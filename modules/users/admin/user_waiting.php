@@ -37,7 +37,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	}
 
 	$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
-		username, md5username, password, email, full_name, gender, photo, birthday,
+		username, md5username, password, email, first_name, last_name, gender, photo, birthday,
 		regdate, question,
 		answer, passlostkey, view_mail, remember, in_groups, active, checknum,
 		last_login, last_ip, last_agent, last_openid, idsite
@@ -46,7 +46,8 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		:md5_username,
 		:password,
 		:email,
-		:full_name,
+		:first_name,
+		:last_name,
 		'', '', 0, " . $row['regdate'] . ",
 		:question,
 		:answer,
@@ -57,7 +58,8 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	$data_insert['md5_username'] = nv_md5safe( $row['username'] );
 	$data_insert['password'] = $row['password'];
 	$data_insert['email'] = $row['email'];
-	$data_insert['full_name'] = $row['full_name'];
+	$data_insert['first_name'] = $row['first_name'];
+	$data_insert['last_name'] = $row['last_name'];
 	$data_insert['question'] = $row['question'];
 	$data_insert['answer'] = $row['answer'];
 	$userid = $db->insert_id( $sql, 'userid', $data_insert );

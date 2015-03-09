@@ -18,8 +18,10 @@
 					<tr>
 						<td> {LANG.username} </td>
 						<td><input class="form-control fixwidthinput" type="text" name="username" value="" maxlength="100" /></td>
-						<td> {LANG.full_name} </td>
-						<td><input class="form-control fixwidthinput" type="text" name="full_name" value="" maxlength="100" /></td>
+						<td> {LANG.first_name} </td>
+						<td><input class="form-control fixwidthinput" type="text" name="first_name" value="" maxlength="100" /></td>
+						<td> {LANG.last_name} </td>
+                        <td><input class="form-control fixwidthinput" type="text" name="last_name" value="" maxlength="100" /></td>
 					</tr>
 					<tr>
 						<td> {LANG.email} </td>

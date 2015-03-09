@@ -53,9 +53,13 @@
 					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
 				</tr>
 				<tr>
-					<td colspan="2"> {LANG.name} </td>
-					<td><input class="form-control" type="text" value="{DATA.full_name}" name="full_name" style="width: 300px" /></td>
+					<td colspan="2"> {LANG.first_name} </td>
+					<td><input class="form-control" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
 				</tr>
+				<tr>
+                    <td colspan="2"> {LANG.last_name} </td>
+                    <td><input class="form-control" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
+                </tr>
 				<tr>
 					<td colspan="2"> {LANG.gender} </td>
 					<td>
