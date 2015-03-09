@@ -279,7 +279,7 @@ if( ! empty( $generate_page ) )
 	$xtpl->parse( 'main.generate_page' );
 }
 
-if( defined( 'NV_IS_GODADMIN' ) )
+if( in_array( 'export', $allow_func ) )
 {
 	$xtpl->parse( 'main.exportfile' );
 }

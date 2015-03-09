@@ -17,7 +17,7 @@ $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_comments (
  cid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  module varchar(55) NOT NULL,
- area tinyint(4) NOT NULL DEFAULT '0',
+ area int(11) NOT NULL DEFAULT '0',
  id mediumint(8) unsigned NOT NULL DEFAULT '0',
  pid mediumint(8) unsigned NOT NULL DEFAULT '0',
  content text NOT NULL,
@@ -26,6 +26,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  post_name varchar(100) NOT NULL,
  post_email varchar(100) NOT NULL,
  post_ip varchar(15) NOT NULL,
+ url_comment varchar(250) NOT NULL,
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
  likes mediumint(9) NOT NULL DEFAULT '0',
  dislikes mediumint(9) NOT NULL DEFAULT '0',

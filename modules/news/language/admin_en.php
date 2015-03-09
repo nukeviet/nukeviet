@@ -92,6 +92,7 @@ $lang_module['setting_auto_tags'] = 'Automatically generate keywords for article
 $lang_module['setting_tags_remind'] = 'Remind the keywords no description';
 $lang_module['content_tags_empty'] = 'Note: article do not have keywords';
 $lang_module['content_tags_empty_auto'] = 'The system will automatically generate keywords stored at this article, you can disable auto-generated keywords in the management module';
+$lang_module['setting_alias_lower'] = 'Alias to lowercase when creating a new';
 
 $lang_module['viewcat_page'] = 'Display method';
 $lang_module['viewcat_page_new'] = 'New categories, Up';
