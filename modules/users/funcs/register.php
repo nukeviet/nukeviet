@@ -227,10 +227,10 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 
 			$password = ! empty( $array_register['password'] ) ? $crypt->hash( $array_register['password'] ) : '';
 			$your_question = ! empty( $array_register['your_question'] ) ? $array_register['your_question'] : $data_questions[$array_register['question']]['title'];
-			if( empty( $reg_attribs['full_name'] ) ) $reg_attribs['full_name'] = $array_register['username'];
+			if( empty( $reg_attribs['first_name'] ) ) $reg_attribs['first_name'] = $array_register['username'];
 
 			$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
-				(username, md5username, password, email, full_name, gender, photo, birthday, regdate,
+				(username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
 				question, answer, passlostkey, view_mail, remember, in_groups,
 				active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
@@ -238,7 +238,8 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 				:md5username,
 				:password,
 				:email,
-				:full_name,
+				:first_name,
+				:last_name,
 				:gender,
 				'', 0, " . NV_CURRENTTIME . ",
 				:your_question,
@@ -250,7 +251,8 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 			$data_insert['md5username'] = nv_md5safe( $array_register['username'] );
 			$data_insert['password'] = $password;
 			$data_insert['email'] = $reg_attribs['email'];
-			$data_insert['full_name'] = $reg_attribs['full_name'];
+			$data_insert['first_name'] = $reg_attribs['first_name'];
+			$data_insert['last_name'] = $reg_attribs['last_name'];
 			$data_insert['gender'] = $reg_attribs['gender'];
 			$data_insert['your_question'] = $your_question;
 			$data_insert['answer'] = $array_register['answer'];
@@ -294,7 +296,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 			validUserLog( $row, 1, $reg_attribs['opid'], $current_mode );
 
 			$subject = $lang_module['account_register'];
-			$message = sprintf( $lang_module['openid_register_info'], $reg_attribs['full_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'], $reg_attribs['openid'] );
+			$message = sprintf( $lang_module['openid_register_info'], $reg_attribs['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'], $reg_attribs['openid'] );
 			$message .= '<br /><br />------------------------------------------------<br /><br />';
 			$message .= nv_EncString( $message );
 			@nv_sendmail( $global_config['site_email'], $reg_attribs['email'], $subject, $message );
@@ -366,7 +368,8 @@ if( defined( 'NV_EDITOR' ) )
 $custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
 if( $checkss == $array_register['checkss'] )
 {
-	$array_register['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
+	$array_register['first_name'] = nv_substr( $nv_Request->get_title( 'first_name', 'post', '', 1 ), 0, 255 );
+	$array_register['last_name'] = nv_substr( $nv_Request->get_title( 'last_name', 'post', '', 1 ), 0, 255 );
 	$array_register['username'] = $nv_Request->get_title( 'username', 'post', '', 1 );
 	$array_register['password'] = $nv_Request->get_title( 'password', 'post', '' );
 	$array_register['re_password'] = $nv_Request->get_title( 're_password', 'post', '' );
@@ -430,16 +433,17 @@ if( $checkss == $array_register['checkss'] )
 			$your_question = ! empty( $array_register['your_question'] ) ? $array_register['your_question'] : $data_questions[$array_register['question']]['title'];
 			$checknum = nv_genpass( 10 );
 			$checknum = md5( $checknum );
-			if( empty( $array_register['full_name'] ) ) $array_register['full_name'] = $array_register['username'];
+			if( empty( $array_register['first_name'] ) ) $array_register['first_name'] = $array_register['username'];
 
 			if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
 			{
-				$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
+				$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info) VALUES (
 					:username,
 					:md5username,
 					:password,
 					:email,
-					:full_name,
+					:first_name,
+					:last_name,
 					" . NV_CURRENTTIME . ",
 					:your_question,
 					:answer,
@@ -451,7 +455,8 @@ if( $checkss == $array_register['checkss'] )
 				$data_insert['md5username'] = nv_md5safe( $array_register['username'] );
 				$data_insert['password'] = $password;
 				$data_insert['email'] = $array_register['email'];
-				$data_insert['full_name'] = $array_register['full_name'];
+				$data_insert['first_name'] = $array_register['first_name'];
+				$data_insert['last_name'] = $array_register['last_name'];
 				$data_insert['your_question'] = $your_question;
 				$data_insert['answer'] = $array_register['answer'];
 				$data_insert['checknum'] = $checknum;
@@ -473,7 +478,7 @@ if( $checkss == $array_register['checkss'] )
 				if( $global_config['allowuserreg'] == 2 )
 				{
 					$subject = $lang_module['account_active'];
-					$message = sprintf( $lang_module['account_active_info'], $array_register['full_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], $array_register['password'], nv_date( 'H:i d/m/Y', NV_CURRENTTIME + 86400 ) );
+					$message = sprintf( $lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], $array_register['password'], nv_date( 'H:i d/m/Y', NV_CURRENTTIME + 86400 ) );
 					$message .= '<br /><br />------------------------------------------------<br /><br />';
 					$message .= nv_EncString( $message );
 					$send = nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
@@ -507,14 +512,15 @@ if( $checkss == $array_register['checkss'] )
 			else
 			{
 				$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
-					(username, md5username, password, email, full_name, gender, photo, birthday, regdate,
+					(username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
 					question, answer, passlostkey, view_mail, remember, in_groups,
 					active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
 					:username,
 					:md5username,
 					:password,
 					:email,
-					:full_name,
+					:first_name,
+					:last_name,
 					'', '', 0, " . NV_CURRENTTIME . ",
 					:your_question,
 					:answer,
@@ -525,7 +531,8 @@ if( $checkss == $array_register['checkss'] )
 				$data_insert['md5username'] = nv_md5safe( $array_register['username'] );
 				$data_insert['password'] = $password;
 				$data_insert['email'] = $array_register['email'];
-				$data_insert['full_name'] = $array_register['full_name'];
+				$data_insert['first_name'] = $array_register['first_name'];
+				$data_insert['last_name'] = $array_register['last_name'];
 				$data_insert['your_question'] = $your_question;
 				$data_insert['answer'] = $array_register['answer'];
 				$userid = $db->insert_id( $sql, userid, $data_insert );
@@ -547,7 +554,7 @@ if( $checkss == $array_register['checkss'] )
 				$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
 
 				$subject = $lang_module['account_register'];
-				$message = sprintf( $lang_module['account_register_info'], $array_register['full_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'] );
+				$message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'] );
 				$message .= '<br /><br />------------------------------------------------<br /><br />';
 				$message .= nv_EncString( $message );
 				nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
@@ -573,7 +580,7 @@ if( $checkss == $array_register['checkss'] )
 }
 else
 {
-	$array_register['full_name'] = $array_register['username'] = $array_register['email'] = '';
+	$array_register['first_name'] = $array_register['username'] = $array_register['email'] = '';
 	$array_register['password'] = $array_register['re_password'] = $array_register['your_question'] = $array_register['answer'] = '';
 	$array_register['question'] = $array_register['agreecheck'] = 0;
 	$array_register['info'] = $lang_module['info'];

@@ -58,7 +58,8 @@
 					<img style="vertical-align:middle;" alt="{CONTENT_TD.level}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/{CONTENT_TD.img}.png" width="38" height="18" />
 					<!-- END: is_admin -->
 					{CONTENT_TD.username} </td>
-					<td> {CONTENT_TD.full_name} </td>
+					<td> {CONTENT_TD.first_name} </td>
+					<td> {CONTENT_TD.last_name} </td>
 					<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 					<td> {CONTENT_TD.regdate} </td>
 					<td class="text-center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>

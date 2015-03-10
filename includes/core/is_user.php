@@ -24,7 +24,7 @@ elseif( defined( 'NV_IS_USER_FORUM' ) )
 
 	if( isset( $user_info['userid'] ) and $user_info['userid'] > 0 )
 	{
-		$_sql = 'SELECT userid, username, email, full_name, gender, photo, birthday, regdate,
+		$_sql = 'SELECT userid, username, email, first_name, last_name, gender, photo, birthday, regdate,
 			view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip, last_openid, password
 			FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval( $user_info['userid'] ) . ' AND active=1';
 
@@ -33,7 +33,7 @@ elseif( defined( 'NV_IS_USER_FORUM' ) )
 		{
 			define( 'NV_IS_USER', true );
 
-			if( empty( $user_info['full_name'] ) ) $user_info['full_name'] = $user_info['username'];
+			if( empty( $user_info['first_name'] ) ) $user_info['first_name'] = $user_info['username'];
 
 			$user_info['in_groups'] = nv_user_groups( $user_info['in_groups'] );
 			$user_info['st_login'] = ! empty( $user_info['password'] ) ? true : false;
@@ -63,7 +63,7 @@ else
 			{
 				if( isset( $user['checknum'] ) and preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $user['checknum'] ) )
 				{
-					$_sql = 'SELECT userid, username, email, full_name, gender, photo, birthday, regdate,
+					$_sql = 'SELECT userid, username, email, first_name, last_name, gender, photo, birthday, regdate,
 						view_mail, remember, in_groups, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
 						last_openid AS current_openid, password, question, answer
 						FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
@@ -76,7 +76,7 @@ else
 						isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $user_info['current_ip'] ) == 0 and 						//current IP
 						isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $user_info['current_login'] ) ) == 0 ) //current login
 						{
-							if( empty( $user_info['full_name'] ) ) $user_info['full_name'] = $user_info['username'];
+							if( empty( $user_info['first_name'] ) ) $user_info['first_name'] = $user_info['username'];
 
 							$user_info['in_groups'] = nv_user_groups( $user_info['in_groups'] );
 							$user_info['last_login'] = intval( $user['last_login'] );

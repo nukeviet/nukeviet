@@ -73,7 +73,8 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) )
 	$orders = array(
 		'userid',
 		'username',
-		'full_name',
+		'first_name',
+		'last_name',
 		'email' );
 
 	$orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );
@@ -180,7 +181,8 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) )
 			$users_list[$row['userid']] = array(
 				'userid' => $userid_i,
 				'username' => ( string )$row['username'],
-				'full_name' => ( string )$row['full_name'],
+				'first_name' => ( string )$row['first_name'],
+				'last_name' => ( string )$row['last_name'],
 				'email' => ( string )$row['email'],
 				'admin_module_cat' => $admin_module_cat,
 				'is_edit' => $is_edit );
@@ -194,8 +196,10 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) )
 		$head_tds['userid']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=userid&amp;sorttype=ASC";
 		$head_tds['username']['title'] = $lang_module['admin_username'];
 		$head_tds['username']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=username&amp;sorttype=ASC";
-		$head_tds['full_name']['title'] = $lang_module['admin_full_name'];
-		$head_tds['full_name']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=full_name&amp;sorttype=ASC";
+		$head_tds['first_name']['title'] = $lang_module['admin_first_name'];
+		$head_tds['first_name']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=first_name&amp;sorttype=ASC";
+		$head_tds['last_name']['title'] = $lang_module['admin_last_name'];
+		$head_tds['last_name']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=last_name&amp;sorttype=ASC";
 		$head_tds['email']['title'] = $lang_module['admin_email'];
 		$head_tds['email']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=email&amp;sorttype=ASC";
 

@@ -59,7 +59,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$_user['password2'] = $nv_Request->get_title( 'password2', 'post', '', 0 );
 	$_user['question'] = nv_substr( $nv_Request->get_title( 'question', 'post', '', 1 ), 0, 255 );
 	$_user['answer'] = nv_substr( $nv_Request->get_title( 'answer', 'post', '', 1 ), 0, 255 );
-	$_user['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
+	$_user['first_name'] = nv_substr( $nv_Request->get_title( 'first_name', 'post', '', 1 ), 0, 255 );
+	$_user['last_name'] = nv_substr( $nv_Request->get_title( 'last_name', 'post', '', 1 ), 0, 255 );
 	$_user['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
 	$_user['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
 	$_user['sig'] = $nv_Request->get_textarea( 'sig', '', NV_ALLOWED_HTML_TAGS );
@@ -172,7 +173,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$_user['in_groups'] = array_intersect( $in_groups, array_keys( $groups_list ) );
 
 			$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
-				username, md5username, password, email, full_name, gender, birthday, sig, regdate,
+				username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
 				question, answer, passlostkey, view_mail,
 				remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
@@ -180,7 +181,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				:md5_username,
 				:password,
 				:email,
-				:full_name,
+				:first_name,
+				:last_name,
 				:gender,
 				" . $_user['birthday'] . ",
 				:sig,
@@ -196,12 +198,13 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$data_insert['md5_username'] = $md5username;
 			$data_insert['password'] = $crypt->hash( $_user['password1'] );
 			$data_insert['email'] = $_user['email'];
-			$data_insert['full_name'] = $_user['full_name'];
+			$data_insert['first_name'] = $_user['first_name'];
+			$data_insert['last_name'] = $_user['last_name'];
 			$data_insert['gender'] = $_user['gender'];
 			$data_insert['sig'] = $_user['sig'];
 			$data_insert['question'] = $_user['question'];
 			$data_insert['answer'] = $_user['answer'];
-
+			
 			$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
 			if( $userid )
@@ -250,7 +253,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 else
 {
 	$_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = '';
-	$_user['full_name'] = $_user['gender'] = $_user['sig'] = $_user['birthday'] = '';
+	$_user['first_name'] = $_user['last_name'] = $_user['gender'] = $_user['sig'] = $_user['birthday'] = '';
 	$_user['view_mail'] = 0;
 	$_user['in_groups'] = array();
 }
