@@ -209,12 +209,12 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 				}
 				
 				$error_create_folder = array_unique( $error_create_folder );
+				$array_cute_files = array();
+				$array_exists_files = array();
 				
 				// Di chuyen cac file vao thu muc trong site
 				if( empty( $error_create_folder ) )
 				{
-					$array_cute_files = array();
-					
 					foreach( $ziplistContent as $array_file )
 					{
 						if( empty( $array_file['folder'] ) and $array_file['filename'] != 'config.ini' )
@@ -226,6 +226,8 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 								{
 									nv_deletefile( NV_ROOTDIR . '/' . $array_file['filename'] );
 								}
+								
+								$array_exists_files[] = $array_file['filename'];
 							}
 							
 							// Di chuyen file
@@ -282,8 +284,9 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 						$files = $db->query( $sql )->fetchAll( PDO::FETCH_COLUMN, 0 );
 
 						$new_files = array_diff( $array_cute_files, $files );
+						$array_exists_files = array_diff( $array_exists_files, $files );
 						
-						// Luu danh sach file vao CSDL
+						// Luu danh sach file moi vao CSDL
 						if( ! empty( $new_files ) )
 						{
 							foreach( $new_files as $file )
@@ -292,6 +295,18 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 								$sth = $db->prepare( $sql );
 								$sth->bindParam( ':type', $extConfig['extension']['type'], PDO::PARAM_STR );
 								$sth->bindParam( ':title', $extConfig['extension']['name'], PDO::PARAM_STR );
+								$sth->bindParam( ':path', $file, PDO::PARAM_STR );
+								$sth->execute();
+							}
+						}
+						
+						// Cap nhat cac file da co
+						if( ! empty( $array_exists_files ) )
+						{
+							foreach( $array_exists_files as $file )
+							{
+								$sql = 'UPDATE ' . $db_config['prefix'] . '_extension_files SET duplicate = duplicate + 1 WHERE path = :path';
+								$sth = $db->prepare( $sql );
 								$sth->bindParam( ':path', $file, PDO::PARAM_STR );
 								$sth->execute();
 							}
