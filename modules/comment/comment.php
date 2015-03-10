@@ -38,7 +38,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 	if( $num_items )
 	{
 		$emailcomm = $module_config[$module]['emailcomm'];
-		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.full_name, b.photo, b.view_mail' )->limit( $per_page_comment )->offset( ( $page - 1 ) * $per_page_comment );
+		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail' )->limit( $per_page_comment )->offset( ( $page - 1 ) * $per_page_comment );
 
 		if( $sortcomm == 1 )
 		{
@@ -62,7 +62,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 			if( $row['userid'] > 0 )
 			{
 				$row['post_email'] = $row['email'];
-				$row['post_name'] = $row['full_name'];
+				$row['post_name'] = $row['first_name'];
 			}
 			$row['check_like'] = md5( $row['cid'] . '_' . $session_id );
 			$row['post_email'] = ( $emailcomm ) ? $row['post_email'] : '';
@@ -97,7 +97,7 @@ function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 	if( $num_items_sub )
 	{
 		$emailcomm = $module_config[$module]['emailcomm'];
-		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.full_name, b.photo, b.view_mail' );
+		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail' );
 
 		if( $sortcomm == 1 )
 		{
@@ -242,7 +242,7 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 	{
 		if( defined( 'NV_IS_USER' ) )
 		{
-			$xtpl->assign( 'NAME', $user_info['full_name'] );
+			$xtpl->assign( 'NAME', $user_info['first_name'] );
 			$xtpl->assign( 'EMAIL', $user_info['email'] );
 			$xtpl->assign( 'DISABLED', ' disabled="disabled"' );
 		}

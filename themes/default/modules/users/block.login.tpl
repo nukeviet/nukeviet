@@ -46,11 +46,11 @@
 <!-- END: main -->
 <!-- BEGIN: signed -->
 <div class="content signed clearfix">
-	<p class="text-center">{LANG.wellcome}: <strong>{USER.full_name}</strong></p>
+	<p class="text-center">{LANG.wellcome}: <strong>{USER.first_name}&nbsp;{USER.last_name}</strong></p>
 	<hr />
 	<div class="row">
 		<div class="col-xs-12 text-center">
-			<a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail" /></a>
+			<a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.first_name}" class="img-thumbnail" /></a>
 		</div>
 		<div class="col-xs-12">
 			<ul class="nv-list-item">

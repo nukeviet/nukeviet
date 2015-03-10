@@ -55,7 +55,7 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 	{
 		if( defined( 'NV_IS_USER' ) )
 		{
-			$xtpl->assign( 'NAME', $user_info['full_name'] );
+			$xtpl->assign( 'NAME', $user_info['first_name'] );
 			$xtpl->assign( 'EMAIL', $user_info['email'] );
 			$xtpl->assign( 'DISABLED', ' disabled="disabled"' );
 		}

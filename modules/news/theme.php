@@ -758,7 +758,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		}
 		$xtpl->parse( 'main.topic' );
 	}
-
+	
 	if( !empty( $content_comment ) )
 	{
 		$xtpl->assign( 'CONTENT_COMMENT', $content_comment );
