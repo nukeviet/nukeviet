@@ -1,13 +1,15 @@
 <!-- BEGIN: main -->
 <div id="fb-root"></div>
 <script type="text/javascript">
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/{FACEBOOK_LANG}/all.js#xfbml=1&appId={FACEBOOK_APPID}";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+	( function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id))
+				return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/{FACEBOOK_LANG}/all.js#xfbml=1&appId={FACEBOOK_APPID}";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
 </script>
 
 <div itemscope itemtype="http://schema.org/Product" style="display: none">
@@ -15,20 +17,10 @@
 	<img itemprop="image" src="{SRC_PRO_FULL}" alt="{TITLE}" />
 	<span itemprop="description">{hometext}</span>
 	<span itemprop="mpn">{PRODUCT_CODE}</span>
-	<!-- BEGIN: rate -->
-	<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
-		<span itemprop="ratingValue">{RATE_TOTAL}</span> {LANG.trong}
-		<span itemprop="reviewCount">{RATE_VALUE} </span> {LANG.dg}
-	</span>
-	<!-- END: rate -->
-	<span itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-		<span itemprop="category">{CAT_TITLE}</span>
-		<!-- BEGIN: price1 -->
-		<span itemprop="price">{PRICE.sale_format}</span>
-		<span itemprop="priceCurrency">{PRICE.unit}</span>
-		<!-- END: price1 -->
-		<span itemprop="availability">{LANG.detail_pro_number}: {PRODUCT_NUMBER} {pro_unit}</span>
-	</span>
+	<!-- BEGIN: allowed_rating_snippets -->
+	<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"> <span itemprop="ratingValue">{RATE_VALUE}</span> {LANG.trong} <span itemprop="reviewCount">{RATE_TOTAL} </span> {LANG.dg} </span>
+	<!-- END: allowed_rating_snippets -->
+	<span itemprop="offers" itemscope itemtype="http://schema.org/Offer"> <span itemprop="category">{CAT_TITLE}</span> <!-- BEGIN: price1 --> <span itemprop="price">{PRICE.sale_format}</span> <span itemprop="priceCurrency">{PRICE.unit}</span> <!-- END: price1 --> <span itemprop="availability">{LANG.detail_pro_number}: {PRODUCT_NUMBER} {pro_unit}</span> </span>
 </div>
 
 <div id="detail">
@@ -47,215 +39,121 @@
 				</div>
 
 				<div class="col-xs-18">
-				<ul class="product_info">
-					<li>
-						<h2>{TITLE}</h2>
-					</li>
-					<li class="text-muted">
-						{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}
-					</li>
+					<ul class="product_info">
+						<li>
+							<h2>{TITLE}</h2>
+						</li>
+						<li class="text-muted">
+							{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}
+						</li>
 
-					<!-- BEGIN: product_code -->
-					<li>
-						{LANG.product_code}: <strong>{PRODUCT_CODE}</strong>
-					</li>
-					<!-- END: product_code -->
+						<!-- BEGIN: product_code -->
+						<li>
+							{LANG.product_code}: <strong>{PRODUCT_CODE}</strong>
+						</li>
+						<!-- END: product_code -->
 
-					<!-- BEGIN: price -->
-					<li>
-						<p>
-							{LANG.detail_pro_price}:
-							<!-- BEGIN: discounts -->
-							<span class="money">{PRICE.sale_format} {PRICE.unit}</span>
-							<span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
-							<span class="money">{product_discounts} {money_unit}</span>
-							<!-- END: discounts -->
+						<!-- BEGIN: price -->
+						<li>
+							<p>
+								{LANG.detail_pro_price}:
+								<!-- BEGIN: discounts -->
+								<span class="money">{PRICE.sale_format} {PRICE.unit}</span>
+								<span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
+								<span class="money">{product_discounts} {money_unit}</span>
+								<!-- END: discounts -->
 
-							<!-- BEGIN: no_discounts -->
-							<span class="money">{PRICE.price_format} {PRICE.unit}</span>
-							<!-- END: no_discounts -->
-						</p>
-					</li>
-					<!-- END: price -->
+								<!-- BEGIN: no_discounts -->
+								<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+								<!-- END: no_discounts -->
+							</p>
+						</li>
+						<!-- END: price -->
 
-					<!-- BEGIN: contact -->
-					<li>
-						{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
-					</li>
-					<!-- END: contact -->
+						<!-- BEGIN: contact -->
+						<li>
+							{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
+						</li>
+						<!-- END: contact -->
 
-					<!-- BEGIN: group_detail -->
-					<li>
-						<!-- BEGIN: loop -->
-						<!-- BEGIN: maintitle -->
-						<div class="pull-left">
-							<strong>{MAINTITLE}:</strong>&nbsp;
-						</div>
-						<!-- END: maintitle -->
-
-						<!-- BEGIN: subtitle -->
-						<ul class="pull-left" style="padding: 0 10px 0">
+						<!-- BEGIN: group_detail -->
+						<li>
 							<!-- BEGIN: loop -->
-							<li>
-								<a href="{SUBTITLE.link}" title="{SUBTITLE.title}">{SUBTITLE.title}</a>
-							</li>
-							<!-- END: loop -->
-						</ul>
-						<div class="clear"></div>
-						<!-- END: subtitle -->
-						<!-- END: loop -->
-					</li>
-					<!-- END: group_detail -->
-
-					<!-- BEGIN: custom_data -->
-					<!-- BEGIN: loop -->
-					<li>
-						<p>
-							<strong>{CUSTOM_LANG}:</strong> {CUSTOM_DATA}
-						</p>
-					</li>
-					<!-- END: loop -->
-					<!-- END: custom_data -->
-
-					<!-- BEGIN: hometext -->
-					<li>
-						<p class="text-justify">
-							{hometext}
-						</p>
-					</li>
-					<!-- END: hometext -->
-
-					<!-- BEGIN: promotional -->
-					<li>
-						<strong>{LANG.detail_promotional}:</strong> {promotional}
-					</li>
-					<!-- END: promotional -->
-
-					<!-- BEGIN: warranty -->
-					<li>
-						<strong>{LANG.detail_warranty}:</strong> {warranty}
-					</li>
-					<!-- END: warranty -->
-				</ul>
-				<hr />
-
-				<!-- BEGIN: group -->
-				<div class="row">
-					<!-- BEGIN: items -->
-					<div class="col-xs-8 col-md-12">
-						<div class="form-group">
-							<select class="form-control" name="group">
-								<!-- BEGIN: header -->
-								<option value="">---{HEADER}---</option>
-								<!-- END: header -->
-								<!-- BEGIN: loop -->
-								<option value="{GROUP.groupid}">{GROUP.title}</option>
-								<!-- END: loop -->
-							</select>
-						</div>
-					</div>
-					<!-- END: items -->
-				</div>
-				<!-- END: group -->
-
-				<div class="clearfix">
-					&nbsp;
-				</div>
-
-				<div id="ratedata">
-					<!-- BEGIN: allowed_rating -->
-					<div class="clearfix">
-						<span class="rateavg_percent">{LANG.rateavg_percent}: {RATE_AVG_PERCENT}</span>
-						<form id="form3B" action="">
-							<div class="clearfix">
-								<div id="stringrating" class="small">
-									{STRINGRATING}
-								</div>
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.5star}
-									</div>
-									<div class="width-star-bg" value-data="5">
-										<input type="hidden" name="valuerate" value="5" />
-										<div class="width-star-value" title="{PERCENT_RATE.5}%" style="width:{PERCENT_RATE.5}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.5}
-									</div>
-								</div>
-								<br />
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.4star}
-									</div>
-									<div class="width-star-bg" value-data="4">
-										<input type="hidden" name="valuerate" value="4" />
-										<div class="width-star-value" title="{PERCENT_RATE.4}%" style="width:{PERCENT_RATE.4}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.4}
-									</div>
-								</div>
-								<br />
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.3star}
-									</div>
-									<div class="width-star-bg" value-data="3">
-										<input type="hidden" name="valuerate" value="3" />
-										<div class="width-star-value" title="{PERCENT_RATE.3}%" style="width:{PERCENT_RATE.3}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.3}
-									</div>
-								</div>
-								<br />
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.2star}
-									</div>
-									<div class="width-star-bg" value-data="2">
-										<input type="hidden" name="valuerate" value="2" />
-										<div class="width-star-value" title="{PERCENT_RATE.2}%" style="width:{PERCENT_RATE.2}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.2}
-									</div>
-								</div>
-								<br />
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.1star}
-									</div>
-									<div class="width-star-bg" value-data="1">
-										<input type="hidden" name="valuerate" value="1" />
-										<div class="width-star-value" title="{PERCENT_RATE.1}%" style="width:{PERCENT_RATE.1}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.1}
-									</div>
-								</div>
+							<!-- BEGIN: maintitle -->
+							<div class="pull-left">
+								<strong>{MAINTITLE}:</strong>&nbsp;
 							</div>
-						</form>
+							<!-- END: maintitle -->
+
+							<!-- BEGIN: subtitle -->
+							<ul class="pull-left" style="padding: 0 10px 0">
+								<!-- BEGIN: loop -->
+								<li>
+									<a href="{SUBTITLE.link}" title="{SUBTITLE.title}">{SUBTITLE.title}</a>
+								</li>
+								<!-- END: loop -->
+							</ul>
+							<div class="clear"></div>
+							<!-- END: subtitle -->
+							<!-- END: loop -->
+						</li>
+						<!-- END: group_detail -->
+
+						<!-- BEGIN: custom_data -->
+						<!-- BEGIN: loop -->
+						<li>
+							<p>
+								<strong>{CUSTOM_LANG}:</strong> {CUSTOM_DATA}
+							</p>
+						</li>
+						<!-- END: loop -->
+						<!-- END: custom_data -->
+
+						<!-- BEGIN: hometext -->
+						<li>
+							<p class="text-justify">
+								{hometext}
+							</p>
+						</li>
+						<!-- END: hometext -->
+
+						<!-- BEGIN: promotional -->
+						<li>
+							<strong>{LANG.detail_promotional}:</strong> {promotional}
+						</li>
+						<!-- END: promotional -->
+
+						<!-- BEGIN: warranty -->
+						<li>
+							<strong>{LANG.detail_warranty}:</strong> {warranty}
+						</li>
+						<!-- END: warranty -->
+					</ul>
+					<hr />
+
+					<!-- BEGIN: group -->
+					<div class="row">
+						<!-- BEGIN: items -->
+						<div class="col-xs-8 col-md-12">
+							<div class="form-group">
+								<select class="form-control" name="group">
+									<!-- BEGIN: header -->
+									<option value="">---{HEADER}---</option>
+									<!-- END: header -->
+									<!-- BEGIN: loop -->
+									<option value="{GROUP.groupid}">{GROUP.title}</option>
+									<!-- END: loop -->
+								</select>
+							</div>
+						</div>
+						<!-- END: items -->
 					</div>
-					<!-- END: allowed_rating -->
+					<!-- END: group -->
+
+					<div class="clearfix">
+						&nbsp;
+					</div>
 				</div>
-			</div>
 			</div>
 		</div>
 	</div>
@@ -264,21 +162,32 @@
 		<div class="col-md-10">
 			<!-- BEGIN: social_icon -->
 			<ul style="padding: 0; margin-top: 12px;">
-				<li class="pull-left"><div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false" data-share="true">&nbsp;</div></li>
-				<li class="pull-left"><div class="g-plusone" data-size="medium"></div></li>
+				<li class="pull-left">
+					<div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false" data-share="true">
+						&nbsp;
+					</div>
+				</li>
+				<li class="pull-left">
+					<div class="g-plusone" data-size="medium"></div>
+				</li>
 			</ul>
-	        <script type="text/javascript">
-	          window.___gcfg = {lang: nv_sitelang};
-	          (function() {
-	            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-	            po.src = 'https://apis.google.com/js/plusone.js';
-	            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-	          })();
-	        </script>
-	        <!-- END: social_icon -->
+			<script type="text/javascript">
+				window.___gcfg = {
+					lang : nv_sitelang
+				};
+				(function() {
+					var po = document.createElement('script');
+					po.type = 'text/javascript';
+					po.async = true;
+					po.src = 'https://apis.google.com/js/plusone.js';
+					var s = document.getElementsByTagName('script')[0];
+					s.parentNode.insertBefore(po, s);
+				})();
+			</script>
+			<!-- END: social_icon -->
 		</div>
 		<div class="col-md-14">
-           <!-- BEGIN: typepeice -->
+			<!-- BEGIN: typepeice -->
 			<table class="table table-striped table-bordered table-hover" style="width: 264px">
 				<thead>
 					<tr>
@@ -348,13 +257,18 @@
 					<a href="#section-3"><em class="fa fa-comments-o">&nbsp;</em><span>{LANG.detail_comments}</span></a>
 				</li>
 				<!-- END: comment_tab -->
+
+				<!-- BEGIN: allowed_rating_tab -->
+				<li>
+					<a href="#section-4"><em class="fa fa-star-o">&nbsp;</em><span>{LANG.rate_feedback} ({RATE_TOTAL})</span></a>
+				</li>
+				<!-- END: allowed_rating_tab -->
 			</ul>
 		</nav>
 		<div class="content">
 			<section id="section-1">
 				{DETAIL}
 			</section>
-
 			<!-- BEGIN: othersimg -->
 			<section id="section-2">
 				<!-- BEGIN: loop -->
@@ -373,6 +287,56 @@
 				{CONTENT_COMMENT}
 			</section>
 			<!-- END: comment -->
+
+			<!-- BEGIN: allowed_rating -->
+			<section id="section-4">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row form-review">
+							<div class="col-xs-24 col-sm-11 border border-right">
+								<form id="review_form">
+									<div class="form-group">
+										<input type="text" class="form-control" name="sender" value="{SENDER}" placeholder="{LANG.profile_user_name}">
+									</div>
+									<div class="form-group">
+										<div class="rate-ex2-cnt">
+											<div id="1" class="rate-btn-1 rate-btn"></div>
+											<div id="2" class="rate-btn-2 rate-btn"></div>
+											<div id="3" class="rate-btn-3 rate-btn"></div>
+											<div id="4" class="rate-btn-4 rate-btn"></div>
+											<div id="5" class="rate-btn-5 rate-btn"></div>
+										</div>
+									</div>
+									<div class="form-group">
+										<textarea name="comment" class="form-control" placeholder="{LANG.rate_comment}"></textarea>
+									</div>
+									<!-- BEGIN: captcha -->
+									<div class="form-group">
+										<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control pull-left" style="width: 50%" placeholder="{LANG.rate_captcha}" />
+										<div class="pull-left" style="margin-top: 5px">
+											&nbsp;&nbsp;<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{LANG.captcha}" id="vimg" />
+											&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','fcode_iavim');">&nbsp;</em>
+										</div>
+										<div class="clear"></div>
+									</div>
+									<!-- END: captcha -->
+									<div class="form-group">
+										<input type="submit" class="btn btn-primary" value="{LANG.rate}" />
+									</div>
+								</form>
+							</div>
+							<div class="col-xs-24 col-sm-13 border">
+								<div id="rate_list">
+									<p class="text-center">
+										<em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- END: allowed_rating -->
 		</div>
 	</div>
 
@@ -400,39 +364,56 @@
 </div>
 <div class="msgshow" id="msgshow"></div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/tabresponsive.js"></script>
+<!-- BEGIN: allowed_rating_js -->
+<script type="text/javascript">
+	$("#rate_list").load('{LINK_REVIEW}&showdata=1');
+	var rating = 0;
+	$('.rate-btn').hover(function() {
+		$('.rate-btn').removeClass('rate-btn-hover');
+		rating = $(this).attr('id');
+		for (var i = rating; i >= 0; i--) {
+			$('.rate-btn-' + i).addClass('rate-btn-hover');
+		};
+	});
+
+	$('#review_form').submit(function() {
+		var sender = $(this).find('input[name="sender"]').val();
+		var comment = $(this).find('textarea[name="comment"]').val();
+		var fcode = $(this).find('input[name="fcode"]').val();
+		$.ajax({
+			type : "POST",
+			url : '{LINK_REVIEW}' + '&nocache=' + new Date().getTime(),
+			data : 'sender=' + sender + '&rating=' + rating + '&comment=' + comment + '&fcode=' + fcode,
+			success : function(data) {
+				var s = data.split('_');
+				if (s[0] == 'OK') {
+					$('#review_form input[name="sender"], #review_form input[name="fcode"], #review_form textarea').val('');
+					$('.rate-btn').removeClass('rate-btn-hover');
+					$("#rate_list").load('{LINK_REVIEW}&showdata=1');
+				}
+				alert(s[1]);
+			}
+		});
+		return false;
+	});
+</script>
+<!-- END: allowed_rating_js -->
+
+<!-- BEGIN: allowed_print_js -->
+<script type="text/javascript">
+	$(function() {
+		$('#click_print').click(function(event) {
+			var href = $(this).attr("href");
+			event.preventDefault();
+			nv_open_browse(href, '', 640, 500, 'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');
+			return false;
+		});
+	});
+</script>
+<!-- END: allowed_print_js -->
+
 <script type="text/javascript">
 	var detail_error_group = '{LANG.detail_error_group}';
-	new CBPFWTabs( document.getElementById( 'tabs' ) );
-	$(function(){
-	<!-- BEGIN: allowed_print_js -->
-	$('#click_print').click(function(event){
-	var href = $(this).attr("href");
-	event.preventDefault();
-	nv_open_browse(href, '', 640, 500, 'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');
-	return false;
-	});
-	<!-- END: allowed_print_js -->
-
-	<!-- BEGIN: allowed_rating_js -->
-	$(".width-star-bg").click(function(event){
-	event.preventDefault();
-	var val = $(this).attr("value-data");
-	if( confirm( '{LANG.rateconfirm}' )){
-	$.ajax({
-	type: "POST",
-	url: '{LINK_RATE}'+'&nocache=' + new Date().getTime(),
-	data: 'val=' + val,
-	success: function(data){
-	var s = data.split('_');
-	if( s[0] == 'OK' ){
-	$("#ratedata").load('{LINK_RATE}&showdata=1');
-	}
-	alert(s[1]);
-	}
-	});
-	}
-	return false;
-	});
-	<!-- END: allowed_rating_js -->
-	});</script>
+	new CBPFWTabs(document.getElementById('tabs'));
+</script>
 <!-- END: main -->

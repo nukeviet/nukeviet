@@ -55,6 +55,7 @@ $lang_module['siteinfo_publtime'] = 'Tổng số sản phẩm';
 $lang_module['siteinfo_pending'] = 'Số sản phẩm chờ đăng';
 $lang_module['siteinfo_comment_pending'] = 'Số chưa duyệt';
 $lang_module['siteinfo_comment'] = 'Số bình luận đã đăng';
+$lang_module['siteinfo_review'] = 'Số đánh giá chờ duyệt';
 $lang_module['siteinfo_order'] = 'Tổng số đơn đặt hàng';
 $lang_module['siteinfo_order_noview'] = 'Số đơn đặt hàng chưa xem';
 $lang_module['siteinfo_expired'] = 'Số sản phẩm đã hết hạn';
@@ -175,7 +176,7 @@ $lang_module['content_exp_date'] = 'Thời gian hết hạn';
 $lang_module['content_extra'] = 'Tính năng mở rộng';
 $lang_module['content_inhome'] = 'Hiển thị trên trang chủ';
 $lang_module['content_allowed_comm'] = 'Cho phép thảo luận';
-$lang_module['content_allowed_rating'] = 'Cho phép xếp hạng';
+$lang_module['content_allowed_rating'] = 'Cho phép đánh giá';
 $lang_module['content_allowed_send'] = 'Cho phép gửi sản phẩm';
 $lang_module['content_allowed_print'] = 'Cho phép in sản phẩm';
 $lang_module['content_allowed_save'] = 'Cho phép lưu sản phẩm';
@@ -401,6 +402,18 @@ $lang_module['export_excel'] = 'Xuất ra Excel';
 $lang_module['order_seller'] = 'Thống kê lượt mua';
 $lang_module['order_count'] = 'Lượt mua';
 $lang_module['order_list'] = 'Xem danh sách đơn hàng';
+
+$lang_module['review'] = 'Đánh giá sản phẩm';
+$lang_module['review_sender'] = 'Người đánh giá';
+$lang_module['review_rating'] = 'Điểm';
+$lang_module['review_status_1'] = 'Hiển thị';
+$lang_module['review_status_0'] = 'Không hiển thị';
+$lang_module['review_add_time'] = 'Thời gian đăng';
+$lang_module['review_add_time'] = 'Thời gian đăng';
+$lang_module['review_setting_active'] = 'Sử dụng chức năng đánh giá sản phẩm';
+$lang_module['review_setting_check'] = 'Kiểm duyệt đánh giá trước khi hiển thị';
+$lang_module['review_setting_captcha'] = 'Sử dụng mã bảo mật (captcha) khi đánh giá';
+$lang_module['review_notification_new'] = '<strong>%s</strong> đánh giá sản phẩm <strong>%s</strong>';
 
 //Lang for function coupons
 $lang_module['coupons'] = 'Mã giảm giá';

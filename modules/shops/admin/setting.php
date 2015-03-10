@@ -67,6 +67,9 @@ if( $savesetting == 1 )
 	$data['point_active'] = $nv_Request->get_int( 'point_active', 'post', 0 );
 	$data['point_conversion'] = $nv_Request->get_string( 'point_conversion', 'post', 0 );
 	$data['point_new_order'] = $nv_Request->get_string( 'point_new_order', 'post', 0 );
+	$data['review_active'] = $nv_Request->get_int( 'review_active', 'post', 0 );
+	$data['review_check'] = $nv_Request->get_int( 'review_check', 'post', 0 );
+	$data['review_captcha'] = $nv_Request->get_int( 'review_captcha', 'post', 0 );
 
 	if( $error == '' )
 	{
@@ -196,6 +199,15 @@ $xtpl->assign( 'ck_active_wishlist', $check );
 
 $check = ( $data['point_active'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_point', $check );
+
+$check = ( $data['review_active'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_review_active', $check );
+
+$check = ( $data['review_check'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_review_check', $check );
+
+$check = ( $data['review_captcha'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_review_captcha', $check );
 
 // Tien te
 $result = $db->query( "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " ORDER BY code DESC" );

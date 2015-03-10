@@ -68,11 +68,22 @@ if( $number > 0 )
 	$pendinginfo[] = array( 'key' => $lang_siteinfo['siteinfo_order_noview'], 'value' => $number );
 }
 
+// So danh gia cho duyet
+$number = $db->query( 'SELECT COUNT(*) as number FROM ' . $db_config['prefix'] . '_' . $mod_data . '_review where status=0' )->fetchColumn();
+if( $number > 0 )
+{
+	$pendinginfo[] = array(
+		'key' => $lang_siteinfo['siteinfo_review'],
+		'value' => $number,
+		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=review&amp;status=0'
+	);
+}
+
 // Nhac nho cac tu khoa chua co mo ta
 if( ! empty( $module_config[$mod]['tags_remind'] ) )
 {
 	$number = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $mod_data . '_tags WHERE ' . NV_LANG_DATA . '_description = \'\'' )->fetchColumn();
-	
+
 	if( $number > 0 )
 	{
 		$pendinginfo[] = array(

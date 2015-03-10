@@ -1278,3 +1278,66 @@ img.calendar {
 .fb-like{
 	margin-right: 30px;
 }
+
+.form-review{
+	font-size: 13px
+}
+
+.form-review .pagination{
+	margin-top: 2px
+}
+
+.form-review .pagination>li>a{
+	padding: 1px 5px;
+	font-size: 12px;
+}
+
+.form-review .review_row{
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 5px
+}
+
+.form-review .border{
+	padding: 0 10px 0 10px
+}
+
+.form-review .border-right{
+	border-right: 1px solid #ddd;
+}
+
+/*  Second Example with big stars */
+.rate-ex2-cnt{
+	width:150px; height: 30px;
+}
+.rate-ex2-cnt .rate-btn{
+	width: 30px; height:30px;
+	float: left;
+	background: url(../images/shops/rate/rate-btn2.png) no-repeat;
+	cursor: pointer;
+}
+.rate-ex2-cnt .rate-btn:hover, .rate-ex2-cnt  .rate-btn-hover, .rate-ex2-cnt  .rate-btn-active{
+	background: url(../images/shops/rate/rate-btn2-hover.png) no-repeat;
+}
+/* End second Example with big stars */
+
+/* rate result */
+.rate-result-cnt{
+	width: 82px; height: 18px;
+	position: relative;
+}
+.rate-stars{
+	width: 82px; height: 18px;
+	background: url(../images/shops/rate/rate-stars.png) no-repeat;
+	position: absolute;
+}
+.rate-bg{
+	height: 18px;
+	background-color: #ffbe10;
+	position: absolute;
+}
+.star-icon{
+	width: 17px;
+	height: 17px;
+	background: url(../images/shops/rate/rate-btn3-hover.png) no-repeat;
+	float: left
+}

@@ -149,6 +149,31 @@
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<caption>
+				{LANG.review}
+			</caption>
+			<colgroup>
+				<col class="w500" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.review_setting_active}</strong></td>
+					<td><input type="checkbox" value="1" name="review_active" {ck_review_active}/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.review_setting_check}</strong></td>
+					<td><input type="checkbox" value="1" name="review_check" {ck_review_check}/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.review_setting_captcha}</strong></td>
+					<td><input type="checkbox" value="1" name="review_captcha" {ck_review_captcha}/></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>
 				{LANG.keywords}
 			</caption>
 			<colgroup>

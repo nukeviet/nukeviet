@@ -407,3 +407,71 @@ function nv_price_config_add_item() {
 	newitem += '	</tr>';
 	$("#id_price_config").append(newitem);
 }
+
+// Review
+function nv_review_action(oForm, msgnocheck) {
+	var fa = oForm['idcheck[]'];
+	var listid = '';
+	if (fa.length) {
+		for (var i = 0; i < fa.length; i++) {
+			if (fa[i].checked) {
+				listid = listid + fa[i].value + ',';
+			}
+		}
+	} else {
+		if (fa.checked) {
+			listid = listid + fa.value + ',';
+		}
+	}
+
+	if (listid != '') {
+		var action = document.getElementById('action').value;
+		if (action == 'delete') {
+			if (confirm(nv_is_del_confirm[0])) {
+				$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=review&nocache=' + new Date().getTime(), 'del=1&dellist=1&listid=' + listid, function(res) {
+					if( res == 'OK' )
+					{
+						window.location.href = window.location.href;
+					}
+					else
+					{
+						alert(nv_is_del_confirm[2]);
+					}
+				});
+			}
+		} else if( action == 'review_status_1' || action == 'review_status_0' ) {
+			if (confirm(nv_is_change_act_confirm[0]))
+			{
+				var status = action.split('_');
+				$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=review&nocache=' + new Date().getTime(), 'change_status=1&status='+status[2]+'&listid=' + listid, function(res) {
+					if( res == 'OK' )
+					{
+						window.location.href = window.location.href;
+					}
+					else
+					{
+						alert(nv_is_change_act_confirm[2]);
+					}
+				});
+			}
+		}
+		else{
+
+		}
+	} else {
+		alert(msgnocheck);
+	}
+}
+
+function nv_del_review(id) {
+	if (confirm(nv_is_del_confirm[0])) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=review&nocache=' + new Date().getTime(), 'del=1&id=' + id, function(res) {
+			if (res == 'OK') {
+				$('#row_' + id).slideUp();
+			} else {
+				alert(nv_is_del_confirm[2]);
+			}
+
+		});
+	}
+}
