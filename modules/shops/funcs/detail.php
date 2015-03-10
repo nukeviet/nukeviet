@@ -89,7 +89,6 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		die( );
 	}
 
-
 	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_units WHERE id = ' . $data_content['product_unit'] );
 	$data_unit = $sql->fetch( );
 	$data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
@@ -100,6 +99,21 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts WHERE did = ' . $data_content['discount_id'] );
 		$data_shop['discount'] = $sql->fetch( );
 	}
+
+	// Danh gia - Phan hoi
+	$rating_total = 0;
+	$result = $db->query( 'SELECT rating FROM ' . $db_config['prefix'] . '_' . $module_data . '_review WHERE product_id = ' . $data_content['id'] . ' AND status=1' );
+	$rating_count = $result->rowCount();
+	if( $rating_count > 0 )
+	{
+		while( list( $rating ) = $result->fetch( 3 ) )
+		{
+			$rating_total += $rating;
+		}
+	}
+	$data_content['rating_total'] = $rating_count;
+	$data_content['rating_point'] = $rating_total;
+	$data_content['rating_value'] = $rating_count > 0 ? round( $rating_total / $rating_count ) : 0;
 
 	// Xac dinh anh lon
 	$homeimgfile = $data_content['homeimgfile'];
@@ -233,36 +247,6 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		}
 	}
 
-	if( !empty( $data_content['ratingdetail'] ) )
-	{
-		$data_content['ratingdetail'] = unserialize( $data_content['ratingdetail'] );
-	}
-	else
-	{
-		$data_content['ratingdetail'] = array(
-			1 => 0,
-			2 => 0,
-			3 => 0,
-			4 => 0,
-			5 => 0
-		);
-	}
-
-	$total_value = array_sum( $data_content['ratingdetail'] );
-	$total_value = ($total_value == 0) ? 0 : $total_value;
-	$data_content['percent_rate'] = array( );
-
-	$data_content['percent_rate'][1] = ($data_content['ratingdetail'][1] != 0 || $data_content['ratingdetail'][2] != 0 || $data_content['ratingdetail'][3] || $data_content['ratingdetail'][4] || $data_content['ratingdetail'][5]) ? 100 : 0;
-	$data_content['percent_rate'][2] = ($data_content['ratingdetail'][2] != 0 || $data_content['ratingdetail'][3] || $data_content['ratingdetail'][4] || $data_content['ratingdetail'][5]) ? 100 : 0;
-	$data_content['percent_rate'][3] = ($data_content['ratingdetail'][3] != 0 || $data_content['ratingdetail'][4] || $data_content['ratingdetail'][5]) ? 100 : 0;
-	$data_content['percent_rate'][4] = ($data_content['ratingdetail'][4] != 0 || $data_content['ratingdetail'][5]) ? 100 : 0;
-	$data_content['percent_rate'][5] = ($data_content['ratingdetail'][5] != 0) ? 100 : 0;
-
-	$total_rate = $data_content['ratingdetail'][1] + ($data_content['ratingdetail'][2] * 2) + ($data_content['ratingdetail'][3] * 3) + ($data_content['ratingdetail'][4] * 4) + ($data_content['ratingdetail'][5] * 5);
-	//$data_content['ratefercent_avg'] = round( $total_rate / $total_value, 1 );
-	$data_content['ratefercent_avg'] = $total_rate . $lang_module['trong'] . $total_value . $lang_module['dg'];
-	$data_content['total_rate'] = $total_rate;
-	$data_content['total_value'] = $total_value;
 	SetSessionProView( $data_content['id'], $data_content[NV_LANG_DATA . '_title'], $data_content[NV_LANG_DATA . '_alias'], $data_content['addtime'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . '-' . $data_content['id'], $data_content['homeimgthumb'] );
 
 	// comment

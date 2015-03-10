@@ -105,6 +105,7 @@ elseif( $op != 'setup' )
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_payment';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_transaction';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_rows';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_review';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_units';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_items_group';
@@ -288,6 +289,19 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
  ADD " . $lang . "_warranty text NOT NULL,
  ADD " . $lang . "_promotional text NOT NULL,
  ADD " . $lang . "_address text NOT NULL";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_review (
+  review_id int(11) unsigned NOT NULL AUTO_INCREMENT,
+  product_id int(11) NOT NULL DEFAULT '0',
+  userid int(11) NOT NULL DEFAULT '0',
+  sender varchar(255) NOT NULL,
+  content text NOT NULL,
+  rating int(1) NOT NULL,
+  add_time int(11) NOT NULL DEFAULT '0',
+  edit_time int(11) NOT NULL DEFAULT '0',
+  status tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (review_id)
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_block_cat (
  bid mediumint(8) unsigned NOT NULL auto_increment,
@@ -635,6 +649,9 @@ $data['tags_remind'] = 0;
 $data['point_active'] = 0;
 $data['point_conversion'] = 0;
 $data['point_new_order'] = 0;
+$data['review_active'] = 1;
+$data['review_check'] = 1;
+$data['review_captcha'] = 1;
 
 foreach( $data as $config_name => $config_value )
 {

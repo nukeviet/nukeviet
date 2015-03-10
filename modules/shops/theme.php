@@ -1160,7 +1160,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
  */
 function detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment, $compare_id, $popup )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_cat, $meta_property, $pro_config;
+	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_cat, $meta_property, $pro_config, $user_info;
 
 	if( !defined( 'SHADOWBOX' ) )
 	{
@@ -1182,6 +1182,11 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
 	$xtpl->assign( 'POPUP', $popup );
 
+	$xtpl->assign( 'LINK_LOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadcart' );
+	$xtpl->assign( 'THEME_URL', NV_BASE_SITEURL . 'themes/' . $module_info['template'] );
+	$xtpl->assign( 'LINK_PRINT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=print_pro&id=' . $data_content['id'] );
+	$xtpl->assign( 'LINK_REVIEW', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=review&id=' . $data_content['id'] . '&1' );
+
 	if( !empty( $data_content ) )
 	{
 		$xtpl->assign( 'proid', $data_content['id'] );
@@ -1198,17 +1203,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$xtpl->assign( 'PRICE', $price );
 		$xtpl->assign( 'PRODUCT_CODE', $data_content['product_code'] );
 		$xtpl->assign( 'PRODUCT_NUMBER', $data_content['product_number'] );
-
-		$xtpl->assign( 'RATINGDETAIL', $data_content['ratingdetail'] );
-		$xtpl->assign( 'PERCENT_RATE', $data_content['percent_rate'] );
-		$xtpl->assign( 'RATE_AVG_PERCENT', $data_content['ratefercent_avg'] );
-
-		if( $data_content['total_value'] > 0 )
-		{
-			$xtpl->assign( 'RATE_TOTAL', $data_content['total_rate'] );
-			$xtpl->assign( 'RATE_VALUE', $data_content['total_value'] );
-			$xtpl->parse( 'main.rate' );
-		}
 
 		$xtpl->assign( 'pro_unit', $data_unit['title'] );
 
@@ -1262,7 +1256,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$xtpl->assign( 'exptime', $exptime );
 		$xtpl->assign( 'height', $pro_config['homeheight'] );
 		$xtpl->assign( 'width', $pro_config['homewidth'] );
-		$xtpl->assign( 'RATE', $data_content['ratingdetail'] );
 
 		if( $pro_config['active_showhomtext'] == '1' )
 		{
@@ -1316,10 +1309,29 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 				$xtpl->parse( 'main.comment_tab' );
 			}
 
+			if( !empty( $user_info ) )
+			{
+				$xtpl->assign( 'SENDER', !empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'] );
+			}
+
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_content['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $data_content['id'] ) );
 				$xtpl->parse( 'main.adminlink' );
+			}
+
+			if( !empty( $data_content['allowed_rating'] ) and !empty( $pro_config['review_active']) )
+			{
+				$xtpl->assign( 'RATE_TOTAL', $data_content['rating_total'] );
+				$xtpl->assign( 'RATE_VALUE', $data_content['rating_point'] );
+				if( $pro_config['review_captcha'] )
+				{
+					$xtpl->parse( 'main.allowed_rating.captcha' );
+				}
+				$xtpl->parse( 'main.allowed_rating' );
+				$xtpl->parse( 'main.allowed_rating_tab' );
+				$xtpl->parse( 'main.allowed_rating_js' );
+				$xtpl->parse( 'main.allowed_rating_snippets' );
 			}
 
 			$xtpl->parse( 'main.product_detail' );
@@ -1420,11 +1432,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		}
 	}
 
-	$xtpl->assign( 'LINK_LOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadcart' );
-	$xtpl->assign( 'THEME_URL', NV_BASE_SITEURL . 'themes/' . $module_info['template'] );
-	$xtpl->assign( 'LINK_PRINT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=print_pro&id=' . $data_content['id'] );
-	$xtpl->assign( 'LINK_RATE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rate&id=' . $data_content['id'] );
-
 	if( $pro_config['active_price'] == '1' )
 	{
 		if( $data_content['showprice'] == '1' )
@@ -1461,11 +1468,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		}
 	}
 
-	if( !empty( $data_content['allowed_rating'] ) )
-	{
-		$xtpl->parse( 'main.allowed_rating' );
-		$xtpl->parse( 'main.allowed_rating_js' );
-	}
 	if( !empty( $data_content['allowed_send'] ) )
 		$xtpl->parse( 'main.allowed_send' );
 	if( !empty( $data_content['allowed_print'] ) )
