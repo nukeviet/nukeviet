@@ -365,13 +365,13 @@ if( md5( 'delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_
 		$row = $row[0];
 		
 		// Lay danh sach file
-		$sql = 'SELECT path FROM ' . $db_config['prefix'] . '_extension_files WHERE type = :type AND title = :title';
+		$sql = 'SELECT path, duplicate FROM ' . $db_config['prefix'] . '_extension_files WHERE type = :type AND title = :title';
 		$sth = $db->prepare( $sql );
 		$sth->bindValue( ':type', $request['type'] );
 		$sth->bindValue( ':title', $request['title'] );
 		$sth->execute();
 		$files = $sth->fetchAll();
-
+		
 		if( $row['type'] == 'module' )
 		{
 			$module_exit = array();
@@ -527,11 +527,26 @@ if( md5( 'delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_
 			
 			foreach( $files as $file )
 			{
-				$file = NV_ROOTDIR . '/' . $file;
-				
-				if( file_exists( $file ) )
+				if( file_exists( NV_ROOTDIR . '/' . $file['path'] ) )
 				{
-					@nv_deletefile( $file );
+					if( $file['duplicate'] > 0 )
+					{
+						$sql = 'UPDATE ' . $db_config['prefix'] . '_extension_files SET duplicate = duplicate - 1 WHERE path = :path';
+						$sth = $db->prepare( $sql );
+						$sth->bindValue( ':path', $file['path'] );
+						$sth->execute();
+					}
+					else
+					{
+						@nv_deletefile( NV_ROOTDIR . '/' . $file['path'] );
+					}
+				}
+				else
+				{
+					$sql = 'DELETE FROM ' . $db_config['prefix'] . '_extension_files WHERE path = :path';
+					$sth = $db->prepare( $sql );
+					$sth->bindValue( ':path', $file['path'] );
+					$sth->execute();
 				}
 			}
 		}

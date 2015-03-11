@@ -83,8 +83,8 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
 	md5username char(32) NOT NULL DEFAULT '',
 	password varchar(50) NOT NULL DEFAULT '',
 	email varchar(100) NOT NULL DEFAULT '',
-	first_name varchar(255) NOT NULL DEFAULT '',
-	last_name varchar(255) NOT NULL DEFAULT '',
+	first_name varchar(100) NOT NULL DEFAULT '',
+	last_name varchar(100) NOT NULL DEFAULT '',
 	gender char(1) DEFAULT '',
 	photo varchar(255) DEFAULT '',
 	birthday int(11) NOT NULL,
@@ -460,4 +460,18 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
 	 c_count int(11) unsigned NOT NULL DEFAULT '0',
 	 " . NV_LANG_DATA . "_count int(11) unsigned NOT NULL DEFAULT '0',
 	 UNIQUE KEY c_type (c_type,c_val)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT,
+  send_to mediumint(8) unsigned NOT NULL,
+  send_from mediumint(8) unsigned NOT NULL DEFAULT '0',
+  area tinyint(1) unsigned NOT NULL,
+  language char(3) NOT NULL,
+  module varchar(50) NOT NULL,
+  type varchar(255) NOT NULL,
+  content text NOT NULL,
+  add_time int(11) unsigned NOT NULL,
+  view tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
 ) ENGINE=MyISAM";
