@@ -498,6 +498,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				$data_insert[$flang . '_' . $fname] = $rowcontent[$fname];
 			}
 
+			unset( $sth );
 			$rowcontent['id'] = $db->insert_id( $sql, 'catid', $data_insert );
 
 			if( $rowcontent['id'] > 0 )
