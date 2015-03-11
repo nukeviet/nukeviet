@@ -39,7 +39,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="7">
+					<td colspan="8">
 					<!-- BEGIN: exportfile -->
 					<input type="button" class="btn btn-primary" value="{LANG.export}" name="data_export"/>
 					<!-- END: exportfile -->
