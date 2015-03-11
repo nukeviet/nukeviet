@@ -25,7 +25,11 @@ if( $shop_module_config['use_shipping'] == '1' )
 }
 
 $submenu['order_seller'] = $lang_module['order_seller'];
-$submenu['review'] = $lang_module['review'];
+
+if( $shop_module_config['review_active'] == '1' )
+{
+	$submenu['review'] = $lang_module['review'];
+}
 $submenu['items'] = $lang_module['content_add_items'];
 $submenu['content'] = $lang_module['content_add'];
 $submenu['discounts'] = $lang_module['discounts'];

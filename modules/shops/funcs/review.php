@@ -93,7 +93,7 @@ if( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 {
 	$sender = $nv_Request->get_string( 'sender', 'get,post', '' );
 	$rating = $nv_Request->get_int( 'rating', 'get,post', 0 );
-	$comment = $nv_Request->get_string( 'comment', 'get,post', '' );
+	$comment = $nv_Request->get_textarea( 'comment', '' );
 	$fcode = $nv_Request->get_string( 'fcode', 'get,post', '' );
 
 	if( empty( $sender ) )
