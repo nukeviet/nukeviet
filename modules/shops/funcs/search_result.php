@@ -102,15 +102,15 @@ if( $keyword != "" )
 
 if( ( $price1 >= 0 and $price2 > 0 ) )
 {
-	$search .= " AND product_price-(t1.product_discounts/100)*product_price BETWEEN " . $price1 . " AND " . $price2 . " ";
+	$search .= " AND product_price BETWEEN " . $price1 . " AND " . $price2 . " ";
 }
 elseif( $price2 == - 1 and $price1 >= 0 )
 {
-	$search .= " AND product_price-(t1.product_discounts/100)*product_price >= " . $price1 . " ";
+	$search .= " AND product_price >= " . $price1 . " ";
 }
 elseif( $price1 == - 1 and $price2 > 0 )
 {
-	$search .= " AND product_price-(t1.product_discounts/100)*product_price < " . $price2 . " ";
+	$search .= " AND product_price < " . $price2 . " ";
 }
 
 if( ! empty( $typemoney ) )
@@ -190,6 +190,7 @@ while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt,
 
 	$data_content[] = array(
 		"id" => $id,
+		"listcatid" => $listcatid,
 		"publtime" => $publtime,
 		"title" => $title,
 		"alias" => $alias,
