@@ -21,6 +21,12 @@
 				</select></td>
 			</tr>
 			<tr>
+			    <td><strong>{LANG.closed_ssl}</strong></td>
+			    <td>
+			        <input id="check_ssl" type="checkbox" value="1" name="ssl_https" {CHECKED_SSL_HTTPS} />
+			    </td>
+			</tr>
+			<tr>
 				<td><strong>{LANG.site_email}</strong></td>
 				<td><input type="text" name="site_email" value="{DATA.site_email}" class="form-control" style="width: 450px"/></td>
 			</tr>
@@ -129,6 +135,16 @@
 	$('#cdn_download').click(function() {
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl={CDNDL}';
 	});
+	
+	$('#check_ssl').val($(this).is(':checked'));
+
+    $('#check_ssl').change(function() {
+        if($(this).is(":checked")) {
+            var returnVal = confirm('{LANG.note_ssl}');
+            $(this).attr("checked", returnVal);
+        }
+        $('#check_ssl').val($(this).is(':checked'));        
+    });
 
 	function show_rewrite_op() {
 		if( $("input[name=rewrite_optional]").is(":checked") )
