@@ -24,6 +24,7 @@ $lang_module['last_login0'] = 'Chưa bao giờ';
 $lang_module['login'] = 'Tên tài khoản';
 $lang_module['email'] = 'Email';
 $lang_module['full_name'] = 'Tên gọi trên site';
+$lang_module['name'] = 'Tên gọi trên site';
 $lang_module['sig'] = 'Chữ ký';
 $lang_module['editor'] = 'Trình soạn thảo';
 $lang_module['lev'] = 'Quyền hạn';

@@ -21,14 +21,14 @@ if( $admin_id )
 	die( 'NO' );
 }
 
-$sql = 'SELECT username, full_name, email, photo, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
+$sql = 'SELECT username, first_name, last_name, email, photo, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
 $row = $db->query( $sql )->fetch( 3 );
 if( empty( $row ) )
 {
 	die( 'NO' );
 }
 
-list( $username, $full_name, $email, $photo, $idsite ) = $row;
+list( $username, $first_name, $last_name, $email, $photo, $idsite ) = $row;
 
 if( $global_config['idsite'] > 0 and $idsite != $global_config['idsite'] )
 {
@@ -42,7 +42,7 @@ if( $query->fetchColumn() )
 }
 else
 {
-	$userdelete = ( ! empty( $full_name ) ) ? $full_name . ' (' . $username . ')' : $username;
+	$userdelete = ( ! empty( $first_name ) ) ? $first_name . ' (' . $username . ')' : $username;
 
 	$result = $db->exec( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid );
 	if( ! $result )

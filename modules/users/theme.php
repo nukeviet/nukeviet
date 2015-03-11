@@ -1218,7 +1218,7 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 	{
 		$xtpl->assign( 'USER', $user );
 
-		if( ! empty( $user['full_name'] ) && $user['full_name'] != $user['username'] )
+		if( ! empty( $user['first_name'] ) && $user['first_name'] != $user['username'] )
 		{
 			$xtpl->parse( 'main.list.fullname' );
 		}

@@ -17,7 +17,7 @@ if( $nv_Request->isset_request( 'id', 'get' ) )
 {
 	$admin_id = $nv_Request->get_int( 'id', 'get', 0 );
 	$sql = 'SELECT t1.admin_id as admin_id, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,
-	t2.username as username, t2.email as email, t2.full_name as full_name, t2.view_mail as view_mail, t2.regdate as regdate
+	t2.username as username, t2.email as email, t2.first_name as first_name, t2.last_name as last_name, t2.view_mail as view_mail, t2.regdate as regdate
 	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE admin_id=' . $admin_id;
 	$adminrows = $db->query( $sql )->fetchAll();
 	$numrows = sizeof( $adminrows );
@@ -31,7 +31,7 @@ if( $nv_Request->isset_request( 'id', 'get' ) )
 else
 {
 	$sql = 'SELECT t1.admin_id as admin_id, t1.check_num as check_num, t1.last_agent as last_agent, t1.last_ip as last_ip, t1.last_login as last_login, t1.files_level as files_level, t1.lev as lev,t1.position as position, t1.editor as editor, t1.is_suspend as is_suspend, t1.susp_reason as susp_reason,
-		t2.username as username, t2.email as email, t2.full_name as full_name, t2.view_mail as view_mail, t2.regdate as regdate
+		t2.username as username, t2.email as email, t2.first_name as first_name, t2.last_name as last_name, t2.view_mail as view_mail, t2.regdate as regdate
 		FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid ORDER BY t1.lev ASC';
 
 	$adminrows = $db->query( $sql )->fetchAll();
@@ -71,7 +71,7 @@ if( $numrows )
 		$last_login = intval( $row['last_login'] );
 		$last_login = $last_login ? nv_date( 'l, d/m/Y H:i', $last_login ) : $lang_module['last_login0'];
 		$last_agent = $row['last_agent'];
-		$row['full_name'] = empty( $row['full_name'] ) ? $row['full_name'] : $row['username'];
+		$row['first_name'] = empty( $row['first_name'] ) ? $row['first_name'] : $row['username'];
 
 		$browser = array_combine( array( 'key', 'name' ), explode( '|', nv_getBrowser( $last_agent ) ) );
 
@@ -86,7 +86,7 @@ if( $numrows )
 		{
 			$last_reason = unserialize( $row['susp_reason'] );
 			$last_reason = array_shift( $last_reason );
-			list( $susp_admin_id, $susp_admin_name ) = $db->query( 'SELECT userid,full_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval( $last_reason['start_admin'] ) )->fetch( 3 );
+			list( $susp_admin_id, $susp_admin_name ) = $db->query( 'SELECT userid,first_name,last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval( $last_reason['start_admin'] ) )->fetch( 3 );
 			$susp_admin_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_LANG_VARIABLE . "=" . $module_name . "&amp;id=" . $susp_admin_id . "\">" . $susp_admin_name . "</a>";
 			$is_suspend = sprintf( $lang_module['is_suspend1'], nv_date( 'd/m/Y H:i', $last_reason['starttime'] ), $susp_admin_name, $last_reason['info'] );
 		}
@@ -169,13 +169,13 @@ if( $numrows )
 		}
 
 		$admins[$row['admin_id']] = array();
-		$admins[$row['admin_id']]['caption'] = ( $row['admin_id'] == $admin_info['admin_id'] ) ? sprintf( $lang_module['admin_info_title2'], $row['full_name'] ) : sprintf( $lang_module['admin_info_title1'], $row['full_name'] );
+		$admins[$row['admin_id']]['caption'] = ( $row['admin_id'] == $admin_info['admin_id'] ) ? sprintf( $lang_module['admin_info_title2'], $row['first_name'] ) : sprintf( $lang_module['admin_info_title1'], $row['first_name'] );
 		$admins[$row['admin_id']]['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $row['admin_id'];
 		$admins[$row['admin_id']]['thead'] = $thead;
 		$admins[$row['admin_id']]['options'] = array();
 		$admins[$row['admin_id']]['options']['login'] = array( $lang_module['login'], $login );
 		$admins[$row['admin_id']]['options']['email'] = array( $lang_module['email'], $email );
-		$admins[$row['admin_id']]['options']['full_name'] = array( $lang_module['full_name'], $row['full_name'] );
+		$admins[$row['admin_id']]['options']['first_name'] = array( $lang_module['name'], $row['first_name'], $row['last_name'] );
 		$admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
 		$admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
 		$admins[$row['admin_id']]['options']['position'] = array( $lang_module['position'], $row['position'] );

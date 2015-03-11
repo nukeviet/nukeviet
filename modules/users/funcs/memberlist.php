@@ -142,7 +142,7 @@ else
 
 		$num_items = $db->query( $db->sql() )->fetchColumn();
 
-		$db->select( 'userid, username, md5username, full_name, photo, gender, regdate' )
+		$db->select( 'userid, username, md5username, first_name, last_name, photo, gender, regdate' )
 			->order( $orderby . ' ' . $sortby )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );

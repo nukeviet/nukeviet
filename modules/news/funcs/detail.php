@@ -324,10 +324,10 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			'verygood' => $lang_module['star_verygood']
 		);
 	}
+		
+	list( $post_username, $post_first_name, $post_last_name ) = $db->query( 'SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] )->fetch( 3 );
 
-	list( $post_username, $post_full_name ) = $db->query( 'SELECT username, full_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] )->fetch( 3 );
-
-	$news_contents['post_name'] = empty( $post_full_name ) ? $post_username : $post_full_name;
+	$news_contents['post_name'] = empty( $post_first_name ) ? $post_username : $post_first_name;
 
 	$array_keyword = array();
 	$key_words = array();
