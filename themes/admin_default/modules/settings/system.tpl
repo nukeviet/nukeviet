@@ -140,7 +140,6 @@
 
     $('#check_ssl').change(function() {
         if($(this).is(":checked")) {
-            //var aaa = '{LANG.aaa}';
             var returnVal = confirm('{LANG.note_ssl}');
             $(this).attr("checked", returnVal);
         }
