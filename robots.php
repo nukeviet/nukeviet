@@ -12,6 +12,7 @@ define( 'NV_MAINFILE', true );
 define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
 
 require NV_ROOTDIR . '/includes/constants.php';
+require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 
 $cache_file = NV_ROOTDIR . '/' . NV_DATADIR . '/robots.php';
 if( file_exists( $cache_file ) )
@@ -85,7 +86,7 @@ foreach( $robots_other as $key => $value )
 		$contents[] = 'Disallow: ' . $key;
 	}
 }
-$contents[] = 'Sitemap: http://' . $host . $base_siteurl . 'sitemap.xml';
+$contents[] = 'Sitemap: http' . ( $global_config['ssl_https'] ? 's' : '' ) . '://' . $host . $base_siteurl . 'sitemap.xml';
 $contents = implode( "\n", $contents );
 
 header( 'Content-Type: text/plain; charset=utf-8' );

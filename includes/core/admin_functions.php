@@ -513,7 +513,7 @@ function nv_check_rewrite_file()
  */
 function nv_rewrite_change( $array_config_global )
 {
-	global $sys_info, $lang_module, $global_config;
+	global $sys_info, $lang_module;
 	$rewrite_rule = $filename = '';
 	$endurl = ( $array_config_global['rewrite_endurl'] == $array_config_global['rewrite_exturl'] ) ? nv_preg_quote( $array_config_global['rewrite_endurl'] ) : nv_preg_quote( $array_config_global['rewrite_endurl'] ) . '|' . nv_preg_quote( $array_config_global['rewrite_exturl'] );
 
@@ -622,7 +622,7 @@ function nv_rewrite_change( $array_config_global )
 		$rewrite_rule .= "RewriteEngine On\n";
 		$rewrite_rule .= "#RewriteBase " . NV_BASE_SITEURL . "\n";
 
-		if( $global_config['ssl_https'] == '1')
+		if( $array_config_global['ssl_https'] )
 		{
 			$rewrite_rule .= "RewriteCond %{SERVER_PORT} !^443$\n";
 			$rewrite_rule .= "RewriteRule (.*)  https://%{SERVER_NAME}%{REQUEST_URI} [L,R]\n";
@@ -637,7 +637,7 @@ function nv_rewrite_change( $array_config_global )
 		{
 			$rewrite_rule .= "RewriteRule ^((?!http(s?)|ftp\:\/\/).*)\.(css|js)$ CJzip.php?file=$1.$3 [L]\n";
 		}
-		
+
 		$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
 		$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
 		$rewrite_rule .= "RewriteRule (.*)(" . $endurl . ")\$ index.php\n";
