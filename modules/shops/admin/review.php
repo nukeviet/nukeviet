@@ -66,8 +66,9 @@ if( $nv_Request->isset_request( 'change_status', 'get,post' ) )
 $per_page = 20;
 $page = $nv_Request->get_int( 'page', 'post,get', 1 );
 $array_search = array();
-$array_search['keywords'] = $nv_Request->get_title( 'keywords', 'post,get', '' );
-$array_search['status'] = $nv_Request->get_int( 'status', 'post,get', -1 );
+$array_search['product_id'] = $nv_Request->get_int( 'product_id', 'get', 0 );
+$array_search['keywords'] = $nv_Request->get_title( 'keywords', 'get', '' );
+$array_search['status'] = $nv_Request->get_int( 'status', 'get', -1 );
 
 $db->sqlreset( )
 	->select( 'COUNT(*)' )
@@ -81,6 +82,12 @@ if( !empty( $array_search['keywords'] ) )
 {
 	$where .= ' AND ' . NV_LANG_DATA . '_title LIKE :q_title OR sender LIKE :q_sender OR content like :q_content';
 }
+
+if( !empty( $array_search['product_id'] ) )
+{
+	$where .= ' AND t1.product_id = ' . $array_search['product_id'];
+}
+
 if( $array_search['status'] >= 0 )
 {
 	$where .= ' AND t1.status = ' . $array_search['status'];
@@ -132,6 +139,12 @@ if( !empty( $array_search['keywords'] ) )
 {
 	$base_url .= '&keywords=' . $array_search['keywords'];
 }
+
+if( !empty( $array_search['product_id'] ) )
+{
+	$base_url .= '&product_id=' . $array_search['product_id'];
+}
+
 if( $array_search['status'] >= 0 )
 {
 	$base_url .= '&status=' . $array_search['status'];

@@ -89,7 +89,6 @@ if( $showdata == 1 )
 if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 $timeout = $nv_Request->get_int( $module_data . '_' . $op . '_' . $id, 'cookie', 0 );
-$timeout = 0;
 if( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 {
 	$sender = $nv_Request->get_string( 'sender', 'get,post', '' );
@@ -121,7 +120,7 @@ if( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 		$sth->bindParam( ':rating', $rating, PDO::PARAM_INT );
 		if( $sth->execute() )
 		{
-			$content = array( 'product_id' => $id, 'content' => $comment, 'rating' => $rating );
+			$content = array( 'product_id' => $id, 'content' => $comment, 'rating' => $rating, 'status' => $status );
 			nv_insert_notification( $module_name, 'review_new', $content, 0, $userid, 1 );
 			nv_del_moduleCache( $module_name );
 			$contents = "OK_" . ( $pro_config['review_check'] ? $lang_module['rate_success_queue'] : $lang_module['rate_success_ok'] );

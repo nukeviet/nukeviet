@@ -414,6 +414,7 @@ $lang_module['review_setting_active'] = 'Sử dụng chức năng đánh giá s�
 $lang_module['review_setting_check'] = 'Kiểm duyệt đánh giá trước khi hiển thị';
 $lang_module['review_setting_captcha'] = 'Sử dụng mã bảo mật (captcha) khi đánh giá';
 $lang_module['review_notification_new'] = '<strong>%s</strong> đánh giá sản phẩm <strong>%s</strong>';
+$lang_module['review_notification_new_queue'] = '<strong>%s</strong> đánh giá sản phẩm <strong>%s</strong>, bạn cần xem xét đánh giá này trước khi cho phép hiển thị';
 
 //Lang for function coupons
 $lang_module['coupons'] = 'Mã giảm giá';
