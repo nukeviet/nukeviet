@@ -105,12 +105,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 		$array_config_global['my_domains'] = array_unique( $array_config_global['my_domains'] );
 		$array_config_global['my_domains'] = implode( ',', $array_config_global['my_domains'] );
-		
+
 		$array_config_global['ssl_https'] = $nv_Request->get_int( 'ssl_https', 'post' );
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
 		$array_config_global['optActive'] = $nv_Request->get_int( 'optActive', 'post' );
-		
+
 		$site_lang = $nv_Request->get_title( 'site_lang', 'post', '', 1 );
 		if( ! empty( $site_lang ) and in_array( $site_lang, $allow_sitelangs ) )
 		{
@@ -157,7 +157,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			'rewrite_optional' => $array_config_global['rewrite_optional'],
 			'rewrite_endurl' => $global_config['rewrite_endurl'],
 			'rewrite_exturl' => $global_config['rewrite_exturl'],
-			'rewrite_op_mod' => $array_config_global['rewrite_op_mod']
+			'rewrite_op_mod' => $array_config_global['rewrite_op_mod'],
+			'ssl_https' => $array_config_global['ssl_https']
 		);
 		$rewrite = nv_rewrite_change( $array_config_rewrite );
 		if( empty( $rewrite[0] ) )
@@ -204,9 +205,9 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$array_config_global[$c_config_name] = $c_config_value;
 	}
-	
+
 	$lang_multi = $array_config_global['lang_multi'];
-	$xtpl->assign( 'CHECKED_SSL_HTTPS', ( $array_config_global['ssl_https'] ) ? ' checked="checked"' : '' );	
+	$xtpl->assign( 'CHECKED_SSL_HTTPS', ( $array_config_global['ssl_https'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_GZIP_METHOD', ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_LANG_MULTI', ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '' );
 
