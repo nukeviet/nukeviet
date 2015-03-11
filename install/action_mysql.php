@@ -472,5 +472,6 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   type varchar(255) NOT NULL,
   content text NOT NULL,
   add_time int(11) unsigned NOT NULL,
+  view tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM";
