@@ -112,6 +112,11 @@ if( ! empty( $array_data ) )
 						$data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
 					}
 				}
+				else
+				{
+					$data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
+					$data['send_from'] = $lang_global['level5'];
+				}
 
 				include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/notification.php';
 			}
