@@ -155,7 +155,7 @@ if( $post_order == 1 )
 		$data_order['shipping']['ship_carrier_id'] = $nv_Request->get_int( 'carrier', 'post', 0 );
 
 		$price_ship = nv_shipping_price( $total_weight, $pro_config['weight_unit'], $data_order['shipping']['ship_location_id'], $data_order['shipping']['ship_shops_id'], $data_order['shipping']['ship_carrier_id'] );
-		$total_weight_price = empty( $price_ship ) ? 0 : $price_ship['price'];
+		$total_weight_price = empty( $price_ship ) ? 0 : $price_ship;
 	}
 	$total += $total_weight_price;
 
@@ -330,6 +330,9 @@ if( $post_order == 1 )
 			// Cong vao so luong san pham da ban
 			product_number_sell( $listid, $listnum );
 
+			$checkss = md5( $order_id . $global_config['sitekey'] . session_id( ) );
+			$review_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $order_id . '&checkss=' . $checkss;
+
 			if( empty( $order_info ) ) // Them don hang
 			{
 				// Cap nhat lich su su dung ma giam gia
@@ -352,6 +355,61 @@ if( $post_order == 1 )
 					$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
 					$stmt->bindParam( ':point', $total_point, PDO::PARAM_INT );
 					$stmt->execute();
+				}
+
+				// Thong tin van chuyen
+				$num = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id = ' . $order_id )->fetchColumn();
+				if( $num > 0 )
+				{
+					// Sua thong tin van chuyen
+					if( $data_order['order_shipping'] )
+					{
+						$stmt = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping SET ship_name = :ship_name, ship_phone = :ship_phone, ship_location_id = :ship_location_id, ship_address_extend = :ship_address_extend, ship_shops_id = :ship_shops_id, ship_carrier_id = :ship_carrier_id, weight = :weight, weight_unit = :weight_unit, ship_price = :ship_price, ship_price_unit = :ship_price_unit, edit_time = ' . NV_CURRENTTIME . ' WHERE order_id = ' . $order_id );
+						$stmt->bindParam( ':ship_name', $data_order['shipping']['ship_name'], PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_phone', $data_order['shipping']['ship_phone'], PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_location_id', $data_order['shipping']['ship_location_id'], PDO::PARAM_INT );
+						$stmt->bindParam( ':ship_address_extend', $data_order['shipping']['ship_address_extend'], PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_shops_id', $data_order['shipping']['ship_shops_id'], PDO::PARAM_INT );
+						$stmt->bindParam( ':ship_carrier_id', $data_order['shipping']['ship_carrier_id'], PDO::PARAM_INT );
+						$stmt->bindParam( ':weight', $total_weight, PDO::PARAM_STR );
+						$stmt->bindParam( ':weight_unit', $pro_config['weight_unit'], PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_price', $total_weight_price, PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_price_unit', $pro_config['money_unit'], PDO::PARAM_STR );
+						$stmt->execute();
+					}
+					else
+					{
+						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id = ' . $order_id );
+					}
+				}
+				else
+				{
+					// Ghi nhan thong tin van chuyen
+					if( $data_order['order_shipping'] )
+					{
+						try
+						{
+						$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping( order_id, ship_name, ship_phone, ship_location_id, ship_address_extend, ship_shops_id, ship_carrier_id, weight, weight_unit, ship_price, ship_price_unit, add_time ) VALUES ( :order_id, :ship_name, :ship_phone, :ship_location_id, :ship_address_extend, :ship_shops_id, :ship_carrier_id, :weight, :weight_unit, :ship_price, :ship_price_unit, ' . NV_CURRENTTIME . ' )' );
+						$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
+						$stmt->bindParam( ':ship_name', $data_order['shipping']['ship_name'], PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_phone', $data_order['shipping']['ship_phone'], PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_location_id', $data_order['shipping']['ship_location_id'], PDO::PARAM_INT );
+						$stmt->bindParam( ':ship_address_extend', $data_order['shipping']['ship_address_extend'], PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_shops_id', $data_order['shipping']['ship_shops_id'], PDO::PARAM_INT );
+						$stmt->bindParam( ':ship_carrier_id', $data_order['shipping']['ship_carrier_id'], PDO::PARAM_INT );
+						$stmt->bindParam( ':weight', $total_weight, PDO::PARAM_STR );
+						$stmt->bindParam( ':weight_unit', $pro_config['weight_unit'], PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_price', $total_weight_price, PDO::PARAM_STR );
+						$stmt->bindParam( ':ship_price_unit', $pro_config['money_unit'], PDO::PARAM_STR );
+						$stmt->execute();
+						}
+						catch( PDOException $e )
+						{
+							die($e->getMessage());
+						  trigger_error( $e->getMessage() );
+						}
+
+					}
 				}
 
 				// Gui email thong bao don hang
@@ -402,67 +460,38 @@ if( $post_order == 1 )
 					}
 				}
 
+				// Gui mail thong bao den khach hang
 				$lang_module['order_email_noreply'] = sprintf( $lang_module['order_email_noreply'], $global_config['site_url'], $global_config['site_url'] );
 				$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks'], $global_config['site_url'] );
 				$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review'], $global_config['site_url'] . $review_url );
-
 				$data_order['review_url'] = $review_url;
-
 				$email_contents = call_user_func( 'email_new_order', $data_order, $data_pro );
 
 				nv_sendmail( array(
 					$global_config['site_name'],
 					$global_config['site_email']
 				), $data_order['order_email'], sprintf( $lang_module['order_email_title'], $module_info['custom_title'], $data_order['order_code'] ), $email_contents );
-			}
 
-			$num = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id = ' . $order_id )->fetchColumn();
-			if( $num > 0 )
-			{
-				// Sua thong tin van chuyen
-				if( $data_order['order_shipping'] )
-				{
-					$stmt = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping SET ship_name = :ship_name, ship_phone = :ship_phone, ship_location_id = :ship_location_id, ship_address_extend = :ship_address_extend, ship_shops_id = :ship_shops_id, ship_carrier_id = :ship_carrier_id, weight = :weight, weight_unit = :weight_unit, ship_price = :ship_price, ship_price_unit = :ship_price_unit, edit_time = ' . NV_CURRENTTIME . ' WHERE order_id = ' . $order_id );
-					$stmt->bindParam( ':ship_name', $data_order['shipping']['ship_name'], PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_phone', $data_order['shipping']['ship_phone'], PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_location_id', $data_order['shipping']['ship_location_id'], PDO::PARAM_INT );
-					$stmt->bindParam( ':ship_address_extend', $data_order['shipping']['ship_address_extend'], PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_shops_id', $data_order['shipping']['ship_shops_id'], PDO::PARAM_INT );
-					$stmt->bindParam( ':ship_carrier_id', $data_order['shipping']['ship_carrier_id'], PDO::PARAM_INT );
-					$stmt->bindParam( ':weight', $total_weight, PDO::PARAM_STR );
-					$stmt->bindParam( ':weight_unit', $pro_config['weight_unit'], PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_price', $total_weight_price, PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_price_unit', $pro_config['money_unit'], PDO::PARAM_STR );
-					$stmt->execute();
-				}
-				else
-				{
-					$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id = ' . $order_id );
-				}
-			}
-			else
-			{
-				// Ghi nhan thong tin van chuyen
-				if( $data_order['order_shipping'] )
-				{
-					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping( order_id, ship_name, ship_phone, ship_location_id, ship_address_extend, ship_shops_id, ship_carrier_id, weight, weight_unit, ship_price, ship_price_unit, add_time ) VALUES ( :order_id, :ship_name, :ship_phone, :ship_location_id, :ship_address_extend, :ship_shops_id, :ship_carrier_id, :weight, :weight_unit, :ship_price, :ship_price_unit, ' . NV_CURRENTTIME . ' )' );
-					$stmt->bindParam( ':order_id', $order_id, PDO::PARAM_INT );
-					$stmt->bindParam( ':ship_name', $data_order['shipping']['ship_name'], PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_phone', $data_order['shipping']['ship_phone'], PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_location_id', $data_order['shipping']['ship_location_id'], PDO::PARAM_INT );
-					$stmt->bindParam( ':ship_address_extend', $data_order['shipping']['ship_address_extend'], PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_shops_id', $data_order['shipping']['ship_shops_id'], PDO::PARAM_INT );
-					$stmt->bindParam( ':ship_carrier_id', $data_order['shipping']['ship_carrier_id'], PDO::PARAM_INT );
-					$stmt->bindParam( ':weight', $total_weight, PDO::PARAM_STR );
-					$stmt->bindParam( ':weight_unit', $pro_config['weight_unit'], PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_price', $total_weight_price, PDO::PARAM_STR );
-					$stmt->bindParam( ':ship_price_unit', $pro_config['money_unit'], PDO::PARAM_STR );
-					$stmt->execute();
-				}
-			}
+				// Them vao notification
+				$content = array( 'order_id' => $data_order['id'], 'order_code' => $data_order['order_code'], 'order_name' => $data_order['order_name'] );
+				$userid = !empty( $user_info ) ? $user_info['userid'] : 0;
+				nv_insert_notification( $module_name, 'order_new', $content, 0, $userid, 1 );
 
-			$checkss = md5( $order_id . $global_config['sitekey'] . session_id( ) );
-			$review_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $order_id . '&checkss=' . $checkss;
+				// Gui mail thong bao den nguoi quan ly shops
+				$order_url = $global_config['site_url'] . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=or_view&amp;order_id=' . $data_order['id'];
+				$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks_to_admin'], $data_order['order_name'] );
+				$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review_to_admin'], $order_url );
+
+				$listmail_notify = nv_listmail_notify();
+				if( !empty( $listmail_notify ) )
+				{
+					$email_contents_to_admin = call_user_func( 'email_new_order', $data_order, $data_pro );
+					nv_sendmail( array(
+						$global_config['site_name'],
+						$global_config['site_email']
+					), $listmail_notify, sprintf( $lang_module['order_email_title'], $module_info['custom_title'], $data_order['order_code'] ), $email_contents_to_admin );
+				}
+			}
 
 			// Chuyen trang xem thong tin don hang vua dat
 			unset( $_SESSION[$module_data . '_cart'] );

@@ -27,8 +27,7 @@ if( $nv_Request->isset_request( 'get_carrier', 'get' ) )
 		$i = 0;
 		while( $row = $_query->fetch() )
 		{
-			$ck = ( $i == 0 ) ? 'checked="checked"' : '';
-			$contents .= '<label class="show"><input type="radio" name="carrier" ' . $ck . ' value="' . $row['id'] . '" title="' . $row['name'] . '" onclick="nv_carrier_change()" />' . $row['name'] . '</label>';
+			$contents .= '<label class="show"><input type="radio" name="carrier" value="' . $row['id'] . '" title="' . $row['name'] . '" onclick="nv_carrier_change()" />' . $row['name'] . '</label>';
 			$i++;
 		}
 	}
@@ -60,7 +59,7 @@ if( $nv_Request->isset_request( 'get_shipping_price', 'get' ) )
 	$contents = nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $carrier_id );
 	if( !empty( $contents ) )
 	{
-		$contents = $contents['price_format'] . ' ' . $contents['unit'];
+		$contents = $contents . ' ' . $pro_config['money_unit'];
 	}
 	else
 	{

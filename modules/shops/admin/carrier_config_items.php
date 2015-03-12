@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( 'delete_id', 'get' ) and $nv_Request->isset_requ
 				$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items SET weight=' . $weight . ' WHERE id=' . intval( $id ) );
 			}
 		}
-
+		nv_del_moduleCache( $module_name );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=carrier_config_items&cid=' . $cid );
 		die( );
 	}
@@ -102,7 +102,7 @@ if( $row['id'] > 0 )
 	}
 
 	$row['config_weight'] = array( );
-	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid=' . $row['id'] );
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid=' . $row['id'] . ' ORDER BY weight' );
 	if( $result )
 	{
 		while( $weight = $result->fetch( ) )

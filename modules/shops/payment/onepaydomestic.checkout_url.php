@@ -4,7 +4,7 @@
  * @Project NUKEVIET 3.x
  * @Author VINADES., JSC (contact@vinades.vn)
  * @Copyright (C) 2010 VINADES ., JSC. All rights reserved
- * @Createdate Dec 29, 2010  10:42:00 PM 
+ * @Createdate Dec 29, 2010  10:42:00 PM
  */
 
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
@@ -27,7 +27,7 @@ $array_post['vpc_Currency'] = 'VND'; // Viet Nam Dong
 $array_post['vpc_MerchTxnRef'] = nv_genpass( 20 ); // ID giao dich tu tang
 $array_post['vpc_OrderInfo'] = $data['order_code']; // Ten hoa don
 $order_chage = nv_currency_conversion( $data['order_total'], $pro_config['money_unit'], "VND" );
-$array_post['vpc_Amount'] = 100 * intval($order_chage['price'] );// So tien can thanh toan
+$array_post['vpc_Amount'] = 100 * intval($order_chage );// So tien can thanh toan
 
 $array_post['vpc_ReturnURL'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=complete&payment=" . $payment; // URL tra ve
 $array_post['vpc_TicketNo'] = $client_info['ip']; // IP nguoi mua

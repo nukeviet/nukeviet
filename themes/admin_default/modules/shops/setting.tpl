@@ -57,22 +57,6 @@
 			</colgroup>
 			<tbody>
 				<tr>
-					<td><strong>{LANG.setting_active_order}</strong></td>
-					<td><input type="checkbox" value="1" name="active_order" {ck_active_order} /></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_guest_order}</strong></td>
-					<td><input type="checkbox" value="1" name="active_guest_order" {ck_active_guest_order} /></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_active_order_non_detail}</strong></td>
-					<td><input type="checkbox" value="1" name="active_order_non_detail" {ck_active_order_non_detail} /></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_active_order_popup}</strong></td>
-					<td><input type="checkbox" value="1" name="active_order_popup" {ck_active_order_popup} /></td>
-				</tr>
-				<tr>
 					<td><strong>{LANG.setting_hometext}</strong></td>
 					<td><input type="checkbox" value="1" name="active_showhomtext" {ck_active_showhomtext} /></td>
 				</tr>
@@ -81,24 +65,8 @@
 					<td><input type="checkbox" value="1" name="active_price" {ck_active_price} id="active_price" /></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_active_order_number}</strong></td>
-					<td><input type="checkbox" value="1" name="active_order_number" {ck_active_order_number} id="active_order_number" /> {LANG.setting_active_order_number_note} </td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_active_payment}</strong></td>
-					<td><input type="checkbox" value="1" name="active_payment" {ck_active_payment} id="active_payment" /> {LANG.setting_active_payment_note} </td>
-				</tr>
-				<tr>
 					<td><strong>{LANG.setting_compare}</strong></td>
 					<td><input type="checkbox" value="1" name="show_compare" {ck_compare} /></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_shipping}</strong></td>
-					<td><input type="checkbox" value="1" name="use_shipping" {ck_shipping}/></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_coupons}</strong></td>
-					<td><input type="checkbox" value="1" name="use_coupons" {ck_coupons}/></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_money_all}</strong></td>
@@ -131,16 +99,71 @@
 					<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/><span class="text-middle">{LANG.setting_facebookAppIDNote}</span></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.setting_active_auto_check_order}</strong></td>
-					<td><input type="checkbox" value="1" name="auto_check_order" {ck_auto_check_order} id="auto_check_order" /></td>
-				</tr>
-				<tr>
 					<td><strong>{LANG.setting_show_product_code}</strong></td>
 					<td><input type="checkbox" value="1" name="show_product_code" {ck_show_product_code} id="show_product_code" /></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_active_wishlist}</strong></td>
 					<td><input type="checkbox" value="1" name="active_wishlist" {ck_active_wishlist} id="active_wishlist" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="table-responsive" id="setting_group_price">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>
+				{LANG.setting_active_order}
+			</caption>
+			<colgroup>
+				<col class="w500" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.setting_active_order_active}</strong></td>
+					<td><input type="checkbox" value="1" name="active_order" {ck_active_order} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_guest_order}</strong></td>
+					<td><input type="checkbox" value="1" name="active_guest_order" {ck_active_guest_order} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_order_non_detail}</strong></td>
+					<td><input type="checkbox" value="1" name="active_order_non_detail" {ck_active_order_non_detail} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_order_popup}</strong></td>
+					<td><input type="checkbox" value="1" name="active_order_popup" {ck_active_order_popup} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_order_number}</strong></td>
+					<td><input type="checkbox" value="1" name="active_order_number" {ck_active_order_number} id="active_order_number" /> {LANG.setting_active_order_number_note} </td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_payment}</strong></td>
+					<td><input type="checkbox" value="1" name="active_payment" {ck_active_payment} id="active_payment" /> {LANG.setting_active_payment_note} </td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_shipping}</strong></td>
+					<td><input type="checkbox" value="1" name="use_shipping" {ck_shipping}/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_coupons}</strong></td>
+					<td><input type="checkbox" value="1" name="use_coupons" {ck_coupons}/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_auto_check_order}</strong></td>
+					<td><input type="checkbox" value="1" name="auto_check_order" {ck_auto_check_order} id="auto_check_order" /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_group_notify}</strong><em class="help-block">{LANG.setting_group_notify_note}</em></td>
+					<td>
+						<!-- BEGIN: groups_notify -->
+						<div class="row">
+							<label><input name="groups_notify[]" type="checkbox" value="{GROUPS_NOTIFY.value}" {GROUPS_NOTIFY.checked} />{GROUPS_NOTIFY.title}</label>
+						</div>
+						<!-- END: groups_notify -->
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -220,6 +243,26 @@
 			</tbody>
 		</table>
 	</div>
+
+	<div class="table-responsive" id="setting_group_price">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>
+				{LANG.setting_group_price}
+			</caption>
+			<colgroup>
+				<col class="w500" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.setting_group_price_space}</strong><em class="help-block">{LANG.setting_group_price_space_note}</em></td>
+					<td>
+						<textarea class="form-control" name="group_price" rows="9" style="width: 100%">{DATA.group_price}</textarea>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
 	<div class="text-center"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting">
 	</div>
 </form>

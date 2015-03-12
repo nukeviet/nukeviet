@@ -64,6 +64,7 @@ if ( $nv_Request->isset_request( 'delete_id', 'get' ) and $nv_Request->isset_req
 				$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_shops SET weight=' . $weight . ' WHERE id=' . intval( $id ));
 			}
 		}
+		nv_del_moduleCache( $module_name );
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 		die();
 	}

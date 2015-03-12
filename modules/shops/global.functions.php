@@ -491,3 +491,21 @@ function UpdatePoint( $data_content, $add = true )
 		}
 	}
 }
+
+function nv_listmail_notify()
+{
+	global $db, $global_config, $pro_config;
+
+	$array_mail = array();
+	if( !empty( $pro_config['groups_notify'] ) )
+	{
+		$result = $db->query( 'SELECT email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id IN ( ' . $pro_config['groups_notify'] . ' ) )' );
+		while( list( $email ) = $result->fetch( 3 ) )
+		{
+			$array_mail[] = $email;
+		}
+	}
+	$array_mail = array_unique( $array_mail );
+
+	return $array_mail;
+}

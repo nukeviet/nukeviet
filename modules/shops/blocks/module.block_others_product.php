@@ -65,12 +65,29 @@ if( ! function_exists( 'nv_others_product' ) )
 				$xtpl->assign( 'title', $title_i );
 				$xtpl->assign( 'src_img', $src_img );
 				$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $addtime_i ) );
-				if( $pro_config['active_price'] == '1' and $showprice_i == '1' )
+
+				if( $pro_config['active_price'] == '1' )
 				{
-					$product_price = nv_currency_conversion( $product_price_i, $money_unit_i, $pro_config['money_unit'], $discount_id_i );
-					$xtpl->assign( 'PRICE', $product_price );
-					$xtpl->parse( 'main.loop.price' );
+					if( $showprice_i == '1' )
+					{
+						$price = nv_get_price( $id_i, $money_unit_i );
+						$xtpl->assign( 'PRICE', $price );
+						if( $discount_id_i and $price['discount_percent'] > 0 )
+						{
+							$xtpl->parse( 'main.loop.price.discounts' );
+						}
+						else
+						{
+							$xtpl->parse( 'main.loop.price.no_discounts' );
+						}
+						$xtpl->parse( 'main.loop.price' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.loop.contact' );
+					}
 				}
+
 				$bg = ( $i % 2 == 0 ) ? 'bg' : '';
 				$xtpl->assign( 'bg', $bg );
 				$xtpl->parse( 'main.loop' );

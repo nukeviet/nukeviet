@@ -16,8 +16,8 @@ if( defined( 'NV_EDITOR' ) )
 }
 
 $currencies_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/currencies.ini', true );
-
 $data = $module_config[$module_name];
+
 $active_payment_old = 0;
 if( ! empty( $data ) )
 {
@@ -30,6 +30,14 @@ $page_title = $lang_module['setting'];
 
 $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
 $error = "";
+
+$groups_list = array();
+$result = $db->query( 'SELECT group_id, title, idsite FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE group_id NOT IN ( 4, 5, 6 ) AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight' );
+while( $row = $result->fetch() )
+{
+	if( $row['group_id'] < 9 ) $row['title'] = $lang_global['level' . $row['group_id']];
+	$groups_list[$row['group_id']] = ( $global_config['idsite'] > 0 and empty( $row['idsite'] ) ) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
+}
 
 if( $savesetting == 1 )
 {
@@ -53,6 +61,8 @@ if( $savesetting == 1 )
 	$data['active_order_number'] = $nv_Request->get_int( 'active_order_number', 'post', 0 );
 	$data['active_payment'] = $nv_Request->get_int( 'active_payment', 'post', 0 );
 	$data['active_showhomtext'] = $nv_Request->get_int( 'active_showhomtext', 'post', 0 );
+	$_groups_notify = $nv_Request->get_array( 'groups_notify', 'post', array() );
+	$data['groups_notify'] = ! empty( $_groups_notify ) ? implode( ',', array_intersect( $_groups_notify, array_keys( $groups_list ) ) ) : '';
 	$data['active_tooltip'] = $nv_Request->get_int( 'active_tooltip', 'post', 0 );
 	$data['show_product_code'] = $nv_Request->get_int( 'show_product_code', 'post', 0 );
 	$data['show_compare'] = $nv_Request->get_int( 'show_compare', 'post', 0 );
@@ -70,6 +80,7 @@ if( $savesetting == 1 )
 	$data['review_active'] = $nv_Request->get_int( 'review_active', 'post', 0 );
 	$data['review_check'] = $nv_Request->get_int( 'review_check', 'post', 0 );
 	$data['review_captcha'] = $nv_Request->get_int( 'review_captcha', 'post', 0 );
+	$data['group_price'] = $nv_Request->get_textarea( 'group_price', '', 'br' );
 
 	if( $error == '' )
 	{
@@ -208,6 +219,17 @@ $xtpl->assign( 'ck_review_check', $check );
 
 $check = ( $data['review_captcha'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_review_captcha', $check );
+
+$groups_notify = explode( ',', $data['groups_notify'] );
+foreach( $groups_list as $_group_id => $_title )
+{
+	$xtpl->assign( 'GROUPS_NOTIFY', array(
+		'value' => $_group_id,
+		'checked' => in_array( $_group_id, $groups_notify ) ? ' checked="checked"' : '',
+		'title' => $_title
+	) );
+	$xtpl->parse( 'main.groups_notify' );
+}
 
 // Tien te
 $result = $db->query( "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " ORDER BY code DESC" );

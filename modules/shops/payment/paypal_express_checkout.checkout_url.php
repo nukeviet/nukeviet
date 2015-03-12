@@ -159,7 +159,7 @@ if( ! empty( $arrayid ) )
 	while( list( $id, $listcatid, $title, $money_unit ) = $result->fetch( 3 ) )
 	{
 		$itemAmount = nv_currency_conversion( $temppro[$id]['price'], $money_unit, 'USD' );
-		$itemAmount = new BasicAmountType($currencyCode, $itemAmount['sale'] );
+		$itemAmount = new BasicAmountType($currencyCode, $itemAmount );
 
 		$itemTotalValue += $itemAmount->value;
 

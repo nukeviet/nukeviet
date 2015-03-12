@@ -101,7 +101,8 @@ $lang_module['setting_money_all_note'] = 'Cần cập nhật lại tỉ giá n�
 $lang_module['setting_weight_all'] = 'Đơn vị khối lượng chính';
 $lang_module['setting_weight_all_note'] = 'Cần cập nhật lại giá trị chuyển đổi nếu bạn đổi đơn vị khối lượng chính';
 $lang_module['setting_active_auto_check_order'] = 'Tự động duyệt đơn hàng khi người mua gửi ';
-$lang_module['setting_active_order'] = 'Bật chức năng đặt hàng';
+$lang_module['setting_active_order'] = 'Cấu hình chức năng đặt hàng';
+$lang_module['setting_active_order_active'] = 'Bật chức năng đặt hàng';
 $lang_module['setting_active_order_non_detail'] = 'Bật chức năng đặt hàng không cần vào trang xem chi tiết';
 $lang_module['setting_active_order_popup'] = 'Hiển thị cửa sổ xem chi tiết sản phẩm khi đặt hàng tại trang chủ';
 $lang_module['setting_active_price'] = 'Hiển thị giá sản phẩm';
@@ -109,6 +110,8 @@ $lang_module['setting_active_order_number'] = 'Kích hoạt chức năng đặt 
 $lang_module['setting_active_order_number_note'] = 'Chức năng này dùng khi không sử dụng chức năng thanh toán trực tuyến, bật chức năng này thì thanh toán trực tuyến vô tác dụng';
 $lang_module['setting_active_payment'] = 'Cho phép thanh toán trực tuyến với các cổng đã tích hợp';
 $lang_module['setting_active_payment_note'] = 'Chức năng này bật thì được phép thành toán trực truyến, nếu cho đặt hàng với số lượng không giới hạn thì chức năng này không còn tác dụng';
+$lang_module['setting_group_notify'] = 'Các nhóm nhận thông báo từ hệ thống';
+$lang_module['setting_group_notify_note'] = 'Các thành viên thuộc nhóm được chọn sẽ nhận thông báo qua email khi có hoạt động mới (đơn hàng mới, hoàn tất thanh toán,...).';
 $lang_module['setting_active_tooltip'] = 'Bật chức năng tooltip cho sản phẩm';
 $lang_module['setting_show_product_code'] = 'Hiển thị mã sản phẩm';
 $lang_module['setting_active_wishlist'] = 'Sử dụng chức năng Sản phẩm yêu thích';
@@ -325,6 +328,7 @@ $lang_module['product_unit'] = 'sản phẩm';
 $lang_module['product_comment'] = 'bình luận';
 $lang_module['product_order'] = 'đơn đặt';
 $lang_module['detail_info'] = 'Chi tiết';
+
 $lang_module['group'] = 'Nhóm sản phẩm';
 $lang_module['group_sub_sl'] = 'Nhóm chính';
 $lang_module['edit_group'] = 'Sửa nhóm sản phẩm';
@@ -348,6 +352,12 @@ $lang_module['add_otherimage'] = 'Thêm hình minh họa khác';
 $lang_module['file_selectfile'] = 'Chọn hình ảnh';
 $lang_module['group_of'] = 'Của loại sản phẩm';
 $lang_module['group_of_none'] = 'Không của loại nào';
+$lang_module['setting_group_price'] = 'Cấu hình lọc sản phẩm theo giá';
+$lang_module['setting_group_price_space'] = 'Khoảng giá';
+$lang_module['setting_group_price_space_note'] = 'Nhập các giá trị của khoảng giá, từ bé đến lớn, mỗi giá trị nằm trên một dòng. Các giá trị này được sử dụng tại các vị trí lọc sản phẩm theo nhóm. <br /><br /><strong>Ví dụ:</strong> Các khoảng giá 10.000 -> 50.000, 50.000 -> 100.000,....<br /><strong>Thì nhập:</strong><br />10000<br />50000<br />100000<br />....';
+$lang_module['setting_group_price_space_note_cat_0'] = 'Nhập các giá trị của khoảng giá, từ bé đến lớn, mỗi giá trị nằm trên một dòng. Các giá trị này được sử dụng tại các vị trí lọc sản phẩm theo nhóm.<br /><br />Các giá trị ở đây mặc định lấy từ &nbsp; <a href="%s" title="Cấu hình module">Cấu hình module</a>. Bỏ trống nếu muốn hiển thị các khoảng giá từ cấu hình chung, hoặc tùy biến lại các khoảng giá phù hợp với loại sản phẩm hiện tại.';
+$lang_module['setting_group_price_space_note_cat_1'] = 'Nhập các giá trị của khoảng giá, từ bé đến lớn, mỗi giá trị nằm trên một dòng. Các giá trị này được sử dụng tại các vị trí lọc sản phẩm theo nhóm.<br /><br />Các giá trị ở đây mặc định lấy từ chủ đề cha &nbsp; <strong>"%s"</strong>. Bỏ trống nếu muốn hiển thị các khoảng giá từ cấu hình chung, hoặc tùy biến lại các khoảng giá phù hợp với loại sản phẩm hiện tại.';
+
 $lang_module['setting_compare'] = 'Bật chức năng so sánh sản phẩm';
 $lang_module['setting_displays'] = 'Bật chức năng sắp xếp hiển thị ngoài site';
 $lang_module['setting_shipping'] = 'Sử dụng dịch vụ vận chuyển';
@@ -413,7 +423,9 @@ $lang_module['review_add_time'] = 'Thời gian đăng';
 $lang_module['review_setting_active'] = 'Sử dụng chức năng đánh giá sản phẩm';
 $lang_module['review_setting_check'] = 'Kiểm duyệt đánh giá trước khi hiển thị';
 $lang_module['review_setting_captcha'] = 'Sử dụng mã bảo mật (captcha) khi đánh giá';
-$lang_module['review_notification_new'] = '<strong>%s</strong> đánh giá sản phẩm <strong>%s</strong>';
+$lang_module['review_notification_review_new'] = '<strong>%s</strong> đánh giá sản phẩm <strong>%s</strong>';
+$lang_module['review_notification_review_new_queue'] = '<strong>%s</strong> đánh giá sản phẩm <strong>%s</strong>, bạn cần xem xét đánh giá này trước khi cho phép hiển thị';
+$lang_module['review_notification_order_new'] = 'Đơn hàng mới <strong>"%s"</strong>, khách hàng <strong>%s</strong>';
 
 //Lang for function coupons
 $lang_module['coupons'] = 'Mã giảm giá';

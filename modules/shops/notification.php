@@ -20,6 +20,20 @@ if( $data['type'] == 'review_new' )
 		$sql = 'SELECT ' . NV_LANG_DATA . '_alias AS alias FROM ' . $db_config['prefix'] . '_' . $site_mods[$mod]['module_data'] . '_catalogs ORDER BY sort ASC';
 		$global_array_cat = nv_db_cache( $sql, 'catid', $module_name );
 	}
-	$data['title'] = sprintf( $lang_siteinfo['review_notification_new'], $data['send_from'], $title );
-	$data['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
+
+	if( $data['content']['status'] )
+	{
+		$data['title'] = sprintf( $lang_siteinfo['review_notification_review_new'], $data['send_from'], $title );
+		$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=review&product_id=' . $data['content']['product_id'];
+	}
+	else // Danh gia cho kiem duyet
+	{
+		$data['title'] = sprintf( $lang_siteinfo['review_notification_review_new_queue'], $data['send_from'], $title );
+		$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=review&status=0&product_id=' . $data['content']['product_id'];
+	}
+}
+elseif( $data['type'] == 'order_new' )
+{
+	$data['title'] = sprintf( $lang_siteinfo['review_notification_order_new'], $data['content']['order_code'], $data['content']['order_name'] );
+	$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=or_view&order_id=' . $data['content']['order_id'];
 }

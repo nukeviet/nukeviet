@@ -69,24 +69,24 @@
 			<div class="panel-body">
 				<p><strong>{LANG.order_address} (<a href="javascript:void(0)" title="{LANG.shipping_copy}" onclick="nv_get_customer_info()">{LANG.shipping_copy}</a>)</strong></p>
 				<div class="row">
-					<div class="col-xs-5">
+					<div class="col-xs-10">
 						<input type="text" name="ship_name" value="{DATA.shipping.ship_name}" class="form-control" placeholder="{LANG.shipping_name}" />
 						<span class="error">{ERROR.order_shipping_name}</span>
 					</div>
-					<div class="col-xs-7">
+					<div class="col-xs-14">
 						<input type="text" name="ship_phone" value="{DATA.shipping.ship_phone}" class="form-control" placeholder="{LANG.shipping_phone}" />
 						<span class="error">{ERROR.order_shipping_phone}</span>
 					</div>
 				</div><br />
 				<div class="row">
-					<div class="col-xs-5">
+					<div class="col-xs-10">
 						<select id="location" name="ship_location" class="form-control">
 							<!-- BEGIN: location_loop -->
 							<option value="{LOCATION.id}" {LOCATION.selected}>{LOCATION.title}</option>
 							<!-- END: location_loop -->
 						</select>
 					</div>
-					<div class="col-xs-7">
+					<div class="col-xs-14">
 						<input type="text" name="ship_address_extend" class="form-control" placeholder="{LANG.shipping_address_extend}" />
 					</div>
 				</div>
@@ -95,7 +95,7 @@
 					<div class="panel-body">
 						<p><strong>{LANG.shipping_services}</strong></p>
 						<div class="row">
-							<div class="col-xs-6">
+							<div class="col-xs-12">
 								<p><em>{LANG.shipping_shops_chose}</em></p>
 								<!-- BEGIN: shops_loop -->
 								<label class="show">
@@ -104,7 +104,7 @@
 								<span class="help-block">{SHOPS.location_string}</span>
 								<!-- END: shops_loop -->
 							</div>
-							<div class="col-xs-6">
+							<div class="col-xs-12">
 								<p><em>{LANG.shipping_carrier_chose}</em></p>
 								<div id="carrier">
 									<!-- BEGIN: carrier_loop -->

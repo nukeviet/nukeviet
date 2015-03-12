@@ -150,6 +150,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  newday tinyint(4) NOT NULL DEFAULT '3',
  typeprice tinyint(4) NOT NULL DEFAULT '2',
  form varchar(50) NOT NULL DEFAULT '',
+ group_price text NOT NULL DEFAULT '',
  admins mediumtext NOT NULL,
  add_time int(11) unsigned NOT NULL default '0',
  edit_time int(11) unsigned NOT NULL default '0',
@@ -635,6 +636,7 @@ $data['active_guest_order'] = 1;
 $data['active_price'] = 1;
 $data['active_order_number'] = 0;
 $data['active_payment'] = 1;
+$data['groups_price'] = '3';
 $data['active_tooltip'] = 1;
 $data['timecheckstatus'] = 0;
 $data['show_product_code'] = 1;
@@ -652,6 +654,7 @@ $data['point_new_order'] = 0;
 $data['review_active'] = 1;
 $data['review_check'] = 1;
 $data['review_captcha'] = 1;
+$data['group_price'] = '';
 
 foreach( $data as $config_name => $config_value )
 {
@@ -734,8 +737,8 @@ if( ! empty( $set_lang_data ) )
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round, number_format) VALUES (840, 'USD', 'US Dollar', 21000, '0.01', ',||.')";
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round, number_format) VALUES (704, 'VND', 'Vietnam Dong', 1, '100', ',||.')";
 
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (code, title, exchange, round) VALUES ('g', 'Gram', 1, '1')";
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (code, title, exchange, round) VALUES ('kg', 'Kilogam', 1000, '1')";
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (code, title, exchange, round) VALUES ('g', 'Gram', 1, '0.1')";
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (code, title, exchange, round) VALUES ('kg', 'Kilogam', 1000, '0.1')";
 
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD UNIQUE (" . $lang . "_alias)";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_group ADD UNIQUE (" . $lang . "_alias)";

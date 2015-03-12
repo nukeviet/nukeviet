@@ -28,6 +28,10 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 	}
 	$data = $result->fetch();
 
+	// Thong tin van chuyen
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id = ' . $data['order_id'] );
+	$data_shipping = $result->fetch();
+
 	$result = $db->query( 'SELECT amount FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history WHERE order_id=' . $data['order_id'] );
 	$data['coupons'] = $result->fetch();
 
@@ -238,7 +242,7 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		}
 	}
 
-	$contents = call_user_func( 'payment', $data, $data_pro, $url_checkout, $intro_pay, $point );
+	$contents = call_user_func( 'payment', $data, $data_pro, $data_shipping, $url_checkout, $intro_pay, $point );
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
@@ -264,7 +268,7 @@ elseif( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $nv
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
 	while( $row = $result->fetch() )
 	{
-		$listid[] = $row['id'];
+		$listid[] = $row['proid'];
 		$listnum[] = $row['num'];
 		$listprice[] = $row['price'];
 		$listgroup[] = $row['group_id'];

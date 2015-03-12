@@ -11,7 +11,7 @@
 			<span class="price">
                 <!-- BEGIN: discounts -->
                 <span class="money show">{PRICE.sale_format} {PRICE.unit}</span>
-                <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
+                <span class="discounts_money show">{PRICE.price_format} {PRICE.unit}</span>
                 <!-- END: discounts -->
 
 				<!-- BEGIN: no_discounts -->

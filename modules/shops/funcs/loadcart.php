@@ -108,7 +108,7 @@ if( $nv_Request->isset_request( 'get_shipping_price', 'get' ) )
 	$ship_price = nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $carrier_id );
 	if( !empty( $ship_price ) )
 	{
-		$total += $ship_price['price'];
+		$total += $ship_price;
 	}
 }
 

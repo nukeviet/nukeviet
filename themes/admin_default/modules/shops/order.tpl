@@ -88,7 +88,7 @@
 			<!-- BEGIN: row -->
 			<tr <!-- BEGIN: bgview -->class="warning"<!-- END: bgview -->>
 				<td><input type="checkbox" class="ck" value="{order_id}" {DIS} /></td>
-				<td>{DATA.order_code}</td>
+				<td><a href="{link_view}" title="">{DATA.order_code}</a></td>
 				<td>{DATA.order_time}</td>
 				<td><a href="{DATA.link_user}" style="text-decoration:underline" target="_blank">{DATA.order_email}</a></td>
 				<td align="right">{DATA.order_total} {DATA.unit_total}</td>
