@@ -150,6 +150,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  newday tinyint(4) NOT NULL DEFAULT '3',
  typeprice tinyint(4) NOT NULL DEFAULT '2',
  form varchar(50) NOT NULL DEFAULT '',
+ group_price text NOT NULL DEFAULT '',
  admins mediumtext NOT NULL,
  add_time int(11) unsigned NOT NULL default '0',
  edit_time int(11) unsigned NOT NULL default '0',
@@ -652,6 +653,7 @@ $data['point_new_order'] = 0;
 $data['review_active'] = 1;
 $data['review_check'] = 1;
 $data['review_captcha'] = 1;
+$data['group_price'] = '';
 
 foreach( $data as $config_name => $config_value )
 {

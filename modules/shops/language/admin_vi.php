@@ -325,6 +325,7 @@ $lang_module['product_unit'] = 'sản phẩm';
 $lang_module['product_comment'] = 'bình luận';
 $lang_module['product_order'] = 'đơn đặt';
 $lang_module['detail_info'] = 'Chi tiết';
+
 $lang_module['group'] = 'Nhóm sản phẩm';
 $lang_module['group_sub_sl'] = 'Nhóm chính';
 $lang_module['edit_group'] = 'Sửa nhóm sản phẩm';
@@ -348,6 +349,12 @@ $lang_module['add_otherimage'] = 'Thêm hình minh họa khác';
 $lang_module['file_selectfile'] = 'Chọn hình ảnh';
 $lang_module['group_of'] = 'Của loại sản phẩm';
 $lang_module['group_of_none'] = 'Không của loại nào';
+$lang_module['setting_group_price'] = 'Cấu hình lọc sản phẩm theo giá';
+$lang_module['setting_group_price_space'] = 'Khoảng giá';
+$lang_module['setting_group_price_space_note'] = 'Nhập các giá trị của khoảng giá, từ bé đến lớn, mỗi giá trị nằm trên một dòng. Các giá trị này được sử dụng tại các vị trí lọc sản phẩm theo nhóm. <br /><br /><strong>Ví dụ:</strong> Các khoảng giá 10.000 -> 50.000, 50.000 -> 100.000,....<br /><strong>Thì nhập:</strong><br />10000<br />50000<br />100000<br />....';
+$lang_module['setting_group_price_space_note_cat_0'] = 'Nhập các giá trị của khoảng giá, từ bé đến lớn, mỗi giá trị nằm trên một dòng. Các giá trị này được sử dụng tại các vị trí lọc sản phẩm theo nhóm.<br /><br />Các giá trị ở đây mặc định lấy từ &nbsp; <a href="%s" title="Cấu hình module">Cấu hình module</a>. Bỏ trống nếu muốn hiển thị các khoảng giá từ cấu hình chung, hoặc tùy biến lại các khoảng giá phù hợp với loại sản phẩm hiện tại.';
+$lang_module['setting_group_price_space_note_cat_1'] = 'Nhập các giá trị của khoảng giá, từ bé đến lớn, mỗi giá trị nằm trên một dòng. Các giá trị này được sử dụng tại các vị trí lọc sản phẩm theo nhóm.<br /><br />Các giá trị ở đây mặc định lấy từ chủ đề cha &nbsp; <strong>"%s"</strong>. Bỏ trống nếu muốn hiển thị các khoảng giá từ cấu hình chung, hoặc tùy biến lại các khoảng giá phù hợp với loại sản phẩm hiện tại.';
+
 $lang_module['setting_compare'] = 'Bật chức năng so sánh sản phẩm';
 $lang_module['setting_displays'] = 'Bật chức năng sắp xếp hiển thị ngoài site';
 $lang_module['setting_shipping'] = 'Sử dụng dịch vụ vận chuyển';

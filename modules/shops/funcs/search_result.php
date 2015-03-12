@@ -17,6 +17,8 @@ $bid = 1;
 // block host
 $num = $pro_config['per_page'];
 $data_content = array();
+$search = "";
+$url = '';
 
 $keyword = $nv_Request->get_string( 'keyword', 'get' );
 $keyword = str_replace( '+', ' ', $keyword );
@@ -26,6 +28,30 @@ $price2_temp = $nv_Request->get_string( 'price2', 'get', '' );
 $typemoney = $nv_Request->get_string( 'typemoney', 'get', '' );
 $cataid = $nv_Request->get_int( 'cata', 'get', 0 );
 $groupid = $nv_Request->get_string( 'filter', 'get', '' );
+$group_price = $nv_Request->get_string( 'group_price', 'get', '' );
+if( ! empty( $group_price ) )
+{
+	$url .= '&group_price=' . $group_price;
+	$group_price = nv_base64_decode( $group_price );
+	$group_price = unserialize( $group_price );
+	if( !empty( $group_price ) )
+	{
+		$search .= " AND";
+		foreach( $group_price as $i => $group_price_i )
+		{
+			$group_price_i = explode( '-', $group_price_i );
+			if( $group_price_i[0] <= $group_price_i[1] )
+			{
+				$search .= ( $i > 0 ? " OR " : "" ) . " product_price BETWEEN " . $group_price_i[0] . " AND " . $group_price_i[1] . " ";
+			}
+			else
+			{
+				$search .= ( $i > 0 ? " OR " : "" ) . " product_price > " . $group_price_i[0] . " ";
+			}
+		}
+	}
+}
+
 $sid = $nv_Request->get_int( 'sid', 'get', 0 );
 $page = $nv_Request->get_int( 'page', 'get', 1 );
 $num_items = 0;
@@ -85,10 +111,9 @@ if( $pro_config['active_price'] ) $xtpl->parse( 'form.price' );
 $xtpl->parse( 'form' );
 $contents = $xtpl->text( 'form' );
 
-$search = "";
-
 if( ! empty( $groupid ) )
 {
+	$url .= '&filter=' . $groupid;
 	$groupid = nv_base64_decode( $groupid );
 	$groupid = unserialize( $groupid );
 	$groupid = implode( ',', $groupid );
@@ -156,15 +181,15 @@ $table_exchange2 = " LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "
 
 // Fetch Limit
 $db->sqlreset()->select( 'COUNT(*)' )->from( $table_search . " " . $table_exchange . " " . $table_exchange1 . " " . $table_exchange2 )->where( "t1.status =1 " . $search . " " . $show_price );
-$num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( "DISTINCT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.discount_id, t1.money_unit, t1.showprice, t3.newday, t2.exchange " . $sql_i )
 	->order( $order_by )
 	->limit( $per_page )
 	->offset( ( $page - 1 ) * $per_page );
 $result = $db->query( $db->sql() );
+$num_items = $result->rowCount();
 
-$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search_result&keyword=" . $keyword . "&price1=" . $price1 . "&price2=" . $price2 . "&typemoney=" . $typemoney . "&cata=" . $cataid;
+$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search_result&keyword=" . $keyword . "&price1=" . $price1 . "&price2=" . $price2 . "&typemoney=" . $typemoney . "&cata=" . $cataid . $url;
 $html_pages = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
 $link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";

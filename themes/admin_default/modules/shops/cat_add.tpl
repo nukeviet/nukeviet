@@ -104,6 +104,22 @@
 			</tbody>
 		</table>
 		<!-- END: point -->
+
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{LANG.setting_group_price}</caption>
+			<colgroup>
+				<col class="w300" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.setting_group_price_space}</strong><em class="help-block">{LANG.setting_group_price_space_note_cat}</em></td>
+					<td>
+						<textarea class="form-control" name="group_price" rows="9" style="width: 100%">{DATA.group_price}</textarea>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
 		<div class="text-center">
 			<input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}"/>
 		</div>

@@ -18,7 +18,7 @@ $savecat = 0;
 $data = array();
 $groups_list = nv_groups_list();
 
-list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['newday'], $data['typeprice'] ) = array( 0, 0, '', '', '', '', '6', 0, 0, 0, '', '', 7, 1);
+list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['newday'], $data['typeprice'] ) = array( 0, 0, '', '', '', '', '6', 0, 0, 0, '', '', $pro_config['group_price'], 7, 1);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
@@ -78,6 +78,8 @@ if( ! empty( $savecat ) )
 	$data['form'] = $nv_Request->get_title( 'cat_form', 'post', '' );
 	if( ! in_array( $data['form'], $cat_form_exit ) ) $data['form'] = '';
 
+	$data['group_price'] = $nv_Request->get_textarea( 'group_price', '', 'br' );
+
 	$stmt = $db->prepare( 'SELECT count(*) FROM ' . $table_name . ' WHERE catid!=' . $data['catid'] . ' AND ' . NV_LANG_DATA . '_alias= :alias' );
 	$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 	$stmt->execute();
@@ -106,8 +108,8 @@ if( ! empty( $savecat ) )
 
 		$weight = intval( $weight ) + 1;
 
-		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
- 			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :typeprice, :form, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
+		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
+ 			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :typeprice, :form, :group_price, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
 		$data_insert = array();
 		$data_insert['parentid'] = $data['parentid'];
 		$data_insert['image'] = $data['image'];
@@ -116,6 +118,7 @@ if( ! empty( $savecat ) )
 		$data_insert['newday'] = $data['newday'];
 		$data_insert['typeprice'] = $data['typeprice'];
 		$data_insert['form'] = $data['form'];
+		$data_insert['group_price'] = $data['group_price'];
 		$data_insert['admins'] = $admins;
 		$data_insert['groups_view'] = $data['groups_view'];
 		$data_insert['cat_allow_point'] = $data['cat_allow_point'];
@@ -145,7 +148,7 @@ if( ! empty( $savecat ) )
 	{
 		try
 		{
-			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
 			$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
 			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
 			$stmt->bindParam( ':image', $data['image'], PDO::PARAM_STR );
@@ -154,6 +157,7 @@ if( ! empty( $savecat ) )
 			$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
 			$stmt->bindParam( ':typeprice', $data['typeprice'], PDO::PARAM_INT );
 			$stmt->bindParam( ':form', $data['form'], PDO::PARAM_STR );
+			$stmt->bindParam( ':group_price', $data['group_price'], PDO::PARAM_STR );
 			$stmt->bindParam( ':groups_view', $data['groups_view'], PDO::PARAM_STR );
 			$stmt->bindParam( ':cat_allow_point', $data['cat_allow_point'], PDO::PARAM_INT );
 			$stmt->bindParam( ':cat_number_point', $data['cat_number_point'], PDO::PARAM_INT );
@@ -205,6 +209,9 @@ else
 	elseif( $data['parentid'] )
 	{
 		$data['form'] = $db->query( 'SELECT form FROM ' . $table_name . ' where catid=' . $data['parentid'] )->fetchColumn();
+		list( $parent_title, $group_price ) = $db->query( 'SELECT ' . NV_LANG_DATA . '_title, group_price FROM ' . $table_name . ' where catid=' . $data['parentid'] )->fetch( 3 );
+		$data['group_price'] = $group_price;
+		$data['parent_title'] = $parent_title;
 	}
 }
 
@@ -252,6 +259,16 @@ if( $pro_config['point_active'] )
 	}
 	$data['cat_number_point'] = ! empty( $data['cat_number_point'] ) ? $data['cat_number_point'] : '';
 	$data['cat_number_product'] = ! empty( $data['cat_number_product'] ) ? $data['cat_number_product'] : '';
+}
+
+if( $data['parentid'] )
+{
+	$lang_module['setting_group_price_space_note_cat'] = sprintf( $lang_module['setting_group_price_space_note_cat_1'], $data['parent_title'] );
+}
+else
+{
+	$URL_SETTING_GR_PRICE = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting#setting_group_price';
+	$lang_module['setting_group_price_space_note_cat'] = sprintf( $lang_module['setting_group_price_space_note_cat_0'], $URL_SETTING_GR_PRICE );
 }
 
 $xtpl = new XTemplate( 'cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );

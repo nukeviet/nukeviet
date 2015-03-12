@@ -345,6 +345,7 @@ $lang_module['newday'] = "Mới";
 $lang_module['payport'] = "Cổng thanh toán";
 
 $lang_module['filter'] = "Lọc sản phẩm";
+$lang_module['filter_price_from'] = "Lớn hơn %s";
 $lang_module['filter_no_item'] = "Chọn ít nhất một thuộc tính";
 
 $lang_module['compare'] = 'So sánh';

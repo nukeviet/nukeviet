@@ -35,10 +35,10 @@ if( ! function_exists( 'nv_filter_product_cat' ) )
 		$html .= "	<td><div class=\"row\">";
 		foreach( $list as $l )
 		{
-			$html .= "<div class=\"col-sm-3\">";
+			$html .= "<div class=\"col-sm-6\">";
 			$html .= $l[NV_LANG_DATA . '_title'];
 			$html .= "</div>";
-			$html .= "<div class=\"col-sm-9\">";
+			$html .= "<div class=\"col-sm-18\">";
 
 			foreach( $array_style as $key => $style )
 			{

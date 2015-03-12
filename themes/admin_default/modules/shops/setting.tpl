@@ -220,6 +220,26 @@
 			</tbody>
 		</table>
 	</div>
+
+	<div class="table-responsive" id="setting_group_price">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>
+				{LANG.setting_group_price}
+			</caption>
+			<colgroup>
+				<col class="w500" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.setting_group_price_space}</strong><em class="help-block">{LANG.setting_group_price_space_note}</em></td>
+					<td>
+						<textarea class="form-control" name="group_price" rows="9" style="width: 100%">{DATA.group_price}</textarea>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
 	<div class="text-center"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting">
 	</div>
 </form>

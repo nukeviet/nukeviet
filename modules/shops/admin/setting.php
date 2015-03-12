@@ -70,6 +70,7 @@ if( $savesetting == 1 )
 	$data['review_active'] = $nv_Request->get_int( 'review_active', 'post', 0 );
 	$data['review_check'] = $nv_Request->get_int( 'review_check', 'post', 0 );
 	$data['review_captcha'] = $nv_Request->get_int( 'review_captcha', 'post', 0 );
+	$data['group_price'] = $nv_Request->get_textarea( 'group_price', '', 'br' );
 
 	if( $error == '' )
 	{
