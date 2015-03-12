@@ -264,7 +264,7 @@ elseif( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $nv
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
 	while( $row = $result->fetch() )
 	{
-		$listid[] = $row['id'];
+		$listid[] = $row['proid'];
 		$listnum[] = $row['num'];
 		$listprice[] = $row['price'];
 		$listgroup[] = $row['group_id'];

@@ -38,7 +38,7 @@ $listid = $listnum = array();
 $result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $data['order_id'] );
 while( $row = $result->fetch() )
 {
-	$listid[] = $row['id'];
+	$listid[] = $row['proid'];
 	$listnum[] = $row['num'];
 }
 
