@@ -636,6 +636,7 @@ $data['active_guest_order'] = 1;
 $data['active_price'] = 1;
 $data['active_order_number'] = 0;
 $data['active_payment'] = 1;
+$data['groups_price'] = '3';
 $data['active_tooltip'] = 1;
 $data['timecheckstatus'] = 0;
 $data['show_product_code'] = 1;

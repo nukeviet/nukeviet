@@ -23,12 +23,17 @@ if( $data['type'] == 'review_new' )
 
 	if( $data['content']['status'] )
 	{
-		$data['title'] = sprintf( $lang_siteinfo['review_notification_new'], $data['send_from'], $title );
+		$data['title'] = sprintf( $lang_siteinfo['review_notification_review_new'], $data['send_from'], $title );
 		$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=review&product_id=' . $data['content']['product_id'];
 	}
 	else // Danh gia cho kiem duyet
 	{
-		$data['title'] = sprintf( $lang_siteinfo['review_notification_new_queue'], $data['send_from'], $title );
+		$data['title'] = sprintf( $lang_siteinfo['review_notification_review_new_queue'], $data['send_from'], $title );
 		$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=review&status=0&product_id=' . $data['content']['product_id'];
 	}
+}
+elseif( $data['type'] == 'order_new' )
+{
+	$data['title'] = sprintf( $lang_siteinfo['review_notification_order_new'], $data['content']['order_code'], $data['content']['order_name'] );
+	$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=review&product_id=' . $data['content']['product_id'];
 }

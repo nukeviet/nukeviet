@@ -330,6 +330,9 @@ if( $post_order == 1 )
 			// Cong vao so luong san pham da ban
 			product_number_sell( $listid, $listnum );
 
+			$checkss = md5( $order_id . $global_config['sitekey'] . session_id( ) );
+			$review_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $order_id . '&checkss=' . $checkss;
+
 			if( empty( $order_info ) ) // Them don hang
 			{
 				// Cap nhat lich su su dung ma giam gia
@@ -402,18 +405,37 @@ if( $post_order == 1 )
 					}
 				}
 
+				// Gui mail thong bao den khach hang
 				$lang_module['order_email_noreply'] = sprintf( $lang_module['order_email_noreply'], $global_config['site_url'], $global_config['site_url'] );
 				$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks'], $global_config['site_url'] );
 				$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review'], $global_config['site_url'] . $review_url );
-
 				$data_order['review_url'] = $review_url;
-
 				$email_contents = call_user_func( 'email_new_order', $data_order, $data_pro );
 
 				nv_sendmail( array(
 					$global_config['site_name'],
 					$global_config['site_email']
 				), $data_order['order_email'], sprintf( $lang_module['order_email_title'], $module_info['custom_title'], $data_order['order_code'] ), $email_contents );
+
+				// Them vao notification
+				$content = array( 'order_id' => $data_order['id'], 'order_code' => $data_order['order_code'], 'order_name' => $data_order['order_name'] );
+				$userid = !empty( $user_info ) ? $user_info['userid'] : 0;
+				nv_insert_notification( $module_name, 'order_new', $content, 0, $userid, 1 );
+
+				// Gui mail thong bao den nguoi quan ly shops
+				$order_url = $global_config['site_url'] . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=or_view&amp;order_id=' . $data_order['id'];
+				$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks_to_admin'], $data_order['order_name'] );
+				$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review_to_admin'], $order_url );
+
+				$listmail_notify = nv_listmail_notify();
+				if( !empty( $listmail_notify ) )
+				{
+					$email_contents_to_admin = call_user_func( 'email_new_order', $data_order, $data_pro );
+					nv_sendmail( array(
+						$global_config['site_name'],
+						$global_config['site_email']
+					), $listmail_notify, sprintf( $lang_module['order_email_title'], $module_info['custom_title'], $data_order['order_code'] ), $email_contents_to_admin );
+				}
 			}
 
 			$num = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id = ' . $order_id )->fetchColumn();
@@ -460,9 +482,6 @@ if( $post_order == 1 )
 					$stmt->execute();
 				}
 			}
-
-			$checkss = md5( $order_id . $global_config['sitekey'] . session_id( ) );
-			$review_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $order_id . '&checkss=' . $checkss;
 
 			// Chuyen trang xem thong tin don hang vua dat
 			unset( $_SESSION[$module_data . '_cart'] );

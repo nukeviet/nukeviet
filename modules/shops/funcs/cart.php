@@ -11,6 +11,7 @@
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $order_info = array();
+$order_old = array();
 $coupons_code = '';
 $coupons_check = 0;
 
@@ -86,16 +87,23 @@ if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$modu
 		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_info['order_id'] );
 		while( $row = $result->fetch() )
 		{
+			$array_group = array();
 			$data_content = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $row['id'] )->fetch();
-			$order_old[$row['id']] = array(
+			$result_group = $db->query( "SELECT group_id FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id_group WHERE order_i = " . $row['id'] );
+			while( list( $group_id ) = $result_group->fetch( 3 ) )
+			{
+				$array_group[] = $group_id;
+			}
+			$array_group = !empty( $array_group ) ? implode( ',', $array_group ) : '';
+			$order_old[$row['proid']] = array(
 				'num' => $row['num'],
 				'num_old' => $row['num'],
 				'order' => 1,
 				'price' => $row['price'],
 				'money_unit' => $order_info['money_unit'],
 				'discount_id' => $row['discount_id'],
+				'group' => $array_group,
 				'store' => $data_content['product_number'],
-				'group' => $row['group_id'],
 				'weight' => $data_content['product_weight'],
 				'weight_unit' => $data_content['weight_unit']
 			);
@@ -152,6 +160,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 	{
 		$arrayid[] = $pro_id;
 	}
+
 	if( ! empty( $arrayid ) )
 	{
 		$listid = implode( ',', $arrayid );
@@ -183,7 +192,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 
 			if( !empty( $order_info ) )
 			{
-				$product_number = $product_number + $_SESSION[$module_data . '_cart'][$id]['num_old'];
+				$product_number = $product_number + ( isset( $_SESSION[$module_data . '_cart'][$id]['num_old'] ) ? $_SESSION[$module_data . '_cart'][$id]['num_old'] : $_SESSION[$module_data . '_cart'][$id]['num'] );
 			}
 
 			if( $number > $product_number and $number > 0 and empty( $pro_config['active_order_number'] ) )
