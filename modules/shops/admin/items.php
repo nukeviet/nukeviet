@@ -113,7 +113,7 @@ if( $checkss == md5( session_id( ) ) )
 	}
 	elseif( $stype == 'admin_id' and !empty( $q ) )
 	{
-		$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR full_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
+		$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR first_name LIKE '%" . $db->dblikeescape( $q ) . "%' OR last_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
 		$result = $db->query( $sql );
 		$array_admin_id = array( );
 		while( list( $admin_id ) = $result->fetch( 3 ) )
@@ -124,7 +124,7 @@ if( $checkss == md5( session_id( ) ) )
 	}
 	elseif( !empty( $q ) )
 	{
-		$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR full_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
+		$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid IN (SELECT admin_id FROM " . NV_AUTHORS_GLOBALTABLE . ") AND username LIKE '%" . $db->dblikeescape( $q ) . "%' OR first_name LIKE '%" . $db->dblikeescape( $q ) . "%'OR last_name LIKE '%" . $db->dblikeescape( $q ) . "%'";
 		$result = $db->query( $sql );
 
 		$array_admin_id = array( );

@@ -27,7 +27,7 @@ $db->sqlreset( )
 
 if( !empty( $q ) )
 {
-	$db->where( 'username LIKE :q_username OR full_name LIKE :q_fullname OR email LIKE :q_email' );
+	$db->where( 'username LIKE :q_username OR first_name LIKE :q_first_name OR last_name LIKE :q_last_name OR email LIKE :q_email' );
 }
 
 $sth = $db->prepare( $db->sql( ) );
@@ -35,19 +35,21 @@ $sth = $db->prepare( $db->sql( ) );
 if( !empty( $q ) )
 {
 	$sth->bindValue( ':q_username', '%' . $q . '%' );
-	$sth->bindValue( ':q_fullname', '%' . $q . '%' );
+	$sth->bindValue( ':q_first_name', '%' . $q . '%' );
+	$sth->bindValue( ':q_last_name', '%' . $q . '%' );
 	$sth->bindValue( ':q_email', '%' . $q . '%' );
 }
 $sth->execute( );
 $num_items = $sth->fetchColumn( );
 
-$db->select( 't1.username, t1.full_name, t1.email, t2.*' )->order( 't1.userid DESC' )->limit( $per_page )->offset( ($page - 1) * $per_page );
+$db->select( 't1.username, t1.first_name, t1.lastname, t1.email, t2.*' )->order( 't1.userid DESC' )->limit( $per_page )->offset( ($page - 1) * $per_page );
 $sth = $db->prepare( $db->sql( ) );
 
 if( !empty( $q ) )
 {
 	$sth->bindValue( ':q_username', '%' . $q . '%' );
-	$sth->bindValue( ':q_fullname', '%' . $q . '%' );
+	$sth->bindValue( ':q_first_name', '%' . $q . '%' );
+	$sth->bindValue( ':q_last_name', '%' . $q . '%' );
 	$sth->bindValue( ':q_email', '%' . $q . '%' );
 }
 $sth->execute( );

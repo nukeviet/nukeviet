@@ -1311,6 +1311,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 
 			if( !empty( $user_info ) )
 			{
+				$user_info['full_name'] = $user_info['first_name'] . ' ' . $user_info['last_name'];
 				$xtpl->assign( 'SENDER', !empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'] );
 			}
 
