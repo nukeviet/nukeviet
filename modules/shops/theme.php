@@ -1916,9 +1916,9 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
  * @param mixed $intro_pay
  * @return
  */
-function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
+function payment( $data_content, $data_pro, $data_shipping, $url_checkout, $intro_pay, $point )
 {
-	global $module_info, $lang_module, $module_data, $module_file, $global_config, $module_name, $pro_config, $money_config, $global_array_group, $client_info;
+	global $module_info, $lang_module, $module_data, $module_file, $global_config, $module_name, $pro_config, $money_config, $global_array_group, $client_info, $array_location, $array_shops;
 
 	$money = $point * $pro_config['point_conversion'];
 	$money = nv_number_format( $money, nv_get_decimals( $pro_config['money_unit'] ) );
@@ -2005,6 +2005,23 @@ function payment( $data_content, $data_pro, $url_checkout, $intro_pay, $point )
 		$xtpl->parse( 'main.loop' );
 		++$j;
 	}
+
+	// Thong tin van chuyen
+	if( $data_shipping )
+	{
+		$data_shipping['ship_price'] = nv_number_format( $data_shipping['ship_price'], nv_get_decimals( $data_shipping['ship_price_unit'] ) );
+		$data_shipping['ship_location_title'] = $array_location[$data_shipping['ship_location_id']]['title'];
+		while( $array_location[$data_shipping['ship_location_id']]['parentid'] > 0 )
+		{
+			$items = $array_location[$array_location[$data_shipping['ship_location_id']]['parentid']];
+			$data_shipping['ship_location_title'] .= ', ' . $items['title'];
+			$array_location[$data_shipping['ship_location_id']]['parentid'] = $items['parentid'];
+		}
+		$data_shipping['ship_shops_title'] = $array_shops[$data_shipping['ship_shops_id']]['name'];
+		$xtpl->assign( 'DATA_SHIPPING', $data_shipping );
+		$xtpl->parse( 'main.data_shipping' );
+	}
+
 	if( !empty( $data_content['order_note'] ) )
 	{
 		$xtpl->parse( 'main.order_note' );

@@ -35,5 +35,5 @@ if( $data['type'] == 'review_new' )
 elseif( $data['type'] == 'order_new' )
 {
 	$data['title'] = sprintf( $lang_siteinfo['review_notification_order_new'], $data['content']['order_code'], $data['content']['order_name'] );
-	$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=review&product_id=' . $data['content']['product_id'];
+	$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=or_view&order_id=' . $data['content']['order_id'];
 }

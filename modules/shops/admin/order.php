@@ -103,6 +103,7 @@ while( $row = $query->fetch() )
 {
 	$acno = 0;
 	$price = nv_currency_conversion( $row['order_total'], $row['unit_total'], $pro_config['money_unit'] );
+
 	$order_info['sum_price'] = $order_info['sum_price'] + $price['price'];
 
 	if( $row['transaction_status'] == 4 )
@@ -136,7 +137,7 @@ while( $row = $query->fetch() )
 
 	$row['link_user'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $row['user_id'];
 	$row['order_time'] = nv_date( "H:i d/m/y", $row['order_time'] );
-	$row['order_total'] = $price['price_format'];
+	$row['order_total'] = nv_number_format( $price );
 
 	$xtpl->assign( 'DATA', $row );
 

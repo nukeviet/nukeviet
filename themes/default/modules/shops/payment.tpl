@@ -108,6 +108,35 @@
 		</table>
 	</div>
 
+	<!-- BEGIN: data_shipping -->
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{LANG.shipping_info}</caption>
+			<thead>
+				<tr>
+					<th>{LANG.shipping_name}</th>
+					<th>{LANG.order_address}</th>
+					<th>{LANG.carrier}</th>
+					<th>{LANG.weights}</th>
+					<th class="text-right">{LANG.carrier_price}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{DATA_SHIPPING.ship_name} - {DATA_SHIPPING.ship_phone}</td>
+					<td>
+						{DATA_SHIPPING.ship_location_title}
+						<span class="help-block">{DATA_SHIPPING.ship_address_extend}</span>
+					</td>
+					<td>{DATA_SHIPPING.ship_shops_title}</td>
+					<td>{DATA_SHIPPING.weight}{DATA_SHIPPING.weight_unit}</td>
+					<td class="text-right">{DATA_SHIPPING.ship_price} {DATA_SHIPPING.ship_price_unit}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- END: data_shipping -->
+
 	<div class="row">
 		<div class="col-xs-12">
 			<!-- BEGIN: order_note -->

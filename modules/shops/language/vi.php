@@ -526,3 +526,7 @@ $lang_module['notebook'] = 'Sách tay';
 $lang_module['new_old'] = 'Tình trạng';
 $lang_module['new'] = 'Mới';
 $lang_module['old'] = 'Mới';
+
+$lang_module['carrier'] = 'Nhà vận chuyển';
+$lang_module['weights'] = 'Khối lượng';
+$lang_module['carrier_price'] = 'Phí vận chuyển';
