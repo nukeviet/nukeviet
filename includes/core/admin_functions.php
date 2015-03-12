@@ -15,6 +15,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  *
  * @return
  */
+
 function nv_groups_list( )
 {
 	$cache_file = NV_LANG_DATA . '_groups_list_' . NV_CACHE_PREFIX . '.cache';
