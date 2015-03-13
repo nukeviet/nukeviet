@@ -210,14 +210,14 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
  */
 function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login )
 {
-	global $global_config, $module_file, $module_config, $module_info, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
+	global $global_config, $module_file, $module_data, $module_config, $module_info, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/comment' );
 	$xtpl->assign( 'LANG', $lang_module_comment );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'CHECKSS_COMM', $checkss );
 	$xtpl->assign( 'MODULE_COMM', $module );
-	$xtpl->assign( 'module_name', $module_name );
+	$xtpl->assign( 'MODULE_DATA', $module_data );
 	$xtpl->assign( 'AREA_COMM', $area );
 	$xtpl->assign( 'ID_COMM', $id );
 	$xtpl->assign( 'ALLOWED_COMM', $allowed_comm );
