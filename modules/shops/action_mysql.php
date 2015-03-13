@@ -655,6 +655,7 @@ $data['review_active'] = 1;
 $data['review_check'] = 1;
 $data['review_captcha'] = 1;
 $data['group_price'] = '';
+$data['groups_notify'] = '3';
 
 foreach( $data as $config_name => $config_value )
 {

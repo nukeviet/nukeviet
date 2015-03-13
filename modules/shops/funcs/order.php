@@ -25,6 +25,7 @@ $action = 0;
 $post_order = $nv_Request->get_int( 'postorder', 'post', 0 );
 $order_info = array();
 $error = array( );
+$user_info['full_name'] = $user_info['first_name'] . ' ' . $user_info['last_name'];
 
 $data_order = array(
 	'user_id' => $user_info['userid'],
