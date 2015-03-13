@@ -103,8 +103,7 @@ while( $row = $query->fetch() )
 {
 	$acno = 0;
 	$price = nv_currency_conversion( $row['order_total'], $row['unit_total'], $pro_config['money_unit'] );
-
-	$order_info['sum_price'] = $order_info['sum_price'] + $price['price'];
+	$order_info['sum_price'] = $order_info['sum_price'] + $price;
 
 	if( $row['transaction_status'] == 4 )
 	{
