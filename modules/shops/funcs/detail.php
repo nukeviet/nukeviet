@@ -265,7 +265,11 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
     $area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
     $checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
 
-	$content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
+    // Get url comment
+    $url_info = parse_url( $client_info['selfurl'] );
+    $url_comment = $url_info['path'];
+
+	$content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 
 	$contents = detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment, $compare_id, $popup );
 }

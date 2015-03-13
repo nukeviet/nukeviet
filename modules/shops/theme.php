@@ -64,7 +64,7 @@ function draw_option_select_number( $select = -1, $begin = 0, $end = 100, $step 
  */
 function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 0 )
 {
-	global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_cat;
+	global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_cat, $global_array_group;
 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -137,6 +137,23 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 						{
 							if( $data_row_i['product_number'] > 0 )
 							{
+								// Kiem tra nhom bat buoc chon khi dat hang
+								$listgroupid = GetGroupID( $data_row_i['id'] );
+								$group_requie = 0;
+								if( !empty( $listgroupid ) and !empty( $global_array_group ) )
+								{
+									foreach( $global_array_group as $groupinfo )
+									{
+										if( $groupinfo['in_order'] )
+										{
+											$group_requie = 1;
+											break;
+										}
+									}
+								}
+								$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
+								$xtpl->assign( 'GROUP_REQUIE', $group_requie );
+
 								$xtpl->parse( 'main.catalogs.items.order' );
 							}
 							else
@@ -223,7 +240,7 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
  */
 function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_wishlist_id, $global_array_cat;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_wishlist_id, $global_array_cat, $global_array_group;
 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -297,6 +314,23 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 						{
 							if( $data_row_i['product_number'] > 0 )
 							{
+								// Kiem tra nhom bat buoc chon khi dat hang
+								$listgroupid = GetGroupID( $data_row_i['id'] );
+								$group_requie = 0;
+								if( !empty( $listgroupid ) and !empty( $global_array_group ) )
+								{
+									foreach( $global_array_group as $groupinfo )
+									{
+										if( $groupinfo['in_order'] )
+										{
+											$group_requie = 1;
+											break;
+										}
+									}
+								}
+								$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
+								$xtpl->assign( 'GROUP_REQUIE', $group_requie );
+
 								$xtpl->parse( 'main.catalogs.items.order' );
 							}
 							else
