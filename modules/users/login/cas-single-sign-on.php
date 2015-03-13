@@ -45,8 +45,8 @@ if( !empty( $username ) )
 	if( nv_function_exists( 'ldap_connect' ) )
 	{
 		$ldapconn = ldap_connect( $global_config['config_sso']['ldap_host_url'] );
-		ldap_set_option( $cnx, LDAP_OPT_PROTOCOL_VERSION, $global_config['config_sso']['ldap_version'] );
-
+		ldap_set_option( $ldapconn, LDAP_OPT_PROTOCOL_VERSION, $global_config['config_sso']['ldap_version'] );
+    	ldap_set_option( $ldapconn, LDAP_OPT_REFERRALS, 0);
 		if( !empty( $global_config['config_sso']['ldap_bind_dn'] ) and !empty( $global_config['config_sso']['ldap_bind_pw'] ) )
 		{
 			$ldapbind = ldap_bind( $ldapconn, $global_config['config_sso']['ldap_bind_dn'], $global_config['config_sso']['ldap_bind_pw'] );
