@@ -29,6 +29,7 @@ $lang_module['search_id'] = 'ID thành viên';
 $lang_module['search_account'] = 'Tài khoản thành viên';
 $lang_module['search_name'] = 'Tên thành viên';
 $lang_module['search_mail'] = 'Email thành viên';
+$lang_module['search_key'] = 'Từ khóa tìm kiếm';
 $lang_module['search_note'] = 'Từ khóa tìm kiếm không lớn hơn 64 ký tự, không dùng các mã html';
 $lang_module['submit'] = 'Tìm kiếm';
 $lang_module['members_list'] = 'Danh sách thành viên';

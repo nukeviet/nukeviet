@@ -337,6 +337,7 @@ $array_cron_name['cron_auto_sendmail_error_log'] = 'Gửi email các thông báo
 $array_cron_name['cron_ref_expired_del'] = 'Xóa các referer quá hạn';
 $array_cron_name['cron_siteDiagnostic_update'] = 'Cập nhật đánh giá site từ các máy chủ tìm kiếm';
 $array_cron_name['cron_auto_check_version'] = 'Kiểm tra phiên bản NukeViet';
+$array_cron_name['cron_notification_autodel'] = 'Xóa thông báo cũ';
 
 $result = $db->query( 'SELECT id, run_func FROM ' . $db_config['prefix'] . '_cronjobs ORDER BY id ASC' );
 while( list( $id, $run_func ) = $result->fetch( 3 ) )
