@@ -41,6 +41,7 @@ while( $cron_row = $cron_result->fetch() )
 		}
 		if( ! nv_function_exists( $cron_row['run_func'] ) )
 		{
+			nv_insert_notification( 'settings', 'auto_deactive_cronjobs', array( 'cron_id' => $cron_row['id'] ) );
 			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . NV_CURRENTTIME . ', last_result=0 WHERE id=' . $cron_row['id'] );
 			continue;
 		}
@@ -57,6 +58,7 @@ while( $cron_row = $cron_result->fetch() )
 		$result2 = call_user_func_array( $cron_row['run_func'], $params );
 		if( ! $result2 )
 		{
+			nv_insert_notification( 'settings', 'auto_deactive_cronjobs', array( 'cron_id' => $cron_row['id'] ) );
 			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . NV_CURRENTTIME . ', last_result=0 WHERE id=' . $cron_row['id'] );
 		}
 		else
@@ -67,6 +69,7 @@ while( $cron_row = $cron_result->fetch() )
 			}
 			elseif( empty( $cron_row['inter_val'] ) )
 			{
+				nv_insert_notification( 'settings', 'auto_deactive_cronjobs', array( 'cron_id' => $cron_row['id'] ) );
 				$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=0, last_time=' . NV_CURRENTTIME . ', last_result=1 WHERE id=' . $cron_row['id'] );
 			}
 			else

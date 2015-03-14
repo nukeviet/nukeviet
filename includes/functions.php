@@ -1952,7 +1952,7 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 	{
 		$content = !empty( $content ) ? serialize( $content ) : '';
 
-		$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_notification (send_to, send_from, area, language, module, type, content, add_time, view)
+		$sth = $db->prepare( 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . ' (send_to, send_from, area, language, module, type, content, add_time, view)
 		VALUES (:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
 		$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
 		$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
