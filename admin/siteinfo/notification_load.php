@@ -93,9 +93,10 @@ if( ! empty( $array_data ) )
 			{
 				if( $data['send_from'] > 0 )
 				{
-					$user_info = $db->query( 'SELECT username, full_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $data['send_from'] )->fetch();
+					$user_info = $db->query( 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $data['send_from'] )->fetch();
 					if( $user_info )
 					{
+						$user_info['full_name'] = $user_info['first_name'] . ' ' . $user_info['last_name'];
 						$data['send_from'] = !empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'];
 					}
 					else
