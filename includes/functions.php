@@ -1940,7 +1940,7 @@ function nv_site_mods()
  */
 function nv_insert_notification( $module, $type, $content = array(), $send_to = 0, $send_from = 0, $area = 1 )
 {
-	global $db_config, $db;
+	global $db_config, $db, $global_config;
 
 	/* $area
 	 * 0: Khu vuc ngoai site
@@ -1948,17 +1948,20 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 	 * 2: Ca 2 khu vuc tren
 	 */
 
-	$content = !empty( $content ) ? serialize( $content ) : '';
+	if( $global_config['notification_active'] )
+	{
+		$content = !empty( $content ) ? serialize( $content ) : '';
 
-	$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_notification (send_to, send_from, area, language, module, type, content, add_time, view)
-	VALUES (:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
-	$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
-	$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
-	$sth->bindParam( ':area', $area, PDO::PARAM_INT );
-	$sth->bindParam( ':module', $module, PDO::PARAM_STR );
-	$sth->bindParam( ':type', $type, PDO::PARAM_STR );
-	$sth->bindParam( ':content', $content, PDO::PARAM_STR );
-	$sth->execute();
+		$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_notification (send_to, send_from, area, language, module, type, content, add_time, view)
+		VALUES (:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
+		$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
+		$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
+		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+		$sth->bindParam( ':content', $content, PDO::PARAM_STR );
+		$sth->execute();
+	}
 
 	return true;
 }

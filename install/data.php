@@ -60,6 +60,8 @@ $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'description_length', '170')";
 
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ssl_https', '0')";
+$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'notification_active', '1')";
+$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'notification_autodel', '15')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'site_keywords', 'NukeViet, portal, mysql, php')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'site_phone', '')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'block_admin_ip', '0')";
@@ -149,6 +151,7 @@ $sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " ( start_time,
 $sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " ( start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES (" . NV_CURRENTTIME . ", 60, 'ref_expired_del.php', 'cron_ref_expired_del', '', 0, 1, 1, 0, 0)";
 $sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " ( start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES (" . NV_CURRENTTIME . ", 1440, 'siteDiagnostic_update.php', 'cron_siteDiagnostic_update', '', 0, 0, 1, 0, 0)";
 $sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " ( start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES (" . NV_CURRENTTIME . ", 60, 'check_version.php', 'cron_auto_check_version', '', 0, 1, 1, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_CRONJOBS_GLOBALTABLE . " ( start_time, inter_val, run_file, run_func, params, del, is_sys, act, last_time, last_result) VALUES (" . NV_CURRENTTIME . ", 1440, 'notification_autodel.php', 'cron_notification_autodel', '', 0, 1, 1, 0, 0)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES (0, 'module', 'about', 0, 0, 'page', 'about', '4.0.00 1393416212', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES (19, 'module', 'banners', 1, 0, 'banners', 'banners', '4.0.00 1393416212', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";

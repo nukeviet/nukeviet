@@ -111,6 +111,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
 		$array_config_global['optActive'] = $nv_Request->get_int( 'optActive', 'post' );
 
+		$array_config_global['notification_active'] = $nv_Request->get_int( 'notification_active', 'post' );
+		$array_config_global['notification_autodel'] = $nv_Request->get_int( 'notification_autodel', 'post', 15 );
+		if( $array_config_global['notification_active'] != $global_config['notification_active'] )
+		{
+			$db->query( 'UPDATE ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' SET act=' . $array_config_global['notification_active'] . ', last_time=' . NV_CURRENTTIME . ', last_result=0 WHERE run_func="cron_notification_autodel"' );
+		}
+
 		$site_lang = $nv_Request->get_title( 'site_lang', 'post', '', 1 );
 		if( ! empty( $site_lang ) and in_array( $site_lang, $allow_sitelangs ) )
 		{
@@ -210,6 +217,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$xtpl->assign( 'CHECKED_SSL_HTTPS', ( $array_config_global['ssl_https'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_GZIP_METHOD', ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_LANG_MULTI', ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '' );
+	$xtpl->assign( 'CHECKED_NOTIFI_ACTIVE', ( $array_config_global['notification_active'] ) ? ' checked="checked"' : '' );
 
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
 
