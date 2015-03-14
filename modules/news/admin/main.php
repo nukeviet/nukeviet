@@ -104,7 +104,7 @@ if( ! defined( 'NV_IS_ADMIN_MODULE' ) and $catid > 0 and ! in_array( $catid, $ar
 	die();
 }
 $array_search = array(
-	'-' => '---',
+	'-' => '---' . $lang_module['search_type'] . '---',
 	'title' => $lang_module['search_title'],
 	'bodytext' => $lang_module['search_bodytext'],
 	'author' => $lang_module['search_author'],
@@ -125,7 +125,7 @@ $array_in_ordername = array(
 	'hitscm'
 );
 $array_status_view = array(
-	'-' => '---',
+	'-' => '---' . $lang_module['search_status'] . '---',
 	'5' => $lang_module['status_5'],
 	'1' => $lang_module['status_1'],
 	'0' => $lang_module['status_0'],

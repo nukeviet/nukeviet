@@ -3,26 +3,41 @@
 	<!-- BEGIN: is_forum -->
 	<div class="alert alert-warning">{LANG.modforum}</div>
 	<!-- END: is_forum -->
-	<div style="padding-top:10px;">
-		<form class="form-inline" action="{FORM_ACTION}" method="get">
+	<div class="well">
+		<form action="{FORM_ACTION}" method="get">
 			<input name="{NV_NAME_VARIABLE}" type="hidden" value="{MODULE_NAME}" />
-			<span><strong>{LANG.search_type}:</strong></span>
-			<select class="form-control" name="method" id="f_method">
-				<option value="">---</option>
-				<!-- BEGIN: method -->
-				<option value="{METHODS.key}"{METHODS.selected}>{METHODS.value}</option>
-				<!-- END: method -->
-			</select>
-			<input class="form-control" type="text" name="value" id="f_value" value="{SEARCH_VALUE}" />
-			<select class="form-control" name="usactive">
-				<!-- BEGIN: usactive -->
-				<option value="{USACTIVE.key}"{USACTIVE.selected}>{USACTIVE.value}</option>
-				<!-- END: usactive -->
-			</select>
-			<input class="btn btn-primary" name="search" type="submit" value="{LANG.submit}" />
-			<p>
-				{LANG.search_note}
-			</p>
+			<div class="row">
+				<div class="col-xs-12 col-md-6">
+					<div class="form-group">
+						<input class="form-control" type="text" name="value" id="f_value" value="{LANG.search_key}" />
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<div class="form-group">
+						<select class="form-control" name="method" id="f_method">
+							<option value="">---{LANG.search_type}---</option>
+							<!-- BEGIN: method -->
+							<option value="{METHODS.key}"{METHODS.selected}>{METHODS.value}</option>
+							<!-- END: method -->
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<div class="form-group">
+						<select class="form-control" name="usactive">
+							<!-- BEGIN: usactive -->
+							<option value="{USACTIVE.key}"{USACTIVE.selected}>{USACTIVE.value}</option>
+							<!-- END: usactive -->
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<div class="form-group">
+						<input class="btn btn-primary" name="search" type="submit" value="{LANG.submit}" />
+					</div>
+				</div>
+			</div>
+			<label><em>{LANG.search_note}</em></label>
 		</form>
 	</div>
 	<div class="table-responsive">
@@ -33,8 +48,8 @@
 					<!-- BEGIN: head_td -->
 					<th><a href="{HEAD_TD.href}">{HEAD_TD.title}</a></th>
 					<!-- END: head_td -->
-					<td class="text-center"><strong>{LANG.memberlist_active}</th>
-					<th>{LANG.funcs}</th>
+					<th class="text-center">{LANG.memberlist_active}</th>
+					<th class="text-center">{LANG.funcs}</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -63,7 +78,7 @@
 					<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 					<td> {CONTENT_TD.regdate} </td>
 					<td class="text-center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
-					<td style="white-space: nowrap">
+					<td class="text-center">
 					<!-- BEGIN: edit -->
 					&nbsp;&nbsp; <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
 					<!-- END: edit -->
