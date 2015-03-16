@@ -280,7 +280,7 @@ function nv_get_viewImage( $fileName )
 					$thumb_config['thumb_height'] = 0;
 				}
 			}
-			if( $image->fileinfo['width'] > $thumb_config['thumb_width'] )
+			if( $image->fileinfo['width'] > $thumb_config['thumb_width'] or $image->fileinfo['height'] > $thumb_config['thumb_height'] )
 			{
 				$image->resizeXY( $thumb_config['thumb_width'], $thumb_config['thumb_height'] );
 				if( $thumb_config['thumb_type'] == 4 )

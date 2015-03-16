@@ -19,7 +19,7 @@ $sth->execute( array('about', 'page', 'about', 'À propos', '', 1276333182, 1, 1
 $sth->execute( array('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0) );
 $sth->execute( array('users', 'users', 'users', 'Compte d&#039;utilisateur', '', 1274080277, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0) );
 $sth->execute( array('contact', 'contact', 'contact', 'Contact', '', 1275351337, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0) );
-$sth->execute( array('statistics', 'statistics', 'statistics', 'Statistiques', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '6', 5, 1, '', 0, 0) );
+$sth->execute( array('statistics', 'statistics', 'statistics', 'Statistiques', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '2', 5, 1, '', 0, 0) );
 $sth->execute( array('voting', 'voting', 'voting', 'Sondage', '', 1275315261, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0) );
 $sth->execute( array('banners', 'banners', 'banners', 'Publicité', '', 1270400000, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 0) );
 $sth->execute( array('seek', 'seek', 'seek', 'Recherche', '', 1273474173, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0) );
