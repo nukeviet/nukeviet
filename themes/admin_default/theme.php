@@ -290,6 +290,13 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			}
 			$xtpl->parse( 'main.menu_loop' );
 		}
+
+		// Notification icon
+		if( $global_config['notification_active'] )
+		{
+			$xtpl->parse( 'main.notification' );
+			$xtpl->parse( 'main.notification_js' );
+		}
 	}
 
 	if( ! empty( $select_options ) )

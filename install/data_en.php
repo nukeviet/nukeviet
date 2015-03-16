@@ -318,6 +318,7 @@ $array_cron_name['cron_auto_sendmail_error_log'] = 'Send error logs to admin';
 $array_cron_name['cron_ref_expired_del'] = 'Delete expired referer';
 $array_cron_name['cron_siteDiagnostic_update'] = 'Update site diagnostic';
 $array_cron_name['cron_auto_check_version'] = 'Check NukeViet version';
+$array_cron_name['cron_notification_autodel'] = 'Delete old notification';
 
 
 $result = $db->query( "SELECT id, run_func FROM " . $db_config['prefix'] . "_cronjobs ORDER BY id ASC" );

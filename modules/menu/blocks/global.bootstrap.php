@@ -135,15 +135,8 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 			if( isset( $array_menu[$id] ) )
 			{
 				$classcurrent[] = 'dropdown';
-				foreach( $array_menu[$id] as $sid => $sitem )
-				{
-					$xtpl->assign( 'SUB', $sitem );
-					if( ! empty( $sitem['icon'] ) )
-					{
-						$xtpl->parse( 'main.top_menu.sub.item.icon' );
-					}
-					$xtpl->parse( 'main.top_menu.sub.item' );
-				}
+				$submenu = nv_get_bootstrap_submenu( $id, $array_menu );
+				$xtpl->assign( 'SUB', $submenu );
 				$xtpl->parse( 'main.top_menu.sub' );
 				$xtpl->parse( 'main.top_menu.has_sub' );
 			}
@@ -171,7 +164,55 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
+}
 
+/**
+ * nv_get_bootstrap_submenu()
+ *
+ * @param mixed $id
+ * @param mixed $array_menu
+ * @return
+ */
+function nv_get_bootstrap_submenu( $id, $array_menu )
+{
+	global $global_config;
+
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/global.bootstrap.tpl' ) )
+	{
+		$block_theme = $global_config['site_theme'];
+	}
+	else
+	{
+		$block_theme = 'default';
+	}
+
+	$xtpl = new XTemplate( 'global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
+
+	if( !empty( $array_menu[$id] ) )
+	{
+		foreach( $array_menu[$id] as $sid => $smenu )
+		{
+			$submenu = '';
+			if( isset( $array_menu[$sid] ) )
+			{
+				$submenu = nv_get_bootstrap_submenu( $sid, $array_menu );
+				$xtpl->assign( 'SUB', $submenu );
+				$xtpl->parse( 'submenu.loop.item' );
+			}
+			$xtpl->assign( 'SUBMENU', $smenu );
+			if( !empty( $submenu ) )
+			{
+				$xtpl->parse( 'submenu.loop.submenu' );
+			}
+			if( ! empty( $smenu['icon'] ) )
+			{
+				$xtpl->parse( 'submenu.loop.icon' );
+			}
+			$xtpl->parse( 'submenu.loop' );
+		}
+		$xtpl->parse( 'submenu' );
+	}
+	return $xtpl->text( 'submenu' );
 }
 
 if( defined( 'NV_SYSTEM' ) )

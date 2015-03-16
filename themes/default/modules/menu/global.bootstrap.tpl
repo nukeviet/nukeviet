@@ -1,3 +1,19 @@
+<!-- BEGIN: submenu -->
+<ul class="dropdown-menu">
+	<!-- BEGIN: loop -->
+    <li <!-- BEGIN: submenu -->class="dropdown-submenu"<!-- END: submenu -->>
+        <!-- BEGIN: icon -->
+        <img src="{SUBMENU.icon}" />&nbsp;
+        <!-- END: icon -->
+        <a href="{SUBMENU.link}" title="{SUBMENU.note}" {SUBMENU.target}>{SUBMENU.title_trim}</a>
+        <!-- BEGIN: item -->
+        {SUB}
+        <!-- END: item -->
+    </li>
+    <!-- END: loop -->
+</ul>
+<!-- END: submenu -->
+
 <!-- BEGIN: main -->
 <div class="navbar navbar-default navbar-static-top" role="navigation">
 	<div class="navbar-header">
@@ -9,31 +25,22 @@
 		</button>
 	</div>
 	<div class="collapse navbar-collapse" id="menu-site-default">
-		<ul class="nav navbar-nav">
+        <ul class="nav navbar-nav">
 			<li <!-- BEGIN: home_active --> class="active"<!-- END: home_active -->>
 				<a title="{LANG.Home}" href="{THEME_SITE_HREF}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
 			</li>
 			<!-- BEGIN: top_menu -->
-			<li {TOP_MENU.current}>
+            <li {TOP_MENU.current}>
                 <!-- BEGIN: icon -->
                 <img src="{TOP_MENU.icon}" />&nbsp;
                 <!-- END: icon -->
-				<a href="{TOP_MENU.link}" title="{TOP_MENU.note}" {TOP_MENU.target}>{TOP_MENU.title_trim}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
-				<!-- BEGIN: sub -->
-				<ul class="dropdown-menu">
-					<!-- BEGIN: item -->
-                    <li>
-                        <!-- BEGIN: icon -->
-                        <img src="{SUB.icon}" />&nbsp;
-                        <!-- END: icon -->
-                        <a href="{SUB.link}" title="{SUB.note}" {SUB.target}>{SUB.title_trim}</a>
-                    </li>
-                    <!-- END: item -->
-				</ul>
-				<!-- END: sub -->
+                <a href="{TOP_MENU.link}" title="{TOP_MENU.note}" {TOP_MENU.target}>{TOP_MENU.title_trim}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
+                <!-- BEGIN: sub -->
+                {SUB}
+                <!-- END: sub -->
 			</li>
 			<!-- END: top_menu -->
-		</ul>
+         </ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li><a href="#" id="digclock">{THEME_DIGCLOCK_TEXT}</a></li>
 		</ul>
