@@ -132,7 +132,7 @@ function nv_del_content_module( $id )
 			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
 			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id = ' . $id );
 			$groupid = GetGroupID( $id );
-			if( $db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group WHERE pro_id = ' . $id ) )
+			if( $db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id = ' . $id ) )
 			{
 				nv_fix_group_count( $groupid );
 			}
@@ -298,7 +298,7 @@ function nv_fix_group_count( $listid )
 	{
 		if( ! empty( $id ) )
 		{
-			$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE ( group_id='" . $id . "' OR group_id REGEXP '^" . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "$' )";
+			$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE ( group_id='" . $id . "' OR group_id REGEXP '^" . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "$' )";
 			$num = $db->query( $sql )->fetchColumn();
 
 			$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET numpro=" . $num . " WHERE groupid=" . intval( $id );
@@ -442,7 +442,7 @@ function GetGroupID( $pro_id, $group_by_parent = 0 )
 	global $db, $db_config, $module_data, $global_array_group;
 
 	$data = array();
-	$result = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group where pro_id=' . $pro_id );
+	$result = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items where pro_id=' . $pro_id );
 	while( $row = $result->fetch() )
 	{
 		if( $group_by_parent )

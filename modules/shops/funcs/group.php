@@ -34,13 +34,13 @@ $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DA
 $db->sqlreset()
 	->select( 'COUNT(*)' )
 	->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )
-	->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_items_group t2 ON t2.pro_id = t1.id' )
+	->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t2 ON t2.pro_id = t1.id' )
 	->where( 't2.group_id = ' . $groupid . ' AND status =1' );
 
 $num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t3.newday' )
-	->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_items_group t2 ON t2.pro_id = t1.id INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t3 ON t3.catid = t1.listcatid' )
+	->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t2 ON t2.pro_id = t1.id INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t3 ON t3.catid = t1.listcatid' )
 	->order( 'id DESC' )
 	->limit( $per_page )
 	->offset( ( $page - 1 ) * $per_page );

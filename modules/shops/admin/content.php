@@ -515,7 +515,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				}
 				if( !empty( $rowcontent['group_id'] ) )
 				{
-					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_items_group VALUES(' . $rowcontent['id'] . ', :group_id)' );
+					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_items VALUES(' . $rowcontent['id'] . ', :group_id)' );
 
 					foreach( $rowcontent['group_id'] as $group_id_i )
 					{
@@ -634,12 +634,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			{
 				if( $group_id_old != $rowcontent['group_id'] )
 				{
-					$sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group WHERE pro_id = ' . $rowcontent['id'];
+					$sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id = ' . $rowcontent['id'];
 					$db->query( $sql );
 
 					if( !empty( $rowcontent['group_id'] ) )
 					{
-						$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_items_group VALUES(' . $rowcontent['id'] . ', :group_id)' );
+						$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_items VALUES(' . $rowcontent['id'] . ', :group_id)' );
 						foreach( $rowcontent['group_id'] as $group_id_i )
 						{
 							$stmt->bindParam( ':group_id', $group_id_i, PDO::PARAM_STR );

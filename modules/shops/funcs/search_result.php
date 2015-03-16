@@ -177,7 +177,7 @@ if( $pro_config['active_price'] )
 $table_search = "" . $db_config['prefix'] . "_" . $module_data . "_rows t1";
 $table_exchange = " LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " t2 ON t1.money_unit=t2.code";
 $table_exchange1 = " INNER JOIN " . $db_config['prefix'] . "_" . $module_data . "_catalogs t3 ON t3.catid = t1.listcatid";
-$table_exchange2 = " LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_items_group t4 ON t1.id=t4.pro_id";
+$table_exchange2 = " LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_group_items t4 ON t1.id=t4.pro_id";
 
 // Fetch Limit
 $db->sqlreset()->select( 'COUNT(*)' )->from( $table_search . " " . $table_exchange . " " . $table_exchange1 . " " . $table_exchange2 )->where( "t1.status =1 " . $search . " " . $show_price );
