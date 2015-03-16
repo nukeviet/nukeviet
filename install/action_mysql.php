@@ -235,8 +235,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
 $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 	session_id varchar(50) DEFAULT NULL,
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
-	first_name varchar(100) NOT NULL,
-	last_name varchar(100) NOT NULL,
+	username varchar(100) NOT NULL,
 	onl_time int(11) unsigned NOT NULL DEFAULT '0',
 	UNIQUE KEY session_id (session_id),
 	KEY onl_time (onl_time)

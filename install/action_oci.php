@@ -373,8 +373,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( NV_LANGUAGE
 $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 	session_id VARCHAR2(50 CHAR)DEFAULT '',
 	userid NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
-	first_name VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
-	last_name VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
+	username VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
 	onl_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	CONSTRAINT unv_sessions_session_id UNIQUE (session_id)
 )";
