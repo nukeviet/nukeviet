@@ -17,11 +17,11 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 	{
 		global $global_config, $db, $lang_global;
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.counter.tpl' ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/statistics/global.counter.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'];
 		}
-		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.counter.tpl' ) )
+		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/statistics/global.counter.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
@@ -30,7 +30,7 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 			$block_theme = "default";
 		}
 
-		$xtpl = new XTemplate( 'global.counter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
+		$xtpl = new XTemplate( 'global.counter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/statistics' );
 
 		$xtpl->assign( 'LANG', $lang_global );
 		$xtpl->assign( 'IMG_PATH', NV_BASE_SITEURL . 'themes/' . $block_theme . '/' );
