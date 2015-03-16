@@ -124,7 +124,7 @@ if( empty( $contents ) )
 			// Fetch Limit
 			if( $array_url_group or $ajax )
 			{
-				$join = 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_items_group t3 ON t1.id = t3.pro_id';
+				$join = 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t3 ON t1.id = t3.pro_id';
 				$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->join( $join )->where( 't1.listcatid IN (' . implode( ',', $array_cat ) . ') AND t1.status =1 AND t1.id = t3.pro_id AND t1.id = t3.pro_id ' . $list_id_group );
 			}
 			else
@@ -215,7 +215,7 @@ if( empty( $contents ) )
 
 		if( $array_url_group or !empty( $list_id_group ) )
 		{
-			$join = 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_items_group t3 ON t1.id = t3.pro_id';
+			$join = 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t3 ON t1.id = t3.pro_id';
 			$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->join( $join )->where( $where . ' AND t1.status =1 AND t1.id = t3.pro_id ' . $list_id_group );
 		}
 		else

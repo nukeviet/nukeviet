@@ -235,13 +235,13 @@ if( empty( $contents ) )
 				// Fetch Limit
 				$db->sqlreset()->select( 'DISTINCT id' )
 					->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )
-					->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_items_group t3 ON t3.pro_id = t1.id' )
+					->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t3 ON t3.pro_id = t1.id' )
 					->where( $sql_regexp . ' AND t1.inhome=1 AND t1.status =1' );
 
 				$num_pro = $db->query( $db->sql() )->rowCount();
 
 				$db->select( 'DISTINCT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t2.newday' )
-					->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_items_group t3 ON t3.pro_id = t1.id' )
+					->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t3 ON t3.pro_id = t1.id' )
 					->order( 't1.id DESC' )
 					->limit( $num_links );
 
