@@ -21,7 +21,7 @@
 				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','{CAPTCHA_NAME}');">&nbsp;</em>
 			</div>
 			<div class="col-sm-10">
-				<input name="{CAPTCHA_NAME}" id="{CAPTCHA_NAME}" type="password" maxlength="{CAPTCHA_MAXLENGTH}" class="form-control"/>
+				<input name="{CAPTCHA_NAME}" id="{CAPTCHA_NAME}" type="text" maxlength="{CAPTCHA_MAXLENGTH}" class="form-control"/>
 			</div>
 		</div>
 		<!-- END: captcha -->
