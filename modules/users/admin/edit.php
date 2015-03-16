@@ -193,7 +193,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$_user['birthday'] = 0;
 			}
 
-			$password = ! empty( $_user['password1'] ) ? $crypt->hash( $_user['password1'] ) : $row['password'];
+			$password = ! empty( $_user['password1'] ) ? $crypt->hash_password( $_user['password1'], $global_config['hashprefix'] ) : $row['password'];
 
 			// Check photo
 			if( $_user['delpic'] or empty( $photo ) )
@@ -385,7 +385,7 @@ else
 		$xtpl->parse( 'main.answer' );
 		$xtpl->assign( 'REQUIRED_QUESTION', ' required' );
 	}
-	
+
 	foreach( $genders as $gender )
 	{
 		$xtpl->assign( 'GENDER', $gender );

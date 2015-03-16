@@ -75,7 +75,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
     $yahoo = $nv_Request->get_title( 'yahoo', 'post', '', 1 );
     $skype = $nv_Request->get_title( 'skype', 'post', '', 1 );
 	$note = $nv_Request->get_editor( 'note', '', NV_ALLOWED_HTML_TAGS );
-	
 
 	$view_level = $nv_Request->get_array( 'view_level', 'post', array() );
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
@@ -119,9 +118,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['err_part_row_title'];
 	}
-	elseif( empty ( $alias ) ) 
+	elseif( empty ( $alias ) )
 	{
-		$error = $lang_module['error_alias'];		
+		$error = $lang_module['error_alias'];
 	}
 	elseif( ! empty( $email ) and ! empty( $check_valid_email ) )
 	{
@@ -163,7 +162,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$name_key = 'log_add_row';
 			$note_action = $full_name;
 		}
-				
+
 		try
 		{
 			$sth = $db->prepare( $sql);
@@ -176,9 +175,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	        $sth->bindParam( ':skype', $skype, PDO::PARAM_STR );
 			$sth->bindParam( ':note', $note, PDO::PARAM_STR );
 			$sth->bindParam( ':admins', $admins_list, PDO::PARAM_STR );
-			if( !$id )	
+			if( !$id )
 			{
-				$sth->bindParam( ':weight', $weight, PDO::PARAM_STR );	
+				$sth->bindParam( ':weight', $weight, PDO::PARAM_STR );
 			}
 			$sth->execute();
 			if ($sth->rowCount() )
@@ -187,7 +186,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				nv_del_moduleCache( $module_name );
 			}
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department' );
-			die();			
+			die();
 		}
 		catch( PDOException $e )
 		{
@@ -317,7 +316,7 @@ foreach( $adms as $admid => $values )
 		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? ' checked="checked"' : '',
 		'disabled' => $values['level'] === 1 ? ' disabled="disabled"' : ''
 	) );
-	
+
 	$xtpl->parse( 'main.admin' );
 }
 

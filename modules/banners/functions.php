@@ -29,13 +29,11 @@ function nv_banner_client_checkdata( $cookie )
 
 	$client = unserialize( $cookie );
 
-	$strlen = ( NV_CRYPT_SHA1 == 1 ) ? 40 : 32;
-
 	$banner_client_info = array();
 
 	if( isset( $client['login'] ) and preg_match( '/^[a-zA-Z0-9_]{' . NV_UNICKMIN . ',' . NV_UNICKMAX . '}$/', $client['login'] ) )
 	{
-		if( isset( $client['checknum'] ) and preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $client['checknum'] ) )
+		if( isset( $client['checknum'] ) and preg_match( '/^[a-z0-9]{32}$/', $client['checknum'] ) )
 		{
 			$login = $client['login'];
 			$stmt = $db->prepare( 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = :login AND act=1');

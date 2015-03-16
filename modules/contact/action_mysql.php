@@ -62,4 +62,4 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  KEY id (id)
 ) ENGINE=MyISAM";
 
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, phone, fax, email, yahoo, skype, note, admins, act) VALUES ('Webmaster', '', '', '', '', '', '', '1/1/1/0;', 1)";
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, yahoo, skype, note, admins, act, weight) VALUES ('Webmaster', 'Webmaster', '', '', '', '', '', '', '1/1/1/0;', 1, 1)";

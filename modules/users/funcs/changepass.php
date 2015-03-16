@@ -41,7 +41,7 @@ if( $checkss == $array_data['checkss'] )
 {
 	$error = '';
 
-	if( ! empty( $oldpassword ) and ! $crypt->validate( $array_data['nv_password'], $oldpassword ) )
+	if( ! empty( $oldpassword ) and ! $crypt->validate_password( $array_data['nv_password'], $oldpassword ) )
 	{
 		$error = $lang_global['incorrect_password'];
 		$error = str_replace( $lang_global['password'], $lang_module['pass_old'], $error );
@@ -57,7 +57,7 @@ if( $checkss == $array_data['checkss'] )
 	}
 	else
 	{
-		$new_password = $crypt->hash( $array_data['new_password'] );
+		$new_password = $crypt->hash_password( $array_data['new_password'], $global_config['hashprefix'] );
 
 		$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET password= :password WHERE userid=' . $user_info['userid'] );
 		$stmt->bindParam( ':password', $new_password, PDO::PARAM_STR );

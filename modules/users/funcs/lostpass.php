@@ -126,7 +126,7 @@ else
 							if ( $rand < 6) $rand = 6;
 							$password_new = nv_genpass( $rand );
 
-							$password = $crypt->hash( $password_new );
+							$password = $crypt->hash_password( $password_new, $global_config['hashprefix'] );
 							$passlostkey = md5( $row['userid'] . $password . $global_config['sitekey'] );
 
 							$subject = sprintf( $lang_module['lostpass_email_subject'], $global_config['site_name'] );

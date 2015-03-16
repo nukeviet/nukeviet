@@ -86,7 +86,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) and $nv_Request
 		{
 			$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
 			$login_email = false;
-		}		
+		}
 		$row = $db->query( $sql )->fetch();
 		if( empty( $row ) )
 		{
@@ -94,7 +94,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) and $nv_Request
 		}
 		else
 		{
-			if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate( $nv_password, $row['password'] ) )
+			if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate_password( $nv_password, $row['password'] ) )
 			{
 				$userid = $row['userid'];
 			}
@@ -120,8 +120,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) and $nv_Request
 				{
 					nv_insert_logs( NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'], ' Client IP:' . NV_CLIENT_IP, 0 );
 					$admin_id = intval( $row['admin_id'] );
-					$checknum = nv_genpass( 10 );
-					$checknum = $crypt->hash( $checknum );
+					$checknum = md5( nv_genpass( 10 ) );
 					$array_admin = array(
 						'admin_id' => $admin_id,
 						'checknum' => $checknum,

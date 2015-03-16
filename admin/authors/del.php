@@ -45,7 +45,7 @@ function nv_checkAdmpass( $adminpass )
 
 	$sql = 'SELECT password FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $admin_info['userid'];
 	$pass = $db->query( $sql )->fetchColumn();
-	return $crypt->validate( $adminpass, $pass );
+	return $crypt->validate_password( $adminpass, $pass );
 }
 
 $access_admin = $db->query( "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'" )->fetchColumn();

@@ -243,7 +243,7 @@ function openidLogin_Res1( $attribs )
 			else
 			{
 
-				if( $crypt->validate( $password, $nv_row['password'] ) and $nv_seccode )
+				if( $crypt->validate_password( $password, $nv_row['password'] ) and $nv_seccode )
 				{
 					$login_allowed = true;
 				}
@@ -310,7 +310,7 @@ function openidLogin_Res1( $attribs )
 					$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 					$nv_seccode = ! $gfx_chk ? 1 : ( nv_capcha_txt( $nv_seccode ) ? 1 : 0 );
 
-					if( $crypt->validate( $password, $row['password'] ) and $nv_seccode )
+					if( $crypt->validate_password( $password, $row['password'] ) and $nv_seccode )
 					{
 						$reg_attribs = set_reg_attribs( $attribs );
 
@@ -721,7 +721,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 			$row = $db->query( $sql )->fetch();
 			if( ! empty( $row ) )
 			{
-				if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate( $nv_password, $row['password'] ) )
+				if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate_password( $nv_password, $row['password'] ) )
 				{
 					if( ! $row['active'] )
 					{

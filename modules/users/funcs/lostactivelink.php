@@ -127,7 +127,7 @@ if( $checkss == $data['checkss'] )
 
 							if( $ok )
 							{
-								$password = $crypt->hash( $password_new );
+								$password = $crypt->hash_password( $password_new, $global_config['hashprefix'] );
 								$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . '_reg SET password= :password, checknum= :checknum WHERE userid=' . $row['userid'] );
 								$stmt->bindParam( ':password', $password, PDO::PARAM_STR );
 								$stmt->bindParam( ':checknum', $checknum, PDO::PARAM_STR );
