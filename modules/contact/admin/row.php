@@ -37,7 +37,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
 
-$sql = 'SELECT t1.admin_id as id, t1.lev as lev, t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname
+$sql = 'SELECT t1.admin_id as id, t1.lev as lev, t2.username as admin_login, t2.email as admin_email, t2.first_name as admin_firstname, t2.last_name as admin_lastname
 	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
 	INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2
 	ON t1.admin_id = t2.userid
@@ -49,7 +49,8 @@ while( $row = $result->fetch() )
 {
 	$adms[$row['id']] = array(
 		'login' => $row['admin_login'],
-		'fullname' => $row['admin_fullname'],
+		'first_name' => $row['admin_firstname'],
+		'last_name' => $row['admin_lastname'],
 		'email' => $row['admin_email'],
 		'level' => intval( $row['lev'] )
 	);
@@ -62,15 +63,19 @@ if( defined( 'NV_EDITOR' ) )
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
+$listdepartment = nv_departmentList();
+
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
 	$full_name = $nv_Request->get_title( 'full_name', 'post', '', 1 );
+	$alias = $nv_Request->get_title( 'alias', 'post', '', 1 );
 	$phone = $nv_Request->get_title( 'phone', 'post', '', 1 );
 	$fax = $nv_Request->get_title( 'fax', 'post', '', 1 );
 	$email = $nv_Request->get_title( 'email', 'post', '', 1 );
     $yahoo = $nv_Request->get_title( 'yahoo', 'post', '', 1 );
     $skype = $nv_Request->get_title( 'skype', 'post', '', 1 );
 	$note = $nv_Request->get_editor( 'note', '', NV_ALLOWED_HTML_TAGS );
+	
 
 	$view_level = $nv_Request->get_array( 'view_level', 'post', array() );
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
@@ -114,12 +119,17 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['err_part_row_title'];
 	}
+	elseif( empty ( $alias ) ) 
+	{
+		$error = $lang_module['error_alias'];		
+	}
 	elseif( ! empty( $email ) and ! empty( $check_valid_email ) )
 	{
 		$error = $check_valid_email;
 	}
 	else
 	{
+		$alias = empty( $alias ) ? change_alias( $full_name ) : change_alias( $alias );
 		$admins_list = array();
 		foreach( $adms as $admid => $values )
 		{
@@ -140,33 +150,50 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, phone = :phone, fax=:fax, email=:email, yahoo=:yahoo, skype=:skype, note=:note, admins=:admins WHERE id =' . $id;
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, phone = :phone, fax=:fax, email=:email, yahoo=:yahoo, skype=:skype, note=:note, admins=:admins WHERE id =' . $id;
 			$name_key = 'log_edit_row';
 			$note_action = 'id: ' . $id .' ' . $full_name;
 		}
 		else
 		{
-			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, phone, fax, email, yahoo, skype, note, admins, act) VALUES (:full_name, :phone, :fax, :email, :yahoo, :skype, :note, :admins, 1)';
+			$weight = 0;
+			$weight = count( $listdepartment );
+			$weight++;
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, yahoo, skype, note, admins, act, weight) VALUES (:full_name, :alias, :phone, :fax, :email, :yahoo, :skype, :note, :admins, 1, :weight)';
 			$name_key = 'log_add_row';
 			$note_action = $full_name;
 		}
-		$sth = $db->prepare( $sql);
-		$sth->bindParam( ':full_name', $full_name, PDO::PARAM_STR );
-		$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
-		$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
-		$sth->bindParam( ':email', $email, PDO::PARAM_STR );
-        $sth->bindParam( ':yahoo', $yahoo, PDO::PARAM_STR );
-        $sth->bindParam( ':skype', $skype, PDO::PARAM_STR );
-		$sth->bindParam( ':note', $note, PDO::PARAM_STR );
-		$sth->bindParam( ':admins', $admins_list, PDO::PARAM_STR );
-		$sth->execute();
-		if ($sth->rowCount() )
+				
+		try
 		{
-			nv_insert_logs( NV_LANG_DATA, $module_name, $name_key , $note_action, $admin_info['userid'] );
-			nv_del_moduleCache( $module_name );
+			$sth = $db->prepare( $sql);
+			$sth->bindParam( ':full_name', $full_name, PDO::PARAM_STR );
+			$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
+			$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
+			$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
+			$sth->bindParam( ':email', $email, PDO::PARAM_STR );
+	        $sth->bindParam( ':yahoo', $yahoo, PDO::PARAM_STR );
+	        $sth->bindParam( ':skype', $skype, PDO::PARAM_STR );
+			$sth->bindParam( ':note', $note, PDO::PARAM_STR );
+			$sth->bindParam( ':admins', $admins_list, PDO::PARAM_STR );
+			if( !$id )	
+			{
+				$sth->bindParam( ':weight', $weight, PDO::PARAM_STR );	
+			}
+			$sth->execute();
+			if ($sth->rowCount() )
+			{
+				nv_insert_logs( NV_LANG_DATA, $module_name, $name_key , $note_action, $admin_info['userid'] );
+				nv_del_moduleCache( $module_name );
+			}
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department' );
+			die();			
 		}
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department' );
-		die();
+		catch( PDOException $e )
+		{
+			$error = $lang_module['duplicate_alias'];
+			trigger_error( $e->getMessage() );
+		}
 	}
 }
 else
@@ -174,6 +201,7 @@ else
 	if( $id )
 	{
 		$full_name = $frow['full_name'];
+		$alias = $frow['alias'];
 		$phone = $frow['phone'];
 		$fax = $frow['fax'];
 		$email = $frow['email'];
@@ -231,7 +259,7 @@ else
 	}
 	else
 	{
-		$full_name = $phone = $fax = $email = $yahoo = $skype = $note = '';
+		$full_name = $alias = $phone = $fax = $email = $yahoo = $skype = $note = '';
 		$view_level = $reply_level = $obt_level = array();
 
 		foreach( $adms as $admid => $values )
@@ -246,6 +274,8 @@ else
 }
 
 if( ! empty( $note ) ) $note = nv_htmlspecialchars( $note );
+
+if( empty( $row['alias'] ) ) $xtpl->parse( 'main.get_alias' );
 
 if( ! empty( $error ) )
 {
@@ -264,6 +294,7 @@ else
 
 $xtpl->assign( 'DATA', array(
 	'full_name' => $full_name,
+	'alias' => $alias,
 	'phone' => $phone,
 	'fax' => $fax,
 	'email' => $email,
@@ -271,13 +302,14 @@ $xtpl->assign( 'DATA', array(
     'skype' => $skype,
 	'note' => $note
 ) );
-
+//list danh sách bộ phận liên hệ
 $a = 0;
 foreach( $adms as $admid => $values )
 {
 	$xtpl->assign( 'ADMIN', array(
 		'login' => $values['login'],
-		'fullname' => $values['fullname'],
+		'first_name' => $values['first_name'],
+		'last_name' => $values['last_name'],
 		'email' => $values['email'],
 		'admid' => $admid,
 		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? ' checked="checked"' : '',
@@ -285,7 +317,7 @@ foreach( $adms as $admid => $values )
 		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? ' checked="checked"' : '',
 		'disabled' => $values['level'] === 1 ? ' disabled="disabled"' : ''
 	) );
-
+	
 	$xtpl->parse( 'main.admin' );
 }
 
