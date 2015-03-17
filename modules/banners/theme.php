@@ -16,12 +16,13 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
  * @param mixed $contents
  * @return
  */
-function nv_banner_theme_main( $contents )
+function nv_banner_theme_main( $contents, $manament )
 {
-	global $global_config, $module_name, $module_info, $module_file, $lang_module;
+	global $global_config, $module_name, $module_info, $module_file, $lang_module, $lang_global;
 
 	$xtpl = new XTemplate( 'home.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
 
 	if( ! empty( $contents['rows'] ) )
 	{
@@ -50,14 +51,12 @@ function nv_banner_theme_main( $contents )
 
 	$xtpl->assign( 'CONTAINERID', $contents['containerid'] );
 	$xtpl->assign( 'AJ', $contents['aj'] );
-
+	
 	if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	{
-		$xtpl->assign( 'clientinfo_link', $contents['clientinfo_link'] );
-		$xtpl->assign( 'clientinfo_addads', $contents['clientinfo_addads'] );
-		$xtpl->assign( 'clientinfo_stats', $contents['clientinfo_stats'] );
+		$xtpl->assign( 'MANAGEMENT', $manament );
 		$xtpl->parse( 'main.management' );
-	}
+	}	
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -128,16 +127,15 @@ function clientinfo_theme( $contents )
  */
 function clinfo_theme( $contents, $manament )
 {
-	global $global_config, $module_name, $module_file, $module_info, $lang_module;
+	global $global_config, $module_name, $module_file, $module_info, $lang_module, $lang_global;
 
 	$xtpl = new XTemplate( 'clinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
 	if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	{
-		$xtpl->assign( 'LANG', $lang_module );
-		$xtpl->assign( 'clientinfo_link', $manament['clientinfo_link'] );
-		$xtpl->assign( 'clientinfo_addads', $manament['clientinfo_addads'] );
-		$xtpl->assign( 'clientinfo_stats', $manament['clientinfo_stats'] );
+		$xtpl->assign( 'MANAGEMENT', $manament );
 		$xtpl->parse( 'clinfo.management' );
 	}
 

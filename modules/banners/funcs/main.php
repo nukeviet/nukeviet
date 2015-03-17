@@ -29,12 +29,9 @@ while( $row = $result->fetch() )
 
 $contents['containerid'] = "action";
 $contents['aj'] = "nv_login_info('action');";
-$contents['clientinfo_link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=clientinfo";
-$contents['clientinfo_addads'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=addads";
-$contents['clientinfo_stats'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=stats";
 
 $page_title = $module_info['custom_title'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['funcs'][$op]['func_custom_name'];
-$contents = nv_banner_theme_main( $contents );
+$contents = nv_banner_theme_main( $contents, $manament );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

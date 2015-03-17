@@ -1,9 +1,11 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: management -->
 <ul class="nav nav-tabs m-bottom">
-	<li><a href="{clientinfo_link}">{LANG.client_info}</a></li>
-	<li><a href="{clientinfo_addads}">{LANG.client_addads}</a></li>
-	<li><a href="{clientinfo_stats}">{LANG.client_stats}</a></li>
+	<li class="active"><a href="{MANAGEMENT.main}">{LANG.plan_info}</a></li>
+	<li><a href="{MANAGEMENT.link}">{LANG.client_info}</a></li>
+	<li><a href="{MANAGEMENT.addads}">{LANG.client_addads}</a></li>
+	<li><a href="{MANAGEMENT.stats}">{LANG.client_stats}</a></li>
+	<li><a href="{MANAGEMENT.logout}">{GLANG.logout}</a></li>
 </ul>
 <!-- END: management -->
 <!-- BEGIN: if_banner_plan -->
