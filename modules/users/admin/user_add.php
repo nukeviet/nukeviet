@@ -196,7 +196,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$data_insert = array();
 			$data_insert['username'] = $_user['username'];
 			$data_insert['md5_username'] = $md5username;
-			$data_insert['password'] = $crypt->hash( $_user['password1'] );
+			$data_insert['password'] = $crypt->hash_password( $_user['password1'], $global_config['hashprefix'] );
 			$data_insert['email'] = $_user['email'];
 			$data_insert['first_name'] = $_user['first_name'];
 			$data_insert['last_name'] = $_user['last_name'];
@@ -204,7 +204,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			$data_insert['sig'] = $_user['sig'];
 			$data_insert['question'] = $_user['question'];
 			$data_insert['answer'] = $_user['answer'];
-			
+
 			$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
 			if( $userid )

@@ -68,3 +68,33 @@ function nv_del_mess(mid) {
 	}
 	return false;
 }
+
+function nv_chang_weight(vid) {
+    var nv_timer = nv_settimeout_disable('change_weight_' + vid, 5000);
+    var new_weight = $("#change_weight_" + vid).val();
+    $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_weight&nocache=' + new Date().getTime(), 'id=' + vid + '&new_weight=' + new_weight, function(res) {
+        var r_split = res.split("_");
+        if (r_split[0] != 'OK') {
+            alert(nv_is_change_act_confirm[2]);
+        }
+        else
+        {
+            window.location.href = window.location.href;
+        }
+    });
+    return;
+}
+
+function get_alias(id) {
+    var title = strip_tags(document.getElementById('idfull_name').value);
+    if (title != '') {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=alias&nocache=' + new Date().getTime(), 'title=' + encodeURIComponent(title) + '&id=' + id, function(res) {
+            if (res != "") {
+                document.getElementById('idalias').value = res;
+            } else {
+                document.getElementById('idalias').value = '';
+            }
+        });
+    }
+    return false;
+}

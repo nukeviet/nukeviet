@@ -737,7 +737,7 @@ elseif( $step == 6 )
 		}
 		elseif( empty( $error ))
 		{
-			$password = $crypt->hash( $array_data['nv_password'] );
+			$password = $crypt->hash_password( $array_data['nv_password'], $global_config['hashprefix'] );
 			define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
 
 			$userid = 1;
@@ -1078,6 +1078,7 @@ function nv_save_file_config()
 		$content .= "\n";
 		$content .= "\$global_config['idsite'] = 0;\n";
 		$content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
+		$content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";
 
 		if( $step < 7 )
 		{

@@ -24,11 +24,10 @@ $lang_module['in_groups'] = $lang_global['in_groups'];
  */
 function validUserLog( $array_user, $remember, $opid, $current_mode = 0 )
 {
-	global $db, $db_config, $crypt, $nv_Request;
+	global $db, $db_config, $nv_Request;
 
 	$remember = intval( $remember );
-	$checknum = nv_genpass( 10 );
-	$checknum = $crypt->hash( $checknum );
+	$checknum = md5( nv_genpass( 10 ) );
 	$user = array(
 		'userid' => $array_user['userid'],
 		'current_mode' => $current_mode,

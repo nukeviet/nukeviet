@@ -138,7 +138,7 @@ $checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 // Thay doi cau hoi - cau tra loi du phong
 if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 {
-	$oldpassword = $row['password'];
+	$hashpassword = $row['password'];
 	$oldquestion = $row['question'];
 	$oldanswer = $row['answer'];
 
@@ -153,7 +153,7 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 	$step = 1;
 	$error = '';
 
-	if( empty( $oldpassword ) )
+	if( empty( $hashpassword ) )
 	{
 		$step = 2;
 	}
@@ -161,17 +161,9 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 	{
 		if( $checkss == $array_data['checkss'] )
 		{
-			if( $crypt->validate( $array_data['nv_password'], $oldpassword ) or $array_data['nv_password'] == md5( $oldpassword ) )
+			if( $crypt->validate_password( $array_data['nv_password'], $hashpassword ) )
 			{
 				$step = 2;
-
-				if( ! isset( $array_data['nv_password']
-				{
-					31}
-				) )
-				{
-					$array_data['nv_password'] = md5( $crypt->hash( $array_data['nv_password'] ) );
-				}
 			}
 			else
 			{

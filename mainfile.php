@@ -278,7 +278,7 @@ if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 }
 // Class ma hoa du lieu
 require NV_ROOTDIR . '/includes/class/crypt.class.php';
-$crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
+$crypt = new nv_Crypt( $global_config['sitekey'] );
 $global_config['ftp_user_pass'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['ftp_user_pass'] ) );
 
 if( isset( $nv_plugin_area[1] ) )

@@ -146,10 +146,9 @@ function nv_admin_checkdata( $adm_session_value )
 {
 	global $db, $global_config, $db_config;
 
-	$strlen = ( NV_CRYPT_SHA1 == 1 ) ? 40 : 32;
 	$array_admin = unserialize( $adm_session_value );
 
-	if( ! isset( $array_admin['admin_id'] ) or ! is_numeric( $array_admin['admin_id'] ) or $array_admin['admin_id'] <= 0 or ! isset( $array_admin['checknum'] ) or ! preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $array_admin['checknum'] ) ) return array();
+	if( ! isset( $array_admin['admin_id'] ) or ! is_numeric( $array_admin['admin_id'] ) or $array_admin['admin_id'] <= 0 or ! isset( $array_admin['checknum'] ) or ! preg_match( '/^[a-z0-9]{32}$/', $array_admin['checknum'] ) ) return array();
 
 	$query = 'SELECT a.admin_id AS admin_id, a.lev AS lev, a.position AS position, a.check_num AS check_num, a.last_agent AS current_agent,
 		a.last_ip AS current_ip, a.last_login AS current_login, a.files_level AS files_level, a.editor AS editor, b.userid AS userid,

@@ -7,6 +7,7 @@
 		</colgroup>
 		<thead>
 			<tr class="text-center">
+			    <th>{LANG.number}</th>
 				<th>{LANG.part_row_title}</th>
 				<th>{GLANG.email}</th>
 				<th>{GLANG.phonenumber}</th>
@@ -17,12 +18,19 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="6"><a href="{URL_ADD}" title="{LANG.add_row_title}" class="btn btn-default">{LANG.add_row_title}</a></td>
+				<td colspan="7"><a href="{URL_ADD}" title="{LANG.add_row_title}" class="btn btn-default">{LANG.add_row_title}</a></td>
 			</tr>
 		</tfoot>
 		<tbody>
 			<!-- BEGIN: row -->
 			<tr>
+			    <td align="center">
+                    <select id="change_weight_{ROW.id}" onchange="nv_chang_weight('{ROW.id}');" class="form-control w60">
+                        <!-- BEGIN: option -->
+                        <option value="{WEIGHT.value}" {WEIGHT.selected}>{WEIGHT.value}</option>
+                        <!-- END: option -->
+                    </select>
+                </td>
 				<td><a title="{LANG.url_for_iframe}" href="{ROW.url_part}" target="_blank">{ROW.full_name}</a></td>
 				<td>{ROW.email}</td>
 				<td>{ROW.phone}</td>
@@ -30,7 +38,7 @@
 				<td class="text-center">
 				<select id="change_status_{ROW.id}" onchange="nv_chang_status('{ROW.id}');" class="form-control w100">
 					<!-- BEGIN: status -->
-					<option value="{STATUS.key}"{STATUS.selected}>{STATUS.title}</option>
+					   <option value="{STATUS.key}"{STATUS.selected}>{STATUS.title}</option>
 					<!-- END: status -->
 				</select></td>
 				<td class="text-center">

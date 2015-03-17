@@ -225,7 +225,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 		{
 			$nv_Request->unset_request( 'reg_attribs', 'session' );
 
-			$password = ! empty( $array_register['password'] ) ? $crypt->hash( $array_register['password'] ) : '';
+			$password = ! empty( $array_register['password'] ) ? $crypt->hash_password( $array_register['password'], $global_config['hashprefix'] ) : '';
 			$your_question = ! empty( $array_register['your_question'] ) ? $array_register['your_question'] : $data_questions[$array_register['question']]['title'];
 			if( empty( $reg_attribs['first_name'] ) ) $reg_attribs['first_name'] = $array_register['username'];
 
@@ -429,7 +429,7 @@ if( $checkss == $array_register['checkss'] )
 		}
 		if( empty( $error ) )
 		{
-			$password = $crypt->hash( $array_register['password'] );
+			$password = $crypt->hash_password( $array_register['password'], $global_config['hashprefix'] );
 			$your_question = ! empty( $array_register['your_question'] ) ? $array_register['your_question'] : $data_questions[$array_register['question']]['title'];
 			$checknum = nv_genpass( 10 );
 			$checknum = md5( $checknum );

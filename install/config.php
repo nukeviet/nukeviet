@@ -18,8 +18,7 @@ $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
 $db_config['prefix'] = 'nv4';
 $db_config['persistent'] = false;
-$db_config['collation'] = 'utf8_general_ci';
-// mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
+$db_config['collation'] = 'utf8_general_ci';// mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
 
 $array_data = array();
 $array_data['lang_multi'] = 0;
@@ -60,13 +59,17 @@ $global_config['engine_allowed'] = array();
 $global_config['site_theme'] = 'default';
 $global_config['gfx_chk'] = 3;
 
-$global_config['nv_unick_type'] = 4;
 // Tài khoản chỉ được sử dụng Unicode, không có các ký tự đặc biệt
-$global_config['nv_upass_type'] = 0;
-// Mật khẩu cần kết hợp số và chữ
+$global_config['nv_unick_type'] = 4;
 
-$global_config['dump_interval'] = 1;
+// Mật khẩu cần kết hợp số và chữ
+$global_config['nv_upass_type'] = 0;
+
 // Thời gian lặp lại việc sao lưu CSDL tính bằng ngày
+$global_config['dump_interval'] = 1;
+
+//hashprefix: support LDAP({SSHA}, {SHA}, {MD5}); {NV3}
+$global_config['hashprefix'] = '{SSHA}';
 
 //so ky tu toi da cua password doi voi user
 define( 'NV_UPASSMAX', 20 );

@@ -81,7 +81,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
 	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	username varchar(100) NOT NULL DEFAULT '',
 	md5username char(32) NOT NULL DEFAULT '',
-	password varchar(50) NOT NULL DEFAULT '',
+	password varchar(80) NOT NULL DEFAULT '',
 	email varchar(100) NOT NULL DEFAULT '',
 	first_name varchar(100) NOT NULL DEFAULT '',
 	last_name varchar(100) NOT NULL DEFAULT '',
@@ -114,7 +114,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_reg (
 	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	username varchar(100) NOT NULL DEFAULT '',
 	md5username char(32) NOT NULL DEFAULT '',
-	password varchar(50) NOT NULL DEFAULT '',
+	password varchar(80) NOT NULL DEFAULT '',
 	email varchar(100) NOT NULL DEFAULT '',
 	first_name varchar(255) NOT NULL DEFAULT '',
 	last_name varchar(255) NOT NULL DEFAULT '',
@@ -235,8 +235,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
 $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 	session_id varchar(50) DEFAULT NULL,
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
-	first_name varchar(100) NOT NULL,
-	last_name varchar(100) NOT NULL,
+	username varchar(100) NOT NULL,
 	onl_time int(11) unsigned NOT NULL DEFAULT '0',
 	UNIQUE KEY session_id (session_id),
 	KEY onl_time (onl_time)
@@ -318,7 +317,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients (
 	id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	login varchar(60) NOT NULL,
-	pass varchar(50) NOT NULL,
+	pass varchar(80) NOT NULL,
 	reg_time int(11) unsigned NOT NULL DEFAULT '0',
 	full_name varchar(255) NOT NULL,
 	email varchar(100) NOT NULL,

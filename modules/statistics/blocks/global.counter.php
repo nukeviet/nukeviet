@@ -17,20 +17,20 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 	{
 		global $global_config, $db, $lang_global;
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.counter.tpl' ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/statistics/global.counter.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'];
 		}
-		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.counter.tpl' ) )
+		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/statistics/global.counter.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
 		else
 		{
-			$block_theme = "default";
+			$block_theme = 'default';
 		}
 
-		$xtpl = new XTemplate( 'global.counter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
+		$xtpl = new XTemplate( 'global.counter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/statistics' );
 
 		$xtpl->assign( 'LANG', $lang_global );
 		$xtpl->assign( 'IMG_PATH', NV_BASE_SITEURL . 'themes/' . $block_theme . '/' );
@@ -53,7 +53,7 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 			}
 		}
 
-		$sql = "SELECT userid, first_name, last_name FROM " . NV_SESSIONS_GLOBALTABLE . " WHERE onl_time >= " . ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME );
+		$sql = 'SELECT userid, username FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time >= ' . ( NV_CURRENTTIME - NV_ONLINE_UPD_TIME );
 		$query = $db->query( $sql );
 
 		$count_online = $users = $bots = $guests = 0;
@@ -61,20 +61,17 @@ if( ! nv_function_exists( 'nv_block_counter' ) )
 		{
 			++$count_online;
 
-			if( $row['userid'] != 0 )
+			if( $row['userid'] )
 			{
 				++$users;
 			}
+			elseif( preg_match( '/^bot\:/', $row['username'] ) )
+			{
+				++$bots;
+			}
 			else
 			{
-				if( preg_match( "/^bot\:/", $row['first_name'] ) )
-				{
-					++$bots;
-				}
-				else
-				{
-					++$guests;
-				}
+				++$guests;
 			}
 		}
 

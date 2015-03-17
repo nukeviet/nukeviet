@@ -171,6 +171,4 @@ if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 
 //Class ma hoa du lieu
 require NV_ROOTDIR . '/includes/class/crypt.class.php';
-$crypt = new nv_Crypt( $global_config['sitekey'], NV_CRYPT_SHA1 == 1 ? 'sha1' : 'md5' );
-
-?>
+$crypt = new nv_Crypt( $global_config['sitekey'] );
