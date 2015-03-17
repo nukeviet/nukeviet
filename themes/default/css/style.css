@@ -275,6 +275,23 @@ header{
 	min-height:100%;
 }
 
+.fix_banner_left{
+	width: 90px;
+	height: 500px;
+	position: fixed;
+	top: 2px;
+	left: 2px;
+	display: none;
+}
+.fix_banner_right{
+	width: 90px;
+	height: 500px;
+	position: fixed;
+	top: 2px;
+	right: 2px;
+	display: none;
+}
+
 /* Body */
 #body{
 	background:#fff;
