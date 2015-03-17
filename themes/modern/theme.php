@@ -184,18 +184,17 @@ function nv_site_theme( $contents, $full = true )
 					'title' => $module_info['custom_title'],
 					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
 				);
-	
-				$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
-				$xtpl->parse( 'main.mod_title.breakcolumn' );
+				array_unshift( $array_mod_title, $arr_cat_title_i );
 			}
-
-			foreach( $array_mod_title as $arr_cat_title_i )
+			if( ! empty( $array_mod_title ) )
 			{
-				$xtpl->assign( 'BREAKCOLUMN', $arr_cat_title_i );
-				$xtpl->parse( 'main.mod_title.breakcolumn' );
+				foreach( $array_mod_title as $arr_cat_title_i )
+				{
+					$xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
+					$xtpl->parse( 'main.breadcrumbs.loop' );
+				}
+				$xtpl->parse( 'main.breadcrumbs' );
 			}
-
-			$xtpl->parse( 'main.mod_title' );
 		}
 
 		// End process cat module
