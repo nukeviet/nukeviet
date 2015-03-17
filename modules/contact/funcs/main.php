@@ -80,8 +80,8 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 }
 
 //Danh sach cac bo phan
-$sql = 'SELECT id, full_name FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1';
-$array_department = nv_db_cache( $sql, 'id' );
+$sql = 'SELECT id, alias, full_name FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 ORDER BY weight';
+$array_department = nv_db_cache( $sql, 'alias' );
 
 $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
@@ -100,8 +100,8 @@ if( defined( 'NV_IS_USER' ) )
 $fcon = '';
 $fcode = '';
 $error = '';
-$fpart = isset( $array_op[0] ) ? $array_op[0] : 0;
-$fpart = $nv_Request->get_int( 'fpart', 'post,get', $fpart );
+$fpart = isset( $array_op[0] ) ? $array_op[0] : '';
+$fpart = $nv_Request->get_title( 'fpart', 'post,get', $fpart );
 $ftitle = nv_substr( $nv_Request->get_title( 'ftitle', 'post,get', '', 1 ), 0, 250 );
 
 $full = isset( $array_op[1] ) ? $array_op[1] : 1;
@@ -162,7 +162,7 @@ if( ! empty( $array_department ) )
 
 			$sth = $db->prepare( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
 				(cid, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES
-				(" . $fpart . ", :title, :content, " . NV_CURRENTTIME . ", " . $sender_id . ", :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)" );
+				(" . $array_department[$fpart]['id'] . ", :title, :content, " . NV_CURRENTTIME . ", " . $sender_id . ", :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)" );
 			$sth->bindParam( ':title', $ftitle, PDO::PARAM_STR );
 			$sth->bindParam( ':content', $fcon, PDO::PARAM_STR, strlen( $fcon ) );
 			$sth->bindParam( ':sender_name', $fname, PDO::PARAM_STR );
@@ -183,7 +183,7 @@ if( ! empty( $array_department ) )
 					$fcon .= sprintf( $lang_module['sendinfo2'], $website, $fname, $femail, $fphone, $client_info['ip'], $array_department[$fpart]['full_name'] );
 				}
 
-				nv_SendMail2User( $fpart, $fcon, $ftitle, $femail, $fname );
+				nv_SendMail2User( $array_department[$fpart]['id'], $fcon, $ftitle, $femail, $fname );
 				nv_insert_notification( $module_name, 'contact_new', array( 'title' => $ftitle ), 0, $sender_id, 1 );
 
 				$url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;

@@ -57,11 +57,10 @@ else
 		if( ! empty( $user ) and $global_config['allowuserlogin'] )
 		{
 			$user = unserialize( nv_base64_decode( $user ) );
-			$strlen = ( NV_CRYPT_SHA1 == 1 ) ? 40 : 32;
 
 			if( isset( $user['userid'] ) and is_numeric( $user['userid'] ) and $user['userid'] > 0 )
 			{
-				if( isset( $user['checknum'] ) and preg_match( '/^[a-z0-9]{' . $strlen . '}$/', $user['checknum'] ) )
+				if( isset( $user['checknum'] ) and preg_match( '/^[a-z0-9]{32}$/', $user['checknum'] ) )
 				{
 					$_sql = 'SELECT userid, username, email, first_name, last_name, gender, photo, birthday, regdate,
 						view_mail, remember, in_groups, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
@@ -123,5 +122,5 @@ else
 		}
 	}
 
-	unset( $user, $strlen, $_sql );
+	unset( $user, $_sql );
 }

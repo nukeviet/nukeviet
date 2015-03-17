@@ -45,7 +45,7 @@ if( defined( 'NV_IS_ADMIN' ) )
 					$row = $result->fetch();
 					$result->closeCursor();
 
-					if( ! $crypt->validate( $nv_password, $row['admin_pass'] ) )
+					if( ! $crypt->validate_password( $nv_password, $row['admin_pass'] ) )
 					{
 						$error = $lang_global['incorrect_password'];
 					}

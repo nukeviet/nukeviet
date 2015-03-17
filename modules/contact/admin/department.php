@@ -16,8 +16,9 @@ $xtpl->assign( 'GLANG', $lang_global );
 
 $a = 0;
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department ORDER BY weight';
-$result = $db->query( $sql );
-while( $row = $result->fetch() )
+$array_department = $db->query( $sql )->fetchAll();
+$count_department = sizeof( $array_department );
+foreach ($array_department as $row )
 {
 	++$a;
 	$xtpl->assign( 'ROW', array(
@@ -26,24 +27,20 @@ while( $row = $result->fetch() )
 		'phone' => $row['phone'],
 		'fax' => $row['fax'],
 		'id' => $row['id'],
-		'url_part' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['id'] . '/0/1',
+		'url_part' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . '/0/1',
 		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row&amp;id=' . $row['id']
 	) );
-	
-	$listdepartment = nv_departmentList();	
-	
-	$count = count( $listdepartment );
-	
-	for ( $i = 1; $i <= $count; $i++ )
+
+	for ( $i = 1; $i <= $count_department; $i++ )
     {
-		$opt = array( 
-			'value' => $i, 
-			'selected' => $i == $row['weight'] ? " selected=\"selected\"" : "" 
+		$opt = array(
+			'value' => $i,
+			'selected' => $i == $row['weight'] ? " selected=\"selected\"" : ""
 		);
 		$xtpl->assign( 'WEIGHT', $opt );
 		$xtpl->parse( 'main.row.option' );
-	}	
-	
+	}
+
 	$array = array( $lang_global['disable'], $lang_global['active'] );
 
 	foreach( $array as $key => $val )

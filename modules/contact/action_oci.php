@@ -35,7 +35,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
      skype VARCHAR2(100 CHAR) DEFAULT NULL,
 	 note VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 admins VARCHAR2(4000 CHAR) DEFAULT NULL,
-	 act NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE, 
+	 act NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 	 weight NUMBER(8,0) DEFAULT NULL,
  	primary key (id),
  CONSTRAINT cnv_" . $lang . "_" . $module_data . "_dep_name UNIQUE (full_name)
