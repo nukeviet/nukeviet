@@ -396,7 +396,7 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 		'edittime' => $edittime,
 		'hitstotal' => $hitstotal,
 		'num_sell' => $num_sell,
-		'product_unit' => $array_unit[$product_unit][NV_LANG_DATA . '_title'],
+		'product_unit' => isset( $array_unit[$product_unit] ) ? $array_unit[$product_unit][NV_LANG_DATA . '_title'] : '',
 		'status' => $lang_module['status_' . $status],
 		'admin_id' => !empty( $username ) ? $username : '',
 		'product_number' => $product_number,
@@ -426,7 +426,8 @@ $array_list_action = array(
 	'delete' => $lang_global['delete'],
 	'publtime' => $lang_module['publtime'],
 	'exptime' => $lang_module['exptime'],
-	'addtoblock' => $lang_module['addtoblock']
+	'addtoblock' => $lang_module['addtoblock'],
+	'warehouse' => $lang_module['warehouse']
 );
 
 while( list( $catid_i, $title_i ) = each( $array_list_action ) )

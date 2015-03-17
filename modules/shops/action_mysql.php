@@ -99,6 +99,9 @@ elseif( $op != 'setup' )
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group_items';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_warehouse';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs_group';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_orders';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_orders_id';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group';
@@ -237,7 +240,37 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_group_items (
   pro_id int(11) unsigned NOT NULL default '0',
   group_id int(11) unsigned NOT NULL default '0',
+  pro_quantity INT(11) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (pro_id, group_id)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_warehouse (
+  wid int(11) unsigned NOT NULL AUTO_INCREMENT,
+  title varchar(255) NOT NULL,
+  note TEXT NOT NULL,
+  user_id mediumint(8) NOT NULL DEFAULT '0',
+  addtime int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (wid)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (
+  logid int(11) unsigned NOT NULL AUTO_INCREMENT,
+  wid int(11) unsigned NOT NULL default '0',
+  pro_id int(11) unsigned NOT NULL default '0',
+  quantity INT(11) UNSIGNED NOT NULL DEFAULT '0',
+  price float NOT NULL DEFAULT '0',
+  PRIMARY KEY (logid),
+  KEY wid (wid)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs_group (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT,
+  logid int(11) unsigned NOT NULL default '0',
+  groupid MEDIUMINT(8) unsigned NOT NULL default '0',
+  quantity INT(11) UNSIGNED NOT NULL DEFAULT '0'
+  price float NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY logid (logid)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_rows (
