@@ -18,8 +18,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$array_config['viewtype'] = $nv_Request->get_int( 'viewtype', 'post', 0 );
 	$array_config['facebookapi'] = $nv_Request->get_string( 'facebookapi', 'post', '' );
-	$array_config['per_page'] = $nv_Request->get_string( 'per_page', 'post', '0' );
-	$array_config['related_articles'] = $nv_Request->get_string( 'related_articles', 'post', '0' );
+	$array_config['per_page'] = $nv_Request->get_int( 'per_page', 'post', '0' );
+	$array_config['related_articles'] = $nv_Request->get_int( 'related_articles', 'post', '0' );
 
 	$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config SET config_value = :config_value WHERE config_name = :config_name');
 	foreach( $array_config as $config_name => $config_value )
@@ -61,18 +61,18 @@ foreach( $view_array as $key => $title )
 
 for( $i = 5; $i <= 30; ++$i )
 {
-	$xtpl->assign( 'PER_PAGE', array( 
-		'key' => $i, 
-		'title' => $i, 
+	$xtpl->assign( 'PER_PAGE', array(
+		'key' => $i,
+		'title' => $i,
 		'selected' => $i == $array_config['per_page'] ? 'selected="selected"' : '' ) );
 	$xtpl->parse( 'main.per_page' );
 }
 
 for( $i = 5; $i <= 30; ++$i )
 {
-	$xtpl->assign( 'RELATED_ARTICLES', array( 
-		'key' => $i, 
-		'title' => $i, 
+	$xtpl->assign( 'RELATED_ARTICLES', array(
+		'key' => $i,
+		'title' => $i,
 		'selected' => $i == $array_config['related_articles'] ? 'selected="selected"' : '' ) );
 	$xtpl->parse( 'main.related_articles' );
 }

@@ -82,8 +82,6 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 			$first_name = ( ! empty( $row['first_name'] ) ) ? $row['first_name'] : $row['username'];
 			$subject = $lang_module['adduser_register'];
 			$message = sprintf( $lang_module['adduser_register_info'], $first_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $row['username'] );
-			$message .= '<br /><br />------------------------------------------------<br /><br />';
-			$message .= nv_EncString( $message );
 			@nv_sendmail( $global_config['site_email'], $row['email'], $subject, $message );
 		}
 		else

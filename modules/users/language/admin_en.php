@@ -121,7 +121,7 @@ $lang_module['delconfirm_email_content'] = 'Hi %1$s,<br />We are so sorry to del
 $lang_module['adduser_email'] = 'Send notification email:';
 $lang_module['adduser_email_yes'] = 'Yes';
 $lang_module['adduser_register'] = 'Your account was created';
-$lang_module['adduser_register_info'] = 'Hi %1$s,<br />Your account at website %2$s activated. Your login information:<br />URL: %3$s<br />Account: %4$s<br />Password: %5$s<br />This is email automatic sending from website %2$s.<br />Site administrator';
+$lang_module['adduser_register_info'] = 'Hi %1$s,<br />Your account at website %2$s activated. Your login information:<br />URL: <a href="%3$s">%3$s</a><br />Account: %4$s<br />Password: %5$s<br />This is email automatic sending from website %2$s.<br />Site administrator';
 $lang_module['allow_openid'] = 'Allow using Oauth, OpenID';
 $lang_module['openid_servers'] = 'Oauth, OpenID accepted list';
 $lang_module['allow_change_login'] = 'Allow change login name';
