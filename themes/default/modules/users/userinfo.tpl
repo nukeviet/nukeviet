@@ -43,7 +43,14 @@
 		<tbody>
 			<tr>
 				<th>{LANG.name}</th>
-				<td>{USER.first_name}&nbsp;{USER.last_name}</td>
+				<td>
+				    <!-- BEGIN: firtst_last -->
+				        {USER.first_name}&nbsp;{USER.last_name}
+				    <!-- END: firtst_last -->
+				    <!-- BEGIN: last_first -->
+				        {USER.last_name}&nbsp;{USER.first_name}
+				    <!-- END: last_first -->
+				</td>
 			</tr>
 			<tr>
 				<th>{LANG.birthday}</th>

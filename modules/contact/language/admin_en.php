@@ -22,6 +22,7 @@ $lang_module['add_row_title'] = 'Add department';
 $lang_module['department_title'] = 'List of departments';
 $lang_module['alias'] = 'Alias';
 $lang_module['error_alias'] = 'Error: no static links';
+$lang_module['duplicate_alias'] = 'Error: title or static link exists';
 $lang_module['number'] = 'Number';
 $lang_module['err_row_title'] = 'Not exists';
 $lang_module['part_row_title'] = 'Department';

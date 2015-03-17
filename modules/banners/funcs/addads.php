@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_MOD_BANNERS' ) ) die( 'Stop!!!' );
 
 $page_title = $module_info['custom_title'];
 
-global $global_config, $module_name, $module_info, $lang_module;
+global $global_config, $module_name, $module_info, $lang_module, $lang_global, $manament;
 
 if( defined( 'NV_IS_BANNER_CLIENT' ) )
 {
@@ -41,16 +41,16 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 
 	$xtpl = new XTemplate( 'addads.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	
 	$xtpl->assign( 'NV_BASE_URLSITE', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
-	$xtpl->assign( 'clientinfo_link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=clientinfo' );
-	$xtpl->assign( 'clientinfo_addads', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=addads' );
-	$xtpl->assign( 'clientinfo_stats', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=stats' );
+
+	$xtpl->assign( 'MANAGEMENT', $manament );
 	$xtpl->parse( 'main.management' );
 
 	if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
-
 		$error = array();
 		$title = $nv_Request->get_title( 'title', 'post', '', 1 );
 		$blockid = $nv_Request->get_title( 'block', 'post', '', 1 );

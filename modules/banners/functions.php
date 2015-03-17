@@ -79,10 +79,18 @@ if( ! empty( $bncl ) )
 {
 	$banner_client_info = nv_banner_client_checkdata( $bncl );
 
-	if( empty( $banner_client_info ) )
+	$manament = array();
+	$manament['current_login'] = array( $lang_global['current_login'], nv_date( 'd/m/Y H:i', $banner_client_info['current_login'] ) . ' (' . $lang_module['ip'] . ': ' . $banner_client_info['current_ip'] . ')' );
+	$manament['main'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+	$manament['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=clientinfo';
+	$manament['addads'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=addads';
+	$manament['stats'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=stats';
+	$manament['logout'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=logout';
+
+	if( empty( $banner_client_info ) or ( isset( $array_op[0] ) and $array_op[0] == 'logout' ) )
 	{
 		$nv_Request->unset_request( 'bncl', 'cookie' );
-		header( 'Location: ' . $client_info['selfurl'] );
+		header( 'Location: ' . nv_url_rewrite( $manament['main'], true ) );
 		die();
 	}
 	define( 'NV_IS_BANNER_CLIENT', true );
