@@ -75,6 +75,7 @@ else
 		$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
 		$array_config['openid_servers'] = !empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : '';
 		$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
+		$array_config['name_show'] = $nv_Request->get_int( 'name_show', 'post', 0 );
 
 		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 		foreach( $array_config as $config_name => $config_value )
@@ -83,6 +84,13 @@ else
 			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 			$sth->execute();
 		}
+		
+		// trình bày hiển thị họ tên
+		
+		$array_config['name_show_' . NV_LANG_DATA] = $nv_Request->get_int( 'name_show', 'post', 0 );
+		$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='name_show_" . NV_LANG_DATA . "'" );
+		$stmt->bindParam( ':content', $array_config['name_show_' . NV_LANG_DATA], PDO::PARAM_STR );
+		$stmt->execute();
 
 		//cau hinh kich thuoc avatar
 		$array_config['avatar_width'] = $nv_Request->get_int( 'avatar_width', 'post', 120 );
@@ -157,7 +165,7 @@ else
 	$array_config['openid_mode'] = !empty( $array_config['openid_mode'] ) ? ' checked="checked"' : '';
 	$array_config['is_user_forum'] = !empty( $array_config['is_user_forum'] ) ? ' checked="checked"' : '';
 
-	$sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";
+	$sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height' OR config='name_show_" . NV_LANG_DATA . "'" ;
 	$result = $db->query( $sql );
 	while( list( $config, $content ) = $result->fetch( 3 ) )
 	{
@@ -165,6 +173,11 @@ else
 		$array_config[$config] = implode( ', ', $content );
 	}
 	$result->closeCursor();
+	
+	$array_name_show = array(
+		0 => $lang_module['firstname_lastname'],
+		1 => $lang_module['lastname_firstname']		
+	);
 
 	$array_registertype = array(
 		0 => $lang_module['active_not_allow'],
@@ -292,6 +305,17 @@ else
 				$xtpl->parse( 'main.dir_forum' );
 			}
 		}
+	}
+	
+	foreach( $array_name_show as $id => $titleregister )
+	{
+		$array = array(
+			'id' => $id,
+			'select' => ($array_config['name_show_' . NV_LANG_DATA] == $id) ? ' selected="selected"' : '',
+			'value' => $titleregister
+		);
+		$xtpl->assign( 'NAME_SHOW', $array );
+		$xtpl->parse( 'main.name_show' );
 	}
 
 	foreach( $array_whoview as $id => $titleregister )

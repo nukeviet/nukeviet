@@ -199,6 +199,15 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.captcha' );
 	}
+	
+	if( empty($global_config['name_show_' . NV_LANG_DATA]) == 0 )
+	{
+		$xtpl->parse( 'main.last_first' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.firtst_last' );
+	}
 
 	if( $global_config['allowuserreg'] == 2 )
 	{
@@ -719,6 +728,15 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 		$xtpl->assign( 'GENDER', $gender );
 		$xtpl->parse( 'main.gender_option' );
 	}
+	
+	if( empty($global_config['name_show_' . NV_LANG_DATA]) == 0 )
+	{
+		$xtpl->parse( 'main.last_first' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.firtst_last' );
+	}
 
 	// Parse photo
 	if( ! empty( $data['photo'] ) )
@@ -886,8 +904,8 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
  */
 function user_welcome()
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $user_info, $lang_global;
-
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $user_info, $lang_global, $module_config;
+	//print_r($global_config);die;
 	$xtpl = new XTemplate( 'userinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'LANG', $lang_module );
@@ -960,6 +978,15 @@ function user_welcome()
 	if( $global_config['allowquestion'] and empty( $user_info['valid_question'] ) )
 	{
 		$xtpl->parse( 'main.question_empty_note' );
+	}
+	
+	if( empty($global_config['name_show_' . NV_LANG_DATA]) == 0 )
+	{
+		$xtpl->parse( 'main.last_first' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.firtst_last' );
 	}
 
 	$xtpl->parse( 'main' );

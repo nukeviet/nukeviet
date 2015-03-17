@@ -115,6 +115,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$_user['first_name'] = nv_substr( $nv_Request->get_title( 'first_name', 'post', '', 1 ), 0, 255 );
 	$_user['last_name'] = nv_substr( $nv_Request->get_title( 'last_name', 'post', '', 1 ), 0, 255 );
 	$_user['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
+	$_user['language'] = nv_substr( $nv_Request->get_int( 'language', 'post', '', 1 ), 0, 1 );
 	$_user['photo'] = nv_substr( $nv_Request->get_title( 'photo', 'post', '', 1 ), 0, 255 );
 	$_user['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
 	$_user['sig'] = $nv_Request->get_textarea( 'sig', '', NV_ALLOWED_HTML_TAGS );
@@ -182,6 +183,11 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			if( $_user['gender'] != 'M' and $_user['gender'] != 'F' )
 			{
 				$_user['gender'] = '';
+			}
+			
+			if( $_user['language'] != '0' and $_user['language'] != '1' )
+			{
+				$_user['language'] = '';
 			}
 
 			if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $_user['birthday'], $m ) )
@@ -290,6 +296,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				first_name=" . $db->quote( $_user['first_name'] ) . ",
 				last_name=" . $db->quote( $_user['last_name'] ) . ",
 				gender=" . $db->quote( $_user['gender'] ) . ",
+				language=" . $db->quote( $_user['language'] ) . ",
 				photo=" . $db->quote( nv_unhtmlspecialchars( $_user['photo'] ) ) . ",
 				birthday=" . $_user['birthday'] . ",
 				sig=" . $db->quote( $_user['sig'] ) . ",
@@ -343,6 +350,21 @@ $genders = array(
 	)
 );
 
+//Data language
+
+$languages = array(
+	'0' => array(
+		'key' => '0',
+		'title' => $lang_module['firstname_lastname'],
+		'selected' => $_user['language'] == '0' ? ' selected="selected"' : ''
+	),
+	'1' => array(
+		'key' => '1',
+		'title' => $lang_module['lastname_firstname'],
+		'selected' => $_user['language'] == '1' ? ' selected="selected"' : ''
+	)
+);
+
 $_user['view_mail'] = $_user['view_mail'] ? ' checked="checked"' : '';
 
 if( ! empty( $_user['sig'] ) ) $_user['sig'] = nv_htmlspecialchars( $_user['sig'] );
@@ -390,6 +412,12 @@ else
 	{
 		$xtpl->assign( 'GENDER', $gender );
 		$xtpl->parse( 'main.edit_user.gender' );
+	}
+	
+	foreach( $languages as $language )
+	{
+		$xtpl->assign( 'LANGUAGE', $language );
+		$xtpl->parse( 'main.edit_user.language' );
 	}
 
 	if( ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )

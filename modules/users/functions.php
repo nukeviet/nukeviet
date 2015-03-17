@@ -63,6 +63,11 @@ function validUserLog( $array_user, $remember, $opid, $current_mode = 0 )
 	$nv_Request->set_Cookie( 'nvloginhash', $user, $live_cookie_time );
 }
 
+//
+$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='name_show_" . NV_LANG_DATA . "'";
+$result = $db->query( $sql );
+$global_config['name_show_' . NV_LANG_DATA] = $result->fetchColumn();
+$result->closeCursor();
 
 //global config
 $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";
