@@ -75,7 +75,7 @@ else
 		$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
 		$array_config['openid_servers'] = !empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : '';
 		$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
-		$array_config['name_show'] = $nv_Request->get_int( 'name_show', 'post', 0 );
+		$array_config['name_show_' . NV_LANG_DATA] = $nv_Request->get_int( 'name_show_' . NV_LANG_DATA, 'post', 0 );
 
 		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 		foreach( $array_config as $config_name => $config_value )

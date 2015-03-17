@@ -66,7 +66,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$_user['sig'] = $nv_Request->get_textarea( 'sig', '', NV_ALLOWED_HTML_TAGS );
 	$_user['birthday'] = $nv_Request->get_title( 'birthday', 'post' );
 	$_user['in_groups'] = $nv_Request->get_typed_array( 'group', 'post', 'int' );
-	$_user['language'] = $nv_Request->get_int( 'language', 'post', 0 );
 
 	$md5username = nv_md5safe( $_user['username'] );
 
@@ -137,9 +136,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	elseif( $global_config['allowquestion'] and empty( $_user['answer'] ) )
 	{
 		$error = $lang_module['edit_error_answer'];
-	}
-	elseif ( $global_config[''] ) {
-		$error = $lang_module['error_language'];
 	}
 	else
 	{
@@ -332,15 +328,6 @@ else
 	{
 		$xtpl->assign( 'GENDER', $gender );
 		$xtpl->parse( 'main.edit_user.gender' );
-	}
-	
-	foreach( $language as $key => $title )
-	{
-		$xtpl->assign( 'VIEWTYPE', array( 
-			'id' => $key, 
-			'title' => $title, 
-			'selected' => $array_config['language'] == $key ? 'selected="selected"' : '' ) );
-		$xtpl->parse( 'main.loop' );
 	}
 
 	$a = 0;

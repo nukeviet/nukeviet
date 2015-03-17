@@ -905,7 +905,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 function user_welcome()
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $user_info, $lang_global, $module_config;
-	//print_r($global_config);die;
+	
 	$xtpl = new XTemplate( 'userinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'LANG', $lang_module );
