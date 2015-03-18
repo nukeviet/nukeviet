@@ -1200,7 +1200,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	{
 		$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
 		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
+		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
 		define( 'SHADOWBOX', true );
 	}
 
