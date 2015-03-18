@@ -14,22 +14,24 @@
 			<tfoot>
 				<tr>
 					<td colspan="11">
-					<select id="op_name" name="{OP_NAME}" onchange="nv_checkForm();" class="form-control pull-left w200" style="margin-right: 5px">
-						<!-- BEGIN: op -->
-						<option value="{KEY}">{VAL}</option>
-						<!-- END: op -->
-					</select>
-					<select id="type_name" name="{TYPE_NAME}" class="form-control pull-left w200" style="margin-right: 5px">
-						<!-- BEGIN: type -->
-						<option value="{KEY}">{VAL}</option>
-						<!-- END: type -->
-					</select>
-					<select id="ext_name" name="{EXT_NAME}" class="form-control pull-left w200" style="margin-right: 5px"> 
-						<!-- BEGIN: ext -->
-						<option value="{KEY}">{VAL}</option>
-						<!-- END: ext -->
-					</select> 
-					<input name="Submit1" id="subm_form" type="submit" value="{SUBMIT}" class="btn btn-primary" /></td>
+						<select id="op_name" name="{OP_NAME}" onchange="nv_checkForm();" class="form-control pull-left w200" style="margin-right: 5px">
+							<!-- BEGIN: op -->
+							<option value="{KEY}">{VAL}</option>
+							<!-- END: op -->
+						</select>
+						<select id="type_name" name="{TYPE_NAME}" class="form-control pull-left w200" style="margin-right: 5px">
+							<!-- BEGIN: type -->
+							<option value="{KEY}">{VAL}</option>
+							<!-- END: type -->
+						</select>
+						<select id="ext_name" name="{EXT_NAME}" class="form-control pull-left w200" style="margin-right: 5px">
+							<!-- BEGIN: ext -->
+							<option value="{KEY}">{VAL}</option>
+							<!-- END: ext -->
+						</select>
+						<input name="checkss" type="hidden" value="{CHECKSS}" />
+						<input name="Submit1" id="subm_form" type="submit" value="{SUBMIT}" class="btn btn-primary" />
+					</td>
 				</tr>
 			</tfoot>
 			<tbody>
