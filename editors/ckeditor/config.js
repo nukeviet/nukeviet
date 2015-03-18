@@ -6,7 +6,7 @@
 CKEDITOR.editorConfig = function( config ) {
 	config.language = nv_sitelang;
 	config.allowedContent = true;
-	config.extraPlugins = 'video,eqneditor';
+	config.extraPlugins = 'video,eqneditor,tbvdownload';
 	config.entities = false;
 	config.youtube_width = '640';
 	config.youtube_height = '480';
