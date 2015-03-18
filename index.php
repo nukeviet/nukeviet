@@ -67,7 +67,7 @@ else
 
 if( preg_match( $global_config['check_module'], $module_name ) )
 {
-	$site_mods = nv_site_mods();
+	$site_mods = nv_site_mods( $module_name );
 	// IMG thong ke truy cap + online
 	if( $global_config['statistic'] and isset( $site_mods['statistics'] ) and $nv_Request->get_string( 'second', 'get' ) == 'statimg' )
 	{
@@ -85,24 +85,6 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	// Kiểm tra module có trong hệ thống hay không
 	if( isset( $site_mods[$module_name] ) )
 	{
-		//kiem tra quyen truy cap module
-		$groups_view = ( string )$site_mods[$module_name]['groups_view'];
-		if( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
-		{
-			// Login users
-			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-			die();
-		}
-		elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
-		{
-			// Exit
-			nv_info_die( $lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'] );
-			die();
-		}
-		elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
-		{
-			nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
-		}
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];

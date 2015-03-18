@@ -1780,9 +1780,11 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 /**
  * nv_site_mods()
  *
+ * @param string $module_name
+ *
  * @return
  */
-function nv_site_mods()
+function nv_site_mods( $module_name = '' )
 {
 	global $admin_info, $user_info, $admin_info, $global_config, $db;
 
@@ -1846,22 +1848,48 @@ function nv_site_mods()
 	{
 		foreach( $site_mods as $m_title => $row )
 		{
-			$allowed = false;
-			$is_modadmin = false;
+			$allowed = true;
+			$groups_view = ( string )$row['groups_view'];
 
 			if( defined( 'NV_IS_SPADMIN' ) )
 			{
-				$allowed = true;
-				$is_modadmin = true;
+				$site_mods[$m_title]['is_modadmin'] = true;
 			}
 			elseif( defined( 'NV_IS_ADMIN' ) and ! empty( $row['admins'] ) and ! empty( $admin_info['admin_id'] ) and in_array( $admin_info['admin_id'], explode( ',', $row['admins'] ) ) )
 			{
-				$allowed = true;
-				$is_modadmin = true;
+				$site_mods[$m_title]['is_modadmin'] = true;
 			}
-			if( $allowed )
+			elseif( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
 			{
-				$site_mods[$m_title]['is_modadmin'] = $is_modadmin;
+				$allowed = false;
+				if( $module_name == $m_title )
+				{
+					// Login users
+					Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
+					die();
+				}
+			}
+			elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
+			{
+				$allowed = false;
+				if( $module_name == $m_title )
+				{
+					// Exit
+					nv_info_die( $lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'] );
+				}
+			}
+			elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
+			{
+				$allowed = false;
+				if( $module_name == $m_title )
+				{
+					nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
+				}
+			}
+
+			if( ! $allowed )
+			{
+				unset( $site_mods[$m_title] );
 			}
 		}
 		if( isset( $site_mods['users'] ) )
