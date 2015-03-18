@@ -297,8 +297,6 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 
 			$subject = $lang_module['account_register'];
 			$message = sprintf( $lang_module['openid_register_info'], $reg_attribs['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'], $reg_attribs['openid'] );
-			$message .= '<br /><br />------------------------------------------------<br /><br />';
-			$message .= nv_EncString( $message );
 			@nv_sendmail( $global_config['site_email'], $reg_attribs['email'], $subject, $message );
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | OpenID', 0 );
@@ -465,7 +463,6 @@ if( $checkss == $array_register['checkss'] )
 
 				if( ! $userid )
 				{
-					die( $sql );
 					$contents = user_info_exit( $lang_module['err_no_save_account'] );
 					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
 
@@ -479,8 +476,6 @@ if( $checkss == $array_register['checkss'] )
 				{
 					$subject = $lang_module['account_active'];
 					$message = sprintf( $lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], $array_register['password'], nv_date( 'H:i d/m/Y', NV_CURRENTTIME + 86400 ) );
-					$message .= '<br /><br />------------------------------------------------<br /><br />';
-					$message .= nv_EncString( $message );
 					$send = nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
 					if( $send )
 					{
@@ -541,7 +536,7 @@ if( $checkss == $array_register['checkss'] )
 				{
 					$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 
-										$contents = user_info_exit( $lang_module['err_no_save_account'] );
+					$contents = user_info_exit( $lang_module['err_no_save_account'] );
 					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
 
 					include NV_ROOTDIR . '/includes/header.php';
@@ -555,8 +550,6 @@ if( $checkss == $array_register['checkss'] )
 
 				$subject = $lang_module['account_register'];
 				$message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'] );
-				$message .= '<br /><br />------------------------------------------------<br /><br />';
-				$message .= nv_EncString( $message );
 				nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
 
 				$info = $lang_module['register_ok'] . "<br /><br />\n";
