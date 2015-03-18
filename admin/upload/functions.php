@@ -18,7 +18,7 @@ $menu_top = array(
 
 define( 'NV_IS_FILE_ADMIN', true );
 
-$allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'upload', 'addlogo', 'cropimg', 'rotateimg' );
+$allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renameimg', 'moveimg', 'folderlist', 'delfolder', 'renamefolder', 'createfolder', 'upload', 'addlogo', 'cropimg', 'rotateimg', 'download' );
 
 if( defined( 'NV_IS_SPADMIN' ) )
 {

@@ -131,7 +131,7 @@ $lang_module['delconfirm_email_content'] = 'Xin chào %1$s,<br /><br />Chúng t�
 $lang_module['adduser_email'] = 'Gửi email thông báo:';
 $lang_module['adduser_email_yes'] = 'Có';
 $lang_module['adduser_register'] = 'Tài khoản của bạn đã được tạo';
-$lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: %3$s<br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
+$lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['allow_openid'] = 'Cho phép sử dụng Oauth, OpenID để đăng nhập, đăng ký';
 $lang_module['openid_servers'] = 'Các nhà cung cấp Oauth, OpenID được chấp nhận';
 $lang_module['allow_change_login'] = 'Cho phép thay đổi tên đăng nhập';

@@ -34,12 +34,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 	}
 
 	$xtpl = new XTemplate( 'block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users' );
-	
-	$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='name_show_" . NV_LANG_DATA . "'";
-	$result = $db->query( $sql );
-	$global_config['name_show_' . NV_LANG_DATA] = $result->fetchColumn();
-	$result->closeCursor();
-	
+		
 	if( defined( 'NV_IS_USER' ) )
 	{
 		$avata = '';
@@ -62,14 +57,6 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 		{
 			$in_group = "<a title='" . $lang_global['in_groups'] . "' href='" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=regroups'>" . $lang_global['in_groups'] . "</a>";
 			$xtpl->assign( 'in_group', $in_group );
-		}
-		if( ! empty( $global_config['name_show_' . NV_LANG_DATA] ) == 0 )
-		{
-			$xtpl->parse( 'signed.first_last' );
-		}
-		else
-		{	
-			$xtpl->parse( 'signed.last_first' );
 		}
 		$xtpl->parse( 'signed' );
 		$content = $xtpl->text( 'signed' );

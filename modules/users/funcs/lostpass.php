@@ -132,8 +132,6 @@ else
 							$subject = sprintf( $lang_module['lostpass_email_subject'], $global_config['site_name'] );
 							$link_lostpass_content_email = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&u=' . $row['userid'] . '&k=' . $passlostkey;
 							$message = sprintf( $lang_module['lostpass_email_content'], $row['first_name'], $global_config['site_name'], $link_lostpass_content_email, $row['username'], $password_new );
-							$message .= '<br /><br />------------------------------------------------<br /><br />';
-							$message .= nv_EncString( $message );
 
 							$ok = nv_sendmail( $global_config['site_email'], $row['email'], $subject, $message );
 							if( $ok )

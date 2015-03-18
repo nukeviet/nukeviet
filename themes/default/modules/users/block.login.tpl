@@ -48,12 +48,7 @@
 <div class="content signed clearfix">
 	<p class="text-center">{LANG.wellcome}: 
 	    <strong>
-	        <!-- BEGIN: first_last -->
-	           {USER.first_name}&nbsp;{USER.last_name}
-	        <!-- END: first_last -->
-	        <!-- BEGIN: last_first -->
-	           {USER.last_name}&nbsp;{USER.first_name}
-	        <!-- END: last_first -->
+	           {USER.full_name}
 	    </strong>
 	</p>
 	<hr />

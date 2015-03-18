@@ -18,10 +18,9 @@ class nv_Crypt
 	 * nv_Crypt::__construct()
 	 *
 	 * @param mixed $key
-	 * @param mixed $method
 	 * @return
 	 */
-	function __construct( $key, $method )
+	function __construct( $key )
 	{
 		$this->_key = sha1( $key );
 		if( isset( $key{64} ) ) $key = pack( 'H32', $this->_key );

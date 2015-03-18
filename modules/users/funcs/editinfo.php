@@ -347,8 +347,6 @@ if( $checkss == $array_data['checkss'] )
 				{
 					$subject = $lang_module['email_active'];
 					$message = sprintf( $lang_module['email_active_info'], $array_data['first_name'], $array_data['username'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active&userid=" . $userid_check . "&checknum=" . $checknum, nv_date( "H:i d/m/Y", NV_CURRENTTIME + 86400 ), $global_config['site_name'] );
-					$message .= "<br /><br />------------------------------------------------<br /><br />";
-					if( NV_LANG_DATA == 'vi' ) $message .= nv_EncString( $message );
 					$send = nv_sendmail( $global_config['site_email'], $email_new, $subject, $message );
 					if( $send )
 					{
