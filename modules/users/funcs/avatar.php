@@ -16,6 +16,17 @@ $array = array();
 $array['success'] = false;
 $array['error'] = '';
 
+//global config
+$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";
+$result = $db->query( $sql );
+$global_config['avatar_width'] = $result->fetchColumn();
+$result->closeCursor();
+
+$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_height'";
+$result = $db->query( $sql );
+$global_config['avatar_height'] = $result->fetchColumn();
+$result->closeCursor();
+
 if( isset( $_FILES['image_file'] ) and is_uploaded_file( $_FILES['image_file']['tmp_name'] ) )
 {
 	// Get post data

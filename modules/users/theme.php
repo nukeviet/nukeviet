@@ -199,22 +199,11 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.captcha' );
 	}
-	
-	if( empty($global_config['name_show_' . NV_LANG_DATA]) == 0 )
-	{
-		$xtpl->parse( 'main.last_first' );
-	}
-	else
-	{
-		$xtpl->parse( 'main.firtst_last' );
-	}
-
 	if( $global_config['allowuserreg'] == 2 )
 	{
 		$xtpl->assign( 'LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink' );
 		$xtpl->parse( 'main.lostactivelink' );
 	}
-
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -729,15 +718,6 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 		$xtpl->parse( 'main.gender_option' );
 	}
 	
-	if( empty($global_config['name_show_' . NV_LANG_DATA]) == 0 )
-	{
-		$xtpl->parse( 'main.last_first' );
-	}
-	else
-	{
-		$xtpl->parse( 'main.firtst_last' );
-	}
-
 	// Parse photo
 	if( ! empty( $data['photo'] ) )
 	{
@@ -978,15 +958,6 @@ function user_welcome()
 	if( $global_config['allowquestion'] and empty( $user_info['valid_question'] ) )
 	{
 		$xtpl->parse( 'main.question_empty_note' );
-	}
-	
-	if( empty($global_config['name_show_' . NV_LANG_DATA]) == 0 )
-	{
-		$xtpl->parse( 'main.last_first' );
-	}
-	else
-	{
-		$xtpl->parse( 'main.firtst_last' );
 	}
 
 	$xtpl->parse( 'main' );

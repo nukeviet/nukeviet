@@ -75,8 +75,8 @@ else
 						isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $user_info['current_ip'] ) == 0 and 						//current IP
 						isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $user_info['current_login'] ) ) == 0 ) //current login
 						{
-							if( empty( $user_info['first_name'] ) ) $user_info['first_name'] = $user_info['username'];
-
+							$user_info['full_name'] = ( $global_config['name_show'] )  ? $user_info['first_name'] . ' ' . $user_info['last_name'] : $user_info['last_name'] . ' ' . $user_info['first_name'];
+							$user_info['full_name'] = trim( $user_info['full_name'] );
 							$user_info['in_groups'] = nv_user_groups( $user_info['in_groups'] );
 							$user_info['last_login'] = intval( $user['last_login'] );
 							$user_info['last_agent'] = $user['last_agent'];
