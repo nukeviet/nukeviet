@@ -1786,7 +1786,7 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
  */
 function nv_site_mods( $module_name = '' )
 {
-	global $sys_mods, $admin_info, $user_info, $admin_info, $global_config, $db;
+	global $sys_mods, $admin_info, $global_config;
 
 	$site_mods = $sys_mods;
 	if( defined( 'NV_SYSTEM' ) )
@@ -1807,29 +1807,14 @@ function nv_site_mods( $module_name = '' )
 			elseif( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
 			{
 				$allowed = false;
-				if( $module_name == $m_title )
-				{
-					// Login users
-					Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-					die();
-				}
 			}
 			elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
 			{
 				$allowed = false;
-				if( $module_name == $m_title )
-				{
-					// Exit
-					nv_info_die( $lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'] );
-				}
 			}
 			elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
 			{
 				$allowed = false;
-				if( $module_name == $m_title )
-				{
-					nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
-				}
 			}
 
 			if( ! $allowed )
