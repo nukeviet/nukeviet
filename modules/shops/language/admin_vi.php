@@ -622,3 +622,4 @@ $lang_module['warehouse_logs'] = 'Lịch sử nhập kho';
 $lang_module['warehouse_time'] = 'Thời gian thực hiện';
 $lang_module['warehouse_num_pro'] = 'Tổng sản phẩm thay đổi';
 $lang_module['warehouse_detail_info'] = 'Thông tin nhập chi tiết';
+$lang_module['warehouse_detail_group'] = 'Thuộc tính sản phẩm';

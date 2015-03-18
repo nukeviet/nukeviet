@@ -48,37 +48,48 @@ if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 
 				if( !empty( $quantity_i ) )
 				{
 					$total_num = 0;
+					$price_i = 0;
 					$total_price = 0;
+					$array_data_group = array();
 					foreach( $quantity_i as $groupid => $num )
 					{
 						if( !empty( $num ) )
 						{
 							$total_num += $num;
-							$price = floatval( preg_replace( '/[^0-9\.]/', '', $price[$pro_id][$groupid] ) );
-							$total_price += $price;
+							$price_i = floatval( preg_replace( '/[^0-9\.]/', '', $price[$pro_id][$groupid] ) );
+							$total_price += $price_i;
 							if( !empty( $groupid ) )
 							{
-								$money_unit = $money_unit[$pro_id][$groupid];
+								$money_unit_i = $money_unit[$pro_id][$groupid];
 								// Cap nhat so luong san pham cua moi nhom
 								$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_group_items SET pro_quantity = pro_quantity + ' . $num . ' WHERE pro_id=' . $pro_id . ' AND group_id=' . $groupid );
 							}
 							else
 							{
-								$money_unit = $money_unit[$pro_id][0];
+								$money_unit_i = $money_unit[$pro_id][0];
 							}
-
-							// Cap nhat logs nhap kho
-							$sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs( wid, pro_id, quantity, price, money_unit ) VALUES ( ' . $wid .  ', ' . $pro_id . ', ' . $total_num . ', ' . $total_price . ', :money_unit )';
-							$data_insert = array();
-							$data_insert['money_unit'] = $money_unit;
-							$logid = $db->insert_id( $sql, 'logid', $data_insert );
-							if( !empty( $groupid ) and $logid > 0 )
-							{
-								$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs_group( logid, quantity, groupid ) VALUES ( ' . $logid . ', ' . $groupid . ', ' . $num . ' )' );
-								$sth->execute();
-							}
+							$array_data_group[$groupid] = array( 'quantity' => $num, 'price' => $price_i, 'money_unit' => $money_unit_i );
 						}
 					}
+
+					// Cap nhat logs nhap kho
+					$sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs( wid, pro_id, quantity, price, money_unit ) VALUES ( ' . $wid .  ', ' . $pro_id . ', ' . $total_num . ', ' . $total_price . ', :money_unit )';
+					$data_insert = array();
+					$data_insert['money_unit'] = $money_unit_i;
+					$logid = $db->insert_id( $sql, 'logid', $data_insert );
+					if( !empty( $array_data_group ) and $logid > 0 )
+					{
+						$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs_group( logid, groupid, quantity, price, money_unit ) VALUES ( ' . $logid . ', :groupid, :quantity, :price, :money_unit )' );
+						foreach( $array_data_group as $groupid => $data_group )
+						{
+							$sth->bindParam( ':groupid', $groupid, PDO::PARAM_INT );
+							$sth->bindParam( ':quantity', $data_group['quantity'], PDO::PARAM_STR );
+							$sth->bindParam( ':price', $data_group['price'], PDO::PARAM_STR );
+							$sth->bindParam( ':money_unit', $data_group['money_unit'], PDO::PARAM_STR );
+							$sth->execute();
+						}
+					}
+
 					// Cap nhat tong so luong
 					$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET product_number = product_number + ' . $total_num . ' WHERE id=' . $pro_id );
 				}

@@ -37,12 +37,11 @@
 					<td class="text-center">{DATA.no}</td>
 					<td><a href="{DATA.link}" title="{DATA.title}">{DATA.title}</a></td>
 					<td>
-					<div class="row">
 						<!-- BEGIN: product_number -->
 						<div class="form-group">
 							<label class="col-sm-6 control-label"><span class="label label-success">{LANG.content_product_number}</span>&nbsp;<span class="label label-danger" title="{LANG.content_product_number}">{DATA.product_number} {DATA.product_unit}</span></label>
 							<div class="col-sm-6">
-								<input type="number" name="quantity[{DATA.id}][0]" class="form-control" placeholder="{LANG.warehouse_quantity}" />
+								<input type="number" autocomplete="off" name="quantity[{DATA.id}][0]" class="form-control" placeholder="{LANG.warehouse_quantity}" />
 							</div>
 							<div class="col-sm-6">
 								<input type="text" name="price[{DATA.id}][0]" class="form-control" placeholder="{LANG.warehouse_price}" onkeyup="this.value=FormatNumber(this.value);" />
@@ -60,7 +59,7 @@
 						<div class="form-group">
 							<label class="col-sm-6 control-label"><span class="label label-success">{GROUP.parent_title}: {GROUP.title}</span>&nbsp;<span class="label label-danger" title="{LANG.content_product_number}">{GROUP.pro_quantity} {DATA.product_unit}</span></label>
 							<div class="col-sm-6">
-								<input type="number" name="quantity[{DATA.id}][{GROUP.groupid}]" class="form-control" placeholder="{LANG.warehouse_quantity}" />
+								<input type="number" autocomplete="off" name="quantity[{DATA.id}][{GROUP.groupid}]" class="form-control" placeholder="{LANG.warehouse_quantity}" />
 							</div>
 							<div class="col-sm-6">
 								<input type="text" name="price[{DATA.id}][{GROUP.groupid}]" class="form-control" placeholder="{LANG.warehouse_price}" onkeyup="this.value=FormatNumber(this.value);" />
@@ -74,14 +73,13 @@
 							</div>
 						</div>
 						<!-- END: group -->
-					</div></td>
+					</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>
 		</table>
 	</div>
 	<div class="text-center">
-		<br />
 		<input type="submit" class="btn btn-primary" value="{LANG.save}" name="submit" />
 	</div>
 </form>

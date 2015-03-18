@@ -124,6 +124,12 @@
 					<td class="text-right"><strong>{LANG.warehouse_time}</strong></td>
 					<td>{DATA.addtime}</td>
 				</tr>
+				<!-- BEGIN: note -->
+				<tr>
+					<td class="text-right"><strong>{LANG.content_note}</strong></td>
+					<td>{DATA.note}</td>
+				</tr>
+				<!-- END: note -->
 			</tbody>
 		</table>
 	</div>
@@ -131,62 +137,81 @@
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<caption>{LANG.warehouse_detail_info}</caption>
+		<colgroup>
+			<col class="w50" />
+			<col />
+			<col width="600" />
+		</colgroup>
 		<thead>
 			<tr>
 				<th class="text-center">{LANG.setting_stt}</th>
 				<th>{LANG.name}</th>
 				<th class="text-center">{LANG.warehouse_quantity}</th>
-				<th class="text-center">{LANG.warehouse_price}</th>
 			</tr>
 		</thead>
 		<tbody>
+			<!-- BEGIN: loop -->
 			<tr>
-				<!-- BEGIN: loop -->
-				<tr>
-					<td class="text-center">{DATA.no}</td>
-					<td><a href="{DATA.link}" title="{DATA.title}">{DATA.title}</a></td>
-					<td>
+				<td class="text-center">{LOGS.no}</td>
+				<td><a href="{DATA.link}" title="{DATA.title}">{LOGS.title}</a></td>
+				<td>
+					<!-- BEGIN: product_number -->
 					<div class="row">
-						<!-- BEGIN: product_number -->
-						<div class="form-group">
-							<label class="col-sm-6 control-label"><span class="label label-success">{LANG.content_product_number}</span>&nbsp;<span class="label label-danger" title="{LANG.content_product_number}">{DATA.product_number} {DATA.product_unit}</span></label>
-							<div class="col-sm-6">
-								<input type="number" name="quantity[{DATA.id}][0]" class="form-control" placeholder="{LANG.warehouse_quantity}" />
-							</div>
-							<div class="col-sm-6">
-								<input type="text" name="price[{DATA.id}][0]" class="form-control" placeholder="{LANG.warehouse_price}" onkeyup="this.value=FormatNumber(this.value);" />
-							</div>
-							<div class="col-sm-6">
-								<select name="money_unit[{DATA.id}][0]" class="form-control">
-									<!-- BEGIN: money_unit -->
-									<option value="{MON.code}" {MON.selected}>{MON.currency}</option>
-									<!-- END: money_unit -->
-								</select>
-							</div>
+						<div class="col-xs-8 text-center">
+
 						</div>
-						<!-- END: product_number -->
-						<!-- BEGIN: group -->
-						<div class="form-group">
-							<label class="col-sm-6 control-label"><span class="label label-success">{GROUP.parent_title}: {GROUP.title}</span>&nbsp;<span class="label label-danger" title="{LANG.content_product_number}">{GROUP.pro_quantity} {DATA.product_unit}</span></label>
-							<div class="col-sm-6">
-								<input type="number" name="quantity[{DATA.id}][{GROUP.groupid}]" class="form-control" placeholder="{LANG.warehouse_quantity}" />
-							</div>
-							<div class="col-sm-6">
-								<input type="text" name="price[{DATA.id}][{GROUP.groupid}]" class="form-control" placeholder="{LANG.warehouse_price}" onkeyup="this.value=FormatNumber(this.value);" />
-							</div>
-							<div class="col-sm-6">
-								<select name="money_unit[{DATA.id}][{GROUP.groupid}]" class="form-control">
-									<!-- BEGIN: money_unit -->
-									<option value="{MON.code}" {MON.selected}>{MON.currency}</option>
-									<!-- END: money_unit -->
-								</select>
-							</div>
+						<div class="col-xs-8 text-center">
+							<strong>{LANG.seller_num}</strong>
 						</div>
-						<!-- END: group -->
-					</div></td>
-				</tr>
-				<!-- END: loop -->
+						<div class="col-xs-8">
+							<strong>{LANG.warehouse_price}</strong>
+						</div>
+					</div>
+					<hr />
+					<div class="row">
+						<div class="col-xs-8 text-center">
+
+						</div>
+						<div class="col-xs-8 text-center">
+							{LOGS.quantity}
+						</div>
+						<div class="col-xs-8">
+							{LOGS.price} {LOGS.money_unit}
+						</div>
+					</div>
+					<!-- END: product_number -->
+
+					<!-- BEGIN: group -->
+					<div class="row">
+						<div class="col-xs-8 text-right">
+							<strong>{LANG.warehouse_detail_group}</strong>
+						</div>
+						<div class="col-xs-8 text-center">
+							<strong>{LANG.seller_num}</strong>
+						</div>
+						<div class="col-xs-8">
+							<strong>{LANG.warehouse_price}</strong>
+						</div>
+					</div>
+					<hr />
+					<!-- BEGIN: loop -->
+					<div class="row">
+						<div class="col-xs-8 text-right">
+							({GROUP.parent_title}): {GROUP.title}
+						</div>
+						<div class="col-xs-8 text-center">
+							{GROUP.quantity}
+						</div>
+						<div class="col-xs-8">
+							{GROUP.price} {GROUP.money_unit}
+						</div>
+					</div>
+					<hr />
+					<!-- END: loop -->
+					<!-- END: group -->
+				</td>
 			</tr>
+			<!-- END: loop -->
 		</tbody>
 	</table>
 </div>

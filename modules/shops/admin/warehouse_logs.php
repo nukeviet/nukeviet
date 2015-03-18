@@ -25,6 +25,19 @@ if( $wid > 0 )
 	}
 	$array_warehouse = $result->fetch();
 	$page_title = $array_warehouse['title'];
+
+	$array_warehouse['logs'] = array();
+	$result = $db->query( 'SELECT t1.*, t2.' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_rows t2 ON t1.pro_id=t2.id WHERE t1.wid=' . $array_warehouse['wid'] );
+	while( $row = $result->fetch() )
+	{
+		$row['group_info'] = array();
+		$result1 = $db->query( 'SELECT groupid, quantity, price, money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs_group WHERE logid=' . $row['logid'] );
+		while( list( $groupid, $quantity, $price, $money_unit ) = $result1->fetch( 3 ) )
+		{
+			$row['group_info'][] = array( 'groupid' => $groupid, 'quantity' => $quantity, 'price' => $price, 'money_unit' => $money_unit ) ;
+		}
+		$array_warehouse['logs'][$row['logid']] = $row;
+	}
 }
 else
 {
@@ -117,6 +130,51 @@ if( $wid > 0 )
 	$array_warehouse['addtime'] = nv_date( 'H:i d/m/Y', $array_warehouse['addtime'] );
 	$array_warehouse['full_name'] = !empty( $array_warehouse['last_name'] ) ? $array_warehouse['first_name'] . ' ' . $array_warehouse['last_name'] : $array_warehouse['username'];
 	$xtpl->assign( 'DATA', $array_warehouse );
+
+	if( !empty( $array_warehouse['logs'] ) )
+	{
+		$i=1;
+		foreach( $array_warehouse['logs'] as $logs )
+		{
+			$have_group = 0;
+			$logs['no'] = $i;
+			$logs['price'] = nv_number_format( $logs['price'] );
+			$xtpl->assign( 'LOGS', $logs );
+
+			if( !empty( $logs['group_info'] ) )
+			{
+				foreach( $logs['group_info'] as $group_info )
+				{
+					if( $group_info['groupid'] )
+					{
+						$have_group = 1;
+						$group_info['price'] = nv_number_format( $group_info['price'] );
+						$group = $global_array_group[$group_info['groupid']];
+						$group_info['parent_title'] = $global_array_group[$group['parentid']]['title'];
+						$group_info['title'] = $global_array_group[$group['groupid']]['title'];
+						$xtpl->assign( 'GROUP', $group_info );
+						$xtpl->parse( 'main.view.loop.group.loop' );
+					}
+				}
+			}
+
+			if( !$have_group )
+			{
+				$xtpl->parse( 'main.view.loop.product_number' );
+			}
+			else
+			{
+				$xtpl->parse( 'main.view.loop.group' );
+			}
+
+			$xtpl->parse( 'main.view.loop' );
+			$i++;
+		}
+	}
+	if( !empty( $array_warehouse['note'] ) )
+	{
+		$xtpl->parse( 'main.view.note' );
+	}
 	$xtpl->parse( 'main.view' );
 }
 else

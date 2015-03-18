@@ -42,7 +42,7 @@ if( !empty( $q ) )
 $sth->execute( );
 $num_items = $sth->fetchColumn( );
 
-$db->select( 't1.username, t1.first_name, t1.lastname, t1.email, t2.*' )->order( 't1.userid DESC' )->limit( $per_page )->offset( ($page - 1) * $per_page );
+$db->select( 't1.username, t1.first_name, t1.last_name, t1.email, t2.*' )->order( 't1.userid DESC' )->limit( $per_page )->offset( ($page - 1) * $per_page );
 $sth = $db->prepare( $db->sql( ) );
 
 if( !empty( $q ) )
