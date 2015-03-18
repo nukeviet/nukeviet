@@ -11,23 +11,9 @@
 if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
 
 $contents = '';
-$per_page = $page_config['per_page'];
-$related_articles = $page_config['related_articles'];
-$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-
-if( ! empty( $alias ) )
+if( $id )
 {
 	// xem theo bài viết
-	$sth = $db->prepare( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND alias=:alias' );
-	$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
-	$sth->execute();
-	$rowdetail = $sth->fetch();
-	if( empty( $rowdetail ) )
-	{
-		Header( 'Location: ' . nv_url_rewrite( $base_url, true ) );
-		die();
-	}
-
 	$base_url_rewrite = nv_url_rewrite( $base_url . '&' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'], true );
 	if( $_SERVER['REQUEST_URI'] == $base_url_rewrite )
 	{
@@ -41,7 +27,7 @@ if( ! empty( $alias ) )
 			die();
 		}
 		$canonicalUrl = $base_url_rewrite;
-	}	
+	}
 
 	if( ! empty( $rowdetail['image'] ) && ! nv_is_url( $rowdetail['image'] ) )
 	{
@@ -73,17 +59,21 @@ if( ! empty( $alias ) )
 	$page_title = $mod_title = $rowdetail['title'];
 	$description = $rowdetail['description'];
 	$id_profile_googleplus = $rowdetail['gid'];
-	
+
 	// Hiển thị các bài liên quan mới nhất.
 	$other_links = array();
-    $db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data )->order( 'id' )->limit( $related_articles );
-    $result = $db->query($db->sql());
-	while( $_other = $result->fetch() )
-	{
-		$_other['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $_other['alias'] . $global_config['rewrite_exturl'];
-		$other_links[$_other['id']] = $_other;
-	}
 
+	$related_articles = intval( $page_config['related_articles'] );
+	if( $related_articles )
+	{
+	    $db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data )->where( 'id !=' . $id )->order( 'weight ASC' )->limit( $related_articles );
+	    $result = $db->query($db->sql());
+		while( $_other = $result->fetch() )
+		{
+			$_other['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $_other['alias'] . $global_config['rewrite_exturl'];
+			$other_links[$_other['id']] = $_other;
+		}
+	}
 	// comment
 	define( 'NV_COMM_ID', $id );
 	define( 'NV_COMM_ALLOWED', $rowdetail['activecomm'] );
@@ -97,14 +87,14 @@ else
 	$page_title = $module_info['custom_title'];
 	$key_words = $module_info['keywords'];
 	$mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
-	
+	$per_page = $page_config['per_page'];
+
 	$array_data = array();
-	
     $db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_' . $module_data );
     $num_items = $db->query( $db->sql() )->fetchColumn();
-   
+
     $db->select( '*' )->order( 'id' )->limit( $per_page )->offset( ($page - 1) * $per_page);
-    
+
     $result = $db->query($db->sql());
 	while( $row = $result->fetch() )
 	{
@@ -113,13 +103,13 @@ else
 	}
 
 	$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page);
-	
+
 	if( $page > 1 )
 	{
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 	}
 
-	$contents = nv_page_main_list( $array_data, $generate_page );		
+	$contents = nv_page_main_list( $array_data, $generate_page );
 }
 
 include NV_ROOTDIR . '/includes/header.php';
