@@ -44,12 +44,7 @@
 			<tr>
 				<th>{LANG.name}</th>
 				<td>
-				    <!-- BEGIN: firtst_last -->
-				        {USER.first_name}&nbsp;{USER.last_name}
-				    <!-- END: firtst_last -->
-				    <!-- BEGIN: last_first -->
-				        {USER.last_name}&nbsp;{USER.first_name}
-				    <!-- END: last_first -->
+				    {USER.full_name}
 				</td>
 			</tr>
 			<tr>
