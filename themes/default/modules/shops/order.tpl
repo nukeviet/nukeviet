@@ -88,6 +88,7 @@
 					</div>
 					<div class="col-xs-14">
 						<input type="text" name="ship_address_extend" class="form-control" placeholder="{LANG.shipping_address_extend}" />
+						<span class="error">{ERROR.order_shipping_address_extend}</span>
 					</div>
 				</div>
 				<em class="help-block">{LANG.shipping_address_note}</em>

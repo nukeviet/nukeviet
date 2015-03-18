@@ -199,6 +199,8 @@ if( $post_order == 1 )
 		$error['order_shipping_name'] = $lang_module['order_shipping_name_err'];
 	if( $data_order['order_shipping'] and empty( $data_order['shipping']['ship_phone'] ) )
 		$error['order_shipping_phone'] = $lang_module['order_shipping_phone_err'];
+	if( $data_order['order_shipping'] and empty( $data_order['shipping']['ship_address_extend'] ) )
+		$error['order_shipping_address_extend'] = $lang_module['shipping_address_extend_empty'];
 	if( $check == 0 )
 		$error['order_check'] = $lang_module['order_check_err'];
 
