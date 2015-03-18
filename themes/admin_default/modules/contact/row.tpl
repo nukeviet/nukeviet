@@ -11,8 +11,12 @@
 			<tbody>
 				<tr>
 					<td><strong>{LANG.part_row_title}</strong></td>
-					<td><input class="w300 form-control" type="text" name="full_name" value="{DATA.full_name}" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')"/></td>
+					<td><input class="w300 form-control pull-left" type="text" value="{DATA.full_name}" name="full_name" id="idfull_name" maxlength="255" />&nbsp;<span class="text-middle"></td>
 				</tr>
+				<tr>
+                    <td><strong>{LANG.alias}</strong></td>
+                    <td><input class="w300 form-control pull-left" type="text" name="alias" value="{DATA.alias}" id="idalias" maxlength="255" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('{ID}');">&nbsp;</em></td>
+                </tr>
 				<tr>
 					<td><strong>{GLANG.phonenumber}</strong></td>
 					<td><input class="w300 form-control" type="text" name="phone" value="{DATA.phone}"/></td>
@@ -44,7 +48,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.list_admin_row_title}</caption>
 			<thead>
-				<tr>
+				<tr>				    
 					<th>{LANG.username_admin_row_title}</th>
 					<th>{LANG.name_admin_row_title}</th>
 					<th>{GLANG.email}</th>
@@ -57,7 +61,7 @@
 				<!-- BEGIN: admin -->
 				<tr>
 					<td>{ADMIN.login}</td>
-					<td>{ADMIN.fullname}</td>
+					<td>{ADMIN.last_name}&nbsp;{ADMIN.first_name}</td>
 					<td>{ADMIN.email}</td>
 					<td class="text-center"><input type="checkbox" name="view_level[]" value="{ADMIN.admid}"{ADMIN.view_level}{ADMIN.disabled} /></td>
 					<td class="text-center"><input type="checkbox" name="reply_level[]" value="{ADMIN.admid}"{ADMIN.reply_level}{ADMIN.disabled} /></td>
@@ -73,4 +77,13 @@
 		</table>
 	</div>
 </form>
+<!-- BEGIN: get_alias -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#idfull_name').change(function() {
+            get_alias('{ID}');
+        });
+    });
+</script>
+<!-- END: get_alias -->
 <!-- END: main -->

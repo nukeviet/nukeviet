@@ -28,7 +28,7 @@ if( $nv_Request->isset_request( 'code', 'get' ) )
 {
 	$code = $nv_Request->get_string( 'code', 'get', '' );
 
-	if( empty( $code ) or ! preg_match( "/^([a-z0-9]{32})$/i", $code ) or ! isset( $session_files['linkdirect'][$code] ) or ! nv_check_url( $session_files['linkdirect'][$code]['link'] ) )
+	if( empty( $code ) or ! preg_match( "/^([a-z0-9]{32})$/i", $code ) or ! isset( $session_files['linkdirect'][$code] ) )
 	{
 		die( 'Wrong URL' );
 	}

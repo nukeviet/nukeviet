@@ -104,7 +104,7 @@ if( ! defined( 'NV_IS_ADMIN_MODULE' ) and $catid > 0 and ! in_array( $catid, $ar
 	die();
 }
 $array_search = array(
-	'-' => '---',
+	'-' => '---' . $lang_module['search_type'] . '---',
 	'title' => $lang_module['search_title'],
 	'bodytext' => $lang_module['search_bodytext'],
 	'author' => $lang_module['search_author'],
@@ -125,7 +125,7 @@ $array_in_ordername = array(
 	'hitscm'
 );
 $array_status_view = array(
-	'-' => '---',
+	'-' => '---' . $lang_module['search_status'] . '---',
 	'5' => $lang_module['status_5'],
 	'1' => $lang_module['status_1'],
 	'0' => $lang_module['status_0'],
@@ -190,7 +190,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 	}
 	elseif( $stype == 'admin_id' )
 	{
-		$where = " (u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' OR u.full_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
+		$where = " (u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' OR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
 	}
 	elseif( ! empty( $q ) )
 	{
@@ -200,7 +200,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 		{
 			$arr_from[] = "(r." . $val . " LIKE '%" . $db->dblikeescape( $q ) . "%')";
 		}
-		$where = " r.author LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR r.title LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'\n\t\t\tOR u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR u.full_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%'";
+		$where = " r.author LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR r.title LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'\n\t\t\tOR u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%'";
 	}
 	if( $sstatus != '-' )
 	{
@@ -405,8 +405,9 @@ $array_list_action = array(
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$array_list_action['declined'] = $lang_module['declined'];
-	$array_list_action['addtoblock'] = $lang_module['addtoblock'];
+	$array_list_action['block'] = $lang_module['addtoblock'];
 	$array_list_action['addtotopics'] = $lang_module['addtotopics'];
+	$array_list_action['move'] = $lang_module['move'];
 }
 elseif( $check_declined ) // neu co quyen duyet bai thi
 {

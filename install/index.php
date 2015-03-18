@@ -737,7 +737,7 @@ elseif( $step == 6 )
 		}
 		elseif( empty( $error ))
 		{
-			$password = $crypt->hash( $array_data['nv_password'] );
+			$password = $crypt->hash_password( $array_data['nv_password'], $global_config['hashprefix'] );
 			define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
 
 			$userid = 1;
@@ -745,13 +745,14 @@ elseif( $step == 6 )
 			$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_authors' );
 
 			$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_users
-				(userid, username, md5username, password, email, full_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
-				VALUES(" . $userid . ", :username, :md5username, :password, :email, :full_name, '', '', 0, '', " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)" );
+				(userid, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
+				VALUES(" . $userid . ", :username, :md5username, :password, :email, :first_name, :last_name, '', '', 0, '', " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)" );
 			$sth->bindParam( ':username', $array_data['nv_login'], PDO::PARAM_STR );
 			$sth->bindValue( ':md5username', nv_md5safe( $array_data['nv_login'] ), PDO::PARAM_STR );
 			$sth->bindParam( ':password', $password, PDO::PARAM_STR );
 			$sth->bindParam( ':email', $array_data['nv_email'], PDO::PARAM_STR );
-			$sth->bindParam( ':full_name', $array_data['nv_login'], PDO::PARAM_STR );
+			$sth->bindParam( ':first_name', $array_data['nv_login'], PDO::PARAM_STR );
+			$sth->bindParam( ':last_name', $array_data['nv_login'], PDO::PARAM_STR );
 			$sth->bindParam( ':question', $array_data['question'], PDO::PARAM_STR );
 			$sth->bindParam( ':answer_question', $array_data['answer_question'], PDO::PARAM_STR );
 			$ok1 = $sth->execute();
@@ -826,7 +827,8 @@ elseif( $step == 6 )
 					'rewrite_optional' => $global_config['rewrite_optional'],
 					'rewrite_endurl' => $global_config['rewrite_endurl'],
 					'rewrite_exturl' => $global_config['rewrite_exturl'],
-					'rewrite_op_mod' => $global_config['rewrite_op_mod']
+					'rewrite_op_mod' => $global_config['rewrite_op_mod'],
+					'ssl_https' => 0
 				);
 				$rewrite = nv_rewrite_change( $array_config_rewrite );
 				if( empty( $rewrite[0] ) )
@@ -1076,6 +1078,7 @@ function nv_save_file_config()
 		$content .= "\n";
 		$content .= "\$global_config['idsite'] = 0;\n";
 		$content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
+		$content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";
 
 		if( $step < 7 )
 		{

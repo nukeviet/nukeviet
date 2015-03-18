@@ -133,7 +133,7 @@ if( ! empty( $file_name ) )
 					else
 					{
 						$xmllanguage = $xml->xpath( 'language' );
-						$language = ( array )$xmllanguage[0];
+						$language = ( empty( $xmllanguage ) ) ? array() : ( array )$xmllanguage[0];
 
 						if( isset( $language[NV_LANG_INTERFACE] ) )
 						{

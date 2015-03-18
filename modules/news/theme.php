@@ -384,7 +384,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 				if( $a > 1 )
 				{
-					$xtpl->assign( 'WCT', 'col-md-8 ' );
+					$xtpl->assign( 'WCT', 'col-md-16 ' );
 				}
 				else
 				{
@@ -758,7 +758,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		}
 		$xtpl->parse( 'main.topic' );
 	}
-
+	
 	if( !empty( $content_comment ) )
 	{
 		$xtpl->assign( 'CONTENT_COMMENT', $content_comment );

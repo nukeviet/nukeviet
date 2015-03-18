@@ -30,13 +30,13 @@
 		<em class="fa fa-quote-right">&nbsp;</em>
 	</div>
 	<div class="form-group">
-		<label for="nv_username_iavim" class="col-sm-3 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="nv_username_iavim" class="col-sm-6 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<input class="required password form-control" name="nv_password" id="nv_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" />
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-9">
+		<div class="col-sm-offset-6 col-sm-18">
 			<input type="hidden" name="checkss" value="{DATA.checkss}" />
 			<input type="submit" name="submit" value="{LANG.changequestion_submit1}" class="btn btn-primary"/>
 		</div>
@@ -60,8 +60,8 @@ function question_change() {
 		<em class="fa fa-quote-right">&nbsp;</em>
 	</div>
 	<div class="form-group">
-		<label for="question" class="col-sm-4 control-label">{LANG.question}:</label>
-		<div class="col-sm-8">
+		<label for="question" class="col-sm-8 control-label">{LANG.question}:</label>
+		<div class="col-sm-16">
 			<select name="question" id="question" onchange="question_change();" class="form-control">
 				<!-- BEGIN: frquestion -->
 				<option value="{QUESTIONVALUE}">{QUESTIONTITLE}</option>
@@ -70,19 +70,19 @@ function question_change() {
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="your_question" class="col-sm-4 control-label">{LANG.your_question}:</label>
-		<div class="col-sm-8">
+		<label for="your_question" class="col-sm-8 control-label">{LANG.your_question}:</label>
+		<div class="col-sm-16">
 			<input class="form-control" name="your_question" id="your_question" value="{DATA.your_question}" />
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="answer" class="col-sm-4 control-label">{LANG.answer_your_question}:</label>
-		<div class="col-sm-8">
+		<label for="answer" class="col-sm-8 control-label">{LANG.answer_your_question}:</label>
+		<div class="col-sm-16">
 			<input class="form-control required" name="answer" id="answer" value="{DATA.answer}" />
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-sm-offset-4 col-sm-8">
+		<div class="col-sm-offset-8 col-sm-16">
 			<input type="hidden" name="nv_password" value="{DATA.nv_password}" />
 			<input type="hidden" name="checkss" value="{DATA.checkss}" />
 			<input type="hidden" name="send" value="1" />

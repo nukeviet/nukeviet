@@ -61,6 +61,10 @@
 								<th>{LANG.ext_type}</th>
 								<td>{DATA.types}</td>
 							</tr>
+							<tr>
+								<th>{LANG.price}</th>
+								<td>{DATA.price}</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -82,7 +86,7 @@
 			<!-- BEGIN: demo_images -->
 			<div class="rows">
 				<!-- BEGIN: loop -->
-				<div class="col-sm-3">
+				<div class="col-sm-6">
 					<a href="{IMAGE}" target="_blank" class="thumbnail">
 						<img src="{IMAGE}" alt="{DATA.title}" style="width:100%"/>
 					</a>
@@ -97,6 +101,7 @@
 					<thead>
 						<td>{LANG.file_name}</td>
 						<td class="w100">{LANG.file_version}</td>
+						<td class="w100">{LANG.price}</td>
 						<td class="w150">{LANG.compatible}</td>
 						<td class="w100"></td>
 					</thead>
@@ -105,6 +110,7 @@
 						<tr>
 							<td>{FILE.title}</td>
 							<td>{FILE.ver}</td>
+							<td>{FILE.price}</td>
 							<td class="{FILE.compatible_class}">{FILE.compatible_title}</td>
 							<td>
 								<!-- BEGIN: install -->

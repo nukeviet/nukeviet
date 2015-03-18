@@ -4,7 +4,7 @@
 <div id="topnews" class="panel panel-default clearfix" style="display:none">
 	<div class="row">
 		<!-- BEGIN: hots_news_img -->
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div id="slider1" class="sliderwrapper">
 				<!-- BEGIN: loop -->
 				<div class="contentdiv clearfix">
@@ -15,7 +15,7 @@
 			<div id="paginate-slider1" class="pagination">&nbsp;</div>
 		</div>
 		<!-- END: hots_news_img -->
-		<div id="tabs" class="col-md-6 tabs">
+		<div id="tabs" class="col-md-12 tabs">
 			<ul>
 				<!-- BEGIN: loop_tabs_title -->
 				<li>

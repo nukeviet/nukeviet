@@ -37,3 +37,7 @@
 .comment-list .comment-tool li:first-child{
 	margin: 0;
 }
+.comment-list{
+	margin: 0;
+	padding-left: 20px;
+}

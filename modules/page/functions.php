@@ -21,36 +21,20 @@ foreach( $list as $values )
 	$page_config[$values['config_name']] = $values['config_value'];
 }
 
-// Hien thi noi dung
-$sql = 'SELECT id,title,alias FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 ORDER BY weight ASC';
-$rows = nv_db_cache( $sql, 'alias', $module_name );
-
 $id = 0;
+$page = 1;
 $ab_links = array();
 
-if( ! empty( $rows ) )
+$alias = ( ! empty( $array_op ) and ! empty( $array_op[0] ) ) ? $array_op[0] : '';
+
+if( substr( $alias, 0, 5) == 'page-' )
 {
-	$alias = ( ! empty( $array_op ) and ! empty( $array_op[0] ) ) ? $array_op[0] : '';
-
-	if( ! empty( $alias ) and isset( $rows[$alias] ) )
-	{
-		$id = $rows[$alias]['id'];
-		$nv_vertical_menu[] = array( $rows[$alias]['title'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $rows[$alias]['alias'] . $global_config['rewrite_exturl'], 1 );
-		unset( $rows[$alias] );
-	}
-	else
-	{
-		$row = array_shift( $rows );
-		$id = $row['id'];
-		$nv_vertical_menu[] = array( $row['title'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'], 1 );
-	}
-
-	if( ! empty( $rows ) )
-	{
-		foreach( $rows as $row )
-		{
-			$nv_vertical_menu[] = array( $row['title'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'], 0 );
-			$ab_links[] = array( 'title' => $row['title'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'] );
-		}
-	}
+    $page = intval( substr( $array_op[0], 5));
+	$id = 0;
+	$alias = '';
+}
+elseif( $page_config['viewtype'] == 0 )
+{
+	$row = array_shift( $rows );
+	$id = $row['id'];
 }

@@ -7,7 +7,7 @@
 	<!-- BEGIN: itemcat -->
 	<div class="panel-body">
 		<!-- BEGIN: image -->
-		<div class="col-xs-6 col-md-2">
+		<div class="col-xs-12 col-md-4">
 			<a href="{itemcat.more_link}"> <img src="{itemcat.imagesrc}" alt="{itemcat.title}" class="img-thumbnail" /> </a>
 		</div>
 		<!-- END: image -->
@@ -46,7 +46,7 @@
 		</div>
 		<!-- END: is_admin -->
 		<!-- BEGIN: image -->
-  		<div class="col-xs-6 col-md-2">
+  		<div class="col-xs-12 col-md-4">
 			<a href="{listpostcat.more_link}"><img src="{listpostcat.imagesrc}" alt="{listpostcat.title}" class="img-thumbnail" /></a>
 		</div>
 		<!-- END: image -->

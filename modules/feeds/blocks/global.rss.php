@@ -178,7 +178,7 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 		}
 
 		$a = 1;
-		$xtpl = new XTemplate( 'global.rss.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
+		$xtpl = new XTemplate( 'global.rss.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/feeds' );
 		$array_rrs = nv_get_rss( $block_config['url'] );
 		$title_length = isset( $block_config['title_length'] ) ? intval( $block_config['title_length'] ) : 0;
 		foreach( $array_rrs as $item )

@@ -4,10 +4,10 @@
 <div id="idcomment" class="nv-fullbg">
 	<div class="row">
 		<hr />
-		<div class="col-xs-6 text-left">
+		<div class="col-xs-12 text-left">
 			<p class="comment-title"><em class="fa fa-comments">&nbsp;</em> {LANG.comment}</p>
 		</div>
-		<div class="col-xs-6 text-right">
+		<div class="col-xs-12 text-right">
 			<select id="sort" class="form-control">
 				<!-- BEGIN: sortcomm -->
 				<option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
@@ -25,33 +25,33 @@
 		<form method="post" role="form" onsubmit="return false;">
 			<input type="hidden" id="commentpid" value="0"/>
 			<div class="form-group clearfix">
-				<div class="col-xs-6">
+				<div class="col-xs-12">
 					<input id="commentname" type="text" value="{NAME}" {DISABLED} class="form-control" placeholder="{LANG.comment_name}"/>
 				</div>
-				<div class="col-xs-6">
+				<div class="col-xs-12">
 					<input id="commentemail_iavim" type="text" value="{EMAIL}" {DISABLED} class="form-control" placeholder="{LANG.comment_email}"/>
 				</div>
 			</div>
 			<div class="form-group clearfix">
-				<div class="col-xs-12">
-					<textarea id="commentcontent" class="form-control" cols="60" rows="3" placeholder="{LANG.comment_content}"></textarea>
+				<div class="col-xs-24">
+					{comment_content}
 				</div>
 			</div>
 			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
-				<label class="col-xs-3">{LANG.comment_seccode}</label>
-				<div class="col-xs-4">
+				<label class="col-xs-6">{LANG.comment_seccode}</label>
+				<div class="col-xs-8">
 					<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
 					&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','commentseccode_iavim');">&nbsp;</em>
 				</div>
-				<div class="col-xs-5">
+				<div class="col-xs-10">
 					<input id="commentseccode_iavim" type="text" class="form-control" maxlength="{GFX_NUM}"/>
 				</div>
 			</div>
 			<!-- END: captcha -->
 			<div class="form-group text-center">
 				<input id="reset-cm" type="reset" value="RESET" class="btn btn-default" />
-				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
+				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', {editor}, '{MODULE_DATA}_commentcontent', '{URL_COMMENT}', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
 			</div>
 		</form>
 		<script type="text/javascript">

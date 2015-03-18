@@ -12,62 +12,86 @@
 	<em class="fa fa-quote-right">&nbsp;</em>
 </div>
 <form id="registerForm" action="{USER_REGISTER}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
+    <!-- BEGIN: firtst_last -->
 	<div class="form-group">
-		<label for="full_name" class="col-sm-4 control-label">{LANG.name}:</label>
-		<div class="col-sm-8">
-			<input type="text" class="form-control" id="full_name" name="full_name" value="{DATA.full_name}" maxlength="255" />
+		<label for="first_name" class="col-sm-8 control-label">{LANG.first_name}:</label>
+		<div class="col-sm-16">
+			<input type="text" class="form-control" id="first_name" name="first_name" value="{DATA.first_name}" maxlength="255" />
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="nv_email_iavim" class="col-sm-4 control-label">{LANG.email}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-8">
+        <label for="last_name" class="col-sm-8 control-label">{LANG.last_name}:</label>
+        <div class="col-sm-16">
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{DATA.last_name}" maxlength="255" />
+        </div>
+    </div>
+    <!-- END: firtst_last -->
+    <!-- BEGIN: last_first -->    
+    <div class="form-group">
+        <label for="last_name" class="col-sm-8 control-label">{LANG.last_name}:</label>
+        <div class="col-sm-16">
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{DATA.last_name}" maxlength="255" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="first_name" class="col-sm-8 control-label">{LANG.first_name}:</label>
+        <div class="col-sm-16">
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{DATA.first_name}" maxlength="255" />
+        </div>
+    </div>
+    <!-- END: last_first -->
+	<div class="form-group">
+		<label for="nv_email_iavim" class="col-sm-8 control-label">{LANG.email}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-16">
 			<input type="email" class="email required form-control" name="email" value="{DATA.email}" id="nv_email_iavim" maxlength="100" />
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="nv_username_iavim" class="col-sm-4 control-label">{LANG.account}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-8">
+		<label for="nv_username_iavim" class="col-sm-8 control-label">{LANG.account}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-16">
 			<input class="required form-control" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="nv_password_iavim" class="col-sm-4 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-8">
+		<label for="nv_password_iavim" class="col-sm-8 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-16">
 			<input class="form-control required password" name="password" value="{DATA.password}" id="nv_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="nv_re_password_iavim" class="col-sm-4 control-label">{LANG.re_password}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-8">
+		<label for="nv_re_password_iavim" class="col-sm-8 control-label">{LANG.re_password}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-16">
 			<input class="form-control required password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
 		</div>
 	</div>
-	<div class="form-group">
-		<label for="question" class="col-sm-4 control-label">{LANG.question}:</label>
-		<div class="col-sm-8">
-			<select name="question" id="question" class="form-control">
-				<!-- BEGIN: frquestion -->
-				<option value="{QUESTIONVALUE.qid}"{QUESTIONVALUE.selected}>{QUESTIONVALUE.title}</option>
-				<!-- END: frquestion -->
-			</select>
+	<!-- BEGIN: allowquestion -->
+		<div class="form-group">
+			<label for="question" class="col-sm-8 control-label">{LANG.question}:</label>
+			<div class="col-sm-16">
+				<select name="question" id="question" class="form-control">
+					<!-- BEGIN: frquestion -->
+					<option value="{QUESTIONVALUE.qid}"{QUESTIONVALUE.selected}>{QUESTIONVALUE.title}</option>
+					<!-- END: frquestion -->
+				</select>
+			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		<label for="your_question" class="col-sm-4 control-label">{LANG.your_question}:</label>
-		<div class="col-sm-8">
-			<input type="text" class="form-control" name="your_question" id="your_question" value="{DATA.your_question}" />
+		<div class="form-group">
+			<label for="your_question" class="col-sm-8 control-label">{LANG.your_question}:</label>
+			<div class="col-sm-16">
+				<input type="text" class="form-control" name="your_question" id="your_question" value="{DATA.your_question}" />
+			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		<label for="answer" class="col-sm-4 control-label">{LANG.answer_your_question}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-8">
-			<input type="text" class="form-control required" name="answer" id="answer" value="{DATA.answer}" />
+		<div class="form-group">
+			<label for="answer" class="col-sm-8 control-label">{LANG.answer_your_question}<span class="text-danger"> (*)</span>:</label>
+			<div class="col-sm-16">
+				<input type="text" class="form-control required" name="answer" id="answer" value="{DATA.answer}" />
+			</div>
 		</div>
-	</div>
+	<!-- END: allowquestion -->
 	<!-- BEGIN: groups -->
 	<div class="form-group">
-		<label class="col-sm-4 control-label">{LANG.in_group}:</label>
-		<div class="col-sm-8">
+		<label class="col-sm-8 control-label">{LANG.in_group}:</label>
+		<div class="col-sm-16">
 			<!-- BEGIN: list -->
 			<label class="checkbox-inline">
 				<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title} 
@@ -79,8 +103,8 @@
 	<!-- BEGIN: field -->
 	<!-- BEGIN: loop -->
 	<div class="form-group">
-		<label class="col-sm-4 control-label" data-toggle="tooltip" data-placement="right" title="{FIELD.description}">{FIELD.title}<!-- BEGIN: required --><span class="text-danger"> (*)</span><!-- END: required -->:</label>
-		<div class="col-sm-8">
+		<label class="col-sm-8 control-label" data-toggle="tooltip" data-placement="right" title="{FIELD.description}">{FIELD.title}<!-- BEGIN: required --><span class="text-danger"> (*)</span><!-- END: required -->:</label>
+		<div class="col-sm-16">
 			<!-- BEGIN: textbox -->
 			<input class="{FIELD.required} {FIELD.class} form-control" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
 			<!-- END: textbox -->
@@ -124,11 +148,11 @@
 	<!-- END: field -->
 	<!-- BEGIN: captcha -->
 	<div class="form-group">
-		<label for="nv_seccode_iavim" class="col-sm-4 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-4">
+		<label for="nv_seccode_iavim" class="col-sm-8 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-8">
 			<input type="text" name="nv_seccode" id="nv_seccode_iavim" class="required form-control" maxlength="{GFX_MAXLENGTH}" />
 		</div>
-		<div class="col-sm-4">
+		<div class="col-sm-8">
 			<label class="control-label">
 				<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
 				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','seccode_iavim');">&nbsp;</em>
@@ -144,7 +168,7 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-sm-offset-4 col-sm-8">
+		<div class="col-sm-offset-8 col-sm-16">
 			<div class="checkbox">
 				<label>
 					<input class="required" type="checkbox" name="agreecheck" value="1"{DATA.agreecheck}/> 
@@ -154,7 +178,7 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<div class="col-sm-offset-4 col-sm-8">
+		<div class="col-sm-offset-8 col-sm-16">
 			<input type="hidden" name="checkss" value="{DATA.checkss}" />
 			<input id="submit" type="submit" class="btn btn-primary" value="{LANG.register}" />
 		</div>

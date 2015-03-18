@@ -302,3 +302,8 @@ h3{
 	padding: 0 !important;
 	margin: 0 !important;
 }
+
+.fb-like {
+    margin: 0 25px 0 10px;
+    top: -5px;
+}

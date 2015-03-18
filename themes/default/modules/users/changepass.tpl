@@ -17,21 +17,21 @@
 	</p>
 	<!-- BEGIN: passEmpty -->
 	<div class="form-group">
-		<label for="nv_password_iavim" class="col-sm-3 control-label">{LANG.pass_old}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="nv_password_iavim" class="col-sm-6 control-label">{LANG.pass_old}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<input type="password" class="form-control required password" name="nv_password" value="{DATA.nv_password}" id="nv_password_iavim" maxlength="{PASS_MAXLENGTH}"  placeholder="{LANG.pass_old}"/>
 		</div>
 	</div>
 	<!-- END: passEmpty -->
 	<div class="form-group">
-		<label for="new_password_iavim" class="col-sm-3 control-label">{LANG.pass_new}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="new_password_iavim" class="col-sm-6 control-label">{LANG.pass_new}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<input type="password" class="form-control required password" name="new_password" value="{DATA.new_password}" id="new_password_iavim" maxlength="{PASS_MAXLENGTH}"  placeholder="{LANG.pass_new}"/>
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="re_password_iavim" class="col-sm-3 control-label">{LANG.pass_new_re}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="re_password_iavim" class="col-sm-6 control-label">{LANG.pass_new_re}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<input type="password" class="form-control required password" name="re_password" value="{DATA.re_password}" id="re_password_iavim" maxlength="{PASS_MAXLENGTH}"  placeholder="{LANG.pass_new_re}"/>
 		</div>
 	</div>

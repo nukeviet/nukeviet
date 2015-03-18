@@ -57,7 +57,7 @@ else
 	}
 	else
 	{
-		$urlfile = trim( $nv_Request->get_string( 'fileurl', 'post' ) );
+		$urlfile = rawurldecode( trim( $nv_Request->get_string( 'fileurl', 'post' ) ) );
 		$upload_info = $upload->save_urlfile( $urlfile, NV_ROOTDIR . '/' . $path, false, $global_config['nv_auto_resize'] );
 	}
 
@@ -181,7 +181,7 @@ if( empty( $error ) )
 		$info['userid'] = $admin_info['userid'];
 
 		$newalt = $nv_Request->get_title( 'filealt', 'post', '', true );
-		
+
 		if( empty( $newalt ) )
 		{
 			$newalt = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1', $upload_info['basename'] );
@@ -195,9 +195,9 @@ if( empty( $error ) )
 		$sth->bindParam( ':newalt', $newalt, PDO::PARAM_STR );
 		$sth->execute();
 	}
-	
+
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_file'], $path . '/' . $upload_info['basename'], $admin_info['userid'] );
-	
+
 	if( $editor == 'ckeditor' )
 	{
 		echo "<script type=\"text/javascript\">window.parent.CKEDITOR.tools.callFunction(" . $CKEditorFuncNum . ", '" . NV_BASE_SITEURL . $path . "/" . $upload_info['basename'] . "', '');</script>";

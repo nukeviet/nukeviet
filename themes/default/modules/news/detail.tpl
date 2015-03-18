@@ -98,7 +98,7 @@
 		<!-- END: adminlink -->
 		<div class="clear">&nbsp;</div>
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-12">
 				<!-- BEGIN: keywords -->
 				<div class="keywords">
 					<em class="fa fa-tags">&nbsp;</em><strong>{LANG.keywords}: </strong>
@@ -108,7 +108,7 @@
 				</div>
 				<!-- END: keywords -->
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-12">
 			<!-- BEGIN: allowed_rating -->
 				<form id="form3B" action="">
 					<div class="clearfix">

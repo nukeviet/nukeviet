@@ -75,6 +75,19 @@ function nv_site_theme( $contents, $full = true )
 
 	// Header variables
 	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
+	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+	$xtpl->assign( 'LOGO_WIDTH', $size[0] );
+	$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
+
+	if( isset( $size['mime'] ) and $size['mime'] == 'application/x-shockwave-flash' )
+	{
+		$xtpl->parse( 'main.swf' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.image' );
+	}	
+	
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 	
@@ -111,22 +124,24 @@ function nv_site_theme( $contents, $full = true )
 		// Breadcrumbs
 		if( $home != 1 )
 		{
-			$arr_cat_title_i = array(
-				'catid' => 0,
-				'title' => $module_info['custom_title'],
-				'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
-			);
-
-			$xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
-			$xtpl->parse( 'main.breadcrumbs.loop' );
-
-			foreach( $array_mod_title as $arr_cat_title_i )
+			if( $global_config['rewrite_op_mod'] != $module_name )
 			{
-				$xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
-				$xtpl->parse( 'main.breadcrumbs.loop' );
+				$arr_cat_title_i = array(
+					'catid' => 0,
+					'title' => $module_info['custom_title'],
+					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name
+				);
+				array_unshift( $array_mod_title, $arr_cat_title_i );
 			}
-
-			$xtpl->parse( 'main.breadcrumbs' );
+			if( ! empty( $array_mod_title ) )
+			{
+				foreach( $array_mod_title as $arr_cat_title_i )
+				{
+					$xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
+					$xtpl->parse( 'main.breadcrumbs.loop' );
+				}
+				$xtpl->parse( 'main.breadcrumbs' );
+			}
 		}
 
 		// Statistics image

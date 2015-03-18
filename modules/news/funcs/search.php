@@ -60,7 +60,7 @@ $date_array['to_date'] = $to_date;
 $per_pages = 20;
 
 $base_url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
-if( $base_url_rewrite != $_SERVER['REQUEST_URI'] )
+if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 {
 	header( "Location: " . $base_url_rewrite );
 	die();
@@ -198,7 +198,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 if( empty( $key ) )
 {
-	$page_title = $module_info['custom_title'];
+	$page_title = $lang_module['search_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 }
 else
 {

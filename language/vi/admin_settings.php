@@ -38,7 +38,7 @@ $lang_module['rewrite'] = 'Bật chức năng rewrite';
 $lang_module['rewrite_optional'] = 'Loại bỏ kí tự ngôn ngữ trên url';
 $lang_module['rewrite_op_mod'] = 'Loại bỏ tên module trên url';
 $lang_module['disable_content'] = 'Nội dung thông báo site ngưng hoạt động';
-$lang_module['submit'] = 'Lưu';
+$lang_module['submit'] = 'Lưu cấu hình';
 $lang_module['err_writable'] = 'Lỗi hệ thống không ghi được file: %s bạn cần cấu hình server cho phép ghi file này.';
 $lang_module['err_supports_rewrite'] = 'Lỗi, Máy chủ của bạn không hỗ trợ module rewrite';
 
@@ -197,6 +197,8 @@ $lang_module['closed_site_0'] = 'Site hoạt động bình thường';
 $lang_module['closed_site_1'] = 'Đóng cửa site chỉ có Quản trị tối cao truy cập';
 $lang_module['closed_site_2'] = 'Đóng cửa site Người điều hành chung truy cập';
 $lang_module['closed_site_3'] = 'Đóng cửa site Tất cả admin truy cập';
+$lang_module['ssl_https'] = 'Kích hoạt chế độ sử dụng SSL';
+$lang_module['note_ssl'] = 'Bạn có chắc chắn site bạn hỗ trợ https không? Nếu không hỗ trợ sẽ không truy cập được site sau khi lưu?';
 $lang_module['timezoneAuto'] = 'Theo máy tính của khách truy cập';
 $lang_module['timezoneByCountry'] = 'Theo quốc gia của khách truy cập';
 $lang_module['allow_switch_mobi_des'] = 'Cho phép chuyển đổi giao diện mobile, desktop';
@@ -218,3 +220,9 @@ $lang_module['plugin_number'] = 'Số thứ tự';
 $lang_module['plugin_func'] = 'Chức năng';
 $lang_module['plugin_add'] = 'Thêm plugin';
 $lang_module['plugin_file_delete'] = 'Xóa khỏi hệ thống';
+
+$lang_module['notification_config'] = 'Cấu hình chức năng thông báo';
+$lang_module['notification_active'] = 'Hiển thị thông báo khi có hoạt động mới';
+$lang_module['notification_autodel'] = 'Tự động xóa thông báo sau thời gian';
+$lang_module['notification_autodel_note'] = 'Điền <strong>0</strong> nếu không muốn tự động xóa';
+$lang_module['notification_day'] = 'ngày';

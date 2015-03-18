@@ -17,6 +17,11 @@
 	{LANG.empty_response}
 </div>
 <!-- END: empty -->
+<!-- BEGIN: login -->
+<div class="alert alert-info">
+	{LOGIN_NOTE}
+</div>
+<!-- END: login -->
 <!-- BEGIN: data -->
 <div class="ext-wrap clearfix">
 	<!-- BEGIN: loop -->

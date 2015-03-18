@@ -28,6 +28,7 @@
 /uploads/about/*.jpg
 /uploads/banners/*.jpg
 /uploads/page/*.jpg
+/uploads/menu/
 
 # Allow default file
 !/uploads/banners/bongoaigiao.jpg

@@ -143,8 +143,7 @@ function nv_show_funcs()
 		{
 			$mod_theme = $site_mods[$mod]['theme'];
 		}
-
-		if( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' ) )
+		elseif( ! empty( $global_config['site_theme'] ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini' ) )
 		{
 			$mod_theme = $global_config['site_theme'];
 		}

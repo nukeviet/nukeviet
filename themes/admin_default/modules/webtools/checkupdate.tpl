@@ -66,10 +66,11 @@ $(document).ready(function() {
 	<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.checkExtensions} </caption>
 	<col class="top w150" />
 	<col class="top" />
-	<col class="top w200" />
+	<col class="top" />
 	<thead>
 		<tr>
 			<th> {LANG.extName} </th>
+			<th> {LANG.extType} </th>
 			<th> {LANG.extInfo} </th>
 			<th class="text-right"> {LANG.extNote} </th>
 		</tr>
@@ -78,28 +79,53 @@ $(document).ready(function() {
 		<!-- BEGIN: loop -->
 		<tr>
 			<td style="vertical-align:top">
-			<div class="Note {EXTCL}">
 				{EXTNAME}
-			</div></td>
+			</td>
 			<td style="vertical-align:top">
-			<div class="ninfo">
-				{EXTINFO}
-			</div>
-			<div class="wttooltip">
-				<ul>
-					<!-- BEGIN: li -->
-					<li>
-						<strong>{EXTTOOLTIP.title}</strong>: {EXTTOOLTIP.content}
-					</li>
-					<!-- END: li -->
-				</ul>
-				<!-- BEGIN: note1 -->
-				<div class="invalid">
-					{LANG.extNote1_detail}
+				{EXTTYPE}
+			</td>
+			<td style="vertical-align:top">
+				<div class="ninfo">
+					{EXTINFO}
 				</div>
-				<!-- END: note1 -->
-			</div></td>
-			<td style="vertical-align:top;text-align:right"> {EXTNOTE} </td>
+				<div class="wttooltip">
+					<ul>
+						<!-- BEGIN: li -->
+						<li>
+							<strong>{EXTTOOLTIP.title}</strong>: {EXTTOOLTIP.content}
+						</li>
+						<!-- END: li -->
+					</ul>
+					<!-- BEGIN: note1 -->
+					<div class="alert alert-danger">
+						{LANG.extNote1_detail}
+					</div>
+					<!-- END: note1 -->
+					<!-- BEGIN: note2 -->
+					<div class="alert alert-warning">
+						{LANG.extNote1_detail}
+					</div>
+					<!-- END: note2 -->
+					<!-- BEGIN: updateNotSuport -->
+					<div class="alert alert-warning">
+						{UPDNOTE}
+					</div>
+					<!-- END: updateNotSuport -->
+					<!-- BEGIN: updateNotLastest -->
+					<div class="alert alert-success">
+						{UPDNOTE}
+					</div>
+					<!-- END: updateNotLastest -->
+					<!-- BEGIN: updateLastest -->
+					<div class="alert alert-success">
+						{UPDNOTE}
+					</div>
+					<!-- END: updateLastest -->
+				</div>
+			</td>
+			<td style="vertical-align:top;" class="text-right">
+				<em class="fa fa-lg {EXTICON}" data-toggle="tooltip" data-placement="top" title="{EXTNOTE}">&nbsp;</em>
+			</td>
 		</tr>
 		<!-- END: loop -->
 	</tbody>
@@ -127,12 +153,13 @@ $(document).ready(function() {
 		});
 		$(".wttooltip").click(function() {
 			$(this).hide().prev(".ninfo").show()
-		})
+		});
+		$('[data-toggle="tooltip"]').tooltip();
 	});
 	//]]>
 </script>
 <div>
-	<a class="btn btn-primary" href="{LINKNEWEXT}">{LANG.extNote2_link}</a>
+	<a class="btn btn-primary" href="{LINKNEWEXT}">{LANG.extNew}</a>
 </div>
 <!-- END: extUpd -->
 <!-- BEGIN: error -->

@@ -45,6 +45,7 @@ $lang_module['saveok'] = 'Cập nhật bài viết thành công';
 $lang_module['clickgotomodule'] = 'Click vào đây để chuyển vào trang quản lý bài viết.';
 $lang_module['alias'] = 'Liên kết tĩnh';
 $lang_module['name'] = 'Tiêu đề';
+$lang_module['titlesite'] = 'Tùy chỉnh Tiêu đề site';
 $lang_module['error_name'] = 'Lỗi:Bạn cần nhập Tiêu đề';
 $lang_module['weight'] = 'Vị trí';
 $lang_module['numsubcat'] = 'Số chuyên mục con';
@@ -99,6 +100,7 @@ $lang_module['setting_view'] = 'Cấu hình hiển thị';
 $lang_module['setting_post'] = 'Cấu hình đăng bài';
 $lang_module['setting_auto_tags'] = 'Tự động tạo từ khóa cho bài viết nếu không nhập từ khóa lúc đăng bài';
 $lang_module['setting_tags_remind'] = 'Nhắc nhở các từ khóa không có mô tả';
+$lang_module['setting_alias_lower'] = 'Chuyển Liên kết tĩnh về chữ thường khi tạo mới';
 
 $lang_module['viewcat_page'] = 'Cách thể hiện Chuyên mục';
 $lang_module['viewcat_page_new'] = 'danh sách, mới lên trên';
@@ -235,6 +237,8 @@ $lang_module['admin_no_user'] = 'Chức năng phân quyền cho module này ch�
 $lang_module['admin_userid'] = 'userid';
 $lang_module['admin_username'] = 'Tài khoản';
 $lang_module['admin_full_name'] = 'Họ tên';
+$lang_module['admin_first_name'] = 'Tên';
+$lang_module['admin_last_name'] = 'Họ';
 $lang_module['admin_email'] = 'Email';
 
 $lang_module['permissions_admin'] = 'Quản lý Chuyên mục';

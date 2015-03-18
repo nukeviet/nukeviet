@@ -7,7 +7,7 @@
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 <form id="votingcontent" method="post" action="{FORM_ACTION}">
 	<div class="row">
-		<div class="col-sm-12 col-md-9">
+		<div class="col-sm-24 col-md-18">
 			<div class="table-responsive">
 				<table class="table table-striped table-bordered table-hover">
 					<tbody>
@@ -98,15 +98,15 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-3">
+		<div class="col-sm-24 col-md-6">
 			<div class="row">
-				<div class="col-sm-6 col-md-12">
+				<div class="col-sm-12 col-md-24">
 					<div class="form-group">
 						<label>{LANG.voting_maxoption}:</label>
 						<input class="form-control w100" type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt" required pattern="^([0-9])+$" oninvalid="this.setCustomValidity(nv_digits)" oninput="this.setCustomValidity('')"/>
 					</div>
 				</div>
-				<div class="col-sm-6 col-md-12">
+				<div class="col-sm-12 col-md-24">
 					<div class="form-group">
 						<label>{GLANG.groups_view}:</label>
 						<!-- BEGIN: groups_view -->

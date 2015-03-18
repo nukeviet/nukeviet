@@ -20,11 +20,7 @@ $allow_func = array( 'main', 'setuplayout', 'activatetheme', 'change_layout', 'c
 if( defined( 'NV_IS_GODADMIN' ) )
 {
 	$submenu['autoinstall'] = $lang_module['autoinstall'];
-	$allow_func[] = 'deletetheme';
 	$allow_func[] = 'autoinstall';
-	$allow_func[] = 'install_theme';
-	$allow_func[] = 'install_check';
-	$allow_func[] = 'package_theme';
 	$allow_func[] = 'package_theme_module';
 	$allow_func[] = 'getfile';
 }

@@ -4,12 +4,12 @@
 			<div class="footer-copyright">
 				<div class="container">
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-6">
+						<div class="col-xs-24 col-sm-24 col-md-12">
 							<div class="panel-body">
 								[FOOTER_SITE]
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-12 col-md-6">
+						<div class="col-xs-24 col-sm-24 col-md-12">
 							<div class="panel-body">
 								[MENU_FOOTER]
 								<!-- BEGIN: theme_type -->
@@ -34,4 +34,10 @@
 				</div>
 			</div>
 		</footer>
+	</div>
+	<div class="fix_banner_left">
+		[FIX_BANNER_LEFT]
+	</div>
+	<div class="fix_banner_right">
+		[FIX_BANNER_RIGHT]
 	</div>

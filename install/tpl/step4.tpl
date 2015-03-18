@@ -10,7 +10,7 @@
 	</tr>
 	<tr>
 		<th scope="row" class="spec">{LANG.php_version}</th>
-		<td>{LANG.required_on} >= 5.2.0</td>
+		<td>{LANG.required_on} >= 5.3.7</td>
 		<td><span class="highlight_green">{DATA_REQUEST.php_support}</span></td>
 	</tr>
 	<tr>
@@ -125,6 +125,6 @@
 	<!-- BEGIN: nextstep -->
 	<li><span class="next_step"><a
 		href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=5">{LANG.next_step}</a></span></li>
-	<!-- END: nextstep -->		
+	<!-- END: nextstep -->
 </ul>
 <!-- END: step -->

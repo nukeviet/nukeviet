@@ -42,10 +42,18 @@ if( ! nv_user_in_groups( $row['groups_view'] ) )
 }
 
 $base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'], true );
-if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+if( $_SERVER['REQUEST_URI'] == $base_url_rewrite )
+{
+	$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+}
+elseif( NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 {
 	Header( 'Location: ' . $base_url_rewrite );
 	die();
+}
+else
+{
+	$canonicalUrl = $base_url_rewrite;
 }
 
 
@@ -247,11 +255,11 @@ if( ! in_array( $row['id'], $dfile ) )
 // comment
 define( 'NV_COMM_ID', $row['id'] );
 define( 'NV_COMM_ALLOWED', nv_user_in_groups( $row['groups_comment'] ) );
-// Ki?m tra quy?n dang bình lu?n
+// Kiem tra quyen dang binh luan
 $allowed = $module_config[$module_name]['allowed_comm'];
 if( $allowed == '-1' )
 {
-	// Quy?n h?n dang bình lu?n theo bài vi?t
+	// Quyen han dang binh luan theo bai viet
 	$allowed = ( defined( 'NV_COMM_ALLOWED' ) ) ? NV_COMM_ALLOWED : $module_config[$module_name]['setcomm'];
 }
 define( 'NV_PER_PAGE_COMMENT', 5 );//per_page_comment
@@ -285,7 +293,7 @@ $row['del_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV
 
 $page_title = $row['title'];
 $key_words = $module_info['keywords'];
-$description = $list_cats[$row['catid']]['description'];
+$description = $row['description'];
 
 $contents = view_file( $row, $download_config, $content_comment );
 

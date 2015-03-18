@@ -24,8 +24,8 @@
 	</div>
 	<!-- END: error -->
 	<div class="form-group">
-		<label for="nv_username_iavim" class="col-sm-3 control-label">{LANG.account}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="nv_username_iavim" class="col-sm-6 control-label">{LANG.account}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<!-- BEGIN: username_change -->
 			<input type="text" class="form-control required" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}"  placeholder="{LANG.account}"/>
 			<!-- END: username_change -->
@@ -35,8 +35,8 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="nv_email_iavim" class="col-sm-3 control-label">{LANG.email}<span class="text-danger"> (*)</span>:</label>
-		<div class="col-sm-9">
+		<label for="nv_email_iavim" class="col-sm-6 control-label">{LANG.email}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-18">
 			<!-- BEGIN: email_change -->
 			<input type="text" class="form-control required email" name="email" value="{DATA.email}" id="nv_email_iavim" maxlength="100"  placeholder="{LANG.email}"/>
 			<!-- END: email_change -->
@@ -45,15 +45,37 @@
 			<!-- END: email_no_change -->
 		</div>
 	</div>
+	<!-- BEGIN: firtst_last -->
 	<div class="form-group">
-		<label for="full_name" class="col-sm-3 control-label">{LANG.name}:</label>
-		<div class="col-sm-9">
-			<input type="text" class="form-control required" name="full_name" value="{DATA.full_name}" id="full_name" maxlength="100"  placeholder="{LANG.name}"/>
+		<label for="first_name" class="col-sm-6 control-label">{LANG.first_name}:</label>
+		<div class="col-sm-18">
+			<input type="text" class="form-control required" name="first_name" value="{DATA.first_name}" id="first_name" maxlength="100"  placeholder="{LANG.first_name}"/>
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="gender" class="col-sm-3 control-label">{LANG.gender}:</label>
-		<div class="col-sm-9">
+        <label for="last_name" class="col-sm-6 control-label">{LANG.last_name}:</label>
+        <div class="col-sm-18">
+            <input type="text" class="form-control required" name="last_name" value="{DATA.last_name}" id="last_name" maxlength="100"  placeholder="{LANG.last_name}"/>
+        </div>
+    </div>
+    <!-- END: firtst_last -->
+    <!-- BEGIN: last_first -->    
+    <div class="form-group">
+        <label for="last_name" class="col-sm-6 control-label">{LANG.last_name}:</label>
+        <div class="col-sm-18">
+            <input type="text" class="form-control required" name="last_name" value="{DATA.last_name}" id="last_name" maxlength="100"  placeholder="{LANG.last_name}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="first_name" class="col-sm-6 control-label">{LANG.first_name}:</label>
+        <div class="col-sm-18">
+            <input type="text" class="form-control required" name="first_name" value="{DATA.first_name}" id="first_name" maxlength="100"  placeholder="{LANG.first_name}"/>
+        </div>
+    </div>
+    <!-- END: last_first -->
+	<div class="form-group">
+		<label for="gender" class="col-sm-6 control-label">{LANG.gender}:</label>
+		<div class="col-sm-18">
 			<select class="form-control" name="gender" id="gender">
 				<!-- BEGIN: gender_option -->
 				<option value="{GENDER.value}"{GENDER.selected}>{GENDER.title}</option>
@@ -62,8 +84,8 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="avatar" class="col-sm-3 control-label">{LANG.avata}:</label>
-		<div class="col-sm-9">
+		<label for="avatar" class="col-sm-6 control-label">{LANG.avata}:</label>
+		<div class="col-sm-18">
 			<!-- BEGIN: photo -->
 			<p id="current-photo" class="pull-left text-center">
 				<img src="{DATA.photo}" alt="{DATA.username}" class="img-thumbnail m-bottom"/><br />
@@ -85,8 +107,8 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="birthday" class="col-sm-3 control-label">{LANG.birthday}:</label>
-		<div class="col-sm-9">
+		<label for="birthday" class="col-sm-6 control-label">{LANG.birthday}:</label>
+		<div class="col-sm-18">
 			<div class="input-group">
 				<input type="text" class="form-control datepicker" id="birthday" name="birthday" value="{DATA.birthday}" readonly="readonly">
 				<span class="input-group-btn">
@@ -96,8 +118,8 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="view_mail" class="col-sm-3 control-label">{LANG.showmail}:</label>
-		<div class="col-sm-9">
+		<label for="view_mail" class="col-sm-6 control-label">{LANG.showmail}:</label>
+		<div class="col-sm-18">
 			<select name="view_mail" id="view_mail" class="form-control">
 				<option value="0">{LANG.no}</option>
 				<option value="1"{DATA.view_mail}>{LANG.yes}</option>
@@ -107,8 +129,8 @@
 	<!-- BEGIN: field -->
 	<!-- BEGIN: loop -->
 	<div class="form-group">
-		<label class="col-sm-3 control-label" data-toggle="tooltip" data-placement="right" title="{FIELD.description}">{FIELD.title}<!-- BEGIN: required --><span class="text-danger"> (*)</span><!-- END: required -->:</label>
-		<div class="col-sm-9">
+		<label class="col-sm-6 control-label" data-toggle="tooltip" data-placement="right" title="{FIELD.description}">{FIELD.title}<!-- BEGIN: required --><span class="text-danger"> (*)</span><!-- END: required -->:</label>
+		<div class="col-sm-18">
 			<!-- BEGIN: textbox -->
 			<input class="{FIELD.required} {FIELD.class} form-control" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
 			<!-- END: textbox -->

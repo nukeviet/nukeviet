@@ -10,7 +10,7 @@
 
 <form class="form-inline m-bottom" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" class="confirm-reload">
 	<div class="row">
-		<div class="col-sm-12 col-md-9">
+		<div class="col-sm-24 col-md-18">
 			<table class="table table-striped table-bordered">
 				<col class="w200" />
 				<col />
@@ -92,9 +92,9 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="col-sm-12 col-md-3">
+		<div class="col-sm-24 col-md-6">
 			<div class="row">
-				<div class="col-sm-6 col-md-12">
+				<div class="col-sm-12 col-md-24">
 					<ul style="padding:4px; margin:0">
 						<li>
 							<p class="message_head">
@@ -135,7 +135,7 @@
 								<div class="clearfix uiTokenizer uiInlineTokenizer">
 		                            <div id="keywords" class="tokenarea">
 		                                <!-- BEGIN: keywords -->
-		                                <span class="uiToken removable" title="{KEYWORDS}">
+		                                <span class="uiToken removable" title="{KEYWORDS}" ondblclick="$(this).remove();">
 		                                    {KEYWORDS}
 		                                    <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" />
 		                                    <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
@@ -189,7 +189,7 @@
 						</li>
 					</ul>
 				</div>
-				<div class="col-sm-6 col-md-12">
+				<div class="col-sm-12 col-md-24">
 					<ul style="padding:4px; margin:0">
 						<li>
 							<p class="message_head">

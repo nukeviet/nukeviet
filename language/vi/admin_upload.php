@@ -71,6 +71,7 @@ $lang_module['notupload'] = 'Thư mục không được phép upload';
 $lang_module['errorInfo'] = 'Thông báo';
 $lang_module['selectfiletype'] = 'Hiển thị loại file';
 $lang_module['refresh'] = 'Cập nhật lại';
+$lang_module['author'] = 'Người tải file lên';
 $lang_module['author0'] = 'của tất cả';
 $lang_module['author1'] = 'của tôi';
 $lang_module['uploadError1'] = 'Bạn cần chọn file trên PC hoặc chép đường dẫn tới file vào ô URL';

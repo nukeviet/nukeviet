@@ -54,7 +54,8 @@ function set_reg_attribs( $attribs )
 	$reg_attribs['server'] = $attribs['server'];
 	$reg_attribs['username'] = '';
 	$reg_attribs['email'] = $attribs['contact/email'];
-	$reg_attribs['full_name'] = '';
+	$reg_attribs['first_name'] = '';
+	$reg_attribs['last_name'] = '';
 	$reg_attribs['gender'] = '';
 	$reg_attribs['yim'] = '';
 	$reg_attribs['openid'] = $attribs['id'];
@@ -94,26 +95,26 @@ function set_reg_attribs( $attribs )
 
 	if( isset( $attribs['namePerson'] ) and ! empty( $attribs['namePerson'] ) )
 	{
-		$reg_attribs['full_name'] = $attribs['namePerson'];
+		$reg_attribs['first_name'] = $attribs['namePerson'];
 	}
 	elseif( isset( $attribs['namePerson/friendly'] ) and ! empty( $attribs['namePerson/friendly'] ) )
 	{
-		$reg_attribs['full_name'] = $attribs['namePerson/friendly'];
+		$reg_attribs['first_name'] = $attribs['namePerson/friendly'];
 	}
 	elseif( isset( $attribs['namePerson/first'] ) and ! empty( $attribs['namePerson/first'] ) )
 	{
-		$reg_attribs['full_name'] = $attribs['namePerson/first'];
+		$reg_attribs['first_name'] = $attribs['namePerson/first'];
 	}
 
 	if( isset( $attribs['namePerson/last'] ) and ! empty( $attribs['namePerson/last'] ) )
 	{
-		if( ! empty( $reg_attribs['full_name'] ) )
+		if( ! empty( $reg_attribs['first_name'] ) )
 		{
-			$reg_attribs['full_name'] = $attribs['namePerson/last'] . ' ' . $reg_attribs['full_name'];
+			$reg_attribs['first_name'] = $attribs['namePerson/last'] . ' ' . $reg_attribs['first_name'];
 		}
 		else
 		{
-			$reg_attribs['full_name'] = $attribs['namePerson/last'];
+			$reg_attribs['first_name'] = $attribs['namePerson/last'];
 		}
 	}
 
@@ -143,6 +144,8 @@ function openidLogin_Res1( $attribs )
 		die();
 	}
 	$opid = $crypt->hash( $attribs['id'] );
+
+	$current_mode = isset( $attribs['current_mode'] ) ? $attribs['current_mode'] : 1;
 
 	$stmt = $db->prepare( 'SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive FROM ' . NV_USERS_GLOBALTABLE . '_openid a, ' . NV_USERS_GLOBALTABLE . ' b
 		WHERE a.opid= :opid
@@ -188,7 +191,7 @@ function openidLogin_Res1( $attribs )
 			$row = $db->query( $query )->fetch();
 			if( ! empty( $row ) )
 			{
-				validUserLog( $row, 1, $opid );
+				validUserLog( $row, 1, $opid, $current_mode );
 				$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 			}
 			else
@@ -240,7 +243,7 @@ function openidLogin_Res1( $attribs )
 			else
 			{
 
-				if( $crypt->validate( $password, $nv_row['password'] ) and $nv_seccode )
+				if( $crypt->validate_password( $password, $nv_row['password'] ) and $nv_seccode )
 				{
 					$login_allowed = true;
 				}
@@ -253,8 +256,8 @@ function openidLogin_Res1( $attribs )
 		}
 		if( $login_allowed )
 		{
-			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $nv_row['userid'] ) . ', :id, :opid, :email )' );
-			$stmt->bindParam( ':id', $attribs['id'], PDO::PARAM_STR );
+			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $nv_row['userid'] ) . ', :server, :opid, :email )' );
+			$stmt->bindParam( ':server', $attribs['server'], PDO::PARAM_STR );
 			$stmt->bindParam( ':opid',$opid , PDO::PARAM_STR );
 			$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 			$stmt->execute();
@@ -264,7 +267,7 @@ function openidLogin_Res1( $attribs )
 			}
 			else
 			{
-				validUserLog( $nv_row, 1, $opid );
+				validUserLog( $nv_row, 1, $opid, $current_mode );
 				Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 			}
 			die();
@@ -307,19 +310,20 @@ function openidLogin_Res1( $attribs )
 					$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 					$nv_seccode = ! $gfx_chk ? 1 : ( nv_capcha_txt( $nv_seccode ) ? 1 : 0 );
 
-					if( $crypt->validate( $password, $row['password'] ) and $nv_seccode )
+					if( $crypt->validate_password( $password, $row['password'] ) and $nv_seccode )
 					{
 						$reg_attribs = set_reg_attribs( $attribs );
 
 						$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
-							username, md5username, password, email, full_name, gender, photo, birthday, regdate,
+							username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
 							question, answer, passlostkey, view_mail, remember, in_groups,
 							active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
 							:username,
 							:md5username,
 							:password,
 							:email,
-							:full_name,
+							:first_name,
+							:last_name,
 							:gender,
 							'', 0,
 							:regdate,
@@ -332,7 +336,7 @@ function openidLogin_Res1( $attribs )
 						$data_insert['md5username'] = nv_md5safe( $row['username'] );
 						$data_insert['password'] = $row['password'];
 						$data_insert['email'] = $row['email'];
-						$data_insert['full_name'] = ( ! empty( $row['full_name'] ) ? $row['full_name'] : $reg_attribs['full_name'] );
+						$data_insert['first_name'] = ( ! empty( $row['first_name'] ) ? $row['first_name'] : $reg_attribs['first_name'] );
 						$data_insert['gender'] = $reg_attribs['gender'];
 						$data_insert['regdate'] = $row['regdate'];
 						$data_insert['question'] = $row['question'];
@@ -351,8 +355,8 @@ function openidLogin_Res1( $attribs )
 						$stmt->bindParam( ':userid', $row['userid'], PDO::PARAM_STR );
 						$stmt->execute();
 
-						$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :openid, :opid, :email )' );
-						$stmt->bindParam( ':openid', $attribs['id'], PDO::PARAM_STR );
+						$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :server, :opid, :email )' );
+						$stmt->bindParam( ':server', $attribs['server'], PDO::PARAM_STR );
 						$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 						$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 						$stmt->execute();
@@ -361,7 +365,7 @@ function openidLogin_Res1( $attribs )
 						$result = $db->query( $query );
 						$row = $result->fetch();
 
-						validUserLog( $row, 1, $opid );
+						validUserLog( $row, 1, $opid, $current_mode );
 
 						$info = $lang_module['account_active_ok'] . "<br /><br />\n";
 						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
@@ -459,8 +463,8 @@ function openidLogin_Res1( $attribs )
 							else
 							{
 								$error = '';
-								$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :openid, :opid, :email )' );
-								$stmt->bindParam( ':openid', $attribs['id'], PDO::PARAM_STR );
+								$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :server, :opid, :email )' );
+								$stmt->bindParam( ':server', $attribs['server'], PDO::PARAM_STR );
 								$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 								$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 								$stmt->execute();
@@ -527,7 +531,7 @@ function openidLogin_Res1( $attribs )
 		{
 			// Dang nhap bang mot tai khoan do he thong tao tu dong
 			$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
-				(username, md5username, password, email, full_name, gender, photo, birthday,
+				(username, md5username, password, email, first_name, last_name, gender, photo, birthday,
 				regdate, question, answer, passlostkey,
 				view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
 				VALUES (
@@ -535,7 +539,8 @@ function openidLogin_Res1( $attribs )
 				:md5username,
 				'',
 				:email,
-				:full_name,
+				:first_name
+				:last_name,
 				:gender,
 				'', 0, " . NV_CURRENTTIME . ",
 				'', '', '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . "
@@ -545,7 +550,8 @@ function openidLogin_Res1( $attribs )
 			$data_insert['username'] = $reg_attribs['username'];
 			$data_insert['md5username'] = nv_md5safe( $reg_attribs['username'] );
 			$data_insert['email'] = $reg_attribs['email'];
-			$data_insert['full_name'] = $reg_attribs['full_name'];
+			$data_insert['first_name'] = $reg_attribs['first_name'];
+			$data_insert['last_name'] = $reg_attribs['last_name'];
 			$data_insert['gender'] = ucfirst( $reg_attribs['gender'] ? $reg_attribs['gender']{0} : '' );
 			$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
@@ -574,13 +580,13 @@ function openidLogin_Res1( $attribs )
 			$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
 
 			// Luu vao bang OpenID
-			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :openid, :opid , :email)' );
-			$stmt->bindParam( ':openid', $reg_attribs['openid'], PDO::PARAM_STR );
+			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . intval( $row['userid'] ) . ', :server, :opid , :email)' );
+			$stmt->bindParam( ':server', $reg_attribs['server'], PDO::PARAM_STR );
 			$stmt->bindParam( ':opid', $reg_attribs['opid'], PDO::PARAM_STR );
 			$stmt->bindParam( ':email', $reg_attribs['email'], PDO::PARAM_STR );
 			$stmt->execute();
 
-			validUserLog( $row, 1, $reg_attribs['opid'] );
+			validUserLog( $row, 1, $reg_attribs['opid'], $current_mode );
 			$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
 			Header( 'Location: ' . nv_url_rewrite( $nv_redirect, true ) );
@@ -625,65 +631,10 @@ $nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
 if( defined( 'NV_OPENID_ALLOWED' ) )
 {
 	$server = $nv_Request->get_string( 'server', 'get', '' );
-	if( ! empty( $server ) and isset( $openid_servers[$server] ) )
+	if( ! empty( $server ) and in_array( $server, $global_config['openid_servers'] ) )
 	{
-		if( $server == 'facebook' )
+		if( $nv_Request->isset_request( 'result', 'get' ) )
 		{
-			include NV_ROOTDIR . '/modules/' . $module_file . '/facebook.auth.class.php' ;
-			$FaceBookAuth = new FaceBookAuth( $global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=' . $server );
-
-			$state = $nv_Request->get_string( 'state', 'get', '' );
-			$checksess = md5( $global_config['sitekey'] . session_id() );
-
-			if( ! empty( $state ) )
-			{
-				if( $checksess == $state )
-				{
-					$code = $nv_Request->get_string( 'code', 'get', '' );
-					$error = $nv_Request->get_string( 'error', 'get', '' );
-
-					if( $error )
-					{
-						$attribs = array( 'result' => 'cancel' );
-					}
-					else
-					{
-						$data = $FaceBookAuth->GraphBase( $code );
-
-						if( ! $data->verified )
-						{
-							$attribs = array( 'result' => 'notlogin' );
-						}
-						else
-						{
-							$attribs = array(
-								'result' => 'is_res',
-								'id' => sprintf( $openid_servers[$server]['identity'], $data->id ),
-								'server' => $server
-							) + $FaceBookAuth->getAttributes( $data, $openid_servers[$server]['required'] );
-						}
-					}
-
-					$attribs = serialize( $attribs );
-					$nv_Request->set_Session( 'openid_attribs', $attribs );
-					Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=' . $server . '&result=1&nv_redirect=' . $nv_redirect );
-					exit();
-				}
-				else
-				{
-					Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-					die();
-				}
-			}
-
-			if( ! $nv_Request->isset_request( 'result', 'get' ) )
-			{
-				$scope = 'email';
-				// Yeu cau them email cho phu hop voi NukeViet
-				header( 'Location: ' . $FaceBookAuth->GetOAuthDialogUrl( $checksess, $scope ) );
-				die();
-			}
-
 			$openid_attribs = $nv_Request->get_string( 'openid_attribs', 'session', '' );
 			$openid_attribs = ! empty( $openid_attribs ) ? unserialize( $openid_attribs ) : array();
 
@@ -713,70 +664,8 @@ if( defined( 'NV_OPENID_ALLOWED' ) )
 		}
 		else
 		{
-			include_once NV_ROOTDIR . '/includes/class/openid.class.php' ;
-			$openid = new LightOpenID();
-
-			if( $nv_Request->isset_request( 'openid_mode', 'get' ) )
-			{
-				$openid_mode = $nv_Request->get_string( 'openid_mode', 'get', '' );
-
-				if( $openid_mode == 'cancel' )
-				{
-					$attribs = array( 'result' => 'cancel' );
-				}
-				elseif( ! $openid->validate() )
-				{
-					$attribs = array( 'result' => 'notlogin' );
-				}
-				else
-				{
-					$attribs = array(
-						'result' => 'is_res',
-						'id' => $openid->identity,
-						'server' => $server
-					) + $openid->getAttributes();
-				}
-
-				$attribs = serialize( $attribs );
-				$nv_Request->set_Session( 'openid_attribs', $attribs );
-				Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=' . $server . '&result=1&nv_redirect=' . $nv_redirect );
-				exit();
-			}
-
-			if( ! $nv_Request->isset_request( 'result', 'get' ) )
-			{
-				$openid->identity = $openid_servers[$server]['identity'];
-				$openid->required = array_values( $openid_servers[$server]['required'] );
-				header( 'Location: ' . $openid->authUrl() );
-				die();
-			}
-
-			$openid_attribs = $nv_Request->get_string( 'openid_attribs', 'session', '' );
-			$openid_attribs = ! empty( $openid_attribs ) ? unserialize( $openid_attribs ) : array();
-
-			if( empty( $openid_attribs ) or $openid_attribs['server'] != $server )
-			{
-				$nv_Request->unset_request( 'openid_attribs', 'session' );
-				$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-				Header( 'Location: ' . nv_url_rewrite( $nv_redirect ) );
-				die();
-			}
-
-			if( $openid_attribs['result'] == 'cancel' )
-			{
-				$nv_Request->unset_request( 'openid_attribs', 'session' );
-				openidLogin_Res0( $lang_module['canceled_authentication'] );
-			}
-			elseif( $openid_attribs['result'] == 'notlogin' )
-			{
-				$nv_Request->unset_request( 'openid_attribs', 'session' );
-				openidLogin_Res0( $lang_module['not_logged_in'] );
-			}
-			else
-			{
-				openidLogin_Res1( $openid_attribs );
-			}
-			exit();
+			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+			die();
 		}
 	}
 }
@@ -832,7 +721,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 			$row = $db->query( $sql )->fetch();
 			if( ! empty( $row ) )
 			{
-				if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate( $nv_password, $row['password'] ) )
+				if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate_password( $nv_password, $row['password'] ) )
 				{
 					if( ! $row['active'] )
 					{

@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<meta http-equiv="content-type" content="text/html; charset={SITE_CHERSET}" />
+		<meta http-equiv="content-type" content="text/html; charset={SITE_CHARSET}" />
 		<meta http-equiv="expires" content="0" />
 		<title>{PAGE_TITLE}</title>
 		<!--[if IE 6]>

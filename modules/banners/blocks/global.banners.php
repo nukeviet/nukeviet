@@ -98,40 +98,40 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 					$banners['file_ext'] = nv_getextension( $banners['file_name'] );
 				}
 				$banners['file_alt'] = ( ! empty( $banners['file_alt'] ) ) ? $banners['file_alt'] : $banners['title'];
-				$banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'];
-				$banners['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=banners&amp;" . NV_OP_VARIABLE . "=click&amp;id=" . $banners['id'];
+				$banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $banners['file_name'];
+				$banners['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=banners&amp;' . NV_OP_VARIABLE . '=click&amp;id=' . $banners['id'];
 				$array_banners_content[] = $banners;
 			}
 		}
 
 		if( ! empty( $array_banners_content ) )
 		{
-			if( $xml->form == "random" )
+			if( $xml->form == 'random' )
 			{
 				shuffle( $array_banners_content );
 			}
 			unset( $xml, $array_banners );
 
-			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.banners.tpl' ) )
+			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/banners/global.banners.tpl' ) )
 			{
 				$block_theme = $global_config['module_theme'];
 			}
-			elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.banners.tpl' ) )
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/banners/global.banners.tpl' ) )
 			{
 				$block_theme = $global_config['site_theme'];
 			}
 			else
 			{
-				$block_theme = "default";
+				$block_theme = 'default';
 			}
 
-			$xtpl = new XTemplate( 'global.banners.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
+			$xtpl = new XTemplate( 'global.banners.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/banners' );
 
 			foreach( $array_banners_content as $banners )
 			{
 				$xtpl->assign( 'DATA', $banners );
 
-				if( $banners['file_ext'] == "swf" )
+				if( $banners['file_ext'] == 'swf' )
 				{
 					if( ! empty( $banners['file_click'] ) )
 					{

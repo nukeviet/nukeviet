@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $openid_servers, $lang_module;
+global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $lang_module;
 
 if( $module_name == 'users' ) return '';
 
@@ -34,15 +34,21 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 	}
 
 	$xtpl = new XTemplate( 'block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users' );
-
+	
+	$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='name_show_" . NV_LANG_DATA . "'";
+	$result = $db->query( $sql );
+	$global_config['name_show_' . NV_LANG_DATA] = $result->fetchColumn();
+	$result->closeCursor();
+	
 	if( defined( 'NV_IS_USER' ) )
 	{
 		$avata = '';
 		if( file_exists( NV_ROOTDIR . '/' . $user_info['photo'] ) && ! empty( $user_info['photo'] ) ) $avata = NV_BASE_SITEURL . $user_info['photo'];
 		else $avata = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/no_avatar.jpg";
 		$xtpl->assign( 'AVATA', $avata );
-		$xtpl->assign( 'LANG', $lang_global );
-		$xtpl->assign( 'USER', $user_info );
+		$xtpl->assign( 'LANG', $lang_global );		
+		$xtpl->assign( 'USER', $user_info );		
+		
 		if( ! defined( 'NV_IS_ADMIN' ) )
 		{
 			$xtpl->assign( 'LOGOUT_ADMIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=logout' );
@@ -57,7 +63,14 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 			$in_group = "<a title='" . $lang_global['in_groups'] . "' href='" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=regroups'>" . $lang_global['in_groups'] . "</a>";
 			$xtpl->assign( 'in_group', $in_group );
 		}
-
+		if( ! empty( $global_config['name_show_' . NV_LANG_DATA] ) == 0 )
+		{
+			$xtpl->parse( 'signed.first_last' );
+		}
+		else
+		{	
+			$xtpl->parse( 'signed.last_first' );
+		}
 		$xtpl->parse( 'signed' );
 		$content = $xtpl->text( 'signed' );
 	}
@@ -86,11 +99,10 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 			$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/openid_small.gif' );
 			$xtpl->assign( 'OPENID_IMG_WIDTH', 24 );
 			$xtpl->assign( 'OPENID_IMG_HEIGHT', 24 );
-
 			$assigns = array();
-			foreach( $openid_servers as $server => $value )
+			foreach( $global_config['openid_servers'] as $server )
 			{
-				$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
+				$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=oauth&amp;server=" . $server . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
 				$assigns['title'] = ucfirst( $server );
 				$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/" . $server . ".gif";
 				$assigns['img_width'] = $assigns['img_height'] = 24;
@@ -100,7 +112,6 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 			}
 			$xtpl->parse( 'main.openid' );
 		}
-
 		$xtpl->parse( 'main' );
 		$content = $xtpl->text( 'main' );
 	}

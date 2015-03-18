@@ -219,7 +219,8 @@
 			<tr>
 				<td> {LOOP.userid} </td>
 				<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
-				<td>{LOOP.full_name}</td>
+				<td>{LOOP.first_name}</td>
+				<td>{LOOP.last_name}</td>
 				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 				<td>
 				<!-- BEGIN: delete -->

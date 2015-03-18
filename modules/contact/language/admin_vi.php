@@ -20,6 +20,10 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['edit_title'] = 'Xem nội dung gửi';
 $lang_module['add_row_title'] = 'Thêm bộ phận';
 $lang_module['department_title'] = 'Các bộ phận';
+$lang_module['alias'] = 'Liên kết tĩnh';
+$lang_module['error_alias'] = 'Lỗi: chưa có liên kết tĩnh';
+$lang_module['duplicate_alias'] = 'Lỗi: Tiêu đề hoặc liên kết tính đã tồn tại';
+$lang_module['number'] = 'Thứ tự';
 $lang_module['err_row_title'] = 'Không có';
 $lang_module['part_row_title'] = 'Tên bộ phận';
 $lang_module['email_row_title'] = 'Email';
@@ -66,3 +70,5 @@ $lang_module['delall'] = 'Xóa tất cả';
 $lang_module['siteinfo_new'] = 'Liên hệ chưa đọc';
 $lang_module['no_row_contact'] = 'Không có liên hệ nào gửi đến bạn';
 $lang_module['url_for_iframe'] = 'Liên kết dùng chèn cho iframe';
+
+$lang_module['notification_contact_new'] = '<strong>%s</strong> gửi thư liên hệ với tiêu đề <strong>%s</strong>';

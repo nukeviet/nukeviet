@@ -36,18 +36,30 @@
 				</tr>
 				<tr>
 					<td> {LANG.question} </td>
-					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control required" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
+					<td>
+						<!-- BEGIN: question -->
+						(<span style="color:#FF0000">*</span>)
+						<!-- END: question -->
+					</td>
+					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.answer} </td>
-					<td> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control required" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
+					<td>
+						<!-- BEGIN: answer -->
+						(<span style="color:#FF0000">*</span>)
+						<!-- END: answer -->
+					</td>
+					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
 				</tr>
 				<tr>
-					<td colspan="2"> {LANG.name} </td>
-					<td><input class="form-control" type="text" value="{DATA.full_name}" name="full_name" style="width: 300px" /></td>
+					<td colspan="2"> {LANG.first_name} </td>
+					<td><input class="form-control" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
 				</tr>
+				<tr>
+                    <td colspan="2"> {LANG.last_name} </td>
+                    <td><input class="form-control" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
+                </tr>
 				<tr>
 					<td colspan="2"> {LANG.gender} </td>
 					<td>
@@ -82,7 +94,7 @@
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
-					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 120px;" maxlength="10" type="text" />
+					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 100px;" maxlength="10" type="text" />
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.show_email} </td>
@@ -98,7 +110,7 @@
 					<td>
 						<div class="row checkbox">
 							<!-- BEGIN: list -->
-							<label class="col-sm-10">
+							<label class="col-sm-20">
 								<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
 							</label>
 							<!-- END: list -->
@@ -132,7 +144,7 @@
 					<input class="form-control {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width: 300px" />
 					<!-- END: textbox -->
 					<!-- BEGIN: date -->
-					<input class="form-control txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:90px"/>
+					<input class="form-control txt datepicker {FIELD.required}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" style="width:100px"/>
 					<!-- END: date -->
 					<!-- BEGIN: textarea --><textarea style="width:300px" rows="5" cols="70" name="custom_fields[{FIELD.field}]">{FIELD.value}</textarea>
 					<!-- END: textarea -->

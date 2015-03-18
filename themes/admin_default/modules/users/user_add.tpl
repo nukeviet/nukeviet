@@ -40,18 +40,30 @@
 				</tr>
 				<tr>
 					<td> {LANG.question} </td>
-					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control required" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
+					<td style="width:10px"> 
+						<!-- BEGIN: question -->
+						(<span style="color:#FF0000">*</span>)
+						<!-- END: question -->
+					</td>
+					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.answer} </td>
-					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control required" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
-				</tr>
-				<tr>
-					<td colspan="2"> {LANG.name} </td>
-					<td><input class="form-control" type="text" value="{DATA.full_name}" name="full_name" style="width: 300px" /></td>
-				</tr>
+					<td style="width:10px">
+						<!-- BEGIN: answer -->
+						(<span style="color:#FF0000">*</span>)
+						<!-- END: answer -->
+					</td>
+					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
+				</tr>				
+                <tr>
+                    <td colspan="2"> {LANG.first_name} </td>
+                    <td><input class="form-control" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"> {LANG.last_name} </td>
+                    <td><input class="form-control" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
+                </tr>
 				<tr>
 					<td colspan="2"> {LANG.gender} </td>
 					<td>
@@ -67,7 +79,7 @@
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
-					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 120px;" maxlength="10" type="text" />
+					<td><input name="birthday" id="birthday" class="form-control" value="{DATA.birthday}" style="width: 100px;" maxlength="10" type="text" />
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.show_email} </td>
@@ -83,7 +95,7 @@
 					<td>
 						<div class="row checkbox">
 							<!-- BEGIN: list -->
-							<label class="col-sm-10">
+							<label class="col-sm-20">
 								<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
 							</label>
 							<!-- END: list -->
@@ -189,7 +201,7 @@
 			yearRange: "-99:+0"
 		});
 
-		$("#birthday").datepicker({
+		$(".datepicker").datepicker({
 			showOn : "both",
 			dateFormat : "dd/mm/yy",
 			changeMonth : true,
@@ -197,7 +209,6 @@
 			showOtherMonths : true,
 			buttonImage : nv_siteroot + "images/calendar.gif",
 			buttonImageOnly : true,
-			yearRange: "-99:+0"
 		});
 	});
 	//]]>

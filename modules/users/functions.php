@@ -22,15 +22,15 @@ $lang_module['in_groups'] = $lang_global['in_groups'];
  * @param mixed $opid
  * @return
  */
-function validUserLog( $array_user, $remember, $opid )
+function validUserLog( $array_user, $remember, $opid, $current_mode = 0 )
 {
-	global $db, $db_config, $crypt, $nv_Request;
+	global $db, $db_config, $nv_Request;
 
 	$remember = intval( $remember );
-	$checknum = nv_genpass( 10 );
-	$checknum = $crypt->hash( $checknum );
+	$checknum = md5( nv_genpass( 10 ) );
 	$user = array(
 		'userid' => $array_user['userid'],
+		'current_mode' => $current_mode,
 		'checknum' => $checknum,
 		'current_agent' => NV_USER_AGENT,
 		'last_agent' => $array_user['last_agent'],
@@ -63,6 +63,11 @@ function validUserLog( $array_user, $remember, $opid )
 	$nv_Request->set_Cookie( 'nvloginhash', $user, $live_cookie_time );
 }
 
+//
+$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='name_show_" . NV_LANG_DATA . "'";
+$result = $db->query( $sql );
+$global_config['name_show_' . NV_LANG_DATA] = $result->fetchColumn();
+$result->closeCursor();
 
 //global config
 $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";

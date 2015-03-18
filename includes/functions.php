@@ -1887,6 +1887,10 @@ function nv_site_mods()
 			{
 				$user_ops[] = 'memberlist';
 			}
+			if( defined( 'NV_OPENID_ALLOWED' ) )
+			{
+				$user_ops[] = 'oauth';
+			}
 			$func_us = $site_mods['users']['funcs'];
 			foreach( $func_us as $func => $row )
 			{
@@ -1920,4 +1924,44 @@ function nv_site_mods()
 		return;
 	}
 	return $site_mods;
+}
+
+/**
+ * nv_insert_notification()
+ *
+ * @param integer $send_to
+ * @param integer $send_from
+ * @param int $module
+ * @param string $module
+ * @param string $type
+ * @param integer $add_time
+ * @param array $content
+ * @return
+ */
+function nv_insert_notification( $module, $type, $content = array(), $send_to = 0, $send_from = 0, $area = 1 )
+{
+	global $db_config, $db, $global_config;
+
+	/* $area
+	 * 0: Khu vuc ngoai site
+	 * 1: Khu vuc quan tri
+	 * 2: Ca 2 khu vuc tren
+	 */
+
+	if( $global_config['notification_active'] )
+	{
+		$content = !empty( $content ) ? serialize( $content ) : '';
+
+		$sth = $db->prepare( 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . ' (send_to, send_from, area, language, module, type, content, add_time, view)
+		VALUES (:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
+		$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
+		$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
+		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+		$sth->bindParam( ':content', $content, PDO::PARAM_STR );
+		$sth->execute();
+	}
+
+	return true;
 }

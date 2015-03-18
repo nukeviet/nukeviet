@@ -81,9 +81,10 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
 	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	username varchar(100) NOT NULL DEFAULT '',
 	md5username char(32) NOT NULL DEFAULT '',
-	password varchar(50) NOT NULL DEFAULT '',
+	password varchar(80) NOT NULL DEFAULT '',
 	email varchar(100) NOT NULL DEFAULT '',
-	full_name varchar(255) NOT NULL DEFAULT '',
+	first_name varchar(100) NOT NULL DEFAULT '',
+	last_name varchar(100) NOT NULL DEFAULT '',
 	gender char(1) DEFAULT '',
 	photo varchar(255) DEFAULT '',
 	birthday int(11) NOT NULL,
@@ -113,9 +114,10 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_reg (
 	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	username varchar(100) NOT NULL DEFAULT '',
 	md5username char(32) NOT NULL DEFAULT '',
-	password varchar(50) NOT NULL DEFAULT '',
+	password varchar(80) NOT NULL DEFAULT '',
 	email varchar(100) NOT NULL DEFAULT '',
-	full_name varchar(255) NOT NULL DEFAULT '',
+	first_name varchar(255) NOT NULL DEFAULT '',
+	last_name varchar(255) NOT NULL DEFAULT '',
 	regdate int(11) unsigned NOT NULL DEFAULT '0',
 	question varchar(255) NOT NULL,
 	answer varchar(255) NOT NULL DEFAULT '',
@@ -233,7 +235,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
 $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 	session_id varchar(50) DEFAULT NULL,
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
-	full_name varchar(100) NOT NULL,
+	username varchar(100) NOT NULL,
 	onl_time int(11) unsigned NOT NULL DEFAULT '0',
 	UNIQUE KEY session_id (session_id),
 	KEY onl_time (onl_time)
@@ -282,6 +284,17 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extension
 	KEY type (type)
 ) ENGINE=MyISAM";
 
+
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files (
+	idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	type varchar(10) NOT NULL DEFAULT 'other',
+	title varchar(55) NOT NULL DEFAULT '',
+	path varchar(255) NOT NULL DEFAULT '',
+	lastmodified int(11) unsigned NOT NULL DEFAULT '0',
+	duplicate smallint(4) unsigned NOT NULL DEFAULT '0',
+	PRIMARY KEY (idfile)
+) ENGINE=MyISAM";
+
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 	bid mediumint(8) NOT NULL DEFAULT '0',
 	click_time int(11) unsigned NOT NULL DEFAULT '0',
@@ -304,7 +317,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients (
 	id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	login varchar(60) NOT NULL,
-	pass varchar(50) NOT NULL,
+	pass varchar(80) NOT NULL,
 	reg_time int(11) unsigned NOT NULL DEFAULT '0',
 	full_name varchar(255) NOT NULL,
 	email varchar(100) NOT NULL,
@@ -446,4 +459,18 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_counter (
 	 c_count int(11) unsigned NOT NULL DEFAULT '0',
 	 " . NV_LANG_DATA . "_count int(11) unsigned NOT NULL DEFAULT '0',
 	 UNIQUE KEY c_type (c_type,c_val)
+) ENGINE=MyISAM";
+
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
+  id int(11) unsigned NOT NULL AUTO_INCREMENT,
+  send_to mediumint(8) unsigned NOT NULL,
+  send_from mediumint(8) unsigned NOT NULL DEFAULT '0',
+  area tinyint(1) unsigned NOT NULL,
+  language char(3) NOT NULL,
+  module varchar(50) NOT NULL,
+  type varchar(255) NOT NULL,
+  content text NOT NULL,
+  add_time int(11) unsigned NOT NULL,
+  view tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
 ) ENGINE=MyISAM";

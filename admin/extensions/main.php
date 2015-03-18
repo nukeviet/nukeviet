@@ -73,7 +73,7 @@ if( ! empty( NV_Http::$error ) )
 {
 	$error = nv_http_get_lang( NV_Http::$error );
 }
-elseif( ! isset( $array['error'] ) or ! isset( $array['data'] ) or ! isset( $array['pagination'] ) or ! is_array( $array['error'] ) or ! is_array( $array['data'] ) or ! is_array( $array['pagination'] ) or ( ! empty( $array['error'] ) and ( ! isset( $array['error']['level'] ) or empty( $array['error']['message'] ) ) ) )
+elseif( empty( $array['status'] ) or ! isset( $array['error'] ) or ! isset( $array['data'] ) or ! isset( $array['pagination'] ) or ! is_array( $array['error'] ) or ! is_array( $array['data'] ) or ! is_array( $array['pagination'] ) or ( ! empty( $array['error'] ) and ( ! isset( $array['error']['level'] ) or empty( $array['error']['message'] ) ) ) )
 {
 	$error = $lang_global['error_valid_response'];
 }
@@ -87,6 +87,11 @@ if( ! empty( $error ) )
 {
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.error' );
+}
+elseif( $array['status'] == 'notlogin' )
+{
+	$xtpl->assign( 'LOGIN_NOTE', sprintf( $lang_module['login_require'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_base64_encode( $client_info['selfurl'] ) ) );
+	$xtpl->parse( 'main.login' );
 }
 elseif( empty( $array['data'] ) )
 {

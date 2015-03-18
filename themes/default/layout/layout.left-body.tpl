@@ -2,24 +2,20 @@
 {FILE "header_only.tpl"}
 {FILE "header_extended.tpl"}
 <div class="row">
-	<div class="col-md-12">
-		[HEADER]
-	</div>
+	[HEADER]
 </div>
 <div class="row">
-    <div class="col-sm-8 col-md-9 col-sm-push-4 col-md-push-3">
+    <div class="col-sm-18 col-md-20 col-sm-push-6 col-md-push-4">
         [TOP]
         {MODULE_CONTENT}
         [BOTTOM]
     </div>
-	<div class="col-sm-4 col-md-3 col-sm-pull-8 col-md-pull-9">
+	<div class="col-sm-6 col-md-4 col-sm-pull-18 col-md-pull-20">
 		[LEFT]
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-12">
-		[FOOTER]
-	</div>
+	[FOOTER]
 </div>
 {FILE "footer_extended.tpl"}
 {FILE "footer_only.tpl"}
