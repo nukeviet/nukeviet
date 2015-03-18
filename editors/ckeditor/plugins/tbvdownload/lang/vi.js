@@ -1,6 +1,9 @@
-/*
-Copyright (c) 2015-2016, CKSource - Mr Thang. All rights reserved.
-*/
+/**
+ * @Project NUKEVIET 4.x
+ * @Author Mr.Thang (kid.apt@gmail.com)
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 16-03-2015 12:55
+ */
 
 CKEDITOR.plugins.setLang('tbvdownload', 'vi', {
 		toolbar	: 'Dán HTMl để tải ảnh về máy chủ',

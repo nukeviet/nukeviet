@@ -1,6 +1,8 @@
 /**
- * @license Copyright (c) 2003-2015, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * @Project NUKEVIET 4.x
+ * @Author Mr.Thang (kid.apt@gmail.com)
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 16-03-2015 12:55
  */
 
 CKEDITOR.dialog.add( 'tbvdownloadDialog', function( editor ) {

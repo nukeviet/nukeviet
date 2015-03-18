@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @Project NUKEVIET 4.x
+ * @Author Mr.Thang (kid.apt@gmail.com)
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 16-03-2015 12:55
+ */
+ 
 $data = $nv_Request->get_string( 'data' , 'post', '' );
 
 preg_match_all( '/<\s*img [^\>]*src\s*=\s*[\""\']?([^\""\'\s>]*)/i', $data, $matches );

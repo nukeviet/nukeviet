@@ -1,11 +1,8 @@
 /**
- * Copyright (c) 2014, CKSource - Frederico Knabben. All rights reserved.
- * Licensed under the terms of the MIT License (see LICENSE.md).
- *
- * Basic sample plugin inserting abbreviation elements into the CKEditor editing area.
- *
- * Created out of the CKEditor Plugin SDK:
- * http://docs.ckeditor.com/#!/guide/plugin_sdk_sample_1
+ * @Project NUKEVIET 4.x
+ * @Author Mr.Thang (kid.apt@gmail.com)
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 16-03-2015 12:55
  */
 
 // Register the plugin within the editor.
@@ -13,7 +10,7 @@ CKEDITOR.plugins.add( 'tbvdownload', {
 
 	// Register the icons.
 	icons: 'tbvdownload',
-    lang : ['vi'],
+    lang : ['vi', 'en'],
 	// The plugin initialization logic goes inside this method.
 	init: function( editor ) {
 
