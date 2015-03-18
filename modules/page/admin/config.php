@@ -68,7 +68,7 @@ for( $i = 5; $i <= 30; ++$i )
 	$xtpl->parse( 'main.per_page' );
 }
 
-for( $i = 5; $i <= 30; ++$i )
+for( $i = 0; $i <= 30; ++$i )
 {
 	$xtpl->assign( 'RELATED_ARTICLES', array(
 		'key' => $i,

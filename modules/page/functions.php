@@ -23,18 +23,34 @@ foreach( $list as $values )
 
 $id = 0;
 $page = 1;
-$ab_links = array();
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
 $alias = ( ! empty( $array_op ) and ! empty( $array_op[0] ) ) ? $array_op[0] : '';
-
 if( substr( $alias, 0, 5) == 'page-' )
 {
     $page = intval( substr( $array_op[0], 5));
 	$id = 0;
 	$alias = '';
 }
-elseif( $page_config['viewtype'] == 0 )
+elseif( empty( $alias ) and empty( $page_config['viewtype'] ) )
 {
-	$row = array_shift( $rows );
-	$id = $row['id'];
+    $db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data )->order( 'weight ASC' )->limit( 1 );
+    $rowdetail = $db->query($db->sql())->fetch();
+	if( ! empty( $rowdetail ) )
+	{
+		$id = $rowdetail['id'];
+	}
+}
+elseif( ! empty( $alias ) )
+{
+	$sth = $db->prepare( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND alias=:alias' );
+	$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$sth->execute();
+	$rowdetail = $sth->fetch();
+	if( empty( $rowdetail ) )
+	{
+		Header( 'Location: ' . nv_url_rewrite( $base_url, true ) );
+		die();
+	}
+	$id = $rowdetail['id'];
 }
