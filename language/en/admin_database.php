@@ -46,6 +46,7 @@ $lang_module['table_check_time'] = 'Check';
 $lang_module['optimize'] = 'Optimize';
 $lang_module['savefile'] = 'Save on server';
 $lang_module['download'] = 'Download';
+$lang_module['download_now'] = 'Database download now';
 $lang_module['download_all'] = 'Structures and data';
 $lang_module['download_str'] = 'Structures';
 $lang_module['ext_sql'] = 'Sql file';
