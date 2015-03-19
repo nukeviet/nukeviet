@@ -69,14 +69,14 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 {
 	$site_mods = nv_site_mods( $module_name );
 	// IMG thong ke truy cap + online
-	if( $global_config['statistic'] and isset( $site_mods['statistics'] ) and $nv_Request->get_string( 'second', 'get' ) == 'statimg' )
+	if( $global_config['statistic'] and isset( $sys_mods['statistics'] ) and $nv_Request->get_string( 'second', 'get' ) == 'statimg' )
 	{
 		include_once NV_ROOTDIR . '/includes/core/statimg.php';
 	}
 	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'post,get', 'main' );
 	if( empty( $op ) ) $op = 'main';
 
-	if( $global_config['rewrite_op_mod'] != '' and ! isset( $site_mods[$module_name] ) )
+	if( $global_config['rewrite_op_mod'] != '' and ! isset( $sys_mods[$module_name] ) )
 	{
 		$op = ( $op == 'main' ) ? $module_name : $module_name . '/' . $op;
 		$module_name = $global_config['rewrite_op_mod'];
@@ -287,6 +287,25 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 
 			nv_insert_notification( 'modules', 'auto_deactive_module', array( 'custom_title' => $site_mods[$module_name]['custom_title'] ) );
 			nv_del_moduleCache( 'modules' );
+		}
+	}
+	elseif( isset( $sys_mods[$module_name] ) )
+	{
+		$groups_view = ( string )$sys_mods[$module_name]['groups_view'];
+		if( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
+		{
+			// Login users
+			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
+			die();
+		}
+		elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
+		{
+			// Exit
+			nv_info_die( $lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'] );
+		}
+		elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
+		{
+			nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
 		}
 	}
 }

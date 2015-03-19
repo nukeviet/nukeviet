@@ -1786,64 +1786,9 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
  */
 function nv_site_mods( $module_name = '' )
 {
-	global $admin_info, $user_info, $admin_info, $global_config, $db;
+	global $sys_mods, $admin_info, $global_config;
 
-	$cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
-	if( ( $cache = nv_get_cache( 'modules', $cache_file ) ) != false )
-	{
-		$site_mods = unserialize( $cache );
-	}
-	else
-	{
-		$site_mods = array();
-		try
-		{
-			$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight' );
-			while( $row = $result->fetch() )
-			{
-				$m_title = $row['title'];
-				$f_name = $row['func_name'];
-				$f_alias = $row['alias'];
-				if( ! isset( $site_mods[$m_title] ) )
-				{
-					$site_mods[$m_title] = array(
-						'module_file' => $row['module_file'],
-						'module_data' => $row['module_data'],
-						'custom_title' => $row['custom_title'],
-						'admin_title' => ( empty( $row['admin_title'] ) ) ? $row['custom_title'] : $row['admin_title'],
-						'admin_file' => $row['admin_file'],
-						'main_file' => $row['main_file'],
-						'theme' => $row['theme'],
-						'mobile' => $row['mobile'],
-						'description' => $row['description'],
-						'keywords' => $row['keywords'],
-						'groups_view' => $row['groups_view'],
-						'is_modadmin' => false,
-						'admins' => $row['admins'],
-						'rss' => $row['rss'],
-						'gid' => $row['gid'],
-						'funcs' => array()
-					);
-				}
-				$site_mods[$m_title]['funcs'][$f_alias] = array(
-					'func_id' => $row['func_id'],
-					'func_name' => $f_name,
-					'show_func' => $row['show_func'],
-					'func_custom_name' => $row['func_custom_name'],
-					'in_submenu' => $row['in_submenu']
-				);
-				$site_mods[$m_title]['alias'][$f_name] = $f_alias;
-			}
-			$cache = serialize( $site_mods );
-			nv_set_cache( 'modules', $cache_file, $cache );
-			unset( $cache, $result );
-		}
-		catch( PDOException $e )
-		{
-			return $site_mods;
-		}
-	}
-
+	$site_mods = $sys_mods;
 	if( defined( 'NV_SYSTEM' ) )
 	{
 		foreach( $site_mods as $m_title => $row )
@@ -1862,29 +1807,14 @@ function nv_site_mods( $module_name = '' )
 			elseif( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
 			{
 				$allowed = false;
-				if( $module_name == $m_title )
-				{
-					// Login users
-					Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-					die();
-				}
 			}
 			elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
 			{
 				$allowed = false;
-				if( $module_name == $m_title )
-				{
-					// Exit
-					nv_info_die( $lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'] );
-				}
 			}
 			elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
 			{
 				$allowed = false;
-				if( $module_name == $m_title )
-				{
-					nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
-				}
 			}
 
 			if( ! $allowed )
@@ -1980,8 +1910,9 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 	{
 		$content = !empty( $content ) ? serialize( $content ) : '';
 
-		$sth = $db->prepare( 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . ' (send_to, send_from, area, language, module, type, content, add_time, view)
-		VALUES (:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
+		$sth = $db->prepare( 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
+		(send_to, send_from, area, language, module, type, content, add_time, view)	VALUES
+		(:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
 		$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
 		$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
 		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
@@ -1990,6 +1921,5 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 		$sth->bindParam( ':content', $content, PDO::PARAM_STR );
 		$sth->execute();
 	}
-
 	return true;
 }
