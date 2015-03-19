@@ -456,3 +456,52 @@ if( isset( $nv_plugin_area[2] ) )
         include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
     }
 }
+
+$cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
+if( ( $cache = nv_get_cache( 'modules', $cache_file ) ) != false )
+{
+	$sys_mods = unserialize( $cache );
+}
+else
+{
+	$sys_mods = array();
+	$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight' );
+	while( $row = $result->fetch() )
+	{
+		$m_title = $row['title'];
+		$f_name = $row['func_name'];
+		$f_alias = $row['alias'];
+		if( ! isset( $sys_mods[$m_title] ) )
+		{
+			$sys_mods[$m_title] = array(
+				'module_file' => $row['module_file'],
+				'module_data' => $row['module_data'],
+				'custom_title' => $row['custom_title'],
+				'admin_title' => ( empty( $row['admin_title'] ) ) ? $row['custom_title'] : $row['admin_title'],
+				'admin_file' => $row['admin_file'],
+				'main_file' => $row['main_file'],
+				'theme' => $row['theme'],
+				'mobile' => $row['mobile'],
+				'description' => $row['description'],
+				'keywords' => $row['keywords'],
+				'groups_view' => $row['groups_view'],
+				'is_modadmin' => false,
+				'admins' => $row['admins'],
+				'rss' => $row['rss'],
+				'gid' => $row['gid'],
+				'funcs' => array()
+			);
+		}
+		$sys_mods[$m_title]['funcs'][$f_alias] = array(
+			'func_id' => $row['func_id'],
+			'func_name' => $f_name,
+			'show_func' => $row['show_func'],
+			'func_custom_name' => $row['func_custom_name'],
+			'in_submenu' => $row['in_submenu']
+		);
+		$sys_mods[$m_title]['alias'][$f_name] = $f_alias;
+	}
+	$cache = serialize( $sys_mods );
+	nv_set_cache( 'modules', $cache_file, $cache );
+	unset( $cache, $result );
+}

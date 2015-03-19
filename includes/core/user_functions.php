@@ -51,7 +51,7 @@ function nv_create_submenu()
  */
 function nv_blocks_content( $sitecontent )
 {
-	global $db, $module_info, $module_name, $op, $global_config, $lang_global, $site_mods, $user_info, $themeConfig;
+	global $db, $module_info, $module_name, $op, $global_config, $lang_global, $sys_mods, $user_info, $themeConfig;
 
 	$_posAllowed = array();
 
@@ -84,13 +84,11 @@ function nv_blocks_content( $sitecontent )
 	else
 	{
 		$cache = array();
-
 		$in = array();
-		$sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight';
-		$list = nv_db_cache( $sql, '', 'modules' );
+		$list = $sys_mods[$module_name]['funcs'];
 		foreach( $list as $row )
 		{
-			if( $row['title'] == $module_name and $row['show_func'] )
+			if( $row['show_func'] )
 			{
 				$in[] = $row['func_id'];
 			}
@@ -163,9 +161,9 @@ function nv_blocks_content( $sitecontent )
 				{
 					include NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/' . $_row['file_name'];
 				}
-				elseif( isset( $site_mods[$_row['module']]['module_file'] ) and ! empty( $site_mods[$_row['module']]['module_file'] ) and file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'] ) )
+				elseif( isset( $sys_mods[$_row['module']]['module_file'] ) and ! empty( $sys_mods[$_row['module']]['module_file'] ) and file_exists( NV_ROOTDIR . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'] ) )
 				{
-					include NV_ROOTDIR . '/modules/' . $site_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'];
+					include NV_ROOTDIR . '/modules/' . $sys_mods[$_row['module']]['module_file'] . '/blocks/' . $_row['file_name'];
 				}
 				unset( $block_config );
 
@@ -439,7 +437,7 @@ function nv_html_page_title()
 	{
 		if( ! isset( $global_config['pageTitleMode'] ) or empty( $global_config['pageTitleMode'] ) ) $global_config['pageTitleMode'] = 'pagetitle ' . NV_TITLEBAR_DEFIS . ' sitename';
 
-		if( empty( $page_title ) and ! preg_match( '/(funcname|modulename|sitename)/i', $global_config['pageTitleMode'] ) ) 
+		if( empty( $page_title ) and ! preg_match( '/(funcname|modulename|sitename)/i', $global_config['pageTitleMode'] ) )
 		{
 			$_title = $module_info['funcs'][$op]['func_custom_name'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 		}
