@@ -6,7 +6,7 @@
 CKEDITOR.editorConfig = function( config ) {
 	config.language = nv_sitelang;
 	config.allowedContent = true;
-	config.extraPlugins = 'video,eqneditor,tbvdownload';
+	config.extraPlugins = 'video,eqneditor,switchbar,tbvdownload';
 	config.entities = false;
 	config.youtube_width = '640';
 	config.youtube_height = '480';
@@ -22,26 +22,22 @@ CKEDITOR.editorConfig = function( config ) {
 	    { name: 'forms' },
 	    { name: 'links' },
 	    { name: 'insert' },
-	    { name: 'tools' },
-	    { name: 'others' },
 	    { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
-	    '/',
-	    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
 	    { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
 	    { name: 'styles' },
 	    { name: 'colors' },
+	    { name: 'others' },
+	    { name: 'tools' },
 	];
 
 	config.toolbar_Basic =
 	[
 		{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
-		{ name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
-                 ,'Iframe' ] },
-                '/',
+		{ name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
 		{ name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
 		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
 		{ name: 'links', items : [ 'Link','Unlink','Anchor' ] },
 		{ name: 'styles', items : [ 'Font', 'FontSize', 'TextColor', 'BGColor' ] },
-		{ name: 'tools', items : [ 'Maximize','-','About' ] },
+		{ name: 'tools', items : ['SwitchBar',  'Maximize'] },
 	];
 };
