@@ -41,7 +41,11 @@ if( empty( $contents ) )
 	$array_catpage = array();
 	$array_cat_other = array();
 
-	if( $viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' )
+	if(  $viewcat == 'viewcat_none' )
+	{
+		$contents = '';
+	}
+	elseif( $viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' )
 	{
 		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 'publtime DESC' : 'publtime ASC';
 		$db->sqlreset()
