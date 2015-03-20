@@ -99,7 +99,7 @@
 			</tbody>
 			<tfoot>
 				<tr class="text-left">
-					<td colspan="9">
+					<td colspan="12">
 						<select class="form-control" name="action" id="action">
 							<!-- BEGIN: action -->
 							<option value="{ACTION.value}">{ACTION.title}</option>
