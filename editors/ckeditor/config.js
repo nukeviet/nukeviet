@@ -17,26 +17,29 @@ CKEDITOR.editorConfig = function( config ) {
 	config.codeSnippet_theme = 'github';
 	// Default setting.
 	config.toolbarGroups = [
-	    { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
-	    { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
-	    { name: 'forms' },
-	    { name: 'links' },
-	    { name: 'insert' },
-	    { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
-	    { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-	    { name: 'styles' },
-	    { name: 'colors' },
-	    { name: 'others' },
-	    { name: 'tools' },
+		{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+		{ name: 'insert' },
+		{ name: 'others' },
+		'/',
+		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+		{ name: 'links' },
+		'/',
+		{ name: 'styles' },
+		{ name: 'colors' },
+		{ name: 'editing', groups: [ 'find', 'selection'] },
+		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+		{ name: 'tools' },
 	];
 
 	config.toolbar_Basic =
 	[
 		{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
 		{ name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+		{ name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+		'/',
 		{ name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
 		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
-		{ name: 'links', items : [ 'Link','Unlink','Anchor' ] },
 		{ name: 'styles', items : [ 'Font', 'FontSize', 'TextColor', 'BGColor' ] },
 		{ name: 'tools', items : ['SwitchBar',  'Maximize'] },
 	];

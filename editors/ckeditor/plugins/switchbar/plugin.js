@@ -7,19 +7,15 @@
 	var _buttonName = "SwitchBar";
 	var _pluginCommand='switchbar';
 
-	var _currentBar = "";
-
 	var commandDefinition =
 	{
 		exec: function( editor )
 		{
-			if ( _currentBar == editor.config.switchBarSimple ) {
-				editor.config.switchBarDefault = editor.config.switchBarReach;
+			if ( editor.config.toolbar == editor.config.switchBarSimple ) {
+				editor.config.toolbar = editor.config.switchBarReach;
 			} else {
-				editor.config.switchBarDefault = editor.config.switchBarSimple;
+				editor.config.toolbar = editor.config.switchBarSimple;
 			}
-			editor.config.toolbar = editor.config.switchBarDefault;
-
 			//the only way is to destroy the editor and recreate it again with new configurations
 			var areaID = editor.name;
 			var config = editor.config;
@@ -35,8 +31,7 @@
 		init: function( editor )
 		{
 			var pluginIcon = "";
-			_currentBar = editor.config.switchBarDefault;
-			if ( _currentBar == editor.config.switchBarSimple ) {
+			if ( editor.config.toolbar == editor.config.switchBarSimple ) {
 				pluginIcon = editor.config.switchBarSimpleIcon;
 			} else {
 				pluginIcon = editor.config.switchBarReachIcon;
@@ -63,12 +58,6 @@ CKEDITOR.config.switchBarSimple = 'Basic';
  * @type string
  */
 CKEDITOR.config.switchBarReach = 'Full';
-
-/**
- * The default toolbar which will be set up at the beginning
- * @type string
- */
-CKEDITOR.config.switchBarDefault = 'Full';
 
 /**
  * The image to the icong for simple toolbar
