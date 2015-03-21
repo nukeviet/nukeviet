@@ -641,7 +641,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 		$xtpl->parse( 'main.showhometext' );
 	}
-	
+
 	if( ! empty( $news_contents['post_name'] ) )
 	{
 		$xtpl->parse( 'main.post_name' );
@@ -661,7 +661,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 		$xtpl->parse( 'main.author' );
 	}
-	
+
 	if( $news_contents['copyright'] == 1 )
 	{
 		if( ! empty( $module_config[$module_name]['copyright'] ) )
@@ -686,7 +686,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
-		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $news_contents['id'] ) );
+		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $news_contents['id'], 1 ) );
 		$xtpl->parse( 'main.adminlink' );
 	}
 
@@ -745,7 +745,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		}
 		$xtpl->parse( 'main.related' );
 	}
-	
+
 	if( ! empty( $topic_array ) )
 	{
 		foreach( $topic_array as $key => $topic_array_i )
