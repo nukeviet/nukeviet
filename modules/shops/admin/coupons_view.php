@@ -92,7 +92,6 @@ else
 	$array_data['status'] = $lang_module['coupons_inactive'];
 }
 $array_data['discount_text'] = $array_data['type'] == 'p' ? '%' : ' ' . $pro_config['money_unit'];
-$array_data['free_shipping'] = $array_data['free_shipping'] ? $lang_global['yes'] : $lang_global['no'];
 $array_data['date_start'] = !empty( $array_data['date_start'] ) ? nv_date( 'd/m/Y', $array_data['date_start'] ) : 'N/A';
 $array_data['date_end'] = !empty( $array_data['date_end'] ) ? nv_date( 'd/m/Y', $array_data['date_end'] ) : $lang_module['coupons_unlimit'];
 

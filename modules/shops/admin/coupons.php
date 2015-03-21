@@ -73,7 +73,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$row['type'] = $nv_Request->get_title( 'type', 'post', 'p' );
 	$row['discount'] = $nv_Request->get_title( 'discount', 'post', '' );
 	$row['total_amount'] = $nv_Request->get_title( 'total_amount', 'post', '' );
-	$row['free_shipping'] = $nv_Request->get_int( 'free_shipping', 'post', 0 );
 	$row['product'] = $nv_Request->get_array( 'product', 'post', '' );
 	$row['product'] = array_diff( $row['product'], array('') );
 	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'date_start', 'post' ), $m ) )
@@ -122,14 +121,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			if( empty( $row['id'] ) )
 			{
-				$sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_coupons (title, code, type, discount, total_amount, free_shipping, date_start, date_end, uses_per_coupon, date_added, status) VALUES (:title, :code, :type, :discount, :total_amount, :free_shipping, :date_start, :date_end, :uses_per_coupon, ' . NV_CURRENTTIME . ', 1)';
+				$sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_coupons (title, code, type, discount, total_amount, date_start, date_end, uses_per_coupon, date_added, status) VALUES (:title, :code, :type, :discount, :total_amount, :date_start, :date_end, :uses_per_coupon, ' . NV_CURRENTTIME . ', 1)';
 				$data_insert = array( );
 				$data_insert['title'] = $row['title'];
 				$data_insert['code'] = $row['code'];
 				$data_insert['type'] = $row['type'];
 				$data_insert['discount'] = $row['discount'];
 				$data_insert['total_amount'] = $row['total_amount'];
-				$data_insert['free_shipping'] = $row['free_shipping'];
 				$data_insert['date_start'] = $row['date_start'];
 				$data_insert['date_end'] = $row['date_end'];
 				$data_insert['uses_per_coupon'] = $row['uses_per_coupon'];
@@ -137,13 +135,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 			else
 			{
-				$stmt = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET title = :title, code = :code, type = :type, discount = :discount, total_amount = :total_amount, free_shipping = :free_shipping, date_start = :date_start, date_end = :date_end, uses_per_coupon = :uses_per_coupon WHERE id=' . $row['id'] );
+				$stmt = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET title = :title, code = :code, type = :type, discount = :discount, total_amount = :total_amount, date_start = :date_start, date_end = :date_end, uses_per_coupon = :uses_per_coupon WHERE id=' . $row['id'] );
 				$stmt->bindParam( ':title', $row['title'], PDO::PARAM_STR );
 				$stmt->bindParam( ':code', $row['code'], PDO::PARAM_STR );
 				$stmt->bindParam( ':type', $row['type'], PDO::PARAM_STR );
 				$stmt->bindParam( ':discount', $row['discount'], PDO::PARAM_STR );
 				$stmt->bindParam( ':total_amount', $row['total_amount'], PDO::PARAM_STR );
-				$stmt->bindParam( ':free_shipping', $row['free_shipping'], PDO::PARAM_INT );
 				$stmt->bindParam( ':date_start', $row['date_start'], PDO::PARAM_INT );
 				$stmt->bindParam( ':date_end', $row['date_end'], PDO::PARAM_INT );
 				$stmt->bindParam( ':uses_per_coupon', $row['uses_per_coupon'], PDO::PARAM_INT );
@@ -205,7 +202,6 @@ else
 	$row['type'] = 'p';
 	$row['discount'] = '';
 	$row['total_amount'] = '';
-	$row['free_shipping'] = 0;
 	$row['product'] = '';
 	$row['date_start'] = NV_CURRENTTIME;
 	$row['date_end'] = 0;
@@ -344,8 +340,6 @@ foreach( $array_select_type as $key => $title )
 	) );
 	$xtpl->parse( 'main.select_type' );
 }
-
-$xtpl->assign( 'free_shipping_checked', $row['free_shipping'] ? 'checked="checked"' : '' );
 
 if( !empty( $row['product'] ) )
 {

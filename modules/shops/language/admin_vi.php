@@ -436,7 +436,6 @@ $lang_module['coupons_type_fixed_amount'] = 'Số tiền cố định';
 $lang_module['coupons_discount'] = 'Giá trị giảm';
 $lang_module['coupons_total_amount'] = 'Giá trị đơn hàng áp dụng';
 $lang_module['coupons_total_amount_note'] = 'Để trống nếu không xác định giá trị đơn hàng';
-$lang_module['coupons_free_shipping'] = 'Miễn phí vận chuyển';
 $lang_module['coupons_product'] = 'Sản phẩm áp dụng';
 $lang_module['coupons_product_note'] = 'Nếu nhập sản phẩm, giảm giá chỉ áp dụng đối với tổng giá của các sản phẩm này, không áp dụng cho tổng đơn hàng';
 $lang_module['coupons_product_custom'] = 'Sản phẩm tùy chọn';

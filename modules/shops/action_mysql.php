@@ -493,7 +493,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   type varchar(1) NOT NULL DEFAULT 'p',
   discount float NOT NULL DEFAULT '0',
   total_amount float NOT NULL DEFAULT '0',
-  free_shipping tinyint(1) NOT NULL DEFAULT '0',
   date_start int(11) unsigned NOT NULL DEFAULT '0',
   date_end int(11) unsigned NOT NULL DEFAULT '0',
   uses_per_coupon int(11) unsigned NOT NULL DEFAULT '0',

@@ -401,7 +401,6 @@ $lang_module['coupons_fill'] = 'Nhập mã giảm giá của qúy khách vào đ
 $lang_module['coupons_check'] = 'Kiểm tra';
 $lang_module['coupons_discount'] = 'Giá trị giảm';
 $lang_module['coupons_total_amount'] = 'Giá trị đơn hàng áp dụng';
-$lang_module['coupons_free_shipping'] = 'Miễn phí vận chuyển';
 $lang_module['coupons_product'] = 'Sản phẩm áp dụng';
 $lang_module['coupons_begin_time'] = 'Ngày bắt đầu';
 $lang_module['coupons_end_time'] = 'Ngày kết thúc';

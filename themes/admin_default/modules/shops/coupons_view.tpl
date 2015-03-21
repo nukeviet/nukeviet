@@ -29,12 +29,6 @@
 				<td><strong>{LANG.coupons_uses_per_coupon}</strong></td>
 				<td>{DATA.uses_per_coupon_count}/{DATA.uses_per_coupon}</td>
 			</tr>
-			<tr>
-				<td><strong>{LANG.coupons_free_shipping}</strong></td>
-				<td>{DATA.free_shipping}</td>
-				<td><strong>{LANG.status}</strong></td>
-				<td>{DATA.status}</td>
-			</tr>
 		</tbody>
 	</table>
 </div>

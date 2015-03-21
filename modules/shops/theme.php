@@ -2779,10 +2779,6 @@ function coupons_info( $data_content, $coupons_check, $error )
 		{
 			$xtpl->parse( 'main.content.total_amount' );
 		}
-		if( $data_content['free_shipping'] )
-		{
-			$xtpl->parse( 'main.content.free_shipping' );
-		}
 
 		$xtpl->parse( 'main.content' );
 	}

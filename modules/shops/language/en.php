@@ -364,7 +364,6 @@ $lang_module['coupons_fill'] = 'Enter discount code here';
 $lang_module['coupons_check'] = 'Check';
 $lang_module['coupons_discount'] = 'Discount';
 $lang_module['coupons_total_amount'] = 'Total amount';
-$lang_module['coupons_free_shipping'] = 'Free shipping';
 $lang_module['coupons_product'] = 'Apply product';
 $lang_module['coupons_begin_time'] = 'Begin time';
 $lang_module['coupons_end_time'] = 'End time';
