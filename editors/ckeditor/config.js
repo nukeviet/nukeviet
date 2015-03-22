@@ -4,6 +4,7 @@
  */
 
 CKEDITOR.editorConfig = function( config ) {
+    config.enterMode = CKEDITOR.ENTER_BR;
 	config.language = nv_sitelang;
 	config.allowedContent = true;
 	config.extraPlugins = 'video,eqneditor,switchbar,tbvdownload';
@@ -43,4 +44,5 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'styles', items : [ 'Font', 'FontSize', 'TextColor', 'BGColor' ] },
 		{ name: 'tools', items : ['SwitchBar',  'Maximize'] },
 	];
+	
 };
