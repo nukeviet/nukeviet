@@ -1241,12 +1241,15 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
  */
 function nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields )
 {
-	global $module_info, $module_file, $lang_module, $module_name;
+	global $module_info, $module_file, $lang_module, $module_name, $global_config;
 
 	$xtpl = new XTemplate( 'viewdetailusers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' );
 	$xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
+	
+	$item['full_name'] = ( $global_config['name_show'] )  ? $item['first_name'] . ' ' . $item['last_name'] : $item['last_name'] . ' ' . $item['first_name'];
+	$item['full_name'] = trim( $item['full_name'] );
 
 	if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . '/' . $item['photo'] ) )
 	{
