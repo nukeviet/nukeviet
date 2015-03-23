@@ -197,12 +197,12 @@ header{
 	padding:10px;
 }
 
-#header #logo img{
+#header #logo a img{
 	height:80px;
 	float:left;
 }
 
-#header #logo h1{
+#header #logo a h1{
 	float:left;
 }
 
