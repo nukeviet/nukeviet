@@ -48,7 +48,7 @@
 <div class="content signed clearfix">
 	<p class="text-center">{LANG.wellcome}: 
 	    <strong>
-	           {USER.first_name}, {USER.last_name}
+	           {USER.full_name}
 	    </strong>
 	</p>
 	<hr />
