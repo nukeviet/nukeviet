@@ -34,15 +34,8 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 
 		if( nv_user_in_groups( $allowed ) )
 		{
-			if( defined( 'NV_IS_ADMIN' ) )
-			{
-				$content = $nv_Request->get_editor( 'content', '', NV_ALLOWED_HTML_TAGS );
-			}
-			else
-			{
-				$content = $nv_Request->get_title( 'content', 'post', '', 1 );
-				$content = nv_nl2br( $content, '<br />' );
-			}
+			$content = $nv_Request->get_title( 'content', 'post', '', 1 );
+			$content = nv_nl2br( $content, '<br />' );
 			$code = $nv_Request->get_title( 'code', 'post', '' );
 			$status = $module_config[$module]['auto_postcomm'];
 
