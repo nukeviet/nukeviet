@@ -1045,8 +1045,8 @@ function search_result_theme( $key, $numRecord, $per_pages, $page, $array_conten
 		{
 			$url_link = substr( $url_link, 0, strpos( $url_link, '?page=' ) );
 		}
-
-		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $page );
+		$_array_url = array( 'link' => $url_link, 'amp' => '&page=' );
+		$generate_page = nv_generate_page( $_array_url, $numRecord, $per_pages, $page );
 
 		$xtpl->assign( 'VIEW_PAGES', $generate_page );
 		$xtpl->parse( 'results.pages_result' );
