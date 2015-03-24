@@ -278,17 +278,6 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 				}
 			}
 		}
-		//neu nguoi dang nhap la admin se co trinh editor de binh luan
-		$xtpl->assign( 'editor', 0 );
-		/*if( defined( 'NV_IS_ADMIN' ) )
-		{
-			$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-		}
-		else{
-			$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-		}*/
-		$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-		$xtpl->assign( 'comment_content', $comment_content );
 
 		if( $show_captcha )
 		{
