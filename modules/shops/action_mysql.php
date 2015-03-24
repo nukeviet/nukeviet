@@ -99,6 +99,8 @@ elseif( $op != 'setup' )
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group_items';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity_logs';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_warehouse';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs_group';
@@ -240,8 +242,14 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_group_items (
   pro_id int(11) unsigned NOT NULL default '0',
   group_id int(11) unsigned NOT NULL default '0',
-  pro_quantity INT(11) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (pro_id, group_id)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_group_quantity (
+  pro_id int(11) unsigned NOT NULL default '0',
+  listgroup varchar(255) NOT NULL,
+  quantity int(11) unsigned NOT NULL,
+  UNIQUE KEY pro_id (pro_id,listgroup)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_warehouse (
@@ -266,9 +274,10 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs_group (
   id int(11) unsigned NOT NULL AUTO_INCREMENT,
   logid int(11) unsigned NOT NULL default '0',
-  groupid MEDIUMINT(8) unsigned NOT NULL default '0',
-  quantity INT(11) UNSIGNED NOT NULL DEFAULT '0'
+  listgroup varchar(255)NOT NULL,
+  quantity INT(11) UNSIGNED NOT NULL DEFAULT '0',
   price float NOT NULL DEFAULT '0',
+  money_unit char(3) NOT NULL,
   PRIMARY KEY (id),
   KEY logid (logid)
 ) ENGINE=MyISAM";

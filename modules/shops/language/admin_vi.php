@@ -623,3 +623,5 @@ $lang_module['warehouse_time'] = 'Thời gian thực hiện';
 $lang_module['warehouse_num_pro'] = 'Tổng sản phẩm thay đổi';
 $lang_module['warehouse_detail_info'] = 'Thông tin nhập chi tiết';
 $lang_module['warehouse_detail_group'] = 'Thuộc tính sản phẩm';
+$lang_module['warehouse_add_group_propties'] = 'Thêm nhóm thuộc tính';
+$lang_module['warehouse_chose_propties'] = 'Chọn';

@@ -1381,7 +1381,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 
 	// Nhom san pham
 	$listgroupid = GetGroupID( $data_content['id'] );
-
 	if( !empty( $listgroupid ) and !empty( $global_array_group ) )
 	{
 		foreach( $global_array_group as $groupid => $groupinfo )
@@ -1404,6 +1403,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			}
 		}
 		$xtpl->parse( 'main.group' );
+		$xtpl->parse( 'main.lock_btn_order' );
 	}
 
 	// Hien thi danh sach nhom san pham

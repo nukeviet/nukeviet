@@ -244,7 +244,7 @@ function nv_list_lang()
  * @param string $type
  * @return
  */
-function product_number_order( $listid, $listnum, $type = '-' )
+function product_number_order( $listid, $listnum, $listgroup, $type = '-' )
 {
 	global $db_config, $db, $module_data;
 
@@ -256,6 +256,12 @@ function product_number_order( $listid, $listnum, $type = '-' )
 
 			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET product_number = product_number ' . $type . ' ' . intval( $listnum[$i] ) . ' WHERE id =' . $id;
 			$db->query( $sql );
+
+			if( !empty( $listgroup ) )
+			{
+				$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity SET quantity = quantity ' . $type . ' ' . intval( $listnum[$i] ) . ' WHERE pro_id =' . $id . ' AND listgroup=' . $db->quote( $listgroup[$i] );
+				$db->query( $sql );
+			}
 		}
 	}
 }

@@ -639,7 +639,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 					if( !empty( $rowcontent['group_id'] ) )
 					{
-						$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_items(pro_id, group_id, pro_quantity) VALUES(' . $rowcontent['id'] . ', :group_id, 0)' );
+						$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_items(pro_id, group_id) VALUES(' . $rowcontent['id'] . ', :group_id)' );
 						foreach( $rowcontent['group_id'] as $group_id_i )
 						{
 							$stmt->bindParam( ':group_id', $group_id_i, PDO::PARAM_STR );

@@ -31,10 +31,10 @@ if( $wid > 0 )
 	while( $row = $result->fetch() )
 	{
 		$row['group_info'] = array();
-		$result1 = $db->query( 'SELECT groupid, quantity, price, money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs_group WHERE logid=' . $row['logid'] );
-		while( list( $groupid, $quantity, $price, $money_unit ) = $result1->fetch( 3 ) )
+		$result1 = $db->query( 'SELECT listgroup, quantity, price, money_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_warehouse_logs_group WHERE logid=' . $row['logid'] );
+		while( list( $listgroup, $quantity, $price, $money_unit ) = $result1->fetch( 3 ) )
 		{
-			$row['group_info'][] = array( 'groupid' => $groupid, 'quantity' => $quantity, 'price' => $price, 'money_unit' => $money_unit ) ;
+			$row['group_info'][] = array( 'listgroup' => $listgroup, 'quantity' => $quantity, 'price' => $price, 'money_unit' => $money_unit ) ;
 		}
 		$array_warehouse['logs'][$row['logid']] = $row;
 	}
@@ -143,16 +143,21 @@ if( $wid > 0 )
 
 			if( !empty( $logs['group_info'] ) )
 			{
-				foreach( $logs['group_info'] as $group_info )
+				foreach( $logs['group_info'] as $logs_info )
 				{
-					if( $group_info['groupid'] )
+					if( $logs_info['listgroup'] )
 					{
 						$have_group = 1;
-						$group_info['price'] = nv_number_format( $group_info['price'] );
-						$group = $global_array_group[$group_info['groupid']];
-						$group_info['parent_title'] = $global_array_group[$group['parentid']]['title'];
-						$group_info['title'] = $global_array_group[$group['groupid']]['title'];
-						$xtpl->assign( 'GROUP', $group_info );
+						$logs_info['price'] = nv_number_format( $logs_info['price'] );
+						$logs_info['listgroup'] = explode( ',', $logs_info['listgroup'] );
+						foreach( $logs_info['listgroup'] as $groupid )
+						{
+							$group = $global_array_group[$groupid];
+							$group['parent_title'] = $global_array_group[$group['parentid']]['title'];
+							$xtpl->assign( 'GROUP', $group );
+							$xtpl->parse( 'main.view.loop.group.loop.group_logs' );
+						}
+						$xtpl->assign( 'G_LOGS', $logs_info );
 						$xtpl->parse( 'main.view.loop.group.loop' );
 					}
 				}

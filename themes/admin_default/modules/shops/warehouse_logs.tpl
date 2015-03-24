@@ -197,13 +197,15 @@
 					<!-- BEGIN: loop -->
 					<div class="row">
 						<div class="col-xs-8 text-right">
-							({GROUP.parent_title}): {GROUP.title}
+							<!-- BEGIN: group_logs -->
+							<label class="label label-success" data-toggle="tooltip" data-placement="top" title="" data-original-title="{GROUP.parent_title}">{GROUP.title}</label>
+							<!-- END: group_logs -->
 						</div>
 						<div class="col-xs-8 text-center">
-							{GROUP.quantity}
+							{G_LOGS.quantity}
 						</div>
 						<div class="col-xs-8">
-							{GROUP.price} {GROUP.money_unit}
+							{G_LOGS.price} {G_LOGS.money_unit}
 						</div>
 					</div>
 					<hr />
