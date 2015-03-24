@@ -33,7 +33,8 @@ elseif( defined( 'NV_IS_USER_FORUM' ) )
 		{
 			define( 'NV_IS_USER', true );
 
-			if( empty( $user_info['first_name'] ) ) $user_info['first_name'] = $user_info['username'];
+			$user_info['full_name'] = ( $global_config['name_show'] )  ? $user_info['first_name'] . ' ' . $user_info['last_name'] : $user_info['last_name'] . ' ' . $user_info['first_name'];
+			$user_info['full_name'] = trim( $user_info['full_name'] );
 
 			$user_info['in_groups'] = nv_user_groups( $user_info['in_groups'] );
 			$user_info['st_login'] = ! empty( $user_info['password'] ) ? true : false;

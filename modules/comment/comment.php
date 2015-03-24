@@ -242,7 +242,7 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 	{
 		if( defined( 'NV_IS_USER' ) )
 		{
-			$xtpl->assign( 'NAME', $user_info['first_name'] );
+			$xtpl->assign( 'NAME', $user_info['full_name'] );
 			$xtpl->assign( 'EMAIL', $user_info['email'] );
 			$xtpl->assign( 'DISABLED', ' disabled="disabled"' );
 		}
