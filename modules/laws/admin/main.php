@@ -214,8 +214,9 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
             {
 				if ( preg_match( "/^" . str_replace( "/", "\/", NV_BASE_SITEURL . NV_UPLOADS_DIR ) . "\//", $_file ) )
 				{
-					$_file = substr ( $_file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR ) );
-					if( file_exists( NV_UPLOADS_REAL_DIR . $_file ) )
+					$_file = substr ( $_file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR .'/'. $module_name.'/') );
+					
+					if( file_exists( NV_UPLOADS_REAL_DIR .'/'. $module_name.'/'.$_file ) )
 					{
 						$post['files'][] = $_file;
 					}
@@ -374,6 +375,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         $post['aid'] = $post['cid'] = $post['sid'] = $post['sgid'] = $post['who_view'] = $post['who_download'] = 0;
 
         $post['groupcss'] = $post['groupcss2'] = "groupcss0";
+		$post['files'] = '';
 
 		$post['select0'] = " selected=\"selected\"";
         $post['select1'] = "";
@@ -463,7 +465,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         {
             if ( ! empty( $_file ) )
             {
-                $xtpl->assign( 'FILEUPL', array( 'id' => $_id, 'value' => NV_BASE_SITEURL . NV_UPLOADS_DIR . $_file ) );
+                $xtpl->assign( 'FILEUPL', array( 'id' => $_id, 'value' => '/'.NV_UPLOADS_DIR .'/'. $module_name.'/'.$_file ) );
                 $xtpl->parse( 'add.files' );
             }
         }
