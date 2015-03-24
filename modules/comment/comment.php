@@ -280,25 +280,14 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 		}
 		//neu nguoi dang nhap la admin se co trinh editor de binh luan
 		$xtpl->assign( 'editor', 0 );
-		if( defined( 'NV_IS_ADMIN' ) )
+		/*if( defined( 'NV_IS_ADMIN' ) )
 		{
-			if( defined( 'NV_EDITOR' ) )
-			{
-				require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
-			}
-			if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
-			{
-				$xtpl->assign( 'editor', 1 );
-				$comment_content = nv_aleditor( 'commentcontent', '100%', '100px', '', '' );
-			}
-			else
-			{
-				$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-			}
+			$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
 		}
 		else{
 			$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-		}
+		}*/
+		$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
 		$xtpl->assign( 'comment_content', $comment_content );
 
 		if( $show_captcha )
@@ -358,6 +347,11 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 			else
 			{
 				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg';
+			}
+			if( ! empty ($comment_array_i['userid']) )
+			{
+				$comment_array_i['post_name'] = ( $global_config['name_show'] )  ? $comment_array_i['first_name'] . ' ' . $comment_array_i['last_name'] : $comment_array_i['last_name'] . ' ' . $comment_array_i['first_name'];
+				$comment_array_i['post_name'] = trim( $comment_array_i['post_name'] );
 			}
 
 			$xtpl->assign( 'COMMENT', $comment_array_i );
