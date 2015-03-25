@@ -639,7 +639,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 					if( !empty( $rowcontent['group_id'] ) )
 					{
-						$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_items VALUES(' . $rowcontent['id'] . ', :group_id)' );
+						$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_items(pro_id, group_id) VALUES(' . $rowcontent['id'] . ', :group_id)' );
 						foreach( $rowcontent['group_id'] as $group_id_i )
 						{
 							$stmt->bindParam( ':group_id', $group_id_i, PDO::PARAM_STR );
@@ -1127,11 +1127,6 @@ $xtpl->assign( 'edit_bodytext', $edits );
 if( $rowcontent['id'] > 0 and !$is_copy )
 {
 	$op = 'items';
-	$xtpl->parse( 'main.edit' );
-}
-else
-{
-	$xtpl->parse( 'main.add' );
 }
 
 if( empty( $rowcontent['alias'] ) )

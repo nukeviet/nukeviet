@@ -368,7 +368,6 @@ $lang_module['coupons_type_fixed_amount'] = 'Fixed amount';
 $lang_module['coupons_discount'] = 'Discount';
 $lang_module['coupons_total_amount'] = 'Total amount';
 $lang_module['coupons_total_amount_note'] = 'Leave blank if not determine the order value';
-$lang_module['coupons_free_shipping'] = 'Free shipping';
 $lang_module['coupons_product'] = 'Apply product';
 $lang_module['coupons_product_note'] = 'If you enter the discount only applies to the total price of these products, do not apply to the total order';
 $lang_module['coupons_product_custom'] = 'Custom product';

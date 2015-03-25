@@ -393,7 +393,7 @@ $lang_module['1star'] = '1 sao';
 
 $lang_module['custom'] = 'Mở rộng';
 $lang_module['product_empty'] = 'Hết hàng';
-$lang_module['product_number'] = 'còn lại';
+$lang_module['product_number'] = 'Còn lại';
 
 $lang_module['coupon'] = 'Giảm giá';
 $lang_module['coupons'] = 'Sử dụng mã giảm giá';
@@ -401,7 +401,6 @@ $lang_module['coupons_fill'] = 'Nhập mã giảm giá của qúy khách vào đ
 $lang_module['coupons_check'] = 'Kiểm tra';
 $lang_module['coupons_discount'] = 'Giá trị giảm';
 $lang_module['coupons_total_amount'] = 'Giá trị đơn hàng áp dụng';
-$lang_module['coupons_free_shipping'] = 'Miễn phí vận chuyển';
 $lang_module['coupons_product'] = 'Sản phẩm áp dụng';
 $lang_module['coupons_begin_time'] = 'Ngày bắt đầu';
 $lang_module['coupons_end_time'] = 'Ngày kết thúc';
@@ -439,7 +438,8 @@ $lang_module['shipping_info_weight'] = 'Tổng khối lượng';
 $lang_module['shipping_shops'] = 'Cửa hàng';
 $lang_module['shipping_shops_chose'] = 'Chọn cửa hàng';
 $lang_module['shipping_carrier_chose'] = 'Chọn dịch vụ vận chuyển';
-$lang_module['shipping_address_extend'] = 'Thông tin thêm';
+$lang_module['shipping_address_extend'] = 'Địa chỉ chi tiết';
+$lang_module['shipping_address_extend_empty'] = 'Vui lòng nhập địa chỉ chi tiết';
 $lang_module['shipping_address_note'] = 'Để hệ thống có thể tính toán đúng chi phí vận chuyển, vui lòng chọn đơn vị địa chính gần nhất với khu vực nhận hàng của bạn ở hộp chọn bên trên.';
 $lang_module['shipping_error'] = 'Hệ thống không thể đưa ra chi phí vận chuyển. Vui lòng liên hệ với người quản lý hoặc chọn địa điểm thuộc cấp lớn hơn (nếu có) hay nhỏ hơn (nếu có) địa điểm hiện tại.';
 

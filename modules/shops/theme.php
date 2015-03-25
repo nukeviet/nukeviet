@@ -1200,7 +1200,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	{
 		$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
 		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
+		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
 		define( 'SHADOWBOX', true );
 	}
 
@@ -1381,7 +1381,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 
 	// Nhom san pham
 	$listgroupid = GetGroupID( $data_content['id'] );
-
 	if( !empty( $listgroupid ) and !empty( $global_array_group ) )
 	{
 		foreach( $global_array_group as $groupid => $groupinfo )
@@ -1404,6 +1403,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			}
 		}
 		$xtpl->parse( 'main.group' );
+		$xtpl->parse( 'main.lock_btn_order' );
 	}
 
 	// Hien thi danh sach nhom san pham
@@ -2778,10 +2778,6 @@ function coupons_info( $data_content, $coupons_check, $error )
 		if( !empty( $data_content['total_amount'] ) )
 		{
 			$xtpl->parse( 'main.content.total_amount' );
-		}
-		if( $data_content['free_shipping'] )
-		{
-			$xtpl->parse( 'main.content.free_shipping' );
 		}
 
 		$xtpl->parse( 'main.content' );

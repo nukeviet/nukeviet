@@ -11,9 +11,6 @@
 		<!-- BEGIN: total_amount -->
 		<li><strong>{LANG.coupons_total_amount}</strong>: {DATA.total_amount} {MONEY_UNIT}</li>
 		<!-- END: total_amount -->
-		<!-- BEGIN: free_shipping -->
-		<li><strong>{LANG.coupons_free_shipping}</strong>: {GLANG.yes}</li>
-		<!-- END: free_shipping -->
 		<li><strong>{LANG.coupons_begin_time}</strong>: {DATA.date_start}</li>
 		<li><strong>{LANG.coupons_end_time}</strong>: {DATA.date_end}</li>
 	</ul>

@@ -136,7 +136,7 @@
 						<!-- BEGIN: items -->
 						<div class="col-xs-8 col-md-12">
 							<div class="form-group">
-								<select class="form-control" name="group">
+								<select class="form-control" name="group" onchange="check_price( {proid}, '{pro_unit}' )">
 									<!-- BEGIN: header -->
 									<option value="">---{HEADER}---</option>
 									<!-- END: header -->
@@ -208,14 +208,14 @@
 
 			<!-- BEGIN: order -->
 			<div class="pull-right" style="margin-top: 6px">
-				<span class="pull-left text-muted" style="margin: 6px 20px 0">{LANG.product_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
+				<span class="pull-left text-muted" style="margin: 6px 20px 0" id="product_number">{LANG.product_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
 				<input type="number" name="num" value="1" id="pnum" class="pull-left form-control" style="width: 70px">
 				<a href="javascript:void(0)" data-id="{proid}" title="{title_pro}" onclick="cartorder_detail(this, '{POPUP}', 0)">
-				<button class="btn btn-danger btn-xs" style="margin: 5px 0 0 5px">
+				<button class="btn btn-danger btn-xs btn-order" style="margin: 5px 0 0 5px">
 					{LANG.add_cart}
 				</button></a>
 				<a href="javascript:void(0)" data-id="{proid}" title="{title_pro}" onclick="cartorder_detail(this, '{POPUP}', 1)">
-				<button class="btn btn-success btn-xs" style="margin: 5px 0 0 5px">
+				<button class="btn btn-success btn-xs btn-order" style="margin: 5px 0 0 5px">
 					{LANG.buy_now}
 				</button></a>
 			</div>
@@ -416,4 +416,11 @@
 	var detail_error_group = '{LANG.detail_error_group}';
 	new CBPFWTabs(document.getElementById('tabs'));
 </script>
+
+<!-- BEGIN: lock_btn_order -->
+<script type="text/javascript">
+	$('#pnum, .btn-order').attr('disabled', true);
+</script>
+<!-- END: lock_btn_order -->
+
 <!-- END: main -->
