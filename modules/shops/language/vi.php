@@ -393,7 +393,7 @@ $lang_module['1star'] = '1 sao';
 
 $lang_module['custom'] = 'Mở rộng';
 $lang_module['product_empty'] = 'Hết hàng';
-$lang_module['product_number'] = 'còn lại';
+$lang_module['product_number'] = 'Còn lại';
 
 $lang_module['coupon'] = 'Giảm giá';
 $lang_module['coupons'] = 'Sử dụng mã giảm giá';

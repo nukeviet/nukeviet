@@ -195,6 +195,19 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 				$product_number = $product_number + ( isset( $_SESSION[$module_data . '_cart'][$id]['num_old'] ) ? $_SESSION[$module_data . '_cart'][$id]['num_old'] : $_SESSION[$module_data . '_cart'][$id]['num'] );
 			}
 
+			if( !empty( $group ) )
+			{
+				$group = explode( ',', $group );
+				asort( $group );
+				$group = implode( ',', $group );
+				$product_number = 0;
+				$result = $db->query( 'SELECT quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id . ' AND listgroup="' . $group . '"' );
+				if( $result )
+				{
+					$product_number = $result->fetchColumn();
+				}
+			}
+
 			if( $number > $product_number and $number > 0 and empty( $pro_config['active_order_number'] ) )
 			{
 				$number = $_SESSION[$module_data . '_cart'][$id]['num'] = $product_number;

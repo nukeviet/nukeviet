@@ -391,12 +391,13 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 		'link_seller' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=seller&amp;pro_id=' . $id . '&amp;nv_redirect=' . nv_base64_encode( $base_url ),
 		'link_copy' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;copy&amp;id=' . $id,
+		'link_warehouse' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=warehouse&amp;listid=' . $id . '&amp;checkss=' . md5( $global_config['sitekey'] . session_id() ),
 		'title' => $title,
 		'publtime' => $publtime,
 		'edittime' => $edittime,
 		'hitstotal' => $hitstotal,
 		'num_sell' => $num_sell,
-		'product_unit' => $array_unit[$product_unit][NV_LANG_DATA . '_title'],
+		'product_unit' => isset( $array_unit[$product_unit] ) ? $array_unit[$product_unit][NV_LANG_DATA . '_title'] : '',
 		'status' => $lang_module['status_' . $status],
 		'admin_id' => !empty( $username ) ? $username : '',
 		'product_number' => $product_number,
@@ -426,7 +427,8 @@ $array_list_action = array(
 	'delete' => $lang_global['delete'],
 	'publtime' => $lang_module['publtime'],
 	'exptime' => $lang_module['exptime'],
-	'addtoblock' => $lang_module['addtoblock']
+	'addtoblock' => $lang_module['addtoblock'],
+	'warehouse' => $lang_module['warehouse']
 );
 
 while( list( $catid_i, $title_i ) = each( $array_list_action ) )

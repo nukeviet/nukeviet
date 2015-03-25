@@ -73,8 +73,7 @@ function cartorder_detail(a_ob, popup, buy_now) {
 	var num = $('#pnum').val();
 	var id = $(a_ob).attr("data-id");
 	var group = '';
-
-	var i = 0, check = 1;
+	var i = 0;
     $('select[name=group] option:selected').each(function(){
     	var value = $(this).val();
     	if( value != '' )
@@ -89,15 +88,9 @@ function cartorder_detail(a_ob, popup, buy_now) {
     			group = group + ',' + value;
     		}
     	}
-    	else
-    	{
-    		alert(detail_error_group);
-    		check = 0;
-    		return false;
-    	}
 	});
 
-	check && $.ajax({
+	$.ajax({
 		type : "POST",
 		url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setcart' + '&id=' + id + "&group=" + group + "&nocache=" + new Date().getTime(),
 		data : 'num=' + num,
@@ -327,6 +320,37 @@ function payment_point( order_id, checkss, lang_confirm )
 				else
 				{
 					alert( s[1] );
+				}
+			}
+		});
+	}
+}
+
+function check_price( id_pro, pro_unit )
+{
+	var data = [];
+    $('select[name=group] option:selected').each(function(){
+    	var value = $(this).val();
+    	if( value != '' ){
+    		data.push( value );
+    	}
+	});
+
+	if( data.length > 0 ){
+		$.ajax({
+			method: "POST",
+			url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=detail&nocache=' + new Date().getTime(),
+			data: 'check_quantity=1&id_pro='+id_pro+'&pro_unit='+pro_unit+'&listid=' + data,
+			success : function(res) {
+				var s = res.split('_');
+				if( s[0] == 'OK' ){
+					$('#product_number').html( s[1] );
+					$('#pnum, .btn-order').attr('disabled', false);
+					$('#product_number').html( s[1] ).removeClass( 'text-danger' );
+				}
+				else{
+					$('#pnum, .btn-order').attr('disabled', true);
+					$('#product_number').html( s[1] ).addClass( 'text-danger' );
 				}
 			}
 		});
