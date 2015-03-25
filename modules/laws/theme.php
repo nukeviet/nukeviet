@@ -55,8 +55,7 @@ function nv_theme_laws_main ( $array_data, $generate_page )
 function nv_theme_laws_detail ( $array_data )
 {
     global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $client_info;
-
-    $xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+    $xtpl = new XTemplate( $module_info['funcs'][$op]['func_name'] . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
     $xtpl->assign( 'LANG', $lang_module );
 
 	$array_data['publtime'] = $array_data['publtime'] ? nv_date( "d/m/Y", $array_data['publtime'] ) : "N/A";

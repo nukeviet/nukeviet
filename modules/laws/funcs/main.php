@@ -25,6 +25,7 @@ $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DA
 $order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
+
 $result = $db->query( $sql );
 $query = $db->query( "SELECT FOUND_ROWS()" );
 $all_page = $query->fetchColumn();
@@ -38,7 +39,7 @@ while ( $row = $result->fetch() )
 	$row['areatitle'] = $nv_laws_listarea[$row['aid']]['title'];
 	$row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
 	$row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
-	$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'];
+	$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'];
 	$row['stt'] = $stt;
 
 	if( $nv_laws_setting['down_in_home'] )
@@ -49,14 +50,15 @@ while ( $row = $result->fetch() )
 			$row['files'] = explode( ",", $row['files'] );
 			$files = $row['files'];
 			$row['files'] = array();
-
+			
 			foreach( $files as $id => $file )
 			{
+				
 				$file_title = basename( $file );
 				$row['files'][] = array(
 					"title" => $file_title,
 					"titledown" => $lang_module['download'] . ' ' . ( count( $files ) > 1 ? $id + 1 : '' ),
-					"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
+					"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
 				);
 			}
 		}
