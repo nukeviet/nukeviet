@@ -19,8 +19,7 @@ $allow_func = array( 'main', 'setuplayout', 'activatetheme', 'change_layout', 'c
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$submenu['autoinstall'] = $lang_module['autoinstall'];
-	$allow_func[] = 'autoinstall';
+	$submenu['package_theme_module'] = $lang_module['package_theme_module'];
 	$allow_func[] = 'package_theme_module';
 	$allow_func[] = 'getfile';
 }
