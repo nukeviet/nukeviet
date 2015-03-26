@@ -11,6 +11,27 @@
 if( !defined( 'NV_IS_MOD_SHOPS' ) )
 	die( 'Stop!!!' );
 
+if( $nv_Request->isset_request( 'check_quantity', 'post' ) )
+{
+	$id_pro = $nv_Request->get_int( 'id_pro', 'post', 0 );
+	$unit = $nv_Request->get_string( 'pro_unit', 'post', '' );
+	$listid = $nv_Request->get_string( 'listid', 'post' );
+	if( empty( $listid ) or empty( $id_pro ) ) die( 'NO' );
+
+	$listid = explode( ',', $listid );
+	asort( $listid );
+	$listid = implode( ',', $listid );
+	$quantity = $db->query( 'SELECT quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id_pro . ' AND listgroup="' . $listid . '"' )->fetchColumn();
+	if( empty( $quantity ) )
+	{
+		die( 'NO_' . $lang_module['product_empty'] );
+	}
+	else
+	{
+		die( 'OK_' . $lang_module['product_number'] . ': ' . $quantity . ' ' . $unit );
+	}
+}
+
 if( empty( $id ) )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );

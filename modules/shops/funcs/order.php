@@ -70,7 +70,7 @@ $shipping_data = array( 'list_location' => array(), 'list_carrier' => array(), '
 
 // Ma giam gia
 $array_counpons = array( 'code' => '', 'discount' => 0, 'check' => 0 );
-$counpons = array( 'total_amount' => 0, 'date_start' => 0, 'uses_per_coupon_count' => 0, 'uses_per_coupon' => 0, 'type' => 0, 'discount' => 0 );
+$counpons = array( 'id' => 0, 'total_amount' => 0, 'date_start' => 0, 'uses_per_coupon_count' => 0, 'uses_per_coupon' => 0, 'type' => 0, 'discount' => 0 );
 if( ! empty( $_SESSION[$module_data . '_coupons'] ) )
 {
 	$array_counpons = $_SESSION[$module_data . '_coupons'];
@@ -94,7 +94,7 @@ if( $post_order == 1 )
 	$total_weight = 0;
 	$total_weight_price = 0;
 	$i = 0;
-	$listid = $listnum = $listprice = $listid_old = $listnum_old = array();
+	$listid = $listnum = $listprice = $listgroup = $listid_old = $listnum_old = array();
 
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
@@ -321,13 +321,20 @@ if( $post_order == 1 )
 					$listid[] = $pro_id;
 					$listnum[] = $info['num'];
 					$listprice[] = $info['price'];
+					$list = '';
+					if( !empty( $info['group'] ) )
+					{
+						asort( $info['group'] );
+						$list = implode( ',', $info['group'] );
+					}
+					$listgroup[] = $list;
 				}
 			}
 
 			// Neu khong tat chuc nang dat hang vo han thi tru so sp trong kho
 			if( $pro_config['active_order_number'] == '0' )
 			{
-				product_number_order( $listid, $listnum );
+				product_number_order( $listid, $listnum, $listgroup );
 			}
 
 			// Cong vao so luong san pham da ban
