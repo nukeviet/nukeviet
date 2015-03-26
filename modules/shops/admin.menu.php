@@ -39,7 +39,7 @@ if( $shop_module_config['use_coupons'] or defined( 'NV_IS_SPADMIN' ) )
 	$submenu['coupons'] = $lang_module['coupons'];
 }
 
-if( $shop_module_config['point_active'] or defined( 'NV_IS_SPADMIN' ) )
+if( $shop_module_config['point_active'] )
 {
 	$submenu['point'] = $lang_module['point'];
 }
