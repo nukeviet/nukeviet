@@ -235,11 +235,11 @@
 				<col span="3"/>
 			</colgroup>
 			<thead>
-				<tr class="text-center">
-					<th>{LANG.field_number}</th>
-					<th>{LANG.Value}</th>
-					<th>{LANG.field_text}</th>
-					<th>{LANG.field_default_value}</th>
+				<tr>
+					<th class="text-center">{LANG.field_number}</th>
+					<th class="text-center">{LANG.field_value}</th>
+					<th class="text-center">{LANG.field_text}</th>
+					<th class="text-center">{LANG.field_default_value}</th>
 				</tr>
 			</thead>
 			<tfoot>

@@ -63,7 +63,7 @@ for( $index = $count; $index >= 0; --$index )
 
 	$xtpl->parse( 'main.loop' );
 }
-
+$xtpl->assign( 'BACKUPNOW', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=download&amp;checkss=' . md5( $client_info['session_id'] . $global_config['sitekey'] ) );
 $page_title = $lang_module['file_backup'];
 
 $xtpl->parse( 'main' );

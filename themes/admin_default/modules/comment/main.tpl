@@ -2,58 +2,87 @@
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<div class="well">
+	<form action="{NV_BASE_ADMINURL}index.php" method="get">
+		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
+		<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
 
-<form action="{NV_BASE_ADMINURL}index.php" method="get">
-	<br />
-	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
-	<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
-	<table>
-		<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.search_note}</caption>
-		<tr>
-			<td>{LANG.search_module}:</td>
-			<td>
-				<select name="module" class="form-control w200 pull-left" style="margin-bottom: 10px">
-					<!-- BEGIN: module -->
-					<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
-					<!-- END: module -->
-				</select>
-			</td>
-			<td>{LANG.search_status}:</td>
-			<td>
-				<select name="sstatus" class="form-control w200 pull-left" style="margin-bottom: 10px">
-					<!-- BEGIN: search_status -->
-					<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
-					<!-- END: search_status -->
-				</select>
-			</td>
-			<td>{LANG.search_per_page}:</td>
-			<td>
-				<select name="per_page" class="form-control w200 pull-left">
-					<!-- BEGIN: per_page -->
-					<option value="{OPTION.page}" {OPTION.selected} >{OPTION.page}</option>
-					<!-- END: per_page -->
-				</select>
-			</td>
-			<td><input name="from_date" id="from_date" value="{FROM.from_date}" class="form-control w100 pull-left" maxlength="10" type="text" placeholder="{LANG.from_date}" /></td>
-			<td><input name="to_date" id="to_date" value="{FROM.to_date}" class="form-control w100 pull-left" maxlength="10" type="text" placeholder="{LANG.to_date}" /></td>
-		</tr>
-		<tr>
-			<td>{LANG.search_key}:</td>
-			<td><input type="text" value="{FROM.q}" autofocus="autofocus" maxlength="64" name="q" class="form-control w200" /></td>
-			<td>{LANG.search_type}:</td>
-			<td>
-				<select name="stype" class="form-control w200">
-					<!-- BEGIN: search_type -->
-					<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
-					<!-- END: search_type -->
-				</select>
-			</td>
-			<td><input type="submit" value="{LANG.search}" class="btn btn-info" /></td>
-		</tr>
-	</table>
-</form>
+		<div class="row">
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<input type="text" value="{FROM.q}" autofocus="autofocus" maxlength="64" name="q" class="form-control" placeholder="{LANG.search_key}" />
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<select name="stype" class="form-control">
+						<option value="">{LANG.search_type}</option>
+						<!-- BEGIN: search_type -->
+						<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
+						<!-- END: search_type -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<select name="module" class="form-control">
+						<!-- BEGIN: module -->
+						<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
+						<!-- END: module -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<select name="sstatus" class="form-control" style="margin-bottom: 10px">
+						<!-- BEGIN: search_status -->
+						<option value="{OPTION.key}" {OPTION.selected} >{OPTION.title}</option>
+						<!-- END: search_status -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<select name="per_page" class="form-control">
+						<option value="">{LANG.search_per_page}</option>
+						<!-- BEGIN: per_page -->
+						<option value="{OPTION.page}" {OPTION.selected} >{OPTION.page}</option>
+						<!-- END: per_page -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<div class="input-group">
+						<input type="text" class="form-control" name="from_date" id="from_date" value="{FROM.from_date}" readonly="readonly" placeholder="{LANG.from_date}">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="from-btn">
+								<em class="fa fa-calendar fa-fix">&nbsp;</em>
+							</button> </span>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<div class="input-group">
+						<input type="text" class="form-control" name="to_date" id="to_date" value="{FROM.to_date}" readonly="readonly" placeholder="{LANG.to_date}">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="to-btn">
+								<em class="fa fa-calendar fa-fix">&nbsp;</em>
+							</button> </span>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<input type="submit" value="{LANG.search}" class="btn btn-info" />
+				</div>
+			</div>
+		</div>
+		<span class="help-block">{LANG.search_note}</span>
+	</form>
+</div>
 
-<br/>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
@@ -76,22 +105,27 @@
 		</thead>
 		<tfoot>
 			<tr>
-				<td colspan="3">
+				<td colspan="6">
 					<em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp;
 					<em class="fa fa-circle-o fa-lg">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>
-					<span style="width:100px;display:inline-block">&nbsp;</span>
-					<em class="fa fa-exclamation-circle fa-lg">&nbsp;</em><a class="disable" href="javascript:void(0);">{LANG.disable}</a>
-					<em class="fa fa-external-link fa-lg">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a>
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a>
-				</td>
-				<td colspan="3" class="text-center">
-				<!-- BEGIN: generate_page -->
-				<div class="text-center">
-					{GENERATE_PAGE}
-				</div>
-				<!-- END: generate_page -->
+					<div class="pull-right">
+						<em class="fa fa-exclamation-circle fa-lg">&nbsp;</em>
+						<a class="disable" href="javascript:void(0);">{LANG.disable}</a>&nbsp;&nbsp;
+						<em class="fa fa-external-link fa-lg">&nbsp;</em><a class="enable" href="javascript:void(0);">{LANG.enable}</a>&nbsp;&nbsp;
+						<em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="delete" href="javascript:void(0);">{LANG.delete}</a>
+					</div>
+					<div class="clear"></div>
 				</td>
 			</tr>
+			<!-- BEGIN: generate_page -->
+			<tr>
+				<td colspan="6" class="text-center">
+					<div class="text-center">
+						{GENERATE_PAGE}
+					</div>
+				</td>
+			</tr>
+			<!-- END: generate_page -->
 		</tfoot>
 		<tbody>
 			<!-- BEGIN: loop -->
@@ -113,14 +147,20 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <script type="text/javascript">
-	$("#from_date,#to_date").datepicker({
-		showOn : "both",
-		dateFormat : "dd/mm/yy",
-		changeMonth : true,
-		changeYear : true,
-		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
-		buttonImageOnly : true
+	$(function() {
+		$("#from_date, #to_date").datepicker({
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			showOn : 'focus'
+		});
+		$('#to-btn').click(function(){
+			$("#to_date").datepicker('show');
+		});
+		$('#from-btn').click(function(){
+			$("#from_date").datepicker('show');
+		});
 	});
 
 	$("#checkall").click(function() {

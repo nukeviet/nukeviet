@@ -1,36 +1,59 @@
 <!-- BEGIN: main -->
 <div class="well">
-	<form class="navbar-form" action="{NV_BASE_ADMINURL}index.php" method="get" class="form-inline" role="form">
+	<form action="{NV_BASE_ADMINURL}index.php" method="get">
 		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 		<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
-		
-		<select class="form-control" name="catid">
-			<!-- BEGIN: cat_content -->
-			<option value="{CAT_CONTENT.value}" {CAT_CONTENT.selected} >{CAT_CONTENT.title}</option>
-			<!-- END: cat_content -->
-		</select>
-		<label> {LANG.search_type}: </label>
-		<select class="form-control" name="stype">
-			<!-- BEGIN: search_type -->
-			<option value="{SEARCH_TYPE.key}" {SEARCH_TYPE.selected} >{SEARCH_TYPE.value}</option>
-			<!-- END: search_type -->
-		</select>
-		<label> {LANG.search_status}: </label>
-		<select class="form-control" name="sstatus">
-			<!-- BEGIN: search_status -->
-			<option value="{SEARCH_STATUS.key}" {SEARCH_STATUS.selected} >{SEARCH_STATUS.value}</option>
-			<!-- END: search_status -->
-		</select>
-		<label> {LANG.search_per_page}: </label>
-		<select class="form-control" name="per_page">
-			<!-- BEGIN: s_per_page -->
-			<option value="{SEARCH_PER_PAGE.page}" {SEARCH_PER_PAGE.selected}>{SEARCH_PER_PAGE.page}</option>
-			<!-- END: s_per_page -->
-		</select>
-		<input class="form-control" type="text" value="{Q}" maxlength="64" name="q" placeholder="{LANG.search_key}" />
-		<input class="btn btn-primary" type="submit" value="{LANG.search}" />
-		<br />
-		<input type="hidden" name="checkss" value="{CHECKSS}" /><br />
+
+		<div class="row">
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<input class="form-control" type="text" value="{Q}" maxlength="64" name="q" placeholder="{LANG.search_key}" />
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-4">
+				<div class="form-group">
+					<select class="form-control" name="stype">
+						<!-- BEGIN: search_type -->
+						<option value="{SEARCH_TYPE.key}" {SEARCH_TYPE.selected} >{SEARCH_TYPE.value}</option>
+						<!-- END: search_type -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
+				<div class="form-group">
+					<select class="form-control" name="catid">
+						<!-- BEGIN: cat_content -->
+						<option value="{CAT_CONTENT.value}" {CAT_CONTENT.selected} >{CAT_CONTENT.title}</option>
+						<!-- END: cat_content -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="form-group">
+					<select class="form-control" name="sstatus">
+						<!-- BEGIN: search_status -->
+						<option value="{SEARCH_STATUS.key}" {SEARCH_STATUS.selected} >{SEARCH_STATUS.value}</option>
+						<!-- END: search_status -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-2">
+				<div class="form-group">
+					<select class="form-control" name="per_page">
+						<option value="">{LANG.search_per_page}</option>
+						<!-- BEGIN: s_per_page -->
+						<option value="{SEARCH_PER_PAGE.page}" {SEARCH_PER_PAGE.selected}>{SEARCH_PER_PAGE.page}</option>
+						<!-- END: s_per_page -->
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-3">
+				<div class="form-group">
+					<input class="btn btn-primary" type="submit" value="{LANG.search}" />
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="checkss" value="{CHECKSS}" />
 		<label><em>{LANG.search_note}</em></label>
 	</form>
 </div>
@@ -43,8 +66,8 @@
 					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
 					<th class="text-center"><a href="{base_url_name}">{LANG.name}</a></th>
 					<th class="text-center"><a href="{base_url_publtime}">{LANG.content_publ_date}</a></th>
-					<th class="text-center">{LANG.content_admin}</th>
-					<th class="text-center">{LANG.status}</th>
+					<th>{LANG.content_admin}</th>
+					<th>{LANG.status}</th>
                     <th class="text-center">
 					   <a href="{base_url_hitstotal}"><em title="{LANG.hitstotal}" class="fa fa-eye">&nbsp;</em></a>
                     </th>
@@ -70,13 +93,13 @@
                     <td class="text-center">{ROW.hitstotal}</td>
                     <td class="text-center">{ROW.hitscm}</td>
                     <td class="text-center">{ROW.numtags}</td>
-					<td>{ROW.feature}</td>
+					<td class="text-center">{ROW.feature}</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>
 			<tfoot>
 				<tr class="text-left">
-					<td colspan="6">
+					<td colspan="12">
 						<select class="form-control" name="action" id="action">
 							<!-- BEGIN: action -->
 							<option value="{ACTION.value}">{ACTION.title}</option>

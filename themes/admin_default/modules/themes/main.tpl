@@ -23,13 +23,6 @@
 				<!-- BEGIN: link_active -->
 				<a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_activate}</a>
 				<!-- END: link_active -->
-				<!-- BEGIN: dash -->
-				-
-				<!-- END: dash -->
-				<!-- BEGIN: link_delete -->
-				<a href="javascript:void(0);" class="delete" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_delete}</a>
-			</p>
-			<!-- END: link_delete -->
 			<p style="font-size:13px">
 				{ROW.description}
 			</p>

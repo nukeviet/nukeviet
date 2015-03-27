@@ -19,7 +19,7 @@ $sth->execute( array('about', 'page', 'about', 'About', '', 1276333182, 1, 1, ''
 $sth->execute( array('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0) );
 $sth->execute( array('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0) );
 $sth->execute( array('contact', 'contact', 'contact', 'Contact', '', 1275351337, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0) );
-$sth->execute( array('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '6', 5, 1, '', 0, 0) );
+$sth->execute( array('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', '', '', 'online, statistics', '2', 5, 1, '', 0, 0) );
 $sth->execute( array('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0) );
 $sth->execute( array('banners', 'banners', 'banners', 'Banners', '', 1270400000, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 0) );
 $sth->execute( array('seek', 'seek', 'seek', 'Search', '', 1273474173, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0) );
@@ -318,6 +318,7 @@ $array_cron_name['cron_auto_sendmail_error_log'] = 'Send error logs to admin';
 $array_cron_name['cron_ref_expired_del'] = 'Delete expired referer';
 $array_cron_name['cron_siteDiagnostic_update'] = 'Update site diagnostic';
 $array_cron_name['cron_auto_check_version'] = 'Check NukeViet version';
+$array_cron_name['cron_notification_autodel'] = 'Delete old notification';
 
 
 $result = $db->query( "SELECT id, run_func FROM " . $db_config['prefix'] . "_cronjobs ORDER BY id ASC" );

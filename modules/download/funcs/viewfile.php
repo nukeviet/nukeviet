@@ -42,10 +42,18 @@ if( ! nv_user_in_groups( $row['groups_view'] ) )
 }
 
 $base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $list_cats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'], true );
-if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+if( $_SERVER['REQUEST_URI'] == $base_url_rewrite )
+{
+	$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+}
+elseif( NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 {
 	Header( 'Location: ' . $base_url_rewrite );
 	die();
+}
+else
+{
+	$canonicalUrl = $base_url_rewrite;
 }
 
 
@@ -249,6 +257,7 @@ define( 'NV_COMM_ID', $row['id'] );
 define( 'NV_COMM_ALLOWED', nv_user_in_groups( $row['groups_comment'] ) );
 // Kiem tra quyen dang binh luan
 $allowed = $module_config[$module_name]['allowed_comm'];
+
 if( $allowed == '-1' )
 {
 	// Quyen han dang binh luan theo bai viet
@@ -259,7 +268,11 @@ require_once NV_ROOTDIR . '/modules/comment/comment.php';
 $area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
 $checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
 
-$content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
+//get url comment
+    $url_info = parse_url( $client_info['selfurl'] );
+    $url_comment = $url_info['path'];
+
+    $content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 
 $row['rating_point'] = 0;
 if( ! empty( $row['rating_detail'] ) )

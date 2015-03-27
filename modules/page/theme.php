@@ -90,7 +90,7 @@ function nv_page_main( $row, $ab_links )
  * @param mixed $array_data
  * @return
  */
-function nv_page_main_list( $array_data )
+function nv_page_main_list( $array_data, $generate_page )
 {
 	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config, $module_name;
 
@@ -118,8 +118,12 @@ function nv_page_main_list( $array_data )
 
 			$xtpl->parse( 'main.loop' );
 		}
+		if( $generate_page != '' )
+		{
+	        $xtpl->assign( 'GENERATE_PAGE', $generate_page );
+	    }
 	}
-
+	
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

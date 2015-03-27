@@ -22,7 +22,7 @@ $page_title = $lang_global['mod_extensions'];
 
 $request = array();
 $request['page'] = $nv_Request->get_int( 'page', 'get', 1 );
-$request['mode'] = $nv_Request->get_title( 'mode', 'get', 'featured' );
+$request['mode'] = $nv_Request->get_title( 'mode', 'get', '' );
 $request['q'] = nv_substr( $nv_Request->get_title( 'q', 'get', '' ), 0, 64 );
 
 // Fixed request
@@ -33,7 +33,8 @@ $request['basever'] = $global_config['version'];
 // Mode filter
 if( ! in_array( $request['mode'], array( 'search', 'newest', 'popular', 'featured', 'downloaded', 'favorites' ) ) )
 {
-	$request['mode'] = 'featured';
+	header( 'Location:' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=manage' );
+	die();
 }
 
 if( $request['mode'] != 'search' )
@@ -101,53 +102,53 @@ else
 {
 	// Save cookies
 	nv_store_cookies( nv_object2array( $cookies ), $stored_cookies );
-	
+
 	foreach( $array['data'] as $row )
 	{
 		$row['rating_avg'] = ceil( $row['rating_avg'] );
 		$row['type'] = $lang_module['types_' . intval( $row['tid'] )];
 		$row['compatible_class'] = empty( $row['compatible'] ) ? 'text-danger' : 'text-success';
 		$row['compatible_title'] = empty( $row['compatible'] ) ? $lang_module['incompatible'] : $lang_module['compatible'];
-		
+
 		if( empty( $row['image_small'] ) )
 		{
 			$row['image_small'] = NV_BASE_SITEURL . 'themes/default/images/no_image.gif';
 		}
-		
+
 		$row['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $row['id'];
 		$row['detail_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail&amp;id=' . $row['id'];
 		$row['detail_title'] = sprintf( $lang_module['detail_title'], $row['title'] );
-		
+
 		$xtpl->assign( 'ROW', $row );
-		
+
 		// Parse rating
 		for( $i = 1; $i <= 5; $i ++ )
 		{
 			$xtpl->assign( 'STAR', $row['rating_avg'] == $i ? " active" : "" );
 			$xtpl->parse( 'main.data.loop.star' );
 		}
-		
+
 		// Tuong thich moi cho cai dat
 		if( ! empty( $row['compatible'] ) )
 		{
 			$xtpl->parse( 'main.data.loop.install' );
 		}
-		
+
 		$xtpl->parse( 'main.data.loop' );
 	}
-	
+
 	if( ! empty( $array['pagination']['all_page'] ) )
 	{
 		$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;mode=' . $request['mode'] . '&amp;q=' . urlencode( $request['q'] );
 		$generate_page = nv_generate_page( $base_url, intval( $array['pagination']['all_page'] ), $request['per_page'], $request['page'] );
-		
+
 		if( ! empty( $generate_page ) )
 		{
 			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 			$xtpl->parse( 'main.data.generate_page' );
 		}
 	}
-	
+
 	$xtpl->parse( 'main.data' );
 }
 

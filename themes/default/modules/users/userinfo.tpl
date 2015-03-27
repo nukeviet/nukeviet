@@ -43,7 +43,9 @@
 		<tbody>
 			<tr>
 				<th>{LANG.name}</th>
-				<td>{USER.full_name}</td>
+				<td>
+				    {USER.full_name}
+				</td>
 			</tr>
 			<tr>
 				<th>{LANG.birthday}</th>

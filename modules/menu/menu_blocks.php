@@ -24,7 +24,7 @@ function nv_menu_blocks( $block_config )
 
 	$list_cats = array();
 	$sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
-	$list = nv_db_cache( $sql, '', 'menu' );
+	$list = nv_db_cache( $sql, '', $block_config['module'] );
 
 	foreach( $list as $row )
 	{

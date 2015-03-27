@@ -112,7 +112,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	}
 	$_user['question'] = nv_substr( $nv_Request->get_title( 'question', 'post', '', 1 ), 0, 255 );
 	$_user['answer'] = nv_substr( $nv_Request->get_title( 'answer', 'post', '', 1 ), 0, 255 );
-	$_user['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
+	$_user['first_name'] = nv_substr( $nv_Request->get_title( 'first_name', 'post', '', 1 ), 0, 255 );
+	$_user['last_name'] = nv_substr( $nv_Request->get_title( 'last_name', 'post', '', 1 ), 0, 255 );
 	$_user['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
 	$_user['photo'] = nv_substr( $nv_Request->get_title( 'photo', 'post', '', 1 ), 0, 255 );
 	$_user['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
@@ -192,7 +193,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$_user['birthday'] = 0;
 			}
 
-			$password = ! empty( $_user['password1'] ) ? $crypt->hash( $_user['password1'] ) : $row['password'];
+			$password = ! empty( $_user['password1'] ) ? $crypt->hash_password( $_user['password1'], $global_config['hashprefix'] ) : $row['password'];
 
 			// Check photo
 			if( $_user['delpic'] or empty( $photo ) )
@@ -286,7 +287,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				md5username='" . nv_md5safe( $_user['username'] ) . "',
 				password=" . $db->quote( $password ) . ",
 				email=" . $db->quote( $_user['email'] ) . ",
-				full_name=" . $db->quote( $_user['full_name'] ) . ",
+				first_name=" . $db->quote( $_user['first_name'] ) . ",
+				last_name=" . $db->quote( $_user['last_name'] ) . ",
 				gender=" . $db->quote( $_user['gender'] ) . ",
 				photo=" . $db->quote( nv_unhtmlspecialchars( $_user['photo'] ) ) . ",
 				birthday=" . $_user['birthday'] . ",
@@ -383,7 +385,7 @@ else
 		$xtpl->parse( 'main.answer' );
 		$xtpl->assign( 'REQUIRED_QUESTION', ' required' );
 	}
-	
+
 	foreach( $genders as $gender )
 	{
 		$xtpl->assign( 'GENDER', $gender );

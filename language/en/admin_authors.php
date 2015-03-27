@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -19,10 +19,12 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['is_suspend0'] = 'Active';
 $lang_module['is_suspend1'] = 'Suspend &ldquo;%1$s&rdquo; bởi &ldquo;%2$s&rdquo; reason &ldquo;%3$s&rdquo;';
+$lang_module['is_suspend2'] = 'Suspended';
 $lang_module['last_login0'] = 'Never';
 $lang_module['login'] = 'Username';
 $lang_module['email'] = 'Email';
 $lang_module['full_name'] = 'Display name';
+$lang_module['name'] = 'Site name on the website';
 $lang_module['sig'] = 'Signature';
 $lang_module['editor'] = 'Editor';
 $lang_module['lev'] = 'Attributions';
@@ -41,6 +43,7 @@ $lang_module['main'] = 'List of Administrators';
 $lang_module['nv_admin_edit'] = 'Edit administrator\'s information';
 $lang_module['nv_admin_add'] = 'Add a admistrator';
 $lang_module['nv_admin_del'] = 'Delete Administrator';
+$lang_module['username_noactive'] = 'Error: Acount: %s is not enabled, you will need to activate this account before adding site administrator';
 $lang_module['full_name_incorrect'] = 'You do not declare the name of this administrator';
 $lang_module['position_incorrect'] = 'You do not declare the position of this administrator';
 $lang_module['nv_admin_add_info'] = 'To add new website administrator account, you need to declare fully in the box below. You can create an account below your level management';
@@ -75,16 +78,16 @@ $lang_module['suspend_info_yes'] = 'List of times to suspend the operation of th
 $lang_module['suspend_start'] = 'Start';
 $lang_module['suspend_end'] = 'Finish';
 $lang_module['suspend_reason'] = 'Suspending reason';
-$lang_module['suspend_info'] = 'At: %1$s<br />By: %2$s';
+$lang_module['suspend_info'] = 'At: %1$s<br  />By: %2$s';
 $lang_module['suspend0'] = 'Reactive';
 $lang_module['suspend1'] = 'Suspend';
 $lang_module['clean_history'] = 'Clear History';
 $lang_module['suspend_sendmail'] = 'Send notification';
-$lang_module['suspend_sendmail_mess1'] = 'Information from %1$s Aministrators:<br />Your administrator account %1$s is suspended %2$s reason: %3$s.<br />If you have any questions... Email: %4$s';
-$lang_module['suspend_sendmail_mess0'] = 'Information from %1$s Aministrators:<br />Your administrator account %1$s is active at%2$s.<br />Your account has been suspended because:: %3$s';
+$lang_module['suspend_sendmail_mess1'] = 'Information from %1$s Aministrators:<br  />Your administrator account %1$s is suspended %2$s reason: %3$s.<br  />If you have any questions... Email: %4$s';
+$lang_module['suspend_sendmail_mess0'] = 'Information from %1$s Aministrators:<br  />Your administrator account %1$s is active at%2$s.<br  />Your account has been suspended because:: %3$s';
 $lang_module['suspend_sendmail_title'] = 'Notification from website %s';
-$lang_module['delete_sendmail_mess0'] = 'Administrator %1$s notify:<br />Your administrator account in %1$s website deleted %2$s.<br />If you have any questions... Email %3$s';
-$lang_module['delete_sendmail_mess1'] = 'Administrator %1$s website notify:<br />Your administrator account in %1$s website deleted %2$s Reason: %3$s.<br />If you have any questions... Email %4$s';
+$lang_module['delete_sendmail_mess0'] = 'Administrator %1$s notify:<br  />Your administrator account in %1$s website deleted %2$s.<br  />If you have any questions... Email %3$s';
+$lang_module['delete_sendmail_mess1'] = 'Administrator %1$s website notify:<br  />Your administrator account in %1$s website deleted %2$s Reason: %3$s.<br  />If you have any questions... Email %4$s';
 $lang_module['delete_sendmail_title'] = 'Information from %s website';
 $lang_module['delete_sendmail_info'] = 'Do you really want to delete the administrator account &ldquo;<strong>%s</strong>&rdquo;? Please fill in box below to confirm';
 $lang_module['admin_del_sendmail'] = 'Send notification';
@@ -130,16 +133,14 @@ $lang_module['rule_user'] = 'Use only characters a-zA-Z0-9_- for account';
 $lang_module['rule_pass'] = 'Use only characters a-zA-Z0-9_- for password';
 $lang_module['spadmin_add_admin'] = 'Allows General Administrator to create and modify the rights of modules administrator';
 $lang_module['authors_detail_main'] = 'Show detailed information of the administrator account';
+$lang_module['adminrelogin_max'] = 'Filed admin if the wrong type is entered, then the system will deprive admin access and ejected homepage';
+$lang_module['admin_check_pass_time'] = 'Time to check your password, if admin not using the browser';
 $lang_module['add_user'] = 'Appoint a member';
 $lang_module['add_select'] = 'Select';
 $lang_module['add_error_choose'] = 'Error: You did not appoint a member to the administrator';
 $lang_module['add_error_exist'] = 'Error: This user is an administrator';
 $lang_module['add_error_notexist'] = 'Error: This member does not exist';
 $lang_module['add_error_diff'] = 'An undefined error occurred';
-$lang_module['is_suspend2'] = 'Suspended';
-$lang_module['username_noactive'] = 'Error: Acount: %s is not enabled, you will need to activate this account before adding site administrator';
-$lang_module['adminrelogin_max'] = 'Filed admin if the wrong type is entered, then the system will deprive admin access and ejected homepage';
-$lang_module['admin_check_pass_time'] = 'Time to check your password, if admin not using the browser';
 $lang_module['action_account'] = 'Members account';
 $lang_module['action_account_nochange'] = 'Keep members account';
 $lang_module['action_account_suspend'] = 'Lock member account';

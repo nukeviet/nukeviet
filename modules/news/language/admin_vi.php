@@ -100,6 +100,7 @@ $lang_module['setting_view'] = 'Cấu hình hiển thị';
 $lang_module['setting_post'] = 'Cấu hình đăng bài';
 $lang_module['setting_auto_tags'] = 'Tự động tạo từ khóa cho bài viết nếu không nhập từ khóa lúc đăng bài';
 $lang_module['setting_tags_remind'] = 'Nhắc nhở các từ khóa không có mô tả';
+$lang_module['setting_alias_lower'] = 'Chuyển Liên kết tĩnh về chữ thường khi tạo mới';
 
 $lang_module['viewcat_page'] = 'Cách thể hiện Chuyên mục';
 $lang_module['viewcat_page_new'] = 'danh sách, mới lên trên';
@@ -112,6 +113,7 @@ $lang_module['viewcat_list_new'] = 'theo tiêu đề, mới lên trên';
 $lang_module['viewcat_list_old'] = 'theo tiêu đề, cũ lên trên';
 $lang_module['viewcat_grid_new'] = 'theo lưới, mới lên trên';
 $lang_module['viewcat_grid_old'] = 'theo lưới, cũ lên trên';
+$lang_module['viewcat_none'] = 'không hiển thị';
 
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_type'] = 'Tìm kiếm theo';
@@ -236,6 +238,8 @@ $lang_module['admin_no_user'] = 'Chức năng phân quyền cho module này ch�
 $lang_module['admin_userid'] = 'userid';
 $lang_module['admin_username'] = 'Tài khoản';
 $lang_module['admin_full_name'] = 'Họ tên';
+$lang_module['admin_first_name'] = 'Tên';
+$lang_module['admin_last_name'] = 'Họ';
 $lang_module['admin_email'] = 'Email';
 
 $lang_module['permissions_admin'] = 'Quản lý Chuyên mục';

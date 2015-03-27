@@ -22,14 +22,13 @@ $from['from_date'] = $nv_Request->get_title( 'from_date', 'get', '' );
 $from['to_date'] = $nv_Request->get_title( 'to_date', 'get', '' );
 
 $array_search = array(
-	'' => '---',
 	'content' => $lang_module['search_content'],
 	'post_name' => $lang_module['search_post_name'],
 	'post_email' => $lang_module['search_post_email'],
 	'content_id' => $lang_module['search_content_id']
 );
 $array_status_view = array(
-	'2' => '---',
+	'2' => $lang_module['search_status'],
 	'1' => $lang_module['enable'],
 	'0' => $lang_module['disable']
 );
@@ -96,8 +95,7 @@ $search_per_page = array();
 while( $i < 100 )
 {
 	$i = $i + 5;
-
-	$xtpl->assign( 'OPTION', array( 'page' => $i, 'selected' => ( $i == $page ) ? ' selected="selected"' : '' ) );
+	$xtpl->assign( 'OPTION', array( 'page' => $i, 'selected' => ( $i == $per_page ) ? ' selected="selected"' : '' ) );
 	$xtpl->parse( 'main.per_page' );
 }
 

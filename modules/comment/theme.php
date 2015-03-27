@@ -44,7 +44,7 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 	}
 
 	$xtpl->assign( 'COMMENTCONTENT', $comment );
-	
+
 	if( $form_login )
 	{
 		$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_header=' . md5( $client_info['session_id'] . $global_config['sitekey'] ) . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] . '#formcomment' );
@@ -55,7 +55,7 @@ function nv_theme_comment_main( $module, $area, $id, $allowed_comm, $checkss, $c
 	{
 		if( defined( 'NV_IS_USER' ) )
 		{
-			$xtpl->assign( 'NAME', $user_info['full_name'] );
+			$xtpl->assign( 'NAME', $user_info['first_name'] );
 			$xtpl->assign( 'EMAIL', $user_info['email'] );
 			$xtpl->assign( 'DISABLED', ' disabled="disabled"' );
 		}

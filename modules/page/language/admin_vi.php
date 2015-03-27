@@ -52,6 +52,8 @@ $lang_module['config'] = 'Cấu hình';
 $lang_module['config_view_type'] = 'Phương án hiển thị bài viết';
 $lang_module['config_view_type_0'] = 'Một bài viết chính';
 $lang_module['config_view_type_1'] = 'Danh sách các bài viết';
+$lang_module['config_view_type_page'] = 'Số bài viết hiển thị trên một trang';
+$lang_module['config_view_related_articles'] = 'Số bài viết liên quan';
 $lang_module['config_facebookapi'] = 'Facebook App ID';
 $lang_module['config_facebookapi_note'] = ' (Có dạng 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xem chi tiết</a>)';
 $lang_module['config_save'] = 'Lưu cấu hình';

@@ -54,18 +54,18 @@ if( ! nv_function_exists( 'nv_page_list' ) )
 			->select( 'id, title, alias' )
 			->from( NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] )
 			->where( 'status = 1' )
-			->order( 'weight DESC' )
+			->order( 'weight ASC' )
 			->limit( $block_config['numrow'] );
 
 		$list = nv_db_cache( $db->sql(), 'id', $module );
 
 		if( !empty( $list ) )
 		{
-			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/page/block.about.tpl' ) )
+			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/page/block.page_list.tpl' ) )
 			{
 				$block_theme = $global_config['module_theme'];
 			}
-			elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/page/block.about.tpl' ) )
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/page/block.page_list.tpl' ) )
 			{
 				$block_theme = $global_config['site_theme'];
 			}
@@ -78,7 +78,7 @@ if( ! nv_function_exists( 'nv_page_list' ) )
 
 			foreach( $list as $l )
 			{
-				$l['title0'] = nv_clean60( $l['title'], $block_config['title_length'] );
+				$l['title_clean60'] = nv_clean60( $l['title'], $block_config['title_length'] );
 				$l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'] . $global_config['rewrite_exturl'];
 				$xtpl->assign( 'ROW', $l );
 				$xtpl->parse( 'main.loop' );
@@ -93,5 +93,7 @@ if( ! nv_function_exists( 'nv_page_list' ) )
 		}
 	}
 }
-
-$content = nv_page_list( $block_config );
+if( defined( 'NV_SYSTEM' ) )
+{
+	$content = nv_page_list( $block_config );
+}

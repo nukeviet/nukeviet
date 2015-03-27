@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="alert alert-info">{CONTENTS.info}</div>
-<form method="post" id="form_add_client" style="FLOAT:left;width:100%;margin-bottom:20px" action="{CONTENTS.action}">
+<form method="post" id="form_add_client" action="{CONTENTS.action}">
 	<input type="hidden" value="1" name="save" id="save" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">

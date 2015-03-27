@@ -27,7 +27,7 @@
 <!-- BEGIN: signed -->
 <div class="block-signed clearfix">
 	<p>
-		{LANG.wellcome}: <strong>{USER.full_name}</strong>
+		{LANG.wellcome}: <strong>{USER.first_name}, {USER.last_name}</strong>
 	</p>
 	<a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.full_name}" class="s-border fl" /></a>
 	<!-- BEGIN: admin -->

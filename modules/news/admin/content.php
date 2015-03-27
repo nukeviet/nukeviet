@@ -369,7 +369,15 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	// Xử lý liên kết tĩnh
 	$alias = $nv_Request->get_title( 'alias', 'post', '' );
-	$alias = ( $alias == '' ) ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
+	if( empty( $alias ) )
+	{
+		$alias = change_alias( $rowcontent['title'] );
+		if( $module_config[$module_name]['alias_lower'] ) $alias = strtolower( $alias );
+	}
+	else
+	{
+		$alias = change_alias( $alias );
+	}
 
 	if( empty( $alias ) or ! preg_match( "/^([a-zA-Z0-9\_\-]+)$/", $alias ) )
 	{

@@ -40,13 +40,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			if( ! $crypt->validate( $password, $row['pass'] ) )
+			if( ! $crypt->validate_password( $password, $row['pass'] ) )
 			{
 				die( 'action' );
 			}
 			else
 			{
-				$checknum = $crypt->hash( nv_genpass( 10 ) );
+				$checknum = md5( nv_genpass( 10 ) );
 				$current_login = NV_CURRENTTIME;
 				$id = intval( $row['id'] );
 				$agent = substr( NV_USER_AGENT, 0, 254 );

@@ -46,6 +46,7 @@ $lang_module['table_check_time'] = 'Kiểm tra';
 $lang_module['optimize'] = 'Tối ưu';
 $lang_module['savefile'] = 'Lưu trên máy chủ';
 $lang_module['download'] = 'Tải về';
+$lang_module['download_now'] = 'Tải về dữ liệu hiện tại';
 $lang_module['download_all'] = 'Cấu trúc và dữ liệu';
 $lang_module['download_str'] = 'Cấu trúc';
 $lang_module['ext_sql'] = 'Dạng file SQL';

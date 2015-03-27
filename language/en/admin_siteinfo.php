@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -67,6 +67,7 @@ $lang_module['log_View'] = 'View';
 $lang_module['log_del_no_items'] = 'You may choose';
 $lang_module['log_note'] = 'Notes';
 $lang_module['moduleInfo'] = 'Modules Informations';
+$lang_module['pendingInfo'] = 'Pending job from the module';
 $lang_module['moduleName'] = 'Module';
 $lang_module['moduleContent'] = 'Content';
 $lang_module['moduleValue'] = 'Value';
@@ -151,7 +152,9 @@ $lang_module['filter_lang_desc'] = 'descending';
 $lang_module['filter_order_by'] = 'Sort by %s order';
 $lang_module['log_empty'] = 'Delete all';
 $lang_module['log_empty_log'] = 'Delete all system logs';
-$lang_module['pendingInfo'] = 'Pending job from the module';
 $lang_module['update_package_detected'] = 'Detects updated package, the website will temporarily stop working. Please perform the following tasks either before the website will be active again.';
 $lang_module['update_package_delete'] = 'Delete the update package';
 $lang_module['update_package_do'] = 'Update';
+$lang_module['notification_empty'] = '<p align="center">No Notification!</p>';
+$lang_module['notification_module_auto_deactive'] = 'Module <strong />%s  has stopped operation due to error';
+$lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong />%s  has stopped operation due to error';

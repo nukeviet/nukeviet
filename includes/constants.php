@@ -69,9 +69,6 @@ define( 'NV_ADMINRELOGIN_VARIABLE', 'adminrelogin' );
 //Do nen trang khi bat che do nen
 define( 'ZLIB_OUTPUT_COMPRESSION_LEVEL', 6 );
 
-//Phuong phap ma hoa mat khau: 0 = md5, 1 = sha1
-define( 'NV_CRYPT_SHA1', 1 );
-
 //Thoi gian de tinh online, tinh bang giay, 300 = 5 phut
 define( 'NV_ONLINE_UPD_TIME', 300 );
 
@@ -99,10 +96,6 @@ define( 'NV_SITEWORDS_MAX_STRLEN', 300 );
 // Thiet lap cho get,post,cookie,session,request,env,server
 define( 'NV_ALLOW_REQUEST_MODS', 'get,post,cookie,session,request,env,server' );
 define( 'NV_REQUEST_DEFAULT_MODE', 'request' );
-
-// He thong thong bao
-define( 'NV_NOTIFICATION_ADMIN_FILE', 'notification_admin.txt' );
-define( 'NV_NOTIFICATION_SITE_FILE', 'notification_site.txt' );
 
 //Hien thi, ghi loi
 /*
@@ -139,3 +132,4 @@ $global_config['check_theme_admin'] = '/^(admin)\_[a-zA-Z0-9\-\_]+$/';
 $global_config['check_email'] = '/^(?:[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+\.)*[\w\!\#\$\%\&\'\*\+\-\/\=\?\^\`\{\|\}\~]+@(?:(?:(?:[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!\.)){0,61}[a-zA-Z0-9_-]?\.)+[a-zA-Z0-9_](?:[a-zA-Z0-9_\-](?!$)){0,61}[a-zA-Z0-9_]?)|(?:\[(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\]))$/';
 $global_config['check_cron'] = '/^(cron)\_[a-zA-Z0-9\_]+$/';
 $global_config['check_op_layout'] = '/^layout\.([a-zA-Z0-9\-\_]+)\.tpl$/';
+$global_config['check_version'] = '/^([0-9]{1})\.([0-9]{1})\.([0-9]{2})$/';

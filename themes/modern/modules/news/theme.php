@@ -641,7 +641,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 		$xtpl->parse( 'main.showhometext' );
 	}
-	
+
 	if( ! empty( $news_contents['post_name'] ) )
 	{
 		$xtpl->parse( 'main.post_name' );
@@ -661,7 +661,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 		$xtpl->parse( 'main.author' );
 	}
-	
+
 	if( $news_contents['copyright'] == 1 )
 	{
 		if( ! empty( $module_config[$module_name]['copyright'] ) )
@@ -686,7 +686,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
-		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $news_contents['id'] ) );
+		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . "&nbsp;-&nbsp;" . nv_link_delete_page( $news_contents['id'], 1 ) );
 		$xtpl->parse( 'main.adminlink' );
 	}
 
@@ -745,7 +745,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		}
 		$xtpl->parse( 'main.related' );
 	}
-	
+
 	if( ! empty( $topic_array ) )
 	{
 		foreach( $topic_array as $key => $topic_array_i )
@@ -1090,7 +1090,8 @@ function search_result_theme( $key, $numRecord, $per_pages, $page, $array_conten
 			$url_link = substr( $url_link, 0, strpos( $url_link, '?page=' ) );
 		}
 
-		$generate_page = nv_generate_page( $url_link, $numRecord, $per_pages, $page );
+		$_array_url = array( 'link' => $url_link, 'amp' => '&page=' );
+		$generate_page = nv_generate_page( $_array_url, $numRecord, $per_pages, $page );
 
 		$xtpl->assign( 'VIEW_PAGES', $generate_page );
 		$xtpl->parse( 'results.pages_result' );

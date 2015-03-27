@@ -219,12 +219,12 @@ else
 	$ads = array_unique( $ads );
 	$ads = "'" . implode( "','", $ads ) . "'";
 
-	$result2 = $db->query( 'SELECT userid, username, full_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ads . ')' );
+	$result2 = $db->query( 'SELECT userid, username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . $ads . ')' );
 
 	$ads = array();
 	while( $row2 = $result2->fetch() )
 	{
-		$ads[$row2['userid']] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_LANG_VARIABLE . "=" . $module_name . "&amp;admin_id=" . $row2['userid'] . "\">" . $row2['full_name'] . "</a>";
+		$ads[$row2['userid']] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_LANG_VARIABLE . "=" . $module_name . "&amp;admin_id=" . $row2['userid'] . "\">" . $row2['first_name'] . "</a>";
 	}
 	$result2->closeCursor();
 

@@ -10,6 +10,7 @@
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
+$submenu['manage'] = $lang_module['manage'];
 $submenu['newest'] = $lang_module['newest'];
 $submenu['popular'] = $lang_module['popular'];
 $submenu['featured'] = $lang_module['featured'];

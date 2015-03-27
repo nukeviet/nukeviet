@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
  Chrome Frame prompt
  ========================================================================== */
 .chromeframe {
@@ -330,6 +330,10 @@ h1, h2, h3, h4, h5, h6 {
 	margin-right: 10px;
 }
 
+.nv-panel-body{
+	padding: 10px;
+}
+
 /* Left Menu
  -----------------------------------------------------------------------------*/
 #left-menu {
@@ -529,6 +533,9 @@ sup.required {
 	#left-menu {
 		display: none;
 	}
+	#left-menu-toggle{
+		display: block !important;
+	}
 
 	#left-menu-bg {
 		display: none;
@@ -666,6 +673,29 @@ label {
 
 .ui-datepicker select.ui-datepicker-year {
 	width: 39%!important;
+}
+
+/* DIV Listing
+ -----------------------------------------------------------------------------*/
+.nv-listing .listing-title{
+	font-weight: 700;
+	border-bottom: 2px #ddd solid;
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+.nv-listing .listing-body .listing-item{
+	border-bottom: 1px #ddd solid;
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
+
+.nv-listing .listing-body .listing-item:nth-child(odd){
+	background-color: #f9f9f9;
+}
+
+.nv-listing .listing-body .listing-item em{
+	cursor: pointer;
 }
 
 /* =====================================================

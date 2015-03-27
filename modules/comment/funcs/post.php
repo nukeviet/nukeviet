@@ -13,7 +13,6 @@ if( ! defined( 'NV_IS_MOD_COMMENT' ) ) die( 'Stop!!!' );
 $difftimeout = 360;
 
 $contents = 'ERR_' . $lang_module['comment_unsuccess'];
-
 $module = $nv_Request->get_string( 'module', 'post' );
 if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and isset( $site_mods[$module] ) )
 {
@@ -22,7 +21,7 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 	$id = $nv_Request->get_int( 'id', 'post' );
 	$allowed_comm = $nv_Request->get_title( 'allowed', 'post' );
 	$checkss = $nv_Request->get_title( 'checkss', 'post' );
-
+    $url_comment = $nv_Request->get_title( 'url_comment', 'post', '' );
 	if( $id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
 	{
 		// Kiểm tra quyền đăng bình luận
@@ -36,6 +35,7 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 		if( nv_user_in_groups( $allowed ) )
 		{
 			$content = $nv_Request->get_title( 'content', 'post', '', 1 );
+			$content = nv_nl2br( $content, '<br />' );
 			$code = $nv_Request->get_title( 'code', 'post', '' );
 			$status = $module_config[$module]['auto_postcomm'];
 
@@ -84,24 +84,23 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 					}
 				}
 			}
-
 			if( $show_captcha and ! nv_capcha_txt( $code ) )
 			{
 				$contents = 'ERR_' . $lang_global['securitycodeincorrect'];
 			}
 			elseif( $timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout )
 			{
-				$content = nv_nl2br( $content, '<br />' );
 				$pid = $nv_Request->get_int( 'pid', 'post', 0 );
 
 				try
 				{
-					$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_comments (module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status) VALUES (:module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')' );
+					$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_comments (module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, url_comment, status) VALUES (:module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, :url_comment, ' . $status . ')' );
 					$stmt->bindParam( ':module', $module, PDO::PARAM_STR );
 					$stmt->bindParam( ':content', $content, PDO::PARAM_STR, strlen( $content ) );
 					$stmt->bindParam( ':post_name', $name, PDO::PARAM_STR );
 					$stmt->bindParam( ':post_email', $email, PDO::PARAM_STR );
 					$stmt->bindValue( ':post_ip', NV_CLIENT_IP, PDO::PARAM_STR );
+                    $stmt->bindValue( ':url_comment', $url_comment, PDO::PARAM_STR );
 					$stmt->execute();
 					if( $stmt->rowCount() )
 					{

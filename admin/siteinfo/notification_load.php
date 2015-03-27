@@ -12,7 +12,35 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( $nv_Request->isset_request( 'notification_reset', 'post' ) )
 {
-	file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_NOTIFICATION_ADMIN_FILE, 0, LOCK_EX );
+	$db->query( 'UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=1 WHERE view=0' );
+	die();
+}
+
+if( $nv_Request->isset_request( 'notification_get', 'get' ) )
+{
+	if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+
+	$last_time_call = $nv_Request->get_int( 'timestamp', 'get', 0 );
+	$last_time = 0;
+	$count = 0;
+	$return = array();
+
+	$result = $db->query( 'SELECT add_time FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '" AND area=1 AND view=0 ORDER BY id DESC' );
+	$count = $result->rowCount();
+	if( $result )
+	{
+		$last_time = $result->fetchColumn();
+	}
+
+	if ( $last_time > $last_time_call )
+	{
+	    $return = array(
+	        'data_from_file' => $count,
+	        'timestamp' => $last_time
+	    );
+	}
+	$json = json_encode( $return );
+	echo $json;
 	die();
 }
 
@@ -27,13 +55,13 @@ if( $page == 1 )
 $array_data = array();
 $db->sqlreset()
   ->select( '*' )
-  ->from( $db_config['prefix'] . '_notification' )
+  ->from( NV_NOTIFICATION_GLOBALTABLE )
   ->where( 'language = "' . NV_LANG_DATA . '" AND area = 1 OR area = 2' )
   ->order( 'id DESC' )
   ->limit( $per_page )
   ->offset( ($page - 1) * $per_page );
-
 $_query = $db->query( $db->sql() );
+
 while( $row = $_query->fetch() )
 {
 	$array_data[$row['id']] = $row;
@@ -61,13 +89,26 @@ if( ! empty( $array_data ) )
 					$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'];
 				}
 			}
-			elseif( file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/notification.php' ) ) // Hien thi thong bao tu cac module site
+
+			if( $mod == 'settings' )
+			{
+				if( $data['type'] == 'auto_deactive_cronjobs' )
+				{
+					$cron_title = $db->query( 'SELECT ' . NV_LANG_DATA . '_cron_name FROM ' . $db_config['dbsystem'] . '.' . NV_CRONJOBS_GLOBALTABLE . ' WHERE id=' . $data['content']['cron_id'] )->fetchColumn();
+					$data['title'] = sprintf( $lang_module['notification_cronjobs_auto_deactive'], $cron_title );
+					$data['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $data['module'] . '&amp;' . NV_OP_VARIABLE . '=cronjobs';
+				}
+			}
+
+			// Hien thi tu cac module
+			if( file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/notification.php' ) ) // Hien thi thong bao tu cac module site
 			{
 				if( $data['send_from'] > 0 )
 				{
-					$user_info = $db->query( 'SELECT username, full_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $data['send_from'] )->fetch();
+					$user_info = $db->query( 'SELECT username, first_name, last_name, photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $data['send_from'] )->fetch();
 					if( $user_info )
 					{
+						$user_info['full_name'] = $user_info['first_name'] . ' ' . $user_info['last_name'];
 						$data['send_from'] = !empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'];
 					}
 					else
@@ -83,6 +124,11 @@ if( ! empty( $array_data ) )
 					{
 						$data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
 					}
+				}
+				else
+				{
+					$data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
+					$data['send_from'] = $lang_global['level5'];
 				}
 
 				include NV_ROOTDIR . '/modules/' . $site_mods[$mod]['module_file'] . '/notification.php';

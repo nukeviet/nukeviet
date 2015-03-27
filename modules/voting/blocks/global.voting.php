@@ -12,24 +12,22 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_voting_select' ) )
 {
-
 	function nv_block_voting_select_config( $module, $data_block, $lang_block )
 	{
 		global $db, $language_array, $site_mods;
 		$html = '';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_block['vid'] . '</td>';
-		$html .= '<td><select name="config_vid\>';
-
+		$html .= '<td><select name="vid" class="w300 form-control">';
 		$sql = "SELECT vid, question,acceptcm, groups_view, publ_time, exp_time FROM " . NV_PREFIXLANG . "_" . $site_mods['voting']['module_data'] . " WHERE act=1";
 		$list = nv_db_cache( $sql, 'vid', $module );
 		foreach( $list as $l )
 		{
 			$sel = ( $data_block['vid'] == $l['vid'] ) ? ' selected' : '';
-			$html .= "<option value=\"" . $l['vid'] . "\" " . $sel . ">" . $l['question'] . "</option>\n";
+			$html .= "<option value=\"" . $l['vid'] . "\" " . $sel . ">" . $l['question'] . "</option>";
 		}
-		$html .= "\t</select></td>";
-		$html .= "</tr>";
+		$html .= '</select></td>';
+		$html .= '</tr>';
 		return $html;
 	}
 
@@ -39,7 +37,7 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 		$return = array();
 		$return['error'] = array();
 		$return['config'] = array();
-		$return['config']['vid'] = $nv_Request->get_int( 'config_vid', 'post', 0 );
+		$return['config']['vid'] = $nv_Request->get_int( 'vid', 'post', 0 );
 		return $return;
 	}
 

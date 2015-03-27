@@ -13,11 +13,17 @@
 </div>
 <form id="registerForm" action="{USER_REGISTER}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
 	<div class="form-group">
-		<label for="full_name" class="col-sm-8 control-label">{LANG.name}:</label>
+		<label for="first_name" class="col-sm-8 control-label">{LANG.first_name}:</label>
 		<div class="col-sm-16">
-			<input type="text" class="form-control" id="full_name" name="full_name" value="{DATA.full_name}" maxlength="255" />
+			<input type="text" class="form-control" id="first_name" name="first_name" value="{DATA.first_name}" maxlength="255" />
 		</div>
 	</div>
+	<div class="form-group">
+        <label for="last_name" class="col-sm-8 control-label">{LANG.last_name}:</label>
+        <div class="col-sm-16">
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{DATA.last_name}" maxlength="255" />
+        </div>
+    </div>   
 	<div class="form-group">
 		<label for="nv_email_iavim" class="col-sm-8 control-label">{LANG.email}<span class="text-danger"> (*)</span>:</label>
 		<div class="col-sm-16">

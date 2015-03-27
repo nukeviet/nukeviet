@@ -10,52 +10,65 @@
 
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module['autoinstall_method_packet'];
-
 $xtpl = new XTemplate( 'package_theme_module.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
 if( $nv_Request->isset_request( 'op', 'post' ) )
 {
+	$contents = $lang_module['package_noselect_module_theme'];
 	$themename = $nv_Request->get_string( 'themename', 'post' );
-	$modulename = $nv_Request->get_string( 'modulename', 'post' );
 
-	if( preg_match( $global_config['check_module'], $modulename ) and ( preg_match( $global_config['check_theme'], $themename ) or preg_match( $global_config['check_theme_mobile'], $themename ) ) )
+	if( preg_match( $global_config['check_theme'], $themename ) or preg_match( $global_config['check_theme_mobile'], $themename ) )
 	{
 		$allowfolder = array();
-		$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/modules/' . $modulename . '/';
-
-		if( file_exists( NV_ROOTDIR . '/themes/' . $themename . '/css/' . $modulename . '.css' ) )
+		$modulearray = array();
+		$all_module_file = $nv_Request->get_title( 'module_file', 'post' );
+		$module_file_array = explode( ',', $all_module_file );
+		array_unique( $module_file_array );
+		foreach ( $module_file_array as $_module_file )
 		{
-			$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/css/' . $modulename . '.css';
-		}
+			$_module_file = nv_unhtmlspecialchars($_module_file);
+			if( preg_match( $global_config['check_module'], $_module_file ) )
+			{
+				$modulearray[] = $_module_file;
+				$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/modules/' . $_module_file . '/';
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $themename . '/images/' . $modulename . '/' ) )
+				if( file_exists( NV_ROOTDIR . '/themes/' . $themename . '/css/' . $_module_file . '.css' ) )
+				{
+					$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/css/' . $_module_file . '.css';
+				}
+
+				if( file_exists( NV_ROOTDIR . '/themes/' . $themename . '/images/' . $_module_file . '/' ) )
+				{
+					$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/images/' . $_module_file . '/';
+				}
+			}
+		}
+		if( ! empty( $allowfolder ) )
 		{
-			$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/images/' . $modulename . '/';
+			$all_module_file = implode( '_', $modulearray );
+			$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . $all_module_file . '_' . md5( nv_genpass( 10 ) . session_id() ) . '.zip';
+
+			require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
+			$zip = new PclZip( $file_src );
+			$zip->create( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
+
+			$filesize = filesize( $file_src );
+			$file_name = basename( $file_src );
+
+			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['package_theme_module'], 'file name : ' . $themename . '_' . $all_module_file . '.zip', $admin_info['userid'] );
+
+			$linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv4_theme_' . $themename . '_' . $all_module_file . '.zip&amp;checkss=' . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . '&amp;filename=' . $file_name;
+
+			$xtpl->assign( 'LINKGETFILE', $linkgetfile );
+			$xtpl->assign( 'THEMENAME', $themename );
+			$xtpl->assign( 'MODULENAME', $all_module_file );
+			$xtpl->assign( 'FILESIZE', nv_convertfromBytes( $filesize ) );
+
+			$xtpl->parse( 'complete' );
+			$contents = $xtpl->text( 'complete' );
 		}
-
-		$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . $modulename . '_' . md5( nv_genpass( 10 ) . session_id() ) . '.zip';
-
-		require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-		$zip = new PclZip( $file_src );
-		$zip->create( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
-
-		$filesize = filesize( $file_src );
-		$file_name = basename( $file_src );
-
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['autoinstall_method_packet_module'], 'file name : ' . $themename . '_' . $modulename . '.zip', $admin_info['userid'] );
-
-		$linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv4_theme_' . $themename . '_' . $modulename . '.zip&amp;checkss=' . md5( $file_name . $client_info['session_id'] . $global_config['sitekey'] ) . '&amp;filename=' . $file_name;
-
-		$xtpl->assign( 'LINKGETFILE', $linkgetfile );
-		$xtpl->assign( 'THEMENAME', $themename );
-		$xtpl->assign( 'MODULENAME', $modulename );
-		$xtpl->assign( 'FILESIZE', nv_convertfromBytes( $filesize ) );
-
-		$xtpl->parse( 'complete' );
-		$contents = $xtpl->text( 'complete' );
 	}
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
@@ -105,7 +118,9 @@ else
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
 
+	$page_title = $lang_module['package_theme_module'];
+
 	include NV_ROOTDIR . '/includes/header.php';
-	echo $contents;
+	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
 }

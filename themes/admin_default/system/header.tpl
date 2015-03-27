@@ -23,8 +23,6 @@
 			var nv_fc_variable = '{NV_OP_VARIABLE}';
 			var nv_lang_variable = '{NV_LANG_VARIABLE}';
 			var nv_module_name = '{MODULE_NAME}';
-			var nv_datadir = '{NV_DATADIR}';
-			var nv_notification_file_admin = '{NV_NOTIFICATION_ADMIN_FILE}';
 			var nv_my_ofs = '{NV_SITE_TIMEZONE_OFFSET}';
 			var nv_my_abbr = '{NV_CURRENTTIME}';
 			var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';

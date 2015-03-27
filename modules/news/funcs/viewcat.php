@@ -20,7 +20,7 @@ if( $page > 1 )
 	$base_url_rewrite .= '/page-' . $page;
 }
 $base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
-if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 {
 	Header( 'Location: ' . $base_url_rewrite );
 	die();

@@ -31,7 +31,8 @@ $array_viewcat_full = array(
 	'viewcat_main_left' => $lang_module['viewcat_main_left'],
 	'viewcat_main_right' => $lang_module['viewcat_main_right'],
 	'viewcat_main_bottom' => $lang_module['viewcat_main_bottom'],
-	'viewcat_two_column' => $lang_module['viewcat_two_column']
+	'viewcat_two_column' => $lang_module['viewcat_two_column'],
+	'viewcat_none' => $lang_module['viewcat_none']
 );
 $array_viewcat_nosub = array(
 	'viewcat_page_new' => $lang_module['viewcat_page_new'],

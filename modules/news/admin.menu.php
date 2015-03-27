@@ -89,7 +89,9 @@ if( $NV_IS_ADMIN_MODULE )
 	$submenu['topics'] = $lang_module['topics'];
 	$submenu['sources'] = $lang_module['sources'];
 	$submenu['setting'] = $lang_module['setting'];
+	$submenu['admins'] = $lang_module['admin'];
 
+	$allow_func[] = 'admins';
 	$allow_func[] = 'topicsnews';
 	$allow_func[] = 'topics';
 	$allow_func[] = 'topicdelnews';
@@ -112,14 +114,7 @@ if( $NV_IS_ADMIN_MODULE )
 	$allow_func[] = 'list_block';
 
 	$allow_func[] = 'tags';
-
 	$allow_func[] = 'setting';
 	$allow_func[] = 'move';
 	$allow_func[] = 'tools';
-}
-
-if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/admin/admins.php' ) )
-{
-	$submenu['admins'] = $lang_module['admin'];
-	$allow_func[] = 'admins';
 }
