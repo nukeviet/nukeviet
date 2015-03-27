@@ -122,9 +122,9 @@ if( $post_order == 1 )
 				if( $result->rowCount() > 0 )
 				{
 					list( $listcatid ) = $result->fetch( 3 );
-					if( $global_array_cat[$listcatid]['cat_allow_point'] and ( $global_array_cat[$listcatid]['cat_number_product'] == 0 or $info['num'] >= $global_array_cat[$listcatid]['cat_number_product'] ) )
+					if( $global_array_shops_cat[$listcatid]['cat_allow_point'] and ( $global_array_shops_cat[$listcatid]['cat_number_product'] == 0 or $info['num'] >= $global_array_shops_cat[$listcatid]['cat_number_product'] ) )
 					{
-						$total_point += intval( $global_array_cat[$listcatid]['cat_number_point'] );
+						$total_point += intval( $global_array_shops_cat[$listcatid]['cat_number_point'] );
 					}
 				}
 			}
@@ -593,7 +593,7 @@ if( $action == 0 )
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
 				'group' => $group,
-				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 				'num' => $num
 			);
 			++$i;

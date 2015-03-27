@@ -31,9 +31,9 @@ $array_displays = array(
 );
 
 // Categories
-foreach( $global_array_cat as $row )
+foreach( $global_array_shops_cat as $row )
 {
-	$global_array_cat[$row['catid']]['link'] =  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
+	$global_array_shops_cat[$row['catid']]['link'] =  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
 
 	if( $alias_cat_url == $row['alias'] )
 	{
@@ -81,7 +81,7 @@ if( $op == 'main' )
 		$parentid = $catid;
 		while( $parentid > 0 )
 		{
-			$array_cat_i = $global_array_cat[$parentid];
+			$array_cat_i = $global_array_shops_cat[$parentid];
 			$array_mod_title[] = array(
 				'catid' => $parentid,
 				'title' => $array_cat_i['title'],
@@ -112,7 +112,7 @@ if( defined( 'NV_IS_USER' ) and $pro_config['active_wishlist'] )
  */
 function GetDataIn( $result, $catid )
 {
-	global $global_array_cat, $module_name, $module_file, $db, $link, $module_info, $global_config;
+	global $global_array_shops_cat, $module_name, $module_file, $db, $link, $module_info, $global_config;
 
 	$data_content = array();
 	$data = array();
@@ -152,16 +152,16 @@ function GetDataIn( $result, $catid )
 			'showprice' => $showprice,
 			'newday' => $newday,
 			'promotional'=> $promotional,
-			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
 
 	$data_content['id'] = $catid;
-	$data_content['title'] = $global_array_cat[$catid]['title'];
-	$data_content['image'] = $global_array_cat[$catid]['image'];
+	$data_content['title'] = $global_array_shops_cat[$catid]['title'];
+	$data_content['image'] = $global_array_shops_cat[$catid]['image'];
 	$data_content['data'] = $data;
-	$data_content['alias'] = $global_array_cat[$catid]['alias'];
+	$data_content['alias'] = $global_array_shops_cat[$catid]['alias'];
 
 	return $data_content;
 }
@@ -175,7 +175,7 @@ function GetDataIn( $result, $catid )
  */
 function GetDataInGroups( $result, $array_g )
 {
-	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_cat, $global_config;
+	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_shops_cat, $global_config;
 
 	$data_content = array();
 	$data = array();
@@ -216,7 +216,7 @@ function GetDataInGroups( $result, $array_g )
 			'showprice' => $showprice,
 			'newday' => $newday,
 			'promotional' => $promotional,
-			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
@@ -238,7 +238,7 @@ function GetDataInGroups( $result, $array_g )
  */
 function GetDataInGroup( $result, $groupid )
 {
-	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_cat, $global_config;
+	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_shops_cat, $global_config;
 
 	$data_content = array();
 	$data = array();
@@ -278,7 +278,7 @@ function GetDataInGroup( $result, $groupid )
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
 			'newday' => $newday,
-			'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}

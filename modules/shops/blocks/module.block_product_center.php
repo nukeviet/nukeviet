@@ -19,7 +19,7 @@ if( ! function_exists( 'nv_product_center' ) )
 	 */
 	function nv_product_center( $block_config )
 	{
-		global $module_name, $lang_module, $module_info, $module_file, $global_array_cat, $db, $module_data, $db_config, $pro_config, $global_config;
+		global $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $pro_config, $global_config;
 
 		$module = $block_config['module'];
 
@@ -64,7 +64,7 @@ if( ! function_exists( 'nv_product_center' ) )
 
 		foreach( $array as $row )
 		{
-			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . $global_config['rewrite_exturl'];
+			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_shops_cat[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . $global_config['rewrite_exturl'];
 
 			if( $row['homeimgthumb'] == 1 ) //image thumb
 			{

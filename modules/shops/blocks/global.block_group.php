@@ -20,12 +20,12 @@ if( ! function_exists( 'nv_pro_group' ) )
 	 */
 	function GetCatidInChild( $catid )
 	{
-		global $global_array_cat, $array_cat;
+		global $global_array_shops_cat, $array_cat;
 		$array_cat[] = $catid;
-		if( ! empty( $global_array_cat[$catid]['parentid'] ) && ( $global_array_cat[$catid]['parentid'] > 0 ) )
+		if( ! empty( $global_array_shops_cat[$catid]['parentid'] ) && ( $global_array_shops_cat[$catid]['parentid'] > 0 ) )
 		{
-			$array_cat[] = $global_array_cat[$catid]['parentid'];
-			$array_cat_temp = GetCatidInChild( $global_array_cat[$catid]['parentid'] );
+			$array_cat[] = $global_array_shops_cat[$catid]['parentid'];
+			$array_cat_temp = GetCatidInChild( $global_array_shops_cat[$catid]['parentid'] );
 			foreach( $array_cat_temp as $catid_i )
 			{
 				$array_cat[] = $catid_i;

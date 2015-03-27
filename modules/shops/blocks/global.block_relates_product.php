@@ -96,12 +96,12 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 	 */
 	function nv_relates_product( $block_config )
 	{
-		global $site_mods, $global_config, $lang_module, $module_config, $module_config, $module_name, $module_info, $global_array_cat, $db_config, $my_head, $db, $pro_config;
+		global $site_mods, $global_config, $lang_module, $module_config, $module_config, $module_name, $module_info, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 		$mod_file = $site_mods[$module]['module_file'];
-		$array_cat_shops = $global_array_cat;
+		$array_cat_shops = $global_array_shops_cat;
 
 		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $mod_file . '/block.others_product.tpl' ) )
 		{

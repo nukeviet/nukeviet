@@ -18,7 +18,7 @@ if( $data['type'] == 'review_new' )
 	if( $mod != $module_name )
 	{
 		$sql = 'SELECT ' . NV_LANG_DATA . '_alias AS alias FROM ' . $db_config['prefix'] . '_' . $site_mods[$mod]['module_data'] . '_catalogs ORDER BY sort ASC';
-		$global_array_cat = nv_db_cache( $sql, 'catid', $module_name );
+		$global_array_shops_cat = nv_db_cache( $sql, 'catid', $module_name );
 	}
 
 	if( $data['content']['status'] )

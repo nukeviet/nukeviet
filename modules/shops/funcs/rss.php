@@ -25,7 +25,7 @@ if( isset( $array_op[1] ) )
 {
 	$alias_cat_url = $array_op[1];
 	$cattitle = '';
-	foreach( $global_array_cat as $catid_i => $array_cat_i )
+	foreach( $global_array_shops_cat as $catid_i => $array_cat_i )
 	{
 		if( $alias_cat_url == $array_cat_i['alias'] )
 		{
@@ -36,9 +36,9 @@ if( isset( $array_op[1] ) )
 }
 if( ! empty( $catid ) )
 {
-	$channel['title'] = $module_info['custom_title'] . ' - ' . $global_array_cat[$catid]['title'];
+	$channel['title'] = $module_info['custom_title'] . ' - ' . $global_array_shops_cat[$catid]['title'];
 	$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias_cat_url;
-	$channel['description'] = $global_array_cat[$catid]['description'];
+	$channel['description'] = $global_array_shops_cat[$catid]['description'];
 
 	$db->sqlreset()->select( 'id, listcatid, publtime, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_hometext, homeimgfile' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( 'listcatid= ' . $catid . ' AND status =1' )->order( 'publtime DESC' )->limit( 30 );
 	$sql = $db->sql();
@@ -54,7 +54,7 @@ if( $module_info['rss'] )
 	$result = $db->query( $sql );
 	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgfile, $homeimgthumb ) = $result->fetch( 3 ) )
 	{
-		$catalias = $global_array_cat[$listcatid]['alias'];
+		$catalias = $global_array_shops_cat[$listcatid]['alias'];
 
 		if( $homeimgthumb == 1 )//image thumb
 		{

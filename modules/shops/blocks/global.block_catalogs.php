@@ -80,7 +80,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 	 */
 	function nv_pro_catalogs( $block_config )
 	{
-		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db, $db_config, $array_cat_shops;
+		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_shops_cat, $db, $db_config, $array_cat_shops;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
@@ -135,7 +135,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 		}
 		else
 		{
-			$array_cat_shops = $global_array_cat;
+			$array_cat_shops = $global_array_shops_cat;
 		}
 
 		$xtpl = new XTemplate( $block_tpl_name, NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );

@@ -32,7 +32,7 @@ $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'rowcontent', $rowcontent );
 
-$typeprice = ( $cid ) ? $global_array_cat[$cid]['typeprice'] : 1;
+$typeprice = ( $cid ) ? $global_array_shops_cat[$cid]['typeprice'] : 1;
 if( $typeprice == 1 )
 {
 	// List discount

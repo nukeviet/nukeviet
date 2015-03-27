@@ -55,7 +55,7 @@ if( ! function_exists( 'nv_filter_product' ) )
 	 */
 	function nv_filter_product( $block_config )
 	{
-		global $nv_Request, $module_name, $lang_module, $module_info, $module_file, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config, $global_array_group, $global_array_cat, $pro_config, $catid;
+		global $nv_Request, $module_name, $lang_module, $module_info, $module_file, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config, $global_array_group, $global_array_shops_cat, $pro_config, $catid;
 
 		$module = $block_config['module'];
 
@@ -131,9 +131,9 @@ if( ! function_exists( 'nv_filter_product' ) )
 
 		if( !empty( $pro_config['group_price'] ) and $block_config['display_group_price'] )
 		{
-			if( !empty( $catid ) and isset( $global_array_cat[$catid] ) and !empty( $global_array_cat[$catid]['group_price'] ) )
+			if( !empty( $catid ) and isset( $global_array_shops_cat[$catid] ) and !empty( $global_array_shops_cat[$catid]['group_price'] ) )
 			{
-				$price_value = explode( PHP_EOL, $global_array_cat[$catid]['group_price'] );
+				$price_value = explode( PHP_EOL, $global_array_shops_cat[$catid]['group_price'] );
 			}
 			else
 			{

@@ -137,7 +137,7 @@ if( ! empty( $array_id ) )
 				'discount_id' => $discount_id,
 				'money_unit' => $money_unit,
 				'showprice' => $showprice,
-				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 				'link_order' => $link . 'setcart&amp;id=' . $id,
 				'warranty' => $warranty,
 				'promotional' => $promotional,
