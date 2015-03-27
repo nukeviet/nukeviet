@@ -16,7 +16,7 @@ if( defined( 'NV_EDITOR' ) )
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-if( empty( $global_array_cat ) )
+if( empty( $global_array_shops_cat ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
 	die( );
@@ -185,7 +185,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['homeimgfile'] = $nv_Request->get_title( 'homeimg', 'post', '' );
 	$rowcontent['homeimgalt'] = $nv_Request->get_title( 'homeimgalt', 'post', '', 1 );
 
-	$typeprice = ($rowcontent['listcatid']) ? $global_array_cat[$rowcontent['listcatid']]['typeprice'] : 0;
+	$typeprice = ($rowcontent['listcatid']) ? $global_array_shops_cat[$rowcontent['listcatid']]['typeprice'] : 0;
 	if( $typeprice == 2 )
 	{
 		$price_config = $nv_Request->get_array( 'price_config', 'post' );
@@ -348,7 +348,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		}
 	}
 
-	if( $global_array_cat[$rowcontent['listcatid']]['form'] != '' )
+	if( $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
 	{
 		require NV_ROOTDIR . '/modules/' . $module_file . '/fields.check.php';
 	}
@@ -503,11 +503,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			if( $rowcontent['id'] > 0 )
 			{
-				if( $global_array_cat[$rowcontent['listcatid']]['form'] != '' )
+				if( $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
 				{
 					$form = $db->query( 'SELECT form FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs where catid=' . $rowcontent['listcatid'] )->fetchColumn( );
 
-					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
+					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 
 					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
 
@@ -653,18 +653,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
 
 				// Tim va xoa du lieu tuy bien
-				if( $global_array_cat[$rowcontent_old['listcatid']]['form'] != '' )
+				if( $global_array_shops_cat[$rowcontent_old['listcatid']]['form'] != '' )
 				{
-					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent_old['listcatid']]['form'] ) . '"' )->fetchColumn( );
+					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent_old['listcatid']]['form'] ) . '"' )->fetchColumn( );
 
 					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
 					$db->query( "DELETE FROM " . $table_insert . " WHERE shopid =" . $rowcontent['id'] );
 				}
 
-				if( $global_array_cat[$rowcontent['listcatid']]['form'] != '' )
+				if( $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
 				{
 					// Them lai du lieu tuy bien
-					$idtemplate_new = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
+					$idtemplate_new = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 					$table_insert_new = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate_new;
 
 					Insertabl_catfields( $table_insert_new, $array_custom, $rowcontent['id'] );
@@ -806,7 +806,7 @@ elseif( $rowcontent['id'] > 0 )
 	}
 
 	// Custom fields
-	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
+	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 	if( $idtemplate )
 	{
 		$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
@@ -900,7 +900,7 @@ if( !empty( $otherimage ) )
 }
 $xtpl->assign( 'FILE_ITEMS', $items );
 
-foreach( $global_array_cat as $catid_i => $rowscat )
+foreach( $global_array_shops_cat as $catid_i => $rowscat )
 {
 	$xtitle_i = '';
 	if( $rowscat['lev'] > 0 )
@@ -998,7 +998,7 @@ if( count( $array_block_cat_module ) > 0 )
 	$xtpl->parse( 'main.block_cat' );
 }
 
-$typeprice = ($rowcontent['listcatid']) ? $global_array_cat[$rowcontent['listcatid']]['typeprice'] : 1;
+$typeprice = ($rowcontent['listcatid']) ? $global_array_shops_cat[$rowcontent['listcatid']]['typeprice'] : 1;
 if( $typeprice == 1 )
 {
 	// List discount
@@ -1135,9 +1135,9 @@ if( empty( $rowcontent['alias'] ) )
 }
 
 // Custom fiels
-if( $rowcontent['listcatid'] AND !empty( $global_array_cat[$rowcontent['listcatid']]['form'] ) )
+if( $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
 {
-	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_cat[$rowcontent['listcatid']]['form'], $custom );
+	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_shops_cat[$rowcontent['listcatid']]['form'], $custom );
 	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
 }
 

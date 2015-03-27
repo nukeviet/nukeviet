@@ -64,7 +64,7 @@ function draw_option_select_number( $select = -1, $begin = 0, $end = 100, $step 
  */
 function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 0 )
 {
-	global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_cat, $global_array_group;
+	global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -207,10 +207,10 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 					}
 
 					// Hien thi bieu tuong tich luy diem
-					if( $pro_config['point_active'] and $global_array_cat[$data_row_i['listcatid']]['cat_allow_point'] and !empty( $global_array_cat[$data_row_i['listcatid']]['cat_number_point'] ) )
+					if( $pro_config['point_active'] and $global_array_shops_cat[$data_row_i['listcatid']]['cat_allow_point'] and !empty( $global_array_shops_cat[$data_row_i['listcatid']]['cat_number_point'] ) )
 					{
-						$xtpl->assign( 'point', $global_array_cat[$data_row_i['listcatid']]['cat_number_point'] );
-						$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_cat[$data_row_i['listcatid']]['cat_number_point'] ) );
+						$xtpl->assign( 'point', $global_array_shops_cat[$data_row_i['listcatid']]['cat_number_point'] );
+						$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_shops_cat[$data_row_i['listcatid']]['cat_number_point'] ) );
 						$xtpl->parse( 'main.catalogs.items.point' );
 					}
 
@@ -240,7 +240,7 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
  */
 function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_wishlist_id, $global_array_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -382,10 +382,10 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 					}
 
 					// Hien thi bieu tuong tich luy diem
-					if( $pro_config['point_active'] and $global_array_cat[$data_row_i['listcatid']]['cat_allow_point'] and !empty( $global_array_cat[$data_row_i['listcatid']]['cat_number_point'] ) )
+					if( $pro_config['point_active'] and $global_array_shops_cat[$data_row_i['listcatid']]['cat_allow_point'] and !empty( $global_array_shops_cat[$data_row_i['listcatid']]['cat_number_point'] ) )
 					{
-						$xtpl->assign( 'point', $global_array_cat[$data_row_i['listcatid']]['cat_number_point'] );
-						$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_cat[$data_row_i['listcatid']]['cat_number_point'] ) );
+						$xtpl->assign( 'point', $global_array_shops_cat[$data_row_i['listcatid']]['cat_number_point'] );
+						$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_shops_cat[$data_row_i['listcatid']]['cat_number_point'] ) );
 						$xtpl->parse( 'main.catalogs.items.point' );
 					}
 
@@ -398,10 +398,10 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 					$data_row['subcatid'] = explode( ',', $data_row['subcatid'] );
 					foreach( $data_row['subcatid'] as $subcatid )
 					{
-						$items = $global_array_cat[$subcatid];
+						$items = $global_array_shops_cat[$subcatid];
 						if( $items['inhome'] )
 						{
-							$xtpl->assign( 'SUBCAT', $global_array_cat[$subcatid] );
+							$xtpl->assign( 'SUBCAT', $global_array_shops_cat[$subcatid] );
 							$xtpl->parse( 'main.catalogs.subcatloop' );
 						}
 					}
@@ -430,7 +430,7 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
  */
 function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0, $viewtype = '' )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $op, $array_displays, $array_wishlist_id, $global_array_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $op, $array_displays, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
 
 	$xtpl = new XTemplate( 'main_product.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -588,10 +588,10 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			}
 
 			// Hien thi bieu tuong tich luy diem
-			if( $pro_config['point_active'] and $global_array_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) )
+			if( $pro_config['point_active'] and $global_array_shops_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) )
 			{
-				$xtpl->assign( 'point', $global_array_cat[$data_row['listcatid']]['cat_number_point'] );
-				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) );
+				$xtpl->assign( 'point', $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] );
+				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) );
 				$xtpl->parse( 'main.items.point' );
 			}
 
@@ -620,7 +620,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
  */
 function view_search_all( $data_content, $compare_id, $html_pages = '' )
 {
-	global $module_info, $lang_module, $module_file, $pro_config, $array_wishlist_id, $global_array_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
 
 	$xtpl = new XTemplate( 'search_all.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -742,10 +742,10 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
 			}
 
 			// Hien thi bieu tuong tich luy diem
-			if( $pro_config['point_active'] and $global_array_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) )
+			if( $pro_config['point_active'] and $global_array_shops_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) )
 			{
-				$xtpl->assign( 'point', $global_array_cat[$data_row['listcatid']]['cat_number_point'] );
-				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) );
+				$xtpl->assign( 'point', $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] );
+				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) );
 				$xtpl->parse( 'main.items.point' );
 			}
 
@@ -779,7 +779,7 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
  */
 function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $viewtype )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $op, $global_array_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $op, $global_array_shops_cat, $global_array_group;
 
 	$xtpl = new XTemplate( 'view_gird.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -965,10 +965,10 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 			}
 
 			// Hien thi bieu tuong tich luy diem
-			if( $pro_config['point_active'] and $global_array_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) )
+			if( $pro_config['point_active'] and $global_array_shops_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) )
 			{
-				$xtpl->assign( 'point', $global_array_cat[$data_row['listcatid']]['cat_number_point'] );
-				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) );
+				$xtpl->assign( 'point', $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] );
+				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) );
 				$xtpl->parse( 'main.grid_rows.point' );
 			}
 
@@ -993,7 +993,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
  */
 function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $viewtype )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $global_array_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
 
 	$xtpl = new XTemplate( 'view_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1165,10 +1165,10 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 			}
 
 			// Hien thi bieu tuong tich luy diem
-			if( $pro_config['point_active'] and $global_array_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) )
+			if( $pro_config['point_active'] and $global_array_shops_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) )
 			{
-				$xtpl->assign( 'point', $global_array_cat[$data_row['listcatid']]['cat_number_point'] );
-				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) );
+				$xtpl->assign( 'point', $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] );
+				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) );
 				$xtpl->parse( 'main.row.point' );
 			}
 
@@ -1194,7 +1194,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
  */
 function detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment, $compare_id, $popup )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_cat, $meta_property, $pro_config, $user_info;
+	global $module_info, $lang_module, $module_file, $module_name, $my_head, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_shops_cat, $meta_property, $pro_config, $user_info;
 
 	if( !defined( 'SHADOWBOX' ) )
 	{
@@ -1224,7 +1224,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	if( !empty( $data_content ) )
 	{
 		$xtpl->assign( 'proid', $data_content['id'] );
-		$xtpl->assign( 'CAT_TITLE', $global_array_cat[$data_content['listcatid']]['title'] );
+		$xtpl->assign( 'CAT_TITLE', $global_array_shops_cat[$data_content['listcatid']]['title'] );
 		$xtpl->assign( 'SRC_PRO_FULL', $global_config['site_url'] . $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO', $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO_LAGE', $data_content['homeimgfile'] );
@@ -1447,7 +1447,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 		$xtpl->parse( 'main.group_detail' );
 	}
 
-	if( $global_array_cat[$data_content['listcatid']]['typeprice'] == 2 )
+	if( $global_array_shops_cat[$data_content['listcatid']]['typeprice'] == 2 )
 	{
 		$price_config = unserialize( $data_content['price_config'] );
 		if( !empty( $price_config ) )
@@ -1541,7 +1541,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
  */
 function print_product( $data_content, $data_unit, $page_title )
 {
-	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config, $global_array_cat;
+	global $module_info, $lang_module, $module_file, $global_config, $module_name, $pro_config, $global_array_shops_cat;
 
 	$xtpl = new XTemplate( 'print_pro.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1589,7 +1589,7 @@ function print_product( $data_content, $data_unit, $page_title )
  */
 function cart_product( $data_content, $coupons_code, $order_info, $array_error_number )
 {
-	global $module_info, $lang_module, $module_config, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $global_array_cat;
+	global $module_info, $lang_module, $module_config, $module_file, $module_name, $pro_config, $money_config, $global_array_group, $global_array_shops_cat;
 
 	$xtpl = new XTemplate( 'cart.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1633,9 +1633,9 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 			$xtpl->assign( 'product_unit', $data_row['product_unit'] );
 
 			// Tinh diem tich luy
-			if( $pro_config['point_active'] and $global_array_cat[$data_row['listcatid']]['cat_allow_point'] and ($global_array_cat[$data_row['listcatid']]['cat_number_product'] == 0 or $data_row['num'] >= $global_array_cat[$data_row['listcatid']]['cat_number_product']) )
+			if( $pro_config['point_active'] and $global_array_shops_cat[$data_row['listcatid']]['cat_allow_point'] and ($global_array_shops_cat[$data_row['listcatid']]['cat_number_product'] == 0 or $data_row['num'] >= $global_array_shops_cat[$data_row['listcatid']]['cat_number_product']) )
 			{
-				$point_total += intval( $global_array_cat[$data_row['listcatid']]['cat_number_point'] );
+				$point_total += intval( $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] );
 			}
 
 			// Group của sản phẩm
@@ -2390,7 +2390,7 @@ function search_theme( $key, $check_num, $date_array, $array_cat_search )
  */
 function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_content, $url_link, $catid )
 {
-	global $module_file, $module_info, $lang_module, $global_array_cat, $pro_config;
+	global $module_file, $module_info, $lang_module, $global_array_shops_cat, $pro_config;
 
 	$xtpl = new XTemplate( "search.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 
@@ -2406,7 +2406,7 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 		{
 			$listcatid = explode( ",", $value['listcatid'] );
 			$catid_i = ($catid > 0) ? $catid : end( $listcatid );
-			$url = $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
+			$url = $global_array_shops_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'];
 
 			$value['hometext'] = nv_clean60( $value['hometext'], 170 );
 
@@ -2614,7 +2614,7 @@ function compare( $data_pro )
  */
 function wishlist( $data_content, $compare_id, $html_pages = '' )
 {
-	global $module_info, $lang_module, $module_file, $pro_config, $op, $array_displays, $array_wishlist_id, $module_name, $global_array_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $pro_config, $op, $array_displays, $array_wishlist_id, $module_name, $global_array_shops_cat, $global_array_group;
 
 	$xtpl = new XTemplate( 'wishlist.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
@@ -2731,10 +2731,10 @@ function wishlist( $data_content, $compare_id, $html_pages = '' )
 			}
 
 			// Hien thi bieu tuong tich luy diem
-			if( $pro_config['point_active'] and $global_array_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) )
+			if( $pro_config['point_active'] and $global_array_shops_cat[$data_row['listcatid']]['cat_allow_point'] and !empty( $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) )
 			{
-				$xtpl->assign( 'point', $global_array_cat[$data_row['listcatid']]['cat_number_point'] );
-				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_cat[$data_row['listcatid']]['cat_number_point'] ) );
+				$xtpl->assign( 'point', $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] );
+				$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] ) );
 				$xtpl->parse( 'main.items.point' );
 			}
 

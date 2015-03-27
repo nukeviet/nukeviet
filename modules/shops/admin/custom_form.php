@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $datacustom_form = '';
 
 $cid = $nv_Request->get_int( 'cid', 'get', 0 );
-$cat_form = $global_array_cat[$cid]['form'];
+$cat_form = $global_array_shops_cat[$cid]['form'];
 
 if( $cid AND ! empty( $cat_form ) )
 {

@@ -54,9 +54,9 @@ foreach( $array_op as $_inurl )
 	}
 }
 
-$page_title = $global_array_cat[$catid]['title'];
-$key_words = $global_array_cat[$catid]['keywords'];
-$description = $global_array_cat[$catid]['description'];
+$page_title = $global_array_shops_cat[$catid]['title'];
+$key_words = $global_array_shops_cat[$catid]['keywords'];
+$description = $global_array_shops_cat[$catid]['description'];
 
 $contents = '';
 $cache_file = '';
@@ -71,7 +71,7 @@ $viewtype_old = $nv_Request->get_string( 'viewtype', 'session', '' );
 $viewtype = $nv_Request->get_string( 'viewtype', 'post', $viewtype_old );
 if( !empty( $viewtype ) )
 {
-	$global_array_cat[$catid]['viewcat'] = $viewtype;
+	$global_array_shops_cat[$catid]['viewcat'] = $viewtype;
 }
 
 if( !defined( 'NV_IS_MODADMIN' ) and $page < 5 and !$ajax )
@@ -141,14 +141,14 @@ if( empty( $contents ) )
 		}
 	}
 
-	if( $global_array_cat[$catid]['viewcat'] == 'view_home_cat' and $global_array_cat[$catid]['numsubcat'] > 0 )
+	if( $global_array_shops_cat[$catid]['viewcat'] == 'view_home_cat' and $global_array_shops_cat[$catid]['numsubcat'] > 0 )
 	{
 		$data_content = array( );
-		$array_subcatid = explode( ',', $global_array_cat[$catid]['subcatid'] );
+		$array_subcatid = explode( ',', $global_array_shops_cat[$catid]['subcatid'] );
 
 		foreach( $array_subcatid as $catid_i )
 		{
-			$array_info_i = $global_array_cat[$catid_i];
+			$array_info_i = $global_array_shops_cat[$catid_i];
 
 			$array_cat = array( );
 			$array_cat = GetCatidInParent( $catid_i );
@@ -205,7 +205,7 @@ if( empty( $contents ) )
 					'showprice' => $showprice,
 					'newday' => $newday,
 					'promotional' => $promotional,
-					'link_pro' => $link . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+					'link_pro' => $link . $global_array_shops_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 					'link_order' => $link . 'setcart&amp;id=' . $id
 				);
 			}
@@ -233,7 +233,7 @@ if( empty( $contents ) )
 	else
 	{
 		// Fetch Limit
-		if( $global_array_cat[$catid]['numsubcat'] == 0 )
+		if( $global_array_shops_cat[$catid]['numsubcat'] == 0 )
 		{
 			$where = ' t1.listcatid=' . $catid;
 		}
@@ -266,7 +266,7 @@ if( empty( $contents ) )
 
 		if( empty( $array_url_group ) and !$ajax )
 		{
-			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'];
+			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'];
 			$pages = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 		}
 
@@ -276,7 +276,7 @@ if( empty( $contents ) )
 			exit( );
 		}
 
-		$contents = call_user_func( $global_array_cat[$catid]['viewcat'], $data_content, $compare_id, $pages, $sorts, $viewtype );
+		$contents = call_user_func( $global_array_shops_cat[$catid]['viewcat'], $data_content, $compare_id, $pages, $sorts, $viewtype );
 	}
 
 	if( !defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' and !$ajax )

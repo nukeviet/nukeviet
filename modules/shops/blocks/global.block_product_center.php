@@ -99,12 +99,12 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 	 */
 	function nv_global_product_center( $block_config )
 	{
-		global $site_mods, $global_config, $module_config, $lang_module, $module_name, $global_array_cat, $db_config, $my_head, $db, $pro_config;
+		global $site_mods, $global_config, $module_config, $lang_module, $module_name, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 		$mod_file = $site_mods[$module]['module_file'];
-		$array_cat_shops = $global_array_cat;
+		$array_cat_shops = $global_array_shops_cat;
 		$num_view = $block_config['numrow'];
 		$num_get = $block_config['numget'];
 
@@ -139,7 +139,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 				require_once NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php';
 			}
 
-			$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
+			$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, typeprice FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $row )
 			{
@@ -157,22 +157,48 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 					'inhome' => $row['inhome'],
 					'keywords' => $row['keywords'],
 					'groups_view' => $row['groups_view'],
-					'lev' => $row['lev']
+					'lev' => $row['lev'],
+					'typeprice' => $row['typeprice']
 				);
 			}
 			unset( $list, $row );
-			$shops_config = $module_config[$module];
-		}
-		else
-		{
-			$shops_config = $pro_config;
+			$pro_config = $module_config[$module];
+
+
+			// Lay ty gia ngoai te
+			$sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $mod_data . '_money_' . NV_LANG_DATA;
+			$cache_file = NV_LANG_DATA . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
+			if( ($cache = nv_get_cache( $module, $cache_file )) != false )
+			{
+				$money_config = unserialize( $cache );
+			}
+			else
+			{
+				$money_config = array();
+				$result = $db->query( $sql );
+				while( $row = $result->fetch() )
+				{
+					$money_config[$row['code']] = array(
+						'code' => $row['code'],
+						'currency' => $row['currency'],
+						'exchange' => $row['exchange'],
+						'round' => $row['round'],
+						'number_format' => $row['number_format'],
+						'decimals' => $row['round'] > 1 ? $row['round'] : strlen( $row['round'] ) - 2,
+						'is_config' => ($row['code'] == $pro_config['money_unit']) ? 1 : 0
+					);
+				}
+				$result->closeCursor();
+				$cache = serialize( $money_config );
+				nv_set_cache( $module, $cache_file, $cache );
+			}
 		}
 
 		$xtpl = new XTemplate( 'block.product_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . 'themes/' . $block_theme );
 		$xtpl->assign( 'NUMVIEW', $num_view );
-		$xtpl->assign( 'WIDTH', $shops_config['homewidth'] );
+		$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
 
 		$db->sqlreset()
 			->select( 't1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt, t1.showprice, t1.discount_id' )
@@ -209,7 +235,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			$xtpl->assign( 'TITLE0', nv_clean60( $row['title'], 30 ) );
 			$xtpl->assign( 'SRC_IMG', $src_img );
 
-			if( $shops_config['active_price'] == '1' )
+			if( $pro_config['active_price'] == '1' )
 			{
 				if( $row['showprice'] == '1' )
 				{

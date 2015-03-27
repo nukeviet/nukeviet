@@ -58,45 +58,47 @@ if( empty( $data_content ) )
 $data_content['array_custom'] = array();
 $data_content['array_custom_lang'] = array();
 $data_content['template'] = '';
-if( $global_array_cat[$data_content['listcatid']]['form'] != '' )
+if( $global_array_shops_cat[$data_content['listcatid']]['form'] != '' )
 {
-	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$data_content['listcatid']]['form'] ) . '"' )->fetchColumn( );
-
-	$array_tmp = array( );
-	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field  ORDER BY weight' );
-	while( $row = $result->fetch( ) )
+	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$data_content['listcatid']]['form'] ) . '"' )->fetchColumn( );
+	if( $idtemplate )
 	{
-		$listtemplate = explode( '|', $row['listtemplate'] );
-		if( in_array( $idtemplate, $listtemplate ) )
+		$array_tmp = array( );
+		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field  ORDER BY weight' );
+		while( $row = $result->fetch( ) )
 		{
-			$array_tmp[$row['field']] = unserialize( $row['language'] );
-		}
-	}
-
-	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate . ' WHERE shopid = ' . $id . ' AND status=1' );
-	$data_content['template'] = $global_array_cat[$data_content['listcatid']]['form'];
-	$data_content['array_custom'] = $sql->fetch( );
-
-	if( !empty( $array_tmp ) )
-	{
-		foreach( $array_tmp as $f_key => $field )
-		{
-			foreach( $field as $key_lang => $lang_data )
+			$listtemplate = explode( '|', $row['listtemplate'] );
+			if( in_array( $idtemplate, $listtemplate ) )
 			{
-				if( $key_lang == NV_LANG_DATA )
-				{
-					$data_content['array_custom_lang'][$f_key] = $lang_data[0];
-				}
+				$array_tmp[$row['field']] = unserialize( $row['language'] );
 			}
 		}
-		unset( $array_tmp );
+
+		$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate . ' WHERE shopid = ' . $id . ' AND status=1' );
+		$data_content['template'] = $global_array_shops_cat[$data_content['listcatid']]['form'];
+		$data_content['array_custom'] = $sql->fetch( );
+
+		if( !empty( $array_tmp ) )
+		{
+			foreach( $array_tmp as $f_key => $field )
+			{
+				foreach( $field as $key_lang => $lang_data )
+				{
+					if( $key_lang == NV_LANG_DATA )
+					{
+						$data_content['array_custom_lang'][$f_key] = $lang_data[0];
+					}
+				}
+			}
+			unset( $array_tmp );
+		}
 	}
 }
 
 $page_title = $data_content[NV_LANG_DATA . '_title'];
 $description = $data_content[NV_LANG_DATA . '_hometext'];
 
-if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
+if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 {
 	$popup = $nv_Request->get_int( 'popup', 'post,get', 0 );
 
@@ -104,7 +106,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$db->query( $sql );
 
 	$catid = $data_content['listcatid'];
-	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . '-' . $data_content['id'] . $global_config['rewrite_exturl'], true );
+	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . '-' . $data_content['id'] . $global_config['rewrite_exturl'], true );
 
 	if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and !$popup )
 	{
@@ -203,7 +205,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			'showprice' => $showprice,
 			'newday' => $newday,
 			'promotional' => $promotional,
-			'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$data_content['listcatid']]['alias'] . '/' . $alias . '-' . $_id . $global_config['rewrite_exturl'],
+			'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$data_content['listcatid']]['alias'] . '/' . $alias . '-' . $_id . $global_config['rewrite_exturl'],
 			'link_order' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setcart&amp;id=' . $_id
 		);
 	}
@@ -262,7 +264,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 					'showprice' => $showprice,
 					'newday' => $newday,
 					'promotional' => $promotional,
-					'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$data_content['listcatid']]['alias'] . '/' . $alias . '-' . $_id . $global_config['rewrite_exturl'],
+					'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$data_content['listcatid']]['alias'] . '/' . $alias . '-' . $_id . $global_config['rewrite_exturl'],
 					'link_order' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setcart&amp;id=' . $_id
 				);
 			}
@@ -270,7 +272,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		}
 	}
 
-	SetSessionProView( $data_content['id'], $data_content[NV_LANG_DATA . '_title'], $data_content[NV_LANG_DATA . '_alias'], $data_content['addtime'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . '-' . $data_content['id'], $data_content['homeimgthumb'] );
+	SetSessionProView( $data_content['id'], $data_content[NV_LANG_DATA . '_title'], $data_content[NV_LANG_DATA . '_alias'], $data_content['addtime'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . '-' . $data_content['id'], $data_content['homeimgthumb'] );
 
 	// comment
 	define( 'NV_COMM_ID', $data_content['id'] );

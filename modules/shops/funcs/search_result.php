@@ -70,7 +70,7 @@ else
 $xtpl = new XTemplate( "search_all.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-foreach( $global_array_cat as $row )
+foreach( $global_array_shops_cat as $row )
 {
 	$xtitle_i = "";
 	if( $row['lev'] > 0 )
@@ -257,7 +257,7 @@ while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt,
 		"money_unit" => $money_unit,
 		"showprice" => $showprice,
 		"newday" => $newday,
-		"link_pro" => $link . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'],
+		"link_pro" => $link . $global_array_shops_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'],
 		"link_order" => $link . "setcart&amp;id=" . $id
 	);
 }

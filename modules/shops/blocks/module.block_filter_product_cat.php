@@ -78,7 +78,7 @@ if( ! function_exists( 'nv_filter_product_cat' ) )
 	 */
 	function nv_filter_product_cat( $block_config )
 	{
-		global $module_name, $lang_module, $module_info, $site_mods, $module_file, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config, $global_array_group, $global_array_cat, $nv_Request, $array_id_group, $catid, $op;
+		global $module_name, $lang_module, $module_info, $site_mods, $module_file, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config, $global_array_group, $global_array_shops_cat, $nv_Request, $array_id_group, $catid, $op;
 
 		if( $op != 'viewcat' )
 		{
@@ -93,7 +93,7 @@ if( ! function_exists( 'nv_filter_product_cat' ) )
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'CATID', $catid );
 		$xtpl->assign( 'MODULE_URL', nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-		$xtpl->assign( 'CAT_ALIAS', $global_array_cat[$catid]['alias'] );
+		$xtpl->assign( 'CAT_ALIAS', $global_array_shops_cat[$catid]['alias'] );
 
 		$catid = GetParentCatFilter( $catid );
 		$result = $db->query( 'SELECT groupid FROM ' . $db_config['prefix'] . '_' . $site_mods[$module]['module_data'] . '_group_cateid WHERE cateid = ' . $catid );

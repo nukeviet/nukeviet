@@ -324,18 +324,18 @@ function nv_fix_group_count( $listid )
  */
 function GetCatidInParent( $catid, $check_inhome = 0 )
 {
-	global $global_array_cat, $array_cat;
+	global $global_array_shops_cat, $array_cat;
 	$array_cat[] = $catid;
-	$subcatid = explode( ',', $global_array_cat[$catid]['subcatid'] );
+	$subcatid = explode( ',', $global_array_shops_cat[$catid]['subcatid'] );
 	if( ! empty( $subcatid ) )
 	{
 		foreach( $subcatid as $id )
 		{
 			if( $id > 0 )
 			{
-				if( $global_array_cat[$id]['numsubcat'] == 0 )
+				if( $global_array_shops_cat[$id]['numsubcat'] == 0 )
 				{
-					if( ! $check_inhome or ( $check_inhome and $global_array_cat[$id]['inhome'] == 1 ) )
+					if( ! $check_inhome or ( $check_inhome and $global_array_shops_cat[$id]['inhome'] == 1 ) )
 					{
 						$array_cat[] = $id;
 					}
@@ -345,7 +345,7 @@ function GetCatidInParent( $catid, $check_inhome = 0 )
 					$array_cat_temp = GetCatidInParent( $id, $check_inhome );
 					foreach( $array_cat_temp as $catid_i )
 					{
-						if( ! $check_inhome or ( $check_inhome and $global_array_cat[$catid_i]['inhome'] == 1 ) )
+						if( ! $check_inhome or ( $check_inhome and $global_array_shops_cat[$catid_i]['inhome'] == 1 ) )
 						{
 							$array_cat[] = $catid_i;
 						}
@@ -366,15 +366,15 @@ function GetCatidInParent( $catid, $check_inhome = 0 )
 
 function GetParentCatFilter( $cateid )
 {
-	global $db, $db_config, $global_array_cat, $module_name, $module_data;
+	global $db, $db_config, $global_array_shops_cat, $module_name, $module_data;
 
 	$cid = 0;
 	while( true )
 	{
 		$count = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $cateid )->fetchColumn();
-		if( $count == 0 and isset( $global_array_cat[$cateid] ) )
+		if( $count == 0 and isset( $global_array_shops_cat[$cateid] ) )
 		{
-			$cateid = $global_array_cat[$cateid]['parentid'];
+			$cateid = $global_array_shops_cat[$cateid]['parentid'];
 			continue;
 		}
 		else

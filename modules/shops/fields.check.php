@@ -11,7 +11,7 @@
 if( !defined( 'NV_MAINFILE' ) )
 	die( 'Stop!!!' );
 
-$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
+$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 if( $idtemplate )
 {
 	$array_tmp = array( );

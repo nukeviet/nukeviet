@@ -848,7 +848,7 @@ function shops_show_discounts_list( )
  */
 function nv_show_block_list( $bid )
 {
-	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_cat, $global_config, $module_file;
+	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_shops_cat, $global_config, $module_file;
 
 	$xtpl = new XTemplate( "block_list.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -871,7 +871,7 @@ function nv_show_block_list( $bid )
 		$xtpl->assign( 'ROW', array(
 			"id" => $id,
 			"title" => $title,
-			"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id
+			"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_shops_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id
 		) );
 
 		for( $i = 1; $i <= $num; $i++ )
@@ -923,14 +923,14 @@ function drawselect_number( $select_name = "", $number_start = 0, $number_end = 
  */
 function GetCatidInChild( $catid )
 {
-	global $global_array_cat, $array_cat;
+	global $global_array_shops_cat, $array_cat;
 
 	$array_cat[] = $catid;
 
-	if( $global_array_cat[$catid]['parentid'] > 0 )
+	if( $global_array_shops_cat[$catid]['parentid'] > 0 )
 	{
-		$array_cat[] = $global_array_cat[$catid]['parentid'];
-		$array_cat_temp = GetCatidInChild( $global_array_cat[$catid]['parentid'] );
+		$array_cat[] = $global_array_shops_cat[$catid]['parentid'];
+		$array_cat_temp = GetCatidInChild( $global_array_shops_cat[$catid]['parentid'] );
 		foreach( $array_cat_temp as $catid_i )
 		{
 			$array_cat[] = $catid_i;
@@ -950,7 +950,7 @@ function GetCatidInChild( $catid )
  */
 function nv_show_custom_form( $is_edit, $form, $array_custom )
 {
-	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_cat, $global_config, $module_file;
+	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_shops_cat, $global_config, $module_file;
 
 	$xtpl = new XTemplate( 'cat_form_' . $form . '.tpl', NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1127,7 +1127,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 function Insertabl_catfields( $table, $array, $idshop )
 {
 
-	global $db, $module_name, $module_file, $db, $link, $module_info, $global_array_cat, $global_config;
+	global $db, $module_name, $module_file, $db, $link, $module_info, $global_array_shops_cat, $global_config;
 
 	$result = $db->query( "SHOW COLUMNS FROM " . $table );
 

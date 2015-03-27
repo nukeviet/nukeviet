@@ -12,7 +12,7 @@ if( !defined( 'NV_MAINFILE' ) )	die( 'Stop!!!' );
 
 // Categories
 $sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, newday, typeprice, form, group_price, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, cat_allow_point, cat_number_point, cat_number_product, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
-$global_array_cat = nv_db_cache( $sql, 'catid', $module_name );
+$global_array_shops_cat = nv_db_cache( $sql, 'catid', $module_name );
 
 // Groups
 $sql = 'SELECT groupid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewgroup, numsubgroup, subgroupid, ' . NV_LANG_DATA . '_description AS description, inhome, indetail, in_order, ' . NV_LANG_DATA . '_keywords AS keywords, numpro, image, is_require FROM ' . $db_config['prefix'] . '_' . $module_data . '_group ORDER BY sort ASC';
@@ -20,7 +20,6 @@ $global_array_group = nv_db_cache( $sql, 'groupid', $module_name );
 
 // Lay ty gia ngoai te
 $sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
-
 $cache_file = NV_LANG_DATA . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
 if( ($cache = nv_get_cache( $module_name, $cache_file )) != false )
 {
@@ -126,7 +125,7 @@ else
  */
 function nv_get_price( $pro_id, $currency_convert, $number = 1, $per_pro = false, $module = '' )
 {
-	global $db, $db_config, $site_mods, $module_data, $global_array_cat, $pro_config, $money_config, $discounts_config;
+	global $db, $db_config, $site_mods, $module_data, $global_array_shops_cat, $pro_config, $money_config, $discounts_config;
 
 	$return = array();
 	$discount_percent = 0;
@@ -154,7 +153,7 @@ function nv_get_price( $pro_id, $currency_convert, $number = 1, $per_pro = false
 		$price = round( $price, $decimals );
 	}
 
-	if( $global_array_cat[$product['listcatid']]['typeprice'] == 2 )
+	if( $global_array_shops_cat[$product['listcatid']]['typeprice'] == 2 )
 	{
 		$_price_config = unserialize( $product['price_config'] );
 		if( !empty( $_price_config ) )
@@ -169,7 +168,7 @@ function nv_get_price( $pro_id, $currency_convert, $number = 1, $per_pro = false
 			}
 		}
 	}
-	elseif( $global_array_cat[$product['listcatid']]['typeprice'] == 1 )
+	elseif( $global_array_shops_cat[$product['listcatid']]['typeprice'] == 1 )
 	{
 		if( isset( $discounts_config[$product['discount_id']] ) )
 		{
@@ -253,6 +252,7 @@ function nv_number_format( $number, $decimals = 0 )
 
 	$number_format = explode( '||', $money_config[$pro_config['money_unit']]['number_format'] );
 	$str = number_format( $number, $decimals, $number_format[0], $number_format[1] );
+
 	return $str;
 }
 
