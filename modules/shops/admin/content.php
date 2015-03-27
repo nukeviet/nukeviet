@@ -656,18 +656,22 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				if( $global_array_shops_cat[$rowcontent_old['listcatid']]['form'] != '' )
 				{
 					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent_old['listcatid']]['form'] ) . '"' )->fetchColumn( );
-
-					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
-					$db->query( "DELETE FROM " . $table_insert . " WHERE shopid =" . $rowcontent['id'] );
+					if( $idtemplate )
+					{
+						$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
+						$db->query( "DELETE FROM " . $table_insert . " WHERE shopid =" . $rowcontent['id'] );
+					}
 				}
 
 				if( $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
 				{
 					// Them lai du lieu tuy bien
 					$idtemplate_new = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
-					$table_insert_new = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate_new;
-
-					Insertabl_catfields( $table_insert_new, $array_custom, $rowcontent['id'] );
+					if( $idtemplate_new )
+					{
+						$table_insert_new = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate_new;
+						Insertabl_catfields( $table_insert_new, $array_custom, $rowcontent['id'] );
+					}
 				}
 
 			}
