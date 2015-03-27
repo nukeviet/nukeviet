@@ -104,7 +104,6 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 		$mod_file = $site_mods[$module]['module_file'];
-		$array_cat_shops = $global_array_shops_cat;
 		$num_view = $block_config['numrow'];
 		$num_get = $block_config['numget'];
 
@@ -143,7 +142,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $row )
 			{
-				$array_cat_shops[$row['catid']] = array(
+				$global_array_shops_cat[$row['catid']] = array(
 					'catid' => $row['catid'],
 					'parentid' => $row['parentid'],
 					'title' => $row['title'],
@@ -163,7 +162,6 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			}
 			unset( $list, $row );
 			$pro_config = $module_config[$module];
-
 
 			// Lay ty gia ngoai te
 			$sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $mod_data . '_money_' . NV_LANG_DATA;
@@ -211,7 +209,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$list = nv_db_cache( $db->sql(), '', $module );
 		foreach( $list as $row )
 		{
-			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $array_cat_shops[$row['listcatid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
+			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
 
 			if( $row['homeimgthumb'] == 1 ) //image thumb
 			{
