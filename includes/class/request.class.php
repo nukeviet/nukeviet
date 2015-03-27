@@ -306,13 +306,16 @@ class Request
 			$_SERVER['DOCUMENT_ROOT'] = $doc_root;
 		}
 		$_SERVER['SCRIPT_FILENAME'] = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['PHP_SELF'];
-		$_SERVER['SERVER_NAME'] = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'HTTP_HOST', 'SERVER_NAME' ) ) );
 		$_SERVER['SERVER_PORT'] = $this->get_Env( 'SERVER_PORT' );
 		$_SERVER['SERVER_PROTOCOL'] = $this->get_Env( 'SERVER_PROTOCOL' );
+
+		$this->server_name = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'HTTP_HOST', 'SERVER_NAME' ) ) );
+		$this->server_name = preg_replace( '/(\:[0-9]+)$/', '', $this->server_name );
+		$_SERVER['SERVER_NAME'] = $this->server_name;
+
 		$this->base_siteurl = $base_siteurl;
 		$this->base_adminurl = $base_siteurl . ( NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '' );
 		$this->doc_root = $doc_root;
-		$this->server_name = $_SERVER['SERVER_NAME'];
 		$this->server_protocol = strtolower( preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'] ) ) . ( ( $this->get_Env( 'HTTPS' ) == 'on' ) ? 's' : '' );
 		$this->server_port = ( $_SERVER['SERVER_PORT'] == '80' ) ? '' : ( ':' . $_SERVER['SERVER_PORT'] );
 
@@ -1371,5 +1374,4 @@ class Request
 		}
 		return $arr;
 	}
-
 }
