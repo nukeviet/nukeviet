@@ -50,8 +50,8 @@
 
 		$.ajax({
 			type : "POST",
-			url : '/' + script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=viewcat',
-			data : '&ajax=1&catid={CATID}&listgroupid=' + listid,
+			url : script_name,
+			data : 'ajax=1&catid={CATID}&listgroupid=' + listid,
 			success : function(data) {
 				$('#category').html(data);
 				$(".ajax-load-qa").hide();

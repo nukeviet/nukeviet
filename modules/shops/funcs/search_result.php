@@ -116,8 +116,38 @@ if( ! empty( $groupid ) )
 	$url .= '&filter=' . $groupid;
 	$groupid = nv_base64_decode( $groupid );
 	$groupid = unserialize( $groupid );
-	$groupid = implode( ',', $groupid );
-	$search .= " AND t4.group_id IN(" . $groupid . ")";
+
+	$arr_id = array();
+	foreach( $groupid as $id_group )
+	{
+		$group = $global_array_group[$id_group];
+		$arr_id[$group['parentid']][] = $id_group;
+	}
+
+	$_sql = 'SELECT DISTINCT pro_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE ';
+	$j = 1;
+	foreach( $arr_id as $listid )
+	{
+		$a = sizeof( $listid );
+		if( $a > 0 )
+		{
+			$arr_sql = array();
+			for( $i = 0; $i < $a; $i++ )
+			{
+				$arr_sql[]= ' pro_id IN (SELECT pro_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE group_id=' . $listid[$i] . ')';
+			}
+			$_sql .= ' ('. implode(' OR ', $arr_sql) . ')';
+		}
+		if( $j < count( $arr_id ) )
+		{
+			$_sql .= ' AND ';
+		}
+		$j++;
+	}
+	if( !empty( $_sql ) )
+	{
+		$search .= " AND t1.id IN(" . $_sql . ")";
+	}
 }
 
 if( $keyword != "" )
@@ -177,10 +207,9 @@ if( $pro_config['active_price'] )
 $table_search = "" . $db_config['prefix'] . "_" . $module_data . "_rows t1";
 $table_exchange = " LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " t2 ON t1.money_unit=t2.code";
 $table_exchange1 = " INNER JOIN " . $db_config['prefix'] . "_" . $module_data . "_catalogs t3 ON t3.catid = t1.listcatid";
-$table_exchange2 = " LEFT JOIN " . $db_config['prefix'] . "_" . $module_data . "_group_items t4 ON t1.id=t4.pro_id";
 
 // Fetch Limit
-$db->sqlreset()->select( 'COUNT(*)' )->from( $table_search . " " . $table_exchange . " " . $table_exchange1 . " " . $table_exchange2 )->where( "t1.status =1 " . $search . " " . $show_price );
+$db->sqlreset()->select( 'COUNT(*)' )->from( $table_search . " " . $table_exchange . " " . $table_exchange1 )->where( "t1.status =1 " . $search . " " . $show_price );
 
 $db->select( "DISTINCT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.discount_id, t1.money_unit, t1.showprice, t3.newday, t2.exchange " . $sql_i )
 	->order( $order_by )

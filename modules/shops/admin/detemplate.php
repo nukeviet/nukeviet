@@ -55,6 +55,7 @@ if( $id > 0 )
 	else
 	{
 		$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id );
+		@nv_deletefile( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $template['alias'] ) . ".tpl" );
 		$contents = "OK_" . $id;
 	}
 }

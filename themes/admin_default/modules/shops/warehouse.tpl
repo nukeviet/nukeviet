@@ -89,7 +89,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<div <!-- BEGIN: has_error -->class="has-error"<!-- END: has_error -->>
-													<select name="data[{DATA.id}][{J}][group][]" class="form-control">
+													<select name="data[{DATA.id}][{J}][group][]" class="form-control" <!-- BEGIN: has_requied --> required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" <!-- END: has_requied --> >
 														<option value="">{LANG.warehouse_chose_propties} {PARENT.title}</option>
 														<!-- BEGIN: loop -->
 														<option value="{GROUP.groupid}" {GROUP.selected}>{GROUP.title}</option>

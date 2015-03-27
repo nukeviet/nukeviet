@@ -117,13 +117,27 @@ if( ! function_exists( 'nv_filter_product_cat' ) )
 					}
 
 					$global_array_group[$subgroup_id]['checked'] = '';
-
-					$xtpl->assign( 'SUB_GROUP', $global_array_group[$subgroup_id] );
 					if( $group_style[$groupid] == 'label' )
 					{
 						if( in_array( $subgroup_id, $array_id_group ) )
 						{
 							$global_array_group[$subgroup_id]['checked'] = 'checked="checked"';
+						}
+					}
+					elseif( $group_style[$groupid] == 'image' )
+					{
+						if( in_array( $subgroup_id, $array_id_group ) )
+						{
+							$global_array_group[$subgroup_id]['checked'] = 'checked="checked"';
+						}
+					}
+
+					$xtpl->assign( 'SUB_GROUP', $global_array_group[$subgroup_id] );
+
+					if( $group_style[$groupid] == 'label' )
+					{
+						if( in_array( $subgroup_id, $array_id_group ) )
+						{
 							$xtpl->parse( 'main.group.sub_group.loop.label.active' );
 						}
 						$xtpl->parse( 'main.group.sub_group.loop.label' );
@@ -132,7 +146,6 @@ if( ! function_exists( 'nv_filter_product_cat' ) )
 					{
 						if( in_array( $subgroup_id, $array_id_group ) )
 						{
-							$global_array_group[$subgroup_id]['checked'] = 'checked="checked"';
 							$xtpl->parse( 'main.group.sub_group.loop.image.active' );
 						}
 						$xtpl->parse( 'main.group.sub_group.loop.image' );
