@@ -13,11 +13,17 @@ if( !defined( 'NV_IS_MOD_SHOPS' ) )
 
 $ajax = $nv_Request->isset_request( 'ajax', 'get, post' );
 $listgroupid = $nv_Request->get_string( 'listgroupid', 'get, post', '' );
+$array_id_group = array( );
 
 if( $ajax )
 {
 	$page = $nv_Request->get_int( 'page', 'get, post', 1 );
 	$catid = $nv_Request->get_int( 'catid', 'get, post', 0 );
+
+	if( !empty( $listgroupid ) )
+	{
+		$array_id_group = explode( ',', $listgroupid );
+	}
 }
 
 if( empty( $catid ) )
@@ -31,7 +37,6 @@ $compare_id = unserialize( $compare_id );
 
 unset( $array_op[0] );
 $array_url_group = array( );
-$array_id_group = array( );
 foreach( $array_op as $_inurl )
 {
 	if( preg_match( '/^page\-([0-9]+)$/', $_inurl, $m ) )
@@ -99,14 +104,41 @@ if( empty( $contents ) )
 		$orderby = ' product_price DESC, id DESC ';
 	}
 
-	$join = '';
-	if( !$ajax )
+	$_sql = '';
+	if( !empty( $array_id_group ) )
 	{
-		$list_id_group = !empty( $array_id_group ) ? ' AND t3.group_id IN (' . implode( ',', $array_id_group ) . ')' : '';
-	}
-	else
-	{
-		$list_id_group = !empty( $listgroupid ) ? ' AND t3.group_id IN (' . $listgroupid . ')' : '';
+		$arr_id = array();
+		foreach( $array_id_group as $id_group )
+		{
+			$group = $global_array_group[$id_group];
+			$arr_id[$group['parentid']][] = $id_group;
+		}
+
+		$_sql = 'SELECT DISTINCT pro_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE ';
+		$j = 1;
+		foreach( $arr_id as $listid )
+		{
+			$a = sizeof( $listid );
+			if( $a > 0 )
+			{
+				$arr_sql = array();
+				for( $i = 0; $i < $a; $i++ )
+				{
+					$arr_sql[]= ' pro_id IN (SELECT pro_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE group_id=' . $listid[$i] . ')';
+				}
+				$_sql .= ' ('. implode(' OR ', $arr_sql) . ')';
+			}
+			if( $j < count( $arr_id ) )
+			{
+				$_sql .= ' AND ';
+			}
+			$j++;
+		}
+
+		if( !empty( $_sql ) )
+		{
+			$_sql = ' AND t1.id IN ( ' . $_sql . ' )';
+		}
 	}
 
 	if( $global_array_cat[$catid]['viewcat'] == 'view_home_cat' and $global_array_cat[$catid]['numsubcat'] > 0 )
@@ -124,8 +156,7 @@ if( empty( $contents ) )
 			// Fetch Limit
 			if( $array_url_group or $ajax )
 			{
-				$join = 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t3 ON t1.id = t3.pro_id';
-				$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->join( $join )->where( 't1.listcatid IN (' . implode( ',', $array_cat ) . ') AND t1.status =1 AND t1.id = t3.pro_id AND t1.id = t3.pro_id ' . $list_id_group );
+				$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->join( $join )->where( 't1.listcatid IN (' . implode( ',', $array_cat ) . ') AND t1.status=1' . $_sql );
 			}
 			else
 			{
@@ -213,23 +244,22 @@ if( empty( $contents ) )
 			$where = ' t1.listcatid IN (' . implode( ',', $array_cat ) . ')';
 		}
 
-		if( $array_url_group or !empty( $list_id_group ) )
+		if( $array_url_group or !empty( $array_id_group ) )
 		{
-			$join = 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t3 ON t1.id = t3.pro_id';
-			$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->join( $join )->where( $where . ' AND t1.status =1 AND t1.id = t3.pro_id ' . $list_id_group );
+			$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->where( $where . ' AND t1.status =1' . $_sql );
 		}
 		else
 		{
-			$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->where( $where . ' AND t1.status =1 ' );
+			$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->where( $where . ' AND t1.status =1' );
 		}
-
+//die($db->sql( ));
 		$num_items = $db->query( $db->sql( ) )->fetchColumn( );
 
-		$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_promotional,t2.newday, t2.image' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid ' . $join )->order( $orderby )->limit( $per_page )->offset( ($page - 1) * $per_page );
+		$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_promotional,t2.newday, t2.image' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid' )->order( $orderby )->limit( $per_page )->offset( ($page - 1) * $per_page );
 		$result = $db->query( $db->sql( ) );
 
 		$data_content = GetDataIn( $result, $catid );
-		$data_content['count'] = $num_items;
+		$data_content['count'] = count( $data_content['data'] );
 
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;ajax=1&amp;catid=' . $catid . '&amp;listgroupid=' . $listgroupid;
 		$pages = nv_generate_page( $base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'category' );

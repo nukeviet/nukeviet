@@ -61,12 +61,9 @@ $data_content['template'] = '';
 if( $global_array_cat[$data_content['listcatid']]['form'] != '' )
 {
 	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_cat[$data_content['listcatid']]['form'] ) . '"' )->fetchColumn( );
-	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate . ' WHERE shopid = ' . $id . ' AND status=1' );
-	$data_content['template'] = $global_array_cat[$data_content['listcatid']]['form'];
-	$data_content['array_custom'] = $sql->fetch( );
 
 	$array_tmp = array( );
-	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field' );
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field  ORDER BY weight' );
 	while( $row = $result->fetch( ) )
 	{
 		$listtemplate = explode( '|', $row['listtemplate'] );
@@ -75,6 +72,10 @@ if( $global_array_cat[$data_content['listcatid']]['form'] != '' )
 			$array_tmp[$row['field']] = unserialize( $row['language'] );
 		}
 	}
+
+	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate . ' WHERE shopid = ' . $id . ' AND status=1' );
+	$data_content['template'] = $global_array_cat[$data_content['listcatid']]['form'];
+	$data_content['array_custom'] = $sql->fetch( );
 
 	if( !empty( $array_tmp ) )
 	{
@@ -88,6 +89,7 @@ if( $global_array_cat[$data_content['listcatid']]['form'] != '' )
 				}
 			}
 		}
+		unset( $array_tmp );
 	}
 }
 
