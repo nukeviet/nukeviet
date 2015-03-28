@@ -172,6 +172,6 @@ $lang_module['package'] = 'Đóng gói ứng dụng';
 
 $lang_module['delele_ext_confirm'] = 'Bạn có chắc chắn xóa ứng dụng này, việc này sẽ không thể hoàn tác?';
 $lang_module['delele_ext_theme_note_module'] = 'Bạn không thể xóa theme vì đang sử dụng cho module: %s, bạn cần cấu hình lại các module đó.';
-$lang_module['delele_ext_success'] = 'Đã xóa thành công ứng dụng ra khỏi hệ thống !';
-$lang_module['delele_ext_unsuccess'] = 'Có lỗi trong quá trình xóa !';
-$lang_module['delele_ext_theme_delete_current_theme'] = 'Bạn không thể xóa theme hiện tại hệ thống đang sử dụng !';
+$lang_module['delele_ext_success'] = 'Đã xóa thành công ứng dụng ra khỏi hệ thống!';
+$lang_module['delele_ext_unsuccess'] = 'Có lỗi trong quá trình xóa!';
+$lang_module['delele_ext_theme_delete_current_theme'] = 'Bạn không thể xóa theme hiện tại hệ thống đang sử dụng!';
