@@ -54,7 +54,6 @@
 				<th>{LANG.extname}</th>
 				<th>{LANG.file_version}</th>
 				<th>{LANG.author}</th>
-				<th>&nbsp;</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -70,16 +69,21 @@
 					<!-- END: icons -->
 				</td>
 				<td>{ROW.version}</td>
-				<td>{ROW.author}</td>
-				<td class="text-center">
+				<td>{ROW.author}
+				<div class="pull-right text-right hoverShowHide">
 					<em class="fa fa-cloud-download fa-lg package-ext" data-toggle="tooltip" data-placement="top" title="{LANG.package}" data-href="{ROW.url_package}">&nbsp;</em>
 					<!-- BEGIN: delete --><em class="fa fa-trash-o fa-lg delete-ext" data-toggle="tooltip" data-placement="top" title="{GLANG.delete}" data-href="{ROW.url_delete}">&nbsp;</em><!-- END: delete -->
+				</div>
 				</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
 	</table>
 </div>
+<style> 
+table tr:hover div.hoverShowHide {opacity:1;}
+table tr div.hoverShowHide {opacity:0;}
+</style>
 
 <script type="text/javascript">
 $(document).ready(function(){
