@@ -99,6 +99,7 @@ $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_data );
 $xtpl->assign( 'MONEY_UNIT', $pro_config['money_unit'] );
+$xtpl->assign( 'CID', $id );
 
 if( !empty( $array_data['product'] ) )
 {

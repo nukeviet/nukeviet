@@ -86,7 +86,7 @@
 		</thead>
 		<tbody>
 			<!-- BEGIN: row -->
-			<tr <!-- BEGIN: bgview -->class="warning"<!-- END: bgview -->>
+			<tr id="{DATA.order_id}" <!-- BEGIN: bgview -->class="warning"<!-- END: bgview -->>
 				<td><input type="checkbox" class="ck" value="{order_id}" {DIS} /></td>
 				<td><a href="{link_view}" title="">{DATA.order_code}</a></td>
 				<td>{DATA.order_time}</td>
@@ -109,16 +109,21 @@
 	$(function() {
 		$('#checkall').click(function() {
 			$('input:checkbox').each(function() {
-				$(this).attr('checked', 'checked');
+				if( !$(this).attr("disabled") )
+				{
+					$(this).attr('checked', 'checked');
+				}
 			});
+			return false;
 		});
 		$('#uncheckall').click(function() {
 			$('input:checkbox').each(function() {
 				$(this).removeAttr('checked');
 			});
+			return false;
 		});
 		$('#delall').click(function() {
-			if (confirm("{LANG.prounit_del_confirm}")) {
+			if (confirm(nv_is_del_confirm[0])) {
 				var listall = [];
 				$('input.ck:checked').each(function() {
 					listall.push($(this).val());
@@ -132,22 +137,30 @@
 					url : '{URL_DEL}',
 					data : 'listall=' + listall,
 					success : function(data) {
-						window.location = '{URL_DEL_BACK}';
+						var r_split = data.split('_');
+						if( r_split[0] == 'OK' ){
+							window.location.href = window.location.href;
+						}
+						else{
+							alert( nv_is_del_confirm[2] );
+						}
 					}
 				});
 			}
+			return false;
 		});
 
 		$('a.delete').click(function(event) {
 			event.preventDefault();
 			if (confirm("{LANG.prounit_del_confirm}")) {
 				var href = $(this).attr('href');
+				var id = $(this).parents().parents().attr('id');
 				$.ajax({
 					type : 'POST',
 					url : href,
 					data : '',
 					success : function(data) {
-						window.location = '{URL_DEL_BACK}';
+						$('#'+id).remove();
 					}
 				});
 			}

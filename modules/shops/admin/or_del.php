@@ -105,8 +105,12 @@ elseif( $nv_Request->isset_request( 'listall', 'post,get' ) )
 			product_number_sell( $data_order['listid'], $data_order['listnum'], "-" );
 
 			// Cap nhat lich su su dung ma giam gia
-			$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET uses_per_coupon_count = uses_per_coupon_count - 1 WHERE order_id = ' . $order_id );
-			$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
+			$num = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history WHERE order_id = ' . $order_id )->fetchColumn();
+			if( $num > 0 )
+			{
+				$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET uses_per_coupon_count = uses_per_coupon_count - 1 WHERE order_id = ' . $order_id );
+				$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
+			}
 
 			if( !empty( $list_order_i ) )
 			{

@@ -41,7 +41,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#coupons_history').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=coupons_view&coupons_history=1&id=4');
+		$('#coupons_history').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=coupons_view&coupons_history=1&id={CID}');
 	});
 
 	$(function () {

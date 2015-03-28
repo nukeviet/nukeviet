@@ -64,7 +64,7 @@ function draw_option_select_number( $select = -1, $begin = 0, $end = 100, $step 
  */
 function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 0 )
 {
-	global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
+	global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group, $my_head;
 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -153,6 +153,14 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 								}
 								$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
 								$xtpl->assign( 'GROUP_REQUIE', $group_requie );
+
+								if( $group_requie and !defined( 'SHADOWBOX' ) )
+								{
+									$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+									$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+									$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
+									define( 'SHADOWBOX', true );
+								}
 
 								$xtpl->parse( 'main.catalogs.items.order' );
 							}
@@ -240,7 +248,7 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
  */
 function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group, $my_head;
 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -330,6 +338,14 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 								}
 								$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
 								$xtpl->assign( 'GROUP_REQUIE', $group_requie );
+
+								if( $group_requie and !defined( 'SHADOWBOX' ) )
+								{
+									$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+									$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+									$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
+									define( 'SHADOWBOX', true );
+								}
 
 								$xtpl->parse( 'main.catalogs.items.order' );
 							}
@@ -430,7 +446,7 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
  */
 function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0, $viewtype = '' )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $op, $array_displays, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $op, $array_displays, $array_wishlist_id, $global_array_shops_cat, $global_array_group, $my_head;
 
 	$xtpl = new XTemplate( 'main_product.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -509,6 +525,14 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 						}
 						$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
 						$xtpl->assign( 'GROUP_REQUIE', $group_requie );
+
+						if( $group_requie and !defined( 'SHADOWBOX' ) )
+						{
+							$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+							$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+							$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
+							define( 'SHADOWBOX', true );
+						}
 
 						$xtpl->parse( 'main.items.order' );
 					}
@@ -620,7 +644,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
  */
 function view_search_all( $data_content, $compare_id, $html_pages = '' )
 {
-	global $module_info, $lang_module, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_group, $my_head;
 
 	$xtpl = new XTemplate( 'search_all.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -669,6 +693,14 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
 						}
 						$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
 						$xtpl->assign( 'GROUP_REQUIE', $group_requie );
+
+						if( $group_requie and !defined( 'SHADOWBOX' ) )
+						{
+							$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+							$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+							$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
+							define( 'SHADOWBOX', true );
+						}
 
 						$xtpl->parse( 'main.items.order' );
 					}
@@ -779,7 +811,7 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
  */
 function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $viewtype )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $op, $global_array_shops_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $op, $global_array_shops_cat, $global_array_group, $my_head;
 
 	$xtpl = new XTemplate( 'view_gird.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -913,6 +945,14 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 						$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
 						$xtpl->assign( 'GROUP_REQUIE', $group_requie );
 
+						if( $group_requie and !defined( 'SHADOWBOX' ) )
+						{
+							$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+							$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+							$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
+							define( 'SHADOWBOX', true );
+						}
+
 						$xtpl->parse( 'main.grid_rows.order' );
 					}
 					else
@@ -993,7 +1033,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
  */
 function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $viewtype )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $global_array_shops_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $global_array_shops_cat, $global_array_group, $my_head;
 
 	$xtpl = new XTemplate( 'view_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1113,6 +1153,14 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 						}
 						$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
 						$xtpl->assign( 'GROUP_REQUIE', $group_requie );
+
+						if( $group_requie and !defined( 'SHADOWBOX' ) )
+						{
+							$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+							$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+							$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
+							define( 'SHADOWBOX', true );
+						}
 
 						$xtpl->parse( 'main.row.order' );
 					}
@@ -2513,7 +2561,7 @@ function email_new_order( $data_content, $data_pro )
  */
 function compare( $data_pro )
 {
-	global $lang_module, $lang_global, $module_file, $module_info, $pro_config, $global_array_group;
+	global $lang_module, $lang_global, $module_file, $module_info, $pro_config, $global_array_group, $my_head;
 
 	$xtpl = new XTemplate( "compare.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 	$xtpl->assign( 'GLANG', $lang_global );
@@ -2561,6 +2609,14 @@ function compare( $data_pro )
 					}
 					$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
 					$xtpl->assign( 'GROUP_REQUIE', $group_requie );
+
+					if( $group_requie and !defined( 'SHADOWBOX' ) )
+					{
+						$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+						$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+						$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
+						define( 'SHADOWBOX', true );
+					}
 
 					$xtpl->parse( 'main.button.order' );
 				}
@@ -2614,7 +2670,7 @@ function compare( $data_pro )
  */
 function wishlist( $data_content, $compare_id, $html_pages = '' )
 {
-	global $module_info, $lang_module, $module_file, $pro_config, $op, $array_displays, $array_wishlist_id, $module_name, $global_array_shops_cat, $global_array_group;
+	global $module_info, $lang_module, $module_file, $pro_config, $op, $array_displays, $array_wishlist_id, $module_name, $global_array_shops_cat, $global_array_group, $my_head;
 
 	$xtpl = new XTemplate( 'wishlist.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
@@ -2667,6 +2723,14 @@ function wishlist( $data_content, $compare_id, $html_pages = '' )
 						}
 						$group_requie = $pro_config['active_order_popup'] ? 1 : $group_requie;
 						$xtpl->assign( 'GROUP_REQUIE', $group_requie );
+
+						if( $group_requie and !defined( 'SHADOWBOX' ) )
+						{
+							$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
+							$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
+							$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
+							define( 'SHADOWBOX', true );
+						}
 
 						$xtpl->parse( 'main.items.order' );
 					}
