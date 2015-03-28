@@ -595,7 +595,7 @@ if( empty( $error ) )
 				// Check valid folder structure nukeviet (modules, themes, uploads)
 				$folder = explode( '/', $listFiles[$i]['filename'] );
 
-				if( trim( $listFiles[$i]['filename'] ) != 'config.ini' and ( ( $info['exttype'] == 'theme' and $folder[0] != $info['extname'] ) or ( $info['exttype'] != 'theme' and ! in_array( $folder[0], $arraySysOption['allowfolder'] ) and ! in_array( $folder[0] . '/' . $folder[1], $arraySysOption['allowfolder'] ) ) ) )
+				if( trim( $listFiles[$i]['filename'] ) != 'config.ini' and ( ( $info['exttype'] == 'theme' and $folder[0] != $info['extname'] ) or ( $info['exttype'] != 'theme' and ! in_array( $folder[0], $arraySysOption['allowfolder'] ) and ( isset( $folder[1] ) and ! in_array( $folder[0] . '/' . $folder[1], $arraySysOption['allowfolder'] ) ) ) ) )
 				{
 					$info['invaildnum'] ++;
 					$info['filelist'][$j]['class'][] = $info['classcfg']['invaild'];
