@@ -59,6 +59,7 @@ if( $savesetting == 1 )
 	$data['active_order_non_detail'] = $nv_Request->get_int( 'active_order_non_detail', 'post', 0 );
 	$data['active_price'] = $nv_Request->get_int( 'active_price', 'post', 0 );
 	$data['active_order_number'] = $nv_Request->get_int( 'active_order_number', 'post', 0 );
+	$data['order_day'] = $nv_Request->get_int( 'order_day', 'post', 0 );
 	$data['active_payment'] = $nv_Request->get_int( 'active_payment', 'post', 0 );
 	$data['active_showhomtext'] = $nv_Request->get_int( 'active_showhomtext', 'post', 0 );
 	$_groups_notify = $nv_Request->get_array( 'groups_notify', 'post', array() );

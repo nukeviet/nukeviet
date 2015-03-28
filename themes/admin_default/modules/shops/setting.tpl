@@ -165,6 +165,10 @@
 						<!-- END: groups_notify -->
 					</td>
 				</tr>
+				<tr>
+					<td><strong>{LANG.setting_order_day}</strong><span class="help-block">{LANG.setting_order_day_note}</span></td>
+					<td><input type="text" name="order_day" class="form-control" value="{DATA.order_day}" />&nbsp;<span class="text-middle">{LANG.setting_order_num_day}</span></td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
