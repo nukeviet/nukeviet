@@ -33,6 +33,21 @@ if( ! empty( $pro_config ) )
 if( empty( $pro_config['format_order_id'] ) ) $pro_config['format_order_id'] = strtoupper( $module_name ) . '%d';
 if( empty( $pro_config['timecheckstatus'] ) ) $pro_config['timecheckstatus'] = 0; // Thoi gian xu ly archive
 
+// Tu dong xoa don hang sau khoang thoi gian khong thanh toan
+if( !empty( $pro_config['order_day'] ) and $pro_config['order_nexttime'] < NV_CURRENTTIME )
+{
+	$result = $db->query( 'SELECT order_id, order_time FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE transaction_status=0 AND order_time < ' . ( NV_CURRENTTIME - (int)$pro_config['order_day'] * 86400 ) );
+	while( list( $order_id, $order_time ) = $result->fetch( 3 ) )
+	{
+		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
+		nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete order', 'ID: ' . $order_id );
+	}
+
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = " . ( NV_CURRENTTIME + 86400 ) . " WHERE lang='" . NV_LANG_DATA . "' AND module=" . $db->quote( $module_name ) . ' AND config_name="order_nexttime"' );
+	nv_del_moduleCache( 'settings' );
+	nv_del_moduleCache( $module_name );
+}
+
 // Xu ly viec dang san pham tu dong, cho het han san pham ...
 if( $pro_config['timecheckstatus'] > 0 and $pro_config['timecheckstatus'] < NV_CURRENTTIME )
 {
