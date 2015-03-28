@@ -563,7 +563,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 		if( $rowcontent['id'] == 0 )
 		{
-			$rowcontent['publtime'] = ( $rowcontent['publtime'] > NV_CURRENTTIME ) ? $rowcontent['publtime'] : NV_CURRENTTIME;
+			if( ! defined( 'NV_IS_SPADMIN' ) and intval( $rowcontent['publtime'] ) < NV_CURRENTTIME )
+			{
+				$rowcontent['publtime'] = NV_CURRENTTIME;
+			}
 			if( $rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME )
 			{
 				$rowcontent['status'] = 2;
@@ -658,7 +661,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			{
 				$rowcontent['status'] = 1;
 			}
-			if( intval( $rowcontent['publtime'] ) < intval( $rowcontent_old['addtime'] ) )
+			if( ! defined( 'NV_IS_SPADMIN' ) and intval( $rowcontent['publtime'] ) < intval( $rowcontent_old['addtime'] ) )
 			{
 				$rowcontent['publtime'] = $rowcontent_old['addtime'];
 			}
