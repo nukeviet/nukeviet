@@ -150,8 +150,7 @@
 			return false;
 		});
 
-		$('a.delete').click(function(event) {
-			event.preventDefault();
+		$('a.delete').click(function() {
 			if (confirm("{LANG.prounit_del_confirm}")) {
 				var href = $(this).attr('href');
 				var id = $(this).parents().parents().attr('id');
@@ -164,6 +163,7 @@
 					}
 				});
 			}
+			return false;
 		});
 
 		$("#from, #to").datepicker({

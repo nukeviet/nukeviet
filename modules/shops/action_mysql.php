@@ -242,7 +242,9 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_group_items (
   pro_id int(11) unsigned NOT NULL default '0',
   group_id int(11) unsigned NOT NULL default '0',
-  PRIMARY KEY (pro_id, group_id)
+  PRIMARY KEY (pro_id, group_id),
+  KEY pro_id (pro_id),
+  KEY group_id (group_id)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_group_quantity (
@@ -267,6 +269,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   pro_id int(11) unsigned NOT NULL default '0',
   quantity INT(11) UNSIGNED NOT NULL DEFAULT '0',
   price float NOT NULL DEFAULT '0',
+  money_unit char(3) NOT NULL,
   PRIMARY KEY (logid),
   KEY wid (wid)
 ) ENGINE=MyISAM";
