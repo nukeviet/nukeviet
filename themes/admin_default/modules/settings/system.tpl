@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+
 <!-- BEGIN: error -->
 <div class="alert alert-danger">
 	{ERROR}
@@ -93,7 +96,7 @@
 				<tr>
 					<td><strong>{LANG.site_timezone}</strong></td>
 					<td>
-					<select name="site_timezone" class="form-control w200">
+					<select name="site_timezone" id="site_timezone" class="form-control w200">
 						<option value="">{LANG.timezoneAuto}</option>
 						<!-- BEGIN: opsite_timezone -->
 						<option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE} </option>
@@ -152,6 +155,10 @@
 	</div>
 </form>
 <script type="text/javascript">
+	$(document).ready(function() {
+		$("#site_timezone").select2();
+	});
+
 	$('#cdn_download').click(function() {
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl={CDNDL}';
 	});

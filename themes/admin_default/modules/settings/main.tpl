@@ -1,7 +1,11 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
+
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
@@ -64,7 +68,7 @@
 			<tr>
 				<th>{LANG.default_module}</th>
 				<td>
-				<select name="site_home_module" class="form-control w200">
+				<select name="site_home_module" id="site_home_module" class="form-control w200">
 					<!-- BEGIN: module -->
 					<option value="{MODULE.title}"{SELECTED}>{MODULE.custom_title} </option>
 					<!-- END: module -->
@@ -85,6 +89,8 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$(document).ready(function() {
+		$("#site_home_module").select2();
+
 		$("button[name=selectimg]").click(function() {
 			var area = "site_logo";
 			var path = "";

@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
 <script type="text/javascript">
 	var cat = '{LANG.cat}';
 	var caton = '{LANG.caton}';
@@ -180,6 +182,10 @@
 	</div>
 </form>
 <script type="text/javascript">
+	$(document).ready(function() {
+		$("#parentid, #module_name_page").select2();
+	});
+
 	$("input[name=selectimg]").click(function() {
 		var area = "icon";
 		var path = "{UPLOAD_CURRENT}";

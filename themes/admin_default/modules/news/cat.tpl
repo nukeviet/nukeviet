@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+
 <div id="module_show_list">
 	{CAT_LIST}
 </div>
@@ -37,7 +40,7 @@
 					<tr>
 						<th class="text-right">{LANG.cat_sub}: </th>
 						<td>
-						<select class="form-control w200" name="parentid">
+						<select class="form-control w200" name="parentid" id="parentid">
 							<!-- BEGIN: cat_listsub -->
 							<option value="{cat_listsub.value}" {cat_listsub.selected}>{cat_listsub.title}</option>
 							<!-- END: cat_listsub -->
@@ -98,6 +101,10 @@
 </div>
 
 <script type="text/javascript">
+	$(document).ready(function() {
+		$("#parentid").select2();
+	});
+
 	$("#titlelength").html($("#idtitle").val().length);
 	$("#idtitle").bind("keyup paste", function() {
 		$("#titlelength").html($(this).val().length);

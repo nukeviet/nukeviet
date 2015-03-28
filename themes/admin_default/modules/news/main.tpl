@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+
 <div class="well">
 	<form action="{NV_BASE_ADMINURL}index.php" method="get">
 		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -21,7 +24,7 @@
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<div class="form-group">
-					<select class="form-control" name="catid">
+					<select class="form-control" name="catid" id="catid">
 						<!-- BEGIN: cat_content -->
 						<option value="{CAT_CONTENT.value}" {CAT_CONTENT.selected} >{CAT_CONTENT.title}</option>
 						<!-- END: cat_content -->
@@ -117,4 +120,11 @@
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#catid").select2();
+	});
+</script>
+
 <!-- END: main -->
