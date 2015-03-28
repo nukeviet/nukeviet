@@ -15,6 +15,9 @@
 <meta http-equiv="Refresh" content="3;URL={URL}" />
 <!-- END: copyok -->
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+
 <form action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
@@ -28,8 +31,8 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td>
-					<select name="newslang" class="form-control w200 pull-right">
+					<td align="right">
+					<select name="newslang" id="newslang" class="form-control w200 pull-right">
 						<option value="">{LANG.nv_admin_sl1}</option>
 						<!-- BEGIN: newslang -->
 						<option value="{NEWSLANG.key}">{NEWSLANG.title}</option>
@@ -50,4 +53,9 @@
 		</table>
 	</div>
 </form>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#newslang").select2();
+	});
+</script>
 <!-- END: main -->
