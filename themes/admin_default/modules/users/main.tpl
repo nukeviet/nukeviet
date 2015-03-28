@@ -9,7 +9,7 @@
 			<div class="row">
 				<div class="col-xs-12 col-md-6">
 					<div class="form-group">
-						<input class="form-control" type="text" name="value" id="f_value" value="{LANG.search_key}" />
+						<input class="form-control" type="text" name="value" id="f_value" placeholder="{LANG.search_key}" />
 					</div>
 				</div>
 				<div class="col-xs-12 col-md-6">
