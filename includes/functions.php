@@ -1205,6 +1205,8 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 		if( ! $mail->Send() )
 		{
 			trigger_error( $mail->ErrorInfo, E_USER_WARNING );
+
+			return false;
 		}
 
 		return true;
