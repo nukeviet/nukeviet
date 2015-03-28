@@ -270,7 +270,7 @@ function nv_main_action(oForm, checkss, msgnocheck) {
 	}
 }
 
-function nv_del_content(id, checkss, base_adminurl) {
+function nv_del_content(id, checkss, base_adminurl, detail) {
 	if (confirm(nv_is_del_confirm[0])) {
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
 			nv_del_content_result(res);
@@ -290,7 +290,7 @@ function nv_check_movecat(oForm, msgnocheck) {
 function nv_del_content_result(res) {
 	var r_split = res.split('_');
 	if (r_split[0] == 'OK') {
-		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main';
+		window.location.href = window.location.href;
 	} else if (r_split[0] == 'ERR') {
 		alert(r_split[1]);
 	} else {

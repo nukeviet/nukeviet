@@ -57,7 +57,6 @@ $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $check_num = $nv_Request->get_title( 'choose', 'get', 1, 1 );
 $date_array['from_date'] = $from_date;
 $date_array['to_date'] = $to_date;
-$per_pages = 20;
 
 $base_url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
 if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
@@ -193,7 +192,7 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 		);
 	}
 
-	$contents .= search_result_theme( $key, $numRecord, $per_pages, $page, $array_content, $catid );
+	$contents .= search_result_theme( $key, $numRecord, $per_page, $page, $array_content, $catid );
 }
 
 if( empty( $key ) )

@@ -81,7 +81,7 @@ if( ! nv_function_exists( 'nv_department_info' ) )
 
 		//Danh sach cac bo phan
 		$sql = 'SELECT id, full_name, phone, fax, email, yahoo, skype, note FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 AND id=' . $block_config['departmentid'];
-		$array_department = nv_db_cache( $sql, 'id' );
+		$array_department = nv_db_cache( $sql, 'id', $module );
 
 		$xtpl = new XTemplate( 'block.department.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module );
 		$xtpl->assign( 'LANG', $lang_module );
@@ -90,15 +90,15 @@ if( ! nv_function_exists( 'nv_department_info' ) )
 		{
 			foreach( $array_department as $value => $row )
 			{
-				if( ! empty( $row['phone'] ) or ! empty( $row['fax'] ) or ! empty( $row['email'] ) or ! empty( $row['yahoo'] ) or ! empty( $row['skype'] ) )
+				if( ! empty( $row ) )
 				{
 					$xtpl->assign( 'DEPARTMENT', $row );
-					
+
 					if( ! empty( $row['phone'] ) )
 					{
 						$xtpl->parse( 'main.phone' );
 					}
-					
+
 					if( ! empty( $row['fax'] ) )
 					{
 						$xtpl->parse( 'main.fax' );
@@ -108,7 +108,7 @@ if( ! nv_function_exists( 'nv_department_info' ) )
 					{
 						$xtpl->parse( 'main.email' );
 					}
-					
+
 					if( ! empty( $row['yahoo'] ) )
 					{
 						$xtpl->parse( 'main.yahoo' );

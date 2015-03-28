@@ -26,22 +26,21 @@ $i = 1;
 $number_theme = sizeof( $theme_list );
 
 $errorconfig = array();
-
+$array_site_theme = array();
 $array_site_cat_theme = array();
+$result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
+while( list( $theme ) = $result->fetch( 3 ) )
+{
+	$array_site_theme[] = $theme;
+}
 if( $global_config['idsite'] )
 {
 	$theme = $db->query( 'SELECT theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
 	if( ! empty( $theme ) )
 	{
 		$array_site_cat_theme = explode( ',', $theme );
-
-		$result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
-		while( list( $theme ) = $result->fetch( 3 ) )
-		{
-			$array_site_cat_theme[] = $theme;
-		}
-		$array_site_cat_theme = array_unique( $array_site_cat_theme );
 	}
+	$array_site_cat_theme = array_unique( array_merge( $array_site_theme, $array_site_cat_theme ) );
 }
 
 foreach( $theme_list as $value )
@@ -52,7 +51,7 @@ foreach( $theme_list as $value )
 		continue;
 	}
 	//kiem tra giao dien co danh cho subsite hay ko
-	if( ! empty( $array_site_cat_theme ) and ! in_array( $value, $array_site_cat_theme ) )
+	if( $global_config['idsite'] and ! in_array( $value, $array_site_cat_theme ) )
 	{
 		continue;
 	}
@@ -87,12 +86,25 @@ foreach( $theme_list as $value )
 	}
 
 	$xtpl->assign( 'POSITION', implode( ' | ', $pos ) );
-
-	if( ! in_array( $value, $theme_mobile_list ) and $global_config['site_theme'] != $value )
+	if( $global_config['site_theme'] != $value )
 	{
-		$xtpl->parse( 'main.loop.link_active' );
-	}
+		if( in_array($value, $array_site_theme) )
+		{
+			if( $value != 'default' )
+			{
+				$xtpl->parse( 'main.loop.link_delete' );
+			}
+			if( ! in_array( $value, $theme_mobile_list ) )
+			{
+				$xtpl->parse( 'main.loop.link_active' );
+			}
+		}
+		else
+		{
+			$xtpl->parse( 'main.loop.link_setting' );
+		}
 
+	}
 	if( $i % 2 == 0 and $i < $number_theme )
 	{
 		$xtpl->parse( 'main.loop.endtr' );

@@ -15,12 +15,11 @@ $submenu['setuplayout'] = $lang_module['setup_layout'];
 $submenu['blocks'] = $lang_module['blocks'];
 $submenu['xcopyblock'] = $lang_module['xcopyblock'];
 
-$allow_func = array( 'main', 'setuplayout', 'activatetheme', 'change_layout', 'config', 'blocks', 'block_content', 'block_config', 'front_outgroup', 'loadblocks', 'blocks_change_pos', 'blocks_change_order', 'blocks_change_order_group', 'blocks_change_active', 'blocks_del', 'blocks_del_group', 'blocks_func', 'blocks_reset_order', 'sort_order', 'xcopyblock', 'loadposition', 'xcopyprocess' );
+$allow_func = array( 'main', 'deletetheme', 'setuplayout', 'activatetheme', 'change_layout', 'config', 'blocks', 'block_content', 'block_config', 'front_outgroup', 'loadblocks', 'blocks_change_pos', 'blocks_change_order', 'blocks_change_order_group', 'blocks_change_active', 'blocks_del', 'blocks_del_group', 'blocks_func', 'blocks_reset_order', 'sort_order', 'xcopyblock', 'loadposition', 'xcopyprocess' );
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$submenu['autoinstall'] = $lang_module['autoinstall'];
-	$allow_func[] = 'autoinstall';
+	$submenu['package_theme_module'] = $lang_module['package_theme_module'];
 	$allow_func[] = 'package_theme_module';
 	$allow_func[] = 'getfile';
 }

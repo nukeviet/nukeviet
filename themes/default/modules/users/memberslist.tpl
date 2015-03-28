@@ -16,7 +16,7 @@
 		<tbody>
 			<!-- BEGIN: list -->
 			<tr>
-				<td><a href="{USER.link}">{USER.username} <!-- BEGIN: fullname -->&nbsp;({USER.first_name}&nbsp;{USER.last_name})<!-- END: fullname --></a></td>
+				<td><a href="{USER.link}">{USER.username} <!-- BEGIN: fullname -->&nbsp;({USER.full_name})<!-- END: fullname --></a></td>
 				<td>{USER.gender}</td>
 				<td>{USER.regdate}</td>
 			</tr>

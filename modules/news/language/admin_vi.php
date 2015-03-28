@@ -113,6 +113,7 @@ $lang_module['viewcat_list_new'] = 'theo tiêu đề, mới lên trên';
 $lang_module['viewcat_list_old'] = 'theo tiêu đề, cũ lên trên';
 $lang_module['viewcat_grid_new'] = 'theo lưới, mới lên trên';
 $lang_module['viewcat_grid_old'] = 'theo lưới, cũ lên trên';
+$lang_module['viewcat_none'] = 'không hiển thị';
 
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_type'] = 'Tìm kiếm theo';
