@@ -51,10 +51,8 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 	product_number_sell( $listid, $listnum, "-" );
 
 	// Cap nhat lich su su dung ma giam gia
-	$array_coupons = array();
-	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
-	$array_coupons = $result->fetch();
-	if( !empty( $array_coupons ) )
+	$num = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history WHERE order_id = ' . $order_id )->fetchColumn();
+	if( $num > 0 )
 	{
 		$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET uses_per_coupon_count = uses_per_coupon_count - 1 WHERE id = ' . $array_coupons['cid'] );
 		$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
