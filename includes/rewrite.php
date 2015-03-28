@@ -32,12 +32,16 @@ if( $global_config['rewrite_optional'] )
 		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)" . $global_config['rewrite_exturl'] . "\"#"] = "\"\\1\\3" . $global_config['rewrite_exturl'] . "\"";
 		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)\"#"] = "\"\\1\\3" . $global_config['rewrite_endurl'] . "\"";
 		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "/([a-zA-Z0-9-/]+)\"#"] = "\"\\1\\3" . $global_config['rewrite_endurl'] . "\"";
+		if( $global_config['rewrite_op_mod'] == $global_config['site_home_module'] )
+		{
+			$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\"#"] = "\"\\1\"";
+		}
 	}
 
 	// Rewrite search url
 	if( $global_config['rewrite_op_mod'] != 'seek' )
 	{
-		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=seek\&[amp;]*q\=([^\"]+)\"#"] = "\"\\1seek/q=\\3\"";	
+		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=seek\&[amp;]*q\=([^\"]+)\"#"] = "\"\\1seek/q=\\3\"";
 	}
 	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=search\&[amp;]*q\=([^\"]+)\"#"] = "\"\\1\\3/search/q=\\4\"";
 

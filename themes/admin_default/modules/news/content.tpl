@@ -95,7 +95,7 @@
 		<div class="col-sm-24 col-md-6">
 			<div class="row">
 				<div class="col-sm-12 col-md-24">
-					<ul style="padding:4px; margin:0">
+					<ul style="padding-left:4px; margin:0">
 						<li>
 							<p class="message_head">
 								<cite>{LANG.content_cat}:</cite>
@@ -158,7 +158,7 @@
 								<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
 							</p>
 							<div class="message_body">
-								<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 80px;" maxlength="10" readonly="readonly" type="text"/>
+								<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" type="text"/>
 								<select class="form-control" name="phour">
 									{phour}
 								</select>
@@ -173,7 +173,7 @@
 								<cite>{LANG.content_exp_date}:</cite><span class="timestamp">{LANG.content_notetime}</span>
 							</p>
 							<div class="message_body">
-								<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 80px;" maxlength="10" readonly="readonly" type="text"/>
+								<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" type="text"/>
 								<select class="form-control" name="ehour">
 									{ehour}
 								</select>

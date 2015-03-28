@@ -182,8 +182,8 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_openid (
 	primary key (opid)
 )";
 
-$sql_create_table[] = "CREATE INDEX inv_users_openid_userid ON NV3_USERS_OPENID(userid) TABLESPACE USERS";
-$sql_create_table[] = "CREATE INDEX inv_users_openid_email ON NV3_USERS_OPENID(email) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_users_openid_userid ON " . strtoupper( $db_config['prefix'] ) . "_USERS_OPENID(userid) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_users_openid_email ON " . strtoupper( $db_config['prefix'] ) . "_USERS_OPENID(email) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_field (
 	fid NUMBER(8,0) DEFAULT NULL,
@@ -378,7 +378,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_SESSIONS_GLOBALTABLE . " (
 	CONSTRAINT unv_sessions_session_id UNIQUE (session_id)
 )";
 
-$sql_create_table[] = "CREATE INDEX inv_sessions_onl_time ON NV3_SESSIONS(onl_time) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_sessions_onl_time ON " . strtoupper( $db_config['prefix'] ) . "_SESSIONS(onl_time) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
 	name VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
@@ -391,7 +391,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_COOKIES_GLOBALTABLE . " (
 	CONSTRAINT cnv_sys_cookiename UNIQUE (name,domain,path)
 ) ENGINE=MyISAM";
 
-$sql_create_table[] = "CREATE INDEX inv_cookies_name ON NV3_COOKIES(name) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_cookies_name ON " . strtoupper( $db_config['prefix'] ) . "_COOKIES(name) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
 	lang CHAR(2 CHAR) NOT NULL ENABLE,
@@ -423,9 +423,9 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extension
 	CONSTRAINT unv_setup_extensions_title UNIQUE (type,title)
 )";
 
-$sql_create_table[] = "CREATE INDEX inv_setup_extensions_id ON NV3_SETUP_EXTENSIONS(id) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_setup_extensions_id ON " . strtoupper( $db_config['prefix'] ) . "_SETUP_EXTENSIONS(id) TABLESPACE USERS";
 
-$sql_create_table[] = "CREATE INDEX inv_setup_extensions_type ON NV3_SETUP_EXTENSIONS(type) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_setup_extensions_type ON " . strtoupper( $db_config['prefix'] ) . "_SETUP_EXTENSIONS(type) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_extension_files (
 	idfile NUMBER(8,0) DEFAULT NULL,
@@ -457,17 +457,17 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 	click_os_name VARCHAR2(100 CHAR) DEFAULT '' NOT NULL ENABLE,
 	click_ref VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE
 )";
-$sql_create_table[] = "CREATE INDEX inv_banners_click_bid ON NV3_BANNERS_CLICK(bid) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_banners_click_bid ON " . strtoupper( $db_config['prefix'] ) . "_BANNERS_CLICK(bid) TABLESPACE USERS";
 
-$sql_create_table[] = "CREATE INDEX inv_banners_click_click_day ON NV3_BANNERS_CLICK(click_day) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_banners_click_click_day ON " . strtoupper( $db_config['prefix'] ) . "_BANNERS_CLICK(click_day) TABLESPACE USERS";
 
-$sql_create_table[] = "CREATE INDEX inv_banners_click_click_ip ON NV3_BANNERS_CLICK(click_ip) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_banners_click_click_ip ON " . strtoupper( $db_config['prefix'] ) . "_BANNERS_CLICK(click_ip) TABLESPACE USERS";
 
-$sql_create_table[] = "CREATE INDEX inv_banners_click_country ON NV3_BANNERS_CLICK(click_country) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_banners_click_country ON " . strtoupper( $db_config['prefix'] ) . "_BANNERS_CLICK(click_country) TABLESPACE USERS";
 
-$sql_create_table[] = "CREATE INDEX inv_banners_click_browse_key ON NV3_BANNERS_CLICK(click_browse_key) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_banners_click_browse_key ON " . strtoupper( $db_config['prefix'] ) . "_BANNERS_CLICK(click_browse_key) TABLESPACE USERS";
 
-$sql_create_table[] = "CREATE INDEX inv_banners_click_click_os_key ON NV3_BANNERS_CLICK(click_os_key) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_banners_click_click_os_key ON " . strtoupper( $db_config['prefix'] ) . "_BANNERS_CLICK(click_os_key) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients (
 	id NUMBER(8,0) DEFAULT NULL,
@@ -551,7 +551,7 @@ $sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config[
 	  SELECT SNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_ROWS.nextval INTO :new.id FROM DUAL;
 	END TNV_' . strtoupper( $db_config['prefix'] ) . '_BANNERS_ROWS;';
 
-$sql_create_table[] = "CREATE INDEX inv_banners_rows_pid ON NV3_BANNERS_ROWS(pid) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_banners_rows_pid ON " . strtoupper( $db_config['prefix'] ) . "_BANNERS_ROWS(pid) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banip (
 	id NUMBER(8,0) DEFAULT NULL,
@@ -630,9 +630,9 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
 	CONSTRAINT unv_upload_file_did UNIQUE (did,title)
 )";
 
-$sql_create_table[] = "CREATE INDEX inv_upload_file_userid ON NV3_UPLOAD_FILE(userid) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_upload_file_userid ON " . strtoupper( $db_config['prefix'] ) . "_UPLOAD_FILE(userid) TABLESPACE USERS";
 
-$sql_create_table[] = "CREATE INDEX inv_upload_file_type ON NV3_UPLOAD_FILE(type) TABLESPACE USERS";
+$sql_create_table[] = "CREATE INDEX inv_upload_file_type ON " . strtoupper( $db_config['prefix'] ) . "_UPLOAD_FILE(type) TABLESPACE USERS";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_googleplus (
 	gid NUMBER(5,0) DEFAULT NULL,
@@ -678,3 +678,25 @@ $sql_create_table[] = "CREATE TABLE " . $db_config["prefix"] . "_counter (
 	 " . NV_LANG_DATA . "_count NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
 	 CONSTRAINT cnv_counter UNIQUE (c_type,c_val)
 )";
+
+$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
+	id NUMBER(11,0) DEFAULT NULL,
+	send_to NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
+	send_from NUMBER(8,0) DEFAULT 0 NOT NULL ENABLE,
+	area NUMBER(1,0) DEFAULT 0 NOT NULL ENABLE,
+	language VARCHAR2(3 CHAR) DEFAULT '' NOT NULL ENABLE,
+	module VARCHAR2(50 CHAR) DEFAULT '' NOT NULL ENABLE,
+	type VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
+	content VARCHAR2(4000 CHAR) DEFAULT NULL,
+	add_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
+	view NUMBER(1,0) DEFAULT 0 NOT NULL ENABLE,
+	primary key (id)
+)";
+
+$sql_create_table[] = 'create sequence SNV_' . strtoupper( $db_config['prefix'] ) . '_NOTIFICATION';
+$sql_create_table[] = 'CREATE OR REPLACE TRIGGER TNV_' . strtoupper( $db_config['prefix'] ) . '_NOTIFICATION
+  BEFORE INSERT  ON ' . $db_config['prefix'] . '_notification
+  FOR EACH ROW WHEN (new.id is null)
+	BEGIN
+	  SELECT SNV_' . strtoupper( $db_config['prefix'] ) . '_NOTIFICATION.nextval INTO :new.id FROM DUAL;
+	END TNV_' . strtoupper( $db_config['prefix'] ) . '_NOTIFICATION;';

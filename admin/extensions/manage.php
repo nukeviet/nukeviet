@@ -571,7 +571,7 @@ if( md5( 'delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_
 }
 
 $array_extType = array( 'module', 'block', 'theme', 'cronjob', 'other', 'sys', 'admin' );
-$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op] = $lang_module['manage'];
+$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype='] = $lang_module['manage'];
 foreach ($array_extType as $_type)
 {
 	$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;selecttype=' . $_type] = $lang_module['extType_' . $_type];

@@ -32,6 +32,10 @@ if( $global_config['rewrite_optional'] )
 		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)" . $global_config['rewrite_exturl'] . "\"#"] = "\"\\1index.php/\\3" . $global_config['rewrite_exturl'] . "\"";
 		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)\"#"] = "\"\\1index.php/\\3" . $global_config['rewrite_endurl'] . "\"";
 		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "/([a-zA-Z0-9-/]+)\"#"] = "\"\\1index.php/\\3" . $global_config['rewrite_endurl'] . "\"";
+		if( $global_config['rewrite_op_mod'] == $global_config['site_home_module'] )
+		{
+			$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\"#"] = "\"\\1\"";
+		}
 	}
 
 	// Rewrite search url
