@@ -366,7 +366,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 						$_permission_action['publtime'] = true;
 						$_permission_action['re-published'] = true;
 					}
-					elseif( ( $status == 0 or $status == 4 ) and $post_id == $admin_id )
+					elseif( ( $status == 0 or $status == 4 or $status == 5 ) and $post_id == $admin_id )
 					{
 						++$check_edit;
 						$_permission_action['waiting'] = true;
@@ -376,7 +376,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 					{
 						++$check_del;
 					}
-					elseif( ( $status == 0 or $status == 4 ) and $post_id == $admin_id )
+					elseif( ( $status == 0 or $status == 4  or $status == 5 ) and $post_id == $admin_id )
 					{
 						++$check_del;
 						$_permission_action['waiting'] = true;
