@@ -87,7 +87,7 @@ else
 		}
 		else
 		{
-			if( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT )
+			if( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][1] > NV_MAX_HEIGHT )
 			{
 				nv_deletefile( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'] );
 				if( $upload_info['img_info'][0] > NV_MAX_WIDTH )
