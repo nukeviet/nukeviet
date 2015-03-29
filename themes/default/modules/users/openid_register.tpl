@@ -25,7 +25,6 @@
 			<input type="password" class="required form-control password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" maxlength="{PASS_MAXLENGTH}" />
 		</div>
 	</div>
-	<!-- BEGIN: allowquestion -->
 	<div class="form-group">
 		<label for="question" class="col-sm-8 control-label">{LANG.question}:</label>
 		<div class="col-sm-16">
@@ -33,9 +32,9 @@
 				<!-- BEGIN: frquestion -->
 				<option value="{QUESTIONVALUE.qid}"{QUESTIONVALUE.selected}>{QUESTIONVALUE.title}</option>
 				<!-- END: frquestion -->
-			</select>			
+			</select>
 		</div>
-	</div>	
+	</div>
 	<div class="form-group">
 		<label for="your_question" class="col-sm-8 control-label">{LANG.your_question}:</label>
 		<div class="col-sm-16">
@@ -48,7 +47,6 @@
 			<input type="text" class="required form-control" name="answer" id="answer" value="{DATA.answer}" />
 		</div>
 	</div>
-	<!-- END: allowquestion -->
 	<!-- BEGIN: captcha -->
 	<div class="form-group">
 		<label for="nv_seccode_iavim" class="col-sm-8 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
@@ -74,7 +72,7 @@
 		<div class="col-sm-offset-8 col-sm-16">
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" name="agreecheck" value="1"{DATA.agreecheck}/> 
+					<input type="checkbox" name="agreecheck" value="1"{DATA.agreecheck}/>
 					{LANG.accept}
 				</label>
 			</div>

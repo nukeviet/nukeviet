@@ -160,11 +160,11 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$error = $lang_module['edit_error_password'];
 	}
-	elseif( $global_config['allowquestion'] and empty( $_user['question'] ) )
+	elseif( empty( $_user['question'] ) )
 	{
 		$error = $lang_module['edit_error_question'];
 	}
-	elseif( $global_config['allowquestion'] and empty( $_user['answer'] ) )
+	elseif( empty( $_user['answer'] ) )
 	{
 		$error = $lang_module['edit_error_answer'];
 	}
@@ -379,13 +379,6 @@ if( defined( 'NV_IS_USER_FORUM' ) )
 }
 else
 {
-	if( $global_config['allowquestion'] )
-	{
-		$xtpl->parse( 'main.question' );
-		$xtpl->parse( 'main.answer' );
-		$xtpl->assign( 'REQUIRED_QUESTION', ' required' );
-	}
-
 	foreach( $genders as $gender )
 	{
 		$xtpl->assign( 'GENDER', $gender );
