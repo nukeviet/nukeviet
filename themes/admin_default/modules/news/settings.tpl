@@ -95,7 +95,7 @@
 				</tr>
 				<tr>
 					<th>{LANG.setting_copyright}</th>
-					<td><textarea class="form-control" style="width: 450px" name="copyright" id="copyright" cols="20" rows="4">{DATA.copyright}</textarea></td>
+					<td>{COPYRIGHTHTML}</td>
 				</tr>
 			</tbody>
 		</table>
