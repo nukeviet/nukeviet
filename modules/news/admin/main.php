@@ -35,7 +35,8 @@ $val_cat_content = array();
 $val_cat_content[] = array(
 	'value' => 0,
 	'selected' => ( $catid == 0 ) ? ' selected="selected"' : '',
-	'title' => $lang_module['search_cat_all'] );
+	'title' => $lang_module['search_cat_all']
+);
 $array_cat_view = array();
 $check_declined = false;
 foreach( $global_array_cat as $catid_i => $array_value )
@@ -94,11 +95,12 @@ foreach( $global_array_cat as $catid_i => $array_value )
 		$val_cat_content[] = array(
 			'value' => $catid_i,
 			'selected' => $sl,
-			'title' => $xtitle_i );
+			'title' => $xtitle_i
+		);
 		$array_cat_view[] = $catid_i;
 	}
 }
-if( ! defined( 'NV_IS_ADMIN_MODULE' ) and $catid > 0 and ! in_array( $catid, $array_cat_view ) )
+if( ! defined( 'NV_IS_ADMIN_MODULE' ) and $catid > 0 and !in_array( $catid, $array_cat_view ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main' );
 	die();
@@ -143,6 +145,28 @@ $array_status_class = array(
 	'2' => 'success',
 	'3' => 'danger'
 );
+
+$_permission_action = array();
+$array_list_action = array(
+	'delete' => $lang_global['delete'],
+	're-published' => $lang_module['re_published'],
+	'publtime' => $lang_module['publtime'],
+	'exptime' => $lang_module['exptime'],
+	'waiting' => $lang_module['status_action_0']
+);
+
+// Chuyen sang cho duyet
+if( defined( 'NV_IS_ADMIN_MODULE' ) )
+{
+	$array_list_action['declined'] = $lang_module['declined'];
+	$array_list_action['block'] = $lang_module['addtoblock'];
+	$array_list_action['addtotopics'] = $lang_module['addtotopics'];
+	$array_list_action['move'] = $lang_module['move'];
+}
+elseif( $check_declined ) //Neu co quyen duyet bai thi
+{
+	$array_list_action['declined'] = $lang_module['declined'];
+}
 
 if( ! in_array( $stype, array_keys( $array_search ) ) )
 {
@@ -200,7 +224,11 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 		{
 			$arr_from[] = "(r." . $val . " LIKE '%" . $db->dblikeescape( $q ) . "%')";
 		}
-		$where = " r.author LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR r.title LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'\n\t\t\tOR u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' \n\t\t\tOR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%'";
+		$where = " r.author LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
+			OR r.title LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
+			OR c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'
+			OR u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
+			OR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%'";
 	}
 	if( $sstatus != '-' )
 	{
@@ -238,14 +266,16 @@ $global_array_cat[0] = array(
 	'subcatid' => 0,
 	'numlinks' => 3,
 	'description' => '',
-	'keywords' => '' );
+	'keywords' => ''
+);
 $search_type = array();
 foreach( $array_search as $key => $val )
 {
 	$search_type[] = array(
 		'key' => $key,
 		'value' => $val,
-		'selected' => ( $key == $stype ) ? ' selected="selected"' : '' );
+		'selected' => ( $key == $stype ) ? ' selected="selected"' : ''
+	);
 }
 $a = 0;
 foreach( $array_status_view as $key => $val )
@@ -262,26 +292,20 @@ foreach( $array_status_view as $key => $val )
 	$search_status[] = array(
 		'key' => $key,
 		'value' => $val,
-		'selected' => $sl );
+		'selected' => $sl
+	);
 }
 $i = 5;
 $search_per_page = array();
 while( $i <= 500 )
 {
-	$search_per_page[] = array( 'page' => $i, 'selected' => ( $i == $per_page ) ? ' selected="selected"' : '' );
+	$search_per_page[] = array(
+		'page' => $i,
+		'selected' => ( $i == $per_page ) ? ' selected="selected"' : ''
+	);
 	$i = $i + 5;
 }
 $order2 = ( $order == 'asc' ) ? 'desc' : 'asc';
-$base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page . '&amp;catid=' . $catid . '&amp;stype=' . $stype . '&amp;q=' . $q . '&amp;checkss=' . $checkss;
-$base_url_id = $base_url_mod . '&amp;ordername=id&amp;order=' . $order2 . '&amp;page=' . $page;
-$base_url_name = $base_url_mod . '&amp;ordername=title&amp;order=' . $order2 . '&amp;page=' . $page;
-$base_url_publtime = $base_url_mod . '&amp;ordername=publtime&amp;order=' . $order2 . '&amp;page=' . $page;
-$base_url_exptime = $base_url_mod . '&amp;ordername=exptime&amp;order=' . $order2 . '&amp;page=' . $page;
-$base_url_hitstotal = $base_url_mod . '&amp;ordername=hitstotal&amp;order=' . $order2 . '&amp;page=' . $page;
-$base_url_hitscm = $base_url_mod . '&amp;ordername=hitscm&amp;order=' . $order2 . '&amp;page=' . $page;
-
-$base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $ordername . '&amp;order=' . $order;
-
 $ord_sql = ' r.' . $ordername . ' ' . $order;
 
 $db->sqlreset()->select( 'COUNT(*)' )->from( $from )->where( $where );
@@ -321,20 +345,31 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 				{
 					++$check_edit;
 					++$check_del;
+					$_permission_action['publtime'] = true;
+					$_permission_action['re-published'] = true;
+					$_permission_action['exptime'] = true;
+					$_permission_action['declined'] = true;
 				}
 				else
 				{
 					if( $array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1 )
 					{
 						++$check_edit;
+						if( $status )
+						{
+							$_permission_action['exptime'] = true;
+						}
 					}
 					elseif( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and $status == 0 )
 					{
 						++$check_edit;
+						$_permission_action['publtime'] = true;
+						$_permission_action['re-published'] = true;
 					}
 					elseif( ( $status == 0 or $status == 4 ) and $post_id == $admin_id )
 					{
 						++$check_edit;
+						$_permission_action['waiting'] = true;
 					}
 
 					if( $array_cat_admin[$admin_id][$catid_i]['del_content'] == 1 )
@@ -344,6 +379,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 					elseif( ( $status == 0 or $status == 4 ) and $post_id == $admin_id )
 					{
 						++$check_del;
+						$_permission_action['waiting'] = true;
 					}
 				}
 			}
@@ -361,8 +397,15 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 	}
 
 	$admin_funcs = array();
-	if( $check_permission_edit ) $admin_funcs[] = nv_link_edit_page( $id );
-	if( $check_permission_delete ) $admin_funcs[] = nv_link_delete_page( $id );
+	if( $check_permission_edit )
+	{
+		$admin_funcs[] = nv_link_edit_page( $id );
+	}
+	if( $check_permission_delete )
+	{
+		$admin_funcs[] = nv_link_delete_page( $id );
+		$_permission_action['delete'] = true;
+	}
 
 	$data[$id] = array(
 		'id' => $id,
@@ -393,33 +436,15 @@ if( ! empty( $array_ids ) )
 	}
 }
 
-$array_list_action = array(
-	'delete' => $lang_global['delete'],
-	're-published' => $lang_module['re_published'],
-	'publtime' => $lang_module['publtime'],
-	'exptime' => $lang_module['exptime'],
-	'waiting' => $lang_module['status_action_0']
-);
+$base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page . '&amp;catid=' . $catid . '&amp;stype=' . $stype . '&amp;q=' . $q . '&amp;checkss=' . $checkss;
+$base_url_id = $base_url_mod . '&amp;ordername=id&amp;order=' . $order2 . '&amp;page=' . $page;
+$base_url_name = $base_url_mod . '&amp;ordername=title&amp;order=' . $order2 . '&amp;page=' . $page;
+$base_url_publtime = $base_url_mod . '&amp;ordername=publtime&amp;order=' . $order2 . '&amp;page=' . $page;
+$base_url_exptime = $base_url_mod . '&amp;ordername=exptime&amp;order=' . $order2 . '&amp;page=' . $page;
+$base_url_hitstotal = $base_url_mod . '&amp;ordername=hitstotal&amp;order=' . $order2 . '&amp;page=' . $page;
+$base_url_hitscm = $base_url_mod . '&amp;ordername=hitscm&amp;order=' . $order2 . '&amp;page=' . $page;
 
-// Chuyen sang cho duyet
-if( defined( 'NV_IS_ADMIN_MODULE' ) )
-{
-	$array_list_action['declined'] = $lang_module['declined'];
-	$array_list_action['block'] = $lang_module['addtoblock'];
-	$array_list_action['addtotopics'] = $lang_module['addtotopics'];
-	$array_list_action['move'] = $lang_module['move'];
-}
-elseif( $check_declined ) // neu co quyen duyet bai thi
-{
-	$array_list_action['declined'] = $lang_module['declined'];
-}
-
-$action = array();
-while( list( $catid_i, $title_i ) = each( $array_list_action ) )
-{
-	$action[] = array( 'value' => $catid_i, 'title' => $title_i );
-}
-
+$base_url = $base_url_mod . '&amp;sstatus=' . $sstatus . '&amp;ordername=' . $ordername . '&amp;order=' . $order;
 $generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -469,13 +494,20 @@ foreach( $data as $row )
 	$xtpl->parse( 'main.loop' );
 }
 
-foreach( $action as $action1 )
+while( list( $action_i, $title_i ) = each( $array_list_action ) )
 {
-	$xtpl->assign( 'ACTION', $action1 );
-	$xtpl->parse( 'main.action' );
+	if( defined( 'NV_IS_ADMIN_MODULE' ) || isset( $_permission_action[$action_i] ) )
+	{
+		$action_assign = array(
+			'value' => $action_i,
+			'title' => $title_i
+		);
+		$xtpl->assign( 'ACTION', $action_assign );
+		$xtpl->parse( 'main.action' );
+	}
 }
 
-if( ! empty( $generate_page ) )
+if( !empty( $generate_page ) )
 {
 	$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 	$xtpl->parse( 'main.generate_page' );
@@ -487,5 +519,3 @@ $contents = $xtpl->text( 'main' );
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
-
-?>
