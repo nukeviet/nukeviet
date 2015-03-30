@@ -206,7 +206,7 @@ else
 		$data['description'] = $data[NV_LANG_DATA . '_description'];
 		$data['keywords'] = $data[NV_LANG_DATA . '_keywords'];
 	}
-	elseif( $data['parentid'] )
+	if( $data['parentid'] )
 	{
 		$data['form'] = $db->query( 'SELECT form FROM ' . $table_name . ' where catid=' . $data['parentid'] )->fetchColumn();
 		list( $parent_title, $group_price ) = $db->query( 'SELECT ' . NV_LANG_DATA . '_title, group_price FROM ' . $table_name . ' where catid=' . $data['parentid'] )->fetch( 3 );
