@@ -22,8 +22,7 @@ $stmt->execute();
 
 list( $mod_name, $mod_file, $mod_data ) = $stmt->fetch( 3 );
 
-if( empty( $mod_name ) )
-	die( $lang_module['add_error_module'] );
+if( empty( $mod_name ) ) die( $lang_module['add_error_module'] );
 
 $array_item = array();
 if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php' ) )
@@ -37,13 +36,14 @@ foreach( $funcs_item as $key => $sub_item )
 {
 	if( $sub_item['in_submenu'] == 1 )
 	{
-		$array_item[$key] = array(
+		$array_item[] = array(
 			'key' => $key,
 			'title' => $sub_item['func_custom_name'],
 			'alias' => $key
 		);
 	}
 }
+
 if( !empty( $array_item ) )
 {
 	$xtpl = new XTemplate( 'rows.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -64,7 +64,6 @@ if( !empty( $array_item ) )
 				if( isset( $subitem['parentid'] ) and $subitem['parentid'] == $key )
 				{
 					$subitem['title'] = $sp . $subitem['title'];
-					$subitem['alias'] = $item['alias'].'/'.$subitem['alias'];
 					$subitem['module'] = $mod_name;
 					$xtpl->assign( 'item', $subitem );
 					$xtpl->parse( 'main.link.item' );

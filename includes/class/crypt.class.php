@@ -10,7 +10,6 @@
 
 class nv_Crypt
 {
-	private $_func;
 	private $_ipad;
 	private $_opad;
 	private $_key;
@@ -19,13 +18,11 @@ class nv_Crypt
 	 * nv_Crypt::__construct()
 	 *
 	 * @param mixed $key
-	 * @param mixed $method
 	 * @return
 	 */
-	function __construct( $key, $method )
+	function __construct( $key )
 	{
-		$this->_func = $method != 'md5' ? 'sha1' : 'md5';
-		$this->_key = call_user_func( $this->_func, $key );
+		$this->_key = sha1( $key );
 		if( isset( $key{64} ) ) $key = pack( 'H32', $this->_key );
 
 		if( ! isset( $key{63} ) ) $key = str_pad( $key, 64, chr( 0 ) );
@@ -43,11 +40,11 @@ class nv_Crypt
 	 */
 	public function hash( $data, $is_salt = false )
 	{
-		$inner = pack( 'H32', call_user_func( $this->_func, $this->_ipad . $data ) );
-		$digest = call_user_func( $this->_func, $this->_opad . $inner );
+		$inner = pack( 'H32', sha1( $this->_ipad . $data ) );
+		$digest = sha1( $this->_opad . $inner );
 		if( ! $is_salt ) return $digest;
 
-		$mhast = constant( 'MHASH_' . strtoupper( $this->_func ) );
+		$mhast = constant( 'MHASH_SHA1' );
 		$salt = substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyz0123456789' ), 0, 8 );
 		$salt = mhash_keygen_s2k( $mhast, $digest, substr( pack( 'h*', md5( $salt ) ), 0, 8 ), 4 );
 		$hash = strtr( base64_encode( mhash( $mhast, $digest . $salt ) . $salt ), '+/=', '-_,' );
@@ -55,18 +52,59 @@ class nv_Crypt
 	}
 
 	/**
-	 * nv_Crypt::validate()
+	 * nv_Crypt::hash_password()
 	 *
-	 * @param mixed $data
+	 * @param mixed $password
+	 * @param mixed $hashprefix
+	 * @return
+	 */
+	public function hash_password( $password, $hashprefix = '{SSHA}' )
+	{
+		if( $hashprefix == '{SSHA}' )
+		{
+			$salt = substr( str_shuffle( str_repeat( 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 4 ) ), 0, 4 );
+			return '{SSHA}' . base64_encode( sha1( $password . $salt, TRUE ) . $salt );
+		}
+		elseif( $hashprefix == '{SHA}' )
+		{
+			return '{SHA}' . base64_encode( sha1( $password, TRUE ) );
+		}
+		elseif( $hashprefix == '{MD5}' )
+		{
+			return '{MD5}' . base64_encode( md5( $password, TRUE ) );
+		}
+		else
+		{
+			return $this->hash( $password );
+		}
+	}
+	/**
+	 * nv_Crypt::validate_password()
+	 *
+	 * @param mixed $password
 	 * @param mixed $hash
 	 * @return
 	 */
-	public function validate( $data, $hash )
+	public function validate_password( $password, $hash )
 	{
-		if( $this->hash( $data ) == $hash )
+		if( substr( $hash, 0, 6 ) == '{SSHA}' )
 		{
-			return true;
+			$salt = substr( base64_decode( substr( $hash, 6 ) ), 20 );
+			$validate_hash = '{SSHA}' . base64_encode( sha1( $password . $salt, true ) . $salt );
 		}
+		elseif( substr( $hash, 0, 5 ) == '{SHA}' )
+		{
+			$validate_hash = '{SHA}' . base64_encode( sha1( $password, true ) );
+		}
+		elseif( substr( $hash, 0, 5 ) == '{MD5}' )
+		{
+			$validate_hash = '{MD5}' . base64_encode( md5( $password, true ) );
+		}
+		else
+		{
+			$validate_hash = $this->hash( $password );
+		}
+		if( $hash == $validate_hash ) return true;
 		return false;
 	}
 

@@ -20,16 +20,9 @@ $menu_top = array(
 
 $allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'install', 'download', 'login', 'update', 'manage', 'upload' );
 
-$submenu['newest'] = $lang_module['newest'];
-$submenu['popular'] = $lang_module['popular'];
-$submenu['featured'] = $lang_module['featured'];
-$submenu['downloaded'] = $lang_module['downloaded'];
-$submenu['favorites'] = $lang_module['favorites'];
-$submenu['manage'] = $lang_module['manage'];
-
 /**
  * nv_extensions_is_installed()
- * 
+ *
  * @param mixed $type
  * @param mixed $name
  * @param mixed $version
@@ -41,7 +34,7 @@ $submenu['manage'] = $lang_module['manage'];
 function nv_extensions_is_installed( $type, $name, $version )
 {
 	global $db;
-	
+
 	// Module
 	if( $type == 1 )
 	{
@@ -49,13 +42,13 @@ function nv_extensions_is_installed( $type, $name, $version )
 		{
 			return 0;
 		}
-		
+
 		return 1;
-		
+
 		//$stmt = $db->prepare( 'SELECT version FROM ' . NV_PREFIXLANG . '_setup_extensions WHERE basename= :basename AND basename=title AND type=\'module\'' );
 		//$stmt->bindParam( ':basename', $name, PDO::PARAM_STR );
 		//$stmt->execute();
-		//$row = $stmt->fetch();	
+		//$row = $stmt->fetch();
 	}
 	// Theme
 	elseif( $type == 2 )
@@ -78,16 +71,16 @@ function nv_extensions_is_installed( $type, $name, $version )
 		{
 			return 0;
 		}
-		
+
 		return 1;
 	}
-	
+
 	return 2;
 }
 
 /**
  * is_serialized_string()
- * 
+ *
  * @param mixed $data
  * @return
  */
@@ -97,10 +90,10 @@ function is_serialized_string( $data )
 	{
 		return false;
 	}
-	
+
 	$data = trim( $data );
 	$length = nv_strlen( $data );
-	
+
 	if( $length < 4 )
 	{
 		return false;
@@ -121,30 +114,30 @@ function is_serialized_string( $data )
 
 /**
  * nv_get_cookies()
- * 
+ *
  * @param bool $full
  * @return
  */
 function nv_get_cookies( $full = false )
 {
 	global $db;
-	
+
 	$data = array();
 	$arrURL = parse_url( NUKEVIET_STORE_APIURL );
-		
+
 	$data['domain'] = '.' . $arrURL['host'];
 	$data['path'] = '/';
-	
+
 	$sql = 'SELECT * FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE domain=' . $db->quote( $data['domain'] ) . ' AND path=' . $db->quote( $data['path'] );
 	$result = $db->query( $sql );
-	
+
 	$array = array();
 	$array_expires = array();
-	
+
 	while( $row = $result->fetch() )
 	{
 		$row['expires'] = floatval( $row['expires'] );
-		
+
 		if( $row['expires'] <= NV_CURRENTTIME )
 		{
 			$array_expires[] = $db->quote( $row['name'] );
@@ -164,20 +157,20 @@ function nv_get_cookies( $full = false )
 			}
 		}
 	}
-	
+
 	// Delete expired cookies
 	if( ! empty( $array_expires ) )
 	{
 		$sql = 'DELETE FROM ' . NV_COOKIES_GLOBALTABLE . ' WHERE name IN(' . implode( $array_expires ) . ') AND domain=' . $db->quote( $data['domain'] ) . ' AND path=' . $db->quote( $data['path'] );
 		$db->query( $sql );
 	}
-	
+
 	return $array;
 }
 
 /**
  * nv_store_cookies()
- * 
+ *
  * @param mixed $cookies
  * @param mixed $currCookies
  * @return void
@@ -185,7 +178,7 @@ function nv_get_cookies( $full = false )
 function nv_store_cookies( $cookies = array(), $currCookies = array() )
 {
 	global $db;
-	
+
 	if( ! empty( $cookies ) )
 	{
 		foreach( $cookies as $cookie )
@@ -200,7 +193,7 @@ function nv_store_cookies( $cookies = array(), $currCookies = array() )
 				{
 					$cookie['expires'] = intval( $cookie['expires'] );
 				}
-				
+
 				// Update cookie
 				if( isset( $currCookies[$cookie['name']] ) )
 				{
@@ -238,16 +231,16 @@ function nv_store_cookies( $cookies = array(), $currCookies = array() )
 
 /**
  * nv_check_ext_config_filecontent()
- * 
+ *
  * @param mixed $extConfig
  * @return
  */
 function nv_check_ext_config_filecontent( $extConfig )
 {
-	if( ! isset( $extConfig['extension'] ) or ! isset( $extConfig['author'] ) or ! isset( $extConfig['note'] ) or ! isset( $extConfig['extension']['id'] ) or ! isset( $extConfig['extension']['type'] ) or ! isset( $extConfig['extension']['name'] ) or ! isset( $extConfig['extension']['version'] ) or ! isset( $extConfig['extension']['sys'] ) or ! isset( $extConfig['extension']['virtual'] ) or ! isset( $extConfig['author']['name'] ) or ! isset( $extConfig['author']['email'] ) or ! isset( $extConfig['note']['text'] ) )
+	if( ! isset( $extConfig['extension'] ) or ! isset( $extConfig['author'] ) or ! isset( $extConfig['note'] ) or ! isset( $extConfig['extension']['id'] ) or ! isset( $extConfig['extension']['type'] ) or ! isset( $extConfig['extension']['name'] ) or ! isset( $extConfig['extension']['version'] ) or ! isset( $extConfig['author']['name'] ) or ! isset( $extConfig['author']['email'] ) or ! isset( $extConfig['note']['text'] ) )
 	{
 		return false;
 	}
-	
+
 	return true;
 }

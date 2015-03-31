@@ -18,8 +18,9 @@ $cache_file = '';
 
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $base_url_rewrite = nv_url_rewrite( $base_url, true );
+$page_url_rewrite = $page ? nv_url_rewrite( $base_url . '/page-' . $page, true ) : $base_url_rewrite;
 $request_uri = $_SERVER['REQUEST_URI'];
-if( ! ( $home OR $request_uri == $base_url_rewrite OR $request_uri == $base_url_rewrite . 'page-' . $page . '/' ) )
+if( ! ( $home OR $request_uri == $base_url_rewrite OR $request_uri == $page_url_rewrite OR NV_MAIN_DOMAIN . $request_uri == $base_url_rewrite OR NV_MAIN_DOMAIN . $request_uri == $page_url_rewrite ) )
 {
 	$redirect = '<meta http-equiv="Refresh" content="3;URL=' . $base_url_rewrite . '" />';
 	nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect );
@@ -40,7 +41,11 @@ if( empty( $contents ) )
 	$array_catpage = array();
 	$array_cat_other = array();
 
-	if( $viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' )
+	if(  $viewcat == 'viewcat_none' )
+	{
+		$contents = '';
+	}
+	elseif( $viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' )
 	{
 		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 'publtime DESC' : 'publtime ASC';
 		$db->sqlreset()

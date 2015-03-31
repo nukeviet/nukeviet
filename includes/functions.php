@@ -1205,6 +1205,8 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 		if( ! $mail->Send() )
 		{
 			trigger_error( $mail->ErrorInfo, E_USER_WARNING );
+
+			return false;
 		}
 
 		return true;
@@ -1314,8 +1316,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $on_page, $add_prev
 	{
 		if( $on_page > 1 )
 		{
-			$href = $on_page - 1;
-			$href = $href ? $base_url . $amp . $href : $base_url;
+			$href = ( $on_page > 2 ) ? $base_url . $amp . ( $on_page - 1 ) : $base_url;
 			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 			$page_string = "<li><a " . $href . " title=\"" . $lang_global['pageprev'] . "\">&laquo;</a></li>" . $page_string;
 		}
@@ -1326,7 +1327,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $on_page, $add_prev
 
 		if( $on_page < $total_pages )
 		{
-			$href = ( $on_page ) ? $base_url . $amp . $on_page : $base_url;
+			$href = ( $on_page ) ? $base_url . $amp . ( $on_page + 1 ) : $base_url;
 			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 			$page_string .= '<li><a ' . $href . ' title="' . $lang_global['pagenext'] . '">&raquo;</a></li>';
 		}
@@ -1436,7 +1437,8 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
 	{
 		if( $on_page > 1 )
 		{
-			$page_string = '<li><a rel="prev" title="' . $title . ' ' . ( $on_page - 1 ) . '" href="' . $base_url . '/page-' . ( $on_page - 1 ) . '">&laquo;</a></li>' . $page_string;
+			$href = ( $on_page > 2 ) ? $base_url . '/page-' . ( $on_page - 1 ) : $base_url;
+			$page_string = '<li><a rel="prev" title="' . $title . ' ' . ( $on_page - 1 ) . '" href="' . $href . '">&laquo;</a></li>' . $page_string;
 		}
 		else
 		{
@@ -1780,88 +1782,46 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 /**
  * nv_site_mods()
  *
+ * @param string $module_name
+ *
  * @return
  */
-function nv_site_mods()
+function nv_site_mods( $module_name = '' )
 {
-	global $admin_info, $user_info, $admin_info, $global_config, $db;
+	global $sys_mods, $admin_info, $global_config;
 
-	$cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
-	if( ( $cache = nv_get_cache( 'modules', $cache_file ) ) != false )
-	{
-		$site_mods = unserialize( $cache );
-	}
-	else
-	{
-		$site_mods = array();
-		try
-		{
-			$result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' m LEFT JOIN ' . NV_MODFUNCS_TABLE . ' f ON m.title=f.in_module WHERE m.act = 1 ORDER BY m.weight, f.subweight' );
-			while( $row = $result->fetch() )
-			{
-				$m_title = $row['title'];
-				$f_name = $row['func_name'];
-				$f_alias = $row['alias'];
-				if( ! isset( $site_mods[$m_title] ) )
-				{
-					$site_mods[$m_title] = array(
-						'module_file' => $row['module_file'],
-						'module_data' => $row['module_data'],
-						'custom_title' => $row['custom_title'],
-						'admin_title' => ( empty( $row['admin_title'] ) ) ? $row['custom_title'] : $row['admin_title'],
-						'admin_file' => $row['admin_file'],
-						'main_file' => $row['main_file'],
-						'theme' => $row['theme'],
-						'mobile' => $row['mobile'],
-						'description' => $row['description'],
-						'keywords' => $row['keywords'],
-						'groups_view' => $row['groups_view'],
-						'is_modadmin' => false,
-						'admins' => $row['admins'],
-						'rss' => $row['rss'],
-						'gid' => $row['gid'],
-						'funcs' => array()
-					);
-				}
-				$site_mods[$m_title]['funcs'][$f_alias] = array(
-					'func_id' => $row['func_id'],
-					'func_name' => $f_name,
-					'show_func' => $row['show_func'],
-					'func_custom_name' => $row['func_custom_name'],
-					'in_submenu' => $row['in_submenu']
-				);
-				$site_mods[$m_title]['alias'][$f_name] = $f_alias;
-			}
-			$cache = serialize( $site_mods );
-			nv_set_cache( 'modules', $cache_file, $cache );
-			unset( $cache, $result );
-		}
-		catch( PDOException $e )
-		{
-			return $site_mods;
-		}
-	}
-
+	$site_mods = $sys_mods;
 	if( defined( 'NV_SYSTEM' ) )
 	{
 		foreach( $site_mods as $m_title => $row )
 		{
-			$allowed = false;
-			$is_modadmin = false;
+			$allowed = true;
+			$groups_view = ( string )$row['groups_view'];
 
 			if( defined( 'NV_IS_SPADMIN' ) )
 			{
-				$allowed = true;
-				$is_modadmin = true;
+				$site_mods[$m_title]['is_modadmin'] = true;
 			}
 			elseif( defined( 'NV_IS_ADMIN' ) and ! empty( $row['admins'] ) and ! empty( $admin_info['admin_id'] ) and in_array( $admin_info['admin_id'], explode( ',', $row['admins'] ) ) )
 			{
-				$allowed = true;
-				$is_modadmin = true;
+				$site_mods[$m_title]['is_modadmin'] = true;
 			}
-			if( $allowed )
+			elseif( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
 			{
-				$site_mods[$m_title]['is_modadmin'] = $is_modadmin;
+				$allowed = false;
+			}
+			elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
+			{
+				$allowed = false;
+			}
+			elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
+			{
+				$allowed = false;
+			}
+
+			if( ! $allowed )
+			{
+				unset( $site_mods[$m_title] );
 			}
 		}
 		if( isset( $site_mods['users'] ) )
@@ -1940,7 +1900,7 @@ function nv_site_mods()
  */
 function nv_insert_notification( $module, $type, $content = array(), $send_to = 0, $send_from = 0, $area = 1 )
 {
-	global $db_config, $db;
+	global $db_config, $db, $global_config;
 
 	/* $area
 	 * 0: Khu vuc ngoai site
@@ -1948,23 +1908,20 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 	 * 2: Ca 2 khu vuc tren
 	 */
 
-	$content = !empty( $content ) ? serialize( $content ) : '';
-
-	$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_notification (send_to, send_from, area, language, module, type, content, add_time)
-	VALUES (:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ')' );
-	$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
-	$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
-	$sth->bindParam( ':area', $area, PDO::PARAM_INT );
-	$sth->bindParam( ':module', $module, PDO::PARAM_STR );
-	$sth->bindParam( ':type', $type, PDO::PARAM_STR );
-	$sth->bindParam( ':content', $content, PDO::PARAM_STR );
-
-	if( $sth->execute() )
+	if( $global_config['notification_active'] )
 	{
-		$count_current = intval( file_get_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_NOTIFICATION_ADMIN_FILE ) );
-		file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_NOTIFICATION_ADMIN_FILE, $count_current + 1, LOCK_EX );
-		return true;
-	}
+		$content = !empty( $content ) ? serialize( $content ) : '';
 
-	return false;
+		$sth = $db->prepare( 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
+		(send_to, send_from, area, language, module, type, content, add_time, view)	VALUES
+		(:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
+		$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
+		$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
+		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+		$sth->bindParam( ':content', $content, PDO::PARAM_STR );
+		$sth->execute();
+	}
+	return true;
 }

@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+
 <form class="form-inline" role="form" action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
@@ -92,7 +95,7 @@
 				</tr>
 				<tr>
 					<th>{LANG.setting_copyright}</th>
-					<td><textarea class="form-control" style="width: 450px" name="copyright" id="copyright" cols="20" rows="4">{DATA.copyright}</textarea></td>
+					<td>{COPYRIGHTHTML}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -106,13 +109,17 @@
 					<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/><span class="text-middle">{LANG.facebookAppIDNote}</span></td>
 				</tr>
 				<tr>
+					<th>{LANG.setting_alias_lower}</th>
+					<td><input type="checkbox" value="1" name="alias_lower"{ALIAS_LOWER}/></td>
+				</tr>
+				<tr>
 					<th>{LANG.tags_alias}</th>
 					<td><input type="checkbox" value="1" name="tags_alias"{TAGS_ALIAS}/></td>
 				</tr>
 				<tr>
 					<th>{LANG.structure_image_upload}</th>
 					<td>
-					<select class="form-control" name="structure_upload">
+					<select class="form-control" name="structure_upload" id="structure_upload">
 						<!-- BEGIN: structure_upload -->
 						<option value="{STRUCTURE_UPLOAD.key}"{STRUCTURE_UPLOAD.selected}>{STRUCTURE_UPLOAD.title}</option>
 						<!-- END: structure_upload -->
@@ -150,6 +157,10 @@
 </form>
 <script type="text/javascript">
 	//<![CDATA[
+	$(document).ready(function() {
+		$("#structure_upload").select2();
+	});
+
 	$("input[name=selectimg]").click(function() {
 		var area = "show_no_image";
 		var type = "image";

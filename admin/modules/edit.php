@@ -166,15 +166,57 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$mod_name = change_alias( $nv_Request->get_title( 'mod_name', 'post' ) );
 			if( $mod_name != $mod and preg_match( $global_config['check_module'], $mod_name ) )
 			{
-				$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET title= :mod_name WHERE title= :mod' );
-				$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
-				$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
-				if( $sth->execute() )
+				$module_version = array();
+				$version_file = NV_ROOTDIR . '/modules/' . $row['module_file'] . '/version.php';
+				if( file_exists( $version_file ) )
 				{
-					$sth = $db->prepare( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_module= :mod_name WHERE in_module= :mod' );
-					$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
-					$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
-					$sth->execute();
+					include $version_file;
+					if( isset( $module_version['virtual'] ) and $module_version['virtual'] )
+					{
+						$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET title= :mod_name WHERE title= :mod_old' );
+						$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
+						$sth->bindParam( ':mod_old', $mod, PDO::PARAM_STR );
+						if( $sth->execute() )
+						{
+							// Change module name
+							$sth = $db->prepare( 'UPDATE ' . NV_MODFUNCS_TABLE . ' SET in_module= :mod_name WHERE in_module= :mod_old' );
+							$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
+							$sth->bindParam( ':mod_old', $mod, PDO::PARAM_STR );
+							$sth->execute();
+							
+							// Change site_home_module
+							if( $mod == $global_config['site_home_module'] )
+							{
+								$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'site_home_module' AND lang = '" . NV_LANG_DATA . "' AND module='global'" );
+								$sth->bindParam( ':config_value', $mod_name, PDO::PARAM_STR );
+								$sth->execute();
+							}
+		
+							// Change block
+							$sth = $db->prepare( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET module= :mod_name WHERE module= :mod_old' );
+							$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
+							$sth->bindParam( ':mod_old', $mod, PDO::PARAM_STR );
+							$sth->execute();
+		
+							// Change config
+							$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET module= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module= :mod_old" );
+							$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
+							$sth->bindParam( ':mod_old', $mod, PDO::PARAM_STR );
+							$sth->execute();
+		
+							// Change comment
+							$sth = $db->prepare( "UPDATE " . NV_PREFIXLANG . "_comments SET module= :mod_name WHERE module= :mod_old" );
+							$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
+							$sth->bindParam( ':mod_old', $mod, PDO::PARAM_STR );
+							$sth->execute();
+		
+							// Change logs
+							$sth = $db->prepare( "UPDATE " . $db_config['prefix'] . "_logs SET module_name= :mod_name WHERE lang = '" . NV_LANG_DATA . "' AND module_name= :mod_old" );
+							$sth->bindParam( ':mod_name', $mod_name, PDO::PARAM_STR );
+							$sth->bindParam( ':mod_old', $mod, PDO::PARAM_STR );
+							$sth->execute();
+						}
+					}
 				}
 			}
 			nv_delete_all_cache();

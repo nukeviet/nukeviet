@@ -73,6 +73,7 @@ else
 	$array['compatible_class'] = empty( $array['compatible'] ) ? 'text-danger' : 'text-success';
 	$array['compatible_title'] = empty( $array['compatible'] ) ? $lang_module['incompatible'] : $lang_module['compatible'];
 	$array['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $array['id'];
+	$array['price'] = $array['price'] ? ( preg_replace( "/\,0$/", '', number_format( $array['price'], 1, ',', '.' ) ) . ' ' . $array['currency'] ) : $lang_module['free'];
 	
 	$xtpl->assign( 'DATA', $array );
 	
@@ -106,7 +107,8 @@ else
 		$file['compatible_class'] = empty( $file['compatible'] ) ? 'text-danger' : 'text-success';
 		$file['compatible_title'] = empty( $file['compatible'] ) ? $lang_module['incompatible'] : $lang_module['compatible'];
 		$file['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $array['id'] . '&amp;fid=' . $file['id'];
-
+		$file['price'] = $file['price'] ? ( preg_replace( "/\,0$/", '', number_format( $file['price'], 1, ',', '.' ) ) . ' ' . $file['currency'] ) : $lang_module['free'];
+		
 		$xtpl->assign( 'FILE', $file );
 		
 		if( $file['type'] == 1 and ! empty( $file['compatible'] ) )

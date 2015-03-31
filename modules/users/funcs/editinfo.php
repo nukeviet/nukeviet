@@ -138,7 +138,7 @@ $checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 // Thay doi cau hoi - cau tra loi du phong
 if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 {
-	$oldpassword = $row['password'];
+	$hashpassword = $row['password'];
 	$oldquestion = $row['question'];
 	$oldanswer = $row['answer'];
 
@@ -153,7 +153,7 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 	$step = 1;
 	$error = '';
 
-	if( empty( $oldpassword ) )
+	if( empty( $hashpassword ) )
 	{
 		$step = 2;
 	}
@@ -161,17 +161,9 @@ if( $nv_Request->isset_request( 'changequestion', 'get' ) )
 	{
 		if( $checkss == $array_data['checkss'] )
 		{
-			if( $crypt->validate( $array_data['nv_password'], $oldpassword ) or $array_data['nv_password'] == md5( $oldpassword ) )
+			if( $crypt->validate_password( $array_data['nv_password'], $hashpassword ) )
 			{
 				$step = 2;
-
-				if( ! isset( $array_data['nv_password']
-				{
-					31}
-				) )
-				{
-					$array_data['nv_password'] = md5( $crypt->hash( $array_data['nv_password'] ) );
-				}
 			}
 			else
 			{
@@ -259,7 +251,8 @@ if( $checkss == $array_data['checkss'] )
 {
 	$error = array();
 
-	$array_data['full_name'] = nv_substr( $nv_Request->get_title( 'full_name', 'post', '', 1 ), 0, 255 );
+	$array_data['first_name'] = nv_substr( $nv_Request->get_title( 'first_name', 'post', '', 1 ), 0, 255 );
+	$array_data['last_name'] = nv_substr( $nv_Request->get_title( 'last_name', 'post', '', 1 ), 0, 255 );
 	$array_data['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
 	$array_data['photo'] = nv_substr( $nv_Request->get_title( 'avatar', 'post', '', 1 ), 0, 255 );
 	$array_data['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 0 ), 0, 10 );
@@ -280,13 +273,13 @@ if( $checkss == $array_data['checkss'] )
 		}
 	}
 
-	if( empty( $array_data['full_name'] ) )
+	if( empty( $array_data['first_name'] ) )
 	{
-		$array_data['full_name'] = $row['full_name'];
+		$array_data['first_name'] = $row['first_name'];
 		$error[] = $lang_module['name'];
-		if( empty( $array_data['full_name'] ) )
+		if( empty( $array_data['first_name'] ) )
 		{
-			$array_data['full_name'] = $row['username'];
+			$array_data['first_name'] = $row['username'];
 		}
 	}
 
@@ -330,11 +323,12 @@ if( $checkss == $array_data['checkss'] )
 			}
 			else
 			{
-				$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, full_name, regdate, question, answer, checknum, users_info) VALUES (
+				$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info) VALUES (
 					'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "',
 					:md5_username,
 					'',
 					:email_new,
+					'',
 					'',
 					" . NV_CURRENTTIME . ",
 					'',
@@ -352,9 +346,7 @@ if( $checkss == $array_data['checkss'] )
 				if( $userid_check > 0 )
 				{
 					$subject = $lang_module['email_active'];
-					$message = sprintf( $lang_module['email_active_info'], $array_data['full_name'], $array_data['username'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active&userid=" . $userid_check . "&checknum=" . $checknum, nv_date( "H:i d/m/Y", NV_CURRENTTIME + 86400 ), $global_config['site_name'] );
-					$message .= "<br /><br />------------------------------------------------<br /><br />";
-					if( NV_LANG_DATA == 'vi' ) $message .= nv_EncString( $message );
+					$message = sprintf( $lang_module['email_active_info'], $array_data['first_name'], $array_data['username'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active&userid=" . $userid_check . "&checknum=" . $checknum, nv_date( "H:i d/m/Y", NV_CURRENTTIME + 86400 ), $global_config['site_name'] );
 					$send = nv_sendmail( $global_config['site_email'], $email_new, $subject, $message );
 					if( $send )
 					{
@@ -433,7 +425,8 @@ if( $checkss == $array_data['checkss'] )
 		username= :username,
 		md5username= :md5username,
 		email= :email,
-		full_name= :full_name,
+		first_name= :first_name,
+		last_name= :last_name,
 		gender= :gender,
 		photo= :photo,
 		birthday= :birthday,
@@ -446,7 +439,8 @@ if( $checkss == $array_data['checkss'] )
 	$stmt->bindParam( ':username', $array_data['username'], PDO::PARAM_STR );
 	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
 	$stmt->bindParam( ':email', $array_data['email'], PDO::PARAM_STR );
-	$stmt->bindParam( ':full_name', $array_data['full_name'], PDO::PARAM_STR );
+	$stmt->bindParam( ':first_name', $array_data['first_name'], PDO::PARAM_STR );
+	$stmt->bindParam( ':last_name', $array_data['last_name'], PDO::PARAM_STR );
 	$stmt->bindParam( ':gender', $array_data['gender'], PDO::PARAM_STR );
 	$stmt->bindParam( ':photo', $photo, PDO::PARAM_STR );
 	$stmt->bindParam( ':birthday', $array_data['birthday'], PDO::PARAM_STR );
@@ -495,7 +489,8 @@ if( $checkss == $array_data['checkss'] )
 }
 else
 {
-	$array_data['full_name'] = $row['full_name'];
+	$array_data['first_name'] = $row['first_name'];
+	$array_data['last_name'] = $row['last_name'];
 	$array_data['gender'] = $row['gender'];
 	$array_data['birthday'] = ! empty( $row['birthday'] ) ? date( 'd/m/Y', $row['birthday'] ) : '';
 	$array_data['view_mail'] = intval( $row['view_mail'] );

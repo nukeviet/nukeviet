@@ -341,7 +341,7 @@ if( ! empty( $array_cat_list ) )
 	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 	{
 		$_uploads_dir = NV_UPLOADS_DIR . '/' . $module_name;
-		$descriptionhtml = nv_aleditor( 'descriptionhtml', '100%', '200px', $descriptionhtml, '', $_uploads_dir, $_uploads_dir );
+		$descriptionhtml = nv_aleditor( 'descriptionhtml', '100%', '200px', $descriptionhtml, 'Basic', $_uploads_dir, $_uploads_dir );
 	}
 	else
 	{

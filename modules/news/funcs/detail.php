@@ -79,8 +79,6 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 					$news_contents['homeimgfile'] = $src;
 				}
 
-				$news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
-
 				if( ! empty( $src ) )
 				{
 					$meta_property['og:image'] = ( $news_contents['homeimgthumb'] == 1 ) ? NV_MY_DOMAIN . $news_contents['homeimgfile'] : NV_MY_DOMAIN . $src;
@@ -126,13 +124,19 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 
 	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
-	if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+	if( $_SERVER['REQUEST_URI'] == $base_url_rewrite )
+	{
+		$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+	}
+	elseif( NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 	{
 		Header( 'Location: ' . $base_url_rewrite );
 		die();
 	}
-
-	$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+	else
+	{
+		$canonicalUrl = $base_url_rewrite;
+	}
 
 	$news_contents['url_sendmail'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
 	$news_contents['url_print'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
@@ -319,9 +323,9 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		);
 	}
 
-	list( $post_username, $post_full_name ) = $db->query( 'SELECT username, full_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] )->fetch( 3 );
+	list( $post_username, $post_first_name, $post_last_name ) = $db->query( 'SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] )->fetch( 3 );
 
-	$news_contents['post_name'] = empty( $post_full_name ) ? $post_username : $post_full_name;
+	$news_contents['post_name'] = empty( $post_first_name ) ? $post_username : $post_first_name;
 
 	$array_keyword = array();
 	$key_words = array();

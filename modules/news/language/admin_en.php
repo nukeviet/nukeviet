@@ -92,6 +92,7 @@ $lang_module['setting_auto_tags'] = 'Automatically generate keywords for article
 $lang_module['setting_tags_remind'] = 'Remind the keywords no description';
 $lang_module['content_tags_empty'] = 'Note: article do not have keywords';
 $lang_module['content_tags_empty_auto'] = 'The system will automatically generate keywords stored at this article, you can disable auto-generated keywords in the management module';
+$lang_module['setting_alias_lower'] = 'Alias to lowercase when creating a new';
 
 $lang_module['viewcat_page'] = 'Display method';
 $lang_module['viewcat_page_new'] = 'New categories, Up';
@@ -104,6 +105,8 @@ $lang_module['viewcat_list_new'] = 'title, new front';
 $lang_module['viewcat_list_old'] = 'title, old front';
 $lang_module['viewcat_grid_new'] = 'grid, new front';
 $lang_module['viewcat_grid_old'] = 'grid, old front';
+$lang_module['viewcat_none'] = 'Not show content';
+
 $lang_module['search'] = 'Search';
 $lang_module['search_type'] = 'Search by';
 $lang_module['search_id'] = 'ID';
@@ -210,6 +213,8 @@ $lang_module['admin_no_user'] = 'Decentralized functions for this module only ap
 $lang_module['admin_userid'] = 'User ID';
 $lang_module['admin_username'] = 'Username';
 $lang_module['admin_full_name'] = 'Full name';
+$lang_module['admin_first_name'] = 'First name';
+$lang_module['admin_last_name'] = 'Last name';
 $lang_module['admin_email'] = 'Email';
 $lang_module['permissions_admin'] = 'Management category';
 $lang_module['permissions_add_content'] = 'Add article';

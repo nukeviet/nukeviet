@@ -13,5 +13,6 @@
 		</div>
 	</div>
 	<!-- END: loop -->
+	<div class="text-center">{GENERATE_PAGE}</div>
 </div>
 <!-- END: main -->

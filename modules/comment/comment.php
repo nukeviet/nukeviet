@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$per_page_comment = NV_PER_PAGE_COMMENT;
+$per_page_comment = ( defined( 'NV_PER_PAGE_COMMENT' ) ) ? NV_PER_PAGE_COMMENT : 5;
 
 /**
  * nv_comment_module()
@@ -38,7 +38,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 	if( $num_items )
 	{
 		$emailcomm = $module_config[$module]['emailcomm'];
-		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.full_name, b.photo, b.view_mail' )->limit( $per_page_comment )->offset( ( $page - 1 ) * $per_page_comment );
+		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail' )->limit( $per_page_comment )->offset( ( $page - 1 ) * $per_page_comment );
 
 		if( $sortcomm == 1 )
 		{
@@ -62,7 +62,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 			if( $row['userid'] > 0 )
 			{
 				$row['post_email'] = $row['email'];
-				$row['post_name'] = $row['full_name'];
+				$row['post_name'] = $row['first_name'];
 			}
 			$row['check_like'] = md5( $row['cid'] . '_' . $session_id );
 			$row['post_email'] = ( $emailcomm ) ? $row['post_email'] : '';
@@ -85,6 +85,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 		return array( 'comment' => $comment_array, 'page' => $generate_page );
 	}
 }
+
 function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 {
 	global $db, $module_config;
@@ -96,7 +97,7 @@ function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 	if( $num_items_sub )
 	{
 		$emailcomm = $module_config[$module]['emailcomm'];
-		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.full_name, b.photo, b.view_mail' );
+		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail' );
 
 		if( $sortcomm == 1 )
 		{
@@ -122,15 +123,16 @@ function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 	}
 	return $data_reply_comment;
 }
+
 function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowed, $page )
 {
-	global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info;
+	global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info, $per_page_comment;
 	// Kiểm tra module có được Sử dụng chức năng bình luận
 	if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 	{
 		if( $id > 0 and $module_config[$module]['activecomm'] == 1 )
 		{
-			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed_comm . '&checkss=' . $checkss . '&perpage=' . NV_PER_PAGE_COMMENT . '&url_comment=' . $url_comment;
+			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment . '&url_comment=' . $url_comment;
 
 			// Kiểm tra quyền xem bình luận
 			$form_login = 0;
@@ -208,14 +210,14 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
  */
 function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login )
 {
-	global $global_config, $module_file, $module_config, $module_info, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
+	global $global_config, $module_file, $module_data, $module_config, $module_info, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/comment' );
 	$xtpl->assign( 'LANG', $lang_module_comment );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'CHECKSS_COMM', $checkss );
 	$xtpl->assign( 'MODULE_COMM', $module );
-	$xtpl->assign( 'module_name', $module_name );
+	$xtpl->assign( 'MODULE_DATA', $module_data );
 	$xtpl->assign( 'AREA_COMM', $area );
 	$xtpl->assign( 'ID_COMM', $id );
 	$xtpl->assign( 'ALLOWED_COMM', $allowed_comm );
@@ -276,28 +278,6 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 				}
 			}
 		}
-		//neu nguoi dang nhap la admin se co trinh editor de binh luan
-		$xtpl->assign( 'editor', 0 );
-		if( defined( 'NV_IS_ADMIN' ) )
-		{
-			if( defined( 'NV_EDITOR' ) )
-			{
-				require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
-			}
-			if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
-			{
-				$xtpl->assign( 'editor', 1 );
-				$comment_content = nv_aleditor( 'commentcontent', '100%', '100px', '', '' );
-			}
-			else
-			{
-				$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-			}
-		}
-		else{
-			$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-		}
-		$xtpl->assign( 'comment_content', $comment_content );
 
 		if( $show_captcha )
 		{
@@ -356,6 +336,11 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 			else
 			{
 				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg';
+			}
+			if( ! empty ($comment_array_i['userid']) )
+			{
+				$comment_array_i['post_name'] = ( $global_config['name_show'] )  ? $comment_array_i['first_name'] . ' ' . $comment_array_i['last_name'] : $comment_array_i['last_name'] . ' ' . $comment_array_i['first_name'];
+				$comment_array_i['post_name'] = trim( $comment_array_i['post_name'] );
 			}
 
 			$xtpl->assign( 'COMMENT', $comment_array_i );

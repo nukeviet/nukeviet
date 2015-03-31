@@ -56,13 +56,14 @@ else
 				$array_mod_title[] = array(
 					'catid' => 0,
 					'title' => $item['username'],
-					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . change_alias( $item['username'] ) . '-' . $item['md5username']
+					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . change_alias( $item['username'] ) . '-' . $item['md5username'],
+					//'full_name' => ( $global_config['name_show'] )  ? $item['first_name'] . ' ' . $item['last_name'] : $item['last_name'] . ' ' . $item['first_name'],
 				);
 				
 				$array_field_config = array();
 				$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC' );
 				while( $row_field = $result_field->fetch() )
-				{
+				{//print_r($expression)
 					$language = unserialize( $row_field['language'] );
 					$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
 					$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
@@ -142,7 +143,7 @@ else
 
 		$num_items = $db->query( $db->sql() )->fetchColumn();
 
-		$db->select( 'userid, username, md5username, full_name, photo, gender, regdate' )
+		$db->select( 'userid, username, md5username, first_name, last_name, photo, gender, regdate' )
 			->order( $orderby . ' ' . $sortby )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
@@ -153,6 +154,8 @@ else
 
 		while( $item = $result->fetch() )
 		{
+			$item['full_name'] = ( $global_config['name_show'] )  ? $item['first_name'] . ' ' . $item['last_name'] : $item['last_name'] . ' ' . $item['first_name'];
+			$item['full_name'] = trim( $item['full_name'] );
 			if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . '/' . $item['photo'] ) )
 			{
 				$item['photo'] = NV_BASE_SITEURL . $item['photo'];

@@ -51,7 +51,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$sql .= 'full_name= :full_name, email= :email, website= :website, location= :location, yim= :yim, phone= :phone, fax= :fax, mobile= :mobile WHERE id=' . $banner_client_info['id'];
 
 	$stmt = $db->prepare( $sql) ;
-	if( ! empty( $pass ) ) $stmt->bindParam( ':pass', $crypt->hash( $pass ), PDO::PARAM_STR );
+	if( ! empty( $pass ) ) $stmt->bindParam( ':pass', $crypt->hash_password( $pass, $global_config['hashprefix'] ), PDO::PARAM_STR );
 	$stmt->bindParam( ':full_name', $full_name, PDO::PARAM_STR );
 	$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 	$stmt->bindParam( ':website', $website, PDO::PARAM_STR );

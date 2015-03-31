@@ -26,3 +26,4 @@ $lang_block['tooltip_position_bottom'] = 'Dưới';
 $lang_block['tooltip_position_left'] = 'Trái';
 $lang_block['tooltip_position_right'] = 'Phải';
 $lang_block['tooltip_length'] = 'Số ký tự';
+$lang_block['nocatid'] = 'Không hiển thị trong các chuyên mục';

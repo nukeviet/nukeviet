@@ -100,6 +100,10 @@ $(function(){
 <p class="text-success">
 	<em class="fa fa-lg fa-smile-o">&nbsp;</em> <strong>{LANG.install_check_installed}</strong> <em class="fa fa-lg fa-check">&nbsp;</em>
 </p>
+<!-- BEGIN: paid -->
+<p class="text-success">
+	<em class="fa fa-lg fa-smile-o">&nbsp;</em> <strong>{LANG.install_check_paid}</strong> <em class="fa fa-lg fa-check">&nbsp;</em>
+</p>
 <!-- BEGIN: unsure -->
 <div id="warnning" class="alert alert-warning">
 	<div class="m-bottom">{LANG.install_check_installed_unsure}.</div>
@@ -170,15 +174,30 @@ var EXT = {
 		$('#file-download-response').html('<div class="alert alert-danger">' + m + '</div>');
 	},
 	redirect: function(){
-		if( EXT.tid == 2 ){
-			var url = '{NV_BASE_ADMINURL}index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=themes&' + nv_fc_variable + '=install_theme&downloaded=1';
-		}else{
-			var url = '{NV_BASE_ADMINURL}index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=modules&' + nv_fc_variable + '=install_module&downloaded=1';
-		}
+		var url = '{NV_BASE_ADMINURL}index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=extensions&' + nv_fc_variable + '=upload&uploaded=1';
 		window.location = url;
 	},
 };
 </script>
+<!-- END: paid -->
+<!-- BEGIN: await -->
+<p class="text-danger">
+	<em class="fa fa-lg fa-frown-o">&nbsp;</em> <strong>{LANG.install_check_paid}</strong>
+</p>
+<div class="alert alert-danger">{LANG.install_check_paid_await}</div>
+<!-- END: await -->
+<!-- BEGIN: notlogin -->
+<p class="text-danger">
+	<em class="fa fa-lg fa-frown-o">&nbsp;</em> <strong>{LANG.install_check_paid}</strong>
+</p>
+<div class="alert alert-warning"><a href="{LOGIN_LINK}">{LANG.install_check_paid_nologin}</a></div>
+<!-- END: notlogin -->
+<!-- BEGIN: unpaid -->
+<p class="text-danger">
+	<em class="fa fa-lg fa-frown-o">&nbsp;</em> <strong>{LANG.install_check_paid}</strong>
+</p>
+<div class="alert alert-warning"><a href="{DATA.compatible.origin_link}">{LANG.install_check_paid_unpaid}</a></div>
+<!-- END: unpaid -->
 <!-- END: not_install -->
 <!-- END: install -->
 

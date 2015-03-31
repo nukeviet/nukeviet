@@ -18,24 +18,37 @@ $array_mod_title[] = array(
 	'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic']
 );
 
-$topicalias = isset( $array_op[1] ) ? trim( $array_op[1] ) : '';
-if( !empty( $topicalias ) )
+$alias = isset( $array_op[1] ) ? trim( $array_op[1] ) : '';
+if( !empty( $alias ) )
 {
 	$page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-' ) ? intval( substr( $array_op[2], 5 ) ) : 1;
 
 	$sth = $db->prepare( 'SELECT topicid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE alias= :alias' );
-	$sth->bindParam( ':alias', $topicalias, PDO::PARAM_STR );
+	$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
 	$sth->execute();
 
 	list( $topicid, $page_title, $alias, $topic_image, $description, $key_words ) = $sth->fetch( 3 );
 
-	if( $topicid > 0 && $alias === $topicalias )
+	if( $topicid > 0 )
 	{
+		$base_url_rewrite = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $alias;
+		$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
+		if( $page > 1 )
+		{
+			$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+			$base_url_rewrite .= '/page-' . $page;
+		}		
+		if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+		{
+			Header( 'Location: ' . $base_url_rewrite );
+			die();
+		}
+
 		$array_mod_title[] = array(
 			'catid' => 0,
 			'title' => $page_title,
-			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topicalias
-		);
+			'link' => $base_url
+		);		
 
 		$db->sqlreset()
 			->select( 'COUNT(*)' )
@@ -103,7 +116,6 @@ if( !empty( $topicalias ) )
 		}
 		unset( $result, $row );
 
-		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topicalias;
 		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
 		if( ! empty( $topic_image ) )
@@ -112,11 +124,6 @@ if( !empty( $topicalias ) )
 		}
 
 		$contents = topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image );
-
-		if( $page > 1 )
-		{
-			$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
-		}
 	}
 	else
 	{

@@ -69,9 +69,6 @@ define( 'NV_ADMINRELOGIN_VARIABLE', 'adminrelogin' );
 //Do nen trang khi bat che do nen
 define( 'ZLIB_OUTPUT_COMPRESSION_LEVEL', 6 );
 
-//Phuong phap ma hoa mat khau: 0 = md5, 1 = sha1
-define( 'NV_CRYPT_SHA1', 1 );
-
 //Thoi gian de tinh online, tinh bang giay, 300 = 5 phut
 define( 'NV_ONLINE_UPD_TIME', 300 );
 
@@ -99,10 +96,6 @@ define( 'NV_SITEWORDS_MAX_STRLEN', 300 );
 // Thiet lap cho get,post,cookie,session,request,env,server
 define( 'NV_ALLOW_REQUEST_MODS', 'get,post,cookie,session,request,env,server' );
 define( 'NV_REQUEST_DEFAULT_MODE', 'request' );
-
-// He thong thong bao
-define( 'NV_NOTIFICATION_ADMIN_FILE', 'notification_admin.txt' );
-define( 'NV_NOTIFICATION_SITE_FILE', 'notification_site.txt' );
 
 //Hien thi, ghi loi
 /*

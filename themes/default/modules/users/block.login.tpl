@@ -46,7 +46,11 @@
 <!-- END: main -->
 <!-- BEGIN: signed -->
 <div class="content signed clearfix">
-	<p class="text-center">{LANG.wellcome}: <strong>{USER.full_name}</strong></p>
+	<p class="text-center">{LANG.wellcome}: 
+	    <strong>
+	           {USER.full_name}
+	    </strong>
+	</p>
 	<hr />
 	<div class="row">
 		<div class="col-xs-12 text-center">

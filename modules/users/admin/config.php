@@ -75,7 +75,6 @@ else
 		$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
 		$array_config['openid_servers'] = !empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : '';
 		$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
-
 		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 		foreach( $array_config as $config_name => $config_value )
 		{
@@ -83,6 +82,12 @@ else
 			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 			$sth->execute();
 		}
+
+		$array_config['name_show'] = $nv_Request->get_int( 'name_show', 'post', 0 );
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = :config_name" );
+		$sth->bindValue( ':config_name', 'name_show', PDO::PARAM_STR );
+		$sth->bindParam( ':config_value', $array_config['name_show'], PDO::PARAM_INT );
+		$sth->execute();
 
 		//cau hinh kich thuoc avatar
 		$array_config['avatar_width'] = $nv_Request->get_int( 'avatar_width', 'post', 120 );
@@ -157,7 +162,7 @@ else
 	$array_config['openid_mode'] = !empty( $array_config['openid_mode'] ) ? ' checked="checked"' : '';
 	$array_config['is_user_forum'] = !empty( $array_config['is_user_forum'] ) ? ' checked="checked"' : '';
 
-	$sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";
+	$sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'" ;
 	$result = $db->query( $sql );
 	while( list( $config, $content ) = $result->fetch( 3 ) )
 	{
@@ -165,6 +170,11 @@ else
 		$array_config[$config] = implode( ', ', $content );
 	}
 	$result->closeCursor();
+
+	$array_name_show = array(
+		0 => $lang_module['lastname_firstname'],
+		1 => $lang_module['firstname_lastname']
+	);
 
 	$array_registertype = array(
 		0 => $lang_module['active_not_allow'],
@@ -294,9 +304,20 @@ else
 		}
 	}
 
+	foreach( $array_name_show as $id => $titleregister )
+	{
+		$array = array(
+			'id' => $id,
+			'select' => ( $global_config['name_show'] == $id ) ? ' selected="selected"' : '',
+			'value' => $titleregister
+		);
+		$xtpl->assign( 'NAME_SHOW', $array );
+		$xtpl->parse( 'main.name_show' );
+	}
+
 	foreach( $array_whoview as $id => $titleregister )
 	{
-		$select = ($array_config['whoviewuser'] == $id) ? ' selected="selected"' : '';
+		$select = ( $array_config['whoviewuser'] == $id ) ? ' selected="selected"' : '';
 		$array = array(
 			'id' => $id,
 			'select' => $select,
@@ -314,15 +335,16 @@ else
 		if( preg_match( '/^(cas|oauth|openid)\-([a-z0-9\-\_]+)\.php$/', $server, $m ) )
 		{
 			$checked = (!empty( $servers ) and in_array( $m[2], $servers )) ? ' checked="checked"' : '';
-			$server = array(
+			$openid_assign = array(
 				'name' => $m[2],
 				'title' => $m[1] . ' ' . $m[2],
 				'checked' => $checked,
+				'disabled' => ($server=='cas-single-sign-on.php' and ! isset( $global_config['config_sso']['cas_hostname'] ) ) ? ' disabled="disabled" ' : '',
 				'link_config' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2],
 				'note' => sprintf( $lang_module['oauth_config'], $m[1] . ' ' . $m[2] )
 			);
 
-			$xtpl->assign( 'OPENID', $server );
+			$xtpl->assign( 'OPENID', $openid_assign );
 			if( file_exists( NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php' ) )
 			{
 				$xtpl->parse( 'main.openid_servers.config' );

@@ -41,7 +41,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_login = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
 	$check_email = nv_check_valid_email( $email );
 	$check_pass = nv_check_valid_pass( $pass, NV_UPASSMAX, NV_UPASSMIN );
-	
+
 	if( $website == 'http://' ) $website = '';
 
 	if( ! empty( $check_login ) )
@@ -102,8 +102,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			}
 			else
 			{
-				$pass = ( ! empty( $pass ) ) ? $crypt->hash( $pass ) : $row['pass'];
-		
+				$pass = ( ! empty( $pass ) ) ? $crypt->hash_password( $pass, $global_config['hashprefix'] ) : $row['pass'];
+
 				$stmt = $db->prepare( 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET login= :login, pass= :pass, full_name= :full_name,
 					 email= :email, website= :website, location= :location, yim= :yim,
 					 phone= :phone, fax= :fax, mobile= :mobile, uploadtype= :uploadtype WHERE id=' . $id );
@@ -119,7 +119,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				$stmt->bindParam( ':mobile', $mobile, PDO::PARAM_STR );
 				$stmt->bindParam( ':uploadtype', $uploadtype, PDO::PARAM_STR );
 				$stmt->execute();
-				
+
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_client', 'clientid ' . $id, $admin_info['userid'] );
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=info_client&id=' . $id );
 				die();

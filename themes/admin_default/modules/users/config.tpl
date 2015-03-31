@@ -107,6 +107,16 @@
 				</tr>
 			</tfoot>
 			<tbody>
+			    <tr>
+                    <td> {LANG.name_show} </td>
+                    <td>
+                        <select class="form-control" name="name_show">
+                            <!-- BEGIN: name_show -->
+                            <option value="{NAME_SHOW.id}"{NAME_SHOW.select}>{NAME_SHOW.value}</option>
+                            <!-- END: name_show -->
+                        </select>
+                    </td>
+                </tr>
 				<tr>
 					<td>{LANG.avatar_size}</td>
 					<td>
@@ -169,7 +179,7 @@
 					<td>{LANG.openid_servers}</td>
 					<td>
 					<!-- BEGIN: openid_servers -->
-					<input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} />
+					<input name="openid_servers[]" {OPENID.disabled} value="{OPENID.name}" type="checkbox"{OPENID.checked} />
 					<!-- BEGIN: config -->
 						<a href="{OPENID.link_config}" title="{OPENID.note}">{OPENID.title}</a>
 					<!-- END: config -->

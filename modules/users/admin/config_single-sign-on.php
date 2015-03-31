@@ -20,7 +20,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['cas_language'] = $nv_Request->get_title( 'cas_language', 'post', '' );
 	$array_config['cas_proxy'] = (int)$nv_Request->get_bool( 'cas_proxy', 'post', '' );
 	$array_config['cas_multiauth'] = (int)$nv_Request->get_bool( 'cas_multiauth', 'post', '' );
-	$array_config['cas_certificate_select'] = (int)$nv_Request->get_bool( 'cas_certificate_check', 'post', '' );
+	$array_config['cas_certificate_check'] = (int)$nv_Request->get_bool( 'cas_certificate_check', 'post', '' );
 	$array_config['cas_certificate_path'] = $nv_Request->get_title( 'cas_certificate_path', 'post', '' );
 
 	$array_config['ldap_host_url'] = $nv_Request->get_title( 'ldap_host_url', 'post', '' );
@@ -45,8 +45,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['config_field_lock'] = $nv_Request->get_array( 'config_field_lock', 'post', '' );
 
 	$config_sso = serialize( $array_config );
-
-	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
+	if( isset( $global_config['config_sso']['cas_hostname'] ) )
+	{
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
+	}
+	else
+	{
+		$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', :config_name, :config_value)" );
+	}
 
 	$sth->bindValue( ':config_name', 'config_sso', PDO::PARAM_STR );
 	$sth->bindParam( ':config_value', $config_sso, PDO::PARAM_STR );
@@ -57,7 +63,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&oauth_config=' . $oauth_config . '&rand=' . nv_genpass( ) );
 	die( );
 }
-elseif( !empty( $global_config['config_sso'] ) )
+elseif( isset( $global_config['config_sso']['cas_hostname'] ) )
 {
 	$array_config = $global_config['config_sso'];
 }

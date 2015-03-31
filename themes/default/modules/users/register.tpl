@@ -7,17 +7,23 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <h2>{LANG.register}</h2>
 <div class="m-bottom">
-	<em class="fa fa-quote-left">&nbsp;</em> 
-	{DATA.info} 
+	<em class="fa fa-quote-left">&nbsp;</em>
+	{DATA.info}
 	<em class="fa fa-quote-right">&nbsp;</em>
 </div>
 <form id="registerForm" action="{USER_REGISTER}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
 	<div class="form-group">
-		<label for="full_name" class="col-sm-8 control-label">{LANG.name}:</label>
+		<label for="first_name" class="col-sm-8 control-label">{LANG.first_name}:</label>
 		<div class="col-sm-16">
-			<input type="text" class="form-control" id="full_name" name="full_name" value="{DATA.full_name}" maxlength="255" />
+			<input type="text" class="form-control" id="first_name" name="first_name" value="{DATA.first_name}" maxlength="255" />
 		</div>
 	</div>
+	<div class="form-group">
+        <label for="last_name" class="col-sm-8 control-label">{LANG.last_name}:</label>
+        <div class="col-sm-16">
+            <input type="text" class="form-control" id="last_name" name="last_name" value="{DATA.last_name}" maxlength="255" />
+        </div>
+    </div>
 	<div class="form-group">
 		<label for="nv_email_iavim" class="col-sm-8 control-label">{LANG.email}<span class="text-danger"> (*)</span>:</label>
 		<div class="col-sm-16">
@@ -42,39 +48,37 @@
 			<input class="form-control required password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
 		</div>
 	</div>
-	<!-- BEGIN: allowquestion -->
-		<div class="form-group">
-			<label for="question" class="col-sm-8 control-label">{LANG.question}:</label>
-			<div class="col-sm-16">
-				<select name="question" id="question" class="form-control">
-					<!-- BEGIN: frquestion -->
-					<option value="{QUESTIONVALUE.qid}"{QUESTIONVALUE.selected}>{QUESTIONVALUE.title}</option>
-					<!-- END: frquestion -->
-				</select>
-			</div>
+	<div class="form-group">
+		<label for="question" class="col-sm-8 control-label">{LANG.question}:</label>
+		<div class="col-sm-16">
+			<select name="question" id="question" class="form-control">
+				<!-- BEGIN: frquestion -->
+				<option value="{QUESTIONVALUE.qid}"{QUESTIONVALUE.selected}>{QUESTIONVALUE.title}</option>
+				<!-- END: frquestion -->
+			</select>
 		</div>
-		<div class="form-group">
-			<label for="your_question" class="col-sm-8 control-label">{LANG.your_question}:</label>
-			<div class="col-sm-16">
-				<input type="text" class="form-control" name="your_question" id="your_question" value="{DATA.your_question}" />
-			</div>
+	</div>
+	<div class="form-group">
+		<label for="your_question" class="col-sm-8 control-label">{LANG.your_question}:</label>
+		<div class="col-sm-16">
+			<input type="text" class="form-control" name="your_question" id="your_question" value="{DATA.your_question}" />
 		</div>
-		<div class="form-group">
-			<label for="answer" class="col-sm-8 control-label">{LANG.answer_your_question}<span class="text-danger"> (*)</span>:</label>
-			<div class="col-sm-16">
-				<input type="text" class="form-control required" name="answer" id="answer" value="{DATA.answer}" />
-			</div>
+	</div>
+	<div class="form-group">
+		<label for="answer" class="col-sm-8 control-label">{LANG.answer_your_question}<span class="text-danger"> (*)</span>:</label>
+		<div class="col-sm-16">
+			<input type="text" class="form-control required" name="answer" id="answer" value="{DATA.answer}" />
 		</div>
-	<!-- END: allowquestion -->
+	</div>
 	<!-- BEGIN: groups -->
 	<div class="form-group">
 		<label class="col-sm-8 control-label">{LANG.in_group}:</label>
 		<div class="col-sm-16">
 			<!-- BEGIN: list -->
 			<label class="checkbox-inline">
-				<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title} 
+				<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
 			</label>
-			<!-- END: list -->	
+			<!-- END: list -->
 		</div>
 	</div>
 	<!-- END: groups -->
@@ -149,7 +153,7 @@
 		<div class="col-sm-offset-8 col-sm-16">
 			<div class="checkbox">
 				<label>
-					<input class="required" type="checkbox" name="agreecheck" value="1"{DATA.agreecheck}/> 
+					<input class="required" type="checkbox" name="agreecheck" value="1"{DATA.agreecheck}/>
 					{LANG.accept}
 				</label>
 			</div>

@@ -9,7 +9,8 @@
  * @param timestamp
  */
 
-var page = 1;
+var timer = 0;
+var timer_is_on = 0;
 
 function notification_reset() {
 	$.post(script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification_load&nocache=' + new Date().getTime(), 'notification_reset=1', function(res) {
@@ -17,6 +18,7 @@ function notification_reset() {
 	});
 }
 
+var page = 1;
 function notification_get_more() {
 	$('#notification_load').scroll(function() {
 		if ($(this).scrollTop() + $(this).innerHeight() >= this.scrollHeight) {
@@ -28,36 +30,36 @@ function notification_get_more() {
 	});
 }
 
-function getContent(timestamp) {
-	var queryString = {
-		'timestamp' : timestamp,
-		'datadir' : nv_datadir,
-		'file_admin' : nv_notification_file_admin
-	};
+function nv_get_notification(timestamp) {
+	if(!timer_is_on)
+	{
+	    clearTimeout(timer);
+	    timer_is_on = 0;
+		var queryString = {
+			'notification_get' : 1,
+			'timestamp' : timestamp
+		};
 
-	$.ajax({
-		type : 'GET',
-		url : '/notification.php',
-		data : queryString,
-		success : function(data) {
-			// put result data into "obj"
-			var obj = jQuery.parseJSON(data);
-			// put the data_from_file into #response
-			if (obj.data_from_file > 0) {
-				$('#notification').show().html(obj.data_from_file);
-			} else {
-				$('#notification').hide();
+		$.ajax({
+			type : 'GET',
+			url : script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification_load&nocache=' + new Date().getTime(),
+			data : queryString,
+			success : function(data) {
+				var obj = jQuery.parseJSON(data);
+				if (obj.data_from_file > 0) {
+					$('#notification').show().html(obj.data_from_file);
+				} else {
+					$('#notification').hide();
+				}
+				// call the function again
+				timer = setTimeout("nv_get_notification()", 10000);// load step 10 giay
 			}
-			// call the function again, this time with the timestamp we just got from server.php
-			getContent(obj.timestamp);
-		}
-	});
+		});
+	}
 }
 
-// initialize jQuery
 $(function() {
-	getContent();
-
+	nv_get_notification();
 	notification_get_more();
 
 	// Notification

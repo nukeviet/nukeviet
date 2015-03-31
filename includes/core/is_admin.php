@@ -155,6 +155,8 @@ if( ! empty( $admin_cookie ) )
 			exit();
 		}
 	}
+	$admin_info['full_name'] = ( $global_config['name_show'] )  ? $admin_info['first_name'] . ' ' . $admin_info['last_name'] : $admin_info['last_name'] . ' ' . $admin_info['first_name'];
+	$admin_info['full_name'] = trim( $admin_info['full_name'] );
 }
 
 unset( $admin_cookie, $admin_online );

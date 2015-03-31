@@ -12,9 +12,9 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 {
-
 	function nv_block_config_tophits_blocks( $module, $data_block, $lang_block )
 	{
+		global $site_mods;
 		$html = '';
 		$html .= '<tr>';
 		$html .= '	<td>' . $lang_block['number_day'] . '</td>';
@@ -38,6 +38,30 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
 		$html .= '</td>';
 		$html .= '</tr>';
+		
+		$html .= '<tr>';
+		$html .= '<td>' . $lang_block['nocatid'] . '</td>';
+		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
+		$list = nv_db_cache( $sql, '', $module );
+		$html .= '<td>';
+		$html .= '<div style="height: 200px; overflow: auto">';
+		foreach( $list as $l )
+		{
+			$xtitle_i = '';
+
+			if( $l['lev'] > 0 )
+			{
+				for( $i = 1; $i <= $l['lev']; ++$i )
+				{
+					$xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+				}
+			}
+			$html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ( ( in_array( $l['catid'], $data_block['nocatid'] ) ) ? ' checked="checked"' : '' ) . '</input>' . $l['title'] . '</label><br />';
+		}
+		$html .= '</div>';
+		$html .= '</td>';
+		$html .= '</tr>';
+		
 		return $html;
 	}
 
@@ -52,6 +76,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$return['config']['showtooltip'] = $nv_Request->get_int( 'config_showtooltip', 'post', 0 );
 		$return['config']['tooltip_position'] = $nv_Request->get_string( 'config_tooltip_position', 'post', 0 );
 		$return['config']['tooltip_length'] = $nv_Request->get_string( 'config_tooltip_length', 'post', 0 );
+		$return['config']['nocatid'] = $nv_Request->get_typed_array( 'config_nocatid', 'post', 'int', array() );
 		return $return;
 	}
 
@@ -64,15 +89,21 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$blockwidth = $module_config[$module]['blockwidth'];
 		$show_no_image = $module_config[$module]['show_no_image'];
 		$publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
-
+		
 		$array_block_news = array();
-
 		$db->sqlreset()
 			->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext' )
 			->from( NV_PREFIXLANG . '_' . $mod_data . '_rows' )
-			->where( 'status= 1 AND publtime > ' . $publtime )
 			->order( 'hitstotal DESC' )
 			->limit( $block_config['numrow'] );
+		if( empty( $block_config['nocatid'] ) )
+		{
+			$db->where( 'status= 1 AND publtime > ' . $publtime );
+		}
+		else
+		{
+			$db->where( 'status= 1 AND publtime > ' . $publtime .' AND catid NOT IN ('.implode( ',', $block_config['nocatid'] ) . ')' );
+		}
 
 		$result = $db->query( $db->sql() );
 		while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext ) = $result->fetch( 3 ) )

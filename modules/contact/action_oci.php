@@ -26,7 +26,8 @@ $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_" . $module_data . "_department (
 	 id NUMBER(8,0) DEFAULT NULL,
-	 full_name VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
+	 full_name VARCHAR2(255 CHAR) DEFAULT '' DEFAULT NULL,
+	 alias VARCHAR2(255 CHAR) DEFAULT NULL,
 	 phone VARCHAR2(255 CHAR) DEFAULT NULL,
 	 fax VARCHAR2(255 CHAR) DEFAULT NULL,
 	 email VARCHAR2(100 CHAR) DEFAULT NULL,
@@ -35,6 +36,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config["prefix"] . "_" . $lang . "_
 	 note VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 admins VARCHAR2(4000 CHAR) DEFAULT NULL,
 	 act NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
+	 weight NUMBER(8,0) DEFAULT NULL,
  	primary key (id),
  CONSTRAINT cnv_" . $lang . "_" . $module_data . "_dep_name UNIQUE (full_name)
 )";

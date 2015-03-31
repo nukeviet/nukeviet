@@ -12,6 +12,11 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['setting'];
 
+if( defined( 'NV_EDITOR' ) )
+{
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
+
 $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
 if( ! empty( $savesetting ) )
 {
@@ -26,7 +31,7 @@ if( ! empty( $savesetting ) )
 	$array_config['imagefull'] = $nv_Request->get_int( 'imagefull', 'post', 0 );
 
 	$array_config['allowed_rating_point'] = $nv_Request->get_int( 'allowed_rating_point', 'post', 0 );
-	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
+	$array_config['copyright'] = $nv_Request->get_editor( 'copyright', '', NV_ALLOWED_HTML_TAGS );
 	$array_config['showtooltip'] = $nv_Request->get_int( 'showtooltip', 'post', 0 );
 	$array_config['tooltip_position'] = $nv_Request->get_string( 'tooltip_position', 'post', '' );
 	$array_config['tooltip_length'] = $nv_Request->get_int( 'tooltip_length', 'post', 0 );
@@ -38,6 +43,7 @@ if( ! empty( $savesetting ) )
 	$array_config['structure_upload'] = $nv_Request->get_title( 'structure_upload', 'post', '', 0 );
 	$array_config['config_source'] = $nv_Request->get_int( 'config_source', 'post', 0 );
 	$array_config['imgposition'] = $nv_Request->get_int( 'imgposition', 'post', 0 );
+	$array_config['alias_lower'] = $nv_Request->get_int( 'alias_lower', 'post', 0 );
 	$array_config['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 	$array_config['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
 	$array_config['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
@@ -142,6 +148,7 @@ $xtpl->assign( 'SHOWTOOLTIP', $module_config[$module_name]['showtooltip'] ? ' ch
 $xtpl->assign( 'SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'ALIAS_LOWER', $module_config[$module_name]['alias_lower'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'AUTO_TAGS', $module_config[$module_name]['auto_tags'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'TAGS_REMIND', $module_config[$module_name]['tags_remind'] ? ' checked="checked"' : '' );
 $xtpl->assign( 'SHOW_NO_IMAGE', ( !empty( $module_config[$module_name]['show_no_image'] ) ) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '' );
@@ -202,13 +209,20 @@ while( list( $id_imgposition, $title_imgposition ) = each( $array_imgposition ) 
 	$xtpl->parse( 'main.looppos' );
 }
 
+$copyright = nv_htmlspecialchars( nv_editor_br2nl( $module_config[$module_name]['copyright'] ) );
+if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
+{
+	$_uploads_dir = NV_UPLOADS_DIR . '/' . $module_name;
+	$copyright = nv_aleditor( 'copyright', '100%', '100px', $copyright, 'Basic', $_uploads_dir, $_uploads_dir );
+}
+else
+{
+	$copyright = "<textarea style=\"width: 100%\" name=\"copyright\" id=\"copyright\" cols=\"20\" rows=\"15\">" . $copyright . "</textarea>";
+}
+$xtpl->assign( 'COPYRIGHTHTML', $copyright );
+
 $xtpl->assign( 'PATH', defined( 'NV_IS_SPADMIN' ) ? "" : NV_UPLOADS_DIR . '/' . $module_name );
 $xtpl->assign( 'CURRENTPATH', defined( 'NV_IS_SPADMIN' ) ? "images" : NV_UPLOADS_DIR . '/' . $module_name );
-
-$contents .= 'nv_open_browse("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", 850, 420,"resizable=no,scrollbars=no,toolbar=no,location=no,status=no");';
-$contents .= 'return false;';
-$contents .= '});';
-$contents .= "\n//]]>\n</script>\n";
 
 if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) )
 {

@@ -16,12 +16,12 @@
 		<!-- BEGIN: captcha -->
 		<div class="form-group">
 			<label for="{CAPTCHA_NAME}" class="col-sm-6 control-label">{CAPTCHA_LANG}:</label>
+			<div class="col-sm-10">
+				<input name="{CAPTCHA_NAME}" id="{CAPTCHA_NAME}" type="text" maxlength="{CAPTCHA_MAXLENGTH}" class="form-control"/>
+			</div>
 			<div class="col-sm-8">
 				<img id="vimg" alt="{CAPTCHA_LANG}"src="{CAPTCHA_IMG}" />
 				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','{CAPTCHA_NAME}');">&nbsp;</em>
-			</div>
-			<div class="col-sm-10">
-				<input name="{CAPTCHA_NAME}" id="{CAPTCHA_NAME}" type="password" maxlength="{CAPTCHA_MAXLENGTH}" class="form-control"/>
 			</div>
 		</div>
 		<!-- END: captcha -->

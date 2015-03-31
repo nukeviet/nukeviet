@@ -6,18 +6,11 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-function sendcommment(module, editor, id_content, url_comment, area, id, allowed, newscheckss, gfx_count) {
+function sendcommment(module, id_content, url_comment, area, id, allowed, newscheckss, gfx_count) {
 	var commentname = document.getElementById('commentname');
 	var commentemail = document.getElementById('commentemail_iavim');
 	var code = $("#commentseccode_iavim").val();
-	if( editor == 1)
-	{
-		var commentcontent = CKEDITOR.instances[id_content].getData();
-	}
-	else
-	{
-		var commentcontent = strip_tags($('textarea[name=commentcontent]').val());
-	}
+	var commentcontent = strip_tags($('textarea[name=commentcontent]').val());
 	if (commentname.value == "") {
 		alert(nv_fullname);
 		commentname.focus();
@@ -36,7 +29,8 @@ function sendcommment(module, editor, id_content, url_comment, area, id, allowed
 		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=post&nocache=' + new Date().getTime(), 'module=' + module + '&url_comment=' + url_comment + '&area=' + area + '&id=' + id + '&pid=' + $('#commentpid').val() + '&allowed=' + allowed + '&checkss=' + newscheckss + '&name=' + commentname.value + '&email=' + commentemail.value + '&code=' + code + '&content=' + encodeURIComponent(commentcontent), function(res) {
 			var rs = res.split('_');
 			if (rs[0] == 'OK') {
-				document.location = document.location;
+				$("#idcomment").load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=comment&module=' + module + '&url_comment=' + url_comment + '&area=' + area + '&id=' + id + '&allowed=' + allowed + '&checkss=' + newscheckss + '&nocache=' + new Date().getTime());
+				document.location = "#idcomment";
 			} else {
 				if (gfx_count > 0 ) {
 					nv_change_captcha('vimg', 'commentseccode_iavim');
@@ -53,13 +47,13 @@ function sendcommment(module, editor, id_content, url_comment, area, id, allowed
 	return;
 }
 
-function nv_feedback(cid, post_name) {
+function nv_commment_feedback(cid, post_name) {
 	$("#commentpid").val(cid);
 	$("#commentcontent").focus();
 	$("#commentcontent").val("@" + post_name + " ");
 }
 
-function nv_like(cid, checkss, like) {
+function nv_commment_like(cid, checkss, like) {
 	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=like&nocache=' + new Date().getTime(), 'cid=' + cid + '&like=' + like + '&checkss=' + checkss, function(res) {
 		var rs = res.split('_');
 		if (rs[0] == 'OK') {
@@ -70,12 +64,12 @@ function nv_like(cid, checkss, like) {
 	});
 }
 
-function nv_delete(cid, checkss) {
+function nv_commment_delete(cid, checkss) {
 	if (confirm(nv_is_del_confirm[0])) {
 		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=delete&nocache=' + new Date().getTime(), 'cid=' + cid + '&checkss=' + checkss, function(res) {
 			var rs = res.split('_');
 			if (rs[0] == 'OK') {
-				document.location = document.location;
+				$("#cid_" + cid).remove();
 			} else if (rs[0] == 'ERR') {
 				alert(rs[1]);
 			}

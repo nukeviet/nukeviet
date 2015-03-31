@@ -34,7 +34,7 @@
 			</div>
 			<div class="form-group clearfix">
 				<div class="col-xs-24">
-					{comment_content}
+					<textarea class="form-control" style="width: 100%" name="commentcontent" id="commentcontent" cols="20" rows="5"></textarea>
 				</div>
 			</div>
 			<!-- BEGIN: captcha -->
@@ -51,7 +51,7 @@
 			<!-- END: captcha -->
 			<div class="form-group text-center">
 				<input id="reset-cm" type="reset" value="RESET" class="btn btn-default" />
-				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', {editor}, '{module_name}_commentcontent', '{URL_COMMENT}', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
+				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{MODULE_DATA}_commentcontent', '{URL_COMMENT}', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
 			</div>
 		</form>
 		<script type="text/javascript">
