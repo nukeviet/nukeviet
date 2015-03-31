@@ -6,19 +6,25 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 16-03-2015 12:55
  */
- 
+
+$path = nv_check_path_upload( NV_UPLOADS_DIR . '/' . $mod_name );
+$check_allow_upload_dir = nv_check_allow_upload_dir( $path );
+
 $data = $nv_Request->get_string( 'data' , 'post', '' );
 
-preg_match_all( '/<\s*img [^\>]*src\s*=\s*[\""\']?([^\""\'\s>]*)/i', $data, $matches );
-$imageMatch = array_unique( $matches[1] );
-if( ! empty( $imageMatch ) )
+if( isset( $check_allow_upload_dir['upload_file'] ) and in_array( 'images', $admin_info['allow_files_type'] ) and preg_match_all( '/<\s*img [^\>]*src\s*=\s*[\""\']?([^\""\'\s>]*)/i', $data, $matches ) )
 {
+	$imageMatch = array_unique( $matches[1] );
+
 	$mod_name = $nv_Request->get_title( 'module_name' , 'post', '' );
     $pathsave = $nv_Request->get_title( 'pathsave' , 'post', '' );
 	$upload_real_dir_page = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $mod_name;
     if( !empty( $pathsave ))
 	{
-	   $pathsave = change_alias( $pathsave );
+		if( ! preg_match( '/^[a-z0-9\-\_]+$/i', $module_name ) )
+		{
+			$pathsave = change_alias( $pathsave );
+		}
        $pathsave = $mod_name . '/' . $pathsave;
 		$e = explode( '/', $pathsave );
 		if( ! empty( $e ) )
@@ -44,7 +50,7 @@ if( ! empty( $imageMatch ) )
 	}
 
     $currentpath = str_replace( NV_ROOTDIR . '/', '', $upload_real_dir_page );
-    
+
 	require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 	foreach( $imageMatch as $imageSrc )
 	{

@@ -34,7 +34,6 @@
 					<input class="txt password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" />
 				</dd>
 			</dl>
-			<!-- BEGIN: allowquestion -->
 			<dl class="clearfix">
 				<dt class="fl">
 					<label> {LANG.question} </label>
@@ -63,7 +62,6 @@
 					<input class="txt required" name="answer" value="{DATA.answer}" />
 				</dd>
 			</dl>
-			<!-- END: allowquestion -->
 			<!-- BEGIN: captcha -->
 			<dl class="clearfix captcha gray">
 				<dt class="fl">

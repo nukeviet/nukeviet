@@ -170,10 +170,10 @@ else
 		$array_config[$config] = implode( ', ', $content );
 	}
 	$result->closeCursor();
-	
+
 	$array_name_show = array(
 		0 => $lang_module['lastname_firstname'],
-		1 => $lang_module['firstname_lastname']		
+		1 => $lang_module['firstname_lastname']
 	);
 
 	$array_registertype = array(
@@ -303,7 +303,7 @@ else
 			}
 		}
 	}
-	
+
 	foreach( $array_name_show as $id => $titleregister )
 	{
 		$array = array(
@@ -335,15 +335,16 @@ else
 		if( preg_match( '/^(cas|oauth|openid)\-([a-z0-9\-\_]+)\.php$/', $server, $m ) )
 		{
 			$checked = (!empty( $servers ) and in_array( $m[2], $servers )) ? ' checked="checked"' : '';
-			$server = array(
+			$openid_assign = array(
 				'name' => $m[2],
 				'title' => $m[1] . ' ' . $m[2],
 				'checked' => $checked,
+				'disabled' => ($server=='cas-single-sign-on.php' and ! isset( $global_config['config_sso']['cas_hostname'] ) ) ? ' disabled="disabled" ' : '',
 				'link_config' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2],
 				'note' => sprintf( $lang_module['oauth_config'], $m[1] . ' ' . $m[2] )
 			);
 
-			$xtpl->assign( 'OPENID', $server );
+			$xtpl->assign( 'OPENID', $openid_assign );
 			if( file_exists( NV_ROOTDIR . '/modules/users/admin/config_' . $m[2] . '.php' ) )
 			{
 				$xtpl->parse( 'main.openid_servers.config' );

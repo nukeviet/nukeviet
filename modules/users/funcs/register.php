@@ -209,15 +209,15 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 		{
 			$error = sprintf( $lang_global['passwordsincorrect'], $array_register['password'], $array_register['re_password'] );
 		}
-		elseif( $global_config['allowquestion'] and empty( $array_register['your_question'] ) and empty( $array_register['question'] ) )
+		elseif( empty( $array_register['your_question'] ) and empty( $array_register['question'] ) )
 		{
 			$error = $lang_module['your_question_empty'];
 		}
-		elseif( $global_config['allowquestion'] and $global_config['allowquestion'] and empty( $array_register['answer'] ) )
+		elseif( empty( $array_register['answer'] ) )
 		{
 			$error = $lang_module['answer_empty'];
 		}
-		elseif( $global_config['allowquestion'] and empty( $array_register['agreecheck'] ) )
+		elseif( empty( $array_register['agreecheck'] ) )
 		{
 			$error = $lang_module['agreecheck_empty'];
 		}
@@ -405,11 +405,11 @@ if( $checkss == $array_register['checkss'] )
 	{
 		$error = sprintf( $lang_global['passwordsincorrect'], $array_register['password'], $array_register['re_password'] );
 	}
-	elseif( $global_config['allowquestion'] and empty( $array_register['your_question'] ) and empty( $array_register['question'] ) )
+	elseif( empty( $array_register['your_question'] ) and empty( $array_register['question'] ) )
 	{
 		$error = $lang_module['your_question_empty'];
 	}
-	elseif( $global_config['allowquestion'] and empty( $array_register['answer'] ) )
+	elseif( empty( $array_register['answer'] ) )
 	{
 		$error = $lang_module['answer_empty'];
 	}
