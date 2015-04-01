@@ -117,13 +117,8 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         {
             die( $lang_module['erroNotSelectSubject'] );
         }
-        
-        $post['sgid'] = $nv_Request->get_int( 'sgid', 'post', 0);
-        if ( ! isset( $sgList[$post['sgid']] ) )
-        {
-            die( $lang_module['erroNotSelectSinger'] );
-        }
 
+        $post['sgid'] = $nv_Request->get_int( 'sgid', 'post', 0);
         $post['introtext'] = $nv_Request->get_title( 'introtext', 'post', '', 1 );
         $post['introtext'] = nv_nl2br( $post['introtext'], "<br />" );
         if ( empty( $post['introtext'] ) )
@@ -135,14 +130,14 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 		$post['note'] = nv_nl2br( $post['note'], "<br />" );
 
         $post['replacement'] = nv_substr( $nv_Request->get_title( 'replacement', 'post', '', 1 ), 0, 255);
-		
+
         if ( ! empty( $post['replacement'] ) )
         {
 			$check_replacement = explode( ",", $post['replacement'] );
 			$check_replacement = array_map( "trim", $check_replacement );
 			$check_replacement = array_map( "intval", $check_replacement );
 			$check_replacement = array_filter( $check_replacement );
-			
+
 			foreach( $check_replacement as $replacement )
 			{
 				$sql = "SELECT COUNT(*) as count FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $replacement;
@@ -154,19 +149,19 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 					die( sprintf( $lang_module['replacementError'], $replacement ) );
 				}
 			}
-			
+
 			$post['replacement'] = implode( ",", $check_replacement );
         }
 
 		$post['relatement'] = nv_substr( $nv_Request->get_title( 'relatement', 'post', '', 1 ), 0, 255);
-		
+
         if ( ! empty( $post['relatement'] ) )
         {
 			$check_relatement = explode( ",", $post['relatement'] );
 			$check_relatement = array_map( "trim", $check_relatement );
 			$check_relatement = array_map( "intval", $check_relatement );
 			$check_relatement = array_filter( $check_relatement );
-			
+
 			foreach( $check_relatement as $relatement )
 			{
 				$sql = "SELECT COUNT(*) as count FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $relatement;
@@ -178,7 +173,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 					die( sprintf( $lang_module['relatementError'], $relatement ) );
 				}
 			}
-			
+
 			$post['relatement'] = implode( ",", $check_relatement );
         }
 
@@ -197,10 +192,10 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
             $post['keywords'] = implode( ",", $post['keywords'] );
         }
         if ( empty( $post['keywords'] ) ) $post['keywords'] = nv_get_keywords( ( ! empty( $post['bodytext'] ) ? $post['bodytext'] : $post['introtext'] ) );
-		
+
         $_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
         $post['groups_view'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
-        
+
         $_groups_download = $nv_Request->get_array( 'groups_download', 'post', array() );
         $post['groups_download'] = ! empty( $_groups_download ) ? implode( ',', nv_groups_post( array_intersect( $_groups_download, array_keys( $groups_list ) ) ) ) : '';
 
@@ -215,7 +210,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 				if ( preg_match( "/^" . str_replace( "/", "\/", NV_BASE_SITEURL . NV_UPLOADS_DIR ) . "\//", $_file ) )
 				{
 					$_file = substr ( $_file, strlen ( NV_BASE_SITEURL . NV_UPLOADS_DIR .'/'. $module_name.'/') );
-					
+
 					if( file_exists( NV_UPLOADS_REAL_DIR .'/'. $module_name.'/'.$_file ) )
 					{
 						$post['files'][] = $_file;
@@ -238,7 +233,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         {
             die( $lang_module['erroNotSelectPubtime'] );
         }
-		
+
         $post['exptime'] = nv_substr( $nv_Request->get_title( 'exptime', 'post', '', 1 ), 0, 10);
         unset( $m );
         if ( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $post['exptime'], $m ) )
@@ -262,68 +257,68 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 
         if ( isset( $post['id'] ) )
         {
-            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_row SET 
-                replacement=" . $db->quote( $post['replacement'] ) . ", 
-                relatement=" . $db->quote( $post['relatement'] ) . ", 
-                title=" . $db->quote( $post['title'] ) . ", 
-                alias=" . $db->quote( $alias . "-" . $post['id'] ) . ", 
-                code=" . $db->quote( $post['code'] ) . ", 
-                aid=" . $post['aid'] . ", 
-                cid=" . $post['cid'] . ",               
-                sid=" . $post['sid'] . ",                  
-                sgid=" . $post['sgid'] . ", 
-                note=" . $db->quote( $post['note'] ) . ", 
-                introtext=" . $db->quote( $post['introtext'] ) . ", 
-                bodytext=" . $db->quote( $post['bodytext'] ) . ", 
-                keywords=" . $db->quote( $post['keywords'] ) . ", 
-                groups_view=" . $db->quote( $post['groups_view'] ) . ",  
-                groups_download=" . $db->quote( $post['groups_download'] ) . ", 
-                files=" . $db->quote( $post['files'] ) . ", 
-                edittime=" . NV_CURRENTTIME . ", 
-                publtime=" . $post['publtime'] . ", 
-                exptime=" . $post['exptime'] . ", 
-                startvalid=" . $post['startvalid'] . ", 
-                admin_edit=" . $admin_info['userid'] . " 
+            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_row SET
+                replacement=" . $db->quote( $post['replacement'] ) . ",
+                relatement=" . $db->quote( $post['relatement'] ) . ",
+                title=" . $db->quote( $post['title'] ) . ",
+                alias=" . $db->quote( $alias . "-" . $post['id'] ) . ",
+                code=" . $db->quote( $post['code'] ) . ",
+                aid=" . $post['aid'] . ",
+                cid=" . $post['cid'] . ",
+                sid=" . $post['sid'] . ",
+                sgid=" . $post['sgid'] . ",
+                note=" . $db->quote( $post['note'] ) . ",
+                introtext=" . $db->quote( $post['introtext'] ) . ",
+                bodytext=" . $db->quote( $post['bodytext'] ) . ",
+                keywords=" . $db->quote( $post['keywords'] ) . ",
+                groups_view=" . $db->quote( $post['groups_view'] ) . ",
+                groups_download=" . $db->quote( $post['groups_download'] ) . ",
+                files=" . $db->quote( $post['files'] ) . ",
+                edittime=" . NV_CURRENTTIME . ",
+                publtime=" . $post['publtime'] . ",
+                exptime=" . $post['exptime'] . ",
+                startvalid=" . $post['startvalid'] . ",
+                admin_edit=" . $admin_info['userid'] . "
                 WHERE id=" . $post['id'];
             $db->query( $query );
 
 			$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_set_replace WHERE nid=" . $post['id'];
 			$db->query( $sql );
-			
+
 			$replacement = explode( ",", $post['replacement'] );
 			$replacement = array_filter( $replacement );
-			
+
 			foreach( $replacement as $rep )
 			{
 				$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_set_replace VALUES( NULL, " . $post['id'] . ", " . $rep . " )" );
 			}
-			
+
             nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['editRow'], "Id: " . $post['id'], $admin_info['userid'] );
         }
         else
         {
-            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_row VALUES 
-                (NULL, 
-                " . $db->quote( $post['replacement'] ) . ", 
-                " . $db->quote( $post['relatement'] ) . ", 
-                " . $db->quote( $post['title'] ) . ", 
-                '', 
-                " . $db->quote( $post['code'] ) . ", 
-                " . $post['aid'] . ", 
-                " . $post['cid'] . ", 
-                " . $post['sid'] . ", 
+            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_row VALUES
+                (NULL,
+                " . $db->quote( $post['replacement'] ) . ",
+                " . $db->quote( $post['relatement'] ) . ",
+                " . $db->quote( $post['title'] ) . ",
+                '',
+                " . $db->quote( $post['code'] ) . ",
+                " . $post['aid'] . ",
+                " . $post['cid'] . ",
+                " . $post['sid'] . ",
                 " . $post['sgid'] . ",
-                " . $db->quote( $post['note'] ) . ", 
-                " . $db->quote( $post['introtext'] ) . ", 
-                " . $db->quote( $post['bodytext'] ) . ", 
-                " . $db->quote( $post['keywords'] ) . ", 
-                " . $db->quote( $post['groups_view'] ) . ", 
-                " . $db->quote( $post['groups_download'] ) . ", 
-                " . $db->quote( $post['files'] ) . ", 
-                1, " . NV_CURRENTTIME . ", 0, 
-                " . $post['publtime'] . ", 
-                " . $post['startvalid'] . ", 
-                " . $post['exptime'] . ", 
+                " . $db->quote( $post['note'] ) . ",
+                " . $db->quote( $post['introtext'] ) . ",
+                " . $db->quote( $post['bodytext'] ) . ",
+                " . $db->quote( $post['keywords'] ) . ",
+                " . $db->quote( $post['groups_view'] ) . ",
+                " . $db->quote( $post['groups_download'] ) . ",
+                " . $db->quote( $post['files'] ) . ",
+                1, " . NV_CURRENTTIME . ", 0,
+                " . $post['publtime'] . ",
+                " . $post['startvalid'] . ",
+                " . $post['exptime'] . ",
                 0, 0, " . $admin_info['userid'] . ", 0);";
             $_id = $db->insert_id( $query );
 
@@ -333,7 +328,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 
 			$replacement = explode( ",", $post['replacement'] );
 			$replacement = array_filter( $replacement );
-			
+
 			foreach( $replacement as $rep )
 			{
 				$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_set_replace VALUES( NULL, " . $_id . ", " . $rep . " )" );
@@ -353,7 +348,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     if ( isset( $post['id'] ) )
     {
         $post = $row;
-		
+
         $post['select0'] = ( $post['exptime'] == 0 or $post['exptime'] > NV_CURRENTTIME ) ? " selected=\"selected\"" : "";
         $post['select1'] = ( $post['exptime'] != 0 and $post['exptime'] <= NV_CURRENTTIME ) ? " selected=\"selected\"" : "";
 		$post['display'] = ( $post['exptime'] == 0 or $post['exptime'] > NV_CURRENTTIME ) ? "none" : "block";
@@ -364,7 +359,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         $post['publtime'] = ! empty( $post['publtime'] ) ? date( "d.m.Y", $post['publtime'] ) : "";
         $post['exptime'] = ! empty( $post['exptime'] ) ? date( "d.m.Y", $post['exptime'] ) : "";
         $post['startvalid'] = ! empty( $post['startvalid'] ) ? date( "d.m.Y", $post['startvalid'] ) : "";
-        
+
         $post['ptitle'] = $lang_module['editRow'];
         $post['action_url'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=main&edit&id=" . $post['id'];
     }
@@ -410,15 +405,15 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         $xtpl->assign( 'SUBOPT', $_s );
         $xtpl->parse( 'add.subopt' );
     }
-    
+
     foreach ( $sgList as $_sg )
     {
         $_sg['selected'] = $_sg['id'] == $post['sgid'] ? " selected=\"selected\"" : "";
         $xtpl->assign('SINGER', $_sg);
-        $xtpl->parse( 'add.singers' );                
-            
-    }            
-	
+        $xtpl->parse( 'add.singers' );
+
+    }
+
 	$is_editor = 0;
     if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
     {
@@ -430,7 +425,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         $_cont = "<textarea style=\"width:100%;height:300px\" name=\"bodytext\" id=\"bodytext\">" . $post['bodytext'] . "</textarea>";
     }
     $xtpl->assign( 'CONTENT', $_cont );
-    
+
     $groups_views = array();
 	foreach( $groups_list as $group_id => $grtl )
 	{
@@ -451,7 +446,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         $xtpl->assign( 'GROUPS_VIEWS', $data );
         $xtpl->parse( 'add.group_view' );
     }
-    
+
     foreach ( $groups_downloads as $data )
     {
         $xtpl->assign( 'GROUPS_DOWNLOAD', $data );
@@ -478,7 +473,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 
 	$xtpl->assign( 'NUMFILE', count( $post['files'] ) );
 	$xtpl->assign( 'IS_EDITOR', $is_editor );
-	
+
     $xtpl->parse( 'add' );
     $contents = $xtpl->text( 'add' );
 
@@ -497,13 +492,13 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 if ( $nv_Request->isset_request( 'del', 'post' ) )
 {
     $id = $nv_Request->get_int( 'id', 'post', 0 );
-	
+
     $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id = " . $id;
     $db->query( $query );
-	
+
     $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_set_replace WHERE oid = " . $id;
     $db->query( $query );
-	
+
     nv_del_moduleCache( $module_name );
     die( 'OK' );
 }
@@ -511,7 +506,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
 if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
 {
     $id = $nv_Request->get_int( 'id', 'post', 0 );
-	
+
     $sql = "SELECT status FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id=" . $id;
     $result = $db->query( $sql );
     $num = $result->rowCount();
@@ -522,7 +517,7 @@ if ( $nv_Request->isset_request( 'changestatus', 'post' ) )
     else  $status = 0;
     $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_row SET status=" . $status . " WHERE id=" . $id;
     if ( $db->query( $query ) === false ) die( "ERROR" );
-	
+
     nv_del_moduleCache( $module_name );
 
     die( 'OK' );
@@ -539,31 +534,31 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
 		$aid = $nv_Request->get_int( 'aid', 'get', 0 );
 		$sid = $nv_Request->get_int( 'sid', 'get', 0 );
 		$sgid = $nv_Request->get_int( 'sgid', 'get', 0 );
-		
+
         if ( ! empty( $keywords ) )
         {
             $where .= " AND title like '%" . $keywords . "%' OR code like '%" . $keywords . "%' OR note like '%" . $keywords . "%' OR introtext like '%" . $keywords . "%' OR bodytext like '%" . $keywords . "%'";
             $base_url .= "&keywords=" . $keywords;
         }
-		
+
         if ( ! empty( $cid ) and isset( $catList[$cid] ) )
         {
             $where .= " AND cid=" . $cid;
             $base_url .= "&cat=" . $cid;
         }
-		
+
         if ( ! empty( $aid ) and isset( $aList[$aid] ) )
         {
             $where .= " AND aid=" . $aid;
             $base_url .= "&aid=" . $aid;
         }
-		
+
         if ( ! empty( $sid ) and isset( $sList[$sid] ) )
         {
             $where .= " AND sid=" . $sid;
             $base_url .= "&sid=" . $sid;
         }
-		
+
         if ( ! empty( $sgid ) and isset( $sgList[$sgid] ) )
         {
             $where .= " AND sgid=" . $sgid;
