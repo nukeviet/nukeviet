@@ -136,7 +136,7 @@
 	<form id="addRow" action="{DATA.action_url}" method="post">
 		<h3 class="myh3">{DATA.ptitle}</h3>
 		<div class="row">
-			<div class="col-sm-24 col-md-18">
+			<div class="col-sm-24 col-md-9">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover">
 						<col style="width:200px" />
@@ -236,7 +236,7 @@
 					</table>
 				</div>
 			</div>
-			<div class="col-sm-24 col-md-6">
+			<div class="col-sm-24 col-md-3">
 				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
@@ -245,6 +245,7 @@
 						<tr>
 							<td>
 							<select class="form-control" title="{LANG.catSel}" name="cid">
+								<option value="">---{LANG.catSel}---</option>
 								<!-- BEGIN: catopt -->
 								<option value="{CATOPT.id}"{CATOPT.selected}>{CATOPT.name}</option>
 								<!-- END: catopt -->
@@ -257,6 +258,7 @@
 						<tr>
 							<td>
 							<select class="form-control" title="{LANG.areaSel}" name="aid">
+								<option value="">---{LANG.areaSel}---</option>
 								<!-- BEGIN: areaopt -->
 								<option value="{AREAOPT.id}"{AREAOPT.selected}>{AREAOPT.name}</option>
 								<!-- END: areaopt -->
@@ -268,6 +270,7 @@
 						<tr>
 							<td>
 							<select class="form-control" title="{LANG.subjectSel}" name="sid">
+								<option value="">---{LANG.subjectSel}---</option>
 								<!-- BEGIN: subopt -->
 								<option value="{SUBOPT.id}"{SUBOPT.selected}>{SUBOPT.title}</option>
 								<!-- END: subopt -->
@@ -279,6 +282,7 @@
 						<tr>
 							<td>
 							<select class="form-control" title="{LANG.signer}" name="sgid">
+								<option value="">---{LANG.signer}---</option>
 								<!-- BEGIN: singers -->
 								<option value="{SINGER.id}"{SINGER.selected}>{SINGER.title}</option>
 								<!-- END: singers -->
