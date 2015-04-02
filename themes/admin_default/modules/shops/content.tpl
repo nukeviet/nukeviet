@@ -5,6 +5,7 @@
 </div>
 <!-- END: error -->
 
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.css" rel="stylesheet" />
@@ -30,7 +31,7 @@
 					<tr>
 						<th>{LANG.content_cat} <span class="require">(*)</span></th>
 						<td>
-							<select class="form-control" name="catid" style="width:300px" onchange="nv_change_catid(this, {rowcontent.id})">
+							<select class="form-control" name="catid" id="catid" style="width:300px" onchange="nv_change_catid(this, {rowcontent.id})">
 								<option value="0" data-label="1"> --- </option>
 								<!-- BEGIN: rowscat -->
 								<option value="{ROWSCAT.catid}" {ROWSCAT.selected} data-label="{ROWSCAT.typeprice}">{ROWSCAT.title}</option>
@@ -326,6 +327,7 @@
 
 <div id="message"></div>
 
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.min.js"></script>
@@ -340,6 +342,10 @@
 	var inputnumber = '{LANG.error_inputnumber}';
 	var file_dir = '{NV_UPLOADS_DIR}/{module_name}';
 	var currentpath = "{CURRENT}";
+
+	$(document).ready(function() {
+		$("#catid").select2();
+	});
 
 	$("input[name=selectimg]").click(function() {
 		var area = "homeimg";

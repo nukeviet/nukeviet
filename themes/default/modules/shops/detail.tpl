@@ -208,7 +208,7 @@
 
 			<!-- BEGIN: order -->
 			<div class="pull-right" style="margin-top: 6px">
-				<span class="pull-left text-muted" style="margin: 6px 20px 0" id="product_number">{LANG.product_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
+				<span class="pull-left text-muted" style="margin: 6px 20px 0" id="product_number">{LANG.detail_pro_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
 				<input type="number" name="num" value="1" id="pnum" class="pull-left form-control" style="width: 70px">
 				<a href="javascript:void(0)" data-id="{proid}" title="{title_pro}" onclick="cartorder_detail(this, '{POPUP}', 0)">
 				<button class="btn btn-danger btn-xs btn-order" style="margin: 5px 0 0 5px">

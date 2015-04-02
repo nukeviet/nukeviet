@@ -156,7 +156,7 @@ if( empty( $contents ) )
 			// Fetch Limit
 			if( $array_url_group or $ajax )
 			{
-				$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->join( $join )->where( 't1.listcatid IN (' . implode( ',', $array_cat ) . ') AND t1.status=1' . $_sql );
+				$db->sqlreset( )->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->where( 't1.listcatid IN (' . implode( ',', $array_cat ) . ') AND t1.status=1' . $_sql );
 			}
 			else
 			{
@@ -165,7 +165,7 @@ if( empty( $contents ) )
 
 			$num_pro = $db->query( $db->sql( ) )->fetchColumn( );
 
-			$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice,t1.' . NV_LANG_DATA . '_promotional, t2.newday' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid ' . $join )->order( $orderby )->limit( $array_info_i['numlinks'] );
+			$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice,t1.' . NV_LANG_DATA . '_promotional, t2.newday' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid')->order( $orderby )->limit( $array_info_i['numlinks'] );
 			$result = $db->query( $db->sql( ) );
 
 			$data_pro = array( );
