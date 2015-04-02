@@ -87,7 +87,7 @@
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr class="{ROW.class}">
-					<td><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
+					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
 					<td class="text-left">
 						<p><a target="_blank" href="{ROW.link}">{ROW.title}</a></p>
 					</td>
