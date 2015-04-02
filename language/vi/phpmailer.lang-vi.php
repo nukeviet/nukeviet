@@ -1,12 +1,8 @@
 <?php
-
 /**
- * @PHPMailer language file
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
- * @Language Tiếng Việt
- * @License GNU/GPL version 2 or any later version
- * @Createdate Sat, 08 Feb 2014 06:33:39 GMT
+ * Vietnamese (Tiếng Việt) PHPMailer language file: refer to English translation for definitive list.
+ * @package PHPMailer
+ * @author VINADES.,JSC <contact@vinades.vn>
  */
 
 $PHPMAILER_LANG['authenticate'] = 'Lỗi SMTP: Không thể xác thực.';
