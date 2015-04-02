@@ -1428,23 +1428,26 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	}
 
 	// Nhom san pham
-	$listgroupid = GetGroupID( $data_content['id'] );
+	$listgroupid = GetGroupID( $data_content['id'], 1 );
 	if( !empty( $listgroupid ) and !empty( $global_array_group ) )
 	{
-		foreach( $global_array_group as $groupid => $groupinfo )
+		foreach( $listgroupid as $gid => $subid )
 		{
-			if( $groupinfo['lev'] == 0 and $groupinfo['in_order'] )
+			$parent_info = $global_array_group[$gid];
+			if( $parent_info['in_order'] )
 			{
-				$xtpl->assign( 'HEADER', $groupinfo['title'] );
+				$xtpl->assign( 'HEADER', $parent_info['title'] );
 				$xtpl->parse( 'main.group.items.header' );
-
-				$listsub = explode( ',', $groupinfo['subgroupid'] );
-				foreach( $listsub as $subgroupid )
+				if( !empty( $subid ) )
 				{
-					if( in_array( $subgroupid, $listsub ) )
+					foreach( $subid as $sub_gr_id )
 					{
-						$xtpl->assign( 'GROUP', $global_array_group[$subgroupid] );
-						$xtpl->parse( 'main.group.items.loop' );
+						$sub_info = $global_array_group[$sub_gr_id];
+						if( $sub_info['in_order'] )
+						{
+							$xtpl->assign( 'GROUP', $sub_info );
+							$xtpl->parse( 'main.group.items.loop' );
+						}
 					}
 				}
 				$xtpl->parse( 'main.group.items' );
@@ -1456,25 +1459,24 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 
 	// Hien thi danh sach nhom san pham
 	$i = 0;
-	foreach( $listgroupid as $gid )
+	foreach( $listgroupid as $gid => $subid )
 	{
-		$group = $global_array_group[$gid];
-		if( $group['parentid'] == 0 and $group['indetail'] )
+		$parent_info = $global_array_group[$gid];
+		if( $parent_info['indetail'] )
 		{
-			$xtpl->assign( 'MAINTITLE', $group['title'] );
+			$xtpl->assign( 'MAINTITLE', $parent_info['title'] );
 			$xtpl->parse( 'main.group_detail.loop.maintitle' );
 
-			if( $group['numsubgroup'] > 0 )
+			if( !empty( $subid ) )
 			{
-				$listsubgroupid = explode( ',', $group['subgroupid'] );
-				foreach( $listsubgroupid as $subgroupid )
+				foreach( $subid as $sub_gr_id )
 				{
-					$subgroup = $global_array_group[$subgroupid];
-					if( $subgroup['indetail'] and in_array( $subgroupid, $listgroupid ) )
+					$sub_info = $global_array_group[$sub_gr_id];
+					if( $sub_info['indetail'] )
 					{
 						$xtpl->assign( 'SUBTITLE', array(
-							'title' => $subgroup['title'],
-							'link' => $subgroup['link']
+							'title' => $sub_info['title'],
+							'link' => $sub_info['link']
 						) );
 						$xtpl->parse( 'main.group_detail.loop.subtitle.loop' );
 					}
