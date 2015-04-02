@@ -60,6 +60,7 @@ $lang_module['siteinfo_review'] = 'Số đánh giá chờ duyệt';
 $lang_module['siteinfo_order'] = 'Tổng số đơn đặt hàng';
 $lang_module['siteinfo_order_noview'] = 'Số đơn đặt hàng chưa xem';
 $lang_module['siteinfo_expired'] = 'Số sản phẩm đã hết hạn';
+$lang_module['siteinfo_exptime'] = 'Số sản phẩm sắp hết hạn';
 $lang_module['siteinfo_tags_incomplete'] = 'Số tags chưa có mô tả';
 $lang_module['catalog_name'] = 'Tên loại sản phẩm';
 $lang_module['cat_form'] = 'Dữ liệu tùy biến';
