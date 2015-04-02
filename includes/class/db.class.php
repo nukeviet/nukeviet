@@ -73,10 +73,6 @@ class sql_db extends pdo
 		{
 			parent::__construct( $dsn , $config['dbuname'], $config['dbpass'], $driver_options );
 			parent::exec( "SET SESSION time_zone='" . NV_SITE_TIMEZONE_GMT_NAME . "'" );
-			if( version_compare( PHP_VERSION, '5.3.6', '<' ) and $config['dbtype'] == 'mysql' )
-			{
-				parent::exec('SET NAMES utf8');
-			}
 			$this->connect = 1;
 		}
 		catch( PDOException $e )
