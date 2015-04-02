@@ -34,6 +34,7 @@
 			<div class="col-xs-12 col-md-3">
 				<div class="form-group">
 					<select class="form-control" name="sstatus">
+						<option value="-1"> -- {LANG.search_status} -- </option>
 						<!-- BEGIN: search_status -->
 						<option value="{SEARCH_STATUS.key}" {SEARCH_STATUS.selected} >{SEARCH_STATUS.value}</option>
 						<!-- END: search_status -->
