@@ -16,19 +16,42 @@ if( $nv_Request->isset_request( 'check_quantity', 'post' ) )
 	$id_pro = $nv_Request->get_int( 'id_pro', 'post', 0 );
 	$unit = $nv_Request->get_string( 'pro_unit', 'post', '' );
 	$listid = $nv_Request->get_string( 'listid', 'post' );
-	if( empty( $listid ) or empty( $id_pro ) ) die( 'NO' );
-
 	$listid = explode( ',', $listid );
 	asort( $listid );
-	$listid = implode( ',', $listid );
-	$quantity = $db->query( 'SELECT quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id_pro . ' AND listgroup="' . $listid . '"' )->fetchColumn();
+
+	$quantity = $db->query( 'SELECT quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id_pro . ' AND listgroup="' . implode( ',', $listid ) . '"' )->fetchColumn();
 	if( empty( $quantity ) )
 	{
-		die( 'NO_' . $lang_module['product_empty'] );
+		$sum = 0;
+		$result = $db->query( 'SELECT listgroup, quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id_pro );
+		while( list( $listgroup, $quantity ) = $result->fetch( 3 ) )
+		{
+			$listgroup = explode( ',', $listgroup );
+			$_t = 0;
+			foreach ($listgroup as $_idgroup)
+			{
+				if( in_array( $_idgroup, $listid ) )
+				{
+					$_t = $_t + 1;
+				}
+			}
+			if( $_t == sizeof( $listid ) OR empty($listid) )
+			{
+				$sum += $quantity;
+			}
+		}
+		if( $sum == 0 )
+		{
+			die( 'NO_' . $lang_module['product_empty'] );
+		}
+		else
+		{
+			die( 'NO_' . $lang_module['detail_pro_number'] . ': ' . $sum . ' ' . $unit );
+		}
 	}
 	else
 	{
-		die( 'OK_' . $lang_module['product_number'] . ': ' . $quantity . ' ' . $unit );
+		die( 'OK_' . $lang_module['detail_pro_number'] . ': ' . $quantity . ' ' . $unit );
 	}
 }
 
