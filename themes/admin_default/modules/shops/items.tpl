@@ -122,22 +122,27 @@
 			<tfoot>
 				<tr align="left">
 					<td colspan="10">
-					<select class="form-control" name="action" id="action">
-						<!-- BEGIN: action -->
-						<option value="{ACTION.key}">{ACTION.title}</option>
-						<!-- END: action -->
-					</select> &nbsp; <input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{ACTION_CHECKSESS}','{LANG.msgnocheck}')" value="{LANG.action}"></td>
+						<div class="row">
+							<div class="col-xs-10">
+								<select class="form-control" name="action" id="action">
+									<!-- BEGIN: action -->
+									<option value="{ACTION.key}">{ACTION.title}</option>
+									<!-- END: action -->
+								</select> &nbsp; <input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{ACTION_CHECKSESS}','{LANG.msgnocheck}')" value="{LANG.action}">
+							</div>
+							<div class="col-xs-14 text-right">
+								<!-- BEGIN: generate_page -->
+								{GENERATE_PAGE}
+								<!-- END: generate_page -->
+							</div>
+						</div>
+					</td>
 				</tr>
 			</tfoot>
 		</table>
 	</div>
 </form>
-<!-- BEGIN: generate_page -->
-<br />
-<p class="text-center">
-	{GENERATE_PAGE}
-</p>
-<!-- END: generate_page -->
+
 <script type='text/javascript'>
 	$(function() {
 		$("#from, #to").datepicker({

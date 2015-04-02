@@ -66,8 +66,8 @@ if( $cid > 0 )
 			$require = ' <span class="require">(*)</span>';
 		}
 		$contents_temp_cate .= '<div class="row">';
-		$contents_temp_cate .= '<div class="col-sm-2 text-right"><strong>' . $data_group['title'] . $require . '</strong></div>';
-		$contents_temp_cate .= '<div class="col-sm-10">';
+		$contents_temp_cate .= '<div class="col-sm-4 text-right"><strong>' . $data_group['title'] . $require . '</strong></div>';
+		$contents_temp_cate .= '<div class="col-sm-20">';
 		if( $data_group['numsubgroup'] > 0 )
 		{
 			$contents_temp_cate .= getgroup_ckhtml( $subgroupid_i, $array_groupid_in_row );
