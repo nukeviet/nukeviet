@@ -1685,7 +1685,8 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 			// Tinh diem tich luy
 			if( $pro_config['point_active'] and $global_array_shops_cat[$data_row['listcatid']]['cat_allow_point'] and ($global_array_shops_cat[$data_row['listcatid']]['cat_number_product'] == 0 or $data_row['num'] >= $global_array_shops_cat[$data_row['listcatid']]['cat_number_product']) )
 			{
-				$point_total += intval( $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'] );
+				$cat_number_point = $global_array_shops_cat[$data_row['listcatid']]['cat_number_point'];
+				$point_total += intval( $cat_number_point * $data_row['num'] );
 			}
 
 			// Group của sản phẩm
