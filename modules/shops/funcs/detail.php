@@ -23,6 +23,20 @@ if( $nv_Request->isset_request( 'check_quantity', 'post' ) )
 	if( empty( $quantity ) )
 	{
 		$sum = 0;
+		$count = 0;
+		$listgroupid = GetGroupID( $id_pro, 1 );
+		if( !empty( $listgroupid ) and !empty( $global_array_group ) )
+		{
+			foreach( $listgroupid as $gid => $subid )
+			{
+				$parent_info = $global_array_group[$gid];
+				if( $parent_info['in_order'] )
+				{
+					$count++;
+				}
+			}
+		}
+
 		$result = $db->query( 'SELECT listgroup, quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id_pro );
 		while( list( $listgroup, $quantity ) = $result->fetch( 3 ) )
 		{
@@ -40,7 +54,7 @@ if( $nv_Request->isset_request( 'check_quantity', 'post' ) )
 				$sum += $quantity;
 			}
 		}
-		if( $sum == 0 )
+		if( $sum == 0 OR $count == sizeof( $listid ) )
 		{
 			die( 'NO_' . $lang_module['product_empty'] );
 		}
