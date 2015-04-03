@@ -484,7 +484,7 @@ if( $post_order == 1 )
 
 				// Them vao notification
 				$content = array( 'order_id' => $data_order['id'], 'order_code' => $data_order['order_code'], 'order_name' => $data_order['order_name'] );
-				$userid = !empty( $user_info ) ? $user_info['userid'] : 0;
+				$userid = isset( $user_info['userid'] ) and !empty( $user_info['userid'] ) ? $user_info['userid'] : 0;
 				nv_insert_notification( $module_name, 'order_new', $content, 0, $userid, 1 );
 
 				// Gui mail thong bao den nguoi quan ly shops
