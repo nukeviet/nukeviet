@@ -32,10 +32,13 @@ Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikiped
   
 ##Project work on NukeViet
   - Trung Tâm Dạy Tốt: http://daytot.vn
-    - thpt.daytot.vn
-    - thcs.daytot.vn
-    - tieuhoc.daytot.vn
+    - http://thpt.daytot.vn
+    - http://thcs.daytot.vn
+    - http://tieuhoc.daytot.vn
   - Trung tâm luyện thi đại học Tô Hoàng: http://luyenthitohoang.com
+    - Lịch học trung tâm: http://luyenthitohoang.com/lich-hoc/
+    - Giáo viên trung tâm http://luyenthitohoang.com/Giao-vien/
+    - Lịch khai giảng trung tâm: http://luyenthitohoang.com/Lich-khai-giang/
   - Tài liệu thi vào lớp 10: http://thivao10.vn
   - Cho thuê hội trường tại Hà Nội: http://chothuehoitruong.vn
   - Cho thuê phòng học tại Hà Nội: http://chothuephonghoc.vn
