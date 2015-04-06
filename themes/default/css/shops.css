@@ -1341,3 +1341,12 @@ img.calendar {
 	background: url(../images/shops/rate/rate-btn3-hover.png) no-repeat;
 	float: left
 }
+
+.docpay div{
+	line-height: 25px
+}
+
+.docpay div strong{
+	width: 120px;
+	display: inline-block
+}

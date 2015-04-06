@@ -216,6 +216,8 @@ $lang_module['order_check_err'] = '<em>Bạn cần chọn mục xác nhận thô
 $lang_module['order_ok'] = 'Bạn đã gửi đơn hàng thành công chúng tôi sẽ sớm phản hồi cho bạn!';
 $lang_module['order_payment'] = 'Đã thanh toán';
 $lang_module['order_no_payment'] = 'Chưa thanh toán';
+$lang_module['order_payment_email'] = '<p>Cảm ơn bạn đã đặt hàng tại website {site_url}<br /> Dưới đây là thông tin đơn hàng của bạn.</p> <div class="block clearfix"> <table class="rows2" style="margin-bottom:2px;width:100%;border:1px solid rgb(245, 245, 245);padding:5px;"> <tbody> <tr> <td> <table> <tbody> <tr> <td width="130px">Họ tên khách hàng</td> <td>: <strong>{order_name}</strong></td> </tr> <tr> <td>Email</td> <td>: {order_email}</td> </tr> <tr> <td>Điện thoại</td> <td>: {order_phone}</td> </tr> <tr> <td valign="top">Địa chỉ</td> <td valign="top">: {order_address}</td> </tr> <tr> <td>Thời gian đặt hàng</td> <td>: {dateup} lúc {moment}</td> </tr> </tbody> </table> </td> <td align="center" valign="top" width="100px"> <div class="order_code">Mã đơn hàng<br /> <span class="text_date"><strong>{order_code}</strong></span></div> </td> </tr> </tbody> </table> <br /> {table_product} <p>Bạn có thể xem lại thông tin đơn hàng tại {review_url}</p> <p>Đây là email được gửi tự động từ website <span style="line-height: 20.7999992370605px;">{site_url}</span>, vui lòng không trả lời email này vì chúng tôi sẽ không nhận được email của bạn. Nếu không hiểu về nội dung email này hãy đơn giản xóa nó khỏi hòm thư của bạn.</p> </div>';
+$lang_module['content_here'] = 'đây';
 $lang_module['product_none_select'] = 'Bạn chưa chọn sản phẩm ';
 $lang_module['shop_user_conect'] = 'Bạn đã kết nối với người này';
 $lang_module['system_waring'] = 'Hệ thống đang nâng cấp chức năng này';

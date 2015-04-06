@@ -1,12 +1,10 @@
 <!-- BEGIN: main -->
-<br>
-<div class="block clearfix">
-	<div class="table-responsive">
-		<table class="rows" style="margin-bottom: 2px">
-			<tr>
-				<td>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-24 col-sm-19">
 				<table>
-					<tr>
+					<tr style="margin-bottom: 10px">
 						<td width="130px">{LANG.order_name}:</td>
 						<td><strong> {DATA.order_name} </strong></td>
 					</tr>
@@ -22,103 +20,104 @@
 						<td>{LANG.order_date}:</td>
 						<td>{dateup} {LANG.order_moment} {moment}</td>
 					</tr>
-				</table></td>
-				<td width="100px" valign="top" class="text-center">
-				<div class="order_code">
+				</table>
+			</div>
+			<div class="col-xs-24 col-sm-5">
+				<div class="order_code text-center">
 					{LANG.order_code}
 					<br>
 					<span class="text_date"><strong>{DATA.order_code}</strong></span>
 					<br>
 					<span class="payment">{payment}</span>
-				</div></td>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption>
+			{LANG.content_list}
+		</caption>
+		<thead>
+			<tr>
+				<th width="30px">{LANG.order_no_products}</th>
+				<th>{LANG.order_products_name}</th>
+				<th>{LANG.content_product_code}</th>
+    			<!-- BEGIN: main_group -->
+    			<th>{MAIN_GROUP.title}</th>
+    			<!-- END: main_group -->
+    			<th class="text-center">{LANG.order_product_price} ({unit})</th>
+				<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
+				<th>{LANG.order_product_unit}</th>
+				<th class="text-right">{LANG.order_product_price_total} ({unit})</th>
 			</tr>
-		</table>
-	</div>
-
-	<div class="table-responsive">
-		<table class="table table-striped table-bordered table-hover">
-			<caption>
-				{LANG.content_list}
-			</caption>
-			<thead>
-				<tr>
-					<th width="30px">{LANG.order_no_products}</th>
-					<th>{LANG.order_products_name}</th>
-					<th>{LANG.content_product_code}</th>
-	    			<!-- BEGIN: main_group -->
-	    			<th>{MAIN_GROUP.title}</th>
-	    			<!-- END: main_group -->
-	    			<th class="text-center">{LANG.order_product_price} ({unit})</th>
-					<th class="text-center" width="60px">{LANG.order_product_numbers}</th>
-					<th>{LANG.order_product_unit}</th>
-					<th class="text-right">{LANG.order_product_price_total} ({unit})</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- BEGIN: loop -->
-				<tr>
-					<td class="text-center">{pro_no}</td>
-					<td class="prd"><span><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></span>
-					<br />
-					<!-- BEGIN: display_group --><span class="text-muted">
-							<!-- BEGIN: item -->
-							<span class="show"><span class="text-muted">{group.parent_title}: <strong>{group.title}</strong></span></span>
-							<!-- END: item -->
-						</span><!-- END: display_group --></td>
-					<td><strong>{product_code}</strong></td>
-					<!-- BEGIN: sub_group -->
-	    			<td><a href="{SUB_GROUP.link}" target="_blank" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
-	    			<!-- END: sub_group -->
-	    			<td class="text-center">{product_price}</td>
-					<td class="amount text-center">{product_number}</td>
-					<td class="unit">{product_unit}</td>
-					<td class="money" align="right"><strong>{product_price_total}</strong></td>
-				</tr>
-				<!-- END: loop -->
-			</tbody>
-		</table>
-	</div>
-
-	<!-- BEGIN: data_shipping -->
-	<div class="table-responsive">
-		<table class="table table-striped table-bordered table-hover">
-			<caption>{LANG.shipping_info}</caption>
-			<thead>
-				<tr>
-					<th>{LANG.shipping_name}</th>
-					<th>{LANG.order_address}</th>
-					<th>{LANG.carrier}</th>
-					<th>{LANG.weights}</th>
-					<th class="text-right">{LANG.carrier_price}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>{DATA_SHIPPING.ship_name} - {DATA_SHIPPING.ship_phone}</td>
-					<td>
-						{DATA_SHIPPING.ship_location_title}
-						<span class="help-block">{DATA_SHIPPING.ship_address_extend}</span>
-					</td>
-					<td>{DATA_SHIPPING.ship_shops_title}</td>
-					<td>{DATA_SHIPPING.weight}{DATA_SHIPPING.weight_unit}</td>
-					<td class="text-right">{DATA_SHIPPING.ship_price} {DATA_SHIPPING.ship_price_unit}</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<!-- END: data_shipping -->
-
-	<p class="text-right">{LANG.order_total}: <strong id="total">{order_total} {unit}</strong></p>
-
-	<!-- BEGIN: order_note -->
-	<span style="font-style: italic;">{LANG.order_products_note} : {DATA.order_note}</span>
-	<!-- END: order_note -->
-	<table style="margin-top: 2px">
-		<tr>
-			<td><!-- BEGIN: admin_process --> - {LANG.order_admin_process} : {admin_process} <!-- END: admin_process --></td>
-		</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td class="text-center">{pro_no}</td>
+				<td class="prd"><span><a target="_blank" title="{product_name}" href="{link_pro}">{product_name}</a></span>
+				<br />
+				<!-- BEGIN: display_group --><span class="text-muted">
+						<!-- BEGIN: item -->
+						<span class="show"><span class="text-muted">{group.parent_title}: <strong>{group.title}</strong></span></span>
+						<!-- END: item -->
+					</span><!-- END: display_group --></td>
+				<td><strong>{product_code}</strong></td>
+				<!-- BEGIN: sub_group -->
+    			<td><a href="{SUB_GROUP.link}" target="_blank" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
+    			<!-- END: sub_group -->
+    			<td class="text-center">{product_price}</td>
+				<td class="amount text-center">{product_number}</td>
+				<td class="unit">{product_unit}</td>
+				<td class="money" align="right"><strong>{product_price_total}</strong></td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
 	</table>
 </div>
+
+<!-- BEGIN: data_shipping -->
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption>{LANG.shipping_info}</caption>
+		<thead>
+			<tr>
+				<th>{LANG.shipping_name}</th>
+				<th>{LANG.order_address}</th>
+				<th>{LANG.carrier}</th>
+				<th>{LANG.weights}</th>
+				<th class="text-right">{LANG.carrier_price}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{DATA_SHIPPING.ship_name} - {DATA_SHIPPING.ship_phone}</td>
+				<td>
+					{DATA_SHIPPING.ship_location_title}
+					<span class="help-block">{DATA_SHIPPING.ship_address_extend}</span>
+				</td>
+				<td>{DATA_SHIPPING.ship_shops_title}</td>
+				<td>{DATA_SHIPPING.weight}{DATA_SHIPPING.weight_unit}</td>
+				<td class="text-right">{DATA_SHIPPING.ship_price} {DATA_SHIPPING.ship_price_unit}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<!-- END: data_shipping -->
+
+<p class="text-right">{LANG.order_total}: <strong id="total">{order_total} {unit}</strong></p>
+
+<!-- BEGIN: order_note -->
+<span style="font-style: italic;">{LANG.order_products_note} : {DATA.order_note}</span>
+<!-- END: order_note -->
+<table style="margin-top: 2px">
+	<tr>
+		<td><!-- BEGIN: admin_process --> - {LANG.order_admin_process} : {admin_process} <!-- END: admin_process --></td>
+	</tr>
+</table>
 <div class="text-center">
 	<form class="form-inline" action="" method="post" name="fpost" id="post"><input type="hidden" value="{order_id}" name="order_id"><input type="hidden" value="1" name="save">
 		<!-- BEGIN: onsubmit -->

@@ -475,7 +475,42 @@ if( $post_order == 1 )
 				$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks'], $global_config['site_url'] );
 				$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review'], $global_config['site_url'] . $review_url );
 				$data_order['review_url'] = $review_url;
-				$email_contents = call_user_func( 'email_new_order', $data_order, $data_pro );
+
+				$content = '';
+				$email_contents_table = call_user_func( 'email_new_order', $content, $data_order, $data_pro, true );
+				$replace_data = array(
+					'order_code' => $data_order['order_code'],
+					'order_name' => $data_order['order_name'],
+					'order_email' => $data_order['order_email'],
+					'order_phone' => $data_order['order_phone'],
+					'order_address' => $data_order['order_address'],
+					'order_note' => $data_order['order_note'],
+					'order_total' => $data_order['order_total'],
+					'unit_total' => $data_order['unit_total'],
+					'dateup' => nv_date( "d-m-Y", $data_content['order_time'] ),
+					'moment' => nv_date( "H:i", $data_content['order_time'] ),
+					'review_url' => '<a href="' . $global_config['site_url'] . $data_order['review_url'] . '">' . $lang_module['content_here'] . '</a>',
+					'table_product' => $email_contents_table,
+					'site_url' => $global_config['site_url'],
+					'site_name' => $global_config['site_name'],
+				);
+
+				$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . '_order_content.txt';
+				if( file_exists( $content_file ) )
+				{
+					$content = file_get_contents( $content_file );
+					$content = nv_editor_br2nl( $content );
+				}
+				else
+				{
+					$content = $lang_module['order_payment_email'];
+				}
+
+				foreach( $replace_data as $key => $value )
+				{
+					$content = str_replace( '{' . $key . '}', $value, $content );
+				}
+				$email_contents = call_user_func( 'email_new_order', $content, $data_order, $data_pro );
 
 				nv_sendmail( array(
 					$global_config['site_name'],
