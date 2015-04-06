@@ -69,7 +69,7 @@
 					<tr>
 						<td class="text-right">
 						<br />
-						<strong>{GLANG.groups_view} </th>
+						<strong>{LANG.viewcat_detail} </th>
 						<td>
 							<!-- BEGIN: groups_views -->
 							<div class="row">
