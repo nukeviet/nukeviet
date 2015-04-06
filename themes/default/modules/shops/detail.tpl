@@ -36,6 +36,32 @@
 						{ADMINLINK}
 					</p>
 					<!-- END: adminlink -->
+					<!-- BEGIN: social_icon -->
+					<hr />
+					<ul style="padding: 0; margin-top: 5px;">
+						<li class="pull-left">
+							<div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false" data-share="true">
+								&nbsp;
+							</div>
+						</li>
+						<li class="pull-left">
+							<div class="g-plusone" data-size="medium"></div>
+						</li>
+					</ul>
+					<script type="text/javascript">
+						window.___gcfg = {
+							lang : nv_sitelang
+						};
+						(function() {
+							var po = document.createElement('script');
+							po.type = 'text/javascript';
+							po.async = true;
+							po.src = 'https://apis.google.com/js/plusone.js';
+							var s = document.getElementsByTagName('script')[0];
+							s.parentNode.insertBefore(po, s);
+						})();
+					</script>
+					<!-- END: social_icon -->
 				</div>
 
 				<div class="col-xs-24 col-sm-18">
@@ -137,11 +163,11 @@
 							<!-- BEGIN: items -->
 							<div class="row">
 								<!-- BEGIN: header -->
-								<div class="col-xs-8 col-sm-4" style="margin-top: 4px">
+								<div class="col-xs-8 col-sm-5" style="margin-top: 4px">
 									{HEADER}
 								</div>
 								<!-- END: header -->
-								<div class="col-xs-16 col-sm-20 itemsgroup" data-groupid="{GROUPID}" data-header="{HEADER}">
+								<div class="col-xs-16 col-sm-19 itemsgroup" data-groupid="{GROUPID}" data-header="{HEADER}">
 									<!-- BEGIN: loop -->
 									<label class="label_group <!-- BEGIN: active -->active<!-- END: active -->"><input type="radio" class="groupid" name="groupid[{GROUPID}]" value="{GROUP.groupid}" <!-- BEGIN: checked -->checked="checked" <!-- END: checked -->>{GROUP.title}</label>
 									<!-- END: loop -->
@@ -152,83 +178,51 @@
 						<!-- END: group -->
 						<span id="group_error">&nbsp;</span>
 						<div class="row">
-							<div class="col-xs-8 col-sm-4">
+							<div class="col-xs-8 col-sm-5">
 								{LANG.detail_pro_number}
 							</div>
-							<div class="col-xs-16 col-sm-20">
+							<div class="col-xs-16 col-sm-19">
 								<input type="number" name="num" value="1" min="1" max="{PRODUCT_NUMBER}" id="pnum" class="pull-left form-control" style="width: 100px; margin-right: 5px">
-								<span class="help-block pull-left" id="product_number">({LANG.product_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit})</span>
+								<span class="help-block pull-left" id="product_number">{LANG.detail_pro_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
 							</div>
 						</div>
 						<div class="clearfix"></div>
 					</div>
+
+					<!-- BEGIN: typepeice -->
+					<table class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th class="text-right">{LANG.detail_pro_number}</th>
+								<th class="text-left">{LANG.cart_price} ({money_unit})</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- BEGIN: items -->
+							<tr>
+								<td class="text-right">{ITEMS.number_from} -> {ITEMS.number_to}</td>
+								<td class="text-left">{ITEMS.price}</td>
+							</tr>
+							<!-- END: items -->
+						</tbody>
+					</table>
+					<!-- END: typepeice -->
+
+					<!-- BEGIN: order -->
+					<button class="btn btn-danger btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 0)">
+						<em class="fa fa-shopping-cart fa-lg">&nbsp;</em>
+						{LANG.add_cart}
+					</button>
+					<button class="btn btn-success btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 1)">
+						<em class="fa fa-paper-plane-o fa-lg">&nbsp;</em>
+						{LANG.buy_now}
+					</button>
+					<!-- END: order -->
+					<!-- BEGIN: product_empty -->
+					<button class="btn btn-danger disabled">{LANG.product_empty}</button>
+					<!-- END: product_empty -->
 				</div>
 			</div>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-10">
-			<!-- BEGIN: social_icon -->
-			<ul style="padding: 0; margin-top: 5px;">
-				<li class="pull-left">
-					<div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false" data-share="true">
-						&nbsp;
-					</div>
-				</li>
-				<li class="pull-left">
-					<div class="g-plusone" data-size="medium"></div>
-				</li>
-			</ul>
-			<script type="text/javascript">
-				window.___gcfg = {
-					lang : nv_sitelang
-				};
-				(function() {
-					var po = document.createElement('script');
-					po.type = 'text/javascript';
-					po.async = true;
-					po.src = 'https://apis.google.com/js/plusone.js';
-					var s = document.getElementsByTagName('script')[0];
-					s.parentNode.insertBefore(po, s);
-				})();
-			</script>
-			<!-- END: social_icon -->
-		</div>
-		<div class="col-md-14">
-			<!-- BEGIN: typepeice -->
-			<table class="table table-striped table-bordered table-hover" style="width: 264px">
-				<thead>
-					<tr>
-						<th class="text-right">{LANG.detail_pro_number}</th>
-						<th class="text-left">{LANG.cart_price} ({money_unit})</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- BEGIN: items -->
-					<tr>
-						<td class="text-right">{ITEMS.number_from} -> {ITEMS.number_to}</td>
-						<td class="text-left">{ITEMS.price}</td>
-					</tr>
-					<!-- END: items -->
-				</tbody>
-			</table>
-			<!-- END: typepeice -->
-
-			<!-- BEGIN: order -->
-			<div class="pull-right">
-				<button class="btn btn-danger btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 0)">{LANG.add_cart}</button>
-				<button class="btn btn-success btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 1)">{LANG.buy_now}</button>
-			</div>
-			<!-- END: order -->
-
-			<!-- BEGIN: product_empty -->
-			<div class="pull-right" style="margin-top: 6px">
-				<button class="btn btn-danger disabled">
-					{LANG.product_empty}
-				</button>
-			</div>
-			<!-- END: product_empty -->
 		</div>
 	</div>
 

@@ -349,7 +349,7 @@ function payment_point( order_id, checkss, lang_confirm )
 function check_price( id_pro, pro_unit )
 {
 	var data = [];
-    $('select[name=group] option:selected').each(function(){
+    $('.groupid:checked').each(function(){
     	var value = $(this).val();
     	if( value != '' ){
     		data.push( value );
@@ -364,13 +364,14 @@ function check_price( id_pro, pro_unit )
 			success : function(res) {
 				var s = res.split('_');
 				if( s[0] == 'OK' ){
-					$('#product_number').html( s[1] );
+					$('#product_number').html( s[2] );
 					$('#pnum, .btn-order').attr('disabled', false);
-					$('#product_number').html( s[1] ).removeClass( 'text-danger' );
+					$('#product_number').html( s[2] ).removeClass( 'text-danger' );
+					$('#pnum').attr('max', s[1]);
 				}
 				else{
 					$('#pnum, .btn-order').attr('disabled', true);
-					$('#product_number').html( s[1] ).addClass( 'text-danger' );
+					$('#product_number').html( s[2] ).addClass( 'text-danger' );
 				}
 			}
 		});

@@ -46,26 +46,27 @@ if( $nv_Request->isset_request( 'check_quantity', 'post' ) )
 			{
 				if( in_array( $_idgroup, $listid ) )
 				{
-					$_t = $_t + 1;
+					$_t = $_t +  1;
 				}
 			}
-			if( $_t == sizeof( $listid ) OR empty($listid) )
+			if( $_t == sizeof( $listid ) OR empty( $listid ) )
 			{
 				$sum += $quantity;
 			}
 		}
+
 		if( $sum == 0 OR $count == sizeof( $listid ) )
 		{
-			die( 'NO_' . $lang_module['product_empty'] );
+			die( 'NO_0_' . $lang_module['product_empty'] );
 		}
 		else
 		{
-			die( 'NO_' . $lang_module['detail_pro_number'] . ': ' . $sum . ' ' . $unit );
+			die( 'NO_0_' . $lang_module['detail_pro_number'] . ': ' . $sum . ' ' . $unit );
 		}
 	}
 	else
 	{
-		die( 'OK_' . $lang_module['detail_pro_number'] . ': ' . $quantity . ' ' . $unit );
+		die( 'OK_' . $quantity . '_' . $lang_module['detail_pro_number'] . ': ' . $quantity . ' ' . $unit );
 	}
 }
 
