@@ -73,19 +73,39 @@ function cartorder_detail(a_ob, popup, buy_now) {
 	var num = $('#pnum').val();
 	var id = $(a_ob).attr("data-id");
 	var group = '';
+	var label = '';
+
 	var i = 0;
-    $('select[name=group] option:selected').each(function(){
-    	var value = $(this).val();
-    	if( value != '' )
+	$('.itemsgroup').each(function(){
+		if( $('input[name="groupid['+$(this).attr('data-groupid')+']"]:checked').length == 0 )
+		{
+			i++;
+    		if( i == 1 ){
+    			label = label + $(this).attr('data-header');
+    		}
+    		else{
+    			label = label + ', ' + $(this).attr('data-header');
+    		}
+		}
+	});
+	if( label != '' ){
+		$('#group_error').css( 'display', 'block' );
+		$('#group_error').html( detail_error_group + ' <strong>' + label + '</strong>' );
+		return false;
+	}
+
+	i = 0;
+    $('.groupid').each(function(){
+    	if( $(this).is(':checked') )
     	{
     		i++;
     		if( i == 1 )
     		{
-    			group = group + value;
+    			group = group + $(this).val();
     		}
     		else
     		{
-    			group = group + ',' + value;
+    			group = group + ',' + $(this).val();
     		}
     	}
 	});

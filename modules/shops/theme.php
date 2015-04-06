@@ -1440,6 +1440,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			$parent_info = $global_array_group[$gid];
 			if( $parent_info['in_order'] )
 			{
+				$xtpl->assign( 'GROUPID', $parent_info['groupid'] );
 				$xtpl->assign( 'HEADER', $parent_info['title'] );
 				$xtpl->parse( 'main.group.items.header' );
 				if( !empty( $subid ) )
@@ -1450,6 +1451,11 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 						if( $sub_info['in_order'] )
 						{
 							$xtpl->assign( 'GROUP', $sub_info );
+							if( sizeof( $subid ) == 1 )
+							{
+								$xtpl->parse( 'main.group.items.loop.active' );
+								$xtpl->parse( 'main.group.items.loop.checked' );
+							}
 							$xtpl->parse( 'main.group.items.loop' );
 						}
 					}
@@ -1458,7 +1464,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			}
 		}
 		$xtpl->parse( 'main.group' );
-		$xtpl->parse( 'main.lock_btn_order' );
 	}
 
 	// Hien thi danh sach nhom san pham

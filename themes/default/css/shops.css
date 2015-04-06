@@ -1350,3 +1350,12 @@ img.calendar {
 	width: 120px;
 	display: inline-block
 }
+
+#group_error {
+	color: #C00;
+	font-style: italic;
+	padding: 5px;
+	border: 1px dashed #C00;
+	margin: 5px 0;
+	display: none;
+}

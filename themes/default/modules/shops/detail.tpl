@@ -27,7 +27,7 @@
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-xs-6 text-center">
+				<div class="col-xs-24 col-sm-6 text-center">
 					<a href="{SRC_PRO_LAGE}" title="{TITLE}" <!-- BEGIN: shadowbox -->rel="shadowbox"<!-- END: shadowbox -->> <img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail"> </a>
 					<br />
 					<em class="fa fa-search-plus text-primary zoom_img">&nbsp;</em><a href="{SRC_PRO_LAGE}" title="{TITLE}" rel="shadowbox[miss]">{LANG.detail_view_lage_img}</a>
@@ -38,7 +38,7 @@
 					<!-- END: adminlink -->
 				</div>
 
-				<div class="col-xs-18">
+				<div class="col-xs-24 col-sm-18">
 					<ul class="product_info">
 						<li>
 							<h2>{TITLE}</h2>
@@ -131,27 +131,36 @@
 					</ul>
 					<hr />
 
-					<!-- BEGIN: group -->
-					<div class="row">
-						<!-- BEGIN: items -->
-						<div class="col-xs-8 col-md-12">
-							<div class="form-group">
-								<select class="form-control" name="group" onchange="check_price( {proid}, '{pro_unit}' )">
-									<!-- BEGIN: header -->
-									<option value="">---{HEADER}---</option>
-									<!-- END: header -->
+					<div class="well">
+						<!-- BEGIN: group -->
+						<div class="filter_product">
+							<!-- BEGIN: items -->
+							<div class="row">
+								<!-- BEGIN: header -->
+								<div class="col-xs-8 col-sm-4" style="margin-top: 4px">
+									{HEADER}
+								</div>
+								<!-- END: header -->
+								<div class="col-xs-16 col-sm-20 itemsgroup" data-groupid="{GROUPID}" data-header="{HEADER}">
 									<!-- BEGIN: loop -->
-									<option value="{GROUP.groupid}">{GROUP.title}</option>
+									<label class="label_group <!-- BEGIN: active -->active<!-- END: active -->"><input type="radio" class="groupid" name="groupid[{GROUPID}]" value="{GROUP.groupid}" <!-- BEGIN: checked -->checked="checked" <!-- END: checked -->>{GROUP.title}</label>
 									<!-- END: loop -->
-								</select>
+								</div>
+							</div>
+							<!-- END: items -->
+						</div>
+						<!-- END: group -->
+						<span id="group_error">&nbsp;</span>
+						<div class="row">
+							<div class="col-xs-8 col-sm-4">
+								{LANG.detail_pro_number}
+							</div>
+							<div class="col-xs-16 col-sm-20">
+								<input type="number" name="num" value="1" min="1" max="{PRODUCT_NUMBER}" id="pnum" class="pull-left form-control" style="width: 100px; margin-right: 5px">
+								<span class="help-block pull-left" id="product_number">({LANG.product_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit})</span>
 							</div>
 						</div>
-						<!-- END: items -->
-					</div>
-					<!-- END: group -->
-
-					<div class="clearfix">
-						&nbsp;
+						<div class="clearfix"></div>
 					</div>
 				</div>
 			</div>
@@ -161,7 +170,7 @@
 	<div class="row">
 		<div class="col-md-10">
 			<!-- BEGIN: social_icon -->
-			<ul style="padding: 0; margin-top: 12px;">
+			<ul style="padding: 0; margin-top: 5px;">
 				<li class="pull-left">
 					<div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false" data-share="true">
 						&nbsp;
@@ -207,12 +216,9 @@
 			<!-- END: typepeice -->
 
 			<!-- BEGIN: order -->
-			<div class="pull-right" style="margin-top: 6px">
-				<span class="pull-left text-muted" style="margin: 6px 20px 0" id="product_number">{LANG.detail_pro_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
-				<input type="number" name="num" value="1" id="pnum" class="pull-left form-control" style="width: 70px">
-
-				<button class="btn btn-danger btn-xs btn-order" data-id="{proid}" style="margin: 5px 0 0 5px" onclick="cartorder_detail(this, '{POPUP}', 0)">{LANG.add_cart}</button>
-				<button class="btn btn-success btn-xs btn-order" data-id="{proid}" style="margin: 5px 0 0 5px" onclick="cartorder_detail(this, '{POPUP}', 1)">{LANG.buy_now}</button>
+			<div class="pull-right">
+				<button class="btn btn-danger btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 0)">{LANG.add_cart}</button>
+				<button class="btn btn-success btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 1)">{LANG.buy_now}</button>
 			</div>
 			<!-- END: order -->
 
@@ -410,12 +416,24 @@
 <script type="text/javascript">
 	var detail_error_group = '{LANG.detail_error_group}';
 	new CBPFWTabs(document.getElementById('tabs'));
-</script>
 
-<!-- BEGIN: lock_btn_order -->
-<script type="text/javascript">
-	$('#pnum, .btn-order').attr('disabled', true);
+	$('.groupid').click(function() {
+		var _this = $('input[name="'+$(this).attr('name')+'"]');
+		$('input[name="'+$(this).attr('name')+'"]').parent().css('border-color', '#ccc');
+		if( $(this).is(':checked') )
+		{
+		    $(this).parent().css('border-color', 'blue');
+		}
+		$('#group_error').css( 'display', 'none' );
+		check_price( '{proid}', '{pro_unit}' );
+	});
+
+	$('#pnum').change(function(){
+		if( intval($(this).val()) > intval($(this).attr('max')) ){
+			alert('{LANG.detail_error_number} ' + $(this).attr('max') );
+			$(this).val( $(this).attr('max') );
+		}
+	});
 </script>
-<!-- END: lock_btn_order -->
 
 <!-- END: main -->
