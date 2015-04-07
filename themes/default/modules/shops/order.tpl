@@ -106,7 +106,10 @@
 								<!-- END: shops_loop -->
 							</div>
 							<div class="col-xs-12">
-								<p><em>{LANG.shipping_carrier_chose}</em></p>
+								<p>
+									<em>{LANG.shipping_carrier_chose}</em>
+									<span class="error show">{ERROR.order_shipping_carrier_id}</span>
+								</p>
 								<div id="carrier">
 									<!-- BEGIN: carrier_loop -->
 									<label class="show"><input type="radio" name="carrier" value="{CARRIER.id}" {CARRIER.checked} title="{CARRIER.name}" />{CARRIER.name}</label>

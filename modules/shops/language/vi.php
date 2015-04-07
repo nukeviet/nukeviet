@@ -121,6 +121,7 @@ $lang_module['product_payment_form'] = 'Hình thức thanh toán';
 $lang_module['product_payment_cancel'] = 'Chọn hình thức thanh toán khác';
 $lang_module['product_keywords'] = 'Từ khóa';
 $lang_module['product_move_form'] = 'Vận chuyển';
+$lang_module['discount_product'] = 'Sản phẩm khuyến mãi';
 $lang_module['lang_post'] = 'Thực hiện';
 $lang_module['product_post_ok'] = 'Bạn đã đăng thành công!';
 $lang_module['product_edit_ok'] = 'Bạn đã cập nhật thông tin thành công!';
@@ -151,7 +152,6 @@ $lang_module['detail_others_view'] = 'Sản phẩm bạn vừa xem';
 $lang_module['detail_view_img'] = 'Xem ảnh đầy đủ';
 $lang_module['detail_share_title'] = 'Chia sẻ';
 $lang_module['detail_rate_math'] = 'điểm';
-$lang_module['detail_error_number'] = 'Số lượng trong kho chỉ còn';
 $lang_module['print'] = 'In ra';
 $lang_module['print_page'] = 'In trang này';
 $lang_module['print_close'] = 'Đóng';
@@ -167,6 +167,7 @@ $lang_module['detail_no_permission'] = 'Chú ý: Bạn không được quyền x
 $lang_module['detail_no_otherimage'] = 'Sản phẩm này không có hình ảnh khác';
 $lang_module['detail_close_feature'] = 'Chức năng này đã bị tắt';
 $lang_module['detail_error_group'] = 'Vui lòng chọn';
+$lang_module['detail_error_number'] = 'Số lượng trong kho chỉ còn';
 $lang_module['redirect_to_back_shops'] = 'Quay lại trang chủ';
 $lang_module['company_product'] = 'Sản phẩm thuộc gian hàng';
 $lang_module['cart_check_cart'] = 'Kiểm tra giỏ hàng';
@@ -348,6 +349,10 @@ $lang_module['view_page_list'] = 'Theo danh sách';
 $lang_module['view_page_gird'] = 'Theo dạng lưới';
 $lang_module['newday'] = "Mới";
 $lang_module['payport'] = "Cổng thanh toán";
+$lang_module['payment_receive'] = "Thanh toán khi nhận hàng";
+$lang_module['payment_receive_note'] = "Quý khách sẽ thanh toán cho nhân viên giao dịch khi nhận hàng";
+$lang_module['payment_online'] = "Thanh toán trực tuyến";
+$lang_module['payment_point'] = "Sử dụng điểm tích lũy";
 
 $lang_module['filter'] = "Lọc sản phẩm";
 $lang_module['filter_price_from'] = "Lớn hơn %s";
@@ -443,8 +448,9 @@ $lang_module['shipping_shops_chose'] = 'Chọn cửa hàng';
 $lang_module['shipping_carrier_chose'] = 'Chọn dịch vụ vận chuyển';
 $lang_module['shipping_address_extend'] = 'Địa chỉ chi tiết';
 $lang_module['shipping_address_extend_empty'] = 'Vui lòng nhập địa chỉ chi tiết';
+$lang_module['shipping_carrier_id_empty'] = 'Chọn nhà vận chuyển';
 $lang_module['shipping_address_note'] = 'Để hệ thống có thể tính toán đúng chi phí vận chuyển, vui lòng chọn đơn vị địa chính gần nhất với khu vực nhận hàng của bạn ở hộp chọn bên trên.';
-$lang_module['shipping_error'] = 'Hệ thống không thể đưa ra chi phí vận chuyển. Vui lòng liên hệ với người quản lý hoặc chọn địa điểm thuộc cấp lớn hơn (nếu có) hay nhỏ hơn (nếu có) địa điểm hiện tại.';
+$lang_module['shipping_error'] = 'Hệ thống không thể đưa ra chi phí vận chuyển trong lúc này. Sau khi nhận được đơn hàng, chúng tôi sẽ liên hệ lại với bạn về vấn đề này.';
 
 //them truong tuy bien
 

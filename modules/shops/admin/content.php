@@ -295,6 +295,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$error = $lang_module['error_cat'];
 	}
+	elseif( $pro_config['use_shipping'] and empty( $rowcontent['product_weight'] ) )
+	{
+		$error = $lang_module['error_weight'];
+	}
 	elseif( trim( strip_tags( $rowcontent['hometext'] ) ) == '' )
 	{
 		$error = $lang_module['error_hometext'];
