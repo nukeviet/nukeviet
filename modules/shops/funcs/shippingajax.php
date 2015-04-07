@@ -56,14 +56,23 @@ if( $nv_Request->isset_request( 'get_shipping_price', 'get' ) )
 	$shops_id = $nv_Request->get_int( 'shops_id', 'get', 0 );
 	$carrier_id = $nv_Request->get_int( 'carrier_id', 'get', 0 );
 
-	$contents = nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $carrier_id );
-	if( !empty( $contents ) )
+	$str_error = '<span class="error">' . $lang_module['shipping_error'] . '</span>';
+
+	if( !empty( $weight ) )
 	{
-		$contents = $contents . ' ' . $pro_config['money_unit'];
+		$contents = nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $carrier_id );
+		if( !empty( $contents ) )
+		{
+			$contents = $contents . ' ' . $pro_config['money_unit'];
+		}
+		else
+		{
+			$contents = $str_error;
+		}
 	}
 	else
 	{
-		$contents = '<span class="error">' . $lang_module['shipping_error'] . '</span>';
+		$contents = $str_error;
 	}
 }
 
