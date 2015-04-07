@@ -17,12 +17,12 @@
 <table class="rows" style="width:100%;border:1px solid #F5F5F5;">
 	<tr class="bgtop" style="background:#CCCCCC;line-height:22px;">
 		<td align="center" width="30px" style="padding:5px"> {LANG.order_no_products} </td>
-		<td class="prd" style="padding:5px"> {LANG.cart_products} </td>
+		<td class="prd" style="padding:5px"> {LANG.name} </td>
 		<!-- BEGIN: price1 -->
-		<td class="price" align="right" style="padding:5px"> {LANG.cart_price} ({unit}) </td>
+		<td class="price" align="right" style="padding:5px"> {LANG.content_product_product_price} ({unit}) </td>
 		<!-- END: price1 -->
-		<td class="amount" align="center" width="60px" style="padding:5px"> {LANG.cart_numbers} </td>
-		<td class="unit" width="40" style="padding:5px"> {LANG.cart_unit} </td>
+		<td class="amount" align="center" width="60px" style="padding:5px"> {LANG.seller_num} </td>
+		<td class="unit" width="60" style="padding:5px"> {LANG.unit_total} </td>
 	</tr>
 	<tbody>
 	<!-- BEGIN: loop -->
@@ -41,10 +41,10 @@
 <table class="rows" style="margin-top:2px;width:100%;border:1px solid #F5F5F5;">
 	<tr>
 		<!-- BEGIN: order_note -->
-		<td valign="top" style="padding:5px"><span style="font-style:italic;"> {LANG.cart_note} : {DATA.order_note} </span></td>
+		<td valign="top" style="padding:5px"><span style="font-style:italic;"> {LANG.order_products_note} : {DATA.order_note} </span></td>
 		<!-- END: order_note -->
 		<!-- BEGIN: price3 -->
-		<td align="right" valign="top" style="padding:5px"> {LANG.cart_total_print}: <strong id="total">{order_total}</strong> {unit} </td>
+		<td align="right" valign="top" style="padding:5px"> {LANG.order_total}: <strong id="total">{order_total}</strong> {unit} </td>
 		<!-- END: price3 -->
 	</tr>
 </table>

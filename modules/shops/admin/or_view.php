@@ -72,25 +72,25 @@ $i = 0;
 foreach( $listid as $id )
 {
 	$sql = 'SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.product_price,t2.' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 WHERE t1.product_unit = t2.id AND t1.id =' . $id . ' AND t1.status =1 AND t1.publtime < ' . NV_CURRENTTIME . ' AND (t1.exptime=0 OR t1.exptime>' . NV_CURRENTTIME . ')';
-
 	$result = $db->query( $sql );
-
-	list( $id, $_catid, $product_code, $publtime, $title, $alias, $product_price, $unit ) = $result->fetch( 3 );
-	$price = nv_get_price( $id, $pro_config['money_unit'], $listnum[$i], true );
-	$data_pro[] = array(
-		'id' => $id,
-		'publtime' => $publtime,
-		'title' => $title,
-		'alias' => $alias,
-		'product_price' => $listprice[$i],
-		'product_price_total' => $listprice[$i] * $listnum[$i],
-		'product_code' => $product_code,
-		'product_unit' => $unit,
-		'link_pro' => $link . $global_array_shops_cat[$_catid]['alias'] . '/' . $alias . '-' . $id,
-		'product_number' => $listnum[$i],
-		'product_group' => isset( $listgroup[$i] ) ? $listgroup[$i] : ''
-	);
-	++$i;
+	if( $result->rowCount() )
+	{
+		list( $id, $_catid, $product_code, $publtime, $title, $alias, $product_price, $unit ) = $result->fetch( 3 );
+		$data_pro[] = array(
+			'id' => $id,
+			'publtime' => $publtime,
+			'title' => $title,
+			'alias' => $alias,
+			'product_price' => $listprice[$i],
+			'product_price_total' => $listprice[$i] * $listnum[$i],
+			'product_code' => $product_code,
+			'product_unit' => $unit,
+			'link_pro' => $link . $global_array_shops_cat[$_catid]['alias'] . '/' . $alias . '-' . $id,
+			'product_number' => $listnum[$i],
+			'product_group' => isset( $listgroup[$i] ) ? $listgroup[$i] : ''
+		);
+		++$i;
+	}
 }
 
 // Thong tin van chuyen

@@ -1440,6 +1440,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			$parent_info = $global_array_group[$gid];
 			if( $parent_info['in_order'] )
 			{
+				$xtpl->assign( 'GROUPID', $parent_info['groupid'] );
 				$xtpl->assign( 'HEADER', $parent_info['title'] );
 				$xtpl->parse( 'main.group.items.header' );
 				if( !empty( $subid ) )
@@ -1450,6 +1451,11 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 						if( $sub_info['in_order'] )
 						{
 							$xtpl->assign( 'GROUP', $sub_info );
+							if( sizeof( $subid ) == 1 )
+							{
+								$xtpl->parse( 'main.group.items.loop.active' );
+								$xtpl->parse( 'main.group.items.loop.checked' );
+							}
 							$xtpl->parse( 'main.group.items.loop' );
 						}
 					}
@@ -1458,7 +1464,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			}
 		}
 		$xtpl->parse( 'main.group' );
-		$xtpl->parse( 'main.lock_btn_order' );
 	}
 
 	// Hien thi danh sach nhom san pham
@@ -2508,53 +2513,61 @@ function search_result_theme( $key, $numRecord, $per_pages, $pages, $array_conte
 /**
  * email_new_order()
  *
+ * @param mixed $content
  * @param mixed $data_content
  * @param mixed $data_pro
+ * @param mixed $data_table
  * @return
  */
-function email_new_order( $data_content, $data_pro )
+function email_new_order( $content, $data_content, $data_pro, $data_table = false )
 {
 	global $module_info, $lang_module, $module_file, $pro_config, $global_config, $money_config;
 
-	$xtpl = new XTemplate( "email_new_order.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'dateup', date( "d-m-Y", $data_content['order_time'] ) );
-	$xtpl->assign( 'moment', date( "H:i' ", $data_content['order_time'] ) );
-	$xtpl->assign( 'DATA', $data_content );
-	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
-	$xtpl->assign( 'SITE_DOMAIN', $global_config['site_url'] );
-
-	$i = 0;
-	foreach( $data_pro as $pdata )
+	if( $data_table )
 	{
-		$xtpl->assign( 'product_name', $pdata['title'] );
-		$xtpl->assign( 'product_number', $pdata['product_number'] );
-		$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
-		$xtpl->assign( 'product_unit', $pdata['product_unit'] );
-		$xtpl->assign( 'pro_no', $i + 1 );
+		$xtpl = new XTemplate( "email_new_order.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+		$xtpl->assign( 'LANG', $lang_module );
+		$xtpl->assign( 'DATA', $data_content );
 
-		$bg = ($i % 2 == 0) ? " style=\"background:#f3f3f3;\"" : "";
-		$xtpl->assign( 'bg', $bg );
+		$i = 0;
+		foreach( $data_pro as $pdata )
+		{
+			$xtpl->assign( 'product_name', $pdata['title'] );
+			$xtpl->assign( 'product_number', $pdata['product_number'] );
+			$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
+			$xtpl->assign( 'product_unit', $pdata['product_unit'] );
+			$xtpl->assign( 'pro_no', $i + 1 );
+
+			$bg = ($i % 2 == 0) ? " style=\"background:#f3f3f3;\"" : "";
+			$xtpl->assign( 'bg', $bg );
+
+			if( $pro_config['active_price'] == '1' )
+				$xtpl->parse( 'data_product.loop.price2' );
+			$xtpl->parse( 'data_product.loop' );
+			++$i;
+		}
+
+		if( !empty( $data_content['order_note'] ) )
+		{
+			$xtpl->parse( 'data_product.order_note' );
+		}
+
+		$xtpl->assign( 'order_total', nv_number_format( $data_content['order_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
+		$xtpl->assign( 'unit', $data_content['unit_total'] );
 
 		if( $pro_config['active_price'] == '1' )
-			$xtpl->parse( 'main.loop.price2' );
-		$xtpl->parse( 'main.loop' );
-		++$i;
+		{
+			$xtpl->parse( 'data_product.price1' );
+			$xtpl->parse( 'data_product.price3' );
+		}
+
+		$xtpl->parse( 'data_product' );
+		return $xtpl->text( 'data_product' );
 	}
 
-	if( !empty( $data_content['order_note'] ) )
-	{
-		$xtpl->parse( 'main.order_note' );
-	}
-
-	$xtpl->assign( 'order_total', nv_number_format( $data_content['order_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
-	$xtpl->assign( 'unit', $data_content['unit_total'] );
-
-	if( $pro_config['active_price'] == '1' )
-	{
-		$xtpl->parse( 'main.price1' );
-		$xtpl->parse( 'main.price3' );
-	}
+	$xtpl = new XTemplate( "email_new_order.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'CONTENT', $content );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );

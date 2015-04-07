@@ -73,19 +73,39 @@ function cartorder_detail(a_ob, popup, buy_now) {
 	var num = $('#pnum').val();
 	var id = $(a_ob).attr("data-id");
 	var group = '';
+	var label = '';
+
 	var i = 0;
-    $('select[name=group] option:selected').each(function(){
-    	var value = $(this).val();
-    	if( value != '' )
+	$('.itemsgroup').each(function(){
+		if( $('input[name="groupid['+$(this).attr('data-groupid')+']"]:checked').length == 0 )
+		{
+			i++;
+    		if( i == 1 ){
+    			label = label + $(this).attr('data-header');
+    		}
+    		else{
+    			label = label + ', ' + $(this).attr('data-header');
+    		}
+		}
+	});
+	if( label != '' ){
+		$('#group_error').css( 'display', 'block' );
+		$('#group_error').html( detail_error_group + ' <strong>' + label + '</strong>' );
+		return false;
+	}
+
+	i = 0;
+    $('.groupid').each(function(){
+    	if( $(this).is(':checked') )
     	{
     		i++;
     		if( i == 1 )
     		{
-    			group = group + value;
+    			group = group + $(this).val();
     		}
     		else
     		{
-    			group = group + ',' + value;
+    			group = group + ',' + $(this).val();
     		}
     	}
 	});
@@ -329,7 +349,7 @@ function payment_point( order_id, checkss, lang_confirm )
 function check_price( id_pro, pro_unit )
 {
 	var data = [];
-    $('select[name=group] option:selected').each(function(){
+    $('.groupid:checked').each(function(){
     	var value = $(this).val();
     	if( value != '' ){
     		data.push( value );
@@ -344,13 +364,14 @@ function check_price( id_pro, pro_unit )
 			success : function(res) {
 				var s = res.split('_');
 				if( s[0] == 'OK' ){
-					$('#product_number').html( s[1] );
+					$('#product_number').html( s[2] );
 					$('#pnum, .btn-order').attr('disabled', false);
-					$('#product_number').html( s[1] ).removeClass( 'text-danger' );
+					$('#product_number').html( s[2] ).removeClass( 'text-danger' );
+					$('#pnum').attr('max', s[1]);
 				}
 				else{
 					$('#pnum, .btn-order').attr('disabled', true);
-					$('#product_number').html( s[1] ).addClass( 'text-danger' );
+					$('#product_number').html( s[2] ).addClass( 'text-danger' );
 				}
 			}
 		});

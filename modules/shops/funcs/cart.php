@@ -201,10 +201,10 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 				asort( $group );
 				$group = implode( ',', $group );
 				$product_number = 0;
-				$result = $db->query( 'SELECT quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id . ' AND listgroup="' . $group . '"' );
-				if( $result )
+				$_result = $db->query( 'SELECT quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id . ' AND listgroup="' . $group . '"' );
+				if( $_result )
 				{
-					$product_number = $result->fetchColumn();
+					$product_number = $_result->fetchColumn();
 				}
 			}
 
