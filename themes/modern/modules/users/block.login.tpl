@@ -7,7 +7,7 @@
 		<!-- BEGIN: captcha -->
 		<div class="box clearfix">
 			<input id="block_seccode_iavim" name="nv_seccode" type="text" class="input fl" onblur="if(this.value=='')this.value='{LANG.securitycode}';" onclick="if(this.value=='{LANG.securitycode}')this.value='';" value="{LANG.securitycode}" />
-			<img class="captcha fl" id="block_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" /><img src="{CAPTCHA_REFR_SRC}" class="refresh fl" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('block_vimg','block_seccode_iavim');"/>
+			<img class="captcha fl" id="block_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" /><img src="{CAPTCHA_REFR_SRC}" class="refresh fl" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('block_vimg','block_seccode_iavim');"/>
 		</div>
 		<!-- END: captcha -->
 		<div class="f-action">
