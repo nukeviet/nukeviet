@@ -26,6 +26,24 @@ $page_title = $global_array_group[$groupid]['title'];
 $key_words = $global_array_group[$groupid]['keywords'];
 $description = $global_array_group[$groupid]['description'];
 $data_content = array();
+$chirld_groupid = GetGroupidInParent( $groupid, 1, 1 );
+
+$nv_Request->get_int( 'sorts', 'session', 0 );
+$sorts = $nv_Request->get_int( 'sort', 'post', 0 );
+$sorts_old = $nv_Request->get_int( 'sorts', 'session', 0 );
+$sorts = $nv_Request->get_int( 'sorts', 'post', $sorts_old );
+
+$nv_Request->get_string( 'viewtype', 'session', '' );
+$viewtype = $nv_Request->get_string( 'viewtype', 'post', '' );
+$viewtype_old = $nv_Request->get_string( 'viewtype', 'session', '' );
+$viewtype = $nv_Request->get_string( 'viewtype', 'post', $viewtype_old );
+if( !empty( $viewtype ) )
+{
+	$global_array_group[$groupid]['viewgroup'] = $viewtype;
+}
+
+$compare_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+$compare_id = unserialize( $compare_id );
 
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=group/' . $global_array_group[$groupid]['alias'];
@@ -35,12 +53,11 @@ $db->sqlreset()
 	->select( 'COUNT(*)' )
 	->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )
 	->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t2 ON t2.pro_id = t1.id' )
-	->where( 't2.group_id = ' . $groupid . ' AND status =1' );
+	->where( 't2.group_id IN (' . implode( ',', $chirld_groupid ) . ') AND status =1' );
 
 $num_items = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t3.newday' )
-	->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_items t2 ON t2.pro_id = t1.id INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t3 ON t3.catid = t1.listcatid' )
+$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_promotional' )
 	->order( 'id DESC' )
 	->limit( $per_page )
 	->offset( ( $page - 1 ) * $per_page );
@@ -64,7 +81,7 @@ if( $page > 1 )
 	$description .= ' ' . $page;
 }
 
-$contents = call_user_func( $global_array_group[$groupid]['viewgroup'], $data_content, $pages );
+$contents = call_user_func( $global_array_group[$groupid]['viewgroup'], $data_content, $compare_id, $pages, $sorts, $viewtype );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
