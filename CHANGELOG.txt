@@ -4,45 +4,45 @@ http://nukeviet.vn
 NUKEVIET 4.0.11
 CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (commit/f73da99 to commit/7143a90)
 - Hệ thống
-    + Sử dụng lớp PDO, thay thế cho class Mysql sử dụng trong NukeViet 3, để có thể sử dụng sang các loại CSDL khác nhau: Hiện tại hỗ trợ Mysql, MariaDB, Oracle
-    + Tối ưu hệ thống để tiết kiệm tài nguyên máy chủ web, chạy trên các máy chủ PHP 5.3, 5.4, 5.5
-    + Sửa Cài đặt chế độ đa ngôn ngữ, nếu ko đa ngôn ngữ thì bật chế độ loại bỏ ký tự ngôn ngữ trên url, Loại bỏ tên module trên url
-    + Thêm hệ thống thông báo (notification) vào trong admin
-    + Đổi tên module search => seek, rss => feeds
+	+ Sử dụng lớp PDO, thay thế cho class Mysql sử dụng trong NukeViet 3, để có thể sử dụng sang các loại CSDL khác nhau: Hiện tại hỗ trợ Mysql, MariaDB, Oracle
+	+ Tối ưu hệ thống để tiết kiệm tài nguyên máy chủ web, chạy trên các máy chủ PHP 5.3, 5.4, 5.5
+	+ Sửa Cài đặt chế độ đa ngôn ngữ, nếu ko đa ngôn ngữ thì bật chế độ loại bỏ ký tự ngôn ngữ trên url, Loại bỏ tên module trên url
+	+ Thêm hệ thống thông báo (notification) vào trong admin
+	+ Đổi tên module search => seek, rss => feeds
 	+ Thêm mới module Comment, quản lý comment cho các module tập trung
-    + Thay đổi cache, mỗi module sẽ lưu cache theo một thư mục. Lưu cache theo từng domain
-    + Hỗ trợ tên miền tiếng việt.
-    + Hosting CDN cho javascript, css
-    + Cấu hình bộ gõ tiếng việt (Nếu site có cài ngôn ngữ tiếng việt)
-    + Mã hóa các mật khẩu lưu trữ trong hệ thống: FTP, Account mail SMTP
-    + Chuyển các giá trị tại file /includes/constants.php vào cấu hình trong admin
-    + Thêm thư viên  IP6 để nhận dạng được quốc gia theo IP6
-    + Sửa lỗi khi sử dụng logo flash
-    + Thay đổi hệ thống kiểm tra cập nhật
-    + Sửa rewrite  trên IIS 7 với Unicode Permalinks
-    + Thay đổi cơ chế quản lý block, sử dụng popup để quản lý block
-    + Thêm tính năng tùy chọn khi sử dụng giao thức https
-    + Thêm plugin rewrite_obsolute để chuyển các link thành link tuyệt đối.
-    + Thêm chức năng cảnh báo bằng javascript khi vô tình chuyển trang khi đang soạn thảo dở mà chưa lưu
-    + Bổ sung chức năng hiển thị cảnh báo khi gần hết hạn đăng nhập (time out tự động).
-    + Thêm cấu hình Kiểm tra và chặn các máy tính nếu agent không có để không phải sửa lại code
-    + Loại bỏ Sitemap ping của Yahoo, Ask
-    + Quản lý file được đưa vào lưu trữ trong CSDL, hỗ trợ tìm kiếm file.
+	+ Thay đổi cache, mỗi module sẽ lưu cache theo một thư mục. Lưu cache theo từng domain
+	+ Hỗ trợ tên miền tiếng việt.
+	+ Hosting CDN cho javascript, css
+	+ Cấu hình bộ gõ tiếng việt (Nếu site có cài ngôn ngữ tiếng việt)
+	+ Mã hóa các mật khẩu lưu trữ trong hệ thống: FTP, Account mail SMTP
+	+ Chuyển các giá trị tại file /includes/constants.php vào cấu hình trong admin
+	+ Thêm thư viên  IP6 để nhận dạng được quốc gia theo IP6
+	+ Sửa lỗi khi sử dụng logo flash
+	+ Thay đổi hệ thống kiểm tra cập nhật
+	+ Sửa rewrite  trên IIS 7 với Unicode Permalinks
+	+ Thay đổi cơ chế quản lý block, sử dụng popup để quản lý block
+	+ Thêm tính năng tùy chọn khi sử dụng giao thức https
+	+ Thêm plugin rewrite_obsolute để chuyển các link thành link tuyệt đối.
+	+ Thêm chức năng cảnh báo bằng javascript khi vô tình chuyển trang khi đang soạn thảo dở mà chưa lưu
+	+ Bổ sung chức năng hiển thị cảnh báo khi gần hết hạn đăng nhập (time out tự động).
+	+ Thêm cấu hình Kiểm tra và chặn các máy tính nếu agent không có để không phải sửa lại code
+	+ Loại bỏ Sitemap ping của Yahoo, Ask
+	+ Quản lý file được đưa vào lưu trữ trong CSDL, hỗ trợ tìm kiếm file.
 - Module extensions
-    + Thêm module extensions: Quản lý , cài đặt các ứng dụng từ NukeViet Store
-    + Chuyển các cài đặt: giao diện, module, … qua module này quản ý.
+	+ Thêm module extensions: Quản lý , cài đặt các ứng dụng từ NukeViet Store
+	+ Chuyển các cài đặt: giao diện, module,… qua module này quản lý.
 - Module upload
-    + CSDL của module upload được đưa vào CSDL, hỗ trợ tìm kiếm các file
-    + Cấu hình thumbnail theo từng module, kích thước, và chất lượng
-    + Với các module có sử dụng hình ảnh minh hoạ như module News chỉ tạo 1 ảnh thumb cho mỗi ảnh upload để giảm số lượng file.
-    + Bổ sung chức năng tự điều chỉnh kích thước ảnh tải lên host về một kích thước được cấu hình nếu lớn hơn kích thước đó để không mất công tải ảnh lên nhiều lần.
-    + Module uploads cho phép chọn và thao tác trên nhiều file, thao tác trên chuột và phím tắt thông dụng
-    + Sửa lỗi Upload ảnh từ URL: nếu đường link chứa cách trống
-    + Tính năng điền thẻ ALT cho ảnh: sau khi upload xong, chương trình sẽ hỏi đổi tên file ảnh và miêu tả ảnh, phục vụ SEO hình ảnh
+	+ CSDL của module upload được đưa vào CSDL, hỗ trợ tìm kiếm các file
+	+ Cấu hình thumbnail theo từng module, kích thước, và chất lượng
+	+ Với các module có sử dụng hình ảnh minh hoạ như module News chỉ tạo 1 ảnh thumb cho mỗi ảnh upload để giảm số lượng file.
+	+ Bổ sung chức năng tự điều chỉnh kích thước ảnh tải lên host về một kích thước được cấu hình nếu lớn hơn kích thước đó để không mất công tải ảnh lên nhiều lần.
+	+ Module uploads cho phép chọn và thao tác trên nhiều file, thao tác trên chuột và phím tắt thông dụng
+	+ Sửa lỗi Upload ảnh từ URL: nếu đường link chứa cách trống
+	+ Tính năng điền thẻ ALT cho ảnh: sau khi upload xong, chương trình sẽ hỏi đổi tên file ảnh và miêu tả ảnh, phục vụ SEO hình ảnh
 - Trình soạn thảo
-    + Sử dụng trình soạn thảo ckeditor 4.4.7
-    + Tích hợp công thức toán học
-    + Chức năng hiển thị nguyên một đoạn code trong bài viết, highlight code
+	+ Sử dụng trình soạn thảo ckeditor 4.4.7
+	+ Tích hợp công thức toán học
+	+ Chức năng hiển thị nguyên một đoạn code trong bài viết, highlight code
 - Giao diện
 	+ Thiết kế lại giao diện quản trị dựa trên bootstrap, responsive
 	+ Sử dụng bootstrap framework html, css. Hỗ trợ giao diện tùy biến trên các thiết bị
@@ -51,68 +51,68 @@ CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (commit/f73da99 to commit
 	+ Loại bỏ tên module trên breakcrumb
 	+ Thêm hai khối cố định trên màn hình để làm quảng cáo ở hai bên.
 - Module News
-    + Phân quyền quản lý tới từng chủ đề.
-    + Thêm biểu tượng “New” cho bài viết mới đăng Theo từng chủ đề
-    + Thêm chức năng di chuyển nhiều bài viết từ chuyên mục này qua chuyên mục khác.
-    + Sửa lại chức năng lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
-    + Bổ sung các mầu vào trạng thái bài viết trong admin, Bổ sung trạng thái của bài viết: Nháp, Từ chối, re-published (đăng lại các bản tin đã đăng trước đó)
-    + Thêm chức năng thông báo trạng thái bài viết khi bài viết chưa đăng nhưng admin xem ngoài site (Để tránh tình trạng ngưòi này xem được, gửi link cho người khác thì báo lỗi bài viết không tồn tại)
-    + Thêm chức năng hiển thị ảnh đại diện chuyên mục.
-    + Cho phép xuống hàng trong giới thiệu ngắn gọn của news
-    + Thêm cấu hình mặc định hiển thị ảnh minh họa trong trang xem chi tiết tin
-    + Bổ sung hiển thị tooltip tại danh sách cái bài viết, các block.
-    + Hiển thị lượt xem bài viết cho quản trị
-    + Tích hợp tính năng ping và chức năng Ping bài viết
-    + Tối ưu các thẻ html cho SEO
-    + Thêm chức năng Tags cho bài viết: Có các cấu hình site name - keywords - description riêng cho từng Tag giống quản lý groups.
-    + Thêm các công cụ mạng xã hội : nút Like facebook, G+ , twitter, comment của facebook (Block trong module comment)
+	+ Phân quyền quản lý tới từng chủ đề.
+	+ Thêm biểu tượng “New” cho bài viết mới đăng Theo từng chủ đề
+	+ Thêm chức năng di chuyển nhiều bài viết từ chuyên mục này qua chuyên mục khác.
+	+ Sửa lại chức năng lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
+	+ Bổ sung các mầu vào trạng thái bài viết trong admin, Bổ sung trạng thái của bài viết: Nháp, Từ chối, re-published (đăng lại các bản tin đã đăng trước đó)
+	+ Thêm chức năng thông báo trạng thái bài viết khi bài viết chưa đăng nhưng admin xem ngoài site (Để tránh tình trạng ngưòi này xem được, gửi link cho người khác thì báo lỗi bài viết không tồn tại)
+	+ Thêm chức năng hiển thị ảnh đại diện chuyên mục.
+	+ Cho phép xuống hàng trong giới thiệu ngắn gọn của news
+	+ Thêm cấu hình mặc định hiển thị ảnh minh họa trong trang xem chi tiết tin
+	+ Bổ sung hiển thị tooltip tại danh sách cái bài viết, các block.
+	+ Hiển thị lượt xem bài viết cho quản trị
+	+ Tích hợp tính năng ping và chức năng Ping bài viết
+	+ Tối ưu các thẻ html cho SEO
+	+ Thêm chức năng Tags cho bài viết: Có các cấu hình site name - keywords - description riêng cho từng Tag giống quản lý groups.
+	+ Thêm các công cụ mạng xã hội: nút Like facebook, G+ , twitter, comment của facebook (Block trong module comment)
 - Thay thế module about bằng module page
-    + Có Hình minh họa, Chú thích cho hình, Miêu tả (hỗ trợ cho SEO)
-    + Cấu hình Hiển thị các công cụ Like facebook, G+, Twitter
-    + Cấu hình Sử dụng chức năng bình luận của facebook
-    + Cấu hình xác thực Google+ (quyền tác giả, giống module news)
-    + Cấu hình mỗi bài viết Sử dụng layout, tức mỗi bài viết có 1 giao diện
-    + Thêm RSS cho module page
-    + Cấu hình phương án hiển thị bài viết tại trang chính
-    + Thêm block danh sách các bài viết
-- Module Users:
-    + Thay thế OpenID bằng thư viện OAuth 1.x và OAuth 2.0 để đăng nhập qua : google, facebook
-    + Thêm thư viện phpCAS để đăng nhập SSO qua CAS server, và lấy thông tin qua LDAP
-    + Thêm tính năng tùy biến các trường dữ liệu thành viên
-    + Thêm chức năng cấu hình phân quyền sử dụng module Users
-    + Thêm cấu hình cho phép kiểm soát ký tự username khi đăng ký
-    + Thêm cấu hình cho phép kiểm soát độ phức tạp của mật khẩu
-    + Sửa cơ chế phục hồi mật khẩu
-    + Thêm chức năng cấm sử dụng các mật khẩu đơn giản
-    + Thêm chức năng khóa tài khoản, xóa tài khoản, khi xóa quản trị website
-    + Thêm chức năng tạo mật khẩu ngẫu nhiên cho admin
-    + Sử dụng tên truy cập hoặc email để đăng nhập
-    + Thay đổi phân quyền các chức năng theo các nhóm thành viên
-    + Cập nhật thêm tính năng cho phép tài khoản dưới quyền admin trong BQT website đăng nhập và thêm cấu hình config tính năng này.
-    + Tách trường full_name thành first_name và last_name, cấu hình hiển thị họ tên (Họ tên - Tên họ).
+	+ Có Hình minh họa, Chú thích cho hình, Miêu tả (hỗ trợ cho SEO)
+	+ Cấu hình Hiển thị các công cụ Like facebook, G+, Twitter
+	+ Cấu hình Sử dụng chức năng bình luận của facebook
+	+ Cấu hình xác thực Google+ (quyền tác giả, giống module news)
+	+ Cấu hình mỗi bài viết Sử dụng layout, tức mỗi bài viết có 1 giao diện
+	+ Thêm RSS cho module page
+	+ Cấu hình phương án hiển thị bài viết tại trang chính
+	+ Thêm block danh sách các bài viết
+- Module Users
+	+ Thay thế OpenID bằng thư viện OAuth 1.x và OAuth 2.0 để đăng nhập qua : google, facebook
+	+ Thêm thư viện phpCAS để đăng nhập SSO qua CAS server, và lấy thông tin qua LDAP
+	+ Thêm tính năng tùy biến các trường dữ liệu thành viên
+	+ Thêm chức năng cấu hình phân quyền sử dụng module Users
+	+ Thêm cấu hình cho phép kiểm soát ký tự username khi đăng ký
+	+ Thêm cấu hình cho phép kiểm soát độ phức tạp của mật khẩu
+	+ Sửa cơ chế phục hồi mật khẩu
+	+ Thêm chức năng cấm sử dụng các mật khẩu đơn giản
+	+ Thêm chức năng khóa tài khoản, xóa tài khoản, khi xóa quản trị website
+	+ Thêm chức năng tạo mật khẩu ngẫu nhiên cho admin
+	+ Sử dụng tên truy cập hoặc email để đăng nhập
+	+ Thay đổi phân quyền các chức năng theo các nhóm thành viên
+	+ Cập nhật thêm tính năng cho phép tài khoản dưới quyền admin trong BQT website đăng nhập và thêm cấu hình config tính năng này.
+	+ Tách trường full_name thành first_name và last_name, cấu hình hiển thị họ tên (Họ tên - Tên họ).
 - Module Download
-    + Sửa lỗi điều hướng liên kết
-    + Sửa mô tả khi xem chi tiết
+	+ Sửa lỗi điều hướng liên kết
+	+ Sửa mô tả khi xem chi tiết
 - Thêm module Công cụ Seo
-    + Gom các cấu hình và các công cụ web liên quan đến SEO về module này
-    + Thêm chức năng loại bỏ tên module khỏi url khi tắt chức năng đa ngôn ngữ.
-    + Thêm chức năng đổi đường dẫn của module, để tiện việc SEO url
-    + Thêm chức năng xác thực Google+ (quyền tác giả)
-    + Thêm chức năng Ping đến các công cụ tìm kiếm
-    + Hỗ trợ Meta OG của facebook: Để thêm mới meta ogp, thêm dữ liệu cho mảng $meta_property
-    + Hỗ trợ chèn Meta GEO qua Cấu hình Meta-Tags
+	+ Gom các cấu hình và các công cụ web liên quan đến SEO về module này
+	+ Thêm chức năng loại bỏ tên module khỏi url khi tắt chức năng đa ngôn ngữ.
+	+ Thêm chức năng đổi đường dẫn của module, để tiện việc SEO url
+	+ Thêm chức năng xác thực Google+ (quyền tác giả)
+	+ Thêm chức năng Ping đến các công cụ tìm kiếm
+	+ Hỗ trợ Meta OG của facebook: Để thêm mới meta ogp, thêm dữ liệu cho mảng $meta_property
+	+ Hỗ trợ chèn Meta GEO qua Cấu hình Meta-Tags
 - Module staticts
-    + Thay đổi cơ chế tính số lượt truy cập site: Đếm lại sau 30 phút khách truy cập không hoạt động
-    + Cấu hình mặc định, chỉ có quản trị mới được xem
+	+ Thay đổi cơ chế tính số lượt truy cập site: Đếm lại sau 30 phút khách truy cập không hoạt động
+	+ Cấu hình mặc định, chỉ có quản trị mới được xem
 - Module Banner
-    + Thêm hình ảnh hiển thị thay thế cho banner flash trên trình duyệt là mobile (Bởi nhiều trình mobile không cho chạy flash)
-    + Thêm chức năng khi click vào quảng cáo: cửa sổ mới, cửa sổ hiện tại ...
+	+ Thêm hình ảnh hiển thị thay thế cho banner flash trên trình duyệt là mobile (Bởi nhiều trình mobile không cho chạy flash)
+	+ Thêm chức năng khi click vào quảng cáo: cửa sổ mới, cửa sổ hiện tại ...
 - Module Contact
-    + Thêm block global.department.php (hiển thị thông tin bộ phận liên hệ hiện).
-    + Người quản trị có thể trả lời khách hàng nhiều lần, hệ thống ghi tất cả các lần trả lời đó.
+	+ Thêm block global.department.php (hiển thị thông tin bộ phận liên hệ hiện).
+	+ Người quản trị có thể trả lời khách hàng nhiều lần, hệ thống ghi tất cả các lần trả lời đó.
 - Module menu
-    + Thay đổi cách quản lý menu trực quan hơn
-    + Tách các kiểu menu thành các block menu riêng biệt
+	+ Thay đổi cách quản lý menu trực quan hơn
+	+ Tách các kiểu menu thành các block menu riêng biệt
 
 NUKEVIET 3.4.02 (3.4.02.r1929)
 CODE: http://code.google.com/p/nuke-viet/source/list (r1759 to r1929)
