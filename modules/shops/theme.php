@@ -97,7 +97,7 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 					$xtpl->assign( 'LINK_ORDER', $data_row_i['link_order'] );
 					$xtpl->assign( 'height', $pro_config['homeheight'] );
 					$xtpl->assign( 'width', $pro_config['homewidth'] );
-					$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row_i['hometext'] ) );
+					$xtpl->assign( 'hometext', $data_row_i['hometext'] );
 					$xtpl->assign( 'PRODUCT_CODE', $data_row_i['product_code'] );
 
 					$newday = $data_row_i['publtime'] + (86400 * $data_row_i['newday']);
@@ -281,7 +281,7 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 					$xtpl->assign( 'LINK_ORDER', $data_row_i['link_order'] );
 					$xtpl->assign( 'height', $pro_config['homeheight'] );
 					$xtpl->assign( 'width', $pro_config['homewidth'] );
-					$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row_i['hometext'] ) );
+					$xtpl->assign( 'hometext', $data_row_i['hometext'] );
 					$xtpl->assign( 'PRODUCT_CODE', $data_row_i['product_code'] );
 
 					$newday = $data_row_i['publtime'] + (86400 * $data_row_i['newday']);
@@ -488,7 +488,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
-			$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 
 			if( $data_row['promotional'] != '' )
@@ -668,7 +668,7 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
-			$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'num', $num_row );
 
 			if( $pro_config['active_order'] == '1' and $pro_config['active_order_non_detail'] == '1' )
@@ -878,7 +878,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
-			$xtpl->assign( 'intro', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'intro', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
@@ -1095,7 +1095,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
-			$xtpl->assign( 'intro', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'intro', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 
 			$newday = $data_row['publtime'] + (86400 * $data_row['newday']);
@@ -2601,7 +2601,7 @@ function compare( $data_pro )
 		$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 		$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 		$xtpl->parse( 'main.homeimgthumb' );
-		$xtpl->assign( 'intro', nv_htmlspecialchars( $data_row['hometext'] ) );
+		$xtpl->assign( 'intro', $data_row['hometext'] );
 		$xtpl->parse( 'main.hometext' );
 		$xtpl->assign( 'bodytext', nv_clean60( $data_row['bodytext'], 400 ) );
 		$xtpl->parse( 'main.bodytext' );
@@ -2712,7 +2712,7 @@ function wishlist( $data_content, $compare_id, $html_pages = '' )
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
-			$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 
 			$newday = $data_row['publtime'] + (86400 * $data_row['newday']);
