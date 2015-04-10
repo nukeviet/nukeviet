@@ -1310,7 +1310,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			$i = 1;
 			foreach( $data_content['array_custom'] as $field => $value )
 			{
-				if( $i > 2 )
+				if( $i > 2 and !empty( $value ) )
 				{
 					$xtpl->assign( 'CUSTOM_DATA', $value );
 					$xtpl->assign( 'CUSTOM_LANG', $data_content['array_custom_lang'][$field] );
