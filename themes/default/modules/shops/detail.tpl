@@ -156,9 +156,8 @@
 						<!-- END: warranty -->
 					</ul>
 					<hr />
-
+					<!-- BEGIN: group -->
 					<div class="well">
-						<!-- BEGIN: group -->
 						<div class="filter_product">
 							<!-- BEGIN: items -->
 							<div class="row">
@@ -175,8 +174,12 @@
 							</div>
 							<!-- END: items -->
 						</div>
-						<!-- END: group -->
 						<span id="group_error">&nbsp;</span>
+					</div>
+					<!-- END: group -->
+
+					<!-- BEGIN: product_number -->
+					<div class="well">
 						<div class="row">
 							<div class="col-xs-8 col-sm-5">
 								{LANG.detail_pro_number}
@@ -186,8 +189,10 @@
 								<span class="help-block pull-left" id="product_number">{LANG.detail_pro_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
 							</div>
 						</div>
-						<div class="clearfix"></div>
 					</div>
+					<!-- END: product_number -->
+
+					<div class="clearfix"></div>
 
 					<!-- BEGIN: typepeice -->
 					<table class="table table-striped table-bordered table-hover">

@@ -1554,6 +1554,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			if( $data_content['product_number'] > 0 )
 			{
 				$xtpl->parse( 'main.order' );
+				$xtpl->parse( 'main.product_number' );
 			}
 			else
 			{
