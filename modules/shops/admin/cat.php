@@ -171,7 +171,7 @@ if( ! empty( $savecat ) )
 					$stmt = $db->prepare( 'SELECT max(weight) FROM ' . $table_name . ' WHERE parentid= :parentid ' );
 					$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
 					$stmt->execute();
-					$weight->fetchColumn();
+					$weight = $stmt->fetchColumn();
 					$weight = intval( $weight ) + 1;
 					$sql = 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE catid=' . intval( $data['catid'] );
 					$db->query( $sql );

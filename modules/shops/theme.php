@@ -209,7 +209,7 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 					}
 
 					// Hien thi bieu tuong giam gia
-					if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 )
+					if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 and $data_row_i['showprice'] )
 					{
 						$xtpl->parse( 'main.catalogs.items.discounts' );
 					}
