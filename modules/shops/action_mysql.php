@@ -414,6 +414,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  num mediumint(9) NOT NULL,
  price int(11) NOT NULL,
  discount_id smallint(6) NOT NULL DEFAULT '0',
+ PRIMARY KEY (id),
  UNIQUE KEY orderid (order_id, id)
 ) ENGINE=MyISAM";
 

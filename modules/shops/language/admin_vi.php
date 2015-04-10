@@ -445,7 +445,8 @@ $lang_module['review_setting_check'] = 'Kiểm duyệt đánh giá trước khi 
 $lang_module['review_setting_captcha'] = 'Sử dụng mã bảo mật (captcha) khi đánh giá';
 $lang_module['review_notification_review_new'] = '<strong>%s</strong> đánh giá sản phẩm <strong>%s</strong>';
 $lang_module['review_notification_review_new_queue'] = '<strong>%s</strong> đánh giá sản phẩm <strong>%s</strong>, bạn cần xem xét đánh giá này trước khi cho phép hiển thị';
-$lang_module['review_notification_order_new'] = 'Đơn hàng mới <strong>"%s"</strong>, khách hàng <strong>%s</strong>';
+$lang_module['review_notification_order_new'] = 'Khách hàng <strong>%s</strong> vừa tạo đơn hàng mới <strong>"%s"</strong>';
+$lang_module['review_notification_order_edit'] = 'Khách hàng <strong>%s</strong> vừa cập nhật lại đơn hàng <strong>"%s"</strong>';
 
 //Lang for function coupons
 $lang_module['coupons'] = 'Mã giảm giá';
