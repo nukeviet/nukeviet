@@ -392,7 +392,7 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 					}
 
 					// Hien thi bieu tuong giam gia
-					if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 )
+					if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 and $data_row_i['showprice'] )
 					{
 						$xtpl->parse( 'main.catalogs.items.discounts' );
 					}
@@ -606,7 +606,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			}
 
 			// Hien thi bieu tuong giam gia
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.items.discounts' );
 			}
@@ -768,7 +768,7 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
 				$xtpl->parse( 'main.items.wishlist' );
 			}
 
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.items.discounts' );
 			}
@@ -999,7 +999,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 				$xtpl->parse( 'main.grid_rows.wishlist' );
 			}
 
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.grid_rows.discounts' );
 			}
@@ -1207,7 +1207,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 				}
 			}
 
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.row.discounts' );
 			}
@@ -2654,7 +2654,7 @@ function compare( $data_pro )
 			if( $data_row['showprice'] == '1' )
 			{
 				$xtpl->assign( 'PRICE', $price );
-				if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+				if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 				{
 					$xtpl->parse( 'main.price.discounts' );
 				}
@@ -2809,7 +2809,7 @@ function wishlist( $data_content, $compare_id, $html_pages = '' )
 				$xtpl->parse( 'main.items.compare' );
 			}
 
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.items.discounts' );
 			}
