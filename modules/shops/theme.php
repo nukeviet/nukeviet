@@ -97,7 +97,7 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 					$xtpl->assign( 'LINK_ORDER', $data_row_i['link_order'] );
 					$xtpl->assign( 'height', $pro_config['homeheight'] );
 					$xtpl->assign( 'width', $pro_config['homewidth'] );
-					$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row_i['hometext'] ) );
+					$xtpl->assign( 'hometext', $data_row_i['hometext'] );
 					$xtpl->assign( 'PRODUCT_CODE', $data_row_i['product_code'] );
 
 					$newday = $data_row_i['publtime'] + (86400 * $data_row_i['newday']);
@@ -281,7 +281,7 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 					$xtpl->assign( 'LINK_ORDER', $data_row_i['link_order'] );
 					$xtpl->assign( 'height', $pro_config['homeheight'] );
 					$xtpl->assign( 'width', $pro_config['homewidth'] );
-					$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row_i['hometext'] ) );
+					$xtpl->assign( 'hometext', $data_row_i['hometext'] );
 					$xtpl->assign( 'PRODUCT_CODE', $data_row_i['product_code'] );
 
 					$newday = $data_row_i['publtime'] + (86400 * $data_row_i['newday']);
@@ -392,7 +392,7 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 					}
 
 					// Hien thi bieu tuong giam gia
-					if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 )
+					if( $data_row_i['discount_id'] and $price['discount_percent'] > 0 and $data_row_i['showprice'] )
 					{
 						$xtpl->parse( 'main.catalogs.items.discounts' );
 					}
@@ -488,7 +488,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
-			$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 
 			if( $data_row['promotional'] != '' )
@@ -606,7 +606,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			}
 
 			// Hien thi bieu tuong giam gia
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.items.discounts' );
 			}
@@ -668,7 +668,7 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
-			$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'num', $num_row );
 
 			if( $pro_config['active_order'] == '1' and $pro_config['active_order_non_detail'] == '1' )
@@ -768,7 +768,7 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
 				$xtpl->parse( 'main.items.wishlist' );
 			}
 
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.items.discounts' );
 			}
@@ -878,7 +878,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
-			$xtpl->assign( 'intro', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'intro', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
@@ -999,7 +999,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 				$xtpl->parse( 'main.grid_rows.wishlist' );
 			}
 
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.grid_rows.discounts' );
 			}
@@ -1095,7 +1095,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 			$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 			$xtpl->assign( 'link_order', $data_row['link_order'] );
-			$xtpl->assign( 'intro', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'intro', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 
 			$newday = $data_row['publtime'] + (86400 * $data_row['newday']);
@@ -1207,7 +1207,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 				}
 			}
 
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.row.discounts' );
 			}
@@ -1310,7 +1310,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			$i = 1;
 			foreach( $data_content['array_custom'] as $field => $value )
 			{
-				if( $i > 2 )
+				if( $i > 2 and !empty( $value ) )
 				{
 					$xtpl->assign( 'CUSTOM_DATA', $value );
 					$xtpl->assign( 'CUSTOM_LANG', $data_content['array_custom_lang'][$field] );
@@ -1554,6 +1554,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			if( $data_content['product_number'] > 0 )
 			{
 				$xtpl->parse( 'main.order' );
+				$xtpl->parse( 'main.product_number' );
 			}
 			else
 			{
@@ -2601,7 +2602,7 @@ function compare( $data_pro )
 		$xtpl->assign( 'link_pro', $data_row['link_pro'] );
 		$xtpl->assign( 'img_pro', $data_row['homeimgthumb'] );
 		$xtpl->parse( 'main.homeimgthumb' );
-		$xtpl->assign( 'intro', nv_htmlspecialchars( $data_row['hometext'] ) );
+		$xtpl->assign( 'intro', $data_row['hometext'] );
 		$xtpl->parse( 'main.hometext' );
 		$xtpl->assign( 'bodytext', nv_clean60( $data_row['bodytext'], 400 ) );
 		$xtpl->parse( 'main.bodytext' );
@@ -2654,7 +2655,7 @@ function compare( $data_pro )
 			if( $data_row['showprice'] == '1' )
 			{
 				$xtpl->assign( 'PRICE', $price );
-				if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+				if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 				{
 					$xtpl->parse( 'main.price.discounts' );
 				}
@@ -2712,7 +2713,7 @@ function wishlist( $data_content, $compare_id, $html_pages = '' )
 			$xtpl->assign( 'LINK_ORDER', $data_row['link_order'] );
 			$xtpl->assign( 'height', $pro_config['homeheight'] );
 			$xtpl->assign( 'width', $pro_config['homewidth'] );
-			$xtpl->assign( 'hometext', nv_htmlspecialchars( $data_row['hometext'] ) );
+			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 
 			$newday = $data_row['publtime'] + (86400 * $data_row['newday']);
@@ -2809,7 +2810,7 @@ function wishlist( $data_content, $compare_id, $html_pages = '' )
 				$xtpl->parse( 'main.items.compare' );
 			}
 
-			if( $data_row['discount_id'] and $price['discount_percent'] > 0 )
+			if( $data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice'] )
 			{
 				$xtpl->parse( 'main.items.discounts' );
 			}
