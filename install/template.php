@@ -127,7 +127,9 @@ function nv_step_2( $array_dir_check, $array_ftp_data, $nextstep )
 		$xtpl->assign( 'DATAFILE', array(
 			'dir' => $dir,
 			'check' => $check,
+			'classcheck' => ( $check == $lang_module['dir_writable'] ) ? 'highlight_green' : 'highlight_red',
 			'class' => $class
+
 		) );
 
 		$xtpl->parse( 'step.loopdir' );
@@ -221,7 +223,7 @@ function nv_step_5( $db_config, $nextstep )
 			$array_dbtype['value'] = $value;
 			$array_dbtype['selected'] = ( $db_config['dbtype'] == $value ) ? ' selected="selected"' : '';
 			$array_dbtype['text'] = (isset( $lang_pdo['pdo_' . $value] )) ? $lang_pdo['pdo_' . $value] : $value;
-			
+
 			$xtpl->assign( 'DBTYPE', $array_dbtype );
 			$xtpl->parse( 'step.dbtype' );
 		}

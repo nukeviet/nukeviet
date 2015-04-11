@@ -110,6 +110,7 @@ $lang_module['viewcat_list_old'] = 'title, old front';
 $lang_module['viewcat_grid_new'] = 'grid, new front';
 $lang_module['viewcat_grid_old'] = 'grid, old front';
 $lang_module['viewcat_none'] = 'Not show content';
+$lang_module['viewcat_detail'] = 'Group is view in detail content';
 
 $lang_module['search'] = 'Search';
 $lang_module['search_type'] = 'Search by';
