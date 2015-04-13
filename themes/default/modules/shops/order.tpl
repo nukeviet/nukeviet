@@ -87,7 +87,7 @@
 						</select>
 					</div>
 					<div class="col-xs-14">
-						<input type="text" name="ship_address_extend" class="form-control" placeholder="{LANG.shipping_address_extend}" />
+						<input type="text" name="ship_address_extend" value="{DATA.shipping.ship_address_extend}" class="form-control" placeholder="{LANG.shipping_address_extend}" />
 						<span class="error">{ERROR.order_shipping_address_extend}</span>
 					</div>
 				</div>
@@ -254,7 +254,7 @@
 		var carrier_id = $('input[name="carrier"]:checked');
 		var location_id = $('#location option:selected').val();
 
-		$('#carrier').load( url_load + '&get_carrier=1&shops_id=' + shops_id.val() );
+		$('#carrier').load( url_load + '&get_carrier=1&carrier_id={DATA.shipping.ship_carrier_id}&shops_id=' + shops_id.val() );
 		$('#shipping_shops').text( shops_id.attr("title") );
 		$('#shipping_services').text( carrier_id.attr("title") );
 		nv_get_price();

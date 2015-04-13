@@ -15,6 +15,8 @@ $contents = '';
 if( $nv_Request->isset_request( 'get_carrier', 'get' ) )
 {
 	$shopsid = $nv_Request->get_int( 'shops_id', 'get', 0 );
+	$carrier_id = $nv_Request->get_int( 'carrier_id', 'get', 0 );
+
 	if( ! empty( $shopsid ) )
 	{
 		$db->sqlreset()
@@ -27,7 +29,8 @@ if( $nv_Request->isset_request( 'get_carrier', 'get' ) )
 		$i = 0;
 		while( $row = $_query->fetch() )
 		{
-			$contents .= '<label class="show"><input type="radio" name="carrier" value="' . $row['id'] . '" title="' . $row['name'] . '" onclick="nv_carrier_change()" />' . $row['name'] . '</label>';
+			$sl = $row['id'] == $carrier_id ? 'checked="checked"' : '';
+			$contents .= '<label class="show"><input type="radio" name="carrier" value="' . $row['id'] . '" title="' . $row['name'] . '" onclick="nv_carrier_change()" ' . $sl . ' />' . $row['name'] . '</label>';
 			$i++;
 		}
 	}
