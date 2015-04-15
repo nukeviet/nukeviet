@@ -179,9 +179,16 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
 					$is_delete = true;
 				}
 			}
-			require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
-			$lang_module_comment = $lang_module;
 
+			if( file_exists( NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php' ) )
+			{
+				require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
+			}
+			else
+			{
+				require NV_ROOTDIR . '/modules/comment/language/en.php';
+			}
+			$lang_module_comment = $lang_module;
 			if( $view_comm )
 			{
 				$comment_array = nv_comment_data( $module, $area, $id, $allowed_comm, $page, $sortcomm, $base_url );
@@ -191,9 +198,7 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
 			{
 				$comment = '';
 			}
-			$contents = nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login );
-
-			 return $contents;
+			return nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login );
 		}
 		else
 		{
