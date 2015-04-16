@@ -259,7 +259,7 @@ if( empty( $contents ) )
 		$result = $db->query( $db->sql( ) );
 
 		$data_content = GetDataIn( $result, $catid );
-		$data_content['count'] = count( $data_content['data'] );
+		$data_content['count'] = $num_items;
 
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;ajax=1&amp;catid=' . $catid . '&amp;listgroupid=' . $listgroupid;
 		$pages = nv_generate_page( $base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'category' );
