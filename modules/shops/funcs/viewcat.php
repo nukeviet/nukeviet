@@ -151,7 +151,7 @@ if( empty( $contents ) )
 			$array_info_i = $global_array_shops_cat[$catid_i];
 
 			$array_cat = array( );
-			$array_cat = GetCatidInParent( $catid_i );
+			$array_cat = GetCatidInParent( $catid_i, true );
 
 			// Fetch Limit
 			if( $array_url_group or $ajax )
@@ -240,7 +240,7 @@ if( empty( $contents ) )
 		else
 		{
 			$array_cat = array( );
-			$array_cat = GetCatidInParent( $catid );
+			$array_cat = GetCatidInParent( $catid, true );
 			$where = ' t1.listcatid IN (' . implode( ',', $array_cat ) . ')';
 		}
 
