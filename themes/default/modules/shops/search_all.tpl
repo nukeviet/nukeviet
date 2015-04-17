@@ -45,7 +45,7 @@
 				</div>
 				<div class="col-xs-24">
 					<div class="form-group text-center">
-						<input type="button" class="btn btn-primary" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch1()">
+						<input type="submit" class="btn btn-primary" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch1()">
 					</div>
 				</div>
 			</div>
