@@ -142,8 +142,6 @@ function nv_del_source(sourceid) {
 			var r_split = res.split('_');
 			if (r_split[0] == 'OK') {
 				nv_show_list_source();
-			} else if (r_split[0] == 'ERR') {
-				alert(r_split[1]);
 			} else {
 				alert(nv_is_del_confirm[2]);
 			}

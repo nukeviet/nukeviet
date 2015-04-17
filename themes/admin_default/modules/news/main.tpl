@@ -34,6 +34,7 @@
 			<div class="col-xs-12 col-md-3">
 				<div class="form-group">
 					<select class="form-control" name="sstatus">
+						<option value="-1"> -- {LANG.search_status} -- </option>
 						<!-- BEGIN: search_status -->
 						<option value="{SEARCH_STATUS.key}" {SEARCH_STATUS.selected} >{SEARCH_STATUS.value}</option>
 						<!-- END: search_status -->
@@ -86,7 +87,7 @@
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr class="{ROW.class}">
-					<td><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
+					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
 					<td class="text-left">
 						<p><a target="_blank" href="{ROW.link}">{ROW.title}</a></p>
 					</td>

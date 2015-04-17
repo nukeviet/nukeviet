@@ -12,6 +12,8 @@
 </div>
 <!-- END: loopimg -->
 <!-- BEGIN: generate_page -->
+<div class="clearfix"></div>
+<hr />
 <div class="text-center">
 	{GENERATE_PAGE}
 </div>
@@ -45,7 +47,7 @@ $( "#imglist" ).selectable({
 	},
 	stop: function( e, ui ){
 		fileSelectStop(e, ui);
-		
+
 		setTimeout(function(){
 			KEYPR.isSelectable = false;
 			KEYPR.isFileSelectable = false;

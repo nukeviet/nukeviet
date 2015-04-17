@@ -83,7 +83,6 @@ $lang_module['block_select_module'] = 'Select module';
 $lang_module['block_select_function'] = 'Select function';
 $lang_module['block_error_fileconfig_title'] = 'Interface configuration file error';
 $lang_module['block_error_fileconfig_content'] = 'Interface configuration file is incorrect or does not exist. Check in your theme directory';
-
 $lang_module['package_theme_module'] = 'Pack by module';
 $lang_module['autoinstall_continue'] = 'Next';
 $lang_module['back'] = 'Back';
@@ -134,7 +133,6 @@ $lang_module['theme_created_activate_layout'] = 'Error: You need to set the layo
 $lang_module['theme_delete'] = 'Delete Settings';
 $lang_module['theme_delete_confirm'] = 'Are you sure you delete the setting: ';
 $lang_module['theme_delete_unsuccess'] = 'There are errors in the process the setting !';
-$lang_module['theme_created_current_use'] = 'Giao diện đang sử dụng';
 $lang_module['theme_created_current_use'] = 'Interface using';
 $lang_module['theme_created_delete_theme'] = 'Do you want to delete the all theme setting';
 $lang_module['theme_created_delete_current_theme'] = 'You can not delete the current theme when the systme is using it!';
@@ -158,6 +156,7 @@ $lang_module['autoinstall_theme_overwrite'] = 'Overwrite';
 $lang_module['block_error_nsblock'] = 'Block not yet selected or title of block invalid';
 $lang_module['autoinstall_theme_success_setupblocks'] = 'The installation process is successful. The system will automatically transfer you to the page of the block management interface.';
 $lang_module['autoinstall_theme_success_setuplayout'] = 'The installation process is successful. The system will automatically transfer you to the page layout settings interface.';
-
 $lang_module['config'] = 'Set Theme';
 $lang_module['config_not_exit'] = 'Theme %s not configured';
+$lang_module['theme_created_setting'] = 'Set theme follow default configuration';
+$lang_module['theme_delete_success'] = 'Theme delete success';

@@ -14,7 +14,7 @@
 	</div>
 	<!-- BEGIN: captcha -->
 	<div class="form-group text-right">
-		<img id="block_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" />
+		<img id="block_vimg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" />
 		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('block_vimg','block_seccode_iavim');">&nbsp;</em>
 	</div>
 	<div class="form-group">
@@ -32,7 +32,7 @@
 	<!-- BEGIN: openid -->
 	<hr />
 	<p class="text-center">
-		<img alt="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" /> {LANG.openid_login} 
+		<img alt="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" /> {LANG.openid_login}
 	</p>
 	<div class="text-center">
 		<!-- BEGIN: server -->
@@ -46,7 +46,7 @@
 <!-- END: main -->
 <!-- BEGIN: signed -->
 <div class="content signed clearfix">
-	<p class="text-center">{LANG.wellcome}: 
+	<p class="text-center">{LANG.wellcome}:
 	    <strong>
 	           {USER.full_name}
 	    </strong>

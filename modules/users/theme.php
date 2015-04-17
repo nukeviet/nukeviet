@@ -192,7 +192,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha' );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.captcha' );
 	}
@@ -251,7 +251,7 @@ function openid_register( $gfx_chk, $array_register, $siteterms, $data_questions
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha' );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.captcha' );
 	}
@@ -293,7 +293,7 @@ function user_login( $gfx_chk, $array_login )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha' );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.captcha' );
 	}
@@ -377,7 +377,7 @@ function user_openid_login( $gfx_chk, $array_login, $attribs )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha' );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.captcha' );
 	}
@@ -468,7 +468,7 @@ function user_lostpass( $data, $question )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha' );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.step1' );
 	}
@@ -515,7 +515,7 @@ function user_lostactivelink( $data, $question )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha' );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.step1' );
 	}
@@ -1005,7 +1005,7 @@ function openid_account_confirm( $gfx_chk, $attribs )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha' );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->parse( 'main.captcha' );
 	}
 
@@ -1060,7 +1060,7 @@ function openid_active_confirm( $gfx_chk, $attribs )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha' );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->parse( 'main.captcha' );
 	}
 	$xtpl->assign( 'USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login' );

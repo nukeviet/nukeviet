@@ -534,8 +534,6 @@ if( $checkss == $array_register['checkss'] )
 
 				if( ! $userid )
 				{
-					$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
-
 					$contents = user_info_exit( $lang_module['err_no_save_account'] );
 					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
 
@@ -547,6 +545,7 @@ if( $checkss == $array_register['checkss'] )
 
 				$query_field['userid'] = $userid;
 				$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
+				$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 
 				$subject = $lang_module['account_register'];
 				$message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'] );

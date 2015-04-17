@@ -137,10 +137,14 @@ $lang_module['del_content'] = 'Xóa bài viết';
 $lang_module['no_public'] = 'Chú ý: Bài viết này chưa được xuất bản, chỉ có những người có quyền thao tác mới có thể xem được nội dung.';
 
 $lang_module['status_alert'] = 'Bài viết đang ở trạng thái: %1$s';
-$lang_module['status_0'] = 'Chờ duyệt';
+$lang_module['status_0'] = 'Ngưng hiệu lực';
 $lang_module['status_1'] = 'Xuất bản';
 $lang_module['status_2'] = 'Hẹn giờ đăng';
 $lang_module['status_3'] = 'Hết hạn';
 $lang_module['status_4'] = 'Lưu tạm';
-$lang_module['status_5'] = 'Từ chối';
-$lang_module['status_6'] = 'Chuyển biên tập';
+$lang_module['status_5'] = 'Chuyển duyệt bài';
+$lang_module['status_6'] = 'Từ chối duyệt bài';
+$lang_module['status_7'] = 'Đang duyệt bài';
+$lang_module['status_8'] = 'Chuyển đăng bài';
+$lang_module['status_9'] = 'Từ chối đăng bài';
+$lang_module['status_10'] = 'Đang kiểm tra để đăng';

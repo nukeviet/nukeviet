@@ -14,7 +14,7 @@ $contents = array();
 $contents['info'] = $lang_module['main_page_info'];
 $contents['detail'] = $lang_global['detail'];
 
-$sql = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE act=1 ORDER BY blang ASC";
+$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE act=1 ORDER BY blang ASC';
 $result = $db->query( $sql );
 $contents['rows'] = array();
 
@@ -27,10 +27,10 @@ while( $row = $result->fetch() )
 	$contents['rows'][$row['id']]['description'] = array( $lang_module['description'], $row['description'] );
 }
 
-$contents['containerid'] = "action";
+$contents['containerid'] = 'action';
 $contents['aj'] = "nv_login_info('action');";
 
-$page_title = $module_info['custom_title'] . " " . NV_TITLEBAR_DEFIS . " " . $module_info['funcs'][$op]['func_custom_name'];
+$page_title = $module_info['custom_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['funcs'][$op]['func_custom_name'];
 $contents = nv_banner_theme_main( $contents, $manament );
 
 include NV_ROOTDIR . '/includes/header.php';

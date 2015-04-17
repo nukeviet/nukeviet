@@ -73,13 +73,12 @@ function nv_banner_client_checkdata( $cookie )
 	return $banner_client_info;
 }
 
+$manament = array();
 $bncl = $nv_Request->get_string( 'bncl', 'cookie' );
-
 if( ! empty( $bncl ) )
 {
 	$banner_client_info = nv_banner_client_checkdata( $bncl );
 
-	$manament = array();
 	$manament['current_login'] = array( $lang_global['current_login'], nv_date( 'd/m/Y H:i', $banner_client_info['current_login'] ) . ' (' . $lang_module['ip'] . ': ' . $banner_client_info['current_ip'] . ')' );
 	$manament['main'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 	$manament['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=clientinfo';
