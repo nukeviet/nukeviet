@@ -771,6 +771,24 @@ function nv_groups_del_user( $group_id, $userid )
 }
 
 /**
+ * nv_show_name_user()
+ *
+ * @param string $first_name
+ * @param string $last_name
+ * @param string $user_name
+ *  * 
+ * @return
+ */
+function nv_show_name_user( $first_name, $last_name,  $user_name )
+{
+	global $global_config;
+	
+	$full_name = ( $global_config['name_show'] )  ? $first_name . ' ' . $last_name : $last_name . ' ' . $first_name;
+	$full_name = trim( $full_name );
+	return empty( $full_name ) ? $user_name : $full_name;
+}
+
+/**
  * nv_date()
  *
  * @param string $format
