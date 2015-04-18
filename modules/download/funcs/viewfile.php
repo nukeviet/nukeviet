@@ -253,26 +253,33 @@ if( ! in_array( $row['id'], $dfile ) )
 }
 
 // comment
-define( 'NV_COMM_ID', $row['id'] );
-define( 'NV_COMM_ALLOWED', nv_user_in_groups( $row['groups_comment'] ) );
-// Kiem tra quyen dang binh luan
-$allowed = $module_config[$module_name]['allowed_comm'];
-
-if( $allowed == '-1' )
+if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) )
 {
-	// Quyen han dang binh luan theo bai viet
-	$allowed = ( defined( 'NV_COMM_ALLOWED' ) ) ? NV_COMM_ALLOWED : $module_config[$module_name]['setcomm'];
-}
-define( 'NV_PER_PAGE_COMMENT', 5 );//per_page_comment
-require_once NV_ROOTDIR . '/modules/comment/comment.php';
-$area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
-$checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
+	define( 'NV_COMM_ID', $row['id'] );
+	define( 'NV_COMM_ALLOWED', nv_user_in_groups( $row['groups_comment'] ) );
+	// Kiem tra quyen dang binh luan
+	$allowed = $module_config[$module_name]['allowed_comm'];
 
-//get url comment
+	if( $allowed == '-1' )
+	{
+		// Quyen han dang binh luan theo bai viet
+		$allowed = ( defined( 'NV_COMM_ALLOWED' ) ) ? NV_COMM_ALLOWED : $module_config[$module_name]['setcomm'];
+	}
+	define( 'NV_PER_PAGE_COMMENT', 5 );//per_page_comment
+	require_once NV_ROOTDIR . '/modules/comment/comment.php';
+	$area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
+	$checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
+
+	//get url comment
     $url_info = parse_url( $client_info['selfurl'] );
     $url_comment = $url_info['path'];
 
     $content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
+}
+else
+{
+	$content_comment = '';
+}
 
 $row['rating_point'] = 0;
 if( ! empty( $row['rating_detail'] ) )
