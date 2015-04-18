@@ -235,7 +235,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 			$db->order( $order_by );
 		}
 
-		$result2 = $db->query( $db->sql() );die($db->sql());
+		$result2 = $db->query( $db->sql() );
 		while( $row = $result2->fetch() )
 		{
 			$array_user[$row['userid']] = array(
