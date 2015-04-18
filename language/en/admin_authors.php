@@ -146,6 +146,7 @@ $lang_module['action_account_nochange'] = 'Keep members account';
 $lang_module['action_account_suspend'] = 'Lock member account';
 $lang_module['action_account_del'] = 'Delete member account';
 $lang_module['module_admin'] = 'Module system powers';
+$lang_module['users'] = 'Users';
 $lang_module['number'] = 'No.';
 $lang_module['module'] = 'Module name';
 $lang_module['custom_title'] = 'Title';
