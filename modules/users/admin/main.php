@@ -26,6 +26,8 @@ if( $usactive > 1 )
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&usactive=' . $usactive;
 
+$where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
+
 $methods = array(
 	'userid' => array(
 		'key' => 'userid',
@@ -37,8 +39,8 @@ $methods = array(
 		'value' => $lang_module['search_account'],
 		'selected' => ''
 	),
-	'concat(first_name,last_name)' => array(
-		'key' => 'concat(first_name,last_name)',
+	$where_fullname => array(
+		'key' => $where_fullname,
 		'value' => $lang_module['search_name'],
 		'selected' => ''
 	),
