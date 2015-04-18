@@ -37,16 +37,11 @@ $methods = array(
 		'value' => $lang_module['search_account'],
 		'selected' => ''
 	),
-	'first_name' => array(
-		'key' => 'first_name',
+	'concat(first_name,last_name)' => array(
+		'key' => 'concat(first_name,last_name)',
 		'value' => $lang_module['search_name'],
 		'selected' => ''
 	),
-	/*'last_name' => array(
-		'key' => 'last_name',
-		'value' => $lang_module['search_name'],
-		'selected' => ''
-	),*/
 	'email' => array(
 		'key' => 'email',
 		'value' => $lang_module['search_mail'],
@@ -57,7 +52,7 @@ $methods = array(
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
 $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ( $nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '' );
 
-$orders = array( 'userid', 'username', 'first_name', 'last_name', 'email', 'regdate' );
+$orders = array( 'userid', 'username', 'full_name', 'email', 'regdate' );
 $orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', 'DESC' );
 if( $ordertype != 'ASC' ) $ordertype = 'DESC';
@@ -100,6 +95,7 @@ $db->select( '*' )
 	->offset( ( $page - 1 ) * $per_page );
 if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
 {
+	$orderby = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? 'first_name' : 'last_name');	
 	$db->order( $orderby . ' ' . $ordertype);
 	$base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
 }
@@ -119,6 +115,7 @@ while( $row = $result2->fetch() )
 		'username' => ( string )$row['username'],
 		'first_name' => ( string )$row['first_name'],
 		'last_name' => ( string )$row['last_name'],
+		'full_name' => ( string )nv_show_name_user( $row['first_name'], $row['last_name'], $row['username'] ),
 		'email' => ( string )$row['email'],
 		'regdate' => date( 'd/m/Y H:i', $row['regdate'] ),
 		'checked' => ( int )$row['active'] ? ' checked="checked"' : '',
@@ -195,14 +192,18 @@ $head_tds['userid']['title'] = $lang_module['userid'];
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=userid&amp;sorttype=ASC';
 $head_tds['username']['title'] = $lang_module['account'];
 $head_tds['username']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=username&amp;sorttype=ASC';
-$head_tds['first_name']['title'] = $lang_module['first_name'];
-$head_tds['first_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=first_name&amp;sorttype=ASC';
-$head_tds['last_name']['title'] = $lang_module['last_name'];
-$head_tds['last_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=last_name&amp;sorttype=ASC';
+$head_tds['full_name']['title'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
+$sort_fullname = $global_config['name_show'] == 0 ? 'last_name' : 'first_name';
+$head_tds['full_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=full_name&amp;sorttype=ASC';
 $head_tds['email']['title'] = $lang_module['email'];
 $head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=email&amp;sorttype=ASC';
 $head_tds['regdate']['title'] = $lang_module['register_date'];
 $head_tds['regdate']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=regdate&amp;sorttype=ASC';
+
+if( $orderby == 'last_name' or $orderby == 'last_name' )
+{
+	$orderby = 'full_name';
+}
 
 foreach( $orders as $order )
 {
