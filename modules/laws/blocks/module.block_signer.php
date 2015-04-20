@@ -25,7 +25,7 @@ if ( ! function_exists( 'nv_law_block_singer' ) )
         $title_length = 24;
 		
         $html = "";
-		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_name . "_signer ORDER BY RAND() LIMIT 10";
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer ORDER BY RAND() LIMIT 10";
 
 		$result = $db->query( $sql );
 
