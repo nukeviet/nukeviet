@@ -136,7 +136,7 @@
 	<form id="addRow" action="{DATA.action_url}" method="post">
 		<h3 class="myh3">{DATA.ptitle}</h3>
 		<div class="row">
-			<div class="col-sm-24 col-md-9">
+			<div class="col-sm-24 col-md-18">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover">
 						<col style="width:200px" />
@@ -236,7 +236,7 @@
 					</table>
 				</div>
 			</div>
-			<div class="col-sm-24 col-md-3">
+			<div class="col-sm-24 col-md-6">
 				<table class="table table-striped table-bordered table-hover">
 					<tbody>
 						<tr>
@@ -277,7 +277,7 @@
 							</select></td>
 						</tr>
 						<tr>
-							<td>{LANG.signer} <span class="red">*</span></td>
+							<td>{LANG.signer}</td>
 						</tr>
 						<tr>
 							<td>
