@@ -144,7 +144,7 @@
 						<th>{LANG.content_hometext} <span class="require">(*)</span> {LANG.content_notehome}</th>
 					</tr>
 					<tr>
-						<td>						<textarea class="form-control" rows="4" name="hometext" style="width:98%">{rowcontent.hometext}</textarea></td>
+						<td>{edit_hometext}</td>
 					</tr>
 					<tr>
 						<th>{LANG.content_bodytext} <span class="require">(*)</span> {LANG.content_bodytext_note}</th>
@@ -157,10 +157,71 @@
 					</tr>
 
 					<tr>
-						<th>{LANG.content_promotional}</th>
+						<th>{LANG.content_gift}</th>
 					</tr>
 					<tr>
-						<td><textarea class="form-control" name="promotional" style="width:100%;height:50px">{rowcontent.promotional}</textarea></td>
+						<td>
+							<div class="row">
+								<div class="col-xs-12">
+									<textarea class="form-control" name="gift_content" style="width:100%;height:70px">{rowcontent.gift_content}</textarea>
+								</div>
+								<div class="col-xs-12">
+									<div class="row">
+										<div class="col-xs-24" style="margin-bottom: 5px">
+											<div class="row">
+												<div class="col-xs-12">
+													<div class="form-group">
+														<div class="input-group">
+															<input type="text" class="form-control" name="gift_from" value="{rowcontent.gift_from}" id="gift_from" readonly="readonly" placeholder="{LANG.date_from}">
+															<span class="input-group-btn">
+																<button class="btn btn-default" type="button" id="from-btn">
+																	<em class="fa fa-calendar fa-fix">&nbsp;</em>
+																</button> </span>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-6">
+													<select class="form-control" name="gift_from_h" style="width: 100%">
+														{gift_from_h}
+													</select>
+												</div>
+												<div class="col-xs-6">
+													<select class="form-control" name="gift_from_m" style="width: 100%">
+														{gift_from_m}
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-24">
+											<div class="row">
+												<div class="col-xs-12">
+													<div class="form-group">
+														<div class="input-group">
+															<input type="text" class="form-control" name="gift_to" value="{rowcontent.gift_to}" id="gift_to" readonly="readonly" placeholder="{LANG.date_to}">
+															<span class="input-group-btn">
+																<button class="btn btn-default" type="button" id="to-btn">
+																	<em class="fa fa-calendar fa-fix">&nbsp;</em>
+																</button> </span>
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-6">
+													<select class="form-control" name="gift_to_h" style="width: 100%">
+														{gift_to_h}
+													</select>
+												</div>
+												<div class="col-xs-6">
+													<select class="form-control" name="gift_to_m" style="width: 100%">
+														{gift_to_m}
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>

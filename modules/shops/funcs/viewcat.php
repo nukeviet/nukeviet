@@ -165,12 +165,12 @@ if( empty( $contents ) )
 
 			$num_pro = $db->query( $db->sql( ) )->fetchColumn( );
 
-			$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice,t1.' . NV_LANG_DATA . '_promotional, t2.newday' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid')->order( $orderby )->limit( $array_info_i['numlinks'] );
+			$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice,t1.' . NV_LANG_DATA . '_gift_content, t1.gift_from, t1.gift_to, t2.newday' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid')->order( $orderby )->limit( $array_info_i['numlinks'] );
 			$result = $db->query( $db->sql( ) );
 
 			$data_pro = array( );
 
-			while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $promotional, $newday ) = $result->fetch( 3 ) )
+			while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $gift_content, $gift_from, $gift_to, $newday ) = $result->fetch( 3 ) )
 			{
 				if( $homeimgthumb == 1 )//image thumb
 				{
@@ -204,7 +204,9 @@ if( empty( $contents ) )
 					'money_unit' => $money_unit,
 					'showprice' => $showprice,
 					'newday' => $newday,
-					'promotional' => $promotional,
+					'gift_content' => $gift_content,
+					'gift_from' => $gift_from,
+					'gift_to' => $gift_to,
 					'link_pro' => $link . $global_array_shops_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 					'link_order' => $link . 'setcart&amp;id=' . $id
 				);
@@ -240,7 +242,7 @@ if( empty( $contents ) )
 		else
 		{
 			$array_cat = array( );
-			$array_cat = GetCatidInParent( $catid );
+			$array_cat = GetCatidInParent( $catid, true );
 			$where = ' t1.listcatid IN (' . implode( ',', $array_cat ) . ')';
 		}
 
@@ -255,11 +257,11 @@ if( empty( $contents ) )
 
 		$num_items = $db->query( $db->sql( ) )->fetchColumn( );
 
-		$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_promotional,t2.newday, t2.image' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid' )->order( $orderby )->limit( $per_page )->offset( ($page - 1) * $per_page );
+		$db->select( 't1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_code, t1.product_number, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.' . NV_LANG_DATA . '_gift_content, t1.gift_from, t1.gift_to, t2.newday, t2.image' )->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_catalogs t2 ON t2.catid = t1.listcatid' )->order( $orderby )->limit( $per_page )->offset( ($page - 1) * $per_page );
 		$result = $db->query( $db->sql( ) );
 
 		$data_content = GetDataIn( $result, $catid );
-		$data_content['count'] = count( $data_content['data'] );
+		$data_content['count'] = $num_items;
 
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;ajax=1&amp;catid=' . $catid . '&amp;listgroupid=' . $listgroupid;
 		$pages = nv_generate_page( $base_url, $num_items, $per_page, $page, true, true, 'nv_urldecode_ajax', 'category' );
@@ -275,7 +277,6 @@ if( empty( $contents ) )
 			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 			exit( );
 		}
-
 		$contents = call_user_func( $global_array_shops_cat[$catid]['viewcat'], $data_content, $compare_id, $pages, $sorts, $viewtype );
 	}
 

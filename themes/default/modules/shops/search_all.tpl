@@ -45,7 +45,7 @@
 				</div>
 				<div class="col-xs-24">
 					<div class="form-group text-center">
-						<input type="button" class="btn btn-primary" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch1()">
+						<input type="submit" class="btn btn-primary" name="submit" id="submit" value="{LANG.search}" onclick="onsubmitsearch1()">
 					</div>
 				</div>
 			</div>
@@ -71,6 +71,9 @@
 				<!-- BEGIN: point -->
 				<span class="label label-info" title="{point_note}">+{point}</span>
 				<!-- END: point -->
+				<!-- BEGIN: gift -->
+            	<span class="label label-success">+<em class="fa fa-gift fa-lg">&nbsp;</em></span>
+            	<!-- END: gift -->
 			</div>
 			<div class="caption text-center">
 				<h3><a href="{LINK}" title="{TITLE}">{TITLE0}</a></h3>

@@ -112,10 +112,10 @@
 							<!-- END: maintitle -->
 
 							<!-- BEGIN: subtitle -->
-							<ul class="pull-left" style="padding: 0 10px 0">
+							<ul class="pull-left list-inline" style="padding: 0 10px 0">
 								<!-- BEGIN: loop -->
 								<li>
-									<a href="{SUBTITLE.link}" title="{SUBTITLE.title}">{SUBTITLE.title}</a>
+									{SUBTITLE.title}
 								</li>
 								<!-- END: loop -->
 							</ul>
@@ -156,6 +156,17 @@
 						<!-- END: warranty -->
 					</ul>
 					<hr />
+					<!-- BEGIN: gift -->
+					<div class="alert alert-info">
+						<div class="pull-left">
+							<em class="fa fa-gift fa-3x">&nbsp;</em>
+						</div>
+						<div class="pull-left">
+							<h4>{gift_content}</h4>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<!-- END: gift -->
 					<!-- BEGIN: group -->
 					<div class="well">
 						<div class="filter_product">

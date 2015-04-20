@@ -84,8 +84,9 @@ $rowcontent = array(
 	'note' => '',
 	'keywords' => '',
 	'keywords_old' => '',
-	'warranty' => '',
-	'promotional' => ''
+	'gift_content' => '',
+	'gift_from' => NV_CURRENTTIME,
+	'gift_to' => 0
 );
 
 $page_title = $lang_module['content_add'];
@@ -162,13 +163,38 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 	$rowcontent['note'] = $nv_Request->get_title( 'note', 'post', '', 1 );
 	$rowcontent['address'] = $nv_Request->get_title( 'address', 'post', '', 1 );
-	$rowcontent['warranty'] = $nv_Request->get_title( 'warranty', 'post', '', 1 );
-	$rowcontent['promotional'] = $nv_Request->get_title( 'promotional', 'post', '', 1 );
+
+	$rowcontent['gift_content'] = $nv_Request->get_title( 'gift_content', 'post', '', 1 );
+	$rowcontent['gift_from'] = $nv_Request->get_title( 'gift_from', 'post', '' );
+	$rowcontent['gift_to'] = $nv_Request->get_title( 'gift_to', 'post', '' );
+	if( !empty( $rowcontent['gift_content'] ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $rowcontent['gift_from'], $m ) )
+	{
+		$gift_from_h = $nv_Request->get_int( 'gift_from_h', 'post', 0 );
+		$gift_from_m = $nv_Request->get_int( 'gift_from_m', 'post', 0 );
+		$rowcontent['gift_from'] = mktime( $gift_from_h, $gift_from_m, 0, $m[2], $m[1], $m[3] );
+	}
+	else
+	{
+		$rowcontent['gift_from'] = 0;
+	}
+
+	if( !empty( $rowcontent['gift_content'] ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $rowcontent['gift_to'], $m ) )
+	{
+		$gift_to_h = $nv_Request->get_int( 'gift_to_h', 'post', 23 );
+		$gift_to_m = $nv_Request->get_int( 'gift_to_m', 'post', 59 );
+		$rowcontent['gift_to'] = mktime( $gift_to_h, $gift_to_m, 59, $m[2], $m[1], $m[3] );
+	}
+	else
+	{
+		$rowcontent['gift_to'] = 0;
+	}
 
 	$alias = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$rowcontent['alias'] = ($alias == '') ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
 
-	$rowcontent['hometext'] = $nv_Request->get_textarea( 'hometext', 'post', '', 'br', 1 );
+	$hometext = $nv_Request->get_string( 'hometext', 'post', '' );
+	$rowcontent['hometext'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $hometext, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $hometext ) ), '<br />' );
+
 	$rowcontent['product_code'] = nv_substr( $nv_Request->get_title( 'product_code', 'post', '', 1 ), 0, 255 );
 	$rowcontent['product_number'] = $nv_Request->get_int( 'product_number', 'post', 0 );
 	$rowcontent['product_price'] = $nv_Request->get_string( 'product_price', 'post', '' );
@@ -598,6 +624,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 homeimgthumb= :homeimgthumb,
 			 imgposition=" . intval( $rowcontent['imgposition'] ) . ",
 			 copyright=" . intval( $rowcontent['copyright'] ) . ",
+			 gift_from=" . intval( $rowcontent['gift_from'] ) . ",
+			 gift_to=" . intval( $rowcontent['gift_to'] ) . ",
 			 inhome=" . intval( $rowcontent['inhome'] ) . ",
 			 allowed_comm= :allowed_comm,
 			 allowed_rating=" . intval( $rowcontent['allowed_rating'] ) . ",
@@ -610,8 +638,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 " . NV_LANG_DATA . "_alias= :alias,
 			 " . NV_LANG_DATA . "_hometext= :hometext,
 			 " . NV_LANG_DATA . "_bodytext= :bodytext,
-			 " . NV_LANG_DATA . "_warranty= :warranty,
-			 " . NV_LANG_DATA . "_promotional= :promotional
+			 " . NV_LANG_DATA . "_gift_content= :gift_content
 			 WHERE id =" . $rowcontent['id'] );
 
 			$stmt->bindParam( ':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR );
@@ -630,8 +657,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$stmt->bindParam( ':alias', $rowcontent['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':hometext', $rowcontent['hometext'], PDO::PARAM_STR, strlen( $rowcontent['hometext'] ) );
 			$stmt->bindParam( ':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen( $rowcontent['bodytext'] ) );
-			$stmt->bindParam( ':promotional', $rowcontent['promotional'], PDO::PARAM_STR );
-			$stmt->bindParam( ':warranty', $rowcontent['warranty'], PDO::PARAM_STR );
+			$stmt->bindParam( ':gift_content', $rowcontent['gift_content'], PDO::PARAM_STR );
 			$stmt->bindParam( ':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR );
 
 			if( $stmt->execute( ) )
@@ -797,8 +823,7 @@ elseif( $rowcontent['id'] > 0 )
 	$rowcontent['alias'] = $rowcontent[NV_LANG_DATA . '_alias'];
 	$rowcontent['hometext'] = $rowcontent[NV_LANG_DATA . '_hometext'];
 	$rowcontent['bodytext'] = $rowcontent[NV_LANG_DATA . '_bodytext'];
-	$rowcontent['promotional'] = $rowcontent[NV_LANG_DATA . '_promotional'];
-	$rowcontent['warranty'] = $rowcontent[NV_LANG_DATA . '_warranty'];
+	$rowcontent['gift_content'] = $rowcontent[NV_LANG_DATA . '_gift_content'];
 	$rowcontent['address'] = $rowcontent[NV_LANG_DATA . '_address'];
 	$rowcontent['group_id'] = $group_id_old;
 	$rowcontent['keywords'] = $keyword;
@@ -835,7 +860,6 @@ if( !empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . 
 {
 	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
 }
-$rowcontent['hometext'] = nv_htmlspecialchars( nv_br2nl( $rowcontent['hometext'] ) );
 
 $tdate = date( 'H|i', $rowcontent['publtime'] );
 $publ_date = date( 'd/m/Y', $rowcontent['publtime'] );
@@ -851,6 +875,13 @@ else
 	$tdate = date( 'H|i', $rowcontent['exptime'] );
 	list( $ehour, $emin ) = explode( '|', $tdate );
 }
+
+$gift_from_h = !empty( $rowcontent['gift_from'] ) ? nv_date( 'H', $rowcontent['gift_from'] ) : '0';
+$gift_from_m = !empty( $rowcontent['gift_from'] ) ? nv_date( 'i', $rowcontent['gift_from'] ) : '0';
+$gift_to_h = !empty( $rowcontent['gift_to'] ) ? nv_date( 'H', $rowcontent['gift_to'] ) : '23';
+$gift_to_m = !empty( $rowcontent['gift_to'] ) ? nv_date( 'i', $rowcontent['gift_to'] ) : '59';
+$rowcontent['gift_from'] = !empty( $rowcontent['gift_from'] ) ? nv_date( 'd/m/Y', $rowcontent['gift_from'] ) : '';
+$rowcontent['gift_to'] = !empty( $rowcontent['gift_to'] ) ? nv_date( 'd/m/Y', $rowcontent['gift_to'] ) : '';
 
 if( !empty( $rowcontent['otherimage'] ) )
 {
@@ -942,19 +973,27 @@ $xtpl->parse( 'main.listgroup' );
 
 // Time update
 $xtpl->assign( 'publ_date', $publ_date );
-$select = '';
+$select = ''; $_gift_from_h = $_gift_to_h = '';
 for( $i = 0; $i <= 23; $i++ )
 {
 	$select .= "<option value=\"" . $i . "\"" . (($i == $phour) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$_gift_from_h .= "<option value=\"" . $i . "\"" . (($i == $gift_from_h) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$_gift_to_h .= "<option value=\"" . $i . "\"" . (($i == $gift_to_h) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $xtpl->assign( 'phour', $select );
+$xtpl->assign( 'gift_from_h', $_gift_from_h );
+$xtpl->assign( 'gift_to_h', $_gift_to_h );
 
-$select = "";
+$select = ""; $_gift_from_m = $_gift_to_m = '';
 for( $i = 0; $i < 60; $i++ )
 {
 	$select .= "<option value=\"" . $i . "\"" . (($i == $pmin) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$_gift_from_m .= "<option value=\"" . $i . "\"" . (($i == $gift_from_m) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$_gift_to_m .= "<option value=\"" . $i . "\"" . (($i == $gift_to_m) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $xtpl->assign( 'pmin', $select );
+$xtpl->assign( 'gift_from_m', $_gift_from_m );
+$xtpl->assign( 'gift_to_m', $_gift_to_m );
 
 // Time exp
 $xtpl->assign( 'exp_date', $exp_date );
@@ -984,6 +1023,17 @@ foreach( $groups_list as $_group_id => $_title )
 	$xtpl->parse( 'main.allowed_comm' );
 }
 
+$rowcontent['hometext'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['hometext'] ) );
+if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+{
+	$edits = nv_aleditor( 'hometext', '100%', '150px', $rowcontent['hometext'], 'Basic' );
+}
+else
+{
+	$edits = "<textarea style=\"width: 100%\" name=\"hometext\" id=\"hometext\" cols=\"20\" rows=\"15\">" . $rowcontent['hometext'] . "</textarea>";
+}
+$xtpl->assign( 'edit_hometext', $edits );
+
 $rowcontent['bodytext'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['bodytext'] ) );
 if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 {
@@ -993,6 +1043,7 @@ else
 {
 	$edits = "<textarea style=\"width: 100%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"15\">" . $rowcontent['bodytext'] . "</textarea>";
 }
+$xtpl->assign( 'edit_bodytext', $edits );
 
 $shtm = '';
 if( count( $array_block_cat_module ) > 0 )
@@ -1129,8 +1180,6 @@ if( !empty( $weight_config ) )
 		$xtpl->parse( 'main.weight_unit' );
 	}
 }
-
-$xtpl->assign( 'edit_bodytext', $edits );
 
 if( $rowcontent['id'] > 0 and !$is_copy )
 {

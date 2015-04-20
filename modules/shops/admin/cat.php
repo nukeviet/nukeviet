@@ -18,7 +18,12 @@ $savecat = 0;
 $data = array();
 $groups_list = nv_groups_list();
 
-list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['newday'], $data['typeprice'] ) = array( 0, 0, '', '', '', '', '6', 0, 0, 0, '', '', $pro_config['group_price'], 7, 1);
+if( defined( 'NV_EDITOR' ) )
+{
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
+
+list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice'] ) = array( 0, 0, '', '', '', '', '', '6', 0, 0, 0, '', '', $pro_config['group_price'], 0, 7, 1);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
@@ -44,6 +49,8 @@ if( ! empty( $savecat ) )
 	$data['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$data['description'] = $nv_Request->get_string( 'description', 'post', '' );
 	$data['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $data['description'] ) ), '<br />' );
+	$data['descriptionhtml'] = $nv_Request->get_editor( 'descriptionhtml', '', NV_ALLOWED_HTML_TAGS );
+	$data['viewdescriptionhtml'] = $nv_Request->get_int( 'viewdescriptionhtml', 'post', 0 );
 	$data['cat_allow_point'] = $nv_Request->get_int( 'cat_allow_point', 'post', 0 );
 	$data['cat_number_point'] = $nv_Request->get_int( 'cat_number_point', 'post', 0 );
 	$data['cat_number_product'] = $nv_Request->get_int( 'cat_number_product', 'post', 0 );
@@ -108,8 +115,8 @@ if( ! empty( $savecat ) )
 
 		$weight = intval( $weight ) + 1;
 
-		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
- 			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :typeprice, :form, :group_price, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
+		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price, viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
+ 			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :typeprice, :form, :group_price, :viewdescriptionhtml, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
 		$data_insert = array();
 		$data_insert['parentid'] = $data['parentid'];
 		$data_insert['image'] = $data['image'];
@@ -119,6 +126,7 @@ if( ! empty( $savecat ) )
 		$data_insert['typeprice'] = $data['typeprice'];
 		$data_insert['form'] = $data['form'];
 		$data_insert['group_price'] = $data['group_price'];
+		$data_insert['viewdescriptionhtml'] = $data['viewdescriptionhtml'];
 		$data_insert['admins'] = $admins;
 		$data_insert['groups_view'] = $data['groups_view'];
 		$data_insert['cat_allow_point'] = $data['cat_allow_point'];
@@ -148,16 +156,18 @@ if( ! empty( $savecat ) )
 	{
 		try
 		{
-			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, viewdescriptionhtml = :viewdescriptionhtml, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_descriptionhtml = :descriptionhtml, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
 			$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
 			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
 			$stmt->bindParam( ':image', $data['image'], PDO::PARAM_STR );
 			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
+			$stmt->bindParam( ':descriptionhtml', $data['descriptionhtml'], PDO::PARAM_STR );
 			$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
 			$stmt->bindParam( ':typeprice', $data['typeprice'], PDO::PARAM_INT );
 			$stmt->bindParam( ':form', $data['form'], PDO::PARAM_STR );
 			$stmt->bindParam( ':group_price', $data['group_price'], PDO::PARAM_STR );
+			$stmt->bindParam( ':viewdescriptionhtml', $data['viewdescriptionhtml'], PDO::PARAM_INT );
 			$stmt->bindParam( ':groups_view', $data['groups_view'], PDO::PARAM_STR );
 			$stmt->bindParam( ':cat_allow_point', $data['cat_allow_point'], PDO::PARAM_INT );
 			$stmt->bindParam( ':cat_number_point', $data['cat_number_point'], PDO::PARAM_INT );
@@ -171,7 +181,7 @@ if( ! empty( $savecat ) )
 					$stmt = $db->prepare( 'SELECT max(weight) FROM ' . $table_name . ' WHERE parentid= :parentid ' );
 					$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
 					$stmt->execute();
-					$weight = $stmt->fetchColumn();
+					$weight->fetchColumn();
 					$weight = intval( $weight ) + 1;
 					$sql = 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE catid=' . intval( $data['catid'] );
 					$db->query( $sql );
@@ -338,6 +348,24 @@ if( ! empty( $cat_form_exit ) )
 	}
 	$xtpl->parse( 'main.cat_form' );
 }
+
+$descriptionhtml = nv_htmlspecialchars( nv_editor_br2nl( $data[NV_LANG_DATA . '_descriptionhtml'] ) );
+if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
+{
+	$descriptionhtml = nv_aleditor( 'descriptionhtml', '100%', '200px', $descriptionhtml, 'Basic' );
+}
+else
+{
+	$descriptionhtml = "<textarea style=\"width: 100%\" name=\"descriptionhtml\" id=\"descriptionhtml\" cols=\"20\" rows=\"15\">" . $descriptionhtml . "</textarea>";
+}
+$xtpl->assign( 'DESCRIPTIONHTML', $descriptionhtml );
+
+for( $i = 0; $i <= 2; $i++ )
+{
+	$xtpl->assign( 'VIEWDESCRIPTION', array( 'value' => $i, 'checked' => $data['viewdescriptionhtml'] == $i ? ' checked="checked"' : '', 'title' => $lang_module['content_bodytext_display_' . $i] ) );
+	$xtpl->parse( 'main.viewdescriptionhtml' );
+}
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
