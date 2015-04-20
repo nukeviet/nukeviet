@@ -85,9 +85,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'end_time', 'post' ), $m ) )
 	{
-		$_hour = 0;
-		$_min = 0;
-		$row['end_time'] = mktime( $_hour, $_min, 0, $m[2], $m[1], $m[3] );
+		$_hour = 23;
+		$_min = 59;
+		$_sec = 59;
+		$row['end_time'] = mktime( $_hour, $_min, $_sec, $m[2], $m[1], $m[3] );
 	}
 	else
 	{
