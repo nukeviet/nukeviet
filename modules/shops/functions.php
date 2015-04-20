@@ -116,7 +116,7 @@ function GetDataIn( $result, $catid )
 
 	$data_content = array();
 	$data = array();
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$promotional, $newday ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$gift_content, $gift_from, $gift_to, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -151,7 +151,9 @@ function GetDataIn( $result, $catid )
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
 			'newday' => $newday,
-			'promotional'=> $promotional,
+			'gift_content'=> $gift_content,
+			'gift_from'=> $gift_from,
+			'gift_to'=> $gift_to,
 			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
@@ -167,10 +169,10 @@ function GetDataIn( $result, $catid )
 }
 
 /**
- * GetDataInGroups()
+ * GetDataInGroup()
  *
  * @param mixed $result
- * @param mixed $array_g
+ * @param mixed $groupid
  * @return
  */
 function GetDataInGroups( $result, $array_g )
@@ -180,7 +182,7 @@ function GetDataInGroups( $result, $array_g )
 	$data_content = array();
 	$data = array();
 
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $promotional ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$gift_content, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -214,8 +216,8 @@ function GetDataInGroups( $result, $array_g )
 			'discount_id' => $discount_id,
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
-			'newday' => $global_array_shops_cat[$listcatid]['newday'],
-			'promotional' => $promotional,
+			'newday' => $newday,
+			'gift_content' => $gift_content,
 			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
@@ -243,7 +245,7 @@ function GetDataInGroup( $result, $groupid )
 	$data_content = array();
 	$data = array();
 
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $promotional ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $gift_content, $gift_to, $gift_from ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -277,7 +279,9 @@ function GetDataInGroup( $result, $groupid )
 			'discount_id' => $discount_id,
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
-			'promotional' => $promotional,
+			'gift_content' => $gift_content,
+			'gift_from' => $gift_from,
+			'gift_to' => $gift_to,
 			'newday' => $global_array_shops_cat[$listcatid]['newday'],
 			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id

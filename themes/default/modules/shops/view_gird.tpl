@@ -41,6 +41,9 @@
             	<!-- BEGIN: point -->
             	<span class="label label-info" title="{point_note}">+{point}</span>
             	<!-- END: point -->
+            	<!-- BEGIN: gift -->
+            	<span class="label label-success">+<em class="fa fa-gift fa-lg">&nbsp;</em></span>
+            	<!-- END: gift -->
             </div>
             <div class="caption text-center">
                 <h3><a href="{link_pro}" title="{title_pro}">{title_pro0}</a></h3>

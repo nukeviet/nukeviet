@@ -156,6 +156,17 @@
 						<!-- END: warranty -->
 					</ul>
 					<hr />
+					<!-- BEGIN: gift -->
+					<div class="alert alert-info">
+						<div class="pull-left">
+							<em class="fa fa-gift fa-3x">&nbsp;</em>
+						</div>
+						<div class="pull-left">
+							<h4>{gift_content}</h4>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<!-- END: gift -->
 					<!-- BEGIN: group -->
 					<div class="well">
 						<div class="filter_product">

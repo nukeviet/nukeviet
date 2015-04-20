@@ -39,6 +39,9 @@
             	<!-- BEGIN: point -->
             	<span class="label label-info" title="{point_note}">+{point}</span>
             	<!-- END: point -->
+            	<!-- BEGIN: gift -->
+            	<span class="label label-success">+<em class="fa fa-gift fa-lg">&nbsp;</em></span>
+            	<!-- END: gift -->
     			<br />
     			<!-- BEGIN: product_code -->
     			{LANG.product_code}: <strong>{PRODUCT_CODE}</strong>
