@@ -20,13 +20,19 @@
 					<!-- BEGIN: image -->
 					<a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}" class="img-thumbnail pull-left imghome" /></a>
 					<!-- END: image -->
-
 					<h3>
 						<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
 						<!-- BEGIN: newday -->
 						<span class="icon_new">&nbsp;</span>
 						<!-- END: newday -->
 					</h3>
+					<h5 class="text-muted">
+						<ul class="list-unstyled list-inline">
+							<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
+							<li><em class="fa fa-eye">&nbsp;</em> {CONTENT.hitstotal}</li>
+							<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
+						</ul>
+					</h5>
 					<p class="text-justify">{CONTENT.hometext}</p>
 				</div>
 
