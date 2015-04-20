@@ -181,6 +181,18 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 	 PRIMARY KEY (id)
 	) ENGINE=MyISAM";
 
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_logs (
+	 id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+	 sid mediumint(8) NOT NULL DEFAULT '0',
+	 userid mediumint(8) unsigned NOT NULL DEFAULT '0',
+	 status tinyint(4) NOT NULL DEFAULT '0',
+	 note varchar(255) NOT NULL,
+	 set_time int(11) unsigned NOT NULL DEFAULT '0',
+	 PRIMARY KEY (id),
+	 KEY sid (sid),
+	 KEY userid (userid)
+) ENGINE=MyISAM";
+
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config_post (
 	 group_id smallint(5) NOT NULL,
 	 addcontent tinyint(4) NOT NULL,

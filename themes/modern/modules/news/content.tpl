@@ -121,7 +121,7 @@
 	<div class="news">
 		<label><strong>{LANG.captcha}:</strong> <span class="txtrequired">(*)</span></label>
 		<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" style="width: 100px;" />
-		<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{LANG.captcha}" id="vimg" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','fcode_iavim');" />
+		<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{LANG.captcha}" id="vimg" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','fcode_iavim');" />
 	</div>
 	<br />
 	<div style="width: 500px; text-align: center;">

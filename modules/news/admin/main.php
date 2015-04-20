@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['content_list'];
 $stype = $nv_Request->get_string( 'stype', 'get', '-' );
-$sstatus = $nv_Request->get_string( 'sstatus', 'get', '-' );
+$sstatus = $nv_Request->get_int( 'sstatus', 'get', -1 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $per_page_old = $nv_Request->get_int( 'per_page', 'cookie', 50 );
 $per_page = $nv_Request->get_int( 'per_page', 'get', $per_page_old );
@@ -49,31 +49,31 @@ foreach( $global_array_cat as $catid_i => $array_value )
 	}
 	elseif( isset( $array_cat_admin[$admin_id][$catid_i] ) )
 	{
-		if( $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 )
+		$_cat_admin_i = $array_cat_admin[$admin_id][$catid_i];
+		if( $_cat_admin_i['admin'] == 1 )
+		{
+			$check_cat = true;
+			$check_declined = true;
+		}
+		elseif( $_cat_admin_i['add_content'] == 1 )
 		{
 			$check_cat = true;
 		}
-		elseif( $array_cat_admin[$admin_id][$catid_i]['add_content'] == 1 )
+		elseif( $_cat_admin_i['pub_content'] == 1 or $_cat_admin_i['app_content'] == 1 )
+		{
+			$check_cat = true;
+			$check_declined = true;
+		}
+		elseif( $_cat_admin_i['edit_content'] == 1 )
 		{
 			$check_cat = true;
 		}
-		elseif( $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 )
-		{
-			$check_cat = true;
-		}
-		elseif( $array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1 )
-		{
-			$check_cat = true;
-		}
-		elseif( $array_cat_admin[$admin_id][$catid_i]['del_content'] == 1 )
+		elseif( $_cat_admin_i['del_content'] == 1 )
 		{
 			$check_cat = true;
 		}
 	}
-	if( isset( $array_cat_admin[$admin_id][$catid_i] ) && $array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 )
-	{
-		$check_declined = true;
-	}
+
 	if( $check_cat )
 	{
 		$xtitle_i = '';
@@ -151,7 +151,7 @@ $array_list_action = array(
 	'delete' => $lang_global['delete'],
 	're-published' => $lang_module['re_published'],
 	'publtime' => $lang_module['publtime'],
-	'exptime' => $lang_module['exptime'],
+	'stop' => $lang_module['status_0'],
 	'waiting' => $lang_module['status_action_0']
 );
 
@@ -172,9 +172,9 @@ if( ! in_array( $stype, array_keys( $array_search ) ) )
 {
 	$stype = '-';
 }
-if( ! in_array( $sstatus, array_keys( $array_status_view ) ) )
+if( $sstatus < 0 or $sstatus > 10 )
 {
-	$sstatus = '-';
+	$sstatus = -1;
 }
 if( ! in_array( $ordername, array_keys( $array_in_ordername ) ) )
 {
@@ -191,7 +191,7 @@ else
 $where = '';
 $page = $nv_Request->get_int( 'page', 'get', 1 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
-if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
+if( $checkss == md5( session_id() ) )
 {
 	if( $stype == 'bodytext' )
 	{
@@ -230,7 +230,7 @@ if( ( $checkss == md5( session_id() ) and ! empty( $q ) ) || $sstatus != '-' )
 			OR u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
 			OR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%'";
 	}
-	if( $sstatus != '-' )
+	if( $sstatus != -1 )
 	{
 		if( $where == '' )
 		{
@@ -277,24 +277,17 @@ foreach( $array_search as $key => $val )
 		'selected' => ( $key == $stype ) ? ' selected="selected"' : ''
 	);
 }
-$a = 0;
-foreach( $array_status_view as $key => $val )
+
+for ($i=0; $i  <= 10; $i++)
 {
-	if( $key == $sstatus and $a == 0 )
-	{
-		$sl = ' selected="selected"';
-		$a = 1;
-	}
-	else
-	{
-		$sl = '';
-	}
+	$sl = ( $i == $sstatus ) ? ' selected="selected"' : '';
 	$search_status[] = array(
-		'key' => $key,
-		'value' => $val,
+		'key' => $i,
+		'value' => $lang_module['status_' . $i],
 		'selected' => $sl
 	);
 }
+
 $i = 5;
 $search_per_page = array();
 while( $i <= 500 )
@@ -309,7 +302,6 @@ $order2 = ( $order == 'asc' ) ? 'desc' : 'asc';
 $ord_sql = ' r.' . $ordername . ' ' . $order;
 
 $db->sqlreset()->select( 'COUNT(*)' )->from( $from )->where( $where );
-
 $num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, r.hitstotal, r.hitscm, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );

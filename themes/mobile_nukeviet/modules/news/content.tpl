@@ -42,7 +42,7 @@
 	{LANG.content_keywords}<input value="{DATA.keywords}" name="keywords" type="text"/>
 	{LANG.captcha}:<span class="rqe">(*)</span>
 	<input type="text" value="" id="fcode_iavim" name="fcode"/>
-	<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" id="vimg"/>
+	<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" id="vimg"/>
 	<img src="{CAPTCHA_REFR_SRC}" width="16" height="16" onclick="nv_change_captcha('vimg','fcode_iavim');"/>
 	<div class="ac">
 		<input type="hidden" name="contentid" value="{DATA.id}"/>
