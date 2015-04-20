@@ -2,9 +2,14 @@
 <div id="category">
     <div class="page-header">
         <h1>{CAT_NAME} ({count} {LANG.title_products})</h1>
+        <!-- BEGIN: viewdescriptionhtml -->
 		<!-- BEGIN: image -->
-		<img src="{IMAGE}" class="img-responsive" alt="{CAT_NAME}">
+		<div class="text-center">
+			<img src="{IMAGE}" class="img-thumbnail" alt="{CAT_NAME}">
+		</div>
 		<!-- END: image -->
+		<p>{DESCRIPTIONHTML}</p>
+		<!-- END: viewdescriptionhtml -->
     </div>
 
     <!-- BEGIN: displays -->
