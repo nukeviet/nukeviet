@@ -22,7 +22,7 @@ if( $num_items )
 {
 	$page = $nv_Request->get_int( 'page', 'get', 1 );
 	$per_page = 50;
-	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allreferers'];
+	$base_url = NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allreferers'];
 
 	$db->sqlreset()
 		->select( 'host, total, last_update' )
@@ -37,7 +37,7 @@ if( $num_items )
 	while( list( $host, $count, $last_visit ) = $result->fetch( 3 ) )
 	{
 		$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
-		$bymonth = '<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $host . '">' . $lang_module['statbymoth2'] . '</a>';
+		$bymonth = '<a href="' . NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['referer'] . '&amp;host=' . $host . '">' . $lang_module['statbymoth2'] . '</a>';
 		$host_list[$host] = array( $count, $last_visit, $bymonth );
 	}
 
