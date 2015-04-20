@@ -112,10 +112,10 @@
 							<!-- END: maintitle -->
 
 							<!-- BEGIN: subtitle -->
-							<ul class="pull-left" style="padding: 0 10px 0">
+							<ul class="pull-left list-inline" style="padding: 0 10px 0">
 								<!-- BEGIN: loop -->
 								<li>
-									<a href="{SUBTITLE.link}" title="{SUBTITLE.title}">{SUBTITLE.title}</a>
+									{SUBTITLE.title}
 								</li>
 								<!-- END: loop -->
 							</ul>

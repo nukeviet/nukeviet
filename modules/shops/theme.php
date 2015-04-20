@@ -1483,10 +1483,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 					$sub_info = $global_array_group[$sub_gr_id];
 					if( $sub_info['indetail'] )
 					{
-						$xtpl->assign( 'SUBTITLE', array(
-							'title' => $sub_info['title'],
-							'link' => $sub_info['link']
-						) );
+						$xtpl->assign( 'SUBTITLE', $sub_info['title'] );
 						$xtpl->parse( 'main.group_detail.loop.subtitle.loop' );
 					}
 				}
