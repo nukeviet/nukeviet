@@ -185,7 +185,7 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 					}
 
 					// Qua tang
-					if( !empty( $data_row_i['gift_content'] ) and NV_CURRENTTIME >= $data_row_i['gift_from'] and NV_CURRENTTIME <= $data_row_i['gift_to'] )
+					if( $pro_config['active_gift'] and !empty( $data_row_i['gift_content'] ) and NV_CURRENTTIME >= $data_row_i['gift_from'] and NV_CURRENTTIME <= $data_row_i['gift_to'] )
 					{
 						$xtpl->parse( 'main.catalogs.items.gift' );
 					}
@@ -374,7 +374,7 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 					}
 
 					// Qua tang
-					if( !empty( $data_row_i['gift_content'] ) and  NV_CURRENTTIME >= $data_row_i['gift_from'] and NV_CURRENTTIME <= $data_row_i['gift_to'] )
+					if( $pro_config['active_gift'] and !empty( $data_row_i['gift_content'] ) and  NV_CURRENTTIME >= $data_row_i['gift_from'] and NV_CURRENTTIME <= $data_row_i['gift_to'] )
 					{
 						$xtpl->parse( 'main.catalogs.items.gift' );
 					}
@@ -503,7 +503,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 
-			if( $data_row['gift_content'] != '' )
+			if( $pro_config['active_gift'] and $data_row['gift_content'] != '' )
 			{
 				$xtpl->parse( 'main.items.gift_content' );
 			}
@@ -594,7 +594,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			}
 
 			// Qua tang
-			if( !empty( $data_row['gift_content'] ) and NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
+			if( $pro_config['active_gift'] and !empty( $data_row['gift_content'] ) and NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
 			{
 				$xtpl->parse( 'main.items.gift' );
 			}
@@ -763,7 +763,7 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
 			}
 
 			// Qua tang
-			if( !empty( $data_row['gift_content'] ) and NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
+			if( $pro_config['active_gift'] and !empty( $data_row['gift_content'] ) and NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
 			{
 				$xtpl->parse( 'main.items.gift' );
 			}
@@ -1009,7 +1009,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 			}
 
 			// Qua tang
-			if( !empty( $data_row['gift_content'] ) and NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
+			if( $pro_config['active_gift'] and !empty( $data_row['gift_content'] ) and NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
 			{
 				$xtpl->parse( 'main.grid_rows.gift' );
 			}
@@ -1221,7 +1221,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 			}
 
 			// Qua tang
-			if( !empty( $data_row['gift_content'] ) and NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
+			if( $pro_config['active_gift'] and !empty( $data_row['gift_content'] ) and NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
 			{
 				$xtpl->parse( 'main.row.gift' );
 			}
@@ -1360,7 +1360,7 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			}
 		}
 
-		if( !empty( $data_content[NV_LANG_DATA . '_gift_content'] ) and NV_CURRENTTIME >= $data_content['gift_from'] and NV_CURRENTTIME <= $data_content['gift_to'] )
+		if( $pro_config['active_gift'] and !empty( $data_content[NV_LANG_DATA . '_gift_content'] ) and NV_CURRENTTIME >= $data_content['gift_from'] and NV_CURRENTTIME <= $data_content['gift_to'] )
 		{
 			$xtpl->assign( 'gift_content', $data_content[NV_LANG_DATA . '_gift_content'] );
 			$xtpl->parse( 'main.gift' );
@@ -2853,7 +2853,7 @@ function wishlist( $data_content, $compare_id, $html_pages = '' )
 			}
 
 			// Qua tang
-			if( !empty( $data_row['gift_content'] ) and  NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
+			if( $pro_config['active_gift'] and !empty( $data_row['gift_content'] ) and  NV_CURRENTTIME >= $data_row['gift_from'] and NV_CURRENTTIME <= $data_row['gift_to'] )
 			{
 				$xtpl->parse( 'main.items.gift' );
 			}
