@@ -1196,6 +1196,19 @@ if( empty( $rowcontent['alias'] ) )
 	$xtpl->parse( 'main.getalias' );
 }
 
+if( !$pro_config['active_warehouse'] )
+{
+	if( $rowcontent['id'] > 0 )
+	{
+		$xtpl->parse( 'main.warehouse.edit' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.warehouse.add' );
+	}
+	$xtpl->parse( 'main.warehouse' );
+}
+
 // Custom fiels
 if( $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
 {

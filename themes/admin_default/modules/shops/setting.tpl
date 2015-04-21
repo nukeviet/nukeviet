@@ -110,6 +110,10 @@
 					<td><strong>{LANG.setting_active_gift}</strong></td>
 					<td><input type="checkbox" value="1" name="active_gift" {ck_active_gift} /></td>
 				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_warehouse}</strong></td>
+					<td><input type="checkbox" value="1" name="active_warehouse" {ck_active_warehouse} /></td>
+				</tr>
 			</tbody>
 		</table>
 	</div>

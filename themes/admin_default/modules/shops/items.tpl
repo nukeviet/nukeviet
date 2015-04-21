@@ -115,7 +115,12 @@
 					<td class="text-center">{ROW.product_number}</td>
 					<td class="text-center"><!-- BEGIN: seller --><a href="{ROW.link_seller}" title="{LANG.report_detail}">{ROW.num_sell} {ROW.product_unit}</a><!-- END: seller --><!-- BEGIN: seller_empty --> {ROW.num_sell} {ROW.product_unit} <!-- END: seller_empty --></td>
 					<td class="text-center">{ROW.status}</td>
-					<td class="text-center"><a href="{ROW.link_warehouse}" title="{LANG.warehouse}"><em class="fa fa-cubes fa-lg">&nbsp;</em></a>&nbsp;&nbsp;&nbsp;<a href="{ROW.link_copy}" title="{LANG.product_copy_note}"><em class="fa fa-copy fa-lg">&nbsp;</em></a>&nbsp;&nbsp;&nbsp;{ROW.link_edit}&nbsp;&nbsp;&nbsp;{ROW.link_delete} </td>
+					<td class="text-center">
+						<!-- BEGIN: warehouse_icon -->
+						<a href="{ROW.link_warehouse}" title="{LANG.warehouse}"><em class="fa fa-cubes fa-lg">
+						<!-- END: warehouse_icon -->
+						&nbsp;</em></a>&nbsp;&nbsp;&nbsp;<a href="{ROW.link_copy}" title="{LANG.product_copy_note}"><em class="fa fa-copy fa-lg">&nbsp;</em></a>&nbsp;&nbsp;&nbsp;{ROW.link_edit}&nbsp;&nbsp;&nbsp;{ROW.link_delete}
+					</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>

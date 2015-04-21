@@ -30,7 +30,12 @@ if( $shop_module_config['review_active'] == '1' )
 {
 	$submenu['review'] = $lang_module['review'];
 }
-$submenu['warehouse_logs'] = $lang_module['warehouse_logs'];
+
+if( $shop_module_config['active_warehouse'] )
+{
+	$submenu['warehouse_logs'] = $lang_module['warehouse_logs'];
+}
+
 $submenu['items'] = $lang_module['content_add_items'];
 $submenu['content'] = $lang_module['content_add'];
 $submenu['discounts'] = $lang_module['discounts'];
