@@ -155,7 +155,7 @@
 							{edit_bodytext}
 						</div></td>
 					</tr>
-
+					<!-- BEGIN: gift -->
 					<tr>
 						<th>{LANG.content_gift}</th>
 					</tr>
@@ -223,6 +223,7 @@
 							</div>
 						</td>
 					</tr>
+					<!-- END: gift -->
 				</tbody>
 			</table>
 			<div id="custom_form">

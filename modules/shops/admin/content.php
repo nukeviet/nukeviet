@@ -1181,6 +1181,11 @@ if( !empty( $weight_config ) )
 	}
 }
 
+if( $pro_config['active_gift'] )
+{
+	$xtpl->parse( 'main.gift' );
+}
+
 if( $rowcontent['id'] > 0 and !$is_copy )
 {
 	$op = 'items';
