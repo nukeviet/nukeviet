@@ -397,7 +397,15 @@ function nv_change_catid(obj, id) {
 		$("#typepriceold").val(typeprice);
 	}
 	$('#custom_form').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=custom_form&cid=' + cid + "&id=" + id);
-	$('#listgroupid').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getgroup&cid=' + cid);
+	$.get( script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getgroup&cid=' + cid, function( data ) {
+		if( data != '' ){
+			$('#list_group').show();
+			$("#listgroupid").html( data );
+		}
+		else{
+			$('#list_group').hide();
+		}
+	});
 }
 
 function nv_price_config_add_item() {
