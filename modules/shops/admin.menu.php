@@ -35,7 +35,7 @@ $submenu['items'] = $lang_module['content_add_items'];
 $submenu['content'] = $lang_module['content_add'];
 $submenu['discounts'] = $lang_module['discounts'];
 
-if( $shop_module_config['use_coupons'] or defined( 'NV_IS_SPADMIN' ) )
+if( $shop_module_config['use_coupons'] )
 {
 	$submenu['coupons'] = $lang_module['coupons'];
 }
