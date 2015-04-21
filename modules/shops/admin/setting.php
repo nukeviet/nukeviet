@@ -72,6 +72,7 @@ if( $savesetting == 1 )
 	$data['use_coupons'] = $nv_Request->get_int( 'use_coupons', 'post', 0 );
 	$data['active_guest_order'] = $nv_Request->get_int( 'active_guest_order', 'post', 0 );
 	$data['active_wishlist'] = $nv_Request->get_int( 'active_wishlist', 'post', 0 );
+	$data['active_gift'] = $nv_Request->get_int( 'active_gift', 'post', 0 );
 	$data['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 	$data['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
 	$data['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
@@ -208,6 +209,9 @@ $xtpl->assign( 'ck_coupons', $check );
 
 $check = ( $data['active_wishlist'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_wishlist', $check );
+
+$check = ( $data['active_gift'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_gift', $check );
 
 $check = ( $data['point_active'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_point', $check );

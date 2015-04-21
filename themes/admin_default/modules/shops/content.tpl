@@ -155,7 +155,7 @@
 							{edit_bodytext}
 						</div></td>
 					</tr>
-
+					<!-- BEGIN: gift -->
 					<tr>
 						<th>{LANG.content_gift}</th>
 					</tr>
@@ -223,6 +223,7 @@
 							</div>
 						</td>
 					</tr>
+					<!-- END: gift -->
 				</tbody>
 			</table>
 			<div id="custom_form">
@@ -365,8 +366,7 @@
 		</div>
 	</div>
 
-	<!-- BEGIN:listgroup -->
-	<div class="table-responsive">
+	<div class="table-responsive" style="display: none" id="list_group">
 		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
@@ -378,7 +378,6 @@
 			</tbody>
 		</table>
 	</div>
-	<!-- END:listgroup -->
 
 	<div class="text-center" style="margin-top: 10px">
 		<!-- BEGIN:status -->
@@ -432,7 +431,12 @@
 		}
 	});
 
-	$("#listgroupid").load('{url_load}');
+	$.get( '{url_load}', function( data ) {
+		if( data != '' ){
+			$('#list_group').show();
+			$("#listgroupid").html( data );
+		}
+	});
 
 </script>
 
