@@ -75,6 +75,7 @@
 												<td colspan="2">
 													<input type="button" value="{LANG.price_config_add}" onclick="nv_price_config_add_item();" class="btn btn-info" />
 												</td>
+											</tr>
 										</tfoot>
 										<tbody>
 											<!-- BEGIN: loop -->
@@ -109,6 +110,15 @@
 								</th>
 							<!-- END: typeprice1 -->
 						</tr>
+						<!-- BEGIN: warehouse -->
+						<tr>
+							<th>{LANG.content_product_number}</th>
+							<td colspan="3">
+								<!-- BEGIN: edit --><span class="text-middle"><strong>{rowcontent.product_number}</strong> + </span><input class="form-control" type="number" min="0" maxlength="50" value="0" name="product_number" style="width: 100px;" /><!-- END: edit -->
+								<!-- BEGIN: add --><input class="form-control" type="number" min="0" maxlength="50" value="{rowcontent.product_number}" name="product_number" style="width: 100px;" /><!-- END: add -->
+							</td>
+						</tr>
+						<!-- END: warehouse -->
 					</tbody>
 				</table>
 			</div>

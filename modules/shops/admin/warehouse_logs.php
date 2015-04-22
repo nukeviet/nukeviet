@@ -11,6 +11,12 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
+if( !$pro_config['active_warehouse'] )
+{
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items' );
+	die();
+}
+
 $wid = $nv_Request->get_int( 'wid', 'get', 0 );
 $array_search = array();
 $array_warehouse = array();

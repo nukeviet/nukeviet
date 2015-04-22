@@ -418,6 +418,12 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 		$xtpl->parse( 'main.loop.seller_empty' );
 	}
 
+	// Hien thi nhap kho
+	if( $pro_config['active_warehouse'] )
+	{
+		$xtpl->parse( 'main.loop.warehouse_icon' );
+	}
+
 	$xtpl->parse( 'main.loop' );
 
 	++$a;
@@ -427,9 +433,13 @@ $array_list_action = array(
 	'delete' => $lang_global['delete'],
 	'publtime' => $lang_module['publtime'],
 	'exptime' => $lang_module['exptime'],
-	'addtoblock' => $lang_module['addtoblock'],
-	'warehouse' => $lang_module['warehouse']
+	'addtoblock' => $lang_module['addtoblock']
 );
+
+if( $pro_config['active_warehouse'] )
+{
+	$array_list_action['warehouse'] = $lang_module['warehouse'];
+}
 
 while( list( $catid_i, $title_i ) = each( $array_list_action ) )
 {

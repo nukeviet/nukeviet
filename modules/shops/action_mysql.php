@@ -697,6 +697,7 @@ $data['use_shipping'] = 1;
 $data['use_coupons'] = 0;
 $data['active_wishlist'] = 1;
 $data['active_gift'] = 1;
+$data['active_warehouse'] = 1;
 $data['tags_alias'] = 0;
 $data['auto_tags'] = 1;
 $data['tags_remind'] = 0;

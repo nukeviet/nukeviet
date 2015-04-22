@@ -124,6 +124,7 @@ $lang_module['setting_active_tooltip'] = 'Bật chức năng tooltip cho sản p
 $lang_module['setting_show_product_code'] = 'Hiển thị mã sản phẩm';
 $lang_module['setting_active_wishlist'] = 'Sử dụng chức năng Sản phẩm yêu thích';
 $lang_module['setting_active_gift'] = 'Sử dụng chức năng nhận quà tặng';
+$lang_module['setting_active_warehouse'] = 'Sử dụng chức năng nhập kho';
 $lang_module['setting_auto_tags'] = 'Tự động tạo từ khóa cho bài viết nếu không nhập từ khóa lúc đăng bài';
 $lang_module['setting_tags_remind'] = 'Nhắc nhở các từ khóa không có mô tả';
 $lang_module['setting_facebookAppID'] = 'Facebook App ID';
