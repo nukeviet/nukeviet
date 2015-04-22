@@ -155,7 +155,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  newday tinyint(4) NOT NULL DEFAULT '3',
  typeprice tinyint(4) NOT NULL DEFAULT '2',
  form varchar(50) NOT NULL DEFAULT '',
- group_price text NOT NULL DEFAULT '',
+ group_price text NOT NULL,
  viewdescriptionhtml tinyint(1) unsigned NOT NULL default '0',
  admins mediumtext NOT NULL,
  add_time int(11) unsigned NOT NULL default '0',
@@ -300,7 +300,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  product_code varchar(255) NOT NULL DEFAULT '',
  product_number int(11) NOT NULL DEFAULT '0',
  product_price float NOT NULL DEFAULT '0',
- price_config text NOT NULL DEFAULT '',
+ price_config text NOT NULL,
  money_unit char(3) NOT NULL,
  product_unit int(11) NOT NULL,
  product_weight float NOT NULL DEFAULT '0',
@@ -511,7 +511,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_wishlist (
   wid smallint(6) NOT NULL AUTO_INCREMENT,
   user_id int(11) unsigned NOT NULL default '0',
-  listid text DEFAULT '',
+  listid text,
   PRIMARY KEY (wid)
 ) ENGINE=MyISAM";
 
