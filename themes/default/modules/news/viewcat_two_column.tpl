@@ -24,6 +24,13 @@
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
+			<h5 class="text-muted">
+				<ul class="list-unstyled list-inline">
+					<li><em class="fa fa-clock-o">&nbsp;</em> {NEWSTOP.publtime}</li>
+					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {NEWSTOP.hitstotal}</li>
+					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {NEWSTOP.hitscm}</li>
+				</ul>
+			</h5>
 			<p class="text-justify">
 				{NEWSTOP.hometext}
 			</p>
@@ -59,6 +66,13 @@
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
+			<h5 class="text-muted">
+				<ul class="list-unstyled list-inline">
+					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
+					<li><em class="fa fa-eye">&nbsp;</em> {CONTENT.hitstotal}</li>
+					<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
+				</ul>
+			</h5>
 			<!-- BEGIN: image -->
 			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->

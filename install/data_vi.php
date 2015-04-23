@@ -19,7 +19,7 @@ $sth->execute( array('about', 'page', 'about', 'Giới thiệu', '', 1276333182,
 $sth->execute( array('news', 'news', 'news', 'Tin Tức', '', 1270400000, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0) );
 $sth->execute( array('users', 'users', 'users', 'Thành viên', 'Tài khoản', 1274080277, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0) );
 $sth->execute( array('contact', 'contact', 'contact', 'Liên hệ', '', 1275351337, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0) );
-$sth->execute( array('statistics', 'statistics', 'statistics', 'Thống kê', '', 1276520928, 1, 0, '', '', '', 'truy cập, online, statistics', '2', 5, 1, '', 0, 0) );
+$sth->execute( array('statistics', 'statistics', 'statistics', 'Thống kê', '', 1276520928, 1, 1, '', '', '', 'truy cập, online, statistics', '2', 5, 1, '', 0, 0) );
 $sth->execute( array('voting', 'voting', 'voting', 'Thăm dò ý kiến', '', 1275315261, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0) );
 $sth->execute( array('banners', 'banners', 'banners', 'Quảng cáo', '', 1270400000, 1, 1 , '', '', '', '', '6', 7, 1, '', 0, 0) );
 $sth->execute( array('seek', 'seek', 'seek', 'Tìm kiếm', '', 1273474173, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0) );
@@ -331,7 +331,7 @@ $array_cron_name = array();
 $array_cron_name['cron_online_expired_del'] = 'Xóa các dòng ghi trạng thái online đã cũ trong CSDL';
 $array_cron_name['cron_dump_autobackup'] = 'Tự động lưu CSDL';
 $array_cron_name['cron_auto_del_temp_download'] = 'Xóa các file tạm trong thư mục tmp';
-$array_cron_name['cron_del_ip_logs'] = 'Xóa IP log files Xóa các file logo truy cập';
+$array_cron_name['cron_del_ip_logs'] = 'Xóa IP log files, Xóa các file nhật ký truy cập';
 $array_cron_name['cron_auto_del_error_log'] = 'Xóa các file error_log quá hạn';
 $array_cron_name['cron_auto_sendmail_error_log'] = 'Gửi email các thông báo lỗi cho admin';
 $array_cron_name['cron_ref_expired_del'] = 'Xóa các referer quá hạn';

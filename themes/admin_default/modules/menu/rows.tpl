@@ -7,53 +7,69 @@
 	var nv_lang_data = '{NV_LANG_DATA}';
 </script>
 <!-- BEGIN: table -->
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<colgroup>
-			<col class="w50">
-			<col span="2">
-			<col class="w150">
-			<col class="w150">
-		</colgroup>
-		<thead>
-			<tr>
-				<th>{LANG.number}</th>
-				<th>{LANG.title}</th>
-				<th>{LANG.link}</th>
-				<th class="text-center">{GLANG.groups_view}</th>
-				<th class="text-center">{LANG.action}</th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- BEGIN: loop1 -->
-			<tr>
-				<td class="text-center">
-				<select id="change_weight_{ROW.id}" onchange="nv_chang_weight_item('{ROW.id}','{ROW.mid}','{ROW.parentid}','weight');" class="form-control w100">
-					<!-- BEGIN: weight -->
-					<option value="{stt}" {select}>{stt}</option>
-					<!-- END: weight -->
-				</select></td>
-				<td>
-                    <!-- BEGIN: icon -->
-                    <img src="{ROW.icon}" height="20px" />
-                    <!-- END: icon -->
-                    <a href="{ROW.url_title}"><strong>{ROW.title} </strong>
-                </a>
-				<!-- BEGIN: sub -->
-				(<span class="requie">{ROW.sub} {LANG.sub_menu}</span>)
-				<!-- END: sub -->
-				</td>
-				<td>{ROW.link}</td>
-				<td class="text-center">{ROW.groups_view}</td>
-				<td class="text-center">
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
-				</td>
-			</tr>
-			<!-- END: loop1 -->
-		</tbody>
-	</table>
-</div>
+<form class="navbar-form" method="post" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&mid={DATA.mid}&parentid={DATA.parentid}">
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<colgroup>
+				<col class="w50">
+				<col class="w50">
+				<col span="2">
+				<col class="w150">
+				<col class="w150">
+			</colgroup>
+			<thead>
+				<tr>
+					<th class="text-center"><input name="check_all[]" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" type="checkbox"></th>
+					<th>{LANG.number}</th>
+					<th>{LANG.title}</th>
+					<th>{LANG.link}</th>
+					<th class="text-center">{GLANG.groups_view}</th>
+					<th class="text-center">{LANG.action}</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td colspan="6">
+						<select id="action" name="action" class="form-control">
+							<option value="delete">{LANG.delete}</option>
+						</select>
+						<input onclick="return nv_main_action(this.form, '{LANG.msgnocheck}')" name="submit" type="submit" value="{LANG.action_form}" class="btn btn-primary w100" />
+					</td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<!-- BEGIN: loop1 -->
+				<tr>
+					<td class="text-center"><input type="checkbox" name="idcheck[]" value="{ROW.id}" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);"></td>
+					<td class="text-center">
+						<select id="change_weight_{ROW.id}" onchange="nv_chang_weight_item('{ROW.id}','{ROW.mid}','{ROW.parentid}','weight');" class="form-control w100">
+							<!-- BEGIN: weight -->
+							<option value="{stt}" {select}>{stt}</option>
+							<!-- END: weight -->
+						</select>
+					</td>
+					<td>
+	                    <!-- BEGIN: icon -->
+	                    <img src="{ROW.icon}" height="20px" />
+	                    <!-- END: icon -->
+	                    <a href="{ROW.url_title}"><strong>{ROW.title} </strong>
+	                </a>
+					<!-- BEGIN: sub -->
+					(<span class="requie">{ROW.sub} {LANG.sub_menu}</span>)
+					<!-- END: sub -->
+					</td>
+					<td>{ROW.link}</td>
+					<td class="text-center">{ROW.groups_view}</td>
+					<td class="text-center">
+						<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
+						<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
+					</td>
+				</tr>
+				<!-- END: loop1 -->
+			</tbody>
+		</table>
+	</div>
+</form>
 <!-- END: table -->
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>

@@ -35,7 +35,7 @@ ul.listnews li {
 }
 
 ul.listnews li img {
-	margin-right: 5px;	
+	margin-right: 5px;
 }
 
 div.news_column .time{
@@ -43,12 +43,20 @@ div.news_column .time{
 	display: inline;
 }
 
+div.news_column h5 .list-inline>li{
+	padding-left: 0
+}
+
+div.news_column h5 .list-inline{
+	margin-bottom: 3px
+}
+
 div.news_column .socialicon{
 	margin: -8px 0 -8px 0;
 }
 
 div.news_column .imghome{
-	margin: 0 10px 0 0;	
+	margin: 0 10px 0 0;
 }
 
 #hometext h2 {
@@ -59,7 +67,7 @@ div.news_column .imghome{
 
 div.news_column .imgalt{
 	display: block;
-	text-align: center;	
+	text-align: center;
 	margin-top: 5px;
 }
 
@@ -89,7 +97,7 @@ div.news_column ul.related li {
 }
 
 div.news_column .panel-heading {
-	font-size: 13px;	
+	font-size: 13px;
 }
 
 div.span-25 ul.related li {
@@ -280,7 +288,7 @@ div.news_column ul.related a:hover{
 }
 
 .tooltip-inner {
-	width: 300px; 
+	width: 300px;
 	max-width: 300px !important;
 	padding: 10px;
 }
@@ -303,7 +311,7 @@ h3{
 	margin: 0 !important;
 }
 
-.fb-like {
+.fb-like, .fb-share-button {
     margin: 0 25px 0 10px;
     top: -5px;
 }

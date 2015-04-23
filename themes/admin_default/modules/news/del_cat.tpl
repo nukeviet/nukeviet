@@ -17,7 +17,7 @@
 						<br />
 						<br />
 						<strong>{LANG.delcat_msg_rows_move}</strong>:<br />
-						<select class="form-control w300" name="catidnews" style="display: inline-block; text-align: center">
+						<select class="form-control w300" name="catidnews" style="display: inline-block">
 							<!-- BEGIN: catidnews -->
 							<option value="{CATIDNEWS.key}">{CATIDNEWS.title}</option>
 							<!-- END: catidnews -->
