@@ -312,6 +312,17 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	}
 }
 
+if( $nv_Request->get_title( 'action', 'post' ) =='delete' and $nv_Request->isset_request( 'idcheck', 'post' ) )
+{
+	$array_id = $nv_Request->get_typed_array( 'idcheck', 'post', 'int' );
+	foreach ($array_id as $id)
+	{
+		nv_menu_del_sub( $id, $post['parentid'] );
+	}
+	menu_fix_order( $post['mid'] );
+	nv_del_moduleCache( $module_name );
+}
+
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $post['mid'] . ' AND parentid=' . $post['parentid'] . ' ORDER BY weight';
 $result = $db->query( $sql );
 

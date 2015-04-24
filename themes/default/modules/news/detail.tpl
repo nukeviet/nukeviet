@@ -76,6 +76,7 @@
 		<hr />
         <!-- BEGIN: socialbutton -->
         <div class="socialicon pull-left">
+        	<div style="width:60px" class="fb-share-button" data-href="{SELFURL}" data-layout="button">&nbsp;</div>
 	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
 	        <div class="g-plusone" data-size="medium"></div>
 	        <script type="text/javascript">

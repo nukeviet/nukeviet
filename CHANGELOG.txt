@@ -1,11 +1,17 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.15 (Open beta 3)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.15 (37 commits: from commit/fc6ee3f to commit/477c6e1)
+- Add function nv_show_name_user
+- Module menu: add funtion delete multi menu, add facebook share button
+- Fix and update something...
+
 NUKEVIET 4.0.13 (Open beta 1)
-CODE: https://github.com/nukeviet/nukeviet/tree/4.0.13 (88 commits: from commit/f73da99 to commit/fc6ee3f)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.13 (88 commits: from commit/7143a90 to commit/fc6ee3f)
 - CKeditor: add plugin switchbar
 - Update Font Awesome 4.3.0, jQuery 2.1.3, PHPMailer 5.2.9
-- Fix and updat something...
+- Fix and update something...
 
 NUKEVIET 4.0.11 (Close beta 11)
 CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (1850 commits: from commit/f73da99 to commit/7143a90)
