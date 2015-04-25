@@ -213,7 +213,7 @@ function nv_file_table( $table )
 	$result = $db->query( 'SHOW COLUMNS FROM ' . $table );
 	while( list( $field ) = $result->fetch( 3 ) )
 	{
-		$tmp = explode( '_', $field );
+		$tmp = explode( '_', $field, 2 );
 		foreach( $lang_value as $lang_i )
 		{
 			if( ! empty( $tmp[0] ) && ! empty( $tmp[1] ) )
