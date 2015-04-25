@@ -81,9 +81,12 @@ $array_cat_search[0]['title'] = $lang_module['search_all'];
 $contents = call_user_func( 'search_theme', $key, $check_num, $date_array, $array_cat_search );
 $where = '';
 $tbl_src = '';
-
-if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
+if( empty( $key ) AND ( $catid == 0 ) AND empty( $from_date ) AND empty( $to_date ) )
 {
+	$contents .= '<div class="alert alert-danger">'.$lang_module['empty_data_search'].'</div>';
+}
+else {
+
 	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search&amp;q='. $key , true );
 	$canonicalUrl = NV_MY_DOMAIN . $base_url_rewrite;
 
@@ -124,11 +127,11 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m ) )
 	{
-		$where .= ' AND publtime >=' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		$where .= ' AND publtime <=' . mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
 	}
 	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $from_date, $m ) )
 	{
-		$where .= ' AND publtime <= ' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		$where .= ' AND publtime >=' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 
 	if( $catid > 0 )
