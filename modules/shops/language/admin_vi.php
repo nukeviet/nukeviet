@@ -150,6 +150,7 @@ $lang_module['view_home_group'] = 'Hiển thị theo nhóm sản phẩm';
 $lang_module['cat_have_product_err'] = 'Bạn không thể thêm loại sản phẩm vào chủ đề đã có sản phẩm bên trong';
 $lang_module['cat_do_not_add'] = 'Không thêm được';
 $lang_module['error_cat_name'] = 'Không có tên chủ đề';
+$lang_module['error_weight'] = 'Lỗi: Bạn cần nhập khối lượng sản phẩm';
 $lang_module['search'] = 'Tìm kiếm';
 $lang_module['search_type'] = 'Tìm kiếm theo';
 $lang_module['search_id'] = 'ID';
