@@ -23,13 +23,13 @@
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
-			<h5 class="text-muted">
+			<div class="text-muted">
 				<ul class="list-unstyled list-inline">
 					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
 					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}</li>
 					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}</li>
 				</ul>
-			</h5>
+			</div>
 			<p class="text-justify">
 				{CONTENT.hometext}
 			</p>
