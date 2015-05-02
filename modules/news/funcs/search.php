@@ -30,18 +30,19 @@ function GetSourceNews( $sourceid )
 function BoldKeywordInStr( $str, $keyword )
 {
 	$str = nv_clean60( $str, 300 );
-	$tmp = explode( ' ', $keyword );
-
-	foreach( $tmp as $k )
+	if( ! empty( $keyword ) )
 	{
-		$tp = strtolower( $k );
-		$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
-		$tp = strtoupper( $k );
-		$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
-		$k[0] = strtoupper( $k[0] );
-		$str = str_replace( $k, '<span class="keyword">' . $k . '</span>', $str );
+		$tmp = explode( ' ', $keyword );
+		foreach( $tmp as $k )
+		{
+			$tp = strtolower( $k );
+			$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
+			$tp = strtoupper( $k );
+			$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
+			$k[0] = strtoupper( $k[0] );
+			$str = str_replace( $k, '<span class="keyword">' . $k . '</span>', $str );
+		}
 	}
-
 	return $str;
 }
 
