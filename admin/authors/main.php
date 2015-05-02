@@ -71,7 +71,6 @@ if( $numrows )
 		$last_login = intval( $row['last_login'] );
 		$last_login = $last_login ? nv_date( 'l, d/m/Y H:i', $last_login ) : $lang_module['last_login0'];
 		$last_agent = $row['last_agent'];
-		$row['first_name'] = empty( $row['first_name'] ) ? $row['first_name'] : $row['username'];
 
 		$browser = array_combine( array( 'key', 'name' ), explode( '|', nv_getBrowser( $last_agent ) ) );
 
@@ -168,14 +167,16 @@ if( $numrows )
 			$allow_files_type = array_values( array_intersect( $global_config['file_allowed_ext'], $allow_files_type ) );
 		}
 
+		$row['full_name'] = nv_show_name_user( $row['first_name'], $row['last_name'], $row['username'] );
+
 		$admins[$row['admin_id']] = array();
-		$admins[$row['admin_id']]['caption'] = ( $row['admin_id'] == $admin_info['admin_id'] ) ? sprintf( $lang_module['admin_info_title2'], $row['first_name'] ) : sprintf( $lang_module['admin_info_title1'], $row['first_name'] );
+		$admins[$row['admin_id']]['caption'] = ( $row['admin_id'] == $admin_info['admin_id'] ) ? sprintf( $lang_module['admin_info_title2'], $row['full_name'] ) : sprintf( $lang_module['admin_info_title1'], $row['full_name'] );
 		$admins[$row['admin_id']]['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;id=' . $row['admin_id'];
 		$admins[$row['admin_id']]['thead'] = $thead;
 		$admins[$row['admin_id']]['options'] = array();
 		$admins[$row['admin_id']]['options']['login'] = array( $lang_module['login'], $login );
 		$admins[$row['admin_id']]['options']['email'] = array( $lang_module['email'], $email );
-		$admins[$row['admin_id']]['options']['first_name'] = array( $lang_module['name'], $row['first_name'], $row['last_name'] );
+		$admins[$row['admin_id']]['options']['full_name'] = array( $lang_module['name'], $row['full_name'] );
 		$admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
 		$admins[$row['admin_id']]['options']['lev'] = array( $lang_module['lev'], $level_txt );
 		$admins[$row['admin_id']]['options']['position'] = array( $lang_module['position'], $row['position'] );
@@ -276,6 +277,7 @@ if( ! empty( $admins ) )
 			$data_row = array();
 			$data_row['link'] = $values['link'];
 			$data_row['login'] = $values['options']['login'][1];
+			$data_row['full_name'] = $values['options']['full_name'][1];
 			$data_row['email'] = $values['options']['email'][1];
 			$data_row['lev'] = $values['options']['lev'][1];
 			$data_row['position'] = $values['options']['position'][1];
