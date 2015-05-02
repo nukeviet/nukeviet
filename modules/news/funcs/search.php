@@ -56,18 +56,39 @@ $from_date = $nv_Request->get_title( 'from_date', 'get', '', 0 );
 $to_date = $nv_Request->get_title( 'to_date', 'get', '', 0 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $check_num = $nv_Request->get_title( 'choose', 'get', 1, 1 );
-$date_array['from_date'] = $from_date;
-$date_array['to_date'] = $to_date;
+$date_array['from_date'] = preg_replace( '/[^0-9]/', '.', urldecode( $from_date ) );
+$date_array['to_date'] = preg_replace( '/[^0-9]/', '.', urldecode( $to_date ) );
 
-$base_url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
-if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+$base_url_rewrite = $request_uri = urldecode( $_SERVER['REQUEST_URI'] );
+if( empty( $catid ) )
 {
-	header( "Location: " . $base_url_rewrite );
+	$base_url_rewrite = str_replace('&catid=' . $catid, '', $base_url_rewrite );
+}
+if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'] ) )
+{
+	$base_url_rewrite = str_replace('&from_date=' . $from_date, '&from_date=' . $date_array['from_date'], $base_url_rewrite );
+}
+else
+{
+	$base_url_rewrite = str_replace('&from_date=' . $from_date, '', $base_url_rewrite );
+}
+if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'] ) )
+{
+	$base_url_rewrite = str_replace('&to_date=' . $to_date, '&to_date=' . $date_array['to_date'], $base_url_rewrite );
+}
+else
+{
+	$base_url_rewrite = str_replace('&to_date=' . $to_date, '', $base_url_rewrite );
+}
+$base_url_rewrite = nv_url_rewrite($base_url_rewrite , true );
+
+if( $request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite )
+{
+	header( 'Location: ' . $base_url_rewrite );
 	die();
 }
 
 $array_cat_search = array();
-
 foreach( $global_array_cat as $arr_cat_i )
 {
 	$array_cat_search[$arr_cat_i['catid']] = array(
