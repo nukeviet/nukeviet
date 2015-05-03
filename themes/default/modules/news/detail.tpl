@@ -179,7 +179,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip">{TOPIC.title}</a>
+			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip" title="{TOPIC.title}">{TOPIC.title}</a>
 			<em>({TOPIC.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -233,6 +233,7 @@
 $(document).ready(function() {
 	$(".bodytext img").toggleClass('img-thumbnail');
 	<!-- BEGIN: tooltip -->
+	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
 	$("[data-rel='tooltip'][data-content!='']").tooltip({
 		placement: "{TOOLTIP_POSITION}",
 		html: true,
