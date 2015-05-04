@@ -28,7 +28,7 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
 	$is_search = true;
 
 	$search['key'] = nv_substr( $nv_Request->get_title( 'q', 'get', '' ), 0, NV_MAX_SEARCH_LENGTH );
-	$search['key'] = str_replace( '+', ' ', $search['key'] );
+	$search['key'] = str_replace( '+', ' ', urldecode( $search['key'] ) );
 	$search['mod'] = $nv_Request->get_title( 'm', 'get', 'all', $search['mod'] );
 	$search['logic'] = $nv_Request->get_int( 'l', 'get', $search['logic'] );
 	$search['page'] = $nv_Request->get_int( 'page', 'get', 1 );
@@ -36,10 +36,10 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
     if( $search['logic'] != 1 ) $search['logic'] = 0;
     if( ! isset( $array_mod[$search['mod']] ) ) $search['mod'] = 'all';
 
-	$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . htmlspecialchars( urlencode( nv_unhtmlspecialchars( $search['key'] ) ) );
+	$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . htmlspecialchars( nv_unhtmlspecialchars( $search['key'] ) );
     if( $search['mod'] != 'all' )
     {
-        $base_url_rewrite .= '&m=' . htmlspecialchars( urlencode( nv_unhtmlspecialchars( $search['mod'] ) ) );
+        $base_url_rewrite .= '&m=' . htmlspecialchars( nv_unhtmlspecialchars( $search['mod'] ) );
     }
     if( $search['logic'] != 1 )
     {
@@ -51,7 +51,8 @@ if( $nv_Request->isset_request( 'q', 'get' ) )
     }
 	$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
 
-	if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+	$request_uri = urldecode( $_SERVER['REQUEST_URI'] );
+	if( $request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite )
 	{
 		Header( 'Location: ' . $base_url_rewrite );
 		die();

@@ -54,7 +54,7 @@ if( defined( 'NV_IS_ADMIN' ) )
 						$nv_Request->set_Session( 'online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0' );
 						$nv_Request->unset_request( 'admin_login_redirect', 'session' );
 
-						if( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 )
+						if( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 and strpos( $redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification_load') == 0 )
 						{
 							Header( 'Location: ' . nv_url_rewrite( $redirect, true ) );
 							exit();
@@ -72,7 +72,7 @@ if( defined( 'NV_IS_ADMIN' ) )
 				$nv_Request->unset_request( 'admin,online', 'session' );
 				$nv_Request->unset_request( 'admin_relogin_redirect', 'session' );
 
-				if( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 )
+				if( ! empty( $redirect ) and nv_is_myreferer( $redirect ) == 1 and strpos( $redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification_load') == 0 )
 				{
 					$server_name = preg_replace( '/^www\./', '', nv_getenv( 'HTTP_HOST' ) );
 					$nohttp_redirect = preg_replace( array( '/^[a-zA-Z]+\:\/\//', '/www\./' ), array( '', '' ), $redirect );

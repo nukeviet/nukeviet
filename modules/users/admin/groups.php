@@ -211,6 +211,8 @@ if( $nv_Request->isset_request( 'gid,exclude', 'post' ) )
 	die( 'OK' );
 }
 
+$lang_module['nametitle'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
+
 $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -241,6 +243,7 @@ if( $nv_Request->isset_request( 'listUsers', 'get' ) )
 		$idsite = ( $global_config['idsite'] == $groupsList[$group_id]['idsite'] ) ? 0 : $global_config['idsite'];
 		foreach ( $_rows as $row )
 		{
+			$row['full_name'] = nv_show_name_user( $row['first_name'], $row['last_name'], $row['username'] );
 			$xtpl->assign( 'LOOP', $row );
 			if( $group_id > 3 and ( $idsite == 0 or $idsite == $row['idsite'] ) )
 			{
