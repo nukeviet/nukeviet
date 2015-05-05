@@ -9,10 +9,13 @@ You should have received a copy of the GNU General Public License along with thi
 NukeViet is a registered trademark of Vietnam Open Source Development Joint Stock Company (VINADES.,JSC).
 
 NukeViet includes works under other copyright notices and distributed according to the terms of the GNU General Public License or a compatible license, including:
+	Bootstrap: http://getbootstrap.com/
 	XTemplate: http://www.phpxtemplate.org
 	jQuery: http://jquery.com/
 	Ckeditor: http://ckeditor.com/
-	OpenID: http://openid.net/
-	PHPMailer: http://code.google.com/a/apache-extras.org/p/phpmailer/
+	LightOpenID: https://code.google.com/p/lightopenid/
+	phpCAS: https://github.com/Jasig/phpCAS
+	PHPoAuthLib: https://github.com/Lusitanian/PHPoAuthLib
+	PHPMailer: https://github.com/PHPMailer/PHPMailer
 	MUDIM: http://mudim.googlecode.com
 	... see copyright information at the header of source code file.

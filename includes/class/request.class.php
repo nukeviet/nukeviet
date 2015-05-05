@@ -306,13 +306,16 @@ class Request
 			$_SERVER['DOCUMENT_ROOT'] = $doc_root;
 		}
 		$_SERVER['SCRIPT_FILENAME'] = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['PHP_SELF'];
-		$_SERVER['SERVER_NAME'] = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'HTTP_HOST', 'SERVER_NAME' ) ) );
 		$_SERVER['SERVER_PORT'] = $this->get_Env( 'SERVER_PORT' );
 		$_SERVER['SERVER_PROTOCOL'] = $this->get_Env( 'SERVER_PROTOCOL' );
+
+		$this->server_name = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'HTTP_HOST', 'SERVER_NAME' ) ) );
+		$this->server_name = preg_replace( '/(\:[0-9]+)$/', '', $this->server_name );
+		$_SERVER['SERVER_NAME'] = $this->server_name;
+
 		$this->base_siteurl = $base_siteurl;
 		$this->base_adminurl = $base_siteurl . ( NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '' );
 		$this->doc_root = $doc_root;
-		$this->server_name = $_SERVER['SERVER_NAME'];
 		$this->server_protocol = strtolower( preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'] ) ) . ( ( $this->get_Env( 'HTTPS' ) == 'on' ) ? 's' : '' );
 		$this->server_port = ( $_SERVER['SERVER_PORT'] == '80' ) ? '' : ( ':' . $_SERVER['SERVER_PORT'] );
 
@@ -443,41 +446,48 @@ class Request
 	 */
 	private function get_session_save_path( $path )
 	{
-		$save_path = '';
-		$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
-		if( extension_loaded( 'suhosin' ) )
-		{
-			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
+		$save_path = session_save_path();
+		if ( is_dir( $save_path ) && is_writable( $save_path ) ) {
+			$this->session_save_path = $save_path;
 		}
-
-		if( function_exists( 'session_save_path' ) and ! in_array( 'session_save_path', $disable_functions ) )
+		else
 		{
-			if( preg_match( '/^[a-zA-Z]{1}[a-zA-Z0-9_]*$/', $path ) )
+			$save_path = '';
+			$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
+			if( extension_loaded( 'suhosin' ) )
 			{
-				$save_path = NV_ROOTDIR . '/' . $path;
-				if( ! is_writable( $save_path ) )
+				$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
+			}
+
+			if( function_exists( 'session_save_path' ) and ! in_array( 'session_save_path', $disable_functions ) )
+			{
+				if( preg_match( '/^[a-zA-Z]{1}[a-zA-Z0-9_]*$/', $path ) )
 				{
-					if( ! is_dir( $save_path ) )
-					{
-						$oldumask = umask( 0 );
-						$res = @mkdir( $save_path, 0755 );
-						umask( $oldumask );
-					}
-					if( ! @is_writable( $save_path ) )
-					{
-						if( ! @chmod( $save_path ) ) $save_path = '';
-					}
-					clearstatcache();
+					$save_path = NV_ROOTDIR . '/' . $path;
 					if( ! is_writable( $save_path ) )
 					{
-						trigger_error( Request::SESSION_SAVE_PATH_NOT_SET, 256 );
+						if( ! is_dir( $save_path ) )
+						{
+							$oldumask = umask( 0 );
+							$res = @mkdir( $save_path, 0755 );
+							umask( $oldumask );
+						}
+						if( ! @is_writable( $save_path ) )
+						{
+							if( ! @chmod( $save_path ) ) $save_path = '';
+						}
+						clearstatcache();
+						if( ! is_writable( $save_path ) )
+						{
+							trigger_error( Request::SESSION_SAVE_PATH_NOT_SET, 256 );
+						}
 					}
+					session_save_path( $save_path . '/' );
 				}
-				session_save_path( $save_path . '/' );
+				$save_path = session_save_path();
 			}
-			$save_path = session_save_path();
+			$this->session_save_path = $save_path;
 		}
-		$this->session_save_path = $save_path;
 	}
 
 	/**
@@ -1371,5 +1381,4 @@ class Request
 		}
 		return $arr;
 	}
-
 }

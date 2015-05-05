@@ -32,12 +32,12 @@ if( !empty( $alias ) )
 	if( $topicid > 0 )
 	{
 		$base_url_rewrite = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $alias;
-		$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
 		if( $page > 1 )
 		{
 			$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 			$base_url_rewrite .= '/page-' . $page;
-		}		
+		}
+		$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
 		if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 		{
 			Header( 'Location: ' . $base_url_rewrite );
@@ -48,7 +48,7 @@ if( !empty( $alias ) )
 			'catid' => 0,
 			'title' => $page_title,
 			'link' => $base_url
-		);		
+		);
 
 		$db->sqlreset()
 			->select( 'COUNT(*)' )

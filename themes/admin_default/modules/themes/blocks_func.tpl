@@ -32,10 +32,10 @@
 		<tfoot>
 			<tr class="aright">
 				<td colspan="7">
-					<em class="fa fa-plus-circle fa-lg">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp; 
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a>&nbsp;&nbsp; 
-					<em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp; 
-					<em class="fa fa-square-o fa-lg">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a>&nbsp;&nbsp; 
+					<em class="fa fa-plus-circle fa-lg">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp;
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a>&nbsp;&nbsp;
+					<em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp;
+					<em class="fa fa-square-o fa-lg">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.block_uncheckall}</a>&nbsp;&nbsp;
 				</td>
 			</tr>
 		</tfoot>
@@ -69,12 +69,7 @@
 	$(function() {
 		$("a.block_content").click(function() {
 			var bid = parseInt($(this).attr("title"));
-			Shadowbox.open({
-				content : '<iframe src="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=themes&amp;{NV_OP_VARIABLE}=block_content&amp;bid=' + bid + '&amp;blockredirect={BLOCKREDIRECT}" border="1" frameborder="0" style="width:780px;height:450px"></iframe>',
-				player : "html",
-				height : 450,
-				width : 780
-			});
+            nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=themes&{NV_OP_VARIABLE}=block_content&bid=" + bid + "&blockredirect={BLOCKREDIRECT}", "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no");
 		});
 		$("select[name=module]").change(function() {
 			var module = $(this).val();

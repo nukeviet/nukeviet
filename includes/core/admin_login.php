@@ -144,7 +144,7 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) and $nv_Request
 					define( 'NV_IS_ADMIN', true );
 
 					$redirect = NV_BASE_SITEURL . NV_ADMINDIR;
-					if( ! empty( $admin_login_redirect ) )
+					if( ! empty( $admin_login_redirect ) and strpos( $admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification_load') == 0 )
 					{
 						$redirect = $admin_login_redirect;
 						$nv_Request->unset_request( 'admin_login_redirect', 'session' );

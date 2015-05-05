@@ -328,6 +328,7 @@ elseif( $step == 4 )
 
 	$array_resquest = array();
 	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
+	$array_resquest['class_pdo_support'] = 'highlight_red';
 	if ( class_exists( 'PDO' ) )
 	{
 		$PDODrivers = PDO::getAvailableDrivers();
@@ -336,15 +337,19 @@ elseif( $step == 4 )
 			if( file_exists( NV_ROOTDIR . '/install/action_' . $_driver . '.php' ) )
 			{
 				$array_resquest['pdo_support'] = $lang_module['compatible'];
+				$array_resquest['class_pdo_support'] = 'highlight_green';
 				$nextstep = 1;
 				break;
 			}
 		}
 	}
-	$array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
 
+	$array_resquest['php_required'] = $sys_info['php_required'];
+	$sys_info['php_support'] = ( version_compare( PHP_VERSION, $sys_info['php_required'] ) < 0 ) ? 0 : 1;
+	$array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
 	foreach( $array_resquest_key as $key )
 	{
+		$array_resquest['class_' . $key] = ( $sys_info[$key] ) ? 'highlight_green' : 'highlight_red';
 		$array_resquest[$key] = ( $sys_info[$key] ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
 
 		if( ! $sys_info[$key] )
@@ -359,18 +364,23 @@ elseif( $step == 4 )
 	}
 
 	$array_suport = array();
-	$array_support['supports_rewrite'] = ( empty( $sys_info['supports_rewrite'] ) ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['safe_mode'] = ( $sys_info['safe_mode'] ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['register_globals'] = ( ini_get( 'register_globals' ) == '1' || strtolower( ini_get( 'register_globals' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['magic_quotes_runtime'] = ( ini_get( 'magic_quotes_runtime' ) == '1' || strtolower( ini_get( 'magic_quotes_runtime' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['magic_quotes_gpc'] = ( ini_get( 'magic_quotes_gpc' ) == '1' || strtolower( ini_get( 'magic_quotes_gpc' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['magic_quotes_sybase'] = ( ini_get( 'magic_quotes_sybase' ) == '1' || strtolower( ini_get( 'magic_quotes_sybase' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['output_buffering'] = ( ini_get( 'output_buffering' ) == '1' || strtolower( ini_get( 'output_buffering' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['session_auto_start'] = ( ini_get( 'session.auto_start' ) == '1' || strtolower( ini_get( 'session.auto_start' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['display_errors'] = ( ini_get( 'display_errors' ) == '1' || strtolower( ini_get( 'display_errors' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['allowed_set_time_limit'] = ( $sys_info['allowed_set_time_limit'] ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
-	$array_support['zlib_support'] = ( $sys_info['zlib_support'] ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
-	$array_support['zip_support'] = ( extension_loaded( 'zip' ) ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+	$array_support['supports_rewrite'] = ( empty( $sys_info['supports_rewrite'] ) ) ? 0 : 1;
+	$array_support['safe_mode'] = ( $sys_info['safe_mode'] ) ? 0 : 1;
+	$array_support['register_globals'] = ( ini_get( 'register_globals' ) == '1' || strtolower( ini_get( 'register_globals' ) ) == 'on' ) ? 0 : 1;
+	$array_support['magic_quotes_runtime'] = ( ini_get( 'magic_quotes_runtime' ) == '1' || strtolower( ini_get( 'magic_quotes_runtime' ) ) == 'on' ) ? 0 : 1;
+	$array_support['magic_quotes_gpc'] = ( ini_get( 'magic_quotes_gpc' ) == '1' || strtolower( ini_get( 'magic_quotes_gpc' ) ) == 'on' ) ? 0 : 1;
+	$array_support['magic_quotes_sybase'] = ( ini_get( 'magic_quotes_sybase' ) == '1' || strtolower( ini_get( 'magic_quotes_sybase' ) ) == 'on' ) ? 0 : 1;
+	$array_support['output_buffering'] = ( ini_get( 'output_buffering' ) == '1' || strtolower( ini_get( 'output_buffering' ) ) == 'on' ) ? 0 : 1;
+	$array_support['session_auto_start'] = ( ini_get( 'session.auto_start' ) == '1' || strtolower( ini_get( 'session.auto_start' ) ) == 'on' ) ? 0 : 1;
+	$array_support['display_errors'] = ( ini_get( 'display_errors' ) == '1' || strtolower( ini_get( 'display_errors' ) ) == 'on' ) ? 0 : 1;
+	$array_support['allowed_set_time_limit'] = ( $sys_info['allowed_set_time_limit'] ) ? 1 : 0;
+	$array_support['zlib_support'] = ( $sys_info['zlib_support'] ) ? 1 : 0;
+	$array_support['zip_support'] = ( extension_loaded( 'zip' ) ) ? 1 : 0;
+	foreach ($array_support as $_key => $_support )
+	{
+		$array_support['class_' . $_key] = ( $_support ) ? 'highlight_green' : 'highlight_red';
+		$array_support[$_key] = ( $_support ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+	}
 
 	$contents = nv_step_4( $array_resquest, $array_support, $nextstep );
 }

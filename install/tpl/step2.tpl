@@ -1,7 +1,7 @@
 <!-- BEGIN: step -->
 <!-- BEGIN: winhost -->
 <blockquote>
-	{LANG.s2_winhost_info} 
+	{LANG.s2_winhost_info}
 	<!-- BEGIN: infonext -->
 	{LANG.s2_winhost_info1} <span class="highlight_green">OK</span> {LANG.s2_winhost_info2}.
 	<!-- END: infonext -->
@@ -74,18 +74,18 @@ $(document).ready(function(){
 		var ftp_user_name = $('input[name="ftp_user_name"]').val();
 		var ftp_user_pass = $('input[name="ftp_user_pass"]').val();
 		var ftp_port = $('input[name="ftp_port"]').val();
-		
+
 		if( ftp_server == '' || ftp_user_name == '' || ftp_user_pass == '' )
 		{
 			alert('{LANG.ftp_error_empty}');
 			return;
 		}
-		
+
 		$(this).attr('disabled', 'disabled');
-		
+
 		var data = 'ftp_server=' + ftp_server + '&ftp_port=' + ftp_port + '&ftp_user_name=' + ftp_user_name + '&ftp_user_pass=' + ftp_user_pass + '&tetectftp=1';
 		var url = '{ACTIONFORM}';
-		
+
 		$.ajax({type:"POST", url:url, data:data, success:function(c){
 			c = c.split('|');
 			if( c[0] == 'OK' ){
@@ -110,7 +110,7 @@ $(document).ready(function(){
 	<!-- BEGIN: loopdir -->
 	<tr>
 		<th scope="col" class="{DATAFILE.class}">{DATAFILE.dir}</th>
-		<td><span class="highlight_green">{DATAFILE.check}</span></td>
+		<td><span class="{DATAFILE.classcheck}">{DATAFILE.check}</span></td>
 	</tr>
 	<!-- END: loopdir -->
 </table>

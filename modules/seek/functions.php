@@ -94,8 +94,7 @@ function BoldKeywordInStr( $str, $keyword, $logic )
 
 	foreach( $array_keyword as $k )
 	{
-		unset( $matches );
-		if( preg_match( '/^(.*?)' . preg_quote( $k ) . '/uis', $str, $matches ) )
+		if( preg_match( '/^(.*?)' . nv_preg_quote( $k ) . '/uis', $str, $matches ) )
 		{
 			$strlen = nv_strlen( $str );
 			$kstrlen = nv_strlen( $k );
@@ -136,7 +135,7 @@ function BoldKeywordInStr( $str, $keyword, $logic )
 	$pattern = array();
 	foreach( $array_keyword as $k )
 	{
-		$pattern[] = '/(' . preg_quote( $k ) . ')/uis';
+		$pattern[] = '/(' . nv_preg_quote( $k ) . ')/uis';
 	}
 
 	$str = preg_replace( $pattern, '{\\1}', $str );

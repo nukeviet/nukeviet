@@ -40,22 +40,29 @@
 				</tr>
 				<tr>
 					<td> {LANG.question} </td>
-					<td style="width:10px"> 
-						<!-- BEGIN: question -->
+					<td style="width:10px">
 						(<span style="color:#FF0000">*</span>)
-						<!-- END: question -->
 					</td>
-					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
+					<td><input class="form-control required" type="text" value="{DATA.question}" name="question" style="width: 300px" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.answer} </td>
 					<td style="width:10px">
-						<!-- BEGIN: answer -->
 						(<span style="color:#FF0000">*</span>)
-						<!-- END: answer -->
 					</td>
-					<td><input class="form-control{REQUIRED_QUESTION}" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
-				</tr>				
+					<td><input class="form-control required" type="text" value="{DATA.answer}" name="answer" style="width: 300px" /></td>
+				</tr>
+				<!-- BEGIN: name_show_0 -->
+                <tr>
+                    <td colspan="2"> {LANG.last_name} </td>
+                    <td><input class="form-control" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"> {LANG.first_name} </td>
+                    <td><input class="form-control" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
+                </tr>
+                <!-- END: name_show_0 -->
+				<!-- BEGIN: name_show_1 -->
                 <tr>
                     <td colspan="2"> {LANG.first_name} </td>
                     <td><input class="form-control" type="text" value="{DATA.first_name}" name="first_name" style="width: 300px" /></td>
@@ -64,6 +71,7 @@
                     <td colspan="2"> {LANG.last_name} </td>
                     <td><input class="form-control" type="text" value="{DATA.last_name}" name="last_name" style="width: 300px" /></td>
                 </tr>
+                <!-- END: name_show_1 -->
 				<tr>
 					<td colspan="2"> {LANG.gender} </td>
 					<td>

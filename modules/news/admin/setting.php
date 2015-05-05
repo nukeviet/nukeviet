@@ -12,6 +12,11 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['setting'];
 
+if( defined( 'NV_EDITOR' ) )
+{
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
+
 $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
 if( ! empty( $savesetting ) )
 {
@@ -26,7 +31,7 @@ if( ! empty( $savesetting ) )
 	$array_config['imagefull'] = $nv_Request->get_int( 'imagefull', 'post', 0 );
 
 	$array_config['allowed_rating_point'] = $nv_Request->get_int( 'allowed_rating_point', 'post', 0 );
-	$array_config['copyright'] = $nv_Request->get_title( 'copyright', 'post', '', 1 );
+	$array_config['copyright'] = $nv_Request->get_editor( 'copyright', '', NV_ALLOWED_HTML_TAGS );
 	$array_config['showtooltip'] = $nv_Request->get_int( 'showtooltip', 'post', 0 );
 	$array_config['tooltip_position'] = $nv_Request->get_string( 'tooltip_position', 'post', '' );
 	$array_config['tooltip_length'] = $nv_Request->get_int( 'tooltip_length', 'post', 0 );
@@ -204,13 +209,20 @@ while( list( $id_imgposition, $title_imgposition ) = each( $array_imgposition ) 
 	$xtpl->parse( 'main.looppos' );
 }
 
+$copyright = nv_htmlspecialchars( nv_editor_br2nl( $module_config[$module_name]['copyright'] ) );
+if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
+{
+	$_uploads_dir = NV_UPLOADS_DIR . '/' . $module_name;
+	$copyright = nv_aleditor( 'copyright', '100%', '100px', $copyright, 'Basic', $_uploads_dir, $_uploads_dir );
+}
+else
+{
+	$copyright = "<textarea style=\"width: 100%\" name=\"copyright\" id=\"copyright\" cols=\"20\" rows=\"15\">" . $copyright . "</textarea>";
+}
+$xtpl->assign( 'COPYRIGHTHTML', $copyright );
+
 $xtpl->assign( 'PATH', defined( 'NV_IS_SPADMIN' ) ? "" : NV_UPLOADS_DIR . '/' . $module_name );
 $xtpl->assign( 'CURRENTPATH', defined( 'NV_IS_SPADMIN' ) ? "images" : NV_UPLOADS_DIR . '/' . $module_name );
-
-$contents .= 'nv_open_browse("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=upload&popup=1&area=" + area+"&path="+path+"&type="+type+"&currentpath="+currentpath, "NVImg", 850, 420,"resizable=no,scrollbars=no,toolbar=no,location=no,status=no");';
-$contents .= 'return false;';
-$contents .= '});';
-$contents .= "\n//]]>\n</script>\n";
 
 if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) )
 {

@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+
 <div id="rankForm">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
@@ -109,6 +112,7 @@
 			$("#keywordRankResult").text("").load("index.php?{NV_NAME_VARIABLE}=seotools&{NV_OP_VARIABLE}=keywordRank&i=process&k=" + keyword + "&l=" + lr + "&a=" + accuracy + "&num=" + nv_randomPassword(10));
 			return false;
 		});
+		$("#lr").select2();
 	});
 	//]]>
 </script>

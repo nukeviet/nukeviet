@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
@@ -11,7 +14,7 @@
 				<tr>
 					<td><strong>{LANG.statistics_timezone}</strong></td>
 					<td>
-					<select name="statistics_timezone" class="form-control w200">
+					<select name="statistics_timezone" id="statistics_timezone" class="form-control w200">
 						<!-- BEGIN: timezone -->
 						<option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE} </option>
 						<!-- END: timezone -->
@@ -51,4 +54,9 @@
 		</table>
 	</div>
 </form>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#statistics_timezone").select2();
+	});
+</script>
 <!-- END: main -->

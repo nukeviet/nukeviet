@@ -88,4 +88,43 @@ function menu_fix_order( $mid, $parentid = 0, $order = 0, $lev = 0 )
 	return $order;
 }
 
+function nv_menu_del_sub( $id, $parentid )
+{
+	global $module_data, $module_name, $db, $admin_info;
+
+	$sql = 'SELECT title, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
+	$row = $db->query( $sql )->fetch();
+
+	if( empty( $row ) ) die( 'NO_' . $id );
+
+	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+	if( $db->exec( $sql ) )
+	{
+		// Cap nhat cho menu cha
+		if( $parentid > 0 )
+		{
+			$sql = 'SELECT subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $parentid;
+			$subitem = $db->query( $sql )->fetch();
+			if( ! empty( $subitem ) )
+			{
+				$subitem = implode( ',', array_diff( array_filter( array_unique( explode( ',', $subitem['subitem'] ) ) ), array( $id ) ) );
+
+				$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET subitem= :subitem WHERE id=' . $parentid );
+				$stmt->bindParam( ':subitem', $subitem, PDO::PARAM_STR, strlen( $subitem ) );
+				$stmt->execute();
+			}
+		}
+
+		$subitem = ( ! empty( $row['subitem'] ) ) ? explode( ',', $row['subitem'] ) : array();
+		foreach( $subitem as $id )
+		{
+			$sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+
+			list( $parentid ) = $db->query( $sql )->fetch( 3 );
+			nv_menu_del_sub( $id, $parentid );
+			nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
+		}
+	}
+}
+
 define( 'NV_IS_FILE_ADMIN', true );

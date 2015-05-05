@@ -17,7 +17,7 @@ if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
  * @param mixed $ab_links
  * @return
  */
-function nv_page_main( $row, $ab_links )
+function nv_page_main( $row, $ab_links, $content_comment)
 {
 	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config;
 
@@ -74,9 +74,9 @@ function nv_page_main( $row, $ab_links )
 		$xtpl->parse( 'main.other' );
 	}
 
-	if( defined( 'NV_COMM_URL' ) )
+	if( !empty( $content_comment ) )
 	{
-		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
+		$xtpl->assign( 'CONTENT_COMMENT', $content_comment );
 		$xtpl->parse( 'main.comment' );
 	}
 
@@ -123,7 +123,7 @@ function nv_page_main_list( $array_data, $generate_page )
 	        $xtpl->assign( 'GENERATE_PAGE', $generate_page );
 	    }
 	}
-	
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
