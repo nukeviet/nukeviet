@@ -9,7 +9,9 @@
 
 <div id="edit">
 	<!-- BEGIN: error -->
-	<div class="alert alert-warning">{ERROR}</div>
+	<div class="alert alert-warning">
+		{ERROR}
+	</div>
 	<!-- END: error -->
 	<!-- BEGIN: content -->
 	<form action="{NV_BASE_ADMINURL}index.php" method="post">
@@ -20,7 +22,9 @@
 		<input name="savecat" type="hidden" value="1" />
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
-				<caption><em class="fa fa-file-text-o">&nbsp;</em>{caption}</caption>
+				<caption>
+					<em class="fa fa-file-text-o">&nbsp;</em>{caption}
+				</caption>
 				<tbody>
 					<tr>
 						<th class="col-md-4 text-right">{LANG.name}: </th>
@@ -28,10 +32,7 @@
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.alias}: </th>
-						<td>
-							<input class="form-control w500 pull-left" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/>
-							&nbsp;<em class="fa fa-refresh fa-lg fa-pointer text-middle" onclick="get_alias('cat', {catid});">&nbsp;</em>
-						</td>
+						<td><input class="form-control w500 pull-left" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/> &nbsp;<em class="fa fa-refresh fa-lg fa-pointer text-middle" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.titlesite}: </th>
@@ -53,30 +54,20 @@
 					<tr>
 						<td class="text-right">
 						<br />
-						<strong>{LANG.description} </th>
-						<td >
-							<textarea class="form-control" id="description" name="description" cols="100" rows="5">{description}</textarea><br />
-							<span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span>
-						</td>
+						<strong>{LANG.description} </th> <td >						<textarea class="form-control" id="description" name="description" cols="100" rows="5">{description}</textarea>
+<br />						<span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.content_homeimg}</th>
-						<td>
-							<input class="form-control w500 pull-left" type="text" name="image" id="image" value="{image}"/>
-							&nbsp;<input type="button" value="Browse server" name="selectimg" class="btn btn-info" />
-						</td>
+						<td><input class="form-control w500 pull-left" type="text" name="image" id="image" value="{image}"/> &nbsp;<input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 					</tr>
 					<tr>
 						<td class="text-right">
 						<br />
-						<strong>{LANG.viewcat_detail} </th>
-						<td>
-							<!-- BEGIN: groups_views -->
-							<div class="row">
-								<label><input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}</label>
-							</div>
-							<!-- END: groups_views -->
-						</td>
+						<strong>{LANG.viewcat_detail} </th> <td><!-- BEGIN: groups_views -->
+						<div class="row">
+							<label><input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}</label>
+						</div><!-- END: groups_views --></td>
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.content_bodytext}: </th>
@@ -84,12 +75,20 @@
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.viewdescription}: </th>
-						<td>
-						<!-- BEGIN: viewdescription -->
-						<input type="radio" name="viewdescription" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.selected}> {VIEWDESCRIPTION.title} &nbsp; &nbsp;
-						<!-- END: viewdescription -->
-						</td>
+						<td><!-- BEGIN: viewdescription --><input type="radio" name="viewdescription" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.selected}> {VIEWDESCRIPTION.title} &nbsp; &nbsp; <!-- END: viewdescription --></td>
 					</tr>
+					<!-- BEGIN: featured_news -->
+					<tr>
+						<th class="text-right">{LANG.featured_news}: </th>
+						<td>
+						<select class="form-control w200" name="featured_news" id="featured_news">
+							<option value="0" >{LANG.not_featured_news}</option>
+							<!-- BEGIN: featured_news_loop -->
+							<option value="{FEATURED_NEWS.id}" {FEATURED_NEWS.selected}>{FEATURED_NEWS.title}</option>
+							<!-- END: featured_news_loop -->
+						</select></td>
+					</tr>
+					<!-- END: featured_news -->
 				</tbody>
 			</table>
 		</div>
@@ -126,14 +125,14 @@
 		var type = "image";
 		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
-	});
+	}); 
 </script>
 
 <!-- BEGIN: getalias -->
 <script type="text/javascript">
 	$("#idtitle").change(function() {
 		get_alias("cat", 0);
-	});
+	}); 
 </script>
 <!-- END: getalias -->
 <!-- END: content -->
