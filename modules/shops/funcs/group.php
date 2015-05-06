@@ -26,7 +26,7 @@ $page_title = $global_array_group[$groupid]['title'];
 $key_words = $global_array_group[$groupid]['keywords'];
 $description = $global_array_group[$groupid]['description'];
 $data_content = array();
-$chirld_groupid = GetGroupidInParent( $groupid, 1, 1 );
+$chirld_groupid = GetGroupidInParent( $groupid, 1 );
 
 $nv_Request->get_int( 'sorts', 'session', 0 );
 $sorts = $nv_Request->get_int( 'sort', 'post', 0 );
