@@ -107,13 +107,12 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 						$nv_Request->set_Cookie( $module_name . '_timeout', NV_CURRENTTIME );
 						if( $status )
 						{
-							$row = array();
-							$row['module'] =  $module;
-							$row['id'] = $id;
-
 							$mod_info = $site_mods[$module];
 							if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
 							{
+								$row = array();
+								$row['module'] =  $module;
+								$row['id'] = $id;
 								include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
 							}
 						}
