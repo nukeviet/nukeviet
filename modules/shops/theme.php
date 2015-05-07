@@ -1567,12 +1567,13 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 	if( $global_array_shops_cat[$data_content['listcatid']]['typeprice'] == 2 )
 	{
 		$price_config = unserialize( $data_content['price_config'] );
-		if( !empty( $price_config ) )
+		if( !empty( $price_config ) and sizeof( $price_config ) > 1 )
 		{
 			$before = 1;
 			foreach( $price_config as $items )
 			{
 				$items['number_from'] = $before;
+				$items['price'] = nv_currency_conversion( $items['price'], $data_content['money_unit'], $pro_config['money_unit'] );
 				$items['price'] = nv_number_format( $items['price'], nv_get_decimals( $pro_config['money_unit'] ) );
 				$xtpl->assign( 'ITEMS', $items );
 				$xtpl->parse( 'main.typepeice.items' );

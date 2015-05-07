@@ -142,7 +142,7 @@ function nv_get_price( $pro_id, $currency_convert, $number = 1, $per_pro = false
 	}
 
 	$r = $money_config[$product['money_unit']]['round'];
-	$decimals = nv_get_decimals( $product['money_unit'] );
+	$decimals = nv_get_decimals( $currency_convert );
 
 	if( $r > 1 )
 	{

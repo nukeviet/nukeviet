@@ -141,7 +141,13 @@ function cartorder_detail(a_ob, popup, buy_now) {
 
 function open_popup_detail( url )
 {
-	var width = 780, height = 450;
+	if ($(window).width() >= 640){
+		var width = 780, height = 450;
+	}
+	else{
+		var width = 280, height = 400;
+	}
+
 	Shadowbox.open({
 		content : '<iframe src="' + url + '" border="0" frameborder="0" style="width:' + width + 'px;height:' + height + 'px"></iframe>',
 		player : "html",
