@@ -8,8 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( !defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['categories'];
 
@@ -20,7 +19,7 @@ if( defined( 'NV_EDITOR' ) )
 
 $error = $admins = '';
 $savecat = 0;
-list( $catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured_news ) = array(
+list( $catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured ) = array(
 	0,
 	0,
 	'',
@@ -35,7 +34,7 @@ list( $catid, $parentid, $title, $titlesite, $alias, $description, $descriptionh
 	0
 );
 
-$groups_list = nv_groups_list( );
+$groups_list = nv_groups_list();
 
 $parentid = $nv_Request->get_int( 'parentid', 'get,post', 0 );
 
@@ -53,14 +52,14 @@ if( $catid > 0 and isset( $global_array_cat[$catid] ) )
 	$image = $global_array_cat[$catid]['image'];
 	$keywords = $global_array_cat[$catid]['keywords'];
 	$groups_view = $global_array_cat[$catid]['groups_view'];
-	$featured_news = $global_array_cat[$catid]['featured_news_id'];
+	$featured = $global_array_cat[$catid]['featured'];
 
-	if( !defined( 'NV_IS_ADMIN_MODULE' ) )
+	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 	{
 		if( !(isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 		{
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
-			die( );
+			die();
 		}
 	}
 
@@ -70,7 +69,7 @@ if( $catid > 0 and isset( $global_array_cat[$catid] ) )
 else
 {
 	$caption = $lang_module['add_cat'];
-	$array_in_cat = array( );
+	$array_in_cat = array();
 }
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
@@ -89,7 +88,7 @@ if( !empty( $savecat ) )
 	$descriptionhtml = $nv_Request->get_editor( 'descriptionhtml', '', NV_ALLOWED_HTML_TAGS );
 
 	$viewdescription = $nv_Request->get_int( 'viewdescription', 'post', 0 );
-	$featured_news = $nv_Request->get_int( 'featured_news', 'post', 0 );
+	$featured = $nv_Request->get_int( 'featured', 'post', 0 );
 
 	// Xử lý liên kết tĩnh
 	$_alias = $nv_Request->get_title( 'alias', 'post', '' );
@@ -105,7 +104,7 @@ if( !empty( $savecat ) )
 			}
 			else
 			{
-				$_m_catid = $db->query( 'SELECT MAX(catid) AS cid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat' )->fetchColumn( );
+				$_m_catid = $db->query( 'SELECT MAX(catid) AS cid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat' )->fetchColumn();
 
 				if( empty( $_m_catid ) )
 				{
@@ -123,7 +122,7 @@ if( !empty( $savecat ) )
 		$alias = $_alias;
 	}
 
-	$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array( ) );
+	$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
 	$groups_view = !empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	$image = $nv_Request->get_string( 'image', 'post', '' );
@@ -137,26 +136,26 @@ if( !empty( $savecat ) )
 		$image = '';
 	}
 
-	if( !defined( 'NV_IS_ADMIN_MODULE' ) )
+	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 	{
 		if( !(isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 		{
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
-			die( );
+			die();
 		}
 	}
 
 	if( $catid == 0 and $title != '' )
 	{
-		$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid )->fetchColumn( );
+		$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid )->fetchColumn();
 		$weight = intval( $weight ) + 1;
 		$viewcat = 'viewcat_page_new';
 		$subcatid = '';
 
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday,featured_news_id, keywords, admins, add_time, edit_time, groups_view) VALUES
-			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2',:featured_news_id, :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday,featured, keywords, admins, add_time, edit_time, groups_view) VALUES
+			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2',:featured, :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
 
-		$data_insert = array( );
+		$data_insert = array();
 		$data_insert['parentid'] = $parentid;
 		$data_insert['title'] = $title;
 		$data_insert['titlesite'] = $titlesite;
@@ -169,7 +168,7 @@ if( !empty( $savecat ) )
 		$data_insert['keywords'] = $keywords;
 		$data_insert['admins'] = $admins;
 		$data_insert['groups_view'] = $groups_view;
-		$data_insert['featured_news_id'] = $featured_news;
+		$data_insert['featured'] = $featured;
 
 		$newcatid = $db->insert_id( $sql, 'catid', $data_insert );
 		if( $newcatid > 0 )
@@ -177,9 +176,9 @@ if( !empty( $savecat ) )
 			require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
 			nv_copy_structure_table( NV_PREFIXLANG . '_' . $module_data . '_' . $newcatid, NV_PREFIXLANG . '_' . $module_data . '_rows' );
-			nv_fix_cat_order( );
+			nv_fix_cat_order();
 
-			if( !defined( 'NV_IS_ADMIN_MODULE' ) )
+			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 			{
 				$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (' . $admin_id . ', ' . $newcatid . ', 1, 1, 1, 1, 1)' );
 			}
@@ -187,7 +186,7 @@ if( !empty( $savecat ) )
 			nv_del_moduleCache( $module_name );
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['add_cat'], $title, $admin_info['userid'] );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
-			die( );
+			die();
 		}
 		else
 		{
@@ -196,7 +195,7 @@ if( !empty( $savecat ) )
 	}
 	elseif( $catid > 0 and $title != '' )
 	{
-		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description = :description, descriptionhtml = :descriptionhtml, image= :image, viewdescription= :viewdescription,featured_news_id=:featured_news_id, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid );
+		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description = :description, descriptionhtml = :descriptionhtml, image= :image, viewdescription= :viewdescription,featured=:featured, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid );
 		$stmt->bindParam( ':parentid', $parentid, PDO::PARAM_INT );
 		$stmt->bindParam( ':title', $title, PDO::PARAM_STR );
 		$stmt->bindParam( ':titlesite', $titlesite, PDO::PARAM_STR );
@@ -207,26 +206,26 @@ if( !empty( $savecat ) )
 		$stmt->bindParam( ':description', $description, PDO::PARAM_STR, strlen( $description ) );
 		$stmt->bindParam( ':descriptionhtml', $descriptionhtml, PDO::PARAM_STR, strlen( $descriptionhtml ) );
 		$stmt->bindParam( ':groups_view', $groups_view, PDO::PARAM_STR );
-		$stmt->bindParam( ':featured_news_id', $featured_news, PDO::PARAM_INT );
-		$stmt->execute( );
+		$stmt->bindParam( ':featured', $featured, PDO::PARAM_INT );
+		$stmt->execute();
 
-		if( $stmt->rowCount( ) )
+		if( $stmt->rowCount() )
 		{
 			if( $parentid != $parentid_old )
 			{
-				$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid )->fetchColumn( );
+				$weight = $db->query( 'SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid )->fetchColumn();
 				$weight = intval( $weight ) + 1;
 
 				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET weight=' . $weight . ' WHERE catid=' . intval( $catid );
 				$db->query( $sql );
 
-				nv_fix_cat_order( );
+				nv_fix_cat_order();
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_cat'], $title, $admin_info['userid'] );
 			}
 
 			nv_del_moduleCache( $module_name );
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
-			die( );
+			die();
 		}
 		else
 		{
@@ -241,7 +240,7 @@ if( !empty( $savecat ) )
 
 $groups_view = explode( ',', $groups_view );
 
-$array_cat_list = array( );
+$array_cat_list = array();
 if( defined( 'NV_IS_ADMIN_MODULE' ) )
 {
 	$array_cat_list[0] = $lang_module['cat_sub_sl'];
@@ -268,7 +267,7 @@ foreach( $global_array_cat as $catid_i => $array_value )
 
 if( !empty( $array_cat_list ) )
 {
-	$cat_listsub = array( );
+	$cat_listsub = array();
 	while( list( $catid_i, $title_i ) = each( $array_cat_list ) )
 	{
 		if( !in_array( $catid_i, $array_in_cat ) )
@@ -281,7 +280,7 @@ if( !empty( $array_cat_list ) )
 		}
 	}
 
-	$groups_views = array( );
+	$groups_views = array();
 	foreach( $groups_list as $group_id => $grtl )
 	{
 		$groups_views[] = array(
@@ -335,26 +334,26 @@ if( $catid > 0 )
 	$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 ORDER BY publtime DESC LIMIT 100';
 	$result = $db->query( $sql );
 	$array_id=array();
-	$array_id[] = $featured_news;
-	while( $row = $result->fetch( ) )
+	$array_id[] = $featured;
+	while( $row = $result->fetch() )
 	{
 		$array_id[] = $row['id'] ;
 	}
-	
-	$sql1 = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id IN ('.implode(',', $array_id).')';
+
+	$sql1 = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id IN ('.implode(',', $array_id).') ORDER BY publtime DESC';
 	$result = $db->query( $sql1 );
-	
-	while( $row = $result->fetch( ) )
+
+	while( $row = $result->fetch() )
 	{
 		$row = array(
 			'id' => $row['id'],
-			'selected' => ($featured_news == $row['id']) ? ' selected="selected"' : '',
+			'selected' => ($featured == $row['id']) ? ' selected="selected"' : '',
 			'title' => $row['title']
 		);
 		$xtpl->assign( 'FEATURED_NEWS', $row );
-		$xtpl->parse( 'main.content.featured_news.featured_news_loop' );
+		$xtpl->parse( 'main.content.featured.featured_loop' );
 	}
-	$xtpl->parse( 'main.content.featured_news' );
+	$xtpl->parse( 'main.content.featured' );
 }
 
 if( !empty( $error ) )
