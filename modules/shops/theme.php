@@ -1343,23 +1343,6 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			$xtpl->parse( 'main.shadowbox' );
 		}
 
-		// Tinh thoi gian dem nguoc
-		if( $data_content['discount_id'] > 0 )
-		{
-			$discount = $discounts_config[$data_content['discount_id']];
-			if( NV_CURRENTTIME >= $discount['begin_time'] and NV_CURRENTTIME <= $discount['end_time'] )
-			{
-				if( !defined( 'COUNTDOWN' ) )
-				{
-					$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $module_file . "/js/jquery.countdown.min.js\"></script>\n";
-					define( 'COUNTDOWN', true );
-				}
-				$xtpl->assign( 'discount_title', $discount['title'] );
-				$xtpl->assign( 'discount_to', nv_date( 'Y/m/d H:i:s', $discount['end_time'] ) );
-				$xtpl->parse( 'main.discount_to' );
-			}
-		}
-
 		if( $pro_config['active_gift'] and !empty( $data_content[NV_LANG_DATA . '_gift_content'] ) and NV_CURRENTTIME >= $data_content['gift_from'] and NV_CURRENTTIME <= $data_content['gift_to'] )
 		{
 			$xtpl->assign( 'gift_content', $data_content[NV_LANG_DATA . '_gift_content'] );
