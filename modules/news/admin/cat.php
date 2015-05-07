@@ -332,8 +332,18 @@ for( $i = 0; $i <= 2; $i++ )
 }
 if( $catid > 0 )
 {
-	$sql1 = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE catid=' . $catid . ' AND status=1  ORDER BY publtime DESC';
+	$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 ORDER BY publtime DESC LIMIT 100';
+	$result = $db->query( $sql );
+	$array_id=array();
+	$array_id[] = $featured_news;
+	while( $row = $result->fetch( ) )
+	{
+		$array_id[] = $row['id'] ;
+	}
+	
+	$sql1 = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id IN ('.implode(',', $array_id).')';
 	$result = $db->query( $sql1 );
+	
 	while( $row = $result->fetch( ) )
 	{
 		$row = array(
@@ -346,6 +356,7 @@ if( $catid > 0 )
 	}
 	$xtpl->parse( 'main.content.featured_news' );
 }
+
 if( !empty( $error ) )
 {
 	$xtpl->assign( 'ERROR', $error );

@@ -54,8 +54,11 @@
 					<tr>
 						<td class="text-right">
 						<br />
-						<strong>{LANG.description} </th> <td >						<textarea class="form-control" id="description" name="description" cols="100" rows="5">{description}</textarea>
-<br />						<span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span></td>
+						<strong>{LANG.description} </th> 
+						<td >						
+							<textarea class="form-control" id="description" name="description" cols="100" rows="5">{description}</textarea>
+							<br />						
+							<span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.content_homeimg}</th>
@@ -75,13 +78,17 @@
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.viewdescription}: </th>
-						<td><!-- BEGIN: viewdescription --><input type="radio" name="viewdescription" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.selected}> {VIEWDESCRIPTION.title} &nbsp; &nbsp; <!-- END: viewdescription --></td>
+						<td>
+							<!-- BEGIN: viewdescription -->
+							<input type="radio" name="viewdescription" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.selected}> {VIEWDESCRIPTION.title} &nbsp; &nbsp;
+							<!-- END: viewdescription -->
+						</td>
 					</tr>
 					<!-- BEGIN: featured_news -->
 					<tr>
 						<th class="text-right">{LANG.featured_news}: </th>
 						<td>
-						<select class="form-control w200" name="featured_news" id="featured_news">
+						<select class="form-control" name="featured_news" id="featured_news">
 							<option value="0" >{LANG.not_featured_news}</option>
 							<!-- BEGIN: featured_news_loop -->
 							<option value="{FEATURED_NEWS.id}" {FEATURED_NEWS.selected}>{FEATURED_NEWS.title}</option>

@@ -315,3 +315,12 @@ h3{
     margin: 0 25px 0 10px;
     top: -5px;
 }
+
+.featurednews h2 {
+	font-size: 16px !important;
+	padding-left: 5px !important;
+}
+.featurednews p {
+	font-size: 14px !important;
+	padding-left: 5px !important;
+}
