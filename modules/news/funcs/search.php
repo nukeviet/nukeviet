@@ -30,18 +30,19 @@ function GetSourceNews( $sourceid )
 function BoldKeywordInStr( $str, $keyword )
 {
 	$str = nv_clean60( $str, 300 );
-	$tmp = explode( ' ', $keyword );
-
-	foreach( $tmp as $k )
+	if( ! empty( $keyword ) )
 	{
-		$tp = strtolower( $k );
-		$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
-		$tp = strtoupper( $k );
-		$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
-		$k[0] = strtoupper( $k[0] );
-		$str = str_replace( $k, '<span class="keyword">' . $k . '</span>', $str );
+		$tmp = explode( ' ', $keyword );
+		foreach( $tmp as $k )
+		{
+			$tp = strtolower( $k );
+			$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
+			$tp = strtoupper( $k );
+			$str = str_replace( $tp, '<span class="keyword">' . $tp . '</span>', $str );
+			$k[0] = strtoupper( $k[0] );
+			$str = str_replace( $k, '<span class="keyword">' . $k . '</span>', $str );
+		}
 	}
-
 	return $str;
 }
 
@@ -55,18 +56,39 @@ $from_date = $nv_Request->get_title( 'from_date', 'get', '', 0 );
 $to_date = $nv_Request->get_title( 'to_date', 'get', '', 0 );
 $catid = $nv_Request->get_int( 'catid', 'get', 0 );
 $check_num = $nv_Request->get_title( 'choose', 'get', 1, 1 );
-$date_array['from_date'] = $from_date;
-$date_array['to_date'] = $to_date;
+$date_array['from_date'] = preg_replace( '/[^0-9]/', '.', urldecode( $from_date ) );
+$date_array['to_date'] = preg_replace( '/[^0-9]/', '.', urldecode( $to_date ) );
 
-$base_url_rewrite = nv_url_rewrite( $_SERVER['REQUEST_URI'], true );
-if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+$base_url_rewrite = $request_uri = urldecode( $_SERVER['REQUEST_URI'] );
+if( empty( $catid ) )
 {
-	header( "Location: " . $base_url_rewrite );
+	$base_url_rewrite = str_replace('&catid=' . $catid, '', $base_url_rewrite );
+}
+if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['from_date'] ) )
+{
+	$base_url_rewrite = str_replace('&from_date=' . $from_date, '&from_date=' . $date_array['from_date'], $base_url_rewrite );
+}
+else
+{
+	$base_url_rewrite = str_replace('&from_date=' . $from_date, '', $base_url_rewrite );
+}
+if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'] ) )
+{
+	$base_url_rewrite = str_replace('&to_date=' . $to_date, '&to_date=' . $date_array['to_date'], $base_url_rewrite );
+}
+else
+{
+	$base_url_rewrite = str_replace('&to_date=' . $to_date, '', $base_url_rewrite );
+}
+$base_url_rewrite = nv_url_rewrite($base_url_rewrite , true );
+
+if( $request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite )
+{
+	header( 'Location: ' . $base_url_rewrite );
 	die();
 }
 
 $array_cat_search = array();
-
 foreach( $global_array_cat as $arr_cat_i )
 {
 	$array_cat_search[$arr_cat_i['catid']] = array(
@@ -81,9 +103,12 @@ $array_cat_search[0]['title'] = $lang_module['search_all'];
 $contents = call_user_func( 'search_theme', $key, $check_num, $date_array, $array_cat_search );
 $where = '';
 $tbl_src = '';
-
-if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
+if( empty( $key ) AND ( $catid == 0 ) AND empty( $from_date ) AND empty( $to_date ) )
 {
+	$contents .= '<div class="alert alert-danger">'.$lang_module['empty_data_search'].'</div>';
+}
+else {
+
 	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search&amp;q='. $key , true );
 	$canonicalUrl = NV_MY_DOMAIN . $base_url_rewrite;
 
@@ -124,11 +149,11 @@ if( isset( $key{NV_MIN_SEARCH_LENGTH - 1} ) )
 
 	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m ) )
 	{
-		$where .= ' AND publtime >=' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		$where .= ' AND publtime <=' . mktime( 23, 59, 59, $m[2], $m[1], $m[3] );
 	}
 	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $from_date, $m ) )
 	{
-		$where .= ' AND publtime <= ' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
+		$where .= ' AND publtime >=' . mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
 
 	if( $catid > 0 )

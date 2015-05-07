@@ -44,12 +44,8 @@
 
 			<div class="form-group form-inline">
 				<div class="col-md-8">{LANG.from_date}</div>
-	  			<div class="col-md-16"><input class="datepicker form-control" name="to_date" value="{TO_DATE}" style="width:120px; display: inline" maxlength="10" type="text"/></div>
-			</div>
-
-			<div class="form-group form-inline">
-				<div class="col-md-8">{LANG.to_date}</div>
-	  			<div class="col-md-16"><input class="datepicker form-control" name="from_date" value="{FROM_DATE}" style="width: 120px; display: inline" maxlength="10" type="text" /></div>
+	  			<div class="col-md-8"><input class="datepicker form-control" name="from_date" value="{FROM_DATE}" style="width: 120px; display: inline" maxlength="10" type="text" /></div>
+	  			<div class="col-md-8">{LANG.to_date}: <input class="datepicker form-control" name="to_date" value="{TO_DATE}" style="width:120px; display: inline" maxlength="10" type="text"/></div>
 			</div>
 
 			<div class="form-group form-inline">

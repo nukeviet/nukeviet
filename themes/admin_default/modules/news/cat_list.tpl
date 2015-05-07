@@ -18,7 +18,7 @@
 				<th class="text-center">{LANG.numlinks}</th>
 				<th class="text-center"><img src="{NV_BASE_SITEURL}themes/default/images/news/new.gif" title="{LANG.newday}"/></th>
 				<th class="text-center">{LANG.viewcat_page}</th>
-				<th>&nbsp;</th>
+				<th class="text-center">{LANG.functional}</th>
 			</tr>
 		</thead>
 		<tbody>

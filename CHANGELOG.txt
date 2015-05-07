@@ -1,6 +1,11 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.16 (Open beta 4)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.16 (27 commits: from commit/477c6e1 to commit/7b30b9c)
+- Add feature: Select "news focus" for Category of news module
+- Fix and update something...
+
 NUKEVIET 4.0.15 (Open beta 3)
 CODE: https://github.com/nukeviet/nukeviet/tree/4.0.15 (37 commits: from commit/fc6ee3f to commit/477c6e1)
 - Add function nv_show_name_user
