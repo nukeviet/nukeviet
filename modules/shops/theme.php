@@ -1072,7 +1072,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
  */
 function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $viewtype )
 {
-	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $global_array_shops_cat, $global_array_group, $my_head, $page;
+	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $array_displays, $array_wishlist_id, $global_array_shops_cat, $global_array_group, $my_head, $page, $op;
 
 	$xtpl = new XTemplate( 'view_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1088,19 +1088,22 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 	$xtpl->assign( 'link_order_all', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setcart' );
 	$xtpl->assign( 'SUM', count( $data_content['data'] ) );
 
-	if( ( $global_array_shops_cat[$data_content['id']]['viewdescriptionhtml'] and $page == 1) OR $global_array_shops_cat[$data_content['id']]['viewdescriptionhtml'] == 2 )
+	if( $op != 'group' )
 	{
-		$xtpl->assign( 'DESCRIPTIONHTML', $global_array_shops_cat[$data_content['id']]['descriptionhtml'] );
-		if( !empty( $data_content['image'] ) )
+		if( ( $global_array_shops_cat[$data_content['id']]['viewdescriptionhtml'] and $page == 1) OR $global_array_shops_cat[$data_content['id']]['viewdescriptionhtml'] == 2 )
 		{
-			$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['image'];
-			if( !empty( $data_content['image'] ) and file_exists( $image ) )
+			$xtpl->assign( 'DESCRIPTIONHTML', $global_array_shops_cat[$data_content['id']]['descriptionhtml'] );
+			if( !empty( $data_content['image'] ) )
 			{
-				$xtpl->assign( 'IMAGE', NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['image'] );
-				$xtpl->parse( 'main.viewdescriptionhtml.image' );
+				$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data_content['image'];
+				if( !empty( $data_content['image'] ) and file_exists( $image ) )
+				{
+					$xtpl->assign( 'IMAGE', NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['image'] );
+					$xtpl->parse( 'main.viewdescriptionhtml.image' );
+				}
 			}
+			$xtpl->parse( 'main.viewdescriptionhtml' );
 		}
-		$xtpl->parse( 'main.viewdescriptionhtml' );
 	}
 
 	if( $pro_config['show_displays'] == 1 )
