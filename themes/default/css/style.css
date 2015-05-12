@@ -809,3 +809,6 @@ ul.listnews img{
 .other_blocknews img{
 	margin-right: 5px
 }
+.sidebar-nav {
+	margin: 0px !important;
+}
