@@ -142,9 +142,6 @@ if( $allow_change )
 					$message = trim( $message );
 
 					$mess = $message;
-					$mess .= "\r\n\r\n............................\r\n\r\n";
-					$mess .= nv_EncString( $message );
-
 					$mess = nv_nl2br( $mess, "<br />" );
 
 					$xtpl = new XTemplate( 'message.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/system' );
@@ -166,10 +163,14 @@ if( $allow_change )
 					$from = array( $admin_info['username'], $my_mail );
 					$to = $row_user['email'];
 					$send = nv_sendmail( $from, $to, nv_EncString( $title ), $content );
-
 					if( ! $send )
 					{
-						nv_info_die( $lang_global['error_info_caption'], $lang_global['site_info'], $lang_global['error_sendmail_admin'] );
+						$page_title = $lang_global['error_info_caption'];
+						$contents = $lang_global['error_sendmail_admin'] . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />';
+
+						include NV_ROOTDIR . '/includes/header.php';
+						echo nv_admin_theme( $contents );
+						include NV_ROOTDIR . '/includes/footer.php';
 					}
 				}
 			}

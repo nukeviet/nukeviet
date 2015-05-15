@@ -19,7 +19,20 @@ if( defined( 'NV_EDITOR' ) )
 
 $error = $admins = '';
 $savecat = 0;
-list( $catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription ) = array( 0, 0, '', '', '', '', '', '', '6', '', 0 );
+list( $catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured ) = array(
+	0,
+	0,
+	'',
+	'',
+	'',
+	'',
+	'',
+	'',
+	'6',
+	'',
+	0,
+	0
+);
 
 $groups_list = nv_groups_list();
 
@@ -39,10 +52,11 @@ if( $catid > 0 and isset( $global_array_cat[$catid] ) )
 	$image = $global_array_cat[$catid]['image'];
 	$keywords = $global_array_cat[$catid]['keywords'];
 	$groups_view = $global_array_cat[$catid]['groups_view'];
+	$featured = $global_array_cat[$catid]['featured'];
 
 	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 	{
-		if( ! ( isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
+		if( !(isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 		{
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
 			die();
@@ -60,8 +74,9 @@ else
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
-if( ! empty( $savecat ) )
+if( !empty( $savecat ) )
 {
+
 	$catid = $nv_Request->get_int( 'catid', 'post', 0 );
 	$parentid_old = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$parentid = $nv_Request->get_int( 'parentid', 'post', 0 );
@@ -73,12 +88,13 @@ if( ! empty( $savecat ) )
 	$descriptionhtml = $nv_Request->get_editor( 'descriptionhtml', '', NV_ALLOWED_HTML_TAGS );
 
 	$viewdescription = $nv_Request->get_int( 'viewdescription', 'post', 0 );
+	$featured = $nv_Request->get_int( 'featured', 'post', 0 );
 
 	// Xử lý liên kết tĩnh
 	$_alias = $nv_Request->get_title( 'alias', 'post', '' );
-	$_alias = ( $_alias == '' ) ? change_alias( $title ) : change_alias( $_alias );
+	$_alias = ($_alias == '') ? change_alias( $title ) : change_alias( $_alias );
 
-	if( empty( $_alias ) or ! preg_match( "/^([a-zA-Z0-9\_\-]+)$/", $_alias ) )
+	if( empty( $_alias ) or !preg_match( "/^([a-zA-Z0-9\_\-]+)$/", $_alias ) )
 	{
 		if( empty( $alias ) )
 		{
@@ -96,7 +112,7 @@ if( ! empty( $savecat ) )
 				}
 				else
 				{
-					$alias = 'cat-' . ( intval( $_m_catid ) + 1 );
+					$alias = 'cat-' . (intval( $_m_catid ) + 1);
 				}
 			}
 		}
@@ -107,7 +123,7 @@ if( ! empty( $savecat ) )
 	}
 
 	$_groups_post = $nv_Request->get_array( 'groups_view', 'post', array() );
-	$groups_view = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
+	$groups_view = !empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	$image = $nv_Request->get_string( 'image', 'post', '' );
 	if( is_file( NV_DOCUMENT_ROOT . $image ) )
@@ -122,7 +138,7 @@ if( ! empty( $savecat ) )
 
 	if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
 	{
-		if( ! ( isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1 ) )
+		if( !(isset( $array_cat_admin[$admin_id][$parentid] ) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1) )
 		{
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid );
 			die();
@@ -136,8 +152,8 @@ if( ! empty( $savecat ) )
 		$viewcat = 'viewcat_page_new';
 		$subcatid = '';
 
-		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, keywords, admins, add_time, edit_time, groups_view) VALUES
-			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2', :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
+		$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday,featured, keywords, admins, add_time, edit_time, groups_view) VALUES
+			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2',:featured, :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
 
 		$data_insert = array();
 		$data_insert['parentid'] = $parentid;
@@ -152,13 +168,14 @@ if( ! empty( $savecat ) )
 		$data_insert['keywords'] = $keywords;
 		$data_insert['admins'] = $admins;
 		$data_insert['groups_view'] = $groups_view;
+		$data_insert['featured'] = $featured;
 
 		$newcatid = $db->insert_id( $sql, 'catid', $data_insert );
 		if( $newcatid > 0 )
 		{
 			require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
-			nv_copy_structure_table( NV_PREFIXLANG . '_' . $module_data . '_' . $newcatid , NV_PREFIXLANG . '_' . $module_data . '_rows' );
+			nv_copy_structure_table( NV_PREFIXLANG . '_' . $module_data . '_' . $newcatid, NV_PREFIXLANG . '_' . $module_data . '_rows' );
 			nv_fix_cat_order();
 
 			if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
@@ -178,8 +195,8 @@ if( ! empty( $savecat ) )
 	}
 	elseif( $catid > 0 and $title != '' )
 	{
-		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description = :description, descriptionhtml = :descriptionhtml, image= :image, viewdescription= :viewdescription, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid );
-		$stmt->bindParam( ':parentid', $parentid, PDO::PARAM_INT);
+		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description = :description, descriptionhtml = :descriptionhtml, image= :image, viewdescription= :viewdescription,featured=:featured, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid );
+		$stmt->bindParam( ':parentid', $parentid, PDO::PARAM_INT );
 		$stmt->bindParam( ':title', $title, PDO::PARAM_STR );
 		$stmt->bindParam( ':titlesite', $titlesite, PDO::PARAM_STR );
 		$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
@@ -189,6 +206,7 @@ if( ! empty( $savecat ) )
 		$stmt->bindParam( ':description', $description, PDO::PARAM_STR, strlen( $description ) );
 		$stmt->bindParam( ':descriptionhtml', $descriptionhtml, PDO::PARAM_STR, strlen( $descriptionhtml ) );
 		$stmt->bindParam( ':groups_view', $groups_view, PDO::PARAM_STR );
+		$stmt->bindParam( ':featured', $featured, PDO::PARAM_INT );
 		$stmt->execute();
 
 		if( $stmt->rowCount() )
@@ -230,7 +248,7 @@ if( defined( 'NV_IS_ADMIN_MODULE' ) )
 foreach( $global_array_cat as $catid_i => $array_value )
 {
 	$lev_i = $array_value['lev'];
-	if( defined( 'NV_IS_ADMIN_MODULE' ) or ( isset( $array_cat_admin[$admin_id][$catid_i] ) and $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 ) )
+	if( defined( 'NV_IS_ADMIN_MODULE' ) or (isset( $array_cat_admin[$admin_id][$catid_i] ) and $array_cat_admin[$admin_id][$catid_i]['admin'] == 1) )
 	{
 		$xtitle_i = '';
 		if( $lev_i > 0 )
@@ -247,16 +265,16 @@ foreach( $global_array_cat as $catid_i => $array_value )
 	}
 }
 
-if( ! empty( $array_cat_list ) )
+if( !empty( $array_cat_list ) )
 {
 	$cat_listsub = array();
 	while( list( $catid_i, $title_i ) = each( $array_cat_list ) )
 	{
-		if( ! in_array( $catid_i, $array_in_cat ) )
+		if( !in_array( $catid_i, $array_in_cat ) )
 		{
 			$cat_listsub[] = array(
 				'value' => $catid_i,
-				'selected' => ( $catid_i == $parentid ) ? ' selected="selected"' : '',
+				'selected' => ($catid_i == $parentid) ? ' selected="selected"' : '',
 				'title' => $title_i
 			);
 		}
@@ -295,7 +313,7 @@ $xtpl->assign( 'description', nv_htmlspecialchars( nv_br2nl( $description ) ) );
 
 $xtpl->assign( 'CAT_LIST', nv_show_cat_list( $parentid ) );
 $xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
-if( ! empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $image ) )
+if( !empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $image ) )
 {
 	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $image;
 }
@@ -305,20 +323,46 @@ for( $i = 0; $i <= 2; $i++ )
 {
 	$data = array(
 		'value' => $i,
-		'selected' => ( $viewdescription == $i ) ? ' checked="checked"' : '',
+		'selected' => ($viewdescription == $i) ? ' checked="checked"' : '',
 		'title' => $lang_module['viewdescription_' . $i]
 	);
 	$xtpl->assign( 'VIEWDESCRIPTION', $data );
 	$xtpl->parse( 'main.content.viewdescription' );
 }
+if( $catid > 0 )
+{
+	$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE status=1 ORDER BY publtime DESC LIMIT 100';
+	$result = $db->query( $sql );
+	$array_id=array();
+	$array_id[] = $featured;
+	while( $row = $result->fetch() )
+	{
+		$array_id[] = $row['id'] ;
+	}
 
-if( ! empty( $error ) )
+	$sql1 = 'SELECT id, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id IN ('.implode(',', $array_id).') ORDER BY publtime DESC';
+	$result = $db->query( $sql1 );
+
+	while( $row = $result->fetch() )
+	{
+		$row = array(
+			'id' => $row['id'],
+			'selected' => ($featured == $row['id']) ? ' selected="selected"' : '',
+			'title' => $row['title']
+		);
+		$xtpl->assign( 'FEATURED_NEWS', $row );
+		$xtpl->parse( 'main.content.featured.featured_loop' );
+	}
+	$xtpl->parse( 'main.content.featured' );
+}
+
+if( !empty( $error ) )
 {
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.error' );
 }
 
-if( ! empty( $array_cat_list ) )
+if( !empty( $array_cat_list ) )
 {
 	if( empty( $alias ) )
 	{

@@ -278,4 +278,11 @@ $lang_module['googleplus_1'] = 'Không sử dụng';
 $lang_module['googleplus_0'] = 'Theo quyền tác giả của module';
 $lang_module['input_title_blocks'] = 'Nhập tiêu đề nhóm tin...';
 $lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
+
 $lang_module['alias_empty_notice'] = 'Liên kết tĩnh còn trống, hệ thống sẽ tự động tạo liên kết tĩnh phù hợp';
+
+$lang_module['functional'] = 'Chức năng';
+$lang_module['featured'] = 'Tin nổi bật';
+$lang_module['addtocat'] = 'Thêm bài viết nổi bật vào chuyên mục';
+$lang_module['delete_from_cat'] = 'Xóa bài viết khỏi chuyên mục';
+$lang_module['not_featured'] = 'Không có bài viết nào';

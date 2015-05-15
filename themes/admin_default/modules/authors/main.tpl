@@ -2,7 +2,6 @@
 <!-- BEGIN: loop -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover" id="aid{ID}">
-		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CAPTION}</caption>
 		<col span="2" style="width: 50%"/>
 		<thead>
 			<tr>

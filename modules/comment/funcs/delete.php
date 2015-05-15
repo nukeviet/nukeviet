@@ -19,11 +19,12 @@ $session_id = session_id() . '_' . $global_config['sitekey'];
 
 if( $cid > 0 and $checkss == md5( $cid . '_' . $session_id ) )
 {
-	$_sql = 'SELECT cid, module FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid;
+	$_sql = 'SELECT cid, module, id FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid;
 	$row = $db->query( $_sql )->fetch();
 	if( isset( $row['cid'] ) )
 	{
 		$module = $row['module'];
+		$id = $row['id'];
 
 		// Kiểm tra lại quyền xóa comment
 		$is_delete = false;
@@ -43,6 +44,15 @@ if( $cid > 0 and $checkss == md5( $cid . '_' . $session_id ) )
 		if( $is_delete )
 		{
 			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid );
+			$mod_info = $site_mods[$module];
+			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
+			{
+				$row = array();
+				$row['module'] =  $module;
+				$row['id'] = $id;
+				include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
+			}
+
 			$contents = 'OK_' . $cid;
 		}
 	}

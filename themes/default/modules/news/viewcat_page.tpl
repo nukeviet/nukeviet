@@ -12,6 +12,41 @@
 <!-- END: viewdescription -->
 <!-- BEGIN: viewcatloop -->
 <div class="news_column">
+	<!-- BEGIN: featured -->
+	<div class="panel panel-default">
+		<div class="panel-body featured">
+			<!-- BEGIN: image -->
+			<a href="{CONTENT.link}" title="{CONTENT.title}"><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" /></a>
+			<!-- END: image -->
+			<h2>
+				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+				<!-- BEGIN: newday --><span class="icon_new">&nbsp;</span><!-- END: newday -->
+			</h2>
+			<div class="text-muted">
+				<ul class="list-unstyled list-inline">
+					<li>
+						<em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}
+					</li>
+					<li>
+						<em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}
+					</li>
+					<li>
+						<em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}
+					</li>
+				</ul>
+			</div>
+			<p class="text-justify">
+				{CONTENT.hometext}
+			</p>
+			<!-- BEGIN: adminlink -->
+			<p class="text-right">
+				{ADMINLINK}
+			</p>
+			<!-- END: adminlink -->
+		</div>
+	</div>
+	<!-- END: featured -->
+	<!-- BEGIN: news -->
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<!-- BEGIN: image -->
@@ -23,13 +58,13 @@
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
-			<h5 class="text-muted">
+			<div class="text-muted">
 				<ul class="list-unstyled list-inline">
 					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
 					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}</li>
 					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}</li>
 				</ul>
-			</h5>
+			</div>
 			<p class="text-justify">
 				{CONTENT.hometext}
 			</p>
@@ -40,6 +75,7 @@
 			<!-- END: adminlink -->
 		</div>
 	</div>
+	<!-- END: news -->
 </div>
 <!-- END: viewcatloop -->
 <!-- BEGIN: related -->

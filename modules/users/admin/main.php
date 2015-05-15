@@ -97,7 +97,7 @@ $db->select( '*' )
 	->offset( ( $page - 1 ) * $per_page );
 if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
 {
-	$orderby = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? 'first_name' : 'last_name');	
+	$orderby = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? 'first_name' : 'last_name');
 	$db->order( $orderby . ' ' . $ordertype);
 	$base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
 }
@@ -113,14 +113,12 @@ $is_setactive = ( in_array( 'setactive', $allow_func ) ) ? true : false;
 while( $row = $result2->fetch() )
 {
 	$users_list[$row['userid']] = array(
-		'userid' => ( int )$row['userid'],
-		'username' => ( string )$row['username'],
-		'first_name' => ( string )$row['first_name'],
-		'last_name' => ( string )$row['last_name'],
-		'full_name' => ( string )nv_show_name_user( $row['first_name'], $row['last_name'], $row['username'] ),
-		'email' => ( string )$row['email'],
+		'userid' =>  $row['userid'],
+		'username' =>  $row['username'],
+		'full_name' =>  nv_show_name_user( $row['first_name'], $row['last_name'], $row['username'] ),
+		'email' =>  $row['email'],
 		'regdate' => date( 'd/m/Y H:i', $row['regdate'] ),
-		'checked' => ( int )$row['active'] ? ' checked="checked"' : '',
+		'checked' =>  $row['active'] ? ' checked="checked"' : '',
 		'disabled' => ( $is_setactive ) ? ' onclick="nv_chang_status(' . $row['userid'] . ');"' : ' disabled="disabled"',
 		'is_edit' => $is_edit,
 		'is_delete' => $is_delete,

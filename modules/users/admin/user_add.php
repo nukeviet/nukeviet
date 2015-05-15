@@ -317,6 +317,8 @@ if( defined( 'NV_IS_USER_FORUM' ) )
 }
 else
 {
+	$xtpl->parse( 'main.edit_user.name_show_' . $global_config['name_show'] );
+
 	foreach( $genders as $gender )
 	{
 		$xtpl->assign( 'GENDER', $gender );

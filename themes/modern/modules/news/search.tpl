@@ -31,9 +31,9 @@
 		</div>
 		<div class="rows clearfix">
 			<label>{LANG.finter_title} :</label>
-			<input class="input datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" type="text"/>
+			<input class="input datepicker" name="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" type="text"/>
 			{LANG.to_date}
-			<input class="input datepicker" name="from_date" id="from_date" value="{FROM_DATE}" style="width:90px;" maxlength="10" type="text" />
+			<input class="input datepicker" name="to_date" value="{TO_DATE}" style="width:90px;" maxlength="10" type="text" />
 		</div>
 		<div class="rows clearfix">
 			<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />

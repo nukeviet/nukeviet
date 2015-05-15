@@ -26,13 +26,13 @@
 						<span class="icon_new">&nbsp;</span>
 						<!-- END: newday -->
 					</h3>
-					<h5 class="text-muted">
+					<div class="text-muted">
 						<ul class="list-unstyled list-inline">
 							<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
 							<li><em class="fa fa-eye">&nbsp;</em> {CONTENT.hitstotal}</li>
 							<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
 						</ul>
-					</h5>
+					</div>
 					<p class="text-justify">{CONTENT.hometext}</p>
 				</div>
 
@@ -41,7 +41,7 @@
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">
-							<a class="show" href="{OTHER.link}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip">{OTHER.title}</a>
+							<a class="show" href="{OTHER.link}" title="{OTHER.title}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip">{OTHER.title}</a>
 						</li>
 						<!-- END: loop -->
 					</ul>
@@ -55,11 +55,16 @@
 
 <!-- BEGIN: tooltip -->
 <script type="text/javascript">
-$(document).ready(function() {$("[data-rel='tooltip'][data-content!='']").tooltip({
-	placement: "{TOOLTIP_POSITION}",
-	html: true,
-	title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-});});
+$(document).ready(function() {
+	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
+	$("[data-rel='tooltip'][data-content!='']").tooltip({
+		placement: "{TOOLTIP_POSITION}",
+		html: true,
+		title: function(){
+			return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';
+		}
+	});
+});
 </script>
 <!-- END: tooltip -->
 
