@@ -5,10 +5,10 @@
 	<a class="btn btn-default btn-xs" href="javascript:void(0);" onclick="{CONTENTS.act.0}">{CONTENTS.act.1}</a>
 	<!-- END: act -->
 </div>
+<div class="clearfix"></div>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.caption}</caption>
-		<col span="2" style="width:50%;white-space:nowrap" />
 		<tbody>
 			<!-- BEGIN: loop1 -->
 			<tr>
@@ -18,6 +18,8 @@
 			<!-- END: loop1 -->
 		</tbody>
 	</table>
+</div>
+<div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.stat.0}</caption>
 		<tbody>

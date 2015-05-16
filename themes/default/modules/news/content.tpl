@@ -26,7 +26,7 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.content_cat} <span class="txtrequired">(*)</span></label>
 		<div class="col-sm-20">
-			<div style="height: 130px; width: 100%; overflow: auto; text-align: left;">
+			<div style="height: 130px; width: 100%; overflow: auto; text-align: left; border: solid 1px #ddd; padding: 11px;">
 				<table>
 					<tbody>
 						<!-- BEGIN: catid -->
