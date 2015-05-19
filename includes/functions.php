@@ -771,6 +771,24 @@ function nv_groups_del_user( $group_id, $userid )
 }
 
 /**
+ * nv_show_name_user()
+ *
+ * @param string $first_name
+ * @param string $last_name
+ * @param string $user_name
+ *  *
+ * @return
+ */
+function nv_show_name_user( $first_name, $last_name,  $user_name = '' )
+{
+	global $global_config;
+
+	$full_name = ( $global_config['name_show'] )  ? $first_name . ' ' . $last_name : $last_name . ' ' . $first_name;
+	$full_name = trim( $full_name );
+	return empty( $full_name ) ? $user_name : $full_name;
+}
+
+/**
  * nv_date()
  *
  * @param string $format
@@ -1205,6 +1223,8 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 		if( ! $mail->Send() )
 		{
 			trigger_error( $mail->ErrorInfo, E_USER_WARNING );
+
+			return false;
 		}
 
 		return true;
@@ -1314,8 +1334,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $on_page, $add_prev
 	{
 		if( $on_page > 1 )
 		{
-			$href = $on_page - 1;
-			$href = $href ? $base_url . $amp . $href : $base_url;
+			$href = ( $on_page > 2 ) ? $base_url . $amp . ( $on_page - 1 ) : $base_url;
 			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 			$page_string = "<li><a " . $href . " title=\"" . $lang_global['pageprev'] . "\">&laquo;</a></li>" . $page_string;
 		}
@@ -1326,7 +1345,7 @@ function nv_generate_page( $base_url, $num_items, $per_page, $on_page, $add_prev
 
 		if( $on_page < $total_pages )
 		{
-			$href = ( $on_page ) ? $base_url . $amp . $on_page : $base_url;
+			$href = ( $on_page ) ? $base_url . $amp . ( $on_page + 1 ) : $base_url;
 			$href = ! $onclick ? "href=\"" . $href . "\"" : "href=\"javascript:void(0)\" onclick=\"" . $js_func_name . "('" . rawurlencode( nv_unhtmlspecialchars( $href ) ) . "','" . $containerid . "')\"";
 			$page_string .= '<li><a ' . $href . ' title="' . $lang_global['pagenext'] . '">&raquo;</a></li>';
 		}
@@ -1436,7 +1455,8 @@ function nv_alias_page( $title, $base_url, $num_items, $per_page, $on_page, $add
 	{
 		if( $on_page > 1 )
 		{
-			$page_string = '<li><a rel="prev" title="' . $title . ' ' . ( $on_page - 1 ) . '" href="' . $base_url . '/page-' . ( $on_page - 1 ) . '">&laquo;</a></li>' . $page_string;
+			$href = ( $on_page > 2 ) ? $base_url . '/page-' . ( $on_page - 1 ) : $base_url;
+			$page_string = '<li><a rel="prev" title="' . $title . ' ' . ( $on_page - 1 ) . '" href="' . $href . '">&laquo;</a></li>' . $page_string;
 		}
 		else
 		{

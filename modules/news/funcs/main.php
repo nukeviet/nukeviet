@@ -124,17 +124,58 @@ if( empty( $contents ) )
 
 		$key = 0;
 		$db->sqlreset()
-			->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
-			->where( 'status= 1 AND inhome=1' )
-			->order( 'publtime DESC' );
+		->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+		->order( 'publtime DESC' );
 
 		foreach( $global_array_cat as $_catid => $array_cat_i )
 		{
 			if( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
 			{
 				$array_cat[$key] = $array_cat_i;
+				$featured = 0;
+				if( $array_cat_i['featured'] != 0 )
+				{
+					$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1' )->sql() );
+					if( $item = $result->fetch() )
+					{
+						if( $item['homeimgthumb'] == 1 )
+						{
+							$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+						}
+						elseif( $item['homeimgthumb'] == 2 )
+						{
+							$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+						}
+						elseif( $item['homeimgthumb'] == 3 )
+						{
+							$item['imghome'] = $item['homeimgfile'];
+						}
+						elseif( !empty( $show_no_image ) )
+						{
+							$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
+						}
+						else
+						{
+							$item['imghome'] = '';
+						}
 
-				$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->limit( $array_cat_i['numlinks'] )->sql() );
+						$item['newday'] = $array_cat_i['newday'];
+						$item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+						$array_cat[$key]['content'][] = $item;
+						$featured = $item['id'];
+					}
+				}
+
+				if( $featured )
+				{
+					$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 );
+				}
+				else
+				{
+					$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1' )->limit( $array_cat_i['numlinks'] );
+				}
+
+				$result = $db->query( $db->sql() );
 				while( $item = $result->fetch() )
 				{
 					if( $item['homeimgthumb'] == 1 )
@@ -186,7 +227,48 @@ if( empty( $contents ) )
 			if( $array_cat_i['parentid'] == 0 and $array_cat_i['inhome'] == 1 )
 			{
 				$array_catpage[$key] = $array_cat_i;
-				$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->limit($array_cat_i['numlinks'])->sql() );
+				$featured = 0;
+				if( $array_cat_i['featured'] != 0 )
+				{
+					$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1' )->limit($array_cat_i['numlinks'])->sql() );
+					while( $item = $result->fetch() )
+					{
+						if( $item['homeimgthumb'] == 1 )
+						{
+							$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+						}
+						elseif( $item['homeimgthumb'] == 2 )
+						{
+							$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+						}
+						elseif( $item['homeimgthumb'] == 3 )
+						{
+							$item['imghome'] = $item['homeimgfile'];
+						}
+						elseif( !empty( $show_no_image ) )
+						{
+							$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
+						}
+						else
+						{
+							$item['imghome'] = '';
+						}
+
+						$item['newday'] = $array_cat_i['newday'];
+						$item['link'] = $array_cat_i['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+						$array_catpage[$key]['content'][] = $item;
+						$featured = $item['id'];
+					}
+				}
+				if( $featured )
+				{
+					$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 );
+				}
+				else
+				{
+					$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1' )->limit( $array_cat_i['numlinks'] );
+				}
+				$result = $db->query( $db->sql() );
 
 				while( $item = $result->fetch() )
 				{
@@ -261,7 +343,7 @@ if( empty( $contents ) )
 			{
 				$item['imghome'] = '';
 			}
-			
+
 			$item['newday'] = $global_array_cat[$item['catid']]['newday'];
 			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;

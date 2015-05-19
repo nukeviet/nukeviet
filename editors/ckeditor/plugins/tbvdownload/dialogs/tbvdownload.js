@@ -7,6 +7,23 @@
 
 CKEDITOR.dialog.add( 'tbvdownloadDialog', function( editor ) {
 	var lang = editor.lang.tbvdownload;
+	var path_image= (editor.config.filebrowserImageBrowseUrl)? editor.config.filebrowserImageBrowseUrl : '';
+	var sURLVariables = path_image.split('&');
+	var ipath = '';
+	var icurrentpath = '';
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == 'path')
+        {
+            ipath = sParameterName[1];
+        }
+        else if (sParameterName[0] == 'currentpath')
+        {
+            icurrentpath = sParameterName[1];
+        }
+    }
+    path_image = (icurrentpath.indexOf(ipath) != -1 ) ? icurrentpath.replace(ipath+'/', '') : '';
 
 	function onPasteFrameLoad( win ) {
 		var doc = new CKEDITOR.dom.document( win.document ),
@@ -198,7 +215,7 @@ CKEDITOR.dialog.add( 'tbvdownloadDialog', function( editor ) {
 							bogus = body.getBogus(),
 							html;
 						bogus && bogus.remove();
-                        
+
 						// Saving the contents so changes until paste is complete will not take place (#7500)
 						html = body.getHtml();
 						// Opera needs some time to think about what has happened and what it should do now.
@@ -208,7 +225,7 @@ CKEDITOR.dialog.add( 'tbvdownloadDialog', function( editor ) {
                             data: { data: html, module_name : nv_module_name, pathsave : $('#pathsave').val() },
                             async: false
                         }).responseText
-    
+
 						setTimeout( function() {
 							editor.fire( 'pasteDialogCommit', html );
 						}, 0 );
@@ -220,23 +237,14 @@ CKEDITOR.dialog.add( 'tbvdownloadDialog', function( editor ) {
 					html: '<div style="white-space:normal;width:340px">' + lang.url_path_save + '</div>'
 				},
 				{
-					// Text input field for the abbreviation title (explanation). 
+					// Text input field for the abbreviation title (explanation).
                     //id cai toi ko lay dc gio la minh dang dung trong 1 thang khac de goi quay ra
 					type: 'html',
 					id: 'pathsave',
                     style: 'width:100%;height:100%',
-                    html : '<div><input class="cke_dialog_ui_input_text" type="text" name="pathsave" id="pathsave" ></div>'
+                    html : '<div><input class="cke_dialog_ui_input_text" type="text" name="pathsave" id="pathsave" value="' + path_image + '"></div>'
 				}
 			]
 		} ]
 	};
 } );
-
-/**
- * Internal event to pass paste dialog's data to the listeners.
- *
- * @private
- * @event pasteDialogCommit
- * @member CKEDITOR.editor
- * @param {CKEDITOR.editor} editor This editor instance.
- */

@@ -92,3 +92,33 @@ function nv_menu_item_delete(id, mid, parentid, num) {
     }
 	return false;
 }
+
+function nv_main_action(oForm, msgnocheck) {
+	var fa = oForm['idcheck[]'];
+	var listid = '';
+	if (fa.length) {
+		for (var i = 0; i < fa.length; i++) {
+			if (fa[i].checked) {
+				listid = listid + fa[i].value + ',';
+			}
+		}
+	} else {
+		if (fa.checked) {
+			listid = listid + fa.value + ',';
+		}
+	}
+
+	if (listid != '') {
+		var action = document.getElementById('action').value;
+		if (action == 'delete') {
+			if (confirm(nv_is_del_confirm[0])) {
+				return true;
+			}
+		} else {
+			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '='+action+'&listid=' + listid + '&checkss=' + checkss;
+		}
+	} else {
+		alert(msgnocheck);
+	}
+	return false;
+}

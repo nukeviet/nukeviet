@@ -79,8 +79,6 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 					$news_contents['homeimgfile'] = $src;
 				}
 
-				$news_contents['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $news_contents['homeimgfile'];
-
 				if( ! empty( $src ) )
 				{
 					$meta_property['og:image'] = ( $news_contents['homeimgthumb'] == 1 ) ? NV_MY_DOMAIN . $news_contents['homeimgfile'] : NV_MY_DOMAIN . $src;
@@ -324,10 +322,9 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			'verygood' => $lang_module['star_verygood']
 		);
 	}
-		
-	list( $post_username, $post_first_name, $post_last_name ) = $db->query( 'SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] )->fetch( 3 );
 
-	$news_contents['post_name'] = empty( $post_first_name ) ? $post_username : $post_first_name;
+	list( $post_username, $post_first_name, $post_last_name ) = $db->query( 'SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] )->fetch( 3 );
+	$news_contents['post_name'] = nv_show_name_user( $post_first_name, $post_last_name, $post_username );
 
 	$array_keyword = array();
 	$key_words = array();
@@ -339,24 +336,30 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	}
 
 	// comment
-	define( 'NV_COMM_ID', $id );//ID bài viết hoặc
-    define( 'NV_COMM_AREA', $module_info['funcs'][$op]['func_id'] );//để đáp ứng comment ở bất cứ đâu không cứ là bài viết
-    //check allow comemnt
-    $allowed = $module_config[$module_name]['allowed_comm'];//tuy vào module để lấy cấu hình. Nếu là module news thì có cấu hình theo bài viết
-    if( $allowed == '-1' )
-    {
-       $allowed = $news_contents['allowed_comm'];
+	if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) )
+	{
+		define( 'NV_COMM_ID', $id );//ID bài viết hoặc
+	    define( 'NV_COMM_AREA', $module_info['funcs'][$op]['func_id'] );//để đáp ứng comment ở bất cứ đâu không cứ là bài viết
+	    //check allow comemnt
+	    $allowed = $module_config[$module_name]['allowed_comm'];//tuy vào module để lấy cấu hình. Nếu là module news thì có cấu hình theo bài viết
+	    if( $allowed == '-1' )
+	    {
+	       $allowed = $news_contents['allowed_comm'];
+	    }
+	    define( 'NV_PER_PAGE_COMMENT', 5 ); //Số bản ghi hiển thị bình luận
+	    require_once NV_ROOTDIR . '/modules/comment/comment.php';
+	    $area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
+	    $checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
+
+	    //get url comment
+	    $url_info = parse_url( $client_info['selfurl'] );
+	    $url_comment = $url_info['path'];
+	    $content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
     }
-    define( 'NV_PER_PAGE_COMMENT', 5 ); //Số bản ghi hiển thị bình luận
-    require_once NV_ROOTDIR . '/modules/comment/comment.php';
-    $area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
-    $checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
-
-    //get url comment
-    $url_info = parse_url( $client_info['selfurl'] );
-    $url_comment = $url_info['path'];
-
-    $content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
+	else
+	{
+		$content_comment = '';
+	}
 
 	$contents = detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment );
 	$id_profile_googleplus = $news_contents['gid'];

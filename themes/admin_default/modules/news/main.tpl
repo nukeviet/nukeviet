@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+
 <div class="well">
 	<form action="{NV_BASE_ADMINURL}index.php" method="get">
 		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -21,7 +24,7 @@
 			</div>
 			<div class="col-xs-12 col-md-6">
 				<div class="form-group">
-					<select class="form-control" name="catid">
+					<select class="form-control" name="catid" id="catid">
 						<!-- BEGIN: cat_content -->
 						<option value="{CAT_CONTENT.value}" {CAT_CONTENT.selected} >{CAT_CONTENT.title}</option>
 						<!-- END: cat_content -->
@@ -31,6 +34,7 @@
 			<div class="col-xs-12 col-md-3">
 				<div class="form-group">
 					<select class="form-control" name="sstatus">
+						<option value="-1"> -- {LANG.search_status} -- </option>
 						<!-- BEGIN: search_status -->
 						<option value="{SEARCH_STATUS.key}" {SEARCH_STATUS.selected} >{SEARCH_STATUS.value}</option>
 						<!-- END: search_status -->
@@ -83,7 +87,7 @@
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr class="{ROW.class}">
-					<td><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
+					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
 					<td class="text-left">
 						<p><a target="_blank" href="{ROW.link}">{ROW.title}</a></p>
 					</td>
@@ -117,4 +121,11 @@
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#catid").select2();
+	});
+</script>
+
 <!-- END: main -->

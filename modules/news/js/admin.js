@@ -142,8 +142,6 @@ function nv_del_source(sourceid) {
 			var r_split = res.split('_');
 			if (r_split[0] == 'OK') {
 				nv_show_list_source();
-			} else if (r_split[0] == 'ERR') {
-				alert(r_split[1]);
 			} else {
 				alert(nv_is_del_confirm[2]);
 			}
@@ -290,7 +288,7 @@ function nv_check_movecat(oForm, msgnocheck) {
 function nv_del_content_result(res) {
 	var r_split = res.split('_');
 	if (r_split[0] == 'OK') {
-		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main';
+		window.location.href = window.location.href;
 	} else if (r_split[0] == 'ERR') {
 		alert(r_split[1]);
 	} else {

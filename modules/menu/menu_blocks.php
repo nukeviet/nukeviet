@@ -24,7 +24,7 @@ function nv_menu_blocks( $block_config )
 
 	$list_cats = array();
 	$sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
-	$list = nv_db_cache( $sql, '', 'menu' );
+	$list = nv_db_cache( $sql, '', $block_config['module'] );
 
 	foreach( $list as $row )
 	{
@@ -92,8 +92,11 @@ function nv_menu_blocks( $block_config )
 			{
 				$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'] );
 				$xtpl->assign( 'HTML_CONTENT', $html_content );
-				$xtpl->parse( 'main.loopcat1.cat2' );
-				$xtpl->parse( 'main.loopcat1.expand' );
+				if( $html_content != '' )
+				{
+					$xtpl->parse( 'main.loopcat1.cat2' );
+					$xtpl->parse( 'main.loopcat1.expand' );
+				}
 			}
 			$xtpl->parse( 'main.loopcat1' );
 		}

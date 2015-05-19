@@ -402,7 +402,22 @@ function nv_getFileInfo( $pathimg, $file )
 	}
 	elseif( in_array( $ext, $array_documents ) )
 	{
-		$info['src'] = 'images/doc.gif';
+		if( $ext == 'doc' or $ext == 'docx' )
+		{
+			$info['src'] = 'images/msword.png';
+		}
+		elseif( $ext == 'xls' or $ext == 'xlsx' )
+		{
+			$info['src'] = 'images/excel.png';
+		}
+		elseif( $ext == 'pdf' )
+		{
+			$info['src'] = 'images/pdf.png';
+		}
+		else
+		{
+			$info['src'] = 'images/doc.gif';
+		}
 	}
 
 	$info['userid'] = 0;

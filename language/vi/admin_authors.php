@@ -144,10 +144,11 @@ $lang_module['add_error_notexist'] = 'Lỗi: Thành viên này không tồn tạ
 $lang_module['add_error_diff'] = 'Xảy ra lỗi không xác định';
 
 $lang_module['action_account'] = 'Tài khoản thành viên';
-$lang_module['action_account_nochange'] = 'Dữ nguyên tài khoản thành viên';
+$lang_module['action_account_nochange'] = 'Giữ nguyên tài khoản thành viên';
 $lang_module['action_account_suspend'] = 'Khóa tài khoản thành viên';
 $lang_module['action_account_del'] = 'Xóa tài khoản thành viên';
 $lang_module['module_admin'] = 'Quyền hạn module hệ thống';
+$lang_module['users'] = 'Tài khoản';
 $lang_module['number'] = 'STT';
 $lang_module['module'] = 'Tên module';
 $lang_module['custom_title'] = 'Tiêu đề';

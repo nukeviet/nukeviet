@@ -76,6 +76,7 @@
 		<hr />
         <!-- BEGIN: socialbutton -->
         <div class="socialicon pull-left">
+        	<div style="width:60px" class="fb-share-button" data-href="{SELFURL}" data-layout="button">&nbsp;</div>
 	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
 	        <div class="g-plusone" data-size="medium"></div>
 	        <script type="text/javascript">
@@ -178,7 +179,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip">{TOPIC.title}</a>
+			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip" title="{TOPIC.title}">{TOPIC.title}</a>
 			<em>({TOPIC.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -232,6 +233,7 @@
 $(document).ready(function() {
 	$(".bodytext img").toggleClass('img-thumbnail');
 	<!-- BEGIN: tooltip -->
+	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
 	$("[data-rel='tooltip'][data-content!='']").tooltip({
 		placement: "{TOOLTIP_POSITION}",
 		html: true,

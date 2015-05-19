@@ -34,15 +34,8 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 
 		if( nv_user_in_groups( $allowed ) )
 		{
-			if( defined( 'NV_IS_ADMIN' ) )
-			{
-				$content = $nv_Request->get_editor( 'content', '', NV_ALLOWED_HTML_TAGS );
-			}
-			else
-			{
-				$content = $nv_Request->get_title( 'content', 'post', '', 1 );
-				$content = nv_nl2br( $content, '<br />' );
-			}
+			$content = $nv_Request->get_title( 'content', 'post', '', 1 );
+			$content = nv_nl2br( $content, '<br />' );
 			$code = $nv_Request->get_title( 'code', 'post', '' );
 			$status = $module_config[$module]['auto_postcomm'];
 
@@ -114,13 +107,12 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 						$nv_Request->set_Cookie( $module_name . '_timeout', NV_CURRENTTIME );
 						if( $status )
 						{
-							$row = array();
-							$row['module'] =  $module;
-							$row['id'] = $id;
-
 							$mod_info = $site_mods[$module];
 							if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
 							{
+								$row = array();
+								$row['module'] =  $module;
+								$row['id'] = $id;
 								include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
 							}
 						}

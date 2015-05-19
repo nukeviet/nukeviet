@@ -24,6 +24,13 @@
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
+			<div class="text-muted">
+				<ul class="list-unstyled list-inline">
+					<li><em class="fa fa-clock-o">&nbsp;</em> {NEWSTOP.publtime}</li>
+					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {NEWSTOP.hitstotal}</li>
+					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {NEWSTOP.hitscm}</li>
+				</ul>
+			</div>
 			<p class="text-justify">
 				{NEWSTOP.hometext}
 			</p>
@@ -59,6 +66,13 @@
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
+			<div class="text-muted">
+				<ul class="list-unstyled list-inline">
+					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
+					<li><em class="fa fa-eye">&nbsp;</em> {CONTENT.hitstotal}</li>
+					<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
+				</ul>
+			</div>
 			<!-- BEGIN: image -->
 			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
@@ -74,7 +88,7 @@
 			<ul class="related">
 				<!-- BEGIN: other -->
 				<li class="{CLASS}">
-					<a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip">{CONTENT.title}</a>
+					<a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip" title="{CONTENT.title}">{CONTENT.title}</a>
 				</li>
 				<!-- END: other -->
 			</ul>
@@ -104,11 +118,14 @@ $(window).load(function(){
 
 <!-- BEGIN: tooltip -->
 <script type="text/javascript">
-$(document).ready(function() {$("[data-rel='tooltip'][data-content!='']").tooltip({
-	placement: "{TOOLTIP_POSITION}",
-	html: true,
-	title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-});});
+$(document).ready(function() {
+	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
+	$("[data-rel='tooltip'][data-content!='']").tooltip({
+		placement: "{TOOLTIP_POSITION}",
+		html: true,
+		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+	});
+});
 </script>
 <!-- END: tooltip -->
 

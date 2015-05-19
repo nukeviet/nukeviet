@@ -312,6 +312,17 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	}
 }
 
+if( $nv_Request->get_title( 'action', 'post' ) =='delete' and $nv_Request->isset_request( 'idcheck', 'post' ) )
+{
+	$array_id = $nv_Request->get_typed_array( 'idcheck', 'post', 'int' );
+	foreach ($array_id as $id)
+	{
+		nv_menu_del_sub( $id, $post['parentid'] );
+	}
+	menu_fix_order( $post['mid'] );
+	nv_del_moduleCache( $module_name );
+}
+
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $post['mid'] . ' AND parentid=' . $post['parentid'] . ' ORDER BY weight';
 $result = $db->query( $sql );
 
@@ -325,11 +336,15 @@ while( $row = $result->fetch() )
 	$nu = $db->query( $sql )->fetchColumn();
 
 	$row['sub'] = sizeof( array_filter( explode( ',', $row['subitem'] ) ) );
-	$array_groups_view = explode( ',', $row['groups_view'] );
+
 	$groups_view = array();
+	$array_groups_view = explode( ',', $row['groups_view'] );
 	foreach( $array_groups_view as $_group_id )
 	{
-		$groups_view[] = $groups_list[$_group_id];
+		if( isset( $groups_list[$_group_id] ) )
+		{
+			$groups_view[] = $groups_list[$_group_id];
+		}
 	}
 	if( ! empty( $row['icon'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['icon'] ) )
 	{
@@ -352,7 +367,7 @@ while( $row = $result->fetch() )
 		'groups_view' => implode( '<br>', $groups_view ),
 		'url_title' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;parentid=' . $row['id'],
 		'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;id=' . $row['id'] . '#edit',
-		);
+	);
 }
 
 $array_mod_title = array();
@@ -446,7 +461,8 @@ if( $post['id'] != 0 )
 				$array_item[$key] = array(
 					'key' => $key,
 					'title' => $sub_item['func_custom_name'],
-					'alias' => $key );
+					'alias' => $key
+				);
 			}
 		}
 

@@ -571,6 +571,7 @@ while( $row = $result2->fetch() )
 	$array[$row['id']] = array(
 		'id' => $row['id'],
 		'title' => $row['title'],
+		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $listcats[$row['catid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'],
 		'cattitle' => $listcats[$row['catid']]['title'],
 		'catlink' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;catid=' . $row['catid'],
 		'uploadtime' => nv_date( 'd/m/Y H:i', $row['uploadtime'] ),

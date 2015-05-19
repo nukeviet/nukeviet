@@ -42,11 +42,11 @@
 		<div class="content-page">
 			{CONTENT.bodytext}
 		</div>
-		<div class="content-page">
-			<!-- BEGIN: comment -->
-			<iframe src="{NV_COMM_URL}" id = "fcomment" onload = "nv_setIframeHeight( this.id )" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
-			<!-- END: comment -->
-		</div>
+		<!-- BEGIN: comment -->
+			<div class="content-page">
+				{CONTENT_COMMENT}
+			</div>
+		<!-- END: comment -->
 		<!-- BEGIN: other -->
 		<div class="other-news" style="border-top: 1px solid #d8d8d8;">
 			<ul style="margin:10px;">

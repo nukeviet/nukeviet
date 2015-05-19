@@ -179,9 +179,16 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
 					$is_delete = true;
 				}
 			}
-			require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
-			$lang_module_comment = $lang_module;
 
+			if( file_exists( NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php' ) )
+			{
+				require NV_ROOTDIR . '/modules/comment/language/' . NV_LANG_INTERFACE . '.php';
+			}
+			else
+			{
+				require NV_ROOTDIR . '/modules/comment/language/en.php';
+			}
+			$lang_module_comment = $lang_module;
 			if( $view_comm )
 			{
 				$comment_array = nv_comment_data( $module, $area, $id, $allowed_comm, $page, $sortcomm, $base_url );
@@ -191,9 +198,7 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
 			{
 				$comment = '';
 			}
-			$contents = nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login );
-
-			 return $contents;
+			return nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login );
 		}
 		else
 		{
@@ -242,7 +247,7 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 	{
 		if( defined( 'NV_IS_USER' ) )
 		{
-			$xtpl->assign( 'NAME', $user_info['first_name'] );
+			$xtpl->assign( 'NAME', $user_info['full_name'] );
 			$xtpl->assign( 'EMAIL', $user_info['email'] );
 			$xtpl->assign( 'DISABLED', ' disabled="disabled"' );
 		}
@@ -278,17 +283,6 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 				}
 			}
 		}
-		//neu nguoi dang nhap la admin se co trinh editor de binh luan
-		$xtpl->assign( 'editor', 0 );
-		/*if( defined( 'NV_IS_ADMIN' ) )
-		{
-			$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-		}
-		else{
-			$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-		}*/
-		$comment_content = "<textarea class=\"form-control\" style=\"width: 100%\" name=\"commentcontent\" id=\"commentcontent\" cols=\"20\" rows=\"5\"></textarea>";
-		$xtpl->assign( 'comment_content', $comment_content );
 
 		if( $show_captcha )
 		{
@@ -299,7 +293,7 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 			$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 			$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-			$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha' );
+			$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 			$xtpl->parse( 'main.allowed_comm.captcha' );
 		}
 		else

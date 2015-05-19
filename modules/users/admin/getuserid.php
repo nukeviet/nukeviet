@@ -20,6 +20,8 @@ $page_title = $lang_module['pagetitle'];
 $filtersql = $nv_Request->get_string( 'filtersql', 'get', '' );
 
 $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+
+$lang_module['fullname'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
@@ -50,22 +52,17 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 	if( $orderregdate != 'DESC' and $orderregdate != '' ) $orderregdate = 'ASC';
 
 	$array['username'] = $nv_Request->get_title( 'username', 'get', '' );
-	$array['first_name'] = $nv_Request->get_title( 'first_name', 'get', '' );
-	$array['last_name'] = $nv_Request->get_title( 'last_name', 'get', '' );
+	$array['full_name'] = $nv_Request->get_title( 'full_name', 'get', '' );
 	$array['email'] = $nv_Request->get_title( 'email', 'get', '' );
 	$array['sig'] = $nv_Request->get_title( 'sig', 'get', '' );
-
 	$array['regdatefrom'] = $nv_Request->get_title( 'regdatefrom', 'get', '' );
 	$array['regdateto'] = $nv_Request->get_title( 'regdateto', 'get', '' );
-
 	$array['last_loginfrom'] = $nv_Request->get_title( 'last_loginfrom', 'get', '' );
 	$array['last_loginto'] = $nv_Request->get_title( 'last_loginto', 'get', '' );
-
 	$array['last_ip'] = $nv_Request->get_title( 'last_ip', 'get', '' );
-
 	$array['gender'] = $nv_Request->get_title( 'gender', 'get', '' );
 
-	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $array['regdatefrom'], $m ) )
+	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $array['regdatefrom'], $m ) )
 	{
 		$array['regdatefrom1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -74,7 +71,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$array['regdatefrom1'] = '';
 	}
 
-	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $array['regdateto'], $m ) )
+	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $array['regdateto'], $m ) )
 	{
 		$array['regdateto1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -83,7 +80,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$array['regdateto1'] = '';
 	}
 
-	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $array['last_loginfrom'], $m ) )
+	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $array['last_loginfrom'], $m ) )
 	{
 		$array['last_loginfrom1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -92,7 +89,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		$array['last_loginfrom1'] = '';
 	}
 
-	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $array['last_loginto'], $m ) )
+	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $array['last_loginto'], $m ) )
 	{
 		$array['last_loginto1'] = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 	}
@@ -121,10 +118,12 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 			$array_where[] = "( username LIKE '%" . $db->dblikeescape( $array['username'] ) . "%' )";
 		}
 
-		if( ! empty( $array['first_name'] ) )
+		if( ! empty( $array['full_name'] ) )
 		{
-			$base_url .= '&amp;first_name=' . rawurlencode( $array['first_name'] );
-			$array_where[] = "( first_name LIKE '%" . $db->dblikeescape( $array['first_name'] ) . "%' )";
+			$base_url .= '&amp;full_name=' . rawurlencode( $array['full_name'] );
+			
+			$where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
+			$array_where[] =  "(" . $where_fullname ." LIKE '%" . $db->dblikeescape( $array['full_name'] ) . "%' )";
 		}
 
 		if( ! empty( $array['email'] ) )
