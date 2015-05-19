@@ -2374,7 +2374,8 @@ function history_order( $data_content, $link_check_order )
 		$xtpl->assign( 'unit_total', $data_row['unit_total'] );
 		$xtpl->assign( 'note', $data_row['order_note'] );
 		$xtpl->assign( 'URL_DEL_BACK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=history' );
-		if( intval( $data_row['transaction_status'] ) == -1 )
+
+		if( intval( $data_row['transaction_status'] ) <= 1 )
 		{
 			$xtpl->assign( 'link_remove', $data_row['link_remove'] );
 			$xtpl->parse( 'main.rows.remove' );
