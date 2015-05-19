@@ -312,7 +312,7 @@ div.news_column ul.related a:hover{
     font-size: 15px !important;
 }
 .news_column h3{
-    font-size: 14px !important;
+    font-size: 14px;
 }
 
 .fb-like, .fb-share-button {
