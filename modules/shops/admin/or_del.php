@@ -17,10 +17,6 @@ $contents = "NO_" . $order_id;
 
 if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . session_id() ) )
 {
-	// Thong tin dat hang
-	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id );
-	$data_order = $result->fetch();
-
 	// Thong tin dat hang chi tiet
 	$list_order_i = $listid = $listnum = $listgroup = array();
 	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
@@ -93,14 +89,34 @@ elseif( $nv_Request->isset_request( 'listall', 'post,get' ) )
 			$data_order = $result->fetch();
 			$result->closeCursor();
 
+			// Thong tin dat hang chi tiet
+			$list_order_i = $listid = $listnum = $listgroup = array();
+			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
+			while( $row = $result->fetch() )
+			{
+				$list_order_i[] = $row['id'];
+				$listid[] = $row['proid'];
+				$listnum[] = $row['num'];
+
+				$list = '';
+				$result_group = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id'] );
+				$group = array();
+				while( list( $group_id ) = $result_group->fetch( 3 ) )
+				{
+					$group[] = $group_id;
+				}
+				asort( $group );
+				$listgroup[] = implode( ',', $group );
+			}
+
 			// Cong lai san pham trong kho
 			if( $pro_config['active_order_number'] == '0' )
 			{
-				product_number_order( $data_order['listid'], $data_order['listnum'], "+" );
+				product_number_order( $listid, $listnum, $listgroup, "+" );
 			}
 
 			// Tru lai so san pham da ban
-			product_number_sell( $data_order['listid'], $data_order['listnum'], "-" );
+			product_number_sell( $listid, $listnum, "-" );
 
 			// Cap nhat lich su su dung ma giam gia
 			$num = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history WHERE order_id = ' . $order_id )->fetchColumn();
