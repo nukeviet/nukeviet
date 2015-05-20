@@ -100,7 +100,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) )
 			{
 				$admin_module = 1;
 			}
-			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_admins WHERE userid = " . $userid . " AND catid > 0" );
+			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_admins WHERE userid = " . $userid );
 			$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, app_content) VALUES ('" . $userid . "', '0', '" . $admin_module . "', '1', '1', '1', '1', '1')" );
 		}
 		else
