@@ -37,7 +37,25 @@
 		<div id="hometext">
 			<!-- BEGIN: imgthumb -->
 			<div class="imghome pull-left text-center" style="width:{DETAIL.image.width}px;">
-				<a href="{DETAIL.homeimgfile}" title="{DETAIL.image.alt}" rel="shadowbox"><img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail" /></a>
+				<a href="#" id="pop" title="{DETAIL.image.alt}">
+				    <img id="imageresource" alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail" >
+                </a>
+				<!-- Creates the bootstrap modal where the image will appear -->
+                <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">{DETAIL.image.alt}</h4>
+                      </div>
+                      <div class="modal-body">
+                        <center><img src="" id="imagepreview" class="img-thumbnail" ></center>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 				<em>{DETAIL.image.note}</em>
 			</div>
 			<!-- END: imgthumb -->
@@ -231,6 +249,10 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
+    $("#pop").on("click", function() {
+       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
+       $('#imagemodal').modal('show');
+    });
 	$(".bodytext img").toggleClass('img-thumbnail');
 	<!-- BEGIN: tooltip -->
 	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");

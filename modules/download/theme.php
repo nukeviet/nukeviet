@@ -58,20 +58,20 @@ function theme_main_download( $array_cats, $list_cats, $download_config )
 			$items = $cat['items'];
 			#parse the first items
 			$thefirstcat = current( $items );
-			
+
 			$xtpl->assign( 'itemcat', $thefirstcat );
 			if( ! empty( $thefirstcat['imagesrc'] ) )
 			{
 				$xtpl->parse( 'main.catbox.itemcat.image' );
 			}
-			
+
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;edit=1&amp;id=' . $thefirstcat['id'] );
 				$xtpl->assign( 'DEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 				$xtpl->parse( 'main.catbox.itemcat.adminlink' );
 			}
-			
+
 			$xtpl->parse( 'main.catbox.itemcat' );
 			foreach( $items as $item )
 			{
@@ -188,16 +188,14 @@ function view_file( $row, $download_config, $content_comment )
 {
 	global $global_config, $lang_global, $lang_module, $module_name, $module_file, $module_info, $my_head;
 
-	if( ! defined( 'SHADOWBOX' ) and isset( $row['fileimage']['src'] ) and ! empty( $row['fileimage']['src'] ) )
+	/*
+	if( ! defined( 'MODAL' ) )
 	{
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-		$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-		$my_head .= "<script type=\"text/javascript\">\n";
-		$my_head .= "Shadowbox.init();\n";
-		$my_head .= "</script>\n";
-
-		define( 'SHADOWBOX', true );
-	}
+		$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/bootstrap-theme.css\" />\n";
+		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/bootstrap.js\"></script>\n";
+		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/bootstrap.min.js\"></script>\n";
+		define( 'MODAL', true );
+	}*/
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
 	$my_head .= "<script src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
@@ -219,7 +217,7 @@ function view_file( $row, $download_config, $content_comment )
 		$xtpl->assign( 'FILEIMAGE', $row['fileimage'] );
 		$xtpl->parse( 'main.is_image' );
 	}
-    
+
     if( ! empty( $row['download_info'] ) )
     {
         $xtpl->parse( 'main.download_info' );
@@ -316,44 +314,44 @@ function theme_upload( $array, $list_cats, $download_config, $error )
         required: true,
         rangelength: [3, 255]
     },
-     
+
     upload_author_name: {
         rangelength: [3, 100]
     },
-     
+
     upload_author_email: {
         email: true
     },
-     
+
     upload_author_url: {
         url: true
     },
-     
+
     upload_fileupload: {
         accept: '" . implode( "|", $download_config['upload_filetype'] ) . "'
     },
-     
+
     upload_filesize: {
         number: true
     },
-     
+
     upload_fileimage: {
         accept: 'jpg|gif|png'
     },
-     
+
     upload_introtext: {
         maxlength: 500
     },
-     
+
     upload_description: {
         maxlength: 5000
     },
-     
+
     upload_user_name: {
         required: true,
         rangelength: [3, 60]
     },
-     
+
     upload_seccode: {
         required: true,
         minlength: 6
