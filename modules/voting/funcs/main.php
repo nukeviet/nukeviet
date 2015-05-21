@@ -61,7 +61,7 @@ if( empty( $vid ) )
 		foreach( $allowed as $current_voting )
 		{
 			$action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-
+			$current_voting['publ_time'] = nv_date( 'l - d/m/Y H:i', $current_voting['publ_time'] );
 			$voting_array = array(
 				'checkss' => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ),
 				'accept' => ( int )$current_voting['acceptcm'],
@@ -70,9 +70,9 @@ if( empty( $vid ) )
 				'question' => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
 				'action' => $action,
 				'langresult' => $lang_module['voting_result'],
-				'langsubmit' => $lang_module['voting_hits']
+				'langsubmit' => $lang_module['voting_hits'],
+				'publtime' => $current_voting['publ_time']
 			);
-
 			$xtpl->assign( 'VOTING', $voting_array );
 
 			$sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';

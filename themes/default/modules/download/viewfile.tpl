@@ -4,7 +4,25 @@
 	<div class="panel-body">
 	<!-- BEGIN: is_image -->
 	<div class="image">
-		<a  title="{ROW.title}" href="{FILEIMAGE.orig_src}" rel="shadowbox;height={FILEIMAGE.orig_height};width={FILEIMAGE.orig_width}"><img alt="{ROW.title}"src="{FILEIMAGE.src}" width="{FILEIMAGE.width}" height="{FILEIMAGE.height}" /></a>
+		<a href="#" id="pop" title="{ROW.title}">
+            <img id="imageresource" alt="{ROW.title}" src="{FILEIMAGE.src}" width="{FILEIMAGE.width}" height="{FILEIMAGE.height}" class="img-thumbnail" >
+        </a>
+        <!-- Creates the bootstrap modal where the image will appear -->
+        <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">{ROW.title}</h4>
+              </div>
+              <div class="modal-body">
+                <img src="" id="imagepreview" style="width: 400px; height: 264px;" >
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 	</div>
 	<!-- END: is_image -->
 	<!-- BEGIN: introtext -->
@@ -19,47 +37,47 @@
 		<dl class="dl-horizontal">
 			<dt>{LANG.file_title}:</dt>
 			<dd>{ROW.title}</dd>
-			
+
 			<dt>{LANG.file_version}:</dt>
 			<dd>{ROW.version}</dd>
-			
+
 			<dt>{LANG.author_name}:</dt>
 			<dd>{ROW.author_name}</dd>
-			
+
 			<dt>{LANG.author_url}:</dt>
 			<dd>{ROW.author_url}</dd>
-			
+
 			<dt>{LANG.bycat2}:</dt>
 			<dd>{ROW.catname}</dd>
-			
+
 			<dt>{LANG.uploadtime}:</dt>
 			<dd>{ROW.uploadtime}</dd>
-			
+
 			<dt>{LANG.updatetime}:</dt>
 			<dd>{ROW.updatetime}</dd>
-			
+
 			<dt>{LANG.user_name}:</dt>
 			<dd>{ROW.user_name}</dd>
-			
+
 			<dt>{LANG.copyright}:</dt>
 			<dd>{ROW.copyright}</dd>
-			
+
 			<dt>{LANG.filesize}:</dt>
 			<dd>{ROW.filesize}</dd>
-			
+
 			<dt>{LANG.view_hits}:</dt>
 			<dd>{ROW.view_hits}</dd>
-			
+
 			<dt>{LANG.download_hits}:</dt>
 			<dd id="download_hits">{ROW.download_hits}</dd>
-			
+
 			<!-- BEGIN: comment_hits -->
 			<dt>{LANG.comment_hits}:</dt>
 			<dd>{ROW.comment_hits}</dd>
 			<!-- END: comment_hits -->
 		</dl>
 	</div>
-	
+
 	<div class="info_download">
 		<!-- BEGIN: report -->
 		<div class="report pull-right">
@@ -74,11 +92,11 @@
 			<div class="hidden">
 				<iframe name="idown">&nbsp;</iframe>
 			</div>
-			
+
 			<div class="panel-heading">
 				{LANG.download_fileupload} {SITE_NAME}:
 			</div>
-			
+
 			<div class="panel-body">
 				<!-- BEGIN: row -->
 					<em class="fa fa-link">&nbsp;</em>&nbsp;<a id="myfile{FILEUPLOAD.key}" href="{FILEUPLOAD.link}" onclick="nv_download_file('idown','{FILEUPLOAD.title}');return false;">{FILEUPLOAD.title}</a>
@@ -86,13 +104,13 @@
 			</div>
 		</div>
 		<!-- END: fileupload -->
-		
+
 		<!-- BEGIN: linkdirect -->
 		<div class="panel panel-default download">
 			<div class="panel-heading">
 				{LANG.download_linkdirect} {HOST}:
 			</div>
-			
+
 			<div class="panel-body">
 				<!-- BEGIN: row -->
 					<span class="fa fa-link">&nbsp;</span>&nbsp;<a href="{LINKDIRECT.link}" onclick="nv_linkdirect('{LINKDIRECT.code}');return false;">{LINKDIRECT.name}</a>
@@ -101,7 +119,7 @@
 		</div>
 		<!-- END: linkdirect -->
 	<!-- END: download_allow -->
-	
+
 	<!-- BEGIN: download_info -->
 	<div class="download">
 		<div class="alert alert-danger">
@@ -109,7 +127,7 @@
 		</div>
 	</div>
 	<!-- END: download_info -->
-	
+
 	<div class="detail">
 		<span class="fa fa-info">&nbsp;</span>&nbsp;&nbsp;{LANG.file_rating}
 	</div>
@@ -182,4 +200,12 @@
 <!-- BEGIN: comment -->
 {CONTENT_COMMENT}
 <!-- END: comment -->
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#pop").on("click", function() {
+       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
+       $('#imagemodal').modal('show');
+    });
+});
+</script>
 <!-- END: main -->

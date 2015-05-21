@@ -86,12 +86,12 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 				$block_theme = 'default';
 			}
 
-			if( ! defined( 'SHADOWBOX' ) )
+			if( ! defined( 'MODAL' ) )
 			{
-				$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-				$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-				$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-				define( 'SHADOWBOX', true );
+				//$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/bootstrap-theme.css\" />\n";
+				$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/bootstrap.js\"></script>\n";
+
+				define( 'MODAL', true );
 			}
 			$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $site_mods['voting']['module_file'] . "/js/user.js\"></script>\n";
 

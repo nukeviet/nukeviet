@@ -190,7 +190,7 @@ header{
 	left:0;
 	width:100%;
 	background:rgba(255,255,255,0.75);
-	z-index:10000;
+	z-index:10;
 }
 #header #logo{
 	float:left;
@@ -809,3 +809,6 @@ ul.listnews img{
 .other_blocknews img{
 	margin-right: 5px
 }
+/*.fade.in{
+	display: block !important;
+}*/
