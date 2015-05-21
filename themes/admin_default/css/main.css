@@ -789,7 +789,7 @@ label {
 	max-width: 40px;
 	margin: 0 5px 5px 0
 }
-@media (max-width: 360px) {
+@media (min-width: 360px) {
 	#header .menu > li {
 		float: left;
 		line-height: 52px;
