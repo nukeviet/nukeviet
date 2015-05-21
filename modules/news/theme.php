@@ -172,7 +172,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	return $xtpl->text( 'main' );
 }
 
-function viewcat_page_news( $array_catpage, $array_cat_other, $generate_page )
+function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 {
 	global $global_array_cat, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
