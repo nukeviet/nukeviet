@@ -7,7 +7,7 @@
 <!-- BEGIN: data -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<col span="5" style="white-space: nowrap;" />
+		<col span="6" style="white-space: nowrap;" />
 		<col class="w250" />
 		<col style="white-space: nowrap;" />
 		<thead>
