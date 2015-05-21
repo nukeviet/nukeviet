@@ -82,7 +82,6 @@
 					<td>
 						<!-- BEGIN: photo -->
 						<p id="current-photo" class="pull-left text-center">
-							<!--<img src="{IMG.src}" alt="{DATA.username}" class="img-thumbnail m-bottom" width="{IMG.width}" height="{IMG.height}"/><br />-->
 							<a href="#" id="pop" title="{DATA.username}">
                                 <img id="imageresource" alt="{DATA.username}" src="{IMG.src}" width="{IMG.width}" height="{IMG.height}" class="img-thumbnail" >
                             </a>
