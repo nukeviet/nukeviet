@@ -41,6 +41,15 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 
 			$timeout = $nv_Request->get_int( $module_name . '_timeout', 'cookie', 0 );
 
+			if( ( $status == 2 and !defined( 'NV_IS_USER' ) ) or $status == 0 )
+			{
+				$status = 0;
+			}
+			else
+			{
+				$status = 1;
+			}
+
 			if( defined( 'NV_IS_USER' ) )
 			{
 				$userid = $user_info['userid'];
@@ -117,15 +126,7 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 							}
 						}
 
-						$comment_success = '';
-						if( ( $status == 2 and !defined( 'NV_IS_USER' ) ) or $status == 0 )
-						{
-							$comment_success = $lang_module['comment_success_queue'];
-						}
-						else
-						{
-							$comment_success = $lang_module['comment_success'];
-						}
+						$comment_success = $status ? $lang_module['comment_success'] : $lang_module['comment_success_queue'];
 						$contents = 'OK_' . nv_base64_encode( $comment_success );
 					}
 				}
