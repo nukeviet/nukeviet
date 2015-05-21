@@ -97,7 +97,7 @@ function viewcat_list_new( $array_catpage, $catid, $page )
 	return $xtpl->text( 'main' );
 }
 
-function viewcat_page_new( $array_catpage, $array_cat_other )
+function viewcat_page_news( $array_catpage, $array_cat_other )
 {
 	global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info;
 	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
