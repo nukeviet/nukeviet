@@ -14,7 +14,7 @@
 <!-- BEGIN: featuredloop -->
 <div class="news_column">
 <div class="panel panel-default">
-		<div class="panel-body featurednews">
+		<div class="panel-body featured">
 			<!-- BEGIN: image -->
 			<a href="{CONTENT.link}" title="{CONTENT.title}"><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="150px" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->

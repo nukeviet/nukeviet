@@ -92,8 +92,11 @@ function nv_menu_blocks( $block_config )
 			{
 				$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'] );
 				$xtpl->assign( 'HTML_CONTENT', $html_content );
-				$xtpl->parse( 'main.loopcat1.cat2' );
-				$xtpl->parse( 'main.loopcat1.expand' );
+				if( $html_content != '' )
+				{
+					$xtpl->parse( 'main.loopcat1.cat2' );
+					$xtpl->parse( 'main.loopcat1.expand' );
+				}
 			}
 			$xtpl->parse( 'main.loopcat1' );
 		}

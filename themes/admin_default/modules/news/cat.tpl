@@ -54,10 +54,10 @@
 					<tr>
 						<td class="text-right">
 						<br />
-						<strong>{LANG.description} </th> 
-						<td >						
+						<strong>{LANG.description} </th>
+						<td >
 							<textarea class="form-control" id="description" name="description" cols="100" rows="5">{description}</textarea>
-							<br />						
+							<br />
 							<span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span></td>
 					</tr>
 					<tr>
@@ -84,18 +84,18 @@
 							<!-- END: viewdescription -->
 						</td>
 					</tr>
-					<!-- BEGIN: featured_news -->
+					<!-- BEGIN: featured -->
 					<tr>
-						<th class="text-right">{LANG.featured_news}: </th>
+						<th class="text-right">{LANG.featured}: </th>
 						<td>
-						<select class="form-control" name="featured_news" id="featured_news">
-							<option value="0" >{LANG.not_featured_news}</option>
-							<!-- BEGIN: featured_news_loop -->
+						<select class="form-control" name="featured" id="featured">
+							<option value="0" >{LANG.not_featured}</option>
+							<!-- BEGIN: featured_loop -->
 							<option value="{FEATURED_NEWS.id}" {FEATURED_NEWS.selected}>{FEATURED_NEWS.title}</option>
-							<!-- END: featured_news_loop -->
+							<!-- END: featured_loop -->
 						</select></td>
 					</tr>
-					<!-- END: featured_news -->
+					<!-- END: featured -->
 				</tbody>
 			</table>
 		</div>
@@ -132,14 +132,14 @@
 		var type = "image";
 		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
-	}); 
+	});
 </script>
 
 <!-- BEGIN: getalias -->
 <script type="text/javascript">
 	$("#idtitle").change(function() {
 		get_alias("cat", 0);
-	}); 
+	});
 </script>
 <!-- END: getalias -->
 <!-- END: content -->

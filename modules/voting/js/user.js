@@ -43,12 +43,10 @@ function nv_sendvoting(form, vid, acceptcm, checkss, msg) {
 	if (lid == '0' && acceptcm > 0) {
 		alert(msg);
 	} else {
-		Shadowbox.open({
-			content : '<iframe src="' + nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=voting&' + nv_fc_variable + '=main&vid=' + vid + '&checkss=' + checkss + '&lid=' + lid + '" border="0" frameborder="0" style="width:670px;height:400px"></iframe>',
-			player : 'html',
-			height : 400,
-			width : 670
-		});
+        $('#idmodals').removeData('bs.modal');
+     	$('#idmodals').on('show.bs.modal', function () {
+             $('#idmodals .modal-body').load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=voting&' + nv_fc_variable + '=main&vid=' + vid + '&checkss=' + checkss + '&lid=' + lid);
+        }).modal();
 	}
 	return false;
 }

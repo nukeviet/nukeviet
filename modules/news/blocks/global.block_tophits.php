@@ -38,7 +38,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
 		$html .= '</td>';
 		$html .= '</tr>';
-		
+
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_block['nocatid'] . '</td>';
 		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
@@ -61,7 +61,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$html .= '</div>';
 		$html .= '</td>';
 		$html .= '</tr>';
-		
+
 		return $html;
 	}
 
@@ -82,14 +82,15 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
 	function nv_news_block_tophits( $block_config, $mod_data )
 	{
-		global $module_array_cat, $module_info, $db, $module_config, $global_config;
+		global $module_array_cat, $site_mods, $module_info, $db, $module_config, $global_config;
 
 		$module = $block_config['module'];
+		$mod_file = $site_mods[$module]['module_file'];
 
 		$blockwidth = $module_config[$module]['blockwidth'];
 		$show_no_image = $module_config[$module]['show_no_image'];
 		$publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
-		
+
 		$array_block_news = array();
 		$db->sqlreset()
 			->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext' )
@@ -140,7 +141,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 			);
 		}
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme']  . '/modules/news/block_news.tpl' ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme']  . '/modules/' . $mod_file . '/block_tophits.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'] ;
 		}
@@ -149,7 +150,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 			$block_theme = 'default';
 		}
 
-		$xtpl = new XTemplate( 'block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news' );
+		$xtpl = new XTemplate( 'block_tophits.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/'. $mod_file );
 
 		foreach( $array_block_news as $array_news )
 		{

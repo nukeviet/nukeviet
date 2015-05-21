@@ -10,103 +10,6 @@
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-function viewcat_grid_featurednews( $array_catpage, $catid, $generate_page, $featured_news_id )
-{
-	global $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page;
-	$xtpl = new XTemplate( 'viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
-	if( ($global_array_cat[$catid]['viewdescription'] and $page == 1) OR $global_array_cat[$catid]['viewdescription'] == 2 )
-	{
-		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
-		if( $global_array_cat[$catid]['image'] )
-		{
-			$xtpl->assign( 'HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $global_array_cat[$catid]['image'] );
-			$xtpl->parse( 'main.viewdescription.image' );
-		}
-		$xtpl->parse( 'main.viewdescription' );
-	}
-
-	if( ! empty( $catid ) )
-	{
-		$xtpl->assign( 'CAT', $global_array_cat[$catid] );
-		$xtpl->parse( 'main.cattitle' );
-	}
-
-	$a = 0;
-
-	foreach( $array_catpage as $array_row_i )
-	{
-		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
-		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
-		$xtpl->clear_autoreset();
-		$xtpl->assign( 'CONTENT', $array_row_i );
-		++$a;		
-		if ( $featured_news_id == $array_row_i['id'] )
-		{
-			if ( defined( 'NV_IS_MODADMIN' ) )
-			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
-				$xtpl->parse( 'main.featuredloop.adminlink' );
-			}
-	
-			if ( $array_row_i['imghome'] != '' )
-			{
-				$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
-				$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
-				$xtpl->parse( 'main.featuredloop.image' );
-			}
-	
-			if ( $newday >= NV_CURRENTTIME )
-			{
-				$xtpl->parse( 'main.featuredloop.newday' );
-			}
-	
-			$xtpl->set_autoreset();
-			$xtpl->parse( 'main.featuredloop' );
-		}
-		else
-		{
-			if ( defined( 'NV_IS_MODADMIN' ) )
-			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
-				$xtpl->parse( 'main.viewcatloop.adminlink' );
-			}
-	
-			if ( $array_row_i['imghome'] != '' )
-			{
-				$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
-				$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
-				$xtpl->parse( 'main.viewcatloop.image' );
-			}
-	
-			if ( $newday >= NV_CURRENTTIME )
-			{
-				$xtpl->parse( 'main.viewcatloop.newday' );
-			}
-	
-			$xtpl->set_autoreset();
-			$xtpl->parse( 'main.viewcatloop' );
-		}
-	}
-
-	if( ! empty( $generate_page ) )
-	{
-		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
-		$xtpl->parse( 'main.generate_page' );
-	}
-
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
-	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
 function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 {
 	global $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page;
@@ -123,6 +26,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 		}
 		$xtpl->parse( 'main.viewdescription' );
 	}
+
 	if( ! empty( $catid ) )
 	{
 		$xtpl->assign( 'CAT', $global_array_cat[$catid] );
@@ -130,7 +34,6 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	}
 
 	$a = 0;
-
 	foreach( $array_catpage as $array_row_i )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
@@ -138,27 +41,53 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'CONTENT', $array_row_i );
-		++$a;		
-		if ( defined( 'NV_IS_MODADMIN' ) )
+		++$a;
+		if( $a == 1 )
 		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
-			$xtpl->parse( 'main.viewcatloop.adminlink' );
-		}
+			if ( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
+				$xtpl->parse( 'main.featuredloop.adminlink' );
+			}
 
-		if ( $array_row_i['imghome'] != '' )
+			if ( $array_row_i['imghome'] != '' )
+			{
+				$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
+				$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
+				$xtpl->parse( 'main.featuredloop.image' );
+			}
+
+			if ( $newday >= NV_CURRENTTIME )
+			{
+				$xtpl->parse( 'main.featuredloop.newday' );
+			}
+
+			$xtpl->set_autoreset();
+			$xtpl->parse( 'main.featuredloop' );
+		}
+		else
 		{
-			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
-			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
-			$xtpl->parse( 'main.viewcatloop.image' );
-		}
+			if ( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
+				$xtpl->parse( 'main.viewcatloop.adminlink' );
+			}
 
-		if ( $newday >= NV_CURRENTTIME )
-		{
-			$xtpl->parse( 'main.viewcatloop.newday' );
-		}
+			if ( $array_row_i['imghome'] != '' )
+			{
+				$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
+				$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
+				$xtpl->parse( 'main.viewcatloop.image' );
+			}
 
-		$xtpl->set_autoreset();
-		$xtpl->parse( 'main.viewcatloop' );
+			if ( $newday >= NV_CURRENTTIME )
+			{
+				$xtpl->parse( 'main.viewcatloop.newday' );
+			}
+
+			$xtpl->set_autoreset();
+			$xtpl->parse( 'main.viewcatloop' );
+		}
 	}
 
 	if( ! empty( $generate_page ) )
@@ -243,7 +172,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	return $xtpl->text( 'main' );
 }
 
-function viewcat_page_featurednews( $array_catpage, $array_cat_other, $generate_page, $featured_news )
+function viewcat_page_news( $array_catpage, $array_cat_other, $generate_page )
 {
 	global $global_array_cat, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
@@ -280,7 +209,7 @@ function viewcat_page_featurednews( $array_catpage, $array_cat_other, $generate_
 			$xtpl->parse( 'main.viewcatloop.cat' );
 			++$n;
 		}
-		if( $featured_news == $array_row_i['id'] )
+		if( $a == 0 )
 		{
 			$xtpl->clear_autoreset();
 			$xtpl->assign( 'CONTENT', $array_row_i );
@@ -288,27 +217,25 @@ function viewcat_page_featurednews( $array_catpage, $array_cat_other, $generate_
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
-				$xtpl->parse( 'main.viewcatloop.featurednews.adminlink' );
+				$xtpl->parse( 'main.viewcatloop.featured.adminlink' );
 			}
 
 			if( $array_row_i['imghome'] != '' )
 			{
 				$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 				$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
-				$xtpl->parse( 'main.viewcatloop.featurednews.image' );
+				$xtpl->parse( 'main.viewcatloop.featured.image' );
 			}
 
 			if( $newday >= NV_CURRENTTIME )
 			{
-				$xtpl->parse( 'main.viewcatloop.featurednews.newday' );
+				$xtpl->parse( 'main.viewcatloop.featured.newday' );
 			}
 
-			$xtpl->parse( 'main.viewcatloop.featurednews' );
-			++$a;
+			$xtpl->parse( 'main.viewcatloop.featured' );
 		}
 		else
 		{
-
 			$xtpl->clear_autoreset();
 			$xtpl->assign( 'CONTENT', $array_row_i );
 
@@ -332,100 +259,7 @@ function viewcat_page_featurednews( $array_catpage, $array_cat_other, $generate_
 
 			$xtpl->set_autoreset();
 			$xtpl->parse( 'main.viewcatloop.news' );
-			++$a;
 		}
-	}
-	$xtpl->parse( 'main.viewcatloop' );
-	if( ! empty( $array_cat_other ) )
-	{
-		$xtpl->assign( 'ORTHERNEWS', $lang_module['other'] );
-
-		foreach( $array_cat_other as $array_row_i )
-		{
-			$newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday'] );
-			$array_row_i['publtime'] = nv_date( "d/m/Y", $array_row_i['publtime'] );
-			$xtpl->assign( 'RELATED', $array_row_i );
-			if( $newday >= NV_CURRENTTIME )
-			{
-				$xtpl->parse( 'main.related.loop.newday' );
-			}
-			$xtpl->parse( 'main.related.loop' );
-		}
-
-		$xtpl->parse( 'main.related' );
-	}
-
-	if( ! empty( $generate_page ) )
-	{
-		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
-		$xtpl->parse( 'main.generate_page' );
-	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
-{
-	global $global_array_cat, $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
-
-	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
-	if( ($global_array_cat[$catid]['viewdescription'] and $page == 1) OR $global_array_cat[$catid]['viewdescription'] == 2 )
-	{
-		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
-		if( $global_array_cat[$catid]['image'] )
-		{
-			$xtpl->assign( 'HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $global_array_cat[$catid]['image'] );
-			$xtpl->parse( 'main.viewdescription.image' );
-		}
-		$xtpl->parse( 'main.viewdescription' );
-	}
-	$a = 0;
-	foreach( $array_catpage as $array_row_i )
-	{
-		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
-		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$array_row_i['listcatid'] = explode( ',', $array_row_i['listcatid'] );
-		$num_cat = sizeof( $array_row_i['listcatid'] );
-
-		$n = 1;
-		foreach( $array_row_i['listcatid'] as $listcatid )
-		{
-			$listcat = array(
-				'title' => $global_array_cat[$listcatid]['title'],
-				"link" => $global_array_cat[$listcatid]['link']
-			);
-			$xtpl->assign( 'CAT', $listcat );
-			(($n < $num_cat) ? $xtpl->parse( 'main.viewcatloop.cat.comma' ) : '');
-			$xtpl->parse( 'main.viewcatloop.cat' );
-			++$n;
-		}
-
-		$xtpl->clear_autoreset();
-		$xtpl->assign( 'CONTENT', $array_row_i );
-
-		if( defined( 'NV_IS_MODADMIN' ) )
-		{
-			$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
-			$xtpl->parse( 'main.viewcatloop.news.adminlink' );
-		}
-
-		if( $array_row_i['imghome'] != '' )
-		{
-			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
-			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
-			$xtpl->parse( 'main.viewcatloop.news.image' );
-		}
-
-		if( $newday >= NV_CURRENTTIME )
-		{
-			$xtpl->parse( 'main.viewcatloop.news.newday' );
-		}
-
-		$xtpl->set_autoreset();
-		$xtpl->parse( 'main.viewcatloop.news' );
 		++$a;
 	}
 	$xtpl->parse( 'main.viewcatloop' );
@@ -458,7 +292,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 	return $xtpl->text( 'main' );
 }
 
-function viewcat_top( $array_catcontent, $generate_page, $featured_news )
+function viewcat_top( $array_catcontent, $generate_page )
 {
 	global $module_name, $module_file, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
@@ -475,16 +309,18 @@ function viewcat_top( $array_catcontent, $generate_page, $featured_news )
 		}
 		$xtpl->parse( 'main.viewdescription' );
 	}
+
 	// Cac bai viet phan dau
 	if( ! empty( $array_catcontent ) )
 	{
+		$a = 0;
 		foreach( $array_catcontent as $key => $array_catcontent_i )
 		{
 			$newday = $array_catcontent_i['publtime'] + ( 86400 * $array_catcontent_i['newday'] );
 			$array_catcontent_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_catcontent_i['publtime'] );
 			$xtpl->assign( 'CONTENT', $array_catcontent_i );
 
-			if( $array_catcontent_i['id'] == $featured_news )
+			if( $a == 0 )
 			{
 				if( $array_catcontent_i['imghome'] != '' )
 				{
@@ -512,6 +348,7 @@ function viewcat_top( $array_catcontent, $generate_page, $featured_news )
 				}
 				$xtpl->parse( 'main.catcontentloop' );
 			}
+			++$a;
 		}
 	}
 	// Het cac bai viet phan dau
@@ -561,7 +398,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 				$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 				$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
 				++$a;
-					
+
 				if( $a == 1 )
 				{
 					if ( $newday >= NV_CURRENTTIME )
@@ -778,14 +615,6 @@ function viewcat_two_column( $array_content, $array_catpage )
 function detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment )
 {
 	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info, $client_info;
-
-	if( ! defined( 'SHADOWBOX' ) )
-	{
-		$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
-		define( 'SHADOWBOX', true );
-	}
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
 	$my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";

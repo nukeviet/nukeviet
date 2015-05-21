@@ -160,6 +160,7 @@ function nv_save_file_config_global()
 			$sys_info['supports_rewrite'] = false;
 		}
 	}
+	//$sys_info['supports_rewrite'] = false;
 	if( $sys_info['supports_rewrite'] == 'rewrite_mode_iis' or $sys_info['supports_rewrite'] == 'rewrite_mode_apache' )
 	{
 		$content_config .= "\$sys_info['supports_rewrite']='" . $sys_info['supports_rewrite'] . "';\n";
