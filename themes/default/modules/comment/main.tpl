@@ -22,6 +22,14 @@
 	<hr />
 	<div id="formcomment" class="comment-form">
 		<!-- BEGIN: allowed_comm -->
+
+		<!-- BEGIN: comment_result -->
+		<div class="alert alert-info" id="alert-info">{STATUS_COMMENT}</div>
+		<script type="text/javascript">
+			$('#alert-info').delay(5000).fadeOut('slow');
+		</script>
+		<!-- END: comment_result -->
+
 		<form method="post" role="form" onsubmit="return false;">
 			<input type="hidden" id="commentpid" value="0"/>
 			<div class="form-group clearfix">

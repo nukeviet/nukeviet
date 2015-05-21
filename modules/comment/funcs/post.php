@@ -116,7 +116,17 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 								include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
 							}
 						}
-						$contents = 'OK_' . $lang_module['comment_success'];
+
+						$comment_success = '';
+						if( ( $status == 2 and !defined( 'NV_IS_USER' ) ) or $status == 0 )
+						{
+							$comment_success = $lang_module['comment_success_queue'];
+						}
+						else
+						{
+							$comment_success = $lang_module['comment_success'];
+						}
+						$contents = 'OK_' . nv_base64_encode( $comment_success );
 					}
 				}
 				catch( PDOException $e )
