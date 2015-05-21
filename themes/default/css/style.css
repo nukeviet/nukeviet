@@ -594,6 +594,19 @@ input[type=radio]:checked:before {
 
 /* Responsive theme */
 
+@media (max-width: 640px){
+	body{
+		font-size: 14px;
+		line-height: 24px;
+	}
+	div.news_column ul.related{
+		margin-bottom: 0px;
+	}
+	div.news_column ul.related li{
+		padding: 0 4px 4px 0 !important;
+	}
+}
+
 @media (max-width: 768px){
 	.container {
 		width:100%;
