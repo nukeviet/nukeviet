@@ -40,6 +40,7 @@ $lang_module['add_type_menu'] = 'Select menu type';
 $lang_module['module_name'] = 'Select module';
 $lang_module['cho_module'] = 'Select module';
 $lang_module['action'] = 'Activities';
+$lang_module['display'] = 'Display';
 $lang_module['data_no'] = 'There is no data in the system';
 $lang_module['back'] = 'Back';
 $lang_module['title_exit_cat'] = 'That name already exists';

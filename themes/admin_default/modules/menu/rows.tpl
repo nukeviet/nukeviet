@@ -25,7 +25,7 @@
 					<th>{LANG.title}</th>
 					<th>{LANG.link}</th>
 					<th class="text-center">{GLANG.groups_view}</th>
-					<th>{LANG.active}</th>
+					<th class="text-center">{LANG.display}</th>
 					<th class="text-center">{LANG.action}</th>
 				</tr>
 			</thead>
