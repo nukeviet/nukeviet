@@ -3,9 +3,9 @@
 	<!-- BEGIN: note -->
 		<div class="alert alert-info">{VOTINGNOTE}</div>
 	<!-- END: note -->
-	
+
 	<h3 class="text-primary text-center"><span class="glyphicon glyphicon-question-sign"></span> {VOTINGQUESTION}</h3>
-	
+
 	<!-- BEGIN: result -->
 		<div class="row">
 			<div class="col-xs-12">{VOTING.title}</div>
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 	<!-- END: result -->
-	
+
 	<p class="text-center">
 		<strong>{LANG.total}</strong>: {TOTAL} {LANG.counter} - <strong>{LANG.publtime}: </strong>{PUBLTIME}
 	</p>

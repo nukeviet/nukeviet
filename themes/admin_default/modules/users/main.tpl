@@ -9,7 +9,7 @@
 			<div class="row">
 				<div class="col-xs-12 col-md-6">
 					<div class="form-group">
-						<input class="form-control" type="text" name="value" id="f_value" placeholder="{LANG.search_key}" />
+						<input class="form-control" type="text" name="value" value="{SEARCH_VALUE}" id="f_value" placeholder="{LANG.search_key}" />
 					</div>
 				</div>
 				<div class="col-xs-12 col-md-6">
@@ -25,6 +25,7 @@
 				<div class="col-xs-12 col-md-6">
 					<div class="form-group">
 						<select class="form-control" name="usactive">
+							<option value="-1">---{LANG.usactive}---</option>
 							<!-- BEGIN: usactive -->
 							<option value="{USACTIVE.key}"{USACTIVE.selected}>{USACTIVE.value}</option>
 							<!-- END: usactive -->
