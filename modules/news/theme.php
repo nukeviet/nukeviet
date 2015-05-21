@@ -616,14 +616,6 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 {
 	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info, $client_info;
 
-	/*if( ! defined( 'MODAL' ) )
-	{
-		$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/bootstrap-theme.css\" />\n";
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/bootstrap.js\"></script>\n";
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/bootstrap.min.js\"></script>\n";
-		define( 'MODAL', true );
-	}*/
-
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
 	$my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";
 	$my_head .= "<link href='" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css' type=\"text/css\" rel=\"stylesheet\"/>\n";

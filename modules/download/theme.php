@@ -188,15 +188,6 @@ function view_file( $row, $download_config, $content_comment )
 {
 	global $global_config, $lang_global, $lang_module, $module_name, $module_file, $module_info, $my_head;
 
-	/*
-	if( ! defined( 'MODAL' ) )
-	{
-		$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/bootstrap-theme.css\" />\n";
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/bootstrap.js\"></script>\n";
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/bootstrap.min.js\"></script>\n";
-		define( 'MODAL', true );
-	}*/
-
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
 	$my_head .= "<script src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js\" type=\"text/javascript\"></script>\n";
 	$my_head .= "<link href=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css\" type=\"text/css\" rel=\"stylesheet\" />\n";

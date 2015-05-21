@@ -43,26 +43,10 @@ function nv_sendvoting(form, vid, acceptcm, checkss, msg) {
 	if (lid == '0' && acceptcm > 0) {
 		alert(msg);
 	} else {
-
-		$.ajax({
-            url : nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=voting&' + nv_fc_variable + '=main&vid=' + vid + '&checkss=' + checkss + '&lid=' + lid,
-            type : "get", // chọn phương thức gửi là get
-            dateType:"text", // dữ liệu trả về dạng text
-            data : { // Danh sách các thuộc tính sẽ gửi đi
-                 number : $('#number').val()
-            },
-            success : function (result){
-                // Sau khi gửi và kết quả trả về thành công thì gán nội dung trả về
-                // đó vào thẻ div có vid =  main
-                $('#votingcontent'+vid).html(result);
-            }
-        });
-		/*Shadowbox.open({
-			content : '<iframe src="' + nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=voting&' + nv_fc_variable + '=main&vid=' + vid + '&checkss=' + checkss + '&lid=' + lid + '" border="0" frameborder="0" style="width:670px;height:400px"></iframe>',
-			player : 'html',
-			height : 400,
-			width : 670
-		});*/
+        $('#idmodals').removeData('bs.modal');
+     	$('#idmodals').on('show.bs.modal', function () {
+             $('#idmodals .modal-body').load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=voting&' + nv_fc_variable + '=main&vid=' + vid + '&checkss=' + checkss + '&lid=' + lid);
+        }).modal();
 	}
 	return false;
 }
