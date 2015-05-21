@@ -20,6 +20,7 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['comment'] = 'Reader Comments';
 $lang_module['comment_login'] = 'You must login to comment this article';
 $lang_module['comment_success'] = 'Successful comments';
+$lang_module['comment_success_queue'] = 'Sended success. Your comment will display after approval';
 $lang_module['comment_unsuccess'] = 'Error processing the data or incomplete data';
 $lang_module['comment_title'] = 'Your comments';
 $lang_module['comment_view'] = 'View comments';
