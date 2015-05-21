@@ -27,7 +27,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 		if( defined( 'NV_IS_MODADMIN' ) or ( $news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ( $news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME ) ) )
 		{
-			$time_set = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'session' );
+			$time_set = $nv_Request->get_int( $module_data . '_' . $op . '_' . $id, 'session' );
 			if( empty( $time_set ) )
 			{
 				$nv_Request->set_Session( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
