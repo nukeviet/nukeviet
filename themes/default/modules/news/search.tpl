@@ -81,7 +81,7 @@ $(document).ready(function() {
 
 		<!-- BEGIN: result -->
 		<h3><a href="{LINK}">{TITLEROW}</a></h3>
-		<div class="text-justify">
+		<div class="text-justify col-sm-24">
 			<p>
 				<!-- BEGIN: result_img -->
 				<img src="{IMG_SRC}" border="0" width="{IMG_WIDTH}px" class="img-thumbnail pull-left" style="margin: 0 5px 5px 0" />
