@@ -86,3 +86,5 @@ $lang_module['captcha_0'] = 'Không hiển thị';
 $lang_module['captcha_1'] = 'Nếu không phải là thành viên';
 $lang_module['captcha_2'] = 'Nếu không phải người quản lý bình luận';
 $lang_module['captcha_3'] = 'Hiển thị trong mọi trường hợp';
+
+$lang_module['siteinfo_queue_comments'] = 'Số bình luận chờ duyệt';
