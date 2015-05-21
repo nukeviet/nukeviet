@@ -330,7 +330,7 @@ h1, h2, h3, h4, h5, h6 {
 	margin-right: 10px;
 }
 
-.nv-panel-body{
+.nv-panel-body {
 	padding: 10px;
 }
 
@@ -533,7 +533,7 @@ sup.required {
 	#left-menu {
 		display: none;
 	}
-	#left-menu-toggle{
+	#left-menu-toggle {
 		display: block !important;
 	}
 
@@ -664,37 +664,37 @@ label {
 }
 
 .ui-datepicker {
-	width: 18em!important;
+	width: 18em !important;
 }
 
 .ui-datepicker select.ui-datepicker-month {
-	width: 59%!important;
+	width: 59% !important;
 }
 
 .ui-datepicker select.ui-datepicker-year {
-	width: 39%!important;
+	width: 39% !important;
 }
 
 /* DIV Listing
  -----------------------------------------------------------------------------*/
-.nv-listing .listing-title{
+.nv-listing .listing-title {
 	font-weight: 700;
 	border-bottom: 2px #ddd solid;
 	padding-top: 7px;
 	padding-bottom: 7px;
 }
 
-.nv-listing .listing-body .listing-item{
+.nv-listing .listing-body .listing-item {
 	border-bottom: 1px #ddd solid;
 	padding-top: 7px;
 	padding-bottom: 7px;
 }
 
-.nv-listing .listing-body .listing-item:nth-child(odd){
+.nv-listing .listing-body .listing-item:nth-child(odd) {
 	background-color: #f9f9f9;
 }
 
-.nv-listing .listing-body .listing-item em{
+.nv-listing .listing-body .listing-item em {
 	cursor: pointer;
 }
 
@@ -740,7 +740,7 @@ label {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus{
+.nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
 	color: #fff !important;
 }
 
@@ -751,7 +751,7 @@ label {
 	content: "\f05a";
 }
 
-#notification{
+#notification {
 	position: absolute;
 	top: 4px;
 	right: 3px;
@@ -770,7 +770,7 @@ label {
 	z-index: 1
 }
 
-#notification_load .notify_item{
+#notification_load .notify_item {
 	border-top: 1px solid #424141;
 }
 
@@ -785,7 +785,15 @@ label {
 	text-decoration: none;
 }
 
-#notification_load .notify_item a img{
+#notification_load .notify_item a img {
 	max-width: 40px;
 	margin: 0 5px 5px 0
+}
+@media (min-width: 360px) {
+	#header .menu > li {
+		float: left;
+		line-height: 52px;
+		position: relative;
+		padding: 0 10px;
+	}
 }
