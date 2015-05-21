@@ -82,7 +82,26 @@
 					<td>
 						<!-- BEGIN: photo -->
 						<p id="current-photo" class="pull-left text-center">
-							<img src="{IMG.src}" alt="{DATA.username}" class="img-thumbnail m-bottom" width="{IMG.width}" height="{IMG.height}"/><br />
+							<!--<img src="{IMG.src}" alt="{DATA.username}" class="img-thumbnail m-bottom" width="{IMG.width}" height="{IMG.height}"/><br />-->
+							<a href="#" id="pop" title="{DATA.username}">
+                                <img id="imageresource" alt="{DATA.username}" src="{IMG.src}" width="{IMG.width}" height="{IMG.height}" class="img-thumbnail" >
+                            </a>
+							<!-- Creates the bootstrap modal where the image will appear -->
+                            <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">{DETAIL.image.alt}</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    <center><img src="" id="imagepreview" class="img-thumbnail" ></center>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
 							<span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.delete}</span>
 							<input type="hidden" name="delpic" id="photo_delete" value="{DATA.delpic}"/>
 						</p>
@@ -214,6 +233,10 @@
 //<![CDATA[
 document.getElementById('form_user').setAttribute("autocomplete", "off");
 $(function() {
+    $("#pop").on("click", function() {
+       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
+       $('#imagemodal').modal('show');
+    });
 	$.toggleShowPassword({
 	    field: '#password2',
 	    control: '#methods'
