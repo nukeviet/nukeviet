@@ -12,7 +12,6 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_news_block_news' ) )
 {
-
 	function nv_block_config_news( $module, $data_block, $lang_block )
 	{
 		$html = '<tr>';
@@ -29,7 +28,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		{
 			$html .= '<option value="' . $key . '" ' . ( $data_block['tooltip_position'] == $key ? 'selected="selected"' : '' ) . '>' . $value . '</option>';
 		}
-		$html .= '</select>';		
+		$html .= '</select>';
 		$html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
 		$html .= '</td>';
 		$html .= '</tr>';
@@ -120,7 +119,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 			$block_theme = 'default';
 		}
 		$xtpl = new XTemplate( 'block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news/' );
-		
+
 		foreach( $array_block_news as $array_news )
 		{
 			$array_news['hometext'] = nv_clean60( $array_news['hometext'], $block_config['tooltip_length'], true );
@@ -129,15 +128,15 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 			{
 				$xtpl->parse( 'main.newloop.imgblock' );
 			}
-			
+
 			if( ! $block_config['showtooltip'] )
 			{
 				$xtpl->assign( 'TITLE', 'title="' . $array_news['title'] . '"' );
 			}
-			
+
 			$xtpl->parse( 'main.newloop' );
 		}
-		
+
 		if( $block_config['showtooltip'] )
 		{
 			$xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );

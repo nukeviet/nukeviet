@@ -15,7 +15,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 	function nv_block_config_news_headline( $module, $data_block, $lang_block )
 	{
 		global $lang_module;
-		$html .= '<tr>';
+		$html = '<tr>';
 		$html .= '<td>' . $lang_block['showtooltip'] . '</td>';
 		$html .= '<td>';
 		$html .= '<input type="checkbox" value="1" name="config_showtooltip" ' . ( $data_block['showtooltip'] == 1 ? 'checked="checked"' : '' ) . ' /><br /><br />';
@@ -43,15 +43,15 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 		$return['config']['tooltip_length'] = $nv_Request->get_string( 'config_tooltip_length', 'post', 0 );
 		return $return;
 	}
-	
+
 	function nv_block_headline( $block_config )
 	{
 		global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat, $global_config;
-	
+
 		$array_bid_content = array();
-	
+
 		$cache_file = NV_LANG_DATA . '_block_headline_' . NV_CACHE_PREFIX . '.cache';
-	
+
 		if( ( $cache = nv_get_cache( $module_name, $cache_file ) ) != false )
 		{
 			$array_bid_content = unserialize( $cache );
@@ -65,7 +65,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 				->order( 'weight ASC' )
 				->limit( 2 );
 			$result = $db->query( $db->sql() );
-	
+
 			while( list( $bid, $titlebid, $numberbid ) = $result->fetch( 3 ) )
 			{
 				++$id;
@@ -76,7 +76,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 					'number' => $numberbid
 				);
 			}
-	
+
 			foreach( $array_bid_content as $i => $array_bid )
 			{
 				$db->sqlreset()
@@ -86,7 +86,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 					->where( 't2.bid=' . $array_bid['bid'] )
 					->order( 't2.weight ASC' )
 					->limit( $array_bid['number'] );
-	
+
 				$result = $db->query( $db->sql() );
 				$array_content = array();
 				while( list( $id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt, $hometext ) = $result->fetch( 3 ) )
@@ -105,13 +105,13 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 			$cache = serialize( $array_bid_content );
 			nv_set_cache( $module_name, $cache_file, $cache );
 		}
-	
+
 		$xtpl = new XTemplate( 'block_headline.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	
+
 		$xtpl->assign( 'PIX_IMG', NV_BASE_SITEURL . 'images/pix.gif' );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'TEMPLATE', $module_info['template'] );
-	
+
 		$images = array();
 		if( ! empty( $array_bid_content[1]['content'] ) )
 		{
@@ -140,12 +140,12 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 			}
 			$xtpl->parse( 'main.hots_news_img' );
 		}
-	
+
 		foreach( $array_bid_content as $i => $array_bid )
 		{
 			$xtpl->assign( 'TAB_TITLE', $array_bid );
 			$xtpl->parse( 'main.loop_tabs_title' );
-	
+
 			$content_bid = $array_bid['content'];
 			if( ! empty( $content_bid ) )
 			{
@@ -160,19 +160,19 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 						$images_url = $lastest['homeimgfile'];
 					}
 					$lastest['homeimgfile'] = $images_url;
-					
+
 					if( ! $block_config['showtooltip'] )
 					{
 						$xtpl->assign( 'TITLE', 'title="' . $lastest['title'] . '"' );
 					}
-					
+
 					$lastest['hometext'] = nv_clean60( $lastest['hometext'], $block_config['tooltip_length'], true );
 					$xtpl->assign( 'LASTEST', $lastest );
 					$xtpl->parse( 'main.loop_tabs_content.content.loop' );
 				}
 				$xtpl->parse( 'main.loop_tabs_content.content' );
 			}
-	
+
 			$xtpl->parse( 'main.loop_tabs_content' );
 		}
 
@@ -181,9 +181,9 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 			$xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );
 			$xtpl->parse( 'main.tooltip' );
 		}
-	
+
 		if( empty( $my_head ) or ! preg_match( "/jquery\.imgpreload\.min\.js[^>]+>/", $my_head ) ) $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.imgpreload.min.js\"></script>\n";
-	
+
 		$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/contentslider.js\"></script>\n";
 		$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 		$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.tabs.min.js\"></script>\n";
