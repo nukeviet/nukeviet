@@ -721,6 +721,8 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 		$xtpl->parse( 'main.add_photo' );
 	}
 
+	$xtpl->parse( 'main.name_show_' . $global_config['name_show'] );
+
 	// Parse custom fields
 	if( ! empty( $array_field_config ) )
 	{
