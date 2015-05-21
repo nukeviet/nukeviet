@@ -16,7 +16,7 @@ if( ! nv_function_exists( 'nv_block_news_cat' ) )
 	{
 		global $site_mods;
 
-		$html .= '<tr>';
+		$html = '<tr>';
 		$html .= '<td>' . $lang_block['catid'] . '</td>';
 		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
 		$list = nv_db_cache( $sql, '', $module );
