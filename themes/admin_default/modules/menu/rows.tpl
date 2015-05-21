@@ -15,6 +15,7 @@
 				<col class="w50">
 				<col span="2">
 				<col class="w150">
+				<col class="w100">
 				<col class="w150">
 			</colgroup>
 			<thead>
@@ -24,12 +25,13 @@
 					<th>{LANG.title}</th>
 					<th>{LANG.link}</th>
 					<th class="text-center">{GLANG.groups_view}</th>
+					<th>{LANG.active}</th>
 					<th class="text-center">{LANG.action}</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="6">
+					<td colspan="7">
 						<select id="action" name="action" class="form-control">
 							<option value="delete">{LANG.delete}</option>
 						</select>
@@ -60,6 +62,7 @@
 					</td>
 					<td>{ROW.link}</td>
 					<td class="text-center">{ROW.groups_view}</td>
+					<td class="text-center"> <input type="checkbox" id="change_active_{ROW.id}" onclick="nv_change_active({ROW.id})" {ROW.active} /> </td>
 					<td class="text-center">
 						<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
 						<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
