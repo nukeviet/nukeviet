@@ -80,20 +80,22 @@ $(document).ready(function() {
 		<!-- END: noneresult -->
 
 		<!-- BEGIN: result -->
-		<h3><a href="{LINK}">{TITLEROW}</a></h3>
-		<div class="text-justify">
-			<p>
-				<!-- BEGIN: result_img -->
-				<img src="{IMG_SRC}" border="0" width="{IMG_WIDTH}px" class="img-thumbnail pull-left" style="margin: 0 5px 5px 0" />
-				<!-- END: result_img -->
-				{CONTENT}
-			</p>
-		</div>
-		<div class="text-right">
-			{AUTHOR}
-		</div>
-		<div class="text-right">
-			<strong>{LANG.source_title}:</strong> <span>{SOURCE}</span>
+		<div class="clearfix">
+			<h3><a href="{LINK}">{TITLEROW}</a></h3>
+			<div class="text-justify col-sm-24">
+				<p>
+					<!-- BEGIN: result_img -->
+					<img src="{IMG_SRC}" border="0" width="{IMG_WIDTH}px" class="img-thumbnail pull-left" style="margin: 0 5px 5px 0" />
+					<!-- END: result_img -->
+					{CONTENT}
+				</p>
+			</div>
+			<div class="text-right">
+				{AUTHOR}
+			</div>
+			<div class="text-right">
+				<strong>{LANG.source_title}:</strong> <span>{SOURCE}</span>
+			</div>
 		</div>
 		<hr />
 		<!-- END: result -->
