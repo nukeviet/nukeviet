@@ -214,6 +214,7 @@ $lang_module['whoview_admin'] = 'Quản trị';
 $lang_module['random_password'] = 'Tạo mật khẩu ngẫu nhiên';
 $lang_module['show_password'] = 'Hiển thị mật khẩu';
 
+$lang_module['usactive'] = 'Trạng thái tài khoản';
 $lang_module['usactive_0'] = 'Tài khoản bị khóa';
 $lang_module['usactive_1'] = 'Tài khoản hoạt động';
 $lang_module['usactive_2'] = 'Tài khoản site quản lý bị khóa';

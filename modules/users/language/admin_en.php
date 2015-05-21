@@ -211,6 +211,7 @@ $lang_module['whoview_user'] = 'User';
 $lang_module['whoview_admin'] = 'Administrator';
 $lang_module['random_password'] = 'Random Password';
 $lang_module['show_password'] = 'Show password';
+$lang_module['usactive'] = 'Account status';
 $lang_module['usactive_0'] = 'Account locked';
 $lang_module['usactive_1'] = 'Account active';
 $lang_module['usactive_2'] = 'Account admin blocked';
