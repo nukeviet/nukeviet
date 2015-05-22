@@ -10,9 +10,6 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-// Check theme modern
-$is_exists_theme_modern = file_exists( NV_ROOTDIR . '/themes/modern/config.ini' );
-
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
 $sth->execute( array('about', 'page', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '', '6', 1, 1, '', 0, 0) );
@@ -126,47 +123,6 @@ $sth->execute( array(53, 'body', 'default') );
 $sth->execute( array(35, 'left-body-right', 'default') );
 $sth->execute( array(50, 'left-body-right', 'default') );
 
-if( $is_exists_theme_modern )
-{
-	$sth->execute( array(5, 'body-right', 'modern') );
-	$sth->execute( array(0, 'body-right', 'modern') );
-	$sth->execute( array(2, 'body', 'modern') );
-	$sth->execute( array(6, 'body-right', 'modern') );
-	$sth->execute( array(7, 'body-right', 'modern') );
-	$sth->execute( array(13, 'body-right', 'modern') );
-	$sth->execute( array(15, 'body-right', 'modern') );
-	$sth->execute( array(16, 'body-right', 'modern') );
-	$sth->execute( array(17, 'body-right', 'modern') );
-	$sth->execute( array(18, 'body-right', 'modern') );
-	$sth->execute( array(19, 'body-right', 'modern') );
-	$sth->execute( array(20, 'body-right', 'modern') );
-	$sth->execute( array(21, 'body-right', 'modern') );
-	$sth->execute( array(22, 'body-right', 'modern') );
-	$sth->execute( array(23, 'body-right', 'modern') );
-	$sth->execute( array(24, 'body-right', 'modern') );
-	$sth->execute( array(25, 'body-right', 'modern') );
-	$sth->execute( array(26, 'body-right', 'modern') );
-	$sth->execute( array(27, 'body-right', 'modern') );
-	$sth->execute( array(28, 'body', 'modern') );
-	$sth->execute( array(29, 'body', 'modern') );
-	$sth->execute( array(30, 'body', 'modern') );
-	$sth->execute( array(31, 'body', 'modern') );
-	$sth->execute( array(32, 'body', 'modern') );
-	$sth->execute( array(33, 'body', 'modern') );
-	$sth->execute( array(34, 'body', 'modern') );
-	$sth->execute( array(36, 'body-right', 'modern') );
-	$sth->execute( array(39, 'body-right', 'modern') );
-	$sth->execute( array(42, 'body-right', 'modern') );
-	$sth->execute( array(43, 'body-right', 'modern') );
-	$sth->execute( array(46, 'body-right', 'modern') );
-	$sth->execute( array(47, 'body', 'modern') );
-	$sth->execute( array(48, 'body-right', 'modern') );
-	$sth->execute( array(52, 'body-right', 'modern') );
-	$sth->execute( array(53, 'body', 'modern') );
-	$sth->execute( array(35, 'body-right', 'modern') );
-	$sth->execute( array(50, 'body-right', 'modern') );
-}
-
 $sth->execute( array(0, 'body', 'mobile_nukeviet') );
 $sth->execute( array(2, 'body', 'mobile_nukeviet') );
 $sth->execute( array(5, 'body', 'mobile_nukeviet') );
@@ -216,19 +172,6 @@ $sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Center Bann
 $sth->execute( array(17, 'default', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:229:"<p class="footer">© Copyright NukeViet 4. All right reserved.</p><p>Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
 $sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
-
-if( $is_exists_theme_modern )
-{
-	$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'News Center', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
-	$sth->execute( array(10, 'modern', 'about', 'global.about.php', 'About', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
-	$sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Login site', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
-	$sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Voting', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
-	$sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Counter', '', '', '[RIGHT]', 0, 1, '6', 1, 4, '') );
-	$sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '6', 0, 5, '') );
-	$sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Top banner', '', 'no_title', '[TOPADV]', 0, 1, '6', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
-	$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
-	$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:207:"© Copyright NukeViet 4. All right reserved.<br  />Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a>";}') );
-}
 
 $sth->execute( array(20, 'mobile_nukeviet', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 

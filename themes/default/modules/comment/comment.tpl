@@ -37,7 +37,7 @@
 <!-- BEGIN: children -->
 <ul class="comment-list">
 	<!-- BEGIN: detail -->
-	<li class="media">
+	<li class="media" id="cid_{COMMENT.cid}">
 		<div class="media-body">
 			<p>{COMMENT.content}</p>
 			<div class="comment-info clearfix">

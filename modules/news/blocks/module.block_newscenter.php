@@ -12,10 +12,9 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 {
-
 	function nv_block_config_news_newscenter( $module, $data_block, $lang_block )
 	{
-		$html .= '<tr>';
+		$html = '<tr>';
 		$html .= '<td>' . $lang_block['showtooltip'] . '</td>';
 		$html .= '<td>';
 		$html .= '<input type="checkbox" value="1" name="config_showtooltip" ' . ( $data_block['showtooltip'] == 1 ? 'checked="checked"' : '' ) . ' /><br /><br />';

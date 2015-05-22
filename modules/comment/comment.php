@@ -124,7 +124,7 @@ function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 	return $data_reply_comment;
 }
 
-function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowed, $page )
+function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowed, $page, $status_comment = '' )
 {
 	global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info, $per_page_comment;
 	// Kiểm tra module có được Sử dụng chức năng bình luận
@@ -198,7 +198,7 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
 			{
 				$comment = '';
 			}
-			return nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login );
+			return nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment );
 		}
 		else
 		{
@@ -213,7 +213,7 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
  * @param mixed $array_data
  * @return
  */
-function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login )
+function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment = '' )
 {
 	global $global_config, $module_file, $module_data, $module_config, $module_info, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
 
@@ -299,6 +299,13 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 		else
 		{
 			$xtpl->assign( 'GFX_NUM', 0 );
+		}
+
+		if( !empty( $status_comment ) )
+		{
+			$status_comment = nv_base64_decode( $status_comment );
+			$xtpl->assign( 'STATUS_COMMENT', $status_comment );
+			$xtpl->parse( 'main.allowed_comm.comment_result' );
 		}
 
 		$xtpl->parse( 'main.allowed_comm' );
