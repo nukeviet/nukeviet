@@ -199,7 +199,6 @@ header{
 
 #header #logo a img{
 	height:80px;
-	float:left;
 }
 
 #header #logo a h1{
@@ -631,7 +630,7 @@ input[type=radio]:checked:before {
 		width:100%;
 	}
 	#header{
-		height:190px;
+		height:200px;
 	}
 	#header #logo{
 		width:100%;
@@ -659,7 +658,7 @@ input[type=radio]:checked:before {
 	}
 
 	#banner{
-		height:190px;
+		height:200px;
 	}
 
 	#menu-site-default .navbar-right{
