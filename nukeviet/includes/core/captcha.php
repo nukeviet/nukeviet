@@ -18,7 +18,7 @@ if( $global_config['captcha_type'] == 1 )
 	if( file_exists( NV_ROOTDIR . '/includes/keywords/ccaptcha_' . NV_LANG_INTERFACE . '.php' ) )
 	{
 		$captcha->wordsFile = 'keywords/ccaptcha_' . NV_LANG_INTERFACE . '.php';
-		
+
 	}
 	else
 	{
@@ -99,7 +99,7 @@ else
 	header("Cache-Control:");
 	header("Pragma:");
 	header("Set-Cookie:");
-	ImageJPEG( $image, '', 90 );
+	ImageJPEG( $image, null, 90 );
 	ImageDestroy( $image );
 	die();
 }

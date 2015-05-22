@@ -18,12 +18,36 @@ $sql = "SELECT `catid`, `alias` FROM `" . NV_PREFIXLANG . "_" . $module_data . "
 $result = $db->sql_query( $sql );
 while( list( $catid_i, $alias_i ) = $db->sql_fetchrow( $result ) )
 {
-	$global_array_cat[$catid_i] = array( "alias" => $alias_i );
+	$check_cat = false;
+	if( defined( 'NV_IS_ADMIN_MODULE' ) )
+	{
+		$check_cat = true;
+	}
+	elseif( isset( $array_cat_admin[$admin_id][$catid_i] ) )
+	{
+		if( $array_cat_admin[$admin_id][$catid_i]['admin'] == 1 )
+		{
+			$check_cat = true;
+		}
+		elseif( $array_cat_admin[$admin_id][$catid_i]['comment'] == 1 )
+		{
+			$check_cat = true;
+		}
+	}
+	if( $check_cat )
+	{
+		$global_array_cat[$catid_i] = array( "alias" => $alias_i );
+	}
 }
 
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = 20;
-$sql = "SELECT SQL_CALC_FOUND_ROWS a.cid, a.content, a.post_email, a.status, b.id, b.title, b.listcatid, b.alias, c.userid, c.email FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_rows` b ON (a.id=b.id) LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` as c ON (a.userid =c.userid) ORDER BY a.cid DESC LIMIT " . $page . "," . $per_page;
+$sql = "SELECT SQL_CALC_FOUND_ROWS a.cid, a.content, a.post_email, a.status, b.id, b.title, b.catid, b.alias, c.userid, c.email FROM `" . NV_PREFIXLANG . "_" . $module_data . "_comments` a INNER JOIN `" . NV_PREFIXLANG . "_" . $module_data . "_rows` b ON (a.id=b.id) LEFT JOIN `" . NV_USERS_GLOBALTABLE . "` as c ON (a.userid =c.userid)";
+if( ! defined( 'NV_IS_ADMIN_MODULE' ) )
+{
+	$sql .= " WHERE b.catid IN ( ". implode(', ', array_keys( $global_array_cat ) ) ." )";
+}
+$sql .= " ORDER BY a.cid DESC LIMIT " . $page . "," . $per_page;
 $result = $db->sql_query( $sql );
 
 $result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
@@ -31,12 +55,9 @@ list( $all_page ) = $db->sql_fetchrow( $result_all );
 
 $array = array();
 $a = 0;
-while( list( $cid, $content, $email, $status, $id, $title, $listcatid, $alias, $userid, $user_email ) = $db->sql_fetchrow( $result ) )
+while( list( $cid, $content, $email, $status, $id, $title, $catid_i, $alias, $userid, $user_email ) = $db->sql_fetchrow( $result ) )
 {
 	++ $a;
-	$arr_listcatid = explode( ",", $listcatid );
-	$catid_i = end( $arr_listcatid );
-
 	if( $userid > 0 )
 	{
 		$email = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=edit&amp;userid=" . $userid . "\"> " . $user_email . "</a>";
