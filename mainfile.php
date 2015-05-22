@@ -100,7 +100,7 @@ require NV_ROOTDIR . '/includes/class/error.class.php';
 $ErrorHandler = new Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
-if( empty( $global_config['allow_sitelangs'] ) or empty( $global_config['allow_adminlangs'] ) )
+if( empty( $global_config['allow_sitelangs'] ) )
 {
 	trigger_error( 'Error! Language variables is empty!', 256 );
 }
@@ -352,7 +352,7 @@ define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
 
 if( defined( 'NV_ADMIN' ) )
 {
-	if( ! in_array( NV_LANG_DATA, $global_config['allow_adminlangs'] ) )
+	if( ! file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/global.php' ) )
 	{
 		if( $global_config['lang_multi'] )
 		{
@@ -361,7 +361,7 @@ if( defined( 'NV_ADMIN' ) )
 		Header( 'Location: ' . NV_BASE_ADMINURL );
 		exit();
 	}
-	if( ! in_array( NV_LANG_INTERFACE, $global_config['allow_adminlangs'] ) )
+	if( ! file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/global.php' ) )
 	{
 		if( $global_config['lang_multi'] )
 		{

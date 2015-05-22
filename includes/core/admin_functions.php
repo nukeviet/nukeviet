@@ -227,7 +227,7 @@ function nv_save_file_config_global()
 	$config_variable['error_log_fileext'] = NV_LOGS_EXT;
 	$config_variable['error_send_email'] = $config_variable['error_send_email'];
 
-	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'allow_adminlangs', 'openid_servers', 'allow_request_mods', 'config_sso' );
+	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'openid_servers', 'allow_request_mods', 'config_sso' );
 
 	if( empty( $config_variable['openid_servers'] ) )
 	{
