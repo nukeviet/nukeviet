@@ -24,6 +24,11 @@ $(document).ready(function(){
 	});
 
 	$('#btn-search').click(function(){
-		$('#search').toggle();
+		if( $('#search').css('display') == 'none' ){
+			$('#search').slideDown('fast');
+		}
+		else{
+			$('#search').slideUp('fast');
+		}
 	});
 });

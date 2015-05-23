@@ -50,7 +50,9 @@ div.news_column h5 .list-inline>li{
 div.news_column h5 .list-inline{
 	margin-bottom: 3px
 }
-
+div.news_column ul.list-inline li{
+	font-size: 12px
+}
 div.news_column .socialicon{
 	margin: -8px 0 -8px 0;
 }
@@ -86,14 +88,11 @@ div.news_column p.adminlink {
 
 div.news_column ul.related{
 	float: left;
-}
-
-div.span-25 ul.related {
-	width: 100%
+	padding: 0
 }
 
 div.news_column ul.related li {
-	padding: 0 4px 0 0
+	padding: 0 4px 10px 0
 }
 
 div.news_column .panel-heading {

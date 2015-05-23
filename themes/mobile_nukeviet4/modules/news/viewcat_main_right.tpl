@@ -3,22 +3,31 @@
 <div class="news_column">
 	<div class="panel panel-default clearfix">
 		<div class="panel-heading">
-			<ul class="list-inline" style="margin: 0">
+			<ul class="list-inline pull-left" style="margin: 0">
 				<li><h2><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h2></li>
-				<!-- BEGIN: subcatloop -->
-				<li class="hidden-xs"><h3><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></h3></li>
-				<!-- END: subcatloop -->
-				<!-- BEGIN: subcatmore -->
-				<li class="pull-right hidden-xs"><h3><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a></h3></li>
-				<!-- END: subcatmore -->
+
 			</ul>
+			<!-- BEGIN: subcat -->
+			<div class="btn-group pull-right">
+				<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+					<span class="caret"></span>
+					<span class="sr-only">Toggle Dropdown</span>
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<!-- BEGIN: loop -->
+					<li><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></li>
+					<!-- END: loop -->
+				</ul>
+			</div>
+			<!-- END: subcat -->
+			<div class="clearfix"></div>
 		</div>
 
 		<div class="panel-body">
 			<div class="row">
 				<div class="{WCT}">
 					<!-- BEGIN: image -->
-					<a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" alt="{HOMEIMGALT}" width="{IMGWIDTH}" class="img-thumbnail pull-left imghome" /></a>
+					<a title="{CONTENT.title}" href="{CONTENT.link}"><img src="{HOMEIMG}" alt="{HOMEIMGALT}" width="60" class="img-thumbnail pull-left imghome" /></a>
 					<!-- END: image -->
 					<h3>
 						<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
