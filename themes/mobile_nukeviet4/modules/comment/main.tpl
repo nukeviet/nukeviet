@@ -4,10 +4,10 @@
 <div id="idcomment" class="nv-fullbg">
 	<div class="row">
 		<hr />
-		<div class="col-xs-12 text-left">
+		<div class="col-xs-24 col-md-12 text-left">
 			<p class="comment-title"><em class="fa fa-comments">&nbsp;</em> {LANG.comment}</p>
 		</div>
-		<div class="col-xs-12 text-right">
+		<div class="col-xs-24 col-md-12 text-right">
 			<select id="sort" class="form-control">
 				<!-- BEGIN: sortcomm -->
 				<option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
@@ -33,10 +33,10 @@
 		<form method="post" role="form" onsubmit="return false;">
 			<input type="hidden" id="commentpid" value="0"/>
 			<div class="form-group clearfix">
-				<div class="col-xs-12">
+				<div class="col-xs-12 col-md-12">
 					<input id="commentname" type="text" value="{NAME}" {DISABLED} class="form-control" placeholder="{LANG.comment_name}"/>
 				</div>
-				<div class="col-xs-12">
+				<div class="col-xs-12 col-md-12">
 					<input id="commentemail_iavim" type="text" value="{EMAIL}" {DISABLED} class="form-control" placeholder="{LANG.comment_email}"/>
 				</div>
 			</div>
