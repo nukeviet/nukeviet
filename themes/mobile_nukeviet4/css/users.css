@@ -1,0 +1,81 @@
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 31/05/2010, 00:36
+ */
+
+/* Upload, crop avatar */
+.users-avupload{
+	margin:0 auto;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+	border:1px #dadada solid;
+	background:#fff;
+	position:absolute;
+	min-height:300px!important;
+	min-width:300px!important;
+}
+.users-avupload .upload-button{
+	cursor:pointer;
+	color:#00a8ff;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin:-109.5px 0 0 -91px;
+}
+.users-avupload .upload-button em{
+	margin-right:-45px;
+}
+.users-avupload .upload-button span{
+	font-size:16px;
+}
+.users-avupload .img-area{
+	text-align:center;
+	margin-bottom:10px;
+}
+.users-avupload .img-area img{
+	width:100%;
+	display: none;
+}
+.users-avupload .info{
+	display:none;
+}
+.users-avupload .icon-stack{
+	padding:0 5px;
+	display:inline-block;
+}
+
+@media (max-width: 599px){
+	.users-avupload{
+		width:100%;
+	}
+}
+@media (min-width: 600px){
+	.users-avupload{
+		width:600px;
+		left:50%;
+		margin-left:-300px;
+	}
+}
+@media (max-height: 599px){
+	.users-avupload{
+		top:0;
+	}
+}
+@media (min-height: 600px){
+	.users-avupload{
+		height:600px;
+		top:50%;
+		margin-top:-300px;
+	}
+	.users-avupload .img-area{
+		min-height:490px;
+	}
+}
+
+/* EDIT INFO */
+#change-photo{
+	display: none;
+}
