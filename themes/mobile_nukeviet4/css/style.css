@@ -726,6 +726,7 @@ ul.listnews img{
 .other_blocknews img{
 	margin-right: 5px
 }
-/*.fade.in{
-	display: block !important;
-}*/
+.row{
+	margin-left: 0px;
+	margin-right: 0px;
+}
