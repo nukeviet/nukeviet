@@ -70,6 +70,9 @@ function nv_commment_delete(cid, checkss) {
 			var rs = res.split('_');
 			if (rs[0] == 'OK') {
 				$("#cid_" + cid).remove();
+				$.post(nv_url_comm + '&nocache=' + new Date().getTime(), 'sortcomm=' + $('#sort').val() , function(res) {
+					$('#idcomment').html(res);
+				});
 			} else if (rs[0] == 'ERR') {
 				alert(rs[1]);
 			}

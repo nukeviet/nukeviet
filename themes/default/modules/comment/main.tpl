@@ -77,9 +77,9 @@
 	</div>
 </div>
 <script type="text/javascript">
+var nv_url_comm = '{BASE_URL_COMM}';
 $("#sort").change(function() {
-	var key = $('#sort').val();
-	$.post('{BASE_URL_COMM}&nocache=' + new Date().getTime(), 'sortcomm=' + key , function(res) {
+	$.post(nv_url_comm + '&nocache=' + new Date().getTime(), 'sortcomm=' + $('#sort').val() , function(res) {
 		$('#idcomment').html(res);
 	});
 });

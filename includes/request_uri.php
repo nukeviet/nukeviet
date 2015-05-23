@@ -108,5 +108,38 @@ else
 		$_GET[NV_OP_VARIABLE] = 'tag';
 		$_GET['alias'] = urldecode( $matches[3] );
 	}
+	elseif( $sys_info['supports_rewrite'] == false )
+	{
+		if( preg_match( '/^' . $base_siteurl_quote . 'seek\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_NAME_VARIABLE] = 'seek';
+			$_GET['q'] = urldecode( $matches[1] );
+		}
+		elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z]{2}+)\/seek\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_LANG_VARIABLE] = $matches[1];
+			$_GET[NV_NAME_VARIABLE] = 'seek';
+			$_GET['q'] = urldecode( $matches[2] );
+		}
+		elseif( ! empty( $global_config['rewrite_op_mod'] ) and preg_match( '/^' . $base_siteurl_quote . 'search\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_NAME_VARIABLE] = $global_config['rewrite_op_mod'];
+			$_GET[NV_OP_VARIABLE] = 'search';
+			$_GET['q'] = urldecode( $matches[1] );
+		}
+		elseif( $global_config['rewrite_optional'] and preg_match( '/^' . $base_siteurl_quote . '([a-zA-Z0-9\-]+)\/search\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_NAME_VARIABLE] = $matches[1];
+			$_GET[NV_OP_VARIABLE] = 'search';
+			$_GET['q'] = urldecode( $matches[2] );
+		}
+		elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z]{2}+)\/([a-zA-Z0-9\-]+)\/search\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_LANG_VARIABLE] = $matches[1];
+			$_GET[NV_NAME_VARIABLE] = $matches[2];
+			$_GET[NV_OP_VARIABLE] = 'search';
+			$_GET['q'] = urldecode( $matches[3] );
+		}
+	}
 }
 unset( $base_siteurl, $request_uri, $request_uri_array, $matches, $lop );
