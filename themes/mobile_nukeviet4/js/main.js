@@ -22,4 +22,8 @@ $(document).ready(function(){
 		selector: "[data-toggle=tooltip]",
 		container: "body"
 	});
+
+	$('#btn-search').click(function(){
+		$('#search').toggle();
+	});
 });
