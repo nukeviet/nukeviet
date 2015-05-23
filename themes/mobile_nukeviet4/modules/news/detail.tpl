@@ -15,8 +15,8 @@
 <div class="news_column panel panel-default">
 	<div class="panel-body">
 		<h1>{DETAIL.title}</h1>
-		<em class="pull-left time">{DETAIL.publtime}</em>
-		<ul class="list-inline pull-right">
+		<em class="time">{DETAIL.publtime}</em>
+		<ul class="list-inline">
 			<!-- BEGIN: allowed_send -->
 			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="nv_open_browse('{URL_SENDMAIL}','{TITLE}',650,500,'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_send -->
@@ -27,7 +27,7 @@
 			<li><a title="{LANG.savefile}" href="{URL_SAVEFILE}"><em class="fa fa-save fa-lg">&nbsp;</em></a></li>
 			<!-- END: allowed_save -->
 		</ul>
-		<hr class="clear"/>
+		<hr />
 		<!-- BEGIN: no_public -->
 		<div class="alert alert-warning">
 			{LANG.no_public}
@@ -36,7 +36,7 @@
 		<!-- BEGIN: showhometext -->
 		<div id="hometext">
 			<!-- BEGIN: imgthumb -->
-			<div class="imghome pull-left text-center" style="width:{DETAIL.image.width}px;">
+			<div class="imghome text-center">
 				<a href="#" id="pop" title="{DETAIL.image.alt}">
 				    <img id="imageresource" alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" width="{DETAIL.image.width}" class="img-thumbnail" >
                 </a>
@@ -56,7 +56,8 @@
                     </div>
                   </div>
                 </div>
-				<em>{DETAIL.image.note}</em>
+				<em class="show">{DETAIL.image.note}</em>
+				<hr />
 			</div>
 			<!-- END: imgthumb -->
 			<h2>{DETAIL.hometext}</h2>

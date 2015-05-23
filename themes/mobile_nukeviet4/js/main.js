@@ -22,4 +22,13 @@ $(document).ready(function(){
 		selector: "[data-toggle=tooltip]",
 		container: "body"
 	});
+
+	$('#btn-search').click(function(){
+		if( $('#search').css('display') == 'none' ){
+			$('#search').slideDown('fast');
+		}
+		else{
+			$('#search').slideUp('fast');
+		}
+	});
 });
