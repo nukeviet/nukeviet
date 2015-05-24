@@ -32,11 +32,13 @@
 
 		<form method="post" role="form" onsubmit="return false;">
 			<input type="hidden" id="commentpid" value="0"/>
-			<div class="form-group clearfix">
-				<div class="col-xs-12 col-md-12">
+			<div class="col-xs-24 col-md-12">
+				<div class="form-group">
 					<input id="commentname" type="text" value="{NAME}" {DISABLED} class="form-control" placeholder="{LANG.comment_name}"/>
 				</div>
-				<div class="col-xs-12 col-md-12">
+			</div>
+			<div class="col-xs-24 col-md-12">
+				<div class="form-group">
 					<input id="commentemail_iavim" type="text" value="{EMAIL}" {DISABLED} class="form-control" placeholder="{LANG.comment_email}"/>
 				</div>
 			</div>
@@ -47,8 +49,7 @@
 			</div>
 			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
-				<label class="col-xs-6">{LANG.comment_seccode}</label>
-				<div class="col-xs-8">
+				<div class="col-xs-14">
 					<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
 					&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','commentseccode_iavim');">&nbsp;</em>
 				</div>

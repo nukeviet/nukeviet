@@ -22,6 +22,7 @@
 }
 .comment-list .comment-info .cm_item{
 	margin-right: 10px;
+	display: block
 }
 .comment-list .comment-tool{
 	padding: 0;
@@ -33,7 +34,9 @@
 	margin-left: 10px;
 	position: relative;
 	float: left;
-	font-size: 13px;
+}
+.comment-info{
+	font-size: 12px
 }
 .comment-list .comment-tool li:first-child{
 	margin: 0;
