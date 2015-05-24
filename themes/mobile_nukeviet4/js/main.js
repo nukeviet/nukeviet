@@ -26,9 +26,21 @@ $(document).ready(function(){
 	$('#btn-search').click(function(){
 		if( $('#search').css('display') == 'none' ){
 			$('#search').slideDown('fast');
+			$('#nav').slideUp('fast');
+			$('#topmenu_search_query').focus();
 		}
 		else{
 			$('#search').slideUp('fast');
+		}
+	});
+
+	$('#btn-bars').click(function(){
+		if( $('#nav').css('display') == 'none' ){
+			$('#nav').slideDown('fast');
+			$('#search').slideUp('fast');
+		}
+		else{
+			$('#nav').slideUp('fast');
 		}
 	});
 });
