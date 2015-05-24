@@ -70,7 +70,7 @@
 		</form>
 	</div>
 	<section>
-		<div class="container" id="body">
+		<div id="body">
 		    <div class="row">
     			<!-- BEGIN: breadcrumbs -->
     			<ol class="breadcrumb">
