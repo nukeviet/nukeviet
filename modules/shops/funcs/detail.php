@@ -145,8 +145,13 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 {
 	$popup = $nv_Request->get_int( 'popup', 'post,get', 0 );
 
-	$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET hitstotal=hitstotal+1 WHERE id=' . $id;
-	$db->query( $sql );
+	$time_set = $nv_Request->get_int( $module_data . '_' . $op . '_' . $id, 'session' );
+	if( empty( $time_set ) )
+	{
+		$nv_Request->set_Session( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
+		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET hitstotal=hitstotal+1 WHERE id=' . $id;
+		$db->query( $sql );
+	}
 
 	$catid = $data_content['listcatid'];
 	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . '-' . $data_content['id'] . $global_config['rewrite_exturl'], true );
