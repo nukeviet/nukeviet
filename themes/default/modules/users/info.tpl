@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<div class="page">
 <script src="{NV_BASE_SITEURL}js/admin.js" type="text/javascript"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
@@ -205,4 +206,5 @@ $(document).ready(function() {
 	<!-- END: add_photo -->
 });
 </script>
+</div>
 <!-- END: main -->
