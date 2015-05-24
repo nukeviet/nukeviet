@@ -48,18 +48,14 @@
 				<div class="col-xs-19 text-right">
 					<ul class="list-inline list-control">
 						<li id="btn-search"><em class="fa fa-search fa-lg fa-pointer">&nbsp;</em></li>
-						<li>Menu</li>
+						<li id="btn-bars"><em class="fa fa-bars fa-lg fa-pointer">&nbsp;</em></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</header>
-	<nav>
-		<div class="container-fluid">
-			<div class="row">
-				[MENU_SITE]
-			</div>
-		</div>
+	<nav id="nav" style="display: none">
+		[MENU_SITE]
 	</nav>
 	<div id="search" class="container-fluid" style="display: none">
 		<form action="{NV_BASE_SITEURL}" method="get" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">

@@ -119,11 +119,9 @@
 			</div>
 			<div class="col-md-12">
 			<!-- BEGIN: allowed_rating -->
+			<br />
 				<form id="form3B" action="">
 					<div class="clearfix">
-						<div id="stringrating">
-							{STRINGRATING}
-						</div>
 			            <!-- BEGIN: data_rating -->
 			            <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
 			               {LANG.rating_average}:

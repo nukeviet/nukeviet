@@ -86,7 +86,7 @@ div.news_column p.adminlink {
 	margin-bottom: 10px;
 }
 
-div.news_column ul.related{
+ul.related{
 	float: left;
 	padding: 0
 }
