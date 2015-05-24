@@ -2,9 +2,9 @@
 {FILE "header_only.tpl"}
 {FILE "header_extended.tpl"}
 <div class="row">
-	<div class="col-md-24">
-		{MODULE_CONTENT}
-	</div>
+	[TOP]
+	{MODULE_CONTENT}
+	[BOTTOM]
 </div>
 {FILE "footer_extended.tpl"}
 {FILE "footer_only.tpl"}

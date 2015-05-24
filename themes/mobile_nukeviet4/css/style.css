@@ -11,13 +11,13 @@
 	font-family: 'Roboto';
 	font-style: normal;
 	font-weight: 400;
-	src: local('Roboto Regular'), local('Roboto-Regular'), url('../fonts/roboto-400.woff') format('woff');
+	src: local('Roboto Regular'), local('Roboto-Regular'), url('../../default/fonts/roboto-400.woff') format('woff');
 }
 @font-face {
 	font-family: 'Roboto';
 	font-style: normal;
 	font-weight: 700;
-	src: local('Roboto Bold'), local('Roboto-Bold'), url('../fonts/roboto-700.woff') format('woff');
+	src: local('Roboto Bold'), local('Roboto-Bold'), url('../../default/fonts/roboto-700.woff') format('woff');
 }
 
 /* Fix bootstrap */
