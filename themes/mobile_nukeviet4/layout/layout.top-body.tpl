@@ -3,6 +3,7 @@
 {FILE "header_extended.tpl"}
 <div class="row">
 	<div class="col-md-24">
+		[TOP]
 		{MODULE_CONTENT}
 	</div>
 </div>

@@ -3,7 +3,9 @@
 {FILE "header_extended.tpl"}
 <div class="row">
 	<div class="col-md-24">
+		[TOP]
 		{MODULE_CONTENT}
+		[BOTTOM]
 	</div>
 </div>
 {FILE "footer_extended.tpl"}
