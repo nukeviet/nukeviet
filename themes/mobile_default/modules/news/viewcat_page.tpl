@@ -4,7 +4,7 @@
 	<div class="alert alert-info clearfix">
 		<h1>{CONTENT.title}</h1>
 		<!-- BEGIN: image -->
-		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
+		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="60" class="img-thumbnail pull-left imghome" />
 		<!-- END: image -->
 		<p class="text-justify">{CONTENT.description}</p>
 	</div>
@@ -16,7 +16,7 @@
 	<div class="panel panel-default">
 		<div class="panel-body featured">
 			<!-- BEGIN: image -->
-			<a href="{CONTENT.link}" title="{CONTENT.title}"><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" /></a>
+			<a href="{CONTENT.link}" title="{CONTENT.title}"><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="60" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
 			<h2>
 				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
@@ -28,10 +28,10 @@
 						<em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}
 					</li>
 					<li>
-						<em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}
+						<em class="fa fa-eye">&nbsp;</em> {CONTENT.hitstotal}
 					</li>
 					<li>
-						<em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}
+						<em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}
 					</li>
 				</ul>
 			</div>
@@ -50,7 +50,7 @@
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<!-- BEGIN: image -->
-			<a href="{CONTENT.link}" title="{CONTENT.title}"><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" /></a>
+			<a href="{CONTENT.link}" title="{CONTENT.title}"><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="60" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
 			<h3>
 				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
@@ -61,8 +61,8 @@
 			<div class="text-muted">
 				<ul class="list-unstyled list-inline">
 					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
-					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}</li>
-					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}</li>
+					<li><em class="fa fa-eye">&nbsp;</em> {CONTENT.hitstotal}</li>
+					<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
 				</ul>
 			</div>
 			<p class="text-justify">

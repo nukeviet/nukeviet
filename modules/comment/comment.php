@@ -345,10 +345,15 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 			{
 				$comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
 			}
-			else
+			elseif( is_file(  NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg' ) )
 			{
 				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg';
 			}
+			else
+			{
+				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
+			}
+
 			if( ! empty ($comment_array_i['userid']) )
 			{
 				$comment_array_i['post_name'] = ( $global_config['name_show'] )  ? $comment_array_i['first_name'] . ' ' . $comment_array_i['last_name'] : $comment_array_i['last_name'] . ' ' . $comment_array_i['first_name'];

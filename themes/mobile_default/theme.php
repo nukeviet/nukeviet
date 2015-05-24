@@ -12,7 +12,7 @@ if( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 function nv_site_theme( $contents, $full = true )
 {
-	global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op;
+	global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op, $drag_block;
 
 	// Determine tpl file, check exists tpl file
 	$layout_file = ( $full ) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
@@ -159,6 +159,7 @@ function nv_site_theme( $contents, $full = true )
 			if( ! empty( $mobile_theme ) )
 			{
 				$num_theme_type = sizeof( $global_config['array_theme_type'] ) - 1;
+
 				foreach( $global_config['array_theme_type'] as $i => $theme_type )
 				{
 					$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
@@ -181,6 +182,11 @@ function nv_site_theme( $contents, $full = true )
 				$xtpl->parse( 'main.theme_type' );
 			}
 		}
+	}
+
+	if( !$drag_block )
+	{
+		$xtpl->parse( 'main.no_drag_block' );
 	}
 
 	$xtpl->parse( 'main' );

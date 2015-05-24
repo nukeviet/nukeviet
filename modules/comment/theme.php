@@ -131,9 +131,13 @@ function nv_comment_theme( $module, $comment_array, $is_delete )
 		{
 			$comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
 		}
-		else
+		elseif( is_file( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg' ) )
 		{
 			$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg';
+		}
+		else
+		{
+			$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
 		}
 
 		$xtpl->assign( 'COMMENT', $comment_array_i );
