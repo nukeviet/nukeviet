@@ -132,7 +132,7 @@ body{
 	height: 100%;
 	padding: 0;
 	margin: 0;
-	background:#ccc url('../images/bg.png') repeat;
+	background:#FFFFFF;
 }
 a, a:link, a:active, a:visited{
 	color: #0E73E6;
@@ -298,6 +298,9 @@ a.btn{
 }
 .nv-hr.nv-hr-sm{
 	margin:5px 0;
+}
+.page{
+	padding: 10px;
 }
 
 /* Social share, social button */
