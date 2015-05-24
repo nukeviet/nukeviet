@@ -54,7 +54,7 @@
 			</div>
 		</div>
 	</header>
-	<nav id="nav" style="display: none">
+	<nav id="nav" <!-- BEGIN: no_drag_block -->style="display: none"<!-- END: no_drag_block -->>
 		[MENU_SITE]
 	</nav>
 	<div id="search" class="container-fluid" style="display: none">
