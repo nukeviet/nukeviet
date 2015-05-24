@@ -16,17 +16,6 @@
 	<div class="panel-body">
 		<h1>{DETAIL.title}</h1>
 		<em class="time">{DETAIL.publtime}</em>
-		<ul class="list-inline">
-			<!-- BEGIN: allowed_send -->
-			<li><a rel="nofollow" title="{LANG.sendmail}" href="javascript:void(0);" onclick="nv_open_browse('{URL_SENDMAIL}','{TITLE}',650,500,'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-envelope fa-lg">&nbsp;</em></a></li>
-			<!-- END: allowed_send -->
-			<!-- BEGIN: allowed_print -->
-			<li><a title="{LANG.print}" href="javascript: void(0)" onclick="nv_open_browse('{URL_PRINT}','{TITLE}',840,500,'resizable=yes,scrollbars=yes,toolbar=no,location=no,status=no');return false"><em class="fa fa-print fa-lg">&nbsp;</em></a></li>
-			<!-- END: allowed_print -->
-			<!-- BEGIN: allowed_save -->
-			<li><a title="{LANG.savefile}" href="{URL_SAVEFILE}"><em class="fa fa-save fa-lg">&nbsp;</em></a></li>
-			<!-- END: allowed_save -->
-		</ul>
 		<hr />
 		<!-- BEGIN: no_public -->
 		<div class="alert alert-warning">

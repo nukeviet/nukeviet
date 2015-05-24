@@ -3,14 +3,13 @@
 			<div class="footer-copyright">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xs-24 col-sm-24 col-md-12">
+						<div class="col-xs-24">
 							<div class="panel-body">
 								[FOOTER_SITE]
 							</div>
 						</div>
 						<div class="col-xs-24 col-sm-24 col-md-12">
 							<div class="panel-body">
-								[MENU_FOOTER]
 								<!-- BEGIN: theme_type -->
 								<div class="theme-change">
 									{LANG.theme_type_select}:
