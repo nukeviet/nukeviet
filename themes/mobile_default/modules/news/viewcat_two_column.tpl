@@ -6,7 +6,7 @@
 		<!-- BEGIN: image -->
 		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
 		<!-- END: image -->
-		<p class="text-justify">{CONTENT.description}</p>
+		<p>{CONTENT.description}</p>
 	</div>
 </div>
 <!-- END: viewdescription -->

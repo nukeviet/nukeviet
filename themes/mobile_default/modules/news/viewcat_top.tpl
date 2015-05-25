@@ -6,7 +6,7 @@
 		<!-- BEGIN: image -->
 		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" id="imghome" class="img-thumbnail pull-left" />
 		<!-- END: image -->
-		<p class="text-justify">{CONTENT.description}</p>
+		<p>{CONTENT.description}</p>
 	</div>
 </div>
 <!-- END: viewdescription -->
@@ -30,7 +30,7 @@
 						<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
 					</ul>
 				</div>
-				<p class="text-justify">
+				<p>
 					{CONTENT.hometext}
 				</p>
 				<!-- BEGIN: adminlink -->
