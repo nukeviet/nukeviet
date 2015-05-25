@@ -85,6 +85,23 @@
 	</div>
 	<!-- END: catalogs -->
 </div>
+
+<!-- BEGIN: modal_loaded -->
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{LANG.add_product}</h4>
+			</div>
+			<div class="modal-body">
+				<em class="fa fa-spinner fa-spin">&nbsp;</em>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END: modal_loaded -->
+
 <div class="msgshow" id="msgshow">&nbsp;</div>
 <!-- BEGIN: tooltip_js -->
 <script type="text/javascript">
