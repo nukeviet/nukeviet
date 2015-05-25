@@ -499,10 +499,6 @@ input[type=radio]:checked:before {
 	background-color: #1e8cbe;
 }
 
-ul.other-news{
-	padding-left: 0px;
-	margin-left: 0px;
-}
 .img-thumbnail{
 	height:auto !important;
 	padding: 0px;
@@ -546,13 +542,6 @@ figure.image > figcaption{
 .list-inline .hidden-xs a : hover {
 	color: #0066cc
 }
-div.news_column{
-	padding: 10px 0px;
-}
-div.news_column .panel-heading {
-	font-size: 14px;
-	font-weight: bold;
-}
 .panel-heading {
 	border-bottom: 1px solid rgba(0, 0, 0, 0);
 	border-top-left-radius: 3px;
@@ -581,25 +570,6 @@ blockquote{
 
 #sb-container{
 	z-index: 99999999 !important
-}
-
-ul.listnews{
-	padding: 0;
-}
-ul.listnews li{
-	margin-bottom: 10px;
-}
-ul.listnews img{
-	margin-right: 5px;
-}
-.other_blocknews ul{
-	margin:0;padding:0
-}
-.other_blocknews ul li{
-	margin-bottom: 10px
-}
-.other_blocknews img{
-	margin-right: 5px
 }
 
 ul.list-control li{
