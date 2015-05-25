@@ -6,7 +6,7 @@
 		<!-- BEGIN: image -->
 		<img alt="{TOPPIC_TITLE}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
 		<!-- END: image -->
-		<p class="text-justify">{TOPPIC_DESCRIPTION}</p>
+		<p>{TOPPIC_DESCRIPTION}</p>
 	</div>
 </div>
 <!-- END: topicdescription -->
@@ -21,7 +21,7 @@
 		<p>
 			<em class="fa fa-clock-o">&nbsp;</em><em>{TIME} {DATE}</em>
 		</p>
-		<p class="text-justify">
+		<p>
 			{TOPIC.hometext}
 		</p>
 		<!-- BEGIN: adminlink -->

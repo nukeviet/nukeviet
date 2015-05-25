@@ -55,7 +55,7 @@
 							<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
 						</ul>
 					</div>
-					<p class="text-justify">{CONTENT.hometext}</p>
+					<p>{CONTENT.hometext}</p>
 				</div>
 			</div>
 		</div>
