@@ -214,7 +214,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
  * @param mixed $data_questions
  * @return
  */
-function openid_register( $gfx_chk, $array_register, $siteterms, $data_questions )
+function openid_register( $array_register, $siteterms, $data_questions )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $nv_redirect;
 
@@ -242,18 +242,6 @@ function openid_register( $gfx_chk, $array_register, $siteterms, $data_questions
 	{
 		$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
 		$xtpl->parse( 'main.frquestion' );
-	}
-
-	if( $gfx_chk )
-	{
-		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
-		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
-		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
-		$xtpl->parse( 'main.captcha' );
 	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
