@@ -46,6 +46,9 @@ ul, ol {
 	line-height: 18px;
 	text-align: justify
 }
+.well p{
+	margin: 0px;
+}
 .navbar-default .navbar-nav>li>a{
 	color: #fff;
 }
@@ -340,7 +343,7 @@ header{
 }
 #footer .footer-copyright .theme-change{
 	margin-top:10px;
-	text-align:center;
+	text-align:right;
 	width:100%;
 }
 
