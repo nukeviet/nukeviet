@@ -145,3 +145,9 @@ $lang_module['type_view_1'] = "Cũ nhất lên trên";
 $lang_module['wait'] = "Vui lòng đợi...";
 
 $lang_module['search_error'] = "Chọn ít nhất một điều kiện tìm kiếm";
+
+$lang_module['msg1'] = 'Bạn cần thêm';
+$lang_module['msg2'] = 'truớc';
+$lang_module['msg3'] = 'Nhấn vào đây';
+$lang_module['msg4'] = 'để chuyển đến trang thêm ';
+$lang_module['msg5'] = 'Hệ thống sẽ tự chuyển trang sau 5 giây.';
