@@ -34,7 +34,7 @@
                 <!-- BEGIN: icon -->
                 <img src="{TOP_MENU.icon}" />&nbsp;
                 <!-- END: icon -->
-                <a class="dropdown-toggle" data-toggle="dropdown" href="{TOP_MENU.link}" role="button" aria-expanded="false" title="{TOP_MENU.note}" {TOP_MENU.target}>{TOP_MENU.title_trim}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
+                <a class="dropdown-toggle" {TOP_MENU.dropdown_data_toggle} href="{TOP_MENU.link}" role="button" aria-expanded="false" title="{TOP_MENU.note}" {TOP_MENU.target}>{TOP_MENU.title_trim}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
                 <!-- BEGIN: sub -->
                 {SUB}
                 <!-- END: sub -->
