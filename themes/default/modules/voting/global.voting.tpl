@@ -23,7 +23,7 @@
 							&nbsp;
 						</div>
 						<div class="modal-body">
-							<em class="fa fa-spinner fa-spin">&nbsp;</em>
+							<p class="text-center"><em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em></p>
 						</div>
 					</div>
 				</div>

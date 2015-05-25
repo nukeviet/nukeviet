@@ -581,7 +581,6 @@ ul.list-control li{
 	margin-right: 0px;
 }
 
-/* css form-control */
 .form-control{
 	-webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
 	box-shadow: inset 0 0px 0px rgba(0,0,0,0.075);
@@ -598,16 +597,6 @@ button.close {
 	-webkit-appearance: none;
 }
 
-.close {
-	float: right;
-	font-size: 21px;
-	font-weight: 700;
-	line-height: 1;
-	color: #000;
-	text-shadow: 0 1px 0 #fff;
-	opacity: .2;
-	filter: alpha(opacity=20);
-}
 .sidebar-nav{
 	margin: 0 !important
 }
