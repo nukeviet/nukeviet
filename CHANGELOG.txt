@@ -2,7 +2,7 @@ CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
 NUKEVIET 4.0.17 (Open beta 5)
-CODE: https://github.com/nukeviet/nukeviet/tree/4.0.17 (139 commits: from commit/0e46061 to commit/3f820dc)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.17 (190 commits: from commit/0e46061 to commit/36e1704)
 - Remove theme modern
 - Remove theme mobile_nukeviet
 - Add theme mobile_default
