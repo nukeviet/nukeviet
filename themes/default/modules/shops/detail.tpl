@@ -33,15 +33,11 @@
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 									<h4 class="modal-title" id="myModalLabel">{TITLE}</h4>
 								</div>
 								<div class="modal-body">
 									<img src="{SRC_PRO_LAGE}" id="imagepreview" class="img-thumbnail" >
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">
-										Close
-									</button>
 								</div>
 							</div>
 						</div>

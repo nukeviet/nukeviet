@@ -69,6 +69,7 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
 	$num_view = $pro_config['per_row'];
@@ -230,8 +231,16 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 		}
 	}
 
+	if( !defined( 'MODAL_LOADED' ) )
+	{
+		$xtpl->parse( 'main.modal_loaded' );
+		define( 'MODAL_LOADED', true );
+	}
+
 	if( $pro_config['active_tooltip'] == 1 )
+	{
 		$xtpl->parse( 'main.tooltip_js' );
+	}
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -251,6 +260,7 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 	$xtpl = new XTemplate( 'main_procate.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
 	$num_view = $pro_config['per_row'];
@@ -426,8 +436,16 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 		}
 	}
 
+	if( !defined( 'MODAL_LOADED' ) )
+	{
+		$xtpl->parse( 'main.modal_loaded' );
+		define( 'MODAL_LOADED', true );
+	}
+
 	if( $pro_config['active_tooltip'] == 1 )
+	{
 		$xtpl->parse( 'main.tooltip_js' );
+	}
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -448,6 +466,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'CSS_PRODUCT_CODE', !empty( $pro_config['show_product_code'] ) ? ' show-product-code' : '' );
 
 	if( (!isset( $op ) OR $op != 'detail') && $pro_config['show_displays'] == 1 )
@@ -617,6 +636,12 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			++$i;
 		}
 
+		if( !defined( 'MODAL_LOADED' ) )
+		{
+			$xtpl->parse( 'main.modal_loaded' );
+			define( 'MODAL_LOADED', true );
+		}
+
 		if( !empty( $html_pages ) )
 		{
 			$xtpl->assign( 'generate_page', $html_pages );
@@ -782,6 +807,13 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
 			$xtpl->parse( 'main.items' );
 			++$i;
 		}
+
+		if( !defined( 'MODAL_LOADED' ) )
+		{
+			$xtpl->parse( 'main.modal_loaded' );
+			define( 'MODAL_LOADED', true );
+		}
+
 		if( !empty( $html_pages ) )
 		{
 			$xtpl->assign( 'generate_page', $html_pages );
@@ -807,7 +839,6 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 
 	$xtpl = new XTemplate( 'view_gird.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'module_name', $module_file );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
@@ -1015,10 +1046,21 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 			++$i;
 		}
 	}
+
 	$xtpl->assign( 'pages', $pages );
 	$xtpl->assign( 'LINK_LOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadcart' );
+
+	if( !defined( 'MODAL_LOADED' ) )
+	{
+		$xtpl->parse( 'main.modal_loaded' );
+		define( 'MODAL_LOADED', true );
+	}
+
 	if( $pro_config['active_tooltip'] == 1 )
+	{
 		$xtpl->parse( 'main.tooltip_js' );
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1036,7 +1078,6 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 
 	$xtpl = new XTemplate( 'view_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'module_name', $module_file );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
@@ -1230,6 +1271,12 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
 	}
 	$xtpl->assign( 'pages', $pages );
 	$xtpl->assign( 'LINK_LOAD', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=loadcart' );
+
+	if( !defined( 'MODAL_LOADED' ) )
+	{
+		$xtpl->parse( 'main.modal_loaded' );
+		define( 'MODAL_LOADED', true );
+	}
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -2812,6 +2859,12 @@ function wishlist( $data_content, $compare_id, $html_pages = '' )
 			}
 
 			$xtpl->parse( 'main.items' );
+		}
+
+		if( !defined( 'MODAL_LOADED' ) )
+		{
+			$xtpl->parse( 'main.modal_loaded' );
+			define( 'MODAL_LOADED', true );
 		}
 
 		if( !empty( $html_pages ) )
