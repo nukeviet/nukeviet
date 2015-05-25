@@ -378,7 +378,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		}
 	}
 
-	if( $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
+	if( isset( $global_array_shops_cat[$rowcontent['listcatid']] ) and $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
 	{
 		require NV_ROOTDIR . '/modules/' . $module_file . '/fields.check.php';
 	}
