@@ -26,7 +26,7 @@ $lang_module['nv_lang_native_name'] = 'Indigenous languages';
 $lang_module['nv_lang_sl'] = 'Select';
 $lang_module['nv_lang_sladm'] = 'Administration';
 $lang_module['nv_lang_slsite'] = 'Site';
-$lang_module['nv_data_note'] = 'To create a new data language, you need enable multi-language, create first the interface language, export to files then configure to display';
+$lang_module['nv_data_note'] = 'To create a new data language, you need enable multi-language, to download new language visit <a title="Site Language Translation for NukeViet 4" href="http://translate.nukeviet.vn" target="_blank">Site Language Translation for NukeViet 4</a>';
 $lang_module['nv_setup'] = 'Installed';
 $lang_module['nv_setup_new'] = 'Setup';
 $lang_module['nv_setup_delete'] = 'Delete data language';
