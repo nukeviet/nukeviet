@@ -64,7 +64,11 @@ function nv_menu_blocks( $block_config )
 		}
 	}
 
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $block_config['block_name'] . '.tpl' ) )
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/' . $block_config['block_name'] . '.tpl' ) )
+	{
+		$block_theme = $global_config['module_theme'];
+	}
+	elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $block_config['block_name'] . '.tpl' ) )
 	{
 		$block_theme = $global_config['site_theme'];
 	}
@@ -190,7 +194,11 @@ function nv_smenu_blocks( $style, $list_cats, $list_sub )
 {
 	global $global_config;
 
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $style . '.tpl' ) )
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/' . $style . '.tpl' ) )
+	{
+		$block_theme = $global_config['module_theme'];
+	}
+	elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $style . '.tpl' ) )
 	{
 		$block_theme = $global_config['site_theme'];
 	}
