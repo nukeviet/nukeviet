@@ -48,7 +48,8 @@ if( !empty( $_GET['code'] ) )
 			'result' => 'is_res',
 			'id' => $result['id'],
 			'contact/email' => $result['email'],
-			'namePerson/friendly' => $result['given_name'],
+			'namePerson/first' => $result['family_name'],
+			'namePerson/last' => $result['given_name'],
 			'namePerson' => $result['name'],
 			'person/gender' => $result['gender'],
 			'server' => $server,
@@ -68,5 +69,6 @@ if( !empty( $_GET['code'] ) )
 else
 {
 	$url = $googleService->getAuthorizationUri();
-	header( 'Location: ' . $url );
+	Header( 'Location: ' . $url );
+	exit();
 }

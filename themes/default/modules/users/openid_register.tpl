@@ -48,21 +48,7 @@
     			<input type="text" class="required form-control" name="answer" id="answer" value="{DATA.answer}" />
     		</div>
     	</div>
-    	<!-- BEGIN: captcha -->
-    	<div class="form-group">
-    		<label for="nv_seccode_iavim" class="col-sm-8 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
-    		<div class="col-sm-8">
-    			<input type="text" name="nv_seccode" id="nv_seccode_iavim" class="required form-control" maxlength="{GFX_MAXLENGTH}" />
-    		</div>
-    		<div class="col-sm-8">
-    			<label class="control-label">
-    				<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" class="nv-captcha"/>
-    				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','nv_seccode_iavim');">&nbsp;</em>
-    			</label>
-    		</div>
-    	</div>
-    	<!-- END: captcha -->
-    	<div class="panel panel-default">
+     	<div class="panel panel-default">
     		<div class="panel-body pre-scrollable">
     			<h4>{LANG.usage_terms}</h4>
     			<hr />
