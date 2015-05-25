@@ -28,9 +28,25 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-xs-24 col-sm-6 text-center">
-					<a href="{SRC_PRO_LAGE}" title="{TITLE}" <!-- BEGIN: shadowbox -->rel="shadowbox"<!-- END: shadowbox -->> <img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail"> </a>
+					<img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail pointer" id="imageproduct" data-target="#imagemodal">
+               		<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h4 class="modal-title" id="myModalLabel">{TITLE}</h4>
+								</div>
+								<div class="modal-body">
+									<img src="{SRC_PRO_LAGE}" id="imagepreview" class="img-thumbnail" >
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">
+										Close
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
 					<br />
-					<em class="fa fa-search-plus text-primary zoom_img">&nbsp;</em><a href="{SRC_PRO_LAGE}" title="{TITLE}" rel="shadowbox[miss]">{LANG.detail_view_lage_img}</a>
 					<!-- BEGIN: adminlink -->
 					<p>
 						{ADMINLINK}
@@ -225,11 +241,11 @@
 					<!-- END: typepeice -->
 
 					<!-- BEGIN: order -->
-					<button class="btn btn-danger btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 0)">
+					<button class="btn btn-danger btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 0); return false;">
 						<em class="fa fa-shopping-cart fa-lg">&nbsp;</em>
 						{LANG.add_cart}
 					</button>
-					<button class="btn btn-success btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 1)">
+					<button class="btn btn-success btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 1); return false;">
 						<em class="fa fa-paper-plane-o fa-lg">&nbsp;</em>
 						{LANG.buy_now}
 					</button>
@@ -248,14 +264,13 @@
 		<!-- END: shop -->
 	</div>
 
+	<!-- BEGIN: product_detail -->
 	<div id="tabs" class="tabs">
 		<nav>
 			<ul>
-				<!-- BEGIN: product_detail -->
 				<li>
 					<a href="#section-1"><em class="fa fa-bars">&nbsp;</em><span>{LANG.product_detail}</span></a>
 				</li>
-				<!-- END: product_detail -->
 
 				<!-- BEGIN: othersimg_title -->
 				<li>
@@ -372,9 +387,9 @@
 		</div>
 	</div>
 	<!-- END: other_view -->
+	<!-- END: product_detail -->
 </div>
 <div class="msgshow" id="msgshow"></div>
-<script type="text/javascript" src="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/tabresponsive.js"></script>
 <!-- BEGIN: allowed_rating_js -->
 <script type="text/javascript">
 	$("#rate_list").load('{LINK_REVIEW}&showdata=1');
@@ -423,9 +438,16 @@
 </script>
 <!-- END: allowed_print_js -->
 
+<!-- BEGIN: imagemodal -->
+<script type="text/javascript">
+    $("#imageproduct").on("click", function() {
+    	$('#imagemodal').modal('show');
+    });
+</script>
+<!-- END: imagemodal -->
+
 <script type="text/javascript">
 	var detail_error_group = '{LANG.detail_error_group}';
-	new CBPFWTabs(document.getElementById('tabs'));
 
 	$('.groupid').click(function() {
 		var _this = $('input[name="'+$(this).attr('name')+'"]');

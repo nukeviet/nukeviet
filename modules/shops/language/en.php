@@ -125,7 +125,6 @@ $lang_module['product_alias'] = 'Alias';
 $lang_module['price_contact'] = 'Contact';
 $lang_module['detail_product_name'] = 'Product name';
 $lang_module['detail_share'] = 'Share';
-$lang_module['detail_view_lage_img'] = 'View full size';
 $lang_module['detail_dateup'] = 'Post on';
 $lang_module['detail_num_view'] = 'Views';
 $lang_module['detail_pro_price'] = 'Price';
