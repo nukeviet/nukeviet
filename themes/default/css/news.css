@@ -25,17 +25,23 @@
 	background: #fff url(../images/squared-blue.png) no-repeat 5px 9px
 }
 
-ul.listnews {
-	margin: 0;
+ul.listnews{
 	padding: 0;
 }
-
-ul.listnews li {
+ul.listnews li{
 	margin-bottom: 10px;
 }
-
-ul.listnews li img {
+ul.listnews img{
 	margin-right: 5px;
+}
+.other_blocknews ul{
+	margin:0;padding:0
+}
+.other_blocknews ul li{
+	margin-bottom: 10px
+}
+.other_blocknews img{
+	margin-right: 5px
 }
 
 div.news_column .time{
@@ -97,7 +103,8 @@ div.news_column ul.related li {
 }
 
 div.news_column .panel-heading {
-	font-size: 13px;
+	font-size: 14px;
+	font-weight: bold;
 }
 
 div.span-25 ul.related li {

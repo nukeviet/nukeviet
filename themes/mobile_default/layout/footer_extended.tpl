@@ -8,7 +8,7 @@
 								[FOOTER_SITE]
 							</div>
 						</div>
-						<div class="col-xs-24 col-sm-24 col-md-12">
+						<div class="col-xs-24 col-sm-24 col-md-24">
 							<div class="panel-body">
 								<!-- BEGIN: theme_type -->
 								<div class="theme-change">
