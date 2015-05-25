@@ -488,34 +488,37 @@ if( md5( 'delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_
 			else
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del_theme', 'theme ' . $request['title'], $admin_info['userid'] );
-				$result = nv_deletefile( NV_ROOTDIR . '/themes/' . $request['title'], true );
 
-				if( ! empty( $result[0] ) )
+				if( file_exists( NV_ROOTDIR . '/themes/' . $request['title'] ) )
 				{
-					$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup=1' );
-					while( list( $_lang ) = $result->fetch( 3 ) )
+					$result = nv_deletefile( NV_ROOTDIR . '/themes/' . $request['title'], true );
+					if( ! empty( $result[0] ) )
 					{
-						$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme' );
-						$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
-						$sth->execute();
+						$result = $db->query( 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language where setup=1' );
+						while( list( $_lang ) = $result->fetch( 3 ) )
+						{
+							$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_modthemes WHERE theme = :theme' );
+							$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
+							$sth->execute();
 
-						$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme= :theme)' );
-						$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
-						$sth->execute();
+							$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight WHERE bid IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme= :theme)' );
+							$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
+							$sth->execute();
 
-						$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme' );
-						$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
-						$sth->execute();
+							$sth = $db->prepare( 'DELETE FROM ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups WHERE theme = :theme' );
+							$sth->bindParam( ':theme', $request['title'], PDO::PARAM_STR );
+							$sth->execute();
+						}
+						nv_del_moduleCache( 'themes' );
+
+						$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes' );
+						$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight' );
+						$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups' );
 					}
-					nv_del_moduleCache( 'themes' );
-
-					$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes' );
-					$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight' );
-					$db->query( 'OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_groups' );
-				}
-				else
-				{
-					die( 'ERROR_' . $lang_module['delele_ext_theme_unsuccess'] );
+					else
+					{
+						die( 'ERROR_' . $lang_module['delele_ext_unsuccess'] );
+					}
 				}
 			}
 		}

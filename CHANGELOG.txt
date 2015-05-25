@@ -1,6 +1,14 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.17 (Open beta 5)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.17 (139 commits: from commit/0e46061 to commit/3f820dc)
+- Remove theme modern
+- Remove theme mobile_nukeviet
+- Add theme mobile_default
+- add Modals for getbootstrap (replacement for shadowbox)
+- Fix and update something...
+
 NUKEVIET 4.0.16 (Open beta 4)
 CODE: https://github.com/nukeviet/nukeviet/tree/4.0.16 (27 commits: from commit/477c6e1 to commit/7b30b9c)
 - Add feature: Select "news focus" for Category of news module

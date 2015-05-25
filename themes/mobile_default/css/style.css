@@ -132,7 +132,7 @@ body{
 	height: 100%;
 	padding: 0;
 	margin: 0;
-	background:#ccc url('../images/bg.png') repeat;
+	background:#FFFFFF;
 }
 a, a:link, a:active, a:visited{
 	color: #0E73E6;
@@ -171,6 +171,12 @@ span.keyword{
 .nv-fullbg{
 	min-height: 100%;
 	background: #fff;
+}
+#search-form{
+	padding: 10px 0px;
+}
+#search_result{
+	padding-bottom: 10px;
 }
 a.btn{
 	color: #fff;
@@ -211,7 +217,7 @@ a.btn{
 }
 
 #search{
-	margin-top: 4px;
+	margin-top: 13px;
 	margin-bottom: 4px
 }
 
@@ -229,7 +235,8 @@ a.btn{
 
 /* Body */
 .breadcrumb{
-	margin-bottom: 10px;
+	margin-top: 0px;
+	margin-bottom: 0px;
 	border-radius: 0px;
 }
 #body{
@@ -237,8 +244,6 @@ a.btn{
 	border-color:#dadada;
 	border-style:solid;
 	border-width:0;
-	padding-top:10px;
-	padding-bottom: 10px;
 }
 
 /* Footer */
@@ -298,6 +303,13 @@ a.btn{
 }
 .nv-hr.nv-hr-sm{
 	margin:5px 0;
+}
+.page{
+	padding: 15px 10px;
+}
+.page h1{
+	color: #0E73E6;
+	font-weight: bold;
 }
 
 /* Social share, social button */
@@ -498,6 +510,7 @@ ul.other-news{
 }
 figure.image{
 	background: #f1f1f1;
+	margin: 10px 0px;
 }
 figure.image > img{
 	margin: 5px;
@@ -533,6 +546,9 @@ figure.image > figcaption{
 }
 .list-inline .hidden-xs a : hover {
 	color: #0066cc
+}
+div.news_column{
+	padding: 10px 0px;
 }
 div.news_column .panel-heading {
 	font-size: 14px;
@@ -604,4 +620,11 @@ ul.list-control li{
 
 .sidebar-nav{
 	margin: 0 !important
+}
+.time{
+	font-size: 14px;
+}
+hr{
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
