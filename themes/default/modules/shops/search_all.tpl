@@ -59,7 +59,7 @@
 	<div class="col-sm-12 col-md-{num}">
 		<div class="thumbnail">
 			<div style="height: {height}px">
-				<a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" data-content="{hometext}" data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
+				<a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" data-content='{hometext}' data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
 			</div>
 			<div class="info_pro">
 				<!-- BEGIN: newday -->
