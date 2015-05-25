@@ -86,7 +86,7 @@ if( $numrows )
 			$last_reason = unserialize( $row['susp_reason'] );
 			$last_reason = array_shift( $last_reason );
 			list( $susp_admin_id, $susp_admin_name ) = $db->query( 'SELECT userid,first_name,last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . intval( $last_reason['start_admin'] ) )->fetch( 3 );
-			$susp_admin_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_LANG_VARIABLE . "=" . $module_name . "&amp;id=" . $susp_admin_id . "\">" . $susp_admin_name . "</a>";
+			$susp_admin_name = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;id=" . $susp_admin_id . "\">" . $susp_admin_name . "</a>";
 			$is_suspend = sprintf( $lang_module['is_suspend1'], nv_date( 'd/m/Y H:i', $last_reason['starttime'] ), $susp_admin_name, $last_reason['info'] );
 		}
 
