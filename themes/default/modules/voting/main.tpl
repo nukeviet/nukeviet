@@ -30,13 +30,12 @@
 <div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-body" id="idmodals">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				&nbsp;
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">
-					Close
-				</button>
+			<div class="modal-body" id="idmodals">
+				<em class="fa fa-spinner fa-spin">&nbsp;</em>
 			</div>
 		</div>
 	</div>

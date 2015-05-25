@@ -799,6 +799,29 @@ blockquote{
 	font-size: 13px
 }
 
+.modal-header .close {
+	margin-top: -2px;
+}
+
+button.close {
+	padding: 0;
+	cursor: pointer;
+	background: 0 0;
+	border: 0;
+	-webkit-appearance: none;
+}
+
+.close {
+	float: right;
+	font-size: 21px;
+	font-weight: 700;
+	line-height: 1;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+	opacity: .2;
+	filter: alpha(opacity=20);
+}
+
 #sb-container{
 	z-index: 99999999 !important
 }
@@ -806,21 +829,27 @@ blockquote{
 ul.listnews{
 	padding: 0;
 }
+
 ul.listnews li{
 	margin-bottom: 10px;
 }
+
 ul.listnews img{
 	margin-right: 5px;
 }
+
 .other_blocknews ul{
 	margin:0;padding:0
 }
+
 .other_blocknews ul li{
 	margin-bottom: 10px
 }
+
 .other_blocknews img{
 	margin-right: 5px
 }
-/*.fade.in{
-	display: block !important;
-}*/
+
+.pointer{
+	cursor: pointer
+}

@@ -45,22 +45,21 @@
 		<a href="#" id="pop" title="{CONTENT.title}">
             <img id="imageresource" alt="{CONTENT.imagealt}" src="{CONTENT.image}" class="img-thumbnail" >
         </a>
-		<!-- Creates the bootstrap modal where the image will appear -->
+
         <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">{CONTENT.imagealt}</h4>
-              </div>
-              <div class="modal-body">
-                <center><img src="" id="imagepreview" class="img-thumbnail"></center>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">{CONTENT.title}</h4>
+					</div>
+					<div class="modal-body">
+						<img src="" id="imagepreview" class="img-thumbnail">
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<em style="display: block;margin: 10px 0 10px 0;">{CONTENT.imagealt}</em>
 	</div>
 	<!-- END: image -->
