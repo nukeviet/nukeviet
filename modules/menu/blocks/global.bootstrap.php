@@ -137,12 +137,19 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 			{
 				$classcurrent[] = 'active';
 			}
-
 			if( ! empty( $item['class'] ) )
 			{
 				$classcurrent[] = $item['class'];
 			}
 			$item['current'] = empty( $classcurrent ) ? '' : ' class="' . ( implode( ' ', $classcurrent ) ) . '"';
+
+			$item['dropdown_data_toggle'] = empty( $classcurrent ) ? '' : ' data-toggle="' . ( implode( ' ', $classcurrent ) ) . '"';
+
+			if( nv_menu_bootstrap_check_current( $item['link'], $item['active_type'] ) )
+			{
+				$classcurrent[] = 'active';
+			}
+
 			$xtpl->assign( 'TOP_MENU', $item );
 			if( ! empty( $item['icon'] ) )
 			{

@@ -3,12 +3,12 @@
 			<div class="footer-copyright">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xs-24">
+						<div class="col-sm-24 col-md-24">
 							<div class="panel-body">
 								[FOOTER_SITE]
 							</div>
 						</div>
-						<div class="col-xs-24 col-sm-24 col-md-24">
+						<div class="col-sm-24 col-md-24">
 							<div class="panel-body">
 								<!-- BEGIN: theme_type -->
 								<div class="theme-change">

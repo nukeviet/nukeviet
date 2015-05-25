@@ -116,7 +116,7 @@ if( ! $num )
 	$contents = "<div style=\"padding-top:15px;text-align:center\">\n";
 	$contents .= "<strong>" . $lang_module['report_empty'] . "</strong>";
 	$contents .= "</div>\n";
-	$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_LANG_VARIABLE . "=" . $module_name . "\" />";
+	$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "\" />";
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );

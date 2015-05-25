@@ -46,6 +46,9 @@ ul, ol {
 	line-height: 18px;
 	text-align: justify
 }
+.well p{
+	margin: 0px;
+}
 .navbar-default .navbar-nav>li>a{
 	color: #fff;
 }
@@ -340,7 +343,7 @@ header{
 }
 #footer .footer-copyright .theme-change{
 	margin-top:10px;
-	text-align:center;
+	text-align:right;
 	width:100%;
 }
 
@@ -414,9 +417,6 @@ header{
 .nv-block-banners img{
 	max-width: 100%!important;
 	height:auto;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
 }
 .nv-block-rss li{
 	border-bottom: 1px #dadada solid;
@@ -474,39 +474,12 @@ header{
 	.nv-infodie {
 		width: 100%;
 	}
-	div.news_column ul.related {
-		padding: 4px;
-		text-align: justify;
-		clear:both
-	}
-
-	div.news_column ul.fixedwidth {
-		width: 100%;
-		clear:both
-	}
-	div.news_column div.fixedwidth {
-		float: left;
-		width: 100%;
-		clear:both
-	}
 }
 @media (min-width: 500px){
 	.nv-infodie {
 		width: 500px;
 		left: 50%;
 		margin-left: -250px;
-	}
-	div.news_column ul.related {
-		padding: 4px;
-		text-align: justify
-	}
-
-	div.news_column ul.fixedwidth {
-		width: 100%
-	}
-	div.news_column div.fixedwidth {
-		float: left;
-		width: 100%
 	}
 }
 @media (min-height: 500px){
@@ -597,12 +570,6 @@ input[type=radio]:checked:before {
 		font-size: 14px;
 		line-height: 24px;
 	}
-	div.news_column ul.related{
-		margin-bottom: 0px;
-	}
-	div.news_column ul.related li{
-		padding: 0 4px 4px 0 !important;
-	}
 }
 @media (max-width: 768px){
 	.container {
@@ -682,18 +649,6 @@ input[type=radio]:checked:before {
 	#wraper{
 		width: 100%;
 	}
-	div.news_column ul.related {
-		padding: 4px;
-		text-align: justify
-	}
-
-	div.news_column ul.fixedwidth {
-		width: 28%
-	}
-	div.news_column div.fixedwidth {
-		float: left;
-		width: 68%
-	}
 }
 @media (min-width: 992px){
 	.container {
@@ -702,39 +657,11 @@ input[type=radio]:checked:before {
 	#wraper{
 		width: 950px;
 	}
-	div.news_column ul.related {
-		padding: 4px;
-		text-align: justify
-	}
-
-	div.news_column ul.fixedwidth {
-		width: 28%
-	}
-	div.news_column div.fixedwidth {
-		float: left;
-		width: 68%
-	}
 }
 @media (min-width: 1200px){
 	#wraper{
 		width: 1150px;
 	}
-	div.news_column ul.related {
-		padding: 4px;
-		text-align: justify
-	}
-
-	div.news_column ul.fixedwidth {
-		width: 28%
-	}
-	div.news_column div.fixedwidth {
-		float: left;
-		width: 68%
-	}
-}
-ul.other-news{
-	padding-left: 0px;
-	margin-left: 0px;
 }
 .img-thumbnail{
 	height:auto !important
