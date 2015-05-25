@@ -116,7 +116,7 @@ else
     $db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_' . $module_data );
     $num_items = $db->query( $db->sql() )->fetchColumn();
 
-    $db->select( '*' )->order( 'id' )->limit( $per_page )->offset( ($page - 1) * $per_page);
+    $db->select( '*' )->order( 'weight' )->limit( $per_page )->offset( ($page - 1) * $per_page);
 
     $result = $db->query($db->sql());
 	while( $row = $result->fetch() )
