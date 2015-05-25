@@ -131,7 +131,6 @@ $lang_module['product_alias'] = 'Liên kết tĩnh';
 $lang_module['price_contact'] = 'Liên hệ';
 $lang_module['detail_product_name'] = 'Tên sản phẩm';
 $lang_module['detail_share'] = 'Chia sẻ';
-$lang_module['detail_view_lage_img'] = 'Xem ảnh lớn';
 $lang_module['detail_dateup'] = 'Đăng ngày';
 $lang_module['detail_num_view'] = 'Lượt xem';
 $lang_module['detail_pro_price'] = 'Giá bán';

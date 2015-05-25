@@ -64,7 +64,10 @@ function cartorder(a_ob, popup, url) {
 	}
 	else
 	{
-		open_popup_detail( url + '&popup=1' );
+        $('#idmodals').removeData('bs.modal');
+     	$('#idmodals').on('show.bs.modal', function () {
+             $('#idmodals .modal-body').load( url + '&popup=1' );
+        }).modal();
 	}
 }
 
@@ -136,23 +139,6 @@ function cartorder_detail(a_ob, popup, buy_now) {
 				}
 			}
 		}
-	});
-}
-
-function open_popup_detail( url )
-{
-	if ($(window).width() >= 640){
-		var width = 780, height = 450;
-	}
-	else{
-		var width = 280, height = 400;
-	}
-
-	Shadowbox.open({
-		content : '<iframe src="' + url + '" border="0" frameborder="0" style="width:' + width + 'px;height:' + height + 'px"></iframe>',
-		player : "html",
-		height : height,
-		width : width
 	});
 }
 
