@@ -36,7 +36,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				&nbsp;
 			</div>
-			<div class="modal-body" id="idmodals">
+			<div class="modal-body">
 				<em class="fa fa-spinner fa-spin">&nbsp;</em>
 			</div>
 		</div>
