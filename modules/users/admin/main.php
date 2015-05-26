@@ -97,8 +97,8 @@ $db->select( '*' )
 	->offset( ( $page - 1 ) * $per_page );
 if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
 {
-	$orderby = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? 'first_name' : 'last_name');
-	$db->order( $orderby . ' ' . $ordertype);
+	$orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
+	$db->order( $orderby_sql . ' ' . $ordertype);
 	$base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
 }
 
@@ -199,11 +199,6 @@ $head_tds['email']['title'] = $lang_module['email'];
 $head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=email&amp;sorttype=ASC';
 $head_tds['regdate']['title'] = $lang_module['register_date'];
 $head_tds['regdate']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;sortby=regdate&amp;sorttype=ASC';
-
-if( $orderby == 'last_name' or $orderby == 'last_name' )
-{
-	$orderby = 'full_name';
-}
 
 foreach( $orders as $order )
 {
