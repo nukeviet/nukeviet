@@ -147,7 +147,8 @@ if( ! empty( $module_name ) )
 
 		if( $global_config['lang_multi'] )
 		{
-			foreach( $global_config['allow_adminlangs'] as $lang_i )
+			$_language_array = nv_scandir(  NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
+			foreach( $_language_array as $lang_i )
 			{
 				if( file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/global.php' ) )
 				{

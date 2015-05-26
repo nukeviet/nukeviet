@@ -189,15 +189,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 		$array_register['your_question'] = $nv_Request->get_title( 'your_question', 'post', '', 1 );
 		$array_register['answer'] = $nv_Request->get_title( 'answer', 'post', '', 1, 255 );
 		$array_register['agreecheck'] = $nv_Request->get_int( 'agreecheck', 'post', 0 );
-		$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
-
-		$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
-
-		if( ! $check_seccode )
-		{
-			$error = $lang_global['securitycodeincorrect'];
-		}
-		elseif( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) != '' )
+		if( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) != '' )
 		{
 			$error = $check_login;
 		}
@@ -324,7 +316,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 	$siteterms = $result->fetchColumn();
 	$result->closeCursor();
 
-	$contents = openid_register( $gfx_chk, $array_register, $siteterms, $data_questions );
+	$contents = openid_register( $array_register, $siteterms, $data_questions );
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );

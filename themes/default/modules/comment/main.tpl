@@ -22,6 +22,14 @@
 	<hr />
 	<div id="formcomment" class="comment-form">
 		<!-- BEGIN: allowed_comm -->
+
+		<!-- BEGIN: comment_result -->
+		<div class="alert alert-info" id="alert-info">{STATUS_COMMENT}</div>
+		<script type="text/javascript">
+			$('#alert-info').delay(5000).fadeOut('slow');
+		</script>
+		<!-- END: comment_result -->
+
 		<form method="post" role="form" onsubmit="return false;">
 			<input type="hidden" id="commentpid" value="0"/>
 			<div class="form-group clearfix">
@@ -69,9 +77,9 @@
 	</div>
 </div>
 <script type="text/javascript">
+var nv_url_comm = '{BASE_URL_COMM}';
 $("#sort").change(function() {
-	var key = $('#sort').val();
-	$.post('{BASE_URL_COMM}&nocache=' + new Date().getTime(), 'sortcomm=' + key , function(res) {
+	$.post(nv_url_comm + '&nocache=' + new Date().getTime(), 'sortcomm=' + $('#sort').val() , function(res) {
 		$('#idcomment').html(res);
 	});
 });

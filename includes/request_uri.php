@@ -28,7 +28,7 @@ if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( '#/index\.php(.*)$#
 $base_siteurl .= '/';
 $base_siteurl_quote = nv_preg_quote( $base_siteurl );
 
-$request_uri = preg_replace( '/(' . $base_siteurl_quote . ')index\.php\//', '\\1', $_SERVER['REQUEST_URI'] );
+$request_uri = preg_replace( '/(' . $base_siteurl_quote . ')index\.php\//', '\\1', urldecode( $_SERVER['REQUEST_URI'] ) );
 
 if( $global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and preg_match( '/^' . $base_siteurl_quote . '([a-z0-9\-]+)' . nv_preg_quote( $global_config['rewrite_exturl'] ) . '$/i', $request_uri, $matches ) )
 {
@@ -107,6 +107,50 @@ else
 		$_GET[NV_NAME_VARIABLE] = $matches[2];
 		$_GET[NV_OP_VARIABLE] = 'tag';
 		$_GET['alias'] = urldecode( $matches[3] );
+	}
+	elseif( $sys_info['supports_rewrite'] == false )
+	{
+		if( preg_match( '/^' . $base_siteurl_quote . 'seek\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_NAME_VARIABLE] = 'seek';
+			$_GET['q'] = $matches[1];
+		}
+		elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z]{2}+)\/seek\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_LANG_VARIABLE] = $matches[1];
+			$_GET[NV_NAME_VARIABLE] = 'seek';
+			$_GET['q'] = $matches[2];
+		}
+		elseif( ! empty( $global_config['rewrite_op_mod'] ) and preg_match( '/^' . $base_siteurl_quote . 'search\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_NAME_VARIABLE] = $global_config['rewrite_op_mod'];
+			$_GET[NV_OP_VARIABLE] = 'search';
+			$_GET['q'] = $matches[1];
+		}
+		elseif( $global_config['rewrite_optional'] and preg_match( '/^' . $base_siteurl_quote . '([a-zA-Z0-9\-]+)\/search\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_NAME_VARIABLE] = $matches[1];
+			$_GET[NV_OP_VARIABLE] = 'search';
+			$_GET['q'] = $matches[2];
+		}
+		elseif( preg_match( '/^' . $base_siteurl_quote . '([a-z]{2}+)\/([a-zA-Z0-9\-]+)\/search\/q\=(.*)$/', $request_uri, $matches ) )
+		{
+			$_GET[NV_LANG_VARIABLE] = $matches[1];
+			$_GET[NV_NAME_VARIABLE] = $matches[2];
+			$_GET[NV_OP_VARIABLE] = 'search';
+			$_GET['q'] = $matches[3];
+		}
+		if( strpos( $_GET['q'], '&' ) )
+		{
+			$_q_arr = explode( '&', $_GET['q'] );
+			$_GET['q'] = $_q_arr[0];
+			$all = sizeof( $_q_arr );
+			for ( $i=1; $i < $all; $i++ )
+			{
+				$_sub = explode( '=', $_q_arr[$i] );
+				$_GET[$_sub[0]] = $_sub[1];
+			}
+		}
 	}
 }
 unset( $base_siteurl, $request_uri, $request_uri_array, $matches, $lop );

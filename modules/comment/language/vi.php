@@ -19,6 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['comment'] = 'Ý kiến bạn đọc';
 $lang_module['comment_login'] = 'Bạn cần đăng nhập thành viên để có thể bình luận bài viết này';
 $lang_module['comment_success'] = 'Bình luận thành công';
+$lang_module['comment_success_queue'] = 'Gửi thành công. Bình luận của bạn sẽ hiển thị sau khi được kiểm duyệt';
 $lang_module['comment_unsuccess'] = 'Lỗi trong quá trình xử lý dữ liệu hoặc dữ liệu không đầy đủ';
 $lang_module['comment_title'] = 'Gửi bình luận của bạn';
 $lang_module['comment_view'] = 'Xem phản hồi';

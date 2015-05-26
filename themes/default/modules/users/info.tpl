@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<div class="page">
 <script src="{NV_BASE_SITEURL}js/admin.js" type="text/javascript"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
@@ -45,6 +46,21 @@
 			<!-- END: email_no_change -->
 		</div>
 	</div>
+	<!-- BEGIN: name_show_0 -->
+	<div class="form-group">
+        <label for="last_name" class="col-sm-6 control-label">{LANG.last_name}:</label>
+        <div class="col-sm-18">
+            <input type="text" class="form-control required" name="last_name" value="{DATA.last_name}" id="last_name" maxlength="100"  placeholder="{LANG.last_name}"/>
+        </div>
+    </div>
+	<div class="form-group">
+		<label for="first_name" class="col-sm-6 control-label">{LANG.first_name}:</label>
+		<div class="col-sm-18">
+			<input type="text" class="form-control required" name="first_name" value="{DATA.first_name}" id="first_name" maxlength="100"  placeholder="{LANG.first_name}"/>
+		</div>
+	</div>
+    <!-- END: name_show_0 -->
+	<!-- BEGIN: name_show_1 -->
 	<div class="form-group">
 		<label for="first_name" class="col-sm-6 control-label">{LANG.first_name}:</label>
 		<div class="col-sm-18">
@@ -57,6 +73,7 @@
             <input type="text" class="form-control required" name="last_name" value="{DATA.last_name}" id="last_name" maxlength="100"  placeholder="{LANG.last_name}"/>
         </div>
     </div>
+    <!-- END: name_show_1 -->
 	<div class="form-group">
 		<label for="gender" class="col-sm-6 control-label">{LANG.gender}:</label>
 		<div class="col-sm-18">
@@ -189,4 +206,5 @@ $(document).ready(function() {
 	<!-- END: add_photo -->
 });
 </script>
+</div>
 <!-- END: main -->
