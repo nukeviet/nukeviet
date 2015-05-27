@@ -89,25 +89,34 @@
 		<aside id="left-menu">
 			<div id="bg-left-menu" style="padding-right: 20px;padding-left: 4px;width: 200px;">
 				<ul class="nav nav-pills nav-stacked text-color">
-				<!-- BEGIN: menu_loop -->
-					<li {MENU_CLASS}>
-						<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
-						<!-- BEGIN: submenu -->
-						<ul class="dropdown-menu">
-							<!-- BEGIN: submenu_loop -->
-							<li>
-								<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-							</li>
-							<!-- END: submenu_loop -->
-						</ul>
-						<!-- END: submenu -->
-						<span class="arrow">&nbsp;</span>
-					</li>
-					<!-- BEGIN: current -->
-					<li>
-						<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
-					</li>
-					<!-- END: current -->
+					<!-- BEGIN: menu_loop -->
+						<li {MENU_CLASS}>
+							<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_HREF}">{MENU_NAME}</a>
+							<!-- BEGIN: submenu -->
+							<ul class="dropdown-menu">
+								<!-- BEGIN: loop -->
+								<li>
+									<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+								</li>
+								<!-- END: loop -->
+							</ul>
+							<!-- END: submenu -->
+							<span class="arrow">&nbsp;</span>
+						</li>
+						<!-- BEGIN: current -->
+						<li {MENU_CLASS}>
+							<a class="{MENU_SUB_CURRENT}" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={MENU_SUB_OP}">{MENU_SUB_NAME}</a>
+							<!-- BEGIN: submenu -->
+							<ul class="dropdown-menu">
+								<!-- BEGIN: loop -->
+								<li>
+									<a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MENU_SUB_HREF}&amp;{NV_OP_VARIABLE}={CUR_SUB_OP}">{CUR_SUB_NAME}</a>
+								</li>
+								<!-- END: loop -->
+							</ul>
+							<!-- END: submenu -->
+						</li>
+						<!-- END: current -->
 					<!-- END: menu_loop -->
 				</ul>
 				<div class="clearfix"> </div>
