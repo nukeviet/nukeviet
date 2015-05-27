@@ -57,8 +57,21 @@ ul, ol {
 	white-space: nowrap;
 }
 
+.dropdown-mobile {
+	border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+
 .dropdown-submenu {
     position: relative;
+}
+
+.dropdown-submenu li{
+	border-top: 1px solid rgba(255, 255, 255, 0.5);
+	line-height: 33px;
+}
+
+.dropdown-submenu li a{
+	color: #FFFFFF;
 }
 
 .dropdown-submenu>.dropdown-menu {

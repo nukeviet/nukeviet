@@ -49,11 +49,6 @@
 <script type="text/javascript">
 nv_DigitalClock('digclock');
 $(document).ready(function(){
-	$('#menu-site-default .dropdown').hover(function(){
-		$(this).addClass('open');
-	}, function(){
-		$(this).removeClass('open');
-	});
 	$('#menu-site-default a').hover(function(){
 		$(this).attr("rel", $(this).attr("title"));
         $(this).removeAttr("title");
@@ -61,6 +56,33 @@ $(document).ready(function(){
 		$(this).attr("title", $(this).attr("rel"));
         $(this).removeAttr("rel");
 	});
+
+	var $window = $(window);
+
+    function checkWidth() {
+        var windowsize = $window.width();
+        if (windowsize <= 640) {
+            $( "li.dropdown ul" ).removeClass( "dropdown-menu" );
+            $( "li.dropdown ul" ).addClass( "dropdown-submenu" );
+            $( "li.dropdown a" ).addClass( "dropdown-mobile" );
+            $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" );
+        }
+        else{
+            $( "li.dropdown ul" ).addClass( "dropdown-menu" );
+            $( "li.dropdown ul" ).removeClass( "dropdown-submenu" );
+            $( "li.dropdown a" ).removeClass( "dropdown-mobile" );
+            $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" );
+            $('#menu-site-default .dropdown').hover(function(){
+                $(this).addClass('open');
+            }, function(){
+                $(this).removeClass('open');
+            });
+        }
+    }
+    // Execute on load
+    checkWidth();
+    // Bind event listener
+    $(window).resize(checkWidth);
 });
 </script>
 <!-- END: main -->
