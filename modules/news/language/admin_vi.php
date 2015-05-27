@@ -246,6 +246,8 @@ $lang_module['admin_full_name'] = 'Họ tên';
 $lang_module['admin_first_name'] = 'Tên';
 $lang_module['admin_last_name'] = 'Họ';
 $lang_module['admin_email'] = 'Email';
+$lang_module['firstname_lastname'] = 'Tên và Họ';
+$lang_module['lastname_firstname'] = 'Họ và Tên';
 
 $lang_module['permissions_admin'] = 'Quản lý Chuyên mục';
 $lang_module['permissions_add_content'] = 'Tạo bài viết';
