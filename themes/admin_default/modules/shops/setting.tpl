@@ -3,6 +3,63 @@
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<caption>
+				{LANG.content_extra}
+			</caption>
+			<colgroup>
+				<col class="w500" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.setting_active_order_active}</strong></td>
+					<td><input type="checkbox" value="1" name="active_order" {ck_active_order} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_payment}</strong></td>
+					<td><input type="checkbox" value="1" name="active_payment" {ck_active_payment} id="active_payment" /> {LANG.setting_active_payment_note} </td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_shipping}</strong></td>
+					<td><input type="checkbox" value="1" name="use_shipping" {ck_shipping}/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_coupons}</strong></td>
+					<td><input type="checkbox" value="1" name="use_coupons" {ck_coupons}/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_point_active}</strong></td>
+					<td><input type="checkbox" name="point_active" value="1" {ck_active_point} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_wishlist}</strong></td>
+					<td><input type="checkbox" value="1" name="active_wishlist" {ck_active_wishlist} id="active_wishlist" /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_gift}</strong></td>
+					<td><input type="checkbox" value="1" name="active_gift" {ck_active_gift} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.setting_active_warehouse}</strong></td>
+					<td><input type="checkbox" value="1" name="active_warehouse" {ck_active_warehouse} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.review_setting_active}</strong></td>
+					<td><input type="checkbox" value="1" name="review_active" {ck_review_active}/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.template_setting_active}</strong></td>
+					<td><input type="checkbox" value="1" name="template_active" {ck_template_active}/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.download_setting_active}</strong></td>
+					<td><input type="checkbox" value="1" name="download_active" {ck_download_active}/></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption>
 				{LANG.search_per_page}
 			</caption>
 			<colgroup>
@@ -102,18 +159,6 @@
 					<td><strong>{LANG.setting_show_product_code}</strong></td>
 					<td><input type="checkbox" value="1" name="show_product_code" {ck_show_product_code} id="show_product_code" /></td>
 				</tr>
-				<tr>
-					<td><strong>{LANG.setting_active_wishlist}</strong></td>
-					<td><input type="checkbox" value="1" name="active_wishlist" {ck_active_wishlist} id="active_wishlist" /></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_active_gift}</strong></td>
-					<td><input type="checkbox" value="1" name="active_gift" {ck_active_gift} /></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_active_warehouse}</strong></td>
-					<td><input type="checkbox" value="1" name="active_warehouse" {ck_active_warehouse} /></td>
-				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -127,10 +172,6 @@
 				<col class="w500" />
 			</colgroup>
 			<tbody>
-				<tr>
-					<td><strong>{LANG.setting_active_order_active}</strong></td>
-					<td><input type="checkbox" value="1" name="active_order" {ck_active_order} /></td>
-				</tr>
 				<tr>
 					<td><strong>{LANG.setting_guest_order}</strong></td>
 					<td><input type="checkbox" value="1" name="active_guest_order" {ck_active_guest_order} /></td>
@@ -146,18 +187,6 @@
 				<tr>
 					<td><strong>{LANG.setting_active_order_number}</strong></td>
 					<td><input type="checkbox" value="1" name="active_order_number" {ck_active_order_number} id="active_order_number" /> {LANG.setting_active_order_number_note} </td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_active_payment}</strong></td>
-					<td><input type="checkbox" value="1" name="active_payment" {ck_active_payment} id="active_payment" /> {LANG.setting_active_payment_note} </td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_shipping}</strong></td>
-					<td><input type="checkbox" value="1" name="use_shipping" {ck_shipping}/></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.setting_coupons}</strong></td>
-					<td><input type="checkbox" value="1" name="use_coupons" {ck_coupons}/></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_active_auto_check_order}</strong></td>
@@ -190,10 +219,6 @@
 				<col class="w500" />
 			</colgroup>
 			<tbody>
-				<tr>
-					<td><strong>{LANG.review_setting_active}</strong></td>
-					<td><input type="checkbox" value="1" name="review_active" {ck_review_active}/></td>
-				</tr>
 				<tr>
 					<td><strong>{LANG.review_setting_check}</strong></td>
 					<td><input type="checkbox" value="1" name="review_check" {ck_review_check}/></td>
@@ -240,10 +265,6 @@
 				<col class="w500" />
 			</colgroup>
 			<tbody>
-				<tr>
-					<td><strong>{LANG.setting_point_active}</strong></td>
-					<td><input type="checkbox" name="point_active" value="1" {ck_active_point} /></td>
-				</tr>
 				<tr>
 					<td><strong>{LANG.setting_point_conversion}</strong></td>
 					<td><input type="text" name="point_conversion" class="form-control" value="{DATA.point_conversion}" /><span class="text-middle">{DATA.money_unit} / {LANG.setting_point_1}</span></td>

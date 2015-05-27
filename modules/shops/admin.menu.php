@@ -50,17 +50,23 @@ if( $shop_module_config['point_active'] )
 {
 	$submenu['point'] = $lang_module['point'];
 }
-$submenu['cat'] = $lang_module['categories'];
-$submenu['group'] = $lang_module['group'];
-$submenu['blockcat'] = $lang_module['block'];
-$submenu['prounit'] = $lang_module['prounit'];
-$submenu['money'] = $lang_module['money'];
-$submenu['weight'] = $lang_module['weight_unit'];
 $submenu['tags'] = $lang_module['tags'];
-if( defined( 'NV_IS_SPADMIN' ) )
+
+$menu_setting = array();
+$menu_setting['cat'] = $lang_module['categories'];
+$menu_setting['group'] = $lang_module['group'];
+$menu_setting['blockcat'] = $lang_module['block'];
+$menu_setting['prounit'] = $lang_module['prounit'];
+$menu_setting['money'] = $lang_module['money'];
+$menu_setting['weight'] = $lang_module['weight_unit'];
+if( defined( 'NV_IS_SPADMIN' ) and $shop_module_config['template_active'] )
 {
-	$submenu['template'] = $lang_module['fields'];
+	$menu_setting['template'] = $lang_module['fields'];
 }
-$submenu['payport'] = $lang_module['setup_payment'];
-$submenu['docpay'] = $lang_module['document_payment'];
-$submenu['setting'] = $lang_module['setting'];
+
+if( $shop_module_config['active_payment'] )
+{
+	$menu_setting['payport'] = $lang_module['setup_payment'];
+	$menu_setting['docpay'] = $lang_module['document_payment'];
+}
+$submenu['setting'] = array( 'title' => $lang_module['setting'], 'submenu' => $menu_setting );

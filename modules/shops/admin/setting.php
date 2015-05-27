@@ -84,6 +84,8 @@ if( $savesetting == 1 )
 	$data['review_check'] = $nv_Request->get_int( 'review_check', 'post', 0 );
 	$data['review_captcha'] = $nv_Request->get_int( 'review_captcha', 'post', 0 );
 	$data['group_price'] = $nv_Request->get_textarea( 'group_price', '', 'br' );
+	$data['template_active'] = $nv_Request->get_int( 'template_active', 'post', 0 );
+	$data['download_active'] = $nv_Request->get_int( 'download_active', 'post', 0 );
 
 	if( $error == '' )
 	{
@@ -228,6 +230,12 @@ $xtpl->assign( 'ck_review_check', $check );
 
 $check = ( $data['review_captcha'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_review_captcha', $check );
+
+$check = ( $data['template_active'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_template_active', $check );
+
+$check = ( $data['download_active'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_download_active', $check );
 
 $groups_notify = explode( ',', $data['groups_notify'] );
 foreach( $groups_list as $_group_id => $_title )
