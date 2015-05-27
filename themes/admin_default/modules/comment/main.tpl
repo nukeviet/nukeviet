@@ -134,7 +134,9 @@
 				<td>{ROW.module}</td>
 				<td><a target="_blank" href="{ROW.link}" title="{ROW.content}">{ROW.title}</a></td>
 				<td>{ROW.email}</td>
-				<td class="text-center"><em class="fa fa-{ROW.status} fa-lg">&nbsp;</em></td>
+				<td class="text-center">
+				    <input type="checkbox" id="change_active_{ROW.cid}" onclick="nv_change_active('{ROW.cid}')" {ROW.active}>
+                </td>
 				<td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
 			</tr>
 			<!-- END: loop -->

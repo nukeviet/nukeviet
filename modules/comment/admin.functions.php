@@ -10,7 +10,7 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'edit', 'active', 'del' );
+$allow_func = array( 'main', 'edit', 'active', 'del', 'change_active' );
 if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$submenu['config'] = $lang_module['config'];
