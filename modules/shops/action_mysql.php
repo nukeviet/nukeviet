@@ -693,7 +693,7 @@ $data['timecheckstatus'] = 0;
 $data['show_product_code'] = 1;
 $data['show_compare'] = 0;
 $data['show_displays'] = 0;
-$data['use_shipping'] = 1;
+$data['use_shipping'] = 0;
 $data['use_coupons'] = 0;
 $data['active_wishlist'] = 1;
 $data['active_gift'] = 1;
@@ -709,6 +709,8 @@ $data['review_check'] = 1;
 $data['review_captcha'] = 1;
 $data['group_price'] = '';
 $data['groups_notify'] = '3';
+$data['template_active'] = '0';
+$data['download_active'] = '0';
 
 foreach( $data as $config_name => $config_value )
 {
