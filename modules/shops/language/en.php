@@ -513,5 +513,3 @@ $lang_module['specifications'] = 'Specifications';
 $lang_module['carrier'] = 'Transporters';
 $lang_module['weights'] = 'Weights';
 $lang_module['carrier_price'] = 'Shipping Costs';
-
-?>

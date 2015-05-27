@@ -647,3 +647,6 @@ $lang_module['warehouse_detail_info'] = 'Thông tin nhập chi tiết';
 $lang_module['warehouse_detail_group'] = 'Thuộc tính sản phẩm';
 $lang_module['warehouse_add_group_propties'] = 'Thêm nhóm thuộc tính';
 $lang_module['warehouse_chose_propties'] = 'Chọn';
+
+$lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
+$lang_module['download_setting_active'] = 'Sử dụng chức Quản lý file tài liệu';

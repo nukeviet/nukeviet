@@ -623,5 +623,3 @@ $lang_module['warehouse_detail_info'] = 'warehouse detail information';
 $lang_module['warehouse_detail_group'] = 'Product attributes';
 $lang_module['warehouse_add_group_propties'] = 'Add attribute group';
 $lang_module['warehouse_chose_propties'] = 'Choose';
-
-?>
