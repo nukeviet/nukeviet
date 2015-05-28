@@ -18,7 +18,12 @@ $savecat = 0;
 $data = array();
 $groups_list = nv_groups_list();
 
-list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['newday'] ) = array( 0, 0, '', '', '', '', '6', 0, 0, 0, '', '', 7);
+if( defined( 'NV_EDITOR' ) )
+{
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
+
+list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice'] ) = array( 0, 0, '', '', '', '', '', '6', 0, 0, 0, '', '', $pro_config['group_price'], 0, 7, 1);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
@@ -36,6 +41,7 @@ if( ! empty( $savecat ) )
 	$field_lang = nv_file_table( $table_name );
 
 	$data['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
+	$data['typeprice'] = $nv_Request->get_int( 'typeprice', 'post', 2 );
 	$data['parentid_old'] = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$data['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
 	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
@@ -43,6 +49,8 @@ if( ! empty( $savecat ) )
 	$data['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$data['description'] = $nv_Request->get_string( 'description', 'post', '' );
 	$data['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $data['description'] ) ), '<br />' );
+	$data['descriptionhtml'] = $nv_Request->get_editor( 'descriptionhtml', '', NV_ALLOWED_HTML_TAGS );
+	$data['viewdescriptionhtml'] = $nv_Request->get_int( 'viewdescriptionhtml', 'post', 0 );
 	$data['cat_allow_point'] = $nv_Request->get_int( 'cat_allow_point', 'post', 0 );
 	$data['cat_number_point'] = $nv_Request->get_int( 'cat_number_point', 'post', 0 );
 	$data['cat_number_product'] = $nv_Request->get_int( 'cat_number_product', 'post', 0 );
@@ -77,6 +85,8 @@ if( ! empty( $savecat ) )
 	$data['form'] = $nv_Request->get_title( 'cat_form', 'post', '' );
 	if( ! in_array( $data['form'], $cat_form_exit ) ) $data['form'] = '';
 
+	$data['group_price'] = $nv_Request->get_textarea( 'group_price', '', 'br' );
+
 	$stmt = $db->prepare( 'SELECT count(*) FROM ' . $table_name . ' WHERE catid!=' . $data['catid'] . ' AND ' . NV_LANG_DATA . '_alias= :alias' );
 	$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 	$stmt->execute();
@@ -105,15 +115,18 @@ if( ! empty( $savecat ) )
 
 		$weight = intval( $weight ) + 1;
 
-		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, form, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
- 			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :form, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
+		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price, viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
+ 			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :typeprice, :form, :group_price, :viewdescriptionhtml, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
 		$data_insert = array();
 		$data_insert['parentid'] = $data['parentid'];
 		$data_insert['image'] = $data['image'];
 		$data_insert['subcatid'] = '';
 		$data_insert['viewcat'] = 'viewcat_page_list';
 		$data_insert['newday'] = $data['newday'];
+		$data_insert['typeprice'] = $data['typeprice'];
 		$data_insert['form'] = $data['form'];
+		$data_insert['group_price'] = $data['group_price'];
+		$data_insert['viewdescriptionhtml'] = $data['viewdescriptionhtml'];
 		$data_insert['admins'] = $admins;
 		$data_insert['groups_view'] = $data['groups_view'];
 		$data_insert['cat_allow_point'] = $data['cat_allow_point'];
@@ -143,14 +156,18 @@ if( ! empty( $savecat ) )
 	{
 		try
 		{
-			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, form = :form, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, viewdescriptionhtml = :viewdescriptionhtml, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_descriptionhtml = :descriptionhtml, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
 			$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
 			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
 			$stmt->bindParam( ':image', $data['image'], PDO::PARAM_STR );
 			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
+			$stmt->bindParam( ':descriptionhtml', $data['descriptionhtml'], PDO::PARAM_STR );
 			$stmt->bindParam( ':keywords', $data['keywords'], PDO::PARAM_STR );
+			$stmt->bindParam( ':typeprice', $data['typeprice'], PDO::PARAM_INT );
 			$stmt->bindParam( ':form', $data['form'], PDO::PARAM_STR );
+			$stmt->bindParam( ':group_price', $data['group_price'], PDO::PARAM_STR );
+			$stmt->bindParam( ':viewdescriptionhtml', $data['viewdescriptionhtml'], PDO::PARAM_INT );
 			$stmt->bindParam( ':groups_view', $data['groups_view'], PDO::PARAM_STR );
 			$stmt->bindParam( ':cat_allow_point', $data['cat_allow_point'], PDO::PARAM_INT );
 			$stmt->bindParam( ':cat_number_point', $data['cat_number_point'], PDO::PARAM_INT );
@@ -199,9 +216,12 @@ else
 		$data['description'] = $data[NV_LANG_DATA . '_description'];
 		$data['keywords'] = $data[NV_LANG_DATA . '_keywords'];
 	}
-	elseif( $data['parentid'] )
+	if( $data['parentid'] )
 	{
 		$data['form'] = $db->query( 'SELECT form FROM ' . $table_name . ' where catid=' . $data['parentid'] )->fetchColumn();
+		list( $parent_title, $group_price ) = $db->query( 'SELECT ' . NV_LANG_DATA . '_title, group_price FROM ' . $table_name . ' where catid=' . $data['parentid'] )->fetch( 3 );
+		$data['group_price'] = $group_price;
+		$data['parent_title'] = $parent_title;
 	}
 }
 
@@ -251,6 +271,16 @@ if( $pro_config['point_active'] )
 	$data['cat_number_product'] = ! empty( $data['cat_number_product'] ) ? $data['cat_number_product'] : '';
 }
 
+if( $data['parentid'] )
+{
+	$lang_module['setting_group_price_space_note_cat'] = sprintf( $lang_module['setting_group_price_space_note_cat_1'], $data['parent_title'] );
+}
+else
+{
+	$URL_SETTING_GR_PRICE = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting#setting_group_price';
+	$lang_module['setting_group_price_space_note_cat'] = sprintf( $lang_module['setting_group_price_space_note_cat_0'], $URL_SETTING_GR_PRICE );
+}
+
 $xtpl = new XTemplate( 'cat_add.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -258,6 +288,7 @@ $xtpl->assign( 'CAPTION', ( $data['catid'] > 0 ) ? $lang_module['edit_cat'] : $l
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'CAT_LIST', shops_show_cat_list( $data['parentid'] ) );
 $xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;catid=' . $data['catid'] . '&amp;parentid=' . $data['parentid'] );
 
 if( $error != '' )
 {
@@ -290,6 +321,15 @@ foreach( $groups_list as $_group_id => $_title )
 	$xtpl->parse( 'main.groups_view' );
 }
 
+// Cach tinh gia san pham
+$array_typeprice = array( $lang_module['typeprice_none'], $lang_module['config_discounts'], $lang_module['typeprice_per_product'] );
+foreach( $array_typeprice as $key => $value )
+{
+	$ck = $data['typeprice'] == $key ? 'checked="checked"' : '';
+	$xtpl->assign( 'TYPEPRICE', array( 'key' => $key, 'value' => $value, 'checked' => $ck ) );
+	$xtpl->parse( 'main.typeprice_loop' );
+}
+
 if( $pro_config['point_active'] )
 {
 	$xtpl->parse( 'main.point' );
@@ -308,6 +348,24 @@ if( ! empty( $cat_form_exit ) )
 	}
 	$xtpl->parse( 'main.cat_form' );
 }
+
+$descriptionhtml = nv_htmlspecialchars( nv_editor_br2nl( $data[NV_LANG_DATA . '_descriptionhtml'] ) );
+if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
+{
+	$descriptionhtml = nv_aleditor( 'descriptionhtml', '100%', '200px', $descriptionhtml, 'Basic' );
+}
+else
+{
+	$descriptionhtml = "<textarea style=\"width: 100%\" name=\"descriptionhtml\" id=\"descriptionhtml\" cols=\"20\" rows=\"15\">" . $descriptionhtml . "</textarea>";
+}
+$xtpl->assign( 'DESCRIPTIONHTML', $descriptionhtml );
+
+for( $i = 0; $i <= 2; $i++ )
+{
+	$xtpl->assign( 'VIEWDESCRIPTION', array( 'value' => $i, 'checked' => $data['viewdescriptionhtml'] == $i ? ' checked="checked"' : '', 'title' => $lang_module['content_bodytext_display_' . $i] ) );
+	$xtpl->parse( 'main.viewdescriptionhtml' );
+}
+
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 

@@ -18,7 +18,7 @@ list( $groupid, $parentid, $title ) = $db->query( "SELECT groupid, parentid, " .
 if( $groupid > 0 )
 {
 	$delallcheckss = $nv_Request->get_string( 'delallcheckss', 'post', "" );
-	
+
 	$check_parentid = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid=" . $groupid )->fetchColumn();
 
 	if( intval( $check_parentid ) > 0 )
@@ -27,7 +27,7 @@ if( $groupid > 0 )
 	}
 	else
 	{
-		$check_rows = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE group_id='" . $groupid . "'" )->fetchColumn();
+		$check_rows = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE group_id='" . $groupid . "'" )->fetchColumn();
 
 		if( intval( $check_rows ) > 0 )
 		{
@@ -84,7 +84,7 @@ if( $groupid > 0 )
 				}
 				elseif( ! empty( $delgroupandrows ) )
 				{
-					$result = $db->query( "SELECT pro_id FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE group_id='" . $groupid . "'" );
+					$result = $db->query( "SELECT pro_id FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE group_id='" . $groupid . "'" );
 
 					while( $row = $result->fetch() )
 					{
@@ -92,6 +92,7 @@ if( $groupid > 0 )
 					}
 
 					$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid );
+					$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_cateid WHERE groupid=" . $groupid );
 
 					nv_fix_group_order();
 					nv_del_moduleCache( $module_name );
@@ -105,7 +106,7 @@ if( $groupid > 0 )
 
 					if( $groupidnews > 0 )
 					{
-						$result = $db->query( "SELECT pro_id FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE group_id='" . $groupid . "'" );
+						$result = $db->query( "SELECT pro_id FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE group_id='" . $groupid . "'" );
 
 						while( $row = $result->fetch() )
 						{
@@ -114,12 +115,13 @@ if( $groupid > 0 )
 							$row['group_id'][] = $groupidnews;
 							$row['group_id'] = array_unique( $row['group_id'] );
 
-							$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_items_group SET group_id= :group_id WHERE pro_id =" . $row['pro_id'] );
+							$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group_items SET group_id= :group_id WHERE pro_id =" . $row['pro_id'] );
 							$stmt->bindParam( ':group_id', $groupidnews, PDO::PARAM_STR );
 							$stmt->execute();
 						}
 
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid );
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_cateid WHERE groupid=" . $groupid );
 
 						nv_fix_group_order();
 						nv_fix_group_count( $groupidnews );
@@ -138,10 +140,11 @@ if( $groupid > 0 )
 	}
 	if( $contents == "NO_" . $groupid )
 	{
-		$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE group_id=" . $groupid;
+		$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE group_id=" . $groupid;
 		$db->exec( $sql );
-		
+
 		$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid;
+		$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_cateid WHERE groupid=" . $groupid );
 		if( $db->exec( $sql ) )
 		{
 			nv_fix_group_order();

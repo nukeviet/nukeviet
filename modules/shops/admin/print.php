@@ -29,7 +29,7 @@ $data = $db->query( 'SELECT * FROM ' . $table_name . ' WHERE order_id=' . $id )-
 $xtpl = new XTemplate( 'print.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'dateup', date( 'd-m-Y', $data['order_time'] ) );
-$xtpl->assign( 'moment', date( 'h:i', $data['order_time'] ) );
+$xtpl->assign( 'moment', date( 'H:i', $data['order_time'] ) );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'order_id', $data['order_id'] );
 
@@ -38,7 +38,7 @@ $listid = $listnum = array();
 $result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $data['order_id'] );
 while( $row = $result->fetch() )
 {
-	$listid[] = $row['id'];
+	$listid[] = $row['proid'];
 	$listnum[] = $row['num'];
 }
 

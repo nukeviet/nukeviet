@@ -33,6 +33,41 @@ if( ! empty( $pro_config ) )
 if( empty( $pro_config['format_order_id'] ) ) $pro_config['format_order_id'] = strtoupper( $module_name ) . '%d';
 if( empty( $pro_config['timecheckstatus'] ) ) $pro_config['timecheckstatus'] = 0; // Thoi gian xu ly archive
 
+// Tu dong xoa don hang sau tgian khong duoc xac nhan
+if( !empty( $pro_config['order_day'] ) and $pro_config['order_nexttime'] < NV_CURRENTTIME )
+{
+	$result = $db->query( 'SELECT order_id, order_time FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE transaction_status=0 AND order_time < ' . ( NV_CURRENTTIME - (int)$pro_config['order_day'] * 86400 ) );
+	while( list( $order_id, $order_time ) = $result->fetch( 3 ) )
+	{
+		$result_del = $db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
+		if( $result_del )
+		{
+			// Thong tin dat hang chi tiet
+			$listid = $listnum = array();
+			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
+			while( $row = $result->fetch() )
+			{
+				$listid[] = $row['id'];
+				$listnum[] = $row['num'];
+			}
+
+			// Cong lai san pham trong kho
+			if( $pro_config['active_order_number'] == '0' )
+			{
+				product_number_order( $listid, $listnum, "+" );
+			}
+
+			// Tru lai so san pham da ban
+			product_number_sell( $listid, $listnum, "-" );
+
+			nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete order', 'ID: ' . $order_id );
+		}
+	}
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = " . ( NV_CURRENTTIME + 86400 ) . " WHERE lang='" . NV_LANG_DATA . "' AND module=" . $db->quote( $module_name ) . ' AND config_name="order_nexttime"' );
+	nv_del_moduleCache( 'settings' );
+	nv_del_moduleCache( $module_name );
+}
+
 // Xu ly viec dang san pham tu dong, cho het han san pham ...
 if( $pro_config['timecheckstatus'] > 0 and $pro_config['timecheckstatus'] < NV_CURRENTTIME )
 {
@@ -132,7 +167,7 @@ function nv_del_content_module( $id )
 			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
 			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id = ' . $id );
 			$groupid = GetGroupID( $id );
-			if( $db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group WHERE pro_id = ' . $id ) )
+			if( $db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id = ' . $id ) )
 			{
 				nv_fix_group_count( $groupid );
 			}
@@ -167,7 +202,7 @@ function nv_archive_content_module( $id )
 function nv_link_edit_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em><a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a>";
+	$link = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\" title=\"" . $lang_global['edit'] . "\"><em class=\"fa fa-edit fa-lg\">&nbsp;</em></a>";
 	return $link;
 }
 
@@ -180,7 +215,7 @@ function nv_link_edit_page( $id )
 function nv_link_delete_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em><a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\">" . $lang_global['delete'] . "</a>";
+	$link = "<a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "')\" title=\"" . $lang_global['delete'] . "\"><em class=\"fa fa-trash-o fa-lg\">&nbsp;</em></a>";
 	return $link;
 }
 
@@ -198,7 +233,7 @@ function nv_file_table( $table )
 	$result = $db->query( 'SHOW COLUMNS FROM ' . $table );
 	while( list( $field ) = $result->fetch( 3 ) )
 	{
-		$tmp = explode( '_', $field );
+		$tmp = explode( '_', $field, 2 );
 		foreach( $lang_value as $lang_i )
 		{
 			if( ! empty( $tmp[0] ) && ! empty( $tmp[1] ) )
@@ -244,7 +279,7 @@ function nv_list_lang()
  * @param string $type
  * @return
  */
-function product_number_order( $listid, $listnum, $type = '-' )
+function product_number_order( $listid, $listnum, $listgroup, $type = '-' )
 {
 	global $db_config, $db, $module_data;
 
@@ -256,6 +291,12 @@ function product_number_order( $listid, $listnum, $type = '-' )
 
 			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows SET product_number = product_number ' . $type . ' ' . intval( $listnum[$i] ) . ' WHERE id =' . $id;
 			$db->query( $sql );
+
+			if( !empty( $listgroup ) )
+			{
+				$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity SET quantity = quantity ' . $type . ' ' . intval( $listnum[$i] ) . ' WHERE pro_id =' . $id . ' AND listgroup=' . $db->quote( $listgroup[$i] );
+				$db->query( $sql );
+			}
 		}
 	}
 }
@@ -298,7 +339,7 @@ function nv_fix_group_count( $listid )
 	{
 		if( ! empty( $id ) )
 		{
-			$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_items_group WHERE ( group_id='" . $id . "' OR group_id REGEXP '^" . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "$' )";
+			$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE ( group_id='" . $id . "' OR group_id REGEXP '^" . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "\\\,' OR group_id REGEXP '\\\," . $id . "$' )";
 			$num = $db->query( $sql )->fetchColumn();
 
 			$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET numpro=" . $num . " WHERE groupid=" . intval( $id );
@@ -318,18 +359,18 @@ function nv_fix_group_count( $listid )
  */
 function GetCatidInParent( $catid, $check_inhome = 0 )
 {
-	global $global_array_cat, $array_cat;
+	global $global_array_shops_cat, $array_cat;
 	$array_cat[] = $catid;
-	$subcatid = explode( ',', $global_array_cat[$catid]['subcatid'] );
+	$subcatid = explode( ',', $global_array_shops_cat[$catid]['subcatid'] );
 	if( ! empty( $subcatid ) )
 	{
 		foreach( $subcatid as $id )
 		{
 			if( $id > 0 )
 			{
-				if( $global_array_cat[$id]['numsubcat'] == 0 )
+				if( $global_array_shops_cat[$id]['numsubcat'] == 0 )
 				{
-					if( ! $check_inhome or ( $check_inhome and $global_array_cat[$id]['inhome'] == 1 ) )
+					if( ! $check_inhome or ( $check_inhome and $global_array_shops_cat[$id]['inhome'] == 1 ) )
 					{
 						$array_cat[] = $id;
 					}
@@ -339,7 +380,7 @@ function GetCatidInParent( $catid, $check_inhome = 0 )
 					$array_cat_temp = GetCatidInParent( $id, $check_inhome );
 					foreach( $array_cat_temp as $catid_i )
 					{
-						if( ! $check_inhome or ( $check_inhome and $global_array_cat[$catid_i]['inhome'] == 1 ) )
+						if( ! $check_inhome or ( $check_inhome and $global_array_shops_cat[$catid_i]['inhome'] == 1 ) )
 						{
 							$array_cat[] = $catid_i;
 						}
@@ -352,16 +393,54 @@ function GetCatidInParent( $catid, $check_inhome = 0 )
 }
 
 /**
+ * GetParentCatFilter()
+ *
+ * @param mixed $cateid
+ * @return
+ */
+
+function GetParentCatFilter( $cateid )
+{
+	global $db, $db_config, $global_array_shops_cat, $module_name, $module_data;
+
+	$cid = 0;
+	while( true )
+	{
+		$count = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE cateid = ' . $cateid )->fetchColumn();
+		if( $count == 0 and isset( $global_array_shops_cat[$cateid] ) )
+		{
+			$cateid = $global_array_shops_cat[$cateid]['parentid'];
+			continue;
+		}
+		else
+		{
+			$cid = $cateid;
+			break;
+		}
+	}
+	return $cid;
+}
+
+/**
  * GetGroupidInParent()
  *
  * @param mixed $groupid
  * @param integer $check_inhome
  * @return
  */
-function GetGroupidInParent( $groupid, $check_inhome = 0 )
+function GetGroupidInParent( $groupid, $check_inhome = 0, $only_children = 0 )
 {
 	global $global_array_group, $array_group;
-	$array_group[] = $groupid;
+
+	if( $only_children )
+	{
+		$array_group = array();
+	}
+	else
+	{
+		$array_group[] = $groupid;
+	}
+
 	$subgroupid = explode( ',', $global_array_group[$groupid]['subgroupid'] );
 	if( ! empty( $subgroupid ) )
 	{
@@ -399,15 +478,23 @@ function GetGroupidInParent( $groupid, $check_inhome = 0 )
  * @param mixed $pro_id
  * @return
  */
-function GetGroupID( $pro_id )
+function GetGroupID( $pro_id, $group_by_parent = 0 )
 {
-	global $db, $db_config, $module_data;
-	$data = array();
+	global $db, $db_config, $module_data, $global_array_group;
 
-	$result = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_items_group where pro_id=' . $pro_id );
+	$data = array();
+	$result = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items where pro_id=' . $pro_id );
 	while( $row = $result->fetch() )
 	{
-		$data[] = $row['group_id'];
+		if( $group_by_parent )
+		{
+			$parentid = $global_array_group[$row['group_id']]['parentid'];
+			$data[$parentid][] = $row['group_id'];
+		}
+		else
+		{
+			$data[] = $row['group_id'];
+		}
 	}
 	return $data;
 }
@@ -444,4 +531,22 @@ function UpdatePoint( $data_content, $add = true )
 			$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_point_history(userid, order_id, point, time) VALUES (" . $data_content['user_id'] . ", " . $data_content['order_id'] . ", -" . $point . ", " . NV_CURRENTTIME . ")" );
 		}
 	}
+}
+
+function nv_listmail_notify()
+{
+	global $db, $global_config, $pro_config;
+
+	$array_mail = array();
+	if( !empty( $pro_config['groups_notify'] ) )
+	{
+		$result = $db->query( 'SELECT email FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id IN ( ' . $pro_config['groups_notify'] . ' ) )' );
+		while( list( $email ) = $result->fetch( 3 ) )
+		{
+			$array_mail[] = $email;
+		}
+	}
+	$array_mail = array_unique( $array_mail );
+
+	return $array_mail;
 }

@@ -14,12 +14,12 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 {
 	/**
 	 * nv_pro_catalogs()
-	 * 
+	 *
 	 * @return
 	 */
 	function nv_pro_catalogs()
 	{
-		global $lang_module, $module_info, $module_file, $global_array_cat;
+		global $lang_module, $module_info, $module_file, $global_array_shops_cat;
 
 		$xtpl = new XTemplate( "block.catalogs.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
 		$xtpl->assign( 'LANG', $lang_module );
@@ -28,7 +28,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 		$cut_num = 24;
 		$html = "";
 
-		foreach( $global_array_cat as $cat )
+		foreach( $global_array_shops_cat as $cat )
 		{
 			if( $cat['parentid'] == 0 )
 			{
@@ -50,13 +50,13 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 
 	/**
 	 * html_viewsub()
-	 * 
+	 *
 	 * @param mixed $list_sub
 	 * @return
 	 */
 	function html_viewsub( $list_sub )
 	{
-		global $global_array_cat, $cut_num;
+		global $global_array_shops_cat, $cut_num;
 
 		if( empty( $list_sub ) ) return "";
 		else
@@ -66,11 +66,11 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 
 			foreach( $list as $catid )
 			{
-				if( $global_array_cat[$catid]['inhome'] == '1' )
+				if( $global_array_shops_cat[$catid]['inhome'] == '1' )
 				{
 					$html .= "<li>\n";
-					$html .= "<a title=\"" . $global_array_cat[$catid]['title'] . "\" href=\"" . $global_array_cat[$catid]['link'] . "\">" . nv_clean60( $global_array_cat[$catid]['title'], $cut_num ) . "</a>\n";
-					if( ! empty( $global_array_cat[$catid]['subcatid'] ) ) $html .= html_viewsub( $global_array_cat[$catid]['subcatid'] );
+					$html .= "<a title=\"" . $global_array_shops_cat[$catid]['title'] . "\" href=\"" . $global_array_shops_cat[$catid]['link'] . "\">" . nv_clean60( $global_array_shops_cat[$catid]['title'], $cut_num ) . "</a>\n";
+					if( ! empty( $global_array_shops_cat[$catid]['subcatid'] ) ) $html .= html_viewsub( $global_array_shops_cat[$catid]['subcatid'] );
 					$html .= "</li>\n";
 				}
 			}

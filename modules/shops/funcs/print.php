@@ -32,7 +32,7 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
 	while( $row = $result->fetch() )
 	{
-		$listid[] = $row['id'];
+		$listid[] = $row['proid'];
 		$listnum[] = $row['num'];
 		$listprice[] = $row['price'];
 		$listgroup[] = $row['group_id'];
@@ -71,7 +71,7 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 				"product_price" => $temppro[$id]['price'],
 				"product_unit" => $unit,
 				"money_unit" => $money_unit,
-				"link_pro" => $link . $global_array_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'],
+				"link_pro" => $link . $global_array_shops_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'],
 				"product_number" => $temppro[$id]['num']
 			);
 		}

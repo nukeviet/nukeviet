@@ -140,7 +140,6 @@ function nv_del_location(locationid) {
 	return false;
 }
 
-
 // Xu ly block ---------------------------------------
 
 function nv_del_block_cat(bid) {
@@ -257,6 +256,8 @@ function nv_main_action(oForm, checkss, msgnocheck) {
 			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=publtime&listid=' + listid + '&checkss=' + checkss;
 		} else if (action == 'exptime') {
 			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=exptime&listid=' + listid + '&checkss=' + checkss;
+		} else if (action == 'warehouse') {
+			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=warehouse&listid=' + listid + '&checkss=' + checkss;
 		}
 	} else {
 		alert(msgnocheck);
@@ -363,7 +364,6 @@ function nv_add_otherimage() {
 	file_items++;
 }
 
-
 function nv_add_title() {
 	var a = "<tr><td><input class=\"form-control\" value=\"\" name=\"custom[title_config][]\" style=\"width : 80%\" maxlength=\"255\"  type=\"text\"/></td>";
 	a += "<td><input class=\"form-control\" value=\"\" name=\"custom[content_config][]\" style=\"width : 80%\" maxlength=\"255\"  type=\"text\"/></td></tr>";
@@ -371,16 +371,189 @@ function nv_add_title() {
 	file_items++;
 }
 
-
-
 function nv_getcatalog(obj) {
 	var pid = $(obj).val();
 	var url = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getcatalog&pid=' + pid;
-	$('#vcatid').load(url);
+	$.get(url, function(data) {
+		if( data == '' )
+		{
+			$('#cat').hide();
+		}
+		else
+		{
+			$('#cat #vcatid').html( data );
+			$('#cat').show();
+		}
+	});
 }
 
 function nv_change_catid(obj, id) {
 	var cid = $(obj).val();
+	var typepriceold = $("#typepriceold").val();
+	typeprice = $(obj).find('option:selected').attr("data-label");
+	if (typeprice!=typepriceold)
+	{
+		$('#priceproduct').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getprice&cid=' + cid + "&id=" + id);
+		$("#typepriceold").val(typeprice);
+	}
 	$('#custom_form').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=custom_form&cid=' + cid + "&id=" + id);
-	$('#listgroupid').load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getgroup&cid=' + cid + "&inrow=" + inrow);
+	$.get( script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=getgroup&cid=' + cid, function( data ) {
+		if( data != '' ){
+			$('#list_group').show();
+			$("#listgroupid").html( data );
+		}
+		else{
+			$('#list_group').hide();
+		}
+	});
+}
+
+function nv_price_config_add_item() {
+	var items =  $("input[name^=price_config]").length;
+	items = items/2 + 1;
+	var newitem = '<tr>';
+	newitem += '	<td><input class="form-control" type="number" name="price_config['+items+'][number_to]" value=""/></td>';
+	newitem += '	<td><input class="form-control" type="text" name="price_config['+items+'][price]" value="" onkeyup="this.value=FormatNumber(this.value);" style="text-align: right"/></td>';
+	newitem += '	</tr>';
+	$("#id_price_config").append(newitem);
+}
+
+// Review
+function nv_review_action(oForm, msgnocheck) {
+	var fa = oForm['idcheck[]'];
+	var listid = '';
+	if (fa.length) {
+		for (var i = 0; i < fa.length; i++) {
+			if (fa[i].checked) {
+				listid = listid + fa[i].value + ',';
+			}
+		}
+	} else {
+		if (fa.checked) {
+			listid = listid + fa.value + ',';
+		}
+	}
+
+	if (listid != '') {
+		var action = document.getElementById('action').value;
+		if (action == 'delete') {
+			if (confirm(nv_is_del_confirm[0])) {
+				$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=review&nocache=' + new Date().getTime(), 'del=1&dellist=1&listid=' + listid, function(res) {
+					if( res == 'OK' )
+					{
+						window.location.href = window.location.href;
+					}
+					else
+					{
+						alert(nv_is_del_confirm[2]);
+					}
+				});
+			}
+		} else if( action == 'review_status_1' || action == 'review_status_0' ) {
+			if (confirm(nv_is_change_act_confirm[0]))
+			{
+				var status = action.split('_');
+				$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=review&nocache=' + new Date().getTime(), 'change_status=1&status='+status[2]+'&listid=' + listid, function(res) {
+					if( res == 'OK' )
+					{
+						window.location.href = window.location.href;
+					}
+					else
+					{
+						alert(nv_is_change_act_confirm[2]);
+					}
+				});
+			}
+		}
+		else{
+
+		}
+	} else {
+		alert(msgnocheck);
+	}
+}
+
+function nv_del_review(id) {
+	if (confirm(nv_is_del_confirm[0])) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=review&nocache=' + new Date().getTime(), 'del=1&id=' + id, function(res) {
+			if (res == 'OK') {
+				$('#row_' + id).slideUp();
+			} else {
+				alert(nv_is_del_confirm[2]);
+			}
+
+		});
+	}
+}
+
+function FormatNumber(str) {
+
+	var strTemp = GetNumber(str);
+	if (strTemp.length <= 3)
+		return strTemp;
+	strResult = "";
+	for (var i = 0; i < strTemp.length; i++)
+		strTemp = strTemp.replace(",", "");
+	var m = strTemp.lastIndexOf(".");
+	if (m == -1) {
+		for (var i = strTemp.length; i >= 0; i--) {
+			if (strResult.length > 0 && (strTemp.length - i - 1) % 3 == 0)
+				strResult = "," + strResult;
+			strResult = strTemp.substring(i, i + 1) + strResult;
+		}
+	} else {
+		var strphannguyen = strTemp.substring(0, strTemp.lastIndexOf("."));
+		var strphanthapphan = strTemp.substring(strTemp.lastIndexOf("."), strTemp.length);
+		var tam = 0;
+		for (var i = strphannguyen.length; i >= 0; i--) {
+
+			if (strResult.length > 0 && tam == 4) {
+				strResult = "," + strResult;
+				tam = 1;
+			}
+
+			strResult = strphannguyen.substring(i, i + 1) + strResult;
+			tam = tam + 1;
+		}
+		strResult = strResult + strphanthapphan;
+	}
+	return strResult;
+}
+
+function GetNumber(str) {
+	var count = 0;
+	for (var i = 0; i < str.length; i++) {
+		var temp = str.substring(i, i + 1);
+		if (!(temp == "," || temp == "." || (temp >= 0 && temp <= 9))) {
+			alert(inputnumber);
+			return str.substring(0, i);
+		}
+		if (temp == " ")
+			return str.substring(0, i);
+		if (temp == ".") {
+			if (count > 0)
+				return str.substring(0, ipubl_date);
+			count++;
+		}
+	}
+	return str;
+}
+
+function IsNumberInt(str) {
+	for (var i = 0; i < str.length; i++) {
+		var temp = str.substring(i, i + 1);
+		if (!(temp == "." || (temp >= 0 && temp <= 9))) {
+			alert(inputnumber);
+			return str.substring(0, i);
+		}
+		if (temp == ",") {
+			return str.substring(0, i);
+		}
+	}
+	return str;
+}
+
+function reset_form( form ){
+	form.find('input:text, input:password, input:file, select, textarea').val('');
+	form.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
 }

@@ -13,26 +13,20 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $datacustom_form = '';
 
 $cid = $nv_Request->get_int( 'cid', 'get', 0 );
-if( $cid AND ! empty( $global_array_cat[$cid]['form'] ) )
-{
-	$array_custom = array();
-	$array_custom_lang = array();
+$cat_form = $global_array_shops_cat[$cid]['form'];
 
+if( $cid AND ! empty( $cat_form ) )
+{
 	$id = $nv_Request->get_int( 'id', 'get', 0 );
-	if( $id )
+
+	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $cat_form ) . '"' )->fetchColumn( );
+	if( $idtemplate )
 	{
-		$rowcontent = $db->query( 'SELECT custom, ' . NV_LANG_DATA . '_custom FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows where id=' . $id )->fetch();
-		if ( !empty( $rowcontent['custom'] ) )
-		{
-			$array_custom = unserialize( $rowcontent['custom'] );
-		}
-		if ( !empty( $rowcontent[NV_LANG_DATA . '_custom'] ) )
-		{
-			$array_custom_lang = unserialize( $rowcontent[NV_LANG_DATA . '_custom'] );
-		}
+		$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
+		$custom = $db->query( "SELECT * FROM " . $table_insert . " where shopid=" . $id )->fetch( );
 	}
 
-	$datacustom_form = nv_show_custom_form( $global_array_cat[$cid]['form'], $array_custom, $array_custom_lang );
+	$datacustom_form = nv_show_custom_form( $id, $cat_form, $custom );
 }
 
 include NV_ROOTDIR . '/includes/header.php';

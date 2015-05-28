@@ -176,7 +176,7 @@ if( isset( $DoECResponse ) )
 
 				if( $transaction_id > 0 )
 				{
-					$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1, is_lock=1 WHERE order_id=" . $PaymentDetail['order_id'] );
+					$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE order_id=" . $PaymentDetail['order_id'] );
 				}
 				else
 				{

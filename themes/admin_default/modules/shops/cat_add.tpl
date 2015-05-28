@@ -7,7 +7,7 @@
 	<!-- BEGIN: error -->
 	<div class="alert alert-warning">{error}</div>
 	<!-- END: error -->
-	<form class="form-inline" action="" method="post">
+	<form class="form-inline" action="{FORM_ACTION}" method="post">
 		<input type="hidden" name="catid" value="{DATA.catid}" />
 		<input type="hidden" name="parentid_old" value="{DATA.parentid}" />
 		<input name="savecat" type="hidden" value="1" />
@@ -29,7 +29,16 @@
 						<!-- BEGIN: parent_loop -->
 						<option value="{pcatid_i}" {pselect}>{ptitle_i}</option>
 						<!-- END: parent_loop -->
-					</select></td>
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<th class="text-right">{LANG.typeprice} </th>
+					<td>
+						<!-- BEGIN: typeprice_loop -->
+						<label><input type="radio" name="typeprice" value="{TYPEPRICE.key}" {TYPEPRICE.checked} />{TYPEPRICE.value}</label>&nbsp;&nbsp;
+						<!-- END: typeprice_loop -->
+					</td>
 				</tr>
 				<tr>
 					<th class="text-right">{LANG.keywords}: </th>
@@ -46,6 +55,20 @@
 					<td>
 						<input class="form-control" style="width: 500px" type="text" name="image" id="image" value="{DATA.image}"/>
 						<a class="btn btn-info" name="selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.file_selectfile}</a>
+					</td>
+				</tr>
+				<tr>
+					<th class="text-right">{LANG.content_bodytext}</th>
+					<td>
+						{DESCRIPTIONHTML}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-right">{LANG.content_bodytext_display}</th>
+					<td>
+						<!-- BEGIN: viewdescriptionhtml -->
+						<label><input type="radio" name="viewdescriptionhtml" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.checked} />{VIEWDESCRIPTION.title}</label>&nbsp;&nbsp;&nbsp;
+						<!-- END: viewdescriptionhtml -->
 					</td>
 				</tr>
 				<!-- BEGIN: cat_form -->
@@ -95,6 +118,22 @@
 			</tbody>
 		</table>
 		<!-- END: point -->
+
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{LANG.setting_group_price}</caption>
+			<colgroup>
+				<col class="w300" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td><strong>{LANG.setting_group_price_space}</strong><em class="help-block">{LANG.setting_group_price_space_note_cat}</em></td>
+					<td>
+						<textarea class="form-control" name="group_price" rows="9" style="width: 100%">{DATA.group_price}</textarea>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
 		<div class="text-center">
 			<input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}"/>
 		</div>

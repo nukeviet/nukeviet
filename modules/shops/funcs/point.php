@@ -74,7 +74,7 @@ if( $nv_Request->isset_request( 'paypoint', 'get' ) )
 
 			if( $transaction_id > 0 )
 			{
-				$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $transaction_status . ", transaction_id=" . $transaction_id . ", transaction_count=transaction_count+1, is_lock=1 WHERE order_id=" . $order_id );
+				$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $transaction_status . ", transaction_id=" . $transaction_id . ", transaction_count=transaction_count+1 WHERE order_id=" . $order_id );
 
 				// Cap nhat diem tich luy
 				UpdatePoint( $order_data );
@@ -105,11 +105,10 @@ $all_page = $db->query( $db->sql() )->fetchColumn();
 $db->select( 't1.*, t2.order_code' )
   ->order( 'id DESC' )
   ->limit( $per_page )
-  ->offset( $page );
-
-$link_module = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+  ->offset( ( $page - 1 ) * $per_page );
 
 $_query = $db->query( $db->sql() );
+$link_module = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 while( $row = $_query->fetch() )
 {
 	$checkss = md5( $row['order_id'] . $global_config['sitekey'] . session_id() );

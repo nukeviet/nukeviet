@@ -19,7 +19,7 @@ $data = array();
 list( $data['id'], $data['parentid'], $data['title'] ) = array( 0, 0, '' );
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
-$per_page = 10;
+$per_page = 20;
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=location';
 
 $savelocation = $nv_Request->get_int( 'savelocation', 'post', 0 );
@@ -137,6 +137,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'CAPTION', $caption );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'LOCATION_LIST', shops_show_location_list( $data['parentid'], $page, $per_page, $base_url ) );
+$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $data['id'] . '&amp;parentid=' . $data['parentid'] );
 
 $xtpl->assign( 'LOCALTION_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=location' );
 $xtpl->assign( 'CARRIER_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=carrier' );

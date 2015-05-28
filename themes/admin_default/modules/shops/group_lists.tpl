@@ -15,7 +15,7 @@
 				<th>{LANG.catalog_name}</th>
 				<th>{LANG.viewcat_page}</th>
 				<th class="text-center">{LANG.inhome}</th>
-				<th class="text-center">{LANG.indetail} <em class="fa fa-info-circle text-info" data-toggle="tooltip" title="" data-original-title="{LANG.indetail_note}">&nbsp;</em></th>
+				<th class="text-center">{LANG.indetail} <span class="info_icon" data-toggle="tooltip" title="" data-original-title="{LANG.indetail_note}">&nbsp;</span></th>
 				<th class="text-center">{LANG.in_order}</th>
 				<th class="w150">&nbsp;</th>
 			</tr>
@@ -29,7 +29,10 @@
 					<option value="{OPTION.key}"{OPTION.selected}>{OPTION.title}</option>
 					<!-- END: weight -->
 				</select></td>
-				<td><a href="{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=group&amp;parentid={ROW.groupid}"><strong>{ROW.title}</strong></a>{ROW.numsubgroup} </td>
+				<td>
+					<a data-toggle="tooltip" title="" data-original-title="{ROW.description}" href="{ROW.group_link}"><strong>{ROW.title}</strong></a>
+					{ROW.numsubgroup}
+				</td>
 				<td>
 					<select class="form-control" id="id_viewgroup_{ROW.groupid}" onchange="nv_chang_group('{ROW.groupid}','viewgroup');">
 						<!-- BEGIN: viewgroup -->

@@ -16,8 +16,7 @@ $receiver = $payment_config['receiver_pay'];
 
 $return_url = $global_config['site_url'] . "/?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=complete&payment=nganluong";
 $price = $data['order_total'];
-$price_array = nv_currency_conversion( $price, $pro_config['money_unit'], "VND" );
-$price_vn = $price_array['sale'];
+$price_vn = nv_currency_conversion( $price, $pro_config['money_unit'], "VND" );
 
 $order_code = $data['order_code'];
 $transaction_info = $data['order_note'];

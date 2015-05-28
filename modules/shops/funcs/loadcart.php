@@ -11,11 +11,13 @@
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $num = isset( $_SESSION[$module_data . '_cart'] ) ? count( $_SESSION[$module_data . '_cart'] ) : 0;
-$total = $total_coupons = 0;
+$total = 0;
+
+$total_coupons = 0;
 $counpons = array();
-$coupons_check = $nv_Request->get_int( 'coupons_check', 'get' );
+$coupons_check = $nv_Request->get_int( 'coupons_check', 'get', 0 );
+$coupons_load = $nv_Request->get_int( 'coupons_load', 'get', 0 );
 $coupons_code = $nv_Request->get_title( 'coupons_code', 'get', '' );
-$_SESSION[$module_data . '_coupons'] = array();
 
 if( !empty( $coupons_code ) )
 {
@@ -28,11 +30,16 @@ if( !empty( $coupons_code ) )
 	}
 }
 
+if( $coupons_load )
+{
+	$_SESSION[$module_data . '_coupons']['check'] = $coupons_check;
+}
+
 if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 {
 	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $info )
 	{
-		$price = nv_currency_conversion( $info['price'], $info['money_unit'], $pro_config['money_unit'], $info['discount_id'], $info['num'] );
+		$price = nv_get_price( $pro_id, $pro_config['money_unit'], $info['num'] );
 		// Ap dung giam gia cho tung san pham dac biet
 		if( !empty( $counpons['product'] ) )
 		{
@@ -83,8 +90,11 @@ if( ( empty( $counpons['total_amount'] ) or $total > $counpons['total_amount'] )
 			}
 		}
 	}
-	$_SESSION[$module_data . '_coupons']['code'] = $coupons_check ? $coupons_code : '';
-	$_SESSION[$module_data . '_coupons']['discount'] = $total_old - $total;
+
+	if( $coupons_check )
+	{
+		$_SESSION[$module_data . '_coupons']['discount'] = $total_old - $total;
+	}
 }
 
 if( $nv_Request->isset_request( 'get_shipping_price', 'get' ) )
@@ -98,7 +108,7 @@ if( $nv_Request->isset_request( 'get_shipping_price', 'get' ) )
 	$ship_price = nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $carrier_id );
 	if( !empty( $ship_price ) )
 	{
-		$total += $ship_price['price'];
+		$total += $ship_price;
 	}
 }
 

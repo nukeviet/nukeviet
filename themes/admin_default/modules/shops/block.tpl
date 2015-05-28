@@ -9,11 +9,15 @@
 		<input type="hidden" name ="{NV_OP_VARIABLE}"value="{OP}" />
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
-				<col width="10"/>
-				<caption>{LANG.addtoblock}</caption>
+				<colgroup>
+					<col class="w50" />
+				</colgroup>
+				<caption>
+					{LANG.addtoblock}
+				</caption>
 				<thead>
 					<tr class="text-center">
-						<th><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
+						<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
 						<th>{LANG.name}</th>
 					</tr>
 				</thead>
@@ -33,7 +37,7 @@
 							<!-- BEGIN: bid -->
 							<option value="{BID.key}" {BID.selected}>{BID.title}</option>
 							<!-- END: bid -->
-						</select><input type="hidden" name ="checkss" value="{CHECKSESS}" /><input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" /></td>
+						</select>&nbsp;<input type="hidden" name ="checkss" value="{CHECKSESS}" /><input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" /></td>
 					</tr>
 				</tfoot>
 			</table>

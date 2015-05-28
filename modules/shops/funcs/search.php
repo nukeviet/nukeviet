@@ -43,7 +43,7 @@ $array_cat_search[0] = array(
 	'xtitle' => ''
 );
 
-foreach( $global_array_cat as $arr_cat_i )
+foreach( $global_array_shops_cat as $arr_cat_i )
 {
 	$xtitle = '';
 	if( $arr_cat_i['lev'] > 0 )
@@ -74,7 +74,7 @@ if( strlen( $key ) >= NV_MIN_SEARCH_LENGTH )
 
 	if( $catid != 0 )
 	{
-		if( $global_array_cat[$catid]['numsubcat'] == 0 )
+		if( $global_array_shops_cat[$catid]['numsubcat'] == 0 )
 		{
 			$where .= 'AND listcatid=' . $catid;
 		}

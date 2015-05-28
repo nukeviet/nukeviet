@@ -26,7 +26,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 
 		$html = "<tr>";
 		$html .= "	<td>" . $lang_block['blockid'] . "</td>";
-		$html .= "	<td><select name=\"config_blockid\">\n";
+		$html .= "	<td><select name=\"config_blockid\" class=\"form-control w200\">\n";
 
 		$sql = "SELECT bid, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM " . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
 		$list = nv_db_cache( $sql, 'catid', $module );
@@ -42,12 +42,12 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['numget'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_numget\" size=\"5\" value=\"" . $data_block['numget'] . "\"/></td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_numget\" size=\"5\" value=\"" . $data_block['numget'] . "\"/></td>";
 		$html .= "</tr>";
 
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['numrow'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
 		$html .= "</tr>";
 
 		return $html;
@@ -72,6 +72,25 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		return $return;
 	}
 
+	if( !nv_function_exists( 'nv_get_price_tmp' ) )
+	{
+		function nv_get_price_tmp( $module_name, $module_data, $module_file, $pro_id )
+		{
+			global $db, $db_config, $module_config, $discounts_config;
+
+			$price = array();
+			$pro_config = $module_config[$module_name];
+
+			if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php' ) )
+			{
+				require_once NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php';
+				$price = nv_get_price( $pro_id, $pro_config['money_unit'], 1, false, $module_name );
+			}
+
+			return $price;
+		}
+	}
+
 	/**
 	 * nv_global_product_center()
 	 *
@@ -80,12 +99,11 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 	 */
 	function nv_global_product_center( $block_config )
 	{
-		global $site_mods, $global_config, $module_name, $global_array_cat, $db_config, $my_head, $db, $pro_config;
+		global $site_mods, $global_config, $module_config, $lang_module, $module_name, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 		$mod_file = $site_mods[$module]['module_file'];
-		$array_cat_shops = $global_array_cat;
 		$num_view = $block_config['numrow'];
 		$num_get = $block_config['numget'];
 
@@ -101,25 +119,30 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			$block_theme = 'default';
 		}
 
-		// Xac dinh CSS
-		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/css/' . $mod_file . '.css' ) )
-		{
-			$block_css = $global_config['site_theme'];
-		}
-		else
-		{
-			$block_css = 'default';
-		}
-
 		if( $module != $module_name )
 		{
+			// Css
+			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/css/' . $mod_file . '.css' ) )
+			{
+				$block_css = $global_config['site_theme'];
+			}
+			else
+			{
+				$block_css = 'default';
+			}
 			$my_head .= '<link rel="stylesheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_css . '/css/' . $mod_file . '.css' . '" type="text/css" />';
-			$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
 
+			// Language
+			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php' ) )
+			{
+				require_once NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php';
+			}
+
+			$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, typeprice FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
 			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $row )
 			{
-				$array_cat_shops[$row['catid']] = array(
+				$global_array_shops_cat[$row['catid']] = array(
 					'catid' => $row['catid'],
 					'parentid' => $row['parentid'],
 					'title' => $row['title'],
@@ -133,19 +156,50 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 					'inhome' => $row['inhome'],
 					'keywords' => $row['keywords'],
 					'groups_view' => $row['groups_view'],
-					'lev' => $row['lev']
+					'lev' => $row['lev'],
+					'typeprice' => $row['typeprice']
 				);
 			}
 			unset( $list, $row );
+			$pro_config = $module_config[$module];
+
+			// Lay ty gia ngoai te
+			$sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $mod_data . '_money_' . NV_LANG_DATA;
+			$cache_file = NV_LANG_DATA . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
+			if( ($cache = nv_get_cache( $module, $cache_file )) != false )
+			{
+				$money_config = unserialize( $cache );
+			}
+			else
+			{
+				$money_config = array();
+				$result = $db->query( $sql );
+				while( $row = $result->fetch() )
+				{
+					$money_config[$row['code']] = array(
+						'code' => $row['code'],
+						'currency' => $row['currency'],
+						'exchange' => $row['exchange'],
+						'round' => $row['round'],
+						'number_format' => $row['number_format'],
+						'decimals' => $row['round'] > 1 ? $row['round'] : strlen( $row['round'] ) - 2,
+						'is_config' => ($row['code'] == $pro_config['money_unit']) ? 1 : 0
+					);
+				}
+				$result->closeCursor();
+				$cache = serialize( $money_config );
+				nv_set_cache( $module, $cache_file, $cache );
+			}
 		}
 
-		$xtpl = new XTemplate( 'block.product_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module );
+		$xtpl = new XTemplate( 'block.product_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
+		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . 'themes/' . $block_theme );
 		$xtpl->assign( 'NUMVIEW', $num_view );
 		$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
 
 		$db->sqlreset()
-			->select( 't1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt' )
+			->select( 't1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt, t1.showprice, t1.discount_id' )
 			->from( $db_config['prefix'] . '_' . $mod_data . '_rows t1' )
 			->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $mod_data . '_block t2 ON t1.id = t2.id' )
 			->where( 't2.bid= ' . $block_config['blockid'] . ' AND t1.status =1' )
@@ -153,10 +207,9 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			->limit( $num_get );
 
 		$list = nv_db_cache( $db->sql(), '', $module );
-
 		foreach( $list as $row )
 		{
-			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $array_cat_shops[$row['listcatid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
+			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
 
 			if( $row['homeimgthumb'] == 1 ) //image thumb
 			{
@@ -179,6 +232,28 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			$xtpl->assign( 'TITLE', $row['title'] );
 			$xtpl->assign( 'TITLE0', nv_clean60( $row['title'], 30 ) );
 			$xtpl->assign( 'SRC_IMG', $src_img );
+
+			if( $pro_config['active_price'] == '1' )
+			{
+				if( $row['showprice'] == '1' )
+				{
+					$price = nv_get_price_tmp( $module, $mod_data, $mod_file, $row['id'] );
+					$xtpl->assign( 'PRICE', $price );
+					if( $row['discount_id'] and $price['discount_percent'] > 0 )
+					{
+						$xtpl->parse( 'main.items.price.discounts' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.items.price.no_discounts' );
+					}
+					$xtpl->parse( 'main.items.price' );
+				}
+				else
+				{
+					$xtpl->parse( 'main.items.contact' );
+				}
+			}
 
 			$xtpl->parse( 'main.items' );
 		}

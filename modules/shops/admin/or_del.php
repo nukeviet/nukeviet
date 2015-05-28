@@ -17,38 +17,50 @@ $contents = "NO_" . $order_id;
 
 if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . session_id() ) )
 {
-	// Thong tin dat hang
-	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id );
-	$data_order = $result->fetch();
-
 	// Thong tin dat hang chi tiet
-	$listid = $listnum = array();
+	$list_order_i = $listid = $listnum = $listgroup = array();
 	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
 	while( $row = $result->fetch() )
 	{
-		$listid[] = $row['id'];
+		$list_order_i[] = $row['id'];
+		$listid[] = $row['proid'];
 		$listnum[] = $row['num'];
+
+		$list = '';
+		$result_group = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id'] );
+		$group = array();
+		while( list( $group_id ) = $result_group->fetch( 3 ) )
+		{
+			$group[] = $group_id;
+		}
+		asort( $group );
+		$listgroup[] = implode( ',', $group );
 	}
 
 	// Cong lai san pham trong kho
 	if( $pro_config['active_order_number'] == '0' )
 	{
-		product_number_order( $listid, $listnum, "+" );
+		product_number_order( $listid, $listnum, $listgroup, "+" );
 	}
 
 	// Tru lai so san pham da ban
 	product_number_sell( $listid, $listnum, "-" );
 
 	// Cap nhat lich su su dung ma giam gia
-	$array_coupons = array();
-	$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
-	$array_coupons = $result->fetch();
-	if( !empty( $array_coupons ) )
+	$num = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history WHERE order_id = ' . $order_id )->fetchColumn();
+	if( $num > 0 )
 	{
 		$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET uses_per_coupon_count = uses_per_coupon_count - 1 WHERE id = ' . $array_coupons['cid'] );
 		$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
 	}
 
+	if( !empty( $list_order_i ) )
+	{
+		foreach( $list_order_i as $order_i )
+		{
+			$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id_group WHERE order_i=" . $order_i );
+		}
+	}
 	$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
 	if( $exec )
 	{
@@ -77,22 +89,54 @@ elseif( $nv_Request->isset_request( 'listall', 'post,get' ) )
 			$data_order = $result->fetch();
 			$result->closeCursor();
 
+			// Thong tin dat hang chi tiet
+			$list_order_i = $listid = $listnum = $listgroup = array();
+			$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
+			while( $row = $result->fetch() )
+			{
+				$list_order_i[] = $row['id'];
+				$listid[] = $row['proid'];
+				$listnum[] = $row['num'];
+
+				$list = '';
+				$result_group = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id'] );
+				$group = array();
+				while( list( $group_id ) = $result_group->fetch( 3 ) )
+				{
+					$group[] = $group_id;
+				}
+				asort( $group );
+				$listgroup[] = implode( ',', $group );
+			}
+
 			// Cong lai san pham trong kho
 			if( $pro_config['active_order_number'] == '0' )
 			{
-				product_number_order( $data_order['listid'], $data_order['listnum'], "+" );
+				product_number_order( $listid, $listnum, $listgroup, "+" );
 			}
 
 			// Tru lai so san pham da ban
-			product_number_sell( $data_order['listid'], $data_order['listnum'], "-" );
+			product_number_sell( $listid, $listnum, "-" );
 
 			// Cap nhat lich su su dung ma giam gia
-			$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET uses_per_coupon_count = uses_per_coupon_count - 1 WHERE order_id = ' . $order_id );
-			$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
+			$num = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history WHERE order_id = ' . $order_id )->fetchColumn();
+			if( $num > 0 )
+			{
+				$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_coupons SET uses_per_coupon_count = uses_per_coupon_count - 1 WHERE order_id = ' . $order_id );
+				$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_coupons_history WHERE order_id=" . $order_id );
+			}
 
+			if( !empty( $list_order_i ) )
+			{
+				foreach( $list_order_i as $order_i )
+				{
+					$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id_group WHERE order_i=" . $order_i );
+				}
+			}
 			$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id WHERE order_id=" . $order_id );
 			if( $exec )
 			{
+				$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id_group WHERE order_i=" . $order_id );
 				$exec = $db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_orders WHERE order_id=" . $order_id . " AND transaction_status < 1" );
 				if( $exec )
 				{

@@ -83,7 +83,7 @@ $array_data = $result->fetch();
 $result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_product WHERE cid = ' . $array_data['id'] );
 $array_data['product'] = $result->fetch();
 
-if( NV_CURRENTTIME >= $view['date_start'] and ( empty( $view['uses_per_coupon'] ) or $view['uses_per_coupon_count'] < $view['uses_per_coupon'] ) and ( empty( $view['date_end'] ) or NV_CURRENTTIME < $view['date_end'] ) )
+if( NV_CURRENTTIME >= $array_data['date_start'] and ( empty( $array_data['uses_per_coupon'] ) or $array_data['uses_per_coupon_count'] < $array_data['uses_per_coupon'] ) and ( empty( $array_data['date_end'] ) or NV_CURRENTTIME < $array_data['date_end'] ) )
 {
 	$array_data['status'] = $lang_module['coupons_active'];
 }
@@ -92,7 +92,6 @@ else
 	$array_data['status'] = $lang_module['coupons_inactive'];
 }
 $array_data['discount_text'] = $array_data['type'] == 'p' ? '%' : ' ' . $pro_config['money_unit'];
-$array_data['free_shipping'] = $array_data['free_shipping'] ? $lang_global['yes'] : $lang_global['no'];
 $array_data['date_start'] = !empty( $array_data['date_start'] ) ? nv_date( 'd/m/Y', $array_data['date_start'] ) : 'N/A';
 $array_data['date_end'] = !empty( $array_data['date_end'] ) ? nv_date( 'd/m/Y', $array_data['date_end'] ) : $lang_module['coupons_unlimit'];
 
@@ -100,6 +99,7 @@ $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_data );
 $xtpl->assign( 'MONEY_UNIT', $pro_config['money_unit'] );
+$xtpl->assign( 'CID', $id );
 
 if( !empty( $array_data['product'] ) )
 {

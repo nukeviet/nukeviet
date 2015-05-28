@@ -95,12 +95,6 @@
 					<td><input class="form-control" type="text" name="total_amount" value="{ROW.total_amount}" />&nbsp;<em class="fa fa-info-circle fa-lg text-info" data-toggle="tooltip" title="{LANG.coupons_total_amount_note}">&nbsp;</em></td>
 				</tr>
 				<tr>
-					<td> {LANG.coupons_free_shipping} </td>
-					<td>
-						<input class="form-control" type="checkbox" name="free_shipping" value="1" {free_shipping_checked}>
-					</td>
-				</tr>
-				<tr>
 					<td> {LANG.coupons_product} </td>
 					<td>
 						<div class="message_body" style="overflow: auto">

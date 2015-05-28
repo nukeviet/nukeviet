@@ -11,16 +11,15 @@
 if( !defined( 'NV_MAINFILE' ) )	die( 'Stop!!!' );
 
 // Categories
-$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, newday, form, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, cat_allow_point, cat_number_point, cat_number_product, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
-$global_array_cat = nv_db_cache( $sql, 'catid', $module_name );
+$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, newday, typeprice, form, group_price, viewdescriptionhtml, numlinks, ' . NV_LANG_DATA . '_description AS description, ' . NV_LANG_DATA . '_descriptionhtml AS descriptionhtml, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, cat_allow_point, cat_number_point, cat_number_product, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
+$global_array_shops_cat = nv_db_cache( $sql, 'catid', $module_name );
 
 // Groups
-$sql = 'SELECT groupid, parentid, cateid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewgroup, numsubgroup, subgroupid, ' . NV_LANG_DATA . '_description AS description, inhome, indetail, in_order, ' . NV_LANG_DATA . '_keywords AS keywords, numpro, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_group ORDER BY sort ASC';
+$sql = 'SELECT groupid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewgroup, numsubgroup, subgroupid, ' . NV_LANG_DATA . '_description AS description, inhome, indetail, in_order, ' . NV_LANG_DATA . '_keywords AS keywords, numpro, image, is_require FROM ' . $db_config['prefix'] . '_' . $module_data . '_group ORDER BY sort ASC';
 $global_array_group = nv_db_cache( $sql, 'groupid', $module_name );
 
 // Lay ty gia ngoai te
-$sql = 'SELECT code, currency, exchange, round FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
-
+$sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
 $cache_file = NV_LANG_DATA . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
 if( ($cache = nv_get_cache( $module_name, $cache_file )) != false )
 {
@@ -37,6 +36,7 @@ else
 			'currency' => $row['currency'],
 			'exchange' => $row['exchange'],
 			'round' => $row['round'],
+			'number_format' => $row['number_format'],
 			'decimals' => $row['round'] > 1 ? $row['round'] : strlen( $row['round'] ) - 2,
 			'is_config' => ($row['code'] == $pro_config['money_unit']) ? 1 : 0
 		);
@@ -115,31 +115,33 @@ else
 }
 
 /**
- * nv_currency_conversion()
+ * nv_get_price()
  *
- * @param mixed $price
- * @param mixed $currency_curent
+ * @param mixed $pro_id
  * @param mixed $currency_convert
- * @param mixed $discount_id
  * @param mixed $number
+ * @param mixed $per_pro
  * @return
  */
-function nv_currency_conversion( $price, $currency_curent, $currency_convert, $discount_id = 0, $number = 1 )
+function nv_get_price( $pro_id, $currency_convert, $number = 1, $per_pro = false, $module = '' )
 {
-	global $pro_config, $money_config, $discounts_config;
+	global $db, $db_config, $site_mods, $module_data, $global_array_shops_cat, $pro_config, $money_config, $discounts_config;
 
-	if( $currency_curent == $pro_config['money_unit'] )
+	$return = array();
+	$discount_percent = 0;
+	$discount_unit = '';
+	$discount = 0;
+
+	$module_data = !empty( $module ) ? $site_mods[$module]['module_data'] : $module_data;
+	$product = $db->query( 'SELECT listcatid, product_price, money_unit, price_config, discount_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $pro_id )->fetch();
+	$price = $product['product_price'];
+
+	if( !$per_pro )
 	{
-		$price = $price / $money_config[$currency_convert]['exchange'];
+		$price = $price * $number;
 	}
-	elseif( $currency_convert == $pro_config['money_unit'] )
-	{
-		$price = $price * $money_config[$currency_curent]['exchange'];
-	}
-	$price = $price * $number;
 
-
-	$r = $money_config[$currency_convert]['round'];
+	$r = $money_config[$product['money_unit']]['round'];
 	$decimals = nv_get_decimals( $currency_convert );
 
 	if( $r > 1 )
@@ -151,47 +153,52 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 		$price = round( $price, $decimals );
 	}
 
-	$f = 0;
-	$discount_percent = 0;
-	$discount_unit = '';
-	$discount = 0;
-
-	if( isset( $discounts_config[$discount_id] ) )
+	if( $global_array_shops_cat[$product['listcatid']]['typeprice'] == 2 )
 	{
-		$_config = $discounts_config[$discount_id];
-		if( $_config['begin_time'] < NV_CURRENTTIME and ($_config['end_time'] > NV_CURRENTTIME or empty( $_config['end_time'] )) )
+		$_price_config = unserialize( $product['price_config'] );
+		if( !empty( $_price_config ) )
 		{
-			foreach( $_config['config'] as $_d )
+			foreach( $_price_config as $_p )
 			{
-				if( $_d['discount_from'] <= $number and $_d['discount_to'] >= $number )
+				if( $number <= $_p['number_to'] )
 				{
-					$discount_percent = $_d['discount_number'];
-					if( $_d['discount_unit'] == 'p' )
-					{
-						$discount_unit = '%';
-						$discount = ($price * ($discount_percent / 100));
-					}
-					else
-					{
-						$discount_unit = ' ' . $pro_config['money_unit'];
-						$discount = $discount_percent * $number;
-					}
-
-					if( $r > 1 )
-					{
-						$discount = round( $discount / $r ) * $r;
-					}
-					else
-					{
-						$discount = round( $discount, $decimals );
-					}
+					$price = $_p['price'] * ( !$per_pro ? $number : 1 );
 					break;
 				}
 			}
 		}
 	}
+	elseif( $global_array_shops_cat[$product['listcatid']]['typeprice'] == 1 )
+	{
+		if( isset( $discounts_config[$product['discount_id']] ) )
+		{
+			$_config = $discounts_config[$product['discount_id']];
+			if( $_config['begin_time'] < NV_CURRENTTIME and ($_config['end_time'] > NV_CURRENTTIME or empty( $_config['end_time'] )) )
+			{
+				foreach( $_config['config'] as $_d )
+				{
+					if( $_d['discount_from'] <= $number and $_d['discount_to'] >= $number )
+					{
+						$discount_percent = $_d['discount_number'];
+						if( $_d['discount_unit'] == 'p' )
+						{
+							$discount_unit = '%';
+							$discount = ($price * ($discount_percent / 100));
+						}
+						else
+						{
+							$discount_unit = ' ' . $pro_config['money_unit'];
+							$discount = $discount_percent * $number;
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
 
-	$return = array();
+	$price = nv_currency_conversion($price, $product['money_unit'], $currency_convert );
+
 	$return['price'] = $price; // Giá sản phẩm chưa format
 	$return['price_format'] = nv_number_format( $price, $decimals ); // Giá sản phẩm đã format
 
@@ -202,9 +209,33 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 
 	$return['sale'] = $price - $discount;// Giá bán thực tế của sản phẩm
 	$return['sale_format'] = nv_number_format( $return['sale'], $decimals );// Giá bán thực tế của sản phẩm đã format
-	$return['unit'] = $currency_convert;// Đơn vị của tiền tệ
+	$return['unit'] = $currency_convert;
 
 	return $return;
+}
+
+/**
+ * nv_currency_conversion()
+ *
+ * @param mixed $price
+ * @param mixed $currency_curent
+ * @param mixed $currency_convert
+ * @return
+ */
+function nv_currency_conversion( $price, $currency_curent, $currency_convert )
+{
+	global $pro_config, $money_config, $discounts_config;
+
+	if( $currency_curent == $pro_config['money_unit'] )
+	{
+		$price = $price / $money_config[$currency_convert]['exchange'];
+	}
+	elseif( $currency_convert == $pro_config['money_unit'] )
+	{
+		$price = $price * $money_config[$currency_curent]['exchange'];
+	}
+
+	return $price;
 }
 
 /**
@@ -217,7 +248,11 @@ function nv_currency_conversion( $price, $currency_curent, $currency_convert, $d
 
 function nv_number_format( $number, $decimals = 0 )
 {
-	$str = number_format( $number, $decimals, ',', '.' );
+	global $money_config, $pro_config;
+
+	$number_format = explode( '||', $money_config[$pro_config['money_unit']]['number_format'] );
+	$str = number_format( $number, $decimals, $number_format[0], $number_format[1] );
+
 	return $str;
 }
 
@@ -312,49 +347,38 @@ function nv_shipping_price( $weight, $weight_unit, $location_id, $shops_id, $car
 
 	if( $config_id )
 	{
-		$sql = 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_items WHERE cid = ' . $config_id;
-		$result = $db->query( $sql );
-		list( $id ) = $result->fetch( 3 );
+		$sql = 'SELECT iid FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location WHERE cid = ' . $config_id . ' AND lid = ' . $location_id;
+				$result = $db->query( $sql );
+				list( $iid ) = $result->fetch( 3 );
 
-		if( $id )
+		if( $iid )
 		{
 			// Weight config
-			$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid = ' . $id;
+			$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_weight WHERE iid = ' . $iid . ' ORDER BY weight';
 			$result = $db->query( $sql );
 			while( $array_weight = $result->fetch() )
 			{
 				$array_weight_config[$array_weight['iid']][] = $array_weight;
 			}
-
-			// Location config
-			$sql = 'SELECT lid FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier_config_location WHERE iid = ' . $id;
-			$result = $db->query( $sql );
-			while( list( $lid ) = $result->fetch( 3 ) )
-			{
-				$array_location_config[] = $lid;
-			}
 		}
 	}
 
-	if( in_array( $location_id, $array_location_config ) )
+	if( !empty( $array_weight_config ) )
 	{
-		if( !empty( $array_weight_config ) )
+		foreach( $array_weight_config as $weight_config )
 		{
-			foreach( $array_weight_config as $weight_config )
+			foreach( $weight_config as $config )
 			{
-				foreach( $weight_config as $config )
+				$config['weight'] = nv_weight_conversion( $config['weight'], $config['weight_unit'], $weight_unit );
+				if( $weight < $config['weight'] )
 				{
-					$config['weight'] = nv_weight_conversion( $config['weight'], $config['weight_unit'], $weight_unit );
-					if( $weight <= $config['weight'] )
-					{
-						$price = nv_currency_conversion( $config['carrier_price'], $config['carrier_price_unit'], $pro_config['money_unit'] );
-						break;
-					}
-					else
-					{
-						// Vuot muc gia cau hinh
+					$price = nv_currency_conversion( $config['carrier_price'], $config['carrier_price_unit'], $pro_config['money_unit'] );
+					break;
+				}
+				else
+				{
+					// Vuot muc gia cau hinh
 
-					}
 				}
 			}
 		}

@@ -16,11 +16,22 @@ $order_id = $nv_Request->get_int( 'order_id', 'get', 0 );
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . session_id() ) )
 {
+	$data_pro = array();
 	$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
 	// Thong tin don hang
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
+	if( $result->rowCount() == 0 )
+	{
+		Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
+		die();
+	}
 	$data = $result->fetch();
+
+	// Thong tin van chuyen
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id = ' . $data['order_id'] );
+	$data_shipping = $result->fetch();
+
 	$result = $db->query( 'SELECT amount FROM ' . $db_config['prefix'] . '_' . $module_data . '_coupons_history WHERE order_id=' . $data['order_id'] );
 	$data['coupons'] = $result->fetch();
 
@@ -30,15 +41,66 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		die();
 	}
 
+	// Sua don hang
+	if( $nv_Request->isset_request( 'edit', 'get' ) )
+	{
+		if( $data['transaction_status'] != 4 )
+		{
+			$_SESSION[$module_data . '_order_info'] = array(
+				'order_id' => $data['order_id'],
+				'order_code' => $data['order_code'],
+				'money_unit' => $data['unit_total'],
+				'order_name' => $data['order_name'],
+				'order_email' => $data['order_email'],
+				'order_address' => $data['order_address'],
+				'order_phone' => $data['order_phone'],
+				'order_note' => $data['order_note'],
+				'unit_total' => $data['unit_total'],
+				'order_url' => $link . 'payment&amp;order_id=' . $data['order_id'] . '&amp;checkss=' . $checkss,
+				'order_edit' => $link . 'payment&amp;unedit&amp;order_id=' . $data['order_id'] . '&amp;checkss=' . $checkss,
+				'checked' => 1 );
+		}
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart', true ) );
+		die();
+	}
+
+	// Huy sua don hang
+	if( $nv_Request->isset_request( 'unedit', 'get' ) )
+	{
+		if( isset( $_SESSION[$module_data . '_cart'] ) )
+		{
+			unset( $_SESSION[$module_data . '_cart'] );
+		}
+
+		if( isset( $_SESSION[$module_data . '_order_info'] ) )
+		{
+			unset( $_SESSION[$module_data . '_order_info'] );
+		}
+		Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=payment&order_id=' . $data['order_id'] . '&checkss=' . $checkss );
+		die();
+	}
+
+	if( ! empty( $_SESSION[$module_data . '_order_info'] ) )
+	{
+		$lang_module['order_edit'] = $lang_module['order_unedit'];
+	}
+
 	// Thong tin chi tiet mat hang trong don hang
 	$listid = $listnum = $listprice = $listgroup = array();
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
 	while( $row = $result->fetch() )
 	{
-		$listid[] = $row['id'];
+		$listid[] = $row['proid'];
 		$listnum[] = $row['num'];
 		$listprice[] = $row['price'];
-		$listgroup[] = $row['group_id'];
+
+		$result_group = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id'] );
+		$group = array();
+		while( list( $group_id ) = $result_group->fetch( 3 ) )
+		{
+			$group[] = $group_id;
+		}
+		$listgroup[] = $group;
 	}
 
 	$i = 0;
@@ -59,22 +121,22 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		$templistid = implode( ',', $arrayid );
 
 		$sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t2.' . NV_LANG_DATA . '_title, t1.money_unit, t1.discount_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $templistid . ') AND t1.status =1';
-
 		$result = $db->query( $sql );
 		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $unit, $money_unit, $discount_id ) = $result->fetch( 3 ) )
 		{
+			$price = nv_get_price( $id, $pro_config['money_unit'], $temppro[$id]['num'], true );
 			$data_pro[] = array(
 				'id' => $id,
 				'publtime' => $publtime,
 				'title' => $title,
 				'alias' => $alias,
 				'hometext' => $hometext,
-				'product_price' => $temppro[$id]['price'],
+				'product_price' => $price['sale'],
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
 				'discount_id' => $discount_id,
 				'product_group' => $temppro[$id]['group'],
-				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 				'product_number' => $temppro[$id]['num']
 			);
 		}
@@ -119,7 +181,7 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		}
 
 		// Get content intro
-		$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . '_content.txt';
+		$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . '_docpay_content.txt';
 		if( file_exists( $content_file ) )
 		{
 			$intro_pay = file_get_contents( $content_file );
@@ -171,13 +233,16 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 
 	// Lay so diem tich luy cua khach
 	$point = 0;
-	$result = $db->query( 'SELECT point_total FROM ' . $db_config['prefix'] . '_' . $module_data . '_point WHERE userid = ' . $user_info['userid'] . '' );
-	if( $result )
+	if( !empty( $user_info ) )
 	{
-		$point = $result->fetchColumn();
+		$result = $db->query( 'SELECT point_total FROM ' . $db_config['prefix'] . '_' . $module_data . '_point WHERE userid = ' . $user_info['userid'] );
+		if( $result )
+		{
+			$point = $result->fetchColumn();
+		}
 	}
 
-	$contents = call_user_func( 'payment', $data, $data_pro, $url_checkout, $intro_pay, $point );
+	$contents = call_user_func( 'payment', $data, $data_pro, $data_shipping, $url_checkout, $intro_pay, $point );
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
@@ -203,7 +268,7 @@ elseif( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $nv
 	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
 	while( $row = $result->fetch() )
 	{
-		$listid[] = $row['id'];
+		$listid[] = $row['proid'];
 		$listnum[] = $row['num'];
 		$listprice[] = $row['price'];
 		$listgroup[] = $row['group_id'];

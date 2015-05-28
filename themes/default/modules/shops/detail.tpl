@@ -1,282 +1,256 @@
 <!-- BEGIN: main -->
+<div id="fb-root"></div>
+<script type="text/javascript">
+	( function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id))
+				return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/{FACEBOOK_LANG}/all.js#xfbml=1&appId={FACEBOOK_APPID}";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div itemscope itemtype="http://schema.org/Product" style="display: none">
+	<span itemprop="name">{TITLE}</span>
+	<img itemprop="image" src="{SRC_PRO_FULL}" alt="{TITLE}" />
+	<span itemprop="description">{hometext}</span>
+	<span itemprop="mpn">{PRODUCT_CODE}</span>
+	<!-- BEGIN: allowed_rating_snippets -->
+	<span itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"> <span itemprop="ratingValue">{RATE_VALUE}</span> {LANG.trong} <span itemprop="reviewCount">{RATE_TOTAL} </span> {LANG.dg} </span>
+	<!-- END: allowed_rating_snippets -->
+	<span itemprop="offers" itemscope itemtype="http://schema.org/Offer"> <span itemprop="category">{CAT_TITLE}</span> <!-- BEGIN: price1 --> <span itemprop="price">{PRICE.sale_format}</span> <span itemprop="priceCurrency">{PRICE.unit}</span> <!-- END: price1 --> <span itemprop="availability">{LANG.detail_pro_number}: {PRODUCT_NUMBER} {pro_unit}</span> </span>
+</div>
+
 <div id="detail">
 	<div class="panel panel-default">
 		<div class="panel-body">
-			<div class="col-md-3 text-center">
-				<a href="{SRC_PRO_LAGE}" title="{TITLE}" <!-- BEGIN: shadowbox -->rel="shadowbox"<!-- END: shadowbox -->> <img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail"> </a>
-				<br />
-				<em class="fa fa-search-plus text-primary zoom_img">&nbsp;</em><a href="{SRC_PRO_LAGE}" title="{TITLE}" rel="shadowbox[miss]">{LANG.detail_view_lage_img}</a>
-				<!-- BEGIN: adminlink -->
-				<p>
-					{ADMINLINK}
-				</p>
-				<!-- END: adminlink -->
-			</div>
+			<div class="row">
+				<div class="col-xs-24 col-sm-6 text-center">
+					<img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail pointer" id="imageproduct" data-target="#imagemodal">
+               		<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									<h4 class="modal-title" id="myModalLabel">{TITLE}</h4>
+								</div>
+								<div class="modal-body">
+									<img src="{SRC_PRO_LAGE}" id="imagepreview" class="img-thumbnail" >
+								</div>
+							</div>
+						</div>
+					</div>
+					<br />
+					<!-- BEGIN: adminlink -->
+					<p>
+						{ADMINLINK}
+					</p>
+					<!-- END: adminlink -->
+					<!-- BEGIN: social_icon -->
+					<hr />
+					<ul style="padding: 0; margin-top: 5px;">
+						<li class="pull-left">
+							<div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false" data-share="true">
+								&nbsp;
+							</div>
+						</li>
+						<li class="pull-left">
+							<div class="g-plusone" data-size="medium"></div>
+						</li>
+					</ul>
+					<script type="text/javascript">
+						window.___gcfg = {
+							lang : nv_sitelang
+						};
+						(function() {
+							var po = document.createElement('script');
+							po.type = 'text/javascript';
+							po.async = true;
+							po.src = 'https://apis.google.com/js/plusone.js';
+							var s = document.getElementsByTagName('script')[0];
+							s.parentNode.insertBefore(po, s);
+						})();
+					</script>
+					<!-- END: social_icon -->
+				</div>
 
-			<div class="col-md-9">
-				<ul class="product_info">
-					<li>
-						<h2>{TITLE}</h2>
-					</li>
-					<li class="text-muted">
-						{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}
-					</li>
+				<div class="col-xs-24 col-sm-18">
+					<ul class="product_info">
+						<li>
+							<h2>{TITLE}</h2>
+						</li>
+						<li class="text-muted">
+							{DATE_UP} - {NUM_VIEW} {LANG.detail_num_view}
+						</li>
 
-					<!-- BEGIN: product_code -->
-					<li>
-						{LANG.product_code}: <strong>{PRODUCT_CODE}</strong>
-					</li>
-					<!-- END: product_code -->
+						<!-- BEGIN: product_code -->
+						<li>
+							{LANG.product_code}: <strong>{PRODUCT_CODE}</strong>
+						</li>
+						<!-- END: product_code -->
 
-					<!-- BEGIN: price -->
-					<li>
-						<p>
-							{LANG.detail_pro_price}:
-							<!-- BEGIN: discounts -->
-							<span class="money">{PRICE.sale_format} {PRICE.unit}</span>
-							<span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
-							<!-- END: discounts -->
-							<span class="money">{product_discounts} {money_unit}</span>
+						<!-- BEGIN: price -->
+						<li>
+							<p>
+								{LANG.detail_pro_price}:
+								<!-- BEGIN: discounts -->
+								<span class="money">{PRICE.sale_format} {PRICE.unit}</span>
+								<span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
+								<span class="money">{product_discounts} {money_unit}</span>
+								<!-- END: discounts -->
 
-							<!-- BEGIN: no_discounts -->
-							<span class="money">{PRICE.price_format} {PRICE.unit}</span>
-							<!-- END: no_discounts -->
-						</p>
-					</li>
-					<!-- END: price -->
+								<!-- BEGIN: no_discounts -->
+								<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+								<!-- END: no_discounts -->
+							</p>
+						</li>
+						<!-- END: price -->
 
-					<!-- BEGIN: contact -->
-					<li>
-						{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
-					</li>
-					<!-- END: contact -->
+						<!-- BEGIN: contact -->
+						<li>
+							{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
+						</li>
+						<!-- END: contact -->
 
-					<!-- BEGIN: group_detail -->
-					<li>
-						<!-- BEGIN: loop -->
+						<!-- BEGIN: group_detail -->
+						<li>
+							<!-- BEGIN: loop -->
 							<!-- BEGIN: maintitle -->
-							<div class="pull-left"><strong>{MAINTITLE}:</strong></div>
+							<div class="pull-left">
+								<strong>{MAINTITLE}:</strong>&nbsp;
+							</div>
 							<!-- END: maintitle -->
 
 							<!-- BEGIN: subtitle -->
-							<ul class="pull-left" style="padding: 0 10px 0">
-							<!-- BEGIN: loop -->
-							<li><a href="{SUBTITLE.link}" title="{SUBTITLE.title}">{SUBTITLE.title}</a></li>
-							<!-- END: loop -->
+							<ul class="pull-left list-inline" style="padding: 0 10px 0">
+								<!-- BEGIN: loop -->
+								<li>
+									{SUBTITLE.title}
+								</li>
+								<!-- END: loop -->
 							</ul>
 							<div class="clear"></div>
 							<!-- END: subtitle -->
+							<!-- END: loop -->
+						</li>
+						<!-- END: group_detail -->
+
+						<!-- BEGIN: custom_data -->
+						<!-- BEGIN: loop -->
+						<li>
+							<p>
+								<strong>{CUSTOM_LANG}:</strong> {CUSTOM_DATA}
+							</p>
+						</li>
 						<!-- END: loop -->
-					</li>
-					<!-- END: group_detail -->
+						<!-- END: custom_data -->
 
-					<!-- BEGIN: hometext -->
-					<li>
-						<p class="text-justify">
-							{hometext}
-						</p>
-					</li>
-					<!-- END: hometext -->
+						<!-- BEGIN: hometext -->
+						<li>
+							<p class="text-justify">
+								{hometext}
+							</p>
+						</li>
+						<!-- END: hometext -->
 
-					<!-- BEGIN: custom -->
-					<!-- BEGIN: loop -->
-					<li>
-						<p>
-							<strong>{custom.lang}:</strong> {custom.title}
-						</p>
-					</li>
-					<!-- END: loop -->
-					<!-- END: custom -->
+						<!-- BEGIN: promotional -->
+						<li>
+							<strong>{LANG.detail_promotional}:</strong> {promotional}
+						</li>
+						<!-- END: promotional -->
 
-					<!-- BEGIN: custom_lang -->
-					<!-- BEGIN: loop -->
-					<li>
-						<p>
-							<strong>{custom_lang.lang}:</strong> {custom_lang.title}
-						</p>
-					</li>
-					<!-- END: loop -->
-					<!-- END: custom_lang -->
-
-					<!-- BEGIN: promotional -->
-					<li>
-						<strong>{LANG.detail_promotional}:</strong> {promotional}
-					</li>
-					<!-- END: promotional -->
-
-					<!-- BEGIN: warranty -->
-					<li>
-						<strong>{LANG.detail_warranty}:</strong> {warranty}
-					</li>
-					<!-- END: warranty -->
-				</ul>
-				<hr />
-
-				<div class="row">
-					<!-- BEGIN: group -->
-					<!-- BEGIN: items -->
-					<div class="col-md-6">
-						{GROUP}
+						<!-- BEGIN: warranty -->
+						<li>
+							<strong>{LANG.detail_warranty}:</strong> {warranty}
+						</li>
+						<!-- END: warranty -->
+					</ul>
+					<hr />
+					<!-- BEGIN: gift -->
+					<div class="alert alert-info">
+						<div class="pull-left">
+							<em class="fa fa-gift fa-3x">&nbsp;</em>
+						</div>
+						<div class="pull-left">
+							<h4>{gift_content}</h4>
+						</div>
+						<div class="clearfix"></div>
 					</div>
-					<!-- END: items -->
-					<!-- END: group -->
-				</div>
-
-				<div class="clearfix">
-					&nbsp;
-				</div>
-
-				<div id="ratedata">
-					<!-- BEGIN: allowed_rating -->
-					<div class="clearfix">
-						<span class="rateavg_percent">{LANG.rateavg_percent}: {RATE_AVG_PERCENT}</span>
-						<form id="form3B" action="">
-							<div class="clearfix">
-								<div id="stringrating" class="small">
-									{STRINGRATING}
+					<!-- END: gift -->
+					<!-- BEGIN: group -->
+					<div class="well">
+						<div class="filter_product">
+							<!-- BEGIN: items -->
+							<div class="row">
+								<!-- BEGIN: header -->
+								<div class="col-xs-8 col-sm-5" style="margin-top: 4px">
+									{HEADER}
 								</div>
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.5star}
-									</div>
-									<div class="width-star-bg" value-data="5">
-										<input type="hidden" name="valuerate" value="5" />
-										<div class="width-star-value" title="{PERCENT_RATE.5}%" style="width:{PERCENT_RATE.5}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.5}
-									</div>
-								</div>
-								<br />
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.4star}
-									</div>
-									<div class="width-star-bg" value-data="4">
-										<input type="hidden" name="valuerate" value="4" />
-										<div class="width-star-value" title="{PERCENT_RATE.4}%" style="width:{PERCENT_RATE.4}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.4}
-									</div>
-								</div>
-								<br />
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.3star}
-									</div>
-									<div class="width-star-bg" value-data="3">
-										<input type="hidden" name="valuerate" value="3" />
-										<div class="width-star-value" title="{PERCENT_RATE.3}%" style="width:{PERCENT_RATE.3}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.3}
-									</div>
-								</div>
-								<br />
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.2star}
-									</div>
-									<div class="width-star-bg" value-data="2">
-										<input type="hidden" name="valuerate" value="2" />
-										<div class="width-star-value" title="{PERCENT_RATE.2}%" style="width:{PERCENT_RATE.2}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.2}
-									</div>
-								</div>
-								<br />
-
-								<div class="rate-star">
-									<div class="width-star-title">
-										{LANG.1star}
-									</div>
-									<div class="width-star-bg" value-data="1">
-										<input type="hidden" name="valuerate" value="1" />
-										<div class="width-star-value" title="{PERCENT_RATE.1}%" style="width:{PERCENT_RATE.1}%">
-											&nbsp;
-										</div>
-									</div>
-									<div class="width-star-num">
-										{RATINGDETAIL.1}
-									</div>
+								<!-- END: header -->
+								<div class="col-xs-16 col-sm-19 itemsgroup" data-groupid="{GROUPID}" data-header="{HEADER}">
+									<!-- BEGIN: loop -->
+									<label class="label_group <!-- BEGIN: active -->active<!-- END: active -->"><input type="radio" class="groupid" name="groupid[{GROUPID}]" value="{GROUP.groupid}" <!-- BEGIN: checked -->checked="checked" <!-- END: checked -->>{GROUP.title}</label>
+									<!-- END: loop -->
 								</div>
 							</div>
-						</form>
+							<!-- END: items -->
+						</div>
+						<span id="group_error">&nbsp;</span>
 					</div>
-					<!-- END: allowed_rating -->
+					<!-- END: group -->
+
+					<!-- BEGIN: product_number -->
+					<div class="well">
+						<div class="row">
+							<div class="col-xs-8 col-sm-5">
+								{LANG.detail_pro_number}
+							</div>
+							<div class="col-xs-16 col-sm-19">
+								<input type="number" name="num" value="1" min="1" max="{PRODUCT_NUMBER}" id="pnum" class="pull-left form-control" style="width: 100px; margin-right: 5px">
+								<span class="help-block pull-left" id="product_number">{LANG.detail_pro_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
+							</div>
+						</div>
+					</div>
+					<!-- END: product_number -->
+
+					<div class="clearfix"></div>
+
+					<!-- BEGIN: typepeice -->
+					<table class="table table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th class="text-right">{LANG.detail_pro_number}</th>
+								<th class="text-left">{LANG.cart_price} ({money_unit})</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- BEGIN: items -->
+							<tr>
+								<td class="text-right">{ITEMS.number_from} -> {ITEMS.number_to}</td>
+								<td class="text-left">{ITEMS.price}</td>
+							</tr>
+							<!-- END: items -->
+						</tbody>
+					</table>
+					<!-- END: typepeice -->
+
+					<!-- BEGIN: order -->
+					<button class="btn btn-danger btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 0); return false;">
+						<em class="fa fa-shopping-cart fa-lg">&nbsp;</em>
+						{LANG.add_cart}
+					</button>
+					<button class="btn btn-success btn-order" data-id="{proid}" onclick="cartorder_detail(this, '{POPUP}', 1); return false;">
+						<em class="fa fa-paper-plane-o fa-lg">&nbsp;</em>
+						{LANG.buy_now}
+					</button>
+					<!-- END: order -->
+					<!-- BEGIN: product_empty -->
+					<button class="btn btn-danger disabled">{LANG.product_empty}</button>
+					<!-- END: product_empty -->
 				</div>
 			</div>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-6">
-			<div style="margin-top: 6px">
-				<button class="btn btn-default btn-sm disabled">
-					{LANG.detail_share}:
-				</button>
-				<!-- BEGIN: allowed_print -->
-				<a rel="nofollow" href="{LINK_PRINT}" class="btn btn-default btn-sm" title="Print" id="click_print"> <em class="fa fa-print fa-lg fb">&nbsp;</em> </a>
-				<!-- END: allowed_print -->
-				<a onclick="share_facebook();" href="javascript:;" class="btn btn-default btn-sm" title="Share On Facebook"> <em class="fa fa-thumbs-o-up fa-lg fb">&nbsp;</em> </a>
-
-				<a class="btn btn-default btn-sm" onclick="share_twitter();" href="javascript:;" title="Share on Twitter"> <em class="fa fa-twitter fa-lg tw">&nbsp;</em> </a>
-
-				<a class="btn btn-default btn-sm google-plus-one" onclick="share_google();" href="javascript:;" title="Share on Google"> <em class="fa fa-google-plus google">&nbsp;</em> <span class="google">1</span> </a>
-			</div>
-		</div>
-		<div class="col-md-6">
-		    <!-- BEGIN: discount_default -->
-			<table class="table table-striped table-bordered table-hover">
-				<thead>
-					<tr>
-						<th class="text-right">{LANG.detail_pro_number}</th>
-						<th class="text-left">{LANG.cart_price} ({money_unit})</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- BEGIN: items -->
-					<tr>
-						<td class="text-right">{ITEMS.discount_from} -> {ITEMS.discount_to}</td>
-						<td class="text-left">{ITEMS.discount_price}</td>
-					</tr>
-					<!-- END: items -->
-				</tbody>
-			</table>
-			<!-- END: discount_default -->
-
-			<!-- BEGIN: order -->
-			<div class="pull-right" style="margin-top: 6px">
-				<span class="pull-left text-muted" style="margin: 6px 20px 0">{LANG.product_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
-				<input type="number" name="num" value="1" id="pnum" class="pull-left form-control" style="width: 70px">
-				<a href="javascript:void(0)" id="{proid}" title="{title_pro}" onclick="cartorder_detail(this)">
-				<button class="btn btn-warning btn-xs" style="margin: 5px 0 0 5px">
-					{LANG.add_product}
-				</button></a>
-			</div>
-			<!-- END: order -->
-
-			<!-- BEGIN: product_empty -->
-			<div class="pull-right" style="margin-top: 6px">
-				<button class="btn btn-danger disabled">
-					{LANG.product_empty}
-				</button>
-			</div>
-			<!-- END: product_empty -->
 		</div>
 	</div>
 
@@ -286,18 +260,13 @@
 		<!-- END: shop -->
 	</div>
 
+	<!-- BEGIN: product_detail -->
 	<div id="tabs" class="tabs">
 		<nav>
 			<ul>
 				<li>
 					<a href="#section-1"><em class="fa fa-bars">&nbsp;</em><span>{LANG.product_detail}</span></a>
 				</li>
-
-				<!-- BEGIN: discount_title -->
-				<li>
-					<a href="#section-4"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.discount_detail}</span></a>
-				</li>
-				<!-- END: discount_title -->
 
 				<!-- BEGIN: othersimg_title -->
 				<li>
@@ -311,36 +280,21 @@
 				</li>
 				<!-- END: comment_tab -->
 
+				<!-- BEGIN: allowed_rating_tab -->
 				<li>
-					<a href="#section-5"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.detail_newtab}</span></a>
+					<a href="#section-4"><em class="fa fa-star-o">&nbsp;</em><span>{LANG.rate_feedback} ({RATE_TOTAL})</span></a>
 				</li>
+				<!-- END: allowed_rating_tab -->
 			</ul>
 		</nav>
 		<div class="content">
 			<section id="section-1">
 				{DETAIL}
 			</section>
-
-			<!-- BEGIN: discount_content -->
-			<section id="section-4">
-				<h3>{DISCOUNT.title}</h3>
-				<p>
-					{DISCOUNT.begin_time}{DISCOUNT.end_time}, {DISCOUNT.text}
-				</p>
-				<ul>
-					<!-- BEGIN: items -->
-					<li>
-						{ITEMS}
-					</li>
-					<!-- END: items -->
-				</ul>
-			</section>
-			<!-- END: discount_content -->
-
 			<!-- BEGIN: othersimg -->
 			<section id="section-2">
 				<!-- BEGIN: loop -->
-				<div class="col-xs-6 col-md-3">
+				<div class="col-xs-12 col-md-6">
 					<a href="{IMG_SRC_OTHER}" class="thumbnail" rel="shadowbox[miss]"><img src="{IMG_SRC_OTHER}" style="max-height: 100px" /></a>
 				</div>
 				<!-- END: loop -->
@@ -352,15 +306,59 @@
 
 			<!-- BEGIN: comment -->
 			<section id="section-3">
-				<iframe src="{NV_COMM_URL}" onload = "nv_setIframeHeight( this.id )" id="fcomment" style="width: 100%; min-height: 300px; max-height: 1000px"></iframe>
+				{CONTENT_COMMENT}
 			</section>
 			<!-- END: comment -->
 
-			<!-- BEGIN: cust -->
-			<section id="section-5">
-				{custom}
+			<!-- BEGIN: allowed_rating -->
+			<section id="section-4">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row form-review">
+							<div class="col-xs-24 col-sm-11 border border-right">
+								<form id="review_form">
+									<div class="form-group">
+										<input type="text" class="form-control" name="sender" value="{SENDER}" placeholder="{LANG.profile_user_name}">
+									</div>
+									<div class="form-group">
+										<div class="rate-ex2-cnt">
+											<div id="1" class="rate-btn-1 rate-btn"></div>
+											<div id="2" class="rate-btn-2 rate-btn"></div>
+											<div id="3" class="rate-btn-3 rate-btn"></div>
+											<div id="4" class="rate-btn-4 rate-btn"></div>
+											<div id="5" class="rate-btn-5 rate-btn"></div>
+										</div>
+									</div>
+									<div class="form-group">
+										<textarea name="comment" class="form-control" placeholder="{LANG.rate_comment}"></textarea>
+									</div>
+									<!-- BEGIN: captcha -->
+									<div class="form-group">
+										<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control pull-left" style="width: 40%" placeholder="{LANG.rate_captcha}" />
+										<div class="pull-left" style="margin-top: 5px">
+											&nbsp;&nbsp;<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{LANG.captcha}" id="vimg" />
+											&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','fcode_iavim');">&nbsp;</em>
+										</div>
+										<div class="clear"></div>
+									</div>
+									<!-- END: captcha -->
+									<div class="form-group">
+										<input type="submit" class="btn btn-primary" value="{LANG.rate}" />
+									</div>
+								</form>
+							</div>
+							<div class="col-xs-24 col-sm-13 border">
+								<div id="rate_list">
+									<p class="text-center">
+										<em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</section>
-			<!-- END: cust-->
+			<!-- END: allowed_rating -->
 		</div>
 	</div>
 
@@ -385,42 +383,85 @@
 		</div>
 	</div>
 	<!-- END: other_view -->
+	<!-- END: product_detail -->
 </div>
 <div class="msgshow" id="msgshow"></div>
-<script type="text/javascript" src="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/tabresponsive.js"></script>
+<!-- BEGIN: allowed_rating_js -->
 <script type="text/javascript">
-		new CBPFWTabs( document.getElementById( 'tabs' ) );
+	$("#rate_list").load('{LINK_REVIEW}&showdata=1');
+	var rating = 0;
+	$('.rate-btn').hover(function() {
+		$('.rate-btn').removeClass('rate-btn-hover');
+		rating = $(this).attr('id');
+		for (var i = rating; i >= 0; i--) {
+			$('.rate-btn-' + i).addClass('rate-btn-hover');
+		};
+	});
 
-	$(function(){
-	<!-- BEGIN: allowed_print_js -->
-	$('#click_print').click(function(event){
-	var href = $(this).attr("href");
-	event.preventDefault();
-	nv_open_browse(href, '', 640, 500, 'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');
-	return false;
+	$('#review_form').submit(function() {
+		var sender = $(this).find('input[name="sender"]').val();
+		var comment = $(this).find('textarea[name="comment"]').val();
+		var fcode = $(this).find('input[name="fcode"]').val();
+		$.ajax({
+			type : "POST",
+			url : '{LINK_REVIEW}' + '&nocache=' + new Date().getTime(),
+			data : 'sender=' + sender + '&rating=' + rating + '&comment=' + comment + '&fcode=' + fcode,
+			success : function(data) {
+				var s = data.split('_');
+				if (s[0] == 'OK') {
+					$('#review_form input[name="sender"], #review_form input[name="fcode"], #review_form textarea').val('');
+					$('.rate-btn').removeClass('rate-btn-hover');
+					$("#rate_list").load('{LINK_REVIEW}&showdata=1');
+				}
+				alert(s[1]);
+			}
+		});
+		return false;
 	});
-	<!-- END: allowed_print_js -->
+</script>
+<!-- END: allowed_rating_js -->
 
-	<!-- BEGIN: allowed_rating_js -->
-	$(".width-star-bg").click(function(event){
-	event.preventDefault();
-	var val = $(this).attr("value-data");
-	if( confirm( '{LANG.rateconfirm}' )){
-	$.ajax({
-	type: "POST",
-	url: '{LINK_RATE}'+'&nocache=' + new Date().getTime(),
-	data: 'val=' + val,
-	success: function(data){
-	var s = data.split('_');
-	if( s[0] == 'OK' ){
-	$("#ratedata").load('{LINK_RATE}&showdata=1');
-	}
-	alert(s[1]);
-	}
+<!-- BEGIN: allowed_print_js -->
+<script type="text/javascript">
+	$(function() {
+		$('#click_print').click(function(event) {
+			var href = $(this).attr("href");
+			event.preventDefault();
+			nv_open_browse(href, '', 640, 500, 'resizable=no,scrollbars=yes,toolbar=no,location=no,status=no');
+			return false;
+		});
 	});
-	}
-	return false;
+</script>
+<!-- END: allowed_print_js -->
+
+<!-- BEGIN: imagemodal -->
+<script type="text/javascript">
+    $("#imageproduct").on("click", function() {
+    	$('#imagemodal').modal('show');
+    });
+</script>
+<!-- END: imagemodal -->
+
+<script type="text/javascript">
+	var detail_error_group = '{LANG.detail_error_group}';
+
+	$('.groupid').click(function() {
+		var _this = $('input[name="'+$(this).attr('name')+'"]');
+		$('input[name="'+$(this).attr('name')+'"]').parent().css('border-color', '#ccc');
+		if( $(this).is(':checked') )
+		{
+		    $(this).parent().css('border-color', 'blue');
+		}
+		$('#group_error').css( 'display', 'none' );
+		check_price( '{proid}', '{pro_unit}' );
 	});
-	<!-- END: allowed_rating_js -->
-	});</script>
+
+	$('#pnum').change(function(){
+		if( intval($(this).val()) > intval($(this).attr('max')) ){
+			alert('{LANG.detail_error_number} ' + $(this).attr('max') );
+			$(this).val( $(this).attr('max') );
+		}
+	});
+</script>
+
 <!-- END: main -->

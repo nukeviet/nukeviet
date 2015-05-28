@@ -8,7 +8,7 @@
 	<!-- BEGIN: error -->
 	<div class="alert alert-warning">{error}</div>
 	<!-- END: error -->
-	<form class="form-inline" action="" method="post">
+	<form class="form-inline" action="{FORM_ACTION}" method="post">
 		<input type="hidden" name ="id" value="{DATA.id}" />
 		<input type="hidden" name ="parentid_old" value="{DATA.parentid}" />
 		<input name="savelocation" type="hidden" value="1" />

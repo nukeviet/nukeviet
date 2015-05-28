@@ -46,7 +46,7 @@ $array_info[] = array(
 $number = $db->query( 'SELECT SUM(product_number) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows' )->fetchColumn();
 $array_info[] = array(
 	'title' => $lang_module['product_number_all_store'],
-	'value' => $number,
+	'value' => !empty( $number ) ? $number : 0,
 	'link' => $link . '=items',
 	'unit' => $lang_module['product_unit']
 );

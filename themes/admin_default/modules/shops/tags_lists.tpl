@@ -1,6 +1,12 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col class="w100" />
+			<col span="2" />
+			<col class="w100" />
+			<col class="w150" />
+		</colgroup>
 		<thead>
 			<tr>
 				<th class="text-center">{LANG.number}</th>
@@ -16,7 +22,7 @@
 				<td class="text-center">{ROW.number}</td>
 				<td><a href="{ROW.link}">{ROW.alias}</a></td>
 				<td>
-					{ROW.keywords} 
+					{ROW.keywords}
 					<!-- BEGIN: incomplete -->
 				 	<em class="text-danger fa fa-lg fa-warning tags-tip" data-toggle="tooltip" data-placement="top" title="{LANG.tags_no_description}">&nbsp;</em>
 					<!-- END: incomplete -->

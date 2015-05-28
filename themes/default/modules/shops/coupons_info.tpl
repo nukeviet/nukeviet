@@ -11,13 +11,10 @@
 		<!-- BEGIN: total_amount -->
 		<li><strong>{LANG.coupons_total_amount}</strong>: {DATA.total_amount} {MONEY_UNIT}</li>
 		<!-- END: total_amount -->
-		<!-- BEGIN: free_shipping -->
-		<li><strong>{LANG.coupons_free_shipping}</strong>: {GLANG.yes}</li>
-		<!-- END: free_shipping -->
 		<li><strong>{LANG.coupons_begin_time}</strong>: {DATA.date_start}</li>
 		<li><strong>{LANG.coupons_end_time}</strong>: {DATA.date_end}</li>
 	</ul>
-	<label class="pull-right"><input type="checkbox" name="coupons_uses" id="coupons_uses" />{LANG.coupons_uses}</label>
+	<label class="pull-right"><input type="checkbox" name="coupons_uses" id="coupons_uses" {COUPONS_CHECK} />{LANG.coupons_uses}</label>
 	<div class="clear"></div>
 </div>
 <script type="text/javascript">
@@ -25,12 +22,12 @@
 		$('#coupons_uses').change(function() {
 			var coupons_code = $('#coupons_code').val();
 			if($(this).is(":checked")) {
-				$("#total").load(urload + '&coupons_check=1&coupons_code=' + coupons_code + '&t=2');
+				$("#total").load(urload + '&coupons_check=1&coupons_load=1&coupons_code=' + coupons_code + '&t=2');
 				$("#cart_" + nv_module_name).load(urload + '&coupons_check=1&coupons_code=' + coupons_code);
 			}
 			else
 			{
-				$("#total").load(urload + '&coupons_check=0&coupons_code=' + coupons_code + '&t=2');
+				$("#total").load(urload + '&coupons_check=0&coupons_load=1&coupons_code=' + coupons_code + '&t=2');
 				$("#cart_" + nv_module_name).load(urload + '&coupons_check=0&coupons_code=' + coupons_code);
 			}
 		});

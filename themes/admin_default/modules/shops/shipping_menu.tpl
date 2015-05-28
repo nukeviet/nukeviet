@@ -1,8 +1,8 @@
 <div class="row">
-	<div class="col-xs-4">
-		<strong>Tổng số yêu cầu vận chuyển:</strong> <span class="text-danger">103</span> <br /><strong>Đã xử lý:</strong> 55
-	</div>
 	<div class="col-xs-8">
+
+	</div>
+	<div class="col-xs-16">
 		<div class="btn-group pull-right">
 			<button type="button" class="btn btn-primary" id="shipping">
 				{LANG.shipping}

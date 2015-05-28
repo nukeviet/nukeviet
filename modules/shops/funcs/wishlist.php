@@ -33,6 +33,9 @@ if( preg_match( '/^page\-([0-9]+)$/', ( isset( $array_op[1] ) ? $array_op[1] : '
 $data_content = array();
 $array_wishlist_id = implode( ',', $array_wishlist_id );
 
+$compare_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
+$compare_id = unserialize( $compare_id );
+
 // Fetch Limit
 $db->sqlreset()->select( 'COUNT(*)' )->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )->where( 't1.inhome=1 AND t1.status =1 AND id IN (' . $array_wishlist_id . ')' );
 
@@ -80,7 +83,7 @@ while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt,
 		'money_unit' => $money_unit,
 		'showprice' => $showprice,
 		'newday' => $newday,
-		'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+		'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 		'link_order' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setcart&amp;id=' . $id
 	);
 }
@@ -94,7 +97,7 @@ if( empty( $data_content ) and $page > 1 )
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=wishlist';
 $html_pages = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
-$contents = call_user_func( 'wishlist', $data_content, $html_pages );
+$contents = call_user_func( 'wishlist', $data_content, $compare_id, $html_pages );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

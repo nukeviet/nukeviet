@@ -53,10 +53,17 @@ $listid = $listnum = $listprice = $listgroup = array();
 $result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id );
 while( $row = $result->fetch() )
 {
-	$listid[] = $row['id'];
+	$listid[] = $row['proid'];
 	$listnum[] = $row['num'];
 	$listprice[] = $row['price'];
-	$listgroup[] = $row['group_id'];
+
+	$result_group = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id'] );
+	$group = array();
+	while( list( $group_id ) = $result_group->fetch( 3 ) )
+	{
+		$group[] = $group_id;
+	}
+	$listgroup[] = $group;
 }
 
 $data_pro = array();
@@ -65,23 +72,25 @@ $i = 0;
 foreach( $listid as $id )
 {
 	$sql = 'SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.product_price,t2.' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 WHERE t1.product_unit = t2.id AND t1.id =' . $id . ' AND t1.status =1 AND t1.publtime < ' . NV_CURRENTTIME . ' AND (t1.exptime=0 OR t1.exptime>' . NV_CURRENTTIME . ')';
-
 	$result = $db->query( $sql );
-
-	list( $id, $_catid, $product_code, $publtime, $title, $alias, $product_price, $unit ) = $result->fetch( 3 );
-	$data_pro[] = array(
-		'id' => $id,
-		'publtime' => $publtime,
-		'title' => $title,
-		'alias' => $alias,
-		'product_price' => $listprice[$i] * $listnum[$i],
-		'product_code' => $product_code,
-		'product_unit' => $unit,
-		'link_pro' => $link . $global_array_cat[$_catid]['alias'] . '/' . $alias . '-' . $id,
-		'product_number' => $listnum[$i],
-		'product_group' => isset( $listgroup[$i] ) ? $listgroup[$i] : ''
-	);
-	++$i;
+	if( $result->rowCount() )
+	{
+		list( $id, $_catid, $product_code, $publtime, $title, $alias, $product_price, $unit ) = $result->fetch( 3 );
+		$data_pro[] = array(
+			'id' => $id,
+			'publtime' => $publtime,
+			'title' => $title,
+			'alias' => $alias,
+			'product_price' => $listprice[$i],
+			'product_price_total' => $listprice[$i] * $listnum[$i],
+			'product_code' => $product_code,
+			'product_unit' => $unit,
+			'link_pro' => $link . $global_array_shops_cat[$_catid]['alias'] . '/' . $alias . '-' . $id,
+			'product_number' => $listnum[$i],
+			'product_group' => isset( $listgroup[$i] ) ? $listgroup[$i] : ''
+		);
+		++$i;
+	}
 }
 
 // Thong tin van chuyen
@@ -96,34 +105,72 @@ if( $data_content['transaction_status'] == '4' )
 $xtpl = new XTemplate( 'or_view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'dateup', date( 'd-m-Y', $data_content['order_time'] ) );
-$xtpl->assign( 'moment', date( 'h:i', $data_content['order_time'] ) );
+$xtpl->assign( 'moment', date( 'H:i', $data_content['order_time'] ) );
 $xtpl->assign( 'DATA', $data_content );
 $xtpl->assign( 'order_id', $data_content['order_id'] );
 
-$i = 0;
+$array_group_main = array( );
+if( !empty( $global_array_group ) )
+{
+	foreach( $global_array_group as $array_group )
+	{
+		if( $array_group['indetail'] and $array_group['lev'] == 0 )
+		{
+			$array_group_main[] = $array_group['groupid'];
+			$xtpl->assign( 'MAIN_GROUP', $array_group );
+			$xtpl->parse( 'main.main_group' );
+		}
+	}
+}
+
+$j = 0;
 foreach( $data_pro as $pdata )
 {
 	$xtpl->assign( 'product_code', $pdata['product_code'] );
 	$xtpl->assign( 'product_name', $pdata['title'] );
 	$xtpl->assign( 'product_number', $pdata['product_number'] );
 	$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
+	$xtpl->assign( 'product_price_total', nv_number_format( $pdata['product_price_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
 	$xtpl->assign( 'product_unit', $pdata['product_unit'] );
 	$xtpl->assign( 'link_pro', $pdata['link_pro'] );
-	$xtpl->assign( 'pro_no', $i + 1 );
+	$xtpl->assign( 'pro_no', $j + 1 );
 
+	// Nhóm hiển thị cùng sản phẩm
+	foreach( $array_group_main as $group_main_id )
+	{
+		$array_sub_group = GetGroupID( $pdata['id'] );
+		for( $i = 0; $i < count( $array_group_main ); $i++ )
+		{
+			$data = array( 'title' => '', 'link' => '' );
+			foreach( $array_sub_group as $sub_group_id )
+			{
+				$item = $global_array_group[$sub_group_id];
+				if( $item['parentid'] == $group_main_id )
+				{
+					$data['title'] = $item['title'];
+					$data['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=group/' . $item['alias'];
+				}
+			}
+			$xtpl->assign( 'SUB_GROUP', $data );
+		}
+		$xtpl->parse( 'main.loop.sub_group' );
+	}
+
+	// Nhóm thuộc tính sản phẩm khách hàng chọn
 	if( ! empty( $pdata['product_group'] ) )
 	{
-		$groupid = explode( ',', $pdata['product_group'] );
-		foreach( $groupid as $id )
+		foreach( $pdata['product_group'] as $groupid )
 		{
-			$xtpl->assign( 'group_title', $global_array_group[$id]['title'] );
+			$items = $global_array_group[$groupid];
+			$items['parent_title'] = $global_array_group[$items['parentid']]['title'];
+			$xtpl->assign( 'group', $items );
 			$xtpl->parse( 'main.loop.display_group.item' );
 		}
 		$xtpl->parse( 'main.loop.display_group' );
 	}
 
 	$xtpl->parse( 'main.loop' );
-	++$i;
+	++$j;
 }
 
 // Thong tin van chuyen
@@ -199,7 +246,7 @@ if( $data_content['transaction_status'] != '4' )
 	$action_pay = '&action=pay';
 	$xtpl->parse( 'main.onpay' );
 }
-elseif( !$data_content['is_lock'] )
+else
 {
 	$lang_module['order_submit_pay_comfix'] = $lang_module['order_submit_unpay_comfix'];
 	$xtpl->parse( 'main.unpay' );

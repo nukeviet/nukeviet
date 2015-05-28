@@ -25,7 +25,7 @@ if( ! function_exists( 'nv_others_product' ) )
 
 		if( $op == 'detail' )
 		{
-			global $module_name, $lang_module, $module_info, $module_file, $global_array_cat, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config;
+			global $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config;
 
 			$xtpl = new XTemplate( 'block.others_product.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 			$xtpl->assign( 'LANG', $lang_module );
@@ -61,16 +61,33 @@ if( ! function_exists( 'nv_others_product' ) )
 					$src_img = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/shops/no-image.jpg';
 				}
 
-				$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$listcatid_i]['alias'] . '/' . $alias_i . '-' . $id_i . $global_config['rewrite_exturl'] );
+				$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$listcatid_i]['alias'] . '/' . $alias_i . '-' . $id_i . $global_config['rewrite_exturl'] );
 				$xtpl->assign( 'title', $title_i );
 				$xtpl->assign( 'src_img', $src_img );
 				$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $addtime_i ) );
-				if( $pro_config['active_price'] == '1' and $showprice_i == '1' )
+
+				if( $pro_config['active_price'] == '1' )
 				{
-					$product_price = nv_currency_conversion( $product_price_i, $money_unit_i, $pro_config['money_unit'], $discount_id_i );
-					$xtpl->assign( 'PRICE', $product_price );
-					$xtpl->parse( 'main.loop.price' );
+					if( $showprice_i == '1' )
+					{
+						$price = nv_get_price( $id_i, $money_unit_i );
+						$xtpl->assign( 'PRICE', $price );
+						if( $discount_id_i and $price['discount_percent'] > 0 )
+						{
+							$xtpl->parse( 'main.loop.price.discounts' );
+						}
+						else
+						{
+							$xtpl->parse( 'main.loop.price.no_discounts' );
+						}
+						$xtpl->parse( 'main.loop.price' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.loop.contact' );
+					}
 				}
+
 				$bg = ( $i % 2 == 0 ) ? 'bg' : '';
 				$xtpl->assign( 'bg', $bg );
 				$xtpl->parse( 'main.loop' );

@@ -8,17 +8,54 @@
  * @Createdate 2-10-2010 18:49
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( !defined( 'NV_IS_FILE_ADMIN' ) )
+	die( 'Stop!!!' );
 
-$id = $nv_Request->get_int( 'id', 'post,get', 0 );
+$id = $nv_Request->get_int( 'id', 'get', 0 );
 $contents = "NO_" . $id;
 
 if( $id > 0 )
 {
-	$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id;
-	if( $db->exec( $sql ) )
+	$template = $db->query( 'SELECT title, alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE id = ' . $id )->fetch();
+
+	$result = $db->query( 'SELECT fid, listtemplate, field FROM ' . $db_config['prefix'] . '_' . $module_data . '_field' );
+	if( $result->rowCount() )
 	{
-		$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_info_".$id);		
+		while( list( $fid, $listtemplate, $field ) = $result->fetch( 3 ) )
+		{
+			$listtemplate = explode( '|', $listtemplate );
+			if( in_array( $id, $listtemplate ) )
+			{
+				if( count( $listtemplate ) > 1 )
+				{
+					$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id );
+					$db->query( "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $module_data . "_info_" . $id );
+
+					unset( $listtemplate[array_search( $id, $listtemplate )] );
+
+					$listtemplate = implode( '|', $listtemplate );
+					$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET listtemplate = " . $listtemplate . " WHERE fid = " . $fid );
+
+					@nv_deletefile( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $template['alias'] ) . ".tpl" );
+
+					$contents = "OK_" . $id;
+				}
+				else
+				{
+					$contents = "NO_" . sprintf( $lang_module['template_error_only'], $field, $template['title'] );
+				}
+			}
+			else
+			{
+				$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id );
+				$contents = "OK_" . $id;
+			}
+		}
+	}
+	else
+	{
+		$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id );
+		@nv_deletefile( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $template['alias'] ) . ".tpl" );
 		$contents = "OK_" . $id;
 	}
 }
@@ -32,14 +69,46 @@ else
 	{
 		if( $id > 0 )
 		{
-			$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id;
-			$db->query( $sql );			
-			$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_info_".$id);		
-			
+			$template = $db->query( 'SELECT title, alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE id = ' . $id )->fetch();
+
+			$result = $db->query( 'SELECT fid, listtemplate, field FROM ' . $db_config['prefix'] . '_' . $module_data . '_field' );
+			if( $result->rowCount() )
+			{
+				while( list( $fid, $listtemplate, $field ) = $result->fetch( 3 ) )
+				{
+					$listtemplate = explode( '|', $listtemplate );
+					if( in_array( $id, $listtemplate ) )
+					{
+						if( count( $listtemplate ) > 1 )
+						{
+							$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id );
+							$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_info_" . $id );
+
+							unset( $listtemplate[array_search( $id, $listtemplate )] );
+							$listtemplate = implode( '|', $listtemplate );
+							$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET listtemplate = " . $listtemplate . " WHERE fid = " . $fid );
+
+							@nv_deletefile( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $template['alias'] ) . ".tpl" );
+						}
+						else
+						{
+							$contents = "NO_" . sprintf( $lang_module['template_error_only'], $field, $template['title'] );
+						}
+					}
+					else
+					{
+						$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id );
+						$contents = "OK_" . $id;
+					}
+				}
+			}
+			else
+			{
+				$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id );
+				$contents = "OK_" . $id;
+			}
 		}
 	}
-
-	$contents = "OK_0";
 }
 
 nv_del_moduleCache( $module_name );

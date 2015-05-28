@@ -1,10 +1,15 @@
 <!-- BEGIN: main -->
 <div id="category">
     <div class="page-header">
-        <h1>{CAT_NAME}</h1>
+        <h1>{CAT_NAME} ({count} {LANG.title_products})</h1>
+        <!-- BEGIN: viewdescriptionhtml -->
 		<!-- BEGIN: image -->
-		<img src="{IMAGE}" class="img-responsive" alt="{CAT_NAME}">
+		<div class="text-center">
+			<img src="{IMAGE}" class="img-thumbnail" alt="{CAT_NAME}">
+		</div>
 		<!-- END: image -->
+		<p>{DESCRIPTIONHTML}</p>
+		<!-- END: viewdescriptionhtml -->
     </div>
 
     <!-- BEGIN: displays -->
@@ -14,6 +19,12 @@
             <!-- BEGIN: sorts -->
                 <option value="{key}" {se}> {value}</option>
             <!-- END: sorts -->
+        </select>
+        <label class="control-label">{LANG.title_viewnum}</label>
+        <select name="viewtype" id="viewtype" class="form-control input-sm" onchange="nv_chang_viewtype();">
+            <!-- BEGIN: viewtype -->
+                <option value="{VIEWTYPE.key}" {VIEWTYPE.selected}> {VIEWTYPE.value}</option>
+            <!-- END: viewtype -->
         </select>
     </div>
     <div class="clear">&nbsp;</div>
@@ -33,6 +44,9 @@
             	<!-- BEGIN: point -->
             	<span class="label label-info" title="{point_note}">+{point}</span>
             	<!-- END: point -->
+            	<!-- BEGIN: gift -->
+            	<span class="label label-success">+<em class="fa fa-gift fa-lg">&nbsp;</em></span>
+            	<!-- END: gift -->
     			<br />
     			<!-- BEGIN: product_code -->
     			{LANG.product_code}: <strong>{PRODUCT_CODE}</strong>
@@ -75,7 +89,7 @@
                 <!-- END: compare -->
 
     			<!-- BEGIN: order -->
-    			<a href="javascript:void(0)" id="{id}" title="{title_pro}" onclick="cartorder(this)"><button class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
+    			<a href="javascript:void(0)" id="{id}" title="{title_pro}" onclick="cartorder(this, {GROUP_REQUIE}, '{link_pro}')"><button class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
     			<!-- END: order -->
 
 				<!-- BEGIN: product_empty -->
@@ -89,9 +103,26 @@
 		</div>
 	</div>
 	<!-- END: row -->
-	<div class="pages">
+	<div class="text-center">
 		{pages}
 	</div>
 </div>
+
+<!-- BEGIN: modal_loaded -->
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{LANG.add_product}</h4>
+			</div>
+			<div class="modal-body">
+				<em class="fa fa-spinner fa-spin">&nbsp;</em>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END: modal_loaded -->
+
 <div class="msgshow" id="msgshow"></div>
 <!-- END: main -->

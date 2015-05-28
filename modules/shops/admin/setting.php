@@ -16,8 +16,8 @@ if( defined( 'NV_EDITOR' ) )
 }
 
 $currencies_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/currencies.ini', true );
-
 $data = $module_config[$module_name];
+
 $active_payment_old = 0;
 if( ! empty( $data ) )
 {
@@ -30,6 +30,14 @@ $page_title = $lang_module['setting'];
 
 $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
 $error = "";
+
+$groups_list = array();
+$result = $db->query( 'SELECT group_id, title, idsite FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE group_id NOT IN ( 4, 5, 6 ) AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight' );
+while( $row = $result->fetch() )
+{
+	if( $row['group_id'] < 9 ) $row['title'] = $lang_global['level' . $row['group_id']];
+	$groups_list[$row['group_id']] = ( $global_config['idsite'] > 0 and empty( $row['idsite'] ) ) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
+}
 
 if( $savesetting == 1 )
 {
@@ -45,24 +53,39 @@ if( $savesetting == 1 )
 	$data['home_view'] = $nv_Request->get_string( 'home_view', 'post', '' );
 	$data['format_order_id'] = $nv_Request->get_string( 'format_order_id', 'post', '' );
 	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );
-	$data['address'] = $nv_Request->get_string( 'address', 'post', '' );
+	$data['facebookappid'] = $nv_Request->get_string( 'facebookappid', 'post', '' );
 	$data['active_order'] = $nv_Request->get_int( 'active_order', 'post', 0 );
+	$data['active_order_popup'] = $nv_Request->get_int( 'active_order_popup', 'post', 0 );
+	$data['active_order_non_detail'] = $nv_Request->get_int( 'active_order_non_detail', 'post', 0 );
 	$data['active_price'] = $nv_Request->get_int( 'active_price', 'post', 0 );
 	$data['active_order_number'] = $nv_Request->get_int( 'active_order_number', 'post', 0 );
+	$data['order_day'] = $nv_Request->get_int( 'order_day', 'post', 0 );
 	$data['active_payment'] = $nv_Request->get_int( 'active_payment', 'post', 0 );
 	$data['active_showhomtext'] = $nv_Request->get_int( 'active_showhomtext', 'post', 0 );
+	$_groups_notify = $nv_Request->get_array( 'groups_notify', 'post', array() );
+	$data['groups_notify'] = ! empty( $_groups_notify ) ? implode( ',', array_intersect( $_groups_notify, array_keys( $groups_list ) ) ) : '';
 	$data['active_tooltip'] = $nv_Request->get_int( 'active_tooltip', 'post', 0 );
 	$data['show_product_code'] = $nv_Request->get_int( 'show_product_code', 'post', 0 );
 	$data['show_compare'] = $nv_Request->get_int( 'show_compare', 'post', 0 );
 	$data['show_displays'] = $nv_Request->get_int( 'show_displays', 'post', 0 );
+	$data['use_shipping'] = $nv_Request->get_int( 'use_shipping', 'post', 0 );
+	$data['use_coupons'] = $nv_Request->get_int( 'use_coupons', 'post', 0 );
 	$data['active_guest_order'] = $nv_Request->get_int( 'active_guest_order', 'post', 0 );
 	$data['active_wishlist'] = $nv_Request->get_int( 'active_wishlist', 'post', 0 );
+	$data['active_gift'] = $nv_Request->get_int( 'active_gift', 'post', 0 );
+	$data['active_warehouse'] = $nv_Request->get_int( 'active_warehouse', 'post', 0 );
 	$data['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 	$data['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
 	$data['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
 	$data['point_active'] = $nv_Request->get_int( 'point_active', 'post', 0 );
 	$data['point_conversion'] = $nv_Request->get_string( 'point_conversion', 'post', 0 );
 	$data['point_new_order'] = $nv_Request->get_string( 'point_new_order', 'post', 0 );
+	$data['review_active'] = $nv_Request->get_int( 'review_active', 'post', 0 );
+	$data['review_check'] = $nv_Request->get_int( 'review_check', 'post', 0 );
+	$data['review_captcha'] = $nv_Request->get_int( 'review_captcha', 'post', 0 );
+	$data['group_price'] = $nv_Request->get_textarea( 'group_price', '', 'br' );
+	$data['template_active'] = $nv_Request->get_int( 'template_active', 'post', 0 );
+	$data['download_active'] = $nv_Request->get_int( 'download_active', 'post', 0 );
 
 	if( $error == '' )
 	{
@@ -104,10 +127,13 @@ $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 
 // Số sản phẩm hiển thị trên một dòng
-for( $i = 3; $i <= 5; $i++ )
+for( $i = 1; $i <= 10; $i++ )
 {
-    $xtpl->assign( 'PER_ROW', array( 'value' => $i, 'selected' => $data['per_row'] == $i ? 'selected="selected"' : '' ) );
-    $xtpl->parse( 'main.per_row' );
+	if( 24 % $i == 0 )
+	{
+	    $xtpl->assign( 'PER_ROW', array( 'value' => $i, 'selected' => $data['per_row'] == $i ? 'selected="selected"' : '' ) );
+	    $xtpl->parse( 'main.per_row' );
+	}
 }
 
 $check_view = array(
@@ -145,6 +171,12 @@ $xtpl->assign( 'ck_post_auto_member', $check );
 $check = ( $data['active_order'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_order', $check );
 
+$check = ( $data['active_order_popup'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_order_popup', $check );
+
+$check = ( $data['active_order_non_detail'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_order_non_detail', $check );
+
 $check = ( $data['active_price'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_price', $check );
 
@@ -172,11 +204,49 @@ $xtpl->assign( 'ck_compare', $check );
 $check = ( $data['show_displays'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_displays', $check );
 
+$check = ( $data['use_shipping'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_shipping', $check );
+
+$check = ( $data['use_coupons'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_coupons', $check );
+
 $check = ( $data['active_wishlist'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_wishlist', $check );
 
+$check = ( $data['active_gift'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_gift', $check );
+
+$check = ( $data['active_warehouse'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_warehouse', $check );
+
 $check = ( $data['point_active'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_point', $check );
+
+$check = ( $data['review_active'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_review_active', $check );
+
+$check = ( $data['review_check'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_review_check', $check );
+
+$check = ( $data['review_captcha'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_review_captcha', $check );
+
+$check = ( $data['template_active'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_template_active', $check );
+
+$check = ( $data['download_active'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_download_active', $check );
+
+$groups_notify = explode( ',', $data['groups_notify'] );
+foreach( $groups_list as $_group_id => $_title )
+{
+	$xtpl->assign( 'GROUPS_NOTIFY', array(
+		'value' => $_group_id,
+		'checked' => in_array( $_group_id, $groups_notify ) ? ' checked="checked"' : '',
+		'title' => $_title
+	) );
+	$xtpl->parse( 'main.groups_notify' );
+}
 
 // Tien te
 $result = $db->query( "SELECT code, currency FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " ORDER BY code DESC" );

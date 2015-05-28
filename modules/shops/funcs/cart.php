@@ -10,8 +10,16 @@
 
 if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
-$data_content = array();
+$order_info = array();
+$order_old = array();
 $coupons_code = '';
+$coupons_check = 0;
+
+if( isset( $_SESSION[$module_data . '_coupons']['code'] ) and isset( $_SESSION[$module_data . '_coupons']['check'] ) )
+{
+	$coupons_code = $_SESSION[$module_data . '_coupons']['code'];
+	$coupons_check = $_SESSION[$module_data . '_coupons']['check'];
+}
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
 // Coupons
@@ -34,12 +42,95 @@ if( $nv_Request->isset_request( 'coupons_check', 'post' ) )
 			$error = $lang_module['coupons_no_exist'];
 		}
 	}
-	$contents = call_user_func( 'coupons_info', $data_content, $error );
+
+	if( empty( $error ) )
+	{
+		$_SESSION[$module_data . '_coupons'] = array( 'check' => $coupons_check, 'code' => $coupons_code );
+	}
+
+	$contents = call_user_func( 'coupons_info', $data_content, $coupons_check, $error );
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
 	include NV_ROOTDIR . '/includes/footer.php';
 	die();
+}
+
+if( $nv_Request->isset_request( 'coupons_clear', 'post' ) )
+{
+	unset( $_SESSION[$module_data . '_coupons'] );
+	die();
+}
+
+$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cart', true );
+if( $_SERVER['REQUEST_URI'] != $base_url_rewrite )
+{
+	Header( 'Location: ' . $base_url_rewrite );
+	die( );
+}
+
+// Sửa đơn hàng
+if( isset( $_SESSION[$module_data . '_order_info'] ) and !empty( $_SESSION[$module_data . '_order_info'] ) )
+{
+	$order_info = $_SESSION[$module_data . '_order_info'];
+	$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_info['order_id'] );
+
+	if( $result->rowCount() == 0 )
+	{
+		unset( $_SESSION[$module_data . '_order_info'] );
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+		die();
+	}
+
+	if( $_SESSION[$module_data . '_order_info']['checked'] )
+	{
+		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_info['order_id'] );
+		while( $row = $result->fetch() )
+		{
+			$array_group = array();
+			$data_content = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows WHERE id = " . $row['id'] )->fetch();
+			$result_group = $db->query( "SELECT group_id FROM " . $db_config['prefix'] . "_" . $module_data . "_orders_id_group WHERE order_i = " . $row['id'] );
+			while( list( $group_id ) = $result_group->fetch( 3 ) )
+			{
+				$array_group[] = $group_id;
+			}
+			$array_group = !empty( $array_group ) ? implode( ',', $array_group ) : '';
+			$order_old[$row['proid']] = array(
+				'num' => $row['num'],
+				'num_old' => $row['num'],
+				'order' => 1,
+				'price' => $row['price'],
+				'money_unit' => $order_info['money_unit'],
+				'discount_id' => $row['discount_id'],
+				'group' => $array_group,
+				'store' => $data_content['product_number'],
+				'weight' => $data_content['product_weight'],
+				'weight_unit' => $data_content['weight_unit']
+			);
+		}
+
+		$shipping_old = array(
+			'ship_name' => '',
+			'ship_phone' => '',
+			'ship_location_id' => 0,
+			'ship_address_extend' => '',
+			'ship_shops_id' => 0,
+			'ship_carrier_id' => 0,
+			'order_shipping' => 0
+		);
+
+		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_shipping WHERE order_id=' . $order_info['order_id'] );
+		if( $result->rowCount() )
+		{
+			$shipping_old = $result->fetch();
+			$shipping_old['order_shipping'] = 1;
+		}
+
+		$_SESSION[$module_data . '_order_info']['checked'] = 0;
+		$_SESSION[$module_data . '_order_info']['order_product'] = $order_old;
+		$_SESSION[$module_data . '_order_info']['shipping'] = $shipping_old;
+		$_SESSION[$module_data . '_cart'] = $order_old;
+	}
 }
 
 if( $nv_Request->get_int( 'save', 'post', 0 ) == 1 )
@@ -59,6 +150,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) == 1 )
 	}
 }
 
+$data_content = array();
 $array_error_product_number = array();
 
 if( ! empty( $_SESSION[$module_data . '_cart'] ) )
@@ -68,6 +160,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 	{
 		$arrayid[] = $pro_id;
 	}
+
 	if( ! empty( $arrayid ) )
 	{
 		$listid = implode( ',', $arrayid );
@@ -95,8 +188,26 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 			}
 
 			$group = $_SESSION[$module_data . '_cart'][$id]['group'];
-
 			$number = $_SESSION[$module_data . '_cart'][$id]['num'];
+
+			if( !empty( $order_info ) )
+			{
+				$product_number = $product_number + ( isset( $_SESSION[$module_data . '_cart'][$id]['num_old'] ) ? $_SESSION[$module_data . '_cart'][$id]['num_old'] : $_SESSION[$module_data . '_cart'][$id]['num'] );
+			}
+
+			if( !empty( $group ) )
+			{
+				$group = explode( ',', $group );
+				asort( $group );
+				$group = implode( ',', $group );
+				$product_number = 0;
+				$_result = $db->query( 'SELECT quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id . ' AND listgroup="' . $group . '"' );
+				if( $_result )
+				{
+					$product_number = $_result->fetchColumn();
+				}
+			}
+
 			if( $number > $product_number and $number > 0 and empty( $pro_config['active_order_number'] ) )
 			{
 				$number = $_SESSION[$module_data . '_cart'][$id]['num'] = $product_number;
@@ -122,7 +233,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
 				'group' => $group,
-				'link_pro' => $link . $global_array_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 				'num' => $number,
 				'link_remove' => $link . 'remove&id=' . $id
 			);
@@ -144,7 +255,7 @@ else
 
 $page_title = $lang_module['cart_title'];
 
-$contents = call_user_func( 'cart_product', $data_content, $coupons_code, $array_error_product_number );
+$contents = call_user_func( 'cart_product', $data_content, $coupons_code, $order_info, $array_error_product_number );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
