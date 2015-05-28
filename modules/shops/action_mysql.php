@@ -682,9 +682,9 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_files ADD " . $lang . "_description MEDIUMTEXT NOT NULL DEFAULT ''";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_files_rows (
- id_files mediumint(8) unsigned NOT NULL,
  id_rows int(11) unsigned NOT NULL,
- download_hits mediumint(8) unsigned NOT NULL,
+ id_files mediumint(8) unsigned NOT NULL,
+ download_hits mediumint(8) unsigned NOT NULL DEFAULT '0',
  UNIQUE KEY id_files (id_files, id_rows)
 ) ENGINE=MyISAM";
 

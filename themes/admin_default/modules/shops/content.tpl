@@ -165,6 +165,21 @@
 							{edit_bodytext}
 						</div></td>
 					</tr>
+					<!-- BEGIN: files -->
+					<tr>
+						<th>{LANG.download_file}</th>
+					</tr>
+					<tr>
+						<td>
+							<select name="files[]" id="files" class="form-control" style="width: 100%" multiple="multiple">
+								<!-- BEGIN: loop -->
+								<option value="{FILES.id}" {FILES.selected}>{FILES.title}</option>
+								<!-- END: loop -->
+							</select>
+						</td>
+					</tr>
+					<!-- END: files -->
+
 					<!-- BEGIN: gift -->
 					<tr>
 						<th>{LANG.content_gift}</th>
@@ -419,7 +434,7 @@
 	var currentpath = "{CURRENT}";
 
 	$(document).ready(function() {
-		$("#catid").select2();
+		$("#catid, #files").select2();
 	});
 
 	$("input[name=selectimg]").click(function() {
