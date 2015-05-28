@@ -140,7 +140,7 @@ else
 			$_GET[NV_OP_VARIABLE] = 'search';
 			$_GET['q'] = $matches[3];
 		}
-		if( strpos( $_GET['q'], '&' ) )
+		if( isset( $_GET['q'] ) and strpos( $_GET['q'], '&' ) )
 		{
 			$_q_arr = explode( '&', $_GET['q'] );
 			$_GET['q'] = $_q_arr[0];

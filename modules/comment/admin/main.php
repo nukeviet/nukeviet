@@ -223,6 +223,7 @@ while( list( $cid, $module, $area, $id, $content, $userid, $post_name, $email, $
 		'content' => $content ,
 		'module' => $module,
 		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=view&amp;area=' . $area . '&amp;id=' . $id,
+		'active' => $status ? 'checked="checked"' : '',
 		'status' => ( $status == 1 ) ? 'check' : 'circle-o',
 		'linkedit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;cid=' . $cid,
 		'linkdelete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;list=' . $cid
