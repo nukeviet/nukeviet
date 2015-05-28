@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<ul class="listnews">
+<ul>
 	<!-- BEGIN: newloop -->
 	<li class="clearfix">
 		<!-- BEGIN: imgblock -->
