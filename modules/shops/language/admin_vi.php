@@ -648,5 +648,17 @@ $lang_module['warehouse_detail_group'] = 'Thuộc tính sản phẩm';
 $lang_module['warehouse_add_group_propties'] = 'Thêm nhóm thuộc tính';
 $lang_module['warehouse_chose_propties'] = 'Chọn';
 
-$lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
+$lang_module['download'] = 'Quản lý tài liệu';
+$lang_module['download_file_title'] = 'Tên tài liệu';
+$lang_module['download_file_time'] = 'Thời gian thêm';
+$lang_module['download_file_count'] = 'Số sản phẩm liên kết';
+$lang_module['download_file_description'] = 'Mô tả tài liệu';
+$lang_module['download_file_path'] = 'Đường dẫn tài liệu';
+$lang_module['download_file_chose'] = 'Chọn tập tin';
+$lang_module['download_file_add'] = 'Thêm tài liệu';
+$lang_module['download_file_edit'] = 'Sửa tài liệu';
 $lang_module['download_setting_active'] = 'Sử dụng chức Quản lý file tài liệu';
+$lang_module['download_files_error_title'] = 'Vui lòng nhập tên tài liệu';
+$lang_module['download_files_error_path'] = 'Vui lòng chọn đường dẫn tài liệu';
+
+$lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
