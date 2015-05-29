@@ -15,7 +15,24 @@ $data = array();
 $error = array();
 $table_name = $db_config['prefix'] . "_" . $module_data . "_files";
 $data['id'] = $nv_Request->get_int( 'id', 'get', 0 );
+$popup = $nv_Request->get_bool( 'popup', 'get', 0 );
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+
+if( $nv_Request->isset_request( 'get_files', 'post,get' ) )
+{
+	$option = '';
+	$sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';
+	$array_files = nv_db_cache( $sql, 'id', $module_name );
+
+	if( !empty( $array_files ) )
+	{
+		foreach( $array_files as $files )
+		{
+			$option .= '<option value="' . $files['id'] . '">' . $files['title'] . '</option>';
+		}
+	}
+	die( $option );
+}
 
 if( $nv_Request->isset_request( 'del', 'post,get' ) )
 {
@@ -63,16 +80,20 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( empty( $data['title'] ) )
 	{
-		$error[] = $lang_module['download_files_error_title'];
+		die( 'NO_' . $lang_module['download_files_error_title'] );
 	}
 
 	if( empty( $data['path'] ) )
 	{
-		$error[] = $lang_module['download_files_error_path'];
+		die( 'NO_' . $lang_module['download_files_error_path'] );
 	}
 	elseif( file_exists( NV_ROOTDIR . $data['path'] ) )
 	{
 		$data['path'] = str_replace( NV_UPLOADS_DIR . '/' . $module_name . '/', '', $data['path'] );
+	}
+	else
+	{
+		die( 'NO_' . $lang_module['download_files_error_path_valid'] );
 	}
 
 	if( $data['id'] > 0 )
@@ -84,12 +105,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		if( $stmt->execute() )
 		{
 			nv_del_moduleCache( $module_name );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
-			die();
+			die( 'OK' );
 		}
 		else
 		{
-			$error[] = $lang_module['errorsave'];
+			die( 'NO_' . $lang_module['errorsave'] );
 		}
 	}
 	else
@@ -116,16 +136,16 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		if( $stmt->execute() )
 		{
 			nv_del_moduleCache( $module_name );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
-			die();
+			die( 'OK' );
 		}
 		else
 		{
-			$error[] = $lang_module['errorsave'];
+			die( 'NO_' . $lang_module['errorsave'] );
 		}
 	}
 }
-elseif( $data['id'] > 0 )
+
+if( $data['id'] > 0 )
 {
 	$lang_module['download_file_add'] = $lang_module['download_file_edit'];
 	$data = $db->query( 'SELECT id, ' . NV_LANG_DATA . '_title title, ' . NV_LANG_DATA . '_description description, path FROM ' . $table_name . ' WHERE id=' . $data['id'] )->fetch();
@@ -140,52 +160,55 @@ else
 	$data[NV_LANG_DATA . '_description'] = '';
 }
 
-$per_page = 20;
-$page = $nv_Request->get_int( 'page', 'post,get', 1 );
 $array_search = array();
 $array_search['keywords'] = $nv_Request->get_title( 'keywords', 'get', '' );
 $array_search['status'] = $nv_Request->get_int( 'status', 'get', -1 );
-$where = '';
-
-$db->sqlreset( )
-	->select( 'COUNT(*)' )
-	->from( $db_config['prefix'] . '_' . $module_data . '_files' );
-
-if( !empty( $array_search['keywords'] ) )
+if( !$popup )
 {
-	$where .= ' AND ' . NV_LANG_DATA . '_title LIKE :q_title OR ' . NV_LANG_DATA . '_description LIKE :q_description';
+	$per_page = 20;
+	$page = $nv_Request->get_int( 'page', 'post,get', 1 );
+	$where = '';
+
+	$db->sqlreset( )
+		->select( 'COUNT(*)' )
+		->from( $db_config['prefix'] . '_' . $module_data . '_files' );
+
+	if( !empty( $array_search['keywords'] ) )
+	{
+		$where .= ' AND ' . NV_LANG_DATA . '_title LIKE :q_title OR ' . NV_LANG_DATA . '_description LIKE :q_description';
+	}
+
+	if( $array_search['status'] >= 0 )
+	{
+		$where .= ' AND status = ' . $array_search['status'];
+	}
+
+	if( ! empty( $where ) )
+	{
+		$db->where( '1=1' . $where );
+	}
+
+	$sth = $db->prepare( $db->sql( ) );
+
+	if( !empty( $array_search['keywords'] ) )
+	{
+		$sth->bindValue( ':q_title', '%' . $array_search['keywords'] . '%' );
+		$sth->bindValue( ':q_description', '%' . $array_search['keywords'] . '%' );
+	}
+
+	$sth->execute( );
+	$num_items = $sth->fetchColumn( );
+
+	$db->select( 'id, path, addtime, status, ' . NV_LANG_DATA . '_title title, ' . NV_LANG_DATA . '_description description' )->order( 'id DESC' )->limit( $per_page )->offset( ($page - 1) * $per_page );
+	$sth = $db->prepare( $db->sql( ) );
+
+	if( !empty( $array_search['keywords'] ) )
+	{
+		$sth->bindValue( ':q_title', '%' . $array_search['keywords'] . '%' );
+		$sth->bindValue( ':q_description', '%' . $array_search['keywords'] . '%' );
+	}
+	$sth->execute( );
 }
-
-if( $array_search['status'] >= 0 )
-{
-	$where .= ' AND status = ' . $array_search['status'];
-}
-
-if( ! empty( $where ) )
-{
-	$db->where( '1=1' . $where );
-}
-
-$sth = $db->prepare( $db->sql( ) );
-
-if( !empty( $array_search['keywords'] ) )
-{
-	$sth->bindValue( ':q_title', '%' . $array_search['keywords'] . '%' );
-	$sth->bindValue( ':q_description', '%' . $array_search['keywords'] . '%' );
-}
-
-$sth->execute( );
-$num_items = $sth->fetchColumn( );
-
-$db->select( 'id, path, addtime, status, ' . NV_LANG_DATA . '_title title, ' . NV_LANG_DATA . '_description description' )->order( 'id DESC' )->limit( $per_page )->offset( ($page - 1) * $per_page );
-$sth = $db->prepare( $db->sql( ) );
-
-if( !empty( $array_search['keywords'] ) )
-{
-	$sth->bindValue( ':q_title', '%' . $array_search['keywords'] . '%' );
-	$sth->bindValue( ':q_description', '%' . $array_search['keywords'] . '%' );
-}
-$sth->execute( );
 
 $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -193,6 +216,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
 $xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'NV_UPLOADS_DIR', NV_UPLOADS_DIR );
@@ -202,40 +226,50 @@ $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'SEARCH', $array_search );
 $xtpl->assign( 'UPLOADS_FILES_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/files' );
 $xtpl->assign( 'ACTION', $base_url );
+$xtpl->assign( 'POPUP', $popup );
 
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-if( !empty( $array_search['keywords'] ) )
+if( !$popup )
 {
-	$base_url .= '&keywords=' . $array_search['keywords'];
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+	if( !empty( $array_search['keywords'] ) )
+	{
+		$base_url .= '&keywords=' . $array_search['keywords'];
+	}
+
+	if( $array_search['status'] >= 0 )
+	{
+		$base_url .= '&status=' . $array_search['status'];
+	}
+
+	while( $view = $sth->fetch( ) )
+	{
+		$view['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $view['id'] . '#edit';
+		$view['count_product'] = $db->query( 'SELECT COUNT(*) FROM ' . $table_name . '_rows WHERE id_files=' . $view['id'] )->fetchColumn();
+		$view['addtime'] = nv_date( 'H:i d/m/Y', $view['addtime'] );
+		$view['active'] = $view['status'] ? 'checked="checked"' : '';
+		$xtpl->assign( 'VIEW', $view );
+		$xtpl->parse( 'main.non_popup.loop' );
+	}
+
+	$array_status = array( '1' => $lang_module['review_status_1'], '0' => $lang_module['review_status_0'] );
+	foreach( $array_status as $key => $value )
+	{
+		$xtpl->assign( 'STATUS', array( 'key' => $key, 'value' => $value, 'selected' => $array_search['status'] == $key ? 'selected="selected"' : '' ) );
+		$xtpl->parse( 'main.non_popup.status' );
+	}
+
+	$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
+	if( !empty( $generate_page ) )
+	{
+		$xtpl->assign( 'NV_GENERATE_PAGE', $generate_page );
+		$xtpl->parse( 'main.non_popup.generate_page' );
+	}
+
+	$xtpl->parse( 'main.non_popup' );
 }
-
-if( $array_search['status'] >= 0 )
+else
 {
-	$base_url .= '&status=' . $array_search['status'];
-}
-
-while( $view = $sth->fetch( ) )
-{
-	$view['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $view['id'] . '#edit';
-	$view['count_product'] = $db->query( 'SELECT COUNT(*) FROM ' . $table_name . '_rows WHERE id_files=' . $view['id'] )->fetchColumn();
-	$view['addtime'] = nv_date( 'H:i d/m/Y', $view['addtime'] );
-	$view['active'] = $view['status'] ? 'checked="checked"' : '';
-	$xtpl->assign( 'VIEW', $view );
-	$xtpl->parse( 'main.loop' );
-}
-
-$array_status = array( '1' => $lang_module['review_status_1'], '0' => $lang_module['review_status_0'] );
-foreach( $array_status as $key => $value )
-{
-	$xtpl->assign( 'STATUS', array( 'key' => $key, 'value' => $value, 'selected' => $array_search['status'] == $key ? 'selected="selected"' : '' ) );
-	$xtpl->parse( 'main.status' );
-}
-
-$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
-if( !empty( $generate_page ) )
-{
-	$xtpl->assign( 'NV_GENERATE_PAGE', $generate_page );
-	$xtpl->parse( 'main.generate_page' );
+	$xtpl->parse( 'main.popup' );
 }
 
 if( !empty( $error ) )
@@ -250,5 +284,5 @@ $contents = $xtpl->text( 'main' );
 $page_title = $lang_module['download'];
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme( $contents );
+echo nv_admin_theme( $contents, !$popup );
 include NV_ROOTDIR . '/includes/footer.php';
