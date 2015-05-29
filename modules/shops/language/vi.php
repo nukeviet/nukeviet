@@ -536,3 +536,9 @@ $lang_module['old'] = 'Mới';
 $lang_module['carrier'] = 'Nhà vận chuyển';
 $lang_module['weights'] = 'Khối lượng';
 $lang_module['carrier_price'] = 'Phí vận chuyển';
+
+$lang_module['download'] = 'Tài liệu';
+$lang_module['download_file_name'] = 'Tên tài liệu';
+$lang_module['download_file_unknown'] = 'N/A';
+$lang_module['download_file'] = 'Tải về tập tin';
+$lang_module['download_error'] = 'Tải tệp tin không thành công';

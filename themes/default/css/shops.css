@@ -1359,3 +1359,12 @@ img.calendar {
 	margin: 5px 0;
 	display: none;
 }
+
+.download{
+	border-bottom: dashed #DDDDDD 1px;
+	line-height: 35px
+}
+
+.download, .download a{
+	font-size: 13px
+}
