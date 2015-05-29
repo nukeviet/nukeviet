@@ -84,6 +84,8 @@ $rowcontent = array(
 	'note' => '',
 	'keywords' => '',
 	'keywords_old' => '',
+	'files' => array(),
+	'files_old' => array(),
 	'gift_content' => '',
 	'gift_from' => NV_CURRENTTIME,
 	'gift_to' => 0
@@ -99,8 +101,10 @@ $rowcontent['id'] = $nv_Request->get_int( 'id', 'get,post', 0 );
 $group_id_old = array( );
 if( $rowcontent['id'] > 0 )
 {
+	// Old group
 	$group_id_old = getGroupID( $rowcontent['id'] );
 
+	// Old keywords
 	$array_keywords_old = array( );
 	$_query = $db->query( 'SELECT tid, ' . NV_LANG_DATA . '_keyword FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE id=' . $rowcontent['id'] . ' ORDER BY ' . NV_LANG_DATA . '_keyword ASC' );
 	while( $row = $_query->fetch( ) )
@@ -109,6 +113,17 @@ if( $rowcontent['id'] > 0 )
 	}
 	$rowcontent['keywords'] = implode( ', ', $array_keywords_old );
 	$rowcontent['keywords_old'] = $rowcontent['keywords'];
+
+	// Old files
+	$result = $db->query( "SELECT id_files FROM " . $db_config['prefix'] . "_" . $module_data . "_files_rows WHERE id_rows=" . $rowcontent['id'] );
+	if( $result->rowCount() > 0 )
+	{
+		while( list( $id_files ) = $result->fetch( 3 ) )
+		{
+			$rowcontent['files'][] = $id_files;
+		}
+		$rowcontent['files_old'] = $rowcontent['files'];
+	}
 }
 
 if( $nv_Request->get_int( 'save', 'post' ) == 1 )
@@ -163,6 +178,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 	$rowcontent['note'] = $nv_Request->get_title( 'note', 'post', '', 1 );
 	$rowcontent['address'] = $nv_Request->get_title( 'address', 'post', '', 1 );
+	$rowcontent['files'] = $nv_Request->get_typed_array( 'files', 'post', 'int', array() );
 
 	$rowcontent['gift_content'] = $nv_Request->get_title( 'gift_content', 'post', '', 1 );
 	$rowcontent['gift_from'] = $nv_Request->get_title( 'gift_from', 'post', '' );
@@ -573,6 +589,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					$stmt->execute( );
 				}
 
+				// Add file download
+				if( $pro_config['download_active'] )
+				{
+					if( !empty( $rowcontent['files'] ) )
+					{
+						foreach( $rowcontent['files'] as $id_files )
+						{
+							$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_files_rows (id_rows, id_files, download_hits) VALUES (' . $rowcontent['id'] . ', ' . $id_files .', 0)' );
+						}
+					}
+				}
+
 				nv_fix_group_count( $rowcontent['group_id'] );
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Add A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
 			}
@@ -662,6 +690,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			if( $stmt->execute( ) )
 			{
+				// Cap nhat lai group neu co thay doi
 				if( $group_id_old != $rowcontent['group_id'] )
 				{
 					$sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id = ' . $rowcontent['id'];
@@ -680,7 +709,30 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					nv_fix_group_count( $rowcontent['group_id'] );
 					nv_fix_group_count( $group_id_old );
 				}
-				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
+
+				// Cap nhat lai files neu co thay doi
+				if( $pro_config['download_active'] )
+				{
+					$rowcontent['files'] = array_map( 'intval', $rowcontent['files'] );
+					if( $rowcontent['files'] != $rowcontent['files_old'] )
+					{
+						foreach( $rowcontent['files'] as $id_files )
+						{
+							if( !in_array( $id_files, $rowcontent['files_old'] ) )
+							{
+								$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_files_rows (id_rows, id_files) VALUES (' . $rowcontent['id'] .', ' . $id_files . ')' );
+							}
+						}
+
+						foreach( $rowcontent['files_old'] as $id_files_old )
+						{
+							if( !in_array( $id_files_old, $rowcontent['files'] ) )
+							{
+								$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_files_rows WHERE id_files = ' . $id_files_old );
+							}
+						}
+					}
+				}
 
 				// Tim va xoa du lieu tuy bien
 				if( $global_array_shops_cat[$rowcontent_old['listcatid']]['form'] != '' )
@@ -703,7 +755,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 						Insertabl_catfields( $table_insert_new, $array_custom, $rowcontent['id'] );
 					}
 				}
-
+				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
 			}
 			else
 			{
@@ -817,6 +869,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 }
 elseif( $rowcontent['id'] > 0 )
 {
+	$files = $rowcontent['files'];
 	$keyword = $rowcontent['keywords'];
 	$rowcontent = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows where id=" . $rowcontent['id'] )->fetch( );
 	$rowcontent['title'] = $rowcontent[NV_LANG_DATA . '_title'];
@@ -827,6 +880,7 @@ elseif( $rowcontent['id'] > 0 )
 	$rowcontent['address'] = $rowcontent[NV_LANG_DATA . '_address'];
 	$rowcontent['group_id'] = $group_id_old;
 	$rowcontent['keywords'] = $keyword;
+	$rowcontent['files'] = $files;
 
 	$page_title = $lang_module['content_edit'];
 
@@ -893,6 +947,13 @@ else
 }
 
 $rowcontent['product_weight'] = empty( $rowcontent['product_weight'] ) ? '' : $rowcontent['product_weight'];
+
+$array_files = array();
+if( $pro_config['download_active'] )
+{
+	$sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';
+	$array_files = nv_db_cache( $sql, 'id', $module_name );
+}
 
 $xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -1133,6 +1194,20 @@ if( !empty( $rowcontent['keywords'] ) )
 		$xtpl->assign( 'KEYWORDS', $keywords );
 		$xtpl->parse( 'main.keywords' );
 	}
+}
+
+if( $pro_config['download_active'] )
+{
+	if( !empty( $array_files ) )
+	{
+		foreach( $array_files as $files )
+		{
+			$files['selected'] = in_array( $files['id'], $rowcontent['files'] ) ? 'selected="selected"' : '';
+			$xtpl->assign( 'FILES', $files );
+			$xtpl->parse( 'main.files.loop' );
+		}
+	}
+	$xtpl->parse( 'main.files' );
 }
 
 if( $module_config[$module_name]['auto_tags'] )

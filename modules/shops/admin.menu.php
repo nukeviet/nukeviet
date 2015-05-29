@@ -50,6 +50,12 @@ if( $shop_module_config['point_active'] )
 {
 	$submenu['point'] = $lang_module['point'];
 }
+
+if( $shop_module_config['download_active'] )
+{
+	$submenu['download'] = $lang_module['download'];
+}
+
 $submenu['tags'] = $lang_module['tags'];
 
 $menu_setting = array();

@@ -164,13 +164,22 @@ function nv_del_content_module( $id )
 		}
 		if( $number_no_del == 0 )
 		{
+			// Xoa binh luan
 			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
+
+			// Xoa block san pham
 			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id = ' . $id );
+
+			// Xoa du lieu nhom san pham
 			$groupid = GetGroupID( $id );
 			if( $db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id = ' . $id ) )
 			{
 				nv_fix_group_count( $groupid );
 			}
+
+			// Xoa tai lieu
+			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_files_rows WHERE id_rows=' . $id );
+
 			$content_del = 'OK_' . $id;
 		}
 		else

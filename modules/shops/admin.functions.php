@@ -77,7 +77,8 @@ $allow_func = array(
 	'getprice',
 	'review',
 	'warehouse',
-	'warehouse_logs'
+	'warehouse_logs',
+	'download'
 );
 if( defined( 'NV_IS_SPADMIN' ) )
 {
