@@ -674,6 +674,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  id mediumint(8) unsigned NOT NULL auto_increment,
  path varchar(255) NOT NULL,
  filesize int(11) unsigned NOT NULL DEFAULT '0',
+ extension varchar(10) NOT NULL DEFAULT ''
  addtime int(11) unsigned NOT NULL DEFAULT '0',
  status tinyint(1) unsigned DEFAULT '1',
  PRIMARY KEY (id)

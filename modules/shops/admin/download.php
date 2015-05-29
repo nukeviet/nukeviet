@@ -78,6 +78,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$data['description'] = $nv_Request->get_textarea( 'description', '', 'br' );
 	$data['path'] = $nv_Request->get_title( 'path', 'post', '' );
 	$data['filesize'] = 0;
+	$data['extension'] = '';
 
 	$data['path'] = str_replace( NV_UPLOADS_DIR . '/' . $module_name . '/', '', $data['path'] );
 	$real_file = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_name . $data['path'];
@@ -94,6 +95,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	elseif( file_exists( $real_file ) and ( $filesize = filesize( $real_file ) ) != 0 )
 	{
 		$data['filesize'] = $filesize;
+		$data['extension'] = nv_getextension( $real_file );
 	}
 	else
 	{
@@ -102,10 +104,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( $data['id'] > 0 )
 	{
-		$stmt = $db->prepare( "UPDATE " . $table_name . " SET path=:path, filesize=:filesize, " . NV_LANG_DATA . "_title=:title, " . NV_LANG_DATA . "_description=:description WHERE id =" . $data['id'] );
+		$stmt = $db->prepare( "UPDATE " . $table_name . " SET path=:path, filesize=:filesize, extension=:extension, " . NV_LANG_DATA . "_title=:title, " . NV_LANG_DATA . "_description=:description WHERE id =" . $data['id'] );
 		$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
 		$stmt->bindParam( ':path', $data['path'], PDO::PARAM_STR );
 		$stmt->bindParam( ':filesize', $data['filesize'], PDO::PARAM_STR );
+		$stmt->bindParam( ':extension', $data['extension'], PDO::PARAM_STR );
 		$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
 		if( $stmt->execute() )
 		{
@@ -136,9 +139,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 		}
 
-		$stmt = $db->prepare( "INSERT INTO " . $table_name . " (id, path, filesize, addtime, status " . $listfield . ") VALUES (NULL, :path, :filesize, " . NV_CURRENTTIME . ", 1 " . $listvalue . ")" );
+		$stmt = $db->prepare( "INSERT INTO " . $table_name . " (id, path, filesize, extension, addtime, status " . $listfield . ") VALUES (NULL, :path, :filesize, :extension, " . NV_CURRENTTIME . ", 1 " . $listvalue . ")" );
 		$stmt->bindParam( ':path', $data['path'], PDO::PARAM_STR );
 		$stmt->bindParam( ':filesize', $data['filesize'], PDO::PARAM_STR );
+		$stmt->bindParam( ':extension', $data['extension'], PDO::PARAM_STR );
 		if( $stmt->execute() )
 		{
 			nv_del_moduleCache( $module_name );
