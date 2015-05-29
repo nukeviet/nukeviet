@@ -44,7 +44,7 @@
 					</div>
 					<br />
 					<!-- BEGIN: adminlink -->
-					<p>
+					<p class="tab-pane">
 						{ADMINLINK}
 					</p>
 					<!-- END: adminlink -->

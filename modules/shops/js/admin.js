@@ -581,7 +581,14 @@ function IsNumberInt(str) {
 	return str;
 }
 
-function reset_form( form ){
-	form.find('input:text, input:password, input:file, select, textarea').val('');
-	form.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
-}
+$.fn.clearForm = function() {
+	return this.each(function() {
+		var type = this.type, tag = this.tagName.toLowerCase();
+		if (tag == 'form')
+			return $(':input', this).clearForm();
+		if (type == 'text' || type == 'password' || tag == 'textarea')
+			this.value = '';
+		else if (tag == 'select')
+			this.selectedIndex = 0;
+	});
+};

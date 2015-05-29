@@ -1208,6 +1208,7 @@ if( $pro_config['download_active'] )
 		}
 	}
 	$xtpl->parse( 'main.files' );
+	$xtpl->parse( 'main.files_js' );
 }
 
 if( $module_config[$module_name]['auto_tags'] )

@@ -44,7 +44,7 @@
 			<div class="col-sm-6">
 				<div class="form-group">
 					<input type="submit" class="btn btn-primary" value="{LANG.search}" />
-					<input type="button" class="btn btn-danger" value="{LANG.reset}" onclick="reset_form( $('#search_form') );" />
+					<input type="button" class="btn btn-danger" value="{LANG.reset}" onclick="$('#search_form').clearForm();" />
 				</div>
 			</div>
 		</div>
