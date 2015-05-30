@@ -1,3 +1,6 @@
+#wraper{
+	width: 100%;
+}
 @media (max-width: 1200px){
 	#header #logo a span{
 		display:none;
@@ -6,7 +9,7 @@
 		background: #043c72;
 		border-top: 4px solid #043c72;
 		color:#fff;
-		width: 100%;
+		width: 100% !important;
 	}
 }
 

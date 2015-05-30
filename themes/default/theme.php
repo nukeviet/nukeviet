@@ -30,9 +30,12 @@ function nv_site_theme( $contents, $full = true, $responsive = false )
 	$css = nv_html_css();
 
 	// Css for admin
-	if( defined( 'NV_IS_ADMIN' ) and $full )
+	if( defined( 'NV_IS_ADMIN' ) and $full and $responsive )
 	{
 		$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/admin.css\" />\n";
+	}
+	else{
+		$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/admin.non_responsive.css\" />\n";
 	}
 
     // Style config

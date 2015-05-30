@@ -170,6 +170,7 @@ h1, h2, h3, h4, h5, h6{
 	margin-bottom:10px!important;
 }
 #wraper{
+	width: 1150px;
 	margin:0 auto;
 }
 .fa-fix{
@@ -324,7 +325,6 @@ header{
 	background: #043c72;
 	border-top: 4px solid #043c72;
 	color:#fff;
-	width: 1150px;
 }
 #footer .footer-copyright a{
 	color:#fff;
