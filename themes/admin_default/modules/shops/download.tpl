@@ -37,7 +37,7 @@
 			<col />
 			<col class="w150" />
 			<col class="w150" />
-			<col class="w100" />
+			<col class="w100" span="2" />
 			<col class="w150" />
 		</colgroup>
 		<thead>
@@ -45,6 +45,7 @@
 				<th>{LANG.download_file_title}</th>
 				<th class="text-center">{LANG.download_file_time}</th>
 				<th class="text-center">{LANG.download_file_count}</th>
+				<th class="text-center">{LANG.download_file_down_hits}</th>
 				<th class="text-center">{LANG.status}</th>
 				<th>&nbsp;</th>
 			</tr>
@@ -55,6 +56,7 @@
 				<td>{VIEW.title}</td>
 				<td class="text-center">{VIEW.addtime}</td>
 				<td class="text-center">{VIEW.count_product}</td>
+				<td class="text-center">{VIEW.download_hits}</td>
 				<td class="text-center"><input type="checkbox" id="change_active_{VIEW.id}" onclick="nv_change_active_files({VIEW.id})" {VIEW.active} /></td>
 				<td class="text-center">
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="{VIEW.url_edit}" title="{GLANG.delete}">{GLANG.edit}</a>&nbsp;

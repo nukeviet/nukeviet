@@ -254,7 +254,18 @@ if( !$popup )
 	while( $view = $sth->fetch( ) )
 	{
 		$view['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $view['id'] . '#edit';
+
 		$view['count_product'] = $db->query( 'SELECT COUNT(*) FROM ' . $table_name . '_rows WHERE id_files=' . $view['id'] )->fetchColumn();
+		$view['download_hits'] = 0;
+		$result = $db->query( 'SELECT download_hits FROM ' . $table_name . '_rows WHERE id_files=' . $view['id'] );
+		if( $result->rowCount() > 0 )
+		{
+			while( list( $download_hits ) = $result->fetch( 3 ) )
+			{
+				$view['download_hits'] += $download_hits;
+			}
+		}
+
 		$view['addtime'] = nv_date( 'H:i d/m/Y', $view['addtime'] );
 		$view['active'] = $view['status'] ? 'checked="checked"' : '';
 		$xtpl->assign( 'VIEW', $view );
