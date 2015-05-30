@@ -17,6 +17,7 @@ $table_name = $db_config['prefix'] . "_" . $module_data . "_files";
 $data['id'] = $nv_Request->get_int( 'id', 'get', 0 );
 $popup = $nv_Request->get_bool( 'popup', 'get', 0 );
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$groups_list = nv_groups_list();
 
 if( $nv_Request->isset_request( 'get_files', 'post,get' ) )
 {
@@ -77,6 +78,17 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$data['title'] = $nv_Request->get_title( 'title', 'post', '' );
 	$data['description'] = $nv_Request->get_textarea( 'description', '', 'br' );
 	$data['path'] = $nv_Request->get_title( 'path', 'post', '' );
+
+	$_dowload_groups = $nv_Request->get_array( 'download_groups', 'post', array() );
+	if( in_array( -1, $_dowload_groups ) )
+	{
+		$data['download_groups'] = '-1';
+	}
+	else
+	{
+		$data['download_groups'] = ! empty( $_dowload_groups ) ? implode( ',', nv_groups_post( array_intersect( $_dowload_groups, array_keys( $groups_list ) ) ) ) : '';
+	}
+
 	$data['filesize'] = 0;
 	$data['extension'] = '';
 
@@ -104,11 +116,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( $data['id'] > 0 )
 	{
-		$stmt = $db->prepare( "UPDATE " . $table_name . " SET path=:path, filesize=:filesize, extension=:extension, " . NV_LANG_DATA . "_title=:title, " . NV_LANG_DATA . "_description=:description WHERE id =" . $data['id'] );
+		$stmt = $db->prepare( "UPDATE " . $table_name . " SET path=:path, filesize=:filesize, extension=:extension, download_groups=:download_groups, " . NV_LANG_DATA . "_title=:title, " . NV_LANG_DATA . "_description=:description WHERE id =" . $data['id'] );
 		$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
 		$stmt->bindParam( ':path', $data['path'], PDO::PARAM_STR );
 		$stmt->bindParam( ':filesize', $data['filesize'], PDO::PARAM_STR );
 		$stmt->bindParam( ':extension', $data['extension'], PDO::PARAM_STR );
+		$stmt->bindParam( ':download_groups', $data['download_groups'], PDO::PARAM_STR );
 		$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
 		if( $stmt->execute() )
 		{
@@ -139,10 +152,11 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			}
 		}
 
-		$stmt = $db->prepare( "INSERT INTO " . $table_name . " (id, path, filesize, extension, addtime, status " . $listfield . ") VALUES (NULL, :path, :filesize, :extension, " . NV_CURRENTTIME . ", 1 " . $listvalue . ")" );
+		$stmt = $db->prepare( "INSERT INTO " . $table_name . " (id, path, filesize, extension, addtime, download_groups, status " . $listfield . ") VALUES (NULL, :path, :filesize, :extension, " . NV_CURRENTTIME . ", :download_groups, 1 " . $listvalue . ")" );
 		$stmt->bindParam( ':path', $data['path'], PDO::PARAM_STR );
 		$stmt->bindParam( ':filesize', $data['filesize'], PDO::PARAM_STR );
 		$stmt->bindParam( ':extension', $data['extension'], PDO::PARAM_STR );
+		$stmt->bindParam( ':download_groups', $data['download_groups'], PDO::PARAM_STR );
 		if( $stmt->execute() )
 		{
 			nv_del_moduleCache( $module_name );
@@ -158,13 +172,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 if( $data['id'] > 0 )
 {
 	$lang_module['download_file_add'] = $lang_module['download_file_edit'];
-	$data = $db->query( 'SELECT id, ' . NV_LANG_DATA . '_title title, ' . NV_LANG_DATA . '_description description, path FROM ' . $table_name . ' WHERE id=' . $data['id'] )->fetch();
+	$data = $db->query( 'SELECT id, ' . NV_LANG_DATA . '_title title, ' . NV_LANG_DATA . '_description description, path, download_groups FROM ' . $table_name . ' WHERE id=' . $data['id'] )->fetch();
 }
 else
 {
 	$data['id'] = 0;
 	$data['path'] = '';
 	$data['status'] = 1;
+	$data['download_groups'] = -1;
 	$data['addtime'] = NV_CURRENTTIME;
 	$data[NV_LANG_DATA . '_title'] = '';
 	$data[NV_LANG_DATA . '_description'] = '';
@@ -279,6 +294,24 @@ if( !$popup )
 		$xtpl->parse( 'main.non_popup.status' );
 	}
 
+	$download_groups = explode( ',', $data['download_groups'] );
+	$xtpl->assign( 'DOWNLOAD_GROUPS', array(
+		'value' => -1,
+		'checked' => in_array( -1, $download_groups ) ? ' checked="checked"' : '',
+		'title' => $lang_module['download_setting_groups_module']
+	) );
+	$xtpl->parse( 'main.non_popup.download_groups' );
+
+	foreach( $groups_list as $_group_id => $_title )
+	{
+		$xtpl->assign( 'DOWNLOAD_GROUPS', array(
+			'value' => $_group_id,
+			'checked' => in_array( $_group_id, $download_groups ) ? ' checked="checked"' : '',
+			'title' => $_title
+		) );
+		$xtpl->parse( 'main.non_popup.download_groups' );
+	}
+
 	$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 	if( !empty( $generate_page ) )
 	{
@@ -290,6 +323,24 @@ if( !$popup )
 }
 else
 {
+	$download_groups = explode( ',', $data['download_groups'] );
+	$xtpl->assign( 'DOWNLOAD_GROUPS', array(
+		'value' => -1,
+		'checked' => in_array( -1, $download_groups ) ? ' checked="checked"' : '',
+		'title' => $lang_module['download_setting_groups_module']
+	) );
+	$xtpl->parse( 'main.popup.download_groups' );
+
+	foreach( $groups_list as $_group_id => $_title )
+	{
+		$xtpl->assign( 'DOWNLOAD_GROUPS', array(
+			'value' => $_group_id,
+			'checked' => in_array( $_group_id, $download_groups ) ? ' checked="checked"' : '',
+			'title' => $_title
+		) );
+		$xtpl->parse( 'main.popup.download_groups' );
+	}
+
 	$xtpl->parse( 'main.popup' );
 }
 

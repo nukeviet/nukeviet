@@ -1368,3 +1368,9 @@ img.calendar {
 .download, .download a{
 	font-size: 13px
 }
+
+.btn-transparent{
+	background: none;
+	border: none;
+	box-shadow: none
+}

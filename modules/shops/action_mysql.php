@@ -676,6 +676,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  filesize int(11) unsigned NOT NULL DEFAULT '0',
  extension varchar(10) NOT NULL DEFAULT ''
  addtime int(11) unsigned NOT NULL DEFAULT '0',
+ download_groups varchar(255) NOT NULL DEFAULT '-1',
  status tinyint(1) unsigned DEFAULT '1',
  PRIMARY KEY (id)
 ) ENGINE=MyISAM";
@@ -737,6 +738,7 @@ $data['group_price'] = '';
 $data['groups_notify'] = '3';
 $data['template_active'] = '0';
 $data['download_active'] = '0';
+$data['download_groups'] = '6';
 
 foreach( $data as $config_name => $config_value )
 {

@@ -108,6 +108,16 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="col-sm-3"><strong>{LANG.download_setting_groups}</strong></label>
+					<div class="col-sm-21">
+						<ul class="list-inline">
+							<!-- BEGIN: download_groups -->
+							<li><label><input name="download_groups[]" type="checkbox" value="{DOWNLOAD_GROUPS.value}" {DOWNLOAD_GROUPS.checked} />{DOWNLOAD_GROUPS.title}</label></li>
+							<!-- END: download_groups -->
+						</ul>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-3 control-label">&nbsp;</label>
 					<div class="col-sm-21">
 						<input type="submit" name="submit" class="btn btn-primary" value="{LANG.save}" />
@@ -139,6 +149,14 @@
 		<tr>
 			<td>{LANG.download_file_description}</td>
 			<td colspan="2"><textarea class="form-control" name="description" style="width: 100%">{DATA.description}</textarea></td>
+		</tr>
+		<tr>
+			<td>{LANG.download_setting_groups}</td>
+			<td colspan="2">
+				<!-- BEGIN: download_groups -->
+				<label class="show"><input name="download_groups[]" type="checkbox" value="{DOWNLOAD_GROUPS.value}" {DOWNLOAD_GROUPS.checked} />{DOWNLOAD_GROUPS.title}</label>
+				<!-- END: download_groups -->
+			</td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
