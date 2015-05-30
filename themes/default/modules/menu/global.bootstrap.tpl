@@ -61,7 +61,7 @@ $(document).ready(function(){
 
     function checkWidth() {
         var windowsize = $window.width();
-        if (windowsize <= 640) {
+        if (theme_responsive == '1' && windowsize <= 640) {
             $( "li.dropdown ul" ).removeClass( "dropdown-menu" );
             $( "li.dropdown ul" ).addClass( "dropdown-submenu" );
             $( "li.dropdown a" ).addClass( "dropdown-mobile" );
