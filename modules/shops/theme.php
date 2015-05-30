@@ -1481,6 +1481,20 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 						$files['extension_icon'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/icon_files/document.png';
 					}
 					$xtpl->assign( 'FILES', $files );
+
+					if( $files['download_groups'] == '-1' )
+					{
+						$files['download_groups'] = $pro_config['download_groups'];
+					}
+					if( !nv_user_in_groups( $files['download_groups'] ) )
+					{
+						$xtpl->assign( 'NOTE', $lang_module['download_file_no'] );
+						$xtpl->parse( 'main.product_detail.files_content.loop.disabled' );
+					}
+					else
+					{
+						$xtpl->assign( 'NOTE', $lang_module['download_file'] );
+					}
 					$xtpl->parse( 'main.product_detail.files_content.loop' );
 				}
 				$xtpl->parse( 'main.product_detail.files_content' );

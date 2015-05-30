@@ -51,7 +51,15 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.download_setting_active}</strong></td>
-					<td><input type="checkbox" value="1" name="download_active" {ck_download_active}/></td>
+					<td><input type="checkbox" value="1" name="download_active" id="download_active" {ck_download_active}/></td>
+				</tr>
+				<tr id="download_groups" <!-- BEGIN: download_groups_none -->style="display: none"<!-- END: download_groups_none -->>
+					<td><strong>{LANG.download_setting_groups}</strong></td>
+					<td>
+						<!-- BEGIN: download_groups -->
+						<label class="show"><input name="download_groups[]" type="checkbox" value="{DOWNLOAD_GROUPS.value}" {DOWNLOAD_GROUPS.checked} />{DOWNLOAD_GROUPS.title}</label>
+						<!-- END: download_groups -->
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -299,6 +307,7 @@
 	<div class="text-center"><input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" /><input type="hidden" value="1" name="savesetting">
 	</div>
 </form>
+
 <!-- BEGIN: payment -->
 <script type="text/javascript">
 	var url_back = '{url_back}';
@@ -332,4 +341,11 @@
 	</tbody>
 </table>
 <!-- END: payment -->
+
+<script type="text/javascript">
+	$('#download_active').change(function(){
+		$('#download_groups').toggle();
+	});
+</script>
+
 <!-- BEGIN: main -->

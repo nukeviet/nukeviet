@@ -37,7 +37,7 @@
 			<col />
 			<col class="w150" />
 			<col class="w150" />
-			<col class="w100" />
+			<col class="w100" span="2" />
 			<col class="w150" />
 		</colgroup>
 		<thead>
@@ -45,6 +45,7 @@
 				<th>{LANG.download_file_title}</th>
 				<th class="text-center">{LANG.download_file_time}</th>
 				<th class="text-center">{LANG.download_file_count}</th>
+				<th class="text-center">{LANG.download_file_down_hits}</th>
 				<th class="text-center">{LANG.status}</th>
 				<th>&nbsp;</th>
 			</tr>
@@ -55,6 +56,7 @@
 				<td>{VIEW.title}</td>
 				<td class="text-center">{VIEW.addtime}</td>
 				<td class="text-center">{VIEW.count_product}</td>
+				<td class="text-center">{VIEW.download_hits}</td>
 				<td class="text-center"><input type="checkbox" id="change_active_{VIEW.id}" onclick="nv_change_active_files({VIEW.id})" {VIEW.active} /></td>
 				<td class="text-center">
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="{VIEW.url_edit}" title="{GLANG.delete}">{GLANG.edit}</a>&nbsp;
@@ -106,6 +108,16 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="col-sm-3"><strong>{LANG.download_setting_groups}</strong></label>
+					<div class="col-sm-21">
+						<ul class="list-inline">
+							<!-- BEGIN: download_groups -->
+							<li><label><input name="download_groups[]" type="checkbox" value="{DOWNLOAD_GROUPS.value}" {DOWNLOAD_GROUPS.checked} />{DOWNLOAD_GROUPS.title}</label></li>
+							<!-- END: download_groups -->
+						</ul>
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="col-sm-3 control-label">&nbsp;</label>
 					<div class="col-sm-21">
 						<input type="submit" name="submit" class="btn btn-primary" value="{LANG.save}" />
@@ -137,6 +149,14 @@
 		<tr>
 			<td>{LANG.download_file_description}</td>
 			<td colspan="2"><textarea class="form-control" name="description" style="width: 100%">{DATA.description}</textarea></td>
+		</tr>
+		<tr>
+			<td>{LANG.download_setting_groups}</td>
+			<td colspan="2">
+				<!-- BEGIN: download_groups -->
+				<label class="show"><input name="download_groups[]" type="checkbox" value="{DOWNLOAD_GROUPS.value}" {DOWNLOAD_GROUPS.checked} />{DOWNLOAD_GROUPS.title}</label>
+				<!-- END: download_groups -->
+			</td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
