@@ -8,24 +8,13 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( !defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if( ! nv_function_exists( 'nv_comment_new' ) )
+if( !nv_function_exists( 'nv_comment_new' ) )
 {
 	function nv_block_comment_new( $module, $data_block, $lang_block )
 	{
 		global $module_config, $db;
-
-		$array_module_comment = array();
-		$result = $db->query( 'SELECT title, module_file, module_data, custom_title, admin_title, admins FROM ' . NV_MODULES_TABLE . ' ORDER BY weight' );
-		while( $row = $result->fetch() )
-		{
-			$module_i = $row['title'];
-			if( isset( $module_config[$module_i]['activecomm'] ) )
-			{
-				$array_module_comment[$module_i] = $row['custom_title'];
-			}
-		}
 
 		$html = '<tr>';
 		$html .= '	<td>' . $lang_block['titlelength'] . '</td>';
@@ -35,17 +24,6 @@ if( ! nv_function_exists( 'nv_comment_new' ) )
 		$html .= '<tr>';
 		$html .= '	<td>' . $lang_block['numrow'] . '</td>';
 		$html .= '	<td><input type="text" name="config_numrow" class="form-control w200" size="5" value="' . $data_block['numrow'] . '"/></td>';
-		$html .= '</tr>';
-
-		$html .= '<tr>';
-		$html .= '<td>' . $lang_block['module'] . '</td>';
-		$html .= '<td>';
-		foreach( $array_module_comment as $module_i => $title )
-		{
-			$ck = in_array( $module_i, $data_block['module_view'] ) ? ' checked=checked' : '';
-			$html .= '<input ' . $ck . ' type="checkbox" name="config_module[]" class="form-control w200" size="5" id="' . $module_i . '" value="' . $module_i . '"/><label for="' . $module_i . '">' . $title . '</label><br />';
-		}
-		$html .= '</td>';
 		$html .= '</tr>';
 		return $html;
 	}
@@ -57,14 +35,13 @@ if( ! nv_function_exists( 'nv_comment_new' ) )
 		$return['error'] = array();
 		$return['config'] = array();
 		$return['config']['titlelength'] = $nv_Request->get_int( 'config_titlelength', 'post', 0 );
-		$return['config']['module_view'] = $nv_Request->get_array( 'config_module', 'post', array() );
 		$return['config']['numrow'] = $nv_Request->get_int( 'config_numrow', 'post', 0 );
 		return $return;
 	}
 
 	function nv_comment_new( $block_config )
 	{
-		global $site_mods, $db, $module_info;
+		global $site_mods, $db, $module_info, $global_config;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
@@ -80,40 +57,38 @@ if( ! nv_function_exists( 'nv_comment_new' ) )
 		}
 
 		$xtpl = new XTemplate( 'block_new_comment.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
-		if( empty( $block_config['module_view'] ) )
-		{
-			$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $mod_data . "s WHERE status=1 ORDER BY post_time DESC LIMIT " . $block_config['numrow'];
-		}
-		else
-		{
-			$sql_where = array();
-			foreach( $block_config['module_view'] as $module_i )
-			{
-				$sql_where[] = 'module LIKE "%' . $module_i . '%"';
-			}
-			$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $mod_data . "s WHERE status=1 AND (" . implode( ' OR ', $sql_where ) . ") ORDER BY post_time DESC LIMIT " . $block_config['numrow'];
-		}
-
+		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_comment WHERE module = " . $db->quote( $module ) . " AND status=1 ORDER BY post_time DESC LIMIT " . $block_config['numrow'];
 		$result = $db->query( $sql );
-		$data_comment = array();
+		$array_comment = array();
+		$array_news_id = array();
+		while( $comment = $result->fetch() )
+		{
+			$array_comment[] = $comment;
+			$array_news_id[] = $comment['id'];
+		}
+		$array_news_id = array_unique( $array_news_id );
+		$result = $db->query( 'SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode( ',', $array_news_id ) . ') AND status = 1' );
+		$array_news_id = array();
 		while( $row = $result->fetch() )
 		{
-			$data_comment[] = $row;
+			$array_news_id[$row['id']] = $row;
 		}
-		if( ! empty( $data_comment ) )
+
+		foreach( $array_comment as $comment )
 		{
-			foreach( $data_comment as $comment )
+			if( isset( $array_news_id[$comment['id']] ) )
 			{
+				$comment['url_comment'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=' . $array_news_id[$comment['id']]['alias_cat'] . '/' . $array_news_id[$comment['id']]['alias_id'] . '-' . $comment['id'] . $global_config['rewrite_exturl'], true );
 				$comment['content'] = nv_clean60( $comment['content'], $block_config['titlelength'] );
 				$comment['post_time'] = nv_date( 'd/m/Y H:i', $comment['post_time'] );
 				$xtpl->assign( 'COMMENT', $comment );
 				$xtpl->parse( 'main.loop' );
 			}
 		}
-
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
+
 }
 
 if( defined( 'NV_SYSTEM' ) )

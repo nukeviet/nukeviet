@@ -10,8 +10,8 @@
 				<!-- END: emailcomm -->
 				<em class="fa fa-clock-o">&nbsp;</em> <span class="small">{LANG.pubtime} {COMMENT.post_time}</span>
 			</div>
-			<p><a href="{COMMENT.url_comment}">{COMMENT.content}</a></p>
-		</div>		
+			<p><a href="{COMMENT.url_comment}#idcomment">{COMMENT.content}</a></p>
+		</div>
 	</li>
 	<!-- END: loop -->
 </ul>
