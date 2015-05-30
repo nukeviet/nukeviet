@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_SYSTEM' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-function nv_site_theme( $contents, $full = true )
+function nv_site_theme( $contents, $full = true, $responsive = false )
 {
 	global $home, $array_mod_title, $lang_global, $language_array, $global_config, $site_mods, $module_name, $module_info, $op_file, $mod_title, $my_head, $my_footer, $client_info, $module_config, $op;
 
@@ -69,6 +69,16 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
 	$xtpl->assign( 'THEME_CSS', $css );
 	$xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
+	$xtpl->assign( 'THEME_RESPONSIVE', (int) $responsive );
+	if( $responsive )
+	{
+		$xtpl->parse( 'main.viewport' );
+		$xtpl->parse( 'main.responsive' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.non_responsive' );
+	}
 
 	// Module contents
 	$xtpl->assign( 'MODULE_CONTENT', $contents );

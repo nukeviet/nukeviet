@@ -50,7 +50,7 @@ ul, ol {
 	margin: 0px;
 }
 .navbar-default .navbar-nav>li>a{
-	color: #fff;
+	color: #fff !important;
 }
 
 .navbar-nav>li>a{
@@ -324,6 +324,7 @@ header{
 	background: #043c72;
 	border-top: 4px solid #043c72;
 	color:#fff;
+	width: 1150px;
 }
 #footer .footer-copyright a{
 	color:#fff;
@@ -359,15 +360,6 @@ header{
 	margin-top:10px;
 	text-align:right;
 	width:100%;
-}
-
-@media (max-width: 1200px){
-	#footer .footer-copyright{
-		background: #043c72;
-		border-top: 4px solid #043c72;
-		color:#fff;
-		width: 1150px;
-	}
 }
 
 

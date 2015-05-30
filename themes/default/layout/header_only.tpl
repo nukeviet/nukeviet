@@ -2,19 +2,30 @@
 <html lang="{LANG.Content_Language}" xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://ogp.me/ns#">
 	<head>
 		{THEME_PAGE_TITLE} {THEME_META_TAGS}
-
-		<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+        <!-- BEGIN: viewport -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- END: viewport -->
 		{THEME_SITE_RSS}
 
 		<link rel="shortcut icon" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/favicon.ico" />
 		<link rel="apple-touch-icon" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/apple-touch-icon.png" />
 
-		<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/bootstrap.non-responsive.css" rel="stylesheet" />
-		<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/font-awesome.min.css" rel="stylesheet" />
-		<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.css" rel="stylesheet" />
-        <!--  <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.responsive.css" rel="stylesheet" />-->
-		{THEME_CSS}
+        <!-- BEGIN: responsive -->
+        <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.css" rel="stylesheet" />
+        <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.responsive.css" rel="stylesheet" />
+        <!-- END: responsive -->
 
+        <!-- BEGIN: non_responsive -->
+        <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/bootstrap.non-responsive.css" rel="stylesheet" />
+        <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.css" rel="stylesheet" />
+        <!-- END: non_responsive -->
+
+		<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/font-awesome.min.css" rel="stylesheet" />
+		{THEME_CSS}
+        <script type="text/javascript">
+            var theme_responsive = '{THEME_RESPONSIVE}';
+        </script>
 		{THEME_SITE_JS}
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/main.js"></script>
 		<!--[if lt IE 9]>
