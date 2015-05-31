@@ -1292,7 +1292,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
  * @param mixed $array_other_view
  * @return
  */
-function detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment, $compare_id, $popup )
+function detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_shops_cat, $meta_property, $pro_config, $user_info, $discounts_config, $my_head, $my_footer;
 
@@ -1465,6 +1465,41 @@ function detail_product( $data_content, $data_unit, $data_shop, $data_others, $a
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $data_content['id'] ) . '&nbsp;-&nbsp;' . nv_link_delete_page( $data_content['id'] ) );
 				$xtpl->parse( 'main.adminlink' );
+			}
+
+			// Tap tin tai lieu
+			if( !empty( $data_content['files'] ) )
+			{
+				foreach( $data_content['files'] as $files )
+				{
+					if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/images/' . $module_file . '/icon_files/' . $files['extension'] . '.png' ) )
+					{
+						$files['extension_icon'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/icon_files/' . $files['extension'] . '.png';
+					}
+					else
+					{
+						$files['extension_icon'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/icon_files/document.png';
+					}
+					$xtpl->assign( 'FILES', $files );
+
+					if( $files['download_groups'] == '-1' )
+					{
+						$files['download_groups'] = $pro_config['download_groups'];
+					}
+					if( !nv_user_in_groups( $files['download_groups'] ) )
+					{
+						$xtpl->assign( 'NOTE', $lang_module['download_file_no'] );
+						$xtpl->parse( 'main.product_detail.files_content.loop.disabled' );
+					}
+					else
+					{
+						$xtpl->assign( 'NOTE', $lang_module['download_file'] );
+					}
+					$xtpl->parse( 'main.product_detail.files_content.loop' );
+				}
+				$xtpl->parse( 'main.product_detail.files_content' );
+				$xtpl->parse( 'main.product_detail.files_title' );
+				$xtpl->parse( 'main.files_js' );
 			}
 
 			$xtpl->parse( 'main.product_detail' );
