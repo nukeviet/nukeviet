@@ -666,10 +666,30 @@ $lang_module['download_file_available'] = 'Danh sách hiện có';
 $lang_module['download_file_selected'] = 'Danh sách đã chọn';
 $lang_module['download_file_add_success'] = 'Đã thêm tài liệu thành công, danh sách tài liệu đã được cập nhật, bạn có thể tiếp tục thêm tập tin hoặc đóng cửa sổ này.';
 $lang_module['download_file_move_warning'] = 'Bạn có chắc chắn muốn di chuyển nhiều đối tượng, hệ thống sẽ mất một ít thời gian để xử lý';
+$lang_module['download_setting_active'] = 'Sử dụng chức năng Quản lý file tài liệu';
 $lang_module['download_files_error_title'] = 'Vui lòng nhập tên tài liệu';
 $lang_module['download_files_error_path'] = 'Vui lòng chọn đường dẫn tài liệu';
 $lang_module['download_files_error_path_valid'] = 'Đường dẫn tập tin không hợp lệ';
 $lang_module['download_setting_active'] = 'Sử dụng chức Quản lý file tài liệu';
 $lang_module['download_setting_groups'] = 'Ai được phép tải tập tin';
 $lang_module['download_setting_groups_module'] = 'Theo cấu hình module';
+
 $lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
+
+//Lang for function tabs
+$lang_module['tabs'] = 'Quản lý tab';
+$lang_module['add'] = 'Thêm mới';
+$lang_module['icon'] = 'Icon';
+$lang_module['error_required_cotent'] = 'Lỗi: bạn cần nhập dữ liệu cho Cotent';
+$lang_module['content'] = 'Nội dung';
+$lang_module['error_required_content'] = 'Lỗi: bạn cần nhập dữ liệu cho Nội dung';
+$lang_module['select_content_detail'] = 'Chi tiết sản phẩm';
+$lang_module['select_content_image'] = 'Hình ảnh khác';
+$lang_module['select_content_download'] = 'Download tài liệu';
+$lang_module['select_content_comment'] = 'Bình luận';
+$lang_module['select_content_rate'] = 'Đánh giá sản phẩm';
+$lang_module['select_content_customdata'] = 'Dữ liệu tùy biến';
+
+//Lang for function field
+$lang_module['field_tab_page'] = 'Hiển thị dữ liệu cho tab'; 
+$lang_module['introduce'] = 'Giới thiệu'; 

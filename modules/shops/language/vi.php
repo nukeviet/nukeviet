@@ -543,3 +543,11 @@ $lang_module['download_file_unknown'] = 'N/A';
 $lang_module['download_file'] = 'Tải về tập tin';
 $lang_module['download_file_no'] = 'Bạn không được phép tải tập tin này';
 $lang_module['download_error'] = 'Tải tệp tin không thành công';
+
+$lang_module['introduce'] = 'Giới thiệu'; 
+$lang_module['select_content_detail'] = 'Chi tiết sản phẩm';
+$lang_module['select_content_image'] = 'Hình ảnh khác';
+$lang_module['select_content_download'] = 'Download tài liệu';
+$lang_module['select_content_comment'] = 'Bình luận';
+$lang_module['select_content_rate'] = 'Đánh giá sản phẩm';
+$lang_module['select_content_customdata'] = 'Dữ liệu tùy biến';
