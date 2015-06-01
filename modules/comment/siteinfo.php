@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 $lang_siteinfo = nv_get_lang_module( $mod );
 
 // Tong so binh luan
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comments WHERE status= 0' )->fetchColumn();
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . ' WHERE status= 0' )->fetchColumn();
 if( $number > 0 )
 {
 	$pendinginfo[] = array(

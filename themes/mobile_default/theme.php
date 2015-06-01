@@ -163,8 +163,8 @@ function nv_site_theme( $contents, $full = true )
 				foreach( $global_config['array_theme_type'] as $i => $theme_type )
 				{
 					$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-					$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $i] );
-					$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $i] ) );
+					$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $theme_type] );
+					$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $theme_type] ) );
 
 					if( $theme_type == $global_config['current_theme_type'] )
 					{
