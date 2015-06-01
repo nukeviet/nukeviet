@@ -1,6 +1,10 @@
 <!-- BEGIN: main -->
 <div class="row" style="margin-bottom: 5px">
 	<div class="col-xs-24">
+		<div class="btn-group pull-left">
+			<a href="{TEM_ADD}" class="btn btn-info">{LANG.template_add}</a>
+		</div>
+
 		<div class="btn-group pull-right">
 			<button type="button" class="btn btn-primary btn-xs" id="field">
 				{LANG.field_id}
@@ -42,7 +46,7 @@
 		<!-- BEGIN: row -->
 		<tr>
 			<td class="text-center"><input type="checkbox" class="ck" value="{id}" /></td>
-			<td>{title}</td>
+			<td><a href="{FIELD_TAB}">{title}</a></td>
 			<td class="text-center"><input type="checkbox" id="change_active_{id}" onclick="nv_change_active({id})" {active} /></td>
 			<td class="text-center"><i class="fa fa-edit">&nbsp;</i><a href="{link_edit}" title="">{LANG.edit}</a>&nbsp; <i class="fa fa-trash-o">&nbsp;</i><a href="{link_del}" class="delete" title="">{LANG.del}</a></td>
 		</tr>
@@ -82,12 +86,9 @@
 					data : 'listall=' + listall,
 					success : function(data) {
 						var r_split = data.split('_');
-						if (r_split[0] != 'OK')
-						{
+						if (r_split[0] != 'OK') {
 							alert(r_split[1]);
-						}
-						else
-						{
+						} else {
 							window.location = '{URL_DEL_BACK}';
 						}
 					}
@@ -104,12 +105,9 @@
 					data : '',
 					success : function(data) {
 						var r_split = data.split('_');
-						if (r_split[0] != 'OK')
-						{
+						if (r_split[0] != 'OK') {
 							alert(r_split[1]);
-						}
-						else
-						{
+						} else {
 							window.location = '{URL_DEL_BACK}';
 						}
 					}
@@ -143,10 +141,10 @@
 			{caption}
 		</caption>
 		<tr>
-			<td align="right" width="150px"><strong>{LANG.template_name}: </strong><span class="red">*</span></td>
-			<td><input class="form-control" name="title" type="text" value="{DATA.title}" maxlength="255" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" /></td>
+			<th class="text-right w200">{LANG.template_name}: </strong><span class="red">*</span></th>
+			<td class="w500"><input class="form-control w500" name="title" type="text" value="{DATA.title}" maxlength="150" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" /></td>
 			<td><input class="btn btn-primary" name="submit" type="submit" value="{LANG.template_save}" /></td>
-		</tr>
+		<tr>
 	</table>
 </form>
 <!-- END: main -->

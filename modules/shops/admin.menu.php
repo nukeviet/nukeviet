@@ -57,6 +57,7 @@ if( $shop_module_config['download_active'] )
 }
 
 $submenu['tags'] = $lang_module['tags'];
+$submenu['tabs'] = $lang_module['tabs'];
 
 $menu_setting = array();
 $menu_setting['cat'] = $lang_module['categories'];

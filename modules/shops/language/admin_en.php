@@ -623,3 +623,19 @@ $lang_module['warehouse_detail_info'] = 'warehouse detail information';
 $lang_module['warehouse_detail_group'] = 'Product attributes';
 $lang_module['warehouse_add_group_propties'] = 'Add attribute group';
 $lang_module['warehouse_chose_propties'] = 'Choose';
+
+//Lang for function tabs
+$lang_module['tabs'] = 'Tabs';
+$lang_module['icon'] = 'Icon';
+$lang_module['error_required_cotent'] = 'Error: Required fields enter the Cotent';
+$lang_module['content'] = 'Content';
+$lang_module['error_required_content'] = 'Error: Required fields enter the Content';
+$lang_module['select_content_detail'] = 'Detail content';
+$lang_module['select_content_image'] = 'Image other';
+$lang_module['select_content_download'] = 'Download';
+$lang_module['select_content_comment'] = 'Comment';
+$lang_module['select_content_rate'] = 'Rate';
+$lang_module['select_content_customdata'] = 'Custom data';
+
+//Lang for function field
+$lang_module['field'] = 'field';

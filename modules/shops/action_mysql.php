@@ -138,6 +138,7 @@ elseif( $op != 'setup' )
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_shops_carrier';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_files';
 	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_files_rows';
+	$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_tabs';
 	$set_lang_data = '';
 }
 
@@ -200,6 +201,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   fid mediumint(8) NOT NULL AUTO_INCREMENT,
   field varchar(25) NOT NULL,
   listtemplate varchar(25) NOT NULL,
+  tab varchar(255) NOT NULL DEFAULT '',
   weight int(10) unsigned NOT NULL DEFAULT '1',
   field_type enum('number','date','textbox','textarea','editor','select','radio','checkbox','multiselect') NOT NULL DEFAULT 'textbox',
   field_choices text NOT NULL,
@@ -670,11 +672,21 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   UNIQUE KEY shops_id (shops_id, carrier_id)
 ) ENGINE=MyISAM ";
 
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_tabs (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  title varchar(50) NOT NULL DEFAULT '',
+  icon varchar(50) NOT NULL DEFAULT '',
+  content varchar(50) NOT NULL DEFAULT '',
+  weight int(10) unsigned NOT NULL DEFAULT '1',
+  active tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (id)
+) ENGINE=MyISAM";
+
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_files (
  id mediumint(8) unsigned NOT NULL auto_increment,
  path varchar(255) NOT NULL,
  filesize int(11) unsigned NOT NULL DEFAULT '0',
- extension varchar(10) NOT NULL DEFAULT ''
+ extension varchar(10) NOT NULL DEFAULT '',
  addtime int(11) unsigned NOT NULL DEFAULT '0',
  download_groups varchar(255) NOT NULL DEFAULT '-1',
  status tinyint(1) unsigned DEFAULT '1',

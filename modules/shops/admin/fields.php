@@ -156,7 +156,7 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 		$xtpl->assign( 'choicesql_next', $array_choicesql[$choice] );
 		if( $num_table > 0 )
 		{
-			$choice_seltected = explode( '|', $choice_seltected );
+			$choice_seltected = explode( ',', $choice_seltected );
 			foreach( $_items as $item )
 			{
 				$_temp_choice['sl_key'] = ($choice_seltected[0] == $item['field']) ? ' selected="selected"' : '';
@@ -202,7 +202,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( !empty( $templateids ) )
 	{
-		$dataform['listtemplate'] = implode( "|", $templateids );
+		$dataform['listtemplate'] = implode( ",", $templateids );
 	}
 	else
 	{
@@ -415,7 +415,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$dataform['sql_choices'] = '';
 			if( $choicesql_module != '' && $choicesql_table != '' && $choicesql_column_key != '' && $choicesql_column_val != '' )
 			{
-				$dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val;
+				$dataform['sql_choices'] = $choicesql_module . ',' . $choicesql_table . ',' . $choicesql_column_key . ',' . $choicesql_column_val;
 			}
 			else
 			{
@@ -490,7 +490,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				{
 					$type_date = nv_get_data_type( $dataform );
 
-					$listtemid_old = explode( '|', $dataform_old['listtemplate'] );
+					$listtemid_old = explode( ',', $dataform_old['listtemplate'] );
 					if( $listtemid_old != $templateids )
 					{
 						foreach( $templateids as $template_i )
@@ -505,7 +505,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 						{
 							if( ! in_array( $temid_old, $templateids ) )
 							{
-								$db->query( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $temid_old . " DROP IF EXISTS " . $dataform['field'] );
+								$db->query( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $temid_old . " DROP " . $dataform['field'] );
 							}
 						}
 					}
@@ -541,7 +541,7 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	list( $fid, $listtemplate, $field, $weight ) = $db->query( 'SELECT fid,listtemplate, field, weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $fid )->fetch( 3 );
 	if( $listtemplate != '' )
 	{
-		$listtemplate = explode( "|", $listtemplate );
+		$listtemplate = explode( ",", $listtemplate );
 		foreach( $listtemplate as $array_template_i )
 		{
 			$db->query( ' ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_info_' . $array_template_i . '  DROP ' . $field );
@@ -595,14 +595,15 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 $xtpl->assign( 'TEM_ADD', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=template#add" );
+$xtpl->assign( 'FIELD_ADD', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=fields#ffields" );
 
-// Danh sach cau hoi
+// Danh sach
 $show_view = false;
 if( !$nv_Request->isset_request( 'id', 'post,get' ) )
 {
 	$show_view = true;
 
-	$per_page = 6;
+	$per_page = 60;
 
 	$page = $nv_Request->get_int( 'page', 'post,get', 1 );
 	$xtpl->assign( 'page', $page );
@@ -724,7 +725,7 @@ else
 	if( !empty( $dataform['sql_choices'] ) )
 	{
 		$choice_type_sql = 1;
-		$sql_data_choice = explode( '|', $dataform['sql_choices'] );
+		$sql_data_choice = explode( ',', $dataform['sql_choices'] );
 		$xtpl->assign( 'SQL_DATA_CHOICE', $sql_data_choice );
 		$xtpl->parse( 'main.nv_load_sqlchoice' );
 	}
@@ -847,7 +848,7 @@ if( !empty( $error ) )
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.load.error' );
 }
-$array_catid_in_row = explode( '|', $dataform['listtemplate'] );
+$array_catid_in_row = explode( ',', $dataform['listtemplate'] );
 
 foreach( $array_template as $template_i => $array_value )
 {

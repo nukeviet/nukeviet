@@ -138,13 +138,7 @@
 						<!-- END: group_detail -->
 
 						<!-- BEGIN: custom_data -->
-						<!-- BEGIN: loop -->
-						<li>
-							<p>
-								<strong>{CUSTOM_LANG}:</strong> {CUSTOM_DATA}
-							</p>
-						</li>
-						<!-- END: loop -->
+						{CUSTOM_DATA}
 						<!-- END: custom_data -->
 
 						<!-- BEGIN: hometext -->
@@ -261,78 +255,30 @@
 	</div>
 
 	<!-- BEGIN: product_detail -->
+	<!-- BEGIN: tabs -->
 	<div id="tabs" class="tabs">
 		<nav>
 			<ul>
+				<!-- BEGIN: tabs_title -->
 				<li>
-					<a href="#section-1"><em class="fa fa-bars">&nbsp;</em><span>{LANG.product_detail}</span></a>
+					<a href="#section-{ID_TAB}"><span class="img_tab">{IMG_TAB}</span><span>{LANG_TAB}</span></a>
 				</li>
-
-				<!-- BEGIN: files_title -->
-				<li>
-					<a href="#section-5"><em class="fa fa-files-o">&nbsp;</em><span>{LANG.download}</span></a>
-				</li>
-				<!-- END: files_title -->
-
-				<!-- BEGIN: othersimg_title -->
-				<li>
-					<a href="#section-2"><em class="fa fa-picture-o">&nbsp;</em><span>{LANG.add_otherimage}</span></a>
-				</li>
-				<!-- END: othersimg_title -->
-
-				<!-- BEGIN: comment_tab -->
-				<li>
-					<a href="#section-3"><em class="fa fa-comments-o">&nbsp;</em><span>{LANG.detail_comments}</span></a>
-				</li>
-				<!-- END: comment_tab -->
-
+				<!-- END: tabs_title -->
 				<!-- BEGIN: allowed_rating_tab -->
 				<li>
-					<a href="#section-4"><em class="fa fa-star-o">&nbsp;</em><span>{LANG.rate_feedback} ({RATE_TOTAL})</span></a>
+					<a href="#section-{ID_TAB}"><span class="img_tab">{IMG_TAB}</span><span><span>{LANG.rate_feedback} ({RATE_TOTAL})</span></a>
 				</li>
 				<!-- END: allowed_rating_tab -->
+				
 			</ul>
 		</nav>
 		<div class="content">
-			<section id="section-1">
-				{DETAIL}
+			
+			<!-- BEGIN: tabs_content -->
+			<section id="section-{ID_TAB}">
+				{TAB_CONTENT}
 			</section>
-
-			<!-- BEGIN: files_content -->
-			<section id="section-5">
-				<!-- BEGIN: loop -->
-				<div class="row download">
-					<div class="col-md-18">
-						<img src="{FILES.extension_icon}" width="16" />&nbsp;<a href="" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{FILES.description}">{FILES.title}</a>
-					</div>
-					<div class="col-md-4"><span class="text-muted">{FILES.filesize}</span></div>
-					<div class="col-md-2 text-right" data-toggle="tooltip" data-placement="top" data-original-title="{NOTE}">
-						<button id="{FILES.id}" title="" class="btn btn-primary btn-xs download_files" <!-- BEGIN: disabled -->disabled="disabled"<!-- END: disabled --> ><em class="fa fa-download">&nbsp;</em></button>
-					</div>
-				</div>
-				<!-- END: loop -->
-			</section>
-			<!-- END: files_content -->
-
-			<!-- BEGIN: othersimg -->
-			<section id="section-2">
-				<!-- BEGIN: loop -->
-				<div class="col-xs-12 col-md-6">
-					<a href="{IMG_SRC_OTHER}" class="thumbnail" rel="shadowbox[miss]"><img src="{IMG_SRC_OTHER}" style="max-height: 100px" /></a>
-				</div>
-				<!-- END: loop -->
-				<div class="clear">
-					&nbsp;
-				</div>
-			</section>
-			<!-- END: othersimg -->
-
-			<!-- BEGIN: comment -->
-			<section id="section-3">
-				{CONTENT_COMMENT}
-			</section>
-			<!-- END: comment -->
-
+			<!-- END: tabs_content -->
 			<!-- BEGIN: allowed_rating -->
 			<section id="section-4">
 				<div class="panel panel-default">
@@ -382,8 +328,10 @@
 				</div>
 			</section>
 			<!-- END: allowed_rating -->
+			
 		</div>
 	</div>
+	<!-- END: tabs -->
 
 	<!-- BEGIN: other -->
 	<div class="panel panel-default">

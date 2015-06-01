@@ -1374,3 +1374,17 @@ img.calendar {
 	border: none;
 	box-shadow: none
 }
+
+/*css cho tab*/
+.img_tab, .img_tab>img{
+	display: inline-block;
+	max-height: 30px;
+	max-width: 30px;
+}
+.img_tab>img{
+	padding-right: 5px;
+}
+
+#detail ul{
+	padding-left: 0;
+}

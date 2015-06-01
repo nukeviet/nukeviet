@@ -1292,7 +1292,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
  * @param mixed $array_other_view
  * @return
  */
-function detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup )
+function detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup , $idtemplate )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_shops_cat, $meta_property, $pro_config, $user_info, $discounts_config, $my_head, $my_footer;
 
@@ -1338,21 +1338,14 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 			$xtpl->assign( 'gift_content', $data_content[NV_LANG_DATA . '_gift_content'] );
 			$xtpl->parse( 'main.gift' );
 		}
-
+		
+		// Hien thi du lieu tuy bien o phan gioi thieu
 		if( !empty( $data_content['array_custom'] ) and !empty( $data_content['array_custom_lang'] ) )
 		{
-			$i = 1;
-			foreach( $data_content['array_custom'] as $field => $value )
-			{
-				if( $i > 2 and !empty( $value ) )
-				{
-					$xtpl->assign( 'CUSTOM_DATA', $value );
-					$xtpl->assign( 'CUSTOM_LANG', $data_content['array_custom_lang'][$field] );
-					$xtpl->parse( 'main.custom_data.loop' );
-				}
-				$i++;
-			}
+			$custom_data = nv_custom_tpl('tab_' . str_replace( '-', '_', strtolower( change_alias( $lang_module['introduce'] ) ) ) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
+			$xtpl->assign( 'CUSTOM_DATA', $custom_data );
 			$xtpl->parse( 'main.custom_data' );
+			
 		}
 
 		// San pham yeu thich
@@ -1378,6 +1371,108 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 			$xtpl->assign( 'hometext', $data_content[NV_LANG_DATA . '_hometext'] );
 			$xtpl->parse( 'main.hometext' );
 		}
+		
+		// lam tab
+		//print_r($data_content['tabs']);die;
+		foreach ($data_content['tabs'] as $key => $value_tab) 
+		{
+			$tab_content = '';
+			
+			if( $value_tab == $lang_module['select_content_detail'] )// Chi tiết sản phẩm
+			{
+				$tab_content =  $data_content[NV_LANG_DATA . '_bodytext'] ;
+			}
+
+			if( $value_tab == $lang_module['select_content_image'] )// Hình ảnh khác
+			{
+				$array_data = array();
+				if( !empty( $data_content['otherimage'] ) )
+				{
+					$otherimage = explode( '|', $data_content['otherimage'] );
+					foreach ($otherimage as $key_img => $otherimage_i) {
+						
+						if( !empty( $otherimage_i ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $otherimage_i ) )
+						{
+							$otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $otherimage_i;
+						}
+						$array_data[$key_img]['img_src_other'] = $otherimage_i;
+					}
+				}
+				else
+				{
+					$otherimage = array( );
+				}
+				$tab_content = nv_tpl( 'othersimg.tpl', $array_data );//echo($tab_content .'<br><br><br>');
+			}
+			
+			if( $value_tab == $lang_module['select_content_comment'] )// Bình luận
+			{
+				$tab_content =  $content_comment ;
+			}
+			
+			if( $value_tab == $lang_module['select_content_rate'] )// Đánh giá sản phẩm
+			{
+				$tab_content = '';
+				$xtpl->assign( 'ID_TAB', $key );
+				$tabs_img = '<em class="fa fa-star-o">&nbsp;</em>';
+				if( !empty( $data_content['tabs_img'][$key] ) )
+				{
+					$tabs_img = '<img src="/'.NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['tabs_img'][$key].'" />' ;
+				}
+				$xtpl->assign( 'IMG_TAB', $tabs_img );
+				if( !empty( $user_info ) )
+				{
+					$user_info['full_name'] = nv_show_name_user( $user_info['first_name'], $user_info['last_name'], $user_info['username'] );
+					$xtpl->assign( 'SENDER', !empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'] );
+				}
+	
+				if( !empty( $data_content['allowed_rating'] ) and !empty( $pro_config['review_active'] ) )
+				{
+					$xtpl->assign( 'RATE_TOTAL', $data_content['rating_total'] );
+					$xtpl->assign( 'RATE_VALUE', $data_content['rating_point'] );
+					if( $pro_config['review_captcha'] )
+					{
+						$xtpl->parse( 'main.product_detail.tabs.allowed_rating.captcha' );
+					}
+	
+					if( $data_content['rating_total'] > 0 and $data_content['rating_point'] > 0 )
+					{
+						$xtpl->parse( 'main.allowed_rating_snippets' );
+					}
+	
+					$xtpl->parse( 'main.product_detail.tabs.allowed_rating' );
+					$xtpl->parse( 'main.product_detail.tabs.allowed_rating_tab' );
+					$xtpl->parse( 'main.allowed_rating_js' );
+					
+				}
+			}
+
+			if( $value_tab == $lang_module['select_content_customdata'] )// Dữ liệu tùy biến
+			{
+				if( !empty( $data_content['array_custom'] ) and !empty( $data_content['array_custom_lang'] ) )
+				{
+					$custom_data = nv_custom_tpl('tab_' . str_replace( '-', '_', strtolower( change_alias( $data_content['tabs_title'][$key] ) ) ) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
+				}	
+				$tab_content =  $custom_data ;//die($tab_content);
+			}
+			
+			if( !empty($tab_content) )
+			{
+				$tabs_img = '<em class="fa fa-bars">&nbsp;</em>';
+				if( !empty( $data_content['tabs_img'][$key] ) )
+				{
+					$tabs_img = '<img src="/'.NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_content['tabs_img'][$key].'" />' ;
+				}
+				$xtpl->assign( 'IMG_TAB', $tabs_img );
+				$xtpl->assign( 'LANG_TAB', $data_content['tabs_title'][$key] );
+				$xtpl->assign( 'ID_TAB', $key );
+				$xtpl->assign( 'TAB_CONTENT',  $tab_content  );
+				$xtpl->parse( 'main.product_detail.tabs.tabs_title' );
+				$xtpl->parse( 'main.product_detail.tabs.tabs_content' );
+			}
+		}//die;
+		$xtpl->parse( 'main.product_detail.tabs' );
+		// lam tab
 
 		if( !$popup )
 		{
@@ -1701,7 +1796,6 @@ function print_product( $data_content, $data_unit, $page_title )
 		$xtpl->assign( 'TITLE', $data_content[NV_LANG_DATA . '_title'] );
 		$xtpl->assign( 'NUM_VIEW', $data_content['hitstotal'] );
 		$xtpl->assign( 'DATE_UP', $lang_module['detail_dateup'] . date( ' d-m-Y ', $data_content['addtime'] ) . $lang_module['detail_moment'] . date( " H:i'", $data_content['addtime'] ) );
-		$xtpl->assign( 'DETAIL', $data_content[NV_LANG_DATA . '_bodytext'] );
 		$xtpl->assign( 'PRICE', nv_get_price( $data_content['id'], $pro_config['money_unit'] ) );
 		$xtpl->assign( 'money_unit', $pro_config['money_unit'] );
 		$xtpl->assign( 'pro_unit', $data_unit['title'] );
