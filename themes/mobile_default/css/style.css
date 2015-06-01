@@ -413,13 +413,25 @@ a.btn{
 	display: table-cell;
 	vertical-align: middle;
 }
-
+/* panel-body */
 .panel-body{
 	padding: 5px;
 }
-
 .panel-body h3 {
 	color: #0066cc;
+}
+.panel-body ul{
+	margin: 0px;
+	padding: 0px;
+}
+.panel-body ul li{
+	margin-bottom: 10px
+}
+.panel-body img{
+	margin-right: 5px
+}
+.panel-body ul li:last-child{
+	margin-bottom: 0px;
 }
 
 .panel{

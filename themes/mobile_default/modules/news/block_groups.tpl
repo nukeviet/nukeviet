@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<div class="other_blocknews">
+<div>
 	<ul>
 		<!-- BEGIN: loop -->
 		<li class="clearfix">

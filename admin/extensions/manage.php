@@ -97,20 +97,7 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 		$files = $sth->fetchAll();
 
 		$config_ini = '';
-		// Neu co du lieu file thi chi them nhung file nay
-		if( ! empty( $files ) )
-		{
-			foreach( $files as $file )
-			{
-				$file = NV_ROOTDIR . '/' . $file['path'];
-
-				if( file_exists( $file ) )
-				{
-					$files_folders[] = $file;
-				}
-			}
-		}
-		elseif( $row['type'] == 'module' )
+		if( $row['type'] == 'module' )
 		{
 			// Module folder
 			if( file_exists( NV_ROOTDIR . '/modules/' . $row['basename'] . '/' ) )
@@ -295,6 +282,29 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 			}
 		}
 
+		//Kiểm tra các file không có trong cấu trúc của module, giao diện
+		if( ! empty( $files ) )
+		{
+			foreach( $files as $file )
+			{
+				$file = NV_ROOTDIR . '/' . $file['path'];
+
+				$_exitfolder = false;
+				foreach ( $files_folders as $_folder )
+				{
+					if( strpos( $file, $_folder ) !== false )
+					{
+						$_exitfolder = true;
+						break;
+					}
+				}
+				if( $_exitfolder == false and file_exists( $file ) )
+				{
+					$files_folders[] = $file;
+				}
+			}
+		}
+
 		if( ! empty( $files_folders ) )
 		{
 			$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $row['type'] . '_' . $row['basename'] . '_' . md5( nv_genpass( 10 ) . session_id() ) . '.zip';
@@ -304,6 +314,7 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				@nv_deletefile( $file_src );
 			}
 
+			$files_folders = array_unique( $files_folders );
 			require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 			$zip = new PclZip( $file_src );
 			$zip->add( $files_folders, PCLZIP_OPT_REMOVE_PATH, $row['type'] == 'theme' ? ( NV_ROOTDIR . '/themes' ) : NV_ROOTDIR );
