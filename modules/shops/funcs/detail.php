@@ -223,6 +223,14 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 		$data_content['homeimgthumb'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
 	}
 
+	// Tu khoa
+	$key_words = array();
+	$_query = $db->query( 'SELECT a1.' . NV_LANG_DATA . '_keyword keyword, a2.' . NV_LANG_DATA . '_alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id'] );
+	while( $row = $_query->fetch() )
+	{
+		$key_words[] = $row['keyword'];
+	}
+
 	//metatag image facebook
 	$meta_property['og:image'] = NV_MY_DOMAIN . $data_content['homeimgthumb'];
 
@@ -360,6 +368,8 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
     // Get url comment
     $url_info = parse_url( $client_info['selfurl'] );
     $url_comment = $url_info['path'];
+
+	$key_words = implode( ',', $key_words );
 
 	$content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 
