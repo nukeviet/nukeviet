@@ -8,8 +8,7 @@
  * @Createdate Thu, 28 May 2015 04:00:31 GMT
  */
 
-if( !defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( !defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $table_name = $db_config['prefix'] . '_' . $module_data . '_tabs';
 
@@ -18,8 +17,7 @@ if( $nv_Request->isset_request( 'change_status', 'post, get' ) )
 {
 	$id = $nv_Request->get_int( 'id', 'post, get', 0 );
 
-	if( !$id )
-		die( 'NO' );
+	if( !$id ) die( 'NO' );
 
 	$query = 'SELECT active FROM ' . $table_name . ' WHERE id=' . $id;
 	$result = $db->query( $query );
@@ -41,6 +39,7 @@ if( $nv_Request->isset_request( 'change_status', 'post, get' ) )
 		$query = 'UPDATE ' . $table_name . ' SET active=' . $db->quote( $active ) . ' WHERE id=' . $id;
 		$db->query( $query );
 	}
+	nv_del_moduleCache( $module_name );
 	Header( 'Location:' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 	exit ;
 }
@@ -111,14 +110,16 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	$row['title'] = $nv_Request->get_title( 'title', 'post', '' );
 	$row['icon'] = $nv_Request->get_title( 'icon', 'post', '' );
+
 	if( is_file( NV_DOCUMENT_ROOT . $row['icon'] ) )
 	{
-		$row['icon'] = substr( $row['icon'], strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' ) );
+		$row['icon'] = str_replace( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/', '', $row['icon'] );
 	}
 	else
 	{
 		$row['icon'] = '';
 	}
+
 	$row['content'] = $nv_Request->get_title( 'content', 'post', '' );
 
 	$row['active'] = $nv_Request->get_int( 'active', 'post', 1 );
