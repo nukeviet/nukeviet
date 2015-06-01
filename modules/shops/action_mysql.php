@@ -90,6 +90,8 @@ if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 	 DROP ' . $lang . '_title,
 	 DROP ' . $lang . '_description';
 
+	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_tabs DROP ' . $lang . '_title';
+
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_tags_id DROP ' . $lang . '_keyword';
 }
 elseif( $op != 'setup' )
@@ -672,16 +674,6 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   UNIQUE KEY shops_id (shops_id, carrier_id)
 ) ENGINE=MyISAM ";
 
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_tabs (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  title varchar(50) NOT NULL DEFAULT '',
-  icon varchar(50) NOT NULL DEFAULT '',
-  content varchar(50) NOT NULL DEFAULT '',
-  weight int(10) unsigned NOT NULL DEFAULT '1',
-  active tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (id)
-) ENGINE=MyISAM";
-
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_files (
  id mediumint(8) unsigned NOT NULL auto_increment,
  path varchar(255) NOT NULL,
@@ -702,6 +694,17 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  download_hits mediumint(8) unsigned NOT NULL DEFAULT '0',
  UNIQUE KEY id_files (id_files, id_rows)
 ) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_tabs (
+  id int(3) unsigned NOT NULL AUTO_INCREMENT,
+  icon varchar(50) NOT NULL DEFAULT '',
+  content varchar(50) NOT NULL DEFAULT '',
+  weight int(10) unsigned NOT NULL DEFAULT '1',
+  active tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (id)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_tabs ADD " . $lang . "_title VARCHAR( 255 ) NOT NULL DEFAULT ''";
 
 $data = array();
 $data['image_size'] = '100x100';
@@ -831,6 +834,12 @@ if( ! empty( $set_lang_data ) )
 	{
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_files SET " . $lang . "_title = " . $set_lang_data . "_title";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_files SET " . $lang . "_description = " . $set_lang_data . "_description";
+	}
+
+	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_tabs" )->fetchColumn();
+	if( $numrow )
+	{
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tabs SET " . $lang . "_title = " . $set_lang_data . "_title";
 	}
 
 	$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " SET exchange = '1'";

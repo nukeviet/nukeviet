@@ -11,6 +11,8 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
+$table_name = $db_config['prefix'] . '_' . $module_data . '_tabs';
+
 //change status
 if( $nv_Request->isset_request( 'change_status', 'post, get' ) )
 {
@@ -19,7 +21,7 @@ if( $nv_Request->isset_request( 'change_status', 'post, get' ) )
 	if( !$id )
 		die( 'NO' );
 
-	$query = 'SELECT active FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs WHERE id=' . $id;
+	$query = 'SELECT active FROM ' . $table_name . ' WHERE id=' . $id;
 	$result = $db->query( $query );
 	$numrows = $result->rowCount( );
 	if( $numrows > 0 )
@@ -36,9 +38,7 @@ if( $nv_Request->isset_request( 'change_status', 'post, get' ) )
 				$active = 1;
 			}
 		}
-		$query = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tabs SET
-				active=' . $db->quote( $active ) . '
-				WHERE id=' . $id;
+		$query = 'UPDATE ' . $table_name . ' SET active=' . $db->quote( $active ) . ' WHERE id=' . $id;
 		$db->query( $query );
 	}
 	Header( 'Location:' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -52,7 +52,7 @@ if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
 	$content = 'NO_' . $id;
 	if( $new_vid > 0 )
 	{
-		$sql = 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs WHERE id!=' . $id . ' ORDER BY weight ASC';
+		$sql = 'SELECT id FROM ' . $table_name . ' WHERE id!=' . $id . ' ORDER BY weight ASC';
 		$result = $db->query( $sql );
 		$weight = 0;
 		while( $row = $result->fetch( ) )
@@ -60,10 +60,10 @@ if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
 			++$weight;
 			if( $weight == $new_vid )
 				++$weight;
-			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tabs SET weight=' . $weight . ' WHERE id=' . $row['id'];
+			$sql = 'UPDATE ' . $table_name. ' SET weight=' . $weight . ' WHERE id=' . $row['id'];
 			$db->query( $sql );
 		}
-		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tabs SET weight=' . $new_vid . ' WHERE id=' . $id;
+		$sql = 'UPDATE ' . $table_name . ' SET weight=' . $new_vid . ' WHERE id=' . $id;
 		$db->query( $sql );
 		$content = 'OK_' . $id;
 	}
@@ -73,6 +73,7 @@ if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
 	include NV_ROOTDIR . '/includes/footer.php';
 	exit( );
 }
+
 if( $nv_Request->isset_request( 'delete_id', 'get' ) and $nv_Request->isset_request( 'delete_checkss', 'get' ) )
 {
 	$id = $nv_Request->get_int( 'delete_id', 'get' );
@@ -80,19 +81,19 @@ if( $nv_Request->isset_request( 'delete_id', 'get' ) and $nv_Request->isset_requ
 	if( $id > 0 and $delete_checkss == md5( $id . NV_CACHE_PREFIX . $client_info['session_id'] ) )
 	{
 		$weight = 0;
-		$sql = 'SELECT weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs WHERE id =' . $db->quote( $id );
+		$sql = 'SELECT weight FROM ' . $table_name . ' WHERE id =' . $db->quote( $id );
 		$result = $db->query( $sql );
 		list( $weight ) = $result->fetch( 3 );
 
-		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs  WHERE id = ' . $db->quote( $id ) );
+		$db->query( 'DELETE FROM ' . $table_name . '  WHERE id = ' . $db->quote( $id ) );
 		if( $weight > 0 )
 		{
-			$sql = 'SELECT id, weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs WHERE weight >' . $weight;
+			$sql = 'SELECT id, weight FROM ' . $table_name . ' WHERE weight >' . $weight;
 			$result = $db->query( $sql );
 			while( list( $id, $weight ) = $result->fetch( 3 ) )
 			{
 				$weight--;
-				$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tabs SET weight=' . $weight . ' WHERE id=' . intval( $id ) );
+				$db->query( 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE id=' . intval( $id ) );
 			}
 		}
 		nv_del_moduleCache( $module_name );
@@ -106,6 +107,8 @@ $error = array( );
 $row['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
+	$field_lang = nv_file_table( $table_name );
+
 	$row['title'] = $nv_Request->get_title( 'title', 'post', '' );
 	$row['icon'] = $nv_Request->get_title( 'icon', 'post', '' );
 	if( is_file( NV_DOCUMENT_ROOT . $row['icon'] ) )
@@ -135,18 +138,34 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		{
 			if( empty( $row['id'] ) )
 			{
-				$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_tabs (title, icon, content, weight, active) VALUES (:title, :icon, :content, :weight, 1)' );
+				$listfield = "";
+				$listvalue = "";
 
-				$weight = $db->query( 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs' )->fetchColumn( );
+				foreach( $field_lang as $field_lang_i )
+				{
+					list( $flang, $fname ) = $field_lang_i;
+					$listfield .= ", " . $flang . "_" . $fname;
+					if( $flang == NV_LANG_DATA )
+					{
+						$listvalue .= ", " . $db->quote( $row[$fname] );
+					}
+					else
+					{
+						$listvalue .= ", " . $db->quote( $row[$fname] );
+					}
+				}
+
+				$stmt = $db->prepare( 'INSERT INTO ' . $table_name . ' (icon, content, weight, active ' . $listfield .  ') VALUES (:icon, :content, :weight, 1 ' . $listvalue . ')' );
+
+				$weight = $db->query( 'SELECT max(weight) FROM ' . $table_name )->fetchColumn( );
 				$weight = intval( $weight ) + 1;
 				$stmt->bindParam( ':weight', $weight, PDO::PARAM_INT );
-
 			}
 			else
 			{
-				$stmt = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tabs SET title = :title, icon = :icon, content = :content, active = 1 WHERE id=' . $row['id'] );
+				$stmt = $db->prepare( 'UPDATE ' . $table_name . ' SET icon = :icon, content = :content, active = 1, ' . NV_LANG_DATA . '_title=:title WHERE id=' . $row['id'] );
+				$stmt->bindParam( ':title', $row['title'], PDO::PARAM_STR );
 			}
-			$stmt->bindParam( ':title', $row['title'], PDO::PARAM_STR );
 			$stmt->bindParam( ':icon', $row['icon'], PDO::PARAM_STR );
 			$stmt->bindParam( ':content', $row['content'], PDO::PARAM_STR );
 
@@ -161,19 +180,18 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		catch( PDOException $e )
 		{
 			trigger_error( $e->getMessage( ) );
-			die( $e->getMessage( ) );
-			//Remove this line after checks finished
 		}
 	}
 }
 elseif( $row['id'] > 0 )
 {
-	$row = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs WHERE id=' . $row['id'] )->fetch( );
+	$row = $db->query( 'SELECT * FROM ' . $table_name . ' WHERE id=' . $row['id'] )->fetch( );
 	if( empty( $row ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 		die( );
 	}
+	$row['title'] = $row[NV_LANG_DATA . '_title'];
 }
 else
 {
@@ -195,7 +213,7 @@ if( !$nv_Request->isset_request( 'id', 'post,get' ) )
 	$show_view = true;
 	$per_page = 20;
 	$page = $nv_Request->get_int( 'page', 'post,get', 1 );
-	$db->sqlreset( )->select( 'COUNT(*)' )->from( '' . $db_config['prefix'] . '_' . $module_data . '_tabs' );
+	$db->sqlreset( )->select( 'COUNT(*)' )->from( $table_name );
 	$sth = $db->prepare( $db->sql( ) );
 	$sth->execute( );
 	$num_items = $sth->fetchColumn( );
@@ -224,7 +242,6 @@ $xtpl->assign( 'ROW', $row );
 if( $show_view )
 {
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
-	$xtpl->assign( 'NV_GENERATE_PAGE', nv_generate_page( $base_url, $num_items, $per_page, $page ) );
 
 	while( $view = $sth->fetch( ) )
 	{
@@ -237,20 +254,22 @@ if( $show_view )
 			) );
 			$xtpl->parse( 'main.view.loop.weight_loop' );
 		}
-		if( $view['active'] == 1 )
-		{
-			$check = 'checked';
-		}
-		else
-		{
-			$check = '';
-		}
-		$xtpl->assign( 'CHECK', $check );
+		$view['title'] = $view[NV_LANG_DATA . '_title'];
+		$view['content'] = $lang_module['tabs_' . $view['content']];
+		$view['active'] = $view['active'] ? 'checked="checked"' : '';
 		$view['link_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $view['id'];
 		$view['link_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;delete_id=' . $view['id'] . '&amp;delete_checkss=' . md5( $view['id'] . NV_CACHE_PREFIX . $client_info['session_id'] );
 		$xtpl->assign( 'VIEW', $view );
 		$xtpl->parse( 'main.view.loop' );
 	}
+
+	$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
+	if( !empty( $generate_page ) )
+	{
+		$xtpl->assign( 'NV_GENERATE_PAGE', $generate_page );
+		$xtpl->parse( 'main.view.generate_page' );
+	}
+
 	$xtpl->parse( 'main.view' );
 }
 
@@ -261,13 +280,12 @@ if( !empty( $error ) )
 }
 
 $array_select_content = array( );
-
-$array_select_content[$lang_module['select_content_detail']] = $lang_module['select_content_detail'];
-$array_select_content[$lang_module['select_content_image']] = $lang_module['select_content_image'];
-$array_select_content[$lang_module['select_content_download']] = $lang_module['select_content_download'];
-$array_select_content[$lang_module['select_content_comment']] = $lang_module['select_content_comment'];
-$array_select_content[$lang_module['select_content_rate']] = $lang_module['select_content_rate'];
-$array_select_content[$lang_module['select_content_customdata']] = $lang_module['select_content_customdata'];
+$array_select_content['content_detail'] = $lang_module['tabs_content_detail'];
+$array_select_content['content_otherimage'] = $lang_module['tabs_content_otherimage'];
+$array_select_content['content_download'] = $lang_module['tabs_content_download'];
+$array_select_content['content_comments'] = $lang_module['tabs_content_comments'];
+$array_select_content['content_rate'] = $lang_module['tabs_content_rate'];
+$array_select_content['content_customdata'] = $lang_module['tabs_content_customdata'];
 
 $select_content = '';
 
@@ -279,23 +297,6 @@ foreach( $array_select_content as $key => $title )
 		'selected' => ($key == $row['content']) ? ' selected="selected"' : '',
 	) );
 	$xtpl->parse( 'main.select_content' );
-}
-
-$array_checkbox_active = array( );
-
-$array_checkbox_active[1] = $lang_global['yes'];
-foreach( $array_checkbox_active as $key => $title )
-{
-	$xtpl->assign( 'OPTION', array(
-		'key' => $key,
-		'title' => $title,
-		'checked' => ($key == $row['active']) ? ' checked="checked"' : ''
-	) );
-	$xtpl->parse( 'main.checkbox_active' );
-}
-if( empty( $row['id'] ) )
-{
-	$xtpl->parse( 'main.auto_get_alias' );
 }
 
 $xtpl->parse( 'main' );
