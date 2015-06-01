@@ -291,8 +291,13 @@ if( ! sizeof( $array['fileupload'] ) ) array_push( $array['fileupload'], '' );
 $listcats = nv_listcats( $array['catid'] );
 if( empty( $listcats ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1' );
-	exit();
+	$redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat&add=1';
+	$contents = '<p class="note_cat">' . $lang_module['note_cat'] . '</p>';
+	$contents .= "<meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />";
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_admin_theme( $contents );
+	include NV_ROOTDIR . '/includes/footer.php';
+	die();
 }
 
 $array['is_del_report'] = $array['is_del_report'] ? ' checked="checked"' : '';

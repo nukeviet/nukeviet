@@ -218,8 +218,10 @@ header{
 	height:80px;
 }
 
-#header #logo a h1{
+#header #logo h1{
 	float:left;
+	margin: 0px;
+	padding: 0px;
 }
 
 #header #logo object{
@@ -227,7 +229,7 @@ header{
 }
 
 #header .pull-right{
-	margin:33px 33px 0 0;
+	margin:33px 33px;
 }
 #header #logo a{
 	font-size:22px;
