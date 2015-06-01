@@ -133,6 +133,7 @@ $xtpl = new XTemplate( "template.tpl", NV_ROOTDIR . "/themes/" . $global_config[
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'caption', empty( $data['id'] ) ? $lang_module['template_add'] : $lang_module['template_edit'] );
+$xtpl->assign( 'TEM_ADD', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=template#add" );
 
 $count = 0;
 $result = $db->query( "SELECT id, title,alias, status FROM " . $table_name . " ORDER BY id DESC" );
@@ -142,6 +143,7 @@ while( list( $id, $title, $alias, $status ) = $result->fetch( 3 ) )
 	$xtpl->assign( 'title', $title );
 	$xtpl->assign( 'alias', $alias );
 	$xtpl->assign( 'active', $status ? 'checked="checked"' : '' );
+	$xtpl->assign( 'FIELD_TAB', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=field_tab&template=". $id );
 	$xtpl->assign( 'link_edit', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id );
 	$xtpl->assign( 'link_del', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=detemplate&id=" . $id );
 	$xtpl->assign( 'id', $id );
