@@ -99,7 +99,7 @@ $data_content['template'] = '';
 if( $global_array_shops_cat[$data_content['listcatid']]['form'] != '' )
 {
 	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$data_content['listcatid']]['form'] ) . '"' )->fetchColumn( );
-	
+
 	if( $idtemplate )
 	{
 		$listfield = array();
@@ -163,6 +163,7 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 		die( );
 	}
 
+	// Lay don vi san pham
 	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_units WHERE id = ' . $data_content['product_unit'] );
 	$data_unit = $sql->fetch( );
 	$data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
@@ -172,6 +173,17 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 	{
 		$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts WHERE did = ' . $data_content['discount_id'] );
 		$data_shop['discount'] = $sql->fetch( );
+	}
+
+	// Download tai lieu san pham
+	if( $pro_config['download_active'] )
+	{
+		$result = $db->query( 'SELECT id, ' . NV_LANG_DATA . '_title title, ' . NV_LANG_DATA . '_description description, path, filesize, extension, download_groups FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE id IN (SELECT id_files FROM ' . $db_config['prefix'] . '_' . $module_data . '_files_rows WHERE id_rows=' . $data_content['id'] . ')' );
+		while( $row = $result->fetch() )
+		{
+			$row['filesize'] = ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : $lang_module['download_file_unknown'];
+			$data_content['files'][] = $row;
+		}
 	}
 
 	// Danh gia - Phan hoi
@@ -348,7 +360,7 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
     $url_comment = $url_info['path'];
 
 	$content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
-	
+
 	$arr_tab = array( );
 	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs where active =1 ORDER BY weight ASC';
 	$result = $db->query( $sql );

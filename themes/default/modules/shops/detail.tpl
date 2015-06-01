@@ -269,16 +269,16 @@
 					<a href="#section-{ID_TAB}"><span class="img_tab">{IMG_TAB}</span><span><span>{LANG.rate_feedback} ({RATE_TOTAL})</span></a>
 				</li>
 				<!-- END: allowed_rating_tab -->
-				
+
 			</ul>
 		</nav>
 		<div class="content">
-			
 			<!-- BEGIN: tabs_content -->
 			<section id="section-{ID_TAB}">
 				{TAB_CONTENT}
 			</section>
 			<!-- END: tabs_content -->
+
 			<!-- BEGIN: allowed_rating -->
 			<section id="section-4">
 				<div class="panel panel-default">
@@ -328,7 +328,22 @@
 				</div>
 			</section>
 			<!-- END: allowed_rating -->
-			
+
+			<!-- BEGIN: files_content -->
+			<section id="section-5">
+				<!-- BEGIN: loop -->
+				<div class="row download">
+					<div class="col-md-18">
+						<img src="{FILES.extension_icon}" width="16" />&nbsp;<a href="" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{FILES.description}">{FILES.title}</a>
+					</div>
+					<div class="col-md-4"><span class="text-muted">{FILES.filesize}</span></div>
+					<div class="col-md-2 text-right" data-toggle="tooltip" data-placement="top" data-original-title="{NOTE}">
+						<button id="{FILES.id}" title="" class="btn btn-primary btn-xs download_files" <!-- BEGIN: disabled -->disabled="disabled"<!-- END: disabled --> ><em class="fa fa-download">&nbsp;</em></button>
+					</div>
+				</div>
+				<!-- END: loop -->
+			</section>
+			<!-- END: files_content -->
 		</div>
 	</div>
 	<!-- END: tabs -->

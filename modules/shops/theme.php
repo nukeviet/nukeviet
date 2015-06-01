@@ -1338,14 +1338,14 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 			$xtpl->assign( 'gift_content', $data_content[NV_LANG_DATA . '_gift_content'] );
 			$xtpl->parse( 'main.gift' );
 		}
-		
+
 		// Hien thi du lieu tuy bien o phan gioi thieu
 		if( !empty( $data_content['array_custom'] ) and !empty( $data_content['array_custom_lang'] ) )
 		{
 			$custom_data = nv_custom_tpl('tab_' . str_replace( '-', '_', strtolower( change_alias( $lang_module['introduce'] ) ) ) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
 			$xtpl->assign( 'CUSTOM_DATA', $custom_data );
 			$xtpl->parse( 'main.custom_data' );
-			
+
 		}
 
 		// San pham yeu thich
@@ -1371,13 +1371,13 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 			$xtpl->assign( 'hometext', $data_content[NV_LANG_DATA . '_hometext'] );
 			$xtpl->parse( 'main.hometext' );
 		}
-		
+
 		// lam tab
 		//print_r($data_content['tabs']);die;
-		foreach ($data_content['tabs'] as $key => $value_tab) 
+		foreach ($data_content['tabs'] as $key => $value_tab)
 		{
 			$tab_content = '';
-			
+
 			if( $value_tab == $lang_module['select_content_detail'] )// Chi tiết sản phẩm
 			{
 				$tab_content =  $data_content[NV_LANG_DATA . '_bodytext'] ;
@@ -1390,7 +1390,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 				{
 					$otherimage = explode( '|', $data_content['otherimage'] );
 					foreach ($otherimage as $key_img => $otherimage_i) {
-						
+
 						if( !empty( $otherimage_i ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $otherimage_i ) )
 						{
 							$otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $otherimage_i;
@@ -1404,12 +1404,12 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 				}
 				$tab_content = nv_tpl( 'othersimg.tpl', $array_data );//echo($tab_content .'<br><br><br>');
 			}
-			
+
 			if( $value_tab == $lang_module['select_content_comment'] )// Bình luận
 			{
 				$tab_content =  $content_comment ;
 			}
-			
+
 			if( $value_tab == $lang_module['select_content_rate'] )// Đánh giá sản phẩm
 			{
 				$tab_content = '';
@@ -1425,7 +1425,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 					$user_info['full_name'] = nv_show_name_user( $user_info['first_name'], $user_info['last_name'], $user_info['username'] );
 					$xtpl->assign( 'SENDER', !empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'] );
 				}
-	
+
 				if( !empty( $data_content['allowed_rating'] ) and !empty( $pro_config['review_active'] ) )
 				{
 					$xtpl->assign( 'RATE_TOTAL', $data_content['rating_total'] );
@@ -1434,16 +1434,16 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 					{
 						$xtpl->parse( 'main.product_detail.tabs.allowed_rating.captcha' );
 					}
-	
+
 					if( $data_content['rating_total'] > 0 and $data_content['rating_point'] > 0 )
 					{
 						$xtpl->parse( 'main.allowed_rating_snippets' );
 					}
-	
+
 					$xtpl->parse( 'main.product_detail.tabs.allowed_rating' );
 					$xtpl->parse( 'main.product_detail.tabs.allowed_rating_tab' );
 					$xtpl->parse( 'main.allowed_rating_js' );
-					
+
 				}
 			}
 
@@ -1452,10 +1452,10 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 				if( !empty( $data_content['array_custom'] ) and !empty( $data_content['array_custom_lang'] ) )
 				{
 					$custom_data = nv_custom_tpl('tab_' . str_replace( '-', '_', strtolower( change_alias( $data_content['tabs_title'][$key] ) ) ) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
-				}	
+				}
 				$tab_content =  $custom_data ;//die($tab_content);
 			}
-			
+
 			if( !empty($tab_content) )
 			{
 				$tabs_img = '<em class="fa fa-bars">&nbsp;</em>';
