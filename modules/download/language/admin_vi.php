@@ -29,6 +29,7 @@ $lang_module['config_queuefolder'] = 'Thư mục chứa những file chờ kiể
 $lang_module['config_whouploadfile'] = 'Ai được upload file';
 $lang_module['config_whoaddfile'] = 'Ai được thêm file';
 $lang_module['config_confirm'] = 'Chấp nhận';
+$lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['error_cat1'] = 'Lỗi: Chủ đề này đã có !';
 $lang_module['error_cat2'] = 'Lỗi: Chủ đề chưa được khai báo !';
 $lang_module['error_cat3'] = 'Lỗi: Chủ đề mẹ mà bạn chọn không tồn tại !';

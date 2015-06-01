@@ -81,6 +81,7 @@ $lang_module['edit_block_cat'] = 'Sửa nhóm tin';
 $lang_module['link'] = 'Website nguồn tin';
 $lang_module['cat_sub'] = 'Thuộc chuyên mục';
 $lang_module['cat_sub_sl'] = 'Là chuyên mục chính';
+$lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['topic_sl'] = 'Chọn nhóm tin liên quan hoặc tự điền';
 $lang_module['delcat_msg_cat'] = 'Chuyên mục này có %s Chuyên mục thành phần, bạn cần xóa hoặc di chuyển các Chuyên mục thành phần trước';
 $lang_module['delcat_msg_rows'] = 'Chuyên mục có %s bài viết, bạn có chắc chắn xóa hoặc di chuyển sang Chuyên mục khác';
