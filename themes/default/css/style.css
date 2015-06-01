@@ -218,8 +218,10 @@ header{
 	height:80px;
 }
 
-#header #logo a h1{
+#header #logo h1{
 	float:left;
+	margin: 0px;
+	padding: 0px;
 }
 
 #header #logo object{
