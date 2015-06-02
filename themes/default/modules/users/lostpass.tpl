@@ -74,5 +74,28 @@
     	</div>
     </form>
     <!-- END: step2 -->
+    <!-- BEGIN: new_pass -->
+    <form id="lostpassForm" action="{FORM_ACTION}" method="post" role="form" class="form-horizontal m-bottom">   	
+    	<div class="form-group">
+    		<label for="answer" class="col-sm-8 control-label">{LANG.pass_new}<span class="text-danger"> (*)</span>:</label>
+    		<div class="col-sm-16">
+    			<input type="password" class="required form-control" id="pass_new" name="pass_new" maxlength="255" />
+    		</div>
+    	</div>
+    	<div class="form-group">
+    		<label for="answer" class="col-sm-8 control-label">{LANG.pass_new_re}<span class="text-danger"> (*)</span>:</label>
+    		<div class="col-sm-16">
+    			<input type="password" class="required form-control" id="pass_new_re" name="pass_new_re" maxlength="255" />
+    		</div>
+    	</div>
+    	<div class="form-group">
+    		<div class="col-sm-offset-8 col-sm-16">
+    			<input type="hidden" name="u" value="{USERID}" />
+    			<input type="hidden" name="k" value="{K}" />
+    			<input type="submit" value="{LANG.lostpass_submit}" class="btn btn-primary" />
+    		</div>
+    	</div>
+    </form>
+    <!-- END: new_pass -->
 </div>
 <!-- END: main -->
