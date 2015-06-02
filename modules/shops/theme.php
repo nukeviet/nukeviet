@@ -1349,8 +1349,8 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 		// Hien thi du lieu tuy bien o phan gioi thieu
 		if( !empty( $data_content['array_custom'] ) and !empty( $data_content['array_custom_lang'] ) )
 		{
-			$custom_data = nv_custom_tpl( 'tab_' . str_replace( '-', '_', strtolower( change_alias( $lang_module['introduce'] ) ) ) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
-			$xtpl->assign( 'CUSTOM_DATA', $custom_data );
+			$custom_data = nv_custom_tpl( 'tab_introduce.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
+			$xtpl->assign( 'CUSTOM_DATA', $custom_data );//die($custom_data);
 			$xtpl->parse( 'main.custom_data' );
 
 		}
@@ -1394,7 +1394,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 					{
 						$tabs_content = $data_content[NV_LANG_DATA . '_bodytext'];
 					}
-					elseif( $tabs_key == 'content_download' ) // Download tài liệu
+					elseif( $tabs_key == 'content_download' and $pro_config['download_active'] == 1 ) // Download tài liệu
 					{
 						$download_content = nv_download_content( $data_content );
 						$tabs_content = !empty( $download_content ) ? $download_content : '';
@@ -1418,7 +1418,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 					{
 						if( !empty( $data_content['array_custom'] ) and !empty( $data_content['array_custom_lang'] ) )
 						{
-							$custom_data = nv_custom_tpl( 'tab_' . str_replace( '-', '_', strtolower( change_alias( $data_content['tabs_title'][$key] ) ) ) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
+							$custom_data = nv_custom_tpl( 'tab_' . str_replace( '-', '_', strtolower( change_alias( $data_content['tabs'][$tabs_id][NV_LANG_DATA.'_title'] ) ) ) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
 						}
 						$tabs_content = $custom_data;
 					}
@@ -1433,6 +1433,9 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 						{
 							$xtpl->assign( 'TABS_ICON', NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $tabs_value['icon'] );
 							$xtpl->parse( 'main.product_detail.tabs.tabs_title.icon' );
+						}
+						else {
+							$xtpl->parse( 'main.product_detail.tabs.tabs_title.icon_default' );
 						}
 
 						$xtpl->assign( 'TABS_CONTENT', $tabs_content );
@@ -3007,6 +3010,7 @@ function nv_download_content( $data_content )
 
 	$xtpl = new XTemplate( 'download_content.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'proid', $data_content['id'] );
 
 	if( !empty( $data_content['files'] ) )
 	{
