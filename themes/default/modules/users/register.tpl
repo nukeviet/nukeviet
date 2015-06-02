@@ -181,5 +181,5 @@ $(document).ready(function() {
 	});
 });
 </script>
-<div class="page">
+</div>
 <!-- END: main -->
