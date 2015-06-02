@@ -678,18 +678,16 @@ $lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ l
 
 //Lang for function tabs
 $lang_module['tabs'] = 'Quản lý tab';
-$lang_module['add'] = 'Thêm mới';
-$lang_module['icon'] = 'Icon';
-$lang_module['error_required_cotent'] = 'Lỗi: bạn cần nhập dữ liệu cho Cotent';
-$lang_module['content'] = 'Nội dung';
+$lang_module['tabs_icon'] = 'Biểu tượng';
+$lang_module['tabs_content'] = 'Nội dung';
+$lang_module['tabs_content_detail'] = 'Chi tiết sản phẩm';
+$lang_module['tabs_content_otherimage'] = 'Hình ảnh khác';
+$lang_module['tabs_content_download'] = 'Download tài liệu';
+$lang_module['tabs_content_comments'] = 'Bình luận';
+$lang_module['tabs_content_rate'] = 'Đánh giá sản phẩm';
+$lang_module['tabs_content_customdata'] = 'Dữ liệu tùy biến';
 $lang_module['error_required_content'] = 'Lỗi: bạn cần nhập dữ liệu cho Nội dung';
-$lang_module['select_content_detail'] = 'Chi tiết sản phẩm';
-$lang_module['select_content_image'] = 'Hình ảnh khác';
-$lang_module['select_content_download'] = 'Download tài liệu';
-$lang_module['select_content_comment'] = 'Bình luận';
-$lang_module['select_content_rate'] = 'Đánh giá sản phẩm';
-$lang_module['select_content_customdata'] = 'Dữ liệu tùy biến';
 
 //Lang for function field
-$lang_module['field_tab_page'] = 'Hiển thị dữ liệu cho tab'; 
-$lang_module['introduce'] = 'Giới thiệu'; 
+$lang_module['field_tab_page'] = 'Hiển thị dữ liệu cho tab';
+$lang_module['introduce'] = 'Giới thiệu';

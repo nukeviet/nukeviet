@@ -13,7 +13,7 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 
 $arr_tab = array( );
 $arr_tab['introduce'] = $lang_module['introduce'];
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs where content = ' . $db->quote( $lang_module['select_content_customdata'] ) . ' ORDER BY weight ASC';
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs where content = ' . $db->quote( 'product_customdata' ) . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
 while( $row = $result->fetch( ) )
 {
