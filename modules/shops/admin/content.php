@@ -84,8 +84,11 @@ $rowcontent = array(
 	'note' => '',
 	'keywords' => '',
 	'keywords_old' => '',
-	'warranty' => '',
-	'promotional' => ''
+	'files' => array(),
+	'files_old' => array(),
+	'gift_content' => '',
+	'gift_from' => NV_CURRENTTIME,
+	'gift_to' => 0
 );
 
 $page_title = $lang_module['content_add'];
@@ -98,8 +101,10 @@ $rowcontent['id'] = $nv_Request->get_int( 'id', 'get,post', 0 );
 $group_id_old = array( );
 if( $rowcontent['id'] > 0 )
 {
+	// Old group
 	$group_id_old = getGroupID( $rowcontent['id'] );
 
+	// Old keywords
 	$array_keywords_old = array( );
 	$_query = $db->query( 'SELECT tid, ' . NV_LANG_DATA . '_keyword FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE id=' . $rowcontent['id'] . ' ORDER BY ' . NV_LANG_DATA . '_keyword ASC' );
 	while( $row = $_query->fetch( ) )
@@ -108,6 +113,17 @@ if( $rowcontent['id'] > 0 )
 	}
 	$rowcontent['keywords'] = implode( ', ', $array_keywords_old );
 	$rowcontent['keywords_old'] = $rowcontent['keywords'];
+
+	// Old files
+	$result = $db->query( "SELECT id_files FROM " . $db_config['prefix'] . "_" . $module_data . "_files_rows WHERE id_rows=" . $rowcontent['id'] );
+	if( $result->rowCount() > 0 )
+	{
+		while( list( $id_files ) = $result->fetch( 3 ) )
+		{
+			$rowcontent['files'][] = $id_files;
+		}
+		$rowcontent['files_old'] = $rowcontent['files'];
+	}
 }
 
 if( $nv_Request->get_int( 'save', 'post' ) == 1 )
@@ -162,13 +178,39 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 	$rowcontent['note'] = $nv_Request->get_title( 'note', 'post', '', 1 );
 	$rowcontent['address'] = $nv_Request->get_title( 'address', 'post', '', 1 );
-	$rowcontent['warranty'] = $nv_Request->get_title( 'warranty', 'post', '', 1 );
-	$rowcontent['promotional'] = $nv_Request->get_title( 'promotional', 'post', '', 1 );
+	$rowcontent['files'] = $nv_Request->get_typed_array( 'files', 'post', 'int', array() );
+
+	$rowcontent['gift_content'] = $nv_Request->get_title( 'gift_content', 'post', '', 1 );
+	$rowcontent['gift_from'] = $nv_Request->get_title( 'gift_from', 'post', '' );
+	$rowcontent['gift_to'] = $nv_Request->get_title( 'gift_to', 'post', '' );
+	if( !empty( $rowcontent['gift_content'] ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $rowcontent['gift_from'], $m ) )
+	{
+		$gift_from_h = $nv_Request->get_int( 'gift_from_h', 'post', 0 );
+		$gift_from_m = $nv_Request->get_int( 'gift_from_m', 'post', 0 );
+		$rowcontent['gift_from'] = mktime( $gift_from_h, $gift_from_m, 0, $m[2], $m[1], $m[3] );
+	}
+	else
+	{
+		$rowcontent['gift_from'] = 0;
+	}
+
+	if( !empty( $rowcontent['gift_content'] ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $rowcontent['gift_to'], $m ) )
+	{
+		$gift_to_h = $nv_Request->get_int( 'gift_to_h', 'post', 23 );
+		$gift_to_m = $nv_Request->get_int( 'gift_to_m', 'post', 59 );
+		$rowcontent['gift_to'] = mktime( $gift_to_h, $gift_to_m, 59, $m[2], $m[1], $m[3] );
+	}
+	else
+	{
+		$rowcontent['gift_to'] = 0;
+	}
 
 	$alias = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$rowcontent['alias'] = ($alias == '') ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
 
-	$rowcontent['hometext'] = $nv_Request->get_textarea( 'hometext', 'post', '', 'br', 1 );
+	$hometext = $nv_Request->get_string( 'hometext', 'post', '' );
+	$rowcontent['hometext'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $hometext, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $hometext ) ), '<br />' );
+
 	$rowcontent['product_code'] = nv_substr( $nv_Request->get_title( 'product_code', 'post', '', 1 ), 0, 255 );
 	$rowcontent['product_number'] = $nv_Request->get_int( 'product_number', 'post', 0 );
 	$rowcontent['product_price'] = $nv_Request->get_string( 'product_price', 'post', '' );
@@ -295,6 +337,10 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$error = $lang_module['error_cat'];
 	}
+	elseif( $pro_config['use_shipping'] and empty( $rowcontent['product_weight'] ) )
+	{
+		$error = $lang_module['error_weight'];
+	}
 	elseif( trim( strip_tags( $rowcontent['hometext'] ) ) == '' )
 	{
 		$error = $lang_module['error_hometext'];
@@ -348,7 +394,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		}
 	}
 
-	if( $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
+	if( isset( $global_array_shops_cat[$rowcontent['listcatid']] ) and $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
 	{
 		require NV_ROOTDIR . '/modules/' . $module_file . '/fields.check.php';
 	}
@@ -543,6 +589,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					$stmt->execute( );
 				}
 
+				// Add file download
+				if( $pro_config['download_active'] )
+				{
+					if( !empty( $rowcontent['files'] ) )
+					{
+						foreach( $rowcontent['files'] as $id_files )
+						{
+							$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_files_rows (id_rows, id_files, download_hits) VALUES (' . $rowcontent['id'] . ', ' . $id_files .', 0)' );
+						}
+					}
+				}
+
 				nv_fix_group_count( $rowcontent['group_id'] );
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Add A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
 			}
@@ -594,6 +652,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 homeimgthumb= :homeimgthumb,
 			 imgposition=" . intval( $rowcontent['imgposition'] ) . ",
 			 copyright=" . intval( $rowcontent['copyright'] ) . ",
+			 gift_from=" . intval( $rowcontent['gift_from'] ) . ",
+			 gift_to=" . intval( $rowcontent['gift_to'] ) . ",
 			 inhome=" . intval( $rowcontent['inhome'] ) . ",
 			 allowed_comm= :allowed_comm,
 			 allowed_rating=" . intval( $rowcontent['allowed_rating'] ) . ",
@@ -606,8 +666,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			 " . NV_LANG_DATA . "_alias= :alias,
 			 " . NV_LANG_DATA . "_hometext= :hometext,
 			 " . NV_LANG_DATA . "_bodytext= :bodytext,
-			 " . NV_LANG_DATA . "_warranty= :warranty,
-			 " . NV_LANG_DATA . "_promotional= :promotional
+			 " . NV_LANG_DATA . "_gift_content= :gift_content
 			 WHERE id =" . $rowcontent['id'] );
 
 			$stmt->bindParam( ':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR );
@@ -626,12 +685,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 			$stmt->bindParam( ':alias', $rowcontent['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':hometext', $rowcontent['hometext'], PDO::PARAM_STR, strlen( $rowcontent['hometext'] ) );
 			$stmt->bindParam( ':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen( $rowcontent['bodytext'] ) );
-			$stmt->bindParam( ':promotional', $rowcontent['promotional'], PDO::PARAM_STR );
-			$stmt->bindParam( ':warranty', $rowcontent['warranty'], PDO::PARAM_STR );
+			$stmt->bindParam( ':gift_content', $rowcontent['gift_content'], PDO::PARAM_STR );
 			$stmt->bindParam( ':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR );
 
 			if( $stmt->execute( ) )
 			{
+				// Cap nhat lai group neu co thay doi
 				if( $group_id_old != $rowcontent['group_id'] )
 				{
 					$sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id = ' . $rowcontent['id'];
@@ -650,7 +709,30 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					nv_fix_group_count( $rowcontent['group_id'] );
 					nv_fix_group_count( $group_id_old );
 				}
-				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
+
+				// Cap nhat lai files neu co thay doi
+				if( $pro_config['download_active'] )
+				{
+					$rowcontent['files'] = array_map( 'intval', $rowcontent['files'] );
+					if( $rowcontent['files'] != $rowcontent['files_old'] )
+					{
+						foreach( $rowcontent['files'] as $id_files )
+						{
+							if( !in_array( $id_files, $rowcontent['files_old'] ) )
+							{
+								$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_files_rows (id_rows, id_files) VALUES (' . $rowcontent['id'] .', ' . $id_files . ')' );
+							}
+						}
+
+						foreach( $rowcontent['files_old'] as $id_files_old )
+						{
+							if( !in_array( $id_files_old, $rowcontent['files'] ) )
+							{
+								$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_files_rows WHERE id_files = ' . $id_files_old );
+							}
+						}
+					}
+				}
 
 				// Tim va xoa du lieu tuy bien
 				if( $global_array_shops_cat[$rowcontent_old['listcatid']]['form'] != '' )
@@ -673,7 +755,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 						Insertabl_catfields( $table_insert_new, $array_custom, $rowcontent['id'] );
 					}
 				}
-
+				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
 			}
 			else
 			{
@@ -787,17 +869,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 }
 elseif( $rowcontent['id'] > 0 )
 {
+	$files = $rowcontent['files'];
 	$keyword = $rowcontent['keywords'];
 	$rowcontent = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_rows where id=" . $rowcontent['id'] )->fetch( );
 	$rowcontent['title'] = $rowcontent[NV_LANG_DATA . '_title'];
 	$rowcontent['alias'] = $rowcontent[NV_LANG_DATA . '_alias'];
 	$rowcontent['hometext'] = $rowcontent[NV_LANG_DATA . '_hometext'];
 	$rowcontent['bodytext'] = $rowcontent[NV_LANG_DATA . '_bodytext'];
-	$rowcontent['promotional'] = $rowcontent[NV_LANG_DATA . '_promotional'];
-	$rowcontent['warranty'] = $rowcontent[NV_LANG_DATA . '_warranty'];
+	$rowcontent['gift_content'] = $rowcontent[NV_LANG_DATA . '_gift_content'];
 	$rowcontent['address'] = $rowcontent[NV_LANG_DATA . '_address'];
 	$rowcontent['group_id'] = $group_id_old;
 	$rowcontent['keywords'] = $keyword;
+	$rowcontent['files'] = $files;
 
 	$page_title = $lang_module['content_edit'];
 
@@ -831,7 +914,6 @@ if( !empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . 
 {
 	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
 }
-$rowcontent['hometext'] = nv_htmlspecialchars( nv_br2nl( $rowcontent['hometext'] ) );
 
 $tdate = date( 'H|i', $rowcontent['publtime'] );
 $publ_date = date( 'd/m/Y', $rowcontent['publtime'] );
@@ -848,6 +930,13 @@ else
 	list( $ehour, $emin ) = explode( '|', $tdate );
 }
 
+$gift_from_h = !empty( $rowcontent['gift_from'] ) ? nv_date( 'H', $rowcontent['gift_from'] ) : '0';
+$gift_from_m = !empty( $rowcontent['gift_from'] ) ? nv_date( 'i', $rowcontent['gift_from'] ) : '0';
+$gift_to_h = !empty( $rowcontent['gift_to'] ) ? nv_date( 'H', $rowcontent['gift_to'] ) : '23';
+$gift_to_m = !empty( $rowcontent['gift_to'] ) ? nv_date( 'i', $rowcontent['gift_to'] ) : '59';
+$rowcontent['gift_from'] = !empty( $rowcontent['gift_from'] ) ? nv_date( 'd/m/Y', $rowcontent['gift_from'] ) : '';
+$rowcontent['gift_to'] = !empty( $rowcontent['gift_to'] ) ? nv_date( 'd/m/Y', $rowcontent['gift_to'] ) : '';
+
 if( !empty( $rowcontent['otherimage'] ) )
 {
 	$otherimage = explode( '|', $rowcontent['otherimage'] );
@@ -858,6 +947,13 @@ else
 }
 
 $rowcontent['product_weight'] = empty( $rowcontent['product_weight'] ) ? '' : $rowcontent['product_weight'];
+
+$array_files = array();
+if( $pro_config['download_active'] )
+{
+	$sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';
+	$array_files = nv_db_cache( $sql, 'id', $module_name );
+}
 
 $xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -938,19 +1034,27 @@ $xtpl->parse( 'main.listgroup' );
 
 // Time update
 $xtpl->assign( 'publ_date', $publ_date );
-$select = '';
+$select = ''; $_gift_from_h = $_gift_to_h = '';
 for( $i = 0; $i <= 23; $i++ )
 {
 	$select .= "<option value=\"" . $i . "\"" . (($i == $phour) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$_gift_from_h .= "<option value=\"" . $i . "\"" . (($i == $gift_from_h) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$_gift_to_h .= "<option value=\"" . $i . "\"" . (($i == $gift_to_h) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $xtpl->assign( 'phour', $select );
+$xtpl->assign( 'gift_from_h', $_gift_from_h );
+$xtpl->assign( 'gift_to_h', $_gift_to_h );
 
-$select = "";
+$select = ""; $_gift_from_m = $_gift_to_m = '';
 for( $i = 0; $i < 60; $i++ )
 {
 	$select .= "<option value=\"" . $i . "\"" . (($i == $pmin) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$_gift_from_m .= "<option value=\"" . $i . "\"" . (($i == $gift_from_m) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
+	$_gift_to_m .= "<option value=\"" . $i . "\"" . (($i == $gift_to_m) ? " selected=\"selected\"" : "") . ">" . str_pad( $i, 2, "0", STR_PAD_LEFT ) . "</option>\n";
 }
 $xtpl->assign( 'pmin', $select );
+$xtpl->assign( 'gift_from_m', $_gift_from_m );
+$xtpl->assign( 'gift_to_m', $_gift_to_m );
 
 // Time exp
 $xtpl->assign( 'exp_date', $exp_date );
@@ -980,6 +1084,17 @@ foreach( $groups_list as $_group_id => $_title )
 	$xtpl->parse( 'main.allowed_comm' );
 }
 
+$rowcontent['hometext'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['hometext'] ) );
+if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
+{
+	$edits = nv_aleditor( 'hometext', '100%', '150px', $rowcontent['hometext'], 'Basic' );
+}
+else
+{
+	$edits = "<textarea style=\"width: 100%\" name=\"hometext\" id=\"hometext\" cols=\"20\" rows=\"15\">" . $rowcontent['hometext'] . "</textarea>";
+}
+$xtpl->assign( 'edit_hometext', $edits );
+
 $rowcontent['bodytext'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['bodytext'] ) );
 if( defined( 'NV_EDITOR' ) and function_exists( 'nv_aleditor' ) )
 {
@@ -989,6 +1104,7 @@ else
 {
 	$edits = "<textarea style=\"width: 100%\" name=\"bodytext\" id=\"bodytext\" cols=\"20\" rows=\"15\">" . $rowcontent['bodytext'] . "</textarea>";
 }
+$xtpl->assign( 'edit_bodytext', $edits );
 
 $shtm = '';
 if( count( $array_block_cat_module ) > 0 )
@@ -1080,6 +1196,21 @@ if( !empty( $rowcontent['keywords'] ) )
 	}
 }
 
+if( $pro_config['download_active'] )
+{
+	if( !empty( $array_files ) )
+	{
+		foreach( $array_files as $files )
+		{
+			$files['selected'] = in_array( $files['id'], $rowcontent['files'] ) ? 'selected="selected"' : '';
+			$xtpl->assign( 'FILES', $files );
+			$xtpl->parse( 'main.files.loop' );
+		}
+	}
+	$xtpl->parse( 'main.files' );
+	$xtpl->parse( 'main.files_js' );
+}
+
 if( $module_config[$module_name]['auto_tags'] )
 {
 	$xtpl->parse( 'main.auto_tags' );
@@ -1126,7 +1257,10 @@ if( !empty( $weight_config ) )
 	}
 }
 
-$xtpl->assign( 'edit_bodytext', $edits );
+if( $pro_config['active_gift'] )
+{
+	$xtpl->parse( 'main.gift' );
+}
 
 if( $rowcontent['id'] > 0 and !$is_copy )
 {
@@ -1136,6 +1270,19 @@ if( $rowcontent['id'] > 0 and !$is_copy )
 if( empty( $rowcontent['alias'] ) )
 {
 	$xtpl->parse( 'main.getalias' );
+}
+
+if( !$pro_config['active_warehouse'] )
+{
+	if( $rowcontent['id'] > 0 )
+	{
+		$xtpl->parse( 'main.warehouse.edit' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.warehouse.add' );
+	}
+	$xtpl->parse( 'main.warehouse' );
 }
 
 // Custom fiels

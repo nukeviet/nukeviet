@@ -116,7 +116,7 @@ function GetDataIn( $result, $catid )
 
 	$data_content = array();
 	$data = array();
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$promotional, $newday ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$gift_content, $gift_from, $gift_to, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -151,7 +151,9 @@ function GetDataIn( $result, $catid )
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
 			'newday' => $newday,
-			'promotional'=> $promotional,
+			'gift_content'=> $gift_content,
+			'gift_from'=> $gift_from,
+			'gift_to'=> $gift_to,
 			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
@@ -180,7 +182,7 @@ function GetDataInGroups( $result, $array_g )
 	$data_content = array();
 	$data = array();
 
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$promotional, $newday ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice,$gift_content, $newday ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -215,7 +217,7 @@ function GetDataInGroups( $result, $array_g )
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
 			'newday' => $newday,
-			'promotional' => $promotional,
+			'gift_content' => $gift_content,
 			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
@@ -243,7 +245,7 @@ function GetDataInGroup( $result, $groupid )
 	$data_content = array();
 	$data = array();
 
-	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $newday ) = $result->fetch( 3 ) )
+	while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $gift_content, $gift_to, $gift_from ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
@@ -277,7 +279,10 @@ function GetDataInGroup( $result, $groupid )
 			'discount_id' => $discount_id,
 			'money_unit' => $money_unit,
 			'showprice' => $showprice,
-			'newday' => $newday,
+			'gift_content' => $gift_content,
+			'gift_from' => $gift_from,
+			'gift_to' => $gift_to,
+			'newday' => $global_array_shops_cat[$listcatid]['newday'],
 			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
@@ -318,4 +323,72 @@ function SetSessionProView( $id, $title, $alias, $addtime, $link, $homeimgthumb 
 			'homeimgthumb' => $homeimgthumb
 		);
 	}
+}
+
+/**
+ * nv_custom_tpl()
+ *
+ * @param mixed $name_file
+ * @param mixed $array_custom
+ * @param mixed $array_custom_lang
+ * @param mixed $idtemplate
+ * @return
+ */
+function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtemplate )
+{
+	global $module_data, $module_info, $module_file, $lang_module, $db_config, $db;
+	
+	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field';
+	$result = $db->query( $sql );
+	while( $row = $result->fetch( ) )
+	{
+		$row['tab'] = unserialize( $row['tab'] );
+		foreach( $row['tab'] as $key => $value )
+		{
+			if( $key == $idtemplate )
+			{
+				$arr[$row['field']] = 1;
+			}
+		}
+	}
+	$html ='';
+	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
+	$xtpl->assign( 'CUSTOM_DATA', $array_custom );
+	foreach ($array_custom as $key => $value) 
+	{
+		if( isset($arr[$key]) and !empty($value) ) $xtpl->parse( 'main.'.$key );
+	}
+	
+	$xtpl->parse( 'main' );
+	$html = $xtpl->text( 'main' );
+	return $html;
+		
+}
+
+/**
+ * nv_tpl()
+ *
+ * @param mixed $name_file
+ * @param mixed $array_data
+ * @return
+ */
+function nv_tpl( $name_file, $array_data )
+{
+	global $module_data, $module_info, $module_file, $lang_module, $db_config, $db;
+	
+	$html ='';
+	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+	
+	foreach ($array_data as $value) {
+		$xtpl->assign( 'DATA', $value );
+		$xtpl->parse( 'main.loop' );
+	}
+	
+	$xtpl->parse( 'main' );
+	$html = $xtpl->text( 'main' );
+	return $html;
+		
 }

@@ -115,29 +115,39 @@
 					<td class="text-center">{ROW.product_number}</td>
 					<td class="text-center"><!-- BEGIN: seller --><a href="{ROW.link_seller}" title="{LANG.report_detail}">{ROW.num_sell} {ROW.product_unit}</a><!-- END: seller --><!-- BEGIN: seller_empty --> {ROW.num_sell} {ROW.product_unit} <!-- END: seller_empty --></td>
 					<td class="text-center">{ROW.status}</td>
-					<td class="text-center"><a href="{ROW.link_warehouse}" title="{LANG.warehouse}"><em class="fa fa-cubes fa-lg">&nbsp;</em></a>&nbsp;&nbsp;&nbsp;<a href="{ROW.link_copy}" title="{LANG.product_copy_note}"><em class="fa fa-copy fa-lg">&nbsp;</em></a>&nbsp;&nbsp;&nbsp;{ROW.link_edit}&nbsp;&nbsp;&nbsp;{ROW.link_delete} </td>
+					<td class="text-center">
+						<!-- BEGIN: warehouse_icon -->
+						<a href="{ROW.link_warehouse}" title="{LANG.warehouse}"><em class="fa fa-cubes fa-lg">
+						<!-- END: warehouse_icon -->
+						&nbsp;</em></a>&nbsp;&nbsp;&nbsp;<a href="{ROW.link_copy}" title="{LANG.product_copy_note}"><em class="fa fa-copy fa-lg">&nbsp;</em></a>&nbsp;&nbsp;&nbsp;{ROW.link_edit}&nbsp;&nbsp;&nbsp;{ROW.link_delete}
+					</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>
 			<tfoot>
 				<tr align="left">
 					<td colspan="10">
-					<select class="form-control" name="action" id="action">
-						<!-- BEGIN: action -->
-						<option value="{ACTION.key}">{ACTION.title}</option>
-						<!-- END: action -->
-					</select> &nbsp; <input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{ACTION_CHECKSESS}','{LANG.msgnocheck}')" value="{LANG.action}"></td>
+						<div class="row">
+							<div class="col-xs-10">
+								<select class="form-control" name="action" id="action">
+									<!-- BEGIN: action -->
+									<option value="{ACTION.key}">{ACTION.title}</option>
+									<!-- END: action -->
+								</select> &nbsp; <input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{ACTION_CHECKSESS}','{LANG.msgnocheck}')" value="{LANG.action}">
+							</div>
+							<div class="col-xs-14 text-right">
+								<!-- BEGIN: generate_page -->
+								{GENERATE_PAGE}
+								<!-- END: generate_page -->
+							</div>
+						</div>
+					</td>
 				</tr>
 			</tfoot>
 		</table>
 	</div>
 </form>
-<!-- BEGIN: generate_page -->
-<br />
-<p class="text-center">
-	{GENERATE_PAGE}
-</p>
-<!-- END: generate_page -->
+
 <script type='text/javascript'>
 	$(function() {
 		$("#from, #to").datepicker({

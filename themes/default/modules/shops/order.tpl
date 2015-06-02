@@ -87,7 +87,7 @@
 						</select>
 					</div>
 					<div class="col-xs-14">
-						<input type="text" name="ship_address_extend" class="form-control" placeholder="{LANG.shipping_address_extend}" />
+						<input type="text" name="ship_address_extend" value="{DATA.shipping.ship_address_extend}" class="form-control" placeholder="{LANG.shipping_address_extend}" />
 						<span class="error">{ERROR.order_shipping_address_extend}</span>
 					</div>
 				</div>
@@ -106,7 +106,10 @@
 								<!-- END: shops_loop -->
 							</div>
 							<div class="col-xs-12">
-								<p><em>{LANG.shipping_carrier_chose}</em></p>
+								<p>
+									<em>{LANG.shipping_carrier_chose}</em>
+									<span class="error show">{ERROR.order_shipping_carrier_id}</span>
+								</p>
 								<div id="carrier">
 									<!-- BEGIN: carrier_loop -->
 									<label class="show"><input type="radio" name="carrier" value="{CARRIER.id}" {CARRIER.checked} title="{CARRIER.name}" />{CARRIER.name}</label>
@@ -251,7 +254,7 @@
 		var carrier_id = $('input[name="carrier"]:checked');
 		var location_id = $('#location option:selected').val();
 
-		$('#carrier').load( url_load + '&get_carrier=1&shops_id=' + shops_id.val() );
+		$('#carrier').load( url_load + '&get_carrier=1&carrier_id={DATA.shipping.ship_carrier_id}&shops_id=' + shops_id.val() );
 		$('#shipping_shops').text( shops_id.attr("title") );
 		$('#shipping_services').text( carrier_id.attr("title") );
 		nv_get_price();
@@ -311,14 +314,17 @@
 
 	function nv_get_price()
 	{
-		var carrier_id = $('input[name="carrier"]:checked');
-		var shops_id = $('input[name="shops"]:checked').val();
-		var location_id = $('#location option:selected').val();
-		$('#shipping_services').text( carrier_id.attr("title") );
-		$('#shipping_price').load( url_load + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
-		$('#order_address').load( url_load + '&get_location=1&location_id=' + location_id );
-		$("#cart_" + nv_module_name).load( urloadcart + '&coupons_check=1&coupons_code={COUPONS_CODE}&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
-		$("#total").load( urloadcart + '&coupons_check=1&coupons_code={COUPONS_CODE}&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() + '&t=2' );
+		if( $('input[name="order_shipping"]:checked').val() == '1' )
+		{
+			var carrier_id = $('input[name="carrier"]:checked');
+			var shops_id = $('input[name="shops"]:checked').val();
+			var location_id = $('#location option:selected').val();
+			$('#shipping_services').text( carrier_id.attr("title") );
+			$('#shipping_price').load( url_load + '&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
+			$('#order_address').load( url_load + '&get_location=1&location_id=' + location_id );
+			$("#cart_" + nv_module_name).load( urloadcart + '&coupons_check=1&coupons_code={COUPONS_CODE}&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() );
+			$("#total").load( urloadcart + '&coupons_check=1&coupons_code={COUPONS_CODE}&get_shipping_price=1&weight={DATA.weight_total}&weight_unit={weight_unit}&location_id=' + location_id + '&shops_id=' + shops_id + '&carrier_id=' + carrier_id.val() + '&t=2' );
+		}
 	}
 
 	function nv_carrier_change()

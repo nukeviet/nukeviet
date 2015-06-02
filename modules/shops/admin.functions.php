@@ -77,7 +77,10 @@ $allow_func = array(
 	'getprice',
 	'review',
 	'warehouse',
-	'warehouse_logs'
+	'warehouse_logs',
+	'download',
+	'tabs',
+	'field_tab'
 );
 if( defined( 'NV_IS_SPADMIN' ) )
 {
@@ -888,6 +891,70 @@ function nv_show_block_list( $bid )
 		++$a;
 	}
 	$result->closeCursor( );
+
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
+ * email_new_order_payment()
+ *
+ * @param mixed $content
+ * @param mixed $data_content
+ * @param mixed $data_pro
+ * @param mixed $data_table
+ * @return
+ */
+function email_new_order_payment( $content, $data_content, $data_pro, $data_table = false )
+{
+	global $module_info, $lang_module, $module_file, $pro_config, $global_config, $money_config;
+
+	if( $data_table )
+	{
+		$xtpl = new XTemplate( "email_new_order_payment.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+		$xtpl->assign( 'LANG', $lang_module );
+		$xtpl->assign( 'DATA', $data_content );
+
+		$i = 0;
+		foreach( $data_pro as $pdata )
+		{
+			$xtpl->assign( 'product_name', $pdata['title'] );
+			$xtpl->assign( 'product_number', $pdata['product_number'] );
+			$xtpl->assign( 'product_price', nv_number_format( $pdata['product_price'], nv_get_decimals( $pro_config['money_unit'] ) ) );
+			$xtpl->assign( 'product_unit', $pdata['product_unit'] );
+			$xtpl->assign( 'pro_no', $i + 1 );
+
+			$bg = ($i % 2 == 0) ? " style=\"background:#f3f3f3;\"" : "";
+			$xtpl->assign( 'bg', $bg );
+
+			if( $pro_config['active_price'] == '1' )
+				$xtpl->parse( 'data_product.loop.price2' );
+			$xtpl->parse( 'data_product.loop' );
+			++$i;
+		}
+
+		if( !empty( $data_content['order_note'] ) )
+		{
+			$xtpl->parse( 'data_product.order_note' );
+		}
+
+		$xtpl->assign( 'order_total', nv_number_format( $data_content['order_total'], nv_get_decimals( $pro_config['money_unit'] ) ) );
+		$xtpl->assign( 'unit', $data_content['unit_total'] );
+
+		if( $pro_config['active_price'] == '1' )
+		{
+			$xtpl->parse( 'data_product.price1' );
+			$xtpl->parse( 'data_product.price3' );
+		}
+
+		$xtpl->parse( 'data_product' );
+		return $xtpl->text( 'data_product' );
+		die();
+	}
+
+	$xtpl = new XTemplate( "email_new_order_payment.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'CONTENT', $content );
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );

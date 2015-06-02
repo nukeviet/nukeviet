@@ -17,6 +17,20 @@ $(document).ready(function() {
 		buttonImageOnly : true
 	});
 
+	$("#gift_from, #gift_to").datepicker({
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		showOn : 'focus'
+	});
+	$('#to-btn').click(function(){
+		$("#to").datepicker('show');
+	});
+	$('#from-btn').click(function(){
+		$("#from").datepicker('show');
+	});
+
 	$("#keywords-search").bind("keydown", function(event) {
 		if (event.keyCode === $.ui.keyCode.TAB && $(this).data("ui-autocomplete").menu.active) {
 			event.preventDefault();

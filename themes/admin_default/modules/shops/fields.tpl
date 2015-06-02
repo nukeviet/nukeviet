@@ -1,6 +1,10 @@
 <!-- BEGIN: main -->
 <div class="row" style="margin-bottom: 5px">
 	<div class="col-xs-24">
+		<div class="btn-group pull-left">
+			<a href="{FIELD_ADD}" class="btn btn-info">{LANG.captionform_add}</a>
+		</div>
+		
 		<div class="btn-group pull-right">
 			<button type="button" class="btn btn-primary btn-xs" id="template">
 				{LANG.template}
@@ -331,7 +335,7 @@
 	}
 
 	function nv_edit_field(fid) {
-		window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid;
+		window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid + '#ffields';
 	}
 
 	function nv_load_current_date() {

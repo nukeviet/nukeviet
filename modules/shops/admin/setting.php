@@ -31,6 +31,7 @@ $page_title = $lang_module['setting'];
 $savesetting = $nv_Request->get_int( 'savesetting', 'post', 0 );
 $error = "";
 
+// Group custom
 $groups_list = array();
 $result = $db->query( 'SELECT group_id, title, idsite FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE group_id NOT IN ( 4, 5, 6 ) AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight' );
 while( $row = $result->fetch() )
@@ -38,6 +39,9 @@ while( $row = $result->fetch() )
 	if( $row['group_id'] < 9 ) $row['title'] = $lang_global['level' . $row['group_id']];
 	$groups_list[$row['group_id']] = ( $global_config['idsite'] > 0 and empty( $row['idsite'] ) ) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
 }
+
+// Group default
+$groups_list_default = nv_groups_list();
 
 if( $savesetting == 1 )
 {
@@ -72,6 +76,8 @@ if( $savesetting == 1 )
 	$data['use_coupons'] = $nv_Request->get_int( 'use_coupons', 'post', 0 );
 	$data['active_guest_order'] = $nv_Request->get_int( 'active_guest_order', 'post', 0 );
 	$data['active_wishlist'] = $nv_Request->get_int( 'active_wishlist', 'post', 0 );
+	$data['active_gift'] = $nv_Request->get_int( 'active_gift', 'post', 0 );
+	$data['active_warehouse'] = $nv_Request->get_int( 'active_warehouse', 'post', 0 );
 	$data['tags_alias'] = $nv_Request->get_int( 'tags_alias', 'post', 0 );
 	$data['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
 	$data['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
@@ -82,6 +88,10 @@ if( $savesetting == 1 )
 	$data['review_check'] = $nv_Request->get_int( 'review_check', 'post', 0 );
 	$data['review_captcha'] = $nv_Request->get_int( 'review_captcha', 'post', 0 );
 	$data['group_price'] = $nv_Request->get_textarea( 'group_price', '', 'br' );
+	$data['template_active'] = $nv_Request->get_int( 'template_active', 'post', 0 );
+	$data['download_active'] = $nv_Request->get_int( 'download_active', 'post', 0 );
+	$_dowload_groups = $nv_Request->get_array( 'download_groups', 'post', array() );
+	$data['download_groups'] = ! empty( $_dowload_groups ) ? implode( ',', nv_groups_post( array_intersect( $_dowload_groups, array_keys( $groups_list_default ) ) ) ) : '';
 
 	if( $error == '' )
 	{
@@ -209,6 +219,12 @@ $xtpl->assign( 'ck_coupons', $check );
 $check = ( $data['active_wishlist'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_wishlist', $check );
 
+$check = ( $data['active_gift'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_gift', $check );
+
+$check = ( $data['active_warehouse'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_active_warehouse', $check );
+
 $check = ( $data['point_active'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_point', $check );
 
@@ -220,6 +236,12 @@ $xtpl->assign( 'ck_review_check', $check );
 
 $check = ( $data['review_captcha'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_review_captcha', $check );
+
+$check = ( $data['template_active'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_template_active', $check );
+
+$check = ( $data['download_active'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_download_active', $check );
 
 $groups_notify = explode( ',', $data['groups_notify'] );
 foreach( $groups_list as $_group_id => $_title )
@@ -254,6 +276,21 @@ while( list( $code, $title ) = $result->fetch( 3 ) )
 	$array_temp['selected'] = ( $code == $data['weight_unit'] ) ? " selected=\"selected\"" : "";
 	$xtpl->assign( 'DATAWEIGHT', $array_temp );
 	$xtpl->parse( 'main.weight_loop' );
+}
+
+$download_groups = explode( ',', $data['download_groups'] );
+foreach( $groups_list_default as $_group_id => $_title )
+{
+	$xtpl->assign( 'DOWNLOAD_GROUPS', array(
+		'value' => $_group_id,
+		'checked' => in_array( $_group_id, $download_groups ) ? ' checked="checked"' : '',
+		'title' => $_title
+	) );
+	$xtpl->parse( 'main.download_groups' );
+}
+if( !$data['download_active'] )
+{
+	$xtpl->parse( 'main.download_groups_none' );
 }
 
 $xtpl->assign( 'per_page', $select );

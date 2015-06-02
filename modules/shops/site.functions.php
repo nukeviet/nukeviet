@@ -11,7 +11,7 @@
 if( !defined( 'NV_MAINFILE' ) )	die( 'Stop!!!' );
 
 // Categories
-$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, newday, typeprice, form, group_price, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, cat_allow_point, cat_number_point, cat_number_product, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
+$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, newday, typeprice, form, group_price, viewdescriptionhtml, numlinks, ' . NV_LANG_DATA . '_description AS description, ' . NV_LANG_DATA . '_descriptionhtml AS descriptionhtml, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, cat_allow_point, cat_number_point, cat_number_product, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
 $global_array_shops_cat = nv_db_cache( $sql, 'catid', $module_name );
 
 // Groups
@@ -142,7 +142,7 @@ function nv_get_price( $pro_id, $currency_convert, $number = 1, $per_pro = false
 	}
 
 	$r = $money_config[$product['money_unit']]['round'];
-	$decimals = nv_get_decimals( $product['money_unit'] );
+	$decimals = nv_get_decimals( $currency_convert );
 
 	if( $r > 1 )
 	{

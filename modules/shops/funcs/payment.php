@@ -181,7 +181,7 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 		}
 
 		// Get content intro
-		$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . '_content.txt';
+		$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . '_docpay_content.txt';
 		if( file_exists( $content_file ) )
 		{
 			$intro_pay = file_get_contents( $content_file );

@@ -57,6 +57,20 @@
 						<a class="btn btn-info" name="selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.file_selectfile}</a>
 					</td>
 				</tr>
+				<tr>
+					<th class="text-right">{LANG.content_bodytext}</th>
+					<td>
+						{DESCRIPTIONHTML}
+					</td>
+				</tr>
+				<tr>
+					<th class="text-right">{LANG.content_bodytext_display}</th>
+					<td>
+						<!-- BEGIN: viewdescriptionhtml -->
+						<label><input type="radio" name="viewdescriptionhtml" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.checked} />{VIEWDESCRIPTION.title}</label>&nbsp;&nbsp;&nbsp;
+						<!-- END: viewdescriptionhtml -->
+					</td>
+				</tr>
 				<!-- BEGIN: cat_form -->
 				<tr>
 					<th class="text-right">{LANG.cat_form}: </th>

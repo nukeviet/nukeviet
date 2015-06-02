@@ -2,9 +2,14 @@
 <div id="category">
     <div class="page-header">
         <h1>{CAT_NAME} ({count} {LANG.title_products})</h1>
+        <!-- BEGIN: viewdescriptionhtml -->
 		<!-- BEGIN: image -->
-		<img src="{IMAGE}" class="img-responsive" alt="{CAT_NAME}">
+		<div class="text-center">
+			<img src="{IMAGE}" class="img-thumbnail" alt="{CAT_NAME}">
+		</div>
 		<!-- END: image -->
+		<p>{DESCRIPTIONHTML}</p>
+		<!-- END: viewdescriptionhtml -->
     </div>
 
     <!-- BEGIN: displays -->
@@ -29,7 +34,7 @@
     <div class="col-sm-12 col-md-{num}">
         <div class="thumbnail">
             <div style="height: {height}px">
-                <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" data-content="{intro}" data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
+                <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" data-content='{intro}' data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
             </div>
             <div class="info_pro">
             	<!-- BEGIN: new -->
@@ -41,6 +46,9 @@
             	<!-- BEGIN: point -->
             	<span class="label label-info" title="{point_note}">+{point}</span>
             	<!-- END: point -->
+            	<!-- BEGIN: gift -->
+            	<span class="label label-success">+<em class="fa fa-gift fa-lg">&nbsp;</em></span>
+            	<!-- END: gift -->
             </div>
             <div class="caption text-center">
                 <h3><a href="{link_pro}" title="{title_pro}">{title_pro0}</a></h3>
@@ -99,6 +107,23 @@
 		{pages}
 	</div>
 </div>
+
+<!-- BEGIN: modal_loaded -->
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{LANG.add_product}</h4>
+			</div>
+			<div class="modal-body">
+				<em class="fa fa-spinner fa-spin">&nbsp;</em>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END: modal_loaded -->
+
 <div class="msgshow" id="msgshow">
 </div>
 <!-- BEGIN: tooltip_js -->
