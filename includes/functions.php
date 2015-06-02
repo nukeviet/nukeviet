@@ -1846,11 +1846,7 @@ function nv_site_mods( $module_name = '' )
 		{
 			if( defined( 'NV_IS_USER' ) )
 			{
-				$user_ops = array( 'main', 'changepass', 'openid', 'editinfo', 'regroups', 'avatar' );
-				if( ! defined( 'NV_IS_ADMIN' ) )
-				{
-					$user_ops[] = 'logout';
-				}
+				$user_ops = array( 'main', 'logout', 'changepass', 'openid', 'editinfo', 'regroups', 'avatar' );
 			}
 			else
 			{
