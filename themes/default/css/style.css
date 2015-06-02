@@ -483,6 +483,9 @@ header{
 .panel-body h3 {
 	color: #0066cc;
 }
+.panel-body p{
+	margin: 0px;
+}
 .panel-body ul{
 	margin: 0px;
 	padding: 0px;
