@@ -250,7 +250,7 @@
 
 	<!-- BEGIN: product_detail -->
 	<!-- BEGIN: tabs -->
-	<div role="tabpanel">
+	<div role="tabpanel" class="tabs">
 		<ul class="nav nav-tabs" role="tablist">
 			<!-- BEGIN: tabs_title -->
 			<li role="presentation" <!-- BEGIN: active -->class="active"<!-- END: active -->>
@@ -258,7 +258,10 @@
 					<!-- BEGIN: icon -->
 					<img src="{TABS_ICON}" />
 					<!-- END: icon -->
-					{TABS_TITLE}
+					<!-- BEGIN: icon_default -->
+					<em class="fa fa-bars">&nbsp;</em>
+					<!-- END: icon_default -->
+					<span>{TABS_TITLE}</span>
 				</a>
 			</li>
 			<!-- END: tabs_title -->
