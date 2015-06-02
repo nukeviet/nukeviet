@@ -7,22 +7,19 @@
 		<a href="#" id="pop" title="{ROW.title}">
             <img id="imageresource" alt="{ROW.title}" src="{FILEIMAGE.src}" width="{FILEIMAGE.width}" height="{FILEIMAGE.height}" class="img-thumbnail" >
         </a>
-        <!-- Creates the bootstrap modal where the image will appear -->
-        <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">{ROW.title}</h4>
-              </div>
-              <div class="modal-body">
-                <img src="" id="imagepreview" style="width: 400px; height: 264px;" >
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
+		<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">{ROW.title}</h4>
+					</div>
+					<div class="modal-body">
+						<img src="" id="imagepreview" style="width: 400px; height: 264px;" >
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<!-- END: is_image -->
 	<!-- BEGIN: introtext -->

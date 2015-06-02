@@ -81,6 +81,7 @@ $lang_module['edit_block_cat'] = 'Sửa nhóm tin';
 $lang_module['link'] = 'Website nguồn tin';
 $lang_module['cat_sub'] = 'Thuộc chuyên mục';
 $lang_module['cat_sub_sl'] = 'Là chuyên mục chính';
+$lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
 $lang_module['topic_sl'] = 'Chọn nhóm tin liên quan hoặc tự điền';
 $lang_module['delcat_msg_cat'] = 'Chuyên mục này có %s Chuyên mục thành phần, bạn cần xóa hoặc di chuyển các Chuyên mục thành phần trước';
 $lang_module['delcat_msg_rows'] = 'Chuyên mục có %s bài viết, bạn có chắc chắn xóa hoặc di chuyển sang Chuyên mục khác';
@@ -246,6 +247,8 @@ $lang_module['admin_full_name'] = 'Họ tên';
 $lang_module['admin_first_name'] = 'Tên';
 $lang_module['admin_last_name'] = 'Họ';
 $lang_module['admin_email'] = 'Email';
+$lang_module['firstname_lastname'] = 'Tên và Họ';
+$lang_module['lastname_firstname'] = 'Họ và Tên';
 
 $lang_module['permissions_admin'] = 'Quản lý Chuyên mục';
 $lang_module['permissions_add_content'] = 'Tạo bài viết';

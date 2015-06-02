@@ -61,24 +61,17 @@ if( $number > 0 )
 }
 
 // Tong so binh luan duoc dang
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $mod ) . ' AND status = 1' )->fetchColumn();
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $mod ) . ' AND status = 1' )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_comment'], 'value' => $number );
-}
-
-// So binh luan cho duyet
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $mod ) . ' AND status = 0' )->fetchColumn();
-if( $number > 0 )
-{
-	$pendinginfo[] = array( 'key' => $lang_siteinfo['siteinfo_comment_pending'], 'value' => $number );
 }
 
 // Nhac nho cac tu khoa chua co mo ta
 if( ! empty( $module_config[$mod]['tags_remind'] ) )
 {
 	$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_tags WHERE description = \'\'' )->fetchColumn();
-	
+
 	if( $number > 0 )
 	{
 		$pendinginfo[] = array(

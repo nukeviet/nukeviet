@@ -162,7 +162,7 @@ if( empty( $contents ) )
 			$array_cat_other[] = $item;
 		}
 		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
-		$contents = viewcat_page_news( $array_catpage, $array_cat_other, $generate_page );
+		$contents = viewcat_page_new( $array_catpage, $array_cat_other, $generate_page );
 	}
 	elseif( $viewcat == 'viewcat_main_left' or $viewcat == 'viewcat_main_right' or $viewcat == 'viewcat_main_bottom' )
 	{

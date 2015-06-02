@@ -30,11 +30,11 @@
 				<a title="{LANG.Home}" href="{THEME_SITE_HREF}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
 			</li>
 			<!-- BEGIN: top_menu -->
-            <li {TOP_MENU.current}>
+            <li {TOP_MENU.current} rol="presentation">
                 <!-- BEGIN: icon -->
                 <img src="{TOP_MENU.icon}" />&nbsp;
                 <!-- END: icon -->
-                <a href="{TOP_MENU.link}" title="{TOP_MENU.note}" {TOP_MENU.target}>{TOP_MENU.title_trim}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
+                <a class="dropdown-toggle" {TOP_MENU.dropdown_data_toggle} href="{TOP_MENU.link}" role="button" aria-expanded="false" title="{TOP_MENU.note}" {TOP_MENU.target}>{TOP_MENU.title_trim}<!-- BEGIN: has_sub --> <strong class="caret">&nbsp;</strong><!-- END: has_sub --></a>
                 <!-- BEGIN: sub -->
                 {SUB}
                 <!-- END: sub -->
@@ -49,11 +49,6 @@
 <script type="text/javascript">
 nv_DigitalClock('digclock');
 $(document).ready(function(){
-	$('#menu-site-default .dropdown').hover(function(){
-		$(this).addClass('open');
-	}, function(){
-		$(this).removeClass('open');
-	});
 	$('#menu-site-default a').hover(function(){
 		$(this).attr("rel", $(this).attr("title"));
         $(this).removeAttr("title");
@@ -61,6 +56,35 @@ $(document).ready(function(){
 		$(this).attr("title", $(this).attr("rel"));
         $(this).removeAttr("rel");
 	});
+
+	var $window = $(window);
+
+    function checkWidth() {
+        var windowsize = $window.width();
+        if (theme_responsive == '1' && windowsize <= 640) {
+            $( "li.dropdown ul" ).removeClass( "dropdown-menu" );
+            $( "li.dropdown ul" ).addClass( "dropdown-submenu" );
+            $( "li.dropdown a" ).addClass( "dropdown-mobile" );
+            $( "#menu-site-default ul li a.dropdown-toggle" ).addClass( "dropdown-mobile" );
+            $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" );
+        }
+        else{
+            $( "li.dropdown ul" ).addClass( "dropdown-menu" );
+            $( "li.dropdown ul" ).removeClass( "dropdown-submenu" );
+            $( "li.dropdown a" ).removeClass( "dropdown-mobile" );
+            $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" );
+            $( "#menu-site-default ul li a.dropdown-toggle" ).removeClass( "dropdown-mobile" );
+            $('#menu-site-default .dropdown').hover(function(){
+                $(this).addClass('open');
+            }, function(){
+                $(this).removeClass('open');
+            });
+        }
+    }
+    // Execute on load
+    checkWidth();
+    // Bind event listener
+    $(window).resize(checkWidth);
 });
 </script>
 <!-- END: main -->

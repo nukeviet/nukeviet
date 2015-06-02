@@ -303,6 +303,15 @@ h1, h2, h3, h4, h5, h6 {
 	position: relative;
 }
 
+#contentmod p.note_cat{
+	padding: 15px;
+	margin: 0px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+	color: red;
+}
+
 #info_tab {
 	background-color: #F2F2F2;
 	padding: 7px 2px;
@@ -796,4 +805,26 @@ label {
 		position: relative;
 		padding: 0 10px;
 	}
+}
+.modal-header .close {
+	margin-top: -2px;
+}
+
+button.close {
+	padding: 0;
+	cursor: pointer;
+	background: 0 0;
+	border: 0;
+	-webkit-appearance: none;
+}
+
+.close {
+	float: right;
+	font-size: 21px;
+	font-weight: 700;
+	line-height: 1;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+	opacity: .2;
+	filter: alpha(opacity=20);
 }

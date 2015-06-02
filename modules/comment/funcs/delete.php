@@ -19,7 +19,7 @@ $session_id = session_id() . '_' . $global_config['sitekey'];
 
 if( $cid > 0 and $checkss == md5( $cid . '_' . $session_id ) )
 {
-	$_sql = 'SELECT cid, module, id FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid;
+	$_sql = 'SELECT cid, module, id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 	$row = $db->query( $_sql )->fetch();
 	if( isset( $row['cid'] ) )
 	{
@@ -43,7 +43,7 @@ if( $cid > 0 and $checkss == md5( $cid . '_' . $session_id ) )
 
 		if( $is_delete )
 		{
-			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid );
+			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid );
 			$mod_info = $site_mods[$module];
 			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
 			{

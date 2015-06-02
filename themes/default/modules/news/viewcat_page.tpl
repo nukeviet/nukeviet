@@ -93,6 +93,7 @@
 </ul>
 <!-- END: related -->
 <!-- BEGIN: generate_page -->
+<div class="clearfix"></div>
 <div class="text-center">
 	{GENERATE_PAGE}
 </div>

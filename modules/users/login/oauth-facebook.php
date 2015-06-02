@@ -38,7 +38,6 @@ if( !empty( $_GET['code'] ) )
 
 	// Send a request with it
 	$result = json_decode( $facebookService->request( '/me' ), true );
-
 	if( isset( $result['email'] ) )
 	{
 		$attribs = array(
@@ -68,5 +67,6 @@ if( !empty( $_GET['code'] ) )
 else
 {
 	$url = $facebookService->getAuthorizationUri();
-	header( 'Location: ' . $url );
+	Header( 'Location: ' . $url );
+	exit();
 }

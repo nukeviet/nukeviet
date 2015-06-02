@@ -362,13 +362,13 @@ function nv_html_meta_tags()
 
 	if( $home )
 	{
-		$canonicalUrl = NV_MAIN_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $global_config['site_home_module'], true );
+		$canonicalUrl = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $global_config['site_home_module'], true );
 	}
 	elseif( empty( $canonicalUrl ) )
 	{
 		$canonicalUrl = str_replace( NV_MY_DOMAIN . '/', NV_MAIN_DOMAIN . '/', $client_info['selfurl'] );
 	}
-	elseif( substr( $canonicalUrl, 0, 4 ) != 'http' )
+	if( substr( $canonicalUrl, 0, 4 ) != 'http' )
 	{
 		if( substr( $canonicalUrl, 0, 1 ) != '/' ) $canonicalUrl = NV_BASE_SITEURL . $canonicalUrl;
 		$canonicalUrl = NV_MAIN_DOMAIN . $canonicalUrl;

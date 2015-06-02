@@ -32,7 +32,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 	}
 	$_where .= ' AND a.id= ' . $id . ' AND a.status=1 AND a.pid=0';
 
-	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comments a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( $_where );
+	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comment a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( $_where );
 
 	$num_items = $db->query( $db->sql() )->fetchColumn();
 	if( $num_items )
@@ -89,7 +89,7 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 {
 	global $db, $module_config;
-	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comments a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( 'a.pid=' . $cid . ' AND a.status=1' );
+	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comment a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( 'a.pid=' . $cid . ' AND a.status=1' );
 
 	$data_reply_comment = array();
 
@@ -124,7 +124,7 @@ function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 	return $data_reply_comment;
 }
 
-function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowed, $page )
+function nv_comment_module( $module, $checkss, $area, $id, $allowed, $page, $status_comment = '' )
 {
 	global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info, $per_page_comment;
 	// Kiểm tra module có được Sử dụng chức năng bình luận
@@ -132,7 +132,7 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
 	{
 		if( $id > 0 and $module_config[$module]['activecomm'] == 1 )
 		{
-			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment . '&url_comment=' . $url_comment;
+			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment;
 
 			// Kiểm tra quyền xem bình luận
 			$form_login = 0;
@@ -198,7 +198,7 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
 			{
 				$comment = '';
 			}
-			return nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login );
+			return nv_theme_comment_module( $module, $area, $id, $allowed, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment );
 		}
 		else
 		{
@@ -213,7 +213,7 @@ function nv_comment_module( $module, $url_comment, $checkss, $area, $id, $allowe
  * @param mixed $array_data
  * @return
  */
-function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login )
+function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment = '' )
 {
 	global $global_config, $module_file, $module_data, $module_config, $module_info, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
 
@@ -227,7 +227,6 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 	$xtpl->assign( 'ID_COMM', $id );
 	$xtpl->assign( 'ALLOWED_COMM', $allowed_comm );
 	$xtpl->assign( 'BASE_URL_COMM', $base_url );
-	$xtpl->assign( 'URL_COMMENT', $url_comment );
 
 	// Order by comm
 	for( $i = 0; $i <= 2; ++$i )
@@ -301,6 +300,13 @@ function nv_theme_comment_module( $module, $url_comment, $area, $id, $allowed_co
 			$xtpl->assign( 'GFX_NUM', 0 );
 		}
 
+		if( !empty( $status_comment ) )
+		{
+			$status_comment = nv_base64_decode( $status_comment );
+			$xtpl->assign( 'STATUS_COMMENT', $status_comment );
+			$xtpl->parse( 'main.allowed_comm.comment_result' );
+		}
+
 		$xtpl->parse( 'main.allowed_comm' );
 	}
 	elseif( $form_login )
@@ -338,10 +344,15 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 			{
 				$comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
 			}
-			else
+			elseif( is_file(  NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg' ) )
 			{
 				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg';
 			}
+			else
+			{
+				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
+			}
+
 			if( ! empty ($comment_array_i['userid']) )
 			{
 				$comment_array_i['post_name'] = ( $global_config['name_show'] )  ? $comment_array_i['first_name'] . ' ' . $comment_array_i['last_name'] : $comment_array_i['last_name'] . ' ' . $comment_array_i['first_name'];

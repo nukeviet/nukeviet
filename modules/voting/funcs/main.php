@@ -94,7 +94,8 @@ if( empty( $vid ) )
 			}
 			$xtpl->parse( 'main.loop' );
 		}
-		$contents = $xtpl->text( 'main.loop' );
+		$xtpl->parse( 'main' );
+		$contents = $xtpl->text( 'main' );
 	}
 
 	include NV_ROOTDIR . '/includes/header.php';

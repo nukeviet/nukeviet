@@ -1,9 +1,9 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
+* @Project NUKEVIET 4
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -25,38 +25,23 @@ $lang_module['save'] = 'Save';
 $lang_module['action'] = 'Submit';
 $lang_module['move'] = 'Move';
 $lang_module['save_temp'] = 'Draft save';
-$lang_module['save_send_admin'] = 'Save articles, send admin';
-$lang_module['save_send_spadmin'] = 'Save articles, send super admin';
 $lang_module['publtime'] = 'Publish';
 $lang_module['exptime'] = 'Make expired';
-$lang_module['status_action_0'] = 'Switch to wait for approval';
-$lang_module['declined'] = 'Reject posts';
-$lang_module['re_published'] = 'Re published';
 $lang_module['status'] = 'Status';
 $lang_module['status_0'] = 'Stop effect';
 $lang_module['status_1'] = 'Published';
 $lang_module['status_2'] = 'Still waitting';
 $lang_module['status_3'] = 'Expired';
-$lang_module['status_4'] = 'Draft';
-$lang_module['status_5'] = 'Send Approve';
-$lang_module['status_6'] = 'Reject Approve';
-$lang_module['status_7'] = 'Checking for Approve';
-$lang_module['status_8'] = 'Send Publish';
-$lang_module['status_9'] = 'Reject Publish';
-$lang_module['status_10'] = 'Checking for Publish';
 $lang_module['errorsave'] = 'Error: Update content fail, please check your article alias';
 $lang_module['saveok'] = 'Update succesfully';
 $lang_module['clickgotomodule'] = 'Click here to management posts.';
 $lang_module['alias'] = 'Static Link';
 $lang_module['name'] = 'Title';
-$lang_module['titlesite'] = 'Customize the site title';
 $lang_module['error_name'] = 'Error: Please add title';
 $lang_module['weight'] = 'Position';
 $lang_module['numsubcat'] = 'Number of sub-categories';
 $lang_module['inhome'] = 'Home';
 $lang_module['numlinks'] = 'Number of link';
-$lang_module['numcomments'] = 'Num comments';
-$lang_module['newday'] = 'Show new icon (day)';
 $lang_module['description'] = 'Description';
 $lang_module['keywords'] = 'Keyword';
 $lang_module['content_list'] = 'List of articles';
@@ -72,6 +57,7 @@ $lang_module['edit_block_cat'] = 'Edit block groups';
 $lang_module['link'] = 'Website\'s link';
 $lang_module['cat_sub'] = 'Categories';
 $lang_module['cat_sub_sl'] = 'Main categories';
+$lang_module['note_cat'] = 'You need to create a category before';
 $lang_module['topic_sl'] = 'Select topics';
 $lang_module['delcat_msg_cat'] = 'Error:Categories has %s sub-categories';
 $lang_module['delcat_msg_rows'] = 'Error:Delete categories fail because categories %s article.';
@@ -89,15 +75,6 @@ $lang_module['setting_per_page'] = 'Number of article and article preamble are s
 $lang_module['setting_st_links'] = 'Number of article are only shown link';
 $lang_module['setting_idf_df'] = 'Default';
 $lang_module['setting_copyright'] = 'Copyright';
-
-$lang_module['setting_view'] = 'Setting view';
-$lang_module['setting_post'] = 'Setting post';
-$lang_module['setting_auto_tags'] = 'Automatically generate keywords for article keyword is entered at the post';
-$lang_module['setting_tags_remind'] = 'Remind the keywords no description';
-$lang_module['content_tags_empty'] = 'Note: article do not have keywords';
-$lang_module['content_tags_empty_auto'] = 'The system will automatically generate keywords stored at this article, you can disable auto-generated keywords in the management module';
-$lang_module['setting_alias_lower'] = 'Alias to lowercase when creating a new';
-
 $lang_module['viewcat_page'] = 'Display method';
 $lang_module['viewcat_page_new'] = 'New categories, Up';
 $lang_module['viewcat_page_old'] = 'Old categories, Up';
@@ -109,9 +86,6 @@ $lang_module['viewcat_list_new'] = 'title, new front';
 $lang_module['viewcat_list_old'] = 'title, old front';
 $lang_module['viewcat_grid_new'] = 'grid, new front';
 $lang_module['viewcat_grid_old'] = 'grid, old front';
-$lang_module['viewcat_none'] = 'Not show content';
-$lang_module['viewcat_detail'] = 'Group is view in detail content';
-
 $lang_module['search'] = 'Search';
 $lang_module['search_type'] = 'Search by';
 $lang_module['search_id'] = 'ID';
@@ -144,7 +118,6 @@ $lang_module['content_exp_date'] = 'Expire:';
 $lang_module['content_extra'] = 'Extra features';
 $lang_module['content_inhome'] = 'Show on homepage';
 $lang_module['content_allowed_comm'] = 'Allow comment';
-$lang_module['content_note_comm'] = 'Function currently config in Management module comment';
 $lang_module['content_allowed_rating'] = 'Allow ratings';
 $lang_module['content_allowed_send'] = 'Allow sending';
 $lang_module['content_allowed_print'] = 'Allow printing';
@@ -161,17 +134,8 @@ $lang_module['content_saveok'] = 'Successfully recorded data';
 $lang_module['content_main'] = 'Back to management';
 $lang_module['redircet_title'] = 'Action well done';
 $lang_module['content_archive'] = 'Save after expire date';
-$lang_module['showtooltip'] = 'Display tooltip';
-$lang_module['showtooltip_position'] = 'Tooltip postition';
-$lang_module['showtooltip_position_top'] = 'Top';
-$lang_module['showtooltip_position_bottom'] = 'Bottom';
-$lang_module['showtooltip_position_left'] = 'Left';
-$lang_module['showtooltip_position_right'] = 'Right';
-$lang_module['showtooltip_length'] = 'Số ký tự';
 $lang_module['showhometext'] = 'Show hometext on view content';
-$lang_module['show_no_image'] = 'Display image No-Image if post has no illustrations';
 $lang_module['imgposition'] = 'Article image';
-$lang_module['imgpositiondefault'] = 'Default configuration, Presentation Figure in the article when posting';
 $lang_module['imgposition_0'] = 'Not show';
 $lang_module['imgposition_1'] = 'To be shown based on modules configuration';
 $lang_module['imgposition_2'] = 'Show preamble';
@@ -198,8 +162,6 @@ $lang_module['siteinfo_expired'] = 'Expired posts';
 $lang_module['siteinfo_exptime'] = 'Expire posts';
 $lang_module['siteinfo_comment'] = 'Total comments';
 $lang_module['siteinfo_comment_pending'] = 'Uncheck comments';
-$lang_module['siteinfo_tags_incomplete'] = 'Number of tags without description';
-
 $lang_module['group_content'] = 'Configure post messages in the Front-end';
 $lang_module['group_addcontent'] = 'Add article';
 $lang_module['group_postcontent'] = 'Add article without censoring';
@@ -218,19 +180,13 @@ $lang_module['admin_no_user'] = 'Decentralized functions for this module only ap
 $lang_module['admin_userid'] = 'User ID';
 $lang_module['admin_username'] = 'Username';
 $lang_module['admin_full_name'] = 'Full name';
-$lang_module['admin_first_name'] = 'First name';
-$lang_module['admin_last_name'] = 'Last name';
 $lang_module['admin_email'] = 'Email';
 $lang_module['permissions_admin'] = 'Management category';
 $lang_module['permissions_add_content'] = 'Add article';
 $lang_module['permissions_pub_content'] = 'Posted article';
-$lang_module['permissions_app_content'] = 'Approved article';
 $lang_module['permissions_edit_content'] = 'Edit article';
 $lang_module['permissions_del_content'] = 'Delete article';
 $lang_module['permissions_pub_error'] = 'Error: You can not post messages in category: %1$s';
-$lang_module['permissions_sendspadmin_error'] = 'Error: You are not allowed to post to the editors at Category: %1$s';
-$lang_module['permissions_pub_show_error'] = 'Error: You do not have to display the articles in Category: %1$s';
-
 $lang_module['error_no_del_content_id'] = 'Error: The system does not delete the article id:';
 $lang_module['structure_image_upload'] = 'The module\'s upload images are archived in the default into directory structure';
 $lang_module['content_back'] = 'Back to edit page';
@@ -242,32 +198,79 @@ $lang_module['config_source_link'] = 'Show link of information source';
 $lang_module['config_source_logo'] = 'Show logo of information source';
 $lang_module['delcat_msg_cat_permissions'] = 'You are not allowed to do this action';
 $lang_module['search_status'] = 'Status';
+$lang_module['save_send_admin'] = 'Save articles, send admin';
+$lang_module['save_send_spadmin'] = 'Save articles, send super admin';
+$lang_module['status_action_0'] = 'Switch to wait for approval';
+$lang_module['declined'] = 'Reject posts';
+$lang_module['re_published'] = 'Re published';
+$lang_module['status_4'] = 'Draft';
+$lang_module['status_5'] = 'Send Approve';
+$lang_module['status_6'] = 'Reject Approve';
+$lang_module['status_7'] = 'Checking for Approve';
+$lang_module['status_8'] = 'Send Publish';
+$lang_module['status_9'] = 'Reject Publish';
+$lang_module['status_10'] = 'Checking for Publish';
+$lang_module['titlesite'] = 'Customize the site title';
+$lang_module['numcomments'] = 'Num comments';
+$lang_module['newday'] = 'Show new icon (day)';
 $lang_module['hitstotal'] = 'Number view';
-
 $lang_module['checkall'] = 'Check all';
 $lang_module['uncheckall'] = 'Uncheck all';
 $lang_module['viewdescription'] = 'Show describes when view topic';
 $lang_module['viewdescription_0'] = 'No display';
 $lang_module['viewdescription_1'] = 'Display in page 1 of topic';
 $lang_module['viewdescription_2'] = 'Display in all page of topic';
+$lang_module['setting_view'] = 'Setting view';
+$lang_module['setting_post'] = 'Setting post';
+$lang_module['setting_auto_tags'] = 'Automatically generate keywords for article keyword is entered at the post';
+$lang_module['setting_tags_remind'] = 'Remind the keywords no description';
+$lang_module['setting_alias_lower'] = 'Alias to lowercase when creating a new';
+$lang_module['viewcat_none'] = 'Not show content';
+$lang_module['viewcat_detail'] = 'Group is view in detail content';
 $lang_module['content_tag'] = 'Tags';
 $lang_module['content_tag_note'] = 'To generate automatically, copy the entire contents of the article in the box below and click';
+$lang_module['content_note_comm'] = 'Function currently config in Management module comment';
 $lang_module['allowed_rating_point'] = 'Showing reviews on google if article have points';
 $lang_module['no_allowed_rating'] = 'No display';
+$lang_module['content_tags_empty'] = 'Note: article do not have keywords';
+$lang_module['content_tags_empty_auto'] = 'The system will automatically generate keywords stored at this article, you can disable auto-generated keywords in the management module';
+$lang_module['showtooltip'] = 'Display tooltip';
+$lang_module['showtooltip_position'] = 'Tooltip postition';
+$lang_module['showtooltip_position_top'] = 'Top';
+$lang_module['showtooltip_position_bottom'] = 'Bottom';
+$lang_module['showtooltip_position_left'] = 'Left';
+$lang_module['showtooltip_position_right'] = 'Right';
+$lang_module['showtooltip_length'] = 'Số ký tự';
+$lang_module['show_no_image'] = 'Display image No-Image if post has no illustrations';
+$lang_module['imgpositiondefault'] = 'Default configuration, Presentation Figure in the article when posting';
 $lang_module['facebookAppID'] = 'Facebook App ID';
 $lang_module['facebookAppIDNote'] = '(Form: 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
 $lang_module['socialbutton'] = 'Display Like facebook, G+, Twitter tools when view aricle';
+$lang_module['siteinfo_tags_incomplete'] = 'Number of tags without description';
+$lang_module['admin_first_name'] = 'First name';
+$lang_module['admin_last_name'] = 'Last name';
+$lang_module['firstname_lastname'] = 'Firstname and Lastname';
+$lang_module['lastname_firstname'] = 'Lastname and Firstname';
+$lang_module['permissions_app_content'] = 'Approved article';
+$lang_module['permissions_sendspadmin_error'] = 'Error: You are not allowed to post to the editors at Category: %1$s';
+$lang_module['permissions_pub_show_error'] = 'Error: You do not have to display the articles in Category: %1$s';
 $lang_module['tags'] = 'Tags manage';
 $lang_module['add_tags'] = 'Add tag';
 $lang_module['edit_tags'] = 'Edit tag';
 $lang_module['tags_alias'] = 'Filter Vietnamese diacritics and other characters a-z, 0-9, - in the static link tags';
+$lang_module['alias_search'] = 'Show the different tags, use the search function to display more results';
 $lang_module['tags_all_link'] = 'View the description tags are not enabled, click here to see all tags';
 $lang_module['tags_no_description'] = 'Tags no description';
-$lang_module['alias_search'] = 'Show the different tags, use the search function to display more results';
 $lang_module['googleplus'] = 'authentication Google+ (copyright)';
 $lang_module['googleplus_1'] = 'Not use';
 $lang_module['googleplus_0'] = 'According configuration copyright of module';
-
 $lang_module['input_title_blocks'] = 'Input title group';
 $lang_module['input_keyword_tags'] = 'Input keyword ';
 $lang_module['alias_empty_notice'] = 'Alias empty, the system will automatically create static link';
+$lang_module['functional'] = 'Function';
+$lang_module['featured'] = 'Featured news';
+$lang_module['addtocat'] = 'Add featured article in the category';
+$lang_module['delete_from_cat'] = 'Delete posts from category';
+$lang_module['not_featured'] = 'No posts yet';
+
+?>

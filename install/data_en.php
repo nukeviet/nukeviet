@@ -10,23 +10,20 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-// Check theme modern
-$is_exists_theme_modern = file_exists( NV_ROOTDIR . '/themes/modern/config.ini' );
-
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array('about', 'page', 'about', 'About', '', 1276333182, 1, 1, '', '', '', '', '6', 1, 1, '', 0, 0) );
-$sth->execute( array('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0) );
-$sth->execute( array('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0) );
-$sth->execute( array('contact', 'contact', 'contact', 'Contact', '', 1275351337, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0) );
-$sth->execute( array('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 1, '', '', '', 'online, statistics', '2', 5, 1, '', 0, 0) );
-$sth->execute( array('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0) );
-$sth->execute( array('banners', 'banners', 'banners', 'Banners', '', 1270400000, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 0) );
-$sth->execute( array('seek', 'seek', 'seek', 'Search', '', 1273474173, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0) );
-$sth->execute( array('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 0) );
-$sth->execute( array('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1279366705, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0) );
-$sth->execute( array('page', 'page', 'page', 'Page', '', 1279366705, 1, 1, '', '', '', '', '6', 11, 1, '', 0, 0) );
-$sth->execute( array('comment', 'comment', 'comment', 'Comment', '', 1279366705, 1, 1, '', '', '', '', '6', 12, 1, '', 0, 0) );
+$sth->execute( array('about', 'page', 'about', 'About', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 0) );
+$sth->execute( array('news', 'news', 'news', 'News', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0) );
+$sth->execute( array('users', 'users', 'users', 'Users', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0) );
+$sth->execute( array('contact', 'contact', 'contact', 'Contact', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0) );
+$sth->execute( array('statistics', 'statistics', 'statistics', 'Statistics', '', NV_CURRENTTIME, 1, 1, '', '', '', 'online, statistics', '2', 5, 1, '', 0, 0) );
+$sth->execute( array('voting', 'voting', 'voting', 'Voting', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0) );
+$sth->execute( array('banners', 'banners', 'banners', 'Banners', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 0) );
+$sth->execute( array('seek', 'seek', 'seek', 'Search', '', NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0) );
+$sth->execute( array('menu', 'menu', 'menu', 'Menu Site', '', NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 0) );
+$sth->execute( array('feeds', 'feeds', 'feeds', 'Rss Feeds', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0) );
+$sth->execute( array('page', 'page', 'page', 'Page', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 0) );
+$sth->execute( array('comment', 'comment', 'comment', 'Comment', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 12, 1, '', 0, 0) );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -85,6 +82,9 @@ $sth->execute( array(56, 'like', 'like', 'Like', 'comment', 1, 0, 3, '') );
 $sth->execute( array(57, 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, '') );
 $sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 13, '') );
 $sth->execute( array(59, 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '') );
+$sth->execute( array(60, 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, '') );
+$sth->execute( array(61, 'rss', 'rss', 'Rss', 'page', 0, 0, 0, '') );
+$sth->execute( array(62, 'rss', 'rss', 'Rss', 'about', 0, 0, 0, '') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
@@ -126,82 +126,41 @@ $sth->execute( array(53, 'body', 'default') );
 $sth->execute( array(35, 'left-body-right', 'default') );
 $sth->execute( array(50, 'left-body-right', 'default') );
 
-if( $is_exists_theme_modern )
-{
-	$sth->execute( array(5, 'body-right', 'modern') );
-	$sth->execute( array(0, 'body-right', 'modern') );
-	$sth->execute( array(2, 'body', 'modern') );
-	$sth->execute( array(6, 'body-right', 'modern') );
-	$sth->execute( array(7, 'body-right', 'modern') );
-	$sth->execute( array(13, 'body-right', 'modern') );
-	$sth->execute( array(15, 'body-right', 'modern') );
-	$sth->execute( array(16, 'body-right', 'modern') );
-	$sth->execute( array(17, 'body-right', 'modern') );
-	$sth->execute( array(18, 'body-right', 'modern') );
-	$sth->execute( array(19, 'body-right', 'modern') );
-	$sth->execute( array(20, 'body-right', 'modern') );
-	$sth->execute( array(21, 'body-right', 'modern') );
-	$sth->execute( array(22, 'body-right', 'modern') );
-	$sth->execute( array(23, 'body-right', 'modern') );
-	$sth->execute( array(24, 'body-right', 'modern') );
-	$sth->execute( array(25, 'body-right', 'modern') );
-	$sth->execute( array(26, 'body-right', 'modern') );
-	$sth->execute( array(27, 'body-right', 'modern') );
-	$sth->execute( array(28, 'body', 'modern') );
-	$sth->execute( array(29, 'body', 'modern') );
-	$sth->execute( array(30, 'body', 'modern') );
-	$sth->execute( array(31, 'body', 'modern') );
-	$sth->execute( array(32, 'body', 'modern') );
-	$sth->execute( array(33, 'body', 'modern') );
-	$sth->execute( array(34, 'body', 'modern') );
-	$sth->execute( array(36, 'body-right', 'modern') );
-	$sth->execute( array(39, 'body-right', 'modern') );
-	$sth->execute( array(42, 'body-right', 'modern') );
-	$sth->execute( array(43, 'body-right', 'modern') );
-	$sth->execute( array(46, 'body-right', 'modern') );
-	$sth->execute( array(47, 'body', 'modern') );
-	$sth->execute( array(48, 'body-right', 'modern') );
-	$sth->execute( array(52, 'body-right', 'modern') );
-	$sth->execute( array(53, 'body', 'modern') );
-	$sth->execute( array(35, 'body-right', 'modern') );
-	$sth->execute( array(50, 'body-right', 'modern') );
-}
-
-$sth->execute( array(0, 'body', 'mobile_nukeviet') );
-$sth->execute( array(2, 'body', 'mobile_nukeviet') );
-$sth->execute( array(5, 'body', 'mobile_nukeviet') );
-$sth->execute( array(6, 'body', 'mobile_nukeviet') );
-$sth->execute( array(7, 'body', 'mobile_nukeviet') );
-$sth->execute( array(13, 'body', 'mobile_nukeviet') );
-$sth->execute( array(15, 'body', 'mobile_nukeviet') );
-$sth->execute( array(16, 'body', 'mobile_nukeviet') );
-$sth->execute( array(17, 'body', 'mobile_nukeviet') );
-$sth->execute( array(18, 'body', 'mobile_nukeviet') );
-$sth->execute( array(19, 'body', 'mobile_nukeviet') );
-$sth->execute( array(20, 'body', 'mobile_nukeviet') );
-$sth->execute( array(21, 'body', 'mobile_nukeviet') );
-$sth->execute( array(22, 'body', 'mobile_nukeviet') );
-$sth->execute( array(23, 'body', 'mobile_nukeviet') );
-$sth->execute( array(24, 'body', 'mobile_nukeviet') );
-$sth->execute( array(25, 'body', 'mobile_nukeviet') );
-$sth->execute( array(26, 'body', 'mobile_nukeviet') );
-$sth->execute( array(27, 'body', 'mobile_nukeviet') );
-$sth->execute( array(28, 'body', 'mobile_nukeviet') );
-$sth->execute( array(29, 'body', 'mobile_nukeviet') );
-$sth->execute( array(30, 'body', 'mobile_nukeviet') );
-$sth->execute( array(31, 'body', 'mobile_nukeviet') );
-$sth->execute( array(32, 'body', 'mobile_nukeviet') );
-$sth->execute( array(33, 'body', 'mobile_nukeviet') );
-$sth->execute( array(34, 'body', 'mobile_nukeviet') );
-$sth->execute( array(36, 'body', 'mobile_nukeviet') );
-$sth->execute( array(39, 'body', 'mobile_nukeviet') );
-$sth->execute( array(42, 'body', 'mobile_nukeviet') );
-$sth->execute( array(43, 'body', 'mobile_nukeviet') );
-$sth->execute( array(46, 'body', 'mobile_nukeviet') );
-$sth->execute( array(47, 'body', 'mobile_nukeviet') );
-$sth->execute( array(48, 'body', 'mobile_nukeviet') );
-$sth->execute( array(35, 'body', 'mobile_nukeviet') );
-$sth->execute( array(50, 'body', 'mobile_nukeviet') );
+$sth->execute( array(0, 'body', 'mobile_default') );
+$sth->execute( array(2, 'body', 'mobile_default') );
+$sth->execute( array(5, 'body', 'mobile_default') );
+$sth->execute( array(6, 'body', 'mobile_default') );
+$sth->execute( array(7, 'body', 'mobile_default') );
+$sth->execute( array(13, 'body', 'mobile_default') );
+$sth->execute( array(15, 'body', 'mobile_default') );
+$sth->execute( array(16, 'body', 'mobile_default') );
+$sth->execute( array(17, 'body', 'mobile_default') );
+$sth->execute( array(18, 'body', 'mobile_default') );
+$sth->execute( array(19, 'body', 'mobile_default') );
+$sth->execute( array(20, 'body', 'mobile_default') );
+$sth->execute( array(21, 'body', 'mobile_default') );
+$sth->execute( array(22, 'body', 'mobile_default') );
+$sth->execute( array(23, 'body', 'mobile_default') );
+$sth->execute( array(24, 'body', 'mobile_default') );
+$sth->execute( array(25, 'body', 'mobile_default') );
+$sth->execute( array(26, 'body', 'mobile_default') );
+$sth->execute( array(27, 'body', 'mobile_default') );
+$sth->execute( array(28, 'body', 'mobile_default') );
+$sth->execute( array(29, 'body', 'mobile_default') );
+$sth->execute( array(30, 'body', 'mobile_default') );
+$sth->execute( array(31, 'body', 'mobile_default') );
+$sth->execute( array(32, 'body', 'mobile_default') );
+$sth->execute( array(33, 'body', 'mobile_default') );
+$sth->execute( array(34, 'body', 'mobile_default') );
+$sth->execute( array(36, 'body', 'mobile_default') );
+$sth->execute( array(39, 'body', 'mobile_default') );
+$sth->execute( array(42, 'body', 'mobile_default') );
+$sth->execute( array(43, 'body', 'mobile_default') );
+$sth->execute( array(46, 'body', 'mobile_default') );
+$sth->execute( array(47, 'body', 'mobile_default') );
+$sth->execute( array(48, 'body', 'mobile_default') );
+$sth->execute( array(35, 'body', 'mobile_default') );
+$sth->execute( array(50, 'body', 'mobile_default') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -216,21 +175,7 @@ $sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Center Bann
 $sth->execute( array(17, 'default', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 $sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:229:"<p class="footer">© Copyright NukeViet 4. All right reserved.</p><p>Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
 $sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
-
-if( $is_exists_theme_modern )
-{
-	$sth->execute( array(9, 'modern', 'news', 'module.block_newscenter.php', 'News Center', '', 'no_title', '[HEADER]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
-	$sth->execute( array(10, 'modern', 'about', 'global.about.php', 'About', '', 'no_title_html', '[RIGHT]', 0, 1, '6', 1, 1, '') );
-	$sth->execute( array(11, 'modern', 'users', 'global.login.php', 'Login site', '', '', '[RIGHT]', 0, 1, '6', 1, 2, '') );
-	$sth->execute( array(12, 'modern', 'voting', 'global.voting_random.php', 'Voting', '', '', '[RIGHT]', 0, 1, '6', 1, 3, '') );
-	$sth->execute( array(13, 'modern', 'statistics', 'global.counter.php', 'Counter', '', '', '[RIGHT]', 0, 1, '6', 1, 4, '') );
-	$sth->execute( array(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '6', 0, 5, '') );
-	$sth->execute( array(15, 'modern', 'banners', 'global.banners.php', 'Top banner', '', 'no_title', '[TOPADV]', 0, 1, '6', 1, 1, 'a:1:{s:12:"idplanbanner";i:1;}') );
-	$sth->execute( array(16, 'modern', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
-	$sth->execute( array(18, 'modern', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:207:"© Copyright NukeViet 4. All right reserved.<br  />Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a>";}') );
-}
-
-$sth->execute( array(20, 'mobile_nukeviet', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
+$sth->execute( array(20, 'mobile_default', 'theme', 'global.menu.php', 'global menu', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, '') );
 
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );

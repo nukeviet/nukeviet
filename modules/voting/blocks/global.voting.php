@@ -116,6 +116,13 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 						$xtpl->parse( 'main.result1' );
 					}
 				}
+
+				if( !defined( 'MODAL_LOADED' ) )
+				{
+					$xtpl->parse( 'main.modal_loaded' );
+					define( 'MODAL_LOADED', true );
+				}
+
 				$xtpl->parse( 'main' );
 				return $xtpl->text( 'main' );
 			}

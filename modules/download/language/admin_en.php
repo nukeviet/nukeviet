@@ -29,6 +29,7 @@ $lang_module['config_queuefolder'] = 'Preprocess file\'s folder';
 $lang_module['config_whouploadfile'] = 'Upload file';
 $lang_module['config_whoaddfile'] = 'Add file';
 $lang_module['config_confirm'] = 'Confirm';
+$lang_module['note_cat'] = 'You need to create a category before';
 $lang_module['error_cat1'] = 'Error: Category was used!';
 $lang_module['error_cat2'] = 'Error: Empty category!';
 $lang_module['error_cat3'] = 'Error: Not exists category!';
