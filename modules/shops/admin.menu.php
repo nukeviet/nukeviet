@@ -57,7 +57,6 @@ if( $shop_module_config['download_active'] )
 }
 
 $submenu['tags'] = $lang_module['tags'];
-$submenu['tabs'] = $lang_module['tabs'];
 
 $menu_setting = array();
 $menu_setting['cat'] = $lang_module['categories'];
@@ -66,11 +65,14 @@ $menu_setting['blockcat'] = $lang_module['block'];
 $menu_setting['prounit'] = $lang_module['prounit'];
 $menu_setting['money'] = $lang_module['money'];
 $menu_setting['weight'] = $lang_module['weight_unit'];
-if( defined( 'NV_IS_SPADMIN' ) and $shop_module_config['template_active'] )
+if( defined( 'NV_IS_SPADMIN' ) )
 {
-	$menu_setting['template'] = $lang_module['fields'];
+	if( $shop_module_config['template_active'] )
+	{
+		$menu_setting['template'] = $lang_module['fields'];
+	}
+	$menu_setting['tabs'] = $lang_module['tabs'];
 }
-
 if( $shop_module_config['active_payment'] )
 {
 	$menu_setting['payport'] = $lang_module['setup_payment'];
