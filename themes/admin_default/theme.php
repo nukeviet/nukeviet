@@ -271,7 +271,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 					{
 						$xtpl->assign( 'MENU_SUB_HREF', $m );
 						$xtpl->assign( 'MENU_SUB_OP', $n );
-						$xtpl->assign( 'MENU_SUB_NAME', ( isset( $l['title'] ) ) ? $l['title'] : $l );
+						$xtpl->assign( 'MENU_SUB_NAME', ( is_array( $l ) and isset( $l['title'] ) ) ? $l['title'] : $l );
 						$xtpl->parse( 'main.menu_loop.submenu.loop' );
 					}
 					$xtpl->parse( 'main.menu_loop.submenu' );
@@ -281,25 +281,31 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			{
 				foreach( $submenu as $n => $l )
 				{
-					$xtpl->assign( 'MENU_SUB_CURRENT', ((( ! empty( $op ) and $op == $n) or ( ! empty( $set_active_op ) and $set_active_op == $n)) ? "subactive" : "subcurrent") );
+					if( is_array( $l ) and isset( $l['submenu'] ) )
+					{
+						$_subtitle = $l['title'];
+						$_submenu_i = $l['submenu'];
+					}
+					else
+					{
+						$_subtitle = $l;
+						$_submenu_i = '';
+					}
+					$xtpl->assign( 'MENU_SUB_CURRENT', ( ( ( ! empty( $op ) and $op == $n ) or ( ! empty( $set_active_op ) and $set_active_op == $n) ) ? "subactive" : "subcurrent" ) );
 					$xtpl->assign( 'MENU_SUB_HREF', $m );
 					$xtpl->assign( 'MENU_SUB_OP', $n );
-					$xtpl->assign( 'MENU_SUB_NAME', ( isset( $l['title'] ) ) ? $l['title'] : $l );
+					$xtpl->assign( 'MENU_SUB_NAME', $_subtitle );
 					$xtpl->assign( 'MENU_CLASS', '');
-					if( isset( $l['submenu'] ) )
+					if( ! empty( $_submenu_i ) )
 					{
-						$submenu = $l['submenu'];
-						if( ! empty( $submenu ) )
+						$xtpl->assign( 'MENU_CLASS', ' class="dropdown"');
+						foreach( $_submenu_i as $sn => $sl )
 						{
-							$xtpl->assign( 'MENU_CLASS', ' class="dropdown"');
-							foreach( $submenu as $sn => $sl )
-							{
-								$xtpl->assign( 'CUR_SUB_OP', $sn );
-								$xtpl->assign( 'CUR_SUB_NAME', $sl );
-								$xtpl->parse( 'main.menu_loop.current.submenu.loop' );
-							}
-							$xtpl->parse( 'main.menu_loop.current.submenu' );
+							$xtpl->assign( 'CUR_SUB_OP', $sn );
+							$xtpl->assign( 'CUR_SUB_NAME', $sl );
+							$xtpl->parse( 'main.menu_loop.current.submenu.loop' );
 						}
+						$xtpl->parse( 'main.menu_loop.current.submenu' );
 					}
 					$xtpl->parse( 'main.menu_loop.current' );
 				}
@@ -347,7 +353,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 				'title' => $page_title,
 				'link' => '',
 				'active' => true,
-			),
+			)
 		);
 	}
 
@@ -370,10 +376,8 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			{
 				$xtpl->parse( 'main.breadcrumbs.loop.text' );
 			}
-
 			$xtpl->parse( 'main.breadcrumbs.loop' );
 		}
-
 		$xtpl->parse( 'main.breadcrumbs' );
 	}
 
