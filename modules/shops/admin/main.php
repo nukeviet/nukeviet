@@ -34,7 +34,7 @@ $array_info[] = array(
 	'unit' => $lang_module['product_unit']
 );
 // Tong so luong binh luan
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) )->fetchColumn();
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $module_name ) )->fetchColumn();
 $array_info[] = array(
 	'title' => $lang_module['product_number_commet'],
 	'value' => $number,

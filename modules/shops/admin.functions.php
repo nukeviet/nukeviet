@@ -80,7 +80,8 @@ $allow_func = array(
 	'warehouse_logs',
 	'download',
 	'tabs',
-	'field_tab'
+	'field_tab',
+	'updateprice'
 );
 if( defined( 'NV_IS_SPADMIN' ) )
 {

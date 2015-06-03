@@ -65,6 +65,21 @@ $qhtml = nv_htmlspecialchars( $q );
 $ordername = $nv_Request->get_string( 'ordername', 'get', 'publtime' );
 $order = $nv_Request->get_string( 'order', 'get' ) == 'asc' ? 'asc' : 'desc';
 
+$listcatid = $nv_Request -> get_int( 'listcatid', 'get' );
+$where = '';
+if ( ! empty ( $listcatid ) )
+{
+	if ( isset ( $global_array_shops_cat[ $listcatid ] ) )
+	{
+		$subcatid = $global_array_shops_cat[ $listcatid ]['subcatid'];
+		$where = 'listcatid=' . $listcatid;
+		if ( $subcatid != 0)
+		{
+			$where .= ' or listcatid IN (' . $subcatid . ')';
+		}
+	}
+}
+
 $array_search = array(
 	'product_code' => $lang_module['search_product_code'],
 	'title' => $lang_module['search_title'],
@@ -216,6 +231,10 @@ if( $checkss == md5( session_id( ) ) )
 		}
 		$from .= ' publtime <= ' . $to . '';
 	}
+}
+if ( ! empty( $where ) )
+{
+	$from .= ' WHERE ' . $where;
 }
 
 $num_items = $db->query( 'SELECT COUNT(*) FROM ' . $from )->fetchColumn( );

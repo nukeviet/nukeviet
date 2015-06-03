@@ -692,3 +692,7 @@ $lang_module['error_required_content'] = 'Lỗi: bạn cần nhập dữ liệu 
 //Lang for function field
 $lang_module['field_tab_page'] = 'Hiển thị dữ liệu cho tab';
 $lang_module['introduce'] = 'Giới thiệu';
+
+$lang_module['updateprice']='Cập nhật giá theo loại';
+$lang_module['cateid'] = 'Loại sản phẩm';
+$lang_module['newprice'] = 'Giá mới';
