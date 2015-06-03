@@ -25,24 +25,7 @@ ul.other-news {
 	padding-left: 0px;
 	margin-left: 0px;
 }
-ul.listnews{
-	padding: 0;
-}
-ul.listnews li{
-	margin-bottom: 10px;
-}
-ul.listnews img{
-	margin-right: 5px;
-}
-.other_blocknews ul{
-	margin:0;padding:0
-}
-.other_blocknews ul li{
-	margin-bottom: 10px
-}
-.other_blocknews img{
-	margin-right: 5px
-}
+
 div.news_column .time {
 	margin: 3px 0 10px 0;
 	display: inline;

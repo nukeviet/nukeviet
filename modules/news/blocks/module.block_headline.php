@@ -153,13 +153,16 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 				{
 					if( ! empty( $lastest['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $lastest['homeimgfile'] ) )
 					{
-						$images_url = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $lastest['homeimgfile'];
+						$lastest['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $lastest['homeimgfile'];
 					}
 					elseif( nv_is_url( $lastest['homeimgfile'] ) )
 					{
-						$images_url = $lastest['homeimgfile'];
+						$lastest['homeimgfile'] = $lastest['homeimgfile'];
 					}
-					$lastest['homeimgfile'] = $images_url;
+					else
+					{
+						$lastest['homeimgfile'] = '';
+					}
 
 					if( ! $block_config['showtooltip'] )
 					{

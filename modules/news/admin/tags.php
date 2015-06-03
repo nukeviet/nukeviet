@@ -12,14 +12,14 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 /**
  * nv_show_tags_list()
- * 
+ *
  * @param string $q
  * @param integer $incomplete
  * @return
  */
 function nv_show_tags_list( $q = '', $incomplete = false )
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
+	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $module_config;
 
 	$db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags' )->order( 'alias ASC' );
 
@@ -35,7 +35,7 @@ function nv_show_tags_list( $q = '', $incomplete = false )
 	}
 	else
 	{
-		$db->order( 'alias ASC' );
+		$db->order( 'alias ASC' )->limit( $module_config[$module_name]['per_page'] );
 	}
 
 	$sth = $db->prepare( $db->sql() );
@@ -55,19 +55,19 @@ function nv_show_tags_list( $q = '', $incomplete = false )
 		$row['number'] = ++$number;
 		$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['tag'] . '/' . $row['alias'];
 		$row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;tid=' . $row['tid'] . ( $incomplete === true ? '&amp;incomplete=1' : '' ) . '#edit';
-		
+
 		$xtpl->assign( 'ROW', $row );
-		
+
 		if( empty( $row['description'] ) and $incomplete === false )
 		{
 			$xtpl->parse( 'main.loop.incomplete' );
 		}
-		
+
 		$xtpl->parse( 'main.loop' );
 	}
 	$sth->closeCursor();
 
-	if( empty( $q ) and $number > 9 )
+	if( empty( $q ) and $number >= $module_config[$module_name]['per_page'] )
 	{
 		$xtpl->parse( 'main.other' );
 	}
@@ -216,7 +216,7 @@ if( ! empty( $error ) )
 if( $incomplete )
 {
 	$xtpl->assign( 'ALL_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
-	
+
 	$xtpl->parse( 'main.incomplete' );
 	$xtpl->parse( 'main.incomplete_link' );
 }

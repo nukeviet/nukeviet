@@ -23,10 +23,10 @@ while( $row = $query->fetch() )
 	$sql_drop_module[] = 'drop SEQUENCE ' . $row['sequence_name'];
 }
 
-$query = $db->query( "select count(*) from all_tables WHERE table_name = '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_comments" ) . "'" );
+$query = $db->query( "select count(*) from all_tables WHERE table_name = '" . strtoupper( $db_config['prefix'] . "_" . $lang . "_comment" ) . "'" );
 if( $query->fetchColumn() )
 {
-	$sql_drop_module[] = "DELETE FROM " . $db_config["prefix"] . "_" . $lang . "_comments WHERE module='" . $module_name . "'";
+	$sql_drop_module[] = "DELETE FROM " . $db_config["prefix"] . "_" . $lang . "_comment WHERE module='" . $module_name . "'";
 }
 $sql_create_module = $sql_drop_module;
 

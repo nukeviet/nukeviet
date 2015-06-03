@@ -94,7 +94,8 @@ div.span-25 ul.related li {
 
 div.news_column ul.related a {
 	color: #3b3b3b;
-	padding-left: 6px
+	padding-left: 6px;
+	text-align: left;
 }
 
 div.news_column ul.related a:hover{

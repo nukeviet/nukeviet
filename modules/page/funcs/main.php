@@ -93,9 +93,8 @@ if( $id )
 
 	    //get url comment
 	    $url_info = parse_url( $client_info['selfurl'] );
-	    $url_comment = $url_info['path'];
 
-	    $content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
+	    $content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 	}
 	else
 	{

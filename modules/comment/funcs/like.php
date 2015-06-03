@@ -29,12 +29,12 @@ if( $cid > 0 and $checkss == md5( $cid . '_' . $session_id ) )
 	{
 		$nv_Request->set_Cookie( $module_name . '_like_' . $cid, 1, 86400 );
 
-		$_sql = 'SELECT cid, likes, dislikes FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid;
+		$_sql = 'SELECT cid, likes, dislikes FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 		$row = $db->query( $_sql )->fetch();
 		if( isset( $row['cid'] ) )
 		{
 			$like = $nv_Request->get_int( 'like', 'post' );
-			$query = 'UPDATE ' . NV_PREFIXLANG . '_comments SET';
+			$query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET';
 			if( $like > 0 )
 			{
 				$contents = 'OK_like' . $cid . '_' . ( $row['likes'] + 1 );

@@ -55,7 +55,7 @@ function nv_del_cat( $catid )
 	if( ! empty( $ids ) )
 	{
 		$ids = implode( ',', $ids );
-		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id IN (' . $ids . ')';
+		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $module_name ) . ' AND id IN (' . $ids . ')';
 		$db->query( $sql );
 
 		$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_report WHERE fid IN (' . $ids . ')';

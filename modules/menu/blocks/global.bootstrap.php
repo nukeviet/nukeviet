@@ -143,8 +143,6 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 			}
 			$item['current'] = empty( $classcurrent ) ? '' : ' class="' . ( implode( ' ', $classcurrent ) ) . '"';
 
-			$item['dropdown_data_toggle'] = empty( $classcurrent ) ? '' : ' data-toggle="' . ( implode( ' ', $classcurrent ) ) . '"';
-
 			if( nv_menu_bootstrap_check_current( $item['link'], $item['active_type'] ) )
 			{
 				$classcurrent[] = 'active';
