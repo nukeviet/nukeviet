@@ -136,6 +136,7 @@ $lang_module['authors_detail_main'] = 'Hiển thị chi tiết các thông tin t
 
 $lang_module['adminrelogin_max'] = 'Số lần admin được nhập lại nếu gõ sai, sau đó hệ thống sẽ tước quyền truy cập admin và đẩy ra trang chủ';
 $lang_module['admin_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu admin không sử dụng trình duyệt';
+$lang_module['user_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu người dùng không sử dụng trình duyệt';
 $lang_module['add_user'] = 'Chỉ định thành viên';
 $lang_module['add_select'] = 'Chọn';
 $lang_module['add_error_choose'] = 'Lỗi: Bạn chưa chọn thành viên được chỉ định làm quản trị';
