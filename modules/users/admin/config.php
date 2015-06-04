@@ -75,6 +75,12 @@ else
 		$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
 		$array_config['openid_servers'] = !empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : '';
 		$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
+		$array_config['user_check_pass_time'] = 60 * $nv_Request->get_int( 'user_check_pass_time', 'post' );
+		
+		if( $array_config['user_check_pass_time'] < 120 )
+		{
+			$array_config['user_check_pass_time'] = 120;
+		}
 		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 		foreach( $array_config as $config_name => $config_value )
 		{
@@ -199,7 +205,10 @@ else
 	$xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'DATA', $array_config );
+	$xtpl->assign( 'USER_CHECK_PASS_TIME', round( $global_config['user_check_pass_time'] / 60 ) );
+	
 	if( !in_array( DIR_FORUM, $ignorefolders ) and file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' ) )
 	{
 		$forum_files = @scandir( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' );
