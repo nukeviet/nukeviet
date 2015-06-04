@@ -58,10 +58,6 @@
 					<td>{LANG.admin_check_pass_time}</td>
 					<td><input class="form-control pull-left" style="width:50px;" type="text" value="{ADMIN_CHECK_PASS_TIME}" name="admin_check_pass_time" maxlength="3"/>({GLANG.min})</td>
 				</tr>
-				<tr>
-					<td>{LANG.user_check_pass_time}</td>
-					<td><input class="form-control pull-left" style="width:50px;" type="text" value="{USER_CHECK_PASS_TIME}" name="user_check_pass_time" maxlength="3"/>({GLANG.min})</td>
-				</tr>
 			</tbody>
 		</table>
 	</div>

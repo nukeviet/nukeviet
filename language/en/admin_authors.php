@@ -135,7 +135,6 @@ $lang_module['spadmin_add_admin'] = 'Allows General Administrator to create and 
 $lang_module['authors_detail_main'] = 'Show detailed information of the administrator account';
 $lang_module['adminrelogin_max'] = 'Filed admin if the wrong type is entered, then the system will deprive admin access and ejected homepage';
 $lang_module['admin_check_pass_time'] = 'Time to check your password, if admin not using the browser';
-$lang_module['user_check_pass_time'] = 'Time to check your password, if users not using the browser';
 $lang_module['add_user'] = 'Appoint a member';
 $lang_module['add_select'] = 'Select';
 $lang_module['add_error_choose'] = 'Error: You did not appoint a member to the administrator';
