@@ -96,6 +96,8 @@ if( empty( $data_content ) )
 $data_content['array_custom'] = array();
 $data_content['array_custom_lang'] = array();
 $data_content['template'] = '';
+$idtemplate = 0;
+
 if( $global_array_shops_cat[$data_content['listcatid']]['form'] != '' )
 {
 	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$data_content['listcatid']]['form'] ) . '"' )->fetchColumn( );
@@ -116,7 +118,7 @@ if( $global_array_shops_cat[$data_content['listcatid']]['form'] != '' )
 
 		if( !empty( $listfield ) )
 		{
-			$sql = $db->query( 'SELECT shopid, status, ' . implode( ',', $listfield ) . ' FROM ' . $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate . ' WHERE shopid = ' . $id . ' AND status=1' );
+			$sql = $db->query( 'SELECT ' . implode( ',', $listfield ) . ' FROM ' . $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate . ' WHERE shopid = ' . $id . ' AND status=1' );
 			$data_content['template'] = $global_array_shops_cat[$data_content['listcatid']]['form'];
 			$data_content['array_custom'] = $sql->fetch( );
 
@@ -162,15 +164,28 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 		die( );
 	}
 
+	// Lay don vi san pham
 	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_units WHERE id = ' . $data_content['product_unit'] );
 	$data_unit = $sql->fetch( );
 	$data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
 
-	// Lay chi tiet giam gia
-	if( $data_content['discount_id'] )
+	// Hien thi tabs
+	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs where active=1 ORDER BY weight ASC';
+	$data_content['tabs'] = nv_db_cache( $sql, 'id', $module_name );
+
+	$data_content['files'] = array();
+	if( !empty( $data_content['tabs'] ) )
 	{
-		$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts WHERE did = ' . $data_content['discount_id'] );
-		$data_shop['discount'] = $sql->fetch( );
+		// Download tai lieu san pham
+		if( $pro_config['download_active'] )
+		{
+			$result = $db->query( 'SELECT id, ' . NV_LANG_DATA . '_title title, ' . NV_LANG_DATA . '_description description, path, filesize, extension, download_groups FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE id IN (SELECT id_files FROM ' . $db_config['prefix'] . '_' . $module_data . '_files_rows WHERE id_rows=' . $data_content['id'] . ')' );
+			while( $row = $result->fetch() )
+			{
+				$row['filesize'] = ! empty( $row['filesize'] ) ? nv_convertfromBytes( $row['filesize'] ) : $lang_module['download_file_unknown'];
+				$data_content['files'][] = $row;
+			}
+		}
 	}
 
 	// Danh gia - Phan hoi
@@ -206,6 +221,14 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 	else//no image
 	{
 		$data_content['homeimgthumb'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
+	}
+
+	// Tu khoa
+	$key_words = array();
+	$_query = $db->query( 'SELECT a1.' . NV_LANG_DATA . '_keyword keyword, a2.' . NV_LANG_DATA . '_alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id'] );
+	while( $row = $_query->fetch() )
+	{
+		$key_words[] = $row['keyword'];
 	}
 
 	//metatag image facebook
@@ -346,9 +369,11 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
     $url_info = parse_url( $client_info['selfurl'] );
     $url_comment = $url_info['path'];
 
+	$key_words = implode( ',', $key_words );
+
 	$content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 
-	$contents = detail_product( $data_content, $data_unit, $data_shop, $data_others, $array_other_view, $content_comment, $compare_id, $popup );
+	$contents = detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate );
 }
 else
 {

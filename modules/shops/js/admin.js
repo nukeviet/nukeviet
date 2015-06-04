@@ -486,6 +486,34 @@ function nv_del_review(id) {
 	}
 }
 
+function nv_del_files(id) {
+	if (confirm(nv_is_del_confirm[0])) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&nocache=' + new Date().getTime(), 'del=1&id=' + id, function(res) {
+			if (res == 'OK') {
+				$('#row_' + id).slideUp();
+			} else {
+				alert(nv_is_del_confirm[2]);
+			}
+
+		});
+	}
+}
+
+function nv_change_active_files( id )
+{
+	var new_status = $('#change_active_' + id).is(':checked') ? 1 : 0;
+	if (confirm(nv_is_change_act_confirm[0])) {
+		var nv_timer = nv_settimeout_disable('change_active_' + id, 3000);
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&nocache=' + new Date().getTime(), 'change_active=1&id=' + id + '&new_status=' + new_status, function(res) {
+
+		});
+	}
+	else
+	{
+		$('#change_active_' + id).prop('checked', new_status ? false : true );
+	}
+}
+
 function FormatNumber(str) {
 
 	var strTemp = GetNumber(str);
@@ -553,7 +581,14 @@ function IsNumberInt(str) {
 	return str;
 }
 
-function reset_form( form ){
-	form.find('input:text, input:password, input:file, select, textarea').val('');
-	form.find('input:radio, input:checkbox').removeAttr('checked').removeAttr('selected');
-}
+$.fn.clearForm = function() {
+	return this.each(function() {
+		var type = this.type, tag = this.tagName.toLowerCase();
+		if (tag == 'form')
+			return $(':input', this).clearForm();
+		if (type == 'text' || type == 'password' || tag == 'textarea')
+			this.value = '';
+		else if (tag == 'select')
+			this.selectedIndex = 0;
+	});
+};

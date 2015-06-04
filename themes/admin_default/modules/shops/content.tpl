@@ -165,6 +165,44 @@
 							{edit_bodytext}
 						</div></td>
 					</tr>
+					<!-- BEGIN: files -->
+					<tr>
+						<th>{LANG.download_file}</th>
+					</tr>
+					<tr>
+						<td>
+							<div class="row">
+								<div class="col-md-19">
+									<select name="files[]" id="files" class="form-control" style="width: 100%" multiple="multiple">
+										<!-- BEGIN: loop -->
+										<option value="{FILES.id}" {FILES.selected}>{FILES.title}</option>
+										<!-- END: loop -->
+									</select>
+								</div>
+								<div class="col-md-1">
+									<span class="text-middle">{LANG.download_file_or}</span>
+								</div>
+								<div class="col-md-4">
+									<button class="btn btn-primary" id="add_file">{LANG.download_file_add}</button>
+									<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+													<h4>{LANG.download_file_add}</h4>
+												</div>
+												<div class="modal-body">
+													<p class="text-center"><em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em></p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<!-- END: files -->
+
 					<!-- BEGIN: gift -->
 					<tr>
 						<th>{LANG.content_gift}</th>
@@ -447,8 +485,23 @@
 			$("#listgroupid").html( data );
 		}
 	});
-
 </script>
+
+<!-- BEGIN: files_js -->
+<script type="text/javascript">
+	$("#files").select2({
+		placeholder: "{LANG.download_file_chose_h}"
+	});
+
+	$('#add_file').click(function(){
+        $('#idmodals').removeData('bs.modal');
+     	$('#idmodals').on('show.bs.modal', function () {
+             $('#idmodals .modal-body').load( script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&popup=1' );
+        }).modal();
+		return false;
+	});
+</script>
+<!-- END: files_js -->
 
 <!-- BEGIN:getalias -->
 <script type="text/javascript">

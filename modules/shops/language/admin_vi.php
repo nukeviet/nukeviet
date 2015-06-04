@@ -60,6 +60,7 @@ $lang_module['siteinfo_review'] = 'Số đánh giá chờ duyệt';
 $lang_module['siteinfo_order'] = 'Tổng số đơn đặt hàng';
 $lang_module['siteinfo_order_noview'] = 'Số đơn đặt hàng chưa xem';
 $lang_module['siteinfo_expired'] = 'Số sản phẩm đã hết hạn';
+$lang_module['siteinfo_exptime'] = 'Số sản phẩm sắp hết hạn';
 $lang_module['siteinfo_tags_incomplete'] = 'Số tags chưa có mô tả';
 $lang_module['catalog_name'] = 'Tên loại sản phẩm';
 $lang_module['cat_form'] = 'Dữ liệu tùy biến';
@@ -648,5 +649,50 @@ $lang_module['warehouse_detail_group'] = 'Thuộc tính sản phẩm';
 $lang_module['warehouse_add_group_propties'] = 'Thêm nhóm thuộc tính';
 $lang_module['warehouse_chose_propties'] = 'Chọn';
 
-$lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
+$lang_module['download'] = 'Quản lý tài liệu';
+$lang_module['download_file'] = 'Tài liệu sản phẩm';
+$lang_module['download_file_title'] = 'Tên tài liệu';
+$lang_module['download_file_time'] = 'Thời gian thêm';
+$lang_module['download_file_count'] = 'Số sản phẩm liên kết';
+$lang_module['download_file_description'] = 'Mô tả tài liệu';
+$lang_module['download_file_path'] = 'Đường dẫn tài liệu';
+$lang_module['download_file_chose'] = 'Chọn tập tin';
+$lang_module['download_file_chose_h'] = 'Chọn tài liệu đã có';
+$lang_module['download_file_or'] = 'hoặc';
+$lang_module['download_file_add'] = 'Thêm tài liệu';
+$lang_module['download_file_edit'] = 'Sửa tài liệu';
+$lang_module['download_file_down_hits'] = 'Lượt tải';
+$lang_module['download_file_filler'] = 'Nhập tên tập tin để lọc';
+$lang_module['download_file_available'] = 'Danh sách hiện có';
+$lang_module['download_file_selected'] = 'Danh sách đã chọn';
+$lang_module['download_file_add_success'] = 'Đã thêm tài liệu thành công, danh sách tài liệu đã được cập nhật, bạn có thể tiếp tục thêm tập tin hoặc đóng cửa sổ này.';
+$lang_module['download_file_move_warning'] = 'Bạn có chắc chắn muốn di chuyển nhiều đối tượng, hệ thống sẽ mất một ít thời gian để xử lý';
+$lang_module['download_setting_active'] = 'Sử dụng chức năng Quản lý file tài liệu';
+$lang_module['download_files_error_title'] = 'Vui lòng nhập tên tài liệu';
+$lang_module['download_files_error_path'] = 'Vui lòng chọn đường dẫn tài liệu';
+$lang_module['download_files_error_path_valid'] = 'Đường dẫn tập tin không hợp lệ';
 $lang_module['download_setting_active'] = 'Sử dụng chức Quản lý file tài liệu';
+$lang_module['download_setting_groups'] = 'Ai được phép tải tập tin';
+$lang_module['download_setting_groups_module'] = 'Theo cấu hình module';
+
+$lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
+
+//Lang for function tabs
+$lang_module['tabs'] = 'Quản lý tab';
+$lang_module['tabs_icon'] = 'Biểu tượng';
+$lang_module['tabs_content'] = 'Nội dung';
+$lang_module['tabs_content_detail'] = 'Chi tiết sản phẩm';
+$lang_module['tabs_content_otherimage'] = 'Hình ảnh khác';
+$lang_module['tabs_content_download'] = 'Download tài liệu';
+$lang_module['tabs_content_comments'] = 'Bình luận';
+$lang_module['tabs_content_rate'] = 'Đánh giá sản phẩm';
+$lang_module['tabs_content_customdata'] = 'Dữ liệu tùy biến';
+$lang_module['error_required_content'] = 'Lỗi: bạn cần nhập dữ liệu cho Nội dung';
+
+//Lang for function field
+$lang_module['field_tab_page'] = 'Hiển thị dữ liệu cho tab';
+$lang_module['introduce'] = 'Giới thiệu';
+
+$lang_module['updateprice']='Cập nhật giá theo loại';
+$lang_module['cateid'] = 'Loại sản phẩm';
+$lang_module['newprice'] = 'Giá mới';
