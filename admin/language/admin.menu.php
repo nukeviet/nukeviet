@@ -11,7 +11,16 @@
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
 $submenu['main'] = $lang_module['nv_lang_data'];
-if( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
+if( empty( $global_config['idsite'] ) )
 {
-	$submenu['countries'] = $lang_module['countries'];
+	if( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
+	{
+		$submenu['countries'] = $lang_module['countries'];
+	}
+	$submenu['interface'] = $lang_module['nv_lang_interface'];
+	$submenu['check'] = $lang_module['nv_lang_check'];
+	if( defined( 'NV_IS_GODADMIN' ) )
+	{
+		$submenu['setting'] = $lang_global['mod_settings'];
+	}
 }
