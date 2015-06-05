@@ -664,3 +664,25 @@ button.close {
 .pointer{
 	cursor: pointer
 }
+
+.chromeframe {
+	position: fixed !important;
+	top: 0 !important;
+	right: 0;
+	left: 0;
+	width: 100% !important;
+	z-index: 99999999999999 !important;
+	background: #ffff00 !important;
+	color: #000 !important;
+	height: 25px;
+	line-height: 25px;
+	padding: 0.2em 0;
+	text-align: center !important;
+}
+#timeoutsess {
+	display: none;
+}
+
+#timeoutsess a {
+	color: #0000FF !important;
+}
