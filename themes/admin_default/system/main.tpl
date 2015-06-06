@@ -34,7 +34,7 @@
 			<!-- BEGIN: notification -->
 			<li class="dropdown">
 				<span id="notification" style="display: none"></span>
-				<a href="javascript:void(0)"> <em class="fa fa-bell-o fa-2x fix">&nbsp;</em></a>
+				<a href="javascript:void(0)"  class="dropdown-toggle" data-toggle="dropdown"> <em class="fa fa-bell-o fa-2x fix">&nbsp;</em></a>
 				<div class="dropdown-menu" style="width: 430px">
 					<div id="notification_load">
 
