@@ -3027,7 +3027,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar {
   position: relative;
-  min-height: 50px;
+  min-height: 48px;
   margin-bottom: 0;
   border: 1px solid transparent;
 }
@@ -3058,7 +3058,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-static-top {
   z-index: 1000;
-  border-width: 0 0 1px;
+  border-width: 0 0 0px;
 }
 
 .navbar-fixed-top,
@@ -3315,7 +3315,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 }
 .breadcrumb {
   padding: 8px 15px;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
   list-style: none;
   background-color: #f5f5f5;
   border-radius: 4px;

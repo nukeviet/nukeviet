@@ -466,6 +466,29 @@ function user_lostpass( $data, $question )
 }
 
 /**
+ * user_lostpass_new()
+ *
+ * @param mixed $data
+ * @param mixed $question
+ * @return
+ */
+function user_lostpass_new( $userid, $k )
+{
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
+
+	$xtpl = new XTemplate( 'lostpass.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
+	$xtpl->assign( 'USERID', $userid );
+	$xtpl->assign( 'K', $k );
+	
+	$xtpl->parse( 'main.new_pass' );
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
  * user_lostactivelink()
  *
  * @param mixed $data

@@ -57,6 +57,7 @@ $lang_module['edit_block_cat'] = 'Edit block groups';
 $lang_module['link'] = 'Website\'s link';
 $lang_module['cat_sub'] = 'Categories';
 $lang_module['cat_sub_sl'] = 'Main categories';
+$lang_module['note_cat'] = 'You need to create a category before';
 $lang_module['topic_sl'] = 'Select topics';
 $lang_module['delcat_msg_cat'] = 'Error:Categories has %s sub-categories';
 $lang_module['delcat_msg_rows'] = 'Error:Delete categories fail because categories %s article.';

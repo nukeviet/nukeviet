@@ -218,8 +218,10 @@ header{
 	height:80px;
 }
 
-#header #logo a h1{
+#header #logo h1{
 	float:left;
+	margin: 0px;
+	padding: 0px;
 }
 
 #header #logo object{
@@ -227,7 +229,7 @@ header{
 }
 
 #header .pull-right{
-	margin:33px 33px 0 0;
+	margin:33px 33px;
 }
 #header #logo a{
 	font-size:22px;
@@ -481,6 +483,9 @@ header{
 .panel-body h3 {
 	color: #0066cc;
 }
+.panel-body p{
+	margin: 0px;
+}
 .panel-body ul{
 	margin: 0px;
 	padding: 0px;
@@ -658,4 +663,26 @@ button.close {
 
 .pointer{
 	cursor: pointer
+}
+
+.chromeframe {
+	position: fixed !important;
+	top: 0 !important;
+	right: 0;
+	left: 0;
+	width: 100% !important;
+	z-index: 99999999999999 !important;
+	background: #ffff00 !important;
+	color: #000 !important;
+	height: 25px;
+	line-height: 25px;
+	padding: 0.2em 0;
+	text-align: center !important;
+}
+#timeoutsess {
+	display: none;
+}
+
+#timeoutsess a {
+	color: #0000FF !important;
 }

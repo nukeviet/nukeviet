@@ -303,6 +303,15 @@ h1, h2, h3, h4, h5, h6 {
 	position: relative;
 }
 
+#contentmod p.note_cat{
+	padding: 15px;
+	margin: 0px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+	color: red;
+}
+
 #info_tab {
 	background-color: #F2F2F2;
 	padding: 7px 2px;

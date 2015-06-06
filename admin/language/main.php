@@ -72,7 +72,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
             die();
         }
 	}
-	elseif( $checksess == md5( $keylang . session_id() ) and file_exists( NV_ROOTDIR . '/language/' . $keylang . '/global.php' ) )
+	elseif( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $global_config['allow_adminlangs'] ) )
 	{
 		if( isset( $array_lang_setup[$keylang] ) and $array_lang_setup[$keylang] == 1 )
 		{
@@ -301,8 +301,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 	}
 }
 $a = 0;
-$_language_array = nv_scandir(  NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
-foreach( $_language_array as $keylang )
+foreach( $global_config['allow_adminlangs'] as $keylang )
 {
 	$delete = '';
 	$allow_sitelangs = '';
