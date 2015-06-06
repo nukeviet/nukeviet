@@ -24,7 +24,6 @@ if( ! defined( 'NV_IS_AJAX' ) )
 		$contents = str_replace( '[MEMORY_TIME_USAGE]', sprintf( $lang_global['memory_time_usage'] , nv_convertfromBytes( memory_get_usage() ), number_format( ( microtime( true ) - NV_START_TIME ), 3, '.', '' ) ), $contents );
 	}
 }
-$db = null;
 
 if( isset( $nv_plugin_area[3] ) )
 {
@@ -35,6 +34,7 @@ if( isset( $nv_plugin_area[3] ) )
     }
 }
 
+$db = null;
 unset( $lang_global, $global_config, $client_info );
 
 //Nen trang
