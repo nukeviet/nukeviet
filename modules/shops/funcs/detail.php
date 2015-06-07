@@ -225,7 +225,7 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 
 	// Tu khoa
 	$key_words = array();
-	$_query = $db->query( 'SELECT a1.' . NV_LANG_DATA . '_keyword keyword, a2.' . NV_LANG_DATA . '_alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id'] );
+	$_query = $db->query( 'SELECT a1.keyword keyword, a2.alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id'] );
 	while( $row = $_query->fetch() )
 	{
 		$key_words[] = $row['keyword'];
