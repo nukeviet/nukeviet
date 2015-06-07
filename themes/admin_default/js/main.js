@@ -69,10 +69,10 @@ $(document).ready(function(){
 	});
 
 	// Show submenu
-	$('#menu-horizontal .dropdown, .menu .dropdown, #left-menu .dropdown:not(.active)').hover(function(){
-		//NV.openMenu(this);
+	$('#menu-horizontal .dropdown, #left-menu .dropdown:not(.active)').hover(function(){
+		NV.openMenu(this);
 	}, function(){
-		//NV.closeMenu(this);
+		NV.closeMenu(this);
 	});
 
 	// Left menu handle
