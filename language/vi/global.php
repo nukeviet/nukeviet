@@ -279,5 +279,3 @@ $lang_global['msgbeforeunload'] = 'Bạn có chắc chắn chuyển sang trang k
 $lang_global['timeoutsess_nouser'] = 'Bạn đã không sử dụng Site';
 $lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng thái đăng nhập';
 $lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
-
-$lang_module['user_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu người dùng không sử dụng trình duyệt';

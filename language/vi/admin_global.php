@@ -52,11 +52,6 @@ $lang_global['login_error_security'] = 'Lỗi: Mã kiểm tra chưa được kha
 $lang_global['error_zlib_support'] = 'Lỗi: Máy chủ của bạn không hỗ trợ thư viện zlib, bạn cần liên hệ với nhà cung cấp dịch vụ hosting bật thư viện zlib để có thể sử dụng tính năng này.';
 $lang_global['error_zip_extension'] = 'Lỗi: Máy chủ của bạn không hỗ trợ extension ZIP, bạn cần liên hệ với nhà cung cấp dịch vụ hosting bật extension ZIP để có thể sử dụng tính năng này.';
 
-$lang_global['msgbeforeunload'] = 'Bạn có chắc chắn chuyển sang trang khác, Nếu thực hiện dữ liệu sẽ không được lưu';
-$lang_global['timeoutsess_nouser'] = 'Bạn đã không sử dụng Site';
-$lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng thái đăng nhập';
-$lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
-
 $lang_global['length_characters'] = 'Số ký tự';
 $lang_global['length_suggest_max'] = 'Nên nhập tối đa %s ký tự';
 
