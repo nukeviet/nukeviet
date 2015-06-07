@@ -218,10 +218,10 @@ $db->select( "DISTINCT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "
 $result = $db->query( $db->sql() );
 $num_items = $result->rowCount();
 
-$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=search_result&keyword=" . $keyword . "&price1=" . $price1 . "&price2=" . $price2 . "&typemoney=" . $typemoney . "&cata=" . $cataid . $url;
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search_result&keyword=' . $keyword . '&price1=' . $price1 . '&price2=' . $price2 . '&typemoney=' . $typemoney . '&cata=' . $cataid . $url;
 $html_pages = nv_generate_page( $base_url, $num_items, $per_page, $page );
 
-$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=";
+$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
 while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_number, $product_price, $discount_id, $money_unit, $showprice, $gift_content, $gift_from, $gift_to, $newday ) = $result->fetch( 3 ) )
 {
@@ -239,29 +239,29 @@ while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt,
 	}
 	else//no image
 	{
-		$thumb = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/no-image.jpg";
+		$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
 	}
 
 	$data_content[] = array(
-		"id" => $id,
-		"listcatid" => $listcatid,
-		"publtime" => $publtime,
-		"title" => $title,
-		"alias" => $alias,
-		"hometext" => $hometext,
-		"homeimgalt" => $homeimgalt,
-		"homeimgthumb" => $thumb,
+		'id' => $id,
+		'listcatid' => $listcatid,
+		'publtime' => $publtime,
+		'title' => $title,
+		'alias' => $alias,
+		'hometext' => $hometext,
+		'homeimgalt' => $homeimgalt,
+		'homeimgthumb' => $thumb,
 		'product_number' => $product_number,
-		"product_price" => $product_price,
-		"discount_id" => $discount_id,
-		"money_unit" => $money_unit,
-		"showprice" => $showprice,
-		"gift_content" => $gift_content,
-		"gift_from" => $gift_from,
-		"gift_to" => $gift_to,
-		"newday" => $newday,
-		"link_pro" => $link . $global_array_shops_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id . $global_config['rewrite_exturl'],
-		"link_order" => $link . "setcart&amp;id=" . $id
+		'product_price' => $product_price,
+		'discount_id' => $discount_id,
+		'money_unit' => $money_unit,
+		'showprice' => $showprice,
+		'gift_content' => $gift_content,
+		'gift_from' => $gift_from,
+		'gift_to' => $gift_to,
+		'newday' => $newday,
+		'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
+		'link_order' => $link . 'setcart&amp;id=' . $id
 	);
 }
 

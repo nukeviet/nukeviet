@@ -207,7 +207,7 @@ if( empty( $contents ) )
 					'gift_content' => $gift_content,
 					'gift_from' => $gift_from,
 					'gift_to' => $gift_to,
-					'link_pro' => $link . $global_array_shops_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+					'link_pro' => $link . $global_array_shops_cat[$catid_i]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 					'link_order' => $link . 'setcart&amp;id=' . $id
 				);
 			}

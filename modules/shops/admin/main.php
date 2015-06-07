@@ -118,15 +118,11 @@ $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-$xtpl->assign( 'module', $module_info['custom_title'] . ' (' . $module_name . ')' );
-$xtpl->assign( 'module_version', '1.0.0 : 20-01-2011' );
 
-$i = 0;
 foreach( $array_info as $info )
 {
 	$xtpl->assign( 'KEY', $info );
 	$xtpl->parse( 'main.loop' );
-	++$i;
 }
 
 $xtpl->parse( 'main' );

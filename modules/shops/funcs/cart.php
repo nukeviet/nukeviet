@@ -233,7 +233,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
 				'group' => $group,
-				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 				'num' => $number,
 				'link_remove' => $link . 'remove&id=' . $id
 			);
