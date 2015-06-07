@@ -408,3 +408,4 @@ $lang_module['info'] = "Cập nhật dữ liệu từ LDAP xuống website là t
 		<b>Chú ý:</b> Cập nhật dư liệu LDAP bên ngoại yêu cầu bạn thiết đặt binddn và bindpw cho một người dùng bind có quyền chỉnh sửa tất cả bản ghi người dùng. Hiện tại nó không lưu giữ các thuộc tính đa trị, và sẽ xóa các giá trị gia tăng khi cập nhật.	</p>";
 
 $lang_module['alown_login_other_browser']='Cho phép đăng nhập từ trình duyệt khác';
+$lang_module['user_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu người dùng không sử dụng trình duyệt';
