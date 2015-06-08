@@ -8,8 +8,11 @@
  * @Createdate 3-6-2010 0:14
  */
 
-if( !defined( 'NV_IS_MOD_SHOPS' ) )
-	die( 'Stop!!!' );
+if( !defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
+
+try
+{
+
 
 if( $nv_Request->isset_request( 'check_quantity', 'post' ) )
 {
@@ -70,12 +73,6 @@ if( $nv_Request->isset_request( 'check_quantity', 'post' ) )
 	}
 }
 
-if( empty( $id ) )
-{
-	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-	exit( );
-}
-
 $compare_id = $nv_Request->get_string( $module_data . '_compare_id', 'session', '' );
 $compare_id = unserialize( $compare_id );
 
@@ -83,15 +80,14 @@ $compare_id = unserialize( $compare_id );
 $contents = '';
 $publtime = 0;
 
-$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id = ' . $id . ' AND status=1' );
-$data_content = $sql->fetch( );
-$data_shop = array( );
-
+$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE ' . NV_LANG_DATA . '_alias = ' . $db->quote( $alias_url ) . ' AND status=1' );
+$data_content = $sql->fetch();
 if( empty( $data_content ) )
 {
 	$nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 	redict_link( $lang_module['detail_do_not_view'], $lang_module['redirect_to_back_shops'], $nv_redirect );
 }
+$id = $data_content['id'];
 
 $data_content['array_custom'] = array();
 $data_content['array_custom_lang'] = array();
@@ -100,13 +96,13 @@ $idtemplate = 0;
 
 if( $global_array_shops_cat[$data_content['listcatid']]['form'] != '' )
 {
-	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$data_content['listcatid']]['form'] ) . '"' )->fetchColumn( );
+	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$data_content['listcatid']]['form'] ) . '"' )->fetchColumn();
 	if( $idtemplate )
 	{
 		$listfield = array();
-		$array_tmp = array( );
+		$array_tmp = array();
 		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field ORDER BY weight' );
-		while( $row = $result->fetch( ) )
+		while( $row = $result->fetch() )
 		{
 			$listtemplate = explode( '|', $row['listtemplate'] );
 			if( in_array( $idtemplate, $listtemplate ) )
@@ -120,7 +116,7 @@ if( $global_array_shops_cat[$data_content['listcatid']]['form'] != '' )
 		{
 			$sql = $db->query( 'SELECT ' . implode( ',', $listfield ) . ' FROM ' . $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate . ' WHERE shopid = ' . $id . ' AND status=1' );
 			$data_content['template'] = $global_array_shops_cat[$data_content['listcatid']]['form'];
-			$data_content['array_custom'] = $sql->fetch( );
+			$data_content['array_custom'] = $sql->fetch();
 
 			if( !empty( $array_tmp ) )
 			{
@@ -156,17 +152,17 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 	}
 
 	$catid = $data_content['listcatid'];
-	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . '-' . $data_content['id'] . $global_config['rewrite_exturl'], true );
+	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $data_content[NV_LANG_DATA . '_alias'] . $global_config['rewrite_exturl'], true );
 
 	if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and !$popup )
 	{
 		Header( 'Location: ' . $base_url_rewrite );
-		die( );
+		die();
 	}
 
 	// Lay don vi san pham
 	$sql = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_units WHERE id = ' . $data_content['product_unit'] );
-	$data_unit = $sql->fetch( );
+	$data_unit = $sql->fetch();
 	$data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
 
 	// Hien thi tabs
@@ -225,7 +221,7 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 
 	// Tu khoa
 	$key_words = array();
-	$_query = $db->query( 'SELECT a1.' . NV_LANG_DATA . '_keyword keyword, a2.' . NV_LANG_DATA . '_alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id'] );
+	$_query = $db->query( 'SELECT a1.keyword keyword, a2.alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id'] );
 	while( $row = $_query->fetch() )
 	{
 		$key_words[] = $row['keyword'];
@@ -235,10 +231,10 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 	$meta_property['og:image'] = NV_MY_DOMAIN . $data_content['homeimgthumb'];
 
 	// Fetch Limit
-	$db->sqlreset( )->select( ' id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, price_config, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( 'id!=' . $id . ' AND listcatid = ' . $data_content['listcatid'] . ' AND status=1' )->order( 'ID DESC' )->limit( $pro_config['per_row'] * 2 );
-	$result = $db->query( $db->sql( ) );
+	$db->sqlreset()->select( ' id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, price_config, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( 'id!=' . $id . ' AND listcatid = ' . $data_content['listcatid'] . ' AND status=1' )->order( 'ID DESC' )->limit( $pro_config['per_row'] * 2 );
+	$result = $db->query( $db->sql() );
 
-	$data_others = array( );
+	$data_others = array();
 	while( list( $_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $price_config, $money_unit, $discount_id, $showprice, $hometext, $gift_content, $gift_from, $gift_to ) = $result->fetch( 3 ) )
 	{
 		if( $homeimgthumb == 1 )//image thumb
@@ -278,15 +274,15 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 			'gift_content' => $gift_content,
 			'gift_from' => $gift_from,
 			'gift_to' => $gift_to,
-			'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$data_content['listcatid']]['alias'] . '/' . $alias . '-' . $_id . $global_config['rewrite_exturl'],
+			'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$data_content['listcatid']]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 			'link_order' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setcart&amp;id=' . $_id
 		);
 	}
 
-	$array_other_view = array( );
+	$array_other_view = array();
 	if( !empty( $_SESSION[$module_data . '_proview'] ) )
 	{
-		$arrid = array( );
+		$arrid = array();
 		foreach( $_SESSION[$module_data . '_proview'] as $id_i => $data_i )
 		{
 			if( $id_i != $id )
@@ -298,9 +294,8 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 		if( !empty( $arrtempid ) )
 		{
 			// Fetch Limit
-			$db->sqlreset( )->select( 'id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( 'id IN ( ' . $arrtempid . ') AND status=1' )->order( 'id DESC' )->limit( $pro_config['per_row'] * 2 );
-			$result = $db->query( $db->sql( ) );
-
+			$db->sqlreset()->select( 'id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( 'id IN ( ' . $arrtempid . ') AND status=1' )->order( 'id DESC' )->limit( $pro_config['per_row'] * 2 );
+			$result = $db->query( $db->sql() );
 			while( list( $_id, $listcatid, $title, $alias, $homeimgfile, $homeimgthumb, $addtime, $publtime, $product_code, $product_number, $product_price, $money_unit, $discount_id, $showprice, $hometext, $gift_content, $gift_from, $gift_to ) = $result->fetch( 3 ) )
 			{
 				if( $homeimgthumb == 1 )//image thumb
@@ -339,7 +334,7 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 					'gift_content' => $gift_content,
 					'gift_from' => $gift_from,
 					'gift_to' => $gift_to,
-					'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$data_content['listcatid']]['alias'] . '/' . $alias . '-' . $_id . $global_config['rewrite_exturl'],
+					'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$data_content['listcatid']]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 					'link_order' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setcart&amp;id=' . $_id
 				);
 			}
@@ -390,4 +385,11 @@ else
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
+}
+}
+catch( PDOException $e )
+{
+  trigger_error( $e->getMessage() );
+  print_r( $e );
+  die();
 }

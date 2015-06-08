@@ -1296,8 +1296,8 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
  * @param mixed $data_content
  * @param mixed $data_unit
  * @param mixed $data_others
- * @param mixed $data_shop
  * @param mixed $array_other_view
+ * @param mixed $content_comment
  * @return
  */
 function detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate )

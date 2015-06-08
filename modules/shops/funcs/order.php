@@ -632,7 +632,7 @@ if( $action == 0 )
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
 				'group' => $group,
-				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 				'num' => $num
 			);
 			++$i;

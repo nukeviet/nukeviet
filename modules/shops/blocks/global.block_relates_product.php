@@ -218,7 +218,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 				$src_img = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/shops/no-image.jpg';
 			}
 
-			$xtpl->assign( 'link', $link . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'] );
+			$xtpl->assign( 'link', $link . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'] );
 			$xtpl->assign( 'title', nv_clean60( $row['title'], $cut_num ) );
 			$xtpl->assign( 'src_img', $src_img );
 			$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $row['addtime'] ) );

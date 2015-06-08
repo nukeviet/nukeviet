@@ -67,11 +67,10 @@ if( $op == 'main' )
 	}
 	else
 	{
-		if( sizeof( $array_op ) == 2 and preg_match( '/^([a-z0-9\-]+)\-([0-9]+)$/i', $array_op[1], $m1 ) and ! preg_match( '/^page\-([0-9]+)$/', $array_op[1], $m2 ) )
+		if( sizeof( $array_op ) == 2 and preg_match( '/^([a-z0-9\-]+)$/i', $array_op[1] ) and ! preg_match( '/^page\-([0-9]+)$/', $array_op[1], $m2 ) )
 		{
 			$op = 'detail';
-			$alias_url = $m1[1];
-			$id = $m1[2];
+			$alias_url = $array_op[1];
 		}
 		else
 		{
@@ -154,7 +153,7 @@ function GetDataIn( $result, $catid )
 			'gift_content'=> $gift_content,
 			'gift_from'=> $gift_from,
 			'gift_to'=> $gift_to,
-			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
@@ -218,7 +217,7 @@ function GetDataInGroups( $result, $array_g )
 			'showprice' => $showprice,
 			'newday' => $newday,
 			'gift_content' => $gift_content,
-			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
@@ -283,7 +282,7 @@ function GetDataInGroup( $result, $groupid )
 			'gift_from' => $gift_from,
 			'gift_to' => $gift_to,
 			'newday' => $global_array_shops_cat[$listcatid]['newday'],
-			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+			'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 			'link_order' => $link . 'setcart&amp;id=' . $id
 		);
 	}
@@ -337,7 +336,7 @@ function SetSessionProView( $id, $title, $alias, $addtime, $link, $homeimgthumb 
 function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtemplate )
 {
 	global $module_data, $module_info, $module_file, $lang_module, $db_config, $db;
-	
+
 	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field';
 	$result = $db->query( $sql );
 	while( $row = $result->fetch( ) )
@@ -355,15 +354,15 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
 	$xtpl->assign( 'CUSTOM_DATA', $array_custom );
-	foreach ($array_custom as $key => $value) 
+	foreach ($array_custom as $key => $value)
 	{
 		if( isset($arr[$key]) and !empty($value) ) $xtpl->parse( 'main.'.$key );
 	}
-	
+
 	$xtpl->parse( 'main' );
 	$html = $xtpl->text( 'main' );
 	return $html;
-		
+
 }
 
 /**
@@ -376,19 +375,19 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 function nv_tpl( $name_file, $array_data )
 {
 	global $module_data, $module_info, $module_file, $lang_module, $db_config, $db;
-	
+
 	$html ='';
 	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
-	
+
 	foreach ($array_data as $value) {
 		$xtpl->assign( 'DATA', $value );
 		$xtpl->parse( 'main.loop' );
 	}
-	
+
 	$xtpl->parse( 'main' );
 	$html = $xtpl->text( 'main' );
 	return $html;
-		
+
 }
