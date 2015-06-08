@@ -10,17 +10,17 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if( ! nv_function_exists( 'nv_language' ) )
+if( ! nv_function_exists( 'nv_block_language' ) )
 {
-	function nv_language( $block_config )
+	function nv_block_language( $block_config )
 	{
 		global $global_config, $site_mods, $lang_global, $language_array;
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.social.tpl' ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.block_language.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'];
 		}
-		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.social.tpl' ) )
+		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.block_language.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
@@ -62,5 +62,5 @@ if( ! nv_function_exists( 'nv_language' ) )
 
 if( defined( 'NV_SYSTEM' ) )
 {
-	$content = nv_language( $block_config );
+	$content = nv_block_language( $block_config );
 }
