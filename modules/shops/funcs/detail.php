@@ -10,10 +10,6 @@
 
 if( !defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
-try
-{
-
-
 if( $nv_Request->isset_request( 'check_quantity', 'post' ) )
 {
 	$id_pro = $nv_Request->get_int( 'id_pro', 'post', 0 );
@@ -220,12 +216,8 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 	}
 
 	// Tu khoa
-	$key_words = array();
 	$_query = $db->query( 'SELECT a1.keyword keyword, a2.alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id'] );
-	while( $row = $_query->fetch() )
-	{
-		$key_words[] = $row['keyword'];
-	}
+	$key_words = $_query->fetchAll();
 
 	//metatag image facebook
 	$meta_property['og:image'] = NV_MY_DOMAIN . $data_content['homeimgthumb'];
@@ -364,11 +356,9 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
     $url_info = parse_url( $client_info['selfurl'] );
     $url_comment = $url_info['path'];
 
-	$key_words = implode( ',', $key_words );
-
 	$content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 
-	$contents = detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate );
+	$contents = detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate, $key_words );
 }
 else
 {
@@ -385,11 +375,4 @@ else
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-}
-}
-catch( PDOException $e )
-{
-  trigger_error( $e->getMessage() );
-  print_r( $e );
-  die();
 }
