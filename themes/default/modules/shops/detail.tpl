@@ -266,7 +266,7 @@
 				</li>
 				<!-- END: tabs_title -->
 			</ul>
-	
+
 			<div class="tab-content">
 				<!-- BEGIN: tabs_content -->
 				<div role="tabpanel" class="tab-pane fade <!-- BEGIN: active -->active in<!-- END: active -->" id="{TABS_KEY}-{TABS_ID}">
@@ -276,18 +276,20 @@
 			</div>
 		</div>
 		<!-- END: tabs -->
-		
+
 		<!-- BEGIN: keywords -->
-			<div class="row">
+	    <div class="panel panel-default">
+		    <div class="panel-body">
 				<div class="keywords">
 					<em class="fa fa-tags">&nbsp;</em><strong>{LANG.keywords}: </strong>
 					<!-- BEGIN: loop -->
 						<a title="{KEYWORD}" href="{LINK_KEYWORDS}"><em>{KEYWORD}</em></a>{SLASH}
 					<!-- END: loop -->
 				</div>
-			</div>		
-		<!-- END: keywords -->	
-	
+			</div>
+		</div>
+		<!-- END: keywords -->
+
 		<!-- BEGIN: other -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -298,7 +300,7 @@
 			</div>
 		</div>
 		<!-- END: other -->
-	
+
 		<!-- BEGIN: other_view -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
