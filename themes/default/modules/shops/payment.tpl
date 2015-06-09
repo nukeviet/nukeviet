@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="block clearfix">
-	<div class="row panel panel-default">
+	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="col-xs-14">
 				<div class="row">
@@ -136,23 +136,24 @@
 		</table>
 	</div>
 	<!-- END: data_shipping -->
-
-	<div class="row">
-		<div class="col-xs-12">
-			<!-- BEGIN: order_note -->
-			<em>{LANG.cart_note} : {DATA.order_note}</em>
-			<!-- END: order_note -->
-		</div>
-		<div class="col-xs-12 text-right">
-			<!-- BEGIN: price3 -->
-			<!-- BEGIN: total_coupons -->
-			<p class="pull-right">
-				{LANG.coupon}: <strong>{order_coupons}</strong> {unit}
-			</p>
-			<div class="clear"></div>
-			<!-- END: total_coupons -->
-			{LANG.cart_total}: <strong id="total">{order_total}</strong> {unit} <!-- END: price3 -->
-		</div>
+    <div class="panel panel-default">
+    	<div class="panel-body">
+    		<div class="col-xs-12">
+    			<!-- BEGIN: order_note -->
+    			<em>{LANG.cart_note} : {DATA.order_note}</em>
+    			<!-- END: order_note -->
+    		</div>
+    		<div class="col-xs-12 text-right">
+    			<!-- BEGIN: price3 -->
+    			<!-- BEGIN: total_coupons -->
+    			<p class="pull-right">
+    				{LANG.coupon}: <strong>{order_coupons}</strong> {unit}
+    			</p>
+    			<div class="clear"></div>
+    			<!-- END: total_coupons -->
+    			{LANG.cart_total}: <strong id="total">{order_total}</strong> {unit} <!-- END: price3 -->
+    		</div>
+    	</div>
 	</div>
 
 	<!-- BEGIN: actpay -->
