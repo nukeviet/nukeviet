@@ -165,7 +165,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 	$sth->bindParam( ':config_name', $selectthemes, PDO::PARAM_STR );
 	$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR, strlen( $config_value ) );
 	$sth->execute();
-	
+
 	if( defined( 'NV_CONFIG_DIR' ) AND $global_config['idsite'] > 0 )
 	{
 		if( isset( $global_config['sitetimestamp'] ) )
@@ -180,7 +180,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 
 	nv_del_moduleCache( 'settings' );
-	
+
 	if( file_exists( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $selectthemes . "_" . $global_config['idsite'] . ".css" ) )
 	{
 		nv_deletefile( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $selectthemes . "_" . $global_config['idsite'] . ".css" );
@@ -209,7 +209,7 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
 $xtpl->assign( 'SELECTTHEMES', $selectthemes );
-$xtpl->assign( 'UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_name );
+$xtpl->assign( 'UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_upload );
 
 // List style border
 $boder_style = array(

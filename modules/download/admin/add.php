@@ -364,8 +364,8 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
-$xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/images' );
-$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/' . $upload_dir );
+$xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/images' );
+$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/' . $upload_dir );
 
 if( ! empty( $error ) )
 {

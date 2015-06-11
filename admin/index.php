@@ -95,6 +95,8 @@ if( ! empty( $module_name ) )
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
+		$module_upload = $module_info['module_upload'];
+
 		$include_functions = NV_ROOTDIR . '/modules/' . $module_file . '/admin.functions.php';
 		$include_menu = NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php';
 		$include_file = NV_ROOTDIR . '/modules/' . $module_file . '/admin/' . $op . '.php';

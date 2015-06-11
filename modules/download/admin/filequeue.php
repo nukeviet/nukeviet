@@ -262,15 +262,15 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 					$newfile2 = $newfile;
 					$i = 1;
-					while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $upload_dir . '/' . $newfile2 ) )
+					while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $upload_dir . '/' . $newfile2 ) )
 					{
 						$newfile2 = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $newfile );
 						++$i;
 					}
 
-					if( @nv_copyfile( NV_ROOTDIR . '/' . $file, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $upload_dir . '/' . $newfile2 ) )
+					if( @nv_copyfile( NV_ROOTDIR . '/' . $file, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $upload_dir . '/' . $newfile2 ) )
 					{
-						$array['fileupload'][] = '/' . $module_name . '/' . $upload_dir . '/' . $newfile2;
+						$array['fileupload'][] = '/' . $module_upload . '/' . $upload_dir . '/' . $newfile2;
 					}
 				}
 			}
@@ -305,15 +305,15 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 
 					$newfile2 = $newfile;
 					$i = 1;
-					while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/images/' . $newfile2 ) )
+					while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/images/' . $newfile2 ) )
 					{
 						$newfile2 = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . $i . '\2', $newfile );
 						++$i;
 					}
 
-					if( @nv_copyfile( NV_ROOTDIR . '/' . $fileimage, NV_UPLOADS_REAL_DIR . '/' . $module_name . '/images/' . $newfile2 ) )
+					if( @nv_copyfile( NV_ROOTDIR . '/' . $fileimage, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/images/' . $newfile2 ) )
 					{
-						$array['fileimage'] = '/' . $module_name . '/images/' . $newfile2;
+						$array['fileimage'] = '/' . $module_upload . '/images/' . $newfile2;
 					}
 				}
 			}
@@ -539,8 +539,8 @@ if( $nv_Request->isset_request( 'edit', 'get' ) )
 	$xtpl->assign( 'DATA', $array );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
-	$xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/images' );
-	$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/' . $upload_dir );
+	$xtpl->assign( 'IMG_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/images' );
+	$xtpl->assign( 'FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/' . $upload_dir );
 
 	if( ! empty( $error ) )
 	{

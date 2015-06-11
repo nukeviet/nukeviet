@@ -71,11 +71,11 @@ if( !empty( $alias ) )
 		{
 			if( $item['homeimgthumb'] == 1 )//image thumb
 			{
-				$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 2 )//image file
 			{
-				$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 3 )//image url
 			{
@@ -121,7 +121,7 @@ if( !empty( $alias ) )
 
 		if( ! empty( $topic_image ) )
 		{
-			$topic_image = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/topics/' . $topic_image;
+			$topic_image = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $topic_image;
 		}
 
 		$contents = topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image );
@@ -140,13 +140,13 @@ else
 	$result = $db->query( 'SELECT topicid as id, title, alias, image, description as hometext, keywords, add_time as publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC' );
 	while( $item = $result->fetch() )
 	{
-		if( ! empty( $item['image'] ) AND file_exists( NV_ROOTDIR. '/' . NV_FILES_DIR . '/' . $module_name . '/topics/' . $item['image'] ) )//image thumb
+		if( ! empty( $item['image'] ) AND file_exists( NV_ROOTDIR. '/' . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'] ) )//image thumb
 		{
-			$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/topics/' . $item['image'];
+			$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'];
 		}
 		elseif( ! empty( $item['image'] ) )//image file
 		{
-			$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/topics/' . $item['image'];
+			$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $item['image'];
 		}
 		elseif( ! empty( $show_no_image ) )//no image
 		{

@@ -50,7 +50,7 @@ $description = $global_array_cat[$catid]['description'];
 $global_array_cat[$catid]['description'] = $global_array_cat[$catid]['descriptionhtml'];
 if( ! empty($global_array_cat[$catid]['image']))
 {
-	$meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $global_array_cat[$catid]['image'];
+	$meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image'];
 }
 
 if( empty( $contents ) )
@@ -82,11 +82,11 @@ if( empty( $contents ) )
 			{
 				if( $item['homeimgthumb'] == 1 ) //image thumb
 				{
-					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 				}
 				elseif( $item['homeimgthumb'] == 2 ) //image file
 				{
-					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 				}
 				elseif( $item['homeimgthumb'] == 3 ) //image url
 				{
@@ -117,11 +117,11 @@ if( empty( $contents ) )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 3 ) //image url
 			{
@@ -187,11 +187,11 @@ if( empty( $contents ) )
 			{
 				if( $item['homeimgthumb'] == 1 ) //image thumb
 				{
-					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 				}
 				elseif( $item['homeimgthumb'] == 2 ) //image file
 				{
-					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 				}
 				elseif( $item['homeimgthumb'] == 3 ) //image url
 				{
@@ -223,11 +223,11 @@ if( empty( $contents ) )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 3 ) //image url
 			{
@@ -271,11 +271,11 @@ if( empty( $contents ) )
 					{
 						if( $item['homeimgthumb'] == 1 ) //image thumb
 						{
-							$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+							$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 						}
 						elseif( $item['homeimgthumb'] == 2 ) //image file
 						{
-							$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+							$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 						}
 						elseif( $item['homeimgthumb'] == 3 ) //image url
 						{
@@ -311,11 +311,11 @@ if( empty( $contents ) )
 				{
 					if( $item['homeimgthumb'] == 1 ) //image thumb
 					{
-						$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+						$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 					}
 					elseif( $item['homeimgthumb'] == 2 ) //image file
 					{
-						$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+						$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 					}
 					elseif( $item['homeimgthumb'] == 3 ) //image url
 					{
@@ -363,11 +363,11 @@ if( empty( $contents ) )
 			{
 				if( $item['homeimgthumb'] == 1 ) //image thumb
 				{
-					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 				}
 				elseif( $item['homeimgthumb'] == 2 ) //image file
 				{
-					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 				}
 				elseif( $item['homeimgthumb'] == 3 ) //image url
 				{
@@ -404,11 +404,11 @@ if( empty( $contents ) )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 3 ) //image url
 			{
@@ -451,11 +451,11 @@ if( empty( $contents ) )
 				{
 					if( $item['homeimgthumb'] == 1 ) //image thumb
 					{
-						$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+						$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 					}
 					elseif( $item['homeimgthumb'] == 2 ) //image file
 					{
-						$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+						$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 					}
 					elseif( $item['homeimgthumb'] == 3 ) //image url
 					{
@@ -491,11 +491,11 @@ if( empty( $contents ) )
 			{
 				if( $item['homeimgthumb'] == 1 ) //image thumb
 				{
-					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 				}
 				elseif( $item['homeimgthumb'] == 2 ) //image file
 				{
-					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 				}
 				elseif( $item['homeimgthumb'] == 3 ) //image url
 				{
@@ -543,11 +543,11 @@ if( empty( $contents ) )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 2 ) //image file
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 3 ) //image url
 			{

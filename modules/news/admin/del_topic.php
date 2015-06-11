@@ -52,9 +52,9 @@ if( $topicid > 0 )
 		if( $db->exec( $query ) )
 		{
 			nv_fix_topic();
-			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/' . $image ) )
+			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $image ) )
 			{
-				nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/topics/' . $image );
+				nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $image );
 			}
 			$contents = 'OK_' . $topicid;
 		}
