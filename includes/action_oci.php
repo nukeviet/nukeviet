@@ -48,6 +48,7 @@ function nv_create_table_sys( $lang )
 		 title VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 module_file VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 module_data VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
+		 module_upload VARCHAR2(55 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 custom_title VARCHAR2(255 CHAR) DEFAULT '' NOT NULL ENABLE,
 		 admin_title VARCHAR2(255 CHAR) DEFAULT '',
 		 set_time NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,

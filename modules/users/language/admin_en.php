@@ -387,3 +387,6 @@ $lang_module['update_LDAP_config_name'] = 'First Name';
 $lang_module['update_LDAP_config_lname'] = 'Last Name';
 $lang_module['default'] = 'Default';
 $lang_module['info'] = 'Updated data from LDAP to the website is optional. You can choose to pre-fill some NukeViet user information with information from the <b /> LDAP fields  is shown here. <p> <br  /> If you leave these fields blank, then no What have been converted from LDAP and the default value of NukeViet will be used to replace  <p> <br  /> In other cases, users will be able to prepare all This after school starts.  <p> <b /> Update site:  If enabled, the entry will be updated (from external authentication) each time the user logged in or have synced users. </p> <hr /> <p> <br  /> <b /> Note:  to update the data you require an external LDAP settings and bindpw binddn to bind a user has the right to edit all User log. Currently it does not preserve multi-valued attributes, and will remove the added value when updating. </p>';
+
+$lang_module['allowuserloginmulti']='Allow user login multi';
+$lang_module['user_check_pass_time'] = 'Check pass time';

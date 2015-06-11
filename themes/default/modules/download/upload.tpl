@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="page_title">
-	<div class="right2">
+	<div class="text-right">
 		<a href="{DOWNLOAD}">{LANG.download}</a>
 	</div>
 	{LANG.upload}

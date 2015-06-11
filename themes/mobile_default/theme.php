@@ -99,27 +99,6 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
 		$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
 
-		// Multiple languages
-		if( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
-		{
-			foreach( $global_config['allow_sitelangs'] as $lang_i )
-			{
-				$xtpl->assign( 'LANGSITENAME', $language_array[$lang_i]['name'] );
-				$xtpl->assign( 'LANGSITEURL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_i );
-
-				if( NV_LANG_DATA != $lang_i )
-				{
-					$xtpl->parse( 'main.language.langitem' );
-				}
-				else
-				{
-					$xtpl->parse( 'main.language.langcuritem' );
-				}
-			}
-
-			$xtpl->parse( 'main.language' );
-		}
-
 		// Breadcrumbs
 		if( $home != 1 )
 		{

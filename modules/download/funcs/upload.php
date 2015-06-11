@@ -157,7 +157,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 			if( isset( $_FILES['upload_fileupload'] ) and is_uploaded_file( $_FILES['upload_fileupload']['tmp_name'] ) )
 			{
 				$upload = new upload( $global_config['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], $download_config['maxfilesize'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
-				$upload_info = $upload->save_file( $_FILES['upload_fileupload'], NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'], false );
+				$upload_info = $upload->save_file( $_FILES['upload_fileupload'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $download_config['temp_dir'], false );
 
 				@unlink( $_FILES['upload_fileupload']['tmp_name'] );
 
@@ -170,7 +170,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 						$random_num = mt_rand( 0, $maxran );
 						$random_num = md5( $random_num );
 						$nv_pathinfo_filename = nv_pathinfo_filename( $upload_info['name'] );
-						$new_name = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
+						$new_name = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
 
 						$rename = nv_renamefile( $upload_info['name'], $new_name );
 
@@ -217,7 +217,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 				if( isset( $_FILES['upload_fileimage'] ) and is_uploaded_file( $_FILES['upload_fileimage']['tmp_name'] ) )
 				{
 					$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-					$upload_info = $upload->save_file( $_FILES['upload_fileimage'], NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'], false );
+					$upload_info = $upload->save_file( $_FILES['upload_fileimage'], NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $download_config['temp_dir'], false );
 
 					@unlink( $_FILES['upload_fileimage']['tmp_name'] );
 
@@ -228,7 +228,7 @@ if( $nv_Request->isset_request( 'addfile', 'post' ) )
 						$random_num = mt_rand( 0, $maxran );
 						$random_num = md5( $random_num );
 						$nv_pathinfo_filename = nv_pathinfo_filename( $upload_info['name'] );
-						$new_name = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
+						$new_name = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $download_config['temp_dir'] . '/' . $nv_pathinfo_filename . '.' . $random_num . '.' . $upload_info['ext'];
 
 						$rename = nv_renamefile( $upload_info['name'], $new_name );
 

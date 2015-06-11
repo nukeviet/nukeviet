@@ -132,7 +132,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	$post['icon'] = $nv_Request->get_string( 'icon', 'post', '' );
 	if( is_file( NV_DOCUMENT_ROOT . $post['icon'] ) )
 	{
-		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$post['icon'] = substr( $post['icon'], $lu );
 	}
 	else
@@ -346,9 +346,9 @@ while( $row = $result->fetch() )
 			$groups_view[] = $groups_list[$_group_id];
 		}
 	}
-	if( ! empty( $row['icon'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['icon'] ) )
+	if( ! empty( $row['icon'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['icon'] ) )
 	{
-		$row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['icon'];
+		$row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['icon'];
 	}
 	else
 	{
@@ -399,13 +399,13 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] ) . '&amp;parentid=' . $post['parentid'];
 
-if( ! empty( $post['icon'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $post['icon'] ) )
+if( ! empty( $post['icon'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['icon'] ) )
 {
-	$post['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $post['icon'];
+	$post['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['icon'];
 }
 
 $xtpl->assign( 'DATA', $post );
-$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
+$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload );
 
 if( ! empty( $arr_table ) )
 {

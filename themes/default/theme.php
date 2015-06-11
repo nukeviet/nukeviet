@@ -64,7 +64,7 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-	
+
 	$xtpl->assign( 'NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ' );
 	$xtpl->assign( 'NV_SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'NV_SITE_TITLE', $global_config['site_name'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['admin_page'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'] );
@@ -78,7 +78,7 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'NV_SITE_TIMEZONE_OFFSET', round( NV_SITE_TIMEZONE_OFFSET / 3600 ) );
 	$xtpl->assign( 'NV_CURRENTTIME', nv_date( 'T', NV_CURRENTTIME ) );
 	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
-	
+
 	$xtpl->assign( 'LANG_TIMEOUTSESS_NOUSER', $lang_global['timeoutsess_nouser'] );
 	$xtpl->assign( 'LANG_TIMEOUTSESS_CLICK', $lang_global['timeoutsess_click'] );
 	$xtpl->assign( 'LANG_TIMEOUTSESS_SEC', $lang_global['sec'] );
@@ -130,27 +130,6 @@ function nv_site_theme( $contents, $full = true )
 		// Search form variables
 		$xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
 		$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
-
-		// Multiple languages
-		if( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
-		{
-			foreach( $global_config['allow_sitelangs'] as $lang_i )
-			{
-				$xtpl->assign( 'LANGSITENAME', $language_array[$lang_i]['name'] );
-				$xtpl->assign( 'LANGSITEURL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_i );
-
-				if( NV_LANG_DATA != $lang_i )
-				{
-					$xtpl->parse( 'main.language.langitem' );
-				}
-				else
-				{
-					$xtpl->parse( 'main.language.langcuritem' );
-				}
-			}
-
-			$xtpl->parse( 'main.language' );
-		}
 
 		// Breadcrumbs
 		if( $home != 1 )

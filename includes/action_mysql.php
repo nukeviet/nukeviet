@@ -47,6 +47,7 @@ function nv_create_table_sys( $lang )
 		 title varchar(55) NOT NULL,
 		 module_file varchar(55) NOT NULL DEFAULT '',
 		 module_data varchar(55) NOT NULL DEFAULT '',
+		 module_upload varchar(55) NOT NULL DEFAULT '',
 		 custom_title varchar(255) NOT NULL,
 		 admin_title varchar(255) DEFAULT '',
 		 set_time int(11) unsigned NOT NULL DEFAULT '0',

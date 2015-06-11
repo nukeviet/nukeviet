@@ -64,7 +64,7 @@ $(function() {
 
 	// Notification
 	$('.menu .dropdown').hover(function() {
-		NV.openMenu(this);
+		//NV.openMenu(this);
 		$.get(script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification_load', function(result) {
 			notification_reset();
 			$('#notification_load').html(result).slimScroll({
@@ -74,6 +74,6 @@ $(function() {
 		});
 	}, function() {
 		page = 1;
-		NV.closeMenu(this);
+		//NV.closeMenu(this);
 	});
 });

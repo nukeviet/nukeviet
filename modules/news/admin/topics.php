@@ -39,7 +39,7 @@ if( ! empty( $savecat ) )
 	$array['image'] = $nv_Request->get_title( 'homeimg', 'post', '' );
 	if( ! nv_is_url( $array['image'] ) and file_exists( NV_DOCUMENT_ROOT . $array['image'] ) )
 	{
-		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/topics/" );
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' );
 		$array['image'] = substr( $array['image'], $lu );
 	}
 	else
@@ -66,7 +66,7 @@ if( ! empty( $savecat ) )
 		$data_insert['image'] = $array['image'];
 		$data_insert['weight'] = $weight;
 		$data_insert['keywords'] = $array['keywords'];
-		
+
 		if( $db->insert_id( $_sql, 'topicid', $data_insert ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_topic', " ", $admin_info['userid'] );
@@ -86,7 +86,7 @@ if( ! empty( $savecat ) )
 		$stmt->bindParam( ':description', $array['description'], PDO::PARAM_STR );
 		$stmt->bindParam( ':image', $array['image'], PDO::PARAM_STR );
 		$stmt->bindParam( ':keywords', $array['keywords'], PDO::PARAM_STR );
-	
+
 		if( $stmt->execute() )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_topic', "topicid " . $array['topicid'], $admin_info['userid'] );
@@ -106,9 +106,9 @@ if( $array['topicid'] > 0 )
 	$lang_module['add_topic'] = $lang_module['edit_topic'];
 }
 
-if( is_file( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . "/" . $module_name . "/topics/" . $array['image'] ) )
+if( is_file( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $array['image'] ) )
 {
-	$array['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/topics/" . $array['image'];
+	$array['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $array['image'];
 }
 
 $xtpl = new XTemplate( 'topics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -118,7 +118,7 @@ $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
-$xtpl->assign( 'UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/topics' );
+$xtpl->assign( 'UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/topics' );
 $xtpl->assign( 'DATA', $array );
 $xtpl->assign( 'TOPIC_LIST', nv_show_topics_list() );
 

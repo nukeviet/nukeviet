@@ -31,7 +31,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td class="right top">
+					<td class="text-right top">
 					<br />
 					<strong>{LANG.vmodule_note}:</strong></td>
 					<td><textarea style="width: 450px" name="note" cols="80" rows="5" class="form-control">{NOTE}</textarea></td>

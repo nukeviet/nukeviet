@@ -55,16 +55,16 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	else
 	{
-		if( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_config['upload_dir'] ) )
+		if( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $array_config['upload_dir'] ) )
 		{
-			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, $array_config['upload_dir'] );
+			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, $array_config['upload_dir'] );
 			if( $mkdir[0] == 0 )
 			{
 				$array_config['upload_dir'] = 'files';
 			}
 			else
 			{
-				$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
+				$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $array_config['upload_dir'] . "', 0)" );
 			}
 		}
 	}
@@ -75,16 +75,16 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	else
 	{
-		if( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $array_config['temp_dir'] ) )
+		if( ! is_dir( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $array_config['temp_dir'] ) )
 		{
-			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, $array_config['temp_dir'] );
+			$mkdir = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, $array_config['temp_dir'] );
 			if( $mkdir[0] == 0 )
 			{
 				$array_config['temp_dir'] = 'temp';
 			}
 			else
 			{
-				$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_name . "/" . $array_config['upload_dir'] . "', 0)" );
+				$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $array_config['upload_dir'] . "', 0)" );
 			}
 		}
 	}
