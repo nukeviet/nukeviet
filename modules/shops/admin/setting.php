@@ -312,9 +312,9 @@ if( ! empty( $array_setting_payment ) )
 		$value['titleactive'] = ( ! empty( $value['active'] ) ) ? $lang_global['yes'] : $lang_global['no'];
 		$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=payport&amp;payment=" . $value['payment'];
 		$value['active'] = ( $value['active'] == '1' ) ? "checked=\"checked\"" : "";
-		if( ! empty( $value['images_button'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $value['images_button'] ) )
+		if( ! empty( $value['images_button'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $value['images_button'] ) )
 		{
-			$value['images_button'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $value['images_button'];
+			$value['images_button'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $value['images_button'];
 		}
 		$value['slect_weight'] = drawselect_number( $value['payment'], 1, $all_page + 1, $value['weight'], "nv_chang_pays('" . $value['payment'] . "',this,url_change_weight,url_back);" );
 		$xtpl->assign( 'DATA_PM', $value );

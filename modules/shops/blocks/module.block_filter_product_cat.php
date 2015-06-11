@@ -78,7 +78,7 @@ if( ! function_exists( 'nv_filter_product_cat' ) )
 	 */
 	function nv_filter_product_cat( $block_config )
 	{
-		global $module_name, $lang_module, $module_info, $site_mods, $module_file, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config, $global_array_group, $global_array_shops_cat, $nv_Request, $array_id_group, $catid, $op;
+		global $module_name, $lang_module, $module_info, $site_mods, $module_file, $module_upload, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config, $global_array_group, $global_array_shops_cat, $nv_Request, $array_id_group, $catid, $op;
 
 		if( $op != 'viewcat' )
 		{
@@ -113,7 +113,7 @@ if( ! function_exists( 'nv_filter_product_cat' ) )
 				{
 					if( ! empty( $global_array_group[$subgroup_id]['image'] ) )
 					{
-						$global_array_group[$subgroup_id]['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $global_array_group[$subgroup_id]['image'];
+						$global_array_group[$subgroup_id]['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $global_array_group[$subgroup_id]['image'];
 					}
 
 					$global_array_group[$subgroup_id]['checked'] = '';

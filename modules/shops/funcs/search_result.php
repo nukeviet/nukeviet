@@ -227,11 +227,11 @@ while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt,
 {
 	if( $homeimgthumb == 1 )//image thumb
 	{
-		$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+		$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 	}
 	elseif( $homeimgthumb == 2 )//image file
 	{
-		$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+		$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 	}
 	elseif( $homeimgthumb == 3 )//image url
 	{

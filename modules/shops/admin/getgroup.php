@@ -27,9 +27,9 @@ function getgroup_ckhtml( $subgroupid_i, $array_groupid_in_row )
 			}
 
 			$image = '';
-			if( ! empty( $data_group['image'] ) and file_exists( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_group['image'] ) )
+			if( ! empty( $data_group['image'] ) and file_exists( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data_group['image'] ) )
 			{
-				$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data_group['image'];
+				$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data_group['image'];
 				$image = '<img src="' . $image . '" style="margin-top: -3px; max-width: 16px; max-height: 16px" alt="' . $groupinfo_i['title'] . '" />';
 
 			}
