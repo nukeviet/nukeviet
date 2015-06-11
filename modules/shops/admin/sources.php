@@ -11,8 +11,8 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['sources'];
-$table_name = $db_config['prefix'] . "_" . $module_data . "_sources";
-list( $rowcontent['sourceid'], $title, $link, $logo, $error ) = array( 0, "", "http://", "", "" );
+$table_name = $db_config['prefix'] . '_' . $module_data . '_sources';
+list( $rowcontent['sourceid'], $title, $link, $logo, $error ) = array( 0, '', 'http://', '', '' );
 $rowcontent = array(
 	'sourceid' => 0,
 	'link' => '',
@@ -32,22 +32,22 @@ if( ! empty( $savecat ) )
 	$rowcontent['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 	$rowcontent['link'] = strtolower( nv_substr( $nv_Request->get_title( 'link', 'post', '', 1 ), 0, 255 ) );
 
-	$logo_old = $db->query( "SELECT logo FROM " . $table_name . " WHERE sourceid =" . $rowcontent['sourceid'] )->fetchColumn();
+	$logo_old = $db->query( 'SELECT logo FROM ' . $table_name . ' WHERE sourceid =' . $rowcontent['sourceid'] )->fetchColumn();
 
 	$rowcontent['logo'] = $nv_Request->get_string( 'logo', 'post', '' );
 
 	if( ! nv_is_url( $rowcontent['logo'] ) and file_exists( NV_DOCUMENT_ROOT . $rowcontent['logo'] ) )
 	{
-		$rowcontent['logo'] = substr( $rowcontent['logo'], strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" ) );
+		$rowcontent['logo'] = substr( $rowcontent['logo'], strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' ) );
 	}
 	elseif( ! nv_is_url( $rowcontent['logo'] ) )
 	{
 		$rowcontent['logo'] = $logo_old;
 	}
 
-	if( $rowcontent['logo'] != $logo_old and is_file( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/source/" . $logo_old ) )
+	if( $rowcontent['logo'] != $logo_old and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/source/' . $logo_old ) )
 	{
-		@unlink( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/source/" . $logo_old );
+		@unlink( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/source/' . $logo_old );
 	}
 
 	if( empty( $rowcontent['title'] ) )
@@ -58,7 +58,7 @@ if( ! empty( $savecat ) )
 	{
 		if( $rowcontent['sourceid'] == 0 )
 		{
-			$weight = $db->query( "SELECT max(weight) FROM " . $table_name . "" )->fetchColumn();
+			$weight = $db->query( 'SELECT max(weight) FROM ' . $table_name )->fetchColumn();
 			$weight = intval( $weight ) + 1;
 
 			$listfield = "";
@@ -66,8 +66,8 @@ if( ! empty( $savecat ) )
 			foreach( $field_lang as $field_lang_i )
 			{
 				list( $flang, $fname ) = $field_lang_i;
-				$listfield .= ", " . $flang . "_" . $fname;
-				$listvalue .= ", :" . $flang . "_" . $fname;
+				$listfield .= ', ' . $flang . '_' . $fname;
+				$listvalue .= ', :' . $flang . '_' . $fname;
 			}
 			$sql = "INSERT INTO " . $table_name . " ( link, logo, weight, add_time, edit_time " . $listfield . ") VALUES ( :link, :logo, " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . " " . $listvalue . ")";
 			$data_insert = array();
@@ -136,7 +136,7 @@ if( $error != "" )
 
 if( ! empty( $rowcontent['logo'] ) )
 {
-	$rowcontent['logo'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/source/" . $rowcontent['logo'];
+	$rowcontent['logo'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $rowcontent['logo'];
 }
 
 $xtpl->assign( 'DATA', $rowcontent );

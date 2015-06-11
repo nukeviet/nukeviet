@@ -111,7 +111,7 @@ if( defined( 'NV_IS_USER' ) and $pro_config['active_wishlist'] )
  */
 function GetDataIn( $result, $catid )
 {
-	global $global_array_shops_cat, $module_name, $module_file, $db, $link, $module_info, $global_config;
+	global $global_array_shops_cat, $module_name, $module_file, $module_upload, $db, $link, $module_info, $global_config;
 
 	$data_content = array();
 	$data = array();
@@ -119,11 +119,11 @@ function GetDataIn( $result, $catid )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
-			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 2 )//image file
 		{
-			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 3 )//image url
 		{
@@ -176,7 +176,7 @@ function GetDataIn( $result, $catid )
  */
 function GetDataInGroups( $result, $array_g )
 {
-	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_shops_cat, $global_config;
+	global $global_array_group, $module_name, $module_file, $module_upload, $db, $link, $module_info, $global_array_shops_cat, $global_config;
 
 	$data_content = array();
 	$data = array();
@@ -185,11 +185,11 @@ function GetDataInGroups( $result, $array_g )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
-			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 2 )//image file
 		{
-			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 3 )//image url
 		{
@@ -239,7 +239,7 @@ function GetDataInGroups( $result, $array_g )
  */
 function GetDataInGroup( $result, $groupid )
 {
-	global $global_array_group, $module_name, $module_file, $db, $link, $module_info, $global_array_shops_cat, $global_config;
+	global $global_array_group, $module_name, $module_file, $module_upload, $db, $link, $module_info, $global_array_shops_cat, $global_config;
 
 	$data_content = array();
 	$data = array();
@@ -248,11 +248,11 @@ function GetDataInGroup( $result, $groupid )
 	{
 		if( $homeimgthumb == 1 )//image thumb
 		{
-			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 2 )//image file
 		{
-			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 3 )//image url
 		{

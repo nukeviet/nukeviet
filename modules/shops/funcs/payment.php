@@ -167,9 +167,9 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 
 				$url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;order_id=' . $order_id . '&amp;payment=' . $row['payment'] . '&amp;checksum=' . md5( $order_id . $row['payment'] . $global_config['sitekey'] . session_id() );
 
-				if( ! empty( $images_button ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $images_button ) )
+				if( ! empty( $images_button ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $images_button ) )
 				{
-					$images_button = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $images_button;
+					$images_button = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $images_button;
 				}
 
 				$url_checkout[] = array(

@@ -58,11 +58,11 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 		{
 			if( $homeimgthumb == 1 )//image thumb
 			{
-				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 2 )//image file
 			{
-				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 3 )//image url
 			{
@@ -101,7 +101,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 
 		if( ! empty( $image_tag ) )
 		{
-			$image_tag = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/topics/' . $image_tag;
+			$image_tag = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $image_tag;
 		}
 
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=wishlist';

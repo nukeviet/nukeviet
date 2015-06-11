@@ -46,11 +46,11 @@ if( ! function_exists( 'nv_others_product' ) )
 			{
 				if( $homeimgthumb_i == 1 ) //image thumb
 				{
-					$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $homeimgfile_i;
+					$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile_i;
 				}
 				elseif( $homeimgthumb_i == 2 ) //image file
 				{
-					$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $homeimgfile_i;
+					$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile_i;
 				}
 				elseif( $homeimgthumb_i == 3 ) //image url
 				{
