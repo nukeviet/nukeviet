@@ -180,28 +180,31 @@ if( ! empty( $module_name ) )
 
 		require $include_functions;
 		
-		// Kết nối với các Plugin
-		$plugin_filename = scandir( NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' );
-		foreach( $plugin_filename as $_filename )
+		if( is_dir( NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' ) )
 		{
-			if(preg_match( '/^([a-zA-Z0-9\-\_]+)\_(admin)\.php$/' , $_filename, $m ))
+			// Kết nối với các Plugin
+			$plugin_filename = scandir( NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' );
+			foreach( $plugin_filename as $_filename )
 			{
-				$plugin_name = $m[1];
-				if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_' . NV_LANG_INTERFACE . '.php' ) )
+				if(preg_match( '/^([a-zA-Z0-9\-\_]+)\_(admin)\.php$/' , $_filename, $m ))
 				{
-					require NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_' . NV_LANG_INTERFACE . '.php';
+					$plugin_name = $m[1];
+					if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_' . NV_LANG_INTERFACE . '.php' ) )
+					{
+						require NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_' . NV_LANG_INTERFACE . '.php';
+					}
+					elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/plugin_' . $plugin_name . '_admin_' . NV_LANG_DATA . '.php' ) )
+					{
+						require NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_' . NV_LANG_DATA . '.php';
+					}
+					elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_en.php' ) )
+					{
+						require NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_en.php';
+					}
+					require NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' . $plugin_name . '_admin.php';
 				}
-				elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/plugin_' . $plugin_name . '_admin_' . NV_LANG_DATA . '.php' ) )
-				{
-					require NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_' . NV_LANG_DATA . '.php';
-				}
-				elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_en.php' ) )
-				{
-					require NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_en.php';
-				}
-				require NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' . $plugin_name . '_admin.php';
 			}
-		}		
+		}	
 		
 		if( in_array( $op, $allow_func ) )
 		{

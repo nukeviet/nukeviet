@@ -19,6 +19,8 @@ $array_mod_title[] = array(
 );
 
 $alias = isset( $array_op[1] ) ? trim( $array_op[1] ) : '';
+$topic_array = array();
+
 if( !empty( $alias ) )
 {
 	$page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-' ) ? intval( substr( $array_op[2], 5 ) ) : 1;
@@ -62,7 +64,6 @@ if( !empty( $alias ) )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
 
-		$topic_array = array();
 		$end_publtime = 0;
 
 		$result = $db->query( $db->sql() );
