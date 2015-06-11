@@ -24,7 +24,7 @@ $contents = '';
 
 // Thiet lap module moi
 $setmodule = $nv_Request->get_title( 'setmodule', 'get', '', 1 );
-if( ! empty( $setmodule ) )
+if( ! empty( $setmodule ) and preg_match( $global_config['check_module'], $setmodule ) )
 {
 	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( 'setmodule' . $setmodule . session_id() . $global_config['sitekey'] ) )
 	{
@@ -66,7 +66,7 @@ if( ! empty( $setmodule ) )
 				$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 				$sth->bindParam( ':module_file', $modrow['basename'], PDO::PARAM_STR );
 				$sth->bindParam( ':module_data', $modrow['table_prefix'], PDO::PARAM_STR );
-				$sth->bindParam( ':module_upload', $modrow['basename'], PDO::PARAM_STR );
+				$sth->bindParam( ':module_upload', $setmodule, PDO::PARAM_STR );
 				$sth->bindParam( ':custom_title', $custom_title, PDO::PARAM_STR );
 				$sth->execute();
 			}
