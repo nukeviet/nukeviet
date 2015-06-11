@@ -28,7 +28,7 @@
 		<!-- BEGIN: loop -->
 		<li class="list-group-item">
 			<a href="{loop.more_link}">{loop.title}</a>
-			<div class="right"><em class="fa fa-download">&nbsp;</em> {LANG.viewcat_download_hits} {loop.download_hits}</div>
+			<div class="text-right"><em class="fa fa-download">&nbsp;</em> {LANG.viewcat_download_hits} {loop.download_hits}</div>
 		</li>
 		<!-- END: loop -->
 	</ul>

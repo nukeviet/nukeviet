@@ -31,7 +31,7 @@ if( $id )
 
 	if( ! empty( $rowdetail['image'] ) && ! nv_is_url( $rowdetail['image'] ) )
 	{
-		$rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowdetail['image'];
+		$rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'];
 	}
 	$rowdetail['add_time'] = nv_date( 'H:i T l, d/m/Y', $rowdetail['add_time'] );
 	$rowdetail['edit_time'] = nv_date( 'H:i T l, d/m/Y', $rowdetail['edit_time'] );
