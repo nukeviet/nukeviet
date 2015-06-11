@@ -165,7 +165,7 @@ function nv_del_content_module( $id )
 		if( $number_no_del == 0 )
 		{
 			// Xoa binh luan
-			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
+			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
 
 			// Xoa block san pham
 			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id = ' . $id );

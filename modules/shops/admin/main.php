@@ -34,7 +34,7 @@ $array_info[] = array(
 	'unit' => $lang_module['product_unit']
 );
 // Tong so luong binh luan
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comments WHERE module=' . $db->quote( $module_name ) )->fetchColumn();
+$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $module_name ) )->fetchColumn();
 $array_info[] = array(
 	'title' => $lang_module['product_number_commet'],
 	'value' => $number,
@@ -118,15 +118,11 @@ $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-$xtpl->assign( 'module', $module_info['custom_title'] . ' (' . $module_name . ')' );
-$xtpl->assign( 'module_version', '1.0.0 : 20-01-2011' );
 
-$i = 0;
 foreach( $array_info as $info )
 {
 	$xtpl->assign( 'KEY', $info );
 	$xtpl->parse( 'main.loop' );
-	++$i;
 }
 
 $xtpl->parse( 'main' );

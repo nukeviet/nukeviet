@@ -32,12 +32,12 @@ $data_unit['title'] = $data_unit[NV_LANG_DATA . '_title'];
 $homeimgfile = $data_content['homeimgfile'];
 if( $data_content['homeimgthumb'] == 1 )//image thumb
 {
-	$data_content['homeimgthumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
-	$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+	$data_content['homeimgthumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
+	$data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 }
 elseif( $data_content['homeimgthumb'] == 2 )//image file
 {
-	$data_content['homeimgthumb'] = $data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+	$data_content['homeimgthumb'] = $data_content['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 }
 elseif( $data_content['homeimgthumb'] == 3 )//image url
 {

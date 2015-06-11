@@ -16,7 +16,6 @@
 /cache/
 /data/
 /editors/
-/files/
 /images/
 /includes/
 /install/
@@ -25,7 +24,6 @@
 /logs/
 /sess/
 /tmp/
-/uploads/
 /README.md
 
 # Ignore fix module files and directories.

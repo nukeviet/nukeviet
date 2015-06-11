@@ -23,7 +23,7 @@ if( empty( $global_array_shops_cat ) )
 }
 
 $table_name = $db_config['prefix'] . '_' . $module_data . '_rows';
-$month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, date( 'Y_m' ), true );
+$month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, date( 'Y_m' ), true );
 $array_block_cat_module = array( );
 $id_block_content = array( );
 $array_custom = array( );
@@ -106,10 +106,10 @@ if( $rowcontent['id'] > 0 )
 
 	// Old keywords
 	$array_keywords_old = array( );
-	$_query = $db->query( 'SELECT tid, ' . NV_LANG_DATA . '_keyword FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE id=' . $rowcontent['id'] . ' ORDER BY ' . NV_LANG_DATA . '_keyword ASC' );
+	$_query = $db->query( 'SELECT tid, keyword FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' WHERE id=' . $rowcontent['id'] . ' ORDER BY keyword ASC' );
 	while( $row = $_query->fetch( ) )
 	{
-		$array_keywords_old[$row['tid']] = $row[NV_LANG_DATA . '_keyword'];
+		$array_keywords_old[$row['tid']] = $row['keyword'];
 	}
 	$rowcontent['keywords'] = implode( ', ', $array_keywords_old );
 	$rowcontent['keywords_old'] = $rowcontent['keywords'];
@@ -289,7 +289,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		if( !nv_is_url( $otherimage_i ) and file_exists( NV_DOCUMENT_ROOT . $otherimage_i ) )
 		{
-			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 			$otherimage_i = substr( $otherimage_i, $lu );
 		}
 		elseif( !nv_is_url( $otherimage_i ) )
@@ -410,7 +410,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			// Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
 			$keywords_return = array( );
-			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . "_" . $module_data . '_tags_id where ' . NV_LANG_DATA . '_keyword = :keyword' );
+			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . "_" . $module_data . '_tags_id_' . NV_LANG_DATA . ' where keyword = :keyword' );
 			foreach( $keywords as $keyword_i )
 			{
 				$sth->bindParam( ':keyword', $keyword_i, PDO::PARAM_STR );
@@ -447,9 +447,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['homeimgthumb'] = 0;
 		if( !nv_is_url( $rowcontent['homeimgfile'] ) and is_file( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
-			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
-			if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+			if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 			{
 				$rowcontent['homeimgthumb'] = 1;
 			}
@@ -794,7 +794,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					{
 						$alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias( $keyword ) : str_replace( ' ', '-', $keyword );
 						$alias_i = nv_strtolower( $alias_i );
-						$sth = $db->prepare( 'SELECT tid, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags where ' . NV_LANG_DATA . '_alias= :alias OR FIND_IN_SET(:keyword, ' . NV_LANG_DATA . '_keywords)>0' );
+						$sth = $db->prepare( 'SELECT tid, alias, description, keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0' );
 						$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
 						$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 						$sth->execute( );
@@ -806,7 +806,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 							$array_insert['alias'] = $alias_i;
 							$array_insert['keyword'] = $keyword;
 
-							$tid = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags (" . NV_LANG_DATA . "_numpro, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_description, " . NV_LANG_DATA . "_image, " . NV_LANG_DATA . "_keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert );
+							$tid = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_" . NV_LANG_DATA . " (numpro, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert );
 						}
 						else
 						{
@@ -824,24 +824,24 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 								}
 								if( $keywords_i != $keywords_i2 )
 								{
-									$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_keywords= :keywords WHERE tid =' . $tid );
+									$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' SET keywords= :keywords WHERE tid =' . $tid );
 									$sth->bindParam( ':keywords', $keywords_i2, PDO::PARAM_STR );
 									$sth->execute( );
 								}
 							}
-							$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_numpro = ' . NV_LANG_DATA . '_numpro+1 WHERE tid = ' . $tid );
+							$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' SET numpro = numpro+1 WHERE tid = ' . $tid );
 						}
 
 						// insert keyword for table _tags_id
 						try
 						{
-							$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_tags_id (id, tid, ' . NV_LANG_DATA . '_keyword) VALUES (' . $rowcontent['id'] . ', ' . intval( $tid ) . ', :keyword)' );
+							$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' (id, tid,  keyword) VALUES (' . $rowcontent['id'] . ', ' . intval( $tid ) . ', :keyword)' );
 							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 							$sth->execute( );
 						}
 						catch( PDOException $e )
 						{
-							$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_id SET ' . NV_LANG_DATA . '_keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . intval( $tid ) );
+							$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' SET  keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . intval( $tid ) );
 							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 							$sth->execute( );
 						}
@@ -853,8 +853,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				{
 					if( !in_array( $keyword, $keywords ) )
 					{
-						$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_numpro = ' . NV_LANG_DATA . '_numpro-1 WHERE tid = ' . $tid );
-						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid );
+						$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' SET numpro = numpro-1 WHERE tid = ' . $tid );
+						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid );
 					}
 				}
 			}
@@ -910,9 +910,9 @@ elseif( $rowcontent['id'] > 0 )
 	}
 }
 
-if( !empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+if( !empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 {
-	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
+	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
 }
 
 $tdate = date( 'H|i', $rowcontent['publtime'] );
@@ -962,7 +962,7 @@ $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'module_name', $module_name );
-$xtpl->assign( 'CURRENT', NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y_m' ) );
+$xtpl->assign( 'CURRENT', NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' ) );
 
 if( $error != '' )
 {
@@ -985,9 +985,9 @@ if( !empty( $otherimage ) )
 {
 	foreach( $otherimage as $otherimage_i )
 	{
-		if( !empty( $otherimage_i ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $otherimage_i ) )
+		if( !empty( $otherimage_i ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $otherimage_i ) )
 		{
-			$otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $otherimage_i;
+			$otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $otherimage_i;
 		}
 		$data_otherimage_i = array(
 			'id' => $items,

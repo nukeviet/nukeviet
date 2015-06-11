@@ -249,52 +249,68 @@
 	</div>
 
 	<!-- BEGIN: product_detail -->
-	<!-- BEGIN: tabs -->
-	<div role="tabpanel">
-		<ul class="nav nav-tabs" role="tablist">
-			<!-- BEGIN: tabs_title -->
-			<li role="presentation" <!-- BEGIN: active -->class="active"<!-- END: active -->>
-				<a href="#{TABS_KEY}-{TABS_ID}" aria-controls="{TABS_KEY}-{TABS_ID}" role="tab" data-toggle="tab">
-					<!-- BEGIN: icon -->
-					<img src="{TABS_ICON}" />
-					<!-- END: icon -->
-					{TABS_TITLE}
-				</a>
-			</li>
-			<!-- END: tabs_title -->
-		</ul>
+		<!-- BEGIN: tabs -->
+		<div role="tabpanel" class="tabs">
+			<ul class="nav nav-tabs" role="tablist">
+				<!-- BEGIN: tabs_title -->
+				<li role="presentation" <!-- BEGIN: active -->class="active"<!-- END: active -->>
+					<a href="#{TABS_KEY}-{TABS_ID}" aria-controls="{TABS_KEY}-{TABS_ID}" role="tab" data-toggle="tab">
+						<!-- BEGIN: icon -->
+						<img src="{TABS_ICON}" />
+						<!-- END: icon -->
+						<!-- BEGIN: icon_default -->
+						<em class="fa fa-bars">&nbsp;</em>
+						<!-- END: icon_default -->
+						<span>{TABS_TITLE}</span>
+					</a>
+				</li>
+				<!-- END: tabs_title -->
+			</ul>
 
-		<div class="tab-content">
-			<!-- BEGIN: tabs_content -->
-			<div role="tabpanel" class="tab-pane fade <!-- BEGIN: active -->active in<!-- END: active -->" id="{TABS_KEY}-{TABS_ID}">
-				{TABS_CONTENT}
+			<div class="tab-content">
+				<!-- BEGIN: tabs_content -->
+				<div role="tabpanel" class="tab-pane fade <!-- BEGIN: active -->active in<!-- END: active -->" id="{TABS_KEY}-{TABS_ID}">
+					{TABS_CONTENT}
+				</div>
+				<!-- END: tabs_content -->
 			</div>
-			<!-- END: tabs_content -->
 		</div>
-	</div>
-	<!-- END: tabs -->
+		<!-- END: tabs -->
 
-	<!-- BEGIN: other -->
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			{LANG.detail_others}
+		<!-- BEGIN: keywords -->
+	    <div class="panel panel-default">
+		    <div class="panel-body">
+				<div class="keywords">
+					<em class="fa fa-tags">&nbsp;</em><strong>{LANG.keywords}: </strong>
+					<!-- BEGIN: loop -->
+						<a title="{KEYWORD}" href="{LINK_KEYWORDS}"><em>{KEYWORD}</em></a>{SLASH}
+					<!-- END: loop -->
+				</div>
+			</div>
 		</div>
-		<div class="panel-body">
-			{OTHER}
-		</div>
-	</div>
-	<!-- END: other -->
+		<!-- END: keywords -->
 
-	<!-- BEGIN: other_view -->
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			{LANG.detail_others_view}
+		<!-- BEGIN: other -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{LANG.detail_others}
+			</div>
+			<div class="panel-body">
+				{OTHER}
+			</div>
 		</div>
-		<div class="panel-body">
-			{OTHER_VIEW}
+		<!-- END: other -->
+
+		<!-- BEGIN: other_view -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{LANG.detail_others_view}
+			</div>
+			<div class="panel-body">
+				{OTHER_VIEW}
+			</div>
 		</div>
-	</div>
-	<!-- END: other_view -->
+		<!-- END: other_view -->
 	<!-- END: product_detail -->
 </div>
 

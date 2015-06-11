@@ -594,11 +594,11 @@ if( $action == 0 )
 		{
 			if( $homeimgthumb == 1 )//image thumb
 			{
-				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 2 )//image file
 			{
-				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 3 )//image url
 			{
@@ -632,7 +632,7 @@ if( $action == 0 )
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
 				'group' => $group,
-				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 				'num' => $num
 			);
 			++$i;

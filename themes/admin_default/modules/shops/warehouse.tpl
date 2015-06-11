@@ -101,7 +101,7 @@
 										<!-- END: items -->
 										<div class="col-sm-3">
 											<div class="form-group">
-												<input type="number" min="0" autocomplete="off" name="data[{DATA.id}][{J}][quantity]" class="form-control" placeholder="{LANG.warehouse_quantity}" />
+												<input type="number" autocomplete="off" name="data[{DATA.id}][{J}][quantity]" class="form-control" placeholder="{LANG.warehouse_quantity}" />
 											</div>
 										</div>
 										<div class="col-sm-3">

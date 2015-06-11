@@ -10,14 +10,17 @@
 
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
+$table_name = $db_config['prefix'] . '_' . $module_data . '_tabs';
 
 $arr_tab = array( );
-$arr_tab['introduce'] = $lang_module['introduce'];
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs where content = ' . $db->quote( 'product_customdata' ) . ' ORDER BY weight ASC';
+$arr_tab['introduce'] = 'introduce';
+$sql = 'SELECT * FROM ' . $table_name . ' where content = ' . $db->quote( 'content_customdata' ) . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
+$field_lang = nv_file_table( $table_name );
+
 while( $row = $result->fetch( ) )
 {
-	$arr_tab[$row['id']] = $row['title'];
+	$arr_tab[$row['id']] = $row[NV_LANG_DATA.'_title'];
 }
 
 if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
