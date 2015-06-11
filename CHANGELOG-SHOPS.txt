@@ -1,6 +1,12 @@
 CHANGE LOG: MODULE SHOPS
 
-- Module Shops
+Module Shops 4.0.15
+	+ Sửa một số lỗi Module Shops 4.0.14
+	+ Loại bỏ ID sản phẩm trên URL sản phẩm
+	+ Thêm chức năng Quản lý tập tin đính kèm
+	+ Thêm chức năng Quản lý tab (trên trang chi tiết)
+
+Module Shops 4.0.14
     + Bỏ tính năng hãng sản xuất
     + Thay đổi cơ chế quản lý và sử dụng nhóm sản phẩm
         * Thêm logo cho nhóm
