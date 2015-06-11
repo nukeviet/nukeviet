@@ -55,7 +55,7 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 
 	function nv_news_block_newscenter( $block_config )
 	{
-		global $module_data, $module_name, $module_file, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
+		global $module_data, $module_name, $module_file, $module_upload, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
 
 		$db->sqlreset()
 					->select( 'id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile' )
@@ -77,14 +77,14 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 
 				if( $i == 1 )
 				{
-					$image = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
+					$image = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
 
 					if( $row['homeimgfile'] != '' and file_exists( $image ) )
 					{
 						$width = isset( $block_config['width'] ) ? $block_config['width'] : 183;
 						$height = isset( $block_config['height'] ) ? $block_config['height'] : 150;
 
-						$row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
+						$row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
 						$imginfo = nv_is_image( $image );
 						$basename = basename( $image );
 						if( $imginfo['width'] > $width or $imginfo['height'] > $height )
@@ -126,11 +126,11 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 				{
 					if( $row['homeimgthumb'] == 1 )
 					{
-						$row['imgsource'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
+						$row['imgsource'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
 					}
 					elseif( $row['homeimgthumb'] == 2 )
 					{
-						$row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['homeimgfile'];
+						$row['imgsource'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
 					}
 					elseif( $row['homeimgthumb'] == 3 )
 					{

@@ -40,7 +40,7 @@ if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $currentpath ) )
 }
 else
 {
-	$upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_name;
+	$upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_upload;
 	$e = explode( '/', $currentpath );
 	if( ! empty( $e ) )
 	{
@@ -67,13 +67,13 @@ else
 }
 
 $currentpath = str_replace( NV_ROOTDIR . '/', '', $upload_real_dir_page );
-$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_name;
+$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload;
 if( ! defined( 'NV_IS_SPADMIN' ) and strpos( $structure_upload, 'username' ) !== false )
 {
 	$array_currentpath = explode( '/', $currentpath );
 	if( $array_currentpath[2] == $username_alias )
 	{
-		$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_name . '/' . $username_alias;
+		$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $username_alias;
 	}
 }
 
@@ -541,9 +541,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['homeimgthumb'] = 0;
 		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and is_file( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
-			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
-			if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+			if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 			{
 				$rowcontent['homeimgthumb'] = 1;
 			}
@@ -881,9 +881,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 $rowcontent['bodyhtml'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['bodyhtml'] ) );
 
-if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 {
-	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
+	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
 }
 
 $array_catid_in_row = explode( ',', $rowcontent['listcatid'] );

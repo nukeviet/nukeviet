@@ -392,6 +392,7 @@ function nv_mkdir( $path, $dir_name )
 	if( ! is_dir( $path ) ) return array( 0, sprintf( $lang_global['error_directory_does_not_exist'], $path ) );
 
 	$ftp_check_login = 0;
+	$res = false;
 	if( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) == 1 )
 	{
 		$ftp_server = nv_unhtmlspecialchars( $global_config['ftp_server'] );
@@ -691,7 +692,7 @@ function nv_chmod_dir( $conn_id, $dir, $subdir = false )
 		if( $subdir and is_dir( NV_ROOTDIR . '/' . $dir ) )
 		{
 			ftp_chmod( $conn_id, 0777, $dir );
-			
+
 			$list_files = ftp_nlist( $conn_id, $dir );
 			foreach( $list_files as $file_i )
 			{

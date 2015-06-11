@@ -108,7 +108,7 @@ $directory = NV_UPLOADS_REAL_DIR;
 
 if( $is_zip )
 {
-	$upload_dir = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $upload_dir;
+	$upload_dir = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $upload_dir;
 	$subfile = nv_pathinfo_filename( $file );
 	$tem_file = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $subfile;
 

@@ -81,7 +81,7 @@ while( list( $key, $value ) = each( $language_array ) )
 			$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=download&amp;dirlang=" . $key . "&amp;checksess=" . md5( "downloadallfile" . session_id() ) . "\">" . $lang_module['nv_admin_download'] . "</a>";
 		}
 
-		if( ! empty( $arr_lang_func ) and ! in_array( $key, $global_config['allow_adminlangs'] ) and in_array( 'delete', $allow_func ) )
+		if( ! empty( $arr_lang_func ) and in_array( 'delete', $allow_func ) )
 		{
 			$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delete&amp;dirlang=" . $key . "&amp;checksess=" . md5( "deleteallfile" . session_id() ) . "\">" . $lang_module['nv_admin_delete'] . "</a>";
 		}
@@ -91,9 +91,7 @@ while( list( $key, $value ) = each( $language_array ) )
 			'key' => $key,
 			'language' => $value['language'],
 			'name' => $value['name'],
-			'arr_lang_func' => implode( ' - ', $arr_lang_func ),
-			'allow_sitelangs' => ( $check_lang_exit and in_array( $key, $array_lang_setup ) ) ? ( in_array( $key, $global_config['allow_sitelangs'] ) ? ' checked="checked"' : '' ) : ' disabled="disabled"',
-			'allow_adminlangs' => ( $check_lang_exit ) ? ( in_array( $key, $global_config['allow_adminlangs'] ) ? ' checked="checked"' : '' ) : ' disabled="disabled"'
+			'arr_lang_func' => implode( ' - ', $arr_lang_func )
 		) );
 		$xtpl->parse( 'main.loop' );
 	}

@@ -45,6 +45,7 @@ class download
 		'directory' => ''
 	);
 	private $disable_functions = array();
+	private $disable_classes = array();
 	private $magic_path;
 
 	/**
@@ -69,6 +70,8 @@ class download
 			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
 		}
 		$this->disable_functions = $disable_functions;
+
+		$this->disable_classes = ( ini_get( 'disable_classes' ) != '' and ini_get( 'disable_classes' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_classes' ) ) ) : array();
 
 		$path = $this->real_path( $path, $directory );
 		$extension = $this->getextension( $path );

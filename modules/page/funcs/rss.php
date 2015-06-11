@@ -23,15 +23,15 @@ if( $module_info['rss'] )
 	$result = $db->query( $sql );
 	while ( $row = $result->fetch() )
 	{
-		$rimages = ( ! empty( $row['image'] ) ) ? '<img src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['image'] . '" width="100" align="left" border="0">' : '';
-		
+		$rimages = ( ! empty( $row['image'] ) ) ? '<img src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'] . '" width="100" align="left" border="0">' : '';
+
 		$items[] = array(
 			'title' => $row['title'],
 			'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'],
 			'guid' => $module_name . '_' . $row['id'],
 			'description' => $rimages . $row['description'],
 			'pubdate' => $row['add_time']
-		);		
+		);
 	}
 }
 nv_rss_generate( $channel, $items );

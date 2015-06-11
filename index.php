@@ -86,6 +86,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
+		$module_upload = $module_info['module_upload'];
 		$include_file = NV_ROOTDIR . '/modules/' . $module_file . '/funcs/main.php';
 
 		if( file_exists( $include_file ) )

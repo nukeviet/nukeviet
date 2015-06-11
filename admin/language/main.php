@@ -12,6 +12,8 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_lang_data'];
 
+$lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
+
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -72,7 +74,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
             die();
         }
 	}
-	elseif( $checksess == md5( $keylang . session_id() ) and file_exists( NV_ROOTDIR . '/language/' . $keylang . '/global.php' ) )
+	elseif( $checksess == md5( $keylang . session_id() ) and in_array( $keylang, $lang_array_exit ) )
 	{
 		if( isset( $array_lang_setup[$keylang] ) and $array_lang_setup[$keylang] == 1 )
 		{
@@ -301,8 +303,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 	}
 }
 $a = 0;
-$_language_array = nv_scandir(  NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
-foreach( $_language_array as $keylang )
+foreach( $lang_array_exit as $keylang )
 {
 	$delete = '';
 	$allow_sitelangs = '';

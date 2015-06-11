@@ -186,11 +186,11 @@ else {
 	{
 		if( $homeimgthumb == 1 ) //image thumb
 		{
-			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 2 ) //image file
 		{
-			$img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 3 ) //image url
 		{
