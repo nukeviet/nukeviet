@@ -46,7 +46,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 
 	function nv_block_headline( $block_config )
 	{
-		global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat, $global_config;
+		global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $module_upload, $global_array_cat, $global_config;
 
 		$array_bid_content = array();
 
