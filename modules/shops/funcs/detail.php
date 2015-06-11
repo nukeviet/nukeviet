@@ -216,8 +216,14 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 	}
 
 	// Tu khoa
+	$array_keyword = array();
 	$_query = $db->query( 'SELECT a1.keyword keyword, a2.alias alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' a1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' a2 ON a1.tid=a2.tid WHERE a1.id=' . $data_content['id'] );
-	$key_words = $_query->fetchAll();
+	while( $row = $_query->fetch() )
+	{
+		$array_keyword[] = $row;
+		$key_words[] = $row['keyword'];
+	}
+	$key_words = !empty( $key_words ) ? implode( ',', $key_words ) : '';
 
 	//metatag image facebook
 	$meta_property['og:image'] = NV_MY_DOMAIN . $data_content['homeimgthumb'];
@@ -359,7 +365,7 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 		$content_comment = '';
 	}
 
-	$contents = detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate, $key_words );
+	$contents = detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate, $array_keyword );
 }
 else
 {
