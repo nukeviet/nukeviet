@@ -50,7 +50,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 
 	function nv_news_block_news( $block_config, $mod_data )
 	{
-		global $module_array_cat, $module_info, $db, $module_config, $global_config;
+		global $module_array_cat, $module_info, $db, $module_config, $global_config, $site_mods;
 
 		$module = $block_config['module'];
 		$blockwidth = $module_config[$module]['blockwidth'];
