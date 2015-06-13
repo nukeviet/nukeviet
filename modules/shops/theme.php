@@ -1300,7 +1300,7 @@ function viewcat_page_list( $data_content, $compare_id, $pages, $sort = 0, $view
  * @param mixed $content_comment
  * @return
  */
-function detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate, $key_words )
+function detail_product( $data_content, $data_unit, $data_others, $array_other_view, $content_comment, $compare_id, $popup, $idtemplate, $array_keyword )
 {
 	global $module_info, $lang_module, $module_file, $module_name, $module_upload, $pro_config, $global_config, $global_array_group, $array_wishlist_id, $client_info, $global_array_shops_cat, $meta_property, $pro_config, $user_info, $discounts_config, $my_head, $my_footer;
 
@@ -1452,10 +1452,10 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 				$xtpl->parse( 'main.product_detail.tabs' );
 			}
 
-			if( !empty( $key_words ) )
+			if( !empty( $array_keyword ) )
 			{
-				$t = sizeof( $key_words ) - 1;
-				foreach( $key_words as $i => $value )
+				$t = sizeof( $array_keyword ) - 1;
+				foreach( $array_keyword as $i => $value )
 				{
 					$xtpl->assign( 'KEYWORD', $value['keyword'] );
 					$xtpl->assign( 'LINK_KEYWORDS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . urlencode( $value['alias'] ) );
