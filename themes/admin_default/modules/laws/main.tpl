@@ -83,9 +83,7 @@
 			</select>
 		</div>
 		<div class="form-group">
-			<button class="btn btn-primary" onclick="nv_search_laws(); return false;">
-				{LANG.search}
-			</button>
+			<button class="btn btn-primary" onclick="nv_search_laws(); return false;">{LANG.search}</button>
 		</div>
 	</form>
 </div>
@@ -95,11 +93,7 @@
 </div>
 
 <div id="lawlist">
-	<div style="text-align: center">
-		<em class="fa fa-spinner fa-spin fa-4x">&nbsp;</em>
-		<br />
-		{LANG.wait}
-	</div>
+	<div style="text-align: center"><em class="fa fa-spinner fa-spin fa-4x">&nbsp;</em><br />{LANG.wait}</div>
 </div>
 
 <script type="text/javascript">
@@ -107,38 +101,29 @@
 		$('#lawlist').load(rawurldecode(url));
 	}
 
-	function nv_search_laws() {
+	function nv_search_laws(){
 		var keywords = $('input[name="keywords"]').val();
 		var cid = $('select[name="cid"]').val();
 		var aid = $('select[name="aid"]').val();
 		var sid = $('select[name="sid"]').val();
 		var sgid = $('select[name="sgid"]').val();
 
-		if (keywords == '' && cid == '' && aid == '' && sid == '' && sgid == '') {
-			alert('{LANG.search_error}');
-		} else {
+		if( keywords == '' && cid == '' && aid == '' && sid == '' && sgid == '' )
+		{
+			alert( '{LANG.search_error}' );
+		}
+		else
+		{
 			$('#lawlist').html('<div style="text-align: center"><em class="fa fa-spinner fa-spin fa-4x">&nbsp;</em><br />{LANG.wait}</div>');
 			$('#lawlist').load('{BASE_LOAD}&keywords=' + keywords + '&cat=' + cid + '&aid=' + aid + '&sid=' + sid + '&sgid=' + sgid);
 		}
 	}
 
-
 	$(window).load(function() {
 		$('#lawlist').load('{BASE_LOAD}');
-	}); 
+	});
 </script>
 <!-- END: main -->
-
-<!-- BEGIN: msg -->
-<!-- BEGIN: loop -->
-<div>
-	{LANG.msg1} <strong>"{TYPE}"</strong> {LANG.msg2} . <strong><a href="{HREF}" style="font-size: 16px"> {LANG.msg3} </a></strong> {LANG.msg4}<strong>"{TYPE}"</strong>.
-	<br />
-	<br />
-	{LANG.msg5}
-</div>
-<!-- END: loop -->
-<!-- END: msg -->
 
 <!-- BEGIN: add -->
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
@@ -158,11 +143,15 @@
 						<tbody>
 							<tr>
 								<td>{LANG.title} <span class="red">*</span></td>
-								<td><input title="{LANG.title}" class="form-control" style="width: 400px" type="text" name="title" value="{DATA.title}" maxlength="255" /></td>
+								<td>
+								<input title="{LANG.title}" class="form-control" style="width: 400px" type="text" name="title" value="{DATA.title}" maxlength="255" />
+								</td>
 							</tr>
 							<tr>
 								<td>{LANG.code} <span class="red">*</span></td>
-								<td><input title="{LANG.code}" class="form-control" style="width: 400px" type="text" name="code" value="{DATA.code}" maxlength="255" /></td>
+								<td>
+								<input title="{LANG.code}" class="form-control" style="width: 400px" type="text" name="code" value="{DATA.code}" maxlength="255" />
+								</td>
 							</tr>
 
 							<tr>
@@ -179,12 +168,16 @@
 								</div></td>
 							</tr>
 							<tr class="form-inline">
-								<td> {LANG.publtime} <span class="red">*</span></td>
-								<td><label> <input class="form-control" name="publtime" id="publtime" value="{DATA.publtime}" style="width: 110px;" maxlength="10" type="text" /> &nbsp;({LANG.prm})</label></td>
+								<td> {LANG.publtime}  <span class="red">*</span></td>
+								<td><label>
+									<input class="form-control" name="publtime" id="publtime" value="{DATA.publtime}" style="width: 110px;" maxlength="10" type="text" />
+									&nbsp;({LANG.prm})</label></td>
 							</tr>
 							<tr class="form-inline">
 								<td> {LANG.startvalid}</td>
-								<td><label> <input class="form-control" name="startvalid" id="startvalid" value="{DATA.startvalid}" style="width: 110px;" maxlength="10" type="text" /> &nbsp;({LANG.prm})</label></td>
+								<td><label>
+									<input class="form-control" name="startvalid" id="startvalid" value="{DATA.startvalid}" style="width: 110px;" maxlength="10" type="text" />
+									&nbsp;({LANG.prm})</label></td>
 							</tr>
 							<tr>
 								<td> {LANG.exptime} </td>
@@ -212,23 +205,29 @@
 							</tr>
 							<tr>
 								<td> {LANG.replacement} ({LANG.ID}) </td>
-								<td><input class="form-control" title="{LANG.replacement}" type="text" name="replacement" id="replacement" style="width: 200px;" maxlength="255" value="{DATA.replacement}" /></td>
+								<td>
+								<input class="form-control" title="{LANG.replacement}" type="text" name="replacement" id="replacement" style="width: 200px;" maxlength="255" value="{DATA.replacement}" />
+								</td>
 							</tr>
 							<tr>
 								<td> {LANG.relatement} ({LANG.ID}) </td>
-								<td><input class="form-control" title="{LANG.relatement}" type="text" name="relatement" id="relatement" style="width: 200px;" maxlength="255" value="{DATA.relatement}" /></td>
+								<td>
+								<input class="form-control" title="{LANG.relatement}" type="text" name="relatement" id="relatement" style="width: 200px;" maxlength="255" value="{DATA.relatement}" />
+								</td>
 							</tr>
 							<tr>
 								<td>{LANG.keywords}</td>
-								<td><label> <input title="{LANG.keywords}" class="form-control" style="width: 400px" type="text" name="keywords" value="{DATA.keywords}" maxlength="255" /> ({LANG.keywordsNote})</label></td>
+								<td><label>
+									<input title="{LANG.keywords}" class="form-control" style="width: 400px" type="text" name="keywords" value="{DATA.keywords}" maxlength="255" />
+									({LANG.keywordsNote})</label></td>
 							</tr>
 							<tr>
 								<td style="vertical-align:top">{LANG.note}</td>
-								<td>								<textarea class="form-control" name="note" id="note">{DATA.note}</textarea></td>
+								<td><textarea class="form-control" name="note" id="note">{DATA.note}</textarea></td>
 							</tr>
 							<tr>
 								<td>{LANG.introtext} <span class="red">*</span></td>
-								<td>								<textarea class="form-control" rows="5" name="introtext" id="introtext">{DATA.introtext}</textarea></td>
+								<td><textarea class="form-control" rows="5" name="introtext" id="introtext">{DATA.introtext}</textarea></td>
 							</tr>
 							<tr>
 								<td colspan="2">{CONTENT}</td>
@@ -246,11 +245,11 @@
 						<tr>
 							<td>
 							<select class="form-control" title="{LANG.catSel}" name="cid">
-								<option value="">---{LANG.catSel}---</option>
 								<!-- BEGIN: catopt -->
 								<option value="{CATOPT.id}"{CATOPT.selected}>{CATOPT.name}</option>
 								<!-- END: catopt -->
-							</select></td>
+							</select>
+							</td>
 						</tr>
 						<tr>
 							<td>{LANG.areaSel} <span class="red">*</span></td>
@@ -258,7 +257,6 @@
 						<tr>
 							<td>
 							<select class="form-control" title="{LANG.areaSel}" name="aid">
-								<option value="">---{LANG.areaSel}---</option>
 								<!-- BEGIN: areaopt -->
 								<option value="{AREAOPT.id}"{AREAOPT.selected}>{AREAOPT.name}</option>
 								<!-- END: areaopt -->
@@ -270,19 +268,17 @@
 						<tr>
 							<td>
 							<select class="form-control" title="{LANG.subjectSel}" name="sid">
-								<option value="">---{LANG.subjectSel}---</option>
 								<!-- BEGIN: subopt -->
 								<option value="{SUBOPT.id}"{SUBOPT.selected}>{SUBOPT.title}</option>
 								<!-- END: subopt -->
 							</select></td>
 						</tr>
 						<tr>
-							<td>{LANG.signer}</td>
+							<td>{LANG.signer} <span class="red">*</span></td>
 						</tr>
 						<tr>
 							<td>
 							<select class="form-control" title="{LANG.signer}" name="sgid">
-								<option value="">---{LANG.signer}---</option>
 								<!-- BEGIN: singers -->
 								<option value="{SINGER.id}"{SINGER.selected}>{SINGER.title}</option>
 								<!-- END: singers -->
@@ -294,7 +290,9 @@
 						<tr>
 							<td><!-- BEGIN: group_view -->
 							<div class="row">
-								<label> <input name="groups_view[]" type="checkbox" value="{GROUPS_VIEWS.id}" {GROUPS_VIEWS.checked} /> {GROUPS_VIEWS.title}</label>
+								<label>
+									<input name="groups_view[]" type="checkbox" value="{GROUPS_VIEWS.id}" {GROUPS_VIEWS.checked} />
+									{GROUPS_VIEWS.title}</label>
 							</div><!-- END: group_view --></td>
 						</tr>
 						<tr>
@@ -303,7 +301,9 @@
 						<tr>
 							<td><!-- BEGIN: groups_download -->
 							<div class="row">
-								<label> <input name="groups_download[]" type="checkbox" value="{GROUPS_DOWNLOAD.id}" {GROUPS_DOWNLOAD.checked} /> {GROUPS_DOWNLOAD.title}</label>
+								<label>
+									<input name="groups_download[]" type="checkbox" value="{GROUPS_DOWNLOAD.id}" {GROUPS_DOWNLOAD.checked} />
+									{GROUPS_DOWNLOAD.title}</label>
 							</div><!-- END: groups_download --></td>
 						</tr>
 					</tbody>
@@ -319,6 +319,7 @@
 	//<![CDATA[
 	$("#publtime,#startvalid").datepicker({
 		showOn : "both",
+		yearRange: "2000:2025",
 		dateFormat : "dd.mm.yy",
 		changeMonth : true,
 		changeYear : true,
@@ -369,9 +370,9 @@
 			return !1;
 		}
 
-		if (nv_is_editor == '1') {
-			$("textarea[name=bodytext]").val(CKEDITOR.instances.{MODULE_DATA
-		}_bodytext.getData());
+		if( nv_is_editor == '1' )
+		{
+			$("textarea[name=bodytext]").val(CKEDITOR.instances.{MODULE_DATA}_bodytext.getData());
 		}
 
 		a = $(this).serialize();

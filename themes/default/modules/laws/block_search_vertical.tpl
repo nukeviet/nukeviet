@@ -86,6 +86,7 @@
 		$("#ls_from,#ls_to").datepicker({
 			showOn : "both",
 			dateFormat : "dd/mm/yy",
+			yearRange: "2000:2025",
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
