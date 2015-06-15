@@ -63,8 +63,8 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 
 		$skey = nv_substr( $nv_Request->get_title( 'q', 'get', '', 1 ), 0, NV_MAX_SEARCH_LENGTH);
 
-		$sfrom = nv_substr( $nv_Request->get_title( 'sfrom', 'get', '', 1 ), 0, 10);
-		$sto = nv_substr( $nv_Request->get_title( 'sto', 'get', '', 1 ), 0, 10);
+		$sfrom = nv_substr( $nv_Request->get_title( 'sfrom', 'get', '' ), 0, 10);
+		$sto = nv_substr( $nv_Request->get_title( 'sto', 'get', '' ), 0, 10);
 
 		$xtpl->assign( 'FROM', $sfrom );
 		$xtpl->assign( 'TO', $sto );

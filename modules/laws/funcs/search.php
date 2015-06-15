@@ -21,8 +21,8 @@ $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data
 
 $key = nv_substr( $nv_Request->get_title( 'q', 'get', '', 1 ), 0, NV_MAX_SEARCH_LENGTH);
 
-$sfrom = nv_substr( $nv_Request->get_title( 'sfrom', 'get', '', 1 ), 0, 10);
-$sto = nv_substr( $nv_Request->get_title( 'sto', 'get', '', 1 ), 0, 10);
+$sfrom = nv_substr( $nv_Request->get_title( 'sfrom', 'get', '' ), 0, 10);
+$sto = nv_substr( $nv_Request->get_title( 'sto', 'get', '' ), 0, 10);
 
 $area = $nv_Request->get_int( 'area', 'get', 0 );
 $cat = $nv_Request->get_int( 'cat', 'get', 0 );
@@ -31,7 +31,7 @@ $sstatus = $nv_Request->get_int( 'status', 'get', 0 );
 $ssigner = $nv_Request->get_int( 'signer', 'get', 0 );
 
 unset( $m );
-if ( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $sfrom, $m ) )
+if ( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $sfrom, $m ) )
 {
 	$sfrom1 = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 }
@@ -41,7 +41,7 @@ else
 }
 
 unset( $m );
-if ( preg_match( "/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/", $sto, $m ) )
+if ( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $sto, $m ) )
 {
 	$sto1 = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 }
