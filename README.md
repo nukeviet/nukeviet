@@ -11,6 +11,11 @@ NukeViet fully supports multi-languages for internationalization and localizatio
 
 Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikipedia.org/wiki/NukeViet
 
+##Licensing
+NukeViet is released under GNU/GPL version 2 or any later version.
+
+See [LICENSE.txt](LICENSE.txt) for the full license.
+
 ##NukeViet official website
   - Home page - link to all resources NukeViet: http://nukeviet.vn (select Vietnamese to have the latest information).
   - NukeViet official Coding: http://code.nukeviet.vn

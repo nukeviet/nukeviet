@@ -21,9 +21,9 @@ $module_version = array(
 	'author' => 'VINADES (contact@vinades.vn)',
 	'note' => '',
 	'uploads_dir' => array(
-		$module_name,
-		$module_name . '/files',
-		$module_name . '/images',
-		$module_name . '/temp'
+		$module_upload,
+		$module_upload . '/files',
+		$module_upload . '/images',
+		$module_upload . '/temp'
 	)
 );
