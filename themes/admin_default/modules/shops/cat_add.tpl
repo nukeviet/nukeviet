@@ -178,7 +178,7 @@
 <!-- BEGIN: getalias -->
 <script type="text/javascript">
 	$("#idtitle").change(function() {
-		get_alias("cat", 0);
+		get_alias("cat", {DATA.catid});
 	});
 </script>
 <!-- END: getalias -->

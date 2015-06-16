@@ -1036,3 +1036,5 @@ if( empty( $row ) and $lang == 'vi' )
 	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('10', '10', '9', '10', '150', 'VND');";
 	$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs (logid, wid, pro_id, quantity, price, money_unit) VALUES('11', '11', '8', '15', '50000', 'VND');";
 }
+
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_rows ADD UNIQUE (" . $lang . "_alias)";
