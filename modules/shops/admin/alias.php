@@ -30,8 +30,7 @@ if( $mod == 'content' )
 		}
 		else
 		{
-			$nb = $db->query( 'SELECT MAX(bid) FROM ' . $tab )->fetchColumn();
-			
+			$nb = $db->query( 'SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows' )->fetchColumn();
 			$alias .= '-' . ( intval( $nb ) + 1 );
 		}
 	}
