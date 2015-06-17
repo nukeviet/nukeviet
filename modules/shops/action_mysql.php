@@ -9,10 +9,10 @@
  */
 
 if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
-$sql_drop_module = array();
 
 global $op, $db;
 
+$sql_drop_module = array();
 $result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $module_data . "\_money\_%'" );
 $num_table = intval( $result->rowCount() );
 $array_lang_module_setup = array();
@@ -54,7 +54,8 @@ if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 	 DROP ' . $lang . '_alias,
 	 DROP ' . $lang . '_hometext,
 	 DROP ' . $lang . '_bodytext,
-	 DROP ' . $lang . '_gift_content';
+	 DROP ' . $lang . '_gift_content,
+	 DROP ' . $lang . '_address';
 
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_catalogs
 	 DROP ' . $lang . '_title,
