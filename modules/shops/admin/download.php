@@ -92,8 +92,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$data['filesize'] = 0;
 	$data['extension'] = '';
 
-	$data['path'] = str_replace( NV_UPLOADS_DIR . '/' . $module_name . '/', '', $data['path'] );
-	$real_file = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_name . $data['path'];
+	$data['path'] = str_replace( NV_UPLOADS_DIR . '/' . $module_upload . '/', '', $data['path'] );
+	$real_file = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . $data['path'];
 
 	if( empty( $data['title'] ) )
 	{
@@ -249,7 +249,7 @@ $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'SEARCH', $array_search );
-$xtpl->assign( 'UPLOADS_FILES_DIR', NV_UPLOADS_DIR . '/' . $module_name . '/files' );
+$xtpl->assign( 'UPLOADS_FILES_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/files' );
 $xtpl->assign( 'ACTION', $base_url );
 $xtpl->assign( 'POPUP', $popup );
 

@@ -107,12 +107,12 @@ if( ! empty( $array_id ) )
 			$homeimgfiles1 = $homeimgfile;
 			if( $homeimgthumb == 1 )//image thumb
 			{
-				$homeimgthumbs = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfiles1;
-				$homeimgthumbs = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfiles1;
+				$homeimgthumbs = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfiles1;
+				$homeimgthumbs = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfiles1;
 			}
 			elseif( $homeimgthumb == 2 )//image file
 			{
-				$homeimgthumbs = $homeimgfiles1 = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfiles1;
+				$homeimgthumbs = $homeimgfiles1 = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfiles1;
 			}
 			elseif( $homeimgthumb == 3 )//image url
 			{
@@ -137,7 +137,7 @@ if( ! empty( $array_id ) )
 				'discount_id' => $discount_id,
 				'money_unit' => $money_unit,
 				'showprice' => $showprice,
-				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 				'link_order' => $link . 'setcart&amp;id=' . $id,
 				'gift_content' => $gift_content,
 				'bodytext' => $bodytext

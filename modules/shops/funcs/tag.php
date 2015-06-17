@@ -32,7 +32,7 @@ $page_title = trim( str_replace( '-', ' ', $alias ) );
 
 if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 {
-	$stmt = $db->prepare( 'SELECT tid, ' . NV_LANG_DATA . '_image, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags WHERE ' . NV_LANG_DATA . '_alias= :alias' );
+	$stmt = $db->prepare( 'SELECT tid, image, description, keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' WHERE alias= :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
 	$stmt->execute();
 	list( $tid, $image_tag, $description, $key_words ) = $stmt->fetch( 3 );
@@ -43,7 +43,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 		$db->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )
-			->where( 'status=1 AND id IN (SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ')' );
+			->where( 'status=1 AND id IN (SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' WHERE tid=' . $tid . ')' );
 
 		$num_items = $db->query( $db->sql() )->fetchColumn();
 
@@ -58,11 +58,11 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 		{
 			if( $homeimgthumb == 1 )//image thumb
 			{
-				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 2 )//image file
 			{
-				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 3 )//image url
 			{
@@ -88,7 +88,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 				'money_unit' => $money_unit,
 				'showprice' => $showprice,
 				'newday' => $newday,
-				'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 				'link_order' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setcart&amp;id=' . $id
 			);
 		}
@@ -101,7 +101,7 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 
 		if( ! empty( $image_tag ) )
 		{
-			$image_tag = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/topics/' . $image_tag;
+			$image_tag = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $image_tag;
 		}
 
 		$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=wishlist';

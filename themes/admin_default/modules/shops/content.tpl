@@ -27,7 +27,7 @@
 						</tr>
 						<tr>
 							<th>{LANG.alias}: </th>
-							<td colspan="3"><input class="form-control" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255" style="width: 400px" /> &nbsp; <i class="fa fa-refresh fa-lg" onclick="get_alias();">&nbsp;</i></td>
+							<td colspan="3"><input class="form-control" name="alias" type="text" id="idalias" value="{rowcontent.alias}" maxlength="255" style="width: 400px" /> &nbsp; <i class="fa fa-refresh fa-lg" onclick="get_alias('content', {rowcontent.id});">&nbsp;</i></td>
 						</tr>
 						<tr>
 							<th>{LANG.content_cat} <span class="require">(*)</span></th>
@@ -506,7 +506,7 @@
 <!-- BEGIN:getalias -->
 <script type="text/javascript">
 	$("#idtitle").change(function() {
-		get_alias();
+		get_alias('content', {rowcontent.id});
 	});
 </script>
 <!-- END:getalias -->

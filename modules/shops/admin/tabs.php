@@ -113,7 +113,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( is_file( NV_DOCUMENT_ROOT . $row['icon'] ) )
 	{
-		$row['icon'] = str_replace( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/', '', $row['icon'] );
+		$row['icon'] = str_replace( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/', '', $row['icon'] );
 	}
 	else
 	{
@@ -202,9 +202,9 @@ else
 	$row['content'] = '';
 	$row['active'] = 0;
 }
-if( !empty( $row['icon'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['icon'] ) )
+if( !empty( $row['icon'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['icon'] ) )
 {
-	$row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['icon'];
+	$row['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['icon'];
 }
 
 // Fetch Limit
