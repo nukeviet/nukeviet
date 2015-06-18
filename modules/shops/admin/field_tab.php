@@ -184,6 +184,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )// luu lai
 	{
 		$arr_tab_tpl[$key] = array_unique( $value );
 	}
+	file_put_contents( NV_ROOTDIR . '/themes/default/modules/' . $module_file . '/tab_introduce.tpl', '', LOCK_EX );
 	foreach( $arr_tab_tpl as $key => $value )
 	{
 		$name_file = 'tab_' . str_replace( '-', '_', strtolower( change_alias( $arr_tab[$key] ) ) ) . '.tpl';

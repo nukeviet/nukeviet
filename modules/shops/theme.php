@@ -1349,7 +1349,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 		if( !empty( $data_content['array_custom'] ) and !empty( $data_content['array_custom_lang'] ) )
 		{
 			$custom_data = nv_custom_tpl( 'tab_introduce.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
-			$xtpl->assign( 'CUSTOM_DATA', $custom_data );//die($custom_data);
+			$xtpl->assign( 'CUSTOM_DATA', $custom_data );
 			$xtpl->parse( 'main.custom_data' );
 
 		}
@@ -3053,10 +3053,9 @@ function nv_download_content( $data_content )
 			$xtpl->parse( 'main.files_content.loop' );
 		}
 		$xtpl->parse( 'main.files_content' );
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
 }
 
 /**
@@ -3093,8 +3092,7 @@ function nv_display_othersimage( $otherimage )
 			}
 		}
 		$xtpl->parse( 'main.othersimg' );
+		$xtpl->parse( 'main' );
+		return $xtpl->text( 'main' );
 	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
 }

@@ -335,7 +335,7 @@ function SetSessionProView( $id, $title, $alias, $addtime, $link, $homeimgthumb 
  */
 function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtemplate )
 {
-	global $module_data, $module_info, $module_file, $lang_module, $db_config, $db;
+	global $module_data, $module_info, $module_file, $lang_module, $db_config, $db, $global_config;
 
 	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field';
 	$result = $db->query( $sql );
@@ -351,18 +351,35 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 		}
 	}
 	$html ='';
-	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '/' . $name_file ) )
+	{
+		$theme_tpl = $global_config['module_theme'];
+	}
+	else
+	{
+		$theme_tpl = 'default';
+	}
+	
+	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/themes/' . $theme_tpl . '/modules/' . $module_file );
 	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
 	$xtpl->assign( 'CUSTOM_DATA', $array_custom );
+	$count = 0;
 	foreach ($array_custom as $key => $value)
 	{
-		if( isset($arr[$key]) and !empty($value) ) $xtpl->parse( 'main.'.$key );
+		if( isset($arr[$key]) and !empty($value) ) 
+		{
+			$xtpl->parse( 'main.'.$key );
+			$count ++;
+		}
 	}
-
-	$xtpl->parse( 'main' );
-	$html = $xtpl->text( 'main' );
+	
+	if( $count > 0)
+	{
+		$xtpl->parse( 'main' );
+		$html = $xtpl->text( 'main' );
+	}
 	return $html;
-
 }
 
 /**
