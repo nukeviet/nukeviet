@@ -69,7 +69,7 @@ function nv_list_cats( $is_link = false, $is_parentlink = true )
 				{
 					$list_cats[$row['id']] = $list[$row['id']];
 					$list_cats[$row['id']]['name'] = $list[$row['id']]['title'];
-					$list_cats[$row['id']]['is_download_allow'] = ( int )nv_user_in_groups( $row['groups_download'] );
+					$list_cats[$row['id']]['is_download_allow'] =  nv_user_in_groups( $row['groups_download'] );
 					$list_cats[$row['id']]['subcats'] = array();
 
 					if( $is_link )
