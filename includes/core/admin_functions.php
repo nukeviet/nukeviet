@@ -64,6 +64,10 @@ function nv_groups_post( $groups_view )
 	{
 		return array_diff( $groups_view, array( 1 ) );
 	}
+	if( empty( $groups_view) )
+	{
+		return array( 1 );
+	}
 	return array_map( 'intval', $groups_view );
 }
 
