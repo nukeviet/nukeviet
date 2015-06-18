@@ -67,26 +67,29 @@ if( !nv_function_exists( 'nv_comment_new' ) )
 			$array_news_id[] = $comment['id'];
 		}
 		$array_news_id = array_unique( $array_news_id );
-		$result = $db->query( 'SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode( ',', $array_news_id ) . ') AND status = 1' );
-		$array_news_id = array();
-		while( $row = $result->fetch() )
+		if( !empty( $array_news_id ) )
 		{
-			$array_news_id[$row['id']] = $row;
-		}
-
-		foreach( $array_comment as $comment )
-		{
-			if( isset( $array_news_id[$comment['id']] ) )
+			$result = $db->query( 'SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode( ',', $array_news_id ) . ') AND status = 1' );
+			$array_news_id = array();
+			while( $row = $result->fetch() )
 			{
-				$comment['url_comment'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=' . $array_news_id[$comment['id']]['alias_cat'] . '/' . $array_news_id[$comment['id']]['alias_id'] . '-' . $comment['id'] . $global_config['rewrite_exturl'], true );
-				$comment['content'] = nv_clean60( $comment['content'], $block_config['titlelength'] );
-				$comment['post_time'] = nv_date( 'd/m/Y H:i', $comment['post_time'] );
-				$xtpl->assign( 'COMMENT', $comment );
-				$xtpl->parse( 'main.loop' );
+				$array_news_id[$row['id']] = $row;
 			}
+
+			foreach( $array_comment as $comment )
+			{
+				if( isset( $array_news_id[$comment['id']] ) )
+				{
+					$comment['url_comment'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=' . $array_news_id[$comment['id']]['alias_cat'] . '/' . $array_news_id[$comment['id']]['alias_id'] . '-' . $comment['id'] . $global_config['rewrite_exturl'], true );
+					$comment['content'] = nv_clean60( $comment['content'], $block_config['titlelength'] );
+					$comment['post_time'] = nv_date( 'd/m/Y H:i', $comment['post_time'] );
+					$xtpl->assign( 'COMMENT', $comment );
+					$xtpl->parse( 'main.loop' );
+				}
+			}
+			$xtpl->parse( 'main' );
+			return $xtpl->text( 'main' );
 		}
-		$xtpl->parse( 'main' );
-		return $xtpl->text( 'main' );
 	}
 
 }
