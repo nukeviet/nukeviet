@@ -1395,7 +1395,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 					}
 					elseif( $tabs_key == 'content_download' and $pro_config['download_active'] == 1 ) // Download tài liệu
 					{
-						$download_content = nv_download_content( $data_content );
+						$download_content = nv_download_content( $data_content, $tabs_key.'-'.$tabs_id );
 						$tabs_content = !empty( $download_content ) ? $download_content : '';
 					}
 					elseif( $tabs_key == 'content_otherimage' )// Hình ảnh khác
@@ -3013,6 +3013,7 @@ function nv_review_content( $data_content )
  * nv_download_content
  *
  * @param mixed $data_content
+ * @param mixed $linktab
  * @return
  */
 function nv_download_content( $data_content )
@@ -3025,6 +3026,7 @@ function nv_download_content( $data_content )
 
 	if( !empty( $data_content['files'] ) )
 	{
+		$login = 0;
 		foreach( $data_content['files'] as $files )
 		{
 			if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/images/' . $module_file . '/icon_files/' . $files['extension'] . '.png' ) )
@@ -3052,6 +3054,14 @@ function nv_download_content( $data_content )
 			}
 			$xtpl->parse( 'main.files_content.loop' );
 		}
+		
+		if( $login > 0 )
+		{
+			$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] . '#'.$linktab );
+			$xtpl->assign( 'DOWNLOAD_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module['download_login'] . '</a>' );
+			$xtpl->parse( 'main.form_login' );
+		}
+		
 		$xtpl->parse( 'main.files_content' );
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );

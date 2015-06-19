@@ -16,6 +16,12 @@
 </div>
 <!-- END: files_content -->
 
+<!-- BEGIN: form_login-->
+<div class="alert alert-danger fade in">
+	{DOWNLOAD_LOGIN}
+</div>
+<!-- END: form_login -->
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('[data-toggle="tooltip"]').tooltip({ container: 'body' });
