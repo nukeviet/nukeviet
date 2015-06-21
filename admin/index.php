@@ -120,7 +120,7 @@ if( ! empty( $module_name ) )
 		$module_info = $admin_mods[$module_name];
 		if( md5( $module_info['module'] . '#' . $module_info['act_1'] . '#' . $module_info['act_2'] . '#' . $module_info['act_3'] . '#' . $global_config['sitekey'] ) )
 		{
-			$module_file = $module_name;
+			$module_upload = $module_file = $module_name;
 			$include_functions = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/functions.php';
 			$include_menu = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/admin.menu.php';
 			$include_file = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/' . $op . '.php';
@@ -181,7 +181,7 @@ if( ! empty( $module_name ) )
 		}
 
 		require $include_functions;
-		
+
 		if( is_dir( NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' ) )
 		{
 			// Kết nối với các Plugin
@@ -206,8 +206,8 @@ if( ! empty( $module_name ) )
 					require NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' . $plugin_name . '_admin.php';
 				}
 			}
-		}	
-		
+		}
+
 		if( in_array( $op, $allow_func ) )
 		{
 			$admin_menu_mods = array();

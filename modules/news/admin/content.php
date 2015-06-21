@@ -17,19 +17,19 @@ if( defined( 'NV_EDITOR' ) )
 
 $username_alias = change_alias( $admin_info['username'] );
 $array_structure_image = array();
-$array_structure_image[''] = $module_name;
-$array_structure_image['Y'] = $module_name . '/' . date( 'Y' );
-$array_structure_image['Ym'] = $module_name . '/' . date( 'Y_m' );
-$array_structure_image['Y_m'] = $module_name . '/' . date( 'Y/m' );
-$array_structure_image['Ym_d'] = $module_name . '/' . date( 'Y_m/d' );
-$array_structure_image['Y_m_d'] = $module_name . '/' . date( 'Y/m/d' );
-$array_structure_image['username'] = $module_name . '/' . $username_alias;
+$array_structure_image[''] = $module_upload;
+$array_structure_image['Y'] = $module_upload . '/' . date( 'Y' );
+$array_structure_image['Ym'] = $module_upload . '/' . date( 'Y_m' );
+$array_structure_image['Y_m'] = $module_upload . '/' . date( 'Y/m' );
+$array_structure_image['Ym_d'] = $module_upload . '/' . date( 'Y_m/d' );
+$array_structure_image['Y_m_d'] = $module_upload . '/' . date( 'Y/m/d' );
+$array_structure_image['username'] = $module_upload . '/' . $username_alias;
 
-$array_structure_image['username_Y'] = $module_name . '/' . $username_alias . '/' . date( 'Y' );
-$array_structure_image['username_Ym'] = $module_name . '/' . $username_alias . '/' . date( 'Y_m' );
-$array_structure_image['username_Y_m'] = $module_name . '/' . $username_alias . '/' . date( 'Y/m' );
-$array_structure_image['username_Ym_d'] = $module_name . '/' . $username_alias . '/' . date( 'Y_m/d' );
-$array_structure_image['username_Y_m_d'] = $module_name . '/' . $username_alias . '/' . date( 'Y/m/d' );
+$array_structure_image['username_Y'] = $module_upload . '/' . $username_alias . '/' . date( 'Y' );
+$array_structure_image['username_Ym'] = $module_upload . '/' . $username_alias . '/' . date( 'Y_m' );
+$array_structure_image['username_Y_m'] = $module_upload . '/' . $username_alias . '/' . date( 'Y/m' );
+$array_structure_image['username_Ym_d'] = $module_upload . '/' . $username_alias . '/' . date( 'Y_m/d' );
+$array_structure_image['username_Y_m_d'] = $module_upload . '/' . $username_alias . '/' . date( 'Y/m/d' );
 
 $structure_upload = isset( $module_config[$module_name]['structure_upload'] ) ? $module_config[$module_name]['structure_upload'] : 'Ym';
 $currentpath = isset( $array_structure_image[$structure_upload] ) ? $array_structure_image[$structure_upload] : '';

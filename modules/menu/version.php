@@ -18,5 +18,5 @@ $module_version = array(
 	'date' => 'Fri, 7 May 2010 09:47:15 GMT',
 	'author' => 'VINADES (contact@vinades.vn)',
 	'note' => '',
-    'uploads_dir' => array( $module_name)
+    'uploads_dir' => array( $module_upload)
 );

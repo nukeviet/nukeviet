@@ -134,9 +134,9 @@ $row['catname'] = $list_cats[$row['catid']]['name'];
 //phan quyen tai file tai danh muc
 $row['is_download_allow'] = $list_cats[$row['catid']]['is_download_allow'];
 //neu danh muc cho phep tai file thi kiem tra tiep phan quyen tai file trong chi tiet file
-if( $row['is_download_allow'] == false )
+if( $row['is_download_allow'] )
 {
-	$row['is_download_allow'] = ( int )nv_user_in_groups( $row['groups_download'] );
+	$row['is_download_allow'] = nv_user_in_groups( $row['groups_download'] );
 }
 
 $session_files = array();

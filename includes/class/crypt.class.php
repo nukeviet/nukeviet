@@ -153,9 +153,10 @@ class nv_Crypt
 		$slast = ord( substr( $dec, -1 ) );
 		$slastc = chr( $slast );
 		$pcheck = substr( $dec, -$slast );
-		if( preg_match( "/$slastc{" . $slast . "}/", $dec ) )
+		$dec_len = strlen( $dec );
+		if( $dec_len )
 		{
-			return rtrim( $dec, ( ( ord( substr( $dec, strlen( $dec ) - 1, 1 ) ) >= 0 and ord( substr( $dec, strlen( $dec ) - 1, 1 ) ) <= 16 ) ? chr( ord( substr( $dec, strlen( $dec ) - 1, 1 ) ) ) : null ) );
+			return rtrim( $dec, ( ( ord( substr( $dec, $dec_len - 1, 1 ) ) >= 0 and ord( substr( $dec, $dec_len - 1, 1 ) ) <= 16 ) ? chr( ord( substr( $dec, $dec_len - 1, 1 ) ) ) : null ) );
 		}
 		else
 		{
