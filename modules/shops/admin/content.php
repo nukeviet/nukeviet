@@ -180,7 +180,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['address'] = $nv_Request->get_title( 'address', 'post', '', 1 );
 	$rowcontent['files'] = $nv_Request->get_typed_array( 'files', 'post', 'int', array() );
 
-	$rowcontent['gift_content'] = $nv_Request->get_title( 'gift_content', 'post', '', 1 );
+	$rowcontent['gift_content'] = $nv_Request->get_textarea( 'gift_content', '', 'br' );
 	$rowcontent['gift_from'] = $nv_Request->get_title( 'gift_from', 'post', '' );
 	$rowcontent['gift_to'] = $nv_Request->get_title( 'gift_to', 'post', '' );
 	if( !empty( $rowcontent['gift_content'] ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $rowcontent['gift_from'], $m ) )
@@ -613,7 +613,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		else
 		{
 			$rowcontent_old = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows where id=' . $rowcontent['id'] )->fetch( );
-			
+
 			$rowcontent['user_id'] = $rowcontent_old['user_id'];
 
 			if( $rowcontent_old['status'] == 1 )
