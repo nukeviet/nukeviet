@@ -424,6 +424,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					}
 				}
 			}
+			$sth->closeCursor();
 
 			if( sizeof( $keywords_return ) < 20 )
 			{
@@ -612,7 +613,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		else
 		{
 			$rowcontent_old = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows where id=' . $rowcontent['id'] )->fetch( );
-
+			
 			$rowcontent['user_id'] = $rowcontent_old['user_id'];
 
 			if( $rowcontent_old['status'] == 1 )
