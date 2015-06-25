@@ -864,7 +864,7 @@ function nv_show_block_list( $bid )
 	$xtpl->assign( 'OP', $op );
 	$xtpl->assign( 'BID', $bid );
 
-	$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t2.weight FROM " . $db_config['prefix'] . "_" . $module_data . "_rows as t1 INNER JOIN " . $db_config['prefix'] . "_" . $module_data . "_block AS t2 ON t1.id = t2.id WHERE t2.bid= " . $bid . " AND t1.inhome='1' ORDER BY t2.weight ASC";
+	$sql = 'SELECT t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t2.weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows as t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_block AS t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.inhome=1 ORDER BY t2.weight ASC';
 
 	$result = $db->query( $sql );
 	$num = $result->rowCount( );
@@ -873,17 +873,17 @@ function nv_show_block_list( $bid )
 	while( list( $id, $listcatid, $title, $alias, $weight ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			"id" => $id,
-			"title" => $title,
-			"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_shops_cat[$listcatid]['alias'] . "/" . $alias . "-" . $id
+			'id' => $id,
+			'title' => $title,
+			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl']
 		) );
 
 		for( $i = 1; $i <= $num; $i++ )
 		{
 			$xtpl->assign( 'WEIGHT', array(
-				"key" => $i,
-				"title" => $i,
-				"selected" => $i == $weight ? " selected=\"selected\"" : ""
+				'key' => $i,
+				'title' => $i,
+				'selected' => $i == $weight ? ' selected="selected"' : ''
 			) );
 			$xtpl->parse( 'main.loop.weight' );
 		}
