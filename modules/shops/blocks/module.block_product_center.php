@@ -19,7 +19,7 @@ if( ! function_exists( 'nv_product_center' ) )
 	 */
 	function nv_product_center( $block_config )
 	{
-		global $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $pro_config, $global_config;
+		global $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $pro_config, $global_config, $site_mods;
 
 		$module = $block_config['module'];
 
