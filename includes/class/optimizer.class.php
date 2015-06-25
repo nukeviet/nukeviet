@@ -263,15 +263,24 @@ class optimezer
 
 		if( ! $this->_tidySupport ) $this->_content = $this->minifyHTML( $this->_content );
 
-		$head = "<head>" . $this->eol . $this->_title . $this->eol;
-		if( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
-		if( ! empty( $this->_links ) ) $head .= implode( $this->eol, $this->_links ) . $this->eol;
-		if( ! empty( $this->_cssLinks ) ) $head .= "<link rel=\"Stylesheet\" href=\"" . $this->newCssLink() . "\" type=\"text/css\" />" . $this->eol;
-		if( ! empty( $this->_cssIgnoreLinks ) ) $head .= implode( $this->eol, $this->_cssIgnoreLinks ) . $this->eol;
-		if( ! empty( $this->_style ) ) $head .= "<style type=\"text/css\">" . $this->minifyCss( implode( $this->eol, $this->_style ) ) . "</style>" . $this->eol;
-		$head .= "<script type=\"text/javascript\" src=\"" . $this->base_siteurl . "js/jquery/jquery.min.js\"></script>" . $this->eol;
-		if( ! $this->_tidySupport ) $head = $this->minifyHTML( $head );
-		$this->_content = trim( preg_replace( '/<head>/i', $head, $this->_content, 1 ) );
+		$head = "";
+		if ( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
+        	if ( ! empty( $this->_links ) ) $head .= implode( $this->eol, $this->_links ) . $this->eol;
+        	if ( ! empty( $this->_cssLinks ) ) $head .= "<link rel=\"Stylesheet\" href=\"" . $this->newCssLink() . "\" type=\"text/css\" />" . $this->eol;
+        	if ( ! empty( $this->_cssIgnoreLinks ) ) $head .= implode( $this->eol, $this->_cssIgnoreLinks ) . $this->eol;
+        	if ( ! empty( $this->_style ) ) $head .= "<style type=\"text/css\">" . $this->minifyCss( implode( $this->eol, $this->_style ) ) . "</style>" . $this->eol;
+        	if ( ! $this->_tidySupport ) $head = $this->minifyHTML( $head );
+
+	        if ( preg_match( "/\<head\>/", $this->_content ) )
+	        {
+	            $head = "<head>" . $this->eol . $this->_title . $this->eol . $head;
+	            $head .= "<script type=\"text/javascript\" src=\"" . $this->base_siteurl . "js/jquery/jquery.min.js\"></script>" . $this->eol;
+	            $this->_content = trim( preg_replace( '/<head>/i', $head, $this->_content, 1 ) );
+	        }
+	        else
+	        {
+	            $this->_content = $head . $this->_content;
+	        }
 
 		if( $this->_tidySupport )
 		{
