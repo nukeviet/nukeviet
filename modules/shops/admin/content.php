@@ -180,7 +180,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['address'] = $nv_Request->get_title( 'address', 'post', '', 1 );
 	$rowcontent['files'] = $nv_Request->get_typed_array( 'files', 'post', 'int', array() );
 
-	$rowcontent['gift_content'] = $nv_Request->get_title( 'gift_content', 'post', '', 1 );
+	$rowcontent['gift_content'] = $nv_Request->get_textarea( 'gift_content', '', 'br' );
 	$rowcontent['gift_from'] = $nv_Request->get_title( 'gift_from', 'post', '' );
 	$rowcontent['gift_to'] = $nv_Request->get_title( 'gift_to', 'post', '' );
 	if( !empty( $rowcontent['gift_content'] ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $rowcontent['gift_from'], $m ) )
@@ -424,6 +424,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					}
 				}
 			}
+			$sth->closeCursor();
 
 			if( sizeof( $keywords_return ) < 20 )
 			{
