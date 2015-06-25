@@ -116,7 +116,7 @@ class optimezer
 		}
 
 		$this->_content = preg_replace( "/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content );
-		$jsRegex = "/<script[^>]*>[^\<]*<\/script>/is";
+		$jsRegex = "/<\s*\bscript\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
 		if( preg_match_all( $jsRegex, $this->_content, $jsMatches ) )
 		{
 			$this->_jsMatches = $jsMatches[0];
@@ -233,22 +233,24 @@ class optimezer
 				$meta[] = "<meta " . $row[0][0] . "=\"" . $row[1][0] . "\" " . $row[0][1] . "=\"" . $row[1][1] . "\" />";
 			}
 		}
-
+		
+		$_jsBefore = array();
+        	$_jsAfter = array();
+        	$_jsSrc = array();
+        	
 		if( ! empty( $this->_jsMatches ) )
 		{
-			$_jsSrc = array();
-
 			foreach( $this->_jsMatches as $key => $value )
 			{
-				unset( $matches2 );
+				unset( $matches2, $matches3 );
 
-				//Chi cho phep ket noi 1 lan doi voi 1 file JS
-				if( preg_match( "/^<script[^>]+src\s*=\s*[\"|']([^\"']+)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", $value, $matches2 ) )
+				if( preg_match( "/<\s*\bscript\b[^>]+src\s*=\s*[\"|']([^\"']+)[\"|'][^>]*>[\s\r\n\t]*<\s*\/\s*script\s*>/is", $value, $matches2 ) )
 				{
+					//Chi cho phep ket noi 1 lan doi voi 1 file JS
 					$value = ( ! empty( $matches2[1] ) and ! in_array( $matches2[1], $_jsSrc ) ) ? $value : "";
 					if( ! empty( $matches2[1] ) ) $_jsSrc[] = $matches2[1];
 				}
-				elseif( ! preg_match( "/<script[^>]+src\s*=([^>]+)>[\s\r\n\t]*<\/script>/is", $value ) and preg_match( "/<script([^>]*)>([^\<]+)<\/script>/is", $value, $matches2 ) )
+				elseif( preg_match( "/<\s*\bscript\b([^>]*)>(.*?)<\s*\/\s*script\s*>/is", $value, $matches2 ) )
 				{
 					$value = ( empty( $matches2[1] ) or ! preg_match( "/^([^\W]*)$/is", $matches2[1] ) ) ? $this->minifyJsInline( $matches2 ) : "";
 				}
@@ -256,12 +258,17 @@ class optimezer
 				{
 					$value = '';
 				}
+				
+				if ( ! empty( $value ) and preg_match( "/<\s*\bscript\b[^>]+data\-show\s*\=\s*[\"|'](after|before)[\"|'][^>]*>(.*?)<\s*\/\s*script\s*>/is", $value, $matches3 ) )
+		                {
+		                    if ( $matches3[1] == "before" ) $_jsBefore[] = $value;
+		                    elseif ( $matches3[1] == "after" ) $_jsAfter[] = $value;
+		                    $value = "";
+		                }
 
 				$this->_content = preg_replace( "/\{\|js\_" . $key . "\|\}/", $value, $this->_content );
 			}
 		}
-
-		if( ! $this->_tidySupport ) $this->_content = $this->minifyHTML( $this->_content );
 
 		$head = "";
 		if ( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
@@ -269,17 +276,26 @@ class optimezer
         	if ( ! empty( $this->_cssLinks ) ) $head .= "<link rel=\"Stylesheet\" href=\"" . $this->newCssLink() . "\" type=\"text/css\" />" . $this->eol;
         	if ( ! empty( $this->_cssIgnoreLinks ) ) $head .= implode( $this->eol, $this->_cssIgnoreLinks ) . $this->eol;
         	if ( ! empty( $this->_style ) ) $head .= "<style type=\"text/css\">" . $this->minifyCss( implode( $this->eol, $this->_style ) ) . "</style>" . $this->eol;
-        	if ( ! $this->_tidySupport ) $head = $this->minifyHTML( $head );
+        	
+        	$_jsBefore = ! empty( $_jsBefore ) ? implode( $this->eol, $_jsBefore ) . $this->eol : "";
+        	$_jsAfter = ! empty( $_jsAfter ) ? implode( $this->eol, $_jsAfter ) . $this->eol : "";
 
 	        if ( preg_match( "/\<head\>/", $this->_content ) )
 	        {
 	            $head = "<head>" . $this->eol . $this->_title . $this->eol . $head;
 	            $head .= "<script type=\"text/javascript\" src=\"" . $this->base_siteurl . "js/jquery/jquery.min.js\"></script>" . $this->eol;
 	            $this->_content = trim( preg_replace( '/<head>/i', $head, $this->_content, 1 ) );
+	            if ( ! empty( $_jsBefore ) ) $this->_content = preg_replace( '/<\/head>/', implode( $this->eol, $_jsBefore ) . $this->eol . "</head>", $this->_content, 1 );
+	            $this->_content = preg_replace( '/<\/head>/', $_jsBefore . "</head>", $this->_content, 1 );
 	        }
 	        else
 	        {
-	            $this->_content = $head . $this->_content;
+	            $this->_content = $head . $_jsBefore . $this->_content;
+	        }
+	        
+	        if ( ! empty( $_jsAfter ) )
+	        {
+	            $this->_content = preg_match( "/\<\/body\>/", $this->_content ) ? preg_replace( '/<\/body>/', $_jsAfter . "</body>", $this->_content, 1 ) : $this->eol . $_jsAfter;
 	        }
 
 		if( $this->_tidySupport )
@@ -294,7 +310,7 @@ class optimezer
 			}
 		}
 
-		return $this->_content;
+		return $this->minifyHTML( $this->_content );
 	}
 
 	/**
@@ -580,15 +596,18 @@ class optimezer
 	private function minifyHTML( $content )
 	{
 		$content = preg_replace_callback( '/<!--([\s\S]*?)-->/', array( $this, 'HTMLCommentCB' ), $content );
-		$content = preg_replace( '/<([^\>]+)\s+\/\s+\>/', '<$1 />', $content );
-		$content = preg_replace( '#<(br|hr|input|img|meta)([^>]+)>#', "<\\1\\2 />", $content );
-		$content = preg_replace( '#\s*\/\s*\/>#', " />", $content );
-		$content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
-		$content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
-		$content = preg_replace( '/^\s+/', '', $content );
-		$content = preg_replace( "/\n([\n\t\s]+)\n/", "\n", $content );
-
-		return $content;
+	        $content = preg_replace( '/<([^\>]+)\s+\/\s+\>/', '<$1 />', $content );
+	        $content = preg_replace( '#<(br|hr|input|img|meta)([^>]+)>#', "<\\1\\2 />", $content );
+	        $content = preg_replace( '#\s*\/\s*\/>#', " />", $content );
+	        $content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
+	        $content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
+	        $content = preg_replace( '/^\s+/', '', $content );
+	        // @todo take into account attribute values that span multiple lines.
+	        $content = preg_replace( '/^\s+|\s+$/m', '', $content );
+	        // remove ws outside of all elements
+	        $content = preg_replace( '/>(\\s(?:\\s*))?([^<]+)(\\s(?:\s*))?</', '>$1$2$3<', $content );
+	
+	        return $content;
 	}
 
 	/**
