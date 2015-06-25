@@ -250,7 +250,7 @@ class optimezer
 				}
 				elseif( ! preg_match( "/<script[^>]+src\s*=([^>]+)>[\s\r\n\t]*<\/script>/is", $value ) and preg_match( "/<script([^>]*)>([^\<]+)<\/script>/is", $value, $matches2 ) )
 				{
-					$value = ! preg_match( "/^([^\W]*)$/is", $matches2[1] ) ? $this->minifyJsInline( $matches2 ) : "";
+					$value = ( empty( $matches2[1] ) or ! preg_match( "/^([^\W]*)$/is", $matches2[1] ) ) ? $this->minifyJsInline( $matches2 ) : "";
 				}
 				else
 				{
