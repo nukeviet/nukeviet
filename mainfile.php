@@ -259,7 +259,22 @@ else
 }
 
 // Xac dinh co phai truy cap bang mobile hay khong
-$client_info['is_mobile'] = nv_checkmobile( NV_USER_AGENT );
+if( $nv_Request->isset_request( 'is_mobile', 'session' ) )
+{
+	$client_info['is_mobile'] = $nv_Request->get_bool( 'is_mobile', 'session' );
+	$client_info['is_tablet'] = $nv_Request->get_bool( 'is_tablet', 'session' );
+}
+else
+{
+
+	require NV_ROOTDIR . '/includes/class/Mobile_Detect.php';
+	$detect = new Mobile_Detect;
+	$client_info['is_mobile'] = $detect->isMobile();
+	$client_info['is_tablet'] = $detect->isTablet();
+
+	$nv_Request->set_Session( 'is_mobile', $client_info['is_mobile'] );
+	$nv_Request->set_Session( 'is_tablet', $client_info['is_tablet'] );
+}
 
 // Ket noi voi class chong flood
 if( $global_config['is_flood_blocker'] and ! $nv_Request->isset_request( 'admin', 'session' ) and //
