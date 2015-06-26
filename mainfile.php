@@ -258,22 +258,16 @@ else
 	}
 }
 
-// Xac dinh co phai truy cap bang mobile hay khong
-if( $nv_Request->isset_request( 'is_mobile', 'session' ) )
-{
-	$client_info['is_mobile'] = $nv_Request->get_bool( 'is_mobile', 'session' );
-	$client_info['is_tablet'] = $nv_Request->get_bool( 'is_tablet', 'session' );
-}
-else
-{
+require NV_ROOTDIR . '/includes/class/Mobile_Detect.php';
+$detect = new Mobile_Detect;
+$client_info['is_mobile'] = $detect->isMobile();
+$client_info['is_tablet'] = $detect->isTablet();
 
-	require NV_ROOTDIR . '/includes/class/Mobile_Detect.php';
-	$detect = new Mobile_Detect;
-	$client_info['is_mobile'] = $detect->isMobile();
-	$client_info['is_tablet'] = $detect->isTablet();
-
-	$nv_Request->set_Session( 'is_mobile', $client_info['is_mobile'] );
-	$nv_Request->set_Session( 'is_tablet', $client_info['is_tablet'] );
+$is_mobile_tablet = $client_info['is_mobile'] . '-' . $client_info['is_tablet'];
+if( $is_mobile_tablet != $nv_Request->get_string( 'is_mobile_tablet', 'session' ) )
+{
+	$nv_Request->set_Session( 'is_mobile_tablet', $is_mobile_tablet );
+	$nv_Request->unset_request( 'nv' . NV_LANG_DATA . 'themever', 'cookie' );
 }
 
 // Ket noi voi class chong flood
@@ -392,9 +386,6 @@ if( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( '
 {
 	require NV_ROOTDIR . '/includes/core/cronjobs.php';
 }
-
-// Xac dinh kieu giao dien mac dinh
-$global_config['current_theme_type'] = $nv_Request->get_string( 'nv' . NV_LANG_DATA . 'themever', 'cookie', '' );
 
 // Kiem tra tu cach admin
 if( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )
