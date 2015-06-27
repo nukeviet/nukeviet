@@ -258,8 +258,17 @@ else
 	}
 }
 
-// Xac dinh co phai truy cap bang mobile hay khong
-$client_info['is_mobile'] = nv_checkmobile( NV_USER_AGENT );
+require NV_ROOTDIR . '/includes/class/Mobile_Detect.php';
+$detect = new Mobile_Detect;
+$client_info['is_mobile'] = $detect->isMobile();
+$client_info['is_tablet'] = $detect->isTablet();
+
+$is_mobile_tablet = $client_info['is_mobile'] . '-' . $client_info['is_tablet'];
+if( $is_mobile_tablet != $nv_Request->get_string( 'is_mobile_tablet', 'session' ) )
+{
+	$nv_Request->set_Session( 'is_mobile_tablet', $is_mobile_tablet );
+	$nv_Request->unset_request( 'nv' . NV_LANG_DATA . 'themever', 'cookie' );
+}
 
 // Ket noi voi class chong flood
 if( $global_config['is_flood_blocker'] and ! $nv_Request->isset_request( 'admin', 'session' ) and //
@@ -377,9 +386,6 @@ if( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( '
 {
 	require NV_ROOTDIR . '/includes/core/cronjobs.php';
 }
-
-// Xac dinh kieu giao dien mac dinh
-$global_config['current_theme_type'] = $nv_Request->get_string( 'nv' . NV_LANG_DATA . 'themever', 'cookie', '' );
 
 // Kiem tra tu cach admin
 if( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )

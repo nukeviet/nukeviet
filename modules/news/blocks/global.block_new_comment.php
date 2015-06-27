@@ -8,9 +8,9 @@
  * @Createdate 3/9/2010 23:25
  */
 
-if( !defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if( !nv_function_exists( 'nv_comment_new' ) )
+if( ! nv_function_exists( 'nv_comment_new' ) )
 {
 	function nv_block_comment_new( $module, $data_block, $lang_block )
 	{
@@ -45,18 +45,7 @@ if( !nv_function_exists( 'nv_comment_new' ) )
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
-		$mod_file = $site_mods[$module]['module_file'];
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $mod_file . '/block_new_comment.tpl' ) )
-		{
-			$block_theme = $module_info['template'];
-		}
-		else
-		{
-			$block_theme = 'default';
-		}
-
-		$xtpl = new XTemplate( 'block_new_comment.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
 		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_comment WHERE module = " . $db->quote( $module ) . " AND status=1 ORDER BY post_time DESC LIMIT " . $block_config['numrow'];
 		$result = $db->query( $sql );
 		$array_comment = array();
@@ -66,33 +55,46 @@ if( !nv_function_exists( 'nv_comment_new' ) )
 			$array_comment[] = $comment;
 			$array_news_id[] = $comment['id'];
 		}
-		$array_news_id = array_unique( $array_news_id );
-		$result = $db->query( 'SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode( ',', $array_news_id ) . ') AND status = 1' );
-		$array_news_id = array();
-		while( $row = $result->fetch() )
-		{
-			$array_news_id[$row['id']] = $row;
-		}
 
-		foreach( $array_comment as $comment )
+		if( ! empty( $array_news_id ) )
 		{
-			if( isset( $array_news_id[$comment['id']] ) )
+			$result = $db->query( 'SELECT t1.id, t1.alias AS alias_id, t2.alias AS alias_cat FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $mod_data . '_cat t2 ON t1.catid = t2.catid WHERE t1.id IN (' . implode( ',', array_unique( $array_news_id ) ) . ') AND status = 1' );
+			$array_news_id = array();
+			while( $row = $result->fetch() )
 			{
-				$comment['url_comment'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=' . $array_news_id[$comment['id']]['alias_cat'] . '/' . $array_news_id[$comment['id']]['alias_id'] . '-' . $comment['id'] . $global_config['rewrite_exturl'], true );
-				$comment['content'] = nv_clean60( $comment['content'], $block_config['titlelength'] );
-				$comment['post_time'] = nv_date( 'd/m/Y H:i', $comment['post_time'] );
-				$xtpl->assign( 'COMMENT', $comment );
-				$xtpl->parse( 'main.loop' );
+				$array_news_id[$row['id']] = $row;
 			}
+
+			$mod_file = $site_mods[$module]['module_file'];
+			if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $mod_file . '/block_new_comment.tpl' ) )
+			{
+				$block_theme = $module_info['template'];
+			}
+			else
+			{
+				$block_theme = 'default';
+			}
+
+			$xtpl = new XTemplate( 'block_new_comment.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
+			foreach( $array_comment as $comment )
+			{
+				if( isset( $array_news_id[$comment['id']] ) )
+				{
+					$comment['url_comment'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module . '&' . NV_OP_VARIABLE . '=' . $array_news_id[$comment['id']]['alias_cat'] . '/' . $array_news_id[$comment['id']]['alias_id'] . '-' . $comment['id'] . $global_config['rewrite_exturl'], true );
+					$comment['content'] = nv_clean60( $comment['content'], $block_config['titlelength'] );
+					$comment['post_time'] = nv_date( 'd/m/Y H:i', $comment['post_time'] );
+					$xtpl->assign( 'COMMENT', $comment );
+					$xtpl->parse( 'main.loop' );
+				}
+			}
+			$xtpl->parse( 'main' );
+			return $xtpl->text( 'main' );
 		}
-		$xtpl->parse( 'main' );
-		return $xtpl->text( 'main' );
 	}
 
 }
 
 if( defined( 'NV_SYSTEM' ) )
 {
-	$module = $block_config['module'];
 	$content = nv_comment_new( $block_config );
 }

@@ -21,7 +21,7 @@
         <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.css" rel="stylesheet" />
         <!-- END: non_responsive -->
 
-		<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/font-awesome.min.css" rel="stylesheet" />
+		<link href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css" rel="stylesheet" />
 		{THEME_CSS}
         <script type="text/javascript">
             var theme_responsive = '{THEME_RESPONSIVE}';
