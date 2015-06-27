@@ -17,8 +17,6 @@ if( !$pro_config['point_active'] )
 	die();
 }
 
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:point';
-
 $q = $nv_Request->get_title( 'q', 'post,get' );
 $per_page = 20;
 $page = $nv_Request->get_int( 'page', 'post,get', 1 );

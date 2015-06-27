@@ -11,7 +11,6 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['setup_payment'];
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:payport';
 
 $array_setting_payment = array();
 

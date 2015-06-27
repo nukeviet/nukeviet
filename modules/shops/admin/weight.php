@@ -12,7 +12,6 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
 $page_title = $lang_module['weight_unit'];
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:weight';
 
 $error = '';
 $savecat = 0;

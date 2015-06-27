@@ -17,8 +17,6 @@ if( !$pro_config['active_warehouse'] )
 	die();
 }
 
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:warehouse';
-
 $wid = $nv_Request->get_int( 'wid', 'get', 0 );
 $array_search = array();
 $array_warehouse = array();

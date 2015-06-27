@@ -11,8 +11,6 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:coupons';
-
 if( $nv_Request->isset_request( 'delete_id', 'get' ) and $nv_Request->isset_request( 'delete_checkss', 'get' ) )
 {
 	$id = $nv_Request->get_int( 'delete_id', 'get' );

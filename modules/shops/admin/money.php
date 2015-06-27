@@ -12,7 +12,6 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
 $page_title = $lang_module['money'];
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:money';
 
 $currencies_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/currencies.ini', true );
 
