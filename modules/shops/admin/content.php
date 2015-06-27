@@ -210,6 +210,23 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$alias = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$rowcontent['alias'] = ($alias == '') ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
 
+	if( !empty( $rowcontent['alias'] ) )
+	{
+		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id !=' . $rowcontent['id'] . ' AND '  . NV_LANG_DATA . '_alias = :alias' );
+		$stmt->bindParam( ':alias', $rowcontent['alias'], PDO::PARAM_STR );
+		$stmt->execute();
+		if( $stmt->fetchColumn() )
+		{
+			$rows_id = $rowcontent['id'];
+			if( $rows_id == 0 )
+			{
+				$rows_id = $db->query( 'SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows' )->fetchColumn();
+				$rows_id = intval( $rows_id ) + 1;
+			}
+			$rowcontent['alias'] = $rowcontent['alias'] . '-' . $rows_id;
+		}
+	}
+
 	$hometext = $nv_Request->get_string( 'hometext', 'post', '' );
 	$rowcontent['hometext'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $hometext, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $hometext ) ), '<br />' );
 
