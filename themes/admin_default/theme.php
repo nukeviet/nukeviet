@@ -74,7 +74,7 @@ function nv_get_submenu_mod( $module_name )
 
 function nv_admin_theme( $contents, $head_site = 1 )
 {
-	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title, $url_instruction;
+	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title, $array_url_instruction, $op;
 
 	$dir_template = '';
 
@@ -340,11 +340,18 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.site_mods' );
 	}
 
-	if( !empty( $url_instruction ) and filter_var( $url_instruction, FILTER_VALIDATE_URL ) )
+	if( !empty( $array_url_instruction ) )
 	{
-		$xtpl->assign( 'NV_INSTRUCTION', $lang_global['go_instrucion'] );
-		$xtpl->assign( 'NV_URL_INSTRUCTION', $url_instruction );
-		$xtpl->parse( 'main.url_instruction' );
+		foreach( $array_url_instruction as $key => $value )
+		{
+			if( $op == $key and filter_var( $value, FILTER_VALIDATE_URL ) )
+			{
+				$xtpl->assign( 'NV_INSTRUCTION', $lang_global['go_instrucion'] );
+				$xtpl->assign( 'NV_URL_INSTRUCTION', $value );
+				$xtpl->parse( 'main.url_instruction' );
+				break;
+			}
+		}
 	}
 
 	/**
