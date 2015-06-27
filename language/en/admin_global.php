@@ -31,6 +31,7 @@ $lang_global['mod_webtools'] = 'Webtools';
 $lang_global['mod_extensions'] = 'Extensions';
 $lang_global['go_clientsector'] = 'Home page';
 $lang_global['go_clientmod'] = 'Preview';
+$lang_global['go_instrucion'] = 'Instrucion document';
 $lang_global['please_select'] = 'Please select';
 $lang_global['admin_password_empty'] = 'Administrator password has not been declared';
 $lang_global['adminpassincorrect'] = 'Administrator password &ldquo;<strong>%s</strong>&rdquo; is inaccurate. Try again';

@@ -34,6 +34,7 @@ $lang_global['mod_subsite'] = 'Quản lý site con';
 $lang_global['mod_extensions'] = 'Mở rộng';
 $lang_global['go_clientsector'] = 'Trang chủ site';
 $lang_global['go_clientmod'] = 'Xem ngoài site';
+$lang_global['go_instrucion'] = 'Tài liệu hướng dẫn';
 $lang_global['please_select'] = 'Hãy lựa chọn';
 $lang_global['admin_password_empty'] = 'Mật khẩu quản trị của bạn chưa được khai báo';
 $lang_global['adminpassincorrect'] = 'Mật khẩu quản trị &ldquo;<strong>%s</strong>&rdquo; không chính xác. Hãy thử lại lần nữa';
