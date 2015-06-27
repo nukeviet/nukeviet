@@ -12,6 +12,7 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
 $page_title = $lang_module['carrier_config_config'];
+$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:shipping_config';
 
 $config_weight = array( );
 $cid = $nv_Request->get_int( 'cid', 'post,get', 0 );

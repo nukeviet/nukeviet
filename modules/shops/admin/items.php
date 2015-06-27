@@ -12,6 +12,7 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
 $page_title = $lang_module['content_list'];
+$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:list';
 
 if( !defined( 'SHADOWBOX' ) )
 {

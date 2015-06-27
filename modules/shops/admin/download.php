@@ -11,6 +11,8 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
+$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:download';
+
 $data = array();
 $error = array();
 $table_name = $db_config['prefix'] . "_" . $module_data . "_files";

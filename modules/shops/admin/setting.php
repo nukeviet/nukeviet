@@ -10,6 +10,8 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
+$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:setting';
+
 if( defined( 'NV_EDITOR' ) )
 {
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';

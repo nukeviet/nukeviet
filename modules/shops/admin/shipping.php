@@ -11,6 +11,8 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
+$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:shipping';
+
 $per_page = 20;
 $page = $nv_Request->get_int( 'page', 'post,get', 1 );
 $array_search = array();

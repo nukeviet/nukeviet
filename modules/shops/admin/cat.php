@@ -11,6 +11,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['cat_title'];
+$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:cat';
 
 $table_name = $db_config['prefix'] . '_' . $module_data . '_catalogs';
 $error = $admins = '';
