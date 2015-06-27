@@ -10,6 +10,8 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
+http://wiki.nukeviet.vn/nukeviet4:admin:shops:tags
+
 /**
  * nv_show_tags_list()
  *

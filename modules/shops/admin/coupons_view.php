@@ -11,6 +11,8 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
+$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:coupons';
+
 $id = $nv_Request->get_int( 'id', 'get', 0 );
 if( empty( $id ) )
 {

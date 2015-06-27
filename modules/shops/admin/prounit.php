@@ -11,6 +11,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['prounit'];
+$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:unit';
 
 $error = "";
 $savecat = 0;
