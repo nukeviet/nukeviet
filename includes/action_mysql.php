@@ -77,6 +77,7 @@ function nv_create_table_sys( $lang )
 		 position varchar(55) DEFAULT NULL,
 		 exp_time int(11) DEFAULT '0',
 		 active tinyint(4) DEFAULT '0',
+		 hide_device tinyint(4) DEFAULT '0',
 		 groups_view varchar(255) DEFAULT '',
 		 all_func tinyint(4) NOT NULL DEFAULT '0',
 		 weight int(11) NOT NULL DEFAULT '0',

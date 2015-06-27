@@ -39,8 +39,8 @@ if( preg_match( $global_config['check_theme'], $theme1 ) and preg_match( $global
 		while( $row = $sth->fetch() )
 		{
 			$_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
-				(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-				(:theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', ' . $row['active'] . ', :groups_view, :all_func, :weight, :config )';
+				(theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES
+				(:theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', ' . $row['active'] . ', ' . $row['hide_device'] . ', :groups_view, :all_func, :weight, :config )';
 
 			$data = array();
 			$data['theme'] = $theme2;

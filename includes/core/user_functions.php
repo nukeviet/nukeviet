@@ -51,7 +51,7 @@ function nv_create_submenu()
  */
 function nv_blocks_content( $sitecontent )
 {
-	global $db, $module_info, $module_name, $op, $global_config, $lang_global, $sys_mods, $user_info, $themeConfig;
+	global $db, $module_info, $module_name, $op, $global_config, $lang_global, $sys_mods, $user_info, $client_info, $themeConfig;
 
 	$_posAllowed = array();
 
@@ -123,6 +123,7 @@ function nv_blocks_content( $sitecontent )
 				'file_name' => $_row['file_name'],
 				'template' => $_row['template'],
 				'exp_time' => $_row['exp_time'],
+				'hide_device' => $_row['hide_device'],
 				'groups_view' => $_row['groups_view'],
 				'all_func' => $_row['all_func'],
 				'block_config' => $block_config
@@ -147,6 +148,21 @@ function nv_blocks_content( $sitecontent )
 			if( $_row['exp_time'] != 0 and $_row['exp_time'] <= NV_CURRENTTIME )
 			{
 				$unact[] = $_row['bid'];
+				continue;
+			}
+			if( $client_info['is_tablet'] and $_row['hide_device'] == 2 )
+			{
+
+			}
+
+			if( $client_info['is_mobile'] and $_row['hide_device'] == 2 )
+			{
+				//Ẩn trên mobile + Máy tính bảng
+				continue;
+			}
+			elseif( $client_info['is_mobile'] and ! $client_info['is_tablet'] and $_row['hide_device'] == 1 )
+			{
+				// Ẩn trên mobile, không ẩn trên máy tính bảng
 				continue;
 			}
 

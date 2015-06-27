@@ -78,6 +78,7 @@ function nv_create_table_sys( $lang )
 		 position VARCHAR2(55 CHAR)DEFAULT '',
 		 exp_time NUMBER(11,0) DEFAULT 0,
 		 active NUMBER(3,0) DEFAULT 0,
+		 hide_device NUMBER(3,0) DEFAULT 0,
 		 groups_view VARCHAR2(255 CHAR) DEFAULT '',
 		 all_func NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 weight NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,
