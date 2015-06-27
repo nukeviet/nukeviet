@@ -12,7 +12,6 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['order_title'];
 $table_name = $db_config['prefix'] . "_" . $module_data . "_orders";
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:order';
 
 $checkss = $nv_Request->get_string( 'checkss', 'get', '' );
 $where = '';

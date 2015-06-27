@@ -18,7 +18,6 @@ if( !defined( 'NV_IS_SPADMIN' ) )
 }
 
 $page_title = $lang_module['template'];
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:template';
 $error = "";
 $savecat = 0;
 

@@ -17,7 +17,6 @@ if( !$pro_config['active_warehouse'] )
 }
 
 $page_title = sprintf( $lang_module['warehouse_day'], nv_date( 'd/m/Y', NV_CURRENTTIME ) );
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:warehouse';
 
 if( $nv_Request->isset_request( 'checkss', 'get' ) and $nv_Request->get_string( 'checkss', 'get' ) == md5( $global_config['sitekey'] . session_id() ) )
 {

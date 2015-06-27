@@ -11,8 +11,6 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) )
 	die( 'Stop!!!' );
 
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:review';
-
 if( $nv_Request->isset_request( 'del', 'post,get' ) )
 {
 	$dellist = $nv_Request->isset_request( 'dellist', 'post,get' );

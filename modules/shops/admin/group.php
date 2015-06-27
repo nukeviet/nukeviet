@@ -11,7 +11,6 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['group'];
-$url_instruction = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:group';
 
 $table_name = $db_config['prefix'] . '_' . $module_data . '_group';
 $error = $admins = '';
