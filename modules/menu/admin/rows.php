@@ -478,14 +478,13 @@ if( $post['id'] != 0 )
 					$item['selected'] = ( $item['alias'] == $post['op'] ) ? ' selected="selected"' : '';
 					$xtpl->assign( 'item', $item );
 					$xtpl->parse( 'main.link.item' );
-					foreach( $array_item as $subitem )
+					if( isset( $item['parentid'] ) )
 					{
-						if( isset( $subitem['parentid'] ) and $subitem['parentid'] === $key )
+						$array_submenu = array();
+						nv_menu_get_submenu( $key, $post['op'], $array_item, $sp );
+						foreach( $array_submenu as $item2 )
 						{
-							$subitem['title'] = $sp . $subitem['title'];
-							$subitem['module'] = $mod_name;
-							$subitem['selected'] = ( $subitem['alias'] == $post['op'] ) ? ' selected="selected"' : '';
-							$xtpl->assign( 'item', $subitem );
+							$xtpl->assign( 'item', $item2 );
 							$xtpl->parse( 'main.link.item' );
 						}
 					}

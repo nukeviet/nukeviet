@@ -127,4 +127,26 @@ function nv_menu_del_sub( $id, $parentid )
 	}
 }
 
+/**
+ * @param int $id
+ * @param array $array_item
+ * @param string $sp_i
+ */
+function nv_menu_get_submenu( $id, $alias_selected, $array_item, $sp_i )
+{
+	global  $array_submenu, $sp, $mod_name;
+	foreach( $array_item as $item2 )
+	{
+		if( isset( $item2['parentid'] ) and $item2['parentid'] == $id )
+		{
+			$item2['title'] = $sp_i . $item2['title'];
+			$item2['module'] = $mod_name;
+			$item2['selected'] = ( $item2['alias'] == $alias_selected ) ? ' selected="selected"' : '';
+
+			$array_submenu[]= $item2;
+			nv_menu_get_submenu( $item2['key'], $alias_selected, $array_item, $sp_i . $sp );
+		}
+	}
+}
+
 define( 'NV_IS_FILE_ADMIN', true );
