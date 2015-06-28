@@ -391,7 +391,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['alias'] = $alias;
 	}
 
-	$rowcontent['hometext'] = $nv_Request->get_textarea( 'hometext', 'post', '', 'br', 1 );
+	$rowcontent['hometext'] = $nv_Request->get_textarea( 'hometext', '', 'br', 1 );
 
 	$rowcontent['homeimgfile'] = $nv_Request->get_title( 'homeimg', 'post', '' );
 	$rowcontent['homeimgalt'] = $nv_Request->get_title( 'homeimgalt', 'post', '', 1 );
@@ -879,6 +879,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$id_block_content = $id_block_content_post;
 }
 
+$rowcontent['hometext'] = nv_htmlspecialchars( nv_br2nl( $rowcontent['hometext'] ) );
 $rowcontent['bodyhtml'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['bodyhtml'] ) );
 
 if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
