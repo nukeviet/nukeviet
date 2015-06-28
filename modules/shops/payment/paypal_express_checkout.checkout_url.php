@@ -122,7 +122,7 @@ $insuranceTotal = new BasicAmountType($currencyCode, 0); // Phí bảo hiểm
 
 // Thông tin người nhận
 $address = new AddressType();
-$address->CityName = $data['order_address'];
+$address->CityName = '';
 $address->Name = $data['order_name'];
 $address->Street1 = '';
 $address->StateOrProvince = '';
