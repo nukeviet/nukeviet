@@ -482,7 +482,7 @@ function user_lostpass_new( $userid, $k )
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
 	$xtpl->assign( 'USERID', $userid );
 	$xtpl->assign( 'K', $k );
-	
+
 	$xtpl->parse( 'main.new_pass' );
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -1254,9 +1254,7 @@ function nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields
 	$xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' );
 	$xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
 
-	$item['full_name'] = ( $global_config['name_show'] )  ? $item['first_name'] . ' ' . $item['last_name'] : $item['last_name'] . ' ' . $item['first_name'];
-	$item['full_name'] = trim( $item['full_name'] );
-
+	$item['full_name'] = nv_show_name_user( $item['first_name'], $item['last_name'] );
 	if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . '/' . $item['photo'] ) )
 	{
 		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . $item['photo'] );
