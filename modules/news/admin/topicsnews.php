@@ -10,15 +10,15 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$page_title = $lang_module['topic_page'];
-$set_active_op = 'topics';
-
 $topicid = $nv_Request->get_int( 'topicid', 'get' );
-if( ! $topicid )
+$topictitle = $db->query( 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid =' . $topicid )->fetchColumn();
+if( empty( $topictitle ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=topics' );
 	die();
 }
+
+$page_title = $lang_module['topic_page'] . ': ' . $topictitle;
 
 $global_array_cat = array();
 
@@ -61,6 +61,7 @@ else
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
+$set_active_op = 'topics';
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
