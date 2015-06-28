@@ -69,9 +69,7 @@ if( !empty( $array_item ) )
 		}
 	}
 
-	$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module );
 	$xtpl->parse( 'main.link' );
-
 	$contents = $xtpl->text( 'main.link' );
 
 	include NV_ROOTDIR . '/includes/header.php';
