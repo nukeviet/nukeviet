@@ -60,6 +60,8 @@ else
 	$data['answer'] = nv_substr( $nv_Request->get_title( 'answer', 'post', '', 1 ), 0, 255 );
 	$data['send'] = $nv_Request->get_bool( 'send', 'post', false );
 	$data['nv_seccode'] = $nv_Request->get_title( 'nv_seccode', 'post', '' );
+	$data['nv_redirect'] = $nv_Request->get_title( 'nv_redirect', 'get, post', '' );
+
 	$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 	$seccode = $nv_Request->get_string( 'lostpass_seccode', 'session', '' );
 
@@ -136,11 +138,11 @@ else
 							$password_new = nv_genpass( $rand );
 
 							$passlostkey = md5( $row['userid'] . $password_new . $global_config['sitekey'] );
-							$k = md5( $row['userid'] . $passlostkey . $global_config['sitekey'] );							
-							
+							$k = md5( $row['userid'] . $passlostkey . $global_config['sitekey'] );
+
 							$subject = sprintf( $lang_module['lostpass_email_subject'], $global_config['site_name'] );
 							$link_lostpass_content_email = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&u=' . $row['userid'] . '&k=' . $k;
-							
+
 							$row['full_name'] = nv_show_name_user( $row['first_name'], $row['last_name'], $row['username'] );
 							$message = sprintf( $lang_module['lostpass_email_content'], $row['full_name'], $global_config['site_name'], $link_lostpass_content_email, $row['username'] );
 
@@ -159,8 +161,10 @@ else
 							{
 								$info = $lang_global['error_sendmail'];
 							}
+
+							$nv_redirect = ! empty( $data['nv_redirect'] ) ? nv_base64_decode( $data['nv_redirect'] ) : nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true );
 							$contents = user_info_exit( $info );
-							$contents .= '<meta http-equiv="refresh" content="10;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
+							$contents .= '<meta http-equiv="refresh" content="10;url=' . $nv_redirect . '" />';
 
 							include NV_ROOTDIR . '/includes/header.php';
 							echo nv_site_theme( $contents );
