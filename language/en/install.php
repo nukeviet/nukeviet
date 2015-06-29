@@ -17,7 +17,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'NukeViet Setup';
+$lang_module['titlesetup'] = 'Setup NukeViet 4.0 Release Candidate';
 $lang_module['select_language'] = 'Select languages';
 $lang_module['license'] = 'License';
 $lang_module['check_server'] = 'Check server';
