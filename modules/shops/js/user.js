@@ -79,7 +79,7 @@ function cartorder_detail(a_ob, popup, buy_now) {
 	var label = '';
 
 	var i = 0;
-	$('.itemsgroup').each(function(){
+	$('.label_group').each(function(){
 		if( $('input[name="groupid['+$(this).attr('data-groupid')+']"]:checked').length == 0 )
 		{
 			i++;

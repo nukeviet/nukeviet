@@ -183,7 +183,7 @@
 									{HEADER}
 								</div>
 								<!-- END: header -->
-								<div class="col-xs-16 col-sm-19 itemsgroup" data-groupid="{GROUPID}" data-header="{HEADER}">
+								<div class="col-xs-16 col-sm-19" data-groupid="{GROUPID}" data-header="{HEADER}">
 									<!-- BEGIN: loop -->
 									<label class="label_group <!-- BEGIN: active -->active<!-- END: active -->"><input type="radio" class="groupid" name="groupid[{GROUPID}]" value="{GROUP.groupid}" <!-- BEGIN: checked -->checked="checked" <!-- END: checked -->>{GROUP.title}</label>
 									<!-- END: loop -->
