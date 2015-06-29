@@ -33,7 +33,7 @@ function getgroup_ckhtml( $subgroupid_i, $array_groupid_in_row )
 				$image = '<img src="' . $image . '" style="margin-top: -3px; max-width: 16px; max-height: 16px" alt="' . $groupinfo_i['title'] . '" />';
 
 			}
-			$contents_temp .= '<label style="margin-right: 15px; line-height:25px"><input type="checkbox" name="groupids[]" value="' . $groupid_i . '"' . $ch . ' />' . $image . $data_group['title'] . '</label>';
+			$contents_temp .= '<label class="col-xs-24 col-sm-4"><input type="checkbox" name="groupids[]" value="' . $groupid_i . '"' . $ch . ' />' . $image . $data_group['title'] . '</label>';
 		}
 	}
 	return $contents_temp;
@@ -66,8 +66,8 @@ if( $cid > 0 )
 			$require = ' <span class="require">(*)</span>';
 		}
 		$contents_temp_cate .= '<div class="row">';
-		$contents_temp_cate .= '<div class="col-sm-4 text-right"><strong>' . $data_group['title'] . $require . '</strong></div>';
-		$contents_temp_cate .= '<div class="col-sm-20">';
+		$contents_temp_cate .= '<label class="col-sm-3 control-label"><strong>' . $data_group['title'] . $require . '</strong></label>';
+		$contents_temp_cate .= '<div class="col-sm-21">';
 		if( $data_group['numsubgroup'] > 0 )
 		{
 			$contents_temp_cate .= getgroup_ckhtml( $subgroupid_i, $array_groupid_in_row );

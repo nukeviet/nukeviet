@@ -267,6 +267,7 @@ $lang_module['view'] = 'Views';
 $lang_module['views'] = 'Views';
 $lang_module['date_from'] = 'From day';
 $lang_module['date_to'] = 'Date to';
+$lang_module['product_info'] = 'Product info';
 $lang_module['order_info'] = 'Order informations';
 $lang_module['order_date'] = 'Ordered on';
 $lang_module['order_moment'] = 'at';
