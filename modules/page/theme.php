@@ -21,14 +21,6 @@ function nv_page_main( $row, $ab_links, $content_comment)
 {
 	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config;
 
-	if( ! defined( 'SHADOWBOX' ) )
-	{
-		$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
-		define( 'SHADOWBOX', true );
-	}
-
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CONTENT', $row );
@@ -92,7 +84,7 @@ function nv_page_main( $row, $ab_links, $content_comment)
  */
 function nv_page_main_list( $array_data, $generate_page )
 {
-	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config, $module_name;
+	global $module_file, $lang_module, $module_upload, $module_info, $meta_property, $my_head, $client_info, $page_config, $module_name;
 
 	$template = ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file .'/main_list.tpl' ) ) ? $module_info['template'] : 'default';
 
@@ -105,7 +97,7 @@ function nv_page_main_list( $array_data, $generate_page )
 		{
 			if( ! empty( $data['image'] ) )
 			{
-				$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data['image'];
+				$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data['image'];
 				$data['imagealt'] = ! empty( $data['imagealt'] ) ? $data['imagealt'] : $data['title'];
 			}
 

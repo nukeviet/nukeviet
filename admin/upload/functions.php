@@ -69,6 +69,16 @@ function nv_check_allow_upload_dir( $dir )
 		return $level;
 	}
 
+	$mod_name = '';
+	foreach ( $site_mods as $_mod_name_i => $_row_i )
+	{
+		if( $_row_i['module_upload'] == $_dir_mod )
+		{
+			$mod_name = $_mod_name_i;
+			break;
+		}
+	}
+
 	// Quyen cua dieu hanh toi cao va dieu hanh chung
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
@@ -87,7 +97,7 @@ function nv_check_allow_upload_dir( $dir )
 			$level['delete_dir'] = true;
 
 			// Khong doi ten, xoa thu muc upload cua module hoac thu muc co chua thu muc con
-			if( isset( $site_mods[$_dir_mod] ) and ! empty( $_dir_mod_sub ) )
+			if( isset( $site_mods[$mod_name] ) and ! empty( $_dir_mod_sub ) )
 			{
 				unset( $level['rename_dir'], $level['delete_dir'] );
 			}
@@ -110,7 +120,7 @@ function nv_check_allow_upload_dir( $dir )
             $level['rotate_file'] = true;
 		}
 	}
-	elseif( isset( $site_mods[$_dir_mod] ) )
+	elseif( isset( $site_mods[$mod_name] ) )
 	{
 		$level['view_dir'] = true;
 
@@ -402,7 +412,22 @@ function nv_getFileInfo( $pathimg, $file )
 	}
 	elseif( in_array( $ext, $array_documents ) )
 	{
-		$info['src'] = 'images/doc.gif';
+		if( $ext == 'doc' or $ext == 'docx' )
+		{
+			$info['src'] = 'images/msword.png';
+		}
+		elseif( $ext == 'xls' or $ext == 'xlsx' )
+		{
+			$info['src'] = 'images/excel.png';
+		}
+		elseif( $ext == 'pdf' )
+		{
+			$info['src'] = 'images/pdf.png';
+		}
+		else
+		{
+			$info['src'] = 'images/doc.gif';
+		}
 	}
 
 	$info['userid'] = 0;

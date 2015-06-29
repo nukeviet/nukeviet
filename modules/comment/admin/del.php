@@ -19,13 +19,13 @@ if( ! empty( $listcid ) )
 	$listcid = implode( ', ', $cid_array );
 
 	// Xac dinh ID cac bai viet
-	$sql = 'SELECT DISTINCT id, module FROM ' . NV_PREFIXLANG . '_comments WHERE cid IN (' . $listcid . ')';
+	$sql = 'SELECT DISTINCT id, module FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid IN (' . $listcid . ')';
 	$array_row_id = $db->query( $sql )->fetchAll();
 	// Het Xac dinh ID cac bai viet
 
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
-		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE cid IN (' . $listcid . ')' );
+		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid IN (' . $listcid . ')' );
 	}
 	elseif( ! empty( $site_mod_comm ) )
 	{
@@ -34,7 +34,7 @@ if( ! empty( $listcid ) )
 		{
 			$array_mod_name[] = "'" . $module_i . "'";
 		}
-		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE cid IN (' . $listcid . ') AND module IN (' . implode( ', ', $array_mod_name ) . ')' );
+		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid IN (' . $listcid . ') AND module IN (' . implode( ', ', $array_mod_name ) . ')' );
 	}
 	else
 	{
@@ -52,6 +52,7 @@ if( ! empty( $listcid ) )
 			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
 			{
 				include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
+				nv_del_moduleCache( $row['module'] );
 			}
 		}
 	}

@@ -82,3 +82,5 @@ $lang_module['captcha_0'] = 'Hide';
 $lang_module['captcha_1'] = 'If not a user';
 $lang_module['captcha_2'] = 'If not the manager comment';
 $lang_module['captcha_3'] = 'Display at all';
+
+$lang_module['siteinfo_queue_comments'] = 'Total commments need approval';

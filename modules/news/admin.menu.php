@@ -74,9 +74,8 @@ else
 	}
 }
 
-$allow_func = array( 'main', 'view', 'stop', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'alias', 'topicajax', 'sourceajax', 'tagsajax', 'cat', 'change_cat', 'list_cat', 'del_cat' );
+$allow_func = array( 'main', 'view', 'stop', 'publtime', 'waiting', 'declined', 're-published', 'content', 'rpc', 'del_content', 'alias', 'topicajax', 'sourceajax', 'tagsajax' );
 
-$submenu['cat'] = $lang_module['categories'];
 if( ! isset( $site_mods['cms'] ) )
 {
 	$submenu['content'] = $lang_module['content_add'];
@@ -84,12 +83,18 @@ if( ! isset( $site_mods['cms'] ) )
 
 if( $NV_IS_ADMIN_MODULE )
 {
+	$submenu['cat'] = $lang_module['categories'];
 	$submenu['tags'] = $lang_module['tags'];
 	$submenu['groups'] = $lang_module['block'];
 	$submenu['topics'] = $lang_module['topics'];
 	$submenu['sources'] = $lang_module['sources'];
-	$submenu['setting'] = $lang_module['setting'];
 	$submenu['admins'] = $lang_module['admin'];
+	$submenu['setting'] = $lang_module['setting'];
+
+	$allow_func[] = 'cat';
+	$allow_func[] = 'change_cat';
+	$allow_func[] = 'list_cat';
+	$allow_func[] = 'del_cat';
 
 	$allow_func[] = 'admins';
 	$allow_func[] = 'topicsnews';
@@ -116,5 +121,4 @@ if( $NV_IS_ADMIN_MODULE )
 	$allow_func[] = 'tags';
 	$allow_func[] = 'setting';
 	$allow_func[] = 'move';
-	$allow_func[] = 'tools';
 }

@@ -49,32 +49,27 @@ if( !empty( $array_item ) )
 	$xtpl = new XTemplate( 'rows.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
-	foreach( $array_item as $key => $item )
+	foreach( $array_item as $key => $item1 )
 	{
-		$parentid = ( isset( $item['parentid'] )) ? $item['parentid'] : 0;
+		$parentid = ( isset( $item1['parentid'] )) ? $item1['parentid'] : 0;
 		if( empty( $parentid ) )
 		{
-			$item['module'] = $mod_name;
+			$item1['module'] = $mod_name;
 
-			$xtpl->assign( 'item', $item );
+			$xtpl->assign( 'item', $item1 );
 			$xtpl->parse( 'main.link.item' );
 
-			foreach( $array_item as $subitem )
+			$array_submenu = array();
+			nv_menu_get_submenu( $key, '', $array_item, $sp );
+			foreach( $array_submenu as $item2 )
 			{
-				if( isset( $subitem['parentid'] ) and $subitem['parentid'] == $key )
-				{
-					$subitem['title'] = $sp . $subitem['title'];
-					$subitem['module'] = $mod_name;
-					$xtpl->assign( 'item', $subitem );
-					$xtpl->parse( 'main.link.item' );
-				}
+				$xtpl->assign( 'item', $item2 );
+				$xtpl->parse( 'main.link.item' );
 			}
 		}
 	}
 
-	$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module );
 	$xtpl->parse( 'main.link' );
-
 	$contents = $xtpl->text( 'main.link' );
 
 	include NV_ROOTDIR . '/includes/header.php';

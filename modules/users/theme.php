@@ -32,8 +32,14 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 				 });";
 	$my_head .= " </script>\n";
 
+	$user_register = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register';
+	if( ! empty( $array_register['nv_redirect'] ) )
+	{
+		$user_register .= '&nv_redirect=' . $array_register['nv_redirect'];
+	}
+
 	$xtpl = new XTemplate( 'register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register' );
+	$xtpl->assign( 'USER_REGISTER', $user_register );
 	$xtpl->assign( 'NICK_MAXLENGTH', NV_UNICKMAX );
 	$xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -214,7 +220,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
  * @param mixed $data_questions
  * @return
  */
-function openid_register( $gfx_chk, $array_register, $siteterms, $data_questions )
+function openid_register( $array_register, $siteterms, $data_questions )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head, $nv_redirect;
 
@@ -243,18 +249,6 @@ function openid_register( $gfx_chk, $array_register, $siteterms, $data_questions
 		$xtpl->assign( 'QUESTIONVALUE', $array_question_i );
 		$xtpl->parse( 'main.frquestion' );
 	}
-
-	if( $gfx_chk )
-	{
-		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
-		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
-		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
-		$xtpl->parse( 'main.captcha' );
-	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -280,9 +274,17 @@ function user_login( $gfx_chk, $array_login )
 		 });";
 	$my_head .= " </script>\n";
 
+	$user_register = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register';
+	$user_lostpass = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass';
+	if( !empty( $array_login['nv_redirect'] ) )
+	{
+		$user_register .= '&nv_redirect=' . $array_login['nv_redirect'];
+		$user_lostpass .= '&nv_redirect=' . $array_login['nv_redirect'];
+	}
+
 	$xtpl->assign( 'USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login' );
-	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register' );
-	$xtpl->assign( 'USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
+	$xtpl->assign( 'USER_REGISTER', $user_register );
+	$xtpl->assign( 'USER_LOSTPASS', $user_lostpass );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $array_login );
 
@@ -454,15 +456,21 @@ function user_lostpass( $data, $question )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'DATA', $data );
 
+	$form_action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass';
+	if( ! empty( $data['nv_redirect'] ) )
+	{
+		$form_action .= '&nv_redirect=' . $data['nv_redirect'];
+	}
+
 	if( $data['step'] == 2 )
 	{
-		$xtpl->assign( 'FORM2_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
+		$xtpl->assign( 'FORM2_ACTION', $form_action );
 		$xtpl->assign( 'QUESTION', $question );
 		$xtpl->parse( 'main.step2' );
 	}
 	else
 	{
-		$xtpl->assign( 'FORM1_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
+		$xtpl->assign( 'FORM1_ACTION', $form_action );
 		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
@@ -473,6 +481,29 @@ function user_lostpass( $data, $question )
 		$xtpl->parse( 'main.step1' );
 	}
 
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+/**
+ * user_lostpass_new()
+ *
+ * @param mixed $data
+ * @param mixed $question
+ * @return
+ */
+function user_lostpass_new( $userid, $k )
+{
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
+
+	$xtpl = new XTemplate( 'lostpass.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
+	$xtpl->assign( 'USERID', $userid );
+	$xtpl->assign( 'K', $k );
+
+	$xtpl->parse( 'main.new_pass' );
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -720,6 +751,8 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 	{
 		$xtpl->parse( 'main.add_photo' );
 	}
+
+	$xtpl->parse( 'main.name_show_' . $global_config['name_show'] );
 
 	// Parse custom fields
 	if( ! empty( $array_field_config ) )
@@ -1241,9 +1274,7 @@ function nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields
 	$xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' );
 	$xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
 
-	$item['full_name'] = ( $global_config['name_show'] )  ? $item['first_name'] . ' ' . $item['last_name'] : $item['last_name'] . ' ' . $item['first_name'];
-	$item['full_name'] = trim( $item['full_name'] );
-
+	$item['full_name'] = nv_show_name_user( $item['first_name'], $item['last_name'] );
 	if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . '/' . $item['photo'] ) )
 	{
 		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . $item['photo'] );

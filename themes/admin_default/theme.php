@@ -74,7 +74,7 @@ function nv_get_submenu_mod( $module_name )
 
 function nv_admin_theme( $contents, $head_site = 1 )
 {
-	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title;
+	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title, $array_url_instruction, $op;
 
 	$dir_template = '';
 
@@ -271,8 +271,8 @@ function nv_admin_theme( $contents, $head_site = 1 )
 					{
 						$xtpl->assign( 'MENU_SUB_HREF', $m );
 						$xtpl->assign( 'MENU_SUB_OP', $n );
-						$xtpl->assign( 'MENU_SUB_NAME', $l );
-						$xtpl->parse( 'main.menu_loop.submenu.submenu_loop' );
+						$xtpl->assign( 'MENU_SUB_NAME', ( is_array( $l ) and isset( $l['title'] ) ) ? $l['title'] : $l );
+						$xtpl->parse( 'main.menu_loop.submenu.loop' );
 					}
 					$xtpl->parse( 'main.menu_loop.submenu' );
 				}
@@ -281,10 +281,32 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			{
 				foreach( $submenu as $n => $l )
 				{
-					$xtpl->assign( 'MENU_SUB_CURRENT', ((( ! empty( $op ) and $op == $n) or ( ! empty( $set_active_op ) and $set_active_op == $n)) ? "subactive" : "subcurrent") );
+					if( is_array( $l ) and isset( $l['submenu'] ) )
+					{
+						$_subtitle = $l['title'];
+						$_submenu_i = $l['submenu'];
+					}
+					else
+					{
+						$_subtitle = $l;
+						$_submenu_i = '';
+					}
+					$xtpl->assign( 'MENU_SUB_CURRENT', ( ( ( ! empty( $op ) and $op == $n ) or ( ! empty( $set_active_op ) and $set_active_op == $n) ) ? "subactive" : "subcurrent" ) );
 					$xtpl->assign( 'MENU_SUB_HREF', $m );
 					$xtpl->assign( 'MENU_SUB_OP', $n );
-					$xtpl->assign( 'MENU_SUB_NAME', $l );
+					$xtpl->assign( 'MENU_SUB_NAME', $_subtitle );
+					$xtpl->assign( 'MENU_CLASS', '');
+					if( ! empty( $_submenu_i ) )
+					{
+						$xtpl->assign( 'MENU_CLASS', ' class="dropdown"');
+						foreach( $_submenu_i as $sn => $sl )
+						{
+							$xtpl->assign( 'CUR_SUB_OP', $sn );
+							$xtpl->assign( 'CUR_SUB_NAME', $sl );
+							$xtpl->parse( 'main.menu_loop.current.submenu.loop' );
+						}
+						$xtpl->parse( 'main.menu_loop.current.submenu' );
+					}
 					$xtpl->parse( 'main.menu_loop.current' );
 				}
 			}
@@ -318,6 +340,20 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.site_mods' );
 	}
 
+	if( !empty( $array_url_instruction ) )
+	{
+		foreach( $array_url_instruction as $key => $value )
+		{
+			if( $op == $key and filter_var( $value, FILTER_VALIDATE_URL ) )
+			{
+				$xtpl->assign( 'NV_INSTRUCTION', $lang_global['go_instrucion'] );
+				$xtpl->assign( 'NV_URL_INSTRUCTION', $value );
+				$xtpl->parse( 'main.url_instruction' );
+				break;
+			}
+		}
+	}
+
 	/**
 	 * Breadcrumbs
 	 * Note: If active is true, the link will be dismiss
@@ -331,7 +367,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 				'title' => $page_title,
 				'link' => '',
 				'active' => true,
-			),
+			)
 		);
 	}
 
@@ -354,10 +390,8 @@ function nv_admin_theme( $contents, $head_site = 1 )
 			{
 				$xtpl->parse( 'main.breadcrumbs.loop.text' );
 			}
-
 			$xtpl->parse( 'main.breadcrumbs.loop' );
 		}
-
 		$xtpl->parse( 'main.breadcrumbs' );
 	}
 

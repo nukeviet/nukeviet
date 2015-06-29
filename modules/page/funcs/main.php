@@ -31,7 +31,7 @@ if( $id )
 
 	if( ! empty( $rowdetail['image'] ) && ! nv_is_url( $rowdetail['image'] ) )
 	{
-		$rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowdetail['image'];
+		$rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'];
 	}
 	$rowdetail['add_time'] = nv_date( 'H:i T l, d/m/Y', $rowdetail['add_time'] );
 	$rowdetail['edit_time'] = nv_date( 'H:i T l, d/m/Y', $rowdetail['edit_time'] );
@@ -91,11 +91,7 @@ if( $id )
 	    $area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
 	    $checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
 
-	    //get url comment
-	    $url_info = parse_url( $client_info['selfurl'] );
-	    $url_comment = $url_info['path'];
-
-	    $content_comment = nv_comment_module( $module_name, $url_comment, $checkss, $area, NV_COMM_ID, $allowed, 1 );
+	    $content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 	}
 	else
 	{
@@ -116,7 +112,7 @@ else
     $db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_' . $module_data );
     $num_items = $db->query( $db->sql() )->fetchColumn();
 
-    $db->select( '*' )->order( 'id' )->limit( $per_page )->offset( ($page - 1) * $per_page);
+    $db->select( '*' )->order( 'weight' )->limit( $per_page )->offset( ($page - 1) * $per_page);
 
     $result = $db->query($db->sql());
 	while( $row = $result->fetch() )

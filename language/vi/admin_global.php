@@ -34,6 +34,7 @@ $lang_global['mod_subsite'] = 'Quản lý site con';
 $lang_global['mod_extensions'] = 'Mở rộng';
 $lang_global['go_clientsector'] = 'Trang chủ site';
 $lang_global['go_clientmod'] = 'Xem ngoài site';
+$lang_global['go_instrucion'] = 'Tài liệu hướng dẫn';
 $lang_global['please_select'] = 'Hãy lựa chọn';
 $lang_global['admin_password_empty'] = 'Mật khẩu quản trị của bạn chưa được khai báo';
 $lang_global['adminpassincorrect'] = 'Mật khẩu quản trị &ldquo;<strong>%s</strong>&rdquo; không chính xác. Hãy thử lại lần nữa';
@@ -51,11 +52,6 @@ $lang_global['login_error_password'] = 'Lỗi: Password của Admin chưa đư�
 $lang_global['login_error_security'] = 'Lỗi: Mã kiểm tra chưa được khai báo hoặc khai báo không hợp lệ! (Phải có %1$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin và số)';
 $lang_global['error_zlib_support'] = 'Lỗi: Máy chủ của bạn không hỗ trợ thư viện zlib, bạn cần liên hệ với nhà cung cấp dịch vụ hosting bật thư viện zlib để có thể sử dụng tính năng này.';
 $lang_global['error_zip_extension'] = 'Lỗi: Máy chủ của bạn không hỗ trợ extension ZIP, bạn cần liên hệ với nhà cung cấp dịch vụ hosting bật extension ZIP để có thể sử dụng tính năng này.';
-
-$lang_global['msgbeforeunload'] = 'Bạn có chắc chắn chuyển sang trang khác, Nếu thực hiện dữ liệu sẽ không được lưu';
-$lang_global['timeoutsess_nouser'] = 'Bạn đã không sử dụng Site';
-$lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng thái đăng nhập';
-$lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
 
 $lang_global['length_characters'] = 'Số ký tự';
 $lang_global['length_suggest_max'] = 'Nên nhập tối đa %s ký tự';

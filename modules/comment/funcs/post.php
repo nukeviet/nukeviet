@@ -21,7 +21,6 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 	$id = $nv_Request->get_int( 'id', 'post' );
 	$allowed_comm = $nv_Request->get_title( 'allowed', 'post' );
 	$checkss = $nv_Request->get_title( 'checkss', 'post' );
-    $url_comment = $nv_Request->get_title( 'url_comment', 'post', '' );
 	if( $id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX ) )
 	{
 		// Kiểm tra quyền đăng bình luận
@@ -40,6 +39,15 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 			$status = $module_config[$module]['auto_postcomm'];
 
 			$timeout = $nv_Request->get_int( $module_name . '_timeout', 'cookie', 0 );
+
+			if( ( $status == 2 and !defined( 'NV_IS_USER' ) ) or $status == 0 )
+			{
+				$status = 0;
+			}
+			else
+			{
+				$status = 1;
+			}
 
 			if( defined( 'NV_IS_USER' ) )
 			{
@@ -94,13 +102,12 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 
 				try
 				{
-					$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_comments (module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, url_comment, status) VALUES (:module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, :url_comment, ' . $status . ')' );
+					$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status) VALUES (:module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')' );
 					$stmt->bindParam( ':module', $module, PDO::PARAM_STR );
 					$stmt->bindParam( ':content', $content, PDO::PARAM_STR, strlen( $content ) );
 					$stmt->bindParam( ':post_name', $name, PDO::PARAM_STR );
 					$stmt->bindParam( ':post_email', $email, PDO::PARAM_STR );
 					$stmt->bindValue( ':post_ip', NV_CLIENT_IP, PDO::PARAM_STR );
-                    $stmt->bindValue( ':url_comment', $url_comment, PDO::PARAM_STR );
 					$stmt->execute();
 					if( $stmt->rowCount() )
 					{
@@ -116,12 +123,16 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 								include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
 							}
 						}
-						$contents = 'OK_' . $lang_module['comment_success'];
+
+						$comment_success = $status ? $lang_module['comment_success'] : $lang_module['comment_success_queue'];
+						$contents = 'OK_' . nv_base64_encode( $comment_success );
 					}
 				}
 				catch( PDOException $e )
 				{
-					//$contents = 'ERR_' . $e->getMessage();
+					print_r($e);
+					die();
+					$contents = 'ERR_' . $e->getMessage();
 				}
 			}
 			else

@@ -42,7 +42,24 @@
 	<p style="font-weight: bold;text-align: justify;font-style: italic;">{CONTENT.description}</p>
 	<!-- BEGIN: image -->
 	<div class="image text-center">
-		<a rel="shadowbox" href="{CONTENT.image}"><img src="{CONTENT.image}" class="img-thumbnail" /></a>
+		<a href="#" id="pop" title="{CONTENT.title}">
+            <img id="imageresource" alt="{CONTENT.imagealt}" src="{CONTENT.image}" class="img-thumbnail" >
+        </a>
+
+        <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">{CONTENT.title}</h4>
+					</div>
+					<div class="modal-body">
+						<img src="" id="imagepreview" class="img-thumbnail">
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<em style="display: block;margin: 10px 0 10px 0;">{CONTENT.imagealt}</em>
 	</div>
 	<!-- END: image -->
@@ -64,6 +81,10 @@
 	<!-- END: other -->
 	<script type="text/javascript">
 		$(document).ready(function() {
+		    $("#pop").on("click", function() {
+               $('#imagepreview').attr('src', $('#imageresource').attr('src'));
+               $('#imagemodal').modal('show');
+            });
 			$(".bodytext img").toggleClass('img-thumbnail');
 		});
 	</script>

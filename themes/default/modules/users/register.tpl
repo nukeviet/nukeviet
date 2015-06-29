@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<div class="page">
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
@@ -180,4 +181,5 @@ $(document).ready(function() {
 	});
 });
 </script>
+</div>
 <!-- END: main -->

@@ -1,39 +1,41 @@
 <!-- BEGIN: main -->
 <div id="add">
-	<div class="table-responsive">
-		<table class="table table-striped table-bordered table-hover">
-			<colgroup>
-				<col class="w50"/>
-				<col>
-			</colgroup>
-			<thead>
-				<tr>
-					<th>&nbsp;</th>
-					<th>{LANG.name}</th>
-				</tr>
-			</thead>
-			<tfoot>
-				<tr>
-					<td class="text-center"><input name="checkall" type="checkbox"/></td>
-					<td>
-					<select class="form-control" name="topicsid">
-						<!-- BEGIN: topicsid -->
-						<option value="{TOPICSID.key}">{TOPICSID.title}</option>
-						<!-- END: topicsid -->
-					</select> 
-					<input name="update" type="button" value="{LANG.save}" /></td>
-				</tr>
-			</tfoot>
-			<tbody>
-				<!-- BEGIN: loop -->
-				<tr>
-					<td class="text-center"><input type="checkbox" value="{ROW.id}" name="idcheck"{ROW.checked}></td>
-					<td>{ROW.title}</td>
-				</tr>
-				<!-- END: loop -->
-			</tbody>
-		</table>
-	</div>
+	<form class="form-inline" role="form" action="{NV_BASE_ADMINURL}index.php" method="post">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<colgroup>
+					<col class="w50"/>
+					<col>
+				</colgroup>
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>{LANG.name}</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<td class="text-center"><input name="checkall" type="checkbox"/></td>
+						<td>
+						<select class="form-control" name="topicsid">
+							<!-- BEGIN: topicsid -->
+							<option value="{TOPICSID.key}">{TOPICSID.title}</option>
+							<!-- END: topicsid -->
+						</select> 
+						<input class="btn btn-primary" name="update" type="button" value="{LANG.save}" /></td>
+					</tr>
+				</tfoot>
+				<tbody>
+					<!-- BEGIN: loop -->
+					<tr>
+						<td class="text-center"><input type="checkbox" value="{ROW.id}" name="idcheck"{ROW.checked}></td>
+						<td>{ROW.title}</td>
+					</tr>
+					<!-- END: loop -->
+				</tbody>
+			</table>
+		</div>
+	</form>
 </div>
 <script type="text/javascript">
 	$(function() {
@@ -67,7 +69,7 @@
 				data : 'listid=' + listid + '&topicsid=' + topic,
 				success : function(data) {
 					alert(data);
-					window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topics';
+					window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid=' + topic;
 				}
 			});
 			return false;

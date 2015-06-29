@@ -86,6 +86,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
+		$module_upload = $module_info['module_upload'];
 		$include_file = NV_ROOTDIR . '/modules/' . $module_file . '/funcs/main.php';
 
 		if( file_exists( $include_file ) )
@@ -95,8 +96,16 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			{
 				$theme_type = $nv_Request->get_title( 'nv' . NV_LANG_DATA . 'themever', 'get', '', 1 );
 				$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
+				if( empty( $global_config['switch_mobi_des'] ) )
+				{
+					$array_theme_type  = array_diff( $global_config['array_theme_type'], array( 'm' ) );
+				}
+				else
+				{
+					$array_theme_type  =  $global_config['array_theme_type'];
+				}
 
-				if( in_array( $theme_type, $global_config['array_theme_type'] ) and ! empty( $global_config['switch_mobi_des'] ) ) $nv_Request->set_Cookie( 'nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME );
+				if( in_array( $theme_type, $array_theme_type ) ) $nv_Request->set_Cookie( 'nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME );
 
 				$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 				Header( 'Location: ' . nv_url_rewrite( $nv_redirect ) );
@@ -156,28 +165,36 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				require NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
 			}
 
+			// Xac dinh kieu giao dien mac dinh
+			$global_config['current_theme_type'] = $nv_Request->get_string( 'nv' . NV_LANG_DATA . 'themever', 'cookie', '' );
+
 			// Xac dinh giao dien chung
 			$is_mobile = false;
 			$theme_type = '';
 			$_theme = ( ! empty( $module_info['mobile'] ) ) ? $module_info['mobile'] : $global_config['mobile_theme'];
-			if( ( ( ! empty( $client_info['is_mobile'] ) and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == $global_config['array_theme_type'][1] and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
+			if( ( ( $client_info['is_mobile'] and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == 'm' and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
 			{
 				$global_config['module_theme'] = $_theme;
 				$is_mobile = true;
-				$theme_type = $global_config['array_theme_type'][1];
+				$theme_type = 'm';
 			}
 			else
 			{
+				if( empty( $global_config['current_theme_type'] ) and $client_info['is_mobile'] )
+				{
+					$global_config['current_theme_type'] = 'r';
+				}
+
 				$_theme = ( ! empty( $module_info['theme'] ) ) ? $module_info['theme'] : $global_config['site_theme'];
 				if( ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
 				{
 					$global_config['module_theme'] = $_theme;
-					$theme_type = $global_config['array_theme_type'][0];
+					$theme_type = $global_config['current_theme_type'];
 				}
 				elseif( file_exists( NV_ROOTDIR . '/themes/default/theme.php' ) )
 				{
 					$global_config['module_theme'] = 'default';
-					$theme_type = $global_config['array_theme_type'][0];
+					$theme_type = $global_config['current_theme_type'];
 				}
 				else
 				{

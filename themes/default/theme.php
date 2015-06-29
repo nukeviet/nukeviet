@@ -17,11 +17,13 @@ function nv_site_theme( $contents, $full = true )
 	// Determine tpl file, check exists tpl file
 	$layout_file = ( $full ) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
 
+	$responsive = ( $global_config['current_theme_type'] == 'r' ) ? true : false;
+
 	if( ! file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' . $layout_file ) )
 	{
 		nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
 	}
-	
+
 	if( isset( $global_config['sitetimestamp'] ) )
 	{
 		$global_config['timestamp'] += $global_config['sitetimestamp'];
@@ -63,17 +65,49 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
+	$xtpl->assign( 'NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ' );
+	$xtpl->assign( 'NV_SITE_NAME', $global_config['site_name'] );
+	$xtpl->assign( 'NV_SITE_TITLE', $global_config['site_name'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['admin_page'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'] );
+	$xtpl->assign( 'SITE_DESCRIPTION', $global_config['site_description'] );
+	$xtpl->assign( 'NV_CHECK_PASS_MSTIME', (intval( $global_config['user_check_pass_time'] ) - 62) * 1000 );
+	$xtpl->assign( 'MODULE_NAME', $module_name );
+	$xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
+	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
+	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+	$xtpl->assign( 'NV_SITE_TIMEZONE_OFFSET', round( NV_SITE_TIMEZONE_OFFSET / 3600 ) );
+	$xtpl->assign( 'NV_CURRENTTIME', nv_date( 'T', NV_CURRENTTIME ) );
+	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
+
+	$xtpl->assign( 'LANG_TIMEOUTSESS_NOUSER', $lang_global['timeoutsess_nouser'] );
+	$xtpl->assign( 'LANG_TIMEOUTSESS_CLICK', $lang_global['timeoutsess_click'] );
+	$xtpl->assign( 'LANG_TIMEOUTSESS_SEC', $lang_global['sec'] );
+	$xtpl->assign( 'LANG_TIMEOUTSESS_TIMEOUT', $lang_global['timeoutsess_timeout'] );
+	$xtpl->assign( 'MSGBEFOREUNLOAD', $lang_global['msgbeforeunload'] );
+
 	// System variables
 	$xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title() );
 	$xtpl->assign( 'THEME_META_TAGS', nv_html_meta_tags() );
 	$xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
 	$xtpl->assign( 'THEME_CSS', $css );
 	$xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
-	
+	$xtpl->assign( 'THEME_RESPONSIVE', (int) $responsive );
+	if( $responsive )
+	{
+		$xtpl->parse( 'main.viewport' );
+		$xtpl->parse( 'main.responsive' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.non_responsive' );
+	}
+
 	// Module contents
 	$xtpl->assign( 'MODULE_CONTENT', $contents );
 
 	// Header variables
+	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
 	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 	$xtpl->assign( 'LOGO_WIDTH', $size[0] );
@@ -86,11 +120,8 @@ function nv_site_theme( $contents, $full = true )
 	else
 	{
 		$xtpl->parse( 'main.image' );
-	}	
-	
-	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
-	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
-	
+	}
+
 	if( $op == 'main' ) $xtpl->parse( 'main.main_h1' );
 	else  $xtpl->parse( 'main.main_none_h1' );
 	// Only full theme
@@ -99,27 +130,6 @@ function nv_site_theme( $contents, $full = true )
 		// Search form variables
 		$xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
 		$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
-
-		// Multiple languages
-		if( $global_config['lang_multi'] and sizeof( $global_config['allow_sitelangs'] ) > 1 )
-		{
-			foreach( $global_config['allow_sitelangs'] as $lang_i )
-			{
-				$xtpl->assign( 'LANGSITENAME', $language_array[$lang_i]['name'] );
-				$xtpl->assign( 'LANGSITEURL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_i );
-
-				if( NV_LANG_DATA != $lang_i )
-				{
-					$xtpl->parse( 'main.language.langitem' );
-				}
-				else
-				{
-					$xtpl->parse( 'main.language.langcuritem' );
-				}
-			}
-
-			$xtpl->parse( 'main.language' );
-		}
 
 		// Breadcrumbs
 		if( $home != 1 )
@@ -154,31 +164,36 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->assign( 'THEME_STAT_IMG', $theme_stat_img );
 
 		// Change theme types
-		if( ! empty( $global_config['switch_mobi_des'] ) and ! empty( $module_info['mobile'] ) )
+		$mobile_theme = empty( $module_info['mobile'] ) ?  $global_config['mobile_theme'] : $module_info['mobile'];
+		if( empty( $mobile_theme ) or empty( $global_config['switch_mobi_des'] ))
 		{
-			$num_theme_type = sizeof( $global_config['array_theme_type'] ) - 1;
-
-			foreach( $global_config['array_theme_type'] as $i => $theme_type )
-			{
-				$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-				$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $i] );
-				$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $i] ) );
-
-				if( $theme_type == $global_config['current_theme_type'] )
-				{
-					$xtpl->parse( 'main.theme_type.loop.current' );
-				}
-				else
-				{
-					$xtpl->parse( 'main.theme_type.loop.other' );
-				}
-
-				if( $i < $num_theme_type ) $xtpl->parse( 'main.theme_type.loop.space' );
-
-				$xtpl->parse( 'main.theme_type.loop' );
-			}
-			$xtpl->parse( 'main.theme_type' );
+			$array_theme_type  = array_diff( $global_config['array_theme_type'], array( 'm' ) );
 		}
+		else
+		{
+			$array_theme_type = $global_config['array_theme_type'];
+		}
+		$num_theme_type = sizeof( $array_theme_type ) - 1;
+		foreach( $array_theme_type as $i => $theme_type )
+		{
+			$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
+			$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $theme_type] );
+			$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $theme_type] ) );
+
+			if( $theme_type == $global_config['current_theme_type'] )
+			{
+				$xtpl->parse( 'main.theme_type.loop.current' );
+			}
+			else
+			{
+				$xtpl->parse( 'main.theme_type.loop.other' );
+			}
+
+			if( $i < $num_theme_type ) $xtpl->parse( 'main.theme_type.loop.space' );
+
+			$xtpl->parse( 'main.theme_type.loop' );
+		}
+		$xtpl->parse( 'main.theme_type' );
 	}
 
 	$xtpl->parse( 'main' );

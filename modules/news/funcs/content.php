@@ -296,9 +296,9 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		$rowcontent['homeimgthumb'] = 0;
 		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and is_file( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
-			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
-			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+			if( is_file( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 			{
 				$rowcontent['homeimgthumb'] = 1;
 			}
@@ -563,14 +563,14 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 			die();
 		}
 
-		$body_contents = $db->query( "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil( $rowcontent['id'] / 2000 ) . " where id=" . $rowcontent['id'] )->fetch();
+		$body_contents = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $rowcontent['id'] / 2000 ) . ' where id=' . $rowcontent['id'] )->fetch();
 		$rowcontent = array_merge( $rowcontent, $body_contents );
 		unset( $body_contents );
 	}
 
-	if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+	if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 	{
-		$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
+		$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
 	}
 
 	$rowcontent['bodyhtml'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['bodyhtml'] ) );
@@ -686,124 +686,109 @@ elseif( defined( 'NV_IS_USER' ) )
 		$page = intval( substr( $array_op[1], 5 ) );
 	}
 
+	$contents = "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5( "0" . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
+
 	$array_catpage = array();
 
 	$db->sqlreset()
 		->select( 'COUNT(*)' )
-		->from( NV_PREFIXLANG . "_" . $module_data . "_rows" )
-		->where( "admin_id= " . $user_info['userid'] );
+		->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+		->where( 'admin_id= ' . $user_info['userid'] );
 
 	$num_items = $db->query( $db->sql() )->fetchColumn();
-
-	$db->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
-		->order( 'id DESC' )
-		->limit( $per_page )
-		->offset( ( $page - 1 ) * $per_page );
-
-	$result = $db->query( $db->sql() );
-	while( $item = $result->fetch() )
+	if( $num_items )
 	{
-		if( $item['homeimgthumb'] == 1 ) // image thumb
+		$db->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+			->order( 'id DESC' )
+			->limit( $per_page )
+			->offset( ( $page - 1 ) * $per_page );
+
+		$result = $db->query( $db->sql() );
+		while( $item = $result->fetch() )
 		{
-			$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
-		}
-		elseif( $item['homeimgthumb'] == 2 ) // image file
-		{
-			$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
-		}
-		elseif( $item['homeimgthumb'] == 3 ) // image url
-		{
-			$item['imghome'] = $item['homeimgfile'];
-		}
-		else // no image
-		{
-			$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
-		}
-
-		$item['is_edit_content'] = ( empty( $item['status'] ) or $array_post_user['editcontent'] ) ? 1 : 0;
-		$item['is_del_content'] = ( empty( $item['status'] ) or $array_post_user['delcontent'] ) ? 1 : 0;
-
-		$catid = $item['catid'];
-		$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
-		$array_catpage[] = $item;
-	}
-
-	// parse content
-	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
-
-	$a = 0;
-	foreach( $array_catpage as $array_row_i )
-	{
-		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$xtpl->assign( 'CONTENT', $array_row_i );
-		$id = $array_row_i['id'];
-		$array_link_content = array();
-
-		if( $array_row_i['is_edit_content'] )
-		{
-			$array_link_content[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['edit'] . "</a>";
-		}
-
-		if( $array_row_i['is_del_content'] )
-		{
-			$array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['delete'] . "</a>";
-		}
-
-		if( ! empty( $array_link_content ) )
-		{
-			$xtpl->assign( 'ADMINLINK', implode( '&nbsp;-&nbsp;', $array_link_content ) );
-			$xtpl->parse( 'main.viewcatloop.adminlink' );
-		}
-
-		if( $array_row_i['imghome'] != '' )
-		{
-			$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
-			$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
-			$xtpl->parse( 'main.viewcatloop.image' );
-		}
-
-		// parse list catid
-		$n = 1;
-		$array_catid = explode( ',', $array_row_i['listcatid'] );
-		$num_cat = sizeof( $array_catid );
-
-		foreach( $array_catid as $catid_i )
-		{
-			if( isset( $global_array_cat[$catid_i] ) )
+			if( $item['homeimgthumb'] == 1 ) // image thumb
 			{
-				$listcat = array( 'title' => $global_array_cat[$catid_i]['title'], 'link' => $global_array_cat[$catid_i]['link'] );
-				$xtpl->assign( 'CAT', $listcat );
-				if( $n < $num_cat )
-				{
-					$xtpl->parse( 'main.viewcatloop.cat.comma' );
-				}
-				$xtpl->parse( 'main.viewcatloop.cat' );
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
-			++$n;
+			elseif( $item['homeimgthumb'] == 2 ) // image file
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 3 ) // image url
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			else // no image
+			{
+				$item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
+			}
+
+			$item['is_edit_content'] = ( empty( $item['status'] ) or $array_post_user['editcontent'] ) ? 1 : 0;
+			$item['is_del_content'] = ( empty( $item['status'] ) or $array_post_user['delcontent'] ) ? 1 : 0;
+
+			$catid = $item['catid'];
+			$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+			$array_catpage[] = $item;
 		}
 
+
+		// parse content
+		$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+		$xtpl->assign( 'LANG', $lang_module );
+		$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
+
+		$a = 0;
+		foreach( $array_catpage as $array_row_i )
+		{
+			$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
+			$xtpl->assign( 'CONTENT', $array_row_i );
+			$id = $array_row_i['id'];
+			$array_link_content = array();
+
+			if( $array_row_i['is_edit_content'] )
+			{
+				$array_link_content[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['edit'] . "</a>";
+			}
+
+			if( $array_row_i['is_del_content'] )
+			{
+				$array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_global['delete'] . "</a>";
+			}
+
+			if( ! empty( $array_link_content ) )
+			{
+				$xtpl->assign( 'ADMINLINK', implode( '&nbsp;-&nbsp;', $array_link_content ) );
+				$xtpl->parse( 'main.viewcatloop.news.adminlink' );
+			}
+
+			if( $array_row_i['imghome'] != '' )
+			{
+				$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
+				$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
+				$xtpl->parse( 'main.viewcatloop.news.image' );
+			}
+
+			$xtpl->parse( 'main.viewcatloop.news' );
+			++$a;
+		}
 		$xtpl->parse( 'main.viewcatloop' );
-		++$a;
-	}
 
-	$contents .= "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5( "0" . $client_info['session_id'] . $global_config['sitekey'] ) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
+		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 
-	$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
+		if( ! empty( $generate_page ) )
+		{
+			$xtpl->assign( 'GENERATE_PAGE', $generate_page );
+			$xtpl->parse( 'main.generate_page' );
+		}
 
-	if( ! empty( $generate_page ) )
-	{
-		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
-		$xtpl->parse( 'main.generate_page' );
-	}
+		$xtpl->parse( 'main' );
+		$contents .= $xtpl->text( 'main' );
 
-	$xtpl->parse( 'main' );
-	$contents .= $xtpl->text( 'main' );
 
-	if( $page > 1 )
-	{
-		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+		if( $page > 1 )
+		{
+			$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+		}
 	}
 }
 elseif( $array_post_user['addcontent'] )

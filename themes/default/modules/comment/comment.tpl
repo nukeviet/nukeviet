@@ -7,10 +7,10 @@
 		</a>
 		<div class="media-body">
 			<p>{COMMENT.content}</p>
-			<div class="comment-info">
+			<div class="comment-info clearfix">
 				<em class="pull-left fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
 				<div class="pull-right text-right">
-					<ul class="comment-tool">
+					<ul class="comment-tool clearfix">
 						<!-- BEGIN: delete --><li><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_delete({COMMENT.cid}, '{COMMENT.check_like}')">{LANG.delete}</a></li><!-- END: delete -->
 						<li><em class="fa fa-reply">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_feedback({COMMENT.cid}, '{COMMENT.post_name}')">{LANG.feedback}</a></li>
 						<li><em class="fa fa-thumbs-o-up">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_commment_like({COMMENT.cid}, '{COMMENT.check_like}', '1')">{LANG.like}</a> <span id="like{COMMENT.cid}">{COMMENT.likes}</span></li>
@@ -37,10 +37,10 @@
 <!-- BEGIN: children -->
 <ul class="comment-list">
 	<!-- BEGIN: detail -->
-	<li class="media">
+	<li class="media" id="cid_{COMMENT.cid}">
 		<div class="media-body">
 			<p>{COMMENT.content}</p>
-			<div class="comment-info">
+			<div class="comment-info clearfix">
 				<em class="pull-left fa fa-user">&nbsp;</em> <strong class="cm_item">{COMMENT.post_name} </strong>
 				<div class="pull-right text-right">
 					<ul class="comment-tool">

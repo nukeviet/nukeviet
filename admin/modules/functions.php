@@ -151,10 +151,10 @@ function nv_setup_data_module( $lang, $module_name )
 
 	$return = 'NO_' . $module_name;
 
-	$sth = $db->prepare( 'SELECT module_file, module_data, theme FROM ' . $db_config['prefix'] . '_' . $lang . '_modules WHERE title= :title');
+	$sth = $db->prepare( 'SELECT module_file, module_data, module_upload, theme FROM ' . $db_config['prefix'] . '_' . $lang . '_modules WHERE title= :title');
 	$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
 	$sth->execute();
-	list( $module_file, $module_data, $module_theme ) = $sth->fetch( 3 );
+	list( $module_file, $module_data, $module_upload, $module_theme ) = $sth->fetch( 3 );
 	if( !empty( $module_file ) )
 	{
 		$module_version = array();

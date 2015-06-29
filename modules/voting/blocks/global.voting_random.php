@@ -12,7 +12,6 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 if( ! nv_function_exists( 'nv_block_voting' ) )
 {
-
 	/**
 	 * nv_block_voting()
 	 *
@@ -86,13 +85,6 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 				$block_theme = 'default';
 			}
 
-			if( ! defined( 'SHADOWBOX' ) )
-			{
-				$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-				$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-				$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-				define( 'SHADOWBOX', true );
-			}
 			$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $site_mods['voting']['module_file'] . "/js/user.js\"></script>\n";
 
 			$action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=voting';
@@ -126,6 +118,13 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 					$xtpl->parse( 'main.result1' );
 				}
 			}
+
+			if( !defined( 'MODAL_LOADED' ) )
+			{
+				$xtpl->parse( 'main.modal_loaded' );
+				define( 'MODAL_LOADED', true );
+			}
+
 			$xtpl->parse( 'main' );
 			$content = $xtpl->text( 'main' );
 		}

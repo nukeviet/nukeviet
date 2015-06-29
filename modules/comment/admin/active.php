@@ -22,7 +22,7 @@ if( ! empty( $listcid ) )
 
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
-		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_comments SET status=' . $status . ' WHERE cid IN (' . $listcid . ')' );
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $status . ' WHERE cid IN (' . $listcid . ')' );
 	}
 	elseif( ! empty( $site_mod_comm ) )
 	{
@@ -31,7 +31,7 @@ if( ! empty( $listcid ) )
 		{
 			$array_mod_name[] = "'" . $module_i . "'";
 		}
-		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_comments SET status=' . $status . ' WHERE cid IN (' . $listcid . ') AND module IN (' . implode( ', ', $array_mod_name ) . ')' );
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $status . ' WHERE cid IN (' . $listcid . ') AND module IN (' . implode( ', ', $array_mod_name ) . ')' );
 	}
 	else
 	{
@@ -44,9 +44,9 @@ if( ! empty( $listcid ) )
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_active'] . ': ' . $lang_enable, 'listcid: ' . $listcid, $admin_info['userid'] );
 
 	// Xac dinh ID cac bai viet
-	$sql = 'SELECT DISTINCT id, module FROM ' . NV_PREFIXLANG . '_comments WHERE cid in (' . $listcid . ')';
-	$query_comments = $db->query( $sql );
-	while( $row = $query_comments->fetch() )
+	$sql = 'SELECT DISTINCT id, module FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid in (' . $listcid . ')';
+	$query_comment = $db->query( $sql );
+	while( $row = $query_comment->fetch() )
 	{
 		if( isset( $site_mod_comm[$row['module']] ) )
 		{
@@ -54,6 +54,7 @@ if( ! empty( $listcid ) )
 			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
 			{
 				include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
+				nv_del_moduleCache( $row['module'] );
 			}
 		}
 	}

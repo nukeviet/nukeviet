@@ -17,10 +17,8 @@ if( empty( $global_config['idsite'] ) )
 	{
 		$submenu['countries'] = $lang_module['countries'];
 	}
-
 	$submenu['interface'] = $lang_module['nv_lang_interface'];
 	$submenu['check'] = $lang_module['nv_lang_check'];
-	$submenu['copy'] = $lang_module['nv_admin_copy'];
 	if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$submenu['setting'] = $lang_global['mod_settings'];

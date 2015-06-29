@@ -225,7 +225,7 @@ else
 	$ads = array();
 	while( $row2 = $result2->fetch() )
 	{
-		$ads[$row2['userid']] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_LANG_VARIABLE . "=" . $module_name . "&amp;admin_id=" . $row2['userid'] . "\">" . $row2['first_name'] . "</a>";
+		$ads[$row2['userid']] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;admin_id=" . $row2['userid'] . "\">" . $row2['first_name'] . "</a>";
 	}
 	$result2->closeCursor();
 

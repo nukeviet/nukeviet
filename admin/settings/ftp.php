@@ -139,18 +139,19 @@ if( $sys_info['ftp_support'] )
 			$ftp->close();
 		}
 
-		$array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $ftp_user_pass ) );
 
-		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'" );
-		foreach( $array_config as $config_name => $config_value )
-		{
-			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
-			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
-			$sth->execute();
-		}
-		
 		if( empty( $error ) )
 		{
+			$array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $ftp_user_pass ) );
+
+			$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'" );
+			foreach( $array_config as $config_name => $config_value )
+			{
+				$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+				$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+				$sth->execute();
+			}
+
 			nv_save_file_config_global();
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 			exit();

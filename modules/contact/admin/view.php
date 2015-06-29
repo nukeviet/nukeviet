@@ -76,12 +76,7 @@ if( $row['is_reply'] )
 	{
 		$sql = 'SELECT t2.username as admin_login, t2.email as admin_email, t2.first_name, t2.last_name FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id=' . intval( $row['reply_aid'] );
 		$adm_row = $db->query( $sql )->fetch();
-		$reply_name = ( $global_config['name_show'] ) ? $adm_row['first_name'] . ' ' . $adm_row['last_name'] : $adm_row['last_name'] . ' ' . $adm_row['first_name'];
-		$reply_name = trim( $reply_name );
-		if( empty( $reply_name ) )
-		{
-			$reply_name = $adm_row['admin_login'];
-		}
+		$reply_name = nv_show_name_user( $adm_row['first_name'], $adm_row['last_name'], $adm_row['admin_login'] );
 		$reply_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . intval( $row['reply_aid'] ) . '">' . $reply_name . '</a>';
 
 		$adm_row['reply_name'] = $reply_name;

@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -57,6 +57,7 @@ $lang_module['block_change_pos_warning'] = 'If you change the position of this b
 $lang_module['block_change_pos_warning2'] = 'Do you want to change position?';
 $lang_module['block_error_nogroup'] = 'Please select at least 1 group';
 $lang_module['block_error_noblock'] = 'Please select at least 1 block';
+$lang_module['block_error_nsblock'] = 'Block not yet selected or title of block invalid';
 $lang_module['block_delete_confirm'] = 'Are you sure you want to delete all the selected block. If this will not be deleted to recover?';
 $lang_module['block_delete_per_confirm'] = 'Are you sure you want to remove this block?';
 $lang_module['block_add_success'] = 'Add successful';
@@ -87,28 +88,6 @@ $lang_module['package_theme_module'] = 'Pack by module';
 $lang_module['autoinstall_continue'] = 'Next';
 $lang_module['back'] = 'Back';
 $lang_module['autoinstall_error_nomethod'] = 'Empty setup type!';
-$lang_module['autoinstall_theme_select_file'] = 'Please select packages for installation:';
-$lang_module['autoinstall_theme_error_nofile'] = 'Error: Please select the file to install';
-$lang_module['autoinstall_theme_error_filetype'] = 'Error: Install File must be in zip or gz format';
-$lang_module['autoinstall_theme_error_createfile'] = 'Error: Unable to cache file list. Check the permissions of tmp directory';
-$lang_module['autoinstall_theme_uploadedfile'] = 'The system uploaded file:';
-$lang_module['autoinstall_theme_uploadedfilesize'] = 'File size';
-$lang_module['autoinstall_theme_uploaded_filenum'] = 'Total number of files + folders:';
-$lang_module['autoinstall_theme_error_warning_fileexist'] = 'The list is on the system:';
-$lang_module['autoinstall_theme_checkfile_notice'] = 'To continue the installation , click on CHECK the system will check automatically for compatibility';
-$lang_module['autoinstall_theme_checkfile'] = 'CHECK !';
-$lang_module['autoinstall_theme_installdone'] = 'Install ...';
-$lang_module['autoinstall_theme_error_downloaded'] = 'Error: Can not find downloaded files';
-$lang_module['autoinstall_theme_error_invalidfile'] = 'Error: Invalid zip file';
-$lang_module['autoinstall_theme_error_invalidfile_back'] = 'Back';
-$lang_module['autoinstall_package_processing'] = 'please wait to complete...';
-$lang_module['autoinstall_theme_error_uploadfile'] = 'Error: Unable to upload files. Please check directory permission or chmod directory';
-$lang_module['autoinstall_theme_unzip_abort'] = 'The installation can not continue automatically by the host does not support.';
-$lang_module['autoinstall_theme_permission_folder'] = 'The installation can not continue automatically, because the system can not create folders.';
-$lang_module['autoinstall_theme_error_movefile'] = 'The automatic installation can not continue the host does not support moving files after extract';
-$lang_module['autoinstall_theme_cantunzip'] = 'Error: can not extract. Please check folders permissions.';
-$lang_module['autoinstall_theme_unzip_filelist'] = 'List of extracted files';
-$lang_module['autoinstall_theme_unzip_setuppage'] = 'Go to the management page theme.';
 $lang_module['autoinstall_package_select'] = 'Select theme to pack';
 $lang_module['autoinstall_package_noselect'] = 'Select theme to pack';
 $lang_module['autoinstall_package_module_select'] = 'Select the module to package';
@@ -129,14 +108,13 @@ $lang_module['theme_created_website'] = 'visit author\'s website';
 $lang_module['theme_created_folder'] = 'Files + directory in:';
 $lang_module['theme_created_position'] = 'Positions designed in the theme:';
 $lang_module['theme_created_activate'] = 'Activate';
+$lang_module['theme_created_setting'] = 'Set theme follow default configuration';
 $lang_module['theme_created_activate_layout'] = 'Error: You need to set the layout for this interface the firt to active';
 $lang_module['theme_delete'] = 'Delete Settings';
 $lang_module['theme_delete_confirm'] = 'Are you sure you delete the setting: ';
+$lang_module['theme_delete_success'] = 'Theme delete success';
 $lang_module['theme_delete_unsuccess'] = 'There are errors in the process the setting !';
 $lang_module['theme_created_current_use'] = 'Interface using';
-$lang_module['theme_created_delete_theme'] = 'Do you want to delete the all theme setting';
-$lang_module['theme_created_delete_current_theme'] = 'You can not delete the current theme when the systme is using it!';
-$lang_module['theme_created_delete_module_theme'] = 'You can not delete themes because this theme are using for module:% s, you need to reconfigure modules.';
 $lang_module['block_front_delete_error'] = 'Error: Unable to delete the block, check your permission';
 $lang_module['block_front_outgroup_success'] = 'Block was successfully removed from the group and add to group';
 $lang_module['block_front_outgroup_cancel'] = 'Currently there is only one block in this group should therefore not removed from group';
@@ -153,10 +131,10 @@ $lang_module['block_weight'] = 'Set the position of block';
 $lang_module['block_weight_confirm'] = 'Do you want to set up the position of block? The settings in the function will be the settings.';
 $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Info: Package interfaces you install the file already exists, you have to make sure the installation to overwrite this file';
 $lang_module['autoinstall_theme_overwrite'] = 'Overwrite';
-$lang_module['block_error_nsblock'] = 'Block not yet selected or title of block invalid';
-$lang_module['autoinstall_theme_success_setupblocks'] = 'The installation process is successful. The system will automatically transfer you to the page of the block management interface.';
-$lang_module['autoinstall_theme_success_setuplayout'] = 'The installation process is successful. The system will automatically transfer you to the page layout settings interface.';
 $lang_module['config'] = 'Set Theme';
 $lang_module['config_not_exit'] = 'Theme %s not configured';
-$lang_module['theme_created_setting'] = 'Set theme follow default configuration';
-$lang_module['theme_delete_success'] = 'Theme delete success';
+
+$lang_module['hide_device'] = 'Hide in device';
+$lang_module['hide_device_0'] = 'Always show';
+$lang_module['hide_device_1'] = 'Hide mobile';
+$lang_module['hide_device_2'] = 'Hide mobile and tablet';

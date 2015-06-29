@@ -33,9 +33,7 @@ elseif( defined( 'NV_IS_USER_FORUM' ) )
 		{
 			define( 'NV_IS_USER', true );
 
-			$user_info['full_name'] = ( $global_config['name_show'] )  ? $user_info['first_name'] . ' ' . $user_info['last_name'] : $user_info['last_name'] . ' ' . $user_info['first_name'];
-			$user_info['full_name'] = trim( $user_info['full_name'] );
-
+			$user_info['full_name'] = nv_show_name_user( $user_info['first_name'], $user_info['last_name'], $user_info['username'] );;
 			$user_info['in_groups'] = nv_user_groups( $user_info['in_groups'] );
 			$user_info['st_login'] = ! empty( $user_info['password'] ) ? true : false;
 			$user_info['current_mode'] = 1;
@@ -59,9 +57,10 @@ else
 		{
 			$user = unserialize( nv_base64_decode( $user ) );
 
-			if( isset( $user['userid'] ) and is_numeric( $user['userid'] ) and $user['userid'] > 0 )
+			if( isset( $user['userid'] ) and isset( $user['checknum'] ) and isset( $user['checkhash'] ) )
 			{
-				if( isset( $user['checknum'] ) and preg_match( '/^[a-z0-9]{32}$/', $user['checknum'] ) )
+				$user['userid'] = intval( $user['userid'] );
+				if( $user['checkhash'] == md5( $user['userid'] . $user['checknum'] . $global_config['sitekey'] . NV_USER_AGENT ) )
 				{
 					$_sql = 'SELECT userid, username, email, first_name, last_name, gender, photo, birthday, regdate,
 						view_mail, remember, in_groups, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
@@ -71,13 +70,28 @@ else
 					$user_info = $db->query( $_sql )->fetch();
 					if( ! empty( $user_info ) )
 					{
-						if( strcasecmp( $user['checknum'], $user_info['checknum'] ) == 0 and 						//checknum
-						isset( $user['current_agent'] ) and ! empty( $user['current_agent'] ) and strcasecmp( $user['current_agent'], $user_info['current_agent'] ) == 0 and 						//user_agent
-						isset( $user['current_ip'] ) and ! empty( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $user_info['current_ip'] ) == 0 and 						//current IP
-						isset( $user['current_login'] ) and ! empty( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $user_info['current_login'] ) ) == 0 ) //current login
+						if( empty( $global_config['allowuserloginmulti'] ) )
 						{
-							$user_info['full_name'] = ( $global_config['name_show'] )  ? $user_info['first_name'] . ' ' . $user_info['last_name'] : $user_info['last_name'] . ' ' . $user_info['first_name'];
-							$user_info['full_name'] = trim( $user_info['full_name'] );
+							if( strcasecmp( $user['checknum'], $user_info['checknum'] ) == 0 and //checknum
+							isset( $user['current_agent'] ) and strcasecmp( $user['current_agent'], $user_info['current_agent'] ) == 0 and //user_agent
+							isset( $user['current_ip'] ) and strcasecmp( $user['current_ip'], $user_info['current_ip'] ) == 0 and //current IP
+							isset( $user['current_login'] ) and strcasecmp( $user['current_login'], intval( $user_info['current_login'] ) ) == 0 ) //current login
+							{
+								$checknum = true;
+							}
+							else
+							{
+								$checknum = false;
+							}
+						}
+						else
+						{
+							$checknum = true;
+						}
+
+						if( $checknum )
+						{
+							$user_info['full_name'] = nv_show_name_user( $user_info['first_name'], $user_info['last_name'], $user_info['username'] );
 							$user_info['in_groups'] = nv_user_groups( $user_info['in_groups'] );
 							$user_info['last_login'] = intval( $user['last_login'] );
 							$user_info['last_agent'] = $user['last_agent'];
@@ -106,6 +120,10 @@ else
 									$user_info['openid_email'] = $row['email'];
 								}
 							}
+						}
+						else
+						{
+							$user_info = array();
 						}
 					}
 				}

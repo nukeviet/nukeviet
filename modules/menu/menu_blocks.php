@@ -64,7 +64,11 @@ function nv_menu_blocks( $block_config )
 		}
 	}
 
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $block_config['block_name'] . '.tpl' ) )
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/' . $block_config['block_name'] . '.tpl' ) )
+	{
+		$block_theme = $global_config['module_theme'];
+	}
+	elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $block_config['block_name'] . '.tpl' ) )
 	{
 		$block_theme = $global_config['site_theme'];
 	}
@@ -92,8 +96,11 @@ function nv_menu_blocks( $block_config )
 			{
 				$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'] );
 				$xtpl->assign( 'HTML_CONTENT', $html_content );
-				$xtpl->parse( 'main.loopcat1.cat2' );
-				$xtpl->parse( 'main.loopcat1.expand' );
+				if( $html_content != '' )
+				{
+					$xtpl->parse( 'main.loopcat1.cat2' );
+					$xtpl->parse( 'main.loopcat1.expand' );
+				}
 			}
 			$xtpl->parse( 'main.loopcat1' );
 		}
@@ -187,7 +194,11 @@ function nv_smenu_blocks( $style, $list_cats, $list_sub )
 {
 	global $global_config;
 
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $style . '.tpl' ) )
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/' . $style . '.tpl' ) )
+	{
+		$block_theme = $global_config['module_theme'];
+	}
+	elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $style . '.tpl' ) )
 	{
 		$block_theme = $global_config['site_theme'];
 	}

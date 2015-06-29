@@ -189,15 +189,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 		$array_register['your_question'] = $nv_Request->get_title( 'your_question', 'post', '', 1 );
 		$array_register['answer'] = $nv_Request->get_title( 'answer', 'post', '', 1, 255 );
 		$array_register['agreecheck'] = $nv_Request->get_int( 'agreecheck', 'post', 0 );
-		$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
-
-		$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
-
-		if( ! $check_seccode )
-		{
-			$error = $lang_global['securitycodeincorrect'];
-		}
-		elseif( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) != '' )
+		if( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) != '' )
 		{
 			$error = $check_login;
 		}
@@ -296,7 +288,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 			validUserLog( $row, 1, $reg_attribs['opid'], $current_mode );
 
 			$subject = $lang_module['account_register'];
-			$message = sprintf( $lang_module['openid_register_info'], $reg_attribs['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'], $reg_attribs['openid'] );
+			$message = sprintf( $lang_module['openid_register_info'], $reg_attribs['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $reg_attribs['openid'] );
 			@nv_sendmail( $global_config['site_email'], $reg_attribs['email'], $subject, $message );
 
 			nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | OpenID', 0 );
@@ -324,7 +316,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 	$siteterms = $result->fetchColumn();
 	$result->closeCursor();
 
-	$contents = openid_register( $gfx_chk, $array_register, $siteterms, $data_questions );
+	$contents = openid_register( $array_register, $siteterms, $data_questions );
 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
@@ -475,7 +467,7 @@ if( $checkss == $array_register['checkss'] )
 				if( $global_config['allowuserreg'] == 2 )
 				{
 					$subject = $lang_module['account_active'];
-					$message = sprintf( $lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'], $array_register['password'], nv_date( 'H:i d/m/Y', NV_CURRENTTIME + 86400 ) );
+					$message = sprintf( $lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'],  nv_date( 'H:i d/m/Y', NV_CURRENTTIME + 86400 ) );
 					$send = nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
 					if( $send )
 					{
@@ -548,15 +540,21 @@ if( $checkss == $array_register['checkss'] )
 				$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 
 				$subject = $lang_module['account_register'];
-				$message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'], $array_register['password'] );
+				$message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username']);
 				nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
+
+				$nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+				if( ! empty( $array_register['nv_redirect'] ) )
+				{
+					$nv_redirect .= '&nv_redirect=' . $array_register['nv_redirect'];
+				}
 
 				$info = $lang_module['register_ok'] . "<br /><br />\n";
 				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
-				$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_login'] . '</a>]';
+				$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] . '</a>]';
 
 				$contents = user_info_exit( $info );
-				$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
+				$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( $nv_redirect, true ) . '" />';
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
 

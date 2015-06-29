@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'menu', 'rows', 'link_menu', 'link_module', 'change_weight_row', 'del_row' );
+$allow_func = array( 'main', 'menu', 'rows', 'link_menu', 'link_module', 'change_weight_row', 'del_row', 'change_active' );
 
 // Loai lien ket
 $type_target = array();
@@ -123,6 +123,28 @@ function nv_menu_del_sub( $id, $parentid )
 			list( $parentid ) = $db->query( $sql )->fetch( 3 );
 			nv_menu_del_sub( $id, $parentid );
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
+		}
+	}
+}
+
+/**
+ * @param int $id
+ * @param array $array_item
+ * @param string $sp_i
+ */
+function nv_menu_get_submenu( $id, $alias_selected, $array_item, $sp_i )
+{
+	global  $array_submenu, $sp, $mod_name;
+	foreach( $array_item as $item2 )
+	{
+		if( isset( $item2['parentid'] ) and $item2['parentid'] == $id )
+		{
+			$item2['title'] = $sp_i . $item2['title'];
+			$item2['module'] = $mod_name;
+			$item2['selected'] = ( $item2['alias'] == $alias_selected ) ? ' selected="selected"' : '';
+
+			$array_submenu[]= $item2;
+			nv_menu_get_submenu( $item2['key'], $alias_selected, $array_item, $sp_i . $sp );
 		}
 	}
 }

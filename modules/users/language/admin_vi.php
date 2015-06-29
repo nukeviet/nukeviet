@@ -214,6 +214,7 @@ $lang_module['whoview_admin'] = 'Quản trị';
 $lang_module['random_password'] = 'Tạo mật khẩu ngẫu nhiên';
 $lang_module['show_password'] = 'Hiển thị mật khẩu';
 
+$lang_module['usactive'] = 'Trạng thái tài khoản';
 $lang_module['usactive_0'] = 'Tài khoản bị khóa';
 $lang_module['usactive_1'] = 'Tài khoản hoạt động';
 $lang_module['usactive_2'] = 'Tài khoản site quản lý bị khóa';
@@ -406,3 +407,5 @@ $lang_module['info'] = "Cập nhật dữ liệu từ LDAP xuống website là t
 		Trong trường hợp khác, người dùng sẽ có khả năng soạn thảo tất cả các trường này sau khi chúng bắt dầu.	</p>	<p>		<b>Cập nhật site:</b> Nếu được kích hoạt, mục sẽ được cập nhật (từ xác thực ngoài) mỗi khi người dùng đăng nhập hoặc có đồng bộ hóa người dùng.	</p>	<hr>	<p>
 		<b>Chú ý:</b> Cập nhật dư liệu LDAP bên ngoại yêu cầu bạn thiết đặt binddn và bindpw cho một người dùng bind có quyền chỉnh sửa tất cả bản ghi người dùng. Hiện tại nó không lưu giữ các thuộc tính đa trị, và sẽ xóa các giá trị gia tăng khi cập nhật.	</p>";
 
+$lang_module['allowuserloginmulti']='Cho phép đăng nhập cùng lúc từ nhiều trình duyệt';
+$lang_module['user_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu người dùng không sử dụng trình duyệt';

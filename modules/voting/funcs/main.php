@@ -60,19 +60,17 @@ if( empty( $vid ) )
 		$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 		foreach( $allowed as $current_voting )
 		{
-			$action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-
 			$voting_array = array(
 				'checkss' => md5( $current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey'] ),
 				'accept' => ( int )$current_voting['acceptcm'],
 				'errsm' => ( int )$current_voting['acceptcm'] > 1 ? sprintf( $lang_module['voting_warning_all'], ( int )$current_voting['acceptcm'] ) : $lang_module['voting_warning_accept1'],
 				'vid' => $current_voting['vid'],
 				'question' => ( empty( $current_voting['link'] ) ) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
-				'action' => $action,
+				'action' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name,
 				'langresult' => $lang_module['voting_result'],
-				'langsubmit' => $lang_module['voting_hits']
+				'langsubmit' => $lang_module['voting_hits'],
+				'publtime' => nv_date( 'l - d/m/Y H:i', $current_voting['publ_time'] )
 			);
-
 			$xtpl->assign( 'VOTING', $voting_array );
 
 			$sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';
@@ -96,7 +94,8 @@ if( empty( $vid ) )
 			}
 			$xtpl->parse( 'main.loop' );
 		}
-		$contents = $xtpl->text( 'main.loop' );
+		$xtpl->parse( 'main' );
+		$contents = $xtpl->text( 'main' );
 	}
 
 	include NV_ROOTDIR . '/includes/header.php';

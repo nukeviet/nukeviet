@@ -10,10 +10,16 @@
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-if( ! defined( 'NV_IS_USER' ) or defined( 'NV_IS_ADMIN' ) )
+if( ! defined( 'NV_IS_USER' ) )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	die();
+}
+
+if( defined( 'NV_IS_ADMIN' ) )
+{
+	nv_insert_logs( NV_LANG_DATA, 'login', '[' . $user_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, 0 );
+	$nv_Request->unset_request( 'admin,online', 'session' );
 }
 
 $url_redirect = ! empty( $client_info['referer'] ) ? $client_info['referer'] : ( isset( $_SERVER['SCRIPT_URI'] ) ? $_SERVER['SCRIPT_URI'] : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA );
@@ -40,7 +46,7 @@ $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><
 $info .= "[<a href=\"" . $url_redirect . "\">" . $lang_module['redirect_to_back'] . "</a>]";
 
 $contents = user_info_exit( $info );
-$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( $url ) . "\" />";
+$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( $url_redirect ) . "\" />";
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

@@ -41,6 +41,7 @@ $lang_module['module_name'] = 'Chọn module';
 $lang_module['cho_module'] = 'Chọn module';
 $lang_module['error_menu_block'] = 'Lỗi: Chưa nhập khối menu';
 $lang_module['action'] = 'Hoạt động';
+$lang_module['display'] = 'Hiển thị';
 $lang_module['data_no'] = 'Hệ thống chưa có dữ liệu';
 $lang_module['back'] = 'Trở về mục trước ';
 $lang_module['title_exit_cat'] = 'Tên này đã tồn tại';

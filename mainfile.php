@@ -22,7 +22,7 @@ define( 'NV_MAINFILE', true );
 define( 'NV_START_TIME', microtime( true ) );
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $select_options = $error_info = $countries = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $array_url_instruction = $content_type = $submenu = $select_options = $error_info = $countries = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -100,7 +100,7 @@ require NV_ROOTDIR . '/includes/class/error.class.php';
 $ErrorHandler = new Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
-if( empty( $global_config['allow_sitelangs'] ) or empty( $global_config['allow_adminlangs'] ) )
+if( empty( $global_config['allow_sitelangs'] ) )
 {
 	trigger_error( 'Error! Language variables is empty!', 256 );
 }
@@ -258,8 +258,17 @@ else
 	}
 }
 
-// Xac dinh co phai truy cap bang mobile hay khong
-$client_info['is_mobile'] = nv_checkmobile( NV_USER_AGENT );
+require NV_ROOTDIR . '/includes/class/Mobile_Detect.php';
+$detect = new Mobile_Detect;
+$client_info['is_mobile'] = $detect->isMobile();
+$client_info['is_tablet'] = $detect->isTablet();
+
+$is_mobile_tablet = $client_info['is_mobile'] . '-' . $client_info['is_tablet'];
+if( $is_mobile_tablet != $nv_Request->get_string( 'is_mobile_tablet', 'session' ) )
+{
+	$nv_Request->set_Session( 'is_mobile_tablet', $is_mobile_tablet );
+	$nv_Request->unset_request( 'nv' . NV_LANG_DATA . 'themever', 'cookie' );
+}
 
 // Ket noi voi class chong flood
 if( $global_config['is_flood_blocker'] and ! $nv_Request->isset_request( 'admin', 'session' ) and //
@@ -352,7 +361,7 @@ define( 'UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode'] );
 
 if( defined( 'NV_ADMIN' ) )
 {
-	if( ! in_array( NV_LANG_DATA, $global_config['allow_adminlangs'] ) )
+	if( ! file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/global.php' ) )
 	{
 		if( $global_config['lang_multi'] )
 		{
@@ -361,7 +370,7 @@ if( defined( 'NV_ADMIN' ) )
 		Header( 'Location: ' . NV_BASE_ADMINURL );
 		exit();
 	}
-	if( ! in_array( NV_LANG_INTERFACE, $global_config['allow_adminlangs'] ) )
+	if( ! file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/global.php' ) )
 	{
 		if( $global_config['lang_multi'] )
 		{
@@ -377,9 +386,6 @@ if( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( '
 {
 	require NV_ROOTDIR . '/includes/core/cronjobs.php';
 }
-
-// Xac dinh kieu giao dien mac dinh
-$global_config['current_theme_type'] = $nv_Request->get_string( 'nv' . NV_LANG_DATA . 'themever', 'cookie', '' );
 
 // Kiem tra tu cach admin
 if( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )
@@ -477,6 +483,7 @@ else
 				$sys_mods[$m_title] = array(
 					'module_file' => $row['module_file'],
 					'module_data' => $row['module_data'],
+					'module_upload' => $row['module_upload'],
 					'custom_title' => $row['custom_title'],
 					'admin_title' => ( empty( $row['admin_title'] ) ) ? $row['custom_title'] : $row['admin_title'],
 					'admin_file' => $row['admin_file'],

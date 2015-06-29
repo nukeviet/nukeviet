@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['edit_title'];
 $cid = $nv_Request->get_int( 'cid', 'get,post' );
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid;
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 $row = $db->query( $sql )->fetch();
 
 if( empty( $row ) or ! isset( $site_mod_comm[$row['module']] ) )
@@ -26,7 +26,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$delete = $nv_Request->get_int( 'delete', 'post', 0 );
 	if( $delete )
 	{
-		$count = $db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_comments WHERE cid=' . $cid );
+		$count = $db->exec( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid );
 	}
 	else
 	{
@@ -34,7 +34,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$active = $nv_Request->get_int( 'active', 'post', 0 );
 		$active = ( $active == 1 ) ? 1 : 0;
 
-		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_comments SET content= :content, status=' . $active . ' WHERE cid=' . $cid );
+		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET content= :content, status=' . $active . ' WHERE cid=' . $cid );
 		$stmt->bindParam( ':content', $content, PDO::PARAM_STR );
 		$stmt->execute();
 		$count = $stmt->rowCount();
@@ -50,6 +50,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
 			{
 				include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
+				nv_del_moduleCache( $row['module'] );
 			}
 		}
 	}

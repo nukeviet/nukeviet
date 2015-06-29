@@ -11,7 +11,7 @@
         defaults = {
             toggle: true
         };
-        
+
     function Plugin(element, options) {
         this.element = element;
         this.settings = $.extend({}, defaults, options);
@@ -29,7 +29,7 @@
             $this.find('li.active').has('ul').children('ul').addClass('collapse in');
             $this.find('li').not('.active').has('ul').children('ul').addClass('collapse');
 
-            $this.find('li').has('span').children('#expand').on('click', function (e) {
+            $this.find('li').has('span').children('.expand').on('click', function (e) {
                 e.preventDefault();
 
                 $(this).parent('li').toggleClass('active').children('ul').collapse('toggle');

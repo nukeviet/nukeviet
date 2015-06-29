@@ -73,11 +73,10 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) )
 	$orders = array(
 		'userid',
 		'username',
-		'first_name',
-		'last_name',
+		'full_name',
 		'email' );
 
-	$orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );
+	$orderby = $nv_Request->get_string( 'sortby', 'get', 'userid' );//die($orderby);
 	$ordertype = $nv_Request->get_string( 'sorttype', 'get', 'DESC' );
 	if( $ordertype != "ASC" ) $ordertype = "DESC";
 
@@ -100,7 +99,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) )
 			{
 				$admin_module = 1;
 			}
-			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_admins WHERE userid = " . $userid . " AND catid > 0" );
+			$db->query( "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_admins WHERE userid = " . $userid );
 			$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content, app_content) VALUES ('" . $userid . "', '0', '" . $admin_module . "', '1', '1', '1', '1', '1')" );
 		}
 		else
@@ -163,7 +162,8 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) )
 		$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " where userid IN (" . $module_info['admins'] . ")";
 		if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
 		{
-			$sql .= " ORDER BY " . $orderby . " " . $ordertype;
+			$orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
+			$sql .= " ORDER BY " . $orderby_sql . " " . $ordertype;
 			$base_url .= "&amp;sortby=" . $orderby . "&amp;sorttype=" . $ordertype;
 		}
 		$result = $db->query( $sql );
@@ -181,8 +181,7 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) )
 			$users_list[$row['userid']] = array(
 				'userid' => $userid_i,
 				'username' => ( string )$row['username'],
-				'first_name' => ( string )$row['first_name'],
-				'last_name' => ( string )$row['last_name'],
+				'full_name' =>  nv_show_name_user( $row['first_name'], $row['last_name'], $row['username'] ),
 				'email' => ( string )$row['email'],
 				'admin_module_cat' => $admin_module_cat,
 				'is_edit' => $is_edit );
@@ -196,10 +195,8 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) )
 		$head_tds['userid']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=userid&amp;sorttype=ASC";
 		$head_tds['username']['title'] = $lang_module['admin_username'];
 		$head_tds['username']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=username&amp;sorttype=ASC";
-		$head_tds['first_name']['title'] = $lang_module['admin_first_name'];
-		$head_tds['first_name']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=first_name&amp;sorttype=ASC";
-		$head_tds['last_name']['title'] = $lang_module['admin_last_name'];
-		$head_tds['last_name']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=last_name&amp;sorttype=ASC";
+		$head_tds['full_name']['title'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
+		$head_tds['full_name']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=full_name&amp;sorttype=ASC";
 		$head_tds['email']['title'] = $lang_module['admin_email'];
 		$head_tds['email']['href'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;sortby=email&amp;sorttype=ASC";
 

@@ -30,6 +30,7 @@ function nv_link_module(module) {
 		$('input#module').val(new_status);
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_module&nocache=' + new Date().getTime(), 'module=' + new_status, function(res) {
 			$('#thu').html(res);
+			$('#module_sub_menu').select2();
 		});
 	} else {
 		$('input#link').val('');
@@ -91,6 +92,21 @@ function nv_menu_item_delete(id, mid, parentid, num) {
 		});
     }
 	return false;
+}
+
+function nv_change_active( id )
+{
+	var new_status = $('#change_active_' + id).is(':checked') ? 1 : 0;
+	if (confirm(nv_is_change_act_confirm[0])) {
+		var nv_timer = nv_settimeout_disable('change_active_' + id, 3000);
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_active&nocache=' + new Date().getTime(), 'change_active=1&id=' + id + '&new_status=' + new_status, function(res) {
+
+		});
+	}
+	else
+	{
+		$('#change_active_' + id).prop('checked', new_status ? false : true );
+	}
 }
 
 function nv_main_action(oForm, msgnocheck) {
