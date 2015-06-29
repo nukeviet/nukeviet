@@ -121,3 +121,4 @@ $array_url_instruction['tabs'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:
 $array_url_instruction['tags'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:tags';
 $array_url_instruction['weight'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:weight';
 $array_url_instruction['block'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:block';
+$array_url_instruction['discounts'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:discount';

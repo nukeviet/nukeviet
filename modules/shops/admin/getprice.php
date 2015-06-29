@@ -32,6 +32,14 @@ $xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'rowcontent', $rowcontent );
 
+foreach( $money_config as $code => $info )
+{
+	$info['select'] = ($rowcontent['money_unit'] == $code) ? "selected=\"selected\"" : "";
+	$xtpl->assign( 'MON', $info );
+	$xtpl->parse( 'main.product_price.money_unit' );
+	$xtpl->parse( 'main.typeprice2.money_unit' );
+}
+
 $typeprice = ( $cid ) ? $global_array_shops_cat[$cid]['typeprice'] : 1;
 if( $typeprice == 1 )
 {
@@ -71,12 +79,6 @@ else
 	$xtpl->parse( 'main.product_price' );
 }
 
-foreach( $money_config as $code => $info )
-{
-	$info['select'] = ($rowcontent['money_unit'] == $code) ? "selected=\"selected\"" : "";
-	$xtpl->assign( 'MON', $info );
-	$xtpl->parse( 'main.money_unit' );
-}
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
