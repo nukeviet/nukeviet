@@ -1140,7 +1140,7 @@ $typeprice = ($rowcontent['listcatid']) ? $global_array_shops_cat[$rowcontent['l
 if( $typeprice == 1 )
 {
 	// List discount
-	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
+	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts ORDER BY add_time DESC';
 	$_result = $db->query( $sql );
 	while( $_discount = $_result->fetch( ) )
 	{
