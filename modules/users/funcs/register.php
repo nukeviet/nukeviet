@@ -543,12 +543,18 @@ if( $checkss == $array_register['checkss'] )
 				$message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username']);
 				nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
 
+				$nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+				if( ! empty( $array_register['nv_redirect'] ) )
+				{
+					$nv_redirect .= '&nv_redirect=' . $array_register['nv_redirect'];
+				}
+
 				$info = $lang_module['register_ok'] . "<br /><br />\n";
 				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
-				$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_login'] . '</a>]';
+				$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] . '</a>]';
 
 				$contents = user_info_exit( $info );
-				$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
+				$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( $nv_redirect, true ) . '" />';
 
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
 

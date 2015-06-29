@@ -133,3 +133,8 @@ $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Info: Package inter
 $lang_module['autoinstall_theme_overwrite'] = 'Overwrite';
 $lang_module['config'] = 'Set Theme';
 $lang_module['config_not_exit'] = 'Theme %s not configured';
+
+$lang_module['hide_device'] = 'Hide in device';
+$lang_module['hide_device_0'] = 'Always show';
+$lang_module['hide_device_1'] = 'Hide mobile';
+$lang_module['hide_device_2'] = 'Hide mobile and tablet';

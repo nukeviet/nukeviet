@@ -25,11 +25,11 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 	foreach( $listid as $_id )
 	{
 		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET topicid=' . $topicsid . ' WHERE id=' . $_id );
-		
+
 		$result = $db->query( 'SELECT listcatid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $_id );
 		list( $listcatid ) = $result->fetch( 3 );
 		$listcatid = explode( ',', $listcatid );
-		
+
 		foreach( $listcatid as $catid )
 		{
 			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SET topicid=' . $topicsid . ' WHERE id=' . $_id );
@@ -38,10 +38,7 @@ if( $nv_Request->isset_request( 'topicsid', 'post' ) )
 
 	nv_del_moduleCache( $module_name );
 
-	include NV_ROOTDIR . '/includes/header.php';
-	echo $lang_module['topic_update_success'];
-	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
+	exit( $lang_module['topic_update_success'] );
 }
 
 $db->sqlreset()
@@ -85,6 +82,7 @@ while( $row = $result->fetch() )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
+$set_active_op = 'topics';
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';
