@@ -1,0 +1,32 @@
+.invalid {
+	color: #F00;
+	font: 800 11px Tahoma, Arial, Verdana, sans-serif
+}
+
+.newVesionInfo {
+	color: #EF3805;
+	font: 800 12px Tahoma, Arial, Verdana, sans-serif
+}
+
+.newVesionMess {
+	margin: 10px 0
+}
+
+.ninfo {
+	cursor: pointer
+}
+
+.wttooltip {
+	cursor: pointer;
+	display: none;
+}
+
+.error {
+	color: #EF3805;
+	font: 800 12px Tahoma, Arial, Verdana, sans-serif
+}
+
+.myLink, .myLink span {
+	color: #FF0000;
+	text-decoration: none
+}

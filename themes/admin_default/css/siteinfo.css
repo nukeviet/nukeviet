@@ -1,0 +1,70 @@
+.idinfo {
+	vertical-align: top;
+	width: 50px
+}
+
+.ninfo {
+	cursor: pointer
+}
+
+.tooltip {
+	font: 11px Tahoma, Arial, Verdana, sans-serif;
+	cursor: pointer;
+	display: none
+}
+
+.tooltiptitle {
+	font: 800 12px Tahoma, Arial, Verdana, sans-serif;
+	margin-bottom: 10px
+}
+
+.author {
+	vertical-align: top;
+	width: 100px
+}
+
+.updated {
+	vertical-align: top;
+	text-align: right;
+	white-space: nowrap;
+	width: 100px
+}
+
+.newVesionInfo {
+	background: #EF3805;
+	font: 800 12px/30px Tahoma, Arial, Verdana, sans-serif;
+	color: #fff;
+	text-align: center
+}
+
+.newVesionInfo a {
+	color: #fff
+}
+
+.orderasc {
+	height: 16px;
+	padding-left: 16px;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url('../images/arrows/tall-up-arrow.gif')
+}
+
+.orderdesc {
+	height: 16px;
+	padding-left: 16px;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url('../images/arrows/tall-down-arrow.gif')
+}
+
+.orderno {
+	height: 16px;
+	padding-left: 16px;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url('../images/collapse-all.gif')
+}
+
+.pointer {
+	cursor: pointer
+}

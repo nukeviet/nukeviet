@@ -1,0 +1,70 @@
+#nukeviet
+
+<Files ~ "\.(htm|html|css|js|php)$">
+  AddDefaultCharset UTF-8
+</Files>
+
+<Files .htaccess>
+  order allow,deny
+  deny from all
+</Files>
+
+<Files config.php>
+  order allow,deny
+  deny from all
+</Files>
+
+<Files mainfile.php>
+  order allow,deny
+  deny from all
+</Files>
+
+<IfModule mod_deflate.c>
+
+  <FilesMatch "\.(css|js|xml)$">
+    SetOutputFilter DEFLATE
+  </FilesMatch>
+
+</IfModule>
+
+<IfModule mod_headers.c>
+
+  <FilesMatch "\.(js|css|xml|gz)$">
+    Header append Vary Accept-Encoding
+  </FilesMatch>
+  
+  <FilesMatch "\.(doc|pdf|swf)$">
+    Header set X-Robots-Tag "noarchive, nosnippet"
+  </FilesMatch>
+  
+  <FilesMatch "\.(jpe?g|JPE?G|png|PNG|gif|GIF|swf|SWF|ico|ICO|xsl|XSL)(\?[0-9]{9,11})?$">
+	Header append Cache-Control "public"
+	Header add "Expires" "Tue, 31 Dec 2019 23:59:59 GMT"
+	Header add "Cache-Control" "max-age=2592000"
+  </FilesMatch>
+
+</IfModule>
+
+##################################################################################
+#nukeviet_rewrite_start //Please do not change the contents of the following lines
+##################################################################################
+
+#Options +FollowSymLinks
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+#RewriteBase /
+RewriteCond %{REQUEST_FILENAME} /robots.txt$ [NC]
+RewriteRule ^ robots.php?action=%{HTTP_HOST} [L]
+RewriteRule ^(.*?)sitemap\.xml$ index.php?nv=SitemapIndex [L]
+RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?language=$2&nv=SitemapIndex [L]
+RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?language=$2&nv=$3&op=sitemap [L]
+RewriteRule ^((?!http(s?)|ftp\:\/\/).*)\.(css|js)$ CJzip.php?file=$1.$3 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule (.*)(\/|\.html)$ index.php
+RewriteRule (.*)tag\/(.*)$ index.php
+</IfModule>
+
+#nukeviet_rewrite_end
+##################################################################################

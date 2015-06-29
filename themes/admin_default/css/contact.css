@@ -1,0 +1,105 @@
+.listdata1 {
+	background: #F2F2F2;
+	border-top: #F0F0F0 solid 1px;
+	font-size: 11px;
+	font-weight: 700;
+	height: 20px;
+	margin: 5px auto;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 5px
+}
+
+.listdata {
+	border: #E4E4E4 1px solid;
+	margin: 5px auto
+}
+
+.listdata .tr1 {
+	background: #FFF
+}
+
+.listdata .tr2 {
+	background: #F5F5F5
+}
+
+.listdata .tr11 {
+	background: #FFF;
+	font-weight: 700
+}
+
+.listdata .tr22 {
+	background: #F5F5F5;
+	font-weight: 700
+}
+
+.listdata tr td {
+	padding: 5px
+}
+
+.datatilte {
+	background: #8AB0FF;
+	color: #000;
+	font-size: 11px;
+	font-weight: 700;
+	text-decoration: underline
+}
+
+.contact {
+	padding: 10px
+}
+
+.contact .title {
+	font-weight: 700
+}
+
+.contact .con {
+	width: 100%
+}
+
+.contact .con tr {
+	line-height: 22px
+}
+
+.contact .con .bt1 {
+	background: #F5F5F5;
+	border: #CCC 1px solid
+}
+
+.ar1 {
+	font-family: Arial;
+	font-size: 12px;
+	width: 100%
+}
+
+.err {
+	color: red;
+	font-weight: 700;
+	text-align: center
+}
+
+.listdata1 a, .breakpage a:link {
+	color: #000;
+	line-height: normal;
+	text-decoration: none
+}
+
+.listdata1 a:hover {
+	color: red
+}
+
+.add {
+	padding: 10px;
+	width: 810px
+}
+
+.div_contact_con {
+	border: #CCC 1px solid;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	padding: 10px
+}
+
+.listdata .tr1:hover, .listdata .tr2:hover {
+	background: #F2F2F2
+}

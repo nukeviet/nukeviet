@@ -1,0 +1,37 @@
+# Base ignore
+/.project
+/.buildpath
+/.settings
+/config.php
+/cache/
+/data/diagnostic-*.xml
+/files/css/*.opt.css
+/logs/data_logs/
+/logs/dump_backup/
+/logs/error_logs/
+/logs/ip_logs/
+/logs/ref_logs/
+/logs/voting_logs/
+/sess/sess_*
+/tmp/
+
+# Ignore some class
+/includes/class/PHPExcel/
+/includes/class/PHPExcel.php
+
+# Ignore some uploads, files dir
+/files/download
+/files/*.jpg
+/uploads/download
+/uploads/users/*.jpg
+/uploads/contact/*.jpg
+/uploads/about/*.jpg
+/uploads/banners/*.jpg
+/uploads/page/*.jpg
+/uploads/menu/
+
+# Allow default file
+!/uploads/banners/bongoaigiao.jpg
+!/uploads/banners/vinades.jpg
+!/uploads/banners/vndads___05.jpg
+!/uploads/banners/webnhanh_vn.gif
