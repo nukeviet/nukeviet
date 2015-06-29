@@ -1,57 +1,138 @@
 <!-- BEGIN: main -->
 <div id="category">
-	<h2 class="page_title">{CAT_NAME}</h2>
-	<div id="products" class="clearfix">
+    <div class="page-header">
+        <h1>{CAT_NAME} ({count} {LANG.title_products})</h1>
+        <!-- BEGIN: viewdescriptionhtml -->
+		<!-- BEGIN: image -->
+		<div class="text-center">
+			<img src="{IMAGE}" class="img-thumbnail" alt="{CAT_NAME}">
+		</div>
+		<!-- END: image -->
+		<p>{DESCRIPTIONHTML}</p>
+		<!-- END: viewdescriptionhtml -->
+    </div>
+
+    <!-- BEGIN: displays -->
+    <div class="form-group form-inline pull-right">
+        <label class="control-label">{LANG.displays_product}</label>
+        <select name="sort" id="sort" class="form-control input-sm" onchange="nv_chang_price();">
+            <!-- BEGIN: sorts -->
+                <option value="{key}" {se}> {value}</option>
+            <!-- END: sorts -->
+        </select>
+        <label class="control-label">{LANG.title_viewnum}</label>
+        <select name="viewtype" id="viewtype" class="form-control input-sm" onchange="nv_chang_viewtype();">
+            <!-- BEGIN: viewtype -->
+                <option value="{VIEWTYPE.key}" {VIEWTYPE.selected}> {VIEWTYPE.value}</option>
+            <!-- END: viewtype -->
+        </select>
+    </div>
+    <div class="clear">&nbsp;</div>
+    <!-- END: displays -->
+
 	<!-- BEGIN: grid_rows -->
-		<div class="items" style="width:{pwidth}%">
-			<div class="items_content">
-				<div class="content_top{CSS_PRODUCT_CODE}">
-					<a title="{title_pro}" href="{link_pro}" class="tip_trigger">
-						<img src="{img_pro}" alt="{title_pro}" style="max-height:{height}px;max-width:{width}px;"/>
-						<!-- BEGIN: tooltip -->
-						<span class="tip"><strong>{title_pro}</strong><br /><img src="{img_pro}" style="max-width:{width}px;">{intro}</span>
-						<!-- END: tooltip -->
-					</a><br />
-					<span><a href="{LINK}" title="{title_pro}">{title_pro0}</a></span> <br />
-					<!-- BEGIN: product_code -->
-					<div class="shops-center">{PRODUCT_CODE}</div>
-					<!-- END: product_code -->
-				</div>
-				<!-- BEGIN: adminlink -->
-				<div class="shops-center">{ADMINLINK}</div>
-				<!-- END: adminlink -->
+    <div class="col-sm-12 col-md-{num}">
+        <div class="thumbnail">
+            <div style="height: {height}px">
+                <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" data-content='{intro}' data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
+            </div>
+            <div class="info_pro">
+            	<!-- BEGIN: new -->
+            	<span class="label label-success newday">{LANG.newday}</span>
+            	<!-- END: new -->
+            	<!-- BEGIN: discounts -->
+            	<span class="label label-danger">-{PRICE.discount_percent}{PRICE.discount_unit}</span>
+            	<!-- END: discounts -->
+            	<!-- BEGIN: point -->
+            	<span class="label label-info" title="{point_note}">+{point}</span>
+            	<!-- END: point -->
+            	<!-- BEGIN: gift -->
+            	<span class="label label-success">+<em class="fa fa-gift fa-lg">&nbsp;</em></span>
+            	<!-- END: gift -->
+            </div>
+            <div class="caption text-center">
+                <h3><a href="{link_pro}" title="{title_pro}">{title_pro0}</a></h3>
+
+                <!-- BEGIN: product_code -->
+                <p class="label label-default">{PRODUCT_CODE}</p>
+                <!-- END: product_code -->
+
+                <!-- BEGIN: adminlink -->
+                <p>{ADMINLINK}</p>
+                <!-- END: adminlink -->
+
 				<!-- BEGIN: price -->
-				<p class="content_price">
-					<span class="{class_money}">{product_price} {money_unit}</span>
-					<!-- BEGIN: discounts -->
-					<br /><span class="money">{product_discounts} {money_unit}</span>
-					<!-- END: discounts -->
+				<p class="price">
+                    <!-- BEGIN: discounts -->
+                    <span class="money">{PRICE.sale_format} {PRICE.unit}</span>
+                    <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
+                    <!-- END: discounts -->
+
+					<!-- BEGIN: no_discounts -->
+					<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+					<!-- END: no_discounts -->
 				</p>
 				<!-- END: price -->
-				<!-- BEGIN: contact -->
-				<p class="content_price">
-					{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
-				</p>
-				<!-- END: contact -->
-				<div align="center">
-				   <!-- BEGIN: order -->
-				   <a href="javascript:void(0)" id="{id}" title="{title_pro}" class="pro_order" onclick="cartorder(this)">{LANG.add_product}</a>
-				   <!-- END: order -->
-				   <a class="pro_detail" href="{link_pro}" title="{title_pro}">{LANG.detail_product}</a>
-				</div> 
-			</div>
-		</div>
-		<!-- BEGIN: end_row -->
-			<div style="clear:both"></div>
-		<!-- END: end_row -->
+
+                <!-- BEGIN: contact -->
+                <p class="price">
+                    {LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
+                </p>
+                <!-- END: contact -->
+
+                <!-- BEGIN: compare -->
+                <p><input type="checkbox" value="{ID}"{ch} onclick="nv_compare({ID});" id="compare_{ID}"/><a href="#" onclick="nv_compare_click();" >&nbsp;{LANG.compare}</a></p>
+                <!-- END: compare -->
+
+                <div class="clearfix">
+                    <!-- BEGIN: order -->
+                    <a href="javascript:void(0)" id="{id}" title="{title_pro}" onclick="cartorder(this, {GROUP_REQUIE}, '{link_pro}')"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
+                    <!-- END: order -->
+
+					<!-- BEGIN: product_empty -->
+                    <button class="btn btn-danger disabled btn-xs">{LANG.product_empty}</button>
+                    <!-- END: product_empty -->
+
+	                <!-- BEGIN: wishlist -->
+	                <a href="javascript:void(0)" title="{title_pro}" ><button type="button" onclick="wishlist({id}, this)" class="btn btn-primary btn-xs <!-- BEGIN: disabled -->disabled<!-- END: disabled -->">{LANG.wishlist}</button></a>
+	                <!-- END: wishlist -->
+                </div>
+            </div>
+        </div>
+    </div>
 	<!-- END: grid_rows -->
+	<div class="clearfix">
 	</div>
-	<div class="pages">
+	<div class="text-center">
 		{pages}
 	</div>
 </div>
-<div class="msgshow" id="msgshow"></div>
+
+<!-- BEGIN: modal_loaded -->
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{LANG.add_product}</h4>
+			</div>
+			<div class="modal-body">
+				<em class="fa fa-spinner fa-spin">&nbsp;</em>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END: modal_loaded -->
+
+<div class="msgshow" id="msgshow">
+</div>
 <!-- BEGIN: tooltip_js -->
-<script type="text/javascript">tooltip_shop();</script>
+<script type="text/javascript">
+	$(document).ready(function() {$("[data-rel='tooltip']").tooltip({
+		placement: "bottom",
+		html: true,
+		title: function(){return '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+	});});
+</script>
 <!-- END: tooltip_js -->
 <!-- END: main -->

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/9/2010 23:25
  */
 
@@ -13,7 +14,7 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 {
 	/**
 	 * nv_block_config_relates_blocks()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $data_block
 	 * @param mixed $lang_block
@@ -22,13 +23,11 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 	function nv_block_config_relates_blocks( $module, $data_block, $lang_block )
 	{
 		global $db_config, $site_mods;
-		
-		$html = "";
-		
-		$html .= "<tr>";
+
+		$html = "<tr>";
 		$html .= "	<td>" . $lang_block['blockid'] . "</td>";
-		$html .= "	<td><select name=\"config_blockid\">\n";
-		$sql = "SELECT `bid`,  " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM `" . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat` ORDER BY `weight` ASC";
+		$html .= "	<td><select name=\"config_blockid\" class=\"form-control w200\">\n";
+		$sql = "SELECT bid, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM " . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
 		$list = nv_db_cache( $sql, 'catid', $module );
 		foreach( $list as $l )
 		{
@@ -37,23 +36,23 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		}
 		$html .= "	</select></td>\n";
 		$html .= "</tr>";
-		
+
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['numrow'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
 		$html .= "</tr>";
-		
+
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['cut_num'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></td>";
 		$html .= "</tr>";
-		
+
 		return $html;
 	}
 
 	/**
 	 * nv_block_config_relates_blocks_submit()
-	 * 
+	 *
 	 * @param mixed $module
 	 * @param mixed $lang_block
 	 * @return
@@ -70,154 +69,187 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 		return $return;
 	}
 
-	if( ! function_exists( 'CurrencyConversion' ) )
+	if( !nv_function_exists( 'nv_get_price_tmp' ) )
 	{
-		/**
-		 * CurrencyConversion()
-		 * 
-		 * @param mixed $price
-		 * @param mixed $currency_curent
-		 * @param mixed $currency_convert
-		 * @param mixed $block_config
-		 * @return
-		 */
-		function CurrencyConversion( $price, $currency_curent, $currency_convert, $block_config )
+		function nv_get_price_tmp( $module_name, $module_data, $module_file, $pro_id )
 		{
-			global $money_config, $module_config;
-			$module = $block_config['module'];
-			$pro_config = $module_config[$module];
-			$str = number_format( $price, 0, '.', ' ' );
-			if( ! empty( $money_config ) )
+			global $db, $db_config, $module_config, $discounts_config;
+
+			$price = array();
+			$pro_config = $module_config[$module_name];
+
+			if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php' ) )
 			{
-				if( $currency_curent == $pro_config['money_unit'] )
-				{
-					$value = doubleval( $money_config[$currency_convert]['exchange'] );
-					$price = doubleval( $price * $value );
-					$str = number_format( $price, 0, '.', ' ' );
-					$ss = "~";
-				}
-				elseif( $currency_convert == $pro_config['money_unit'] )
-				{
-					$value = doubleval( $money_config[$currency_curent]['exchange'] );
-					$price = doubleval( $price / $value );
-					$str = number_format( $price, 0, '.', ' ' );
-				}
+				require_once NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php';
+				$price = nv_get_price( $pro_id, $pro_config['money_unit'], 1, false, $module_name );
 			}
-			$ss = ( $currency_curent == $currency_convert ) ? "" : "~";
-			return $ss . $str;
+
+			return $price;
 		}
 	}
 
 	/**
 	 * nv_relates_product()
-	 * 
+	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
 	function nv_relates_product( $block_config )
 	{
-		global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_cat, $db_config, $my_head;
-		
+		global $site_mods, $global_config, $lang_module, $module_config, $module_config, $module_name, $module_info, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config;
+
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 		$mod_file = $site_mods[$module]['module_file'];
-		$pro_config = $module_config[$module];
-		$array_cat_shops = $global_array_cat;
-		
-		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $mod_file . "/block.others_product.tpl" ) )
+
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/' . $mod_file . '/block.others_product.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
 		else
 		{
-			$block_theme = "default";
+			$block_theme = 'default';
 		}
-		
+
 		if( $module != $module_name )
 		{
-			$sql = "SELECT `catid`, `parentid`, `lev`, `" . NV_LANG_DATA . "_title` AS `title`, `" . NV_LANG_DATA . "_alias` AS `alias`, `viewcat`, `numsubcat`, `subcatid`, `numlinks`, `" . NV_LANG_DATA . "_description` AS `description`, `inhome`, `" . NV_LANG_DATA . "_keywords` AS `keywords`, `who_view`, `groups_view` FROM `" . $db_config['prefix'] . "_" . $mod_data . "_catalogs` ORDER BY `order` ASC";
-
-			$list = nv_db_cache( $sql, "catid", $module );
+			$sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, typeprice FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
+			$list = nv_db_cache( $sql, 'catid', $module );
 			foreach( $list as $row )
 			{
-				$array_cat_shops[$row['catid']] = array(
-					"catid" => $row['catid'],
-					"parentid" => $row['parentid'],
-					"title" => $row['title'],
-					"alias" => $row['alias'],
-					"link" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $row['alias'],
-					"viewcat" => $row['viewcat'],
-					"numsubcat" => $row['numsubcat'],
-					"subcatid" => $row['subcatid'],
-					"numlinks" => $row['numlinks'],
-					"description" => $row['description'],
-					"inhome" => $row['inhome'],
-					"keywords" => $row['keywords'],
-					"who_view" => $row['who_view'],
-					"groups_view" => $row['groups_view'],
-					'lev' => $row['lev']
+				$global_array_shops_cat[$row['catid']] = array(
+					'catid' => $row['catid'],
+					'parentid' => $row['parentid'],
+					'title' => $row['title'],
+					'alias' => $row['alias'],
+					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'],
+					'viewcat' => $row['viewcat'],
+					'numsubcat' => $row['numsubcat'],
+					'subcatid' => $row['subcatid'],
+					'numlinks' => $row['numlinks'],
+					'description' => $row['description'],
+					'inhome' => $row['inhome'],
+					'keywords' => $row['keywords'],
+					'groups_view' => $row['groups_view'],
+					'lev' => $row['lev'],
+					'typeprice' => $row['typeprice']
 				);
 			}
 			unset( $list, $row );
-			
-			if( file_exists( NV_ROOTDIR . "/themes/" . $block_theme . "/css/" . $mod_file . ".css" ) )
+
+			// Css
+			if( file_exists( NV_ROOTDIR . '/themes/' . $block_theme . '/css/' . $mod_file . '.css' ) )
 			{
-				$my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/css/' . $mod_file . '.css' . '" type="text/css" />';
+				$my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/css/' . $mod_file . '.css" type="text/css" />';
+			}
+
+			// Language
+			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php' ) )
+			{
+				require_once NV_ROOTDIR . '/modules/' . $mod_file . '/language/' . NV_LANG_DATA . '.php';
+			}
+
+			$pro_config = $module_config[$module];
+
+			// Lay ty gia ngoai te
+			$sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $mod_data . '_money_' . NV_LANG_DATA;
+			$cache_file = NV_LANG_DATA . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
+			if( ($cache = nv_get_cache( $module, $cache_file )) != false )
+			{
+				$money_config = unserialize( $cache );
+			}
+			else
+			{
+				$money_config = array();
+				$result = $db->query( $sql );
+				while( $row = $result->fetch() )
+				{
+					$money_config[$row['code']] = array(
+						'code' => $row['code'],
+						'currency' => $row['currency'],
+						'exchange' => $row['exchange'],
+						'round' => $row['round'],
+						'number_format' => $row['number_format'],
+						'decimals' => $row['round'] > 1 ? $row['round'] : strlen( $row['round'] ) - 2,
+						'is_config' => ($row['code'] == $pro_config['money_unit']) ? 1 : 0
+					);
+				}
+				$result->closeCursor();
+				$cache = serialize( $money_config );
+				nv_set_cache( $module, $cache_file, $cache );
 			}
 		}
-		
-		$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=";
 
-		$xtpl = new XTemplate( "block.others_product.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
-		
-		$sql = "SELECT t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS `title`, t1." . NV_LANG_DATA . "_alias AS `alias`, t1.addtime, t1.homeimgthumb, t1.product_price, t1.product_discounts, t1.money_unit, t1.showprice FROM `" . $db_config['prefix'] . "_" . $module . "_rows` AS t1 INNER JOIN `" . $db_config['prefix'] . "_" . $module . "_block` AS t2 ON t1.id = t2.id WHERE t2.bid= " . $block_config['blockid'] . " AND t1.status=1 ORDER BY t1.addtime DESC, t2.weight ASC LIMIT 0 , " . $block_config['numrow'];
-		$list = nv_db_cache( $sql, "id", $module );
-		
+		$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=';
+
+		$xtpl = new XTemplate( 'block.others_product.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
+		$xtpl->assign( 'LANG', $lang_module );
+		$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
+
+		$db->sqlreset()
+			->select( 't1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice' )
+			->from( $db_config['prefix'] . '_' . $mod_data . '_rows t1' )
+			->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $mod_data . '_block t2 ON t1.id = t2.id' )
+			->where( 't2.bid= ' . $block_config['blockid'] . ' AND t1.status =1' )
+			->order( 't1.addtime DESC, t2.weight ASC' )
+			->limit( $block_config['numrow'] );
+
+		$list = nv_db_cache( $db->sql(), 'id', $module );
+
 		$i = 1;
 		$cut_num = $block_config['cut_num'];
 
 		foreach( $list as $row )
 		{
-			$thumb = explode( "|", $row['homeimgthumb'] );
-			if( ! empty( $thumb[0] ) and ! nv_is_url( $thumb[0] ) )
+			if( $row['homeimgthumb'] == 1 ) //image thumb
 			{
-				$thumb[0] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module . "/" . $thumb[0];
+				$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
 			}
-			else
+			elseif( $row['homeimgthumb'] == 2 ) //image file
 			{
-				$thumb[0] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $mod_file . "/no-image.jpg";
+				$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
 			}
-			
-			$xtpl->assign( 'link', $link . $array_cat_shops[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] );
+			elseif( $row['homeimgthumb'] == 3 ) //image url
+			{
+				$src_img = $row['homeimgfile'];
+			}
+			else //no image
+			{
+				$src_img = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/shops/no-image.jpg';
+			}
+
+			$xtpl->assign( 'link', $link . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'] );
 			$xtpl->assign( 'title', nv_clean60( $row['title'], $cut_num ) );
-			$xtpl->assign( 'src_img', $thumb[0] );
+			$xtpl->assign( 'src_img', $src_img );
 			$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $row['addtime'] ) );
-			
-			if( $pro_config['active_price'] == '1' and $row['showprice'] == '1' )
+
+			if( $pro_config['active_price'] == '1' )
 			{
-				$product_price = CurrencyConversion( $row['product_price'], $row['money_unit'], $pro_config['money_unit'], $block_config );
-				$xtpl->assign( 'product_price', $product_price );
-				$xtpl->assign( 'money_unit', $pro_config['money_unit'] );
-				if( $row['product_discounts'] != 0 )
+				if( $row['showprice'] == '1' )
 				{
-					$price_product_discounts = $row['product_price'] - ( $row['product_price'] * ( $row['product_discounts'] / 100 ) );
-					$xtpl->assign( 'product_discounts', CurrencyConversion( $price_product_discounts, $row['money_unit'], $pro_config['money_unit'], $block_config ) );
-					$xtpl->assign( 'class_money', 'discounts_money' );
-					$xtpl->parse( 'main.loop.discounts' );
+					$price = nv_get_price_tmp( $module, $mod_data, $mod_file, $row['id'] );
+					//var_dump($price); die;
+					$xtpl->assign( 'PRICE', $price );
+					if( $row['discount_id'] and $price['discount_percent'] > 0 )
+					{
+						$xtpl->parse( 'main.loop.price.discounts' );
+					}
+					else
+					{
+						$xtpl->parse( 'main.loop.price.no_discounts' );
+					}
+					$xtpl->parse( 'main.loop.price' );
 				}
 				else
 				{
-					$xtpl->assign( 'class_money', 'money' );
+					$xtpl->parse( 'main.loop.contact' );
 				}
-				$xtpl->parse( 'main.loop.price' );
 			}
-			
-			$bg = ( $i % 2 == 0 ) ? "bg" : "";
-			$xtpl->assign( "bg", $bg );
+
 			$xtpl->parse( 'main.loop' );
-			$i++;
+			++$i;
 		}
-		
+
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
@@ -227,5 +259,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_relates_product( $block_config );
 }
-
-?>

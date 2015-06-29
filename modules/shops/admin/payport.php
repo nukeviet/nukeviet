@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -14,11 +15,11 @@ $page_title = $lang_module['setup_payment'];
 $array_setting_payment = array();
 
 // Load config template payment port in data
-$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` ORDER BY `weight` ASC";
-$result = $db->sql_query( $sql );
-$all_page = $db->sql_numrows( $result );
+$sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment ORDER BY weight ASC";
+$result = $db->query( $sql );
+$num_items = $result->rowCount();
 
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$array_setting_payment[$row['payment']] = $row;
 }
@@ -44,11 +45,11 @@ foreach( $payment_funcs as $payment )
 		$config = $xmlconfig[0];
 		$array_config = array();
 		$array_config_title = array();
-		
+
 		foreach( $config as $key => $value )
 		{
 			$config_lang = $value->attributes();
-			
+
 			if( isset( $config_lang[NV_LANG_INTERFACE] ) )
 			{
 				$lang = ( string )$config_lang[NV_LANG_INTERFACE];
@@ -57,11 +58,11 @@ foreach( $payment_funcs as $payment )
 			{
 				$lang = $key;
 			}
-			
+
 			$array_config[$key] = trim( $value );
 			$array_config_title[$key] = $lang;
 		}
-		
+
 		$array_payment_other[$payment] = array(
 			'payment' => $payment,
 			'paymentname' => trim( $xml->name ),
@@ -84,50 +85,53 @@ if( ! empty( $payment ) )
 	{
 		if( ! empty( $array_payment_other[$payment] ) )
 		{
-			list( $weight ) = $db->sql_fetchrow( $db->sql_query( "SELECT max(`weight`) FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment`" ) );
+			$weight = $db->query( "SELECT max(weight) FROM " . $db_config['prefix'] . "_" . $module_data . "_payment" )->fetchColumn();
 			$weight = intval( $weight ) + 1;
-			
-			$sql = "REPLACE INTO `" . $db_config['prefix'] . "_" . $module_data . "_payment` (`payment`, `paymentname`, `domain`, `active`, `weight`, `config`,`images_button`) VALUES (" . $db->dbescape_string( $payment ) . ", " . $db->dbescape_string( $array_payment_other[$payment]['paymentname'] ) . ", " . $db->dbescape_string( $array_payment_other[$payment]['domain'] ) . ", '0', '" . $weight . "', '" . nv_base64_encode( serialize( $array_payment_other[$payment]['config'] ) ) . "', " . $db->dbescape_string( $array_payment_other[$payment]['images_button'] ) . ")";
-			
-			$db->sql_query( $sql );
-			
+
+			$sql = "REPLACE INTO " . $db_config['prefix'] . "_" . $module_data . "_payment (payment, paymentname, domain, active, weight, config,images_button) VALUES (" . $db->quote( $payment ) . ", " . $db->quote( $array_payment_other[$payment]['paymentname'] ) . ", " . $db->quote( $array_payment_other[$payment]['domain'] ) . ", '0', '" . $weight . "', '" . nv_base64_encode( serialize( $array_payment_other[$payment]['config'] ) ) . "', " . $db->quote( $array_payment_other[$payment]['images_button'] ) . ")";
+
+			$db->query( $sql );
+
 			$data_pay = $array_payment_other[$payment];
 		}
 	}
-	
+
 	// Get data have in database
-	$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . $module_data . "_payment` WHERE payment=" . $db->dbescape( $payment );
-	$result = $db->sql_query( $sql );
-	
-	$data_pay = $db->sql_fetchrow( $result );
+	$stmt = $db->prepare( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE payment= :payment" );
+	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
+	$stmt->execute();
+	$data_pay = $stmt->fetch();
 }
 
 if( $nv_Request->isset_request( 'saveconfigpaymentedit', 'post' ) )
 {
-	$payment = filter_text_input( 'payment', 'post', '', 0 );
-	$paymentname = filter_text_input( 'paymentname', 'post', '', 0 );
-	$domain = filter_text_input( 'domain', 'post', '', 0 );
-	$images_button = filter_text_input( 'images_button', 'post', '', 0 );
+	$payment = $nv_Request->get_title( 'payment', 'post', '', 0 );
+	$paymentname = $nv_Request->get_title( 'paymentname', 'post', '', 0 );
+	$domain = $nv_Request->get_title( 'domain', 'post', '', 0 );
+	$images_button = $nv_Request->get_title( 'images_button', 'post', '', 0 );
 	$active = $nv_Request->get_int( 'active', 'post', 0 );
 	$array_config = $nv_Request->get_array( 'config', 'post', array() );
 
 	if( ! nv_is_url( $images_button ) and file_exists( NV_DOCUMENT_ROOT . $images_button ) )
 	{
-		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$images_button = substr( $images_button, $lu );
 	}
 	elseif( ! nv_is_url( $images_button ) )
 	{
-		$images_button = "";
+		$images_button = '';
 	}
 
-	$sql = "UPDATE `" . $db_config['prefix'] . "_" . $module_data . "_payment` SET `paymentname` = " . $db->dbescape_string( $paymentname ) . ", `domain` = " . $db->dbescape_string( $domain ) . ", `active`=" . $active . ", `config` = '" . nv_base64_encode( serialize( $array_config ) ) . "',`images_button`=" . $db->dbescape_string( $images_button ) . " WHERE `payment` = " . $db->dbescape_string( $payment ) . " LIMIT 1";
-	
-	$db->sql_query( $sql );
-	
+	$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_payment SET paymentname = :paymentname, domain = :domain, active=" . $active . ", config = '" . nv_base64_encode( serialize( $array_config ) ) . "',images_button= :images_button WHERE payment = :payment" );
+	$stmt->bindParam( ':paymentname', $paymentname, PDO::PARAM_STR );
+	$stmt->bindParam( ':domain', $domain, PDO::PARAM_STR );
+	$stmt->bindParam( ':images_button', $images_button, PDO::PARAM_STR );
+	$stmt->bindParam( ':payment', $payment, PDO::PARAM_STR );
+	$stmt->execute();
+
 	nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_product', "edit " . $paymentname, $admin_info['userid'] );
 	nv_del_moduleCache( $module_name );
-	
+
 	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 }
 
@@ -137,19 +141,19 @@ $xtpl->assign( 'LANG', $lang_module );
 $a = 0;
 if( ! empty( $array_setting_payment ) and empty( $data_pay ) )
 {
+	$all_page = sizeof( $array_setting_payment );
 	foreach( $array_setting_payment as $value )
 	{
 		$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;payment=" . $value['payment'];
-		$value['class'] = ( $a % 2 == 0 ) ? ' class="second"' : '';
 		$value['active'] = ( $value['active'] == "1" ) ? "checked=\"checked\"" : "";
 		$value['slect_weight'] = drawselect_number( $value['payment'], 1, $all_page + 1, $value['weight'], "nv_chang_pays('" . $value['payment'] . "',this,url_change_weight,url_back);" );
-		
+
 		$xtpl->assign( 'DATA_PM', $value );
-		
+
 		$xtpl->parse( 'main.listpay.paymentloop' );
-		$a ++;
+		++$a;
 	}
-	
+
 	$xtpl->assign( 'url_back', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 	$xtpl->assign( 'url_change', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=changepay" );
 	$xtpl->assign( 'url_active', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=actpay" );
@@ -164,16 +168,15 @@ if( ! empty( $array_payment_other ) && empty( $data_pay ) )
 		if( ! in_array( $pay, $array_setting_payment_key ) )
 		{
 			$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&amp;payment=" . $value['payment'];
-			$value['class'] = ( $a % 2 == 0 ) ? ' class="second"' : '';
 			$value['STT'] = $a;
-			
+
 			$xtpl->assign( 'ODATA_PM', $value );
-			
+
 			$xtpl->parse( 'main.olistpay.opaymentloop' );
-			$a ++;
+			++$a;
 		}
 	}
-	
+
 	if( $a > 1 ) $xtpl->parse( 'main.olistpay' );
 }
 
@@ -197,20 +200,20 @@ if( ! empty( $data_pay ) )
 		{
 			$lang = $key;
 		}
-		
+
 		$value = $array_config[$key];
-		
+
 		$xtpl->assign( 'CONFIG_LANG', $lang );
 		$xtpl->assign( 'CONFIG_NAME', $key );
 		$xtpl->assign( 'CONFIG_VALUE', $value );
-		
+
 		$xtpl->parse( 'main.paymentedit.config' );
 	}
-	
+
 	$data_pay['active'] = ( $data_pay['active'] == "1" ) ? "checked=\"checked\"" : "";
-	
+
 	$xtpl->assign( 'DATA', $data_pay );
-	
+
 	$xtpl->parse( 'main.paymentedit' );
 }
 
@@ -222,8 +225,6 @@ if( NV_LANG_DATA == 'vi' )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . "/includes/header.php" );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . "/includes/footer.php" );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';
