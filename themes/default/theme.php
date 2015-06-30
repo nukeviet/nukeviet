@@ -88,6 +88,17 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
 	$xtpl->assign( 'THEME_CSS', $css );
 	$xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
+	
+	if($client_info['browser']['key'] == "explorer" AND $client_info['browser']['version'] < 9)
+	{
+		$xtpl->parse( 'main.lt_ie9' );
+	}
+	
+	if($client_info['browser']['key'] == "explorer" AND $client_info['browser']['version'] < 7)
+	{
+		$xtpl->parse( 'main.lt_ie7' );
+	}
+	    
 	if( $global_config['current_theme_type'] == 'r' )
 	{
 		$xtpl->parse( 'main.viewport' );
