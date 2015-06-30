@@ -1081,8 +1081,6 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 {
 	global $db, $global_config, $sys_info;
 
-	require_once NV_ROOTDIR . '/includes/phpmailer/PHPMailerAutoload.php';
-
 	try
 	{
 		$mail = new PHPMailer;
