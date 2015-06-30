@@ -85,10 +85,10 @@ class Browser
     const BROWSER_MSNBOT = 'msnbot'; // http://search.msn.com/msnbot.htm
     const BROWSER_BINGBOT = 'bingbot'; // http://en.wikipedia.org/wiki/Bingbot
 
-    const BROWSER_NETSCAPE_NAVIGATOR = 'Netscape Navigator'; // http://browser.netscape.com/ (DEPRECATED)
-    const BROWSER_GALEON = 'Galeon'; // http://galeon.sourceforge.net/ (DEPRECATED)
-    const BROWSER_NETPOSITIVE = 'NetPositive'; // http://en.wikipedia.org/wiki/NetPositive (DEPRECATED)
-    const BROWSER_PHOENIX = 'Phoenix'; // http://en.wikipedia.org/wiki/History_of_Mozilla_Firefox (DEPRECATED)
+    const BROWSER_NETSCAPE_NAVIGATOR = 'netscape'; // http://browser.netscape.com/ (DEPRECATED)
+    const BROWSER_GALEON = 'galeon'; // http://galeon.sourceforge.net/ (DEPRECATED)
+    const BROWSER_NETPOSITIVE = 'netpositive'; // http://en.wikipedia.org/wiki/NetPositive (DEPRECATED)
+    const BROWSER_PHOENIX = 'phoenix'; // http://en.wikipedia.org/wiki/History_of_Mozilla_Firefox (DEPRECATED)
     
     const BROWSER_OPERA_NAME = 'Opera'; // http://www.opera.com/
     const BROWSER_OPERA_MINI_NAME = 'Opera Mini'; // http://www.opera.com/mini/
