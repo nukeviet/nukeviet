@@ -169,29 +169,6 @@ function nv_check_bot()
 }
 
 /**
- * nv_getBrowser()
- *
- * @param string $agent
- * @return
- */
-function nv_getBrowser( $agent )
-{
-	global $nv_parse_ini_browsers;
-
-	foreach( $nv_parse_ini_browsers as $key => $info )
-	{
-		if( preg_match( '#' . $info['rule'] . '#i', $agent, $results ) )
-		{
-			if( isset( $results[1] ) ) return ( $key . '|' . $info['name'] . ' v' . $results[1] );
-
-			return ( $key . '|' . $info['name'] );
-		}
-	}
-
-	return ( 'Unknown|Unknown' );
-}
-
-/**
  * nv_getOs()
  *
  * @param string $agent
