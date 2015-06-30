@@ -13,8 +13,8 @@
 <!-- END: tree -->
 <!-- BEGIN: main -->
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/slimmenu.css" />
-<script	type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/jquery.slimmenu.js"></script>
-<script src="{NV_BASE_SITEURL}js/ui/jquery.ui.effect.js"></script>
+<script	type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/jquery.slimmenu.js" data-show="after"></script>
+<script src="{NV_BASE_SITEURL}js/ui/jquery.ui.effect.js" data-show="after"></script>
 <ul class="slimmenu">
 	<!-- BEGIN: loopcat1 -->
 	<li>
@@ -30,7 +30,7 @@
 	</li>
 	<!-- END: loopcat1 -->
 </ul>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $('ul.slimmenu').slimmenu(
 {
 	collapserTitle: 'Main Menu',
