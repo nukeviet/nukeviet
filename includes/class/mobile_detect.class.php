@@ -748,11 +748,11 @@ class Mobile_Detect
         return self::$uaHttpHeaders;
     }
 
-    
+
     /**
      * Set CloudFront headers
      * http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html#header-caching-web-device
-     * 
+     *
      * @param array $cfHeaders List of HTTP headers
      *
      * @return  boolean If there were CloudFront headers to be set

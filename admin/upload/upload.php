@@ -47,8 +47,6 @@ else
 		$allow_files_type = array();
 	}
 
-	require_once NV_ROOTDIR . '/includes/class/upload.class.php';
-
 	$upload = new upload( $allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 
 	if( isset( $_FILES['upload']['tmp_name'] ) and is_uploaded_file( $_FILES['upload']['tmp_name'] ) )
@@ -69,7 +67,6 @@ else
 	{
 		if( $global_config['nv_auto_resize'] and ( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT ) )
 		{
-			require_once NV_ROOTDIR . '/includes/class/image.class.php';
 			$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1] );
 			$createImage->resizeXY( NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], 90 );
@@ -158,7 +155,6 @@ else
 						$config_logo['w'] = $w;
 						$config_logo['h'] = $h;
 
-						require_once NV_ROOTDIR . '/includes/class/image.class.php';
 						$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
 						$createImage->addlogo( NV_ROOTDIR . '/' . $upload_logo, '', '', $config_logo );
 						$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'] );

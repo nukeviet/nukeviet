@@ -12,8 +12,6 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 if( $global_config['captcha_type'] == 1 )
 {
-	require NV_ROOTDIR . '/includes/class/SimpleCaptcha.class.php';
-
 	$captcha = new SimpleCaptcha();
 
 	if( file_exists( NV_ROOTDIR . '/includes/keywords/ccaptcha_' . NV_LANG_INTERFACE . '.php' ) )

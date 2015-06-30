@@ -8,8 +8,6 @@
  * @Createdate 2/3/2012, 9:10
  */
 
-if( ! defined( 'NV_HTTP_CLASS' ) ) define( 'NV_HTTP_CLASS', true );
-
 /**
  * NV_Http
  *
@@ -26,7 +24,7 @@ class NV_Http
 	 */
 	private $root_dir = '';
 	private $tmp_dir = '';
-	
+
 	/**
 	 * All site config
 	 */
@@ -35,17 +33,17 @@ class NV_Http
 		'sitekey' => 'default',
 		'site_charset' => 'utf-8',
 	);
-	
+
 	/**
 	 * Error message and error code
 	 * Error code help user to show error message with optional language
 	 * Error message is default by english.
 	 */
 	public static $error = array();
-	
+
 	/**
 	 * NV_Http::__construct()
-	 * 
+	 *
 	 * @param mixed $config
 	 * @param string $tmp_dir
 	 * @return
@@ -59,7 +57,7 @@ class NV_Http
 		 */
 		$store_dir = '/../../';
 		$this->root_dir = preg_replace( '/[\/]+$/', '', str_replace( DIRECTORY_SEPARATOR, '/', realpath( dirname( __file__ ) . $store_dir ) ) );
-		
+
 		// Custom some config
 		if( ! empty( $config['version'] ) )
 		{
@@ -73,13 +71,13 @@ class NV_Http
 		{
 			$this->site_config['site_charset'] = $config['site_charset'];
 		}
-		
+
 		// Find my domain
 		$server_name = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'HTTP_HOST', 'SERVER_NAME' ) ) );
 		$server_protocol = strtolower( preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $this->get_Env( 'SERVER_PROTOCOL' ) ) ) . ( ( $this->get_Env( 'HTTPS' ) == 'on' ) ? 's' : '' );
 		$server_port = $this->get_Env( 'SERVER_PORT' );
 		$server_port = ( $server_port == '80' ) ? '' : ( ':' . $server_port );
-		
+
 		if( filter_var( $server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) === false )
 		{
 			$this->site_config['my_domain'] = $server_protocol . '://' . $server_name . $server_port;
@@ -88,19 +86,19 @@ class NV_Http
 		{
 			$this->site_config['my_domain'] = $server_protocol . '://[' . $server_name . ']' . $server_port;
 		}
-		
+
 		// Check user custom temp dir
 		$this->tmp_dir = $this->root_dir . '/' . $tmp_dir;
-		
+
 		if( ! is_dir( $this->tmp_dir ) )
 		{
 			$this->tmp_dir = $this->root_dir . '/tmp';
 		}
 	}
-	
+
 	/**
 	 * NV_Http::request()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param mixed $args
 	 * @return
@@ -128,23 +126,23 @@ class NV_Http
 			'filename' => null,
 			'limit_response_size' => null,
 		);
-		
+
 		// Get full args
 		$args = $this->build_args( $args, $defaults );
-		
+
 		// Get url info
 		$infoURL = @parse_url( $url );
-		
+
 		// Check valid url
 		if( empty( $url ) or empty( $infoURL['scheme'] ) )
 		{
 			$this->set_error(1);
 			return false;
 		}
-		
+
 		// Set SSL
 		$args['ssl'] = $infoURL['scheme'] == 'https' or $infoURL['scheme'] == 'ssl';
-		
+
 		/**
 		 * Block url
 		 * By basic version, all url will be enabled and no blocking by check function
@@ -159,13 +157,13 @@ class NV_Http
 		$homeURL = parse_url( $this->site_config['my_domain'] );
 		$args['local'] = $homeURL['host'] == $infoURL['host'] || 'localhost' == $infoURL['host'];
 		unset( $homeURL );
-		
+
 		// If Stream but no file, default is a file in temp dir with base $url name
 		if( $args['stream'] and empty( $args['filename'] ) )
 		{
 			$args['filename'] = $this->tmp_dir . '/' . basename( $url );
 		}
-		
+
 		// Check if streaming a file
 		if( $args['stream'] )
 		{
@@ -176,13 +174,13 @@ class NV_Http
 				return false;
 			}
 		}
-		
+
 		// Default header is an empty array
 		if( is_null( $args['headers'] ) )
 		{
 			$args['headers'] = array();
 		}
-		
+
 		if( ! is_array( $args['headers'] ) )
 		{
 			$processedHeaders = NV_Http::processHeaders( $args['headers'], $url );
@@ -201,7 +199,7 @@ class NV_Http
 			$args['user-agent'] = $args['headers']['user-agent'];
 			unset( $args['headers']['user-agent'] );
 		}
-		
+
 		// Get Referer
 		if( isset( $args['headers']['Referer'] ) )
 		{
@@ -220,15 +218,15 @@ class NV_Http
 		}
 
 		NV_Http::buildCookieHeader( $args );
-		
+
 		NV_Http::mbstring_binary_safe_encoding();
-		
+
 		if( ! isset( $args['headers']['Accept-Encoding'] ) )
 		{
 			if( $encoding = NV_http_encoding::accept_encoding( $url, $args ) )
 			{
 				$args['headers']['Accept-Encoding'] = $encoding;
-			}	
+			}
 		}
 
 		if( ( ! is_null( $args['body'] ) and '' != $args['body'] ) or $args['method'] == 'POST' or $args['method'] == 'PUT' )
@@ -246,7 +244,7 @@ class NV_Http
 			if( $args['body'] === '' )
 			{
 				$args['body'] = null;
-			}	
+			}
 
 			if( ! isset( $args['headers']['Content-Length'] ) and ! isset( $args['headers']['content-length'] ) )
 			{
@@ -278,7 +276,7 @@ class NV_Http
 					$cookies_set[$key] = $value['name'];
 				}
 			}
-			
+
 			foreach( $args['cookies'] as $cookie )
 			{
 				if( ! in_array( $cookie->name, $cookies_set ) and $cookie->test( $url ) )
@@ -290,10 +288,10 @@ class NV_Http
 
 		return $response;
 	}
-	
+
 	/**
 	 * NV_Http::get_Env()
-	 * 
+	 *
 	 * @param mixed $key
 	 * @return
 	 */
@@ -303,7 +301,7 @@ class NV_Http
 		{
 			$key = array( $key );
 		}
-		
+
 		foreach( $key as $k )
 		{
 			if( isset( $_SERVER[$k] ) ) return $_SERVER[$k];
@@ -311,13 +309,13 @@ class NV_Http
 			elseif( @getenv( $k ) ) return @getenv( $k );
 			elseif( function_exists( 'apache_getenv' ) and apache_getenv( $k, true ) ) return apache_getenv( $k, true );
 		}
-		
+
 		return '';
 	}
-	
+
 	/**
 	 * NV_Http::parse_str()
-	 * 
+	 *
 	 * @param mixed $str
 	 * @return
 	 */
@@ -325,18 +323,18 @@ class NV_Http
 	{
 		$r = array();
 		parse_str( $str, $r );
-		
+
 		if( get_magic_quotes_gpc() )
 		{
 			$r = array_map( "stripslashes", $r );
 		}
-		
+
 		return $r;
 	}
-	
+
 	/**
 	 * NV_Http::set_error()
-	 * 
+	 *
 	 * @param mixed $code
 	 * @return
 	 */
@@ -344,7 +342,7 @@ class NV_Http
 	{
 		$code = intval( $code );
 		$message = "";
-		
+
 		switch( $code )
 		{
 			case 1: $message = "A valid URL was not provided."; break;
@@ -360,14 +358,14 @@ class NV_Http
 			case 11: $message = "HTTP Curl request failed."; break;
 			default: $message = "There are some unknow errors had been occurred.";
 		}
-		
+
 		self::$error['code'] = $code;
 		self::$error['message'] = $message;
 	}
 
 	/**
 	 * NV_Http::_dispatch_request()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param mixed $args
 	 * @return
@@ -377,7 +375,7 @@ class NV_Http
 		static $transports = array();
 
 		$class = $this->_get_first_available_transport( $args, $url );
-		
+
 		if( ! $class )
 		{
 			$this->set_error(4);
@@ -394,10 +392,10 @@ class NV_Http
 
 		return $response;
 	}
-	
+
 	/**
 	 * NV_Http::mbstring_binary_safe_encoding()
-	 * 
+	 *
 	 * @param bool $reset
 	 * @return
 	 */
@@ -405,44 +403,44 @@ class NV_Http
 	{
 		static $encodings = array();
 		static $overloaded = null;
-	
+
 		if( is_null( $overloaded ) )
 		{
 			$overloaded = function_exists( 'mb_internal_encoding' ) and ( ini_get( 'mbstring.func_overload' ) & 2 );
 		}
-	
+
 		if( $overloaded === false )
 		{
 			return;
 		}
-	
+
 		if( ! $reset )
 		{
 			$encoding = mb_internal_encoding();
 			array_push( $encodings, $encoding );
 			mb_internal_encoding( 'ISO-8859-1' );
 		}
-	
+
 		if( $reset and $encodings )
 		{
 			$encoding = array_pop( $encodings );
 			mb_internal_encoding( $encoding );
 		}
 	}
-	
+
 	/**
 	 * NV_Http::reset_mbstring_encoding()
-	 * 
+	 *
 	 * @return
 	 */
 	public static function reset_mbstring_encoding()
 	{
 		NV_Http::mbstring_binary_safe_encoding( true );
 	}
-		
+
 	/**
 	 * NV_Http::handle_redirects()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param mixed $args
 	 * @param mixed $response
@@ -451,7 +449,7 @@ class NV_Http
 	static function handle_redirects( $url, $args, $response )
 	{
 		static $nv_http;
-		
+
 		// If no redirects are present, or, redirects were not requested, perform no action.
 		if( ! isset( $response['headers']['location'] ) or $args['_redirection'] === 0 )
 		{
@@ -507,13 +505,13 @@ class NV_Http
 		{
 			$nv_http = new NV_Http();
 		}
-		
+
 		return $nv_http->request( $redirect_location, $args );
 	}
-	
+
 	/**
 	 * NV_Http::make_absolute_url()
-	 * 
+	 *
 	 * @param mixed $maybe_relative_path
 	 * @param mixed $url
 	 * @return
@@ -542,7 +540,7 @@ class NV_Http
 		}
 
 		$absolute_path = $url_parts['scheme'] . '://' . $url_parts['host'];
-		
+
 		if( isset( $url_parts['port'] ) )
 		{
 			$absolute_path .= ':' . $url_parts['port'];
@@ -583,20 +581,20 @@ class NV_Http
 
 		return $absolute_path . '/' . ltrim( $path, '/' );
 	}
-	
+
 	/**
 	 * NV_Http::reset()
-	 * 
+	 *
 	 * @return
 	 */
 	public function reset()
 	{
 		$this->error = array();
 	}
-	
+
 	/**
 	 * NV_Http::is_error()
-	 * 
+	 *
 	 * @param mixed $resources
 	 * @return
 	 */
@@ -606,13 +604,13 @@ class NV_Http
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * NV_Http::_get_first_available_transport()
-	 * 
+	 *
 	 * @param mixed $args
 	 * @param mixed $url
 	 * @return
@@ -637,10 +635,10 @@ class NV_Http
 
 		return false;
 	}
-	
+
 	/**
 	 * NV_Http::build_args()
-	 * 
+	 *
 	 * @param mixed $args
 	 * @param mixed $defaults
 	 * @return
@@ -655,13 +653,13 @@ class NV_Http
 		{
 			$args = $this->parse_str( $args );
 		}
-		
+
 		return array_merge( $defaults, $args );
 	}
-	
+
 	/**
 	 * NV_Http::processResponse()
-	 * 
+	 *
 	 * @param mixed $strResponse
 	 * @return
 	 */
@@ -671,10 +669,10 @@ class NV_Http
 
 		return array( 'headers' => $res[0], 'body' => isset( $res[1] ) ? $res[1] : '' );
 	}
-	
+
 	/**
 	 * NV_Http::processHeaders()
-	 * 
+	 *
 	 * @param mixed $headers
 	 * @param string $url
 	 * @return
@@ -712,7 +710,7 @@ class NV_Http
 			if( empty( $tempheader ) )
 			{
 				continue;
-			}				
+			}
 
 			if( strpos( $tempheader, ':' ) === false )
 			{
@@ -733,14 +731,14 @@ class NV_Http
 				{
 					$newheaders[$key] = array( $newheaders[$key] );
 				}
-					
+
 				$newheaders[$key][] = $value;
 			}
 			else
 			{
 				$newheaders[$key] = $value;
 			}
-			
+
 			if( 'set-cookie' == $key )
 			{
 				$cookies[] = new NV_http_cookie( $value, $url );
@@ -753,10 +751,10 @@ class NV_Http
 			'cookies' => $cookies
 		);
 	}
-	
+
 	/**
 	 * NV_Http::buildCookieHeader()
-	 * 
+	 *
 	 * @param mixed $args
 	 * @return
 	 */
@@ -783,10 +781,10 @@ class NV_Http
 			$args['headers']['cookie'] = $cookies_header;
 		}
 	}
-	
+
 	/**
 	 * NV_Http::is_ip_address()
-	 * 
+	 *
 	 * @param mixed $maybe_ip
 	 * @return
 	 */
@@ -804,10 +802,10 @@ class NV_Http
 
 		return false;
 	}
-	
+
 	/**
 	 * NV_Http::post()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param mixed $args
 	 * @return
@@ -821,7 +819,7 @@ class NV_Http
 
 	/**
 	 * NV_Http::get()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param mixed $args
 	 * @return
@@ -835,7 +833,7 @@ class NV_Http
 
 	/**
 	 * NV_Http::head()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param mixed $args
 	 * @return
@@ -882,7 +880,7 @@ class NV_http_cookie{
 
 	/**
 	 * NV_http_cookie::__construct()
-	 * 
+	 *
 	 * @param mixed $data
 	 * @param string $requested_url
 	 * @return
@@ -893,14 +891,14 @@ class NV_http_cookie{
 		{
 			$arrURL = @parse_url( $requested_url );
 		}
-			
+
 		if( isset( $arrURL['host'] ) )
 		{
 			$this->domain = $arrURL['host'];
 		}
-			
+
 		$this->path = isset( $arrURL['path'] ) ? $arrURL['path'] : '/';
-		
+
 		if( '/' != substr( $this->path, -1 ) )
 		{
 			$this->path = dirname( $this->path ) . '/';
@@ -922,21 +920,21 @@ class NV_http_cookie{
 			foreach( $pairs as $pair )
 			{
 				$pair = rtrim( $pair );
-				
+
 				if( empty( $pair ) )
 				{
 					// Handles the cookie ending in ; which results in a empty final pair
 					continue;
-				}	
+				}
 
 				list( $key, $val ) = strpos( $pair, '=' ) ? explode( '=', $pair ) : array( $pair, '' );
 				$key = strtolower( trim( $key ) );
-				
+
 				if( $key == 'expires' )
 				{
 					$val = strtotime( $val );
 				}
-				
+
 				$this->$key = $val;
 			}
 		}
@@ -953,23 +951,23 @@ class NV_http_cookie{
 				if( isset( $data[ $field ] ) )
 				{
 					$this->$field = $data[$field];
-				}	
+				}
 			}
 
 			if( isset( $data['expires'] ) )
 			{
 				$this->expires = is_int( $data['expires'] ) ? $data['expires'] : strtotime( $data['expires'] );
-			}	
+			}
 			else
 			{
 				$this->expires = null;
-			}	
+			}
 		}
 	}
 
 	/**
 	 * NV_http_cookie::test()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @return
 	 */
@@ -995,7 +993,7 @@ class NV_http_cookie{
 		$path   = isset( $this->path )   ? $this->path   : '/';
 		$port   = isset( $this->port )   ? $this->port   : null;
 		$domain = isset( $this->domain ) ? strtolower( $this->domain ) : strtolower( $url['host'] );
-		
+
 		if( stripos( $domain, '.' ) === false )
 		{
 			$domain .= '.local';
@@ -1007,7 +1005,7 @@ class NV_http_cookie{
 		{
 			return false;
 		}
-		
+
 		// Port - supports "port-lists" in the format: "80,8000,8080"
 		if( ! empty( $port ) and ! in_array( $url['port'], explode( ',', $port) ) )
 		{
@@ -1025,7 +1023,7 @@ class NV_http_cookie{
 
 	/**
 	 * NV_http_cookie::getHeaderValue()
-	 * 
+	 *
 	 * @return
 	 */
 	function getHeaderValue()
@@ -1034,13 +1032,13 @@ class NV_http_cookie{
 		{
 			return '';
 		}
-		
+
 		return $this->name . '=' . $this->value;
 	}
 
 	/**
 	 * NV_http_cookie::getFullHeader()
-	 * 
+	 *
 	 * @return
 	 */
 	function getFullHeader()
@@ -1079,7 +1077,7 @@ class NV_http_curl
 	 * @var resource
 	 */
 	private $stream_handle = false;
-	
+
 	/**
 	 * The error code and error message.
 	 * @access public
@@ -1089,7 +1087,7 @@ class NV_http_curl
 
 	/**
 	 * NV_http_curl::request()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param mixed $args
 	 * @return
@@ -1172,17 +1170,17 @@ class NV_http_curl
 		curl_setopt( $handle, CURLOPT_SSL_VERIFYPEER, $ssl_verify );
 		curl_setopt( $handle, CURLOPT_CAINFO, $args['sslcertificates'] );
 		curl_setopt( $handle, CURLOPT_USERAGENT, $args['user-agent'] );
-		
+
 		// Add Curl referer if not empty
 		if( ! is_null( $args['referer'] ) or ! empty( $args['referer'] ) )
 		{
 			curl_setopt( $handle, CURLOPT_AUTOREFERER, true );
 			curl_setopt( $handle, CURLOPT_REFERER, $args['referer'] );
 		}
-		
+
 		// The option doesn't work with safe mode or when open_basedir is set, and there's a
 		curl_setopt( $handle, CURLOPT_FOLLOWLOCATION, false );
-		
+
 		if( defined( 'CURLOPT_PROTOCOLS' ) )
 		{
 			// PHP 5.2.10 / cURL 7.19.4
@@ -1204,12 +1202,12 @@ class NV_http_curl
 				break;
 			default:
 				curl_setopt( $handle, CURLOPT_CUSTOMREQUEST, $args['method'] );
-				
+
 				if( ! is_null( $args['body'] ) )
 				{
 					curl_setopt( $handle, CURLOPT_POSTFIELDS, $args['body'] );
 				}
-					
+
 				break;
 		}
 
@@ -1227,14 +1225,14 @@ class NV_http_curl
 		}
 		else
 		{
-			$this->max_body_length = false;		
-		}				
+			$this->max_body_length = false;
+		}
 
 		// If streaming to a file open a file handle, and setup our curl streaming handler
 		if( $args['stream'] )
 		{
 			$this->stream_handle = @fopen( $args['filename'], 'w+' );
-				
+
 			if( ! $this->stream_handle )
 			{
 				NV_Http::set_error(10);
@@ -1254,7 +1252,7 @@ class NV_http_curl
 			{
 				$headers[] = "{$name}: $value";
 			}
-			
+
 			curl_setopt( $handle, CURLOPT_HTTPHEADER, $headers );
 		}
 
@@ -1275,15 +1273,15 @@ class NV_http_curl
 			if( $curl_error = curl_error( $handle ) )
 			{
 				curl_close( $handle );
-				
+
 				NV_Http::set_error(11);
 				return $this;
 			}
-			
+
 			if( in_array( curl_getinfo( $handle, CURLINFO_HTTP_CODE ), array( 301, 302 ) ) )
 			{
 				curl_close( $handle );
-				
+
 				NV_Http::set_error(5);
 				return $this;
 			}
@@ -1307,23 +1305,23 @@ class NV_http_curl
 			if( CURLE_WRITE_ERROR /* 23 */ == $curl_error and $args['stream'] )
 			{
 				fclose( $this->stream_handle );
-				
+
 				NV_Http::set_error(9);
 				return $this;
 			}
-			
+
 			if( $curl_error = curl_error( $handle ) )
 			{
 				curl_close( $handle );
-				
+
 				NV_Http::set_error(11);
 				return $this;
 			}
-			
+
 			if( in_array( curl_getinfo( $handle, CURLINFO_HTTP_CODE ), array( 301, 302 ) ) )
 			{
 				curl_close( $handle );
-				
+
 				NV_Http::set_error(5);
 				return $this;
 			}
@@ -1366,7 +1364,7 @@ class NV_http_curl
 
 	/**
 	 * NV_http_curl::stream_headers()
-	 * 
+	 *
 	 * @param mixed $handle
 	 * @param mixed $headers
 	 * @return
@@ -1379,7 +1377,7 @@ class NV_http_curl
 
 	/**
 	 * NV_http_curl::stream_body()
-	 * 
+	 *
 	 * @param mixed $handle
 	 * @param mixed $data
 	 * @return
@@ -1408,7 +1406,7 @@ class NV_http_curl
 
 	/**
 	 * NV_http_curl::test()
-	 * 
+	 *
 	 * @param mixed $args
 	 * @return
 	 */
@@ -1439,7 +1437,7 @@ class NV_http_streams
 {
 	/**
 	 * NV_http_streams::request()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param mixed $args
 	 * @return
@@ -1456,9 +1454,9 @@ class NV_http_streams
 			'body' => null,
 			'cookies' => array()
 		);
-		
+
 		$args = NV_Http::build_args( $args, $defaults );
-		
+
 		// Get user agent
 		if( isset( $args['headers']['User-Agent'] ) )
 		{
@@ -1514,7 +1512,7 @@ class NV_http_streams
 			{
 				$arrURL['host'] = $args['headers']['host'];
 			}
-			
+
 			unset( $args['headers']['Host'], $args['headers']['host'] );
 		}
 
@@ -1627,7 +1625,7 @@ class NV_http_streams
 		{
 			$strHeaders .= 'User-agent: ' . $args['user-agent'] . "\r\n";
 		}
-		
+
 		// Add referer if not empty
 		if( ! empty( $args['referer'] ) )
 		{
@@ -1680,7 +1678,7 @@ class NV_http_streams
 		if( $args['stream'] )
 		{
 			$stream_handle = @fopen( $args['filename'], 'w+' );
-			
+
 			if( ! $stream_handle )
 			{
 				NV_Http::set_error(8);
@@ -1691,11 +1689,11 @@ class NV_http_streams
 			while( ! feof( $handle ) and $keep_reading )
 			{
 				$block = fread( $handle, $block_size );
-				
+
 				if( ! $bodyStarted )
 				{
 					$strResponse .= $block;
-					
+
 					if( strpos( $strResponse, "\r\n\r\n" ) )
 					{
 						$process = NV_Http::processResponse( $strResponse );
@@ -1734,19 +1732,19 @@ class NV_http_streams
 		else
 		{
 			$header_length = 0;
-			
+
 			// Not end file and some one
 			while( ! feof( $handle ) and $keep_reading )
 			{
 				$block = fread( $handle, $block_size );
 				$strResponse .= $block;
-				
+
 				if( ! $bodyStarted and strpos( $strResponse, "\r\n\r\n" ) )
 				{
 					$header_length = strpos( $strResponse, "\r\n\r\n" ) + 4;
 					$bodyStarted = true;
 				}
-				
+
 				$keep_reading = ( ! $bodyStarted or ! isset( $args['limit_response_size'] ) or strlen( $strResponse ) < ( $header_length + $args['limit_response_size'] ) );
 			}
 
@@ -1795,7 +1793,7 @@ class NV_http_streams
 
 	/**
 	 * NV_http_streams::verify_ssl_certificate()
-	 * 
+	 *
 	 * @param mixed $stream
 	 * @param mixed $host
 	 * @return
@@ -1819,11 +1817,11 @@ class NV_http_streams
 		$host_type = ( NV_Http::is_ip_address( $host ) ? 'ip' : 'dns' );
 
 		$certificate_hostnames = array();
-		
+
 		if( ! empty( $cert['extensions']['subjectAltName'] ) )
 		{
 			$match_against = preg_split( '/,\s*/', $cert['extensions']['subjectAltName'] );
-			
+
 			foreach( $match_against as $match )
 			{
 				list( $match_type, $match_host ) = explode( ':', $match );
@@ -1865,7 +1863,7 @@ class NV_http_streams
 
 	/**
 	 * NV_http_streams::test()
-	 * 
+	 *
 	 * @param mixed $args
 	 * @return
 	 */
@@ -1884,7 +1882,7 @@ class NV_http_streams
 			{
 				return false;
 			}
-			
+
 			if( ! function_exists( 'openssl_x509_parse' ) )
 			{
 				return false;
@@ -1899,7 +1897,7 @@ class NV_http_encoding
 {
 	/**
 	 * NV_http_encoding::compress()
-	 * 
+	 *
 	 * @param mixed $raw
 	 * @param integer $level
 	 * @param mixed $supports
@@ -1912,7 +1910,7 @@ class NV_http_encoding
 
 	/**
 	 * NV_http_encoding::decompress()
-	 * 
+	 *
 	 * @param mixed $compressed
 	 * @param mixed $length
 	 * @return
@@ -1954,7 +1952,7 @@ class NV_http_encoding
 
 	/**
 	 * NV_http_encoding::compatible_gzinflate()
-	 * 
+	 *
 	 * @param mixed $gzData
 	 * @return
 	 */
@@ -1972,25 +1970,25 @@ class NV_http_encoding
 					list( $xlen ) = unpack( 'v', substr( $gzData, $i, 2 ) );
 					$i = $i + 2 + $xlen;
 				}
-				
+
 				if( $flg & 8 )
 				{
 					$i = strpos( $gzData, "\0", $i ) + 1;
 				}
-				
+
 				if( $flg & 16 )
 				{
 					$i = strpos( $gzData, "\0", $i ) + 1;
 				}
-					
+
 				if( $flg & 2 )
 				{
 					$i = $i + 2;
 				}
 			}
-			
+
 			$decompressed = @gzinflate( substr( $gzData, $i, -8 ) );
-			
+
 			if( $decompressed !== false )
 			{
 				return $decompressed;
@@ -1999,7 +1997,7 @@ class NV_http_encoding
 
 		// Compressed data from java.util.zip.Deflater amongst others.
 		$decompressed = @gzinflate( substr( $gzData, 2 ) );
-		
+
 		if( $decompressed !== false )
 		{
 			return $decompressed;
@@ -2010,7 +2008,7 @@ class NV_http_encoding
 
 	/**
 	 * NV_http_encoding::accept_encoding()
-	 * 
+	 *
 	 * @param mixed $url
 	 * @param mixed $args
 	 * @return
@@ -2029,7 +2027,7 @@ class NV_http_encoding
 		{
 			// disable when streaming to file
 			$compression_enabled = false;
-		}	
+		}
 		elseif( isset( $args['limit_response_size'] ) )
 		{
 			// If only partial content is being requested, we won't be able to decompress it
@@ -2059,7 +2057,7 @@ class NV_http_encoding
 
 	/**
 	 * NV_http_encoding::content_encoding()
-	 * 
+	 *
 	 * @return
 	 */
 	public static function content_encoding()
@@ -2069,7 +2067,7 @@ class NV_http_encoding
 
 	/**
 	 * NV_http_encoding::should_decode()
-	 * 
+	 *
 	 * @param mixed $headers
 	 * @return
 	 */
@@ -2092,7 +2090,7 @@ class NV_http_encoding
 
 	/**
 	 * NV_http_encoding::is_available()
-	 * 
+	 *
 	 * @return
 	 */
 	public static function is_available()

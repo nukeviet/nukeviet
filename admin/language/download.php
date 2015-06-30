@@ -96,12 +96,10 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . se
 		}
 
 		//Zip file
-		require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 		$zip = new PclZip( $file_src );
 		$zip->create( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR );
 
 		//Download file
-		require_once NV_ROOTDIR . '/includes/class/download.class.php';
 		$file_basename = 'Language_' . $dirlang . '.zip';
 		$download = new download( $file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, $file_basename );
 		$download->download_file();

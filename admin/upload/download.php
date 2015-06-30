@@ -51,7 +51,6 @@ if( isset( $check_allow_upload_dir['upload_file'] ) and in_array( 'images', $adm
 
     $currentpath = str_replace( NV_ROOTDIR . '/', '', $upload_real_dir_page );
 
-	require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 	foreach( $imageMatch as $imageSrc )
 	{
 		if( nv_check_url( $imageSrc ) )

@@ -8,29 +8,11 @@
  * @Createdate 25/12/2010, 11:2
  */
 
-if( defined( 'NV_CLASS_KEYWORDRANK' ) ) return;
-define( 'NV_CLASS_KEYWORDRANK', true );
-
-if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
-if( ! defined( 'NV_SERVER_NAME' ) )
-{
-	$_server_name = ( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
-	$_server_name = preg_replace( '/^[a-zA-Z]+\:\/\//', '', $_server_name );
-	define( 'NV_SERVER_NAME', $_server_name );
-	unset( $_server_name );
-}
-
 if( ! isset( $getContent ) or ! is_object( $getContent ) )
 {
 	if( ! isset( $global_config ) or empty( $global_config ) )
 	{
-		$global_config = array( 'version' => '3.0.12', 'sitekey' => mt_rand() );
-	}
-
-	if( ! class_exists( 'UrlGetContents' ) )
-	{
-		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
+		$global_config = array( 'version' => '4.0.20', 'sitekey' => mt_rand() );
 	}
 
 	$getContent = new UrlGetContents( $global_config );
@@ -43,11 +25,11 @@ class keywordRank
 	private $accuracy;
 	private $myDomain;
 	public $currentDomain;
-	private $pattern = array( //
-		'googleByDomain' => 'http://www.google.com/search?hl=en&domains=%s&q=%s&sitesearch=%s%s', //
-		'googleByAll' => 'http://www.google.com/search?hl=en&q=%s%s' //
+	private $pattern = array(
+		'googleByDomain' => 'http://www.google.com/search?hl=en&domains=%s&q=%s&sitesearch=%s%s',
+		'googleByAll' => 'http://www.google.com/search?hl=en&q=%s%s'
 	);
-	private $langList = array( //
+	private $langList = array(
 		'af', 'sq', 'ar', 'be', 'bg', 'ca', 'zh-CN', 'hr', 'cs', 'da', 'nl', 'et', 'tl', 'fi', 'fr', 'gl', 'de', //
 		'en', 'el', 'ht', 'iw', 'hi', 'hu', 'is', 'id', 'ga', 'it', 'ja', 'ko', 'lv', 'lt', 'mk', 'ms', 'mt', 'no', //
 		'fa', 'pl', 'pt', 'ro', 'ru', 'sr', 'sk', 'sl', 'es', 'sw', 'sv', 'th', 'tr', 'uk', 'vi', 'cy', 'yi' //
@@ -64,7 +46,6 @@ class keywordRank
 		if( isset( $_pattern['googleByDomain'] ) ) $this->$pattern['googleByDomain'] = $_pattern['googleByDomain'];
 		if( isset( $_pattern['googleByAll'] ) ) $this->$pattern['googleByAll'] = $_pattern['googleByAll'];
 		$this->myDomain = NV_SERVER_NAME;
-		//$this->myDomain = 'nukeviet.vn';
 	}
 
 	/**

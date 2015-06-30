@@ -1444,7 +1444,6 @@ function nv_check_domain( $domain )
 		}
 		else
 		{
-			require_once NV_ROOTDIR . '/includes/class/idna_convert.class.php';
 			$IDN = new idna_convert( array( 'idn_version' => 2008 ) );
 			$domain_ascii = $IDN->encode( $domain );
 		}
@@ -1692,7 +1691,6 @@ function nv_change_buffer( $buffer )
 
 	if( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
 	{
-		include_once NV_ROOTDIR . '/includes/class/optimizer.class.php' ;
 		$opt_css_file = ( empty( $global_config['cdn_url'] ) ) ? true : false;
 		$optimezer = new optimezer( $buffer, $opt_css_file );
 		$buffer = $optimezer->process();

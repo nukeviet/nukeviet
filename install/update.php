@@ -266,7 +266,6 @@ class NvUpdate
 			$ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
 			$ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
 
-			include_once NV_ROOTDIR . '/includes/class/ftp.class.php' ;
 			$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 20 ), $ftp_port );
 
 			if( empty( $ftp->error ) and $ftp->chdir( $ftp_path ) )
@@ -1106,8 +1105,6 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 				$NvUpdate->log( $nv_update_config, $lang_module['update_log_dump_file_down'], true );
 
 				//Download file
-				require_once NV_ROOTDIR . '/includes/class/download.class.php';
-
 				$download = new download( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs', 'backup_update_' . date( 'Y_m_d' ) . '.zip' );
 				$download->download_file();
 				exit();
@@ -1158,7 +1155,6 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 					$i++;
 				}
 
-				require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 				$zip = new PclZip( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $filename2 );
 				$return = $zip->add( $zip_file_backup, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR );
 
@@ -1655,9 +1651,6 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 				die( 'ERROR|' . $lang_module['ftp_error_empty'] );
 			}
 
-			if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
-			if( ! defined( 'NV_BUFFER_CLASS' ) ) require NV_ROOTDIR . '/includes/class/buffer.class.php';
-
 			$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
 			if( ! empty( $ftp->error ) )
@@ -1791,7 +1784,6 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 					$ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
 					$ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
 
-					include_once NV_ROOTDIR . '/includes/class/ftp.class.php' ;
 					$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 20 ), $ftp_port );
 
 					if( ! empty( $ftp->error ) )

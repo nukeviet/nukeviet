@@ -39,11 +39,6 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 
 		if( ! isset( $Diagnostic ) or ! is_object( $Diagnostic ) )
 		{
-			if( ! class_exists( 'UrlGetContents' ) )
-			{
-				include NV_ROOTDIR . '/includes/class/Diagnostic.class.php' ;
-			}
-
 			$Diagnostic = new Diagnostic();
 		}
 

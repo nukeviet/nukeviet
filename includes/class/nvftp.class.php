@@ -21,8 +21,6 @@
  * $ftp->close(); // Must close connection after use event failed to connect, login
  */
 
-if( ! defined( 'NV_FTP_CLASS' ) ) define( 'NV_FTP_CLASS', true );
-
 // Ngon ngu
 define( 'NV_FTP_ERR_CONNECT', isset( $lang_global['ftp_err_connect'] ) ? $lang_global['ftp_err_connect'] : 'Error: Couldn\'t connect to FTP server' );
 define( 'NV_FTP_ERR_LOGIN', isset( $lang_global['ftp_err_login'] ) ? $lang_global['ftp_err_login'] : 'Error: Couldn\'t login with this account' );

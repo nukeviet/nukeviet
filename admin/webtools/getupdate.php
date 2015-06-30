@@ -20,11 +20,9 @@ if( $nv_Request->get_title( 'checksess', 'get', '' ) == md5( 'unzip' . $version 
 	$xtpl->assign( 'LANG', $lang_module );
 
 	$filename = NV_TEMPNAM_PREFIX . 'sysupd_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
-	
+
 	if( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename ) )
 	{
-		require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-	
 		$zip = new PclZip( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename );
 		$ziplistContent = $zip->listContent();
 
@@ -186,7 +184,7 @@ if( $nv_Request->get_title( 'checksess', 'get', '' ) == md5( 'unzip' . $version 
 				ftp_close( $conn_id );
 			}
 		}
-		
+
 		if( ! empty( $no_extract ) )
 		{
 			$i = 0;
@@ -232,11 +230,11 @@ if( $nv_Request->get_title( 'checksess', 'get', '' ) == md5( 'unzip' . $version 
 			$xtpl->assign( 'URL_GO', NV_BASE_SITEURL . 'install/update.php' );
 			$xtpl->parse( 'complete.ok' );
 		}
-		
+
 		$xtpl->parse( 'complete' );
 		echo $xtpl->text( 'complete' );
 	}
-	
+
 	die();
 }
 
@@ -245,11 +243,10 @@ if( $nv_Request->get_title( 'checksess', 'get', '' ) == md5( 'download' . $versi
 	$xtpl = new XTemplate( 'getupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
-	require( NV_ROOTDIR . '/includes/class/http.class.php' );
 	$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
-	
+
 	$filename = NV_TEMPNAM_PREFIX . 'sysupd_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
-	
+
 	// Debug
 	$args = array(
 		'headers' => array(
@@ -264,15 +261,15 @@ if( $nv_Request->get_title( 'checksess', 'get', '' ) == md5( 'download' . $versi
 			'version' => $version
 		)
 	);
-	
+
 	// Delete temp file if exists
 	if( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename ) )
 	{
 		@nv_deletefile( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename );
 	}
-	
+
 	$apidata = $NV_Http->post( NUKEVIET_STORE_APIURL, $args );
-	
+
 	if( ! empty( NV_Http::$error ) )
 	{
 		$error = nv_http_get_lang( NV_Http::$error );
@@ -281,23 +278,21 @@ if( $nv_Request->get_title( 'checksess', 'get', '' ) == md5( 'download' . $versi
 	{
 		$error = $lang_module['get_update_error_file_download'];
 	}
-	
+
 	if( ! empty( $error ) )
-	{	
+	{
 		$xtpl->assign( 'ERROR', $error );
-		
+
 		$xtpl->parse( 'error' );
 		echo $xtpl->text( 'error' );
 	}
 	else
 	{
-		require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-	
 		$zip = new PclZip( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename );
 		$ziplistContent = $zip->listContent();
-		
+
 		$warning = false;
-		
+
 		// Check security
 		foreach( $ziplistContent as $zipContent )
 		{
@@ -306,23 +301,23 @@ if( $nv_Request->get_title( 'checksess', 'get', '' ) == md5( 'download' . $versi
 				$warning = true;
 			}
 		}
-		
+
 		if( $warning === true )
 		{
 			$xtpl->assign( 'MESSAGE', sprintf( $lang_module['get_update_warning'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;checksess=' . md5( 'unzip' . $version . $global_config['sitekey'] . session_id() ) ) );
-			
+
 			$xtpl->parse( 'warning' );
 			echo $xtpl->text( 'warning' );
 		}
 		else
 		{
 			$xtpl->assign( 'MESSAGE', sprintf( $lang_module['get_update_ok'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;checksess=' . md5( 'unzip' . $version . $global_config['sitekey'] . session_id() ) ) );
-			
+
 			$xtpl->parse( 'ok' );
 			echo $xtpl->text( 'ok' );
 		}
 	}
-	
+
 	die();
 }
 
@@ -337,7 +332,7 @@ if( $nv_Request->get_title( 'checksess', 'get', '' ) == md5( $version . $global_
 
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
-	
+
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';

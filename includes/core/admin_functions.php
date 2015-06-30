@@ -382,7 +382,6 @@ function nv_geVersion( $updatetime = 3600 )
 	}
 	else
 	{
-		include NV_ROOTDIR . '/includes/class/http.class.php' ;
 		$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 
 		$args = array(
@@ -864,7 +863,6 @@ function nv_getExtVersion( $updatetime = 3600 )
 
 		if( ! empty( $array_ext_ids ) )
 		{
-			include NV_ROOTDIR . '/includes/class/http.class.php' ;
 			$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 
 			$args = array(

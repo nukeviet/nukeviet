@@ -58,7 +58,7 @@ var NV = {
 				wrap.css('min-height', '100%');
 			}
 		}
-	},
+	}
 };
 
 $(document).ready(function(){

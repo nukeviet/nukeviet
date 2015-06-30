@@ -55,7 +55,6 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 	if( $config_logo['w'] > 0 and $config_logo['h'] > 0 )
 	{
-		require_once NV_ROOTDIR . '/includes/class/image.class.php';
 		$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 		$createImage->addlogo( $upload_logo, '', '', $config_logo );
 		$createImage->save( NV_ROOTDIR . '/' . $path, $file );

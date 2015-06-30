@@ -215,8 +215,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_user', 'userid ' . $userid, $admin_info['userid'] );
 				if( isset( $_FILES['photo'] ) and is_uploaded_file( $_FILES['photo']['tmp_name'] ) )
 				{
-					require_once NV_ROOTDIR . '/includes/class/upload.class.php' ;
-
 					$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, 80, 80 );
 					$upload_info = $upload->save_file( $_FILES['photo'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false );
 

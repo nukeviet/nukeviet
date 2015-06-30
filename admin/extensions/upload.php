@@ -39,8 +39,6 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 		}
 		else
 		{
-			require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-
 			$zip = new PclZip( $filename );
 			$ziplistContent = $zip->listContent();
 
@@ -449,8 +447,6 @@ else
 		$error = $lang_module['autoinstall_error_downloaded'];
 	}
 }
-
-require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 
 $error = '';
 $info = array();

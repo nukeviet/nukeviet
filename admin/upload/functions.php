@@ -272,7 +272,6 @@ function nv_get_viewImage( $fileName )
 					}
 				}
 			}
-			include_once NV_ROOTDIR . '/includes/class/image.class.php' ;
 			$image = new image( NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			if( $thumb_config['thumb_type'] == 4 )
 			{

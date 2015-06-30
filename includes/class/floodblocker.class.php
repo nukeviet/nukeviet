@@ -8,12 +8,6 @@
  * @Createdate 3/27/2010 0:30
  */
 
-if( defined( 'NV_CLASS_FLOODBLOCKER' ) ) return;
-define( 'NV_CLASS_FLOODBLOCKER', true );
-
-if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
-if( ! defined( 'NV_LOGS_EXT' ) ) define( "NV_LOGS_EXT", "log" );
-
 class FloodBlocker
 {
 	const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';

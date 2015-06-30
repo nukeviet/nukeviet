@@ -58,11 +58,6 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 			{
 				if( ! isset( $keywordRank ) or ! is_object( $keywordRank ) )
 				{
-					if( ! class_exists( 'keywordRank' ) )
-					{
-						include NV_ROOTDIR . '/includes/class/keywordRank.class.php' ;
-					}
-
 					$keywordRank = new keywordRank();
 				}
 

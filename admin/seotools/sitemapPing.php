@@ -152,7 +152,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and empty( $global_config['id
 
 	if( ! empty( $searchEngines['searchEngine'] ) )
 	{
-		include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
 		$array2XML = new Array2XML();
 		$array2XML->saveXML( $searchEngines, 'searchEngines', $file_searchEngines, $global_config['site_charset'] );
 	}

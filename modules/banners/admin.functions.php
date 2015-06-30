@@ -40,8 +40,6 @@ function nv_CreateXML_bannerPlan()
 		}
 	}
 
-	include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
-
 	$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE act = 1';
 	$result = $db->query( $sql );
 

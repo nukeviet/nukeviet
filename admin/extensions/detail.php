@@ -24,7 +24,6 @@ $xtpl->assign( 'LANG', $lang_module );
 
 $request['id'] = $nv_Request->get_int( 'id', 'get', 0 );
 
-require( NV_ROOTDIR . '/includes/class/http.class.php' );
 $NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 
 // Debug
@@ -64,7 +63,7 @@ else
 	$array_files = $array['files'];
 	$array_images = $array['image_demo'];
 	unset( $array['files'], $array['image_demo'] );
-	
+
 	// Change some variable to display value
 	$array['updatetime'] = nv_date( "H:i d/m/Y", $array['updatetime'] );
 	$array['view_hits'] = number_format( $array['view_hits'], 0, '.', '.' );
@@ -74,14 +73,14 @@ else
 	$array['compatible_title'] = empty( $array['compatible'] ) ? $lang_module['incompatible'] : $lang_module['compatible'];
 	$array['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $array['id'];
 	$array['price'] = $array['price'] ? ( preg_replace( "/\,0$/", '', number_format( $array['price'], 1, ',', '.' ) ) . ' ' . $array['currency'] ) : $lang_module['free'];
-	
+
 	$xtpl->assign( 'DATA', $array );
-	
+
 	if( empty( $array['documentation'] ) )
 	{
 		$xtpl->parse( 'main.data.empty_documentation' );
 	}
-	
+
 	if( ! empty( $array_images ) )
 	{
 		foreach( $array_images as $image )
@@ -89,28 +88,28 @@ else
 			$xtpl->assign( 'IMAGE', $image );
 			$xtpl->parse( 'main.data.demo_images.loop' );
 		}
-		
+
 		$xtpl->parse( 'main.data.demo_images' );
 	}
 	else
 	{
-		$xtpl->parse( 'main.data.empty_images' );	
+		$xtpl->parse( 'main.data.empty_images' );
 	}
-	
+
 	if( ! empty( $array['compatible'] ) )
 	{
 		$xtpl->parse( 'main.data.install' );
 	}
-	
+
 	foreach( $array_files as $file )
 	{
 		$file['compatible_class'] = empty( $file['compatible'] ) ? 'text-danger' : 'text-success';
 		$file['compatible_title'] = empty( $file['compatible'] ) ? $lang_module['incompatible'] : $lang_module['compatible'];
 		$file['install_link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=install&amp;id=' . $array['id'] . '&amp;fid=' . $file['id'];
 		$file['price'] = $file['price'] ? ( preg_replace( "/\,0$/", '', number_format( $file['price'], 1, ',', '.' ) ) . ' ' . $file['currency'] ) : $lang_module['free'];
-		
+
 		$xtpl->assign( 'FILE', $file );
-		
+
 		if( $file['type'] == 1 and ! empty( $file['compatible'] ) )
 		{
 			$xtpl->parse( 'main.data.file.install' );
@@ -119,10 +118,10 @@ else
 		{
 			$xtpl->parse( 'main.data.file.download' );
 		}
-		
+
 		$xtpl->parse( 'main.data.file' );
 	}
-	
+
 	$xtpl->parse( 'main.data' );
 }
 

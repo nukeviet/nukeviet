@@ -46,9 +46,6 @@ if( $sys_info['ftp_support'] )
 			die( 'ERROR|' . $lang_module['ftp_error_full'] );
 		}
 
-		if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
-		if( ! defined( 'NV_BUFFER_CLASS' ) ) require NV_ROOTDIR . '/includes/class/buffer.class.php';
-
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
 		if( ! empty( $ftp->error ) )
@@ -90,8 +87,6 @@ if( $sys_info['ftp_support'] )
 			$ftp_user_name = nv_unhtmlspecialchars( $array_config['ftp_user_name'] );
 			$ftp_user_pass = nv_unhtmlspecialchars( $array_config['ftp_user_pass'] );
 			$ftp_path = nv_unhtmlspecialchars( $array_config['ftp_path'] );
-
-			if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
 
 			$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 

@@ -50,7 +50,6 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 			$all_module_file = implode( '_', $modulearray );
 			$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . $all_module_file . '_' . md5( nv_genpass( 10 ) . session_id() ) . '.zip';
 
-			require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 			$zip = new PclZip( $file_src );
 			$zip->create( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
 

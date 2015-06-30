@@ -8,30 +8,12 @@
  * @Createdate 23/12/2010, 9:36
  */
 
-if( defined( 'NV_CLASS_DIAGNOSTIC' ) ) return;
-define( 'NV_CLASS_DIAGNOSTIC', true );
-
-if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
-if( ! defined( 'NV_DATADIR' ) ) define( 'NV_DATADIR', 'data' );
-if( ! defined( 'NV_SERVER_NAME' ) )
-{
-	$_server_name = ( isset( $_SERVER['SERVER_NAME'] ) and ! empty( $_SERVER['SERVER_NAME'] ) ) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
-	$_server_name = preg_replace( '/^[a-zA-Z]+\:\/\//', '', $_server_name );
-	define( 'NV_SERVER_NAME', $_server_name );
-	unset( $_server_name );
-}
 
 if( ! isset( $getContent ) or ! is_object( $getContent ) )
 {
 	if( ! isset( $global_config ) or empty( $global_config ) )
 	{
-		$global_config = array( 'version' => '3.0.12', 'sitekey' => mt_rand() );
-	}
-
-	if( ! class_exists( 'UrlGetContents' ) )
-	{
-		include NV_ROOTDIR . '/includes/class/geturl.class.php' ;
+		$global_config = array( 'version' => '4.0.20', 'sitekey' => mt_rand() );
 	}
 
 	$getContent = new UrlGetContents( $global_config );

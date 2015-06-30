@@ -26,8 +26,6 @@ if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info[
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download'], 'File name: ' . basename( $filename ), $admin_info['userid'] );
 
 	//Download file
-	require_once NV_ROOTDIR . '/includes/class/download.class.php';
-
 	$name = basename( $path_filename );
 	$name_arr = explode( '_', $name );
 

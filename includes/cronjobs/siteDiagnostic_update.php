@@ -14,11 +14,6 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
 
 if( ! isset( $Diagnostic ) or ! is_object( $Diagnostic ) )
 {
-	if( ! class_exists( 'Diagnostic' ) )
-	{
-		include NV_ROOTDIR . '/includes/class/Diagnostic.class.php' ;
-	}
-
 	$Diagnostic = new Diagnostic();
 }
 

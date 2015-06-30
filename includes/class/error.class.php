@@ -12,8 +12,6 @@ if( ! defined( 'E_STRICT' ) ) define( 'E_STRICT', 2048 ); //khong sua
 if( ! defined( 'E_RECOVERABLE_ERROR' ) ) define( 'E_RECOVERABLE_ERROR', 4096 ); //khong sua
 if( ! defined( 'E_DEPRECATED' ) ) define( 'E_DEPRECATED', 8192 ); //khong sua
 if( ! defined( 'E_USER_DEPRECATED' ) ) define( 'E_USER_DEPRECATED', 16384 ); //khong sua
-if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
 
 class Error
 {
@@ -398,7 +396,7 @@ class Error
 		if( ! file_exists( $track_errors ) )
 		{
 			file_put_contents( $track_errors, '', FILE_APPEND );
-			
+
 			if( ! empty( $this->log_errors_list ) and isset( $this->log_errors_list[$errno] ) )
 			{
 				$this->_log();
