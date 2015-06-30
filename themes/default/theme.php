@@ -88,7 +88,6 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
 	$xtpl->assign( 'THEME_CSS', $css );
 	$xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
-	$xtpl->assign( 'THEME_RESPONSIVE', (int) $responsive );
 	if( $global_config['current_theme_type'] == 'r' )
 	{
 		$xtpl->parse( 'main.viewport' );
