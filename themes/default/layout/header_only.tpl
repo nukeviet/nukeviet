@@ -23,9 +23,6 @@
 
 		<link href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css" rel="stylesheet" />
 		{THEME_CSS}
-        <script type="text/javascript">
-            var theme_responsive = '{THEME_RESPONSIVE}';
-        </script>
 		{THEME_SITE_JS}
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/main.js"></script>
 		<!--[if lt IE 9]>
