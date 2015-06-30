@@ -46,7 +46,7 @@
 		</ul>
 	</div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 nv_DigitalClock('digclock');
 $(document).ready(function(){
 	$('#menu-site-default a').hover(function(){
