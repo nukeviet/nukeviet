@@ -143,6 +143,7 @@ $lang_module['email_active_error_mail'] = 'Your account updated. But system did 
 $lang_module['st_login'] = 'Regular login';
 $lang_module['st_login2'] = 'Regular login';
 $lang_module['admin_login'] = 'Login by admin account';
+$lang_module['mode_login_1'] = "Regular login";
 $lang_module['mode_login_2'] = 'Login by OpenID';
 $lang_module['mode_login_3'] = 'Login by Oauth';
 $lang_module['mode_login_4'] = 'Login by CAS Server';
