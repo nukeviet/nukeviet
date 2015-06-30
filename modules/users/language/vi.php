@@ -143,6 +143,7 @@ $lang_module['email_active_error_mail'] = 'Tài khoản của bạn vừa đư�
 $lang_module['st_login'] = 'Đăng nhập theo kiểu thông thường';
 $lang_module['st_login2'] = 'Khả năng đăng nhập thông thường';
 $lang_module['admin_login'] = 'Đăng nhập nhờ tài khoản Admin';
+$lang_module['mode_login_1'] = "Đăng nhập theo kiểu thông thường";
 $lang_module['mode_login_2'] = 'Đăng nhập bằng OpenID';
 $lang_module['mode_login_3'] = 'Đăng nhập bằng Oauth';
 $lang_module['mode_login_4'] = 'Đăng nhập bằng CAS Server';
