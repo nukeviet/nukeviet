@@ -626,6 +626,7 @@ function nv_user_in_groups( $groups_view )
 		else
 		{
 			global $user_info;
+			if ( empty( $user_info['in_groups'] ) ) return false;
 			return ( array_intersect( $user_info['in_groups'], $groups_view ) != array() );
 		}
 	}
