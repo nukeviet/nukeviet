@@ -129,7 +129,7 @@
 
 	<br />
 </form>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	function get_alias() {
 		var title = strip_tags(document.getElementById('idtitle').value);
 		if (title != '') {
