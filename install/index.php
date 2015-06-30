@@ -939,8 +939,8 @@ elseif( $step == 6 )
 						}
 					}
 
-					$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/br.ini', true );
-					foreach( $tmp_array as $_browser => $v )
+					$tmp_array = array('opera','operamini','webtv','explorer','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
+					foreach( $tmp_array as $_browser )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote( $_browser ) . ", 0, 0, 0)" );
 					}
