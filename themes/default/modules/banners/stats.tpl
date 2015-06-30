@@ -48,7 +48,7 @@
 			</ul>
 		</div>	
 	</div>
-	<script type="text/javascript">
+	<script type="text/javascript" data-show="after">
 	var type = '', month = '', ads = '';
 	$(function() {
 		$('#adsstat-ads a').click(function() {
