@@ -248,10 +248,13 @@ if( $client_info['is_bot'] )
 }
 else
 {
-	$client_info['browser'] = array_combine( array( 'key', 'name' ), explode( '|', nv_getBrowser( NV_USER_AGENT ) ) );
-	if( preg_match( '/^([^0-9]+)([0-9]+)\.(.*)$/', $client_info['browser']['name'], $matches ) )
+    $browser = new Browser( NV_USER_AGENT );
+    $client_info['browser'] = array();
+    $client_info['browser']['key'] = $browser->getBrowserKey();
+    $client_info['browser']['name'] = $browser->getBrowser();
+    if( preg_match( '/^([0-9]+)\.(.*)$/', $browser->getVersion(), $matches ) )
 	{
-		$client_info['browser']['version'] = ( int )$matches[2];
+		$client_info['browser']['version'] = ( int )$matches[1];
 		unset( $matches );
 	}
 	else
