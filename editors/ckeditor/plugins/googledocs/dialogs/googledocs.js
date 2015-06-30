@@ -103,7 +103,7 @@ CKEDITOR.dialog.add('googledocs', function (editor) {
             label: editor.lang.googledocs.btnUpload,
             filebrowser: {
               action: 'QuickUpload',
-              target: 'settingsTab:txtUrl',
+              target: 'settingsTab:txtUrl'
             },
             'for': [ 'uploadTab', 'upload' ]
           }

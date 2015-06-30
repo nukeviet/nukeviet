@@ -20,7 +20,7 @@ CKEDITOR.plugins.add( 'eqneditor', {
 		// First make sure we have loaded the necessary scripts
   	CKEDITOR.scriptLoader.load( [
 		this.path+'codecogs/eq_config.js', 
-		this.path+'codecogs/eq_editor-lite-17.js',
+		this.path+'codecogs/eq_editor-lite-17.js'
 		]);
 		
 		// Load Additional CSS 

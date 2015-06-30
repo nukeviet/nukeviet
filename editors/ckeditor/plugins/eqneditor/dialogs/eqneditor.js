@@ -33,12 +33,12 @@ CKEDITOR.dialog.add( 'eqneditorDialog', function(editor)
 					},
 					{
 							type: 'html',
-							html: '<label for="CClatex'+window.CCounter+'">Equation (LaTeX):</label>',
+							html: '<label for="CClatex'+window.CCounter+'">Equation (LaTeX):</label>'
 					},
 					{
 							type: 'html',
 							html: '<textarea id="CClatex'+window.CCounter+'" rows="5"></textarea>',
-							style:'border:1px solid #8fb6bd; width:540px; font-size:16px; padding:5px; background-color:#ffc',
+							style:'border:1px solid #8fb6bd; width:540px; font-size:16px; padding:5px; background-color:#ffc'
 					},
 					{
 						 	type: 'html',
