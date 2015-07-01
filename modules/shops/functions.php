@@ -342,16 +342,19 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 	while( $row = $result->fetch( ) )
 	{
 		$row['tab'] = unserialize( $row['tab'] );
-		foreach( $row['tab'] as $key => $value )
+		if( !empty( $row['tab'] ) )
 		{
-			if( $key == $idtemplate )
+			foreach( $row['tab'] as $key => $value )
 			{
-				$arr[$row['field']] = 1;
+				if( $key == $idtemplate )
+				{
+					$arr[$row['field']] = 1;
+				}
 			}
 		}
 	}
 	$html ='';
-	
+
 	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '/' . $name_file ) )
 	{
 		$theme_tpl = $global_config['module_theme'];
@@ -360,20 +363,20 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 	{
 		$theme_tpl = 'default';
 	}
-	
+
 	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/themes/' . $theme_tpl . '/modules/' . $module_file );
 	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
 	$xtpl->assign( 'CUSTOM_DATA', $array_custom );
 	$count = 0;
 	foreach ($array_custom as $key => $value)
 	{
-		if( isset($arr[$key]) and !empty($value) ) 
+		if( isset($arr[$key]) and !empty($value) )
 		{
 			$xtpl->parse( 'main.'.$key );
 			$count ++;
 		}
 	}
-	
+
 	if( $count > 0)
 	{
 		$xtpl->parse( 'main' );

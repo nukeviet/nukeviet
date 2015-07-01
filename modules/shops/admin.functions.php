@@ -1235,7 +1235,7 @@ function Insertabl_catfields( $table, $array, $idshop )
 
 function nv_create_form_file( $array_template_id )
 {
-	global $db, $db_config, $module_name, $module_data, $module_file, $array_template;
+	global $db, $db_config, $module_name, $module_data, $module_file, $array_template, $lang_module;
 
 	foreach( $array_template_id as $templateids_i )
 	{
@@ -1252,15 +1252,15 @@ function nv_create_form_file( $array_template_id )
 
 		$array_field_js = array( );
 		$content_2 = "<!-- BEGIN: main -->\n";
-		$content_2 .= "\t<div class=\"table-responsive\">\n\t\t<table class=\"table table-striped table-bordered table-hover\">\n";
-		$content_2 .= "\t\t\t<tbody>\n";
+		$content_2 .= "\t<div class=\"panel panel-default\">\n\t\t<div class=\"panel-heading\">{LANG.tabs_content_customdata}</div>\n";
+		$content_2 .= "\t\t<div class=\"panel-body\">\n";
 
 		foreach( $array_views as $key => $input_type_i )
 		{
-			$content_2 .= "\t\t\t\t<tr>\n";
-			$content_2 .= "\t\t\t\t\t<td> {CUSTOM_LANG." . $key . ".title} </td>\n";
+			$content_2 .= "\t\t\t<div class=\"form-group\">\n";
+			$content_2 .= "\t\t\t\t<label class=\"col-md-4 control-label\"> {CUSTOM_LANG." . $key . ".title} </label>\n";
 
-			$content_2 .= "\t\t\t\t\t<td>";
+			$content_2 .= "\t\t\t\t<div class=\"col-md-20\">";
 
 			if( $input_type_i == 'time' )
 			{
@@ -1386,12 +1386,11 @@ function nv_create_form_file( $array_template_id )
 					$content_2 .= "&nbsp;<i class=\"fa fa-refresh fa-lg icon-pointer\" onclick=\"nv_get_alias('id_" . $key . "');\">&nbsp;</i>";
 				}
 			}
-			$content_2 .= "</td>\n";
-			$content_2 .= "\t\t\t\t</tr>\n";
+			$content_2 .= "</div>\n";
+			$content_2 .= "\t\t\t</div>\n";
 		}
 
-		$content_2 .= "\t\t\t</tbody>\n";
-		$content_2 .= "\t\t</table>\n";
+		$content_2 .= "\t\t</div>\n";
 		$content_2 .= "\t</div>\n";
 
 		if( !empty( $array_field_js['date'] ) )

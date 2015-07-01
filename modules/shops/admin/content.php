@@ -1307,11 +1307,10 @@ if( !$pro_config['active_warehouse'] )
 }
 
 // Custom fiels
-if( $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
+if( $pro_config['template_active'] and $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
 {
 	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_shops_cat[$rowcontent['listcatid']]['form'], $custom );
 	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
-	$xtpl->parse( 'main.customfield' );
 }
 
 $xtpl->parse( 'main' );
