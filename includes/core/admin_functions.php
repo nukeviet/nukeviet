@@ -315,9 +315,6 @@ function nv_save_file_config_global()
 	unset( $language_array );
 	$content_config .= "\$language_array=" . nv_var_export( $tmp_array ) . ";\n";
 
-	$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/os.ini', true );
-	$content_config .= "\$nv_parse_ini_os=" . nv_var_export( $tmp_array ) . ";\n";
-
 	$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/timezone.ini', true );
 	$content_config .= "\$nv_parse_ini_timezone=" . nv_var_export( $tmp_array ) . ";\n";
 

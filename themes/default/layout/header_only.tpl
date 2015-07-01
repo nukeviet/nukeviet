@@ -26,8 +26,8 @@
 		{THEME_SITE_JS}
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/main.js"></script>
 		<!-- BEGIN: lt_ie9 -->
-		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/html5shiv.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/respond.min.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/html5shiv.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/respond.min.js"></script>
 		<!-- END: lt_ie9 -->
 	</head>
 	<body>

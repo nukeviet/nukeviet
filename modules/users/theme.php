@@ -25,7 +25,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 					$('#registerForm').validate({
 					});
@@ -226,7 +226,7 @@ function openid_register( $array_register, $siteterms, $data_questions )
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#registerForm').validate({
 			});
@@ -268,7 +268,7 @@ function user_login( $gfx_chk, $array_login )
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#loginForm').validate();
 		 });";
@@ -342,7 +342,7 @@ function user_openid_login( $gfx_chk, $array_login, $attribs )
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#loginForm').validate();
 		 });";
@@ -447,7 +447,7 @@ function user_lostpass( $data, $question )
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#lostpassForm').validate();
 		 });";
@@ -523,7 +523,7 @@ function user_lostactivelink( $data, $question )
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#lostpassForm').validate();
 		 });";
@@ -571,7 +571,7 @@ function user_changepass( $array_data = array() )
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#changePassForm').validate();
 		 });";
@@ -624,7 +624,7 @@ function user_changequestion( $array_data )
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#changeQuestionForm').validate();
 		 });";
@@ -1019,7 +1019,7 @@ function openid_account_confirm( $gfx_chk, $attribs )
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#loginForm').validate();
 		 });";
@@ -1074,7 +1074,7 @@ function openid_active_confirm( $gfx_chk, $attribs )
 
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.validate.min.js\"></script>\n";
 	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/jquery.validator-" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
+	$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$my_head .= "$(document).ready(function(){
 			$('#loginForm').validate();
 		 });";

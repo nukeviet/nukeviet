@@ -6,12 +6,6 @@
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/table.css" />
-        <!--[if IE 6]>
-            <script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
-            <script type="text/javascript">
-            DD_belatedPNG.fix('#,img');
-            </script>
-        <![endif]-->
         <script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/{NV_LANG_UPDATE}.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>

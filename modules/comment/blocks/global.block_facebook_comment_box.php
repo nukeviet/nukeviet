@@ -69,7 +69,7 @@ if( ! nv_function_exists( 'nv_facebook_comment_box_blocks' ) )
 			$facebookappid = ( isset( $module_config[$module_name]['facebookappid'] ) ) ? $module_config[$module_name]['facebookappid'] : $block_config['facebookappid'];
 
 			$content .= "<div id=\"fb-root\"></div>
-			<script type=\"text/javascript\">
+			<script type=\"text/javascript\" data-show=\"after\">
 			 (function(d, s, id) {
 			 var js, fjs = d.getElementsByTagName(s)[0];
 			 if (d.getElementById(id)) return;

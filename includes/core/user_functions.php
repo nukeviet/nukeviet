@@ -150,19 +150,15 @@ function nv_blocks_content( $sitecontent )
 				$unact[] = $_row['bid'];
 				continue;
 			}
-			if( $client_info['is_tablet'] and $_row['hide_device'] == 2 )
-			{
 
-			}
-
-			if( $client_info['is_mobile'] and $_row['hide_device'] == 2 )
+			if( $client_info['is_mobile'] and ( $_row['hide_device'] == 1 or $_row['hide_device'] == 3 ) )
 			{
-				//Ẩn trên mobile + Máy tính bảng
+				//Ẩn trên mobile
 				continue;
 			}
-			elseif( $client_info['is_mobile'] and ! $client_info['is_tablet'] and $_row['hide_device'] == 1 )
+			elseif( $client_info['is_tablet'] and ( $_row['hide_device'] == 2 or $_row['hide_device'] == 3 ) )
 			{
-				// Ẩn trên mobile, không ẩn trên máy tính bảng
+				// Ẩn trên Máy tính bảng
 				continue;
 			}
 
@@ -536,7 +532,7 @@ function nv_html_site_js()
 	{
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\"></script>\n";
-		$return .= '<script type="text/javascript">
+		$return .= '<script type="text/javascript" data-show=\"after\">
  			//<![CDATA[
 					var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {

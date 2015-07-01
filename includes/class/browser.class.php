@@ -89,7 +89,7 @@ class Browser
     const BROWSER_GALEON = 'galeon'; // http://galeon.sourceforge.net/ (DEPRECATED)
     const BROWSER_NETPOSITIVE = 'netpositive'; // http://en.wikipedia.org/wiki/NetPositive (DEPRECATED)
     const BROWSER_PHOENIX = 'phoenix'; // http://en.wikipedia.org/wiki/History_of_Mozilla_Firefox (DEPRECATED)
-    
+
     const BROWSER_OPERA_NAME = 'Opera'; // http://www.opera.com/
     const BROWSER_OPERA_MINI_NAME = 'Opera Mini'; // http://www.opera.com/mini/
     const BROWSER_WEBTV_NAME = 'WebTV'; // http://www.webtv.net/pc/
@@ -128,23 +128,35 @@ class Browser
     const BROWSER_PHOENIX_NAME = 'Phoenix'; // http://en.wikipedia.org/wiki/History_of_Mozilla_Firefox (DEPRECATED)
 
     const PLATFORM_UNKNOWN = 'unknown';
-    const PLATFORM_WINDOWS = 'Windows';
-    const PLATFORM_WINDOWS_CE = 'Windows CE';
-    const PLATFORM_APPLE = 'Apple';
-    const PLATFORM_LINUX = 'Linux';
-    const PLATFORM_OS2 = 'OS/2';
-    const PLATFORM_BEOS = 'BeOS';
-    const PLATFORM_IPHONE = 'iPhone';
-    const PLATFORM_IPOD = 'iPod';
-    const PLATFORM_IPAD = 'iPad';
-    const PLATFORM_BLACKBERRY = 'BlackBerry';
-    const PLATFORM_NOKIA = 'Nokia';
-    const PLATFORM_FREEBSD = 'FreeBSD';
-    const PLATFORM_OPENBSD = 'OpenBSD';
-    const PLATFORM_NETBSD = 'NetBSD';
-    const PLATFORM_SUNOS = 'SunOS';
-    const PLATFORM_OPENSOLARIS = 'OpenSolaris';
-    const PLATFORM_ANDROID = 'Android';
+    const PLATFORM_WINDOWS = 'win';
+    const PLATFORM_WINDOWS_8 = 'win8';
+    const PLATFORM_WINDOWS_7 = 'win7';
+    const PLATFORM_WINDOWS_2003 = 'win2003';
+    const PLATFORM_WINDOWS_VISTA = 'winvista';
+    const PLATFORM_WINDOWS_CE = 'wince';
+    const PLATFORM_WINDOWS_XP = 'winxp';
+    const PLATFORM_WINDOWS_2000 = 'win2000';
+    const PLATFORM_WINDOWS_95 = 'win95';
+    const PLATFORM_WINDOWS_ME = 'winme';
+    const PLATFORM_WINDOWS_NT = 'winnt';
+    const PLATFORM_WINDOWS_98 = 'win98';
+    const PLATFORM_APPLE = 'apple';
+    const PLATFORM_LINUX = 'linux';
+    const PLATFORM_OS2 = 'os2';
+    const PLATFORM_BEOS = 'beos';
+    const PLATFORM_IPHONE = 'iphone';
+    const PLATFORM_IPOD = 'ipod';
+    const PLATFORM_IPAD = 'ipad';
+    const PLATFORM_BLACKBERRY = 'blackberry';
+    const PLATFORM_NOKIA = 'nokia';
+    const PLATFORM_FREEBSD = 'freebsd';
+    const PLATFORM_OPENBSD = 'openbsd';
+    const PLATFORM_NETBSD = 'netbsd';
+    const PLATFORM_SUNOS = 'sunos';
+    const PLATFORM_OPENSOLARIS = 'opensolaris';
+    const PLATFORM_ANDROID = 'android';
+    const PLATFORM_IRIX = 'irix';
+    const PLATFORM_PALM = 'palm';
 
     const OPERATING_SYSTEM_UNKNOWN = 'unknown';
 
@@ -187,7 +199,7 @@ class Browser
      */
     function isBrowser( $browserName )
     {
-        return ( 0 == strcasecmp( $this->_browser_name, trim( $browserName ) ) OR 0 == strcasecmp( $this->_browser_key, trim( $browserName ) ) );
+        return ( 0 == strcasecmp( $this->_browser_name, trim( $browserName ) ) or 0 == strcasecmp( $this->_browser_key, trim( $browserName ) ) );
     }
 
     /**
@@ -198,7 +210,7 @@ class Browser
     {
         return $this->_browser_name;
     }
-    
+
     /**
      * The key of the browser.  All return types are from the class contants
      * @return string Key of the browser
@@ -223,6 +235,42 @@ class Browser
      * @return string Name of the browser
      */
     public function getPlatform()
+    {
+        $names = array(
+            'unknown' => 'Unknown',
+            'win' => 'Windows',
+            'win8' => 'Windows 8',
+            'win7' => 'Windows 7',
+            'win2003' => 'Windows 2003',
+            'winvista' => 'Windows Vista',
+            'wince' => 'Windows CE',
+            'winxp' => 'Windows XP',
+            'win2000' => 'Windows 2000',
+            'win95' => 'Windows 95',
+            'winme' => 'Windows ME',
+            'winnt' => 'Windows NT',
+            'win98' => 'Windows 98',
+            'apple' => 'Apple',
+            'linux' => 'Linux',
+            'os2' => 'OS/2',
+            'beos' => 'BeOS',
+            'iphone' => 'iPhone',
+            'ipod' => 'iPod',
+            'ipad' => 'iPad',
+            'blackberry' => 'BlackBerry',
+            'nokia' => 'Nokia',
+            'freebsd' => 'FreeBSD',
+            'openbsd' => 'OpenBSD',
+            'netbsd' => 'NetBSD',
+            'sunos' => 'SunOS',
+            'opensolaris' => 'OpenSolaris',
+            'android' => 'Android',
+            'irix' => 'Irix',
+            'palm' => 'Palm' );
+        return isset( $names[$this->_platform] ) ? $names[$this->_platform] : $names['unknown'];
+    }
+
+    public function getPlatformKey()
     {
         return $this->_platform;
     }
@@ -1358,9 +1406,20 @@ class Browser
      */
     protected function checkPlatform()
     {
-        if ( stripos( $this->_agent, 'windows' ) !== false )
+        if ( stripos( $this->_agent, 'win' ) !== false )
         {
             $this->_platform = self::PLATFORM_WINDOWS;
+            if ( preg_match( "/wi(n|ndows)[ \-]?nt[ \/]?6\.(2|3)/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_8;
+            elseif ( preg_match( "/wi(n|ndows)[ \-]?nt[ \/]?6\.1/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_7;
+            elseif ( preg_match( "/wi(n|ndows)[ \-]?nt[ \/]?6\.0/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_VISTA;
+            elseif ( preg_match( "/wi(n|ndows)[ \-]?(2003|nt[ \/]?5\\.2)/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_2003;
+            elseif ( preg_match( "/windows xp/i", $this->_agent ) or preg_match( "/wi(n|ndows)[ \-]?nt[ /]?5\.1/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_XP;
+            elseif ( preg_match( "/wi(n|ndows)[ \-]?(2000|nt[ \/]?5\.0)/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_2000;
+            elseif ( preg_match( "/wi(n|ndows)[ \-]?95/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_95;
+            elseif ( preg_match( "/wi(n|ndows)[ \-]?ce/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_CE;
+            elseif ( preg_match( "/win 9x 4\.90/i", $this->_agent ) or preg_match( "/wi(n|ndows)[ \-]?me/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_ME;
+            elseif ( preg_match( "/wi(n|ndows)[ \-]?nt/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_NT;
+            elseif ( preg_match( "/wi(n|ndows)[ \-]?98/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_98;
         }
         elseif ( stripos( $this->_agent, 'iPad' ) !== false )
         {
@@ -1382,7 +1441,7 @@ class Browser
         {
             $this->_platform = self::PLATFORM_ANDROID;
         }
-        elseif ( stripos( $this->_agent, 'linux' ) !== false )
+        elseif ( stripos( $this->_agent, 'linux' ) !== false or preg_match( "/mdk for ([0-9.]{1,10})/i", $this->_agent ) )
         {
             $this->_platform = self::PLATFORM_LINUX;
         }
@@ -1414,7 +1473,7 @@ class Browser
         {
             $this->_platform = self::PLATFORM_SUNOS;
         }
-        elseif ( stripos( $this->_agent, 'OS\/2' ) !== false )
+        elseif ( stripos( $this->_agent, 'OS\/2' ) !== false or preg_match( "/warp[ \/]?([0-9.]{1,10})/i", $this->_agent ) )
         {
             $this->_platform = self::PLATFORM_OS2;
         }
@@ -1422,9 +1481,13 @@ class Browser
         {
             $this->_platform = self::PLATFORM_BEOS;
         }
-        elseif ( stripos( $this->_agent, 'win' ) !== false )
+        elseif ( stripos( $this->_agent, 'irix' ) !== false )
         {
-            $this->_platform = self::PLATFORM_WINDOWS;
+            $this->_platform = self::PLATFORM_IRIX;
+        }
+        elseif ( stripos( $this->_agent, 'Palm' ) !== false )
+        {
+            $this->_platform = self::PLATFORM_PALM;
         }
     }
 }

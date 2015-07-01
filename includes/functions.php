@@ -131,68 +131,6 @@ function nv_checkagent( $a )
 }
 
 /**
- * nv_check_bot()
- *
- * @return
- */
-function nv_check_bot()
-{
-	$file_bots = NV_ROOTDIR . '/' . NV_DATADIR . '/bots.config';
-	$bots = ( file_exists( $file_bots ) and filesize( $file_bots ) ) ? unserialize( file_get_contents( $file_bots ) ) : array();
-
-	if( empty( $bots ) and file_exists( NV_ROOTDIR . '/includes/bots.php' ) ) include NV_ROOTDIR . '/includes/bots.php' ;
-
-	if( empty( $bots ) ) return array();
-
-	foreach( $bots as $name => $values )
-	{
-		$is_bot = false;
-
-		if( $values['agent'] and preg_match( '#' . str_replace( '\*', '.*?', nv_preg_quote( $values['agent'], '#' ) ) . '#i', NV_USER_AGENT ) ) $is_bot = true;
-
-		if( ! empty( $values['ips'] ) and ( $is_bot or ! $values['agent'] ) )
-		{
-			$is_bot = false;
-			$ips = implode( '|', array_map( 'nv_preg_quote', explode( '|', $values['ips'] ) ) );
-			if( preg_match( '/^' . $ips . '/', NV_CLIENT_IP ) ) $is_bot = true;
-		}
-
-		if( $is_bot ) return array(
-			'name' => $name,
-			'agent' => $values['agent'],
-			'ip' => NV_CLIENT_IP,
-			'allowed' => $values['allowed']
-		);
-	}
-
-	return array();
-}
-
-/**
- * nv_getOs()
- *
- * @param string $agent
- * @return
- */
-function nv_getOs( $agent )
-{
-	global $nv_parse_ini_os;
-
-	foreach( $nv_parse_ini_os as $key => $info )
-	{
-		if( preg_match( '#' . $info['rule'] . '#i', $agent, $results ) )
-		{
-			if( strstr( $key, 'win' ) ) return ( $key . '|' . $info['name'] );
-			if( isset( $results[1] ) ) return ( $key . '|' . $info['name'] . ' ' . $results[1] );
-
-			return ( $key . '|' . $info['name'] );
-		}
-	}
-
-	return ( 'Unspecified|Unspecified' );
-}
-
-/**
  * nv_convertfromBytes()
  *
  * @param integer $size
@@ -1621,7 +1559,7 @@ function nv_change_buffer( $buffer )
 
 	if( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
 	{
-		$googleAnalytics = "<script type=\"text/javascript\">\r\n";
+		$googleAnalytics = "<script type=\"text/javascript\" data-show=\"after\">\r\n";
 		$googleAnalytics .= "//<![CDATA[\r\n";
 		if( $global_config['googleAnalyticsMethod'] == 'universal' )
 		{
@@ -1657,7 +1595,7 @@ function nv_change_buffer( $buffer )
 	}
 	if( NV_LANG_INTERFACE == 'vi' and ( $global_config['mudim_active'] == 1 or ( $global_config['mudim_active'] == 2 and defined( 'NV_SYSTEM' ) ) or ( $global_config['mudim_active'] == 3 and defined( 'NV_ADMIN' ) ) ) )
 	{
-		$body_replace .= "<script type=\"text/javascript\">
+		$body_replace .= "<script type=\"text/javascript\" data-show=\"after\">
 				var mudim_showPanel = " . ( ( $global_config['mudim_showpanel'] ) ? "true" : "false" ) . ";
 				var mudim_displayMode = " . $global_config['mudim_displaymode'] . ";
 				var mudim_method = " . $global_config['mudim_method'] . ";

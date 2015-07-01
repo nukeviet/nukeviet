@@ -230,42 +230,23 @@ if( NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed 
 	define( 'NV_IS_MY_USER_AGENT', true );
 }
 
-// Xac dinh co phai la bot hay khong
-$client_info['bot_info'] = nv_check_bot();
-$client_info['is_bot'] = ( ! empty( $client_info['bot_info'] ) ) ? 1 : 0;
-
-// Neu la bot va bot bi cam truy cap
-if( $client_info['is_bot'] and empty( $client_info['bot_info']['allowed'] ) ) trigger_error( 'Sorry! Website does not support the bot', 256 );
-
 // Xac dinh borwser cua client
-if( $client_info['is_bot'] )
+$browser = new Browser( NV_USER_AGENT );
+$client_info['browser'] = array();
+$client_info['browser']['key'] = $browser->getBrowserKey();
+$client_info['browser']['name'] = $browser->getBrowser();
+if( preg_match( '/^([0-9]+)\.(.*)$/', $browser->getVersion(), $matches ) )
 {
-	$client_info['browser'] = array(
-		'key' => 'Unknown',
-		'name' => 'Unknown',
-		'version' => 0
-	);
+	$client_info['browser']['version'] = (int) $matches[1];
 }
 else
 {
-    $browser = new Browser( NV_USER_AGENT );
-    $client_info['browser'] = array();
-    $client_info['browser']['key'] = $browser->getBrowserKey();
-    $client_info['browser']['name'] = $browser->getBrowser();
-    if( preg_match( '/^([0-9]+)\.(.*)$/', $browser->getVersion(), $matches ) )
-	{
-		$client_info['browser']['version'] = ( int )$matches[1];
-		unset( $matches );
-	}
-	else
-	{
-		$client_info['browser']['version'] = 0;
-	}
+	$client_info['browser']['version'] = 0;
 }
-
-$detect = new Mobile_Detect;
-$client_info['is_mobile'] = $detect->isMobile();
-$client_info['is_tablet'] = $detect->isTablet();
+$client_info['is_mobile'] = $browser->isMobile();
+$client_info['is_tablet'] = $browser->isTablet();
+$client_info['is_bot'] = $browser->isRobot();
+$client_info['client_os'] = array( 'key' => $browser->getPlatformKey(), 'name' => $browser->getPlatform() );
 
 $is_mobile_tablet = $client_info['is_mobile'] . '-' . $client_info['is_tablet'];
 if( $is_mobile_tablet != $nv_Request->get_string( 'is_mobile_tablet', 'session' ) )
@@ -280,9 +261,6 @@ if( $global_config['is_flood_blocker'] and ! $nv_Request->isset_request( 'admin'
 {
 	require NV_ROOTDIR . '/includes/core/flood_blocker.php';
 }
-
-// Xac dinh OS cua client
-$client_info['client_os'] = $client_info['is_bot'] ? array( 'key' => 'Robot', 'name' => $client_info['bot_info']['name'] ) : array_combine( array( 'key', 'name' ), explode( '|', nv_getOs( NV_USER_AGENT ) ) );
 
 // Captcha
 if( $nv_Request->isset_request( 'scaptcha', 'get' ) )

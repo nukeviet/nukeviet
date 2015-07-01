@@ -154,7 +154,7 @@ $ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 $contents['types'] = array_keys( $ini );
 
 $contents = nv_add_client_theme( $contents );
-$contents .= "<script type=\"text/javascript\">
+$contents .= "<script type=\"text/javascript\" data-show=\"after\">
 		//<![CDATA[
 		var f = document.getElementById('form_add_client');
 		var u = f.elements[0];
