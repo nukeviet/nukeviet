@@ -8,8 +8,7 @@
  * @Createdate Jun 20, 2010 8:59:32 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,voting,feeds,menu,page,comment' );
 

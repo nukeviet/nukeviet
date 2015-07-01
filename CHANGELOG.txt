@@ -1,6 +1,16 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.20 (Release Candidate)
+- Add class Browser-Detect
+- remove function: nv_check_bot, nv_getBrowser, nv_getOs
+- Add Autoload Class
+- Update PHPMailer 5.2.10
+- update class optimezer.class
+- Remove do not use file
+- Add data-show="after" for <script type="text/javascript"  ...
+- Fix and update something...
+
 NUKEVIET 4.0.19 (Release Candidate 1)
 - Add class Mobile-Detect
 - Add instruction url function
