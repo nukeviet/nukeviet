@@ -979,7 +979,8 @@ $xtpl->assign( 'rowcontent', $rowcontent );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-$xtpl->assign( 'module_name', $module_name );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'MODULE_UPLOAD', $module_upload );
 $xtpl->assign( 'CURRENT', NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' ) );
 
 if( $error != '' )
