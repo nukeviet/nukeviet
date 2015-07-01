@@ -326,7 +326,7 @@ elseif( $step == 4 )
 	$array_resquest = array();
 	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
 	$array_resquest['class_pdo_support'] = 'highlight_red';
-	if ( class_exists( 'PDO' ) )
+	if ( class_exists( 'PDO', false ) )
 	{
 		$PDODrivers = PDO::getAvailableDrivers();
 		foreach($PDODrivers as $_driver)
@@ -801,7 +801,7 @@ elseif( $step == 6 )
 						$db->query( "UPDATE " . $db_config['prefix'] . "_authors_module SET checksum = '" . $checksum . "' WHERE mid = " . $row['mid'] );
 					}
 
-					if( ! ( nv_function_exists( 'finfo_open' ) or nv_class_exists( "finfo" ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) ) )
+					if( ! ( nv_function_exists( 'finfo_open' ) or nv_class_exists( 'finfo', false ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) ) )
 					{
 						$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = 'mild' WHERE lang='sys' AND module = 'global' AND config_name = 'upload_checking_mode'" );
 					}

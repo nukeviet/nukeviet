@@ -95,7 +95,7 @@ class optimezer
 			$this->cssDir = SYSTEM_FILES_DIR . '/css';
 		}
 
-		if( class_exists( 'tidy' ) )
+		if( class_exists( 'tidy', false ) )
 		{
 			$this->_tidySupport = true;
 		}
@@ -233,11 +233,11 @@ class optimezer
 				$meta[] = "<meta " . $row[0][0] . "=\"" . $row[1][0] . "\" " . $row[0][1] . "=\"" . $row[1][1] . "\" />";
 			}
 		}
-		
+
 		$_jsBefore = array();
         	$_jsAfter = array();
         	$_jsSrc = array();
-        	
+
 		if( ! empty( $this->_jsMatches ) )
 		{
 			foreach( $this->_jsMatches as $key => $value )
@@ -258,7 +258,7 @@ class optimezer
 				{
 					$value = '';
 				}
-				
+
 				if ( ! empty( $value ) and preg_match( "/<\s*\bscript\b[^>]+data\-show\s*\=\s*[\"|'](after|before)[\"|'][^>]*>(.*?)<\s*\/\s*script\s*>/is", $value, $matches3 ) )
 		                {
 		                    if ( $matches3[1] == "before" ) $_jsBefore[] = $value;
@@ -276,7 +276,7 @@ class optimezer
         	if ( ! empty( $this->_cssLinks ) ) $head .= "<link rel=\"Stylesheet\" href=\"" . $this->newCssLink() . "\" type=\"text/css\" />" . $this->eol;
         	if ( ! empty( $this->_cssIgnoreLinks ) ) $head .= implode( $this->eol, $this->_cssIgnoreLinks ) . $this->eol;
         	if ( ! empty( $this->_style ) ) $head .= "<style type=\"text/css\">" . $this->minifyCss( implode( $this->eol, $this->_style ) ) . "</style>" . $this->eol;
-        	
+
         	$_jsBefore = ! empty( $_jsBefore ) ? implode( $this->eol, $_jsBefore ) . $this->eol : "";
         	$_jsAfter = ! empty( $_jsAfter ) ? implode( $this->eol, $_jsAfter ) . $this->eol : "";
 
@@ -292,7 +292,7 @@ class optimezer
 	        {
 	            $this->_content = $head . $_jsBefore . $this->_content;
 	        }
-	        
+
 	        if ( ! empty( $_jsAfter ) )
 	        {
 	            $this->_content = preg_match( "/\<\/body\>/", $this->_content ) ? preg_replace( '/<\/body>/', $_jsAfter . "</body>", $this->_content, 1 ) : $this->eol . $_jsAfter;
@@ -606,7 +606,7 @@ class optimezer
 	        $content = preg_replace( '/^\s+|\s+$/m', '', $content );
 	        // remove ws outside of all elements
 	        $content = preg_replace( '/>(\\s(?:\\s*))?([^<]+)(\\s(?:\s*))?</', '>$1$2$3<', $content );
-	
+
 	        return $content;
 	}
 
