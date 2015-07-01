@@ -310,13 +310,14 @@ function nv_function_exists( $funcName )
  * nv_class_exists()
  *
  * @param string $clName
+ * @param bool $autoload
  * @return
  */
-function nv_class_exists( $clName )
+function nv_class_exists( $clName, $autoload = true )
 {
 	global $sys_info;
 
-	return ( class_exists( $clName ) and ! in_array( $clName, $sys_info['disable_classes'] ) );
+	return ( class_exists( $clName, $autoload ) and ! in_array( $clName, $sys_info['disable_classes'] ) );
 }
 
 /**

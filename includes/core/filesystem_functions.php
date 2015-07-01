@@ -178,7 +178,7 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 
 	if( empty( $mime ) or $mime == 'application/octet-stream' )
 	{
-		if( nv_class_exists( 'finfo' ) )
+		if( nv_class_exists( 'finfo', false ) )
 		{
 			$finfo = new finfo( FILEINFO_MIME );
 			if( $finfo )
