@@ -183,9 +183,11 @@
 									{HEADER}
 								</div>
 								<!-- END: header -->
-								<div class="col-xs-16 col-sm-19" data-groupid="{GROUPID}" data-header="{HEADER}">
+								<div class="col-xs-16 col-sm-19 itemsgroup" data-groupid="{GROUPID}" data-header="{HEADER}">
 									<!-- BEGIN: loop -->
-									<label class="label_group <!-- BEGIN: active -->active<!-- END: active -->"><input type="radio" class="groupid" name="groupid[{GROUPID}]" value="{GROUP.groupid}" <!-- BEGIN: checked -->checked="checked" <!-- END: checked -->>{GROUP.title}</label>
+									<label class="label_group <!-- BEGIN: active -->active<!-- END: active -->">
+										<input type="radio" class="groupid" onclick="check_quantity( $(this) )" name="groupid[{GROUPID}]" value="{GROUP.groupid}" <!-- BEGIN: checked -->checked="checked" <!-- END: checked -->>{GROUP.title}
+									</label>
 									<!-- END: loop -->
 								</div>
 							</div>
@@ -340,16 +342,15 @@
 <script type="text/javascript">
 	var detail_error_group = '{LANG.detail_error_group}';
 
-	$('.groupid').click(function() {
-		var _this = $('input[name="'+$(this).attr('name')+'"]');
-		$('input[name="'+$(this).attr('name')+'"]').parent().css('border-color', '#ccc');
-		if( $(this).is(':checked') )
+	function check_quantity( _this ){
+		$('input[name="'+_this.attr('name')+'"]').parent().css('border-color', '#ccc');
+		if( _this.is(':checked') )
 		{
-		    $(this).parent().css('border-color', 'blue');
+		    _this.parent().css('border-color', 'blue');
 		}
 		$('#group_error').css( 'display', 'none' );
 		check_price( '{proid}', '{pro_unit}' );
-	});
+	}
 
 	$('#pnum').change(function(){
 		if( intval($(this).val()) > intval($(this).attr('max')) ){
