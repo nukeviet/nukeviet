@@ -42,7 +42,7 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	$xtpl = new XTemplate( 'addads.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
-	
+
 	$xtpl->assign( 'NV_BASE_URLSITE', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 
@@ -79,7 +79,6 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		}
 		else
 		{
-			require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 			$upload = new upload( $file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$upload_info = $upload->save_file( $_FILES['image'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 			@unlink( $_FILES['image']['tmp_name'] );
@@ -132,9 +131,9 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 			$data_insert['file_mime'] = $file_mime;
 			$data_insert['description'] = $description;
 			$data_insert['url'] = $url;
-		
+
 			$id = $db->insert_id( $_sql, 'id', $data_insert );
-				
+
 			if( $id )
 			{
 				$xtpl->assign( 'pagetitle', $lang_module['addads_success'] . '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '">' );

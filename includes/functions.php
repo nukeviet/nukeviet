@@ -169,29 +169,6 @@ function nv_check_bot()
 }
 
 /**
- * nv_getBrowser()
- *
- * @param string $agent
- * @return
- */
-function nv_getBrowser( $agent )
-{
-	global $nv_parse_ini_browsers;
-
-	foreach( $nv_parse_ini_browsers as $key => $info )
-	{
-		if( preg_match( '#' . $info['rule'] . '#i', $agent, $results ) )
-		{
-			if( isset( $results[1] ) ) return ( $key . '|' . $info['name'] . ' v' . $results[1] );
-
-			return ( $key . '|' . $info['name'] );
-		}
-	}
-
-	return ( 'Unknown|Unknown' );
-}
-
-/**
  * nv_getOs()
  *
  * @param string $agent
@@ -626,6 +603,7 @@ function nv_user_in_groups( $groups_view )
 		else
 		{
 			global $user_info;
+			if ( empty( $user_info['in_groups'] ) ) return false;
 			return ( array_intersect( $user_info['in_groups'], $groups_view ) != array() );
 		}
 	}
@@ -1081,8 +1059,6 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 {
 	global $db, $global_config, $sys_info;
 
-	require_once NV_ROOTDIR . '/includes/phpmailer/PHPMailerAutoload.php';
-
 	try
 	{
 		$mail = new PHPMailer;
@@ -1444,7 +1420,6 @@ function nv_check_domain( $domain )
 		}
 		else
 		{
-			require_once NV_ROOTDIR . '/includes/class/idna_convert.class.php';
 			$IDN = new idna_convert( array( 'idn_version' => 2008 ) );
 			$domain_ascii = $IDN->encode( $domain );
 		}
@@ -1692,7 +1667,6 @@ function nv_change_buffer( $buffer )
 
 	if( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
 	{
-		include_once NV_ROOTDIR . '/includes/class/optimizer.class.php' ;
 		$opt_css_file = ( empty( $global_config['cdn_url'] ) ) ? true : false;
 		$optimezer = new optimezer( $buffer, $opt_css_file );
 		$buffer = $optimezer->process();

@@ -101,7 +101,7 @@
 <!-- END: loopcat -->
 <div class="clear">&nbsp;</div>
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(window).load(function(){
     $.each( $('.two_column .panel-body'), function(k,v){
         if( k % 2 == 0 )
@@ -117,7 +117,7 @@ $(window).load(function(){
 </script>
 
 <!-- BEGIN: tooltip -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(document).ready(function() {
 	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
 	$("[data-rel='tooltip'][data-content!='']").tooltip({

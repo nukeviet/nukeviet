@@ -54,7 +54,6 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 
 	$process = $data = array();
 
-	require_once NV_ROOTDIR . '/includes/class/geturl.class.php';
 	$geturl = new UrlGetContents();
 
 	$result = $db->query( "SELECT a." . $onetype . " FROM " . NV_BANNERS_GLOBALTABLE. "_click a INNER JOIN " . NV_BANNERS_GLOBALTABLE. "_rows b ON a.bid=b.id WHERE b.clid= " . $banner_client_info['id'] . " AND a.click_time <= " . $enddate . " AND a.click_time >= " . $firstdate . " AND a.bid=" . $ads . " ORDER BY click_time ASC" );

@@ -31,7 +31,7 @@
     	</div>
     </div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
 UAV.config.avatar_width = {NV_AVATAR_WIDTH};
 UAV.config.avatar_height = {NV_AVATAR_HEIGHT};

@@ -66,7 +66,7 @@
 </div>
 <!-- END: generate_page -->
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(window).load(function(){
 	$.each( $('.thumbnail'), function(k,v){
 		var height1 = $($('.thumbnail')[k]).height();
@@ -79,7 +79,7 @@ $(window).load(function(){
 </script>
 
 <!-- BEGIN: tooltip -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(document).ready(function() {
 	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
 	$("[data-rel='tooltip'][data-content!='']").tooltip({

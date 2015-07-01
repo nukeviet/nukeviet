@@ -471,9 +471,6 @@ function nv_deletefile( $file, $delsub = false )
 		$ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
 		$ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
 
-		// Goi file Class xu ly
-		if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
-
 		// Ket noi, dang nhap
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
@@ -886,8 +883,6 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 
 		if( $is_create )
 		{
-			include NV_ROOTDIR . '/includes/class/image.class.php' ;
-
 			$image = new image( $original_name, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$image->resizeXY( $width );
 			$image->save( NV_ROOTDIR . '/' . $thumb_path, $matches[3] . '_' . md5( $original_name . $width ) . $matches[4] );

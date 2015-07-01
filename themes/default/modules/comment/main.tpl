@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}modules/comment/js/user.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}modules/comment/js/user.js" data-show="after"></script>
 <link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/comment.css" type="text/css" />
 <div id="idcomment" class="nv-fullbg">
 	<div class="row">
@@ -25,7 +25,7 @@
 
 		<!-- BEGIN: comment_result -->
 		<div class="alert alert-info" id="alert-info">{STATUS_COMMENT}</div>
-		<script type="text/javascript">
+		<script type="text/javascript" data-show="after">
 			$('#alert-info').delay(5000).fadeOut('slow');
 		</script>
 		<!-- END: comment_result -->
@@ -62,7 +62,7 @@
 				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{MODULE_DATA}_commentcontent', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
 			</div>
 		</form>
-		<script type="text/javascript">
+		<script type="text/javascript" data-show="after">
 		$("#reset-cm").click(function() {
 			$("#commentcontent,#commentseccode_iavim").val("");
 			$("#commentpid").val(0);
@@ -76,7 +76,7 @@
 		<!-- END: form_login -->
 	</div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 var nv_url_comm = '{BASE_URL_COMM}';
 $("#sort").change(function() {
 	$.post(nv_url_comm + '&nocache=' + new Date().getTime(), 'sortcomm=' + $('#sort').val() , function(res) {

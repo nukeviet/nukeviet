@@ -315,9 +315,6 @@ function nv_save_file_config_global()
 	unset( $language_array );
 	$content_config .= "\$language_array=" . nv_var_export( $tmp_array ) . ";\n";
 
-	$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/br.ini', true );
-	$content_config .= "\$nv_parse_ini_browsers=" . nv_var_export( $tmp_array ) . ";\n";
-
 	$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/os.ini', true );
 	$content_config .= "\$nv_parse_ini_os=" . nv_var_export( $tmp_array ) . ";\n";
 
@@ -382,7 +379,6 @@ function nv_geVersion( $updatetime = 3600 )
 	}
 	else
 	{
-		include NV_ROOTDIR . '/includes/class/http.class.php' ;
 		$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 
 		$args = array(
@@ -864,7 +860,6 @@ function nv_getExtVersion( $updatetime = 3600 )
 
 		if( ! empty( $array_ext_ids ) )
 		{
-			include NV_ROOTDIR . '/includes/class/http.class.php' ;
 			$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 
 			$args = array(
