@@ -120,6 +120,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'MODULE_UPLOAD', $module_upload );
 $xtpl->assign( 'NV_UPLOADS_DIR', NV_UPLOADS_DIR );
 $xtpl->assign( 'OP', $op );
 
