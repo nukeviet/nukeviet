@@ -13,7 +13,7 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 $table_name = $db_config['prefix'] . '_' . $module_data . '_tabs';
 
 $arr_tab = array( );
-$arr_tab['introduce'] = 'introduce';
+$arr_tab['introduce'] = $lang_module['status_1'];
 $sql = 'SELECT * FROM ' . $table_name . ' where content = ' . $db->quote( 'content_customdata' ) . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
 $field_lang = nv_file_table( $table_name );
