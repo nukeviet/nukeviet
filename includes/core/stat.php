@@ -56,7 +56,7 @@ function nv_stat_update()
 		$db->query( "UPDATE " . NV_COUNTER_GLOBALTABLE . " SET c_count= 0, " . NV_LANG_DATA . "_count= 0 WHERE c_type='hour'" );
 	}
 
-	$bot_name = ( $client_info['is_bot'] and ! empty( $client_info['bot_info']['name'] ) ) ? $client_info['bot_info']['name'] : '';
+	$bot_name = ( $client_info['is_bot'] and ! empty( $client_info['browser']['name'] ) ) ? $client_info['browser']['name'] : '';
 	$browser = $client_info['browser']['key'];
 	if( $browser == 'Unknown' )
 	{

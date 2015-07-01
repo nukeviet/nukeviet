@@ -131,44 +131,6 @@ function nv_checkagent( $a )
 }
 
 /**
- * nv_check_bot()
- *
- * @return
- */
-function nv_check_bot()
-{
-	$file_bots = NV_ROOTDIR . '/' . NV_DATADIR . '/bots.config';
-	$bots = ( file_exists( $file_bots ) and filesize( $file_bots ) ) ? unserialize( file_get_contents( $file_bots ) ) : array();
-
-	if( empty( $bots ) and file_exists( NV_ROOTDIR . '/includes/bots.php' ) ) include NV_ROOTDIR . '/includes/bots.php' ;
-
-	if( empty( $bots ) ) return array();
-
-	foreach( $bots as $name => $values )
-	{
-		$is_bot = false;
-
-		if( $values['agent'] and preg_match( '#' . str_replace( '\*', '.*?', nv_preg_quote( $values['agent'], '#' ) ) . '#i', NV_USER_AGENT ) ) $is_bot = true;
-
-		if( ! empty( $values['ips'] ) and ( $is_bot or ! $values['agent'] ) )
-		{
-			$is_bot = false;
-			$ips = implode( '|', array_map( 'nv_preg_quote', explode( '|', $values['ips'] ) ) );
-			if( preg_match( '/^' . $ips . '/', NV_CLIENT_IP ) ) $is_bot = true;
-		}
-
-		if( $is_bot ) return array(
-			'name' => $name,
-			'agent' => $values['agent'],
-			'ip' => NV_CLIENT_IP,
-			'allowed' => $values['allowed']
-		);
-	}
-
-	return array();
-}
-
-/**
  * nv_getOs()
  *
  * @param string $agent
