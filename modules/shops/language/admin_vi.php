@@ -377,6 +377,7 @@ $lang_module['delgroup_no_group'] = 'Không thuộc nhóm nào';
 $lang_module['content_group'] = 'Là sản phẩm thuộc nhóm';
 $lang_module['add_otherimage'] = 'Thêm hình minh họa khác';
 $lang_module['file_selectfile'] = 'Chọn hình ảnh';
+$lang_module['groupview_page'] = 'Cách thể hiện nhóm sản phẩm';
 $lang_module['group_of'] = 'Của loại sản phẩm';
 $lang_module['group_of_none'] = 'Không của loại nào';
 $lang_module['setting_group_price'] = 'Cấu hình lọc sản phẩm theo giá';

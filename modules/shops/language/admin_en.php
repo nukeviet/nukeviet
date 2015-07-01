@@ -374,6 +374,7 @@ $lang_module['delgroup_no_group'] = 'No group';
 $lang_module['content_group'] = 'Product Group';
 $lang_module['add_otherimage'] = 'Add picture';
 $lang_module['file_selectfile'] = 'Select image';
+$lang_module['groupview_page'] = 'Display method of product';
 $lang_module['group_of'] = 'types of products';
 $lang_module['group_of_none'] = 'Not included in any group';
 $lang_module['setting_group_price'] = 'Configure filter products by price';

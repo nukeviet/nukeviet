@@ -79,15 +79,15 @@ function cartorder_detail(a_ob, popup, buy_now) {
 	var label = '';
 
 	var i = 0;
-	$('.label_group').each(function(){
-		if( $('input[name="groupid['+$(this).attr('data-groupid')+']"]:checked').length == 0 )
+	$('.itemsgroup').each(function(){
+		if( $('input[name="groupid['+$(this).data('groupid')+']"]:checked' ).length == 0 )
 		{
 			i++;
     		if( i == 1 ){
-    			label = label + $(this).attr('data-header');
+    			label = label + $(this).data('header');
     		}
     		else{
-    			label = label + ', ' + $(this).attr('data-header');
+    			label = label + ', ' + $(this).data('header');
     		}
 		}
 	});

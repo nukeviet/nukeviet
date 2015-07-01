@@ -979,7 +979,8 @@ $xtpl->assign( 'rowcontent', $rowcontent );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-$xtpl->assign( 'module_name', $module_name );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'MODULE_UPLOAD', $module_upload );
 $xtpl->assign( 'CURRENT', NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' ) );
 
 if( $error != '' )
@@ -1306,11 +1307,10 @@ if( !$pro_config['active_warehouse'] )
 }
 
 // Custom fiels
-if( $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
+if( $pro_config['template_active'] and $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
 {
 	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_shops_cat[$rowcontent['listcatid']]['form'], $custom );
 	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
-	$xtpl->parse( 'main.customfield' );
 }
 
 $xtpl->parse( 'main' );

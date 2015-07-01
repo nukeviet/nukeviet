@@ -190,7 +190,7 @@
 							<div class="input-group">
 								<input value="{DATAOTHERIMAGE.value}" name="otherimage[]" id="otherimage_{DATAOTHERIMAGE.id}" class="form-control" maxlength="255">
 								<span class="input-group-btn">
-									<button class="btn btn-default" type="button" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{module_name}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; ">
+									<button class="btn btn-default" type="button" onclick="nv_open_browse( '{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=otherimage_{DATAOTHERIMAGE.id}&path={NV_UPLOADS_DIR}/{MODULE_UPLOAD}&currentpath={CURRENT}&type=file', 'NVImg', 850, 500, 'resizable=no,scrollbars=no,toolbar=no,location=no,status=no' ); return false; ">
 										<em class="fa fa-folder-open-o fa-fix">&nbsp;</em>
 									</button>
 								</span>
@@ -315,12 +315,7 @@
 			</div>
 			<!-- END: gift -->
 
-			<!-- BEGIN: customfield -->
-			<div class="panel panel-default">
-				<div class="panel-heading">{LANG.tabs_content_customdata}</div>
-				<div class="panel-body">{DATACUSTOM_FORM}</div>
-			</div>
-			<!-- END: customfield -->
+			<div id="custom_form">{DATACUSTOM_FORM}</div>
 		</div>
 
 		<div class="col-sm-24 col-md-6">
@@ -495,7 +490,7 @@
 	var file_selectfile = '{LANG.file_selectfile}';
 	var nv_base_adminurl = '{NV_BASE_ADMINURL}';
 	var inputnumber = '{LANG.error_inputnumber}';
-	var file_dir = '{NV_UPLOADS_DIR}/{module_name}';
+	var file_dir = '{NV_UPLOADS_DIR}/{MODULE_UPLOAD}';
 	var currentpath = "{CURRENT}";
 
 	$(document).ready(function() {
@@ -504,7 +499,7 @@
 
 	$("#selectimg").click(function() {
 		var area = "homeimg";
-		var path = "{NV_UPLOADS_DIR}/{module_name}";
+		var path = "{NV_UPLOADS_DIR}/{MODULE_UPLOAD}";
 		var currentpath = "{CURRENT}";
 		var type = "image";
 		nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 500, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
