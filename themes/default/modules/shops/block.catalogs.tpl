@@ -1,12 +1,12 @@
 <!-- BEGIN: main -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	var imageslist = {
 		down : ['downarrowclass', '{THEME_TEM}/images/promenu/down.gif', 23],
 		right : ['rightarrowclass', '{THEME_TEM}/images/promenu/right.gif']
-	}; 
+	};
 </script>
-<script type="text/javascript"	src="{THEME_TEM}/js/promenu.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after" src="{THEME_TEM}/js/promenu.js"></script>
+<script type="text/javascript" data-show="after">
 	ddsmoothmenu.init({
 		mainmenuid : "smoothmenu2",
 		orientation : 'v',

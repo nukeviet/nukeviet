@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{THEME_TEM}/js/responsiveCarousel.min.js"></script>
-<script type="text/javascript">
+<script data-show="after" type="text/javascript" src="{THEME_TEM}/js/responsiveCarousel.min.js"></script>
+<script data-show="after" type="text/javascript">
 	jQuery(document).ready(function($){
 		$('.product_center').carousel({ autoRotate: 4000, speed: 800, overflow: false, visible: '{NUMVIEW}', itemMinWidth: 150, itemEqualHeight: true, itemMargin: 10 });
 		$('.product_center').on("initCarousel", function(event, defaults, obj){

@@ -214,7 +214,7 @@
 <form action="" method="post">
 	<input type="hidden" value="{order_id}" name="order_id"><input type="hidden" value="1" name="save">
 </form>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip();
 

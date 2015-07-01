@@ -49,10 +49,10 @@
 	</form>
 </div>
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" data-show="after" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" data-show="after" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" data-show="after">
 	$(document).ready(function() {
 		$("#to_date,#from_date").datepicker({
 			showOn : "both",

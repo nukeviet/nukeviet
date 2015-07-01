@@ -17,7 +17,7 @@
 	<label class="pull-right"><input type="checkbox" name="coupons_uses" id="coupons_uses" {COUPONS_CHECK} />{LANG.coupons_uses}</label>
 	<div class="clear"></div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(document).ready(function() {
 		$('#coupons_uses').change(function() {
 			var coupons_code = $('#coupons_code').val();

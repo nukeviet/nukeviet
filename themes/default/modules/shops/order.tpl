@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/select2/select2.min.js"></script>
+<script type="text/javascript" data-show="after" src="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/select2/select2.min.js"></script>
 <link href="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/select2/select2.min.css" type="text/css" rel="stylesheet" />
 
 <div class="block clearfix">
@@ -220,7 +220,7 @@
 	</form>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	var url_load = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=shippingajax';
 	var urloadcart = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=loadcart';
 	var order_shipping = '{DATA.order_shipping}';
@@ -248,7 +248,7 @@
 </script>
 
 <!-- BEGIN: shipping_javascript -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(document).ready(function() {
 		var shops_id = $('input[name="shops"]:checked');
 		var carrier_id = $('input[name="carrier"]:checked');
