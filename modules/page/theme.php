@@ -19,7 +19,7 @@ if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
  */
 function nv_page_main( $row, $ab_links, $content_comment)
 {
-	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config;
+	global $module_file, $lang_module, $module_info, $meta_property, $client_info, $page_config;
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -84,7 +84,7 @@ function nv_page_main( $row, $ab_links, $content_comment)
  */
 function nv_page_main_list( $array_data, $generate_page )
 {
-	global $module_file, $lang_module, $module_upload, $module_info, $meta_property, $my_head, $client_info, $page_config, $module_name;
+	global $module_file, $lang_module, $module_upload, $module_info, $meta_property, $client_info, $page_config, $module_name;
 
 	$template = ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file .'/main_list.tpl' ) ) ? $module_info['template'] : 'default';
 
