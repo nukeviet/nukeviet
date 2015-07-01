@@ -131,30 +131,6 @@ function nv_checkagent( $a )
 }
 
 /**
- * nv_getOs()
- *
- * @param string $agent
- * @return
- */
-function nv_getOs( $agent )
-{
-	global $nv_parse_ini_os;
-
-	foreach( $nv_parse_ini_os as $key => $info )
-	{
-		if( preg_match( '#' . $info['rule'] . '#i', $agent, $results ) )
-		{
-			if( strstr( $key, 'win' ) ) return ( $key . '|' . $info['name'] );
-			if( isset( $results[1] ) ) return ( $key . '|' . $info['name'] . ' ' . $results[1] );
-
-			return ( $key . '|' . $info['name'] );
-		}
-	}
-
-	return ( 'Unspecified|Unspecified' );
-}
-
-/**
  * nv_convertfromBytes()
  *
  * @param integer $size

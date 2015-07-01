@@ -163,7 +163,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		$row['exp_time'] = 0;
 	}
 	$row['active'] = $nv_Request->get_int( 'active', 'post', 0 );
-	$row['hide_device'] = $nv_Request->get_int( 'hide_device', 'post', 0 );
+	$hide_device = $nv_Request->get_array( 'hide_device', 'post', 0 );
+	$row['hide_device'] = array_sum( $hide_device );
 
 	$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
 	$row['groups_view'] = ! empty( $groups_view ) ? implode( ',', nv_groups_post( array_intersect( $groups_view, array_keys( $groups_list ) ) ) ) : '';
@@ -538,11 +539,11 @@ for( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
 	$xtpl->parse( 'main.position' );
 }
 
-for ($i=0; $i < 3; $i++)
+for ($i=1; $i < 3; $i++)
 {
 	$xtpl->assign( 'HIDE_DEVICE', array(
 		'key' => $i,
-		'checked' => ( $row['hide_device'] == $i ) ? ' checked="checked"' : '',
+		'checked' => ( $row['hide_device'] == $i or $row['hide_device'] == 3 ) ? ' checked="checked"' : '',
 		'title' => $lang_module['hide_device_' . $i]
 	) );
 	$xtpl->parse( 'main.hide_device' );

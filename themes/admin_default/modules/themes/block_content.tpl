@@ -102,7 +102,7 @@
 					<td>
 						<!-- BEGIN: hide_device -->
 							<label id="hide_device_{HIDE_DEVICE.key}" style="padding-right: 20px">
-								<input name="hide_device" type="radio" value="{HIDE_DEVICE.key}"{HIDE_DEVICE.checked}/>&nbsp;{HIDE_DEVICE.title}
+								<input name="hide_device[]" type="checkbox" value="{HIDE_DEVICE.key}"{HIDE_DEVICE.checked}/>&nbsp;{HIDE_DEVICE.title}
 							</label>
 						<!-- END: hide_device -->
 					</td>
