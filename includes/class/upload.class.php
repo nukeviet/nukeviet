@@ -139,7 +139,7 @@ class upload
 	 */
 	private function cl_exists( $clName )
 	{
-		return ( class_exists( $clName ) and ! in_array( $clName, $this->disable_classes ) );
+		return ( class_exists( $clName, false ) and ! in_array( $clName, $this->disable_classes ) );
 	}
 
 	/**

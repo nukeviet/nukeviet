@@ -193,7 +193,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
  */
 function nv_xmlOutput( $content, $lastModified )
 {
-	if( class_exists( 'tidy' ) )
+	if( class_exists( 'tidy', false ) )
 	{
 		$tidy_options = array(
 			'input-xml' => true,
