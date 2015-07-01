@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js" data-show="after"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js" data-show="after"></script>
+
 <div class="page">
     <ul class="nav nav-tabs m-bottom">
     	<li><a href="{URL_MODULE}">{LANG.user_info}</a></li>
@@ -45,7 +48,7 @@
     </form>
     <!-- END: step1 -->
     <!-- BEGIN: step2 -->
-    <script type="text/javascript">
+    <script type="text/javascript" data-show="after">
     function question_change() {
     	var question_option = $("#question").val();
     	$("#question").val('0');
@@ -93,4 +96,8 @@
     </form>
     <!-- END: step2 -->
 </div>
+<script type="text/javascript" data-show="after">
+$(document).ready(function(){
+	$('#changeQuestionForm').validate();
+});
 <!-- END: main -->

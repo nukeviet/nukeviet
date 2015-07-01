@@ -152,6 +152,7 @@ elseif( empty( $id)  )
 {
 	$row['image'] = '';
 	$row['layout_func'] = '';
+	$row['description']='';
 	$row['bodytext'] = '';
 	$row['activecomm'] = $module_config[$module_name]['setcomm'];
 	$row['socialbutton'] = 1;

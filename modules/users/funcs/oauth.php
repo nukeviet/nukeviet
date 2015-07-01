@@ -26,7 +26,6 @@ if( $global_config['allowuserlogin'] and defined( 'NV_OPENID_ALLOWED' ) )
 		}
 		else
 		{
-			include_once NV_ROOTDIR . '/includes/class/openid.class.php' ;
 			$openid = new LightOpenID();
 
 			if( $nv_Request->isset_request( 'openid_mode', 'get' ) )

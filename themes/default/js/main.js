@@ -85,10 +85,13 @@ $(document).ready(function(){
 		return false;
 	});
 
-// Show admin confirm
-	myTimerPage = setTimeout(function() {
-		timeoutsessrun();
-	}, nv_check_pass_mstime);
+	if( nv_is_user )
+	{
+		// Show messger timeout login users 
+		myTimerPage = setTimeout(function() {
+			timeoutsessrun();
+		}, nv_check_pass_mstime);
+	}
 
 	// Show confirm message on leave, reload page
 	$('form.confirm-reload').change(function() {

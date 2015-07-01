@@ -32,7 +32,7 @@ UAV.config = {
 	imageSize: 'image-size',
 	btnSubmit: 'btn-submit',
 	btnReset: 'btn-reset',
-	uploadForm: 'upload-form',
+	uploadForm: 'upload-form'
 };
 
 // Default language, replace it with your own
@@ -41,13 +41,13 @@ UAV.lang = {
 	smallsize: 'File too small',
 	filetype: 'Only accept jmage file tyle',
 	bigfile: 'File too big',
-	upload: 'Please upload and drag to crop',
+	upload: 'Please upload and drag to crop'
 };
 
 UAV.data = {
 	error: false,
 	busy: false,
-	jcropApi: null,
+	jcropApi: null
 };
 
 UAV.tool = {
@@ -68,7 +68,7 @@ UAV.tool = {
 		$('#' + UAV.config.y1).val(0);
 		$('#' + UAV.config.x2).val(0);
 		$('#' + UAV.config.y2).val(0);
-	},
+	}
 };
 
 // Please use this package with Jcrop http://deepliquid.com/content/Jcrop.html
@@ -109,7 +109,7 @@ UAV.common = {
 						bgOpacity: .3,
 						onChange: function(e){ UAV.tool.update(e); },
 						onSelect: function(e){ UAV.tool.update(e); },
-						onRelease: function(e){ UAV.tool.clear(e); },
+						onRelease: function(e){ UAV.tool.clear(e); }
 					}, function(){
 						var bounds = this.getBounds();
 						$('#' + UAV.config.w).val(bounds[0]);

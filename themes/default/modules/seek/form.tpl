@@ -40,8 +40,8 @@
 	<div class="text-center search_adv">
 		<a href="#" class="IntSearch">{LANG.search_adv_internet}</a>
 	</div>
-	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-	<script type="text/javascript" >
+	<script src="http://www.google.com/jsapi" type="text/javascript" data-show="after"></script>
+	<script type="text/javascript" data-show="after">
 		google.load('search', '1', {
 			language : nv_sitelang
 		});
@@ -50,7 +50,7 @@
 	<!-- END: search_engine_unique_ID -->
 	<hr />
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 //<![CDATA[
 $('#search_query_mod').change(function(){
 	var data = $(this).find('option:selected').data();

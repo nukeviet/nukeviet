@@ -8,27 +8,9 @@
  * @Createdate 17/8/2010, 0:16
  */
 
-if( ! defined( 'NV_ROOTDIR' ) )
-{
-	define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
-}
-
-if( ! defined( 'NV_UPLOADS_REAL_DIR' ) )
-{
-	define( 'NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/uploads/' );
-}
-
 if( ! defined( 'NV_MIME_INI_FILE' ) )
 {
 	define( "NV_MIME_INI_FILE", str_replace( "\\", "/", realpath( dirname( __file__ ) . "/.." ) . '/ini/mime.ini' ) );
-}
-
-if( ! defined( 'ALLOWED_SET_TIME_LIMIT' ) )
-{
-	if( $sys_info['allowed_set_time_limit'] )
-	{
-		define( 'ALLOWED_SET_TIME_LIMIT', true );
-	}
 }
 
 class download
@@ -47,6 +29,7 @@ class download
 	private $disable_functions = array();
 	private $disable_classes = array();
 	private $magic_path;
+	private $safe_mode;
 
 	/**
 	 * download::__construct()
@@ -72,6 +55,8 @@ class download
 		$this->disable_functions = $disable_functions;
 
 		$this->disable_classes = ( ini_get( 'disable_classes' ) != '' and ini_get( 'disable_classes' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_classes' ) ) ) : array();
+
+		$this->safe_mode = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
 
 		$path = $this->real_path( $path, $directory );
 		$extension = $this->getextension( $path );
@@ -157,7 +142,7 @@ class download
 	 */
 	private function cl_exists( $clName )
 	{
-		return ( class_exists( $clName ) and ! in_array( $clName, $this->disable_classes ) );
+		return ( class_exists( $clName, false ) and ! in_array( $clName, $this->disable_classes ) );
 	}
 
 	/**
@@ -434,7 +419,8 @@ class download
 			@ob_end_clean();
 		}
 		$old_status = ignore_user_abort( true );
-		if( defined( 'ALLOWED_SET_TIME_LIMIT' ) )
+
+		if( ! $this->safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $this->disable_functions ) )
 		{
 			set_time_limit( 0 );
 		}
@@ -507,7 +493,7 @@ class download
 		fclose( $res );
 
 		ignore_user_abort( $old_status );
-		if( defined( 'ALLOWED_SET_TIME_LIMIT' ) )
+		if( ! $this->safe_mode and function_exists( 'set_time_limit' ) and ! in_array( 'set_time_limit', $this->disable_functions ) )
 		{
 			set_time_limit( ini_get( 'max_execution_time' ) );
 		}

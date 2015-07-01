@@ -52,7 +52,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 	if( ! empty( $metatags['meta'] ) )
 	{
-		include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
 		$array2XML = new Array2XML();
 		$array2XML->saveXML( $metatags, 'metatags', $file_metatags, $global_config['site_charset'] );
 	}

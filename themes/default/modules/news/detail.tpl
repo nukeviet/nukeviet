@@ -1,8 +1,12 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/star-rating/jquery.rating.pack.js"></script>\n";
+<script src="{NV_BASE_SITEURL}js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
+<link href="{NV_BASE_SITEURL}js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
 <link href="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
+
 <!-- BEGIN: facebookjssdk -->
 <div id="fb-root"></div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
     (function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
@@ -96,7 +100,7 @@
         	<div style="width:60px" class="fb-share-button" data-href="{SELFURL}" data-layout="button">&nbsp;</div>
 	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
 	        <div class="g-plusone" data-size="medium"></div>
-	        <script type="text/javascript">
+	        <script type="text/javascript" data-show="after">
 	          window.___gcfg = {lang: nv_sitelang};
 	          (function() {
 	            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
@@ -106,7 +110,7 @@
 	        </script>
 
 	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
-	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js" data-show="after"></script>
 	    </div>
         <!-- END: socialbutton -->
         <!-- BEGIN: adminlink -->
@@ -145,7 +149,7 @@
 						</div>
 					</div>
 				</form>
-				<script type="text/javascript">
+				<script type="text/javascript" data-show="after">
 					var sr = 0;
 					$('.hover-star').rating({
 						focus : function(value, link) {
@@ -175,7 +179,7 @@
 					$('.hover-star').rating('select', '{NUMBERRATING}');
 				</script>
 				<!-- BEGIN: disablerating -->
-				<script type="text/javascript">
+				<script type="text/javascript" data-show="after">
 					$(".hover-star").rating('disable');
 					sr = 2;
 				</script>
@@ -246,7 +250,7 @@
 	<!-- END: related -->
 </div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(document).ready(function() {
     $("#pop").on("click", function() {
        $('#imagepreview').attr('src', $('#imageresource').attr('src'));
@@ -263,8 +267,8 @@ $(document).ready(function() {
 	<!-- END: tooltip -->
 });
 </script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
-<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js" data-show="after"></script>
+<script type="text/javascript" data-show="after">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->
 <!-- BEGIN: no_permission -->
 <div class="alert alert-info">

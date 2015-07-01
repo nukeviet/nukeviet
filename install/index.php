@@ -92,9 +92,6 @@ elseif( $step == 2 )
 			die( 'ERROR|' . $lang_module['ftp_error_empty'] );
 		}
 
-		if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
-		if( ! defined( 'NV_BUFFER_CLASS' ) ) require NV_ROOTDIR . '/includes/class/buffer.class.php';
-
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
 		if( ! empty( $ftp->error ) )
@@ -329,7 +326,7 @@ elseif( $step == 4 )
 	$array_resquest = array();
 	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
 	$array_resquest['class_pdo_support'] = 'highlight_red';
-	if ( class_exists( 'PDO' ) )
+	if ( class_exists( 'PDO', false ) )
 	{
 		$PDODrivers = PDO::getAvailableDrivers();
 		foreach($PDODrivers as $_driver)
@@ -422,7 +419,6 @@ elseif( $step == 5 )
 		}
 
 		// Bat dau phien lam viec cua MySQL
-		require_once NV_ROOTDIR . '/includes/class/db.class.php';
 		$db = new sql_db( $db_config );
 		$connect = $db->connect;
 		if( ! $connect )
@@ -689,7 +685,6 @@ elseif( $step == 6 )
 	define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
 
 	// Bat dau phien lam viec cua MySQL
-	require_once NV_ROOTDIR . '/includes/class/db.class.php';
 	$db = new sql_db( $db_config );
 	if( ! empty( $db->error ) )
 	{
@@ -806,7 +801,7 @@ elseif( $step == 6 )
 						$db->query( "UPDATE " . $db_config['prefix'] . "_authors_module SET checksum = '" . $checksum . "' WHERE mid = " . $row['mid'] );
 					}
 
-					if( ! ( nv_function_exists( 'finfo_open' ) or nv_class_exists( "finfo" ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) ) )
+					if( ! ( nv_function_exists( 'finfo_open' ) or nv_class_exists( 'finfo', false ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) ) )
 					{
 						$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = 'mild' WHERE lang='sys' AND module = 'global' AND config_name = 'upload_checking_mode'" );
 					}
@@ -944,8 +939,8 @@ elseif( $step == 6 )
 						}
 					}
 
-					$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/br.ini', true );
-					foreach( $tmp_array as $_browser => $v )
+					$tmp_array = array('opera','operamini','webtv','explorer','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
+					foreach( $tmp_array as $_browser )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote( $_browser ) . ", 0, 0, 0)" );
 					}
@@ -955,8 +950,8 @@ elseif( $step == 6 )
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)" );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unspecified', 0, 0, 0)" );
 
-					$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/os.ini', true );
-					foreach( $tmp_array as $_os => $v )
+					$tmp_array = array('unknown', 'win', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'win95', 'winme', 'winnt', 'win98', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
+					foreach( $tmp_array as $_os )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote( $_os ) . ", 0, 0, 0)" );
 					}

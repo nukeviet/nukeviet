@@ -10,9 +10,9 @@
 <!-- END: tree -->
 <!-- BEGIN: main -->
 <link rel="stylesheet" href="{NV_BASE_SITEURL}js/jquery/jquery.treeview.css" type="text/css"/>
-<script src="{NV_BASE_SITEURL}js/jquery/jquery.cookie.js" type="text/javascript"></script>
-<script src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js" type="text/javascript"></script>
-<script type="text/javascript">
+<script src="{NV_BASE_SITEURL}js/jquery/jquery.cookie.js" type="text/javascript" data-show="after"></script>
+<script src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js" type="text/javascript" data-show="after"></script>
+<script type="text/javascript" data-show="after">
 	$(document).ready(function() {
 		$("#navigation{MENUID}").treeview({
 			collapsed : true,

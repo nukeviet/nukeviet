@@ -150,19 +150,15 @@ function nv_blocks_content( $sitecontent )
 				$unact[] = $_row['bid'];
 				continue;
 			}
-			if( $client_info['is_tablet'] and $_row['hide_device'] == 2 )
-			{
 
-			}
-
-			if( $client_info['is_mobile'] and $_row['hide_device'] == 2 )
+			if( $client_info['is_mobile'] and ( $_row['hide_device'] == 1 or $_row['hide_device'] == 3 ) )
 			{
-				//Ẩn trên mobile + Máy tính bảng
+				//Ẩn trên mobile
 				continue;
 			}
-			elseif( $client_info['is_mobile'] and ! $client_info['is_tablet'] and $_row['hide_device'] == 1 )
+			elseif( $client_info['is_tablet'] and ( $_row['hide_device'] == 2 or $_row['hide_device'] == 3 ) )
 			{
-				// Ẩn trên mobile, không ẩn trên máy tính bảng
+				// Ẩn trên Máy tính bảng
 				continue;
 			}
 
@@ -370,7 +366,7 @@ function nv_html_meta_tags()
 		}
 	}
 
-	$return .= "<meta name=\"generator\" content=\"NukeViet v4.x\" />\n";
+	$return .= "<meta name=\"generator\" content=\"NukeViet v4.0\" />\n";
 	if( defined( 'NV_IS_ADMIN' ) )
 	{
 		$return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\" />\n";
@@ -517,7 +513,7 @@ function nv_html_site_js()
 	$return = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>\n";
 	$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n";
 	$return .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
-	$return .= "var nv_siteroot=\"" . NV_BASE_SITEURL . "\",nv_sitelang=\"" . NV_LANG_INTERFACE . "\",nv_name_variable=\"" . NV_NAME_VARIABLE . "\",nv_fc_variable=\"" . NV_OP_VARIABLE . "\",nv_lang_variable=\"" . NV_LANG_VARIABLE . "\",nv_module_name=\"" . $module_name . "\",nv_my_ofs=" . round( NV_SITE_TIMEZONE_OFFSET / 3600 ) . ",nv_my_abbr=\"" . nv_date( "T", NV_CURRENTTIME ) . "\",nv_cookie_prefix=\"" . $global_config['cookie_prefix'] . "\",nv_check_pass_mstime = " . ( ( intval( $global_config['user_check_pass_time'] ) - 62) * 1000 ) . ",nv_area_admin=0;\n";
+	$return .= "var nv_siteroot=\"" . NV_BASE_SITEURL . "\",nv_sitelang=\"" . NV_LANG_INTERFACE . "\",nv_name_variable=\"" . NV_NAME_VARIABLE . "\",nv_fc_variable=\"" . NV_OP_VARIABLE . "\",nv_lang_variable=\"" . NV_LANG_VARIABLE . "\",nv_module_name=\"" . $module_name . "\",nv_func_name=\"" . $op . "\",nv_is_user=" . ( ( int )defined( "NV_IS_USER" ) ) . ", nv_my_ofs=" . round( NV_SITE_TIMEZONE_OFFSET / 3600 ) . ",nv_my_abbr=\"" . nv_date( "T", NV_CURRENTTIME ) . "\",nv_cookie_prefix=\"" . $global_config['cookie_prefix'] . "\",nv_check_pass_mstime=" . ( ( intval( $global_config['user_check_pass_time'] ) - 62 ) * 1000 ) . ",nv_area_admin=0,theme_responsive=" . ( ( int )( $global_config['current_theme_type'] == 'r' ) ) . ";\n";
 	$return .= "//]]>\n</script>\n";
 	$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/global.js\"></script>\n";
 	if( defined( 'NV_IS_ADMIN' ) )
@@ -536,7 +532,7 @@ function nv_html_site_js()
 	{
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\"></script>\n";
-		$return .= '<script type="text/javascript">
+		$return .= '<script type="text/javascript" data-show=\"after\">
  			//<![CDATA[
 					var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {

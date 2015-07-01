@@ -17,8 +17,6 @@ function nv_site_theme( $contents, $full = true )
 	// Determine tpl file, check exists tpl file
 	$layout_file = ( $full ) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
 
-	$responsive = ( $global_config['current_theme_type'] == 'r' ) ? true : false;
-
 	if( ! file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' . $layout_file ) )
 	{
 		nv_info_die( $lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content'] );
@@ -41,23 +39,22 @@ function nv_site_theme( $contents, $full = true )
     if ( isset( $module_config['themes'][$global_config['module_theme']] ) )
 	{
 		if ( ! file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
-    	{
-			$config_theme = unserialize( $module_config['themes'][$global_config['module_theme']] );
-		    $css_content = nv_css_setproperties( 'body', $config_theme['body'] );
-		    $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
-		    $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
-		    $css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
-		    $css_content .= nv_css_setproperties( '#header, #banner', $config_theme['header'] );
-		    $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
-			$css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
-			$css_content .= nv_css_setproperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
-		    $css_content .= nv_css_setproperties( 'generalcss', $config_theme['generalcss'] ); // Không nên thay đổi "generalcss"
-
-		    file_put_contents( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css', $css_content );
-
-			unset( $config_theme, $css_content );
-    	}
-	    $my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] . "\" />\n";
+	    	{
+	    		$config_theme = unserialize( $module_config['themes'][$global_config['module_theme']] );
+	    		$css_content = nv_css_setproperties( 'body', $config_theme['body'] );
+	    		$css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
+	    		$css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
+	    		$css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
+	    		$css_content .= nv_css_setproperties( '#header, #banner', $config_theme['header'] );
+	    		$css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
+	    		$css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
+	    		$css_content .= nv_css_setproperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
+	    		$css_content .= nv_css_setproperties( 'generalcss', $config_theme['generalcss'] ); // Không nên thay đổi "generalcss"
+	
+	    		file_put_contents( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css', $css_content );
+	    		unset( $config_theme, $css_content );
+	    	}
+		$my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] . "\" />\n";
 	}
 
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );
@@ -91,8 +88,18 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
 	$xtpl->assign( 'THEME_CSS', $css );
 	$xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
-	$xtpl->assign( 'THEME_RESPONSIVE', (int) $responsive );
-	if( $responsive )
+	
+	if($client_info['browser']['key'] == "explorer" AND $client_info['browser']['version'] < 9)
+	{
+		$xtpl->parse( 'main.lt_ie9' );
+	}
+	
+	if($client_info['browser']['key'] == "explorer" AND $client_info['browser']['version'] < 7)
+	{
+		$xtpl->parse( 'main.lt_ie7' );
+	}
+	    
+	if( $global_config['current_theme_type'] == 'r' )
 	{
 		$xtpl->parse( 'main.viewport' );
 		$xtpl->parse( 'main.responsive' );

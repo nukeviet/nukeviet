@@ -131,91 +131,6 @@ function nv_checkagent( $a )
 }
 
 /**
- * nv_check_bot()
- *
- * @return
- */
-function nv_check_bot()
-{
-	$file_bots = NV_ROOTDIR . '/' . NV_DATADIR . '/bots.config';
-	$bots = ( file_exists( $file_bots ) and filesize( $file_bots ) ) ? unserialize( file_get_contents( $file_bots ) ) : array();
-
-	if( empty( $bots ) and file_exists( NV_ROOTDIR . '/includes/bots.php' ) ) include NV_ROOTDIR . '/includes/bots.php' ;
-
-	if( empty( $bots ) ) return array();
-
-	foreach( $bots as $name => $values )
-	{
-		$is_bot = false;
-
-		if( $values['agent'] and preg_match( '#' . str_replace( '\*', '.*?', nv_preg_quote( $values['agent'], '#' ) ) . '#i', NV_USER_AGENT ) ) $is_bot = true;
-
-		if( ! empty( $values['ips'] ) and ( $is_bot or ! $values['agent'] ) )
-		{
-			$is_bot = false;
-			$ips = implode( '|', array_map( 'nv_preg_quote', explode( '|', $values['ips'] ) ) );
-			if( preg_match( '/^' . $ips . '/', NV_CLIENT_IP ) ) $is_bot = true;
-		}
-
-		if( $is_bot ) return array(
-			'name' => $name,
-			'agent' => $values['agent'],
-			'ip' => NV_CLIENT_IP,
-			'allowed' => $values['allowed']
-		);
-	}
-
-	return array();
-}
-
-/**
- * nv_getBrowser()
- *
- * @param string $agent
- * @return
- */
-function nv_getBrowser( $agent )
-{
-	global $nv_parse_ini_browsers;
-
-	foreach( $nv_parse_ini_browsers as $key => $info )
-	{
-		if( preg_match( '#' . $info['rule'] . '#i', $agent, $results ) )
-		{
-			if( isset( $results[1] ) ) return ( $key . '|' . $info['name'] . ' v' . $results[1] );
-
-			return ( $key . '|' . $info['name'] );
-		}
-	}
-
-	return ( 'Unknown|Unknown' );
-}
-
-/**
- * nv_getOs()
- *
- * @param string $agent
- * @return
- */
-function nv_getOs( $agent )
-{
-	global $nv_parse_ini_os;
-
-	foreach( $nv_parse_ini_os as $key => $info )
-	{
-		if( preg_match( '#' . $info['rule'] . '#i', $agent, $results ) )
-		{
-			if( strstr( $key, 'win' ) ) return ( $key . '|' . $info['name'] );
-			if( isset( $results[1] ) ) return ( $key . '|' . $info['name'] . ' ' . $results[1] );
-
-			return ( $key . '|' . $info['name'] );
-		}
-	}
-
-	return ( 'Unspecified|Unspecified' );
-}
-
-/**
  * nv_convertfromBytes()
  *
  * @param integer $size
@@ -333,13 +248,14 @@ function nv_function_exists( $funcName )
  * nv_class_exists()
  *
  * @param string $clName
+ * @param bool $autoload
  * @return
  */
-function nv_class_exists( $clName )
+function nv_class_exists( $clName, $autoload = true )
 {
 	global $sys_info;
 
-	return ( class_exists( $clName ) and ! in_array( $clName, $sys_info['disable_classes'] ) );
+	return ( class_exists( $clName, $autoload ) and ! in_array( $clName, $sys_info['disable_classes'] ) );
 }
 
 /**
@@ -626,6 +542,7 @@ function nv_user_in_groups( $groups_view )
 		else
 		{
 			global $user_info;
+			if ( empty( $user_info['in_groups'] ) ) return false;
 			return ( array_intersect( $user_info['in_groups'], $groups_view ) != array() );
 		}
 	}
@@ -1081,8 +998,6 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 {
 	global $db, $global_config, $sys_info;
 
-	require_once NV_ROOTDIR . '/includes/phpmailer/PHPMailerAutoload.php';
-
 	try
 	{
 		$mail = new PHPMailer;
@@ -1444,7 +1359,6 @@ function nv_check_domain( $domain )
 		}
 		else
 		{
-			require_once NV_ROOTDIR . '/includes/class/idna_convert.class.php';
 			$IDN = new idna_convert( array( 'idn_version' => 2008 ) );
 			$domain_ascii = $IDN->encode( $domain );
 		}
@@ -1645,7 +1559,7 @@ function nv_change_buffer( $buffer )
 
 	if( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
 	{
-		$googleAnalytics = "<script type=\"text/javascript\">\r\n";
+		$googleAnalytics = "<script type=\"text/javascript\" data-show=\"after\">\r\n";
 		$googleAnalytics .= "//<![CDATA[\r\n";
 		if( $global_config['googleAnalyticsMethod'] == 'universal' )
 		{
@@ -1681,7 +1595,7 @@ function nv_change_buffer( $buffer )
 	}
 	if( NV_LANG_INTERFACE == 'vi' and ( $global_config['mudim_active'] == 1 or ( $global_config['mudim_active'] == 2 and defined( 'NV_SYSTEM' ) ) or ( $global_config['mudim_active'] == 3 and defined( 'NV_ADMIN' ) ) ) )
 	{
-		$body_replace .= "<script type=\"text/javascript\">
+		$body_replace .= "<script type=\"text/javascript\" data-show=\"after\">
 				var mudim_showPanel = " . ( ( $global_config['mudim_showpanel'] ) ? "true" : "false" ) . ";
 				var mudim_displayMode = " . $global_config['mudim_displaymode'] . ";
 				var mudim_method = " . $global_config['mudim_method'] . ";
@@ -1692,7 +1606,6 @@ function nv_change_buffer( $buffer )
 
 	if( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
 	{
-		include_once NV_ROOTDIR . '/includes/class/optimizer.class.php' ;
 		$opt_css_file = ( empty( $global_config['cdn_url'] ) ) ? true : false;
 		$optimezer = new optimezer( $buffer, $opt_css_file );
 		$buffer = $optimezer->process();

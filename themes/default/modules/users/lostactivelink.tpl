@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js" data-show="after"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js" data-show="after"></script>
+
 <div class="page">
     <h2>{LANG.lostactive_pagetitle}</h2>
     <!-- BEGIN: step1 -->
@@ -75,4 +78,9 @@
     </form>
     <!-- END: step2 -->
 </div>
+<script type="text/javascript" data-show="after">
+$(document).ready(function(){
+	$('#lostpassForm').validate();
+});
+</script>
 <!-- END: main -->

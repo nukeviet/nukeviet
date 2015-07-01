@@ -8,12 +8,6 @@
  * @Createdate 4/8/2010 6:35
  */
 
-if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
-if( ! defined( 'NV_LIVE_SESSION_TIME' ) ) define( 'NV_LIVE_SESSION_TIME', 0 );
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( '/[\/]+$/', '', str_replace( DIRECTORY_SEPARATOR, '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
-if( ! defined( 'NV_ADMINDIR' ) ) define( 'NV_ADMINDIR', 'admin' );
-if( ! defined( 'NV_EDITORSDIR' ) ) define( 'NV_EDITORSDIR', 'editors' );
-
 /**
  * Request
  *

@@ -136,6 +136,5 @@ $lang_module['config'] = 'Thiết lập giao diện';
 $lang_module['config_not_exit'] = 'Giao diện %s không có chức năng cấu hình';
 
 $lang_module['hide_device'] = 'Ẩn trên thiết bị';
-$lang_module['hide_device_0'] = 'Luôn hiển thị';
 $lang_module['hide_device_1'] = 'Ẩn trên mobile';
-$lang_module['hide_device_2'] = 'Ẩn trên mobile + Máy tính bảng';
+$lang_module['hide_device_2'] = 'Máy tính bảng';

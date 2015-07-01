@@ -23,15 +23,12 @@
 
 		<link href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css" rel="stylesheet" />
 		{THEME_CSS}
-        <script type="text/javascript">
-            var theme_responsive = '{THEME_RESPONSIVE}';
-        </script>
 		{THEME_SITE_JS}
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/main.js"></script>
-		<!--[if lt IE 9]>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/html5shiv.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/respond.min.js"></script>
-		<![endif]-->
+		<!-- BEGIN: lt_ie9 -->
+		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/html5shiv.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/respond.min.js"></script>
+		<!-- END: lt_ie9 -->
 	</head>
 	<body>
 		<div id="timeoutsess" class="chromeframe">

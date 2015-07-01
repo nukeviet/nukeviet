@@ -42,7 +42,7 @@ function nv_aleditor( $textareaname, $width = '100%', $height = '450px', $val = 
 	}
 
 	$return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
-	$return .= "<script type=\"text/javascript\">
+	$return .= "<script type=\"text/javascript\" data-show=\"after\">
 			CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . ( ! empty( $customtoolbar ) ? 'toolbar : "' . $customtoolbar . '",' : '' ) . " width: '" . $width . "',height: '" . $height . "',";
 	if( ! empty( $admin_info['allow_files_type'] ) )
 	{

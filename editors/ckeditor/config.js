@@ -30,7 +30,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'colors' },
 		{ name: 'editing', groups: [ 'find', 'selection'] },
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-		{ name: 'tools' },
+		{ name: 'tools' }
 	];
 
 	config.toolbar_Basic =
@@ -42,7 +42,6 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
 		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
 		{ name: 'styles', items : [ 'Font', 'FontSize', 'TextColor', 'BGColor' ] },
-		{ name: 'tools', items : ['SwitchBar',  'Maximize'] },
+		{ name: 'tools', items : ['SwitchBar',  'Maximize'] }
 	];
-	
 };

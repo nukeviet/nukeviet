@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_MOD_BANNERS' ) ) die( 'Stop!!!' );
 
 global $client_info;
 
-$bot_name = ( $client_info['is_bot'] and ! empty( $client_info['bot_info']['name'] ) ) ? $client_info['bot_info']['name'] : "Not_bot";
+$bot_name = ( $client_info['is_bot'] and ! empty( $client_info['browser']['name'] ) ) ? $client_info['browser']['name'] : "Not_bot";
 $browser = ( $client_info['is_mobile'] ) ? "Mobile" : $client_info['browser']['key'];
 
 $links = NV_MY_DOMAIN;
@@ -38,7 +38,7 @@ if( $id > 0 )
 	}
 }
 
-echo '<script type="text/javascript">';
+echo '<script type="text/javascript" data-show="after">';
 echo '		window.location.href="' . $links . '";';
 echo '</script>';
 echo '<noscript>';
