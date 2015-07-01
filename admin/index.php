@@ -95,6 +95,8 @@ if( ! empty( $module_name ) )
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
+		$module_upload = $module_info['module_upload'];
+
 		$include_functions = NV_ROOTDIR . '/modules/' . $module_file . '/admin.functions.php';
 		$include_menu = NV_ROOTDIR . '/modules/' . $module_file . '/admin.menu.php';
 		$include_file = NV_ROOTDIR . '/modules/' . $module_file . '/admin/' . $op . '.php';
@@ -118,7 +120,7 @@ if( ! empty( $module_name ) )
 		$module_info = $admin_mods[$module_name];
 		if( md5( $module_info['module'] . '#' . $module_info['act_1'] . '#' . $module_info['act_2'] . '#' . $module_info['act_3'] . '#' . $global_config['sitekey'] ) )
 		{
-			$module_file = $module_name;
+			$module_upload = $module_file = $module_name;
 			$include_functions = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/functions.php';
 			$include_menu = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/admin.menu.php';
 			$include_file = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/' . $op . '.php';
@@ -179,6 +181,33 @@ if( ! empty( $module_name ) )
 		}
 
 		require $include_functions;
+
+		if( is_dir( NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' ) )
+		{
+			// Kết nối với các Plugin
+			$plugin_filename = scandir( NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' );
+			foreach( $plugin_filename as $_filename )
+			{
+				if(preg_match( '/^([a-zA-Z0-9\-\_]+)\_(admin)\.php$/' , $_filename, $m ))
+				{
+					$plugin_name = $m[1];
+					if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_' . NV_LANG_INTERFACE . '.php' ) )
+					{
+						require NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_' . NV_LANG_INTERFACE . '.php';
+					}
+					elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/plugin_' . $plugin_name . '_admin_' . NV_LANG_DATA . '.php' ) )
+					{
+						require NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_' . NV_LANG_DATA . '.php';
+					}
+					elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_en.php' ) )
+					{
+						require NV_ROOTDIR . '/modules/' . $module_file . '/language/plugin_' . $plugin_name . '_admin_en.php';
+					}
+					require NV_ROOTDIR . '/modules/' . $module_file . '/plugin/' . $plugin_name . '_admin.php';
+				}
+			}
+		}
+
 		if( in_array( $op, $allow_func ) )
 		{
 			$admin_menu_mods = array();

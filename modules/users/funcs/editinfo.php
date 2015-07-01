@@ -376,7 +376,7 @@ if( $checkss == $array_data['checkss'] )
 			else
 			{
 				$new_photo_name = $array_data['photo'];
-				$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/';
+				$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/';
 
 				$new_photo_name2 = $new_photo_name;
 				$i = 1;

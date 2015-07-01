@@ -178,7 +178,7 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 
 	if( empty( $mime ) or $mime == 'application/octet-stream' )
 	{
-		if( nv_class_exists( 'finfo' ) )
+		if( nv_class_exists( 'finfo', false ) )
 		{
 			$finfo = new finfo( FILEINFO_MIME );
 			if( $finfo )
@@ -392,6 +392,7 @@ function nv_mkdir( $path, $dir_name )
 	if( ! is_dir( $path ) ) return array( 0, sprintf( $lang_global['error_directory_does_not_exist'], $path ) );
 
 	$ftp_check_login = 0;
+	$res = false;
 	if( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) == 1 )
 	{
 		$ftp_server = nv_unhtmlspecialchars( $global_config['ftp_server'] );
@@ -469,9 +470,6 @@ function nv_deletefile( $file, $delsub = false )
 		$ftp_user_name = nv_unhtmlspecialchars( $global_config['ftp_user_name'] );
 		$ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
 		$ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
-
-		// Goi file Class xu ly
-		if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
 
 		// Ket noi, dang nhap
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
@@ -691,7 +689,7 @@ function nv_chmod_dir( $conn_id, $dir, $subdir = false )
 		if( $subdir and is_dir( NV_ROOTDIR . '/' . $dir ) )
 		{
 			ftp_chmod( $conn_id, 0777, $dir );
-			
+
 			$list_files = ftp_nlist( $conn_id, $dir );
 			foreach( $list_files as $file_i )
 			{
@@ -885,8 +883,6 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 
 		if( $is_create )
 		{
-			include NV_ROOTDIR . '/includes/class/image.class.php' ;
-
 			$image = new image( $original_name, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$image->resizeXY( $width );
 			$image->save( NV_ROOTDIR . '/' . $thumb_path, $matches[3] . '_' . md5( $original_name . $width ) . $matches[4] );

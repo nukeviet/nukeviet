@@ -7,7 +7,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.enterMode = CKEDITOR.ENTER_BR;
 	config.language = nv_sitelang;
 	config.allowedContent = true;
-	config.extraPlugins = 'video,eqneditor,switchbar,tbvdownload';
+	config.extraPlugins = 'video,eqneditor,switchbar,tbvdownload,googledocs';
 	config.entities = false;
 	config.youtube_width = '640';
 	config.youtube_height = '480';
@@ -30,7 +30,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'colors' },
 		{ name: 'editing', groups: [ 'find', 'selection'] },
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-		{ name: 'tools' },
+		{ name: 'tools' }
 	];
 
 	config.toolbar_Basic =
@@ -42,7 +42,6 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
 		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
 		{ name: 'styles', items : [ 'Font', 'FontSize', 'TextColor', 'BGColor' ] },
-		{ name: 'tools', items : ['SwitchBar',  'Maximize'] },
+		{ name: 'tools', items : ['SwitchBar',  'Maximize'] }
 	];
-	
 };

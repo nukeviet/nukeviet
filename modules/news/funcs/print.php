@@ -80,7 +80,7 @@ if( $id > 0 and $catid > 0 )
 			$width = $height = 0;
 			if( $content['homeimgthumb'] == 1 and $content['imgposition'] == 1 )
 			{
-				$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
+				$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $content['homeimgfile'];
 				$width = $module_config[$module_name]['homewidth'];
 			}
 			elseif( $content['homeimgthumb'] == 3 )
@@ -88,9 +88,9 @@ if( $id > 0 and $catid > 0 )
 				$src = $content['homeimgfile'];
 				$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 			}
-			elseif( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
+			elseif( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $content['homeimgfile'] ) )
 			{
-				$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
+				$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $content['homeimgfile'];
 				$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 			}
 			$alt = ( empty( $content['homeimgalt'] ) ) ? $content['title'] : $content['homeimgalt'];

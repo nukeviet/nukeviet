@@ -21,30 +21,14 @@
         <link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.css" rel="stylesheet" />
         <!-- END: non_responsive -->
 
-		<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/font-awesome.min.css" rel="stylesheet" />
+		<link href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css" rel="stylesheet" />
 		{THEME_CSS}
-        <script type="text/javascript">
-            var theme_responsive = '{THEME_RESPONSIVE}';
-        </script>
 		{THEME_SITE_JS}
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/main.js"></script>
-		<!--[if lt IE 9]>
+		<!-- BEGIN: lt_ie9 -->
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/html5shiv.js"></script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/respond.min.js"></script>
-		<![endif]-->
-		<script type="text/javascript">
-			var nv_siteroot = '{NV_BASE_SITEURL}';
-			var nv_sitelang = '{NV_LANG_INTERFACE}';
-			var nv_name_variable = '{NV_NAME_VARIABLE}';
-			var nv_fc_variable = '{NV_OP_VARIABLE}';
-			var nv_lang_variable = '{NV_LANG_VARIABLE}';
-			var nv_module_name = '{MODULE_NAME}';
-			var nv_my_ofs = '{NV_SITE_TIMEZONE_OFFSET}';
-			var nv_my_abbr = '{NV_CURRENTTIME}';
-			var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
-			var nv_check_pass_mstime = '{NV_CHECK_PASS_MSTIME}';
-			var nv_area_admin = 1;
-		</script>
+		<!-- END: lt_ie9 -->
 	</head>
 	<body>
 		<div id="timeoutsess" class="chromeframe">

@@ -8,17 +8,12 @@
  * @Createdate 12/28/2009 14:30
  */
 
-if( defined( 'NV_CLASS_IMAGE_PHP' ) ) return;
-define( 'NV_CLASS_IMAGE_PHP', true );
-
 if( ! defined( 'ERROR_IMAGE1' ) ) define( 'ERROR_IMAGE1', 'The file is not a known image format' );
 if( ! defined( 'ERROR_IMAGE2' ) ) define( 'ERROR_IMAGE2', 'The file is not readable' );
 if( ! defined( 'ERROR_IMAGE3' ) ) define( 'ERROR_IMAGE3', 'File is not supplied or is not a file' );
 if( ! defined( 'ERROR_IMAGE4' ) ) define( 'ERROR_IMAGE4', 'Image type not supported' );
 if( ! defined( 'ERROR_IMAGE5' ) ) define( 'ERROR_IMAGE5', 'Image mime type not supported' );
 if( ! defined( 'ERROR_IMAGE6' ) ) define( 'ERROR_IMAGE6', 'Error loading Image' );
-
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
 
 class image
 {

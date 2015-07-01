@@ -46,7 +46,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 
 	function nv_block_headline( $block_config )
 	{
-		global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $global_array_cat, $global_config;
+		global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $module_upload, $global_array_cat, $global_config;
 
 		$array_bid_content = array();
 
@@ -119,9 +119,9 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 			$a = 0;
 			foreach( $hot_news as $hot_news_i )
 			{
-				if( ! empty( $hot_news_i['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $hot_news_i['homeimgfile'] ) )
+				if( ! empty( $hot_news_i['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'] ) )
 				{
-					$images_url = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $hot_news_i['homeimgfile'];
+					$images_url = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'];
 				}
 				elseif( nv_is_url( $hot_news_i['homeimgfile'] ) )
 				{
@@ -151,9 +151,9 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 			{
 				foreach( $content_bid as $lastest )
 				{
-					if( ! empty( $lastest['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $lastest['homeimgfile'] ) )
+					if( ! empty( $lastest['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $lastest['homeimgfile'] ) )
 					{
-						$lastest['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $lastest['homeimgfile'];
+						$lastest['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $lastest['homeimgfile'];
 					}
 					elseif( nv_is_url( $lastest['homeimgfile'] ) )
 					{

@@ -655,7 +655,7 @@ function cropfile(){
 
 	$('#cropContent').css({
 		'width' : size[0] + 4,
-		'height' : size[1] + 4,
+		'height' : size[1] + 4
 	}).html('<img class="crop-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
 	// Check size
@@ -757,7 +757,7 @@ function addlogo(){
 
 	$('#addlogoContent').css({
 		'width' : size[0] + 4,
-		'height' : size[1] + 4,
+		'height' : size[1] + 4
 	}).html('<img class="addlogo-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
 	// Check size
@@ -888,7 +888,7 @@ function rotatefile(){
 		'width' : size[0],
 		'height' : size[1],
 		'margin-top' : contentMargin,
-		'margin-bottom' : contentMargin + 10,
+		'margin-bottom' : contentMargin + 10
 	}).html('<img src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
 	$("div#rorateimage").dialog({
@@ -1309,7 +1309,7 @@ var LFILE = {
 
 			$("input[name=selFile]").val(fileName);
 		}
-	},
+	}
 }
 
 /* Rorate Handle */
@@ -1441,7 +1441,7 @@ var RRT = {
 				}
 			});
 		});
-	},
+	}
 };
 
 /* Keypress, Click Handle */
@@ -1520,7 +1520,7 @@ var KEYPR = {
 
 			KEYPR.isSelectable = false;
 		});
-	},
+	}
 };
 
 var NVUPLOAD = {
@@ -1749,19 +1749,17 @@ var NVUPLOAD = {
 		$('#upload-button-area .browse-button ul li div:first').width( $('#upload-local').outerWidth() ).height( $('#upload-local').outerHeight() );
 
 		// Build upload queue
-		$('#upload-queue').html('\
-			<div class="queue-header">\
-				<div class="container-fluid">\
-					<div class="row">\
-						<div class="col-sm-' + ( nv_alt_require ? '8' : '14' ) + '">' + LANG.file_name + '</div>\
-						' + ( nv_alt_require ? '<div class="col-sm-6">' + LANG.altimage + '</div>' : '' ) + '\
-						<div class="col-sm-4">' + LANG.upload_size + '</div>\
-						<div class="col-sm-6">' + LANG.upload_status + '</div>\
-					</div>\
-				</div>\
-			</div>\
-			<div id="upload-queue-files" class="container-fluid"></div>\
-		');
+		$('#upload-queue').html('<div class="queue-header">' +
+				'<div class="container-fluid">' +
+					'<div class="row">' +
+						'<div class="col-sm-' + ( nv_alt_require ? '8' : '14' ) + '">' + LANG.file_name + '</div>' +
+						( nv_alt_require ? '<div class="col-sm-6">' + LANG.altimage + '</div>' : '' ) + 
+						'<div class="col-sm-4">' + LANG.upload_size + '</div>' +
+						'<div class="col-sm-6">' + LANG.upload_status + '</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>' +
+			'<div id="upload-queue-files" class="container-fluid"></div>');
 
 		// Rendered is true
 		NVUPLOAD.rendered = true;
@@ -1937,7 +1935,7 @@ var NVUPLOAD = {
 		$("input[name=selFile]").val( selFile );
 		NVUPLOAD.uploadCancel();
 		LFILE.reload( folderPath, selFile );
-	},
+	}
 };
 
 var NVCMENU = {
@@ -2047,7 +2045,7 @@ var NVCMENU = {
 	hide : function(){
 		NVCMENU.menu.hide();
 		NVCMENU.shadow.hide();
-	},
+	}
 };
 
 var NVLDATA = {

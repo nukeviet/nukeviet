@@ -31,7 +31,7 @@ else
 		$array_login = array(
 			"nv_login" => '',
 			"nv_password" => '',
-			"nv_redirect" => ''
+			"nv_redirect" => $nv_Request->get_title( 'nv_redirect', 'post,get', '' )
 		);
 		$array_login['openid_info'] = $lang_module['what_is_openid'];
 		if( $global_config['allowuserreg'] == 2 )

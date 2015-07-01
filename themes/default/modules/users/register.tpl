@@ -3,9 +3,9 @@
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js" data-show="after"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js" data-show="after"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js" data-show="after"></script>
 <h2>{LANG.register}</h2>
 <div class="m-bottom">
 	<em class="fa fa-quote-left">&nbsp;</em>
@@ -170,7 +170,7 @@
 	<div class="alert alert-info"><a href="{LOSTACTIVELINK_SRC}">{LANG.resend_activelink}</a></div>
 	<!-- END: lostactivelink -->
 </form>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(document).ready(function() {
 	$(".datepicker").datepicker({
 		dateFormat : "dd/mm/yy",

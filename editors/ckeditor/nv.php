@@ -23,21 +23,21 @@ define( 'CKEDITOR', true );
  */
 function nv_aleditor( $textareaname, $width = '100%', $height = '450px', $val = '', $customtoolbar = '', $path = '', $currentpath = '' )
 {
-	global $module_name, $module_data, $admin_info, $client_info;
+	global $module_upload, $module_data, $admin_info, $client_info;
 
 	if( empty( $path ) and empty( $currentpath ) )
 	{
 		$path = NV_UPLOADS_DIR;
 		$currentpath = NV_UPLOADS_DIR;
 
-		if( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . date( "Y_m" ) ) )
+		if( ! empty( $module_upload ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . date( "Y_m" ) ) )
 		{
-			$currentpath = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( "Y_m" );
-			$path = NV_UPLOADS_DIR . '/' . $module_name;
+			$currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( "Y_m" );
+			$path = NV_UPLOADS_DIR . '/' . $module_upload;
 		}
-		elseif( ! empty( $module_name ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name ) )
+		elseif( ! empty( $module_upload ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload ) )
 		{
-			$currentpath = NV_UPLOADS_DIR . '/' . $module_name;
+			$currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 		}
 	}
 

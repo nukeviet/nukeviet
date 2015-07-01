@@ -10,7 +10,7 @@
 
 if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-unset( $lang_module, $language_array, $nv_parse_ini_browsers, $nv_parse_ini_mobile, $nv_parse_ini_os, $nv_parse_ini_timezone, $countries, $module_info, $site_mods );
+unset( $lang_module, $language_array, $nv_parse_ini_os, $nv_parse_ini_timezone, $countries, $module_info, $site_mods );
 global $db, $nv_Request, $nv_plugin_area;
 
 $contents = ob_get_contents();
@@ -24,7 +24,6 @@ if( ! defined( 'NV_IS_AJAX' ) )
 		$contents = str_replace( '[MEMORY_TIME_USAGE]', sprintf( $lang_global['memory_time_usage'] , nv_convertfromBytes( memory_get_usage() ), number_format( ( microtime( true ) - NV_START_TIME ), 3, '.', '' ) ), $contents );
 	}
 }
-$db = null;
 
 if( isset( $nv_plugin_area[3] ) )
 {
@@ -35,6 +34,7 @@ if( isset( $nv_plugin_area[3] ) )
     }
 }
 
+$db = null;
 unset( $lang_global, $global_config, $client_info );
 
 //Nen trang

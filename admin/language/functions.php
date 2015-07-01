@@ -22,7 +22,19 @@ $menu_top = array(
 $allow_func = array( 'main' );
 if( empty( $global_config['idsite'] ) )
 {
+	$allow_func[] = 'read';
+	$allow_func[] = 'copy';
+	$allow_func[] = 'edit';
+	$allow_func[] = 'download';
+	$allow_func[] = 'interface';
+	$allow_func[] = 'check';
 	$allow_func[] = 'countries';
+	if( defined( 'NV_IS_GODADMIN' ) )
+	{
+		$allow_func[] = 'setting';
+		$allow_func[] = 'write';
+		$allow_func[] = 'delete';
+	}
 }
 
 if( ! isset( $global_config['site_description'] ) )
@@ -40,5 +52,38 @@ define( 'NV_ALLOWED_HTML_LANG', $allowed_html_tags );
 define( 'NV_IS_FILE_LANG', true );
 
 $dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
+
+/**
+ * nv_admin_add_field_lang()
+ *
+ * @param mixed $dirlang
+ * @return
+ */
+function nv_admin_add_field_lang( $dirlang )
+{
+	global $module_name, $db_config, $db, $language_array;
+
+	if( isset( $language_array[$dirlang] ) and ! empty( $language_array[$dirlang] ) )
+	{
+		$add_field = true;
+
+		$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
+		foreach ( $columns_array as $row )
+		{
+			if( $row['field'] == 'author_' . $dirlang )
+			{
+				$add_field = false;
+				break;
+			}
+		}
+
+		if( $add_field == true )
+		{
+			$db->columns_add( NV_LANGUAGE_GLOBALTABLE, 'lang_' . $dirlang, 'string', 4000, true );
+			$db->columns_add( NV_LANGUAGE_GLOBALTABLE, 'update_' . $dirlang, 'integer', 2147483647, true, 0);
+			$db->columns_add( NV_LANGUAGE_GLOBALTABLE . '_file', 'author_' . $dirlang, 'string', 4000, true );
+		}
+	}
+}
 
 $language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );

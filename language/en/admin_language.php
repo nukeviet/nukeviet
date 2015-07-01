@@ -48,6 +48,7 @@ $lang_module['nv_setting_type_2'] = 'Update value that hase no lang_key only';
 $lang_module['nv_setting_save'] = 'Update configuration successfully';
 $lang_module['nv_lang_show'] = 'Managing the display language';
 $lang_module['nv_lang_name'] = 'Language';
+$lang_module['nv_lang_slsite'] = 'Show Site';
 $lang_module['nv_lang_native_name'] = 'Indigenous languages';
 $lang_module['nv_lang_sl'] = 'Select';
 $lang_module['nv_lang_error_exit'] = 'Announcement: The current language does not have to be read into the database, <br /> <br /> system will automatically read data in a language';

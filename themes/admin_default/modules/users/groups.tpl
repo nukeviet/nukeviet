@@ -234,7 +234,7 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$("a.delete").click(function() {
-		$.ajax({
+		confirm("{LANG.delConfirm} ?") && $.ajax({
 			type : "POST",
 			url : "{MODULE_URL}={OP}",
 			data : "gid={GID}&exclude=" + $(this).attr("title"),

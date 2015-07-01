@@ -4,7 +4,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<colgroup>
 				<col span="3" />
-				<col class="w250" />
+				<col class="w150" />
 			</colgroup>
 			<thead>
 				<tr>
@@ -31,8 +31,7 @@
 					</select></td>
 					<td class="text-left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
 					<td class="text-center">
-						<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=content&amp;id={ROW.id}">{GLANG.edit}</a> - 
-						<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_chang_block({BID},{ROW.id},'delete')">{LANG.delete_from_block}</a>
+						<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=content&amp;id={ROW.id}">{GLANG.edit}</a> 
 					</td>
 				</tr>
 			<!-- END: loop -->

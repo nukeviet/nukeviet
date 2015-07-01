@@ -72,7 +72,8 @@ if( $numrows )
 		$last_login = $last_login ? nv_date( 'l, d/m/Y H:i', $last_login ) : $lang_module['last_login0'];
 		$last_agent = $row['last_agent'];
 
-		$browser = array_combine( array( 'key', 'name' ), explode( '|', nv_getBrowser( $last_agent ) ) );
+		$browser = new Browser( $last_agent );
+        	$browser = array( 'key' => $browser->getBrowserKey(), 'name' => $browser->getBrowser() );
 
 		$os = array_combine( array( 'key', 'name' ), explode( '|', nv_getOs( $last_agent ) ) );
 

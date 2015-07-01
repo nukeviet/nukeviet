@@ -24,7 +24,7 @@ $lang_module['in_groups'] = $lang_global['in_groups'];
  */
 function validUserLog( $array_user, $remember, $opid, $current_mode = 0 )
 {
-	global $db, $db_config, $nv_Request;
+	global $db, $db_config, $global_config, $nv_Request;
 
 	$remember = intval( $remember );
 	$checknum = md5( nv_genpass( 10 ) );
@@ -32,6 +32,7 @@ function validUserLog( $array_user, $remember, $opid, $current_mode = 0 )
 		'userid' => $array_user['userid'],
 		'current_mode' => $current_mode,
 		'checknum' => $checknum,
+		'checkhash' => md5( $array_user['userid'] . $checknum . $global_config['sitekey'] . NV_USER_AGENT ),
 		'current_agent' => NV_USER_AGENT,
 		'last_agent' => $array_user['last_agent'],
 		'current_ip' => NV_CLIENT_IP,

@@ -45,7 +45,7 @@
     </form>
     <!-- END: step1 -->
     <!-- BEGIN: step2 -->
-    <script type="text/javascript">
+    <script type="text/javascript" data-show="after">
     function question_change() {
     	var question_option = $("#question").val();
     	$("#question").val('0');

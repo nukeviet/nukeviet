@@ -27,8 +27,8 @@ if( $func_id > 0 and isset( $row['bid'] ) )
 	try
 	{
 		$_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
-			(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-			( :theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', ' . $row['active'] . ', :groups_view, 0, ' . $row['weight'] . ', :config )';
+			(theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES
+			( :theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', ' . $row['active'] . ', ' . $row['hide_device'] . ', :groups_view, 0, ' . $row['weight'] . ', :config )';
 
 		$data = array();
 		$data['theme'] = $row['theme'];

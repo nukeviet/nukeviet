@@ -15,9 +15,9 @@ $module_version = array(
 	'modfuncs' => 'main, clientinfo, addads, stats',
 	'is_sysmod' => 1,
 	'virtual' => 0,
-	'version' => '4.0.17',
+	'version' => '4.0.19',
 	'date' => 'Wed, 20 Oct 2010 00:00:00 GMT',
 	'author' => 'VINADES (contact@vinades.vn)',
 	'note' => '',
-	'uploads_dir' => array( $module_name )
+	'uploads_dir' => array( $module_upload )
 );

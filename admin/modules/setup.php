@@ -24,7 +24,7 @@ $contents = '';
 
 // Thiet lap module moi
 $setmodule = $nv_Request->get_title( 'setmodule', 'get', '', 1 );
-if( ! empty( $setmodule ) )
+if( ! empty( $setmodule ) and preg_match( $global_config['check_module'], $setmodule ) )
 {
 	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( 'setmodule' . $setmodule . session_id() . $global_config['sitekey'] ) )
 	{
@@ -32,7 +32,7 @@ if( ! empty( $setmodule ) )
 		$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 		$sth->execute();
 		$modrow = $sth->fetch();
-		
+
 		if( ! empty( $modrow ) )
 		{
 			if( ! empty( $array_site_cat_module ) and ! in_array( $modrow['basename'], $array_site_cat_module ) )
@@ -60,12 +60,13 @@ if( ! empty( $setmodule ) )
 			try
 			{
 				$sth = $db->prepare( "INSERT INTO " . NV_MODULES_TABLE . "
-					(title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss) VALUES
-					(:title, :module_file, :module_data, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 1, '',1)
+					(title, module_file, module_data, module_upload, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss) VALUES
+					(:title, :module_file, :module_data, :module_upload, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 1, '',1)
 				" );
 				$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 				$sth->bindParam( ':module_file', $modrow['basename'], PDO::PARAM_STR );
 				$sth->bindParam( ':module_data', $modrow['table_prefix'], PDO::PARAM_STR );
+				$sth->bindParam( ':module_upload', $setmodule, PDO::PARAM_STR );
 				$sth->bindParam( ':custom_title', $custom_title, PDO::PARAM_STR );
 				$sth->execute();
 			}
@@ -178,10 +179,10 @@ foreach( $arr_module_news as $module_name_i => $arr )
 		// Chỉ cho phép ảo hóa module khi virtual = 1, Khi virtual = 2, chỉ đổi được tên các func
 		$module_version['virtual'] = ( $module_version['virtual'] == 1 ) ? 1 : 0;
 
-		$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES ( 
+		$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES (
 			\'module\', :title, ' . intval( $module_version['is_sysmod'] ) . ', ' . intval( $module_version['virtual'] ) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)'
 		);
-		
+
 		$sth->bindParam( ':title', $module_name_i, PDO::PARAM_STR );
 		$sth->bindParam( ':basename', $module_name_i, PDO::PARAM_STR );
 		$sth->bindParam( ':table_prefix', $module_data, PDO::PARAM_STR );
@@ -245,9 +246,9 @@ foreach( $modules_data as $row )
 			{
 				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5( 'setmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
 			}
-			
+
 			$mod['setup'] = "<em class=\"fa fa-sun-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\">" . $lang_module['setup'] . "</a>";
-			
+
 			if( $mod['module_file'] == $mod['title'] )
 			{
 				$array_modules[] = $mod;

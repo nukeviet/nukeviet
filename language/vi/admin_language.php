@@ -48,6 +48,7 @@ $lang_module['nv_setting_type_2'] = 'Chỉ cập nhật các giá trị đã có
 $lang_module['nv_setting_save'] = 'Cập nhật cấu hình thành công';
 $lang_module['nv_lang_show'] = 'Quản lý hiển thị ngôn ngữ';
 $lang_module['nv_lang_name'] = 'Tên ngôn ngữ';
+$lang_module['nv_lang_slsite'] = 'Hiển thị ngoài site';
 $lang_module['nv_lang_native_name'] = 'Ngôn ngữ bản địa';
 $lang_module['nv_lang_sl'] = ' Có thể chọn';
 $lang_module['nv_lang_error_exit'] = 'Thông báo: hiện tại chưa có ngôn ngữ nào được đọc vào Cơ sở dữ liệu, <br /> <br />Hệ thống sẽ tự động chuyển sang phần đọc dữ liệu ngôn ngữ.';
