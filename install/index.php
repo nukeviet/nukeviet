@@ -950,8 +950,8 @@ elseif( $step == 6 )
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)" );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unspecified', 0, 0, 0)" );
 
-					$tmp_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/os.ini', true );
-					foreach( $tmp_array as $_os => $v )
+					$tmp_array = array('unknown', 'win', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'win95', 'winme', 'winnt', 'win98', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
+					foreach( $tmp_array as $_os )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote( $_os ) . ", 0, 0, 0)" );
 					}
