@@ -112,7 +112,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		if( defined( 'NV_IS_MODADMIN' ) and $news_contents['status'] != 1 )
 		{
 			$alert = sprintf( $lang_module['status_alert'], $lang_module['status_' . $news_contents['status']] );
-			$my_head .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
+			$my_head .= "<script type=\"text/javascript\" data-show=\"after\">alert('". $alert ."')</script>";
 		}
 	}
 

@@ -1559,7 +1559,7 @@ function nv_change_buffer( $buffer )
 
 	if( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
 	{
-		$googleAnalytics = "<script type=\"text/javascript\">\r\n";
+		$googleAnalytics = "<script type=\"text/javascript\" data-show=\"after\">\r\n";
 		$googleAnalytics .= "//<![CDATA[\r\n";
 		if( $global_config['googleAnalyticsMethod'] == 'universal' )
 		{
@@ -1595,7 +1595,7 @@ function nv_change_buffer( $buffer )
 	}
 	if( NV_LANG_INTERFACE == 'vi' and ( $global_config['mudim_active'] == 1 or ( $global_config['mudim_active'] == 2 and defined( 'NV_SYSTEM' ) ) or ( $global_config['mudim_active'] == 3 and defined( 'NV_ADMIN' ) ) ) )
 	{
-		$body_replace .= "<script type=\"text/javascript\">
+		$body_replace .= "<script type=\"text/javascript\" data-show=\"after\">
 				var mudim_showPanel = " . ( ( $global_config['mudim_showpanel'] ) ? "true" : "false" ) . ";
 				var mudim_displayMode = " . $global_config['mudim_displaymode'] . ";
 				var mudim_method = " . $global_config['mudim_method'] . ";

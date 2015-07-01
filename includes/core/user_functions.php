@@ -532,7 +532,7 @@ function nv_html_site_js()
 	{
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
 		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\"></script>\n";
-		$return .= '<script type="text/javascript">
+		$return .= '<script type="text/javascript" data-show=\"after\">
  			//<![CDATA[
 					var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {

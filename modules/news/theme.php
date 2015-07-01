@@ -904,7 +904,7 @@ function sendmail_themme( $sendmail )
 {
 	global $module_info, $module_file, $global_config, $lang_module, $lang_global;
 
-	$script = "<script type=\"text/javascript\">\n";
+	$script = "<script type=\"text/javascript\" data-show=\"after\">\n";
 	$script .= " $(document).ready(function(){\n";
 	$script .= " $(\"#sendmailForm\").validate();\n";
 	$script .= " });\n";
