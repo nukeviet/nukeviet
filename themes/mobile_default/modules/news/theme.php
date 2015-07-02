@@ -615,11 +615,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 
 function detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment )
 {
-	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info, $client_info;
-
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
-	$my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";
-	$my_head .= "<link href='" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css' type=\"text/css\" rel=\"stylesheet\"/>\n";
+	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $lang_global, $user_info, $admin_info, $client_info;
 
 	$xtpl = new XTemplate( 'detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG_GLOBAL', $lang_global );
@@ -627,7 +623,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'LANG', $lang_module );
 
-	$news_contents['addtime'] = nv_date( "d/m/Y h:i:s", $news_contents['addtime'] );
+	$news_contents['addtime'] = nv_date( 'd/m/Y h:i:s', $news_contents['addtime'] );
 
 	$xtpl->assign( 'NEWSID', $news_contents['id'] );
 	$xtpl->assign( 'NEWSCHECKSS', $news_contents['newscheckss'] );
@@ -730,7 +726,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
-		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . " " . nv_link_delete_page( $news_contents['id'], 1 ) );
+		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . ' ' . nv_link_delete_page( $news_contents['id'], 1 ) );
 		$xtpl->parse( 'main.adminlink' );
 	}
 
@@ -870,7 +866,7 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . " " . nv_link_delete_page( $topic_array_i['id'] ) );
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . ' ' . nv_link_delete_page( $topic_array_i['id'] ) );
 				$xtpl->parse( 'main.topic.adminlink' );
 			}
 
@@ -904,14 +900,6 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 function sendmail_themme( $sendmail )
 {
 	global $module_info, $module_file, $global_config, $lang_module, $lang_global;
-
-	$script = "<script type=\"text/javascript\">\n";
-	$script .= " $(document).ready(function(){\n";
-	$script .= " $(\"#sendmailForm\").validate();\n";
-	$script .= " });\n";
-	$script .= "</script>\n";
-
-	$sendmail['script'] = $script;
 
 	$xtpl = new XTemplate( 'sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'SENDMAIL', $sendmail );

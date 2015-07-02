@@ -15,12 +15,12 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  *
  * Ham xu ly chinh cho block
  *
- * @param mixed $block_config
+ * @param array $block_config
  * @return
  */
 function nv_menu_blocks( $block_config )
 {
-	global $db, $global_config, $my_head;
+	global $db, $global_config;
 
 	$list_cats = array();
 	$sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
