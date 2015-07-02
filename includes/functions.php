@@ -1600,7 +1600,7 @@ function nv_change_buffer( $buffer )
 				var mudim_displayMode = " . $global_config['mudim_displaymode'] . ";
 				var mudim_method = " . $global_config['mudim_method'] . ";
 			</script>\n";
-		$body_replace .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>\n";
+		$body_replace .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\" data-show=\"after\"></script>\n";
 	}
 	$buffer = preg_replace( '/(<\/body>)/i', $body_replace . '\\1', $buffer, 1 );
 
