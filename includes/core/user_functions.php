@@ -20,7 +20,7 @@ $meta_property = array(
 	'og:url' => ''
 );
 
-//tÃ i khoáº£n Google+
+//tài kho?n Google+
 $id_profile_googleplus = 0;
 
 /**
@@ -153,12 +153,12 @@ function nv_blocks_content( $sitecontent )
 
 			if( $client_info['is_mobile'] and ( $_row['hide_device'] == 1 or $_row['hide_device'] == 3 ) )
 			{
-				//áº¨n trÃªn mobile
+				//?n trên mobile
 				continue;
 			}
 			elseif( $client_info['is_tablet'] and ( $_row['hide_device'] == 2 or $_row['hide_device'] == 3 ) )
 			{
-				// áº¨n trÃªn MÃ¡y tÃ­nh báº£ng
+				// ?n trên Máy tính b?ng
 				continue;
 			}
 
@@ -411,7 +411,7 @@ function nv_html_meta_tags()
 		}
 	}
 
-	//tÃ i khoáº£n Google+
+	//tài kho?n Google+
 	if( $id_profile_googleplus == 0 )
 	{
 		$id_profile_googleplus = $module_info['gid'];
@@ -522,7 +522,7 @@ function nv_html_site_js()
 	{
 	$return .= "<script src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\" data-show=\"after\"></script>" . PHP_EOL;
         $return .= "<script src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\" data-show=\"after\"></script>" . PHP_EOL;
-        $return .= '<script data-show=\"after\">
+        $return .= '<script data-show="after">
  			//<![CDATA[
 					var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {

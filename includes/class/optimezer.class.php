@@ -454,8 +454,9 @@ class optimezer
      */
     private function _minifyJsInline( $js )
     {
+        $js = str_replace( array( "//<![CDATA[", "//]]>" ), "", $js ); // remove CDATA
+
         $replace = array(
-            '#^\s*//<!\[CDATA\[([\s\S]*)//\]\]>\s*\z#' => "$1", // remove CDATA
             '#\'([^\n\']*?)/\*([^\n\']*)\'#' => "'\1/'+\'\'+'*\2'", // remove comments from ' strings
             '#\"([^\n\"]*?)/\*([^\n\"]*)\"#' => '"\1/"+\'\'+"*\2"', // remove comments from " strings
             '#/\*.*?\*/#s' => "", // strip C style comments
@@ -475,19 +476,16 @@ class optimezer
             '#\s*(\{|\()\s*#' => '$1',
             '#\s*(\}|\))\s*#' => '$1',
             '#(\;|\,)[ ]+#' => '$1',
-            '#[ ]+([\=]+)[ ]+#' => '$1'
-                );
+            '#[ ]+([\=]+)[ ]+#' => '$1' );
 
         $search = array_keys( $replace );
         $js = preg_replace( $search, $replace, $js );
         $js = str_replace( '$(document).ready', '$', $js );
-        $js = trim( $js );
 
-        if( ! $this->_tidySupport )
-		{
-			$js = "//<![CDATA[" . $this->eol . $js . $this->eol . "//]]>";
-		}
-
+        if ( ! $this->_tidySupport )
+        {
+            $js = "//<![CDATA[" . $this->eol . trim( $js ) . $this->eol . "//]]>";
+        }
         return $js;
     }
 
