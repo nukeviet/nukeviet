@@ -15,8 +15,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  *
  * @return
  */
-
-function nv_groups_list( )
+function nv_groups_list()
 {
 	$cache_file = NV_LANG_DATA . '_groups_list_' . NV_CACHE_PREFIX . '.cache';
 	if( ( $cache = nv_get_cache( 'users', $cache_file ) ) != false )
@@ -609,12 +608,12 @@ function nv_rewrite_change( $array_config_global )
 		}
 		$rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
 		$rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
-		$rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"/{R:1}/{R:2}/\" />\n";
+		$rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/{R:2}/\" />\n";
 		$rewrite_rule .= " </rule>\n";
 
 		$rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
 		$rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
-		$rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"/{R:1}/\" />\n";
+		$rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/\" />\n";
 		$rewrite_rule .= " </rule>\n";
 
 		$rewrite_rule = nv_rewrite_rule_iis7( $rewrite_rule );
@@ -681,8 +680,8 @@ function nv_rewrite_change( $array_config_global )
 			$rewrite_rule .= "RewriteRule ^([a-z]{2})\/([a-zA-Z0-9\-]+)\/search\/q\=(.*)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=search&q=$3 [L]\n";;
 		}
 
-		$rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ /$1/$2/ [L,R=301]\n";
-		$rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-]+)$ /$1/ [L,R=301]\n";
+		$rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ " . NV_BASE_SITEURL . "$1/$2/ [L,R=301]\n";
+		$rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-]+)$ " . NV_BASE_SITEURL . "$1/ [L,R=301]\n";
 		$rewrite_rule .= "</IfModule>\n\n";
 		$rewrite_rule .= "#nukeviet_rewrite_end\n";
 		$rewrite_rule .= "##################################################################################\n\n";
