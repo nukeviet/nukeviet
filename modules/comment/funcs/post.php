@@ -38,7 +38,7 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 			$code = $nv_Request->get_title( 'code', 'post', '' );
 			$status = $module_config[$module]['auto_postcomm'];
 
-			$timeout = $nv_Request->get_int( $module_name . '_timeout', 'cookie', 0 );
+			$timeout = $nv_Request->get_int( $site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, 'cookie', 0 );
 
 			if( ( $status == 2 and !defined( 'NV_IS_USER' ) ) or $status == 0 )
 			{
@@ -111,7 +111,7 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 					$stmt->execute();
 					if( $stmt->rowCount() )
 					{
-						$nv_Request->set_Cookie( $module_name . '_timeout', NV_CURRENTTIME );
+						$nv_Request->set_Cookie( $site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, NV_CURRENTTIME, $difftimeout );
 						if( $status )
 						{
 							$mod_info = $site_mods[$module];
@@ -130,8 +130,6 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 				}
 				catch( PDOException $e )
 				{
-					print_r($e);
-					die();
 					$contents = 'ERR_' . $e->getMessage();
 				}
 			}
