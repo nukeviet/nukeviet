@@ -1,7 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.0.20 (Release Candidate)
+NUKEVIET 4.0.20 (No release)
 - Add class Browser-Detect
 - remove function: nv_check_bot, nv_getBrowser, nv_getOs
 - Add Autoload Class
@@ -11,7 +11,7 @@ NUKEVIET 4.0.20 (Release Candidate)
 - Add data-show="after" for <script type="text/javascript"  ...
 - Fix and update something...
 
-NUKEVIET 4.0.19 (Release Candidate 1)
+NUKEVIET 4.0.19 (No release)
 - Add class Mobile-Detect
 - Add instruction url function
 - ckeditor: change plugins googledocs, remove addon magicline
