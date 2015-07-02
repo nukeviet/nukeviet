@@ -287,16 +287,13 @@ function nv_html_meta_tags()
 
 	if ( ! empty( $site_description ) )
 	{
-	    $site_description = preg_replace( '/<[^>]*>/', ' ', $site_description ); // ----- remove HTML TAGs
-	    $site_description = str_replace( "\r", '', $site_description );    // --- replace with empty space
-	    $site_description = str_replace( "\n", ' ', $site_description );   // --- replace with space
-	    $site_description = str_replace( "\t", ' ', $site_description );   // --- replace with space
-	    $site_description = trim( preg_replace( '/[ ]+/', ' ', $site_description ) ); // ----- remove multiple spaces
+        $site_description = preg_replace( array( '/<[^>]*>/', '/[\r\n\t]+/' ),' ', $site_description );
+        $site_description = trim( preg_replace( '/[ ]+/', ' ', $site_description ) );
 		if( $global_config['description_length'] )
 		{
 			$site_description = nv_clean60( $site_description, $global_config['description_length'], true );
 		}
-		$return .= "<meta name=\"description\" content=\"" . $site_description . "\" />\n";
+		$return .= "<meta name=\"description\" content=\"" . $site_description . "\" />" . PHP_EOL;
 	}
 
 	$kw = array();
@@ -323,11 +320,11 @@ function nv_html_meta_tags()
 		$key_words = implode( ',', $kw );
 		$key_words = preg_replace( array( "/[ ]*\,[ ]+/", "/[\,]+/" ), array( ", ", ", " ), $key_words );
 		$key_words = nv_strtolower( strip_tags( $key_words ) );
-		$return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />\n";
-		$return .= "<meta name=\"news_keywords\" content=\"" . $key_words . "\" />\n";
+		$return .= "<meta name=\"keywords\" content=\"" . $key_words . "\" />" . PHP_EOL;
+		$return .= "<meta name=\"news_keywords\" content=\"" . $key_words . "\" />" . PHP_EOL;
 	}
 
-	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />\n";
+	$return .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $global_config['site_charset'] . "\" />" . PHP_EOL;
 
 	if( $global_config['idsite'] and file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/site_' . $global_config['idsite'] . '_metatags.xml' ) )
 	{
@@ -360,16 +357,16 @@ function nv_html_meta_tags()
 			{
 				if( ( $meta['group'] == 'http-equiv' or $meta['group'] == 'name' or $meta['group'] == 'property') and preg_match( '/^[a-zA-Z0-9\-\_\.\:]+$/', $meta['value'] ) and preg_match( "/^([^\'\"]+)$/", ( string )$meta['content'] ) )
 				{
-					$return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\" />\n";
+					$return .= "<meta " . $meta['group'] . "=\"" . $meta['value'] . "\" content=\"" . $meta['content'] . "\" />" . PHP_EOL;
 				}
 			}
 		}
 	}
 
-	$return .= "<meta name=\"generator\" content=\"NukeViet v4.0\" />\n";
+	$return .= "<meta name=\"generator\" content=\"NukeViet v4.0\" />" . PHP_EOL;
 	if( defined( 'NV_IS_ADMIN' ) )
 	{
-		$return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\" />\n";
+		$return .= "<meta http-equiv=\"refresh\" content=\"" . $global_config['admin_check_pass_time'] . "\" />" . PHP_EOL;
 	}
 
 	if( $home )
@@ -399,7 +396,7 @@ function nv_html_meta_tags()
 		{
 			if( ! empty( $value ) )
 			{
-				$return .= "<meta property=\"" . $key . "\" content=\"" . $value . "\" />\n";
+				$return .= "<meta property=\"" . $key . "\" content=\"" . $value . "\" />" . PHP_EOL;
 			}
 		}
 	}
@@ -409,7 +406,7 @@ function nv_html_meta_tags()
 		{
 			if( ! preg_match('/^og\:/', $key) and ! empty( $value ) )
 			{
-				$return .= "<meta property=\"" . $key . "\" content=\"" . $value . "\" />\n";
+				$return .= "<meta property=\"" . $key . "\" content=\"" . $value . "\" />" . PHP_EOL;
 			}
 		}
 	}
@@ -424,11 +421,11 @@ function nv_html_meta_tags()
 		$dbgoogleplus = nv_db_cache( 'SELECT gid, idprofile FROM ' . $db_config['prefix'] . '_googleplus', 'gid', 'seotools' );
 		if( isset( $dbgoogleplus[$id_profile_googleplus]['idprofile'] ) )
 		{
-			$return .= "<link rel=\"author\" href=\"https://plus.google.com/" . $dbgoogleplus[$id_profile_googleplus]['idprofile'] . "/\" />\n";
+			$return .= "<link rel=\"author\" href=\"https://plus.google.com/" . $dbgoogleplus[$id_profile_googleplus]['idprofile'] . "/\" />" . PHP_EOL;
 		}
 	}
 
-	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\" />\n";
+	$return .= "<link rel=\"canonical\" href=\"" . $canonicalUrl . "\" />" . PHP_EOL;
 	return $return;
 }
 
@@ -460,7 +457,7 @@ function nv_html_page_title()
 	}
 	//$replace = array( "\\", "/", ":", "*", "?", "\"", "<", ">", "|" );
 	//$_title = str_replace( $replace, '', $_title );
-	return "<title>" . nv_htmlspecialchars( strip_tags( $_title ) ) . "</title>\n";
+	return "<title>" . nv_htmlspecialchars( strip_tags( $_title ) ) . "</title>" . PHP_EOL;
 }
 
 /**
@@ -474,7 +471,7 @@ function nv_html_css()
 
 	if( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/css/' . $module_file . '.css' ) )
 	{
-		return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />\n";
+		return "<link rel=\"StyleSheet\" href=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/css/" . $module_file . ".css\" type=\"text/css\" />" . PHP_EOL;
 	}
 
 	return '';
@@ -494,7 +491,7 @@ function nv_html_site_rss()
 	{
 		foreach( $rss as $rss_item )
 		{
-			$return .= "<link rel=\"alternate\" href=\"" . $rss_item['src'] . "\" title=\"" . strip_tags( $rss_item['title'] ) . "\" type=\"application/rss+xml\" />\n";
+			$return .= "<link rel=\"alternate\" href=\"" . $rss_item['src'] . "\" title=\"" . strip_tags( $rss_item['title'] ) . "\" type=\"application/rss+xml\" />" . PHP_EOL;
 		}
 	}
 
@@ -510,29 +507,22 @@ function nv_html_site_js()
 {
 	global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info;
 
-	$return = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>\n";
-	$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n";
-	$return .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
-	$return .= "var nv_siteroot=\"" . NV_BASE_SITEURL . "\",nv_sitelang=\"" . NV_LANG_INTERFACE . "\",nv_name_variable=\"" . NV_NAME_VARIABLE . "\",nv_fc_variable=\"" . NV_OP_VARIABLE . "\",nv_lang_variable=\"" . NV_LANG_VARIABLE . "\",nv_module_name=\"" . $module_name . "\",nv_func_name=\"" . $op . "\",nv_is_user=" . ( ( int )defined( "NV_IS_USER" ) ) . ", nv_my_ofs=" . round( NV_SITE_TIMEZONE_OFFSET / 3600 ) . ",nv_my_abbr=\"" . nv_date( "T", NV_CURRENTTIME ) . "\",nv_cookie_prefix=\"" . $global_config['cookie_prefix'] . "\",nv_check_pass_mstime=" . ( ( intval( $global_config['user_check_pass_time'] ) - 62 ) * 1000 ) . ",nv_area_admin=0,theme_responsive=" . ( ( int )( $global_config['current_theme_type'] == 'r' ) ) . ";\n";
-	$return .= "//]]>\n</script>\n";
-	$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/global.js\"></script>\n";
-	if( defined( 'NV_IS_ADMIN' ) )
-	{
-		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/admin.js\"></script>\n";
-	}
-	if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/js/user.js' ) )
-	{
-		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $module_file . "/js/user.js\"></script>\n";
-	}
-	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
-	{
-		$return .= nv_add_editor_js();
-	}
+	$return = "<script>" . PHP_EOL;
+    $return .= "var nv_siteroot=\"" . NV_BASE_SITEURL . "\",nv_sitelang=\"" . NV_LANG_INTERFACE . "\",nv_name_variable=\"" . NV_NAME_VARIABLE . "\",nv_fc_variable=\"" . NV_OP_VARIABLE . "\",nv_lang_variable=\"" . NV_LANG_VARIABLE . "\",nv_module_name=\"" . $module_name . "\",nv_func_name=\"" . $op . "\",nv_is_user=" . ( ( int )defined( "NV_IS_USER" ) ) . ", nv_my_ofs=" . round( NV_SITE_TIMEZONE_OFFSET / 3600 ) . ",nv_my_abbr=\"" . nv_date( "T", NV_CURRENTTIME ) . "\",nv_cookie_prefix=\"" . $global_config['cookie_prefix'] . "\",nv_check_pass_mstime=" . ( ( intval( $global_config['user_check_pass_time'] ) - 62 ) * 1000 ) . ",nv_area_admin=0,theme_responsive=" . ( ( int )( $global_config['current_theme_type'] == 'r' ) ) . ";" . PHP_EOL;
+    $return .= "</script>" . PHP_EOL;
+    $return .= "<script src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>" . PHP_EOL;
+    $return .= "<script src=\"" . NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js\"></script>" . PHP_EOL;
+    $return .= "<script src=\"" . NV_BASE_SITEURL . "js/global.js\"></script>" . PHP_EOL;
+
+    if ( defined( 'NV_IS_ADMIN' ) ) $return .= "<script src=\"" . NV_BASE_SITEURL . "js/admin.js\"></script>" . PHP_EOL;
+    if ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/js/user.js' ) ) $return .= "<script src=\"" . NV_BASE_SITEURL . "modules/" . $module_file . "/js/user.js\"></script>" . PHP_EOL;
+    if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) ) $return .= nv_add_editor_js();
+
 	if( defined( 'NV_IS_DRAG_BLOCK' ) )
 	{
-		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\"></script>\n";
-		$return .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\"></script>\n";
-		$return .= '<script type="text/javascript" data-show=\"after\">
+	$return .= "<script src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\" data-show=\"after\"></script>" . PHP_EOL;
+        $return .= "<script src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\" data-show=\"after\"></script>" . PHP_EOL;
+        $return .= '<script data-show=\"after\">
  			//<![CDATA[
 					var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
 					$(function() {
@@ -692,3 +682,5 @@ function nv_groups_list_pub()
 
 	return $groups;
 }
+
+?>
