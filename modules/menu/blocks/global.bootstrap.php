@@ -157,11 +157,6 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 			}
 			$xtpl->parse( 'main.top_menu' );
 		}
-		// Active home menu
-		if( ! empty( $home ) )
-		{
-			$xtpl->parse( 'main.home_active' );
-		}
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
