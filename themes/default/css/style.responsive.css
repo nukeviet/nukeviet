@@ -122,15 +122,15 @@
 		width: 100%;
 	}
 }
-@media (min-width: 992px) and (max-width: 1080px){
+@media (min-width: 992px){
 	.container {
 		width: 100%;
 	}
 	#wraper{
-		width: 100%;
+		width: 950px;
 	}
 }
-@media (min-width: 1081px){
+@media (min-width: 1200px){
 	#wraper{
 		width: 1080px;
 	}
