@@ -1,5 +1,4 @@
 <!-- BEGIN: main -->
-{SENDMAIL.script}
 <!-- BEGIN: close -->
 <script type="text/javascript" data-show="after">
 	var howLong = 10000;

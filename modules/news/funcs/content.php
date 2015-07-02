@@ -23,7 +23,7 @@ elseif( ! nv_function_exists( 'nv_aleditor' ) and file_exists( NV_ROOTDIR . '/' 
 	function nv_aleditor( $textareaname, $width = '100%', $height = '450px', $val = '', $customtoolbar = '' )
 	{
 		$return = '<textarea style="width: ' . $width . '; height:' . $height . ';" id="' . $module_data . '_' . $textareaname . '" name="' . $textareaname . '">' . $val . '</textarea>';
-		$return .= "<script type=\"text/javascript\">
+		$return .= "<script type=\"text/javascript\" data-show=\"after\">
 		CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . ( ! empty( $customtoolbar ) ? 'toolbar : "' . $customtoolbar . '",' : '' ) . " width: '" . $width . "',height: '" . $height . "',});
 		</script>";
 		return $return;
@@ -585,7 +585,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 	if( ! empty( $error ) )
 	{
-		$my_head .= "<script type=\"text/javascript\">\n";
+		$my_head .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 		$my_head .= "	alert('" . $error . "')\n";
 		$my_head .= "</script>\n";
 	}
@@ -670,7 +670,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 	if( empty( $rowcontent['alias'] ) )
 	{
-		$contents .= "<script type=\"text/javascript\">\n";
+		$contents .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 		$contents .= '$("#idtitle").change(function () {
  		get_alias();
 		});';

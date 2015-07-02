@@ -17,14 +17,6 @@ if( empty( $vid ) )
 	$page_title = $module_info['custom_title'];
 	$key_words = $module_info['keywords'];
 
-	if( ! defined( 'SHADOWBOX' ) )
-	{
-		$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-		$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-		define( 'SHADOWBOX', true );
-	}
-
 	$sql = 'SELECT vid, question, link, acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1 ORDER BY publ_time DESC';
 	$list = nv_db_cache( $sql, 'vid', 'voting' );
 

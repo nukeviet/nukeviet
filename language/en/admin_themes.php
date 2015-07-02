@@ -135,6 +135,5 @@ $lang_module['config'] = 'Set Theme';
 $lang_module['config_not_exit'] = 'Theme %s not configured';
 
 $lang_module['hide_device'] = 'Hide in device';
-$lang_module['hide_device_0'] = 'Always show';
 $lang_module['hide_device_1'] = 'Hide mobile';
-$lang_module['hide_device_2'] = 'Hide mobile and tablet';
+$lang_module['hide_device_2'] = 'Hide tablet';

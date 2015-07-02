@@ -17,7 +17,6 @@ if( empty( $global_config['idsite'] ) )
 }
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$allow_func[] = 'bots';
 	$allow_func[] = 'robots';
 }
 
