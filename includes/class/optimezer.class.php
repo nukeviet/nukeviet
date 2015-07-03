@@ -468,15 +468,14 @@ class optimezer
             '#(//[^\n]*\n)#s' => "\\1\n", // extra line feed after any comments left (important given later replacements)
             '#/([\'"])\+\'\'\+([\'"])\*#' => "/*", // restore comments in strings
             '#;+\s*([};])#' => '$1',
-            '#(\b|\x24)\s+(\b|\x24)#' => '$1 $2',
-            '#([+\-])\s+([+\-])#' => '$1 $1',
-            '#\s+#' => ' ',
+            '#[\r\n\t ]+#' => ' ',
             '#([^\'"]*)true([^\'"]*)#i' => "$1!0$2",
             '#([^\'"]*)false([^\'"]*)#i' => "$1!1$2",
             '#\s*(\{|\()\s*#' => '$1',
             '#\s*(\}|\))\s*#' => '$1',
             '#(\;|\,)[ ]+#' => '$1',
-            '#[ ]+([\=]+)[ ]+#' => '$1' );
+            '#[ ]+([\=]+)[ ]+#' => '$1' 
+            );
 
         $search = array_keys( $replace );
         $js = preg_replace( $search, $replace, $js );
