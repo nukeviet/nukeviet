@@ -104,7 +104,7 @@ ul.slimmenu li a {
 	text-shadow: 0 1px 0 rgba(255,255,255,0.2);
 	background: none;
 }
-ul.slimmenu li a:hover, ul.slimmenu li a:focus, ul.slimmenu li a:active {
+ul.slimmenu li a:hover, ul.slimmenu li a:focus, ul.slimmenu li.current {
 	background-color: #063b70;
 	text-decoration: none;
 }

@@ -229,7 +229,7 @@ header{
 }
 
 #header .pull-right{
-	margin:33px 33px;
+	margin:33px 10px 0 0;
 }
 #header #logo a{
 	font-size:22px;
