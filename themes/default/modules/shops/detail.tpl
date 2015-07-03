@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div id="fb-root"></div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	( function(d, s, id) {
 			var js, fjs = d.getElementsByTagName(s)[0];
 			if (d.getElementById(id))
@@ -60,7 +60,7 @@
 							<div class="g-plusone" data-size="medium"></div>
 						</li>
 					</ul>
-					<script type="text/javascript">
+					<script type="text/javascript" data-show="after">
 						window.___gcfg = {
 							lang : nv_sitelang
 						};
@@ -319,7 +319,7 @@
 <div class="msgshow" id="msgshow"></div>
 
 <!-- BEGIN: allowed_print_js -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(function() {
 		$('#click_print').click(function(event) {
 			var href = $(this).attr("href");
@@ -332,14 +332,14 @@
 <!-- END: allowed_print_js -->
 
 <!-- BEGIN: imagemodal -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
     $("#imageproduct").on("click", function() {
     	$('#imagemodal').modal('show');
     });
 </script>
 <!-- END: imagemodal -->
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	var detail_error_group = '{LANG.detail_error_group}';
 
 	function check_quantity( _this ){

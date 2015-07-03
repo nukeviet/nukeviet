@@ -82,7 +82,7 @@
 	</table>
 </div>
 <div class="msgshow" id="msgshow">&nbsp;</div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	var lang_del_confirm = '{LANG.compare_del_items_confirm}';
 </script>
 

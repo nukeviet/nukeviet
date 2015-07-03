@@ -22,7 +22,7 @@
 </div>
 <!-- END: form_login -->
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(document).ready(function(){
 		$('[data-toggle="tooltip"]').tooltip({ container: 'body' });
 	});

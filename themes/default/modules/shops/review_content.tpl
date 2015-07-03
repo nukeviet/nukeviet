@@ -44,7 +44,7 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$("#rate_list").load('{LINK_REVIEW}&showdata=1');
 	var rating = 0;
 	$('.rate-btn').hover(function() {
