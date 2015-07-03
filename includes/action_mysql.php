@@ -149,18 +149,18 @@ function nv_create_table_sys( $lang )
 	 ) ENGINE=MyISAM";
 
  	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES
-		('about', 'page', 'about', 'About', '', 1435767440, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 0),
-		('news', 'news', 'news', 'News', '', 1435767440, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 0),
-		('users', 'users', 'users', 'Users', 'Users', 1435767440, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 0),
-		('contact', 'contact', 'contact', 'Contact', '', 1435767440, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 0),
-		('statistics', 'statistics', 'statistics', 'Statistics', '', 1435767440, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 0),
-		('voting', 'voting', 'voting', 'Voting', '', 1435767440, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 0),
-		('banners', 'banners', 'banners', 'Banners', '', 1435767440, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 0),
-		('seek', 'seek', 'seek', 'Search', '', 1435767440, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 0),
-		('menu', 'menu', 'menu', 'Menu Site', '', 1435767440, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 0),
-		('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1435767440, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 0),
-		('page', 'page', 'page', 'Page', '', 1435767440, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
-		('comment', 'comment', 'comment', 'Comment', '', 1435767440, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0)";
+		('about', 'page', 'about', 'About', '', 1435940800, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 0),
+		('news', 'news', 'news', 'News', '', 1435940800, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 0),
+		('users', 'users', 'users', 'Users', 'Users', 1435940800, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 0),
+		('contact', 'contact', 'contact', 'Contact', '', 1435940800, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 0),
+		('statistics', 'statistics', 'statistics', 'Statistics', '', 1435940800, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 0),
+		('voting', 'voting', 'voting', 'Voting', '', 1435940800, 1, 1, '', '', '', '', '0', 6, 1, '', 1, 0),
+		('banners', 'banners', 'banners', 'Banners', '', 1435940800, 1, 1, '', '', '', '', '0', 7, 1, '', 0, 0),
+		('seek', 'seek', 'seek', 'Search', '', 1435940800, 1, 0, '', '', '', '', '0', 8, 1, '', 0, 0),
+		('menu', 'menu', 'menu', 'Menu Site', '', 1435940800, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 0),
+		('feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1435940800, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 0),
+		('page', 'page', 'page', 'Page', '', 1435940800, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
+		('comment', 'comment', 'comment', 'Comment', '', 1435940800, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0)";
 
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
 	 	('" . $lang . "', 'global', 'site_domain', ''),

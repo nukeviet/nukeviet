@@ -13,7 +13,7 @@ if( ! isset( $getContent ) or ! is_object( $getContent ) )
 {
 	if( ! isset( $global_config ) or empty( $global_config ) )
 	{
-		$global_config = array( 'version' => '4.0.20', 'sitekey' => mt_rand() );
+		$global_config = array( 'version' => '4.0.21', 'sitekey' => mt_rand() );
 	}
 
 	$getContent = new UrlGetContents( $global_config );
