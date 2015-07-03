@@ -518,77 +518,60 @@ function nv_html_site_js()
     if ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/js/user.js' ) ) $return .= "<script src=\"" . NV_BASE_SITEURL . "modules/" . $module_file . "/js/user.js\"></script>" . PHP_EOL;
     if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) ) $return .= nv_add_editor_js();
 
-	if( defined( 'NV_IS_DRAG_BLOCK' ) )
-	{
-	$return .= "<script src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\" data-show=\"after\"></script>" . PHP_EOL;
+	if ( defined( 'NV_IS_DRAG_BLOCK' ) )
+    {
+        $return .= "<script src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.min.js\" data-show=\"after\"></script>" . PHP_EOL;
         $return .= "<script src=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.sortable.min.js\" data-show=\"after\"></script>" . PHP_EOL;
         $return .= '<script data-show="after">
- 			//<![CDATA[
-					var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '";
-					$(function() {
-						$("a.delblock").click(function(){
-							var bid = $(this).attr("name");
-							if (confirm("' . $lang_global['block_delete_confirm'] . '")){
-								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=blocks_del", "bid="+bid, function(theResponse){
-									alert(theResponse);
-									window.location.href = "' . $client_info['selfurl'] . '";
-								});
-							}
-						});
-
-						$("a.outgroupblock").click(function(){
-							var bid = $(this).attr("name");
-							if (confirm("' . $lang_global['block_outgroup_confirm'] . '")){
-								$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=front_outgroup", "func_id=' . $module_info['funcs'][$op]['func_id'] . '&bid="+bid, function(theResponse){
-									alert(theResponse);
-								});
-							}
-						});
-
-						$("a.block_content").click(function(){
-							var bid = $(this).attr("name");
-							var tag = $(this).attr("id");
-							nv_open_browse("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=block_content&selectthemes=' . $global_config['module_theme'] . '&tag="+tag+"&bid="+bid+"&blockredirect="+blockredirect, "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no");
-				 		});
-
-				 		var func_id = ' . ( $module_info['funcs'][$op]['func_id'] ) . ';
-				 		var post_order = false;
-						$(".column").sortable({
-							connectWith: \'.column\',
-							opacity: 0.8,
-							cursor: \'move\',
-							receive: function(){
-									post_order = true;
-									var position = $(this).attr("id");
-									var order = $(this).sortable("serialize");
-									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&position="+position+"&func_id="+func_id, function(theResponse){
-										if(theResponse=="OK_"+func_id){
-					 					$("div#toolbar>ul.info").html("<li><span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span></li>").fadeIn(1000);
-										}
-										else{
-											alert("' . $lang_global['blocks_saved_error'] . '");
-										}
-									});
-							},
-							stop: function() {
-								if(post_order == false){
-									var order = $(this).sortable("serialize");
-									$.post("' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=sort_order", order+"&func_id="+func_id, function(theResponse){
-										if(theResponse=="OK_"+func_id){
-					 					$("div#toolbar>ul.info").html("<span style=\'color:#ff0000;padding-left:150px;font-weight:700;\'>' . $lang_global['blocks_saved'] . '</span>").fadeIn(1000);
-										}
-										else{
-											alert("' . $lang_global['blocks_saved_error'] . '");
-										}
-									});
-								}
-							}
-						});
-						$(".column").disableSelection();
-					});
-				//]]>
-				</script>';
-	}
+//<![CDATA[
+$(function() {
+    var blockredirect = "' . nv_base64_encode( $client_info['selfurl'] ) . '",
+        selfurl = "' . $client_info['selfurl'] . '",
+        block_delete_confirm = "' . $lang_global['block_delete_confirm'] . '",
+        block_outgroup_confirm = "' . $lang_global['block_outgroup_confirm'] . '",
+        blocks_saved = "' . $lang_global['blocks_saved'] . '",
+        blocks_saved_error = "' . $lang_global['blocks_saved_error'] . '",
+        post_url = "' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",
+        func_id = ' . $module_info['funcs'][$op]['func_id'] . ',
+        module_theme = "' . $global_config['module_theme'] . '";
+	$("a.delblock").click(function() {
+		confirm(block_delete_confirm) && $.post(post_url + "blocks_del", "bid=" + $(this).attr("name"), function(a) {
+			alert(a);
+			window.location.href = selfurl
+		})
+	});
+	$("a.outgroupblock").click(function() {
+		confirm(block_outgroup_confirm) && $.post(post_url + "front_outgroup", "func_id=" + func_id + "&bid=" + $(this).attr("name"), function(a) {
+			alert(a)
+		})
+	});
+	$("a.block_content").click(function() {
+		nv_open_browse(post_url + "block_content&selectthemes=" + module_theme + "&tag=" + $(this).attr("id") + "&bid=" + $(this).attr("name") + "&blockredirect=" + blockredirect, "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no")
+	});
+	var b = !1;
+	$(".column").sortable({
+		connectWith: ".column",
+		opacity: .8,
+		cursor: "move",
+		receive: function() {
+			b = !0;
+			$.post(post_url + "sort_order", $(this).sortable("serialize") + "&position=" + $(this).attr("id") + "&func_id=" + func_id, function(a) {
+				a == "OK_" + func_id ? $("div#toolbar>ul.info").html("<li><span style=\"color:#ff0000;padding-left:150px;font-weight:700;\">" + blocks_saved + "</span></li>").fadeIn(1E3) : alert(blocks_saved_error)
+			})
+		},
+		stop: function() {
+			if (0 == b) {
+				$.post(post_url + "sort_order", $(this).sortable("serialize") + "&func_id=" + func_id, function(a) {
+					a == "OK_" + func_id ? $("div#toolbar>ul.info").html("<span style=\"color:#ff0000;padding-left:150px;font-weight:700;\">" + blocks_saved + "</span>").fadeIn(1E3) : alert(blocks_saved_error)
+				})
+			}
+		}
+	});
+	$(".column").disableSelection()
+});
+//]]>
+</script>';
+    }
 	return $return;
 }
 
