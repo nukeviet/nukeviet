@@ -131,17 +131,9 @@
 		max-width: 1080px;
 	}
 	
-	nav > .container > .row {
-		margin-left: 0px ;
-		margin-right: 0px ;
-	}
 }
 @media (min-width: 1200px){
 	#wraper{
 		width: 1080px;
-	}
-	nav > .container > .row {
-		margin-left: -5px  ;
-		margin-right: -5px;
 	}
 }
