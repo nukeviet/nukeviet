@@ -455,7 +455,6 @@ class optimezer
     private function _minifyJsInline( $js )
     {
         $js = str_replace( array( "//<![CDATA[", "//]]>" ), "", $js ); // remove CDATA
-
         $replace = array(
             '#\'([^\n\']*?)/\*([^\n\']*)\'#' => "'\1/'+\'\'+'*\2'", // remove comments from ' strings
             '#\"([^\n\"]*?)/\*([^\n\"]*)\"#' => '"\1/"+\'\'+"*\2"', // remove comments from " strings
@@ -467,14 +466,19 @@ class optimezer
             '#\s+\n#' => "\n", // strip excess whitespace
             '#(//[^\n]*\n)#s' => "\\1\n", // extra line feed after any comments left (important given later replacements)
             '#/([\'"])\+\'\'\+([\'"])\*#' => "/*", // restore comments in strings
+            '#(?<![\+\-])\s*([\+\-])(?![\+\-])#' => '$1',
+            '#(?<![\+\-])([\+\-])\s*(?![\+\-])#' => '$1',
+            '#(for\([^;]*;[^;]*;[^;\{]*\));(\}|$)#s' => '$1;;$2',
             '#;+\s*([};])#' => '$1',
+            '#;(\}|$)#s' => '$1',
             '#[\r\n\t ]+#' => ' ',
             '#([^\'"]*)true([^\'"]*)#i' => "$1!0$2",
             '#([^\'"]*)false([^\'"]*)#i' => "$1!1$2",
             '#\s*(\{|\()\s*#' => '$1',
             '#\s*(\}|\))\s*#' => '$1',
             '#(\;|\,)[ ]+#' => '$1',
-            '#[ ]+([\=]+)[ ]+#' => '$1' 
+            '#[ ]+([\=\<\>\!\:\?\|\&]+)#' => '$1',
+            '#([\=\<\>\!\:\?\|\&]+)[ ]+#' => '$1'
             );
 
         $search = array_keys( $replace );
