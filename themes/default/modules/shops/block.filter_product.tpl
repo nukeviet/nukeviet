@@ -32,7 +32,7 @@
 	<input type="submit" name="filter" value="{LANG.filter}" class="btn btn-primary btn-xs btn-sm pull-right" />
 </form>
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	function check() {
 		var count = 0;
 		$('input[name="group_id[]"], input[name="group_price[]"]').each(function() {

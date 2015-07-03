@@ -163,7 +163,7 @@
 <div class="msgshow" id="msgshow"></div>
 
 <!-- BEGIN: tooltip_js -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(document).ready(function() {
 		$("[data-rel='tooltip']").tooltip({
 			placement : "bottom",
