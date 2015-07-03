@@ -94,7 +94,7 @@ function nv_menu_blocks( $block_config )
 			}
 			if( ! empty( $cat['subcats'] ) )
 			{
-				$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'] );
+				$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'], $block_theme );
 				$xtpl->assign( 'HTML_CONTENT', $html_content );
 				if( $html_content != '' )
 				{
@@ -190,23 +190,8 @@ function nv_menu_check_current( $url, $type = 0 )
  * @param mixed $list_sub
  * @return
  */
-function nv_smenu_blocks( $style, $list_cats, $list_sub )
+function nv_smenu_blocks( $style, $list_cats, $list_sub, $block_theme )
 {
-	global $global_config;
-
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/' . $style . '.tpl' ) )
-	{
-		$block_theme = $global_config['module_theme'];
-	}
-	elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $style . '.tpl' ) )
-	{
-		$block_theme = $global_config['site_theme'];
-	}
-	else
-	{
-		$block_theme = 'default';
-	}
-
 	$xtpl = new XTemplate( $style . '.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 
 	if( empty( $list_sub ) )
@@ -231,7 +216,7 @@ function nv_smenu_blocks( $style, $list_cats, $list_sub )
 				}
 				if( ! empty( $list_cats[$catid]['subcats'] ) )
 				{
-					$tree = nv_smenu_blocks( $style, $list_cats, $list_cats[$catid]['subcats'] );
+					$tree = nv_smenu_blocks( $style, $list_cats, $list_cats[$catid]['subcats'], $block_theme );
 
 					$xtpl->assign( 'TREE_CONTENT', $tree );
 					$xtpl->parse( 'tree.tree_content' );

@@ -132,5 +132,3 @@ if( defined( 'NV_SYSTEM' ) )
 		$content = nv_block_voting_select( $block_config, $global_array_cat );
 	}
 }
-
-?>

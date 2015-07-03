@@ -136,5 +136,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_block_voting();
 }
-
-?>
