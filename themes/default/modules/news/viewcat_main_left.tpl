@@ -54,7 +54,7 @@
 </div>
 <!-- END: listcat -->
 <!-- BEGIN: tooltip -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(document).ready(function() {
 	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
 	$("[data-rel='tooltip'][data-content!='']").tooltip({

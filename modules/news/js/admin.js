@@ -188,9 +188,12 @@ function nv_show_list_block_cat() {
 }
 
 function nv_chang_block(bid, id, mod) {
+	if (mod == 'delete' && !confirm(nv_is_del_confirm[0])) {
+		return false;
+	}
 	var nv_timer = nv_settimeout_disable('id_weight_' + id, 5000);
 	var new_vid = $('#id_weight_' + id).val();
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block&nocache=' + new Date().getTime(), 'id=' + id + '&bid=' + bid + '&&mod=' + mod + '&new_vid=' + new_vid, function(res) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=change_block&nocache=' + new Date().getTime(), 'id=' + id + '&bid=' + bid + '&mod=' + mod + '&new_vid=' + new_vid, function(res) {
 		nv_chang_block_result(res);
 	});
 	return;

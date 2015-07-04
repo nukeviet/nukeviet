@@ -212,7 +212,7 @@ $lang_module['topic_nocheck'] = 'Hãy chọn ít nhất 1 bài viết để có 
 $lang_module['topic_delete_confirm'] = 'Bạn có chắc muốn xóa nhóm tin liên quan ra khỏi bài viết ?';
 $lang_module['topic_delete_success'] = 'Loại bỏ thành công !';
 $lang_module['topic_nonews'] = 'Hiện tại không có bài viết nào thuộc nhóm tin liên quan này !';
-$lang_module['addtotopics'] = 'Thêm vào nhóm tin liên quan';
+$lang_module['addtotopics'] = 'Thêm vào Theo dòng sự kiện';
 $lang_module['topic_update_success'] = 'Cập nhật thành công!';
 $lang_module['topic_num_news'] = ' bài viết';
 

@@ -27,7 +27,7 @@ function nv_online_upd()
 	}
 	elseif( $client_info['is_bot'] )
 	{
-		$username = 'bot:' . $client_info['bot_info']['name'];
+		$username = 'bot:' . $client_info['browser']['name'];
 	}
 
 	$sth = $db->prepare( 'UPDATE ' . NV_SESSIONS_GLOBALTABLE . ' SET userid = ' . $userid . ', username = :username, onl_time = ' . NV_CURRENTTIME . ' WHERE session_id = :session_id');

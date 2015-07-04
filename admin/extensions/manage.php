@@ -315,7 +315,6 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 			}
 
 			$files_folders = array_unique( $files_folders );
-			require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 			$zip = new PclZip( $file_src );
 			$zip->add( $files_folders, PCLZIP_OPT_REMOVE_PATH, $row['type'] == 'theme' ? ( NV_ROOTDIR . '/themes' ) : NV_ROOTDIR );
 
@@ -350,7 +349,6 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 
 			if( $filesize > 0 )
 			{
-				require_once NV_ROOTDIR . '/includes/class/download.class.php';
 				$download = new download( $file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, 'nv4_' . $row['type'] . '_' . $row['basename'] . '.zip' );
 				$download->download_file();
 				exit();

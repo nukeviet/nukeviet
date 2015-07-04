@@ -12,16 +12,27 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $cid = $nv_Request->get_int( 'cid', 'post', 0 );
 
-$sql = 'SELECT cid FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
+$sql = 'SELECT id, module FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
 
-$cid = $db->query( $sql )->fetchColumn();
-if( empty( $cid ) ) die( 'NO_' . $cid );
+$row = $db->query( $sql )->fetch();
+if( empty( $row ) ) die( 'NO_' . $cid );
 
 $new_status = $nv_Request->get_bool( 'new_status', 'post' );
 $new_status = ( int )$new_status;
 
 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET status=' . $new_status . ' WHERE cid=' . $cid;
 $db->query( $sql );
+
+if( isset( $site_mod_comm[$row['module']] ) )
+{
+	$mod_info = $site_mod_comm[$row['module']];
+	if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
+	{
+		include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
+		nv_del_moduleCache( $row['module'] );
+	}
+}
+
 nv_del_moduleCache( $module_name );
 
 include NV_ROOTDIR . '/includes/header.php';

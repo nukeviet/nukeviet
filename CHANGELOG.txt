@@ -1,6 +1,42 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.21 (No release)
+- Add data-show for javascript
+- Fix module comment
+- Update block global.slimmenu for default menu
+- Update getbootstrap v3.3.5
+- Remove module Download
+- fix Redirect link
+
+NUKEVIET 4.0.20 (No release)
+- Add class Browser-Detect
+- remove function: nv_check_bot, nv_getBrowser, nv_getOs
+- Add Autoload Class
+- Update PHPMailer 5.2.10
+- update class optimezer.class
+- Remove do not use file
+- Add data-show="after" for <script type="text/javascript"  ...
+- Fix and update something...
+
+NUKEVIET 4.0.19 (No release)
+- Add class Mobile-Detect
+- Add instruction url function
+- ckeditor: change plugins googledocs, remove addon magicline
+- Fix and update something...
+
+NUKEVIET 4.0.18 (Open beta 6)
+CODE: https://github.com/nukeviet/nukeviet/tree/4.0.18 (101 commits: from commit/6372e19 to commit/8c0c5be)
+- Add plugin for admin module
+- Add no responsive for theme default
+- Add tool language interface
+- Change database module comment
+- Fix change module_name (Add variable $module_upload)
+- Fix package extension
+- Module users: remove password in mail
+- update jQuery 2.1.4
+- Fix and update something...
+
 NUKEVIET 4.0.17 (Open beta 5)
 CODE: https://github.com/nukeviet/nukeviet/tree/4.0.17 (190 commits: from commit/0e46061 to commit/36e1704)
 - Remove theme modern

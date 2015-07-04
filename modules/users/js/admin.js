@@ -257,7 +257,7 @@ function nv_genpass() {
 $.toggleShowPassword = function (options) {
     var settings = $.extend({
         field: "#password",
-        control: "#toggle_show_password",
+        control: "#toggle_show_password"
     }, options);
 
     var control = $(settings.control);

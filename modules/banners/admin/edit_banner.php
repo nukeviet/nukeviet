@@ -115,7 +115,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( isset( $_FILES['banner'] ) and is_uploaded_file( $_FILES['banner']['tmp_name'] ) )
 		{
-			require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 			$upload = new upload( $contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$upload_info = $upload->save_file( $_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 			@unlink( $_FILES['banner']['tmp_name'] );
@@ -144,7 +143,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		{
 			if( isset( $_FILES['imageforswf'] ) and is_uploaded_file( $_FILES['imageforswf']['tmp_name'] ) )
 			{
-				require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 				$upload = new upload( $contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 				$upload_info = $upload->save_file( $_FILES['imageforswf'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 				@unlink( $_FILES['imageforswf']['tmp_name'] );
@@ -261,7 +259,7 @@ $contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 
 
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 $my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_footer .= "<script type=\"text/javascript\">\n";
+$my_footer .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 $my_footer .= "Shadowbox.init({\n";
 $my_footer .= "});\n";
 $my_footer .= "</script>\n";

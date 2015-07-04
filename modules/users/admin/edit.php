@@ -14,7 +14,7 @@ $page_title = $lang_module['edit_title'];
 
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 $my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_footer .= "<script type=\"text/javascript\">\n";
+$my_footer .= "<script type=\"text/javascript\" data-show=\"after\">\n";
 $my_footer .= "Shadowbox.init({\n";
 $my_footer .= "});\n";
 $my_footer .= "</script>\n";
@@ -209,7 +209,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					else
 					{
 						$new_photo_name = $_user['photo'];
-						$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_name . '/';
+						$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/';
 
 						$new_photo_name2 = $new_photo_name;
 						$i = 1;

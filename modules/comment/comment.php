@@ -207,17 +207,27 @@ function nv_comment_module( $module, $checkss, $area, $id, $allowed, $page, $sta
 	}
 }
 
+
 /**
- * nv_theme_comment_main()
- *
- * @param mixed $array_data
- * @return
+ * @param string $module
+ * @param integer $area
+ * @param integer $id
+ * @param int $allowed_comm
+ * @param string $checkss
+ * @param string $comment
+ * @param int $sortcomm
+ * @param string $base_url
+ * @param boolean $form_login
+ * @param int $status_comment
+ * @return string
  */
 function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, $comment, $sortcomm, $base_url, $form_login, $status_comment = '' )
 {
-	global $global_config, $module_file, $module_data, $module_config, $module_info, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
+	global $global_config, $module_file, $module_data, $module_config, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
 
-	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/comment' );
+	$template = file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/main.tpl' ) ? $global_config['module_theme'] : 'default';
+
+	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
 	$xtpl->assign( 'LANG', $lang_module_comment );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'CHECKSS_COMM', $checkss );
@@ -226,7 +236,12 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 	$xtpl->assign( 'AREA_COMM', $area );
 	$xtpl->assign( 'ID_COMM', $id );
 	$xtpl->assign( 'ALLOWED_COMM', $allowed_comm );
-	$xtpl->assign( 'BASE_URL_COMM', $base_url );
+
+	if( defined( 'NV_COMM_ID') )
+	{
+		$xtpl->assign( 'BASE_URL_COMM', $base_url );
+		$xtpl->parse( 'main.header' );
+	}
 
 	// Order by comm
 	for( $i = 0; $i <= 2; ++$i )
@@ -322,9 +337,11 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 
 function nv_comment_module_data( $module, $comment_array, $is_delete )
 {
-	global $global_config, $module_info, $module_file, $module_config, $lang_module_comment;
+	global $global_config, $module_file, $module_config, $lang_module_comment;
 
-	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/comment' );
+	$template = file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl' ) ? $global_config['module_theme'] : 'default';
+
+	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
 	$xtpl->assign( 'TEMPLATE', $global_config['site_theme'] );
 	$xtpl->assign( 'LANG', $lang_module_comment );
 
@@ -353,10 +370,9 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
 			}
 
-			if( ! empty ($comment_array_i['userid']) )
+			if( ! empty( $comment_array_i['userid'] ) )
 			{
-				$comment_array_i['post_name'] = ( $global_config['name_show'] )  ? $comment_array_i['first_name'] . ' ' . $comment_array_i['last_name'] : $comment_array_i['last_name'] . ' ' . $comment_array_i['first_name'];
-				$comment_array_i['post_name'] = trim( $comment_array_i['post_name'] );
+				$comment_array_i['post_name'] = nv_show_name_user( $comment_array_i['first_name'], $comment_array_i['last_name'] );
 			}
 
 			$xtpl->assign( 'COMMENT', $comment_array_i );
@@ -385,9 +401,11 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 
 function nv_comment_module_data_reply( $module, $comment_array, $is_delete )
 {
-	global $global_config, $module_info, $module_file, $module_config, $lang_module_comment;
+	global $global_config, $module_file, $module_config, $lang_module_comment;
 
-	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/comment' );
+	$template = file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl' ) ? $global_config['module_theme'] : 'default';
+
+	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
 	$xtpl->assign( 'TEMPLATE', $global_config['site_theme'] );
 	$xtpl->assign( 'LANG', $lang_module_comment );
 
@@ -408,6 +426,11 @@ function nv_comment_module_data_reply( $module, $comment_array, $is_delete )
 		else
 		{
 			$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg';
+		}
+
+		if( ! empty( $comment_array_i['userid'] ) )
+		{
+			$comment_array_i['post_name'] = nv_show_name_user( $comment_array_i['first_name'], $comment_array_i['last_name'] );
 		}
 
 		$xtpl->assign( 'COMMENT', $comment_array_i );

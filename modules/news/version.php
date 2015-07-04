@@ -17,10 +17,10 @@ $module_version = array(
 	'submenu' => 'content,rss,search',
 	'is_sysmod' => 0, // 1:0 => Co phai la module he thong hay khong
 	'virtual' => 1, // 1:0 => Co cho phep ao hao module hay khong
-	'version' => '4.0.17', // Phien ban cua modle
+	'version' => '4.0.20', // Phien ban cua modle
 	'date' => 'Wed, 20 Oct 2010 00:00:00 GMT', // Ngay phat hanh phien ban
 	'author' => 'VINADES (contact@vinades.vn)', // Tac gia
 	'note' => '', // Ghi chu
-	'uploads_dir' => array( $module_name, $module_name . '/source', $module_name . '/temp_pic', $module_name . '/topics' ),
-	'files_dir' => array( $module_name . '/topics' )
+	'uploads_dir' => array( $module_upload, $module_upload . '/source', $module_upload . '/temp_pic', $module_upload . '/topics' ),
+	'files_dir' => array( $module_upload . '/topics' )
 );

@@ -17,6 +17,8 @@ if( !nv_function_exists( 'nv_news_category' ) )
 	function nv_block_config_news_category( $module, $data_block, $lang_block )
 	{
 		global $site_mods;
+
+		$html_input = '';
 		$html = '<tr>';
 		$html .= '<td>' . $lang_block['catid'] . '</td>';
 		$html .= '<td><select name="config_catid" class="form-control w200">';
@@ -39,7 +41,7 @@ if( !nv_function_exists( 'nv_news_category' ) )
 		}
 		$html .= '</select>';
 		$html .= $html_input;
-		$html .= '<script type="text/javascript">';
+		$html .= '<script type="text/javascript" data-show="after">';
 		$html .= '	$("select[name=config_catid]").change(function() {';
 		$html .= '		$("input[name=title]").val($("select[name=config_catid] option:selected").text());';
 		$html .= '		$("input[name=link]").val($("#config_catid_" + $("select[name=config_catid]").val()).val());';
@@ -102,7 +104,7 @@ if( !nv_function_exists( 'nv_news_category' ) )
 					$html .= "<a title=\"" . $cat['title'] . "\" href=\"" . $cat['link'] . "\">" . nv_clean60( $cat['title'], $title_length ) . "</a>\n";
 					if( !empty( $cat['subcatid'] ) )
 					{
-						$html .= "<span class=\"arrow\" id=\"expand\">+</span>";
+						$html .= "<span class=\"arrow expand\">+</span>";
 						$html .= nv_news_sub_category( $cat['subcatid'], $title_length );
 					}
 					$html .= "</li>\n";

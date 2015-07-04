@@ -152,6 +152,14 @@
 					</select></td>
 				</tr>
 				<tr>
+					<td>{LANG.user_check_pass_time}</td>
+					<td><input class="form-control pull-left" style="width:50px;" type="text" value="{USER_CHECK_PASS_TIME}" name="user_check_pass_time" maxlength="3"/>({GLANG.min})</td>
+				</tr>
+				<tr>
+					<td>{LANG.allowuserloginmulti}</td>
+					<td><input name="allowuserloginmulti" value="1" type="checkbox" {DATA.allowuserloginmulti} /></td>
+				</tr>
+				<tr>
 					<td>{LANG.allow_login}</td>
 					<td><input name="allowuserlogin" value="1" type="checkbox"{DATA.allowuserlogin} /></td>
 				</tr>

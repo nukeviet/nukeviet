@@ -22,12 +22,18 @@ define( 'NV_MAINFILE', true );
 define( 'NV_START_TIME', microtime( true ) );
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $select_options = $error_info = $countries = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $array_url_instruction = $content_type = $submenu = $select_options = $error_info = $countries = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
 // Xac dinh thu muc goc cua site
 define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
+
+// Register given function autoload implementation
+spl_autoload_register( function ( $classname )
+{
+	include NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php';
+} );
 
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
@@ -76,7 +82,6 @@ else
 }
 
 // Xac dinh IP cua client
-require NV_ROOTDIR . '/includes/class/ips.class.php';
 $ips = new ips();
 // define( 'NV_SERVER_IP', $ips->server_ip );
 define( 'NV_FORWARD_IP', $ips->forward_ip );
@@ -96,7 +101,6 @@ require NV_ROOTDIR . '/includes/timezone.php';
 define( 'NV_CURRENTTIME', isset( $_SERVER['REQUEST_TIME'] ) ? $_SERVER['REQUEST_TIME'] : time() );
 
 // Ket noi voi class Error_handler
-require NV_ROOTDIR . '/includes/class/error.class.php';
 $ErrorHandler = new Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
@@ -113,7 +117,6 @@ require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/core/cache_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
-require NV_ROOTDIR . '/includes/class/xtemplate.class.php';
 
 // IP Ban
 if( nv_is_banIp( NV_CLIENT_IP ) ) trigger_error( 'Hi and Good-bye!!!', 256 );
@@ -134,7 +137,6 @@ if( defined( 'NV_SYSTEM' ) )
 }
 
 // Ket noi voi class xu ly request
-require NV_ROOTDIR . '/includes/class/request.class.php';
 $nv_Request = new Request( $global_config, NV_CLIENT_IP );
 
 define( 'NV_SERVER_NAME', $nv_Request->server_name );
@@ -228,38 +230,30 @@ if( NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed 
 	define( 'NV_IS_MY_USER_AGENT', true );
 }
 
-// Xac dinh co phai la bot hay khong
-$client_info['bot_info'] = nv_check_bot();
-$client_info['is_bot'] = ( ! empty( $client_info['bot_info'] ) ) ? 1 : 0;
-
-// Neu la bot va bot bi cam truy cap
-if( $client_info['is_bot'] and empty( $client_info['bot_info']['allowed'] ) ) trigger_error( 'Sorry! Website does not support the bot', 256 );
-
 // Xac dinh borwser cua client
-if( $client_info['is_bot'] )
+$browser = new Browser( NV_USER_AGENT );
+$client_info['browser'] = array();
+$client_info['browser']['key'] = $browser->getBrowserKey();
+$client_info['browser']['name'] = $browser->getBrowser();
+if( preg_match( '/^([0-9]+)\.(.*)$/', $browser->getVersion(), $matches ) )
 {
-	$client_info['browser'] = array(
-		'key' => 'Unknown',
-		'name' => 'Unknown',
-		'version' => 0
-	);
+	$client_info['browser']['version'] = (int) $matches[1];
 }
 else
 {
-	$client_info['browser'] = array_combine( array( 'key', 'name' ), explode( '|', nv_getBrowser( NV_USER_AGENT ) ) );
-	if( preg_match( '/^([^0-9]+)([0-9]+)\.(.*)$/', $client_info['browser']['name'], $matches ) )
-	{
-		$client_info['browser']['version'] = ( int )$matches[2];
-		unset( $matches );
-	}
-	else
-	{
-		$client_info['browser']['version'] = 0;
-	}
+	$client_info['browser']['version'] = 0;
 }
+$client_info['is_mobile'] = $browser->isMobile();
+$client_info['is_tablet'] = $browser->isTablet();
+$client_info['is_bot'] = $browser->isRobot();
+$client_info['client_os'] = array( 'key' => $browser->getPlatformKey(), 'name' => $browser->getPlatform() );
 
-// Xac dinh co phai truy cap bang mobile hay khong
-$client_info['is_mobile'] = nv_checkmobile( NV_USER_AGENT );
+$is_mobile_tablet = $client_info['is_mobile'] . '-' . $client_info['is_tablet'];
+if( $is_mobile_tablet != $nv_Request->get_string( 'is_mobile_tablet', 'session' ) )
+{
+	$nv_Request->set_Session( 'is_mobile_tablet', $is_mobile_tablet );
+	$nv_Request->unset_request( 'nv' . NV_LANG_DATA . 'themever', 'cookie' );
+}
 
 // Ket noi voi class chong flood
 if( $global_config['is_flood_blocker'] and ! $nv_Request->isset_request( 'admin', 'session' ) and //
@@ -268,16 +262,12 @@ if( $global_config['is_flood_blocker'] and ! $nv_Request->isset_request( 'admin'
 	require NV_ROOTDIR . '/includes/core/flood_blocker.php';
 }
 
-// Xac dinh OS cua client
-$client_info['client_os'] = $client_info['is_bot'] ? array( 'key' => 'Robot', 'name' => $client_info['bot_info']['name'] ) : array_combine( array( 'key', 'name' ), explode( '|', nv_getOs( NV_USER_AGENT ) ) );
-
 // Captcha
 if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 {
 	require NV_ROOTDIR . '/includes/core/captcha.php';
 }
 // Class ma hoa du lieu
-require NV_ROOTDIR . '/includes/class/crypt.class.php';
 $crypt = new nv_Crypt( $global_config['sitekey'] );
 $global_config['ftp_user_pass'] = $crypt->aes_decrypt( nv_base64_decode( $global_config['ftp_user_pass'] ) );
 
@@ -291,7 +281,6 @@ if( isset( $nv_plugin_area[1] ) )
 }
 
 // Bat dau phien lam viec cua MySQL
-require NV_ROOTDIR . '/includes/class/db.class.php';
 $db = new sql_db( $db_config );
 if( empty( $db->connect ) )
 {
@@ -377,9 +366,6 @@ if( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( '
 {
 	require NV_ROOTDIR . '/includes/core/cronjobs.php';
 }
-
-// Xac dinh kieu giao dien mac dinh
-$global_config['current_theme_type'] = $nv_Request->get_string( 'nv' . NV_LANG_DATA . 'themever', 'cookie', '' );
 
 // Kiem tra tu cach admin
 if( defined( 'NV_IS_ADMIN' ) || defined( 'NV_IS_SPADMIN' ) )
@@ -477,6 +463,7 @@ else
 				$sys_mods[$m_title] = array(
 					'module_file' => $row['module_file'],
 					'module_data' => $row['module_data'],
+					'module_upload' => $row['module_upload'],
 					'custom_title' => $row['custom_title'],
 					'admin_title' => ( empty( $row['admin_title'] ) ) ? $row['custom_title'] : $row['admin_title'],
 					'admin_file' => $row['admin_file'],

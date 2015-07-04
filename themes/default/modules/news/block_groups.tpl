@@ -10,7 +10,7 @@
 	<!-- END: loop -->
 </ul>
 <!-- BEGIN: tooltip -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(document).ready(function() {$("[data-rel='block_tooltip'][data-content!='']").tooltip({
 	placement: "{TOOLTIP_POSITION}",
 	html: true,

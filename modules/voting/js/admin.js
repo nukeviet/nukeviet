@@ -25,7 +25,7 @@ function nv_del_content(vid, checkss) {
 function nv_vote_add_item(mess) {
 	items++;
 	var newitem = '<tr>';
-	newitem += '	<td class="right">' + mess + ' ' + items + '</td>';
+	newitem += '	<td class="text-right">' + mess + ' ' + items + '</td>';
 	newitem += '	<td><input class="form-control" type="text" value="" name="answervotenews[]"></td>';
 	newitem += '	<td><input class="form-control" type="text" value="" name="urlvotenews[]"></td>';
 	newitem += '	</tr>';

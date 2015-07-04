@@ -45,7 +45,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$image = $nv_Request->get_string( 'image', 'post', '' );
 	if( is_file( NV_DOCUMENT_ROOT . $image ) )
 	{
-		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$row['image'] = substr( $image, $lu );
 	}
 	else
@@ -54,9 +54,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	}
 	$row['imagealt'] = $nv_Request->get_title( 'imagealt', 'post', '', 1 );
 
-	$row['description'] = $nv_Request->get_string( 'description', 'post', '' );
-	$row['description'] = nv_nl2br( nv_htmlspecialchars( strip_tags( $row['description'] ) ), '<br />' );
-
+	$row['description'] = $nv_Request->get_textarea( 'description', '', 'br', 1 );
 	$row['bodytext'] = $nv_Request->get_editor( 'bodytext', '', NV_ALLOWED_HTML_TAGS );
 	$row['keywords'] = nv_strtolower( $nv_Request->get_title( 'keywords', 'post', '', 0 ) );
 
@@ -154,6 +152,7 @@ elseif( empty( $id)  )
 {
 	$row['image'] = '';
 	$row['layout_func'] = '';
+	$row['description']='';
 	$row['bodytext'] = '';
 	$row['activecomm'] = $module_config[$module_name]['setcomm'];
 	$row['socialbutton'] = 1;
@@ -162,6 +161,7 @@ elseif( empty( $id)  )
 
 if( defined( 'NV_EDITOR' ) ) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 
+$row['description'] = nv_htmlspecialchars( nv_br2nl( $row['description'] ) );
 $row['bodytext'] = htmlspecialchars( nv_editor_br2nl( $row['bodytext'] ) );
 if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
@@ -172,9 +172,9 @@ else
 	$row['bodytext'] = '<textarea style="width:100%;height:300px" name="bodytext">' . $row['bodytext'] . '</textarea>';
 }
 
-if( ! empty( $row['image'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['image'] ) )
+if( ! empty( $row['image'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'] ) )
 {
-	$row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $row['image'];
+	$row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
 }
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
 $lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );
@@ -184,7 +184,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-$xtpl->assign( 'UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_name );
+$xtpl->assign( 'UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload );
 $xtpl->assign( 'DATA', $row );
 $xtpl->assign( 'BODYTEXT', $row['bodytext'] );
 $xtpl->assign( 'SOCIALBUTTON', ( $row['socialbutton'] ) ? ' checked="checked"' : '' );

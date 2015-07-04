@@ -26,7 +26,7 @@
 	</div>
 	<div class="collapse navbar-collapse" id="menu-site-default">
         <ul class="nav navbar-nav">
-			<li <!-- BEGIN: home_active --> class="active"<!-- END: home_active -->>
+			<li>
 				<a title="{LANG.Home}" href="{THEME_SITE_HREF}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
 			</li>
 			<!-- BEGIN: top_menu -->
@@ -46,7 +46,7 @@
 		</ul>
 	</div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 nv_DigitalClock('digclock');
 $(document).ready(function(){
 	$('#menu-site-default a').hover(function(){

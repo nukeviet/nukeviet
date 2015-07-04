@@ -11,19 +11,19 @@
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
-$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array('about', 'page', 'about', 'Giới thiệu', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 0) );
-$sth->execute( array('news', 'news', 'news', 'Tin Tức', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0) );
-$sth->execute( array('users', 'users', 'users', 'Thành viên', 'Tài khoản', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0) );
-$sth->execute( array('contact', 'contact', 'contact', 'Liên hệ', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0) );
-$sth->execute( array('statistics', 'statistics', 'statistics', 'Thống kê', '', NV_CURRENTTIME, 1, 1, '', '', '', 'truy cập, online, statistics', '2', 5, 1, '', 0, 0) );
-$sth->execute( array('voting', 'voting', 'voting', 'Thăm dò ý kiến', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0) );
-$sth->execute( array('banners', 'banners', 'banners', 'Quảng cáo', '', NV_CURRENTTIME, 1, 1 , '', '', '', '', '6', 7, 1, '', 0, 0) );
-$sth->execute( array('seek', 'seek', 'seek', 'Tìm kiếm', '', NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0) );
-$sth->execute( array('menu', 'menu', 'menu', 'Menu Site', '', NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 0) );
-$sth->execute( array('feeds', 'feeds', 'feeds', 'Rss Feeds', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0) );
-$sth->execute( array('page', 'page', 'page', 'Page', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 0) );
-$sth->execute( array('comment', 'comment', 'comment', 'Bình luận', 'Quản lý bình luận', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 12, 1, '', 0, 0) );
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, module_upload, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
+$sth->execute( array('about', 'page', 'about', 'about', 'Giới thiệu', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 0) );
+$sth->execute( array('news', 'news', 'news', 'news', 'Tin Tức', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0) );
+$sth->execute( array('users', 'users', 'users', 'users', 'Thành viên', 'Tài khoản', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0) );
+$sth->execute( array('contact', 'contact', 'contact', 'contact', 'Liên hệ', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0) );
+$sth->execute( array('statistics', 'statistics', 'statistics', 'statistics', 'Thống kê', '', NV_CURRENTTIME, 1, 1, '', '', '', 'truy cập, online, statistics', '2', 5, 1, '', 0, 0) );
+$sth->execute( array('voting', 'voting', 'voting', 'voting', 'Thăm dò ý kiến', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0) );
+$sth->execute( array('banners', 'banners', 'banners', 'banners', 'Quảng cáo', '', NV_CURRENTTIME, 1, 1 , '', '', '', '', '6', 7, 1, '', 0, 0) );
+$sth->execute( array('seek', 'seek', 'seek', 'seek', 'Tìm kiếm', '', NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0) );
+$sth->execute( array('menu', 'menu', 'menu', 'menu', 'Menu Site', '', NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 0) );
+$sth->execute( array('feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0) );
+$sth->execute( array('page', 'page', 'page', 'page', 'Page', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 0) );
+$sth->execute( array('comment', 'comment', 'comment', 'comment', 'Bình luận', 'Quản lý bình luận', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 12, 1, '', 0, 0) );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -176,21 +176,21 @@ $sth->execute( array(56, 'body', 'mobile_default') );
 $sth->execute( array(57, 'body', 'mobile_default') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
-$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Chủ đề', '', 'no_title', '[LEFT]', 0, 1, '6', 1, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}') );
-$sth->execute( array(2, 'default', 'statistics', 'global.counter.php', 'Thống kê truy cập', '', 'primary', '[LEFT]', 0, 1, '6', 1, 2, '') );
-$sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Quảng cáo trái', '', 'no_title', '[LEFT]', 0, 1, '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
-$sth->execute( array(4, 'default', 'about', 'global.about.php', 'Giới thiệu', '', 'border', '[RIGHT]', 0, 1, '6', 1, 1, '') );
-$sth->execute( array(5, 'default', 'users', 'global.login.php', 'Đăng nhập thành viên', '', 'primary', '[RIGHT]', 0, 1, '6', 1, 2, '') );
-$sth->execute( array(6, 'default', 'voting', 'global.voting_random.php', 'Thăm dò ý kiến', '', 'primary', '[RIGHT]', 0, 1, '6', 1, 3, '') );
-$sth->execute( array(7, 'default', 'news', 'module.block_newscenter.php', 'Tin mới nhất', '', 'no_title', '[TOP]', 0, 1, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
-$sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Quảng cáo giữa trang', '', 'no_title', '[TOP]', 0, 1, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(17, 'default', 'menu', 'global.bootstrap.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:20;}') );
-$sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:231:"<p class="footer"> © Copyright NukeViet 4. All right reserved.</p><p> Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
-$sth->execute( array(21, 'default', 'theme', 'global.social.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, '6', 1, 1, 'a:4:{s:8:"facebook";s:32:"http://www.facebook.com/nukeviet";s:11:"google_plus";s:32:"https://www.google.com/+nukeviet";s:7:"youtube";s:37:"https://www.youtube.com/user/nukeviet";s:7:"twitter";s:28:"https://twitter.com/nukeviet";}') );
-$sth->execute( array(22, 'default', 'theme', 'global.menu_footer.php', 'Menu footer', '', 'no_title', '[MENU_FOOTER]', 0, 1, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:4:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";}}') );
-$sth->execute( array(20, 'mobile_default', 'menu', 'global.metismenu.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, 1, '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}') );
-$sth->execute( array(23, 'mobile_default', 'page', 'global.html.php', 'global html', '', 'no_title', '[FOOTER_SITE]', 0, 1, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:229:"<p class="footer">© Copyright NukeViet 4. All right reserved.</p><p>Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
+$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Chủ đề', '', 'no_title', '[LEFT]', 0, 1, 0, '6', 1, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}') );
+$sth->execute( array(2, 'default', 'statistics', 'global.counter.php', 'Thống kê truy cập', '', 'primary', '[LEFT]', 0, 1, 0, '6', 1, 2, '') );
+$sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Quảng cáo trái', '', 'no_title', '[LEFT]', 0, 1, 0, '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
+$sth->execute( array(4, 'default', 'about', 'global.about.php', 'Giới thiệu', '', 'border', '[RIGHT]', 0, 1, 0, '6', 1, 1, '') );
+$sth->execute( array(5, 'default', 'users', 'global.login.php', 'Đăng nhập thành viên', '', 'primary', '[RIGHT]', 0, 1, 0, '6', 1, 2, '') );
+$sth->execute( array(6, 'default', 'voting', 'global.voting_random.php', 'Thăm dò ý kiến', '', 'primary', '[RIGHT]', 0, 1, 0, '6', 1, 3, '') );
+$sth->execute( array(7, 'default', 'news', 'module.block_newscenter.php', 'Tin mới nhất', '', 'no_title', '[TOP]', 0, 1, 0, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
+$sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Quảng cáo giữa trang', '', 'no_title', '[TOP]', 0, 1, 0, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
+$sth->execute( array(17, 'default', 'menu', 'global.slimmenu.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, 1, 0, '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:20;}') );
+$sth->execute( array(19, 'default', 'page', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, 0, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:231:"<p class="footer"> © Copyright NukeViet 4. All right reserved.</p><p> Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
+$sth->execute( array(21, 'default', 'theme', 'global.social.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, 0, '6', 1, 1, 'a:4:{s:8:"facebook";s:32:"http://www.facebook.com/nukeviet";s:11:"google_plus";s:32:"https://www.google.com/+nukeviet";s:7:"youtube";s:37:"https://www.youtube.com/user/nukeviet";s:7:"twitter";s:28:"https://twitter.com/nukeviet";}') );
+$sth->execute( array(22, 'default', 'theme', 'global.menu_footer.php', 'Menu footer', '', 'no_title', '[MENU_FOOTER]', 0, 1, 0, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:4:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";}}') );
+$sth->execute( array(20, 'mobile_default', 'menu', 'global.metismenu.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, 1, 0, '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}') );
+$sth->execute( array(23, 'mobile_default', 'page', 'global.html.php', 'global html', '', 'no_title', '[FOOTER_SITE]', 0, 1, 0, '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:229:"<p class="footer">© Copyright NukeViet 4. All right reserved.</p><p>Powered by <a href="http://nukeviet.vn/" title="NukeViet CMS">NukeViet CMS</a>. Design by <a href="http://vinades.vn/" title="VINADES.,JSC">VINADES.,JSC</a></p>";}') );
 
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
@@ -394,8 +394,8 @@ if( $result->fetchColumn() )
 
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (1, 'Báo Hà Nội Mới', 'http://hanoimoi.com.vn', '', 1, 1274989177, 1274989177)" );
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (2, 'VINADES.,JSC', 'http://vinades.vn', '', 2, 1274989787, 1274989787)" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (3, 'NukeViet', 'http://nukeviet.vn', '', 2, 1274989787, 1274989787)" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (4, 'Báo điện tử Dân Trí', 'http://dantri.com.vn', '', 3, 1322685396, 1322685396)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (3, 'NukeViet', 'http://nukeviet.vn', '', 3, 1274989787, 1274989787)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (4, 'Báo điện tử Dân Trí', 'http://dantri.com.vn', '', 4, 1322685396, 1322685396)" );
 
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_topics VALUES (1, 'NukeViet 3', 'NukeViet-3', '', 'NukeViet 3', 1, 'NukeViet 3', 1274990212, 1274990212)" );
 
@@ -486,7 +486,7 @@ if( $result->fetchColumn() )
 	$sth->execute( array(10, 9, 'nukeviet') );
 
 	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $copyright ) . " WHERE module = 'news' AND config_name = 'copyright' AND lang='vi'" );
-	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = 'news' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'" );
+	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_home_module'] . "' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'" );
 }
 
 $result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='voting'" );
@@ -531,8 +531,8 @@ if( $result->fetchColumn() )
 
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (1, 0, 1, 'Giới thiệu', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about', '', '', 1, 1, 0, '2,3', '6', 'about', '', 1, '', 1, 1)" );
-$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (2, 1, 1, 'Giới thiệu về NukeViet 3.0', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&amp;op=Gioi-thieu-ve-NukeViet-3-0', '', '', 1, 2, 1, '', '6', 'about', 'Gioi-thieu-ve-NukeViet-3-0', 1, '', 1, 1) ");
-$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (3, 1, 1, 'Giới thiệu về công ty chuyên quản NukeViet', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&amp;op=Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet', '', '', 2, 3, 1, '', '6', 'about', 'Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (2, 1, 1, 'Giới thiệu về NukeViet 3.0', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&amp;op=Gioi-thieu-ve-NukeViet-3-0" . $global_config['rewrite_exturl'] . "', '', '', 1, 2, 1, '', '6', 'about', 'Gioi-thieu-ve-NukeViet-3-0" . $global_config['rewrite_exturl'] . "', 1, '', 1, 1) " );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (3, 1, 1, 'Giới thiệu về công ty chuyên quản NukeViet', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&amp;op=Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet" . $global_config['rewrite_exturl'] . "', '', '', 2, 3, 1, '', '6', 'about', 'Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet" . $global_config['rewrite_exturl'] . "', 1, '', 1, 1) ");
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (4, 0, 1, 'Tin Tức', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=news', '', '', 2, 4, 0, '5,6,7,8,30,31,32', '6', 'news', '', 1, '', 1, 1)" );
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (5, 4, 1, 'Tin tức', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=news&amp;op=Tin-tuc', '', '', 1, 5, 1, '', '6', 'news', 'Tin-tuc', 1, '', 1, 1) ");
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (6, 4, 1, 'Sản phẩm', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=news&amp;op=San-pham', '', '', 2, 6, 1, '', '6', 'news', 'San-pham', 1, '', 1, 1) ");
@@ -547,7 +547,7 @@ $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data .
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (15, 9, 1, 'Openid', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=users&op=openid', '', '', 6, 18, 1, '', '4', 'users', 'openid', 1, '', 1, 1) ");
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (16, 9, 1, 'Danh sách thành viên', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=users&op=memberlist', '', '', 7, 19, 1, '', '4', 'users', 'memberlist', 1, '', 1, 1) ");
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (17, 0, 1, 'Liên hệ', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=contact', '', '', 7, 28, 0, '18', '6', 'contact', '', 1, '', 1, 1)" );
-$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (18, 17, 1, 'Webmaster', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=contact&amp;op=1', '', '', 1, 29, 1, '', '6', 'contact', '1', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (18, 17, 1, 'Webmaster', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=contact&amp;op=Webmaster', '', '', 1, 29, 1, '', '6', 'contact', '1', 1, '', 1, 1) ");
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (19, 0, 1, 'Thống kê', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=statistics', '', '', 4, 20, 0, '20,21,22,23,24', '2', 'statistics', '', 1, '', 1, 1)" );
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (20, 19, 1, 'Theo đường dẫn đến site', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=statistics&amp;op=allreferers', '', '', 1, 21, 1, '', '2', 'statistics', 'allreferers', 1, '', 1, 1) ");
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (21, 19, 1, 'Theo quốc gia', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=statistics&amp;op=allcountries', '', '', 2, 22, 1, '', '2', 'statistics', 'allcountries', 1, '', 1, 1) ");

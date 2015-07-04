@@ -8,18 +8,8 @@
  * @Createdate 18/1/2011, 1:11
  */
 
-if( defined( 'NV_CLASS_UPLOAD_PHP' ) ) return;
-define( 'NV_CLASS_UPLOAD_PHP', true );
-
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
-
 define( 'NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini' );
-if( ! defined( 'NV_TEMP_DIR' ) ) define( 'NV_TEMP_DIR', 'tmp' );
 define( 'NV_TEMP_REAL_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR );
-if( ! defined( 'NV_TEMPNAM_PREFIX' ) ) define( 'NV_TEMPNAM_PREFIX', 'nv_' );
-
-if( ! defined( 'UPLOAD_CHECKING_MODE' ) ) define( 'UPLOAD_CHECKING_MODE', 'strong' );
-
 define( '_ERROR_UPLOAD_NAMEEMPTY', isset( $lang_global['error_uploadNameEmpty'] ) ? $lang_global['error_uploadNameEmpty'] : 'Upload failed: UserFile Name is empty' );
 define( '_ERROR_UPLOAD_SIZEEMPTY', isset( $lang_global['error_uploadSizeEmpty'] ) ? $lang_global['error_uploadSizeEmpty'] : 'Upload failed: UserFile Size is empty' );
 define( '_ERROR_UPLOAD_INI_SIZE', isset( $lang_global['error_upload_ini_size'] ) ? $lang_global['error_upload_ini_size'] : 'The uploaded file exceeds the upload_max_filesize directive in php.ini' );
@@ -149,7 +139,7 @@ class upload
 	 */
 	private function cl_exists( $clName )
 	{
-		return ( class_exists( $clName ) and ! in_array( $clName, $this->disable_classes ) );
+		return ( class_exists( $clName, false ) and ! in_array( $clName, $this->disable_classes ) );
 	}
 
 	/**

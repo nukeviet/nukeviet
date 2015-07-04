@@ -98,6 +98,16 @@
 					<td><input type="checkbox" name="active" value="1"{ROW.block_active}/> {LANG.block_yes}</td>
 				</tr>
 				<tr>
+					<td>{LANG.hide_device}:</td>
+					<td>
+						<!-- BEGIN: hide_device -->
+							<label id="hide_device_{HIDE_DEVICE.key}" style="padding-right: 20px">
+								<input name="hide_device[]" type="checkbox" value="{HIDE_DEVICE.key}"{HIDE_DEVICE.checked}/>&nbsp;{HIDE_DEVICE.title}
+							</label>
+						<!-- END: hide_device -->
+					</td>
+				</tr>
+				<tr>
 					<td>{GLANG.groups_view}:</td>
 					<td>
 					<!-- BEGIN: groups_list -->

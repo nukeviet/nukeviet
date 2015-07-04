@@ -270,3 +270,9 @@ $lang_global['level3'] = 'Module administrator';
 $lang_global['level4'] = 'Member';
 $lang_global['level5'] = 'Guest';
 $lang_global['level6'] = 'All';
+
+$lang_global['msgbeforeunload'] = 'Are you sure you go to other sites, if done the data will not be stored';
+$lang_global['timeoutsess_nouser'] = 'You did not use the site';
+$lang_global['timeoutsess_click'] = 'Click here to remain logged';
+$lang_global['timeoutsess_timeout'] = 'Timeout';
+$lang_global['unknown'] = 'Unknown';

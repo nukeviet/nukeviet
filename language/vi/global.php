@@ -274,3 +274,10 @@ $lang_global['level3'] = 'Quản lý module';
 $lang_global['level4'] = 'Thành viên';
 $lang_global['level5'] = 'Khách';
 $lang_global['level6'] = 'Tất cả';
+
+$lang_global['msgbeforeunload'] = 'Bạn có chắc chắn chuyển sang trang khác, Nếu thực hiện dữ liệu sẽ không được lưu';
+$lang_global['timeoutsess_nouser'] = 'Bạn đã không sử dụng Site';
+$lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng thái đăng nhập';
+$lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
+
+$lang_global['unknown'] = 'Không xác định';

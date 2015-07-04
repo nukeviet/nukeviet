@@ -31,7 +31,7 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 		}
 		$html .= '</select>';
 		$html .= $html_input;
-		$html .= '<script type="text/javascript">';
+		$html .= '<script type="text/javascript" data-show="after">';
 		$html .= '	$("select[name=config_blockid]").change(function() {';
 		$html .= '		$("input[name=title]").val($("select[name=config_blockid] option:selected").text());';
 		$html .= '		$("input[name=link]").val($("#config_blockid_" + $("select[name=config_blockid]").val()).val());';
@@ -105,11 +105,11 @@ if( ! nv_function_exists( 'nv_block_news_groups' ) )
 				$l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$l['catid']]['alias'] . '/' . $l['alias'] . '-' . $l['id'] . $global_config['rewrite_exturl'];
 				if( $l['homeimgthumb'] == 1 )
 				{
-					$l['thumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $l['homeimgfile'];
+					$l['thumb'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $l['homeimgfile'];
 				}
 				elseif( $l['homeimgthumb'] == 2 )
 				{
-					$l['thumb'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $l['homeimgfile'];
+					$l['thumb'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $l['homeimgfile'];
 				}
 				elseif( $l['homeimgthumb'] == 3 )
 				{

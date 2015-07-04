@@ -6,12 +6,6 @@
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/table.css" />
-        <!--[if IE 6]>
-            <script type="text/javascript" src="{BASE_SITEURL}js/fix-png-ie6.js"></script>
-            <script type="text/javascript">
-            DD_belatedPNG.fix('#,img');
-            </script>
-        <![endif]-->
         <script type="text/javascript" src="{BASE_SITEURL}js/global.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/language/{LANG_DATA}.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.min.js"></script>
@@ -73,7 +67,7 @@
         </div>
         <div id="footer">
             <p>
-                &copy; 2010 - 2012 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
+                &copy; 2010 - 2015 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
             </p>
             <p>
                 {LANG.publish} <strong>GNU/GPL v2.0</strong>

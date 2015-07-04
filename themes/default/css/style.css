@@ -11,13 +11,13 @@
 	font-family: 'Roboto';
 	font-style: normal;
 	font-weight: 400;
-	src: local('Roboto Regular'), local('Roboto-Regular'), url('../fonts/roboto-400.woff') format('woff');
+	src: local('Roboto Regular'), local('Roboto-Regular'), url('../../default/fonts/roboto-400.woff') format('woff');
 }
 @font-face {
 	font-family: 'Roboto';
 	font-style: normal;
 	font-weight: 700;
-	src: local('Roboto Bold'), local('Roboto-Bold'), url('../fonts/roboto-700.woff') format('woff');
+	src: local('Roboto Bold'), local('Roboto-Bold'), url('../../default/fonts/roboto-700.woff') format('woff');
 }
 
 /* Fix bootstrap */
@@ -170,7 +170,7 @@ h1, h2, h3, h4, h5, h6{
 	margin-bottom:10px!important;
 }
 #wraper{
-	width: 1150px;
+	width: 1080px;
 	margin:0 auto;
 }
 .fa-fix{
@@ -229,7 +229,7 @@ header{
 }
 
 #header .pull-right{
-	margin:33px 33px;
+	margin:33px 10px 0 0;
 }
 #header #logo a{
 	font-size:22px;
@@ -294,16 +294,16 @@ header{
 }
 
 .fix_banner_left{
-	width: 90px;
-	height: 500px;
+	width: 120px;
+	height: 480px;
 	position: fixed;
 	top: 2px;
 	left: 2px;
 	display: none;
 }
 .fix_banner_right{
-	width: 90px;
-	height: 500px;
+	width: 120px;
+	height: 480px;
 	position: fixed;
 	top: 2px;
 	right: 2px;
@@ -663,4 +663,26 @@ button.close {
 
 .pointer{
 	cursor: pointer
+}
+
+.chromeframe {
+	position: fixed !important;
+	top: 0 !important;
+	right: 0;
+	left: 0;
+	width: 100% !important;
+	z-index: 99999999999999 !important;
+	background: #ffff00 !important;
+	color: #000 !important;
+	height: 25px;
+	line-height: 25px;
+	padding: 0.2em 0;
+	text-align: center !important;
+}
+#timeoutsess {
+	display: none;
+}
+
+#timeoutsess a {
+	color: #0000FF !important;
 }

@@ -154,19 +154,19 @@ $xtpl->assign( 'TAGS_REMIND', $module_config[$module_name]['tags_remind'] ? ' ch
 $xtpl->assign( 'SHOW_NO_IMAGE', ( !empty( $module_config[$module_name]['show_no_image'] ) ) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '' );
 
 $array_structure_image = array();
-$array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_name;
-$array_structure_image['Y'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y' );
-$array_structure_image['Ym'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y_m' );
-$array_structure_image['Y_m'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y/m' );
-$array_structure_image['Ym_d'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y_m/d' );
-$array_structure_image['Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y/m/d' );
-$array_structure_image['username'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin';
+$array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_upload;
+$array_structure_image['Y'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y' );
+$array_structure_image['Ym'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' );
+$array_structure_image['Y_m'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y/m' );
+$array_structure_image['Ym_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m/d' );
+$array_structure_image['Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y/m/d' );
+$array_structure_image['username'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin';
 
-$array_structure_image['username_Y'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y' );
-$array_structure_image['username_Ym'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y_m' );
-$array_structure_image['username_Y_m'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y/m' );
-$array_structure_image['username_Ym_d'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y_m/d' );
-$array_structure_image['username_Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_name . '/username_admin/' . date( 'Y/m/d' );
+$array_structure_image['username_Y'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date( 'Y' );
+$array_structure_image['username_Ym'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date( 'Y_m' );
+$array_structure_image['username_Y_m'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date( 'Y/m' );
+$array_structure_image['username_Ym_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date( 'Y_m/d' );
+$array_structure_image['username_Y_m_d'] = NV_UPLOADS_DIR . '/' . $module_upload . '/username_admin/' . date( 'Y/m/d' );
 
 $structure_image_upload = isset( $module_config[$module_name]['structure_upload'] ) ? $module_config[$module_name]['structure_upload'] : "Ym";
 
@@ -212,7 +212,7 @@ while( list( $id_imgposition, $title_imgposition ) = each( $array_imgposition ) 
 $copyright = nv_htmlspecialchars( nv_editor_br2nl( $module_config[$module_name]['copyright'] ) );
 if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
-	$_uploads_dir = NV_UPLOADS_DIR . '/' . $module_name;
+	$_uploads_dir = NV_UPLOADS_DIR . '/' . $module_upload;
 	$copyright = nv_aleditor( 'copyright', '100%', '100px', $copyright, 'Basic', $_uploads_dir, $_uploads_dir );
 }
 else
@@ -221,8 +221,8 @@ else
 }
 $xtpl->assign( 'COPYRIGHTHTML', $copyright );
 
-$xtpl->assign( 'PATH', defined( 'NV_IS_SPADMIN' ) ? "" : NV_UPLOADS_DIR . '/' . $module_name );
-$xtpl->assign( 'CURRENTPATH', defined( 'NV_IS_SPADMIN' ) ? "images" : NV_UPLOADS_DIR . '/' . $module_name );
+$xtpl->assign( 'PATH', defined( 'NV_IS_SPADMIN' ) ? "" : NV_UPLOADS_DIR . '/' . $module_upload );
+$xtpl->assign( 'CURRENTPATH', defined( 'NV_IS_SPADMIN' ) ? "images" : NV_UPLOADS_DIR . '/' . $module_upload );
 
 if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) )
 {
