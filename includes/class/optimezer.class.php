@@ -448,7 +448,7 @@ class optimezer
 
 	/**
      * optimezer::_minifyJsInline()
-     * 
+     *
      * @param mixed $js
      * @return
      */
@@ -663,10 +663,10 @@ class optimezer
         }
         return $m[0];
     }
-    
+
     /**
      * optimezer::removeQuotes()
-     * 
+     *
      * @param mixed $content
      * @return
      */
