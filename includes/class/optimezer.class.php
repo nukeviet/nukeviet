@@ -448,7 +448,7 @@ class optimezer
 
 	/**
      * optimezer::_minifyJsInline()
-     * 
+     *
      * @param mixed $js
      * @return
      */
@@ -663,16 +663,16 @@ class optimezer
         }
         return $m[0];
     }
-    
+
     /**
      * optimezer::removeQuotes()
-     * 
+     *
      * @param mixed $content
      * @return
      */
     private function removeQuotes($content)
     {
-        return preg_replace('/\s+(type|title|data-[a-z0-9]+|colspan|scope|role|media|name|rel|id|class|rel|alt|value|selected)\s*=\s*(\"|\')([a-z0-9_-]+)\2/i', ' $1=$3',$content);
+        return preg_replace('/\s+(type|title|data-[a-z0-9]+|colspan|scope|role|media|name|rel|id|class|rel|alt|value|selected)\s*=\s*(\"|\')([a-z0-9_-]+)\1/i', ' $1=$3',$content);
     }
 
 	/**
