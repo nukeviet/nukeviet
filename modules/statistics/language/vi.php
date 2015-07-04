@@ -29,7 +29,6 @@ $lang_module['statbybrowser'] = 'Thống kê theo trình duyệt';
 $lang_module['statbyos'] = 'Thống kê theo Hệ điều hành';
 $lang_module['statbybot'] = 'Thống kê theo Máy chủ tìm kiếm';
 $lang_module['statbyreferer'] = 'Thống kê theo Đường dẫn đến site';
-$lang_module['unknown'] = 'Không xác định';
 $lang_module['others'] = 'Khác';
 $lang_module['viewall'] = 'Xem toàn bộ';
 $lang_module['country'] = 'Quốc gia';
