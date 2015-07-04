@@ -1,6 +1,6 @@
 CHANGE LOG: MODULE SHOPS
 
-Module Shops 4.0.16
+Module Shops 4.0.16 (Release Candidate 1)
 	+ Sửa một số lỗi Module Shops 4.0.15
 	+ Cho phép xuống dòng trong nội dung quà tặng
 	+ Thêm đường dẫn đến bài viết giới thiệu từng chức trên wiki
