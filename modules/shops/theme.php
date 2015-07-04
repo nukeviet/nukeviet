@@ -2617,7 +2617,9 @@ function email_new_order( $content, $data_content, $data_pro, $data_table = fals
 			$xtpl->assign( 'bg', $bg );
 
 			if( $pro_config['active_price'] == '1' )
+			{
 				$xtpl->parse( 'data_product.loop.price2' );
+			}
 			$xtpl->parse( 'data_product.loop' );
 			++$i;
 		}
