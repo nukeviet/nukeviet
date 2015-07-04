@@ -1,6 +1,8 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: header -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}modules/comment/js/user.js"></script>
 <link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/comment.css" type="text/css" />
+<!-- END: header -->
 <div id="idcomment" class="nv-fullbg">
 	<div class="row">
 		<hr />

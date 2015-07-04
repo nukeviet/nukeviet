@@ -3,7 +3,7 @@
 	<!-- BEGIN: icon -->
 	<img src="{MENUTREE.icon}" />&nbsp;
 	<!-- END: icon -->
-	<a title="{MENUTREE.note}" href="{MENUTREE.link}" {MENUTREE.target}>{MENUTREE.title}</a>
+	<a title="{MENUTREE.note}" href="{MENUTREE.link}" {MENUTREE.target}>{MENUTREE.title_trim}</a>
 	<!-- BEGIN: tree_content -->
 	<ul>
 		{TREE_CONTENT}
@@ -16,12 +16,15 @@
 <script	type="text/javascript" src="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/js/jquery.slimmenu.js" data-show="after"></script>
 <script src="{NV_BASE_SITEURL}js/ui/jquery.ui.effect.js" data-show="after"></script>
 <ul class="slimmenu">
-	<!-- BEGIN: loopcat1 -->
 	<li>
+		<a title="{LANG.Home}" href="{THEME_SITE_HREF}"><em class="fa fa-lg fa-home">&nbsp;</em> <span class="hidden-sm"> {LANG.Home} </span></a>
+	</li>
+	<!-- BEGIN: loopcat1 -->
+	<li {CAT1.class}>
 		<!-- BEGIN: icon -->
         <img src="{CAT1.icon}" />&nbsp;
         <!-- END: icon -->
-		<a title="{CAT1.note}" href="{CAT1.link}" {CAT1.target}>{CAT1.title}</a>
+		<a title="{CAT1.note}" href="{CAT1.link}" {CAT1.target}>{CAT1.title_trim}</a>
 		<!-- BEGIN: cat2 -->
 			<ul>
 				{HTML_CONTENT}
@@ -33,7 +36,8 @@
 <script type="text/javascript" data-show="after">
 $('ul.slimmenu').slimmenu(
 {
-	collapserTitle: 'Main Menu',
+    resizeWidth: (theme_responsive == '1') ? 768 : 360,
+	collapserTitle: '{BLOCK_CONFIG.title}',
 	easingEffect:'easeInOutQuint',
 	animSpeed: 'medium',
 	indentChildren: true,

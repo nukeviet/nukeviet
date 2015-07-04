@@ -1553,77 +1553,75 @@ function nv_url_rewrite( $buffer, $is_url = false )
  */
 function nv_change_buffer( $buffer )
 {
-	global $db, $sys_info, $global_config, $client_info;
+    global $db, $sys_info, $global_config, $client_info;
 
-	if( NV_ANTI_IFRAME and ! $client_info['is_myreferer'] ) $buffer = preg_replace( '/(<body[^>]*>)/', "$1\r\n<script type=\"text/javascript\">if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1 );
+    if ( NV_ANTI_IFRAME and ! $client_info['is_myreferer'] ) $buffer = preg_replace( '/(<body[^>]*>)/', "$1" . PHP_EOL . "<script>if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1 );
 
-	if( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
-	{
-		$googleAnalytics = "<script type=\"text/javascript\" data-show=\"after\">\r\n";
-		$googleAnalytics .= "//<![CDATA[\r\n";
-		if( $global_config['googleAnalyticsMethod'] == 'universal' )
-		{
-			$googleAnalytics .= "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\r\n";
-			$googleAnalytics .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\r\n";
-			$googleAnalytics .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\r\n";
-			$googleAnalytics .= "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');\r\n";
-			$googleAnalytics .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');\r\n";
-			$googleAnalytics .= "ga('send', 'pageview');\r\n";
-		}
-		else
-		{
-			$dp = '';
-			if( $global_config['googleAnalyticsSetDomainName'] == 1 )
-			{
-				$dp .= "_gaq.push([\"_setDomainName\",\"" . $global_config['cookie_domain'] . "\"]);";
-			}
-			elseif( $global_config['googleAnalyticsSetDomainName'] == 2 )
-			{
-				$dp .= "_gaq.push([\"_setDomainName\",\"none\"]);_gaq.push([\"_setAllowLinker\",true]);";
-			}
-			$googleAnalytics .= "var _gaq=_gaq||[];_gaq.push([\"_setAccount\",\"" . $global_config['googleAnalyticsID'] . "\"]);" . $dp . "_gaq.push([\"_trackPageview\"]);(function(){var a=document.createElement(\"script\");a.type=\"text/javascript\";a.async=true;a.src=(\"https:\"==document.location.protocol?\"https://ssl\":\"http://www\")+\".google-analytics.com/ga.js\";var b=document.getElementsByTagName(\"script\")[0];b.parentNode.insertBefore(a,b)})();\r\n";
-		}
-		$googleAnalytics .= "//]]>\r\n";
-		$googleAnalytics .= "</script>\r\n";
-		$buffer = preg_replace( '/(<\/head>)/i', $googleAnalytics . "\\1", $buffer, 1 );
-	}
+    $body_replace = $internal = $external = '';
 
-	$body_replace = '';
-	if( NV_CURRENTTIME > $global_config['cronjobs_next_time'] )
-	{
-		$body_replace .= "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>\n";
-	}
-	if( NV_LANG_INTERFACE == 'vi' and ( $global_config['mudim_active'] == 1 or ( $global_config['mudim_active'] == 2 and defined( 'NV_SYSTEM' ) ) or ( $global_config['mudim_active'] == 3 and defined( 'NV_ADMIN' ) ) ) )
-	{
-		$body_replace .= "<script type=\"text/javascript\" data-show=\"after\">
-				var mudim_showPanel = " . ( ( $global_config['mudim_showpanel'] ) ? "true" : "false" ) . ";
-				var mudim_displayMode = " . $global_config['mudim_displaymode'] . ";
-				var mudim_method = " . $global_config['mudim_method'] . ";
-			</script>\n";
-		$body_replace .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>\n";
-	}
-	$buffer = preg_replace( '/(<\/body>)/i', $body_replace . '\\1', $buffer, 1 );
+    if ( NV_CURRENTTIME > $global_config['cronjobs_next_time'] )
+    {
+        $body_replace .= "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>" . PHP_EOL;
+    }
 
-	if( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
-	{
-		$opt_css_file = ( empty( $global_config['cdn_url'] ) ) ? true : false;
-		$optimezer = new optimezer( $buffer, $opt_css_file );
-		$buffer = $optimezer->process();
-	}
+    if ( NV_LANG_INTERFACE == 'vi' and ( $global_config['mudim_active'] == 1 or ( $global_config['mudim_active'] == 2 and defined( 'NV_SYSTEM' ) ) or ( $global_config['mudim_active'] == 3 and defined( 'NV_ADMIN' ) ) ) )
+    {
+        $internal .= "var mudim_showPanel=" . ( ( $global_config['mudim_showpanel'] ) ? "!0" : "!1" ) . ",mudim_displayMode=" . $global_config['mudim_displaymode'] . ",mudim_method=" . $global_config['mudim_method'] . ";" . PHP_EOL;
+        $external .= "<script src=\"" . NV_BASE_SITEURL . "js/mudim.js\" data-show=\"after\"></script>" . PHP_EOL;
+    }
 
-	if( ! empty( $global_config['cdn_url'] ) )
-	{
-		$buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-	}
-	elseif( ! $sys_info['supports_rewrite'] )
-	{
-		$buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . NV_BASE_SITEURL . "CJzip.php?file=\\4&amp;r=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-	}
-	else
-	{
-		$buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-	}
-	return $buffer;
+    if ( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
+    {
+        if ( $global_config['googleAnalyticsMethod'] == 'universal' )
+        {
+            $internal .= "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
+            $internal .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," . PHP_EOL;
+            $internal .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" . PHP_EOL;
+            $internal .= "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');" . PHP_EOL;
+            $internal .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');" . PHP_EOL;
+            $internal .= "ga('send', 'pageview');" . PHP_EOL;
+        }
+        else
+        {
+            $dp = '';
+            if ( $global_config['googleAnalyticsSetDomainName'] == 1 )
+            {
+                $dp .= "_gaq.push([\"_setDomainName\",\"" . $global_config['cookie_domain'] . "\"]);";
+            }
+            elseif ( $global_config['googleAnalyticsSetDomainName'] == 2 )
+            {
+                $dp .= "_gaq.push([\"_setDomainName\",\"none\"]);_gaq.push([\"_setAllowLinker\",true]);";
+            }
+            $internal .= "var _gaq=_gaq||[];_gaq.push([\"_setAccount\",\"" . $global_config['googleAnalyticsID'] . "\"]);" . $dp . "_gaq.push([\"_trackPageview\"]);(function(){var a=document.createElement(\"script\");a.type=\"text/javascript\";a.async=true;a.src=(\"https:\"==document.location.protocol?\"https://ssl\":\"http://www\")+\".google-analytics.com/ga.js\";var b=document.getElementsByTagName(\"script\")[0];b.parentNode.insertBefore(a,b)})();" . PHP_EOL;
+        }
+    }
+
+    if ( ! empty( $internal ) ) $internal = "<script data-show=\"after\">" . PHP_EOL . $internal . "</script>" . PHP_EOL;
+    $body_replace .= $internal . $external;
+
+    if ( ! empty( $body_replace ) ) $buffer = preg_replace( '/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1 );
+
+    if ( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
+    {
+        $opt_css_file = ( empty( $global_config['cdn_url'] ) ) ? true : false;
+        $optimezer = new optimezer( $buffer, $opt_css_file );
+        $buffer = $optimezer->process();
+    }
+
+    if ( ! empty( $global_config['cdn_url'] ) )
+    {
+        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+    }
+    elseif ( ! $sys_info['supports_rewrite'] )
+    {
+        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . NV_BASE_SITEURL . "CJzip.php?file=\\4&amp;r=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+    }
+    else
+    {
+        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+    }
+
+    return $buffer;
 }
 
 /**

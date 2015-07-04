@@ -12,15 +12,15 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 /**
  * nv_menu_blocks()
- *
  * Ham xu ly chinh cho block
  *
  * @param array $block_config
  * @return
+ *
  */
 function nv_menu_blocks( $block_config )
 {
-	global $db, $global_config;
+	global $db, $global_config, $lang_global;
 
 	$list_cats = array();
 	$sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
@@ -60,7 +60,8 @@ function nv_menu_blocks( $block_config )
 				'link' => nv_url_rewrite( nv_unhtmlspecialchars( $row['link'] ), true ),
 				'icon' => $row['icon'],
 				'html_class' => $row['css'],
-				'current' => nv_menu_check_current( $row['link'], ( int )$row['active_type'] ) );
+				'current' => nv_menu_check_current( $row['link'], $row['active_type'] )
+			);
 		}
 	}
 
@@ -78,29 +79,37 @@ function nv_menu_blocks( $block_config )
 	}
 
 	$xtpl = new XTemplate( $block_config['block_name'] . '.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
+	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'BLOCK_THEME', $block_theme );
+	$xtpl->assign( 'BLOCK_CONFIG', $block_config );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 
 	foreach( $list_cats as $cat )
 	{
 		if( empty( $cat['parentid'] ) )
 		{
-			$cat['class'] = nv_menu_blocks_active( $cat );
-
-			$xtpl->assign( 'CAT1', $cat );
-			if( ! empty( $cat['icon'] ) )
-			{
-				$xtpl->parse( 'main.loopcat1.icon' );
-			}
 			if( ! empty( $cat['subcats'] ) )
 			{
-				$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'] );
+				$submenu_active = array();
+				$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'], $submenu_active, $block_theme );
 				$xtpl->assign( 'HTML_CONTENT', $html_content );
 				if( $html_content != '' )
 				{
 					$xtpl->parse( 'main.loopcat1.cat2' );
 					$xtpl->parse( 'main.loopcat1.expand' );
 				}
+				if( ! empty( $submenu_active ) )
+				{
+					$cat['current'] = true;
+				}
+			}
+			$cat['class'] = nv_menu_blocks_active( $cat );
+
+			$xtpl->assign( 'CAT1', $cat );
+			if( ! empty( $cat['icon'] ) )
+			{
+				$xtpl->parse( 'main.loopcat1.icon' );
 			}
 			$xtpl->parse( 'main.loopcat1' );
 		}
@@ -116,6 +125,7 @@ function nv_menu_blocks( $block_config )
  *
  * @param mixed $cat
  * @return
+ *
  */
 function nv_menu_blocks_active( $cat )
 {
@@ -145,6 +155,7 @@ function nv_menu_blocks_active( $cat )
  * @param mixed $url
  * @param integer $type
  * @return
+ *
  */
 function nv_menu_check_current( $url, $type = 0 )
 {
@@ -162,19 +173,22 @@ function nv_menu_check_current( $url, $type = 0 )
 	{
 		return true;
 	}
-	elseif( $type == 2 )
+	elseif( $_url != NV_BASE_SITEURL )
 	{
-		if( preg_match( '#' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
-		return false;
-	}
-	elseif( $type == 1 )
-	{
-		if( preg_match( '#^' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
-		return false;
-	}
-	elseif( $_curr_url == $_url )
-	{
-		return true;
+		if( $type == 2 )
+		{
+			if( preg_match( '#' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
+			return false;
+		}
+		elseif( $type == 1 )
+		{
+			if( preg_match( '#^' . preg_quote( $_url, '#' ) . '#', $_curr_url ) ) return true;
+			return false;
+		}
+		elseif( $_curr_url == $_url )
+		{
+			return true;
+		}
 	}
 
 	return false;
@@ -182,31 +196,16 @@ function nv_menu_check_current( $url, $type = 0 )
 
 /**
  * nv_smenu_blocks()
- *
  * Hien thi menu con
  *
  * @param mixed $style
  * @param mixed $list_cats
  * @param mixed $list_sub
  * @return
+ *
  */
-function nv_smenu_blocks( $style, $list_cats, $list_sub )
+function nv_smenu_blocks( $style, $list_cats, $list_sub, &$submenu_active, $block_theme )
 {
-	global $global_config;
-
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/' . $style . '.tpl' ) )
-	{
-		$block_theme = $global_config['module_theme'];
-	}
-	elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/' . $style . '.tpl' ) )
-	{
-		$block_theme = $global_config['site_theme'];
-	}
-	else
-	{
-		$block_theme = 'default';
-	}
-
 	$xtpl = new XTemplate( $style . '.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 
 	if( empty( $list_sub ) )
@@ -223,6 +222,10 @@ function nv_smenu_blocks( $style, $list_cats, $list_sub )
 			if( in_array( $catid, $list ) )
 			{
 				$list_cats[$catid]['class'] = nv_menu_blocks_active( $list_cats[$catid] );
+				if( $list_cats[$catid]['current'] === true )
+				{
+					$submenu_active[] = $catid;
+				}
 
 				$xtpl->assign( 'MENUTREE', $list_cats[$catid] );
 				if( ! empty( $list_cats[$catid]['icon'] ) )
@@ -231,7 +234,7 @@ function nv_smenu_blocks( $style, $list_cats, $list_sub )
 				}
 				if( ! empty( $list_cats[$catid]['subcats'] ) )
 				{
-					$tree = nv_smenu_blocks( $style, $list_cats, $list_cats[$catid]['subcats'] );
+					$tree = nv_smenu_blocks( $style, $list_cats, $list_cats[$catid]['subcats'], $submenu_active, $block_theme );
 
 					$xtpl->assign( 'TREE_CONTENT', $tree );
 					$xtpl->parse( 'tree.tree_content' );

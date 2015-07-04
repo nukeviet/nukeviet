@@ -107,211 +107,249 @@ class optimezer
 	 * @return
 	 */
 	public function process()
-	{
-		$conditionRegex = "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is";
-		if( preg_match_all( $conditionRegex, $this->_content, $conditonMatches ) )
-		{
-			$this->_conditon = $conditonMatches[0];
-			$this->_content = preg_replace_callback( $conditionRegex, array( $this, 'conditionCallback' ), $this->_content );
-		}
+    {
+        $conditionRegex = "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is";
+        if ( preg_match_all( $conditionRegex, $this->_content, $conditonMatches ) )
+        {
+            $this->_conditon = $conditonMatches[0];
+            $this->_content = preg_replace_callback( $conditionRegex, array( $this, 'conditionCallback' ), $this->_content );
+        }
 
-		$this->_content = preg_replace( "/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content );
-		$jsRegex = "/<\s*\bscript\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
-		if( preg_match_all( $jsRegex, $this->_content, $jsMatches ) )
-		{
-			$this->_jsMatches = $jsMatches[0];
-			$this->_content = preg_replace_callback( $jsRegex, array( $this, 'jsCallback' ), $this->_content );
-		}
+        $this->_content = preg_replace( "/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content );
+        $jsRegex = "/<\s*\bscript\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
+        if ( preg_match_all( $jsRegex, $this->_content, $jsMatches ) )
+        {
+            $this->_jsMatches = $jsMatches[0];
+            $this->_content = preg_replace_callback( $jsRegex, array( $this, 'jsCallback' ), $this->_content );
+        }
 
-		$this->_meta['http-equiv'] = $this->_meta['name'] = $this->_meta['other'] = array();
-		$this->_meta['charset'] = "";
+        $this->_meta['http-equiv'] = $this->_meta['name'] = $this->_meta['other'] = array();
+        $this->_meta['charset'] = "";
 
-		if( $this->opt_css_file )
-		{
-			$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
-		}
-		else
-		{
-			$regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<style[^>]*>[^\<]*</style>!is";
-		}
+        if ( $this->opt_css_file )
+        {
+            $regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<link[^>]+>|<style[^>]*>[^\<]*</style>!is";
+        }
+        else
+        {
+            $regex = "!<meta[^>]+>|<title>[^<]+<\/title>|<style[^>]*>[^\<]*</style>!is";
+        }
 
-		if( preg_match_all( $regex, $this->_content, $matches ) )
-		{
-			foreach( $matches[0] as $tag )
-			{
-				if( preg_match( '/^<meta/', $tag ) )
-				{
-					preg_match_all( "/([a-zA-Z\-\_]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2 );
-					if( ! empty( $matches2 ) )
-					{
-						$combine = array_combine( $matches2[1], $matches2[2] );
-						if( array_key_exists( 'http-equiv', $combine ) )
-						{
-							$this->_meta['http-equiv'][strtolower( $combine['http-equiv'] )] = $combine['content'];
-						}
-						elseif( array_key_exists( 'name', $combine ) )
-						{
-							$this->_meta['name'][strtolower( $combine['name'] )] = $combine['content'];
-						}
-						elseif( array_key_exists( 'charset', $combine ) )
-						{
-							$this->_meta['charset'] = $combine['charset'];
-						}
-						else
-						{
-							$this->_meta['other'][] = array( $matches2[1], $matches2[2] );
-						}
+        if ( preg_match_all( $regex, $this->_content, $matches ) )
+        {
+            foreach ( $matches[0] as $tag )
+            {
+                if ( preg_match( '/^<meta/', $tag ) )
+                {
+                    preg_match_all( "/([a-zA-Z\-\_]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2 );
+                    if ( ! empty( $matches2 ) )
+                    {
+                        $combine = array_combine( $matches2[1], $matches2[2] );
+                        if ( array_key_exists( 'http-equiv', $combine ) )
+                        {
+                            $this->_meta['http-equiv'][strtolower( $combine['http-equiv'] )] = $combine['content'];
+                        }
+                        elseif ( array_key_exists( 'name', $combine ) )
+                        {
+                            $this->_meta['name'][strtolower( $combine['name'] )] = $combine['content'];
+                        }
+                        elseif ( array_key_exists( 'charset', $combine ) )
+                        {
+                            $this->_meta['charset'] = $combine['charset'];
+                        }
+                        else
+                        {
+                            $this->_meta['other'][] = array( $matches2[1], $matches2[2] );
+                        }
 
-					}
-				}
-				elseif( preg_match( "/^<title>[^<]+<\/title>/is", $tag ) )
-				{
-					$this->_title = $tag;
-				}
-				elseif( preg_match( "/^<style[^>]*>([^<]*)<\/style>/is", $tag, $matches2 ) )
-				{
-					$this->_style[] = $matches2[1];
-				}
-				elseif( preg_match( "/^<link/", $tag ) )
-				{
-					preg_match_all( "/([a-zA-Z]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2 );
-					$combine = array_combine( $matches2[1], $matches2[2] );
-					if( isset( $combine['rel'] ) and preg_match( "/stylesheet/is", $combine['rel'] ) )
-					{
-						if( ! isset( $combine['title'] ) and isset( $combine['href'] ) and preg_match( "/^(?!http(s?)|ftp\:\/\/)(.*?)\.css$/", $combine['href'], $matches3 ) )
-						{
-							$media = isset( $combine['media'] ) ? $combine['media'] : "";
-							$this->_cssLinks[$matches3[0]] = $media;
-						}
-						else
-						{
-							$this->_cssIgnoreLinks[] = $tag;
-						}
-					}
-					else
-					{
-						$this->_links[] = $tag;
-					}
-				}
-			}
+                    }
+                }
+                elseif ( preg_match( "/^<title>[^<]+<\/title>/is", $tag ) )
+                {
+                    $this->_title = $tag;
+                }
+                elseif ( preg_match( "/^<style[^>]*>([^<]*)<\/style>/is", $tag, $matches2 ) )
+                {
+                    $this->_style[] = $matches2[1];
+                }
+                elseif ( preg_match( "/^<link/", $tag ) )
+                {
+                    preg_match_all( "/([a-zA-Z]+)\s*=\s*[\"|']([^\"']+)/is", $tag, $matches2 );
+                    $combine = array_combine( $matches2[1], $matches2[2] );
+                    if ( isset( $combine['rel'] ) and preg_match( "/stylesheet/is", $combine['rel'] ) )
+                    {
+                        if ( ! isset( $combine['title'] ) and isset( $combine['href'] ) and preg_match( "/^(?!http(s?)|ftp\:\/\/)(.*?)\.css$/", $combine['href'], $matches3 ) )
+                        {
+                            $media = isset( $combine['media'] ) ? $combine['media'] : "";
+                            $this->_cssLinks[$matches3[0]] = $media;
+                        }
+                        else
+                        {
+                            $this->_cssIgnoreLinks[] = $tag;
+                        }
+                    }
+                    else
+                    {
+                        $this->_links[] = $tag;
+                    }
+                }
+            }
 
-			$this->_content = preg_replace( $regex, '', $this->_content );
-		}
+            $this->_content = preg_replace( $regex, '', $this->_content );
+        }
 
-		if( ! empty( $this->_conditon ) )
-		{
-			foreach( $this->_conditon as $key => $value )
-			{
-				$this->_content = preg_replace( "/\{\|condition\_" . $key . "\|\}/", $value, $this->_content );
-			}
-		}
+        if ( ! empty( $this->_conditon ) )
+        {
+            foreach ( $this->_conditon as $key => $value )
+            {
+                $this->_content = preg_replace( "/\{\|condition\_" . $key . "\|\}/", $value, $this->_content );
+            }
+        }
 
-		$meta = array();
-		if( ! empty( $this->_meta['name'] ) )
-		{
-			foreach( $this->_meta['name'] as $value => $content )
-			{
-				$meta[] = "<meta name=\"" . $value . "\" content=\"" . $content . "\" />";
-			}
-		}
+        $meta = array();
+        if ( ! empty( $this->_meta['name'] ) )
+        {
+            foreach ( $this->_meta['name'] as $value => $content )
+            {
+                $meta[] = "<meta name=\"" . $value . "\" content=\"" . $content . "\" />";
+            }
+        }
 
-		if( ! empty( $this->_meta['charset'] ) )
-		{
-			$meta[] = "<meta charset=\"" . $this->_meta['charset'] . "\" />";
-		}
-		if( ! empty( $this->_meta['http-equiv'] ) )
-		{
-			foreach( $this->_meta['http-equiv'] as $value => $content )
-			{
-				$meta[] = "<meta http-equiv=\"" . $value . "\" content=\"" . $content . "\" />";
-			}
-		}
-		if( ! empty( $this->_meta['other'] ) )
-		{
-			foreach( $this->_meta['other'] as $row )
-			{
-				$meta[] = "<meta " . $row[0][0] . "=\"" . $row[1][0] . "\" " . $row[0][1] . "=\"" . $row[1][1] . "\" />";
-			}
-		}
+        if ( ! empty( $this->_meta['charset'] ) )
+        {
+            $meta[] = "<meta charset=\"" . $this->_meta['charset'] . "\" />";
+        }
+        if ( ! empty( $this->_meta['http-equiv'] ) )
+        {
+            foreach ( $this->_meta['http-equiv'] as $value => $content )
+            {
+                $meta[] = "<meta http-equiv=\"" . $value . "\" content=\"" . $content . "\" />";
+            }
+        }
+        if ( ! empty( $this->_meta['other'] ) )
+        {
+            foreach ( $this->_meta['other'] as $row )
+            {
+                $meta[] = "<meta " . $row[0][0] . "=\"" . $row[1][0] . "\" " . $row[0][1] . "=\"" . $row[1][1] . "\" />";
+            }
+        }
 
-		$_jsBefore = array();
-        	$_jsAfter = array();
-        	$_jsSrc = array();
+        $_jsBefore_internal = $_jsBefore_external = $_jsAfter_internal = $_jsAfter_external = "";
+        $_jsSrc = array();
+        $_test_beforeAfter = "/<\s*\bscript\b[^>]+data\-show\s*\=\s*[\"|'](after|before)[\"|'][^>]*>(.*?)<\s*\/\s*script\s*>/is";
 
-		if( ! empty( $this->_jsMatches ) )
-		{
-			foreach( $this->_jsMatches as $key => $value )
-			{
-				unset( $matches2, $matches3 );
+        $this->_content = $this->removeQuotes( $this->_content );
 
-				if( preg_match( "/<\s*\bscript\b[^>]+src\s*=\s*[\"|']([^\"']+)[\"|'][^>]*>[\s\r\n\t]*<\s*\/\s*script\s*>/is", $value, $matches2 ) )
-				{
-					//Chi cho phep ket noi 1 lan doi voi 1 file JS
-					$value = ( ! empty( $matches2[1] ) and ! in_array( $matches2[1], $_jsSrc ) ) ? $value : "";
-					if( ! empty( $matches2[1] ) ) $_jsSrc[] = $matches2[1];
-				}
-				elseif( preg_match( "/<\s*\bscript\b([^>]*)>(.*?)<\s*\/\s*script\s*>/is", $value, $matches2 ) )
-				{
-					$value = ( empty( $matches2[1] ) or ! preg_match( "/^([^\W]*)$/is", $matches2[1] ) ) ? $this->minifyJsInline( $matches2 ) : "";
-				}
-				else
-				{
-					$value = '';
-				}
+        if ( ! empty( $this->_jsMatches ) )
+        {
+            foreach ( $this->_jsMatches as $key => $value )
+            {
+                unset( $matches2, $matches3 );
 
-				if ( ! empty( $value ) and preg_match( "/<\s*\bscript\b[^>]+data\-show\s*\=\s*[\"|'](after|before)[\"|'][^>]*>(.*?)<\s*\/\s*script\s*>/is", $value, $matches3 ) )
-		                {
-		                    if ( $matches3[1] == "before" ) $_jsBefore[] = $value;
-		                    elseif ( $matches3[1] == "after" ) $_jsAfter[] = $value;
-		                    $value = "";
-		                }
+                if ( preg_match( "/<\s*\bscript\b[^>]+src\s*=\s*[\"|']([^\"']+)[\"|'][^>]*>[\s\r\n\t]*<\s*\/\s*script\s*>/is", $value, $matches2 ) )
+                {
+                    //Chi cho phep ket noi 1 lan doi voi 1 file JS
+                    $external = trim( $matches2[1] );
+                    if ( ! empty( $external ) )
+                    {
+                        if ( ! in_array( $external, $_jsSrc ) )
+                        {
+                            $_jsSrc[] = $external;
 
-				$this->_content = preg_replace( "/\{\|js\_" . $key . "\|\}/", $value, $this->_content );
-			}
-		}
+                            if ( preg_match( $_test_beforeAfter, $value, $matches3 ) )
+                            {
+                                if ( $matches3[1] == "before" ) $_jsBefore_external .= $value . $this->eol;
+                                elseif ( $matches3[1] == "after" ) $_jsAfter_external .= $value . $this->eol;
+                                $value = '';
+                            }
+                        }
+                        else
+                        {
+                            $value = '';
+                        }
+                    }
+                    else
+                    {
+                        $value = '';
+                    }
+                }
+                elseif ( preg_match( "/<\s*\bscript\b([^>]*)>(.*?)<\s*\/\s*script\s*>/is", $value, $matches2 ) )
+                {
+                    $internal = trim( $matches2[2] );
+                    if ( ! empty( $internal ) and ( empty( $matches2[1] ) or ! preg_match( "/^([^\W]*)$/is", $matches2[1] ) ) )
+                    {
+                        if ( preg_match( $_test_beforeAfter, $value, $matches3 ) )
+                        {
+                            if ( $matches3[1] == "before" ) $_jsBefore_internal .= $internal . $this->eol;
+                            elseif ( $matches3[1] == "after" ) $_jsAfter_internal .= $internal . $this->eol;
+                            $value = '';
+                        }
+                        else
+                        {
+                            $value = $this->minifyJsInline( $matches2 );
+                        }
+                    }
+                    else
+                    {
+                        $value = '';
+                    }
+                }
+                else
+                {
+                    $value = '';
+                }
 
-		$head = "";
-		if ( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
-        	if ( ! empty( $this->_links ) ) $head .= implode( $this->eol, $this->_links ) . $this->eol;
-        	if ( ! empty( $this->_cssLinks ) ) $head .= "<link rel=\"Stylesheet\" href=\"" . $this->newCssLink() . "\" type=\"text/css\" />" . $this->eol;
-        	if ( ! empty( $this->_cssIgnoreLinks ) ) $head .= implode( $this->eol, $this->_cssIgnoreLinks ) . $this->eol;
-        	if ( ! empty( $this->_style ) ) $head .= "<style type=\"text/css\">" . $this->minifyCss( implode( $this->eol, $this->_style ) ) . "</style>" . $this->eol;
+                $this->_content = preg_replace( "/\{\|js\_" . $key . "\|\}/", $this->eol . $value, $this->_content );
+            }
+        }
 
-        	$_jsBefore = ! empty( $_jsBefore ) ? implode( $this->eol, $_jsBefore ) . $this->eol : "";
-        	$_jsAfter = ! empty( $_jsAfter ) ? implode( $this->eol, $_jsAfter ) . $this->eol : "";
+        $head = "";
+        if ( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
+        if ( ! empty( $this->_links ) ) $head .= implode( $this->eol, $this->_links ) . $this->eol;
+        if ( ! empty( $this->_cssLinks ) ) $head .= "<link rel=\"Stylesheet\" href=\"" . $this->newCssLink() . "\" type=\"text/css\" />" . $this->eol;
+        if ( ! empty( $this->_cssIgnoreLinks ) ) $head .= implode( $this->eol, $this->_cssIgnoreLinks ) . $this->eol;
+        if ( ! empty( $this->_style ) ) $head .= "<style type=\"text/css\">" . $this->minifyCss( implode( $this->eol, $this->_style ) ) . "</style>" . $this->eol;
+        $head = $this->removeQuotes( $head );
 
-	        if ( preg_match( "/\<head\>/", $this->_content ) )
-	        {
-	            $head = "<head>" . $this->eol . $this->_title . $this->eol . $head;
-	            $head .= "<script type=\"text/javascript\" src=\"" . $this->base_siteurl . "js/jquery/jquery.min.js\"></script>" . $this->eol;
-	            $this->_content = trim( preg_replace( '/<head>/i', $head, $this->_content, 1 ) );
-	            if ( ! empty( $_jsBefore ) ) $this->_content = preg_replace( '/<\/head>/', implode( $this->eol, $_jsBefore ) . $this->eol . "</head>", $this->_content, 1 );
-	            $this->_content = preg_replace( '/<\/head>/', $_jsBefore . "</head>", $this->_content, 1 );
-	        }
-	        else
-	        {
-	            $this->_content = $head . $_jsBefore . $this->_content;
-	        }
+        if ( ! empty( $_jsBefore_internal ) ) $_jsBefore_internal = "<script>" . $this->eol . $this->_minifyJsInline( $_jsBefore_internal ) . $this->eol . "</script>";
+        if ( ! empty( $_jsAfter_internal ) ) $_jsAfter_internal = "<script>" . $this->eol . $this->_minifyJsInline( $_jsAfter_internal ) . $this->eol . "</script>";
 
-	        if ( ! empty( $_jsAfter ) )
-	        {
-	            $this->_content = preg_match( "/\<\/body\>/", $this->_content ) ? preg_replace( '/<\/body>/', $_jsAfter . "</body>", $this->_content, 1 ) : $this->eol . $_jsAfter;
-	        }
+        if ( preg_match( "/\<head\>/", $this->_content ) )
+        {
+            $head = "<head>" . $this->eol . $this->_title . $this->eol . $head;
+            $head .= "<script src=\"" . $this->base_siteurl . "js/jquery/jquery.min.js\"></script>" . $this->eol;
+            $this->_content = trim( preg_replace( '/<head>/i', $head, $this->_content, 1 ) );
+            $_jsBefore = $_jsBefore_external . $_jsBefore_internal;
+            if ( ! empty( $_jsBefore ) ) $this->_content = preg_replace( '/\s*<\/head>/', $this->eol . $_jsBefore . $this->eol . "</head>", $this->_content, 1 );
+        }
+        else
+        {
+            $this->_content = $head . $_jsBefore_external . $_jsBefore_internal . $this->_content;
+        }
 
-		if( $this->_tidySupport )
-		{
-			if( strncasecmp( $this->_content, '<!DOCTYPE html>', 15 ) === 0 )
-			{
-				return $this->tidy5( $this->_content );
-			}
-			else
-			{
-				return tidy_repair_string( $this->_content, $this->tidy_options, 'utf8' );
-			}
-		}
+        if ( preg_match( "/\<\/body\>/", $this->_content ) )
+        {
+            $this->_content = preg_replace( '/\s*<\/body>/', $this->eol . $_jsAfter_external . $_jsAfter_internal . $this->eol . "</body>", $this->_content, 1 );
+        }
+        else
+        {
+            $this->_content = $this->_content . $this->eol . $_jsAfter_external . $_jsAfter_internal;
+        }
 
-		return $this->minifyHTML( $this->_content );
-	}
+        if ( $this->_tidySupport )
+        {
+            if ( strncasecmp( $this->_content, '<!DOCTYPE html>', 15 ) === 0 )
+            {
+                return $this->tidy5( $this->_content );
+            }
+            else
+            {
+                return tidy_repair_string( $this->_content, $this->tidy_options, 'utf8' );
+            }
+        }
+
+        return $this->minifyHTML( $this->_content );
+    }
 
 	/**
 	 * optimezer::tidy5()
@@ -409,23 +447,62 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::minifyJsInline()
-	 *
-	 * @param mixed $jsInline
-	 * @return
-	 */
-	private function minifyJsInline( $matches )
-	{
-		$jsInline = preg_replace( '/(?:^\\s*<!--\\s*|\\s*(?:\\/\\/)?\\s*-->\\s*$)/', '', $matches[2] );
-		$jsInline = preg_replace( "/(\r\n)+|(\n|\r)+/", "\r\n", $jsInline );
-		$jsInline = preg_replace( '/^\s+|\s+$/m', '', $jsInline );
-		if( ! $this->_tidySupport and ! preg_match( "/^\/\/<\!\[CDATA\[/", $jsInline ) )
-		{
-			$jsInline = "//<![CDATA[" . $this->eol . $jsInline . $this->eol . "//]]>";
-		}
-		$jsInline = '<script' . $matches[1] . '>' . $this->eol . $jsInline . $this->eol . '</script>';
-		return $jsInline;
-	}
+     * optimezer::_minifyJsInline()
+     * 
+     * @param mixed $js
+     * @return
+     */
+    private function _minifyJsInline( $js )
+    {
+        $js = str_replace( array( "//<![CDATA[", "//]]>" ), "", $js ); // remove CDATA
+        $replace = array(
+            '#\'([^\n\']*?)/\*([^\n\']*)\'#' => "'\1/'+\'\'+'*\2'", // remove comments from ' strings
+            '#\"([^\n\"]*?)/\*([^\n\"]*)\"#' => '"\1/"+\'\'+"*\2"', // remove comments from " strings
+            '#/\*.*?\*/#s' => "", // strip C style comments
+            '#[\r\n]+#' => "\n", // remove blank lines and \r's
+            '#\n([ \t]*//.*?\n)*#s' => "\n", // strip line comments (whole line only)
+            '#([^\\])//([^\'"\n]*)\n#s' => "\\1\n", // strip line comments (that aren't possibly in strings or regex's)
+            '#\n\s+#' => "\n", // strip excess whitespace
+            '#\s+\n#' => "\n", // strip excess whitespace
+            '#(//[^\n]*\n)#s' => "\\1\n", // extra line feed after any comments left (important given later replacements)
+            '#/([\'"])\+\'\'\+([\'"])\*#' => "/*", // restore comments in strings
+            '#(?<![\+\-])\s*([\+\-])(?![\+\-])#' => '$1',
+            '#(?<![\+\-])([\+\-])\s*(?![\+\-])#' => '$1',
+            '#(for\([^;]*;[^;]*;[^;\{]*\));(\}|$)#s' => '$1;;$2',
+            '#;+\s*([};])#' => '$1',
+            '#;(\}|$)#s' => '$1',
+            '#[\r\n\t ]+#' => ' ',
+            '#([^\'"]*)true([^\'"]*)#i' => "$1!0$2",
+            '#([^\'"]*)false([^\'"]*)#i' => "$1!1$2",
+            '#\s*(\{|\()\s*#' => '$1',
+            '#\s*(\}|\))\s*#' => '$1',
+            '#(\;|\,)[ ]+#' => '$1',
+            '#[ ]+([\=\<\>\!\:\?\|\&]+)#' => '$1',
+            '#([\=\<\>\!\:\?\|\&]+)[ ]+#' => '$1'
+            );
+
+        $search = array_keys( $replace );
+        $js = preg_replace( $search, $replace, $js );
+        $js = str_replace( '$(document).ready', '$', $js );
+
+        if ( ! $this->_tidySupport )
+        {
+            $js = "//<![CDATA[" . $this->eol . trim( $js ) . $this->eol . "//]]>";
+        }
+        return $js;
+    }
+
+    /**
+     * optimezer::minifyJsInline()
+     *
+     * @param mixed $jsInline
+     * @return
+     */
+    private function minifyJsInline( $matches )
+    {
+        $jsInline = $this->_minifyJsInline( $matches[2] );
+        return '<script' . $matches[1] . '>' . $this->eol . $jsInline . $this->eol . '</script>';
+    }
 
 	/**
 	 * optimezer::getCssContent()
@@ -579,13 +656,24 @@ class optimezer
 	 * @return
 	 */
 	private function checkImg( $m )
-	{
-		if( ! preg_match( '/alt=[\'|"](.*?)[\'|"]/i', $m[1] ) )
-		{
-			return ( "<img alt=\"\"" . $m[1] . "/>" );
-		}
-		return $m[0];
-	}
+    {
+        if ( ! preg_match( '/alt=[\'|"]?(.*?)[\'|"]?/i', $m[1] ) )
+        {
+            return ( "<img alt=\"\"" . $m[1] . "/>" );
+        }
+        return $m[0];
+    }
+    
+    /**
+     * optimezer::removeQuotes()
+     * 
+     * @param mixed $content
+     * @return
+     */
+    private function removeQuotes($content)
+    {
+        return preg_replace('/\s+(type|title|data-[a-z0-9]+|colspan|scope|role|media|name|rel|id|class|rel|alt|value|selected)\s*=\s*(\"|\')([a-z0-9_-]+)\2/i', ' $1=$3',$content);
+    }
 
 	/**
 	 * optimezer::minifyHTML()
@@ -594,21 +682,25 @@ class optimezer
 	 * @return
 	 */
 	private function minifyHTML( $content )
-	{
-		$content = preg_replace_callback( '/<!--([\s\S]*?)-->/', array( $this, 'HTMLCommentCB' ), $content );
-	        $content = preg_replace( '/<([^\>]+)\s+\/\s+\>/', '<$1 />', $content );
-	        $content = preg_replace( '#<(br|hr|input|img|meta)([^>]+)>#', "<\\1\\2 />", $content );
-	        $content = preg_replace( '#\s*\/\s*\/>#', " />", $content );
-	        $content = preg_replace_callback( '/<img([^>]+)\/>/', array( $this, 'checkImg' ), $content );
-	        $content = preg_replace( '/\s+action\s*=\s*[\'|"]\s*[\'|"]/', '', $content );
-	        $content = preg_replace( '/^\s+/', '', $content );
-	        // @todo take into account attribute values that span multiple lines.
-	        $content = preg_replace( '/^\s+|\s+$/m', '', $content );
-	        // remove ws outside of all elements
-	        $content = preg_replace( '/>(\\s(?:\\s*))?([^<]+)(\\s(?:\s*))?</', '>$1$2$3<', $content );
+    {
+        $content = preg_replace_callback( '/<!--([\s\S]*?)-->/', array( $this, 'HTMLCommentCB' ), $content );
+        $content = preg_replace_callback( '/<img([^>]+)\/?>/', array( $this, 'checkImg' ), $content );
+        $replace = array(
+            '/<\s+/' => '<',
+            '/\s+>/' => '>',
+            '/>[ ]+</' => '><',
+            '/<([^\>]+)\s+\/\s*\>/' => '<$1>',
+            '/\s+type\s*\=\s*[\"\']text\/(javascript|css)[\"\']/' => '',
+            '/\s+data\-show\s*\=\s*[\"\'](before|after)[\"\']/' => '',
+            '/[ ]{2,}/' => ' ',
+            '/^\s+|\s+$/m' => '',
+            '/^\s+/' => '',
+            '/>(\s(?:\s*))?([^<]+)(\s(?:\s*))?</' => '>$1$2$3<' );
+        $search = array_keys( $replace );
+        $content = preg_replace( $search, $replace, $content );
 
-	        return $content;
-	}
+        return $content;
+    }
 
 	/**
 	 * optimezer::HTMLCommentCB()

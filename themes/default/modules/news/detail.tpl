@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/star-rating/jquery.rating.pack.js"></script>\n";
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/star-rating/jquery.rating.pack.js"></script>
 <script src="{NV_BASE_SITEURL}js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
 <link href="{NV_BASE_SITEURL}js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
 <link href="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
