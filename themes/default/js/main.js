@@ -6,8 +6,8 @@
  * @Createdate 31/05/2010, 00:36
  */
 function fix_banner_center() {
-	var w = Math.round(($(window).width() - 1330)/4);
-    if ( w > 0)
+	var w = Math.round(($(window).width() - 1330)/2);
+    if ( w >= 0)
     {
     	$( "div.fix_banner_left" ).css( "left", w+"px" );
     	$( "div.fix_banner_right" ).css( "right", w+"px" );
