@@ -1,6 +1,14 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.21 (No release)
+- Add data-show for javascript
+- Fix module comment
+- Update block global.slimmenu for default menu
+- Update getbootstrap v3.3.5
+- Remove module Download
+- fix Redirect link
+
 NUKEVIET 4.0.20 (No release)
 - Add class Browser-Detect
 - remove function: nv_check_bot, nv_getBrowser, nv_getOs
