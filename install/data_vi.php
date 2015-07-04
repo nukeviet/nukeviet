@@ -394,8 +394,8 @@ if( $result->fetchColumn() )
 
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (1, 'Báo Hà Nội Mới', 'http://hanoimoi.com.vn', '', 1, 1274989177, 1274989177)" );
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (2, 'VINADES.,JSC', 'http://vinades.vn', '', 2, 1274989787, 1274989787)" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (3, 'NukeViet', 'http://nukeviet.vn', '', 2, 1274989787, 1274989787)" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (4, 'Báo điện tử Dân Trí', 'http://dantri.com.vn', '', 3, 1322685396, 1322685396)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (3, 'NukeViet', 'http://nukeviet.vn', '', 3, 1274989787, 1274989787)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (4, 'Báo điện tử Dân Trí', 'http://dantri.com.vn', '', 4, 1322685396, 1322685396)" );
 
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_topics VALUES (1, 'NukeViet 3', 'NukeViet-3', '', 'NukeViet 3', 1, 'NukeViet 3', 1274990212, 1274990212)" );
 
