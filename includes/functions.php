@@ -1604,8 +1604,8 @@ function nv_change_buffer( $buffer )
     if ( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
     {
         $opt_css_file = ( empty( $global_config['cdn_url'] ) ) ? true : false;
-        $optimezer = new optimezer( $buffer, $opt_css_file );
-        $buffer = $optimezer->process();
+        $optimizer = new optimizer( $buffer, $opt_css_file );
+        $buffer = $optimizer->process();
     }
 
     if ( ! empty( $global_config['cdn_url'] ) )
