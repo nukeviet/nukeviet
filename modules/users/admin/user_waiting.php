@@ -100,21 +100,25 @@ $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_D
 $methods = array(
 	'userid' => array(
 		'key' => 'userid',
+		'sql' => 'userid',
 		'value' => $lang_module['search_id'],
 		'selected' => ''
 	),
 	'username' => array(
 		'key' => 'username',
+		'sql' => 'username',
 		'value' => $lang_module['search_account'],
 		'selected' => ''
 	),
-	'first_name' => array(
-		'key' => 'first_name',
+	'fullname' => array(
+		'key' => 'fullname',
+		'sql' => $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)",
 		'value' => $lang_module['search_name'],
 		'selected' => ''
 	),
 	'email' => array(
 		'key' => 'email',
+		'sql' => 'email',
 		'value' => $lang_module['search_mail'],
 		'selected' => ''
 	)
@@ -137,7 +141,7 @@ if( ! empty( $method ) and isset( $methods[$method] ) and ! empty( $methodvalue 
 	$methods[$method]['selected'] = ' selected="selected"';
 	$table_caption = $lang_module['search_page_title'];
 
-	$db->where( $method . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'" );
+	$db->where( $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'" );
 }
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
