@@ -8,7 +8,7 @@
  * @Createdate 27/11/2010, 22:45
  */
 
-class optimezer
+class optimizer
 {
 	private $_content;
 	private $_conditon = array();
@@ -60,7 +60,7 @@ class optimezer
 	);
 
 	/**
-	 * optimezer::__construct()
+	 * optimizer::__construct()
 	 *
 	 * @param mixed $content
 	 * @return
@@ -102,7 +102,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::process()
+	 * optimizer::process()
 	 *
 	 * @return
 	 */
@@ -352,7 +352,7 @@ class optimezer
     }
 
 	/**
-	 * optimezer::tidy5()
+	 * optimizer::tidy5()
 	 *
 	 * @param mixed $string
 	 * @return
@@ -392,7 +392,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::conditionCallback()
+	 * optimizer::conditionCallback()
 	 *
 	 * @param mixed $matches
 	 * @return
@@ -405,7 +405,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::jsCallback()
+	 * optimizer::jsCallback()
 	 *
 	 * @param mixed $matches
 	 * @return
@@ -418,7 +418,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::newCssLink()
+	 * optimizer::newCssLink()
 	 *
 	 * @return
 	 */
@@ -447,7 +447,7 @@ class optimezer
 	}
 
 	/**
-     * optimezer::_minifyJsInline()
+     * optimizer::_minifyJsInline()
      *
      * @param mixed $js
      * @return
@@ -493,7 +493,7 @@ class optimezer
     }
 
     /**
-     * optimezer::minifyJsInline()
+     * optimizer::minifyJsInline()
      *
      * @param mixed $jsInline
      * @return
@@ -505,7 +505,7 @@ class optimezer
     }
 
 	/**
-	 * optimezer::getCssContent()
+	 * optimizer::getCssContent()
 	 *
 	 * @param mixed $link
 	 * @return
@@ -519,7 +519,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::changeCssURL()
+	 * optimizer::changeCssURL()
 	 *
 	 * @param mixed $matches
 	 * @return
@@ -542,7 +542,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::minifyCss()
+	 * optimizer::minifyCss()
 	 *
 	 * @param mixed $cssContent
 	 * @return
@@ -590,7 +590,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::commentCB()
+	 * optimizer::commentCB()
 	 *
 	 * @param mixed $m
 	 * @return
@@ -627,7 +627,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::selectorsCB()
+	 * optimizer::selectorsCB()
 	 *
 	 * @param mixed $m
 	 * @return
@@ -638,7 +638,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::fontFamilyCB()
+	 * optimizer::fontFamilyCB()
 	 *
 	 * @param mixed $m
 	 * @return
@@ -650,7 +650,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::checkImg()
+	 * optimizer::checkImg()
 	 *
 	 * @param mixed $m
 	 * @return
@@ -665,7 +665,7 @@ class optimezer
     }
 
     /**
-     * optimezer::removeQuotes()
+     * optimizer::removeQuotes()
      *
      * @param mixed $content
      * @return
@@ -676,7 +676,7 @@ class optimezer
     }
 
 	/**
-	 * optimezer::minifyHTML()
+	 * optimizer::minifyHTML()
 	 *
 	 * @param mixed $content
 	 * @return
@@ -703,7 +703,7 @@ class optimezer
     }
 
 	/**
-	 * optimezer::HTMLCommentCB()
+	 * optimizer::HTMLCommentCB()
 	 *
 	 * @param mixed $m
 	 * @return
@@ -714,7 +714,7 @@ class optimezer
 	}
 
 	/**
-	 * optimezer::HTMLoutsideTagCB()
+	 * optimizer::HTMLoutsideTagCB()
 	 *
 	 * @param mixed $m
 	 * @return
