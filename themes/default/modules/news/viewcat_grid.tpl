@@ -35,7 +35,7 @@
 				</ul>
 			</div>
 			<p class="text-justify">
-				{CONTENT.hometext}
+				{HOMETEXT}
 			</p>
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
@@ -52,7 +52,7 @@
 	<div class="thumbnail">
 		<a title="{CONTENT.title}" href="{CONTENT.link}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail"/></a>
 		<div class="caption text-center">
-			<h4><a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip" title="{CONTENT.title}">{CONTENT.title}</a></h4>
+			<h4><a class="show" href="{CONTENT.link}" data-content="{HOMETEXT}" data-img="{CONTENT.imghome}" data-rel="tooltip" title="{CONTENT.title}">{CONTENT.title}</a></h4>
 			<span>{ADMINLINK}</span>
 		</div>
 	</div>
