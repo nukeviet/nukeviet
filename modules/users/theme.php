@@ -581,7 +581,7 @@ function user_changequestion( $array_data )
 
 	if( $array_data['step'] == 2 )
 	{
-		$xtpl->assign( 'FORM2_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo&amp;changequestion=1' );
+		$xtpl->assign( 'FORM2_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=changequestion' );
 		foreach( $array_data['questions'] as $key => $question )
 		{
 			$xtpl->assign( 'QUESTIONVALUE', $key );
@@ -592,7 +592,7 @@ function user_changequestion( $array_data )
 	}
 	else
 	{
-		$xtpl->assign( 'FORM1_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo&amp;changequestion=1' );
+		$xtpl->assign( 'FORM1_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=changequestion' );
 		$xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
 		$xtpl->parse( 'main.step1' );
 	}

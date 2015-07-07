@@ -34,7 +34,7 @@ function cron_siteDiagnostic_update()
 		$updtime = @filemtime( $cacheFile );
 	}
 
-	$currentMonth = mktime( 0, 0, 0, date( "m", NV_CURRENTTIME ), 1, date( "Y", NV_CURRENTTIME ) );
+	$currentMonth = mktime( 0, 0, 0, date( 'm', NV_CURRENTTIME ), 1, date( 'Y', NV_CURRENTTIME ) );
 
 	if( $updtime < $currentMonth )
 	{

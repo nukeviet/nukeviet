@@ -8,17 +8,6 @@
  * @Createdate 23/12/2010, 9:36
  */
 
-
-if( ! isset( $getContent ) or ! is_object( $getContent ) )
-{
-	if( ! isset( $global_config ) or empty( $global_config ) )
-	{
-		$global_config = array( 'version' => '4.0.20', 'sitekey' => mt_rand() );
-	}
-
-	$getContent = new UrlGetContents( $global_config );
-}
-
 class Diagnostic
 {
 	private $googleDomains = array( 'toolbarqueries.google.com' );
@@ -35,6 +24,7 @@ class Diagnostic
 	public $currentCache;
 	private $max = 1000;
 	private $disable_functions = array();
+	private $getContent;
 
 	/**
 	 * Diagnostic::__construct()
@@ -59,7 +49,8 @@ class Diagnostic
 
 		$this->disable_functions = $disable_functions;
 		$this->myDomain = NV_SERVER_NAME;
-		// $this->myDomain = 'nukeviet.vn';
+		$_config = array( 'version' => '4.0.21', 'sitekey' => mt_rand() );
+		$this->getContent = new UrlGetContents( $_config );
 	}
 
 	/**
@@ -159,8 +150,6 @@ class Diagnostic
 	 */
 	public function getPageRank()
 	{
-		global $getContent;
-
 		if( extension_loaded( 'curl' ) and ( empty( $this->disable_functions ) or ( ! empty( $this->disable_functions ) and ! preg_grep( '/^curl\_/', $this->disable_functions ) ) ) )
 		{
 			$ch = $this->checkHash( $this->hashURL( $this->currentDomain ) );
@@ -198,10 +187,8 @@ class Diagnostic
 	 */
 	public function getAlexaRank()
 	{
-		global $getContent;
-
 		$url = sprintf( $this->pattern['AlexaRank'], urlencode( $this->currentDomain ) );
-		$content = $getContent->get( $url );
+		$content = $this->getContent->get( $url );
 		$xmldata = simplexml_load_string( $content );
 
 		$result = array( 0, 0, 0 );
@@ -228,10 +215,8 @@ class Diagnostic
 	 */
 	public function getGoogleBackLink()
 	{
-		global $getContent;
-
 		$url = sprintf( $this->pattern['GoogleBackLink'], urlencode( ':' . $this->currentDomain ) );
-		$content = $getContent->get( $url );
+		$content = $this->getContent->get( $url );
 
 		if( preg_match( '/\<div(.*?)\>About ([0-9\,]+) results(.*?)<\/div\>/isU', $content, $match ) )
 		{
@@ -251,10 +236,8 @@ class Diagnostic
 	 */
 	public function getGoogleIndexed()
 	{
-		global $getContent;
-
 		$url = sprintf( $this->pattern['GoogleIndexed'], urlencode( ':' . $this->currentDomain ) );
-		$content = $getContent->get( $url );
+		$content = $this->getContent->get( $url );
 
 		if( preg_match( '/\<div(.*?)\>About ([0-9\,]+) results(.*?)\<\/div\>/isU', $content, $match ) )
 		{
@@ -274,10 +257,8 @@ class Diagnostic
 	 */
 	public function getBingBackLink()
 	{
-		global $getContent;
-
 		$url = sprintf( $this->pattern['BingBackLink'], urlencode( ':' . $this->currentDomain ) );
-		$content = $getContent->get( $url );
+		$content = $this->getContent->get( $url );
 
 		if( preg_match( "/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match ) )
 		{
@@ -297,10 +278,8 @@ class Diagnostic
 	 */
 	public function getBingIndexed()
 	{
-		global $getContent;
-
 		$url = sprintf( $this->pattern['BingIndexed'], urlencode( ':' . $this->currentDomain ) );
-		$content = $getContent->get( $url );
+		$content = $this->getContent->get( $url );
 
 		if( preg_match( "/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match ) )
 		{

@@ -14,7 +14,7 @@
 			<a href="{URL_HREF}changepass">{LANG.changepass_title}</a>
 		</li>
 		<li class="active">
-			<a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a>
+			<a href="{URL_HREF}changequestion">{LANG.question2}</a>
 		</li>
 		<!-- BEGIN: allowopenid -->
 		<li>
