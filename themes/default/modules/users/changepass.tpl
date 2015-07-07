@@ -7,7 +7,7 @@
     	<li><a href="{URL_MODULE}">{LANG.user_info}</a></li>
     	<li><a href="{URL_HREF}editinfo">{LANG.editinfo}</a></li>
     	<li class="active"><a href="{URL_HREF}changepass">{LANG.changepass_title}</a></li>
-    	<li><a href="{URL_HREF}editinfo&amp;changequestion">{LANG.question2}</a></li>
+    	<li><a href="{URL_HREF}changequestion">{LANG.question2}</a></li>
     	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
     	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
     	<!-- BEGIN: logout --><li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li><!-- END: logout -->

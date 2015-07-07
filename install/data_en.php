@@ -85,6 +85,7 @@ $sth->execute( array(59, 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '') );
 $sth->execute( array(60, 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, '') );
 $sth->execute( array(61, 'rss', 'rss', 'Rss', 'page', 0, 0, 0, '') );
 $sth->execute( array(62, 'rss', 'rss', 'Rss', 'about', 0, 0, 0, '') );
+$sth->execute( array(63, 'changequestion', 'changequestion', 'Change Question', 'users', 1, 1, 14, '') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
@@ -125,6 +126,7 @@ $sth->execute( array(52, 'left-body-right', 'default') );
 $sth->execute( array(53, 'body', 'default') );
 $sth->execute( array(35, 'left-body-right', 'default') );
 $sth->execute( array(50, 'left-body-right', 'default') );
+$sth->execute( array(63, 'left-body-right', 'default') );
 
 $sth->execute( array(0, 'body', 'mobile_default') );
 $sth->execute( array(2, 'body', 'mobile_default') );
@@ -161,6 +163,7 @@ $sth->execute( array(47, 'body', 'mobile_default') );
 $sth->execute( array(48, 'body', 'mobile_default') );
 $sth->execute( array(35, 'body', 'mobile_default') );
 $sth->execute( array(50, 'body', 'mobile_default') );
+$sth->execute( array(63, 'body', 'mobile_default') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
