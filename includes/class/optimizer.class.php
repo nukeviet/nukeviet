@@ -454,32 +454,273 @@ class optimizer
      */
     private function _minifyJsInline( $js )
     {
-        $js = str_replace( array( "//<![CDATA[", "//]]>" ), "", $js ); // remove CDATA
+        //http://stackoverflow.com/questions/19509863/how-to-remove-js-comments-using-php
+        $js = preg_replace( "/(\/\*\*\/)(\/\/(?!([^\n\r]*?\*\/)).*)/", "$1", $js );
+        $js = preg_replace( "/\\\\n/", "VQerT", $js );
+        $js = preg_replace( "/\\\\r/", "ZQerT", $js );
+        do
+        {
+            $js = preg_replace( "/(http(s)?\:)([^\r\n]*?)(\/\/)/", "$1$3qDdXX", $js, 1, $count );
+        } while ( $count );
+        // Remove all extra new lines after [ and \
+        $js = preg_replace( "/(\*|[\r\n]|\'|\"|\,|\+|\{|;|\(|\)|\[|\]|\{|\}|\?|[^p|s]:|\&|\%|([^\\\\])[a-m-o-u-s-zA-Z]|\||-|=|[0-9])(\s*)(?!([^=\\\\\&\/\"\'\^\*:]))(\/)(\/)+(?!([\r\n\*\+\"]*?([^\r\n]*?\*\/|[^\r\n]*?\"\s*\+|([^\r\n]*?=\";))))([^\n\r]*)([^;\"\'\{\(\}\,]\s*[\\\\\[])(?=([\r\n]+))/", "$1$2$3", $js );
+        // slash star followed by all except */ and star slash */ remove add start document!
+        $js = preg_replace( "/(^^\/\*)[\s\S]*?(\*\/)/", "\n \n", $js );
+        // /* followed by (not new line but) ... */ ... /* ... till */
+        $js = preg_replace( "/((([\r\n]\s*)(\/\*[^\r\n]*?\*\/(?!([^\n\r]*?\"\s*\+)))([^\n\r]*?\/\*[^\n\r]*?\*\/(?!([^\n\r]*?\"\s*\+))[^\n\r]*?\/\*[^\n\r]*?\*\/(?!([^\n\r]*?\"\s*\+)))+)+(?!([\*]))(?=([^\n\r\/]*?\/\/\/)))/", "$3", $js );
+        // slash slash remove start document! folowed by all exept new line!
+        $js = preg_replace( "/(^^\/)+(\/)[^\r\n]*?[\r\n]/", "\n ", $js );
+        // (slash slash) remove everything behinde it not if its followed by */ and /n/r or " + and /n/r
+        $js = preg_replace( "/([\r\n]+?\s*)((\/)(\/)+)(?!([^\r\n]*?)([\\\\]|\*\/|[=]+\s*\";|[=]+\s*\';)).*/", "$1\n ", $js );
+        // slash slash star between collons protect like: ' //* ' by TDdXX
+        $js = preg_replace( "/(\'\s*)(\/\/\*)([^\r\n\*]*?(?!(\*\/))(\'))/", "$1TDdXX$3", $js );
+        // slash slash star between collons protect like: ' //* ' by TDdXX
+        $js = preg_replace( "/(\"\s*)(\/\/\*)([^\r\n\*]*?(?!(\*\/))(\"))/", "$1TDdXX$3", $js );
+        // in regex star slash protect by: ODdPK
+        $js = preg_replace( "/(\,\s*)(\*\/\*)(\s*[\}\"\'\;\)])/", "$1RDdPK$3", $js ); // , */* '
+        $js = preg_replace( '/(\n|\r|\+|\&|\=|\|\||\(|[^\)]\:[^\=\,\/\$\\\\\<]|\(|return(?!(\/[a-zA-Z]+))|\!|\,)(?!(\s*\/\/|\n))(\s*\/)([^\]\)\}\*\;\)\,gi\.]\s*)([^\/\n]*?)(\*\/)/', '$1$4$5$6ODdPK', $js );
+        // (slash r) (slash n) protect if followed by " + and new line
+        $js = preg_replace( "/[\/][\/]+([\\\\r]+[\\\\n]+[\"]\s*[\+])/", "*/WQerT", $js );
+        // Html Text protection!
+        $js = preg_replace( "/([\r\n]\s*\/\/)[^\r\n]*?\/\*(?=(\/))[^\r\n]*?([\r\n])/", "$1 */$3", $js );
+        $js = preg_replace( "/([\)]|[^\/|\\\\|\"])(\/\*)(?=([^\r\n]*?[\\\\][rn]([\\\\][nr])?\s*\"\s*\+\s*(\n|\r)?\s*\"))/", "$1pDdYX", $js );
+        $js = preg_replace( '/([\"]\s*[\,\+][\r\n]\s*[\"])(\s*\/\/)((\/\/)|(\/))*/', '$1qDdXX', $js );
+        $js = preg_replace( '/([\"]\s*[\,\+][\r\n]\s*[\"](qDdXX))[\\\\]*(\s*\/\/)*((\/\/)|(\/))*/', '$1', $js );
+        // started by new line slash slash remove all not followed by */ and new line!
+        $js = preg_replace( "/([\r\n]\s*)(?=([^\r\n\*\,\:\;a-zA-Z\"]*?))(\/)+(\/)[^\r\n\/][^\r\n\*\,]*?[\*]+(?!([^\r\n]*?(([^\r\n]*?\/|\"\s*\)\s*\;|\"\s*\;|\"\s*\,|\'\s*\)\s*\;|\'\s*\;|\'\s*\,))))[^\r\n]*(?!([\/\r\n]))[^\r\n]*/", "$1", $js );
+        // removes all *.../ achter // leaves the ( // /* staan en */ ) 1 off 2
+        $js = preg_replace( "/([\r\n](\/)*[^:\;\,\.\+])(\/\/[^\r\n]*?)(\*)?([^\r\n]+?)(\*)+([^\r\n\*\/])+?(\/[^\*])(?!([^\r\n]*?((\"\s*\)\s*\;|\"\s*\;|\"\s*\,|\'\s*\)\s*\;|\'\s*\;|\'\s*\,))))/", "$1$3$7$8", $js );
+        // removes all /* after // leaves the ( // */ staan ) 2 off 2
+        do
+        {
+            $js = preg_replace( "/([\r\n])((\/)*[^:\;\,\.\+])(\/\/[^\r\n]*?)(\*)?([^\r\n]+?)(\/|\*)([^\r\n]*?)(\*)[\r\n]/", "$1", $js, 1, $count );
+        } while ( $count );
+        // removes all (/* and */) combinations after // and everything behinde it! but leaves  ///* */ or example. ///*//*/ one times.
+        $js = preg_replace( "/(((([\r\n](?=([^:;,\.\+])))(\/)+(\/))(\*))([^\r\n]*?)(\/\*)*([^\r\n])*?(\*\/)(?!([^\r\n]*?((\"\s*\)\s*\;|\"\s*\;|\"\s*\,|\'\s*\)\s*\;|\'\s*\;|\'\s*\,))))(((?=([^:\;\,\.\+])))(\/)*([^\r\n]*?)(\*|\/)?([^\r\n]*?)(\/\*)([^\r\n])*?(\*\/)(?!([^\r\n]*?((\"\s*\)\s*\;|\"\s*\;|\"\s*\,|\'\s*\)\s*\;|\'\s*\;|\'\s*\,)))))*)+[^\r\n]*/", "$2$7$9$10$11$12", $js );
+        // removes /* ... followed by */ repeat even pairs till new line!
+        $js = preg_replace( "/(\/\*[\r\n]\s*)(?!([^\/<>;:%~`#@&-_=,\.\$\^\{\[\(\|\)\*\+\?\'\"\a-zA-Z0-9]))(((\/\*)[^\r\n]*?(\*\/)?[^\r\n]*?(\/\*)[^\r\n]*?(\*\/))*((\/\*)[^\r\n]*?(\*\/)))+(?!([^\r\n]*?(\*\/|\/\*)))[^\r\n]*?[\r\n]/", "\n ", $js );
+        // (Mark) Regex Find all "  Mark with = AwTc  and  CwRc // special cahacers are:  . \ + * ? ^ $ [ ] ( ) { } < > = ! | : " '
+        $js = preg_replace( "/(?!([\r\n]))(\+|\?|&|\=|\|\||\(|\!|,|return(?!(\/[a-zA-Z]+))|[^\)]\:)(?!(\s*\/\/|\n|\/\*[^\r\n\*]*?\*\/))(\s*\/([\^]?))(?!([\r\n\*\/]|[\*]))(?!(\<\!\-\-))(([^\]\)\}\*;,g&\.\"\']?\s*)(?=([\]\)\}\*;,g&\.\/\"\']))?)((.*)(([\w\W])([\*]?\/\s*)(?=(\]))|([\w\W])([\*]?\/\s*)(?=(\}))|([^\\\\])([\*]?\/\s*)(?=(\)))|([\w\W])([\*]?\/\s*)(?=([i][g]?[\W]))|([\w\W])([\*]?\/\s*)(?=([g][i]?[\W]))|([\w\W])([\*]?\/\s*)(?=(\,))|([^\\\\]|[\/])([\*]?\/\s*)(?=(;))|([\w\W])([\*]?\/\:\s)(?!([@\[\)\(\}\{\.,#%\+-\=`~\*&\^;\:\'\"]))|([^\\\\])([\*]?\/\s*)(?=(\.[^\/]))|([^\\\\])([\*]?\/\s*)(?=([\r\n]\s*[;\.,\)\}\]]\s*[^\/]|[\r\n]\s*([i][g]?[\W])|[\r\n]\s*([g][i]?[\W]))))|([^\\\\])([\*]?\/\s*)(?=([;\.,\)\}\]]\s*[^\/]|([i][g]?[\W])|([g][i]?[\W]))))/", "$2$3$5AwTc$7$8$10$13$15$18$21$24$27$30$33$36$39$42$47CwRc$16$19$22$25$28$31$34$37$40$43$48", $js );
+        // Remove all extra new lines after [ and \
+        $js = preg_replace( "/([^;\"\'\{\(\}\,]\s*[\\\\\[]\s?)\s*([\r\n]+)/", "$1", $js );
+        $js = preg_replace( "/([\|\[])\s*(\]\|)/", "$1$2", $js );
+        // (star slash) or (slash star) 1 sentence! Protect! With pDdYX and ODdPK
+        do
+        {
+            $js = preg_replace( '/(AwTc)([^\r\n]*?)(\/)(\*)(?=([^\r\n]*?CwRc))/', '$1$2pDdYX', $js, 1, $count );
+        } while ( $count );
+        do
+        {
+            $js = preg_replace( '/(AwTc)([^\r\n]*?)(\*)(\/)(?=([^\r\n]*?CwRc))/', '$1$2ODdPK', $js, 1, $count );
+        } while ( $count );
+        // (slash slash) 1 sentence! Protect with: qDdXX
+        do
+        {
+            $js = preg_replace( '/(AwTc)([^\r\n]*?)(\/)(\/)(?=([^\r\n]*?CwRc))/', '$1$2qDdXX', $js, 1, $count );
+        } while ( $count );
+
+        // (Mark) Regex Find all "  Mark With :  YuKt  and   ZuKd
+        $js = preg_replace( "/((join|split|match|replace|RegExp|return|regex)\s*)(\(\s*(\")?)(([^\r\n]*?)((\")?\s*\))(?!(\"\)|\[|\")|\())/", "$1$3YuKt$6ZuKd$7", $js );
+        // (star slash) or (slash star) 1 sentence! Protect! With pDdYX and ODdPK
+        do
+        {
+            $js = preg_replace( '/((\")?YuKt)([^\r\n]*?)(\/)(\*)(?=([^\r\n]*?ZuKd))/', '$1$3pDdYX', $js, 1, $count );
+        } while ( $count );
+        do
+        {
+            $js = preg_replace( '/((\")?YuKt)([^\r\n]*?)(\*)(\/)(?=([^\r\n]*?ZuKd))/', '$1$3ODdPK', $js, 1, $count );
+        } while ( $count );
+        // (slash slash) 1 sentence! Protect with: qDdXX
+        do
+        {
+            $js = preg_replace( '/((\")?YuKt)([^\r\n]*?)(\/)(\/)(?=([^\r\n]*?ZuKd))/', '$1$3qDdXX', $js, 1, $count );
+        } while ( $count );
+        // (slash slash) 2 sentences! Protect ' and "
+        do
+        {
+            $js = preg_replace( "/(=|\+|\(|[a-z]|\,)(\s*)(\")([^\r\n\;\/\'\)\,\]\}\*]*?)(\/)(\/)([^\r\n\;\"\*]*?)(\")/", "$1$2$3$4qDdXX$7$8", $js, 1, $count );
+        } while ( $count );
+
+        do
+        {
+            $js = preg_replace( "/(=|\+|\(|[a-z]|\,)(\s*)(\')([^\r\n\;\/\'\)\,\]\}\*]*?)(\/)(\/)([^\r\n\*\;\']*?)(\')/", "$1$2$3$4qDdXX$7$8", $js, 1, $count );
+        } while ( $count );
+        // (slash slash) 2 sentences! Protect ' and "
+        do
+        {
+            $js = preg_replace( "/(\"[^\r\n\;]*?)(\/)(\/)([^\r\n\"\;]*?([\"]\s*(\;|\)|\,)))/", "$1qDdXX$4", $js, 1, $count );
+        } while ( $count );
+        do
+        {
+            $js = preg_replace( "/(\'[^\r\n\;]*?)(\/)(\/)([^\r\n\'\;]*?([\']\s*(\;|\)|\,)))/", "$1qDdXX$4", $js, 1, $count );
+        } while ( $count );
+        // Remove all slar slash achter \n
+        $js = preg_replace( "/([\n\r])([^\n\r\*\,\"\']*?)(?=([^\*\,\:\;a-zA-Z\"]*?))(\/)(\/)+(?=([^\n\r]*?\*\/))([^\n\r]*?(\*\/)).*/", "$1$4$5 $8", $js );
+        do
+        {
+            $js = preg_replace( "/([\r\n]\s*)((\/\*(?!(\*\/)))([^\r\n]+?)(\*\/))(?!([^\n\r\/]*?(\/)(\/)+\*))/", "$1$3$6", $js, 1, $count );
+        } while ( $count );
+        $js = preg_replace( "/([\n\r]\/)(\/)+([^\n\r]*?)(\*\/)([^\n\r]*?(\*\/))(?!([^\n\r]*?(\*\/)|[^\n\r]*?(\/\*))).*/", "$1/ $4", $js );
+        do
+        {
+            $js = preg_replace( "/([\n\r]\s*\/\*\*\/)([^\n\r=]*?\/\*[^\n\r]*?\*\/)(?=([\n\r]|\/\/))/", "$1", $js, 1, $count );
+        } while ( $count );
+        $js = preg_replace( "/([\n\r]\s*\/\*\*\/)([^\n\r=]*?)(\/\/.*)/", "$1$2", $js );
+        // Remove all slash slash achter = '...'; //......
+        do
+        {
+            $js = preg_replace( "/(\=\s*)(?=([^\r\n\'\"]*?\'[^\n\r\']*?\'))([^\n\r;]*?[;]\s*)(\/\/[^\r\n][^\r\n]*)[\n\r]/", "$1$3", $js, 1, $count );
+        } while ( $count );
+        // protect slash slash '...abc//...abc'!
+        do
+        {
+            $js = preg_replace( "/(\=)(\s*\')([^\r\n\'\"]*?)(\/)(\/)([^\r\n]*?[\'])/", "$1$2$3qDdXX$6", $js, 1, $count );
+        } while ( $count );
+        //(slash star) or (star slash) : no dubble senteces here! Protect with: pDdYX and ODdPK
+        do
+        {
+            $js = preg_replace( "/(\"[^\r\n\;\,\"]*?)(\/)(\*)([^\r\n;\,\"]*?)(\")/", "$1pDdYX$4$5", $js, 1, $count );
+        } while ( $count ); // open
+        do
+        {
+            $js = preg_replace( "/([^\"]\"[^\r\n\;\/\,\"]*?)(\s*)(\*)(\/)([^\r\n;\,\"=]*?)(\")/", "$1$2ODdPK$5$6", $js, 1, $count );
+        } while ( $count ); // close
+        do
+        {
+            $js = preg_replace( "/(\'[^\r\n\;\,\']*?)(\/)(\*)([^\r\n;\,\']*?)(\')/", "$1pDdYX$4$5", $js, 1, $count );
+        } while ( $count ); // open
+        do
+        {
+            $js = preg_replace( "/(\'[^\r\n\;\/\,\']*?)(\s*)(\*)(\/)([^\r\n;\,\']*?)(\')/", "$1$2ODdPK$5$6", $js, 1, $count );
+        } while ( $count ); // close
+        // protect star slash '...abc*/...abc'!
+        do
+        {
+            $js = preg_replace( "/(\'[^\r\n\;\,\']*?)(\*)(\/)([^\r\n;\,\']*?)(\')(?!([^\n\r\+]*?[\']))/", "$1ODdPK$4$5", $js, 1, $count );
+        } while ( $count );
+        // protect star slash '...abc*/...abc'!
+        do
+        {
+            $js = preg_replace( "/(\"[^\r\n\;\,\"]*?)(\*)(\/)([^\r\n;\,\"]*?)(\")(?!([^\n\r\+]*?[\"]))/", "$1ODdPK$4$5", $js, 1, $count );
+        } while ( $count );
+        // \n protect
+
+        do
+        {
+            $js = preg_replace( "/(=\s*\"[^\n\r\"]*?)(\/\/)(?=([^\n\r]*?\"\s*;))/", "$1qDdXX", $js, 1, $count );
+        } while ( $count );
+        do
+        {
+            $js = preg_replace( "/(=\s*\"[^\n\r\"]*?)(\/\*)(?=([^\n\r]*?\"\s*;))/", "$1pDdYX", $js, 1, $count );
+        } while ( $count );
+        do
+        {
+            $js = preg_replace( "/(=\s*\"[^\n\r\"]*?)(\*\/)(?=([^\n\r]*?\"\s*;))/", "$1ODdPK", $js, 1, $count );
+        } while ( $count );
+        do
+        {
+            $js = preg_replace( "/(=\s*\'[^\n\r\']*?)(\/\/)(?=([^\n\r]*?\'\s*;))/", "$1qDdXX", $js, 1, $count );
+        } while ( $count );
+        do
+        {
+            $js = preg_replace( "/(=\s*\'[^\n\r\']*?)(\/\*)(?=([^\n\r]*?\'\s*;))/", "$1pDdYX", $js, 1, $count );
+        } while ( $count );
+        do
+        {
+            $js = preg_replace( "/(=\s*\'[^\n\r\']*?)(\*\/)(?=([^\n\r]*?\'\s*;))/", "$1ODdPK", $js, 1, $count );
+        } while ( $count );
+        // (Slash Slash) alle = " // " and = ' // ' replace by! qDdXX
+        do
+        {
+            $js = preg_replace( "/(\=|\()(\s*\")([^\r\n\'\"]*?[\'][^\r\n\'\"]*?)(\/)(\/)([^\r\n\'\"]*?[\'])(\s*\'[^\r\n\'\"]*?)(\/\/|qDdXX)?([^\r\n\'\"]*?[\'][^\r\n\'\"]*?[\"])(?!(\'\)|\s*[\)]?\s*\+|\'))/", "$1$2$3qDdXX$6$7qDdXX$9$10", $js, 1, $count );
+        } while ( $count );
+        do
+        {
+            $js = preg_replace( "/(\=|\()(\s*\')([^\r\n\'\"]*?[\"][^\r\n\'\"]*?)(\/)(\/)([^\r\n\'\"]*?[\"])(\s*\"[^\r\n\'\"]*?)(\/\/|qDdXX)?([^\r\n\'\"]*?[\"][^\r\n\'\"]*?[\'])(?!(\'\)|\s*[\)]?\s*\+|\'))/", "$1$2$3qDdXX$6$7qDdXX$9$10", $js, 1, $count );
+        } while ( $count );
+        // (slash slash) Remove all also , or + not followed by */ and newline
+        $js = preg_replace( "/(\*|[\r\n]|[^\\\\]\'|[^\\\\]\"|\,|\+|\{|;|\(|\)|\[|\]|\{|\}|\?|[^p|s]:|\&|\%|([^\\\\])[a-m-o-u-s-zA-Z]|\||-|=|[0-9])(\s*)(?!([^=\\\\\&\/\"\'\^\*:]))(\/)(\/)+(?!([\r\n\*\+\"]*?([^\r\n]*?\*\/|[^\r\n]*?\"\s*\+|([^\r\n]*?=\";)))).*/", "$1", $js );
+        // (slash slash star slash) Remove everhing behinde it not followed by */ or new line
+        $js = preg_replace( "/(\/\/\*\/)(?!([\r\n\*\+\"]*?([^\r\n]*?\*\/|[^\r\n]*?\"\s*\+|([^\r\n]*?=\";)))).*/", "", $js );
+        // Remove almost all star comments except colon/**/
+        $js = preg_replace( "/(?!([^\n\r]*?[\'\"]))(\s*<!--.*-->)(?!(<\/div>))[^\n\r]*?(\*\/)?.*/", "$2$4", $js );
+        $js = preg_replace( "/\/\*/", "\n/*dddpp", $js );
+        $js = preg_replace( '/((\{\s*|\(\s*|:\s*)[\"\']\s*)(([^\n\r\{\};\"\']*)dddpp)/', '$1$4', $js );
+        $js = preg_replace( "/\*\//", "xxxpp*/\n", $js );
+        $js = preg_replace( '/([^\"\'](\(\s*|:\s*|\[\s*)[\"\']\s*)(([^\};\"\']*)xxxpp(?=([^\n\r]*?[\"\'])))/', '$1$4', $js );
+        $js = preg_replace( '/([\"\'])\s*\/\*/', '$1/*', $js );
+        $js = preg_replace( '/(\n)[^\'"]?\/\*dddpp.*?xxxpp\*\//s', '', $js );
+        $js = preg_replace( '/\n\/\*dddpp([^\s]*)/', '$1', $js );
+        $js = preg_replace( '/xxxpp\*\/\n([^\s]*)/', '*/$1', $js );
+        $js = preg_replace( '/xxxpp\*\/\n([\"])/', '$1', $js );
+        $js = preg_replace( '/(\*)\n*\s*(\/\*)\s*/', '$1$2', $js );
+        $js = preg_replace( '/(\*\/)\s*(\")/', '$1$2', $js );
+        $js = preg_replace( '/\/\*dddpp(\s*)/', '/*', $js );
+        $js = preg_replace( '/\n\s*\n/', "\n", $js );
+        $js = preg_replace( '/\s+(\*\/)\s*/', "$1\n", $js );
+        $js = preg_replace( "/([\n\r][^\n\r\*\,\"\']*?)(?=([^\*\,\:\;a-zA-Z\"]*?))(\/)(\/)+(?!([\r\n\*\+\"]*?([^\r\n]*?\*\/|[^\r\n]*?\"\s*\+|([^\r\n]*?=\";)))).*/", "$1", $js );
+        $js = preg_replace( "/(?!([^\n\r]*?[\'\"]))(\s*<!--.*-->)(?!(<\/div>))[^\n\r]*?(\*\/)?.*/", "", $js );
+        // Restore all
+        $js = preg_replace( '/TOtX/', '"', $js ); // Restore "
+        $js = preg_replace( "/TOtH/", "'", $js ); // Restore '
+        $js = preg_replace( "/qDdXX/", "//", $js ); // Restore //
+        $js = preg_replace( "/pDdYX/", "/*", $js ); // Restore
+        $js = preg_replace( "/ODdPK/", "*/", $js ); // Restore
+        $js = preg_replace( "/RDdPK/", "*/*", $js ); // Restore
+        $js = preg_replace( "/TDdXX/", "//*", $js ); // Restore */
+        $js = preg_replace( '/\*\/WQerT/', '\\\\r\\\\n" +', $js ); // Restore \r\n" +
+        $js = preg_replace( '/VQerT/', '\\\\n', $js ); // Restore \n"
+        $js = preg_replace( '/ZQerT/', '\\\\r', $js ); // Restore \n"
+        // Remove all markings!
+        $js = preg_replace( '/(AwTc)/', '', $js ); // Start most Regex!
+        $js = preg_replace( '/(CwRc)/', '', $js ); // End Most regex!
+        $js = preg_replace( '/(qDdu)/', '', $js ); // //
+        $js = preg_replace( '/ZXKd/', '', $js ); // End Rexex (join|split|match|replace|RegExp|return|regex)
+        $js = preg_replace( '/(YuKt)/', '', $js ); //   Start Regex (join|split|match|replace|RegExp|return|regex)
+        $js = preg_replace( '/(ZuKd)/', '', $js ); //  End Rexex (join|split|match|replace|RegExp|return|regex)
+        // all \s and [\n\r] repair like they where!
+
+        $js = preg_replace( "/([a-zA-Z0-9]\s?)\s*[\n\r]+(\s*[\)\,&]\s?)(\s*[\r\n]+\s*[\{])/", "$1$2$3", $js );
+        $js = preg_replace( "/([a-zA-Z0-9\(]\s?)\s*[\n\r]+(\s*[;\)\,&\+\-a-zA-Z0-9]\s?)(\s*[\{;a-zA-Z0-9\,&\n\r])/", "$1$2$3", $js );
+        $js = preg_replace( "/(\(\s?)\s*[\n\r]+(\s*function)/", "$1$2", $js );
+        $js = preg_replace( "/(=\s*\[[a-zA-Z0-9]\s?)\s*([\r\n]+)/", "$1", $js );
+        //-----------------------------------------------
+        $js = preg_replace( "/([^\*\/\'\"]\s*)(\/\/\s*\*\/)/", "$1", $js );
+        // Remove all /**/// .... Remove expept /**/ and followed by */ till newline!
+        $js = preg_replace( "/(\/\*\*\/)(\/\/(?!([^\n\r]*?\*\/)).*)/", "$1", $js );
+        $js = preg_replace( "/(\/\/\\\\\*[^\n\r\"\'\/]*?[\n\r])/", "\r\n", $js );
+        $js = preg_replace( "/([\r\n]\s*)(\/\*[^\r\n]*?\*\/(?!([^\r\n]*?\"\s*\+)))/", "$1", $js );
+        //Remove colon /**/
+        $js = preg_replace( "/(\=\s*)(?=([^\r\n\'\"]*?\'[^\n\r\'\"]*?\'))([^\n\r\/]*?)(\/\/[^\r\n\"\'][^\r\n]*[\'\"])(\/\*\*\/)[\n\r]/", "$1$3$4\n", $js );
+        $js = preg_replace( "/(\=\s*)(?=([^\r\n\'\"]*?\"[^\n\r\'\"]*?\"))([^\n\r\/]*?)(\/\/[^\r\n\"\'][^\r\n]*[\'\"])(\/\*\*\/)[\n\r]/", "$1$3$4\n", $js );
+        //Remove colon //
+        $js = preg_replace( "/([^\'\"ps\s]\s*)(\:[^\r\n\'\"\[\]]*?\'[^\n\r\'\"]*?\')([^\n\r\/a-zA-Z0-9]*?)(\/\/)[^\r\n\/\'][^\r\n]*/", "$1$2", $js );
+        $js = preg_replace( "/([^\'\"ps\s]\s*)(\:[^\r\n\'\"\[\]]*?\"[^\n\r\'\"]*?\")([^\n\r\/a-zA-Z0-9]*?)(\/\/)[^\r\n\/\"][^\r\n]*/", "$1$2", $js );
+        //Remove all after ; slah slah+
+        $js = preg_replace( "/([^\n\r;]*?[;]\s*)(\/\/[^\r\n](?!([^\n\r]*?\"\s*;))[^\r\n]*?)[\n\r]/", "$1", $js );
+        $js = preg_replace( '/\s*(\*\/)\s+/', "$1", $js );
+        //END Remove comments.
+        //START Remove all whitespaces
+        $js = preg_replace( '/\s+/', ' ', $js );
+        $js = preg_replace( '/\s*(?:(?=[=\-\+\|%&\*\)\[\]\{\};:\,\.\<\>\!\@\#\^`~]))/', '', $js );
+        $js = preg_replace( '/(?:(?<=[=\-\+\|%&\*\)\[\]\{\};:\,\.\<\>\?\!\@\#\^`~]))\s*/', '', $js );
+        $js = preg_replace( '/([^a-zA-Z0-9\s\-=+\|!@#$%^&*()`~\[\]{};:\'",<.>\/?])\s+([^a-zA-Z0-9\s\-=+\|!@#$%^&*()`~\[\]{};:\'",<.>\/?])/', '$1$2', $js );
+        //END Remove all whitespaces
+
+        //NUKEVIET
         $replace = array(
-            '#\'([^\n\']*?)/\*([^\n\']*)\'#' => "'\1/'+\'\'+'*\2'", // remove comments from ' strings
-            '#\"([^\n\"]*?)/\*([^\n\"]*)\"#' => '"\1/"+\'\'+"*\2"', // remove comments from " strings
-            '#/\*.*?\*/#s' => "", // strip C style comments
-            '#[\r\n]+#' => "\n", // remove blank lines and \r's
-            '#\n([ \t]*//.*?\n)*#s' => "\n", // strip line comments (whole line only)
-            '#([^\\])//([^\'"\n]*)\n#s' => "\\1\n", // strip line comments (that aren't possibly in strings or regex's)
-            '#\n\s+#' => "\n", // strip excess whitespace
-            '#\s+\n#' => "\n", // strip excess whitespace
-            '#(//[^\n]*\n)#s' => "\\1\n", // extra line feed after any comments left (important given later replacements)
-            '#/([\'"])\+\'\'\+([\'"])\*#' => "/*", // restore comments in strings
             '#(?<![\+\-])\s*([\+\-])(?![\+\-])#' => '$1',
             '#(?<![\+\-])([\+\-])\s*(?![\+\-])#' => '$1',
             '#(for\([^;]*;[^;]*;[^;\{]*\));(\}|$)#s' => '$1;;$2',
             '#;+\s*([};])#' => '$1',
             '#;(\}|$)#s' => '$1',
-            '#[\r\n\t ]+#' => ' ',
             '#([^\'"]*)true([^\'"]*)#i' => "$1!0$2",
             '#([^\'"]*)false([^\'"]*)#i' => "$1!1$2",
             '#\s*(\{|\()\s*#' => '$1',
             '#\s*(\}|\))\s*#' => '$1',
             '#(\;|\,)[ ]+#' => '$1',
             '#[ ]+([\=\<\>\!\:\?\|\&]+)#' => '$1',
-            '#([\=\<\>\!\:\?\|\&]+)[ ]+#' => '$1'
-            );
+            '#([\=\<\>\!\:\?\|\&]+)[ ]+#' => '$1' );
 
         $search = array_keys( $replace );
         $js = preg_replace( $search, $replace, $js );
