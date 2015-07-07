@@ -434,7 +434,6 @@ elseif( $step == 5 )
 					try
 					{
 						$db->query( 'CREATE DATABASE ' . $db_config['dbname'] );
-						$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
 						$db->exec( 'USE ' . $db_config['dbname'] );
 
 						$db_config['error'] = '';
@@ -448,18 +447,28 @@ elseif( $step == 5 )
 			}
 		}
 
-		if( $connect )
+		if( $connect AND $db_config['dbtype'] == 'mysql' )
 		{
-			$tables = array();
-
 			try
 			{
-			  $db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
 			}
 			catch( PDOException $e )
 			{
-			  trigger_error( $e->getMessage() );
+				trigger_error( $e->getMessage() );
 			}
+
+			$row = $db->query( 'SELECT @@session.character_set_database AS character_set_database,  @@session.collation_database AS collation_database')->fetch();
+			if( $row['character_set_database'] != 'utf8' or $row['collation_database'] != $db_config['collation'] )
+			{
+				$db_config['error'] = 'Error character set database';
+				$connect = 0;
+			}
+		}
+
+		if( $connect )
+		{
+			$tables = array();
 
 			if( $sys_info['allowed_set_time_limit'] )
 			{
