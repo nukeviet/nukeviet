@@ -1601,20 +1601,9 @@ function nv_change_buffer( $buffer )
 
     if ( ! empty( $body_replace ) ) $buffer = preg_replace( '/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1 );
 
-    if ( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
-    {
-        $opt_css_file = ( empty( $global_config['cdn_url'] ) ) ? true : false;
-        $optimizer = new optimizer( $buffer, $opt_css_file );
-        $buffer = $optimizer->process();
-    }
-
     if ( ! empty( $global_config['cdn_url'] ) )
     {
         $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-    }
-    elseif ( ! $sys_info['supports_rewrite'] )
-    {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . NV_BASE_SITEURL . "CJzip.php?file=\\4&amp;r=" . $global_config['timestamp'] . "\"\\7>", $buffer );
     }
     else
     {

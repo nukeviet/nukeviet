@@ -1,5 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
+NUKEVIET 4.0.22 (No release)
+- Remove code zip file css, javascript.
+- Install: check collation database
 
 NUKEVIET 4.0.21 (NukeViet 4.0 Release Candidate 1)
 - Add data-show for javascript

@@ -108,15 +108,6 @@
 					<td><input type="checkbox" value="1" name="gzip_method" {CHECKED_GZIP_METHOD} /></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.optActive}</strong></td>
-					<td>
-					<select name="optActive" class="form-control w200">
-						<!-- BEGIN: optActive -->
-						<option value="{OPTACTIVE_OP}" {OPTACTIVE_SELECTED}>{OPTACTIVE_TEXT}</option>
-						<!-- END: optActive -->
-					</select></td>
-				</tr>
-				<tr>
 					<td><strong>{LANG.my_domains}</strong></td>
 					<td><input type="text" name="my_domains" value="{MY_DOMAINS}" class="form-control" style="width: 450px"/></td>
 				</tr>
