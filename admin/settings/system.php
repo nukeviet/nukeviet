@@ -109,7 +109,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['ssl_https'] = $nv_Request->get_int( 'ssl_https', 'post' );
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
-		$array_config_global['optActive'] = $nv_Request->get_int( 'optActive', 'post' );
 
 		$array_config_global['notification_active'] = $nv_Request->get_int( 'notification_active', 'post' );
 		$array_config_global['notification_autodel'] = $nv_Request->get_int( 'notification_autodel', 'post', 15 );
@@ -186,13 +185,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 $page_title = $lang_module['global_config'];
 
-$optActive_Modes = array(
-	'0' => $lang_module['optActive_no'],
-	'1' => $lang_module['optActive_all'],
-	'2' => $lang_module['optActive_site'],
-	'3' => $lang_module['optActive_admin']
-);
-
 $xtpl = new XTemplate( 'system.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $global_config );
@@ -254,14 +246,6 @@ if( defined( 'NV_IS_GODADMIN' ) )
 			$xtpl->parse( 'main.system.lang_multi.lang_geo' );
 		}
 		$xtpl->parse( 'main.system.lang_multi' );
-	}
-
-	foreach( $optActive_Modes as $key => $value )
-	{
-		$xtpl->assign( 'OPTACTIVE_OP', $key );
-		$xtpl->assign( 'OPTACTIVE_SELECTED', ( $key == $array_config_global['optActive'] ) ? "selected='selected'" : "" );
-		$xtpl->assign( 'OPTACTIVE_TEXT', $value );
-		$xtpl->parse( 'main.system.optActive' );
 	}
 
 	$xtpl->assign( 'TIMEZONEOP', 'byCountry' );

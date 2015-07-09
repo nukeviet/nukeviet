@@ -20,7 +20,7 @@ if( ! defined( 'NV_IS_MOD_SEARCH' ) ) die( 'Stop!!!' );
  */
 function search_main_theme( $is_search, $search, $array_modul )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $my_head;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name;
 
 	$xtpl = new XTemplate( 'form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );

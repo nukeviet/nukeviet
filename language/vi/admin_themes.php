@@ -134,3 +134,7 @@ $lang_module['autoinstall_theme_overwrite'] = 'Thực hiện';
 
 $lang_module['config'] = 'Thiết lập giao diện';
 $lang_module['config_not_exit'] = 'Giao diện %s không có chức năng cấu hình';
+
+$lang_module['hide_device'] = 'Ẩn trên thiết bị';
+$lang_module['hide_device_1'] = 'Ẩn trên mobile';
+$lang_module['hide_device_2'] = 'Máy tính bảng';

@@ -6,36 +6,12 @@
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/table.css" />
-        <!--[if IE 6]>
-            <script type="text/javascript" src="{BASE_SITEURL}js/fix-png-ie6.js"></script>
-            <script type="text/javascript">
-            DD_belatedPNG.fix('#,img');
-            </script>
-        <![endif]-->
         <script type="text/javascript" src="{BASE_SITEURL}js/global.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/language/{LANG_DATA}.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/language/jquery.validator-{LANG_DATA}.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $('span.language_head').click(function(){
-                    $('ul.language_body').slideToggle('medium');
-                });
-                $('ul.language_body li a').mouseover(function(){
-                    $(this).animate({
-                        fontSize: "12px",
-                        paddingLeft: "10px"
-                    }, 50);
-                });
-                $('ul.language_body li a').mouseout(function(){
-                    $(this).animate({
-                        fontSize: "12px",
-                        paddingLeft: "10px"
-                    }, 50);
-                });
-            });
-        </script>
+        <script type="text/javascript" src="{BASE_SITEURL}install/js/main.js"></script>
     </head>
     <body>
         <div id="header">

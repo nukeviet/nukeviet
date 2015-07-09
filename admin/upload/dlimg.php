@@ -20,7 +20,6 @@ $path_filename = NV_ROOTDIR . '/' . $path . '/' . $image;
 if( ! empty( $image ) && is_file( $path_filename ) && nv_check_allow_upload_dir( $path ) )
 {
 	//Download file
-	require_once NV_ROOTDIR . '/includes/class/download.class.php';
 	$download = new download( $path_filename, NV_ROOTDIR . '/' . $path, $image );
 	$download->download_file();
 	exit();

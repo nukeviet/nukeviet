@@ -52,7 +52,7 @@
 	<div class="thumbnail">
 		<a title="{CONTENT.title}" href="{CONTENT.link}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail"/></a>
 		<div class="caption text-center">
-			<h4><a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip" title="{CONTENT.title}">{CONTENT.title}</a></h4>
+			<h4><a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext_clean}" data-img="{CONTENT.imghome}" data-rel="tooltip" title="{CONTENT.title}">{CONTENT.title}</a></h4>
 			<span>{ADMINLINK}</span>
 		</div>
 	</div>
@@ -66,7 +66,7 @@
 </div>
 <!-- END: generate_page -->
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(window).load(function(){
 	$.each( $('.thumbnail'), function(k,v){
 		var height1 = $($('.thumbnail')[k]).height();
@@ -79,7 +79,7 @@ $(window).load(function(){
 </script>
 
 <!-- BEGIN: tooltip -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(document).ready(function() {
 	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
 	$("[data-rel='tooltip'][data-content!='']").tooltip({

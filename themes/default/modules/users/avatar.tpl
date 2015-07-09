@@ -1,4 +1,6 @@
 <!-- BEGIN: main -->
+<script src="{NV_BASE_SITEURL}js/jquery/jquery.Jcrop.min.js" type="text/javascript"></script>
+<link href="{NV_BASE_SITEURL}js/jquery/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
 <div class="page">
     <div class="users-avupload form-tooltip">
     	<div class="panel-body">
@@ -31,24 +33,24 @@
     	</div>
     </div>
 </div>
-<script type="text/javascript">
-UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
-UAV.config.avatar_width = {NV_AVATAR_WIDTH};
-UAV.config.avatar_height = {NV_AVATAR_HEIGHT};
-UAV.config.max_width = {NV_MAX_WIDTH};
-UAV.config.max_height = {NV_MAX_HEIGHT};
-UAV.lang.bigsize = '{LANG.avata_bigsize}';
-UAV.lang.smallsize = '{LANG.avata_smallsize}';
-UAV.lang.filetype = '{LANG.avata_filetype}';
-UAV.lang.bigfile = '{LANG.avata_bigfile}';
-UAV.lang.upload = '{LANG.avata_upload}';
-$(document).ready(function() {
-	<!-- BEGIN: complete -->
-	$("#avatar", opener.document).val('{FILENAME}');
-	window.close();
-	<!-- END: complete -->
-	<!-- BEGIN: init -->UAV.init();<!-- END: init -->
-	<!-- BEGIN: error -->alert('{ERROR}');<!-- END: error -->
-});
+<script type="text/javascript" data-show="after">
+	UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
+	UAV.config.avatar_width = {NV_AVATAR_WIDTH};
+	UAV.config.avatar_height = {NV_AVATAR_HEIGHT};
+	UAV.config.max_width = {NV_MAX_WIDTH};
+	UAV.config.max_height = {NV_MAX_HEIGHT};
+	UAV.lang.bigsize = '{LANG.avata_bigsize}';
+	UAV.lang.smallsize = '{LANG.avata_smallsize}';
+	UAV.lang.filetype = '{LANG.avata_filetype}';
+	UAV.lang.bigfile = '{LANG.avata_bigfile}';
+	UAV.lang.upload = '{LANG.avata_upload}';
+	$(document).ready(function() {
+		<!-- BEGIN: complete -->
+		$("#avatar", opener.document).val('{FILENAME}');
+		window.close();
+		<!-- END: complete -->
+		<!-- BEGIN: init -->UAV.init();<!-- END: init -->
+		<!-- BEGIN: error -->alert('{ERROR}');<!-- END: error -->
+	});
 </script>
 <!-- END: main -->

@@ -126,7 +126,7 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 			if( isset( $array_menu[$id] ) )
 			{
 				$classcurrent[] = 'dropdown';
-				$submenu = nv_get_bootstrap_submenu( $id, $array_menu, $submenu_active );
+				$submenu = nv_get_bootstrap_submenu( $id, $array_menu, $submenu_active, $block_theme );
 				$xtpl->assign( 'SUB', $submenu );
 				$xtpl->parse( 'main.top_menu.sub' );
 				$xtpl->parse( 'main.top_menu.has_sub' );
@@ -157,36 +157,19 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 			}
 			$xtpl->parse( 'main.top_menu' );
 		}
-		// Active home menu
-		if( ! empty( $home ) )
-		{
-			$xtpl->parse( 'main.home_active' );
-		}
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
 
 	/**
-	 * nv_get_bootstrap_submenu()
-	 *
-	 * @param mixed $id
-	 * @param mixed $array_menu
-	 * @return
-	 *
+	 * @param int $id
+	 * @param array $array_menu
+	 * @param bool $submenu_active
+	 * @param string $block_theme
+	 * @return string
 	 */
-	function nv_get_bootstrap_submenu( $id, $array_menu, &$submenu_active )
+	function nv_get_bootstrap_submenu( $id, $array_menu, &$submenu_active, $block_theme )
 	{
-		global $global_config;
-
-		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/menu/global.bootstrap.tpl' ) )
-		{
-			$block_theme = $global_config['site_theme'];
-		}
-		else
-		{
-			$block_theme = 'default';
-		}
-
 		$xtpl = new XTemplate( 'global.bootstrap.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/menu' );
 
 		if( ! empty( $array_menu[$id] ) )
@@ -200,7 +183,7 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 				$submenu = '';
 				if( isset( $array_menu[$sid] ) )
 				{
-					$submenu = nv_get_bootstrap_submenu( $sid, $array_menu, $submenu_active );
+					$submenu = nv_get_bootstrap_submenu( $sid, $array_menu, $submenu_active, $block_theme );
 					$xtpl->assign( 'SUB', $submenu );
 					$xtpl->parse( 'submenu.loop.item' );
 				}

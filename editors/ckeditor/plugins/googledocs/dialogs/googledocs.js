@@ -1,5 +1,130 @@
-﻿CKEDITOR.dialog.add("googledocs",function(a){return{title:a.lang.googledocs.title,width:400,height:350,onLoad:function(){getDocuments()},contents:[{id:"settingsTab",label:a.lang.googledocs.settingsTab,elements:[{type:"select",id:"documents",className:"googledocs",label:a.lang.googledocs.selectDocument,items:[],"default":"",size:4,onChange:function(){CKEDITOR.dialog.getCurrent().getContentElement("settingsTab","txtUrl").setValue(this.getValue())}},{type:"text",id:"txtUrl",label:a.lang.googledocs.url,
-required:!0,validate:CKEDITOR.dialog.validate.notEmpty(a.lang.googledocs.alertUrl)},{type:"hbox",widths:["60px","330px"],className:"googledocs",children:[{type:"text",width:"45px",id:"txtWidth",label:a.lang.common.width,"default":710,required:!0,validate:CKEDITOR.dialog.validate.integer(a.lang.googledocs.alertWidth)},{type:"text",id:"txtHeight",width:"45px",label:a.lang.common.height,"default":920,required:!0,validate:CKEDITOR.dialog.validate.integer(a.lang.googledocs.alertHeight)}]}]},{id:"uploadTab",
-label:a.lang.googledocs.uploadTab,filebrowser:"uploadButton",elements:[{type:"file",id:"upload"},{type:"fileButton",id:"uploadButton",label:a.lang.googledocs.btnUpload,filebrowser:{action:"QuickUpload",onSelect:function(a){getDocuments(a)}},"for":["uploadTab","upload"]}]}],onOk:function(){var b=a.document.createElement("iframe"),c=encodeURIComponent(this.getValueOf("settingsTab","txtUrl"));b.setAttribute("src","http://docs.google.com/viewer?url="+c+"&embedded=true");b.setAttribute("width",this.getValueOf("settingsTab",
-"txtWidth"));b.setAttribute("height",this.getValueOf("settingsTab","txtHeight"));b.setAttribute("style","border: none;");a.insertElement(b)},onShow:function(){getDocuments()}}});
-var getDocuments=function(a){CKEDITOR.env.ie7Compat&&fixIE7display();$.get(CKEDITOR.currentInstance.config.filebrowserGoogledocsBrowseUrl,function(b){var c=CKEDITOR.dialog.getCurrent().getContentElement("settingsTab","documents");c.clear();$.each(b,function(a,b){c.add(b.name,b.url)});c.setValue(a);console.log(a);a&&c.focus()},"json")};
+CKEDITOR.dialog.add('googledocs', function (editor) {
+
+	function onChangeSrc() {
+		return true;
+	}
+
+	var hasFileBrowser = !!( editor.config.filebrowserImageBrowseUrl || editor.config.filebrowserBrowseUrl ),
+		srcBoxChildren = [
+			{
+	            type: 'text',
+				id: 'txtUrl',
+	            label: editor.lang.googledocs.url,
+	            required: true,
+				onChange: onChangeSrc,
+	            validate: CKEDITOR.dialog.validate.notEmpty( editor.lang.googledocs.alertUrl )
+			}
+		];
+
+	if ( hasFileBrowser ) {
+		srcBoxChildren.push( {
+			type: 'button',
+			id: 'browse',
+			style: 'display:inline-block;margin-top:16px;',
+			align: 'center',
+			label: editor.lang.common.browseServer,
+			hidden: true,
+			filebrowser: 'settingsTab:txtUrl'
+		} );
+	}
+
+  return {
+    title: editor.lang.googledocs.title,
+    width: 400,
+    height: 150,
+
+    contents:
+    [
+      //  document settings tab
+      {
+        id: 'settingsTab',
+        label: editor.lang.googledocs.settingsTab,
+        elements:
+        [
+          //  url
+          {
+			type: 'vbox',
+			padding: 0,
+			children: [
+				{
+					type: 'hbox',
+					widths: [ '100%' ],
+					children: srcBoxChildren
+				}
+			]
+          },
+          //  options
+          {
+            type: 'hbox',
+            widths: [ '60px', '330px' ],
+            className: 'googledocs',
+            children:
+            [
+              //  width
+              {
+                type: 'text',
+                width: '45px',
+                id: 'txtWidth',
+                label: editor.lang.common.width,
+                'default': 710,
+                required: true,
+                validate: CKEDITOR.dialog.validate.integer( editor.lang.googledocs.alertWidth )
+              },
+              //  height
+              {
+                type: 'text',
+                id: 'txtHeight',
+                width: '45px',
+                label: editor.lang.common.height,
+                'default': 920,
+                required: true,
+                validate: CKEDITOR.dialog.validate.integer( editor.lang.googledocs.alertHeight )
+              }
+            ]
+          }
+        ]
+      },
+      //  upload tab
+      {
+        id: 'uploadTab',
+        label: editor.lang.googledocs.uploadTab,
+        filebrowser: 'uploadButton',
+        elements:
+        [
+          //  file input
+          {
+            type: 'file',
+            id: 'upload'
+          },
+          //  submit button
+          {
+            type: 'fileButton',
+            id: 'uploadButton',
+            label: editor.lang.googledocs.btnUpload,
+            filebrowser: {
+              action: 'QuickUpload',
+              target: 'settingsTab:txtUrl'
+            },
+            'for': [ 'uploadTab', 'upload' ]
+          }
+        ]
+      }
+    ],
+    onOk: function() {
+		var dialog = this;
+		var iframe = editor.document.createElement( 'iframe' );
+		var txtUrl = dialog.getValueOf( 'settingsTab', 'txtUrl' );
+		var regexp = /(ftp|http|https):\/\//;
+		if( ! regexp.test( txtUrl ) ) {
+			txtUrl = window.location.protocol + '//' + window.location.host + txtUrl;
+		}
+		var srcEncoded = encodeURIComponent( txtUrl );
+
+		iframe.setAttribute( 'src',     'http://docs.google.com/viewer?url=' + srcEncoded + '&embedded=true' );
+		iframe.setAttribute( 'width',   dialog.getValueOf( 'settingsTab', 'txtWidth' ) );
+		iframe.setAttribute( 'height',  dialog.getValueOf( 'settingsTab', 'txtHeight' ) );
+		iframe.setAttribute( 'style',   'border: none;' );
+		editor.insertElement( iframe );
+    }
+  };
+});

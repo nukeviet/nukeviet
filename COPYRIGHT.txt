@@ -18,4 +18,5 @@ NukeViet includes works under other copyright notices and distributed according 
 	PHPoAuthLib: https://github.com/Lusitanian/PHPoAuthLib
 	PHPMailer: https://github.com/PHPMailer/PHPMailer
 	MUDIM: http://mudim.googlecode.com
+	Browser-Detect: https://github.com/cbschuld/Browser.php
 	... see copyright information at the header of source code file.

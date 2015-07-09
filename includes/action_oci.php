@@ -8,8 +8,7 @@
  * @Createdate Jun 20, 2010 8:59:32 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,voting,feeds,menu,page,comment' );
 
@@ -78,6 +77,7 @@ function nv_create_table_sys( $lang )
 		 position VARCHAR2(55 CHAR)DEFAULT '',
 		 exp_time NUMBER(11,0) DEFAULT 0,
 		 active NUMBER(3,0) DEFAULT 0,
+		 hide_device NUMBER(3,0) DEFAULT 0,
 		 groups_view VARCHAR2(255 CHAR) DEFAULT '',
 		 all_func NUMBER(3,0) DEFAULT 0 NOT NULL ENABLE,
 		 weight NUMBER(11,0) DEFAULT 0 NOT NULL ENABLE,

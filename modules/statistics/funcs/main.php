@@ -183,7 +183,7 @@ $total = 0;
 $countries_list = array();
 while( list( $country, $count, $last_visit ) = $result->fetch( 3 ) )
 {
-	$fullname = isset( $countries[$country] ) ? $countries[$country][1] : $lang_module['unknown'];
+	$fullname = isset( $countries[$country] ) ? $countries[$country][1] : $lang_global['unknown'];
 	$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
 	$countries_list[$country] = array( $fullname, $count, $last_visit );
 
@@ -215,7 +215,7 @@ $browsers_list = array();
 while( list( $browser, $count, $last_visit ) = $result->fetch( 3 ) )
 {
 	$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
-	$browsers_list[ucfirst( $browser )] = array( $count, $last_visit );
+	$browsers_list[$browser] = array( $count, $last_visit );
 
 	$total = $total + $count;
 }
@@ -246,7 +246,7 @@ $os_list = array();
 while( list( $os, $count, $last_visit ) = $result->fetch( 3 ) )
 {
 	$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
-	$os_list[ucfirst( $os )] = array( $count, $last_visit );
+	$os_list[$os] = array( $count, $last_visit );
 
 	$total = $total + $count;
 }

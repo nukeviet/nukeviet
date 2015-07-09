@@ -114,7 +114,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$sth->bindValue( ':config_name', 'upload_auto_alt', PDO::PARAM_STR );
 	$sth->bindValue( ':config_value', $array_config_define['upload_auto_alt'], PDO::PARAM_STR );
 	$sth->execute();
-	
+
 	$array_config_define = array();
 	$array_config_define['nv_max_width'] = $nv_Request->get_int( 'nv_max_width', 'post' );
 	$array_config_define['nv_max_height'] = $nv_Request->get_int( 'nv_max_height', 'post' );
@@ -184,7 +184,7 @@ foreach( $_upload_checking_mode as $m => $n )
 }
 
 $strong = false;
-if( nv_function_exists( 'finfo_open' ) or nv_class_exists( 'finfo' ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) )
+if( nv_function_exists( 'finfo_open' ) or nv_class_exists( 'finfo', false ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) )
 {
 	$strong = true;
 }

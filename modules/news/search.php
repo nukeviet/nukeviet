@@ -14,7 +14,7 @@ $db->sqlreset()
 	->select( 'COUNT(*)' )
 	->from( NV_PREFIXLANG . '_' . $m_values['module_data'] . '_rows r')
 	->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $m_values['module_data'] . '_bodytext c ON (r.id=c.id)' )
-	->where('(' . nv_like_logic( 'r.title', $dbkeywordhtml, $logic ) . ' OR ' . nv_like_logic( 'r.hometext', $dbkeyword, $logic ) . ') OR ' . nv_like_logic( 'c.bodytext', $dbkeyword, $logic ) . '	AND r.status= 1' );
+	->where('(' . nv_like_logic( 'r.title', $dbkeywordhtml, $logic ) . ' OR ' . nv_like_logic( 'r.hometext', $dbkeyword, $logic ) . ' OR ' . nv_like_logic( 'c.bodytext', $dbkeyword, $logic ) . ')	AND r.status= 1' );
 
 $num_items = $db->query( $db->sql() )->fetchColumn();
 

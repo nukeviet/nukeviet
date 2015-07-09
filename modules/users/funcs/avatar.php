@@ -36,35 +36,32 @@ if( isset( $_FILES['image_file'] ) and is_uploaded_file( $_FILES['image_file']['
 	$array['y2'] = $nv_Request->get_int( 'y2', 'post', 0 );
 	$array['w'] = $nv_Request->get_int( 'w', 'post', 0 );
 	$array['h'] = $nv_Request->get_int( 'h', 'post', 0 );
-	
+
 	// Caculate crop size
 	$array['avatar_width'] = intval( $array['x2'] - $array['x1'] );
 	$array['avatar_height'] = intval( $array['y2'] - $array['y1'] );
-	
+
 	if( sizeof( array_filter( array( $array['x1'], $array['y1'], $array['x2'], $array['y2'], $array['w'], $array['h'] ) ) ) < 4 or $array['avatar_width'] < $global_config['avatar_width'] or $array['avatar_height'] < $global_config['avatar_height'] )
 	{
 		$array['error'] = $lang_module['avata_error_data'];
 	}
 	else
 	{
-		require_once ( NV_ROOTDIR . '/includes/class/upload.class.php' );
-		
 		$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
-		
+
 		// Storage in temp dir
 		$upload_info = $upload->save_file( $_FILES['image_file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false );
-	
+
 		// Delete upload tmp
 		@unlink( $_FILES['image_file']['tmp_name'] );
-	
+
 		if( empty( $upload_info['error'] ) )
 		{
 			$basename = $upload_info['basename'];
 			$basename = preg_replace( '/(.*)(\.[a-zA-Z]+)$/', '\1_' . nv_genpass(8) . "_" . $user_info['userid'] . '\2', $basename );
-			
-			require_once ( NV_ROOTDIR . '/includes/class/image.class.php' );
+
 			$image = new image( $upload_info['name'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
-			
+
 			// Resize image, crop image
 			$image->resizeXY( $array['w'], $array['h'] );
 			$image->cropFromLeft( $array['x1'], $array['y1'], $array['avatar_width'], $array['avatar_height'] );
@@ -73,7 +70,7 @@ if( isset( $_FILES['image_file'] ) and is_uploaded_file( $_FILES['image_file']['
 			// Save new image
 			$image->save( NV_ROOTDIR . '/' . NV_TEMP_DIR, $basename );
 			$image->close();
-			
+
 			if( file_exists( $image->create_Image_info['src'] ) )
 			{
 				$array['success'] = true;

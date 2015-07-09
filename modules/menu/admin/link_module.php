@@ -59,33 +59,17 @@ if( !empty( $array_item ) )
 			$xtpl->assign( 'item', $item1 );
 			$xtpl->parse( 'main.link.item' );
 
-			foreach( $array_item as $item2 )
+			$array_submenu = array();
+			nv_menu_get_submenu( $key, '', $array_item, $sp );
+			foreach( $array_submenu as $item2 )
 			{
-				if( isset( $item2['parentid'] ) and $item2['parentid'] == $key )
-				{
-					$item2['title'] = $sp . $item2['title'];
-					$item2['module'] = $mod_name;
-					$xtpl->assign( 'item', $item2 );
-					$xtpl->parse( 'main.link.item' );
-
-					foreach( $array_item as $item3 )
-					{
-						if( isset( $item3['parentid'] ) and $item3['parentid'] == $item2['key'] )
-						{
-							$item3['title'] =  $sp . $sp . $item3['title'];
-							$item3['module'] = $mod_name;
-							$xtpl->assign( 'item', $item3 );
-							$xtpl->parse( 'main.link.item' );
-						}
-					}
-				}
+				$xtpl->assign( 'item', $item2 );
+				$xtpl->parse( 'main.link.item' );
 			}
 		}
 	}
 
-	$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module );
 	$xtpl->parse( 'main.link' );
-
 	$contents = $xtpl->text( 'main.link' );
 
 	include NV_ROOTDIR . '/includes/header.php';

@@ -119,12 +119,14 @@
 				<tr>
 					<td><strong>{LANG.chomodule}</strong></td>
 					<td>
+						<div class="form-group">
 						<select name="module_name" id="module_name_{module.key}" onchange="nv_link_module('{module.key}');" class="form-control w200">
 							<option value="0">{LANG.cho_module}</option>
 							<!-- BEGIN: module -->
 							<option value="{module.key}"{module.selected}>{module.title}</option>
 							<!-- END: module -->
 						</select>
+						</div>
 						<span id="thu">
 							<!-- BEGIN: link -->
 							<select name="op" id="module_sub_menu" onchange="nv_link_settitle('{item.alias}','{item.module}');" class="form-control w200">

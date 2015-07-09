@@ -52,6 +52,7 @@ if( ! empty( $listcid ) )
 			if( file_exists( NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php' ) )
 			{
 				include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
+				nv_del_moduleCache( $row['module'] );
 			}
 		}
 	}

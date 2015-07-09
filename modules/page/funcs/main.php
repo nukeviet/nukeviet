@@ -91,9 +91,6 @@ if( $id )
 	    $area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
 	    $checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
 
-	    //get url comment
-	    $url_info = parse_url( $client_info['selfurl'] );
-
 	    $content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 	}
 	else

@@ -170,7 +170,7 @@ h1, h2, h3, h4, h5, h6{
 	margin-bottom:10px!important;
 }
 #wraper{
-	width: 1150px;
+	width: 1080px;
 	margin:0 auto;
 }
 .fa-fix{
@@ -229,7 +229,7 @@ header{
 }
 
 #header .pull-right{
-	margin:33px 33px;
+	margin:33px 10px 0 0;
 }
 #header #logo a{
 	font-size:22px;
@@ -294,16 +294,16 @@ header{
 }
 
 .fix_banner_left{
-	width: 90px;
-	height: 500px;
+	width: 120px;
+	height: 480px;
 	position: fixed;
 	top: 2px;
 	left: 2px;
 	display: none;
 }
 .fix_banner_right{
-	width: 90px;
-	height: 500px;
+	width: 120px;
+	height: 480px;
 	position: fixed;
 	top: 2px;
 	right: 2px;

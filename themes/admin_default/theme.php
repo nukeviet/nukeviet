@@ -74,7 +74,7 @@ function nv_get_submenu_mod( $module_name )
 
 function nv_admin_theme( $contents, $head_site = 1 )
 {
-	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title;
+	global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title, $array_url_instruction, $op;
 
 	$dir_template = '';
 
@@ -141,14 +141,9 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'NV_CURRENTTIME', nv_date( 'T', NV_CURRENTTIME ) );
 	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
 
-	if( file_exists( NV_ROOTDIR . '/js/admin_' . $module_file . '.js' ) )
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/js/' . $module_file . '.js' ) )
 	{
-		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . 'js/admin_' . $module_file . '.js' );
-		$xtpl->parse( 'main.module_js' );
-	}
-	elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/js/admin.js' ) )
-	{
-		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . 'modules/' . $module_file . '/js/admin.js' );
+		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/js/' . $module_file . '.js' );
 		$xtpl->parse( 'main.module_js' );
 	}
 
@@ -338,6 +333,20 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	{
 		$xtpl->assign( 'NV_GO_CLIENTMOD', $lang_global['go_clientmod'] );
 		$xtpl->parse( 'main.site_mods' );
+	}
+
+	if( !empty( $array_url_instruction ) )
+	{
+		foreach( $array_url_instruction as $key => $value )
+		{
+			if( $op == $key and filter_var( $value, FILTER_VALIDATE_URL ) )
+			{
+				$xtpl->assign( 'NV_INSTRUCTION', $lang_global['go_instrucion'] );
+				$xtpl->assign( 'NV_URL_INSTRUCTION', $value );
+				$xtpl->parse( 'main.url_instruction' );
+				break;
+			}
+		}
 	}
 
 	/**

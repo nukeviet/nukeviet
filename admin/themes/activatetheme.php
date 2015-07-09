@@ -129,8 +129,8 @@ elseif( ! empty($selectthemes) and file_exists( NV_ROOTDIR . '/themes/' . $selec
 
 			$all_func = ($row['all_func'] == 1 and preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $file_name )) ? 1 : 0;
 
-			$_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
-			( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $all_func . "', '" . $row['weight'] . "', :config )";
+			$_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES
+			( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', 0, :groups_view, '" . $all_func . "', '" . $row['weight'] . "', :config )";
 			$data = array();
 			$data['selectthemes'] = $selectthemes;
 			$data['module'] = $row['module'];

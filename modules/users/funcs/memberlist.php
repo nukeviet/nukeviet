@@ -5,7 +5,7 @@
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 08 Apr 2012 00:00:00 GMT GMT
+ * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
@@ -32,7 +32,7 @@ else
 		'title' => $lang_module['listusers'],
 		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op
 	);
-	
+
 	//xem chi tiet thanh vien
 	if( isset( $array_op[1] ) && ! empty( $array_op[1] ) )
 	{
@@ -56,14 +56,13 @@ else
 				$array_mod_title[] = array(
 					'catid' => 0,
 					'title' => $item['username'],
-					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . change_alias( $item['username'] ) . '-' . $item['md5username'],
-					//'full_name' => ( $global_config['name_show'] )  ? $item['first_name'] . ' ' . $item['last_name'] : $item['last_name'] . ' ' . $item['first_name'],
+					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/' . change_alias( $item['username'] ) . '-' . $item['md5username']
 				);
-				
+
 				$array_field_config = array();
 				$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC' );
 				while( $row_field = $result_field->fetch() )
-				{//print_r($expression)
+				{
 					$language = unserialize( $row_field['language'] );
 					$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
 					$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
@@ -81,7 +80,7 @@ else
 					}
 					$array_field_config[] = $row_field;
 				}
-				
+
 				$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $item['userid'];
 				$result = $db->query( $sql );
 				$custom_fields = $result->fetch();
@@ -154,8 +153,7 @@ else
 
 		while( $item = $result->fetch() )
 		{
-			$item['full_name'] = ( $global_config['name_show'] )  ? $item['first_name'] . ' ' . $item['last_name'] : $item['last_name'] . ' ' . $item['first_name'];
-			$item['full_name'] = trim( $item['full_name'] );
+			$item['full_name'] = nv_show_name_user( $item['first_name'], $item['last_name'] );
 			if( ! empty( $item['photo'] ) and file_exists( NV_ROOTDIR . '/' . $item['photo'] ) )
 			{
 				$item['photo'] = NV_BASE_SITEURL . $item['photo'];

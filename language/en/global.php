@@ -275,3 +275,4 @@ $lang_global['msgbeforeunload'] = 'Are you sure you go to other sites, if done t
 $lang_global['timeoutsess_nouser'] = 'You did not use the site';
 $lang_global['timeoutsess_click'] = 'Click here to remain logged';
 $lang_global['timeoutsess_timeout'] = 'Timeout';
+$lang_global['unknown'] = 'Unknown';

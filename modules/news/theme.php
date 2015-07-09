@@ -13,10 +13,12 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 {
 	global $module_name, $module_file, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page;
+
 	$xtpl = new XTemplate( 'viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
-	if( ($global_array_cat[$catid]['viewdescription'] and $page == 1) OR $global_array_cat[$catid]['viewdescription'] == 2 )
+
+	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 1 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
 		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
 		if( $global_array_cat[$catid]['image'] )
@@ -38,26 +40,28 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
+
 		$xtpl->clear_autoreset();
+		$array_row_i['hometext_clean'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 		$xtpl->assign( 'CONTENT', $array_row_i );
+
 		++$a;
 		if( $a == 1 )
 		{
-			if ( defined( 'NV_IS_MODADMIN' ) )
+			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 				$xtpl->parse( 'main.featuredloop.adminlink' );
 			}
 
-			if ( $array_row_i['imghome'] != '' )
+			if( $array_row_i['imghome'] != '' )
 			{
 				$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 				$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
 				$xtpl->parse( 'main.featuredloop.image' );
 			}
 
-			if ( $newday >= NV_CURRENTTIME )
+			if( $newday >= NV_CURRENTTIME )
 			{
 				$xtpl->parse( 'main.featuredloop.newday' );
 			}
@@ -67,20 +71,20 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 		}
 		else
 		{
-			if ( defined( 'NV_IS_MODADMIN' ) )
+			if( defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_row_i['id'] ) . " " . nv_link_delete_page( $array_row_i['id'] ) );
 				$xtpl->parse( 'main.viewcatloop.adminlink' );
 			}
 
-			if ( $array_row_i['imghome'] != '' )
+			if( $array_row_i['imghome'] != '' )
 			{
 				$xtpl->assign( 'HOMEIMG1', $array_row_i['imghome'] );
 				$xtpl->assign( 'HOMEIMGALT1', ! empty( $array_row_i['homeimgalt'] ) ? $array_row_i['homeimgalt'] : $array_row_i['title'] );
 				$xtpl->parse( 'main.viewcatloop.image' );
 			}
 
-			if ( $newday >= NV_CURRENTTIME )
+			if( $newday >= NV_CURRENTTIME )
 			{
 				$xtpl->parse( 'main.viewcatloop.newday' );
 			}
@@ -114,7 +118,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
 
-	if( ($global_array_cat[$catid]['viewdescription'] and $page == 0) OR $global_array_cat[$catid]['viewdescription'] == 2 )
+	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 0 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
 		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
 		if( $global_array_cat[$catid]['image'] )
@@ -148,7 +152,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 			$xtpl->parse( 'main.viewcatloop.image' );
 		}
 
-		if ( $newday >= NV_CURRENTTIME )
+		if( $newday >= NV_CURRENTTIME )
 		{
 			$xtpl->parse( 'main.viewcatloop.newday' );
 		}
@@ -179,7 +183,8 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
-	if( ($global_array_cat[$catid]['viewdescription'] and $page == 1) OR $global_array_cat[$catid]['viewdescription'] == 2 )
+
+	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 1 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
 		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
 		if( $global_array_cat[$catid]['image'] )
@@ -189,6 +194,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 		}
 		$xtpl->parse( 'main.viewdescription' );
 	}
+
 	$a = 0;
 	foreach( $array_catpage as $array_row_i )
 	{
@@ -205,7 +211,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 				"link" => $global_array_cat[$listcatid]['link']
 			);
 			$xtpl->assign( 'CAT', $listcat );
-			(($n < $num_cat) ? $xtpl->parse( 'main.viewcatloop.cat.comma' ) : '');
+			( ( $n < $num_cat ) ? $xtpl->parse( 'main.viewcatloop.cat.comma' ) : '' );
 			$xtpl->parse( 'main.viewcatloop.cat' );
 			++$n;
 		}
@@ -263,13 +269,14 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 		++$a;
 	}
 	$xtpl->parse( 'main.viewcatloop' );
+
 	if( ! empty( $array_cat_other ) )
 	{
 		$xtpl->assign( 'ORTHERNEWS', $lang_module['other'] );
 
 		foreach( $array_cat_other as $array_row_i )
 		{
-			$newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday'] );
+			$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 			$array_row_i['publtime'] = nv_date( "d/m/Y", $array_row_i['publtime'] );
 			$xtpl->assign( 'RELATED', $array_row_i );
 			if( $newday >= NV_CURRENTTIME )
@@ -299,7 +306,8 @@ function viewcat_top( $array_catcontent, $generate_page )
 	$xtpl = new XTemplate( 'viewcat_top.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH0', $module_config[$module_name]['homewidth'] );
-	if( ($global_array_cat[$catid]['viewdescription'] and $page == 1) OR $global_array_cat[$catid]['viewdescription'] == 2 )
+
+	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 1 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
 		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
 		if( $global_array_cat[$catid]['image'] )
@@ -334,7 +342,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 					$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $array_catcontent_i['id'] ) . " " . nv_link_delete_page( $array_catcontent_i['id'] ) );
 					$xtpl->parse( 'main.catcontent.adminlink' );
 				}
-				if ( $newday >= NV_CURRENTTIME )
+				if( $newday >= NV_CURRENTTIME )
 				{
 					$xtpl->parse( 'main.catcontent.newday' );
 				}
@@ -342,7 +350,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 			}
 			else
 			{
-				if ( $newday >= NV_CURRENTTIME )
+				if( $newday >= NV_CURRENTTIME )
 				{
 					$xtpl->parse( 'main.catcontentloop.newday' );
 				}
@@ -368,6 +376,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 	$xtpl = new XTemplate( $viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
+
 	// Hien thi cac chu de con
 	foreach( $array_cat as $key => $array_row_i )
 	{
@@ -401,7 +410,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 				if( $a == 1 )
 				{
-					if ( $newday >= NV_CURRENTTIME )
+					if( $newday >= NV_CURRENTTIME )
 					{
 						$xtpl->parse( 'main.listcat.newday' );
 					}
@@ -422,7 +431,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 				}
 				else
 				{
-					if ( $newday >= NV_CURRENTTIME )
+					if( $newday >= NV_CURRENTTIME )
 					{
 						$xtpl->assign( 'CLASS', 'icon_new_small' );
 					}
@@ -473,7 +482,8 @@ function viewcat_two_column( $array_content, $array_catpage )
 	$xtpl = new XTemplate( 'viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH0', $module_config[$module_name]['homewidth'] );
-	if( ($global_array_cat[$catid]['viewdescription'] and $page == 1) OR $global_array_cat[$catid]['viewdescription'] == 2 )
+
+	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 1 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
 		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
 		if( $global_array_cat[$catid]['image'] )
@@ -483,7 +493,8 @@ function viewcat_two_column( $array_content, $array_catpage )
 		}
 		$xtpl->parse( 'main.viewdescription' );
 	}
-	//Bai viet o phan dau
+
+	// Bai viet o phan dau
 	if( ! empty( $array_content ) )
 	{
 		foreach( $array_content as $key => $array_content_i )
@@ -507,7 +518,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 					$xtpl->parse( 'main.catcontent.content.adminlink' );
 				}
 
-				if ( $newday >= NV_CURRENTTIME )
+				if( $newday >= NV_CURRENTTIME )
 				{
 					$xtpl->parse( 'main.catcontent.content.newday' );
 				}
@@ -515,7 +526,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			}
 			else
 			{
-				if ( $newday >= NV_CURRENTTIME )
+				if( $newday >= NV_CURRENTTIME )
 				{
 					$xtpl->parse( 'main.catcontent.other.newday' );
 				}
@@ -526,7 +537,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 		$xtpl->parse( 'main.catcontent' );
 	}
 
-	//Theo chu de
+	// Theo chu de
 	$a = 0;
 	$xtpl->assign( 'IMGWIDTH01', $module_config[$module_name]['homewidth'] );
 
@@ -539,7 +550,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$array_catpage_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_catpage_i['alias'];
 
 			$xtpl->assign( 'CAT', $array_catpage_i );
-			$xtpl->assign( 'ID', ($a + 1) );
+			$xtpl->assign( 'ID', ( $a + 1 ) );
 
 			$k = 0;
 
@@ -563,7 +574,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 				$xtpl->parse( 'main.loopcat.content.adminlink' );
 			}
 
-			if ( $newday >= NV_CURRENTTIME )
+			if( $newday >= NV_CURRENTTIME )
 			{
 				$xtpl->parse( 'main.loopcat.content.newday' );
 			}
@@ -574,7 +585,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 			{
 				for( $index = 1; $index < $number_content; ++$index )
 				{
-					if ( $newday >= NV_CURRENTTIME )
+					if( $newday >= NV_CURRENTTIME )
 					{
 						$xtpl->parse( 'main.loopcat.other.newday' );
 						$xtpl->assign( 'CLASS', 'icon_new_small' );
@@ -607,18 +618,14 @@ function viewcat_two_column( $array_content, $array_catpage )
 		$xtpl->parse( 'main.tooltip' );
 	}
 
-	//Theo chu de
+	// Theo chu de
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
 
 function detail_theme( $news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment )
 {
-	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $my_head, $lang_global, $user_info, $admin_info, $client_info;
-
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.pack.js\"></script>\n";
-	$my_head .= "<script src='" . NV_BASE_SITEURL . "js/star-rating/jquery.MetaData.js' type=\"text/javascript\"></script>\n";
-	$my_head .= "<link href='" . NV_BASE_SITEURL . "js/star-rating/jquery.rating.css' type=\"text/css\" rel=\"stylesheet\"/>\n";
+	global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $lang_global, $user_info, $admin_info, $client_info;
 
 	$xtpl = new XTemplate( 'detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG_GLOBAL', $lang_global );
@@ -626,7 +633,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'LANG', $lang_module );
 
-	$news_contents['addtime'] = nv_date( "d/m/Y h:i:s", $news_contents['addtime'] );
+	$news_contents['addtime'] = nv_date( 'd/m/Y h:i:s', $news_contents['addtime'] );
 
 	$xtpl->assign( 'NEWSID', $news_contents['id'] );
 	$xtpl->assign( 'NEWSCHECKSS', $news_contents['newscheckss'] );
@@ -721,7 +728,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		{
 			$xtpl->assign( 'KEYWORD', $value['keyword'] );
 			$xtpl->assign( 'LINK_KEYWORDS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=tag/' . urlencode( $value['alias'] ) );
-			$xtpl->assign( 'SLASH', ($t == $i) ? '' : ', ' );
+			$xtpl->assign( 'SLASH', ( $t == $i ) ? '' : ', ' );
 			$xtpl->parse( 'main.keywords.loop' );
 		}
 		$xtpl->parse( 'main.keywords' );
@@ -729,7 +736,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 
 	if( defined( 'NV_IS_MODADMIN' ) )
 	{
-		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . " " . nv_link_delete_page( $news_contents['id'], 1 ) );
+		$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $news_contents['id'] ) . ' ' . nv_link_delete_page( $news_contents['id'], 1 ) );
 		$xtpl->parse( 'main.adminlink' );
 	}
 
@@ -758,7 +765,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		{
 			$related_new_array_i['hometext'] = nv_clean60( $related_new_array_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 			$newday = $related_new_array_i['time'] + ( 86400 * $related_new_array_i['newday'] );
-			if ( $newday >= NV_CURRENTTIME )
+			if( $newday >= NV_CURRENTTIME )
 			{
 				$xtpl->parse( 'main.related_new.loop.newday' );
 			}
@@ -776,7 +783,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		{
 			$related_array_i['hometext'] = nv_clean60( $related_array_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 			$newday = $related_array_i['time'] + ( 86400 * $related_array_i['newday'] );
-			if ( $newday >= NV_CURRENTTIME )
+			if( $newday >= NV_CURRENTTIME )
 			{
 				$xtpl->parse( 'main.related.loop.newday' );
 			}
@@ -793,7 +800,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		{
 			$topic_array_i['hometext'] = nv_clean60( $topic_array_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 			$newday = $topic_array_i['time'] + ( 86400 * $topic_array_i['newday'] );
-			if ( $newday >= NV_CURRENTTIME )
+			if( $newday >= NV_CURRENTTIME )
 			{
 				$xtpl->parse( 'main.topic.loop.newday' );
 			}
@@ -804,7 +811,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		$xtpl->parse( 'main.topic' );
 	}
 
-	if( !empty( $content_comment ) )
+	if( ! empty( $content_comment ) )
 	{
 		$xtpl->assign( 'CONTENT_COMMENT', $content_comment );
 		$xtpl->parse( 'main.comment' );
@@ -847,7 +854,7 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 	if( ! empty( $description ) )
 	{
 		$xtpl->assign( 'TOPPIC_DESCRIPTION', $description );
-		if(!empty($topic_image))
+		if( ! empty( $topic_image ) )
 		{
 			$xtpl->assign( 'HOMEIMG1', $topic_image );
 			$xtpl->parse( 'main.topicdescription.image' );
@@ -869,7 +876,7 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 
 			if( defined( 'NV_IS_MODADMIN' ) )
 			{
-				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . " " . nv_link_delete_page( $topic_array_i['id'] ) );
+				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . ' ' . nv_link_delete_page( $topic_array_i['id'] ) );
 				$xtpl->parse( 'main.topic.adminlink' );
 			}
 
@@ -903,14 +910,6 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 function sendmail_themme( $sendmail )
 {
 	global $module_info, $module_file, $global_config, $lang_module, $lang_global;
-
-	$script = "<script type=\"text/javascript\">\n";
-	$script .= " $(document).ready(function(){\n";
-	$script .= " $(\"#sendmailForm\").validate();\n";
-	$script .= " });\n";
-	$script .= "</script>\n";
-
-	$sendmail['script'] = $script;
 
 	$xtpl = new XTemplate( 'sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'SENDMAIL', $sendmail );
@@ -1002,7 +1001,7 @@ function news_print( $result )
 // Search
 function search_theme( $key, $check_num, $date_array, $array_cat_search )
 {
-	global $module_name, $module_info, $module_file, $lang_module, $module_name, $my_head;
+	global $module_name, $module_info, $module_file, $lang_module, $module_name;
 
 	$xtpl = new XTemplate( 'search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1079,18 +1078,21 @@ function search_result_theme( $key, $numRecord, $per_pages, $page, $array_conten
 		$xtpl->parse( 'results.noneresult' );
 	}
 
-	if( $numRecord > $per_pages )// show pages
+	if( $numRecord > $per_pages ) // show pages
 	{
 		$url_link = $_SERVER['REQUEST_URI'];
 		if( strpos( $url_link, '&page=' ) > 0 )
 		{
 			$url_link = substr( $url_link, 0, strpos( $url_link, '&page=' ) );
 		}
-		elseif( strpos( $url_link, '?page=' ) > 0)
+		elseif( strpos( $url_link, '?page=' ) > 0 )
 		{
 			$url_link = substr( $url_link, 0, strpos( $url_link, '?page=' ) );
 		}
-		$_array_url = array( 'link' => $url_link, 'amp' => '&page=' );
+		$_array_url = array(
+			'link' => $url_link,
+			'amp' => '&page='
+		);
 		$generate_page = nv_generate_page( $_array_url, $numRecord, $per_pages, $page );
 
 		$xtpl->assign( 'VIEW_PAGES', $generate_page );

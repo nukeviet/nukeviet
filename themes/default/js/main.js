@@ -6,8 +6,8 @@
  * @Createdate 31/05/2010, 00:36
  */
 function fix_banner_center() {
-	var w = Math.round(($(window).width() - 1330)/4);
-    if ( w > 0)
+	var w = Math.round(($(window).width() - 1330)/2);
+    if ( w >= 0)
     {
     	$( "div.fix_banner_left" ).css( "left", w+"px" );
     	$( "div.fix_banner_right" ).css( "right", w+"px" );
@@ -72,6 +72,29 @@ function timeoutsessrun() {
 	}, 1000);
 }
 
+function checkWidthMenu() {
+    var windowsize = $(window).width();
+    if (theme_responsive == '1' && windowsize <= 640) {
+        $( "li.dropdown ul" ).removeClass( "dropdown-menu" );
+        $( "li.dropdown ul" ).addClass( "dropdown-submenu" );
+        $( "li.dropdown a" ).addClass( "dropdown-mobile" );
+        $( "#menu-site-default ul li a.dropdown-toggle" ).addClass( "dropdown-mobile" );
+        $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" );
+    }
+    else{
+        $( "li.dropdown ul" ).addClass( "dropdown-menu" );
+        $( "li.dropdown ul" ).removeClass( "dropdown-submenu" );
+        $( "li.dropdown a" ).removeClass( "dropdown-mobile" );
+        $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" );
+        $( "#menu-site-default ul li a.dropdown-toggle" ).removeClass( "dropdown-mobile" );
+        $('#menu-site-default .dropdown').hover(function(){
+            $(this).addClass('open');
+        }, function(){
+            $(this).removeClass('open');
+        });
+    }
+}
+
 // NukeViet Default Custom JS
 $(document).ready(function(){
 	fix_banner_center();
@@ -85,10 +108,13 @@ $(document).ready(function(){
 		return false;
 	});
 
-// Show admin confirm
-	myTimerPage = setTimeout(function() {
-		timeoutsessrun();
-	}, nv_check_pass_mstime);
+	if( nv_is_user )
+	{
+		// Show messger timeout login users 
+		myTimerPage = setTimeout(function() {
+			timeoutsessrun();
+		}, nv_check_pass_mstime);
+	}
 
 	// Show confirm message on leave, reload page
 	$('form.confirm-reload').change(function() {
@@ -102,9 +128,22 @@ $(document).ready(function(){
 		selector: "[data-toggle=tooltip]",
 		container: "body"
 	});
+	
+	// Change site lang
+    $(".nv_change_site_lang").change(function(){
+        document.location = $(this).val();
+    });
+    
+    // Menu bootstrap
+	$('#menu-site-default a').hover(function(){
+		$(this).attr("rel", $(this).attr("title"));
+        $(this).removeAttr("title");
+	}, function(){
+		$(this).attr("title", $(this).attr("rel"));
+        $(this).removeAttr("rel");
+	});
 });
 
-$(window).on('resize', function()
-{
+$(window).on('resize', function(){
 	fix_banner_center();
 });
