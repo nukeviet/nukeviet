@@ -1,6 +1,8 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.0.22 (Developing)
+- Optimize in-line javascript in tpl
+- Move javascript from module to theme
 - Remove code zip file css, javascript.
 - Install: check collation database
 
