@@ -100,3 +100,30 @@ function nv_cl_edit_save(full_name, email, website, location, yim, phone, fax, m
 	});
 	return false;
 }
+
+var type = '', month = '', ads = '';
+var charturl;
+
+$(document).ready(function(){
+	$('#adsstat-ads a').click(function() {
+		ads = $(this).attr('rel');
+		$('#text-ads').html($(this).text());
+		if (type != "" && month != "" & ads != "") {
+			$('#chartdata').html('<img src="{charturl}&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:100%"/>');
+		}
+	});
+	$('#adsstat-type a').click(function() {
+		type = $(this).attr('rel');
+		$('#text-type').html($(this).text());
+		if (type != "" && month != "" & ads != "") {
+			$('#chartdata').html('<img src="{charturl}&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:100%"/>');
+		}
+	});
+	$('#adsstat-month a').click(function() {
+		month = $(this).attr('rel');
+		$('#text-month').html($(this).text());
+		if (type != "" && month != "" & ads != "") {
+			$('#chartdata').html('<img src="{charturl}&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:100%"/>');
+		}
+	});	
+});

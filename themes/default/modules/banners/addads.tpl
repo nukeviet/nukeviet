@@ -84,23 +84,23 @@
 		</div>
 	</form>
 	<script type="text/javascript" data-show="after">
-		$(document).ready(function() {
-			$('#frm').validate();
-			$(".datepicker").datepicker({
-				showOn : "focus",
-				dateFormat : "dd/mm/yy",
-				changeMonth : true,
-				changeYear : true,
-				showOtherMonths : true,
-				buttonImageOnly : true
-			});
-			$('#begintime-btn').click(function(){
-				$("#begintime").datepicker('show');
-			});
-			$('#endtime-btn').click(function(){
-				$("#endtime").datepicker('show');
-			});
+	$(document).ready(function() {
+		$('#frm').validate();
+		$(".datepicker").datepicker({
+			showOn : "focus",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImageOnly : true
 		});
+		$('#begintime-btn').click(function(){
+			$("#begintime").datepicker('show');
+		});
+		$('#endtime-btn').click(function(){
+			$("#endtime").datepicker('show');
+		});
+	});
 	</script>
 </div>
 <!-- END: main -->

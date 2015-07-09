@@ -34,8 +34,7 @@
 	<!-- END: loopcat1 -->
 </ul>
 <script type="text/javascript" data-show="after">
-$('ul.slimmenu').slimmenu(
-{
+$('ul.slimmenu').slimmenu({
     resizeWidth: (theme_responsive == '1') ? 768 : 360,
 	collapserTitle: '{BLOCK_CONFIG.title}',
 	easingEffect:'easeInOutQuint',
