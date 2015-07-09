@@ -939,13 +939,10 @@ elseif( $step == 6 )
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('hour', '" . str_pad( $i, 2, '0', STR_PAD_LEFT ) . "', 0, 0, 0)" );
 					}
 
-					if( file_exists( NV_ROOTDIR . '/includes/bots.php' ) )
+					$bots = array('googlebot', 'msnbot', 'bingbot', 'yahooslurp', 'w3cvalidator');
+					foreach( $bots as $_bot )
 					{
-						include NV_ROOTDIR . '/includes/bots.php' ;
-						foreach( $bots as $_bot => $v )
-						{
-							$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote( $_bot ) . ", 0, 0, 0)" );
-						}
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote( $_bot ) . ", 0, 0, 0)" );
 					}
 
 					$tmp_array = array('opera','operamini','webtv','explorer','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');

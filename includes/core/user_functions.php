@@ -20,7 +20,7 @@ $meta_property = array(
 	'og:url' => ''
 );
 
-//tài kho?n Google+
+//tï¿½i kho?n Google+
 $id_profile_googleplus = 0;
 
 /**
@@ -153,12 +153,12 @@ function nv_blocks_content( $sitecontent )
 
 			if( $client_info['is_mobile'] and ( $_row['hide_device'] == 1 or $_row['hide_device'] == 3 ) )
 			{
-				//?n trên mobile
+				//?n trï¿½n mobile
 				continue;
 			}
 			elseif( $client_info['is_tablet'] and ( $_row['hide_device'] == 2 or $_row['hide_device'] == 3 ) )
 			{
-				// ?n trên Máy tính b?ng
+				// ?n trï¿½n Mï¿½y tï¿½nh b?ng
 				continue;
 			}
 
@@ -411,7 +411,7 @@ function nv_html_meta_tags()
 		}
 	}
 
-	//tài kho?n Google+
+	//tï¿½i kho?n Google+
 	if( $id_profile_googleplus == 0 )
 	{
 		$id_profile_googleplus = $module_info['gid'];
@@ -515,7 +515,12 @@ function nv_html_site_js()
     $return .= "<script src=\"" . NV_BASE_SITEURL . "js/global.js\"></script>" . PHP_EOL;
 
     if ( defined( 'NV_IS_ADMIN' ) ) $return .= "<script src=\"" . NV_BASE_SITEURL . "js/admin.js\"></script>" . PHP_EOL;
-    if ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/js/user.js' ) ) $return .= "<script src=\"" . NV_BASE_SITEURL . "modules/" . $module_file . "/js/user.js\"></script>" . PHP_EOL;
+    
+    if ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.js' ) ) 
+    {
+		$return .= "<script src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/" . $module_file . ".js\"></script>" . PHP_EOL;
+	}
+	
     if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) ) $return .= nv_add_editor_js();
 
 	if ( defined( 'NV_IS_DRAG_BLOCK' ) )

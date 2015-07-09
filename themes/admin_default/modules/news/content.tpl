@@ -321,7 +321,7 @@ $('[type="submit"]').hover(function(){
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}modules/news/js/content.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/news_content.js"></script>
 <!-- BEGIN: getalias -->
 <script type="text/javascript">
 //<![CDATA[
