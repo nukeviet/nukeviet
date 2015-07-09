@@ -39,6 +39,11 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 					$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/css/' . $_module_file . '.css';
 				}
 
+				if( file_exists( NV_ROOTDIR . '/themes/' . $themename . '/js/' . $_module_file . '.js' ) )
+				{
+					$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/js/' . $_module_file . '.js';
+				}
+
 				if( file_exists( NV_ROOTDIR . '/themes/' . $themename . '/images/' . $_module_file . '/' ) )
 				{
 					$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/images/' . $_module_file . '/';

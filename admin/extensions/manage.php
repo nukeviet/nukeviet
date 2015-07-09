@@ -107,10 +107,6 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 			elseif( file_exists( NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $row['basename'] . '/' ) )
 			{
 				$files_folders[] = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $row['basename'] . '/';
-				if( file_exists( NV_ROOTDIR . '/js/admin_' . $row['basename'] . '.js' ) )
-				{
-					$files_folders[] = NV_ROOTDIR . '/js/admin_' . $row['basename'] . '.js';
-				}
 
 				$langs_admin = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
 				foreach( $langs_admin as $langi )
@@ -142,6 +138,11 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 					$files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/css/' . $row['basename'] . '.css';
 				}
 
+				if( file_exists( NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '.js' ) )
+				{
+					$files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '.js';
+				}
+
 				if( file_exists( NV_ROOTDIR . '/themes/' . $theme_package . '/images/' . $row['basename'] . '/' ) )
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/images/' . $row['basename'] . '/';
@@ -154,6 +155,11 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				if( file_exists( NV_ROOTDIR . '/themes/admin_default/css/' . $row['basename'] . '.css' ) )
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/admin_default/css/' . $row['basename'] . '.css';
+				}
+
+				if( file_exists( NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '.js' ) )
+				{
+					$files_folders[] = NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '.js';
 				}
 
 				if( file_exists( NV_ROOTDIR . '/themes/admin_default/images/' . $row['basename'] . '/' ) )
