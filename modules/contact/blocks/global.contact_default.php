@@ -42,6 +42,7 @@ if ( ! nv_function_exists( 'nv_contact_default_info' ) )
         $xtpl = new XTemplate( 'block.contact_default.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods['contact']['module_file'] );
         $row = array_shift( $array_department );
         if ( empty( $row ) ) return "";
+        $row['emailhref'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
 
         $xtpl->assign( 'DEPARTMENT', $row );
 
