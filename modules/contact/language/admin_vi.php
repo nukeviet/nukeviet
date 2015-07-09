@@ -72,3 +72,4 @@ $lang_module['no_row_contact'] = 'Không có liên hệ nào gửi đến bạn'
 $lang_module['url_for_iframe'] = 'Liên kết dùng chèn cho iframe';
 
 $lang_module['notification_contact_new'] = '<strong>%s</strong> gửi thư liên hệ với tiêu đề <strong>%s</strong>';
+$lang_module['is_default'] = 'Mặc định';

@@ -53,6 +53,8 @@ foreach ($array_department as $row )
 
 		$xtpl->parse( 'main.row.status' );
 	}
+    
+    $xtpl->parse( $row['is_default'] ? 'main.row.check' : 'main.row.notcheck' );
 
 	$xtpl->parse( 'main.row' );
 }

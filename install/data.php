@@ -178,6 +178,7 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VAL
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_extension_files VALUES (NULL, 'module', 'contact', 'modules/contact/action_mysql.php', " . NV_CURRENTTIME . ", 0)";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_extension_files VALUES (NULL, 'module', 'contact', 'modules/contact/action_oci.php', " . NV_CURRENTTIME . ", 0)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_extension_files VALUES (NULL, 'module', 'contact', 'modules/contact/admin/change_default.php', " . NV_CURRENTTIME . ", 0)";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_extension_files VALUES (NULL, 'module', 'contact', 'modules/contact/admin/change_status.php', " . NV_CURRENTTIME . ", 0)";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_extension_files VALUES (NULL, 'module', 'contact', 'modules/contact/admin/content.php', " . NV_CURRENTTIME . ", 0)";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_extension_files VALUES (NULL, 'module', 'contact', 'modules/contact/admin/del.php', " . NV_CURRENTTIME . ", 0)";
