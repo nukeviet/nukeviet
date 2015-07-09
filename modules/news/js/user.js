@@ -35,3 +35,17 @@ function nv_del_content(id, checkss, base_adminurl, detail) {
 	}
 	return false;
 }
+
+function get_alias() {
+	var title = strip_tags(document.getElementById('idtitle').value);
+	if (title != '') {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'get_alias=' + encodeURIComponent(title), function(res) {
+			if (res != "") {
+				document.getElementById('idalias').value = res;
+			} else {
+				document.getElementById('idalias').value = '';
+			}
+		});
+	}
+	return false;
+}

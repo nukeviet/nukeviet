@@ -14,9 +14,9 @@
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/main.css">
 		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
 		<script type="text/javascript">
-			var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{GFX_NUM}');
-			var login_error_security = '{LOGIN_ERROR_SECURITY}';
-			var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
+		var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{GFX_NUM}');
+		var login_error_security = '{LOGIN_ERROR_SECURITY}';
+		var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
 		</script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}js/admin_login.js"></script>
