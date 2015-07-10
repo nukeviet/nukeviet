@@ -82,7 +82,6 @@
 </form>
 
 <script type="text/javascript" data-show="after">
-
 	$(document).ready(function() {
 		$("#from_date, #to_date").datepicker({
 			dateFormat : "dd.mm.yy",
