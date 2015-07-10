@@ -26,7 +26,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" class="text-center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" class="btn btn-primary" /></td>
+					<td colspan="2" class="text-center"><input name="continue_ptm" type="button" value="{LANG.autoinstall_continue}" class="btn btn-primary" /></td>
 				</tr>
 				<tr>
 					<td colspan="2" class="text-center">
@@ -39,34 +39,9 @@
 	</div>
 </form>
 <script type="text/javascript">
-	//<![CDATA[
-	$(function() {
-		$("input[name=continue]").click(function() {
-			var themename = $("select[name=themename]").val();
-			module_file = '';
-			$("input[name='module_file[]']:checked").each(function() {
-				module_file = module_file + ',' + $(this).val();
-			});
-			if (themename != 0 && module_file != '') {
-				$("#message").html('<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" />{LANG.autoinstall_package_processing}');
-				$("#message").fadeIn();
-				$("input[name=continue]").attr("disabled", "disabled");
-				$("#step1").slideUp();
-				$.ajax({
-					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}",
-					data : "themename=" + themename + "&module_file=" + module_file + "&{NV_OP_VARIABLE}={OP}",
-					success : function(data) {
-						$("input[name=continue]").removeAttr("disabled");
-						$("#message").html(data);
-					}
-				});
-			} else {
-				alert("{LANG.package_noselect_module_theme}");
-				return false;
-			}
-		});
-	});
-	//]]>
+//<![CDATA[
+LANG.autoinstall_package_processing = "{LANG.autoinstall_package_processing}";
+LANG.package_noselect_module_theme = "{LANG.package_noselect_module_theme}";
+//]]>
 </script>
 <!-- END: main -->
