@@ -27,9 +27,9 @@ $order_info = array();
 $error = array( );
 
 $data_order = array(
-	'user_id' => $user_info['userid'],
-	'order_name' => $user_info['full_name'],
-	'order_email' => $user_info['email'],
+	'user_id' => isset( $user_info['userid'] ) ? $user_info['userid'] : 0,
+	'order_name' => isset( $user_info['full_name'] ) ? $user_info['full_name'] : '',
+	'order_email' => isset( $user_info['email'] ) ? $user_info['email'] : '',
 	'order_phone' => '',
 	'order_note' => '',
 	'admin_id' => 0,
