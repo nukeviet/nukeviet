@@ -616,15 +616,38 @@ function nv_html_site_js( $html = true )
     global $global_config, $module_info, $module_name, $module_file, $lang_global, $op, $client_info;
 
     $jsDef = "var nv_siteroot=\"" . NV_BASE_SITEURL . "\",nv_sitelang=\"" . NV_LANG_INTERFACE . "\",nv_name_variable=\"" . NV_NAME_VARIABLE . "\",nv_fc_variable=\"" . NV_OP_VARIABLE . "\",nv_lang_variable=\"" . NV_LANG_VARIABLE . "\",nv_module_name=\"" . $module_name . "\",nv_func_name=\"" . $op . "\",nv_is_user=" . ( ( int )defined( "NV_IS_USER" ) ) . ", nv_my_ofs=" . round( NV_SITE_TIMEZONE_OFFSET / 3600 ) . ",nv_my_abbr=\"" . nv_date( "T", NV_CURRENTTIME ) . "\",nv_cookie_prefix=\"" . $global_config['cookie_prefix'] . "\",nv_check_pass_mstime=" . ( ( intval( $global_config['user_check_pass_time'] ) - 62 ) * 1000 ) . ",nv_area_admin=0,theme_responsive=" . ( ( int )( $global_config['current_theme_type'] == 'r' ) );
-    if ( defined( 'NV_IS_DRAG_BLOCK' ) ) $jsDef .= ',drag_block=1,blockredirect="' . nv_base64_encode( $client_info['selfurl'] ) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $lang_global['block_delete_confirm'] . '",block_outgroup_confirm="' . $lang_global['block_outgroup_confirm'] . '",blocks_saved="' . $lang_global['blocks_saved'] . '",blocks_saved_error="' . $lang_global['blocks_saved_error'] . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';
-    $jsDef .= ";";
-    $return = array();
+    
+	if ( defined( 'NV_IS_DRAG_BLOCK' ) )
+	{
+		$jsDef .= ',drag_block=1,blockredirect="' . nv_base64_encode( $client_info['selfurl'] ) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $lang_global['block_delete_confirm'] . '",block_outgroup_confirm="' . $lang_global['block_outgroup_confirm'] . '",blocks_saved="' . $lang_global['blocks_saved'] . '",blocks_saved_error="' . $lang_global['blocks_saved_error'] . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';
+	}
+    
+	$jsDef .= ";";
+    
+	$return = array();
     $return[] = array( 'ext' => 0, 'content' => $jsDef );
     $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "js/jquery/jquery.min.js" );
     $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "js/language/" . NV_LANG_INTERFACE . ".js" );
     $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "js/global.js" );
-    if ( defined( 'NV_IS_ADMIN' ) ) $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "js/admin.js" );
-    if ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/js/user.js' ) ) $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "modules/" . $module_file . "/js/user.js" );
+    
+	if ( defined( 'NV_IS_ADMIN' ) ) $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "js/admin.js" );
+    
+    // Old module js
+    if ( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/js/user.js' ) )
+    {
+    	$return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "modules/" . $module_file . "/js/user.js" );
+    }
+    
+    // New module js
+	if ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.js' ) )
+	{
+		$return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js' );
+	}
+	//	elseif ( file_exists( NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js' ) )
+	//	{
+	//		$return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . 'themes/default/js/' . $module_file . '.js' );
+	//	}
+    
     if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
     {
         $editor_js = nv_add_editor_js();
