@@ -138,3 +138,14 @@ function nv_main_action(oForm, msgnocheck) {
 	}
 	return false;
 }
+
+$(document).ready(function(){
+	$("#select-img-menurow").click(function(){
+		var area = "icon";
+		var path = CFG.upload_current;
+		var currentpath = CFG.upload_current;
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});	
+});
