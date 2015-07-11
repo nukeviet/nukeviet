@@ -124,6 +124,7 @@ define( 'BROWSER_OPERA', 'Opera' );
 define( 'BROWSER_OPERAMINI', 'Opera Mini' );
 define( 'BROWSER_WEBTV', 'WebTV' );
 define( 'BROWSER_EXPLORER', 'Internet Explorer' );
+define( 'BROWSER_EDGE', 'Microsoft Edger' );
 define( 'BROWSER_POCKET', 'Pocket Internet Explorer' );
 define( 'BROWSER_KONQUEROR', 'Konqueror' );
 define( 'BROWSER_ICAB', 'iCab' );
@@ -154,6 +155,7 @@ define( 'BROWSER_BINGBOT', 'Bing Bot' );
 
 //Platform Names
 define( 'PLATFORM_WIN', 'Windows' );
+define( 'PLATFORM_WIN10', 'Windows 10' );
 define( 'PLATFORM_WIN8', 'Windows 8' );
 define( 'PLATFORM_WIN7', 'Windows 7' );
 define( 'PLATFORM_WIN2003', 'Windows 2003' );
@@ -161,10 +163,6 @@ define( 'PLATFORM_WINVISTA', 'Windows Vista' );
 define( 'PLATFORM_WINCE', 'Windows CE' );
 define( 'PLATFORM_WINXP', 'Windows XP' );
 define( 'PLATFORM_WIN2000', 'Windows 2000' );
-define( 'PLATFORM_WIN95', 'Windows 95' );
-define( 'PLATFORM_WINME', 'Windows ME' );
-define( 'PLATFORM_WINNT', 'Windows NT' );
-define( 'PLATFORM_WIN98', 'Windows 98' );
 define( 'PLATFORM_APPLE', 'Apple' );
 define( 'PLATFORM_LINUX', 'Linux' );
 define( 'PLATFORM_OS2', 'OS/2' );
