@@ -44,12 +44,8 @@ $info['server'] = array(
 	)
 );
 
-$js = false;
-
 if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 {
-	$js = true;
-
 	$info['chmod'] = array(
 		'caption' => $lang_module['chmod'],
 		'field' => array(
@@ -115,12 +111,6 @@ foreach( $info as $key => $if )
 }
 
 $contents = $xtpl->text( 'main' );
-
-if( $js )
-{
-	$xtpl->parse( 'js' );
-	$contents .= $xtpl->text( 'js' );
-}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );

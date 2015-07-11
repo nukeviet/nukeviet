@@ -62,3 +62,14 @@ function get_alias(id) {
 	}
 	return false;
 }
+
+$(document).ready(function(){
+	$("input[name=selectimg]").click(function() {
+		var area = "image";
+		var alt = "imagealt";
+		var path = uploads_dir_user;
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+});

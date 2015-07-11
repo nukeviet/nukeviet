@@ -19,3 +19,124 @@ function nv_is_del_cron(cronid) {
 	}
 	return false;
 }
+
+function show_rewrite_op() {
+	if ($("input[name=rewrite_optional]").is(":checked")) {
+		$('#tr_rewrite_op_mod').show();
+	} else {
+		$('#tr_rewrite_op_mod').hide();
+	}
+}
+
+function nv_chang_weight(pid) {
+	window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&pid=' + pid + '&weight=' + $('#weight_' + pid).val();
+}
+
+$(document).ready(function(){
+	// System
+	$('#cdn_download').click(function() {
+		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl=' + CFG.cdndl;
+	});
+	
+	$('#ssl_https').change(function() {
+		if ($(this).is(":checked")) {
+			var returnVal = confirm(LANG.note_ssl);
+			$(this).attr("checked", returnVal);
+		}
+	});
+	
+	// Smtp
+	$("input[name=mailer_mode]").click(function() {
+		var type = $(this).val();
+		if (type == "smtp") {
+			$("#smtp").show();
+		} else {
+			$("#smtp").hide();
+		}
+	});
+
+	// Security
+	if( $.fn.datepicker ){
+		$(".datepicker, #start_date").datepicker({
+			showOn : "both",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImageOnly : true
+		});
+	}
+	$('.submit-security').click(function() {
+		var ip = $('input[name=ip]').val();
+		$('input[name=ip]').focus();
+		if (ip == '') {
+			alert(LANG.banip_error_ip);
+			return false;
+		}
+		var area = $('select[name=area]').val();
+		$('select[name=area]').focus();
+		if (area == '0') {
+			alert(LANG.banip_error_area);
+			return false;
+		}
+	});
+	$('a.deleteone-ip').click(function() {
+		if (confirm(LANG.banip_delete_confirm)) {
+			var url = $(this).attr('href');
+			$.ajax({
+				type : 'POST',
+				url : url,
+				data : '',
+				success : function(data) {
+					alert(LANG.banip_del_success);
+					window.location = script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security";
+				}
+			});
+		}
+		return false;
+	});
+	
+	// Site setting
+	$("#select-site-logo").click(function() {
+		var area = "site_logo";
+		var path = "";
+		var currentpath = "images";
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+	
+	// FTP setting
+	$('#autodetectftp').click(function() {
+		var ftp_server = $('input[name="ftp_server"]').val();
+		var ftp_user_name = $('input[name="ftp_user_name"]').val();
+		var ftp_user_pass = $('input[name="ftp_user_pass"]').val();
+		var ftp_port = $('input[name="ftp_port"]').val();
+
+		if (ftp_server == '' || ftp_user_name == '' || ftp_user_pass == '') {
+			alert(LANG.ftp_error_full);
+			return;
+		}
+
+		$(this).attr('disabled', 'disabled');
+
+		var data = 'ftp_server=' + ftp_server + '&ftp_port=' + ftp_port + '&ftp_user_name=' + ftp_user_name + '&ftp_user_pass=' + ftp_user_pass + '&tetectftp=1';
+		var url = CFG.detect_ftp;
+
+		$.ajax({
+			type : "POST",
+			url : url,
+			data : data,
+			success : function(c) {
+				c = c.split('|');
+				if (c[0] == 'OK') {
+					$('#ftp_path_iavim').val(c[1]);
+				} else {
+					alert(c[1]);
+				}
+				$('#autodetectftp').removeAttr('disabled');
+			}
+		});
+	});
+});

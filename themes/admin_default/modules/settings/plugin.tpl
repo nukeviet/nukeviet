@@ -48,9 +48,4 @@
 		</table>
 	</div>
 </form>
-<script type="text/javascript">
-	function nv_chang_weight(pid) {
-		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=plugin&pid=' + pid + '&weight=' + $('#weight_' + pid).val();
-	}
-</script>
 <!-- END: main -->

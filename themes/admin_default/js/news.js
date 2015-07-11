@@ -313,3 +313,92 @@ function get_alias(mod, id) {
 	}
 	return false;
 }
+
+function nv_search_tag(tid) {
+	$("#module_show_list").html('<p class="text-center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load("index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=tags&q=" + rawurlencode($("#q").val()) + "&num=" + nv_randomPassword(10));
+	return false;
+}
+
+function nv_del_tags(tid) {
+	if (confirm(nv_is_del_confirm[0])) {
+		$("#module_show_list").html('<p class="text-center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load("index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=tags&del_tid=" + tid + "&num=" + nv_randomPassword(10));
+	}
+	return false;
+}
+
+$(document).ready(function(){
+	$('#checkall').click(function() {
+		$('input:checkbox').each(function() {
+			$(this).attr('checked', 'checked');
+		});
+	});
+	$('#uncheckall').click(function() {
+		$('input:checkbox').each(function() {
+			$(this).removeAttr('checked');
+		});
+	});
+	
+	// Topic
+	$('#delete-topic').click(function() {
+		var list = [];
+		$('input[name=newsid]:checked').each(function() {
+			list.push($(this).val());
+		});
+		if (list.length < 1) {
+			alert(LANG.topic_nocheck);
+			return false;
+		}
+		if (confirm(LANG.topic_delete_confirm)) {
+			$.ajax({
+				type : 'POST',
+				url : 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicdelnews',
+				data : 'list=' + list,
+				success : function(data) {
+					alert(data);
+					window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid=' + CFG.topicid;
+				}
+			});
+		}
+		return false;
+	});
+
+	// Topics
+	$("#select-img-topic").click(function() {
+		var area = "homeimg";
+		var path = CFG.upload_dir;
+		var currentpath = CFG.upload_dir;
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+	
+	// Tags
+	$("#select-img-tag").click(function() {
+		var area = "image";
+		var path = CFG.upload_current;
+		var currentpath = CFG.upload_current;
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+	
+	// Sources
+	$("#select-img-source").click(function() {
+		var area = "logo";
+		var path = CFG.upload_path;
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+
+	// Setting
+	$("#select-img-setting").click(function() {
+		var area = "show_no_image";
+		var type = "image";
+		var path = CFG.path;
+		var currentpath = CFG.currentpath;
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+
+});
