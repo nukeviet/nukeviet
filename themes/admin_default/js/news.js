@@ -326,6 +326,80 @@ function nv_del_tags(tid) {
 	return false;
 }
 
+function checkallfirst() {
+    $(this).one("click", checkallsecond);
+	$('input:checkbox').each(function() {
+		$(this).attr('checked', 'checked');
+	});
+}
+
+function checkallsecond() {
+    $(this).one("click", checkallfirst);
+	$('input:checkbox').each(function() {
+		$(this).removeAttr('checked');
+	});
+}
+
+function check_add_first() {
+	$(this).one("dblclick", check_add_second);
+	$("input[name='add_content[]']:checkbox").prop("checked", true);
+}
+
+function check_add_second() {
+	$(this).one("dblclick", check_add_first);
+	$("input[name='add_content[]']:checkbox").prop("checked", false);
+}
+
+function check_app_first() {
+	$(this).one("dblclick", check_app_second);
+	$("input[name='app_content[]']:checkbox").prop("checked", true);
+}
+
+function check_app_second() {
+	$(this).one("dblclick", check_app_first);
+	$("input[name='app_content[]']:checkbox").prop("checked", false);
+}
+
+function check_pub_first() {
+	$(this).one("dblclick", check_pub_second);
+	$("input[name='pub_content[]']:checkbox").prop("checked", true);
+}
+
+function check_pub_second() {
+	$(this).one("dblclick", check_pub_first);
+	$("input[name='pub_content[]']:checkbox").prop("checked", false);
+}
+
+function check_edit_first() {
+	$(this).one("dblclick", check_edit_second);
+	$("input[name='edit_content[]']:checkbox").prop("checked", true);
+}
+
+function check_edit_second() {
+	$(this).one("dblclick", check_edit_first);
+	$("input[name='edit_content[]']:checkbox").prop("checked", false);
+}
+
+function check_del_first() {
+	$(this).one("dblclick", check_del_second);
+	$("input[name='del_content[]']:checkbox").prop("checked", true);
+}
+
+function check_del_second() {
+	$(this).one("dblclick", check_del_first);
+	$("input[name='del_content[]']:checkbox").prop("checked", false);
+}
+
+function check_admin_first() {
+	$(this).one("dblclick", check_admin_second);
+	$("input[name='admin_content[]']:checkbox").prop("checked", true);
+}
+
+function check_admin_second() {
+	$(this).one("dblclick", check_admin_first);
+	$("input[name='admin_content[]']:checkbox").prop("checked", false);
+}
+
 $(document).ready(function(){
 	$('#checkall').click(function() {
 		$('input:checkbox').each(function() {
@@ -401,4 +475,73 @@ $(document).ready(function(){
 		return false;
 	});
 
+	// Groups
+	$("#select-img-group").click(function() {
+		var area = "image";
+		var path = CFG.upload_current;
+		var currentpath = CFG.upload_current;
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+
+	// News content
+	$("#select-img-post").click(function() {
+		var area = "homeimg";
+		var alt = "homeimgalt";
+		var path = CFG.uploads_dir_user;
+		var currentpath = CFG.upload_current;
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
+	$('.submit-post').hover(function(){
+		if( $('[name="keywords[]"]').length == 0 ){
+			if( $('#message-tags').length == 0 ){
+				$('#message').append('<div id="message-tags" class="alert alert-danger">' + LANG.content_tags_empty + '</div>');
+			}
+		}else{
+			$('#message-tags').remove();
+		}
+		if( $('[name="alias"]').val() == '' ){
+			if( $('#message-alias').length == 0 ){
+				$('#message').append('<div id="message-alias" class="alert alert-danger">' + LANG.alias_empty_notice + '.</div>');
+			}
+		}else{
+			$('#message-alias').remove();
+		}
+	});
+
+	// Add to topic
+	$('#update-topic').click(function() {
+		var listid = [];
+		$('input[name=idcheck]:checked').each(function() {
+			listid.push($(this).val());
+		});
+		if (listid.length < 1) {
+			alert(LANG.topic_nocheck);
+			return false;
+		}
+		var topic = $('select[name=topicsid]').val();
+		$.ajax({
+			type : 'POST',
+			url : 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=addtotopics',
+			data : 'listid=' + listid + '&topicsid=' + topic,
+			success : function(data) {
+				alert(data);
+				window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid=' + topic;
+			}
+		});
+		return false;
+	});
+	
+	// Cat
+	$("#select-img-cat").click(function() {
+		var area = "image";
+		var path = CFG.upload_current;
+		var currentpath = CFG.upload_current;
+		var type = "image";
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		return false;
+	});
 });

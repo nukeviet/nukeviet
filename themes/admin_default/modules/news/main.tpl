@@ -121,11 +121,9 @@
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
-
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#catid").select2();
 	});
 </script>
-
 <!-- END: main -->

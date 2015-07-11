@@ -62,7 +62,7 @@
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.content_homeimg}</th>
-						<td><input class="form-control w500 pull-left" type="text" name="image" id="image" value="{image}"/> &nbsp;<input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+						<td><input class="form-control w500 pull-left" type="text" name="image" id="image" value="{image}"/> &nbsp;<input id="select-img-cat" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 					</tr>
 					<tr>
 						<td class="text-right">
@@ -107,10 +107,10 @@
 </div>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#parentid").select2();
-	});
-
+var CFG = [];
+CFG.upload_current = '{UPLOAD_CURRENT}';
+$(document).ready(function() {
+	$("#parentid").select2();
 	$("#titlelength").html($("#idtitle").val().length);
 	$("#idtitle").bind("keyup paste", function() {
 		$("#titlelength").html($(this).val().length);
@@ -125,22 +125,12 @@
 	$("#description").bind("keyup paste", function() {
 		$("#descriptionlength").html($(this).val().length);
 	});
-	$("input[name=selectimg]").click(function() {
-		var area = "image";
-		var path = "{UPLOAD_CURRENT}";
-		var currentpath = "{UPLOAD_CURRENT}";
-		var type = "image";
-		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
-</script>
-
-<!-- BEGIN: getalias -->
-<script type="text/javascript">
+	<!-- BEGIN: getalias -->
 	$("#idtitle").change(function() {
 		get_alias("cat", 0);
 	});
+	<!-- END: getalias -->
+});
 </script>
-<!-- END: getalias -->
 <!-- END: content -->
 <!-- END: main -->
