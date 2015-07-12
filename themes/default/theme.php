@@ -73,7 +73,7 @@ function nv_site_theme( $contents, $full = true )
 
     //Links
     $html_links = nv_html_links( false );
-    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/font-awesome.min.css' );
+    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/default/css/font-awesome.min.css' );
     if ( $global_config['current_theme_type'] == 'r' )
     {
         $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css' );
@@ -126,12 +126,6 @@ function nv_site_theme( $contents, $full = true )
     $html_js = nv_html_site_js( false );
     $html_js[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/main.js" );
 
-    if ( $client_info['browser']['key'] == "explorer" and $client_info['browser']['version'] < 9 )
-    {
-        $html_js[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/html5shiv.js" );
-        $html_js[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/respond.min.js" );
-    }
-
     foreach ( $html_js as $js )
     {
         if ( $js['ext'] )
@@ -147,9 +141,9 @@ function nv_site_theme( $contents, $full = true )
         $xtpl->parse( 'main.js' );
     }
 
-    if ( $client_info['browser']['key'] == "explorer" and $client_info['browser']['version'] < 7 )
+    if ( $client_info['browser']['key'] == 'explorer' and $client_info['browser']['version'] < 9 )
     {
-        $xtpl->parse( 'main.lt_ie7' );
+        $xtpl->parse( 'main.lt_ie9' );
     }
 
 	// Module contents

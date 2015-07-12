@@ -106,6 +106,7 @@ $lang_global['year'] = 'năm';
 $lang_global['today'] = 'Hôm nay';
 $lang_global['current_month'] = 'Tháng hiện tại';
 $lang_global['nojs'] = 'Trình duyệt của bạn đã tắt chức năng hỗ trợ JavaScript.<br />Website chỉ làm việc khi bạn bật nó trở lại.<br />Để tham khảo cách bật JavaScript, hãy click chuột <a href="http://wiki.nukeviet.vn/support:browser:enable_javascript">vào đây</a>!';
+$lang_global['chromeframe'] = 'Bạn đang sử dụng một trình duyệt <strong>lỗi thời</strong>. Vui lòng <a href="http://browsehappy.com/">nâng cấp trình duyệt của bạn</a> hoạt <a href="http://www.google.com/chromeframe/?redirect=true">kích hoạt Google Chrome Frame</a> để cải thiện trải nghiệm của bạn.';
 $lang_global['sun'] = 'CN';
 $lang_global['mon'] = 'T2';
 $lang_global['tue'] = 'T3';
