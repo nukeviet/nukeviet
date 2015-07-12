@@ -79,20 +79,20 @@ function checkWidthMenu() {
         $( "li.dropdown ul" ).addClass( "dropdown-submenu" );
         $( "li.dropdown a" ).addClass( "dropdown-mobile" );
         $( "#menu-site-default ul li a.dropdown-toggle" ).addClass( "dropdown-mobile" );
-        $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" );
+        $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" )
     }
     else{
         $( "li.dropdown ul" ).addClass( "dropdown-menu" );
         $( "li.dropdown ul" ).removeClass( "dropdown-submenu" );
         $( "li.dropdown a" ).removeClass( "dropdown-mobile" );
         $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" );
-        $( "#menu-site-default ul li a.dropdown-toggle" ).removeClass( "dropdown-mobile" );
-        $('#menu-site-default .dropdown').hover(function(){
-            $(this).addClass('open');
-        }, function(){
-            $(this).removeClass('open');
-        });
+        $( "#menu-site-default ul li a.dropdown-toggle" ).removeClass( "dropdown-mobile" )
     }
+    $('#menu-site-default .dropdown').hover(function(){
+    	$(this).addClass('open')
+    }, function(){
+    	$(this).removeClass('open')
+    })
 }
 
 // NukeViet Default Custom JS
