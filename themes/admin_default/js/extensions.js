@@ -74,7 +74,7 @@ var EXT = {
 	redirect: function(){
 		var url = script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=extensions&' + nv_fc_variable + '=upload&uploaded=1';
 		window.location = url;
-	},
+	}
 };
 
 function checkext(myArray, myValue) {

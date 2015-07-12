@@ -416,7 +416,7 @@ $(document).ready(function(){
 			changeYear : true,
 			showOtherMonths : true,
 			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true,
+			buttonImageOnly : true
 		});
 		$("#birthday").datepicker({
 			showOn : "both",

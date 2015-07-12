@@ -30,7 +30,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 	}
 	else
 	{
-		$block_theme = "default";
+		$block_theme = 'default';
 	}
 
 	$xtpl = new XTemplate( 'block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users' );
@@ -39,7 +39,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 	{
 		$avata = '';
 		if( file_exists( NV_ROOTDIR . '/' . $user_info['photo'] ) && ! empty( $user_info['photo'] ) ) $avata = NV_BASE_SITEURL . $user_info['photo'];
-		else $avata = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/no_avatar.jpg";
+		else $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.jpg';
 		$xtpl->assign( 'AVATA', $avata );
 		$xtpl->assign( 'LANG', $lang_global );
 		$xtpl->assign( 'USER', $user_info );
@@ -55,7 +55,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 
 		if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
 		{
-			$in_group = "<a title='" . $lang_global['in_groups'] . "' href='" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=regroups'>" . $lang_global['in_groups'] . "</a>";
+			$in_group = '<a title="' . $lang_global['in_groups'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=regroups">' . $lang_global['in_groups'] . '</a>';
 			$xtpl->assign( 'in_group', $in_group );
 		}
 		$xtpl->parse( 'signed' );
@@ -83,15 +83,15 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 
 		if( defined( 'NV_OPENID_ALLOWED' ) )
 		{
-			$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/openid_small.gif' );
+			$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/openid_small.png' );
 			$xtpl->assign( 'OPENID_IMG_WIDTH', 24 );
 			$xtpl->assign( 'OPENID_IMG_HEIGHT', 24 );
 			$assigns = array();
 			foreach( $global_config['openid_servers'] as $server )
 			{
-				$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=users&amp;" . NV_OP_VARIABLE . "=oauth&amp;server=" . $server . "&amp;nv_redirect=" . nv_base64_encode( $client_info['selfurl'] );
+				$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] );
 				$assigns['title'] = ucfirst( $server );
-				$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $block_theme . "/images/users/" . $server . ".gif";
+				$assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/' . $server . '.png';
 				$assigns['img_width'] = $assigns['img_height'] = 24;
 
 				$xtpl->assign( 'OPENID', $assigns );

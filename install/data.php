@@ -174,7 +174,7 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VA
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', '', 'http://www.mofa.gov.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', '', 'http://vinades.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,2)";
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (3, 'Quang cao giua trang', 1, 0, 'webnhanh_vn.gif', 'gif', 'image/gif', 510, 65, '', '', 'http://webnhanh.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (3, 'Quang cao giua trang', 1, 0, 'webnhanh_vn.png', 'png', 'image/png', 510, 65, '', '', 'http://webnhanh.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_extension_files VALUES (NULL, 'module', 'contact', 'modules/contact/action_mysql.php', " . NV_CURRENTTIME . ", 0)";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_extension_files VALUES (NULL, 'module', 'contact', 'modules/contact/action_oci.php', " . NV_CURRENTTIME . ", 0)";

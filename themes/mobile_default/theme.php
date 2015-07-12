@@ -35,15 +35,13 @@ function nv_site_theme( $contents, $full = true )
 	// System variables
     $xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title( false ) );
 
-    //Meta-tags
-    $metatags = nv_html_meta_tags( false );
-    if ( $global_config['current_theme_type'] == 'r' )
-    {
-        $metatags[] = array(
-            'name' => 'name',
-            'value' => 'viewport',
-            'content' => 'width=device-width, initial-scale=1' );
-    }
+		// Meta-tags
+	$metatags = nv_html_meta_tags( false );
+	$metatags[] = array(
+		'name' => 'name',
+		'value' => 'viewport',
+		'content' => 'width=device-width, initial-scale=1'
+	);
 
     foreach ( $metatags as $meta )
     {
