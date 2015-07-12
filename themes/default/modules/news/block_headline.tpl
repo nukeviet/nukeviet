@@ -41,7 +41,7 @@
 	</div>
 </div>
 <!-- BEGIN: tooltip -->
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 $(document).ready(function() {$("[data-rel='block_headline_tooltip'][data-content!='']").tooltip({
 	placement: "{TOOLTIP_POSITION}",
 	html: true,

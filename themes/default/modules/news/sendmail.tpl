@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: close -->
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 	setTimeout("self.close()", 10000);
 </script>
 <!-- END: close -->

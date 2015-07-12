@@ -65,7 +65,7 @@
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 $(window).load(function(){
 	$.each( $('.thumbnail'), function(k,v){
 		var height1 = $($('.thumbnail')[k]).height();

@@ -41,7 +41,7 @@ if( !nv_function_exists( 'nv_news_category' ) )
 		}
 		$html .= '</select>';
 		$html .= $html_input;
-		$html .= '<script type="text/javascript" data-show="after">';
+		$html .= '<script type="text/javascript">';
 		$html .= '	$("select[name=config_catid]").change(function() {';
 		$html .= '		$("input[name=title]").val($("select[name=config_catid] option:selected").text());';
 		$html .= '		$("input[name=link]").val($("#config_catid_" + $("select[name=config_catid]").val()).val());';

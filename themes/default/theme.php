@@ -257,7 +257,7 @@ function nv_site_theme( $contents, $full = true )
 
 		if( defined( 'NV_IS_ADMIN' ) )
 		{
-			$my_footer = nv_admin_menu() . $my_footer;
+			$my_footer .= nv_admin_menu() ;
 		}
 	}
 

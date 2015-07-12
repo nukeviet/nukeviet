@@ -222,7 +222,7 @@
     </div>
 </div>
 
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
         $('#picker_body_color').css({'background-color' : $('#picker_body_color').val()});

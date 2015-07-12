@@ -27,7 +27,7 @@
 	</div>
 </div>
 <!-- BEGIN: tooltip -->
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 $(document).ready(function() {$("[data-rel='block_newscenter_tooltip'][data-content!='']").tooltip({
 	placement: "{TOOLTIP_POSITION}",
 	html: true,

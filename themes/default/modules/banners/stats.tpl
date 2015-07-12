@@ -48,7 +48,7 @@
 			</ul>
 		</div>	
 	</div>
-	<script type="text/javascript" data-show="after">
+	<script type="text/javascript">
 	charturl = '{charturl}';
 	</script>
 </div>

@@ -46,7 +46,7 @@
 		</ul>
 	</div>
 </div>
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 nv_DigitalClock('digclock');
 $(document).ready(function(){
     checkWidthMenu();

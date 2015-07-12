@@ -100,7 +100,7 @@
 <!-- END: clear -->
 <!-- END: loopcat -->
 <div class="clear">&nbsp;</div>
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 $(window).load(function(){
     $.each( $('.two_column .panel-body'), function(k,v){
         if( k % 2 == 0 )
