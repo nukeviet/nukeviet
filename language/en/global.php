@@ -277,3 +277,5 @@ $lang_global['timeoutsess_nouser'] = 'You did not use the site';
 $lang_global['timeoutsess_click'] = 'Click here to remain logged';
 $lang_global['timeoutsess_timeout'] = 'Timeout';
 $lang_global['unknown'] = 'Unknown';
+$lang_global['joinnow'] = 'Join Now';
+$lang_global['contactUs'] = 'Contact Us';
