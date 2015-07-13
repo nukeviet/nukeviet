@@ -252,7 +252,7 @@ while( $row = $func_result->fetch() )
 
 $disable_site_content = 'Notre site est fermé temporairement pour la maintenance. Veuillez revenir plus tard. Merci!';
 $copyright = 'Veuillez citer le lien vers l&#039;article original si vous le reproduisez sur un autre site. Merci.';
-$site_description = 'NUKEVIET CMS 3.0 Developé par Vinades.,Jsc';
+$site_description = 'Partager le succès, connectez passions';
 
 $db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $site_description ) . " WHERE module = 'global' AND config_name = 'site_description' AND lang='fr'" );
 $db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $disable_site_content ) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='fr'" );
