@@ -95,7 +95,7 @@
 				<div class="form-group">
 					<label class="col-sm-3 control-label"><strong>{LANG.download_file_path}</strong> <span class="red">*</span></label>
 					<div class="col-sm-18">
-						<input type="text" name="path" id="path" value="{DATA.path}" class="form-control" readonly="readonly" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')">
+						<input type="text" name="path" id="path" value="{FILE_PATH}" class="form-control" readonly="readonly" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')">
 					</div>
 					<div class="col-sm-3">
 						<button class="btn btn-primary" id="open_files"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.download_file_chose}</button>
@@ -143,7 +143,7 @@
 		</tr>
 		<tr>
 			<td>{LANG.download_file_path}</td>
-			<td><input type="text" name="path" id="path" value="{DATA.path}" class="form-control" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" style="width: 100%"></td>
+			<td><input type="text" name="path" id="path" value="{FILE_PATH}" class="form-control" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" style="width: 100%"></td>
 			<td><button class="btn btn-primary" id="open_files"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.download_file_chose}</button></td>
 		</tr>
 		<tr>
