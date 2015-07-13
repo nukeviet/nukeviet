@@ -48,13 +48,16 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-					<td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg" class="btn btn-info"/></td>
+					<td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="image" id="image" value="{image}"/> <input id="select-img-tag" type="button" value="Browse server" name="selectimg" class="btn btn-info"/></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </form>
 <script type="text/javascript">
+var CFG = [];
+CFG.upload_current = '{UPLOAD_CURRENT}';
+$(document).ready(function(){
 	$("#aliaslength").html($("#idalias").val().length);
 	$("#idalias").bind("keyup paste", function() {
 		$("#aliaslength").html($(this).val().length);
@@ -64,28 +67,6 @@
 	$("#description").bind("keyup paste", function() {
 		$("#descriptionlength").html($(this).val().length);
 	});
-
-	$("input[name=selectimg]").click(function() {
-		var area = "image";
-		var path = "{UPLOAD_CURRENT}";
-		var currentpath = "{UPLOAD_CURRENT}";
-		var type = "image";
-		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
-
-	var load_bar = '<p class="text-center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>';
-
-	function nv_search_tag(tid) {
-		$("#module_show_list").html(load_bar).load("index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=tags&q=" + rawurlencode($("#q").val()) + "&num=" + nv_randomPassword(10))
-		return false;
-	}
-
-	function nv_del_tags(tid) {
-		if (confirm(nv_is_del_confirm[0])) {
-			$("#module_show_list").html(load_bar).load("index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=tags&del_tid=" + tid + "&num=" + nv_randomPassword(10))
-		}
-		return false;
-	}
+});
 </script>
 <!-- END: main -->

@@ -72,6 +72,29 @@ function timeoutsessrun() {
 	}, 1000);
 }
 
+function checkWidthMenu() {
+    var windowsize = $(window).width();
+    if (theme_responsive == '1' && windowsize <= 640) {
+        $( "li.dropdown ul" ).removeClass( "dropdown-menu" );
+        $( "li.dropdown ul" ).addClass( "dropdown-submenu" );
+        $( "li.dropdown a" ).addClass( "dropdown-mobile" );
+        $( "#menu-site-default ul li a.dropdown-toggle" ).addClass( "dropdown-mobile" );
+        $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" )
+    }
+    else{
+        $( "li.dropdown ul" ).addClass( "dropdown-menu" );
+        $( "li.dropdown ul" ).removeClass( "dropdown-submenu" );
+        $( "li.dropdown a" ).removeClass( "dropdown-mobile" );
+        $( "li.dropdown ul li a" ).removeClass( "dropdown-mobile" );
+        $( "#menu-site-default ul li a.dropdown-toggle" ).removeClass( "dropdown-mobile" )
+    }
+    $('#menu-site-default .dropdown').hover(function(){
+    	$(this).addClass('open')
+    }, function(){
+    	$(this).removeClass('open')
+    })
+}
+
 // NukeViet Default Custom JS
 $(document).ready(function(){
 	fix_banner_center();
@@ -80,8 +103,8 @@ $(document).ready(function(){
 	$('a[href="#"], a[href=""]').attr('href','javascript:void(0);');
 
 	// Smooth scroll to top
-	$('#totop').click(function(){
-		$('body').animate({scrollTop : 0}, 'slow');
+	$('#totop,#bttop').click(function(){
+		$('html,body').animate({scrollTop : 0}, 800);
 		return false;
 	});
 
@@ -105,9 +128,22 @@ $(document).ready(function(){
 		selector: "[data-toggle=tooltip]",
 		container: "body"
 	});
+	
+	// Change site lang
+    $(".nv_change_site_lang").change(function(){
+        document.location = $(this).val();
+    });
+    
+    // Menu bootstrap
+	$('#menu-site-default a').hover(function(){
+		$(this).attr("rel", $(this).attr("title"));
+        $(this).removeAttr("title");
+	}, function(){
+		$(this).attr("title", $(this).attr("rel"));
+        $(this).removeAttr("rel");
+	});
 });
 
-$(window).on('resize', function()
-{
+$(window).on('resize', function(){
 	fix_banner_center();
 });

@@ -85,6 +85,7 @@ $sth->execute( array(59, 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '') );
 $sth->execute( array(60, 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, '') );
 $sth->execute( array(61, 'rss', 'rss', 'Rss', 'page', 0, 0, 0, '') );
 $sth->execute( array(62, 'rss', 'rss', 'Rss', 'about', 0, 0, 0, '') );
+$sth->execute( array(63, 'changequestion', 'changequestion', 'Thay đổi câu hỏi bảo mật', 'users', 1, 1, 14, '') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
@@ -131,6 +132,7 @@ $sth->execute( array(54, 'left-body-right', 'default') );
 $sth->execute( array(55, 'left-body-right', 'default') );
 $sth->execute( array(56, 'left-body-right', 'default') );
 $sth->execute( array(57, 'left-body-right', 'default') );
+$sth->execute( array(63, 'left-body-right', 'default') );
 
 $sth->execute( array(0, 'body', 'mobile_default') );
 $sth->execute( array(2, 'body', 'mobile_default') );
@@ -174,6 +176,7 @@ $sth->execute( array(54, 'body', 'mobile_default') );
 $sth->execute( array(55, 'body', 'mobile_default') );
 $sth->execute( array(56, 'body', 'mobile_default') );
 $sth->execute( array(57, 'body', 'mobile_default') );
+$sth->execute( array(63, 'body', 'mobile_default') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -394,8 +397,8 @@ if( $result->fetchColumn() )
 
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (1, 'Báo Hà Nội Mới', 'http://hanoimoi.com.vn', '', 1, 1274989177, 1274989177)" );
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (2, 'VINADES.,JSC', 'http://vinades.vn', '', 2, 1274989787, 1274989787)" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (3, 'NukeViet', 'http://nukeviet.vn', '', 2, 1274989787, 1274989787)" );
-	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (4, 'Báo điện tử Dân Trí', 'http://dantri.com.vn', '', 3, 1322685396, 1322685396)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (3, 'NukeViet', 'http://nukeviet.vn', '', 3, 1274989787, 1274989787)" );
+	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_sources VALUES (4, 'Báo điện tử Dân Trí', 'http://dantri.com.vn', '', 4, 1322685396, 1322685396)" );
 
 	$db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_news_topics VALUES (1, 'NukeViet 3', 'NukeViet-3', '', 'NukeViet 3', 1, 'NukeViet 3', 1274990212, 1274990212)" );
 

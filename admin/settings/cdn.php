@@ -16,7 +16,6 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 	$allowzip = array();
 	$allowzip[] = $dir . '/.htaccess';
 	$allowzip[] = $dir . '/web.config';
-	$allowzip[] = $dir . '/CJzip.php';
 	$allowzip[] = $dir . '/images/index.html';
 	$allowzip[] = $dir . '/js/index.html';
 	$allowzip[] = $dir . '/modules/index.html';

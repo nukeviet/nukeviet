@@ -108,15 +108,6 @@
 					<td><input type="checkbox" value="1" name="gzip_method" {CHECKED_GZIP_METHOD} /></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.optActive}</strong></td>
-					<td>
-					<select name="optActive" class="form-control w200">
-						<!-- BEGIN: optActive -->
-						<option value="{OPTACTIVE_OP}" {OPTACTIVE_SELECTED}>{OPTACTIVE_TEXT}</option>
-						<!-- END: optActive -->
-					</select></td>
-				</tr>
-				<tr>
 					<td><strong>{LANG.my_domains}</strong></td>
 					<td><input type="text" name="my_domains" value="{MY_DOMAINS}" class="form-control" style="width: 450px"/></td>
 				</tr>
@@ -155,28 +146,15 @@
 	</div>
 </form>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#site_timezone").select2();
-	});
+$(document).ready(function() {
+	$("#site_timezone").select2();
+});
 
-	$('#cdn_download').click(function() {
-		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl={CDNDL}';
-	});
+var LANG = [];
+LANG.note_ssl = "{LANG.note_ssl}";
+var CFG = [];
+CFG.cdndl = "{CDNDL}";
 
-	$('#ssl_https').change(function() {
-		if ($(this).is(":checked")) {
-			var returnVal = confirm('{LANG.note_ssl}');
-			$(this).attr("checked", returnVal);
-		}
-	});
-
-	function show_rewrite_op() {
-		if ($("input[name=rewrite_optional]").is(":checked")) {
-			$('#tr_rewrite_op_mod').show();
-		} else {
-			$('#tr_rewrite_op_mod').hide();
-		}
-	}
-	show_rewrite_op();
+show_rewrite_op();
 </script>
 <!-- END: main -->

@@ -39,51 +39,9 @@
 	</div>
 </form>
 <script type="text/javascript">
-	//<![CDATA[
-	$(document).ready(function() {
-		$("select[name=theme1]").change(function() {
-			var theme1 = $(this).val();
-			var theme2 = $("select[name=theme2]").val();
-			if (theme2 != 0 && theme1 != 0 && theme1 != theme2) {
-				$("#loadposition").html('<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" />{LANG.autoinstall_package_processing}');
-				$("#loadposition").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=loadposition&theme2=" + theme2 + "&theme1=" + theme1);
-			} else {
-				$("#loadposition").html("");
-			}
-		});
-		$("select[name=theme2]").change(function() {
-			var theme2 = $(this).val();
-			var theme1 = $("select[name=theme1]").val();
-			if (theme2 != 0 && theme1 != 0 && theme1 != theme2) {
-				$("#loadposition").html('<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" />{LANG.autoinstall_package_processing}');
-				$("#loadposition").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=loadposition&theme2=" + theme2 + "&theme1=" + theme1);
-			} else {
-				$("#loadposition").html("");
-			}
-		});
-		$("input[name=continue]").click(function() {
-			var theme1 = $("select[name=theme1]").val();
-			var theme2 = $("select[name=theme2]").val();
-			var positionlist = [];
-			$('input[name="position[]"]:checked').each(function() {
-				positionlist.push($(this).val());
-			});
-			if (positionlist.length < 1) {
-				alert("{LANG.xcopyblock_no_position}");
-				return false;
-			} else {
-				$("#loadposition").html('<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" />{LANG.autoinstall_package_processing}');
-				$.ajax({
-					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=xcopyprocess",
-					data : "position=" + positionlist + "&theme1=" + theme1 + "&theme2=" + theme2,
-					success : function(data) {
-						$("#loadposition").html(data);
-					}
-				});
-			}
-		});
-	});
-	//]]>
+//<![CDATA[
+LANG.autoinstall_package_processing = '{LANG.autoinstall_package_processing}';
+LANG.xcopyblock_no_position = '{LANG.xcopyblock_no_position}';
+//]]>
 </script>
 <!-- END: main -->

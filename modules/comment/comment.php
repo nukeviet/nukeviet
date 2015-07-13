@@ -229,17 +229,29 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
 	$xtpl->assign( 'LANG', $lang_module_comment );
-	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
+	$xtpl->assign( 'TEMPLATE', $template );
 	$xtpl->assign( 'CHECKSS_COMM', $checkss );
 	$xtpl->assign( 'MODULE_COMM', $module );
 	$xtpl->assign( 'MODULE_DATA', $module_data );
 	$xtpl->assign( 'AREA_COMM', $area );
 	$xtpl->assign( 'ID_COMM', $id );
 	$xtpl->assign( 'ALLOWED_COMM', $allowed_comm );
+	$xtpl->assign( 'BASE_URL_COMM', $base_url );
 
 	if( defined( 'NV_COMM_ID') )
 	{
-		$xtpl->assign( 'BASE_URL_COMM', $base_url );
+		// Check call module js file
+		if(  file_exists( NV_ROOTDIR . '/themes/' . $template . '/js/comment.js' ) )
+		{
+			$xtpl->parse( 'main.header.jsfile' );
+		}
+		
+		// Check call module css file
+		if(  file_exists( NV_ROOTDIR . '/themes/' . $template . '/css/comment.css' ) )
+		{
+			$xtpl->parse( 'main.header.cssfile' );
+		}
+		
 		$xtpl->parse( 'main.header' );
 	}
 
@@ -342,7 +354,7 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 	$template = file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl' ) ? $global_config['module_theme'] : 'default';
 
 	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
-	$xtpl->assign( 'TEMPLATE', $global_config['site_theme'] );
+	$xtpl->assign( 'TEMPLATE', $template );
 	$xtpl->assign( 'LANG', $lang_module_comment );
 
 	if( ! empty( $comment_array['comment'] ) )
@@ -406,7 +418,7 @@ function nv_comment_module_data_reply( $module, $comment_array, $is_delete )
 	$template = file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl' ) ? $global_config['module_theme'] : 'default';
 
 	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
-	$xtpl->assign( 'TEMPLATE', $global_config['site_theme'] );
+	$xtpl->assign( 'TEMPLATE', $template );
 	$xtpl->assign( 'LANG', $lang_module_comment );
 
 	foreach( $comment_array as $comment_array_i )

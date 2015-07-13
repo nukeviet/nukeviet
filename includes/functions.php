@@ -1567,7 +1567,7 @@ function nv_change_buffer( $buffer )
     if ( NV_LANG_INTERFACE == 'vi' and ( $global_config['mudim_active'] == 1 or ( $global_config['mudim_active'] == 2 and defined( 'NV_SYSTEM' ) ) or ( $global_config['mudim_active'] == 3 and defined( 'NV_ADMIN' ) ) ) )
     {
         $internal .= "var mudim_showPanel=" . ( ( $global_config['mudim_showpanel'] ) ? "!0" : "!1" ) . ",mudim_displayMode=" . $global_config['mudim_displaymode'] . ",mudim_method=" . $global_config['mudim_method'] . ";" . PHP_EOL;
-        $external .= "<script src=\"" . NV_BASE_SITEURL . "js/mudim.js\" data-show=\"after\"></script>" . PHP_EOL;
+        $external .= "<script src=\"" . NV_BASE_SITEURL . "js/mudim.js\"></script>" . PHP_EOL;
     }
 
     if ( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
@@ -1596,25 +1596,17 @@ function nv_change_buffer( $buffer )
         }
     }
 
-    if ( ! empty( $internal ) ) $internal = "<script data-show=\"after\">" . PHP_EOL . $internal . "</script>" . PHP_EOL;
+    if ( ! empty( $internal ) ) $internal = "<script>" . PHP_EOL . $internal . "</script>" . PHP_EOL;
     $body_replace .= $internal . $external;
 
     if ( ! empty( $body_replace ) ) $buffer = preg_replace( '/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1 );
 
-    if ( ( $global_config['optActive'] == 1 ) || ( ! defined( 'NV_ADMIN' ) and $global_config['optActive'] == 2 ) || ( defined( 'NV_ADMIN' ) and $global_config['optActive'] == 3 ) )
-    {
-        $opt_css_file = ( empty( $global_config['cdn_url'] ) ) ? true : false;
-        $optimezer = new optimezer( $buffer, $opt_css_file );
-        $buffer = $optimezer->process();
-    }
+	$optimizer = new optimizer( $buffer,  NV_BASE_SITEURL );
+	$buffer = $optimizer->process();
 
     if ( ! empty( $global_config['cdn_url'] ) )
     {
         $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-    }
-    elseif ( ! $sys_info['supports_rewrite'] )
-    {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . NV_BASE_SITEURL . "CJzip.php?file=\\4&amp;r=" . $global_config['timestamp'] . "\"\\7>", $buffer );
     }
     else
     {
@@ -1705,7 +1697,7 @@ function nv_site_mods( $module_name = '' )
 		{
 			if( defined( 'NV_IS_USER' ) )
 			{
-				$user_ops = array( 'main', 'logout', 'changepass', 'openid', 'editinfo', 'regroups', 'avatar' );
+				$user_ops = array( 'main', 'logout', 'changepass', 'openid', 'editinfo', 'changequestion', 'regroups', 'avatar' );
 			}
 			else
 			{

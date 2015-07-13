@@ -259,7 +259,7 @@ $contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 
 
 $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
 $my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_footer .= "<script type=\"text/javascript\" data-show=\"after\">\n";
+$my_footer .= "<script type=\"text/javascript\">\n";
 $my_footer .= "Shadowbox.init({\n";
 $my_footer .= "});\n";
 $my_footer .= "</script>\n";

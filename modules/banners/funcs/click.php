@@ -38,7 +38,7 @@ if( $id > 0 )
 	}
 }
 
-echo '<script type="text/javascript" data-show="after">';
+echo '<script type="text/javascript">';
 echo '		window.location.href="' . $links . '";';
 echo '</script>';
 echo '<noscript>';

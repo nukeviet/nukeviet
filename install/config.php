@@ -30,7 +30,7 @@ $array_data['re_password'] = '';
 $array_data['question'] = '';
 $array_data['answer_question'] = '';
 
-$global_config['version'] = '4.0.20';// NukeViet 4.0 Release Candidate
+$global_config['version'] = '4.0.21';// NukeViet 4.0 Release Candidate 1
 $global_config['site_email'] = '';
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';
@@ -86,6 +86,8 @@ define( 'NV_UNICKMAX', 20 );
 define( 'NV_UNICKMIN', 4 );
 
 define( 'NV_LIVE_COOKIE_TIME', 31104000 );
+
+define( 'NV_LIVE_SESSION_TIME', 0 );
 
 // Ma HTML duoc chap nhan
 define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, source, track, code, pre' );

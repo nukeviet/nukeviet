@@ -12,9 +12,9 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/superfish.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/superfish-navbar.css" />
 <link rel="stylesheet" type="text/css" media="screen" href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/superfish-vertical.css" />
-<script	type="text/javascript" src="{NV_BASE_SITEURL}js/superfish/hoverIntent.js" data-show="after"></script>
-<script	type="text/javascript" src="{NV_BASE_SITEURL}js/superfish/superfish.js" data-show="after"></script>
-<script	type="text/javascript" src="{NV_BASE_SITEURL}js/superfish/supersubs.js" data-show="after"></script>
+<script	type="text/javascript" src="{NV_BASE_SITEURL}js/superfish/hoverIntent.js"></script>
+<script	type="text/javascript" src="{NV_BASE_SITEURL}js/superfish/superfish.js"></script>
+<script	type="text/javascript" src="{NV_BASE_SITEURL}js/superfish/supersubs.js"></script>
 <style type="text/css">
 	.style_nav {
 		position: relative;
@@ -24,7 +24,7 @@
 		z-index: 990
 	}
 </style>
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 	$(document).ready(function() {
 		$("ul.sf-menu").superfish({
 			pathClass : 'current'

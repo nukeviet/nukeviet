@@ -43,7 +43,7 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 
 	function nv_block_voting_select( $block_config, $global_array_cat )
 	{
-		global $module_info, $global_config, $db, $site_mods, $module_name, $my_head, $client_info;
+		global $module_info, $global_config, $db, $site_mods, $module_name, $my_footer, $client_info;
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
 
@@ -75,8 +75,11 @@ if( ! nv_function_exists( 'nv_block_voting_select' ) )
 				{
 					$block_theme = 'default';
 				}
-				
-				$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $site_mods['voting']['module_file'] . "/js/user.js\" data-show=\"after\"></script>\n";
+
+				if( file_exists( NV_ROOTDIR . '/themes/' . $block_theme . '/js/voting.js' ) )
+				{
+					$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/js/voting.js\"></script>\n";
+				}
 
 				$action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";
 

@@ -1,14 +1,4 @@
 <!-- BEGIN: main -->
-<script type="text/javascript">
-	function nv_check_form(OForm) {
-		var f_method = $("#f_method").val();
-		var f_value = $("#f_value").val();
-		if (f_method != '' && f_value != '') {
-			OForm.submit();
-		}
-		return false;
-	}
-</script>
 <div id="users">
 	<!-- BEGIN: is_forum -->
 	<div class="alert alert-warning">{LANG.modforum}</div>

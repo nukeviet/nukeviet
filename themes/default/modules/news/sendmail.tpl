@@ -1,8 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: close -->
-<script type="text/javascript" data-show="after">
-	var howLong = 10000;
-	setTimeout("self.close()", howLong);
+<script type="text/javascript">
+	setTimeout("self.close()", 10000);
 </script>
 <!-- END: close -->
 <style type="text/css">

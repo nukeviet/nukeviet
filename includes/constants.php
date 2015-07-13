@@ -119,6 +119,68 @@ define( 'NV_THEME_TYPE', 'r,d,m' );
 // Vui long khong thay doi gia tri nay
 define( 'NUKEVIET_STORE_APIURL', 'http://api.nukeviet.vn/store/' );
 
+//Browser Names
+define( 'BROWSER_OPERA', 'Opera' );
+define( 'BROWSER_OPERAMINI', 'Opera Mini' );
+define( 'BROWSER_WEBTV', 'WebTV' );
+define( 'BROWSER_EXPLORER', 'Internet Explorer' );
+define( 'BROWSER_EDGE', 'Microsoft Edger' );
+define( 'BROWSER_POCKET', 'Pocket Internet Explorer' );
+define( 'BROWSER_KONQUEROR', 'Konqueror' );
+define( 'BROWSER_ICAB', 'iCab' );
+define( 'BROWSER_OMNIWEB', 'OmniWeb' );
+define( 'BROWSER_FIREBIRD', 'Firebird' );
+define( 'BROWSER_FIREFOX', 'Firefox' );
+define( 'BROWSER_ICEWEASEL', 'Iceweasel' );
+define( 'BROWSER_SHIRETOKO', 'Shiretoko' );
+define( 'BROWSER_MOZILLA', 'Mozilla' );
+define( 'BROWSER_AMAYA', 'Amaya' );
+define( 'BROWSER_LYNX', 'Lynx' );
+define( 'BROWSER_SAFARI', 'Safari' );
+define( 'BROWSER_IPHONE', 'iPhone' );
+define( 'BROWSER_IPOD', 'iPod' );
+define( 'BROWSER_IPAD', 'iPad' );
+define( 'BROWSER_CHROME', 'Chrome' );
+define( 'BROWSER_ANDROID', 'Android' );
+define( 'BROWSER_GOOGLEBOT', 'GoogleBot' );
+define( 'BROWSER_YAHOOSLURP', 'Yahoo! Slurp' );
+define( 'BROWSER_W3CVALIDATOR', 'W3C Validator' );
+define( 'BROWSER_BLACKBERRY', 'BlackBerry' );
+define( 'BROWSER_ICECAT', 'IceCat' );
+define( 'BROWSER_NOKIAS60', 'Nokia S60 OSS Browser' );
+define( 'BROWSER_NOKIA', 'Nokia Browser' );
+define( 'BROWSER_MSN', 'MSN Browser' );
+define( 'BROWSER_MSNBOT', 'MSN Bot' );
+define( 'BROWSER_BINGBOT', 'Bing Bot' );
+
+//Platform Names
+define( 'PLATFORM_WIN', 'Windows' );
+define( 'PLATFORM_WIN10', 'Windows 10' );
+define( 'PLATFORM_WIN8', 'Windows 8' );
+define( 'PLATFORM_WIN7', 'Windows 7' );
+define( 'PLATFORM_WIN2003', 'Windows 2003' );
+define( 'PLATFORM_WINVISTA', 'Windows Vista' );
+define( 'PLATFORM_WINCE', 'Windows CE' );
+define( 'PLATFORM_WINXP', 'Windows XP' );
+define( 'PLATFORM_WIN2000', 'Windows 2000' );
+define( 'PLATFORM_APPLE', 'Apple' );
+define( 'PLATFORM_LINUX', 'Linux' );
+define( 'PLATFORM_OS2', 'OS/2' );
+define( 'PLATFORM_BEOS', 'BeOS' );
+define( 'PLATFORM_IPHONE', 'iPhone' );
+define( 'PLATFORM_IPOD', 'iPod' );
+define( 'PLATFORM_IPAD', 'iPad' );
+define( 'PLATFORM_BLACKBERRY', 'BlackBerry' );
+define( 'PLATFORM_NOKIA', 'Nokia' );
+define( 'PLATFORM_FREEBSD', 'FreeBSD' );
+define( 'PLATFORM_OPENBSD', 'OpenBSD' );
+define( 'PLATFORM_NETBSD', 'NetBSD' );
+define( 'PLATFORM_SUNOS', 'SunOS' );
+define( 'PLATFORM_OPENSOLARIS', 'OpenSolaris' );
+define( 'PLATFORM_ANDROID', 'Android' );
+define( 'PLATFORM_IRIX', 'Irix' );
+define( 'PLATFORM_PALM', 'Palm' );
+
 $global_config['site_charset'] = 'utf-8';
 $global_config['check_module'] = '/^[a-zA-Z0-9\-]+$/';
 $global_config['check_op'] = '/^[a-zA-Z0-9\-]+$/';

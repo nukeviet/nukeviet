@@ -12,25 +12,9 @@
 							<input type="submit" name="submit" class="btn btn-primary btn-sm" value="{LANG.install_submit}"/>
 						</form>
 						<script type="text/javascript">
-						function checkext(myArray, myValue) {
-							var type = eval(myArray).join().indexOf(myValue) >= 0;
-							return type;
-						}
-						function checkform(){
-							var zipfile = $("input[name=extfile]").val();
-							if( zipfile == "" ){
-								alert("{LANG.install_error_nofile}");
-								return false;
-							}
-							var filezip = zipfile.slice(-3);
-							var filegzip = zipfile.slice(-2);
-							var allowext = new Array("zip", "gz");
-							if (! checkext(allowext, filezip) || ! checkext(allowext, filegzip)) {
-								alert("{LANG.install_error_filetype}");
-								return false;
-							}
-							return true;
-						}
+						var LANG = [];
+						LANG.install_error_nofile = '{LANG.install_error_nofile}';
+						LANG.install_error_filetype = '{LANG.install_error_filetype}';
 						</script>
 						<!-- END: upload -->
 						<!-- BEGIN: nozlib -->
@@ -86,23 +70,7 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function(){
-	$('[data-toggle="tooltip"]').tooltip();
-	$('.package-ext').click(function(e){
-		window.location = $(this).data('href');
-	});
-	$('.delete-ext').click(function(){
-		if( confirm('{LANG.delele_ext_confirm}') ){
-			$.post($(this).data('href') + '&nocache=' + new Date().getTime(), '', function(res) {
-				res = res.split('_');
-				alert(res[1]);
-
-				if( res[0] == 'OK' ){
-					window.location.href = window.location.href;
-				}
-			});
-		}
-	});
-});
+var LANG = [];
+LANG.delele_ext_confirm = '{LANG.delele_ext_confirm}';
 </script>
 <!-- END: main -->

@@ -70,18 +70,6 @@ Shadowbox.init({
     overlayOpacity: 0.8,
     handleOversize: 'resize',
 });
-var player_width = $(window).width();
-var player_height = $(window).height();
-if( player_width > 1060 ){
-	player_width = 1000;
-}else{
-	player_width = player_width - 60;
-}
-if( player_height > 660 ){
-	player_height = 600;
-}else{
-	player_height = player_height - 60;
-}
 $(function(){
 	$('.ex-detail').click(function(e){
 		e.preventDefault();

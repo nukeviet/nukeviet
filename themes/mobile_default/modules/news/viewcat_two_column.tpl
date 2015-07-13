@@ -104,8 +104,7 @@
 <script type="text/javascript">
 $(window).load(function(){
     $.each( $('.two_column .panel-body'), function(k,v){
-        if( k % 2 == 0 )
-        {
+        if( k % 2 == 0 ){
             var height1 = $($('.two_column .panel-body')[k]).height();
             var height2 = $($('.two_column .panel-body')[k+1]).height();
             var height = ( height1 > height2 ? height1 : height2 );
