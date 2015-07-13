@@ -51,7 +51,7 @@ if( ! nv_function_exists( 'nv_page_list' ) )
 		if( ! isset( $site_mods[$module] ) ) return '';
 
 		$db->sqlreset()
-			->select( '*' )
+			->select( 'id, title, alias, description' )
 			->from( NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] )
 			->where( 'status = 1' )
 			->order( 'weight ASC' )
