@@ -92,8 +92,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$data['filesize'] = 0;
 	$data['extension'] = '';
 
-	$data['path'] = str_replace( NV_UPLOADS_DIR . '/' . $module_upload . '/', '', $data['path'] );
-	$real_file = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . $data['path'];
+	$real_path = substr( $data['path'], strlen( NV_BASE_SITEURL ) );
+	$real_file = NV_ROOTDIR . '/' .  $real_path;
 
 	if( empty( $data['title'] ) )
 	{
