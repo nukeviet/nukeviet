@@ -35,7 +35,7 @@
 <script src="{NV_BASE_SITEURL}js/ui/jquery.ui.effect.js"></script>
 <script type="text/javascript">
 	$('ul.slimmenu').slimmenu({
-	    resizeWidth: (theme_responsive == '1') ? 768 : 360,
+	    resizeWidth: (theme_responsive == '1') ? 768 : 0,
 		collapserTitle: '{BLOCK_CONFIG.title}',
 		easingEffect:'easeInOutQuint',
 		animSpeed: 'medium',
