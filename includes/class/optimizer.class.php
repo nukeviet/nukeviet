@@ -163,8 +163,7 @@ class optimizer
 			}
 		}
 
-		$_jsAfter = '<script src="' . $this->base_siteurl . 'js/jquery/jquery.min.js"></script>' . $this->eol;
-
+		$_jsAfter = '';
 		$_jsSrc = array();
 
 		if( ! empty( $this->_jsMatches ) )
@@ -235,6 +234,7 @@ class optimizer
 		}
 		if( preg_match( '/\<\/body\>/', $this->_content ) )
 		{
+			$_jsAfter = '<script src="' . $this->base_siteurl . 'js/jquery/jquery.min.js"></script>' . $this->eol . $_jsAfter;
 			$this->_content = preg_replace( '/\s*<\/body>/', $this->eol . $_jsAfter . $this->eol . '</body>', $this->_content, 1 );
 		}
 		else
