@@ -282,5 +282,5 @@ $lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng th�
 $lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
 
 $lang_global['unknown'] = 'Không xác định';
-$lang_global['joinnow'] = 'Chúng tên trên mạng xã hội';
+$lang_global['joinnow'] = 'Chúng tôi trên mạng xã hội';
 $lang_global['contactUs'] = 'Thông tin liên hệ';

@@ -166,7 +166,7 @@ function nv_create_table_sys( $lang )
 	 	('" . $lang . "', 'global', 'site_domain', ''),
 	 	('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 4.x'),
 	 	('" . $lang . "', 'global', 'site_logo', 'images/logo.png'),
-	 	('" . $lang . "', 'global', 'site_description', 'NukeViet CMS 4.x Developed by VINADES.,JSC'),
+	 	('" . $lang . "', 'global', 'site_description', 'Sharing success, connect passions'),
 	 	('" . $lang . "', 'global', 'site_keywords', ''),
         ('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
 	 	('" . $lang . "', 'global', 'mobile_theme', ''),
