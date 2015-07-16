@@ -25,12 +25,11 @@ $action = 0;
 $post_order = $nv_Request->get_int( 'postorder', 'post', 0 );
 $order_info = array();
 $error = array( );
-$user_info['full_name'] = $user_info['first_name'] . ' ' . $user_info['last_name'];
 
 $data_order = array(
-	'user_id' => $user_info['userid'],
-	'order_name' => (!empty( $user_info['full_name'] )) ? $user_info['full_name'] : $user_info['username'],
-	'order_email' => $user_info['email'],
+	'user_id' => isset( $user_info['userid'] ) ? $user_info['userid'] : 0,
+	'order_name' => isset( $user_info['full_name'] ) ? $user_info['full_name'] : '',
+	'order_email' => isset( $user_info['email'] ) ? $user_info['email'] : '',
 	'order_phone' => '',
 	'order_note' => '',
 	'admin_id' => 0,
@@ -71,7 +70,7 @@ $shipping_data = array( 'list_location' => array(), 'list_carrier' => array(), '
 // Ma giam gia
 $array_counpons = array( 'code' => '', 'discount' => 0, 'check' => 0 );
 $counpons = array( 'id' => 0, 'total_amount' => 0, 'date_start' => 0, 'uses_per_coupon_count' => 0, 'uses_per_coupon' => 0, 'type' => 0, 'discount' => 0 );
-if( ! empty( $_SESSION[$module_data . '_coupons'] ) and $_SESSION[$module_data . '_coupons']['discount'] > 0 )
+if( isset( $_SESSION[$module_data . '_coupons']['discount'] ) and $_SESSION[$module_data . '_coupons']['discount'] > 0 )
 {
 	$array_counpons = $_SESSION[$module_data . '_coupons'];
 }
@@ -522,25 +521,21 @@ if( $post_order == 1 )
 				$global_config['site_email']
 			), $data_order['order_email'], sprintf( $email_title, $module_info['custom_title'], $data_order['order_code'] ), $email_contents );
 
-			// Them vao notification
-			$content = array( 'order_id' => $data_order['id'], 'order_code' => $data_order['order_code'], 'order_name' => $data_order['order_name'] );
-			$userid = isset( $user_info['userid'] ) and !empty( $user_info['userid'] ) ? $user_info['userid'] : 0;
-			nv_insert_notification( $module_name, empty( $order_info ) ? 'order_new' : 'order_edit', $content, 0, $userid, 1 );
-
 			// Gui mail thong bao den nguoi quan ly shops
-			$order_url = $global_config['site_url'] . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=or_view&amp;order_id=' . $data_order['id'];
-			$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks_to_admin'], $data_order['order_name'] );
-			$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review_to_admin'], $order_url );
-
 			$listmail_notify = nv_listmail_notify();
 			if( !empty( $listmail_notify ) )
 			{
-				$email_contents_to_admin = call_user_func( 'email_new_order', $data_order, $data_pro );
+				$email_contents_to_admin = call_user_func( 'email_new_order', $content, $data_order, $data_pro );
 				nv_sendmail( array(
 					$global_config['site_name'],
 					$global_config['site_email']
 				), $listmail_notify, sprintf( $email_title, $module_info['custom_title'], $data_order['order_code'] ), $email_contents_to_admin );
 			}
+
+			// Them vao notification
+			$content = array( 'order_id' => $data_order['id'], 'order_code' => $data_order['order_code'], 'order_name' => $data_order['order_name'] );
+			$userid = isset( $user_info['userid'] ) and !empty( $user_info['userid'] ) ? $user_info['userid'] : 0;
+			nv_insert_notification( $module_name, empty( $order_info ) ? 'order_new' : 'order_edit', $content, 0, $userid, 1 );
 
 			// Chuyen trang xem thong tin don hang vua dat
 			unset( $_SESSION[$module_data . '_cart'] );

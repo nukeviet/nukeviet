@@ -5,7 +5,6 @@
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
-					<th>{LANG.weight}</th>
 					<th>{LANG.title}</th>
 					<th>{LANG.begin_time}</th>
 					<th>{LANG.end_time}</th>
@@ -17,12 +16,6 @@
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
-					<td>
-					<select class="form-control" id="id_weight_{VIEW.did}" onchange="nv_change_weight('{VIEW.did}');">
-						<!-- BEGIN: weight_loop -->
-						<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
-						<!-- END: weight_loop -->
-					</select></td>
 					<td> {VIEW.title} </td>
 					<td> {VIEW.begin_time} </td>
 					<td> {VIEW.end_time} </td>
@@ -136,22 +129,6 @@
 		buttonImage : nv_siteroot + "images/calendar.gif",
 		buttonImageOnly : true
 	});
-
-	function nv_change_weight(id) {
-		var nv_timer = nv_settimeout_disable('id_weight_' + id, 5000);
-		var new_vid = $('#id_weight_' + id).val();
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=discounts&nocache=' + new Date().getTime(), 'ajax_action=1&did=' + id + '&new_vid=' + new_vid, function(res) {
-			var r_split = res.split('_');
-			if (r_split[0] != 'OK') {
-				alert(nv_is_change_act_confirm[2]);
-			}
-			clearTimeout(nv_timer);
-			window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=discounts';
-			return;
-		});
-		return;
-	}
-
 	//]]>
 </script>
 <!-- END: main -->

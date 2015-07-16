@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <link rel="stylesheet" type="text/css"  href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/jquery.metisMenu.css" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.metisMenu.js"></script>
+<script data-show="after" type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.metisMenu.js"></script>
 
 <div class="clearfix panel">
     <aside class="sidebar">
@@ -12,7 +12,7 @@
     </aside>
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(function () {
     $('#menu_{ID}').metisMenu({
         toggle: false

@@ -12,8 +12,8 @@
 		<thead>
 			<tr>
 				<th class="w100">{LANG.weight}</th>
-				<th>{LANG.catalog_name}</th>
-				<th>{LANG.viewcat_page}</th>
+				<th>{LANG.group_name}</th>
+				<th>{LANG.groupview_page}</th>
 				<th class="text-center">{LANG.inhome}</th>
 				<th class="text-center">{LANG.indetail} <span class="info_icon" data-toggle="tooltip" title="" data-original-title="{LANG.indetail_note}">&nbsp;</span></th>
 				<th class="text-center">{LANG.in_order}</th>

@@ -255,8 +255,20 @@ foreach( $global_array_shops_cat as $cat )
 {
 	if( $cat['catid'] > 0 )
 	{
-		$cat['selected'] = $cat['catid'] == $catid ? ' selected="selected"' : '';
+		$xtitle_i = '';
+		if( $cat['lev'] > 0 )
+		{
+			$xtitle_i .= '&nbsp;&nbsp;&nbsp;|';
+			for( $i = 1; $i <= $cat['lev']; ++$i )
+			{
+				$xtitle_i .= '---';
+			}
+			$xtitle_i .= '>&nbsp;';
+		}
+		$xtitle_i .= $cat['title'];
+		$cat['title'] = $xtitle_i;
 
+		$cat['selected'] = $cat['catid'] == $catid ? ' selected="selected"' : '';
 		$xtpl->assign( 'CATID', $cat );
 		$xtpl->parse( 'main.catid' );
 	}

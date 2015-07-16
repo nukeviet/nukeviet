@@ -1506,11 +1506,13 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 	$listgroupid = GetGroupID( $data_content['id'], 1 );
 	if( !empty( $listgroupid ) and !empty( $global_array_group ) )
 	{
+		$have_group = 0;
 		foreach( $listgroupid as $gid => $subid )
 		{
 			$parent_info = $global_array_group[$gid];
 			if( $parent_info['in_order'] )
 			{
+				$have_group = 1;
 				$xtpl->assign( 'GROUPID', $parent_info['groupid'] );
 				$xtpl->assign( 'HEADER', $parent_info['title'] );
 				$xtpl->parse( 'main.group.items.header' );
@@ -1534,7 +1536,10 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 				$xtpl->parse( 'main.group.items' );
 			}
 		}
-		$xtpl->parse( 'main.group' );
+		if( $have_group )
+		{
+			$xtpl->parse( 'main.group' );
+		}
 	}
 
 	// Hien thi danh sach nhom san pham
@@ -2612,7 +2617,9 @@ function email_new_order( $content, $data_content, $data_pro, $data_table = fals
 			$xtpl->assign( 'bg', $bg );
 
 			if( $pro_config['active_price'] == '1' )
+			{
 				$xtpl->parse( 'data_product.loop.price2' );
+			}
 			$xtpl->parse( 'data_product.loop' );
 			++$i;
 		}
@@ -3054,14 +3061,14 @@ function nv_download_content( $data_content )
 			}
 			$xtpl->parse( 'main.files_content.loop' );
 		}
-		
+
 		if( $login > 0 )
 		{
 			$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] . '#'.$linktab );
 			$xtpl->assign( 'DOWNLOAD_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module['download_login'] . '</a>' );
 			$xtpl->parse( 'main.form_login' );
 		}
-		
+
 		$xtpl->parse( 'main.files_content' );
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );

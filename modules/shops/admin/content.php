@@ -180,7 +180,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['address'] = $nv_Request->get_title( 'address', 'post', '', 1 );
 	$rowcontent['files'] = $nv_Request->get_typed_array( 'files', 'post', 'int', array() );
 
-	$rowcontent['gift_content'] = $nv_Request->get_title( 'gift_content', 'post', '', 1 );
+	$rowcontent['gift_content'] = $nv_Request->get_textarea( 'gift_content', '', 'br' );
 	$rowcontent['gift_from'] = $nv_Request->get_title( 'gift_from', 'post', '' );
 	$rowcontent['gift_to'] = $nv_Request->get_title( 'gift_to', 'post', '' );
 	if( !empty( $rowcontent['gift_content'] ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $rowcontent['gift_from'], $m ) )
@@ -207,6 +207,23 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$alias = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$rowcontent['alias'] = ($alias == '') ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
+
+	if( !empty( $rowcontent['alias'] ) )
+	{
+		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id !=' . $rowcontent['id'] . ' AND '  . NV_LANG_DATA . '_alias = :alias' );
+		$stmt->bindParam( ':alias', $rowcontent['alias'], PDO::PARAM_STR );
+		$stmt->execute();
+		if( $stmt->fetchColumn() )
+		{
+			$rows_id = $rowcontent['id'];
+			if( $rows_id == 0 )
+			{
+				$rows_id = $db->query( 'SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows' )->fetchColumn();
+				$rows_id = intval( $rows_id ) + 1;
+			}
+			$rowcontent['alias'] = $rowcontent['alias'] . '-' . $rows_id;
+		}
+	}
 
 	$hometext = $nv_Request->get_string( 'hometext', 'post', '' );
 	$rowcontent['hometext'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $hometext, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $hometext ) ), '<br />' );
@@ -613,7 +630,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		else
 		{
 			$rowcontent_old = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows where id=' . $rowcontent['id'] )->fetch( );
-			
+
 			$rowcontent['user_id'] = $rowcontent_old['user_id'];
 
 			if( $rowcontent_old['status'] == 1 )
@@ -962,7 +979,8 @@ $xtpl->assign( 'rowcontent', $rowcontent );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-$xtpl->assign( 'module_name', $module_name );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'MODULE_UPLOAD', $module_upload );
 $xtpl->assign( 'CURRENT', NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' ) );
 
 if( $error != '' )
@@ -1119,11 +1137,22 @@ if( count( $array_block_cat_module ) > 0 )
 	$xtpl->parse( 'main.block_cat' );
 }
 
+if( !empty( $money_config ) )
+{
+	foreach( $money_config as $code => $info )
+	{
+		$info['select'] = ($rowcontent['money_unit'] == $code) ? "selected=\"selected\"" : "";
+		$xtpl->assign( 'MON', $info );
+		$xtpl->parse( 'main.product_price.money_unit' );
+		$xtpl->parse( 'main.typeprice2.money_unit' );
+	}
+}
+
 $typeprice = ($rowcontent['listcatid']) ? $global_array_shops_cat[$rowcontent['listcatid']]['typeprice'] : 1;
 if( $typeprice == 1 )
 {
 	// List discount
-	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
+	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts ORDER BY add_time DESC';
 	$_result = $db->query( $sql );
 	while( $_discount = $_result->fetch( ) )
 	{
@@ -1132,6 +1161,7 @@ if( $typeprice == 1 )
 		$xtpl->parse( 'main.typeprice1.discount' );
 	}
 	$xtpl->parse( 'main.typeprice1' );
+
 	$xtpl->parse( 'main.product_price' );
 }
 elseif( $typeprice == 2 )
@@ -1238,16 +1268,6 @@ $xtpl->assign( 'allowed_save_checked', $allowed_save_checked );
 $showprice_checked = ($rowcontent['showprice']) ? " checked=\"checked\"" : "";
 $xtpl->assign( 'ck_showprice', $showprice_checked );
 
-if( !empty( $money_config ) )
-{
-	foreach( $money_config as $code => $info )
-	{
-		$info['select'] = ($rowcontent['money_unit'] == $code) ? "selected=\"selected\"" : "";
-		$xtpl->assign( 'MON', $info );
-		$xtpl->parse( 'main.money_unit' );
-	}
-}
-
 if( !empty( $weight_config ) )
 {
 	foreach( $weight_config as $code => $info )
@@ -1287,7 +1307,7 @@ if( !$pro_config['active_warehouse'] )
 }
 
 // Custom fiels
-if( $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
+if( $pro_config['template_active'] and $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
 {
 	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_shops_cat[$rowcontent['listcatid']]['form'], $custom );
 	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );

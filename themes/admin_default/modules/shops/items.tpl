@@ -1,10 +1,8 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="well">
 	<form action="{NV_BASE_ADMINURL}index.php" method="get">
@@ -28,7 +26,7 @@
 			</div>
 			<div class="col-xs-12 col-md-4">
 				<div class="form-group">
-					<select class="form-control" name="catid">
+					<select class="form-control" name="catid" id="catid">
 						<option value="0">---{LANG.search_cat}---</option>
 						<!-- BEGIN: catid -->
 						<option value="{CATID.catid}"{CATID.selected}>{CATID.title}</option>
@@ -147,9 +145,14 @@
 		</table>
 	</div>
 </form>
-
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type='text/javascript'>
 	$(function() {
+		$("#catid").select2();
+
 		$("#from, #to").datepicker({
 			dateFormat : "dd/mm/yy",
 			changeMonth : true,

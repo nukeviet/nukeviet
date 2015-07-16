@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 $(document).ready(function() {
     window.print();
 });

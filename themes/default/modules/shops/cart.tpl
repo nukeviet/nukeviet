@@ -130,7 +130,7 @@
 		</div>
 	</div>
 </form>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(document).ready(function(){
 		$('[data-toggle="tooltip"]').tooltip();
 	});
@@ -159,7 +159,7 @@
 </script>
 
 <!-- BEGIN: coupons_javascript -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	var coupons_code = $('input[name="coupons_code"]').val();
 	if (coupons_code != '') {
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cart&nocache=' + new Date().getTime(), 'coupons_check=1&coupons_code=' + coupons_code, function(res) {

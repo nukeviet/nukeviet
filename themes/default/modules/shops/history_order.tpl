@@ -42,7 +42,7 @@
     	</tbody>
     </table>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(function() {
 		$('#Check_Order').click(function(event) {
 			event.preventDefault();
@@ -90,6 +90,6 @@
 				return false;
 			}
 		});
-	}); 
+	});
 </script>
 <!-- END: main -->

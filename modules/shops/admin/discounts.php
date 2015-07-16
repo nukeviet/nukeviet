@@ -11,33 +11,6 @@
 if( !defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $config_discount = array();
-if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
-{
-	$did = $nv_Request->get_int( 'did', 'post', 0 );
-	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
-	$content = 'NO_' . $did;
-	if( $new_vid > 0 )
-	{
-		$sql = 'SELECT did FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts WHERE did!=' . $did . ' ORDER BY weight ASC';
-		$result = $db->query( $sql );
-		$weight = 0;
-		while( $row = $result->fetch() )
-		{
-			++$weight;
-			if( $weight == $new_vid ) ++$weight;
-			$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_discounts SET weight=' . $weight . ' WHERE did=' . $row['did'];
-			$db->query( $sql );
-		}
-		$sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_discounts SET weight=' . $new_vid . ' WHERE did=' . $did;
-		$db->query( $sql );
-		$content = 'OK_' . $did;
-	}
-	nv_del_moduleCache( $module_name );
-	include NV_ROOTDIR . '/includes/header.php';
-	echo $content;
-	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
-}
 
 if( $nv_Request->isset_request( 'delete_did', 'get' ) and $nv_Request->isset_request( 'delete_checkss', 'get' ) )
 {
@@ -45,22 +18,7 @@ if( $nv_Request->isset_request( 'delete_did', 'get' ) and $nv_Request->isset_req
 	$delete_checkss = $nv_Request->get_string( 'delete_checkss', 'get' );
 	if( $did > 0 and $delete_checkss == md5( $did . NV_CACHE_PREFIX . $client_info['session_id'] ) )
 	{
-		$weight = 0;
-		$sql = 'SELECT weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts WHERE did =' . $db->quote( $did );
-		$result = $db->query( $sql );
-		list( $weight ) = $result->fetch( 3 );
-
 		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts  WHERE did = ' . $db->quote( $did ) );
-		if( $weight > 0 )
-		{
-			$sql = 'SELECT did, weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts WHERE weight >' . $weight;
-			$result = $db->query( $sql );
-			while( list( $did, $weight ) = $result->fetch( 3 ) )
-			{
-				$weight--;
-				$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_discounts SET weight=' . $weight . ' WHERE did=' . intval( $did ) );
-			}
-		}
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 		die();
 	}
@@ -137,11 +95,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				$row['add_time'] = NV_CURRENTTIME;
 				$row['edit_time'] = NV_CURRENTTIME;
 
-				$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_discounts (title, weight, add_time, edit_time, begin_time, end_time, config, detail) VALUES (:title, :weight, :add_time, :edit_time, :begin_time, :end_time, :config, :detail)' );
-
-				$weight = $db->query( 'SELECT max(weight) FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts' )->fetchColumn();
-				$weight = intval( $weight ) + 1;
-				$stmt->bindParam( ':weight', $weight, PDO::PARAM_INT );
+				$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_discounts (title, add_time, edit_time, begin_time, end_time, config, detail) VALUES (:title, :add_time, :edit_time, :begin_time, :end_time, :config, :detail)' );
 
 				$stmt->bindParam( ':add_time', $row['add_time'], PDO::PARAM_INT );
 				$stmt->bindParam( ':edit_time', $row['edit_time'], PDO::PARAM_INT );
@@ -229,7 +183,7 @@ if( !$nv_Request->isset_request( 'id', 'post,get' ) )
 	$sth->execute();
 	$num_items = $sth->fetchColumn();
 
-	$db->select( '*' )->order( 'weight ASC' )->limit( $per_page )->offset( ($page - 1) * $per_page );
+	$db->select( '*' )->order( 'add_time DESC' )->limit( $per_page )->offset( ($page - 1) * $per_page );
 	$sth = $db->prepare( $db->sql() );
 	$sth->execute();
 }
@@ -252,15 +206,6 @@ if( $show_view )
 {
 	while( $view = $sth->fetch() )
 	{
-		for( $i = 1; $i <= $num_items; ++$i )
-		{
-			$xtpl->assign( 'WEIGHT', array(
-				'key' => $i,
-				'title' => $i,
-				'selected' => ($i == $view['weight']) ? ' selected="selected"' : ''
-			) );
-			$xtpl->parse( 'main.view.loop.weight_loop' );
-		}
 		$view['begin_time'] = ( empty( $view['begin_time'] )) ? '' : nv_date( 'd/m/Y', $view['begin_time'] );
 		$view['end_time'] = ( empty( $view['end_time'] )) ? '' : nv_date( 'd/m/Y', $view['end_time'] );
 		if( $view['detail'] )
