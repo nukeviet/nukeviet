@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $lang_module;
+global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $lang_module, $my_head;
 
 if( $module_name == 'users' ) return '';
 
@@ -32,13 +32,17 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 	{
 		$block_theme = 'default';
 	}
+	
+	// Call js file
+	$blockJs = file_exists( NV_ROOTDIR . '/themes/' . $block_theme . '/js/users.js' ) ? $block_theme : 'default';
+	$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'themes/' . $blockJs . '/js/users.js"></script>';
 
 	$xtpl = new XTemplate( 'block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users' );
 
 	if( defined( 'NV_IS_USER' ) )
 	{
 		$avata = '';
-		if( file_exists( NV_ROOTDIR . '/' . $user_info['photo'] ) && ! empty( $user_info['photo'] ) ) $avata = NV_BASE_SITEURL . $user_info['photo'];
+		if( file_exists( NV_ROOTDIR . '/' . $user_info['photo'] ) and ! empty( $user_info['photo'] ) ) $avata = NV_BASE_SITEURL . $user_info['photo'];
 		else $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.jpg';
 		$xtpl->assign( 'AVATA', $avata );
 		$xtpl->assign( 'LANG', $lang_global );
@@ -53,7 +57,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 		$xtpl->assign( 'CHANGE_INFO', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users' );
 		$xtpl->assign( 'RE_GROUPS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=regroups' );
 
-		if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
+		if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
 		{
 			$in_group = '<a title="' . $lang_global['in_groups'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=regroups">' . $lang_global['in_groups'] . '</a>';
 			$xtpl->assign( 'in_group', $in_group );
@@ -99,6 +103,12 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 			}
 			$xtpl->parse( 'main.openid' );
 		}
+		
+		if( $global_config['allowuserreg'] )
+		{
+			$xtpl->parse( 'main.allowuserreg' );
+		}
+		
 		$xtpl->parse( 'main' );
 		$content = $xtpl->text( 'main' );
 	}

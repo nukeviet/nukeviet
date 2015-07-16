@@ -670,6 +670,16 @@ $mod_title = $lang_module['login'];
 
 $contents = '';
 $error = '';
+
+/**
+ * Error Code:
+ * 0 - Success
+ * 1 - Username
+ * 2 - Password
+ * 3 - Captcha
+ */
+$error_code = 0;
+
 $nv_header = $nv_Request->get_title( 'nv_header', 'get, post', '' );
 $full = ( $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ) ? false : true;
 if( $nv_Request->isset_request( 'nv_login', 'post' ) )
@@ -677,20 +687,24 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 	$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
 	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
 	$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
+	$nv_ajax_login = $nv_Request->get_int( 'nv_ajax_login', 'post', 0 );
 
 	$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
 
 	if( ! $check_seccode )
 	{
 		$error = $lang_global['securitycodeincorrect'];
+		$error_code = 3;
 	}
 	elseif( empty( $nv_username ) )
 	{
 		$error = $lang_global['username_empty'];
+		$error_code = 1;
 	}
 	elseif( empty( $nv_password ) )
 	{
 		$error = $lang_global['password_empty'];
+		$error_code = 2;
 	}
 	else
 	{
@@ -729,7 +743,12 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 			}
 		}
 	}
-
+	
+	if( $nv_ajax_login )
+	{
+		die( '' . $error_code );
+	}
+	
 	if( empty( $error ) )
 	{
 		$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -744,6 +763,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		include NV_ROOTDIR . '/includes/footer.php';
 		exit();
 	}
+	
 	$lang_module['login_info'] = '<span style="color:#fb490b;">' . $error . '</span>';
 	$array_login = array(
 		'nv_login' => $nv_username,
