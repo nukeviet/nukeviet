@@ -147,3 +147,10 @@ $(document).ready(function(){
 $(window).on('resize', function(){
 	fix_banner_center();
 });
+
+$(window).load(function(){
+	var $QRCode = $('#QR-code');
+	if( $QRCode ){
+		$QRCode.attr('src', nv_siteroot + 'index.php?second=qr&u=' + encodeURIComponent( $QRCode.data('url') ) + '&l=' + $QRCode.data('level') + '&ppp=' + $QRCode.data('ppp') + '&of=' + $QRCode.data('of') + '&p=' + new Date().getTime());
+	}
+});
