@@ -282,8 +282,12 @@ $lang_global['contactUs'] = 'Contact Us';
 
 $lang_global['company_name'] = 'Company name';
 $lang_global['company_sortname'] = 'Sort name';
+$lang_global['company_regcode'] = 'Business registration number';
+$lang_global['company_regcode2'] = 'BN';
+$lang_global['company_regplace'] = 'Place of registration';
 $lang_global['company_address'] = 'Address';
 $lang_global['company_phone'] = 'Phone';
 $lang_global['company_fax'] = 'Fax';
 $lang_global['company_email'] = 'Email';
 $lang_global['company_website'] = 'Website';
+$lang_global['siteterms'] = 'Terms & Conditions';

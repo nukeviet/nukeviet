@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
 <ul class="company_info">
-<!-- BEGIN: company_name --><li>{DATA.company_name}<!-- BEGIN: company_sortname --> ({DATA.company_sortname})<!-- END: company_sortname --></li><!-- END: company_name -->
+<!-- BEGIN: company_name --><li class="company_name">{DATA.company_name}<!-- BEGIN: company_sortname --> ({DATA.company_sortname})<!-- END: company_sortname --></li><!-- END: company_name -->
+<!-- BEGIN: company_regcode --><li><em class="fa fa-key"></em><span>{LANG.company_regcode2}: {DATA.company_regcode}<!-- BEGIN: company_regplace -->, {LANG.company_regplace}: {DATA.company_regplace}<!-- END: company_regplace --></span></li><!-- END: company_regcode -->
 <!-- BEGIN: company_address --><li><em class="fa fa-map-marker"></em><span>{DATA.company_address}</span></li><!-- END: company_address -->
 <!-- BEGIN: company_phone --><li><a href="tel:{DATA.company_phone}"><em class="fa fa-phone"></em><span>{DATA.company_phone}</span></a></li><!-- END: company_phone -->
 <!-- BEGIN: company_fax --><li><em class="fa fa-fax"></em><span>{DATA.company_fax}</span></li><!-- END: company_fax -->

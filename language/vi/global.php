@@ -287,8 +287,12 @@ $lang_global['contactUs'] = 'Thông tin liên hệ';
 
 $lang_global['company_name'] = 'Tên chính thức';
 $lang_global['company_sortname'] = 'Tên viết tắt';
+$lang_global['company_regcode'] = 'Mã số Doanh nghiệp';
+$lang_global['company_regcode2'] = 'M.S.D.N';
+$lang_global['company_regplace'] = 'Cấp tại';
 $lang_global['company_address'] = 'Địa chỉ';
 $lang_global['company_phone'] = 'Điện thoại';
 $lang_global['company_fax'] = 'Số Fax';
 $lang_global['company_email'] = 'Email';
 $lang_global['company_website'] = 'Website';
+$lang_global['siteterms'] = 'Điều khoản sử dụng';
