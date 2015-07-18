@@ -104,8 +104,30 @@ if( ! nv_function_exists( 'nv_block_qr_code' ) )
 	function nv_block_qr_code( $block_config )
 	{
 		global $page_title, $global_config, $client_info;
+        
+        if ( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.QR_code.tpl' ) )
+        {
+            $block_theme = $global_config['module_theme'];
+        }
+        elseif ( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.QR_code.tpl' ) )
+        {
+            $block_theme = $global_config['site_theme'];
+        }
+        else
+        {
+            $block_theme = 'default';
+        }
+        
+        $xtpl = new XTemplate( 'global.QR_code.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
+        $xtpl->assign( 'LANG', $lang_global );
+        $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+        
+        $block_config['selfurl'] = $client_info['selfurl'];
+        $block_config['title'] = "QR-Code: " . str_replace( '"', "&quot;", ( $page_title ? $page_title : $global_config['site_name'] ) );
+        $xtpl->assign( 'QRCODE', $block_config );
 		
-		return '<img id="QR-code" src="' . NV_BASE_SITEURL . 'images/pix.gif" alt="QR-Code: ' . str_replace( '"', "&quot;", ( $page_title ? $page_title : $global_config['site_name'] ) ) . '" data-url="' . $client_info['selfurl'] . '" data-level="' . $block_config['level'] . '" data-ppp="' . $block_config['pixel_per_point'] . '" data-of="' . $block_config['outer_frame'] . '">';
+        $xtpl->parse( 'main' );
+        return $xtpl->text( 'main' );
 	}
 }
 

@@ -148,9 +148,7 @@ $(window).on('resize', function(){
 	fix_banner_center();
 });
 
-$(window).load(function(){
-	var $QRCode = $('#QR-code');
-	if( $QRCode ){
-		$QRCode.attr('src', nv_siteroot + 'index.php?second=qr&u=' + encodeURIComponent( $QRCode.data('url') ) + '&l=' + $QRCode.data('level') + '&ppp=' + $QRCode.data('ppp') + '&of=' + $QRCode.data('of') + '&p=' + new Date().getTime());
-	}
+$(window).load(function() {
+	var a = $("#QR-code");
+	a && a.attr("src", nv_siteroot + "index.php?second=qr&u=" + encodeURIComponent(a.data("url")) + "&l=" + a.data("level") + "&ppp=" + a.data("ppp") + "&of=" + a.data("of"))
 });
