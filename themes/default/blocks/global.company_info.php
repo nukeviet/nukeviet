@@ -34,6 +34,14 @@ if ( ! nv_function_exists( 'nv_company_info' ) )
         $html .= '<td><input type="text" name="company_regplace" value="' . $data_block['company_regplace'] . '" size="80"></td>';
         $html .= '</tr>';
         $html .= '<tr>';
+        $html .= '<td>' . $lang_global['company_licensenumber'] . '</td>';
+        $html .= '<td><input type="text" name="company_licensenumber" value="' . $data_block['company_licensenumber'] . '" size="80"></td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
+        $html .= '<td>' . $lang_global['company_responsibility'] . '</td>';
+        $html .= '<td><input type="text" name="company_responsibility" value="' . $data_block['company_responsibility'] . '" size="80"></td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
         $html .= '<td>' . $lang_global['company_address'] . '</td>';
         $html .= '<td><input type="text" name="company_address" value="' . $data_block['company_address'] . '" size="80"></td>';
         $html .= '</tr>';
@@ -67,6 +75,8 @@ if ( ! nv_function_exists( 'nv_company_info' ) )
         $return['config']['company_sortname'] = $nv_Request->get_title( 'company_sortname', 'post' );
         $return['config']['company_regcode'] = $nv_Request->get_title( 'company_regcode', 'post' );
         $return['config']['company_regplace'] = $nv_Request->get_title( 'company_regplace', 'post' );
+        $return['config']['company_licensenumber'] = $nv_Request->get_title( 'company_licensenumber', 'post' );
+        $return['config']['company_responsibility'] = $nv_Request->get_title( 'company_responsibility', 'post' );
         $return['config']['company_address'] = $nv_Request->get_title( 'company_address', 'post' );
         $return['config']['company_phone'] = $nv_Request->get_title( 'company_phone', 'post' );
         $return['config']['company_fax'] = $nv_Request->get_title( 'company_fax', 'post' );
@@ -111,15 +121,36 @@ if ( ! nv_function_exists( 'nv_company_info' ) )
             }
             $xtpl->parse( 'main.company_name' );
         }
+
+        $key = array();
+        $i = 0;
         if ( ! empty( $block_config['company_regcode'] ) )
         {
+            $key[$i] = $lang_global['company_regcode2'] . ": " . $block_config['company_regcode'];
             if ( ! empty( $block_config['company_regplace'] ) )
             {
-                $xtpl->parse( 'main.company_regcode.company_regplace' );
+                $key[$i] .= ", " . $lang_global['company_regplace'] . " " . $block_config['company_regplace'];
             }
+            ++$i;
+        }
+        if ( ! empty( $block_config['company_licensenumber'] ) )
+        {
+            $key[$i] = $lang_global['company_licensenumber'] . ": " . $block_config['company_licensenumber'];
+            ++$i;
+        }
+
+        if ( $i )
+        {
+            $key = implode( ".<br>", $key );
+            $xtpl->assign( 'LICENSE', $key );
             $xtpl->parse( 'main.company_regcode' );
         }
-        
+
+        if ( ! empty( $block_config['company_responsibility'] ) )
+        {
+            $xtpl->parse( 'main.company_responsibility' );
+        }
+
         if ( ! empty( $block_config['company_address'] ) )
         {
             $xtpl->parse( 'main.company_address' );
