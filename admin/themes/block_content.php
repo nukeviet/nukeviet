@@ -81,7 +81,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$array_file_name = explode( '|', $list_file_name );
 
 	$file_name = $row['file_name'] = trim( $array_file_name[0] );
-	$module = $row['module'] = nv_substr( $nv_Request->get_title( 'module', 'post', '', 0 ), 0, 55 );
+	$module = $row['module'] = nv_substr( $nv_Request->get_title( 'module_type', 'post', '', 0 ), 0, 55 );
 	$row['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 
 	$path_file_php = $path_file_ini = $path_file_lang = '';
