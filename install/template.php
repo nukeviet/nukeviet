@@ -271,11 +271,6 @@ function nv_step_6( $array_data, $nextstep )
 		$xtpl->parse( 'step.nextstep' );
 	}
 
-	if( NV_LANG_DATA == 'vi' )
-	{
-		$xtpl->parse( 'step.viet_keyboard' );
-	}
-
 	$xtpl->parse( 'step' );
 	return $xtpl->text( 'step' );
 }

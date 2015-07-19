@@ -147,14 +147,6 @@ function nv_comment_module( $module, $checkss, $area, $id, $allowed, $page, $sta
 
 			$page_title = $module_info['custom_title'];
 			$key_words = $module_info['keywords'];
-			if( $client_info['browser']['key'] == 'chrome' )
-			{
-				$global_config['mudim_showpanel'] = 0;
-			}
-			else
-			{
-				$global_config['mudim_active'] = 0;
-			}
 
 			$sortcomm_old = $nv_Request->get_int( 'sortcomm', 'cookie', $module_config[$module]['sortcomm'] );
 			$sortcomm = $nv_Request->get_int( 'sortcomm', 'post,get', $sortcomm_old );
@@ -245,13 +237,13 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 		{
 			$xtpl->parse( 'main.header.jsfile' );
 		}
-		
+
 		// Check call module css file
 		if(  file_exists( NV_ROOTDIR . '/themes/' . $template . '/css/comment.css' ) )
 		{
 			$xtpl->parse( 'main.header.cssfile' );
 		}
-		
+
 		$xtpl->parse( 'main.header' );
 	}
 

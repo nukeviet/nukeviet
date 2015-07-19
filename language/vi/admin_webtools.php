@@ -69,16 +69,6 @@ $lang_module['autocheckupdate'] = 'Bật tính năng kiểm tra phiên bản t�
 $lang_module['updatetime'] = 'Thời gian kiểm lại phiên bản sau';
 $lang_module['clearip_logs'] = 'Xóa ip logs';
 $lang_module['update_manual_delete'] = 'Hãy xóa thủ công.';
-
-$lang_module['mudim'] = 'Cấu hình bộ gõ Tiếng Việt';
-$lang_module['mudim_active'] = 'Kích hoạt bộ gõ tiếng việt Mudim';
-$lang_module['mudim_active_no'] = 'Không kích hoạt';
-$lang_module['mudim_active_all'] = 'Kích hoạt toàn site';
-$lang_module['mudim_active_site'] = 'Kích hoạt khu vực ngoài site';
-$lang_module['mudim_active_admin'] = 'Kích hoạt khu vực admin';
-$lang_module['mudim_showpanel'] = 'Hiển thị bảng điều khiển Mudim';
-$lang_module['mudim_method'] = 'Kiểu gõ mặc định';
-$lang_module['mudim_displaymode'] = 'Hiển thị công cụ dưới dạng';
 $lang_module['error_unknow'] = 'Lỗi chưa xác định';
 
 $lang_module['get_update'] = 'Cập nhật hệ thống';
