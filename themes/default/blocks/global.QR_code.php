@@ -103,7 +103,7 @@ if( ! nv_function_exists( 'nv_block_qr_code' ) )
 	 */
 	function nv_block_qr_code( $block_config )
 	{
-		global $page_title, $global_config, $client_info;
+		global $page_title, $global_config, $client_info, $lang_global;
         
         if ( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.QR_code.tpl' ) )
         {
