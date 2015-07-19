@@ -140,6 +140,13 @@ while( $row = $result->fetch() )
 	);
 }
 
+if( $nv_Request->isset_request( 'get_question', 'post' ) )
+{
+	include NV_ROOTDIR . '/includes/header.php';
+	echo json_encode( $data_questions );
+	include NV_ROOTDIR . '/includes/footer.php';
+}
+
 // Captcha
 $gfx_chk = ( in_array( $global_config['gfx_chk'], array( 3, 4, 6, 7 ) ) ) ? 1 : 0;
 
@@ -358,6 +365,8 @@ if( defined( 'NV_EDITOR' ) )
 $custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
 if( $checkss == $array_register['checkss'] )
 {
+	$is_ajax_register = $nv_Request->get_int( 'nv_ajax_register', 'post' );
+	
 	$array_register['first_name'] = nv_substr( $nv_Request->get_title( 'first_name', 'post', '', 1 ), 0, 255 );
 	$array_register['last_name'] = nv_substr( $nv_Request->get_title( 'last_name', 'post', '', 1 ), 0, 255 );
 	$array_register['username'] = $nv_Request->get_title( 'username', 'post', '', 1 );
@@ -483,6 +492,11 @@ if( $checkss == $array_register['checkss'] )
 					$info = $lang_module['account_register_to_admin'] . "<br /><br />\n";
 				}
 
+				if( $is_ajax_register )
+				{
+					die( 'OK|' . $info );
+				}
+				
 				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
 				$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_login'] . '</a>]';
 
@@ -548,6 +562,11 @@ if( $checkss == $array_register['checkss'] )
 				{
 					$nv_redirect .= '&nv_redirect=' . $array_register['nv_redirect'];
 				}
+				
+				if( $is_ajax_register )
+				{
+					die( 'OK|' . $lang_module['register_ok'] );
+				}
 
 				$info = $lang_module['register_ok'] . "<br /><br />\n";
 				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
@@ -565,7 +584,12 @@ if( $checkss == $array_register['checkss'] )
 			}
 		}
 	}
-
+	
+	if( $is_ajax_register )
+	{
+		die( 'ERROR|' . strip_tags( $error ) );
+	}
+	
 	$array_register['info'] = '<span style="color:#fb490b;">' . $error . '</span>';
 }
 else
@@ -580,6 +604,13 @@ $array_register['agreecheck'] = $array_register['agreecheck'] ? ' checked="check
 
 $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
 $siteterms = $db->query( $sql )->fetchColumn();
+
+if( $nv_Request->isset_request( 'get_usage_terms', 'post' ) )
+{
+	include NV_ROOTDIR . '/includes/header.php';
+	echo $siteterms;
+	include NV_ROOTDIR . '/includes/footer.php';
+}
 
 $contents = user_register( $gfx_chk, $array_register, $siteterms, $data_questions, $array_field_config, $custom_fields );
 

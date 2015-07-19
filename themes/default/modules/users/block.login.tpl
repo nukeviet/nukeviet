@@ -1,29 +1,46 @@
 <!-- BEGIN: main -->
 <div id="nv-block-login" class="text-center">
-	<em class="fa fa-sign-in">&nbsp;</em> <a href="" class="login">{LANG.loginsubmit}</a> 
+	<em class="fa fa-sign-in">&nbsp;</em> <a href="{USER_LOGIN}" class="login">{LANG.loginsubmit}</a> 
 	<!-- BEGIN: allowuserreg -->
 	<em class="fa fa-user-plus">&nbsp;</em> <a href="{USER_REGISTER}" class="register">{LANG.register}</a> 
 	<!-- END: allowuserreg -->
 </div>
 <script type="text/javascript">
 $.fn.user.defaults = $.extend({}, $.fn.user.defaults, {
-	<!-- BEGIN: captcha -->
-	isCaptcha: true,
 	captchaW: {GFX_WIDTH},
 	captchaH: {GFX_HEIGHT},
 	captchaLen: {GFX_MAXLENGTH},
-	<!-- END: captcha -->
+	timeStamp: {NV_CURRENTTIME},
+	checkss: '{CHECKSESS}',
+	<!-- BEGIN: captcha_login -->isCaptchaLogin: true,<!-- END: captcha_login -->
+	<!-- BEGIN: captcha_reg -->isCaptchaReg: true,<!-- END: captcha_reg -->
+	<!-- BEGIN: allowuserreg1 -->allowreg: true,<!-- END: allowuserreg1 -->
 	lostpassLink: '{USER_LOSTPASS}',
-	lang: {
-		close: '{LANG.cancel}',
-		login: '{LANG.loginsubmit}',
-		loginSubmit: '{LANG.loginsubmit}',
-		securitycode: '{LANG.securitycode}',
-		username: '{LANG.username}',
-		password: '{LANG.password}',
-		lostpass: '{LANG.lostpass}',
-		openidLogin: '{LANG.openid_login}',
-	}
+});
+$.fn.user.defaults.lang = $.extend({}, $.fn.user.defaults.lang, {
+	close: '{LANG.cancel}',
+	login: '{LANG.loginsubmit}',
+	loginSubmit: '{LANG.loginsubmit}',
+	securitycode: '{LANG.securitycode}',
+	username: '{LANG.username}',
+	password: '{LANG.password}',
+	lostpass: '{LANG.lostpass}',
+	<!-- BEGIN: allowuserreg2 -->
+	register: '{LANG.register}',
+	firstName: '{LANG.first_name}',
+	lastName: '{LANG.last_name}',
+	email: '{LANG.email}',
+	account: '{LANG.username}',
+	rePassword: '{LANG.password2}',
+	question: '{LANG.question}',
+	yourQuestion: '{LANG.your_question}',
+	answerYourQuestion: '{LANG.answer_your_question}',
+	inGroup: '{LANG.in_group}',
+	usageTerms: '{LANG.usage_terms}',
+	captcha: '{LANG.securitycode}',
+	accept: '{LANG.accept}',
+	<!-- END: allowuserreg2 -->
+	openidLogin: '{LANG.openid_login}'
 });
 <!-- BEGIN: openid -->
 $.fn.user.defaults.isOpenID = true;

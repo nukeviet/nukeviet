@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $lang_module, $my_head;
+global $client_info, $global_config, $module_name, $module_info, $user_info, $lang_global, $my_head;
 
 if( $module_name == 'users' ) return '';
 
@@ -67,22 +67,36 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 	}
 	else
 	{
+		if( file_exists( NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php' ) )
+		{
+			include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
+		}
+		else
+		{
+			include NV_ROOTDIR . '/modules/users/language/vi.php';
+		}
+		
 		$xtpl->assign( 'REDIRECT', nv_base64_encode( $client_info['selfurl'] ) );
-		$xtpl->assign( 'USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login' );
-		$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register' );
-		$xtpl->assign( 'USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostpass' );
-		$xtpl->assign( 'LANG', $lang_global );
-
+		$xtpl->assign( 'USER_LOGIN', nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login', true ) );
+		$xtpl->assign( 'USER_REGISTER', nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register', true ) );
+		$xtpl->assign( 'USER_LOSTPASS', nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostpass', true ) );
+		$xtpl->assign( 'LANG', array_merge( $lang_global, $lang_module ) );
+		
+		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
+		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
+		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
+		$xtpl->assign( 'NV_CURRENTTIME', NV_CURRENTTIME );
+		
+		$xtpl->assign( 'CHECKSESS', md5( $client_info['session_id'] . $global_config['sitekey'] ) );
+		
 		if( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) )
 		{
-			$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
-			$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-			$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-			$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-			$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
-			$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
-			$xtpl->parse( 'main.captcha' );
+			$xtpl->parse( 'main.captcha_login' );
+		}
+		
+		if( in_array( $global_config['gfx_chk'], array( 3, 4, 6, 7 ) ) )
+		{
+			$xtpl->parse( 'main.captcha_reg' );
 		}
 
 		if( defined( 'NV_OPENID_ALLOWED' ) )
@@ -107,6 +121,8 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 		if( $global_config['allowuserreg'] )
 		{
 			$xtpl->parse( 'main.allowuserreg' );
+			$xtpl->parse( 'main.allowuserreg1' );
+			$xtpl->parse( 'main.allowuserreg2' );
 		}
 		
 		$xtpl->parse( 'main' );
