@@ -287,7 +287,6 @@ if( $nv_Request->isset_request( 'userlist', 'get' ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 //Them + sua nhom

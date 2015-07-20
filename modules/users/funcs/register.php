@@ -39,7 +39,6 @@ if( ! $global_config['allowuserreg'] )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 /**
@@ -265,7 +264,6 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 				include NV_ROOTDIR . '/includes/header.php';
 				echo nv_site_theme( $contents );
 				include NV_ROOTDIR . '/includes/footer.php';
-				exit();
 			}
 
 			$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
@@ -328,7 +326,6 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->get_bool( 'openid', 'get', f
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 // Dang ky thong thuong
@@ -527,7 +524,6 @@ if( $checkss == $array_register['checkss'] )
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
 						include NV_ROOTDIR . '/includes/footer.php';
-						exit();
 					}
 				}
 				else

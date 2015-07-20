@@ -275,7 +275,6 @@ function openidLogin_Res1( $attribs )
 		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents );
 		include NV_ROOTDIR . '/includes/footer.php';
-		exit();
 	}
 
 	if( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
@@ -370,7 +369,6 @@ function openidLogin_Res1( $attribs )
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
 						include NV_ROOTDIR . '/includes/footer.php';
-						exit();
 					}
 					else
 					{
@@ -389,7 +387,6 @@ function openidLogin_Res1( $attribs )
 				include NV_ROOTDIR . '/includes/header.php';
 				echo nv_site_theme( $contents );
 				include NV_ROOTDIR . '/includes/footer.php';
-				exit();
 			}
 			else
 			{
@@ -483,7 +480,6 @@ function openidLogin_Res1( $attribs )
 				include NV_ROOTDIR . '/includes/header.php';
 				echo nv_site_theme( $contents );
 				include NV_ROOTDIR . '/includes/footer.php';
-				exit();
 			}
 
 			$array_login = array(
@@ -508,7 +504,6 @@ function openidLogin_Res1( $attribs )
 		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents );
 		include NV_ROOTDIR . '/includes/footer.php';
-		exit();
 	}
 	elseif( $option == 1 or $option == 2 )
 	{
@@ -615,7 +610,6 @@ function openidLogin_Res1( $attribs )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 $nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
@@ -779,7 +773,6 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $contents, $full );
 		include NV_ROOTDIR . '/includes/footer.php';
-		exit();
 	}
 	
 	$lang_module['login_info'] = '<span style="color:#fb490b;">' . $error[0]['value'] . '</span>';

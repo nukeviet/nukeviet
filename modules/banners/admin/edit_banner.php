@@ -49,7 +49,6 @@ if( empty( $contents['file_allowed_ext'] ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( nv_edit_banner_theme( $contents ) );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 $sql = 'SELECT id,login,full_name FROM ' . NV_BANNERS_GLOBALTABLE. '_clients ORDER BY login ASC';
