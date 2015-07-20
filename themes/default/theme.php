@@ -100,10 +100,10 @@ function nv_site_theme( $contents, $full = true )
             $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
             $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
             $css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
-            $css_content .= nv_css_setproperties( '#header, #banner', $config_theme['header'] );
+            $css_content .= nv_css_setproperties( '#header', $config_theme['header'] );
             $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
             $css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
-            $css_content .= nv_css_setproperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
+            $css_content .= nv_css_setproperties( '.panel-default > .panel-heading', $config_theme['block_heading'] );
             $css_content .= nv_css_setproperties( 'generalcss', $config_theme['generalcss'] ); // Không nên thay đổi "generalcss"
 
             file_put_contents( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css', $css_content );
@@ -166,8 +166,6 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->parse( 'main.image' );
 	}
 
-	if( $op == 'main' ) $xtpl->parse( 'main.main_h1' );
-	else  $xtpl->parse( 'main.main_none_h1' );
 	// Only full theme
 	if( $full )
 	{

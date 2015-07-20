@@ -53,7 +53,7 @@ ul, ol {
 	color: #fff !important;
 }
 
-.navbar-nav>li>a{
+.navbar-nav > li > a{
 	white-space: nowrap;
 }
 
@@ -74,7 +74,7 @@ ul, ol {
 	color: #FFFFFF;
 }
 
-.dropdown-submenu>.dropdown-menu {
+.dropdown-submenu > .dropdown-menu {
     top: 0;
     left: 100%;
     margin-top: -6px;
@@ -84,7 +84,7 @@ ul, ol {
     border-radius: 0 6px 6px 6px;
 }
 
-.dropdown-submenu:hover>.dropdown-menu {
+.dropdown-submenu:hover > .dropdown-menu {
     display: block;
 }
 
@@ -102,7 +102,7 @@ ul, ol {
     margin-right: -10px;
 }
 
-.dropdown-submenu:hover>a:after {
+.dropdown-submenu:hover > a:after {
     border-left-color: #fff;
 }
 
@@ -110,7 +110,7 @@ ul, ol {
     float: none;
 }
 
-.dropdown-submenu.pull-left>.dropdown-menu {
+.dropdown-submenu.pull-left > .dropdown-menu {
     left: -100%;
     margin-left: 10px;
     -webkit-border-radius: 6px 0 6px 6px;
@@ -199,47 +199,38 @@ a.btn{
 }
 
 /* Header */
-header{
-	position:relative;
-}
-#header-wraper{
-	position:relative;
-}
 #header{
-	height:100px;
-	position:absolute;
-	top:0;
-	left:0;
-	width:100%;
-	background:rgba(255,255,255,0.75);
-	z-index:10;
-}
-#header #logo{
-	float:left;
-	padding:10px;
+	position:relative;
+	background:#8DC2EE !important;
+    min-height:100px
 }
 
-#header #logo a img{
-	height:49px;
+#header .logo{
+    position:relative;
+	float:left;
+    margin: 0px;
+	padding:20px
 }
 
-#header #logo h1{
-	float:left;
-	margin: 0px;
-	padding: 0px;
+#header .logo h1{
+    display: none
 }
 
-#header #logo object{
-	float:left;
+#header .logo h2{
+    color: #D8EAF8;
+    font-size: 24px;
+    font-weight: bold;
+    font-style: italic;
+    font-family: "Times New Roman";
+    text-shadow: -1px -1px 0 #5697D0, 1px -1px 0 #5697D0, -1px 1px 0 #5697D0, 1px 1px 0 #5697D0;
+    letter-spacing: 0.5px;
+    line-height: 1.1;
+    margin: 0;
+    padding: 0
 }
 
 #header .pull-right{
 	margin:33px 10px 0 0;
-}
-#header #logo a{
-	font-size:22px;
-	line-height:80px;
-	color:#333;
 }
 
 #social-icons{
@@ -284,18 +275,6 @@ header{
 }
 #search input[type="text"]{
 	border:1px #66afe9 solid;
-}
-
-#banner{
-	position:relative;
-	height:100px;
-	top:0;
-	left:0;
-	overflow:hidden;
-}
-#banner img{
-	width:100%;
-	min-height:100%;
 }
 
 .fix_banner_left{
