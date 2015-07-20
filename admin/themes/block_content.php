@@ -507,7 +507,7 @@ $xtpl->assign( 'ROW', array(
 	'title' => $row['title'],
 	'exp_time' => ( $row['exp_time'] > 0 ) ? date( 'd/m/Y', $row['exp_time'] ) : '',
 	'block_active' => ( intval( $row['active'] ) == 1 ) ? ' checked="checked"' : '',
-	'link' => $row['link'],
+	'link' => nv_htmlspecialchars( $row['link'] ),
 	'bid' => $row['bid'],
 	'module' => $row['module'],
 	'file_name' => $row['file_name']
