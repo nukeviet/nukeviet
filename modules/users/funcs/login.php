@@ -669,16 +669,7 @@ $key_words = $module_info['keywords'];
 $mod_title = $lang_module['login'];
 
 $contents = '';
-$error = '';
-
-/**
- * Error Code:
- * 0 - Success
- * 1 - Username
- * 2 - Password
- * 3 - Captcha
- */
-$error_code = 0;
+$error = array();
 
 $nv_header = $nv_Request->get_title( 'nv_header', 'get, post', '' );
 $full = ( $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ) ? false : true;
@@ -693,20 +684,29 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 
 	if( ! $check_seccode )
 	{
-		$error = $lang_global['securitycodeincorrect'];
-		$error_code = 3;
+		$error[] = array(
+			'name' => 'nv_seccode',
+			'value' => $lang_global['securitycodeincorrect']
+		);
 	}
-	elseif( empty( $nv_username ) )
+	
+	if( empty( $nv_username ) )
 	{
-		$error = $lang_global['username_empty'];
-		$error_code = 1;
+		$error[] = array(
+			'name' => 'nv_login',
+			'value' => $lang_global['username_empty']
+		);
 	}
-	elseif( empty( $nv_password ) )
+	
+	if( empty( $nv_password ) )
 	{
-		$error = $lang_global['password_empty'];
-		$error_code = 2;
+		$error[] = array(
+			'name' => 'nv_password',
+			'value' => $lang_global['password_empty']
+		);
 	}
-	else
+	
+	if( empty( $error ) )
 	{
 		if( defined( 'NV_IS_USER_FORUM' ) )
 		{
@@ -714,39 +714,57 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		}
 		else
 		{
-			$error = $lang_global['loginincorrect'];
+			$error1 = $lang_global['loginincorrect'];
+			
 			if( nv_check_valid_email( $nv_username ) == '' )
 			{
+				// Email login
 				$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE email =" . $db->quote( $nv_username );
 				$login_email = true;
 			}
 			else
 			{
+				// Username login
 				$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
 				$login_email = false;
 			}
+			
 			$row = $db->query( $sql )->fetch();
+			
 			if( ! empty( $row ) )
 			{
 				if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate_password( $nv_password, $row['password'] ) )
 				{
 					if( ! $row['active'] )
 					{
-						$error = $lang_module['login_no_active'];
+						$error1 = $lang_module['login_no_active'];
 					}
 					else
 					{
-						$error = '';
+						$error1 = '';
 						validUserLog( $row, 1, '' );
 					}
 				}
 			}
+			
+			if( ! empty( $error1 ) )
+			{
+				$error[] = array(
+					'name' => '',
+					'value' => $error1
+				);
+			}
+			
+			unset( $error1 );
 		}
 	}
 	
+	// Ajax respon
 	if( $nv_ajax_login )
 	{
-		die( '' . $error_code );
+		include NV_ROOTDIR . '/includes/header.php';
+		echo json_encode( $error );
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 	
 	if( empty( $error ) )
@@ -764,7 +782,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		exit();
 	}
 	
-	$lang_module['login_info'] = '<span style="color:#fb490b;">' . $error . '</span>';
+	$lang_module['login_info'] = '<span style="color:#fb490b;">' . $error[0]['value'] . '</span>';
 	$array_login = array(
 		'nv_login' => $nv_username,
 		'nv_password' => $nv_password,

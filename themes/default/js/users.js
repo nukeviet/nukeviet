@@ -455,23 +455,32 @@ UAV.init = function(){
 		$('#block-login-submit').click(function(){
 			$this = $(this);
 			$this.attr('disabled', 'disabled');
-			$.post(
-				nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(),
-				'nv_login=' + encodeURIComponent($('#block_login_iavim').val()) + '&nv_password=' + encodeURIComponent($('#block_password_iavim').val()) + '&' + ( opts.isCaptchaLogin ? '&nv_seccode=' + encodeURIComponent($('#block_seccode_iavim').val()) : '' ) + '&nv_ajax_login=1',
-				function(e) {
+			$.ajax({
+				type: 'POST',
+				cache: false,
+				url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(),
+				data: 'nv_login=' + encodeURIComponent($('#block_login_iavim').val()) + '&nv_password=' + encodeURIComponent($('#block_password_iavim').val()) + '&' + ( opts.isCaptchaLogin ? '&nv_seccode=' + encodeURIComponent($('#block_seccode_iavim').val()) : '' ) + '&nv_ajax_login=1',
+				dataType: 'json',
+				success: function(e){
 					$this.removeAttr('disabled');
-					e = parseInt(e);
-					if( e == 0 ){
+					if( e.length ){
+						$.each(e, function(k, v){
+							if( v.name == '' ){
+								alert( v.value );
+							}else{
+								$('#loginModal [name=' + v.name + ']').attr({
+									'title': v.value,
+									'data-trigger': 'focus'
+								}).tooltip().parent().parent().addClass('has-error');
+							}
+						});
+						
+						$('#loginModal .has-error:first input').focus();
+					}else{
 						opts.loginComplete.call(undefined, e, opts);
-					}else if( e == 1 ){
-						$('#block_login_iavim').parent().parent().addClass('has-error');
-					}else if( e == 2 ){
-						$('#block_password_iavim').parent().parent().addClass('has-error');
-					}else if( e == 3 ){
-						$('#block_seccode_iavim').parent().parent().addClass('has-error');
 					}
 				}
-			);
+			});
 		});		
 		
 		$('#block-register-submit').click(function(){
