@@ -1,7 +1,8 @@
 	<noscript>
 		<div class="alert alert-danger">{LANG.nojs}</div>
 	</noscript>
-	<div id="wraper">
+    <div class="body-bg">
+	<div class="wraper">
 		<header>
 			<div class="container">
 				<div id="header" class="row">
@@ -35,9 +36,6 @@
                         <h2>{SITE_DESCRIPTION}</h2>
                     </div>
                     <div class="pull-right">
-                        <div id="social-icons">
-                            [SOCIAL_ICONS]
-                        </div>
                         <div id="search">
                             <form action="{NV_BASE_SITEURL}" method="get" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">
                                 <div class="input-group">
@@ -52,6 +50,19 @@
 				</div>
 			</div>
 		</header>
+        <nav class="header-nav">
+            <div class="container">
+                <div class="social-icons">
+                [SOCIAL_ICONS]
+                </div>
+                <div class="contactDefault">
+                [CONTACT_DEFAULT]
+                </div>
+                <div id="tip" data-content="">
+                    <div class="bg bg-gradient"></div>
+                </div>
+            </div>
+        </nav>
 		<nav>
 			<div class="container">
 				<div class="row">

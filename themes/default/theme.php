@@ -99,7 +99,7 @@ function nv_site_theme( $contents, $full = true )
             $css_content = nv_css_setproperties( 'body', $config_theme['body'] );
             $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
             $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
-            $css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
+            $css_content .= nv_css_setproperties( '.wraper', $config_theme['content'] );
             $css_content .= nv_css_setproperties( '#header', $config_theme['header'] );
             $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
             $css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
@@ -152,8 +152,13 @@ function nv_site_theme( $contents, $full = true )
 	// Header variables
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
-	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
 	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+    $logo = preg_replace( "/\.[a-z]+$/i", ".svg", $global_config['site_logo'] );
+    if ( ! file_exists( NV_ROOTDIR . "/" . $logo ) )
+    {
+        $logo = $global_config['site_logo'];
+    }
+    $xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $logo );
 	$xtpl->assign( 'LOGO_WIDTH', $size[0] );
 	$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
 

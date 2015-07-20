@@ -1,4 +1,4 @@
-#wraper{
+.wraper{
 	width: 100%;
 }
 @media (max-width: 1200px){
@@ -11,7 +11,7 @@
 }
 
 @media (max-width: 992px){
-	.container {
+	.body-bg, .container {
 		width:100%;
 	}
 	#header .logo{
@@ -22,15 +22,6 @@
 	#header .pull-right{
 		width:100%;
 		margin:0;
-	}
-	#social-icons{
-		width:100%;
-		text-align:center;
-		margin-bottom:10px;
-	}
-	#social-icons ul{
-		width:100%;
-		text-align:center;
 	}
 	#search{
 		width:100%;
@@ -54,10 +45,26 @@
 	}
 }
 
-@media (max-width: 768px){
-	.container {
+@media (max-width: 767px){
+	.body-bg, .container {
 		width:100%;
 	}
+    .social-icons,
+    .contactDefault{
+        float: right;
+        margin-right: 10px;
+        margin-left: 0
+    }
+    .social-icons .content,
+    .contactDefault .content{
+        display:none
+    }
+    .contactList li{
+        display: block
+    }
+    .contactList li .fa{
+        width: 20px
+    }
 }
 
 @media (max-width: 640px){
@@ -81,6 +88,24 @@
 	.nv-infodie {
 		width: 100%;
 	}
+    .visible-ss-block{
+        display: block !important;
+    }
+    .visible-ss-inline{
+        display: inline !important
+    }
+    .visible-ss-inline-block{
+        display: inline-block !important;
+    }
+    .hidden-ss-block,
+    .hidden-ss-inline,
+    .hidden-ss-inline-block{
+        display: none !important;
+    }
+    #tip {
+        max-width: 100%;
+        margin-right: 0 !important
+    }
 }
 @media (min-width: 500px){
 	.nv-infodie {
@@ -90,7 +115,7 @@
 	}
 }
 @media (min-height: 500px){
-	.container {
+	.body-bg, .container {
 		width:100%;
 	}
 	.nv-infodie{
@@ -101,15 +126,15 @@
 }
 
 @media (min-width: 768px){
-	#wraper{
+	.wraper{
 		width: 100%;
 	}
 }
 @media (min-width: 992px){
-	.container {
+	.body-bg, .container {
 		width: 100%;
 	}
-	#wraper{
+	.wraper{
 		width: 100%;
 		max-width: 1080px;
 	}
@@ -120,7 +145,7 @@
 	}
 }
 @media (min-width: 1200px){
-	#wraper{
+	.wraper{
 		width: 1080px;
 	}
 	nav > .container > .row {

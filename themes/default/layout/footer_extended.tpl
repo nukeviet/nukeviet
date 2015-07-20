@@ -35,6 +35,7 @@
 			</div>
 		</footer>
 	</div>
+    </div>
 	<div class="fix_banner_left">
 		[FIX_BANNER_LEFT]
 	</div>
