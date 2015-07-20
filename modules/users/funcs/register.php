@@ -530,45 +530,47 @@ if( $checkss == $array_register['checkss'] )
 						exit();
 					}
 				}
-
-				if( $global_config['allowuserreg'] == 2 )
+				else
 				{
-					$subject = $lang_module['account_active'];
-					$message = sprintf( $lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'],  nv_date( 'H:i d/m/Y', NV_CURRENTTIME + 86400 ) );
-					$send = nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
-					
-					if( $send )
+					if( $global_config['allowuserreg'] == 2 )
 					{
-						$info = $lang_module['account_active_mess'];
+						$subject = $lang_module['account_active'];
+						$message = sprintf( $lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'],  nv_date( 'H:i d/m/Y', NV_CURRENTTIME + 86400 ) );
+						$send = nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
+						
+						if( $send )
+						{
+							$info = $lang_module['account_active_mess'];
+						}
+						else
+						{
+							$info = $lang_module['account_active_mess_error_mail'];
+						}
 					}
 					else
 					{
-						$info = $lang_module['account_active_mess_error_mail'];
+						$info = $lang_module['account_register_to_admin'];
 					}
-				}
-				else
-				{
-					$info = $lang_module['account_register_to_admin'];
-				}
-
-				if( $is_ajax_register )
-				{
-					$complete = $info;
-				}
-				else
-				{
-					$info .= "<br /><br />\n";
-					$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
-					$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_login'] . '</a>]';
 	
-					$contents = user_info_exit( $info );
-					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
-	
-					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
-	
-					include NV_ROOTDIR . '/includes/header.php';
-					echo nv_site_theme( $contents );
-					include NV_ROOTDIR . '/includes/footer.php';
+					if( $is_ajax_register )
+					{
+						$complete = $info;
+					}
+					else
+					{
+						$info .= "<br /><br />\n";
+						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+						$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_login'] . '</a>]';
+		
+						$contents = user_info_exit( $info );
+						$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
+		
+						nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
+		
+						include NV_ROOTDIR . '/includes/header.php';
+						echo nv_site_theme( $contents );
+						include NV_ROOTDIR . '/includes/footer.php';
+					}
 				}
 			}
 			else
@@ -618,39 +620,41 @@ if( $checkss == $array_register['checkss'] )
 						include NV_ROOTDIR . '/includes/footer.php';
 					}
 				}
-
-				$query_field['userid'] = $userid;
-				$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
-				$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
-
-				$subject = $lang_module['account_register'];
-				$message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username']);
-				nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
-
-				$nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-				if( ! empty( $array_register['nv_redirect'] ) )
-				{
-					$nv_redirect .= '&nv_redirect=' . $array_register['nv_redirect'];
-				}
-				
-				if( $is_ajax_register )
-				{
-					$complete = $lang_module['register_ok'];
-				}
 				else
 				{
-					$info = $lang_module['register_ok'] . "<br /><br />\n";
-					$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
-					$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] . '</a>]';
+					$query_field['userid'] = $userid;
+					$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
+					$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 	
-					$contents = user_info_exit( $info );
-					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( $nv_redirect, true ) . '" />';
+					$subject = $lang_module['account_register'];
+					$message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username']);
+					nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
 	
-					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
-	
-					include NV_ROOTDIR . '/includes/header.php';
-					echo nv_site_theme( $contents );
-					include NV_ROOTDIR . '/includes/footer.php';
+					$nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+					if( ! empty( $array_register['nv_redirect'] ) )
+					{
+						$nv_redirect .= '&nv_redirect=' . $array_register['nv_redirect'];
+					}
+					
+					if( $is_ajax_register )
+					{
+						$complete = $lang_module['register_ok'];
+					}
+					else
+					{
+						$info = $lang_module['register_ok'] . "<br /><br />\n";
+						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+						$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] . '</a>]';
+		
+						$contents = user_info_exit( $info );
+						$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( $nv_redirect, true ) . '" />';
+		
+						nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
+		
+						include NV_ROOTDIR . '/includes/header.php';
+						echo nv_site_theme( $contents );
+						include NV_ROOTDIR . '/includes/footer.php';
+					}
 				}
 			}
 		}
