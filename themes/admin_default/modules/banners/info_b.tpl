@@ -8,7 +8,9 @@
 <div class="clearfix"></div>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.caption}</caption>
+		<caption>
+			<em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.caption}
+		</caption>
 		<tbody>
 			<!-- BEGIN: loop1 -->
 			<tr>
@@ -21,7 +23,9 @@
 </div>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.stat.0}</caption>
+		<caption>
+			<em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.stat.0}
+		</caption>
 		<tbody>
 			<tr>
 				<td><span class="text-middle pull-left">{CONTENTS.stat.1}:</span>
@@ -34,13 +38,29 @@
 					<!-- BEGIN: stat2 -->
 					<option value="{K}">{V}</option>
 					<!-- END: stat2 -->
-				</select>
-				<input type="button" class="btn btn-primary" value="{CONTENTS.stat.6}" id="{CONTENTS.stat.7}" onclick="{CONTENTS.stat.8}" /></td>
+				</select><input type="button" class="btn btn-primary" value="{CONTENTS.stat.6}" id="{CONTENTS.stat.7}" onclick="{CONTENTS.stat.8}" /></td>
 			</tr>
 		</tbody>
 	</table>
 </div>
 <div id="{CONTENTS.containerid}"></div>
+
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">{LANG.file_name}</h4>
+			</div>
+			<div class="modal-body">
+
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
 	$(function() {
 		$('a[class=delfile]').click(function(event) {
@@ -57,6 +77,18 @@
 					}
 				});
 			}
+		});
+
+		$("#open_modal_image").on("click", function() {
+			$('#imagemodal .modal-dialog').css({'width': $(this).data('width')+23});
+			$('#imagemodal .modal-body').html('<img src="' + $(this).data('src') + '" />');
+			$('#imagemodal').modal('show');
+		});
+
+		$("#open_modal_flash").on("click", function() {
+			$('#imagemodal .modal-dialog').css({'width': $(this).data('width')+23});
+			$('#imagemodal .modal-body').html('<object type="application/x-shockwave-flash" data="' + $(this).data('src') + '" width="' + $(this).data('width') + '"><param name="movie" value="' + $(this).data('src') + '"><param name="wmode" value="transparent"></object>');
+			$('#imagemodal').modal('show');
 		});
 	});
 </script>
