@@ -29,7 +29,7 @@ $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 if( $popup )
 {
 	$lang_module['browse_file'] = $lang_global['browse_file'];
-	
+
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'ADMIN_THEME', $global_config['module_theme'] );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
@@ -73,12 +73,12 @@ if( $popup )
 	{
 		$upload_logo = '';
 	}
-	
+
 	// Get logo size
 	if( $upload_logo )
 	{
 		$logo_size = getimagesize( NV_ROOTDIR . '/' . $upload_logo );
-		
+
 		$upload_logo_config = array(
 			'w' => $logo_size[0],
 			'h' => $logo_size[1],
@@ -86,7 +86,7 @@ if( $popup )
 			'autologosize2' => $global_config['autologosize2'],
 			'autologosize3' => $global_config['autologosize3'],
 		);
-		
+
 		$upload_logo_config = implode( '|', $upload_logo_config );
 		$upload_logo = NV_BASE_SITEURL . $upload_logo;
 	}
@@ -94,10 +94,10 @@ if( $popup )
 	{
 		$upload_logo_config = '';
 	}
-	
+
 	$xtpl->assign( 'UPLOAD_LOGO', $upload_logo );
 	$xtpl->assign( 'UPLOAD_LOGO_CONFIG', $upload_logo_config );
-	
+
 	// Check upload allow file types
 	if( $type == 'image' and in_array( 'images', $admin_info['allow_files_type'] ) )
 	{
@@ -111,20 +111,20 @@ if( $popup )
 	{
 		$allow_files_type = $admin_info['allow_files_type'];
 	}
-	
+
 	$mimes = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
-	
+
 	foreach( $mimes as $mime_type => $file_ext )
 	{
 		if( ! in_array( $mime_type, $global_config['forbid_mimes'] ) and in_array( $mime_type, $allow_files_type ) )
 		{
 			$file_ext = array_diff( array_keys( $file_ext ), $global_config['forbid_extensions'] );
-			
+
 			if( ! empty( $file_ext ) )
 			{
 				$xtpl->assign( 'MIMI_TYPE', ucfirst( $mime_type ) );
 				$xtpl->assign( 'MIME_EXTS', implode( ',', $file_ext ) );
-				
+
 				$xtpl->parse( 'main.mime' );
 			}
 		}
@@ -142,20 +142,15 @@ if( $popup )
 	{
 		$xtpl->parse( 'main.auto_alt' );
 	}
-	
+
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
-	
-	if( ! $nv_Request->isset_request( 'nomudim', 'get' ) or $nv_Request->get_int( 'nomudim', 'get', 0 ) == 1 )
-	{
-		$global_config['mudim_active'] = 0;
-	}
-	
+
 	$head_site = 0;
 }
 else
 {
-	$xtpl->assign( 'IFRAME_SRC', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;popup=1&amp;nomudim=1' );
+	$xtpl->assign( 'IFRAME_SRC', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;popup=1' );
 	$xtpl->parse( 'uploadPage' );
 	$contents = $xtpl->text( 'uploadPage' );
 	$head_site = 1;

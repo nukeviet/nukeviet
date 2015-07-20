@@ -126,7 +126,6 @@ if( $id > 0 and $catid > 0 )
 			header( "Content-Type: text/x-delimtext; name=\"" . $result['alias'] . ".html\"" );
 			header( "Content-disposition: attachment; filename=" . $result['alias'] . ".html" );
 
-			$global_config['mudim_active'] = 0;
 			include NV_ROOTDIR . '/includes/header.php';
 			echo preg_replace_callback( "/(src|href)\=\"([^\"]+)\"/", "nv_src_href_callback", nv_url_rewrite( nv_site_theme( $contents, false ) ) );
 			include NV_ROOTDIR . '/includes/footer.php';

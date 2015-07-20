@@ -106,15 +106,4 @@ $(document).ready(function(){
 document.getElementById('site_config').setAttribute("autocomplete", "off");
 //]]>
 </script>
-
-<!-- BEGIN: viet_keyboard -->
-<script type="text/javascript">
-//<![CDATA[
-var mudim_showPanel = true;
-var mudim_displayMode = 0;
-var mudim_method = 4;
-//]]>
-</script>
-<script type="text/javascript" src="{BASE_SITEURL}js/mudim.js"></script>
-<!-- BEGIN: viet_keyboard -->
 <!-- END: step -->

@@ -15,7 +15,6 @@ if( empty( $global_config['idsite'] ) )
 {
 	$allow_func[] = 'checkupdate';
 	$allow_func[] = 'config';
-	$allow_func[] = 'mudim';
 }
 
 $menu_top = array(

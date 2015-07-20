@@ -208,11 +208,6 @@ if( ! empty( $array_department ) )
             if( isset( $array_op[1] ) and $array_op[1] == 0 )
             {
                 $base_url_rewrite .= '/0';
-                if( isset( $array_op[2] ) )
-                {
-                    $global_config['mudim_active'] = $array_op[2];
-                    $base_url_rewrite .= '/' . $array_op[2];
-                }
             }
         }
         $base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
