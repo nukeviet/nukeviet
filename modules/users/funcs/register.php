@@ -386,46 +386,94 @@ if( $checkss == $array_register['checkss'] )
 
 	$check_seccode = ! $gfx_chk ? true : ( nv_capcha_txt( $nv_seccode ) ? true : false );
 
+	$error = array();
+	$complete = '';
+
 	if( ! $check_seccode )
 	{
-		$error = $lang_global['securitycodeincorrect'];
+		$error[] = array(
+			'name' => 'nv_seccode',
+			'value' => $lang_global['securitycodeincorrect']
+		);
 	}
-	elseif( ( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) ) != '' )
+	
+	if( ( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) ) != '' )
 	{
-		$error = $check_login;
+		$error[] = array(
+			'name' => 'username',
+			'value' => $check_login
+		);
 	}
-	elseif( ( $check_email = nv_check_email_reg( $array_register['email'] ) ) != '' )
+	
+	if( ( $check_email = nv_check_email_reg( $array_register['email'] ) ) != '' )
 	{
-		$error = $check_email;
+		$error[] = array(
+			'name' => 'email',
+			'value' => $check_email
+		);
 	}
-	elseif( ( $check_pass = nv_check_valid_pass( $array_register['password'], NV_UPASSMAX, NV_UPASSMIN ) ) != '' )
+	
+	if( ( $check_pass = nv_check_valid_pass( $array_register['password'], NV_UPASSMAX, NV_UPASSMIN ) ) != '' )
 	{
-		$error = $check_pass;
+		$error[] = array(
+			'name' => 'password',
+			'value' => $check_pass
+		);
 	}
-	elseif( $array_register['password'] != $array_register['re_password'] )
+	
+	if( $array_register['password'] != $array_register['re_password'] )
 	{
-		$error = sprintf( $lang_global['passwordsincorrect'], $array_register['password'], $array_register['re_password'] );
+		$error[] = array(
+			'name' => 're_password',
+			'value' => sprintf( $lang_global['passwordsincorrect'], $array_register['password'], $array_register['re_password'] )
+		);
 	}
-	elseif( empty( $array_register['your_question'] ) and empty( $array_register['question'] ) )
+	
+	if( empty( $array_register['your_question'] ) and empty( $array_register['question'] ) )
 	{
-		$error = $lang_module['your_question_empty'];
+		$error[] = array(
+			'name' => 'your_question',
+			'value' => $lang_module['your_question_empty']
+		);
 	}
-	elseif( empty( $array_register['answer'] ) )
+	
+	if( empty( $array_register['answer'] ) )
 	{
-		$error = $lang_module['answer_empty'];
+		$error[] = array(
+			'name' => 'answer',
+			'value' => $lang_module['answer_empty']
+		);
 	}
-	elseif( empty( $array_register['agreecheck'] ) )
+	
+	if( empty( $array_register['agreecheck'] ) )
 	{
-		$error = $lang_module['agreecheck_empty'];
+		$error[] = array(
+			'name' => 'agreecheck',
+			'value' => $lang_module['agreecheck_empty']
+		);
 	}
-	else
+	
+	if( empty( $error ) )
 	{
 		$query_field = array( 'userid' => 0 );
+		
 		if( ! empty( $array_field_config ) )
 		{
 			$userid = 0;
 			require NV_ROOTDIR . '/modules/users/fields.check.php';
 		}
+		
+		// Error: String to Array
+		if( ! empty( $error ) )
+		{
+			$error = array(
+				0 => array(
+					'name' => '',
+					'value' => $error
+				)
+			);
+		}
+		
 		if( empty( $error ) )
 		{
 			$password = $crypt->hash_password( $array_register['password'], $global_config['hashprefix'] );
@@ -464,13 +512,23 @@ if( $checkss == $array_register['checkss'] )
 
 				if( ! $userid )
 				{
-					$contents = user_info_exit( $lang_module['err_no_save_account'] );
-					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
-
-					include NV_ROOTDIR . '/includes/header.php';
-					echo nv_site_theme( $contents );
-					include NV_ROOTDIR . '/includes/footer.php';
-					exit();
+					if( $is_ajax_register )
+					{
+						$error[] = array(
+							'name' => '',
+							'value' => $lang_module['err_no_save_account']
+						);
+					}
+					else
+					{
+						$contents = user_info_exit( $lang_module['err_no_save_account'] );
+						$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
+	
+						include NV_ROOTDIR . '/includes/header.php';
+						echo nv_site_theme( $contents );
+						include NV_ROOTDIR . '/includes/footer.php';
+						exit();
+					}
 				}
 
 				if( $global_config['allowuserreg'] == 2 )
@@ -478,37 +536,40 @@ if( $checkss == $array_register['checkss'] )
 					$subject = $lang_module['account_active'];
 					$message = sprintf( $lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'],  nv_date( 'H:i d/m/Y', NV_CURRENTTIME + 86400 ) );
 					$send = nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
+					
 					if( $send )
 					{
-						$info = $lang_module['account_active_mess'] . "<br /><br />\n";
+						$info = $lang_module['account_active_mess'];
 					}
 					else
 					{
-						$info = $lang_module['account_active_mess_error_mail'] . "<br /><br />\n";
+						$info = $lang_module['account_active_mess_error_mail'];
 					}
 				}
 				else
 				{
-					$info = $lang_module['account_register_to_admin'] . "<br /><br />\n";
+					$info = $lang_module['account_register_to_admin'];
 				}
 
 				if( $is_ajax_register )
 				{
-					die( 'OK|' . $info );
+					$complete = $info;
 				}
-				
-				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
-				$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_login'] . '</a>]';
-
-				$contents = user_info_exit( $info );
-				$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
-
-				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
-
-				include NV_ROOTDIR . '/includes/header.php';
-				echo nv_site_theme( $contents );
-				include NV_ROOTDIR . '/includes/footer.php';
-				exit();
+				else
+				{
+					$info .= "<br /><br />\n";
+					$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+					$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_login'] . '</a>]';
+	
+					$contents = user_info_exit( $info );
+					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
+	
+					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
+	
+					include NV_ROOTDIR . '/includes/header.php';
+					echo nv_site_theme( $contents );
+					include NV_ROOTDIR . '/includes/footer.php';
+				}
 			}
 			else
 			{
@@ -540,13 +601,22 @@ if( $checkss == $array_register['checkss'] )
 
 				if( ! $userid )
 				{
-					$contents = user_info_exit( $lang_module['err_no_save_account'] );
-					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
-
-					include NV_ROOTDIR . '/includes/header.php';
-					echo nv_site_theme( $contents );
-					include NV_ROOTDIR . '/includes/footer.php';
-					exit();
+					if( $is_ajax_register )
+					{
+						$error[] = array(
+							'name' => '',
+							'value' => $lang_module['err_no_save_account']
+						);
+					}
+					else
+					{
+						$contents = user_info_exit( $lang_module['err_no_save_account'] );
+						$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
+	
+						include NV_ROOTDIR . '/includes/header.php';
+						echo nv_site_theme( $contents );
+						include NV_ROOTDIR . '/includes/footer.php';
+					}
 				}
 
 				$query_field['userid'] = $userid;
@@ -565,32 +635,42 @@ if( $checkss == $array_register['checkss'] )
 				
 				if( $is_ajax_register )
 				{
-					die( 'OK|' . $lang_module['register_ok'] );
+					$complete = $lang_module['register_ok'];
 				}
-
-				$info = $lang_module['register_ok'] . "<br /><br />\n";
-				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
-				$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] . '</a>]';
-
-				$contents = user_info_exit( $info );
-				$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( $nv_redirect, true ) . '" />';
-
-				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
-
-				include NV_ROOTDIR . '/includes/header.php';
-				echo nv_site_theme( $contents );
-				include NV_ROOTDIR . '/includes/footer.php';
-				exit();
+				else
+				{
+					$info = $lang_module['register_ok'] . "<br /><br />\n";
+					$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+					$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] . '</a>]';
+	
+					$contents = user_info_exit( $info );
+					$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( $nv_redirect, true ) . '" />';
+	
+					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
+	
+					include NV_ROOTDIR . '/includes/header.php';
+					echo nv_site_theme( $contents );
+					include NV_ROOTDIR . '/includes/footer.php';
+				}
 			}
 		}
 	}
 	
+	// Ajax respon
 	if( $is_ajax_register )
 	{
-		die( 'ERROR|' . strip_tags( $error ) );
+		$respon = array(
+			'status' => $complete ? 'success' : 'error',
+			'message' => $complete,
+			'error' => $error
+		);
+		
+		include NV_ROOTDIR . '/includes/header.php';
+		echo json_encode( $respon );
+		include NV_ROOTDIR . '/includes/footer.php';
 	}
 	
-	$array_register['info'] = '<span style="color:#fb490b;">' . $error . '</span>';
+	$array_register['info'] = '<span style="color:#fb490b;">' . $error[0]['value'] . '</span>';
 }
 else
 {
