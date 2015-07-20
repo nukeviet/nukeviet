@@ -409,7 +409,7 @@ header{
 }
 .nv-list-item li{
 	padding:4px;
-	margin:0;
+	margin:0!important;
 }
 .nv-list-item.sm li{
 	padding:2px;

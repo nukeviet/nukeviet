@@ -39,43 +39,56 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 
 	$xtpl = new XTemplate( 'block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users' );
 
+	if( file_exists( NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php' ) )
+	{
+		include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
+	}
+	else
+	{
+		include NV_ROOTDIR . '/modules/users/language/vi.php';
+	}
+
 	if( defined( 'NV_IS_USER' ) )
 	{
 		$avata = '';
-		if( file_exists( NV_ROOTDIR . '/' . $user_info['photo'] ) and ! empty( $user_info['photo'] ) ) $avata = NV_BASE_SITEURL . $user_info['photo'];
-		else $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.jpg';
+		
+		if( file_exists( NV_ROOTDIR . '/' . $user_info['photo'] ) and ! empty( $user_info['photo'] ) )
+		{
+			$avata = NV_BASE_SITEURL . $user_info['photo'];
+		}
+		else
+		{
+			$avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.jpg';
+		}
+		
 		$xtpl->assign( 'AVATA', $avata );
-		$xtpl->assign( 'LANG', $lang_global );
+		$xtpl->assign( 'LANG', array_merge( $lang_global, $lang_module ) );
 		$xtpl->assign( 'USER', $user_info );
+		
+		$xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users' );
+		$xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=' );
+		
+		if( defined( 'NV_OPENID_ALLOWED' ) )
+		{
+			$xtpl->parse( 'signed.allowopenid' );
+		}
+		
+		if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
+		{
+			$xtpl->parse( 'signed.regroups' );
+		}
 
 		if( ! defined( 'NV_IS_ADMIN' ) )
 		{
 			$xtpl->assign( 'LOGOUT_ADMIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=logout' );
-			$xtpl->parse( 'signed.admin' );
+			$xtpl->parse( 'signed.logout' );
 		}
-		$xtpl->assign( 'CHANGE_PASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=changepass' );
-		$xtpl->assign( 'CHANGE_INFO', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users' );
-		$xtpl->assign( 'RE_GROUPS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=regroups' );
-
-		if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
-		{
-			$in_group = '<a title="' . $lang_global['in_groups'] . '" href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=regroups">' . $lang_global['in_groups'] . '</a>';
-			$xtpl->assign( 'in_group', $in_group );
-		}
+		
 		$xtpl->parse( 'signed' );
 		$content = $xtpl->text( 'signed' );
 	}
 	else
-	{
-		if( file_exists( NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php' ) )
-		{
-			include NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
-		}
-		else
-		{
-			include NV_ROOTDIR . '/modules/users/language/vi.php';
-		}
-		
+	{		
 		$xtpl->assign( 'REDIRECT', nv_base64_encode( $client_info['selfurl'] ) );
 		$xtpl->assign( 'USER_LOGIN', nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login', true ) );
 		$xtpl->assign( 'USER_REGISTER', nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=register', true ) );
