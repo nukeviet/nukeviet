@@ -21,9 +21,9 @@
 </style>
 <div class="content">
 <script type="text/javascript">
-	//<![CDATA[
-	var htmlload = '<tr><td class="text-center" colspan="2"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></td></tr>';
-	//]]>
+//<![CDATA[
+var htmlload = '<tr><td class="text-center" colspan="2"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></td></tr>';
+//]]>
 </script>
 <!-- END: head -->
 <!-- BEGIN: main -->
@@ -43,7 +43,7 @@
 				<tr>
 					<td>{LANG.block_type}:</td>
 					<td>
-					<select name="module" class="form-control w200 pull-left" style="margin-right: 5px">
+					<select name="module_type" class="form-control w200 pull-left" style="margin-right: 5px">
 						<option value="">{LANG.block_select_type}</option>
 						<option value="theme"{THEME_SELECTED}>{LANG.block_type_theme}</option>
 						<!-- BEGIN: module -->

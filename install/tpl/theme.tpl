@@ -11,25 +11,7 @@
         <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}js/language/jquery.validator-{LANG_DATA}.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $('span.language_head').click(function(){
-                    $('ul.language_body').slideToggle('medium');
-                });
-                $('ul.language_body li a').mouseover(function(){
-                    $(this).animate({
-                        fontSize: "12px",
-                        paddingLeft: "10px"
-                    }, 50);
-                });
-                $('ul.language_body li a').mouseout(function(){
-                    $(this).animate({
-                        fontSize: "12px",
-                        paddingLeft: "10px"
-                    }, 50);
-                });
-            });
-        </script>
+        <script type="text/javascript" src="{BASE_SITEURL}install/js/main.js"></script>
     </head>
     <body>
         <div id="header">

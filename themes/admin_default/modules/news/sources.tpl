@@ -31,7 +31,7 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.source_logo}: </strong></td>
-					<td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="logo" id="logo" value="{logo}"/> <input type="button" value="{GLANG.browse_image}" name="selectimg" class="btn btn-info" />
+					<td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="logo" id="logo" value="{logo}"/> <input id="select-img-source" type="button" value="{GLANG.browse_image}" name="selectimg" class="btn btn-info" />
 					<!-- BEGIN: logo -->
 					<br />
 					<img src="{logo}"/></td>
@@ -45,13 +45,8 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-$("input[name=selectimg]").click(function() {
-	var area = "logo";
-	var path = "{NV_UPLOADS_DIR}/{MODULE_UPLOAD}/source";
-	var type = "image";
-	nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-	return false;
-});
+var CFG = [];
+CFG.upload_path = '{NV_UPLOADS_DIR}/{MODULE_UPLOAD}/source';
 //]]>
 </script>
 <!-- END: main -->

@@ -44,7 +44,7 @@
 		<ul class="related">
 			<!-- BEGIN: other -->
 			<li>
-				<a class="show" href="{NEWSTOP.link}" data-content="{NEWSTOP.hometext}" data-img="{NEWSTOP.imghome}" rel="tooltip">{NEWSTOP.title}</a>
+				<a class="show" href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a>
 			</li>
 			<!-- END: other -->
 		</ul>
@@ -88,7 +88,7 @@
 			<ul class="related">
 				<!-- BEGIN: other -->
 				<li class="{CLASS}">
-					<a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip" title="{CONTENT.title}">{CONTENT.title}</a>
+					<a class="show" href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
 				</li>
 				<!-- END: other -->
 			</ul>
@@ -104,8 +104,7 @@
 <script type="text/javascript">
 $(window).load(function(){
     $.each( $('.two_column .panel-body'), function(k,v){
-        if( k % 2 == 0 )
-        {
+        if( k % 2 == 0 ){
             var height1 = $($('.two_column .panel-body')[k]).height();
             var height2 = $($('.two_column .panel-body')[k+1]).height();
             var height = ( height1 > height2 ? height1 : height2 );
@@ -115,18 +114,4 @@ $(window).load(function(){
     });
 });
 </script>
-
-<!-- BEGIN: tooltip -->
-<script type="text/javascript">
-$(document).ready(function() {
-	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
-	$("[data-rel='tooltip'][data-content!='']").tooltip({
-		placement: "{TOOLTIP_POSITION}",
-		html: true,
-		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-	});
-});
-</script>
-<!-- END: tooltip -->
-
 <!-- END: main -->

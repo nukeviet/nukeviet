@@ -14,7 +14,7 @@ if( defined( 'NV_IS_SPADMIN' ) )
 {
 	$submenu['department'] = $lang_module['department_title'];
 	$submenu['content'] = $lang_module['content'];
-	$allow_func = array( 'main', 'reply', 'del', 'department', 'row', 'del_department', 'content', 'view', 'change_status', 'change_weight', 'alias' );
+	$allow_func = array( 'main', 'reply', 'del', 'department', 'row', 'del_department', 'content', 'view', 'change_status', 'change_weight', 'alias', 'change_default' );
 }
 else
 {

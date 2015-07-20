@@ -65,37 +65,6 @@
 	</form>
 </div>
 <div id="resultdata">&nbsp;</div>
-<script type="text/javascript">
-	//<![CDATA[
-	$(document).ready(function() {
-		$("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
-			showOn : "both",
-			dateFormat : "dd.mm.yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonText : '',
-			showButtonPanel : true,
-			showOn : 'focus'
-		});
-		$("#formgetuid").submit(function() {
-			var a = $(this).attr("action");
-			b = $(this).serialize();
-			a = a + "&" + b + "&submit";
-			$("#formgetuid input, #formgetuid select").attr("disabled", "disabled");
-			$.ajax({
-				type : "GET",
-				url : a,
-				success : function(c) {
-					$("#resultdata").html(c);
-					$("#formgetuid input, #formgetuid select").removeAttr("disabled")
-				}
-			});
-			return !1
-		});
-	});
-	//]]>
-</script>
 <!--  END: main  -->
 <!-- BEGIN: resultdata -->
 <!-- BEGIN: data -->
@@ -146,12 +115,6 @@
 		$("#{AREA}", opener.document).val(userid);
 		window.close();
 	}
-
-	$("thead a,.generatePage a").click(function() {
-		var a = $(this).attr("href");
-		$("#resultdata").load(a);
-		return !1
-	});
 	//]]>
 </script>
 <!-- END: data -->

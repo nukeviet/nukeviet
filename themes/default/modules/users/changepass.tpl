@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js" data-show="after"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js" data-show="after"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="page">
     <ul class="nav nav-tabs m-bottom">
@@ -45,7 +45,7 @@
     	</div>
     </form>
 </div>
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 $(document).ready(function(){
 	$('#changePassForm').validate();
 });

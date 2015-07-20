@@ -109,41 +109,14 @@ $(window).load(function(){
 <div id="endupdate">
 	<div class="infoalert" id="infodetectedupg">
 		{LANG.update_info_end}<br />
-		<strong><a class="delete_update_backage" href="{URL_DELETE}" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
+		<strong><a class="delete_update_backage delete_update_backage_end" href="{URL_DELETE}" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
 		<script type="text/javascript">
 		var completeUpdate = 0;
-		$(document).ready(function(){
-			$('.delete_update_backage').click(function(){
-				if( completeUpdate == 0 ){
-					if( confirm( nv_is_del_confirm[0] ) ){
-						$('#infodetectedupg').append('<div id="dpackagew"><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Waiting..."/></div>');
-						$.get( $(this).attr('href') , function(e){
-							$('#dpackagew').remove()
-							if( e == 'OK' ){
-								completeUpdate = 1;
-								$('#endupdate').append(
-									'<div class="infook">' +
-										'{LANG.update_package_deleted}<br />' +
-										'<a href="{URL_GOHOME}" title="{LANG.gohome}">{LANG.gohome}</a> - ' +
-										'<a href="{URL_GOADMIN}" title="{LANG.update_goadmin}">{LANG.update_goadmin}</a>' +
-									'</div>'
-								);
-							}else{
-								alert(e);
-								$('#endupdate').append(
-									'<div class="infoerror">' +
-										'{LANG.update_package_not_deleted}<br />' +
-										'<a href="{URL_GOHOME}" title="{LANG.gohome}">{LANG.gohome}</a> - ' +
-										'<a href="{URL_GOADMIN}" title="{LANG.update_goadmin}">{LANG.update_goadmin}</a>' +
-									'</div>'
-								);
-							}
-						});
-					}
-				}
-				return !1;
-			});
-		});
+		var URL_GOHOME = '{URL_GOHOME}';
+		var URL_GOADMIN = '{URL_GOADMIN}';
+		var update_package_deleted = '{LANG.update_package_deleted}';
+		var gohome = '{LANG.gohome}';
+		var update_goadmin = '{LANG.update_goadmin}';
 		</script>
 	</div>
 </div>

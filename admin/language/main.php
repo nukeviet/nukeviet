@@ -12,12 +12,12 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_lang_data'];
 
+$lang_module['nv_data_note'] = sprintf( $lang_module['nv_data_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=system' );
 $lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
-
 
 $array_lang_setup = array();
 $result = $db->query( 'SELECT lang, setup FROM ' . $db_config['prefix'] . '_setup_language' );
@@ -302,6 +302,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 		exit();
 	}
 }
+
 $a = 0;
 foreach( $lang_array_exit as $keylang )
 {
@@ -363,12 +364,6 @@ foreach( $lang_array_exit as $keylang )
 	}
 	$xtpl->parse( 'main.loop' );
 }
-$contents .= "</table>\n";
-
-$contents .= "<div class=\"quote\" style=\"width:97.5%;\">\n";
-$contents .= "<blockquote><span>" . $lang_module['nv_data_note'] . "</span></blockquote>\n";
-$contents .= "</div>\n";
-$contents .= "<div class=\"clear\"></div>\n";
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

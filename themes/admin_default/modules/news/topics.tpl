@@ -34,7 +34,7 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}:</strong></td>
-					<td><input class="form-control pull-left w500" style="margin-right: 5px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /> <input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+					<td><input class="form-control pull-left w500" style="margin-right: 5px" type="text" name="homeimg" id="homeimg" value="{DATA.image}" /> <input id="select-img-topic" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.keywords}: </strong></td>
@@ -51,22 +51,13 @@
 	</div>
 	<br />
 </form>
+<script type="text/javascript">
+var CFG = [];
+CFG.upload_dir = '{UPLOADS_DIR}';
 <!-- BEGIN: getalias -->
-<script type="text/javascript">
-	$("#idtitle").change(function() {
-		get_alias('topics', '{DATA.topicid}');
-	});
-</script>
+$("#idtitle").change(function() {
+	get_alias('topics', '{DATA.topicid}');
+});
 <!-- END: getalias -->
-
-<script type="text/javascript">
-	$("input[name=selectimg]").click(function() {
-		var area = "homeimg";
-		var path = "{UPLOADS_DIR}";
-		var currentpath = "{UPLOADS_DIR}";
-		var type = "image";
-		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
 </script>
 <!-- END: main -->

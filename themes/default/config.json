@@ -253,8 +253,8 @@
     "@label-danger-bg": "@brand-danger",
     "@label-color": "#fff",
     "@label-link-hover-color": "#fff",
-    "@modal-inner-padding": "20px",
-    "@modal-title-padding": "15px",
+    "@modal-inner-padding": "10px",
+    "@modal-title-padding": "10px",
     "@modal-title-line-height": "@line-height-base",
     "@modal-content-bg": "#fff",
     "@modal-content-border-color": "rgba(0,0,0,.2)",
@@ -407,7 +407,8 @@
     "component-animations.less",
     "dropdowns.less",
     "tooltip.less",
-    "popovers.less"
+    "popovers.less",
+    "modals.less"
   ],
   "js": [
     "dropdown.js",
@@ -420,5 +421,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=623801d8100fda93f4c6"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=9982b7f641cdf4438e2b"
 }

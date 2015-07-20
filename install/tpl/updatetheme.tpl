@@ -6,28 +6,14 @@
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/table.css" />
+        <script type="text/javascript">
+		var nv_siteroot = '{NV_BASE_SITEURL}';
+		</script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/{NV_LANG_UPDATE}.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $('span.language_head').click(function(){
-                    $('ul.language_body').slideToggle('medium');
-                });
-                $('ul.language_body li a').mouseover(function(){
-                    $(this).animate({
-                        fontSize: "12px",
-                        paddingLeft: "10px"
-                    }, 50);
-                });
-                $('ul.language_body li a').mouseout(function(){
-                    $(this).animate({
-                        fontSize: "12px",
-                        paddingLeft: "10px"
-                    }, 50);
-                });
-            });
-        </script>
+        <script type="text/javascript" src="{NV_BASE_SITEURL}install/js/main.js"></script>
+        <script type="text/javascript" src="{NV_BASE_SITEURL}install/js/update.js"></script>
     </head>
     <body>
         <div id="header">

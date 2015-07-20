@@ -50,7 +50,7 @@
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">
-							<a class="show" href="{OTHER.link}" title="{OTHER.title}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip">{OTHER.title}</a>
+							<a class="show" href="{OTHER.link}" title="{OTHER.title}">{OTHER.title}</a>
 						</li>
 						<!-- END: loop -->
 					</ul>
@@ -61,20 +61,4 @@
 	</div>
 </div>
 <!-- END: listcat -->
-
-<!-- BEGIN: tooltip -->
-<script type="text/javascript">
-$(document).ready(function() {
-	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
-	$("[data-rel='tooltip'][data-content!='']").tooltip({
-		placement: "{TOOLTIP_POSITION}",
-		html: true,
-		title: function(){
-			return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';
-		}
-	});
-});
-</script>
-<!-- END: tooltip -->
-
 <!-- END: main -->

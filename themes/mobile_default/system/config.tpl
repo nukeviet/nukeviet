@@ -224,54 +224,53 @@
 
 <script type="text/javascript">
 //<![CDATA[
-    $(document).ready(function() {
-        $('#picker_body_color').css({'background-color' : $('#picker_body_color').val()});
-        $('#picker_body_background').css({'background-color' : $('#picker_body_background').val()});
-        $('#picker_content_background').css({'background-color' : $('#picker_content_background').val()});
-        $('#picker_link_color').css({'background-color' : $('#picker_link_color').val()});
-        $('#picker_link_hover_color').css({'background-color' : $('#picker_link_hover_color').val()});
-        $('#picker_header_background').css({'background-color' : $('#picker_header_background').val()});
-        $('#picker_footer_background').css({'background-color' : $('#picker_footer_background').val()});
-        $('#picker_block_background').css({'background-color' : $('#picker_block_background').val()});
-        $('#picker_block_header_bg').css({'background-color' : $('#picker_block_header_bg').val()});
+$(document).ready(function() {
+    $('#picker_body_color').css({'background-color' : $('#picker_body_color').val()});
+    $('#picker_body_background').css({'background-color' : $('#picker_body_background').val()});
+    $('#picker_content_background').css({'background-color' : $('#picker_content_background').val()});
+    $('#picker_link_color').css({'background-color' : $('#picker_link_color').val()});
+    $('#picker_link_hover_color').css({'background-color' : $('#picker_link_hover_color').val()});
+    $('#picker_header_background').css({'background-color' : $('#picker_header_background').val()});
+    $('#picker_footer_background').css({'background-color' : $('#picker_footer_background').val()});
+    $('#picker_block_background').css({'background-color' : $('#picker_block_background').val()});
+    $('#picker_block_header_bg').css({'background-color' : $('#picker_block_header_bg').val()});
 
-        //Default Action
-        $(".tab_content").hide(); //Hide all content
-        $("ul.tabs li:first").addClass("active").show(); //Activate first tab
-        $(".tab_content:first").show(); //Show first tab content
+    //Default Action
+    $(".tab_content").hide();
+    $("ul.tabs li:first").addClass("active").show();
+    $(".tab_content:first").show();
 
-        //On Click Event
-        $("ul.tabs li").click(function() {
-            $("ul.tabs li").removeClass("active"); //Remove any "active" class
-            $(this).addClass("active"); //Add "active" class to selected tab
-            $(".tab_content").hide(); //Hide all tab content
-            var activeTab = $(this).find("a").attr("href"); //Find the rel attribute value to identify the active tab + content
-            $(activeTab).fadeIn(); //Fade in the active content
-            return false;
-        });
-
-    });
-
-    $('#picker_block_header_bg, #picker_body_color, #picker_body_background, #picker_content_background, #picker_link_color, #picker_link_hover_color, #picker_header_background, #picker_footer_background, #picker_block_background').colpick({
-        layout:'hex',
-        submit:0,
-        colorScheme:'dark',
-        onChange:function(hsb,hex,rgb,el,bySetColor) {
-            $(el).css('background-color','#'+hex);
-            if(!bySetColor) $(el).val('#' + hex);
-        }
-    }).keyup(function(){
-        $(this).colpickSetColor(this.value);
-    });
-
-    function nv_open_filemanage( area )
-    {
-        var alt = "backgroundimgalt";
-        var path = "{UPLOADS_DIR}";
-        var type = "image";
-        nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+    //On Click Event
+    $("ul.tabs li").click(function() {
+        $("ul.tabs li").removeClass("active");
+        $(this).addClass("active"); 
+        $(".tab_content").hide();
+        var activeTab = $(this).find("a").attr("href");
+        $(activeTab).fadeIn();
         return false;
+    });
+
+});
+
+$('#picker_block_header_bg, #picker_body_color, #picker_body_background, #picker_content_background, #picker_link_color, #picker_link_hover_color, #picker_header_background, #picker_footer_background, #picker_block_background').colpick({
+    layout:'hex',
+    submit:0,
+    colorScheme:'dark',
+    onChange:function(hsb,hex,rgb,el,bySetColor) {
+        $(el).css('background-color','#'+hex);
+        if(!bySetColor) $(el).val('#' + hex);
     }
+}).keyup(function(){
+    $(this).colpickSetColor(this.value);
+});
+
+function nv_open_filemanage( area ){
+    var alt = "backgroundimgalt";
+    var path = "{UPLOADS_DIR}";
+    var type = "image";
+    nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+    return false;
+}
 //]]>
 </script>
 <!-- END:main -->

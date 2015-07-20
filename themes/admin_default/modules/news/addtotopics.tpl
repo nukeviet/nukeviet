@@ -22,7 +22,7 @@
 							<option value="{TOPICSID.key}">{TOPICSID.title}</option>
 							<!-- END: topicsid -->
 						</select> 
-						<input class="btn btn-primary" name="update" type="button" value="{LANG.save}" /></td>
+						<input class="btn btn-primary" name="update" id="update-topic" type="button" value="{LANG.save}" /></td>
 					</tr>
 				</tfoot>
 				<tbody>
@@ -38,42 +38,10 @@
 	</form>
 </div>
 <script type="text/javascript">
-	$(function() {
-	    function checkallfirst() {
-	        $(this).one("click", checkallsecond);
-			$('input:checkbox').each(function() {
-				$(this).attr('checked', 'checked');
-			});
-	    }
-	    function checkallsecond() {
-	        $(this).one("click", checkallfirst);
-			$('input:checkbox').each(function() {
-				$(this).removeAttr('checked');
-			});
-	    }
-	    $('input[name=checkall]').one("click", checkallfirst);
-
-		$('input[name=update]').click(function() {
-			var listid = [];
-			$('input[name=idcheck]:checked').each(function() {
-				listid.push($(this).val());
-			});
-			if (listid.length < 1) {
-				alert('{LANG.topic_nocheck}');
-				return false;
-			}
-			var topic = $('select[name=topicsid]').val();
-			$.ajax({
-				type : 'POST',
-				url : 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=addtotopics',
-				data : 'listid=' + listid + '&topicsid=' + topic,
-				success : function(data) {
-					alert(data);
-					window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid=' + topic;
-				}
-			});
-			return false;
-		});
-	});
+var LANG = [];
+LANG.topic_nocheck = '{LANG.topic_nocheck}';
+$(function() {
+    $('input[name=checkall]').one("click", checkallfirst);
+});
 </script>
 <!-- END: main -->

@@ -36,7 +36,17 @@ if( defined( 'NV_IS_AJAX' ) )
 		$row = $db->query( $query )->fetch();
 		if( !empty( $row ) )
 		{
-			if( ! ( $act == 3 and ( $row['module'] == 'database' or $row['module'] == 'settings' or $row['module'] == 'site' ) ) )
+			$save = true;
+			if( $act == 3 and ( $row['module'] == 'database' or $row['module'] == 'settings' or $row['module'] == 'site' ) )
+			{
+				$save = false;
+			}
+			elseif( $act == 1  and $row['module'] == 'authors' )
+			{
+				$save = false;
+			}
+
+			if( $save )
 			{
 				$act_val = ( $row['act_' . $act] ) ? 0 : 1;
 				$checksum = md5( $row['module'] . '#' . $row['act_1'] . '#' . $row['act_2'] . '#' . $row['act_3'] . '#' . $global_config['sitekey'] );
@@ -74,6 +84,10 @@ foreach ( $rows as $row )
 	{
 		$chang_act[$i] = ( $row['act_' . $i] ) ? ' checked="checked"' : '';
 		if( $i == 3 and ( $row['module'] == 'database' or $row['module'] == 'settings' or $row['module'] == 'site' ) )
+		{
+			$chang_act[$i] .= ' disabled="disabled"';
+		}
+		elseif( $i == 1  and $row['module'] == 'authors' )
 		{
 			$chang_act[$i] .= ' disabled="disabled"';
 		}

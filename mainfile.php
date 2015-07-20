@@ -361,10 +361,17 @@ if( defined( 'NV_ADMIN' ) )
 	}
 }
 
-// cronjobs
-if( $nv_Request->isset_request( 'second', 'get' ) and $nv_Request->get_string( 'second', 'get' ) == 'cronjobs' )
+// Second execute
+if( $nv_Request->isset_request( 'second', 'get' ) )
 {
-	require NV_ROOTDIR . '/includes/core/cronjobs.php';
+	if( $nv_Request->get_string( 'second', 'get' ) == 'cronjobs' )
+	{
+		require NV_ROOTDIR . '/includes/core/cronjobs.php';
+	}
+	elseif( $nv_Request->get_string( 'second', 'get' ) == 'qr' )
+	{
+		require NV_ROOTDIR . '/includes/core/qr.php';
+	}
 }
 
 // Kiem tra tu cach admin

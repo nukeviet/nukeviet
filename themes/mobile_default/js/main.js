@@ -17,12 +17,6 @@ $(document).ready(function(){
 		return false;
 	});
 
-	// Trigger tooltip
-	$('.form-tooltip').tooltip({
-		selector: "[data-toggle=tooltip]",
-		container: "body"
-	});
-
 	$('#btn-search').click(function(){
 		if( $('#search').css('display') == 'none' ){
 			$('#search').slideDown('fast');
@@ -42,5 +36,9 @@ $(document).ready(function(){
 		else{
 			$('#nav').slideUp('fast');
 		}
+	});
+	
+	$('#bttop').click(function(){
+		$('body,html').animate({scrollTop:0},800);
 	});
 });
