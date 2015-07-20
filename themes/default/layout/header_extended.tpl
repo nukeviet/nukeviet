@@ -35,21 +35,30 @@
                         <h1>{SITE_NAME}</h1>
                         <h2>{SITE_DESCRIPTION}</h2>
                     </div>
-                    <div class="pull-right">
-                        <div id="search">
-                            <form action="{NV_BASE_SITEURL}" method="get" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">
-                                <div class="input-group">
-                                    <input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
-                                    <input type="hidden" name="{NV_NAME_VARIABLE}" value="seek" />
-                                    <input type="text" class="form-control" name="q" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" placeholder="{LANG.search}..."/>
-                                    <span class="input-group-btn"><button class="btn btn-info" type="submit" id="topmenu_search_submit"><em class="fa fa-lg fa-search"></em></button></span>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+                    <div class="clearfix"></div>
+                    <!-- BEGIN: breadcrumbs -->
+                    <h3 class="breadcrumb">
+                        <span class="hidden" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></span><!-- BEGIN: loop --><span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span class="txt" itemprop="title">{BREADCRUMBS.title}</span></a></span><!-- END: loop -->
+                    </h3>
+                    <!-- END: breadcrumbs -->
 				</div>
 			</div>
 		</header>
+		<nav class="second-nav" id="menusite">
+			<div class="container">
+				<div class="row">
+                    <div class="bg radius-top-left radius-top-right box-shadow">
+					[MENU_SITE]
+                    </div>
+				</div>
+                <div class="headerSearch">
+                    <div class="input-group">
+                        <input type="text" class="form-control" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" placeholder="{LANG.search}...">
+                        <span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_SUBMIT_ONCLICK}" data-minlength="{THEME_SEARCH_QUERY_MIN_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
+                    </div>
+                </div>
+			</div>
+		</nav>
         <nav class="header-nav">
             <div class="container">
                 <div class="social-icons">
@@ -63,19 +72,6 @@
                 </div>
             </div>
         </nav>
-		<nav>
-			<div class="container">
-				<div class="row">
-					[MENU_SITE]
-				</div>
-			</div>
-		</nav>
 		<section>
 			<div class="container" id="body">
-				<!-- BEGIN: breadcrumbs -->
-				<ol class="breadcrumb">
-					<li class="home" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><em class="fa fa-lg fa-home">&nbsp;</em><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></li>
-					<!-- BEGIN: loop --><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
-				</ol>
-				<!-- END: breadcrumbs -->
 				[THEME_ERROR_INFO]

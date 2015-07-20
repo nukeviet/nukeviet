@@ -127,12 +127,12 @@ $(function() {
 		$(this).removeAttr("rel")
 	});
 	//Tip
-	/*$("[data-toggle=collapse]").click(function(a) {
+	$("[data-toggle=collapse]").click(function(a) {
 		tipHide();
-		$(".header-nav").is(".hidde768") ? setTimeout(function() {
-			$(".header-nav").removeClass("hidde768")
-		}, 500) : $(".header-nav").addClass("hidde768")
-	});*/
+		$(".header-nav").is(".hidden-ss-block") ? setTimeout(function() {
+			$(".header-nav").removeClass("hidden-ss-block")
+		}, 500) : $(".header-nav").addClass("hidden-ss-block")
+	});
 	$(document).on("keydown", function(a) {
 		27 === a.keyCode && tip_active && tipHide()
 	});
