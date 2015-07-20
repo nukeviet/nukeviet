@@ -77,12 +77,6 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 		{
 			$xtpl->parse( 'signed.regroups' );
 		}
-
-		if( ! defined( 'NV_IS_ADMIN' ) )
-		{
-			$xtpl->assign( 'LOGOUT_ADMIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=logout' );
-			$xtpl->parse( 'signed.logout' );
-		}
 		
 		$xtpl->parse( 'signed' );
 		$content = $xtpl->text( 'signed' );
