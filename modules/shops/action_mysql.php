@@ -675,7 +675,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_files ADD " . $lang . "_title VARCHAR( 255 ) NOT NULL DEFAULT ''";
-$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_files ADD " . $lang . "_description MEDIUMTEXT NOT NULL DEFAULT ''";
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_files ADD " . $lang . "_description MEDIUMTEXT NOT NULL";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_files_rows (
  id_rows int(11) unsigned NOT NULL,
