@@ -29,11 +29,11 @@ if ( ! nv_function_exists( 'nv_contact_default_info' ) )
             $block_theme = 'default';
         }
 
-        $sql = 'SELECT id, phone, email, yahoo, skype FROM ' . NV_PREFIXLANG . '_' . $site_mods['contact']['module_data'] . '_department WHERE act=1 AND is_default=1';
+        $sql = 'SELECT id, alias, phone, email, yahoo, skype FROM ' . NV_PREFIXLANG . '_' . $site_mods['contact']['module_data'] . '_department WHERE act=1 AND is_default=1';
         $array_department = nv_db_cache( $sql, 'id', 'contact' );
         if ( empty( $array_department ) )
         {
-            $sql = 'SELECT id, phone, email, yahoo, skype FROM ' . NV_PREFIXLANG . '_' . $site_mods['contact']['module_data'] . '_department WHERE act=1 ORDER BY weight LIMIT 1';
+            $sql = 'SELECT id, alias, phone, email, yahoo, skype FROM ' . NV_PREFIXLANG . '_' . $site_mods['contact']['module_data'] . '_department WHERE act=1 ORDER BY weight LIMIT 1';
             $array_department = nv_db_cache( $sql, 'id', 'contact' );
         }
 
