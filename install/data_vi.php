@@ -24,6 +24,7 @@ $sth->execute( array('menu', 'menu', 'menu', 'menu', 'Menu Site', '', NV_CURRENT
 $sth->execute( array('feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0) );
 $sth->execute( array('page', 'page', 'page', 'page', 'Page', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 0) );
 $sth->execute( array('comment', 'comment', 'comment', 'comment', 'Bình luận', 'Quản lý bình luận', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 12, 1, '', 0, 0) );
+$sth->execute( array('siteterms', 'page', 'siteterms', 'siteterms', 'Điều khoản sử dụng', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 13, 1, '', 1, 0) );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -86,6 +87,9 @@ $sth->execute( array(60, 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, '') )
 $sth->execute( array(61, 'rss', 'rss', 'Rss', 'page', 0, 0, 0, '') );
 $sth->execute( array(62, 'rss', 'rss', 'Rss', 'about', 0, 0, 0, '') );
 $sth->execute( array(63, 'changequestion', 'changequestion', 'Thay đổi câu hỏi bảo mật', 'users', 1, 1, 14, '') );
+$sth->execute( array(64, 'main', 'main', 'Main', 'siteterms', 1, 0, 1, '') );
+$sth->execute( array(65, 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, '') );
+$sth->execute( array(66, 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
@@ -132,7 +136,10 @@ $sth->execute( array(54, 'left-body-right', 'default') );
 $sth->execute( array(55, 'left-body-right', 'default') );
 $sth->execute( array(56, 'left-body-right', 'default') );
 $sth->execute( array(57, 'left-body-right', 'default') );
+$sth->execute( array(58, 'left-body-right', 'default') );
 $sth->execute( array(63, 'left-body-right', 'default') );
+$sth->execute( array(64, 'left-body-right', 'default') );
+$sth->execute( array(65, 'left-body-right', 'default') );
 
 $sth->execute( array(0, 'body', 'mobile_default') );
 $sth->execute( array(2, 'body', 'mobile_default') );
@@ -177,6 +184,8 @@ $sth->execute( array(55, 'body', 'mobile_default') );
 $sth->execute( array(56, 'body', 'mobile_default') );
 $sth->execute( array(57, 'body', 'mobile_default') );
 $sth->execute( array(63, 'body', 'mobile_default') );
+$sth->execute( array(64, 'body', 'mobile_default') );
+$sth->execute( array(65, 'body', 'mobile_default') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -534,6 +543,17 @@ if( $result->fetchColumn() )
 	$sth->execute();
 
 	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '0' WHERE module = 'about' AND config_name = 'activecomm' AND lang='" . $lang_data . "'" );
+}
+
+$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='siteterms'" );
+if( $result->fetchColumn() )
+{
+	$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_siteterms (id, title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight, admin_id, add_time, edit_time, status) VALUES (1, 'Chính sách bảo mật Quyền riêng tư', 'Chinh-sach-bao-mat-Quyen-rieng-tu', '', '', '', :bodytext, '', 0, 4, '', 0, 1, 1, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 1)" );
+	$bodytext = "(Đang cập nhật)";
+	$sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodyhtml ) );
+	$sth->execute();
+
+	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '0' WHERE module = 'siteterms' AND config_name = 'activecomm' AND lang='" . $lang_data . "'" );
 }
 
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
