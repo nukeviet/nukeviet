@@ -72,9 +72,23 @@ function tipShow(a, b) {
 	$("#tip").attr("data-content", b).show("fast");
 	tip_active = !0
 }
+
+function barcode() {
+    var a = $("#barcode");
+    a && $.ajax({
+		url: nv_siteroot + "js/jquery/jquery.qrcode.min.js",
+		dataType: "script",
+		cache: !0
+	}).done(function() {
+	   var b = $(a).innerWidth();
+		$(a).qrcode({width:b,height:b,text:strHref})
+	})
+}
+
 $(function() {
 	winResize();
 	fix_banner_center();
+    //barcode();
 	// Modify all empty link
 	$('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
 	// Smooth scroll to top
@@ -148,14 +162,25 @@ $(function() {
 			c = $("#tip").attr("data-content");
 		a != c ? ("" != c && $("[data-target=" + c + "]").attr("data-click", "y"), $("#tip .bg").html(b), tipShow(this, a)) : "n" == $(this).attr("data-click") ? tipHide() : tipShow(this, a);
 		return !1
-	})
+	});
+    //QR-code
+    $(".qrcode").click(function() {
+    	var a = $(this),
+    		c = $(this).data("target");
+    	if (!0 === $(this).data("load")) return $(c).modal(), !1;
+    	a.data("load", !0);
+    	var b = new Image,
+    		d = a.data("img");
+    	$(b).load(function() {
+    		$(d).attr("src", b.src);
+    		$(c).modal()
+    	});
+    	b.src = nv_siteroot + "index.php?second=qr&u=" + encodeURIComponent(a.data("url")) + "&l=" + a.data("level") + "&ppp=" + a.data("ppp") + "&of=" + a.data("of");
+    	return !1
+    })
 });
 $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();
 	tipHide()
-})
-$(window).load(function() {
-	var a = $("#QR-code");
-	a && a.attr("src", nv_siteroot + "index.php?second=qr&u=" + encodeURIComponent(a.data("url")) + "&l=" + a.data("level") + "&ppp=" + a.data("ppp") + "&of=" + a.data("of"))
 });
