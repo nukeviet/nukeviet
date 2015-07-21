@@ -140,7 +140,6 @@ if( ! $array_post_user['addcontent'] )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 if( $nv_Request->isset_request( 'get_alias', 'post' ) )
@@ -549,7 +548,6 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 				include NV_ROOTDIR . '/includes/header.php';
 				echo nv_site_theme( $contents );
 				include NV_ROOTDIR . '/includes/footer.php';
-				exit();
 			}
 		}
 	}

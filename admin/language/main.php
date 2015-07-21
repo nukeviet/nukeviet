@@ -66,7 +66,6 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
             include NV_ROOTDIR . '/includes/header.php';
             echo nv_admin_theme( $contents );
             include NV_ROOTDIR . '/includes/footer.php';
-            exit();
 		}
         else
         {
@@ -81,7 +80,6 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_admin_theme( $lang_module['nv_data_setup'] );
 			include NV_ROOTDIR . '/includes/footer.php';
-			exit();
 		}
 		elseif( $global_config['lang_multi'] )
 		{
@@ -114,7 +112,6 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 					include NV_ROOTDIR . '/includes/header.php';
 					echo nv_admin_theme( 'ERROR SETUP SQL: <br />' . $query );
 					include NV_ROOTDIR . '/includes/footer.php';
-					exit();
 				}
 			}
 			$db->columns_add( NV_COUNTER_GLOBALTABLE, $keylang . '_count', 'integer', 2147483647, true, 0);
@@ -217,7 +214,6 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_admin_theme( 'ERROR SETUP: <br />' . $e->getMessage() );
 						include NV_ROOTDIR . '/includes/footer.php';
-						exit();
 					}
 				}
 			}
@@ -230,14 +226,12 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_admin_theme( $contents );
 			include NV_ROOTDIR . '/includes/footer.php';
-			exit();
 		}
 		else
 		{
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_admin_theme( $lang_module['nv_data_note'] );
 			include NV_ROOTDIR . '/includes/footer.php';
-			exit();
 		}
 	}
 	elseif( $checksess == md5( $deletekeylang . session_id() . 'deletekeylang' ) and ! in_array( $deletekeylang, $global_config['allow_sitelangs'] ) )

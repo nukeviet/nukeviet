@@ -529,11 +529,7 @@ function user_changepass( $array_data = array() )
 		$xtpl->parse( 'main.allowopenid' );
 	}
 
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
-	}
-	if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
+	if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
 	{
 		$xtpl->parse( 'main.regroups' );
 	}
@@ -568,13 +564,9 @@ function user_changequestion( $array_data )
 	{
 		$xtpl->parse( 'main.allowopenid' );
 	}
-	if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
+	if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
 	{
 		$xtpl->parse( 'main.regroups' );
-	}
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
 	}
 
 	$xtpl->assign( 'DATA', $array_data );
@@ -633,14 +625,9 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 		$xtpl->parse( 'main.allowopenid' );
 	}
 
-	if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
+	if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
 	{
 		$xtpl->parse( 'main.regroups' );
-	}
-
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
 	}
 
 	$xtpl->assign( 'DATA', $data );
@@ -852,11 +839,7 @@ function user_welcome()
 		$xtpl->parse( 'main.allowopenid' );
 	}
 
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
-	}
-	if( ( ! empty( $groups_list ) ) && ( $global_config['allowuserpublic'] == 1 ) )
+	if( ( ! empty( $groups_list ) ) and ( $global_config['allowuserpublic'] == 1 ) )
 	{
 		$xtpl->parse( 'main.regroups' );
 	}
@@ -1050,13 +1033,10 @@ function user_openid_administrator( $data )
 	{
 		$xtpl->parse( 'main.allowopenid' );
 	}
-	if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
+	
+	if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
 	{
 		$xtpl->parse( 'main.regroups' );
-	}
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
 	}
 
 	$xtpl->assign( 'DATA', $data );
@@ -1122,8 +1102,6 @@ function nv_regroup_theme( $groups )
 		$xtpl->parse( 'main.list' );
 	}
 
-	if( ! defined( 'NV_IS_ADMIN' ) ) $xtpl->parse( 'main.logout' );
-
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1152,7 +1130,7 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 	{
 		$xtpl->assign( 'USER', $user );
 
-		if( ! empty( $user['first_name'] ) && $user['first_name'] != $user['username'] )
+		if( ! empty( $user['first_name'] ) and $user['first_name'] != $user['username'] )
 		{
 			$xtpl->parse( 'main.list.fullname' );
 		}
@@ -1267,7 +1245,6 @@ function user_info_exit_redirect( $info, $nv_redirect )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 /**

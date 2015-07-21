@@ -7,7 +7,7 @@
     	<li><a href="{URL_HREF}changequestion">{LANG.question2}</a></li>
     	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
     	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
-    	<!-- BEGIN: logout --><li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li><!-- END: logout -->
+    	<li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li>
     </ul>
     <h2>{LANG.user_info}</h2>
     <div class="row m-bottom">

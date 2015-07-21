@@ -14,6 +14,3 @@
 		<!-- END: js -->		
 	</head>
 	<body>
-		<div id="timeoutsess" class="chromeframe">
-		    {LANG_TIMEOUTSESS_NOUSER}, <a onclick="timeoutsesscancel();" href="#">{LANG_TIMEOUTSESS_CLICK}</a>. {LANG_TIMEOUTSESS_TIMEOUT}: <span id="secField"> 60 </span> {LANG_TIMEOUTSESS_SEC}
-		</div>
