@@ -48,7 +48,7 @@ if( $nv_Request->isset_request( 'download', 'get' ) )
 		exit();
 	}
 
-	if( !file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['files'][$fileid] ) )
+	if( !file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid] ) )
 	{
 		Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
 		exit();
@@ -66,9 +66,8 @@ if( $nv_Request->isset_request( 'download', 'get' ) )
 		$nv_Request->set_Session( 'lawsdownloaded', $lawsdownloaded );
 	}
 
-	require_once ( NV_ROOTDIR . '/includes/class/download.class.php' );
-	$file_info = pathinfo( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['files'][$fileid] );
-	$download = new download( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $row['files'][$fileid], $file_info['dirname'], $file_info['basename'], true );
+	$file_info = pathinfo( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid] );
+	$download = new download( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid], $file_info['dirname'], $file_info['basename'], true );
 	$download->download_file();
 	exit();
 }
