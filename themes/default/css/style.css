@@ -721,10 +721,13 @@ a.btn {
 .company_info .company_name {
     text-transform:uppercase;
 }
-.company_info li em,
-.company_info li span {
+.company_info li > em,
+.company_info li > span {
     display:table-cell;
     vertical-align:middle;
+}
+.company_info li.company_name > span{
+	display: inline;
 }
 .company_info li em {
     font-size:1.4em;
