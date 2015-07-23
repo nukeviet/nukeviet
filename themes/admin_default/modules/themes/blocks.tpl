@@ -44,6 +44,7 @@
 				</select></td>
 				<td>
 				<select name="listpos" title="{ROW.bid}" class="form-control">
+					<option value="">&nbsp;</option>
 					<!-- BEGIN: position -->
 					<option value="{POSITION.key}"{POSITION.selected}>{POSITION.title}</option>
 					<!-- END: position -->
