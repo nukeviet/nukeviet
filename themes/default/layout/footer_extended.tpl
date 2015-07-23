@@ -29,6 +29,9 @@
                             <div class="panel-body">
                                 [QR_CODE]
                             </div>
+                            <div id="ftip" data-content="">
+                                <div class="bg bg-gradient"></div>
+                            </div>
                         </div>
                         <div class="col-xs-24 col-sm-24 col-md-16">
                             <div class="panel-body">

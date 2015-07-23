@@ -9,6 +9,7 @@
 var myTimerPage = "",
 	myTimersecField = "",
 	tip_active = !1,
+    ftip_active = !1,
 	winX = 0,
 	winY = 0,
 	docX = 0,
@@ -62,33 +63,47 @@ function checkWidthMenu() {
 
 function tipHide() {
 	$("[data-toggle=tip]").attr("data-click", "y").removeClass("active");
-	$("#tip").hide();
-	tip_active = !1
+    $("#tip").hide();
+    tip_active = !1
+}
+
+function ftipHide() {
+	$("[data-toggle=ftip]").attr("data-click", "y").removeClass("active");
+	$("#ftip").hide();
+	ftip_active = !1
 }
 
 function tipShow(a, b) {
+    ftip_active && ftipHide();
 	$("[data-toggle=tip]").removeClass("active");
 	$(a).attr("data-click", "n").addClass("active");
 	$("#tip").attr("data-content", b).show("fast");
 	tip_active = !0
 }
 
-function barcode() {
-    var a = $("#barcode");
-    a && $.ajax({
-		url: nv_siteroot + "js/jquery/jquery.qrcode.min.js",
-		dataType: "script",
-		cache: !0
-	}).done(function() {
-	   var b = $(a).innerWidth();
-		$(a).qrcode({width:b,height:b,text:strHref})
-	})
-}
+function ftipShow(a, b) {
+	if ($(a).is(".qrcode") && "no" == $(a).attr("data-load")) return qrcodeLoad(a), !1;
+	tip_active && tipHide();
+	$("[data-toggle=ftip]").removeClass("active");
+	$(a).attr("data-click", "n").addClass("active");
+	$("#ftip").attr("data-content", b).show("fast");
+	ftip_active = !0
+};
+
+//QR-code
+function qrcodeLoad(a) {
+	var b = new Image,
+		c = $(a).data("img");
+	$(b).load(function() {
+		$(c).attr("src", b.src);
+		$(a).attr("data-load", "yes").click()
+	});
+	b.src = nv_siteroot + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
+};
 
 $(function() {
 	winResize();
 	fix_banner_center();
-    //barcode();
 	// Modify all empty link
 	$('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
 	// Smooth scroll to top
@@ -103,8 +118,8 @@ $(function() {
 		if ("n" == $(this).attr("data-click")) return !1;
 		$(this).attr("data-click", "n");
 		var a = $(".headerSearch input"),
-			b = strip_tags(a.val()),
 			c = a.attr("maxlength"),
+			b = strip_tags(a.val()),
 			d = $(this).attr("data-minlength");
 		a.parent().removeClass("has-error");
 		"" == b || b.length < d || b.length > c ? (a.parent().addClass("has-error"), a.val(b).focus(), $(this).attr("data-click", "y")) : window.location.href = $(this).attr("data-url") + rawurlencode(b);
@@ -140,47 +155,36 @@ $(function() {
 		$(this).attr("title", $(this).attr("rel"));
 		$(this).removeAttr("rel")
 	});
-	//Tip
+	//Tip + Ftip
 	$("[data-toggle=collapse]").click(function(a) {
-		tipHide();
-		$(".header-nav").is(".hidden-ss-block") ? setTimeout(function() {
-			$(".header-nav").removeClass("hidden-ss-block")
-		}, 500) : $(".header-nav").addClass("hidden-ss-block")
-	});
-	$(document).on("keydown", function(a) {
-		27 === a.keyCode && tip_active && tipHide()
-	});
-	$(document).on("click", function() {
-		tip_active && tipHide()
-	});
-	$("#tip").on("click", function(a) {
-		a.stopPropagation()
-	});
-	$("[data-toggle=tip]").click(function() {
-		var a = $(this).attr("data-target"),
-			b = $(a).html(),
-			c = $("#tip").attr("data-content");
-		a != c ? ("" != c && $("[data-target=" + c + "]").attr("data-click", "y"), $("#tip .bg").html(b), tipShow(this, a)) : "n" == $(this).attr("data-click") ? tipHide() : tipShow(this, a);
-		return !1
-	});
-    //QR-code
-    $(".qrcode").click(function() {
-    	var a = $(this),
-    		c = $(this).data("target");
-    	if (!0 === $(this).data("load")) return $(c).modal(), !1;
-    	a.data("load", !0);
-    	var b = new Image,
-    		d = a.data("img");
-    	$(b).load(function() {
-    		$(d).attr("src", b.src);
-    		$(c).modal()
-    	});
-    	b.src = nv_siteroot + "index.php?second=qr&u=" + encodeURIComponent(a.data("url")) + "&l=" + a.data("level") + "&ppp=" + a.data("ppp") + "&of=" + a.data("of");
+    	tipHide();
+    	ftipHide();
+    	$(".header-nav").is(".hidden-ss-block") ? setTimeout(function() {
+    		$(".header-nav").removeClass("hidden-ss-block")
+    	}, 500) : $(".header-nav").addClass("hidden-ss-block")
+    });
+    $(document).on("keydown", function(a) {
+    	27 === a.keyCode && (tip_active && tipHide(), ftip_active && ftipHide())
+    });
+    $(document).on("click", function() {
+    	tip_active && tipHide();
+    	ftip_active && ftipHide()
+    });
+    $("#tip, #ftip").on("click", function(a) {
+    	a.stopPropagation()
+    });
+    $("[data-toggle=tip], [data-toggle=ftip]").click(function() {
+    	var a = $(this).attr("data-target"),
+    		d = $(a).html(),
+    		b = $(this).attr("data-toggle"),
+    		c = "tip" == b ? $("#tip").attr("data-content") : $("#ftip").attr("data-content");
+    	a != c ? ("" != c && $('[data-target="' + c + '"]').attr("data-click", "y"), "tip" == b ? ($("#tip .bg").html(d), tipShow(this, a)) : ($("#ftip .bg").html(d), ftipShow(this, a))) : "n" == $(this).attr("data-click") ? "tip" == b ? tipHide() : ftipHide() : "tip" == b ? tipShow(this, a) : ftipShow(this, a);
     	return !1
-    })
+    });
 });
 $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();
-	tipHide()
+	tipHide();
+    ftipHide()
 });

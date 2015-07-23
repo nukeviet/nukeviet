@@ -178,7 +178,7 @@
     .hidden-ss-inline-block {
         display:none !important;
     }
-    #tip {
+    #tip, #footer-tip {
         max-width:100%;
         margin-right:0 !important;
     }
