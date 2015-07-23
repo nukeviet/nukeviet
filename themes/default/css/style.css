@@ -826,7 +826,7 @@ a.btn {
 /* Block global */
 .nv-block-banners {
     position:relative;
-    margin-bottom:2px;
+    margin-bottom:10px;
     text-align:center;
 }
 .nv-block-banners .link {
