@@ -1060,3 +1060,29 @@ button.close {
 #timeoutsess a {
     color:#0000FF !important;
 }
+
+.featured-products > .row{
+	margin-bottom: 20px;
+}
+.featured-products > .row:last-child{
+	margin-bottom: 0;
+}
+.featured-products h3{
+	margin-bottom: 5px;
+	_text-transform: inherit!important;
+}
+.featured-products .img-thumbnail{
+	margin-top: 3px;
+}
+.featured-products ul{
+	margin: 0;
+	padding: 0;
+}
+.featured-products ul > li{
+	margin-bottom: 5px;
+}
+.featured-products ul > li:before{
+	font-family: 'FontAwesome';
+	content: "\f105";
+	margin-right: 5px;
+}
