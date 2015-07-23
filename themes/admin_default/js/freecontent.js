@@ -99,14 +99,14 @@ $(document).ready(function(){
 		$(cfg.blockSubmitBtn).attr('disabled', 'disabled');
 		$(cfg.blockModal).find(cfg.load).show();
 		$(cfg.blockModal + ' .has-error').removeClass('has-error');
-		$(cfg.blockModal + ' .txt').val('').tooltip('destroy');
+		$(cfg.blockModal + ' .txt').tooltip('destroy');
 
 		var data = {
 			bid: $this.find('[name="bid"]').val(),
 			title: $this.find('[name="title"]').val(),
 			description: $this.find('[name="description"]').val()
 		}
-		
+
 		$.ajax({
 			type: 'POST',
 			cache: false,
