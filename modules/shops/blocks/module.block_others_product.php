@@ -25,7 +25,7 @@ if( ! function_exists( 'nv_others_product' ) )
 
 		if( $op == 'detail' )
 		{
-			global $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config;
+			global $site_mods, $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config;
 
 			$xtpl = new XTemplate( 'block.others_product.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 			$xtpl->assign( 'LANG', $lang_module );
