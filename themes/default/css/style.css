@@ -684,6 +684,9 @@ a.btn {
     letter-spacing:0.5px;
     text-transform:uppercase;
 }
+#footer h3 a{
+    color: inherit;
+}
 #footer p {
     margin:0;
     padding:0;
@@ -1059,18 +1062,19 @@ button.close {
     color:#0000FF !important;
 }
 
+/* Block featured-products */
 .featured-products > .row{
-	margin-bottom: 20px;
+	margin-bottom: 35px;
 }
 .featured-products > .row:last-child{
 	margin-bottom: 0;
 }
-.featured-products h3{
-	margin-bottom: 5px;
-	_text-transform: inherit!important;
-}
 .featured-products .img-thumbnail{
 	margin-top: 3px;
+    margin-bottom: 10px;
+    background-color: #fff !important;
+    border-width: 1px !important;
+    padding: 1px !important
 }
 .featured-products ul{
 	margin: 0;
