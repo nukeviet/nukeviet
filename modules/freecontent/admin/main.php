@@ -168,6 +168,8 @@ else
 {
 	foreach( $array as $row )
 	{
+		$row['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=list&amp;bid=' . $row['bid'];
+		
 		$xtpl->assign( 'ROW', $row );
 		$xtpl->parse( 'main.rows.loop' );
 	}

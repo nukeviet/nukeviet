@@ -51,7 +51,7 @@
 		<tbody id="block-list-container">
 			<!-- BEGIN: loop -->
 			<tr id="block-row-{ROW.bid}">
-				<td><strong><a href="">{ROW.title}</a></strong></td>
+				<td><strong><a href="{ROW.link}">{ROW.title}</a></strong></td>
 				<td>{ROW.description}</td>
 				<td class="text-center">
 					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="#" class="block-edit" data-bid="{ROW.bid}">{GLANG.edit}</a>
@@ -89,6 +89,7 @@
 				</form>			
 			</div>
 			<div class="modal-footer">
+				<span class="per-loading"> <i class="fa fa-circle-o-notch fa-spin"></i> </span>
 				<button type="button" class="btn btn-default" data-dismiss="modal">{GLANG.cancel}</button>
 				<button type="button" class="btn btn-primary block-submit-trigger">{GLANG.save}</button>
 			</div>
