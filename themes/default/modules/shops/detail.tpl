@@ -184,19 +184,21 @@
 					</div>
 					<!-- END: group -->
 
-					<!-- BEGIN: product_number -->
+					<!-- BEGIN: order_number -->
 					<div class="well">
 						<div class="row">
 							<div class="col-xs-8 col-sm-5">
 								{LANG.detail_pro_number}
 							</div>
 							<div class="col-xs-16 col-sm-19">
-								<input type="number" name="num" value="1" min="1" max="{PRODUCT_NUMBER}" id="pnum" class="pull-left form-control" style="width: 100px; margin-right: 5px">
+								<input type="number" name="num" value="1" min="1" id="pnum" class="pull-left form-control" style="width: 100px; margin-right: 5px">
+								<!-- BEGIN: product_number -->
 								<span class="help-block pull-left" id="product_number">{LANG.detail_pro_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
+								<!-- END: product_number -->
 							</div>
 						</div>
 					</div>
-					<!-- END: product_number -->
+					<!-- END: order_number -->
 
 					<div class="clearfix"></div>
 
@@ -344,9 +346,20 @@
 </script>
 <!-- END: imagemodal -->
 
+<!-- BEGIN: order_number_limit -->
 <script type="text/javascript" data-show="after">
-	var detail_error_group = '{LANG.detail_error_group}';
+	$('#pnum').attr( 'max', '{PRODUCT_NUMBER}' );
+	$('#pnum').change(function(){
+		if( intval($(this).val()) > intval($(this).attr('max')) ){
+			alert('{LANG.detail_error_number} ' + $(this).attr('max') );
+			$(this).val( $(this).attr('max') );
+		}
+	});
+</script>
+<!-- END: order_number_limit -->
 
+<script type="text/javascript">
+	var detail_error_group = '{LANG.detail_error_group}';
 	function check_quantity( _this ){
 		$('input[name="'+_this.attr('name')+'"]').parent().css('border-color', '#ccc');
 		if( _this.is(':checked') )
@@ -354,15 +367,10 @@
 		    _this.parent().css('border-color', 'blue');
 		}
 		$('#group_error').css( 'display', 'none' );
+		<!-- BEGIN: check_price -->
 		check_price( '{proid}', '{pro_unit}' );
+		<!-- END: check_price -->
 	}
-
-	$('#pnum').change(function(){
-		if( intval($(this).val()) > intval($(this).attr('max')) ){
-			alert('{LANG.detail_error_number} ' + $(this).attr('max') );
-			$(this).val( $(this).attr('max') );
-		}
-	});
 </script>
 
 <!-- END: main -->

@@ -1626,10 +1626,16 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 	{
 		if( $data_content['showprice'] == '1' )
 		{
-			if( $data_content['product_number'] > 0 )
+			if( $data_content['product_number'] > 0 OR $pro_config['active_order_number'] )
 			{
+				if( !$pro_config['active_order_number'] )
+				{
+					$xtpl->parse( 'main.order_number.product_number' );
+					$xtpl->parse( 'main.order_number_limit' );
+					$xtpl->parse( 'main.check_price' );
+				}
+				$xtpl->parse( 'main.order_number' );
 				$xtpl->parse( 'main.order' );
-				$xtpl->parse( 'main.product_number' );
 			}
 			else
 			{
@@ -1639,14 +1645,20 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 	}
 
 	if( !empty( $data_content['allowed_send'] ) )
+	{
 		$xtpl->parse( 'main.allowed_send' );
+	}
+
 	if( !empty( $data_content['allowed_print'] ) )
 	{
 		$xtpl->parse( 'main.allowed_print' );
 		$xtpl->parse( 'main.allowed_print_js' );
 	}
+
 	if( !empty( $data_content['allowed_save'] ) )
+	{
 		$xtpl->parse( 'main.allowed_save' );
+	}
 
 	if( !defined( 'FACEBOOK_JSSDK' ) )
 	{
