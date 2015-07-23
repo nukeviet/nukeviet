@@ -12,12 +12,21 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $num = isset( $_SESSION[$module_data . '_cart'] ) ? count( $_SESSION[$module_data . '_cart'] ) : 0;
 $total = 0;
-
+$total_old = 0;
 $total_coupons = 0;
-$counpons = array();
+
 $coupons_check = $nv_Request->get_int( 'coupons_check', 'get', 0 );
 $coupons_load = $nv_Request->get_int( 'coupons_load', 'get', 0 );
 $coupons_code = $nv_Request->get_title( 'coupons_code', 'get', '' );
+
+$counpons = array(
+	'title' => '',
+	'type' => 'p',
+	'discount' => 0,
+	'total_amount' => 0,
+	'date_start' => 0,
+	'date_end' => 0
+);
 
 if( !empty( $coupons_code ) )
 {
