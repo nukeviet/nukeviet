@@ -74,6 +74,7 @@
 //<![CDATA[
 var selectthemes = '{SELECTTHEMES}';
 var blockredirect = '{BLOCKREDIRECT}';
+var blockcheckss = '{CHECKSS}';
 LANG.block_delete_per_confirm = '{LANG.block_delete_per_confirm}';
 LANG.block_weight_confirm = '{LANG.block_weight_confirm}';
 LANG.block_error_noblock = '{LANG.block_error_noblock}';

@@ -149,7 +149,7 @@ $(document).ready(function() {
 	});
 	$("a.block_weight").click(function() {
 		if (confirm(LANG.block_weight_confirm)) {
-			$.post(MODULE_URL + "=blocks_reset_order", "checkss={CHECKSS}", function(theResponse) {
+			$.post(MODULE_URL + "=blocks_reset_order", "checkss=" + blockcheckss, function(theResponse) {
 				alert(theResponse);
 				window.location = MODULE_URL + "=blocks";
 			});
