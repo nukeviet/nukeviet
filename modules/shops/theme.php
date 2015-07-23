@@ -1779,20 +1779,20 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 				$array_sub_group = GetGroupID( $data_row['id'] );
 				for( $i = 0; $i < count( $array_group_main ); $i++ )
 				{
-					$data = array(
-						'title' => '',
-						'link' => ''
-					);
+					$data = array();
 					foreach( $array_sub_group as $sub_group_id )
 					{
 						$item = $global_array_group[$sub_group_id];
 						if( $item['parentid'] == $group_main_id )
 						{
-							$data['title'] = $item['title'];
-							$data['link'] = $item['link'];
+							$data = array(
+								'title' => $item['title'],
+								'link' => $item['link']
+							);
+							$xtpl->assign( 'SUB_GROUP', $data );
+							$xtpl->parse( 'main.rows.sub_group.loop' );
 						}
 					}
-					$xtpl->assign( 'SUB_GROUP', $data );
 				}
 				$xtpl->parse( 'main.rows.sub_group' );
 			}
