@@ -1791,7 +1791,6 @@ function cart_product( $data_content, $coupons_code, $order_info, $array_error_n
 				$array_sub_group = GetGroupID( $data_row['id'] );
 				for( $i = 0; $i < count( $array_group_main ); $i++ )
 				{
-					$data = array();
 					foreach( $array_sub_group as $sub_group_id )
 					{
 						$item = $global_array_group[$sub_group_id];
@@ -1944,20 +1943,19 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 				$array_sub_group = GetGroupID( $data_row['id'] );
 				for( $i = 0; $i < count( $array_group_main ); $i++ )
 				{
-					$data = array(
-						'title' => '',
-						'link' => ''
-					);
 					foreach( $array_sub_group as $sub_group_id )
 					{
 						$item = $global_array_group[$sub_group_id];
 						if( $item['parentid'] == $group_main_id )
 						{
-							$data['title'] = $item['title'];
-							$data['link'] = $item['link'];
+							$data = array(
+								'title' => $item['title'],
+								'link' => $item['link']
+							);
+							$xtpl->assign( 'SUB_GROUP', $data );
+							$xtpl->parse( 'main.rows.sub_group.loop' );
 						}
 					}
-					$xtpl->assign( 'SUB_GROUP', $data );
 				}
 				$xtpl->parse( 'main.rows.sub_group' );
 			}
@@ -2078,6 +2076,10 @@ function uers_order( $data_content, $data_order, $total_coupons, $order_info, $e
 		}
 		$xtpl->parse( 'main.shipping_chose' );
 	}
+	else
+	{
+		$xtpl->parse( 'main.order_address' );
+	}
 
 	if( !empty( $order_info ) )
 	{
@@ -2160,20 +2162,19 @@ function payment( $data_content, $data_pro, $data_shipping, $url_checkout, $intr
 			$array_sub_group = GetGroupID( $pdata['id'] );
 			for( $i = 0; $i < count( $array_group_main ); $i++ )
 			{
-				$data = array(
-					'title' => '',
-					'link' => ''
-				);
 				foreach( $array_sub_group as $sub_group_id )
 				{
 					$item = $global_array_group[$sub_group_id];
 					if( $item['parentid'] == $group_main_id )
 					{
-						$data['title'] = $item['title'];
-						$data['link'] = $item['link'];
+						$data = array(
+							'title' => $item['title'],
+							'link' => $item['link']
+						);
+						$xtpl->assign( 'SUB_GROUP', $data );
+						$xtpl->parse( 'main.loop.sub_group.loop' );
 					}
 				}
-				$xtpl->assign( 'SUB_GROUP', $data );
 			}
 			$xtpl->parse( 'main.loop.sub_group' );
 		}
@@ -2189,19 +2190,26 @@ function payment( $data_content, $data_pro, $data_shipping, $url_checkout, $intr
 	}
 
 	// Thong tin van chuyen
-	if( $data_shipping )
+	if( $pro_config['use_shipping'] )
 	{
-		$data_shipping['ship_price'] = nv_number_format( $data_shipping['ship_price'], nv_get_decimals( $data_shipping['ship_price_unit'] ) );
-		$data_shipping['ship_location_title'] = $array_location[$data_shipping['ship_location_id']]['title'];
-		while( $array_location[$data_shipping['ship_location_id']]['parentid'] > 0 )
+		if( $data_shipping )
 		{
-			$items = $array_location[$array_location[$data_shipping['ship_location_id']]['parentid']];
-			$data_shipping['ship_location_title'] .= ', ' . $items['title'];
-			$array_location[$data_shipping['ship_location_id']]['parentid'] = $items['parentid'];
+			$data_shipping['ship_price'] = nv_number_format( $data_shipping['ship_price'], nv_get_decimals( $data_shipping['ship_price_unit'] ) );
+			$data_shipping['ship_location_title'] = $array_location[$data_shipping['ship_location_id']]['title'];
+			while( $array_location[$data_shipping['ship_location_id']]['parentid'] > 0 )
+			{
+				$items = $array_location[$array_location[$data_shipping['ship_location_id']]['parentid']];
+				$data_shipping['ship_location_title'] .= ', ' . $items['title'];
+				$array_location[$data_shipping['ship_location_id']]['parentid'] = $items['parentid'];
+			}
+			$data_shipping['ship_shops_title'] = $array_shops[$data_shipping['ship_shops_id']]['name'];
+			$xtpl->assign( 'DATA_SHIPPING', $data_shipping );
+			$xtpl->parse( 'main.data_shipping' );
 		}
-		$data_shipping['ship_shops_title'] = $array_shops[$data_shipping['ship_shops_id']]['name'];
-		$xtpl->assign( 'DATA_SHIPPING', $data_shipping );
-		$xtpl->parse( 'main.data_shipping' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.order_address' );
 	}
 
 	if( !empty( $data_content['order_note'] ) )

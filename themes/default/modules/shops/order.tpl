@@ -48,6 +48,16 @@
                     </div>
                 </div>
 
+				<!-- BEGIN: order_address -->
+                <div class="form-group">
+                    <label class="col-sm-6 control-label">{LANG.order_address} </label>
+                    <div class="col-sm-18">
+                        <p class="form-control-static"><input name="order_address" class="form-control" value="{DATA.order_address}" /></p>
+                        <span class="error">{ERROR.order_address}</span>
+                    </div>
+                </div>
+                <!-- END: order_address -->
+
 				<!-- BEGIN: shipping_chose -->
                 <div class="form-group">
                     <label class="col-sm-6 control-label">{LANG.shipping}</label>
@@ -181,7 +191,11 @@
 						<!-- END: display_group -->
     				</td>
 					<!-- BEGIN: sub_group -->
-	    			<td><a href="{SUB_GROUP.link}" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
+	    			<td>
+	    				<!-- BEGIN: loop -->
+	    				<a href="{SUB_GROUP.link}" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a>
+	    				<!-- END: loop -->
+	    			</td>
 	    			<!-- END: sub_group -->
     				<!-- BEGIN: price2 -->
     				<td class="money" align="right"><strong>{PRICE.sale_format}</strong></td>

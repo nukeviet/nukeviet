@@ -147,11 +147,14 @@ foreach( $data_pro as $pdata )
 				$item = $global_array_group[$sub_group_id];
 				if( $item['parentid'] == $group_main_id )
 				{
-					$data['title'] = $item['title'];
-					$data['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=group/' . $item['alias'];
+					$data = array(
+						'title' => $item['title'],
+						'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=group/' . $item['alias']
+					);
+					$xtpl->assign( 'SUB_GROUP', $data );
+					$xtpl->parse( 'main.loop.sub_group.loop' );
 				}
 			}
-			$xtpl->assign( 'SUB_GROUP', $data );
 		}
 		$xtpl->parse( 'main.loop.sub_group' );
 	}
@@ -174,19 +177,26 @@ foreach( $data_pro as $pdata )
 }
 
 // Thong tin van chuyen
-if( $data_shipping )
+if( $pro_config['use_shipping'] )
 {
-	$data_shipping['ship_price'] = nv_number_format( $data_shipping['ship_price'], nv_get_decimals( $data_shipping['ship_price_unit'] ) );
-	$data_shipping['ship_location_title'] = $array_location[$data_shipping['ship_location_id']]['title'];
-	while( $array_location[$data_shipping['ship_location_id']]['parentid'] > 0 )
+	if( $data_shipping )
 	{
-		$items = $array_location[$array_location[$data_shipping['ship_location_id']]['parentid']];
-		$data_shipping['ship_location_title'] .= ', ' . $items['title'];
-		$array_location[$data_shipping['ship_location_id']]['parentid'] = $items['parentid'];
+		$data_shipping['ship_price'] = nv_number_format( $data_shipping['ship_price'], nv_get_decimals( $data_shipping['ship_price_unit'] ) );
+		$data_shipping['ship_location_title'] = $array_location[$data_shipping['ship_location_id']]['title'];
+		while( $array_location[$data_shipping['ship_location_id']]['parentid'] > 0 )
+		{
+			$items = $array_location[$array_location[$data_shipping['ship_location_id']]['parentid']];
+			$data_shipping['ship_location_title'] .= ', ' . $items['title'];
+			$array_location[$data_shipping['ship_location_id']]['parentid'] = $items['parentid'];
+		}
+		$data_shipping['ship_shops_title'] = $array_shops[$data_shipping['ship_shops_id']]['name'];
+		$xtpl->assign( 'DATA_SHIPPING', $data_shipping );
+		$xtpl->parse( 'main.data_shipping' );
 	}
-	$data_shipping['ship_shops_title'] = $array_shops[$data_shipping['ship_shops_id']]['name'];
-	$xtpl->assign( 'DATA_SHIPPING', $data_shipping );
-	$xtpl->parse( 'main.data_shipping' );
+}
+else
+{
+	$xtpl->parse( 'main.order_address' );
 }
 
 if( ! empty( $data_content['order_note'] ) )
