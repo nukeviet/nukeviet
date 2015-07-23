@@ -75,6 +75,7 @@ else
 		$array_config['is_user_forum'] = $nv_Request->get_int( 'is_user_forum', 'post', 0 );
 		$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
 		$array_config['openid_servers'] = !empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : '';
+		$array_config['openid_processing'] = $nv_Request->get_int( 'openid_processing', 'post', 0 );
 		$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
 		$array_config['user_check_pass_time'] = 60 * $nv_Request->get_int( 'user_check_pass_time', 'post' );
 
@@ -194,6 +195,11 @@ else
 		0 => $lang_module['whoview_all'],
 		1 => $lang_module['whoview_user'],
 		2 => $lang_module['whoview_admin']
+	);
+	$array_openid_processing = array(
+		0 => $lang_module['openid_processing_0'],
+		3 => $lang_module['openid_processing_3'],
+		4 => $lang_module['openid_processing_4']
 	);
 
 	$ignorefolders = array(
@@ -337,6 +343,19 @@ else
 		$xtpl->assign( 'WHOVIEW', $array );
 		$xtpl->parse( 'main.whoviewlistuser' );
 	}
+
+	foreach( $array_openid_processing as $id => $titleregister )
+	{
+		$select = ( $array_config['openid_processing'] == $id ) ? ' selected="selected"' : '';
+		$array = array(
+			'id' => $id,
+			'select' => $select,
+			'value' => $titleregister
+		);
+		$xtpl->assign( 'OPENID_PROCESSING', $array );
+		$xtpl->parse( 'main.openid_processing' );
+	}
+
 
 	$servers = $array_config['openid_servers'];
 
