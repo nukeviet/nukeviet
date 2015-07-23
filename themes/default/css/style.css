@@ -142,8 +142,6 @@ body {
     padding:0;
 }
 body {
-    -webkit-transform:perspective(1400px) matrix3d(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1);
-    -webkit-transform-style:preserve-3d;
     background:#efefef;
 }
 a,
