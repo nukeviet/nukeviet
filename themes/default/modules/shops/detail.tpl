@@ -28,20 +28,7 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-xs-24 col-sm-6 text-center">
-					<img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail pointer" id="imageproduct" data-target="#imagemodal">
-               		<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">{TITLE}</h4>
-								</div>
-								<div class="modal-body">
-									<img src="{SRC_PRO_LAGE}" id="imagepreview" class="img-thumbnail" >
-								</div>
-							</div>
-						</div>
-					</div>
+					<a href="" data-src="{SRC_PRO_LAGE}" data-width="{SRC_PRO_LAGE_INFO.width}" class="open_modal" title="{TITLE}"><img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail" id="imageproduct"></a>
 					<br />
 					<!-- BEGIN: adminlink -->
 					<p class="tab-pane">
@@ -316,6 +303,20 @@
 	<!-- END: product_detail -->
 </div>
 
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				&nbsp;
+			</div>
+			<div class="modal-body">
+				<p class="text-center"><em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em></p>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="msgshow" id="msgshow"></div>
 
 <!-- BEGIN: allowed_print_js -->
@@ -333,9 +334,13 @@
 
 <!-- BEGIN: imagemodal -->
 <script type="text/javascript" data-show="after">
-    $("#imageproduct").on("click", function() {
-    	$('#imagemodal').modal('show');
-    });
+	$('.open_modal').click(function(e){
+		e.preventDefault();
+		var maxwidth = 800;
+ 		$('#idmodals .modal-dialog').css( {'width': $(this).data('width') + 23, 'max-width': maxwidth + 23 } );
+ 		$('#idmodals .modal-body').html( '<img src="' + $(this).data('src') + '" alt="" style="max-width: ' + maxwidth + 'px" />' );
+ 		$('#idmodals').modal('show');
+	});
 </script>
 <!-- END: imagemodal -->
 

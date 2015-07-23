@@ -1327,6 +1327,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 		$xtpl->assign( 'SRC_PRO_FULL', $global_config['site_url'] . $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO', $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO_LAGE', $data_content['homeimgfile'] );
+		$xtpl->assign( 'SRC_PRO_LAGE_INFO', nv_is_image( NV_ROOTDIR . $data_content['homeimgfile'] ) );
 		$xtpl->assign( 'TITLE', $data_content[NV_LANG_DATA . '_title'] );
 		$xtpl->assign( 'NUM_VIEW', $data_content['hitstotal'] );
 		$xtpl->assign( 'DATE_UP', $lang_module['detail_dateup'] . ' ' . nv_date( 'd-m-Y h:i:s A', $data_content['publtime'] ) );
@@ -3085,14 +3086,6 @@ function nv_display_othersimage( $otherimage )
 {
 	global $module_info, $lang_module, $lang_global, $module_name, $module_data, $module_file, $module_upload, $pro_config, $op, $my_head;
 
-	if( !defined( 'SHADOWBOX' ) )
-	{
-		$my_head .= "<link rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"none\" });</script>";
-		define( 'SHADOWBOX', true );
-	}
-
 	$xtpl = new XTemplate( 'othersimg.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
@@ -3105,6 +3098,7 @@ function nv_display_othersimage( $otherimage )
 			{
 				$otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $otherimage_i;
 				$xtpl->assign( 'IMG_SRC_OTHER', $otherimage_i );
+				$xtpl->assign( 'IMG_SRC_OTHER_INFO', nv_is_image( NV_ROOTDIR . $otherimage_i ) );
 				$xtpl->parse( 'main.othersimg.loop' );
 			}
 		}

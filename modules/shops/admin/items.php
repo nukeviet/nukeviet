@@ -13,17 +13,6 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 
 $page_title = $lang_module['content_list'];
 
-if( !defined( 'SHADOWBOX' ) )
-{
-	$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-	$my_head .= "<script type=\"text/javascript\">\n";
-	$my_head .= "Shadowbox.init();\n";
-	$my_head .= "</script>\n";
-
-	define( 'SHADOWBOX', true );
-}
-
 // List pro_unit
 $array_unit = array();
 $sql = 'SELECT id, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units';
@@ -436,6 +425,7 @@ while( list( $id, $listcatid, $admin_id, $homeimgfile, $homeimgthumb, $title, $a
 		'money_unit' => $money_unit,
 		'thumb' => $thumb,
 		'imghome' => $imghome,
+		'imghome_info' => nv_is_image( NV_ROOTDIR . '/' . $imghome ),
 		'link_edit' => nv_link_edit_page( $id ),
 		'link_delete' => nv_link_delete_page( $id )
 	) );
