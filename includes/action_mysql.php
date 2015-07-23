@@ -10,7 +10,7 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,voting,feeds,menu,page,comment' );
+define( 'NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment' );
 
 function nv_copy_structure_table( $table_des, $table_src )
 {
@@ -150,7 +150,7 @@ function nv_create_table_sys( $lang )
 
  	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modules (title, module_file, module_data, module_upload, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES
 		('about', 'page', 'about', 'about', 'About', '', 1436199600, 1, 1, '', '', '', '', '0', 1, 1, '', 1, 0),
-		('news', 'news', 'news', 'news', 'News', '', 1436199600, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 0),
+ 		('news', 'news', 'news', 'news', 'News', '', 1436199600, 1, 1, '', '', '', '', '0', 2, 1, '', 1, 0),
 		('users', 'users', 'users', 'users', 'Users', 'Users', 1436199600, 1, 1, '', '', '', '', '0', 3, 1, '', 0, 0),
 		('contact', 'contact', 'contact', 'contact', 'Contact', '', 1436199600, 1, 1, '', '', '', '', '0', 4, 1, '', 0, 0),
 		('statistics', 'statistics', 'statistics', 'statistics', 'Statistics', '', 1436199600, 1, 0, '', '', '', '', '0', 5, 1, '', 0, 0),
@@ -160,7 +160,8 @@ function nv_create_table_sys( $lang )
 		('menu', 'menu', 'menu', 'menu', 'Menu Site', '', 1436199600, 0, 1, '', '', '', '', '0', 9, 1, '', 0, 0),
 		('feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', 1436199600, 1, 1, '', '', '', '', '0', 10, 1, '', 0, 0),
 		('page', 'page', 'page', 'page', 'Page', '', 1436199600, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
-		('comment', 'comment', 'comment', 'comment', 'Comment', '', 1436199600, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0)";
+		('comment', 'comment', 'comment', 'comment', 'Comment', '', 1436199600, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0),
+ 		('siteterms', 'page', 'siteterms', 'siteterms', 'Siteterms', '', 1436199600, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 0)";
 
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
 	 	('" . $lang . "', 'global', 'site_domain', ''),

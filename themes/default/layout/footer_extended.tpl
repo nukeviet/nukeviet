@@ -25,8 +25,18 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="panel-body">
-                        [FOOTER_SITE]
+                        <div class="col-xs-24 col-sm-24 col-md-8">
+                            <div class="panel-body">
+                                [QR_CODE]
+                            </div>
+                            <div id="ftip" data-content="">
+                                <div class="bg bg-gradient"></div>
+                            </div>
+                        </div>
+                        <div class="col-xs-24 col-sm-24 col-md-16">
+                            <div class="panel-body">
+                            [FOOTER_SITE]
+                            </div>
                         </div>
                     </div>
                 </div>
