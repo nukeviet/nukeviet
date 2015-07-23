@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" data-show="after" src="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/select2/select2.min.js"></script>
-<link href="{NV_BASE_SITEURL}modules/{MODULE_FILE}/js/select2/select2.min.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" data-show="after" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<link href="{NV_BASE_SITEURL}js/select2/select2.min.css" type="text/css" rel="stylesheet" />
 
 <div class="block clearfix">
 	<div class="step_bar alert alert-success clearfix">
