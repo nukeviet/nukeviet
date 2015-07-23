@@ -718,8 +718,10 @@ a.btn {
     padding:8px 0;
 }
 #footer .menu li a:before {
-    content:"\2981";
+    content:"\f111";
     color:#143961;
+    font-family: FontAwesome;
+    font-size:5px;
     padding-right:6px;
     vertical-align:middle;
 }
