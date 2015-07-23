@@ -42,7 +42,7 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 				$_files = glob( NV_ROOTDIR . '/themes/' . $themename . '/js/' . $_module_file . '*.js' );
 				foreach( $_files as $_file )
 				{
-					$files_folders[] = $_file;
+					$allowfolder[] = $_file;
 				}
 
 				if( file_exists( NV_ROOTDIR . '/themes/' . $themename . '/images/' . $_module_file . '/' ) )
