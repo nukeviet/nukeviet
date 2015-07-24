@@ -124,7 +124,7 @@ elseif( $step == 2 )
 	}
 
 	// Danh sach cac file can kiem tra quyen ghi
-	$array_dir = array( NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . '/css', NV_DATADIR );
+	$array_dir = array( NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_DATADIR );
 	if( NV_SESSION_SAVE_PATH != '' )
 	{
 		$array_dir[] = NV_SESSION_SAVE_PATH;
@@ -945,7 +945,7 @@ elseif( $step == 6 )
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote( $_bot ) . ", 0, 0, 0)" );
 					}
 
-					$tmp_array = array('opera','operamini','webtv','explorer','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
+					$tmp_array = array('opera','operamini','webtv','explorer','edge','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
 					foreach( $tmp_array as $_browser )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote( $_browser ) . ", 0, 0, 0)" );
@@ -956,7 +956,7 @@ elseif( $step == 6 )
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)" );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unspecified', 0, 0, 0)" );
 
-					$tmp_array = array('unknown', 'win', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'win95', 'winme', 'winnt', 'win98', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
+					$tmp_array = array('unknown', 'win', 'win10', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
 					foreach( $tmp_array as $_os )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote( $_os ) . ", 0, 0, 0)" );

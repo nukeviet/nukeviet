@@ -37,7 +37,7 @@
     Header set X-Robots-Tag "noarchive, nosnippet"
   </FilesMatch>
   
-  <FilesMatch "\.(jpe?g|JPE?G|png|PNG|gif|GIF|swf|SWF|ico|ICO|xsl|XSL)(\?[0-9]{9,11})?$">
+  <FilesMatch "\.(jpe?g|JPE?G|png|PNG|gif|GIF|swf|SWF|ico|ICO|xsl|XSL|woff)(\?[0-9]{9,11})?$">
 	Header append Cache-Control "public"
 	Header add "Expires" "Tue, 31 Dec 2019 23:59:59 GMT"
 	Header add "Cache-Control" "max-age=2592000"

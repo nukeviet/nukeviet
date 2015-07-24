@@ -89,17 +89,4 @@
 		</table>
 	</div>
 </form>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("#start_date").datepicker({
-			showOn : "both",
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
-		});
-	});
-</script>
 <!-- END: main -->

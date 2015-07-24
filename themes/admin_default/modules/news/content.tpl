@@ -47,7 +47,7 @@
 				<tbody>
 					<tr>
 						<td><strong>{LANG.content_homeimg}</strong></td>
-						<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+						<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input id="select-img-post" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.content_homeimgalt}</td>
@@ -269,17 +269,17 @@
 		<input type="hidden" value="1" name="save" />
 		<input type="hidden" value="{rowcontent.id}" name="id" />
 		<!-- BEGIN:status -->
-		<input class="btn btn-primary" name="statussave" type="submit" value="{LANG.save}" />
+		<input class="btn btn-primary submit-post" name="statussave" type="submit" value="{LANG.save}" />
 		<!-- END:status -->
 		<!-- BEGIN:status0 -->
-		<input class="btn btn-primary" name="status4" type="submit" value="{LANG.save_temp}" />
-		<input class="btn btn-primary" name="status1" type="submit" value="{LANG.publtime}" />
+		<input class="btn btn-primary submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
+		<input class="btn btn-primary submit-post" name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status0 -->
         <!-- BEGIN:status1 -->
-		<input class="btn btn-primary" name="status4" type="submit" value="{LANG.save_temp}" />
-		<input class="btn btn-primary" name="status6" type="submit" value="{LANG.save_send_admin}" />
+		<input class="btn btn-primary submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
+		<input class="btn btn-primary submit-post" name="status6" type="submit" value="{LANG.save_send_admin}" />
             <!-- BEGIN:status0 -->
-            <input class="btn btn-primary" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
+            <input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
             <!-- END:status0 -->
 		<!-- END:status1 -->
 		<br />
@@ -288,32 +288,18 @@
 <div id="message"></div>
 <script type="text/javascript">
 //<![CDATA[
+var LANG = [];
+var CFG = [];
+CFG.uploads_dir_user = '{UPLOADS_DIR_USER}';
+CFG.upload_current = '{UPLOAD_CURRENT}';
+LANG.content_tags_empty = '{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->';
+LANG.alias_empty_notice = '{LANG.alias_empty_notice}';
 var content_checkcatmsg = "{LANG.content_checkcatmsg}";
-$("input[name=selectimg]").click(function() {
-	var area = "homeimg";
-	var alt = "homeimgalt";
-	var path = "{UPLOADS_DIR_USER}";
-	var currentpath = "{UPLOAD_CURRENT}";
-	var type = "image";
-	nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-	return false;
+<!-- BEGIN: getalias -->
+$("#idtitle").change(function() {
+	get_alias();
 });
-$('[type="submit"]').hover(function(){
-	if( $('[name="keywords[]"]').length == 0 ){
-		if( $('#message-tags').length == 0 ){
-			$('#message').append('<div id="message-tags" class="alert alert-danger">{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags --></div>');
-		}
-	}else{
-		$('#message-tags').remove();
-	}
-	if( $('[name="alias"]').val() == '' ){
-		if( $('#message-alias').length == 0 ){
-			$('#message').append('<div id="message-alias" class="alert alert-danger">{LANG.alias_empty_notice}.</div>');
-		}
-	}else{
-		$('#message-alias').remove();
-	}
-});
+<!-- END: getalias -->
 //]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
@@ -322,13 +308,4 @@ $('[type="submit"]').hover(function(){
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/news_content.js"></script>
-<!-- BEGIN: getalias -->
-<script type="text/javascript">
-//<![CDATA[
-$("#idtitle").change(function() {
-	get_alias();
-});
-//]]>
-</script>
-<!-- END: getalias -->
 <!-- END:main -->

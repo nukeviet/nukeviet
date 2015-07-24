@@ -185,7 +185,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip" title="{TOPIC.title}">{TOPIC.title}</a>
+			<a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a>
 			<em>({TOPIC.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -206,7 +206,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a href="{RELATED_NEW.link}" data-content="{RELATED_NEW.hometext}" data-img="{RELATED_NEW.imghome}" data-rel="tooltip">{RELATED_NEW.title}</a>
+			<a href="{RELATED_NEW.link}" title="{RELATED_NEW.title}">{RELATED_NEW.title}</a>
 			<em>({RELATED_NEW.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -224,7 +224,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a class="list-inline" href="{RELATED.link}" data-content="{RELATED.hometext}" data-img="{RELATED.imghome}" data-rel="tooltip">{RELATED.title}</a>
+			<a class="list-inline" href="{RELATED.link}" title="{RELATED.title}">{RELATED.title}</a>
 			<em>({RELATED.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -242,14 +242,6 @@ $(document).ready(function() {
        $('#imagemodal').modal('show');
     });
 	$(".bodytext img").toggleClass('img-thumbnail');
-	<!-- BEGIN: tooltip -->
-	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
-	$("[data-rel='tooltip'][data-content!='']").tooltip({
-		placement: "{TOOLTIP_POSITION}",
-		html: true,
-		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-	});
-	<!-- END: tooltip -->
 });
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>

@@ -1564,12 +1564,6 @@ function nv_change_buffer( $buffer )
         $body_replace .= "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>" . PHP_EOL;
     }
 
-    if ( NV_LANG_INTERFACE == 'vi' and ( $global_config['mudim_active'] == 1 or ( $global_config['mudim_active'] == 2 and defined( 'NV_SYSTEM' ) ) or ( $global_config['mudim_active'] == 3 and defined( 'NV_ADMIN' ) ) ) )
-    {
-        $internal .= "var mudim_showPanel=" . ( ( $global_config['mudim_showpanel'] ) ? "!0" : "!1" ) . ",mudim_displayMode=" . $global_config['mudim_displaymode'] . ",mudim_method=" . $global_config['mudim_method'] . ";" . PHP_EOL;
-        $external .= "<script src=\"" . NV_BASE_SITEURL . "js/mudim.js\" data-show=\"after\"></script>" . PHP_EOL;
-    }
-
     if ( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
     {
         if ( $global_config['googleAnalyticsMethod'] == 'universal' )
@@ -1596,10 +1590,13 @@ function nv_change_buffer( $buffer )
         }
     }
 
-    if ( ! empty( $internal ) ) $internal = "<script data-show=\"after\">" . PHP_EOL . $internal . "</script>" . PHP_EOL;
+    if ( ! empty( $internal ) ) $internal = "<script>" . PHP_EOL . $internal . "</script>" . PHP_EOL;
     $body_replace .= $internal . $external;
 
     if ( ! empty( $body_replace ) ) $buffer = preg_replace( '/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1 );
+
+	$optimizer = new optimizer( $buffer,  NV_BASE_SITEURL );
+	$buffer = $optimizer->process();
 
     if ( ! empty( $global_config['cdn_url'] ) )
     {

@@ -1,7 +1,6 @@
 <!-- BEGIN: main -->
 <div id="getUpd" class="hide"></div>
 <script type="text/javascript">
-var nv_loading = '<div class="text-center"><em class="fa fa-spin fa-spinner fa-2x m-bottom wt-icon-loading"></em></div>';
 //<![CDATA[
 $(document).ready(function(){
 	$('#getUpd').html(nv_loading).removeClass('hide').load("index.php?{NV_NAME_VARIABLE}=extensions&{NV_OP_VARIABLE}=update&eid={EID}&fid={FID}&checksess={CHECKSESS}&num=" + nv_randomPassword(10));

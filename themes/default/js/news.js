@@ -49,3 +49,11 @@ function get_alias() {
 	}
 	return false;
 }
+
+$(document).ready(function() {
+	$("[data-rel='tooltip'][data-content!=''][data-position!='']").removeAttr("title").tooltip({
+		placement: $(this).data('position'),
+		html: true,
+		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+	});
+});

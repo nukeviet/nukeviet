@@ -19,7 +19,7 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 	 */
 	function nv_block_voting()
 	{
-		global $db, $my_head, $site_mods, $global_config, $client_info;
+		global $db, $my_footer, $site_mods, $global_config, $client_info;
 
 		$content = '';
 
@@ -85,7 +85,10 @@ if( ! nv_function_exists( 'nv_block_voting' ) )
 				$block_theme = 'default';
 			}
 
-			$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "modules/" . $site_mods['voting']['module_file'] . "/js/user.js\" data-show=\"after\"></script>\n";
+			if( file_exists( NV_ROOTDIR . '/themes/' . $block_theme . '/js/voting.js' ) )
+			{
+				$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/js/voting.js\"></script>\n";
+			}
 
 			$action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=voting';
 

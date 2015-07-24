@@ -229,57 +229,9 @@
 //<![CDATA[
 document.getElementById('form_user').setAttribute("autocomplete", "off");
 $(function() {
-    $("#pop").on("click", function() {
-       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
-       $('#imagemodal').modal('show');
-    });
 	$.toggleShowPassword({
 	    field: '#password2',
 	    control: '#methods'
-	});
-
-	$('#form_user').validate({
-		rules : {
-			username : {
-				minlength : 5
-			}
-		}
-	});
-
-	$(".datepicker").datepicker({
-		showOn : "both",
-		dateFormat : "dd/mm/yy",
-		changeMonth : true,
-		changeYear : true,
-		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
-		buttonImageOnly : true,
-	});
-
-	$("#birthday").datepicker({
-		showOn : "both",
-		dateFormat : "dd/mm/yy",
-		changeMonth : true,
-		changeYear : true,
-		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
-		buttonImageOnly : true,
-		yearRange: "-99:+0",
-		beforeShow: function() {
-	        setTimeout(function(){
-	            $('.ui-datepicker').css('z-index', 999999999);
-	        }, 0);
-    	}
-	});
-
-	$("#btn_upload").click(function() {
-		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
-		return false;
-	});
-	$('#current-photo-btn').click(function(){
-		$('#current-photo').hide();
-		$('#photo_delete').val('1');
-		$('#change-photo').show();
 	});
 });
 //]]>

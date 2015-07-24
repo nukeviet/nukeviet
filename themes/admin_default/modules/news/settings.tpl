@@ -82,7 +82,7 @@
 				</tr>
 				<tr>
 					<th>{LANG.show_no_image}</th>
-					<td><input class="form-control" name="show_no_image" id="show_no_image" value="{SHOW_NO_IMAGE}" style="width:340px;" type="text"/> <input value="{GLANG.browse_image}" name="selectimg" type="button" class="btn btn-info"/></td>
+					<td><input class="form-control" name="show_no_image" id="show_no_image" value="{SHOW_NO_IMAGE}" style="width:340px;" type="text"/> <input id="select-img-setting" value="{GLANG.browse_image}" name="selectimg" type="button" class="btn btn-info"/></td>
 				</tr>
 				<tr>
 					<th>{LANG.config_source}</th>
@@ -156,20 +156,14 @@
 	</div>
 </form>
 <script type="text/javascript">
-	//<![CDATA[
-	$(document).ready(function() {
-		$("#structure_upload").select2();
-	});
-
-	$("input[name=selectimg]").click(function() {
-		var area = "show_no_image";
-		var type = "image";
-		var path = "{PATH}";
-		var currentpath = "{CURRENTPATH}";
-		nv_open_browse("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
-	//]]>
+//<![CDATA[
+var CFG = [];
+CFG.path = '{PATH}';
+CFG.currentpath = '{CURRENTPATH}';
+$(document).ready(function() {
+	$("#structure_upload").select2();
+});
+//]]>
 </script>
 <!-- BEGIN: admin_config_post -->
 <form action="{FORM_ACTION}" method="post">

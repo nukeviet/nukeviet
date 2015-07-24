@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<form action="">
+<form action="{NV_BASE_SITEURL}" method="get">
 	<h4>{VOTING.question}</h4>
 	<fieldset>
 		<!-- BEGIN: resultn -->

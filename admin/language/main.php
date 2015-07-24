@@ -12,12 +12,12 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_lang_data'];
 
+$lang_module['nv_data_note'] = sprintf( $lang_module['nv_data_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=system' );
 $lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
-
 
 $array_lang_setup = array();
 $result = $db->query( 'SELECT lang, setup FROM ' . $db_config['prefix'] . '_setup_language' );
@@ -66,7 +66,6 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
             include NV_ROOTDIR . '/includes/header.php';
             echo nv_admin_theme( $contents );
             include NV_ROOTDIR . '/includes/footer.php';
-            exit();
 		}
         else
         {
@@ -81,7 +80,6 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_admin_theme( $lang_module['nv_data_setup'] );
 			include NV_ROOTDIR . '/includes/footer.php';
-			exit();
 		}
 		elseif( $global_config['lang_multi'] )
 		{
@@ -114,7 +112,6 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 					include NV_ROOTDIR . '/includes/header.php';
 					echo nv_admin_theme( 'ERROR SETUP SQL: <br />' . $query );
 					include NV_ROOTDIR . '/includes/footer.php';
-					exit();
 				}
 			}
 			$db->columns_add( NV_COUNTER_GLOBALTABLE, $keylang . '_count', 'integer', 2147483647, true, 0);
@@ -217,7 +214,6 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_admin_theme( 'ERROR SETUP: <br />' . $e->getMessage() );
 						include NV_ROOTDIR . '/includes/footer.php';
-						exit();
 					}
 				}
 			}
@@ -230,14 +226,12 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_admin_theme( $contents );
 			include NV_ROOTDIR . '/includes/footer.php';
-			exit();
 		}
 		else
 		{
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_admin_theme( $lang_module['nv_data_note'] );
 			include NV_ROOTDIR . '/includes/footer.php';
-			exit();
 		}
 	}
 	elseif( $checksess == md5( $deletekeylang . session_id() . 'deletekeylang' ) and ! in_array( $deletekeylang, $global_config['allow_sitelangs'] ) )
@@ -302,6 +296,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 		exit();
 	}
 }
+
 $a = 0;
 foreach( $lang_array_exit as $keylang )
 {
@@ -363,12 +358,6 @@ foreach( $lang_array_exit as $keylang )
 	}
 	$xtpl->parse( 'main.loop' );
 }
-$contents .= "</table>\n";
-
-$contents .= "<div class=\"quote\" style=\"width:97.5%;\">\n";
-$contents .= "<blockquote><span>" . $lang_module['nv_data_note'] . "</span></blockquote>\n";
-$contents .= "</div>\n";
-$contents .= "<div class=\"clear\"></div>\n";
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );

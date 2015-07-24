@@ -37,7 +37,6 @@ if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 $lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );

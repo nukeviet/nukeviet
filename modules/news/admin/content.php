@@ -455,7 +455,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				}
 			}
 		}
-		$rowcontent['keywords'] = implode( ',', $keywords );
+		$rowcontent['keywords'] = implode( ',', $keywords_return );
 	}
 
 	if( empty( $rowcontent['title'] ) )

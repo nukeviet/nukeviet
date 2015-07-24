@@ -12,13 +12,6 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['edit_title'];
 
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_footer .= "<script type=\"text/javascript\" data-show=\"after\">\n";
-$my_footer .= "Shadowbox.init({\n";
-$my_footer .= "});\n";
-$my_footer .= "</script>\n";
-
 $userid = $nv_Request->get_int( 'userid', 'get', 0 );
 
 $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;

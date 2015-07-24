@@ -2,9 +2,9 @@
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js" data-show="after"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js" data-show="after"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js" data-show="after"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <form action="{BASE_URL_SITE}" name="fsea" method="get" id="fsea" class="form-horizontal">
 	<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
@@ -81,8 +81,7 @@
 	</div>
 </form>
 
-<script type="text/javascript" data-show="after">
-
+<script type="text/javascript">
 	$(document).ready(function() {
 		$("#from_date, #to_date").datepicker({
 			dateFormat : "dd.mm.yy",

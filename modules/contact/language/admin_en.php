@@ -71,3 +71,4 @@ $lang_module['siteinfo_new'] = 'Unread contact';
 $lang_module['no_row_contact'] = 'Any Contact';
 $lang_module['url_for_iframe'] = 'Url for iframe';
 $lang_module['notification_contact_new'] = '<strong />%s mailing contact title<strong />%s';
+$lang_module['is_default'] = 'Default';

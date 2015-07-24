@@ -36,7 +36,6 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		include NV_ROOTDIR . '/includes/header.php';
 		echo nv_site_theme( $upload_blocked );
 		include NV_ROOTDIR . '/includes/footer.php';
-		exit();
 	}
 
 	$xtpl = new XTemplate( 'addads.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );

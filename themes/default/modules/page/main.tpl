@@ -2,7 +2,7 @@
 <div class="page">
 	<!-- BEGIN: facebookjssdk -->
 	<div id="fb-root"></div>
-	<script type="text/javascript" data-show="after">
+	<script type="text/javascript">
 	(function(d, s, id) {
 		var js, fjs = d.getElementsByTagName(s)[0];
 		if (d.getElementById(id)) return;
@@ -23,7 +23,7 @@
 			<!-- END: facebook -->
 			<li>
 				<div class="g-plusone" data-size="medium"></div>
-				<script type="text/javascript" data-show="after">
+				<script type="text/javascript">
 				  window.___gcfg = {lang: nv_sitelang};
 				  (function() {
 					var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
@@ -34,7 +34,7 @@
 			</li>
 			<li>
 				<a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
-				<script type="text/javascript" src="http://platform.twitter.com/widgets.js" data-show="after"></script>
+				<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 			</li>
 		</ul>
 	</div>
@@ -79,7 +79,7 @@
 		<!-- END: loop -->
 	</ul>
 	<!-- END: other -->
-	<script type="text/javascript" data-show="after">
+	<script type="text/javascript">
 		$(document).ready(function() {
 		    $("#pop").on("click", function() {
                $('#imagepreview').attr('src', $('#imageresource').attr('src'));

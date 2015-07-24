@@ -1,6 +1,6 @@
-	<!--[if lt IE 7]>
-	<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-	<![endif]-->
+	<!-- BEGIN: lt_ie9 -->
+	<p class="chromeframe">{LANG.chromeframe}</p>
+	<!-- END: lt_ie9 -->
 	<noscript>
 		<div class="alert alert-danger">{LANG.nojs}</div>
 	</noscript>

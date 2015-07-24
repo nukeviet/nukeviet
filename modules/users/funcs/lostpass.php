@@ -119,7 +119,6 @@ else
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
 						include NV_ROOTDIR . '/includes/footer.php';
-						exit();
 					}
 					if( $global_config['allowquestion'] == 0 )
 					{
@@ -169,7 +168,6 @@ else
 							include NV_ROOTDIR . '/includes/header.php';
 							echo nv_site_theme( $contents );
 							include NV_ROOTDIR . '/includes/footer.php';
-							exit();
 						}
 						else
 						{

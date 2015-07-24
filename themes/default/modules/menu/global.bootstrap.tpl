@@ -15,7 +15,7 @@
 <!-- END: submenu -->
 
 <!-- BEGIN: main -->
-<div class="navbar navbar-default navbar-static-top" role="navigation">
+<div class="navbar navbar-default navbar-static-top radius-top-left radius-top-right bg-gradient" role="navigation">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-site-default">
 			<span class="sr-only">&nbsp;</span>
@@ -27,7 +27,7 @@
 	<div class="collapse navbar-collapse" id="menu-site-default">
         <ul class="nav navbar-nav">
 			<li>
-				<a title="{LANG.Home}" href="{THEME_SITE_HREF}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
+				<a class="home" title="{LANG.Home}" href="{THEME_SITE_HREF}"><em class="fa fa-lg fa-home">&nbsp;</em> {LANG.Home}</a>
 			</li>
 			<!-- BEGIN: top_menu -->
             <li {TOP_MENU.current} rol="presentation">
@@ -41,14 +41,10 @@
 			</li>
 			<!-- END: top_menu -->
          </ul>
-		<ul class="nav navbar-nav navbar-right">
-			<li><a href="#" id="digclock">{THEME_DIGCLOCK_TEXT}</a></li>
-		</ul>
 	</div>
 </div>
 <script type="text/javascript" data-show="after">
-nv_DigitalClock('digclock');
-$(document).ready(function(){
+$(function(){
     checkWidthMenu();
     $(window).resize(checkWidthMenu);
 });

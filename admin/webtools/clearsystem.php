@@ -84,13 +84,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 			closedir( $dh );
 		}
 
-		$cssDir = NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css';
-		$files = nv_clear_files( $cssDir, SYSTEM_FILES_DIR . '/css' );
-		foreach( $files as $file )
-		{
-			$xtpl->assign( 'DELFILE', $file );
-			$xtpl->parse( 'main.delfile.loop' );
-		}
 		if( defined( 'NV_IS_GODADMIN' ) )
 		{
 			$timestamp = intval( $global_config['timestamp'] ) + 1;

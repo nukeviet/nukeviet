@@ -158,7 +158,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$weight = 0;
 			$weight = count( $listdepartment );
 			$weight++;
-			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, yahoo, skype, note, admins, act, weight) VALUES (:full_name, :alias, :phone, :fax, :email, :yahoo, :skype, :note, :admins, 1, :weight)';
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, yahoo, skype, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :yahoo, :skype, :note, :admins, 1, :weight, 0)';
 			$name_key = 'log_add_row';
 			$note_action = $full_name;
 		}

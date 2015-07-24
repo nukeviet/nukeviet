@@ -106,6 +106,7 @@ $lang_global['year'] = 'năm';
 $lang_global['today'] = 'Hôm nay';
 $lang_global['current_month'] = 'Tháng hiện tại';
 $lang_global['nojs'] = 'Trình duyệt của bạn đã tắt chức năng hỗ trợ JavaScript.<br />Website chỉ làm việc khi bạn bật nó trở lại.<br />Để tham khảo cách bật JavaScript, hãy click chuột <a href="http://wiki.nukeviet.vn/support:browser:enable_javascript">vào đây</a>!';
+$lang_global['chromeframe'] = 'Bạn đang sử dụng một trình duyệt <strong>lỗi thời</strong>. Vui lòng <a href="http://browsehappy.com/">nâng cấp trình duyệt của bạn</a> hoạt <a href="http://www.google.com/chromeframe/?redirect=true">kích hoạt Google Chrome Frame</a> để cải thiện trải nghiệm của bạn.';
 $lang_global['sun'] = 'CN';
 $lang_global['mon'] = 'T2';
 $lang_global['tue'] = 'T3';
@@ -256,8 +257,8 @@ $lang_global['error_upload_url_notfound'] = 'Lỗi: Không thể tải file từ
 $lang_global['theme_type_r'] = 'Tự động';
 $lang_global['theme_type_d'] = 'Máy Tính';
 $lang_global['theme_type_m'] = 'Di động';
-$lang_global['theme_type_chose'] = 'Chuyển sang giao diện cho %s';
-$lang_global['theme_type_select'] = 'Xem giao diện';
+$lang_global['theme_type_chose'] = 'Click để chuyển sang giao diện %s';
+$lang_global['theme_type_select'] = 'Chế độ giao diện đang hiển thị';
 $lang_global['ftp_err_connect'] = 'Lỗi: Không thể kết nối với FTP server';
 $lang_global['ftp_err_login'] = 'Lỗi: Đăng nhập thất bại';
 $lang_global['ftp_err_enable'] = 'Lỗi: Máy chủ không hỗ trợ FTP';
@@ -281,3 +282,25 @@ $lang_global['timeoutsess_click'] = 'Bấm vào đây để duy trì trạng th�
 $lang_global['timeoutsess_timeout'] = 'Thời gian chờ';
 
 $lang_global['unknown'] = 'Không xác định';
+$lang_global['joinnow'] = 'Chúng tôi trên mạng xã hội';
+$lang_global['contactUs'] = 'Thông tin liên hệ';
+
+$lang_global['company_name'] = 'Tên chính thức';
+$lang_global['company_sortname'] = 'Tên viết tắt';
+$lang_global['company_regcode'] = 'Mã số Doanh nghiệp';
+$lang_global['company_regcode2'] = 'M.S.D.N';
+$lang_global['company_regplace'] = 'Cấp tại';
+$lang_global['company_licensenumber'] = 'Giấy phép số';
+$lang_global['company_responsibility'] = 'Chịu trách nhiệm';
+$lang_global['company_address'] = 'Địa chỉ';
+$lang_global['company_phone'] = 'Điện thoại';
+$lang_global['company_fax'] = 'Fax';
+$lang_global['company_email'] = 'Email';
+$lang_global['company_website'] = 'Website';
+$lang_global['siteterms'] = 'Điều khoản sử dụng';
+$lang_global['siteterms_url'] = 'Đường dẫn đến Điều khoản sử dụng';
+$lang_global['copyright_by'] = 'Bản quyền thuộc về';
+$lang_global['copyright_url'] = 'URL của trang giữ bản quyền website';
+$lang_global['powered_by'] = 'Mã nguồn';
+$lang_global['design_by'] = 'Thiết kế bởi';
+$lang_global['design_url'] = 'URL của trang giữ bản quyền thiết kế';

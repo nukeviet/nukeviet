@@ -184,6 +184,17 @@
 					<td><input name="openid_mode" value="1" type="checkbox"{DATA.openid_mode} /></td>
 				</tr>
 				<tr>
+					<td>{LANG.openid_processing}</td>
+					<td>
+						<select class="form-control" name="openid_processing">
+							<!-- BEGIN: openid_processing -->
+							<option value="{OPENID_PROCESSING.id}"{OPENID_PROCESSING.select}> {OPENID_PROCESSING.value}</option>
+							<!-- END: openid_processing -->
+						</select>
+					</td>
+				</tr>				
+				
+				<tr>
 					<td>{LANG.openid_servers}</td>
 					<td>
 					<!-- BEGIN: openid_servers -->
