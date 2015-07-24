@@ -390,6 +390,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  order_name varchar(255) NOT NULL,
  order_email varchar(255) NOT NULL,
  order_phone varchar(20) NOT NULL,
+ order_address varchar(255) NOT NULL,
  order_note text NOT NULL,
  user_id int(11) unsigned NOT NULL default '0',
  admin_id int(11) unsigned NOT NULL default '0',

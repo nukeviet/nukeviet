@@ -16,6 +16,12 @@
 						<td>{LANG.order_phone}:</td>
 						<td>{DATA.order_phone}</td>
 					</tr>
+					<!-- BEGIN: order_address -->
+					<tr>
+						<td>{LANG.order_address}:</td>
+						<td>{DATA.order_address}</td>
+					</tr>
+					<!-- END: order_address -->
 					<tr>
 						<td>{LANG.order_date}:</td>
 						<td>{dateup} {LANG.order_moment} {moment}</td>
@@ -67,7 +73,11 @@
 					</span><!-- END: display_group --></td>
 				<td><strong>{product_code}</strong></td>
 				<!-- BEGIN: sub_group -->
-    			<td><a href="{SUB_GROUP.link}" target="_blank" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
+    			<td>
+    				<!-- BEGIN: loop -->
+    				<a href="{SUB_GROUP.link}" target="_blank" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a>
+    				<!-- END: loop -->
+    			</td>
     			<!-- END: sub_group -->
     			<td class="text-center">{product_price}</td>
 				<td class="amount text-center">{product_number}</td>

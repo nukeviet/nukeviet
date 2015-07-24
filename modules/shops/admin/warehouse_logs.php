@@ -135,6 +135,7 @@ if( $wid > 0 )
 {
 	$array_warehouse['addtime'] = nv_date( 'H:i d/m/Y', $array_warehouse['addtime'] );
 	$array_warehouse['full_name'] = !empty( $array_warehouse['last_name'] ) ? $array_warehouse['first_name'] . ' ' . $array_warehouse['last_name'] : $array_warehouse['username'];
+
 	$xtpl->assign( 'DATA', $array_warehouse );
 
 	if( !empty( $array_warehouse['logs'] ) )
