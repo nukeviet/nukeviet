@@ -137,10 +137,11 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/css/' . $row['basename'] . '.css';
 				}
-
-				if( file_exists( NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '.js' ) )
+				
+				$_files = glob( NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '*.js' );
+				foreach( $_files as $_file )
 				{
-					$files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '.js';
+					$files_folders[] = $_file;
 				}
 
 				if( file_exists( NV_ROOTDIR . '/themes/' . $theme_package . '/images/' . $row['basename'] . '/' ) )
@@ -156,11 +157,12 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/admin_default/css/' . $row['basename'] . '.css';
 				}
-
-				if( file_exists( NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '.js' ) )
+				
+				$_files = glob( NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '*.js' );
+				foreach( $_files as $_file )
 				{
-					$files_folders[] = NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '.js';
-				}
+					$files_folders[] = $_file;
+				}				
 
 				if( file_exists( NV_ROOTDIR . '/themes/admin_default/images/' . $row['basename'] . '/' ) )
 				{

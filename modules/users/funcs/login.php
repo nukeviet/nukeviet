@@ -592,8 +592,13 @@ function openidLogin_Res1( $attribs )
 	$array_user_login = array();
 	if( ! defined( 'NV_IS_USER_FORUM' ) )
 	{
-		$array_user_login[] = array( 'title' => $lang_module['openid_note3'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1&amp;option=1&amp;nv_redirect=' . $nv_redirect );
-		$array_user_login[] = array( 'title' => $lang_module['openid_note4'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1&amp;option=2&amp;nv_redirect=' . $nv_redirect );
+		$array_user_login[3] = array( 'title' => $lang_module['openid_note3'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=' . $attribs['server'] . '&result=1&option=1&nv_redirect=' . $nv_redirect );
+		$array_user_login[4] = array( 'title' => $lang_module['openid_note4'], 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login&server=' . $attribs['server'] . '&result=1&option=2&nv_redirect=' . $nv_redirect );
+		if( isset( $array_user_login[$global_config['openid_processing']] ) )
+		{
+			Header( 'Location: ' . $array_user_login[$global_config['openid_processing']]['link'] );
+			exit();
+		}
 	}
 	else
 	{
@@ -683,7 +688,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 			'value' => $lang_global['securitycodeincorrect']
 		);
 	}
-	
+
 	if( empty( $nv_username ) )
 	{
 		$error[] = array(
@@ -691,7 +696,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 			'value' => $lang_global['username_empty']
 		);
 	}
-	
+
 	if( empty( $nv_password ) )
 	{
 		$error[] = array(
@@ -699,7 +704,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 			'value' => $lang_global['password_empty']
 		);
 	}
-	
+
 	if( empty( $error ) )
 	{
 		if( defined( 'NV_IS_USER_FORUM' ) )
@@ -709,7 +714,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		else
 		{
 			$error1 = $lang_global['loginincorrect'];
-			
+
 			if( nv_check_valid_email( $nv_username ) == '' )
 			{
 				// Email login
@@ -722,9 +727,9 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 				$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe( $nv_username ) . "'";
 				$login_email = false;
 			}
-			
+
 			$row = $db->query( $sql )->fetch();
-			
+
 			if( ! empty( $row ) )
 			{
 				if( ( ( $row['username'] == $nv_username and $login_email == false ) or ( $row['email'] == $nv_username and $login_email == true ) ) and $crypt->validate_password( $nv_password, $row['password'] ) )
@@ -740,7 +745,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 					}
 				}
 			}
-			
+
 			if( ! empty( $error1 ) )
 			{
 				$error[] = array(
@@ -748,11 +753,11 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 					'value' => $error1
 				);
 			}
-			
+
 			unset( $error1 );
 		}
 	}
-	
+
 	// Ajax respon
 	if( $nv_ajax_login )
 	{
@@ -760,7 +765,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		echo json_encode( $error );
 		include NV_ROOTDIR . '/includes/footer.php';
 	}
-	
+
 	if( empty( $error ) )
 	{
 		$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
@@ -774,7 +779,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		echo nv_site_theme( $contents, $full );
 		include NV_ROOTDIR . '/includes/footer.php';
 	}
-	
+
 	$lang_module['login_info'] = '<span style="color:#fb490b;">' . $error[0]['value'] . '</span>';
 	$array_login = array(
 		'nv_login' => $nv_username,

@@ -176,7 +176,8 @@ function nv_site_theme( $contents, $full = true )
 	{
 		// Search form variables
 		$xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
-		$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
+        $xtpl->assign( 'THEME_SEARCH_QUERY_MIN_LENGTH', NV_MIN_SEARCH_LENGTH );
+		$xtpl->assign( 'THEME_SEARCH_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&q=' );
 
 		// Breadcrumbs
 		if( $home != 1 )
@@ -242,25 +243,25 @@ function nv_site_theme( $contents, $full = true )
             $xtpl->parse( 'main.theme_type.loop' );
         }
         $xtpl->parse( 'main.theme_type' );
+
+        if( defined( 'NV_IS_ADMIN' ) )
+		{
+            $xtpl->assign( 'ADMINTOOLBAR', nv_admin_menu() );
+		}
 	}
 
-	$xtpl->parse( 'main' );
+    $xtpl->parse( 'main' );
 	$sitecontent = $xtpl->text( 'main' );
-
-	// Only full theme
+    
+    // Only full theme
 	if( $full )
 	{
 		$sitecontent = nv_blocks_content( $sitecontent );
 		$sitecontent = str_replace( '[THEME_ERROR_INFO]', nv_error_info(), $sitecontent );
-
-		if( defined( 'NV_IS_ADMIN' ) )
-		{
-			$my_footer .= nv_admin_menu() ;
-		}
 	}
 
-	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1 );
-	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1 );
+    if ( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1 );
+    if ( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1 );
 
 	return $sitecontent;
 }

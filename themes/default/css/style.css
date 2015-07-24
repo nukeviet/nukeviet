@@ -142,8 +142,6 @@ body {
     padding:0;
 }
 body {
-    -webkit-transform:perspective(1400px) matrix3d(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1);
-    -webkit-transform-style:preserve-3d;
     background:#efefef;
 }
 a,
@@ -259,21 +257,11 @@ a.btn {
     right:0;
     margin:10px;
 }
-.footerNav .breadcrumb {
-    top:0;
-    left:10px;
-    right:94px;
-    display:table;
-    height:80px;
-    margin:0;
-}
+
 .breadcrumb > span {
     display:inline-block;
 }
-.footerNav .breadcrumb > span {
-    display:table-cell;
-    vertical-align:middle;
-}
+
 .breadcrumb > span + span + span:before {
     content:"\2192";
     padding:0 6px;
@@ -588,18 +576,6 @@ a.btn {
     padding-top:10px;
 }
 
-/* Footer-NAV */
-.footerNav {
-    position:relative;
-    min-height:80px;
-    width:100%;
-    background:#f7f7f7 url(../images/hbg.jpg) repeat-x left -51px;
-    background-image:url(../images/header.jpg),url(../images/hbg.jpg);
-    background-repeat:no-repeat,repeat-x;
-    background-position:left top,left -51px;
-    background-size:auto,auto;
-}
-
 /* Footer-NAV2 */
 .footerNav2 {
     position:relative;
@@ -686,6 +662,9 @@ a.btn {
     letter-spacing:0.5px;
     text-transform:uppercase;
 }
+#footer h3 a{
+    color: inherit;
+}
 #footer p {
     margin:0;
     padding:0;
@@ -717,8 +696,10 @@ a.btn {
     padding:8px 0;
 }
 #footer .menu li a:before {
-    content:"\2981";
+    content:"\f111";
     color:#143961;
+    font-family: FontAwesome;
+    font-size:5px;
     padding-right:6px;
     vertical-align:middle;
 }
@@ -823,7 +804,7 @@ a.btn {
 /* Block global */
 .nv-block-banners {
     position:relative;
-    margin-bottom:2px;
+    margin-bottom:10px;
     text-align:center;
 }
 .nv-block-banners .link {
@@ -1059,4 +1040,31 @@ button.close {
 }
 #timeoutsess a {
     color:#0000FF !important;
+}
+
+/* Block featured-products */
+.featured-products > .row{
+	margin-bottom: 35px;
+}
+.featured-products > .row:last-child{
+	margin-bottom: 0;
+}
+.featured-products .img-thumbnail{
+	margin-top: 3px;
+    margin-bottom: 10px;
+    background-color: #fff !important;
+    border-width: 1px !important;
+    padding: 1px !important
+}
+.featured-products ul{
+	margin: 0;
+	padding: 0;
+}
+.featured-products ul > li{
+	margin-bottom: 5px;
+}
+.featured-products ul > li:before{
+	font-family: 'FontAwesome';
+	content: "\f105";
+	margin-right: 5px;
 }
