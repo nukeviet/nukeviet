@@ -257,21 +257,11 @@ a.btn {
     right:0;
     margin:10px;
 }
-.footerNav .breadcrumb {
-    top:0;
-    left:10px;
-    right:94px;
-    display:table;
-    height:80px;
-    margin:0;
-}
+
 .breadcrumb > span {
     display:inline-block;
 }
-.footerNav .breadcrumb > span {
-    display:table-cell;
-    vertical-align:middle;
-}
+
 .breadcrumb > span + span + span:before {
     content:"\2192";
     padding:0 6px;
@@ -584,18 +574,6 @@ a.btn {
     box-shadow:0 0 4px rgba(0,0,0,0.15);
     -webkit-box-shadow:0 0 4px rgba(0,0,0,0.15);
     padding-top:10px;
-}
-
-/* Footer-NAV */
-.footerNav {
-    position:relative;
-    min-height:80px;
-    width:100%;
-    background:#f7f7f7 url(../images/hbg.jpg) repeat-x left -51px;
-    background-image:url(../images/header.jpg),url(../images/hbg.jpg);
-    background-repeat:no-repeat,repeat-x;
-    background-position:left top,left -51px;
-    background-size:auto,auto;
 }
 
 /* Footer-NAV2 */

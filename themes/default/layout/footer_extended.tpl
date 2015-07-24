@@ -1,13 +1,6 @@
                 </div>
             </section>
         </div>
-        <nav class="footerNav">
-            <div class="wraper">
-                <div class="container">
-                    Tam thoi chua biet cho gi vao day
-                </div>
-            </div>
-        </nav>
         <footer id="footer">
             <div class="wraper">
                 <div class="container">
