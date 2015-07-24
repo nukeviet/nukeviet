@@ -505,14 +505,6 @@ function nv_urldecode_ajax(my_url, containerid) {
 	return;
 }
 
-function nv_change_captcha(imgid, captchaid) {
-	var vimg = document.getElementById(imgid);
-	nocache = nv_randomPassword(10);
-	vimg.src = nv_siteroot + 'index.php?scaptcha=captcha&nocache=' + nocache;
-	document.getElementById(captchaid).value = '';
-	return false;
-}
-
 function nv_open_browse(theURL, winName, w, h, features) {
 	LeftPosition = (screen.width) ? (screen.width - w) / 2 : 0;
 	TopPosition = (screen.height) ? (screen.height - h) / 2 : 0;

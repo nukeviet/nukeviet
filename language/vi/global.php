@@ -304,3 +304,4 @@ $lang_global['copyright_url'] = 'URL của trang giữ bản quyền website';
 $lang_global['powered_by'] = 'Mã nguồn';
 $lang_global['design_by'] = 'Thiết kế bởi';
 $lang_global['design_url'] = 'URL của trang giữ bản quyền thiết kế';
+$lang_global['signin'] = 'Đăng nhập';

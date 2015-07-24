@@ -5,6 +5,12 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
+/*Change Captcha*/
+function change_captcha(a) {
+    $("img.captchaImg").attr("src",nv_siteroot + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+	$(a).val("");
+	return !1
+};
 
 // NukeViet Default Custom JS
 $(document).ready(function(){

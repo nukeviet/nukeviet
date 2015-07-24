@@ -54,8 +54,8 @@
     		</div>
     		<div class="form-group">
     			<label for="fcode_iavim" class="m-bottom">{LANG.captcha}</label>
-    			<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{LANG.captcha}" id="vimg" />
-    			&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','fcode_iavim');">&nbsp;</em>
+    			<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{LANG.captcha}" class="captchaImg" />
+    			&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#fcode_iavim');">&nbsp;</em>
     			<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control" />
     		</div>
     		<div class="text-center form-group">
