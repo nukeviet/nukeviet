@@ -74,6 +74,7 @@ function ftipHide() {
 }
 
 function tipShow(a, b) {
+    if ($(a).is(".pa")) switchTab(a + " .guest-sign");
     ftip_active && ftipHide();
 	$("[data-toggle=tip]").removeClass("active");
 	$(a).attr("data-click", "n").addClass("active");
@@ -109,8 +110,7 @@ function switchTab(a) {
 	$(c + " [data-switch]").removeClass("current");
 	$(a).addClass("current");
     $(c + " " + b[0]).removeClass("hidden");
-	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden");
-	return !1
+	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
 };
 
 /*Change Captcha*/
@@ -199,7 +199,7 @@ $(function() {
     		c = "tip" == b ? $("#tip").attr("data-content") : $("#ftip").attr("data-content");
     	a != c ? ("" != c && $('[data-target="' + c + '"]').attr("data-click", "y"), "tip" == b ? ($("#tip .bg").html(d), tipShow(this, a)) : ($("#ftip .bg").html(d), ftipShow(this, a))) : "n" == $(this).attr("data-click") ? "tip" == b ? tipHide() : ftipHide() : "tip" == b ? tipShow(this, a) : ftipShow(this, a);
     	return !1
-    });
+    })
 });
 $(window).on("resize", function() {
 	winResize();
