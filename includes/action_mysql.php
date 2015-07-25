@@ -171,7 +171,7 @@ function nv_create_table_sys( $lang )
 	 	('" . $lang . "', 'global', 'site_description', 'Sharing success, connect passions'),
 	 	('" . $lang . "', 'global', 'site_keywords', ''),
         ('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
-	 	('" . $lang . "', 'global', 'mobile_theme', ''),
+	 	('" . $lang . "', 'global', 'mobile_theme', 'mobile_default'),
 	 	('" . $lang . "', 'global', 'site_home_module', 'users'),
 	 	('" . $lang . "', 'global', 'switch_mobi_des', '1'),
 		('" . $lang . "', 'global', 'upload_logo', 'images/logo.png'),

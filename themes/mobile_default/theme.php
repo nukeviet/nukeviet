@@ -178,35 +178,32 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->assign( 'THEME_STAT_IMG', $theme_stat_img );
 
 		// Change theme types
-		if( ! empty( $global_config['switch_mobi_des'] ) )
+		$icons = array('r' => 'random', 'd' => 'desktop', 'm' => 'mobile');
+		$current_theme_type = ( isset( $global_config['current_theme_type'] ) and ! empty( $global_config['current_theme_type'] ) and in_array( $global_config['current_theme_type'], array_keys( $icons ) ) ) ? $global_config['current_theme_type'] : 'd';
+		foreach ( $global_config['array_theme_type'] as $theme_type )
 		{
-			$mobile_theme = empty( $module_info['mobile'] ) ?  $global_config['mobile_theme'] : $module_info['mobile'];
-			if( ! empty( $mobile_theme ) )
+			$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
+			$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $theme_type] );
+			$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $theme_type] ) );
+			$xtpl->assign( 'STHEME_ICON', $icons[$theme_type] );
+		
+			if ( $theme_type == $global_config['current_theme_type'] )
 			{
-				$num_theme_type = sizeof( $global_config['array_theme_type'] ) - 1;
-
-				foreach( $global_config['array_theme_type'] as $i => $theme_type )
-				{
-					$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-					$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $theme_type] );
-					$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $theme_type] ) );
-
-					if( $theme_type == $global_config['current_theme_type'] )
-					{
-						$xtpl->parse( 'main.theme_type.loop.current' );
-					}
-					else
-					{
-						$xtpl->parse( 'main.theme_type.loop.other' );
-					}
-
-					if( $i < $num_theme_type ) $xtpl->parse( 'main.theme_type.loop.space' );
-
-					$xtpl->parse( 'main.theme_type.loop' );
-				}
-				$xtpl->parse( 'main.theme_type' );
+				$xtpl->parse( 'main.theme_type.loop.current' );
 			}
+			else
+			{
+				$xtpl->parse( 'main.theme_type.loop.other' );
+			}
+		
+			$xtpl->parse( 'main.theme_type.loop' );
 		}
+		$xtpl->parse( 'main.theme_type' );
+		
+		if( defined( 'NV_IS_ADMIN' ) )
+		{
+			$xtpl->assign( 'ADMINTOOLBAR', nv_admin_menu() );
+		}		
 	}
 
 	if( !$drag_block )

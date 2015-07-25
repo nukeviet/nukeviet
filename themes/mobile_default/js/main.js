@@ -18,9 +18,11 @@ $(document).ready(function(){
 	$('a[href="#"], a[href=""]').attr('href','javascript:void(0);');
 
 	// Smooth scroll to top
-	$('#totop').click(function(){
-		$('body').animate({scrollTop : 0}, 'slow');
-		return false;
+	$(".bttop").click(function() {
+		$("html,body").animate({
+			scrollTop: 0
+		}, 800);
+		return !1
 	});
 
 	$('#btn-search').click(function(){
