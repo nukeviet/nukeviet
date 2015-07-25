@@ -142,9 +142,10 @@ function nv_site_theme( $contents, $full = true )
 	if( $full )
 	{
 		// Search form variables
-		$xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
-		$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
-
+		$xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
+        $xtpl->assign( 'NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH );
+		$xtpl->assign( 'THEME_SEARCH_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&q=' );
+		
 		// Breadcrumbs
 		if( $home != 1 )
 		{
