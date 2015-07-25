@@ -101,6 +101,25 @@ function qrcodeLoad(a) {
 	b.src = nv_siteroot + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
 };
 
+//Switch tab*/
+function switchTab(a) {
+	if ($(a).is(".current")) return !1;
+	var b = $(a).data("switch").split(/\s*,\s*/),
+		c = $(a).data("obj");
+	$(c + " [data-switch]").removeClass("current");
+	$(a).addClass("current");
+    $(c + " " + b[0]).removeClass("hidden");
+	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden");
+	return !1
+};
+
+/*Change Captcha*/
+function change_captcha(a) {
+    $("img.captchaImg").attr("src",nv_siteroot + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+	$(a).val("");
+	return !1
+};
+
 $(function() {
 	winResize();
 	fix_banner_center();

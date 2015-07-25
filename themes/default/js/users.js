@@ -242,8 +242,8 @@ UAV.init = function(){
 						</div>\
 						" + ( opts.isCaptchaLogin ?
 						"<div class=\"form-group text-right\">\
-							<img id=\"block_vimg\" src=\"" + opts.siteroot + "index.php?scaptcha=captcha&t=" + opts.timeStamp + "\" width=\"" + opts.captchaW + "\" height=\"" + opts.captchaH + "\"/>\
-							<em class=\"fa fa-pointer fa-refresh fa-lg\" onclick=\"nv_change_captcha('block_vimg','block_seccode_iavim');\"></em>\
+							<img class=\"captchaImg\" src=\"" + opts.siteroot + "index.php?scaptcha=captcha&t=" + opts.timeStamp + "\" width=\"" + opts.captchaW + "\" height=\"" + opts.captchaH + "\"/>\
+							<em class=\"fa fa-pointer fa-refresh fa-lg\" onclick=\"change_captcha('#block_seccode_iavim');\"></em>\
 						</div>\
 						<div class=\"form-group\">\
 							<div class=\"input-group\">\
@@ -349,8 +349,8 @@ UAV.init = function(){
 							</div>\
 							<div class=\"col-sm-8\">\
 								<label class=\"control-label\">\
-									<img id=\"vimg\" src=\"" + opts.siteroot + "index.php?scaptcha=captcha&t=" + opts.timeStamp + "\" width=\"" + opts.captchaW + "\" height=\"" + opts.captchaH + "\" />\
-									&nbsp;<em class=\"fa fa-pointer fa-refresh fa-lg\" onclick=\"nv_change_captcha('vimg','nv_seccode_iavim');\">&nbsp;</em>\
+									<img class=\"captchaImg\" src=\"" + opts.siteroot + "index.php?scaptcha=captcha&t=" + opts.timeStamp + "\" width=\"" + opts.captchaW + "\" height=\"" + opts.captchaH + "\" />\
+									&nbsp;<em class=\"fa fa-pointer fa-refresh fa-lg\" onclick=\"change_captcha('#nv_seccode_iavim');\">&nbsp;</em>\
 								</label>\
 							</div>\
 						</div>\
@@ -512,7 +512,7 @@ UAV.init = function(){
 				dataType: 'json',
 				success: function(e){
 					$this.removeAttr('disabled');
-					nv_change_captcha('vimg','nv_seccode_iavim');
+					change_captcha('#nv_seccode_iavim');
 					
 					if( e.status == 'success' ){
 						opts.registerComplete.call(undefined, e.message, opts);

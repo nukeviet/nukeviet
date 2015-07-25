@@ -31,8 +31,8 @@
     		</div>
     		<div class="col-sm-10">
     			<label class="control-label">
-    				<img id="vimglogin" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-    				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimglogin','seccode_iavim');">&nbsp;</em>
+    				<img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+    				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#seccode_iavim');">&nbsp;</em>
     			</label>
     		</div>
     	</div>

@@ -33,7 +33,7 @@ function sendcommment(module, id_content, area, id, allowed, newscheckss, gfx_co
 				document.location = "#idcomment";
 			} else {
 				if (gfx_count > 0 ) {
-					nv_change_captcha('vimg', 'commentseccode_iavim');
+					change_captcha('#commentseccode_iavim');
 				}
 				if (rs[0] == 'ERR') {
 					alert(rs[1]);

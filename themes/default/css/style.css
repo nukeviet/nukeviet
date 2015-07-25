@@ -28,6 +28,14 @@
     color:#fff !important
 }
 
+/* Fonts Weight */
+.text-normal{
+    font-weight: 400
+}
+.text-bold{
+    font-weight:800
+}
+
 /* Fix bootstrap */
 .visible-xs-block,
 .visible-xs-inline,
@@ -257,11 +265,9 @@ a.btn {
     right:0;
     margin:10px;
 }
-
 .breadcrumb > span {
     display:inline-block;
 }
-
 .breadcrumb > span + span + span:before {
     content:"\2192";
     padding:0 6px;
@@ -432,18 +438,20 @@ a.btn {
     color:#fff;
 }
 .header-nav a.button {
+    display:inline-block;
     padding:8px;
     color:#fff;
+    line-height:1;
     background:#1182C8;
     border-width:2px;
     border-color:transparent transparent #1182C8 #1182C8;
     border-style:solid;
     border-radius:5px;
-    -webkit-border-radius:5px;
+    -webkit-border-radius:5px
 }
 .header-nav a.button:hover,
 .header-nav a.active {
-    background:#205FA0 !important;
+    background-color:#205FA0 !important;
 }
 
 /* TIP POPUP and FTIP POPUP */
@@ -508,8 +516,8 @@ a.btn {
     color:#fff !important;
 }
 
-/* Blocks social-icons AND contactDefault */
-.social-icons {
+/* Blocks social-icons, contactDefault and personalArea */
+.social-icons,.personalArea {
     line-height:51px;
     float:right;
     margin:0 10px;
@@ -519,6 +527,38 @@ a.btn {
     float:left;
     margin:0 10px;
 }
+.personalArea{
+    margin-left:50px;
+}
+.personalArea a.button.user,.personalArea a.button.user:hover {
+    width:30px;
+    height:30px;
+    margin-top:11px;
+    border-width: 0;
+    border-radius: 15px !important;
+    -webkit-border-radius:15px !important;
+    background-color: transparent !important;
+    background-size:contain
+}
+
+/* guestBlock */
+.guestBlock > h3{
+    border-bottom: 1px solid #ccc;
+}
+.guestBlock > h3 > a{
+    display: inline-block;
+    line-height: 34px;
+    padding: 0 17px;
+    background:#e5e5e5;
+    -webkit-border-top-right-radius:5px;
+    border-top-right-radius:5px;
+    -webkit-border-top-left-radius:5px;
+    border-top-left-radius:5px;
+}
+.guestBlock > h3 > a:hover,.guestBlock > h3 > a.current{
+    background:#D0D0D0
+}
+
 .socialList,
 .contactList {
     list-style:none;
@@ -862,7 +902,7 @@ a.btn {
 
 /* panel-body */
 .panel-body h3 {
-    color:#0066cc;
+    color:#428BCA;
 }
 .panel-body p {
     margin:0;
@@ -1054,7 +1094,7 @@ button.close {
     margin-bottom: 10px;
     background-color: #fff !important;
     border-width: 1px !important;
-    padding: 1px !important
+    padding: 0 !important
 }
 .featured-products ul{
 	margin: 0;
