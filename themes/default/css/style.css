@@ -1081,7 +1081,10 @@ button.close {
 #timeoutsess a {
     color:#0000FF !important;
 }
-
+#company-map{
+	width: 100%;
+	height: 300px;
+}
 /* Block featured-products */
 .featured-products > .row{
 	margin-bottom: 35px;

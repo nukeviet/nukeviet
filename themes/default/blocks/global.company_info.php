@@ -93,7 +93,7 @@ if ( ! nv_function_exists( 'nv_company_info' ) )
      */
     function nv_company_info( $block_config )
     {
-        global $global_config, $lang_global;
+        global $global_config, $lang_global, $my_head;
 
         if ( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.company_info.tpl' ) )
         {
@@ -153,7 +153,9 @@ if ( ! nv_function_exists( 'nv_company_info' ) )
 
         if ( ! empty( $block_config['company_address'] ) )
         {
+        	$my_head .= "<script type=\"text/javascript\" src=\"http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false\"></script>" . NV_EOL;
             $xtpl->parse( 'main.company_address' );
+            $xtpl->parse( 'main.company_address1' );
         }
         if ( ! empty( $block_config['company_phone'] ) )
         {
