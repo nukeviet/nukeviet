@@ -21,6 +21,7 @@ class optimizer
 	private $_links = array();
 	private $_cssLinks = array();
 	private $_jsMatches = array();
+	private $_htmlforFooter = "";
 	private $_jsCount = 0;
 	private $base_siteurl;
 	private $eol = "\r\n";
@@ -65,6 +66,13 @@ class optimizer
 				'jsCallback'
 			), $this->_content );
 		}
+		
+		$htmlRegex = "/<\!--\s*START\s+FORFOOTER\s*-->(.*?)<\!--\s*END\s+FORFOOTER\s*-->/is";
+	        if ( preg_match_all( $htmlRegex, $this->_content, $htmlMatches ) )
+	        {
+	            $this->_htmlforFooter = implode( $this->eol, $htmlMatches[1] );
+	            $this->_content = preg_replace( $htmlRegex, "", $this->_content );
+	        }
 
 		$this->_meta['http-equiv'] = $this->_meta['name'] = $this->_meta['other'] = array();
 		$this->_meta['charset'] = '';
@@ -234,11 +242,19 @@ class optimizer
 		}
 		if( preg_match( '/\<\/body\>/', $this->_content ) )
 		{
+			if ( ! empty( $this->_htmlforFooter ) )
+			{
+				$this->_content = preg_replace( '/\s*<\/body>/', $this->eol . $this->_htmlforFooter . $this->eol . '</body>', $this->_content, 1 );
+		        }
 			$_jsAfter = '<script src="' . $this->base_siteurl . 'js/jquery/jquery.min.js"></script>' . $this->eol . $_jsAfter;
 			$this->_content = preg_replace( '/\s*<\/body>/', $this->eol . $_jsAfter . $this->eol . '</body>', $this->_content, 1 );
 		}
 		else
 		{
+			if ( ! empty( $this->_htmlforFooter ) )
+			{
+				$this->_content .= $this->eol . $this->_htmlforFooter;
+			}
 			$this->_content = $this->_content . $this->eol . $_jsAfter;
 		}
 
