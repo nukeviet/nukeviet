@@ -61,6 +61,9 @@
 		</nav>
         <nav class="header-nav">
             <div class="container">
+                <div class="personalArea">
+                [PERSONALAREA]
+                </div>
                 <div class="social-icons">
                 [SOCIAL_ICONS]
                 </div>
@@ -68,7 +71,7 @@
                 [CONTACT_DEFAULT]
                 </div>
                 <div id="tip" data-content="">
-                    <div class="bg bg-gradient"></div>
+                    <div class="bg"></div>
                 </div>
             </div>
         </nav>

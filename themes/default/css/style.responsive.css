@@ -47,8 +47,13 @@
     .container {
         width:100%;
     }
+    .box-shadow {
+        box-shadow:none;
+        -webkit-box-shadow:none;
+    }
     .social-icons,
-    .contactDefault {
+    .contactDefault,
+    .personalArea {
         float:right;
         margin-right:10px;
         margin-left:0;
@@ -181,6 +186,9 @@
     #tip, #footer-tip {
         max-width:100%;
         margin-right:0 !important;
+    }
+    .guestBlock{
+        width:100%
     }
 }
 @media (min-width:500px) and (max-width:991px) {

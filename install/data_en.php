@@ -194,7 +194,7 @@ $sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'categor
 $sth->execute( array(2, 'default', 'statistics', 'global.counter_button.php', 'Online button', '', 'no_title', '[QR_CODE]', 0, 1, 0, '6', 1, 2, '') );
 $sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Left Banner', '', 'no_title', '[LEFT]', 0, 1, 0, '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
 $sth->execute( array(4, 'default', 'about', 'global.about.php', 'About', '', 'border', '[RIGHT]', 0, 1, 0, '6', 1, 1, '') );
-$sth->execute( array(5, 'default', 'users', 'global.login.php', 'Login site', '', 'primary', '[RIGHT]', 0, 1, 0, '6', 1, 2, '') );
+$sth->execute( array(5, 'default', 'users', 'global.user_button.php', 'Login site', '', 'no_title', '[PERSONALAREA]', 0, 1, 0, '6', 1, 1, '') );
 $sth->execute( array(6, 'default', 'voting', 'global.voting_random.php', 'voting', '', 'primary', '[RIGHT]', 0, 1, 0, '6', 1, 3, '') );
 $sth->execute( array(7, 'default', 'news', 'module.block_newscenter.php', 'News', '', 'no_title', '[TOP]', 0, 1, 0, '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
 $sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Center Banner', '', 'no_title', '[TOP]', 0, 1, 0, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );

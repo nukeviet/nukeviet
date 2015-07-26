@@ -6,6 +6,173 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+function inputSignIn(b) {
+	!1 === $("#tip .bsubmit").prop("disabled") && (13 != b.which || b.shiftKey || (b.preventDefault(), $("#tip .bsubmit").trigger("click")))
+}
+
+function buttonSignIn(b) {
+	var a = $("#tip " + b),
+		c = $("[name=blogin]", a),
+		g = $("[name=bpass]", a),
+		e = $("[name=bsec]", a),
+		h = $(".info", a),
+		d = $(".bsubmit", a).attr("data-errorMessage"),
+		k = $(".bsubmit", a).attr("data-loginOk");
+	a.find("input,button").each(function() {
+		$(this).val(trim(strip_tags($(this).val()))).prop("disabled", !0).parent().parent().removeClass("has-error")
+	});
+	$.ajax({
+		type: "POST",
+		cache: !1,
+		url: nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=login&nocache=" + (new Date).getTime(),
+		data: "nv_login=" + encodeURIComponent(c.val()) + "&nv_password=" + encodeURIComponent(g.val()) + (e ? "&nv_seccode=" + encodeURIComponent(e.val()) : "") + "&nv_ajax_login=1",
+		dataType: "json",
+		success: function(b) {
+			if (b.length) {
+				$("input", a).prop("disabled", !1);
+				setTimeout(function() {
+					$(".bsubmit", a).prop("disabled", !1)
+				}, 3E3);
+				change_captcha(".bsec");
+				var f = d + ":<ul>";
+				$.each(b, function(a, b) {
+					f += "<li>- " + b.value + "</li>";
+					"nv_login" == b.name ? c.parent().parent().addClass("has-error") : "nv_password" == b.name ? g.parent().parent().addClass("has-error") : "nv_seccode" == b.name && e.parent().parent().addClass("has-error")
+				});
+				f += "</ul>";
+				h.html(f).addClass("error")
+			} else a.find("input,button").parent().parent().removeClass("has-error").addClass("has-success"), h.html(k).removeClass("error").addClass("success"), setTimeout(function() {
+				window.location.href = window.location.href
+			}, 2E3)
+		}
+	});
+	return !1
+}
+
+function inputReg(b) {
+	!1 === $("#tip .brsubmit").prop("disabled") && (13 != b.which || b.shiftKey || (b.preventDefault(), $("#tip .brsubmit").trigger("click")))
+}
+
+function usageTermsShow()
+{
+    $.ajax({
+        type: 'POST',
+        cache: !0,
+        url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register',
+        data: 'get_usage_terms=1',
+        dataType: 'html',
+        success: function(e){
+            $('#bt_usage-terns').find('.modal-body .ct').html(e);
+            $('#bt_usage-terns').modal()
+        }
+    });
+    return!1
+}
+
+function addQuestion(b) {
+	$("#tip [name=bryq]").val($(b).text());
+	$("#tip .btql").attr("data-show", "no");
+	$("#tip .qlist").hide();
+	return !1
+}
+
+function showQlist() {
+	var b = $("#tip .qlist"),
+		a = b.html(),
+		c = $("#tip .btql");
+	"yes" == c.attr("data-show") ? (c.attr("data-show", "no"), b.hide()) : ("" == a && $.ajax({
+		type: "POST",
+		cache: !0,
+		url: nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=register",
+		data: "get_question=1",
+		dataType: "json",
+		success: function(a) {
+			var c = "<ul>";
+			$.each(a, function(a, b) {
+				0 != a && (c += '<li><a href="javascript:void(0);" onclick="addQuestion(this);">' + b.title + "</a></li>")
+			});
+			b.html(c)
+		}
+	}), c.attr("data-show", "yes"), b.show());
+	return !1
+}
+
+function buttonReg(b) {
+	var a = $("#tip " + b),
+		c = $(".info", a),
+		g = $(".brsubmit", a).attr("data-errorMessage"),
+		e = $(".brsubmit", a).attr("data-regOK");
+	a.find("input,button").each(function() {
+		$(this).val(trim(strip_tags($(this).val()))).prop("disabled", !0).parent().parent().removeClass("has-error")
+	});
+	$("#tip .btql").attr("data-show", "no");
+	$("#tip .qlist").hide();
+	b = {
+		first_name: $("[name=brfname]", a).val(),
+		last_name: $("[name=brlname]", a).val(),
+		email: $("[name=bremail]", a).val(),
+		username: $("[name=brlogin]", a).val(),
+		password: $("[name=brpass]", a).val(),
+		re_password: $("[name=brpass2]", a).val(),
+		your_question: $("[name=bryq]", a).val(),
+		answer: $("[name=brya]", a).val(),
+		nv_seccode: $("[name=brsec]", a).val(),
+		agreecheck: $("[name=bragr]", a).prop("checked") ? 1 : 0,
+		checkss: $("[name=checkss]", a).val(),
+		nv_ajax_register: 1
+	};
+	$.ajax({
+		type: "POST",
+		cache: !1,
+		url: nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=users&" + nv_fc_variable + "=register&nocache=" + (new Date).getTime(),
+		data: $.param(b),
+		dataType: "json",
+		success: function(b) {
+			if ("success" == b.status) a.find("input,button").parent().parent().removeClass("has-error").addClass("has-success"), c.html("" != b.message ? b.message : e).removeClass("error").addClass("success"), $(".inputs", a).hide(), $("html,body").animate({
+				scrollTop: 0
+			}, 800, function() {
+				setTimeout(function() {
+					$("#tip .guest-sign").trigger("click")
+				}, 1E4)
+			});
+			else {
+				$("input", a).prop("disabled", !1);
+				setTimeout(function() {
+					$(".brsubmit", a).prop("disabled", !1)
+				}, 3E3);
+				change_captcha(".brsec");
+				var d = g + ":<ul>";
+				b = b.error;
+				$.each(b, function(b, c) {
+					d += "<li>- " + c.value + "</li>";
+					"email" == c.name ? $("[name=bremail]", a).parent().parent().addClass("has-error") : "username" == c.name ? $("[name=brlogin]", a).parent().parent().addClass("has-error") : "password" == c.name ? $("[name=brpass]", a).parent().parent().addClass("has-error") : "re_password" == c.name ? $("[name=brpass2]", a).parent().parent().addClass("has-error") : "your_question" == c.name ? $("[name=bryq]", a).parent().parent().addClass("has-error") : "answer" == c.name ? $("[name=brya]", a).parent().parent().addClass("has-error") : "nv_seccode" == c.name ? $("[name=brsec]", a).parent().parent().addClass("has-error") : "agreecheck" == c.name && $("[name=bragr]", a).parent().parent().addClass("has-error")
+				});
+				d += "</ul>";
+				c.html(d).addClass("error")
+			}
+		}
+	});
+	return !1
+};
+
+function bt_logout(a){
+    $.ajax({
+        type: 'POST',
+        cache: !1,
+        url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=logout&nocache=' + new Date().getTime(),
+        data: 'nv_ajax_login=1',
+        dataType: 'html',
+        success: function(e){
+            $('#tip .userBlock').hide();
+            $('#tip .info').addClass("text-center success").html(e).show();
+            setTimeout(function() {
+				window.location.href = window.location.href
+			}, 2E3)
+        }
+    });
+    return!1
+}
+
 var UAV = {};
 
 // Default config, replace it with your own
@@ -459,10 +626,11 @@ UAV.init = function(){
 				type: 'POST',
 				cache: false,
 				url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(),
-				data: 'nv_login=' + encodeURIComponent($('#block_login_iavim').val()) + '&nv_password=' + encodeURIComponent($('#block_password_iavim').val()) + '&' + ( opts.isCaptchaLogin ? '&nv_seccode=' + encodeURIComponent($('#block_seccode_iavim').val()) : '' ) + '&nv_ajax_login=1',
+				data: 'nv_login=' + encodeURIComponent($('#block_login_iavim').val()) + '&nv_password=' + encodeURIComponent($('#block_password_iavim').val()) + ( opts.isCaptchaLogin ? '&nv_seccode=' + encodeURIComponent($('#block_seccode_iavim').val()) : '' ) + '&nv_ajax_login=1',
 				dataType: 'json',
 				success: function(e){
 					$this.removeAttr('disabled');
+                    change_captcha('#block_seccode_iavim');
 					if( e.length ){
 						$.each(e, function(k, v){
 							if( v.name == '' ){

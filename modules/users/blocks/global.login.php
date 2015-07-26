@@ -35,7 +35,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 	
 	// Call js file
 	$blockJs = file_exists( NV_ROOTDIR . '/themes/' . $block_theme . '/js/users.js' ) ? $block_theme : 'default';
-	$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . 'themes/' . $blockJs . '/js/users.js"></script>';
+	$my_head .= '<script src="' . NV_BASE_SITEURL . 'themes/' . $blockJs . '/js/users.js"></script>';
 
 	$xtpl = new XTemplate( 'block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users' );
 

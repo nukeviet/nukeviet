@@ -38,7 +38,7 @@ var nv_restoreTitle = "Click để đóng hình ảnh, Click và kéo để di c
 var nv_error_login = "Lỗi: Bạn chưa khai báo tài khoản hoặc khai báo không đúng. Tài khoản phải bao gồm những ký tự có trong bảng chữ cái latin, số và dấu gạch dưới. Số ký tự tối đa là [max], tối thiểu là [min]";
 var nv_error_password = "Lỗi: Bạn chưa khai báo mật khẩu hoặc khai báo không đúng. Mật khẩu phải bao gồm những ký tự có trong bảng chữ cái latin, số và dấu gạch dưới. Số ký tự tối đa là [max], tối thiểu là [min]";
 var nv_error_email = "Lỗi: Bạn chưa khai báo địa chỉ hộp thư điện tử hoặc khai báo không đúng quy định";
-var nv_error_seccode = "Lỗi: Bạn chưa khai báo mã chống spam hoặc khai báo không đúng. Mã chống spam phải là một dãy số có chiều dài là [num] ký tự được thể hiện trong hình bên";
+var nv_error_seccode = "Lỗi: Bạn chưa khai báo Mã bảo mật hoặc khai báo không đúng. Mã bảo mật phải là một dãy số có chiều dài là [num] ký tự được thể hiện trong hình bên";
 var nv_login_failed = "Lỗi: Vì một lý do nào đó, hệ thống không tiếp nhận tài khoản của bạn. Hãy thử khai báo lại lần nữa";
 var nv_content_failed = "Lỗi: Vì một lý do nào đó, hệ thống không tiếp nhận thông tin của bạn. Hãy thử khai báo lại lần nữa";
 
@@ -64,7 +64,7 @@ var nv_min = "Xin vui lòng nhập một giá trị lớn hơn hoặc bằng {0}
 var nv_fullname = "Họ tên nhập không hợp lệ.";
 var nv_title = "Bạn chưa nhập tiêu đề.";
 var nv_content = "Nội dung không được để trống.";
-var nv_code = "Mã chống spam không đúng.";
+var nv_code = "Mã bảo mật không đúng.";
 
 // Message before unload
 var nv_msgbeforeunload = "Dữ liệu chưa được lưu. Bạn sẽ bị mất dữ liệu nếu thoát khỏi trang này. Bạn có đồng ý thoát không?";
