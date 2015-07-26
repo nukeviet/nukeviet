@@ -8,16 +8,22 @@
 
 var nv_loading = '<div class="text-center"><em class="fa fa-spin fa-spinner fa-2x m-bottom wt-icon-loading"></em></div>';
 
+function start_tooltip(){
+	$('[data-toggle="tooltip"]').tooltip();
+}
+
 $(document).ready(function() {
-	$("#sysUpdRefresh").click(function() {
-		$("#sysUpd").html(nv_loading).load("index.php?" + nv_name_variable + "=webtools&" + nv_fc_variable + "=checkupdate&i=sysUpdRef&num=" + nv_randomPassword(10));
-		return false
-	})
-	$("#extUpdRefresh").click(function() {
-		$("#extUpd").html(nv_loading).load("index.php?" + nv_name_variable + "=webtools&" + nv_fc_variable + "=checkupdate&i=extUpdRef&num=" + nv_randomPassword(10));
-		return false
+	$("body").delegate( "#sysUpdRefresh", "click", function(){
+		$("#sysUpd").html(nv_loading).load("index.php?" + nv_name_variable + "=webtools&" + nv_fc_variable + "=checkupdate&i=sysUpdRef&num=" + nv_randomPassword(10), function(){
+			start_tooltip();
+		});
 	});
-	$(".ninfo").click(function() {
+	$("body").delegate( "#extUpdRefresh", "click", function(){
+		$("#extUpd").html(nv_loading).load("index.php?" + nv_name_variable + "=webtools&" + nv_fc_variable + "=checkupdate&i=extUpdRef&num=" + nv_randomPassword(10), function(){
+			start_tooltip();
+		});
+	});
+	$("body").delegate( ".ninfo", "click", function(){
 		$(".ninfo").each(function() {
 			$(this).show()
 		});
@@ -27,8 +33,7 @@ $(document).ready(function() {
 		$(this).hide().next(".wttooltip").show();
 		return false
 	});
-	$(".wttooltip").click(function() {
-		$(this).hide().prev(".ninfo").show()
+	$("body").delegate( ".wttooltip", "click", function(){
+		$(this).hide().prev(".ninfo").show();
 	});
-	$('[data-toggle="tooltip"]').tooltip();
 });
