@@ -14,7 +14,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-				<div id="company-map" style="width:100%;height:400px"></div>
+				<div id="company-map"></div>
             </div>
         </div>
     </div>
