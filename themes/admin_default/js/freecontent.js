@@ -193,17 +193,15 @@ $(document).ready(function(){
 		// Build/Rebuild editor
 		if( isEditor ){
 			var instance = CKEDITOR.instances[cfg.ctEditor];
-		    if( instance ){
-		        instance.destroy();
+		    if( ! instance ){
+				CKEDITOR.replace(cfg.ctEditor, {
+				    width: '100%',
+				    height: $(cfg.ctModal + ' [name="description"]').height() - 30,
+				    toolbar: [{ name: 'Tools', items: [ 'Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', '-', 'RemoveFormat', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'Source', '-', 'Maximize' ] }],
+					toolbarLocation: 'bottom',
+					removePlugins: 'elementspath,resize'
+				});
 		    }
-			CKEDITOR.replace(cfg.ctEditor, {
-			    width: '100%',
-			    height: $(cfg.ctModal + ' [name="description"]').height() - 30,
-			    toolbar: [{ name: 'Tools', items: [ 'Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', '-', 'RemoveFormat', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'Source', '-', 'Maximize' ] }],
-				toolbarLocation: 'bottom',
-				removePlugins: 'elementspath,resize'
-			});
-			
 		}
 		
 		// Add content: Clear editor
@@ -225,7 +223,7 @@ $(document).ready(function(){
 						$.each(e.data, function(k, v){
 							$this = $(cfg.ctModal + ' [name=' + k + ']');
 							var t = $this.prop('type');
-							
+
 							if( t == 'text' ){
 								$this.val(v);
 							}else if( t == 'checkbox' ){
