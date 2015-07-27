@@ -252,10 +252,13 @@ $(function() {
 	// Google map
 	if( $('#company-address').length ){
 		$('#company-map-modal').on('shown.bs.modal', function(){
-			var script = document.createElement('script');
-			script.type = 'text/javascript';
-			script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initializeMap';
-			document.body.appendChild(script);
+			if( ! $('#googleMapAPI').length ){
+				var script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.id = 'googleMapAPI';
+				script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initializeMap';
+				document.body.appendChild(script);
+			}
 		})
 	}
 });
