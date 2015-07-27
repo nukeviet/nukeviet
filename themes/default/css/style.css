@@ -830,6 +830,9 @@ a.btn {
 }
 
 /* Block Company info */
+.company_info a{
+	cursor: pointer;
+}
 .company_info li {
     display:table;
     clear:both;
