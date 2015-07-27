@@ -56,7 +56,7 @@ if ( $global_config['allowuserlogin'] )
             $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.jpg';
         }
         
-        $user_info['current_login_txt'] = nv_date( 'd F, H:i', $user_info['current_login'] );
+        $user_info['current_login_txt'] = nv_date( 'd/m, H:i', $user_info['current_login'] );
 
         $xtpl->assign( 'AVATA', $avata );
         $xtpl->assign( 'USER', $user_info );
