@@ -1,61 +1,189 @@
 <!-- BEGIN: main -->
 <div id="nv-block-login" class="text-center">
 	<em class="fa fa-sign-in">&nbsp;</em> <a href="{USER_LOGIN}" class="login">{LANG.loginsubmit}</a> 
-	<!-- BEGIN: allowuserreg -->
+	<!-- BEGIN: allowuserreg_link -->
 	<em class="fa fa-user-plus">&nbsp;</em> <a href="{USER_REGISTER}" class="register">{LANG.register}</a> 
-	<!-- END: allowuserreg -->
+	<!-- END: allowuserreg_link -->
 </div>
-<script type="text/javascript">
-$.fn.user.defaults = $.extend({}, $.fn.user.defaults, {
-	captchaW: {GFX_WIDTH},
-	captchaH: {GFX_HEIGHT},
-	captchaLen: {GFX_MAXLENGTH},
-	timeStamp: {NV_CURRENTTIME},
-	siteroot: nv_siteroot,
-	checkss: '{CHECKSESS}',
-	<!-- BEGIN: captcha_login -->isCaptchaLogin: true,<!-- END: captcha_login -->
-	<!-- BEGIN: captcha_reg -->isCaptchaReg: true,<!-- END: captcha_reg -->
-	<!-- BEGIN: allowuserreg1 -->allowreg: true,<!-- END: allowuserreg1 -->
-	lostpassLink: '{USER_LOSTPASS}',
-});
-$.fn.user.defaults.lang = $.extend({}, $.fn.user.defaults.lang, {
-	close: '{LANG.cancel}',
-	login: '{LANG.loginsubmit}',
-	loginSubmit: '{LANG.loginsubmit}',
-	securitycode: '{LANG.securitycode}',
-	username: '{LANG.username}',
-	password: '{LANG.password}',
-	lostpass: '{LANG.lostpass}',
-	<!-- BEGIN: allowuserreg2 -->
-	register: '{LANG.register}',
-	firstName: '{LANG.first_name}',
-	lastName: '{LANG.last_name}',
-	email: '{LANG.email}',
-	account: '{LANG.username}',
-	rePassword: '{LANG.password2}',
-	question: '{LANG.question}',
-	yourQuestion: '{LANG.your_question}',
-	answerYourQuestion: '{LANG.answer_your_question}',
-	inGroup: '{LANG.in_group}',
-	usageTerms: '{LANG.usage_terms}',
-	captcha: '{LANG.securitycode}',
-	accept: '{LANG.accept}',
-	<!-- END: allowuserreg2 -->
-	openidLogin: '{LANG.openid_login}'
-});
-<!-- BEGIN: openid -->
-$.fn.user.defaults.isOpenID = true;
-<!-- BEGIN: server -->
-$.fn.user.defaults.openIDSV.push({
-	title: '{OPENID.title}',
-	href: '{OPENID.href}',
-	imgSRC: '{OPENID.img_src}',
-	imgW: '{OPENID.img_width}',
-	imgH: '{OPENID.img_height}'
-});
-<!-- END: server -->
-<!-- END: openid -->
-</script>
+<!-- START FORFOOTER -->
+<div class="modal fade" id="loginModal">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="{LANG.cancel}"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title">{LANG.loginsubmit}</h4>
+	  </div>
+	  <div class="modal-body">
+		<div class="container-fluid">
+			<form action="" method="post" role="form" class="form-tooltip">
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
+						<input type="text" class="form-control" id="block_login_iavim" name="nv_login" value="" placeholder="{LANG.username}">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
+						<input type="password" class="form-control" id="block_password_iavim" name="nv_password" value="" placeholder="{LANG.password}">
+					</div>
+				</div>
+				<!-- BEGIN: captcha_login -->
+				<div class="form-group text-right">
+					<img class="captchaImg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}"/>
+					<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#block_seccode_iavim');"></em>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon"><em class="fa fa-shield fa-lg fa-fix"></em></span>
+						<input id="block_seccode_iavim" name="nv_seccode" type="text" class="form-control" maxlength="{GFX_MAXLENGTH}" placeholder="{LANG.securitycode}"/>
+					</div>
+				</div>
+				<!-- END: captcha_login -->
+				<div class="form-group">
+					<a class="pull-right" title="{LANG.lostpass}" href="{USER_LOSTPASS}">{LANG.lostpass}?</a>
+				</div>
+				<!-- BEGIN: openid -->
+				<div class="clearfix">
+					<hr />
+					<p class="text-center">
+						<i class="fa fa-openid"></i> {LANG.openid_login}
+					</p>
+					<div class="text-center">
+						<!-- BEGIN: server -->
+						<a title="{OPENID.title}" href="{OPENID.href}">
+					 		<img alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" data-toggle="tooltip" data-placement="top" title="{OPENID.title}"/>
+						</a>
+						<!-- END: server -->
+					</div>
+				</div>
+				<!-- END: openid -->
+			</form>
+		</div>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">{LANG.cancel}</button>
+		<button type="button" class="btn btn-primary" id="block-login-submit">{LANG.loginsubmit}</button>
+	  </div>
+	</div>
+  </div>
+</div>
+<!-- BEGIN: allowuserreg_html -->
+<div class="modal fade" id="registerModal">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="{LANG.cancel}"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title">{LANG.register}</h4>
+	  </div>
+	  <div class="modal-body">
+		<div class="container-fluid">
+			<form id="registerForm" action="" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
+				<div class="form-group">
+					<label for="first_name" class="col-sm-8 control-label">{LANG.first_name}:</label>
+					<div class="col-sm-16">
+						<input type="text" class="form-control" id="first_name" name="first_name" value="" maxlength="255" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="last_name" class="col-sm-8 control-label">{LANG.last_name}:</label>
+					<div class="col-sm-16">
+						<input type="text" class="form-control" id="last_name" name="last_name" value="" maxlength="255" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="nv_email_iavim" class="col-sm-8 control-label">{LANG.email}<span class="text-danger"> (*)</span>:</label>
+					<div class="col-sm-16">
+						<input type="email" class="email required form-control" name="email" value="" id="nv_email_iavim" maxlength="100" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="nv_username_iavim" class="col-sm-8 control-label">{LANG.username}<span class="text-danger"> (*)</span>:</label>
+					<div class="col-sm-16">
+						<input type="text" class="required form-control" name="username" value="" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="nv_password_iavim" class="col-sm-8 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
+					<div class="col-sm-16">
+						<input class="form-control required password" name="password" value="" id="nv_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="nv_re_password_iavim" class="col-sm-8 control-label">{LANG.password2}<span class="text-danger"> (*)</span>:</label>
+					<div class="col-sm-16">
+						<input class="form-control required password" name="re_password" value="" id="nv_re_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="question" class="col-sm-8 control-label">{LANG.question}:</label>
+					<div class="col-sm-16">
+						<select name="question" id="question" class="form-control"></select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="your_question" class="col-sm-8 control-label">{LANG.your_question}:</label>
+					<div class="col-sm-16">
+						<input type="text" class="form-control" name="your_question" id="your_question" value="" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="answer" class="col-sm-8 control-label">{LANG.answer_your_question}<span class="text-danger"> (*)</span>:</label>
+					<div class="col-sm-16">
+						<input type="text" class="form-control required" name="answer" id="answer" value="" />
+					</div>
+				</div>
+				<!-- BEGIN: captcha -->
+				<div class="form-group">
+					<label for="nv_seccode_iavim" class="col-sm-8 control-label">{LANG.securitycode}<span class="text-danger"> (*)</span>:</label>
+					<div class="col-sm-8">
+						<input type="text" name="nv_seccode" id="nv_seccode_iavim" class="required form-control" maxlength="{GFX_MAXLENGTH}" />
+					</div>
+					<div class="col-sm-8">
+						<label class="control-label">
+							<img class="captchaImg" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+							&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#nv_seccode_iavim');">&nbsp;</em>
+						</label>
+					</div>
+				</div>
+				<!-- END: captcha -->
+				<div class="form-group">
+					<label for="question" class="col-sm-8 control-label"><a id="show-usage-terns" href="">{LANG.usage_terms} <i class="fa fa-globe"></i></a>:</label>
+					<div class="col-sm-16">
+						<div class="checkbox">
+							<label>
+								<input class="required" type="checkbox" name="agreecheck" id="agreecheck" value="1"/>
+								{LANG.accept}
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+	  </div>
+	  <div class="modal-footer">
+		<input type="hidden" name="checkss" id="checkss" value="{CHECKSESS}" />
+		<i id="block-register-loading" class="fa fa-circle-o-notch fa-spin hidden"></i>
+		<button type="button" class="btn btn-default" data-dismiss="modal">{LANG.cancel}</button>
+		<button type="button" class="btn btn-primary" id="block-register-submit">{LANG.register}</button>
+	  </div>
+	</div>
+  </div>
+</div>
+<div id="usage-terns" class="modal fade nocontent">
+  <div class="modal-dialog">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title">{LANG.usage_terms}</h4>
+	  </div>
+	  <div class="modal-body">
+		<div class="text-center"><i class="fa fa-circle-o-notch fa-spin fa-3x"></i></div>
+	  </div>
+	</div>
+  </div>
+</div>
+<!-- END: allowuserreg_html -->
+<!-- END FORFOOTER -->
 <!-- END: main -->
 <!-- BEGIN: signed -->
 <div class="content signed clearfix">
