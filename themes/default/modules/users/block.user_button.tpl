@@ -20,14 +20,11 @@
             </div>
             <!-- BEGIN: captcha -->
         	<div class="form-group">
-                <div class="text-right margin-top margin-bottom">
-            		<img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}">
-            		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.bsec');">&nbsp;</em>
-            	</div>
-        		<div class="input-group">
-        			<span class="input-group-addon"><em class="fa fa-shield fa-lg fa-fix">&nbsp;</em></span>
-        			<input type="text" class="bsec required form-control" name="bsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputSignIn(event);">
-        		</div>
+                <div class="form-inline text-right">
+                    <img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}">
+              		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.bsec');">&nbsp;</em>
+            		<input type="text" class="bsec required form-control" name="bsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputSignIn(event);">
+                </div>
         	</div>
         	<!-- END: captcha -->
             <div class="text-center">
@@ -80,14 +77,12 @@
                 </div>
                 <!-- BEGIN: captcha_reg -->
                 <div class="form-group">
-                    <div class="text-right margin-bottom-sm">
-                		<img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" />
-                		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.brsec');">&nbsp;</em>
+                    <div class="form-inline text-right">
+                  		<img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" />
+                  		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.brsec');">&nbsp;</em>
+                		<span><input type="text" class="brsec required form-control" name="brsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputReg(event);" /></span>
                 	</div>
-                 </div>
-                <div class="form-group">
-            		<span><input type="text" class="brsec required form-control" name="brsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputReg(event);" /></span>
-            	</div>
+                </div>
                 <!-- END: captcha_reg -->
                 <div class="form-group">
                     <div class="checkbox text-right">
