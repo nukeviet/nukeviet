@@ -245,6 +245,25 @@ $(function() {
 		})
     }
 });
+
+// Fix bootstrap multiple modal
+$(document).on({
+	'show.bs.modal': function () {
+		var zIndex = 1040 + (10 * $('.modal:visible').length);
+		$(this).css('z-index', zIndex);
+		setTimeout(function() {
+			$('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+		}, 0);
+	},
+	'hidden.bs.modal': function() {
+		if ($('.modal:visible').length > 0) {
+			setTimeout(function() {
+				$(document.body).addClass('modal-open');
+			}, 0);
+		}
+	}
+}, '.modal');
+
 $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();
