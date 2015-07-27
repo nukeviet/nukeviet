@@ -140,6 +140,14 @@ function change_captcha(a) {
 	return !1
 };
 
+/*modalShow*/
+function modalShow(a, b) {
+	"" == a && (a = "&nbsp;");
+	$("#sitemodal").find(".modal-title").html(a);
+	$("#sitemodal").find(".modal-body").html(b);
+	$("#sitemodal").modal()
+}
+
 $(function() {
 	winResize();
 	fix_banner_center();
