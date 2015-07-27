@@ -19,13 +19,13 @@
 				<div class="form-group">
 					<div class="input-group">
 						<span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
-						<input type="text" class="form-control" id="block_login_iavim" name="nv_login" value="" placeholder="{LANG.username}">
+						<input type="text" class="form-control txt" id="block_login_iavim" name="nv_login" value="" placeholder="{LANG.username}">
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="input-group">
 						<span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-						<input type="password" class="form-control" id="block_password_iavim" name="nv_password" value="" placeholder="{LANG.password}">
+						<input type="password" class="form-control txt" id="block_password_iavim" name="nv_password" value="" placeholder="{LANG.password}">
 					</div>
 				</div>
 				<!-- BEGIN: captcha_login -->
@@ -36,7 +36,7 @@
 				<div class="form-group">
 					<div class="input-group">
 						<span class="input-group-addon"><em class="fa fa-shield fa-lg fa-fix"></em></span>
-						<input id="block_seccode_iavim" name="nv_seccode" type="text" class="form-control" maxlength="{GFX_MAXLENGTH}" placeholder="{LANG.securitycode}"/>
+						<input id="block_seccode_iavim" name="nv_seccode" type="text" class="form-control txt" maxlength="{GFX_MAXLENGTH}" placeholder="{LANG.securitycode}"/>
 					</div>
 				</div>
 				<!-- END: captcha_login -->

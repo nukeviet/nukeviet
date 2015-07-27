@@ -509,16 +509,18 @@ UAV.init = function(){
 		return this.each(function(){
 			$(this).find('.login').click(function(e){
 				e.preventDefault();
+				$('#loginModal .has-error').removeClass('has-error');
+				$('#loginModal .txt').val('').tooltip('destroy');
 				$('#loginModal').modal('toggle');
 			});
 			$(this).find('.register').click(function(e){
 				e.preventDefault();
-				$('#registerModal').modal('toggle');
 				$('#registerModal [type="text"]').val('');
 				$('#registerModal [type="email"]').val('');
 				$('#registerModal [type="password"]').val('');
-				$('#registerModal [type="checkbox"]').removeAttr('checked');
+				$('#registerModal [type="checkbox"]').prop('checked', false);
 				$('#registerModal select option').removeAttr('selected');
+				$('#registerModal').modal('toggle');
 			});
 		});
 	};
