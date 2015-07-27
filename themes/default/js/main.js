@@ -11,6 +11,8 @@ var myTimerPage = "",
 	myTimersecField = "",
 	tip_active = !1,
     ftip_active = !1,
+    tip_autoclose = !0,
+    ftip_autoclose = !0,
 	winX = 0,
 	winY = 0,
 	docX = 0,
@@ -66,17 +68,32 @@ function checkWidthMenu() {
 function tipHide() {
 	$("[data-toggle=tip]").attr("data-click", "y").removeClass("active");
     $("#tip").hide();
-    tip_active = !1
+    tip_active = !1;
+    tipAutoClose(!0)
 }
 
 function ftipHide() {
 	$("[data-toggle=ftip]").attr("data-click", "y").removeClass("active");
 	$("#ftip").hide();
-	ftip_active = !1
+	ftip_active = !1;
+    ftipAutoClose(!0)
+}
+
+function tipAutoClose(a)
+{
+    !0 != a && (a = !1);
+    tip_autoclose = a
+}
+
+function ftipAutoClose(a)
+{
+    !0 != a && (a = !1);
+    ftip_autoclose = a
 }
 
 function tipShow(a, b) {
     if ($(a).is(".pa")) switchTab(a + " .guest-sign");
+    tip_active && tipHide();
     ftip_active && ftipHide();
 	$("[data-toggle=tip]").removeClass("active");
 	$(a).attr("data-click", "n").addClass("active");
@@ -87,6 +104,7 @@ function tipShow(a, b) {
 function ftipShow(a, b) {
 	if ($(a).is(".qrcode") && "no" == $(a).attr("data-load")) return qrcodeLoad(a), !1;
 	tip_active && tipHide();
+    ftip_active && ftipHide();
 	$("[data-toggle=ftip]").removeClass("active");
 	$(a).attr("data-click", "n").addClass("active");
 	$("#ftip").attr("data-content", b).show("fast");
@@ -121,6 +139,14 @@ function change_captcha(a) {
 	$(a).val("");
 	return !1
 };
+
+/*modalShow*/
+function modalShow(a, b) {
+	"" == a && (a = "&nbsp;");
+	$("#sitemodal").find(".modal-title").html(a);
+	$("#sitemodal").find(".modal-body").html(b);
+	$("#sitemodal").modal()
+}
 
 $(function() {
 	winResize();
@@ -185,11 +211,11 @@ $(function() {
     	}, 500) : $(".header-nav").addClass("hidden-ss-block")
     });
     $(document).on("keydown", function(a) {
-    	27 === a.keyCode && (tip_active && tipHide(), ftip_active && ftipHide())
+    	27 === a.keyCode && (tip_active && tip_autoclose && tipHide(), ftip_active && ftip_autoclose && ftipHide())
     });
     $(document).on("click", function() {
-    	tip_active && tipHide();
-    	ftip_active && ftipHide()
+    	tip_active && tip_autoclose && tipHide();
+    	ftip_active && ftip_autoclose && ftipHide()
     });
     $("#tip, #ftip").on("click", function(a) {
     	a.stopPropagation()
@@ -227,11 +253,28 @@ $(function() {
 		})
     }
 });
+
+// Fix bootstrap multiple modal
+$(document).on({
+	'show.bs.modal': function () {
+		var zIndex = 1040 + (10 * $('.modal:visible').length);
+		$(this).css('z-index', zIndex);
+		setTimeout(function() {
+			$('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+		}, 0);
+	},
+	'hidden.bs.modal': function() {
+		if ($('.modal:visible').length > 0) {
+			setTimeout(function() {
+				$(document.body).addClass('modal-open');
+			}, 0);
+		}
+	}
+}, '.modal');
+
 $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();
 	tipHide();
     ftipHide()
 });
-
-

@@ -3,7 +3,7 @@
 <!-- START FORFOOTER -->
 <div id="guestBlock" class="hidden">
     <div class="guestBlock">
-        <h3><a href="#" onclick="switchTab(this)" class="guest-sign pointer margin-right current" data-switch=".log-area, .reg-area" data-obj=".guestBlock">{GLANG.signin}</a> <!-- BEGIN: allowuserreg2 --><a href="#" onclick="switchTab(this)" class="guest-reg pointer" data-switch=".reg-area, .log-area" data-obj=".guestBlock">{GLANG.register}</a> <!-- END: allowuserreg2 --></h3>
+        <h3><a href="#" onclick="switchTab(this);tipAutoClose(true);" class="guest-sign pointer margin-right current" data-switch=".log-area, .reg-area" data-obj=".guestBlock">{GLANG.signin}</a> <!-- BEGIN: allowuserreg2 --><a href="#" onclick="switchTab(this);tipAutoClose(false);" class="guest-reg pointer" data-switch=".reg-area, .log-area" data-obj=".guestBlock">{GLANG.register}</a> <!-- END: allowuserreg2 --></h3>
         <div class="log-area">
             <div class="info margin-bottom">{GLANG.logininfo}</div>
             <div class="form-group">
@@ -91,7 +91,7 @@
                 <!-- END: captcha_reg -->
                 <div class="form-group">
                     <div class="checkbox text-right">
-            		  <input type="checkbox" class="required " value="1" name="bragr">{LANG.accept2} <a href="#" onclick="usageTermsShow();"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
+            		  <input type="checkbox" class="required " value="1" name="bragr">{LANG.accept2} <a href="#" onclick="usageTermsShow('{LANG.usage_terms}');"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
                     </div>
                 </div>
                 <div class="text-center">
@@ -101,16 +101,6 @@
             </div>
         </div>
         <!-- END: allowuserreg -->
-    </div>
-</div>
-<div id="bt_usage-terns" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h3>{LANG.usage_terms}</h3>
-                <div class="ct well"></div>
-            </div>
-        </div>
     </div>
 </div>
 <!-- END FORFOOTER -->

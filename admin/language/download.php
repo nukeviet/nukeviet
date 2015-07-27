@@ -72,7 +72,27 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . se
 				$allowfolder[] = NV_ROOTDIR . '/js/language/' . $fjs;
 			}
 		}
+		
+		// Lang theme default
+		if( file_exists( NV_ROOTDIR . '/themes/default/language/' . $dirlang . '.php' ) )
+		{
+			$allowfolder[] = NV_ROOTDIR . '/themes/default/language/' . $dirlang . '.php';
+		}
+		if( file_exists( NV_ROOTDIR . '/themes/default/language/admin_' . $dirlang . '.php' ) )
+		{
+			$allowfolder[] = NV_ROOTDIR . '/themes/default/language/admin_' . $dirlang . '.php';
+		}		
 
+		// Lang theme mobile_default
+		if( file_exists( NV_ROOTDIR . '/themes/mobile_default/language/' . $dirlang . '.php' ) )
+		{
+			$allowfolder[] = NV_ROOTDIR . '/themes/mobile_default/language/' . $dirlang . '.php';
+		}
+		if( file_exists( NV_ROOTDIR . '/themes/mobile_default/language/admin_' . $dirlang . '.php' ) )
+		{
+			$allowfolder[] = NV_ROOTDIR . '/themes/mobile_default/language/admin_' . $dirlang . '.php';
+		}
+		
 		//package samples data
 		if( file_exists( NV_ROOTDIR . '/install/data_' . $dirlang . '.php' ) )
 		{
@@ -83,13 +103,7 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . se
 			$allowfolder[] = NV_ROOTDIR . '/js/install/data_en.php';
 		}
 
-		if( file_exists( NV_ROOTDIR . '/includes/phpmailer/language/phpmailer.lang-' . $dirlang . '.php' ) )
-		{
-			$allowfolder[] = NV_ROOTDIR . '/includes/phpmailer/language/phpmailer.lang-' . $dirlang . '.php';
-		}
-
 		$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $dirlang . '.zip';
-
 		if( file_exists( $file_src ) )
 		{
 			unlink( $file_src );

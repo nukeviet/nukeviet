@@ -53,7 +53,7 @@ function inputReg(b) {
 	!1 === $("#tip .brsubmit").prop("disabled") && (13 != b.which || b.shiftKey || (b.preventDefault(), $("#tip .brsubmit").trigger("click")))
 }
 
-function usageTermsShow()
+function usageTermsShow(t)
 {
     $.ajax({
         type: 'POST',
@@ -62,8 +62,7 @@ function usageTermsShow()
         data: 'get_usage_terms=1',
         dataType: 'html',
         success: function(e){
-            $('#bt_usage-terns').find('.modal-body .ct').html(e);
-            $('#bt_usage-terns').modal()
+            modalShow(t,e)
         }
     });
     return!1

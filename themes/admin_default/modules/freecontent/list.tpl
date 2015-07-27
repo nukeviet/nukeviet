@@ -11,19 +11,23 @@
 </div>
 <div class="clearfix" id="content-list-container">
 	<!-- BEGIN: loop -->
-	<div id="content-row-{ROW.id}">
-		<div class="clearfix">
-			<!-- BEGIN: image -->
-			<img src="{ROW.image}" alt="{ROW.title}" class="img-thumbnail w100 pull-left content-image">
-			<!-- END: image -->
-			<div class="pull-right">
-				<div class="btn-group">
-					<a title="{GLANG.edit}" class="btn btn-sm btn-default content-edit" data-id="{ROW.id}" href="#"><i class="fa fa-edit"></i></a>
-					<a title="{GLANG.delete}" class="btn btn-sm btn-default content-delete" data-id="{ROW.id}" data-title="{ROW.title}" href="#"><i class="fa fa-trash"></i></a>
-				</div>
+	<div id="content-row-{ROW.id}" class="content-list">
+		<div class="row">
+			<div class="col-lg-2 col-md-3 col-sm-4 col-xs-24">
+				<!-- BEGIN: image -->
+				<img src="{ROW.image}" alt="{ROW.title}" class="img-thumbnail w100 pull-left content-image">
+				<!-- END: image -->
 			</div>
-			<h3 class="content-title">{ROW.title}</h3>
-			{ROW.description}
+			<div class="col-lg-22 col-md-21 col-sm-20 col-xs-24">
+				<div class="pull-right">
+					<div class="btn-group">
+						<a title="{GLANG.edit}" class="btn btn-sm btn-default content-edit" data-id="{ROW.id}" href="#"><i class="fa fa-edit"></i></a>
+						<a title="{GLANG.delete}" class="btn btn-sm btn-default content-delete" data-id="{ROW.id}" data-title="{ROW.title}" href="#"><i class="fa fa-trash"></i></a>
+					</div>
+				</div>
+				<h3 class="content-title">{ROW.title}</h3>
+				{ROW.description}
+			</div>
 		</div>
 		<hr>
 	</div>

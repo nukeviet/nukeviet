@@ -11,6 +11,7 @@ $.fn.user.defaults = $.extend({}, $.fn.user.defaults, {
 	captchaH: {GFX_HEIGHT},
 	captchaLen: {GFX_MAXLENGTH},
 	timeStamp: {NV_CURRENTTIME},
+	siteroot: nv_siteroot,
 	checkss: '{CHECKSESS}',
 	<!-- BEGIN: captcha_login -->isCaptchaLogin: true,<!-- END: captcha_login -->
 	<!-- BEGIN: captcha_reg -->isCaptchaReg: true,<!-- END: captcha_reg -->
