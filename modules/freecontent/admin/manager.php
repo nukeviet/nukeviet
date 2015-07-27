@@ -199,6 +199,15 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 			if( $sth->rowCount() )
 			{
+				// Get next execute
+				$sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE end_time > 0 AND status = 1';
+				$result = $db->query( $sql );
+				$next_execute = intval( $result->fetchColumn() );
+				$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'" );
+				$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
+				$sth->bindParam( ':config_value', $next_execute, PDO::PARAM_STR );
+				$sth->execute();
+				
 				if( $data['id'] )
 				{
 					nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit Content', 'ID: ' . $data['id'], $admin_info['userid'] );
@@ -208,6 +217,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					nv_insert_logs( NV_LANG_DATA, $module_name, 'Add Content', $data['title'], $admin_info['userid'] );
 				}
 
+				nv_del_moduleCache( 'settings' );
 				nv_del_moduleCache( $module_name );
 				$message = $lang_module['save_success'];
 			}
