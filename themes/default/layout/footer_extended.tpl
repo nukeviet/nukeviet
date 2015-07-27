@@ -21,7 +21,7 @@
                                 [QR_CODE]
                             </div>
                             <div id="ftip" data-content="">
-                                <div class="bg bg-gradient"></div>
+                                <div class="bg"></div>
                             </div>
                         </div>
                         <div class="col-xs-24 col-sm-24 col-md-16">

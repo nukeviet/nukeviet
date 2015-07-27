@@ -18,23 +18,23 @@ if ( ! nv_function_exists( 'nv_copyright_info' ) )
 
         $html = '<tr>';
         $html .= '<td>' . $lang_global['copyright_by'] . '</td>';
-        $html .= '<td><input type="text" name="copyright_by" value="' . $data_block['copyright_by'] . '" size="80"></td>';
+        $html .= '<td><input type="text" name="copyright_by" value="' . nv_htmlspecialchars( $data_block['copyright_by'] ) . '" size="80"></td>';
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '<td>' . $lang_global['copyright_url'] . '</td>';
-        $html .= '<td><input type="text" name="copyright_url" value="' . $data_block['copyright_url'] . '" size="80"></td>';
+        $html .= '<td><input type="text" name="copyright_url" value="' . nv_htmlspecialchars( $data_block['copyright_url'] ) . '" size="80"></td>';
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '<td>' . $lang_global['design_by'] . '</td>';
-        $html .= '<td><input type="text" name="design_by" value="' . $data_block['design_by'] . '" size="80"></td>';
+        $html .= '<td><input type="text" name="design_by" value="' . nv_htmlspecialchars( $data_block['design_by'] ) . '" size="80"></td>';
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '<td>' . $lang_global['design_url'] . '</td>';
-        $html .= '<td><input type="text" name="design_url" value="' . $data_block['design_url'] . '" size="80"></td>';
+        $html .= '<td><input type="text" name="design_url" value="' . nv_htmlspecialchars( $data_block['design_url'] ) . '" size="80"></td>';
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '<td>' . $lang_global['siteterms_url'] . '</td>';
-        $html .= '<td><input type="text" name="siteterms_url" value="' . $data_block['siteterms_url'] . '" size="80"></td>';
+        $html .= '<td><input type="text" name="siteterms_url" value="' . nv_htmlspecialchars( $data_block['siteterms_url'] ) . '" size="80"></td>';
         $html .= '</tr>';
 
         return $html;

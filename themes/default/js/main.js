@@ -5,6 +5,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
+
 // NukeViet Default Custom JS
 var myTimerPage = "",
 	myTimersecField = "",
@@ -13,7 +14,8 @@ var myTimerPage = "",
 	winX = 0,
 	winY = 0,
 	docX = 0,
-	docY = 0;
+	docY = 0,
+	mapLoaded = 0;
 
 function winResize() {
 	winX = $(window).width();
@@ -74,6 +76,7 @@ function ftipHide() {
 }
 
 function tipShow(a, b) {
+    if ($(a).is(".pa")) switchTab(a + " .guest-sign");
     ftip_active && ftipHide();
 	$("[data-toggle=tip]").removeClass("active");
 	$(a).attr("data-click", "n").addClass("active");
@@ -109,8 +112,7 @@ function switchTab(a) {
 	$(c + " [data-switch]").removeClass("current");
 	$(a).addClass("current");
     $(c + " " + b[0]).removeClass("hidden");
-	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden");
-	return !1
+	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
 };
 
 /*Change Captcha*/
@@ -200,6 +202,30 @@ $(function() {
     	a != c ? ("" != c && $('[data-target="' + c + '"]').attr("data-click", "y"), "tip" == b ? ($("#tip .bg").html(d), tipShow(this, a)) : ($("#ftip .bg").html(d), ftipShow(this, a))) : "n" == $(this).attr("data-click") ? "tip" == b ? tipHide() : ftipHide() : "tip" == b ? tipShow(this, a) : ftipShow(this, a);
     	return !1
     });
+    
+    // Google map
+    if( $('#company-address').length ){
+		$('#company-map-modal').on('shown.bs.modal', function(){
+			var a, b, c;
+		    a = new google.maps.Map(document.getElementById("company-map"), {
+		        zoom: 14,
+		        mapTypeId: google.maps.MapTypeId.ROADMAP,
+		        disableDefaultUI: false
+		 	});
+			b = new google.maps.Geocoder();
+			b.geocode({ 'address': $('#company-address').text() }, function(results, status){
+			    if(status == google.maps.GeocoderStatus.OK){
+			        a.setCenter(results[0].geometry.location);
+			        var marker = new google.maps.Marker({
+			            map: a,
+			            position: results[0].geometry.location,
+				        draggable: false,
+				        animation: google.maps.Animation.DROP
+			        });
+			    }
+			});
+		})
+    }
 });
 $(window).on("resize", function() {
 	winResize();
@@ -207,3 +233,5 @@ $(window).on("resize", function() {
 	tipHide();
     ftipHide()
 });
+
+

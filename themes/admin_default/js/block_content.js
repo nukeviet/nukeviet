@@ -49,12 +49,15 @@ function file_name_change() {
 			"display" : "none"
 		});
 		if (module_type == "theme") {
-			var arr = arr_file[2].split(".");
-			for (var i = 0; i < arr.length; i++) {
-				$("#idmodule_" + arr[i]).css({
-					"display" : "block"
-				});
-			}
+			if("undefined" != typeof arr_file)
+            {
+                var arr = arr_file[2].split(".");
+    			for (var i = 0; i < arr.length; i++) {
+    				$("#idmodule_" + arr[i]).css({
+    					"display" : "block"
+    				});
+    			}
+            }
 		} else {
 			$("#idmodule_" + module_type).css({
 				"display" : "block"

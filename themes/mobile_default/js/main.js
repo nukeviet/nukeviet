@@ -18,9 +18,11 @@ $(document).ready(function(){
 	$('a[href="#"], a[href=""]').attr('href','javascript:void(0);');
 
 	// Smooth scroll to top
-	$('#totop').click(function(){
-		$('body').animate({scrollTop : 0}, 'slow');
-		return false;
+	$(".bttop").click(function() {
+		$("html,body").animate({
+			scrollTop: 0
+		}, 800);
+		return !1
 	});
 
 	$('#btn-search').click(function(){
@@ -44,7 +46,19 @@ $(document).ready(function(){
 		}
 	});
 	
-	$('#bttop').click(function(){
-		$('body,html').animate({scrollTop:0},800);
+	//Search form
+	$(".headerSearch button").on("click", function() {
+		if ("n" == $(this).attr("data-click")) return !1;
+		$(this).attr("data-click", "n");
+		var a = $(".headerSearch input"),
+			c = a.attr("maxlength"),
+			b = strip_tags(a.val()),
+			d = $(this).attr("data-minlength");
+		a.parent().removeClass("has-error");
+		"" == b || b.length < d || b.length > c ? (a.parent().addClass("has-error"), a.val(b).focus(), $(this).attr("data-click", "y")) : window.location.href = $(this).attr("data-url") + rawurlencode(b);
+		return !1
 	});
+	$(".headerSearch input").on("keypress", function(a) {
+		13 != a.which || a.shiftKey || (a.preventDefault(), $(".headerSearch button").trigger("click"))
+	});	
 });

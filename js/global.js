@@ -70,26 +70,6 @@ function nv_iChars_Remove(str) {
 	return str.replace(nv_specialchars, "");
 }
 
-function formatStringAsUriComponent(s) {
-
-	// replace html with whitespace
-	s = s.replace(/<\/?[^>]*>/gm, " ");
-
-	// remove entities
-	s = s.replace(/&[\w]+;/g, "");
-
-	// remove 'punctuation'
-	s = s.replace(/[\.\,\"\'\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\^\_\{\}\|\~]/g, "");
-
-	// replace multiple whitespace with single whitespace
-	s = s.replace(/\s{2,}/g, " ");
-
-	// trim whitespace at start and end of title
-	s = s.replace(/^\s+|\s+$/g, "");
-
-	return s;
-}
-
 function nv_setCookie(name, value, expiredays) {
 	if (expiredays) {
 		var exdate = new Date();
@@ -392,23 +372,6 @@ function nv_DigitalClock(div_id) {
 		}
 		setTimeout('nv_DigitalClock("' + div_id + '")', (60 - intSeconds ) * 1000);
 	}
-}
-
-function nv_search_submit(search_query, search_button, minlength, maxlength) {
-	var query = document.getElementById(search_query);
-	var format_query = strip_tags(query.value);
-	var allowed = (format_query != '' && format_query.length >= minlength && format_query.length <= maxlength) ? true : false;
-	if (!allowed) {
-		query.value = format_query;
-		messalert = nv_rangelength.replace('{0}', minlength);
-		messalert = messalert.replace('{1}', maxlength);
-		alert(messalert);
-	} else {
-		var sbutton = document.getElementById(search_button);
-		sbutton.disabled = true;
-		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=seek&q=' + rawurlencode(format_query);
-	}
-	return false;
 }
 
 function nv_show_hidden(div_id, st) {

@@ -53,14 +53,17 @@
 				</div>
                 <div class="headerSearch">
                     <div class="input-group">
-                        <input type="text" class="form-control" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" placeholder="{LANG.search}...">
-                        <span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{THEME_SEARCH_QUERY_MIN_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
+                        <input type="text" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}...">
+                        <span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
                     </div>
                 </div>
 			</div>
 		</nav>
         <nav class="header-nav">
             <div class="container">
+                <div class="personalArea">
+                [PERSONALAREA]
+                </div>
                 <div class="social-icons">
                 [SOCIAL_ICONS]
                 </div>
@@ -68,7 +71,7 @@
                 [CONTACT_DEFAULT]
                 </div>
                 <div id="tip" data-content="">
-                    <div class="bg bg-gradient"></div>
+                    <div class="bg"></div>
                 </div>
             </div>
         </nav>

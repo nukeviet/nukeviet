@@ -17,11 +17,11 @@ if( ! nv_function_exists( 'nv_block_counter_button' ) )
 	{
 		global $global_config, $db, $lang_global;
 
-		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/statistics/global.counter.tpl' ) )
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/statistics/global.counter_button.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'];
 		}
-		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/statistics/global.counter.tpl' ) )
+		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/statistics/global.counter_button.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
