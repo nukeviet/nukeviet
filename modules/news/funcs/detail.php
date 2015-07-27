@@ -81,7 +81,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 				if( ! empty( $src ) )
 				{
-					$meta_property['og:image'] = ( $news_contents['homeimgthumb'] == 1 ) ? NV_MY_DOMAIN . $news_contents['homeimgfile'] : NV_MY_DOMAIN . $src;
+					$meta_property['og:image'] = ( $news_contents['homeimgthumb'] == 1 ) ? NV_MY_DOMAIN . $news_contents['homeimgfile'] : $src;
 
 					if( $news_contents['imgposition'] > 0 )
 					{
