@@ -120,10 +120,19 @@
     		    	<li><a href="{URL_HREF}changequestion">{LANG.question2}</a></li>
     		    	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
     		    	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
-    		    	<li><a href="#" onclick="bt_logout(this);">{LANG.logout_title}</a></li>
     		    </ul>
     		</div>
     	</div>
+    </div>
+    <div class="tip-footer">
+        <div class="row">
+            <div class="col-xs-16 small">
+                <em class="button btn-sm fa fa-sign-in" title="{LANG.current_login}"></em>{USER.current_login_txt}
+            </div>
+            <div class="col-xs-8 text-right">
+                <button type="button" class="btn btn-default btn-sm active" onclick="bt_logout(this);"><em class="fa fa-sign-out"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
+            </div>
+        </div>
     </div>
 </div>
 <!-- END FORFOOTER -->
