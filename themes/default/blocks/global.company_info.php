@@ -64,25 +64,37 @@ if ( ! nv_function_exists( 'nv_company_info' ) )
 		$html .= '<div id="config_company_maparea">';
 		$html .= '<div id="config_company_mapcanvas" style="margin-top:10px;" class="form-group"></div>';
 		$html .= '<div class="row">';
-		$html .= '<div class="col-xs-5">';
+		$html .= '<div class="col-xs-4">';
+		$html .= '<div class="input-group">
+				  	<span class="input-group-addon">L</span>
+				  	<input type="text" class="form-control" name="company_address" id="config_company_mapcenterlat" value="' . $data_block['company_address'] . '" readonly="readonly">
+				  </div>';
+		$html .= '</div>';
+		$html .= '<div class="col-xs-4">';
+		$html .= '<div class="input-group">
+				  	<span class="input-group-addon">N</span>
+				  	<input type="text" class="form-control" name="company_address" id="config_company_mapcenterlng" value="' . $data_block['company_address'] . '" readonly="readonly">
+				  </div>';
+		$html .= '</div>';
+		$html .= '<div class="col-xs-4">';
 		$html .= '<div class="input-group">
 				  	<span class="input-group-addon">L</span>
 				  	<input type="text" class="form-control" name="company_address" id="config_company_maplat" value="' . $data_block['company_address'] . '" readonly="readonly">
 				  </div>';
 		$html .= '</div>';
-		$html .= '<div class="col-xs-5">';
+		$html .= '<div class="col-xs-4">';
 		$html .= '<div class="input-group">
 				  	<span class="input-group-addon">N</span>
 				  	<input type="text" class="form-control" name="company_address" id="config_company_maplng" value="' . $data_block['company_address'] . '" readonly="readonly">
 				  </div>';
 		$html .= '</div>';
-		$html .= '<div class="col-xs-5">';
+		$html .= '<div class="col-xs-3">';
 		$html .= '<div class="input-group">
 				  	<span class="input-group-addon">Z</span>
 				  	<input type="text" class="form-control" name="company_address" id="config_company_mapzoom" value="' . $data_block['company_address'] . '" readonly="readonly">
 				  </div>';
 		$html .= '</div>';
-		$html .= '<div class="col-xs-9">';
+		$html .= '<div class="col-xs-5">';
 		$html .= '<button class="btn btn-default" onclick="modalShow(\'' . $lang_block['cominfo_map_guide_title'] . '\',\'' . $lang_block['cominfo_map_guide_content'] . '\');return!1;">' . $lang_block['cominfo_map_guide_title'] . '</button>';
 		$html .= '</div>';
 		$html .= '</div>';
