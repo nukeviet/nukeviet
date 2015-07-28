@@ -16,8 +16,7 @@ var myTimerPage = "",
 	winX = 0,
 	winY = 0,
 	docX = 0,
-	docY = 0,
-	mapLoaded = 0;
+	docY = 0;
 
 function winResize() {
 	winX = $(window).width();
@@ -111,7 +110,7 @@ function ftipShow(a, b) {
 	ftip_active = !0
 };
 
-//QR-code
+// QR-code
 function qrcodeLoad(a) {
 	var b = new Image,
 		c = $(a).data("img");
@@ -122,7 +121,7 @@ function qrcodeLoad(a) {
 	b.src = nv_siteroot + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
 };
 
-//Switch tab*/
+// Switch tab
 function switchTab(a) {
 	if ($(a).is(".current")) return !1;
 	var b = $(a).data("switch").split(/\s*,\s*/),
@@ -133,12 +132,42 @@ function switchTab(a) {
 	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
 };
 
-/*Change Captcha*/
+// Change Captcha
 function change_captcha(a) {
     $("img.captchaImg").attr("src",nv_siteroot + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
 	$(a).val("");
 	return !1
 };
+
+// ModalShow
+function modalShow(a, b) {
+	"" == a && (a = "&nbsp;");
+	$("#sitemodal").find(".modal-title").html(a);
+	$("#sitemodal").find(".modal-body").html(b);
+	$("#sitemodal").modal()
+}
+
+// Build google map for block Company Info
+function initializeMap(){
+	var a, b, c;
+    a = new google.maps.Map(document.getElementById("company-map"), {
+        zoom: 14,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: false
+ 	});
+	b = new google.maps.Geocoder();
+	b.geocode({ 'address': $('#company-address').text() }, function(results, status){
+	    if(status == google.maps.GeocoderStatus.OK){
+	        a.setCenter(results[0].geometry.location);
+	        var marker = new google.maps.Marker({
+	            map: a,
+	            position: results[0].geometry.location,
+		        draggable: false,
+		        animation: google.maps.Animation.DROP
+	        });
+	    }
+	});	
+}
 
 $(function() {
 	winResize();
@@ -220,31 +249,38 @@ $(function() {
     	a != c ? ("" != c && $('[data-target="' + c + '"]').attr("data-click", "y"), "tip" == b ? ($("#tip .bg").html(d), tipShow(this, a)) : ($("#ftip .bg").html(d), ftipShow(this, a))) : "n" == $(this).attr("data-click") ? "tip" == b ? tipHide() : ftipHide() : "tip" == b ? tipShow(this, a) : ftipShow(this, a);
     	return !1
     });
-    
-    // Google map
-    if( $('#company-address').length ){
+	// Google map
+	if( $('#company-address').length ){
 		$('#company-map-modal').on('shown.bs.modal', function(){
-			var a, b, c;
-		    a = new google.maps.Map(document.getElementById("company-map"), {
-		        zoom: 14,
-		        mapTypeId: google.maps.MapTypeId.ROADMAP,
-		        disableDefaultUI: false
-		 	});
-			b = new google.maps.Geocoder();
-			b.geocode({ 'address': $('#company-address').text() }, function(results, status){
-			    if(status == google.maps.GeocoderStatus.OK){
-			        a.setCenter(results[0].geometry.location);
-			        var marker = new google.maps.Marker({
-			            map: a,
-			            position: results[0].geometry.location,
-				        draggable: false,
-				        animation: google.maps.Animation.DROP
-			        });
-			    }
-			});
+			if( ! $('#googleMapAPI').length ){
+				var script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.id = 'googleMapAPI';
+				script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initializeMap';
+				document.body.appendChild(script);
+			}
 		})
-    }
+	}
 });
+
+// Fix bootstrap multiple modal
+$(document).on({
+	'show.bs.modal': function () {
+		var zIndex = 1040 + (10 * $('.modal:visible').length);
+		$(this).css('z-index', zIndex);
+		setTimeout(function() {
+			$('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+		}, 0);
+	},
+	'hidden.bs.modal': function() {
+		if ($('.modal:visible').length > 0) {
+			setTimeout(function() {
+				$(document.body).addClass('modal-open');
+			}, 0);
+		}
+	}
+}, '.modal');
+
 $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();

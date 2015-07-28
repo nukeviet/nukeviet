@@ -53,7 +53,7 @@
 			<div id="login-content">
 				<h3>{LOGIN_TITLE}</h3>
 				<div class="inner-message">{LOGIN_INFO}</div>
-				<form class="loginform" method="post" action="{NV_BASE_ADMINURL}index.php" onsubmit="return nv_checkadminlogin_submit();">
+				<form class="loginform form-horizontal" method="post" action="{NV_BASE_ADMINURL}index.php" onsubmit="return nv_checkadminlogin_submit();">
 					<!-- BEGIN: lang_multi -->
 					<p class="muti-lang form-inline">
 						<label for="langinterface">{LANGTITLE}:</label>
@@ -75,9 +75,19 @@
 					<!-- BEGIN: captcha -->
 					<p>
 						<label for="nv_seccode">{N_CAPTCHA}:</label>
-						<input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" class="captcha"/>
-						<img id="vimg" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-						<em class="fa fa-refresh fa-lg icon-pointer" onclick="nv_change_captcha();">&nbsp;</em>
+						<div class="row">
+							<div class="col-xs-11">
+								<input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" class="form-control captcha"/>
+							</div>
+							<div class="col-xs-11">
+								<label class="control-label">
+									<img id="vimg" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+								</label>
+							</div>
+							<div class="col-xs-2">
+								<em class="fa fa-refresh fa-lg icon-pointer" onclick="nv_change_captcha();">&nbsp;</em>
+							</div>
+						</div>
 					</p>
 					<!-- END: captcha -->
 					<div id="smb">

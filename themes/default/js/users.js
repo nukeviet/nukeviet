@@ -53,7 +53,7 @@ function inputReg(b) {
 	!1 === $("#tip .brsubmit").prop("disabled") && (13 != b.which || b.shiftKey || (b.preventDefault(), $("#tip .brsubmit").trigger("click")))
 }
 
-function usageTermsShow()
+function usageTermsShow(t)
 {
     $.ajax({
         type: 'POST',
@@ -62,8 +62,7 @@ function usageTermsShow()
         data: 'get_usage_terms=1',
         dataType: 'html',
         success: function(e){
-            $('#bt_usage-terns').find('.modal-body .ct').html(e);
-            $('#bt_usage-terns').modal()
+            modalShow(t,e)
         }
     });
     return!1
@@ -372,252 +371,56 @@ UAV.init = function(){
 	$.fn.user = function( options ){
 		var opts = $.extend( {}, $.fn.user.defaults, options );
 		var ajaxLoaded = false;
-		var openID = "";
 		
-		if( opts.isOpenID && opts.openIDSV.length ){
-			for( i = 0, j = opts.openIDSV.length; i < j; i ++ ){
-				openID += "\
-					<a title=\"" + opts.openIDSV[i].title + "\" href=\"" + opts.openIDSV[i].href + "\">\
-				 		<img alt=\"" + opts.openIDSV[i].title + "\" src=\"" + opts.openIDSV[i].imgSRC + "\" width=\"" + opts.openIDSV[i].imgW + "\" height=\"" + opts.openIDSV[i].imgH + "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"" + opts.openIDSV[i].title + "\"/>\
-					</a>\
-				";
+		$('#registerModal').on('show.bs.modal', function(e){
+			if( ! ajaxLoaded ){
+				$('#block-register-submit').attr('disabled', 'disabled');
+				$('#block-register-loading').removeClass('hidden');
+				
+				$.ajax({
+					type: 'POST',
+					cache: true,
+					url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register&nocache=' + new Date().getTime(),
+					data: 'get_question=1',
+					dataType: 'json',
+					success: function(e){
+						var html = '';
+						$.each(e, function(k, v){
+							html += '<option value="' + v.qid + '"' + v.selected + '>' + v.title + '</option>';
+						});
+						$('select#question').html(html);
+						ajaxLoaded = true;
+						$('#block-register-loading').addClass('hidden');
+						$('#block-register-submit').removeAttr('disabled');
+					}
+				});
 			}
-		}
-		
-	    opts.loginHTML = "\
-		<div class=\"modal fade\" id=\"loginModal\"> \
-		  <div class=\"modal-dialog\">\
-		    <div class=\"modal-content\">\
-		      <div class=\"modal-header\">\
-		        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"" + opts.lang.close + "\"><span aria-hidden=\"true\">&times;</span></button>\
-		        <h4 class=\"modal-title\">" + opts.lang.login + "</h4>\
-		      </div>\
-		      <div class=\"modal-body\">\
-		      	<div class=\"container-fluid\">\
-					<form action=\"\" method=\"post\" role=\"form\" class=\"form-tooltip\">\
-						<div class=\"form-group\">\
-							<div class=\"input-group\">\
-								<span class=\"input-group-addon\"><em class=\"fa fa-user fa-lg\"></em></span>\
-								<input type=\"text\" class=\"form-control\" id=\"block_login_iavim\" name=\"nv_login\" value=\"\" placeholder=\"" + opts.lang.username + "\">\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<div class=\"input-group\">\
-								<span class=\"input-group-addon\"><em class=\"fa fa-key fa-lg fa-fix\"></em></span>\
-								<input type=\"password\" class=\"form-control\" id=\"block_password_iavim\" name=\"nv_password\" value=\"\" placeholder=\"" + opts.lang.password + "\">\
-							</div>\
-						</div>\
-						" + ( opts.isCaptchaLogin ?
-						"<div class=\"form-group text-right\">\
-							<img class=\"captchaImg\" src=\"" + opts.siteroot + "index.php?scaptcha=captcha&t=" + opts.timeStamp + "\" width=\"" + opts.captchaW + "\" height=\"" + opts.captchaH + "\"/>\
-							<em class=\"fa fa-pointer fa-refresh fa-lg\" onclick=\"change_captcha('#block_seccode_iavim');\"></em>\
-						</div>\
-						<div class=\"form-group\">\
-							<div class=\"input-group\">\
-								<span class=\"input-group-addon\"><em class=\"fa fa-shield fa-lg fa-fix\"></em></span>\
-								<input id=\"block_seccode_iavim\" name=\"nv_seccode\" type=\"text\" class=\"form-control\" maxlength=\"" + opts.captchaLen + "\" placeholder=\"" + opts.lang.securitycode + "\"/>\
-							</div>\
-						</div>" : "" ) + "\
-						<div class=\"form-group\">\
-							<a class=\"pull-right\" title=\"" + opts.lang.lostpass + "\" href=\"" + opts.lostpassLink + "\">" + opts.lang.lostpass + "?</a>\
-						</div>\
-						" + ( opts.isOpenID ? "\
-						<div class=\"clearfix\">\
-							<hr />\
-							<p class=\"text-center\">\
-						 		<i class=\"fa fa-openid\"></i> " + opts.lang.openidLogin + "\
-							</p>\
-							<div class=\"text-center\">\
-								" + openID + "\
-							</div>\
-						</div>" : "" ) + "\
-						<!-- END: openid -->\
-					</form>\
-		      	</div>\
-		      </div>\
-		      <div class=\"modal-footer\">\
-		        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">" + opts.lang.close + "</button>\
-		        <button type=\"button\" class=\"btn btn-primary\" id=\"block-login-submit\">" + opts.lang.loginSubmit + "</button>\
-		      </div>\
-		    </div>\
-		  </div>\
-		</div>";
-
-	    opts.registerHTML = "\
-		<div class=\"modal fade\" id=\"registerModal\"> \
-		  <div class=\"modal-dialog\">\
-		    <div class=\"modal-content\">\
-		      <div class=\"modal-header\">\
-		        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"" + opts.lang.close + "\"><span aria-hidden=\"true\">&times;</span></button>\
-		        <h4 class=\"modal-title\">" + opts.lang.register + "</h4>\
-		      </div>\
-		      <div class=\"modal-body\">\
-		      	<div class=\"container-fluid\">\
-		      		<form id=\"registerForm\" action=\"\" method=\"post\" role=\"form\" class=\"form-horizontal form-tooltip m-bottom\">\
-						<div class=\"form-group\">\
-							<label for=\"first_name\" class=\"col-sm-8 control-label\">" + opts.lang.firstName + ":</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"text\" class=\"form-control\" id=\"first_name\" name=\"first_name\" value=\"\" maxlength=\"255\" />\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-					        <label for=\"last_name\" class=\"col-sm-8 control-label\">" + opts.lang.lastName + ":</label>\
-					        <div class=\"col-sm-16\">\
-					            <input type=\"text\" class=\"form-control\" id=\"last_name\" name=\"last_name\" value=\"\" maxlength=\"255\" />\
-					        </div>\
-					    </div>\
-						<div class=\"form-group\">\
-							<label for=\"nv_email_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.email + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"email\" class=\"email required form-control\" name=\"email\" value=\"\" id=\"nv_email_iavim\" maxlength=\"100\" />\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"nv_username_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.account + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"text\" class=\"required form-control\" name=\"username\" value=\"\" id=\"nv_username_iavim\" maxlength=\"{NICK_MAXLENGTH}\" />\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"nv_password_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.password + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input class=\"form-control required password\" name=\"password\" value=\"\" id=\"nv_password_iavim\" type=\"password\" maxlength=\"{PASS_MAXLENGTH}\" autocomplete=\"off\"/>\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"nv_re_password_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.rePassword + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input class=\"form-control required password\" name=\"re_password\" value=\"\" id=\"nv_re_password_iavim\" type=\"password\" maxlength=\"{PASS_MAXLENGTH}\" autocomplete=\"off\"/>\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"question\" class=\"col-sm-8 control-label\">" + opts.lang.question + ":</label>\
-							<div class=\"col-sm-16\">\
-								<select name=\"question\" id=\"question\" class=\"form-control\"></select>\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"your_question\" class=\"col-sm-8 control-label\">" + opts.lang.yourQuestion + ":</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"text\" class=\"form-control\" name=\"your_question\" id=\"your_question\" value=\"\" />\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"answer\" class=\"col-sm-8 control-label\">" + opts.lang.answerYourQuestion + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"text\" class=\"form-control required\" name=\"answer\" id=\"answer\" value=\"\" />\
-							</div>\
-						</div>\
-						" + ( opts.isCaptchaReg ? "\
-						<div class=\"form-group\">\
-							<label for=\"nv_seccode_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.captcha + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-8\">\
-								<input type=\"text\" name=\"nv_seccode\" id=\"nv_seccode_iavim\" class=\"required form-control\" maxlength=\"" + opts.captchaLen + "\" />\
-							</div>\
-							<div class=\"col-sm-8\">\
-								<label class=\"control-label\">\
-									<img class=\"captchaImg\" src=\"" + opts.siteroot + "index.php?scaptcha=captcha&t=" + opts.timeStamp + "\" width=\"" + opts.captchaW + "\" height=\"" + opts.captchaH + "\" />\
-									&nbsp;<em class=\"fa fa-pointer fa-refresh fa-lg\" onclick=\"change_captcha('#nv_seccode_iavim');\">&nbsp;</em>\
-								</label>\
-							</div>\
-						</div>\
-						" : "" ) + "\
-						<div class=\"form-group\">\
-							<label for=\"question\" class=\"col-sm-8 control-label\"><a id=\"show-usage-terns\" href=\"\">" + opts.lang.usageTerms + " <i class=\"fa fa-globe\"></i></a>:</label>\
-							<div class=\"col-sm-16\">\
-								<div class=\"checkbox\">\
-									<label>\
-										<input class=\"required\" type=\"checkbox\" name=\"agreecheck\" id=\"agreecheck\" value=\"1\"/>\
-										" + opts.lang.accept + "\
-									</label>\
-								</div>\
-							</div>\
-						</div>\
-		      		</div>\
-		      </div>\
-		      <div class=\"modal-footer\">\
-		      	<input type=\"hidden\" name=\"checkss\" id=\"checkss\" value=\"" + opts.checkss + "\" />\
-		      	<i id=\"block-register-loading\" class=\"fa fa-circle-o-notch fa-spin hidden\"></i>\
-		        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">" + opts.lang.close + "</button>\
-		        <button type=\"button\" class=\"btn btn-primary\" id=\"block-register-submit\">" + opts.lang.register + "</button>\
-		      </div>\
-		    </div>\
-		  </div>\
-		</div>";
-		
-		// Render html
-		if(this.length){
-			$('body').append(opts.loginHTML);
 			
-			if( opts.allowreg ){
-				$('body').append(opts.registerHTML);
+			$('#agreecheck').attr('disabled', 'disabled');
+		});
+		
+		$('#show-usage-terns').click(function(e){
+			e.preventDefault();
+			
+			if( ! $('#usage-terns').is('.nocontent') ){
+				$('#usage-terns').modal('toggle');
+				$('#agreecheck').removeAttr('disabled');
+			}else{
+				$('#usage-terns').modal('toggle');
 				
-				$('#registerModal').on('show.bs.modal', function(e){
-					if( ! ajaxLoaded ){
-						$('#block-register-submit').attr('disabled', 'disabled');
-						$('#block-register-loading').removeClass('hidden');
-						
-						$.ajax({
-							type: 'POST',
-							cache: true,
-							url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register&nocache=' + new Date().getTime(),
-							data: 'get_question=1',
-							dataType: 'json',
-							success: function(e){
-								var html = '';
-								$.each(e, function(k, v){
-									html += '<option value="' + v.qid + '"' + v.selected + '>' + v.title + '</option>';
-								});
-								$('select#question').html(html);
-								ajaxLoaded = true;
-								$('#block-register-loading').addClass('hidden');
-								$('#block-register-submit').removeAttr('disabled');
-							}
-						});
-					}
-					
-					$('#agreecheck').attr('disabled', 'disabled');
-				});
-				
-				$('#show-usage-terns').click(function(e){
-					e.preventDefault();
-					
-					if( $('#usage-terns').length ){
-						$('#usage-terns').modal('toggle');
+				$.ajax({
+					type: 'POST',
+					cache: true,
+					url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register&nocache=' + new Date().getTime(),
+					data: 'get_usage_terms=1',
+					dataType: 'html',
+					success: function(e){
+						$('#usage-terns').removeClass('nocontent').find('.modal-body').html(e);
 						$('#agreecheck').removeAttr('disabled');
-					}else{
-						$('body').append(
-							"<div id=\"usage-terns\" class=\"modal fade\">\
-							  <div class=\"modal-dialog\">\
-							    <div class=\"modal-content\">\
-							      <div class=\"modal-header\">\
-							        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
-							        <h4 class=\"modal-title\">" + opts.lang.usageTerms + "</h4>\
-							      </div>\
-							      <div class=\"modal-body\">\
-							        <div class=\"text-center\"><i class=\"fa fa-circle-o-notch fa-spin fa-3x\"></i></div>\
-							      </div>\
-							    </div>\
-							  </div>\
-							</div>"
-						);
-						$('#usage-terns').modal('toggle');
-						
-						$.ajax({
-							type: 'POST',
-							cache: true,
-							url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register&nocache=' + new Date().getTime(),
-							data: 'get_usage_terms=1',
-							dataType: 'html',
-							success: function(e){
-								$('#usage-terns').find('.modal-body').html(e);
-								$('#agreecheck').removeAttr('disabled');
-							}
-						});
 					}
 				});
 			}
-		}
+		});
 		
 		$('#block-login-submit').click(function(){
 			$this = $(this);
@@ -626,7 +429,7 @@ UAV.init = function(){
 				type: 'POST',
 				cache: false,
 				url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(),
-				data: 'nv_login=' + encodeURIComponent($('#block_login_iavim').val()) + '&nv_password=' + encodeURIComponent($('#block_password_iavim').val()) + ( opts.isCaptchaLogin ? '&nv_seccode=' + encodeURIComponent($('#block_seccode_iavim').val()) : '' ) + '&nv_ajax_login=1',
+				data: 'nv_login=' + encodeURIComponent($('#block_login_iavim').val()) + '&nv_password=' + encodeURIComponent($('#block_password_iavim').val()) + '&nv_seccode=' + encodeURIComponent( $('#block_seccode_iavim').length ? $('#block_seccode_iavim').val() : '' ) + '&nv_ajax_login=1',
 				dataType: 'json',
 				success: function(e){
 					$this.removeAttr('disabled');
@@ -706,16 +509,18 @@ UAV.init = function(){
 		return this.each(function(){
 			$(this).find('.login').click(function(e){
 				e.preventDefault();
+				$('#loginModal .has-error').removeClass('has-error');
+				$('#loginModal .txt').val('').tooltip('destroy');
 				$('#loginModal').modal('toggle');
 			});
 			$(this).find('.register').click(function(e){
 				e.preventDefault();
-				$('#registerModal').modal('toggle');
 				$('#registerModal [type="text"]').val('');
 				$('#registerModal [type="email"]').val('');
 				$('#registerModal [type="password"]').val('');
-				$('#registerModal [type="checkbox"]').removeAttr('checked');
+				$('#registerModal [type="checkbox"]').prop('checked', false);
 				$('#registerModal select option').removeAttr('selected');
+				$('#registerModal').modal('toggle');
 			});
 		});
 	};
@@ -729,41 +534,6 @@ UAV.init = function(){
 }(jQuery));
 
 $.fn.user.defaults = {
-	isCaptchaLogin: false,
-	isCaptchaReg: false,
-	captchaW: 120,
-	captchaH: 25,
-	captchaLen: 6,
-	timeStamp: 0,
-	siteroot: "/",
-	lostpassLink: "/",
-	isOpenID: false,
-	openIDSV: new Array(),
-	allowreg: false,
-	checkss: "",
-	lang: {
-		close: "Close",
-		login: "Login",
-		loginSubmit: "Login",
-		username: "Username",
-		password: "Password",
-		securitycode: "Security code",
-		lostpass: "Lost password",
-		openidLogin: "Openid login",
-		register: "Register",
-		firstName: "First name",
-		lastName: "Last name",
-		email: "Email",
-		account: "Account",
-		rePassword: "Repeat password",
-		question: "Question",
-		yourQuestion: "Your question",
-		answerYourQuestion: "Answer your question",
-		inGroup: "Group",
-		usageTerms: "Usage terms",
-		captcha: "Captcha",
-		accept: "Accept"
-	},
     loginComplete: function(res, opts){
     	window.location.href = window.location.href;
     },

@@ -18,48 +18,48 @@ if ( ! nv_function_exists( 'nv_company_info' ) )
 
 		$html = '<tr>';
 		$html .= '<td>' . $lang_global['company_name'] . '</td>';
-		$html .= '<td><input type="text" name="company_name" value="' . $data_block['company_name'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_name" value="' . $data_block['company_name'] . '"></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_sortname'] . '</td>';
-		$html .= '<td><input type="text" name="company_sortname" value="' . $data_block['company_sortname'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_sortname" value="' . $data_block['company_sortname'] . '"></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_regcode'] . '</td>';
-		$html .= '<td><input type="text" name="company_regcode" value="' . $data_block['company_regcode'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_regcode" value="' . $data_block['company_regcode'] . '"></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_regplace'] . '</td>';
-		$html .= '<td><input type="text" name="company_regplace" value="' . $data_block['company_regplace'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_regplace" value="' . $data_block['company_regplace'] . '"></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_licensenumber'] . '</td>';
-		$html .= '<td><input type="text" name="company_licensenumber" value="' . $data_block['company_licensenumber'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_licensenumber" value="' . $data_block['company_licensenumber'] . '"></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_responsibility'] . '</td>';
-		$html .= '<td><input type="text" name="company_responsibility" value="' . $data_block['company_responsibility'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_responsibility" value="' . $data_block['company_responsibility'] . '"></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_address'] . '</td>';
-		$html .= '<td><input type="text" name="company_address" value="' . $data_block['company_address'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_address" value="' . $data_block['company_address'] . '"></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_phone'] . '</td>';
-		$html .= '<td><input type="text" name="company_phone" value="' . $data_block['company_phone'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_phone" value="' . $data_block['company_phone'] . '"><button onclick="modalShow(\'' . $lang_global['phone_note_title'] . '\',\'' . $lang_global['phone_note_content'] . '\');return!1;">' . $lang_global['phone_note_title'] . '</button></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_fax'] . '</td>';
-		$html .= '<td><input type="text" name="company_fax" value="' . $data_block['company_fax'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_fax" value="' . $data_block['company_fax'] . '"></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_email'] . '</td>';
-		$html .= '<td><input type="text" name="company_email" value="' . $data_block['company_email'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_email" value="' . $data_block['company_email'] . '"><span>' . $lang_global['multi_note'] . '</span></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '<td>' . $lang_global['company_website'] . '</td>';
-		$html .= '<td><input type="text" name="company_website" value="' . $data_block['company_website'] . '" size="80"></td>';
+		$html .= '<td><input type="text" class="form-control" name="company_website" value="' . $data_block['company_website'] . '"><span>' . $lang_global['multi_note'] . '</span></td>';
 		$html .= '</tr>';
 
 		return $html;
@@ -93,7 +93,7 @@ if ( ! nv_function_exists( 'nv_company_info' ) )
 	 */
 	function nv_company_info( $block_config )
 	{
-		global $global_config, $lang_global, $my_head;
+		global $global_config, $lang_global;
 
 		if ( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.company_info.tpl' ) )
 		{
@@ -153,26 +153,59 @@ if ( ! nv_function_exists( 'nv_company_info' ) )
 
 		if ( ! empty( $block_config['company_address'] ) )
 		{
-			$my_head .= "<script type=\"text/javascript\" src=\"http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false\"></script>" . NV_EOL;
 			$xtpl->parse( 'main.company_address' );
 			$xtpl->parse( 'main.company_address1' );
 		}
 		if ( ! empty( $block_config['company_phone'] ) )
-		{
-			$xtpl->parse( 'main.company_phone' );
-		}
+        {
+            $nums = array_map( "trim", explode( "|", $block_config['company_phone'] ) );
+            foreach ( $nums as $k => $num )
+            {
+                unset( $m );
+                if ( preg_match( "/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m ) )
+                {
+                    $xtpl->assign( 'PHONE', array( 'number' => $m[1], 'href' => $m[2] ) );
+                    $xtpl->parse( 'main.company_phone.item.href' );
+                    $xtpl->parse( 'main.company_phone.item.href2' );
+                }
+                else
+                {
+                    $num = preg_replace( "/\[[^\]]*\]/", "", $num );
+                    $xtpl->assign( 'PHONE', array( 'number' => $num ) );
+                }
+                if ( $k ) $xtpl->parse( 'main.company_phone.item.comma' );
+                $xtpl->parse( 'main.company_phone.item' );
+            }
+
+            $xtpl->parse( 'main.company_phone' );
+        }
 		if ( ! empty( $block_config['company_fax'] ) )
 		{
 			$xtpl->parse( 'main.company_fax' );
 		}
 		if ( ! empty( $block_config['company_email'] ) )
-		{
-			$xtpl->parse( 'main.company_email' );
-		}
+        {
+            $emails = array_map( "trim", explode( ",", $block_config['company_email'] ) );
+            foreach ( $emails as $k => $email )
+            {
+                $xtpl->assign( 'EMAIL', $email );
+                if ( $k ) $xtpl->parse( 'main.company_email.item.comma' );
+                $xtpl->parse( 'main.company_email.item' );
+            }
+            $xtpl->parse( 'main.company_email' );
+        }
 		if ( ! empty( $block_config['company_website'] ) )
-		{
-			$xtpl->parse( 'main.company_website' );
-		}
+        {
+            $webs = array_map( "trim", explode( ",", $block_config['company_website'] ) );
+            foreach ( $webs as $k => $web )
+            {
+                if ( ! preg_match( "/^http\:\/\//", $web ) ) $web = "http://" . $web;
+                $xtpl->assign( 'WEBSITE', $web );
+                if ( $k ) $xtpl->parse( 'main.company_website.item.comma' );
+                $xtpl->parse( 'main.company_website.item' );
+            }
+            $xtpl->parse( 'main.company_website' );
+        }
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}

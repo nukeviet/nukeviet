@@ -20,14 +20,11 @@
             </div>
             <!-- BEGIN: captcha -->
         	<div class="form-group">
-                <div class="text-right margin-top margin-bottom">
-            		<img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}">
-            		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.bsec');">&nbsp;</em>
-            	</div>
-        		<div class="input-group">
-        			<span class="input-group-addon"><em class="fa fa-shield fa-lg fa-fix">&nbsp;</em></span>
-        			<input type="text" class="bsec required form-control" name="bsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputSignIn(event);">
-        		</div>
+                <div class="form-inline text-right">
+                    <img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}">
+              		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.bsec');">&nbsp;</em>
+            		<input type="text" class="bsec required form-control" name="bsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputSignIn(event);">
+                </div>
         	</div>
         	<!-- END: captcha -->
             <div class="text-center">
@@ -80,18 +77,16 @@
                 </div>
                 <!-- BEGIN: captcha_reg -->
                 <div class="form-group">
-                    <div class="text-right margin-bottom-sm">
-                		<img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" />
-                		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.brsec');">&nbsp;</em>
+                    <div class="form-inline text-right">
+                  		<img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" />
+                  		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.brsec');">&nbsp;</em>
+                		<span><input type="text" class="brsec required form-control" name="brsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputReg(event);" /></span>
                 	</div>
-                 </div>
-                <div class="form-group">
-            		<span><input type="text" class="brsec required form-control" name="brsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputReg(event);" /></span>
-            	</div>
+                </div>
                 <!-- END: captcha_reg -->
                 <div class="form-group">
                     <div class="checkbox text-right">
-            		  <input type="checkbox" class="required " value="1" name="bragr">{LANG.accept2} <a href="#" onclick="usageTermsShow();"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
+            		  <input type="checkbox" class="required " value="1" name="bragr">{LANG.accept2} <a href="#" onclick="usageTermsShow('{LANG.usage_terms}');"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
                     </div>
                 </div>
                 <div class="text-center">
@@ -101,16 +96,6 @@
             </div>
         </div>
         <!-- END: allowuserreg -->
-    </div>
-</div>
-<div id="bt_usage-terns" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h3>{LANG.usage_terms}</h3>
-                <div class="ct well"></div>
-            </div>
-        </div>
     </div>
 </div>
 <!-- END FORFOOTER -->
@@ -135,10 +120,19 @@
     		    	<li><a href="{URL_HREF}changequestion">{LANG.question2}</a></li>
     		    	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
     		    	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
-    		    	<li><a href="#" onclick="bt_logout(this);">{LANG.logout_title}</a></li>
     		    </ul>
     		</div>
     	</div>
+    </div>
+    <div class="tip-footer">
+        <div class="row">
+            <div class="col-xs-16 small">
+                <em class="button btn-sm fa fa-sign-in" title="{LANG.current_login}"></em>{USER.current_login_txt}
+            </div>
+            <div class="col-xs-8 text-right">
+                <button type="button" class="btn btn-default btn-sm active" onclick="bt_logout(this);"><em class="fa fa-sign-out"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
+            </div>
+        </div>
     </div>
 </div>
 <!-- END FORFOOTER -->

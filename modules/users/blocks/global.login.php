@@ -38,6 +38,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 	$my_head .= '<script src="' . NV_BASE_SITEURL . 'themes/' . $blockJs . '/js/users.js"></script>';
 
 	$xtpl = new XTemplate( 'block.login.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/users' );
+	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
 	if( file_exists( NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php' ) )
 	{
@@ -100,11 +101,6 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 		{
 			$xtpl->parse( 'main.captcha_login' );
 		}
-		
-		if( in_array( $global_config['gfx_chk'], array( 3, 4, 6, 7 ) ) )
-		{
-			$xtpl->parse( 'main.captcha_reg' );
-		}
 
 		if( defined( 'NV_OPENID_ALLOWED' ) )
 		{
@@ -127,9 +123,13 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 		
 		if( $global_config['allowuserreg'] )
 		{
-			$xtpl->parse( 'main.allowuserreg' );
-			$xtpl->parse( 'main.allowuserreg1' );
-			$xtpl->parse( 'main.allowuserreg2' );
+			if( in_array( $global_config['gfx_chk'], array( 3, 4, 6, 7 ) ) )
+			{
+				$xtpl->parse( 'main.allowuserreg_html.captcha' );
+			}
+			
+			$xtpl->parse( 'main.allowuserreg_link' );
+			$xtpl->parse( 'main.allowuserreg_html' );
 		}
 		
 		$xtpl->parse( 'main' );

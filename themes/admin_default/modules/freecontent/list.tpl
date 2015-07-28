@@ -21,6 +21,7 @@
 			<div class="col-lg-22 col-md-21 col-sm-20 col-xs-24">
 				<div class="pull-right">
 					<div class="btn-group">
+						<a title="{ROW.status_text}" class="btn btn-sm btn-default content-status ct-status{ROW.status}" data-id="{ROW.id}" data-status="{ROW.status}" href="#"><i class="fa fa-circle"></i></a>
 						<a title="{GLANG.edit}" class="btn btn-sm btn-default content-edit" data-id="{ROW.id}" href="#"><i class="fa fa-edit"></i></a>
 						<a title="{GLANG.delete}" class="btn btn-sm btn-default content-delete" data-id="{ROW.id}" data-title="{ROW.title}" href="#"><i class="fa fa-trash"></i></a>
 					</div>

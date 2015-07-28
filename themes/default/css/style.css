@@ -553,6 +553,21 @@ a.btn {
     -webkit-border-top-right-radius:5px;
     border-top-right-radius:5px;
 }
+#tip .tip-footer,#ftip .tip-footer{
+    background: #e1e1e1;
+    border: 1px solid #ccc;
+    padding:10px
+}
+#tip .tip-footer{
+    -webkit-border-bottom-left-radius:5px;
+    border-bottom-left-radius:5px;
+    -webkit-border-bottom-right-radius:5px;
+    border-bottom-right-radius:5px;
+    margin: 10px -15px -16px
+}
+#ftip .ftip-footer{
+    margin: 10px -15px -15px
+}
 #tip h3, #ftip h3 {
     font-size:13px;
     font-weight:700;
@@ -605,7 +620,7 @@ a.btn {
     display:none
 }
 .guestBlock{
-    width:300px
+    width:350px
 }
 
 /* guestBlock */

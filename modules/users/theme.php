@@ -852,40 +852,42 @@ function user_welcome()
 	{
 		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.jpg' );
 	}
+    
+    $_user_info = $user_info;
 
-	$user_info['gender'] = ( $user_info['gender'] == 'M' ) ? $lang_module['male'] : ( $user_info['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
-	$user_info['birthday'] = empty( $user_info['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $user_info['birthday'] );
-	$user_info['regdate'] = nv_date( 'd/m/Y', $user_info['regdate'] );
-	$user_info['view_mail'] = empty( $user_info['view_mail'] ) ? $lang_module['no'] : $lang_module['yes'];
-	$user_info['last_login'] = empty( $user_info['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $user_info['last_login'] );
-	$user_info['current_login'] = nv_date( 'l, d/m/Y H:i', $user_info['current_login'] );
-	$user_info['st_login'] = ! empty( $user_info['st_login'] ) ? $lang_module['yes'] : $lang_module['no'];
+	$_user_info['gender'] = ( $user_info['gender'] == 'M' ) ? $lang_module['male'] : ( $user_info['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
+	$_user_info['birthday'] = empty( $user_info['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $user_info['birthday'] );
+	$_user_info['regdate'] = nv_date( 'd/m/Y', $user_info['regdate'] );
+	$_user_info['view_mail'] = empty( $user_info['view_mail'] ) ? $lang_module['no'] : $lang_module['yes'];
+	$_user_info['last_login'] = empty( $user_info['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $user_info['last_login'] );
+	$_user_info['current_login'] = nv_date( 'l, d/m/Y H:i', $user_info['current_login'] );
+	$_user_info['st_login'] = ! empty( $user_info['st_login'] ) ? $lang_module['yes'] : $lang_module['no'];
 
 	if( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 5 )
 	{
-		$user_info['current_mode'] = $lang_module['admin_login'];
+		$_user_info['current_mode'] = $lang_module['admin_login'];
 	}
 	elseif( isset( $user_info['current_mode'] ) and isset( $lang_module['mode_login_' . $user_info['current_mode']] ) )
 	{
-		$user_info['current_mode'] = $lang_module['mode_login_' . $user_info['current_mode']] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
+		$_user_info['current_mode'] = $lang_module['mode_login_' . $user_info['current_mode']] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
 	}
 	else
 	{
-		$user_info['current_mode'] = $lang_module['mode_login_1'];
+		$_user_info['current_mode'] = $lang_module['mode_login_1'];
 	}
 
-	$user_info['change_name_info'] = sprintf( $lang_module['change_name_info'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo' );
-	$user_info['pass_empty_note'] = sprintf( $lang_module['pass_empty_note'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=changepass' );
-	$user_info['question_empty_note'] = sprintf( $lang_module['question_empty_note'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo&amp;changequestion' );
+	$_user_info['change_name_info'] = sprintf( $lang_module['change_name_info'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo' );
+	$_user_info['pass_empty_note'] = sprintf( $lang_module['pass_empty_note'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=changepass' );
+	$_user_info['question_empty_note'] = sprintf( $lang_module['question_empty_note'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo&amp;changequestion' );
 
-	$xtpl->assign( 'USER', $user_info );
+	$xtpl->assign( 'USER', $_user_info );
 
 	if( ! $global_config['allowloginchange'] and ! empty( $user_info['current_openid'] ) and empty( $user_info['last_login'] ) and empty( $user_info['last_agent'] ) and empty( $user_info['last_ip'] ) and empty( $user_info['last_openid'] ) )
 	{
 		$xtpl->parse( 'main.change_login_note' );
 	}
 
-	if( $user_info['st_login'] == $lang_module['no'] )
+	if( empty( $user_info['st_login'] ) )
 	{
 		$xtpl->parse( 'main.pass_empty_note' );
 	}
