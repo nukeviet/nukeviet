@@ -81,7 +81,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 				if( ! empty( $src ) )
 				{
-					$meta_property['og:image'] = ( $news_contents['homeimgthumb'] == 1 ) ? NV_MY_DOMAIN . $news_contents['homeimgfile'] : $src;
+					$meta_property['og:image'] = ( preg_match( '/^(http|https|ftp|gopher)\:\/\//', $src ) ) ? $src : NV_MY_DOMAIN . $src;
 
 					if( $news_contents['imgposition'] > 0 )
 					{
@@ -107,6 +107,15 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			{
 				$publtime = intval( $news_contents['publtime'] );
 			}
+			
+			$meta_property['og:type'] = 'article';
+			$meta_property['article:published_time'] = date( 'Y-m-dTH:i:s', $news_contents['publtime'] );
+			$meta_property['article:modified_time'] = date( 'Y-m-dTH:i:s', $news_contents['edittime'] );
+			if( $news_contents['exptime'] )
+			{
+				$meta_property['article:expiration_time'] = date( 'Y-m-dTH:i:s', $news_contents['exptime'] );
+			}
+			$meta_property['article:section'] = $global_array_cat[$news_contents['catid']]['title'];
 		}
 
 		if( defined( 'NV_IS_MODADMIN' ) and $news_contents['status'] != 1 )
@@ -335,6 +344,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	{
 		$array_keyword[] = $row;
 		$key_words[] = $row['keyword'];
+		$meta_property['article:tag'][] = $row['keyword'];
 	}
 
 	// comment
