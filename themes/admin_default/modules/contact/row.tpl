@@ -19,7 +19,7 @@
                 </tr>
 				<tr>
 					<td><strong>{GLANG.phonenumber}</strong></td>
-					<td><input class="w300 form-control" type="text" name="phone" value="{DATA.phone}"/></td>
+					<td><input class="w300 form-control" type="text" name="phone" value="{DATA.phone}"/><button onclick="modalShow('{GLANG.phone_note_title}','{GLANG.phone_note_content}');return!1;">{GLANG.phone_note_title}</button></td>
 				</tr>
 				<tr>
 					<td><strong>Fax</strong></td>
@@ -27,15 +27,15 @@
 				</tr>
 				<tr>
 					<td><strong>{GLANG.email}</strong></td>
-					<td><input class="w300 form-control" type="email" oninvalid="setCustomValidity( nv_email )" oninput="setCustomValidity('')" name="email" value="{DATA.email}"/></td>
+					<td><input class="w300 form-control" type="text" name="email" value="{DATA.email}"/><span>{GLANG.multi_email_note}</span></td>
 				</tr>
                 <tr>
 					<td><strong>{LANG.yahoo_row_title}</strong></td>
-					<td><input class="w300 form-control" type="yahoo" name="yahoo" value="{DATA.yahoo}"/></td>
+					<td><input class="w300 form-control" type="yahoo" name="yahoo" value="{DATA.yahoo}"/><span>{GLANG.multi_note}</span></td>
 				</tr>
                 <tr>
 					<td><strong>{LANG.skype_row_title}</strong></td>
-					<td><input class="w300 form-control" type="skype" name="skype" value="{DATA.skype}"/></td>
+					<td><input class="w300 form-control" type="skype" name="skype" value="{DATA.skype}"/><span>{GLANG.multi_note}</span></td>
 				</tr>
 				<tr>
 					<td colspan="2">
