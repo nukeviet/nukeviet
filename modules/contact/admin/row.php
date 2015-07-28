@@ -80,7 +80,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
 	$obt_level = $nv_Request->get_array( 'obt_level', 'post', array() );
 
-	$check_valid_email = nv_check_valid_email( $email );
+    if( !empty( $email ) )
+    {
+        $_email = array_map( "trim", explode( ",", $email ) );
+        $email = array();
+        foreach($_email as $e)
+        {
+            $check_valid_email = nv_check_valid_email( $e );
+            if( empty( $check_valid_email ) ) $email[] = $e;
+        }
+        $email = implode( ", ", $email );
+    }
+    
 
 	$admins = array();
 
@@ -121,10 +132,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	elseif( empty ( $alias ) )
 	{
 		$error = $lang_module['error_alias'];
-	}
-	elseif( ! empty( $email ) and ! empty( $check_valid_email ) )
-	{
-		$error = $check_valid_email;
 	}
 	else
 	{

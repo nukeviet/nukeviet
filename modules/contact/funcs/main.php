@@ -32,7 +32,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 
 	if( ! empty( $email ) )
 	{
-		$email_list[] = $email;
+		$email_list[] = array_shift( array_map( "trim", explode( ",", $email ) ) );
 	}
 
 	if( ! empty( $admins ) )
