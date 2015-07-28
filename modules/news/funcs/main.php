@@ -92,26 +92,29 @@ if( empty( $contents ) )
 			$end_publtime = $item['publtime'];
 		}
 
-		$db->sqlreset()
-			->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' );
+		if( $st_links > 0)
+		{
+			$db->sqlreset()
+				->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
+				->from( NV_PREFIXLANG . '_' . $module_data . '_rows' );
 
-		if( $viewcat == 'viewcat_page_new' )
-		{
-			$db->where( 'status= 1 AND inhome=1 AND publtime < ' . $end_publtime );
-		}
-		else
-		{
-			$db->where( 'status= 1 AND inhome=1 AND publtime > ' . $end_publtime );
-		}
-		$db->order( $order_by )->limit( $st_links );
+			if( $viewcat == 'viewcat_page_new' )
+			{
+				$db->where( 'status= 1 AND inhome=1 AND publtime < ' . $end_publtime );
+			}
+			else
+			{
+				$db->where( 'status= 1 AND inhome=1 AND publtime > ' . $end_publtime );
+			}
+			$db->order( $order_by )->limit( $st_links );
 
-		$result = $db->query( $db->sql() );
-		while( $item = $result->fetch() )
-		{
-			$item['newday'] = $global_array_cat[$item['catid']]['newday'];
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
-			$array_cat_other[] = $item;
+			$result = $db->query( $db->sql() );
+			while( $item = $result->fetch() )
+			{
+				$item['newday'] = $global_array_cat[$item['catid']]['newday'];
+				$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+				$array_cat_other[] = $item;
+			}
 		}
 
 		$viewcat = 'viewcat_page_new';
