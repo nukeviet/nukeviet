@@ -29,21 +29,17 @@ function checkDbDriver(){
 		dataType: 'json',
 		success: function(e){
 			$('#dbtype-check').addClass('hide');
-			console.log(e);
+			
 			if( e.status != 'success' ){
-				var ct = '';
-				
-				ct += '<p><a href="' + e.link + '" target="_blank">' + e.message + '</a></p>';
-				ct += '<ul>';
-				
-				$.each(e.files, function(k, v){
-					ct += '<li>' + v + '</li>';
-				});
-				
-				ct += '</ul>',
-				
+				var ct = "", len = 0, o;
+				for (o in e.files) {
+				  len++;
+				}
+				0 < len ? (ct += '<p><a href="' + e.link + '" target="_blank">' + e.message + "</a></p>", ct += "<ul>", $.each(e.files, function(b, a) {
+				  ct += "<li>" + a + "</li>";
+				}), ct += "</ul>") : ct += "<p>" + e.message + "</p>";
 				showNvModal(ct);
-				$this.find('option').prop('selected', false);
+				$this.find("option").prop("selected", !1);
 			}
 		}
 	});
@@ -68,10 +64,12 @@ $(document).ready(function(){
     });
     
     // Check db driver
-    checkDbDriver();
-    $('[name="dbtype"]').change(function(){
-    	checkDbDriver();
-    });
+    if( $('[name="dbtype"]').length ){
+	    checkDbDriver();
+	    $('[name="dbtype"]').change(function(){
+	    	checkDbDriver();
+	    });
+    }
     
     // Init NV Simple Moal
     if( $('.nv-modal').length ){
