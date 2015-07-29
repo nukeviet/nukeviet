@@ -94,24 +94,30 @@ function nv_site_theme( $contents, $full = true )
     // Customs Style
     if ( isset( $module_config['themes'][$global_config['module_theme']] ) and ! empty( $module_config['themes'][$global_config['module_theme']] ) )
     {
-        if ( ! file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
+        $config_theme = unserialize( $module_config['themes'][$global_config['module_theme']] );
+        if ( ! empty( $config_theme ) )
         {
-            $config_theme = unserialize( $module_config['themes'][$global_config['module_theme']] );
-            $css_content = nv_css_setproperties( 'body', $config_theme['body'] );
-            $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
-            $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
-            $css_content .= nv_css_setproperties( '.wraper', $config_theme['content'] );
-            $css_content .= nv_css_setproperties( '#header', $config_theme['header'] );
-            $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
-            $css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
-            $css_content .= nv_css_setproperties( '.panel-default > .panel-heading', $config_theme['block_heading'] );
-            $css_content .= nv_css_setproperties( 'generalcss', $config_theme['generalcss'] ); // Không nên thay đổi "generalcss"
+            if ( ! file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
+            {
+                $css_content = "";
+                isset( $config_theme['body'] ) && ! empty( $config_theme['body'] ) && $css_content .= nv_css_setproperties( 'body', $config_theme['body'] );
+                isset( $config_theme['a_link'] ) && ! empty( $config_theme['a_link'] ) && $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
+                isset( $config_theme['a_link_hover'] ) && ! empty( $config_theme['a_link_hover'] ) && $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
+                isset( $config_theme['content'] ) && ! empty( $config_theme['content'] ) && $css_content .= nv_css_setproperties( '.wraper', $config_theme['content'] );
+                isset( $config_theme['header'] ) && ! empty( $config_theme['header'] ) && $css_content .= nv_css_setproperties( '#header', $config_theme['header'] );
+                isset( $config_theme['footer'] ) && ! empty( $config_theme['footer'] ) && $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
+                isset( $config_theme['block'] ) && ! empty( $config_theme['block'] ) && $css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
+                isset( $config_theme['block_heading'] ) && ! empty( $config_theme['block_heading'] ) && $css_content .= nv_css_setproperties( '.panel-default > .panel-heading', $config_theme['block_heading'] );
+                isset( $config_theme['generalcss'] ) && ! empty( $config_theme['generalcss'] ) && $css_content .= nv_css_setproperties( 'generalcss', $config_theme['generalcss'] ); // Không nên thay đổi "generalcss"
 
-            file_put_contents( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css', $css_content );
-            unset( $config_theme, $css_content );
+                file_put_contents( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css', $css_content );
+
+            }
+
+            $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] );
         }
 
-        $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] );
+        unset( $config_theme, $css_content );
     }
 
     foreach ( $html_links as $links )
