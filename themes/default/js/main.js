@@ -149,24 +149,28 @@ function modalShow(a, b) {
 
 // Build google map for block Company Info
 function initializeMap(){
-	var a, b, c;
-    a = new google.maps.Map(document.getElementById("company-map"), {
-        zoom: 14,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        disableDefaultUI: false
- 	});
-	b = new google.maps.Geocoder();
-	b.geocode({ 'address': $('#company-address').text() }, function(results, status){
-	    if(status == google.maps.GeocoderStatus.OK){
-	        a.setCenter(results[0].geometry.location);
-	        var marker = new google.maps.Marker({
-	            map: a,
-	            position: results[0].geometry.location,
-		        draggable: false,
-		        animation: google.maps.Animation.DROP
-	        });
-	    }
-	});	
+	var ele = 'company-map';
+	var map, marker, ca, cf, a, f, z;
+	ca = parseFloat($('#' + ele).data('clat'));
+	cf = parseFloat($('#' + ele).data('clng'));
+	a = parseFloat($('#' + ele).data('lat'));
+	f = parseFloat($('#' + ele).data('lng'));
+	z = parseInt($('#' + ele).data('zoom'));
+	
+	map = new google.maps.Map(document.getElementById(ele),{
+		zoom: z,
+		center: {
+			lat: ca,
+			lng: cf
+		}
+	});
+	
+	marker = new google.maps.Marker({
+        map: map,
+        position: new google.maps.LatLng(a,f),
+        draggable: false,
+        animation: google.maps.Animation.DROP
+    });
 }
 
 $(function() {

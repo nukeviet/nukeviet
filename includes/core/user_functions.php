@@ -418,13 +418,26 @@ function nv_html_meta_tags( $html = true )
     {
         if ( empty( $meta_property['og:title'] ) ) $meta_property['og:title'] = $page_title;
         if ( empty( $meta_property['og:description'] ) ) $meta_property['og:description'] = $site_description;
-        if ( empty( $meta_property['og:type'] ) ) $meta_property['og:type'] = 'WebPage';
+        if ( empty( $meta_property['og:type'] ) ) $meta_property['og:type'] = 'website';
         if ( empty( $meta_property['og:url'] ) ) $meta_property['og:url'] = $canonicalUrl;
         $meta_property['og:site_name'] = $global_config['site_name'];
 
         foreach ( $meta_property as $key => $value )
         {
-            if ( ! empty( $value ) )
+            if( is_array( $value ) )
+            {
+            	foreach ( $value as $value_i )
+        		{
+        			if ( ! empty( $value_i ) )
+        			{
+        				$return[] = array(
+        					'name' => 'property',
+        					'value' => $key,
+        					'content' => $value_i );
+        			}
+        		}
+            }
+        	elseif ( ! empty( $value ) )
             {
                 $return[] = array(
                     'name' => 'property',
