@@ -4,7 +4,7 @@ Khi báo lỗi bạn vui lòng cung cấp các thông tin sau để chúng tôi 
 
 1. Tiêu đề thông báo lỗi ngắn gọn, xúc tích, đảm bảo tóm tắt được nội dung.
 
-2. Mô tả chi tiết lỗi gặp phải, quá trình hoặc thao tác dẫn đến lỗi.
+2. Mô tả chi tiết lỗi gặp phải, quá trình hoặc thao tác dẫn đến lỗi.Việc mô tả quá trình dẫn đến lỗi đặc biệt quan trọng vì nhiều khi lỗi chỉ xảy ra đúng với một số thao tác nhất định màvới các thao tác khác thì hệ thống không bị lỗi. Ví dụ trường hợp này: https://github.com/nukeviet/nukeviet/issues/1178
 
 3. Cung cấp thông tin máy chủ
 
