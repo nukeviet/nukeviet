@@ -382,7 +382,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 			foreach( $array_cat[$key]['content'] as $array_row_i )
 			{
 				$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
-				$array_row_i['publtime'] = nv_date( 'd/m/Y', $array_row_i['publtime'] );
+				$array_row_i['publtime'] = nv_date( 'd/m/Y H:i', $array_row_i['publtime'] );
 				$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], 120 );
 				++$a;
 
