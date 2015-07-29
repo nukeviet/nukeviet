@@ -390,6 +390,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  order_name varchar(255) NOT NULL,
  order_email varchar(255) NOT NULL,
  order_phone varchar(20) NOT NULL,
+ order_address varchar(255) NOT NULL,
  order_note text NOT NULL,
  user_id int(11) unsigned NOT NULL default '0',
  admin_id int(11) unsigned NOT NULL default '0',
@@ -675,7 +676,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_files ADD " . $lang . "_title VARCHAR( 255 ) NOT NULL DEFAULT ''";
-$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_files ADD " . $lang . "_description MEDIUMTEXT NOT NULL DEFAULT ''";
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_files ADD " . $lang . "_description MEDIUMTEXT NOT NULL";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_files_rows (
  id_rows int(11) unsigned NOT NULL,

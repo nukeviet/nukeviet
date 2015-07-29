@@ -25,7 +25,8 @@ if ( ! function_exists( 'nv_cart_info' ) )
 		$module = $block_config['module'];
 
 		$coupons_code = '';
-		if( isset( $_SESSION[$module_data . '_coupons']['code'] ) )
+
+		if( isset( $_SESSION[$module_data . '_coupons'] ) and !empty( $_SESSION[$module_data . '_coupons']['code'] ) and $_SESSION[$module_data . '_coupons']['check'] )
 		{
 			$coupons_code = $_SESSION[$module_data . '_coupons']['code'];
 		}

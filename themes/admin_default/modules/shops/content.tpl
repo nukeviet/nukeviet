@@ -483,7 +483,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}modules/shops/js/content.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/content.js"></script>
 
 <script type="text/javascript">
 	var file_items = '{FILE_ITEMS}';
