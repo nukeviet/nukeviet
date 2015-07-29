@@ -57,5 +57,11 @@ $lang_module['content_link_error'] = 'Có vẻ đây không phải là một li�
 $lang_module['content_total_rows'] = 'Tổng số';
 $lang_module['content_delete'] = 'Xóa nội dung';
 $lang_module['content_delete_confirm'] = 'Dữ liệu đã xóa không thể khôi phục, bạn có muốn xóa không?';
+$lang_module['content_status_0'] = 'Đang tạm dừng hoạt động, nhấp để kích hoạt';
+$lang_module['content_status_1'] = 'Đang hoạt động, nhấp để tạm dừng';
+$lang_module['content_status_2'] = 'Đã hết hạn, nhấp để kích hoạt lại';
+$lang_module['content_status_note0'] = 'Hiệu lực vào lúc';
+$lang_module['content_status_note1'] = 'Sẽ hết hạn lúc %s';
+$lang_module['content_status_note2'] = 'Đã hết hạn lúc %s';
 
 $lang_module['mng'] = 'Quản lý nội dung';

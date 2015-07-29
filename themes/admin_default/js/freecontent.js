@@ -30,7 +30,9 @@ var cfg = {
 	ctEditLink: '.content-edit',
 	ctDelLink: '.content-delete',
 	ctRow: '#content-row-',
-	ctList: '#content-list-container'
+	ctList: '#content-list-container',
+	ctStatusBtn: '.content-status',
+	ctStatusPrefix: 'ct-status'
 };
 
 function nv_pare_data(id, isEditor){
@@ -378,5 +380,31 @@ $(document).ready(function(){
 				}
 			}
 		});
+	});
+	
+	// Change content status
+	$(cfg.ctStatusBtn).click(function(e){
+		e.preventDefault();
+		$this = $(this);
+		
+		if( ! $this.is('.' + cfg.ctStatusPrefix + '-disabled') ){
+			$this.removeClass(cfg.ctStatusPrefix + $this.data('status')).addClass(cfg.ctStatusPrefix + '-disabled');
+			$.ajax({
+				type: 'POST',
+				cache: false,
+				url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
+				data: 'id=' + $this.data('id') + '&changestatus=1',
+				dataType: 'json',
+				success: function(e){
+					if( e.status == 'success' ){
+						$this.data('status', '' + e.responCode);
+						$this.removeClass(cfg.ctStatusPrefix + '-disabled').addClass(cfg.ctStatusPrefix + e.responCode).prop('title', e.responText);
+					}else{
+						$this.removeClass(cfg.ctStatusPrefix + '-disabled').addClass(cfg.ctStatusPrefix + $this.data('status'));
+						alert( e.message );
+					}
+				}
+			});
+		}	
 	});
 });

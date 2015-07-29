@@ -99,20 +99,22 @@ if( ! empty( $page_title ) and $page_title == strip_punctuation( $page_title ) )
 		unset( $query, $row );
 
 		$item_array_other = array();
-		$db->sqlreset()
-			->select( 'id, catid, addtime, edittime, publtime, title, alias, hitstotal' )
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
-			->where( 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ') and publtime < ' . $end_publtime )
-			->order( 'publtime DESC' )
-			->limit( $st_links );
-		$result = $db->query( $db->sql() );
-		while( $item = $result->fetch() )
+		if ( $st_links > 0)
 		{
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
-			$item_array_other[] = $item;
+			$db->sqlreset()
+				->select( 'id, catid, addtime, edittime, publtime, title, alias, hitstotal' )
+				->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+				->where( 'status=1 AND id IN (SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid=' . $tid . ') and publtime < ' . $end_publtime )
+				->order( 'publtime DESC' )
+				->limit( $st_links );
+			$result = $db->query( $db->sql() );
+			while( $item = $result->fetch() )
+			{
+				$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+				$item_array_other[] = $item;
+			}
+			unset( $query, $row );
 		}
-
-		unset( $query, $row );
 
 		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 

@@ -33,6 +33,14 @@ function timeoutsessrun() {
 	}, 1000);
 }
 
+// ModalShow
+function modalShow(a, b) {
+	"" == a && (a = "&nbsp;");
+	$("#sitemodal").find(".modal-title").html(a);
+	$("#sitemodal").find(".modal-body").html(b);
+	$("#sitemodal").modal()
+}
+
 var NV = {
 	menuBusy: false,
 	menuTimer: null,
