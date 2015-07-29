@@ -32,7 +32,7 @@ function nv_SendMail2User( $cid, $fcontent, $ftitle, $femail, $full_name )
 
 	if( ! empty( $email ) )
 	{
-		$email_list[] = $email;
+		$email_list[] = array_shift( array_map( "trim", explode( ",", $email ) ) );
 	}
 
 	if( ! empty( $admins ) )
@@ -192,7 +192,6 @@ if( ! empty( $array_department ) )
 				include NV_ROOTDIR . '/includes/header.php';
 				echo nv_site_theme( $contents );
 				include NV_ROOTDIR . '/includes/footer.php';
-				exit();
 			}
 		}
 	}
@@ -208,11 +207,6 @@ if( ! empty( $array_department ) )
             if( isset( $array_op[1] ) and $array_op[1] == 0 )
             {
                 $base_url_rewrite .= '/0';
-                if( isset( $array_op[2] ) )
-                {
-                    $global_config['mudim_active'] = $array_op[2];
-                    $base_url_rewrite .= '/' . $array_op[2];
-                }
             }
         }
         $base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );

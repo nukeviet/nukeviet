@@ -137,10 +137,11 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/css/' . $row['basename'] . '.css';
 				}
-
-				if( file_exists( NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '.js' ) )
+				
+				$_files = glob( NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '*.js' );
+				foreach( $_files as $_file )
 				{
-					$files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '.js';
+					$files_folders[] = $_file;
 				}
 
 				if( file_exists( NV_ROOTDIR . '/themes/' . $theme_package . '/images/' . $row['basename'] . '/' ) )
@@ -156,11 +157,12 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/admin_default/css/' . $row['basename'] . '.css';
 				}
-
-				if( file_exists( NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '.js' ) )
+				
+				$_files = glob( NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '*.js' );
+				foreach( $_files as $_file )
 				{
-					$files_folders[] = NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '.js';
-				}
+					$files_folders[] = $_file;
+				}				
 
 				if( file_exists( NV_ROOTDIR . '/themes/admin_default/images/' . $row['basename'] . '/' ) )
 				{
@@ -636,11 +638,34 @@ foreach( $array_langs as $lang )
 	}
 }
 
-// Array themes exists
-
+// Array themes exists - Unnecessary
 // Array blocks exists
+$array_blocks_exists = array();
+
+foreach( $array_langs as $lang )
+{
+	$sql = 'SELECT DISTINCT file_name FROM ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups';
+	$result = $db->query( $sql );
+
+	while( $row = $result->fetch() )
+	{
+		$array_blocks_exists[$row['file_name']] = $row['file_name'];
+	}
+}
 
 // Array crons exists
+$array_crons_exists = array();
+
+foreach( $array_langs as $lang )
+{
+	$sql = 'SELECT DISTINCT run_file FROM ' . NV_CRONJOBS_GLOBALTABLE;
+	$result = $db->query( $sql );
+
+	while( $row = $result->fetch() )
+	{
+		$array_crons_exists[$row['run_file']] = $row['run_file'];
+	}
+}
 
 // List extensions
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename';
@@ -664,6 +689,14 @@ while( $row = $result->fetch() )
 		$row['delete_allowed'] = false;
 	}
 	elseif( $row['type'] == 'theme' and ( $global_config['site_theme'] == $row['basename'] or $row['basename'] == 'default' ) )
+	{
+		$row['delete_allowed'] = false;
+	}
+	elseif( $row['type'] == 'block' and isset( $array_blocks_exists[$row['basename']] ) )
+	{
+		$row['delete_allowed'] = false;
+	}
+	elseif( $row['type'] == 'cronjob' and isset( $array_crons_exists[$row['basename']] ) )
 	{
 		$row['delete_allowed'] = false;
 	}
@@ -720,6 +753,7 @@ if( $selecttype == '' or $selecttype == 'theme' )
 		);
 	}
 }
+
 foreach( $array_parse as $row )
 {
 	$xtpl->assign( 'ROW', $row );

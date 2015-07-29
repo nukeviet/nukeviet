@@ -38,7 +38,7 @@ var nv_restoreTitle = "Click to close image, click and drag to move. Use arrow k
 var nv_error_login = "Error: You haven't fill your account or account information incorrect. Account include Latin characters, numbers, underscore. Max characters is [max], min characters is [min]";
 var nv_error_password = "Error: You haven't fill your password or password information incorrect. Password include Latin characters, numbers, underscore. Max characters is [max], min characters is [min]";
 var nv_error_email = "Error: You haven't fill your email address or email address incorrect.";
-var nv_error_seccode = "Error: You haven't fill anti spam secure code or anti spam secure code you fill incorrect. Anti spam secure code is a sequense of number [num] characters display in image.";
+var nv_error_seccode = "Error: You haven't fill Security Code or Security Code you fill incorrect. Security Code is a sequense of number [num] characters display in image.";
 var nv_login_failed = "Error: For some reasons, system doesn't accept your account. Try again.";
 var nv_content_failed = "Error: For some reasons, system doesn't accept content Try again.";
 

@@ -85,7 +85,6 @@ if( $step == 2 )
 			include NV_ROOTDIR . '/includes/header.php';
 			echo nv_site_theme( $contents );
 			include NV_ROOTDIR . '/includes/footer.php';
-			exit();
 		}
 	}
 }

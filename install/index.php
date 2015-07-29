@@ -801,7 +801,6 @@ elseif( $step == 6 )
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_path', " . $db->quote( $global_config['ftp_path'] ) . ")" );
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_check_login', " . $db->quote( $global_config['ftp_check_login'] ) . ")" );
 					$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = " . $db->quote( $array_data['site_name'] ) . " WHERE module = 'global' AND config_name = 'site_name'" );
-					$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = 'mobile_default' WHERE lang='" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'mobile_theme'" );
 
 					$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_authors_module ORDER BY weight ASC" );
 					while( $row = $result->fetch() )

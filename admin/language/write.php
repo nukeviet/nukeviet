@@ -157,29 +157,6 @@ function nv_admin_write_lang( $dirlang, $idfile )
 						$lang_value = str_replace( '<br />', '<br />', $lang_value );
 
 						$content_temp = "\$" . $langtype . "['" . $lang_key . "'] = '$lang_value';\n";
-						$content_temp .= "/*\n";
-
-						if( $dirlang != "vi" and ! empty( $lang_value_vi ) )
-						{
-							$lang_value_vi = nv_unhtmlspecialchars( $lang_value_vi );
-							$lang_value_vi = str_replace( "\'", "'", $lang_value_vi );
-							$lang_value_vi = str_replace( "'", "\'", $lang_value_vi );
-							$lang_value_vi = nv_nl2br( $lang_value_vi );
-							$lang_value_vi = str_replace( '<br />', '<br />', $lang_value_vi );
-							$content_temp .= "\t vietnam:\t " . $lang_value_vi . "\n";
-						}
-
-						if( $dirlang != "en" and ! empty( $lang_value_en ) )
-						{
-							$lang_value_en = nv_unhtmlspecialchars( $lang_value_en );
-							$lang_value_en = str_replace( "\'", "'", $lang_value_en );
-							$lang_value_en = str_replace( "'", "\'", $lang_value_en );
-							$lang_value_en = nv_nl2br( $lang_value_en );
-							$lang_value_en = str_replace( '<br />', '<br />', $lang_value_en );
-							$content_temp .= "\t english:\t " . $lang_value_en . "\n";
-						}
-
-						$content_temp .= "*/\n\n";
 
 						if( $update_time > 0 )
 						{
@@ -218,7 +195,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 			}
 			if( $numrows )
 			{
-				$number_bytes = file_put_contents( $include_lang, $content_lang, LOCK_EX );
+				$number_bytes = file_put_contents( $include_lang, trim( $content_lang ), LOCK_EX );
 				if( empty( $number_bytes ) )
 				{
 					$errfile = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );

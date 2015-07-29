@@ -87,7 +87,7 @@ $contents['pass_input_maxlength'] = NV_UPASSMAX;
 $contents['gfx_chk'] = $global_config['gfx_chk'];
 $contents['captcha'] = $lang_global['securitycode'];
 $contents['captcha_name'] = 'seccode_iavim';
-$contents['captcha_img'] = NV_BASE_SITEURL . 'index.php?scaptcha=captcha&cch=' . nv_genpass( 10 );
+$contents['captcha_img'] = NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME;
 $contents['captcha_maxlength'] = NV_GFX_NUM;
 $contents['captcha_refresh'] = $lang_global['captcharefresh'];
 $contents['captcha_refr_src'] = NV_BASE_SITEURL . 'images/refresh.png';

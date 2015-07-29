@@ -32,25 +32,31 @@
 	<em class="fa fa-lg fa-frown-o">&nbsp;</em> <strong>{LANG.install_check_require}</strong>
 </p>
 <div class="alert alert-danger"><a class="text-danger ex-detail" href="{REQUIRE_LINK}" title="{REQUIRE_TITLE}">{REQUIRE_MESSAGE}</a></div>
+
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">{LANG.file_name}</h4>
+			</div>
+			<div class="modal-body">
+				<p class="text-center"><em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em></p>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
-Shadowbox.init({
-	animate: false,
-	animateFade: false,
-    enableKeys: false,
-    modal: true,
-    overlayOpacity: 0.8,
-    handleOversize: 'resize',
-});
 $(function(){
 	$('.ex-detail').click(function(e){
 		e.preventDefault();
-		Shadowbox.open({
-	        content: '<iframe style="width:' + player_width + 'px;height:' + player_height + 'px;border:0" src="' + $(this).attr('href') + '"></iframe>',
-	        player: "html",
-	        title: $(this).attr('title'),
-	        height: player_height,
-	        width: player_width
-	    });
+		$('#myModalLabel').html( $(this).attr('title') );
+		$('#imagemodal .modal-dialog').css({'width': player_width});
+		$('#imagemodal .modal-body').load( $(this).attr('href') );
+		$('#imagemodal').modal('show');
 	});
 });
 </script>
@@ -109,12 +115,12 @@ $(document).ready(function(){
 </script>
 <!-- END: startdownload -->
 <div id="file-download" class="m-bottom">
-	<em class="fa fa-lg fa-meh-o status">&nbsp;</em> 
-	<strong>{LANG.install_file_download}<span class="waiting">...</span></strong> 
+	<em class="fa fa-lg fa-meh-o status">&nbsp;</em>
+	<strong>{LANG.install_file_download}<span class="waiting">...</span></strong>
 	<em class="fa fa-lg fa-check complete">&nbsp;</em>
 </div>
 <div id="file-download-response">
-	
+
 </div>
 <script type="text/javascript">
 var LANG = [];

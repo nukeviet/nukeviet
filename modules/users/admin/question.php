@@ -168,7 +168,6 @@ if( $nv_Request->isset_request( 'qlist', 'post' ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );

@@ -40,7 +40,6 @@ if( empty( $array_lang_exit ) or ! in_array( $dirlang, $array_lang_exit ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 $select_options = array();

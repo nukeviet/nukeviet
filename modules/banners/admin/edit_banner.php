@@ -49,7 +49,6 @@ if( empty( $contents['file_allowed_ext'] ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( nv_edit_banner_theme( $contents ) );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 $sql = 'SELECT id,login,full_name FROM ' . NV_BANNERS_GLOBALTABLE. '_clients ORDER BY login ASC';
@@ -246,7 +245,7 @@ $contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid 
 
 $imageforswf = ( ! empty( $imageforswf ) ) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf : '';
 
-$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "rel=\"shadowbox;height=" . $height . ";width=" . $width . "\"", NV_BASE_SITEURL . "images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . "images/ico_" . substr( $imageforswf, -3 ) . ".gif" );
+$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "data-width=" . $width . " id=" . ( $file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image' ) . "", NV_BASE_SITEURL . "images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . "images/ico_" . substr( $imageforswf, -3 ) . ".gif" );
 
 $contents['upload'] = array( sprintf( $lang_module['re_upload'], $contents['file_allowed_ext'] ), 'banner', $lang_module['imageforswf'], 'imageforswf' );
 $contents['file_alt'] = array( $lang_module['file_alt'], 'file_alt', $file_alt, 255 );
@@ -256,13 +255,6 @@ $contents['target'] = array( $lang_module['target'], 'target', $targets, $target
 
 $contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10 );
 $contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10 );
-
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_footer .= "<script type=\"text/javascript\">\n";
-$my_footer .= "Shadowbox.init({\n";
-$my_footer .= "});\n";
-$my_footer .= "</script>\n";
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( nv_edit_banner_theme( $contents ) );

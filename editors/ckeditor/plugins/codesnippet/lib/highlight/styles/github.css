@@ -3,14 +3,6 @@
 github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 
 */
-pre {
-	max-height:300px;
-	overflow: auto;
-}
-
-pre code {
-	white-space: pre;
-}
 
 .hljs {
   display: block; padding: 0.5em;

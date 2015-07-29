@@ -12,8 +12,7 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 
 // Eg: $id = nv_insert_logs('lang','module name','name key','note',1, 'link acess');
 
-// Call jquery datepicker + shadowbox
-
+// Call jquery datepicker
 $my_head = "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.core.css\" rel=\"stylesheet\" />\n";
 $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
 $my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/ui/jquery.ui.datepicker.css\" rel=\"stylesheet\" />\n";

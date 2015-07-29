@@ -47,7 +47,7 @@ if( ! nv_function_exists( 'nv_menu_theme_social' ) )
 
 	function nv_menu_theme_social( $block_config )
 	{
-		global $global_config, $site_mods;
+		global $global_config, $site_mods, $lang_global;
 
 		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.social.tpl' ) )
 		{
@@ -64,6 +64,7 @@ if( ! nv_function_exists( 'nv_menu_theme_social' ) )
 
 		$xtpl = new XTemplate( 'global.social.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks' );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+        $xtpl->assign( 'LANG', $lang_global );
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
 		$xtpl->assign( 'DATA', $block_config );
 		if( ! empty( $block_config['facebook'] ) )

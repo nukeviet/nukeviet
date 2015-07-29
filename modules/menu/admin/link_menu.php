@@ -52,4 +52,3 @@ $contents = $xtpl->text( 'main.cat' );
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';
-exit();

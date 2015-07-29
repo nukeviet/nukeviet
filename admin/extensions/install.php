@@ -10,14 +10,6 @@
 
 if( ! defined( 'NV_IS_FILE_EXTENSIONS' ) ) die( 'Stop!!!' );
 
-if( ! defined( 'SHADOWBOX' ) )
-{
-	$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-
-	define( 'SHADOWBOX', true );
-}
-
 $page_title = $lang_global['mod_extensions'];
 
 $request = array();

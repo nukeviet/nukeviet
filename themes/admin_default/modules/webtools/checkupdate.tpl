@@ -7,7 +7,9 @@
 //<![CDATA[
 $(document).ready(function(){
 	$('#sysUpd').html(nv_loading).removeClass('hide').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=checkupdate&i=sysUpd&num=" + nv_randomPassword(10), function(){
-		$("#extUpd").html(nv_loading).removeClass('hide').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=checkupdate&i=extUpd&num=" + nv_randomPassword(10))
+		$("#extUpd").html(nv_loading).removeClass('hide').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=checkupdate&i=extUpd&num=" + nv_randomPassword(10), function(){
+			start_tooltip();
+		});
 	});
 });
 //]]>

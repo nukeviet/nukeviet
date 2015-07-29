@@ -48,7 +48,7 @@ function sendcontact(num) {
 
 	if ((seccode.value.length != num ) || ! nv_namecheck.test(seccode.value)) {
 		alert(nv_code);
-		nv_change_captcha('vimg', 'fcode_iavim');
+		change_captcha('#fcode_iavim');
 		bt.disabled = false;
 		seccode.focus();
 		return false;

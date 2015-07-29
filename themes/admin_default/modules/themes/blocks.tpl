@@ -44,6 +44,7 @@
 				</select></td>
 				<td>
 				<select name="listpos" title="{ROW.bid}" class="form-control">
+					<option value="">&nbsp;</option>
 					<!-- BEGIN: position -->
 					<option value="{POSITION.key}"{POSITION.selected}>{POSITION.title}</option>
 					<!-- END: position -->
@@ -74,6 +75,7 @@
 //<![CDATA[
 var selectthemes = '{SELECTTHEMES}';
 var blockredirect = '{BLOCKREDIRECT}';
+var blockcheckss = '{CHECKSS}';
 LANG.block_delete_per_confirm = '{LANG.block_delete_per_confirm}';
 LANG.block_weight_confirm = '{LANG.block_weight_confirm}';
 LANG.block_error_noblock = '{LANG.block_error_noblock}';
