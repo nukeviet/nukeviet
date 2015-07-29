@@ -19,19 +19,31 @@
 </div>
 <script type="text/javascript" data-show="after">
 	$(document).ready(function() {
+		nv_check_counpons_use();
 		$('#coupons_uses').change(function() {
 			var coupons_code = $('#coupons_code').val();
 			if($(this).is(":checked")) {
-				$("#total").load(urload + '&coupons_check=1&coupons_load=1&coupons_code=' + coupons_code + '&t=2');
 				$("#cart_" + nv_module_name).load(urload + '&coupons_check=1&coupons_code=' + coupons_code);
 			}
 			else
 			{
-				$("#total").load(urload + '&coupons_check=0&coupons_load=1&coupons_code=' + coupons_code + '&t=2');
 				$("#cart_" + nv_module_name).load(urload + '&coupons_check=0&coupons_code=' + coupons_code);
 			}
+			nv_check_counpons_use();
 		});
 	});
+
+	function nv_check_counpons_use()
+	{
+		var coupons_code = $('#coupons_code').val();
+		if($('#coupons_uses').is(":checked")) {
+			$("#total").load(urload + '&coupons_check=1&coupons_load=1&coupons_code=' + coupons_code + '&t=2');
+		}
+		else
+		{
+			$("#total").load(urload + '&coupons_check=0&coupons_load=1&coupons_code=' + coupons_code + '&t=2');
+		}
+	}
 </script>
 <!-- END: content -->
 
