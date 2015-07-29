@@ -387,7 +387,7 @@ function nv_show_cat_list( $parentid = 0 )
 				}
 				$xtpl->parse( 'main.data.loop.viewcat' );
 
-				for( $i = 0; $i <= 10; ++$i )
+				for( $i = 0; $i <= 20; ++$i )
 				{
 					$xtpl->assign( 'NUMLINKS', array(
 						'key' => $i,
