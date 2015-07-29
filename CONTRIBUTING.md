@@ -21,9 +21,6 @@ Nếu NukeViet cài trên hosting (website đang chạy thực tế) cần có t
 > + Các thông tin khác về phần mềm webserver, PHP và cơ sở dữ liệu: (Ví dụ: Apache 2.4.7, MySQL 5.5.36, PHP 5.4.25)
 
  
-* Nếu xác định lỗi từ giao diện, vui lòng cung cấp thêm thông tin về giao diện
-> + Tên gói giao diện (Chỉ kiểm tra đối với giao diện tích hợp sẵn trong source NukeViet)
+* Nếu xác định lỗi từ giao diện, vui lòng cung cấp thêm thông tin về  Tên gói giao diện (Chỉ kiểm tra đối với giao diện tích hợp sẵn trong source NukeViet)
  
 * Nếu là các lỗi nhỏ, cơ bản, dễ xác định lỗi... hay các câu hỏi, đề xuất, góp ý... thì không cần cung cấp thông tin về máy chủ, giao diện tại phần 2, 3.
-
-
