@@ -575,9 +575,8 @@ function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $
 	$a = 0;
 	foreach( $ctsb['rows'] as $key => $value )
 	{
-		$const = @constant( "BROWSER_" . strtoupper( $key ) );
-        if ( ! is_null( $const ) ) $key = $const;
-        if ( $key == 'unknown' ) $key = $lang_global['unknown'];
+		$const = "BROWSER_" . strtoupper( $key );
+        $key = defined( $const ) ? @constant( $const ) : $lang_global['unknown'];
         $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
@@ -614,9 +613,8 @@ function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $
 	$a = 0;
 	foreach( $ctso['rows'] as $key => $value )
 	{
-		$const = @constant( "PLATFORM_" . strtoupper( $key ) );
-        if ( ! is_null( $const ) ) $key = $const;
-        if ( $key == 'unknown' ) $key = $lang_global['unknown'];
+		$const = "PLATFORM_" . strtoupper( $key );
+        $key = defined( $const ) ? @constant( $const ) : $lang_global['unknown'];
         $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 		$xtpl->assign( 'CLASS', $class );
