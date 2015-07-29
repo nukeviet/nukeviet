@@ -27,48 +27,94 @@ function nv_site_theme( $contents, $full = true )
 		$global_config['timestamp'] += $global_config['sitetimestamp'];
 	}
 
-	$css = nv_html_css();
-
-	// Css for admin
-	if( defined( 'NV_IS_ADMIN' ) and $full )
-	{
-		$css .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/css/admin.css\" />\n";
-	}
-
-    // Style config
-    if ( isset( $module_config['themes'][$global_config['module_theme']] ) )
-	{
-		if ( ! file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
-    	{
-			$config_theme = unserialize( $module_config['themes'][$global_config['module_theme']] );
-		    $css_content = nv_css_setproperties( 'body', $config_theme['body'] );
-		    $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
-		    $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
-		    $css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
-		    $css_content .= nv_css_setproperties( '#header, #banner', $config_theme['header'] );
-		    $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
-			$css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
-			$css_content .= nv_css_setproperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
-		    $css_content .= nv_css_setproperties( 'generalcss', $config_theme['generalcss'] ); // Không nên thay đổi "generalcss"
-
-		    file_put_contents( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css', $css_content );
-
-			unset( $config_theme, $css_content );
-    	}
-	    $my_footer .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] . "\" />\n";
-	}
-
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );
 	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 
 	// System variables
-	$xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title() );
-	$xtpl->assign( 'THEME_META_TAGS', nv_html_meta_tags() );
-	$xtpl->assign( 'THEME_SITE_RSS', nv_html_site_rss() );
-	$xtpl->assign( 'THEME_CSS', $css );
-	$xtpl->assign( 'THEME_SITE_JS', nv_html_site_js() );
+    $xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title( false ) );
+
+		// Meta-tags
+	$metatags = nv_html_meta_tags( false );
+	$metatags[] = array(
+		'name' => 'name',
+		'value' => 'viewport',
+		'content' => 'width=device-width, initial-scale=1'
+	);
+
+    foreach ( $metatags as $meta )
+    {
+        $xtpl->assign( 'THEME_META_TAGS', $meta );
+        $xtpl->parse( 'main.metatags' );
+    }
+
+    //Links
+    $html_links = nv_html_links( false );
+    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/default/css/font-awesome.min.css' );
+    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css' );
+    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css' );
+
+    if ( defined( 'NV_IS_ADMIN' ) and $full )
+    {
+        $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/admin.css' );
+    }
+
+    // Customs Style
+    if ( isset( $module_config['themes'][$global_config['module_theme']] ) )
+    {
+        if ( ! file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
+        {
+            $config_theme = unserialize( $module_config['themes'][$global_config['module_theme']] );
+            $css_content = nv_css_setproperties( 'body', $config_theme['body'] );
+            $css_content .= nv_css_setproperties( 'a, a:link, a:active, a:visited', $config_theme['a_link'] );
+            $css_content .= nv_css_setproperties( 'a:hover', $config_theme['a_link_hover'] );
+            $css_content .= nv_css_setproperties( '#wraper', $config_theme['content'] );
+            $css_content .= nv_css_setproperties( '#header, #banner', $config_theme['header'] );
+            $css_content .= nv_css_setproperties( '#footer', $config_theme['footer'] );
+            $css_content .= nv_css_setproperties( '.panel, .well, .nv-block-banners', $config_theme['block'] );
+            $css_content .= nv_css_setproperties( '.panel-default>.panel-heading', $config_theme['block_heading'] );
+            $css_content .= nv_css_setproperties( 'generalcss', $config_theme['generalcss'] ); // Không nên thay đổi "generalcss"
+
+            file_put_contents( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css', $css_content );
+            unset( $config_theme, $css_content );
+        }
+
+        $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . SYSTEM_FILES_DIR . "/css/theme_" . $global_config['module_theme'] . "_" . $global_config['idsite'] . ".css?t=" . $global_config['timestamp'] );
+    }
+
+    foreach ( $html_links as $links )
+    {
+        foreach ( $links as $key => $value )
+        {
+            $xtpl->assign( 'LINKS', array( 'key' => $key, 'value' => $value ) );
+            $xtpl->parse( 'main.links.attr' );
+        }
+        $xtpl->parse( 'main.links' );
+    }
+
+    $html_js = nv_html_site_js( false );
+    $html_js[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/main.js" );
+
+    foreach ( $html_js as $js )
+    {
+        if ( $js['ext'] )
+        {
+            $xtpl->assign( 'JS_SRC', $js['content'] );
+            $xtpl->parse( 'main.js.ext' );
+        }
+        else
+        {
+            $xtpl->assign( 'JS_CONTENT', PHP_EOL . $js['content'] . PHP_EOL );
+            $xtpl->parse( 'main.js.int' );
+        }
+        $xtpl->parse( 'main.js' );
+    }
+
+    if ( $client_info['browser']['key'] == 'explorer' and $client_info['browser']['version'] < 9 )
+    {
+        $xtpl->parse( 'main.lt_ie9' );
+    }
 
 	// Module contents
 	$xtpl->assign( 'MODULE_CONTENT', $contents );
@@ -96,9 +142,10 @@ function nv_site_theme( $contents, $full = true )
 	if( $full )
 	{
 		// Search form variables
-		$xtpl->assign( 'THEME_SEARCH_QUERY_MAX_LENGTH', NV_MAX_SEARCH_LENGTH );
-		$xtpl->assign( 'THEME_SEARCH_SUBMIT_ONCLICK', "nv_search_submit('topmenu_search_query', 'topmenu_search_submit', " . NV_MIN_SEARCH_LENGTH . ", " . NV_MAX_SEARCH_LENGTH . ");" );
-
+		$xtpl->assign( 'NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH );
+        $xtpl->assign( 'NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH );
+		$xtpl->assign( 'THEME_SEARCH_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&q=' );
+		
 		// Breadcrumbs
 		if( $home != 1 )
 		{
@@ -132,35 +179,32 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->assign( 'THEME_STAT_IMG', $theme_stat_img );
 
 		// Change theme types
-		if( ! empty( $global_config['switch_mobi_des'] ) )
+		$icons = array('r' => 'random', 'd' => 'desktop', 'm' => 'mobile');
+		$current_theme_type = ( isset( $global_config['current_theme_type'] ) and ! empty( $global_config['current_theme_type'] ) and in_array( $global_config['current_theme_type'], array_keys( $icons ) ) ) ? $global_config['current_theme_type'] : 'd';
+		foreach ( $global_config['array_theme_type'] as $theme_type )
 		{
-			$mobile_theme = empty( $module_info['mobile'] ) ?  $global_config['mobile_theme'] : $module_info['mobile'];
-			if( ! empty( $mobile_theme ) )
+			$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
+			$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $theme_type] );
+			$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $theme_type] ) );
+			$xtpl->assign( 'STHEME_ICON', $icons[$theme_type] );
+		
+			if ( $theme_type == $global_config['current_theme_type'] )
 			{
-				$num_theme_type = sizeof( $global_config['array_theme_type'] ) - 1;
-
-				foreach( $global_config['array_theme_type'] as $i => $theme_type )
-				{
-					$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-					$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $theme_type] );
-					$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $theme_type] ) );
-
-					if( $theme_type == $global_config['current_theme_type'] )
-					{
-						$xtpl->parse( 'main.theme_type.loop.current' );
-					}
-					else
-					{
-						$xtpl->parse( 'main.theme_type.loop.other' );
-					}
-
-					if( $i < $num_theme_type ) $xtpl->parse( 'main.theme_type.loop.space' );
-
-					$xtpl->parse( 'main.theme_type.loop' );
-				}
-				$xtpl->parse( 'main.theme_type' );
+				$xtpl->parse( 'main.theme_type.loop.current' );
 			}
+			else
+			{
+				$xtpl->parse( 'main.theme_type.loop.other' );
+			}
+		
+			$xtpl->parse( 'main.theme_type.loop' );
 		}
+		$xtpl->parse( 'main.theme_type' );
+		
+		if( defined( 'NV_IS_ADMIN' ) )
+		{
+			$xtpl->assign( 'ADMINTOOLBAR', nv_admin_menu() );
+		}		
 	}
 
 	if( !$drag_block )
@@ -179,7 +223,7 @@ function nv_site_theme( $contents, $full = true )
 
 		if( defined( 'NV_IS_ADMIN' ) )
 		{
-			$my_footer = nv_admin_menu() . $my_footer;
+			$my_footer .= $my_footer;
 		}
 	}
 

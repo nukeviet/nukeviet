@@ -124,7 +124,7 @@ elseif( $step == 2 )
 	}
 
 	// Danh sach cac file can kiem tra quyen ghi
-	$array_dir = array( NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . '/css', NV_DATADIR );
+	$array_dir = array( NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_DATADIR );
 	if( NV_SESSION_SAVE_PATH != '' )
 	{
 		$array_dir[] = NV_SESSION_SAVE_PATH;
@@ -434,7 +434,6 @@ elseif( $step == 5 )
 					try
 					{
 						$db->query( 'CREATE DATABASE ' . $db_config['dbname'] );
-						$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
 						$db->exec( 'USE ' . $db_config['dbname'] );
 
 						$db_config['error'] = '';
@@ -448,18 +447,28 @@ elseif( $step == 5 )
 			}
 		}
 
-		if( $connect )
+		if( $connect AND $db_config['dbtype'] == 'mysql' )
 		{
-			$tables = array();
-
 			try
 			{
-			  $db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
 			}
 			catch( PDOException $e )
 			{
-			  trigger_error( $e->getMessage() );
+				trigger_error( $e->getMessage() );
 			}
+
+			$row = $db->query( 'SELECT @@session.character_set_database AS character_set_database,  @@session.collation_database AS collation_database')->fetch();
+			if( $row['character_set_database'] != 'utf8' or $row['collation_database'] != $db_config['collation'] )
+			{
+				$db_config['error'] = 'Error character set database';
+				$connect = 0;
+			}
+		}
+
+		if( $connect )
+		{
+			$tables = array();
 
 			if( $sys_info['allowed_set_time_limit'] )
 			{
@@ -792,7 +801,6 @@ elseif( $step == 6 )
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_path', " . $db->quote( $global_config['ftp_path'] ) . ")" );
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_check_login', " . $db->quote( $global_config['ftp_check_login'] ) . ")" );
 					$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = " . $db->quote( $array_data['site_name'] ) . " WHERE module = 'global' AND config_name = 'site_name'" );
-					$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = 'mobile_default' WHERE lang='" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'mobile_theme'" );
 
 					$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_authors_module ORDER BY weight ASC" );
 					while( $row = $result->fetch() )
@@ -930,16 +938,13 @@ elseif( $step == 6 )
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('hour', '" . str_pad( $i, 2, '0', STR_PAD_LEFT ) . "', 0, 0, 0)" );
 					}
 
-					if( file_exists( NV_ROOTDIR . '/includes/bots.php' ) )
+					$bots = array('googlebot', 'msnbot', 'bingbot', 'yahooslurp', 'w3cvalidator');
+					foreach( $bots as $_bot )
 					{
-						include NV_ROOTDIR . '/includes/bots.php' ;
-						foreach( $bots as $_bot => $v )
-						{
-							$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote( $_bot ) . ", 0, 0, 0)" );
-						}
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote( $_bot ) . ", 0, 0, 0)" );
 					}
 
-					$tmp_array = array('opera','operamini','webtv','explorer','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
+					$tmp_array = array('opera','operamini','webtv','explorer','edge','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
 					foreach( $tmp_array as $_browser )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote( $_browser ) . ", 0, 0, 0)" );
@@ -950,7 +955,7 @@ elseif( $step == 6 )
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)" );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unspecified', 0, 0, 0)" );
 
-					$tmp_array = array('unknown', 'win', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'win95', 'winme', 'winnt', 'win98', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
+					$tmp_array = array('unknown', 'win', 'win10', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
 					foreach( $tmp_array as $_os )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote( $_os ) . ", 0, 0, 0)" );

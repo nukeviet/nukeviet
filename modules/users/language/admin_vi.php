@@ -134,6 +134,10 @@ $lang_module['adduser_register'] = 'Tài khoản của bạn đã được tạo
 $lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['allow_openid'] = 'Cho phép sử dụng Oauth, OpenID để đăng nhập, đăng ký';
 $lang_module['openid_servers'] = 'Các nhà cung cấp Oauth, OpenID được chấp nhận';
+$lang_module['openid_processing'] = 'Chế độ mặc định xử lý sau khi login OpenID';
+$lang_module['openid_processing_0'] = 'Người dùng tự chọn hình thức xử lý';
+$lang_module['openid_processing_3'] = 'Đăng ký một tài khoản mới và gán OpenID này vào tài khoản đó';
+$lang_module['openid_processing_4'] = 'Đăng nhập tự động bằng một tài khoản do hệ thống tự tạo';
 $lang_module['allow_change_login'] = 'Cho phép thay đổi tên đăng nhập';
 $lang_module['is_user_forum'] = 'Sử dụng thành viên của Diễn đàn';
 $lang_module['search_page_title'] = 'Kết quả tìm kiếm';

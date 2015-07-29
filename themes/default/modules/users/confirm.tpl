@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js" data-show="after"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js" data-show="after"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="page">
     <h2>{LANG.openid_login}</h2>
@@ -18,8 +18,8 @@
     	<!-- BEGIN: captcha -->
     	<div class="form-group">
     		<div class="col-sm-offset-6 col-sm-18">
-    			<img id="vimglogin" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-    			&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimglogin','seccode_iavim');">&nbsp;</em>
+    			<img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+    			&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#seccode_iavim');">&nbsp;</em>
     		</div>
     	</div>
     	<div class="form-group">
@@ -48,7 +48,7 @@
     	</p>
     </form>
 </div>
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 $(document).ready(function(){
 	$('#loginForm').validate();
 });

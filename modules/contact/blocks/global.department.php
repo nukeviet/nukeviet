@@ -80,7 +80,7 @@ if( ! nv_function_exists( 'nv_department_info' ) )
 		}
 
 		//Danh sach cac bo phan
-		$sql = 'SELECT id, full_name, phone, fax, email, yahoo, skype, note FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 AND id=' . $block_config['departmentid'];
+		$sql = 'SELECT id, full_name, phone, fax, email, yahoo, skype, note, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 AND id=' . $block_config['departmentid'];
 		$array_department = nv_db_cache( $sql, 'id', $module );
 
 		$xtpl = new XTemplate( 'block.department.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module );
@@ -92,11 +92,35 @@ if( ! nv_function_exists( 'nv_department_info' ) )
 			{
 				if( ! empty( $row ) )
 				{
+				    $row['emailhref'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
+                    
 					$xtpl->assign( 'DEPARTMENT', $row );
 
 					if( ! empty( $row['phone'] ) )
 					{
-						$xtpl->parse( 'main.phone' );
+						$nums = array_map( "trim", explode( "|", nv_unhtmlspecialchars( $row['phone'] ) ) );
+                        foreach ( $nums as $k => $num )
+                        {
+                            unset( $m );
+                            if ( preg_match( "/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m ) )
+                            {
+                                $phone = array( 'number' => nv_htmlspecialchars( $m[1] ), 'href' => $m[2] );
+                                $xtpl->assign( 'PHONE', $phone );
+                                $xtpl->parse( 'main.phone.item.href' );
+                                $xtpl->parse( 'main.phone.item.href2' );
+                            }
+                            else
+                            {
+                                
+                                $num = preg_replace( "/\[[^\]]*\]/", "", $num );
+                                $phone = array( 'number' => nv_htmlspecialchars( $num ) );
+                                $xtpl->assign( 'PHONE', $phone );
+                            }
+                            if ( $k ) $xtpl->parse( 'main.phone.item.comma' );
+                            $xtpl->parse( 'main.phone.item' );
+                        }
+                        
+                        $xtpl->parse( 'main.phone' );
 					}
 
 					if( ! empty( $row['fax'] ) )
@@ -106,17 +130,40 @@ if( ! nv_function_exists( 'nv_department_info' ) )
 
 					if( ! empty( $row['email'] ) )
 					{
-						$xtpl->parse( 'main.email' );
+						$emails = array_map( "trim", explode( ",", $row['email'] ) );
+
+                        foreach ( $emails as $k => $email )
+                        {
+                            $xtpl->assign( 'EMAIL', $email );
+                            if ( $k ) $xtpl->parse( 'main.email.item.comma' );
+                            $xtpl->parse( 'main.email.item' );
+                        }
+            
+                        $xtpl->parse( 'main.email' );
 					}
 
 					if( ! empty( $row['yahoo'] ) )
 					{
-						$xtpl->parse( 'main.yahoo' );
+						$ys = array_map( "trim", explode( ",", $row['yahoo'] ) );
+                        foreach ( $ys as $k => $y )
+                        {
+                            $xtpl->assign( 'YAHOO', $y );
+                            if ( $k ) $xtpl->parse( 'main.yahoo.item.comma' );
+                            $xtpl->parse( 'main.yahoo.item' );
+                        }                        
+                        $xtpl->parse( 'main.yahoo' );
 					}
 
 					if( ! empty( $row['skype'] ) )
 					{
-						$xtpl->parse( 'main.skype' );
+						$ss = array_map( "trim", explode( ",", $row['skype'] ) );
+                        foreach ( $ss as $k => $s )
+                        {
+                            $xtpl->assign( 'SKYPE', $s );
+                            if ( $k ) $xtpl->parse( 'main.skype.item.comma' );
+                            $xtpl->parse( 'main.skype.item' );
+                        }
+                        $xtpl->parse( 'main.skype' );
 					}
 				}
 				else

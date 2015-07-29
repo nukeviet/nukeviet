@@ -51,7 +51,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 		{
 			if( ( $row['show_register'] and $userid == 0 ) or $userid > 0 )
 			{
-				$row['tbodyclass'] = ( $a % 2 ) ? " class=\"second\"" : "";
+				$row['tbodyclass'] = ( $a % 2 ) ? ' class="second"' : '';
 				if( $userid == 0 and empty( $custom_fields ) )
 				{
 					if( ! empty( $row['field_choices'] ) )
@@ -108,7 +108,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 					$row['value'] = htmlspecialchars( nv_editor_br2nl( $row['value'] ) );
 					if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 					{
-						$array_tmp = explode( "@", $row['class'] );
+						$array_tmp = explode( '@', $row['class'] );
 						$edits = nv_aleditor( 'custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value'] );
 						$xtpl->assign( 'EDITOR', $edits );
 						$xtpl->parse( 'main.field.loop.editor' );
@@ -127,7 +127,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							'key' => $key,
 							'selected' => ( $key == $row['value'] ) ? ' selected="selected"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.field.loop.select.loop' );
 					}
@@ -142,7 +142,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 							'id' => $row['fid'] . '_' . $number++,
 							'key' => $key,
 							'checked' => ( $key == $row['value'] ) ? ' checked="checked"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.field.loop.radio' );
 					}
@@ -157,7 +157,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 							'id' => $row['fid'] . '_' . $number++,
 							'key' => $key,
 							'checked' => ( in_array( $key, $valuecheckbox ) ) ? ' checked="checked"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.field.loop.checkbox' );
 					}
@@ -170,7 +170,7 @@ function user_register( $gfx_chk, $array_register, $siteterms, $data_questions, 
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							'key' => $key,
 							'selected' => ( in_array( $key, $valueselect ) ) ? ' selected="selected"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.field.loop.multiselect.loop' );
 					}
@@ -219,7 +219,7 @@ function openid_register( $array_register, $siteterms, $data_questions )
 	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register&amp;openid=1' );
 	$xtpl->assign( 'NICK_MAXLENGTH', NV_UNICKMAX );
 	$xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
-	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.gif' );
+	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.png' );
 	$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 	$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -269,23 +269,23 @@ function user_login( $gfx_chk, $array_login )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.captcha' );
 	}
 
 	if( defined( 'NV_OPENID_ALLOWED' ) )
 	{
-		$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.gif' );
+		$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.png' );
 		$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 		$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 
 		$assigns = array();
 		foreach( $global_config['openid_servers'] as $server )
 		{
-			$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=oauth&amp;server=" . $server;
+			$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
 			$assigns['title'] = ucfirst( $server );
-			$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
+			$assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/' . $server . '.png';
 			$assigns['img_width'] = $assigns['img_height'] = 24;
 
 			$xtpl->assign( 'OPENID', $assigns );
@@ -319,16 +319,16 @@ function user_openid_login( $gfx_chk, $array_login, $attribs )
 	$xtpl->assign( 'USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
 	$xtpl->assign( 'NICK_MAXLENGTH', NV_UNICKMAX );
 	$xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
-	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.gif' );
+	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.png' );
 	$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 	$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 
 	$assigns = array();
 	foreach( $global_config['openid_servers'] as $server )
 	{
-		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
+		$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $server;
 		$assigns['title'] = ucfirst( $server );
-		$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
+		$assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/' . $server . '.png';
 		$assigns['img_width'] = $assigns['img_height'] = 24;
 
 		$xtpl->assign( 'OPENID', $assigns );
@@ -345,7 +345,7 @@ function user_openid_login( $gfx_chk, $array_login, $attribs )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.captcha' );
 	}
@@ -370,7 +370,7 @@ function user_openid_login2( $attribs, $array_user_login )
 
 	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register&amp;nv_redirect=' . $nv_redirect );
 	$xtpl->assign( 'USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass&amp;nv_redirect=' . $nv_redirect );
-	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.gif' );
+	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.png' );
 	$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 	$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 
@@ -383,9 +383,9 @@ function user_openid_login2( $attribs, $array_user_login )
 	$assigns = array();
 	foreach( $global_config['openid_servers'] as $server )
 	{
-		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server . "&amp;nv_redirect=" . $nv_redirect;
+		$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $server . '&amp;nv_redirect=' . $nv_redirect;
 		$assigns['title'] = ucfirst( $server );
-		$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
+		$assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/' . $server . '.png';
 		$assigns['img_width'] = $assigns['img_height'] = 24;
 
 		$xtpl->assign( 'OPENID', $assigns );
@@ -434,7 +434,7 @@ function user_lostpass( $data, $question )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.step1' );
 	}
@@ -494,7 +494,7 @@ function user_lostactivelink( $data, $question )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.step1' );
 	}
@@ -529,11 +529,7 @@ function user_changepass( $array_data = array() )
 		$xtpl->parse( 'main.allowopenid' );
 	}
 
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
-	}
-	if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
+	if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
 	{
 		$xtpl->parse( 'main.regroups' );
 	}
@@ -568,13 +564,9 @@ function user_changequestion( $array_data )
 	{
 		$xtpl->parse( 'main.allowopenid' );
 	}
-	if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
+	if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
 	{
 		$xtpl->parse( 'main.regroups' );
-	}
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
 	}
 
 	$xtpl->assign( 'DATA', $array_data );
@@ -633,14 +625,9 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 		$xtpl->parse( 'main.allowopenid' );
 	}
 
-	if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
+	if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
 	{
 		$xtpl->parse( 'main.regroups' );
-	}
-
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
 	}
 
 	$xtpl->assign( 'DATA', $data );
@@ -691,7 +678,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 		{
 			if( ( $row['show_register'] and $userid == 0 ) or $userid > 0 )
 			{
-				$row['tbodyclass'] = ( $a % 2 ) ? " class=\"second\"" : "";
+				$row['tbodyclass'] = ( $a % 2 ) ? ' class="second"' : '';
 
 				if( $userid == 0 and empty( $custom_fields ) )
 				{
@@ -752,7 +739,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 					$row['value'] = htmlspecialchars( nv_editor_br2nl( $row['value'] ) );
 					if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 					{
-						$array_tmp = explode( "@", $row['class'] );
+						$array_tmp = explode( '@', $row['class'] );
 						$edits = nv_aleditor( 'custom_fields[' . $row['field'] . ']', $array_tmp[0], $array_tmp[1], $row['value'] );
 						$xtpl->assign( 'EDITOR', $edits );
 						$xtpl->parse( 'main.field.loop.editor' );
@@ -771,7 +758,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							'key' => $key,
 							'selected' => ( $key == $row['value'] ) ? ' selected="selected"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.field.loop.select.loop' );
 					}
@@ -786,7 +773,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 							'id' => $row['fid'] . '_' . $number++,
 							'key' => $key,
 							'checked' => ( $key == $row['value'] ) ? ' checked="checked"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.field.loop.radio' );
 					}
@@ -802,7 +789,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 							'id' => $row['fid'] . '_' . $number++,
 							'key' => $key,
 							'checked' => ( in_array( $key, $valuecheckbox ) ) ? ' checked="checked"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.field.loop.checkbox' );
 					}
@@ -816,7 +803,7 @@ function user_info( $data, $array_field_config, $custom_fields, $error )
 						$xtpl->assign( 'FIELD_CHOICES', array(
 							'key' => $key,
 							'selected' => ( in_array( $key, $valueselect ) ) ? ' selected="selected"' : '',
-							"value" => $value
+							'value' => $value
 						) );
 						$xtpl->parse( 'main.field.loop.multiselect.loop' );
 					}
@@ -852,11 +839,7 @@ function user_welcome()
 		$xtpl->parse( 'main.allowopenid' );
 	}
 
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
-	}
-	if( ( ! empty( $groups_list ) ) && ( $global_config['allowuserpublic'] == 1 ) )
+	if( ( ! empty( $groups_list ) ) and ( $global_config['allowuserpublic'] == 1 ) )
 	{
 		$xtpl->parse( 'main.regroups' );
 	}
@@ -869,40 +852,42 @@ function user_welcome()
 	{
 		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.jpg' );
 	}
+    
+    $_user_info = $user_info;
 
-	$user_info['gender'] = ( $user_info['gender'] == "M" ) ? $lang_module['male'] : ( $user_info['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
-	$user_info['birthday'] = empty( $user_info['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $user_info['birthday'] );
-	$user_info['regdate'] = nv_date( 'd/m/Y', $user_info['regdate'] );
-	$user_info['view_mail'] = empty( $user_info['view_mail'] ) ? $lang_module['no'] : $lang_module['yes'];
-	$user_info['last_login'] = empty( $user_info['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $user_info['last_login'] );
-	$user_info['current_login'] = nv_date( 'l, d/m/Y H:i', $user_info['current_login'] );
-	$user_info['st_login'] = ! empty( $user_info['st_login'] ) ? $lang_module['yes'] : $lang_module['no'];
+	$_user_info['gender'] = ( $user_info['gender'] == 'M' ) ? $lang_module['male'] : ( $user_info['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
+	$_user_info['birthday'] = empty( $user_info['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $user_info['birthday'] );
+	$_user_info['regdate'] = nv_date( 'd/m/Y', $user_info['regdate'] );
+	$_user_info['view_mail'] = empty( $user_info['view_mail'] ) ? $lang_module['no'] : $lang_module['yes'];
+	$_user_info['last_login'] = empty( $user_info['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $user_info['last_login'] );
+	$_user_info['current_login'] = nv_date( 'l, d/m/Y H:i', $user_info['current_login'] );
+	$_user_info['st_login'] = ! empty( $user_info['st_login'] ) ? $lang_module['yes'] : $lang_module['no'];
 
 	if( isset( $user_info['current_mode'] ) and $user_info['current_mode'] == 5 )
 	{
-		$user_info['current_mode'] = $lang_module['admin_login'];
+		$_user_info['current_mode'] = $lang_module['admin_login'];
 	}
 	elseif( isset( $user_info['current_mode'] ) and isset( $lang_module['mode_login_' . $user_info['current_mode']] ) )
 	{
-		$user_info['current_mode'] = $lang_module['mode_login_' . $user_info['current_mode']] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
+		$_user_info['current_mode'] = $lang_module['mode_login_' . $user_info['current_mode']] . ': ' . $user_info['openid_server'] . ' (' . $user_info['openid_email'] . ')';
 	}
 	else
 	{
-		$user_info['current_mode'] = $lang_module['mode_login_1'];
+		$_user_info['current_mode'] = $lang_module['mode_login_1'];
 	}
 
-	$user_info['change_name_info'] = sprintf( $lang_module['change_name_info'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=editinfo" );
-	$user_info['pass_empty_note'] = sprintf( $lang_module['pass_empty_note'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=changepass" );
-	$user_info['question_empty_note'] = sprintf( $lang_module['question_empty_note'], NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=editinfo&amp;changequestion" );
+	$_user_info['change_name_info'] = sprintf( $lang_module['change_name_info'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo' );
+	$_user_info['pass_empty_note'] = sprintf( $lang_module['pass_empty_note'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=changepass' );
+	$_user_info['question_empty_note'] = sprintf( $lang_module['question_empty_note'], NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo&amp;changequestion' );
 
-	$xtpl->assign( 'USER', $user_info );
+	$xtpl->assign( 'USER', $_user_info );
 
 	if( ! $global_config['allowloginchange'] and ! empty( $user_info['current_openid'] ) and empty( $user_info['last_login'] ) and empty( $user_info['last_agent'] ) and empty( $user_info['last_ip'] ) and empty( $user_info['last_openid'] ) )
 	{
 		$xtpl->parse( 'main.change_login_note' );
 	}
 
-	if( $user_info['st_login'] == $lang_module['no'] )
+	if( empty( $user_info['st_login'] ) )
 	{
 		$xtpl->parse( 'main.pass_empty_note' );
 	}
@@ -946,7 +931,7 @@ function openid_account_confirm( $gfx_chk, $attribs )
 	$xtpl = new XTemplate( 'confirm.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1' );
-	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.gif' );
+	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.png' );
 	$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 	$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 	if( $gfx_chk )
@@ -956,7 +941,7 @@ function openid_account_confirm( $gfx_chk, $attribs )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->parse( 'main.captcha' );
 	}
 
@@ -966,9 +951,9 @@ function openid_account_confirm( $gfx_chk, $attribs )
 	$assigns = array();
 	foreach( $global_config['openid_servers'] as $server )
 	{
-		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
+		$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $server;
 		$assigns['title'] = ucfirst( $server );
-		$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
+		$assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/' . $server . '.png';
 		$assigns['img_width'] = $assigns['img_height'] = 24;
 
 		$xtpl->assign( 'OPENID', $assigns );
@@ -993,7 +978,7 @@ function openid_active_confirm( $gfx_chk, $attribs )
 	$xtpl = new XTemplate( 'active_confirm.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1' );
-	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.gif' );
+	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.png' );
 	$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 	$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 	if( $gfx_chk )
@@ -1003,7 +988,7 @@ function openid_active_confirm( $gfx_chk, $attribs )
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . '?scaptcha=captcha&t=' . NV_CURRENTTIME );
+		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->parse( 'main.captcha' );
 	}
 	$xtpl->assign( 'USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login' );
@@ -1012,9 +997,9 @@ function openid_active_confirm( $gfx_chk, $attribs )
 	$assigns = array();
 	foreach( $global_config['openid_servers'] as $server )
 	{
-		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=login&amp;server=" . $server;
+		$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $server;
 		$assigns['title'] = ucfirst( $server );
-		$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
+		$assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/' . $server . '.png';
 		$assigns['img_width'] = $assigns['img_height'] = 24;
 
 		$xtpl->assign( 'OPENID', $assigns );
@@ -1039,7 +1024,7 @@ function user_openid_administrator( $data )
 
 	$xtpl = new XTemplate( 'openid_administrator.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.gif' );
+	$xtpl->assign( 'OPENID_IMG_SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/openid.png' );
 	$xtpl->assign( 'OPENID_IMG_WIDTH', 150 );
 	$xtpl->assign( 'OPENID_IMG_HEIGHT', 60 );
 
@@ -1050,13 +1035,10 @@ function user_openid_administrator( $data )
 	{
 		$xtpl->parse( 'main.allowopenid' );
 	}
-	if( ! empty( $groups_list ) && $global_config['allowuserpublic'] == 1 )
+	
+	if( ! empty( $groups_list ) and $global_config['allowuserpublic'] == 1 )
 	{
 		$xtpl->parse( 'main.regroups' );
-	}
-	if( ! defined( 'NV_IS_ADMIN' ) )
-	{
-		$xtpl->parse( 'main.logout' );
 	}
 
 	$xtpl->assign( 'DATA', $data );
@@ -1084,9 +1066,9 @@ function user_openid_administrator( $data )
 	$assigns = array();
 	foreach( $global_config['openid_servers'] as $server )
 	{
-		$assigns['href'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=oauth&amp;server=" . $server;
+		$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
 		$assigns['title'] = ucfirst( $server );
-		$assigns['img_src'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/" . $server . ".gif";
+		$assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/' . $server . '.png';
 		$assigns['img_width'] = $assigns['img_height'] = 24;
 
 		$xtpl->assign( 'OPENID', $assigns );
@@ -1122,8 +1104,6 @@ function nv_regroup_theme( $groups )
 		$xtpl->parse( 'main.list' );
 	}
 
-	if( ! defined( 'NV_IS_ADMIN' ) ) $xtpl->parse( 'main.logout' );
-
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1152,7 +1132,7 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 	{
 		$xtpl->assign( 'USER', $user );
 
-		if( ! empty( $user['first_name'] ) && $user['first_name'] != $user['username'] )
+		if( ! empty( $user['first_name'] ) and $user['first_name'] != $user['username'] )
 		{
 			$xtpl->parse( 'main.list.fullname' );
 		}
@@ -1194,7 +1174,7 @@ function nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields
 		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.jpg' );
 	}
 
-	$item['gender'] = ( $item['gender'] == "M" ) ? $lang_module['male'] : ( $item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
+	$item['gender'] = ( $item['gender'] == 'M' ) ? $lang_module['male'] : ( $item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );
 	$item['birthday'] = empty( $item['birthday'] ) ? $lang_module['na'] : nv_date( 'd/m/Y', $item['birthday'] );
 	$item['regdate'] = nv_date( 'd/m/Y', $item['regdate'] );
 	$item['last_login'] = empty( $item['last_login'] ) ? '' : nv_date( 'l, d/m/Y H:i', $item['last_login'] );
@@ -1267,7 +1247,6 @@ function user_info_exit_redirect( $info, $nv_redirect )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_site_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 /**

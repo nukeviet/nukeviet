@@ -42,7 +42,7 @@
 			</tr>
 			<tr>
 				<th>{LANG.site_logo}</th>
-				<td><input type="text" class="w300 form-control pull-left" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="margin-right: 10px" /><button name="selectimg" class="btn btn-default"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
+				<td><input type="text" class="w300 form-control pull-left" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="margin-right: 10px" /><button id="select-site-logo" name="selectimg" class="btn btn-default"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
 			</tr>
 			<tr>
 				<th>{LANG.theme}</th>
@@ -90,15 +90,6 @@
 	//<![CDATA[
 	$(document).ready(function() {
 		$("#site_home_module").select2();
-
-		$("button[name=selectimg]").click(function() {
-			var area = "site_logo";
-			var path = "";
-			var currentpath = "images";
-			var type = "image";
-			nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-			return false;
-		});
 	});
 	//]]>
 </script>

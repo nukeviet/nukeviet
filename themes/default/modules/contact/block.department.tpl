@@ -8,7 +8,7 @@
 				<!-- BEGIN: phone -->
 				<tr>
 					<td>{LANG.phone}</td>
-					<td>{DEPARTMENT.phone}</td>
+					<td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><!-- BEGIN: href --><a href="tel:{PHONE.href}"><!-- END: href -->{PHONE.number}<!-- BEGIN: href2 --></a><!-- END: href2 --><!-- END: item --></td>
 				</tr>
 				<!-- END: phone -->
 				<!-- BEGIN: fax -->
@@ -20,19 +20,19 @@
 				<!-- BEGIN: email -->
 				<tr>
 					<td>{LANG.email}</td>
-					<td><a href="mailto:{DEPARTMENT.email}">{DEPARTMENT.email}</a></td>
+					<td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="{DEPARTMENT.emailhref}">{EMAIL}</a><!-- END: item --></td>
 				</tr>
 				<!-- END: email -->
 				<!-- BEGIN: yahoo -->
 				<tr>
 					<td>{LANG.yahoo}</td>
-					<td><a href="ymsgr:sendIM?{DEPARTMENT.yahoo}">{DEPARTMENT.yahoo}</a></td>
+					<td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="ymsgr:SendIM?{YAHOO}" title="Yahoo Chat">{YAHOO}</a><!-- END: item --></td>
 				</tr>
 				<!-- END: yahoo -->
 				<!-- BEGIN: skype -->
 				<tr>
 					<td>{LANG.skype}</td>
-					<td><a href="skype:{DEPARTMENT.skype}?chat">{DEPARTMENT.skype}</a></td>
+					<td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="skype:{SKYPE}?call" title="Skype">{SKYPE}</a><!-- END: item --></td>
 				</tr>
 				<!-- END: skype -->
 				<!-- BEGIN: note -->

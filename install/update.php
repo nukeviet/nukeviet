@@ -240,7 +240,6 @@ class NvUpdate
 			include NV_ROOTDIR . '/includes/header.php';
 			echo $this->template( $contents );
 			include NV_ROOTDIR . '/includes/footer.php';
-			exit();
 		}
 	}
 

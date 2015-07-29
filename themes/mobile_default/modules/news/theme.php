@@ -38,7 +38,6 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'CONTENT', $array_row_i );
 		++$a;
@@ -96,12 +95,6 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 		$xtpl->parse( 'main.generate_page' );
 	}
 
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
-	}
-
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -130,7 +123,6 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	{
 		$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
 		$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
-		$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 		$xtpl->clear_autoreset();
 		$xtpl->assign( 'NUMBER', ++$a );
 		$xtpl->assign( 'CONTENT', $array_row_i );
@@ -160,12 +152,6 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	{
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.generate_page' );
-	}
-
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -396,7 +382,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 			foreach( $array_cat[$key]['content'] as $array_row_i )
 			{
 				$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
-				$array_row_i['publtime'] = nv_date( 'd/m/Y', $array_row_i['publtime'] );
+				$array_row_i['publtime'] = nv_date( 'd/m/Y H:i', $array_row_i['publtime'] );
 				$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], 120 );
 				++$a;
 
@@ -431,7 +417,6 @@ function viewsubcat_main( $viewcat, $array_cat )
 					{
 						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
-					$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 					$xtpl->assign( 'OTHER', $array_row_i );
 					$xtpl->parse( 'main.listcat.related.loop' );
 				}
@@ -455,12 +440,6 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 			$xtpl->parse( 'main.listcat' );
 		}
-	}
-
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -585,8 +564,6 @@ function viewcat_two_column( $array_content, $array_catpage )
 						$xtpl->assign( 'CLASS', 'icon_list' );
 					}
 
-					$array_catpage_i['content'][$index]['hometext'] = nv_clean60( $array_catpage_i['content'][$index]['hometext'], $module_config[$module_name]['tooltip_length'], true );
-
 					$xtpl->assign( 'CONTENT', $array_catpage_i['content'][$index] );
 					$xtpl->parse( 'main.loopcat.other' );
 				}
@@ -600,12 +577,6 @@ function viewcat_two_column( $array_content, $array_catpage )
 			$xtpl->parse( 'main.loopcat' );
 			++$a;
 		}
-	}
-
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
 	}
 
 	//Theo chu de
@@ -753,7 +724,6 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $related_new_array as $key => $related_new_array_i )
 		{
-			$related_new_array_i['hometext'] = nv_clean60( $related_new_array_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 			$newday = $related_new_array_i['time'] + ( 86400 * $related_new_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -771,7 +741,6 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $related_array as $related_array_i )
 		{
-			$related_array_i['hometext'] = nv_clean60( $related_array_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 			$newday = $related_array_i['time'] + ( 86400 * $related_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -788,7 +757,6 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		foreach( $topic_array as $key => $topic_array_i )
 		{
-			$topic_array_i['hometext'] = nv_clean60( $topic_array_i['hometext'], $module_config[$module_name]['tooltip_length'], true );
 			$newday = $topic_array_i['time'] + ( 86400 * $topic_array_i['newday'] );
 			if ( $newday >= NV_CURRENTTIME )
 			{
@@ -805,12 +773,6 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		$xtpl->assign( 'CONTENT_COMMENT', $content_comment );
 		$xtpl->parse( 'main.comment' );
-	}
-
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
 	}
 
 	if( $news_contents['status'] != 1 )

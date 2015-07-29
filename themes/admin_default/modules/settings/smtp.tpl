@@ -63,16 +63,6 @@
 <script type="text/javascript">
 	//<![CDATA[
 	document.getElementById('form_edit_smtp').setAttribute("autocomplete", "off");
-	$(function() {
-		$("input[name=mailer_mode]").click(function() {
-			var type = $(this).val();
-			if (type == "smtp") {
-				$("#smtp").show();
-			} else {
-				$("#smtp").hide();
-			}
-		});
-	});
 	//]]>
 </script>
 <!-- END: smtp -->

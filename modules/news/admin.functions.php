@@ -387,7 +387,7 @@ function nv_show_cat_list( $parentid = 0 )
 				}
 				$xtpl->parse( 'main.data.loop.viewcat' );
 
-				for( $i = 0; $i <= 10; ++$i )
+				for( $i = 0; $i <= 20; ++$i )
 				{
 					$xtpl->assign( 'NUMLINKS', array(
 						'key' => $i,
@@ -767,5 +767,4 @@ function redriect( $msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '' )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }

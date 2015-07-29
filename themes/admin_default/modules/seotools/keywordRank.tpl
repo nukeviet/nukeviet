@@ -91,30 +91,13 @@
 <br />
 <div id="keywordRankResult">&nbsp;</div>
 <script type="text/javascript">
-	//<![CDATA[
-	$(document).ready(function() {
-		$("#keywordRankCheck").click(function() {
-			var keyword = $("#keyword").val();
-			keyword = formatStringAsUriComponent(keyword);
-			$("#keyword").attr('value', keyword);
-			if (keyword.length < 3 || keyword.length > 60) {
-				alert("{LANG.keywordInfo}");
-				return false;
-			}
-			keyword = rawurlencode(keyword);
-			var lr = $("#lr").val();
-			var accuracy = $("#accuracy").val();
-			$("#keyword").attr('disabled', 'disabled');
-			$("#lr").attr('disabled', 'disabled');
-			$("#accuracy").attr('disabled', 'disabled');
-			$("#fsubmit").hide();
-			$("#load_img").html('<p style="text-align:center;"><img alt="" src="{NV_BASE_SITEURL}images/load.gif" width="16" height="16" /></p>');
-			$("#keywordRankResult").text("").load("index.php?{NV_NAME_VARIABLE}=seotools&{NV_OP_VARIABLE}=keywordRank&i=process&k=" + keyword + "&l=" + lr + "&a=" + accuracy + "&num=" + nv_randomPassword(10));
-			return false;
-		});
-		$("#lr").select2();
-	});
-	//]]>
+//<![CDATA[
+var LANG = [];
+LANG.keywordInfo = '{LANG.keywordInfo}';
+$(document).ready(function() {
+	$("#lr").select2();
+});
+//]]>
 </script>
 <!-- END: main -->
 <!-- BEGIN: process -->

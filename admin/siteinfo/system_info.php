@@ -44,12 +44,8 @@ $info['server'] = array(
 	)
 );
 
-$js = false;
-
 if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 {
-	$js = true;
-
 	$info['chmod'] = array(
 		'caption' => $lang_module['chmod'],
 		'field' => array(
@@ -65,8 +61,7 @@ if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 			array( 'key' => NV_LOGS_DIR . '/error_logs/tmp', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/error_logs/tmp' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_LOGS_DIR . '/ip_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
 			array( 'key' => NV_LOGS_DIR . '/ref_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ref_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_LOGS_DIR . '/voting_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
-			array( 'key' => NV_FILES_DIR . '/css', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_FILES_DIR . '/css' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) ),
+			array( 'key' => NV_LOGS_DIR . '/voting_logs', 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_LOGS_DIR . '/voting_logs' ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) )
 		)
 	);
 	if( $dh = opendir( NV_ROOTDIR . '/' . NV_CACHEDIR ) )
@@ -115,12 +110,6 @@ foreach( $info as $key => $if )
 }
 
 $contents = $xtpl->text( 'main' );
-
-if( $js )
-{
-	$xtpl->parse( 'js' );
-	$contents .= $xtpl->text( 'js' );
-}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );

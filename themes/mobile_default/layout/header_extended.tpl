@@ -1,6 +1,6 @@
-	<!--[if lt IE 7]>
-	<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-	<![endif]-->
+	<!-- BEGIN: lt_ie9 -->
+	<p class="chromeframe">{LANG.chromeframe}</p>
+	<!-- END: lt_ie9 -->
 	<noscript>
 		<div class="alert alert-danger">{LANG.nojs}</div>
 	</noscript>
@@ -57,17 +57,11 @@
 	<nav id="nav" <!-- BEGIN: no_drag_block -->style="display: none"<!-- END: no_drag_block -->>
 		[MENU_SITE]
 	</nav>
-	<div id="search" class="container-fluid" style="display: none">
-		<form action="{NV_BASE_SITEURL}" method="get" onsubmit="return {THEME_SEARCH_SUBMIT_ONCLICK}">
-			<div class="input-group">
-				<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}" />
-				<input type="hidden" name="{NV_NAME_VARIABLE}" value="seek" />
-				<input type="text" class="form-control" name="q" id="topmenu_search_query" maxlength="{THEME_SEARCH_QUERY_MAX_LENGTH}" placeholder="{LANG.search}..."/>
-				<span class="input-group-btn">
-					<button class="btn btn-info" type="submit" id="topmenu_search_submit"><em class="fa fa-lg fa-search">&nbsp;</em></button>
-				</span>
-			</div>
-		</form>
+	<div id="search" class="headerSearch container-fluid" style="display: none">
+        <div class="input-group">
+            <input type="text" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}...">
+            <span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
+        </div>
 	</div>
 	<section>
 		<div id="body">

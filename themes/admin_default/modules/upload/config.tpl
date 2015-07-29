@@ -41,16 +41,4 @@
 		<input name="submit" type="submit" value="{LANG.pubdate}" class="btn btn-primary" />
 	</div>
 </form>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("input[name=selectimg]").click(function() {
-			var area = "upload_logo";
-			var path = "";
-			var currentpath = "images";
-			var type = "image";
-			nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-			return false;
-		});
-	}); 
-</script>
 <!--  END: main  -->

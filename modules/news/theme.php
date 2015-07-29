@@ -17,6 +17,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	$xtpl = new XTemplate( 'viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
+	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
 
 	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 1 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
@@ -100,12 +101,6 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 		$xtpl->parse( 'main.generate_page' );
 	}
 
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
-	}
-
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -117,6 +112,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	$xtpl = new XTemplate( 'viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
+	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
 
 	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 0 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
@@ -164,12 +160,6 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	{
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.generate_page' );
-	}
-
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -376,6 +366,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 	$xtpl = new XTemplate( $viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
 
 	// Hien thi cac chu de con
 	foreach( $array_cat as $key => $array_row_i )
@@ -405,7 +396,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 			foreach( $array_cat[$key]['content'] as $array_row_i )
 			{
 				$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
-				$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
+				$array_row_i['publtime'] = nv_date( 'd/m/Y H:i', $array_row_i['publtime'] );
 				++$a;
 
 				if( $a == 1 )
@@ -465,12 +456,6 @@ function viewsubcat_main( $viewcat, $array_cat )
 		}
 	}
 
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
-	}
-
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -482,6 +467,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 	$xtpl = new XTemplate( 'viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH0', $module_config[$module_name]['homewidth'] );
+	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
 
 	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 1 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
@@ -612,12 +598,6 @@ function viewcat_two_column( $array_content, $array_catpage )
 		}
 	}
 
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
-	}
-
 	// Theo chu de
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -632,6 +612,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
 
 	$news_contents['addtime'] = nv_date( 'd/m/Y h:i:s', $news_contents['addtime'] );
 
@@ -815,12 +796,6 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	{
 		$xtpl->assign( 'CONTENT_COMMENT', $content_comment );
 		$xtpl->parse( 'main.comment' );
-	}
-
-	if( $module_config[$module_name]['showtooltip'] )
-	{
-		$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position'] );
-		$xtpl->parse( 'main.tooltip' );
 	}
 
 	if( $news_contents['status'] != 1 )

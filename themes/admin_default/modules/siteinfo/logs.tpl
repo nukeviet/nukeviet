@@ -44,38 +44,6 @@
 	</tbody>
 </table>
 </div>
-<script type="text/javascript">
-$(document).ready(function() {
-	$("#from,#to").datepicker({
-		showOn : "both",
-		dateFormat : "dd.mm.yy",
-		changeMonth : true,
-		changeYear : true,
-		showOtherMonths : true,
-		buttonText : '{LANG.select}',
-		showButtonPanel : true,
-		showOn : 'focus'
-	});
-	$('input[name=clear]').click(function() {
-		$('#filter-form .text').val('');
-		$('input[name=q]').val('{LANG.filter_enterkey}');
-	});
-	$('input[name=action]').click(function() {
-		var f_q = $('input[name=q]').val();
-		var f_from = $('input[name=from]').val();
-		var f_to = $('input[name=to]').val();
-		var f_lang = $('select[name=lang]').val();
-		var f_module = $('select[name=module]').val();
-		var f_user = $('select[name=user]').val();
-		if ((f_q != '{LANG.filter_enterkey}' && f_q != '' ) || f_from != '' || f_to != '' || f_lang != '' || f_user != '' || f_module != '') {
-			$('#filter-form input, #filter-form select').attr('disabled', 'disabled');
-			window.location = '{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}&filter=1&checksess={checksess}&q=' + f_q + '&from=' + f_from + '&to=' + f_to + '&lang=' + f_lang + '&module=' + f_module + '&user=' + f_user;
-		} else {
-			alert('{LANG.filter_err_submit}');
-		}
-	});
-});
-</script>
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<colgroup>
@@ -127,76 +95,17 @@ $(document).ready(function() {
 		</tfoot>
 	</table>
 </div>
-<script type='text/javascript'>
+<script type="text/javascript">
 //<![CDATA[
-$(function() {
-	$("#check_all").click(function() {
-		if ($("#check_all").prop("checked")) {
-			$('input.list').prop("checked", true);
-		} else {
-			$('input.list').prop("checked", false);
-		}
-	});
-	$('#delall').click(function() {
-		var listall = [];
-		$('input.list:checked').each(function() {
-			listall.push($(this).val());
-		});
-		if (listall.length < 1) {
-			alert("{LANG.log_del_no_items}");
-			return false;
-		}
-		if (confirm("{LANG.log_del_confirm}")) {
-			$.ajax({
-				type : 'POST',
-				url : '{URL_DEL}',
-				data : 'listall=' + listall,
-				success : function(data) {
-					var s = data.split('_');
-					if (s[0] == 'OK')
-						window.location = '{BACK_URL}';
-					alert(s[1]);
-				}
-			});
-		}
-	});
-	$('a.delete').click(function(event) {
-		event.preventDefault();
-		if (confirm("{LANG.log_del_confirm}")) {
-			var href = $(this).attr('href');
-			$.ajax({
-				type : 'POST',
-				url : href,
-				data : '',
-				success : function(data) {
-					var s = data.split('_');
-					if (s[0] == 'OK') {
-						window.location = '{BACK_URL}';
-					} else {
-						alert(s[1]);
-					}
-				}
-			});
-		}
-	});
-	$("#logempty").click(function() {
-		if (confirm("{LANG.log_del_confirm}")) {
-			$("#logempty").attr("disabled", "disabled");
-			$.ajax({
-				type : 'POST',
-				url : '{NV_BASE_ADMINURL}index.php',
-				data : nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=logs_del&logempty={checksess}",
-				success : function(data) {
-					if (data == 'OK')
-						window.location = "{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "={OP}";
-					else
-						alert(data);
-					$("#logempty").removeAttr("disabled");
-				}
-			});
-		}
-	});
-});
+var LANG = [];
+LANG.filter_enterkey = '{LANG.filter_enterkey}';
+LANG.filter_err_submit = '{LANG.filter_err_submit}';
+LANG.log_del_no_items = '{LANG.log_del_no_items}';
+LANG.log_del_confirm = '{LANG.log_del_confirm}';
+var CFG = [];
+CFG.checksess = '{checksess}';
+CFG.url_del = '{URL_DEL}';
+CFG.back_url = '{BACK_URL}';
 //]]>
 </script>
 <!-- END: main -->

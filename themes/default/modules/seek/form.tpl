@@ -2,7 +2,7 @@
 <div id="cse"></div>
 <div id="search-form" class="text-center">
 	<p><em>{LANG.info_title}</em></p>
-	<form action="{DATA.action}" name="form_search" method="get" id="form_search" role="form" class="form-inline">
+	<form action="{DATA.action}" name="form_search" method="get" id="form_search" role="form">
 		<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
 		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
 		<div class="m-bottom">
@@ -40,8 +40,8 @@
 	<div class="text-center search_adv">
 		<a href="#" class="IntSearch">{LANG.search_adv_internet}</a>
 	</div>
-	<script src="http://www.google.com/jsapi" type="text/javascript" data-show="after"></script>
-	<script type="text/javascript" data-show="after">
+	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+	<script type="text/javascript">
 		google.load('search', '1', {
 			language : nv_sitelang
 		});
@@ -50,7 +50,7 @@
 	<!-- END: search_engine_unique_ID -->
 	<hr />
 </div>
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 //<![CDATA[
 $('#search_query_mod').change(function(){
 	var data = $(this).find('option:selected').data();

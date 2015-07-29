@@ -253,8 +253,8 @@
     "@label-danger-bg": "@brand-danger",
     "@label-color": "#fff",
     "@label-link-hover-color": "#fff",
-    "@modal-inner-padding": "20px",
-    "@modal-title-padding": "15px",
+    "@modal-inner-padding": "10px",
+    "@modal-title-padding": "10px",
     "@modal-title-line-height": "@line-height-base",
     "@modal-content-bg": "#fff",
     "@modal-content-border-color": "rgba(0,0,0,.2)",
@@ -374,7 +374,7 @@
     "@abbr-border-color": "@gray-light",
     "@headings-small-color": "@gray-light",
     "@blockquote-small-color": "@gray-light",
-    "@blockquote-font-size": "(@font-size-base * 1.25)",
+    "@blockquote-font-size": "@font-size-base",
     "@blockquote-border-color": "@gray-lighter",
     "@page-header-border-color": "@gray-lighter",
     "@dl-horizontal-offset": "@component-offset-horizontal",
@@ -407,7 +407,8 @@
     "component-animations.less",
     "dropdowns.less",
     "tooltip.less",
-    "popovers.less"
+    "popovers.less",
+    "modals.less"
   ],
   "js": [
     "dropdown.js",
@@ -420,5 +421,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=623801d8100fda93f4c6"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=550d0818fda6b9453850"
 }

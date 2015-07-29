@@ -11,18 +11,6 @@
 	{LANG.update_info_dump}<br />
 	<strong><a class="update_dump" href="{URL_DUMP_DB_BACKUP}&amp;type=sql" title="{LANG.update_dump} sql">{LANG.update_dump} sql</a></strong> {LANG.update_or} 
 	<strong><a class="update_dump" href="{URL_DUMP_DB_BACKUP}&amp;type=gz" title="{LANG.update_dump} gz">{LANG.update_dump} gz</a></strong>
-	<script type="text/javascript">
-	$(document).ready(function(){
-		$('.update_dump').click(function(){
-			$('#infodetectedupg').append('<div id="dpackagew"><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Waiting..."/></div>');
-			$.get( $(this).attr('href') , function(e){
-				$('#dpackagew').remove();
-				$('#infodetectedupg').append('<br />' + e);
-			});
-			return !1;
-		});
-	});
-	</script>
 </div>
 <!-- END: is_data_backup -->
 <!-- BEGIN: no_data_backup -->
@@ -188,97 +176,23 @@
 						
 					</div>
 					<script type="text/javascript">
-					var NVU = {};
-					NVU.IsStart = 0;
-					NVU.IsAlert = 0;
 					NVU.NextStepUrl = '{DATA.NextStepUrl}';
 					NVU.NavigateConfirm = '{LANG.update_nav_confirm}';
 					NVU.NextFuncs = '{DATA.nextfunction}';
 					NVU.NextFuncsName = '{DATA.nextftitle}';
-					NVU.NextUrl = '';
-					NVU.Start = function(){
-						$('#nv-message').hide();
-						NVU.IsStart = 1;
-						NVU.ShowLoad( NVU.NextFuncsName );
-						$('#' + NVU.NextFuncs).removeClass('ierror').removeClass('iok').removeClass('iwarn').addClass('iload').attr('title', '{LANG.update_taskiload}');
-						setTimeout( "NVU.load()", 1000 );
-					}
-					NVU.load = function(){
-						var url;
-						if( NVU.NextUrl == '' ){
-							url = '{NV_BASE_SITEURL}install/update.php?step=2&substep=3&load=' + NVU.NextFuncs;
-						}else{
-							url = NVU.NextUrl;
-						}
-						
-						// Dieu khien
-						
-						$.get( url, function(r){
-							var check = r.split('|');
-							NVU.HideLoad();
-							
-							if( check[0] == undefined || check[1] == undefined || check[2] == undefined || check[3] == undefined || check[4] == undefined || check[5] == undefined || check[6] == undefined || check[7] == undefined ){
-								check[6] = '1';
-							}
-							
-							if( check[0] == '0' ){
-								NVU.IsAlert = 1;
-								if( check[6] == '1' ){
-									$('#' + NVU.NextFuncs).removeClass('iload').removeClass('iok').removeClass('iwarn').addClass('ierror').attr('title', '{LANG.update_taskierror}');
-								}else{
-									$('#' + NVU.NextFuncs).removeClass('iload').removeClass('iok').removeClass('ierror').addClass('iwarn').attr('title', '{LANG.update_taskiwarn}');
-								}
-							}
-							else
-							{
-								$('#' + NVU.NextFuncs).removeClass('iload').removeClass('iwarn').removeClass('ierror').addClass('iok').attr('title', '{LANG.update_taskiok}');
-							}
-							
-							if( check[6] == '1' ){
-								NVU.SetStop();
-							}else if( check[7] == '1' ){
-								NVU.SetComplete();
-							}else{
-								NVU.NextFuncs = check[1];
-								NVU.NextFuncsName = check[2];
-								NVU.NextUrl = '';
-								var loadmessage = '';
-								if( check[3] != 'NO' && check[3] != '' ) NVU.NextUrl = check[3];
-								if( check[5] != 'NO' && check[5] != '' ){
-									loadmessage = NVU.NextFuncsName + ' - ' + check[5];
-								}else{
-									loadmessage = NVU.NextFuncsName;
-								}
-								NVU.ShowLoad( loadmessage );
-								$('#' + NVU.NextFuncs).removeClass('ierror').removeClass('iok').removeClass('iwarn').addClass('iload').attr('title', '{LANG.update_taskiload}');
-								setTimeout( "NVU.load()", 1000 );
-							}
-						});
-					}
-					NVU.SetStop = function(){
-						NVU.IsStart = 0;
-						$('#nv-message').show().html('<div class="infoerror">{LANG.update_task_do1_error} <strong>&quot;' + NVU.NextFuncsName + '&quot;</strong> {LANG.update_task_do2_error}</div>');
-					}
-					NVU.SetComplete = function(){
-						NVU.IsStart = 0;
-						var DivClass = 'infook';
-						if( NVU.IsAlert == 1 ){
-							DivClass = 'infoalert';
-						}
-						$('#nv-message').show().html('<div class="' + DivClass + '">' + ( ( DivClass == 'infook' ) ? '{LANG.update_task_all_complete}' : '{LANG.update_task_all_complete_alert}' ) + '</div>');
-						$('#control_t').append('<li><span class="next_step"><a href="' + NVU.NextStepUrl + '">{LANG.next_step}</a></span></li>');
-					}
-					NVU.ShowLoad = function(m){
-						$('#nv-loading').html('<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt=""/><br />{LANG.update_task_load} <strong>' + m + '</strong><br />{LANG.update_task_load_message}.');
-						$('#nv-loading').show();
-					}
-					NVU.HideLoad = function(){
-						$('#nv-loading').html('');
-						$('#nv-loading').hide();
-					}
-					NVU.ConfirmExit = function( event ){
-						if( NVU.IsStart == 0 ) {  event.cancelBubble = true;  }  else  { return NVU.NavigateConfirm;  }
-					}
+					NVU.update_taskiload = '{LANG.update_taskiload}';
+					
+					var update_taskierror = '{LANG.update_taskierror}';
+					var update_taskiwarn = '{LANG.update_taskiwarn}';
+					var update_taskiok = '{LANG.update_taskiok}';
+					var update_task_do1_error = '{LANG.update_task_do1_error}';
+					var update_task_do2_error = '{LANG.update_task_do2_error}';
+					var update_task_all_complete = '{LANG.update_task_all_complete}';
+					var update_task_all_complete_alert = '{LANG.update_task_all_complete_alert}';
+					var next_step = '{LANG.next_step}';
+					var update_task_load = '{LANG.update_task_load}';
+					var update_task_load_message = '{LANG.update_task_load_message}';
+					
 					window.onbeforeunload = NVU.ConfirmExit;
 					</script>
 					<!-- END: ConStart -->
@@ -434,48 +348,14 @@
 					</div>
 					<div id="nv-message" class="hide"><div>
 					<script type="text/javascript">
-					var NVMF = {};
-					NVMF.IsStart = 0;
-					NVMF.ftp_nosupport = document.getElementById('ftp_nosupport');
-					NVMF.check_ftp = document.getElementById('check_ftp');
 					NVMF.NavigateConfirm = '{LANG.update_nav_confirm}';
 					NVMF.OkMessage = '{OK_MESSAGE}';
-					NVMF.Start = function(){
-						NVMF.IsStart = 1;
-						$('#nv-message').html('<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Loading..."/><br />{LANG.update_load_waiting}');
-						if( NVMF.ftp_nosupport ){
-							$('#ftp_nosupport').slideUp(400);
-						}
-						if( NVMF.check_ftp ){
-							$('#check_ftp').slideUp(400);
-						}
-						$('#nv-toolmove').slideUp(200, function(){
-							$('#nv-message').slideDown(200, function(){
-								$.get( '{NV_BASE_SITEURL}install/update.php?step=2&substep=4&move', function(r){
-									NVMF.IsStart = 0;
-									if( r == 'OK' ){
-										$('.workitem').removeClass('ierror').removeClass('iload').removeClass('iwarn').addClass('iok');
-										$('#nv-message').html('<div class="infook">' + NVMF.OkMessage + '</div>');
-										$('#control_t').append('<li><span class="next_step"><a href="{DATA.NextStepUrl}">{LANG.next_step}</a></span></li>');
-									}else{
-										if( NVMF.ftp_nosupport ){
-											$('#ftp_nosupport').slideDown(600);
-										}
-										if( NVMF.check_ftp ){
-											$('#check_ftp').slideDown(600);
-										}
-										$('#nv-message').slideUp(200, function(){
-											$('#nv-toolmove').removeClass('infook').addClass('infoerror').html(r + '<br /><strong><a href="javascript:NVMF.Start();" title="{LANG.update_move_redo}">{LANG.update_move_redo}</a></strong><br />{LANG.update_move_redo_message}<br />{LANG.update_move_redo_manual}');
-											$('#nv-toolmove').slideDown(200);
-										});
-									}
-								});
-							});
-						});
-					}
-					NVMF.ConfirmExit = function( event ){
-						if( NVMF.IsStart == 0 ) {  event.cancelBubble = true;  }  else  { return NVMF.NavigateConfirm;  }
-					}
+					var update_load_waiting = '{LANG.update_load_waiting}';
+					var next_step = '{LANG.next_step}';
+					var NextStepUrl = '{LANG.NextStepUrl}';
+					var update_move_redo = '{LANG.update_move_redo}';
+					var update_move_redo_message = '{LANG.update_move_redo_message}';
+					var update_move_redo_manual = '{LANG.update_move_redo_manual}';
 					window.onbeforeunload = NVMF.ConfirmExit;
 					</script>
 					<!-- END: process -->

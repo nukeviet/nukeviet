@@ -381,7 +381,6 @@
     "@hr-border": "@gray-lighter"
   },
   "css": [
-    "print.less",
     "type.less",
     "code.less",
     "grid.less",
@@ -390,33 +389,28 @@
     "buttons.less",
     "button-groups.less",
     "input-groups.less",
-    "navs.less",
-    "navbar.less",
     "breadcrumbs.less",
     "pagination.less",
     "pager.less",
     "labels.less",
     "thumbnails.less",
     "alerts.less",
-    "progress-bars.less",
     "media.less",
     "list-group.less",
     "panels.less",
     "wells.less",
     "component-animations.less",
     "dropdowns.less",
-    "tooltip.less"
+    "modals.less"
   ],
   "js": [
     "dropdown.js",
     "modal.js",
-    "tooltip.js",
-    "popover.js",
     "tab.js",
     "affix.js",
     "collapse.js",
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=e283a4ba9c31781099a5"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=9c35654940b7275cdeb7"
 }

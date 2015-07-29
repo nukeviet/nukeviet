@@ -57,6 +57,7 @@ class Browser
     const BROWSER_OPERA_MINI = 'operamini'; // http://www.opera.com/mini/
     const BROWSER_WEBTV = 'webtv'; // http://www.webtv.net/pc/
     const BROWSER_IE = 'explorer'; // http://www.microsoft.com/ie/
+    const BROWSER_EDGE = 'edge'; // https://www.microsoft.com/en-us/windows/microsoft-edge
     const BROWSER_POCKET_IE = 'pocket'; // http://en.wikipedia.org/wiki/Internet_Explorer_Mobile
     const BROWSER_KONQUEROR = 'konqueror'; // http://www.konqueror.org/
     const BROWSER_ICAB = 'icab'; // http://www.icab.de/
@@ -94,6 +95,7 @@ class Browser
     const BROWSER_OPERA_MINI_NAME = 'Opera Mini'; // http://www.opera.com/mini/
     const BROWSER_WEBTV_NAME = 'WebTV'; // http://www.webtv.net/pc/
     const BROWSER_IE_NAME = 'Internet Explorer'; // http://www.microsoft.com/ie/
+    const BROWSER_EDGE_NAME = 'Microsoft Edge'; // https://msdn.microsoft.com/en-us/library/hh869301%28v=vs.85%29.aspx
     const BROWSER_POCKET_IE_NAME = 'Pocket Internet Explorer'; // http://en.wikipedia.org/wiki/Internet_Explorer_Mobile
     const BROWSER_KONQUEROR_NAME = 'Konqueror'; // http://www.konqueror.org/
     const BROWSER_ICAB_NAME = 'iCab'; // http://www.icab.de/
@@ -129,17 +131,13 @@ class Browser
 
     const PLATFORM_UNKNOWN = 'unknown';
     const PLATFORM_WINDOWS = 'win';
+    const PLATFORM_WINDOWS_10 = 'win10';
     const PLATFORM_WINDOWS_8 = 'win8';
     const PLATFORM_WINDOWS_7 = 'win7';
     const PLATFORM_WINDOWS_2003 = 'win2003';
     const PLATFORM_WINDOWS_VISTA = 'winvista';
     const PLATFORM_WINDOWS_CE = 'wince';
     const PLATFORM_WINDOWS_XP = 'winxp';
-    const PLATFORM_WINDOWS_2000 = 'win2000';
-    const PLATFORM_WINDOWS_95 = 'win95';
-    const PLATFORM_WINDOWS_ME = 'winme';
-    const PLATFORM_WINDOWS_NT = 'winnt';
-    const PLATFORM_WINDOWS_98 = 'win98';
     const PLATFORM_APPLE = 'apple';
     const PLATFORM_LINUX = 'linux';
     const PLATFORM_OS2 = 'os2';
@@ -239,17 +237,13 @@ class Browser
         $names = array(
             'unknown' => 'Unknown',
             'win' => 'Windows',
-            'win8' => 'Windows 8',
+            'win10' => 'Windows 10',
+        	'win8' => 'Windows 8',
             'win7' => 'Windows 7',
             'win2003' => 'Windows 2003',
             'winvista' => 'Windows Vista',
             'wince' => 'Windows CE',
             'winxp' => 'Windows XP',
-            'win2000' => 'Windows 2000',
-            'win95' => 'Windows 95',
-            'winme' => 'Windows ME',
-            'winnt' => 'Windows NT',
-            'win98' => 'Windows 98',
             'apple' => 'Apple',
             'linux' => 'Linux',
             'os2' => 'OS/2',
@@ -673,6 +667,13 @@ class Browser
             $this->setVersion( '11.0' );
             return true;
         }
+        // Test for Microsoft Edge
+        elseif ( preg_match('/\sEdge\/([0-9]+)\./', $this->_agent, $m ) )
+        {
+            $this->setBrowser( self::BROWSER_EDGE, self::BROWSER_EDGE_NAME );
+            $this->setVersion( $m[1] );
+        	return true;
+        } // Test for versions > 1.5        
         // Test for v1 - v1.5 IE
         elseif ( stripos( $this->_agent, 'microsoft internet explorer' ) !== false )
         {
@@ -1410,16 +1411,12 @@ class Browser
         {
             $this->_platform = self::PLATFORM_WINDOWS;
             if ( preg_match( "/wi(n|ndows)[ \-]?nt[ \/]?6\.(2|3)/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_8;
+            elseif ( preg_match( "/wi(n|ndows)[ \-]?nt[ \/]?10\.0/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_10;
             elseif ( preg_match( "/wi(n|ndows)[ \-]?nt[ \/]?6\.1/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_7;
             elseif ( preg_match( "/wi(n|ndows)[ \-]?nt[ \/]?6\.0/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_VISTA;
             elseif ( preg_match( "/wi(n|ndows)[ \-]?(2003|nt[ \/]?5\\.2)/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_2003;
             elseif ( preg_match( "/windows xp/i", $this->_agent ) or preg_match( "/wi(n|ndows)[ \-]?nt[ /]?5\.1/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_XP;
-            elseif ( preg_match( "/wi(n|ndows)[ \-]?(2000|nt[ \/]?5\.0)/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_2000;
-            elseif ( preg_match( "/wi(n|ndows)[ \-]?95/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_95;
             elseif ( preg_match( "/wi(n|ndows)[ \-]?ce/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_CE;
-            elseif ( preg_match( "/win 9x 4\.90/i", $this->_agent ) or preg_match( "/wi(n|ndows)[ \-]?me/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_ME;
-            elseif ( preg_match( "/wi(n|ndows)[ \-]?nt/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_NT;
-            elseif ( preg_match( "/wi(n|ndows)[ \-]?98/i", $this->_agent ) ) $this->_platform = self::PLATFORM_WINDOWS_98;
         }
         elseif ( stripos( $this->_agent, 'iPad' ) !== false )
         {

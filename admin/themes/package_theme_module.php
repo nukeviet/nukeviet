@@ -38,6 +38,12 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 				{
 					$allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/css/' . $_module_file . '.css';
 				}
+				
+				$_files = glob( NV_ROOTDIR . '/themes/' . $themename . '/js/' . $_module_file . '*.js' );
+				foreach( $_files as $_file )
+				{
+					$allowfolder[] = $_file;
+				}
 
 				if( file_exists( NV_ROOTDIR . '/themes/' . $themename . '/images/' . $_module_file . '/' ) )
 				{

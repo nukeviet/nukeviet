@@ -1,3 +1,20 @@
+<!-- SiteModal Required!!! -->
+<div id="sitemodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">&nbsp;</h3>
+            </div>
+            <div class="modal-body">
+                    <em class="fa fa-spinner fa-spin">&nbsp;</em>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/default/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/js/main.js"></script>
 <!-- BEGIN: notification_js -->

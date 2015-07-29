@@ -48,10 +48,10 @@ $contents['rows'][] = array( 'id', $row['id'] );
 $contents['rows'][] = array( $lang_module['title'], $row['title'] );
 $contents['rows'][] = array( $lang_module['in_plan'], $ptitle );
 $contents['rows'][] = array( $lang_module['of_client'], $cl_full_name );
-$contents['rows'][] = array( $lang_module['file_name'], '<a href="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'] . '" rel="shadowbox;height=' . $row['height'] . ';width=' . $row['width'] . '">' . $lang_module['click_show_img'] . '</a>' );
+$contents['rows'][] = array( $lang_module['file_name'], '<a href="javascript:void(0)" data-src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['file_name'] . '" id="' . ( $row['file_ext'] == 'swf' ? 'open_modal_flash' : 'open_modal_image' ) . '" data-width="' . $row['width'] . '">' . $lang_module['click_show_img'] . '</a>' );
 if( ! empty( $row['imageforswf'] ) )
 {
-	$contents['rows'][] = array( $lang_module['imageforswf'], '<a href="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] . '" rel="shadowbox;height=' . $row['height'] . ';width=' . $row['width'] . '">' . $lang_module['click_show_img'] . '</a>' );
+	$contents['rows'][] = array( $lang_module['imageforswf'], '<a href="javascript:void(0)" data-src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $row['imageforswf'] . '" id="open_modal_image" data-width="' . $row['width'] . '">' . $lang_module['click_show_img'] . '</a>' );
 }
 $contents['rows'][] = array( $lang_module['img_info1'], $img_info );
 $contents['rows'][] = array( $lang_module['file_alt'], $row['file_alt'] );
@@ -89,12 +89,6 @@ $contents['containerid'] = 'statistic';
 $contents = call_user_func( 'nv_info_b_theme', $contents );
 
 $page_title = $lang_module['info_banner_title'];
-
-$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_footer = "<script type=\"text/javascript\" data-show=\"after\">\n";
-$my_footer .= "Shadowbox.init();\n";
-$my_footer .= "</script>\n";
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );

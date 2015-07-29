@@ -93,31 +93,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-	function nv_data_export(set_export) {
-		$.ajax({
-			type : "POST",
-			url : "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=export&nocache=" + new Date().getTime(),
-			data : "step=1&set_export=" + set_export + "&method=" + $("select[name=method]").val() + "&value=" + $("input[name=value]").val() + "&usactive=" + $("select[name=usactive]").val(),
-			success : function(response) {
-				if (response == "OK_GETFILE") {
-					nv_data_export(0);
-				} else if (response == "OK_COMPLETE") {
-					$("#users").hide();
-					alert('{LANG.export_complete}');
-					window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=export&step=2';
-				} else {
-					$("#users").hide();
-					alert(response);
-					window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name;
-				}
-			}
-		});
-	}
-
-	$("input[name=data_export]").click(function() {
-		$("input[name=data_export]").attr("disabled", "disabled");
-		$('#users').html('<center>{LANG.export_note}<br /><br /><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" /></center>');
-		nv_data_export(1);
-	});
+ var export_note = '{LANG.export_note}';
+ var export_complete = '{LANG.export_complete}';
 </script>
 <!-- END: main -->

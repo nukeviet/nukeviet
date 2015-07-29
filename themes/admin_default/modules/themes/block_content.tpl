@@ -2,28 +2,11 @@
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<style type="text/css">
-	.exp_time {
-		line-height: 20px
-	}
-
-	.exp_time input {
-		float: left
-	}
-
-	.exp_time img {
-		float: left;
-		margin: 2px
-	}
-	.content{
-		padding: 5px;
-	}
-</style>
 <div class="content">
 <script type="text/javascript">
-	//<![CDATA[
-	var htmlload = '<tr><td class="text-center" colspan="2"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></td></tr>';
-	//]]>
+//<![CDATA[
+var htmlload = '<tr><td class="text-center" colspan="2"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></td></tr>';
+//]]>
 </script>
 <!-- END: head -->
 <!-- BEGIN: main -->
@@ -37,13 +20,12 @@
 <form method="post" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;selectthemes={SELECTTHEMES}&amp;blockredirect={BLOCKREDIRECT}">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<col style="width:160px;white-space:nowrap" />
-			<col style="width:600px;white-space:nowrap" />
+			<col style="width:180px;white-space:nowrap" />
 			<tbody>
 				<tr>
 					<td>{LANG.block_type}:</td>
 					<td>
-					<select name="module" class="form-control w200 pull-left" style="margin-right: 5px">
+					<select name="module_type" class="form-control w200 pull-left" style="margin-right: 5px">
 						<option value="">{LANG.block_select_type}</option>
 						<option value="theme"{THEME_SELECTED}>{LANG.block_type_theme}</option>
 						<!-- BEGIN: module -->

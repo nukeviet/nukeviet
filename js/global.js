@@ -1,46 +1,18 @@
-if ( typeof (nv_siteroot ) == 'undefined') {
-	var nv_siteroot = '/';
-}
-
-if ( typeof (nv_sitelang ) == 'undefined') {
-	var nv_sitelang = 'en';
-}
-
-if ( typeof (nv_name_variable ) == 'undefined') {
-	var nv_name_variable = 'nv';
-}
-
-if ( typeof (nv_fc_variable ) == 'undefined') {
-	var nv_fc_variable = 'op';
-}
-
-if ( typeof (nv_lang_variable ) == 'undefined') {
-	var nv_lang_variable = 'language';
-}
-
-if ( typeof (nv_module_name ) == 'undefined') {
-	var nv_module_name = '';
-}
-
-if ( typeof (nv_area_admin ) == 'undefined') {
-	var nv_area_admin = 0;
-}
-
-if ( typeof (nv_my_ofs ) == 'undefined') {
-	var nv_my_ofs = 7;
-}
-
-if ( typeof (nv_my_dst ) == 'undefined') {
-	var nv_my_dst = false;
-}
-
-if ( typeof (nv_my_abbr ) == 'undefined') {
-	var nv_my_abbr = 'ICT';
-}
-
-if ( typeof (nv_cookie_prefix ) == 'undefined') {
-	var nv_cookie_prefix = 'nv3';
-}
+if ("undefined" == typeof nv_siteroot) var nv_siteroot = "/";
+if ("undefined" == typeof nv_sitelang) var nv_sitelang = "en";
+if ("undefined" == typeof nv_name_variable) var nv_name_variable = "nv";
+if ("undefined" == typeof nv_fc_variable) var nv_fc_variable = "op";
+if ("undefined" == typeof nv_lang_variable) var nv_lang_variable = "language";
+if ("undefined" == typeof nv_module_name) var nv_module_name = "";
+if ("undefined" == typeof nv_func_name) var nv_func_name = "";
+if ("undefined" == typeof nv_is_user) var nv_is_user = 0;
+if ("undefined" == typeof nv_area_admin) var nv_area_admin = 0;
+if ("undefined" == typeof nv_my_ofs) var nv_my_ofs = 7;
+if ("undefined" == typeof nv_my_dst) var nv_my_dst = !1;
+if ("undefined" == typeof nv_my_abbr) var nv_my_abbr = "ICT";
+if ("undefined" == typeof nv_cookie_prefix) var nv_cookie_prefix = "nv4";
+if ("undefined" == typeof nv_check_pass_mstime) var nv_check_pass_mstime = 1738E3;
+if ("undefined" == typeof theme_responsive) var theme_responsive = 0;
 
 var OP = (navigator.userAgent.indexOf('Opera') != -1 );
 var IE = (navigator.userAgent.indexOf('MSIE') != -1 && !OP );
@@ -96,26 +68,6 @@ function nv_iChars_check(field_id) {
 
 function nv_iChars_Remove(str) {
 	return str.replace(nv_specialchars, "");
-}
-
-function formatStringAsUriComponent(s) {
-
-	// replace html with whitespace
-	s = s.replace(/<\/?[^>]*>/gm, " ");
-
-	// remove entities
-	s = s.replace(/&[\w]+;/g, "");
-
-	// remove 'punctuation'
-	s = s.replace(/[\.\,\"\'\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\^\_\{\}\|\~]/g, "");
-
-	// replace multiple whitespace with single whitespace
-	s = s.replace(/\s{2,}/g, " ");
-
-	// trim whitespace at start and end of title
-	s = s.replace(/^\s+|\s+$/g, "");
-
-	return s;
 }
 
 function nv_setCookie(name, value, expiredays) {
@@ -422,23 +374,6 @@ function nv_DigitalClock(div_id) {
 	}
 }
 
-function nv_search_submit(search_query, search_button, minlength, maxlength) {
-	var query = document.getElementById(search_query);
-	var format_query = strip_tags(query.value);
-	var allowed = (format_query != '' && format_query.length >= minlength && format_query.length <= maxlength) ? true : false;
-	if (!allowed) {
-		query.value = format_query;
-		messalert = nv_rangelength.replace('{0}', minlength);
-		messalert = messalert.replace('{1}', maxlength);
-		alert(messalert);
-	} else {
-		var sbutton = document.getElementById(search_button);
-		sbutton.disabled = true;
-		window.location.href = nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=seek&q=' + rawurlencode(format_query);
-	}
-	return false;
-}
-
 function nv_show_hidden(div_id, st) {
 	var divid = document.getElementById(div_id);
 	if (st == 2) {
@@ -531,14 +466,6 @@ function nv_urldecode_ajax(my_url, containerid) {
 	my_url = rawurldecode(my_url);
 	$("#" + containerid).load(my_url);
 	return;
-}
-
-function nv_change_captcha(imgid, captchaid) {
-	var vimg = document.getElementById(imgid);
-	nocache = nv_randomPassword(10);
-	vimg.src = nv_siteroot + 'index.php?scaptcha=captcha&nocache=' + nocache;
-	document.getElementById(captchaid).value = '';
-	return false;
 }
 
 function nv_open_browse(theURL, winName, w, h, features) {

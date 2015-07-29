@@ -18,25 +18,3 @@
 	</table>
 </div>
 <!-- END: main -->
-<!-- BEGIN: js -->
-<script type="text/javascript">
-	//<![CDATA[
-	$("#checkchmod").click(function(event) {
-		event.preventDefault();
-		var url = $(this).attr("href");
-		$("#checkchmod").hide();
-		$("#wait").html('<img class="refresh" src="{NV_BASE_SITEURL}images/load_bar.gif" alt=""/>');
-		$.ajax({
-			type : "POST",
-			url : url,
-			data : "",
-			success : function(data) {
-				$("#wait").html("");
-				alert(data);
-				$("#checkchmod").show();
-			}
-		});
-	})
-	//]]>
-</script>
-<!-- END: js -->

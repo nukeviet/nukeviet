@@ -262,12 +262,6 @@ div.news_column ul.related a:hover {
 	word-break: break-word
 }
 
-.tooltip-inner {
-	width: 300px;
-	max-width: 300px !important;
-	padding: 10px;
-}
-
 .margin_image {
 	margin: 0 5px 1px 0;
 }

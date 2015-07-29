@@ -103,24 +103,16 @@
 	<div class="row text-center"><input type="submit" value="{LANG.save}" class="btn btn-primary"/></div>
 </form>
 <script type="text/javascript">
-	$("#titlelength").html($("#idtitle").val().length);
-	$("#idtitle").bind('keyup paste', function() {
-		$("#titlelength").html($(this).val().length);
-	});
+var uploads_dir_user = '{UPLOADS_DIR_USER}';
+$("#titlelength").html($("#idtitle").val().length);
+$("#idtitle").bind('keyup paste', function() {
+	$("#titlelength").html($(this).val().length);
+});
 
-	$("#descriptionlength").html($("#description").val().length);
-	$("#description").bind('keyup paste', function() {
-		$("#descriptionlength").html($(this).val().length);
-	});
-
-	$("input[name=selectimg]").click(function() {
-		var area = "image";
-		var alt = "imagealt";
-		var path = "{UPLOADS_DIR_USER}";
-		var type = "image";
-		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
+$("#descriptionlength").html($("#description").val().length);
+$("#description").bind('keyup paste', function() {
+	$("#descriptionlength").html($(this).val().length);
+});
 </script>
 <!-- BEGIN: get_alias -->
 <script type="text/javascript">

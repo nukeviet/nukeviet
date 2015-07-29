@@ -141,14 +141,9 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'NV_CURRENTTIME', nv_date( 'T', NV_CURRENTTIME ) );
 	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
 
-	if( file_exists( NV_ROOTDIR . '/js/admin_' . $module_file . '.js' ) )
+	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/js/' . $module_file . '.js' ) )
 	{
-		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . 'js/admin_' . $module_file . '.js' );
-		$xtpl->parse( 'main.module_js' );
-	}
-	elseif( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/js/admin.js' ) )
-	{
-		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . 'modules/' . $module_file . '/js/admin.js' );
+		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/js/' . $module_file . '.js' );
 		$xtpl->parse( 'main.module_js' );
 	}
 

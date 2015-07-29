@@ -80,7 +80,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
 	$obt_level = $nv_Request->get_array( 'obt_level', 'post', array() );
 
-	$check_valid_email = nv_check_valid_email( $email );
+    if( !empty( $email ) )
+    {
+        $_email = array_map( "trim", explode( ",", $email ) );
+        $email = array();
+        foreach($_email as $e)
+        {
+            $check_valid_email = nv_check_valid_email( $e );
+            if( empty( $check_valid_email ) ) $email[] = $e;
+        }
+        $email = implode( ", ", $email );
+    }
+    
 
 	$admins = array();
 
@@ -122,10 +133,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['error_alias'];
 	}
-	elseif( ! empty( $email ) and ! empty( $check_valid_email ) )
-	{
-		$error = $check_valid_email;
-	}
 	else
 	{
 		$alias = empty( $alias ) ? change_alias( $full_name ) : change_alias( $alias );
@@ -158,7 +165,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$weight = 0;
 			$weight = count( $listdepartment );
 			$weight++;
-			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, yahoo, skype, note, admins, act, weight) VALUES (:full_name, :alias, :phone, :fax, :email, :yahoo, :skype, :note, :admins, 1, :weight)';
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, yahoo, skype, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :yahoo, :skype, :note, :admins, 1, :weight, 0)';
 			$name_key = 'log_add_row';
 			$note_action = $full_name;
 		}

@@ -14,7 +14,7 @@
  * include( ftp.class.php );
  * $ftp = new NVftp( '127.0.0.1', 'phantandung', '123456' );
  *
- * detectFtpRoot( $list_valid, $path_root, true, CJzip.php ); // Auto detect ftp remove path
+ * detectFtpRoot( $list_valid, $path_root, true, robots.php ); // Auto detect ftp remove path
  *
  * echo( $ftp->error ); // View error message
  *

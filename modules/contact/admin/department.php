@@ -24,7 +24,7 @@ foreach ($array_department as $row )
 	$xtpl->assign( 'ROW', array(
 		'full_name' => $row['full_name'],
 		'email' => $row['email'],
-		'phone' => $row['phone'],
+		'phone' => preg_replace( "/(\[|&#91;)[^\]]*(&#93;|\])$/","",$row['phone'] ),
 		'fax' => $row['fax'],
 		'id' => $row['id'],
 		'url_part' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . '/0/1',
@@ -53,6 +53,8 @@ foreach ($array_department as $row )
 
 		$xtpl->parse( 'main.row.status' );
 	}
+    
+    $xtpl->parse( $row['is_default'] ? 'main.row.check' : 'main.row.notcheck' );
 
 	$xtpl->parse( 'main.row' );
 }

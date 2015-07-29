@@ -154,7 +154,7 @@
 					<td><strong>{LANG.icon}</strong></td>
 					<td>
 						<input class="form-control w200 pull-left" type="text" name="icon" id="icon" value="{DATA.icon}"/>
-						&nbsp;<input type="button" value="Browse" name="selectimg" class="btn btn-info" />
+						&nbsp;<input id="select-img-menurow" type="button" value="Browse" name="selectimg" class="btn btn-info" />
 					</td>
                     <td>&nbsp;</td>
 				</tr>
@@ -203,17 +203,10 @@
 	</div>
 </form>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#parentid, #module_name_page").select2();
-	});
-
-	$("input[name=selectimg]").click(function() {
-		var area = "icon";
-		var path = "{UPLOAD_CURRENT}";
-		var currentpath = "{UPLOAD_CURRENT}";
-		var type = "image";
-		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
+var CFG = [];
+CFG.upload_current = '{UPLOAD_CURRENT}';
+$(document).ready(function() {
+	$("#parentid, #module_name_page").select2();
+});
 </script>
 <!-- END: main -->

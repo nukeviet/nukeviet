@@ -176,8 +176,6 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 
 	$xtpl->parse( 'main' );
 
-	$global_config['mudim_active'] = 0;
-
 	include NV_ROOTDIR . '/includes/header.php';
 	$xtpl->out( 'main' );
 	include NV_ROOTDIR . '/includes/footer.php';

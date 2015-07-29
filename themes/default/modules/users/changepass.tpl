@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js" data-show="after"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js" data-show="after"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="page">
     <ul class="nav nav-tabs m-bottom">
@@ -10,7 +10,7 @@
     	<li><a href="{URL_HREF}changequestion">{LANG.question2}</a></li>
     	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
     	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
-    	<!-- BEGIN: logout --><li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li><!-- END: logout -->
+    	<li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li>
     </ul>
     <h2>{LANG.change_pass}</h2>
     <form action="{USER_CHANGEPASS}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
@@ -45,7 +45,7 @@
     	</div>
     </form>
 </div>
-<script type="text/javascript" data-show="after">
+<script type="text/javascript">
 $(document).ready(function(){
 	$('#changePassForm').validate();
 });
