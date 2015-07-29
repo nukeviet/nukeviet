@@ -92,7 +92,7 @@ function nv_site_theme( $contents, $full = true )
     }
 
     // Customs Style
-    if ( isset( $module_config['themes'][$global_config['module_theme']] ) )
+    if ( isset( $module_config['themes'][$global_config['module_theme']] ) and ! empty( $module_config['themes'][$global_config['module_theme']] ) )
     {
         if ( ! file_exists( NV_ROOTDIR . '/' . SYSTEM_FILES_DIR . '/css/theme_' . $global_config['module_theme'] . '_' . $global_config['idsite'] . '.css' ) )
         {
