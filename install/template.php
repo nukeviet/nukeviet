@@ -10,6 +10,14 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
+/**
+ * nv_site_theme()
+ * 
+ * @param mixed $step
+ * @param mixed $titletheme
+ * @param mixed $contenttheme
+ * @return
+ */
 function nv_site_theme( $step, $titletheme, $contenttheme )
 {
 	global $lang_module, $languageslist, $language_array, $global_config;
@@ -65,6 +73,11 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 	$xtpl->out( 'main' );
 }
 
+/**
+ * nv_step_1()
+ * 
+ * @return
+ */
 function nv_step_1()
 {
 	global $lang_module, $languageslist, $language_array, $sys_info, $global_config;
@@ -97,6 +110,14 @@ function nv_step_1()
 	return $xtpl->text( 'step' );
 }
 
+/**
+ * nv_step_2()
+ * 
+ * @param mixed $array_dir_check
+ * @param mixed $array_ftp_data
+ * @param mixed $nextstep
+ * @return
+ */
 function nv_step_2( $array_dir_check, $array_ftp_data, $nextstep )
 {
 	global $lang_module, $sys_info, $step;
@@ -153,6 +174,12 @@ function nv_step_2( $array_dir_check, $array_ftp_data, $nextstep )
 	return $xtpl->text( 'step' );
 }
 
+/**
+ * nv_step_3()
+ * 
+ * @param mixed $license
+ * @return
+ */
 function nv_step_3( $license )
 {
 	global $lang_module;
@@ -168,6 +195,14 @@ function nv_step_3( $license )
 	return $xtpl->text( 'step' );
 }
 
+/**
+ * nv_step_4()
+ * 
+ * @param mixed $array_resquest
+ * @param mixed $array_support
+ * @param mixed $nextstep
+ * @return
+ */
 function nv_step_4( $array_resquest, $array_support, $nextstep )
 {
 	global $lang_module;
@@ -189,6 +224,13 @@ function nv_step_4( $array_resquest, $array_support, $nextstep )
 	return $xtpl->text( 'step' );
 }
 
+/**
+ * nv_step_5()
+ * 
+ * @param mixed $db_config
+ * @param mixed $nextstep
+ * @return
+ */
 function nv_step_5( $db_config, $nextstep )
 {
 	global $lang_module, $step, $PDODrivers;
@@ -215,18 +257,15 @@ function nv_step_5( $db_config, $nextstep )
 	$lang_pdo['pdo_sqlsrv'] = 'Microsoft SQL Server / SQL Azure';
 	$lang_pdo['pdo_4d'] = '4D';
 
-	foreach ($PDODrivers as $value)
+	foreach( $PDODrivers as $value )
 	{
-		if( file_exists( NV_ROOTDIR . '/install/action_' . $value . '.php' ) )
-		{
-			$array_dbtype = array();
-			$array_dbtype['value'] = $value;
-			$array_dbtype['selected'] = ( $db_config['dbtype'] == $value ) ? ' selected="selected"' : '';
-			$array_dbtype['text'] = (isset( $lang_pdo['pdo_' . $value] )) ? $lang_pdo['pdo_' . $value] : $value;
+		$array_dbtype = array();
+		$array_dbtype['value'] = $value;
+		$array_dbtype['selected'] = ( $db_config['dbtype'] == $value ) ? ' selected="selected"' : '';
+		$array_dbtype['text'] = (isset( $lang_pdo['pdo_' . $value] )) ? $lang_pdo['pdo_' . $value] : $value;
 
-			$xtpl->assign( 'DBTYPE', $array_dbtype );
-			$xtpl->parse( 'step.dbtype' );
-		}
+		$xtpl->assign( 'DBTYPE', $array_dbtype );
+		$xtpl->parse( 'step.dbtype' );
 	}
 
 	if( $db_config['num_table'] > 0 )
@@ -248,6 +287,13 @@ function nv_step_5( $db_config, $nextstep )
 	return $xtpl->text( 'step' );
 }
 
+/**
+ * nv_step_6()
+ * 
+ * @param mixed $array_data
+ * @param mixed $nextstep
+ * @return
+ */
 function nv_step_6( $array_data, $nextstep )
 {
 	global $lang_module, $step;
@@ -275,6 +321,12 @@ function nv_step_6( $array_data, $nextstep )
 	return $xtpl->text( 'step' );
 }
 
+/**
+ * nv_step_7()
+ * 
+ * @param mixed $finish
+ * @return
+ */
 function nv_step_7( $finish )
 {
 	global $lang_module;

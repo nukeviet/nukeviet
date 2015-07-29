@@ -6,7 +6,51 @@
  * @Createdate 31/05/2010, 00:36
  */
 
+function showNvModal(content, css){
+	if( css == undefined ){
+		css = 'error';
+	}
+	
+    if( $('.nv-modal').length ){
+    	$('.nv-modal:first>.nv-modal-wrap>.nv-modal-content').html('<div class="' + css + '">' + content + '</div>');
+    	$('.nv-modal:first').show().fadeTo(200, 1);
+    }
+}
+
+function checkDbDriver(){
+	var $this = $('[name="dbtype"]');
+	$('#dbtype-check').removeClass('hide');
+	
+	$.ajax({
+		type: 'POST',
+		cache: false,
+		url: $this.data('url') + '&nocache=' + new Date().getTime(),
+		data: 'checkdbtype=' + $this.val(),
+		dataType: 'json',
+		success: function(e){
+			$('#dbtype-check').addClass('hide');
+			console.log(e);
+			if( e.status != 'success' ){
+				var ct = '';
+				
+				ct += '<p><a href="' + e.link + '" target="_blank">' + e.message + '</a></p>';
+				ct += '<ul>';
+				
+				$.each(e.files, function(k, v){
+					ct += '<li>' + v + '</li>';
+				});
+				
+				ct += '</ul>',
+				
+				showNvModal(ct);
+				$this.find('option').prop('selected', false);
+			}
+		}
+	});
+}
+
 $(document).ready(function(){
+	// Language control
     $('span.language_head').click(function(){
         $('ul.language_body').slideToggle('medium');
     });
@@ -22,4 +66,22 @@ $(document).ready(function(){
             paddingLeft: "10px"
         }, 50);
     });
+    
+    // Check db driver
+    checkDbDriver();
+    $('[name="dbtype"]').change(function(){
+    	checkDbDriver();
+    });
+    
+    // Init NV Simple Moal
+    if( $('.nv-modal').length ){
+    	$('.nv-modal:first>.nv-modal-wrap').click(function(e){
+    		if( $(e.toElement).is('.nv-modal-wrap') ){
+		    	$('.nv-modal:first').fadeTo(200, 0, function(){
+		    		$('.nv-modal:first').hide();
+		    		$('.nv-modal:first>.nv-modal-wrap>.nv-modal-content').html('');
+		    	});
+    		}
+    	});
+    }
 });

@@ -55,6 +55,11 @@
                 {LANG.publish} <strong>GNU/GPL v2.0</strong>
             </p>
         </div>
+        <div class="nv-modal">
+			<div class="nv-modal-wrap">
+				<div class="nv-modal-content"></div>
+			</div>
+		</div>
     </body>
 </html>
 <!-- END: main -->
