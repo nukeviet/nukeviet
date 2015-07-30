@@ -61,7 +61,7 @@ function nv_show_tags_list( $q = '', $incomplete = false )
 
 		$xtpl->assign( 'ROW', $row );
 
-		if( empty( $row[NV_LANG_DATA . '_description'] ) and $incomplete === false )
+		if( empty( $row['description'] ) and $incomplete === false )
 		{
 			$xtpl->parse( 'main.loop.incomplete' );
 		}
