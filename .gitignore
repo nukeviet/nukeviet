@@ -12,8 +12,7 @@
 /data/logs/ref_logs/
 /data/logs/voting_logs/
 /assets/css/*.opt.css
-/sess/sess_*
-/tmp/
+/data/tmp/
 
 # Ignore some class
 /includes/class/PHPExcel/
