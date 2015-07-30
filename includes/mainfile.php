@@ -26,9 +26,6 @@ $db_config = $global_config = $module_config = $client_info = $user_info = $admi
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
-// Xac dinh thu muc goc cua site
-define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
-
 // Register given function autoload implementation
 spl_autoload_register( function ( $classname )
 {

@@ -9,6 +9,7 @@
  */
 
 define( 'NV_ADMIN', true );
+
 require_once 'mainfile.php';
 
 $file_config_temp = NV_TEMP_DIR . '/config_' . md5( $global_config['sitekey'] ) . '.php';
@@ -186,7 +187,7 @@ elseif( $step == 2 )
 			}
 			elseif( ftp_chdir( $conn_id, $global_config['ftp_path'] ) )
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'robots.txt', 'js', 'language', NV_LOGS_DIR, 'mainfile.php', 'modules', 'themes', NV_TEMP_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'robots.txt', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR );
 				if( NV_SESSION_SAVE_PATH != '' )
 				{
 					$check_files[] = NV_SESSION_SAVE_PATH;
@@ -410,7 +411,7 @@ elseif( $step == 5 )
 			'link' => '',
 			'files' => array()
 		);
-		
+
 		if( $dbtype == 'mysql' ) // Not check default dbtype
 		{
 			$respon['status'] = 'success';
@@ -427,11 +428,11 @@ elseif( $step == 5 )
 					'install' => 'install/action_' . $dbtype . '.php',
 					'sys' => 'includes/action_' . $dbtype . '.php'
 				);
-				
+
 				include NV_ROOTDIR . '/includes/action_mysql.php';
-				
+
 				$array_module_setup = array_map( "trim", explode( ',', NV_MODULE_SETUP_DEFAULT ) );
-				
+
 				foreach( $array_module_setup as $module )
 				{
 					if( file_exists( NV_ROOTDIR . '/modules/' . $module . '/action_mysql.php' ) )
@@ -439,7 +440,7 @@ elseif( $step == 5 )
 						$array_check_files[] = 'modules/' . $module . '/action_' . $dbtype . '.php';
 					}
 				}
-				
+
 				foreach( $array_check_files as $key => $file )
 				{
 					if( file_exists( NV_ROOTDIR . '/' . $file ) )
@@ -447,7 +448,7 @@ elseif( $step == 5 )
 						unset( $array_check_files[$key] );
 					}
 				}
-				
+
 				if( empty( $array_check_files ) )
 				{
 					$respon['status'] = 'success';
@@ -461,7 +462,7 @@ elseif( $step == 5 )
 				}
 			}
 		}
-		
+
 		echo json_encode( $respon );
 		die();
 	}
@@ -476,7 +477,7 @@ elseif( $step == 5 )
 		{
 			$db_config['dbhost'] = '127.0.0.1';
 		}
-		
+
 		if( $db_config['dbtype'] == 'mysql' )
 		{
 			$db_config['dbsystem'] = $db_config['dbname'];

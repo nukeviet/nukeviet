@@ -14,11 +14,6 @@
   deny from all
 </Files>
 
-<Files mainfile.php>
-  order allow,deny
-  deny from all
-</Files>
-
 <IfModule mod_deflate.c>
 
   <FilesMatch "\.(css|js|xml)$">
