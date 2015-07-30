@@ -40,29 +40,50 @@
 .hidden-ss-inline-block {
     display:inline-block !important;
 }
+.margin {
+    margin:10px;
+}
 .margin-right {
     margin-right:10px;
-}
-.margin-right-sm {
-    margin-right:4px;
 }
 .margin-left {
     margin-left:10px;
 }
-.margin-left-sm {
-    margin-left:4px;
-}
 .margin-top {
     margin-top:10px;
-}
-.margin-top-sm {
-    margin-top:4px;
 }
 .margin-bottom {
     margin-bottom:10px;
 }
+.margin-sm {
+    margin:4px;
+}
+.margin-right-sm {
+    margin-right:4px;
+}
+.margin-left-sm {
+    margin-left:4px;
+}
+.margin-top-sm {
+    margin-top:4px;
+}
 .margin-bottom-sm {
     margin-bottom:4px;
+}
+.margin-lg {
+    margin:15px;
+}
+.margin-right-lg {
+    margin-right:15px;
+}
+.margin-left-lg {
+    margin-left:15px;
+}
+.margin-top-lg {
+    margin-top:15px;
+}
+.margin-bottom-lg {
+    margin-bottom:15px;
 }
 .info{
     border-width: 1px;
@@ -161,6 +182,19 @@ input.required{
     background-repeat: no-repeat
 }
 
+.display-table{
+    display: table
+}
+
+.display-table > * {
+    display: table-row
+}
+
+.display-table > * > * {
+    display: table-cell;
+    padding:5px
+}
+
 /* Fixed Jquery UI Style */
 .ui-widget {
     font-size:12px !important;
@@ -230,6 +264,12 @@ h6 {
 }
 .fa-pointer {
     cursor:pointer;
+}
+.fa-horizon{
+    width: 14px
+}
+.fa-lg.fa-horizon{
+    width: 22px
 }
 h3.sm {
     font-size:16px;
@@ -909,6 +949,13 @@ a.btn {
 }
 .nv-list-item.lg li {
     padding:10px;
+}
+
+/* List none */
+.list-none{
+    list-style:none;
+    margin:0;
+    padding:0
 }
 
 /* Block global */
