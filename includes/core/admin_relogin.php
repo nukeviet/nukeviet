@@ -113,6 +113,7 @@ if( defined( 'NV_IS_ADMIN' ) )
 			$xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme'] );
 			$xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 			$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+			$xtpl->assign( 'ASSETS_DIR', NV_FILES_DIR );
 			$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
 			$xtpl->assign( 'LOGO_WIDTH', $size[0] );
 			$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
