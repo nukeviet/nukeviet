@@ -137,6 +137,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $template );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'ASSETS_DIR', NV_FILES_DIR );
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 
 	if( isset( $size[1] ) )
