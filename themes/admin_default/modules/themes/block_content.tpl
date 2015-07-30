@@ -5,7 +5,7 @@
 <div class="content">
 <script type="text/javascript">
 //<![CDATA[
-var htmlload = '<tr><td class="text-center" colspan="2"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/></td></tr>';
+var htmlload = '<tr><td class="text-center" colspan="2"><img src="{NV_BASE_SITEURL}{NV_FILES_DIR}/images/load_bar.gif"/></td></tr>';
 //]]>
 </script>
 <!-- END: head -->
