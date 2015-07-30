@@ -85,8 +85,8 @@
                 </div>
                 <!-- END: captcha_reg -->
                 <div class="form-group">
-                    <div class="checkbox text-right">
-            		  <input type="checkbox" class="required " value="1" name="bragr">{LANG.accept2} <a href="#" onclick="usageTermsShow('{LANG.usage_terms}');"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
+                    <div class="checkbox">
+            		  <input type="checkbox" class="required fix-box" value="1" name="bragr">{LANG.accept2} <a href="#" onclick="usageTermsShow('{LANG.usage_terms}');"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
                     </div>
                 </div>
                 <div class="text-center">
