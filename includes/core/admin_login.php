@@ -244,7 +244,7 @@ $xtpl->assign( 'LINKLOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE
 if( $global_config['gfx_chk'] == 1 )
 {
 	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'assets/images/refresh.png' );
+	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
 	$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 	$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
 	$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );

@@ -188,7 +188,7 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 					$contents = "<table><tr><td>";
 					$contents .= "<div align=\"center\">";
 					$contents .= "<strong>" . $msg1 . "</strong><br /><br />\n";
-					$contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "assets/images/load_bar.gif\" /><br /><br />\n";
+					$contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/images/load_bar.gif\" /><br /><br />\n";
 					$contents .= "<strong><a href=\"" . $nv_redirect2 . "\">" . $lang_module['rpc_ping_page'] . "</a></strong>";
 					$contents .= " - <strong><a href=\"" . $nv_redirect . "\">" . $msg2 . "</a></strong>";
 					$contents .= "</div>";

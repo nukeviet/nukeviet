@@ -555,7 +555,7 @@ if( $checkss == $array_register['checkss'] )
 					else
 					{
 						$info .= "<br /><br />\n";
-						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "assets/images/load_bar.gif\"><br /><br />\n";
+						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/images/load_bar.gif\"><br /><br />\n";
 						$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_login'] . '</a>]';
 		
 						$contents = user_info_exit( $info );
@@ -639,7 +639,7 @@ if( $checkss == $array_register['checkss'] )
 					else
 					{
 						$info = $lang_module['register_ok'] . "<br /><br />\n";
-						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "assets/images/load_bar.gif\"><br /><br />\n";
+						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/images/load_bar.gif\"><br /><br />\n";
 						$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] . '</a>]';
 		
 						$contents = user_info_exit( $info );

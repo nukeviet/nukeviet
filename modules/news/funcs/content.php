@@ -604,7 +604,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 	$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'assets/images/refresh.png' );
+	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
 	$xtpl->assign( 'NV_GFX_NUM', NV_GFX_NUM );
 	$xtpl->assign( 'CHECKSS', $checkss );
 

@@ -246,7 +246,7 @@ class optimizer
 			{
 				$this->_content = preg_replace( '/\s*<\/body>/', $this->eol . $this->_htmlforFooter . $this->eol . '</body>', $this->_content, 1 );
 		        }
-			$_jsAfter = '<script src="' . $this->base_siteurl . 'assets/js/jquery/jquery.min.js"></script>' . $this->eol . $_jsAfter;
+			$_jsAfter = '<script src="' . $this->base_siteurl . NV_FILES_DIR . '/js/jquery/jquery.min.js"></script>' . $this->eol . $_jsAfter;
 			$this->_content = preg_replace( '/\s*<\/body>/', $this->eol . $_jsAfter . $this->eol . '</body>', $this->_content, 1 );
 		}
 		else

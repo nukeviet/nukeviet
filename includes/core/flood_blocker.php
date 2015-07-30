@@ -20,7 +20,7 @@ if( $flb->is_blocker )
 	{
 		$xtpl = new XTemplate( 'flood_blocker.tpl', NV_ROOTDIR . '/themes/default/system' );
 		$xtpl->assign( 'PAGE_TITLE', $lang_global['flood_page_title'] );
-		$xtpl->assign( 'IMG_SRC', NV_BASE_SITEURL . 'assets/images/load_bar.gif' );
+		$xtpl->assign( 'IMG_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/load_bar.gif' );
 		$xtpl->assign( 'IMG_WIDTH', 33 );
 		$xtpl->assign( 'IMG_HEIGHT', 8 );
 		$xtpl->assign( 'FLOOD_BLOCKER_INFO1', $lang_global['flood_info1'] );

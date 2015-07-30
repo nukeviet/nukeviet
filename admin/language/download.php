@@ -53,23 +53,23 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . se
 		}
 
 		//package js language
-		if( file_exists( NV_ROOTDIR . '/js/language/' . $dirlang . '.js' ) )
+		if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/js/language/' . $dirlang . '.js' ) )
 		{
-			$allowfolder[] = NV_ROOTDIR . '/js/language/' . $dirlang . '.js';
+			$allowfolder[] = NV_ROOTDIR . '/' . NV_FILES_DIR . '/js/language/' . $dirlang . '.js';
 		}
-		elseif( file_exists( NV_ROOTDIR . '/js/language/en.js' ) )
+		elseif( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/js/language/en.js' ) )
 		{
-			$allowfolder[] = NV_ROOTDIR . '/js/language/en.js';
+			$allowfolder[] = NV_ROOTDIR . '/' . NV_FILES_DIR . '/js/language/en.js';
 		}
 
 		$pattern_lang_js = '/[a-zA-Z0-9\-\_\.]+\-' . $dirlang . '\.js$/';
-		$array_lang_js = nv_scandir( NV_ROOTDIR . '/js/language', $pattern_lang_js );
+		$array_lang_js = nv_scandir( NV_ROOTDIR . '/' . NV_FILES_DIR . '/js/language', $pattern_lang_js );
 
 		if( ! empty( $array_lang_js ) )
 		{
 			foreach( $array_lang_js as $fjs )
 			{
-				$allowfolder[] = NV_ROOTDIR . '/js/language/' . $fjs;
+				$allowfolder[] = NV_ROOTDIR . '/' . NV_FILES_DIR . '/js/language/' . $fjs;
 			}
 		}
 
@@ -98,9 +98,9 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . se
 		{
 			$allowfolder[] = NV_ROOTDIR . '/install/data_' . $dirlang . '.php';
 		}
-		elseif( file_exists( NV_ROOTDIR . '/js/install/data_en.php' ) )
+		elseif( file_exists( NV_ROOTDIR . '/install/data_en.php' ) )
 		{
-			$allowfolder[] = NV_ROOTDIR . '/js/install/data_en.php';
+			$allowfolder[] = NV_ROOTDIR . '/install/data_en.php';
 		}
 
 		$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $dirlang . '.zip';

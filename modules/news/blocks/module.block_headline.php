@@ -108,7 +108,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 
 		$xtpl = new XTemplate( 'block_headline.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-		$xtpl->assign( 'PIX_IMG', NV_BASE_SITEURL . 'assets/images/pix.gif' );
+		$xtpl->assign( 'PIX_IMG', NV_BASE_SITEURL . NV_FILES_DIR . '/images/pix.gif' );
 		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 		$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 
@@ -185,11 +185,11 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 			$xtpl->parse( 'main.tooltip' );
 		}
 
-		if( empty( $my_head ) or ! preg_match( "/jquery\.imgpreload\.min\.js[^>]+>/", $my_head ) ) $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "assets/js/jquery/jquery.imgpreload.min.js\"></script>\n";
+		if( empty( $my_head ) or ! preg_match( "/jquery\.imgpreload\.min\.js[^>]+>/", $my_head ) ) $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/js/jquery/jquery.imgpreload.min.js\"></script>\n";
 
 		$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/contentslider.js\"></script>\n";
-		$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "assets/js/ui/jquery.ui.core.min.js\"></script>\n";
-		$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "assets/js/ui/jquery.ui.tabs.min.js\"></script>\n";
+		$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.core.min.js\"></script>\n";
+		$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.tabs.min.js\"></script>\n";
 		$my_footer .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
 		$my_footer .= '$(document).ready(function(){var b=["' . implode( '","', $images ) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
 		$my_footer .= "\n//]]>\n</script>\n";

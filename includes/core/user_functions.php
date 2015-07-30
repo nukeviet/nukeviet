@@ -225,9 +225,9 @@ function nv_blocks_content( $sitecontent )
 						$content = '<div class="portlet" id="bl_' . ( $_row['bid'] ) . '">
 							 <p>
 							 <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '">
-							 <img style="border:none" src="' . NV_BASE_SITEURL . 'assets/images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '">
-							 <img style="border:none" src="' . NV_BASE_SITEURL . 'assets/images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '">
-							 <img style="border:none" src="' . NV_BASE_SITEURL . 'assets/images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
+							 <img style="border:none" src="' . NV_BASE_SITEURL . NV_FILES_DIR . '/images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '">
+							 <img style="border:none" src="' . NV_BASE_SITEURL . NV_FILES_DIR . '/images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '">
+							 <img style="border:none" src="' . NV_BASE_SITEURL . NV_FILES_DIR . '/images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
 							 </p>
 							 ' . $content . '</div>';
 					}
@@ -249,7 +249,7 @@ function nv_blocks_content( $sitecontent )
 		foreach( $array_keys as $__pos )
 		{
 			$_posReal[$__pos] = '<div class="column" id="' . ( preg_replace( '#\[|\]#', '', $__pos ) ) . '">' . $_posReal[$__pos];
-			$_posReal[$__pos] .= '	<span><a class="block_content" id="' . $__pos . '" href="javascript:void(0)"><img style="border:none" src="' . NV_BASE_SITEURL . 'assets/images/add.png" alt="' . $lang_global['add_block'] . '"/> ' . $lang_global['add_block'] . '</a></span>';
+			$_posReal[$__pos] .= '	<span><a class="block_content" id="' . $__pos . '" href="javascript:void(0)"><img style="border:none" src="' . NV_BASE_SITEURL . NV_FILES_DIR . '/images/add.png" alt="' . $lang_global['add_block'] . '"/> ' . $lang_global['add_block'] . '</a></span>';
 			$_posReal[$__pos] .= '</div>';
 		}
 	}
@@ -639,11 +639,11 @@ function nv_html_site_js( $html = true )
 
 	$return = array();
     $return[] = array( 'ext' => 0, 'content' => $jsDef );
-    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "assets/js/jquery/jquery.min.js" );
-    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "assets/js/language/" . NV_LANG_INTERFACE . ".js" );
-    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "assets/js/global.js" );
+    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/jquery/jquery.min.js" );
+    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/language/" . NV_LANG_INTERFACE . ".js" );
+    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/global.js" );
 
-	if ( defined( 'NV_IS_ADMIN' ) ) $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "assets/js/admin.js" );
+	if ( defined( 'NV_IS_ADMIN' ) ) $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/admin.js" );
 
     // module js
 	if ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.js' ) )
@@ -660,8 +660,8 @@ function nv_html_site_js( $html = true )
 
     if ( defined( 'NV_IS_DRAG_BLOCK' ) )
     {
-        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "assets/js/ui/jquery.ui.core.min.js" );
-        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . "assets/js/ui/jquery.ui.sortable.min.js" );
+        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.core.min.js" );
+        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.sortable.min.js" );
     }
 
     if ( ! $html ) return $return;

@@ -32,7 +32,7 @@ function contact_main_theme( $array_content, $array_department, $base_url, $chec
 	$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'assets/images/refresh.png' );
+	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
 	$xtpl->assign( 'NV_GFX_NUM', NV_GFX_NUM );
 
 	if( ! empty( $array_content['error'] ) )
