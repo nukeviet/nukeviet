@@ -291,7 +291,7 @@ a.btn {
     min-width:100%;
     min-height:100%;
     background:transparent url(../images/hbg.jpg) repeat-x left top;
-    background-image:url(../images/header.jpg),url(../images/hbg.jpg);
+    background-image:url(../images/header.png),url(../images/hbg.jpg);
     background-repeat:no-repeat,repeat-x;
     background-position:left 51px,left top;
     background-size:auto,auto;
