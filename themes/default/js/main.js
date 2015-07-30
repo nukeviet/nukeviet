@@ -298,5 +298,5 @@ $(document).on({
 $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();
-	if (50 < cRangeX || 50 < cRangeY) tipHide(), ftipHide()
+	if (150 < cRangeX || 150 < cRangeY) tipHide(), ftipHide()
 });
