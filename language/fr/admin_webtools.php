@@ -39,3 +39,7 @@ $lang_module['autocheckupdate'] = 'Activer la mise à jour automatique';
 $lang_module['updatetime'] = 'Échéance de vérification';
 $lang_module['clearip_logs'] = 'Effacer ip logs';
 $lang_module['update_manual_delete'] = 'Merci de supprimer manuellement';
+
+$lang_module['global_statistics'] = 'Config. de Statistiques';
+$lang_module['statistic'] = 'Activer  les statistiques';
+$lang_module['statistics_timezone'] = 'Fuseau horaire pour les statistiques';

@@ -69,7 +69,6 @@ $lang_module['isLocalhost'] = 'Công cụ không hỗ trợ Localhost';
 $lang_module['submit'] = 'Thực hiện';
 $lang_module['weight'] = 'Stt';
 
-$lang_module['online_upd'] = 'Kích hoạt tiện ích đếm số người online';
 $lang_module['robots'] = 'Cấu hình file robots.txt';
 $lang_module['robots_number'] = 'Số thứ tự';
 $lang_module['robots_filename'] = 'Tên file';
@@ -90,10 +89,6 @@ $lang_module['metaTagsOgpNote'] = 'Open Graph protocol: là 1 chuẩn dữ liệ
 $lang_module['description_length'] = 'Số ký tự của thẻ meta tag description';
 $lang_module['description_note'] = ' = 0 không giới hạn số ký tự';
 
-$lang_module['global_statistics'] = 'Cấu hình thống kê';
-$lang_module['statistic'] = 'Kích hoạt tiện ích thống kê';
-$lang_module['statistics_timezone'] = 'Múi giờ dùng khi thống kê truy cập';
-
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Tên gọi ngoài site';
 
@@ -107,13 +102,6 @@ $lang_module['googleplus_idprofile'] = 'ID profile Google+';
 $lang_module['googleplus_add'] = 'Thêm mới';
 $lang_module['googleplusNote1'] = 'Việc thiết lập xác minh quyền tác giả sẽ giúp bảo vệ bài viết gốc, tránh tình trạng bài copy TOP cao hơn bài gốc. Việc thiết lập này, sẽ được thiết lập cho toàn module. <br />Nếu trong module có chức năng Cấu hình xác thực Google+, thì chức năng đó được ưu tiên hơn';
 $lang_module['googleplusNote2'] = 'Nếu link Google+ là https://plus.google.com/105065032561530186108 thì ID profile Google+ chỉ cần nhập 105065032561530186108';
-
-$lang_module['googleAnalyticsSetDomainName_title'] = 'Đặc tính Domain khi khai báo với Google Analytics';
-$lang_module['googleAnalyticsSetDomainName_0'] = 'Domain duy nhất';
-$lang_module['googleAnalyticsSetDomainName_1'] = 'Domain cấp cao + subdomains chạy song song';
-$lang_module['googleAnalyticsSetDomainName_2'] = 'Nhiều Domain cấp cao chạy song song';
-$lang_module['googleAnalyticsID'] = 'ID tài khoản Google Analytics<br />(Có dạng UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">xem chi tiết</a>)';
-$lang_module['googleAnalyticsMethod'] = 'Chọn phương pháp theo dõi site của Google Analytics';
 
 $lang_module['rpc'] = "Dịch vụ PING";
 $lang_module['rpc_setting'] = "Cấu hình dịch vụ PING";
