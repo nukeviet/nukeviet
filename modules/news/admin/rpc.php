@@ -11,17 +11,17 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 // Ket noi ngon ngu
-if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_seotools.php' ) )
+if( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_seotools.php' ) )
 {
-	require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_seotools.php';
+	require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_seotools.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_seotools.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_seotools.php' ) )
 {
-	require NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_seotools.php';
+	require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_seotools.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/en/admin_seotools.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_seotools.php' ) )
 {
-	require NV_ROOTDIR . '/language/en/admin_seotools.php';
+	require NV_ROOTDIR . '/includes/language/en/admin_seotools.php';
 }
 
 $page_title = $lang_module['rpc'];

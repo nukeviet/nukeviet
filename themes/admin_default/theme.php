@@ -19,17 +19,17 @@ function nv_get_submenu( $mod )
 	if( file_exists( NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php' ) )
 	{
 		//ket noi voi file ngon ngu cua module
-		if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php' ) )
+		if( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php' ) )
 		{
-			include NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php';
+			include NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php';
 		}
-		elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php' ) )
+		elseif( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php' ) )
 		{
-			include NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php';
+			include NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php';
 		}
-		elseif( file_exists( NV_ROOTDIR . '/language/en/admin_' . $mod . '.php' ) )
+		elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_' . $mod . '.php' ) )
 		{
-			include NV_ROOTDIR . '/language/en/admin_' . $mod . '.php';
+			include NV_ROOTDIR . '/includes/language/en/admin_' . $mod . '.php';
 		}
 
 		include NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php';

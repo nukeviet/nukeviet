@@ -12,14 +12,14 @@
 	{pagetitle}{errorinfo}
 </div>
 <div id="clinfo">
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-	<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-	<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-	<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/jquery/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+	<link type="text/css" href="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+	<link type="text/css" href="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+	<link type="text/css" href="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/ui/jquery.ui.core.min.js"></script>
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 	<form id="frm" action="" method="post" enctype="multipart/form-data" role="form" class="form-horizontal">
 		<div class="form-group">
 			<label for="title" class="col-sm-6 control-label">{LANG.addads_title}<span class="text-danger"> (*)</span>:</label>

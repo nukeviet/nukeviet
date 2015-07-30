@@ -41,12 +41,12 @@ define( 'NV_ADMIN', true );
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php' ;
 
 // Xac dinh ngon ngu cap nhat
-$dirs = nv_scandir( NV_ROOTDIR . '/language', '/^([a-z]{2})/' );
+$dirs = nv_scandir( NV_ROOTDIR . '/includes/language', '/^([a-z]{2})/' );
 $languageslist = array();
 
 foreach( $dirs as $file )
 {
-	if( is_file( NV_ROOTDIR . '/language/' . $file . '/install.php' ) )
+	if( is_file( NV_ROOTDIR . '/includes/language/' . $file . '/install.php' ) )
 	{
 		$languageslist[] = $file;
 	}
@@ -58,11 +58,11 @@ $nv_update_config['allow_lang'] = $array_lang_update;
 $cookie_lang = $nv_Request->get_string( 'update_lang', 'cookie', '' );
 $update_lang = $nv_Request->get_string( NV_LANG_VARIABLE, 'get,post', '' );
 
-if( ! empty( $update_lang ) and ( in_array( $update_lang, $array_lang_update ) ) and file_exists( NV_ROOTDIR . '/language/' . $update_lang . '/global.php' ) )
+if( ! empty( $update_lang ) and ( in_array( $update_lang, $array_lang_update ) ) and file_exists( NV_ROOTDIR . '/includes/language/' . $update_lang . '/global.php' ) )
 {
 	if( $update_lang != $cookie_lang ) $nv_Request->set_Cookie( 'update_lang', $update_lang, NV_LIVE_COOKIE_TIME );
 }
-elseif( preg_match( '/^[a-z]{2}$/', $cookie_lang ) and ( in_array( $cookie_lang, $array_lang_update ) ) and file_exists( NV_ROOTDIR . '/language/' . $cookie_lang . '/global.php' ) )
+elseif( preg_match( '/^[a-z]{2}$/', $cookie_lang ) and ( in_array( $cookie_lang, $array_lang_update ) ) and file_exists( NV_ROOTDIR . '/includes/language/' . $cookie_lang . '/global.php' ) )
 {
 	$update_lang = $cookie_lang;
 }
@@ -82,9 +82,9 @@ define( 'NV_LANG_UPDATE', $update_lang );
 unset( $dirs, $languageslist, $file, $data_update_lang, $array_lang_update, $cookie_lang, $update_lang );
 if( NV_LANG_UPDATE != NV_LANG_DATA ) unset( $lang_module, $lang_global );
 
-require NV_ROOTDIR . '/language/' . NV_LANG_UPDATE . '/global.php';
-require NV_ROOTDIR . '/language/' . NV_LANG_UPDATE . '/admin_global.php';
-require NV_ROOTDIR . '/language/' . NV_LANG_UPDATE . '/install.php';
+require NV_ROOTDIR . '/includes/language/' . NV_LANG_UPDATE . '/global.php';
+require NV_ROOTDIR . '/includes/language/' . NV_LANG_UPDATE . '/admin_global.php';
+require NV_ROOTDIR . '/includes/language/' . NV_LANG_UPDATE . '/install.php';
 
 $lang_module = array_merge( $lang_module, $nv_update_config['lang'][NV_LANG_UPDATE] );
 unset( $nv_update_config['lang'] );
@@ -1646,7 +1646,7 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 			}
 			else
 			{
-				$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', NV_SESSION_SAVE_PATH, 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
+				$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
 
 				$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 

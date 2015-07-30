@@ -38,9 +38,9 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 	{
 		$upload_logo = NV_ROOTDIR . '/' . $global_config['site_logo'];
 	}
-	elseif( file_exists( NV_ROOTDIR . '/images/logo.png' ) )
+	elseif( file_exists( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png' ) )
 	{
-		$upload_logo = NV_ROOTDIR . '/images/logo.png';
+		$upload_logo = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png';
 	}
 	else
 	{
