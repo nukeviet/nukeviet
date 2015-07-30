@@ -10,7 +10,7 @@
 
 if( !defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$config_theme = array(
+$default_config_theme = array(
 	'body' => array(
 		'color' => '',
 		'font_size' => '',
