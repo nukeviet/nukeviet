@@ -142,7 +142,7 @@ else
 		$info = $lang_module['account_change_mail_error'] . "<br /><br />\n";
 	}
 }
-$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "assets/images/load_bar.gif\"><br /><br />\n";
 $info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $lang_module['redirect_to_login'] . "</a>]";
 
 $contents = user_info_exit( $info );

@@ -232,7 +232,7 @@
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImage : nv_siteroot + "assets/images/calendar.gif",
 			buttonImageOnly : true,
 			yearRange: "-90:+0"
 		});

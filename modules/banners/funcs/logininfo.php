@@ -90,7 +90,7 @@ $contents['captcha_name'] = 'seccode_iavim';
 $contents['captcha_img'] = NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME;
 $contents['captcha_maxlength'] = NV_GFX_NUM;
 $contents['captcha_refresh'] = $lang_global['captcharefresh'];
-$contents['captcha_refr_src'] = NV_BASE_SITEURL . 'images/refresh.png';
+$contents['captcha_refr_src'] = NV_BASE_SITEURL . 'assets/images/refresh.png';
 $contents['submit'] = $lang_global['loginsubmit'];
 $contents['sm_button_name'] = 'sm_button';
 $contents['sm_button_onclick'] = "nv_cl_login_submit(" . NV_UNICKMAX . ", " . NV_UNICKMIN . ", " . NV_UPASSMAX . ", " . NV_UPASSMIN . ", " . NV_GFX_NUM . ", " . $global_config['gfx_chk'] . ",'lg_iavim','pw_iavim','seccode_iavim','sm_button');";

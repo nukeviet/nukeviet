@@ -75,7 +75,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				'PageRank' => array(
 					'class' => ' class="' . $class_PageRank . '"',
 					'style' => 'text-align:right',
-					'content' => '<img alt="' . $inf['PageRank'] . '" src="' . NV_BASE_SITEURL . 'images/rank/' . $inf['PageRank'] . '.gif" width="42" height="7" /> ' . number_format( $inf['PageRank'] )
+					'content' => '<img alt="' . $inf['PageRank'] . '" src="' . NV_BASE_SITEURL . 'assets/images/rank/' . $inf['PageRank'] . '.gif" width="42" height="7" /> ' . number_format( $inf['PageRank'] )
 				),
 				'AlexaRank' => array(
 					'class' => ' class="' . $class_AlexaRank . '"',

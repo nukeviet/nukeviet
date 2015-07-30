@@ -315,13 +315,13 @@ function get_alias(mod, id) {
 }
 
 function nv_search_tag(tid) {
-	$("#module_show_list").html('<p class="text-center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&q=" + rawurlencode($("#q").val()) + "&num=" + nv_randomPassword(10));
+	$("#module_show_list").html('<p class="text-center"><img src="' + nv_siteroot + 'assets/images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&q=" + rawurlencode($("#q").val()) + "&num=" + nv_randomPassword(10));
 	return false;
 }
 
 function nv_del_tags(tid) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$("#module_show_list").html('<p class="text-center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&del_tid=" + tid + "&num=" + nv_randomPassword(10));
+		$("#module_show_list").html('<p class="text-center"><img src="' + nv_siteroot + 'assets/images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&del_tid=" + tid + "&num=" + nv_randomPassword(10));
 	}
 	return false;
 }
