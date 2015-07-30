@@ -8,7 +8,7 @@
  * @Createdate 2-2-2010 12:55
  */
 
-if( ! defined( 'NV_IS_FILE_SEOTOOLS' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_WEBTOOLS' ) ) die( 'Stop!!!' );
 
 $timezone_array = array_keys( $nv_parse_ini_timezone );
 $googleAnalyticsMethod = array( 'classic' => 'Classic Analytics', 'universal' => 'Universal Analytics' );

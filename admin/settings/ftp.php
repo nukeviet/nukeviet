@@ -102,7 +102,7 @@ if( $sys_info['ftp_support'] )
 			}
 			else
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'js', 'language', NV_LOGS_DIR, 'mainfile.php', 'modules', 'themes', NV_TEMP_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR );
 				if( NV_SESSION_SAVE_PATH != '' )
 				{
 					$check_files[] = NV_SESSION_SAVE_PATH;

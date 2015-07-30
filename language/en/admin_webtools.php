@@ -78,3 +78,14 @@ $lang_module['get_update_error_movefile'] = 'Error Can not move file';
 $lang_module['get_update_cantunzip'] = 'Error can not be unpacked. Please check chmod the directory.';
 $lang_module['get_update_okunzip'] = 'Unzip successful, the system will redirect momentarily';
 $lang_module['get_update_okunzip_link'] = 'Visit upgrade web';
+
+$lang_module['global_statistics'] = 'Statistics config';
+$lang_module['statistic'] = 'Activate statistics';
+$lang_module['statistics_timezone'] = 'Time zone for statistics';
+$lang_module['online_upd'] = 'Activate monitoring online users';
+$lang_module['googleAnalyticsSetDomainName_title'] = 'Domain properties when declared with Google Analytics';
+$lang_module['googleAnalyticsSetDomainName_0'] = 'A single domain';
+$lang_module['googleAnalyticsSetDomainName_1'] = 'One domain with multiple subdomains';
+$lang_module['googleAnalyticsSetDomainName_2'] = 'Multiple top-level domains';
+$lang_module['googleAnalyticsID'] = 'Google Analytics ID<br />(UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>)';
+$lang_module['googleAnalyticsMethod'] = 'Choose your method of Google Analytics tracking site';

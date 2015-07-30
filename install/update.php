@@ -11,23 +11,10 @@
 define( 'NV_SYSTEM', true );
 define( 'NV_IS_UPDATE', true );
 
-//Ket noi den mainfile.php nam o thu muc goc.
-$realpath_mainfile = '';
+//Xac dinh thu muc goc cua site
+define( 'NV_ROOTDIR', str_replace( '\\', '/', realpath( pathinfo( __file__, PATHINFO_DIRNAME ) . '/../' ) ) );
 
-$temp_dir = str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) );
-$temp_path = '/../';
-for( $i = 0; $i < 10; ++$i )
-{
-	$realpath_mainfile = @realpath( $temp_dir . $temp_path . 'mainfile.php' );
-	if( ! empty( $realpath_mainfile ) ) break;
-	$temp_path .= '../';
-}
-unset( $temp_dir, $temp_path );
-
-if( empty( $realpath_mainfile ) ) die();
-
-require $realpath_mainfile;
-unset( $realpath_mainfile );
+require NV_ROOTDIR .'/includes/mainfile.php';
 
 // Kiem tra tu cach admin
 if( ! defined( 'NV_IS_GODADMIN' ) )

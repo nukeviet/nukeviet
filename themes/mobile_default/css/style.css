@@ -6,20 +6,6 @@
  * @Createdate Thu, 17 Apr 2014 04:03:46 GMT
  */
 
-/* Font */
-@font-face {
-	font-family: 'Roboto';
-	font-style: normal;
-	font-weight: 400;
-	src: local('Roboto Regular'), local('Roboto-Regular'), url('../../default/fonts/roboto-400.woff') format('woff');
-}
-@font-face {
-	font-family: 'Roboto';
-	font-style: normal;
-	font-weight: 700;
-	src: local('Roboto Bold'), local('Roboto-Bold'), url('../../default/fonts/roboto-700.woff') format('woff');
-}
-
 /* Fix bootstrap */
 .clear {
 	clear: both
@@ -104,7 +90,6 @@ ul, ol {
 
 /* Fixed Jquery UI Style */
 .ui-widget {
-	font-family: 'Roboto', sans-serif !important;
 	font-size: 12px !important;
 	font-weight: 400 !important;
 	line-height: 18px !important;
@@ -147,7 +132,6 @@ iframe{
 h1, h2, h3, h4, h5, h6{
 	margin-top:0;
 	margin-bottom:10px;
-	font-family: 'Roboto', sans-serif;
 	line-height: 22px;
 }
 .m-bottom{
@@ -495,7 +479,6 @@ table caption{
 	text-align: left;
 	font-size: 13px;
 	font-weight: bold;
-	font-family: 'Roboto',sans-serif;
 	line-height: 22px;
 	padding: 0px 0 5px 2px;
 }

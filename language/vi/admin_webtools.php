@@ -80,3 +80,14 @@ $lang_module['get_update_error_movefile'] = 'Lỗi không thể di chuyển file
 $lang_module['get_update_cantunzip'] = 'Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.';
 $lang_module['get_update_okunzip'] = 'Giải nén thành công, hệ thống sẽ chuyển trang trong giây lát';
 $lang_module['get_update_okunzip_link'] = 'Đến trang nâng cấp';
+
+$lang_module['global_statistics'] = 'Cấu hình thống kê';
+$lang_module['statistic'] = 'Kích hoạt tiện ích thống kê';
+$lang_module['statistics_timezone'] = 'Múi giờ dùng khi thống kê truy cập';
+$lang_module['online_upd'] = 'Kích hoạt tiện ích đếm số người online';
+$lang_module['googleAnalyticsSetDomainName_title'] = 'Đặc tính Domain khi khai báo với Google Analytics';
+$lang_module['googleAnalyticsSetDomainName_0'] = 'Domain duy nhất';
+$lang_module['googleAnalyticsSetDomainName_1'] = 'Domain cấp cao + subdomains chạy song song';
+$lang_module['googleAnalyticsSetDomainName_2'] = 'Nhiều Domain cấp cao chạy song song';
+$lang_module['googleAnalyticsID'] = 'ID tài khoản Google Analytics<br />(Có dạng UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">xem chi tiết</a>)';
+$lang_module['googleAnalyticsMethod'] = 'Chọn phương pháp theo dõi site của Google Analytics';

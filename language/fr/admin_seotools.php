@@ -66,7 +66,4 @@ $lang_module['robots_error_writable'] = 'Erreur: impossible d\'enregistrer le fi
 $lang_module['pagetitle2'] = 'Méthode d\'affichage de tag "title"';
 $lang_module['pagetitleNote'] = '<strong>Variables acceptés:</strong><br /><br />- <strong>pagetitle</strong>: Titre de page pour des cas définis,<br />- <strong>funcname</strong>: Nom de la function,<br />- <strong>modulename</strong>: Nom de module,<br />- <strong>sitename</strong>: Nom du site';
 $lang_module['metaTagsContent'] = 'Contenu';
-$lang_module['global_statistics'] = 'Config. de Statistiques';
-$lang_module['statistic'] = 'Activer  les statistiques';
-$lang_module['statistics_timezone'] = 'Fuseau horaire pour les statistiques';
 $lang_module['custom_title'] = 'Titre';

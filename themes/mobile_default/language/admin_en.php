@@ -53,3 +53,5 @@ $lang_module['general_css_note'] = 'Edit css';
 $lang_module['module_in_menu'] = 'Module in menu';
 
 $lang_module['save'] = 'Save configuration';
+$lang_module['exp'] = 'eg';
+$lang_module['gfont_note'] = 'Select font in the site: https://www.google.com/fonts';

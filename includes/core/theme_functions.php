@@ -509,35 +509,27 @@ function nv_xmlSitemapIndex_generate()
  */
 function nv_css_setproperties( $tag, $property_array )
 {
-    $css = $line = '';
-    if( empty( $tag ) ) return '';
+    if ( empty( $tag ) ) return '';
+    if ( ! is_array( $property_array ) ) return $property_array;
 
-    if( is_array( $property_array ) )
+    $css = '';
+    foreach ( $property_array as $property => $value )
     {
-        foreach( $property_array as $property => $value )
+        if ( $property != 'customcss' )
         {
-            if( $property != 'customcss' )
+            if ( ! empty( $property ) and ! empty( $value ) )
             {
-                if( ! empty( $property ) and ! empty( $value ) )
-                {
-                    $property = str_replace( '_', '-', $property );
-                    if( $property == 'background-image' ) $value = "url('" . $value . "')";
-                    $css .= $property . ':' . $value . ';';
-                }
-            }
-            elseif( ! empty( $value ) )
-            {
-                $value = substr(trim($value), -1) == ';' ? $value : $value . ';';
-                $css .= $value;
+                $property = str_replace( '_', '-', $property );
+                if ( $property == 'background-image' ) $value = "url('" . $value . "')";
+                $css .= $property . ':' . $value . ';';
             }
         }
-        $line .= $css == '' ? '' : $tag . '{' . $css . '}';
+        elseif ( ! empty( $value ) )
+        {
+            $value = substr( trim( $value ), -1 ) == ';' ? $value : $value . ';';
+            $css .= $value;
+        }
     }
-    else
-    {
-        $css .= $property_array;
-        $line .= $css == '' ? '' : $css;
-    }
-
-    return $line;
+    ! empty( $css ) && $css = $tag . '{' . $css . '}';
+    return $css;
 }

@@ -9,6 +9,7 @@
  */
 
 define( 'NV_ADMIN', true );
+
 require_once 'mainfile.php';
 
 $file_config_temp = NV_TEMP_DIR . '/config_' . md5( $global_config['sitekey'] ) . '.php';
@@ -186,7 +187,7 @@ elseif( $step == 2 )
 			}
 			elseif( ftp_chdir( $conn_id, $global_config['ftp_path'] ) )
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'robots.txt', 'js', 'language', NV_LOGS_DIR, 'mainfile.php', 'modules', 'themes', NV_TEMP_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'robots.txt', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR );
 				if( NV_SESSION_SAVE_PATH != '' )
 				{
 					$check_files[] = NV_SESSION_SAVE_PATH;
@@ -398,6 +399,74 @@ elseif( $step == 5 )
 
 	$PDODrivers = PDO::getAvailableDrivers();
 
+	// Check dbtype
+	if( $nv_Request->isset_request( 'checkdbtype', 'post' ) )
+	{
+		$dbtype = $nv_Request->get_title( 'checkdbtype', 'post' );
+
+		$respon = array(
+			'status' => 'error',
+			'dbtype' => $dbtype,
+			'message' => '',
+			'link' => '',
+			'files' => array()
+		);
+
+		if( $dbtype == 'mysql' ) // Not check default dbtype
+		{
+			$respon['status'] = 'success';
+		}
+		else
+		{
+			if( ! in_array( $dbtype, $PDODrivers ) )
+			{
+				$respon['message'] = $lang_module['dbcheck_error_driver'];
+			}
+			else
+			{
+				$array_check_files = array(
+					'install' => 'install/action_' . $dbtype . '.php',
+					'sys' => 'includes/action_' . $dbtype . '.php'
+				);
+
+				include NV_ROOTDIR . '/includes/action_mysql.php';
+
+				$array_module_setup = array_map( "trim", explode( ',', NV_MODULE_SETUP_DEFAULT ) );
+
+				foreach( $array_module_setup as $module )
+				{
+					if( file_exists( NV_ROOTDIR . '/modules/' . $module . '/action_mysql.php' ) )
+					{
+						$array_check_files[] = 'modules/' . $module . '/action_' . $dbtype . '.php';
+					}
+				}
+
+				foreach( $array_check_files as $key => $file )
+				{
+					if( file_exists( NV_ROOTDIR . '/' . $file ) )
+					{
+						unset( $array_check_files[$key] );
+					}
+				}
+
+				if( empty( $array_check_files ) )
+				{
+					$respon['status'] = 'success';
+				}
+				else
+				{
+					asort( $array_check_files );
+					$respon['files'] = $array_check_files;
+					$respon['link'] = 'https://github.com/nukeviet/nukeviet-dbtype';
+					$respon['message'] = $lang_module['dbcheck_error_files'];
+				}
+			}
+		}
+
+		echo json_encode( $respon );
+		die();
+	}
+
 	if( in_array( $db_config['dbtype'], $PDODrivers ) and ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
 	{
 		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbuname'] );
@@ -408,6 +477,7 @@ elseif( $step == 5 )
 		{
 			$db_config['dbhost'] = '127.0.0.1';
 		}
+
 		if( $db_config['dbtype'] == 'mysql' )
 		{
 			$db_config['dbsystem'] = $db_config['dbname'];

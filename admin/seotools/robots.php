@@ -100,7 +100,6 @@ else
 	$robots_data['/install/'] = 0;
 	$robots_data['/language/'] = 0;
 	$robots_data['/' . NV_LOGS_DIR . '/'] = 0;
-	$robots_data['/mainfile.php'] = 0;
 	$robots_data['/modules/'] = 0;
 	$robots_data['/robots.php'] = 0;
 	if( NV_SESSION_SAVE_PATH != '' )
