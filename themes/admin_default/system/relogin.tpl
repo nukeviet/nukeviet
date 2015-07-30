@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/main.css">
 		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
-		<script type="text/javascript" src="{NV_BASE_SITEURL}{ASSETS_DIR}js/language/{SITELANG}.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}{ASSETS_DIR}/js/language/{SITELANG}.js"></script>
 		<script type="text/javascript">
 		function nv_checkadminlogin_submit() {
 			var password = document.getElementById('password');

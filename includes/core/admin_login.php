@@ -252,8 +252,10 @@ if( $global_config['gfx_chk'] == 1 )
 	$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 	$xtpl->parse( 'main.captcha' );
 }
+
 if( $global_config['lang_multi'] == 1 )
 {
+	$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 	$_language_array = nv_scandir(  NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/' );
 	foreach( $_language_array as $lang_i )
 	{
