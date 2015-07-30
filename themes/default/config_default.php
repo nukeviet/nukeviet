@@ -31,17 +31,17 @@ $config_theme = array(
 		'padding_bottom' => '',
 		'padding_left' => '',
 		'padding_right' => '',
-		'customcss' => '',
+		'customcss' => ''
 	),
 	'a_link' => array(
 		'color' => '',
 		'font_weight' => '',
-		'font_style' => '',
+		'font_style' => ''
 	),
 	'a_link_hover' => array(
 		'color' => '',
 		'font_weight' => '',
-		'font_style' => '',
+		'font_style' => ''
 	),
 	'content' => array(
 		'margin' => '',
@@ -56,7 +56,7 @@ $config_theme = array(
 		'padding_right' => '',
 		'width' => '',
 		'height' => '',
-		'customcss' => '',
+		'customcss' => ''
 	),
 	'header' => array(
 		'background_color' => '',
@@ -75,7 +75,7 @@ $config_theme = array(
 		'padding_right' => '',
 		'width' => '',
 		'height' => '',
-		'customcss' => '',
+		'customcss' => ''
 	),
 	'footer' => array(
 		'background_color' => '',
@@ -94,7 +94,7 @@ $config_theme = array(
 		'padding_right' => '',
 		'width' => '',
 		'height' => '',
-		'customcss' => '',
+		'customcss' => ''
 	),
 	'block' => array(
 		'background_color' => '',
@@ -115,13 +115,18 @@ $config_theme = array(
 		'border_style' => '',
 		'border_width' => '',
 		'border_radius' => '',
-		'customcss' => '',
+		'customcss' => ''
 	),
 	'block_heading' => array(
 		'background_color' => '',
 		'background_image' => '',
 		'background_repeat' => '',
-		'background_position' => '',
+		'background_position' => ''
 	),
 	'generalcss' => '',
+    'gfont' => array(
+        'family' => '',
+        'styles' => '',
+        'subset' => ''
+    )
 );

@@ -15,6 +15,8 @@ $propety = array();
 
 if ( $nv_Request->isset_request( 'submit', 'post' ) )
 {
+    $css = "";
+
     // Css property for body
     $property['color'] = $nv_Request->get_title( 'body_color', 'post', '' );
     $property['font_size'] = $nv_Request->get_title( 'body_font_size', 'post', '' );
@@ -39,6 +41,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['padding_right'] = $nv_Request->get_title( 'body_padding_right', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'body_customcss', 'post', '' );
     $config_theme['body'] = array_filter( $property );
+    if( !empty( $config_theme['body'] ) )
+    {
+        $css .= nv_css_setproperties( "[body]", $config_theme['body'] );
+    }
     $property = array();
 
     // Css property for link
@@ -48,6 +54,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['font_style'] = $nv_Request->get_bool( 'link_a_font_italic', 'post', 0 );
     $property['font_style'] = $property['font_style'] ? 'italic' : '';
     $config_theme['a_link'] = array_filter( $property );
+    if( !empty( $config_theme['a_link'] ) )
+    {
+        $css .= nv_css_setproperties( "[a_link]", $config_theme['a_link'] );
+    }
     $property = array();
 
     // Css property for link (hover)
@@ -57,6 +67,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['font_style'] = $nv_Request->get_bool( 'link_a_hover_font_italic', 'post', 0 );
     $property['font_style'] = $property['font_style'] ? 'italic' : '';
     $config_theme['a_link_hover'] = array_filter( $property );
+    if( !empty( $config_theme['a_link_hover'] ) )
+    {
+        $css .= nv_css_setproperties( "[a_link_hover]", $config_theme['a_link_hover'] );
+    }
     $property = array();
 
     // Css property for content
@@ -74,6 +88,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['height'] = $nv_Request->get_title( 'content_height', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'content_customcss', 'post', '' );
     $config_theme['content'] = array_filter( $property );
+    if( !empty( $config_theme['content'] ) )
+    {
+        $css .= nv_css_setproperties( "[content]", $config_theme['content'] );
+    }
     $property = array();
 
     // Css property for header
@@ -95,6 +113,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['height'] = $nv_Request->get_title( 'header_height', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'header_customcss', 'post', '' );
     $config_theme['header'] = array_filter( $property );
+    if( !empty( $config_theme['header'] ) )
+    {
+        $css .= nv_css_setproperties( "[header]", $config_theme['header'] );
+    }
     $property = array();
 
     // Css property for footer
@@ -116,6 +138,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['height'] = $nv_Request->get_title( 'footer_height', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'footer_customcss', 'post', '' );
     $config_theme['footer'] = array_filter( $property );
+    if( !empty( $config_theme['footer'] ) )
+    {
+        $css .= nv_css_setproperties( "[footer]", $config_theme['footer'] );
+    }
     $property = array();
 
     // Css property for footer
@@ -139,6 +165,10 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['border_radius'] = $nv_Request->get_title( 'block_border_radius', 'post', '' );
     $property['customcss'] = $nv_Request->get_textarea( 'block_customcss', 'post', '' );
     $config_theme['block'] = array_filter( $property );
+    if( !empty( $config_theme['block'] ) )
+    {
+        $css .= nv_css_setproperties( "[block]", $config_theme['block'] );
+    }
     $property = array();
 
     $property['background_color'] = $nv_Request->get_title( 'block_heading_background_color', 'post', '' );
@@ -146,12 +176,28 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $property['background_repeat'] = $nv_Request->get_title( 'block_heading_background_repeat', 'post', '' );
     $property['background_position'] = $nv_Request->get_title( 'block_heading_background_position', 'post', '' );
     $config_theme['block_heading'] = array_filter( $property );
+    if( !empty( $config_theme['block_heading'] ) )
+    {
+        $css .= nv_css_setproperties( "[block_heading]", $config_theme['block_heading'] );
+    }
     $property = array();
+    
+    $property['family'] = $nv_Request->get_title( 'gfont_family', 'post', '' );
+    $property['styles'] = $nv_Request->get_title( 'gfont_styles', 'post', '' );
+    $property['subset'] = $nv_Request->get_title( 'gfont_subset', 'post', '' );
+    empty( $property['family'] ) && ( $property['styles'] = $property['subset'] = "" );
+    $config_theme['gfont'] = array_filter( $property );
 
     // General css
-    ( $generalcss = nv_unhtmlspecialchars( $nv_Request->get_textarea( 'generalcss', 'post', '' ) ) ) != "" && $config_theme['generalcss'] = $generalcss;
+    if( ( $generalcss = nv_unhtmlspecialchars( $nv_Request->get_textarea( 'generalcss', 'post', '' ) ) ) != "" )
+    {
+        $config_theme['generalcss'] = $generalcss;
+        $css .= nv_css_setproperties( "[generalcss]", $config_theme['generalcss'] );
+    }
 
-    $config_value = serialize( array_filter( $config_theme ) );
+    $config_value = array_filter( $config_theme );
+    !empty( $css ) && $config_value['css_content'] = Minify_CSS_Compressor::process( $css );
+    $config_value = serialize( $config_value );
 
     if ( isset( $module_config['themes'][$selectthemes] ) )
     {
@@ -181,21 +227,27 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 
     nv_del_moduleCache( 'settings' );
 
-    if ( file_exists( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $selectthemes . "_" . $global_config['idsite'] . ".css" ) )
+    if ( file_exists( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css" ) )
     {
-        nv_deletefile( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/theme_" . $selectthemes . "_" . $global_config['idsite'] . ".css" );
+        nv_deletefile( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css" );
     }
 
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectthemes=' . $selectthemes . '&rand=' . nv_genpass() );
     die();
 }
-elseif ( isset( $module_config['themes'][$selectthemes] ) )
-{
-    $config_theme = unserialize( $module_config['themes'][$selectthemes] );
-}
 else
 {
+    $default_config_theme = "";
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config_default.php';
+    if ( isset( $module_config['themes'][$selectthemes] ) )
+    {
+        $config_theme = unserialize( $module_config['themes'][$selectthemes] );
+        $config_theme = array_replace_recursive( $default_config_theme, $config_theme );
+    }
+    else
+    {
+        $config_theme = $default_config_theme;
+    }
 }
 
 $xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $selectthemes . '/system/' );
@@ -235,22 +287,23 @@ if ( isset( $module_config['themes'][$selectthemes] ) )
         $xtpl->parse( 'main.block_border_style' );
     }
 
-    $config_theme['body']['font_weight'] = ( isset( $config_theme['body']['font_weight'] ) && ! empty( $config_theme['body']['font_weight'] ) ) ? ' checked="checked"' : '';
-    $config_theme['body']['font_style'] = ( isset( $config_theme['body']['font_style'] ) && ! empty( $config_theme['body']['font_style'] ) ) ? ' checked="checked"' : '';
-    $config_theme['a_link']['font_weight'] = ( isset( $config_theme['a_link']['font_weight'] ) && ! empty( $config_theme['a_link']['font_weight'] ) ) ? ' checked="checked"' : '';
-    $config_theme['a_link']['font_style'] = ( isset( $config_theme['a_link']['font_style'] ) && ! empty( $config_theme['a_link']['font_style'] ) ) ? ' checked="checked"' : '';
-    $config_theme['a_link_hover']['font_weight'] = ( isset( $config_theme['a_link_hover']['font_weight'] ) && ! empty( $config_theme['a_link_hover']['font_weight'] ) ) ? ' checked="checked"' : '';
-    $config_theme['a_link_hover']['font_style'] = ( isset( $config_theme['a_link_hover']['font_style'] ) && ! empty( $config_theme['a_link_hover']['font_style'] ) ) ? ' checked="checked"' : '';
+    $config_theme['body']['font_weight'] = ! empty( $config_theme['body']['font_weight'] ) ? ' checked="checked"' : '';
+    $config_theme['body']['font_style'] = ! empty( $config_theme['body']['font_style'] ) ? ' checked="checked"' : '';
+    $config_theme['a_link']['font_weight'] = ! empty( $config_theme['a_link']['font_weight'] ) ? ' checked="checked"' : '';
+    $config_theme['a_link']['font_style'] = ! empty( $config_theme['a_link']['font_style'] ) ? ' checked="checked"' : '';
+    $config_theme['a_link_hover']['font_weight'] = ! empty( $config_theme['a_link_hover']['font_weight'] ) ? ' checked="checked"' : '';
+    $config_theme['a_link_hover']['font_style'] = ! empty( $config_theme['a_link_hover']['font_style'] ) ? ' checked="checked"' : '';
 
     $xtpl->assign( 'CONFIG_THEME_BODY', $config_theme['body'] );
     $xtpl->assign( 'CONFIG_THEME_A_LINK', $config_theme['a_link'] );
     $xtpl->assign( 'CONFIG_THEME_A_LINK_HOVER', $config_theme['a_link_hover'] );
-    $xtpl->assign( 'CONFIG_THEME_CONTENT', isset( $config_theme['content'] ) ? $config_theme['content'] : array() );
-    $xtpl->assign( 'CONFIG_THEME_HEADER', isset( $config_theme['header'] ) ? $config_theme['header'] : array() );
-    $xtpl->assign( 'CONFIG_THEME_FOOTER', isset( $config_theme['footer'] ) ? $config_theme['footer'] : array() );
-    $xtpl->assign( 'CONFIG_THEME_BLOCK', isset( $config_theme['block'] ) ? $config_theme['block'] : array() );
-    $xtpl->assign( 'CONFIG_THEME_BLOCK_HEADING', isset( $config_theme['block_heading'] ) ? $config_theme['block_heading'] : array() );
-    $xtpl->assign( 'CONFIG_THEME_GENERCSS', isset( $config_theme['generalcss'] ) ? $config_theme['generalcss'] : "" );
+    $xtpl->assign( 'CONFIG_THEME_CONTENT', $config_theme['content'] );
+    $xtpl->assign( 'CONFIG_THEME_HEADER', $config_theme['header'] );
+    $xtpl->assign( 'CONFIG_THEME_FOOTER', $config_theme['footer'] );
+    $xtpl->assign( 'CONFIG_THEME_BLOCK', $config_theme['block'] );
+    $xtpl->assign( 'CONFIG_THEME_BLOCK_HEADING', $config_theme['block_heading'] );
+    $xtpl->assign( 'CONFIG_THEME_GENERCSS', $config_theme['generalcss'] );
+    $xtpl->assign( 'CONFIG_THEME_GFONT', $config_theme['gfont'] );
 }
 
 $xtpl->parse( 'main' );
