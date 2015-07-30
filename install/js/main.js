@@ -74,7 +74,7 @@ $(document).ready(function(){
     // Init NV Simple Moal
     if( $('.nv-modal').length ){
     	$('.nv-modal:first>.nv-modal-wrap').click(function(e){
-    		if( $(e.toElement).is('.nv-modal-wrap') ){
+    		if( e.target.className == 'nv-modal-wrap' ){
 		    	$('.nv-modal:first').fadeTo(200, 0, function(){
 		    		$('.nv-modal:first').hide();
 		    		$('.nv-modal:first>.nv-modal-wrap>.nv-modal-content').html('');
