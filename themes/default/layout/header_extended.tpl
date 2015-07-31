@@ -35,12 +35,6 @@
                         <h1>{SITE_NAME}</h1>
                         <h2>{SITE_DESCRIPTION}</h2>
                     </div>
-                    <div class="clearfix"></div>
-                    <!-- BEGIN: breadcrumbs -->
-                    <h3 class="breadcrumb">
-                        <span class="hidden" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></span><!-- BEGIN: loop --><span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span class="txt" itemprop="title">{BREADCRUMBS.title}</span></a></span><!-- END: loop -->
-                    </h3>
-                    <!-- END: breadcrumbs -->
 				</div>
 			</div>
 		</header>
@@ -51,14 +45,30 @@
 					[MENU_SITE]
                     </div>
 				</div>
-                <div class="headerSearch">
-                    <div class="input-group">
-                        <input type="text" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}...">
-                        <span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
-                    </div>
-                </div>
 			</div>
 		</nav>
+        <nav class="third-nav">
+            <div class="container">
+				<div class="row bg">
+                    <div class="clearfix">
+                        <div class="col-xs-24 col-sm-18">
+                            <!-- BEGIN: breadcrumbs -->
+                            <ul class="breadcrumbs list-none">
+                                <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></li>
+                                <!-- BEGIN: loop --><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span class="txt" itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
+                            </ul>
+                            <!-- END: breadcrumbs -->
+                        </div>
+                        <div class="headerSearch col-xs-24 col-sm-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}...">
+                                <span class="input-group-btn"><button type="button" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
         <nav class="header-nav">
             <div class="container">
                 <div class="personalArea">
