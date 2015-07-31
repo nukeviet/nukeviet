@@ -140,12 +140,13 @@ function nv_setup_block_module( $mod, $func_id = 0 )
 
 /**
  * nv_setup_data_module()
- *
+ * 
  * @param mixed $lang
  * @param mixed $module_name
+ * @param integer $sample
  * @return
  */
-function nv_setup_data_module( $lang, $module_name )
+function nv_setup_data_module( $lang, $module_name, $sample = 0 )
 {
 	global $db, $db_config, $global_config;
 
@@ -154,8 +155,10 @@ function nv_setup_data_module( $lang, $module_name )
 	$sth = $db->prepare( 'SELECT module_file, module_data, module_upload, theme FROM ' . $db_config['prefix'] . '_' . $lang . '_modules WHERE title= :title');
 	$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
 	$sth->execute();
+	
 	list( $module_file, $module_data, $module_upload, $module_theme ) = $sth->fetch( 3 );
-	if( !empty( $module_file ) )
+	
+	if( ! empty( $module_file ) )
 	{
 		$module_version = array();
 		$version_file = NV_ROOTDIR . '/modules/' . $module_file . '/version.php';
@@ -166,24 +169,26 @@ function nv_setup_data_module( $lang, $module_name )
 		}
 
 		$arr_modfuncs = ( isset( $module_version['modfuncs'] ) and ! empty( $module_version['modfuncs'] ) ) ? array_map( 'trim', explode( ',', $module_version['modfuncs'] ) ) : array();
-		// Xoa du lieu tai bang _config
-
+		
+		// Delete config value in prefix_config table
 		$sth = $db->prepare( "DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang= '" . $lang . "' AND module= :module" );
 		$sth->bindParam( ':module', $module_name, PDO::PARAM_STR );
 		$sth->execute();
+		
 		nv_delete_all_cache();
-
+		
+		// Re-Creat all module table
 		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ) )
 		{
 			$sql_recreate_module = array();
 
 			try
 			{
-			  $db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
 			}
 			catch( PDOException $e )
 			{
-			  trigger_error( $e->getMessage() );
+				trigger_error( $e->getMessage() );
 			}
 
 			include NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ;
@@ -205,6 +210,7 @@ function nv_setup_data_module( $lang, $module_name )
 			}
 		}
 
+		// Setup layout if site module
 		$arr_func_id = array();
 		$arr_show_func = array();
 		$new_funcs = nv_scandir( NV_ROOTDIR . '/modules/' . $module_file . '/funcs', $global_config['check_op_file'] );
@@ -253,7 +259,7 @@ function nv_setup_data_module( $lang, $module_name )
 					}
 				}
 			}
-			// end get default layout
+
 			$_layoutdefault = ( isset( $module_version['layoutdefault'] ) ) ? $module_version['layoutdefault'] : '';
 			if( ! empty( $_layoutdefault ) )
 			{
@@ -343,11 +349,12 @@ function nv_setup_data_module( $lang, $module_name )
 			$sth->bindParam( ':in_module', $module_name, PDO::PARAM_STR );
 			$sth->execute();
 		}
-
-
+	
+		// Creat upload dirs
 		if( isset( $module_version['uploads_dir'] ) and ! empty( $module_version['uploads_dir'] ) )
 		{
 			$sth_dir = $db->prepare( 'INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:dirname, 0, 0, 0, 0, 0)' );
+			
 			foreach( $module_version['uploads_dir'] as $path )
 			{
 				$cp = '';
@@ -379,7 +386,8 @@ function nv_setup_data_module( $lang, $module_name )
 				}
 			}
 		}
-
+		
+		// Creat assets dirs
 		if( isset( $module_version['files_dir'] ) and ! empty( $module_version['files_dir'] ) )
 		{
 			foreach( $module_version['files_dir'] as $path )
@@ -401,10 +409,27 @@ function nv_setup_data_module( $lang, $module_name )
 			}
 		}
 
+		// Install sample data
+		if( $sample )
+		{
+			$sample_lang_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $db_config['dbtype'] . '_' . $lang . '.php';
+			$sample_default_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $db_config['dbtype'] . '_en.php';
+			
+			if( file_exists( $sample_lang_file ) )
+			{
+				include $sample_lang_file;
+			}
+			elseif( file_exists( $sample_default_file ) )
+			{
+				include $sample_default_file;
+			}
+		}
+
 		$return = 'OK_' . $module_name;
 
 		nv_delete_all_cache();
 	}
+	
 	return $return;
 }
 
@@ -416,10 +441,12 @@ function nv_setup_data_module( $lang, $module_name )
  */
 function main_theme( $contents )
 {
-	global $global_config, $module_file;
+	global $global_config, $module_file, $lang_global, $lang_module;
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CONTENT', $contents );
 
 	$xtpl->parse( 'main' );
@@ -438,10 +465,11 @@ function main_theme( $contents )
  */
 function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $weight_list )
 {
-	global $global_config, $module_file;
+	global $global_config, $module_file, $lang_global;
 
 	$xtpl = new XTemplate( 'list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CAPTION', $contents['caption'] );
+	$xtpl->assign( 'GLANG', $lang_global );
 
 	if( ! empty( $act_modules ) )
 	{
@@ -466,7 +494,10 @@ function list_theme( $contents, $act_modules, $deact_modules, $bad_modules, $wei
 				$xtpl->parse( 'main.act_modules.loop.weight' );
 			}
 
-			if( ! empty( $values['del'] ) ) $xtpl->parse( 'main.act_modules.loop.delete' );
+			if( ! empty( $values['del'] ) )
+			{
+				$xtpl->parse( 'main.act_modules.loop.delete' );
+			}
 
 			$xtpl->parse( 'main.act_modules.loop' );
 		}

@@ -97,7 +97,6 @@ while( $row = $result->fetch() )
 	$mod['act'] = array( $row['act'], "nv_chang_act('" . $row['title'] . "');" );
 
 	$mod['edit'] = array( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $row['title'], $lang_global['edit'] );
-	$mod['recreate'] = array( "nv_recreate_mod('" . $row['title'] . "');", $lang_global['recreate'] );
 	$mod['del'] = ( $row['is_sys'] == 0 or $row['title'] != $row['module_file'] ) ? array( "nv_mod_del('" . $row['title'] . "');", $lang_global['delete'] ) : array();
 
 	if( $row['title'] == $global_config['site_home_module'] )
