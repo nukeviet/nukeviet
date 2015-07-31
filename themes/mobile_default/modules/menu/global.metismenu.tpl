@@ -12,7 +12,7 @@
 <link rel="stylesheet" type="text/css"	href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/jquery.metisMenu.css" />
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/jquery/jquery.metisMenu.js"></script>
 
-<div class="clearfix panel">
+<div class="clearfix panel metismenu">
 	<aside class="sidebar">
 		<nav class="sidebar-nav">
 			<ul id="menu_{MENUID}">
