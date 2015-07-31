@@ -19,16 +19,6 @@
         text-align:left;
         padding:10px;
     }
-    #header .breadcrumb {
-        position:relative !important;
-        margin:5px 10px 10px !important;
-        text-align:right !important;
-        font-size:18px;
-    }
-    .footerNav .breadcrumb {
-        position:relative !important;
-        font-size:18px;
-    }
     #menu-site-default .navbar-right {
         display:none;
     }
@@ -68,6 +58,9 @@
     .contactList li .fa {
         width:20px;
     }
+    .breadcrumbs{
+        display:none
+    }
     .hidden-ss-block,
     .hidden-ss-inline,
     .hidden-ss-inline-block {
@@ -77,6 +70,9 @@
         position:absolute;
         left:0;
         top:0;
+    }
+    .third-nav .bg{
+        padding: 10px 5px;
     }
     .navbar-default {
         background:#2463a6 url(../images/hbg2.jpg) repeat-x left top !important;
@@ -111,6 +107,7 @@
     .navbar-collapse {
         padding-left:15px !important;
         padding-right:15px !important;
+        margin-top: -51px
     }
     .navbar-toggle {
         margin-left:10px !important;
