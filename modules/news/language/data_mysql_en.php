@@ -114,5 +114,22 @@ $sth->execute( array(5, 1, 'VINADES') );
 
 $copyright = 'Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement';
 
-$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $copyright ) . " WHERE module = 'news' AND config_name = 'copyright' AND lang='" . $lang_data . "'" );
-$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_home_module'] . "' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'" );
+$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $copyright ) . " WHERE module = 'news' AND config_name = 'copyright' AND lang='" . $lang . "'" );
+
+$result = $db->query( 'SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat ORDER BY sort ASC' );
+while( list( $catid_i ) = $result->fetch( 3 ) )
+{
+	$db->exec( 'CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid_i . ' LIKE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows' );
+}
+
+$result = $db->query( 'SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows ORDER BY id ASC' );
+
+while( list( $id, $listcatid ) = $result->fetch( 3 ) )
+{
+	$arr_catid = explode( ',', $listcatid );
+	foreach( $arr_catid as $catid )
+	{
+		$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows WHERE id=' . $id );
+	}
+}
+$result->closeCursor();
