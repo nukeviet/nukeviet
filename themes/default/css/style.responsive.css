@@ -74,6 +74,9 @@
     .third-nav .bg{
         padding: 10px 5px;
     }
+    .third-nav .current-time{
+        display:none
+    }
     .navbar-default {
         background:#2463a6 url(../images/hbg2.jpg) repeat-x left top !important;
         border-color:#064481 !important;

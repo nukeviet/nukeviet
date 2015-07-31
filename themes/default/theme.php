@@ -42,8 +42,7 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-	$xtpl->assign( 'NV_SITE_TIMEZONE_OFFSET', round( NV_SITE_TIMEZONE_OFFSET / 3600 ) );
-	$xtpl->assign( 'NV_CURRENTTIME', nv_date( 'T', NV_CURRENTTIME ) );
+	$xtpl->assign( 'NV_CURRENTTIME', nv_date( $global_config['date_pattern'] . ', ' . $global_config['time_pattern'], NV_CURRENTTIME ) );
 	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
 
 	$xtpl->assign( 'LANG_TIMEOUTSESS_NOUSER', $lang_global['timeoutsess_nouser'] );
@@ -199,17 +198,18 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->assign( 'THEME_SEARCH_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&q=' );
 
 		// Breadcrumbs
+        $array_mod_title_copy = $array_mod_title;
         if ( $global_config['rewrite_op_mod'] != $module_name )
         {
             $arr_cat_title_i = array(
                 'catid' => 0,
                 'title' => $module_info['custom_title'],
                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
-            array_unshift( $array_mod_title, $arr_cat_title_i );
+            array_unshift( $array_mod_title_copy, $arr_cat_title_i );
         }
-        if ( ! empty( $array_mod_title ) )
+        if ( ! empty( $array_mod_title_copy ) )
         {
-            foreach ( $array_mod_title as $arr_cat_title_i )
+            foreach ( $array_mod_title_copy as $arr_cat_title_i )
             {
                 $xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
                 $xtpl->parse( 'main.breadcrumbs.loop' );
@@ -258,6 +258,11 @@ function nv_site_theme( $contents, $full = true )
             $xtpl->parse( 'main.theme_type.loop' );
         }
         $xtpl->parse( 'main.theme_type' );
+        
+        if( $home || empty( $array_mod_title ) )
+        {
+            $xtpl->parse( 'main.currenttime' );
+        }
 
         if( defined( 'NV_IS_ADMIN' ) )
 		{
