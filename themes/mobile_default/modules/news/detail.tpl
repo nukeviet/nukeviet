@@ -244,7 +244,7 @@ $(document).ready(function() {
 	$(".bodytext img").toggleClass('img-thumbnail');
 });
 </script>
-<script type="text/javascript" src="{NV_BASE_SITEURL{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->
 <!-- BEGIN: no_permission -->
