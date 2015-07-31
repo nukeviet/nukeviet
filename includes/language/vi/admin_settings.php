@@ -86,6 +86,7 @@ $lang_module['bot_allowed'] = 'Quyền xem';
 $lang_module['site_keywords'] = 'Từ khóa cho máy chủ tìm kiếm';
 $lang_module['site_logo'] = 'Tên file logo của site';
 $lang_module['site_email'] = 'Email của site';
+$lang_module['error_set_logs'] = 'Ghi lại lỗi của hệ thống';
 $lang_module['error_send_email'] = 'Email nhận thông báo lỗi';
 $lang_module['lang_multi'] = 'Kích hoạt chức năng đa ngôn ngữ';
 $lang_module['lang_geo'] = 'Kích hoạt chức năng xác định ngôn ngữ theo quốc gia';
