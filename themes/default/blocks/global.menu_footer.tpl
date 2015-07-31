@@ -2,7 +2,7 @@
 <ul class="menu">
 	<!-- BEGIN: footer_menu -->
 	<li>
-		<a href="{FOOTER_MENU.link}"{FOOTER_MENU.current}>{FOOTER_MENU.title}</a>
+		<a href="{FOOTER_MENU.link}">{FOOTER_MENU.title}</a>
 	</li>
 	<!-- END: footer_menu -->
 </ul>
