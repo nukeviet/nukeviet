@@ -17,4 +17,5 @@ $lang_translator['copyright'] = 'phuthanh.nguyen215@gmail.com';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
-$lang_block['htmlcontent'] = 'Entrer le contenu du block';
+$lang_block['blockid'] = 'Choisir un bloque';
+$lang_block['numrows'] = 'Nombre de contenu présentes';

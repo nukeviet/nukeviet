@@ -14,7 +14,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
-$lang_translator['info'] = 'Langue française pour NukeViet 3';
+$lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['nv_lang_data'] = 'Langue de données';
@@ -73,3 +73,8 @@ $lang_module['nv_check_type_2'] = 'Vérifier tout';
 $lang_module['nv_lang_check_title'] = 'Vérifier les lignes pas encore traduites';
 $lang_module['countries'] = 'Langue selon pays';
 $lang_module['countries_name'] = 'Pays';
+$lang_module['nv_lang_module'] = 'Module';
+$lang_module['nv_lang_site'] = 'Site';
+$lang_module['nv_lang_key'] = 'Signe';
+$lang_module['nv_setting_type_1'] = 'Ne sauvegarder que les valeurs qui n\'ont pas eu lang_key';
+$lang_module['nv_lang_native_name'] = 'Langue de la region';
