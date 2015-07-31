@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<span><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" data-toggle="tip" data-target="#guestBlock" data-click="y"><em class="fa fa-sign-in fa-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
+<span><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" data-toggle="tip" data-target="#guestBlock" data-click="y"><em class="icon-enter icon-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
 <!-- START FORFOOTER -->
 <div id="guestBlock" class="hidden">
     <div class="guestBlock">
@@ -127,10 +127,10 @@
     <div class="tip-footer">
         <div class="row">
             <div class="col-xs-16 small">
-                <em class="button btn-sm fa fa-sign-in" title="{LANG.current_login}"></em>{USER.current_login_txt}
+                <em class="button btn-sm icon-enter" title="{LANG.current_login}"></em>{USER.current_login_txt}
             </div>
             <div class="col-xs-8 text-right">
-                <button type="button" class="btn btn-default btn-sm active" onclick="bt_logout(this);"><em class="fa fa-sign-out"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
+                <button type="button" class="btn btn-default btn-sm active" onclick="bt_logout(this);"><em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
             </div>
         </div>
     </div>

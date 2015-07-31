@@ -6,6 +6,70 @@
  * @Createdate Thu,17 Apr 2014 04:03:46 GMT
  */
 
+/* NUKEVIET ICONS */
+@font-face {
+	font-family: 'NukevietIcons';
+	src:url('../fonts/NukevietIcons.eot?avyewf');
+	src:url('../fonts/NukevietIcons.eot?#iefixavyewf') format('embedded-opentype'),
+		url('../fonts/NukevietIcons.ttf?avyewf') format('truetype'),
+		url('../fonts/NukevietIcons.woff?avyewf') format('woff'),
+		url('../fonts/NukevietIcons.svg?avyewf#NukevietIcons') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    display:inline-block;
+    font:normal normal normal 14px/1 NukevietIcons;
+    font-size:inherit;
+    text-rendering:auto;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    transform:translate(0,0);
+    vertical-align:-10%
+}
+
+.icon-lg {
+    font-size:1.33333333em;
+    line-height:.75em;
+    vertical-align:-25%
+}
+
+.icon-horizon{
+    width: 14px
+}
+.icon-lg.icon-horizon{
+    width: 22px
+}
+
+.icon-nukeviet:before {
+	content: "\e607";
+}
+.icon-nukeviet_sm:before {
+	content: "\e608";
+}
+.icon-callcenter:before {
+	content: "\e609";
+}
+.icon-today:before {
+	content: "\e600";
+}
+.icon-qrcode:before {
+	content: "\e601";
+}
+.icon-enter:before {
+	content: "\e602";
+}
+.icon-exit:before {
+	content: "\e603";
+}
+.icon-yahoo:before {
+	content: "\e604";
+}
+.icon-old-phone:before {
+	content: "\e606";
+}
+
 /* Fonts Color */
 .text-black{
     color:#000 !important
