@@ -2,7 +2,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/star-rating/jquery.rating.pack.js"></script>
 <script src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
 <link href="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
-<link href="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
+<link href="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <!-- BEGIN: facebookjssdk -->
 <div id="fb-root"></div>
 <script type="text/javascript">
@@ -244,7 +244,7 @@ $(document).ready(function() {
 	$(".bodytext img").toggleClass('img-thumbnail');
 });
 </script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->
 <!-- BEGIN: no_permission -->
