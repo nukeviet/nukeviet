@@ -18,7 +18,7 @@
 		var login_error_security = '{LOGIN_ERROR_SECURITY}';
 		var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
 		</script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}{ASSETS_DIR}/js/global.js"></script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/js/login.js"></script>
 	</head>
 	<body>

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/select2/select2.min.js"></script>
 
 <form class="form-inline" role="form" action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />

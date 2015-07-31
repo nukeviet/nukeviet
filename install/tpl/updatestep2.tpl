@@ -30,7 +30,7 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$('.update_fdump').click(function(){
-			$('#infodetectedupgf').append('<div id="dpackagewf"><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Waiting..."/></div>');
+			$('#infodetectedupgf').append('<div id="dpackagewf"><img src="{NV_BASE_SITEURL}{NV_FILES_DIR}/images/load_bar.gif" alt="Waiting..."/></div>');
 			$.get( $(this).attr('href') , function(e){
 				$('#dpackagewf').remove();
 				$('#infodetectedupgf').append('<br />' + e);

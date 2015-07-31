@@ -26,7 +26,7 @@ $closed_site_Modes[3] = $lang_module['closed_site_3'];
 $allow_sitelangs = array();
 foreach( $global_config['allow_sitelangs'] as $lang_i )
 {
-	if( file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/global.php' ) )
+	if( file_exists( NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php' ) )
 	{
 		$allow_sitelangs[] = $lang_i;
 	}

@@ -65,9 +65,9 @@ if( $popup )
 	{
 		$upload_logo = $global_config['site_logo'];
 	}
-	elseif( file_exists( NV_ROOTDIR . '/images/logo.png' ) )
+	elseif( file_exists( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png' ) )
 	{
-		$upload_logo = 'images/logo.png';
+		$upload_logo = NV_UPLOADS_DIR . '/logo.png';
 	}
 	else
 	{

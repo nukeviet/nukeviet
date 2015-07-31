@@ -33,7 +33,7 @@
 <!-- BEGIN: load -->
 <div id="module_show_list">
 	<div style="text-align:center;">
-		<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Loading..."/>
+		<img src="{NV_BASE_SITEURL}{NV_FILES_DIR}/images/load_bar.gif" alt="Loading..."/>
 	</div>
 </div>
 <script type="text/javascript">nv_show_list_question();</script>

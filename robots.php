@@ -27,17 +27,11 @@ else
 	$createTime = gmmktime( 0, 0, 0, date( 'm' ), 1, date( 'Y' ) );
 
 	$robots_data = array();
-	$robots_data['/' . NV_CACHEDIR . '/'] = 0;
 	$robots_data['/' . NV_DATADIR . '/'] = 0;
-	$robots_data['/' . NV_EDITORSDIR . '/'] = 0;
 	$robots_data['/includes/'] = 0;
 	$robots_data['/install/'] = 0;
-	$robots_data['/language/'] = 0;
-	$robots_data['/' . NV_LOGS_DIR . '/'] = 0;
 	$robots_data['/modules/'] = 0;
 	$robots_data['/robots.php'] = 0;
-	$robots_data['/' . NV_SESSION_SAVE_PATH . '/'] = 0;
-	$robots_data['/tmp/'] = 0;
 	$robots_data['/web.config'] = 0;
 
 	$robots_other = array();

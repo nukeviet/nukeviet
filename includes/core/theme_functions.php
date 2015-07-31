@@ -137,6 +137,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $template );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'ASSETS_DIR', NV_FILES_DIR );
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 
 	if( isset( $size[1] ) )
@@ -359,7 +360,7 @@ function nv_rss_generate( $channel, $items )
 		$xtpl->parse( 'main.pubDate' );
 	}
 
-	$image = file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) ? NV_ROOTDIR . '/' . $global_config['site_logo'] : NV_ROOTDIR . '/images/logo.png';
+	$image = file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) ? NV_ROOTDIR . '/' . $global_config['site_logo'] : NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png';
 	$image = nv_ImageInfo( $image, 144, true, NV_UPLOADS_REAL_DIR );
 
 	if( ! empty( $image ) )

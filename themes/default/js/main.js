@@ -15,14 +15,22 @@ var myTimerPage = "",
     ftip_autoclose = !0,
 	winX = 0,
 	winY = 0,
+    oldWinX = 0,
+	oldWinY = 0,
+    cRangeX = 0,
+    cRangeY = 0,
 	docX = 0,
 	docY = 0;
 
 function winResize() {
+    oldWinX = winX;
+    oldWinY = winY;
 	winX = $(window).width();
 	winY = $(window).height();
 	docX = $(document).width();
-	docY = $(document).height()
+	docY = $(document).height();
+    cRangeX = Math.abs(winX - oldWinX);
+    cRangeY = Math.abs(winY - oldWinY);
 }
 
 function fix_banner_center() {
@@ -290,6 +298,5 @@ $(document).on({
 $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();
-	tipHide();
-    ftipHide()
+	if (150 < cRangeX || 150 < cRangeY) tipHide(), ftipHide()
 });

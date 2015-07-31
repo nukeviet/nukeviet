@@ -12,7 +12,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 /**
  * nv_site_theme()
- * 
+ *
  * @param mixed $step
  * @param mixed $titletheme
  * @param mixed $contenttheme
@@ -24,6 +24,7 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 
 	$xtpl = new XTemplate( 'theme.tpl', NV_ROOTDIR . '/install/tpl/' );
 	$xtpl->assign( 'BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_FILES_DIR', NV_FILES_DIR );
 	$xtpl->assign( 'LANG_VARIABLE', NV_LANG_VARIABLE );
 	$xtpl->assign( 'LANG_DATA', NV_LANG_DATA );
 	$xtpl->assign( 'MAIN_TITLE', $titletheme );
@@ -75,7 +76,7 @@ function nv_site_theme( $step, $titletheme, $contenttheme )
 
 /**
  * nv_step_1()
- * 
+ *
  * @return
  */
 function nv_step_1()
@@ -112,7 +113,7 @@ function nv_step_1()
 
 /**
  * nv_step_2()
- * 
+ *
  * @param mixed $array_dir_check
  * @param mixed $array_ftp_data
  * @param mixed $nextstep
@@ -176,7 +177,7 @@ function nv_step_2( $array_dir_check, $array_ftp_data, $nextstep )
 
 /**
  * nv_step_3()
- * 
+ *
  * @param mixed $license
  * @return
  */
@@ -197,7 +198,7 @@ function nv_step_3( $license )
 
 /**
  * nv_step_4()
- * 
+ *
  * @param mixed $array_resquest
  * @param mixed $array_support
  * @param mixed $nextstep
@@ -226,7 +227,7 @@ function nv_step_4( $array_resquest, $array_support, $nextstep )
 
 /**
  * nv_step_5()
- * 
+ *
  * @param mixed $db_config
  * @param mixed $nextstep
  * @return
@@ -289,7 +290,7 @@ function nv_step_5( $db_config, $nextstep )
 
 /**
  * nv_step_6()
- * 
+ *
  * @param mixed $array_data
  * @param mixed $nextstep
  * @return
@@ -323,7 +324,7 @@ function nv_step_6( $array_data, $nextstep )
 
 /**
  * nv_step_7()
- * 
+ *
  * @param mixed $finish
  * @return
  */

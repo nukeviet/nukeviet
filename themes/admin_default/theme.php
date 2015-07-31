@@ -19,17 +19,17 @@ function nv_get_submenu( $mod )
 	if( file_exists( NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php' ) )
 	{
 		//ket noi voi file ngon ngu cua module
-		if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php' ) )
+		if( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php' ) )
 		{
-			include NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php';
+			include NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $mod . '.php';
 		}
-		elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php' ) )
+		elseif( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php' ) )
 		{
-			include NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php';
+			include NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $mod . '.php';
 		}
-		elseif( file_exists( NV_ROOTDIR . '/language/en/admin_' . $mod . '.php' ) )
+		elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_' . $mod . '.php' ) )
 		{
-			include NV_ROOTDIR . '/language/en/admin_' . $mod . '.php';
+			include NV_ROOTDIR . '/includes/language/en/admin_' . $mod . '.php';
 		}
 
 		include NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $mod . '/admin.menu.php';
@@ -118,6 +118,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+	$xtpl->assign( 'ASSETS_DIR', NV_FILES_DIR );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'MODULE_FILE', $module_file );
 	$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );

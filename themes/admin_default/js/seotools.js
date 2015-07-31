@@ -176,7 +176,7 @@ $(document).ready(function(){
 		$("#lr").attr('disabled', 'disabled');
 		$("#accuracy").attr('disabled', 'disabled');
 		$("#fsubmit").hide();
-		$("#load_img").html('<p style="text-align:center;"><img alt="" src="' + nv_siteroot + 'images/load.gif" width="16" height="16" /></p>');
+		$("#load_img").html('<p style="text-align:center;"><img alt="" src="' + nv_siteroot + 'assets/images/load.gif" width="16" height="16" /></p>');
 		$("#keywordRankResult").text("").load(script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=keywordRank&i=process&k=" + keyword + "&l=" + lr + "&a=" + accuracy + "&num=" + nv_randomPassword(10));
 		return false;
 	});

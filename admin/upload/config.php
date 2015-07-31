@@ -21,7 +21,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	else
 	{
-		$upload_logo = 'images/logo.png';
+		$upload_logo = NV_UPLOADS_DIR . '/logo.png';
 	}
 
 	$autologosize1 = $nv_Request->get_int( 'autologosize1', 'post', 50 );
