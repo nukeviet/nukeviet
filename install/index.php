@@ -697,37 +697,6 @@ elseif( $step == 5 )
 						break;
 					}
 
-					try
-					{
-						$sql = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules WHERE title='news'";
-						if( $db->query( $sql )->fetchColumn() )
-						{
-							$result = $db->query( 'SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_cat ORDER BY sort ASC' );
-							while( list( $catid_i ) = $result->fetch( 3 ) )
-							{
-								nv_copy_structure_table( $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid_i, $db_config['prefix'] . '_' . $lang_data . '_news_rows' );
-							}
-
-							$result = $db->query( 'SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows ORDER BY id ASC' );
-							while( list( $id, $listcatid ) = $result->fetch( 3 ) )
-							{
-								$arr_catid = explode( ',', $listcatid );
-								foreach( $arr_catid as $catid )
-								{
-									$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_news_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_news_rows WHERE id=' . $id );
-								}
-							}
-							$result->closeCursor();
-						}
-					}
-					catch( PDOException $e )
-					{
-						$nv_Request->set_Session( 'maxstep', 4 );
-						$db_config['error'] = $e->getMessage();
-						trigger_error( $e->getMessage() );
-						break;
-					}
-
 					if( empty( $db_config['error'] ))
 					{
 						++ $step;
@@ -839,7 +808,8 @@ elseif( $step == 6 )
 
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'statistics_timezone', " . $db->quote( NV_SITE_TIMEZONE_NAME ) . ")" );
                     $db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'site_email', " . $db->quote( $global_config['site_email'] ) . ")" );
-					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'error_send_email', " . $db->quote( $global_config['site_email'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'error_set_logs', " . $db->quote( $global_config['error_set_logs'] ) . ")" );
+                    $db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'error_send_email', " . $db->quote( $global_config['site_email'] ) . ")" );
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'site_lang', '" . NV_LANG_DATA . "')" );
 
 					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'my_domains', " . $db->quote( NV_SERVER_NAME ) . ")" );

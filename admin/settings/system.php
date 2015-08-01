@@ -140,7 +140,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$array_config_global['rewrite_op_mod'] = '';
 		}
 
-        $error_send_email = nv_substr( $nv_Request->get_title( 'error_send_email', 'post', '', 1 ), 0, 255 );
+		$array_config_global['error_set_logs'] = $nv_Request->get_int( 'error_set_logs', 'post', 0 );
+		$error_send_email = nv_substr( $nv_Request->get_title( 'error_send_email', 'post', '', 1 ), 0, 255 );
         if( nv_check_valid_email( $error_send_email ) == '' )
         {
             $array_config_global['error_send_email'] = $error_send_email;
@@ -197,8 +198,6 @@ $xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id']
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-    $xtpl->parse( 'main.error_send_email' );
-
 	$result = $db->query( "SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'" );
 	while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 	{
@@ -210,6 +209,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	$xtpl->assign( 'CHECKED_GZIP_METHOD', ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_LANG_MULTI', ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_NOTIFI_ACTIVE', ( $array_config_global['notification_active'] ) ? ' checked="checked"' : '' );
+	$xtpl->assign( 'CHECKED_ERROR_SET_LOGS', ( $array_config_global['error_set_logs'] ) ? ' checked="checked"' : '' );
 
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
 

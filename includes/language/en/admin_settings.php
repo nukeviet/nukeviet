@@ -72,6 +72,7 @@ $lang_module['bot_allowed'] = 'Permission';
 $lang_module['site_keywords'] = 'Keywords';
 $lang_module['site_logo'] = 'Site\'s logo';
 $lang_module['site_email'] = 'Site\'s email';
+$lang_module['error_set_logs'] = 'Recorded of system error';
 $lang_module['error_send_email'] = 'Email receiving error notices';
 $lang_module['lang_multi'] = 'Activate multi-language';
 $lang_module['lang_geo'] = 'Enable the definition of language according to country';
