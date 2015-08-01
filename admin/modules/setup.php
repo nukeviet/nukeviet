@@ -24,10 +24,13 @@ $contents = '';
 
 // Thiet lap module moi
 $setmodule = $nv_Request->get_title( 'setmodule', 'get', '', 1 );
+
 if( ! empty( $setmodule ) and preg_match( $global_config['check_module'], $setmodule ) )
 {
 	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( 'setmodule' . $setmodule . session_id() . $global_config['sitekey'] ) )
 	{
+		$sample = $nv_Request->get_int( 'sample', 'get', 0 );
+		
 		$sth = $db->prepare( 'SELECT basename, table_prefix FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=:title AND type=\'module\'');
 		$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 		$sth->execute();
@@ -76,7 +79,7 @@ if( ! empty( $setmodule ) and preg_match( $global_config['check_module'], $setmo
 			}
 
 			nv_del_moduleCache( 'modules' );
-			$return = nv_setup_data_module( NV_LANG_DATA, $setmodule );
+			$return = nv_setup_data_module( NV_LANG_DATA, $setmodule, $sample );
 			if( $return == 'OK_' . $setmodule )
 			{
 				nv_setup_block_module( $setmodule );
@@ -238,16 +241,7 @@ foreach( $modules_data as $row )
 			$mod['addtime'] = nv_date( 'H:i:s d/m/Y', $row['addtime'] );
 			$mod['author'] = $row['author'];
 			$mod['note'] = $row['note'];
-			if( array_key_exists( $row['title'], $modules_for_title ) )
-			{
-				$url = 'javascript:void(0);';
-			}
-			else
-			{
-				$url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5( 'setmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
-			}
-
-			$mod['setup'] = "<em class=\"fa fa-sun-o fa-lg\">&nbsp;</em> <a href=\"" . $url . "\">" . $lang_module['setup'] . "</a>";
+			$mod['url_setup'] = array_key_exists( $row['title'], $modules_for_title ) ? 'javascript:void(0);' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5( 'setmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
 
 			if( $mod['module_file'] == $mod['title'] )
 			{

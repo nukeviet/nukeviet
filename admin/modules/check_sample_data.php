@@ -12,7 +12,8 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
 
 if( $nv_Request->isset_request( 'module', 'post' ) )
 {
-	$module = $nv_Request->get_title( 'module', 'post' );
+	$module_name = $nv_Request->get_title( 'module', 'post' );
+	$is_setup = $nv_Request->get_int( 'setup', 'post', 0 );
 	
 	$contents = array(
 		'status' => 'error',
@@ -21,13 +22,18 @@ if( $nv_Request->isset_request( 'module', 'post' ) )
 		'code' => 0
 	);
 	
-	if( ! empty( $module ) and preg_match( $global_config['check_module'], $module ) )
+	if( ! empty( $module_name ) and preg_match( $global_config['check_module'], $module_name ) )
 	{
-		$sth = $db->prepare( 'SELECT module_file, module_data, module_upload, theme FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title= :title');
-		$sth->bindParam( ':title', $module, PDO::PARAM_STR );
+		$sth = $db->prepare( 'SELECT module_file FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title= :title');
+		$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
 		$sth->execute();
 		
-		list( $module_file, $module_data, $module_upload, $module_theme ) = $sth->fetch( 3 );
+		list( $module_file ) = $sth->fetch( 3 );
+		
+		if( empty( $module_file ) and file_exists( NV_ROOTDIR . '/modules/' . $module_name . '/version.php' ) )
+		{
+			$module_file = $module_name;
+		}
 		
 		if( ! empty( $module_file ) )
 		{

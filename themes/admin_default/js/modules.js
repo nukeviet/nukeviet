@@ -257,5 +257,50 @@ $(document).ready(function(){
 				}
 			}
 		});
-	})
+	});
+	
+	// Setup module
+	$('.nv-setup-module').click(function(e){
+		e.preventDefault();
+		
+		var $this = $(this);
+		var $container = $('#modal-setup-module');
+		var link = $this.prop('href');
+		
+		$('#modal-setup-module').data('link', link);
+		
+		if( $this.prev().is('.fa-spin') || link == '' || link == '#' || link.match(/javascript\:void/g) ){
+			return;
+		}
+		
+		$this.prev().addClass('fa-spin');
+		
+		$.ajax({
+			type: 'POST',
+			cache: false,
+			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
+			data: 'module=' + $this.data('title') + '&setup=1',
+			dataType: 'json',
+			success: function(e){
+				$this.prev().removeClass('fa-spin');
+				
+				if( e.status == 'success' ){
+					if( e.code == 0 ){
+						window.location = link;
+						return;
+					}
+					
+					$container.find('.message').html( e.message.splice(1, 2).join('. ') + '.' );
+					$container.modal('show');
+				}
+			}
+		});
+	});
+	
+	// Submit setup option
+	$('#modal-setup-module .submit').click(function(){
+		var $this = $('#modal-setup-module');
+		$this.modal('hide');
+		window.location = $this.data('link') + '&sample=' + $this.find('.option').val();
+	});
 });

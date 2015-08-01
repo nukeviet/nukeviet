@@ -629,10 +629,11 @@ function change_custom_name_theme( $contents )
  */
 function setup_modules( $array_head, $array_modules, $array_virtual_head, $array_virtual_modules )
 {
-	global $global_config, $module_file;
+	global $global_config, $module_file, $lang_global, $lang_module;
 
 	$xtpl = new XTemplate( 'setup_modules.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CAPTION', $array_head['caption'] );
 
 	foreach( $array_head['head'] as $thead )

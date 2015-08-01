@@ -71,3 +71,6 @@ $lang_module['reinstall_note1'] = 'Việc cài lại module sẽ làm mất toà
 $lang_module['reinstall_note2'] = 'Module này hỗ trợ một số dữ liệu mẫu để bạn có thể dễ dàng sử dụng';
 $lang_module['reinstall_note3'] = 'Dữ liệu mẫu này hiện khả dụng đối với ngôn ngữ của bạn, bạn có thể cài vào nếu thấy cần thiết';
 $lang_module['reinstall_note4'] = 'Dữ liệu mẫu này hiện không khả dụng đối với ngôn ngữ của bạn, tuy nhiên hệ thống tìm thấy dữ liệu mẫu bằng ngôn ngữ Tiếng Anh, bạn có thể cài vào nếu thấy cần thiết';
+$lang_module['setup_option'] = 'Lựa chọn phương án';
+$lang_module['setup_option_0'] = 'Chỉ thiết lập module';
+$lang_module['setup_option_1'] = 'Thiết lập module và cài đặt dữ liệu mẫu';
