@@ -99,7 +99,7 @@ function ftipAutoClose(a)
 }
 
 function tipShow(a, b) {
-    if ($(a).is(".pa")) switchTab(a + " .guest-sign");
+    if ($(a).is(".pa")) switchTab(".guest-sign",a);
     tip_active && tipHide();
     ftip_active && ftipHide();
 	$("[data-toggle=tip]").removeClass("active");
