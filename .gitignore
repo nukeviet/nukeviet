@@ -13,7 +13,6 @@
 /data/logs/ref_logs/
 /data/logs/voting_logs/
 /data/tmp/
-/uploads/logo_*
 
 # Ignore some class
 /includes/class/PHPExcel/
