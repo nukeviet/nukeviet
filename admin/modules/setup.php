@@ -30,7 +30,7 @@ if( ! empty( $setmodule ) and preg_match( $global_config['check_module'], $setmo
 	if( $nv_Request->get_title( 'checkss', 'get' ) == md5( 'setmodule' . $setmodule . session_id() . $global_config['sitekey'] ) )
 	{
 		$sample = $nv_Request->get_int( 'sample', 'get', 0 );
-		
+
 		$sth = $db->prepare( 'SELECT basename, table_prefix FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=:title AND type=\'module\'');
 		$sth->bindParam( ':title', $setmodule, PDO::PARAM_STR );
 		$sth->execute();
@@ -160,7 +160,7 @@ foreach( $arr_module_news as $module_name_i => $arr )
 				'modfuncs' => 'main',
 				'is_sysmod' => 0,
 				'virtual' => 0,
-				'version' => '3.5.00',
+				'version' => $global_config['version'],
 				'date' => date( 'D, j M Y H:i:s', $timestamp ) . ' GMT',
 				'author' => '',
 				'note' => ''

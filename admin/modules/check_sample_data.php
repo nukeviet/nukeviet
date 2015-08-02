@@ -27,12 +27,19 @@ if( $nv_Request->isset_request( 'module', 'post' ) )
 		$sth = $db->prepare( 'SELECT module_file FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title= :title');
 		$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
 		$sth->execute();
-
 		list( $module_file ) = $sth->fetch( 3 );
 
-		if( empty( $module_file ) and file_exists( NV_ROOTDIR . '/modules/' . $module_name . '/version.php' ) )
+		if( empty( $module_file ) )
 		{
-			$module_file = $module_name;
+			$sth = $db->prepare( 'SELECT basename FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=:title AND type=\'module\'');
+			$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
+			$sth->execute();
+			list( $module_file ) = $sth->fetch( 3 );
+
+			if( empty( $module_file ) and file_exists( NV_ROOTDIR . '/modules/' . $module_name . '/version.php' ) )
+			{
+				$module_file = $module_name;
+			}
 		}
 
 		if( ! empty( $module_file ) )
