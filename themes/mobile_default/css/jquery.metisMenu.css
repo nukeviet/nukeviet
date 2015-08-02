@@ -1,3 +1,7 @@
+.metismenu a{
+    color:#fff !important;
+    text-decoration: none !important;
+}
 .metismenu .arrow {
     float:right;
     margin-top:-33px;
