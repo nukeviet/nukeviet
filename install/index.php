@@ -445,7 +445,7 @@ elseif( $step == 5 )
 				{
 					asort( $array_check_files );
 					$respon['files'] = $array_check_files;
-					$respon['link'] = 'https://github.com/nukeviet/nukeviet-dbtype';
+					$respon['link'] = 'https://github.com/nukeviet/nukeviet/wiki/NukeViet-database-types';
 					$respon['message'] = $lang_module['dbcheck_error_files'];
 				}
 			}
