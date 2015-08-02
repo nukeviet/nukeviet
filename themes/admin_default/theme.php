@@ -245,7 +245,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		}
 		else
 		{
-			$xtpl->assign( 'ADMIN_PHOTO', NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg' );
+			$xtpl->assign( 'ADMIN_PHOTO', NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png' );
 		}
 
 		// Vertical menu

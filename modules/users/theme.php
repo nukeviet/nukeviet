@@ -850,7 +850,7 @@ function user_welcome()
 	}
 	else
 	{
-		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.jpg' );
+		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png' );
 	}
     
     $_user_info = $user_info;
@@ -1171,7 +1171,7 @@ function nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields
 	}
 	else
 	{
-		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.jpg' );
+		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png' );
 	}
 
 	$item['gender'] = ( $item['gender'] == 'M' ) ? $lang_module['male'] : ( $item['gender'] == 'F' ? $lang_module['female'] : $lang_module['na'] );

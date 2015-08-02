@@ -53,7 +53,7 @@ if ( $global_config['allowuserlogin'] )
         }
         else
         {
-            $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.jpg';
+            $avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.png';
         }
         
         $user_info['current_login_txt'] = nv_date( 'd/m, H:i', $user_info['current_login'] );

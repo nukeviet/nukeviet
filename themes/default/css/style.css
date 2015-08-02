@@ -181,6 +181,10 @@
     margin-bottom:15px;
 }
 
+.bg-gainsboro{
+    background-color:#C0C0C0
+}
+
 .info {
     border-width:1px;
     border-style:solid;

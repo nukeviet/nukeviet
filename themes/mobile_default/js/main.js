@@ -113,7 +113,7 @@ $(function() {
 	$('a[href="#"], a[href=""]').attr('href', 'javascript:void(0);');
 	// Smooth scroll to top
 	$(".bttop").click(function() {
-		$("html,body").animate({
+		$(".wrap").animate({
 			scrollTop: 0
 		}, 800);
 		return !1

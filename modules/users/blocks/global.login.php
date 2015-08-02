@@ -59,7 +59,7 @@ if( $global_config['allowuserlogin'] and $module_name != 'users' )
 		}
 		else
 		{
-			$avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.jpg';
+			$avata = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/no_avatar.png';
 		}
 		
 		$xtpl->assign( 'AVATA', $avata );

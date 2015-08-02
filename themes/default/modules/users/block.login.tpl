@@ -195,7 +195,7 @@
 	<hr />
 	<div class="row">
 		<div class="col-xs-8 text-center">
-			<a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail" /></a>
+			<a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
 		</div>
 		<div class="col-xs-16">
 		    <ul class="nv-list-item sm">

@@ -12,7 +12,7 @@
     <h2>{LANG.user_info}</h2>
     <div class="row m-bottom">
     	<div class="col-md-6 text-center">
-    		<img src="{SRC_IMG}" alt="{USER.username}" class="img-thumbnail m-bottom"/><br />
+    		<img src="{SRC_IMG}" alt="{USER.username}" class="img-thumbnail bg-gainsboro m-bottom"/><br />
     		{LANG.img_size_title}
     	</div>
     	<div class="col-md-18">

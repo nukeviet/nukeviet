@@ -3,7 +3,7 @@
     <h2>{LANG.user_info}</h2>
     <div class="row m-bottom">
     	<div class="col-sm-6 text-center">
-    		<p><img src="{SRC_IMG}" alt="{USER.username}" class="img-thumbnail"/></p>
+    		<p><img src="{SRC_IMG}" alt="{USER.username}" class="img-thumbnail bg-gainsboro"/></p>
     		{LANG.img_size_title}
     	</div>
     	<div class="col-sm-18">

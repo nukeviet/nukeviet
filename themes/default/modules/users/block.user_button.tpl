@@ -106,7 +106,7 @@
     	<h3 class="text-center"><span class="text-normal">{GLANG.wellcome}:</span> {USER.full_name}</h3>
     	<div class="row">
     		<div class="col-xs-8 text-center">
-    			<a title="{LANG.edituser}" href="#"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail" /></a>
+    			<a title="{LANG.edituser}" href="#"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
     		</div>
     		<div class="col-xs-16">
     		    <ul class="nv-list-item sm">

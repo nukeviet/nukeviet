@@ -3,7 +3,7 @@
 	<!-- BEGIN: detail -->
 	<li class="media" id="cid_{COMMENT.cid}">
 		<a class="pull-left" href="#">
-			<img class="media-object" src="{COMMENT.photo}" alt="{COMMENT.post_name}" width="40"/>
+			<img class="media-object bg-gainsboro" src="{COMMENT.photo}" alt="{COMMENT.post_name}" width="40"/>
 		</a>
 		<div class="media-body">
 			<p>{COMMENT.content}</p>

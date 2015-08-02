@@ -28,7 +28,7 @@
 			</li>
 			<li class="tip admin-info" data-toggle="tooltip" data-placement="bottom" title="<!-- BEGIN: hello_admin -->{HELLO_ADMIN1}<!-- END: hello_admin --><!-- BEGIN: hello_admin3 -->{HELLO_ADMIN3}<!-- END: hello_admin3 --><!-- BEGIN: hello_admin2 -->{HELLO_ADMIN2}<!-- END: hello_admin2 -->">
 				<a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}=users">
-					<img src="{ADMIN_PHOTO}" alt="{ADMIN_USERNAME}" width="32" height="32"/>
+					<img src="{ADMIN_PHOTO}" alt="{ADMIN_USERNAME}" width="32" height="32" class="bg-gainsboro"/>
 				</a>
 			</li>
 			<!-- BEGIN: notification -->
