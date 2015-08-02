@@ -238,6 +238,10 @@
     cursor:pointer;
 }
 
+.middle{
+    vertical-align:middle
+}
+
 ul,
 ol {
     list-style:none;
@@ -309,6 +313,10 @@ input[type=url].required {
     background-image:url(../images/icons/required.png);
     background-position:right center;
     background-repeat:no-repeat;
+}
+
+.display-inline-block{
+    display: inline-block
 }
 
 .display-table {

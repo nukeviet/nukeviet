@@ -63,7 +63,7 @@ function tipAutoClose(a) {
 }
 
 function tipShow(a, b) {
-	//if ($(a).is(".pa")) switchTab(".guest-sign",a);
+	if ($(a).is(".pa")) switchTab(".guest-sign",a);
 	tip_active && tipHide();
 	$("[data-toggle=tip]").removeClass("active");
 	$(a).attr("data-click", "n").addClass("active");

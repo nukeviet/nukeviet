@@ -6,7 +6,7 @@
         <div id="header" class="clearfix">
             <div class="logo">
                 <!-- BEGIN: image -->
-                <a title="{SITE_NAME}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" width="{LOGO_WIDTH}" height="{LOGO_HEIGHT}" alt="{SITE_NAME}" /></a>
+                <a title="{SITE_NAME} - {SITE_DESCRIPTION}" href="{THEME_SITE_HREF}"><img src="{LOGO_SRC}" width="{LOGO_WIDTH}" height="{LOGO_HEIGHT}" alt="{SITE_NAME}" /></a>
                 <!-- END: image -->
                 <!-- BEGIN: swf -->
                 <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" width="{LOGO_WIDTH}" height="{LOGO_HEIGHT}" >
@@ -41,7 +41,7 @@
 		</div>
 	</header>
     <div class="tip">
-            <div id="tip" data-content=""></div>
+        <div id="tip" data-content=""></div>
     </div>
     <div class="wrap">
     	<section>
