@@ -550,6 +550,7 @@ elseif( $step == 5 )
 			require_once NV_ROOTDIR . '/install/action_' . $db_config['dbtype'] . '.php';
 
 			$num_table = sizeof( $sql_drop_table );
+			
 			if( $num_table > 0 )
 			{
 				if( $db_config['db_detete'] == 1 )
@@ -637,7 +638,9 @@ elseif( $step == 5 )
 
 					$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules ORDER BY weight ASC';
 					$result = $db->query( $sql );
-					while( $row = $result->fetch() )
+					$modules = $result->fetchAll();
+					
+					foreach( $modules as $key => $row )
 					{
 						$setmodule = $row['title'];
 
@@ -652,11 +655,12 @@ elseif( $step == 5 )
 						}
 						else
 						{
+							unset( $modules[$key] );
 							$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title=' . $db->quote( $setmodule ) );
 						}
 					}
-
-					// Cai dat du lieu mau
+					
+					// Cai dat du lieu mau he thong
 					$filesavedata = NV_LANG_DATA;
 					$lang_data = NV_LANG_DATA;
 
@@ -696,6 +700,31 @@ elseif( $step == 5 )
 						trigger_error( $e->getMessage() );
 						break;
 					}
+					
+					// Cai dat du lieu mau module
+					$lang = NV_LANG_DATA;
+					foreach( $modules as $key => $row )
+					{
+						$module_name = $row['title'];
+						$module_file = $row['module_file'];
+						$module_data = $row['module_data'];
+						
+						$data_file = '';
+						
+						if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $db_config['dbtype'] . '_' . NV_LANG_DATA . '.php' ) )
+						{
+							$data_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $db_config['dbtype'] . '_' . NV_LANG_DATA . '.php';
+						}
+						elseif(  file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $db_config['dbtype'] . '_en.php' ) )
+						{
+							$data_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $db_config['dbtype'] . '_en.php';
+						}
+						
+						if( ! empty( $data_file ) )
+						{	
+							include $data_file;
+						}
+					}					
 
 					if( empty( $db_config['error'] ))
 					{
