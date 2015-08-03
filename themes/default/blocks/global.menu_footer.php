@@ -40,6 +40,7 @@ if( ! nv_function_exists( 'nv_menu_theme_default_footer' ) )
 	 *
 	 * @param mixed $block_config
 	 * @return
+	 *
 	 */
 	function nv_menu_theme_default_footer( $block_config )
 	{
@@ -64,52 +65,18 @@ if( ! nv_function_exists( 'nv_menu_theme_default_footer' ) )
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
 		$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 
-		$footer_menu = array();
-		$footer_menu['index'] = array( 'custom_title' => $lang_global['Home'] );
-		$footer_menu = array_merge( $footer_menu, $site_mods );
-
 		$a = 0;
-		foreach( $footer_menu as $modname => $modvalues )
+		foreach( $site_mods as $modname => $modvalues )
 		{
 			if( in_array( $modname, $block_config['module_in_menu'] ) and ! empty( $modvalues['funcs'] ) )
 			{
-				if( $home == 1 and $a == 0 )
-				{
-					$module_current = ' class="current"';
-				}
-				elseif( $modname == $module_name and $home != 1 )
-				{
-					$module_current = ' class="current"';
-				}
-				else
-				{
-					$module_current = '';
-				}
-
-				if( $modname == 'index' )
-				{
-					$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
-				}
-				else
-				{
-					$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname;
-				}
-
-				$aryay_menu = array(
+				$_array_menu = array(
 					'title' => $modvalues['custom_title'],
-					'class' => $modname,
-					'current' => $module_current,
-					'link' => $link
+					'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $modname
 				);
-
-				$xtpl->assign( 'FOOTER_MENU', $aryay_menu );
-
-				if( $a > 0 )
-				{
-					$xtpl->parse( 'main.footer_menu.defis' );
-				}
+				$xtpl->assign( 'FOOTER_MENU', $_array_menu );
 				$xtpl->parse( 'main.footer_menu' );
-				++ $a;
+				++$a;
 			}
 		}
 		$xtpl->parse( 'main' );

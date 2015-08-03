@@ -29,10 +29,10 @@
 			var nv_check_pass_mstime = '{NV_CHECK_PASS_MSTIME}';
 			var nv_area_admin = 1;
 		</script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/{NV_LANG_INTERFACE}.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/admin.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/language/{NV_LANG_INTERFACE}.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/global.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/admin.js"></script>
 
 		<!-- BEGIN: module_js -->
 		<script type="text/javascript" src="{NV_JS_MODULE}"></script>

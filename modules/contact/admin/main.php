@@ -49,20 +49,20 @@ if( ! empty( $contact_allowed['view'] ) )
 
 		while( $row = $result->fetch() )
 		{
-			$image = array( NV_BASE_SITEURL . 'images/mail_new.gif', 12, 9 );
+			$image = array( NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_new.gif', 12, 9 );
 			$status = 'New';
 			$style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
 
 			if( $row['is_read'] == 1 )
 			{
-				$image = array( NV_BASE_SITEURL . 'images/mail_old.gif', 12, 11 );
+				$image = array( NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_old.gif', 12, 11 );
 				$status = $lang_module['tt1_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
 
 			if( $row['is_reply'] )
 			{
-				$image = array( NV_BASE_SITEURL . 'images/mail_reply.gif', 13, 14 );
+				$image = array( NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_reply.gif', 13, 14 );
 				$status = $lang_module['tt2_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}

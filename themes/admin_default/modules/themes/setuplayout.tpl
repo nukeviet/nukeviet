@@ -13,7 +13,7 @@
 		</select>
 		&nbsp;
 		<label> {LANG.add_block_module}: </label>
-		<select name="module" class="form-control w300">
+		<select name="block_module" class="form-control w300">
 			<option value="">{LANG.add_block_all_module}</option>
 			<!-- BEGIN: module -->
 			<option value="{MODULE.title}">{MODULE.custom_title}</option>

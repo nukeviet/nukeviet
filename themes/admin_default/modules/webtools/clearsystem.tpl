@@ -20,10 +20,6 @@
 			</tr>
 			<!-- BEGIN: godadmin -->
 			<tr>
-				<td><strong>{LANG.clearsession}</strong></td>
-				<td><input type="checkbox" value="clearsession" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
-			</tr>
-			<tr>
 				<td><strong>{LANG.clearfiletemp}</strong></td>
 				<td><input type="checkbox" value="clearfiletemp" name="deltype[]" onclick="nv_UncheckAll(this.form, 'deltype[]', 'check_all[]', this.checked);" /></td>
 			</tr>

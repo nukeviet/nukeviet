@@ -122,12 +122,12 @@ if( ! empty( $array_data ) )
 					}
 					else
 					{
-						$data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
+						$data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
 					}
 				}
 				else
 				{
-					$data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
+					$data['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
 					$data['send_from'] = $lang_global['level5'];
 				}
 

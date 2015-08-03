@@ -22,6 +22,7 @@ class Error
 	private $display_errors_list;
 	private $send_errors_list;
 	private $error_send_mail;
+	private $error_set_logs = false;
 	private $error_log_path;
 	private $error_log_tmp = false;
 	private $error_log_filename;
@@ -68,6 +69,7 @@ class Error
 		$this->send_errors_list = $this->parse_error_num( ( int )$config['send_errors_list'] );
 		$this->error_log_path = $this->get_error_log_path( ( string )$config['error_log_path'] );
 		$this->error_send_mail = ( string )$config['error_send_email'];
+		$this->error_set_logs = $config['error_set_logs'];
 
 		if( isset( $config['error_log_filename'] ) and preg_match( '/[a-z0-9\_]+/i', $config['error_log_filename'] ) )
 		{
@@ -292,7 +294,7 @@ class Error
 		$error_code2 = md5( $error_code );
 		$error_file = $this->error_log_256 . '/' . $this->month . '__' . $error_code2 . '__' . $error_code . '.' . $this->error_log_fileext;
 
-		if( ! file_exists( $error_file ) )
+		if( $this->error_set_logs and ! file_exists( $error_file ) )
 		{
 			$content = "TIME: " . $this->error_date . "\r\n";
 			if( ! empty( $this->ip ) ) $content .= "IP: " . $this->ip . "\r\n";
@@ -393,7 +395,7 @@ class Error
 		$track_errors = $this->day . '_' . md5( $this->errno . ( string )$this->errfile . ( string )$this->errline . $this->ip );
 		$track_errors = $this->error_log_tmp . '/' . $track_errors . '.' . $this->error_log_fileext;
 
-		if( ! file_exists( $track_errors ) )
+		if( $this->error_set_logs and ! file_exists( $track_errors ) )
 		{
 			file_put_contents( $track_errors, '', FILE_APPEND );
 

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/select2/select2.min.js"></script>
 
 <!-- BEGIN: error -->
 <div class="alert alert-danger">
@@ -32,12 +32,6 @@
 					<td><strong>{LANG.site_email}</strong></td>
 					<td><input type="text" name="site_email" value="{DATA.site_email}" class="form-control" style="width: 450px"/></td>
 				</tr>
-				<!-- BEGIN: error_send_email -->
-				<tr>
-					<td><strong>{LANG.error_send_email}</strong></td>
-					<td><input type="text" name="error_send_email" value="{DATA.error_send_email}" class="form-control" style="width: 450px"/></td>
-				</tr>
-				<!-- END: error_send_email -->
 				<tr>
 					<td><strong>{LANG.themeadmin}</strong></td>
 					<td>
@@ -115,6 +109,14 @@
 					<td><strong>{LANG.cdn_url}</strong></td>
 					<td><input type="text" name="cdn_url" value="{DATA.cdn_url}" class="form-control pull-left" style="width: 220px; margin-right: 10px"/><input type="button" value="{LANG.cdn_download}"  id="cdn_download" class="btn btn-info"/></td>
 				</tr>
+				<tr>
+					<td><strong>{LANG.error_set_logs}</strong></td>
+					<td><input type="checkbox" value="1" name="error_set_logs" {CHECKED_ERROR_SET_LOGS} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.error_send_email}</strong></td>
+					<td><input type="text" name="error_send_email" value="{DATA.error_send_email}" class="form-control" style="width: 450px"/></td>
+				</tr>				
 				<!-- END: system -->
 				<tr>
 					<td><strong>{LANG.searchEngineUniqueID}</strong></td>

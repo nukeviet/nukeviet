@@ -53,3 +53,5 @@ $lang_module['general_css_note'] = 'Soạn thảo nội dung css vào đây';
 $lang_module['module_in_menu'] = 'Các module hiển thị tại menu';
 
 $lang_module['save'] = 'Lưu cấu hình';
+$lang_module['exp'] = 'ví dụ';
+$lang_module['gfont_note'] = 'Chọn font tại: https://www.google.com/fonts';

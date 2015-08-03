@@ -12,7 +12,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		var url = $(this).attr("href");
 		$("#checkchmod").hide();
-		$("#wait").html('<img class="refresh" src="' + nv_siteroot + 'images/load_bar.gif" alt=""/>');
+		$("#wait").html('<img class="refresh" src="' + nv_siteroot + 'assets/images/load_bar.gif" alt=""/>');
 		$.ajax({
 			type : "POST",
 			url : url,

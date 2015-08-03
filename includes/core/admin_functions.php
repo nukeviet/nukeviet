@@ -220,7 +220,6 @@ function nv_save_file_config_global()
 	$config_variable['check_rewrite_file'] = nv_check_rewrite_file();
 	$config_variable['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? NV_ALLOW_REQUEST_MODS : "request";
 	$config_variable['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim( NV_REQUEST_DEFAULT_MODE ) : 'request';
-	$config_variable['session_save_path'] = NV_SESSION_SAVE_PATH;
 
 	$config_variable['log_errors_list'] = NV_LOG_ERRORS_LIST;
 	$config_variable['display_errors_list'] = NV_DISPLAY_ERRORS_LIST;
@@ -306,7 +305,7 @@ function nv_save_file_config_global()
 
 	$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 	$tmp_array = array();
-	$lang_array_exit = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}+$/" );
+	$lang_array_exit = nv_scandir( NV_ROOTDIR . '/includes/language', "/^[a-z]{2}+$/" );
 	foreach( $lang_array_exit as $lang )
 	{
 		$tmp_array[$lang] = $language_array[$lang];

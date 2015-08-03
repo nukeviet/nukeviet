@@ -48,9 +48,9 @@ class Request
 	public $search_engine = '';
 	private $request_default_mode = 'request';
 	private $allow_request_mods = array( 'get', 'post', 'request', 'cookie', 'session', 'env', 'server' );
-	private $cookie_prefix = 'NV3';
-	private $session_prefix = 'NV3';
-	private $cookie_key = 'nv3';
+	private $cookie_prefix = 'NV4';
+	private $session_prefix = 'NV4';
+	private $cookie_key = 'nv4';
 	private $secure = false;
 	private $httponly = true;
 	private $ip_addr;
@@ -129,7 +129,6 @@ class Request
 		if( extension_loaded( 'filter' ) && filter_id( ini_get( 'filter.default' ) ) !== FILTER_UNSAFE_RAW ) $this->is_filter = true;
 		$this->Initialize( $config['my_domains'] );
 		$this->get_cookie_save_path();
-		$this->get_session_save_path( $config['session_save_path'] );
 		$this->sessionStart();
 		$_REQUEST = array_merge( $_POST, array_diff_key( $_GET, $_POST ) );
 	}
@@ -430,58 +429,6 @@ class Request
 		$this->cookie_path = $this->base_siteurl . '/';
 		$cookie_domain = preg_replace( '/^([w]{3})\./', '', $this->server_name );
 		$this->cookie_domain = ( preg_match( '/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain ) ) ? '.' . $cookie_domain : '';
-	}
-
-	/**
-	 * Request::get_session_save_path()
-	 *
-	 * @param mixed $path
-	 * @return
-	 */
-	private function get_session_save_path( $path )
-	{
-		$save_path = session_save_path();
-		if ( is_dir( $save_path ) && is_writable( $save_path ) ) {
-			$this->session_save_path = $save_path;
-		}
-		else
-		{
-			$save_path = '';
-			$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
-			if( extension_loaded( 'suhosin' ) )
-			{
-				$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
-			}
-
-			if( function_exists( 'session_save_path' ) and ! in_array( 'session_save_path', $disable_functions ) )
-			{
-				if( preg_match( '/^[a-zA-Z]{1}[a-zA-Z0-9_]*$/', $path ) )
-				{
-					$save_path = NV_ROOTDIR . '/' . $path;
-					if( ! is_writable( $save_path ) )
-					{
-						if( ! is_dir( $save_path ) )
-						{
-							$oldumask = umask( 0 );
-							$res = @mkdir( $save_path, 0755 );
-							umask( $oldumask );
-						}
-						if( ! @is_writable( $save_path ) )
-						{
-							if( ! @chmod( $save_path ) ) $save_path = '';
-						}
-						clearstatcache();
-						if( ! is_writable( $save_path ) )
-						{
-							trigger_error( Request::SESSION_SAVE_PATH_NOT_SET, 256 );
-						}
-					}
-					session_save_path( $save_path . '/' );
-				}
-				$save_path = session_save_path();
-			}
-			$this->session_save_path = $save_path;
-		}
 	}
 
 	/**

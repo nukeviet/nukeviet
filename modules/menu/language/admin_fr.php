@@ -6,15 +6,15 @@
 * @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Apr 15, 2011, 08:22:00 AM
+* @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
-$lang_translator['createdate'] = '15/04/2011, 15:22';
-$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
-$lang_translator['info'] = 'Language translated from http://translate.nukeviet.vn';
+$lang_translator['author'] = 'Nguyễn Phú Thành';
+$lang_translator['createdate'] = '31/07/2015, 16:30';
+$lang_translator['copyright'] = 'phuthanh.nguyen215@gmail.com';
+$lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['menu_manager'] = 'Gestion de menu';
@@ -71,3 +71,18 @@ $lang_module['add_type_css_info'] = 'Nom de la classe (CSS) pour déterminer ce 
 $lang_module['add_error_module'] = 'Erreur: aucun module désigné';
 $lang_module['add_error_module_exist'] = 'Erreur: module inexistant';
 $lang_module['msgnocheck'] = 'Il faut sélectionner au moins un article';
+$lang_module['menu_description'] = 'Description';
+$lang_module['type_header'] = 'Menu en haut';
+$lang_module['display'] = 'Apparaitre';
+$lang_module['note'] = 'Note';
+$lang_module['module'] = 'Module';
+$lang_module['op'] = 'OP';
+$lang_module['caton'] = 'Menu père est supprimé si ses menus fils sont supprimés';
+$lang_module['groups'] = 'Si vous choisissez "Groupe de membres", cochez les groupes en dessous';
+$lang_module['main_note'] = 'Cliquer sur le nom  de chaque bloque de menu pour ajouter les rubriques dans chacun ou modifier les rubriques. Note: Vous pouvez créer plusieurs bloques pour utiliser dans les interfaces et des différentes positions';
+$lang_module['action_menu'] = 'Ajouter menu à partir de';
+$lang_module['action_menu_sys_1'] = 'Les menus sont les modules';
+$lang_module['action_menu_sys_2'] = 'Les menus sont les modules, sous-menus sont les sujets ou les fonctionnements';
+$lang_module['action_menu_sys_3'] = 'Les menus sont les sujets ou les fonctionnement des modules';
+$lang_module['icon'] = 'Icone de menu';
+$lang_module['action_form'] = 'Exécuter';

@@ -361,7 +361,7 @@ function openidLogin_Res1( $attribs )
 						validUserLog( $row, 1, $opid, $current_mode );
 
 						$info = $lang_module['account_active_ok'] . "<br /><br />\n";
-						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/images/load_bar.gif\"><br /><br />\n";
 						$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_home'] . '</a>]';
 						$contents = user_info_exit( $info );
 						$contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
@@ -472,7 +472,7 @@ function openidLogin_Res1( $attribs )
 
 				$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 				$info = $lang_module['login_ok'] . "<br /><br />\n";
-				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+				$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/images/load_bar.gif\"><br /><br />\n";
 				$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_back'] . '</a>]';
 				$contents .= user_info_exit( $info );
 				$contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( $nv_redirect, true ) . '" />';
@@ -770,7 +770,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 	{
 		$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 		$info = $lang_module['login_ok'] . "<br /><br />\n";
-		$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+		$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/images/load_bar.gif\"><br /><br />\n";
 		$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_back'] . '</a>]';
 		$contents .= user_info_exit( $info );
 		$contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( $nv_redirect ) . '" />';

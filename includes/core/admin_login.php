@@ -171,13 +171,13 @@ else
 	$nv_username = '';
 }
 
-if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_global.php' ) )
+if( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php' ) )
 {
-	require_once NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_global.php';
+	require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/en/admin_global.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_global.php' ) )
 {
-	require_once NV_ROOTDIR . '/language/en/admin_global.php';
+	require_once NV_ROOTDIR . '/includes/language/en/admin_global.php';
 }
 
 $info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
@@ -202,6 +202,7 @@ $xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme'] );
 $xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'ASSETS_DIR', NV_FILES_DIR );
 $xtpl->assign( 'CHECK_SC', ( $global_config['gfx_chk'] == 1 ) ? 1 : 0 );
 $xtpl->assign( 'LOGIN_TITLE', $lang_global['adminlogin'] );
 $xtpl->assign( 'LOGIN_INFO', $info );
@@ -244,19 +245,20 @@ $xtpl->assign( 'LINKLOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE
 if( $global_config['gfx_chk'] == 1 )
 {
 	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
+	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
 	$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 	$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
 	$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 	$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 	$xtpl->parse( 'main.captcha' );
 }
+
 if( $global_config['lang_multi'] == 1 )
 {
-	$_language_array = nv_scandir(  NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
+	$_language_array = nv_scandir(  NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/' );
 	foreach( $_language_array as $lang_i )
 	{
-		if( file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/global.php' ) and file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/admin_global.php' ) )
+		if( file_exists( NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php' ) and file_exists( NV_ROOTDIR . '/includes/language/' . $lang_i . '/admin_global.php' ) )
 		{
 			$xtpl->assign( 'LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i );
 			$xtpl->assign( 'LANGTITLE', $lang_global['langinterface'] );

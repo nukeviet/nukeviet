@@ -108,12 +108,12 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 			{
 				$files_folders[] = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $row['basename'] . '/';
 
-				$langs_admin = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
+				$langs_admin = nv_scandir( NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/' );
 				foreach( $langs_admin as $langi )
 				{
-					if( file_exists( NV_ROOTDIR . '/language/' . $langi . '/admin_' . $row['basename'] . '.php' ) )
+					if( file_exists( NV_ROOTDIR . '/includes/language/' . $langi . '/admin_' . $row['basename'] . '.php' ) )
 					{
-						$files_folders[] = NV_ROOTDIR . '/language/' . $langi . '/admin_' . $row['basename'] . '.php';
+						$files_folders[] = NV_ROOTDIR . '/includes/language/' . $langi . '/admin_' . $row['basename'] . '.php';
 					}
 				}
 			}
@@ -137,7 +137,7 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/css/' . $row['basename'] . '.css';
 				}
-				
+
 				$_files = glob( NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '*.js' );
 				foreach( $_files as $_file )
 				{
@@ -157,12 +157,12 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/admin_default/css/' . $row['basename'] . '.css';
 				}
-				
+
 				$_files = glob( NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '*.js' );
 				foreach( $_files as $_file )
 				{
 					$files_folders[] = $_file;
-				}				
+				}
 
 				if( file_exists( NV_ROOTDIR . '/themes/admin_default/images/' . $row['basename'] . '/' ) )
 				{
@@ -447,6 +447,13 @@ if( md5( 'delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_
 
 				foreach( $theme_list as $theme )
 				{
+					// Xóa tất cả các file js của module
+					$_files = glob( NV_ROOTDIR . '/themes/' . $theme . '/js/' . $request['title'] . '*.js' );
+					foreach( $_files as $_file )
+					{
+						nv_deletefile( $_file );
+					}
+
 					if( file_exists( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $request['title'] . '.css' ) )
 					{
 						nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $request['title'] . '.css' );
