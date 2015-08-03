@@ -32,6 +32,11 @@ require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/install.php';
 require_once NV_ROOTDIR . '/install/template.php';
 require_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 
+if( is_file( NV_ROOTDIR . '/install/default.php' ) )
+{
+	require_once NV_ROOTDIR . '/install/default.php';
+}
+
 if( is_file( NV_ROOTDIR . '/' . $file_config_temp ) )
 {
 	require_once NV_ROOTDIR . '/' . $file_config_temp;
@@ -381,7 +386,7 @@ elseif( $step == 5 )
 	$db_config['dbpass'] = $nv_Request->get_string( 'dbpass', 'post', $db_config['dbpass'] );
 	$db_config['prefix'] = $nv_Request->get_string( 'prefix', 'post', $db_config['prefix'] );
 	$db_config['dbport'] = $nv_Request->get_string( 'dbport', 'post', $db_config['dbport'] );
-	$db_config['db_detete'] = $nv_Request->get_int( 'db_detete', 'post', '0' );
+	$db_config['db_detete'] = $nv_Request->get_int( 'db_detete', 'post', $db_config['dbdetete'] );
 	$db_config['num_table'] = 0;
 	$db_config['create_db'] = 1;
 
@@ -709,20 +714,21 @@ elseif( $step == 5 )
 						$module_file = $row['module_file'];
 						$module_data = $row['module_data'];
 
-						$data_file = '';
-
 						if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php' ) )
 						{
-							$data_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php';
+							include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php';
 						}
 						elseif(  file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php' ) )
 						{
-							$data_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
+							include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
 						}
 
-						if( ! empty( $data_file ) )
+						if( empty( $array_data['socialbutton'] ) )
 						{
-							include $data_file;
+							if( $module_file == 'news' )
+							{
+								$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = '" . $module_name . "' AND config_name = 'socialbutton' AND lang='" . $lang . "'" );
+							}
 						}
 					}
 
