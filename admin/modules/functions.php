@@ -140,7 +140,7 @@ function nv_setup_block_module( $mod, $func_id = 0 )
 
 /**
  * nv_setup_data_module()
- * 
+ *
  * @param mixed $lang
  * @param mixed $module_name
  * @param integer $sample
@@ -155,9 +155,9 @@ function nv_setup_data_module( $lang, $module_name, $sample = 0 )
 	$sth = $db->prepare( 'SELECT module_file, module_data, module_upload, theme FROM ' . $db_config['prefix'] . '_' . $lang . '_modules WHERE title= :title');
 	$sth->bindParam( ':title', $module_name, PDO::PARAM_STR );
 	$sth->execute();
-	
+
 	list( $module_file, $module_data, $module_upload, $module_theme ) = $sth->fetch( 3 );
-	
+
 	if( ! empty( $module_file ) )
 	{
 		$module_version = array();
@@ -169,14 +169,14 @@ function nv_setup_data_module( $lang, $module_name, $sample = 0 )
 		}
 
 		$arr_modfuncs = ( isset( $module_version['modfuncs'] ) and ! empty( $module_version['modfuncs'] ) ) ? array_map( 'trim', explode( ',', $module_version['modfuncs'] ) ) : array();
-		
+
 		// Delete config value in prefix_config table
 		$sth = $db->prepare( "DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang= '" . $lang . "' AND module= :module" );
 		$sth->bindParam( ':module', $module_name, PDO::PARAM_STR );
 		$sth->execute();
-		
+
 		nv_delete_all_cache();
-		
+
 		// Re-Creat all module table
 		if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php' ) )
 		{
@@ -349,12 +349,12 @@ function nv_setup_data_module( $lang, $module_name, $sample = 0 )
 			$sth->bindParam( ':in_module', $module_name, PDO::PARAM_STR );
 			$sth->execute();
 		}
-	
+
 		// Creat upload dirs
 		if( isset( $module_version['uploads_dir'] ) and ! empty( $module_version['uploads_dir'] ) )
 		{
 			$sth_dir = $db->prepare( 'INSERT INTO ' . NV_UPLOAD_GLOBALTABLE . '_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES (:dirname, 0, 0, 0, 0, 0)' );
-			
+
 			foreach( $module_version['uploads_dir'] as $path )
 			{
 				$cp = '';
@@ -386,7 +386,7 @@ function nv_setup_data_module( $lang, $module_name, $sample = 0 )
 				}
 			}
 		}
-		
+
 		// Creat assets dirs
 		if( isset( $module_version['files_dir'] ) and ! empty( $module_version['files_dir'] ) )
 		{
@@ -412,9 +412,9 @@ function nv_setup_data_module( $lang, $module_name, $sample = 0 )
 		// Install sample data
 		if( $sample )
 		{
-			$sample_lang_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $db_config['dbtype'] . '_' . $lang . '.php';
-			$sample_default_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $db_config['dbtype'] . '_en.php';
-			
+			$sample_lang_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $lang . '.php';
+			$sample_default_file = NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
+
 			if( file_exists( $sample_lang_file ) )
 			{
 				include $sample_lang_file;
@@ -429,7 +429,7 @@ function nv_setup_data_module( $lang, $module_name, $sample = 0 )
 
 		nv_delete_all_cache();
 	}
-	
+
 	return $return;
 }
 

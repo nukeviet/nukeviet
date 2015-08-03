@@ -19,13 +19,11 @@
                 </div>
             </div>
             <!-- BEGIN: captcha -->
-        	<div class="form-group">
-                <div class="form-inline text-right">
-                    <img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}">
-              		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.bsec');">&nbsp;</em>
-            		<input type="text" class="bsec required form-control" name="bsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputSignIn(event);">
+            <div class="form-group">
+                <div class="middle text-right clearfix">
+                    <img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" /><em class="fa fa-pointer fa-refresh margin-left margin-right" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.bsec');"></em><input type="text" style="width:100px;" class="bsec required form-control display-inline-block" name="bsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputSignIn(event);" />
                 </div>
-        	</div>
+            </div>
         	<!-- END: captcha -->
             <div class="text-center">
         	   <a href="{USER_LOSTPASS}" class="margin-right">{GLANG.lostpass}?</a>
@@ -77,11 +75,9 @@
                 </div>
                 <!-- BEGIN: captcha_reg -->
                 <div class="form-group">
-                    <div class="form-inline text-right">
-                  		<img class="captchaImg" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" />
-                  		&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.brsec');">&nbsp;</em>
-                		<span><input type="text" class="brsec required form-control" name="brsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputReg(event);" /></span>
-                	</div>
+                    <div class="middle text-right clearfix">
+                        <img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" /><em class="fa fa-pointer fa-refresh margin-left margin-right" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.brsec');"></em><input type="text" style="width:100px;" class="brsec required form-control display-inline-block" name="brsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputReg(event);" />
+                    </div>
                 </div>
                 <!-- END: captcha_reg -->
                 <div class="form-group">
@@ -110,7 +106,7 @@
     	<h3 class="text-center"><span class="text-normal">{GLANG.wellcome}:</span> {USER.full_name}</h3>
     	<div class="row">
     		<div class="col-xs-8 text-center">
-    			<a title="{LANG.edituser}" href="#"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail" /></a>
+    			<a title="{LANG.edituser}" href="#"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
     		</div>
     		<div class="col-xs-16">
     		    <ul class="nv-list-item sm">

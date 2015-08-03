@@ -124,7 +124,7 @@ define( 'BROWSER_OPERA', 'Opera' );
 define( 'BROWSER_OPERAMINI', 'Opera Mini' );
 define( 'BROWSER_WEBTV', 'WebTV' );
 define( 'BROWSER_EXPLORER', 'Internet Explorer' );
-define( 'BROWSER_EDGE', 'Microsoft Edger' );
+define( 'BROWSER_EDGE', 'Microsoft Edge' );
 define( 'BROWSER_POCKET', 'Pocket Internet Explorer' );
 define( 'BROWSER_KONQUEROR', 'Konqueror' );
 define( 'BROWSER_ICAB', 'iCab' );

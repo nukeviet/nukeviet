@@ -139,9 +139,15 @@ function nv_site_theme( $contents, $full = true )
 
 	// Header variables
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+    $xtpl->assign( 'SITE_DESCRIPTION', $global_config['site_description'] );
 	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
-	$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $global_config['site_logo'] );
-	$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+    $logo_small = preg_replace( "/(\.[a-z]+)$/i", "_small\\1", $global_config['site_logo'] );
+	$logo = file_exists( NV_ROOTDIR . "/" . $logo_small ) ? $logo_small : $global_config['site_logo'];
+    $size = @getimagesize( NV_ROOTDIR . '/' . $logo );
+    $logo_svg = preg_replace( "/\.[a-z]+$/i", ".svg", $logo );
+    file_exists( NV_ROOTDIR . "/" . $logo_svg ) && $logo = $logo_svg;
+    
+    $xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $logo );
 	$xtpl->assign( 'LOGO_WIDTH', $size[0] );
 	$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
 
@@ -154,8 +160,6 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->parse( 'main.image' );
 	}
 
-	if( $op == 'main' ) $xtpl->parse( 'main.main_h1' );
-	else  $xtpl->parse( 'main.main_none_h1' );
 	// Only full theme
 	if( $full )
 	{

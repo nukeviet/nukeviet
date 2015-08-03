@@ -1,7 +1,8 @@
 # Base ignore
-/.project
 /.buildpath
+/.project
 /.settings
+/assets/css/*.opt.css
 /config.php
 /data/cache/*
 /data/config/diagnostic-*.xml
@@ -11,8 +12,8 @@
 /data/logs/ip_logs/
 /data/logs/ref_logs/
 /data/logs/voting_logs/
-/assets/css/*.opt.css
 /data/tmp/
+/uploads/logo_*
 
 # Ignore some class
 /includes/class/PHPExcel/

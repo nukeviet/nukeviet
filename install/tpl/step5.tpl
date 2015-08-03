@@ -20,7 +20,7 @@
 			<!-- BEGIN: dbtype -->
 			<option value="{DBTYPE.value}" {DBTYPE.selected}>{DBTYPE.text}</option>
 			<!-- END: dbtype -->
-		</select> <img id="dbtype-check" class="hide" src="{BASE_SITEURL}images/load_bar.gif"></td>
+		</select> <img id="dbtype-check" class="hide" src="{BASE_SITEURL}{NV_FILES_DIR}/images/load_bar.gif"></td>
 		<td>{LANG.database_default} <strong>MySQL</strong></td>
 	</tr>
 	<tr>
