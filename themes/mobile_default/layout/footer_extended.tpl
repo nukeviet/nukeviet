@@ -11,12 +11,12 @@
 <footer class="footer display-table">
     <div>
         <div>
-            <span class="margin-left" data-toggle="winHelp"><em class="fa fa-cog fa-lg pointer mbt"></em></span>
+            <span data-toggle="winHelp"><em class="fa fa-windows fa-lg pointer mbt"></em></span>
         </div>
         <!-- BEGIN: theme_type -->
         <div class="theme-change">
             <!-- BEGIN: loop -->
-            <!-- BEGIN: other --><a href="{STHEME_TYPE}" class="margin-right" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg mbt-circle"></em></a><!-- END: other --><!-- BEGIN: current --><span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span><!-- END: current -->
+            <!-- BEGIN: other --><a href="{STHEME_TYPE}" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg mbt-circle"></em></a><!-- END: other --><!-- BEGIN: current --><span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span><!-- END: current -->
             <!-- END: loop -->
         </div>
         <!-- END: theme_type -->

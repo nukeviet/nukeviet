@@ -49,8 +49,8 @@ function contentScrt() {
 	oldScrt = scrt;
 	scrt = $(".wrap").scrollTop();
     scrtRangeY = scrt - oldScrt;
-    10 >= scrt ? $(".bttop").hide() : 48 < scrt && (0 < scrtRangeY ? $(".bttop").hide() : $(".bttop").show(50));
-	0 < scrtRangeY ? $(".footer").hide() : $(".footer").show(50);
+    10 >= scrt ? $(".bttop").hide() : 48 < scrt && (0 < scrtRangeY ? $(".bttop").hide() : $(".bttop").show(0));
+	0 < scrtRangeY ? $(".footer").hide() : $(".footer").show(0);
 	/*if (scrt > 48) {
 		if (scrtRangeY > 0 && $("#mobilePage").is(".fixed")) {
 			$("#mobilePage").removeClass("fixed");
@@ -89,7 +89,7 @@ function tipShow(a, b) {
 	tip_active && tipHide();
 	$("[data-toggle=tip]").removeClass("active");
 	$(a).attr("data-click", "n").addClass("active");
-	$("#tip").attr("data-content", b).show("fast");
+	$("#tip").attr("data-content", b).show(0);
 	tip_active = !0
 }
 // Switch tab
