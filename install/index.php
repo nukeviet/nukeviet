@@ -1111,8 +1111,8 @@ function nv_save_file_config()
 
 	if( is_writable( NV_ROOTDIR . '/' . $file_config_temp ) or is_writable( NV_ROOTDIR . '/' . NV_TEMP_DIR ) )
 	{
-		$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) or $global_config['cookie_prefix'] == 'nv3' ) ? 'nv3c_' . nv_genpass( 5 ) : $global_config['cookie_prefix'];
-		$global_config['session_prefix'] = ( empty( $global_config['session_prefix'] ) or $global_config['session_prefix'] == 'nv3' ) ? 'nv3s_' . nv_genpass( 6 ) : $global_config['session_prefix'];
+		$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) or $global_config['cookie_prefix'] == 'nv4' ) ? 'nv4c_' . nv_genpass( 5 ) : $global_config['cookie_prefix'];
+		$global_config['session_prefix'] = ( empty( $global_config['session_prefix'] ) or $global_config['session_prefix'] == 'nv4' ) ? 'nv4s_' . nv_genpass( 6 ) : $global_config['session_prefix'];
 		$global_config['site_email'] = ( ! isset( $global_config['site_email'] ) ) ? '' : $global_config['site_email'];
 
 		$db_config['dbhost'] = ( ! isset( $db_config['dbhost'] ) ) ? 'localhost' : $db_config['dbhost'];
@@ -1121,7 +1121,7 @@ function nv_save_file_config()
 		$db_config['dbuname'] = ( ! isset( $db_config['dbuname'] ) ) ? '' : $db_config['dbuname'];
 		$db_config['dbsystem'] = ( isset( $db_config['dbsystem'] ) ) ? $db_config['dbsystem'] : $db_config['dbuname'];
 		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? '' : $db_config['dbpass'];
-		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? 'nv3' : $db_config['prefix'];
+		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? 'nv4' : $db_config['prefix'];
 
 		$persistent = ( $db_config['persistent'] ) ? 'true' : 'false';
 

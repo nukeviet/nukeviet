@@ -50,7 +50,7 @@ class Request
 	private $allow_request_mods = array( 'get', 'post', 'request', 'cookie', 'session', 'env', 'server' );
 	private $cookie_prefix = 'NV4';
 	private $session_prefix = 'NV4';
-	private $cookie_key = 'nv3';
+	private $cookie_key = 'nv4';
 	private $secure = false;
 	private $httponly = true;
 	private $ip_addr;
