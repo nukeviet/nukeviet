@@ -17,7 +17,9 @@ var tip_active = !1,
 	docY = 0,
 	scrt = 0,
 	oldScrt = 0,
-	scrtRangeY = 0;
+	scrtRangeY = 0,
+    wrapWidth = 0,
+    winHelp = !1;
 
 function winResize() {
 	oldWinX = winX;
@@ -27,22 +29,41 @@ function winResize() {
 	docX = $(document).width();
 	docY = $(document).height();
 	cRangeX = Math.abs(winX - oldWinX);
-	cRangeY = Math.abs(winY - oldWinY);
+	cRangeY = Math.abs(winY - oldWinY)
+}
+
+function winHelpShow() {
+	if (0 != winHelp) return !1;
+    tip_active && tipHide();
+	winHelp = !0;
+    $("#winHelp").show(0)
+}
+
+function winHelpHide() {
+    if (1 != winHelp) return !1;
+    winHelp = !1;
+    $("#winHelp").hide()
 }
 
 function contentScrt() {
 	oldScrt = scrt;
 	scrt = $(".wrap").scrollTop();
-	scrtRangeY = scrt - oldScrt;
-	if (scrt > 56) {
+    scrtRangeY = scrt - oldScrt;
+    10 >= scrt ? $(".bttop").hide() : 48 < scrt && (0 < scrtRangeY ? $(".bttop").hide() : $(".bttop").show(50));
+	0 < scrtRangeY ? $(".footer").hide() : $(".footer").show(50);
+	/*if (scrt > 48) {
 		if (scrtRangeY > 0 && $("#mobilePage").is(".fixed")) {
 			$("#mobilePage").removeClass("fixed");
+            $(".bttop").hide()
 		}
 		if (scrtRangeY < 0 && $("#mobilePage").not(".fixed")) {
 			$("#mobilePage").addClass("fixed");
+            $(".bttop").show("fast")
 		}
-	}
-} /*Change Captcha*/
+	}*/
+}
+
+/*Change Captcha*/
 
 function change_captcha(a) {
 	$("img.captchaImg").attr("src", nv_siteroot + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
@@ -63,6 +84,7 @@ function tipAutoClose(a) {
 }
 
 function tipShow(a, b) {
+    winHelp && winHelpHide();
 	if ($(a).is(".pa")) switchTab(".guest-sign",a);
 	tip_active && tipHide();
 	$("[data-toggle=tip]").removeClass("active");
@@ -109,9 +131,9 @@ function headerSearchKeypress(a) {
 // NukeViet Default Custom JS
 $(function() {
 	winResize();
-	// Modify all empty link
-	$('a[href="#"], a[href=""]').attr('href', 'javascript:void(0);');
-	// Smooth scroll to top
+    // Modify all empty link
+	$('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
+    // Smooth scroll to top
 	$(".bttop").click(function() {
 		$(".wrap").animate({
 			scrollTop: 0
@@ -119,24 +141,32 @@ $(function() {
 		return !1
 	});
 	$(document).on("keydown", function(a) {
-		27 === a.keyCode && (tip_active && tip_autoclose && tipHide())
+		27 === a.keyCode && (tip_active && tip_autoclose && tipHide(), winHelp && winHelpHide())
 	});
 	$(document).on("click", function() {
-		tip_active && tip_autoclose && tipHide()
+		tip_active && tip_autoclose && tipHide();
+		winHelp && winHelpHide()
 	});
 	$("#tip").on("click", function(a) {
 		a.stopPropagation()
 	});
+	$("#winHelp .winHelp").on("click", function(a) {
+		a.stopPropagation()
+	});
 	$("[data-toggle=tip]").click(function() {
 		var a = $(this).attr("data-target"),
-			d = $(a).html(),
-			c = $("#tip").attr("data-content");
-		a != c ? ("" != c && $('[data-target="' + c + '"]').attr("data-click", "y"), $("#tip").html(d), ("#metismenu" == a && $('#tip .metismenu ul').metisMenu({
+			c = $(a).html(),
+			b = $("#tip").attr("data-content");
+		a != b ? ("" != b && $('[data-target="' + b + '"]').attr("data-click", "y"), "#metismenu" == a && (c = $("#headerSearch").html() + c), $("#tip").html(c), "#metismenu" == a && $("#tip .metismenu ul").metisMenu({
 			toggle: !1
-		})), tipShow(this, a)) : "n" == $(this).attr("data-click") ? tipHide() : tipShow(this, a);
+		}), tipShow(this, a)) : "n" == $(this).attr("data-click") ? tipHide() : tipShow(this, a);
 		return !1
 	});
-	//Search form
+	$("[data-toggle=winHelp]").click(function() {
+		winHelp ? winHelpHide() : winHelpShow();
+		return !1
+	});
+    //Search form
 	$(".headerSearch button").on("click", function() {
 		if ("n" == $(this).attr("data-click")) return !1;
 		$(this).attr("data-click", "n");
@@ -153,9 +183,9 @@ $(function() {
 	});
 	$(".wrap").on("scroll", function() {
 		contentScrt()
-	});
+	})
 });
 $(window).on("resize", function() {
 	winResize();
-	if (150 < cRangeX || 150 < cRangeY) tipHide()
+	if (150 < cRangeX || 150 < cRangeY) tip_active && tipHide(), winHelp && winHelpHide()
 });
