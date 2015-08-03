@@ -51,7 +51,7 @@ function contentScrt() {
     scrtRangeY = scrt - oldScrt;
     10 >= scrt ? $(".bttop").hide() : 48 < scrt && (0 < scrtRangeY ? $(".bttop").hide() : $(".bttop").show(0));
 	0 < scrtRangeY ? $(".footer").hide() : $(".footer").show(0);
-	/*if (scrt > 48) {
+	if (scrt > 48) {
 		if (scrtRangeY > 0 && $("#mobilePage").is(".fixed")) {
 			$("#mobilePage").removeClass("fixed");
             $(".bttop").hide()
@@ -60,7 +60,7 @@ function contentScrt() {
 			$("#mobilePage").addClass("fixed");
             $(".bttop").show("fast")
 		}
-	}*/
+	}
 }
 
 /*Change Captcha*/

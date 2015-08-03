@@ -181,7 +181,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
         $css .= nv_css_setproperties( "[block_heading]", $config_theme['block_heading'] );
     }
     $property = array();
-    
+
     $property['family'] = $nv_Request->get_title( 'gfont_family', 'post', '' );
     $property['styles'] = $nv_Request->get_title( 'gfont_styles', 'post', '' );
     $property['subset'] = $nv_Request->get_title( 'gfont_subset', 'post', '' );
@@ -227,9 +227,9 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 
     nv_del_moduleCache( 'settings' );
 
-    if ( file_exists( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css" ) )
+    if ( file_exists( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $selectthemes . '.' . NV_LANG_DATA . '.' . $global_config['idsite'] . '.css' ) )
     {
-        nv_deletefile( NV_ROOTDIR . "/" . SYSTEM_FILES_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css" );
+        nv_deletefile( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $selectthemes . '.' . NV_LANG_DATA . '.' . $global_config['idsite'] . '.css' );
     }
 
     Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&selectthemes=' . $selectthemes . '&rand=' . nv_genpass() );
@@ -237,7 +237,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 }
 else
 {
-    $default_config_theme = "";
+    $default_config_theme = '';
     require NV_ROOTDIR . '/themes/' . $selectthemes . '/config_default.php';
     if ( isset( $module_config['themes'][$selectthemes] ) )
     {

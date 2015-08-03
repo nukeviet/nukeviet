@@ -68,13 +68,13 @@ if( defined( 'NV_CONFIG_DIR' ) )
         $global_config['my_domains'] = $server_name;
     }
     define( 'NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir'] );
-    define( 'NV_FILES_DIR', SYSTEM_FILES_DIR . '/' . $global_config['site_dir'] );
+    define( 'NV_FILES_DIR', NV_ASSETS_DIR . '/' . $global_config['site_dir'] );
     define( 'NV_CACHEDIR', SYSTEM_CACHEDIR . '/' . $global_config['site_dir'] );
 }
 else
 {
     define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
-    define( 'SYSTEM_FILES_DIR', NV_FILES_DIR );
+    define( 'NV_FILES_DIR', NV_ASSETS_DIR );
     define( 'SYSTEM_CACHEDIR', NV_CACHEDIR );
 }
 

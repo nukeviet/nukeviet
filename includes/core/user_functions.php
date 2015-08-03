@@ -20,7 +20,7 @@ $meta_property = array(
 	'og:url' => ''
 );
 
-//t�i kho?n Google+
+// Tai khoan Google+
 $id_profile_googleplus = 0;
 
 /**
@@ -639,11 +639,11 @@ function nv_html_site_js( $html = true )
 
 	$return = array();
     $return[] = array( 'ext' => 0, 'content' => $jsDef );
-    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/jquery/jquery.min.js" );
-    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/language/" . NV_LANG_INTERFACE . ".js" );
-    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/global.js" );
+    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery/jquery.min.js" );
+    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/language/" . NV_LANG_INTERFACE . ".js" );
+    $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/global.js" );
 
-	if ( defined( 'NV_IS_ADMIN' ) ) $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/admin.js" );
+	if ( defined( 'NV_IS_ADMIN' ) ) $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/admin.js" );
 
     // module js
 	if ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.js' ) )
@@ -660,8 +660,8 @@ function nv_html_site_js( $html = true )
 
     if ( defined( 'NV_IS_DRAG_BLOCK' ) )
     {
-        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.core.min.js" );
-        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.sortable.min.js" );
+        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/ui/jquery.ui.core.min.js" );
+        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/ui/jquery.ui.sortable.min.js" );
     }
 
     if ( ! $html ) return $return;
@@ -772,5 +772,3 @@ function nv_groups_list_pub()
 
 	return $groups;
 }
-
-?>

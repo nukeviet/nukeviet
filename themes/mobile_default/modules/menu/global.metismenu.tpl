@@ -10,7 +10,7 @@
 <!-- END: tree -->
 <!-- BEGIN: main -->
 <link rel="stylesheet" type="text/css"	href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/jquery.metisMenu.css" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/jquery/jquery.metisMenu.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.metisMenu.js"></script>
 
 <span data-toggle="tip" data-target="#metismenu" data-click="y"><em class="fa fa-bars pointer mbt"></em></span>
 <!-- START FORFOOTER -->
