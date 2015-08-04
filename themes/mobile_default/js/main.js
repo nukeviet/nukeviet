@@ -178,8 +178,41 @@ $(function() {
 	});
 	$(".wrap").on("scroll", function() {
 		contentScrt()
-	})
+	});
+    // Google map
+	if( $('#company-address').length ){
+		$('#company-map-modal').on('shown.bs.modal', function(){
+			if( ! $('#googleMapAPI').length ){
+				var script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.id = 'googleMapAPI';
+				script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initializeMap';
+				document.body.appendChild(script);
+			}else{
+				initializeMap();
+			}
+		})
+	}
 });
+
+// Fix bootstrap multiple modal
+$(document).on({
+	'show.bs.modal': function () {
+		var zIndex = 1040 + (10 * $('.modal:visible').length);
+		$(this).css('z-index', zIndex);
+		setTimeout(function() {
+			$('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+		}, 0);
+	},
+	'hidden.bs.modal': function() {
+		if ($('.modal:visible').length > 0) {
+			setTimeout(function() {
+				$(document.body).addClass('modal-open');
+			}, 0);
+		}
+	}
+}, '.modal');
+
 $(window).on("resize", function() {
 	winResize();
 	if (150 < cRangeX || 150 < cRangeY) tip_active && tipHide(), winHelp && winHelpHide()

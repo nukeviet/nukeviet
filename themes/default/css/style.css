@@ -376,13 +376,13 @@ a,
 a:link,
 a:active,
 a:visited {
-    color:#0E73E6;
+    color:#205FA0;
 }
 
 a:hover,
 a:focus {
     text-decoration:none;
-    color:#065db0;
+    color:#102D4C;
 }
 
 iframe {

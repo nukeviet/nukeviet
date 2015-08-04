@@ -10,13 +10,8 @@
                     <div>
                         <span data-toggle="winHelp"><em class="fa fa-info-circle fa-lg pointer mbt"></em></span>
                     </div>
-                    <div class="theme-change">
-                        <!-- BEGIN: theme_type -->
-                        <!-- BEGIN: loop -->
-                        <!-- BEGIN: other --><a href="{STHEME_TYPE}" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg mbt-circle"></em></a><!-- END: other --><!-- BEGIN: current --><span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span><!-- END: current -->
-                        <!-- END: loop -->
-                        <!-- END: theme_type -->
-                        <a class="bttop pointer"><em class="fa fa-lg mbt-circle"></em></a>
+                    <div class="text-right">
+                        <a class="bttop pointer"><em class="fa fa-lg mbt"></em></a>
                     </div>
                 </div>
             </div>
@@ -27,9 +22,18 @@
 <!-- Help window -->
 <div id="winHelp">
     <div class="winHelp">
+        [MENU_FOOTER]
+        [COMPANY_INFO]
         <div class="padding">
         [FOOTER_SITE]
         </div>
+        <!-- BEGIN: theme_type -->
+        <div class="theme-change margin-bottom-lg">
+            <!-- BEGIN: loop -->
+            <!-- BEGIN: other --><a href="{STHEME_TYPE}" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg mbt-circle"></em></a><!-- END: other --><!-- BEGIN: current --><span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span><!-- END: current -->
+            <!-- END: loop -->
+        </div>
+        <!-- END: theme_type -->
     </div>
 </div>
 <!-- Search form -->
