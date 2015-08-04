@@ -13,7 +13,7 @@
                     <div class="text-right">
                         <div class="fr">
                         [SOCIAL_ICONS]
-                        <a class="bttop pointer"><em class="fa fa-lg mbt"></em></a>
+                        <a class="bttop pointer"><em class="fa fa-refresh fa-lg mbt"></em></a>
                         </div>
                     </div>
                 </div>

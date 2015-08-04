@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<span class="pa" data-toggle="tip" data-target="#guestBlock" data-click="y"><em class="fa fa-user fa-lg pointer mbt"></em><span class="hidden">{LANG.contactUs}</span></span>
+<span class="pa" data-toggle="tip" data-target="#guestBlock" data-click="y"><em class="fa fa-user fa-lg pointer mbt-lg"></em><span class="hidden">{LANG.contactUs}</span></span>
 <!-- START FORFOOTER -->
 <div id="guestBlock" class="hidden">
     <div class="guestBlock">
