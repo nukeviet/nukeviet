@@ -3,25 +3,27 @@
         <nav class="footerNav2">
             
         </nav>
-        
+        <!-- Footer fixed -->
+        <footer id="footer">
+            <div class="footer display-table">
+                <div>
+                    <div>
+                        <span data-toggle="winHelp"><em class="fa fa-info-circle fa-lg pointer mbt"></em></span>
+                    </div>
+                    <div class="theme-change">
+                        <!-- BEGIN: theme_type -->
+                        <!-- BEGIN: loop -->
+                        <!-- BEGIN: other --><a href="{STHEME_TYPE}" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg mbt-circle"></em></a><!-- END: other --><!-- BEGIN: current --><span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span><!-- END: current -->
+                        <!-- END: loop -->
+                        <!-- END: theme_type -->
+                        <a class="bttop pointer"><em class="fa fa-lg mbt-circle"></em></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
         {ADMINTOOLBAR}
     </div>
 </div>
-<!-- Footer fixed -->
-<footer class="footer display-table">
-    <div>
-        <div>
-            <span data-toggle="winHelp"><em class="fa fa-windows fa-lg pointer mbt"></em></span>
-        </div>
-        <!-- BEGIN: theme_type -->
-        <div class="theme-change">
-            <!-- BEGIN: loop -->
-            <!-- BEGIN: other --><a href="{STHEME_TYPE}" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg mbt-circle"></em></a><!-- END: other --><!-- BEGIN: current --><span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span><!-- END: current -->
-            <!-- END: loop -->
-        </div>
-        <!-- END: theme_type -->
-    </div>
-</footer>
 <!-- Help window -->
 <div id="winHelp">
     <div class="winHelp">
@@ -29,10 +31,6 @@
         [FOOTER_SITE]
         </div>
     </div>
-</div>
-<!-- Go top button -->
-<div class="bttop">
-    <a class="pointer"><em class="fa fa-eject fa-lg"></em></a>
 </div>
 <!-- Search form -->
 <div id="headerSearch" class="hidden">
