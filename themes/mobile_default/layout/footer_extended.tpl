@@ -11,8 +11,14 @@
                         <span data-toggle="winHelp"><em class="fa fa-info-circle fa-lg pointer mbt"></em></span>
                     </div>
                     <div class="text-right">
+                        <div class="fr">
+                        [SOCIAL_ICONS]
                         <a class="bttop pointer"><em class="fa fa-lg mbt"></em></a>
+                        </div>
                     </div>
+                </div>
+                <div class="ftip">
+                    <div id="ftip" data-content=""></div>
                 </div>
             </div>
         </footer>
@@ -22,6 +28,7 @@
 <!-- Help window -->
 <div id="winHelp">
     <div class="winHelp">
+        <div class="logo-small padding"></div>
         [MENU_FOOTER]
         [COMPANY_INFO]
         <div class="padding">

@@ -6,7 +6,9 @@
  * @Createdate 31/05/2010, 00:36
  */
 var tip_active = !1,
+    ftip_active = !1,
 	tip_autoclose = !0,
+    ftip_autoclose = !0,
 	winX = 0,
 	winY = 0,
 	oldWinX = 0,
@@ -38,7 +40,9 @@ function winResize() {
 function winHelpShow() {
 	if (0 != winHelp) return !1;
     tip_active && tipHide();
+    ftip_active && ftipHide();
 	winHelp = !0;
+    $("#winHelp").find(".logo-small").html($(".logo").html());
     $("#winHelp").show(0)
 }
 
@@ -49,6 +53,9 @@ function winHelpHide() {
 }
 
 function contentScrt() {
+    winHelp && winHelpHide();
+    tip_active && tipHide();
+    ftip_active && ftipHide();
 	oldScrt = scrt;
 	scrt = $(".wrap").scrollTop();
 	scrtRangeY = scrt - oldScrt;
@@ -71,22 +78,58 @@ function tipHide() {
 	tipAutoClose(!0)
 }
 
+function ftipHide() {
+	$("[data-toggle=ftip]").attr("data-click", "y").removeClass("active");
+	$("#ftip").hide();
+	ftip_active = !1;
+    ftipAutoClose(!0)
+}
+
 function tipAutoClose(a) {
 	!0 != a && (a = !1);
 	tip_autoclose = a
 }
 
+function ftipAutoClose(a)
+{
+    !0 != a && (a = !1);
+    ftip_autoclose = a
+}
+
 function tipShow(a, b) {
-    winHelp && winHelpHide();
 	if ($(a).is(".pa")) switchTab(".guest-sign",a);
-	tip_active && tipHide();
+	winHelp && winHelpHide();
+    tip_active && tipHide();
+    ftip_active && ftipHide();
 	$("[data-toggle=tip]").removeClass("active");
 	$(a).attr("data-click", "n").addClass("active");
 	$("#tip").attr("data-content", b).show("fast");
 	tip_active = !0
 }
-// Switch tab
 
+function ftipShow(a, b) {
+	if ($(a).is(".qrcode") && "no" == $(a).attr("data-load")) return qrcodeLoad(a), !1;
+	winHelp && winHelpHide();
+    tip_active && tipHide();
+    ftip_active && ftipHide();
+	$("[data-toggle=ftip]").removeClass("active");
+	$(a).attr("data-click", "n").addClass("active");
+	$("#ftip").attr("data-content", b).show("fast");
+	ftip_active = !0
+};
+
+// QR-code
+function qrcodeLoad(a) {
+	var b = new Image,
+		c = $(a).data("img");
+	$(b).load(function() {
+		$(c).attr("src", b.src);
+		$(a).attr("data-load", "yes").click()
+	});
+	b.src = nv_siteroot + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
+};
+
+// Switch tab
 function switchTab(a) {
 	if ($(a).is(".current")) return !1;
 	var b = $(a).data("switch").split(/\s*,\s*/),
@@ -96,13 +139,39 @@ function switchTab(a) {
 	$(c + " " + b[0]).removeClass("hidden");
 	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
 };
-// ModalShow
 
+// ModalShow
 function modalShow(a, b) {
 	"" == a && (a = "&nbsp;");
 	$("#sitemodal").find(".modal-title").html(a);
 	$("#sitemodal").find(".modal-body").html(b);
 	$("#sitemodal").modal()
+}
+
+// Build google map for block Company Info
+function initializeMap(){
+	var ele = 'company-map';
+	var map, marker, ca, cf, a, f, z;
+	ca = parseFloat($('#' + ele).data('clat'));
+	cf = parseFloat($('#' + ele).data('clng'));
+	a = parseFloat($('#' + ele).data('lat'));
+	f = parseFloat($('#' + ele).data('lng'));
+	z = parseInt($('#' + ele).data('zoom'));
+	
+	map = new google.maps.Map(document.getElementById(ele),{
+		zoom: z,
+		center: {
+			lat: ca,
+			lng: cf
+		}
+	});
+	
+	marker = new google.maps.Marker({
+        map: map,
+        position: new google.maps.LatLng(a,f),
+        draggable: false,
+        animation: google.maps.Animation.DROP
+    });
 }
 
 function headerSearchSubmit(t) {
@@ -136,25 +205,24 @@ $(function() {
     	return !1
     });
 	$(document).on("keydown", function(a) {
-		27 === a.keyCode && (tip_active && tip_autoclose && tipHide(), winHelp && winHelpHide())
+		27 === a.keyCode && (tip_active && tip_autoclose && tipHide(), ftip_active && ftip_autoclose && ftipHide(), winHelp && winHelpHide())
 	});
 	$(document).on("click", function() {
 		tip_active && tip_autoclose && tipHide();
+        ftip_active && ftip_autoclose && ftipHide();
 		winHelp && winHelpHide()
 	});
-	$("#tip").on("click", function(a) {
+	$("#tip, #ftip, #winHelp .winHelp").on("click", function(a) {
 		a.stopPropagation()
 	});
-	$("#winHelp .winHelp").on("click", function(a) {
-		a.stopPropagation()
-	});
-	$("[data-toggle=tip]").click(function() {
+	$("[data-toggle=tip], [data-toggle=ftip]").click(function() {
 		var a = $(this).attr("data-target"),
 			c = $(a).html(),
-			b = $("#tip").attr("data-content");
-		a != b ? ("" != b && $('[data-target="' + b + '"]').attr("data-click", "y"), "#metismenu" == a && (c = $("#headerSearch").html() + c), $("#tip").html(c), "#metismenu" == a && $("#tip .metismenu ul").metisMenu({
+            d = $(this).attr("data-toggle"),
+			b = "tip" == d ? $("#tip").attr("data-content") : $("#ftip").attr("data-content");
+		a != b ? ("" != b && $('[data-target="' + b + '"]').attr("data-click", "y"), "#metismenu" == a && (c = $("#headerSearch").html() + c), "tip" == d ? ($("#tip").html(c), "#metismenu" == a && $("#tip .metismenu ul").metisMenu({
 			toggle: !1
-		}), tipShow(this, a)) : "n" == $(this).attr("data-click") ? tipHide() : tipShow(this, a);
+		}), tipShow(this, a)) : ($("#ftip").html(c), ftipShow(this, a))) : "n" == $(this).attr("data-click") ? "tip" == d ? tipHide() : ftipHide() : "tip" == d ? tipShow(this, a) : ftipShow(this, a);
 		return !1
 	});
 	$("[data-toggle=winHelp]").click(function() {
