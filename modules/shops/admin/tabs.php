@@ -16,32 +16,22 @@ $table_name = $db_config['prefix'] . '_' . $module_data . '_tabs';
 if( $nv_Request->isset_request( 'change_status', 'post, get' ) )
 {
 	$id = $nv_Request->get_int( 'id', 'post, get', 0 );
-
-	if( !$id ) die( 'NO' );
+	$content = 'NO_' . $id;
 
 	$query = 'SELECT active FROM ' . $table_name . ' WHERE id=' . $id;
-	$result = $db->query( $query );
-	$numrows = $result->rowCount( );
-	if( $numrows > 0 )
+	$row = $db->query( $query )->fetch();
+	if( isset( $row['active'] ) )
 	{
-		$active = 1;
-		foreach( $result as $row )
-		{
-			if( $row['active'] == 1 )
-			{
-				$active = 0;
-			}
-			else
-			{
-				$active = 1;
-			}
-		}
-		$query = 'UPDATE ' . $table_name . ' SET active=' . $db->quote( $active ) . ' WHERE id=' . $id;
+		$status = ( $row['active'] ) ? 0 : 1;
+		$query = 'UPDATE ' . $table_name . ' SET active=' . intval( $status ) . ' WHERE id=' . $id;
 		$db->query( $query );
+		$content = 'OK_' . $id;
 	}
 	nv_del_moduleCache( $module_name );
-	Header( 'Location:' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
-	exit ;
+	include NV_ROOTDIR . '/includes/header.php';
+	echo $content;
+	include NV_ROOTDIR . '/includes/footer.php';
+	exit();
 }
 
 if( $nv_Request->isset_request( 'ajax_action', 'post' ) )
