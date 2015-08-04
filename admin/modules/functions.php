@@ -670,7 +670,10 @@ function setup_modules( $array_head, $array_modules, $array_virtual_head, $array
 				'stt' => ++$a,
 				'values' => $values
 			) );
-
+			if( ! empty( $values['url_setup'] ) )
+			{
+				$xtpl->parse( 'main.vmodule.loop.setup' );
+			}
 			$xtpl->parse( 'main.vmodule.loop' );
 		}
 
