@@ -16,6 +16,7 @@ var tip_active = !1,
 	docX = 0,
 	docY = 0,
 	scrt = 0,
+    scrh = 0,
 	oldScrt = 0,
 	scrtRangeY = 0,
     wrapWidth = 0,
@@ -29,7 +30,9 @@ function winResize() {
 	docX = $(document).width();
 	docY = $(document).height();
 	cRangeX = Math.abs(winX - oldWinX);
-	cRangeY = Math.abs(winY - oldWinY)
+	cRangeY = Math.abs(winY - oldWinY);
+    scrh = $(".wrap")[0].scrollHeight;
+    scrh > $(".wrap").height() && $(".bttop").find("em").removeClass("fa-chevron-up").toggleClass("fa-chevron-down",!0)
 }
 
 function winHelpShow() {
@@ -48,20 +51,10 @@ function winHelpHide() {
 function contentScrt() {
 	oldScrt = scrt;
 	scrt = $(".wrap").scrollTop();
-    scrtRangeY = scrt - oldScrt;
-    10 >= scrt ? $(".bttop").hide() : 48 < scrt && (0 < scrtRangeY ? $(".bttop").hide() : $(".bttop").show(50));
-	0 < scrtRangeY ? $(".footer").hide() : $(".footer").show(50);
-	/*if (scrt > 48) {
-		if (scrtRangeY > 0 && $("#mobilePage").is(".fixed")) {
-			$("#mobilePage").removeClass("fixed");
-            $(".bttop").hide()
-		}
-		if (scrtRangeY < 0 && $("#mobilePage").not(".fixed")) {
-			$("#mobilePage").addClass("fixed");
-            $(".bttop").show("fast")
-		}
-	}*/
-}
+	scrtRangeY = scrt - oldScrt;
+	0 < scrtRangeY ? ($(".footer").toggleClass("pos-rel", !0), $("#mobilePage").is(".fixed") && $("#mobilePage").removeClass("fixed")) : ($(".footer").removeClass("pos-rel"), $("#mobilePage").not(".fixed") && $("#mobilePage").toggleClass("fixed", !0));
+	0 == scrt ? $(".bttop").find("em").removeClass("fa-chevron-up").toggleClass("fa-chevron-down", !0) : $(".bttop").find("em").removeClass("fa-chevron-down").toggleClass("fa-chevron-up", !0)
+};
 
 /*Change Captcha*/
 
@@ -135,11 +128,13 @@ $(function() {
 	$('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
     // Smooth scroll to top
 	$(".bttop").click(function() {
-		$(".wrap").animate({
-			scrollTop: 0
-		}, 800);
-		return !1
-	});
+    	$(this).find("em").is(".fa-chevron-up") ? $(".wrap").animate({
+    		scrollTop: 0
+    	}, 800) : $(this).find("em").is(".fa-chevron-down") && $(".wrap").animate({
+    		scrollTop: scrh
+    	}, 800);
+    	return !1
+    });
 	$(document).on("keydown", function(a) {
 		27 === a.keyCode && (tip_active && tip_autoclose && tipHide(), winHelp && winHelpHide())
 	});

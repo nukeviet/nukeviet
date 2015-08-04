@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/jquery/jquery.Jcrop.min.js" type="text/javascript"></script>
-<link href="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/jquery/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
+<script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.Jcrop.min.js" type="text/javascript"></script>
+<link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
 <div class="page">
     <div class="users-avupload form-tooltip">
     	<div class="panel-body">

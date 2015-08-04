@@ -83,7 +83,7 @@ $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_
 
 $copyright = 'Veuillez citer le lien vers l&#039;article original si vous le reproduisez sur un autre site. Merci.';
 
-$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $copyright ) . " WHERE module = 'news' AND config_name = 'copyright' AND lang='fr'" );
+$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $copyright ) . " WHERE module = " . $db->quote( $module_name ) . " AND config_name = 'copyright' AND lang=" . $db->quote( $lang ) );
 
 $result = $db->query( 'SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat ORDER BY sort ASC' );
 while( list( $catid_i ) = $result->fetch( 3 ) )

@@ -33,11 +33,11 @@ define( 'NV_CACHEDIR', 'data/cache' );
 //Thu muc chua IP
 define( 'NV_IP_DIR', 'data/ip' );
 
-//Thu muc files
-define( 'NV_FILES_DIR', 'assets' );
+//Thu muc assets
+define( 'NV_ASSETS_DIR', 'assets' );
 
 //Ten thu muc editors
-define( 'NV_EDITORSDIR', 'assets/editors' );
+define( 'NV_EDITORSDIR', NV_ASSETS_DIR . '/editors' );
 
 //Thu muc uploads
 define( 'NV_UPLOADS_DIR', 'uploads' );

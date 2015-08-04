@@ -38,6 +38,7 @@ $sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'i
 
 //Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
+define( 'NV_FILES_DIR', NV_ASSETS_DIR );
 
 // Register given function autoload implementation
 spl_autoload_register( function ( $classname )

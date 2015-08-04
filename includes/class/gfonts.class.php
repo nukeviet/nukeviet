@@ -17,8 +17,8 @@ class Gfonts
 
     public function __construct( $gfonts, $client_info )
     {
-        $this->cssdir = SYSTEM_FILES_DIR . '/css';
-        $this->fontdir = SYSTEM_FILES_DIR . '/fonts';
+        $this->cssdir = NV_ASSETS_DIR . '/css';
+        $this->fontdir = NV_ASSETS_DIR . '/fonts';
         $this->fontsLang = ! empty( $gfonts['subset'] ) ? preg_replace( "/[^a-z0-9\,\-]/i", "", strtolower( $gfonts['subset'] ) ) : "";
         $stringFonts = $this->stringFonts( $gfonts['fonts'] );
         $this->fonts = "family=" . $stringFonts;

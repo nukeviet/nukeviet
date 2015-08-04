@@ -245,7 +245,7 @@ $contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid 
 
 $imageforswf = ( ! empty( $imageforswf ) ) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf : '';
 
-$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "data-width=" . $width . " id=" . ( $file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image' ) . "", NV_BASE_SITEURL . NV_FILES_DIR . "/images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . NV_FILES_DIR . "/images/ico_" . substr( $imageforswf, -3 ) . ".gif" );
+$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "data-width=" . $width . " id=" . ( $file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image' ) . "", NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr( $imageforswf, -3 ) . ".gif" );
 
 $contents['upload'] = array( sprintf( $lang_module['re_upload'], $contents['file_allowed_ext'] ), 'banner', $lang_module['imageforswf'], 'imageforswf' );
 $contents['file_alt'] = array( $lang_module['file_alt'], 'file_alt', $file_alt, 255 );

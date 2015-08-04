@@ -14,6 +14,7 @@
 /data/logs/voting_logs/
 /data/tmp/
 /uploads/logo_*
+/install/default.php
 
 # Ignore some class
 /includes/class/PHPExcel/

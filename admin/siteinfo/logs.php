@@ -13,13 +13,13 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 // Eg: $id = nv_insert_logs('lang','module name','name key','note',1, 'link acess');
 
 // Call jquery datepicker
-$my_head = "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.core.css\" rel=\"stylesheet\" />\n";
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
-$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.datepicker.css\" rel=\"stylesheet\" />\n";
+$my_head = "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/ui/jquery.ui.core.css\" rel=\"stylesheet\" />\n";
+$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/ui/jquery.ui.theme.css\" rel=\"stylesheet\" />\n";
+$my_head .= "<link type=\"text/css\" href=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/ui/jquery.ui.datepicker.css\" rel=\"stylesheet\" />\n";
 
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.core.min.js\"></script>\n";
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/js/ui/jquery.ui.datepicker.min.js\"></script>\n";
-$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_FILES_DIR . "/js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/ui/jquery.ui.core.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/ui/jquery.ui.datepicker.min.js\"></script>\n";
+$my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/language/jquery.ui.datepicker-" . NV_LANG_INTERFACE . ".js\"></script>\n";
 
 $page_title = $lang_module['logs_title'];
 
