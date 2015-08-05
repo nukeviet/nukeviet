@@ -378,7 +378,7 @@ function nv_geVersion( $updatetime = 3600 )
 
 		$args = array(
 			'headers' => array(
-				'Referer' => NUKEVIET_STORE_APIURL,
+				'Referer' => NV_SERVER_NAME,
 			),
 			'body' => array(
 				'lang' > NV_LANG_INTERFACE,

@@ -8,6 +8,9 @@
 		<meta name="author" content="{NV_SITE_COPYRIGHT}">
 		<meta name="generator" content="{NV_SITE_NAME}">
 		<meta name="robots" content="noindex, nofollow">
+		
+		<link rel="shortcut icon" href="{NV_BASE_SITEURL}themes/default/favicon.ico">
+		<link rel="apple-touch-icon" href="{NV_BASE_SITEURL}themes/default/apple-touch-icon.png">
 
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
@@ -47,6 +50,3 @@
 		<![endif]-->
 	</head>
 	<body>
-		<!--[if lt IE 7]>
-		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://www.google.com/chrome/">Setup Google Chrome</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-		<![endif]-->
