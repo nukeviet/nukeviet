@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<span data-toggle="tip" data-target="#contactList" data-click="y"><em class="icon-old-phone icon-lg pointer"></em><span class="hidden">{LANG.contactUs}</span></span>
+<a title="{LANG.contactUs}" class="pointer" data-toggle="ftip" data-target="#contactList" data-click="y"><em class="fa fa-phone fa-lg mbt"></em></a>
 <div id="contactList" class="hidden">
 <div class="contactList">
     <h3>{LANG.contactUs}</h3>

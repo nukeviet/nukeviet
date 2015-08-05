@@ -12,7 +12,7 @@
 <link rel="stylesheet" type="text/css"	href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/jquery.metisMenu.css" />
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.metisMenu.js"></script>
 
-<span data-toggle="tip" data-target="#metismenu" data-click="y"><em class="fa fa-bars pointer mbt"></em></span>
+<span data-toggle="tip" data-target="#metismenu" data-click="y"><em class="fa fa-bars pointer mbt-lg"></em></span>
 <!-- START FORFOOTER -->
 <div id="metismenu" class="hidden">
 <div class="clearfix panel metismenu">

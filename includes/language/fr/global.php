@@ -217,6 +217,7 @@ $lang_global['error_upload_writable'] = 'Erreur: Dossier  %s ne permis pas l\'�
 $lang_global['error_upload_urlfile'] = 'Erreur: lien incorrect';
 $lang_global['error_upload_url_notfound'] = 'Erreur: impossible de prendre le fichier depuis votre lien';
 $lang_global['theme_type_chose'] = 'Changer au thème %s';
+$lang_global['theme_type_chose2'] = 'Changer au thème';
 $lang_global['theme_type_select'] = 'Interface';
 $lang_global['ftp_err_connect'] = 'Erreur: impossible de connecter au serveur FTP';
 $lang_global['ftp_err_login'] = 'Erreur: Connexion échouée';

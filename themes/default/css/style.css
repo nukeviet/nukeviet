@@ -376,13 +376,13 @@ a,
 a:link,
 a:active,
 a:visited {
-    color:#0E73E6;
+    color:#205FA0;
 }
 
 a:hover,
 a:focus {
     text-decoration:none;
-    color:#065db0;
+    color:#102D4C;
 }
 
 iframe {
@@ -601,9 +601,14 @@ a.btn {
 
 .third-nav .current-time {
     display:inline-block;
-    float:right;
+    vertical-align:middle;
     margin-right:10px;
-    margin-top:-25px;
+    line-height:37px
+}
+
+.third-nav ul + .current-time{
+    float:right;
+    margin-top:-35px
 }
 
 .headerSearch {
@@ -921,6 +926,15 @@ a.btn {
     padding:10px;
     z-index:1000;
     display:none;
+}
+
+/* block counter */
+.counter.display-table{
+    width:100%
+}
+
+.counter span + span{
+    text-align: right;
 }
 
 /* guestBlock */

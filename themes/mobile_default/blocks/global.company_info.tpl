@@ -1,4 +1,5 @@
 <!-- BEGIN: main -->
+<div class="padding">
 <ul class="company_info" itemscope itemtype="http://schema.org/LocalBusiness">
 <!-- BEGIN: company_name --><li class="company_name"><span itemprop="name">{DATA.company_name}</span><!-- BEGIN: company_sortname --> (<span itemprop="alternateName">{DATA.company_sortname}</span>)<!-- END: company_sortname --></li><!-- END: company_name -->
 <!-- BEGIN: company_regcode --><li><em class="fa fa-file-text"></em><span>{LICENSE}</span></li><!-- END: company_regcode -->
@@ -9,7 +10,9 @@
 <!-- BEGIN: company_email --><li><em class="fa fa-envelope"></em><span>{LANG.company_email}: <!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="mailto:{EMAIL}"><span itemprop="email">{EMAIL}</span></a><!-- END: item --></span></li><!-- END: company_email -->
 <!-- BEGIN: company_website --><li><em class="fa fa-globe"></em><span>{LANG.company_website}: <!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="{WEBSITE}" target="_blank"><span itemprop="url">{WEBSITE}</span></a><!-- END: item --></span></li><!-- END: company_website -->
 </ul>
+</div>
 <!-- BEGIN: company_map_modal -->
+<!-- START FORFOOTER -->
 <div class="modal fade" id="company-map-modal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -19,5 +22,6 @@
         </div>
     </div>
 </div>
+<!-- END FORFOOTER -->
 <!-- END: company_map_modal -->
 <!-- END: main -->
