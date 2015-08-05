@@ -41,7 +41,7 @@
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">
-							<a class="show h4" href="{OTHER.link}" title="{OTHER.title}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip" data-position="{TOOLTIP_POSITION}">{OTHER.title}</a>
+							<a class="show h4" href="{OTHER.link}" title="{OTHER.title}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}">{OTHER.title}</a>
 						</li>
 						<!-- END: loop -->
 					</ul>
