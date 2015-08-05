@@ -218,11 +218,19 @@ $(function() {
 			return nv_msgbeforeunload
 		})
 	});
-	// Trigger tooltip
+	// Tooltip
 	$(".form-tooltip").tooltip({
-		selector: "[data-toggle=tooltip]",
-		container: "body"
-	});
+    	selector: "[data-toggle=tooltip]",
+    	container: "body"
+    });
+    $("[data-rel='tooltip'][data-content!=''][data-position!='']").removeAttr("title").tooltip({
+    	placement: $(this).data("position"),
+    	container: "body",
+    	html: !0,
+    	title: function() {
+    		return ("" == $(this).data("img") ? "" : '<img class="img-thumbnail pull-left" src="' + $(this).data("img") + '" width="90" />') + $(this).data("content")
+    	}
+    });
 	// Change site lang
 	$(".nv_change_site_lang").change(function() {
 		document.location = $(this).val()

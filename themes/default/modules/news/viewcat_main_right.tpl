@@ -3,13 +3,13 @@
 <div class="news_column">
 	<div class="panel panel-default clearfix">
 		<div class="panel-heading">
-			<ul class="list-inline" style="margin: 0">
-				<li><h2><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h2></li>
+			<ul class="list-inline sub-list-icon" style="margin: 0">
+				<li><h4><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h4></li>
 				<!-- BEGIN: subcatloop -->
-				<li class="hidden-xs"><h3><a title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></h3></li>
+				<li class="hidden-xs"><h4><a class="dimgray" title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></h4></li>
 				<!-- END: subcatloop -->
 				<!-- BEGIN: subcatmore -->
-				<li class="pull-right hidden-xs"><h3><a title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a></h3></li>
+				<li class="pull-right hidden-xs"><h4><a class="dimgray" title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out"></em></a></h4></li>
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
@@ -23,7 +23,7 @@
 					<h3>
 						<a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
 						<!-- BEGIN: newday -->
-						<span class="icon_new">&nbsp;</span>
+						<span class="icon_new"></span>
 						<!-- END: newday -->
 					</h3>
 					<div class="text-muted">
@@ -33,7 +33,7 @@
 							<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
 						</ul>
 					</div>
-					<p class="text-justify">{CONTENT.hometext}</p>
+					<p>{CONTENT.hometext}</p>
 				</div>
 
 				<!-- BEGIN: related -->
@@ -41,7 +41,7 @@
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">
-							<a class="show" href="{OTHER.link}" title="{OTHER.title}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip" data-position="{TOOLTIP_POSITION}">{OTHER.title}</a>
+							<a class="show h4" href="{OTHER.link}" title="{OTHER.title}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip" data-position="{TOOLTIP_POSITION}">{OTHER.title}</a>
 						</li>
 						<!-- END: loop -->
 					</ul>
