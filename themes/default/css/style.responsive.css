@@ -31,6 +31,9 @@
     #footer .footer-copyright .theme-change {
         text-align:center;
     }
+    .column-margin-left{
+        margin-left:0 !important
+    }
 }
 @media (max-width:767px) {
     .body-bg,

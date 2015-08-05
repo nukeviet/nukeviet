@@ -519,6 +519,14 @@ a.dimgray:hover {
     color:#205FA0;
 }
 
+a.black  {
+    color:#333;
+}
+
+a.black:hover {
+    color:#205FA0;
+}
+
 iframe {
     border:0;
 }

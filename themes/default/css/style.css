@@ -86,11 +86,11 @@
 }
 
 .icon_new_small {
-    background:url("../images/squared-blue.png") no-repeat 0 6px;
+    background:url("../images/squared-blue.png") no-repeat 0 8px;
 }
 
 .icon_list {
-    background:url("../images/arrow_left_orange.png") no-repeat 0 6px;
+    background:url("../images/arrow_left_orange.png") no-repeat 0 8px;
 }
 
 /* Fonts Color */
@@ -194,6 +194,10 @@
 
 .margin-bottom-lg {
     margin-bottom:15px;
+}
+
+.column-margin-left{
+    margin-left: 10px !important
 }
 
 .bg-gainsboro{
@@ -426,6 +430,14 @@ a.dimgray  {
 }
 
 a.dimgray:hover {
+    color:#205FA0;
+}
+
+a.black  {
+    color:#333;
+}
+
+a.black:hover {
     color:#205FA0;
 }
 

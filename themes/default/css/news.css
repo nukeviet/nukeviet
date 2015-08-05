@@ -127,27 +127,24 @@ ul.other-news {
     font-weight:bold;
     line-height:1.2;
     margin-bottom:8px;
-}*/
+}
 
 #hot-news p {
     margin-bottom:0;
+}*/
+
+#hot-news li{
+    display: block;
+    padding-bottom:10px;
+    border-bottom:1px solid #dadada;
 }
 
-#hot-news ul.other-news {
-    border-top:1px solid #dadada;
-    list-style-type:none;
-    margin:0;
-    display:block;
+#hot-news li:last-child{
+    border-bottom:none;
 }
 
-#hot-news ul.other-news li {
-    float:left;
-    width:33%;
-}
-
-#hot-news ul.other-news h5 {
-    line-height:1.2;
-    margin-bottom:.5em;
+#hot-news li a{
+    text-indent:6px
 }
 
 #print {
