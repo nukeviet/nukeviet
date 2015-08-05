@@ -665,7 +665,7 @@ function nv_date( $format, $time = 0 )
     global $lang_global;
 
     if ( ! $time ) $time = NV_CURRENTTIME;
-    $format = str_replace( "r", "D, d M y H:i:s O", $format );
+    $format = str_replace( "r", "D, d M Y H:i:s O", $format );
     $format = str_replace( array( "D", "M" ), array( "[D]", "[M]" ), $format );
     $return = date( $format, $time );
 
