@@ -3,7 +3,7 @@
 	<div class="panel panel-default news_column">
 		<div class="panel-body clearfix">
 			<a href="{main.link}"><img src="{main.imgsource}" alt="{main.title}" class="img-thumbnail pull-left imghome" style="width:183px"/></a><h3><a href="{main.link}">{main.title}</a></h3>
-			<p>
+			<p class="text-justify">
 				{main.hometext}
 			</p>
 			<p class="text-right">
