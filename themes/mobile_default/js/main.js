@@ -287,3 +287,28 @@ $(window).on("resize", function() {
 	winResize();
 	if (150 < cRangeX || 150 < cRangeY) tip_active && tipHide(), winHelp && winHelpHide()
 });
+
+// Load Social script - lasest
+$(window).load(function() {
+    (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && 0 < $('[property="fb:app_id"]').length && 0 < $('[property="og:locale"]').length && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
+        var d = a.getElementsByTagName(b)[0];
+        a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + $('[property="og:locale"]').attr("content") + "/all.js#xfbml=1&appId=" + $('[property="fb:app_id"]').attr("content"), d.parentNode.insertBefore(a, d));
+    }(document, "script", "facebook-jssdk"));
+    0 < $(".g-plusone").length && (window.___gcfg = {
+        lang: nv_sitelang
+    }, function() {
+        var a = document.createElement("script");
+        a.type = "text/javascript";
+        a.async = !0;
+        a.src = "https://apis.google.com/js/plusone.js";
+        var b = document.getElementsByTagName("script")[0];
+        b.parentNode.insertBefore(a, b);
+    }());
+    0 < $(".twitter-share-button").length && function() {
+        var a = document.createElement("script");
+        a.type = "text/javascript";
+        a.src = "http://platform.twitter.com/widgets.js";
+        var b = document.getElementsByTagName("script")[0];
+        b.parentNode.insertBefore(a, b);
+    }();
+});
