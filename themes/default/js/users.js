@@ -155,6 +155,7 @@ function buttonReg(b) {
 };
 
 function bt_logout(a){
+    $(a).prop("disabled",!0);
     $.ajax({
         type: 'POST',
         cache: !1,
