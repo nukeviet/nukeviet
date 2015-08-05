@@ -14,7 +14,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
-$lang_translator['info'] = 'Langue française pour NukeViet 3';
+$lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['voting_alias'] = 'Alias';
@@ -51,3 +51,6 @@ $lang_module['voting_delete_confirm'] = 'Êtes-vous sûr de vouloir supprimer le
 $lang_module['voting_delete_success'] = 'Le sondage a été supprimé !';
 $lang_module['warning'] = 'Remarque: Nombre d\'options doivent être moins ou égale au nombre de réponses données';
 $lang_module['voting_error_content'] = 'Remarques: vous devez saisir le contenu de sondage et les réponses';
+$lang_module['voting_error'] = 'Erreur dans le processus d\'ajouter des données';
+$lang_module['voting_question_error'] = 'Erreur dans le processus de saisir des données';
+$lang_module['voting_delete_unsuccess'] = 'Erreur dans le processus de supprimer des données';

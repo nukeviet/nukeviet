@@ -6,15 +6,15 @@
 * @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jul 27, 2015, 03:22:34 AM
+* @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$lang_translator['author'] = 'Phạm Chí Quang';
-$lang_translator['createdate'] = '30/06/2010: 16:38';
-$lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
-$lang_translator['info'] = 'Langue française pour NukeViet 3';
+$lang_translator['author'] = 'Nguyễn Phú Thành';
+$lang_translator['createdate'] = '31/07/2015, 16:30';
+$lang_translator['copyright'] = 'phuthanh.nguyen215@gmail.com';
+$lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['main_title'] = 'Statistiques';
@@ -38,3 +38,4 @@ $lang_module['browser'] = 'Navigateur';
 $lang_module['os'] = 'Systèmes d\'exploitation';
 $lang_module['bot'] = 'Moteurs de recherche';
 $lang_module['referer'] = 'Site';
+$lang_module['refererbysite'] = 'Recenser les liens à partie du site %s';

@@ -46,7 +46,7 @@ if( $catid > 0 )
 			$db->query( $sql );
 			$content = 'OK_' . $parentid;
 		}
-		elseif( $mod == 'numlinks' and $new_vid >= 0 and $new_vid <= 10 )
+		elseif( $mod == 'numlinks' and $new_vid >= 0 and $new_vid <= 20 )
 		{
 			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET numlinks=' . $new_vid . ' WHERE catid=' . $catid ;
 			$db->query( $sql );

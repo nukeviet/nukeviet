@@ -28,10 +28,12 @@
 				<td>{ROW.values.custom_title}</td>
 				<td>{ROW.values.version}</td>
 				<td class="text-center"><input name="change_act_{ROW.mod}" id="change_act_{ROW.mod}" type="checkbox" value="1" onclick="{ROW.values.act.1}" checked="checked"{ROW.act_disabled} /></td>
-				<td><em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> <em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.recreate.0}">{ROW.values.recreate.1}</a>
-				<!-- BEGIN: delete -->
-				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
-				<!-- END: delete -->
+				<td>
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.values.edit.0}">{ROW.values.edit.1}</a> 
+					<em class="fa fa-sun-o fa-lg">&nbsp;</em> <a class="nv-reinstall-module" href="#" data-title="{ROW.values.title.1}">{GLANG.recreate}</a>
+					<!-- BEGIN: delete -->
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="{ROW.values.del.0}">{ROW.values.del.1}</a>
+					<!-- END: delete -->
 				</td>
 			</tr>
 			<!-- END: loop -->

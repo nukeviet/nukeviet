@@ -11,6 +11,7 @@
         <li><a href="#tab3">{LANG.header}</a></li>
         <li><a href="#tab4">{LANG.footer}</a></li>
         <li><a href="#tab5">CSS</a></li>
+        <li><a href="#tab7">Google Fonts</a></li>
     </ul>
     <div class="tab_container">
     <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
@@ -214,6 +215,13 @@
             <label>{LANG.customcss}</label>
             <textarea name="block_customcss" style="width: 300px; height: 50px">{CONFIG_THEME_BLOCK.customcss}</textarea><br />
 		</div>
+        
+        <div id="tab7" class="tab_content">
+            <div>{LANG.gfont_note}</div><br />
+            <label>Family</label>&nbsp;<input type="text" name="gfont_family" value="{CONFIG_THEME_GFONT.family}" placeholder="family" style="width:200px" />&nbsp; ({LANG.exp}, Roboto)<br />
+            <label>Styles</label>&nbsp;<input type="text" name="gfont_styles" value="{CONFIG_THEME_GFONT.styles}" placeholder="styles" style="width:200px" />&nbsp; ({LANG.exp}, 400,400italic)<br />
+            <label>Subset</label>&nbsp;<input type="text" name="gfont_subset" value="{CONFIG_THEME_GFONT.subset}" placeholder="subset" style="width:200px" />&nbsp; ({LANG.exp}, latin,vietnamese)
+        </div>
         
         <label style="width: 150px; margin-bottom: 20px">&nbsp;</label>
         <input type="submit" name="submit" value="{LANG.save}" />    

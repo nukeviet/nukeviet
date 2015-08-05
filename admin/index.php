@@ -10,25 +10,10 @@
 
 define( 'NV_ADMIN', true );
 
-// Ket noi den mainfile.php nam o thu muc goc.
-$realpath_mainfile = $set_active_op = '';
+//Xac dinh thu muc goc cua site
+define( 'NV_ROOTDIR', str_replace( '\\', '/', realpath( pathinfo( __file__, PATHINFO_DIRNAME ) . '/../' ) ) );
 
-$temp_dir = str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) );
-$temp_path = '/../';
-for( $i = 0; $i < 10; ++$i )
-{
-	$realpath_mainfile = @realpath( $temp_dir . $temp_path . 'mainfile.php' );
-	if( ! empty( $realpath_mainfile ) ) break;
-	$temp_path .= '../';
-}
-
-unset( $temp_dir, $temp_path );
-
-if( empty( $realpath_mainfile ) ) die();
-
-require $realpath_mainfile;
-
-ob_start();
+require NV_ROOTDIR .'/includes/mainfile.php';
 
 // Admin dang nhap
 if( ! defined( 'NV_IS_ADMIN' ) or ! isset( $admin_info ) or empty( $admin_info ) )
@@ -38,17 +23,17 @@ if( ! defined( 'NV_IS_ADMIN' ) or ! isset( $admin_info ) or empty( $admin_info )
 	exit();
 }
 
-if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_global.php' ) )
+if( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php' ) )
 {
-	require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_global.php';
+	require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_global.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_global.php' ) )
 {
-	require NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_global.php';
+	require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_global.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/en/admin_global.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_global.php' ) )
 {
-	require NV_ROOTDIR . '/language/en/admin_global.php';
+	require NV_ROOTDIR . '/includes/language/en/admin_global.php';
 }
 
 include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
@@ -126,17 +111,17 @@ if( ! empty( $module_name ) )
 			$include_file = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $module_file . '/' . $op . '.php';
 
 			// Ket noi voi file ngon ngu cua module
-			if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_' . $module_file . '.php' ) )
+			if( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $module_file . '.php' ) )
 			{
-				require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_' . $module_file . '.php';
+				require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_' . $module_file . '.php';
 			}
-			elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_' . $module_file . '.php' ) )
+			elseif( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $module_file . '.php' ) )
 			{
-				require NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_' . $module_file . '.php';
+				require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_' . $module_file . '.php';
 			}
-			elseif( file_exists( NV_ROOTDIR . '/language/en/admin_' . $module_file . '.php' ) )
+			elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_' . $module_file . '.php' ) )
 			{
-				require NV_ROOTDIR . '/language/en/admin_' . $module_file . '.php';
+				require NV_ROOTDIR . '/includes/language/en/admin_' . $module_file . '.php';
 			}
 		}
 	}
@@ -149,10 +134,10 @@ if( ! empty( $module_name ) )
 
 		if( $global_config['lang_multi'] )
 		{
-			$_language_array = nv_scandir(  NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
+			$_language_array = nv_scandir(  NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/' );
 			foreach( $_language_array as $lang_i )
 			{
-				if( file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/global.php' ) )
+				if( file_exists( NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php' ) )
 				{
 					$array_lang_admin[$lang_i] = $language_array[$lang_i]['name'];
 				}

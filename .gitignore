@@ -1,27 +1,28 @@
 # Base ignore
-/.project
 /.buildpath
+/.project
 /.settings
+/assets/css/*.opt.css
 /config.php
-/cache/
-/data/diagnostic-*.xml
-/files/css/*.opt.css
-/logs/data_logs/
-/logs/dump_backup/
-/logs/error_logs/
-/logs/ip_logs/
-/logs/ref_logs/
-/logs/voting_logs/
-/sess/sess_*
-/tmp/
+/data/cache/*
+/data/config/diagnostic-*.xml
+/data/logs/data_logs/
+/data/logs/dump_backup/
+/data/logs/error_logs/
+/data/logs/ip_logs/
+/data/logs/ref_logs/
+/data/logs/voting_logs/
+/data/tmp/
+/uploads/logo_*
+/install/default.php
 
 # Ignore some class
 /includes/class/PHPExcel/
 /includes/class/PHPExcel.php
 
-# Ignore some uploads, files dir
-/files/download
-/files/*.jpg
+# Ignore some uploads, assets dir
+/assets/download
+/assets/*.jpg
 /uploads/download
 /uploads/users/*.jpg
 /uploads/contact/*.jpg
@@ -35,3 +36,5 @@
 !/uploads/banners/vinades.jpg
 !/uploads/banners/vndads___05.jpg
 !/uploads/banners/webnhanh_vn.png
+!/data/cache/.htaccess
+!/data/cache/index.html

@@ -58,7 +58,7 @@ function nv_admin_write_lang( $dirlang, $idfile )
 
 		if( $module == 'global' and preg_match( '/^block\.global\.([a-zA-Z0-9\-\_]+)$/', $admin_file ) )
 		{
-			$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/' . $admin_file . '.php';
+			$include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $admin_file . '.php';
 		}
 		elseif( in_array( $module, $modules_exit ) and preg_match( '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)$/', $admin_file ) )
 		{
@@ -74,20 +74,20 @@ function nv_admin_write_lang( $dirlang, $idfile )
 		}
 		elseif( $module == 'global' and $admin_file == 1 )
 		{
-			$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/admin_' . $module . '.php';
+			$include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php';
 		}
 		elseif( $module == 'global' and $admin_file == 0 )
 		{
-			$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/' . $module . '.php';
+			$include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $module . '.php';
 		}
 		elseif( $module == 'install' and $admin_file == 0 )
 		{
-			$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/' . $module . '.php';
+			$include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/' . $module . '.php';
 		}
 		else
 		{
 			$admin_file = 1;
-			$include_lang = NV_ROOTDIR . '/language/' . $dirlang . '/admin_' . $module . '.php';
+			$include_lang = NV_ROOTDIR . '/includes/language/' . $dirlang . '/admin_' . $module . '.php';
 		}
 
 		if( $include_lang == '' )
@@ -221,7 +221,7 @@ $page_title = $language_array[$dirlang]['name'];
 if( $nv_Request->isset_request( 'idfile,checksess', 'get' ) and $nv_Request->get_string( 'checksess', 'get' ) == md5( $nv_Request->get_int( 'idfile', 'get' ) . session_id() ) )
 {
 	$idfile = $nv_Request->get_int( 'idfile', 'get' );
-	nv_mkdir( NV_ROOTDIR . '/language/', $dirlang );
+	nv_mkdir( NV_ROOTDIR . '/includes/language/', $dirlang );
 	$content = nv_admin_write_lang( $dirlang, $idfile );
 
 	if( empty( $content ) )
@@ -251,7 +251,7 @@ elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_st
 
 	if( $dirlang != '' )
 	{
-		nv_mkdir( NV_ROOTDIR . '/language/', $dirlang );
+		nv_mkdir( NV_ROOTDIR . '/includes/language/', $dirlang );
 
 		$content = '';
 		$array_filename = array();

@@ -54,7 +54,7 @@ if( $submit )
 	}
 	elseif( ! nv_is_url( $site_logo ) )
 	{
-		$array_config['site_logo'] = 'images/logo.png';
+		$array_config['site_logo'] = NV_UPLOADS_DIR . '/logo.png';
 	}
 
 	$array_config['site_home_module'] = nv_substr( $nv_Request->get_title( 'site_home_module', 'post', '', 1 ), 0, 255 );

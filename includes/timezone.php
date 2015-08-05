@@ -24,7 +24,7 @@ function nv_getTimezoneName_from_cookie( $cookie )
 	return '';
 }
 
-$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) ) ? 'nv3' : $global_config['cookie_prefix'];
+$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) ) ? 'nv4' : $global_config['cookie_prefix'];
 
 if( isset( $_COOKIE[$global_config['cookie_prefix'] . '_cltn'] ) )
 {

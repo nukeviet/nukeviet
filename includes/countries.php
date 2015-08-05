@@ -268,7 +268,7 @@ function nv_getCountry_from_file( $ip )
 		$code = ( $numbers[0] * 16777216 ) + ( $numbers[1] * 65536 ) + ( $numbers[2] * 256 ) + ( $numbers[3] );
 
 		$ranges = array();
-		include NV_ROOTDIR . '/' . NV_DATADIR . '/ip_files/' . $numbers[0] . '.php' ;
+		include NV_ROOTDIR . '/' . NV_IP_DIR . '/' . $numbers[0] . '.php' ;
 
 		if( ! empty( $ranges ) )
 		{
@@ -281,13 +281,13 @@ function nv_getCountry_from_file( $ip )
 	else
 	{
 		$numbers = explode( ':', $ip );
-		if( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/ip6_files/' . $numbers[0] . '.php' ) )
+		if( file_exists( NV_ROOTDIR . '/' . NV_IP_DIR . '6/' . $numbers[0] . '.php' ) )
 		{
 			$ip = inet_pton( $ip );
 			$binaryip = inet_to_bits( $ip );
 
 			$ranges = array();
-			include NV_ROOTDIR . '/' . NV_DATADIR . '/ip6_files/' . $numbers[0] . '.php' ;
+			include NV_ROOTDIR . '/' . NV_IP_DIR . '6/' . $numbers[0] . '.php' ;
 			foreach( $ranges as $cidrnet => $country )
 			{
 				list( $net, $maskbits ) = explode( '/', $cidrnet );
