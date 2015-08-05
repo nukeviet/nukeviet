@@ -247,6 +247,10 @@ $(function() {
 	});
     // Google map
 	if( $('#company-address').length ){
+		$('#company-address').click(function(e){
+			e.preventDefault();
+			$('#company-map-modal').modal('show');
+		});
 		$('#company-map-modal').on('shown.bs.modal', function(){
 			if( ! $('#googleMapAPI').length ){
 				var script = document.createElement('script');
