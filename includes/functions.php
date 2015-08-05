@@ -662,57 +662,54 @@ function nv_show_name_user( $first_name, $last_name,  $user_name = '' )
  */
 function nv_date( $format, $time = 0 )
 {
-	global $lang_global;
+    global $lang_global;
 
-	if( ! $time ) $time = NV_CURRENTTIME;
-	$return = date( $format, $time );
+    if ( ! $time ) $time = NV_CURRENTTIME;
+    $format = str_replace( "r", "D, d M y H:i:s O", $format );
+    $format = str_replace( array( "D", "M" ), array( "[D]", "[M]" ), $format );
+    $return = date( $format, $time );
 
-	$replaces = array(
-		'Sun' => $lang_global['sun'],
-		'Mon' => $lang_global['mon'],
-		'Tue' => $lang_global['tue'],
-		'Wed' => $lang_global['wed'],
-		'Thu' => $lang_global['thu'],
-		'Fri' => $lang_global['fri'],
-		'Sat' => $lang_global['sat'],
-		'Jan' => $lang_global['jan'],
-		'Feb' => $lang_global['feb'],
-		'Mar' => $lang_global['mar'],
-		'Apr' => $lang_global['apr'],
-		'May' => $lang_global['may2'],
-		'Jun' => $lang_global['jun'],
-		'Jul' => $lang_global['jul'],
-		'Aug' => $lang_global['aug'],
-		'Sep' => $lang_global['sep'],
-		'Oct' => $lang_global['oct'],
-		'Nov' => $lang_global['nov'],
-		'Dec' => $lang_global['dec']
-	);
-
-	$return = str_replace( array_keys( $replaces ), array_values( $replaces ), $return );
-    
     $replaces = array(
-		'Sunday' => $lang_global['sunday'],
-		'Monday' => $lang_global['monday'],
-		'Tuesday' => $lang_global['tuesday'],
-		'Wednesday' => $lang_global['wednesday'],
-		'Thursday' => $lang_global['thursday'],
-		'Friday' => $lang_global['friday'],
-		'Saturday' => $lang_global['saturday'],
-		'January' => $lang_global['january'],
-		'February' => $lang_global['february'],
-		'March' => $lang_global['march'],
-		'April' => $lang_global['april'],
-		'May' => $lang_global['may'],
-		'June' => $lang_global['june'],
-		'July' => $lang_global['july'],
-		'August' => $lang_global['august'],
-		'September' => $lang_global['september'],
-		'October' => $lang_global['october'],
-		'November' => $lang_global['november'],
-		'December' => $lang_global['december']
-	);
-	return str_ireplace( array_keys( $replaces ), array_values( $replaces ), $return );
+        '/\[Sun\](\W|$)/' => $lang_global['sun'] . "$1",
+        '/\[Mon\](\W|$)/' => $lang_global['mon'] . "$1",
+        '/\[Tue\](\W|$)/' => $lang_global['tue'] . "$1",
+        '/\[Wed\](\W|$)/' => $lang_global['wed'] . "$1",
+        '/\[Thu\](\W|$)/' => $lang_global['thu'] . "$1",
+        '/\[Fri\](\W|$)/' => $lang_global['fri'] . "$1",
+        '/\[Sat\](\W|$)/' => $lang_global['sat'] . "$1",
+        '/\[Jan\](\W|$)/' => $lang_global['jan'] . "$1",
+        '/\[Feb\](\W|$)/' => $lang_global['feb'] . "$1",
+        '/\[Mar\](\W|$)/' => $lang_global['mar'] . "$1",
+        '/\[Apr\](\W|$)/' => $lang_global['apr'] . "$1",
+        '/\[May\](\W|$)/' => $lang_global['may2'] . "$1",
+        '/\[Jun\](\W|$)/' => $lang_global['jun'] . "$1",
+        '/\[Jul\](\W|$)/' => $lang_global['jul'] . "$1",
+        '/\[Aug\](\W|$)/' => $lang_global['aug'] . "$1",
+        '/\[Sep\](\W|$)/' => $lang_global['sep'] . "$1",
+        '/\[Oct\](\W|$)/' => $lang_global['oct'] . "$1",
+        '/\[Nov\](\W|$)/' => $lang_global['nov'] . "$1",
+        '/\[Dec\](\W|$)/' => $lang_global['dec'] . "$1",
+        '/Sunday(\W|$)/' => $lang_global['sunday'] . "$1",
+        '/Monday(\W|$)/' => $lang_global['monday'] . "$1",
+        '/Tuesday(\W|$)/' => $lang_global['tuesday'] . "$1",
+        '/Wednesday(\W|$)/' => $lang_global['wednesday'] . "$1",
+        '/Thursday(\W|$)/' => $lang_global['thursday'] . "$1",
+        '/Friday(\W|$)/' => $lang_global['friday'] . "$1",
+        '/Saturday(\W|$)/' => $lang_global['saturday'] . "$1",
+        '/January(\W|$)/' => $lang_global['january'] . "$1",
+        '/February(\W|$)/' => $lang_global['february'] . "$1",
+        '/March(\W|$)/' => $lang_global['march'] . "$1",
+        '/April(\W|$)/' => $lang_global['april'] . "$1",
+        '/May(\W|$)/' => $lang_global['may'] . "$1",
+        '/June(\W|$)/' => $lang_global['june'] . "$1",
+        '/July(\W|$)/' => $lang_global['july'] . "$1",
+        '/August(\W|$)/' => $lang_global['august'] . "$1",
+        '/September(\W|$)/' => $lang_global['september'] . "$1",
+        '/October(\W|$)/' => $lang_global['october'] . "$1",
+        '/November(\W|$)/' => $lang_global['november'] . "$1",
+        '/December(\W|$)/' => $lang_global['december'] . "$1" );
+
+    return preg_replace( array_keys( $replaces ), array_values( $replaces ), $return );
 }
 
 /**
