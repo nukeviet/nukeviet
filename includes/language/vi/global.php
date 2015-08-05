@@ -258,6 +258,7 @@ $lang_global['theme_type_r'] = 'Tự động';
 $lang_global['theme_type_d'] = 'Máy Tính';
 $lang_global['theme_type_m'] = 'Di động';
 $lang_global['theme_type_chose'] = 'Click để chuyển sang giao diện %s';
+$lang_global['theme_type_chose2'] = 'Chuyển giao diện';
 $lang_global['theme_type_select'] = 'Chế độ giao diện đang hiển thị';
 $lang_global['ftp_err_connect'] = 'Lỗi: Không thể kết nối với FTP server';
 $lang_global['ftp_err_login'] = 'Lỗi: Đăng nhập thất bại';

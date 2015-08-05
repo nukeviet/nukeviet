@@ -902,17 +902,16 @@ header.first-child {
 }
 
 /* theme-change */
-
-.theme-change {
-    text-align: center
+.theme-change{
+    padding: 10px 0;
+    font-size: 11px;
+    border-bottom: 1px solid #bbb
 }
-
-.theme-change span {
-    display:none;
-}
-
-.theme-change .fa-lg {
-    font-size:14px;
+.theme-change span + span:before {
+    content: "|";
+    display:inline-block;
+    margin-left: 5px;
+    margin-right:5px
 }
 
 /* WinHelp */

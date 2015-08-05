@@ -928,6 +928,15 @@ a.btn {
     display:none;
 }
 
+/* block counter */
+.counter.display-table{
+    width:100%
+}
+
+.counter span + span{
+    text-align: right;
+}
+
 /* guestBlock */
 
 .guestBlock {
