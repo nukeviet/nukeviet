@@ -223,8 +223,7 @@ $(function() {
     	selector: "[data-toggle=tooltip]",
     	container: "body"
     });
-    $("[data-rel='tooltip'][data-content!=''][data-position!='']").removeAttr("title").tooltip({
-    	placement: $(this).data("position"),
+    $("[data-rel='tooltip'][data-content!='']").removeAttr("title").tooltip({
     	container: "body",
     	html: !0,
     	title: function() {

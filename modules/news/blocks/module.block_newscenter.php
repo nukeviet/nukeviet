@@ -68,6 +68,7 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 		{
 			$xtpl = new XTemplate( 'block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 			$xtpl->assign( 'lang', $lang_module );
+            $xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );
 			$i = 1;
 			foreach( $list as $row )
 			{
@@ -153,15 +154,14 @@ if( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 					{
 						$xtpl->assign( 'TITLE', 'title="' . $row['title'] . '"' );
 					}
+                    
+                    if( $block_config['showtooltip'] )
+        			{
+        				$xtpl->parse( 'main.othernews.tooltip' );
+        			}
 
 					$xtpl->parse( 'main.othernews' );
 				}
-			}
-
-			if( $block_config['showtooltip'] )
-			{
-				$xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );
-				$xtpl->parse( 'main.tooltip' );
 			}
 
 			$xtpl->parse( 'main' );
