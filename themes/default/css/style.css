@@ -601,9 +601,14 @@ a.btn {
 
 .third-nav .current-time {
     display:inline-block;
-    float:right;
+    vertical-align:middle;
     margin-right:10px;
-    margin-top:-25px;
+    line-height:37px
+}
+
+.third-nav ul + .current-time{
+    float:right;
+    margin-top:-35px
 }
 
 .headerSearch {

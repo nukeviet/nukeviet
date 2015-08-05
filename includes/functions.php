@@ -668,29 +668,6 @@ function nv_date( $format, $time = 0 )
 	$return = date( $format, $time );
 
 	$replaces = array(
-		'Sunday' => $lang_global['sunday'],
-		'Monday' => $lang_global['monday'],
-		'Tuesday' => $lang_global['tuesday'],
-		'Wednesday' => $lang_global['wednesday'],
-		'Thursday' => $lang_global['thursday'],
-		'Friday' => $lang_global['friday'],
-		'Saturday' => $lang_global['saturday'],
-		'January' => $lang_global['january'],
-		'February' => $lang_global['february'],
-		'March' => $lang_global['march'],
-		'April' => $lang_global['april'],
-		'May' => $lang_global['may'],
-		'June' => $lang_global['june'],
-		'July' => $lang_global['july'],
-		'August' => $lang_global['august'],
-		'September' => $lang_global['september'],
-		'October' => $lang_global['october'],
-		'November' => $lang_global['november'],
-		'December' => $lang_global['december']
-	);
-	$return = str_replace( array_keys( $replaces ), array_values( $replaces ), $return );
-
-	$replaces = array(
 		'Sun' => $lang_global['sun'],
 		'Mon' => $lang_global['mon'],
 		'Tue' => $lang_global['tue'],
@@ -712,7 +689,30 @@ function nv_date( $format, $time = 0 )
 		'Dec' => $lang_global['dec']
 	);
 
-	return str_replace( array_keys( $replaces ), array_values( $replaces ), $return );
+	$return = str_replace( array_keys( $replaces ), array_values( $replaces ), $return );
+    
+    $replaces = array(
+		'Sunday' => $lang_global['sunday'],
+		'Monday' => $lang_global['monday'],
+		'Tuesday' => $lang_global['tuesday'],
+		'Wednesday' => $lang_global['wednesday'],
+		'Thursday' => $lang_global['thursday'],
+		'Friday' => $lang_global['friday'],
+		'Saturday' => $lang_global['saturday'],
+		'January' => $lang_global['january'],
+		'February' => $lang_global['february'],
+		'March' => $lang_global['march'],
+		'April' => $lang_global['april'],
+		'May' => $lang_global['may'],
+		'June' => $lang_global['june'],
+		'July' => $lang_global['july'],
+		'August' => $lang_global['august'],
+		'September' => $lang_global['september'],
+		'October' => $lang_global['october'],
+		'November' => $lang_global['november'],
+		'December' => $lang_global['december']
+	);
+	return str_ireplace( array_keys( $replaces ), array_values( $replaces ), $return );
 }
 
 /**

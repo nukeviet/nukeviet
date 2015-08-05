@@ -198,24 +198,27 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->assign( 'THEME_SEARCH_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&q=' );
 
 		// Breadcrumbs
-        $array_mod_title_copy = $array_mod_title;
-        if ( $global_config['rewrite_op_mod'] != $module_name )
+        if( ! $home )
         {
-            $arr_cat_title_i = array(
-                'catid' => 0,
-                'title' => $module_info['custom_title'],
-                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
-            array_unshift( $array_mod_title_copy, $arr_cat_title_i );
-        }
-        if ( ! empty( $array_mod_title_copy ) )
-        {
-            foreach ( $array_mod_title_copy as $arr_cat_title_i )
+            $array_mod_title_copy = $array_mod_title;
+            if ( $global_config['rewrite_op_mod'] != $module_name )
             {
-                $xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
-                $xtpl->parse( 'main.breadcrumbs.loop' );
+                $arr_cat_title_i = array(
+                    'catid' => 0,
+                    'title' => $module_info['custom_title'],
+                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
+                array_unshift( $array_mod_title_copy, $arr_cat_title_i );
             }
+            if ( ! empty( $array_mod_title_copy ) )
+            {
+                foreach ( $array_mod_title_copy as $arr_cat_title_i )
+                {
+                    $xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
+                    $xtpl->parse( 'main.breadcrumbs.loop' );
+                }
+            }
+            $xtpl->parse( 'main.breadcrumbs' );
         }
-        $xtpl->parse( 'main.breadcrumbs' );
 
 		// Statistics image
 		$theme_stat_img = '';
