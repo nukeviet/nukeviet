@@ -203,7 +203,6 @@ $lang_module['weight'] = 'Position';
 $lang_module['config'] = 'Configuration du module';
 $lang_module['password_simple'] = 'Les mots de passe simples sont interdits';
 $lang_module['delete_group_system'] = 'Erreur: Ne peut pas supprimer ce compte car c\'est le compte d\'administration du site';
-$lang_module['allow_openid'] = 'Permettre d\'utiliser Oauth, OpenID pour la connexion, l\'enregistrement';
 $lang_module['openid_servers'] = 'Les fournisseur d\'Oauth, OpenID est accepté';
 $lang_module['openid_processing'] = 'Le mode est par défaut de traiter après la connexion au OpenID';
 $lang_module['openid_processing_0'] = 'Option de choisir la méthode de traiter';

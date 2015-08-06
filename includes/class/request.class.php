@@ -407,11 +407,7 @@ class Request
 			header( 'Location: ' . $this->site_url );
 			exit();
 		}
-		if( sizeof( $_POST ) and $this->referer_key !== 1 )
-		{
-			header( 'Location: ' . $this->site_url );
-			exit();
-		}
+
 		$user_agent = ( string )$this->get_Env( 'HTTP_USER_AGENT' );
 		$user_agent = substr( htmlspecialchars( $user_agent ), 0, 255 );
 		if( empty( $user_agent ) or $user_agent == '-' ) $user_agent = 'none';

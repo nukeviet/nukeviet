@@ -27,24 +27,12 @@ function nv_page_main( $row, $ab_links, $content_comment)
 
 	if( $row['socialbutton'] )
 	{
-		if( ! defined( 'FACEBOOK_JSSDK' ) )
+		if( ! empty( $page_config['facebookapi']  ) )
 		{
-			$xtpl->assign( 'FACEBOOK_LANG', ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US' );
-			if( ! empty( $page_config['facebookapi']  ) )
-			{
-				$xtpl->assign( 'FACEBOOK_APPID', $page_config['facebookapi'] );
-				$meta_property['fb:app_id'] = $page_config['facebookapi'];
-			}
-
-			$xtpl->parse( 'main.facebookjssdk' );
-
-			define( 'FACEBOOK_JSSDK', true );
-		}
-
-		if( defined( 'FACEBOOK_JSSDK' ) )
-		{
+			$meta_property['fb:app_id'] = $page_config['facebookapi'];
+			$meta_property['og:locale'] = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
+			
 			$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
-
 			$xtpl->parse( 'main.socialbutton.facebook' );
 		}
 

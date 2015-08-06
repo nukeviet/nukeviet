@@ -1,17 +1,5 @@
 <!-- BEGIN: main -->
 <div class="page">
-	<!-- BEGIN: facebookjssdk -->
-	<div id="fb-root"></div>
-	<script type="text/javascript">
-	(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return;
-		js = d.createElement(s); js.id = id;
-		js.src = "//connect.facebook.net/{FACEBOOK_LANG}/all.js#xfbml=1&appId={FACEBOOK_APPID}";
-		fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));
-	</script>
-	<!-- END: facebookjssdk -->
 	<h1>{CONTENT.title}</h1>
 	<!-- BEGIN: socialbutton -->
 	<div class="well well-sm">
@@ -23,18 +11,9 @@
 			<!-- END: facebook -->
 			<li>
 				<div class="g-plusone" data-size="medium"></div>
-				<script type="text/javascript">
-				  window.___gcfg = {lang: nv_sitelang};
-				  (function() {
-					var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-					po.src = 'https://apis.google.com/js/plusone.js';
-					var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-				  })();
-				</script>
 			</li>
 			<li>
 				<a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
-				<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 			</li>
 		</ul>
 	</div>

@@ -7,9 +7,9 @@
  */
 
 @font-face {
-    font-family:'NukevietIcons';
-    src:url('../../default/fonts/NukevietIcons.eot?avyewf');
-    src:url('../../default/fonts/NukevietIcons.eot?#iefixavyewf') format('embedded-opentype'),url('../../default/fonts/NukevietIcons.ttf?avyewf') format('truetype'),url('../../default/fonts/NukevietIcons.woff?avyewf') format('woff'),url('../../default/fonts/NukevietIcons.svg?avyewf#NukevietIcons') format('svg');
+    font-family:'NukeVietIcons';
+    src:url('../../default/fonts/NukeVietIcons.eot?avyewf');
+    src:url('../../default/fonts/NukeVietIcons.eot?#iefixavyewf') format('embedded-opentype'),url('../../default/fonts/NukeVietIcons.ttf?avyewf') format('truetype'),url('../../default/fonts/NukeVietIcons.woff?avyewf') format('woff'),url('../../default/fonts/NukeVietIcons.svg?avyewf#NukeVietIcons') format('svg');
     font-weight:normal;
     font-style:normal;
 }
@@ -17,7 +17,7 @@
 [class^="icon-"],
 [class*=" icon-"] {
     display:inline-block;
-    font:normal normal normal 14px/1 NukevietIcons;
+    font:normal normal normal 14px/1 NukeVietIcons;
     font-size:inherit;
     transform:translate(0,0);
     text-rendering:auto;
@@ -482,14 +482,20 @@ blockquote {
 
 /* Global */
 
-html {
+html,
+body {
+    width:100%;
     height:100%;
+    margin:0;
+    padding:0
 }
 
 body {
-    height:100%;
-    padding:0;
-    margin:0;
+    color: #333;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
     background:#ddd url(../images/bg.png) repeat top left;
 }
 
@@ -505,6 +511,22 @@ a:hover {
     color:#102D4C;
 }
 
+a.dimgray  {
+    color:#696969;
+}
+
+a.dimgray:hover {
+    color:#205FA0;
+}
+
+a.black  {
+    color:#333;
+}
+
+a.black:hover {
+    color:#205FA0;
+}
+
 iframe {
     border:0;
 }
@@ -514,10 +536,49 @@ h2,
 h3,
 h4,
 h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6{
+    margin:0;
+    padding:0;
+    line-height: 1.5
+}
+h1,
+h2,
+h3,
+h4,
+h5,
 h6 {
-    margin-top:0;
-    margin-bottom:10px;
-    line-height:22px;
+    font-weight:700;
+}
+h1,
+.h1{
+    font-size:18px;
+}
+h2,
+.h2{
+    font-size:16px;
+}
+
+h3,
+.h3{
+    font-size:14px;
+}
+h4,
+.h4{
+    font-size:13px;
+}
+h5,
+.h5{
+    font-size:12px;
+}
+h6,
+.h6{
+    font-size:11px;
 }
 
 .m-bottom {
@@ -1116,6 +1177,34 @@ header.first-child {
     padding:0;
 }
 
+/* sub-list-icon */
+.sub-list-icon > li:first-child > *:before,.cat-icon:before{
+    content: " \f114 ";
+    font-family:FontAwesome;
+    font-size: inherit;
+    font-weight: 400;
+    text-decoration: none;
+    display: inline-block;
+    vertical-align:middle;
+    margin-right:4px;
+    margin-top: -3px;
+}
+.sub-list-icon > li + li > *:before{
+    content: " \f10c ";
+    font-family:FontAwesome;
+    font-size: 8px;
+    font-weight: 400;
+    text-decoration: none;
+    display: inline-block;
+    vertical-align:middle;
+    margin-right:10px
+}
+.sub-list-icon > li:first-child + li > *:before{
+    content: " \f101 ";
+    font-size: 12px;
+    margin-top: -2px;
+}
+
 /* Form */
 
 input[type="checkbox"],
@@ -1188,8 +1277,11 @@ input[type=radio]:checked:before {
 }
 
 .img-thumbnail {
-    height:auto !important;
-    padding:0;
+    background-color: #d0d0d0;
+    border: none;
+    border-radius: 3px;
+    max-width: 100%;
+    padding: 1px;
 }
 
 figure.image {
@@ -1230,14 +1322,6 @@ figure.image > figcaption {
 .navbar-inverse .navbar-nav > .open > a:focus {
     color:#ffffff;
     background-color:#043C72;
-}
-
-.list-inline .hidden-xs a {
-    color:#848484;
-}
-
-.list-inline .hidden-xs a:hover {
-    color:#0066cc;
 }
 
 #sb-container {

@@ -45,12 +45,6 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'NV_CURRENTTIME', nv_date( $global_config['date_pattern'] . ', ' . $global_config['time_pattern'], NV_CURRENTTIME ) );
 	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
 
-	$xtpl->assign( 'LANG_TIMEOUTSESS_NOUSER', $lang_global['timeoutsess_nouser'] );
-	$xtpl->assign( 'LANG_TIMEOUTSESS_CLICK', $lang_global['timeoutsess_click'] );
-	$xtpl->assign( 'LANG_TIMEOUTSESS_SEC', $lang_global['sec'] );
-	$xtpl->assign( 'LANG_TIMEOUTSESS_TIMEOUT', $lang_global['timeoutsess_timeout'] );
-	$xtpl->assign( 'MSGBEFOREUNLOAD', $lang_global['msgbeforeunload'] );
-
 	// System variables
     $xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title( false ) );
 
