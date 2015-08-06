@@ -38,13 +38,6 @@ $(document).ready(function(){
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl=' + CFG.cdndl;
 	});
 	
-	$('#ssl_https').change(function() {
-		if ($(this).is(":checked")) {
-			var returnVal = confirm(LANG.note_ssl);
-			$(this).attr("checked", returnVal);
-		}
-	});
-	
 	// Smtp
 	$("input[name=mailer_mode]").click(function() {
 		var type = $(this).val();
@@ -138,5 +131,21 @@ $(document).ready(function(){
 				$('#autodetectftp').removeAttr('disabled');
 			}
 		});
+	});
+	
+	// 
+	$('#ssl_https').change(function(){
+		var mode = $(this).val();
+		
+		if( mode != 0 && ! confirm(LANG.note_ssl) ){
+			$(this).val('0');
+			return;
+		}
+		
+		if( mode == '3' ){
+			$('#ssl_https_modules').removeClass('hidden');
+		}else{
+			$('#ssl_https_modules').addClass('hidden');
+		}
 	});
 });

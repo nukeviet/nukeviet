@@ -17,9 +17,9 @@ $lang_translator['copyright'] = 'phuthanh.nguyen215@gmail.com';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
+$lang_block['catid'] = 'Sujet';
 $lang_block['numrow'] = 'Nombre d\'articles affichés';
 $lang_block['type'] = 'Méthode d\'affichage';
-$lang_block['catid'] = 'Sujet';
 $lang_block['showtooltip'] = 'Affichage de tooltip';
 $lang_block['tooltip_position'] = 'Position';
 $lang_block['tooltip_position_top'] = 'Au dessus';

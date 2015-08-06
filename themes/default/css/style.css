@@ -394,6 +394,47 @@ input[type=url].required {
     font-weight:normal !important;
 }
 
+figure {
+    background: #949494;
+    padding: 3px;
+    display: block;
+    float: left;
+    margin: 5px 10px 10px 0;
+    text-align: center
+}
+figure.left{
+    float: left;
+    margin: 5px 10px 10px 0;
+}
+figure.right{
+    float: right;
+    margin: 5px 0 10px 10px;
+}
+figure.center{
+    float: none;
+    background: transparent;
+    margin: 0 auto 10px;
+    padding-top: 0;
+    text-align:center
+}
+figure.noncaption{
+    background: transparent;
+    padding: 0;
+}
+figcaption{
+    text-align: center;
+    margin-top: 5px;
+    font-weight: 700;
+}
+figure figcaption {
+    font-size: 12px;
+    color: #fff;
+    font-weight: normal;
+}
+figure.center figcaption {
+    color: inherit;
+}
+
 /* Global */
 
 html,
@@ -489,6 +530,22 @@ h5,
 h6,
 .h6{
     font-size:11px;
+}
+
+.title{
+    font-size:22px
+}
+
+.hometext{
+    font-weight: 700
+}
+
+.bodytext {
+    word-break:keep-all
+}
+
+.bodytext p{
+    margin-bottom: 15px !important
 }
 
 iframe {
@@ -1504,7 +1561,7 @@ a.btn {
 /* panel-body */
 
 .panel-body h3 {
-    color:#428BCA;
+    color:#205FA0;
 }
 
 .panel-body p {

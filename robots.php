@@ -79,7 +79,7 @@ foreach( $robots_other as $key => $value )
 		$contents[] = 'Disallow: ' . $key;
 	}
 }
-$contents[] = 'Sitemap: http' . ( $global_config['ssl_https'] ? 's' : '' ) . '://' . $host . $base_siteurl . 'sitemap.xml';
+$contents[] = 'Sitemap: http' . ( $global_config['ssl_https'] == 1 ? 's' : '' ) . '://' . $host . $base_siteurl . 'sitemap.xml';
 $contents = implode( "\n", $contents );
 
 header( 'Content-Type: text/plain; charset=utf-8' );

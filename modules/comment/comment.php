@@ -221,6 +221,7 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
 	$xtpl->assign( 'LANG', $lang_module_comment );
+    $xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $template );
 	$xtpl->assign( 'CHECKSS_COMM', $checkss );
 	$xtpl->assign( 'MODULE_COMM', $module );
@@ -258,8 +259,13 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 
 		$xtpl->parse( 'main.sortcomm' );
 	}
-
-	$xtpl->assign( 'COMMENTCONTENT', $comment );
+    
+    if( !empty( $comment ) )
+    {
+        $xtpl->assign( 'COMMENTCONTENT', $comment );
+        $xtpl->parse( 'main.showContent' );
+    }
+	
 	$allowed_comm = nv_user_in_groups( $allowed_comm );
 	if( $allowed_comm )
 	{
@@ -345,13 +351,13 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 
 	$template = file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl' ) ? $global_config['module_theme'] : 'default';
 
-	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
-	$xtpl->assign( 'TEMPLATE', $template );
-	$xtpl->assign( 'LANG', $lang_module_comment );
-
 	if( ! empty( $comment_array['comment'] ) )
 	{
-		foreach( $comment_array['comment'] as $comment_array_i )
+		$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
+        $xtpl->assign( 'TEMPLATE', $template );
+        $xtpl->assign( 'LANG', $lang_module_comment );
+
+        foreach( $comment_array['comment'] as $comment_array_i )
 		{
 			if( ! empty( $comment_array_i['subcomment'] ) )
 			{
@@ -397,10 +403,13 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 		{
 			$xtpl->assign( 'PAGE', $comment_array['page'] );
 		}
+        $xtpl->parse( 'main' );
+        return $xtpl->text( 'main' );
 	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
+    else
+    {
+        return '';
+    }
 }
 
 function nv_comment_module_data_reply( $module, $comment_array, $is_delete )
