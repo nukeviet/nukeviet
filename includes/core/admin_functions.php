@@ -208,7 +208,8 @@ function nv_save_file_config_global()
 	$content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
 	$content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . floatval( $upload_max_filesize ) . ");\n";
 
-	if( $config_variable['openid_mode'] )
+
+	if( ! empty( $config_variable['openid_servers'] ) )
 	{
 		$content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
 	}
@@ -230,11 +231,6 @@ function nv_save_file_config_global()
 	$config_variable['error_send_email'] = $config_variable['error_send_email'];
 
 	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'openid_servers', 'allow_request_mods', 'config_sso', 'ssl_https_modules' );
-
-	if( empty( $config_variable['openid_servers'] ) )
-	{
-		$config_variable['openid_mode'] = 0;
-	}
 
 	if( $config_variable['is_user_forum'] )
 	{
