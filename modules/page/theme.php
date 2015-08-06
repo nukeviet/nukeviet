@@ -24,6 +24,11 @@ function nv_page_main( $row, $ab_links, $content_comment)
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'CONTENT', $row );
+    
+    if( !empty( $row['description'] ) )
+    {
+        $xtpl->parse( 'main.description' );
+    }
 
 	if( $row['socialbutton'] )
 	{
@@ -41,6 +46,10 @@ function nv_page_main( $row, $ab_links, $content_comment)
 
 	if( ! empty( $row['image'] ) )
 	{
+        if( ! empty( $row['imagealt'] ) )
+        {
+            $xtpl->parse( 'main.image.alt' );
+        }
 		$xtpl->parse( 'main.image' );
 	}
 

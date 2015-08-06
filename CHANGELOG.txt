@@ -1,10 +1,26 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 NUKEVIET 4.0.22 (Developing)
+- Restructuring of NukeViet directory
+- Add Language Français, thank Nguyễn Phú Thành.
+- Add module free_content
+- Update theme default, mobile_default
+- Change the sample data into the module
+- Add a management area for google fonts
+- Update SSL setting
 - Optimize in-line javascript in tpl
+- Optime social sharing
+- Move config statistics to module webtools
 - Move javascript from module to theme
 - Remove code zip file css, javascript.
+- config: Recorded of system error
 - Install: check collation database
+- fix rewrite for XAMPP 5.6.8 (PHP 5.6.8)
+- Add QR-code block
+- Remove shadowbox library
+- Update CKEditor 4.5.2
+- Update oAuthLib
+- Update FontAwesome 4.4.0
 
 NUKEVIET 4.0.21 (Open beta 7)
 - Add data-show for javascript
