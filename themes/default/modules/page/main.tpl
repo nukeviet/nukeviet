@@ -4,11 +4,9 @@
 	<!-- BEGIN: socialbutton -->
 	<div class="well well-sm">
 		<ul class="nv-social-share">
-			<!-- BEGIN: facebook -->
 			<li class="facebook">
 				<div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
 			</li>
-			<!-- END: facebook -->
 			<li>
 				<div class="g-plusone" data-size="medium"></div>
 			</li>

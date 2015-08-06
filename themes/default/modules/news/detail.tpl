@@ -84,8 +84,7 @@
 		<hr />
         <!-- BEGIN: socialbutton -->
         <div class="socialicon pull-left">
-        	<!-- BEGIN: facebook --><div style="width:60px" class="fb-share-button" data-href="{SELFURL}" data-layout="button">&nbsp;</div><!-- END: facebook -->
-	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
+			<div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
 	        <div class="g-plusone" data-size="medium"></div>
 	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
 	    </div>
