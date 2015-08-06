@@ -22,7 +22,7 @@ function redict_link( $lang_view, $lang_back, $nv_redirect )
 {
 	$contents = "<div class=\"frame\">";
 	$contents .= $lang_view . "<br /><br />\n";
-	$contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+	$contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
 	$contents .= "<a href=\"" . $nv_redirect . "\">" . $lang_back . "</a>";
 	$contents .= "</div>";
 	$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . $nv_redirect . "\" />";
