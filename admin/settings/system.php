@@ -107,6 +107,19 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['my_domains'] = implode( ',', $array_config_global['my_domains'] );
 
 		$array_config_global['ssl_https'] = $nv_Request->get_int( 'ssl_https', 'post' );
+		$array_config_global['ssl_https_modules'] = $nv_Request->get_array( 'ssl_https_modules', 'post', array() );
+		$array_config_global['ssl_https_modules'] = array_intersect( $array_config_global['ssl_https_modules'], array_keys( $site_mods ) );
+		$array_config_global['ssl_https_modules'] = empty( $array_config_global['ssl_https_modules'] ) ? '' : implode( ',', $array_config_global['ssl_https_modules'] );
+		
+		if( $array_config_global['ssl_https'] < 0 or $array_config_global['ssl_https'] > 3 or ( empty( $array_config_global['ssl_https_modules'] ) and $array_config_global['ssl_https'] == 3 ) )
+		{
+			$array_config_global['ssl_https'] = 0;
+		}
+		if( $array_config_global['ssl_https'] != 3 )
+		{
+			$array_config_global['ssl_https_modules'] = '';
+		}
+		
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
 
@@ -205,7 +218,6 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	}
 
 	$lang_multi = $array_config_global['lang_multi'];
-	$xtpl->assign( 'CHECKED_SSL_HTTPS', ( $array_config_global['ssl_https'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_GZIP_METHOD', ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_LANG_MULTI', ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_NOTIFI_ACTIVE', ( $array_config_global['notification_active'] ) ? ' checked="checked"' : '' );
@@ -261,6 +273,34 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		$xtpl->assign( 'TIMEZONELANGVALUE', $site_timezone_i );
 		$xtpl->parse( 'main.system.opsite_timezone' );
 	}
+	
+	for( $i = 0; $i <= 3; $i ++ )
+	{
+		$ssl_https = array(
+			'key' => $i,
+			'title' => $lang_module['ssl_https_' . $i],
+			'selected' => $i == $array_config_global['ssl_https'] ? ' selected="selected"' : ''
+		);
+		
+		$xtpl->assign( 'SSL_HTTPS', $ssl_https );
+		$xtpl->parse( 'main.system.ssl_https' );
+	}
+	
+	if( intval( $array_config_global['ssl_https'] ) !== 3 )
+	{
+		$xtpl->parse( 'main.system.ssl_https_modules_hide' );
+	}
+	
+	$array_config_global['ssl_https_modules'] = empty( $array_config_global['ssl_https_modules'] ) ? array() : ( is_array( $array_config_global['ssl_https_modules'] ) ? array_intersect( $array_config_global['ssl_https_modules'], array_keys( $site_mods ) ) : array_intersect( array_map( "trim", explode( ',', $array_config_global['ssl_https_modules'] ) ), array_keys( $site_mods ) ) );
+
+	foreach( $site_mods as $_mod_title => $_mod_values )
+	{
+		$xtpl->assign( 'MOD_TITLE', $_mod_title );
+		$xtpl->assign( 'MOD_CHECKED', in_array( $_mod_title, $array_config_global['ssl_https_modules'] ) ? ' checked="checked"' : '' );
+		
+		$xtpl->parse( 'main.system.ssl_https_modules' );
+	}
+	
 	$xtpl->parse( 'main.system' );
 }
 
