@@ -51,7 +51,7 @@
 					<td>
 						<div class="row">
 							<div class="col-xs-8">
-								<select id="ssl_https" name="ssl_https" class="form-control">
+								<select id="ssl_https" name="ssl_https" class="form-control" data-val="{DATA.ssl_https}">
 									<!-- BEGIN: ssl_https -->
 									<option value="{SSL_HTTPS.key}"{SSL_HTTPS.selected}>{SSL_HTTPS.title}</option>
 									<!-- END: ssl_https -->
@@ -59,13 +59,7 @@
 							</div>
 							<div class="col-xs-16">
 								<div class="row<!-- BEGIN: ssl_https_modules_hide --> hidden<!-- END: ssl_https_modules_hide -->" id="ssl_https_modules">
-									<!-- BEGIN: ssl_https_modules -->
-									<div class="col-xs-6">
-										<label>
-											<input type="checkbox" value="{MOD_TITLE}" name="ssl_https_modules[]"{MOD_CHECKED}> {MOD_TITLE}
-										</label>
-									</div>
-									<!-- END: ssl_https_modules -->
+									<a href="{LINK_SSL_MODULES}" target="_blank">{LANG.note_ssl_modules}</a>
 								</div>
 							</div>
 						</div>

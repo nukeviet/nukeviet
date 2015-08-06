@@ -135,9 +135,10 @@ $(document).ready(function(){
 	
 	// 
 	$('#ssl_https').change(function(){
+		var val = $(this).data('val');
 		var mode = $(this).val();
 		
-		if( mode != 0 && ! confirm(LANG.note_ssl) ){
+		if( mode != 0 && val == 0 && ! confirm(LANG.note_ssl) ){
 			$(this).val('0');
 			return;
 		}

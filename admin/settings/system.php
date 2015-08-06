@@ -107,17 +107,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['my_domains'] = implode( ',', $array_config_global['my_domains'] );
 
 		$array_config_global['ssl_https'] = $nv_Request->get_int( 'ssl_https', 'post' );
-		$array_config_global['ssl_https_modules'] = $nv_Request->get_array( 'ssl_https_modules', 'post', array() );
-		$array_config_global['ssl_https_modules'] = array_intersect( $array_config_global['ssl_https_modules'], array_keys( $site_mods ) );
-		$array_config_global['ssl_https_modules'] = empty( $array_config_global['ssl_https_modules'] ) ? '' : implode( ',', $array_config_global['ssl_https_modules'] );
 		
-		if( $array_config_global['ssl_https'] < 0 or $array_config_global['ssl_https'] > 3 or ( empty( $array_config_global['ssl_https_modules'] ) and $array_config_global['ssl_https'] == 3 ) )
+		if( $array_config_global['ssl_https'] < 0 or $array_config_global['ssl_https'] > 3 )
 		{
 			$array_config_global['ssl_https'] = 0;
-		}
-		if( $array_config_global['ssl_https'] != 3 )
-		{
-			$array_config_global['ssl_https_modules'] = '';
 		}
 		
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
@@ -290,16 +283,7 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	{
 		$xtpl->parse( 'main.system.ssl_https_modules_hide' );
 	}
-	
-	$array_config_global['ssl_https_modules'] = empty( $array_config_global['ssl_https_modules'] ) ? array() : ( is_array( $array_config_global['ssl_https_modules'] ) ? array_intersect( $array_config_global['ssl_https_modules'], array_keys( $site_mods ) ) : array_intersect( array_map( "trim", explode( ',', $array_config_global['ssl_https_modules'] ) ), array_keys( $site_mods ) ) );
-
-	foreach( $site_mods as $_mod_title => $_mod_values )
-	{
-		$xtpl->assign( 'MOD_TITLE', $_mod_title );
-		$xtpl->assign( 'MOD_CHECKED', in_array( $_mod_title, $array_config_global['ssl_https_modules'] ) ? ' checked="checked"' : '' );
-		
-		$xtpl->parse( 'main.system.ssl_https_modules' );
-	}
+	$xtpl->assign( 'LINK_SSL_MODULES', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&show_ssl_modules=1' );
 	
 	$xtpl->parse( 'main.system' );
 }

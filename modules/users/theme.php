@@ -260,6 +260,7 @@ function user_login( $gfx_chk, $array_login )
 	$xtpl->assign( 'USER_REGISTER', $user_register );
 	$xtpl->assign( 'USER_LOSTPASS', $user_lostpass );
 	$xtpl->assign( 'LANG', $lang_module );
+    $xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'DATA', $array_login );
 
 	if( $gfx_chk )

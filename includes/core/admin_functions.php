@@ -230,7 +230,7 @@ function nv_save_file_config_global()
 	$config_variable['error_log_fileext'] = NV_LOGS_EXT;
 	$config_variable['error_send_email'] = $config_variable['error_send_email'];
 
-	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'openid_servers', 'allow_request_mods', 'config_sso', 'ssl_https_modules' );
+	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'openid_servers', 'allow_request_mods', 'config_sso' );
 
 	if( $config_variable['is_user_forum'] )
 	{
