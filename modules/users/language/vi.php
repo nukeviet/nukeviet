@@ -74,7 +74,6 @@ $lang_module['avata_news_copy_error'] = 'Không thể lưu hình đại diện';
 $lang_module['birthday'] = 'Ngày tháng năm sinh';
 $lang_module['showmail'] = 'Hiển thị email';
 $lang_module['login'] = 'Thành viên đăng nhập';
-$lang_module['login_info'] = 'Hãy điền đầy đủ thông tin vào những ô dưới đây';
 $lang_module['login_submit'] = 'Đăng nhập';
 $lang_module['user_info'] = 'Thông tin thành viên';
 $lang_module['regdate'] = 'Ngày tham gia';
