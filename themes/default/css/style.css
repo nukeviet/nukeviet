@@ -1281,7 +1281,8 @@ a.btn {
     font-size:15px;
     letter-spacing:0.5px;
     text-transform:uppercase;
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    color:#205FA0;
 }
 
 #footer h3 a {
@@ -1562,10 +1563,6 @@ a.btn {
 }
 
 /* panel-body */
-
-.panel-body h3 {
-    color:#205FA0;
-}
 
 .panel-body p {
     margin:0;
