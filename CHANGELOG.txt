@@ -1,6 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
-NUKEVIET 4.0.22 (Developing)
+
+NUKEVIET 4.0.22 (Open beta 8)
 - Restructuring of NukeViet directory
 - Add Language Français, thank Nguyễn Phú Thành.
 - Add module free_content
