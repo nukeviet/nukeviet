@@ -36,6 +36,7 @@ $lang_global['admin_logout_question'] = 'Bạn thực sự muốn thoát khỏi 
 $lang_global['admin_ipincorrect'] = 'Bạn đang truy cập bằng IP: %s. Rất tiếc IP này không được cấp phép truy cập vào khu vực quản lý site!';
 $lang_global['ok'] = 'OK';
 $lang_global['cancel'] = 'Hủy bỏ';
+$lang_global['reset'] = 'Thiết lập lại';
 $lang_global['fail'] = 'Thất bại';
 $lang_global['firewallsystem'] = 'Administrators Section';
 $lang_global['firewallincorrect'] = 'Hệ thống tường lửa đã chặn việc truy cập với tư cách Admin của bạn!';

@@ -480,6 +480,37 @@ blockquote {
     font-size:13px;
 }
 
+figure {
+    background: #7A7A7A;
+    padding: 10px;
+    display: block;
+    float: left;
+    margin: 5px 10px 10px 0;
+    text-align: center;
+}
+figure.left{
+    float: left;
+    margin: 5px 10px 10px 0;
+}
+figure.right{
+    float: right;
+    margin: 5px 0 10px 10px;
+}
+figure.noncaption{
+    background: transparent;
+    padding: 0;
+}
+figcaption{
+    text-align: center;
+    margin-top: 5px;
+    font-weight: 700;
+}
+figure figcaption {
+    font-size: 12px;
+    color: #fff;
+    font-weight: normal;
+}
+
 /* Global */
 
 html,
@@ -579,6 +610,18 @@ h5,
 h6,
 .h6{
     font-size:11px;
+}
+
+.title{
+    font-size:22px
+}
+
+.hometext{
+    font-weight: 700
+}
+
+.bodytext {
+    word-break:keep-all
 }
 
 .m-bottom {

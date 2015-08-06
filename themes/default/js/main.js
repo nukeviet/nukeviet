@@ -155,6 +155,12 @@ function modalShow(a, b) {
 	$("#sitemodal").modal()
 }
 
+function modalShowByObj(a)
+{
+    var b = $(a).attr("title"), c = $(a).html();
+    modalShow(b, c)
+}
+
 // Build google map for block Company Info
 function initializeMap(){
 	var ele = 'company-map';
