@@ -42,7 +42,11 @@
 				<td>{VROW.values.module_file}</td>
 				<td>{VROW.values.addtime}</td>
 				<td>{VROW.values.note}</td>
-				<td><em class="fa fa-sun-o fa-lg"></em> <a class="nv-setup-module" data-title="{VROW.values.title}" href="{VROW.values.url_setup}">{LANG.setup}</a></td>
+				<td>
+					<!-- BEGIN: setup -->
+						<em class="fa fa-sun-o fa-lg"></em><a class="nv-setup-module" data-title="{VROW.values.title}" href="{VROW.values.url_setup}">{LANG.setup}</a>
+					<!-- END: setup -->
+				</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>

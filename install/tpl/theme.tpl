@@ -6,11 +6,11 @@
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{BASE_SITEURL}install/css/table.css" />
-        <script type="text/javascript" src="{BASE_SITEURL}{NV_FILES_DIR}/js/global.js"></script>
-        <script type="text/javascript" src="{BASE_SITEURL}{NV_FILES_DIR}/js/language/{LANG_DATA}.js"></script>
-        <script type="text/javascript" src="{BASE_SITEURL}{NV_FILES_DIR}/js/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="{BASE_SITEURL}{NV_FILES_DIR}/js/jquery/jquery.validate.min.js"></script>
-        <script type="text/javascript" src="{BASE_SITEURL}{NV_FILES_DIR}/js/language/jquery.validator-{LANG_DATA}.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{LANG_DATA}.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="{BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{LANG_DATA}.js"></script>
         <script type="text/javascript" src="{BASE_SITEURL}install/js/main.js"></script>
     </head>
     <body>

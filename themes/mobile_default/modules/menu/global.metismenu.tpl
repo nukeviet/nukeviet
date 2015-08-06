@@ -10,17 +10,11 @@
 <!-- END: tree -->
 <!-- BEGIN: main -->
 <link rel="stylesheet" type="text/css"	href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/jquery.metisMenu.css" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/jquery/jquery.metisMenu.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.metisMenu.js"></script>
 
-<span data-toggle="tip" data-target="#metismenu" data-click="y"><em class="fa fa-bars pointer"></em></span>
+<span data-toggle="tip" data-target="#metismenu" data-click="y"><em class="fa fa-bars pointer mbt-lg"></em></span>
 <!-- START FORFOOTER -->
 <div id="metismenu" class="hidden">
-<div class="headerSearch container-fluid margin-bottom">
-    <div class="input-group">
-        <input type="text" onkeypress="headerSearchKeypress(event);" class="form-control" maxlength="{NV_MAX_SEARCH_LENGTH}" placeholder="{LANG.search}...">
-        <span class="input-group-btn"><button type="button" onclick="headerSearchSubmit(this);" class="btn btn-info" data-url="{THEME_SEARCH_URL}" data-minlength="{NV_MIN_SEARCH_LENGTH}" data-click="y"><em class="fa fa-search fa-lg"></em></button></span>
-    </div>
-</div>
 <div class="clearfix panel metismenu">
 	<aside class="sidebar">
 		<nav class="sidebar-nav">

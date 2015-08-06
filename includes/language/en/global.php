@@ -244,6 +244,7 @@ $lang_global['theme_type_r'] = 'Responsive';
 $lang_global['theme_type_d'] = 'Desktop';
 $lang_global['theme_type_m'] = 'Mobile';
 $lang_global['theme_type_chose'] = 'Click to switch to %s mode';
+$lang_global['theme_type_chose2'] = 'Switch to Interface';
 $lang_global['theme_type_select'] = 'Interface mode';
 $lang_global['ftp_err_connect'] = 'Error: Can not connect to FTP server';
 $lang_global['ftp_err_login'] = 'Error: Logon failure';

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/select2/select2.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/select2/select2.min.js"></script>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<div class="table-responsive">

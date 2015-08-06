@@ -202,7 +202,7 @@ $xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme'] );
 $xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
-$xtpl->assign( 'ASSETS_DIR', NV_FILES_DIR );
+$xtpl->assign( 'NV_ASSETS_DIR', NV_ASSETS_DIR );
 $xtpl->assign( 'CHECK_SC', ( $global_config['gfx_chk'] == 1 ) ? 1 : 0 );
 $xtpl->assign( 'LOGIN_TITLE', $lang_global['adminlogin'] );
 $xtpl->assign( 'LOGIN_INFO', $info );

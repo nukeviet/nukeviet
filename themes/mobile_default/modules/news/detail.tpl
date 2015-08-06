@@ -1,20 +1,8 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/star-rating/jquery.rating.pack.js"></script>
-<script src="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
-<link href="{NV_BASE_SITEURL}{NV_FILES_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.pack.js"></script>
+<script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
+<link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
 <link href="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
-<!-- BEGIN: facebookjssdk -->
-<div id="fb-root"></div>
-<script type="text/javascript">
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/{FACEBOOK_LANG}/all.js#xfbml=1&appId={FACEBOOK_APPID}";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>
-<!-- END: facebookjssdk -->
 <div class="news_column panel panel-default">
 	<div class="panel-body">
 		<h1>{DETAIL.title}</h1>
@@ -84,20 +72,10 @@
 		<hr />
         <!-- BEGIN: socialbutton -->
         <div class="socialicon pull-left">
-        	<div style="width:60px" class="fb-share-button" data-href="{SELFURL}" data-layout="button">&nbsp;</div>
+        	<!-- BEGIN: facebook --><div style="width:60px" class="fb-share-button" data-href="{SELFURL}" data-layout="button">&nbsp;</div><!-- END: facebook -->
 	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
 	        <div class="g-plusone" data-size="medium"></div>
-	        <script type="text/javascript">
-	          window.___gcfg = {lang: nv_sitelang};
-	          (function() {
-	            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-	            po.src = 'https://apis.google.com/js/plusone.js';
-	            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-	          })();
-	        </script>
-
 	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
-	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 	    </div>
         <!-- END: socialbutton -->
         <!-- BEGIN: adminlink -->

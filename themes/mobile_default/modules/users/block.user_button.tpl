@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<span class="pa" data-toggle="tip" data-target="#guestBlock" data-click="y"><em class="icon-enter icon-lg pointer"></em><span class="hidden">{LANG.contactUs}</span></span>
+<span class="pa" data-toggle="tip" data-target="#guestBlock" data-click="y"><em class="fa fa-user fa-lg pointer mbt-lg"></em><span class="hidden">{LANG.contactUs}</span></span>
 <!-- START FORFOOTER -->
 <div id="guestBlock" class="hidden">
     <div class="guestBlock">
@@ -98,7 +98,7 @@
 <script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
 <!-- END: main -->
 <!-- BEGIN: signed -->
-<span data-toggle="tip" data-target="#userBlock" data-click="y"><strong class="pointer" style="background-image:url({AVATA})"></strong><span class="hidden">{LANG.full_name}</span></span>
+<span data-toggle="tip" data-target="#userBlock" data-click="y"><strong class="pointer bg-gainsboro" style="background-image:url({AVATA})"></strong><span class="hidden">{LANG.full_name}</span></span>
 <!-- START FORFOOTER -->
 <div id="userBlock" class="hidden">
     <div class="info" style="display:none"></div>

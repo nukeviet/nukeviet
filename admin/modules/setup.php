@@ -241,7 +241,7 @@ foreach( $modules_data as $row )
 			$mod['addtime'] = nv_date( 'H:i:s d/m/Y', $row['addtime'] );
 			$mod['author'] = $row['author'];
 			$mod['note'] = $row['note'];
-			$mod['url_setup'] = array_key_exists( $row['title'], $modules_for_title ) ? 'javascript:void(0);' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5( 'setmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
+			$mod['url_setup'] = array_key_exists( $row['title'], $modules_for_title ) ? '' : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;setmodule=' . $row['title'] . '&amp;checkss=' . md5( 'setmodule' . $row['title'] . session_id() . $global_config['sitekey'] );
 
 			if( $mod['module_file'] == $mod['title'] )
 			{

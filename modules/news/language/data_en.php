@@ -113,8 +113,7 @@ $sth->execute( array(5, 5, 'NukeViet') );
 $sth->execute( array(5, 1, 'VINADES') );
 
 $copyright = 'Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement';
-
-$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $copyright ) . " WHERE module = 'news' AND config_name = 'copyright' AND lang='" . $lang . "'" );
+$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $copyright ) . " WHERE module = " . $db->quote( $module_name ) . " AND config_name = 'copyright' AND lang=" . $db->quote( $lang ) );
 
 $result = $db->query( 'SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat ORDER BY sort ASC' );
 while( list( $catid_i ) = $result->fetch( 3 ) )

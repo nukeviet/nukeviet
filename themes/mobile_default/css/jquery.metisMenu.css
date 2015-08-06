@@ -23,11 +23,11 @@
 }
 
 .metismenu .fa.arrow:before {
-    content:" \f104 ";
+    content:" \f107 ";
 }
 
 .metismenu .active > .fa.arrow:before {
-    content:"\f107";
+    content:" \f106 ";
 }
 
 .metismenu .plus-times {
