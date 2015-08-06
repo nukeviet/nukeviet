@@ -1,9 +1,9 @@
 <!-- BEGIN: main -->
-<div style="margin: 10px">
+<div class="margin">
     <!-- BEGIN: note -->
     <div class="alert alert-info">{VOTINGNOTE}</div>
     <!-- END: note -->
-    <h3 class="text-primary text-center">{VOTINGQUESTION}</h3>
+    <h3 class="text-primary text-center margin-bottom-lg">{VOTINGQUESTION}</h3>
     <!-- BEGIN: result -->
     <div class="row">
         <div class="col-xs-24 col-md-12">{VOTING.title}</div>
