@@ -19,10 +19,10 @@ if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
  */
 function nv_page_main( $row, $ab_links, $content_comment)
 {
-	global $module_file, $lang_module, $module_info, $meta_property, $client_info, $page_config;
+	global $module_name, $module_file, $lang_global, $module_info, $meta_property, $client_info, $page_config, $global_config;
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'CONTENT', $row );
 
 	if( $row['socialbutton'] )
@@ -31,7 +31,7 @@ function nv_page_main( $row, $ab_links, $content_comment)
 		{
 			$meta_property['fb:app_id'] = $page_config['facebookapi'];
 			$meta_property['og:locale'] = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
-			
+
 			$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
 			$xtpl->parse( 'main.socialbutton.facebook' );
 		}
@@ -42,6 +42,13 @@ function nv_page_main( $row, $ab_links, $content_comment)
 	if( ! empty( $row['image'] ) )
 	{
 		$xtpl->parse( 'main.image' );
+	}
+
+	if( defined( 'NV_IS_MODADMIN' ) )
+	{
+		$xtpl->assign( 'ADMIN_CHECKSS', md5( $row['id'] . $global_config['sitekey'] . session_id() ) );
+		$xtpl->assign( 'ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'] );
+		$xtpl->parse( 'main.adminlink' );
 	}
 
 	if( ! empty( $ab_links ) )
@@ -72,30 +79,35 @@ function nv_page_main( $row, $ab_links, $content_comment)
  */
 function nv_page_main_list( $array_data, $generate_page )
 {
-	global $module_file, $lang_module, $module_upload, $module_info, $meta_property, $client_info, $page_config, $module_name;
+	global $global_config, $module_file, $lang_global, $module_upload, $module_info, $module_name;
 
 	$template = ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file .'/main_list.tpl' ) ) ? $module_info['template'] : 'default';
 
 	$xtpl = new XTemplate( 'main_list.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
 
 	if( ! empty( $array_data ) )
 	{
-		foreach( $array_data as $data )
+		foreach( $array_data as $row )
 		{
-			if( ! empty( $data['image'] ) )
+			if( ! empty( $row['image'] ) )
 			{
-				$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data['image'];
-				$data['imagealt'] = ! empty( $data['imagealt'] ) ? $data['imagealt'] : $data['title'];
+				$row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
+				$row['imagealt'] = ! empty( $row['imagealt'] ) ? $row['imagealt'] : $row['title'];
 			}
 
-			$xtpl->assign( 'DATA', $data );
+			$xtpl->assign( 'DATA', $row );
 
-			if( ! empty( $data['image'] ) )
+			if( ! empty( $row['image'] ) )
 			{
 				$xtpl->parse( 'main.loop.image' );
 			}
-
+			if( defined( 'NV_IS_MODADMIN' ) )
+			{
+				$xtpl->assign( 'ADMIN_CHECKSS', md5( $row['id'] . $global_config['sitekey'] . session_id() ) );
+				$xtpl->assign( 'ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'] );
+				$xtpl->parse( 'main.loop.adminlink' );
+			}
 			$xtpl->parse( 'main.loop' );
 		}
 		if( $generate_page != '' )

@@ -45,6 +45,12 @@
 	<div class="bodytext">
 		{CONTENT.bodytext}
 	</div>
+    <!-- BEGIN: adminlink -->
+	<p class="text-right adminlink">
+		<em class="fa fa-edit fa-lg">&nbsp;</em><a href="{ADMIN_EDIT}">{GLANG.edit}</a>
+		<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_content({CONTENT.id}, '{ADMIN_CHECKSS}','{NV_BASE_ADMINURL}')">{GLANG.delete}</a>
+	</p>
+	<!-- END: adminlink -->
 	<div class="clear">
 		<!-- BEGIN: comment -->
 			{CONTENT_COMMENT}
