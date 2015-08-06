@@ -36,7 +36,7 @@
     		<div class="form-group">
     			<label for="nv_username_iavim" class="col-sm-8 control-label">{LANG.account}</label>
     			<div class="col-sm-16">
-    				<input class="required form-control" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
+    				<input type="text" class="required form-control" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
     			</div>
     		</div>
     		<div class="form-group">

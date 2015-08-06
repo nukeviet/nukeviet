@@ -238,3 +238,4 @@ $lang_module['field_min_max_value'] = '%1$s doit être saisir de %2$s à %3$s';
 $lang_module['field_min_max_error'] = '%1$s  doit être saisir de %2$s à %3$s caractères';
 $lang_module['field_match_type_required'] = '%s doit être rempli';
 $lang_module['errorMessage'] = 'Message du système';
+$lang_module['login_info'] = 'Remplissez les champs ci-dessous';

@@ -5,8 +5,8 @@
 <div class="page panel panel-default">
     <div class="panel-body">
         <h3 class="margin-bottom-lg">{LANG.login}</h3>
-        <div class="margin-bottom-lg">{GLANG.logininfo}</div>
         <form id="loginForm" action="{USER_LOGIN}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
+            <div class="margin-bottom-lg">{LANG.login_info}</div>
             	<div class="form-group">
             		<label for="login_iavim" class="col-sm-6 control-label">{LANG.account}</label>
             		<div class="col-sm-18">
