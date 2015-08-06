@@ -74,7 +74,6 @@ $lang_module['avata_news_copy_error'] = 'Ne peux pas sauvegarder l\'image de pro
 $lang_module['birthday'] = 'Date de naissance';
 $lang_module['showmail'] = 'Afficher l’émail';
 $lang_module['login'] = 'Se connecter';
-$lang_module['login_info'] = 'Remplissez les champs ci-dessous';
 $lang_module['login_submit'] = 'Soumettre';
 $lang_module['user_info'] = 'Infos de \'utilisateur';
 $lang_module['regdate'] = 'Date d\'inscription';
