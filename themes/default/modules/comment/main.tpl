@@ -9,8 +9,7 @@
 <!-- END: header -->
 
 <div id="idcomment" class="nv-fullbg">
-	<div class="row">
-		<hr />
+	<div class="row clearfix margin-bottom-lg">
 		<div class="col-xs-12 text-left">
 			<p class="comment-title"><em class="fa fa-comments">&nbsp;</em> {LANG.comment}</p>
 		</div>
@@ -20,13 +19,16 @@
 				<option value="{OPTION.key}" {OPTION.selected}>{OPTION.title}</option>
 				<!-- END: sortcomm -->
 			</select>
-			<span class="showhiecom"><em class="fa fa-caret-square-o-down">&nbsp;</em> <a onclick="nv_show_hidden('showcomment',2);" href="javascript:void(0);" id="show-comments">{LANG.comment_hide_show}</a></span>
 		</div>
 	</div>
-	<div id="showcomment">
+    <!-- BEGIN: showContent -->
+    <div class="margin-bottom-lg">
+        <button type="button" class="btn btn-primary btn-xs" onclick="nv_show_hidden('showcomment',2);"><em class="fa fa-caret-square-o-down"></em>&nbsp; {LANG.comment_hide_show}</button>
+    </div>
+	<div id="showcomment" class="margin-bottom-lg">
 		{COMMENTCONTENT}
 	</div>
-	<hr />
+	<!-- END: showContent -->
 	<div id="formcomment" class="comment-form">
 		<!-- BEGIN: allowed_comm -->
 
@@ -65,8 +67,8 @@
 			</div>
 			<!-- END: captcha -->
 			<div class="form-group text-center">
-				<input id="reset-cm" type="reset" value="RESET" class="btn btn-default" />
-				<input id="buttoncontent" type="submit" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{MODULE_DATA}_commentcontent', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
+				<input id="reset-cm" type="button" value="{GLANG.reset}" class="btn btn-default" />
+				<input id="buttoncontent" type="button" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{MODULE_DATA}_commentcontent', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
 			</div>
 		</form>
 		<script type="text/javascript">

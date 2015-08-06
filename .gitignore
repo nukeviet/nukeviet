@@ -30,6 +30,7 @@
 /uploads/banners/*.jpg
 /uploads/page/*.jpg
 /uploads/menu/
+/uploads/news/
 
 # Allow default file
 !/uploads/banners/bongoaigiao.jpg
