@@ -34,11 +34,9 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['width'] . '</td>';
-        $html .= '	<td><input type="width" name="config_width" class="form-control" value="' . $data_block['width'] . '"/></td>';
-        $html .= '</tr>';
-        $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['height'] . '</td>';
-        $html .= '	<td><input type="height" name="config_height" class="form-control" value="' . $data_block['height'] . '"/></td>';
+        $html .= '	<td><input type="width" name="config_width" class="form-control w100 pull-left" value="' . $data_block['width'] . '"/>';
+        $html .= '	<span class="text-middle pull-left">&nbsp; ' . $lang_block['height'] . '&nbsp; </span>';
+        $html .= '	<input type="height" name="config_height" class="form-control w100 pull-left" value="' . $data_block['height'] . '"/></td>';
         $html .= '</tr>';
         return $html;
     }
@@ -50,10 +48,10 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
         $return['error'] = array();
         $return['config'] = array();
         $return['config']['showtooltip'] = $nv_Request->get_int( 'config_showtooltip', 'post', 0 );
-        $return['config']['tooltip_position'] = $nv_Request->get_string( 'config_tooltip_position', 'post', 0 );
-        $return['config']['tooltip_length'] = $nv_Request->get_string( 'config_tooltip_length', 'post', 0 );
-        $return['config']['width'] = $nv_Request->get_string( 'config_width', 'post', '' );
-        $return['config']['height'] = $nv_Request->get_string( 'config_height', 'post', '' );
+        $return['config']['tooltip_position'] = $nv_Request->get_title( 'config_tooltip_position', 'post', 0 );
+        $return['config']['tooltip_length'] = $nv_Request->get_int( 'config_tooltip_length', 'post', 0 );
+        $return['config']['width'] = $nv_Request->get_int( 'config_width', 'post', '' );
+        $return['config']['height'] = $nv_Request->get_int( 'config_height', 'post', '' );
         return $return;
     }
 
@@ -93,8 +91,9 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
                         else
                         {
                             $basename = preg_replace( '/(.*)(\.[a-z]+)$/i', $module_name . '_' . $row['id'] . '_\1_' . $width . '-' . $height . '\2', basename( $image ) );
-                            if ( ( $imginfo = nv_is_image( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename ) ) != array() )
+                            if ( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename ) )
                             {
+                            	$imginfo = nv_is_image( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $basename );
                                 $row['imgsource'] = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $basename;
                                 $row['width'] = $imginfo['width'];
                             }
