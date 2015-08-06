@@ -1268,6 +1268,7 @@ a.btn {
     border-bottom:1px solid #102D4D;
     background:#102D4C;
     padding:20px 0;
+    font-size:13px
 }
 
 #footer,
@@ -1277,8 +1278,10 @@ a.btn {
 
 #footer h3 {
     font-weight:700;
+    font-size:15px;
     letter-spacing:0.5px;
     text-transform:uppercase;
+    margin-bottom: 10px
 }
 
 #footer h3 a {
