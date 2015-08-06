@@ -724,13 +724,11 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	if( $module_config[$module_name]['socialbutton'] )
 	{
 		global $meta_property;
-		
+
 		if( ! empty( $module_config[$module_name]['facebookappid'] ) )
 		{
 			$meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
 			$meta_property['og:locale'] = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
-			
-			$xtpl->parse( 'main.socialbutton.facebook' );
 		}
 		$xtpl->parse( 'main.socialbutton' );
 	}
