@@ -1,73 +1,56 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: management -->
-<div style="border:1px #ccc solid;padding:5px">
-	<h3 style="margin-bottom:15px"><strong>{LANG.tool_management}</strong></h3>
-	<div class="plan_title" style="float:left">
-		<a href="{clientinfo_link}">{LANG.client_info}</a>
-	</div>
-	<div class="plan_title" style="float:left;margin-left:10px">
-		<a href="{clientinfo_addads}">{LANG.client_addads}</a>
-	</div>
-	<div class="plan_title" style="float:left;margin-left:10px">
-		<a href="{clientinfo_stats}">{LANG.client_stats}</a>
-	</div>
-	<div style="clear:both"></div>
-</div>
+<ul class="nav nav-tabs m-bottom">
+	<li><a href="{MANAGEMENT.main}">{LANG.plan_info}</a></li>
+	<li class="active"><a href="{MANAGEMENT.link}">{LANG.client_info}</a></li>
+	<li><a href="{MANAGEMENT.addads}">{LANG.client_addads}</a></li>
+	<li class="active"><a href="{MANAGEMENT.stats}">{LANG.client_stats}</a></li>
+	<li><a href="{MANAGEMENT.logout}">{GLANG.logout}</a></li>
+</ul>
 <!-- END: management -->
-
-<div id="clinfo" style="width:700px">
-	<h3>{LANG.stats_views_ads}
-	<select name="ads">
-		<option value="">{LANG.stats_views_select}</option>
-		<!-- BEGIN: ads -->
-		<option value="{ads.id}">{ads.title}</option>
-		<!-- END: ads -->
-	</select> {LANG.stats_views}
-	<select name="type">
-		<option value="">{LANG.stats_views_select}</option>
-		<option value="country">Country</option>
-		<option value="browser">Browser</option>
-		<option value="date">Date</option>
-		<option value="os">Operating System</option>
-	</select> {LANG.stats_views_month}
-	<select name="month">
-		<option value="">{LANG.stats_views_select}</option>
-		<!-- BEGIN: month -->
-		<option value="{month}">{month}</option>
-		<!-- END: month -->
-	</select></h3>
+<div id="clinfo">
+	<div class="m-bottom">
+		{LANG.stats_views_ads}
+		<div class="btn-group">
+			<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+				<span id="text-ads">{LANG.stats_views_select}</span>
+				<span class="caret">&nbsp;</span>
+			</button>
+			<ul class="dropdown-menu" id="adsstat-ads">
+				<!-- BEGIN: ads -->
+				<li><a href="#" rel="{ads.id}">{ads.title}</a></li>
+				<!-- END: ads -->
+			</ul>
+		</div>
+		{LANG.stats_views}
+		<div class="btn-group">
+			<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+				<span id="text-type">{LANG.stats_views_select}</span>
+				<span class="caret">&nbsp;</span>
+			</button>
+			<ul class="dropdown-menu" id="adsstat-type">
+				<li><a href="#" rel="country">Country</a></li>
+				<li><a href="#" rel="browser">Browser</a></li>
+				<li><a href="#" rel="date">Date</a></li>
+				<li><a href="#" rel="os">Operating System</a></li>
+			</ul>
+		</div>	
+		{LANG.stats_views_month}
+		<div class="btn-group">
+			<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+				<span id="text-month">{LANG.stats_views_select}</span>
+				<span class="caret">&nbsp;</span>
+			</button>
+			<ul class="dropdown-menu" id="adsstat-month">
+				<!-- BEGIN: month -->
+				<li><a href="#" rel="{month}">{month}</a></li>
+				<!-- END: month -->
+			</ul>
+		</div>	
+	</div>
 	<script type="text/javascript">
-		$(function() {
-			$('select[name=ads]').change(function() {
-				var ads = $(this).val();
-				var type = $('select[name=type]').val();
-				var month = $('select[name=month]').val();
-				if (type != "" && month != "" & ads != "") {
-					$('#chartdata').slideDown();
-					$('#chartdata').html('<img src="{charturl}&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:700px"/>');
-				}
-			});
-			$('select[name=type]').change(function() {
-				var type = $(this).val();
-				var month = $('select[name=month]').val();
-				var ads = $('select[name=ads]').val();
-				if (type != "" && month != "" & ads != "") {
-					$('#chartdata').slideDown();
-					$('#chartdata').html('<img src="{charturl}&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:700px"/>');
-				}
-			});
-			$('select[name=month]').change(function() {
-				var month = $(this).val();
-				var type = $('select[name=type]').val();
-				var ads = $('select[name=ads]').val();
-				if (type != "" && month != "" & ads != "") {
-					$('#chartdata').slideDown();
-					$('#chartdata').html('<img src="{charturl}&type=' + type + '&month=' + month + '&ads=' + ads + '" style="width:700px"/>');
-				}
-			});
-		});
+	charturl = '{charturl}';
 	</script>
 </div>
-
-<div id="chartdata" style="border:1px solid #DADADA;margin-bottom:10px;margin-top:5px;padding:5px;display:none;width:700px"></div>
+<div id="chartdata"></div>
 <!-- END: main -->

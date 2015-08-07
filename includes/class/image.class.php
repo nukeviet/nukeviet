@@ -1,14 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/28/2009 14:30
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/28/2009 14:30
  */
-
-if( defined( 'NV_CLASS_IMAGE_PHP' ) ) return;
-define( 'NV_CLASS_IMAGE_PHP', true );
 
 if( ! defined( 'ERROR_IMAGE1' ) ) define( 'ERROR_IMAGE1', 'The file is not a known image format' );
 if( ! defined( 'ERROR_IMAGE2' ) ) define( 'ERROR_IMAGE2', 'The file is not readable' );
@@ -17,17 +15,6 @@ if( ! defined( 'ERROR_IMAGE4' ) ) define( 'ERROR_IMAGE4', 'Image type not suppor
 if( ! defined( 'ERROR_IMAGE5' ) ) define( 'ERROR_IMAGE5', 'Image mime type not supported' );
 if( ! defined( 'ERROR_IMAGE6' ) ) define( 'ERROR_IMAGE6', 'Error loading Image' );
 
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
-
-/**
- * image
- *
- * @package
- * @author NUKEVIET 3.0
- * @copyright VINADES
- * @version 2010
- * @access public
- */
 class image
 {
 	var $filename;
@@ -43,13 +30,13 @@ class image
 	var $is_createWorkingImage = false;
 
 	/**
-     * image::image()
-     *
-     * @param mixed $filename
-     * @param integer $gmaxX
-     * @param integer $gmaxY
-     * @return
-     */
+	 * image::image()
+	 *
+	 * @param mixed $filename
+	 * @param integer $gmaxX
+	 * @param integer $gmaxY
+	 * @return
+	 */
 	function image( $filename, $gmaxX = 0, $gmaxY = 0 )
 	{
 		if( preg_match( "/(http|https|ftp):\/\//i", $filename ) )
@@ -72,11 +59,11 @@ class image
 	}
 
 	/**
-     * image::is_image()
-     *
-     * @param mixed $img
-     * @return
-     */
+	 * image::is_image()
+	 *
+	 * @param mixed $img
+	 * @return
+	 */
 	function is_image( $img )
 	{
 		$typeflag = array();
@@ -115,10 +102,10 @@ class image
 	}
 
 	/**
-     * image::set_memory_limit()
-     *
-     * @return
-     */
+	 * image::set_memory_limit()
+	 *
+	 * @return
+	 */
 	function set_memory_limit()
 	{
 		$mb = Pow( 1024, 2 );
@@ -147,10 +134,10 @@ class image
 	}
 
 	/**
-     * image::get_createImage()
-     *
-     * @return
-     */
+	 * image::get_createImage()
+	 *
+	 * @return
+	 */
 	function get_createImage()
 	{
 		switch( $this->fileinfo['type'] )
@@ -178,11 +165,11 @@ class image
 	}
 
 	/**
-     * image::set_tempnam()
-     *
-     * @param mixed $filename
-     * @return
-     */
+	 * image::set_tempnam()
+	 *
+	 * @param mixed $filename
+	 * @return
+	 */
 	function set_tempnam( $filename )
 	{
 		$tmpfname = tempnam( NV_ROOTDIR . "/tmp", "tmp" );
@@ -198,10 +185,10 @@ class image
 	}
 
 	/**
-     * image::check_file()
-     *
-     * @return
-     */
+	 * image::check_file()
+	 *
+	 * @return
+	 */
 	function check_file()
 	{
 		if( $this->fileinfo == array() ) return ERROR_IMAGE1;
@@ -213,12 +200,12 @@ class image
 	}
 
 	/**
-     * image::resizeXY()
-     *
-     * @param integer $maxX
-     * @param integer $maxY
-     * @return
-     */
+	 * image::resizeXY()
+	 *
+	 * @param integer $maxX
+	 * @param integer $maxY
+	 * @return
+	 */
 	function resizeXY( $maxX = 0, $maxY = 0 )
 	{
 		if( empty( $this->error ) )
@@ -298,11 +285,11 @@ class image
 	}
 
 	/**
-     * image::resizePercent()
-     *
-     * @param integer $percent
-     * @return
-     */
+	 * image::resizePercent()
+	 *
+	 * @param integer $percent
+	 * @return
+	 */
 	function resizePercent( $percent = 0 )
 	{
 		if( empty( $this->error ) )
@@ -382,14 +369,14 @@ class image
 	}
 
 	/**
-     * image::cropFromLeft()
-     *
-     * @param mixed $leftX
-     * @param mixed $leftY
-     * @param mixed $newwidth
-     * @param mixed $newheight
-     * @return
-     */
+	 * image::cropFromLeft()
+	 *
+	 * @param mixed $leftX
+	 * @param mixed $leftY
+	 * @param mixed $newwidth
+	 * @param mixed $newheight
+	 * @return
+	 */
 	function cropFromLeft( $leftX, $leftY, $newwidth, $newheight )
 	{
 		if( empty( $this->error ) )
@@ -450,12 +437,12 @@ class image
 	}
 
 	/**
-     * image::cropFromCenter()
-     *
-     * @param mixed $newwidth
-     * @param mixed $newheight
-     * @return
-     */
+	 * image::cropFromCenter()
+	 *
+	 * @param mixed $newwidth
+	 * @param mixed $newheight
+	 * @return
+	 */
 	function cropFromCenter( $newwidth, $newheight )
 	{
 		if( empty( $this->error ) )
@@ -514,15 +501,15 @@ class image
 	}
 
 	/**
-     * image::addstring()
-     *
-     * @param mixed $string
-     * @param string $align
-     * @param string $valign
-     * @param string $font
-     * @param integer $fsize
-     * @return
-     */
+	 * image::addstring()
+	 *
+	 * @param mixed $string
+	 * @param string $align
+	 * @param string $valign
+	 * @param string $font
+	 * @param integer $fsize
+	 * @return
+	 */
 	function addstring( $string, $align = 'right', $valign = 'bottom', $font = '', $fsize = 2 )
 	{
 		if( empty( $this->error ) )
@@ -574,13 +561,13 @@ class image
 	}
 
 	/**
-     * image::addlogo()
-     *
-     * @param mixed $logo
-     * @param string $align
-     * @param string $valign
-     * @return
-     */
+	 * image::addlogo()
+	 *
+	 * @param mixed $logo
+	 * @param string $align
+	 * @param string $valign
+	 * @return
+	 */
 	function addlogo( $logo, $align = 'right', $valign = 'bottom', $config_logo = array() )
 	{
 		if( empty( $this->error ) )
@@ -591,22 +578,9 @@ class image
 			}
 
 			$logo_info = $this->is_image( $logo );
-			if( $logo_info != array() and $logo_info['width'] != 0 and $logo_info['width'] + 20 <= $this->create_Image_info['width'] and $logo_info['height'] != 0 and $logo_info['height'] + 20 <= $this->create_Image_info['height'] and in_array( $logo_info['type'], array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG ) ) and preg_match( "#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png)#is", $logo_info['mime'] ) )
+			if( $logo_info != array() and $logo_info['width'] != 0 and $logo_info['height'] != 0 and in_array( $logo_info['type'], array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG ) ) and preg_match( "#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png)#is", $logo_info['mime'] ) )
 			{
 				$this->set_memory_limit();
-
-				switch( $logo_info['type'] )
-				{
-					case IMAGETYPE_GIF:
-						$this->logoimg = ImageCreateFromGif( $logo );
-						break;
-					case IMAGETYPE_JPEG:
-						$this->logoimg = ImageCreateFromJpeg( $logo );
-						break;
-					case IMAGETYPE_PNG:
-						$this->logoimg = ImageCreateFromPng( $logo );
-						break;
-				}
 
 				if( isset( $config_logo['w'] ) and isset( $config_logo['h'] ) )
 				{
@@ -650,30 +624,47 @@ class image
 					}
 				}
 
-				if( $this->fileinfo['type'] == IMAGETYPE_PNG and ! $this->is_createWorkingImage )
+				if( $X + $dst_w <= $this->create_Image_info['width']  and $Y + $dst_h <= $this->create_Image_info['height'] )
 				{
-					if( imagealphablending( $this->createImage, false ) )
+					if( $this->fileinfo['type'] == IMAGETYPE_PNG and ! $this->is_createWorkingImage )
 					{
-						$transparency = imagecolorallocatealpha( $this->createImage, 0, 0, 0, 127 );
-						if( false !== $transparency and imagefill( $this->createImage, 0, 0, $transparency ) )
+						if( imagealphablending( $this->createImage, false ) )
 						{
-							imagesavealpha( $this->createImage, true );
+							$transparency = imagecolorallocatealpha( $this->createImage, 0, 0, 0, 127 );
+							if( false !== $transparency and imagefill( $this->createImage, 0, 0, $transparency ) )
+							{
+								imagesavealpha( $this->createImage, true );
+							}
 						}
 					}
-				}
 
-				imagealphablending( $this->createImage, true );
-				ImageCopyResampled( $this->createImage, $this->logoimg, $X, $Y, 0, 0, $dst_w, $dst_h, $logo_info['width'], $logo_info['height'] );
+					imagealphablending( $this->createImage, true );
+
+					switch( $logo_info['type'] )
+					{
+						case IMAGETYPE_GIF:
+							$this->logoimg = ImageCreateFromGif( $logo );
+							break;
+						case IMAGETYPE_JPEG:
+							$this->logoimg = ImageCreateFromJpeg( $logo );
+							break;
+						case IMAGETYPE_PNG:
+							$this->logoimg = ImageCreateFromPng( $logo );
+							break;
+					}
+
+					ImageCopyResampled( $this->createImage, $this->logoimg, $X, $Y, 0, 0, $dst_w, $dst_h, $logo_info['width'], $logo_info['height'] );
+				}
 			}
 		}
 	}
 
 	/**
-     * image::rotate()
-     *
-     * @param mixed $direction
-     * @return
-     */
+	 * image::rotate()
+	 *
+	 * @param mixed $direction
+	 * @return
+	 */
 	function rotate( $direction )
 	{
 		if( empty( $this->error ) )
@@ -688,7 +679,8 @@ class image
 			if( $direction != 0 and $direction != 360 )
 			{
 				$this->set_memory_limit();
-				$workingImage = imagerotate( $this->createImage, $direction, -1 );
+				$transColor = imagecolorallocatealpha( $this->createImage, 255, 255, 255, 127 );
+				$workingImage = imagerotate( $this->createImage, $direction, $transColor );
 				imagealphablending( $workingImage, true );
 				imagesavealpha( $workingImage, true );
 				$this->createImage = $workingImage;
@@ -699,10 +691,10 @@ class image
 	}
 
 	/**
-     * image::reflection()
-     *
-     * @return
-     */
+	 * image::reflection()
+	 *
+	 * @return
+	 */
 	function reflection()
 	{
 		if( empty( $this->error ) )
@@ -739,11 +731,11 @@ class image
 	}
 
 	/**
-     * image::show()
-     *
-     * @param integer $quality
-     * @return
-     */
+	 * image::show()
+	 *
+	 * @param integer $quality
+	 * @return
+	 */
 	function show( $quality = 100 )
 	{
 		if( empty( $this->error ) )
@@ -778,13 +770,13 @@ class image
 	}
 
 	/**
-     * image::save()
-     *
-     * @param mixed $path
-     * @param string $newname
-     * @param integer $quality
-     * @return
-     */
+	 * image::save()
+	 *
+	 * @param mixed $path
+	 * @param string $newname
+	 * @param integer $quality
+	 * @return
+	 */
 	function save( $path, $newname = '', $quality = 100 )
 	{
 		if( empty( $this->error ) )
@@ -813,9 +805,13 @@ class image
 				$newname = preg_replace( '/^\W+|\W+$/', '', $newname );
 				$newname = preg_replace( '/[ ]+/', '_', $newname );
 				$newname = strtolower( preg_replace( '/\W-/', '', $newname ) );
-				$newname = preg_replace( "/." . $this->create_Image_info['ext'] . "$/", '', $newname );
+
+				$_array_name = explode( '.', $newname );
+				$_ext = end( $_array_name );
+				$newname = preg_replace( "/." . array_pop( $_array_name ) . "$/", '', $newname );
+
 				if( ! preg_match( "/\/$/", $path ) ) $path = $path . "/";
-				$newname = $path . $newname . '.' . $this->create_Image_info['ext'];
+				$newname = $path . $newname . '.' . $_ext;
 
 				switch( $this->create_Image_info['type'] )
 				{
@@ -839,10 +835,10 @@ class image
 	}
 
 	/**
-     * image::Destroy()
-     *
-     * @return
-     */
+	 * image::Destroy()
+	 *
+	 * @return
+	 */
 	function Destroy()
 	{
 		if( is_resource( $this->logoimg ) ) @ImageDestroy( $this->logoimg );
@@ -851,10 +847,10 @@ class image
 	}
 
 	/**
-     * image::close()
-     *
-     * @return
-     */
+	 * image::close()
+	 *
+	 * @return
+	 */
 	function close()
 	{
 		if( is_resource( $this->logoimg ) ) @ImageDestroy( $this->logoimg );
@@ -867,5 +863,3 @@ class image
 		$this->is_destroy = true;
 	}
 }
-
-?>

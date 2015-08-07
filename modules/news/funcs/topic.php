@@ -1,96 +1,175 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:14
  */
 
 if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
-$topicalias = isset( $array_op[1] ) ? trim( $array_op[1] ) : '';
-$page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == "page-" ) ? intval( substr( $array_op[2], 5 ) ) : 1;
+$show_no_image = $module_config[$module_name]['show_no_image'];
 
-list( $topicid, $page_title, $description, $key_words ) = $db->sql_fetchrow( $db->sql_query( "SELECT `topicid`, `title`, `description`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_topics` WHERE `alias`=" . $db->dbescape( $topicalias ) . "" ) );
+$array_mod_title[] = array(
+	'catid' => 0,
+	'title' => $module_info['funcs'][$op]['func_custom_name'],
+	'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic']
+);
 
-if( $topicid > 0 )
+$alias = isset( $array_op[1] ) ? trim( $array_op[1] ) : '';
+$topic_array = array();
+
+if( !empty( $alias ) )
 {
-	$array_mod_title[] = array(
-		'catid' => 0,
-		'title' => $page_title,
-		'link' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias
-	);
+	$page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-' ) ? intval( substr( $array_op[2], 5 ) ) : 1;
 
-	$query = $db->sql_query( "SELECT SQL_CALC_FOUND_ROWS `id`, `catid`, `topicid`, `admin_id`, `author`, `sourceid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hometext`, `homeimgfile`, `homeimgalt`, `homeimgthumb`, `allowed_rating`, `hitstotal`, `hitscm`, `total_rating`, `click_rating`, `keywords` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = '" . $topicid . "' ORDER BY `publtime` DESC LIMIT " . ( $page - 1 ) * $per_page . "," . $per_page );
-	$result_all = $db->sql_query( "SELECT FOUND_ROWS()" );
-	list( $all_page ) = $db->sql_fetchrow( $result_all );
+	$sth = $db->prepare( 'SELECT topicid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE alias= :alias' );
+	$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
+	$sth->execute();
 
-	$topic_array = array();
-	$end_publtime = 0;
-	$show_no_image  = $module_config[$module_name]['show_no_image'];
+	list( $topicid, $page_title, $alias, $topic_image, $description, $key_words ) = $sth->fetch( 3 );
 
-	while( $item = $db->sql_fetch_assoc( $query ) )
+	if( $topicid > 0 )
 	{
-		if( $item['homeimgthumb'] == 1 ) //image thumb
+		$base_url_rewrite = $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $alias;
+		if( $page > 1 )
 		{
-			$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+			$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+			$base_url_rewrite .= '/page-' . $page;
 		}
-		elseif( $item['homeimgthumb'] == 2 ) //image file
+		$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
+		if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
 		{
-			$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+			Header( 'Location: ' . $base_url_rewrite );
+			die();
 		}
-		elseif( $item['homeimgthumb'] == 3 ) //image url
-		{
-			$item['src'] = $item['homeimgfile'];
-		}
-		elseif( $show_no_image ) //no image
-		{
-			$item['src'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
-		}
-		else
-		{
-			$item['imghome'] = '';				
-		}		
-		$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
-		$item['width'] = $module_config[$module_name]['homewidth'];
 
-		$end_publtime = $item['publtime'];
+		$array_mod_title[] = array(
+			'catid' => 0,
+			'title' => $page_title,
+			'link' => $base_url
+		);
 
-		$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
-		$topic_array[] = $item;
+		$db->sqlreset()
+			->select( 'COUNT(*)' )
+			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+			->where( 'status=1 AND topicid = ' . $topicid );
+
+		$num_items = $db->query( $db->sql() )->fetchColumn();
+
+		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+			->order( 'publtime DESC' )
+			->limit( $per_page )
+			->offset( ( $page - 1 ) * $per_page );
+
+		$end_publtime = 0;
+
+		$result = $db->query( $db->sql() );
+		while( $item = $result->fetch() )
+		{
+			if( $item['homeimgthumb'] == 1 )//image thumb
+			{
+				$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 2 )//image file
+			{
+				$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 3 )//image url
+			{
+				$item['src'] = $item['homeimgfile'];
+			}
+			elseif( ! empty( $show_no_image ) )//no image
+			{
+				$item['src'] = NV_BASE_SITEURL . $show_no_image;
+			}
+			else
+			{
+				$item['imghome'] = '';
+			}
+			$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
+			$item['width'] = $module_config[$module_name]['homewidth'];
+
+			$end_publtime = $item['publtime'];
+
+			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+			$topic_array[] = $item;
+		}
+		$result->closeCursor();
+		unset( $result, $row );
+
+		$topic_other_array = array();
+		if ( $st_links > 0)
+		{
+			$db->sqlreset()
+				->select( 'id, catid, addtime, edittime, publtime, title, alias, hitstotal' )
+				->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+				->where( 'status=1 AND topicid = ' . $topicid . ' AND publtime < ' . $end_publtime )
+				->order( 'publtime DESC' )
+				->limit( $st_links );
+
+			$result = $db->query( $db->sql() );
+			while( $item = $result->fetch() )
+			{
+				$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+				$topic_other_array[] = $item;
+			}
+			unset( $result, $row );
+		}
+
+		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
+
+		if( ! empty( $topic_image ) )
+		{
+			$topic_image = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $topic_image;
+		}
+
+		$contents = topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image );
 	}
-	$db->sql_freeresult( $query );
-	unset( $query, $row );
-
-	$topic_other_array = array();
-	$query = $db->sql_query( "SELECT `id`, `catid`, `addtime`, `edittime`, `publtime`, `title`, `alias`, `hitstotal` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `topicid` = " . $topicid . " AND `publtime` < " . $end_publtime . " ORDER BY `publtime` DESC LIMIT 0," . $st_links . "" );
-
-	while( $item = $db->sql_fetch_assoc( $query ) )
+	else
 	{
-		$item['link'] = $global_array_cat[$item['catid']]['link'] . "/" . $item['alias'] . "-" . $item['id'];
-		$topic_other_array[] = $item;
-	}
-
-	unset( $query, $row, $arr_listcatid );
-
-	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=topic/" . $topicalias;
-	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
-	$contents = topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description );
-
-	if( $page > 1 )
-	{
-		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'], true ) );
+		exit();
 	}
 }
 else
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
-	exit();
+	$page_title = $module_info['custom_title'];
+	$key_words = $module_info['keywords'];
+
+	$result = $db->query( 'SELECT topicid as id, title, alias, image, description as hometext, keywords, add_time as publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC' );
+	while( $item = $result->fetch() )
+	{
+		if( ! empty( $item['image'] ) AND file_exists( NV_ROOTDIR. '/' . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'] ) )//image thumb
+		{
+			$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'];
+		}
+		elseif( ! empty( $item['image'] ) )//image file
+		{
+			$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $item['image'];
+		}
+		elseif( ! empty( $show_no_image ) )//no image
+		{
+			$item['src'] = NV_BASE_SITEURL . $show_no_image;
+		}
+		else
+		{
+			$item['src'] = '';
+		}
+		$item['alt'] = ! empty( $item['homeimgalt'] ) ? $item['homeimgalt'] : $item['title'];
+		$item['width'] = $module_config[$module_name]['homewidth'];
+
+		$item['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $item['alias'];
+		$topic_array[] = $item;
+	}
+	$result->closeCursor();
+	unset( $result, $row );
+
+	$topic_other_array = array();
+	$contents = topic_theme( $topic_array, $topic_other_array, '', $page_title, $description, '' );
 }
-
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

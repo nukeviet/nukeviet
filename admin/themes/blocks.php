@@ -1,27 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $select_options = array();
-$theme_array = nv_scandir( NV_ROOTDIR . "/themes", array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
+$theme_array = nv_scandir( NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
 if( $global_config['idsite'] )
 {
-	$result = $db->sql_query( "SELECT theme FROM `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site_cat` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . $db_config['prefix'] . "_site` AS t2 ON t1.`cid`=t2.`cid` WHERE t2.`idsite`=" . $global_config['idsite'] );
-	$row = $db->sql_fetch_assoc( $result );
-	if( ! empty( $row['theme'] ) )
+	$theme = $db->query( 'SELECT theme FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site_cat t1 INNER JOIN ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site t2 ON t1.cid=t2.cid WHERE t2.idsite=' . $global_config['idsite'] )->fetchColumn();
+	if( ! empty( $theme ) )
 	{
-		$array_site_cat_theme = explode( ',', $row['theme'] );
-
-		$sql = "SELECT DISTINCT `theme` FROM `" . NV_PREFIXLANG . "_modthemes` WHERE `func_id`=0";
-		$result = $db->sql_query( $sql );
-		while( list( $theme ) = $db->sql_fetchrow( $result ) )
+		$array_site_cat_theme = explode( ',', $theme );
+		$result = $db->query( 'SELECT DISTINCT theme FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0' );
+		while( list( $theme ) = $result->fetch( 3 ) )
 		{
 			$array_site_cat_theme[] = $theme;
 		}
@@ -29,19 +27,11 @@ if( $global_config['idsite'] )
 	}
 }
 
-if( ! defined( 'SHADOWBOX' ) )
-{
-	$my_head = "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-	$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-	$my_head .= "<script type=\"text/javascript\">Shadowbox.init();</script>";
-	define( 'SHADOWBOX', true );
-}
-
 foreach( $theme_array as $themes_i )
 {
 	if( file_exists( NV_ROOTDIR . '/themes/' . $themes_i . '/config.ini' ) )
 	{
-		$select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=blocks&amp;selectthemes=" . $themes_i] = $themes_i;
+		$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=blocks&amp;selectthemes=' . $themes_i] = $themes_i;
 	}
 }
 
@@ -61,7 +51,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 {
 	$page_title = $lang_module['blocks'] . ':' . $selectthemes;
 
-	$xtpl = new XTemplate( "blocks.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'blocks.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 
@@ -71,10 +61,10 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 	$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-	$sql = "SELECT `title`, `custom_title` FROM `" . NV_MODULES_TABLE . "` ORDER BY `weight` ASC";
-	$result = $db->sql_query( $sql );
+	$xtpl->assign( 'SELECTTHEMES', $selectthemes );
 
-	while( list( $m_title, $m_custom_title ) = $db->sql_fetchrow( $result ) )
+	$result = $db->query( 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' );
+	while( list( $m_title, $m_custom_title ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'MODULE', array( 'key' => $m_title, 'title' => $m_custom_title ) );
 		$xtpl->parse( 'main.module' );
@@ -87,24 +77,25 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$positions = $content[0]->position;
 
 	$blocks_positions = array();
-	$result = $db->sql_query( "SELECT `position`, COUNT(*) FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $selectthemes . "' GROUP BY `position`" );
-
-	while( list( $position, $numposition ) = $db->sql_fetchrow( $result ) )
+	$sth = $db->prepare( 'SELECT position, COUNT(*) FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme GROUP BY position' );
+	$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+	$sth->execute();
+	while( list( $position, $numposition ) = $sth->fetch( 3 ) )
 	{
 		$blocks_positions[$position] = $numposition;
 	}
 
-	$result = $db->sql_query( "SELECT * FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $selectthemes . "' ORDER BY `position` ASC, `weight` ASC" );
-
-	while( $row = $db->sql_fetchrow( $result ) )
+	$sth = $db->prepare( 'SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme ORDER BY position ASC, weight ASC' );
+	$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
+	$sth->execute();
+	while( $row = $sth->fetch() )
 	{
 		$xtpl->assign( 'ROW', array(
-			'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 			'bid' => $row['bid'],
 			'title' => $row['title'],
 			'module' => $row['module'],
 			'file_name' => $row['file_name'],
-			'active' => $row['active'] ? $lang_global['yes'] : $lang_global['no']
+			'active' => $row['active'] ? 'checked="checked"' : ''
 		) );
 
 		$numposition = $blocks_positions[$row['position']];
@@ -131,9 +122,8 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		}
 		else
 		{
-			$result_func = $db->sql_query( "SELECT a.func_id, a.in_module, a.func_custom_name FROM `" . NV_MODFUNCS_TABLE . "` AS a INNER JOIN `" . NV_BLOCKS_TABLE . "_weight` AS b ON a.func_id=b.func_id WHERE b.bid=" . $row['bid'] . "" );
-
-			while( list( $funcid_inlist, $func_inmodule, $funcname_inlist ) = $db->sql_fetchrow( $result_func ) )
+			$result_func = $db->query( 'SELECT a.func_id, a.in_module, a.func_custom_name FROM ' . NV_MODFUNCS_TABLE . ' a INNER JOIN ' . NV_BLOCKS_TABLE . '_weight b ON a.func_id=b.func_id WHERE b.bid=' . $row['bid'] );
+			while( list( $funcid_inlist, $func_inmodule, $funcname_inlist ) = $result_func->fetch( 3 ) )
 			{
 				$xtpl->assign( 'FUNCID_INLIST', $funcid_inlist );
 				$xtpl->assign( 'FUNC_INMODULE', $func_inmodule );
@@ -153,8 +143,6 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$contents = $xtpl->text( 'main' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

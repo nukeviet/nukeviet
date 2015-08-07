@@ -1,12 +1,11 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div id="edit"></div>
-<div class="quote" style="width:98%">
-	<blockquote class="error"><span id="message">ERROR! CONFIG FILE: {ERROR}</span></blockquote>
-</div>
+<div id="edit">&nbsp;</div>
+<div class="alert alert-danger"><span id="message">ERROR! CONFIG FILE: {ERROR}</span></div>
 <!-- END: error -->
-<table class="tab1">
-	<tbody class="second">
+<div class="table-responsive">
+	<table class="table table-striped table-bordered">
+		<tbody>
 		<tr>
 			<!-- BEGIN: loop -->
 			<!-- BEGIN: active -->
@@ -16,21 +15,20 @@
 			<td style="padding-left:50px;width:50%">
 			<!-- END: deactive -->
 			<p>
-				<b>{ROW.name}</b> {LANG.theme_created_by} <a href="{ROW.website}" title="{LANG.theme_created_website}" style="color:#3B5998" onclick="this.target='_blank'"><b>{ROW.author}</b></a>
+				<strong>{ROW.name}</strong> {LANG.theme_created_by} <a href="{ROW.website}" title="{LANG.theme_created_website}" style="color:#3B5998" onclick="this.target='_blank'"><strong>{ROW.author}</strong></a>
 			</p>
 			<p><img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" style="max-width:300px;max-height:200px"/>
 			</p>
 			<p style="font-size:13px;margin-top:10px;font-weight:bold">
+				<!-- BEGIN: link_setting -->
+				<em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_setting}</a>
+				<!-- END: link_setting -->
 				<!-- BEGIN: link_active -->
-				<a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_activate}</a>
+				<em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_activate}</a>
 				<!-- END: link_active -->
-				<!-- BEGIN: dash -->
-				-
-				<!-- END: dash -->
 				<!-- BEGIN: link_delete -->
-				<a href="javascript:void(0);" class="delete" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_delete}</a>
-			</p>
-			<!-- END: link_delete -->
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" class="delete" title="{ROW.value}" style="color:#3B5998">{LANG.theme_delete}</a>
+				<!-- END: link_delete -->
 			<p style="font-size:13px">
 				{ROW.description}
 			</p>
@@ -43,7 +41,6 @@
 			<!-- BEGIN: endtr -->
 			</td>
 		</tr>
-		&nbsp;
 		<tr>
 			<!-- END: endtr -->
 			<!-- BEGIN: endtd -->
@@ -52,39 +49,11 @@
 			<!-- END: loop -->
 		</tr>
 	</tbody>
-</table>
+	</table>
+</div>
 <script type="text/javascript">
-	//<![CDATA[
-	$(function() {
-		$("a.activate").click(function() {
-			var theme = $(this).attr("title");
-			$.ajax({
-				type : "POST",
-				url : "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=activatetheme",
-				data : "theme=" + theme,
-				success : function(data) {
-					if (data != "OK_" + theme) {
-						alert(data);
-					}
-					window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}";
-				}
-			});
-		});
-		$("a.delete").click(function() {
-			var theme = $(this).attr("title");
-			if (confirm("{LANG.theme_created_delete_theme}" + theme + " ?")) {
-				$.ajax({
-					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=deletetheme",
-					data : "theme=" + theme,
-					success : function(data) {
-						alert(data);
-						window.location = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}";
-					}
-				});
-			}
-		});
-	});
-	//]]>
+//<![CDATA[
+LANG.theme_delete_confirm = '{LANG.theme_delete_confirm}';
+//]]>
 </script>
 <!-- END: main -->

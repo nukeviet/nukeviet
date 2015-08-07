@@ -16,68 +16,9 @@
 	cursor: pointer
 }
 
-.Note {
-	padding-left: 20px
-}
-
-.Note1 {
-	background: url('../images/icons/note1.png') no-repeat left center
-}
-
-.Note2 {
-	background: url('../images/icons/note2.png') no-repeat left center
-}
-
-.Note3 {
-	background: url('../images/icons/note3.png') no-repeat left center
-}
-
-.Note4 {
-	background: url('../images/icons/note4.png') no-repeat left center
-}
-
-.Note5 {
-	background: url('../images/icons/note5.png') no-repeat left center
-}
-
-.tooltip {
+.wttooltip {
 	cursor: pointer;
 	display: none;
-	font: 11px Tahoma, Arial, Verdana, sans-serif
-}
-
-.tooltip h3 {
-	font: 800 12px/20px Tahoma, Arial, Verdana, sans-serif
-}
-
-.down {
-	background: url('../images/arrows/down.png') no-repeat left center
-}
-
-.up {
-	background: url('../images/arrows/up.png') no-repeat left center
-}
-
-#rankForm {
-	margin: 10px 0
-}
-
-#rankForm h2 {
-	font: 800 13px Arial, Tahoma, Verdana, sans-serif
-}
-
-#rankForm input[type="text"] {
-	width: 200px
-}
-
-#rankForm dd, #rankForm dt {
-	float: left;
-	line-height: 20px;
-	height: 20px
-}
-
-#rankForm dt {
-	width: 80px
 }
 
 .error {

@@ -1,177 +1,202 @@
 <!-- BEGIN: main -->
-<div id="users">
-	<h2 class="line padding_0" style="margin-bottom:5px">{LANG.register}</h2>
-	<div style="text-align:center;padding:10px">
-		{DATA.info}
-	</div>
-	<form id="registerForm" action="{USER_REGISTER}" method="post" class="register">
-		<div class="content">
-			<dl class="clearfix gray">
-				<dd class="fl">
-					<label> {LANG.name} </label>
-				</dd>
-				<dt class="fr">
-					<input class="txt" name="full_name" value="{DATA.full_name}" maxlength="255" />
-				</dt>
-			</dl>
-			<dl class="clearfix">
-				<dd class="fl">
-					<label> {LANG.email} </label>
-				</dd>
-				<dt class="fr">
-					<input class="txt email required" name="email" value="{DATA.email}" id="nv_email_iavim" maxlength="100" />
-				</dt>
-			</dl>
-			<dl class="clearfix gray">
-				<dt class="fl">
-					<label> {LANG.account} </label>
-				</dt>
-				<dd class="fr">
-					<input class="txt required" style="margin-right:2px;margin-top:2px;" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
-				</dd>
-			</dl>
-			<dl class="clearfix">
-				<dt class="fl">
-					<label> {LANG.password} </label>
-				</dt>
-				<dd class="fr">
-					<input class="txt required password" name="password" value="{DATA.password}" id="nv_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
-				</dd>
-			</dl>
-			<dl class="clearfix gray">
-				<dt class="fl">
-					<label> {LANG.re_password} </label>
-				</dt>
-				<dd class="fr">
-					<input class="txt required password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
-				</dd>
-			</dl>
-			<dl class="clearfix">
-				<dt class="fl">
-					<label> {LANG.question} </label>
-				</dt>
-				<dd class="fr">
-					<select name="question">
-						<!-- BEGIN: frquestion -->
-						<option value="{QUESTIONVALUE.qid}"{QUESTIONVALUE.selected}>{QUESTIONVALUE.title}</option>
-						<!-- END: frquestion -->
-					</select>
-				</dd>
-			</dl>
-			<!-- BEGIN: groups -->
-			<dl class="clearfix gray">
-				<dt class="fl">
-					<label> {LANG.in_group} </label>
-				</dt>
-				<dd class="fr">
-					<!-- BEGIN: list -->
-					<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} />
-					<span>{GROUP.title}</span>
-					<!-- END: list -->
-				</dd>
-			</dl>
-			<!-- END: groups -->
-			<dl class="clearfix gray">
-				<dt class="fl">
-					<label> {LANG.your_question} </label>
-				</dt>
-				<dd class="fr">
-					<input class="txt" name="your_question" value="{DATA.your_question}" />
-				</dd>
-			</dl>
-			<dl class="clearfix">
-				<dt class="fl">
-					<label> {LANG.answer_your_question} </label>
-				</dt>
-				<dd class="fr">
-					<input class="txt required" name="answer" value="{DATA.answer}" />
-				</dd>
-			</dl>
-			<!-- BEGIN: field -->
-			<!-- BEGIN: loop -->
-			<dl class="clearfix">
-				<dt class="fl">
-					<label>{FIELD.title}
-						<!-- BEGIN: required -->
-						<span class="error">(*)</span>
-						<!-- END: required -->
-					</label>
-					<br>
-					<i>{FIELD.description}</i>
-				</dt>
-				<dd class="fr">
-					<!-- BEGIN: textbox -->
-					<input class="{FIELD.required} {FIELD.class}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
-					<!-- END: textbox -->
-					<!-- BEGIN: date -->
-					<input class="datepicker {FIELD.required} {FIELD.class}" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
-					<!-- END: date -->
-					<!-- BEGIN: textarea --><textarea name="custom_fields[{FIELD.field}]" class="{FIELD.class}">{FIELD.value}</textarea>
-					<!-- END: textarea -->
-					<!-- BEGIN: editor -->
-					{EDITOR}
-					<!-- END: editor -->
-					<!-- BEGIN: select -->
-					<select name="custom_fields[{FIELD.field}]" class="{FIELD.class}">
-						<!-- BEGIN: loop -->
-						<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
-						<!-- END: loop -->
-					</select>
-					<!-- END: loopselect -->
-					<!-- BEGIN: radio -->
-					<label for="lb_{FIELD_CHOICES.id}"> <input type="radio" name="custom_fields[{FIELD.field}]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" class="{FIELD.class}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
-					<!-- END: radio -->
-					<!-- BEGIN: checkbox -->
-					<label for="lb_{FIELD_CHOICES.id}"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" class="{FIELD.class}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
-					<!-- END: checkbox -->
-					<!-- BEGIN: multiselect -->
-					<select name="custom_fields[{FIELD.field}][]" multiple="multiple" class="{FIELD.class}">
-						<!-- BEGIN: loop -->
-						<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
-						<!-- END: loop -->
-					</select>
-					<!-- END: multiselect -->
-				</dd>
-			</dl>
-			<!-- END: loop -->
-			<!-- END: field -->
-			<!-- BEGIN: captcha -->
-			<dl class="clearfix captcha gray">
-				<dt class="fl">
-					<label> {LANG.captcha} </label>
-				</dt>
-				<dd class="fr" style="width:290px;">
-					<p style="text-align:left;">
-						<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img src="{CAPTCHA_REFR_SRC}" class="refesh" alt="{CAPTCHA_REFRESH}" onclick="nv_change_captcha('vimg','nv_seccode_iavim');"/>
-					</p>
-					<input name="nv_seccode" id="nv_seccode_iavim" class="required" maxlength="{GFX_MAXLENGTH}" />
-				</dd>
-			</dl>
-			<!-- END: captcha -->
-			<div id="accept" style="padding-top:20px">
-				<p>
-					<strong>{LANG.usage_terms}</strong>
-				</p>
-				<div id="accept_scoll" style="border:1px solid #ccc;">
-					<div style="margin:10px;">
-						{NV_SITETERMS}
-					</div>
-				</div>
-			</div>
-			<dl class="clearfix" style="padding-top:10px">
-				<dt class="fl">
-					<input class="fl required" name="agreecheck" type="checkbox" value="1"{DATA.agreecheck} />
-				</dt>
-				<dd>
-					<strong>{LANG.accept}</strong>
-				</dd>
-			</dl>
-			<input type="hidden" name="checkss" value="{DATA.checkss}" />
-			<input id="submit" type="submit" class="submit" value="{LANG.register}" />
-			<!-- BEGIN: lostactivelink -->
-			<a href="{LOSTACTIVELINK_SRC}">{LANG.resend_activelink}</a>
-			<!-- END: lostactivelink -->
-		</div>
-	</form>
-</div>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+
+<div class="page panel panel-default">
+    <div class="panel-body">
+    	<h3 class="margin-bottom-lg">{LANG.register}</h3>
+    	<div class="margin-bottom-lg">{DATA.info}</div>
+    	<form id="registerForm" action="{USER_REGISTER}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
+    		<div class="form-group">
+    			<label for="first_name" class="col-sm-8 control-label">{LANG.first_name}</label>
+    			<div class="col-sm-16">
+    				<input type="text" class="form-control" id="first_name" name="first_name" value="{DATA.first_name}" maxlength="255" />
+    			</div>
+    		</div>
+    		<div class="form-group">
+    	        <label for="last_name" class="col-sm-8 control-label">{LANG.last_name}</label>
+    	        <div class="col-sm-16">
+    	            <input type="text" class="form-control" id="last_name" name="last_name" value="{DATA.last_name}" maxlength="255" />
+    	        </div>
+    	    </div>
+    		<div class="form-group">
+    			<label for="nv_email_iavim" class="col-sm-8 control-label">{LANG.email}</label>
+    			<div class="col-sm-16">
+    				<input type="email" class="email required form-control" name="email" value="{DATA.email}" id="nv_email_iavim" maxlength="100" />
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label for="nv_username_iavim" class="col-sm-8 control-label">{LANG.account}</label>
+    			<div class="col-sm-16">
+    				<input type="text" class="required form-control" name="username" value="{DATA.username}" id="nv_username_iavim" maxlength="{NICK_MAXLENGTH}" />
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label for="nv_password_iavim" class="col-sm-8 control-label">{LANG.password}</label>
+    			<div class="col-sm-16">
+    				<input class="form-control required password" name="password" value="{DATA.password}" id="nv_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label for="nv_re_password_iavim" class="col-sm-8 control-label">{LANG.re_password}</label>
+    			<div class="col-sm-16">
+    				<input class="form-control required password" name="re_password" value="{DATA.re_password}" id="nv_re_password_iavim" type="password" maxlength="{PASS_MAXLENGTH}" autocomplete="off"/>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label for="question" class="col-sm-8 control-label">{LANG.question}</label>
+    			<div class="col-sm-16">
+    				<select name="question" id="question" class="form-control">
+    					<!-- BEGIN: frquestion -->
+    					<option value="{QUESTIONVALUE.qid}"{QUESTIONVALUE.selected}>{QUESTIONVALUE.title}</option>
+    					<!-- END: frquestion -->
+    				</select>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label for="your_question" class="col-sm-8 control-label">{LANG.your_question}</label>
+    			<div class="col-sm-16">
+    				<input type="text" class="form-control" name="your_question" id="your_question" value="{DATA.your_question}" />
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<label for="answer" class="col-sm-8 control-label">{LANG.answer_your_question}</label>
+    			<div class="col-sm-16">
+    				<input type="text" class="form-control required" name="answer" id="answer" value="{DATA.answer}" />
+    			</div>
+    		</div>
+    		<!-- BEGIN: groups -->
+    		<div class="form-group">
+    			<label class="col-sm-8 control-label">{LANG.in_group}</label>
+    			<div class="col-sm-16">
+    				<!-- BEGIN: list -->
+    				<label class="checkbox-inline">
+    					<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
+    				</label>
+    				<!-- END: list -->
+    			</div>
+    		</div>
+    		<!-- END: groups -->
+    		<!-- BEGIN: field -->
+    		<!-- BEGIN: loop -->
+    		<div class="form-group">
+    			<label class="col-sm-8 control-label" data-toggle="tooltip" data-placement="right" title="{FIELD.description}">{FIELD.title}<!-- BEGIN: required --><span class="text-danger"> *</span><!-- END: required -->:</label>
+    			<div class="col-sm-16">
+    				<!-- BEGIN: textbox -->
+    				<input class="{FIELD.required} {FIELD.class} form-control" type="text" name="custom_fields[{FIELD.field}]" value="{FIELD.value}"/>
+    				<!-- END: textbox -->
+    				<!-- BEGIN: date -->
+    				<div class="input-group">
+    					<input type="text" class="form-control datepicker {FIELD.required} {FIELD.class}" id="custom_fields_{FIELD.field}" name="custom_fields[{FIELD.field}]" value="{FIELD.value}" readonly="readonly">
+    					<span class="input-group-btn">
+    						<button class="btn btn-default" type="button" onclick="$('#custom_fields_{FIELD.field}').datepicker('show');"> <em class="fa fa-calendar">&nbsp;</em></button>
+    					</span>
+    				</div>
+    				<!-- END: date -->
+    				<!-- BEGIN: textarea -->
+    				<textarea name="custom_fields[{FIELD.field}]" class="{FIELD.class} form-control">{FIELD.value}</textarea>
+    				<!-- END: textarea -->
+    				<!-- BEGIN: editor -->
+    				{EDITOR}
+    				<!-- END: editor -->
+    				<!-- BEGIN: select -->
+    				<select name="custom_fields[{FIELD.field}]" class="{FIELD.class} form-control">
+    					<!-- BEGIN: loop -->
+    					<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
+    					<!-- END: loop -->
+    				</select>
+    				<!-- END: select -->
+    				<!-- BEGIN: radio -->
+    				<label for="lb_{FIELD_CHOICES.id}"> <input type="radio" name="custom_fields[{FIELD.field}]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" class="{FIELD.class}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
+    				<!-- END: radio -->
+    				<!-- BEGIN: checkbox -->
+    				<label for="lb_{FIELD_CHOICES.id}"> <input type="checkbox" name="custom_fields[{FIELD.field}][]" value="{FIELD_CHOICES.key}" id="lb_{FIELD_CHOICES.id}" class="{FIELD.class}" {FIELD_CHOICES.checked}> {FIELD_CHOICES.value} </label>
+    				<!-- END: checkbox -->
+    				<!-- BEGIN: multiselect -->
+    				<select name="custom_fields[{FIELD.field}][]" multiple="multiple" class="{FIELD.class} form-control">
+    					<!-- BEGIN: loop -->
+    					<option value="{FIELD_CHOICES.key}" {FIELD_CHOICES.selected}>{FIELD_CHOICES.value}</option>
+    					<!-- END: loop -->
+    				</select>
+    				<!-- END: multiselect -->
+    			</div>
+    		</div>
+    		<!-- END: loop -->
+    		<!-- END: field -->
+    		<!-- BEGIN: captcha -->
+    		<div class="form-group">
+    			<label for="nv_seccode_iavim" class="col-sm-8 control-label">{LANG.captcha}</label>
+    			<div class="col-sm-8">
+    				<input type="text" name="nv_seccode" id="nv_seccode_iavim" class="required form-control" maxlength="{GFX_MAXLENGTH}" />
+    			</div>
+    			<div class="col-sm-8">
+    				<label class="control-label">
+    					<img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+    					&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#seccode_iavim');">&nbsp;</em>
+    				</label>
+    			</div>
+    		</div>
+    		<!-- END: captcha -->
+    		<div class="panel panel-default">
+    			<div class="panel-body pre-scrollable">
+    				<h4>{LANG.usage_terms}</h4>
+    				<hr />
+    				{NV_SITETERMS}
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<div class="col-sm-offset-8 col-sm-16">
+    				<div class="checkbox">
+    					<label>
+    						<input class="required" type="checkbox" name="agreecheck" value="1"{DATA.agreecheck}/>
+    						{LANG.accept}
+    					</label>
+    				</div>
+    			</div>
+    		</div>
+    		<div class="form-group">
+    			<div class="col-sm-offset-8 col-sm-16">
+    				<input type="hidden" name="checkss" value="{DATA.checkss}" />
+    				<input id="submit" type="submit" class="btn btn-primary" value="{LANG.register}" />
+    			</div>
+    		</div>
+    		<!-- BEGIN: lostactivelink -->
+    		<div class="alert alert-info"><a href="{LOSTACTIVELINK_SRC}">{LANG.resend_activelink}</a></div>
+    		<!-- END: lostactivelink -->
+    	</form>
+    </div>
+</div>	
+<script type="text/javascript">
+$(function(){
+    $.validator.setDefaults({
+    	highlight: function(a) {
+    		$(a).closest(".form-group").addClass("has-error")
+    	},
+    	unhighlight: function(a) {
+    		$(a).closest(".form-group").removeClass("has-error")
+    	},
+    	errorElement: "span",
+    	errorClass: "help-block",
+    	errorPlacement: function(a, b) {
+    		b.parent(".input-group").length ? a.insertAfter(b.parent()) : b.parent(".radio-inline").length ? a.insertAfter(b.parent().parent()) : a.insertAfter(b)
+    	}
+    });
+	$('#registerForm').validate();
+	$(".datepicker").datepicker({
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		showOn: 'focus'
+	});
+});
+</script>
 <!-- END: main -->

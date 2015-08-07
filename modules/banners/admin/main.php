@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -15,7 +16,7 @@ $contents = array();
 $contents['containerid'] = array();
 $contents['aj'] = array();
 
-list( $new ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `act`=4" ) );
+$new = $db->query( "SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act=4" )->fetchColumn();
 
 if( $new > 0 )
 {
@@ -23,7 +24,7 @@ if( $new > 0 )
 	$contents['aj'][] = "nv_show_banners_list('new_list', 0, 0, 4);";
 }
 
-list( $deact ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `act`=3" ) );
+$deact = $db->query( "SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act=3" )->fetchColumn();
 
 if( $deact > 0 )
 {
@@ -31,7 +32,7 @@ if( $deact > 0 )
 	$contents['aj'][] = "nv_show_banners_list('deact_list', 0, 0, 3);";
 }
 
-list( $exp ) = $db->sql_fetchrow( $db->sql_query( "SELECT COUNT(*) FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `act`=2" ) );
+$exp = $db->query( "SELECT COUNT(*) FROM " . NV_BANNERS_GLOBALTABLE. "_rows WHERE act=2" )->fetchColumn();
 
 if( $exp > 0 )
 {
@@ -41,14 +42,12 @@ if( $exp > 0 )
 
 if( empty( $contents['containerid'] ) or empty( $contents['aj'] ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=banners_list" );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=banners_list' );
 	die();
 }
 
 $contents = call_user_func( "nv_main_theme", $contents );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

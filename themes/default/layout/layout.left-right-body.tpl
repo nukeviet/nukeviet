@@ -1,27 +1,25 @@
 <!-- BEGIN: main -->
-{FILE "header.tpl"}
-<div class="contentwrapper">
+{FILE "header_only.tpl"}
+{FILE "header_extended.tpl"}
+<div class="row">
 	[HEADER]
-	<div class="span-5">
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-13 col-sm-push-12 col-md-push-11">
+        [TOP]
+        {MODULE_CONTENT}
+        [BOTTOM]
+    </div>
+    <div class="col-sm-6 col-md-6 col-sm-pull-6 col-md-pull-8">
+        [RIGHT]
+    </div>
+	<div class="col-sm-6 col-md-5 col-sm-pull-18 col-md-pull-19">
 		[LEFT]
 	</div>
-	<div class="span-6 last">
-		[RIGHT]
-	</div>
-	<div class="span-13 contentcolumn">
-		<!-- BEGIN: mod_title -->
-		<h3 class="breakcolumn"><a title="{LANG.Home}" href="{NV_BASE_SITEURL}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/icons/home.png" alt="{LANG.Home}" /></a>
-		<!-- BEGIN: breakcolumn -->
-		<span class="breakcolumn">&raquo;</span><a href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}">{BREAKCOLUMN.title}</a>
-		<!-- END: breakcolumn -->
-		</h3>
-		<!-- END: mod_title -->
-		[TOP]
-		{MODULE_CONTENT}
-		[BOTTOM]
-	</div>
-	<div class="clear"></div>
+</div>
+<div class="row">
 	[FOOTER]
 </div>
-{FILE "footer.tpl"}
+{FILE "footer_extended.tpl"}
+{FILE "footer_only.tpl"}
 <!-- END: main -->

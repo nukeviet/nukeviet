@@ -1,221 +1,88 @@
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	font-size: 100%;
-	vertical-align: baseline;
-	background: transparent
+body{
+	color:#777;
+}
+#wrapper{
+	position:absolute;
+	top:50%;
+	left:50%;
+	width:350px;
+	margin-left:-175px;
+	margin-top:-250px;
 }
 
-body {
-	line-height: 1
+/* Header
+ -----------------------------------------------------------------------------*/
+#logo{
+	text-align:center;
+	margin-bottom:10px;
 }
 
-ol, ul {
-	list-style: none
+/* Content
+ -----------------------------------------------------------------------------*/
+#login-content{
+	background:#fff;
+	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.13);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,.13);
+	box-shadow: 0 1px 3px rgba(0,0,0,.13);
+	padding:20px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+#login-content h3{
+	margin:0 0 20px 0;
+}
+#login-content label{
+	display:block;
+}
+#login-content img{
+	position:relative;
+	border:3px #ddd solid;
+	top:-2px;
+}
+#login-content i{
+	cursor:pointer;	
+}
+#login-content .input-big{
+	font-size:18px;
+	width:294px;
+}
+#login-content .muti-lang{
+	text-align:right;
+}
+#login-content .muti-lang label{
+	display:inline-block;
+}
+#login-content .captcha{
+	width:140px;
+}
+#login-content .lostpass{
+	text-align:right;
+	font-style:italic;
+	padding:0;
+	margin:0;
 }
 
-blockquote, q {
-	quotes: none
+/* Footer
+ -----------------------------------------------------------------------------*/
+#copyright{
+	text-align:center;
+	font-style:italic;
+	color:#999;
+	margin-top: 10px;
 }
 
-blockquote:before, blockquote:after, q:before, q:after {
-	content: ''
-}:focus {
-	outline: 0
+/* Message
+ -----------------------------------------------------------------------------*/
+.inner-message{
+	margin-bottom:16px;
 }
-
-/* remember to highlight inserts somehow! */
-ins {
-	text-decoration: none
+.inner-message .normal{
+	padding-left:10px;
+	border-left:4px #e7e7e7 solid;
 }
-
-del {
-	text-decoration: line-through
-}
-
-/* tables still need 'cellspacing="0"' in the markup */
-table {
-	border-collapse: collapse;
-	border-spacing: 0
-}
-
-body {
-	color: #666;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 10pt;
-	text-align: center
-}
-
-input {
-	border: 1px solid #CCCCCC;
-	color: #666;
-	width: 250px
-}
-
-img {
-	border: 0px
-}
-
-a {
-	outline: 0
-}
-
-#wrapper {
-	width: 500px;
-	margin: 50px auto
-}
-
-#logo {
-	margin: 0 0 10px 0
-}
-
-#login-header {
-	height: 59px
-}
-
-#login-header-left, #login-header-center, #login-header-right {
-	height: 59px;
-	float: left
-}
-
-#login-header-left {
-	background: url(../images/login/login_tl.jpg) no-repeat top left !important;
-	width: 64px
-}
-
-#login-header-center {
-	background: url(../images/login/login_tc.jpg) repeat-x;
-	width: 420px
-}
-
-#login-header-center h3 {
-	text-align: left;
-	line-height: 59px;
-	color: #fff;
-	font-size: 130%
-}
-
-#login-header-right {
-	background: url(../images/login/login_tr.jpg) no-repeat top right;
-	width: 16px
-}
-
-div#login-content {
-	background: url(../images/login/login_l.jpg) repeat-y top left
-}
-
-div#login-content div {
-	background: url(../images/login/login_r.jpg) repeat-y top right;
-	padding: 0 8px
-}
-
-div#login-content div div {
-	background: #F6F9FE;
-	text-align: left
-}
-
-#login-footer {
-
-}
-
-#login-footer-left, #login-footer-center, #login-footer-right {
-	height: 17px;
-	float: left
-}
-
-#login-footer-left {
-	background: url(../images/login/login_bl.jpg) no-repeat top left;
-	width: 16px
-}
-
-#login-footer-center {
-	background: url(../images/login/login_bc.jpg) repeat-x;
-	width: 468px
-}
-
-#login-footer-right {
-	background: url(../images/login/login_br.jpg) no-repeat top left;
-	width: 16px
-}
-
-.loginform {
-
-}
-
-.loginform ul li {
-	padding: 5px 0
-}
-
-.loginform ul li label {
-	width: 150px;
-	font-weight: 700;
-	float: left;
-	display: block;
-	margin-left: 10px;
-	line-height: 22px
-}
-
-.loginform input, .loginform select {
-	border: 1px solid #ccc
-}
-
-.loginform input {
-	height: 20px
-}
-
-.loginform select {
-	height: 24px;
-	font-size: 110%
-}
-
-.refresh {
-	cursor: pointer
-}
-
-.submitform {
-	background: url(../images/login/login_button.png) top center;
-	width: 120px !important;
-	height: 30px !important;
-	border: 0 !important;
-	color: #fff;
-	font-weight: 700;
-	margin: 10px 160px
-}
-
-.submitform:hover {
-	background: url(../images/login/login_button2.png) top center;
-	cursor: pointer
-}
-
-#copyright {
-	padding: 50px 0 0 0
-}
-
-#copyright a {
-	color: #666;
-	font-size: 80%
-}
-
-#copyright a:hover {
-	color: #ff6600
-}
-
-.error {
-	color: #F60;
-	padding: 10px 0 !important
-}
-
-.normal {
-	padding: 10px 0 !important
-}
-
-a.lostpass {
-	color: #0943ae;
-	text-decoration: none
-}
-
-a:hover.lostpass {
-	color: #666
+.inner-message .error{
+	padding-left:10px;
+	border-left:4px #D54E21 solid;
+	color:#D54E21;
 }

@@ -1,12 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -130,11 +131,9 @@ $lang_module['file_del_confirm'] = 'Do you want delete?';
 $lang_module['delfile_success'] = 'Delete ok!';
 $lang_module['delfile_error'] = 'Delete error';
 $lang_module['weight'] = 'Position';
-
 $lang_module['target'] = 'Target';
 $lang_module['target_blank'] = 'New Window (_blank)';
 $lang_module['target_top'] = 'Topmost Window (_top)';
 $lang_module['target_self'] = 'Same Window (_self)';
 $lang_module['target_parent'] = 'Parent Window (_parent)';
-
-?>
+$lang_module['imageforswf'] = 'Images for mobile browser';

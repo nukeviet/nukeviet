@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/25/2010 21:38
  */
 
@@ -51,16 +52,8 @@ if( ! empty( $banner_client_info['last_login'] ) )
 	$contents['rows']['last_login'] = array( $lang_global['last_login'], nv_date( "d/m/Y H:i", $banner_client_info['last_login'] ) . " (" . $lang_module['ip'] . ": " . $banner_client_info['last_ip'] . ")" );
 }
 
-$manament = array();
-$manament['current_login'] = array( $lang_global['current_login'], nv_date( "d/m/Y H:i", $banner_client_info['current_login'] ) . " (" . $lang_module['ip'] . ": " . $banner_client_info['current_ip'] . ")" );
-$manament['clientinfo_link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=clientinfo";
-$manament['clientinfo_addads'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=addads";
-$manament['clientinfo_stats'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=stats";
-
 $contents = clinfo_theme( $contents, $manament );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

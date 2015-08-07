@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2013 VINADES.,JSC. All rights reserved
- * @createdate 12/02/2013 15:07
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/02/2013 15:07
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -35,9 +36,9 @@ function nv_getRPC( $url, $data )
 	$url_info['query'] = ( isset( $url_info['query'] ) and ! empty( $url_info['query'] ) ) ? '?' . $url_info['query'] : '';
 
 	$proxy = array();
-	if( file_exists( NV_ROOTDIR . "/" . NV_DATADIR . "/proxies.php" ) )
+	if( file_exists( NV_ROOTDIR . '/' . NV_DATADIR . '/proxies.php' ) )
 	{
-		include ( NV_ROOTDIR . "/" . NV_DATADIR . "/proxies.php" );
+		include NV_ROOTDIR . '/' . NV_DATADIR . '/proxies.php' ;
 		if( ! empty( $proxy ) )
 		{
 			$proxy = $proxy[rand( 0, count( $proxy ) - 1 )];
@@ -58,7 +59,7 @@ function nv_getRPC( $url, $data )
 
 				if( isset( $proxy[3], $proxy[4] ) and ! empty( $proxy[3] ) and ! empty( $proxy[4] ) )
 				{
-					$http_request .= "Proxy-Authorization: Basic " . base64_encode( "" . $proxy[3] . ":" . $proxy[4] . "" ) . "\r\n";
+					$http_request .= "Proxy-Authorization: Basic " . base64_encode( $proxy[3] . ":" . $proxy[4] ) . "\r\n";
 				}
 				$http_request .= "\r\n";
 				$response = '';
@@ -225,5 +226,3 @@ function nv_rpcXMLCreate( $webtitle, $webhome, $linkpage, $webrss = '', $method 
 
 	return $xml->saveXML();
 }
-
-?>

@@ -1,18 +1,19 @@
 <!-- BEGIN: main -->
-{FILE "header.tpl"}
-<div class="contentwrapper">
-	<!-- BEGIN: mod_title -->
-	<h3 class="breakcolumn"><a title="{LANG.Home}" href="{NV_BASE_SITEURL}"><img src="{NV_BASE_SITEURL}themes/{TEMPLATE}/images/icons/home.png" alt="{LANG.Home}" /></a>
-	<!-- BEGIN: breakcolumn -->
-	<span class="breakcolumn">&raquo;</span><a href="{BREAKCOLUMN.link}" title="{BREAKCOLUMN.title}">{BREAKCOLUMN.title}</a>
-	<!-- END: breakcolumn -->
-	</h3>
-	<!-- END: mod_title -->
+{FILE "header_only.tpl"}
+{FILE "header_extended.tpl"}
+<div class="row">
 	[HEADER]
-	[TOP]
-	{MODULE_CONTENT}
-	[BOTTOM]
+</div>
+<div class="row">
+	<div class="col-md-24">
+		[TOP]
+		{MODULE_CONTENT}
+		[BOTTOM]
+	</div>
+</div>
+<div class="row">
 	[FOOTER]
 </div>
-{FILE "footer.tpl"}
+{FILE "footer_extended.tpl"}
+{FILE "footer_only.tpl"}
 <!-- END: main -->

@@ -1,31 +1,28 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['block'];
-$set_active_op = "blockcat";
 
-$sql = "SELECT `bid`, `title` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block_cat` ORDER BY `weight` ASC";
-$result = $db->sql_query( $sql );
+$sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
+$result = $db->query( $sql );
 
-if( $db->sql_numrows( $result ) )
+$array_block = array();
+while( list( $bid_i, $title_i ) = $result->fetch( 3 ) )
 {
-	$array_block = array();
-	while( list( $bid_i, $title_i ) = $db->sql_fetchrow( $result ) )
-	{
-		$array_block[$bid_i] = $title_i;
-	}
+	$array_block[$bid_i] = $title_i;
 }
-else
+if( empty( $array_block ) )
 {
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=blockcat" );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blockcat' );
 }
 
 $cookie_bid = $nv_Request->get_int( 'int_bid', 'cookie', 0 );
@@ -49,24 +46,31 @@ $page_title = $array_block[$bid];
 
 if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get_string( 'checkss', 'post' ) == md5( session_id() ) )
 {
-	$id_array = array_map( "intval", $nv_Request->get_array( 'idcheck', 'post' ) );
+	$id_array = array_map( 'intval', $nv_Request->get_array( 'idcheck', 'post' ) );
 	foreach( $id_array as $id )
 	{
-		$db->sql_query( "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_block` (`bid`, `id`, `weight`) VALUES ('" . $bid . "', '" . $id . "', '0')" );
+		try
+		{
+			$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid . ', ' . $id . ', 0)' );
+		}
+		catch( PDOException $e )
+		{
+		  trigger_error( $e->getMessage() );
+		}
 	}
 	nv_news_fix_block( $bid );
 	nv_del_moduleCache( $module_name );
-	Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&bid=" . $bid );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&bid=' . $bid );
 	die();
 }
 
 $select_options = array();
 foreach( $array_block as $xbid => $blockname )
 {
-	$select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;bid=" . $xbid] = $blockname;
+	$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;bid=' . $xbid] = $blockname;
 }
 
-$xtpl = new XTemplate( "block.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'block.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -74,43 +78,42 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
-$xtpl->assign( 'BLOCK_LIST', nv_show_block_list( $bid ) );
 
-$id_array = array();
 $listid = $nv_Request->get_string( 'listid', 'get', '' );
-if( $listid == '' )
+if( $listid == '' and $bid )
 {
-	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `status`=1 AND `id` NOT IN(SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_block` WHERE `bid`=" . $bid . ") ORDER BY `publtime` DESC LIMIT 0,20";
+	$xtpl->assign( 'BLOCK_LIST', nv_show_block_list( $bid ) );
 }
 else
 {
-	$id_array = array_map( "intval", explode( ",", $listid ) );
-	$sql = "SELECT id, title FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` where `status`=1 AND `id` IN (" . implode( ",", $id_array ) . ") ORDER BY `publtime` DESC";
-}
+	$page_title = $lang_module['addtoblock'];
+	$id_array = array_map( 'intval', explode( ',', $listid ) );
 
-$result = $db->sql_query( $sql );
-if( $db->sql_numrows( $result ) )
-{
-	$a = 0;
-	while( list( $id, $title ) = $db->sql_fetchrow( $result ) )
+	$db->sqlreset()
+	->select( 'id, title')
+	->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+	->order( 'publtime DESC' )
+	->where( 'status=1 AND id IN (' . implode( ',', $id_array ) . ')' );
+
+	$result = $db->query( $db->sql() );
+
+	while( list( $id, $title ) = $result->fetch( 3 ) )
 	{
 		$xtpl->assign( 'ROW', array(
-			"class" => ( $a % 2 ) ? " class=\"second\"" : "",
-			"checked" => in_array( $id, $id_array ) ? " checked=\"checked\"" : "",
-			"title" => $title,
-			"id" => $id
+			'checked' => in_array( $id, $id_array ) ? ' checked="checked"' : '',
+			'title' => $title,
+			'id' => $id
 		) );
 
 		$xtpl->parse( 'main.news.loop' );
-		++$a;
 	}
 
 	foreach( $array_block as $xbid => $blockname )
 	{
 		$xtpl->assign( 'BID', array(
-			"key" => $xbid,
-			"title" => $blockname,
-			"selected" => $xbid == $bid ? " selected=\"selected\"" : ""
+			'key' => $xbid,
+			'title' => $blockname,
+			'selected' => $xbid == $bid ? ' selected="selected"' : ''
 		) );
 		$xtpl->parse( 'main.news.bid' );
 	}
@@ -122,8 +125,7 @@ if( $db->sql_numrows( $result ) )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+$set_active_op = 'groups';
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

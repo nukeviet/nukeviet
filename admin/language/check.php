@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -11,47 +12,36 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['nv_lang_check'];
 
-$xtpl = new XTemplate( "check.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'check.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
 $array_lang_exit = array();
 
-$result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
 
 $add_field = true;
-while( $row = $db->sql_fetch_assoc( $result ) )
+foreach ( $columns_array as $row )
 {
-	if( substr( $row['Field'], 0, 7 ) == "author_" )
+	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{
-		$array_lang_exit[] .= trim( substr( $row['Field'], 7, 2 ) );
+		$array_lang_exit[] .= trim( substr( $row['field'], 7, 2 ) );
 	}
 }
 
 if( empty( $array_lang_exit ) )
 {
-	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=setting" );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setting' );
 
 	$xtpl->parse( 'empty' );
 	$contents = $xtpl->text( 'empty' );
 
-	include ( NV_ROOTDIR . '/includes/header.php' );
+	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
-	exit();
-}
-$lang_array_file = array();
-
-$lang_array_file_temp = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}+$/" );
-foreach( $lang_array_file_temp as $value )
-{
-	if( file_exists( NV_ROOTDIR . "/language/" . $value . "/global.php" ) )
-	{
-		$lang_array_file[] = $value;
-	}
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$language_array_source = array( "vi", "en" );
+$language_array_source = array( 'vi', 'en' );
 
 $language_check_type = array(
 	0 => $lang_module['nv_check_type_0'],
@@ -69,16 +59,17 @@ if( $nv_Request->isset_request( 'idfile,savedata', 'post' ) and $nv_Request->get
 {
 	$pozlang = $nv_Request->get_array( 'pozlang', 'post', array() );
 
-	if( ! empty( $pozlang ) )
+	if( ! empty( $pozlang ) and isset( $language_array[$typelang] ) )
 	{
 		foreach( $pozlang as $id => $lang_value )
 		{
-			$id = intval( $id );
 			$lang_value = trim( strip_tags( $lang_value, NV_ALLOWED_HTML_LANG ) );
-
 			if( ! empty( $lang_value ) )
 			{
-				$db->sql_query( "UPDATE `" . NV_LANGUAGE_GLOBALTABLE . "` SET `lang_" . $typelang . "`='" . mysql_real_escape_string( $lang_value ) . "' WHERE `id`='" . $id . "'" );
+				$sth = $db->prepare( 'UPDATE ' . NV_LANGUAGE_GLOBALTABLE . ' SET lang_' . $typelang . '= :lang_value, update_' . $typelang . '= ' . NV_CURRENTTIME . ' WHERE id= :id' );
+				$sth->bindParam( ':id', $id, PDO::PARAM_INT );
+				$sth->bindParam( ':lang_value', $lang_value, PDO::PARAM_STR );
+				$sth->execute();
 			}
 		}
 	}
@@ -120,10 +111,9 @@ foreach( $language_array_source as $key )
 	}
 }
 
-$sql = "SELECT `idfile`, `module`, `admin_file` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` ORDER BY `idfile` ASC";
-$result = $db->sql_query( $sql );
-
-while( list( $idfile_i, $module, $admin_file, ) = $db->sql_fetchrow( $result ) )
+$sql = 'SELECT idfile, module, admin_file FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
+$result = $db->query( $sql );
+while( list( $idfile_i, $module, $admin_file, ) = $result->fetch( 3 ) )
 {
 	switch( $admin_file )
 	{
@@ -166,31 +156,31 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 	$array_where = array();
 	if( $idfile > 0 )
 	{
-		$array_where[] = "`idfile`='" . $idfile . "'";
+		$array_where[] = 'idfile=' . $idfile;
 	}
 
 	if( $check_type == 0 )
 	{
-		$array_where[] = "`lang_" . $typelang . "`=''";
+		$array_where[] = "update_" . $typelang . "=0";
 	}
 	elseif( $check_type == 1 )
 	{
-		$array_where[] = "`lang_" . $typelang . "`=`lang_" . $sourcelang . "`";
+		$array_where[] = "lang_" . $typelang . "=lang_" . $sourcelang;
 	}
 
 	if( empty( $array_where ) )
 	{
-		$query = "SELECT `id`, `idfile`, `lang_key`, `lang_" . $typelang . "` as datalang, `lang_" . $sourcelang . "` as sourcelang FROM `" . NV_LANGUAGE_GLOBALTABLE . "` ORDER BY `id` ASC";
+		$query = 'SELECT id, idfile, lang_key, lang_' . $typelang . ' as datalang, lang_' . $sourcelang . ' as sourcelang FROM ' . NV_LANGUAGE_GLOBALTABLE . ' ORDER BY id ASC';
 	}
 	else
 	{
-		$query = "SELECT `id`, `idfile`, `lang_key`, `lang_" . $typelang . "` as datalang, `lang_" . $sourcelang . "` as sourcelang FROM `" . NV_LANGUAGE_GLOBALTABLE . "` WHERE " . implode( " AND ", $array_where ) . " ORDER BY `id` ASC";
+		$query = 'SELECT id, idfile, lang_key, lang_' . $typelang . ' as datalang, lang_' . $sourcelang . ' as sourcelang FROM ' . NV_LANGUAGE_GLOBALTABLE . ' WHERE ' . implode( ' AND ', $array_where ) . ' ORDER BY id ASC';
 	}
-	$result = $db->sql_query( $query );
+	$result = $db->query( $query );
 
 	$array_lang_data = array();
 
-	while( list( $id, $idfile_i, $lang_key, $datalang, $datasourcelang ) = $db->sql_fetchrow( $result ) )
+	while( list( $id, $idfile_i, $lang_key, $datalang, $datasourcelang ) = $result->fetch( 3 ) )
 	{
 		$array_lang_data[$idfile_i][$id] = array(
 			'lang_key' => $lang_key,
@@ -209,6 +199,7 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 			'savedata' => md5( $global_config['sitekey'] . session_id() )
 		) );
 
+		$i = 0;
 		foreach( $array_lang_data as $idfile_i => $array_lang_file )
 		{
 			$xtpl->assign( 'CAPTION', $array_files[$idfile_i] );
@@ -216,8 +207,7 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 			foreach( $array_lang_file as $id => $row )
 			{
 				$xtpl->assign( 'ROW', array(
-					'class' => ( ++$i % 2 ) ? " class=\"second\"" : "",
-					'stt' => $i,
+					'stt' => ++$i,
 					'lang_key' => $row['lang_key'],
 					'datalang' => nv_htmlspecialchars( $row['datalang'] ),
 					'id' => $id,
@@ -243,8 +233,6 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

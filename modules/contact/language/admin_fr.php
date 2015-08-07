@@ -1,28 +1,35 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Language Français
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
-$lang_translator['info'] = 'Langue française pour NukeViet 3';
+$lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['edit_title'] = 'Prévisualiser';
 $lang_module['add_row_title'] = 'Ajouter un département';
-$lang_module['list_row_title'] = 'Départements';
+$lang_module['department_title'] = 'Départements';
+$lang_module['alias'] = 'Alias';
+$lang_module['error_alias'] = 'Erreur: N\'a pas d\'alia';
+$lang_module['duplicate_alias'] = 'Erreur: Le titre ou l\'alia existent déjà';
+$lang_module['number'] = 'Numero';
 $lang_module['err_row_title'] = 'Inexistant';
 $lang_module['part_row_title'] = 'Département';
 $lang_module['email_row_title'] = 'E-mail';
-$lang_module['note_row_title'] = 'Note';
+$lang_module['yahoo_row_title'] = 'Yahoo';
+$lang_module['skype_row_title'] = 'Skype';
+$lang_module['note_row_title'] = 'Ghi chú';
 $lang_module['bt_save_row_title'] = 'Sauver';
 $lang_module['bt_reset_row_title'] = 'Rafraîchir';
 $lang_module['err_part_row_title'] = 'Manque de titre de département';
@@ -43,7 +50,7 @@ $lang_module['reply_user_send_title'] = 'Répondre à';
 $lang_module['reply_user_title'] = 'Objet';
 $lang_module['name_user_send_title'] = 'Nom d\'expéditeur';
 $lang_module['title_send_title'] = 'Objet';
-$lang_module['status_send_title'] = 'Status';
+$lang_module['status_send_title'] = 'Etat';
 $lang_module['content'] = 'Informations';
 $lang_module['content_title'] = 'Titre d\'article';
 $lang_module['save'] = 'Sauver';
@@ -62,5 +69,6 @@ $lang_module['admin_send2mail_title'] = 'Envoyer les infos à l\'e-mail';
 $lang_module['delall'] = 'Supprimer Tout';
 $lang_module['siteinfo_new'] = 'Messages pas encore lus';
 $lang_module['no_row_contact'] = 'Aucun contact';
-
-?>
+$lang_module['url_for_iframe'] = 'Lien pour iframe';
+$lang_module['notification_contact_new'] = '<strong>%s</strong> envoie un mail pour titre <strong>%s</strong>';
+$lang_module['is_default'] = 'Défaut';

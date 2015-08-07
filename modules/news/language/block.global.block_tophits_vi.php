@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Jun 22, 2010, 08:22:00 AM
  */
 
@@ -18,5 +19,11 @@ $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['number_day'] = 'Số ngày gần nhất đăng bài';
 $lang_block['numrow'] = 'Số bài hiển thị';
-
-?>
+$lang_block['showtooltip'] = 'Hiển thị tooltip';
+$lang_block['tooltip_position'] = 'Vị trí';
+$lang_block['tooltip_position_top'] = 'Trên';
+$lang_block['tooltip_position_bottom'] = 'Dưới';
+$lang_block['tooltip_position_left'] = 'Trái';
+$lang_block['tooltip_position_right'] = 'Phải';
+$lang_block['tooltip_length'] = 'Số ký tự';
+$lang_block['nocatid'] = 'Không hiển thị trong các chuyên mục';

@@ -45,20 +45,6 @@
 	text-decoration: underline
 }
 
-.edit_icon1 {
-	background: url(../images/icons/edit.png) no-repeat left center;
-	border: none;
-	cursor: pointer;
-	padding-left: 15px
-}
-
-.del_icon1 {
-	background: url(../images/icons/delete.png) no-repeat left center;
-	border: none;
-	cursor: pointer;
-	padding-left: 15px
-}
-
 .contact {
 	padding: 10px
 }

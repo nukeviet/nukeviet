@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 22/8/2010, 19:32
  */
 
@@ -118,5 +119,3 @@ function nv_strtoupper( $string )
 
 	return mb_strtoupper( $string, $global_config['site_charset'] );
 }
-
-?>

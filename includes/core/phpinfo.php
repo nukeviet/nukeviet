@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @copyright 2010
- * @createdate 1/9/2010 20:40
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 1/9/2010 20:40
  */
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
@@ -52,5 +53,3 @@ function phpinfo_array( $option = 1, $return = false )
 
 	return ( $return === false ) ? print_r( $pi ) : $pi;
 }
-
-?>

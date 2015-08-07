@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 21:58
  */
 
@@ -11,9 +12,9 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['configuration_php'];
 
-require_once ( NV_ROOTDIR . "/includes/core/phpinfo.php" );
+require_once NV_ROOTDIR . '/includes/core/phpinfo.php';
 
-$xtpl = new XTemplate( "configuration_php.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'configuration_php.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 
 $array = phpinfo_array( 4, 1 );
 $caption = $lang_module['configuration_php'];
@@ -29,8 +30,6 @@ if( ! empty( $array['PHP Core'] ) )
 	$a = 0;
 	foreach( $array['PHP Core'] as $key => $value )
 	{
-		$class = ( $a % 2 ) ? " class=\"second\"" : "";
-		$xtpl->assign( 'CLASS', ( $a % 2 ) ? " class=\"second\"" : "" );
 		$xtpl->assign( 'KEY', $key );
 
 		if( ! is_array( $value ) )
@@ -53,8 +52,6 @@ if( ! empty( $array['PHP Core'] ) )
 	$contents = $xtpl->text( 'main' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

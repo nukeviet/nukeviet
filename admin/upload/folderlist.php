@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -17,8 +18,9 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
  */
 function nv_set_dir_class( $array )
 {
-	$class = array( "folder" );
+	$class = array( 'folder' );
 	$menu = false;
+	
 	if( ! empty( $array ) )
 	{
 		foreach( $array as $key => $item )
@@ -30,8 +32,13 @@ function nv_set_dir_class( $array )
 		}
 	}
 
-	$class = implode( " ", $class );
-	if( $menu ) $class .= " menu";
+	$class = implode( ' ', $class );
+	
+	if( $menu )
+	{
+		$class .= ' menu';
+	}
+	
 	return $class;
 }
 
@@ -46,7 +53,7 @@ function viewdirtree( $dir, $currentpath )
 {
 	global $array_dirname, $global_config, $module_file;
 
-	$pattern = ! empty( $dir ) ? "/^(" . nv_preg_quote( $dir ) . ")\/([^\/]+)$/" : "/^([^\/]+)$/";
+	$pattern = ! empty( $dir ) ? '/^(' . nv_preg_quote( $dir ) . ')\/([^\/]+)$/' : '/^([^\/]+)$/';
 	$_dirlist = preg_grep( $pattern, array_keys( $array_dirname ) );
 
 	$content = '';
@@ -56,25 +63,32 @@ function viewdirtree( $dir, $currentpath )
 
 		if( ! empty( $check_allow_upload_dir ) )
 		{
-			$class_li = ( $_dir == $currentpath or strpos( $currentpath, $_dir . '/' ) !== false ) ? "open collapsable" : "expandable";
+			$class_li = ( $_dir == $currentpath or strpos( $currentpath, $_dir . '/' ) !== false ) ? 'open collapsable' : 'expandable';
 			$style_color = ( $_dir == $currentpath ) ? ' style="color:red"' : '';
 
 			$tree = array();
 			$tree['class1'] = $class_li;
-			$tree['class2'] = nv_set_dir_class( $check_allow_upload_dir ) . " pos" . nv_string_to_filename( $dir );
+			$tree['class2'] = nv_set_dir_class( $check_allow_upload_dir ) . ' pos' . nv_string_to_filename( $dir );
 			$tree['style'] = $style_color;
 			$tree['title'] = $_dir;
 			$tree['titlepath'] = basename( $_dir );
 
 			$content2 = viewdirtree( $_dir, $currentpath );
 
-			$xtpl = new XTemplate( "foldlist.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-			$xtpl->assign( "DIRTREE", $tree );
+			$xtpl = new XTemplate( 'foldlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+			$xtpl->assign( 'DIRTREE', $tree );
+			
+			if( empty( $content2 ) )
+			{
+				$content2 = '<li class="hide">&nbsp;</li>';
+			}
+			
 			if( ! empty( $content2 ) )
 			{
-				$xtpl->assign( "TREE_CONTENT", $content2 );
+				$xtpl->assign( 'TREE_CONTENT', $content2 );
 				$xtpl->parse( 'tree.tree_content' );
 			}
+			
 			$xtpl->parse( 'tree' );
 			$content .= $xtpl->text( 'tree' );
 		}
@@ -87,7 +101,7 @@ $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get,post', NV_UP
 
 if( empty( $path ) )
 {
-	if( $global_config['idsite'] OR ! defined( 'NV_IS_SPADMIN' ) )
+	if( $global_config['idsite'] or ! defined( 'NV_IS_SPADMIN' ) )
 	{
 		$path = NV_UPLOADS_DIR;
 	}
@@ -98,41 +112,45 @@ $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 're
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
 $data = array();
-$data['style'] = $path == $currentpath ? " style=\"color:red\"" : "";
-$data['class'] = nv_set_dir_class( $check_allow_upload_dir ) . " pos" . nv_string_to_filename( $path );
+$data['style'] = $path == $currentpath ? ' style="color:red"' : '';
+$data['class'] = nv_set_dir_class( $check_allow_upload_dir ) . ' pos' . nv_string_to_filename( $path );
 $data['title'] = $path;
 $data['titlepath'] = empty( $path ) ? NV_BASE_SITEURL : $path;
 
 $content = viewdirtree( $path, $currentpath );
 
-$xtpl = new XTemplate( "foldlist.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( "DATA", $data );
-$xtpl->assign( "PATH", $path );
-$xtpl->assign( "CURRENTPATH", $currentpath );
+$xtpl = new XTemplate( 'foldlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'DATA', $data );
+$xtpl->assign( 'PATH', $path );
+$xtpl->assign( 'CURRENTPATH', $currentpath );
 
 $check_allow_upload_dir = nv_check_allow_upload_dir( $currentpath );
-$xtpl->assign( "VIEW_DIR", ( isset( $check_allow_upload_dir['view_dir'] ) and $check_allow_upload_dir['view_dir'] === true ) ? 1 : 0 );
-$xtpl->assign( "CREATE_DIR", ( isset( $check_allow_upload_dir['create_dir'] ) and $check_allow_upload_dir['create_dir'] === true ) ? 1 : 0 );
-$xtpl->assign( "RENAME_DIR", ( isset( $check_allow_upload_dir['rename_dir'] ) and $check_allow_upload_dir['rename_dir'] === true ) ? 1 : 0 );
-$xtpl->assign( "DELETE_DIR", ( isset( $check_allow_upload_dir['delete_dir'] ) and $check_allow_upload_dir['delete_dir'] === true ) ? 1 : 0 );
-$xtpl->assign( "UPLOAD_FILE", ( isset( $check_allow_upload_dir['upload_file'] ) and $check_allow_upload_dir['upload_file'] === true ) ? 1 : 0 );
-$xtpl->assign( "CREATE_FILE", ( isset( $check_allow_upload_dir['create_file'] ) and $check_allow_upload_dir['create_file'] === true ) ? 1 : 0 );
-$xtpl->assign( "RENAME_FILE", ( isset( $check_allow_upload_dir['rename_file'] ) and $check_allow_upload_dir['rename_file'] === true ) ? 1 : 0 );
-$xtpl->assign( "DELETE_FILE", ( isset( $check_allow_upload_dir['delete_file'] ) and $check_allow_upload_dir['delete_file'] === true ) ? 1 : 0 );
-$xtpl->assign( "MOVE_FILE", ( isset( $check_allow_upload_dir['move_file'] ) and $check_allow_upload_dir['move_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'VIEW_DIR', ( isset( $check_allow_upload_dir['view_dir'] ) and $check_allow_upload_dir['view_dir'] === true ) ? 1 : 0 );
+$xtpl->assign( 'CREATE_DIR', ( isset( $check_allow_upload_dir['create_dir'] ) and $check_allow_upload_dir['create_dir'] === true ) ? 1 : 0 );
+$xtpl->assign( 'RENAME_DIR', ( isset( $check_allow_upload_dir['rename_dir'] ) and $check_allow_upload_dir['rename_dir'] === true ) ? 1 : 0 );
+$xtpl->assign( 'DELETE_DIR', ( isset( $check_allow_upload_dir['delete_dir'] ) and $check_allow_upload_dir['delete_dir'] === true ) ? 1 : 0 );
+$xtpl->assign( 'UPLOAD_FILE', ( isset( $check_allow_upload_dir['upload_file'] ) and $check_allow_upload_dir['upload_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'CREATE_FILE', ( isset( $check_allow_upload_dir['create_file'] ) and $check_allow_upload_dir['create_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'RENAME_FILE', ( isset( $check_allow_upload_dir['rename_file'] ) and $check_allow_upload_dir['rename_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'CROP_FILE', ( isset( $check_allow_upload_dir['crop_file'] ) and $check_allow_upload_dir['crop_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'ROTATE_FILE', ( isset( $check_allow_upload_dir['rotate_file'] ) and $check_allow_upload_dir['rotate_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'DELETE_FILE', ( isset( $check_allow_upload_dir['delete_file'] ) and $check_allow_upload_dir['delete_file'] === true ) ? 1 : 0 );
+$xtpl->assign( 'MOVE_FILE', ( isset( $check_allow_upload_dir['move_file'] ) and $check_allow_upload_dir['move_file'] === true ) ? 1 : 0 );
+
+if( empty( $content ) )
+{
+	$content = '<li class="hide">&nbsp;</li>';
+}
 
 if( ! empty( $content ) )
 {
-	$xtpl->assign( "CONTENT", $content );
+	$xtpl->assign( 'CONTENT', $content );
 	$xtpl->parse( 'main.main_content' );
 }
 
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
-include ( NV_ROOTDIR . '/includes/footer.php' );
-exit();
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

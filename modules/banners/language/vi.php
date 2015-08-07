@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -16,6 +17,8 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['plan_title'] = 'Khối quảng cáo';
+$lang_module['plan_info'] = 'Thông tin';
 $lang_module['main_title'] = 'Danh sách các khối quảng cáo';
 $lang_module['main_page_info'] = 'Quảng cáo là một hình thức tăng lượng truy cập đến website của bạn. Nếu bạn quan tâm đến tiện ích này, chúng tôi sẽ cung cấp đến bạn các khối quảng cáo dưới đây';
 $lang_module['title'] = 'Tiêu đề';
@@ -71,5 +74,3 @@ $lang_module['stats_views_country'] = 'Theo quốc gia';
 $lang_module['stats_views_month'] = 'Tháng';
 $lang_module['stats_views_select'] = 'Hãy chọn';
 $lang_module['stats_views_ads'] = 'Quảng cáo';
-
-?>

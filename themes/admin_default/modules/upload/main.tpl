@@ -1,431 +1,362 @@
 <!-- BEGIN: uploadPage -->
-<iframe src="{IFRAME_SRC}" width="100%" height="400px" frameborder="0"></iframe>
+<iframe src="{IFRAME_SRC}" style="border: 0;width: 100%;height:400px">&nbsp;</iframe>
 <!-- END: uploadPage -->
 <!-- BEGIN: main -->
-<!-- BEGIN: header -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=8" />
-		<title>{LANG.upload_manager}</title>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.upload.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.lazyload.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/admin.js"></script>
-	</head>
-	<style type="text/css">
-		body {
-			background: #EAEAEA;
-			font: 12px Arial;
-			height: 100%;
-			margin: 0;
-			padding: 0;
-			position: fixed;
-			width: 100%
-		}
-	</style>
-	<body>
-		<!-- END: header -->
-		<style type="text/css">
-			input[type="file"] {
-				cursor: pointer;
-				filter: alpha(opacity=0);
-				font-size: 30px;
-				height: 33px;
-				left: -320px;
-				opacity: 0;
-				position: relative;
-				z-index: 1
-			}
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.button.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.dialog.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.resizable.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.selectable.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.css" rel="stylesheet" />
 
-			td {
-				border: 1px solid #CCC
-			}
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.draggable.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.resizable.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.selectable.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.button.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.dialog.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.watermarker.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.flash.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.lazyload.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jQueryRotate.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/plupload.full.min.js"></script>
 
-			.authorFile {
-				float: left;
-				margin-left: 5px;
-				position: relative
-			}
-
-			.content {
-				background: #FFF;
-				font: 12px Arial
-			}
-
-			.filebrowse {
-				background: #F5F5F5;
-				height: 360px;
-				overflow: auto;
-				width: 100%
-			}
-
-			.filetype {
-				float: left;
-				position: relative
-			}
-
-			.footer {
-				font: 12px Arial;
-				padding: 5px
-			}
-
-			.imgcontent {
-				background: #fff;
-				border: 2px solid #EAEAEA;
-				color: #666;
-				cursor: pointer;
-				float: left;
-				height: 124px;
-				line-height: 16px;
-				margin-bottom: 2px;
-				margin-right: 2px;
-				padding: 5px;
-				text-align: center;
-				width: 100px
-			}
-
-			.imgfolder {
-				background: #FFF;
-				cursor: pointer;
-				height: 360px;
-				margin: 1px;
-				overflow: auto;
-				width: 200px
-			}
-
-			.imgInfo {
-				font: 400 10px/12px tahoma, arial, sans-serif;
-				height: 30px
-			}
-
-			.imgsel {
-				background: #fd8;
-				border: 2px solid #fb0;
-				color: #333
-			}
-
-			.notupload {
-				color: #F00;
-				float: right;
-				font-size: 10px;
-				font-weight: bold;
-				padding: 5px
-			}
-
-			.refresh, .search {
-				float: left;
-				margin: 3px 10px 0;
-				position: relative
-			}
-
-			.refresh, .search img {
-				border: none
-			}
-
-			.upload {
-				background: url('{NV_BASE_SITEURL}images/upload.gif') no-repeat 0px 0px;
-				cursor: pointer;
-				float: left;
-				height: 26px;
-				overflow: hidden;
-				position: relative;
-				width: 77px
-			}
-
-			.uploadForm {
-				float: right;
-				position: relative
-			}
-
-			img.previewimg {
-				background: #FFF;
-				border: 2px solid #F0F0F0;
-				max-height: 80px;
-				max-width: 80px;
-				padding: 2px
-			}
-
-			#errorInfo {
-				color: #F00;
-				font-size: 12px;
-				padding: 15px
-			}
-
-			#imglist {
-				margin: 5px
-			}
-
-			.imgcontent:hover {
-				background: #F2F9FC;
-				border: 2px solid #DDEFF8;
-				color: #333
-			}
-
-			.upload:hover {
-				background: url('{NV_BASE_SITEURL}images/upload.gif') no-repeat 0px -26px
-			}
-
-			.red {
-				color: red
-			}
-
-			.generate_page {
-				font-size: 10px;
-				font-weight: 700;
-				margin: 10px;
-				text-align: center
-			}
-
-			.generate_page strong {
-				background-color: #fbfbfb;
-				border: 1px solid #666;
-				color: #000;
-				padding: 4px 6px
-			}
-
-			.generate_page a {
-				background-color: #ebebeb;
-				border: 1px solid #c8c8c8;
-				color: #000;
-				padding: 4px 6px;
-				text-decoration: none
-			}
-
-			.generate_page a:hover {
-				background-color: #e0e0e0;
-				color: red
-			}
-		</style>
-
-		<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-		<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-		<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.css" rel="stylesheet" />
-
-		<link type="text/css" href="{NV_BASE_SITEURL}js/jquery/jquery.treeview.css" rel="stylesheet" />
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.treeview.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.dialog.min.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/contextmenu/jquery.contextmenu.r2.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.flash.js"></script>
-		<div class="content">
-			<table width="100%" cellpadding="0" cellspacing="0">
-				<tbody>
-					<tr>
-						<td valign="top" width="200">
-						<div id="imgfolder" class="imgfolder">
-							<p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...
-							</p>
-						</div></td>
-						<td valign="top">
-						<div class="filebrowse">
-							<div id="imglist">
-								<p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...
-								</p>
-							</div>
-						</div></td>
-					</tr>
-				</tbody>
-			</table>
+<div class="content">
+	<div class="row upload-wrap">
+		<div class="col-lg-4 col-md-4 col-sm-6 imgfolder" id="imgfolder">
+			<p class="upload-loading">
+				<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em>
+				<br />
+				{LANG.waiting}...
+			</p>
 		</div>
-		<div class="footer">
-			<div class="refresh">
-				<a href="#" title="{LANG.refresh}"><img alt="{LANG.refresh}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/refresh.png" width="16" height="16"/></a>
+		<div id="upload-content" class="col-lg-20 col-md-20 col-sm-18 filebrowse">
+			<div id="imglist" class="clearfix">
+				<p class="upload-loading">
+					<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em>
+					<br />
+					{LANG.waiting}...
+				</p>
 			</div>
-			<div class="filetype">
-				<select name="imgtype" class="vchange">
-					<option value="file"{SFILE}>{LANG.type_file}</option>
-					<option value="image"{SIMAGE}>{LANG.type_image}</option>
-					<option value="flash"{SFLASH}>{LANG.type_flash}</option>
-				</select>
-			</div>
-			<div class="authorFile">
-				<select name="author" class="vchange">
-					<option value="0">{LANG.author0}</option>
-					<option value="1">{LANG.author1}</option>
-				</select>
-				<select name="order" class="vchange">
-					<option value="0">{LANG.order0}</option>
-					<option value="1">{LANG.order1}</option>
-					<option value="2">{LANG.order2}</option>
-				</select>
-			</div>
-			<div class="search">
-				<a href="#" title="{LANG.search}"><img alt="{LANG.search}" src="{NV_BASE_SITEURL}themes/admin_default/images/icons/search.png" width="16" height="16"/></a>
-			</div>
-			<div class="uploadForm" style="display:none">
-				<div style="margin-top:5px;margin-right:5px;float:left;" id="cfile">
-					{LANG.upload_file}
-				</div>
-				<div class="upload"><input type="file" name="upload" id="myfile"/>
-				</div>
-				<div style="margin-top:10px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/>
-				</div>
-				<div style="margin-top:5px;margin-left:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/ok.png"/>
-				</div>
-				<div style="margin-top:7px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/error.png"/>
-				</div>
-				<div style="float:left;margin-left:5px;">
-					{LANG.upload_otherurl}: <input type="text" name="imgurl"/>
-				</div>
-				<div style="margin-top:10px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/>
-				</div>
-				<div style="margin-top:5px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/ok.png"/>
-				</div>
-				<div style="margin-top:7px;margin-left:5px;margin-right:5px;float:left;display:none"><img src="{NV_BASE_SITEURL}images/error.png"/>
-				</div>
-				<div style="float:left;"><input type="button" value="Upload" id="confirm" />
-				</div>
-			</div>
-			<div class="notupload" style="display:none">
-				{LANG.notupload}
-			</div>
-			<div style="clear:both"></div>
+			<div id="upload-queue"></div>
 		</div>
+	</div>
+</div>
+<div class="footer">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="refresh text-right">
+						<em title="{LANG.refresh}" class="fa fa-refresh fa-lg fa-pointer">&nbsp;</em>
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<select name="imgtype" title="{LANG.selectfiletype}" class="form-control input-sm vchange">
+						<option value="file"{SFILE}>{LANG.type_file}</option>
+						<option value="image"{SIMAGE}>{LANG.type_image}</option>
+						<option value="flash"{SFLASH}>{LANG.type_flash}</option>
+					</select>
+				</div>
+				<div class="col-sm-5">
+					<select name="author" title="{LANG.author}" class="form-control input-sm vchange">
+						<option value="0">{LANG.author0}</option>
+						<option value="1">{LANG.author1}</option>
+					</select>
+				</div>
+				<div class="col-sm-8">
+					<select name="order" class="form-control input-sm vchange">
+						<option value="0">{LANG.order0}</option>
+						<option value="1">{LANG.order1}</option>
+						<option value="2">{LANG.order2}</option>
+					</select>
+				</div>
+				<div class="col-sm-4">
+					<div class="search text-left">
+						<em title="{LANG.search}" class="fa fa-search fa-lg fa-pointer">&nbsp;</em>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12">
+			<div id="upload-button-area">&nbsp;</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
 
-		<input type="hidden" name="currentFileUpload" value=""/>
-		<input type="hidden" name="currentFileUrl" value=""/>
-		<input type="hidden" name="selFile" value=""/>
-		<input type="hidden" name="CKEditorFuncNum" value="{FUNNUM}"/>
-		<input type="hidden" name="area" value="{AREA}"/>
-		<div style="display:none" id="contextMenu"></div>
-		<div style="display:none">
-			<iframe id="Fdownload" src="" width="0" height="0" frameborder="0"></iframe>
-		</div>
+<input type="hidden" name="currentFileUrl" value=""/>
+<input type="hidden" name="selFile" value=""/>
+<input type="hidden" name="CKEditorFuncNum" value="{FUNNUM}"/>
+<input type="hidden" name="area" value="{AREA}"/>
+<input type="hidden" name="alt" value="{ALT}"/>
+<input type="hidden" name="upload_logo" value="{UPLOAD_LOGO}"/>
+<input type="hidden" name="upload_logo_config" value="{UPLOAD_LOGO_CONFIG}"/>
 
-		<div id="renamefolder" style="display:none" title="{LANG.renamefolder}">
-			{LANG.rename_newname}<input type="text" name="foldername"/>
-		</div>
+<div class="upload-hide" id="contextMenu"></div>
 
-		<div id="createfolder" style="display:none" title="{LANG.createfolder}">
-			{LANG.foldername}<input type="text" name="createfoldername"/>
-		</div>
+<div class="upload-hide">
+	<iframe id="Fdownload" src="" width="0" height="0" frameborder="0"></iframe>
+</div>
 
-		<div id="errorInfo" style="display:none" title="{LANG.errorInfo}"></div>
-		<div id="imgpreview" style="overflow:auto;display:none" title="{LANG.preview}">
-			<div style="text-align:center;margin-top:10px" id="fileView" class="dynamic"></div>
-			<div style="text-align:center;font-size:12px;font-weight:800;margin-top:10px" id="fileInfoName" class="dynamic"></div>
-			<div style="text-align:center;font-size:11px;margin-top:10px;margin-bottom:10px" id="fileInfoDetail" class="dynamic"></div>
+<div id="renamefolder" class="upload-hide" title="{LANG.renamefolder}">
+	<div class="form-horizontal" role="form">
+		<div class="form-group">
+			<label class="control-label col-xs-6">{LANG.rename_newname}:</label>
+			<div class="col-xs-18">
+				<input type="text" name="foldername" class="form-control dynamic"/>
+			</div>
 		</div>
-		<div id="imgcreate" style="overflow:auto;display:none;padding:10px;font-size:11px;" title="{LANG.upload_createimage}">
-			<div style="float:left;width:260px;">
-				<div style="padding:5px;background:#EAEAEA;font-weight:800;">
-					{LANG.newSize}
-				</div>
-				<div style="padding:5px;">
-					<input type="hidden" name="origWidth" value="" class="dynamic" />
-					<input type="hidden" name="origHeight" value="" class="dynamic" />
-					X: <input style="width:35px;margin-right:5px" type="text" name="newWidth" maxlength="4" class="dynamic" />
-					Y: <input style="width:35px;margin-right:5px" type="text" name="newHeight" maxlength="4" class="dynamic" />
-					<input type="button" value="{LANG.prView}" name="prView" />
-					<input type="button" value="OK" name="newSizeOK" />
-				</div>
-				<div style="font-size:10px;" title="createInfo" class="dynamic"></div>
+	</div>
+</div>
+
+<div id="createfolder" class="upload-hide" title="{LANG.createfolder}">
+	<div class="form-horizontal" role="form">
+		<div class="form-group">
+			<label class="control-label col-xs-10">{LANG.foldername}:</label>
+			<div class="col-xs-14">
+				<input type="text" name="createfoldername" class="form-control dynamic"/>
 			</div>
-			<div style="float:right;width:360px;">
-				<div style="text-align:center;font-size:12px;font-weight:800;" id="fileInfoName2" class="dynamic"></div>
-				<div style="text-align:center;" id="fileInfoDetail2" class="dynamic"></div>
-				<div style="width:360px;height:230px;text-align:center;margin-top:10px">
-					<img name="myFile2" alt="{LANG.clickSize}" style="border:2px solid #F0F0F0;" width="0" height="0" src="" />
-				</div>
-			</div>
-			<div style="clear:both"></div>
 		</div>
-		<div id="filemove" style="display:none;padding:10px;font-size:11px;" title="{LANG.move}">
-			<div title="pathFileName" style="font-weight:800;margin-bottom:10px" class="dynamic"></div>
-			{LANG.movefolder}:
-			<div style="margin-top:10px;margin-bottom:10px">
-				<select name="newPath"></select>
-			</div>
-			<div><input style="vertical-align:middle" name="mirrorFile" type="checkbox" class="dynamic" /> {LANG.mirrorFile}
-			</div>
-			<div style="margin-bottom:10px"><input style="vertical-align:middle" name="goNewPath" type="checkbox" class="dynamic" /> {LANG.goNewPath}
-			</div>
-			<input style="width:60px;" type="button" value="OK" name="newPathOK" />
-		</div>
-		<div id="filesearch" style="display:none;padding:10px;font-size:11px;" title="{LANG.search}">
-			<form method="get" onsubmit="return searchfile();">
-				{LANG.searchdir}:
-				<div style="margin:10px 0 20px">
-					<select name="searchPath"></select>
+	</div>
+</div>
+
+<div id="errorInfo" class="upload-hide" title="{LANG.errorInfo}"></div>
+
+<div id="imgpreview" title="{LANG.preview}">
+	<div id="fileInfoAlt" class="dynamic file-title"></div>
+	<div id="fileView" class="dynamic file-content"></div>
+	<div id="fileInfoName" class="dynamic file-title"></div>
+	<div id="fileInfoDetail" class="dynamic file-detail"></div>
+</div>
+
+<div id="imgcreate" title="{LANG.upload_createimage}">
+	<div class="row">
+		<div class="col-xs-10">
+			<input type="hidden" name="origWidth" value="" class="dynamic" />
+			<input type="hidden" name="origHeight" value="" class="dynamic" />
+			<div class="title">{LANG.newSize}</div>
+			<div class="form-horizontal" role="form">
+				<div class="form-group">
+					<label class="col-xs-4 control-label">X:</label>
+					<div class="col-xs-8"><input type="text" name="newWidth" maxlength="4" class="dynamic form-control" /></div>
+					<label class="col-xs-4 control-label">Y:</label>
+					<div class="col-xs-8"><input type="text" name="newHeight" maxlength="4" class="dynamic form-control" /></div>
 				</div>
-				{LANG.searchkey}:
-				<div style="margin:10px 0"><input name="q" type="text" class="dynamic" style="width:200px;"/>
-				</div>
-				<input style="margin-left:50px;width:100px;" type="submit" value="{LANG.search}" name="search" />
-			</form>
+			</div>
+			<div class="text-center form-group">
+				<button class="btn btn-default" type="button" name="prView"><em class="fa fa-search fa-lg">&nbsp;</em>{LANG.prView}</button>
+				<button class="btn btn-primary" type="button" name="newSizeOK">{LANG.addlogosave}</button>
+			</div>
+			<div title="createInfo" class="dynamic text-center text-muted"></div>
 		</div>
-		<div id="filerename" style="display:none;padding:10px;font-size:11px;text-align:center;" title="{LANG.rename}">
-			<div id="filerenameOrigName" style="font-weight:800;margin-bottom:10px" class="dynamic"></div>
-			<div style="margin-top:10px;margin-bottom:10px">
-				{LANG.rename_newname}:
-				<input style="width:150px;margin-left:5px" type="text" name="filerenameNewName" maxlength="255" class="dynamic" />
+		<div class="col-xs-14 text-center">
+			<div class="image-preview-wrap clearfix">
+				<div id="fileInfoName2" class="dynamic title"></div>
+				<div id="fileInfoDetail2" class="dynamic"></div>
+				<div class="image-preview">
+					<img name="myFile2" alt="{LANG.clickSize}" width="0" height="0" src="" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="filemove" title="{LANG.move}">
+	<div title="pathFileName" class="dynamic filename"></div>
+	<div class="form-group">
+		<label>{LANG.movefolder}:</label>
+		<select name="newPath" class="form-control"></select>
+	</div>
+	<div class="checkbox">
+		<label>
+			<input name="mirrorFile" type="checkbox" class="dynamic" /> {LANG.mirrorFile}.
+		</label>
+	</div>
+	<div class="checkbox">
+		<label>
+			<input name="goNewPath" type="checkbox" class="dynamic" /> {LANG.goNewPath}.
+		</label>
+	</div>
+	<div class="text-center">
+		<input type="button" value="{LANG.addlogosave}" name="newPathOK" class="btn btn-primary"/>
+	</div>
+</div>
+
+<div id="filesearch" title="{LANG.search}">
+	<form method="get" onsubmit="return searchfile();" role="form">
+		<div class="form-group">
+			<label>{LANG.searchdir}:</label>
+			<select name="searchPath" class="form-control"></select>
+		</div>
+		<div class="form-group">
+			<label>{LANG.searchkey}:</label>
+			<input name="q" type="text" class="form-control dynamic" />
+		</div>
+		<div class="text-center">
+			<button type="submit" name="search" class="btn btn-primary">{LANG.search}</button>
+		</div>
+	</form>
+</div>
+
+<div id="filerename" title="{LANG.rename}">
+	<div id="filerenameOrigName" class="dynamic origname text-center"></div>
+	<div class="form-horizontal" role="form">
+		<div class="form-group">
+			<label class="col-xs-8 control-label">{LANG.rename_newname}:</label>
+			<div class="col-xs-14">
+				<input type="text" name="filerenameNewName" maxlength="255" class="dynamic form-control" />
+			</div>
+			<div class="col-xs-2">
 				<span title="Ext">Ext</span>
 			</div>
-			<input style="width:60px;" type="button" value="OK" name="filerenameOK" />
 		</div>
-		<script type="text/javascript">
-			//<![CDATA[
-			function searchfile() {
-				a = $("select[name=searchPath]").val(), q = $("input[name=q]").val();
-				b = $("select[name=imgtype]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
-				$("div#filesearch").dialog("close");
-				$("#imglist").html('<p style="padding:20px; text-align:center"><img src="{NV_BASE_SITEURL}images/load_bar.gif"/> please wait...</p>').load(nv_module_url + 'imglist&path=' + a + '&type=' + b + e + '&q=' + rawurlencode(q) + '&order=' + $('select[name=order]').val() + '&random=' + nv_randomNum(10))
-				return false;
-			}
+		<div class="form-group">
+			<label class="col-xs-8 control-label">{LANG.altimage}:</label>
+			<div class="col-xs-16">
+				<input type="text" name="filerenameAlt" maxlength="255" class="dynamic form-control" />
+			</div>
+		</div>
+		<div class="text-center">
+			<input class="btn btn-primary" type="button" value="{LANG.addlogosave}" name="filerenameOK" />
+		</div>
+	</div>
+</div>
 
-			var LANG = [];
-			LANG.upload_size = "{LANG.upload_size}";
-			LANG.pubdate = "{LANG.pubdate}";
-			LANG.download = "{LANG.download}";
-			LANG.preview = "{LANG.preview}";
-			LANG.addlogo = "{LANG.addlogo}";
-			LANG.select = "{LANG.select}";
-			LANG.upload_createimage = "{LANG.upload_createimage}";
-			LANG.move = "{LANG.move}";
-			LANG.rename = "{LANG.rename}";
-			LANG.upload_delfile = "{LANG.upload_delfile}";
-			LANG.createfolder = "{LANG.createfolder}";
-			LANG.renamefolder = "{LANG.renamefolder}";
-			LANG.deletefolder = "{LANG.deletefolder}";
-			LANG.delete_folder = "{LANG.delete_folder}";
-			LANG.rename_nonamefolder = "{LANG.rename_nonamefolder}";
-			LANG.folder_exists = "{LANG.folder_exists}";
-			LANG.name_folder_error = "{LANG.name_folder_error}";
-			LANG.rename_noname = "{LANG.rename_noname}";
-			LANG.upload_delimg_confirm = "{LANG.upload_delimg_confirm}";
-			LANG.origSize = "{LANG.origSize}";
-			LANG.errorMinX = "{LANG.errorMinX}";
-			LANG.errorMaxX = "{LANG.errorMaxX}";
-			LANG.errorMinY = "{LANG.errorMinY}";
-			LANG.errorMaxY = "{LANG.errorMaxY}";
-			LANG.errorEmptyX = "{LANG.errorEmptyX}";
-			LANG.errorEmptyY = "{LANG.errorEmptyY}";
+<div id="rorateimage" title="{LANG.rotate}">
+	<input type="hidden" class="dynamic" name="roratePath" value=""/>
+	<input type="hidden" class="dynamic" name="rorateFile" value=""/>
+	<h4 class="text-center"><strong id="rorateimageName" class="dynamic">&nbsp;</strong></h4>
+	<div id="rorateContent" class="rorate-content">
 
-			var nv_max_width = '{NV_MAX_WIDTH}', nv_max_height = '{NV_MAX_HEIGHT}', nv_min_width = '{NV_MIN_WIDTH}', nv_min_height = '{NV_MIN_HEIGHT}';
-			var nv_base_siteurl = "{NV_BASE_SITEURL}", nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=", nv_namecheck = /^([a-zA-Z0-9_-])+$/, array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"], array_flash = ["swf", "swc", "flv"], array_archives = ["rar", "zip", "tar"], array_documents = ["doc", "xls", "chm", "pdf", "docx", "xlsx"];
+	</div>
+	<div class="text-center form-inline">
+		<input type="text" class="form-control w50 dynamic" name="rorateDirection" value="0"/>
+		<button id="rorate90Anticlockwise" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-undo">&nbsp;</em> 90
+		</button>
+		<button id="rorateLeft" type="button" class="btn btn-default btn-reset">
+			<em class="fa fa-lg fa-undo">&nbsp;</em>
+		</button>
+		<button id="rorateRight" type="button" class="btn btn-default btn-reset">
+			<em class="fa fa-lg fa-repeat">&nbsp;</em>
+		</button>
+		<button id="rorate90Clockwise" type="button" class="btn btn-default">
+			<em class="fa fa-lg fa-repeat">&nbsp;</em> 90
+		</button>
+		<input id="rorateimageOK" type="button" class="btn btn-primary" value="{LANG.addlogosave}"/>
+	</div>
+</div>
 
-			var ICON = [];
-			ICON.select = nv_base_siteurl + 'js/contextmenu/icons/select.png';
-			ICON.download = nv_base_siteurl + 'js/contextmenu/icons/download.png';
-			ICON.preview = nv_base_siteurl + 'js/contextmenu/icons/view.png';
-			ICON.create = nv_base_siteurl + 'js/contextmenu/icons/copy.png';
-			ICON.move = nv_base_siteurl + 'js/contextmenu/icons/move.png';
-			ICON.rename = nv_base_siteurl + 'js/contextmenu/icons/rename.png';
-			ICON.filedelete = nv_base_siteurl + 'js/contextmenu/icons/delete.png';
+<div id="uploadremote" title="{LANG.upload_mode_remote}">
+	<div class="row">
+		<label for="uploadremoteFile">{LANG.enter_url}</label>
+	</div>
+	<div class="row">
+		<input type="text" class="form-control dynamic" name="uploadremoteFile" id="uploadremoteFile"/>
+	</div>
+	<div class="dynamic text-center" id="upload-remote-info"></div>
+	<!-- BEGIN: alt_remote -->
+	<div class="row">
+		<label for="uploadremoteFileAlt">{LANG.altimage}</label>
+	</div>
+	<div class="row">
+		<input type="text" class="form-control dynamic" name="uploadremoteFileAlt" id="uploadremoteFileAlt"/>
+	</div>
+	<!-- END: alt_remote -->
+	<div class="row text-center">
+		<input type="button" class="btn btn-primary" name="uploadremoteFileOK" value="{LANG.upload_file}"/>
+	</div>
+</div>
 
-			$(function() {
-				$.getScript(nv_base_siteurl + 'js/upload.js', function() {
-					$("#imgfolder").load(nv_module_url + "folderlist&path={PATH}&currentpath={CURRENTPATH}&random=" + nv_randomNum(10));
-					$("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10))
-				});
-			});
-			//]]>
-		</script>
-		<!-- BEGIN: footer -->
-	</body>
-</html>
-<!-- END: footer -->
+<div id="cropimage" title="{LANG.crop}">
+	<div id="cropContent" class="crop-content"></div>
+	<div id="cropButtons" class="text-center form-inline dynamic"></div>
+</div>
+
+<div id="addlogo" title="{LANG.addlogo}">
+	<div id="addlogoContent" class="addlogo-content"></div>
+	<div id="addlogoButtons" class="text-center form-inline dynamic"></div>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var LANG = [];
+LANG.upload_size = "{LANG.upload_size}";
+LANG.pubdate = "{LANG.pubdate}";
+LANG.download = "{LANG.download}";
+LANG.preview = "{LANG.preview}";
+LANG.addlogo = "{LANG.addlogo}";
+LANG.select = "{LANG.select}";
+LANG.upload_createimage = "{LANG.upload_createimage}";
+LANG.move = "{LANG.move}";
+LANG.move_multiple = "{LANG.move_multiple}";
+LANG.rename = "{LANG.rename}";
+LANG.upload_delfile = "{LANG.upload_delfile}";
+LANG.createfolder = "{LANG.createfolder}";
+LANG.renamefolder = "{LANG.renamefolder}";
+LANG.deletefolder = "{LANG.deletefolder}";
+LANG.delete_folder = "{LANG.delete_folder}";
+LANG.rename_nonamefolder = "{LANG.rename_nonamefolder}";
+LANG.folder_exists = "{LANG.folder_exists}";
+LANG.name_folder_error = "{LANG.name_folder_error}";
+LANG.rename_noname = "{LANG.rename_noname}";
+LANG.upload_delimg_confirm = "{LANG.upload_delimg_confirm}";
+LANG.upload_delimgs_confirm = "{LANG.upload_delimgs_confirm}";
+LANG.origSize = "{LANG.origSize}";
+LANG.errorMinX = "{LANG.errorMinX}";
+LANG.errorMaxX = "{LANG.errorMaxX}";
+LANG.errorMinY = "{LANG.errorMinY}";
+LANG.errorMaxY = "{LANG.errorMaxY}";
+LANG.errorEmptyX = "{LANG.errorEmptyX}";
+LANG.errorEmptyY = "{LANG.errorEmptyY}";
+LANG.crop = "{LANG.crop}";
+LANG.rotate = "{LANG.rotate}";
+LANG.notupload = "{LANG.notupload}";
+LANG.upload_file = "{LANG.upload_file}";
+LANG.upload_mode = "{LANG.upload_mode}";
+LANG.upload_mode_remote = "{LANG.upload_mode_remote}";
+LANG.upload_mode_local = "{LANG.upload_mode_local}";
+LANG.upload_cancel = "{LANG.upload_cancel}";
+LANG.upload_add_files = "{LANG.upload_add_files}";
+LANG.file_name = "{LANG.file_name}";
+LANG.upload_status = "{LANG.upload_status}";
+LANG.upload_info = "{LANG.upload_info}";
+LANG.upload_stop = "{LANG.upload_stop}";
+LANG.upload_continue = "{LANG.upload_continue}";
+LANG.upload_finish = "{LANG.upload_finish}";
+LANG.crop_error_small = "{LANG.crop_error_small}";
+LANG.save = "{LANG.addlogosave}";
+LANG.notlogo = "{LANG.notlogo}";
+LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
+LANG.altimage = "{LANG.altimage}";
+LANG.upload_alt_note = "{LANG.upload_alt_note}";
+
+var nv_max_width = '{NV_MAX_WIDTH}';
+var nv_max_height = '{NV_MAX_HEIGHT}';
+var nv_min_width = '{NV_MIN_WIDTH}';
+var nv_min_height = '{NV_MIN_HEIGHT}';
+var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=";
+var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
+var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
+var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em><br />{LANG.waiting}...</p>';
+var nv_filters = {
+	mime_types : [
+		<!-- BEGIN: mime -->{ title : "{MIMI_TYPE} files", extensions : "{MIME_EXTS}" },
+		<!-- END: mime -->
+	]
+};
+var nv_alt_require = {UPLOAD_ALT_REQUIRE};
+var nv_auto_alt = {UPLOAD_AUTO_ALT};
+//]]>
+</script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/upload.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#imgfolder").load(nv_module_url + "folderlist&path={PATH}&currentpath={CURRENTPATH}&random=" + nv_randomNum(10));
+	$("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10))
+});
+</script>
 <!--  END: main  -->

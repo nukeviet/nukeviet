@@ -1,38 +1,26 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Language Français
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
-$lang_translator['info'] = 'Langue française pour NukeViet 3';
+$lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['nocatpage'] = 'Erreur: manque de titre';
 $lang_module['other'] = 'Autres articles';
 $lang_module['detail'] = 'Détail';
 $lang_module['more'] = 'Détails...';
-$lang_module['comment'] = 'Commentaires des lecteurs';
-$lang_module['comment_login'] = 'Vous devez vous identifier pour utiliser cette fonctionalité';
-$lang_module['comment_success'] = 'Envoi du Commentaire réussi';
-$lang_module['comment_unsuccess'] = 'Erreur d\'exécution de données';
-$lang_module['comment_title'] = 'Envoyer vos commentaires';
-$lang_module['comment_view'] = 'Consulter les commentaires';
-$lang_module['comment_send'] = 'Envoyer un commentaire';
-$lang_module['comment_name'] = 'Votre nom';
-$lang_module['comment_email'] = 'E-mail';
-$lang_module['comment_content'] = 'Commentaire';
-$lang_module['comment_seccode'] = 'Code de sécurité';
-$lang_module['comment_submit'] = 'Envoyer';
-$lang_module['comment_timeout'] = 'Vous avez déjà commenté, merci d\'attendre %s minutes pour envoyer un autre commentaire.';
 $lang_module['sendmail'] = 'Envoyer aux copains';
 $lang_module['sendmail_subject'] = 'Vous avez un message de:';
 $lang_module['sendmail_name'] = 'Votre nom';
@@ -61,6 +49,8 @@ $lang_module['related_new'] = 'Articles plus récents';
 $lang_module['related'] = 'Articles plus anciens';
 $lang_module['savefile'] = 'Enregistrer cet article';
 $lang_module['rating'] = 'Commentaire';
+$lang_module['rating_average'] = 'Classe';
+$lang_module['rating_count'] = 'Vote';
 $lang_module['stringrating'] = 'Notes de cet article: %1$s avec %2$s votes';
 $lang_module['star_note'] = 'Cliquez sur les étoiles pour évaluer';
 $lang_module['star_verypoor'] = 'très mauvais';
@@ -83,6 +73,7 @@ $lang_module['search_on_internet'] = 'Rechercher sur Internet';
 $lang_module['search_adv_internet'] = 'Élargir la recherche sur Internet';
 $lang_module['search_on_nuke'] = 'Rechercher dans le site';
 $lang_module['search_none'] = 'Aucun résultat';
+$lang_module['empty_data_search'] = 'Vous devez choisir au moins une lexique de recherche';
 $lang_module['search_in_module'] = 'dans la section';
 $lang_module['view_all_title'] = 'Voir tous les résultats';
 $lang_module['pages_title'] = 'Page';
@@ -93,18 +84,16 @@ $lang_module['find_content'] = 'Selon le contenu';
 $lang_module['find_author'] = 'Selon l\'auteur';
 $lang_module['find_resource'] = 'Selon la source';
 $lang_module['find_all'] = 'Tout';
-$lang_module['search_modul_title'] = 'News';
+$lang_module['search_modul_title'] = 'Nouvelle';
 $lang_module['type_title'] = 'Méthode de recherche';
 $lang_module['finter_title'] = 'Depuis:';
 $lang_module['source_title'] = 'Source';
 $lang_module['keywords'] = 'Mot clé';
-$lang_module['member_view'] = 'Cette section est réservée uniquement aux utilisateurs!';
-$lang_module['admin_view'] = 'Cette section est réservée uniquement aux administrateurs!';
-$lang_module['group_view'] = 'Cette section est réservée uniquement aux groupes d\'utilisateurs!';
+$lang_module['no_permission'] = 'Vous ne pouvez pas regarder cet article';
 $lang_module['rating_error1'] = 'Évaluation invalide';
 $lang_module['rating_error2'] = 'Vous avez déjà évalué cet article';
 $lang_module['pubtime'] = 'Rédigé à';
-$lang_module['hotnews'] = 'Spotlight';
+$lang_module['hotnews'] = 'Nouvelle spéciale';
 $lang_module['lastest_comment'] = 'Nouveau commentaire';
 $lang_module['category'] = 'Catégorie';
 $lang_module['view'] = 'Vue';
@@ -112,6 +101,7 @@ $lang_module['counter'] = 'Total';
 $lang_module['total_comment'] = 'Commentaires';
 $lang_module['search_cat'] = 'Rechercher dans la catégorie';
 $lang_module['search_all'] = 'Toutes les catégories';
+$lang_module['search_date_rule'] = 'dd.mm.yyyy';
 $lang_module['content'] = 'Gestion des Articles';
 $lang_module['add_content'] = 'Envoyer l\'article';
 $lang_module['topic_sl'] = 'Sélectionnez le sujet';
@@ -130,7 +120,7 @@ $lang_module['content_bodytext'] = 'Détails';
 $lang_module['search_author'] = 'Auteur';
 $lang_module['content_keywords'] = 'mots clés pour les moteurs de recherche';
 $lang_module['save_temp'] = 'Soumettre';
-$lang_module['save_draft'] = 'Enregistrer le brouillon';
+$lang_module['save_draft'] = 'Sauvegarder comme brouillon';
 $lang_module['save_content'] = 'Publier';
 $lang_module['captcha'] = 'Code de sécurité';
 $lang_module['error_cat'] = 'Erreur: sélectionnez la catégorie';
@@ -145,6 +135,16 @@ $lang_module['error_addcontent'] = 'Erreur: Vous n\'avez pas été autorisé à 
 $lang_module['errorsave'] = 'Erreurs: Impossible d\'ajouter, vérifiez si le titre est existant';
 $lang_module['update_content'] = 'Éditer l\'article';
 $lang_module['del_content'] = 'Supprimer l\'article';
-$lang_module['search_date_rule'] = 'dd.mm.yyyy';
-
-?>
+$lang_module['no_public'] = 'Note: Cet article n\'est pas encore publié, seulement les gens qui ont le droit peuvent le regarder';
+$lang_module['status_alert'] = 'Article est en état:  %1$s';
+$lang_module['status_0'] = 'Désactiver';
+$lang_module['status_1'] = 'Publié';
+$lang_module['status_2'] = 'Horaire';
+$lang_module['status_3'] = 'Expiré';
+$lang_module['status_4'] = 'Sauvegarder temporairement';
+$lang_module['status_5'] = 'Passer à l\'examination l\'article';
+$lang_module['status_6'] = 'Refuse d\'examiner';
+$lang_module['status_7'] = 'En cours d\'examiner';
+$lang_module['status_8'] = 'Passer à la mise en ligne de l\'article';
+$lang_module['status_9'] = 'Refuse de mettre en ligne de l\'article';
+$lang_module['status_10'] = 'En cours d\'examiner avant de mettre en ligne';

@@ -1,4 +1,4 @@
--- NUKEVIET 3.0
+-- NUKEVIET 4.0
 -- Module: Database
 -- http://www.nukeviet.vn
 --
@@ -11,9 +11,9 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET SESSION `character_set_client`='utf8';
 SET SESSION `character_set_results`='utf8';
 SET SESSION `character_set_connection`='utf8';
-SET SESSION `collation_connection`='utf8_general_ci';
+SET SESSION `collation_connection`='{|DB_COLLATION|}';
 SET NAMES 'utf8';
-ALTER DATABASE DEFAULT CHARACTER SET `utf8` COLLATE `utf8_general_ci`;
+ALTER DATABASE DEFAULT CHARACTER SET `utf8` COLLATE `{|DB_COLLATION|}`;
 
 --
 -- Database: `{|DB_NAME|}`

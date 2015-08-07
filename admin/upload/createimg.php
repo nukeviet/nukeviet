@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
 
@@ -12,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'post' ) );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
-if( ! isset( $check_allow_upload_dir['create_file'] ) ) die( "ERROR_" . $lang_module['notlevel'] );
+if( ! isset( $check_allow_upload_dir['create_file'] ) ) die( 'ERROR_' . $lang_module['notlevel'] );
 
 $width = $nv_Request->get_int( 'width', 'post' );
 $height = $nv_Request->get_int( 'height', 'post' );
@@ -28,7 +29,6 @@ while( file_exists( NV_ROOTDIR . '/' . $path . '/' . $file ) )
 	++$i;
 }
 
-require_once ( NV_ROOTDIR . "/includes/class/image.class.php" );
 $createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $imagename, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 $createImage->resizeXY( $width, $height );
 $createImage->save( NV_ROOTDIR . '/' . $path, $file, 75 );
@@ -39,14 +39,12 @@ if( isset( $array_dirname[$path] ) )
 	$did = $array_dirname[$path];
 	$info = nv_getFileInfo( $path, $file );
 	$info['userid'] = $admin_info['userid'];
-	$db->sql_query( "INSERT INTO `" . NV_UPLOAD_GLOBALTABLE . "_file` 
-							(`name`, `ext`, `type`, `filesize`, `src`, `srcwidth`, `srcheight`, `size`, `userid`, `mtime`, `did`, `title`) VALUES 
+	$db->query( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
+							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title) VALUES
 							('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $file . "')" );
 }
 
-nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_createimage'], $path . "/" . $file, $admin_info['userid'] );
+nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['upload_createimage'], $path . '/' . $file, $admin_info['userid'] );
 
 echo $file;
 exit();
-
-?>

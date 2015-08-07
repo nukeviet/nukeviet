@@ -1,6 +1,6 @@
 <!-- BEGIN: clientinfo -->
 <div id="{CONTAINERID}"></div>
 <script type="text/javascript">
-	{AJ}
+{AJ}
 </script>
 <!-- END: clientinfo -->

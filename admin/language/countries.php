@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -14,10 +15,9 @@ $page_title = $lang_module['countries'];
 $array_lang_setup = array();
 $array_lang_setup[] = array( '', $lang_module['site_lang'] );
 
-$sql = "SELECT `lang` FROM `" . $db_config['prefix'] . "_setup_language` WHERE `setup`=1";
-$result = $db->sql_query( $sql );
-
-while( list( $lang_i ) = $db->sql_fetchrow( $result ) )
+$sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1';
+$result = $db->query( $sql );
+while( list( $lang_i ) = $result->fetch( 3 ) )
 {
 	if( in_array( $lang_i, $global_config['allow_sitelangs'] ) )
 	{
@@ -42,18 +42,20 @@ if( $nv_Request->isset_request( 'countries', 'post' ) == 1 )
 		}
 	}
 
-	$content_config .= "\n";
-	$content_config .= "?>";
+	file_put_contents( NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php', $content_config, LOCK_EX );
 
-	file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_geo.php", $content_config, LOCK_EX );
-
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	exit();
 }
 
-include ( NV_ROOTDIR . "/" . NV_DATADIR . "/config_geo.php" );
+include NV_ROOTDIR . '/' . NV_DATADIR . '/config_geo.php' ;
 
-$xtpl = new XTemplate( "countries.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file . "" );
+$xtpl = new XTemplate( 'countries.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 $xtpl->assign( 'LANG', $lang_module );
 
 $nb = 0;
@@ -78,8 +80,6 @@ foreach( $countries as $key => $value )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

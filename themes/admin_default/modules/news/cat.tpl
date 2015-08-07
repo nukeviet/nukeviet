@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+
 <div id="module_show_list">
 	{CAT_LIST}
 </div>
@@ -6,10 +9,9 @@
 
 <div id="edit">
 	<!-- BEGIN: error -->
-	<div class="quote" style="width:780px;">
-		<blockquote class="error"><span>{ERROR}</span></blockquote>
+	<div class="alert alert-warning">
+		{ERROR}
 	</div>
-	<div class="clear"></div>
 	<!-- END: error -->
 	<!-- BEGIN: content -->
 	<form action="{NV_BASE_ADMINURL}index.php" method="post">
@@ -18,94 +20,117 @@
 		<input type="hidden" name ="catid" value="{catid}" />
 		<input type="hidden" name ="parentid_old" value="{parentid}" />
 		<input name="savecat" type="hidden" value="1" />
-		<table class="tab1">
-			<caption>{caption}</caption>
-			<tbody>
-				<tr>
-					<td align="right"><strong>{LANG.name}: </strong></td>
-					<td><input style="width: 600px" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/></td>
-				</tr>
-			</tbody>
-			<tbody class="second">
-				<tr>
-					<td valign="top" align="right"><strong>{LANG.alias}: </strong></td>
-					<td><input style="width: 550px" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/><img src="{NV_BASE_SITEURL}images/refresh.png" width="16" style="cursor: pointer; vertical-align: middle;" onclick="get_alias('cat', {catid});" alt="" height="16" /></td>
-				</tr>
-			</tbody>
-			<tbody>
-				<tr>
-					<td align="right"><strong>Title Site: </strong></td>
-					<td><input style="width: 600px" name="titlesite" type="text" value="{titlesite}" maxlength="255"/></td>
-				</tr>
-			</tbody>
-			<tbody class="second">
-				<tr>
-					<td align="right"><strong>{LANG.cat_sub}: </strong></td>
-					<td>
-					<select name="parentid">
-						<!-- BEGIN: cat_listsub -->
-						<option value="{cat_listsub.value}" {cat_listsub.selected}>{cat_listsub.title}</option>
-						<!-- END: cat_listsub -->
-					</select></td>
-				</tr>
-			</tbody>
-			<tbody>
-				<tr>
-					<td align="right"><strong>{LANG.keywords}: </strong></td>
-					<td><input style="width: 600px" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
-				</tr>
-			</tbody>
-			<tbody class="second">
-				<tr>
-					<td valign="top" align="right">
-					<br />
-					<strong>{LANG.description} </strong></td>
-					<td><textarea style="width: 600px" name="description" cols="100" rows="5">{description}</textarea></td>
-				</tr>
-			</tbody>
-			<tbody>
-				<tr>
-					<td valign="top" align="right">
-					<br />
-					<strong>{GLANG.who_view} </strong></td>
-					<td>
-					<div class="message_body">
-						<select name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')" style="width: 250px;">
-							<!-- BEGIN: who_views -->
-							<option value="{who_views.value}" {who_views.selected}>{who_views.title}</option>
-							<!-- END: who_views -->
-						</select>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<caption>
+					<em class="fa fa-file-text-o">&nbsp;</em>{caption}
+				</caption>
+				<tbody>
+					<tr>
+						<th class="col-md-4 text-right">{LANG.name}: </th>
+						<td class="col-md-20 text-left"><input class="form-control w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+					</tr>
+					<tr>
+						<th class="text-right">{LANG.alias}: </th>
+						<td><input class="form-control w500 pull-left" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/> &nbsp;<em class="fa fa-refresh fa-lg fa-pointer text-middle" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
+					</tr>
+					<tr>
+						<th class="text-right">{LANG.titlesite}: </th>
+						<td><input class="form-control w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+					</tr>
+					<tr>
+						<th class="text-right">{LANG.cat_sub}: </th>
+						<td>
+						<select class="form-control w200" name="parentid" id="parentid">
+							<!-- BEGIN: cat_listsub -->
+							<option value="{cat_listsub.value}" {cat_listsub.selected}>{cat_listsub.title}</option>
+							<!-- END: cat_listsub -->
+						</select></td>
+					</tr>
+					<tr>
+						<th class="text-right">{LANG.keywords}: </th>
+						<td><input class="form-control w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
+					</tr>
+					<tr>
+						<td class="text-right">
 						<br />
-						<div id="groups_list" style="{hidediv}">
-							{GLANG.groups_view}:
-							<table style="margin-bottom:8px; width:250px;">
-								<col valign="top" width="150px" />
-								<tr>
-									<td>
-									<!-- BEGIN: groups_views -->
-									<p><input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}
-									</p>
-									<!-- END: groups_views -->
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div></td>
-				</tr>
-			</tbody>
-		</table>
+						<strong>{LANG.description} </th>
+						<td >
+							<textarea class="form-control" id="description" name="description" cols="100" rows="5">{description}</textarea>
+							<br />
+							<span class="text-middle"> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </span></td>
+					</tr>
+					<tr>
+						<th class="text-right">{LANG.content_homeimg}</th>
+						<td><input class="form-control w500 pull-left" type="text" name="image" id="image" value="{image}"/> &nbsp;<input id="select-img-cat" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+					</tr>
+					<tr>
+						<td class="text-right">
+						<br />
+						<strong>{LANG.viewcat_detail} </th> <td><!-- BEGIN: groups_views -->
+						<div class="row">
+							<label><input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}</label>
+						</div><!-- END: groups_views --></td>
+					</tr>
+					<tr>
+						<th class="text-right">{LANG.content_bodytext}: </th>
+						<td>{DESCRIPTIONHTML}</td>
+					</tr>
+					<tr>
+						<th class="text-right">{LANG.viewdescription}: </th>
+						<td>
+							<!-- BEGIN: viewdescription -->
+							<input type="radio" name="viewdescription" value="{VIEWDESCRIPTION.value}" {VIEWDESCRIPTION.selected}> {VIEWDESCRIPTION.title} &nbsp; &nbsp;
+							<!-- END: viewdescription -->
+						</td>
+					</tr>
+					<!-- BEGIN: featured -->
+					<tr>
+						<th class="text-right">{LANG.featured}: </th>
+						<td>
+						<select class="form-control" name="featured" id="featured">
+							<option value="0" >{LANG.not_featured}</option>
+							<!-- BEGIN: featured_loop -->
+							<option value="{FEATURED_NEWS.id}" {FEATURED_NEWS.selected}>{FEATURED_NEWS.title}</option>
+							<!-- END: featured_loop -->
+						</select></td>
+					</tr>
+					<!-- END: featured -->
+				</tbody>
+			</table>
+		</div>
 		<br />
-		<div align="center">
-			<input name="submit1" type="submit" value="{LANG.save}" />
+		<div class="text-center">
+			<input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" />
 		</div>
 	</form>
 </div>
-<!-- BEGIN: getalias -->
+
 <script type="text/javascript">
+var CFG = [];
+CFG.upload_current = '{UPLOAD_CURRENT}';
+$(document).ready(function() {
+	$("#parentid").select2();
+	$("#titlelength").html($("#idtitle").val().length);
+	$("#idtitle").bind("keyup paste", function() {
+		$("#titlelength").html($(this).val().length);
+	});
+
+	$("#titlesitelength").html($("#titlesite").val().length);
+	$("#titlesite").bind("keyup paste", function() {
+		$("#titlesitelength").html($(this).val().length);
+	});
+
+	$("#descriptionlength").html($("#description").val().length);
+	$("#description").bind("keyup paste", function() {
+		$("#descriptionlength").html($(this).val().length);
+	});
+	<!-- BEGIN: getalias -->
 	$("#idtitle").change(function() {
 		get_alias("cat", 0);
-	}); 
+	});
+	<!-- END: getalias -->
+});
 </script>
-<!-- END: getalias -->
 <!-- END: content -->
 <!-- END: main -->

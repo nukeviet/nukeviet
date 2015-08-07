@@ -1,78 +1,24 @@
-table.statistics {
-	background: #fff;
-	border: 1px solid #dadada;
-	border-collapse: separate;
-	border-spacing: 1px;
-	caption-side: top;
-	empty-cells: show;
-	width: 100%
-}
+/**
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 31/05/2010, 00:36
+ */
 
-table.statistics caption {
-	background: url(../images/arrows/arrow4_red.gif) no-repeat left center;
-	font: bold 13px/27px tahoma, verdana, sans-serif;
-	margin-top: 8px;
-	text-align: left;
-	text-indent: 12px
+.statistics-responsive{
+	width: 100%;
+	overflow-x: auto;
 }
-
-table.statistics tbody {
-	background: #f7f7f7
-}
-
-table.statistics tbody.second {
-	background: #eee
-}
-
-table.statistics td a, table.statistics th a {
-	color: #333;
-	text-decoration: underline
-}
-
-table.statistics td, table.statistics th {
-	padding: 7px 5px
-}
-
-table.statistics tfoot {
-	background: #ccc;
-	font: bold 11px tahoma, verdana, sans-serif
-}
-
-table.statistics th {
-	background: #ccc;
-	font-weight: normal;
-	text-align: left
-}
-
-table.statistics thead, table.statistics .thead_box {
-	background: #8ab0ff;
-	font: bold 11px/18px tahoma, verdana, sans-serif;
-	white-space: nowrap
-}
-
-table.statistics th.head1 {
-	text-align: center;
-	white-space: nowrap;
-	width: 35px
-}
-
-table.statistics td.col1 {
-	font-size: 8px;
-	text-align: center;
+.statistics .data{
 	vertical-align: bottom;
-	width: 35px
-}
-
-table.statistics td.col2 {
-	font-size: 8px;
-	width: 300px
-}
-
-table.statistics tr.row1 {
 	text-align: center;
-	width: 35px
 }
-
-table.statistics td.align_r {
-	text-align: right
+.statistics caption{
+	margin-bottom: 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+.statistics .w250{
+	width: 250px;
 }

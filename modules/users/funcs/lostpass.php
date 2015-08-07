@@ -1,48 +1,56 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 if( defined( 'NV_IS_USER' ) )
 {
-	Header( "Location: " . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name, true ) );
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	die();
 }
 
 if( defined( 'NV_IS_USER_FORUM' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/lostpass.php' );
+	require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/lostpass.php' ;
 	exit();
 }
 
 $page_title = $mod_title = $lang_module['lostpass_page_title'];
 $key_words = $module_info['keywords'];
 
-if( $nv_Request->isset_request( 'u', 'get' ) and $nv_Request->isset_request( 'k', 'get' ) )
+$u = $nv_Request->get_int( 'u', 'post,get' );
+$k = $nv_Request->get_string( 'k', 'post,get' );
+if( ! empty( $u ) and ! empty( $k ) )
 {
 	$contents = $lang_module['lostpass_active_error_link'];
-
-	$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `userid`=" . $nv_Request->get_int( 'u', 'get' );
-	$result = $db->sql_query( $sql );
-	$numrows = $db->sql_numrows( $result );
-	if( $numrows == 1 )
+	$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $u;
+	$row = $db->query( $sql )->fetch();
+	if( ! empty( $row ) )
 	{
-		$row = $db->sql_fetchrow( $result );
-		$k = $nv_Request->get_string( 'k', 'get' );
-
 		if( ! empty( $row['passlostkey'] ) and $k == md5( $row['userid'] . $row['passlostkey'] . $global_config['sitekey'] ) )
 		{
-			$db->sql_query( "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `password`='" . $row['passlostkey'] . "', `passlostkey`='' WHERE `userid`=" . $row['userid'] );
-			$contents = $lang_module['change_pass_ok'];
+			$pass_new = $nv_Request->get_string( 'pass_new', 'post' );
+			$pass_new_re = $nv_Request->get_string( 'pass_new_re', 'post' );
+			if( $pass_new == $pass_new_re and !empty( $pass_new ) )
+			{
+				$password = $crypt->hash_password( $pass_new, $global_config['hashprefix'] );
+				$db->query( "UPDATE " . NV_USERS_GLOBALTABLE . " SET password=" . $db->quote( $password ) . ", passlostkey='' WHERE userid=" . $u );
+				$contents = $lang_module['change_pass_ok'];
+				$contents .= '<meta http-equiv="refresh" content="10;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
+			}
+			else
+			{
+				$contents = user_lostpass_new( $row['userid'], $k );
+			}
 		}
 	}
-	$contents .= "<meta http-equiv=\"refresh\" content=\"5;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
 }
 else
 {
@@ -52,6 +60,8 @@ else
 	$data['answer'] = nv_substr( $nv_Request->get_title( 'answer', 'post', '', 1 ), 0, 255 );
 	$data['send'] = $nv_Request->get_bool( 'send', 'post', false );
 	$data['nv_seccode'] = $nv_Request->get_title( 'nv_seccode', 'post', '' );
+	$data['nv_redirect'] = $nv_Request->get_title( 'nv_redirect', 'get, post', '' );
+
 	$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 	$seccode = $nv_Request->get_string( 'lostpass_seccode', 'session', '' );
 
@@ -67,23 +77,25 @@ else
 				$check_email = nv_check_valid_email( $data['userField'] );
 				if( empty( $check_email ) )
 				{
-					$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `email`=" . $db->dbescape( $data['userField'] ) . " AND `active`=1";
+					$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email= :userField AND active=1';
+					$userField = $data['userField'];
 				}
 				else
 				{
-					$sql = "SELECT * FROM `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` WHERE `md5username`='" . nv_md5safe( $data['userField'] ) . "' AND `active`=1";
+					$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=:userField AND active=1';
+					$userField = nv_md5safe( $data['userField']);
 				}
-				$result = $db->sql_query( $sql );
-				$numrows = $db->sql_numrows( $result );
-				if( $numrows == 1 )
+				$stmt = $db->prepare( $sql ) ;
+				$stmt->bindParam( ':userField', $userField, PDO::PARAM_STR );
+				$stmt->execute();
+				$row = $stmt->fetch();
+				if( ! empty( $row ) )
 				{
 					$step = 2;
 					if( empty( $seccode ) )
 					{
 						$nv_Request->set_Session( 'lostpass_seccode', md5( $data['nv_seccode'] ) );
 					}
-					$row = $db->sql_fetchrow( $result );
-					$db->sql_freeresult( $result );
 
 					$question = $row['question'];
 
@@ -92,7 +104,7 @@ else
 					{
 						$info = $lang_module['openid_lostpass_info'];
 					}
-					elseif( $global_config['allowquestion'] AND ( empty( $row['question'] ) or empty( $row['answer'] ) ) )
+					elseif( $global_config['allowquestion'] and ( empty( $row['question'] ) or empty( $row['answer'] ) ) )
 					{
 						$info = $lang_module['lostpass_question_empty'];
 					}
@@ -102,12 +114,11 @@ else
 						$nv_Request->unset_request( 'lostpass_seccode', 'session' );
 
 						$contents = user_info_exit( $info );
-						$contents .= "<meta http-equiv=\"refresh\" content=\"15;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=lostpass", true ) . "\" />";
+						$contents .= '<meta http-equiv="refresh" content="15;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass', true ) . '" />';
 
-						include ( NV_ROOTDIR . '/includes/header.php' );
+						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
-						include ( NV_ROOTDIR . '/includes/footer.php' );
-						exit();
+						include NV_ROOTDIR . '/includes/footer.php';
 					}
 					if( $global_config['allowquestion'] == 0 )
 					{
@@ -125,20 +136,20 @@ else
 							if ( $rand < 6) $rand = 6;
 							$password_new = nv_genpass( $rand );
 
-							$password = $crypt->hash( $password_new );
-							$passlostkey = md5( $row['userid'] . $password . $global_config['sitekey'] );
+							$passlostkey = md5( $row['userid'] . $password_new . $global_config['sitekey'] );
+							$k = md5( $row['userid'] . $passlostkey . $global_config['sitekey'] );
 
 							$subject = sprintf( $lang_module['lostpass_email_subject'], $global_config['site_name'] );
-							$link_lostpass_content_email = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&u=" . $row['userid'] . "&k=" . $passlostkey;
-							$message = sprintf( $lang_module['lostpass_email_content'], $row['full_name'], $global_config['site_name'], $link_lostpass_content_email, $row['username'], $password_new );
-							$message .= "<br /><br />------------------------------------------------<br /><br />";
-							$message .= nv_EncString( $message );
+							$link_lostpass_content_email = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&u=' . $row['userid'] . '&k=' . $k;
+
+							$row['full_name'] = nv_show_name_user( $row['first_name'], $row['last_name'], $row['username'] );
+							$message = sprintf( $lang_module['lostpass_email_content'], $row['full_name'], $global_config['site_name'], $link_lostpass_content_email, $row['username'] );
 
 							$ok = nv_sendmail( $global_config['site_email'], $row['email'], $subject, $message );
 							if( $ok )
 							{
-								$sql = "UPDATE `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` SET `passlostkey`='" . $password . "' WHERE `userid`=" . $row['userid'];
-								$db->sql_query( $sql );
+								$sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
+								$db->query( $sql );
 								if( ! empty( $check_email ) )
 								{
 									$row['email'] = substr( $row['email'], 0, 3 ) . '***' . substr( $row['email'], -6 );
@@ -150,13 +161,13 @@ else
 								$info = $lang_global['error_sendmail'];
 							}
 
+							$nv_redirect = ! empty( $data['nv_redirect'] ) ? nv_base64_decode( $data['nv_redirect'] ) : nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true );
 							$contents = user_info_exit( $info );
-							$contents .= "<meta http-equiv=\"refresh\" content=\"10;url=" . nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name, true ) . "\" />";
+							$contents .= '<meta http-equiv="refresh" content="10;url=' . $nv_redirect . '" />';
 
-							include ( NV_ROOTDIR . '/includes/header.php' );
+							include NV_ROOTDIR . '/includes/header.php';
 							echo nv_site_theme( $contents );
-							include ( NV_ROOTDIR . '/includes/footer.php' );
-							exit();
+							include NV_ROOTDIR . '/includes/footer.php';
 						}
 						else
 						{
@@ -188,12 +199,10 @@ else
 	}
 
 	$data['step'] = $step;
-	$data['info'] = empty( $error ) ? $lang_module['step' . $data['step']] : "<span style=\"color:#fb490b;\">" . $error . "</span>";
+	$data['info'] = empty( $error ) ? $lang_module['step' . $data['step']] : '<span style="color:#fb490b;">' . $error . '</span>';
 	$contents = user_lostpass( $data, $question );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

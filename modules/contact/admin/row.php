@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright 2010 VINADES. All rights reserved
+ * @Copyright 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 22, 2010 3:00:20 PM
  */
 
@@ -13,44 +14,45 @@ $id = $nv_Request->get_int( 'id', 'post,get', 0 );
 
 if( $id )
 {
-	$sql = "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $id;
-	$result = $db->sql_query( $sql );
+	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $id;
+	$frow = $db->query( $sql )->fetch();
 
-	if( ! $db->sql_numrows( $result ) )
+	if( empty( $frow ) )
 	{
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=list_row" );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department' );
 		die();
 	}
 
-	$frow = $db->sql_fetchrow( $result );
-
 	$page_title = $frow['full_name'];
-	$action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;id=" . $id;
+	$action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $id;
 }
 else
 {
 	$page_title = $lang_module['add_row_title'];
-	$action = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
+	$action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
-$xtpl = new XTemplate( "row.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'row.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
 
-$sql = "SELECT t1.admin_id as id, t1.lev as level, t2.username as admin_login, t2.email as admin_email, t2.full_name as admin_fullname FROM
-	`" . NV_AUTHORS_GLOBALTABLE . "` AS t1 INNER JOIN `" . $db_config['dbsystem'] . "`.`" . NV_USERS_GLOBALTABLE . "` AS t2 ON t1.admin_id = t2.userid
-	WHERE t1.lev!=0 AND t1.is_suspend=0";
-$result = $db->sql_query( $sql );
+$sql = 'SELECT t1.admin_id as id, t1.lev as lev, t2.username as admin_login, t2.email as admin_email, t2.first_name as admin_firstname, t2.last_name as admin_lastname
+	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
+	INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2
+	ON t1.admin_id = t2.userid
+	WHERE t1.lev!=0 AND t1.is_suspend=0';
+$result = $db->query( $sql );
 
 $adms = array();
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	$adms[$row['id']] = array(
 		'login' => $row['admin_login'],
-		'fullname' => $row['admin_fullname'],
+		'first_name' => $row['admin_firstname'],
+		'last_name' => $row['admin_lastname'],
 		'email' => $row['admin_email'],
-		'level' => intval( $row['level'] )
+		'level' => intval( $row['lev'] )
 	);
 }
 
@@ -58,22 +60,38 @@ $error = '';
 
 if( defined( 'NV_EDITOR' ) )
 {
-	require_once ( NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' );
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
+
+$listdepartment = nv_departmentList();
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
 	$full_name = $nv_Request->get_title( 'full_name', 'post', '', 1 );
+	$alias = $nv_Request->get_title( 'alias', 'post', '', 1 );
 	$phone = $nv_Request->get_title( 'phone', 'post', '', 1 );
 	$fax = $nv_Request->get_title( 'fax', 'post', '', 1 );
 	$email = $nv_Request->get_title( 'email', 'post', '', 1 );
+    $yahoo = $nv_Request->get_title( 'yahoo', 'post', '', 1 );
+    $skype = $nv_Request->get_title( 'skype', 'post', '', 1 );
 	$note = $nv_Request->get_editor( 'note', '', NV_ALLOWED_HTML_TAGS );
 
 	$view_level = $nv_Request->get_array( 'view_level', 'post', array() );
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
 	$obt_level = $nv_Request->get_array( 'obt_level', 'post', array() );
 
-	$check_valid_email = nv_check_valid_email( $email );
+    if( !empty( $email ) )
+    {
+        $_email = array_map( "trim", explode( ",", $email ) );
+        $email = array();
+        foreach($_email as $e)
+        {
+            $check_valid_email = nv_check_valid_email( $e );
+            if( empty( $check_valid_email ) ) $email[] = $e;
+        }
+        $email = implode( ", ", $email );
+    }
+    
 
 	$admins = array();
 
@@ -111,14 +129,13 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['err_part_row_title'];
 	}
-	elseif( ! empty( $email ) and ! empty( $check_valid_email ) )
+	elseif( empty ( $alias ) )
 	{
-		$error = $check_valid_email;
+		$error = $lang_module['error_alias'];
 	}
 	else
 	{
-		$note = nv_editor_nl2br( $note );
-
+		$alias = empty( $alias ) ? change_alias( $full_name ) : change_alias( $alias );
 		$admins_list = array();
 		foreach( $adms as $admid => $values )
 		{
@@ -135,32 +152,54 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				}
 			}
 		}
-		$admins_list = implode( ";", $admins_list );
+		$admins_list = implode( ';', $admins_list );
 
 		if( $id )
 		{
-			$sql = "UPDATE`" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET
-				`full_name`=" . $db->dbescape( $full_name ) . ", `phone` = " . $db->dbescape( $phone ) . ",
-				`fax`=" . $db->dbescape( $fax ) . ", `email`=" . $db->dbescape( $email ) . ",
-				`note`=" . $db->dbescape( $note ) . ", `admins`=" . $db->dbescape( $admins_list ) . " WHERE `id` =" . $id;
-
-			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_row', "rowid " . $id, $admin_info['userid'] );
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, phone = :phone, fax=:fax, email=:email, yahoo=:yahoo, skype=:skype, note=:note, admins=:admins WHERE id =' . $id;
+			$name_key = 'log_edit_row';
+			$note_action = 'id: ' . $id .' ' . $full_name;
 		}
 		else
 		{
-			$sql = "INSERT INTO `" . NV_PREFIXLANG . "_" . $module_data . "_rows` VALUES (
-				NULL, " . $db->dbescape( $full_name ) . ", " . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ",
-				" . $db->dbescape( $email ) . ", " . $db->dbescape( $note ) . ", " . $db->dbescape( $admins_list ) . ", 1);";
-
-			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_row', " ", $admin_info['userid'] );
+			$weight = 0;
+			$weight = count( $listdepartment );
+			$weight++;
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, yahoo, skype, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :yahoo, :skype, :note, :admins, 1, :weight, 0)';
+			$name_key = 'log_add_row';
+			$note_action = $full_name;
 		}
 
-		$db->sql_query( $sql );
-
-		nv_del_moduleCache( $module_name );
-
-		Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=list_row" );
-		die();
+		try
+		{
+			$sth = $db->prepare( $sql);
+			$sth->bindParam( ':full_name', $full_name, PDO::PARAM_STR );
+			$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
+			$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
+			$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
+			$sth->bindParam( ':email', $email, PDO::PARAM_STR );
+	        $sth->bindParam( ':yahoo', $yahoo, PDO::PARAM_STR );
+	        $sth->bindParam( ':skype', $skype, PDO::PARAM_STR );
+			$sth->bindParam( ':note', $note, PDO::PARAM_STR );
+			$sth->bindParam( ':admins', $admins_list, PDO::PARAM_STR );
+			if( !$id )
+			{
+				$sth->bindParam( ':weight', $weight, PDO::PARAM_STR );
+			}
+			$sth->execute();
+			if ($sth->rowCount() )
+			{
+				nv_insert_logs( NV_LANG_DATA, $module_name, $name_key , $note_action, $admin_info['userid'] );
+				nv_del_moduleCache( $module_name );
+			}
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department' );
+			die();
+		}
+		catch( PDOException $e )
+		{
+			$error = $lang_module['duplicate_alias'];
+			trigger_error( $e->getMessage() );
+		}
 	}
 }
 else
@@ -168,13 +207,16 @@ else
 	if( $id )
 	{
 		$full_name = $frow['full_name'];
+		$alias = $frow['alias'];
 		$phone = $frow['phone'];
 		$fax = $frow['fax'];
 		$email = $frow['email'];
+        $yahoo = $frow['yahoo'];
+        $skype = $frow['skype'];
 		$note = nv_editor_br2nl( $frow['note'] );
 
 		$admins_list = $frow['admins'];
-		$admins_list = ! empty( $admins_list ) ? array_map( "trim", explode( ";", $admins_list ) ) : array();
+		$admins_list = ! empty( $admins_list ) ? array_map( 'trim', explode( ';', $admins_list ) ) : array();
 
 		$view_level = $reply_level = $obt_level = array();
 
@@ -182,9 +224,9 @@ else
 		{
 			foreach( $admins_list as $l )
 			{
-				if( preg_match( "/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i", $l ) )
+				if( preg_match( '/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i', $l ) )
 				{
-					$l2 = array_map( "intval", explode( "/", $l ) );
+					$l2 = array_map( 'intval', explode( '/', $l ) );
 					$admid = intval( $l2[0] );
 
 					if( isset( $adms[$admid] ) )
@@ -223,7 +265,7 @@ else
 	}
 	else
 	{
-		$full_name = $phone = $fax = $email = $note = '';
+		$full_name = $alias = $phone = $fax = $email = $yahoo = $skype = $note = '';
 		$view_level = $reply_level = $obt_level = array();
 
 		foreach( $adms as $admid => $values )
@@ -239,6 +281,8 @@ else
 
 if( ! empty( $note ) ) $note = nv_htmlspecialchars( $note );
 
+if( empty( $row['alias'] ) ) $xtpl->parse( 'main.get_alias' );
+
 if( ! empty( $error ) )
 {
 	$xtpl->assign( 'ERROR', $error );
@@ -247,34 +291,37 @@ if( ! empty( $error ) )
 
 if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 {
-	$note = nv_aleditor( "note", '100%', '150px', $note );
+	$note = nv_aleditor( 'note', '100%', '150px', $note );
 }
 else
 {
-	$note = "<textarea style=\"width:100%;height:150px\" name=\"note\" id=\"note\">" . $note . "</textarea>";
+	$note = '<textarea style="width:100%;height:150px" name="note" id="note">' . $note . '</textarea>';
 }
 
 $xtpl->assign( 'DATA', array(
 	'full_name' => $full_name,
+	'alias' => $alias,
 	'phone' => $phone,
 	'fax' => $fax,
 	'email' => $email,
+    'yahoo' => $yahoo,
+    'skype' => $skype,
 	'note' => $note
 ) );
-
+//list danh sách bộ phận liên hệ
 $a = 0;
 foreach( $adms as $admid => $values )
 {
 	$xtpl->assign( 'ADMIN', array(
-		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
 		'login' => $values['login'],
-		'fullname' => $values['fullname'],
+		'first_name' => $values['first_name'],
+		'last_name' => $values['last_name'],
 		'email' => $values['email'],
 		'admid' => $admid,
-		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? " checked=\"checked\"" : "",
-		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? " checked=\"checked\"" : "",
-		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? " checked=\"checked\"" : "",
-		'disabled' => $values['level'] === 1 ? " disabled=\"disabled\"" : ""
+		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? ' checked="checked"' : '',
+		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? ' checked="checked"' : '',
+		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? ' checked="checked"' : '',
+		'disabled' => $values['level'] === 1 ? ' disabled="disabled"' : ''
 	) );
 
 	$xtpl->parse( 'main.admin' );
@@ -283,8 +330,6 @@ foreach( $adms as $admid => $values )
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

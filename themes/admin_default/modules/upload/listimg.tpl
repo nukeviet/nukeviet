@@ -1,8 +1,8 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: loopimg -->
 <div class="imgcontent{IMG.sel}" title="{IMG.title}">
-	<div style="width:100px;height:96px;display:table-cell; vertical-align:middle;">
-		<img class="previewimg" alt="{IMG.title}" name="{IMG.data}" src="{IMG.src}" width="{IMG.srcwidth}" height="{IMG.srcheight}" />
+	<div style="width:100px;height:86px;display:table-cell; vertical-align:middle;">
+		<img class="previewimg" alt="{IMG.alt}" title="{IMG.title}" name="{IMG.data}" src="{IMG.src}" width="{IMG.srcwidth}" height="{IMG.srcheight}" />
 	</div>
 	<div class="imgInfo">
 		{IMG.name}
@@ -11,72 +11,59 @@
 	</div>
 </div>
 <!-- END: loopimg -->
-<div style="clear:both"></div>
 <!-- BEGIN: generate_page -->
-<div class="generate_page">
+<div class="clearfix"></div>
+<hr />
+<div class="text-center">
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
-<div style="height:100px"></div>
-
 <script type="text/javascript">
-	//<![CDATA[
-	$("img.previewimg").lazyload({
-		placeholder : "{NV_BASE_SITEURL}images/grey.gif",
-		container : $(".filebrowse")
-	});
-	$(".imgcontent").bind("mouseup", function() {
-		fileMouseup(this)
-	});
+//<![CDATA[
+$('img.previewimg').lazyload({
+	placeholder : "{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/grey.gif",
+	container : $(".filebrowse")
+});
 
-	$(".imgcontent").dblclick(function() {
-		if ($("input[name=CKEditorFuncNum]").val() > 0 || $("input[name=area]").val() != "") {
-			insertvaluetofield()
-		} else if (window.top.opener != null) {
-			window.top.opener.SetUrl(nv_base_siteurl + $("span#foldervalue").attr("title") + "/" + $("input[name=selFile]").val());
-			window.top.close();
-			window.top.opener.focus();
-		}
-	});
+$('.imgcontent').bind("mouseup contextmenu", function(e) {
+	e.preventDefault();
+	fileMouseup(this, e);
+});
 
-	$(".imgcontent").contextMenu("contextMenu", {
-		menuStyle : {
-			width : "120px"
-		},
-		bindings : {
-			select : function() {
-				insertvaluetofield()
-			},
-			download : function() {
-				download()
-			},
-			filepreview : function() {
-				preview()
-			},
-			fileaddlogo : function() {
-				addlogo()
-			},
-			create : function() {
-				create()
-			},
-			move : function() {
-				move()
-			},
-			rename : function() {
-				filerename()
-			},
-			filedelete : function() {
-				filedelete()
-			}
-		}
-	});
-	//]]>
+$('.imgcontent').dblclick(function() {
+	insertvaluetofield();
+});
+
+$( "#imglist" ).selectable({
+	filter: '.imgcontent',
+	delay: 90,
+	start: function( e, ui ){
+		NVCMENU.hide();
+		KEYPR.isSelectable = true;
+		KEYPR.isFileSelectable = true;
+	},
+	selecting: function( e, ui ){
+		fileSelecting(e, ui);
+	},
+	stop: function( e, ui ){
+		fileSelectStop(e, ui);
+
+		setTimeout(function(){
+			KEYPR.isSelectable = false;
+			KEYPR.isFileSelectable = false;
+		}, 50);
+	},
+	unselecting: function( e, ui ){
+		fileUnselect(e, ui);
+	},
+});
+//]]>
 </script>
 
 <!-- BEGIN: imgsel -->
 <script type="text/javascript">
-	$(".imgcontent.imgsel").attr('id', 'nv_imgsel_{NV_CURRENTTIME}');
-	window.location.href = "#nv_imgsel_{NV_CURRENTTIME}"; 
+$(".imgcontent.imgsel:first").attr('id', 'nv_imgsel_{NV_CURRENTTIME}');
+window.location.href = "#nv_imgsel_{NV_CURRENTTIME}";
 </script>
 <!-- END: imgsel -->
 <!-- END: main -->

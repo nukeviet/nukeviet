@@ -1,805 +1,294 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
+
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-function nv_create_table_news( $catid )
+$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules' );
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, module_upload, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
+$sth->execute( array('about', 'page', 'about', 'about', 'About', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 0) );
+$sth->execute( array('news', 'news', 'news', 'news', 'News', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0) );
+$sth->execute( array('users', 'users', 'users', 'users', 'users', 'Users', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0) );
+$sth->execute( array('contact', 'contact', 'contact', 'contact', 'Contact', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0) );
+$sth->execute( array('statistics', 'statistics', 'statistics', 'statistics', 'Statistics', '', NV_CURRENTTIME, 1, 1, '', '', '', 'online, statistics', '2', 5, 1, '', 0, 0) );
+$sth->execute( array('voting', 'voting', 'voting', 'voting', 'Voting', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0) );
+$sth->execute( array('banners', 'banners', 'banners', 'banners', 'Banners', '', NV_CURRENTTIME, 1, 1 , '', '', '', '', '6', 7, 1, '', 0, 0) );
+$sth->execute( array('seek', 'seek', 'seek', 'seek', 'Search', '', NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0) );
+$sth->execute( array('menu', 'menu', 'menu', 'menu', 'Menu Site', '', NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 0) );
+$sth->execute( array('feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0) );
+$sth->execute( array('page', 'page', 'page', 'page', 'Page', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 0) );
+$sth->execute( array('comment', 'comment', 'comment', 'comment', 'Comment', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 12, 1, '', 0, 0) );
+$sth->execute( array('siteterms', 'page', 'siteterms', 'siteterms', 'Terms & Conditions', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 13, 1, '', 1, 0) );
+$sth->execute( array('freecontent', 'freecontent', 'freecontent', 'freecontent', 'Freecontent', '', NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 14, 1, '', 0, 0) );
+
+$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)' );
+$sth->execute( array(1, 'sitemap', 'sitemap', 'Sitemap', 'about', 0, 0, 0, '') );
+$sth->execute( array(2, 'main', 'main', 'Main', 'about', 1, 0, 1, '') );
+$sth->execute( array(3, 'sitemap', 'sitemap', 'Sitemap', 'news', 0, 0, 0, '') );
+$sth->execute( array(5, 'content', 'content', 'Content', 'news', 1, 1, 3, '') );
+$sth->execute( array(6, 'detail', 'detail', 'Detail', 'news', 1, 0, 4, '') );
+$sth->execute( array(7, 'main', 'main', 'Main', 'news', 1, 0, 5, '') );
+$sth->execute( array(9, 'print', 'print', 'Print', 'news', 0, 0, 0, '') );
+$sth->execute( array(10, 'rating', 'rating', 'Rating', 'news', 0, 0, 0, '') );
+$sth->execute( array(11, 'rss', 'rss', 'Rss', 'news', 1, 1, 1, '') );
+$sth->execute( array(12, 'savefile', 'savefile', 'Savefile', 'news', 0, 0, 0, '') );
+$sth->execute( array(13, 'search', 'search', 'Search', 'news', 1, 1, 6, '') );
+$sth->execute( array(14, 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, '') );
+$sth->execute( array(15, 'topic', 'topic', 'Topic', 'news', 1, 0, 7, '') );
+$sth->execute( array(16, 'viewcat', 'viewcat', 'Viewcat', 'news', 1, 0, 8, '') );
+$sth->execute( array(17, 'active', 'active', 'Active', 'users', 1, 1, 8, '') );
+$sth->execute( array(18, 'changepass', 'changepass', 'Changepass', 'users', 1, 1, 6, '') );
+$sth->execute( array(19, 'editinfo', 'editinfo', 'Editinfo', 'users', 1, 0, 10, '') );
+$sth->execute( array(20, 'login', 'login', 'Login', 'users', 1, 1, 2, '') );
+$sth->execute( array(21, 'logout', 'logout', 'Logout', 'users', 1, 1, 3, '') );
+$sth->execute( array(22, 'lostactivelink', 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 9, '') );
+$sth->execute( array(23, 'lostpass', 'lostpass', 'Lostpass', 'users', 1, 1, 5, '') );
+$sth->execute( array(24, 'main', 'main', 'Main', 'users', 1, 0, 1, '') );
+$sth->execute( array(25, 'openid', 'openid', 'Openid', 'users', 1, 1, 7, '') );
+$sth->execute( array(26, 'register', 'register', 'Tegister', 'users', 1, 1, 4, '') );
+$sth->execute( array(27, 'main', 'main', 'Main', 'contact', 1, 0, 1, '') );
+$sth->execute( array(28, 'allbots', 'allbots', 'Bots', 'statistics', 1, 1, 6, '') );
+$sth->execute( array(29, 'allbrowsers', 'allbrowsers', 'Browsers', 'statistics', 1, 1, 4, '') );
+$sth->execute( array(30, 'allcountries', 'allcountries', 'countries', 'statistics', 1, 1, 3, '') );
+$sth->execute( array(31, 'allos', 'allos', 'OS', 'statistics', 1, 1, 5, '') );
+$sth->execute( array(32, 'allreferers', 'allreferers', 'All Referers', 'statistics', 1, 1, 2, '') );
+$sth->execute( array(33, 'main', 'main', 'Main', 'statistics', 1, 0, 1, '') );
+$sth->execute( array(34, 'referer', 'referer', 'refererg', 'statistics', 1, 0, 7, '') );
+$sth->execute( array(35, 'main', 'main', 'Main', 'voting', 1, 0, 1, '') );
+$sth->execute( array(36, 'addads', 'addads', 'Addads', 'banners', 1, 0, 1, '') );
+$sth->execute( array(37, 'cledit', 'cledit', 'Cledit', 'banners', 0, 0, 0, '') );
+$sth->execute( array(38, 'click', 'click', 'Click', 'banners', 0, 0, 0, '') );
+$sth->execute( array(39, 'clientinfo', 'clientinfo', 'Clientinfo', 'banners', 1, 0, 2, '') );
+$sth->execute( array(40, 'clinfo', 'clinfo', 'Clinfo', 'banners', 0, 0, 0, '') );
+$sth->execute( array(41, 'logininfo', 'logininfo', 'Logininfo', 'banners', 0, 0, 0, '') );
+$sth->execute( array(42, 'main', 'main', 'Main', 'banners', 1, 0, 3, '') );
+$sth->execute( array(43, 'stats', 'stats', 'Stats', 'banners', 1, 0, 4, '') );
+$sth->execute( array(44, 'viewmap', 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '') );
+$sth->execute( array(46, 'main', 'main', 'Main', 'seek', 1, 0, 1, '') );
+$sth->execute( array(47, 'main', 'main', 'Main', 'feeds', 1, 0, 1, '') );
+$sth->execute( array(48, 'regroups', 'regroups', 'Register Groups', 'users', 1, 0, 11, '') );
+$sth->execute( array(50, 'memberlist', 'memberlist', 'Memberlist', 'users', 1, 1, 12, '') );
+$sth->execute( array(51, 'groups', 'groups', 'Groups', 'news', 1, 0, 9, '') );
+$sth->execute( array(52, 'tag', 'tag', 'Tag', 'news', 1, 0, 2, '') );
+$sth->execute( array(53, 'main', 'main', 'Main', 'page', 1, 0, 1, '') );
+$sth->execute( array(54, 'main', 'main', 'main', 'comment', 1, 0, 1, '') );
+$sth->execute( array(55, 'post', 'post', 'post', 'comment', 1, 0, 2, '') );
+$sth->execute( array(56, 'like', 'like', 'Like', 'comment', 1, 0, 3, '') );
+$sth->execute( array(57, 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, '') );
+$sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 13, '') );
+$sth->execute( array(59, 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '') );
+$sth->execute( array(60, 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, '') );
+$sth->execute( array(61, 'rss', 'rss', 'Rss', 'page', 0, 0, 0, '') );
+$sth->execute( array(62, 'rss', 'rss', 'Rss', 'about', 0, 0, 0, '') );
+$sth->execute( array(63, 'changequestion', 'changequestion', 'Change Question', 'users', 1, 1, 14, '') );
+$sth->execute( array(64, 'main', 'main', 'Main', 'siteterms', 1, 0, 1, '') );
+$sth->execute( array(65, 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, '') );
+$sth->execute( array(66, 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
+
+$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
+$sth->execute( array(0, 'left-body-right', 'default') );
+$sth->execute( array(2, 'left-body-right', 'default') );
+$sth->execute( array(5, 'left-body-right', 'default') );
+$sth->execute( array(6, 'left-body-right', 'default') );
+$sth->execute( array(7, 'left-body-right', 'default') );
+$sth->execute( array(11, 'left-body-right', 'default') );
+$sth->execute( array(13, 'left-body-right', 'default') );
+$sth->execute( array(15, 'left-body-right', 'default') );
+$sth->execute( array(16, 'left-body-right', 'default') );
+$sth->execute( array(17, 'left-body-right', 'default') );
+$sth->execute( array(18, 'left-body-right', 'default') );
+$sth->execute( array(19, 'left-body-right', 'default') );
+$sth->execute( array(20, 'left-body-right', 'default') );
+$sth->execute( array(21, 'left-body-right', 'default') );
+$sth->execute( array(22, 'left-body-right', 'default') );
+$sth->execute( array(23, 'left-body-right', 'default') );
+$sth->execute( array(24, 'left-body-right', 'default') );
+$sth->execute( array(25, 'left-body-right', 'default') );
+$sth->execute( array(26, 'left-body-right', 'default') );
+$sth->execute( array(27, 'left-body-right', 'default') );
+$sth->execute( array(28, 'left-body', 'default') );
+$sth->execute( array(29, 'left-body', 'default') );
+$sth->execute( array(30, 'left-body', 'default') );
+$sth->execute( array(31, 'left-body', 'default') );
+$sth->execute( array(32, 'left-body', 'default') );
+$sth->execute( array(33, 'left-body', 'default') );
+$sth->execute( array(34, 'left-body', 'default') );
+$sth->execute( array(36, 'left-body-right', 'default') );
+$sth->execute( array(39, 'left-body-right', 'default') );
+$sth->execute( array(42, 'left-body-right', 'default') );
+$sth->execute( array(43, 'left-body-right', 'default') );
+$sth->execute( array(46, 'left-body-right', 'default') );
+$sth->execute( array(47, 'left-body-right', 'default') );
+$sth->execute( array(48, 'left-body-right', 'default') );
+$sth->execute( array(35, 'left-body-right', 'default') );
+$sth->execute( array(50, 'left-body-right', 'default') );
+$sth->execute( array(51, 'left-body-right', 'default') );
+$sth->execute( array(52, 'left-body-right', 'default') );
+$sth->execute( array(53, 'body', 'default') );
+$sth->execute( array(54, 'left-body-right', 'default') );
+$sth->execute( array(55, 'left-body-right', 'default') );
+$sth->execute( array(56, 'left-body-right', 'default') );
+$sth->execute( array(57, 'left-body-right', 'default') );
+$sth->execute( array(58, 'left-body-right', 'default') );
+$sth->execute( array(63, 'left-body-right', 'default') );
+$sth->execute( array(64, 'left-body-right', 'default') );
+$sth->execute( array(65, 'left-body-right', 'default') );
+
+$sth->execute( array(0, 'body', 'mobile_default') );
+$sth->execute( array(2, 'body', 'mobile_default') );
+$sth->execute( array(5, 'body', 'mobile_default') );
+$sth->execute( array(6, 'body', 'mobile_default') );
+$sth->execute( array(7, 'body', 'mobile_default') );
+$sth->execute( array(13, 'body', 'mobile_default') );
+$sth->execute( array(15, 'body', 'mobile_default') );
+$sth->execute( array(16, 'body', 'mobile_default') );
+$sth->execute( array(17, 'body', 'mobile_default') );
+$sth->execute( array(18, 'body', 'mobile_default') );
+$sth->execute( array(19, 'body', 'mobile_default') );
+$sth->execute( array(20, 'body', 'mobile_default') );
+$sth->execute( array(21, 'body', 'mobile_default') );
+$sth->execute( array(22, 'body', 'mobile_default') );
+$sth->execute( array(23, 'body', 'mobile_default') );
+$sth->execute( array(24, 'body', 'mobile_default') );
+$sth->execute( array(25, 'body', 'mobile_default') );
+$sth->execute( array(26, 'body', 'mobile_default') );
+$sth->execute( array(27, 'body', 'mobile_default') );
+$sth->execute( array(28, 'body', 'mobile_default') );
+$sth->execute( array(29, 'body', 'mobile_default') );
+$sth->execute( array(30, 'body', 'mobile_default') );
+$sth->execute( array(31, 'body', 'mobile_default') );
+$sth->execute( array(32, 'body', 'mobile_default') );
+$sth->execute( array(33, 'body', 'mobile_default') );
+$sth->execute( array(34, 'body', 'mobile_default') );
+$sth->execute( array(35, 'body', 'mobile_default') );
+$sth->execute( array(36, 'body', 'mobile_default') );
+$sth->execute( array(39, 'body', 'mobile_default') );
+$sth->execute( array(42, 'body', 'mobile_default') );
+$sth->execute( array(43, 'body', 'mobile_default') );
+$sth->execute( array(46, 'body', 'mobile_default') );
+$sth->execute( array(47, 'body', 'mobile_default') );
+$sth->execute( array(48, 'body', 'mobile_default') );
+$sth->execute( array(50, 'body', 'mobile_default') );
+$sth->execute( array(51, 'body', 'mobile_default') );
+$sth->execute( array(52, 'body', 'mobile_default') );
+$sth->execute( array(53, 'body', 'mobile_default') );
+$sth->execute( array(54, 'body', 'mobile_default') );
+$sth->execute( array(55, 'body', 'mobile_default') );
+$sth->execute( array(56, 'body', 'mobile_default') );
+$sth->execute( array(57, 'body', 'mobile_default') );
+$sth->execute( array(63, 'body', 'mobile_default') );
+$sth->execute( array(64, 'body', 'mobile_default') );
+$sth->execute( array(65, 'body', 'mobile_default') );
+
+$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
+$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'category', '', 'no_title', '[LEFT]', 0, 1, 0, '6', 1, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}') );
+$sth->execute( array(2, 'default', 'statistics', 'global.counter_button.php', 'Online button', '', 'no_title', '[QR_CODE]', 0, 1, 0, '6', 1, 2, '') );
+$sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Left Banner', '', 'no_title', '[LEFT]', 0, 1, 0, '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
+$sth->execute( array(4, 'default', 'about', 'global.about.php', 'About', '', 'border', '[RIGHT]', 0, 1, 0, '6', 1, 1, '') );
+$sth->execute( array(5, 'default', 'users', 'global.user_button.php', 'Login site', '', 'no_title', '[PERSONALAREA]', 0, 1, 0, '6', 1, 1, '') );
+$sth->execute( array(6, 'default', 'voting', 'global.voting_random.php', 'voting', '', 'primary', '[RIGHT]', 0, 1, 0, '6', 1, 3, '') );
+$sth->execute( array(7, 'default', 'news', 'module.block_newscenter.php', 'News', '', 'no_title', '[TOP]', 0, 1, 0, '6', 0, 1, 'a:5:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:5:"width";s:3:"400";s:6:"height";s:0:"";}') );
+$sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Center Banner', '', 'no_title', '[TOP]', 0, 1, 0, '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
+$sth->execute( array(9, 'default', 'theme', 'global.company_info.php', 'Company Info', '', 'simple', '[COMPANY_INFO]', 0, 1, 0, '6', 1, 1, 'a:11:{s:12:"company_name";s:58:"Công ty cổ phần phát triển nguồn mở Việt Nam";s:16:"company_sortname";s:12:"VINADES.,JSC";s:15:"company_regcode";s:0:"";s:16:"company_regplace";s:0:"";s:21:"company_licensenumber";s:0:"";s:22:"company_responsibility";s:0:"";s:15:"company_address";s:72:"Phòng 2004 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội";s:13:"company_phone";s:14:"+84-4-85872007";s:11:"company_fax";s:14:"+84-4-35500914";s:13:"company_email";s:18:"contact@vinades.vn";s:15:"company_website";s:17:"http://vinades.vn";}') );
+$sth->execute( array(10, 'default', 'theme', 'global.QR_code.php', 'QR code', '', 'no_title', '[QR_CODE]', 0, 1, 0, '6', 1, 1, 'a:3:{s:5:"level";s:1:"M";s:15:"pixel_per_point";i:4;s:11:"outer_frame";i:1;}') );
+$sth->execute( array(17, 'default', 'menu', 'global.bootstrap.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, 1, 0, '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:20;}') );
+$sth->execute( array(18, 'default', 'contact', 'global.contact_default.php', 'Contact Default', '', 'no_title', '[CONTACT_DEFAULT]', 0, 1, 0, '6', 1, 1, '') );
+$sth->execute( array(19, 'default', 'theme', 'global.copyright.php', 'Copyright', '', 'no_title', '[FOOTER_SITE]', 0, 1, 0, '6', 1, 1, 'a:5:{s:12:"copyright_by";s:0:"";s:13:"copyright_url";s:0:"";s:9:"design_by";s:12:"VINADES.,JSC";s:10:"design_url";s:18:"http://vinades.vn/";s:13:"siteterms_url";s:'. ( 38 + strlen( NV_BASE_SITEURL ) ).':"' . NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&amp;nv=siteterms";}') );
+$sth->execute( array(21, 'default', 'theme', 'global.social.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, 0, '6', 1, 1, 'a:4:{s:8:"facebook";s:32:"http://www.facebook.com/nukeviet";s:11:"google_plus";s:32:"https://www.google.com/+nukeviet";s:7:"youtube";s:37:"https://www.youtube.com/user/nukeviet";s:7:"twitter";s:28:"https://twitter.com/nukeviet";}') );
+$sth->execute( array(22, 'default', 'theme', 'global.menu_footer.php', 'Main categories', '', 'simple', '[MENU_FOOTER]', 0, 1, 0, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}') );
+$sth->execute( array(24, 'default', 'freecontent', 'global.free_content.php', 'Product', '', 'no_title', '[FEATURED_PRODUCT]', 0, 1, 0, '6', 1, 1, 'a:2:{s:7:"blockid";i:1;s:7:"numrows";i:2;}') );
+$sth->execute( array(20, 'mobile_default', 'menu', 'global.metismenu.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, 1, 0, '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}') );
+$sth->execute( array(23, 'mobile_default', 'theme', 'global.copyright.php', 'Copyright', '', 'no_title', '[FOOTER_SITE]', 0, 1, 0, '6', 1, 1, 'a:5:{s:12:"copyright_by";s:0:"";s:13:"copyright_url";s:0:"";s:9:"design_by";s:12:"VINADES.,JSC";s:10:"design_url";s:18:"http://vinades.vn/";s:13:"siteterms_url";s:35:"/index.php?language=en&nv=siteterms";}') );
+$sth->execute( array(25, 'mobile_default', 'users', 'global.user_button.php', 'Sign In', '', 'no_title', '[MENU_SITE]', 0, 1, 0, '6', 1, 1, '') );
+$sth->execute( array(26, 'mobile_default', 'theme', 'global.menu_footer.php', 'Categories', '', 'primary', '[MENU_FOOTER]', 0, 1, 0, '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:9:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";i:8;s:9:"siteterms";}}') );
+$sth->execute( array(27, 'mobile_default', 'theme', 'global.company_info.php', 'Company Info', '', 'primary', '[COMPANY_INFO]', 0, 1, 0, '6', 1, 1, 'a:11:{s:12:"company_name";s:58:"Công ty cổ phần phát triển nguồn mở Việt Nam";s:16:"company_sortname";s:12:"VINADES.,JSC";s:15:"company_regcode";s:0:"";s:16:"company_regplace";s:0:"";s:21:"company_licensenumber";s:0:"";s:22:"company_responsibility";s:0:"";s:15:"company_address";s:72:"Phòng 2004 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội";s:13:"company_phone";s:14:"+84-4-85872007";s:11:"company_fax";s:14:"+84-4-35500914";s:13:"company_email";s:18:"contact@vinades.vn";s:15:"company_website";s:17:"http://vinades.vn";}') );
+$sth->execute( array(28, 'mobile_default', 'contact', 'global.contact_default.php', 'Contact Default', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, 0, '6', 1, 1, '') );
+$sth->execute( array(29, 'mobile_default', 'theme', 'global.social.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, 0, '6', 1, 2, 'a:4:{s:8:"facebook";s:32:"http://www.facebook.com/nukeviet";s:11:"google_plus";s:32:"https://www.google.com/+nukeviet";s:7:"youtube";s:37:"https://www.youtube.com/user/nukeviet";s:7:"twitter";s:28:"https://twitter.com/nukeviet";}') );
+$sth->execute( array(30, 'mobile_default', 'theme', 'global.QR_code.php', 'QR code', '', 'no_title', '[SOCIAL_ICONS]', 0, 1, 0, '6', 1, 3, 'a:3:{s:5:"level";s:1:"L";s:15:"pixel_per_point";i:4;s:11:"outer_frame";i:1;}') );
+
+//
+// Thiết lập Block
+$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
+
+$array_funcid = array();
+$array_funcid_mod = array();
+$array_weight_block = array();
+
+$func_result = $db->query( 'SELECT func_id, func_name, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
+while( list( $func_id_i, $func_name, $in_module ) = $func_result->fetch( 3 ) )
 {
-	global $db, $db_config, $lang_data;
-
-	$db->sql_query( "SET SQL_QUOTE_SHOW_CREATE = 1" );
-	$result = $db->sql_query( "SHOW CREATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows`" );
-	$show = $db->sql_fetchrow( $result );
-	$db->sql_freeresult( $result );
-
-	$show = preg_replace( '/(KEY[^\(]+)(\([^\)]+\))[\s\r\n\t]+(USING BTREE)/i', '\\1\\3 \\2', $show[1] );
-	$sql = preg_replace( '/(default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP|DEFAULT CHARSET=\w+|COLLATE=\w+|character set \w+|collate \w+|AUTO_INCREMENT=\w+)/i', ' \\1', $show );
-	$sql = str_replace( $db_config['prefix'] . "_" . $lang_data . "_news_rows", $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid, $sql );
-
-	$db->sql_query( $sql );
+	$array_funcid[] = $func_id_i;
+	$array_funcid_mod[$in_module][$func_name] = $func_id_i;
 }
 
-$sql_create_table = array();
+$func_result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups ORDER BY theme ASC, position ASC, weight ASC' );
+while( $row = $func_result->fetch() )
+{
+	if( $row['all_func']==1 )
+	{
+		$array_funcid_i = $array_funcid;
+	}
+	else
+	{
+		$array_funcid_i = $array_funcid_mod[$row['module']];
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modules`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modules` (`title`, `module_file`, `module_data`, `custom_title`, `admin_title`, `set_time`, `main_file`, `admin_file`, `theme`, `mobile`, `description`, `keywords`, `groups_view`, `in_menu`, `weight`, `submenu`, `act`, `admins`, `rss`) VALUES
-('about', 'about', 'about', 'About', '', 1276333182, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 1, 1, 1, '', 0),
-('news', 'news', 'news', 'News', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 2, 1, 1, '', 1),
-('users', 'users', 'users', 'Users', '', 1274080277, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 3, 1, 1, '', 0),
-('contact', 'contact', 'contact', 'Contact', '', 1275351337, 1, 1, '', 'mobile_nukeviet', '', '', '0', 1, 4, 1, 1, '', 0),
-('statistics', 'statistics', 'statistics', 'Statistics', '', 1276520928, 1, 0, '', 'mobile_nukeviet', '', 'online, statistics', '0', 1, 5, 1, 1, '', 0),
-('voting', 'voting', 'voting', 'Voting', '', 1275315261, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 6, 1, 1, '', 1),
-('banners', 'banners', 'banners', 'Banners', '', 1270400000, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 7, 1, 1, '', 0),
-('search', 'search', 'search', 'Search', '', 1273474173, 1, 0, '', 'mobile_nukeviet', '', '', '0', 0, 8, 1, 1, '', 0),
-('menu', 'menu', 'menu', 'Menu Site', '', 1295287334, 0, 1, '', 'mobile_nukeviet', '', '', '0', 0, 9, 1, 1, '', 0),
-('rss', 'rss', 'rss', 'Rss', '', 1279366705, 1, 1, '', 'mobile_nukeviet', '', '', '0', 0, 10, 1, 1, '', 0)";
+		$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $row['theme'] . '/config.ini' );
+		$blocks = $xml->xpath( 'setblocks/block' );
+		for( $i = 0, $count = sizeof( $blocks ); $i < $count; ++$i )
+		{
+			$rowini = (array)$blocks[$i];
+			if( $rowini['module'] == $row['module'] AND $rowini['file_name'] == $row['file_name'] )
+			{
+				$array_funcid_i = array();
+				if( ! is_array( $rowini['funcs'] ) )
+				{
+					$rowini['funcs'] = array( $rowini['funcs'] );
+				}
+				foreach( $rowini['funcs'] as $_funcs_list )
+				{
+					list( $mod, $func_list ) = explode( ':', $_funcs_list );
+					$func_array = explode( ',', $func_list );
+					foreach( $func_array as $_func )
+					{
+						if( isset( $array_funcid_mod[$row['module']][$_func] ))
+						{
+							$array_funcid_i[] = $array_funcid_mod[$row['module']][$_func];
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
 
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` (`func_id`, `func_name`, `func_custom_name`, `in_module`, `show_func`, `in_submenu`, `subweight`, `setting`) VALUES
-(1, 'Sitemap', 'Sitemap', 'about', 0, 0, 0, ''),
-(2, 'main', 'Main', 'about', 1, 0, 1, ''),
-(3, 'Sitemap', 'Sitemap', 'news', 0, 0, 0, ''),
-(4, 'comment', 'Comment', 'news', 0, 0, 0, ''),
-(5, 'content', 'Content', 'news', 1, 0, 1, ''),
-(6, 'detail', 'Detail', 'news', 1, 0, 2, ''),
-(7, 'main', 'Main', 'news', 1, 0, 3, ''),
-(8, 'postcomment', 'Postcomment', 'news', 0, 0, 0, ''),
-(9, 'print', 'Print', 'news', 0, 0, 0, ''),
-(10, 'rating', 'Rating', 'news', 0, 0, 0, ''),
-(11, 'rss', 'Rss', 'news', 0, 0, 0, ''),
-(12, 'savefile', 'Savefile', 'news', 0, 0, 0, ''),
-(13, 'search', 'Search', 'news', 1, 0, 4, ''),
-(14, 'sendmail', 'Sendmail', 'news', 0, 0, 0, ''),
-(15, 'topic', 'Topic', 'news', 1, 0, 5, ''),
-(16, 'viewcat', 'Viewcat', 'news', 1, 0, 6, ''),
-(17, 'active', 'Active', 'users', 1, 0, 8, ''),
-(18, 'changepass', 'Changepass', 'users', 1, 1, 6, ''),
-(19, 'editinfo', 'Editinfo', 'users', 1, 0, 10, ''),
-(20, 'login', 'Login', 'users', 1, 1, 2, ''),
-(21, 'logout', 'Logout', 'users', 1, 1, 3, ''),
-(22, 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 9, ''),
-(23, 'lostpass', 'Lostpass', 'users', 1, 1, 5, ''),
-(24, 'main', 'Main', 'users', 1, 0, 1, ''),
-(25, 'openid', 'Openid', 'users', 1, 1, 7, ''),
-(26, 'register', 'Register', 'users', 1, 1, 4, ''),
-(27, 'main', 'Main', 'contact', 1, 0, 1, ''),
-(28, 'allbots', 'Allbots', 'statistics', 1, 1, 6, ''),
-(29, 'allbrowsers', 'Allbrowsers', 'statistics', 1, 1, 4, ''),
-(30, 'allcountries', 'Allcountries', 'statistics', 1, 1, 3, ''),
-(31, 'allos', 'Allos', 'statistics', 1, 1, 5, ''),
-(32, 'allreferers', 'Allreferers', 'statistics', 1, 1, 2, ''),
-(33, 'main', 'Main', 'statistics', 1, 0, 1, ''),
-(34, 'referer', 'Referer', 'statistics', 1, 0, 7, ''),
-(35, 'main', 'Main', 'voting', 1, 0, 1, ''),
-(36, 'addads', 'Addads', 'banners', 1, 0, 1, ''),
-(37, 'cledit', 'Cledit', 'banners', 0, 0, 0, ''),
-(38, 'click', 'Click', 'banners', 0, 0, 0, ''),
-(39, 'clientinfo', 'Clientinfo', 'banners', 1, 0, 2, ''),
-(40, 'clinfo', 'Clinfo', 'banners', 0, 0, 0, ''),
-(41, 'logininfo', 'Logininfo', 'banners', 0, 0, 0, ''),
-(42, 'main', 'Main', 'banners', 1, 0, 3, ''),
-(43, 'stats', 'Stats', 'banners', 1, 0, 4, ''),
-(44, 'viewmap', 'Viewmap', 'banners', 0, 0, 0, ''),
-(45, 'adv', 'Adv', 'search', 0, 0, 0, ''),
-(46, 'main', 'Main', 'search', 1, 0, 1, ''),
-(47, 'main', 'Main', 'rss', 1, 0, 1, ''),
-(48, 'regroups', 'Regroups', 'users', 1, 0, 11, ''),
-(50, 'memberlist', 'Member List', 'users', 1, 1, 12, ''),
-(51, 'groups', 'Groups', 'news', 1, 0, 7, '')";
+	foreach( $array_funcid_i as $func_id )
+	{
+		if( isset($array_weight_block[$row['theme']][$row['position']][$func_id]) )
+		{
+			$weight = $array_weight_block[$row['theme']][$row['position']][$func_id] + 1;
+		}
+		else
+		{
+			$weight = 1;
+		}
+		$array_weight_block[$row['theme']][$row['position']][$func_id] = $weight;
 
-$sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
-(0, 'body-right', 'modern'),
-(0, 'left-body-right', 'default'),
-(2, 'body', 'modern'),
-(2, 'left-body-right', 'default'),
-(5, 'body-right', 'modern'),
-(5, 'left-body-right', 'default'),
-(6, 'body-right', 'modern'),
-(6, 'left-body-right', 'default'),
-(7, 'body-right', 'modern'),
-(7, 'left-body-right', 'default'),
-(13, 'body-right', 'modern'),
-(13, 'left-body-right', 'default'),
-(15, 'body-right', 'modern'),
-(15, 'left-body-right', 'default'),
-(16, 'body-right', 'modern'),
-(16, 'left-body-right', 'default'),
-(17, 'body-right', 'modern'),
-(17, 'left-body-right', 'default'),
-(18, 'body-right', 'modern'),
-(18, 'left-body-right', 'default'),
-(19, 'body-right', 'modern'),
-(19, 'left-body-right', 'default'),
-(20, 'body-right', 'modern'),
-(20, 'left-body-right', 'default'),
-(21, 'body-right', 'modern'),
-(21, 'left-body-right', 'default'),
-(22, 'body-right', 'modern'),
-(22, 'left-body-right', 'default'),
-(23, 'body-right', 'modern'),
-(23, 'left-body-right', 'default'),
-(24, 'body-right', 'modern'),
-(24, 'left-body-right', 'default'),
-(25, 'body-right', 'modern'),
-(25, 'left-body-right', 'default'),
-(26, 'body-right', 'modern'),
-(26, 'left-body-right', 'default'),
-(27, 'body-right', 'modern'),
-(27, 'left-body-right', 'default'),
-(28, 'body', 'modern'),
-(28, 'left-body', 'default'),
-(29, 'body', 'modern'),
-(29, 'left-body', 'default'),
-(30, 'body', 'modern'),
-(30, 'left-body', 'default'),
-(31, 'body', 'modern'),
-(31, 'left-body', 'default'),
-(32, 'body', 'modern'),
-(32, 'left-body', 'default'),
-(33, 'body', 'modern'),
-(33, 'left-body', 'default'),
-(34, 'body', 'modern'),
-(34, 'left-body', 'default'),
-(36, 'body-right', 'modern'),
-(36, 'left-body-right', 'default'),
-(39, 'body-right', 'modern'),
-(39, 'left-body-right', 'default'),
-(42, 'body-right', 'modern'),
-(42, 'left-body-right', 'default'),
-(43, 'body-right', 'modern'),
-(43, 'left-body-right', 'default'),
-(46, 'body-right', 'modern'),
-(46, 'left-body-right', 'default'),
-(47, 'body', 'modern'),
-(47, 'left-body-right', 'default'),
-(48, 'body-right', 'modern'),
-(48, 'left-body-right', 'default')";
+		$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight (bid, func_id, weight) VALUES (' . $row['bid'] . ', ' . $func_id . ', ' . $weight . ')' );
+	}
+}
 
-$sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
-(0, 'body', 'mobile_nukeviet'),
-(2, 'body', 'mobile_nukeviet'),
-(5, 'body', 'mobile_nukeviet'),
-(6, 'body', 'mobile_nukeviet'),
-(7, 'body', 'mobile_nukeviet'),
-(13, 'body', 'mobile_nukeviet'),
-(15, 'body', 'mobile_nukeviet'),
-(16, 'body', 'mobile_nukeviet'),
-(17, 'body', 'mobile_nukeviet'),
-(18, 'body', 'mobile_nukeviet'),
-(19, 'body', 'mobile_nukeviet'),
-(20, 'body', 'mobile_nukeviet'),
-(21, 'body', 'mobile_nukeviet'),
-(22, 'body', 'mobile_nukeviet'),
-(23, 'body', 'mobile_nukeviet'),
-(24, 'body', 'mobile_nukeviet'),
-(25, 'body', 'mobile_nukeviet'),
-(26, 'body', 'mobile_nukeviet'),
-(27, 'body', 'mobile_nukeviet'),
-(28, 'body', 'mobile_nukeviet'),
-(29, 'body', 'mobile_nukeviet'),
-(30, 'body', 'mobile_nukeviet'),
-(31, 'body', 'mobile_nukeviet'),
-(32, 'body', 'mobile_nukeviet'),
-(33, 'body', 'mobile_nukeviet'),
-(34, 'body', 'mobile_nukeviet'),
-(36, 'body', 'mobile_nukeviet'),
-(39, 'body', 'mobile_nukeviet'),
-(42, 'body', 'mobile_nukeviet'),
-(43, 'body', 'mobile_nukeviet'),
-(46, 'body', 'mobile_nukeviet'),
-(47, 'body', 'mobile_nukeviet'),
-(48, 'body', 'mobile_nukeviet')";
+$disable_site_content = 'For technical reasons Web site temporary not available. we are very sorry for that inconvenience!';
 
-$sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
-(35, 'body-right', 'modern'),
-(35, 'left-body-right', 'default'),
-(35, 'body', 'mobile_nukeviet')";
-
-$sql_create_table[] = "REPLACE INTO `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` (`func_id`, `layout`, `theme`) VALUES
-(50, 'body-right', 'modern'),
-(50, 'left-body-right', 'default'),
-(50, 'body', 'mobile_nukeviet')";
-
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` (`bid`, `theme`, `module`, `file_name`, `title`, `link`, `template`, `position`, `exp_time`, `active`, `groups_view`, `all_func`, `weight`, `config`) VALUES
-(1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, 1, '0', 0, 1, 'a:1:{s:12:\"title_length\";i:25;}'),
-(2, 'default', 'statistics', 'global.counter.php', 'Counter', '', '', '[LEFT]', 0, 1, '0', 1, 2, ''),
-(3, 'default', 'banners', 'global.banners.php', 'Left Banner', '', '', '[LEFT]', 0, 1, '0', 1, 3, 'a:1:{s:12:\"idplanbanner\";i:2;}'),
-(4, 'default', 'about', 'global.about.php', 'About', '', 'orange', '[RIGHT]', 0, 1, '0', 1, 1, ''),
-(5, 'default', 'users', 'global.login.php', 'Login site', '', '', '[RIGHT]', 0, 1, '0', 1, 2, ''),
-(6, 'default', 'voting', 'global.voting_random.php', 'Voting', '', '', '[RIGHT]', 0, 1, '0', 1, 3, ''),
-(7, 'default', 'news', 'module.block_headline.php', 'headline', '', 'no_title', '[TOP]', 0, 1, '0', 0, 1, ''),
-(8, 'default', 'banners', 'global.banners.php', 'Center Banner', '', 'no_title', '[TOP]', 0, 1, '0', 1, 2, 'a:1:{s:12:\"idplanbanner\";i:1;}'),
-(9, 'modern', 'news', 'module.block_newscenter.php', 'News Center', '', 'no_title', '[HEADER]', 0, 1, '0', 0, 1, ''),
-(10, 'modern', 'about', 'global.about.php', 'About', '', 'no_title_html', '[RIGHT]', 0, 1, '0', 1, 1, ''),
-(11, 'modern', 'users', 'global.login.php', 'Login site', '', '', '[RIGHT]', 0, 1, '0', 1, 2, ''),
-(12, 'modern', 'voting', 'global.voting_random.php', 'Voting', '', '', '[RIGHT]', 0, 1, '0', 1, 3, ''),
-(13, 'modern', 'statistics', 'global.counter.php', 'Counter', '', '', '[RIGHT]', 0, 1, '0', 1, 4, ''),
-(14, 'modern', 'news', 'module.block_newsright.php', 'News Right', '', 'no_title', '[RIGHT]', 0, 1, '0', 0, 5, ''),
-(15, 'modern', 'banners', 'global.banners.php', 'Top banner', '', 'no_title', '[TOPADV]', 0, 1, '0', 1, 1, 'a:1:{s:12:\"idplanbanner\";i:1;}'),
-(16, 'modern', 'menu', 'global.menu_theme_modern.php', 'global menu theme modern', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, ''),
-(17, 'default', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, ''),
-(18, 'modern', 'global', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:\"htmlcontent\";s:207:\"© Copyright NukeViet 3. All right reserved.<br  />Powered by <a href=\"http://nukeviet.vn/\" title=\"NukeViet CMS\">NukeViet CMS</a>. Design by <a href=\"http://vinades.vn/\" title=\"VINADES.,JSC\">VINADES.,JSC</a>\";}'),
-(19, 'default', 'global', 'global.html.php', 'footer site', '', 'no_title', '[FOOTER_SITE]', 0, 1, '0', 1, 1, 'a:1:{s:11:\"htmlcontent\";s:231:\"<p class=\"footer\"> © Copyright NukeViet 3. All right reserved.</p><p> Powered by <a href=\"http://nukeviet.vn/\" title=\"NukeViet CMS\">NukeViet CMS</a>. Design by <a href=\"http://vinades.vn/\" title=\"VINADES.,JSC\">VINADES.,JSC</a></p>\";}'), 
-(20, 'mobile_nukeviet', 'menu', 'global.menu_theme_default.php', 'global menu theme default', '', 'no_title', '[MENU_SITE]', 0, 1, '0', 1, 1, '')";
-
-$sql_create_table[] = "TRUNCATE TABLE `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight`";
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES
-(1, 5, 1),
-(1, 6, 1),
-(1, 7, 1),
-(1, 13, 1),
-(1, 15, 1),
-(1, 16, 1),
-(2, 2, 1),
-(2, 36, 1),
-(2, 39, 1),
-(2, 42, 1),
-(2, 43, 1),
-(2, 27, 1),
-(2, 5, 2),
-(2, 6, 2),
-(2, 7, 2),
-(2, 13, 2),
-(2, 15, 2),
-(2, 16, 2),
-(2, 47, 1),
-(2, 46, 1),
-(2, 28, 1),
-(2, 29, 1),
-(2, 30, 1),
-(2, 31, 1),
-(2, 32, 1),
-(2, 33, 1),
-(2, 34, 1),
-(2, 17, 1),
-(2, 25, 1),
-(2, 24, 1),
-(2, 23, 1),
-(2, 22, 1),
-(2, 21, 1),
-(2, 20, 1),
-(2, 19, 1),
-(2, 18, 1),
-(2, 26, 1),
-(3, 2, 2),
-(3, 36, 2),
-(3, 39, 2),
-(3, 42, 2),
-(3, 43, 2),
-(3, 27, 2),
-(3, 5, 3),
-(3, 6, 3),
-(3, 7, 3),
-(3, 13, 3),
-(3, 15, 3),
-(3, 16, 3),
-(3, 47, 2),
-(3, 46, 2),
-(3, 28, 2),
-(3, 29, 2),
-(3, 30, 2),
-(3, 31, 2),
-(3, 32, 2),
-(3, 33, 2),
-(3, 34, 2),
-(3, 17, 2),
-(3, 25, 2),
-(3, 24, 2),
-(3, 23, 2),
-(3, 22, 2),
-(3, 21, 2),
-(3, 20, 2),
-(3, 19, 2),
-(3, 18, 2),
-(3, 26, 2),
-(4, 2, 1),
-(4, 36, 1),
-(4, 39, 1),
-(4, 42, 1),
-(4, 43, 1),
-(4, 27, 1),
-(4, 5, 1),
-(4, 6, 1),
-(4, 7, 1),
-(4, 13, 1),
-(4, 15, 1),
-(4, 16, 1),
-(4, 47, 1),
-(4, 46, 1),
-(4, 28, 1),
-(4, 29, 1),
-(4, 30, 1),
-(4, 31, 1),
-(4, 32, 1),
-(4, 33, 1),
-(4, 34, 1),
-(4, 17, 1),
-(4, 25, 1),
-(4, 24, 1),
-(4, 23, 1),
-(4, 22, 1),
-(4, 21, 1),
-(4, 20, 1),
-(4, 19, 1),
-(4, 18, 1),
-(4, 26, 1),
-(5, 2, 2),
-(5, 36, 2),
-(5, 39, 2),
-(5, 42, 2),
-(5, 43, 2),
-(5, 27, 2),
-(5, 5, 2),
-(5, 6, 2),
-(5, 7, 2),
-(5, 13, 2),
-(5, 15, 2),
-(5, 16, 2),
-(5, 47, 2),
-(5, 46, 2),
-(5, 28, 2),
-(5, 29, 2),
-(5, 30, 2),
-(5, 31, 2),
-(5, 32, 2),
-(5, 33, 2),
-(5, 34, 2),
-(5, 17, 2),
-(5, 25, 2),
-(5, 24, 2),
-(5, 23, 2),
-(5, 22, 2),
-(5, 21, 2),
-(5, 20, 2),
-(5, 19, 2),
-(5, 18, 2),
-(5, 26, 2),
-(6, 2, 3),
-(6, 36, 3),
-(6, 39, 3),
-(6, 42, 3),
-(6, 43, 3),
-(6, 27, 3),
-(6, 5, 3),
-(6, 6, 3),
-(6, 7, 3),
-(6, 13, 3),
-(6, 15, 3),
-(6, 16, 3),
-(6, 47, 3),
-(6, 46, 3),
-(6, 28, 3),
-(6, 29, 3),
-(6, 30, 3),
-(6, 31, 3),
-(6, 32, 3),
-(6, 33, 3),
-(6, 34, 3),
-(6, 17, 3),
-(6, 25, 3),
-(6, 24, 3),
-(6, 23, 3),
-(6, 22, 3),
-(6, 21, 3),
-(6, 20, 3),
-(6, 19, 3),
-(6, 18, 3),
-(6, 26, 3),
-(7, 7, 1),
-(8, 2, 1),
-(8, 36, 1),
-(8, 39, 1),
-(8, 42, 1),
-(8, 43, 1),
-(8, 27, 1),
-(8, 5, 1),
-(8, 6, 1),
-(8, 7, 2),
-(8, 13, 1),
-(8, 15, 1),
-(8, 16, 1),
-(8, 47, 1),
-(8, 46, 1),
-(8, 28, 1),
-(8, 29, 1),
-(8, 30, 1),
-(8, 31, 1),
-(8, 32, 1),
-(8, 33, 1),
-(8, 34, 1),
-(8, 17, 1),
-(8, 25, 1),
-(8, 24, 1),
-(8, 23, 1),
-(8, 22, 1),
-(8, 21, 1),
-(8, 20, 1),
-(8, 19, 1),
-(8, 18, 1),
-(8, 26, 1),
-(9, 7, 1),
-(10, 2, 1),
-(10, 36, 1),
-(10, 39, 1),
-(10, 42, 1),
-(10, 43, 1),
-(10, 27, 1),
-(10, 5, 1),
-(10, 6, 1),
-(10, 7, 1),
-(10, 13, 1),
-(10, 15, 1),
-(10, 16, 1),
-(10, 47, 1),
-(10, 46, 1),
-(10, 28, 1),
-(10, 29, 1),
-(10, 30, 1),
-(10, 31, 1),
-(10, 32, 1),
-(10, 33, 1),
-(10, 34, 1),
-(10, 17, 1),
-(10, 25, 1),
-(10, 24, 1),
-(10, 23, 1),
-(10, 22, 1),
-(10, 21, 1),
-(10, 20, 1),
-(10, 19, 1),
-(10, 18, 1),
-(10, 26, 1),
-(11, 2, 2),
-(11, 36, 2),
-(11, 39, 2),
-(11, 42, 2),
-(11, 43, 2),
-(11, 27, 2),
-(11, 5, 2),
-(11, 6, 2),
-(11, 7, 2),
-(11, 13, 2),
-(11, 15, 2),
-(11, 16, 2),
-(11, 47, 2),
-(11, 46, 2),
-(11, 28, 2),
-(11, 29, 2),
-(11, 30, 2),
-(11, 31, 2),
-(11, 32, 2),
-(11, 33, 2),
-(11, 34, 2),
-(11, 17, 2),
-(11, 25, 2),
-(11, 24, 2),
-(11, 23, 2),
-(11, 22, 2),
-(11, 21, 2),
-(11, 20, 2),
-(11, 19, 2),
-(11, 18, 2),
-(11, 26, 2),
-(12, 2, 3),
-(12, 36, 3),
-(12, 39, 3),
-(12, 42, 3),
-(12, 43, 3),
-(12, 27, 3),
-(12, 5, 3),
-(12, 6, 3),
-(12, 7, 3),
-(12, 13, 3),
-(12, 15, 3),
-(12, 16, 3),
-(12, 47, 3),
-(12, 46, 3),
-(12, 28, 3),
-(12, 29, 3),
-(12, 30, 3),
-(12, 31, 3),
-(12, 32, 3),
-(12, 33, 3),
-(12, 34, 3),
-(12, 17, 3),
-(12, 25, 3),
-(12, 24, 3),
-(12, 23, 3),
-(12, 22, 3),
-(12, 21, 3),
-(12, 20, 3),
-(12, 19, 3),
-(12, 18, 3),
-(12, 26, 3),
-(13, 2, 4),
-(13, 36, 4),
-(13, 39, 4),
-(13, 42, 4),
-(13, 43, 4),
-(13, 27, 4),
-(13, 5, 4),
-(13, 6, 4),
-(13, 7, 4),
-(13, 13, 4),
-(13, 15, 4),
-(13, 16, 4),
-(13, 47, 4),
-(13, 46, 4),
-(13, 28, 4),
-(13, 29, 4),
-(13, 30, 4),
-(13, 31, 4),
-(13, 32, 4),
-(13, 33, 4),
-(13, 34, 4),
-(13, 17, 4),
-(13, 25, 4),
-(13, 24, 4),
-(13, 23, 4),
-(13, 22, 4),
-(13, 21, 4),
-(13, 20, 4),
-(13, 19, 4),
-(13, 18, 4),
-(13, 26, 4),
-(14, 5, 5),
-(14, 6, 5),
-(14, 7, 5),
-(14, 13, 5),
-(14, 15, 5),
-(14, 16, 5),
-(15, 2, 1),
-(15, 36, 1),
-(15, 39, 1),
-(15, 42, 1),
-(15, 43, 1),
-(15, 27, 1),
-(15, 5, 1),
-(15, 6, 1),
-(15, 7, 1),
-(15, 13, 1),
-(15, 15, 1),
-(15, 16, 1),
-(15, 47, 1),
-(15, 46, 1),
-(15, 28, 1),
-(15, 29, 1),
-(15, 30, 1),
-(15, 31, 1),
-(15, 32, 1),
-(15, 33, 1),
-(15, 34, 1),
-(15, 17, 1),
-(15, 25, 1),
-(15, 24, 1),
-(15, 23, 1),
-(15, 22, 1),
-(15, 21, 1),
-(15, 20, 1),
-(15, 19, 1),
-(15, 18, 1),
-(15, 26, 1),
-(16, 2, 1),
-(16, 36, 1),
-(16, 39, 1),
-(16, 42, 1),
-(16, 43, 1),
-(16, 27, 1),
-(16, 5, 1),
-(16, 6, 1),
-(16, 7, 1),
-(16, 13, 1),
-(16, 15, 1),
-(16, 16, 1),
-(16, 47, 1),
-(16, 46, 1),
-(16, 33, 1),
-(16, 32, 1),
-(16, 30, 1),
-(16, 29, 1),
-(16, 31, 1),
-(16, 28, 1),
-(16, 34, 1),
-(16, 24, 1),
-(16, 20, 1),
-(16, 21, 1),
-(16, 26, 1),
-(16, 23, 1),
-(16, 18, 1),
-(16, 25, 1),
-(16, 17, 1),
-(16, 22, 1),
-(16, 19, 1),
-(17, 2, 1),
-(17, 36, 1),
-(17, 39, 1),
-(17, 42, 1),
-(17, 43, 1),
-(17, 27, 1),
-(17, 5, 1),
-(17, 6, 1),
-(17, 7, 1),
-(17, 13, 1),
-(17, 15, 1),
-(17, 16, 1),
-(17, 47, 1),
-(17, 46, 1),
-(17, 33, 1),
-(17, 32, 1),
-(17, 30, 1),
-(17, 29, 1),
-(17, 31, 1),
-(17, 28, 1),
-(17, 34, 1),
-(17, 24, 1),
-(17, 20, 1),
-(17, 21, 1),
-(17, 26, 1),
-(17, 23, 1),
-(17, 18, 1),
-(17, 25, 1),
-(17, 17, 1),
-(17, 22, 1),
-(17, 19, 1),
-(18, 2, 1),
-(18, 36, 1),
-(18, 39, 1),
-(18, 42, 1),
-(18, 43, 1),
-(18, 27, 1),
-(18, 5, 1),
-(18, 6, 1),
-(18, 7, 1),
-(18, 13, 1),
-(18, 15, 1),
-(18, 16, 1),
-(18, 47, 1),
-(18, 46, 1),
-(18, 33, 1),
-(18, 32, 1),
-(18, 30, 1),
-(18, 29, 1),
-(18, 31, 1),
-(18, 28, 1),
-(18, 34, 1),
-(18, 24, 1),
-(18, 20, 1),
-(18, 21, 1),
-(18, 26, 1),
-(18, 23, 1),
-(18, 18, 1),
-(18, 25, 1),
-(18, 17, 1),
-(18, 22, 1),
-(18, 19, 1),
-(19, 2, 1),
-(19, 36, 1),
-(19, 39, 1),
-(19, 42, 1),
-(19, 43, 1),
-(19, 27, 1),
-(19, 5, 1),
-(19, 6, 1),
-(19, 7, 1),
-(19, 13, 1),
-(19, 15, 1),
-(19, 16, 1),
-(19, 47, 1),
-(19, 46, 1),
-(19, 33, 1),
-(19, 32, 1),
-(19, 30, 1),
-(19, 29, 1),
-(19, 31, 1),
-(19, 28, 1),
-(19, 34, 1),
-(19, 24, 1),
-(19, 20, 1),
-(19, 21, 1),
-(19, 26, 1),
-(19, 23, 1),
-(19, 18, 1),
-(19, 25, 1),
-(19, 17, 1),
-(19, 22, 1),
-(19, 19, 1),
-(19, 48, 1),
-(2, 48, 1),
-(3, 48, 2),
-(17, 48, 1),
-(4, 48, 1),
-(5, 48, 2),
-(6, 48, 3),
-(8, 48, 1),
-(18, 48, 1),
-(16, 48, 1),
-(10, 48, 1),
-(11, 48, 2),
-(12, 48, 3),
-(13, 48, 4),
-(15, 48, 1)";
-
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES
-(20, 2, 1),
-(20, 36, 1),
-(20, 39, 1),
-(20, 42, 1),
-(20, 43, 1),
-(20, 27, 1),
-(20, 5, 1),
-(20, 6, 1),
-(20, 7, 1),
-(20, 13, 1),
-(20, 15, 1),
-(20, 16, 1),
-(20, 47, 1),
-(20, 46, 1),
-(20, 33, 1),
-(20, 32, 1),
-(20, 30, 1),
-(20, 29, 1),
-(20, 31, 1),
-(20, 28, 1),
-(20, 34, 1),
-(20, 48, 1),
-(20, 24, 1),
-(20, 20, 1),
-(20, 21, 1),
-(20, 26, 1),
-(20, 23, 1),
-(20, 18, 1),
-(20, 25, 1),
-(20, 17, 1),
-(20, 22, 1),
-(20, 19, 1)";
-
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES
-(16, 35, 1),
-(10, 35, 1),
-(11, 35, 2),
-(12, 35, 3),
-(13, 35, 4),
-(15, 35, 1),
-(18, 35, 1),
-(17, 35, 1),
-(19, 35, 1),
-(2, 35, 1),
-(3, 35, 2),
-(4, 35, 1),
-(5, 35, 2),
-(6, 35, 3),
-(8, 35, 1),
-(20, 35, 1)";
-
-$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` (`bid`, `func_id`, `weight`) VALUES
-(16, 50, 1),
-(10, 50, 1),
-(11, 50, 2),
-(12, 50, 3),
-(13, 50, 4),
-(15, 50, 1),
-(18, 50, 1),
-(17, 50, 1),
-(19, 50, 1),
-(2, 50, 1),
-(3, 50, 2),
-(4, 50, 1),
-(5, 50, 2),
-(6, 50, 3),
-(8, 50, 1),
-(20, 50, 1)";
-
-$disable_site_content = "For technical reasons Web site temporary not available. we are very sorry for that inconvenience!";
-
-$copyright = "Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement";
-
-$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` =  " . $db->dbescape_string( $disable_site_content ) . " WHERE `module` =  'global' AND `config_name` = 'disable_site_content' AND `lang`='" . $lang_data . "'";
+$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote( $disable_site_content ) . " WHERE module = 'global' AND config_name = 'disable_site_content' AND lang='" . $lang_data . "'" );
 
 $array_cron_name = array();
 $array_cron_name['cron_online_expired_del'] = 'Delete expired online status';
@@ -811,94 +300,40 @@ $array_cron_name['cron_auto_sendmail_error_log'] = 'Send error logs to admin';
 $array_cron_name['cron_ref_expired_del'] = 'Delete expired referer';
 $array_cron_name['cron_siteDiagnostic_update'] = 'Update site diagnostic';
 $array_cron_name['cron_auto_check_version'] = 'Check NukeViet version';
+$array_cron_name['cron_notification_autodel'] = 'Delete old notification';
 
-$result = $db->sql_query( "SELECT `id`, `run_func` FROM `" . $db_config['prefix'] . "_cronjobs` ORDER BY `id` ASC" );
-while( list( $id, $run_func ) = $db->sql_fetchrow( $result ) )
+$result = $db->query( "SELECT id, run_func FROM " . $db_config['prefix'] . "_cronjobs ORDER BY id ASC" );
+while( list( $id, $run_func ) = $result->fetch( 3 ) )
 {
 	$cron_name = ( isset( $array_cron_name[$run_func] ) ) ? $array_cron_name[$run_func] : $run_func;
-	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_cronjobs` SET `" . $lang_data . "_cron_name` =  " . $db->dbescape_string( $cron_name ) . " WHERE `id`=" . $id;
+	$db->query( 'UPDATE ' . $db_config['prefix'] . '_cronjobs SET ' . $lang_data . '_cron_name = ' . $db->quote( $cron_name ) . ' WHERE id=' . $id );
 }
-$db->sql_freeresult();
 
-$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` = 'modern' WHERE `lang` = 'vi' AND `module` = 'global' AND `config_name` = 'site_theme'";
+$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_theme'] . "' WHERE lang = 'vi' AND module = 'global' AND config_name = 'site_theme'" );
 
-$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='news'" );
-if( $db->sql_numrows( $result ) )
+$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules where title='" . $global_config['site_home_module'] . "'" );
+if( $result->fetchColumn() )
 {
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` VALUES
-		(1, 0, 'Co-operate', '', 'Co-operate', '', '', '', 2, 5, 0, 'viewcat_page_new', 2, '2,3', 1, 3, '', '', 1277689708, 1277689708, 0, ''), 
-		(2, 1, 'Careers at NukeViet', '', 'Careers-at-NukeViet', '', '', '', 1, 6, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690086, 1277690259, 0, ''), 
-		(3, 1, 'Partners', '', 'Partners', '', '', '', 2, 7, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690142, 1277690291, 0, ''), 
-		(4, 0, 'NukeViet news', '', 'NukeViet-news', '', '', '', 1, 1, 0, 'viewcat_page_new', 3, '5,6,7', 1, 3, '', '', 1277690451, 1277690451, 0, ''), 
-		(5, 4, 'Security issues', '', 'Security-issues', '', '', '', 1, 2, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690497, 1277690564, 0, ''), 
-		(6, 4, 'Release notes', '', 'Release-notes', '', '', '', 2, 3, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690588, 1277690588, 0, ''), 
-		(7, 4, 'Development team talk', '', 'Development-team-talk', '', '', '', 3, 4, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690652, 1277690652, 0, ''), 
-		(8, 0, 'NukeViet community', '', 'NukeViet-community', '', '', '', 3, 8, 0, 'viewcat_page_new', 3, '9,10,11', 1, 3, '', '', 1277690748, 1277690748, 0, ''), 
-		(9, 8, 'Activities', '', 'Activities', '', '', '', 1, 9, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690765, 1277690765, 0, ''), 
-		(10, 8, 'Events', '', 'Events', '', '', '', 2, 10, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690783, 1277690783, 0, ''), 
-		(11, 8, 'Faces of week &#x3A;D', '', 'Faces-of-week-D', '', '', '', 3, 11, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690821, 1277690821, 0, ''), 
-		(12, 0, 'Lastest technologies', '', 'Lastest-technologies', '', '', '', 4, 12, 0, 'viewcat_page_new', 2, '13,14', 1, 3, '', '', 1277690888, 1277690888, 0, ''), 
-		(13, 12, 'World wide web', '', 'World-wide-web', '', '', '', 1, 13, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690934, 1277690934, 0, ''), 
-		(14, 12, 'Around internet', '', 'Around-internet', '', '', '', 2, 14, 1, 'viewcat_page_new', 0, '', 1, 3, '', '', 1277690982, 1277690982, 0, '')";
-
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` VALUES
-		(1, 1, '1,7,8', 0, 8, 'VINADES', 0, 1277689959, 1277690410, 1, 1277689920, 0, 2, 'Invite to co-operate announcement', 'Invite-to-co-operate-announcement', 'VINADES.,JSC was founded in order to professionalize NukeViet opensource development and release. We also using NukeViet in our bussiness projects to make it continue developing. Include Advertisment, provide hosting services for NukeViet CMS development.', 'hoptac.jpg', '', 1, 1, 2, 1, 2, 0, 0, 0, 'VINADES'),
-		(2, 14, '14,8', 0, 8, '', 1, 1277691366, 1277691470, 1, 1277691360, 0, 2, 'What does WWW mean?', 'What-does-WWW-mean', 'The World Wide Web, abbreviated as WWW and commonly known as the Web, is a system of interlinked hypertext&nbsp; documents accessed via the Internet.', 'nukeviet3.jpg', 'NukeViet 3.0', 1, 1, 2, 1, 0, 0, 0, 0, 'Web'),
-		(3, 12, '12,7', 0, 8, '', 2, 1277691851, 1287160943, 1, 1277691840, 0, 2, 'HTML 5 review', 'HTML-5-review', 'I have to say that my money used to be on XHTML 2.0 eventually winning the battle for the next great web standard. Either that, or the two titans would continue to battle it out for the forseable future, leading to an increasingly fragmented web.', 'screenshot.jpg', '',1, 1, 2, 1, 2, 0, 0, 0, 'HTML5'),
-		(4, 4, '4', 0, 1, 'VOVNews&#x002F;VNA', 0, 1292959020, 1292959513, 1, 1292959020, 0, 2, 'First open-source company starts operation', 'First-open-source-company-starts-operation', 'The Vietnam Open Source Development Joint Stock Company (VINADES.,JSC), the first firm operating in the field of open source in the country, made its debut on February 25.', 'nangly.jpg', '', 1, 1, 2, 1, 1, 0, 0, 0, 'VINADES, Nguyen Anh Tu'),
-		(5, 4, '4', 0, 1, '', 0, 1292959490, 1292959664, 1, 1292959440, 0, 2, 'NukeViet 3.0 - New CMS for News site', 'NukeViet-30-New-CMS-for-News-site', 'NukeViet 3.0 is a professional system: VINADES.,JSC founded to maintain and improve NukeViet 3.0 features. VINADES.,JSC co-operated with many professional hosting providers to test compatibility issues.', 'nukeviet3.jpg', '', 1, 1, 2, 1, 1, 0, 0, 0, 'NukeViet, VINADES')";
-
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_bodyhtml_1` VALUES
-		(1, '<p> <span style=\"color: black;\"><span style=\"color: black;\"><font size=\"2\"><span style=\"font-family: verdana,sans-serif;\">VIETNAM OPEN SOURCE DEVELOPMENT COMPANY (VINADES.,JSC)<br  /> Head office: Room 1805 – CT2 Nang Huong building, 583 Nguyen Trai street, Hanoi, Vietnam.<br  /> Mobile: (+84)4 8587 2007<br  /> Fax: (+84) 4 3550 0914<br  /> Website: <a f8f55ee40942436149=\"true\" href=\"http://www.vinades.vn/\" target=\"_blank\">www.vinades.vn</a> - <a f8f55ee40942436149=\"true\" href=\"http://www.nukeviet.vn/\" target=\"_blank\">www.nukeviet.vn</a></span></font></span></span></p><div h4f82558737983=\"nukeviet.vn\" style=\"display: inline; cursor: pointer; padding-right: 16px; width: 16px; height: 16px;\"> <span style=\"color: black;\"><span style=\"color: black;\"><font size=\"2\"><span style=\"font-family: verdana,sans-serif;\">&nbsp;</span></font></span></span></div><br  /><p> <span style=\"color: black;\"><span style=\"color: black;\"><font size=\"2\"><span style=\"font-family: verdana,sans-serif;\">Email: <a href=\"mailto:contact@vinades.vn\" target=\"_blank\">contact@vinades.vn</a><br  /> <br  /> <br  /> Dear valued customers and partners,<br  /> <br  /> VINADES.,JSC was founded in order to professionalize NukeViet opensource development and release. We also using NukeViet in our bussiness projects to make it continue developing.<br  /> <br  /> NukeViet is a Content Management System (CMS). 1st general purpose CMS developed by Vietnamese community. It have so many pros. Ex: Biggest community in VietNam, pure Vietnamese, easy to use, easy to develop...<br  /> <br  /> NukeViet 3 is lastest version of NukeViet and it still developing but almost complete with many advantage features.<br  /> <br  /> With respects to invite hosting - domain providers, and all company that pay attension to NukeViet in bussiness co-operate.<br  /> <br  /> Co-operate types:<br  /> <br  /> 1. Website advertisement, banners exchange, links:<br  /> a. Description:<br  /> Website advertising &amp; communication channels.<br  /> On each release version of NukeViet.<br  /> b. Benefits:<br  /> Broadcast to all end users on both side.<br  /> Reduce advertisement cost.<br  /> c. Warranties:<br  /> Place advertisement banner of partners on both side.<br  /> Open sub-forum at NukeViet.VN to support end users who using hosting services providing by partners.<br  /> <br  /> 2. Provide host packet for NukeViet development testing purpose:<br  /> <br  /> a. Description:<br  /> Sign the contract and agreements.<br  /> Partners provide all types of hosting packet for VINADES.,JSC. Each type at least 1 re-sale packet.<br  /> VINADES.,JSC provide an certificate verify host providing by partner compartable with NukeViet.<br  /> b. Benefits:<br  /> Expand market.<br  /> Reduce cost, improve bussiness value.<br  /> c. Warranties:<br  /> Partner provide free hosting packet for VINADES.,JSC to test NukeViet compatibility.<br  /> VINADES.JSC annoucement tested result to community.<br  /> <br  /> 3. Support end users:<br  /> a. Description:<br  /> Co-operate to solve problem of end user.<br  /> Partners send end user requires about NukeViet CMS to VINADES.,JSC. VINADES also send user requires about hosting services to partners.<br  /> b. Benefits:<br  /> Reduce cost, human resources to support end users.<br  /> Support end user more effective.<br  /> c. Warranties:<br  /> Solve end user requires as soon as possible.<br  /> <br  /> 4. Other types:<br  /> Besides, as a publisher of NukeViet CMS, we also place advertisements on software user interface, sample articles in each release version. With thousands of downloaded hits each release version, we believe that it is the most effective advertisement type to webmasters.<br  /> If partners have any ideas about new co-operate types. You are welcome and feel free to send specifics to us. Our slogan is &quot;Co-operate for development&quot;.<br  /> <br  /> We look forward to co-operating with you.<br  /> <br  /> Sincerely,<br  /> <br  /> VINADES.,JSC</span></font></span></span></p>', '', 2, 0, 1, 1, 1), 
-		(2, '<p> With a web browser, one can view web pages&nbsp; that may contain text, images, videos, and other multimedia&nbsp; and navigate between them by using hyperlinks. Using concepts from earlier hypertext systems, British engineer and computer scientist Sir Tim Berners-Lee, now the Director of the World Wide Web Consortium, wrote a proposal in March 1989 for what would eventually become the World Wide Web. He was later joined by Belgian computer scientist Robert Cailliau while both were working at CERN in Geneva, Switzerland. In 1990, they proposed using &quot;HyperText to link and access information of various kinds as a web of nodes in which the user can browse at will&quot;, and released that web in December.<br  /> <br  /> &quot;The World-Wide Web (W3) was developed to be a pool of human knowledge, which would allow collaborators in remote sites to share their ideas and all aspects of a common project.&quot;. If two projects are independently crea-ted, rather than have a central figure make the changes, the two bodies of information could form into one cohesive piece of work.</p><p> For more detail. See <a href=\"http://en.wikipedia.org/wiki/World_Wide_Web\" target=\"_blank\">Wikipedia</a></p>', '', 1, 0, 1, 1, 1), 
-		(3,  '<p> But now that the W3C has admitted defeat, and abandoned <span class=\"caps\">XHTML</span> 2.0, there’s now no getting away f-rom the fact that <span class=\"caps\">HTML</span> 5 is the future. As such, I’ve now spent some time taking a look at this emerging standard, and hope you’ll endulge my ego by taking a glance over my thoughts on the matter.</p><p> Before I get started though, I have to say that I’m very impressed by what I’ve seen. It’s a good set of standards that are being cre-ated, and I hope that they will gradually be adopted over the next few years.</p><h2> New markup</h2><p> <span class=\"caps\">HTML</span> 5 introduces some new markup elements to encourage better structure within documents. The most important of these is &lt;section&gt;, which is used to define a hierarchy within a document. Sections can be nested to define subsections, and each section can be broken up into &lt;header&gt; and &lt;footer&gt; areas.</p><p> The important thing about this addition is that it removes the previous dependancy on &lt;h1&gt;, &lt;h2&gt; and related tags to define structure. Within each &lt;section&gt;, the top level heading is always &lt;h1&gt;. You can use as many &lt;h1&gt; tags as you like within your content, so long as they are correctly nested within &lt;section&gt; tags.</p><p> There’s a plethora of other new tags, all of which seem pretty useful. The best thing about all of this, however, is that there’s no reason not to start using them right away. There’s a small piece of JavaScript that’s needed to make Internet Explorer behave, but aside f-rom that it’s all good. More details about this hack are available at <a href=\"http://www.diveintohtml5.org/\">http://www.diveintohtml5.org</a></p><h2> Easier media embedding</h2><p> <span class=\"caps\">HTML</span> 5 defines some new tags that will make it a lot easier to embed video and audio into pages. In the same way that images are embedded using &lt;img&gt; tags, so now can video and audio files be embedded using &lt;video&gt; and &lt;audio&gt;.</p><p> I don’t think than anyone is going to complain about these new features. They free us f-rom relying on third-party plugins, such as Adobe Flash, for such simple activities such as playing video.</p><p> Unfortunately, due to some annoying licensing conditions and a lack of support for the open-source Theora codec, actually using these tags at the moment requires that videos are encoded in two different formats. Even then, you’ll still need to still provide an Adobe Flash fallback for Internet Explorer.</p><p> You’ll need to be pretty devoted to <span class=\"caps\">HTML</span> 5 to use these tags yet…</p><h2> Relaxed markup rules</h2><p> This is one thorny subject. You know how we’ve all been so good recently with our well-formed <span class=\"caps\">XHTML</span>, quoting those attributes and closing those tags? Now there’s no need to, apparently…</p><p> On the surface, this seems like a big step backwards into the bad days of tag soup. However, if you dig deeper, the reasoning behind this decision goes something like this:</p><ol> <li> It’s unnacceptable to crash out an entire <span class=\"caps\">HTML</span> page just because of a simple <span class=\"caps\">XML</span> syntax error.</li> <li> This means that browsers cannot use an <span class=\"caps\">XML</span> parser, and must instead use a HTML-aware fault-tolerant parser.</li> <li> For consistency, all browsers should handle any such “syntax errors” (such as unquoted attributes and unclosed tags), in the same way.</li> <li> If all browsers are behaving in the same way, then unquoted attributes and unclosed tags are not really syntax errors any more. In fact, by leaving them out of our pages, we can save a few bytes!</li></ol><p> This isn’t to say that you have to throw away those <span class=\"caps\">XHTML</span> coding habits. It’s still all valid <span class=\"caps\">HTML</span> 5. In fact, if you really want to be strict, you can set a different content-type header to enforce well-formed <span class=\"caps\">XHTML</span>. But for most people, we’ll just carry on coding well-formed <span class=\"caps\">HTML</span> with the odd typo, but no longer have to worry about clients screaming at us when the perfectly-rendered page doesn’t validate.</p><h2> So what now?</h2><p> The <span class=\"caps\">HTML</span> 5 specification is getting pretty close to stable, so it’s now safe to use bits of this new standard in your code. How much you use is entirely a personal choice. However, we should all get used to the new markup over the next few years, because <span class=\"caps\">HTML</span> 5 is assuredly here to stay.</p><p> Myself, I’ll be switching to the new doctype and using the new markup for document sections in my code. This step involves very little effort and does a good job of showing support for the new specification.</p><p> The new media tags are another matter. Until all platforms support a single video format, it’s simply not sustainable to be transcoding all videos into two filetypes. When this is coupled with having to provide a Flash fallback, it all seems like a pretty poor return on investment.</p><p> These features will no doubt become more useable over the next few years, as newer browser take the place of old. One day, hopefully, we’ll be able write clean, semantic pages without having to worry about backwards-compatibility.</p><p> Part of this progress relies on web developers using these new standards in our pages. By adopting new technology, we show our support for the standards it represents and place pressure on browser vendors to adhere to those standards. It’s a bit of effort in the short term, but in the long term it will pay dividends.</p>', 'http://www.etianen.com/blog/developers/2010/2/html-5-review/', 2, 0, 1, 1, 1), 
-		(4,  '<p> <span>The Hanoi-based company will further develop and popularise an open source content management system best known as NukeViet in the country. </span></p><p> <span>VINADES Chairman Nguyen Anh Tu said NukeViet is totally free and users can download the product at www.nukeviet.vn. </span></p><p> <span>NukeViet has been widely used across the country over the past five years. The system, built on PHP-Nuke and MySQL database, enables users to easily post and manage files on the Internet or Intranet.</span></p>', '', 0, 0, 1, 1, 1), 
-		(5,  '<p style=\"text-align: justify;\"> NukeViet also testing by many experienced webmasters to optimize system features. NukeViet&#039;s core team are programming enthusiasts. All of them want to make NukeViet become the best and most popular open source CMS.</p><p style=\"text-align: justify;\"> <b>NukeViet 3.0 is a powerful system:</b><br  /> Learn by experiences f-rom NukeViet 2.0, NukeViet 3.0 build ground up on latest web technologies, allow you easily cre-ate portal, online news express, social network, e commerce system.<br  /> NukeViet 3.0 can process huge amount of data. It was used by many companies, corporation&#039;s website with millions of news entries with high traffic.<br  /> <br  /> <b>NukeViet 3.0 is easy to use system:</b><br  /> NukeViet allow you easily to customize and instantly use without any line of code. As developers, NukeViet help you build your own modules rapidly.</p><h2 style=\"text-align: justify;\"> NukeViet 3.0 features:</h2><p style=\"text-align: justify;\"> <b>Technology bases:</b><br  /> NukeViet 3.0 using PHP 5 and MySQL 5 as main programming languages. XTemplate and jQuery for use Ajax f-rom system core.<br  /> NukeViet 3.0 is fully validated with xHTML 1.0, CSS 2.1 and compatible with all major browsers.<br  /> NukeViet 3.0 layout website using grid CSS framework like BluePrintCSS for design templates rapidly.<br  /> <br  /> NukeViet 3.0 has it own core libraries and it is platform independent. You can build your own modules with basic knowledge of PHP and MySQL.<br  /> <br  /> <b>Module structure:</b><br  /> NukeViet 3.0 re-construct module structure. All module files packed into a particular folder. It&#039;s also define module block and module theme for layout modules in many ways.<br  /> <br  /> NukeViet 3.0 support modules can be multiply. We called it abstract modules. It help users automatic cre-ate many modules without any line of code f-rom any exists module which support cre-ate abstract modules.<br  /> <br  /> NukeViet 3.0 support automatic setup modules, blocks, themes f-rom Admin Control Panel. It&#039;s also allow you to share your modules by packed it into packets. NukeViet allow grant, deny access or even re-install, de-lete module.<br  /> <br  /> <b>Multi language:</b><br  /> NukeViet 3 support multi languages in 2 types. Multi interface languages and multi database languages. It had features support administrators to build new languages. In NukeViet 3, admin language, user language, interface language, database language are separate for easily build multi languages systems.<br  /> <br  /> <b>Right:</b><br  /> All manage features only access in admin area. NukeViet 3.0 allow grant access by module and language. It also allow cre-ate user groups and grant access modules by group.<br  /> <br  /> <b>Themes:</b><br  /> NukeViet 3.0 support automatic install and uninstall themes. You can easily customize themes in module and module&#039;s functions. NukeViet store HTML, CSS code separately f-rom PHP code to help designers rapidly layout website.<br  /> <br  /> <b>Customize website using blocks</b><br  /> A block can be a widget, advertisement pictures or any defined data. You can place block in many positions visually by drag and d-rop or argument it in Admin Control Panel.<br  /> <br  /> <b>Securities:</b><br  /> NukeViet using security filters to filter data upload.<br  /> Logging and control access f-rom many search engine as Google, Yahoo or any search engine.<br  /> Anti spam using Captcha, anti flood data...<br  /> NukeViet 3.0 has logging systems to log and track information about client to prevent attack.<br  /> NukeViet 3.0 support automatic up-date to fix security issues or upgrade your website to latest version of NukeViet.<br  /> <br  /> <b>Database:</b><br  /> You can backup database and download backup files to restore database to any point you restored your database.<br  /> <br  /> <b>Control errors report</b><br  /> You can configure to display each type of error only one time. System then sent log files about this error to administrator via email.<br  /> <br  /> <b>SEO:</b><br  /> Support SEO link<br  /> Manage and customize website title<br  /> Manage meta tag<br  /> <br  /> Support keywords for cre-ate statistic via search engine<br  /> <br  /> <b>Prepared for integrate with third party application</b><br  /> NukeViet 3.0 has it own user database and many built-in methods to connect with many forum application. PHPBB or VBB can integrate and use with NukeViet 3.0 by single click.<br  /> <br  /> <b>Distributed login</b><br  /> NukeViet support login by OpenID. Users can login to your website by accounts f-rom popular and well-known provider, such as Google, Yahoo or other OpenID providers. It help your website more accessible and reduce user&#039;s time to filling out registration forms.<br  /> <br  /> Download NukeViet 3.0: <a href=\"http://code.google.com/p/nuke-viet/downloads/list\">http://code.google.com/p/nuke-viet/downloads/list</a><br  /> Website: <a href=\"http://nukeviet.vn/\">http://nukeviet.vn</a></p>', '', 2, 0, 1, 1, 1)";
-
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_bodytext` VALUES
-		(1, ' VIETNAM OPEN SOURCE DEVELOPMENT COMPANY (VINADES.,JSC) Head office: Room 1805 – CT2 Nang Huong building, 583 Nguyen Trai street, Hanoi, Vietnam. Mobile: (+84)4 8587 2007 Fax: (+84) 4 3550 0914 Website: http://www.vinades.vn/ www.vinades.vn - http://www.nukeviet.vn/ www.nukeviet.vn Email: mailto:contact@vinades.vn contact@vinades.vn Dear valued customers and partners, VINADES.,JSC was founded in order to professionalize NukeViet opensource development and release. We also using NukeViet in our bussiness projects to make it continue developing. NukeViet is a Content Management System (CMS). 1st general purpose CMS developed by Vietnamese community. It have so many pros. Ex: Biggest community in VietNam, pure Vietnamese, easy to use, easy to develop... NukeViet 3 is lastest version of NukeViet and it still developing but almost complete with many advantage features. With respects to invite hosting - domain providers, and all company that pay attension to NukeViet in bussiness co-operate. Co-operate types: 1. Website advertisement, banners exchange, links: a. Description: Website advertising & communication channels. On each release version of NukeViet. b. Benefits: Broadcast to all end users on both side. Reduce advertisement cost. c. Warranties: Place advertisement banner of partners on both side. Open sub-forum at NukeViet.VN to support end users who using hosting services providing by partners. 2. Provide host packet for NukeViet development testing purpose: a. Description: Sign the contract and agreements. Partners provide all types of hosting packet for VINADES.,JSC. Each type at least 1 re-sale packet. VINADES.,JSC provide an certificate verify host providing by partner compartable with NukeViet. b. Benefits: Expand market. Reduce cost, improve bussiness value. c. Warranties: Partner provide free hosting packet for VINADES.,JSC to test NukeViet compatibility. VINADES.JSC annoucement tested result to community. 3. Support end users: a. Description: Co-operate to solve problem of end user. Partners send end user requires about NukeViet CMS to VINADES.,JSC. VINADES also send user requires about hosting services to partners. b. Benefits: Reduce cost, human resources to support end users. Support end user more effective. c. Warranties: Solve end user requires as soon as possible. 4. Other types: Besides, as a publisher of NukeViet CMS, we also place advertisements on software user interface, sample articles in each release version. With thousands of downloaded hits each release version, we believe that it is the most effective advertisement type to webmasters. If partners have any ideas about new co-operate types. You are welcome and feel free to send specifics to us. Our slogan is \"Co-operate for development\". We look forward to co-operating with you. Sincerely, VINADES.,JSC'),
-		(2, ' With a web browser, one can view web pages that may contain text, images, videos, and other multimedia and navigate between them by using hyperlinks. Using concepts f-rom earlier hypertext systems, British engineer and computer scientist Sir Tim Berners-Lee, now the Director of the World Wide Web Consortium, wrote a proposal in March 1989 for what would eventually become the World Wide Web. He was later joined by Belgian computer scientist Robert Cailliau while both were working at CERN in Geneva, Switzerland. In 1990, they proposed using \"HyperText to link and access information of various kinds as a web of nodes in which the user can browse at will\", and released that web in December. \"The World-Wide Web (W3) was developed to be a pool of human knowledge, which would allow collaborators in remote sites to share their ideas and all aspects of a common project.\". If two projects are independently crea-ted, rather than have a central figure make the changes, the two bodies of information could form into one cohesive piece of work. For more detail. See http://en.wikipedia.org/wiki/World_Wide_Web Wikipedia'),
-		(3, ' But now that the W3C has admitted defeat, and abandoned XHTML 2.0, there’s now no getting away f-rom the fact that HTML 5 is the future. As such, I’ve now spent some time taking a look at this emerging standard, and hope you’ll endulge my ego by taking a glance over my thoughts on the matter. Before I get started though, I have to say that I’m very impressed by what I’ve seen. It’s a good set of standards that are being cre-ated, and I hope that they will gradually be adopted over the next few years. New markup HTML 5 introduces some new markup elements to encourage better structure within documents. The most important of these is <section>, which is used to define a hierarchy within a document. Sections can be nested to define subsections, and each section can be broken up into <header> and <footer> areas. The important thing about this addition is that it removes the previous dependancy on <h1>, <h2> and related tags to define structure. Within each <section>, the top level heading is always <h1>. You can use as many <h1> tags as you like within your content, so long as they are correctly nested within <section> tags. There’s a plethora of other new tags, all of which seem pretty useful. The best thing about all of this, however, is that there’s no reason not to start using them right away. There’s a small piece of JavaScript that’s needed to make Internet Explorer behave, but aside f-rom that it’s all good. More details about this hack are available at http://www.diveintohtml5.org/ http://www.diveintohtml5.org Easier media embedding HTML 5 defines some new tags that will make it a lot easier to embed video and audio into pages. In the same way that images are embedded using <img> tags, so now can video and audio files be embedded using <video> and <audio>. I don’t think than anyone is going to complain about these new features. They free us f-rom relying on third-party plugins, such as Adobe Flash, for such simple activities such as playing video. Unfortunately, due to some annoying licensing conditions and a lack of support for the open-source Theora codec, actually using these tags at the moment requires that videos are encoded in two different formats. Even then, you’ll still need to still provide an Adobe Flash fallback for Internet Explorer. You’ll need to be pretty devoted to HTML 5 to use these tags yet… Relaxed markup rules This is one thorny subject. You know how we’ve all been so good recently with our well-formed XHTML, quoting those attributes and closing those tags? Now there’s no need to, apparently… On the surface, this seems like a big step backwards into the bad days of tag soup. However, if you dig deeper, the reasoning behind this decision goes something like this: It’s unnacceptable to crash out an entire HTML page just because of a simple XML syntax error. This means that browsers cannot use an XML parser, and must instead use a HTML-aware fault-tolerant parser. For consistency, all browsers should handle any such “syntax errors” (such as unquoted attributes and unclosed tags), in the same way. If all browsers are behaving in the same way, then unquoted attributes and unclosed tags are not really syntax errors any more. In fact, by leaving them out of our pages, we can save a few bytes! This isn’t to say that you have to throw away those XHTML coding habits. It’s still all valid HTML 5. In fact, if you really want to be strict, you can set a different content-type header to enforce well-formed XHTML. But for most people, we’ll just carry on coding well-formed HTML with the odd typo, but no longer have to worry about clients screaming at us when the perfectly-rendered page doesn’t validate. So what now? The HTML 5 specification is getting pretty close to stable, so it’s now safe to use bits of this new standard in your code. How much you use is entirely a personal choice. However, we should all get used to the new markup over the next few years, because HTML 5 is assuredly here to stay. Myself, I’ll be switching to the new doctype and using the new markup for document sections in my code. This step involves very little effort and does a good job of showing support for the new specification. The new media tags are another matter. Until all platforms support a single video format, it’s simply not sustainable to be transcoding all videos into two filetypes. When this is coupled with having to provide a Flash fallback, it all seems like a pretty poor return on investment. These features will no doubt become more useable over the next few years, as newer browser take the place of old. One day, hopefully, we’ll be able write clean, semantic pages without having to worry about backwards-compatibility. Part of this progress relies on web developers using these new standards in our pages. By adopting new technology, we show our support for the standards it represents and place pressure on browser vendors to adhere to those standards. It’s a bit of effort in the short term, but in the long term it will pay dividends.'),
-		(4, ' The Hanoi-based company will further develop and popularise an open source content management system best known as NukeViet in the country. VINADES Chairman Nguyen Anh Tu said NukeViet is totally free and users can download the product at www.nukeviet.vn. NukeViet has been widely used across the country over the past five years. The system, built on PHP-Nuke and MySQL database, enables users to easily post and manage files on the Internet or Intranet.'),
-		(5, ' NukeViet also testing by many experienced webmasters to optimize system features. NukeViet&#039;s core team are programming enthusiasts. All of them want to make NukeViet become the best and most popular open source CMS. NukeViet 3.0 is a powerful system: Learn by experiences f-rom NukeViet 2.0, NukeViet 3.0 build ground up on latest web technologies, allow you easily cre-ate portal, online news express, social network, e commerce system. NukeViet 3.0 can process huge amount of data. It was used by many companies, corporation&#039;s website with millions of news entries with high traffic. NukeViet 3.0 is easy to use system: NukeViet allow you easily to customize and instantly use without any line of code. As developers, NukeViet help you build your own modules rapidly. NukeViet 3.0 features: Technology bases: NukeViet 3.0 using PHP 5 and MySQL 5 as main programming languages. XTemplate and jQuery for use Ajax f-rom system core. NukeViet 3.0 is fully validated with xHTML 1.0, CSS 2.1 and compatible with all major browsers. NukeViet 3.0 layout website using grid CSS framework like BluePrintCSS for design templates rapidly. NukeViet 3.0 has it own core libraries and it is platform independent. You can build your own modules with basic knowledge of PHP and MySQL. Module structure: NukeViet 3.0 re-construct module structure. All module files packed into a particular folder. It&#039;s also define module block and module theme for layout modules in many ways. NukeViet 3.0 support modules can be multiply. We called it abstract modules. It help users automatic cre-ate many modules without any line of code f-rom any exists module which support cre-ate abstract modules. NukeViet 3.0 support automatic setup modules, blocks, themes f-rom Admin Control Panel. It&#039;s also allow you to share your modules by packed it into packets. NukeViet allow grant, deny access or even re-install, de-lete module. Multi language: NukeViet 3 support multi languages in 2 types. Multi interface languages and multi database languages. It had features support administrators to build new languages. In NukeViet 3, admin language, user language, interface language, database language are separate for easily build multi languages systems. Right: All manage features only access in admin area. NukeViet 3.0 allow grant access by module and language. It also allow cre-ate user groups and grant access modules by group. Themes: NukeViet 3.0 support automatic install and uninstall themes. You can easily customize themes in module and module&#039;s functions. NukeViet store HTML, CSS code separately f-rom PHP code to help designers rapidly layout website. Customize website using blocks A block can be a widget, advertisement pictures or any defined data. You can place block in many positions visually by drag and d-rop or argument it in Admin Control Panel. Securities: NukeViet using security filters to filter data upload. Logging and control access f-rom many search engine as Google, Yahoo or any search engine. Anti spam using Captcha, anti flood data... NukeViet 3.0 has logging systems to log and track information about client to prevent attack. NukeViet 3.0 support automatic up-date to fix security issues or upgrade your website to latest version of NukeViet. Database: You can backup database and download backup files to restore database to any point you restored your database. Control errors report You can configure to display each type of error only one time. System then sent log files about this error to administrator via email. SEO: Support SEO link Manage and customize website title Manage meta tag Support keywords for cre-ate statistic via search engine Prepared for integrate with third party application NukeViet 3.0 has it own user database and many built-in methods to connect with many forum application. PHPBB or VBB can integrate and use with NukeViet 3.0 by single click. Distributed login NukeViet support login by OpenID. Users can login to your website by accounts f-rom popular and well-known provider, such as Google, Yahoo or other OpenID providers. It help your website more accessible and reduce user&#039;s time to filling out registration forms. Download NukeViet 3.0: http://code.google.com/p/nuke-viet/downloads/list http://code.google.com/p/nuke-viet/downloads/list Website: http://nukeviet.vn/ http://nukeviet.vn')";
-
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_block_cat` (`bid`, `adddefault`, `number`, `title`, `alias`, `image`, `thumbnail`, `description`, `weight`, `keywords`, `add_time`, `edit_time`) VALUES
-		(1, 0, 4,'Hot News', 'Hot-News', '', '', '', 1, '', 1279963759, 1279963759),
-		(2, 1, 4, 'Top News', 'Top-News', '', '', '', 2, '', 1279963766, 1279963766)";
-
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_sources` VALUES
-		(1, 'Wikipedia', 'http://www.wikipedia.org', '', 1, 1277691366, 1277691366), 
-		(2, 'Enlightened Website Development', 'http://www.etianen.com', '', 2, 1277691851, 1277691851)";
-
-	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` =  " . $db->dbescape_string( $copyright ) . " WHERE `module` =  'news' AND `config_name` = 'copyright' AND `lang`='" . $lang_data . "'";
-	$sql_create_table[] = "UPDATE `" . $db_config['prefix'] . "_config` SET `config_value` =  'news' WHERE `module` =  'global' AND `config_name` = 'site_home_module' AND `lang`='" . $lang_data . "'";
+	$db->query( "UPDATE " . $db_config['prefix'] . "_config SET config_value = '" . $global_config['site_home_module'] . "' WHERE module = 'global' AND config_name = 'site_home_module' AND lang='" . $lang_data . "'" );
 }
 
-$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='voting'" );
-if( $db->sql_numrows( $result ) )
-{
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting` VALUES
-		(2, 'Do you know about Nukeviet 3?', '', 1, 1, 0, '0', 1275318563, 0, 1), 
-		(3, 'What are you interested in open source', '', 1, 1, 0, '0', 1275318589, 0, 1)";
-
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_voting_rows` VALUES
-		(5, 2, 'A whole new sourcecode for the web.','' , 0),
-		(6, 2, 'Open source, free to use.','' , 0),
-		(7, 2, 'Use of xHTML, CSS and Ajax support','' , 0),
-		(8, 2, 'All the comments on','' , 0),
-		(9, 3, 'constantly improved, modified by the whole world.','' , 0),
-		(10, 3, 'To use the free of charge.','' , 0),
-		(11, 3, 'The freedom to explore, modify at will.','' , 0),
-		(12, 3, 'Match to learning and research because the freedom to modify at will.','', 0),
-		(13, 3, 'All comments on','', 0)";
-}
-
-$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` where `title`='about'" );
-if( $db->sql_numrows( $result ) )
-{
-	$sql_create_table[] = "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_about` (`id`, `title`, `alias`, `bodytext`, `keywords`, `weight`, `admin_id`, `add_time`, `edit_time`, `status`) VALUES
-		(1, 'Welcome to NukeViet 3.0', 'Welcome-to-NukeViet-3-0', '<p> NukeViet developed by Vietnamese and for Vietnamese. It&#039;s the 1st opensource CMS in Vietnam. Next generation of NukeViet, version 3.0 coding ground up. Support newest web technology, include xHTML, CSS 3, XTemplate, jQuery, AJAX...<br  /> <br  /> NukeViet&#039;s has it own core libraries build in. So, it&#039;s doesn&#039;t depend on other exists frameworks. With basic knowledge of PHP and MySQL, you can easily using NukeViet for your purposes.<br  /> <br  /> NukeViet 3 core is simply but powerful. It support modules can be multiply. We called it abstract modules. It help users automatic crea-te many modules without any line of code from any exists module which support crea-te abstract modules.<br  /> <br  /> NukeViet 3 support automatic setup modules, blocks, themes at Admin Control Panel. It&#039;s also allow you to share your modules by packed it into packets.<br  /> <br  /> NukeViet 3 support multi languages in 2 types. Multi interface languages and multi database langguages. Had features support web master to build new languages. Many advance features still developing. Let use it, distribute it and feel about opensource.<br  /> <br  /> At last, NukeViet 3 is a thanksgiving gift from VINADES.,JSC to community for all of your supports. And we hoping we going to be a biggest opensource CMS not only in VietNam, but also in the world. :).<br  /> <br  /> If you had any feedbacks and ideas for NukeViet 3 close beta. Feel free to send email to admin@nukeviet.vn. All are welcome<br  /> <br  /> Best regard.</p>', '', 1, 1, 1277266815, 1277266815, 1), 
-		(2, 'NukeViet&#039;s versioning schemes', 'NukeViet-s-versioning-schemes', '<p> NukeViet using 2 versioning schemes:<br  /> <br  /> I. By numbers (technical purposes):<br  /> Structure for numbers is:<br  /> major.minor.revision<br  /> <br  /> 1.Major: Major up-date. Probably not backwards compatible with older version.<br  /> 2.Minor: Minor change, may introduce new features, but backwards compatibility is mostly retained.<br  /> 3.Revision: Minor bug fixes. Packed for testing or pre-release purposes... Closed beta, open beta, RC, Official release.<br  /> <br  /> II: By names (new version release management)<br  /> Main milestones: Closed beta, Open beta, Release candidate, Official.<br  /> 1. Closed beta: Limited testing.<br  /> characteristics: New features testing. It may not include in official version if doesn&#039;t accord with community. Closed beta&#039;s name can contain unique numbers. Ex: Closed beta 1, closed beta 2,... Features of previous release may not include in it&#039;s next release. Time release is announced by development team. This milestone stop when system haven&#039;t any major changes.<br  /> Purposes: Pre-release version to receive feedbacks and ideas from community. Bug fixes for release version.<br  /> Release to: Programmers, expert users.<br  /> Supports:<br  /> &nbsp;&nbsp;&nbsp; Using: None.<br  /> &nbsp;&nbsp;&nbsp; Testing: Documents, not include manual.<br  /> Upgrade: None.<br  /> <br  /> 2. Open beta: Public testing.<br  /> characteristics: Features testing, contain full features of official version. It&#039;s almost include in official version even if it doesn&#039;t accord with community. This milestone start after closed beta milestone closed and release weekly to fix bugs. Open beta&#039;s name can contain unique numbers. Ex: Open beta 1, open beta 2,... Next release include all features of it&#039;s previous release. Open beta milestone stop when system haven&#039;t any critical issue.<br  /> Purposes: Bug fixed which not detect in closed beta.<br  /> Release to: All users of nukeviet.vn forum.<br  /> Supports:<br  /> &nbsp;&nbsp;&nbsp; Using: Limited. Manual and forum supports.<br  /> &nbsp;&nbsp;&nbsp; Testing: Full.<br  /> Upgrade: None.<br  /> <br  /> 3. Release Candidate:<br  /> characteristics: Most stable version and prepare for official release. Release candidate&#039;s name can contain unique numbers.<br  /> Ex: RC 1, RC 2,... by released number.<br  /> If detect cretical issue in this milestone. Another Release Candidate version can be release sooner than release time announced by development team.<br  /> Purposes: Reduce bugs of using official version.<br  /> Release to: All people.<br  /> Supports: Full.<br  /> Upgrade: Yes.<br  /> <br  /> 4. Official:<br  /> characteristics: 1st stable release of new version. It only using 1 time. Next release using numbers. Release about 2 weeks after Release Candidate milestone stoped.<br  /> Purposes: Stop testing and recommend users using new version.</p>', '', 2, 1, 1277267054, 1277693688, 1)";
-}
-
-?>
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (1, 0, 1, 'About', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=about', '', '', 1, 1, 0, '2,3', '6', 'about', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (4, 0, 1, 'News', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news', '', '', 2, 4, 0, '5,6,7,8,30,31,32', '6', 'news', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (9, 0, 1, 'Users', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users', '', '', 3, 12, 0, '10,11,12,13,14,15,16', '6', 'users', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (10, 9, 1, 'Login', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=login', '', '', 1, 13, 1, '', '5', 'users', 'login', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (11, 9, 1, 'Logout', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=logout', '', '', 2, 14, 1, '', '4', 'users', 'logout', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (12, 9, 1, 'Register', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=register', '', '', 3, 15, 1, '', '5', 'users', 'register', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (13, 9, 1, 'Lostpass', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=lostpass', '', '', 4, 16, 1, '', '5', 'users', 'lostpass', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (14, 9, 1, 'Changepass', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=changepass', '', '', 5, 17, 1, '', '4', 'users', 'changepass', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (15, 9, 1, 'Openid', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=openid', '', '', 6, 18, 1, '', '4', 'users', 'openid', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (16, 9, 1, 'Memberlist', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users&op=memberlist', '', '', 7, 19, 1, '', '4', 'users', 'memberlist', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (17, 0, 1, 'Contact', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=contact', '', '', 7, 28, 0, '18', '6', 'contact', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (19, 0, 1, 'Statistics', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics', '', '', 4, 20, 0, '20,21,22,23,24', '2', 'statistics', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (20, 19, 1, 'Referers', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics&amp;op=allreferers', '', '', 1, 21, 1, '', '2', 'statistics', 'allreferers', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (21, 19, 1, 'Countries', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics&amp;op=allcountries', '', '', 2, 22, 1, '', '2', 'statistics', 'allcountries', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (22, 19, 1, 'Browsers', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics&amp;op=allbrowsers', '', '', 3, 23, 1, '', '2', 'statistics', 'allbrowsers', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (23, 19, 1, 'OS', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics&amp;op=allos', '', '', 4, 24, 1, '', '2', 'statistics', 'allos', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (24, 19, 1, 'Bots', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics&amp;op=allbots', '', '', 5, 25, 1, '', '2', 'statistics', 'allbots', 1, '', 1, 1) ");
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (25, 0, 1, 'Voting', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=voting', '', '', 5, 26, 0, '', '6', 'voting', '', 1, '', 1, 1)" );
+$result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES (27, 0, 1, 'Search', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=seek', '', '', 6, 27, 0, '', '6', 'seek', '', 1, '', 1, 1) ");

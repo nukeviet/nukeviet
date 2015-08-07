@@ -1,89 +1,113 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
-	<blockquote class="error"> {ERROR} </blockquote>
-</div>
-<div class="clear"></div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
-<form action="" method="post">
-	<table class="tab1">
-		<col style="width: 250px;" />
+
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col class="w300"/>
+		</colgroup>
 		<tfoot>
 			<tr>
-				<td colspan="2" align="center"><input type="submit" name="submit" value="{LANG.submit}" style="width: 100px;"/></td>
+				<td colspan="2" class="text-center"><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary w100" /></td>
 			</tr>
 		</tfoot>
 		<tbody>
+			<!-- BEGIN: site_domain -->
 			<tr>
-				<td><strong>{LANG.sitename}</strong></td>
-				<td><input type="text" name="site_name" value="{VALUE.sitename}" style="width: 450px"/></td>
-			</tr>
-		</tbody>
-		<tbody class="second">
-			<tr>
-				<td><strong>{LANG.description}</strong></td>
-				<td><input type="text" name="site_description" value="{VALUE.description}" style="width: 450px"/></td>
-			</tr>
-		</tbody>
-		<tbody>
-			<tr>
-				<td><strong>{LANG.site_keywords}</strong></td>
-				<td><input type="text" name="site_keywords" value="{VALUE.site_keywords}" style="width: 450px"/></td>
-			</tr>
-		</tbody>
-		<tbody class="second">
-			<tr>
-				<td><strong>{LANG.site_logo}</strong></td>
-				<td><input type="text" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="width: 350px"/><input style="width:100px" type="button" value="{LANG.browse_image}" name="selectimg"/></td>
-			</tr>
-		</tbody>
-		<tbody>
-			<tr>
-				<td><strong>{LANG.theme}</strong></td>
+				<th>{LANG.site_domain}</th>
 				<td>
-				<select name="site_theme">
+					<select name="site_domain" class="form-control w200">
+						<option value=""> -- </option>
+						<!-- BEGIN: loop -->
+						<option value="{site_domain}"{SELECTED}>{site_domain} </option>
+						<!-- END: loop -->
+					</select>
+				</td>
+			</tr>
+			<!-- END: site_domain -->
+			<tr>
+				<th>{LANG.sitename}</th>
+				<td><input type="text" name="site_name" value="{VALUE.sitename}" class="form-control" style="width: 450px"/></td>
+			</tr>
+			<tr>
+				<th>{LANG.description}</th>
+				<td><input type="text" name="site_description" value="{VALUE.description}" class="form-control" style="width: 450px"/></td>
+			</tr>
+			<tr>
+				<th>{LANG.site_keywords}</th>
+				<td><input type="text" name="site_keywords" class="form-control" value="{VALUE.site_keywords}" style="width: 450px"/></td>
+			</tr>
+			<tr>
+				<th>{LANG.site_logo}</th>
+				<td><input type="text" class="w300 form-control pull-left" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="margin-right: 10px" /><button id="select-site-logo" name="selectimg" class="btn btn-default"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
+			</tr>
+			<tr>
+				<th>{LANG.theme}</th>
+				<td>
+				<select name="site_theme" class="form-control w200">
 					<!-- BEGIN: site_theme -->
 					<option value="{SITE_THEME}"{SELECTED}>{SITE_THEME} </option>
 					<!-- END: site_theme -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
+			<!-- BEGIN: mobile_theme -->
 			<tr>
-				<td><strong>{LANG.default_module}</strong></td>
+				<th>{LANG.mobile_theme}</th>
 				<td>
-				<select name="site_home_module">
+				<select name="mobile_theme" class="form-control w200">
+					<option value="">{LANG.theme}</option>
+					<!-- BEGIN: loop -->
+					<option value="{SITE_THEME}"{SELECTED}>{SITE_THEME} </option>
+					<!-- END: loop -->
+				</select></td>
+			</tr>
+			<!-- END: mobile_theme -->
+			<tr>
+				<th>{LANG.default_module}</th>
+				<td>
+				<select name="site_home_module" id="site_home_module" class="form-control w200">
 					<!-- BEGIN: module -->
 					<option value="{MODULE.title}"{SELECTED}>{MODULE.custom_title} </option>
 					<!-- END: module -->
 				</select></td>
 			</tr>
-		</tbody>
-		<tbody>
 			<tr>
-				<td><strong>{LANG.allow_switch_mobi_des}</strong></td>
+				<th>{LANG.allow_switch_mobi_des}</th>
 				<td><input type="checkbox" name="switch_mobi_des" value="1"{VALUE.switch_mobi_des}/></td>
 			</tr>
-		</tbody>
-		<tbody class="second">
+			<tr<!-- BEGIN: ssl_https_modules_hide --> class="hidden"<!-- END: ssl_https_modules_hide -->>
+				<td><strong>{LANG.ssl_https_module}</strong></td>
+				<td>
+					<div class="row">
+						<!-- BEGIN: ssl_https_modules -->
+						<div class="col-xs-6">
+							<label>
+								<input type="checkbox" value="{MOD_TITLE}" name="ssl_https_modules[]"{MOD_CHECKED}> {MOD_TITLE}
+							</label>
+						</div>
+						<!-- END: ssl_https_modules -->
+					</div>
+					<input type="hidden" name="show_ssl_modules" value="{SHOW_SSL_MODULES}">
+				</td>
+			</tr>
 			<tr>
-				<td><strong>{LANG.disable_content}</strong></td>
+				<th>{LANG.disable_content}</th>
 				<td> {DISABLE_SITE_CONTENT} </td>
 			</tr>
 		</tbody>
 	</table>
+</div>
 </form>
 <script type="text/javascript">
 	//<![CDATA[
 	$(document).ready(function() {
-		$("input[name=selectimg]").click(function() {
-			var area = "site_logo";
-			var path = "";
-			var currentpath = "images";
-			var type = "image";
-			nv_open_browse_file("{NV_BASE_ADMINURL}index.php?{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-			return false;
-		});
+		$("#site_home_module").select2();
 	});
 	//]]>
 </script>

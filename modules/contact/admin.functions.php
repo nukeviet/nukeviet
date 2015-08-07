@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
@@ -18,8 +19,8 @@ function nv_getAllowed()
 {
 	global $module_data, $db, $admin_info;
 
-	$sql = "SELECT `id`,`full_name`,`admins` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows`";
-	$result = $db->sql_query( $sql );
+	$sql = 'SELECT id,full_name,admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department';
+	$result = $db->query( $sql );
 
 	$contact_allowed = array(
 		'view' => array(),
@@ -27,7 +28,7 @@ function nv_getAllowed()
 		'obt' => array()
 	);
 
-	while( $row = $db->sql_fetchrow( $result ) )
+	while( $row = $result->fetch() )
 	{
 		$id = intval( $row['id'] );
 
@@ -38,13 +39,13 @@ function nv_getAllowed()
 		}
 
 		$admins = $row['admins'];
-		$admins = array_map( "trim", explode( ";", $admins ) );
+		$admins = array_map( 'trim', explode( ';', $admins ) );
 
 		foreach( $admins as $a )
 		{
-			if( preg_match( "/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i", $a ) )
+			if( preg_match( '/^([0-9]+)\/([0-1]{1})\/([0-1]{1})\/([0-1]{1})$/i', $a ) )
 			{
-				$admins2 = array_map( "intval", explode( "/", $a ) );
+				$admins2 = array_map( 'intval', explode( '/', $a ) );
 
 				if( $admins2[0] == $admin_info['admin_id'] )
 				{
@@ -59,17 +60,31 @@ function nv_getAllowed()
 	return $contact_allowed;
 }
 
-if( defined( 'NV_IS_GODADMIN' ) )
+function nv_departmentList()
 {
-	$submenu['list_row'] = $lang_module['list_row_title'];
-	$submenu['content'] = $lang_module['content'];
-	$allow_func = array( 'main', 'reply', 'del', 'list_row', 'row', 'del_row', 'content', 'view', 'change_status' );
-}
-else
-{
-	$allow_func = array( 'main', 'reply', 'del', 'view' );
+	global $db, $module_data, $db_config;
+	
+	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_department ORDER BY weight DESC";
+
+	$result = $db->query( $sql );
+	$list = array();
+	while( $row = $result->fetch() )
+	{
+
+		$list[$row['id']] = array(
+			'id' => $row['id'],
+			'full_name' => $row['full_name'],
+			'phone' => $row['phone'],
+			'fax' => $row['fax'],
+			'email' => $row['email'],
+			'yahoo' => $row['yahoo'],
+			'skype' => $row['skype'],
+			'note' => $row['note'],
+			'admins' => $row['admins'],
+			'act' => $row['act'],
+			'weight' => $row['weight']);
+	}
+	return $list;
 }
 
 define( 'NV_IS_FILE_ADMIN', true );
-
-?>

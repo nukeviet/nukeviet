@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 1-27-2010 5:25
  */
 
@@ -22,15 +23,15 @@ function cron_dump_autobackup()
 
 	$result = true;
 
-	$current_day = mktime( 0, 0, 0, date( "n", NV_CURRENTTIME ), date( "j", NV_CURRENTTIME ), date( "Y", NV_CURRENTTIME ) );
+	$current_day = mktime( 0, 0, 0, date( 'n', NV_CURRENTTIME ), date( 'j', NV_CURRENTTIME ), date( 'Y', NV_CURRENTTIME ) );
 	$w_day = $current_day - ( $global_config['dump_backup_day'] * 86400 );
 
 	$contents = array();
-	$contents['savetype'] = ( $global_config['dump_backup_ext'] == "sql" ) ? "sql" : "gz";
-	$file_ext = ( $contents['savetype'] == "sql" ) ? "sql" : "sql.gz";
-	$log_dir = NV_ROOTDIR . "/" . NV_LOGS_DIR . "/dump_backup";
+	$contents['savetype'] = ( $global_config['dump_backup_ext'] == 'sql' ) ? 'sql' : 'gz';
+	$file_ext = ( $contents['savetype'] == 'sql' ) ? 'sql' : 'sql.gz';
+	$log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 
-	$contents['filename'] = $log_dir . "/" . md5( nv_genpass( 10 ) . $client_info['session_id'] ) . "_" . $current_day . "." . $file_ext;
+	$contents['filename'] = $log_dir . '/' . md5( nv_genpass( 10 ) . $client_info['session_id'] ) . '_' . $current_day . '.' . $file_ext;
 
 	if( ! file_exists( $contents['filename'] ) )
 	{
@@ -38,11 +39,11 @@ function cron_dump_autobackup()
 		{
 			while( ( $file = readdir( $dh ) ) !== false )
 			{
-				if( preg_match( "/^([a-zA-Z0-9]+)\_([0-9]+)\.(" . nv_preg_quote( $file_ext ) . ")/", $file, $m ) )
+				if( preg_match( '/^([a-zA-Z0-9]+)\_([0-9]+)\.(' . nv_preg_quote( $file_ext ) . ')/', $file, $m ) )
 				{
 					if( intval( $m[2] ) > 0 and intval( $m[2] ) < $w_day )
 					{
-						@unlink( $log_dir . "/" . $file );
+						@unlink( $log_dir . '/' . $file );
 					}
 				}
 			}
@@ -54,17 +55,17 @@ function cron_dump_autobackup()
 		if( $global_config['dump_autobackup'] )
 		{
 			$contents['tables'] = array();
-			$res = $db->sql_query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
 
-			while( $item = $db->sql_fetchrow( $res ) )
+			$res = $db->query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
+			while( $item = $res->fetch( 3 ) )
 			{
 				$contents['tables'][] = $item[0];
 			}
-			$db->sql_freeresult( $res );
+			$res->closeCursor();
 
-			$contents['type'] = "all";
+			$contents['type'] = 'all';
 
-			include ( NV_ROOTDIR . "/includes/core/dump.php" );
+			include NV_ROOTDIR . '/includes/core/dump.php' ;
 
 			if( ! nv_dump_save( $contents ) )
 			{
@@ -75,5 +76,3 @@ function cron_dump_autobackup()
 
 	return $result;
 }
-
-?>

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate May 30, 2010, 10:57:00 PM
  */
 
@@ -16,6 +17,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['avatar_size'] = 'Kích thước ảnh đại diện';
 $lang_module['dir_forum'] = 'Thư mục chứa diễn đàn';
 $lang_module['modforum'] = 'Chức năng quản lý thành viên hiện do diễn đàn quản lý.';
 $lang_module['list_module_title'] = 'Danh sách thành viên';
@@ -27,6 +29,7 @@ $lang_module['search_id'] = 'ID thành viên';
 $lang_module['search_account'] = 'Tài khoản thành viên';
 $lang_module['search_name'] = 'Tên thành viên';
 $lang_module['search_mail'] = 'Email thành viên';
+$lang_module['search_key'] = 'Từ khóa tìm kiếm';
 $lang_module['search_note'] = 'Từ khóa tìm kiếm không lớn hơn 64 ký tự, không dùng các mã html';
 $lang_module['submit'] = 'Tìm kiếm';
 $lang_module['members_list'] = 'Danh sách thành viên';
@@ -34,6 +37,8 @@ $lang_module['main_title'] = 'Quản lý thành viên';
 $lang_module['userid'] = 'ID';
 $lang_module['account'] = 'Tài khoản';
 $lang_module['name'] = 'Họ tên';
+$lang_module['first_name'] = 'Tên';
+$lang_module['last_name'] = 'Họ';
 $lang_module['email'] = 'Email';
 $lang_module['register_date'] = 'Ngày đăng ký';
 $lang_module['status'] = 'Trạng thái';
@@ -41,13 +46,17 @@ $lang_module['funcs'] = 'Chức năng';
 $lang_module['user_add'] = 'Thêm tài khoản mới';
 $lang_module['password'] = 'Mật khẩu';
 $lang_module['repassword'] = 'Lặp lại mật khẩu';
-$lang_module['question'] = 'Câu hỏi bảo mật';
 $lang_module['answer'] = 'Câu trả lời';
 $lang_module['gender'] = 'Giới tính';
 $lang_module['male'] = 'Nam';
 $lang_module['female'] = 'Nữ';
 $lang_module['NA'] = 'N/A';
+$lang_module['name_show'] = 'Kiểu hiển thị họ tên';
+$lang_module['firstname_lastname'] = 'Tên và Họ';
+$lang_module['lastname_firstname'] = 'Họ và Tên';
+$lang_module['error_language'] = 'Lỗi: bạn chưa chọn kiểu hiển thị Họ và Tên';
 $lang_module['avata'] = 'Hình đại diện';
+$lang_module['avata_chosen'] = 'Chọn ảnh';
 $lang_module['birthday'] = 'Ngày tháng năm sinh';
 $lang_module['date'] = 'Ngày';
 $lang_module['month'] = 'Tháng';
@@ -55,9 +64,13 @@ $lang_module['year'] = 'Năm';
 $lang_module['show_email'] = 'Hiển thị email';
 $lang_module['sig'] = 'Chữ ký';
 $lang_module['in_group'] = 'Là thành viên của nhóm';
+
+$lang_module['question'] = 'Câu hỏi bảo mật';
 $lang_module['addquestion'] = 'Thêm câu hỏi bảo mật';
-$lang_module['savequestion'] = 'Lưu câu hỏi bảo mật';
+$lang_module['savequestion'] = 'Sửa câu hỏi bảo mật';
+$lang_module['deletequestion'] = 'Xóa câu hỏi bảo mật';
 $lang_module['errornotitle'] = 'Lỗi bạn chưa nhập câu hỏi bảo mật';
+
 $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề có thể bị trùng';
 $lang_module['weight'] = 'vị trí';
 $lang_module['save'] = 'Lưu';
@@ -77,6 +90,7 @@ $lang_module['active_all'] = 'Không cần kích hoạt';
 $lang_module['active_email'] = 'Kích hoạt qua email';
 $lang_module['deny_email'] = 'Các từ cấm sử dụng trong email thành viên';
 $lang_module['deny_name'] = 'Các từ cấm sử dụng trong tài khoản thành viên';
+$lang_module['password_simple'] = 'Các từ cấm sử dụng các mật khẩu đơn giản';
 $lang_module['memberlist_active'] = 'Hoạt động';
 $lang_module['memberlist_unactive'] = 'Hoạt động';
 $lang_module['memberlist_error_method'] = 'Hãy chọn phương thức để tìm kiếm !';
@@ -117,9 +131,12 @@ $lang_module['delconfirm_email_content'] = 'Xin chào %1$s,<br /><br />Chúng t�
 $lang_module['adduser_email'] = 'Gửi email thông báo:';
 $lang_module['adduser_email_yes'] = 'Có';
 $lang_module['adduser_register'] = 'Tài khoản của bạn đã được tạo';
-$lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: %3$s<br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['allow_openid'] = 'Cho phép sử dụng OpenID để đăng nhập, đăng ký';
-$lang_module['openid_servers'] = 'Các nhà cung cấp OpenID được chấp nhận';
+$lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
+$lang_module['openid_servers'] = 'Các nhà cung cấp Oauth, OpenID được chấp nhận';
+$lang_module['openid_processing'] = 'Chế độ mặc định xử lý sau khi login OpenID';
+$lang_module['openid_processing_0'] = 'Người dùng tự chọn hình thức xử lý';
+$lang_module['openid_processing_3'] = 'Đăng ký một tài khoản mới và gán OpenID này vào tài khoản đó';
+$lang_module['openid_processing_4'] = 'Đăng nhập tự động bằng một tài khoản do hệ thống tự tạo';
 $lang_module['allow_change_login'] = 'Cho phép thay đổi tên đăng nhập';
 $lang_module['is_user_forum'] = 'Sử dụng thành viên của Diễn đàn';
 $lang_module['search_page_title'] = 'Kết quả tìm kiếm';
@@ -197,7 +214,10 @@ $lang_module['whoviewlistuser'] = 'Ai được xem danh sách thành viên';
 $lang_module['whoview_all'] = 'Tất cả';
 $lang_module['whoview_user'] = 'Thành viên';
 $lang_module['whoview_admin'] = 'Quản trị';
+$lang_module['random_password'] = 'Tạo mật khẩu ngẫu nhiên';
+$lang_module['show_password'] = 'Hiển thị mật khẩu';
 
+$lang_module['usactive'] = 'Trạng thái tài khoản';
 $lang_module['usactive_0'] = 'Tài khoản bị khóa';
 $lang_module['usactive_1'] = 'Tài khoản hoạt động';
 $lang_module['usactive_2'] = 'Tài khoản site quản lý bị khóa';
@@ -233,7 +253,6 @@ $lang_module['field_required'] = 'Trường dữ liệu bắt buộc';
 $lang_module['field_required_note'] = 'Nếu là trường bắt buộc sẽ được hiển thị trong quá trình đăng ký';
 $lang_module['field_show_register'] = 'Hiển thị khi đăng ký';
 $lang_module['field_user_editable'] = 'Thành viên có thể thay đổi';
-$lang_module['field_user_editable_once'] = 'Chỉ được thay đổi 1 lần';
 $lang_module['field_show_profile'] = 'Hiển thị tại trang thành viên';
 $lang_module['field_type'] = 'Loại dữ liệu';
 $lang_module['field_type_number'] = 'Số';
@@ -254,10 +273,12 @@ $lang_module['field_match_type_none'] = 'Không kiểm tra';
 $lang_module['field_match_type_alphanumeric'] = 'Chỉ được dùng các ký tự A-Z, 0-9 và gạch dưới';
 $lang_module['field_match_type_url'] = 'Url';
 $lang_module['field_match_type_regex'] = 'Biểu thức quy tắc';
-$lang_module['field_match_type_callback'] = 'Xử dụng hàm';
+$lang_module['field_match_type_callback'] = 'Sử dụng hàm';
 $lang_module['field_default_value'] = 'Giá trị mặc định';
 $lang_module['field_min_length'] = 'Chiều dài ký tự ít nhất';
 $lang_module['field_max_length'] = 'Chiều dài ký tự nhiều nhất';
+$lang_module['field_min_value'] = 'Giá trị nhỏ nhất';
+$lang_module['field_max_value'] = 'Giá trị lớn nhất';
 $lang_module['field_options_number'] = 'Các tùy chọn cho dữ liệu';
 $lang_module['field_number_type'] = 'Kiểu số';
 $lang_module['field_integer'] = 'Số nguyên';
@@ -272,8 +293,11 @@ $lang_module['field_number'] = 'STT';
 $lang_module['field_value'] = 'Giá trị';
 $lang_module['field_text'] = 'Miêu tả';
 $lang_module['field_add_choice'] = 'Thêm lựa chọn';
-$lang_module['field_date_error'] = 'Giá trị của Min Date cần nhỏ hơm Max Date';
-$lang_module['field_number_error'] = 'Giá trị của Min Value cần nhỏ hơm Max Value';
+$lang_module['field_date_error'] = 'Giá trị của Min Date cần nhỏ hơn Max Date';
+$lang_module['field_number_error'] = 'Giá trị của Min Value cần nhỏ hơn Max Value';
+$lang_module['field_error_empty'] = 'Trường dữ liệu không được rỗng';
+$lang_module['field_error_not_allow'] = 'Trường dữ liệu không được phép sử dụng';
+$lang_module['field_error'] = 'Trường dữ liệu đã có';
 $lang_module['field_match_type_error'] = '%s không đúng quy tắc';
 $lang_module['field_match_type_required'] = '%s bắt buộc nhập';
 $lang_module['field_min_max_error'] = '%1$s cần nhập từ %2$s đến %3$s ký tự';
@@ -282,19 +306,19 @@ $lang_module['field_choicetypes_title'] = 'Lựu chọn dữ liệu';
 $lang_module['field_choicetypes_sql'] = 'Lấy dữ liệu từ CSDL';
 $lang_module['field_choicetypes_text'] = 'Lấy dữ liệu từ nhập liệu';
 $lang_module['field_options_choicesql'] = 'Lựa chọn module, bảng dữ liệu và trường dữ liệu';
-$lang_module['field_options_choicesql_module'] = "Chọn module";
-$lang_module['field_options_choicesql_table'] = "Chọn bảng dữ liệu";
-$lang_module['field_options_choicesql_column'] = "Chọn cột dữ liệu";
-$lang_module['field_options_choicesql_key'] = "Chọn cột làm key";
-$lang_module['field_options_choicesql_val'] = "Chọn cột làm value";
+$lang_module['field_options_choicesql_module'] = 'Chọn module';
+$lang_module['field_options_choicesql_table'] = 'Chọn bảng dữ liệu';
+$lang_module['field_options_choicesql_column'] = 'Chọn cột dữ liệu';
+$lang_module['field_options_choicesql_key'] = 'Chọn cột làm key';
+$lang_module['field_options_choicesql_val'] = 'Chọn cột làm value';
 $lang_module['field_sql_choices_empty'] = 'Lỗi : Lựa chọn lấy dữ liệu từ CSDL không đầy đủ';
 
-$lang_module['facebook_config'] = 'Cấu hình đăng nhập, đăng kí bằng facebook';
-$lang_module['facebook_client_id'] = 'App ID/API Key';
-$lang_module['facebook_client_secret'] = 'Mã Bí Mật';
+$lang_module['oauth_config'] = 'Cấu hình đăng nhập, đăng kí bằng %s';
+$lang_module['oauth_client_id'] = 'App ID/API Key';
+$lang_module['oauth_client_secret'] = 'Mã Bí Mật';
 
 $lang_module['import'] = 'Nhập dữ liệu từ file Excel';
-$lang_module['import_note'] = 'Để nhập dữ liệu từ file Excel, bạn cần <a title="Download file dữ liệu mẫu" href="%1$s"><b>download file dữ liệu mẫu</b></a>, sau đó điền đầy đủ dữ liệu mỗi file không quá 2.000 tài khoản sau đó upload lên thư mục <b>%2$s</b>';
+$lang_module['import_note'] = 'Để nhập dữ liệu từ file Excel, bạn cần <a title="Download file dữ liệu mẫu" href="%1$s"><strong>download file dữ liệu mẫu</strong></a>, sau đó điền đầy đủ dữ liệu mỗi file không quá 2.000 tài khoản sau đó upload lên thư mục <strong>%2$s</strong>';
 $lang_module['export'] = 'Xuất dữ liệu ra file Excel';
 $lang_module['export_example'] = 'File dữ liệu mẫu module users';
 $lang_module['required_phpexcel'] = 'Để sử dụng chức năng này bạn cần cài đặt thư viện PHPExcel, bạn có thể download tại <a title="Download PHPExcel" href="http://nukeviet.vn/vi/store/other/phpexcel/">NukeViet Store</a>';
@@ -315,4 +339,76 @@ $lang_module['read_error_field'] = "Lỗi khi đọc file %1\$s, Bạn cần ki�
 $lang_module['read_error_memory_limit'] = "Lỗi: Hệ thống không đọc được dữ liệu, vui lòng kiểm tra lại các file dữ liệu chỉ để khoảng 2.000 dòng mỗi file hoặc bạn phải cấu hình file php.ini giá trị memory_limit (128MB đọc được khoảng 2.000 dòng)";
 $lang_module['read_ignore'] = "Đọc các dữ liệu không đúng chuẩn";
 
-?>
+$lang_module['update_field'] = "Cập nhật site";
+$lang_module['update_field_oncreate'] = "Khi được tạo";
+$lang_module['update_field_onlogin'] = "Cập đăng site";
+
+$lang_module['cas_config'] = "Thiết lập máy chủ CAS";
+$lang_module['cas_config_hostname'] = "Hostname";
+$lang_module['cas_config_hostname_info'] = "Hostname of the CAS server	<br>eg: cas.nukeviet.vn";
+$lang_module['cas_config_baseUri'] = "Base URI";
+$lang_module['cas_config_baseUri_info'] = " URI of the server (nothing if no baseUri)<br>For example, if the CAS server responds to cas.nukeviet.vn/cas/ then<br>cas_baseuri = cas/";
+$lang_module['cas_config_port'] = "Port";
+$lang_module['cas_config_port_info'] = "Port of the CAS server";
+$lang_module['cas_config_version'] = "CAS protocol version";
+$lang_module['cas_config_version_info'] = "CAS protocol version to use";
+$lang_module['cas_config_language'] = "Language";
+$lang_module['cas_config_language_info'] = "Select language for authentication pages";
+$lang_module['cas_config_proxyMode'] = "Proxy mode";
+$lang_module['cas_config_proxyMode_info'] = "Select 'yes' if you use CAS in proxy-mode";
+$lang_module['cas_config_multiAuthentication'] = "Multi-authentication";
+$lang_module['cas_config_multiAuthentication_info'] = "Select 'yes' if you want to have multi-authentication (CAS + other authentication) ";
+$lang_module['cas_config_serverValidation'] = "Server validation";
+$lang_module['cas_config_serverValidation_info'] = "Select 'yes' if you want to validate the server certificate";
+$lang_module['cas_config_certificatePath'] = "Certificate path";
+$lang_module['cas_config_certificatePath_info'] = "Path of the CA chain file (PEM Format) to validate the server certificate";
+
+$lang_module['ldap_config'] = "Các thiết lập máy chủ LDAP";
+$lang_module['ldap_config_hostURL'] = "Host URL";
+$lang_module['ldap_config_hostURL_info'] = "Chỉ ra máy chủ LDAP trong biểu mẫu URL giống như 'ldap://ldap.nukeviet.vn/' hoặc 'ldaps://ldap.nukeviet.vn/'.";
+$lang_module['ldap_config_version'] = "Version";
+$lang_module['ldap_config_version_info'] = "Phiên bản của LDAP giao thức máy chủ của bạn đang được sử dụng.";
+$lang_module['ldap_config_useTLS'] = "Use TLS";
+$lang_module['ldap_config_useTLS_info'] = "Use regular LDAP service (port 389) with TLS encryption ";
+$lang_module['ldap_config_LDAPencoding'] = "LDAP encoding";
+$lang_module['ldap_config_LDAPencoding_info'] = "Specify encoding used by LDAP server. Most probably utf-8, MS AD v2 uses default platform encoding such as cp1252, cp1250, etc. ";
+$lang_module['ldap_config_PageSize'] = "Page Size";
+$lang_module['ldap_config_PageSize_info'] = "Make sure this value is smaller than your LDAP server result set size limit (the maximum number of entries that can be returned in a single query)";
+
+$lang_module['rb_config'] = "Các thiết lập ràng buộc";
+$lang_module['rb_config_dn'] = "Distinguished name";
+$lang_module['rb_config_dn_info'] = "Nếu bạn muốn sử dụng ràng buộc người dùng để tìm kiếm các người dùng, chỉ ra nó ở đây. Đôi khi nó giống như 'cn=Manager,dc=nukeviet,dc=vn'";
+$lang_module['rb_config_pw'] = "Password";
+$lang_module['rb_config_pw_info'] = "Mật khẩu đối với ràng buộc người dùng .";
+
+$lang_module['user_config'] = "Các thiết lập tra cứu người dùng";
+$lang_module['user_config_userType'] = "User type";
+$lang_module['user_config_userType_info'] = "Chọn những người dùng thế nào được lưu trữ trong LDAP. Các thiết lập này cũng chỉ ra sự vô hiệu hoá đăng nhập như thế nào, tạo người dùng và các cuộc đăng nhập sẽ hoạt động như thế nào. ";
+$lang_module['user_config_context'] = "Contexts";
+$lang_module['user_config_context_info'] = "Danh sách các ngữ cảnh mà ở đó những người sử dụng được xác định. Ngăn cách các ngữ cảnh khác nhau bởi dấu ';'. Ví dụ : 'ou=people,dc=nukeviet,dc=vn'";
+$lang_module['user_config_searchSubcontexts'] = "Search subcontexts";
+$lang_module['user_config_searchSubcontexts_info'] = "Đặt giá trị khác 0. Nếu bạn muốn tìm kiếm người dùng từ ngữ cảnh phụ.";
+$lang_module['user_config_dereferenceAliases'] = "Dereference aliases";
+$lang_module['user_config_dereferenceAliases_info'] = "Quyết định bao nhiêu bí danh được sử dụng trong quá trình tìm kiếm. Chọn một trong số các giá trị sau: 'Không' (LDAP_DEREF_NEVER) hoặc 'Có' (LDAP_DEREF_ALWAYS) ";
+$lang_module['user_config_userAttribute'] = "User attribute";
+$lang_module['user_config_userAttribute_info'] = " Các tuỳ chọn: Ghi đè thuộc tính sử dụng để chỉ ra/tìm kiếm người dùng. Thông thường 'cn'. ";
+$lang_module['user_config_memberAttribute'] = "Member attribute";
+$lang_module['user_config_memberAttribute_info'] = " Tuỳ chọn: Ghi đè thuộc tính về người dùng, khi những người dùng có liên quan tới một nhóm. Thông thường là 'thành viên'";
+$lang_module['user_config_memberAttributeUsesDn'] = "Member attribute uses dn";
+$lang_module['user_config_memberAttributeUsesDn_info'] = "Optional: Overrides handling of member attribute values, either 0 or 1 ";
+$lang_module['user_config_objectClass'] = "Object class";
+$lang_module['user_config_objectClass_info'] = "Tuỳ chọn: Ghi đè lớp đối tượng sử dụng để chỉ định/tìm kiếm người dùng trên kiểu người dùng ldap_user_type. Thông thường bạn không cần thay đổi điều này.";
+
+$lang_module['update_LDAP_config'] = "Cập nhật dữ liệu từ LDAP xuống website";
+$lang_module['update_LDAP_config_name'] = "Tên đệm và tên";
+$lang_module['update_LDAP_config_lname'] = "Họ";
+
+$lang_module['default'] = "Mặc định";
+
+$lang_module['info'] = "Cập nhật dữ liệu từ LDAP xuống website là tuỳ chọn. Bạn có thể chọn điền trước một số thông tin người dùng NukeViet với thông tin từ <b> các trường LDAP</b> được chỉ ra ở đây.<p>
+		Nếu bạn để các trường này trống, thì không có cái gì được chuyển đổi từ LDAP và các giá trị mặc định của NukeViet sẽ được sử dụng để thay thế	</p>	<p>
+		Trong trường hợp khác, người dùng sẽ có khả năng soạn thảo tất cả các trường này sau khi chúng bắt dầu.	</p>	<p>		<b>Cập nhật site:</b> Nếu được kích hoạt, mục sẽ được cập nhật (từ xác thực ngoài) mỗi khi người dùng đăng nhập hoặc có đồng bộ hóa người dùng.	</p>	<hr>	<p>
+		<b>Chú ý:</b> Cập nhật dư liệu LDAP bên ngoại yêu cầu bạn thiết đặt binddn và bindpw cho một người dùng bind có quyền chỉnh sửa tất cả bản ghi người dùng. Hiện tại nó không lưu giữ các thuộc tính đa trị, và sẽ xóa các giá trị gia tăng khi cập nhật.	</p>";
+
+$lang_module['allowuserloginmulti']='Cho phép đăng nhập cùng lúc từ nhiều trình duyệt';
+$lang_module['user_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu người dùng không sử dụng trình duyệt';

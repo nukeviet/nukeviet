@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -18,10 +19,16 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['edit_title'] = 'Xem nội dung gửi';
 $lang_module['add_row_title'] = 'Thêm bộ phận';
-$lang_module['list_row_title'] = 'Các bộ phận';
+$lang_module['department_title'] = 'Các bộ phận';
+$lang_module['alias'] = 'Liên kết tĩnh';
+$lang_module['error_alias'] = 'Lỗi: chưa có liên kết tĩnh';
+$lang_module['duplicate_alias'] = 'Lỗi: Tiêu đề hoặc liên kết tính đã tồn tại';
+$lang_module['number'] = 'Thứ tự';
 $lang_module['err_row_title'] = 'Không có';
 $lang_module['part_row_title'] = 'Tên bộ phận';
 $lang_module['email_row_title'] = 'Email';
+$lang_module['yahoo_row_title'] = 'Yahoo';
+$lang_module['skype_row_title'] = 'Skype';
 $lang_module['note_row_title'] = 'Ghi chú';
 $lang_module['bt_save_row_title'] = 'Ghi lại';
 $lang_module['bt_reset_row_title'] = 'Làm trắng';
@@ -62,5 +69,7 @@ $lang_module['admin_send2mail_title'] = 'Gửi liên hệ tới email';
 $lang_module['delall'] = 'Xóa tất cả';
 $lang_module['siteinfo_new'] = 'Liên hệ chưa đọc';
 $lang_module['no_row_contact'] = 'Không có liên hệ nào gửi đến bạn';
+$lang_module['url_for_iframe'] = 'Liên kết dùng chèn cho iframe';
 
-?>
+$lang_module['notification_contact_new'] = '<strong>%s</strong> gửi thư liên hệ với tiêu đề <strong>%s</strong>';
+$lang_module['is_default'] = 'Mặc định';

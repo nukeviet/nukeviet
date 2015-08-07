@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
@@ -20,19 +21,6 @@ $lang_module['nocatpage'] = 'Lỗi không có chủ đề';
 $lang_module['other'] = 'Các tin khác';
 $lang_module['detail'] = 'Chi tiết tin';
 $lang_module['more'] = 'Xem tiếp...';
-$lang_module['comment'] = 'Ý kiến bạn đọc';
-$lang_module['comment_login'] = 'Bạn cần đăng nhập thành viên để sử dụng chức năng này';
-$lang_module['comment_success'] = 'Bình luận thành công';
-$lang_module['comment_unsuccess'] = 'Lỗi trình quá trình xử lý dữ liệu hoặc dữ liệu không đầy đủ';
-$lang_module['comment_title'] = 'Gửi bình luận của bạn';
-$lang_module['comment_view'] = 'Xem phản hồi';
-$lang_module['comment_send'] = 'Gửi phản hồi';
-$lang_module['comment_name'] = 'Tên của bạn';
-$lang_module['comment_email'] = 'Email';
-$lang_module['comment_content'] = 'Nội dung';
-$lang_module['comment_seccode'] = 'Mã an toàn';
-$lang_module['comment_submit'] = 'Gửi bình luận';
-$lang_module['comment_timeout'] = 'Bạn đã bình chọn vui lòng đợi %s phút sau để có gửi bình luận.';
 $lang_module['sendmail'] = 'Gửi bài viết qua email';
 $lang_module['sendmail_subject'] = 'Bạn nhận được một tin nhắn từ: ';
 $lang_module['sendmail_name'] = 'Tên của bạn';
@@ -61,13 +49,15 @@ $lang_module['related_new'] = 'Những tin mới hơn';
 $lang_module['related'] = 'Những tin cũ hơn';
 $lang_module['savefile'] = 'Lưu bài viết này';
 $lang_module['rating'] = 'Đánh giá bài viết';
+$lang_module['rating_average'] = 'Xếp hạng';
+$lang_module['rating_count'] = 'phiếu bầu';
 $lang_module['stringrating'] = 'Tổng số điểm của bài viết là: %1$s trong %2$s đánh giá';
 $lang_module['star_note'] = 'Click để đánh giá bài viết';
-$lang_module['star_verypoor'] = 'bài viết rất kém';
-$lang_module['star_poor'] = 'bài viết kém';
-$lang_module['star_ok'] = 'bài viết đạt';
-$lang_module['star_good}'] = 'bài viết tốt';
-$lang_module['star_verygood'] = 'bài viết rất tốt';
+$lang_module['star_verypoor'] = 'Bài viết rất kém';
+$lang_module['star_poor'] = 'Bài viết kém';
+$lang_module['star_ok'] = 'Bài viết đạt';
+$lang_module['star_good}'] = 'Bài viết tốt';
+$lang_module['star_verygood'] = 'Bài viết rất tốt';
 $lang_module['main_title'] = 'Tìm kiếm thông tin';
 $lang_module['info_title'] = 'Tìm kiếm nâng cao mục Tin tức';
 $lang_module['key_title'] = 'Từ tìm kiếm';
@@ -83,6 +73,7 @@ $lang_module['search_on_internet'] = 'Tìm trên toàn mạng Internet';
 $lang_module['search_adv_internet'] = 'Mở rộng trên Internet';
 $lang_module['search_on_nuke'] = 'Tìm trong site';
 $lang_module['search_none'] = 'Không tìm thấy dữ liệu nào có liên quan đến';
+$lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 truờng tìm kiếm';
 $lang_module['search_in_module'] = 'trong mục';
 $lang_module['view_all_title'] = 'Xem tất cả các kết quả tìm kiếm';
 $lang_module['pages_title'] = 'Trang';
@@ -98,9 +89,7 @@ $lang_module['type_title'] = 'Lựa chọn kiểu tìm kiếm';
 $lang_module['finter_title'] = 'Thời gian';
 $lang_module['source_title'] = 'Nguồn tin';
 $lang_module['keywords'] = 'Từ khóa';
-$lang_module['member_view'] = 'Chỉ thành viên mới có quyền xem mục này!';
-$lang_module['admin_view'] = 'Chỉ người quản trị mới có quyền xem mục này!';
-$lang_module['group_view'] = 'Chỉ có nhóm thành viên mới có quyền xem mục này!';
+$lang_module['no_permission'] = 'Bạn không được phép xem bài viết';
 $lang_module['rating_error1'] = 'Đánh giá không hợp lệ';
 $lang_module['rating_error2'] = 'Bạn đã đánh giá bài viết này rồi';
 $lang_module['pubtime'] = 'Đăng lúc';
@@ -133,11 +122,11 @@ $lang_module['content_keywords'] = 'Từ khóa dành cho máy chủ tìm kiếm'
 $lang_module['save_temp'] = 'Gửi bài viết đến quản trị site';
 $lang_module['save_draft'] = 'Lưu nháp';
 $lang_module['save_content'] = 'Đăng bài viết';
-$lang_module['captcha'] = 'Mã chống spam';
+$lang_module['captcha'] = 'Mã bảo mật';
 $lang_module['error_cat'] = 'Lỗi: Bài viết chưa có chủ đề';
 $lang_module['error_title'] = 'Lỗi: Bài viết chưa có tiêu đề';
 $lang_module['error_bodytext'] = 'Lỗi: Bài viết chưa có nội dung';
-$lang_module['error_captcha'] = 'Lỗi: Mã chống spam chưa đúng';
+$lang_module['error_captcha'] = 'Lỗi: Mã bảo mật chưa đúng';
 $lang_module['save_content_ok'] = 'Đăng bài viết thành công. <br />Trình duyệt sẽ tự động chuyển về trang quản lý bài viết.';
 $lang_module['save_content_view_page'] = 'Đăng bài viết thành công. <br />Trình duyệt sẽ tự động chuyển về bài viết bạn vừa đăng.';
 $lang_module['save_content_waite'] = 'Bài viết bạn gửi đã được hệ thống ghi nhận, <br />ban quản trị site sẽ kiểm tra bài viết và đăng bài viết trong thời gian sớm nhất, <br />trình duyệt sẽ tự động chuyển về trang quản lý bài viết.';
@@ -146,5 +135,17 @@ $lang_module['error_addcontent'] = 'Lỗi: Bạn chưa được cấp quyền đ
 $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được nội dung, bạn hãy kiểm tra lại tiêu đề bài viết có thể bị trùng';
 $lang_module['update_content'] = 'Sửa bài viết';
 $lang_module['del_content'] = 'Xóa bài viết';
+$lang_module['no_public'] = 'Chú ý: Bài viết này chưa được xuất bản, chỉ có những người có quyền thao tác mới có thể xem được nội dung.';
 
-?>
+$lang_module['status_alert'] = 'Bài viết đang ở trạng thái: %1$s';
+$lang_module['status_0'] = 'Ngưng hiệu lực';
+$lang_module['status_1'] = 'Xuất bản';
+$lang_module['status_2'] = 'Hẹn giờ đăng';
+$lang_module['status_3'] = 'Hết hạn';
+$lang_module['status_4'] = 'Lưu tạm';
+$lang_module['status_5'] = 'Chuyển duyệt bài';
+$lang_module['status_6'] = 'Từ chối duyệt bài';
+$lang_module['status_7'] = 'Đang duyệt bài';
+$lang_module['status_8'] = 'Chuyển đăng bài';
+$lang_module['status_9'] = 'Từ chối đăng bài';
+$lang_module['status_10'] = 'Đang kiểm tra để đăng';

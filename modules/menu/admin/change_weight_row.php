@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.1
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 20-03-2011 20:08
  */
 
@@ -15,34 +16,27 @@ $mid = $nv_Request->get_int( 'mid', 'post', 0 );
 $parentid = $nv_Request->get_int( 'parentid', 'post', 0 );
 $new_weight = $nv_Request->get_int( 'new_weight', 'post', 0 );
 
-$query = "SELECT `weight` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id`=" . $id . " AND `parentid`=" . $parentid;
-$result = $db->sql_query( $query );
-$num = $db->sql_numrows( $result );
+$sql = 'SELECT weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
+$row = $db->query( $sql )->fetch();
 
-if( $num != 1 ) die( 'NO_' . $id );
+if( empty( $row ) OR empty( $new_weight ) ) die( 'NO_' . $id );
 
-$row = $db->sql_fetchrow( $result );
-if( empty( $new_weight ) ) die( 'NO_' . $id );
-
-$query = "SELECT `id` FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` !=" . $id . " AND `parentid`=" . $parentid . " AND `mid`=" . $mid . " ORDER BY `weight` ASC";
-$result = $db->sql_query( $query );
+$query = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id !=' . $id . ' AND parentid=' . $parentid . ' AND mid=' . $mid . ' ORDER BY weight ASC';
+$result = $db->query( $query );
 
 $weight = 0;
-while( $row = $db->sql_fetchrow( $result ) )
+while( $row = $result->fetch() )
 {
 	++$weight;
 	if( $weight == $new_weight ) ++$weight;
-	$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `weight`=" . $weight . " WHERE `id`=" . $row['id'];
-	$db->sql_query( $sql );
+	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $weight . ' WHERE id=' . $row['id'] );
 }
 
-$sql = "UPDATE `" . NV_PREFIXLANG . "_" . $module_data . "_rows` SET `weight`=" . $new_weight . " WHERE `id`=" . $id . " AND `parentid`=" . $parentid;
-$db->sql_query( $sql );
+$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET weight=' . $new_weight . ' WHERE id=' . $id . ' AND parentid=' . $parentid );
 
+menu_fix_order( $mid );
 nv_del_moduleCache( $module_name );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
-echo 'OK_' . $id . "_" . $mid . "_" . $parentid;
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/header.php';
+echo 'OK_' . $id . '_' . $mid . '_' . $parentid;
+include NV_ROOTDIR . '/includes/footer.php';

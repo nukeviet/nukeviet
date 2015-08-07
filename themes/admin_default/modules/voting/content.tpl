@@ -1,131 +1,134 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
-</div>
-<div class="clear"></div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 <form id="votingcontent" method="post" action="{FORM_ACTION}">
-	<table class="tab1">
-		<tbody>
-			<tr>
-				<td>{LANG.voting_allowcm}</td>
-				<td>
-				<select name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')" style="width: 250px;">
-					<!-- BEGIN: who_view -->
-					<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
-					<!-- END: who_view -->
-				</select>
-				<br />
-				<div id="groups_list" style="{SHOW_GROUPS_LIST}">
-					{GLANG.groups_view}:
-					<table style="margin-bottom:8px;width:250px;">
-						<col valign="top" width="150px" />
+	<div class="row">
+		<div class="col-sm-24 col-md-18">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover">
+					<tbody>
 						<tr>
+							<td>{LANG.voting_time}</td>
 							<td>
-							<!-- BEGIN: groups_view -->
-							<p><input name="groups_view[]" type="checkbox"{GROUPS_VIEW.checked} value="{GROUPS_VIEW.key}"/>{GROUPS_VIEW.title}
-							</p>
-							<!-- END: groups_view -->
+								<table>
+									<tr>
+										<td><input name="publ_date" id="publ_date" value="{PUBL_DATE}" class="form-control w100 pull-left" maxlength="10" readonly="readonly" type="text" />&nbsp;</td>
+										<td>
+											<select name="phour" class="form-control w100">
+												<!-- BEGIN: phour -->
+												<option value="{PHOUR.key}"{PHOUR.selected}>{PHOUR.title}</option>
+												<!-- END: phour -->
+											</select>
+										</td>
+										<td>&nbsp;:&nbsp;</td>
+										<td>
+											<select name="pmin" class="form-control w100">
+												<!-- BEGIN: pmin -->
+												<option value="{PMIN.key}"{PMIN.selected}>{PMIN.title}</option>
+												<!-- END: pmin -->
+											</select>
+										</td>
+									</tr>
+								</table>
 							</td>
 						</tr>
+						<tr>
+							<td>{LANG.voting_timeout}</td>
+							<td>
+								<table>
+									<tr>
+										<td><input name="exp_date" id="exp_date" value="{EXP_DATE}" class="form-control w100 pull-left" maxlength="10" readonly="readonly" type="text" />&nbsp;</td>
+										<td>
+											<select name="ehour" class="form-control w100">
+												<!-- BEGIN: ehour -->
+												<option value="{EHOUR.key}"{EHOUR.selected}>{EHOUR.title}</option>
+												<!-- END: ehour -->
+											</select>
+										</td>
+										<td>&nbsp;:&nbsp;</td>
+										<td>
+											<select name="emin" class="form-control w100">
+												<!-- BEGIN: emin -->
+												<option value="{EMIN.key}"{EMIN.selected}>{EMIN.title}</option>
+												<!-- END: emin -->
+											</select>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>{LANG.voting_question}</td>
+							<td><input class="form-control" type="text" name="question" size="60" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}"  oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')"/></td>
+						</tr>
+						<tr>
+							<td>{LANG.voting_link}</td>
+							<td><input class="form-control" type="text" name="link" size="60" value="{DATA.link}" class="txt" /></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover" id="items">
+						<thead>
+							<tr>
+								<th>&nbsp;</th>
+								<th>{LANG.voting_answer}</th>
+								<th>{LANG.voting_link}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- BEGIN: item -->
+							<tr>
+								<td class="text-right">{LANG.voting_question_num} {ITEM.stt}</td>
+								<td><input class="form-control" type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" /></td>
+								<td><input  class="form-control"type="text" value="{ITEM.link}" name="urlvote[{ITEM.id}]"/></td>
+							</tr>
+							<!-- END: item -->
+							<tr>
+								<td class="text-right">{LANG.voting_question_num} {NEW_ITEM}</td>
+								<td><input class="form-control" type="text" value="" name="answervotenews[]" /></td>
+								<td><input class="form-control" type="text" value="" name="urlvotenews[]"/></td>
+							</tr>
+						</tbody>
 					</table>
-				</div></td>
-			</tr>
-		</tbody>
-		<tbody class="second">
-			<tr>
-				<td>{LANG.voting_time}</td>
-				<td><input name="publ_date" id="publ_date" value="{PUBL_DATE}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
-				<select name="phour">
-					<!-- BEGIN: phour -->
-					<option value="{PHOUR.key}"{PHOUR.selected}>{PHOUR.title}</option>
-					<!-- END: phour -->
-				</select>:
-				<select name="pmin">
-					<!-- BEGIN: pmin -->
-					<option value="{PMIN.key}"{PMIN.selected}>{PMIN.title}</option>
-					<!-- END: pmin -->
-				</select></td>
-			</tr>
-		</tbody>
-		<tbody>
-			<tr>
-				<td>{LANG.voting_timeout}</td>
-				<td><input name="exp_date" id="exp_date" value="{EXP_DATE}" style="width: 90px;" maxlength="10" readonly="readonly" type="text" />
-				<select name="ehour">
-					<!-- BEGIN: ehour -->
-					<option value="{EHOUR.key}"{EHOUR.selected}>{EHOUR.title}</option>
-					<!-- END: ehour -->
-				</select>:
-				<select name="emin">
-					<!-- BEGIN: emin -->
-					<option value="{EMIN.key}"{EMIN.selected}>{EMIN.title}</option>
-					<!-- END: emin -->
-				</select></td>
-			</tr>
-		</tbody>
-		<tbody class="second">
-			<tr>
-				<td>{LANG.voting_maxoption}</td>
-				<td><input type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt required" /></td>
-			</tr>
-		</tbody>
-		<tbody>
-			<tr>
-				<td>{LANG.voting_question}</td>
-				<td><input type="text" name="question" size="60" value="{DATA.question}" class="txt required" /></td>
-			</tr>
-		</tbody>
-		<tbody class="second">
-			<tr>
-				<td>{LANG.voting_link}</td>
-				<td><input type="text" name="link" size="60" value="{DATA.link}" class="txt" /></td>
-			</tr>
-		</tbody>
-	</table>
-	<table class="tab1" id="items">
-		<thead>
-			<tr>
-				<td>&nbsp;</td>
-				<td>{LANG.voting_answer}</td>
-				<td>{LANG.voting_link}</td>
-			</tr>
-		</thead>
-		<!-- BEGIN: item -->
-		<tbody {ITEM.class}>
-			<tr>
-				<td style="text-align:right">{LANG.voting_question_num} {ITEM.stt}</td>
-				<td><input type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" style="width:300px" /></td>
-				<td><input type="text" value="{ITEM.link}" name="urlvote[{ITEM.id}]" style="width:350px"/></td>
-			</tr>
-		</tbody>
-		<!-- END: item -->
-		<tbody {NEW_CLASS}>
-			<tr>
-				<td style="text-align:right">{LANG.voting_question_num} {NEW_ITEM}</td>
-				<td><input type="text" value="" name="answervotenews[]" style="width:300px" /></td>
-				<td><input type="text" value="" name="urlvotenews[]" style="width:350px" /></td>
-			</tr>
-		</tbody>
-	</table>
-	<br />
-	<div style="text-align:center">
-		<input type="button" value="{LANG.add_answervote}" onclick="nv_vote_additem('{LANG.voting_question_num}');" />
-		<input type="submit" name="submit" value="{LANG.voting_confirm}" />
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-24 col-md-6">
+			<div class="row">
+				<div class="col-sm-12 col-md-24">
+					<div class="form-group">
+						<label>{LANG.voting_maxoption}:</label>
+						<input class="form-control w100" type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt" required pattern="^([0-9])+$" oninvalid="this.setCustomValidity(nv_digits)" oninput="this.setCustomValidity('')"/>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-24">
+					<div class="form-group">
+						<label>{GLANG.groups_view}:</label>
+						<!-- BEGIN: groups_view -->
+						<div class="row">
+							<label><input name="groups_view[]" type="checkbox" value="{GROUPS_VIEW.value}" {GROUPS_VIEW.checked} />{GROUPS_VIEW.title}</label>
+						</div>
+						<!-- END: groups_view -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row text-center">
+		<input type="button" value="{LANG.add_answervote}" onclick="nv_vote_add_item('{LANG.voting_question_num}');" class="btn btn-info" />
+		<input type="submit" name="submit" value="{LANG.voting_confirm}" class="btn btn-primary" />
 	</div>
 </form>
+
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
-var items = {NEW_ITEM_NUM}
-};
-$("#publ_date,#exp_date").datepicker({
-showOn : "both",
-dateFormat : "dd/mm/yy",
-changeMonth : true,
-changeYear : true,
-showOtherMonths : true,
-buttonImage : nv_siteroot + "images/calendar.gif",
-buttonImageOnly : true
-});
+	var items = '{NEW_ITEM_NUM}';
 </script>
 <!-- END: main -->

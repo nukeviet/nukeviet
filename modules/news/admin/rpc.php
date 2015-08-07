@@ -1,26 +1,27 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.0
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2010 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 // Ket noi ngon ngu
-if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_webtools.php' ) )
+if( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_seotools.php' ) )
 {
-	require ( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_webtools.php' );
+	require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_seotools.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_webtools.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_seotools.php' ) )
 {
-	require ( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_webtools.php' );
+	require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_seotools.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/en/admin_webtools.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_seotools.php' ) )
 {
-	require ( NV_ROOTDIR . '/language/en/admin_webtools.php' );
+	require NV_ROOTDIR . '/includes/language/en/admin_seotools.php';
 }
 
 $page_title = $lang_module['rpc'];
@@ -29,13 +30,13 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 	$id = $nv_Request->get_int( 'id', 'post,get', '' );
 	if( $id > 0 )
 	{
-		$query = $db->sql_query( "SELECT * FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `id` = " . $id . "" );
-		$news_contents = $db->sql_fetchrow( $query );
-		$nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name;
-		$nv_redirect2 = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id . "&checkss=" . md5( $id . $global_config['sitekey'] . session_id() ) . "&rand=" . nv_genpass();
+		$query = $db->query( "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id = " . $id );
+		$news_contents = $query->fetch();
+		$nv_redirect = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name;
+		$nv_redirect2 = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id . "&checkss=" . md5( $id . $global_config['sitekey'] . session_id() ) . "&rand=" . nv_genpass();
 
-		$prcservice = ( isset( $module_config['webtools']['prcservice'] ) ) ? $module_config['webtools']['prcservice'] : "";
-		$prcservice = ( ! empty( $prcservice ) ) ? explode( ",", $prcservice ) : array();
+		$prcservice = ( isset( $module_config['seotools']['prcservice'] ) ) ? $module_config['seotools']['prcservice'] : "";
+		$prcservice = ( ! empty( $prcservice ) ) ? explode( ',', $prcservice ) : array();
 
 		if( $news_contents['id'] > 0 and ! empty( $prcservice ) )
 		{
@@ -44,7 +45,7 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 				if( $nv_Request->get_string( 'checkss', 'post,get', '' ) == md5( $id . $global_config['sitekey'] . session_id() ) )
 				{
 					$services_active = array();
-					require ( NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php' );
+					require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';
 					foreach( $services as $key => $service )
 					{
 						if( in_array( $service[1], $prcservice ) )
@@ -57,24 +58,21 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 					if( empty( $getdata ) )
 					{
 						$page_title = $lang_module['rpc'] . ": " . $news_contents['title'];
-						$xtpl = new XTemplate( "rpc_ping.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/webtools" );
+						$xtpl = new XTemplate( 'rpc_ping.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/seotools' );
 						$xtpl->assign( 'LANG', $lang_module );
 						$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 						$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 						$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 						$xtpl->assign( 'MODULE_NAME', $module_name );
 						$xtpl->assign( 'OP', $op );
-						$xtpl->assign( 'LOAD_DATA', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&id=" . $id . "&checkss=" . md5( $id . $global_config['sitekey'] . session_id() ) . "&getdata=1" );
+						$xtpl->assign( 'LOAD_DATA', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5( $id . $global_config['sitekey'] . session_id() ) . "&getdata=1" );
 
-						$xtpl->assign( 'HOME', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name );
-						$a = 0;
+						$xtpl->assign( 'HOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 						foreach( $services_active as $key => $service )
 						{
-							$a++;
 							$xtpl->assign( 'SERVICE', array(
 								'id' => $key,
 								'title' => $service[1],
-								'class' => ( $a % 2 == 0 ) ? 'class="second"' : '',
 								'icon' => ( isset( $service[3] ) ? $service[3] : "" )
 							) );
 
@@ -108,18 +106,18 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 							$timeout = nv_convertfromSec( $timeout );
 							$finish->nodeValue = "glb|" . sprintf( $lang_module['rpc_error_timeout'], $timeout );
 							$content = $xml2->saveXML();
-							@Header( "Content-Type: text/xml; charset=utf-8" );
+							@Header( 'Content-Type: text/xml; charset=utf-8' );
 							print_r( $content );
 							die();
 						}
 
-						$listcatid_arr = explode( ",", $news_contents['listcatid'] );
+						$listcatid_arr = explode( ',', $news_contents['listcatid'] );
 						$catid_i = $listcatid_arr[0];
 
 						$webtitle = htmlspecialchars( nv_unhtmlspecialchars( $news_contents['title'] ), ENT_QUOTES );
-						$webhome = nv_url_rewrite( NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA );
-						$linkpage = nv_url_rewrite( NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_cat[$catid_i]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'], 1 );
-						$webrss = nv_url_rewrite( NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $global_array_cat[$catid_i]['alias'], 1 );
+						$webhome = nv_url_rewrite( NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
+						$linkpage = nv_url_rewrite( NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'], 1 );
+						$webrss = nv_url_rewrite( NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $global_array_cat[$catid_i]['alias'], 1 );
 
 						$pingtotal = $nv_Request->get_int( 'total', 'post', 0 );
 						if( $sys_info['allowed_set_time_limit'] )
@@ -140,7 +138,7 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 						}
 						else
 						{
-							require ( NV_ROOTDIR . '/includes/core/rpc.php' );
+							require NV_ROOTDIR . '/includes/core/rpc.php';
 
 							for( $i = $pingtotal, $a = 0; $i <= $sCount, $a <= 5; $i++, $a++ )
 							{
@@ -177,7 +175,7 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 
 						$content = $xml2->saveXML();
 
-						@Header( "Content-Type: text/xml; charset=utf-8" );
+						@Header( 'Content-Type: text/xml; charset=utf-8' );
 						print_r( $content );
 						die();
 					}
@@ -190,7 +188,7 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 					$contents = "<table><tr><td>";
 					$contents .= "<div align=\"center\">";
 					$contents .= "<strong>" . $msg1 . "</strong><br /><br />\n";
-					$contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\" /><br /><br />\n";
+					$contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\" /><br /><br />\n";
 					$contents .= "<strong><a href=\"" . $nv_redirect2 . "\">" . $lang_module['rpc_ping_page'] . "</a></strong>";
 					$contents .= " - <strong><a href=\"" . $nv_redirect . "\">" . $msg2 . "</a></strong>";
 					$contents .= "</div>";
@@ -214,8 +212,6 @@ else
 	$contents = 'System not support function php "curl_init" !';
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

@@ -9,49 +9,47 @@
 	<caption>{LANG.properties} <span class="highlight_red">*</span>
 	{LANG.is_required}</caption>
 	<tr>
-		<th scope="col" class="nobg" style="width: 150px;">&nbsp;</th>
+		<th scope="col" class="nobg w150">&nbsp;</th>
 		<th scope="col">{LANG.database_config}</th>
 		<th scope="col">{LANG.note}</th>
 	</tr>
 	<tr>
 		<th scope="row" class="spec">{LANG.database_type} <span
 			class="highlight_red">*</span></th>
-		<td><select name="db_type">
-			<option>MySQL</option>
-		</select></td>
+		<td><select name="dbtype" data-url="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=5">
+			<!-- BEGIN: dbtype -->
+			<option value="{DBTYPE.value}" {DBTYPE.selected}>{DBTYPE.text}</option>
+			<!-- END: dbtype -->
+		</select> <img id="dbtype-check" class="hide" src="{BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif"></td>
 		<td>{LANG.database_default} <strong>MySQL</strong></td>
 	</tr>
 	<tr>
 		<th scope="row" class="specalt">{LANG.host_name} <span
 			class="highlight_red">*</span></th>
-		<td class="alt"><input type="text" value="{DATADASE.dbhost}"
-			name="dbhost" class="required" /></td>
+		<td class="alt"><input type="text" value="{DATADASE.dbhost}" name="dbhost" class="required w120" /> Port:<input type="text" value="{DATADASE.dbport}" name="dbport" style="width: 40px;text-align: right"/></td>
 		<td class="alt">{LANG.host_name_note} <strong>localhost</strong>.</td>
 	</tr>
 	<tr>
 		<th scope="row" class="spec">{LANG.db_username} <span
 			class="highlight_red">*</span></th>
-		<td><input type="text" value="{DATADASE.dbuname}" name="dbuname"
-			class="required" /></td>
+		<td><input type="text" value="{DATADASE.dbuname}" name="dbuname" class="required w200" /></td>
 		<td>{LANG.db_username_note}.</td>
 	</tr>
 	<tr>
 		<th scope="row" class="specalt">{LANG.db_pass}</th>
-		<td class="alt"><input type="password" value="{DATADASE.dbpass}" name="dbpass" /></td>
+		<td class="alt"><input type="password" value="{DATADASE.dbpass}" name="dbpass"  class="w200" /></td>
 		<td class="alt">{LANG.db_pass_note}</td>
 	</tr>
 	<tr>
 		<th scope="row" class="spec">{LANG.db_name}<span class="highlight_red">*</span>
 		</th>
-		<td><input type="text" value="{DATADASE.dbname}" name="dbname"
-			class="required" /></td>
+		<td><input type="text" value="{DATADASE.dbname}" name="dbname" class="required w200" /></td>
 		<td>{LANG.db_name_note}</td>
 	</tr>
 	<tr>
 		<th scope="row" class="specalt">{LANG.prefix} <span
 			class="highlight_red">*</span></th>
-		<td class="alt"><input type="text" value="{DATADASE.prefix}"
-			name="prefix" class="required" /></td>
+		<td class="alt"><input type="text" value="{DATADASE.prefix}" name="prefix" class="required w200" /></td>
 		<td class="alt">&nbsp;</td>
 	</tr>
 	<tr>

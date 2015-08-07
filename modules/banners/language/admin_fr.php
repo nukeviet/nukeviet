@@ -1,26 +1,27 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Language Français
- * @Createdate Jun 21, 2010, 12:30:00 PM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Language Français
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Jun 21, 2010, 12:30:00 PM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
-$lang_translator['info'] = 'Langue française pour NukeViet 3';
+$lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['add_client'] = 'Ajouter un client';
 $lang_module['edit_client'] = 'Modifier les coordonnées du client';
 $lang_module['full_name_empty'] = 'Le nom du client n\'a pas été déclaré';
 $lang_module['website_incorrect'] = 'Site web incorrect';
-$lang_module['yim_incorrect'] = 'YIM incorrect';
+$lang_module['yim_incorrect'] = 'Mauvais YIM';
 $lang_module['add_client_info'] = 'Remplissez tous les champs ci-dessous pour créer un nouveau compte de client';
 $lang_module['edit_client_info'] = 'Les champs avec * sont obligatoirement déclarés';
 $lang_module['login'] = 'Identifiant';
@@ -54,13 +55,13 @@ $lang_module['add_banner'] = 'Ajouter une publicité';
 $lang_module['add_banner_client'] = 'Ajouter une publicité pour le client &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['plans_list'] = 'Blocks publicitaires';
 $lang_module['plans_list2'] = 'Liste des Blocks publicitaires';
-$lang_module['in_plan'] = 'Block';
+$lang_module['in_plan'] = 'Dans le bloque';
 $lang_module['add_plan'] = 'Ajouter un block';
 $lang_module['banners_list'] = 'Bannière';
 $lang_module['title'] = 'Titre';
 $lang_module['title_empty'] = 'Manque de titre';
 $lang_module['size_incorrect'] = 'Tailles minimales sont de 50x50px';
-$lang_module['add_plan_info'] = 'Remplissez les informations aux champs ci-dessous pour créer un nouveau block';
+$lang_module['add_plan_info'] = 'Remplissez les informations aux champs ci-dessous  pour créer un nouveau block';
 $lang_module['edit_plan_info'] = 'Les champs avec * sont obligatoirement déclarés';
 $lang_module['width'] = 'Largeur';
 $lang_module['height'] = 'Hauteur';
@@ -79,6 +80,7 @@ $lang_module['add_banner_info'] = 'Pour ajouter une publicité, remplissez les i
 $lang_module['of_client'] = 'Client';
 $lang_module['upload'] = 'Fichier image (%s)';
 $lang_module['re_upload'] = 'Changer la bannière (%s)';
+$lang_module['imageforswf'] = 'L\'image de publicitaire si le navigateur est un mobile';
 $lang_module['file_alt'] = 'Anoter l\'image';
 $lang_module['click_url'] = 'Lien';
 $lang_module['add_date'] = 'Créer';
@@ -103,7 +105,7 @@ $lang_module['hits_total'] = 'Total clics';
 $lang_module['please_select_month'] = 'Consulter les statistiques détaillés';
 $lang_module['info_stat_caption'] = 'Statistiques détaillés';
 $lang_module['select'] = 'Cliquez pour voir';
-$lang_module['info_stat_byday_caption'] = 'Totaux clics Par date de %1$s l\'année %2$s';
+$lang_module['info_stat_byday_caption'] = 'Totaux clics Par date de  %1$s l\'année %2$s';
 $lang_module['info_stat_bycountry_caption'] = 'Totaux clics Par Location de %1$s l\'année %2$s';
 $lang_module['info_stat_bybrowse_caption'] = 'Totaux clics Par Navigateur de %1$s l\'année %2$s';
 $lang_module['info_stat_byos_caption'] = 'Totaux clics Par Système d\'exploitation %1$s l\'année %2$s';
@@ -117,8 +119,8 @@ $lang_module['show_list_stat2'] = 'Liste des clics du jour &ldquo;<strong>%1$s</
 $lang_module['show_list_stat3'] = 'Liste des clics depuis pays &ldquo;<strong>%1$s</strong>&rdquo; de %2$s l\'année %3$s';
 $lang_module['show_list_stat4'] = 'Liste des clics par navigateur &ldquo;<strong>%1$s</strong>&rdquo; de %2$s l\'année %3$s';
 $lang_module['show_list_stat5'] = 'Liste des clics depuis système d\'exploitation &ldquo;<strong>%1$s</strong>&rdquo; trong %2$s l\'année %3$s';
-$lang_module['click_date'] = 'Date';
-$lang_module['click_ip'] = 'IP';
+$lang_module['click_date'] = 'Temps';
+$lang_module['click_ip'] = 'A partir de l\'IP';
 $lang_module['click_country'] = 'Pays';
 $lang_module['click_browse'] = 'Navigateur';
 $lang_module['click_os'] = 'Système d\'exploitation';
@@ -130,11 +132,8 @@ $lang_module['file_del_confirm'] = 'Êtes-vous sûr de vouloir supprimer?';
 $lang_module['delfile_success'] = 'Suppression réussie!';
 $lang_module['delfile_error'] = 'Suppression échouée';
 $lang_module['weight'] = 'Position';
-
-$lang_module['target'] = 'Cible (Target)';
-$lang_module['target_blank'] = 'Nouvelle fenêtre (_blank)';
-$lang_module['target_top'] = 'Fenêtre supérieure (_top)';
-$lang_module['target_self'] = 'Même fenêtre (_self)';
-$lang_module['target_parent'] = 'Fenêtre parent (_parent)';
-
-?>
+$lang_module['target'] = 'Cible';
+$lang_module['target_blank'] = 'Nouvelle fenêtre';
+$lang_module['target_top'] = 'Fenêtre le plus haut';
+$lang_module['target_self'] = 'A la page';
+$lang_module['target_parent'] = 'Fenêtre père';

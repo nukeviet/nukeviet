@@ -1,172 +1,80 @@
 <!-- BEGIN: main -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>{LANG.sendmail}</title>
-		{SENDMAIL.script}
-		<!-- BEGIN: close -->
-		<script type="text/javascript">
-			var howLong = 10000;
-			setTimeout("self.close()", howLong);
-		</script>
-		<!-- END: close -->
-		<style type="text/css">
-			body {
-				background: #fff;
-				padding: 20px;
-				font-size: 12pt;
-			}
+<!-- BEGIN: close -->
+<script type="text/javascript">
+	setTimeout("self.close()", 10000);
+</script>
+<!-- END: close -->
+<style type="text/css">
+	body {
+		padding: 20px;
+		font-size: 11pt;
+	}
+</style>
 
-			h1 {
-				margin: 0;
-				padding: 0;
-				text-align: center;
-				font-size: 110%;
-				margin-bottom: 10px;
-			}
-
-			input {
-				color: #000;
-			}
-
-			em {
-				color: #ff0000;
-			}
-
-			.form label {
-				width: 150px;
-				float: left;
-			}
-
-			.form label.error {
-				float: none;
-				color: red;
-				padding-left: .5em;
-				vertical-align: top;
-			}
-
-			.form input, .form textarea {
-				width: 250px;
-				float: right;
-				border: 1px solid #ccc;
-			}
-
-			.form input:hover, .form textarea:hover {
-				border: 1px solid #999;
-			}
-
-			.form textarea {
-				height: 100px;
-			}
-
-			.form div {
-				margin: 0 0 10px 0;
-			}
-
-			img {
-				padding: 0 2px;
-			}
-
-			.resfresh1 {
-				padding-top: 6px;
-				cursor: pointer;
-			}
-
-			.form div.submit {
-				text-align: center;
-				margin: 0 auto;
-			}
-
-			.form div.submit input {
-				width: 80px;
-				float: none;
-			}
-
-			ul {
-				color: #ff0000;
-			}
-
-			.clearfix:after {
-				content: ".";
-				display: block;
-				clear: both;
-				visibility: hidden;
-				line-height: 0;
-				height: 0;
-			}
-
-			.fl {
-				float: left;
-			}
-
-			.fr {
-				float: right;
-			}
-
-			.clearfix {
-				display: inline-block;
-			}
-
-			html[xmlns] .clearfix {
-				display: block;
-			}
-
-			* html .clearfix {
-				height: 1%;
-			}
-		</style>
-	</head>
-	<body onload="self.focus()">
-		<!-- BEGIN: content -->
-		<h1>{LANG.sendmail}</h1>
-		<form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="form">
-			<div class="name clearfix">
-				<label for="sname">{LANG.sendmail_name}</label>
-				<em>*</em>
-				<input id="sname" type="text" name="name" value="{SENDMAIL.v_name}" class="required" />
-			</div>
-			<div class="email clearfix">
-				<label for="syourmail_iavim">{LANG.sendmail_youremail}</label>
-				<em>*</em>
-				<input id="syourmail_iavim" type="text" name="youremail" value="{SENDMAIL.v_mail}" class="required email" />
-			</div>
-			<div class="email clearfix">
-				<label for="semail">{LANG.sendmail_email}</label>
-				<em>*</em>
-				<input id="semail" type="text" name="email" value="{SENDMAIL.to_mail}" class="required email" />
-			</div>
-			<div class="content clearfix">
-				<label for="scontent">{LANG.sendmail_content}</label><textarea id="scontent"  name="content" rows="5" cols="20">{SENDMAIL.content}</textarea>
-			</div>
-			<!-- BEGIN: captcha -->
-			<div class="content clearfix">
-				<label for="semail">{LANG.comment_seccode}</label>
-				<em>*</em>
-				<div class="fr" style="width: 250px; display: inline;">
-					<input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" style="width: 60px; float: left !important; margin-top: 2px !important;"/><img class="fl" id="vimg" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh fl resfresh1" onclick="nv_change_captcha('vimg','seccode');"/>
+<div id="sendmail">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<h1 class="text-center">{LANG.sendmail}</h1>
+			<!-- BEGIN: result -->
+			<div class="alert alert-warning" style="margin-top: 10px;">
+				<div>
+					{RESULT.err_name}
+				</div>
+				<div>
+					{RESULT.err_email}
+				</div>
+				<div>
+					{RESULT.err_yourmail}
+				</div>
+				<div class="text-center">
+					{RESULT.send_success}
 				</div>
 			</div>
-			<!-- END: captcha -->
-			<div class="submit clearfix">
-				<input type="hidden" name="checkss" value="{SENDMAIL.checkss}" /><input type="hidden" name="catid" value="{SENDMAIL.catid}" /><input type="hidden" name="id" value="{SENDMAIL.id}" /><input type="submit" value="{LANG.sendmail_submit}" />
-			</div>
-		</form>
-		<!-- END: content -->
-		<!-- BEGIN: result -->
-		<div>
-			{RESULT.err_name}
+			<!-- END: result -->
+
+			<!-- BEGIN: content -->
+				<form id="sendmailForm" action="{SENDMAIL.action}" method="post" class="form-horizontal" role="form">
+					<div class="form-group">
+						<label for="sname" class="col-sm-4 control-label">{LANG.sendmail_name}<em>*</em></label>
+						<div class="col-sm-20">
+							<input id="sname" type="text" name="name" value="{SENDMAIL.v_name}" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="syourmail_iavim" class="col-sm-4 control-label">{LANG.sendmail_youremail}</label>
+						<div class="col-sm-20">
+							<input id="syourmail_iavim" type="text" name="youremail" value="{SENDMAIL.v_mail}" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="semail" class="col-sm-4 control-label">{LANG.sendmail_email}<em>*</em></label>
+						<div class="col-sm-20">
+							<input id="semail" type="text" name="email" value="{SENDMAIL.to_mail}" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="scontent" class="col-sm-4 control-label">{LANG.sendmail_content}</label>
+						<div class="col-sm-20">
+							<textarea id="scontent"  name="content" rows="5" cols="20" class="form-control">{SENDMAIL.content}</textarea>
+						</div>
+					</div>
+
+					<!-- BEGIN: captcha -->
+					<div class="form-group">
+						<label for="semail" class="col-sm-4 control-label">{LANG.captcha}<em>*</em></label>
+						<div class="col-sm-20">
+							<input name="nv_seccode" type="text" id="seccode" class="form-control" maxlength="{GFX_NUM}" style="width: 100px; float: left !important; margin: 2px 5px 0 !important;"/><img class="captchaImg pull-left" style="margin-top: 5px;" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh pull-left resfresh1" style="margin: 9px;" onclick="change_captcha('#seccode');"/>
+						</div>
+					</div>
+					<!-- END: captcha -->
+
+					<input type="hidden" name="checkss" value="{SENDMAIL.checkss}" /><input type="hidden" name="catid" value="{SENDMAIL.catid}" /><input type="hidden" name="id" value="{SENDMAIL.id}" /><input type="submit" value="{LANG.sendmail_submit}" class="btn btn-default" />
+				</form>
+			<!-- END: content -->
 		</div>
-		<div>
-			{RESULT.err_email}
-		</div>
-		<div>
-			{RESULT.err_yourmail}
-		</div>
-		<div style="text-align: center;">
-			{RESULT.send_success}
-		</div>
-		<!-- END: result -->
-	</body>
-</html>
+	</div>
+</div>
 <!-- END: main -->

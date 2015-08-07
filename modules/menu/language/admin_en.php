@@ -1,12 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Apr 15, 2011, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Apr 15, 2011, 08:22:00 AM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -39,9 +40,8 @@ $lang_module['add_type_menu'] = 'Select menu type';
 $lang_module['module_name'] = 'Select module';
 $lang_module['cho_module'] = 'Select module';
 $lang_module['action'] = 'Activities';
+$lang_module['display'] = 'Display';
 $lang_module['data_no'] = 'There is no data in the system';
-$lang_module['block'] = 'This menu block has';
-$lang_module['block2'] = 'Menu, please delete the menu before you delete this menu';
 $lang_module['back'] = 'Back';
 $lang_module['title_exit_cat'] = 'That name already exists';
 $lang_module['add_item'] = 'Add Item';
@@ -55,7 +55,6 @@ $lang_module['module'] = 'Module';
 $lang_module['op'] = 'op';
 $lang_module['path'] = 'path';
 $lang_module['target'] = 'Open link';
-$lang_module['who_view'] = 'Who can view';
 $lang_module['type_target1'] = 'Current Page';
 $lang_module['type_target2'] = 'Open new tab';
 $lang_module['type_target3'] = 'Open new window';
@@ -63,14 +62,13 @@ $lang_module['cat'] = 'This menu has';
 $lang_module['cat0'] = 'Main item';
 $lang_module['cho_item'] = 'Choose the type of module';
 $lang_module['cats'] = 'Belong to Item';
-$lang_module['caton'] = 'submenu, if you want to delete, first delete or move submenu to other menu';
+$lang_module['caton'] = 'submenu, if you delete the submenu will be removed?';
 $lang_module['error_menu_link'] = 'Error: You do not give the url';
 $lang_module['name_block'] = 'Menu block';
 $lang_module['here'] = 'here';
 $lang_module['groups'] = 'Select groups';
 $lang_module['sub_menu'] = 'Only suitable for some specific style, some style will display title instead of the menu name.';
-$lang_module['main_note_0'] = 'Click';
-$lang_module['main_note_1'] = 'to creat new menu block. Click the name of each menu block below to add and edit the menu items. Hint: You can create multiple menu block to use each the theme and positions.';
+$lang_module['main_note'] = 'Click the name of each menu block below to add and edit the menu items. Hint: You can create multiple menu block to use each the theme and positions.';
 $lang_module['add_type_active'] = 'Active menu';
 $lang_module['add_type_active_note'] = 'To define a menu that is activated or deactivated by comparing the menu link pointing to link existing sites by side criteria.';
 $lang_module['add_type_active_0'] = 'Correctly with the menu link';
@@ -82,4 +80,10 @@ $lang_module['add_error_module'] = 'Error: No any module selected';
 $lang_module['add_error_module_exist'] = 'Error: Module not exist';
 $lang_module['error_menu_block'] = 'Error: Enter name of menu block';
 
-?>
+$lang_module['action_menu'] = 'Import form';
+$lang_module['action_menu_sys_1'] = 'Module name';
+$lang_module['action_menu_sys_2'] = 'Module name, submenu is catalogs or functions';
+$lang_module['action_menu_sys_3'] = 'Catalogs or functions in module';
+$lang_module['icon'] = 'Icon';
+$lang_module['action_form'] = 'Submit';
+$lang_module['msgnocheck'] = 'No menu selected';

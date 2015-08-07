@@ -1,95 +1,106 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: management -->
-<div style="border:1px #ccc solid;padding:5px">
-	<h3 style="margin-bottom:15px"><strong>{LANG.tool_management}</strong></h3>
-	<div class="plan_title" style="float:left">
-		<a href="{clientinfo_link}">{LANG.client_info}</a>
-	</div>
-	<div class="plan_title" style="float:left;margin-left:10px">
-		<a href="{clientinfo_addads}">{LANG.client_addads}</a>
-	</div>
-	<div class="plan_title" style="float:left;margin-left:10px">
-		<a href="{clientinfo_stats}">{LANG.client_stats}</a>
-	</div>
-	<div style="clear:both"></div>
-</div>
+<ul class="nav nav-tabs m-bottom">
+	<li><a href="{MANAGEMENT.main}">{LANG.plan_info}</a></li>
+	<li><a href="{MANAGEMENT.link}">{LANG.client_info}</a></li>
+	<li class="active"><a href="{MANAGEMENT.addads}">{LANG.client_addads}</a></li>
+	<li><a href="{MANAGEMENT.stats}">{LANG.client_stats}</a></li>
+	<li><a href="{MANAGEMENT.logout}">{GLANG.logout}</a></li>
+</ul>
 <!-- END: management -->
-<div id="clinfo" style="color:red;font-weight:bold">
+<div id="clinfo" class="alert alert-danger">
 	{pagetitle}{errorinfo}
 </div>
 <div id="clinfo">
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-	<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-	<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-	<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-	<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-	<form id="frm" action="" method="post" enctype="multipart/form-data">
-		<div class="act">
-			<div class="value">
-				<input class="required" type="text" name="title" value="" style="width:250px"/>
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+	<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+	<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+	<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+	<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+	<form id="frm" action="" method="post" enctype="multipart/form-data" role="form" class="form-horizontal">
+		<div class="form-group">
+			<label for="title" class="col-sm-6 control-label">{LANG.addads_title}<span class="text-danger"> (*)</span>:</label>
+			<div class="col-sm-18">
+				<input class="required form-control" type="text" name="title" id="title" value=""/>
 			</div>
-			{LANG.addads_title} (<span style="color:red">*</span>):
 		</div>
-		<div class="deact">
-			<div class="value">
-				<select name="block">
+		<div class="form-group">
+			<label for="block" class="col-sm-6 control-label">{LANG.addads_block}<span class="text-danger"> (*)</span>:</label>
+			<div class="col-sm-18">
+				<select name="block" id="block" class="form-control">
 					<!-- BEGIN: blockitem -->
 					<option value="{blockitem.id}">{blockitem.title}</option>
 					<!-- END: blockitem -->
 				</select>
 			</div>
-			{LANG.addads_block} (<span style="color:red">*</span>):
 		</div>
-		<div class="act">
-			<div class="value">
-				<input type="file" name="image" value=""/>
+		<div class="form-group">
+			<label for="image" class="col-sm-6 control-label">{LANG.addads_adsdata}<span class="text-danger"> (*)</span>:</label>
+			<div class="col-sm-18">
+				<input type="file" name="image" id="image" value="" class="form-control"/>
 			</div>
-			{LANG.addads_adsdata} (<span style="color:red">*</span>):
 		</div>
-		<div class="deact">
-			<div class="value">
-				<input type="text" name="description" value="" style="width:250px"/>
+		<div class="form-group">
+			<label for="description" class="col-sm-6 control-label">{LANG.addads_description}:</label>
+			<div class="col-sm-18">
+				<input type="text" name="description" id="description" value="" class="form-control"/>
 			</div>
-			{LANG.addads_description}:
 		</div>
-		<div class="act">
-			<div class="value">
-				<input class="url" type="text" name="url" value="" style="width:250px"/>
+		<div class="form-group">
+			<label for="url" class="col-sm-6 control-label">{LANG.addads_url}:</label>
+			<div class="col-sm-18">
+				<input class="url form-control" type="text" name="url" id="url" value=""/>
 			</div>
-			{LANG.addads_url}:
 		</div>
-		<div class="deact">
-			<div class="value">
-				<input type="text" readonly="readonly" maxlength="10" style="width: 150px;" value="" class="datepicker" name="begintime">
+		<div class="form-group">
+			<label for="begintime" class="col-sm-6 control-label">{LANG.addads_timebegin}:</label>
+			<div class="col-sm-18">
+				<div class="input-group">
+					<input type="text" class="form-control datepicker" id="begintime" name="begintime" value="" readonly="readonly"/>
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" id="begintime-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
+					</span>
+				</div>
 			</div>
-			{LANG.addads_timebegin}:
 		</div>
-		<div class="act">
-			<div class="value">
-				<input type="text" readonly="readonly" maxlength="10" style="width: 150px;" value="" class="datepicker" name="endtime">
+		<div class="form-group">
+			<label for="endtime" class="col-sm-6 control-label">{LANG.addads_timeend}:</label>
+			<div class="col-sm-18">
+				<div class="input-group">
+					<input type="text" class="form-control datepicker" id="endtime" name="endtime" value="" readonly="readonly"/>
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" id="endtime-btn"> <em class="fa fa-calendar fa-fix">&nbsp;</em></button>
+					</span>
+				</div>
 			</div>
-			{LANG.addads_timeend}:
 		</div>
-		<div class="deact" style="text-align:center">
-			<input type="submit" name="confirm" value="{LANG.addads_confirm}"/>
+		<div class="form-group">
+			<div class="col-sm-offset-6 col-sm-18">
+				<input type="submit" name="confirm" value="{LANG.addads_confirm}" class="btn btn-primary"/>
+			</div>
 		</div>
 	</form>
 	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#frm').validate();
-			$(".datepicker").datepicker({
-				showOn : "both",
-				dateFormat : "dd/mm/yy",
-				changeMonth : true,
-				changeYear : true,
-				showOtherMonths : true,
-				buttonImage : nv_siteroot + "images/calendar.gif",
-				buttonImageOnly : true
-			});
+	$(document).ready(function() {
+		$('#frm').validate();
+		$(".datepicker").datepicker({
+			showOn : "focus",
+			dateFormat : "dd/mm/yy",
+			changeMonth : true,
+			changeYear : true,
+			showOtherMonths : true,
+			buttonImageOnly : true
 		});
+		$('#begintime-btn').click(function(){
+			$("#begintime").datepicker('show');
+		});
+		$('#endtime-btn').click(function(){
+			$("#endtime").datepicker('show');
+		});
+	});
 	</script>
 </div>
 <!-- END: main -->

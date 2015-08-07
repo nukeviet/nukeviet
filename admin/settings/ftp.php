@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
@@ -13,8 +14,13 @@ $error = '';
 
 $page_title = $lang_module['ftp_config'];
 
-$xtpl = new XTemplate( "ftp.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$xtpl = new XTemplate( 'ftp.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'OP', $op );
 
 if( $sys_info['ftp_support'] )
 {
@@ -40,9 +46,6 @@ if( $sys_info['ftp_support'] )
 			die( 'ERROR|' . $lang_module['ftp_error_full'] );
 		}
 
-		if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
-		if( ! defined( 'NV_BUFFER_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/buffer.class.php' );
-
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
 		if( ! empty( $ftp->error ) )
@@ -52,8 +55,7 @@ if( $sys_info['ftp_support'] )
 		}
 		else
 		{
-			$list_valid = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "js", "language", NV_LOGS_DIR, "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
-
+			$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
 			$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 
 			if( $ftp_root === false )
@@ -82,8 +84,6 @@ if( $sys_info['ftp_support'] )
 			$ftp_user_pass = nv_unhtmlspecialchars( $array_config['ftp_user_pass'] );
 			$ftp_path = nv_unhtmlspecialchars( $array_config['ftp_path'] );
 
-			if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
-
 			$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
 			if( ! empty( $ftp->error ) )
@@ -98,8 +98,7 @@ if( $sys_info['ftp_support'] )
 			}
 			else
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR );
-
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR );
 				$list_files = $ftp->listDetail( $ftp_path, 'all' );
 
 				$a = 0;
@@ -127,26 +126,28 @@ if( $sys_info['ftp_support'] )
 			$ftp->close();
 		}
 
-		$array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $ftp_user_pass ) );
-		foreach( $array_config as $config_name => $config_value )
-		{
-			$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "`
-				SET `config_value`=" . $db->dbescape_string( $config_value ) . "
-				WHERE `config_name` = " . $db->dbescape_string( $config_name ) . "
-				AND `lang` = 'sys' AND `module`='global'
-				LIMIT 1" );
-		}
+
 		if( empty( $error ) )
 		{
+			$array_config['ftp_user_pass'] = nv_base64_encode( $crypt->aes_encrypt( $ftp_user_pass ) );
+
+			$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'" );
+			foreach( $array_config as $config_name => $config_value )
+			{
+				$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+				$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+				$sth->execute();
+			}
+
 			nv_save_file_config_global();
-			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 			exit();
 		}
 		$array_config['ftp_user_pass'] = $ftp_user_pass;
 	}
 
 	$xtpl->assign( 'VALUE', $array_config );
-	$xtpl->assign( 'DETECT_FTP', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
+	$xtpl->assign( 'DETECT_FTP', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 
 	if( ! empty( $error ) )
 	{
@@ -163,8 +164,6 @@ else
 	$contents = $xtpl->text( 'no_support' );
 }
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

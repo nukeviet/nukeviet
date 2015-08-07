@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -30,7 +31,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$check_email = nv_check_valid_email( $email );
 	$check_pass = nv_check_valid_pass( $pass, NV_UPASSMAX, NV_UPASSMIN );
 
-	if( $website == "http://" ) $website = '';
+	if( $website == 'http://' ) $website = '';
 
 	if( ! empty( $check_login ) )
 	{
@@ -64,36 +65,60 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['website_incorrect'];
 	}
-	elseif( ! empty( $yim ) and ! preg_match( "/^[a-zA-Z0-9\.\-\_]+$/", $yim ) )
+	elseif( ! empty( $yim ) and ! preg_match( '/^[a-zA-Z0-9\.\-\_]+$/', $yim ) )
 	{
 		$error = $lang_module['yim_incorrect'];
 	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `login`=" . $db->dbescape( $login ) ) ) > 0 )
-	{
-		$error = sprintf( $lang_module['login_is_already_in_use'], $login );
-		$login = '';
-	}
-	elseif( $db->sql_numrows( $db->sql_query( "SELECT `id` FROM `" . NV_BANNERS_GLOBALTABLE. "_clients` WHERE `email`=" . $db->dbescape( $email ) ) ) > 0 )
-	{
-		$error = sprintf( $lang_module['email_is_already_in_use'], $email );
-		$email = '';
-	}
 	else
 	{
-		$pass_crypt = $crypt->hash( $pass );
-
-		$sql = "INSERT INTO `" . NV_BANNERS_GLOBALTABLE. "_clients` (`id`, `login`, `pass`, `reg_time`, `full_name`, `email`, `website`, `location`, `yim`, `phone`, `fax`, `mobile`, `act`, `check_num`, `last_login`, `last_ip`, `last_agent`, `uploadtype`) VALUES
-			(NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( $pass_crypt ) . ", " . NV_CURRENTTIME . ", " . $db->dbescape( $full_name ) . ",
-			" . $db->dbescape( $email ) . ", " . $db->dbescape( $website ) . ", " . $db->dbescape( $location ) . ", " . $db->dbescape( $yim ) . ",
-			" . $db->dbescape( $phone ) . ", " . $db->dbescape( $fax ) . ", " . $db->dbescape( $mobile ) . ", 1, '', 0, '', ''," . $db->dbescape( $uploadtype ) . ")";
-
-		$id = $db->sql_query_insert_id( $sql );
-
-		if( $id )
+		$stmt = $db->prepare( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login= :login' );
+		$stmt->bindParam( ':login', $login, PDO::PARAM_STR );
+	 	$stmt->execute();
+		if( $stmt->fetchColumn() )
 		{
-			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_client', "bannerid " . $id, $admin_info['userid'] );
-			Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=client_list" );
-			die();
+			$error = sprintf( $lang_module['login_is_already_in_use'], $login );
+			$login = '';
+		}
+		else
+		{
+			$stmt = $db->prepare( 'SELECT id FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE email= :email' );
+			$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
+			$stmt->execute();
+			if( $stmt->fetchColumn() )
+			{
+				$error = sprintf( $lang_module['email_is_already_in_use'], $email );
+				$email = '';
+			}
+			else
+			{
+				$pass_crypt = $crypt->hash_password( $pass, $global_config['hashprefix'] );
+
+				$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_clients
+					( login, pass, reg_time, full_name, email, website, location, yim, phone, fax, mobile, act, check_num, last_login, last_ip, last_agent, uploadtype) VALUES
+					( :login, :pass_crypt, " . NV_CURRENTTIME . ", :full_name, :email, :website, :location, :yim, :phone, :fax, :mobile, 1, '', 0, '', '',:uploadtype)";
+
+				$data_insert = array();
+				$data_insert['login'] = $login;
+				$data_insert['pass_crypt'] = $pass_crypt;
+				$data_insert['full_name'] = $full_name;
+				$data_insert['email'] = $email;
+				$data_insert['website'] = $website;
+				$data_insert['location'] = $location;
+				$data_insert['yim'] = $yim;
+				$data_insert['phone'] = $phone;
+				$data_insert['fax'] = $fax;
+				$data_insert['mobile'] = $mobile;
+				$data_insert['uploadtype'] = $uploadtype;
+
+				$id = $db->insert_id( $_sql, 'id', $data_insert );
+
+				if( $id )
+				{
+					nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_client', 'bannerid ' . $id, $admin_info['userid'] );
+					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=client_list' );
+					die();
+				}
+			}
 		}
 	}
 }
@@ -111,7 +136,7 @@ $contents = array();
 $contents['info'] = $info;
 $contents['is_error'] = $is_error;
 $contents['submit'] = $lang_module['add_client_submit'];
-$contents['action'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=add_client";
+$contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=add_client';
 $contents['login'] = array( $lang_module['login'], 'login_iavim', $login, NV_UNICKMAX );
 $contents['pass'] = array( $lang_global['password'], 'pass_iavim', $pass, NV_UPASSMAX );
 $contents['re_pass'] = array( $lang_global['password2'], 're_pass_iavim', $re_pass, NV_UPASSMAX );
@@ -128,7 +153,7 @@ $contents['uploadtype'] = array( $lang_module['uploadtype'], 'uploadtype' );
 $ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 $contents['types'] = array_keys( $ini );
 
-$contents = call_user_func( "nv_add_client_theme", $contents );
+$contents = nv_add_client_theme( $contents );
 $contents .= "<script type=\"text/javascript\">
 		//<![CDATA[
 		var f = document.getElementById('form_add_client');
@@ -139,8 +164,6 @@ $contents .= "<script type=\"text/javascript\">
 
 $page_title = $lang_module['add_client'];
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

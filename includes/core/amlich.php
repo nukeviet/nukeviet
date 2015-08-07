@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 18/10/2011, 9:45
  */
 
@@ -290,13 +291,11 @@ function convertLunar2Solar( $lunarDay, $lunarMonth, $lunarYear, $lunarLeap, $ti
  */
 function alhn()
 {
-	$CAN = array( "Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ", "Canh", "Tân", "Nhâm", "Quý" );
-	$CHI = array( "Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi" );
+	$CAN = array( 'Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý' );
+	$CHI = array( 'Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi' );
 	$arr = array_slice( convertSolar2Lunar( date( 'd' ), date( 'm' ), date( 'Y' ), 7 ), 0, 3 );
 	$arr[0] = str_pad( $arr[0], 2, '0', STR_PAD_LEFT );
 	$arr[1] = str_pad( $arr[1], 2, '0', STR_PAD_LEFT );
-	$arr[2] = $CAN[( $arr[2] + 6 ) % 10] . " " . $CHI[( $arr[2] + 8 ) % 12];
-	return "Âm lịch: ngày " . $arr[0] . " tháng " . $arr[1] . " năm " . $arr[2];
+	$arr[2] = $CAN[( $arr[2] + 6 ) % 10] . ' ' . $CHI[( $arr[2] + 8 ) % 12];
+	return 'Âm lịch: ngày ' . $arr[0] . ' tháng ' . $arr[1] . ' năm ' . $arr[2];
 }
-
-?>

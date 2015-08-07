@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 12/31/2009 0:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 12/31/2009 0:51
  */
 
 if( ! defined( 'NV_IS_MOD_VOTING' ) ) die( 'Stop!!!' );
@@ -19,8 +20,7 @@ function voting_result( $voting )
 {
 	global $module_info, $global_config, $module_file;
 
-	$xtpl = new XTemplate( "result.voting.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-	$xtpl->assign( 'SCRIPT', "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/jquery/jquery.min.js\"></script>\n" );
+	$xtpl = new XTemplate( 'result.voting.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'PUBLTIME', $voting['pubtime'] );
 	$xtpl->assign( 'LANG', $voting['lang'] );
 	$xtpl->assign( 'VOTINGQUESTION', $voting['question'] );
@@ -66,5 +66,3 @@ function voting_result( $voting )
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
-
-?>

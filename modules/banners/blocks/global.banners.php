@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES ., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Jan 10, 2011 6:04:30 PM
  */
 
@@ -18,10 +19,10 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 
 		$html = "<select name=\"config_idplanbanner\">\n";
 		$html .= "<option value=\"\">" . $lang_block['idplanbanner'] . "</option>\n";
-		$query = "SELECT * FROM `" . NV_BANNERS_GLOBALTABLE. "_plans` WHERE (`blang`='" . NV_LANG_DATA . "' OR `blang`='') ORDER BY `title` ASC";
-		$result = $db->sql_query( $query );
+		$query = "SELECT * FROM " . NV_BANNERS_GLOBALTABLE. "_plans WHERE (blang='" . NV_LANG_DATA . "' OR blang='') ORDER BY title ASC";
+		$result = $db->query( $query );
 
-		while( $row_bpn = $db->sql_fetchrow( $result ) )
+		while( $row_bpn = $result->fetch() )
 		{
 			$value = $row_bpn['title'] . " (";
 			$value .= ( ( ! empty( $row_bpn['blang'] ) and isset( $language_array[$row_bpn['blang']] ) ) ? $language_array[$row_bpn['blang']]['name'] : $lang_block['blang_all'] ) . ", ";
@@ -97,40 +98,40 @@ if( ! nv_function_exists( 'nv_block_data_config_banners' ) )
 					$banners['file_ext'] = nv_getextension( $banners['file_name'] );
 				}
 				$banners['file_alt'] = ( ! empty( $banners['file_alt'] ) ) ? $banners['file_alt'] : $banners['title'];
-				$banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . NV_BANNER_DIR . "/" . $banners['file_name'];
-				$banners['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=banners&amp;" . NV_OP_VARIABLE . "=click&amp;id=" . $banners['id'];
+				$banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $banners['file_name'];
+				$banners['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=banners&amp;' . NV_OP_VARIABLE . '=click&amp;id=' . $banners['id'];
 				$array_banners_content[] = $banners;
 			}
 		}
 
 		if( ! empty( $array_banners_content ) )
 		{
-			if( $xml->form == "random" )
+			if( $xml->form == 'random' )
 			{
 				shuffle( $array_banners_content );
 			}
 			unset( $xml, $array_banners );
 
-			if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/blocks/global.banners.tpl" ) )
+			if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/banners/global.banners.tpl' ) )
 			{
 				$block_theme = $global_config['module_theme'];
 			}
-			elseif( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/blocks/global.banners.tpl" ) )
+			elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/banners/global.banners.tpl' ) )
 			{
 				$block_theme = $global_config['site_theme'];
 			}
 			else
 			{
-				$block_theme = "default";
+				$block_theme = 'default';
 			}
 
-			$xtpl = new XTemplate( "global.banners.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/blocks" );
+			$xtpl = new XTemplate( 'global.banners.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/banners' );
 
 			foreach( $array_banners_content as $banners )
 			{
 				$xtpl->assign( 'DATA', $banners );
 
-				if( $banners['file_ext'] == "swf" )
+				if( $banners['file_ext'] == 'swf' )
 				{
 					if( ! empty( $banners['file_click'] ) )
 					{
@@ -160,5 +161,3 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	$content = nv_block_global_banners( $block_config );
 }
-
-?>

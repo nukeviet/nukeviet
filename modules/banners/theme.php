@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
@@ -15,12 +16,13 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
  * @param mixed $contents
  * @return
  */
-function nv_banner_theme_main( $contents )
+function nv_banner_theme_main( $contents, $manament )
 {
-	global $global_config, $module_name, $module_info, $module_file, $lang_module;
+	global $global_config, $module_name, $module_info, $module_file, $lang_module, $lang_global;
 
-	$xtpl = new XTemplate( "home.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'home.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
 
 	if( ! empty( $contents['rows'] ) )
 	{
@@ -49,14 +51,12 @@ function nv_banner_theme_main( $contents )
 
 	$xtpl->assign( 'CONTAINERID', $contents['containerid'] );
 	$xtpl->assign( 'AJ', $contents['aj'] );
-
+	
 	if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	{
-		$xtpl->assign( 'clientinfo_link', $contents['clientinfo_link'] );
-		$xtpl->assign( 'clientinfo_addads', $contents['clientinfo_addads'] );
-		$xtpl->assign( 'clientinfo_stats', $contents['clientinfo_stats'] );
+		$xtpl->assign( 'MANAGEMENT', $manament );
 		$xtpl->parse( 'main.management' );
-	}
+	}	
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -72,7 +72,7 @@ function logininfo_theme( $contents )
 {
 	global $global_config, $module_name, $module_file, $module_info;
 
-	$xtpl = new XTemplate( "logininfo.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'logininfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CLIENT_LOGIN_INFO', $contents['client_info'] );
 	$xtpl->assign( 'LOGIN_LANG', $contents['login'] );
 	$xtpl->assign( 'LOGIN_INPUT_NAME', $contents['login_input_name'] );
@@ -110,7 +110,7 @@ function clientinfo_theme( $contents )
 {
 	global $global_config, $module_name, $module_file, $module_info;
 
-	$xtpl = new XTemplate( "clientinfo.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'clientinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'CONTAINERID', $contents['containerid'] );
 	$xtpl->assign( 'AJ', $contents['aj'] );
 	$xtpl->parse( 'clientinfo' );
@@ -127,16 +127,15 @@ function clientinfo_theme( $contents )
  */
 function clinfo_theme( $contents, $manament )
 {
-	global $global_config, $module_name, $module_file, $module_info, $lang_module;
+	global $global_config, $module_name, $module_file, $module_info, $lang_module, $lang_global;
 
-	$xtpl = new XTemplate( "clinfo.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'clinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
 	if( defined( 'NV_IS_BANNER_CLIENT' ) )
 	{
-		$xtpl->assign( 'LANG', $lang_module );
-		$xtpl->assign( 'clientinfo_link', $manament['clientinfo_link'] );
-		$xtpl->assign( 'clientinfo_addads', $manament['clientinfo_addads'] );
-		$xtpl->assign( 'clientinfo_stats', $manament['clientinfo_stats'] );
+		$xtpl->assign( 'MANAGEMENT', $manament );
 		$xtpl->parse( 'clinfo.management' );
 	}
 
@@ -171,7 +170,7 @@ function clinfo_theme( $contents, $manament )
 function cledit_theme( $contents )
 {
 	global $global_config, $module_name, $module_file, $module_info;
-	$xtpl = new XTemplate( "cledit.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'cledit.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	foreach( $contents['rows'] as $row )
 	{
@@ -203,5 +202,3 @@ function cledit_theme( $contents )
 	$xtpl->parse( 'cledit' );
 	return $xtpl->text( 'cledit' );
 }
-
-?>

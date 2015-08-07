@@ -1,15 +1,16 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
 
 if( ( ! defined( 'NV_SYSTEM' ) and ! defined( 'NV_ADMIN' ) ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-global $global_config, $sys_info, $client_info, $lang_global, $nv_Request;
+global $global_config, $sys_info, $lang_global, $nv_Request;
 
 //Nen trang
 if( $sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get( 'output_handler' ) == '' )
@@ -27,28 +28,35 @@ if( $sys_info['zlib_support'] and $global_config['gzip_method'] and ini_get( 'ou
 	}
 }
 
-@Header( "Content-Type: text/html; charset=" . $global_config['site_charset'] );
-@Header( "Content-Language: " . $lang_global['Content_Language'] );
-@Header( "Last-Modified: " . gmdate( "D, d M Y H:i:s", strtotime( "-1 day" ) ) . " GMT" );
-@Header( "Expires: " . gmdate( "D, d M Y H:i:s", NV_CURRENTTIME - 60 ) . " GMT" );
+@Header( 'Content-Type: text/html; charset=' . $global_config['site_charset'] );
+@Header( 'Content-Language: ' . $lang_global['Content_Language'] );
+@Header( 'Last-Modified: ' . gmdate( 'D, d M Y H:i:s', strtotime( '-1 day' ) ) . " GMT" );
+@Header( 'Expires: ' . gmdate( 'D, d M Y H:i:s', NV_CURRENTTIME - 60 ) . " GMT" );
+
+@Header( 'X-Frame-Options: SAMEORIGIN' );
+@Header( 'X-Content-Type-Options: nosniff' );
+@Header( 'X-XSS-Protection: 1; mode=block' );
 
 $server_software = $nv_Request->get_string( 'SERVER_SOFTWARE', 'server', '' );
 if( strstr( $server_software, 'Apache/2' ) )
 {
-	@Header( "Cache-Control: no-cache, pre-check=0, post-check=0" );
+	@Header( 'Cache-Control: no-cache, pre-check=0, post-check=0' );
 }
 else
 {
-	@Header( "Cache-Control: private, pre-check=0, post-check=0, max-age=0" );
+	@Header( 'Cache-Control: private, pre-check=0, post-check=0, max-age=0' );
 }
 
-@Header( "Pragma: no-cache" );
+@Header( 'Pragma: no-cache' );
 
-if( preg_match( "/(Googlebot)/i", $client_info['agent'] ) )
+if( preg_match( '/(Googlebot)/i', NV_USER_AGENT ) )
 {
-	@Header( "X-Robots-Tag: index,archive,follow,noodp", true );
+	@Header( 'X-Robots-Tag: index,archive,follow,noodp', true );
+}
+
+if( strpos( NV_USER_AGENT, 'MSIE' ) !== false )
+{
+	@header( 'X-UA-Compatible: IE=edge,chrome=1' );
 }
 
 ob_start();
-
-?>

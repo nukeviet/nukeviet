@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -20,7 +21,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 	else
 	{
-		$upload_logo = "images/logo.png";
+		$upload_logo = NV_UPLOADS_DIR . '/logo.png';
 	}
 
 	$autologosize1 = $nv_Request->get_int( 'autologosize1', 'post', 50 );
@@ -39,19 +40,22 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$autologomod = implode( ',', $autologomod );
 	}
 
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'upload_logo', " . $db->dbescape_string( $upload_logo ) . ")" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize1', " . $autologosize1 . ")" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize2', " . $autologosize2 . ")" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologosize3', " . $autologosize3 . ")" );
-	$db->sql_query( "REPLACE INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('" . NV_LANG_DATA . "', 'global', 'autologomod', '" . $autologomod . "')" );
+	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'upload_logo'" );
+	$sth->bindParam( ':config_value', $upload_logo, PDO::PARAM_STR );
+	$sth->execute();
+
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize1 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize1'" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize2 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize2'" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize3 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize3'" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologomod . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologomod'" );
 
 	nv_delete_all_cache();
 
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
+	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass() );
 	die();
 }
 
-$page_title = $lang_global['configlogo'];
+$page_title = $lang_module['configlogo'];
 
 if( ! nv_is_url( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
 {
@@ -69,15 +73,15 @@ $array_autologosize = array(
 	'autologosize3' => $global_config['autologosize3']
 );
 
-$xtpl = new XTemplate( $op . ".tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
-$xtpl->assign( "NV_BASE_SITEURL", NV_BASE_SITEURL );
-$xtpl->assign( "ADMIN_THEME", $global_config['module_theme'] );
-$xtpl->assign( "NV_OP_VARIABLE", NV_OP_VARIABLE );
-$xtpl->assign( "NV_NAME_VARIABLE", NV_NAME_VARIABLE );
-$xtpl->assign( "MODULE_NAME", $module_name );
-$xtpl->assign( "LANG", $lang_module );
-$xtpl->assign( "OP", $op );
-$xtpl->assign( "AUTOLOGOSIZE", $array_autologosize );
+$xtpl = new XTemplate( $op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+$xtpl->assign( 'ADMIN_THEME', $global_config['module_theme'] );
+$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
+$xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'LANG', $lang_module );
+$xtpl->assign( 'OP', $op );
+$xtpl->assign( 'AUTOLOGOSIZE', $array_autologosize );
 
 $a = 0;
 $xtpl->assign( 'CLASS', '' );
@@ -95,24 +99,23 @@ foreach( $site_mods as $mod => $value )
 {
 	if( is_dir( NV_UPLOADS_REAL_DIR . '/' . $mod ) )
 	{
-		$a++;
+		++$a;
 		$xtpl->assign( 'MOD_VALUE', $mod );
-		$xtpl->assign( 'LEV_CHECKED', ( in_array( $mod, $autologomod ) ) ? "checked=\"checked\"" : "" );
+		$xtpl->assign( 'LEV_CHECKED', ( in_array( $mod, $autologomod ) ) ? 'checked="checked"' : '' );
 		$xtpl->assign( 'CUSTOM_TITLE', $value['custom_title'] );
 		$xtpl->parse( 'main.loop1.loop2' );
 
 		if( $a % 3 == 0 )
 		{
 			$xtpl->parse( 'main.loop1' );
-			$xtpl->assign( 'CLASS', ' class="second"' );
 		}
 	}
 }
 
 $a++;
 $xtpl->assign( 'MOD_VALUE', 'all' );
-$xtpl->assign( 'LEV_CHECKED', ( $global_config['autologomod'] == 'all' ) ? "checked=\"checked\"" : "" );
-$xtpl->assign( 'CUSTOM_TITLE', '<b>' . $lang_module['autologomodall'] . '</b>' );
+$xtpl->assign( 'LEV_CHECKED', ( $global_config['autologomod'] == 'all' ) ? 'checked="checked"' : '' );
+$xtpl->assign( 'CUSTOM_TITLE', '<strong>' . $lang_module['autologomodall'] . '</strong>' );
 
 $xtpl->parse( 'main.loop1.loop2' );
 $xtpl->parse( 'main.loop1' );
@@ -120,8 +123,6 @@ $xtpl->parse( 'main' );
 
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

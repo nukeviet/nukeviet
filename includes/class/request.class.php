@@ -1,41 +1,12 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 4/8/2010 6:35
  */
-
-if( defined( 'NV_CLASS_REQUEST' ) ) return;
-define( 'NV_CLASS_REQUEST', true );
-
-if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
-if( ! defined( 'NV_LIVE_SESSION_TIME' ) ) define( 'NV_LIVE_SESSION_TIME', 0 );
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( DIRECTORY_SEPARATOR, '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
-if( ! defined( 'NV_ADMINDIR' ) ) define( 'NV_ADMINDIR', 'admin' );
-if( ! defined( 'NV_EDITORSDIR' ) ) define( 'NV_EDITORSDIR', 'admin/editors' );
-
-if( ! function_exists( 'color_hex2rgb' ) )
-{
-
-	/**
-	 * color_hex2rgb()
-	 *
-	 * @param mixed $hex
-	 * @return
-	 */
-	function color_hex2rgb( $hex )
-	{
-		if( preg_match( "/[^0-9ABCDEFabcdef]/", $hex[1] ) ) return $hex[0];
-		$color = $hex[1];
-		$l = strlen( $color );
-		if( $l != 3 and $l != 6 ) return $hex[0];
-		$l = $l / 3;
-		return "rgb(" . ( hexdec( substr( $color, 0, 1 * $l ) ) ) . ", " . ( hexdec( substr( $color, 1 * $l, 1 * $l ) ) ) . ", " . ( hexdec( substr( $color, 2 * $l, 1 * $l ) ) ) . ");";
-	}
-
-}
 
 /**
  * Request
@@ -75,11 +46,11 @@ class Request
 	public $request_uri;
 	public $user_agent;
 	public $search_engine = '';
-	private $request_default_mode = "request";
+	private $request_default_mode = 'request';
 	private $allow_request_mods = array( 'get', 'post', 'request', 'cookie', 'session', 'env', 'server' );
-	private $cookie_prefix = 'NV3';
-	private $session_prefix = 'NV3';
-	private $cookie_key = 'nv3';
+	private $cookie_prefix = 'NV4';
+	private $session_prefix = 'NV4';
+	private $cookie_key = 'nv4';
 	private $secure = false;
 	private $httponly = true;
 	private $ip_addr;
@@ -89,9 +60,9 @@ class Request
 	private $engine_allowed = array();
 
 	// Cac tags bi cam dung mac dinh, co the go bo bang cach thay doi cac tags cho phep cua NV_ALLOWED_HTML_TAGS
-	private $disabletags = array( "applet", "body", "basefont", "head", "html", "id", "meta", "xml", "blink", "link", "style", "script", "iframe", "frame", "frameset", "ilayer", "layer", "bgsound", "title", "base" );
+	private $disabletags = array( 'applet', 'body', 'basefont', 'head', 'html', 'id', 'meta', 'xml', 'blink', 'link', 'style', 'script', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base' );
 	private $disabledattributes = array( 'action', 'background', 'codebase', 'dynsrc', 'lowsrc' );
-	private $disablecomannds = array( "base64_decode", "cmd", "passthru", "eval", "exec", "system", "fopen", "fsockopen", "file", "file_get_contents", "readfile", "unlink" );
+	private $disablecomannds = array( 'base64_decode', 'cmd', 'passthru', 'eval', 'exec', 'system', 'fopen', 'fsockopen', 'file', 'file_get_contents', 'readfile', 'unlink' );
 
 	/**
 	 * Request::__construct()
@@ -158,7 +129,6 @@ class Request
 		if( extension_loaded( 'filter' ) && filter_id( ini_get( 'filter.default' ) ) !== FILTER_UNSAFE_RAW ) $this->is_filter = true;
 		$this->Initialize( $config['my_domains'] );
 		$this->get_cookie_save_path();
-		$this->get_session_save_path( $config['session_save_path'] );
 		$this->sessionStart();
 		$_REQUEST = array_merge( $_POST, array_diff_key( $_GET, $_POST ) );
 	}
@@ -182,7 +152,7 @@ class Request
 			elseif( @getenv( $k ) ) return @getenv( $k );
 			elseif( function_exists( 'apache_getenv' ) && apache_getenv( $k, true ) ) return apache_getenv( $k, true );
 		}
-		return "";
+		return '';
 	}
 
 	/**
@@ -228,7 +198,7 @@ class Request
 					unset( $GLOBALS[$k] );
 					unset( $GLOBALS[$k] );
 				}
-				if( ! preg_match( "/^[a-zA-Z0-9\_]+$/", $k ) or is_numeric( $k ) )
+				if( ! preg_match( '/^[a-zA-Z0-9\_]+$/', $k ) or is_numeric( $k ) )
 				{
 					unset( $_GET[$k] );
 				}
@@ -246,7 +216,7 @@ class Request
 					unset( $GLOBALS[$k] );
 					unset( $GLOBALS[$k] );
 				}
-				if( ! preg_match( "/^[a-zA-Z0-9\_]+$/", $k ) or is_numeric( $k ) )
+				if( ! preg_match( '/^[a-zA-Z0-9\_]+$/', $k ) or is_numeric( $k ) )
 				{
 					unset( $_POST[$k] );
 				}
@@ -264,7 +234,7 @@ class Request
 					unset( $GLOBALS[$k] );
 					unset( $GLOBALS[$k] );
 				}
-				if( ! preg_match( "/^[a-zA-Z0-9\_]+$/", $k ) or is_numeric( $k ) )
+				if( ! preg_match( '/^[a-zA-Z0-9\_]+$/', $k ) or is_numeric( $k ) )
 				{
 					@setcookie( $k, '', NV_CURRENTTIME - 3600 );
 					unset( $_COOKIE[$k] );
@@ -283,7 +253,7 @@ class Request
 					unset( $GLOBALS[$k] );
 					unset( $GLOBALS[$k] );
 				}
-				if( ! preg_match( "/^[a-zA-Z0-9\_]+$/", $k ) or is_numeric( $k ) )
+				if( ! preg_match( '/^[a-zA-Z0-9\_]+$/', $k ) or is_numeric( $k ) )
 				{
 					unset( $_FILES[$k] );
 				}
@@ -296,27 +266,27 @@ class Request
 		$this->request_uri = ( empty( $_SERVER['REQUEST_URI'] ) ) ? $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] : $_SERVER['REQUEST_URI'];
 		$doc_root = isset( $_SERVER['DOCUMENT_ROOT'] ) ? $_SERVER['DOCUMENT_ROOT'] : '';
 		if( ! empty( $doc_root ) ) $doc_root = str_replace( DIRECTORY_SEPARATOR, '/', $doc_root );
-		if( ! empty( $doc_root ) ) $doc_root = preg_replace( "/[\/]+$/", '', $doc_root );
+		if( ! empty( $doc_root ) ) $doc_root = preg_replace( '/[\/]+$/', '', $doc_root );
 		$base_siteurl = pathinfo( $_SERVER['PHP_SELF'], PATHINFO_DIRNAME );
 		if( $base_siteurl == DIRECTORY_SEPARATOR ) $base_siteurl = '';
 		if( ! empty( $base_siteurl ) ) $base_siteurl = str_replace( DIRECTORY_SEPARATOR, '/', $base_siteurl );
-		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/[\/]+$/", '', $base_siteurl );
-		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( "/^[\/]*(.*)$/", '/\\1', $base_siteurl );
+		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( '/[\/]+$/', '', $base_siteurl );
+		if( ! empty( $base_siteurl ) ) $base_siteurl = preg_replace( '/^[\/]*(.*)$/', '/\\1', $base_siteurl );
 		if( defined( 'NV_WYSIWYG' ) and ! defined( 'NV_ADMIN' ) )
 		{
-			$base_siteurl = preg_replace( "#/" . NV_EDITORSDIR . "(.*)$#", '', $base_siteurl );
+			$base_siteurl = preg_replace( '#/' . NV_EDITORSDIR . '(.*)$#', '', $base_siteurl );
 		}
 		elseif( defined( 'NV_IS_UPDATE' ) )// Update se bao gom ca admin nen update phai dat truoc
 		{
-			$base_siteurl = preg_replace( "#/install(.*)$#", '', $base_siteurl );
+			$base_siteurl = preg_replace( '#/install(.*)$#', '', $base_siteurl );
 		}
 		elseif( defined( 'NV_ADMIN' ) )
 		{
-			$base_siteurl = preg_replace( "#/" . NV_ADMINDIR . "(.*)$#", '', $base_siteurl );
+			$base_siteurl = preg_replace( '#/' . NV_ADMINDIR . '(.*)$#', '', $base_siteurl );
 		}
 		elseif( ! empty( $base_siteurl ) )
 		{
-			$base_siteurl = preg_replace( "#/index\.php(.*)$#", '', $base_siteurl );
+			$base_siteurl = preg_replace( '#/index\.php(.*)$#', '', $base_siteurl );
 		}
 		if( NV_ROOTDIR !== $doc_root . $base_siteurl )
 		{
@@ -329,15 +299,18 @@ class Request
 			$_SERVER['DOCUMENT_ROOT'] = $doc_root;
 		}
 		$_SERVER['SCRIPT_FILENAME'] = $_SERVER['DOCUMENT_ROOT'] . $_SERVER['PHP_SELF'];
-		$_SERVER['SERVER_NAME'] = preg_replace( array( '/^[a-zA-Z]+\:\/\//e' ), '', $this->get_Env( array( 'SERVER_NAME', 'HTTP_HOST' ) ) );
-		$_SERVER['SERVER_PORT'] = $this->get_Env( "SERVER_PORT" );
-		$_SERVER['SERVER_PROTOCOL'] = $this->get_Env( "SERVER_PROTOCOL" );
+		$_SERVER['SERVER_PORT'] = $this->get_Env( 'SERVER_PORT' );
+		$_SERVER['SERVER_PROTOCOL'] = $this->get_Env( 'SERVER_PROTOCOL' );
+
+		$this->server_name = preg_replace( '/^[a-z]+\:\/\//i', '', $this->get_Env( array( 'HTTP_HOST', 'SERVER_NAME' ) ) );
+		$this->server_name = preg_replace( '/(\:[0-9]+)$/', '', $this->server_name );
+		$_SERVER['SERVER_NAME'] = $this->server_name;
+
 		$this->base_siteurl = $base_siteurl;
 		$this->base_adminurl = $base_siteurl . ( NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '' );
 		$this->doc_root = $doc_root;
-		$this->server_name = $_SERVER['SERVER_NAME'];
-		$this->server_protocol = strtolower( preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'] ) ) . ( ( $this->get_Env( "HTTPS" ) == "on" ) ? "s" : "" );
-		$this->server_port = ( $_SERVER['SERVER_PORT'] == "80" ) ? "" : ( ":" . $_SERVER['SERVER_PORT'] );
+		$this->server_protocol = strtolower( preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'] ) ) . ( ( $this->get_Env( 'HTTPS' ) == 'on' ) ? 's' : '' );
+		$this->server_port = ( $_SERVER['SERVER_PORT'] == '80' ) ? '' : ( ':' . $_SERVER['SERVER_PORT'] );
 
 		if( filter_var( $this->server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 ) === false )
 		{
@@ -348,7 +321,7 @@ class Request
 			$this->my_current_domain = $this->server_protocol . '://[' . $this->server_name . ']' . $this->server_port;
 		}
 
-		$this->headerstatus = ( substr( php_sapi_name(), 0, 3 ) == 'cgi' ) ? "Status:" : $_SERVER['SERVER_PROTOCOL'];
+		$this->headerstatus = ( substr( php_sapi_name(), 0, 3 ) == 'cgi' ) ? 'Status:' : $_SERVER['SERVER_PROTOCOL'];
 		$domains = array();
 		if( empty( $my_domains ) )
 		{
@@ -356,8 +329,8 @@ class Request
 		}
 		else
 		{
-			$domains = array_map( "trim", explode( ",", $my_domains ) );
-			$domains = array_map( "strtolower", $domains );
+			$domains = array_map( 'trim', explode( ',', $my_domains ) );
+			$domains = array_map( 'strtolower', $domains );
 		}
 		$this->my_domains = array_unique( $domains );
 
@@ -372,7 +345,7 @@ class Request
 				{
 					$ref['host'] = substr( $ref['host'], 1, -1 );
 				}
-				if( preg_match( "/^" . preg_quote( $ref['host'] ) . "/", $this->server_name ) )
+				if( preg_match( '/^' . preg_quote( $ref['host'] ) . '/', $this->server_name ) )
 				{
 					$this->referer_key = 1;
 				}
@@ -383,7 +356,7 @@ class Request
 					{
 						foreach( $this->engine_allowed as $se => $v )
 						{
-							if( preg_match( "/" . preg_quote( $v['host_pattern'] ) . "/i", $ref['host'] ) )
+							if( preg_match( '/' . preg_quote( $v['host_pattern'] ) . '/i', $ref['host'] ) )
 							{
 								$this->search_engine = $se;
 								break;
@@ -400,7 +373,7 @@ class Request
 					parse_str( $query_string, $parameters );
 					foreach( $parameters as $key => $value )
 					{
-						if( preg_match( "/^[a-zA-Z\_][a-zA-Z0-9\_]*$/", $key ) )
+						if( preg_match( '/^[a-zA-Z\_][a-zA-Z0-9\_]*$/', $key ) )
 						{
 							$tmp[$key] = $this->security_get( $value, true );
 						}
@@ -431,17 +404,13 @@ class Request
 		}
 		if( $this->str_referer_blocker and ! empty( $_SERVER['QUERY_STRING'] ) and $this->referer_key == 0 and empty( $this->search_engine ) )
 		{
-			header( "Location: " . $this->site_url );
+			header( 'Location: ' . $this->site_url );
 			exit();
 		}
-		if( sizeof( $_POST ) and $this->referer_key !== 1 )
-		{
-			header( "Location: " . $this->site_url );
-			exit();
-		}
-		$user_agent = ( string )$this->get_Env( "HTTP_USER_AGENT" );
+
+		$user_agent = ( string )$this->get_Env( 'HTTP_USER_AGENT' );
 		$user_agent = substr( htmlspecialchars( $user_agent ), 0, 255 );
-		if( empty( $user_agent ) or $user_agent == "-" ) $user_agent = "none";
+		if( empty( $user_agent ) or $user_agent == '-' ) $user_agent = 'none';
 		$this->user_agent = $user_agent;
 		$_SERVER['HTTP_USER_AGENT'] = $user_agent;
 	}
@@ -455,52 +424,7 @@ class Request
 	{
 		$this->cookie_path = $this->base_siteurl . '/';
 		$cookie_domain = preg_replace( '/^([w]{3})\./', '', $this->server_name );
-		$this->cookie_domain = ( preg_match( "/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/", $cookie_domain ) ) ? '.' . $cookie_domain : '';
-	}
-
-	/**
-	 * Request::get_session_save_path()
-	 *
-	 * @param mixed $path
-	 * @return
-	 */
-	private function get_session_save_path( $path )
-	{
-		$save_path = '';
-		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
-		if( extension_loaded( 'suhosin' ) )
-		{
-			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
-		}
-
-		if( function_exists( 'session_save_path' ) and ! in_array( 'session_save_path', $disable_functions ) )
-		{
-			if( preg_match( "/^[a-zA-Z]{1}[a-zA-Z0-9_]*$/", $path ) )
-			{
-				$save_path = NV_ROOTDIR . '/' . $path;
-				if( ! is_writable( $save_path ) )
-				{
-					if( ! is_dir( $save_path ) )
-					{
-						$oldumask = umask( 0 );
-						$res = @mkdir( $save_path, 0755 );
-						umask( $oldumask );
-					}
-					if( ! @is_writable( $save_path ) )
-					{
-						if( ! @chmod( $save_path ) ) $save_path = '';
-					}
-					clearstatcache();
-					if( ! is_writable( $save_path ) )
-					{
-						trigger_error( Request::SESSION_SAVE_PATH_NOT_SET, 256 );
-					}
-				}
-				session_save_path( $save_path . '/' );
-			}
-			$save_path = session_save_path();
-		}
-		$this->session_save_path = $save_path;
+		$this->cookie_domain = ( preg_match( '/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain ) ) ? '.' . $cookie_domain : '';
 	}
 
 	/**
@@ -518,18 +442,9 @@ class Request
 		session_set_cookie_params( NV_LIVE_SESSION_TIME, $this->cookie_path, $this->cookie_domain, 0, 1 );
 
 		session_name( $this->cookie_prefix . '_sess' );
-		$session_id = isset( $_COOKIE[$this->cookie_prefix . '_sess'] ) ? $_COOKIE[$this->cookie_prefix . '_sess'] : "";
-		if( ! preg_match( "/^([a-zA-Z0-9]{32})([\d]+)$/", $session_id ) )
-		{
-			$session_id = md5( uniqid( rand(), true ) ) . sprintf( "%u", $this->ip_addr );
-			session_id( $session_id );
-		}
 		session_start();
 		$session_id = session_id();
-		if( ! preg_match( "/^([a-zA-Z0-9]{32})([\d]+)$/", $session_id ) )
-		{
-			trigger_error( Request::INCORRECT_SESSION_ID, 256 );
-		}
+
 		$_SESSION = ( isset( $_SESSION ) and is_array( $_SESSION ) ) ? $_SESSION : array();
 		if( sizeof( $_SESSION ) )
 		{
@@ -542,7 +457,7 @@ class Request
 					unset( $GLOBALS[$k] );
 					unset( $GLOBALS[$k] );
 				}
-				if( ! preg_match( "/^[a-zA-Z0-9\_]+$/", $k ) or is_numeric( $k ) )
+				if( ! preg_match( '/^[a-zA-Z0-9\_]+$/', $k ) or is_numeric( $k ) )
 				{
 					unset( $_SESSION[$k] );
 				}
@@ -551,6 +466,26 @@ class Request
 		}
 		$this->is_session_start = true;
 		$this->session_id = $session_id;
+	}
+
+	private function chr_hexdec_callback( $m )
+	{
+		return chr( hexdec( $m[1] ) );
+	}
+
+	private function chr_callback( $m )
+	{
+		return chr( $m[1] );
+	}
+
+	private function color_hex2rgb_callback( $hex )
+	{
+		if( preg_match( '/[^0-9ABCDEFabcdef]/', $hex[1] ) ) return $hex[0];
+		$color = $hex[1];
+		$l = strlen( $color );
+		if( $l != 3 and $l != 6 ) return $hex[0];
+		$l = $l / 3;
+		return 'rgb(' . ( hexdec( substr( $color, 0, 1 * $l ) ) ) . ', ' . ( hexdec( substr( $color, 1 * $l, 1 * $l ) ) ) . ', ' . ( hexdec( substr( $color, 2 * $l, 1 * $l ) ) ) . ');';
 	}
 
 	/**
@@ -566,10 +501,10 @@ class Request
 		$value = preg_replace( "/%u0([a-z0-9]{3})/i", "&#x\\1;", $value );
 		$value = preg_replace( "/%([a-z0-9]{2})/i", "&#x\\1;", $value );
 		$value = str_ireplace( array( '&#x53;&#x43;&#x52;&#x49;&#x50;&#x54;', '&#x26;&#x23;&#x78;&#x36;&#x41;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x36;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x31;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x33;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x32;&#x3B;&#x26;&#x23;&#x78;&#x36;&#x39;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x30;&#x3B;&#x26;&#x23;&#x78;&#x37;&#x34;&#x3B;', '/*', '*/', '<!--', '-->', '<!-- -->', '&#x0A;', '&#x0D;', '&#x09;', '' ), '', $value );
-		$search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/ie';
-		$value = preg_replace( $search, "chr(hexdec('\\1'))", $value );
-		$search = '/&#0{0,8}(33|34|35|36|37|38|39|40|41|42|43|45|47|48|49|50|51|52|53|54|55|56|57|58|59|61|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|101|102|103|104|105|106|107|108|109|110|111|112|113|114|115|116|117|118|119|120|121|122|123|124|125|126);?/ie';
-		$value = preg_replace( $search, "chr('\\1')", $value );
+		$search = '/&#[xX]0{0,8}(21|22|23|24|25|26|27|28|29|2a|2b|2d|2f|30|31|32|33|34|35|36|37|38|39|3a|3b|3d|3f|40|41|42|43|44|45|46|47|48|49|4a|4b|4c|4d|4e|4f|50|51|52|53|54|55|56|57|58|59|5a|5b|5c|5d|5e|5f|60|61|62|63|64|65|66|67|68|69|6a|6b|6c|6d|6e|6f|70|71|72|73|74|75|76|77|78|79|7a|7b|7c|7d|7e);?/i';
+		$value = preg_replace_callback( $search, array( $this, 'chr_hexdec_callback' ), $value );
+		$search = '/&#0{0,8}(33|34|35|36|37|38|39|40|41|42|43|45|47|48|49|50|51|52|53|54|55|56|57|58|59|61|63|64|65|66|67|68|69|70|71|72|73|74|75|76|77|78|79|80|81|82|83|84|85|86|87|88|89|90|91|92|93|94|95|96|97|98|99|100|101|102|103|104|105|106|107|108|109|110|111|112|113|114|115|116|117|118|119|120|121|122|123|124|125|126);?/i';
+		$value = preg_replace_callback( $search, array( $this, 'chr_callback' ), $value );
 		$search = array( '&#60', '&#060', '&#0060', '&#00060', '&#000060', '&#0000060', '&#60;', '&#060;', '&#0060;', '&#00060;', '&#000060;', '&#0000060;', '&#x3c', '&#x03c', '&#x003c', '&#x0003c', '&#x00003c', '&#x000003c', '&#x3c;', '&#x03c;', '&#x003c;', '&#x0003c;', '&#x00003c;', '&#x000003c;', '&#X3c', '&#X03c', '&#X003c', '&#X0003c', '&#X00003c', '&#X000003c', '&#X3c;', '&#X03c;', '&#X003c;', '&#X0003c;', '&#X00003c;', '&#X000003c;', '&#x3C', '&#x03C', '&#x003C', '&#x0003C', '&#x00003C', '&#x000003C', '&#x3C;', '&#x03C;', '&#x003C;', '&#x0003C;', '&#x00003C;', '&#x000003C;', '&#X3C', '&#X03C', '&#X003C', '&#X0003C', '&#X00003C', '&#X000003C', '&#X3C;', '&#X03C;', '&#X003C;', '&#X0003C;', '&#X00003C;', '&#X000003C;', '\x3c', '\x3C', '\u003c', '\u003C' );
 		$value = str_ireplace( $search, '<', $value );
 		return $value;
@@ -588,10 +523,10 @@ class Request
 		for( $i = 0, $count = sizeof( $attrSet ); $i < $count; ++$i )
 		{
 			if( ! $attrSet[$i] ) continue;
-			$attrSubSet = array_map( "trim", explode( '=', trim( $attrSet[$i] ), 2 ) );
+			$attrSubSet = array_map( 'trim', explode( '=', trim( $attrSet[$i] ), 2 ) );
 			$attrSubSet[0] = strtolower( $attrSubSet[0] );
 
-			if( ! preg_match( "/[a-z]+/i", $attrSubSet[0] ) || in_array( $attrSubSet[0], $this->disabledattributes ) || preg_match( "/^on/i", $attrSubSet[0] ) ) continue;
+			if( ! preg_match( '/[a-z]+/i', $attrSubSet[0] ) || in_array( $attrSubSet[0], $this->disabledattributes ) || preg_match( '/^on/i', $attrSubSet[0] ) ) continue;
 
 			if( ! empty( $attrSubSet[1] ) )
 			{
@@ -622,9 +557,9 @@ class Request
 
 				if( ! empty( $this->disablecomannds ) and preg_match( '#(' . implode( '|', $this->disablecomannds ) . ')(\s*)\((.*?)\)#si', $value ) ) continue;
 
-				$attrSubSet[1] = preg_replace_callback( "/\#([0-9ABCDEFabcdef]{3,6})[\;]*/", 'color_hex2rgb', $attrSubSet[1] );
+				$attrSubSet[1] = preg_replace_callback( '/\#([0-9ABCDEFabcdef]{3,6})[\;]*/', array( $this, 'color_hex2rgb_callback' ), $attrSubSet[1] );
 			}
-			elseif( $attrSubSet[1] !== "0" )
+			elseif( $attrSubSet[1] !== '0' )
 			{
 				$attrSubSet[1] = $attrSubSet[0];
 			}
@@ -641,21 +576,24 @@ class Request
 	 */
 	private function filterTags( $source )
 	{
-		$source = preg_replace( "/\<script([^\>]*)\>(.*)\<\/script\>/isU", "", $source );
-
-		if( preg_match_all( "/<iframe[a-z0-9\s\=\"]*src\=\"http(s)?\:\/\/([w]{3})?\.youtube[^\/]+\/embed\/([^\?]+)(\?[^\"]+)?\"[^\>]*\><\/iframe>/isU", $source, $match ) )
+		$source = preg_replace( '/\<script([^\>]*)\>(.*)\<\/script\>/isU', '', $source );
+		if( in_array( 'iframe', $this->disabletags ) )
 		{
-			foreach( $match[0] as $key => $_m )
+			if( preg_match_all( "/<iframe[a-z0-9\s\=\"]*src\=\"(http(s)?\:)?\/\/([w]{3})?\.youtube[^\/]+\/embed\/([^\?]+)(\?[^\"]+)?\"[^\>]*\><\/iframe>/isU", $source, $match ) )
 			{
-				$vid = $match[3][$key];
-				$width = intval( preg_replace( "/^(.*)width\=\"([\d]+)\"(.*)$/isU", "\\2", $_m ) );
-				$height = intval( preg_replace( "/^(.*)height\=\"([\d]+)\"(.*)$/isU", "\\2", $_m ) );
+				foreach( $match[0] as $key => $_m )
+				{
+					$vid = $match[4][$key];
+					$width = intval( preg_replace( "/^(.*)width\=\"([\d]+)\"(.*)$/isU", "\\2", $_m ) );
+					$height = intval( preg_replace( "/^(.*)height\=\"([\d]+)\"(.*)$/isU", "\\2", $_m ) );
 
-				$width = ( $width > 0 ) ? $width : 480;
-				$height = ( $height > 0 ) ? $height : 360;
+					$width = ( $width > 0 ) ? $width : 480;
+					$height = ( $height > 0 ) ? $height : 360;
 
-				$ojwplayer = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" height="' . $height . '" width="' . $width . '"><param name="movie" value="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf" /><param name="wmode" value="transparent" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value="file=http://www.youtube.com/watch?v=' . $vid . '" /><embed allowfullscreen="true" allowscriptaccess="always" flashvars="file=http://www.youtube.com/watch?v=' . $vid . '" height="' . $height . '" width="' . $width . '" src="' . NV_BASE_SITEURL . 'images/jwplayer/player.swf"></embed></object>';
-				$source = str_replace( $_m, $ojwplayer, $source );
+					$ojwplayer = '<object height="' . $height . '" width="' . $width . '"><param name="movie" value="//www.youtube.com/v/' . $vid . '?rel=0&amp;hl=pt_BR&amp;version=3" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><embed allowfullscreen="true" allowscriptaccess="always" height="' . $height . '" src="//www.youtube.com/v/' . $vid . '?rel=0&amp;autoplay=1&amp;hl=pt_BR&amp;version=3" type="application/x-shockwave-flash" width="' . $width . '"></embed></object>';
+					$source = str_replace( $_m, $ojwplayer, $source );
+				}
+
 			}
 		}
 
@@ -696,7 +634,7 @@ class Request
 			$attrSet = array();
 			$currentSpace = strpos( $tagLeft, ' ' );
 
-			if( substr( $currentTag, 0, 1 ) == "/" )
+			if( substr( $currentTag, 0, 1 ) == '/' )
 			{
 				$isCloseTag = true;
 				list( $tagName ) = explode( ' ', $currentTag );
@@ -709,7 +647,7 @@ class Request
 				$tagName = strtolower( $tagName );
 			}
 
-			if( ( ! preg_match( "/^[a-z][a-z0-9]*$/i", $tagName ) ) || in_array( $tagName, $this->disabletags ) )
+			if( ( ! preg_match( '/^[a-z][a-z0-9]*$/i', $tagName ) ) || in_array( $tagName, $this->disabletags ) )
 			{
 				$postTag = substr( $postTag, ( $tagLength + 2 ) );
 				$tagOpen_start = strpos( $postTag, '<' );
@@ -756,7 +694,7 @@ class Request
 					$preTag .= ' ' . implode( ' ', $attrSet );
 				}
 
-				$preTag .= ( strpos( $fromTagOpen, "</" . $tagName ) ) ? ':}' : ' /:}';
+				$preTag .= ( strpos( $fromTagOpen, '</' . $tagName ) ) ? ':}' : ' /:}';
 			}
 			else
 			{
@@ -829,10 +767,11 @@ class Request
 		}
 		else
 		{
-			$value = preg_replace( "/\t+/", " ", $value );
-			unset( $matches );
-			preg_match_all( '/<!\[cdata\[(.*?)\]\]>/is', $value, $matches );
-			$value = str_replace( $matches[0], $matches[1], $value );
+			//$value = preg_replace( "/\t+/", ' ', $value );
+			if( preg_match_all( '/<!\[cdata\[(.*?)\]\]>/is', $value, $matches ) )
+			{
+				$value = str_replace( $matches[0], $matches[1], $value );
+			}
 			$value = $this->filterTags( $value );
 			$value = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $value );
 			$value = str_replace( array( "[:", ":]", "{:", ":}" ), array( '"', '"', "<", '>' ), $value );
@@ -872,7 +811,7 @@ class Request
 	private function parse_mode( $mode )
 	{
 		if( empty( $mode ) ) return array( $this->request_default_mode );
-		$mode = explode( ",", $mode );
+		$mode = explode( ',', $mode );
 		$mode = array_map( 'trim', $mode );
 		$mode = array_map( 'strtolower', $mode );
 		$mode = array_intersect( $this->allow_request_mods, $mode );
@@ -1178,7 +1117,7 @@ class Request
 					$eval = "if (isset(\$_" . strtoupper( $arr ) . "['" . $name . "']))\n";
 					$eval .= "{\n";
 					$eval .= "if(empty(\$all)) return true;\n";
-					$eval .= "unset(\$names['" . $name . "']);\n";
+					$eval .= "\tunset(\$names['" . $name . "']);\n";
 					$eval .= "}";
 					eval( $eval );
 				}
@@ -1288,22 +1227,14 @@ class Request
 	 * @param mixed $save
 	 * @return
 	 */
-	public function get_editor( $name, $default = '', $allowed_html_tags = '', $save = false )
+	public function get_editor( $name, $default = '', $allowed_html_tags = '' )
 	{
 		$value = ( string )$this->get_value( $name, 'post', $default );
 		if( ! empty( $allowed_html_tags ) )
 		{
-			$allowed_html_tags = array_map( "trim", explode( ",", $allowed_html_tags ) );
-			$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
+			$allowed_html_tags = array_map( 'trim', explode( ',', $allowed_html_tags ) );
+			$allowed_html_tags = '<' . implode( '><', $allowed_html_tags ) . '>';
 			$value = strip_tags( $value, $allowed_html_tags );
-		}
-		if( ( bool )$save )
-		{
-			$value = strtr( $value, array(
-					"\r\n" => '',
-					"\r" => '',
-					"\n" => ''
-				) );
 		}
 		return trim( $value );
 	}
@@ -1322,8 +1253,8 @@ class Request
 		$value = ( string )$this->get_value( $name, 'post', $default );
 		if( ! empty( $allowed_html_tags ) )
 		{
-			$allowed_html_tags = array_map( "trim", explode( ",", $allowed_html_tags ) );
-			$allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
+			$allowed_html_tags = array_map( 'trim', explode( ',', $allowed_html_tags ) );
+			$allowed_html_tags = '<' . implode( '><', $allowed_html_tags ) . '>';
 			$value = strip_tags( $value, $allowed_html_tags );
 		}
 		if( ( bool )$save )
@@ -1368,26 +1299,23 @@ class Request
 		{
 			switch( $type )
 			{
-				case "bool":
+				case 'bool':
 					$arr[$key] = ( bool )$arr[$key];
 					break;
-				case "int":
+				case 'int':
 					$arr[$key] = ( int )$arr[$key];
 					break;
-				case "float":
+				case 'float':
 					$arr[$key] = ( float )$arr[$key];
 					break;
-				case "string":
+				case 'string':
 					$arr[$key] = ( string )$arr[$key];
 					break;
-				case "array":
+				case 'array':
 					$arr[$key] = ( array )$arr[$key];
 					break;
 			}
 		}
 		return $arr;
 	}
-
 }
-
-?>

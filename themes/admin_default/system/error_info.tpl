@@ -1,15 +1,16 @@
 <!-- BEGIN: error_info -->
-<table summary="{TPL_E_CAPTION}" class="tab1" style="border-color:#FF0000;">
-	<caption> {TPL_E_CAPTION} </caption>
-	<col width="16px" />
-	<!-- BEGIN: error_item -->
-	<tbody {TPL_E_CLASS}>
-		<tr>
-			<td><img alt="{TPL_E_ALT}" src="{TPL_E_SRC}" width="16" height="16" /></td>
-			<td> {TPL_E_ERRNO}: {TPL_E_MESS} </td>
-		</tr>
-	</tbody>
-	<!-- END: error_item -->
-</table>
-<br/>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{TPL_E_CAPTION} </caption>
+		<col class="w20" />
+		<tbody>
+		<!-- BEGIN: error_item -->
+			<tr>
+				<td><img alt="{TPL_E_ALT}" src="{TPL_E_SRC}" width="16" height="16" /></td>
+				<td> {TPL_E_ERRNO}: {TPL_E_MESS} </td>
+			</tr>
+		<!-- END: error_item -->
+		</tbody>
+	</table>
+</div>
 <!-- END: error_info -->

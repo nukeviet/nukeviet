@@ -1,39 +1,52 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
 if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 
-$xtpl = new XTemplate( "interface.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+$dirlang_old = $nv_Request->get_string( 'dirlang', 'cookie', NV_LANG_DATA );
+$dirlang = $nv_Request->get_string( 'dirlang', 'get', $dirlang_old );
+
+$page_title = $lang_module['nv_lang_interface'] . ': ' . $language_array[$dirlang]['name'];
+
+$xtpl = new XTemplate( 'interface.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 
 $array_lang_exit = array();
 
-$result = $db->sql_query( "SHOW COLUMNS FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file`" );
-
-while( $row = $db->sql_fetch_assoc( $result ) )
+$columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
+foreach ( $columns_array as $row )
 {
-	if( substr( $row['Field'], 0, 7 ) == "author_" )
+	if( substr( $row['field'], 0, 7 ) == 'author_' )
 	{
-		$array_lang_exit[] .= trim( substr( $row['Field'], 7, 2 ) );
+		$array_lang_exit[] .= trim( substr( $row['field'], 7, 2 ) );
 	}
 }
 
-$select_options = array();
-
-foreach( $array_lang_exit as $langkey )
+if( empty( $array_lang_exit ) or ! in_array( $dirlang, $array_lang_exit ) )
 {
-	$select_options[NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;dirlang=" . $langkey] = $language_array[$langkey]['name'];
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=read&dirlang=' . $dirlang . '&checksess=' . md5( 'readallfile' . session_id() ) );
+
+	$xtpl->parse( 'empty' );
+	$contents = $xtpl->text( 'empty' );
+
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_admin_theme( $contents );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$dirlang_old = $nv_Request->get_string( 'dirlang', 'cookie', NV_LANG_DATA );
-$dirlang = $nv_Request->get_string( 'dirlang', 'get', $dirlang_old );
+$select_options = array();
+foreach( $array_lang_exit as $langkey )
+{
+	$select_options[NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dirlang=' . $langkey] = $language_array[$langkey]['name'];
+}
 
 if( ! in_array( $dirlang, $array_lang_exit ) )
 {
@@ -45,26 +58,11 @@ if( $dirlang_old != $dirlang )
 	$nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
 }
 
-$sql = "SELECT `idfile`, `module`, `admin_file`, `langtype`, `author_" . $dirlang . "` FROM `" . NV_LANGUAGE_GLOBALTABLE . "_file` ORDER BY `idfile` ASC";
-$result = $db->sql_query( $sql );
-
-if( $db->sql_numrows( $result ) == 0 )
-{
-	$xtpl->assign( 'URL', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&dirlang=" . $dirlang . "&checksess=" . md5( "readallfile" . session_id() ) );
-
-	$xtpl->parse( 'empty' );
-	$contents = $xtpl->text( 'empty' );
-
-	include ( NV_ROOTDIR . '/includes/header.php' );
-	echo nv_admin_theme( $contents );
-	include ( NV_ROOTDIR . '/includes/footer.php' );
-	exit();
-}
-
-$page_title = $lang_module['nv_lang_interface'] . ": " . $language_array[$dirlang]['name'];
-
 $a = 0;
-while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql_fetchrow( $result ) )
+
+$sql = 'SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file ORDER BY idfile ASC';
+$result = $db->query( $sql );
+while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $result->fetch( 3 ) )
 {
 	switch( $admin_file )
 	{
@@ -94,14 +92,13 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 	}
 
 	$xtpl->assign( 'ROW', array(
-		'class' => ( ++$a % 2 ) ? " class=\"second\"" : "",
-		'stt' => $a,
+		'stt' => ++$a,
 		'module' => $module,
 		'langsitename' => $langsitename,
 		'author' => $array_translator['author'],
 		'createdate' => $array_translator['createdate'],
-		'url_edit' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=edit&amp;dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id() ),
-		'url_export' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $dirlang . "&amp;idfile=" . $idfile . "&amp;checksess=" . md5( $idfile . session_id() )
+		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile . '&amp;checksess=' . md5( $idfile . session_id() ),
+		'url_export' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=write&amp;dirlang=' . $dirlang . '&amp;idfile=' . $idfile . '&amp;checksess=' . md5( $idfile . session_id() )
 	) );
 	if( in_array( 'write', $allow_func ) )
 	{
@@ -113,8 +110,6 @@ while( list( $idfile, $module, $admin_file, $langtype, $author_lang ) = $db->sql
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 4/10/2010 19:43
  */
 
@@ -11,18 +12,7 @@ if( ! defined( 'E_STRICT' ) ) define( 'E_STRICT', 2048 ); //khong sua
 if( ! defined( 'E_RECOVERABLE_ERROR' ) ) define( 'E_RECOVERABLE_ERROR', 4096 ); //khong sua
 if( ! defined( 'E_DEPRECATED' ) ) define( 'E_DEPRECATED', 8192 ); //khong sua
 if( ! defined( 'E_USER_DEPRECATED' ) ) define( 'E_USER_DEPRECATED', 16384 ); //khong sua
-if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
 
-/**
- * Error
- *
- * @package
- * @author NUKEVIET 3.0
- * @copyright VINADES
- * @version 2010
- * @access public
- */
 class Error
 {
 	const INCORRECT_IP = 'Incorrect IP address specified';
@@ -32,6 +22,7 @@ class Error
 	private $display_errors_list;
 	private $send_errors_list;
 	private $error_send_mail;
+	private $error_set_logs = false;
 	private $error_log_path;
 	private $error_log_tmp = false;
 	private $error_log_filename;
@@ -48,29 +39,29 @@ class Error
 	private $month;
 	private $error_date;
 	private $errortype = array(
-		E_ERROR => "Error", //
-		E_WARNING => "Warning", //
-		E_PARSE => "Parsing Error", //
-		E_NOTICE => "Notice", //
-		E_CORE_ERROR => "Core Error", //
-		E_CORE_WARNING => "Core Warning", //
-		E_COMPILE_ERROR => "Compile Error", //
-		E_COMPILE_WARNING => "Compile Warning", //
-		E_USER_ERROR => "User Error", //
-		E_USER_WARNING => "User Warning", //
-		E_USER_NOTICE => "User Notice", //
-		E_STRICT => "Runtime Notice", //
-		E_RECOVERABLE_ERROR => "Catchable fatal error", //
-		E_DEPRECATED => "Run-time notices", //
-		E_USER_DEPRECATED => "User-generated warning message"
+		E_ERROR => 'Error',
+		E_WARNING => 'Warning',
+		E_PARSE => 'Parsing Error',
+		E_NOTICE => 'Notice',
+		E_CORE_ERROR => 'Core Error',
+		E_CORE_WARNING => 'Core Warning',
+		E_COMPILE_ERROR => 'Compile Error',
+		E_COMPILE_WARNING => 'Compile Warning',
+		E_USER_ERROR => 'User Error',
+		E_USER_WARNING => 'User Warning',
+		E_USER_NOTICE => 'User Notice',
+		E_STRICT => 'Runtime Notice',
+		E_RECOVERABLE_ERROR => 'Catchable fatal error',
+		E_DEPRECATED => 'Run-time notices',
+		E_USER_DEPRECATED => 'User-generated warning message'
 	);
 
 	/**
-     * Error::__construct()
-     *
-     * @param mixed $config
-     * @return
-     */
+	 * Error::__construct()
+	 *
+	 * @param mixed $config
+	 * @return
+	 */
 	public function __construct( $config )
 	{
 		$this->log_errors_list = $this->parse_error_num( ( int )$config['log_errors_list'] );
@@ -78,8 +69,9 @@ class Error
 		$this->send_errors_list = $this->parse_error_num( ( int )$config['send_errors_list'] );
 		$this->error_log_path = $this->get_error_log_path( ( string )$config['error_log_path'] );
 		$this->error_send_mail = ( string )$config['error_send_email'];
+		$this->error_set_logs = $config['error_set_logs'];
 
-		if( isset( $config['error_log_filename'] ) and preg_match( "/[a-z0-9\_]+/i", $config['error_log_filename'] ) )
+		if( isset( $config['error_log_filename'] ) and preg_match( '/[a-z0-9\_]+/i', $config['error_log_filename'] ) )
 		{
 			$this->error_log_filename = $config['error_log_filename'];
 		}
@@ -87,7 +79,7 @@ class Error
 		{
 			$this->error_log_filename = Error::LOG_FILE_NAME_DEFAULT;
 		}
-		if( isset( $config['error_log_fileext'] ) and preg_match( "/[a-z]+/i", $config['error_log_fileext'] ) )
+		if( isset( $config['error_log_fileext'] ) and preg_match( '/[a-z]+/i', $config['error_log_fileext'] ) )
 		{
 			$this->error_log_fileext = $config['error_log_fileext'];
 		}
@@ -96,11 +88,11 @@ class Error
 			$this->error_log_fileext = Error::LOG_FILE_EXT_DEFAULT;
 		}
 
-		$this->day = date( "d-m-Y", NV_CURRENTTIME );
-		$this->error_date = date( "r", NV_CURRENTTIME );
-		$this->month = date( "m-Y", NV_CURRENTTIME );
+		$this->day = date( 'd-m-Y', NV_CURRENTTIME );
+		$this->error_date = date( 'r', NV_CURRENTTIME );
+		$this->month = date( 'm-Y', NV_CURRENTTIME );
 
-		$ip = $this->get_Env( "REMOTE_ADDR" );
+		$ip = $this->get_Env( 'REMOTE_ADDR' );
 		if( preg_match( '#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip ) )
 		{
 			$ip2long = ip2long( $ip );
@@ -125,23 +117,23 @@ class Error
 		$request = $this->get_request();
 		if( ! empty( $request ) ) $this->request = substr( $request, 500 );
 
-		$useragent = $this->get_Env( "HTTP_USER_AGENT" );
+		$useragent = $this->get_Env( 'HTTP_USER_AGENT' );
 		if( ! empty( $useragent ) ) $this->useragent = substr( $useragent, 0, 500 );
 
 		$this->nv_set_ini();
 	}
 
 	/**
-     * Error::nv_set_ini()
-     *
-     * @return
-     */
+	 * Error::nv_set_ini()
+	 *
+	 * @return
+	 */
 	public function nv_set_ini()
 	{
-		$disable_functions = ( ini_get( "disable_functions" ) != '' and ini_get( "disable_functions" ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "disable_functions" ) ) ) : array();
+		$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
 		if( extension_loaded( 'suhosin' ) )
 		{
-			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( "suhosin.executor.func.blacklist" ) ) ) );
+			$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
 		}
 		if( ( function_exists( 'ini_set' ) and ! in_array( 'ini_set', $disable_functions ) ) )
 		{
@@ -151,15 +143,14 @@ class Error
 			ini_set( 'log_errors', 0 );
 			ini_set( 'display_errors', 0 );
 		}
-		error_reporting( 0 );
 	}
 
 	/**
-     * Error::get_Env()
-     *
-     * @param mixed $key
-     * @return
-     */
+	 * Error::get_Env()
+	 *
+	 * @param mixed $key
+	 * @return
+	 */
 	private function get_Env( $key )
 	{
 		if( ! is_array( $key ) )
@@ -172,20 +163,20 @@ class Error
 			if( isset( $_SERVER[$k] ) ) return $_SERVER[$k];
 			elseif( isset( $_ENV[$k] ) ) return $_ENV[$k];
 			elseif( @getenv( $k ) ) return @getenv( $k );
-			elseif( function_exists( 'apache_getenv' ) && apache_getenv( $k, true ) ) return apache_getenv( $k, true );
+			elseif( function_exists( 'apache_getenv' ) and apache_getenv( $k, true ) ) return apache_getenv( $k, true );
 		}
-		return "";
+		return '';
 	}
 
 	/**
-     * Error::get_error_log_path()
-     *
-     * @param mixed $path
-     * @return
-     */
+	 * Error::get_error_log_path()
+	 *
+	 * @param mixed $path
+	 * @return
+	 */
 	private function get_error_log_path( $path )
 	{
-		$path = ltrim( rtrim( preg_replace( array( "/\\\\/", "/\/{2,}/" ), "/", $path ), "/" ), "/" );
+		$path = ltrim( rtrim( preg_replace( array( "/\\\\/", "/\/{2,}/" ), "/", $path ), '/' ), '/' );
 		if( is_dir( NV_ROOTDIR . '/' . $path ) )
 		{
 			$log_path = NV_ROOTDIR . '/' . $path;
@@ -193,11 +184,11 @@ class Error
 		else
 		{
 			$log_path = NV_ROOTDIR;
-			$e = explode( "/", $path );
+			$e = explode( '/', $path );
 			$cp = '';
 			foreach( $e as $p )
 			{
-				if( preg_match( "#[^a-zA-Z0-9\_]#", $p ) )
+				if( preg_match( '#[^a-zA-Z0-9\_]#', $p ) )
 				{
 					$cp = '';
 					break;
@@ -229,11 +220,11 @@ class Error
 	}
 
 	/**
-     * Error::parse_error_num()
-     *
-     * @param mixed $num
-     * @return
-     */
+	 * Error::parse_error_num()
+	 *
+	 * @param mixed $num
+	 * @return
+	 */
 	private function parse_error_num( $num )
 	{
 		if( $num > E_ALL + E_STRICT ) $num = E_ALL + E_STRICT;
@@ -260,7 +251,7 @@ class Error
 		{
 			foreach( $_GET as $key => $value )
 			{
-				if( preg_match( "/^[a-zA-Z0-9\_]+$/", $key ) and ! is_numeric( $key ) )
+				if( preg_match( '/^[a-zA-Z0-9\_]+$/', $key ) and ! is_numeric( $key ) )
 				{
 					$value = $this->fixQuery( $key, $value );
 					if( $value !== false ) $request[$key] = $value;
@@ -268,15 +259,15 @@ class Error
 			}
 		}
 
-		$request = ! empty( $request ) ? '?' . http_build_query( $request ) : "";
-		$request = $this->get_Env( "PHP_SELF" ) . $request;
+		$request = ! empty( $request ) ? '?' . http_build_query( $request ) : '';
+		$request = $this->get_Env( 'PHP_SELF' ) . $request;
 
 		return $request;
 	}
 
 	private function fixQuery( $key, $value )
 	{
-		if( preg_match( "/^[a-zA-Z0-9\_]+$/", $key ) )
+		if( preg_match( '/^[a-zA-Z0-9\_]+$/', $key ) )
 		{
 			if( is_array( $value ) )
 			{
@@ -290,7 +281,7 @@ class Error
 
 			$value = strip_tags( stripslashes( $value ) );
 			$value = preg_replace( "/[\'|\"|\t|\r|\n|\.\.\/]+/", "", $value );
-			$value = str_replace( array( "'", '"', "&" ), array( "&rsquo;", "&quot;", "&amp;" ), $value );
+			$value = str_replace( array( "'", '"', "&" ), array( '&rsquo;', '&quot;', '&amp;' ), $value );
 			return $value;
 		}
 
@@ -303,7 +294,7 @@ class Error
 		$error_code2 = md5( $error_code );
 		$error_file = $this->error_log_256 . '/' . $this->month . '__' . $error_code2 . '__' . $error_code . '.' . $this->error_log_fileext;
 
-		if( ! file_exists( $error_file ) )
+		if( $this->error_set_logs and ! file_exists( $error_file ) )
 		{
 			$content = "TIME: " . $this->error_date . "\r\n";
 			if( ! empty( $this->ip ) ) $content .= "IP: " . $this->ip . "\r\n";
@@ -337,7 +328,7 @@ class Error
 		echo "	<span style=\"color: #1a264e;font-weight: bold;\">" . $this->errstr . "</span><br />\n";
 		echo "	<span style=\"color: #1a264e;\">(Code: " . $error_code2 . ")</span></div>\n";
 		echo "	<div style=\"width: 400px; margin-right: auto; margin-left: auto;text-align:center\">\n";
-		echo "	If you  have any questions about this site,<br />please <a href=\"mailto:" . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
+		echo "	If you have any questions about this site,<br />please <a href=\"mailto:" . $strEncodedEmail . "\">contact</a> the site administrator for more information</div>\n";
 		echo "</body>\n";
 		echo "</html>";
 		die();
@@ -345,12 +336,12 @@ class Error
 
 	private function _log()
 	{
-		$content = "[" . $this->error_date . "]";
-		if( ! empty( $this->ip ) ) $content .= " [" . $this->ip . "]";
-		$content .= " [" . $this->errortype[$this->errno] . "(" . $this->errno . "): " . $this->errstr . "]";
-		if( ! empty( $this->errfile ) ) $content .= " [FILE: " . $this->errfile . "]";
-		if( ! empty( $this->errline ) ) $content .= " [LINE: " . $this->errline . "]";
-		if( ! empty( $this->request ) ) $content .= " [REQUEST: " . $this->request . "]";
+		$content = '[' . $this->error_date . ']';
+		if( ! empty( $this->ip ) ) $content .= ' [' . $this->ip . ']';
+		$content .= ' [' . $this->errortype[$this->errno] . '(' . $this->errno . '): ' . $this->errstr . ']';
+		if( ! empty( $this->errfile ) ) $content .= ' [FILE: ' . $this->errfile . ']';
+		if( ! empty( $this->errline ) ) $content .= ' [LINE: ' . $this->errline . ']';
+		if( ! empty( $this->request ) ) $content .= ' [REQUEST: ' . $this->request . ']';
 		$content .= "\r\n";
 		$error_log_file = $this->error_log_path . '/' . $this->day . '_' . $this->error_log_filename . '.' . $this->error_log_fileext;
 		error_log( $content, 3, $error_log_file );
@@ -358,13 +349,13 @@ class Error
 
 	private function _send()
 	{
-		$content = "[" . $this->error_date . "]";
-		if( ! empty( $this->ip ) ) $content .= " [" . $this->ip . "]";
-		$content .= " [" . $this->errortype[$this->errno] . "(" . $this->errno . "): " . $this->errstr . "]";
-		if( ! empty( $this->errfile ) ) $content .= " [FILE: " . $this->errfile . "]";
-		if( ! empty( $this->errline ) ) $content .= " [LINE: " . $this->errline . "]";
-		if( ! empty( $this->request ) ) $content .= " [REQUEST: " . $this->request . "]";
-		if( ! empty( $this->useragent ) ) $content .= " [AGENT: " . $this->useragent . "]";
+		$content = '[' . $this->error_date . ']';
+		if( ! empty( $this->ip ) ) $content .= ' [' . $this->ip . ']';
+		$content .= ' [' . $this->errortype[$this->errno] . '(' . $this->errno . '): ' . $this->errstr . ']';
+		if( ! empty( $this->errfile ) ) $content .= ' [FILE: ' . $this->errfile . ']';
+		if( ! empty( $this->errline ) ) $content .= ' [LINE: ' . $this->errline . ']';
+		if( ! empty( $this->request ) ) $content .= ' [REQUEST: ' . $this->request . ']';
+		if( ! empty( $this->useragent ) ) $content .= ' [AGENT: ' . $this->useragent . ']';
 		$content .= "\r\n";
 		$error_log_file = $this->error_log_path . '/sendmail.' . $this->error_log_fileext;
 		error_log( $content, 3, $error_log_file );
@@ -375,24 +366,24 @@ class Error
 		global $error_info;
 
 		$info = $this->errstr;
-		if( $this->errno != E_USER_ERROR && $this->errno != E_USER_WARNING && $this->errno != E_USER_NOTICE )
+		if( $this->errno != E_USER_ERROR and $this->errno != E_USER_WARNING and $this->errno != E_USER_NOTICE )
 		{
-			if( ! empty( $this->errfile ) ) $info .= " in file " . $this->errfile;
-			if( ! empty( $this->errline ) ) $info .= " on line " . $this->errline;
+			if( ! empty( $this->errfile ) ) $info .= ' in file ' . $this->errfile;
+			if( ! empty( $this->errline ) ) $info .= ' on line ' . $this->errline;
 		}
 
 		$error_info[] = array( 'errno' => $this->errno, 'info' => $info );
 	}
 
 	/**
-     * Error::error_handler()
-     *
-     * @param mixed $errno
-     * @param mixed $errstr
-     * @param mixed $errfile
-     * @param mixed $errline
-     * @return
-     */
+	 * Error::error_handler()
+	 *
+	 * @param mixed $errno
+	 * @param mixed $errstr
+	 * @param mixed $errfile
+	 * @param mixed $errline
+	 * @return
+	 */
 	public function error_handler( $errno, $errstr, $errfile, $errline )
 	{
 		if( empty( $errno ) ) return;
@@ -404,9 +395,10 @@ class Error
 		$track_errors = $this->day . '_' . md5( $this->errno . ( string )$this->errfile . ( string )$this->errline . $this->ip );
 		$track_errors = $this->error_log_tmp . '/' . $track_errors . '.' . $this->error_log_fileext;
 
-		if( ! file_exists( $track_errors ) )
+		if( $this->error_set_logs and ! file_exists( $track_errors ) )
 		{
 			file_put_contents( $track_errors, '', FILE_APPEND );
+
 			if( ! empty( $this->log_errors_list ) and isset( $this->log_errors_list[$errno] ) )
 			{
 				$this->_log();
@@ -417,7 +409,7 @@ class Error
 				$this->_send();
 			}
 
-			if( ! empty( $this->display_errors_list ) and isset( $this->display_errors_list[$errno] ) )
+			if( ! empty( $this->display_errors_list ) and isset( $this->display_errors_list[$errno] ) and ! preg_match( "/^ftp\_login\(\)/i", $errstr ) )
 			{
 				$this->_display();
 			}
@@ -429,5 +421,3 @@ class Error
 		}
 	}
 }
-
-?>

@@ -1,124 +1,81 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
-	<blockquote><span>{CONTENT.error}</span></blockquote>
-</div>
-<div class="clear"></div>
+<div class="alert alert-danger">{DATA.error}</div>
 <!-- END: error -->
-<form method="post" action="{CONTENT.action}">
-	<table class="tab1 fixtab">
-		<col valign="top" width="150px" />
-		<tr>
-			<td>{CONTENT.custom_title.0}:</td>
-			<td><input name="custom_title" id="custom_title" type="text" value="{CONTENT.custom_title.1}" style="width:300px" maxlength="{CONTENT.custom_title.2}" /></td>
-		</tr>
-	</table>
-	<table class="tab1 fixtab">
-		<col valign="top" width="150px" />
-		<tr>
-			<td>{CONTENT.admin_title.0}:</td>
-			<td><input name="admin_title" id="admin_title" type="text" value="{CONTENT.admin_title.1}" style="width:300px" maxlength="{CONTENT.admin_title.2}" /></td>
-		</tr>
-	</table>
-	<table class="tab1 fixtab">
-		<col valign="top" width="150px" />
-		<tr>
-			<td>{CONTENT.theme.0}:</td>
-			<td>
-			<select name="theme" id="theme">
-				<option value="">{CONTENT.theme.1}</option>
-				<!-- BEGIN: theme -->
-				<option value="{THEME.key}"{THEME.selected}>{THEME.key}</option>
-				<!-- END: theme -->
-			</select></td>
-			<td>&nbsp;</td>
-		</tr>
-	</table>
-	<!-- BEGIN: mobile -->
-	<table class="tab1 fixtab">
-		<col valign="top" width="150px" />
-		<tr>
-			<td>{CONTENT.mobile.0}:</td>
-			<td>
-			<select name="mobile" id="mobile">
-				<option value="">{CONTENT.mobile.1}</option>
-				<!-- BEGIN: loop -->
-				<option value="{MOBILE.key}"{MOBILE.selected}>{MOBILE.key}</option>
-				<!-- END: loop -->
-			</select></td>
-			<td>&nbsp;</td>
-		</tr>
-	</table>
-	<!-- END: mobile -->
-	<table class="tab1 fixtab">
-		<col valign="top" width="150px" />
-		<col valign="top" width="310px" />
-		<tr>
-			<td>{CONTENT.description.0}:</td>
-			<td><input name="description" id="description" type="text" value="{CONTENT.description.1}" style="width:300px" maxlength="{CONTENT.description.2}" /></td>
-			<td>&nbsp;</td>
-		</tr>
-	</table>
-	<table class="tab1 fixtab">
-		<col valign="top" width="150px" />
-		<col valign="top" width="310px" />
-		<tr>
-			<td>{CONTENT.keywords.0}:</td>
-			<td><input name="keywords" id="keywords" type="text" value="{CONTENT.keywords.1}" style="width:300px" maxlength="{CONTENT.keywords.2}" /></td>
-			<td>{CONTENT.keywords.3}</td>
-		</tr>
-	</table>
-	<!-- BEGIN: who_view -->
-	<table class="tab1 fixtab">
-		<col valign="top" width="150px" />
-		<tr>
-			<td>{CONTENT.who_view.0}:</td>
-			<td>
-			<select name="who_view" id="who_view" onchange="nv_sh('who_view','groups_list')">
-				<!-- BEGIN: loop -->
-				<option value="{WHO_VIEW.key}"{WHO_VIEW.selected}>{WHO_VIEW.title}</option>
-				<!-- END: loop -->
-			</select></td>
-			<td>&nbsp;</td>
-		</tr>
-	</table>
-	<div id="groups_list" style="{DISPLAY}">
-		<table class="tab1 fixtab">
-			<col valign="top" width="150px" />
-			<tr>
-				<td>{CONTENT.groups_view.0}:</td>
-				<td>
+<form method="post" action="{DATA.action}">
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<tfoot>
+				<tr>
+					<td colspan="2" class="text-center"><input name="save" id="save" type="hidden" value="1" /><input name="go_add" type="submit" value="{DATA.submit}" class="btn btn-primary" /></td>
+				</tr>
+			</tfoot>
+			<tbody>
+				<tr>
+					<td>{LANG.module_name}:</td>
+					<td><input class="w300 form-control" name="mod_name" id="mod_name" type="text" value="{DATA.mod_name}" maxlength="55" readonly="readonly"/></td>
+				</tr>
+				<tr>
+					<td>{LANG.custom_title}:</td>
+					<td><input class="w300 form-control" name="custom_title" id="custom_title" type="text" value="{DATA.custom_title}" maxlength="100" /></td>
+				</tr>
+				<tr>
+					<td>{LANG.admin_title}:</td>
+					<td><input class="w300 form-control" name="admin_title" id="admin_title" type="text" value="{DATA.admin_title}" maxlength="100" /></td>
+				</tr>
+				<tr>
+					<td>{LANG.theme}:</td>
+					<td>
+					<select name="theme" id="theme" class="form-control w200">
+						<option value="">{DATA.theme.1}</option>
+						<!-- BEGIN: theme -->
+						<option value="{THEME.key}"{THEME.selected}>{THEME.key}</option>
+						<!-- END: theme -->
+					</select></td>
+				</tr>
+				<!-- BEGIN: mobile -->
+				<tr>
+					<td>{DATA.mobile.0}:</td>
+					<td>
+					<select name="mobile" id="mobile" class="form-control w200">
+						<option value="">{DATA.mobile.1}</option>
+						<!-- BEGIN: loop -->
+						<option value="{MOBILE.key}"{MOBILE.selected}>{MOBILE.key}</option>
+						<!-- END: loop -->
+					</select></td>
+				</tr>
+				<!-- END: mobile -->
+				<tr>
+					<td>{LANG.description}:</td>
+					<td><input class="w300 form-control" name="description" id="description" type="text" value="{DATA.description}" maxlength="255" /></td>
+				</tr>
+				<tr>
+					<td>{LANG.keywords}:</td>
+					<td><input class="w300 form-control" name="keywords" id="keywords" type="text" value="{DATA.keywords}" maxlength="255" /> {LANG.keywords_info}</td>
+				</tr>
+				<tr>
+					<td>{GLANG.activate}:</td>
+					<td><input name="act" id="act" type="checkbox" value="1"{ACTIVE} /></td>
+				</tr>
+				<!-- BEGIN: rss -->
+				<tr>
+					<td>{DATA.rss.0}:</td>
+					<td><input name="rss" id="rss" type="checkbox" value="1"{RSS} /></td>
+				</tr>
+				<!-- END: rss -->
 				<!-- BEGIN: groups_view -->
-				<p><input name="groups_view[]" type="checkbox" value="{GROUPS_VIEW.key}"{GROUPS_VIEW.checked}/> {GROUPS_VIEW.title}
-				</p>
+				<tr>
+					<td>{DATA.groups_view.0}:</td>
+					<td>
+					<!-- BEGIN: loop -->
+					<p><input name="groups_view[]" type="checkbox" value="{GROUPS_VIEW.key}"{GROUPS_VIEW.checked}/> {GROUPS_VIEW.title}
+					</p>
+					<!-- END: loop -->
+					</td>
+				</tr>
 				<!-- END: groups_view -->
-				</td>
-			</tr>
+			</tbody>
 		</table>
 	</div>
-	<!-- END: who_view -->
-	<table class="tab1 fixtab">
-		<col valign="top" width="150px" />
-		<tr>
-			<td>{CONTENT.act.0}:</td>
-			<td><input name="act" id="act" type="checkbox" value="1"{ACTIVE} /></td>
-		</tr>
-	</table>
-	<!-- BEGIN: rss -->
-	<table class="tab1 fixtab">
-		<col valign="top" width="150px" />
-		<tr>
-			<td>{CONTENT.rss.0}:</td>
-			<td><input name="rss" id="rss" type="checkbox" value="1"{RSS} /></td>
-		</tr>
-	</table>
-	<!-- END: rss -->
-	<table class="tab1">
-		<col valign="top" width="150px" />
-		<tr>
-			<td><input name="save" id="save" type="hidden" value="1" /></td>
-			<td><input name="go_add" type="submit" value="{CONTENT.submit}" /></td>
-		</tr>
-	</table>
 </form>
 <!-- END: main -->

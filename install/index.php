@@ -1,43 +1,45 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-1-2010 22:42
  */
 
 define( 'NV_ADMIN', true );
-require_once ( 'mainfile.php' );
 
-$file_config_temp = NV_TEMP_DIR . "/config_" . md5( $global_config['sitekey'] ) . ".php";
+require_once 'mainfile.php';
 
-$dirs = nv_scandir( NV_ROOTDIR . "/language", "/^([a-z]{2})/" );
+$file_config_temp = NV_TEMP_DIR . '/config_' . md5( $global_config['sitekey'] ) . '.php';
+
+$dirs = nv_scandir( NV_ROOTDIR . '/includes/language', '/^([a-z]{2})/' );
 
 $languageslist = array();
 
 foreach( $dirs as $file )
 {
-	if( is_file( NV_ROOTDIR . '/language/' . $file . '/install.php' ) )
+	if( is_file( NV_ROOTDIR . '/includes/language/' . $file . '/install.php' ) )
 	{
 		$languageslist[] = $file;
 	}
 }
 
-require_once ( NV_ROOTDIR . "/modules/users/language/" . NV_LANG_DATA . ".php" );
-require_once ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/global.php" );
-require_once ( NV_ROOTDIR . "/language/" . NV_LANG_DATA . "/install.php" );
-require_once ( NV_ROOTDIR . "/install/template.php" );
-require_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
+require_once NV_ROOTDIR . '/modules/users/language/' . NV_LANG_DATA . '.php';
+require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/global.php';
+require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/install.php';
+require_once NV_ROOTDIR . '/install/template.php';
+require_once NV_ROOTDIR . '/includes/core/admin_functions.php';
+
+if( is_file( NV_ROOTDIR . '/install/default.php' ) )
+{
+	require_once NV_ROOTDIR . '/install/default.php';
+}
 
 if( is_file( NV_ROOTDIR . '/' . $file_config_temp ) )
 {
-	require_once ( NV_ROOTDIR . '/' . $file_config_temp );
-	//Bat dau phien lam viec cua MySQL
-	require_once ( NV_ROOTDIR . '/includes/class/mysql.class.php' );
-	$db_config['new_link'] = NV_MYSQL_NEW_LINK;
-	$db_config['persistency'] = NV_MYSQL_PERSISTENCY;
-	$db_config['collation'] = NV_MYSQL_COLLATION;
+	require_once NV_ROOTDIR . '/' . $file_config_temp;
 }
 
 $contents = '';
@@ -47,27 +49,27 @@ $maxstep = $nv_Request->get_int( 'maxstep', 'session', 1 );
 
 if( $step <= 0 or $step > 7 )
 {
-	Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=1" );
+	Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=1' );
 	exit();
 }
 
 if( $step > $maxstep and $step > 2 )
 {
 	$step = $maxstep;
-	Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+	Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
 	exit();
 }
 
-if( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) and $step < 7 )
+if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_FILENAME ) and $step < 7 )
 {
-	Header( "Location: " . NV_BASE_SITEURL . "index.php" );
+	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php' );
 	exit();
 }
 if( empty( $sys_info['supports_rewrite'] ) )
 {
 	if( isset( $_COOKIE['supports_rewrite'] ) and $_COOKIE['supports_rewrite'] == md5( $global_config['sitekey'] ) )
 	{
-		$sys_info['supports_rewrite'] = "rewrite_mode_apache";
+		$sys_info['supports_rewrite'] = 'rewrite_mode_apache';
 	}
 }
 if( $step == 1 )
@@ -96,9 +98,6 @@ elseif( $step == 2 )
 			die( 'ERROR|' . $lang_module['ftp_error_empty'] );
 		}
 
-		if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
-		if( ! defined( 'NV_BUFFER_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/buffer.class.php' );
-
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
 
 		if( ! empty( $ftp->error ) )
@@ -108,7 +107,7 @@ elseif( $step == 2 )
 		}
 		else
 		{
-			$list_valid = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "js", "language", NV_LOGS_DIR, "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR, NV_UPLOADS_DIR );
+			$list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
 
 			$ftp_root = $ftp->detectFtpRoot( $list_valid, NV_ROOTDIR );
 
@@ -127,26 +126,26 @@ elseif( $step == 2 )
 	}
 
 	// Danh sach cac file can kiem tra quyen ghi
-	$array_dir = array( NV_SESSION_SAVE_PATH, NV_LOGS_DIR, NV_LOGS_DIR . "/data_logs", NV_LOGS_DIR . "/dump_backup", NV_LOGS_DIR . "/error_logs", NV_LOGS_DIR . "/error_logs/errors256", NV_LOGS_DIR . "/error_logs/old", NV_LOGS_DIR . "/error_logs/tmp", NV_LOGS_DIR . "/ip_logs", NV_LOGS_DIR . "/ref_logs", NV_LOGS_DIR . "/voting_logs", NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_FILES_DIR . "/css", NV_DATADIR, NV_DATADIR . "/ip_files" );
+	$array_dir = array( NV_LOGS_DIR, NV_LOGS_DIR . '/data_logs', NV_LOGS_DIR . '/dump_backup', NV_LOGS_DIR . '/error_logs', NV_LOGS_DIR . '/error_logs/errors256', NV_LOGS_DIR . '/error_logs/old', NV_LOGS_DIR . '/error_logs/tmp', NV_LOGS_DIR . '/ip_logs', NV_LOGS_DIR . '/ref_logs', NV_LOGS_DIR . '/voting_logs', NV_CACHEDIR, NV_UPLOADS_DIR, NV_TEMP_DIR, NV_FILES_DIR, NV_DATADIR );
 
 	// Them vao cac file trong thu muc data va file cau hinh tam
-	$array_file_data = nv_scandir( NV_ROOTDIR . "/" . NV_DATADIR, "/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/" );
+	$array_file_data = nv_scandir( NV_ROOTDIR . '/' . NV_DATADIR, '/^([a-zA-Z0-9\-\_\.]+)\.([a-z0-9]{2,6})$/' );
 	foreach( $array_file_data as $file_i )
 	{
-		$array_dir[] = NV_DATADIR . "/" . $file_i;
+		$array_dir[] = NV_DATADIR . '/' . $file_i;
 	}
 	$array_dir[] = $file_config_temp;
 
 	// Them vao file .htaccess va web.config
 	if( ! empty( $sys_info['supports_rewrite'] ) )
 	{
-		if( $sys_info['supports_rewrite'] == "rewrite_mode_apache" )
+		if( $sys_info['supports_rewrite'] == 'rewrite_mode_apache' )
 		{
-			$array_dir[] = ".htaccess";
+			$array_dir[] = '.htaccess';
 		}
 		else
 		{
-			$array_dir[] = "web.config";
+			$array_dir[] = 'web.config';
 		}
 	}
 
@@ -173,10 +172,10 @@ elseif( $step == 2 )
 	{
 		if( ! empty( $global_config['ftp_server'] ) and ! empty( $global_config['ftp_user_name'] ) and ! empty( $global_config['ftp_user_pass'] ) )
 		{
-			// set up basic connection
+			// Set up basic connection
 			$conn_id = ftp_connect( $global_config['ftp_server'], $global_config['ftp_port'], 10 );
 
-			// login with username and password
+			// Login with username and password
 			$login_result = ftp_login( $conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass'] );
 			if( ( ! $conn_id ) || ( ! $login_result ) )
 			{
@@ -185,9 +184,9 @@ elseif( $step == 2 )
 			}
 			elseif( ftp_chdir( $conn_id, $global_config['ftp_path'] ) )
 			{
-				$check_files = array( NV_CACHEDIR, NV_DATADIR, "images", "includes", "index.php", "robots.txt", "js", "language", NV_LOGS_DIR, "mainfile.php", "modules", NV_SESSION_SAVE_PATH, "themes", NV_TEMP_DIR );
+				$check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'robots.txt', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR );
 
-				$list_files = ftp_nlist( $conn_id, "." );
+				$list_files = ftp_nlist( $conn_id, '.' );
 
 				$a = 0;
 				foreach( $list_files as $filename )
@@ -286,24 +285,6 @@ elseif( $step == 2 )
 		ftp_close( $conn_id );
 	}
 
-	if( $nextstep )
-	{
-		$i = 0;
-		for( $ip_file = 0; $ip_file <= 255; $ip_file++ )
-		{
-			if( file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/ip_files/" . $ip_file . ".php", "<?php\n\n\$ranges = array();\n\n?>", LOCK_EX ) )
-			{
-				++$i;
-			}
-		}
-
-		if( $i != 256 )
-		{
-			$nextstep = 0;
-			$array_dir_check[NV_DATADIR . "/ip_files"] = sprintf( $lang_module['dir_not_writable_ip_files'], NV_DATADIR . "/ip_files" );
-		}
-	}
-
 	if( $step < 3 and $nextstep == 1 )
 	{
 		$nv_Request->set_Session( 'maxstep', 3 );
@@ -320,27 +301,46 @@ elseif( $step == 3 )
 	}
 	$title = $lang_module['license'];
 
-	if( file_exists( NV_ROOTDIR . "/install/licenses_" . NV_LANG_DATA . ".html" ) )
+	if( file_exists( NV_ROOTDIR . '/install/licenses_' . NV_LANG_DATA . '.html' ) )
 	{
-		$license = file_get_contents( NV_ROOTDIR . "/install/licenses_" . NV_LANG_DATA . ".html" );
+		$license = file_get_contents( NV_ROOTDIR . '/install/licenses_' . NV_LANG_DATA . '.html' );
 	}
 	else
 	{
-		$license = file_get_contents( NV_ROOTDIR . "/install/licenses.html" );
+		$license = file_get_contents( NV_ROOTDIR . '/install/licenses.html' );
 	}
 
 	$contents = nv_step_3( $license );
 }
 elseif( $step == 4 )
 {
-	$nextstep = 1;
+	$nextstep = 0;
 	$title = $lang_module['check_server'];
 
 	$array_resquest = array();
-	$array_resquest_key = array( 'php_support', 'mysql_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
+	$array_resquest['pdo_support'] = $lang_module['not_compatible'];
+	$array_resquest['class_pdo_support'] = 'highlight_red';
+	if ( class_exists( 'PDO', false ) )
+	{
+		$PDODrivers = PDO::getAvailableDrivers();
+		foreach($PDODrivers as $_driver)
+		{
+			if( file_exists( NV_ROOTDIR . '/install/action_' . $_driver . '.php' ) )
+			{
+				$array_resquest['pdo_support'] = $lang_module['compatible'];
+				$array_resquest['class_pdo_support'] = 'highlight_green';
+				$nextstep = 1;
+				break;
+			}
+		}
+	}
 
+	$array_resquest['php_required'] = $sys_info['php_required'];
+	$sys_info['php_support'] = ( version_compare( PHP_VERSION, $sys_info['php_required'] ) < 0 ) ? 0 : 1;
+	$array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
 	foreach( $array_resquest_key as $key )
 	{
+		$array_resquest['class_' . $key] = ( $sys_info[$key] ) ? 'highlight_green' : 'highlight_red';
 		$array_resquest[$key] = ( $sys_info[$key] ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
 
 		if( ! $sys_info[$key] )
@@ -355,41 +355,115 @@ elseif( $step == 4 )
 	}
 
 	$array_suport = array();
-	$array_support['supports_rewrite'] = ( empty( $sys_info['supports_rewrite'] ) ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['safe_mode'] = ( $sys_info['safe_mode'] ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['register_globals'] = ( ini_get( 'register_globals' ) == '1' || strtolower( ini_get( 'register_globals' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['magic_quotes_runtime'] = ( ini_get( 'magic_quotes_runtime' ) == '1' || strtolower( ini_get( 'magic_quotes_runtime' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['magic_quotes_gpc'] = ( ini_get( 'magic_quotes_gpc' ) == '1' || strtolower( ini_get( 'magic_quotes_gpc' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['magic_quotes_sybase'] = ( ini_get( 'magic_quotes_sybase' ) == '1' || strtolower( ini_get( 'magic_quotes_sybase' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['output_buffering'] = ( ini_get( 'output_buffering' ) == '1' || strtolower( ini_get( 'output_buffering' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['session_auto_start'] = ( ini_get( 'session.auto_start' ) == '1' || strtolower( ini_get( 'session.auto_start' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['display_errors'] = ( ini_get( 'display_errors' ) == '1' || strtolower( ini_get( 'display_errors' ) ) == 'on' ) ? $lang_module['not_compatible'] : $lang_module['compatible'];
-	$array_support['allowed_set_time_limit'] = ( $sys_info['allowed_set_time_limit'] ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
-	$array_support['zlib_support'] = ( $sys_info['zlib_support'] ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
-	$array_support['zip_support'] = ( extension_loaded( 'zip' ) ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+	$array_support['supports_rewrite'] = ( empty( $sys_info['supports_rewrite'] ) ) ? 0 : 1;
+	$array_support['safe_mode'] = ( $sys_info['safe_mode'] ) ? 0 : 1;
+	$array_support['register_globals'] = ( ini_get( 'register_globals' ) == '1' || strtolower( ini_get( 'register_globals' ) ) == 'on' ) ? 0 : 1;
+	$array_support['magic_quotes_runtime'] = ( ini_get( 'magic_quotes_runtime' ) == '1' || strtolower( ini_get( 'magic_quotes_runtime' ) ) == 'on' ) ? 0 : 1;
+	$array_support['magic_quotes_gpc'] = ( ini_get( 'magic_quotes_gpc' ) == '1' || strtolower( ini_get( 'magic_quotes_gpc' ) ) == 'on' ) ? 0 : 1;
+	$array_support['magic_quotes_sybase'] = ( ini_get( 'magic_quotes_sybase' ) == '1' || strtolower( ini_get( 'magic_quotes_sybase' ) ) == 'on' ) ? 0 : 1;
+	$array_support['output_buffering'] = ( ini_get( 'output_buffering' ) == '1' || strtolower( ini_get( 'output_buffering' ) ) == 'on' ) ? 0 : 1;
+	$array_support['session_auto_start'] = ( ini_get( 'session.auto_start' ) == '1' || strtolower( ini_get( 'session.auto_start' ) ) == 'on' ) ? 0 : 1;
+	$array_support['display_errors'] = ( ini_get( 'display_errors' ) == '1' || strtolower( ini_get( 'display_errors' ) ) == 'on' ) ? 0 : 1;
+	$array_support['allowed_set_time_limit'] = ( $sys_info['allowed_set_time_limit'] ) ? 1 : 0;
+	$array_support['zlib_support'] = ( $sys_info['zlib_support'] ) ? 1 : 0;
+	$array_support['zip_support'] = ( extension_loaded( 'zip' ) ) ? 1 : 0;
+	foreach ($array_support as $_key => $_support )
+	{
+		$array_support['class_' . $_key] = ( $_support ) ? 'highlight_green' : 'highlight_red';
+		$array_support[$_key] = ( $_support ) ? $lang_module['compatible'] : $lang_module['not_compatible'];
+	}
 
 	$contents = nv_step_4( $array_resquest, $array_support, $nextstep );
 }
 elseif( $step == 5 )
 {
 	$nextstep = 0;
-	$db_config['dbport'] = '';
 	$db_config['error'] = '';
+	$db_config['dbtype'] = $nv_Request->get_string( 'dbtype', 'post', $db_config['dbtype'] );
 	$db_config['dbhost'] = $nv_Request->get_string( 'dbhost', 'post', $db_config['dbhost'] );
 	$db_config['dbname'] = $nv_Request->get_string( 'dbname', 'post', $db_config['dbname'] );
 	$db_config['dbuname'] = $nv_Request->get_string( 'dbuname', 'post', $db_config['dbuname'] );
 	$db_config['dbpass'] = $nv_Request->get_string( 'dbpass', 'post', $db_config['dbpass'] );
-	$db_config['prefix'] = $nv_Request->get_string( 'prefix', 'post', 'nv3' );
-	$db_config['db_detete'] = $nv_Request->get_int( 'db_detete', 'post', '0' );
+	$db_config['prefix'] = $nv_Request->get_string( 'prefix', 'post', $db_config['prefix'] );
+	$db_config['dbport'] = $nv_Request->get_string( 'dbport', 'post', $db_config['dbport'] );
+	$db_config['db_detete'] = $nv_Request->get_int( 'db_detete', 'post', $db_config['dbdetete'] );
 	$db_config['num_table'] = 0;
 	$db_config['create_db'] = 1;
 
-	if( ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
+	$PDODrivers = PDO::getAvailableDrivers();
+
+	// Check dbtype
+	if( $nv_Request->isset_request( 'checkdbtype', 'post' ) )
 	{
-		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['dbuname'] ) );
+		$dbtype = $nv_Request->get_title( 'checkdbtype', 'post' );
 
-		$db_config['dbname'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['dbname'] ) );
+		$respon = array(
+			'status' => 'error',
+			'dbtype' => $dbtype,
+			'message' => '',
+			'link' => '',
+			'files' => array()
+		);
 
+		if( $dbtype == 'mysql' ) // Not check default dbtype
+		{
+			$respon['status'] = 'success';
+		}
+		else
+		{
+			if( ! in_array( $dbtype, $PDODrivers ) )
+			{
+				$respon['message'] = $lang_module['dbcheck_error_driver'];
+			}
+			else
+			{
+				$array_check_files = array(
+					'install' => 'install/action_' . $dbtype . '.php',
+					'sys' => 'includes/action_' . $dbtype . '.php'
+				);
+
+				include NV_ROOTDIR . '/includes/action_mysql.php';
+
+				$array_module_setup = array_map( "trim", explode( ',', NV_MODULE_SETUP_DEFAULT ) );
+
+				foreach( $array_module_setup as $module )
+				{
+					if( file_exists( NV_ROOTDIR . '/modules/' . $module . '/action_mysql.php' ) )
+					{
+						$array_check_files[] = 'modules/' . $module . '/action_' . $dbtype . '.php';
+					}
+				}
+
+				foreach( $array_check_files as $key => $file )
+				{
+					if( file_exists( NV_ROOTDIR . '/' . $file ) )
+					{
+						unset( $array_check_files[$key] );
+					}
+				}
+
+				if( empty( $array_check_files ) )
+				{
+					$respon['status'] = 'success';
+				}
+				else
+				{
+					asort( $array_check_files );
+					$respon['files'] = $array_check_files;
+					$respon['link'] = 'https://github.com/nukeviet/nukeviet/wiki/NukeViet-database-types';
+					$respon['message'] = $lang_module['dbcheck_error_files'];
+				}
+			}
+		}
+
+		echo json_encode( $respon );
+		die();
+	}
+
+	if( in_array( $db_config['dbtype'], $PDODrivers ) and ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
+	{
+		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbuname'] );
+		$db_config['dbname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbname'] );
 		$db_config['prefix'] = preg_replace( array( '/[^a-z0-9]/', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), strtolower( $db_config['prefix'] ) );
 
 		if( substr( $sys_info['os'], 0, 3 ) == 'WIN' and $db_config['dbhost'] == 'localhost' )
@@ -397,26 +471,108 @@ elseif( $step == 5 )
 			$db_config['dbhost'] = '127.0.0.1';
 		}
 
-		$db = new sql_db( $db_config );
-
-		if( ! empty( $db->error ) )
-		{
-			$db_config['error'] = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
-		}
-		else
+		if( $db_config['dbtype'] == 'mysql' )
 		{
 			$db_config['dbsystem'] = $db_config['dbname'];
+		}
+		elseif( $db_config['dbtype'] == 'oci' and empty( $db_config['dbport'] ) )
+		{
+			$db_config['dbport'] = 1521;
+			$db_config['dbsystem'] = $db_config['dbuname'];
+		}
+
+		// Bat dau phien lam viec cua MySQL
+		$db = new sql_db( $db_config );
+		$connect = $db->connect;
+		if( ! $connect )
+		{
+			$db_config['error'] = 'Could not connect to data server';
+			if( $db_config['dbtype'] == 'mysql' )
+			{
+				$db_config['dbname'] = '';
+				$db = new sql_db( $db_config );
+				$db_config['dbname'] = $db_config['dbsystem'];
+				if( $db->connect )
+				{
+					try
+					{
+						$db->query( 'CREATE DATABASE ' . $db_config['dbname'] );
+						$db->exec( 'USE ' . $db_config['dbname'] );
+
+						$db_config['error'] = '';
+						$connect = 1;
+					}
+					catch( PDOException $e )
+					{
+						trigger_error( $e->getMessage() );
+					}
+				}
+			}
+		}
+
+		if( $connect AND $db_config['dbtype'] == 'mysql' )
+		{
+			try
+			{
+				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+			}
+			catch( PDOException $e )
+			{
+				trigger_error( $e->getMessage() );
+			}
+
+			$row = $db->query( 'SELECT @@session.character_set_database AS character_set_database,  @@session.collation_database AS collation_database')->fetch();
+			if( $row['character_set_database'] != 'utf8' or $row['collation_database'] != $db_config['collation'] )
+			{
+				$db_config['error'] = 'Error character set database';
+				$connect = 0;
+			}
+		}
+
+		if( $connect )
+		{
 			$tables = array();
-			$result = $db->sql_query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
-			$num_table = intval( $db->sql_numrows( $result ) );
+
+			if( $sys_info['allowed_set_time_limit'] )
+			{
+				set_time_limit( 0 );
+			}
+
+			// Cai dat du lieu cho he thong
+			$db_config['error'] = '';
+			$sql_create_table = array();
+			$sql_drop_table = array();
+
+			define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
+			define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
+			define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
+			define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
+			define( 'NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language' );
+			define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
+			define( 'NV_COOKIES_GLOBALTABLE', $db_config['prefix'] . '_cookies' );
+			define( 'NV_CRONJOBS_GLOBALTABLE', $db_config['prefix'] . '_cronjobs' );
+
+			require_once NV_ROOTDIR . '/install/action_' . $db_config['dbtype'] . '.php';
+
+			$num_table = sizeof( $sql_drop_table );
 
 			if( $num_table > 0 )
 			{
 				if( $db_config['db_detete'] == 1 )
 				{
-					while( $item = $db->sql_fetch_assoc( $result ) )
+					foreach( $sql_drop_table as $_sql )
 					{
-						$db->sql_query( "DROP TABLE `" . $item['Name'] . "`" );
+						try
+						{
+							$db->query( $_sql );
+						}
+						catch( PDOException $e )
+						{
+							$nv_Request->set_Session( 'maxstep', 4 );
+							$db_config['error'] = $e->getMessage();
+							trigger_error( $e->getMessage() );
+							break;
+						}
 					}
 					$num_table = 0;
 				}
@@ -431,60 +587,65 @@ elseif( $step == 5 )
 			if( $num_table == 0 )
 			{
 				nv_save_file_config();
-				$db_config['error'] = '';
-				$sql_create_table = array();
+				require_once NV_ROOTDIR . '/install/data.php';
 
-				//cai dat du lieu cho he thong
-				require_once ( NV_ROOTDIR . "/install/data.php" );
-
-				foreach( $sql_create_table as $query )
+				foreach( $sql_create_table as $_sql )
 				{
-					if( ! $db->sql_query( $query ) )
+					try
 					{
-						$nv_Request->set_Session( 'maxstep', 1 );
-						die( $query );
-						$db_config['error'] = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
+						$db->query( $_sql );
+					}
+					catch( PDOException $e )
+					{
+						$nv_Request->set_Session( 'maxstep', 4 );
+						$db_config['error'] = $e->getMessage();
+						trigger_error( $e->getMessage() );
 						break;
 					}
 				}
 
-				//Cai dat du lieu cho cac module
+				// Cai dat du lieu cho cac module
 				if( empty( $db_config['error'] ) )
 				{
 					define( 'NV_IS_MODADMIN', true );
 
-					$module_name = "modules";
+					$module_name = 'modules';
 					$lang_module['modules'] = '';
 					$lang_module['vmodule_add'] = '';
 					$lang_module['autoinstall'] = '';
 					$lang_global['mod_modules'] = '';
 
-					require_once ( NV_ROOTDIR . "/" . NV_ADMINDIR . "/modules/functions.php" );
+					define( 'NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload' );
+					require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/modules/functions.php';
 
 					$module_name = '';
+					$modules_exit = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
 
-					require_once ( NV_ROOTDIR . '/includes/sqldata.php' );
+					// Cai dat du lieu cho ngon ngu
+					require_once NV_ROOTDIR . '/includes/action_' . $db_config['dbtype'] . '.php';
 
-					$modules_exit = nv_scandir( NV_ROOTDIR . "/modules", $global_config['check_module'] );
-					$modules_exit[] = 'global';
-
-					//cai dat du lieu cho ngon ngu
 					$sql_create_table = nv_create_table_sys( NV_LANG_DATA );
-
-					foreach( $sql_create_table as $query )
+					foreach( $sql_create_table as $_sql )
 					{
-						if( ! $db->sql_query( $query ) )
+						try
 						{
-							$nv_Request->set_Session( 'maxstep', 1 );
-							$db_config['error'] = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
+							$db->query( $_sql );
+						}
+						catch( PDOException $e )
+						{
+							$nv_Request->set_Session( 'maxstep', 4 );
+							$db_config['error'] = $e->getMessage();
+							trigger_error( $e->getMessage() );
 							break;
 						}
 					}
+					unset( $sql_create_table );
 
-					$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` ORDER BY `weight` ASC";
-					$result = $db->sql_query( $sql );
+					$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules ORDER BY weight ASC';
+					$result = $db->query( $sql );
+					$modules = $result->fetchAll();
 
-					while( $row = $db->sql_fetchrow( $result ) )
+					foreach( $modules as $key => $row )
 					{
 						$setmodule = $row['title'];
 
@@ -492,100 +653,93 @@ elseif( $step == 5 )
 						{
 							$sm = nv_setup_data_module( NV_LANG_DATA, $setmodule );
 
-							if( $sm != "OK_" . $setmodule )
+							if( $sm != 'OK_' . $setmodule )
 							{
-								die( "error set module: " . $setmodule );
+								die( 'error set module: ' . $setmodule );
 							}
 						}
 						else
 						{
-							$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` WHERE `title`=" . $db->dbescape( $setmodule );
-							$db->sql_query( $sql );
+							unset( $modules[$key] );
+							$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . NV_LANG_DATA . '_modules WHERE title=' . $db->quote( $setmodule ) );
 						}
 					}
 
-					//cai dat du lieu mau
+					// Cai dat du lieu mau he thong
 					$filesavedata = NV_LANG_DATA;
 					$lang_data = NV_LANG_DATA;
 
-					if( ! file_exists( NV_ROOTDIR . "/install/data_" . $lang_data . ".php" ) )
+					if( ! file_exists( NV_ROOTDIR . '/install/data_' . $lang_data . '.php' ) )
 					{
-						$filesavedata = "en";
+						$filesavedata = 'en';
+					}
+					include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php' ;
+
+					try
+					{
+						// Xoa du lieu tai bang nvx_vi_modules
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE module_file NOT IN ('" . implode( "', '", $modules_exit ) . "')" );
+
+						// Xoa du lieu tai bang nvx_setup_extensions
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename NOT IN ('" . implode( "', '", $modules_exit ) . "') AND type='module'" );
+
+						// Xoa du lieu tai bang nvx_vi_blocks_groups
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups WHERE module!='theme' AND module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
+
+						// Xoa du lieu tai bang nvx_vi_blocks
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight WHERE bid NOT IN (SELECT bid FROM " . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups)" );
+
+						// Xoa du lieu tai bang nvx_vi_modthemes
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modthemes WHERE func_id in (SELECT func_id FROM " . $db_config['prefix'] . "_" . $lang_data . "_modfuncs WHERE in_module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules))" );
+
+						// Xoa du lieu tai bang nvx_vi_modfuncs
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modfuncs WHERE in_module NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
+
+						// Xoa du lieu tai bang nvx_menu
+						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows WHERE module_name NOT IN (SELECT title FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules)" );
+					}
+					catch( PDOException $e )
+					{
+						$nv_Request->set_Session( 'maxstep', 4 );
+						$db_config['error'] = $e->getMessage();
+						trigger_error( $e->getMessage() );
+						break;
 					}
 
-					include_once ( NV_ROOTDIR . "/install/data_" . $filesavedata . ".php" );
-
-					foreach( $sql_create_table as $query )
+					// Cai dat du lieu mau module
+					$lang = NV_LANG_DATA;
+					foreach( $modules as $key => $row )
 					{
-						if( ! $db->sql_query( $query ) )
+						$module_name = $row['title'];
+						$module_file = $row['module_file'];
+						$module_data = $row['module_data'];
+
+						if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php' ) )
 						{
-							$nv_Request->set_Session( 'maxstep', 1 );
-							die( $query );
-							$db_config['error'] = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
-							break;
+							include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php';
 						}
-					}
-
-					//xoa du lieu tai bang nv3_vi_blocks
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_weight` WHERE `bid` in (SELECT `bid` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN ('" . implode( "', '", $modules_exit ) . "'))";
-					$db->sql_query( $sql );
-
-					//xoa du lieu tai bang nv3_vi_blocks_groups
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_blocks_groups` WHERE `module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
-					$db->sql_query( $sql );
-
-					//xoa du lieu tai bang nv3_vi_modthemes
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modthemes` WHERE `func_id` in (SELECT `func_id` FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "'))";
-					$db->sql_query( $sql );
-
-					//xoa du lieu tai bang nv3_vi_modfuncs
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modfuncs` WHERE `in_module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
-					$db->sql_query( $sql );
-
-					//xoa du lieu tai bang nv3_vi_modules
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_" . $lang_data . "_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
-					$db->sql_query( $sql );
-
-					//xoa du lieu tai bang nv3_setup_modules
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_setup_modules` WHERE `title` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
-					$db->sql_query( $sql );
-
-					//xoa du lieu tai bang nv3_config
-					$sql = "DELETE FROM `" . $db_config['prefix'] . "_config` WHERE `lang`=" . $db->dbescape( $lang_data ) . " AND `module` NOT IN ('" . implode( "', '", $modules_exit ) . "')";
-					$db->sql_query( $sql );
-
-					$sql = "SELECT * FROM `" . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules` WHERE `title`='news'";
-					$result = $db->sql_query( $sql );
-
-					if( $db->sql_numrows( $result ) )
-					{
-						$result = $db->sql_query( "SELECT catid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_cat` ORDER BY `order` ASC" );
-
-						while( list( $catid_i ) = $db->sql_fetchrow( $result ) )
+						elseif(  file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php' ) )
 						{
-							nv_create_table_news( $catid_i );
+							include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
 						}
-						$db->sql_freeresult();
 
-						$result = $db->sql_query( "SELECT id, listcatid FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` ORDER BY `id` ASC" );
-
-						while( list( $id, $listcatid ) = $db->sql_fetchrow( $result ) )
+						if( empty( $array_data['socialbutton'] ) )
 						{
-							$arr_catid = explode( ",", $listcatid );
-							foreach( $arr_catid as $catid )
+							if( $module_file == 'news' )
 							{
-								$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_" . $lang_data . "_news_" . $catid . "` SELECT * FROM `" . $db_config['prefix'] . "_" . $lang_data . "_news_rows` WHERE `id`=" . $id . "" );
+								$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = '" . $module_name . "' AND config_name = 'socialbutton' AND lang='" . $lang . "'" );
 							}
 						}
-
-						$db->sql_freeresult();
 					}
 
-					++$step;
-					$nv_Request->set_Session( 'maxstep', $step );
+					if( empty( $db_config['error'] ))
+					{
+						++ $step;
+						$nv_Request->set_Session( 'maxstep', $step );
 
-					Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
-					exit();
+						Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
+						exit();
+					}
 				}
 			}
 		}
@@ -597,41 +751,35 @@ elseif( $step == 5 )
 elseif( $step == 6 )
 {
 	$nextstep = 0;
-	$array_data = array();
-	$error = $site_name = $login = $email = $password = $re_password = '';
+	$error  = '';
+
+	define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
+
+	// Bat dau phien lam viec cua MySQL
+	$db = new sql_db( $db_config );
+	if( ! empty( $db->error ) )
+	{
+		$error = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
+	}
+	$array_data['site_name'] = $nv_Request->get_title( 'site_name', 'post', $array_data['site_name'], 1 );
+	$array_data['nv_login'] = nv_substr( $nv_Request->get_title( 'nv_login', 'post', $array_data['nv_login'], 1 ), 0, NV_UNICKMAX );
+	$array_data['nv_email'] = $nv_Request->get_title( 'nv_email', 'post', $array_data['nv_email'] );
+	$array_data['nv_password'] = $nv_Request->get_title( 'nv_password', 'post', $array_data['nv_password'] );
+	$array_data['re_password'] = $nv_Request->get_title( 're_password', 'post', $array_data['re_password'] );
+	$array_data['lang_multi'] = (int) $nv_Request->get_bool( 'lang_multi', 'post', $array_data['lang_multi'] );
+
+	$check_login = nv_check_valid_login( $array_data['nv_login'], NV_UNICKMAX, NV_UNICKMIN );
+	$check_pass = nv_check_valid_pass( $array_data['nv_password'], NV_UPASSMAX, NV_UPASSMIN );
+	$check_email = nv_check_valid_email( $array_data['nv_email'] );
+
+	$array_data['question'] = $nv_Request->get_title( 'question', 'post', $array_data['question'], 1 );
+	$array_data['answer_question'] = $nv_Request->get_title( 'answer_question', 'post', $array_data['answer_question'], 1 );
+
+	$global_config['site_email'] = $array_data['nv_email'];
 
 	if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) )
 	{
-		$site_name = $nv_Request->get_title( 'site_name', 'post', '', 1 );
-		$login = nv_substr( $nv_Request->get_title( 'nv_login', 'post', '', 1 ), 0, NV_UNICKMAX );
-		$email = $nv_Request->get_title( 'nv_email', 'post', '' );
-		$password = $nv_Request->get_title( 'nv_password', 'post', '' );
-		$re_password = $nv_Request->get_title( 're_password', 'post', '' );
-		$check_login = nv_check_valid_login( $login, NV_UNICKMAX, NV_UNICKMIN );
-		$check_pass = nv_check_valid_pass( $password, NV_UPASSMAX, NV_UPASSMIN );
-		$check_email = nv_check_valid_email( $email );
-
-		$question = $nv_Request->get_title( 'question', 'post', '', 1 );
-		$answer_question = $nv_Request->get_title( 'answer_question', 'post', '', 1 );
-
-		$array_data['site_name'] = $site_name;
-		$array_data['nv_login'] = $login;
-		$array_data['nv_email'] = $email;
-		$array_data['nv_password'] = $password;
-		$array_data['re_password'] = $re_password;
-		$array_data['nv_login'] = $login;
-		$array_data['question'] = $question;
-		$array_data['answer_question'] = $answer_question;
-
-		$global_config['site_email'] = $email;
-
-		$db = new sql_db( $db_config );
-
-		if( ! empty( $db->error ) )
-		{
-			$error = ( ! empty( $db->error['user_message'] ) ) ? $db->error['user_message'] : $db->error['message'];
-		}
-		elseif( empty( $site_name ) )
+		if( empty( $array_data['site_name'] ) )
 		{
 			$error = $lang_module['err_sitename'];
 		}
@@ -639,9 +787,9 @@ elseif( $step == 6 )
 		{
 			$error = $check_login;
 		}
-		elseif( $login != $db->fixdb( $login ) )
+		elseif( "'" . $array_data['nv_login'] . "'" != $db->quote( $array_data['nv_login'] ) )
 		{
-			$error = sprintf( $lang_module['account_deny_name'], '<strong>' . $login . '</strong>' );
+			$error = sprintf( $lang_module['account_deny_name'], '<strong>' . $array_data['nv_login'] . '</strong>' );
 		}
 		elseif( ! empty( $check_email ) )
 		{
@@ -651,69 +799,102 @@ elseif( $step == 6 )
 		{
 			$error = $check_pass;
 		}
-		elseif( $password != $re_password )
+		elseif( $array_data['nv_password'] != $array_data['re_password'] )
 		{
-			$error = sprintf( $lang_global['passwordsincorrect'], $password, $re_password );
+			$error = sprintf( $lang_global['passwordsincorrect'], $array_data['nv_password'], $array_data['re_password'] );
 		}
-		elseif( empty( $question ) )
+		elseif( empty( $array_data['question'] ) )
 		{
 			$error = $lang_module['your_question_empty'];
 		}
-		elseif( empty( $answer_question ) )
+		elseif( empty( $array_data['answer_question'] ) )
 		{
 			$error = $lang_module['answer_empty'];
 		}
-		else
+		elseif( empty( $error ))
 		{
-			$password = $crypt->hash( $password );
+			$password = $crypt->hash_password( $array_data['nv_password'], $global_config['hashprefix'] );
 			define( 'NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config' );
 
-			$db->sql_query( "TRUNCATE TABLE `" . $db_config['prefix'] . "_users`" );
-			$sql = "INSERT INTO `" . $db_config['prefix'] . "_users` (`userid`, `username`, `md5username`, `password`, `email`, `full_name`, `gender`, `photo`, `birthday`, `sig`, `regdate`, `question`, `answer`, `passlostkey`, `view_mail`, `remember`, `in_groups`, `active`, `checknum`, `last_login`, `last_ip`, `last_agent`, `last_openid`, `idsite`)
-				VALUES(NULL, " . $db->dbescape( $login ) . ", " . $db->dbescape( nv_md5safe( $login ) ) . ", " . $db->dbescape( $password ) . ", " . $db->dbescape( $email ) . ", " . $db->dbescape( $login ) . ", '', '', 0, NULL, " . NV_CURRENTTIME . ", " . $db->dbescape( $question ) . ", " . $db->dbescape( $answer_question ) . ", '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)";
-			$userid = $db->sql_query_insert_id( $sql );
+			$userid = 1;
+			$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_users' );
+			$db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_authors' );
 
-			$db->sql_query( "TRUNCATE TABLE `" . $db_config['prefix'] . "_authors`" );
-			$sql = "INSERT INTO `" . $db_config['prefix'] . "_authors` (`admin_id`, `editor`, `lev`, `files_level`, `position`, `addtime`, `edittime`, `is_suspend`, `susp_reason`, `check_num`, `last_login`, `last_ip`, `last_agent`) VALUES(" . $userid . ", 'ckeditor', 1, 'adobe,application,archives,audio,documents,flash,images,real,video|1|1|1', 'Administrator', 0, 0, 0, '', '', 0, '', '')";
+			$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_users
+				(userid, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
+				VALUES(" . $userid . ", :username, :md5username, :password, :email, :first_name, '', '', '', 0, '', " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)" );
+			$sth->bindParam( ':username', $array_data['nv_login'], PDO::PARAM_STR );
+			$sth->bindValue( ':md5username', nv_md5safe( $array_data['nv_login'] ), PDO::PARAM_STR );
+			$sth->bindParam( ':password', $password, PDO::PARAM_STR );
+			$sth->bindParam( ':email', $array_data['nv_email'], PDO::PARAM_STR );
+			$sth->bindParam( ':first_name', $array_data['nv_login'], PDO::PARAM_STR );
+			$sth->bindParam( ':question', $array_data['question'], PDO::PARAM_STR );
+			$sth->bindParam( ':answer_question', $array_data['answer_question'], PDO::PARAM_STR );
+			$ok1 = $sth->execute();
 
-			if( $userid > 0 and $db->sql_query( $sql ) )
+			$ok2 = $db->exec( "INSERT INTO " . $db_config['prefix'] . "_authors (admin_id, editor, lev, files_level, position, addtime, edittime, is_suspend, susp_reason, check_num, last_login, last_ip, last_agent) VALUES(" . $userid . ", 'ckeditor', 1, 'adobe,application,archives,audio,documents,flash,images,real,video|1|1|1', 'Administrator', 0, 0, 0, '', '', 0, '', '')" );
+
+			if( $ok1 and $ok2 )
 			{
-				$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_users_info` (`userid`) VALUES (" . $userid . ")" );
-				$db->sql_query( "INSERT INTO `" . $db_config['prefix'] . "_groups_users` (`group_id`, `userid`, `data`) VALUES(1, " . $userid . ", '0')" );
-
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', 'site_email', " . $db->dbescape_string( $global_config['site_email'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', 'error_send_email', " . $db->dbescape_string( $global_config['site_email'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'my_domains', " . $db->dbescape_string( NV_SERVER_NAME ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'cookie_prefix', " . $db->dbescape_string( $global_config['cookie_prefix'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'session_prefix', " . $db->dbescape_string( $global_config['session_prefix'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'site_timezone', " . $db->dbescape_string( $global_config['site_timezone'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'site', 'statistics_timezone', " . $db->dbescape_string( NV_SITE_TIMEZONE_NAME ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'proxy_blocker', " . $db->dbescape_string( $global_config['proxy_blocker'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'str_referer_blocker', " . $db->dbescape_string( $global_config['str_referer_blocker'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'lang_multi', " . $db->dbescape_string( $global_config['lang_multi'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'lang_geo', " . $db->dbescape_string( $global_config['lang_geo'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'site_lang', " . $db->dbescape_string( $global_config['site_lang'] ) . ")" );
-
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_server', " . $db->dbescape_string( $global_config['ftp_server'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_port', " . $db->dbescape_string( $global_config['ftp_port'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_user_name', " . $db->dbescape_string( $global_config['ftp_user_name'] ) . ")" );
-
-				$ftp_user_pass = nv_base64_encode( $crypt->aes_encrypt( $global_config['ftp_user_pass'] ) );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_user_pass', " . $db->dbescape_string( $ftp_user_pass ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_path', " . $db->dbescape_string( $global_config['ftp_path'] ) . ")" );
-				$db->sql_query( "INSERT INTO `" . NV_CONFIG_GLOBALTABLE . "` (`lang`, `module`, `config_name`, `config_value`) VALUES ('sys', 'global', 'ftp_check_login', " . $db->dbescape_string( $global_config['ftp_check_login'] ) . ")" );
-				$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = " . $db->dbescape_string( $site_name ) . " WHERE `module` = 'global' AND `config_name` = 'site_name'" );
-
-				$result = $db->sql_query( "SELECT * FROM `" . $db_config['prefix'] . "_authors_module` ORDER BY `weight` ASC" );
-				while( $row = $db->sql_fetch_assoc( $result ) )
+				try
 				{
-					$checksum = md5( $row['module'] . "#" . $row['act_1'] . "#" . $row['act_2'] . "#" . $row['act_3'] . "#" . $global_config['sitekey'] );
-					$db->sql_query( "UPDATE `" . $db_config['prefix'] . "_authors_module` SET `checksum` = '" . $checksum . "' WHERE `mid` = " . $row['mid'] );
+					$db->query( 'INSERT INTO ' . $db_config['prefix'] . '_users_info (userid) VALUES (' . $userid . ')' );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_groups_users (group_id, userid, data) VALUES(1, " . $userid . ", '0')" );
+
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'statistics_timezone', " . $db->quote( NV_SITE_TIMEZONE_NAME ) . ")" );
+                    $db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'site_email', " . $db->quote( $global_config['site_email'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'error_set_logs', " . $db->quote( $global_config['error_set_logs'] ) . ")" );
+                    $db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'error_send_email', " . $db->quote( $global_config['site_email'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'site_lang', '" . NV_LANG_DATA . "')" );
+
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'my_domains', " . $db->quote( NV_SERVER_NAME ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'cookie_prefix', " . $db->quote( $global_config['cookie_prefix'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'session_prefix', " . $db->quote( $global_config['session_prefix'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'site_timezone', " . $db->quote( $global_config['site_timezone'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'proxy_blocker', " . $db->quote( $global_config['proxy_blocker'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'str_referer_blocker', " . $db->quote( $global_config['str_referer_blocker'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'lang_multi', " . $db->quote( $global_config['lang_multi'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'lang_geo', " . $db->quote( $global_config['lang_geo'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_server', " . $db->quote( $global_config['ftp_server'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_port', " . $db->quote( $global_config['ftp_port'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_user_name', " . $db->quote( $global_config['ftp_user_name'] ) . ")" );
+
+					$ftp_user_pass = nv_base64_encode( $crypt->aes_encrypt( $global_config['ftp_user_pass'] ) );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_user_pass', " . $db->quote( $ftp_user_pass ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_path', " . $db->quote( $global_config['ftp_path'] ) . ")" );
+					$db->query( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'ftp_check_login', " . $db->quote( $global_config['ftp_check_login'] ) . ")" );
+					$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = " . $db->quote( $array_data['site_name'] ) . " WHERE module = 'global' AND config_name = 'site_name'" );
+
+					$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_authors_module ORDER BY weight ASC" );
+					while( $row = $result->fetch() )
+					{
+						$checksum = md5( $row['module'] . "#" . $row['act_1'] . "#" . $row['act_2'] . "#" . $row['act_3'] . "#" . $global_config['sitekey'] );
+						$db->query( "UPDATE " . $db_config['prefix'] . "_authors_module SET checksum = '" . $checksum . "' WHERE mid = " . $row['mid'] );
+					}
+
+					if( ! ( nv_function_exists( 'finfo_open' ) or nv_class_exists( 'finfo', false ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) ) )
+					{
+						$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = 'mild' WHERE lang='sys' AND module = 'global' AND config_name = 'upload_checking_mode'" );
+					}
+					if( empty( $array_data['lang_multi'] ) )
+					{
+						$global_config['rewrite_optional'] = 1;
+						$global_config['lang_multi'] = 0;
+						$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE lang='sys' AND module = 'global' AND config_name = 'lang_multi'" );
+						$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '1' WHERE lang='sys' AND module = 'global' AND config_name = 'rewrite_optional'" );
+
+						$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . NV_LANG_DATA . "_modules where title='news'" );
+						if( $result->fetchColumn() )
+						{
+							$global_config['rewrite_op_mod'] = 'news';
+							$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = 'news' WHERE lang='sys' AND module = 'global' AND config_name = 'rewrite_op_mod'" );
+						}
+					}
 				}
-
-				if( ! ( nv_function_exists( 'finfo_open' ) or nv_class_exists( "finfo" ) or nv_function_exists( 'mime_content_type' ) or ( substr( $sys_info['os'], 0, 3 ) != 'WIN' and ( nv_function_exists( 'system' ) or nv_function_exists( 'exec' ) ) ) ) )
+				catch( PDOException $e )
 				{
-					$db->sql_query( "UPDATE `" . NV_CONFIG_GLOBALTABLE . "` SET `config_value` = 'mild' WHERE `lang`='sys' AND `module` = 'global' AND `config_name` = 'upload_checking_mode'" );
+					trigger_error( $e->getMessage() );
+					die( $e->getMessage() );
 				}
 
 				nv_save_file_config();
@@ -721,7 +902,9 @@ elseif( $step == 6 )
 				$array_config_rewrite = array(
 					'rewrite_optional' => $global_config['rewrite_optional'],
 					'rewrite_endurl' => $global_config['rewrite_endurl'],
-					'rewrite_exturl' => $global_config['rewrite_exturl']
+					'rewrite_exturl' => $global_config['rewrite_exturl'],
+					'rewrite_op_mod' => $global_config['rewrite_op_mod'],
+					'ssl_https' => 0
 				);
 				$rewrite = nv_rewrite_change( $array_config_rewrite );
 				if( empty( $rewrite[0] ) )
@@ -730,51 +913,135 @@ elseif( $step == 6 )
 				}
 				elseif( nv_save_file_config_global() )
 				{
-					++$step;
+					++ $step;
 					$nv_Request->set_Session( 'maxstep', $step );
 
 					nv_save_file_config();
 
-					@rename( NV_ROOTDIR . "/" . $file_config_temp, NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME );
+					@rename( NV_ROOTDIR . '/' . $file_config_temp, NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME );
 
-					if( is_writable( NV_ROOTDIR . "/robots.txt" ) )
+					if( is_writable( NV_ROOTDIR . '/robots.txt' ) )
 					{
-						$contents = file_get_contents( NV_ROOTDIR . "/robots.txt" );
+						$contents = file_get_contents( NV_ROOTDIR . '/robots.txt' );
 
-						if( $global_config['is_url_rewrite'] )
+						$check_rewrite_file = nv_check_rewrite_file();
+
+						if( $check_rewrite_file )
 						{
-							$check_rewrite_file = nv_check_rewrite_file();
-
-							if( $check_rewrite_file )
-							{
-								$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "Sitemap.xml";
-							}
-							else
-							{
-								$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php/SitemapIndex" . $global_config['rewrite_endurl'];
-							}
+							$content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap.xml';
 						}
 						else
 						{
-							$content_sitemap = "Sitemap: " . NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_NAME_VARIABLE . "=SitemapIndex";
+							$content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php/SitemapIndex' . $global_config['rewrite_endurl'];
 						}
 
 						$contents = str_replace( 'Sitemap: http://yousite.com/?nv=SitemapIndex', $content_sitemap, $contents );
 
-						file_put_contents( NV_ROOTDIR . "/robots.txt", $contents, LOCK_EX );
+						file_put_contents( NV_ROOTDIR . '/robots.txt', $contents, LOCK_EX );
 					}
 
-					Header( "Location: " . NV_BASE_SITEURL . "install/index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&step=" . $step );
+					define( 'NV_IS_MODADMIN', true );
+
+					$module_name = 'upload';
+					$lang_global['mod_upload'] = 'upload';
+					$global_config['upload_logo'] = '';
+
+					define( 'NV_UPLOAD_GLOBALTABLE', $db_config['prefix'] . '_upload' );
+					define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
+					require_once NV_ROOTDIR . '/' . NV_ADMINDIR . '/upload/functions.php';
+
+					$real_dirlist = array();
+					foreach( $allow_upload_dir as $dir )
+					{
+						$real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
+					}
+					foreach( $real_dirlist as $dirname )
+					{
+						try
+						{
+							$array_dirname[$dirname] = $db->insert_id( "INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('" . $dirname . "', '0', '0', '0', '0', '0')", "did" );
+						}
+						catch (PDOException $e)
+						{
+							trigger_error( $e->getMessage() );
+						}
+					}
+
+					// Data Counter
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('c_time', 'start', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('c_time', 'last', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('total', 'hits', 0, 0, 0)" );
+
+					$year = date( 'Y' );;
+					for( $i=0; $i < 9; $i++ )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('year', '" . $year . "', 0, 0, 0)" );
+						++$year;
+					}
+
+					$ar_tmp = explode(',', 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec');
+					foreach( $ar_tmp as $month )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('month', '" . $month . "', 0, 0, 0)" );
+					}
+
+					for( $i=1; $i < 32; $i++ )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('day', '" . str_pad( $i, 2, '0', STR_PAD_LEFT ) . "', 0, 0, 0)" );
+					}
+
+					$ar_tmp = explode(',', 'Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday');
+					foreach( $ar_tmp as $dayofweek )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('dayofweek', '" . $dayofweek . "', 0, 0, 0)" );
+					}
+
+					for( $i=0; $i < 24; $i++ )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('hour', '" . str_pad( $i, 2, '0', STR_PAD_LEFT ) . "', 0, 0, 0)" );
+					}
+
+					$bots = array('googlebot', 'msnbot', 'bingbot', 'yahooslurp', 'w3cvalidator');
+					foreach( $bots as $_bot )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote( $_bot ) . ", 0, 0, 0)" );
+					}
+
+					$tmp_array = array('opera','operamini','webtv','explorer','edge','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
+					foreach( $tmp_array as $_browser )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote( $_browser ) . ", 0, 0, 0)" );
+					}
+
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Mobile', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'bots', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)" );
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unspecified', 0, 0, 0)" );
+
+					$tmp_array = array('unknown', 'win', 'win10', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
+					foreach( $tmp_array as $_os )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote( $_os ) . ", 0, 0, 0)" );
+					}
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', 'Unspecified', 0, 0, 0)" );
+
+					foreach( $countries as $_country => $v )
+					{
+						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', " . $db->quote( $_country ) . ", 0, 0, 0)" );
+					}
+					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('country', 'unkown', 0, 0, 0)" );
+
+					Header( 'Location: ' . NV_BASE_SITEURL . 'install/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&step=' . $step );
 					exit();
 				}
 				else
 				{
-					$error = sprintf( $lang_module['file_not_writable'], NV_DATADIR . "/config_global.php" );
+					$error = sprintf( $lang_module['file_not_writable'], NV_DATADIR . '/config_global.php' );
 				}
 			}
 			else
 			{
-				$error = "Error add Administrator";
+				$error = 'Error add Administrator';
 			}
 		}
 	}
@@ -787,7 +1054,7 @@ elseif( $step == 7 )
 {
 	$finish = 0;
 
-	if( file_exists( NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME ) )
+	if( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME ) )
 	{
 		$ftp_check_login = 0;
 		$ftp_server_array = array( 'ftp_check_login' => 0 );
@@ -800,10 +1067,10 @@ elseif( $step == 7 )
 
 		if( isset( $ftp_server_array['ftp_check_login'] ) and intval( $ftp_server_array['ftp_check_login'] ) == 1 )
 		{
-			// set up basic connection
+			// Set up basic connection
 			$conn_id = ftp_connect( $ftp_server_array['ftp_server'], $ftp_server_array['ftp_port'], 10 );
 
-			// login with username and password
+			// Login with username and password
 			$login_result = ftp_login( $conn_id, $ftp_server_array['ftp_user_name'], $ftp_server_array['ftp_user_pass'] );
 
 			if( ( ! $conn_id ) || ( ! $login_result ) )
@@ -818,18 +1085,18 @@ elseif( $step == 7 )
 
 		if( $ftp_check_login == 1 )
 		{
-			ftp_rename( $conn_id, NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME, NV_CONFIG_FILENAME );
+			ftp_rename( $conn_id, NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME, NV_CONFIG_FILENAME );
 			nv_chmod_dir( $conn_id, NV_UPLOADS_DIR, true );
 			ftp_chmod( $conn_id, 0644, NV_CONFIG_FILENAME );
 			ftp_close( $conn_id );
 		}
 		else
 		{
-			@rename( NV_ROOTDIR . "/" . NV_TEMP_DIR . "/" . NV_CONFIG_FILENAME, NV_ROOTDIR . "/" . NV_CONFIG_FILENAME );
+			@rename( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_CONFIG_FILENAME, NV_ROOTDIR . '/' . NV_CONFIG_FILENAME );
 		}
 	}
 
-	if( file_exists( NV_ROOTDIR . "/" . NV_CONFIG_FILENAME ) )
+	if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_FILENAME ) )
 	{
 		$finish = 1;
 	}
@@ -850,33 +1117,41 @@ function nv_save_file_config()
 
 	if( is_writable( NV_ROOTDIR . '/' . $file_config_temp ) or is_writable( NV_ROOTDIR . '/' . NV_TEMP_DIR ) )
 	{
-		$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) or $global_config['cookie_prefix'] == "nv3" ) ? "nv3c_" . nv_genpass( 5 ) : $global_config['cookie_prefix'];
-		$global_config['session_prefix'] = ( empty( $global_config['session_prefix'] ) or $global_config['session_prefix'] == "nv3" ) ? "nv3s_" . nv_genpass( 6 ) : $global_config['session_prefix'];
-		$global_config['site_email'] = ( ! isset( $global_config['site_email'] ) ) ? "" : $global_config['site_email'];
+		$global_config['cookie_prefix'] = ( empty( $global_config['cookie_prefix'] ) or $global_config['cookie_prefix'] == 'nv4' ) ? 'nv4c_' . nv_genpass( 5 ) : $global_config['cookie_prefix'];
+		$global_config['session_prefix'] = ( empty( $global_config['session_prefix'] ) or $global_config['session_prefix'] == 'nv4' ) ? 'nv4s_' . nv_genpass( 6 ) : $global_config['session_prefix'];
+		$global_config['site_email'] = ( ! isset( $global_config['site_email'] ) ) ? '' : $global_config['site_email'];
 
-		$db_config['dbhost'] = ( ! isset( $db_config['dbhost'] ) ) ? "localhost" : $db_config['dbhost'];
-		$db_config['dbport'] = ( ! isset( $db_config['dbport'] ) ) ? "" : $db_config['dbport'];
-		$db_config['dbname'] = ( ! isset( $db_config['dbname'] ) ) ? "" : $db_config['dbname'];
-		$db_config['dbuname'] = ( ! isset( $db_config['dbuname'] ) ) ? "" : $db_config['dbuname'];
-		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? "" : $db_config['dbpass'];
-		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? "nv3" : $db_config['prefix'];
+		$db_config['dbhost'] = ( ! isset( $db_config['dbhost'] ) ) ? 'localhost' : $db_config['dbhost'];
+		$db_config['dbport'] = ( ! isset( $db_config['dbport'] ) ) ? '' : $db_config['dbport'];
+		$db_config['dbname'] = ( ! isset( $db_config['dbname'] ) ) ? '' : $db_config['dbname'];
+		$db_config['dbuname'] = ( ! isset( $db_config['dbuname'] ) ) ? '' : $db_config['dbuname'];
+		$db_config['dbsystem'] = ( isset( $db_config['dbsystem'] ) ) ? $db_config['dbsystem'] : $db_config['dbuname'];
+		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? '' : $db_config['dbpass'];
+		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? 'nv4' : $db_config['prefix'];
+
+		$persistent = ( $db_config['persistent'] ) ? 'true' : 'false';
 
 		$content = '';
 		$content .= "<?php\n\n";
 		$content .= NV_FILEHEAD . "\n\n";
 		$content .= "if ( ! defined( 'NV_MAINFILE' ) )\n";
 		$content .= "{\n";
-		$content .= " die( 'Stop!!!' );\n";
+		$content .= "\tdie( 'Stop!!!' );\n";
 		$content .= "}\n\n";
 		$content .= "\$db_config['dbhost'] = '" . $db_config['dbhost'] . "';\n";
 		$content .= "\$db_config['dbport'] = '" . $db_config['dbport'] . "';\n";
 		$content .= "\$db_config['dbname'] = '" . $db_config['dbname'] . "';\n";
+		$content .= "\$db_config['dbsystem'] = '" . $db_config['dbsystem'] . "';\n";
 		$content .= "\$db_config['dbuname'] = '" . $db_config['dbuname'] . "';\n";
 		$content .= "\$db_config['dbpass'] = '" . $db_config['dbpass'] . "';\n";
+		$content .= "\$db_config['dbtype'] = '" . $db_config['dbtype'] . "';\n";
+		$content .= "\$db_config['collation'] = '" . $db_config['collation'] . "';\n";
+		$content .= "\$db_config['persistent'] = " . $persistent . ";\n";
 		$content .= "\$db_config['prefix'] = '" . $db_config['prefix'] . "';\n";
 		$content .= "\n";
 		$content .= "\$global_config['idsite'] = 0;\n";
 		$content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
+		$content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";
 
 		if( $step < 7 )
 		{
@@ -913,10 +1188,7 @@ function nv_save_file_config()
 			$content .= "\$global_config['ftp_check_login'] = '" . $global_config['ftp_check_login'] . "';\n";
 		}
 
-		$content .= "\n";
-		$content .= "?>";
-
-		file_put_contents( NV_ROOTDIR . '/' . $file_config_temp, $content, LOCK_EX );
+		file_put_contents( NV_ROOTDIR . '/' . $file_config_temp, trim( $content ), LOCK_EX );
 
 		return true;
 	}
@@ -925,5 +1197,3 @@ function nv_save_file_config()
 		return false;
 	}
 }
-
-?>

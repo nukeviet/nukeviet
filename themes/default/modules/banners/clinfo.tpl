@@ -1,30 +1,28 @@
 <!-- BEGIN: clinfo -->
 <!-- BEGIN: management -->
-<div style="border:1px #ccc solid;padding:5px">
-	<h3 style="margin-bottom:15px"><strong>{LANG.tool_management}</strong></h3>
-	<div class="plan_title" style="float:left">
-		<a href="{clientinfo_link}">{LANG.client_info}</a>
-	</div>
-	<div class="plan_title" style="float:left;margin-left:10px">
-		<a href="{clientinfo_addads}">{LANG.client_addads}</a>
-	</div>
-	<div class="plan_title" style="float:left;margin-left:10px">
-		<a href="{clientinfo_stats}">{LANG.client_stats}</a>
-	</div>
-	<div style="clear:both"></div>
-</div>
+<ul class="nav nav-tabs m-bottom">
+	<li><a href="{MANAGEMENT.main}">{LANG.plan_info}</a></li>
+	<li class="active"><a href="{MANAGEMENT.link}">{LANG.client_info}</a></li>
+	<li><a href="{MANAGEMENT.addads}">{LANG.client_addads}</a></li>
+	<li><a href="{MANAGEMENT.stats}">{LANG.client_stats}</a></li>
+	<li><a href="{MANAGEMENT.logout}">{GLANG.logout}</a></li>
+</ul>
 <!-- END: management -->
 <div id="clinfo">
-	<!-- BEGIN: name_value -->
-	<div class="{CLASS}">
-		<div class="value">
-			{INFO_VALUE}
-		</div>
-		{INFO_NAME}:
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<tbody>
+				<!-- BEGIN: name_value -->
+				<tr>
+					<td>{INFO_NAME}</td>
+					<td>{INFO_VALUE}</td>
+				</tr>
+				<!-- END: name_value -->			
+			</tbody>
+		</table>
 	</div>
-	<!-- END: name_value -->
 </div>
-<div style="height:27px;clear: both;">
-	<a class="button2" href="javascript:void(0);" onclick="{EDIT_ONCLICK}"><span><span>{EDIT_NAME}</span> </span></a>
-</div>
+<p class="text-center">
+	<a class="btn btn-info" href="javascript:void(0);" onclick="{EDIT_ONCLICK}">{EDIT_NAME}</a>
+</p>
 <!-- END: clinfo -->

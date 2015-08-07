@@ -1,13 +1,12 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: info -->
-<div class="quote" style="width:98%">
-	<blockquote><span>{CONTENTS.info}</span></blockquote>
-</div>
-<div class="clear"></div>
+<div class="alert alert-info">{CONTENTS.info}</div>
 <!-- END: info -->
 <!-- BEGIN: empty -->
-<table summary = "{CONTENTS.caption}" class="tab1">
-	<caption>{CONTENTS.caption}</caption>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<caption><em class="fa fa-file-text-o">&nbsp;</em>{CONTENTS.caption}</caption>
+	</table>
+</div>
 <!-- END: empty -->
 <!-- END: main -->

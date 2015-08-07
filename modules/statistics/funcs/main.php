@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 14/6/2010, 16:59
  */
 
@@ -13,8 +14,6 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-$contents = '';
-
 $current_month_num = date( 'n', NV_CURRENTTIME );
 $current_year = date( 'Y', NV_CURRENTTIME );
 $current_day = date( 'j', NV_CURRENTTIME );
@@ -22,14 +21,11 @@ $current_number_of_days = date( 't', NV_CURRENTTIME );
 $current_dayofweek = date( 'l', NV_CURRENTTIME );
 
 //Thong ke theo nam
-$sql = "SELECT `c_val`,`c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='year' ORDER BY `c_val`";
-$result = $db->sql_query( $sql );
-
 $max = 0;
 $total = 0;
 $year_list = array();
-
-while( list( $year, $count ) = $db->sql_fetchrow( $result ) )
+$result = $db->query( "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='year' ORDER BY c_val" );
+while( list( $year, $count ) = $result->fetch( 3 ) )
 {
 	$year_list[$year] = $count;
 	if( $count > $max )
@@ -65,13 +61,13 @@ $month_list2 = array_chunk( $month_list, $current_month_num, true );
 $month_list2 = $month_list2[0];
 $month_list2 = "'" . implode( "','", array_keys( $month_list2 ) ) . "'";
 
-$sql = "SELECT `c_val`,`c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='month' AND `c_val` IN (" . $month_list2 . ")";
-$result = $db->sql_query( $sql );
 
 $max = 0;
 $total = 0;
 
-while( list( $month, $count ) = $db->sql_fetchrow( $result ) )
+$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='month' AND c_val IN (" . $month_list2 . ")";
+$result = $db->query( $sql );
+while( list( $month, $count ) = $result->fetch( 3 ) )
 {
 	$month_list[$month]['count'] = $count;
 	if( $count > $max )
@@ -89,14 +85,14 @@ $ctsm['max'] = $max;
 $ctsm['total'] = array( $lang_global['total'], number_format( $total ) );
 
 // ngay trong thang
-$sql = "SELECT `c_val`,`c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='day' AND `c_val` <= " . $current_number_of_days . " ORDER BY `c_val`";
-$result = $db->sql_query( $sql );
 
 $max = 0;
 $total = 0;
 $day_list = array();
 
-while( list( $day, $count ) = $db->sql_fetchrow( $result ) )
+$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='day' AND c_val <= " . $current_number_of_days . " ORDER BY c_val";
+$result = $db->query( $sql );
+while( list( $day, $count ) = $result->fetch( 3 ) )
 {
 	$day_list[$day] = $count;
 	if( $count > $max )
@@ -126,13 +122,13 @@ $dayofweek_list['Saturday'] = array( 'fullname' => $lang_global['saturday'], 'co
 
 $dayofweek_list2 = "'" . implode( "','", array_keys( $dayofweek_list ) ) . "'";
 
-$sql = "SELECT `c_val`,`c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='dayofweek' AND `c_val` IN (" . $dayofweek_list2 . ")";
-$result = $db->sql_query( $sql );
+$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='dayofweek' AND c_val IN (" . $dayofweek_list2 . ")";
+$result = $db->query( $sql );
 
 $max = 0;
 $total = 0;
 
-while( list( $dayofweek, $count ) = $db->sql_fetchrow( $result ) )
+while( list( $dayofweek, $count ) = $result->fetch( 3 ) )
 {
 	$dayofweek_list[$dayofweek]['count'] = $count;
 	if( $count > $max )
@@ -150,14 +146,14 @@ $ctsdw['max'] = $max;
 $ctsdw['total'] = array( $lang_global['total'], number_format( $total ) );
 
 // gio trong ngay
-$sql = "SELECT `c_val`,`c_count` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='hour' ORDER BY `c_val`";
-$result = $db->sql_query( $sql );
 
 $max = 0;
 $total = 0;
 $hour_list = array();
 
-while( list( $hour, $count ) = $db->sql_fetchrow( $result ) )
+$sql = "SELECT c_val,c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='hour' ORDER BY c_val";
+$result = $db->query( $sql );
+while( list( $hour, $count ) = $result->fetch( 3 ) )
 {
 	$hour_list[$hour] = $count;
 	if( $count > $max )
@@ -175,23 +171,27 @@ $ctsh['max'] = $max;
 $ctsh['total'] = array( $lang_global['total'], number_format( $total ) );
 
 // quoc gia
-$sql = "SELECT `c_val`,`c_count`, `last_update` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='country' AND `c_count`!=0 ORDER BY `c_count` DESC LIMIT 10";
-$result = $db->sql_query( $sql );
+$db->sqlreset()
+	->select( 'c_val,c_count, last_update' )
+	->from( NV_COUNTER_GLOBALTABLE )
+	->where( "c_type='country' AND c_count!=0" )
+	->order( 'c_count DESC' )
+	->limit( 10 );
+$result = $db->query( $db->sql() );
 
 $total = 0;
 $countries_list = array();
-while( list( $country, $count, $last_visit ) = $db->sql_fetchrow( $result ) )
+while( list( $country, $count, $last_visit ) = $result->fetch( 3 ) )
 {
-	$fullname = isset( $countries[$country] ) ? $countries[$country][1] : $lang_module['unknown'];
-	$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
+	$fullname = isset( $countries[$country] ) ? $countries[$country][1] : $lang_global['unknown'];
+	$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
 	$countries_list[$country] = array( $fullname, $count, $last_visit );
 
 	$total = $total + $count;
 }
 
-$sql = "SELECT SUM(`c_count`), MAX(`c_count`) FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='country'";
-$result = $db->sql_query( $sql );
-list( $all, $max ) = $db->sql_fetchrow( $result );
+$result = $db->query( "SELECT SUM(c_count), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='country'" );
+list( $all, $max ) = $result->fetch( 3 );
 $others = $all - $total;
 
 $ctsc = array();
@@ -202,23 +202,26 @@ $ctsc['max'] = $max;
 $ctsc['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
 // trinh duyet
-$sql = "SELECT `c_val`,`c_count`, `last_update` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='browser' AND `c_count`!=0 ORDER BY `c_count` DESC LIMIT 10";
-$result = $db->sql_query( $sql );
+$db->sqlreset()
+	->select( 'c_val,c_count, last_update' )
+	->from( NV_COUNTER_GLOBALTABLE )
+	->where( "c_type='browser' AND c_count!=0" )
+	->order( 'c_count DESC' );
+$result = $db->query( $db->sql() );
 
 $total = 0;
 $browsers_list = array();
 
-while( list( $browser, $count, $last_visit ) = $db->sql_fetchrow( $result ) )
+while( list( $browser, $count, $last_visit ) = $result->fetch( 3 ) )
 {
-	$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
-	$browsers_list[ucfirst( $browser )] = array( $count, $last_visit );
+	$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
+	$browsers_list[$browser] = array( $count, $last_visit );
 
 	$total = $total + $count;
 }
 
-$sql = "SELECT SUM(`c_count`), MAX(`c_count`) FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='browser'";
-$result = $db->sql_query( $sql );
-list( $all, $max ) = $db->sql_fetchrow( $result );
+$result = $db->query( "SELECT SUM(c_count), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='browser'" );
+list( $all, $max ) = $result->fetch( 3 );
 $others = $all - $total;
 
 $ctsb = array();
@@ -229,23 +232,27 @@ $ctsb['max'] = $max;
 $ctsb['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
 // he dieu hanh
-$sql = "SELECT `c_val`,`c_count`, `last_update` FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='os' AND `c_count`!=0 ORDER BY `c_count` DESC LIMIT 10";
-$result = $db->sql_query( $sql );
+$db->sqlreset()
+	->select( 'c_val,c_count, last_update' )
+	->from( NV_COUNTER_GLOBALTABLE )
+	->where( "c_type='os' AND c_count!=0" )
+	->order( 'c_count DESC' )
+	->limit( 10 );
+$result = $db->query( $db->sql() );
 
 $total = 0;
 $os_list = array();
 
-while( list( $os, $count, $last_visit ) = $db->sql_fetchrow( $result ) )
+while( list( $os, $count, $last_visit ) = $result->fetch( 3 ) )
 {
-	$last_visit = ! empty( $last_visit ) ? nv_date( "l, d F Y H:i", $last_visit ) : "";
-	$os_list[ucfirst( $os )] = array( $count, $last_visit );
+	$last_visit = ! empty( $last_visit ) ? nv_date( 'l, d F Y H:i', $last_visit ) : '';
+	$os_list[$os] = array( $count, $last_visit );
 
 	$total = $total + $count;
 }
 
-$sql = "SELECT SUM(`c_count`), MAX(`c_count`) FROM `" . NV_COUNTER_TABLE . "` WHERE `c_type`='os'";
-$result = $db->sql_query( $sql );
-list( $all, $max ) = $db->sql_fetchrow( $result );
+$result = $db->query( "SELECT SUM(c_count), MAX(c_count) FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_type='os'" );
+list( $all, $max ) = $result->fetch( 3 );
 $others = $all - $total;
 
 $ctso = array();
@@ -255,9 +262,7 @@ $ctso['rows'] = $os_list;
 $ctso['max'] = $max;
 $ctso['others'] = array( $lang_module['others'], number_format( $others ), $lang_module['viewall'] );
 
-$contents = call_user_func( "main" );
-include ( NV_ROOTDIR . '/includes/header.php' );
+$contents = nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh );
+include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

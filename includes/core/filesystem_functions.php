@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2/9/2010, 2:33
  */
 
@@ -28,21 +29,21 @@ function nv_parse_ini_file( $filename, $process_sections = false )
 	foreach( $data as $line )
 	{
 		$line = trim( $line );
-		if( empty( $line ) || preg_match( "/^;/", $line ) ) continue;
-		if( preg_match( "/^\[(.*?)\]$/", $line, $match ) )
+		if( empty( $line ) || preg_match( '/^;/', $line ) ) continue;
+		if( preg_match( '/^\[(.*?)\]$/', $line, $match ) )
 		{
 			$section = $match[1];
 			continue;
 		}
-		if( ! strpos( $line, "=" ) ) continue;
-		list( $key, $value ) = explode( "=", $line );
+		if( ! strpos( $line, '=' ) ) continue;
+		list( $key, $value ) = explode( '=', $line );
 		$key = trim( $key );
 		$value = trim( $value );
 		$value = str_replace( array( '"', "'" ), array( '', '' ), $value );
 
 		if( $process_sections && ! empty( $section ) )
 		{
-			if( preg_match( "/^(.*?)\[\]$/", $key, $match ) )
+			if( preg_match( '/^(.*?)\[\]$/', $key, $match ) )
 			{
 				$ini[$section][$match[1]][] = $value;
 			}
@@ -53,7 +54,7 @@ function nv_parse_ini_file( $filename, $process_sections = false )
 		}
 		else
 		{
-			if( preg_match( "/^(.*?)\[(.*?)\]$/", $key, $match ) )
+			if( preg_match( '/^(.*?)\[(.*?)\]$/', $key, $match ) )
 			{
 				$ini[$match[1]][] = $value;
 			}
@@ -84,7 +85,7 @@ function nv_scandir( $directory, $pattern, $sorting_order = 0 )
 		{
 			while( ( $file = readdir( $dh ) ) !== false )
 			{
-				if( preg_match( "/^\.(.*)$/", $file ) or $file == "index.html" ) continue;
+				if( preg_match( '/^\.(.*)$/', $file ) or $file == 'index.html' ) continue;
 
 				if( ! is_array( $pattern ) )
 				{
@@ -131,18 +132,19 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 	global $sys_info;
 
 	if( empty( $filename ) ) return false;
-	$ext = strtolower( array_pop( explode( '.', $filename ) ) );
+	$_array_name = explode( '.', $filename );
+	$ext = strtolower( array_pop( $_array_name ) );
 	if( empty( $ext ) ) return false;
 
 	$mime = 'application/octet-stream';
 
-	if( nv_function_exists( "finfo_open" ) )
+	if( nv_function_exists( 'finfo_open' ) )
 	{
 		if( empty( $magic_path ) )
 		{
 			$finfo = finfo_open( FILEINFO_MIME );
 		}
-		elseif( $magic_path != "auto" )
+		elseif( $magic_path != 'auto' )
 		{
 			$finfo = finfo_open( FILEINFO_MIME, $magic_path );
 		}
@@ -170,60 +172,60 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 		{
 			$mime = finfo_file( $finfo, realpath( $filename ) );
 			finfo_close( $finfo );
-			$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+			$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 		}
 	}
 
-	if( empty( $mime ) or $mime == "application/octet-stream" )
+	if( empty( $mime ) or $mime == 'application/octet-stream' )
 	{
-		if( nv_class_exists( "finfo" ) )
+		if( nv_class_exists( 'finfo', false ) )
 		{
 			$finfo = new finfo( FILEINFO_MIME );
 			if( $finfo )
 			{
 				$mime = $finfo->file( realpath( $filename ) );
-				$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+				$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 			}
 		}
 	}
 
-	if( empty( $mime ) or $mime == "application/octet-stream" )
+	if( empty( $mime ) or $mime == 'application/octet-stream' )
 	{
 		if( substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 		{
 			if( nv_function_exists( 'system' ) )
 			{
 				ob_start();
-				system( "file -i -b " . escapeshellarg( $filename ) );
+				system( 'file -i -b ' . escapeshellarg( $filename ) );
 				$m = ob_get_clean();
 				$m = trim( $m );
 				if( ! empty( $m ) )
 				{
-					$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
+					$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m );
 				}
 			}
 			elseif( nv_function_exists( 'exec' ) )
 			{
-				$m = @exec( "file -bi " . escapeshellarg( $filename ) );
+				$m = @exec( 'file -bi ' . escapeshellarg( $filename ) );
 				$m = trim( $m );
 				if( ! empty( $m ) )
 				{
-					$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $m );
+					$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m );
 				}
 			}
 		}
 	}
 
-	if( empty( $mime ) or $mime == "application/octet-stream" )
+	if( empty( $mime ) or $mime == 'application/octet-stream' )
 	{
 		if( nv_function_exists( 'mime_content_type' ) )
 		{
 			$mime = mime_content_type( $filename );
-			$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', trim( $mime ) );
+			$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 		}
 	}
 
-	if( empty( $mime ) or $mime == "application/octet-stream" )
+	if( empty( $mime ) or $mime == 'application/octet-stream' )
 	{
 		$img_exts = array( 'png', 'gif', 'jpg', 'bmp', 'tiff', 'swf', 'psd' );
 		if( in_array( $ext, $img_exts ) )
@@ -233,7 +235,7 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 				if( isset( $img_info['mime'] ) and ! empty( $img_info['mime'] ) )
 				{
 					$mime = trim( $img_info['mime'] );
-					$mime = preg_replace( "/^([\.-\w]+)\/([\.-\w]+)(.*)$/i", '$1/$2', $mime );
+					$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $mime );
 				}
 
 				if( empty( $mime ) and isset( $img_info[2] ) )
@@ -244,7 +246,7 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 		}
 	}
 
-	if( empty( $mime ) or $mime == "application/octet-stream" )
+	if( empty( $mime ) or $mime == 'application/octet-stream' )
 	{
 		$mime_types = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini' );
 
@@ -256,25 +258,25 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 		}
 	}
 
-	if( preg_match( "/^application\/(?:x-)?zip(?:-compressed)?$/is", $mime ) )
+	if( preg_match( '/^application\/(?:x-)?zip(?:-compressed)?$/is', $mime ) )
 	{
-		if( $this->file_extension == "docx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-		elseif( $this->file_extension == "dotx" ) $mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
-		elseif( $this->file_extension == "potx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.template";
-		elseif( $this->file_extension == "ppsx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
-		elseif( $this->file_extension == "pptx" ) $mime = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-		elseif( $this->file_extension == "xlsx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-		elseif( $this->file_extension == "xltx" ) $mime = "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
-		elseif( $this->file_extension == "docm" ) $mime = "application/vnd.ms-word.document.macroEnabled.12";
-		elseif( $this->file_extension == "dotm" ) $mime = "application/vnd.ms-word.template.macroEnabled.12";
-		elseif( $this->file_extension == "potm" ) $mime = "application/vnd.ms-powerpoint.template.macroEnabled.12";
-		elseif( $this->file_extension == "ppam" ) $mime = "application/vnd.ms-powerpoint.addin.macroEnabled.12";
-		elseif( $this->file_extension == "ppsm" ) $mime = "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
-		elseif( $this->file_extension == "pptm" ) $mime = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
-		elseif( $this->file_extension == "xlam" ) $mime = "application/vnd.ms-excel.addin.macroEnabled.12";
-		elseif( $this->file_extension == "xlsb" ) $mime = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
-		elseif( $this->file_extension == "xlsm" ) $mime = "application/vnd.ms-excel.sheet.macroEnabled.12";
-		elseif( $this->file_extension == "xltm" ) $mime = "application/vnd.ms-excel.template.macroEnabled.12";
+		if( $this->file_extension == 'docx' ) $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+		elseif( $this->file_extension == 'dotx' ) $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template';
+		elseif( $this->file_extension == 'potx' ) $mime = 'application/vnd.openxmlformats-officedocument.presentationml.template';
+		elseif( $this->file_extension == 'ppsx' ) $mime = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';
+		elseif( $this->file_extension == 'pptx' ) $mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+		elseif( $this->file_extension == 'xlsx' ) $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+		elseif( $this->file_extension == 'xltx' ) $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template';
+		elseif( $this->file_extension == 'docm' ) $mime = 'application/vnd.ms-word.document.macroEnabled.12';
+		elseif( $this->file_extension == 'dotm' ) $mime = 'application/vnd.ms-word.template.macroEnabled.12';
+		elseif( $this->file_extension == 'potm' ) $mime = 'application/vnd.ms-powerpoint.template.macroEnabled.12';
+		elseif( $this->file_extension == 'ppam' ) $mime = 'application/vnd.ms-powerpoint.addin.macroEnabled.12';
+		elseif( $this->file_extension == 'ppsm' ) $mime = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12';
+		elseif( $this->file_extension == 'pptm' ) $mime = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12';
+		elseif( $this->file_extension == 'xlam' ) $mime = 'application/vnd.ms-excel.addin.macroEnabled.12';
+		elseif( $this->file_extension == 'xlsb' ) $mime = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12';
+		elseif( $this->file_extension == 'xlsm' ) $mime = 'application/vnd.ms-excel.sheet.macroEnabled.12';
+		elseif( $this->file_extension == 'xltm' ) $mime = 'application/vnd.ms-excel.template.macroEnabled.12';
 	}
 
 	return $mime;
@@ -304,7 +306,7 @@ function nv_getextension( $filename )
  */
 function nv_get_allowed_ext( $allowed_filetypes, $forbid_extensions, $forbid_mimes )
 {
-	if( $allowed_filetypes == "any" or ( ! empty( $allowed_filetypes ) and is_array( $allowed_filetypes ) and in_array( "any", $allowed_filetypes ) ) ) return "*";
+	if( $allowed_filetypes == 'any' or ( ! empty( $allowed_filetypes ) and is_array( $allowed_filetypes ) and in_array( 'any', $allowed_filetypes ) ) ) return '*';
 	$ini = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/mime.ini', true );
 	$allowmimes = array();
 	if( ! is_array( $allowed_filetypes ) ) $allowed_filetypes = array( $allowed_filetypes );
@@ -381,15 +383,16 @@ function nv_mkdir( $path, $dir_name )
 {
 	global $lang_global, $global_config, $sys_info;
 	$dir_name = nv_string_to_filename( trim( basename( $dir_name ) ) );
-	if( ! preg_match( "/^[a-zA-Z0-9-_.]+$/", $dir_name ) ) return array( 0, sprintf( $lang_global['error_create_directories_name_invalid'], $dir_name ) );
+	if( ! preg_match( '/^[a-zA-Z0-9-_.]+$/', $dir_name ) ) return array( 0, sprintf( $lang_global['error_create_directories_name_invalid'], $dir_name ) );
 	$path = @realpath( $path );
-	if( ! preg_match( '/\/$/', $path ) ) $path = $path . "/";
+	if( ! preg_match( '/\/$/', $path ) ) $path = $path . '/';
 
 	if( file_exists( $path . $dir_name ) ) return array( 2, sprintf( $lang_global['error_create_directories_name_used'], $dir_name ), $path . $dir_name );
 
 	if( ! is_dir( $path ) ) return array( 0, sprintf( $lang_global['error_directory_does_not_exist'], $path ) );
 
 	$ftp_check_login = 0;
+	$res = false;
 	if( $sys_info['ftp_support'] and intval( $global_config['ftp_check_login'] ) == 1 )
 	{
 		$ftp_server = nv_unhtmlspecialchars( $global_config['ftp_server'] );
@@ -455,8 +458,8 @@ function nv_deletefile( $file, $delsub = false )
 	$realpath = realpath( $file );
 	if( empty( $realpath ) ) return array( 0, sprintf( $lang_global['error_non_existent_file'], $file ) );
 	$realpath = str_replace( '\\', '/', $realpath );
-	$realpath = rtrim( $realpath, "\\/" );
-	$preg_match = preg_match( "/^(" . nv_preg_quote( NV_ROOTDIR ) . ")(\/[\S]+)/", $realpath, $path );
+	$realpath = rtrim( $realpath, '\\/' );
+	$preg_match = preg_match( '/^(' . nv_preg_quote( NV_ROOTDIR ) . ')(\/[\S]+)/', $realpath, $path );
 	if( empty( $preg_match ) ) return array( 0, sprintf( $lang_global['error_delete_forbidden'], $file ) );
 
 	$ftp_check_login = 0;
@@ -467,9 +470,6 @@ function nv_deletefile( $file, $delsub = false )
 		$ftp_user_name = nv_unhtmlspecialchars( $global_config['ftp_user_name'] );
 		$ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
 		$ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
-
-		// Goi file Class xu ly
-		if( ! defined( 'NV_FTP_CLASS' ) ) require ( NV_ROOTDIR . '/includes/class/ftp.class.php' );
 
 		// Ket noi, dang nhap
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
@@ -508,14 +508,14 @@ function nv_deletefile( $file, $delsub = false )
 	elseif( is_dir( $realpath ) ) // Khong dung FTP
 	{
 		$files = scandir( $realpath );
-		$files2 = array_diff( $files, array( ".", "..", ".htaccess", "index.html" ) );
+		$files2 = array_diff( $files, array( '.', '..', '.htaccess', 'index.html' ) );
 		if( sizeof( $files2 ) and ! $delsub )
 		{
 			return array( 0, sprintf( $lang_global['error_delete_subdirectories_not_empty'], $path[2] ) );
 		}
 		else
 		{
-			$files = array_diff( $files, array( ".", ".." ) );
+			$files = array_diff( $files, array( '.', '..' ) );
 			if( sizeof( $files ) )
 			{
 				foreach( $files as $f )
@@ -620,7 +620,7 @@ function nv_copyfile( $file, $newfile )
 	if( ! copy( $file, $newfile ) )
 	{
 		$content = @file_get_contents( $file );
-		$openedfile = fopen( $newfile, "w" );
+		$openedfile = fopen( $newfile, 'w' );
 		fwrite( $openedfile, $content );
 		fclose( $openedfile );
 
@@ -648,8 +648,8 @@ function nv_renamefile( $file, $newname )
 	$realpath = realpath( $file );
 	if( empty( $realpath ) ) return array( 0, sprintf( $lang_global['error_non_existent_file'], $file ) );
 	$realpath = str_replace( '\\', '/', $realpath );
-	$realpath = rtrim( $realpath, "\\/" );
-	$preg_match = preg_match( "/^(" . nv_preg_quote( NV_ROOTDIR ) . ")(\/[\S]+)/", $realpath, $path );
+	$realpath = rtrim( $realpath, '\\/' );
+	$preg_match = preg_match( '/^(' . nv_preg_quote( NV_ROOTDIR ) . ')(\/[\S]+)/', $realpath, $path );
 	if( empty( $preg_match ) ) return array( 0, sprintf( $lang_global['error_rename_forbidden'], $file ) );
 	$newname = basename( trim( $newname ) );
 	$pathinfo = pathinfo( $realpath );
@@ -688,6 +688,8 @@ function nv_chmod_dir( $conn_id, $dir, $subdir = false )
 		$array_cmd_dir[] = $dir;
 		if( $subdir and is_dir( NV_ROOTDIR . '/' . $dir ) )
 		{
+			ftp_chmod( $conn_id, 0777, $dir );
+
 			$list_files = ftp_nlist( $conn_id, $dir );
 			foreach( $list_files as $file_i )
 			{
@@ -708,7 +710,7 @@ function nv_chmod_dir( $conn_id, $dir, $subdir = false )
 	}
 	else
 	{
-		$array_cmd_dir[] = '<b>' . $dir . ' --> no chmod 777 </b>';
+		$array_cmd_dir[] = '<strong>' . $dir . ' --> no chmod 777 </strong>';
 	}
 }
 
@@ -811,10 +813,10 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 	if( empty( $original_name ) ) return false;
 
 	$original_name = str_replace( '\\', '/', $original_name );
-	$original_name = rtrim( $original_name, "\\/" );
+	$original_name = rtrim( $original_name, '\\/' );
 
 	unset( $matches );
-	if( ! preg_match( "/^" . nv_preg_quote( NV_ROOTDIR ) . "\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i", $original_name, $matches ) ) return false;
+	if( ! preg_match( '/^' . nv_preg_quote( NV_ROOTDIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $original_name, $matches ) ) return false;
 
 	$imageinfo = array();
 
@@ -849,9 +851,9 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 				$thumb_path = str_replace( '\\', '/', $thumb_path );
 
 				unset( $matches2 );
-				if( preg_match( "/^" . nv_preg_quote( NV_ROOTDIR ) . "([a-z0-9\-\_\/]+)*$/i", $thumb_path, $matches2 ) )
+				if( preg_match( '/^' . nv_preg_quote( NV_ROOTDIR ) . '([a-z0-9\-\_\/]+)*$/i', $thumb_path, $matches2 ) )
 				{
-					$thumb_path = ltrim( $matches2[1], "\\/" );
+					$thumb_path = ltrim( $matches2[1], '\\/' );
 				}
 				else
 				{
@@ -860,7 +862,7 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 			}
 		}
 
-		if( ! empty( $thumb_path ) and ! preg_match( "/\/$/", $thumb_path ) ) $thumb_path = $thumb_path . '/';
+		if( ! empty( $thumb_path ) and ! preg_match( '/\/$/', $thumb_path ) ) $thumb_path = $thumb_path . '/';
 
 		$new_src = $thumb_path . $matches[3] . '_' . md5( $original_name . $width ) . $matches[4];
 
@@ -881,8 +883,6 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 
 		if( $is_create )
 		{
-			include ( NV_ROOTDIR . "/includes/class/image.class.php" );
-
 			$image = new image( $original_name, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$image->resizeXY( $width );
 			$image->save( NV_ROOTDIR . '/' . $thumb_path, $matches[3] . '_' . md5( $original_name . $width ) . $matches[4] );
@@ -939,5 +939,3 @@ function nv_imageResize( $origX, $origY, $maxX, $maxY )
 	}
 	return $return;
 }
-
-?>

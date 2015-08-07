@@ -1,31 +1,33 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: loop -->
-<table id="aid{ID}" summary="{CAPTION}" class="tab1">
-	<col span="2" valign="top" width="50%" />
-	<thead>
-		<tr>
-			<td colspan="2">
-			<div style="position:absolute;right:10px">
-				<!-- BEGIN: edit -->
-				<a class="button1" href="{EDIT_HREF}"><span><span>{EDIT_NAME}</span></span></a>
-				<!-- END: edit -->
-				<!-- BEGIN: suspend -->
-				<a class="button1" href="{SUSPEND_HREF}"><span><span>{SUSPEND_NAME}</span></span></a>
-				<!-- END: suspend -->
-				<!-- BEGIN: del -->
-				<a class="button1" href="{DEL_HREF}"><span><span>{DEL_NAME}</span></span></a>
-				<!-- END: del -->
-			</div><img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /> {CAPTION} </td>
-		</tr>
-	</thead>
-	<!-- BEGIN: option_loop -->
-	<tbody {CLASS}>
-		<tr>
-			<td>{VALUE0}</td>
-			<td>{VALUE1}</td>
-		</tr>
-	</tbody>
-	<!-- END: option_loop -->
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover" id="aid{ID}">
+		<col span="2" style="width: 50%"/>
+		<thead>
+			<tr>
+				<th colspan="2">
+				<div class="pull-right">
+					<!-- BEGIN: edit -->
+					<a class="btn btn-primary btn-xs" href="{EDIT_HREF}">{EDIT_NAME}</a>
+					<!-- END: edit -->
+					<!-- BEGIN: suspend -->
+					<a class="btn btn-primary btn-xs" href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
+					<!-- END: suspend -->
+					<!-- BEGIN: del -->
+					<a class="btn btn-primary btn-xs" href="{DEL_HREF}">{DEL_NAME}</a>
+					<!-- END: del -->
+				</div><img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /> {CAPTION} </th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN: option_loop -->
+			<tr>
+				<td>{VALUE0}</td>
+				<td>{VALUE1}</td>
+			</tr>
+			<!-- END: option_loop -->
+		</tbody>
+	</table>
+</div>
 <!-- END: loop -->
 <!-- END: main -->

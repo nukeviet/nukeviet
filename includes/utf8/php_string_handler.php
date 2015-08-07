@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 22/8/2010, 19:33
  */
 
@@ -155,7 +156,7 @@ function nv_strrpos( $haystack, $needle, $offset = null )
  */
 function nv_strtolower( $string )
 {
-	include ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
+	include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
 
 	return strtr( $string, $utf8_lookup['strtolower'] );
 }
@@ -168,9 +169,7 @@ function nv_strtolower( $string )
  */
 function nv_strtoupper( $string )
 {
-	include ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
+	include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
 
 	return strtr( $string, $utf8_lookup['strtoupper'] );
 }
-
-?>

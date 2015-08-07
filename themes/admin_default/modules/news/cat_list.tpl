@@ -5,85 +5,95 @@
 </div>
 <!-- END: cat_title -->
 <!-- BEGIN: data -->
-<table class="tab1">
-	<colgroup>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<col span="6" style="white-space: nowrap;" />
+		<col class="w250" />
 		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-		<col style="white-space: nowrap;" />
-	</colgroup>
-	<thead>
-		<tr>
-			<td align="center">{LANG.weight}</td>
-			<td>{LANG.name}</td>
-			<td align="center">{LANG.inhome}</td>
-			<td>{LANG.viewcat_page}</td>
-			<td align="center">{LANG.numlinks}</td>
-			<td>&nbsp;</td>
-		</tr>
-	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {ROW.class}>
-		<tr>
-			<td align="center">
-			<!-- BEGIN: stt -->
-			{STT}
-			<!-- END: stt -->
-			<!-- BEGIN: weight -->
-			<select id="id_weight_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','weight');">
-				<!-- BEGIN: loop -->
-				<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
-				<!-- END: loop -->
-			</select>
-			<!-- END: weight -->
-			</td>
-			<td nowrap="nowrap"><a href="{ROW.link}"><strong>{ROW.title}</strong>
-			<!-- BEGIN: numsubcat -->
-			<span style="color:#FF0101;">({NUMSUBCAT})</span>
-			<!-- END: numsubcat -->
-			</a></td>
-			<td align="center">
-			<!-- BEGIN: disabled_inhome -->
-			{INHOME}
-			<!-- END: disabled_inhome -->
-			<!-- BEGIN: inhome -->
-			<select id="id_inhome_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','inhome');">
-				<!-- BEGIN: loop -->
-				<option value="{INHOME.key}"{INHOME.selected}>{INHOME.title}</option>
-				<!-- END: loop -->
-			</select>
-			<!-- END: inhome -->
-			</td>
-			<td align="left">
-			<!-- BEGIN: disabled_viewcat -->
-			{VIEWCAT}
-			<!-- END: disabled_viewcat -->
-			<!-- BEGIN: viewcat -->
-			<select id="id_viewcat_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','viewcat');">
-				<!-- BEGIN: loop -->
-				<option value="{VIEWCAT.key}"{VIEWCAT.selected}>{VIEWCAT.title}</option>
-				<!-- END: loop -->
-			</select>
-			<!-- END: viewcat -->
-			</td>
-			<td align="center">
-			<!-- BEGIN: title_numlinks -->
-			{NUMLINKS}
-			<!-- END: title_numlinks -->
-			<!-- BEGIN: numlinks -->
-			<select id="id_numlinks_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','numlinks');">
-				<!-- BEGIN: loop -->
-				<option value="{NUMLINKS.key}"{NUMLINKS.selected}>{NUMLINKS.title}</option>
-				<!-- END: loop -->
-			</select>
-			<!-- END: numlinks -->
-			</td>
-			<td nowrap="nowrap" align="center">{ROW.adminfuncs}</td>
-		</tr>
-	</tbody>
-	<!-- END: loop -->
-</table>
+		<thead>
+			<tr>
+				<th class="text-center">{LANG.weight}</th>
+				<th class="text-center">{LANG.name}</th>
+				<th class="text-center">{LANG.inhome}</th>
+				<th class="text-center">{LANG.numlinks}</th>
+				<th class="text-center"><img src="{NV_BASE_SITEURL}themes/default/images/icons/new.gif" title="{LANG.newday}"/></th>
+				<th class="text-center">{LANG.viewcat_page}</th>
+				<th class="text-center">{LANG.functional}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td class="text-center">
+				<!-- BEGIN: stt -->
+				{STT}
+				<!-- END: stt -->
+				<!-- BEGIN: weight -->
+				<select class="form-control" id="id_weight_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','weight');">
+					<!-- BEGIN: loop -->
+					<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
+					<!-- END: loop -->
+				</select>
+				<!-- END: weight -->
+				</td>
+				<td><a href="{ROW.link}"><strong>{ROW.title}</strong>
+				<!-- BEGIN: numsubcat -->
+				<span class="red">({NUMSUBCAT})</span>
+				<!-- END: numsubcat -->
+				</a></td>
+				<td class="text-center">
+				<!-- BEGIN: disabled_inhome -->
+				{INHOME}
+				<!-- END: disabled_inhome -->
+				<!-- BEGIN: inhome -->
+				<select class="form-control" id="id_inhome_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','inhome');">
+					<!-- BEGIN: loop -->
+					<option value="{INHOME.key}"{INHOME.selected}>{INHOME.title}</option>
+					<!-- END: loop -->
+				</select>
+				<!-- END: inhome -->
+				</td>
+				<td class="text-center">
+				<!-- BEGIN: title_numlinks -->
+				{NUMLINKS}
+				<!-- END: title_numlinks -->
+				<!-- BEGIN: numlinks -->
+				<select class="form-control" id="id_numlinks_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','numlinks');">
+					<!-- BEGIN: loop -->
+					<option value="{NUMLINKS.key}"{NUMLINKS.selected}>{NUMLINKS.title}</option>
+					<!-- END: loop -->
+				</select>
+				<!-- END: numlinks -->
+				</td>
+				<td class="text-center">
+				<!-- BEGIN: title_newday -->
+				{NEWDAY}
+				<!-- END: title_newday -->
+				<!-- BEGIN: newday -->
+				<select class="form-control" id="id_newday_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','newday');">
+					<!-- BEGIN: loop -->
+					<option value="{NEWDAY.key}"{NEWDAY.selected}>{NEWDAY.title}</option>
+					<!-- END: loop -->
+				</select>
+				<!-- END: newday -->
+				</td>
+				<td class="text-left">
+				<!-- BEGIN: disabled_viewcat -->
+				{VIEWCAT}
+				<!-- END: disabled_viewcat -->
+				<!-- BEGIN: viewcat -->
+				<select class="form-control" id="id_viewcat_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','viewcat');">
+					<!-- BEGIN: loop -->
+					<option value="{VIEWCAT.key}"{VIEWCAT.selected}>{VIEWCAT.title}</option>
+					<!-- END: loop -->
+				</select>
+				<!-- END: viewcat -->
+				</td>
+				<td class="text-center">{ROW.adminfuncs}</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <!-- END: data -->
 <!-- END: main -->

@@ -1,12 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -20,19 +21,6 @@ $lang_module['nocatpage'] = 'Error:No topic';
 $lang_module['other'] = 'Other';
 $lang_module['detail'] = 'Detailed information';
 $lang_module['more'] = 'Read more...';
-$lang_module['comment'] = 'Reader Comments';
-$lang_module['comment_login'] = 'You must login to use this feature';
-$lang_module['comment_success'] = 'Successful comments';
-$lang_module['comment_unsuccess'] = 'Error processing the data or incomplete data';
-$lang_module['comment_title'] = 'Your comments';
-$lang_module['comment_view'] = 'View comments';
-$lang_module['comment_send'] = 'Send a comment';
-$lang_module['comment_name'] = 'Your name:';
-$lang_module['comment_email'] = 'Email';
-$lang_module['comment_content'] = 'Content';
-$lang_module['comment_seccode'] = 'Security code';
-$lang_module['comment_submit'] = 'Submit';
-$lang_module['comment_timeout'] = 'You\'ve voted, please wait for %s minutes later to post a comment';
 $lang_module['sendmail'] = 'Send article by email to friends';
 $lang_module['sendmail_subject'] = 'You receive a message from:';
 $lang_module['sendmail_name'] = 'Your name:';
@@ -83,6 +71,7 @@ $lang_module['search_on_internet'] = 'Internet search';
 $lang_module['search_adv_internet'] = 'Advanced internet search';
 $lang_module['search_on_nuke'] = 'Search on site';
 $lang_module['search_none'] = 'No result match';
+$lang_module['empty_data_search'] = 'empty  search data';
 $lang_module['search_in_module'] = 'Search in module';
 $lang_module['view_all_title'] = 'View all results';
 $lang_module['pages_title'] = 'Page';
@@ -98,9 +87,7 @@ $lang_module['type_title'] = 'Search type';
 $lang_module['finter_title'] = 'From date:';
 $lang_module['source_title'] = 'Source';
 $lang_module['keywords'] = 'Key';
-$lang_module['member_view'] = 'Only member can view!';
-$lang_module['admin_view'] = 'Only admin can view!';
-$lang_module['group_view'] = 'Only group member can view!';
+$lang_module['no_permission'] = 'You do not have permission to view articles';
 $lang_module['rating_error1'] = 'Error: Can\'t rate';
 $lang_module['rating_error2'] = 'You was rated';
 $lang_module['pubtime'] = 'Posted at';
@@ -146,5 +133,19 @@ $lang_module['errorsave'] = 'System errors do not update the content, you check 
 $lang_module['update_content'] = 'Edit Post';
 $lang_module['del_content'] = 'Delete Post';
 $lang_module['search_date_rule'] = 'dd.mm.yyyy';
+$lang_module['rating_average'] = 'Ranking';
+$lang_module['rating_count'] = 'vote';
 
-?>
+$lang_module['no_public'] = 'Note: This article has not yet been published, only those with the right manipulation can view the content.';
+$lang_module['status_alert'] = 'Article are in state: % 1$s';
+$lang_module['status_0'] = 'Stop effect';
+$lang_module['status_1'] = 'Published';
+$lang_module['status_2'] = 'Still waitting';
+$lang_module['status_3'] = 'Expired';
+$lang_module['status_4'] = 'Draft';
+$lang_module['status_5'] = 'Send Approve';
+$lang_module['status_6'] = 'Reject Approve';
+$lang_module['status_7'] = 'Checking for Approve';
+$lang_module['status_8'] = 'Send Publish';
+$lang_module['status_9'] = 'Reject Publish';
+$lang_module['status_10'] = 'Checking for Publish';

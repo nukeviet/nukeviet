@@ -1,22 +1,20 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if( ! defined( 'NV_IS_MOD_NEWS' ) )
-{
-	die( 'Stop!!!' );
-}
+if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 $channel = array();
 $items = array();
 
 $channel['title'] = $module_info['custom_title'];
-$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
+$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $channel['description'] = ! empty( $module_info['description'] ) ? $module_info['description'] : $global_config['site_description'];
 
 $catid = 0;
@@ -33,33 +31,40 @@ if( isset( $array_op[1] ) )
 		}
 	}
 }
+
+$db->sqlreset()
+	->select( 'id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile' )
+	->order( 'publtime DESC' )
+	->limit( 30 );
+
 if( ! empty( $catid ) )
 {
 	$channel['title'] = $module_info['custom_title'] . ' - ' . $global_array_cat[$catid]['title'];
-	$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $alias_cat_url;
+	$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias_cat_url;
 	$channel['description'] = $global_array_cat[$catid]['description'];
 
-	$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . "` WHERE `status`=1 ORDER BY `publtime` DESC LIMIT 30";
+	$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
+		->where( 'status=1' );
 }
 else
 {
-	$sql = "SELECT id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile FROM `" . NV_PREFIXLANG . "_" . $module_data . "_rows` WHERE `status`=1 AND `inhome`='1' ORDER BY `publtime` DESC LIMIT 30";
+	$db->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
+		->where( 'status=1 AND inhome=1' );
 }
 if( $module_info['rss'] )
 {
-	$result = $db->sql_query( $sql );
-	while( list( $id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile ) = $db->sql_fetchrow( $result ) )
+	$result = $db->query( $db->sql() );
+	while( list( $id, $catid_i, $publtime, $title, $alias, $hometext, $homeimgthumb, $homeimgfile ) = $result->fetch( 3 ) )
 	{
-		//if( ! empty( $catid ) ) $catid_i = $catid;//cai nay tao ra nhieu link cho 1 bài viet, rat khong tot cho seo
 		$catalias = $global_array_cat[$catid_i]['alias'];
 
 		if( $homeimgthumb == 1 ) // image thumb
 		{
-			$rimages = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$rimages = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 2 ) // image file
 		{
-			$rimages = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+			$rimages = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
 		elseif( $homeimgthumb == 3 ) // image url
 		{
@@ -69,17 +74,16 @@ if( $module_info['rss'] )
 		{
 			$rimages = '';
 		}
-		$rimages = ( ! empty( $rimages ) ) ? "<img src=\"" . $rimages . "\" width=\"100\" align=\"left\" border=\"0\">" : "";
+		$rimages = ( ! empty( $rimages ) ) ? '<img src="' . $rimages . '" width="100" align="left" border="0">' : '';
 
 		$items[] = array(
 			'title' => $title,
-			'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $catalias . '/' . $alias . '-' . $id, //
+			'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], //
 			'guid' => $module_name . '_' . $id,
 			'description' => $rimages . $hometext,
-			'pubdate' => $publtime );
+			'pubdate' => $publtime
+		);
 	}
 }
 nv_rss_generate( $channel, $items );
 die();
-
-?>

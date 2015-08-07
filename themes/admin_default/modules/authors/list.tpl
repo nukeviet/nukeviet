@@ -1,36 +1,38 @@
 <!-- BEGIN: main -->
-<table class="tab1">
-	<thead>
-		<tr>
-			<td>{LANG.login}</td>
-			<td>{LANG.email}</td>
-			<td>{LANG.lev}</td>
-			<td>{LANG.position}</td>
-			<td>{LANG.is_suspend}</td>
-			<td>{LANG.adminip_funcs}</td>
-		</tr>
-	</thead>
-	<!-- BEGIN: loop -->
-	<tbody {CLASS}>
-		<tr>
-			<td><img class="refresh" alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /><a href="{DATA.link}"><b>{DATA.login}</b></a></td>
-			<td>{DATA.email}</td>
-			<td>{DATA.lev}</td>
-			<td>{DATA.position}</td>
-			<td>{DATA.is_suspend}</td>
-			<td>
-			<!-- BEGIN: edit -->
-			<span class="edit_icon"><a href="{EDIT_HREF}">{EDIT_NAME}</a></span>
-			<!-- END: edit -->
-			<!-- BEGIN: suspend -->
-			&nbsp;-&nbsp;<span class="edit_icon"><a href="{SUSPEND_HREF}">{SUSPEND_NAME}</a></span>
-			<!-- END: suspend -->
-			<!-- BEGIN: del -->
-			&nbsp;-&nbsp;<span class="delete_icon"><a href="{DEL_HREF}">{DEL_NAME}</a></span>
-			<!-- END: del -->
-			</td>
-		</tr>
-	</tbody>
-	<!-- END: loop -->
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>{LANG.login}</th>
+				<th>{LANG.email}</th>
+				<th>{LANG.lev}</th>
+				<th>{LANG.position}</th>
+				<th>{LANG.is_suspend}</th>
+				<th>{LANG.adminip_funcs}</th>
+			</tr>
+		</thead>
+		<tbody>
+		<!-- BEGIN: loop -->
+			<tr>
+				<td><img alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /><a href="{DATA.link}" title="{DATA.full_name}"><strong>{DATA.login}</strong></a></td>
+				<td>{DATA.email}</td>
+				<td>{DATA.lev}</td>
+				<td>{DATA.position}</td>
+				<td>{DATA.is_suspend}</td>
+				<td>
+				<!-- BEGIN: edit -->
+				<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{EDIT_HREF}">{EDIT_NAME}</a>
+				<!-- END: edit -->
+				<!-- BEGIN: suspend -->
+				<em class="fa fa-times-circle-o fa-lg">&nbsp;</em><a href="{SUSPEND_HREF}">{SUSPEND_NAME}</a>
+				<!-- END: suspend -->
+				<!-- BEGIN: del -->
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="{DEL_HREF}">{DEL_NAME}</a>
+				<!-- END: del -->
+				</td>
+			</tr>
+		<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
 <!-- END: main -->

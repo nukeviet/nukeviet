@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
 
@@ -14,22 +15,43 @@ $theme = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site
 
 if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . session_id() ) )
 {
+	
+	// load position file
+	$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $theme . '/config.ini' );
+	$position = $xml->xpath( 'positions' );
+	$positions = $position[0]->position;
+	$array_pos = array();
+	for( $j = 0, $count = sizeof( $positions ); $j < $count; ++$j )
+	{
+		$array_pos[] = trim( $positions[$j]->tag );
+	}	
+	
 	// Cap nhat block hien thi toan site cho cac function moi phat sinh - Danh cho lap trinh vien
 	$array_bid = array();
 	// Danh sac tat ca cac block se kiem tra
-	$sql = "SELECT `bid`, `position` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE `theme`=" . $db->dbescape( $theme ) . " AND `all_func`=1";
-	$result = $db->sql_query( $sql );
 
-	while( list( $bid, $position ) = $db->sql_fetchrow( $result ) )
+	$sth = $db->prepare( 'SELECT bid, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND all_func=1' );
+	$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+	$sth->execute();
+
+	while( list( $bid, $position ) = $sth->fetch( 3 ) )
 	{
-		$array_bid[$bid] = $position;
+		if( in_array( $position, $array_pos ) )
+		{
+			$array_bid[$bid] = $position;
+		}
+		else 
+		{
+			// Xóa các block không còn phần cấu hình.
+			$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid = ' . $bid );
+			$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = ' . $bid );
+		}
 	}
 
 	$array_funcid = array();
 	// Danh sach ID tat ca cac function co block trong he thong
-	$result = $db->sql_query( "SELECT `func_id` FROM `" . NV_MODFUNCS_TABLE . "` WHERE `show_func` = '1' ORDER BY `in_module` ASC, `subweight` ASC" );
-
-	while( list( $func_id_i ) = $db->sql_fetchrow( $result ) )
+	$result = $db->query( 'SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
+	while( list( $func_id_i ) = $result->fetch( 3 ) )
 	{
 		$array_funcid[] = $func_id_i;
 	}
@@ -38,9 +60,8 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 	{
 		$func_list = array();
 		// Cac fuction da them block
-		$result = $db->sql_query( "SELECT `func_id` FROM `" . NV_BLOCKS_TABLE . "_weight` WHERE `bid`=" . $bid );
-
-		while( list( $func_inlist ) = $db->sql_fetchrow( $result ) )
+		$result = $db->query( 'SELECT func_id FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $bid );
+		while( list( $func_inlist ) = $result->fetch( 3 ) )
 		{
 			$func_list[] = $func_inlist;
 		}
@@ -49,24 +70,34 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 		{
 			if( ! in_array( $func_id, $func_list ) ) // Cac function chua duoc them
 			{
-				$sql = "SELECT MAX(t1.weight) FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t1.func_id=" . $func_id . " AND t2.theme=" . $db->dbescape( $theme ) . " AND t2.position=" . $db->dbescape( $position );
-				list( $weight ) = $db->sql_fetchrow( $db->sql_query( $sql ) );
+				$sth = $db->prepare( 'SELECT MAX(t1.weight)
+					FROM ' . NV_BLOCKS_TABLE . '_weight t1
+					INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
+					WHERE t1.func_id = :func_id AND t2.theme = :theme AND t2.position = :position' );
+			    $sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+				$sth->bindParam( ':func_id', $func_id, PDO::PARAM_INT );
+				$sth->bindParam( ':position', $position, PDO::PARAM_STR );
+				$sth->execute();
+				$weight = $sth->fetchColumn();
+
 				$weight = intval( $weight ) + 1;
 
-				$db->sql_query( "INSERT INTO `" . NV_BLOCKS_TABLE . "_weight` (`bid`, `func_id`, `weight`) VALUES ('" . $bid . "', '" . $func_id . "', '" . $weight . "')" );
+				$db->query( 'INSERT INTO ' . NV_BLOCKS_TABLE . '_weight (bid, func_id, weight) VALUES (' . $bid . ', ' . $func_id . ', ' . $weight . ')' );
 			}
 		}
 	}
 
 	// Cap nhat lai weight theo danh sach cac block
-	$result = $db->sql_query( "SELECT bid, position, weight FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $theme . "' ORDER BY `position` ASC, `weight` ASC" );
-
 	$array_position = array();
 
-	while( list( $bid_i, $position, $weight ) = $db->sql_fetchrow( $result ) )
+	$sth = $db->prepare( 'SELECT bid, position, weight FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme ORDER BY position ASC, weight ASC' );
+	$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+	$sth->execute();
+
+	while( list( $bid_i, $position, $weight ) = $sth->fetch( 3 ) )
 	{
 		$array_position[] = $position;
-		$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i );
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i );
 	}
 
 	// Kiem tra va cap nhat lai weight tung function
@@ -75,9 +106,16 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 	foreach( $array_position as $position )
 	{
 		$func_id_old = $weight = 0;
-		$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme='" . $theme . "' AND t2.position='" . $position . "' ORDER BY t1.func_id ASC, t1.weight ASC" );
 
-		while( list( $bid_i, $func_id_i ) = $db->sql_fetchrow( $result ) )
+		$sth = $db->prepare( 'SELECT t1.bid, t1.func_id
+			FROM ' . NV_BLOCKS_TABLE . '_weight t1
+			INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
+			WHERE t2.theme= :theme AND t2.position = :position
+			ORDER BY t1.func_id ASC, t1.weight ASC' );
+	    $sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+	    $sth->bindParam( ':position', $position, PDO::PARAM_STR );
+		$sth->execute();
+		while( list( $bid_i, $func_id_i ) = $sth->fetch( 3 ) )
 		{
 			if( $func_id_i == $func_id_old )
 			{
@@ -89,21 +127,19 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 				$func_id_old = $func_id_i;
 			}
 
-			$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i . " AND `func_id`=" . $func_id_i );
+			$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
 		}
 	}
 
-	$db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_groups`" );
-	$db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_weight`" );
-
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['block_weight'], 'reset position all block', $admin_info['userid'] );
 	nv_del_moduleCache( 'themes' );
+
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
+	$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
 
 	echo $lang_module['block_update_success'];
 }
 else
 {
-	echo "ERROR";
+	echo 'ERROR';
 }
-
-?>

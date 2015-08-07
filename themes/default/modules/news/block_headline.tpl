@@ -1,20 +1,21 @@
 <!-- BEGIN: main -->
-<link type="text/css" rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/jquery.ui.tabs.css" media="all" />
-<div id="topnews" style="display:none">
-	<div class="indent clearfix">
+<link type="text/css" rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/jquery.ui.tabs.css" />
+<link type="text/css" rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/contentslider.css" />
+<div id="topnews" class="panel panel-default clearfix" style="display:none">
+	<div class="row">
 		<!-- BEGIN: hots_news_img -->
-		<div class="headline span-8 last fl">
+		<div class="col-md-12">
 			<div id="slider1" class="sliderwrapper">
 				<!-- BEGIN: loop -->
 				<div class="contentdiv clearfix">
-					<a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}"><img id="slImg{HOTSNEWS.imgID}" src="{PIX_IMG}" alt="{HOTSNEWS.image_alt}" /></a><h3><a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}">{HOTSNEWS.title}</a></h3>
+					<a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}"><img class="img-responsive" id="slImg{HOTSNEWS.imgID}" src="{PIX_IMG}" alt="{HOTSNEWS.image_alt}" /></a><h3><a title="{HOTSNEWS.title}" href="{HOTSNEWS.link}">{HOTSNEWS.title}</a></h3>
 				</div>
 				<!-- END: loop -->
 			</div>
-			<div id="paginate-slider1" class="pagination"></div>
+			<div id="paginate-slider1" class="pagination">&nbsp;</div>
 		</div>
 		<!-- END: hots_news_img -->
-		<div id="tabs" class="fr tabs" style="width:180px;">
+		<div id="tabs" class="col-md-12 tabs">
 			<ul>
 				<!-- BEGIN: loop_tabs_title -->
 				<li>
@@ -22,14 +23,14 @@
 				</li>
 				<!-- END: loop_tabs_title -->
 			</ul>
-			<div class="clear"></div>
+			<div class="clear">&nbsp;</div>
 			<!-- BEGIN: loop_tabs_content -->
 			<div id="tabs-{TAB_TITLE.id}">
 				<!-- BEGIN: content -->
 				<ul class="lastest-news">
 					<!-- BEGIN: loop -->
 					<li>
-						<a title="{LASTEST.title}" href="{LASTEST.link}">{LASTEST.title}</a>
+						<a {TITLE} class="show" href="{LASTEST.link}" data-content="{LASTEST.hometext}" data-img="{LASTEST.homeimgfile}" data-rel="block_headline_tooltip">{LASTEST.title}</a>
 					</li>
 					<!-- END: loop -->
 				</ul>
@@ -39,4 +40,13 @@
 		</div>
 	</div>
 </div>
+<!-- BEGIN: tooltip -->
+<script type="text/javascript">
+$(document).ready(function() {$("[data-rel='block_headline_tooltip'][data-content!='']").tooltip({
+	placement: "{TOOLTIP_POSITION}",
+	html: true,
+	title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+});});
+</script>
+<!-- END: tooltip -->
 <!-- END: main -->

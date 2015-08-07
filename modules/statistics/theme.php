@@ -1,24 +1,25 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @createdate 10/03/2010 10:51
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
+ * @Createdate 10/03/2010 10:51
  */
 
 if( ! defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
 
 /**
- * referer()
+ * nv_theme_statistics_referer()
  *
  * @return
  */
-function referer()
+function nv_theme_statistics_referer( $cts, $total )
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $countries_list, $cts, $host_list, $total;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
-	$xtpl = new XTemplate( "referer.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl = new XTemplate( 'referer.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	if( $total )
 	{
@@ -28,11 +29,9 @@ function referer()
 		{
 			if( ! empty( $m['count'] ) )
 			{
-				$proc = ceil( ( $m['count'] / $cts['max'] ) * 100 );
-				$m['count'] = number_format( $m['count'] );
-				$xtpl->assign( 'M', $m );
-				$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
-				$xtpl->assign( 'HEIGHT', $proc * 2 );
+				$xtpl->assign( 'M', number_format( $m['count'] ) );
+				$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif' );
+				$xtpl->assign( 'HEIGHT', ceil( ( $m['count'] / $cts['max'] ) * 200 ) );
 
 				$xtpl->parse( 'main.loop.img' );
 			}
@@ -62,17 +61,17 @@ function referer()
 }
 
 /**
- * allreferers()
+ * nv_theme_statistics_allreferers()
  *
  * @return
  */
-function allreferers()
+function nv_theme_statistics_allreferers( $num_items, $cts, $host_list )
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $countries_list, $cts, $host_list;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
-	$xtpl = new XTemplate( "allreferers.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl = new XTemplate( 'allreferers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $host_list ) )
 		{
@@ -81,7 +80,7 @@ function allreferers()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -90,7 +89,7 @@ function allreferers()
 				{
 					$proc = ceil( ( $value[0] / $cts['max'] ) * 100 );
 
-					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
+					$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif' );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
@@ -114,17 +113,17 @@ function allreferers()
 }
 
 /**
- * allbots()
+ * nv_theme_statistics_allbots()
  *
  * @return
  */
-function allbots()
+function nv_theme_statistics_allbots( $num_items, $bot_list, $cts )
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $bot_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
-	$xtpl = new XTemplate( "allbots.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl = new XTemplate( 'allbots.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $bot_list ) )
 		{
@@ -133,7 +132,7 @@ function allbots()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -142,7 +141,7 @@ function allbots()
 				{
 					$proc = ceil( ( $value[0] / $cts['max'] ) * 100 );
 
-					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
+					$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif' );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
@@ -166,17 +165,17 @@ function allbots()
 }
 
 /**
- * allos()
+ * nv_theme_statistics_allos()
  *
  * @return
  */
-function allos()
+function nv_theme_statistics_allos( $num_items, $os_list, $cts )
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $os_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
-	$xtpl = new XTemplate( "allos.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl = new XTemplate( 'allos.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $os_list ) )
 		{
@@ -185,8 +184,10 @@ function allos()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				$const = 'PLATFORM_' . strtoupper( $key );
+				$key = defined( $const ) ? constant( $const ) : $lang_global['unknown'];
 
+				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
 
@@ -194,7 +195,7 @@ function allos()
 				{
 					$proc = ceil( ( $value[0] / $cts['max'] ) * 100 );
 
-					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
+					$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif' );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
@@ -218,17 +219,17 @@ function allos()
 }
 
 /**
- * allbrowsers()
+ * nv_theme_statistics_allbrowsers()
  *
  * @return
  */
-function allbrowsers()
+function nv_theme_statistics_allbrowsers( $num_items, $browsers_list, $cts )
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $browsers_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
-	$xtpl = new XTemplate( "allbrowsers.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl = new XTemplate( 'allbrowsers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $browsers_list ) )
 		{
@@ -237,8 +238,10 @@ function allbrowsers()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				$const = 'BROWSER_' . strtoupper( $key );
+				$key = defined( $const ) ? constant( $const ) : $lang_global['unknown'];
 
+                $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
 
@@ -246,14 +249,14 @@ function allbrowsers()
 				{
 					$proc = ceil( ( $value[0] / $cts['max'] ) * 100 );
 
-					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
+					$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif' );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
 					$value[0] = number_format( $value[0] );
 				}
 				$xtpl->assign( 'VALUE', $value );
-				
+
 				++$a;
 
 				$xtpl->parse( 'main.loop' );
@@ -271,17 +274,17 @@ function allbrowsers()
 }
 
 /**
- * allcountries()
+ * nv_theme_statistics_allcountries()
  *
  * @return
  */
-function allcountries()
+function nv_theme_statistics_allcountries( $num_items, $countries_list, $cts )
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $nv_Request, $module_name, $all_page, $countries_list, $cts;
+	global $module_info, $module_file, $lang_module, $lang_global, $module_name;
 
-	$xtpl = new XTemplate( "allcountries.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl = new XTemplate( 'allcountries.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
-	if( $all_page )
+	if( $num_items )
 	{
 		if( ! empty( $countries_list ) )
 		{
@@ -290,7 +293,8 @@ function allcountries()
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+				if ( $key == 'ZZ' ) $value[0] = $lang_global['unknown'];
+                $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -299,7 +303,7 @@ function allcountries()
 				{
 					$proc = ceil( ( $value[1] / $cts['max'] ) * 100 );
 
-					$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
+					$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif' );
 					$xtpl->assign( 'WIDTH', $proc * 3 );
 
 					$xtpl->parse( 'main.loop.img' );
@@ -323,15 +327,15 @@ function allcountries()
 }
 
 /**
- * main()
+ * nv_theme_statistics_main()
  *
  * @return
  */
-function main()
+function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh )
 {
-	global $module_info, $global_config, $module_file, $db, $lang_module, $lang_global, $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $ctso, $ctsh, $contents;
+	global $module_info, $module_name, $module_file, $lang_module, $lang_global;
 
-	$xtpl = new XTemplate( "main.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'CTS', $ctsy );
 
@@ -341,7 +345,7 @@ function main()
 		{
 			$xtpl->assign( 'M', number_format( $m ) );
 			$proc = ceil( ( $m / $ctsy['max'] ) * 100 );
-			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
+			$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif' );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
 
 			$xtpl->parse( 'main.year.loop.img' );
@@ -375,11 +379,10 @@ function main()
 	{
 		if( ! empty( $m['count'] ) )
 		{
-			$contents .= $m['count'] . "<br />";
 			$proc = ceil( ( $m['count'] / $ctsm['max'] ) * 100 );
-			$m['count'] = number_format($m['count']);
+			$m['count'] = number_format( $m['count'] );
 			$xtpl->assign( 'M', $m );
-			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
+			$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif' );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
 
 			$xtpl->parse( 'main.month.loop.img' );
@@ -419,7 +422,7 @@ function main()
 		{
 			$proc = ceil( ( $m / $ctsdm['max'] ) * 100 );
 
-			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
+			$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif' );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
 
 			$xtpl->parse( 'main.day_m.loop.img' );
@@ -455,7 +458,7 @@ function main()
 		{
 			$proc = ceil( ( $m['count'] / $ctsdw['max'] ) * 100 );
 
-			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
+			$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif' );
 			$xtpl->assign( 'HEIGHT', $proc * 2 );
 			$m['count'] = number_format( $m['count'] );
 			$xtpl->assign( 'M', $m );
@@ -497,7 +500,7 @@ function main()
 
 				$proc = ceil( ( $m / $ctsh['max'] ) * 100 );
 
-				$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg.gif" );
+				$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg.gif' );
 				$xtpl->assign( 'HEIGHT', $proc * 2 );
 
 				$xtpl->parse( 'main.hour.loop.img' );
@@ -532,7 +535,8 @@ function main()
 	$a = 0;
 	foreach( $ctsc['rows'] as $key => $value )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		if ( $key == 'ZZ' ) $value[0] = $lang_global['unknown'];
+        $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
 
@@ -540,7 +544,7 @@ function main()
 		{
 			$proc = ceil( ( $value[1] / $ctsc['max'] ) * 100 );
 
-			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
+			$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif' );
 			$xtpl->assign( 'WIDTH', $proc * 3 );
 
 			$xtpl->parse( 'main.ct.loop.img' );
@@ -554,10 +558,9 @@ function main()
 
 	if( $ctsc['others'][1] )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
-		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics&amp;" . NV_OP_VARIABLE . "=allcountries" );
-
+		$xtpl->assign( 'URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allcountries'] );
 		$xtpl->parse( 'main.ct.ot' );
 	}
 
@@ -570,14 +573,17 @@ function main()
 	$a = 0;
 	foreach( $ctsb['rows'] as $key => $value )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$const = 'BROWSER_' . strtoupper( $key );
+        $key = defined( $const ) ? constant( $const ) : $lang_global['unknown'];
+
+        $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
 
 		if( $value[0] )
 		{
 			$proc = ceil( ( $value[0] / $ctsb['max'] ) * 100 );
-			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
+			$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif' );
 			$xtpl->assign( 'WIDTH', $proc * 3 );
 
 			$xtpl->parse( 'main.br.loop.img' );
@@ -591,11 +597,9 @@ function main()
 
 	if( $ctsb['others'][1] )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
-
-		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics&amp;" . NV_OP_VARIABLE . "=allbrowsers" );
-
+		$xtpl->assign( 'URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbrowsers'] );
 		$xtpl->parse( 'main.br.ot' );
 	}
 
@@ -608,8 +612,10 @@ function main()
 	$a = 0;
 	foreach( $ctso['rows'] as $key => $value )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$const = 'PLATFORM_' . strtoupper( $key );
+        $key = defined( $const ) ? constant( $const ) : $lang_global['unknown'];
 
+        $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
 
@@ -617,7 +623,7 @@ function main()
 		{
 			$proc = ceil( ( $value[0] / $ctso['max'] ) * 100 );
 
-			$xtpl->assign( 'SRC', NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/statistics/bg2.gif" );
+			$xtpl->assign( 'SRC', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/statistics/bg2.gif' );
 			$xtpl->assign( 'WIDTH', $proc * 3 );
 
 			$xtpl->parse( 'main.os.loop.img' );
@@ -630,11 +636,10 @@ function main()
 
 	if( $ctso['others'][1] )
 	{
-		$class = ( $a % 2 == 0 ) ? "  class=\"second\"" : "";
+		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 		$xtpl->assign( 'CLASS', $class );
-		$xtpl->assign( 'URL', NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=statistics&amp;" . NV_OP_VARIABLE . "=allos" );
-
+		$xtpl->assign( 'URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allos'] );
 		$xtpl->parse( 'main.os.ot' );
 	}
 
@@ -645,5 +650,3 @@ function main()
 
 	return $xtpl->text( 'main' );
 }
-
-?>

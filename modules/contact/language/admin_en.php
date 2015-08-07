@@ -1,12 +1,13 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
- * @Language English
- * @Createdate Mar 04, 2010, 08:22:00 AM
- */
+* @Project NUKEVIET 4.x
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Language English
+* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+* @Createdate Mar 04, 2010, 08:22:00 AM
+*/
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
@@ -18,10 +19,16 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['edit_title'] = 'Preview';
 $lang_module['add_row_title'] = 'Add department';
-$lang_module['list_row_title'] = 'List of departments';
+$lang_module['department_title'] = 'List of departments';
+$lang_module['alias'] = 'Alias';
+$lang_module['error_alias'] = 'Error: no static links';
+$lang_module['duplicate_alias'] = 'Error: title or static link exists';
+$lang_module['number'] = 'Number';
 $lang_module['err_row_title'] = 'Not exists';
 $lang_module['part_row_title'] = 'Department';
 $lang_module['email_row_title'] = 'Email';
+$lang_module['yahoo_row_title'] = 'Yahoo';
+$lang_module['skype_row_title'] = 'Skype';
 $lang_module['note_row_title'] = 'Note';
 $lang_module['bt_save_row_title'] = 'Save';
 $lang_module['bt_reset_row_title'] = 'Clear';
@@ -62,5 +69,6 @@ $lang_module['admin_send2mail_title'] = 'Send to email';
 $lang_module['delall'] = 'Delete all';
 $lang_module['siteinfo_new'] = 'Unread contact';
 $lang_module['no_row_contact'] = 'Any Contact';
-
-?>
+$lang_module['url_for_iframe'] = 'Url for iframe';
+$lang_module['notification_contact_new'] = '<strong />%s mailing contact title<strong />%s';
+$lang_module['is_default'] = 'Default';

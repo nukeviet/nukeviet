@@ -1,21 +1,20 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="quote" style="width:98%">
-	<blockquote class="error"><span>{ERROR}</span></blockquote>
-</div>
-<div class="clear"></div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <!-- BEGIN: result -->
-<table class="tab1">
-	<tr>
-		<td class="center">
-		<p>
-			<strong>{LANG.save_ok}</strong>
-		</p>
-		<p>
-			<strong><a title="{LANG.save_download}" href="{LINK_DOWN}">{LANG.save_download}</a></strong>
-		</p></td>
-	</tr>
-</table>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<tr>
+			<td class="text-center">
+			<p>
+				<strong>{LANG.save_ok}</strong>
+			</p>
+			<p>
+				<strong><a title="{LANG.save_download}" href="{LINK_DOWN}">{LANG.save_download}</a></strong>
+			</p></td>
+		</tr>
+	</table>
+</div>
 <!-- END: result -->
 <!-- END: main -->

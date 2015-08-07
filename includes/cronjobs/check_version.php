@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 11-7-2011 9:25
  */
 
@@ -24,17 +25,16 @@ function cron_auto_check_version()
 
 	if( ! empty( $admin_cookie ) and $global_config['autocheckupdate'] )
 	{
-		require ( NV_ROOTDIR . "/includes/core/admin_access.php" );
-		require ( NV_ROOTDIR . "/includes/core/is_admin.php" );
+		require NV_ROOTDIR . '/includes/core/admin_access.php';
+		require NV_ROOTDIR . '/includes/core/is_admin.php';
 
 		if( defined( 'NV_IS_GODADMIN' ) )
 		{
-			include_once ( NV_ROOTDIR . "/includes/core/admin_functions.php" );
+			define( 'NV_ADMIN', true );
+			include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 			nv_geVersion( $global_config['autoupdatetime'] * 3600 );
 		}
 	}
 
 	return true;
 }
-
-?>

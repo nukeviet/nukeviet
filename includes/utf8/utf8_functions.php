@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 23/8/2010, 0:13
  */
 
@@ -243,8 +244,13 @@ function nv_trim( $str, $charlist = false )
  */
 function nv_EncString( $string )
 {
-	include ( NV_ROOTDIR . '/includes/utf8/lookup.php' );
+	if( file_exists( NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ) )
+	{
+		include NV_ROOTDIR . '/includes/utf8/lookup_' . NV_LANG_DATA . '.php' ;
+		$string = strtr( $string, $utf8_lookup_lang );
+	}
 
+	include NV_ROOTDIR . '/includes/utf8/lookup.php' ;
 	return strtr( $string, $utf8_lookup['romanize'] );
 }
 
@@ -255,6 +261,7 @@ function nv_EncString( $string )
  */
 function change_alias( $alias )
 {
+	$alias = preg_replace('/[\x{0300}\x{0301}\x{0303}\x{0309}\x{0323}]/u', '', $alias); // fix unicode consortium for Vietnamese
 	$search = array( '&amp;', '&#039;', '&quot;', '&lt;', '&gt;', '&#x005C;', '&#x002F;', '&#40;', '&#41;', '&#42;', '&#91;', '&#93;', '&#33;', '&#x3D;', '&#x23;', '&#x25;', '&#x5E;', '&#x3A;', '&#x7B;', '&#x7D;', '&#x60;', '&#x7E;' );
 	$alias = preg_replace( array( '/[^a-zA-Z0-9]/', '/[ ]+/', '/^[\-]+/', '/[\-]+$/' ), array( ' ', '-', '', '' ), str_replace( $search, ' ', nv_EncString( $alias ) ) );
 	return $alias;
@@ -267,21 +274,20 @@ function change_alias( $alias )
  * @param integer $num
  * @return
  */
-function nv_clean60( $string, $num = 60 )
+function nv_clean60( $string, $num = 60, $specialchars = false )
 {
 	global $global_config;
 
 	$string = nv_unhtmlspecialchars( $string );
 
 	$len = nv_strlen( $string );
-
 	if( $num and $num < $len )
 	{
 		if( ord( nv_substr( $string, $num, 1 ) ) == 32 )
 		{
 			$string = nv_substr( $string, 0, $num ) . '...';
 		}
-		elseif( strpos( $string, " " ) === false )
+		elseif( strpos( $string, ' ' ) === false )
 		{
 			$string = nv_substr( $string, 0, $num );
 		}
@@ -290,7 +296,8 @@ function nv_clean60( $string, $num = 60 )
 			$string = nv_clean60( $string, $num - 1 );
 		}
 	}
+	
+	if( $specialchars ) $string = nv_htmlspecialchars( $string );
+	
 	return $string;
 }
-
-?>

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @Language Tiếng Việt
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Apr 15, 2011, 02:22:00 PM
  */
 
@@ -40,9 +41,8 @@ $lang_module['module_name'] = 'Chọn module';
 $lang_module['cho_module'] = 'Chọn module';
 $lang_module['error_menu_block'] = 'Lỗi: Chưa nhập khối menu';
 $lang_module['action'] = 'Hoạt động';
+$lang_module['display'] = 'Hiển thị';
 $lang_module['data_no'] = 'Hệ thống chưa có dữ liệu';
-$lang_module['block'] = 'Khối menu này có';
-$lang_module['block2'] = ' Menu, bạn hãy xoá menu trước khi xoá menu này';
 $lang_module['back'] = 'Trở về mục trước ';
 $lang_module['title_exit_cat'] = 'Tên này đã tồn tại';
 $lang_module['add_item'] = 'Thêm mục cho menu';
@@ -56,7 +56,6 @@ $lang_module['module'] = 'Module';
 $lang_module['op'] = 'op';
 $lang_module['path'] = 'path';
 $lang_module['target'] = 'Mở trang liên kết';
-$lang_module['who_view'] = 'Quyền xem';
 $lang_module['type_target1'] = 'Trang hiện tại';
 $lang_module['type_target2'] = 'Mở tab mới';
 $lang_module['type_target3'] = 'Mở cửa sổ mới';
@@ -64,14 +63,13 @@ $lang_module['cat'] = 'Menu này có ';
 $lang_module['cat0'] = 'Là mục chính';
 $lang_module['cho_item'] = 'Chọn loại của module';
 $lang_module['cats'] = 'Thuộc mục';
-$lang_module['caton'] = ' menu con nếu muốn xóa hãy xóa hoặc di chuyển các menu con trước';
+$lang_module['caton'] = ' menu con nếu xóa các menu con cũng sẽ bị xóa?';
 $lang_module['error_menu_link'] = 'Lỗi: Bạn chưa nhập đường link';
 $lang_module['name_block'] = 'Khối menu';
 $lang_module['here'] = 'đây';
 $lang_module['groups'] = 'Nếu chọn "Nhóm thành viên" hãy đánh dấu vào các nhóm bên dưới';
 $lang_module['sub_menu'] = 'menu con';
-$lang_module['main_note_0'] = 'Nhấp vào';
-$lang_module['main_note_1'] = 'để tạo khối menu mới. Nhấp vào tên mỗi khối menu bên dưới để thêm các mục menu vào đây cũng như chỉnh sửa các mục menu. Gợi ý: Bạn có thể tạo nhiều khối menu để sử dụng cho các giao diện và vị trí khác nhau.';
+$lang_module['main_note'] = 'Nhấp vào tên mỗi khối menu bên dưới để thêm các mục menu vào đây cũng như chỉnh sửa các mục menu. Gợi ý: Bạn có thể tạo nhiều khối menu để sử dụng cho các giao diện và vị trí khác nhau.';
 $lang_module['add_type_active'] = 'Kiểu active menu.';
 $lang_module['add_type_active_note'] = 'Cách thức xác định một menu có đang được kích hoạt hay không bằng cách so sánh liên kết của menu chỉ đến với liên kết hiện tại của trang theo các tiêu chí bên.';
 $lang_module['add_type_active_0'] = 'Chính xác với liên kết của menu';
@@ -82,4 +80,10 @@ $lang_module['add_type_css_info'] = 'Tên class (CSS) để xác định giao di
 $lang_module['add_error_module'] = 'Lỗi: Không có module nào được chỉ định';
 $lang_module['add_error_module_exist'] = 'Lỗi: Module không tồn tại';
 
-?>
+$lang_module['action_menu'] = 'Nạp menu từ';
+$lang_module['action_menu_sys_1'] = 'Các menu là các module';
+$lang_module['action_menu_sys_2'] = 'Các menu là các module, submenu là các chủ đề hoặc chức năng';
+$lang_module['action_menu_sys_3'] = 'Các menu là chủ đề hoặc chức năng module';
+$lang_module['icon'] = 'Icon menu';
+$lang_module['action_form'] = 'Thực hiện';
+$lang_module['msgnocheck'] = 'Bạn cần chọn ít nhất 1 bài viết để thực hiện';

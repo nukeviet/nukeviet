@@ -57,11 +57,6 @@
 	background: #FFF
 }
 
-#pageContent input {
-	padding: 2px;
-	font: 400 12px Tahoma, Arial, Verdana, sans-serif
-}
-
 #pageContent input[type=text].txt {
 	width: 280px
 }
@@ -115,4 +110,9 @@
 	background-repeat: no-repeat;
 	background-position: right center;
 	background-image: url('../images/arrows/tall-down-arrow.gif')
+}
+
+/* EDIT INFO */
+#change-photo{
+	display: none;
 }

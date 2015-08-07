@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/25/2010 21:7
  */
 
@@ -53,24 +54,19 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 
 	$process = $data = array();
 
-	require_once NV_ROOTDIR . '/includes/class/geturl.class.php';
 	$geturl = new UrlGetContents();
 
-	$total = $db->sql_numrows( $db->sql_query( "SELECT a.bid FROM `" . NV_BANNERS_GLOBALTABLE. "_click` a INNER JOIN `" . NV_BANNERS_GLOBALTABLE. "_rows` b ON a.bid=b.id WHERE b.clid= " . $banner_client_info['id'] . " AND a.click_time <= " . $enddate . " AND a.click_time >= " . $firstdate . " AND a.bid=" . $ads . " ORDER BY `click_time` ASC" ) );
-
-	if( $total )
+	$result = $db->query( "SELECT a." . $onetype . " FROM " . NV_BANNERS_GLOBALTABLE. "_click a INNER JOIN " . NV_BANNERS_GLOBALTABLE. "_rows b ON a.bid=b.id WHERE b.clid= " . $banner_client_info['id'] . " AND a.click_time <= " . $enddate . " AND a.click_time >= " . $firstdate . " AND a.bid=" . $ads . " ORDER BY click_time ASC" );
+	while( $row = $result->fetch() )
 	{
-		$result = $db->sql_query( "SELECT a." . $onetype . " FROM `" . NV_BANNERS_GLOBALTABLE. "_click` a INNER JOIN `" . NV_BANNERS_GLOBALTABLE. "_rows` b ON a.bid=b.id WHERE b.clid= " . $banner_client_info['id'] . " AND a.click_time <= " . $enddate . " AND a.click_time >= " . $firstdate . " AND a.bid=" . $ads . " ORDER BY `click_time` ASC" );
-
-		while( $row = $db->sql_fetchrow( $result ) )
+		if( $type == 'date' )
 		{
-			if( $type == 'date' )
-			{
-				$row[$onetype] = date( 'd/m', $row[$onetype] );
-			}
-			$data[] = $row[$onetype];
+			$row[$onetype] = date( 'd/m', $row[$onetype] );
 		}
-
+		$data[] = $row[$onetype];
+	}
+	if( sizeof( $data ) > 0)
+	{
 		$statics = array_count_values( $data );
 
 		foreach( $statics as $country => $quantity )
@@ -113,5 +109,3 @@ if( defined( 'NV_IS_BANNER_CLIENT' ) )
 		imagedestroy( $my_img );
 	}
 }
-
-?>

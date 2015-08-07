@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 3/15/2010 15:32
  */
 
@@ -15,25 +16,20 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 
 if( empty( $id ) ) die( 'Stop!!!' );
 
-$sql = "SELECT `act` FROM `" . NV_BANNERS_GLOBALTABLE. "_rows` WHERE `id`=" . $id . " AND `act`IN (0,1,3)";
-$result = $db->sql_query( $sql );
-$numrows = $db->sql_numrows( $result );
-if( $numrows != 1 ) die( 'Stop!!!' );
+$sql = 'SELECT act FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE id=' . $id . ' AND act IN (0,1,3)';
+$row = $db->query( $sql )->fetch();
+if( empty( $row ) ) die( 'Stop!!!' );
 
-$row = $db->sql_fetchrow( $result );
 $act = intval( $row['act'] );
 if( $act == 0 ) $act = 1;
 elseif( $act == 1 ) $act = 3;
 elseif( $act == 3 ) $act = 1;
 
-$sql = "UPDATE `" . NV_BANNERS_GLOBALTABLE. "_rows` SET `act`=" . $act . " WHERE `id`=" . $id;
-$return = $db->sql_query( $sql );
-$return = $return ? "OK" : "NO";
+$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET act=' . $act . ' WHERE id=' . $id;
+$return = ( $db->exec( $sql ) ) ? 'OK' : 'NO';
 
 nv_CreateXML_bannerPlan();
 
-include ( NV_ROOTDIR . '/includes/header.php' );
+include NV_ROOTDIR . '/includes/header.php';
 echo $return . '|act_' . $id;
-include ( NV_ROOTDIR . '/includes/footer.php' );
-
-?>
+include NV_ROOTDIR . '/includes/footer.php';

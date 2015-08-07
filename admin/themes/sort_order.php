@@ -1,9 +1,10 @@
 <?php
 
 /**
- * @Project NUKEVIET 3.x
+ * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2012 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+ * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  * @Development version theme control
  */
@@ -19,32 +20,44 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 {
 	$pos_new = '[' . $position . ']';
 
-	$sql = "SELECT `bid`, `theme`, `position` FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE position !=" . $db->dbescape_string( $pos_new ) . " AND bid IN (" . implode( ',', $array_bid ) . ")";
-	$result = $db->sql_query( $sql );
-
-	if( $db->sql_numrows( $result ) == 1 )
+	$sth = $db->prepare( 'SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE position != :position AND bid IN (' . implode( ',', $array_bid ) . ')' );
+	$sth->bindParam( ':position', $pos_new, PDO::PARAM_STR );
+	$sth->execute();
+	$row = $sth->fetch( 3 );
+	if( !empty( $row ) )
 	{
-		list( $bid, $theme, $pos_old ) = $db->sql_fetchrow( $result );
+		list( $bid, $theme, $pos_old ) = $row;
 
-		$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET `position`=" . $db->dbescape_string( $pos_new ) . ", `weight`='2147483647' WHERE `bid`=" . $bid );
-		$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `weight`='2147483647' WHERE `bid`=" . $bid );
+		$sth = $db->prepare( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET position= :position, weight=2147483647 WHERE bid=' . $bid );
+		$sth->bindParam( ':position', $pos_new, PDO::PARAM_STR );
+		$sth->execute();
+
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=2147483647 WHERE bid=' . $bid );
 
 		//Update weight for old position
-		$result = $db->sql_query( "SELECT bid FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $theme . "' AND position='" . $pos_old . "' ORDER BY weight ASC" );
+		$sth = $db->prepare( 'SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme= :theme AND position=:position ORDER BY weight ASC' );
+		$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+		$sth->bindParam( ':position', $pos_old, PDO::PARAM_STR );
+		$sth->execute();
 
-		if( $db->sql_numrows( $result ) )
+		$weight = 0;
+		while( list( $bid_i ) = $sth->fetch( 3 ) )
 		{
-			$weight = 0;
-			while( list( $bid_i ) = $db->sql_fetchrow( $result ) )
-			{
-				++$weight;
-				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i );
-			}
+			++$weight;
+			$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
+		}
 
+		if( $weight )
+		{
 			$func_id_old = $weight = 0;
-			$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme='" . $theme . "' AND t2.position='" . $pos_old . "' ORDER BY t1.func_id ASC, t1.weight ASC" );
 
-			while( list( $bid_i, $func_id_i ) = $db->sql_fetchrow( $result ) )
+			$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight t1
+				INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
+				WHERE t2.theme= :theme AND t2.position= :position ORDER BY t1.func_id ASC, t1.weight ASC' );
+			$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+			$sth->bindParam( ':position', $pos_old, PDO::PARAM_STR );
+			$sth->execute();
+			while( list( $bid_i, $func_id_i ) = $sth->fetch( 3 ) )
 			{
 				if( $func_id_i == $func_id_old )
 				{
@@ -55,42 +68,47 @@ if( ! empty( $array_bid ) && ! empty( $position ) )
 					$weight = 1;
 					$func_id_old = $func_id_i;
 				}
-				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i . " AND `func_id`=" . $func_id_i );
+				$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
 			}
 		}
 
 		//Update weight for news position
-		$result = $db->sql_query( "SELECT bid FROM `" . NV_BLOCKS_TABLE . "_groups` WHERE theme='" . $theme . "' AND position=" . $db->dbescape_string( $pos_new ) . " ORDER BY weight ASC" );
+		$sth = $db->prepare( 'SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups
+			WHERE theme= :theme AND position= :position
+			ORDER BY weight ASC' );
+		$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+		$sth->bindParam( ':position', $pos_new, PDO::PARAM_STR );
+		$sth->execute();
 
-		if( $db->sql_numrows( $result ) )
+		$weight = 0;
+		while( list( $bid_i ) = $sth->fetch( 3 ) )
 		{
-			$weight = 0;
-			while( list( $bid_i ) = $db->sql_fetchrow( $result ) )
-			{
-				++$weight;
-				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_groups` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i );
-			}
-
-			$func_id_old = $weight = 0;
-			$result = $db->sql_query( "SELECT t1.bid, t1.func_id FROM `" . NV_BLOCKS_TABLE . "_weight` AS t1 INNER JOIN `" . NV_BLOCKS_TABLE . "_groups` AS t2 ON t1.bid = t2.bid WHERE t2.theme='" . $theme . "' AND t2.position=" . $db->dbescape_string( $pos_new ) . " ORDER BY t1.func_id ASC, t1.weight ASC" );
-
-			while( list( $bid_i, $func_id_i ) = $db->sql_fetchrow( $result ) )
-			{
-				if( $func_id_i == $func_id_old )
-				{
-					++$weight;
-				}
-				else
-				{
-					$weight = 1;
-					$func_id_old = $func_id_i;
-				}
-				$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET `weight`=" . $weight . " WHERE `bid`=" . $bid_i . " AND `func_id`=" . $func_id_i );
-			}
+			++$weight;
+			$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );
 		}
 
-		$db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_groups`" );
-		$db->sql_query( "OPTIMIZE TABLE `" . NV_BLOCKS_TABLE . "_weight`" );
+		$func_id_old = $weight = 0;
+		$sth = $db->prepare( 'SELECT t1.bid, t1.func_id FROM ' . NV_BLOCKS_TABLE . '_weight t1
+			INNER JOIN ' . NV_BLOCKS_TABLE . '_groups t2 ON t1.bid = t2.bid
+			WHERE t2.theme= :theme AND t2.position= :position
+			ORDER BY t1.func_id ASC, t1.weight ASC' );
+		$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
+		$sth->bindParam( ':position', $pos_new, PDO::PARAM_STR );
+		$sth->execute();
+		while( list( $bid_i, $func_id_i ) = $sth->fetch( 3 ) )
+		{
+			if( $func_id_i == $func_id_old )
+			{
+				++$weight;
+			}
+			else
+			{
+				$weight = 1;
+				$func_id_old = $func_id_i;
+			}
+			$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i );
+		}
+
 	}
 }
 
@@ -100,12 +118,14 @@ if( ! empty( $array_bid ) and $func_id > 0 )
 {
 	foreach( $array_bid as $bid )
 	{
-		$db->sql_query( "UPDATE `" . NV_BLOCKS_TABLE . "_weight` SET weight = " . $weight . " WHERE bid = " . $bid . " AND func_id=" . $func_id );
+		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight = ' . $weight . ' WHERE bid = ' . $bid . ' AND func_id=' . $func_id );
 		++$weight;
 	}
 }
 
 nv_del_moduleCache( 'themes' );
-die( 'OK_' . $func_id );
 
-?>
+$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups' );
+$db->query( 'OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight' );
+
+die( 'OK_' . $func_id );
