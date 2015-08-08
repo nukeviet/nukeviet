@@ -238,3 +238,4 @@ $lang_module['field_min_max_value'] = '%1$s enter from %2$s to %3$s';
 $lang_module['field_min_max_error'] = '%1$s enter from %2$s to %3$s letters';
 $lang_module['field_match_type_required'] = '%s require press';
 $lang_module['errorMessage'] = 'Notifications from website';
+$lang_module['login_info'] = 'Please complete this form';
