@@ -108,12 +108,12 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 			{
 				$files_folders[] = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $row['basename'] . '/';
 
-				$langs_admin = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
+				$langs_admin = nv_scandir( NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/' );
 				foreach( $langs_admin as $langi )
 				{
-					if( file_exists( NV_ROOTDIR . '/language/' . $langi . '/admin_' . $row['basename'] . '.php' ) )
+					if( file_exists( NV_ROOTDIR . '/includes/language/' . $langi . '/admin_' . $row['basename'] . '.php' ) )
 					{
-						$files_folders[] = NV_ROOTDIR . '/language/' . $langi . '/admin_' . $row['basename'] . '.php';
+						$files_folders[] = NV_ROOTDIR . '/includes/language/' . $langi . '/admin_' . $row['basename'] . '.php';
 					}
 				}
 			}

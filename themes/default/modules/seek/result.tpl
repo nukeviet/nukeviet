@@ -11,8 +11,8 @@
 	<!-- END: more -->
 </ul>
 <!-- BEGIN: result -->
-<h3><a href="{RESULT.link}">{RESULT.title}</a></h3>
-<p>{RESULT.content}</p>
+<h3 class="margin-bottom-sm"><a href="{RESULT.link}">{RESULT.title}</a></h3>
+<div class="margin-bottom-lg">{RESULT.content}</div>
 <!-- END: result -->
 <!-- BEGIN: generate_page -->
 <div class="text-center">

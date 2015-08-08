@@ -3,7 +3,7 @@
 	<strong>{MSG1}</strong>
 	<br />
 	<br />
-	<img src="{NV_BASE_SITEURL}images/load_bar.gif" />
+	<img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" />
 	<br />
 	<br />
 	<strong><a href="{NV_REDIRECT}">{MSG2}</a></strong>

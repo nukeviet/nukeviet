@@ -35,7 +35,7 @@
 	<!-- END: loop -->
 </div>
 <div class="clearfix">
-	<div class="pull-right">{LANG.content_total_rows}: <strong>{NUM_ROWS}</strong></div>
+	<div class="pull-right">{LANG.content_total_rows}: <strong id="content-couter" data-total="{NUM_ROWS}">{NUM_ROWS}</strong></div>
 </div>
 <!-- END: rows -->
 <div class="modal fade" id="content-data">

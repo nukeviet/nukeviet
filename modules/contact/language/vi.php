@@ -17,7 +17,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['note'] = 'Xin điền đầy đủ các thông tin dưới đây trước khi gửi thư để chúng tôi tiện hồi âm cho bạn.';
+$lang_module['note'] = 'Nếu quí vị có yêu cầu, đề nghị hay ý kiến đóng góp, vui lòng điền vào mẫu dưới đây và nhấn vào nút Gửi thông tin';
 $lang_module['fullname'] = 'Họ và tên';
 $lang_module['email'] = 'Địa chỉ email';
 $lang_module['yahoo'] = 'Yahoo';

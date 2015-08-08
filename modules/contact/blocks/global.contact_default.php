@@ -50,7 +50,6 @@ if ( ! nv_function_exists( 'nv_contact_default_info' ) )
         if ( ! empty( $row['phone'] ) )
         {
             $nums = array_map( "trim", explode( "|", nv_unhtmlspecialchars( $row['phone'] ) ) );
-            $mainphone = array();
             foreach ( $nums as $k => $num )
             {
                 unset( $m );
@@ -60,8 +59,6 @@ if ( ! nv_function_exists( 'nv_contact_default_info' ) )
                     $xtpl->assign( 'PHONE', $phone );
                     $xtpl->parse( 'main.phone.item.href' );
                     $xtpl->parse( 'main.phone.item.href2' );
-                    
-                    if ( $k == 0 ) $mainphone = $phone;
                 }
                 else
                 {
@@ -69,25 +66,12 @@ if ( ! nv_function_exists( 'nv_contact_default_info' ) )
                     $num = preg_replace( "/\[[^\]]*\]/", "", $num );
                     $phone = array( 'number' => nv_htmlspecialchars( $num ) );
                     $xtpl->assign( 'PHONE', $phone );
-                    
-                    if ( $k == 0 ) $mainphone = $phone;
                 }
                 if ( $k ) $xtpl->parse( 'main.phone.item.comma' );
                 $xtpl->parse( 'main.phone.item' );
             }
             
             $xtpl->parse( 'main.phone' );
-            
-            if( !empty( $mainphone ) )
-            {
-                $xtpl->assign( 'MAINPHONE', $mainphone );
-                if( isset( $mainphone['href'] ) )
-                {
-                    $xtpl->parse( 'main.mainphone.href' );
-                    $xtpl->parse( 'main.mainphone.href2' );
-                }
-                $xtpl->parse( 'main.mainphone' );
-            }
         }
 
         if ( ! empty( $row['email'] ) )

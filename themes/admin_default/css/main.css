@@ -111,6 +111,10 @@ a.link:hover {
 	text-decoration: none !important
 }
 
+.bg-gainsboro{
+    background-color:#C0C0C0
+}
+
 #timeoutsess {
 	display: none;
 }

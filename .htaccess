@@ -14,11 +14,6 @@
   deny from all
 </Files>
 
-<Files mainfile.php>
-  order allow,deny
-  deny from all
-</Files>
-
 <IfModule mod_deflate.c>
 
   <FilesMatch "\.(css|js|xml)$">
@@ -72,3 +67,4 @@ RewriteRule ^([a-zA-Z0-9-]+)$ /$1/ [L,R=301]
 
 #nukeviet_rewrite_end
 ##################################################################################
+

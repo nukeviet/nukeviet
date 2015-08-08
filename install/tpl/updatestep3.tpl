@@ -75,7 +75,7 @@ $(window).load(function(){
 </script>
 <div id="versioninfo">
 	<div class="infoalert">	
-		<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Loading..."/><br />
+		<img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading..."/><br />
 		{LANG.update_waiting}
 	</div>
 </div>
@@ -90,7 +90,7 @@ $(window).load(function(){
 		$('#versioninfo').append(
 			'<div id="modinfo">' +
 				'<div class="infoalert">' +
-					'<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Loading..."/><br />' +
+					'<img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading..."/><br />' +
 					'{LANG.update_waiting_continue}' +
 				'</div>' +
 			'</div>'
@@ -101,7 +101,7 @@ $(window).load(function(){
 </script>
 <div id="versioninfo">
 	<div class="infoalert">	
-		<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Loading..."/><br />
+		<img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading..."/><br />
 		{LANG.update_waiting}
 	</div>
 </div>

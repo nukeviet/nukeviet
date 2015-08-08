@@ -159,7 +159,7 @@ else
 			}
 			else
 			{
-				$item['photo'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.jpg';
+				$item['photo'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';
 			}
 
 			$item['regdate'] = nv_date( 'd/m/Y', $item['regdate'] );

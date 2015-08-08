@@ -15,14 +15,22 @@ var myTimerPage = "",
     ftip_autoclose = !0,
 	winX = 0,
 	winY = 0,
+    oldWinX = 0,
+	oldWinY = 0,
+    cRangeX = 0,
+    cRangeY = 0,
 	docX = 0,
 	docY = 0;
 
 function winResize() {
+    oldWinX = winX;
+    oldWinY = winY;
 	winX = $(window).width();
 	winY = $(window).height();
 	docX = $(document).width();
-	docY = $(document).height()
+	docY = $(document).height();
+    cRangeX = Math.abs(winX - oldWinX);
+    cRangeY = Math.abs(winY - oldWinY);
 }
 
 function fix_banner_center() {
@@ -91,7 +99,7 @@ function ftipAutoClose(a)
 }
 
 function tipShow(a, b) {
-    if ($(a).is(".pa")) switchTab(a + " .guest-sign");
+    if ($(a).is(".pa")) switchTab(".guest-sign",a);
     tip_active && tipHide();
     ftip_active && ftipHide();
 	$("[data-toggle=tip]").removeClass("active");
@@ -145,6 +153,12 @@ function modalShow(a, b) {
 	$("#sitemodal").find(".modal-title").html(a);
 	$("#sitemodal").find(".modal-body").html(b);
 	$("#sitemodal").modal()
+}
+
+function modalShowByObj(a)
+{
+    var b = $(a).attr("title"), c = $(a).html();
+    modalShow(b, c)
 }
 
 // Build google map for block Company Info
@@ -210,11 +224,18 @@ $(function() {
 			return nv_msgbeforeunload
 		})
 	});
-	// Trigger tooltip
+	// Tooltip
 	$(".form-tooltip").tooltip({
-		selector: "[data-toggle=tooltip]",
-		container: "body"
-	});
+    	selector: "[data-toggle=tooltip]",
+    	container: "body"
+    });
+    $("[data-rel='tooltip'][data-content!='']").removeAttr("title").tooltip({
+    	container: "body",
+    	html: !0,
+    	title: function() {
+    		return ("" == $(this).data("img") ? "" : '<img class="img-thumbnail pull-left" src="' + $(this).data("img") + '" width="90" />') + $(this).data("content")
+    	}
+    });
 	// Change site lang
 	$(".nv_change_site_lang").change(function() {
 		document.location = $(this).val()
@@ -290,6 +311,34 @@ $(document).on({
 $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();
-	tipHide();
-    ftipHide()
+	if (150 < cRangeX || 150 < cRangeY) tipHide(), ftipHide()
+});
+
+// Load Social script - lasest
+$(window).load(function() {
+    (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
+        var d = a.getElementsByTagName(b)[0];
+        var fb_app_id = ( $('[property="fb:app_id"]').length > 0 ) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
+        var fb_locale = ( $('[property="og:locale"]').length > 0 ) ? $('[property="og:locale"]').attr("content") : ((nv_sitelang=="vi") ? 'vi_VN' : 'en_US');
+        a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
+    }(document, "script", "facebook-jssdk"));
+    
+    0 < $(".g-plusone").length && (window.___gcfg = {
+        lang: nv_sitelang
+    }, function() {
+        var a = document.createElement("script");
+        a.type = "text/javascript";
+        a.async = !0;
+        a.src = "https://apis.google.com/js/plusone.js";
+        var b = document.getElementsByTagName("script")[0];
+        b.parentNode.insertBefore(a, b);
+    }());
+    
+    0 < $(".twitter-share-button").length && function() {
+        var a = document.createElement("script");
+        a.type = "text/javascript";
+        a.src = "http://platform.twitter.com/widgets.js";
+        var b = document.getElementsByTagName("script")[0];
+        b.parentNode.insertBefore(a, b);
+    }();
 });

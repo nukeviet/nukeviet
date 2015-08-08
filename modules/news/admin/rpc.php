@@ -11,17 +11,17 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 // Ket noi ngon ngu
-if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_seotools.php' ) )
+if( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_seotools.php' ) )
 {
-	require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_seotools.php';
+	require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_seotools.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_seotools.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_seotools.php' ) )
 {
-	require NV_ROOTDIR . '/language/' . NV_LANG_DATA . '/admin_seotools.php';
+	require NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_seotools.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/en/admin_seotools.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_seotools.php' ) )
 {
-	require NV_ROOTDIR . '/language/en/admin_seotools.php';
+	require NV_ROOTDIR . '/includes/language/en/admin_seotools.php';
 }
 
 $page_title = $lang_module['rpc'];
@@ -188,7 +188,7 @@ if( nv_function_exists( "curl_init" ) and nv_function_exists( "curl_exec" ) )
 					$contents = "<table><tr><td>";
 					$contents .= "<div align=\"center\">";
 					$contents .= "<strong>" . $msg1 . "</strong><br /><br />\n";
-					$contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\" /><br /><br />\n";
+					$contents .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\" /><br /><br />\n";
 					$contents .= "<strong><a href=\"" . $nv_redirect2 . "\">" . $lang_module['rpc_ping_page'] . "</a></strong>";
 					$contents .= " - <strong><a href=\"" . $nv_redirect . "\">" . $msg2 . "</a></strong>";
 					$contents .= "</div>";

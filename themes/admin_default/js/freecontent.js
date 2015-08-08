@@ -32,7 +32,8 @@ var cfg = {
 	ctRow: '#content-row-',
 	ctList: '#content-list-container',
 	ctStatusBtn: '.content-status',
-	ctStatusPrefix: 'ct-status'
+	ctStatusPrefix: 'ct-status',
+	ctCouter: '#content-couter'
 };
 
 function nv_pare_data(id, isEditor){
@@ -369,9 +370,11 @@ $(document).ready(function(){
 					$(cfg.ctModalDelete).find('.success').show();
 					
 					setTimeout(function(){
+						var total = $(cfg.ctCouter).data('total') - 1;
 						$(cfg.ctModalDelete).modal('toggle');
 						$(cfg.ctRow + $(cfg.ctModalDelete).find('[name="id"]').val()).remove();
-						if( $(cfg.ctList + ' > div').length < 1 ){
+						$(cfg.ctCouter).data('total', total).html(total);
+						if( total <= 0 ){
 							window.location.href = window.location.href;
 						}
 					}, 1000);

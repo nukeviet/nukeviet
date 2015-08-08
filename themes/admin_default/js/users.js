@@ -316,7 +316,7 @@ function nv_choice_fields_additem() {
 }
 
 function nv_show_list_field() {
-	$('#module_show_list').html('<center><img alt="" src="' + nv_siteroot + 'images/load_bar.gif"></center>').load(script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&qlist=1&nocache=' + new Date().getTime());
+	$('#module_show_list').html('<center><img alt="" src="' + nv_siteroot + 'assets/images/load_bar.gif"></center>').load(script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&qlist=1&nocache=' + new Date().getTime());
 	return;
 }
 
@@ -361,7 +361,7 @@ function nv_load_current_date() {
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImage : nv_siteroot + "assets/images/calendar.gif",
 			buttonImageOnly : true
 		});
 		$("input[name=default_date]").removeAttr("disabled");
@@ -415,7 +415,7 @@ $(document).ready(function(){
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImage : nv_siteroot + "assets/images/calendar.gif",
 			buttonImageOnly : true
 		});
 		$("#birthday").datepicker({
@@ -424,7 +424,7 @@ $(document).ready(function(){
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImage : nv_siteroot + "assets/images/calendar.gif",
 			buttonImageOnly : true,
 			yearRange: "-99:+0",
 			beforeShow: function() {
@@ -438,7 +438,7 @@ $(document).ready(function(){
 	// Export user
 	$("input[name=data_export]").click(function() {
 		$("input[name=data_export]").attr("disabled", "disabled");
-		$('#users').html('<center>' + export_note + '<br /><br /><img src="' + nv_siteroot + 'images/load_bar.gif" alt="" /></center>');
+		$('#users').html('<center>' + export_note + '<br /><br /><img src="' + nv_siteroot + 'assets/images/load_bar.gif" alt="" /></center>');
 		nv_data_export(1);
 	});
 

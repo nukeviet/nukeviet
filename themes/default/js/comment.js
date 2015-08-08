@@ -30,7 +30,9 @@ function sendcommment(module, id_content, area, id, allowed, newscheckss, gfx_co
 			var rs = res.split('_');
 			if (rs[0] == 'OK') {
 				$("#idcomment").load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=comment&module=' + module + '&area=' + area + '&id=' + id + '&allowed=' + allowed + '&status_comment=' + rs[1] + '&checkss=' + newscheckss + '&nocache=' + new Date().getTime());
-				document.location = "#idcomment";
+				$('html, body').animate({
+                    scrollTop: $("#idcomment").offset().top
+                }, 800);
 			} else {
 				if (gfx_count > 0 ) {
 					change_captcha('#commentseccode_iavim');

@@ -10,7 +10,10 @@
 
 define( 'NV_SYSTEM', true );
 
-require str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php';
+// Xac dinh thu muc goc cua site
+define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
+
+require NV_ROOTDIR .'/includes/mainfile.php';
 
 require NV_ROOTDIR . '/includes/core/user_functions.php';
 
@@ -83,6 +86,15 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	// Kiểm tra module có trong hệ thống hay không
 	if( isset( $site_mods[$module_name] ) )
 	{
+		// SSL
+		if( $global_config['ssl_https'] === 3 and ! empty( $global_config['ssl_https_modules'] ) and in_array( $module_name, $global_config['ssl_https_modules'] ) and ( ! isset( $_SERVER['HTTPS'] ) or $_SERVER['HTTPS'] == 'off' ) )
+		{
+			header( "HTTP/1.1 301 Moved Permanently" );
+			header( "Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] );
+			exit();
+		}		
+		
+		// Global variable for module
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];

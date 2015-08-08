@@ -10,7 +10,7 @@
 <!-- END: tree -->
 <!-- BEGIN: main -->
 <link rel="stylesheet" type="text/css"	href="{NV_BASE_SITEURL}themes/{BLOCK_THEME}/css/jquery.metisMenu.css" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.metisMenu.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.metisMenu.js"></script>
 
 <div class="clearfix panel">
 	<aside class="sidebar">
@@ -20,7 +20,7 @@
 					<li>
 						<a title="{CAT1.note}" href="{CAT1.link}"{CAT1.target}>{CAT1.title_trim}</a>
 						<!-- BEGIN: expand -->
-						<span class="arrow expand">+</span>
+						<span class="fa arrow expand"></span>
 						<!-- END: expand -->
 
 						<!-- BEGIN: cat2 -->

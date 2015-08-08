@@ -9,9 +9,9 @@
         <script type="text/javascript">
 		var nv_siteroot = '{NV_BASE_SITEURL}';
 		</script>
-        <script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
-        <script type="text/javascript" src="{NV_BASE_SITEURL}js/language/{NV_LANG_UPDATE}.js"></script>
-        <script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
+        <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{NV_LANG_UPDATE}.js"></script>
+        <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}install/js/main.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}install/js/update.js"></script>
     </head>

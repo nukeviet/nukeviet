@@ -159,25 +159,4 @@ $(document).ready(function(){
 		a != "" && alert(a);
 		return !1
 	});
-	
-	// Keywords rank check
-	$("#keywordRankCheck").click(function() {
-		var keyword = $("#keyword").val();
-		keyword = formatStringAsUriComponent(keyword);
-		$("#keyword").attr('value', keyword);
-		if (keyword.length < 3 || keyword.length > 60) {
-			alert(LANG.keywordInfo);
-			return false;
-		}
-		keyword = rawurlencode(keyword);
-		var lr = $("#lr").val();
-		var accuracy = $("#accuracy").val();
-		$("#keyword").attr('disabled', 'disabled');
-		$("#lr").attr('disabled', 'disabled');
-		$("#accuracy").attr('disabled', 'disabled');
-		$("#fsubmit").hide();
-		$("#load_img").html('<p style="text-align:center;"><img alt="" src="' + nv_siteroot + 'images/load.gif" width="16" height="16" /></p>');
-		$("#keywordRankResult").text("").load(script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=keywordRank&i=process&k=" + keyword + "&l=" + lr + "&a=" + accuracy + "&num=" + nv_randomPassword(10));
-		return false;
-	});
 });

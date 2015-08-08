@@ -14,7 +14,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
-$lang_translator['info'] = 'Langue française pour NukeViet 3';
+$lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['voting_hits'] = 'Voter';
@@ -31,5 +31,6 @@ $lang_module['timeoutmsg'] = 'Vous avez voté! Merci d\'attendre %s minutes pour
 $lang_module['errormsg'] = 'Vous devez choisir une réponse!';
 $lang_module['errorupdate'] = 'Erreur de mise à jour du compteur';
 $lang_module['goback'] = 'Retourner';
+$lang_module['voting_total'] = 'Totale';
 $lang_module['voting_counter'] = 'votes';
 $lang_module['voting_pubtime'] = 'depuis';

@@ -668,12 +668,12 @@ class Browser
             return true;
         }
         // Test for Microsoft Edge
-        elseif ( preg_match('/\sEdge\/([0-9]+)\./', $this->_agent, $m ) )
+        elseif ( preg_match('/\sEdge\/([0-9]+)\.([0-9]+)/', $this->_agent, $m ) )
         {
             $this->setBrowser( self::BROWSER_EDGE, self::BROWSER_EDGE_NAME );
-            $this->setVersion( $m[1] );
+			$this->setVersion( $m[1] . '.' . $m[2] );
         	return true;
-        } // Test for versions > 1.5        
+        } // Test for versions > 1.5
         // Test for v1 - v1.5 IE
         elseif ( stripos( $this->_agent, 'microsoft internet explorer' ) !== false )
         {

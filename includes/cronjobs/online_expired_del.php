@@ -22,18 +22,5 @@ function cron_online_expired_del()
 	global $db;
 	$db->query( 'DELETE FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time < ' . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME) );
 
-	$dir = NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH;
-	if( $dh = opendir( $dir ) )
-	{
-		$timedel = NV_CURRENTTIME - 86400;
-		while( ($file = readdir( $dh )) !== false )
-		{
-			if( preg_match( '/^sess\_([a-z0-9]+)$/', $file ) and filemtime( $dir . '/' . $file ) < $timedel )
-			{
-				unlink( $dir . '/' . $file );
-			}
-		}
-		closedir( $dh );
-	}
 	return true;
 }

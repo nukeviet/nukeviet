@@ -363,7 +363,7 @@ $custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
 if( $checkss == $array_register['checkss'] )
 {
 	$is_ajax_register = $nv_Request->get_int( 'nv_ajax_register', 'post' );
-	
+
 	$array_register['first_name'] = nv_substr( $nv_Request->get_title( 'first_name', 'post', '', 1 ), 0, 255 );
 	$array_register['last_name'] = nv_substr( $nv_Request->get_title( 'last_name', 'post', '', 1 ), 0, 255 );
 	$array_register['username'] = $nv_Request->get_title( 'username', 'post', '', 1 );
@@ -393,7 +393,7 @@ if( $checkss == $array_register['checkss'] )
 			'value' => $lang_global['securitycodeincorrect']
 		);
 	}
-	
+
 	if( ( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) ) != '' )
 	{
 		$error[] = array(
@@ -401,7 +401,7 @@ if( $checkss == $array_register['checkss'] )
 			'value' => $check_login
 		);
 	}
-	
+
 	if( ( $check_email = nv_check_email_reg( $array_register['email'] ) ) != '' )
 	{
 		$error[] = array(
@@ -409,7 +409,7 @@ if( $checkss == $array_register['checkss'] )
 			'value' => $check_email
 		);
 	}
-	
+
 	if( ( $check_pass = nv_check_valid_pass( $array_register['password'], NV_UPASSMAX, NV_UPASSMIN ) ) != '' )
 	{
 		$error[] = array(
@@ -417,7 +417,7 @@ if( $checkss == $array_register['checkss'] )
 			'value' => $check_pass
 		);
 	}
-	
+
 	if( $array_register['password'] != $array_register['re_password'] )
 	{
 		$error[] = array(
@@ -425,7 +425,7 @@ if( $checkss == $array_register['checkss'] )
 			'value' => sprintf( $lang_global['passwordsincorrect'], $array_register['password'], $array_register['re_password'] )
 		);
 	}
-	
+
 	if( empty( $array_register['your_question'] ) and empty( $array_register['question'] ) )
 	{
 		$error[] = array(
@@ -433,7 +433,7 @@ if( $checkss == $array_register['checkss'] )
 			'value' => $lang_module['your_question_empty']
 		);
 	}
-	
+
 	if( empty( $array_register['answer'] ) )
 	{
 		$error[] = array(
@@ -441,7 +441,7 @@ if( $checkss == $array_register['checkss'] )
 			'value' => $lang_module['answer_empty']
 		);
 	}
-	
+
 	if( empty( $array_register['agreecheck'] ) )
 	{
 		$error[] = array(
@@ -449,17 +449,17 @@ if( $checkss == $array_register['checkss'] )
 			'value' => $lang_module['agreecheck_empty']
 		);
 	}
-	
+
 	if( empty( $error ) )
 	{
 		$query_field = array( 'userid' => 0 );
-		
+
 		if( ! empty( $array_field_config ) )
 		{
 			$userid = 0;
 			require NV_ROOTDIR . '/modules/users/fields.check.php';
 		}
-		
+
 		// Error: String to Array
 		if( ! empty( $error ) )
 		{
@@ -470,7 +470,7 @@ if( $checkss == $array_register['checkss'] )
 				)
 			);
 		}
-		
+
 		if( empty( $error ) )
 		{
 			$password = $crypt->hash_password( $array_register['password'], $global_config['hashprefix'] );
@@ -520,7 +520,7 @@ if( $checkss == $array_register['checkss'] )
 					{
 						$contents = user_info_exit( $lang_module['err_no_save_account'] );
 						$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
-	
+
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
 						include NV_ROOTDIR . '/includes/footer.php';
@@ -533,7 +533,7 @@ if( $checkss == $array_register['checkss'] )
 						$subject = $lang_module['account_active'];
 						$message = sprintf( $lang_module['account_active_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=active&userid=' . $userid . '&checknum=' . $checknum, $array_register['username'], $array_register['email'],  nv_date( 'H:i d/m/Y', NV_CURRENTTIME + 86400 ) );
 						$send = nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
-						
+
 						if( $send )
 						{
 							$info = $lang_module['account_active_mess'];
@@ -547,7 +547,7 @@ if( $checkss == $array_register['checkss'] )
 					{
 						$info = $lang_module['account_register_to_admin'];
 					}
-	
+
 					if( $is_ajax_register )
 					{
 						$complete = $info;
@@ -555,14 +555,14 @@ if( $checkss == $array_register['checkss'] )
 					else
 					{
 						$info .= "<br /><br />\n";
-						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
 						$info .= '[<a href="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '">' . $lang_module['redirect_to_login'] . '</a>]';
-		
+
 						$contents = user_info_exit( $info );
 						$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
-		
+
 						nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
-		
+
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
 						include NV_ROOTDIR . '/includes/footer.php';
@@ -610,7 +610,7 @@ if( $checkss == $array_register['checkss'] )
 					{
 						$contents = user_info_exit( $lang_module['err_no_save_account'] );
 						$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register', true ) . '" />';
-	
+
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
 						include NV_ROOTDIR . '/includes/footer.php';
@@ -621,17 +621,17 @@ if( $checkss == $array_register['checkss'] )
 					$query_field['userid'] = $userid;
 					$db->query( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode( ', ', array_keys( $query_field ) ) . ') VALUES (' . implode( ', ', array_values( $query_field ) ) . ')' );
 					$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
-	
+
 					$subject = $lang_module['account_register'];
 					$message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username']);
 					nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
-	
+
 					$nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 					if( ! empty( $array_register['nv_redirect'] ) )
 					{
 						$nv_redirect .= '&nv_redirect=' . $array_register['nv_redirect'];
 					}
-					
+
 					if( $is_ajax_register )
 					{
 						$complete = $lang_module['register_ok'];
@@ -639,14 +639,14 @@ if( $checkss == $array_register['checkss'] )
 					else
 					{
 						$info = $lang_module['register_ok'] . "<br /><br />\n";
-						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . "images/load_bar.gif\"><br /><br />\n";
+						$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
 						$info .= '[<a href="' . $nv_redirect . '">' . $lang_module['redirect_to_login'] . '</a>]';
-		
+
 						$contents = user_info_exit( $info );
 						$contents .= '<meta http-equiv="refresh" content="5;url=' . nv_url_rewrite( $nv_redirect, true ) . '" />';
-		
+
 						nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['register'], $array_register['username'] . ' | ' . $client_info['ip'] . ' | Simple', 0 );
-		
+
 						include NV_ROOTDIR . '/includes/header.php';
 						echo nv_site_theme( $contents );
 						include NV_ROOTDIR . '/includes/footer.php';
@@ -655,7 +655,7 @@ if( $checkss == $array_register['checkss'] )
 			}
 		}
 	}
-	
+
 	// Ajax respon
 	if( $is_ajax_register )
 	{
@@ -664,12 +664,12 @@ if( $checkss == $array_register['checkss'] )
 			'message' => $complete,
 			'error' => $error
 		);
-		
+
 		include NV_ROOTDIR . '/includes/header.php';
 		echo json_encode( $respon );
 		include NV_ROOTDIR . '/includes/footer.php';
 	}
-	
+
 	$array_register['info'] = '<span style="color:#fb490b;">' . $error[0]['value'] . '</span>';
 }
 else

@@ -71,7 +71,7 @@
 <!-- BEGIN: load -->
 <div id="module_show_list">
 	<div class=text-center>
-		<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Loading..."/>
+		<img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Loading..."/>
 	</div>
 </div>
 <script type="text/javascript">nv_show_list_googleplus();</script>

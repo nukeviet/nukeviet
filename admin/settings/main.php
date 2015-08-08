@@ -10,6 +10,7 @@
 
 if( ! defined( 'NV_IS_FILE_SETTINGS' ) ) die( 'Stop!!!' );
 
+$show_ssl_modules = $nv_Request->get_int( 'show_ssl_modules', 'post,get', $global_config['ssl_https'] == 3 );
 $submit = $nv_Request->get_string( 'submit', 'post' );
 $errormess = '';
 
@@ -54,7 +55,7 @@ if( $submit )
 	}
 	elseif( ! nv_is_url( $site_logo ) )
 	{
-		$array_config['site_logo'] = 'images/logo.png';
+		$array_config['site_logo'] = NV_UPLOADS_DIR . '/logo.png';
 	}
 
 	$array_config['site_home_module'] = nv_substr( $nv_Request->get_title( 'site_home_module', 'post', '', 1 ), 0, 255 );
@@ -71,6 +72,10 @@ if( $submit )
 		$array_config['disable_site_content'] = $lang_global['disable_site_content'];
 	}
 
+	$array_config['ssl_https_modules'] = $nv_Request->get_array( 'ssl_https_modules', 'post', array() );
+	$array_config['ssl_https_modules'] = array_intersect( $array_config['ssl_https_modules'], array_keys( $site_mods ) );
+	$array_config['ssl_https_modules'] = empty( $array_config['ssl_https_modules'] ) ? '' : implode( ',', $array_config['ssl_https_modules'] );
+
 	$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = '" . NV_LANG_DATA . "' AND module='global'" );
 	foreach( $array_config as $config_name => $config_value )
 	{
@@ -83,7 +88,7 @@ if( $submit )
 
 	if( empty( $errormess ) )
 	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&rand=' . nv_genpass() );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . ( $show_ssl_modules ? '&show_ssl_modules=1' : '' ) . '&rand=' . nv_genpass() );
 		exit();
 	}
 	else
@@ -102,6 +107,8 @@ if( $submit )
 				$module_config[$c_module][$c_config_name] = $c_config_value;
 			}
 		}
+		
+		$global_config['ssl_https_modules'] = empty( $global_config['ssl_https_modules'] ) ? array() : array_intersect( array_map( "trim", explode( ',', $global_config['ssl_https_modules'] ) ), array_keys( $site_mods ) );
 	}
 }
 
@@ -208,6 +215,20 @@ else
 $xtpl->assign( 'DISABLE_SITE_CONTENT', $disable_site_content );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
+$xtpl->assign( 'SHOW_SSL_MODULES', intval( $show_ssl_modules ) );
+
+if( ! $show_ssl_modules )
+{
+	$xtpl->parse( 'main.ssl_https_modules_hide' );
+}
+
+foreach( $site_mods as $_mod_title => $_mod_values )
+{
+	$xtpl->assign( 'MOD_TITLE', $_mod_title );
+	$xtpl->assign( 'MOD_CHECKED', in_array( $_mod_title, $global_config['ssl_https_modules'] ) ? ' checked="checked"' : '' );
+	
+	$xtpl->parse( 'main.ssl_https_modules' );
+}
 
 if( $errormess != '' )
 {
