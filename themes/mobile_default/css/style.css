@@ -881,7 +881,7 @@ header.first-child {
 }
 
 #ftip {
-    position:absolute;
+    position:fixed;
     bottom:41px;
     right:0;
     float:right;
