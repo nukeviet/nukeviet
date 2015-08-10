@@ -111,6 +111,14 @@ div.news_column ul.related a:hover {
     padding:10px;
 }
 
+.panel-body.other-news > div.clearfix{
+    margin-bottom: 15px;
+}
+
+.panel-body.other-news > div.clearfix:last-child{
+    margin-bottom: 0;
+}
+
 ul.other-news {
     padding-left:0;
     margin-left:0;
