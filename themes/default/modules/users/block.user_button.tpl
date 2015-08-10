@@ -124,12 +124,12 @@
             <p class="margin-bottom-sm"><strong>{GLANG.for_admin}</strong></p>
             <ul class="nv-list-item sm">
                 <li><em class="fa fa-cog fa-horizon margin-right-sm"></em><a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}" title="{GLANG.admin_page}"><span>{GLANG.admin_page}</span></a></li>
+                <!-- BEGIN: is_modadmin -->
+        		<li><em class="fa fa-key fa-horizon margin-right-sm"></em><a href="{URL_ADMINMODULE}" title="{GLANG.admin_module_sector} {MODULENAME}"><span>{GLANG.admin_module_sector} {MODULENAME}</span></a></li>
+        		<!-- END: is_modadmin -->
                 <!-- BEGIN: is_spadadmin -->
         		<li><em class="fa fa-arrows fa-horizon margin-right-sm"></em><a href="{URL_DBLOCK}" title="{LANG_DBLOCK}"><span>{LANG_DBLOCK}</span></a></li>
         		<!-- END: is_spadadmin -->
-                <!-- BEGIN: is_modadmin -->
-        		<li><em class="fa fa-key fa-horizon margin-right-sm"></em><a href="{URL_ADMINMODULE}" title="{GLANG.admin_module_sector}"><span>{GLANG.admin_module_sector}</span></a></li>
-        		<!-- END: is_modadmin -->
                 <li><em class="fa fa-user fa-horizon margin-right-sm"></em><a href="{URL_AUTHOR}" title="{GLANG.admin_view}"><span>{GLANG.admin_view}</span></a></li>
             </ul>
         </div>

@@ -70,7 +70,7 @@ if ( $global_config['allowuserlogin'] )
         $xtpl->assign( 'URL_ADMINMODULE', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
         $xtpl->assign( 'URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id'] );
         $xtpl->assign( 'URL_LOGOUT', defined( 'NV_IS_ADMIN' ) ? 'nv_admin_logout' : 'bt_logout' );
-        $xtpl->assign( 'MODULENAME', $module_name );
+        $xtpl->assign( 'MODULENAME', $module_info['custom_title'] );
         $xtpl->assign( 'AVATA', $avata );
         $xtpl->assign( 'USER', $user_info );
         $xtpl->assign( 'WELCOME', defined( 'NV_IS_ADMIN' ) ? $lang_global['admin_account'] : $lang_global['your_account'] );
