@@ -75,6 +75,13 @@
     content:"\e606";
 }
 
+.icon-icq:before {
+	content: "\e605";
+}
+.icon-viber:before {
+	content: "\e60a";
+}
+
 /* Fix bootstrap */
 
 .min-width {
@@ -284,9 +291,11 @@ ol {
 }
 
 .well {
-    padding:8px;
-    line-height:18px;
-    text-align:justify;
+    padding:8px
+}
+
+.well p {
+    margin:0;
 }
 
 input[type=text].required,
@@ -297,7 +306,8 @@ input[type=search].required,
 input[type=tel].required,
 input[type=time].required,
 input[type=url].required,
-input[type=url].required {
+input[type=url].required,
+textarea.required {
     background-image:url(../images/icons/required.png);
     background-position:right center;
     background-repeat:no-repeat;
@@ -419,12 +429,8 @@ input[type=url].required {
 
 /* panel-body */
 
-.panel-body {
-    padding:5px;
-}
-
-.panel-body h3 {
-    color:#0066cc;
+.panel-body p {
+    margin:0;
 }
 
 .panel-body ul {
@@ -444,27 +450,9 @@ input[type=url].required {
     margin-bottom:0;
 }
 
-.panel {
-    border:1px solid transparent;
-}
 
 .nv-infodie .logo {
     max-width:90% !important;
-}
-
-.panel-heading {
-    border-bottom:1px solid rgba(0,0,0,0);
-    border-top-left-radius:3px;
-    border-top-right-radius:3px;
-    padding:10px;
-}
-
-.panel-primary > .panel-heading > a {
-    color:#fff;
-}
-
-.panel-primary > .panel-heading > a:hover {
-    color:#ddd;
 }
 
 table caption {
@@ -638,6 +626,14 @@ h6,
 
 .fa-pointer {
     cursor:pointer;
+}
+
+.fa-horizon {
+    width:14px;
+}
+
+.fa-lg.fa-horizon {
+    width:22px;
 }
 
 h3.sm {
@@ -816,8 +812,8 @@ header.first-child {
     margin-right:-4px;
 }
 
-.contactList li .fa {
-    width:20px;
+.contactList li .fa, .contactList li [class^="icon-"], .contactList li [class*=" icon-"] {
+    width:20px !important
 }
 
 .qlist {
@@ -881,13 +877,14 @@ header.first-child {
 }
 
 #ftip {
-    position:absolute;
+    position:fixed;
     bottom:41px;
     right:0;
     float:right;
     z-index:9;
     min-width:100px;
     min-height:50px;
+    max-height: calc(100% - 42px);
     overflow-y:auto;
     overflow-x:hidden;
     padding:10px 14px 20px 10px;
@@ -996,7 +993,6 @@ header.first-child {
 
 .footer a {
     color:#333;
-    font-weight:bold;
     text-decoration:none;
 }
 
@@ -1154,7 +1150,7 @@ header.first-child {
 }
 
 .page {
-    padding:15px 10px;
+    padding:15px 5px;
 }
 
 .page h1 {
@@ -1421,6 +1417,16 @@ hr {
     margin-bottom:10px;
 }
 
+/* block Contact*/
+.contactForm{
+    position: relative;
+    width: 300px;
+}
+
+.contactForm .panel{
+    margin-bottom: 0;
+}
+
 @media (max-width:319px) {
     .min-width {
         width:100% !important;
@@ -1433,5 +1439,8 @@ hr {
     }
     .winHelp {
         width:calc(100% - 80px);
+    }
+    .contactForm {
+        width: 100%;
     }
 }

@@ -14,10 +14,10 @@ jQuery.extend(jQuery.validator.messages, {
     creditcard: "Xin vui lòng nhập số thẻ tín dụng hợp lệ.",
     equalTo: "Xin vui lòng nhập cùng một giá trị một lần nữa.",
     accept: "Xin vui lòng nhập giá trị có phần mở rộng hợp lệ.",
-    maxlength: "Xin vui lòng nhập không quá {0} ký tự.",
-    minlength: "Xin vui lòng nhập ít nhất {0} ký tự.",
-    rangelength: "Xin vui lòng nhập một giá trị giữa {0} và {1} ký tự.",
-    range: "Xin vui lòng nhập một giá trị giữa {0} và {1}.",
-    max: "Xin vui lòng nhập một giá trị nhỏ hơn hoặc bằng {0}.",
-    min: "Xin vui lòng nhập một giá trị lớn hơn hoặc bằng {0}."
+    maxlength: $.validator.format("Xin vui lòng nhập không quá {0} ký tự."),
+    minlength: $.validator.format("Xin vui lòng nhập ít nhất {0} ký tự."),
+    rangelength: $.validator.format("Xin vui lòng nhập một giá trị giữa {0} và {1} ký tự."),
+    range: $.validator.format("Xin vui lòng nhập một giá trị giữa {0} và {1}."),
+    max: $.validator.format("Xin vui lòng nhập một giá trị nhỏ hơn hoặc bằng {0}."),
+    min: $.validator.format("Xin vui lòng nhập một giá trị lớn hơn hoặc bằng {0}.")
 });
