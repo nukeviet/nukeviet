@@ -812,8 +812,8 @@ header.first-child {
     margin-right:-4px;
 }
 
-.contactList li .fa {
-    width:20px;
+.contactList li .fa, .contactList li [class^="icon-"], .contactList li [class*=" icon-"] {
+    width:20px !important
 }
 
 .qlist {
