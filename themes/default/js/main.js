@@ -142,10 +142,10 @@ function switchTab(a) {
 
 // Change Captcha
 function change_captcha(a) {
-    $("img.captchaImg").attr("src",nv_siteroot + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
-	$(a).val("");
+	$("img.captchaImg").attr("src", nv_siteroot + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+	"undefined" != typeof a && "" != a && $(a).val("");
 	return !1
-};
+}
 
 // ModalShow
 function modalShow(a, b) {
@@ -287,7 +287,16 @@ $(function() {
 				initializeMap();
 			}
 		})
-	}
+	};
+    // maxLength for textarea
+    $("textarea").on("input propertychange", function() {
+		var a = $(this).prop("maxLength");
+		if (!a || "number" != typeof a) {
+			var a = $(this).attr("maxlength"),
+				b = $(this).val();
+			b.length > a && $(this).val(b.substr(0, a))
+		}
+	})
 });
 
 // Fix bootstrap multiple modal

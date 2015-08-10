@@ -299,3 +299,4 @@ $lang_global['powered_by'] = 'Code source';
 $lang_global['design_by'] = 'Conçu par';
 $lang_global['design_url'] = 'URL de la page qui a le droit de conception';
 $lang_global['signin'] = 'Connexion';
+$lang_global['feedback'] = 'Réaction';

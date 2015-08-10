@@ -21,6 +21,10 @@
 				<td>{LANG.part_row_title}</td>
 				<td>{DATA.part_row_title}</td>
 			</tr>
+            <tr>
+				<td>{LANG.cat}</td>
+				<td>{DATA.cat}</td>
+			</tr>
 			<tr>
 				<td colspan="2">{DATA.content}</td>
 			</tr>

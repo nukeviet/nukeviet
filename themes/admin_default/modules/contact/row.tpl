@@ -11,7 +11,7 @@
 			<tbody>
 				<tr>
 					<td><strong>{LANG.part_row_title}</strong></td>
-					<td><input class="w300 form-control pull-left" type="text" value="{DATA.full_name}" name="full_name" id="idfull_name" maxlength="255" />&nbsp;<span class="text-middle"></td>
+					<td><input class="w300 form-control pull-left" type="text" value="{DATA.full_name}" name="full_name" id="idfull_name" maxlength="255" /></td>
 				</tr>
 				<tr>
                     <td><strong>{LANG.alias}</strong></td>
@@ -30,12 +30,40 @@
 					<td><input class="w300 form-control" type="text" name="email" value="{DATA.email}"/><span>{GLANG.multi_email_note}</span></td>
 				</tr>
                 <tr>
-					<td><strong>{LANG.yahoo_row_title}</strong></td>
-					<td><input class="w300 form-control" type="yahoo" name="yahoo" value="{DATA.yahoo}"/><span>{GLANG.multi_note}</span></td>
+					<td><strong>{LANG.otherContacts}</strong></td>
+					<td>
+                        <!-- BEGIN: other -->
+                        <fieldset class="m-bottom">
+                            <input class="w150 form-control pull-left" type="text" name="otherVar[]" value="{OTHER.var}" />
+                            <input class="w150 form-control pull-left" type="text" name="otherVal[]" value="{OTHER.val}" />&nbsp;<em class="fa fa-remove fa-pointer" onclick="removefieldset(this);">&nbsp;</em>
+                        </fieldset>
+                        <!-- END: other -->
+                        <div class="template">
+                            <fieldset class="m-bottom">
+                                <input class="w150 form-control pull-left" type="text" name="otherVar[]" value="" placeholder="{LANG.otherVar}"/>
+                                <input class="w150 form-control pull-left" type="text" name="otherVal[]" value="" placeholder="{LANG.otherVal}"/>
+                            </fieldset>
+                        </div>
+                        <div class="new"></div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="addfieldset(this);">{LANG.addNew}</button>
+                    </td>
 				</tr>
                 <tr>
-					<td><strong>{LANG.skype_row_title}</strong></td>
-					<td><input class="w300 form-control" type="skype" name="skype" value="{DATA.skype}"/><span>{GLANG.multi_note}</span></td>
+					<td><strong>{LANG.cats}</strong></td>
+					<td>
+                        <!-- BEGIN: cats -->
+                        <fieldset class="m-bottom">
+                            <input class="w300 form-control pull-left" type="text" name="cats[]" value="{CATS}" />&nbsp;<em class="fa fa-remove fa-pointer" onclick="removefieldset(this);">&nbsp;</em>
+                        </fieldset>
+                        <!-- END: cats -->
+                        <div class="template">
+                            <fieldset class="m-bottom">
+                                <input class="w300 form-control pull-left" type="text" name="cats[]" value="" />
+                            </fieldset>
+                        </div>
+                        <div class="new"></div>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="addfieldset(this);">{LANG.addNew}</button>
+                    </td>
 				</tr>
 				<tr>
 					<td colspan="2">
@@ -79,7 +107,19 @@
 </form>
 <!-- BEGIN: get_alias -->
 <script type="text/javascript">
-    $(document).ready(function() {
+function removefieldset(a){
+    var b = $(a).parent().parent();
+    if(b.is(".template")) return!1;
+    $(a).parent().remove();
+    return!1
+}
+function addfieldset(a){
+    var b = $(a).parent().find(".template").html();
+    $(a).parent().find(".new").append(b);
+    $(a).parent().find(".new fieldset").last().append('&nbsp;<em class="fa fa-remove fa-pointer" onclick="removefieldset(this);">&nbsp;</em>');
+    return!1
+}
+    $(function() {
         $('#idfull_name').change(function() {
             get_alias('{ID}');
         });

@@ -500,15 +500,15 @@ function nv_html_links( $html = true )
     $nv_html_site_rss = nv_html_site_rss( false );
     if ( $nv_html_site_rss )
     {
-        $return = array_merge( $return, $nv_html_site_rss );
+        $return = array_merge_recursive( $return, $nv_html_site_rss );
     }
 
     $nv_html_css = nv_html_css( false );
     if ( $nv_html_css )
     {
-        $return = array_merge( $return, $nv_html_css );
+        $return = array_merge_recursive( $return, $nv_html_css );
     }
-
+    
     if ( ! $html ) return $return;
 
     $res = "";

@@ -302,3 +302,4 @@ $lang_global['powered_by'] = 'Powered by';
 $lang_global['design_by'] = 'Design by';
 $lang_global['design_url'] = 'Design by URL';
 $lang_global['signin'] = 'Sign In';
+$lang_global['feedback'] = 'Feedback';
