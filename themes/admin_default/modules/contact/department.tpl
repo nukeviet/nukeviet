@@ -31,7 +31,7 @@
                         <!-- END: option -->
                     </select>
                 </td>
-				<td><a title="{LANG.url_for_iframe}" href="{ROW.url_part}" target="_blank">{ROW.full_name}</a></td>
+				<td>{ROW.full_name}</td>
 				<td>{ROW.email}</td>
 				<td>{ROW.phone}</td>
 				<td>{ROW.fax}</td>
