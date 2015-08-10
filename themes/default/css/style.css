@@ -203,6 +203,38 @@
     margin-bottom:15px;
 }
 
+.padding-top{
+    padding-top: 10px
+}
+
+.padding-left{
+    padding-left: 10px
+}
+
+.padding-right{
+    padding-right: 10px
+}
+
+.padding-bottom{
+    padding-bottom: 10px
+}
+
+.boder-top{
+    border-top: 1px solid #ccc;
+}
+
+.boder-bottom{
+    border-bottom: 1px solid #ccc;
+}
+
+.border-left{
+    border-left: 1px solid #ccc;
+}
+
+.border-right{
+    border-right: 1px solid #ccc;
+}
+
 .column-margin-left{
     margin-left: 10px !important
 }
@@ -1806,6 +1838,30 @@ button.close {
     font-family:'FontAwesome';
     content:"\f105";
     margin-right:5px;
+}
+
+/* Account Level */
+[class^="lev-"],
+[class*=" lev-"]{
+    display:inline-block;
+}
+[class^="lev-"]:before,
+[class*=" lev-"]:before{
+    font-family: FontAwesome;
+    font-size:inherit;
+    margin-right: 5px
+}
+.lev-1:before{
+    content: " \f005 \f005 \f005 "
+}
+.lev-2:before{
+    content: " \f005 \f005 \f006 "
+}
+.lev-3:before{
+    content: " \f005 \f006 \f006 "
+}
+.lev-user:before{
+    content: " \f007 "
 }
 
 /* module Contact*/

@@ -68,6 +68,9 @@ $lang_global['relogin_info'] = 'Bạn đã không online một thời gian dài.
 $lang_global['relogin_error_info'] = '%1$s. Hãy điền lại mật khẩu vào ô trống dưới đây. Thao tác này chỉ được làm nhiều nhất %2$d lần nữa. Nếu sau %2$d lần mà bạn vẫn không xác minh được mật khẩu, hệ thống sẽ tước quyền truy cập Quản trị của bạn';
 
 $lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$s giây';
+$lang_global['for_admin'] = 'Dành cho admin';
+$lang_global['admin_account'] = 'Tài khoản quản trị';
+$lang_global['admin_view'] = 'Tài khoản quản trị của bạn';
 $lang_global['admin_page'] = 'Quản lý site';
 $lang_global['admin_module_sector'] = 'Quản lý module';
 $lang_global['adminlogin'] = 'Đăng nhập quản trị hệ thống';

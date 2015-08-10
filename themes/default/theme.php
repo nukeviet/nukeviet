@@ -261,11 +261,6 @@ function nv_site_theme( $contents, $full = true )
         {
             $xtpl->parse( 'main.currenttime' );
         }
-
-        if( defined( 'NV_IS_ADMIN' ) )
-		{
-            $xtpl->assign( 'ADMINTOOLBAR', nv_admin_menu() );
-		}
 	}
 
     $xtpl->parse( 'main' );

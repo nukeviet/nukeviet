@@ -103,7 +103,7 @@
 <div id="userBlock" class="hidden">
     <div class="info" style="display:none"></div>
     <div class="userBlock clearfix">
-    	<h3 class="text-center"><span class="text-normal">{GLANG.wellcome}:</span> {USER.full_name}</h3>
+    	<h3 class="text-center"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> {USER.full_name}</h3>
     	<div class="row">
     		<div class="col-xs-8 text-center">
     			<a title="{LANG.edituser}" href="#"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
@@ -119,6 +119,21 @@
     		    </ul>
     		</div>
     	</div>
+        <!-- BEGIN: admintoolbar -->
+        <div class="margin-top boder-top padding-top">
+            <p class="margin-bottom-sm"><strong>{GLANG.for_admin}</strong></p>
+            <ul class="nv-list-item sm">
+                <li><em class="fa fa-cog fa-horizon margin-right-sm"></em><a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}" title="{GLANG.admin_page}"><span>{GLANG.admin_page}</span></a></li>
+                <!-- BEGIN: is_spadadmin -->
+        		<li><em class="fa fa-arrows fa-horizon margin-right-sm"></em><a href="{URL_DBLOCK}" title="{LANG_DBLOCK}"><span>{LANG_DBLOCK}</span></a></li>
+        		<!-- END: is_spadadmin -->
+                <!-- BEGIN: is_modadmin -->
+        		<li><em class="fa fa-key fa-horizon margin-right-sm"></em><a href="{URL_ADMINMODULE}" title="{GLANG.admin_module_sector}"><span>{GLANG.admin_module_sector}</span></a></li>
+        		<!-- END: is_modadmin -->
+                <li><em class="fa fa-user fa-horizon margin-right-sm"></em><a href="{URL_AUTHOR}" title="{GLANG.admin_view}"><span>{GLANG.admin_view}</span></a></li>
+            </ul>
+        </div>
+        <!-- END: admintoolbar -->
     </div>
     <div class="tip-footer">
         <div class="row">
@@ -126,7 +141,7 @@
                 <em class="button btn-sm icon-enter" title="{LANG.current_login}"></em>{USER.current_login_txt}
             </div>
             <div class="col-xs-8 text-right">
-                <button type="button" class="btn btn-default btn-sm active" onclick="bt_logout(this);"><em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
+                <button type="button" class="btn btn-default btn-sm active" onclick="{URL_LOGOUT}(this);"><em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
             </div>
         </div>
     </div>
