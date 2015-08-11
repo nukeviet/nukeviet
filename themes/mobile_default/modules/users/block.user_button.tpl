@@ -39,7 +39,7 @@
         	<!-- END: openid -->
         </div>
         <!-- BEGIN: allowuserreg -->
-        <div class="reg-area margin-bottom-lg hidden">
+        <div class="reg-area hidden">
             <div class="info margin-bottom">{LANG.info}</div>
             <div class="inputs">
                 <div class="form-group">

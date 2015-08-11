@@ -34,14 +34,6 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 	{
 		$upload_logo = NV_ROOTDIR . '/' . $global_config['upload_logo'];
 	}
-	elseif( file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
-	{
-		$upload_logo = NV_ROOTDIR . '/' . $global_config['site_logo'];
-	}
-	elseif( file_exists( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png' ) )
-	{
-		$upload_logo = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png';
-	}
 	else
 	{
 		die( 'ERROR#' . $lang_module['notlogo'] );

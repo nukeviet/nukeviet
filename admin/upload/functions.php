@@ -542,7 +542,7 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 	return $real_dirlist;
 }
 
-$allow_upload_dir = array( 'images', SYSTEM_UPLOADS_DIR );
+$allow_upload_dir = array( SYSTEM_UPLOADS_DIR );
 $array_hidefolders = array( '.', '..', 'index.html', '.htaccess', '.tmp' );
 
 $array_images = array( 'gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'ico' );
