@@ -26,7 +26,7 @@ if( $submit )
 	$array_config['site_name'] = nv_substr( $nv_Request->get_title( 'site_name', 'post', '', 1 ), 0, 255 );
 	$array_config['switch_mobi_des'] = $nv_Request->get_int( 'switch_mobi_des', 'post', 0 );
 	$site_logo = $nv_Request->get_title( 'site_logo', 'post' );
-
+    
 	$array_config['site_keywords'] = nv_substr( $nv_Request->get_title( 'site_keywords', 'post', '', 1 ), 0, 255 );
 
 	if( ! empty( $array_config['site_keywords'] ) )
@@ -48,15 +48,22 @@ if( $submit )
 		$array_config['site_keywords'] = ( ! empty( $array_config['site_keywords'] ) ) ? implode( ', ', $array_config['site_keywords'] ) : '';
 	}
 
-	if( ! nv_is_url( $site_logo ) and file_exists( NV_DOCUMENT_ROOT . $site_logo ) )
-	{
-		$lu = strlen( NV_BASE_SITEURL );
-		$array_config['site_logo'] = substr( $site_logo, $lu );
-	}
-	elseif( ! nv_is_url( $site_logo ) )
-	{
-		$array_config['site_logo'] = NV_UPLOADS_DIR . '/logo.png';
-	}
+    if( empty( $site_logo ) OR $site_logo == NV_ASSETS_DIR . '/images/logo.png' )
+    {
+        $array_config['site_logo'] = '';
+    }
+    elseif( ! nv_is_url( $site_logo ) )
+    {
+        if( file_exists( NV_DOCUMENT_ROOT . $site_logo ) )
+        {
+            $lu = strlen( NV_BASE_SITEURL );
+            $array_config['site_logo'] = substr( $site_logo, $lu );
+        }
+        else
+        {
+            $array_config['site_logo'] = '';
+        }
+    }
 
 	$array_config['site_home_module'] = nv_substr( $nv_Request->get_title( 'site_home_module', 'post', '', 1 ), 0, 255 );
 	if( ! isset( $site_mods[$array_config['site_home_module']] ) )
@@ -134,13 +141,11 @@ while( list( $theme ) = $result->fetch( 3 ) )
 
 $global_config['switch_mobi_des'] = ! empty( $global_config['switch_mobi_des'] ) ? ' checked="checked"' : '';
 
-if( ! nv_is_url( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
+$site_logo = '';
+
+if( ! empty( $global_config['site_logo'] ) and $global_config['site_logo'] != NV_ASSETS_DIR . '/images/logo.png' and ! nv_is_url( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
 {
-	$site_logo = NV_BASE_SITEURL . $global_config['site_logo'];
-}
-else
-{
-	$site_logo = $global_config['site_logo'];
+   	$site_logo = NV_BASE_SITEURL . $global_config['site_logo'];
 }
 
 $value_setting = array(
