@@ -152,6 +152,38 @@
     margin-bottom:15px;
 }
 
+.padding-top{
+    padding-top: 10px
+}
+
+.padding-left{
+    padding-left: 10px
+}
+
+.padding-right{
+    padding-right: 10px
+}
+
+.padding-bottom{
+    padding-bottom: 10px
+}
+
+.boder-top{
+    border-top: 1px solid #ccc;
+}
+
+.boder-bottom{
+    border-bottom: 1px solid #ccc;
+}
+
+.border-left{
+    border-left: 1px solid #ccc;
+}
+
+.border-right{
+    border-right: 1px solid #ccc;
+}
+
 .bg-gainsboro {
     background-color:#82B1FE;
 }
@@ -1417,17 +1449,50 @@ hr {
     margin-bottom:10px;
 }
 
+/* Account Level */
+[class^="lev-"],
+[class*=" lev-"]{
+    display:inline-block;
+}
+[class^="lev-"]:before,
+[class*=" lev-"]:before{
+    font-family: FontAwesome;
+    font-size:inherit;
+    margin-right: 5px
+}
+.lev-1:before{
+    content: " \f005 \f005 \f005 "
+}
+.lev-2:before{
+    content: " \f005 \f005 \f006 "
+}
+.lev-3:before{
+    content: " \f005 \f006 \f006 "
+}
+.lev-user:before{
+    content: " \f007 "
+}
+
 /* block Contact*/
 .contactForm{
     position: relative;
-    width: 300px;
+    width: 350px;
+    height:100%;
+    margin: -10px -14px -20px -10px
 }
 
 .contactForm .panel{
-    margin-bottom: 0;
+    margin-bottom:0;
+    color: #333
 }
 
-@media (max-width:319px) {
+@media (max-height:599px) and (min-width:350px) {
+    .contactForm .panel{
+        margin-right: 14px
+    }
+}
+
+@media (max-width:349px) {
     .min-width {
         width:100% !important;
     }
@@ -1442,5 +1507,9 @@ hr {
     }
     .contactForm {
         width: 100%;
+        margin: 0
+    }
+    .contactForm .panel{
+        width: 100%
     }
 }

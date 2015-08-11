@@ -159,7 +159,8 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
         $email_list = array();
         if ( ! empty( $array_department[$fpart]['email'] ) )
         {
-            $email_list[] = array_shift( array_map( "trim", explode( ",", $array_department[$fpart]['email'] ) ) );
+            $_emails = array_map( "trim", explode( ",", $array_department[$fpart]['email'] ) );
+            $email_list[] = $_emails[0];
         }
 
         if ( ! empty( $array_department[$fpart]['admins'] ) )
