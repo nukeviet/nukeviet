@@ -1476,14 +1476,23 @@ hr {
 /* block Contact*/
 .contactForm{
     position: relative;
-    width: 300px;
+    width: 350px;
+    height:100%;
+    margin: -10px -14px -20px -10px
 }
 
 .contactForm .panel{
-    margin-bottom: 0;
+    margin-bottom:0;
+    color: #333
 }
 
-@media (max-width:319px) {
+@media (max-height:599px) and (min-width:350px) {
+    .contactForm .panel{
+        margin-right: 14px
+    }
+}
+
+@media (max-width:349px) {
     .min-width {
         width:100% !important;
     }
@@ -1498,5 +1507,9 @@ hr {
     }
     .contactForm {
         width: 100%;
+        margin: 0
+    }
+    .contactForm .panel{
+        width: 100%
     }
 }
