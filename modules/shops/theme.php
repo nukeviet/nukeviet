@@ -163,7 +163,7 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 						}
 					}
 					if( $pro_config['active_tooltip'] == 1 )
-						$xtpl->parse( 'main.catalogs.items.tooltip' );
+						$xtpl->parse( 'main.catalogs.items.tooltip_js' );
 
 					if( !empty( $pro_config['show_product_code'] ) and !empty( $data_row_i['product_code'] ) )
 					{
@@ -234,11 +234,6 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 	{
 		$xtpl->parse( 'main.modal_loaded' );
 		define( 'MODAL_LOADED', true );
-	}
-
-	if( $pro_config['active_tooltip'] == 1 )
-	{
-		$xtpl->parse( 'main.tooltip_js' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -409,6 +404,11 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 						$xtpl->assign( 'point_note', sprintf( $lang_module['point_product_note'], $global_array_shops_cat[$data_row_i['listcatid']]['cat_number_point'] ) );
 						$xtpl->parse( 'main.catalogs.items.point' );
 					}
+					
+					if( $pro_config['active_tooltip'] == 1 )
+					{
+						$xtpl->parse( 'main.catalogs.items.tooltip_js' );
+					}
 
 					$xtpl->parse( 'main.catalogs.items' );
 					++$i;
@@ -439,11 +439,6 @@ function view_home_cat( $data_content, $compare_id, $html_pages = '', $sort = 0 
 	{
 		$xtpl->parse( 'main.modal_loaded' );
 		define( 'MODAL_LOADED', true );
-	}
-
-	if( $pro_config['active_tooltip'] == 1 )
-	{
-		$xtpl->parse( 'main.tooltip_js' );
 	}
 
 	$xtpl->parse( 'main' );
@@ -574,7 +569,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			}
 
 			if( $pro_config['active_tooltip'] == 1 )
-				$xtpl->parse( 'main.items.tooltip' );
+				$xtpl->parse( 'main.items.tooltip_js' );
 
 			if( !empty( $pro_config['show_product_code'] ) and !empty( $data_row['product_code'] ) )
 			{
@@ -647,8 +642,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			$xtpl->parse( 'main.pages' );
 		}
 	}
-	if( $pro_config['active_tooltip'] == 1 )
-		$xtpl->parse( 'main.tooltip_js' );
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -819,8 +813,7 @@ function view_search_all( $data_content, $compare_id, $html_pages = '' )
 			$xtpl->parse( 'main.pages' );
 		}
 	}
-	if( $pro_config['active_tooltip'] == 1 )
-		$xtpl->parse( 'main.tooltip_js' );
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -989,7 +982,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 				}
 			}
 			if( $pro_config['active_tooltip'] == 1 )
-				$xtpl->parse( 'main.grid_rows.tooltip' );
+				$xtpl->parse( 'main.grid_rows.tooltip_js' );
 
 			if( !empty( $pro_config['show_product_code'] ) and !empty( $data_row['product_code'] ) )
 			{
@@ -1057,11 +1050,6 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 	{
 		$xtpl->parse( 'main.modal_loaded' );
 		define( 'MODAL_LOADED', true );
-	}
-
-	if( $pro_config['active_tooltip'] == 1 )
-	{
-		$xtpl->parse( 'main.tooltip_js' );
 	}
 
 	$xtpl->parse( 'main' );

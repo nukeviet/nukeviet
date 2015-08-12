@@ -85,12 +85,23 @@ table.table tr.bg {
 	z-index: 10020 !important;
 }
 
+/*tooltip*/
 .tooltip-inner {
-	width: 300px;
-	max-width: 300px; !important;
-	padding: 10px;
+    max-width:250px;
+    padding:10px;
+    color:#fff;
+    text-align:left !important;
+    background-color:#0C2138;
+    border-radius:4px
 }
 
+.tooltip-inner img.pull-left{
+    margin:3px 5px 1px 0;
+}
+
+.tooltip-inner img.pull-right{
+    margin:3px 1px 0 5px;
+}
 .pages {
     display: inline-block;
     float: right;
