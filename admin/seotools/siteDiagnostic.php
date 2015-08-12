@@ -47,7 +47,10 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 		$refresh = 0;
 		$imgs = array();
 		$a = 1;
-		foreach( $info['item'] as $inf )
+
+		$info_item = $info['item'];
+		krsort($info_item);
+		foreach( $info_item as $inf )
 		{
 			$refresh = strtotime( $inf['date'] );
 			$class_PageRank = ( isset( $imgs['PageRank'] ) and $imgs['PageRank'] > $inf['PageRank'] ) ? 'down' : ( ( isset( $imgs['PageRank'] ) and $imgs['PageRank'] < $inf['PageRank'] ) ? 'up' : 'pix' );
