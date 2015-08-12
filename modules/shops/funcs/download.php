@@ -31,9 +31,17 @@ if( nv_user_in_groups( $download_groups ) )
 		// Cap nhat luot download
 		$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_files_rows SET download_hits=download_hits+1 WHERE id_rows=' . $id_rows . ' AND id_files=' . $id_files );
 
-		$download = new download( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload .'/files/'. $path, NV_UPLOADS_REAL_DIR );
-		$download->download_file();
-		exit();
+		if( nv_is_url( $path ) )
+		{
+			Header( 'Location: ' . $path );
+			die();
+		}
+		else
+		{
+			$download = new download( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload .'/files/'. $path, NV_UPLOADS_REAL_DIR );
+			$download->download_file();
+			exit();
+		}
 	}
 }
 else
