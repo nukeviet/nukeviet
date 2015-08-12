@@ -225,6 +225,7 @@ function insertvaluetofield(){
 		}
 		window.close();
 	}else{
+        if(window.opener === null ) return !1;
 		var CKEditorFuncNum = $("input[name=CKEditorFuncNum]").val();
 
 		window.opener.CKEDITOR.tools.callFunction(CKEditorFuncNum, fullPath, function(){

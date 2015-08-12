@@ -135,8 +135,11 @@ a.link:hover {
 	margin-bottom: 10px;
 }
 
+.pointer,.fa-pointer,.icon-pointer{
+    cursor: pointer;
+}
+
 .icon-pointer {
-	cursor: pointer;
 	margin-top: 10px;
 }
 

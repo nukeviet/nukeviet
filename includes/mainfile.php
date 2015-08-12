@@ -172,7 +172,7 @@ require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 $domains = explode( ',', $global_config['my_domains'] );
 if( ! in_array( NV_SERVER_NAME, $domains ) )
 {
-    $global_config['site_logo'] = NV_UPLOADS_DIR . '/logo.png';
+    $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
     $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
     nv_info_die( $global_config['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], '', '', '', '' );
 }
@@ -322,6 +322,8 @@ foreach( $list as $row )
 		$module_config[$row['module']][$row['config_name']] = $row['config_value'];
 	}
 }
+
+if( empty( $global_config['site_logo'] ) ) $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
 
 $global_config['ssl_https_modules'] = empty( $global_config['ssl_https_modules'] ) ? array() : array_map( "trim", explode( ',', $global_config['ssl_https_modules'] ) );
 

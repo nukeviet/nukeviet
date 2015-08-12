@@ -60,31 +60,4 @@ function nv_getAllowed()
 	return $contact_allowed;
 }
 
-function nv_departmentList()
-{
-	global $db, $module_data, $db_config;
-	
-	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_department ORDER BY weight DESC";
-
-	$result = $db->query( $sql );
-	$list = array();
-	while( $row = $result->fetch() )
-	{
-
-		$list[$row['id']] = array(
-			'id' => $row['id'],
-			'full_name' => $row['full_name'],
-			'phone' => $row['phone'],
-			'fax' => $row['fax'],
-			'email' => $row['email'],
-			'yahoo' => $row['yahoo'],
-			'skype' => $row['skype'],
-			'note' => $row['note'],
-			'admins' => $row['admins'],
-			'act' => $row['act'],
-			'weight' => $row['weight']);
-	}
-	return $list;
-}
-
 define( 'NV_IS_FILE_ADMIN', true );

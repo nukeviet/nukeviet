@@ -107,6 +107,10 @@ if ( ! nv_function_exists( 'nv_copyright_info' ) )
         {
             $xtpl->parse( 'main.siteterms_url' );
         }
+        if( defined( 'NV_IS_SPADMIN' ) )
+        {
+            $xtpl->parse( 'main.memory_time_usage' );
+        }
         $xtpl->parse( 'main' );
         return $xtpl->text( 'main' );
     }

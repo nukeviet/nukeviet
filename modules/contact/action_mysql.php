@@ -25,9 +25,9 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  phone varchar(255) NOT NULL,
  fax varchar(255) NOT NULL,
  email varchar(100) NOT NULL,
- yahoo varchar(100) NOT NULL,
- skype varchar(100) NOT NULL,
  note text NOT NULL,
+ others text NOT NULL,
+ cats text NOT NULL,
  admins text NOT NULL,
  act tinyint(1) unsigned NOT NULL DEFAULT '0',
  weight smallint(5) NOT NULl,
@@ -39,6 +39,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  cid smallint(5) unsigned NOT NULL DEFAULT '0',
+ cat varchar(255) NOT NULL,
  title varchar(255) NOT NULL,
  content text NOT NULL,
  send_time int(11) unsigned NOT NULL DEFAULT '0',
@@ -62,5 +63,3 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  PRIMARY KEY (rid),
  KEY id (id)
 ) ENGINE=MyISAM";
-
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, yahoo, skype, note, admins, act, weight, is_default) VALUES ('Webmaster', 'Webmaster', '+84 (43) 1234567', '+84 (43) 1234568', 'info@mysite.com', '', 'mySkype', '', '1/1/1/0;', 1, 1, 1)";

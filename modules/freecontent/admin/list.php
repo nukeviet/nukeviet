@@ -34,7 +34,7 @@ $xtpl->assign( 'EDITOR', ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_al
 $xtpl->assign( 'UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload );
 $xtpl->assign( 'BID', $bid );
 
-$sql = 'SELECT id, title, description, link, image, start_time, end_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows ORDER BY bid DESC';
+$sql = 'SELECT id, title, description, link, image, start_time, end_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE bid=' . $bid . ' ORDER BY bid DESC';
 $array = $db->query( $sql )->fetchAll();
 $num_rows = sizeof( $array );
 
