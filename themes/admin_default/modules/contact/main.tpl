@@ -9,13 +9,14 @@
 			<colgroup>
 				<col style="width:30px" />
 				<col style="width:30px" />
-				<col span="4" />
+				<col span="5" />
 			</colgroup>
 			<thead>
 				<tr>
 					<th><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);" /></th>
 					<th colspan="2">{LANG.name_user_send_title}</th>
 					<th>{LANG.part_row_title}</th>
+                    <th>{LANG.cat}</th>
 					<th>{LANG.title_send_title}</th>
 					<th>&nbsp;</th>
 				</tr>
@@ -33,6 +34,7 @@
 					<td {ROW.style} {ROW.onclick}><img alt="{ROW.status}" src="{ROW.image.0}" width="{ROW.image.1}" height="{ROW.image.2}" /></td>
 					<td {ROW.style} {ROW.onclick}> {ROW.sender_name}</td>
 					<td {ROW.style} {ROW.onclick}> {ROW.path}</td>
+                    <td {ROW.style} {ROW.onclick}> {ROW.cat}</td>
 					<td {ROW.style} {ROW.onclick}> {ROW.title}</td>
 					<td {ROW.style} {ROW.onclick}> {ROW.time}</td>
 				</tr>

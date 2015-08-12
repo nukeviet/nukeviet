@@ -65,7 +65,7 @@ function nv_site_theme( $contents, $full = true )
     }
 
     //Links
-    $html_links = nv_html_links( false );
+    $html_links = array();
     $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/default/css/font-awesome.min.css' );
     if ( $global_config['current_theme_type'] == 'r' )
     {
@@ -83,6 +83,7 @@ function nv_site_theme( $contents, $full = true )
     {
         $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/admin.css' );
     }
+    $html_links = array_merge_recursive( $html_links, nv_html_links( false ) );
 
     // Customs Style
     if ( isset( $module_config['themes'][$global_config['module_theme']] ) and ! empty( $module_config['themes'][$global_config['module_theme']] ) )
@@ -260,11 +261,6 @@ function nv_site_theme( $contents, $full = true )
         {
             $xtpl->parse( 'main.currenttime' );
         }
-
-        if( defined( 'NV_IS_ADMIN' ) )
-		{
-            $xtpl->assign( 'ADMINTOOLBAR', nv_admin_menu() );
-		}
 	}
 
     $xtpl->parse( 'main' );

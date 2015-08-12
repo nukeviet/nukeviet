@@ -65,7 +65,7 @@ function contentScrt() {
 /*Change Captcha*/
 function change_captcha(a) {
 	$("img.captchaImg").attr("src", nv_siteroot + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
-	$(a).val("");
+	"undefined" != typeof a && "" != a && $(a).val("");
 	return !1
 }
 
@@ -105,7 +105,8 @@ function tipShow(a, b) {
 }
 
 function ftipShow(a, b) {
-	if ($(a).is(".qrcode") && "no" == $(a).attr("data-load")) return qrcodeLoad(a), !1;
+	if ($(a).is(".qrcode") && "yes" != $(a).attr("data-load")) return qrcodeLoad(a), !1;
+    if ($(a).is("#contactButton") && "yes" != $(a).attr("data-load")) return ctbtLoad($(a)), !1;
 	winHelp && winHelpHide();
 	tip_active && tipHide();
 	ftip_active && ftipHide();
@@ -113,6 +114,23 @@ function ftipShow(a, b) {
 	$(a).attr("data-click", "n").addClass("active");
 	$("#ftip").attr("data-content", b).show("fast");
 	ftip_active = !0
+}
+
+//Contact Button
+function ctbtLoad(a) {
+	var b = $(a.data("target") + " .panel-body");
+	"yes" != a.attr("data-load") && $.ajax({
+		type: "POST",
+		cache: !1,
+		url: nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=contact",
+		data: "loadForm=1&checkss=" + a.attr("data-cs"),
+		dataType: "html",
+		success: function(c) {
+			b.html(c);
+			change_captcha();
+			a.attr("data-load", "yes").click()
+		}
+	})
 }
 
 // QR-code
@@ -143,6 +161,12 @@ function modalShow(a, b) {
 	$("#sitemodal").find(".modal-title").html(a);
 	$("#sitemodal").find(".modal-body").html(b);
 	$("#sitemodal").modal()
+}
+
+function modalShowByObj(a)
+{
+    var b = $(a).attr("title"), c = $(a).html();
+    modalShow(b, c)
 }
 
 // Build google map for block Company Info
@@ -245,6 +269,11 @@ $(function() {
 	$(".wrap").on("scroll", function() {
 		contentScrt()
 	});
+    //FeedBack Button
+    if( $('#contactButton').length ){
+        var script = $('<script type="text/javascript">').attr("src",nv_siteroot + "themes/mobile_default/js/contact.js");
+        $("body").append(script);
+    }
     // Google map
 	if( $('#company-address').length ){
 		$('#company-address').click(function(e){
@@ -262,7 +291,16 @@ $(function() {
 				initializeMap();
 			}
 		})
-	}
+	};
+    // maxLength for textarea
+    $("textarea").on("input propertychange", function() {
+		var a = $(this).prop("maxLength");
+		if (!a || "number" != typeof a) {
+			var a = $(this).attr("maxlength"),
+				b = $(this).val();
+			b.length > a && $(this).val(b.substr(0, a))
+		}
+	})
 });
 
 // Fix bootstrap multiple modal
@@ -290,10 +328,13 @@ $(window).on("resize", function() {
 
 // Load Social script - lasest
 $(window).load(function() {
-    (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && 0 < $('[property="fb:app_id"]').length && 0 < $('[property="og:locale"]').length && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
+    (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
-        a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + $('[property="og:locale"]').attr("content") + "/all.js#xfbml=1&appId=" + $('[property="fb:app_id"]').attr("content"), d.parentNode.insertBefore(a, d));
+        var fb_app_id = ( $('[property="fb:app_id"]').length > 0 ) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
+        var fb_locale = ( $('[property="og:locale"]').length > 0 ) ? $('[property="og:locale"]').attr("content") : ((nv_sitelang=="vi") ? 'vi_VN' : 'en_US');
+        a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
     }(document, "script", "facebook-jssdk"));
+
     0 < $(".g-plusone").length && (window.___gcfg = {
         lang: nv_sitelang
     }, function() {
@@ -304,6 +345,7 @@ $(window).load(function() {
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }());
+    
     0 < $(".twitter-share-button").length && function() {
         var a = document.createElement("script");
         a.type = "text/javascript";

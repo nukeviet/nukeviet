@@ -50,7 +50,7 @@ function nv_site_theme( $contents, $full = true )
     }
 
     //Links
-    $html_links = nv_html_links( false );
+    $html_links = array();
     $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/default/css/font-awesome.min.css' );
     $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css' );
     $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css' );
@@ -59,6 +59,8 @@ function nv_site_theme( $contents, $full = true )
     {
         $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/admin.css' );
     }
+
+    $html_links = array_merge_recursive( $html_links, nv_html_links( false ) );
 
     // Customs Style
     if ( isset( $module_config['themes'][$global_config['module_theme']] ) and ! empty( $module_config['themes'][$global_config['module_theme']] ) )
@@ -206,7 +208,7 @@ function nv_site_theme( $contents, $full = true )
 			$xtpl->assign( 'STHEME_TYPE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;nv' . NV_LANG_DATA . 'themever=' . $theme_type . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
 			$xtpl->assign( 'STHEME_TITLE', $lang_global['theme_type_' . $theme_type] );
 			$xtpl->assign( 'STHEME_INFO', sprintf( $lang_global['theme_type_chose'], $lang_global['theme_type_' . $theme_type] ) );
-			
+
 			if ( $theme_type != $global_config['current_theme_type'] )
 			{
 				$xtpl->parse( 'main.theme_type.loop.other' );
@@ -215,11 +217,6 @@ function nv_site_theme( $contents, $full = true )
 			$xtpl->parse( 'main.theme_type.loop' );
 		}
 		$xtpl->parse( 'main.theme_type' );
-
-		if( defined( 'NV_IS_ADMIN' ) )
-		{
-			$xtpl->assign( 'ADMINTOOLBAR', nv_admin_menu() );
-		}
 	}
 
 	if( !$drag_block )

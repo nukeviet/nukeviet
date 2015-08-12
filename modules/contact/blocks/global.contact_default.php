@@ -29,11 +29,11 @@ if ( ! nv_function_exists( 'nv_contact_default_info' ) )
             $block_theme = 'default';
         }
 
-        $sql = 'SELECT id, alias, phone, email, yahoo, skype FROM ' . NV_PREFIXLANG . '_' . $site_mods['contact']['module_data'] . '_department WHERE act=1 AND is_default=1';
+        $sql = 'SELECT id, alias, phone, email, others FROM ' . NV_PREFIXLANG . '_' . $site_mods['contact']['module_data'] . '_department WHERE act=1 AND is_default=1';
         $array_department = nv_db_cache( $sql, 'id', 'contact' );
         if ( empty( $array_department ) )
         {
-            $sql = 'SELECT id, alias, phone, email, yahoo, skype FROM ' . NV_PREFIXLANG . '_' . $site_mods['contact']['module_data'] . '_department WHERE act=1 ORDER BY weight LIMIT 1';
+            $sql = 'SELECT id, alias, phone, email, others FROM ' . NV_PREFIXLANG . '_' . $site_mods['contact']['module_data'] . '_department WHERE act=1 ORDER BY weight LIMIT 1';
             $array_department = nv_db_cache( $sql, 'id', 'contact' );
         }
 
@@ -88,28 +88,79 @@ if ( ! nv_function_exists( 'nv_contact_default_info' ) )
             $xtpl->parse( 'main.email' );
         }
 
-        if ( ! empty( $row['yahoo'] ) )
+        if ( ! empty( $row['others'] ) )
         {
-            $ys = array_map( "trim", explode( ",", $row['yahoo'] ) );
-            foreach ( $ys as $k => $y )
+            $others = json_decode( $row['others'],true );
+            
+            if( !empty( $others ) )
             {
-                $xtpl->assign( 'YAHOO', $y );
-                if ( $k ) $xtpl->parse( 'main.yahoo.item.comma' );
-                $xtpl->parse( 'main.yahoo.item' );
-            }                        
-            $xtpl->parse( 'main.yahoo' );
-        }
-
-        if ( ! empty( $row['skype'] ) )
-        {
-            $ss = array_map( "trim", explode( ",", $row['skype'] ) );
-            foreach ( $ss as $k => $s )
-            {
-                $xtpl->assign( 'SKYPE', $s );
-                if ( $k ) $xtpl->parse( 'main.skype.item.comma' );
-                $xtpl->parse( 'main.skype.item' );
+                foreach( $others as $key => $value )
+                {
+                    if( !empty( $value ) )
+                    {
+                        if( strtolower( $key ) == "yahoo" )
+                        {
+                            $ys = array_map( "trim", explode( ",", $value ) );
+                            foreach ( $ys as $k => $y )
+                            {
+                                $xtpl->assign( 'YAHOO', array('name' => $key, 'value' => $y ) );
+                                if ( $k ) $xtpl->parse( 'main.yahoo.item.comma' );
+                                $xtpl->parse( 'main.yahoo.item' );
+                            }                        
+                            $xtpl->parse( 'main.yahoo' );
+                        }
+                        elseif( strtolower( $key ) == "skype" )
+                        {
+                            $ss = array_map( "trim", explode( ",", $value ) );
+                            foreach ( $ss as $k => $s )
+                            {
+                                $xtpl->assign( 'SKYPE', array('name' => $key, 'value' => $s ) );
+                                if ( $k ) $xtpl->parse( 'main.skype.item.comma' );
+                                $xtpl->parse( 'main.skype.item' );
+                            }
+                            $xtpl->parse( 'main.skype' );
+                        }
+                        elseif( strtolower( $key ) == "viber" )
+                        {
+                            $ss = array_map( "trim", explode( ",", $value ) );
+                            foreach ( $ss as $k => $s )
+                            {
+                                $xtpl->assign( 'VIBER', array('name' => $key, 'value' => $s ) );
+                                if ( $k ) $xtpl->parse( 'main.viber.item.comma' );
+                                $xtpl->parse( 'main.viber.item' );
+                            }
+                            $xtpl->parse( 'main.viber' );
+                        }
+                        elseif( strtolower( $key ) == "icq" )
+                        {
+                            $ss = array_map( "trim", explode( ",", $value ) );
+                            foreach ( $ss as $k => $s )
+                            {
+                                $xtpl->assign( 'ICQ', array('name' => $key, 'value' => $s ) );
+                                if ( $k ) $xtpl->parse( 'main.icq.item.comma' );
+                                $xtpl->parse( 'main.icq.item' );
+                            }
+                            $xtpl->parse( 'main.icq' );
+                        }
+                        elseif( strtolower( $key ) == "whatsapp" )
+                        {
+                            $ss = array_map( "trim", explode( ",", $value ) );
+                            foreach ( $ss as $k => $s )
+                            {
+                                $xtpl->assign( 'WHATSAPP', array('name' => $key, 'value' => $s ) );
+                                if ( $k ) $xtpl->parse( 'main.whatsapp.item.comma' );
+                                $xtpl->parse( 'main.whatsapp.item' );
+                            }
+                            $xtpl->parse( 'main.whatsapp' );
+                        }
+                        else
+                        {
+                            $xtpl->assign( 'OTHER', array( 'name' => $key, 'value' => $value ) );
+                            $xtpl->parse( 'main.other' );
+                        }
+                    }
+                }
             }
-            $xtpl->parse( 'main.skype' );
         }
         $xtpl->parse( 'main' );
         return $xtpl->text( 'main' );

@@ -10,7 +10,7 @@
 
 if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
-global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head;
+global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info;
 
 $content = "";
 
@@ -58,9 +58,15 @@ if ( $global_config['allowuserlogin'] )
         
         $user_info['current_login_txt'] = nv_date( 'd/m, H:i', $user_info['current_login'] );
 
+        $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+        $xtpl->assign( 'NV_LANG_VARIABLE', NV_LANG_VARIABLE );
+        $xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
+        $xtpl->assign( 'URL_LOGOUT', defined( 'NV_IS_ADMIN' ) ? 'nv_admin_logout' : 'bt_logout' );
+        $xtpl->assign( 'MODULENAME', $module_info['custom_title'] );
         $xtpl->assign( 'AVATA', $avata );
         $xtpl->assign( 'USER', $user_info );
-
+        $xtpl->assign( 'WELCOME', defined( 'NV_IS_ADMIN' ) ? $lang_global['admin_account'] : $lang_global['your_account'] );
+        $xtpl->assign( 'LEVEL', defined( 'NV_IS_ADMIN' ) ? $admin_info['level'] : 'user' );
         $xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users' );
         $xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=' );
 
@@ -73,6 +79,29 @@ if ( $global_config['allowuserlogin'] )
         {
             $xtpl->parse( 'signed.regroups' );
         }
+        
+        if( defined( 'NV_IS_ADMIN' ) )
+		{
+            $new_drag_block = ( defined( 'NV_IS_DRAG_BLOCK' ) ) ? 0 : 1;
+            $lang_drag_block = ( $new_drag_block ) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
+
+            $xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
+            $xtpl->assign( 'URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;drag_block=' . $new_drag_block );
+            $xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );
+            $xtpl->assign( 'URL_ADMINMODULE', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
+            $xtpl->assign( 'URL_AUTHOR', NV_BASE_SITEURL . NV_ADMINDIR . '/index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=authors&amp;id=' . $admin_info['admin_id'] );
+
+            if( defined( 'NV_IS_SPADMIN' ) )
+            {
+                $xtpl->parse( 'signed.admintoolbar.is_spadadmin' );
+            }
+            if( defined( 'NV_IS_MODADMIN' ) and ! empty( $module_info['admin_file'] ) )
+            {
+                $xtpl->parse( 'signed.admintoolbar.is_modadmin' );
+            }
+            $xtpl->parse( 'signed.admintoolbar' );
+		}
+        
 
         $xtpl->parse( 'signed' );
         $content = $xtpl->text( 'signed' );

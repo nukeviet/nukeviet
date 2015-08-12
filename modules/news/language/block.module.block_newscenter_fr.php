@@ -18,8 +18,6 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['numrow'] = 'Nombre d\'articles affichés';
-$lang_block['width'] = 'Largeur';
-$lang_block['height'] = 'Hauteur';
 $lang_block['showtooltip'] = 'Afficher tooltip';
 $lang_block['tooltip_position'] = 'Position';
 $lang_block['tooltip_position_top'] = 'Au dessus';
@@ -27,3 +25,5 @@ $lang_block['tooltip_position_bottom'] = 'Au dessous';
 $lang_block['tooltip_position_left'] = 'A gauche';
 $lang_block['tooltip_position_right'] = 'A droite';
 $lang_block['tooltip_length'] = 'Numero';
+$lang_block['width'] = 'Largeur';
+$lang_block['height'] = 'Hauteur';

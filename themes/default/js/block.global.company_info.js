@@ -103,7 +103,7 @@ function initializeMap(){
 	    markers = [];
 		markers[0] = new google.maps.Marker({
 	        map: map,
-	        position: new google.maps.LatLng(e.latLng.A, e.latLng.F),
+	        position: new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()),
 	        draggable: true,
 	        animation: google.maps.Animation.DROP
 	    });
@@ -118,8 +118,9 @@ function initializeMap(){
 	
 	// Event on change center map
 	google.maps.event.addListener(map, 'center_changed', function() {
-	    $("#" + mapCenLat).val(map.getCenter().A);
-	    $("#" + mapCenLng).val(map.getCenter().F);
+	    $("#" + mapCenLat).val(map.getCenter().lat());
+	    $("#" + mapCenLng).val(map.getCenter().lng());
+	    console.log( map.getCenter() );
 	});	
 }
 
@@ -146,12 +147,12 @@ function controlMap(manual){
 // Map Marker drag event
 function markerdragEvent(markers){
     for (var i = 0, marker; marker = markers[i]; i++) {
-	    $("#" + mapLat).val(marker.position.A);
-	    $("#" + mapLng).val(marker.position.F);
+	    $("#" + mapLat).val(marker.position.lat());
+	    $("#" + mapLng).val(marker.position.lng());
 		
 		google.maps.event.addListener(marker, 'drag', function(e) {
-		    $("#" + mapLat).val(e.latLng.A);
-		    $("#" + mapLng).val(e.latLng.F);
+		    $("#" + mapLat).val(e.latLng.lat());
+		    $("#" + mapLng).val(e.latLng.lng());
 		});	
     }
 }

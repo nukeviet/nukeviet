@@ -664,10 +664,22 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		{
 			if( $news_contents['image']['position'] == 1 )
 			{
+                if( !empty( $news_contents['image']['note'] ) )
+                {
+                    $xtpl->parse( 'main.showhometext.imgthumb.note' );
+                }
+                else
+                {
+                    $xtpl->parse( 'main.showhometext.imgthumb.empty' );
+                }
 				$xtpl->parse( 'main.showhometext.imgthumb' );
 			}
 			elseif( $news_contents['image']['position'] == 2 )
 			{
+                if( !empty( $news_contents['image']['note'] ) )
+                {
+                    $xtpl->parse( 'main.showhometext.imgfull.note' );
+                }
 				$xtpl->parse( 'main.showhometext.imgfull' );
 			}
 		}
@@ -724,13 +736,11 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	if( $module_config[$module_name]['socialbutton'] )
 	{
 		global $meta_property;
-		
+
 		if( ! empty( $module_config[$module_name]['facebookappid'] ) )
 		{
 			$meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
 			$meta_property['og:locale'] = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
-			
-			$xtpl->parse( 'main.socialbutton.facebook' );
 		}
 		$xtpl->parse( 'main.socialbutton' );
 	}
@@ -747,6 +757,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 			}
 			$related_new_array_i['time'] = nv_date( 'd/m/Y', $related_new_array_i['time'] );
 			$xtpl->assign( 'RELATED_NEW', $related_new_array_i );
+            !empty( $module_config[$module_name]['showtooltip'] ) && $xtpl->parse( 'main.related_new.loop.tooltip' );
 			$xtpl->parse( 'main.related_new.loop' );
 		}
 		unset( $key );
@@ -765,6 +776,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 			}
 			$related_array_i['time'] = nv_date( 'd/m/Y', $related_array_i['time'] );
 			$xtpl->assign( 'RELATED', $related_array_i );
+            !empty( $module_config[$module_name]['showtooltip'] ) && $xtpl->parse( 'main.related.loop.tooltip' );
 			$xtpl->parse( 'main.related.loop' );
 		}
 		$xtpl->parse( 'main.related' );
@@ -782,6 +794,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 			}
 			$topic_array_i['time'] = nv_date( 'd/m/Y', $topic_array_i['time'] );
 			$xtpl->assign( 'TOPIC', $topic_array_i );
+            !empty( $module_config[$module_name]['showtooltip'] ) && $xtpl->parse( 'main.topic.loop.tooltip' );
 			$xtpl->parse( 'main.topic.loop' );
 		}
 		$xtpl->parse( 'main.topic' );

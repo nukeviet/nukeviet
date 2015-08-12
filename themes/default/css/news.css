@@ -25,11 +25,6 @@
     background:#fff url("../images/squared-blue.png") no-repeat 5px 9px;
 }
 
-div.news_column .time {
-    margin:3px 0 10px 0;
-    display:inline;
-}
-
 /*div.news_column h5 .list-inline > li {
     padding-left:0;
 }
@@ -39,7 +34,7 @@ div.news_column h5 .list-inline {
 }*/
 
 div.news_column .socialicon {
-    margin:-8px 0 -8px 0;
+    margin:-8px 0;
 }
 
 div.news_column .imghome {
@@ -64,7 +59,6 @@ div.news_column .imgalt {
 
 div.news_column div.items p,
 div.news_column #hometext,
-div.news_column div.bodytext,
 #news_detail h1,
 p.copyright {
     margin-bottom:10px;
@@ -115,6 +109,14 @@ div.news_column ul.related a:hover {
 
 .content-box {
     padding:10px;
+}
+
+.panel-body.other-news > div.clearfix{
+    margin-bottom: 15px;
+}
+
+.panel-body.other-news > div.clearfix:last-child{
+    margin-bottom: 0;
 }
 
 ul.other-news {
@@ -263,10 +265,6 @@ p {
 #print #footer #contact a:hover {
     text-decoration:none;
     cursor:pointer;
-}
-
-.bodytext {
-    word-break:keep-all;
 }
 
 .bodytext figure.image figcaption {

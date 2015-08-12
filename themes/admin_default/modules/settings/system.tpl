@@ -25,10 +25,6 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.ssl_https}</strong></td>
-					<td><input id="ssl_https" type="checkbox" value="1" name="ssl_https" {CHECKED_SSL_HTTPS} /></td>
-				</tr>
-				<tr>
 					<td><strong>{LANG.site_email}</strong></td>
 					<td><input type="text" name="site_email" value="{DATA.site_email}" class="form-control" style="width: 450px"/></td>
 				</tr>
@@ -50,6 +46,25 @@
 					<td><input type="text" name="time_pattern" value="{DATA.time_pattern}" class="w150 form-control"/></td>
 				</tr>
 				<!-- BEGIN: system -->
+				<tr>
+					<td><strong>{LANG.ssl_https}</strong></td>
+					<td>
+						<div class="row">
+							<div class="col-xs-8">
+								<select id="ssl_https" name="ssl_https" class="form-control" data-val="{DATA.ssl_https}">
+									<!-- BEGIN: ssl_https -->
+									<option value="{SSL_HTTPS.key}"{SSL_HTTPS.selected}>{SSL_HTTPS.title}</option>
+									<!-- END: ssl_https -->
+								</select>
+							</div>
+							<div class="col-xs-16">
+								<div class="row<!-- BEGIN: ssl_https_modules_hide --> hidden<!-- END: ssl_https_modules_hide -->" id="ssl_https_modules">
+									<a href="{LINK_SSL_MODULES}" target="_blank">{LANG.note_ssl_modules}</a>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
 				<tr>
 					<td><strong>{LANG.lang_multi}</strong></td>
 					<td><input type="checkbox" value="1" name="lang_multi" {CHECKED_LANG_MULTI} /></td>

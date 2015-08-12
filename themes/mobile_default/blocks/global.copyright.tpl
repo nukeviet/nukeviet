@@ -4,5 +4,6 @@
 <span>{LANG.powered_by} <a href="http://nukeviet.vn/" target="_blank">NukeViet CMS</a>.&nbsp; </span>
 <!-- BEGIN: design_by --><span>{LANG.design_by} <!-- BEGIN: design_url --><a href="{DATA.design_url}" target="_blank"><!-- END: design_url -->{DATA.design_by}<!-- BEGIN: design_url2 --></a><!-- END: design_url2 -->.</span><!-- END: design_by -->
 <!-- BEGIN: siteterms_url --><span>&nbsp;&#10057;&nbsp;<a href="{DATA.siteterms_url}">{LANG.siteterms}</a></span><!-- END: siteterms_url -->
+<!-- BEGIN: memory_time_usage --><br /><span>{LANG.for_admin}: [MEMORY_TIME_USAGE]</span><!-- END: memory_time_usage -->
 </div>
 <!-- END: main -->

@@ -618,7 +618,7 @@ function nv_rewrite_change( $array_config_global )
 		$rewrite_rule .= "RewriteEngine On\n";
 		$rewrite_rule .= "#RewriteBase " . NV_BASE_SITEURL . "\n";
 
-		if( $array_config_global['ssl_https'] )
+		if( $array_config_global['ssl_https'] == 1 )
 		{
 			$rewrite_rule .= "RewriteCond %{SERVER_PORT} !^443$\n";
 			$rewrite_rule .= "RewriteRule (.*)  https://%{SERVER_NAME}%{REQUEST_URI} [L,R]\n";

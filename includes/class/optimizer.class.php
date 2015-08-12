@@ -257,8 +257,8 @@ class optimizer
 			}
 			$this->_content = $this->_content . $this->eol . $_jsAfter;
 		}
-
-		return preg_replace( '/^\s+|\s+$/m', '', $this->_content );
+		$this->_content = str_replace("\r\n", "\n", $this->_content );
+		return preg_replace( "/\n([\t\n\s]+)\n/", "\n", $this->_content );
 	}
 
 	/**
