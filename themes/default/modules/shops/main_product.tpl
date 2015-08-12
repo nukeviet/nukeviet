@@ -16,7 +16,7 @@
     <div class="col-sm-12 col-md-{num}">
         <div class="thumbnail">
             <div style="height: {height}px">
-                <a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" data-content='{hometext}' data-rel="tooltip" class="img-thumbnail" style="max-width:{width}px; max-height: {height}px;"></a>
+                <a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" <!-- BEGIN: tooltip_js -->data-content='{hometext}' data-rel="tooltip" <!-- END: tooltip_js -->class="img-thumbnail" style="max-width:{width}px; max-height: {height}px;"></a>
             </div>
             <div class="info_pro">
             	<!-- BEGIN: new -->
