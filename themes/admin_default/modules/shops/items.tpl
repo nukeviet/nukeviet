@@ -1,8 +1,8 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 
 <div class="well">
 	<form action="{NV_BASE_ADMINURL}index.php" method="get">
@@ -98,7 +98,9 @@
 				<!-- BEGIN: loop -->
 				<tr>
 					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]"></td>
-					<td><a href="{ROW.imghome}" rel="shadowbox[random]"/ title="{ROW.title}"><img src="{ROW.thumb}" alt="{ROW.title}" width="40"/></a></td>
+					<td>
+						<a href="" title="{ROW.title}" class="open_modal" data-width="{ROW.imghome_info.width}" data-src="{ROW.imghome}"><img src="{ROW.thumb}" alt="{ROW.title}" width="40"/></a>
+					</td>
 					<td class="top">
 					<p>
 						<a target="_blank" href="{ROW.link}">{ROW.title}</a>
@@ -145,13 +147,36 @@
 		</table>
 	</div>
 </form>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				&nbsp;
+			</div>
+			<div class="modal-body">
+				<p class="text-center"><em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type='text/javascript'>
 	$(function() {
 		$("#catid").select2();
+
+		$('.open_modal').click(function(e){
+			e.preventDefault();
+			var maxwidth = 800;
+     		$('#idmodals .modal-dialog').css( {'width': $('.open_modal').data('width') + 23, 'max-width': maxwidth + 23 } );
+     		$('#idmodals .modal-body').html( '<img src="' + $('.open_modal').data('src') + '" alt="" style="max-width: ' + maxwidth + 'px" />' );
+     		$('#idmodals').modal('show');
+		});
 
 		$("#from, #to").datepicker({
 			dateFormat : "dd/mm/yy",

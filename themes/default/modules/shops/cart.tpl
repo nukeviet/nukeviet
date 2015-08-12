@@ -72,7 +72,11 @@
 					</td>
 
 					<!-- BEGIN: sub_group -->
-	    			<td><a href="{SUB_GROUP.link}" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
+	    			<td>
+	    				<!-- BEGIN: loop -->
+	    				<a href="{SUB_GROUP.link}" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a>
+	    				<!-- END: loop -->
+	    			</td>
 	    			<!-- END: sub_group -->
 
 					<!-- BEGIN: price2 -->

@@ -130,7 +130,7 @@
 <!-- END: non_popup -->
 
 <!-- BEGIN: popup -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 
 <div id="divsuccess" class="alert alert-info" style="display: none">{LANG.download_file_add_success}</div>
 

@@ -121,7 +121,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 					$html .= "<a title=\"" . $cat['title'] . "\" href=\"" . $cat['link'] . "\">" . nv_clean60( $cat['title'], $cut_num ) . "</a>\n";
 					if( ! empty( $cat['subcatid'] ) )
 					{
-						$html .= "<span class=\"arrow expand\">+</span>";
+						$html .= "<span class=\"fa arrow expand\"></span>";
 						$html .= html_viewsub( $cat['subcatid'], $block_config );
 					}
 					$html .= "</li>\n";
