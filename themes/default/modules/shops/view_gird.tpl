@@ -34,7 +34,7 @@
     <div class="col-sm-12 col-md-{num}">
         <div class="thumbnail">
             <div style="height: {height}px">
-                <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" <!-- BEGIN: tooltip_js -->data-content='{intro}' data-rel="tooltip" <!-- END: tooltip_js -->class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
+                <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" <!-- BEGIN: tooltip_js -->data-content='{intro}' data-rel="tooltip" data-img="{img_pro}"<!-- END: tooltip_js -->class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
             </div>
             <div class="info_pro">
             	<!-- BEGIN: new -->
