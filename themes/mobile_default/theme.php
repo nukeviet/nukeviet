@@ -241,6 +241,11 @@ function nv_site_theme( $contents, $full = true )
 
 	if( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1 );
 	if( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1 );
+    
+    if( defined ('NV_IS_ADMIN' ) && $full )
+    {
+        $sitecontent = preg_replace( '/(<\/body>)/i', PHP_EOL . nv_admin_menu() . PHP_EOL . '\\1', $sitecontent, 1 );
+    }
 
 	return $sitecontent;
 }
