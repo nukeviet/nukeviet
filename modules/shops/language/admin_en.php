@@ -624,6 +624,7 @@ $lang_module['download_file_time'] = 'Time added';
 $lang_module['download_file_count'] = 'Number products links';
 $lang_module['download_file_description'] = 'Description document';
 $lang_module['download_file_path'] = 'Path document';
+$lang_module['download_file_path_note'] = 'Browse file or fill url outside';
 $lang_module['download_file_chose'] = 'Choose File';
 $lang_module['download_file_chose_h'] = 'Select document existing';
 $lang_module['download_file_or'] = 'or';

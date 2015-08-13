@@ -659,6 +659,7 @@ $lang_module['download_file_time'] = 'Thời gian thêm';
 $lang_module['download_file_count'] = 'Số sản phẩm liên kết';
 $lang_module['download_file_description'] = 'Mô tả tài liệu';
 $lang_module['download_file_path'] = 'Đường dẫn tài liệu';
+$lang_module['download_file_path_note'] = 'Chọn tập tin hoặc nhập đường dẫn bên ngoài';
 $lang_module['download_file_chose'] = 'Chọn tập tin';
 $lang_module['download_file_chose_h'] = 'Chọn tài liệu đã có';
 $lang_module['download_file_or'] = 'hoặc';
