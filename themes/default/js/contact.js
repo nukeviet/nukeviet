@@ -15,7 +15,7 @@ function nv_validReset(a)
 
 function nv_validErrorShow(a) {
 	$(a).parent().parent().addClass("has-error");
-	$("[data-mess]",a).not(".tooltip-current").tooltip("destroy");
+	$("[data-mess]",$(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
 	$(a).tooltip({
 		title: function() {
 			return $(a).attr("data-current-mess")

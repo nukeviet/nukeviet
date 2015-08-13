@@ -217,11 +217,6 @@ function nv_site_theme( $contents, $full = true )
 			$xtpl->parse( 'main.theme_type.loop' );
 		}
 		$xtpl->parse( 'main.theme_type' );
-
-		if( defined( 'NV_IS_ADMIN' ) )
-		{
-			$xtpl->assign( 'ADMINTOOLBAR', nv_admin_menu() );
-		}
 	}
 
 	if( !$drag_block )
