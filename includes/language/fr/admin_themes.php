@@ -136,3 +136,9 @@ $lang_module['config_not_exit'] = 'L\'interface %s ne peut pas être configurée
 $lang_module['hide_device'] = 'Cachez sur les appareils';
 $lang_module['hide_device_1'] = 'Cachez sur téléphone portable';
 $lang_module['hide_device_2'] = 'Tablette';
+
+$lang_module['show_device'] = 'Affiche le nom de l\'appareil';
+$lang_module['show_device_1'] = 'Tous';
+$lang_module['show_device_2'] = 'Afficher mobiles';
+$lang_module['show_device_3'] = 'Afficher sur tablette';
+$lang_module['show_device_4'] = 'Autres équipements';
