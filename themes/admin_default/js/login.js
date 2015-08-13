@@ -8,62 +8,38 @@
 
 var seccodecheck = /^([a-zA-Z0-9])+$/;
 
-if ( typeof (jsi) == 'undefined')
-	var jsi = new Array();
-if (!jsi[0])
-	jsi[0] = 'vi';
-if (!jsi[1])
-	jsi[1] = './';
-if (!jsi[2])
-	jsi[2] = 0;
-if (!jsi[3])
-	jsi[3] = 6;
-
+if ("undefined" == typeof jsi) var jsi = [];
+jsi[0] || (jsi[0] = "vi");
+jsi[1] || (jsi[1] = "./");
+jsi[2] || (jsi[2] = 0);
+jsi[3] || (jsi[3] = 6);
 var strHref = window.location.href;
-if (strHref.indexOf("?") > -1) {
-	var strHref_split = strHref.split("?");
-	var script_name = strHref_split[0];
-	var query_string = strHref_split[1];
-} else {
-	var script_name = strHref;
-	var query_string = '';
+if (-1 < strHref.indexOf("?")) var strHref_split = strHref.split("?"), script_name = strHref_split[0], query_string = strHref_split[1];
+else script_name = strHref, query_string = "";
+
+function nv_checkadminlogin_seccode(a) {
+	return a.value.length == jsi[3] && seccodecheck.test(a.value) ? !0 : !1
 }
 
-function nv_checkadminlogin_seccode(seccode) {
-	return (seccode.value.length == jsi[3] && seccodecheck.test(seccode.value)) ? true : false;
-}
-
-function nv_randomPassword(plength) {
-	var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-	var pass = "";
-	for (var z = 0; z < plength; z++) {
-		pass += chars.charAt(Math.floor(Math.random() * 62));
-	}
-	return pass;
+function nv_randomPassword(a) {
+	for (var b = "", c = 0; c < a; c++) b += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".charAt(Math.floor(62 * Math.random()));
+	return b
 }
 
 function nv_checkadminlogin_submit() {
-	if (jsi[2] == 1) {
-		var seccode = document.getElementById('seccode');
-		if (!nv_checkadminlogin_seccode(seccode)) {
-			alert(login_error_security);
-			seccode.focus();
-			return false;
-		}
+	if (1 == jsi[2]) {
+		var a = document.getElementById("seccode");
+		if (!nv_checkadminlogin_seccode(a)) return alert(login_error_security), a.focus(), !1
 	}
-	var login = document.getElementById('login');
-	var password = document.getElementById('password');
-	if (login.value != '' && password.value != '') {
-		return true;
-	} else {
-		return false;
-	}
+	var a = document.getElementById("login"),
+		b = document.getElementById("password");
+	return "" == a.value ? (a.focus(), !1) : "" == b.value ? (b.focus(), !1) : !0
 }
 
 function nv_change_captcha() {
-	var vimg = document.getElementById('vimg');
+	var a = document.getElementById("vimg");
 	nocache = nv_randomPassword(10);
-	vimg.src = jsi[1] + 'index.php?scaptcha=captcha&nocache=' + nocache;
-	document.getElementById('seccode').value = '';
-	return false;
-}
+	a.src = jsi[1] + "index.php?scaptcha=captcha&nocache=" + nocache;
+	document.getElementById("seccode").value = "";
+	return !1
+};
