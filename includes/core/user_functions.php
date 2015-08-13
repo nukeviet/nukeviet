@@ -99,7 +99,7 @@ function nv_blocks_content( $sitecontent )
 			 ON t1.bid = t2.bid
 			 WHERE t2.func_id IN (" . implode( ',', $in ) . ")
 			 AND t1.theme ='" . $global_config['module_theme'] . "'
-			 AND t1.active=1
+			 AND t1.active!=''
 			 ORDER BY t2.weight ASC" );
 
 		while( $_row = $_result->fetch() )
@@ -123,7 +123,7 @@ function nv_blocks_content( $sitecontent )
 				'file_name' => $_row['file_name'],
 				'template' => $_row['template'],
 				'exp_time' => $_row['exp_time'],
-				'hide_device' => $_row['hide_device'],
+				'show_device' => ! empty( $_row['active'] ) ? explode( ',', $_row['active'] ) : array(),
 				'groups_view' => $_row['groups_view'],
 				'all_func' => $_row['all_func'],
 				'block_config' => $block_config
@@ -151,19 +151,30 @@ function nv_blocks_content( $sitecontent )
 				continue;
 			}
 
-			if( $client_info['is_mobile'] and ( $_row['hide_device'] == 1 or $_row['hide_device'] == 3 ) )
+			// Kiem hien thi tren cac thiet bi
+			$_active = false;
+			if( in_array( 1, $_row['show_device'] ) )
 			{
-				//?n tr�n mobile
-				continue;
+				$_active = true;
 			}
-			elseif( $client_info['is_tablet'] and ( $_row['hide_device'] == 2 or $_row['hide_device'] == 3 ) )
+			else
 			{
-				// ?n tr�n M�y t�nh b?ng
-				continue;
+				if( $client_info['is_mobile'] and in_array( 2, $_row['show_device'] ) )
+				{
+					$_active = true;
+				}
+				elseif( $client_info['is_tablet'] and in_array( 3, $_row['show_device'] ) )
+				{
+					$_active = true;
+				}
+				elseif( ! $client_info['is_mobile'] and ! $client_info['is_tablet'] and in_array( 4, $_row['show_device'] ) )
+				{
+					$_active = true;
+				}
 			}
 
-			//Kiem tra quyen xem block
-			if( in_array( $_row['position'], $array_position ) and nv_user_in_groups( $_row['groups_view'] ) )
+			// Kiem tra quyen xem block
+			if( $_active and in_array( $_row['position'], $array_position ) and nv_user_in_groups( $_row['groups_view'] ) )
 			{
 				$block_config = $_row['block_config'];
 				$blockTitle = $_row['blockTitle'];
@@ -238,7 +249,7 @@ function nv_blocks_content( $sitecontent )
 		}
 		if( ! empty( $unact ) )
 		{
-			$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET active=0 WHERE bid IN (' . implode( ',', $unact ) . ')' );
+			$db->query( "UPDATE " . NV_BLOCKS_TABLE . "_groups SET active='' WHERE bid IN (" . implode( ',', $unact ) . ")" );
 			unlink( $cache_file );
 		}
 	}
@@ -462,7 +473,7 @@ function nv_html_meta_tags( $html = true )
 
     if ( ! $html ) return $return;
 
-    $res = "";
+    $res = '';
     foreach ( $return as $link )
     {
         $res .= "<meta " . $link['name'] . "=\"" . $link['value'] . "\" content=\"" . $link['content'] . "\" />" . PHP_EOL;
@@ -511,7 +522,7 @@ function nv_html_links( $html = true )
     
     if ( ! $html ) return $return;
 
-    $res = "";
+    $res = '';
     foreach ( $return as $link )
     {
         $res .= "<link ";

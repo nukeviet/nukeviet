@@ -134,6 +134,8 @@ $lang_module['autoinstall_theme_overwrite'] = 'Overwrite';
 $lang_module['config'] = 'Set Theme';
 $lang_module['config_not_exit'] = 'Theme %s not configured';
 
-$lang_module['hide_device'] = 'Hide in device';
-$lang_module['hide_device_1'] = 'Hide mobile';
-$lang_module['hide_device_2'] = 'Hide tablet';
+$lang_module['show_device'] = 'Show in device';
+$lang_module['show_device_1'] = 'Show all device';
+$lang_module['show_device_2'] = 'Show in mobile';
+$lang_module['show_device_3'] = 'Show in tablet';
+$lang_module['show_device_4'] = 'Show other device';

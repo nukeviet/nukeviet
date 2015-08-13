@@ -200,23 +200,6 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$("input[name=active]").change(function() {
-		var bid = $(this).attr("title");
-		var new_status = $('#change_active_' + bid).is(':checked') ? 1 : 0;
-		if (confirm(nv_is_change_act_confirm[0])) {
-			var nv_timer = nv_settimeout_disable('change_active_' + bid, 3000);
-			$.ajax({
-				type : "POST",
-				url : MODULE_URL + "=blocks_change_active",
-				data : "bid=" + bid + "&new_status=" + new_status,
-				success : function(data) {
-					
-				}
-			});
-		}else{
-			$('#change_active_' + bid).prop('checked', new_status ? false : true );
-		}
-	});
 	
 	// Block funcs
 	$("a.block_content_fucs").click(function() {
