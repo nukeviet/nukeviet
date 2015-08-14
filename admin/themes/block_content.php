@@ -29,7 +29,7 @@ $row = array(
 	'template' => '',
 	'position' => $nv_Request->get_string( 'tag', 'get', '' ),
 	'exp_time' => 0,
-	'active_device' => array( 1 ),
+	'active' => 1,
 	'groups_view' => '6',
 	'all_func' => 1,
 	'weight' => 0,
@@ -512,7 +512,6 @@ while( $row_i = $result->fetch() )
 $xtpl->assign( 'ROW', array(
 	'title' => $row['title'],
 	'exp_time' => ( $row['exp_time'] > 0 ) ? date( 'd/m/Y', $row['exp_time'] ) : '',
-	'block_active' => ( intval( $row['active'] ) == 1 ) ? ' checked="checked"' : '',
 	'link' => nv_htmlspecialchars( $row['link'] ),
 	'bid' => $row['bid'],
 	'module' => $row['module'],
@@ -535,7 +534,7 @@ foreach( $templ_list as $value )
 	}
 }
 
-$active_device = explode( ',', $row['active'] );
+$active_device = ! empty( $row['active'] ) ? explode( ',', $row['active'] ) : array();
 for( $i = 1; $i <= 4; ++$i )
 {
 	$xtpl->assign( 'ACTIVE_DEVICE', array(
