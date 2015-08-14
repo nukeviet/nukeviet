@@ -1878,3 +1878,43 @@ button.close {
     padding:30px 20px;
     display:none
 }
+
+/* Block module-menu */
+.module-menu{
+    display:block;
+    float:left;
+    width:100%;
+    background: #333
+}
+.module-menu ul{
+    margin:0;
+    padding:0
+}
+.module-menu a {
+    display:block;
+    border-bottom:1px solid rgba(0,0,0,0.1);
+    background:#4189C7;
+    background-image:linear-gradient(to right,#428BCA 4px,#4189C7 4px);
+    background-repeat:repeat-x;
+    color:#fff;
+    text-decoration: none;
+    margin:0;
+    padding: 9px 10px 9px 20px;
+    cursor: pointer;
+}
+.module-menu a:before{
+    font-family:'FontAwesome';
+    content:" \f105 ";
+    margin-right:5px;
+}
+.module-menu a.home:before{
+    content:" \f07c ";
+}
+.module-menu a.active{
+    background:#205FA0;
+}
+.module-menu a:hover,.module-menu a.active,.module-menu a:focus{
+    color:#fff;
+    text-decoration:none;
+    background-image:linear-gradient(to right,#FF6600 4px,rgba(0,0,0,0) 4px);
+}
