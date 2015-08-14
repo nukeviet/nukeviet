@@ -793,7 +793,7 @@ class Request
 			$value = $this->filterTags( $value );
 			$value = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $value );
 			//$value = str_replace( array( "[:", ":]", "{:", ":}" ), array( '"', '"', "<", '>' ), $value );
-			$value = trim( $value );
+			$value = trim( str_replace( array( '{:', ':}' ), array( '<', '>' ), $value ) );
 		}
 		return $value;
 	}
