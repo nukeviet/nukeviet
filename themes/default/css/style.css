@@ -402,7 +402,9 @@ textarea.required {
     color:#fff;
     text-align:left !important;
     background-color:#0C2138;
-    border-radius:4px
+    border-radius:4px;
+    height: auto;
+    overflow: auto
 }
 
 .tooltip-inner img.pull-left{
