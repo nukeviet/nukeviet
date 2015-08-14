@@ -180,7 +180,7 @@ elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_global.php' ) )
 	require_once NV_ROOTDIR . '/includes/language/en/admin_global.php';
 }
 
-$info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
+$info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['adminlogininfo'] . '</div>';
 $size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
 $dir_template = '';

@@ -63,6 +63,12 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 	$xtpl->assign( 'SELECTTHEMES', $selectthemes );
 
+	$new_drag_block = $nv_Request->get_int( 'drag_block', 'session', 0 ) ? 0 : 1;
+	$lang_drag_block = ( $new_drag_block ) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
+
+	$xtpl->assign( 'URL_DBLOCK', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;drag_block=' . $new_drag_block );
+	$xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );
+
 	$result = $db->query( 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' );
 	while( list( $m_title, $m_custom_title ) = $result->fetch( 3 ) )
 	{

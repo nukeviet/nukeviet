@@ -39,8 +39,8 @@ if( preg_match( $global_config['check_theme'], $theme1 ) and preg_match( $global
 		while( $row = $sth->fetch() )
 		{
 			$_sql = 'INSERT INTO ' . NV_BLOCKS_TABLE . '_groups
-				(theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES
-				(:theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', ' . $row['active'] . ', ' . $row['hide_device'] . ', :groups_view, :all_func, :weight, :config )';
+				(theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES
+				(:theme, :module, :file_name, :title, :link, :template, :position, ' . $row['exp_time'] . ', :active, :groups_view, :all_func, :weight, :config )';
 
 			$data = array();
 			$data['theme'] = $theme2;
@@ -50,6 +50,7 @@ if( preg_match( $global_config['check_theme'], $theme1 ) and preg_match( $global
 			$data['link'] = $row['link'];
 			$data['template'] = $row['template'];
 			$data['position'] = $row['position'];
+			$data['active'] = $row['active'];
 			$data['groups_view'] = $row['groups_view'];
 			$data['all_func'] = $row['all_func'];
 			$data['weight'] = $row['weight'];
