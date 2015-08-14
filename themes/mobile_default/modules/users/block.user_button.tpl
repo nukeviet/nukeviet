@@ -5,7 +5,7 @@
     <div class="guestBlock">
         <h3><a href="#" onclick="switchTab(this);tipAutoClose(true);" class="guest-sign pointer margin-right current" data-switch=".log-area, .reg-area" data-obj=".guestBlock">{GLANG.signin}</a> <!-- BEGIN: allowuserreg2 --><a href="#" onclick="switchTab(this);tipAutoClose(false);" class="guest-reg pointer" data-switch=".reg-area, .log-area" data-obj=".guestBlock">{GLANG.register}</a> <!-- END: allowuserreg2 --></h3>
         <div class="log-area">
-            <div class="info margin-bottom">{GLANG.logininfo}</div>
+            <div class="nv-info margin-bottom">{GLANG.logininfo}</div>
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
@@ -40,7 +40,7 @@
         </div>
         <!-- BEGIN: allowuserreg -->
         <div class="reg-area hidden">
-            <div class="info margin-bottom">{LANG.info}</div>
+            <div class="nv-info margin-bottom">{LANG.info}</div>
             <div class="inputs">
                 <div class="form-group">
                     <span><input type="text" class="form-control" name="brlname" value="" maxlength="255" placeholder="{LANG.last_name}" onkeypress="inputReg(event);" /></span>
@@ -101,7 +101,7 @@
 <span data-toggle="tip" data-target="#userBlock" data-click="y"><strong class="pointer bg-gainsboro" style="background-image:url({AVATA})"></strong><span class="hidden">{LANG.full_name}</span></span>
 <!-- START FORFOOTER -->
 <div id="userBlock" class="hidden">
-    <div class="info" style="display:none"></div>
+    <div class="nv-info" style="display:none"></div>
     <div class="userBlock clearfix">
     	<h3 class="text-center"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> {USER.full_name}</h3>
     	<div class="row">
