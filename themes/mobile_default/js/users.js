@@ -15,7 +15,7 @@ function buttonSignIn(b) {
 		c = $("[name=blogin]", a),
 		g = $("[name=bpass]", a),
 		e = $("[name=bsec]", a),
-		h = $(".info", a),
+		h = $(".nv-info", a),
 		d = $(".bsubmit", a).attr("data-errorMessage"),
 		k = $(".bsubmit", a).attr("data-loginOk");
 	a.find("input,button").each(function() {
@@ -98,7 +98,7 @@ function showQlist() {
 
 function buttonReg(b) {
 	var a = $("#tip " + b),
-		c = $(".info", a),
+		c = $(".nv-info", a),
 		g = $(".brsubmit", a).attr("data-errorMessage"),
 		e = $(".brsubmit", a).attr("data-regOK");
 	a.find("input,button").each(function() {
@@ -164,7 +164,7 @@ function bt_logout(a){
         dataType: 'html',
         success: function(e){
             $('#tip .userBlock').hide();
-            $('#tip .info').addClass("text-center success").html(e).show();
+            $('#tip .nv-info').addClass("text-center success").html(e).show();
             setTimeout(function() {
 				window.location.href = window.location.href
 			}, 2E3)

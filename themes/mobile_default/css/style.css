@@ -188,7 +188,8 @@
     background-color:#82B1FE;
 }
 
-.info {
+/*nv-info*/
+.nv-info {
     border-width:1px;
     border-style:solid;
     border-color:#D4D4D4;
@@ -199,17 +200,17 @@
     padding:5px 10px;
 }
 
-.info.error {
+.nv-info.error {
     background-color:#EFD7D7 !important;
     border-color:#DCA8A6 !important;
 }
 
-.info.success {
+.nv-info.success {
     background-color:#E5F1FB !important;
     border-color:#8DC1ED !important;
 }
 
-.info:before {
+.nv-info:before {
     content:" \f05a ";
     display:inline-block;
     font-family:FontAwesome;
@@ -219,12 +220,12 @@
     margin-right:5px;
 }
 
-.info.error:before {
+.nv-info.error:before {
     content:" \f057 ";
     color:#A94442;
 }
 
-.info.success:before {
+.nv-info.success:before {
     content:" \f13a ";
     color:#449D44;
 }
