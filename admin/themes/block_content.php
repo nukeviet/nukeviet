@@ -29,8 +29,7 @@ $row = array(
 	'template' => '',
 	'position' => $nv_Request->get_string( 'tag', 'get', '' ),
 	'exp_time' => 0,
-	'hide_device' => 0,
-	'active' => 1,
+	'active_device' => array( 1 ),
 	'groups_view' => '6',
 	'all_func' => 1,
 	'weight' => 0,
@@ -152,7 +151,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 	$row['link'] = $nv_Request->get_title( 'link', 'post', '' );
 	$row['template'] = nv_substr( $nv_Request->get_title( 'template', 'post', '', 0 ), 0, 55 );
-	$row['position'] = nv_substr( $nv_Request->get_title( 'position', 'post', '', 0 ), 0, 55 );
+	$row['position'] = $nv_Request->get_title( 'position', 'post', '', 0 );
+	$row['position'] = nv_substr( nv_unhtmlspecialchars( $row['position'] ), 0, 55 );
 
 	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'exp_time', 'post' ), $m ) )
 	{
@@ -162,9 +162,16 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$row['exp_time'] = 0;
 	}
-	$row['active'] = $nv_Request->get_int( 'active', 'post', 0 );
-	$hide_device = $nv_Request->get_array( 'hide_device', 'post', 0 );
-	$row['hide_device'] = array_sum( $hide_device );
+
+	$row['active_device'] = $nv_Request->get_typed_array( 'active_device', 'post', 'int' );
+	if( in_array( '1', $row['active_device'] ) or ( in_array( '2', $row['active_device'] ) and in_array( '3', $row['active_device'] ) and in_array( '4', $row['active_device'] ) ) )
+	{
+		$row['active'] = 1;
+	}
+	else
+	{
+		$row['active'] = implode( ',', $row['active_device'] );
+	}
 
 	$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
 	$row['groups_view'] = ! empty( $groups_view ) ? implode( ',', nv_groups_post( array_intersect( $groups_view, array_keys( $groups_list ) ) ) ) : '';
@@ -358,7 +365,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$sth->execute();
 				$row['weight'] = intval( $sth->fetchColumn() ) + 1;
 
-				$_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, hide_device, groups_view, all_func, weight, config) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', '" . $row['hide_device'] . "', :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )";
+				$_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', :active, :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )";
 				$data = array();
 				$data['selectthemes'] = $selectthemes;
 				$data['module'] = $row['module'];
@@ -367,6 +374,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$data['link'] = $row['link'];
 				$data['template'] = $row['template'];
 				$data['position'] = $row['position'];
+				$data['active'] = $row['active'];
 				$data['groups_view'] = $row['groups_view'];
 				$data['config'] = $row['config'];
 				$row['bid'] = $db->insert_id( $_sql, 'bid', $data );
@@ -384,7 +392,6 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 					position=:position,
 					exp_time=:exp_time,
 					active=:active,
-					hide_device=:hide_device,
 					groups_view=:groups_view,
 					all_func=:all_func,
 					config=:config
@@ -397,8 +404,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$sth->bindParam( ':template', $row['template'], PDO::PARAM_STR );
 				$sth->bindParam( ':position', $row['position'], PDO::PARAM_STR );
 				$sth->bindParam( ':exp_time', $row['exp_time'], PDO::PARAM_STR );
-				$sth->bindParam( ':active', $row['active'], PDO::PARAM_INT );
-				$sth->bindParam( ':hide_device', $row['hide_device'], PDO::PARAM_INT );
+				$sth->bindParam( ':active', $row['active'], PDO::PARAM_STR );
 				$sth->bindParam( ':groups_view', $row['groups_view'], PDO::PARAM_STR );
 				$sth->bindParam( ':all_func', $row['all_func'], PDO::PARAM_STR );
 				$sth->bindParam( ':config', $row['config'], PDO::PARAM_STR );
@@ -529,6 +535,17 @@ foreach( $templ_list as $value )
 	}
 }
 
+$active_device = explode( ',', $row['active'] );
+for( $i = 1; $i <= 4; ++$i )
+{
+	$xtpl->assign( 'ACTIVE_DEVICE', array(
+		'key' => $i,
+		'checked' => ( in_array( $i, $active_device ) ) ? ' checked="checked"' : '',
+		'title' => $lang_module['show_device_' . $i]
+	) );
+	$xtpl->parse( 'main.active_device' );
+}
+
 for( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
 {
 	$xtpl->assign( 'POSITION', array(
@@ -537,16 +554,6 @@ for( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
 		'title' => ( string )$positions[$i]->name
 	) );
 	$xtpl->parse( 'main.position' );
-}
-
-for ($i=1; $i < 3; $i++)
-{
-	$xtpl->assign( 'HIDE_DEVICE', array(
-		'key' => $i,
-		'checked' => ( $row['hide_device'] == $i or $row['hide_device'] == 3 ) ? ' checked="checked"' : '',
-		'title' => $lang_module['hide_device_' . $i]
-	) );
-	$xtpl->parse( 'main.hide_device' );
 }
 
 foreach( $groups_list as $group_id => $grtl )

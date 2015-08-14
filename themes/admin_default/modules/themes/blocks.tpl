@@ -16,7 +16,6 @@
 				<th>{LANG.block_pos}</th>
 				<th>{LANG.block_title}</th>
 				<th>{LANG.block_file}</th>
-				<th class="text-center">{LANG.block_active}</th>
 				<th>{LANG.block_func_list}</th>
 				<th class="text-center">{LANG.functions}</th>
 				<th>&nbsp;</th>
@@ -24,8 +23,9 @@
 		</thead>
 		<tfoot>
 			<tr class="text-right">
-				<td colspan="8">
+				<td colspan="7">
 					<em class="fa fa-edit fa-lg">&nbsp;</em> <a class="block_weight" href="javascript:void(0);">{LANG.block_weight}</a>&nbsp;&nbsp;&nbsp;&nbsp; 
+        			<em class="fa fa-object-group fa-lg">&nbsp;</em><a href="{URL_DBLOCK}" title="{LANG_DBLOCK}"><span>{LANG_DBLOCK}</span></a>&nbsp;&nbsp;&nbsp;&nbsp; 
 					<em class="fa fa-plus-circle fa-lg">&nbsp;</em> <a class="block_content" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp;&nbsp;&nbsp; 
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete_group" href="javascript:void(0);">{GLANG.delete}</a>&nbsp;&nbsp;&nbsp;&nbsp; 
 					<em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp;&nbsp;&nbsp; 
@@ -51,7 +51,6 @@
 				</select></td>
 				<td>{ROW.title}</td>
 				<td>{ROW.module} {ROW.file_name}</td>
-				<td class="text-center"><input type="checkbox" name="active" title="{ROW.bid}" id="change_active_{ROW.bid}" {ROW.active} /></td>
 				<td>
 				<!-- BEGIN: all_func -->
 				{LANG.add_block_all_module}
