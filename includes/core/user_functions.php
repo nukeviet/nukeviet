@@ -143,8 +143,10 @@ function nv_blocks_content( $sitecontent )
 	{
 		$unact = array();
 		$array_position = array_keys( $_posReal );
-		foreach( $blocks as $_row )
+		foreach( $blocks as $_key => $_row )
 		{
+			$blockID = "nv" . $_key;
+
 			if( $_row['exp_time'] != 0 and $_row['exp_time'] <= NV_CURRENTTIME )
 			{
 				$unact[] = $_row['bid'];
