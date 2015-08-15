@@ -146,6 +146,7 @@ function nv_blocks_content( $sitecontent )
 		foreach( $blocks as $_key => $_row )
 		{
 			$blockID = "nv" . $_key;
+			global $blockID;
 
 			if( $_row['exp_time'] != 0 and $_row['exp_time'] <= NV_CURRENTTIME )
 			{
