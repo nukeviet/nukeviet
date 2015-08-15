@@ -127,8 +127,8 @@ $lang_module['xcopyblock_process'] = 'Sao chép';
 $lang_module['xcopyblock_no_position'] = 'Hãy chọn ít nhất 1 vị trí để sao chép';
 $lang_module['xcopyblock_notice'] = 'Khi thực hiện, hệ thống sẽ xóa các block đã tồn tại ở theme đích, vui lòng chờ cho các tiến trình thực hiện thành công.';
 $lang_module['xcopyblock_success'] = 'Quá trình sao chép thành công !';
-$lang_module['block_weight'] = 'Thiết lập lại vị trí các block';
-$lang_module['block_weight_confirm'] = 'Bạn có chắc chắn thiết lập lại vị trí các block, khi đó các thiết lập theo các function sẽ bị thiết lập lại';
+$lang_module['block_weight'] = 'Cập nhật lại vị trí các block';
+$lang_module['block_weight_confirm'] = 'Bạn có chắc chắn Cập nhật lại vị trí các block, khi đó các cấu hình theo các function sẽ bị cập nhật lại';
 $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Thông báo: Gói giao diện bạn cài đặt đã tồn tại các file, bạn có chắc chắn thực hiện tiếp quá trình cài đặt để ghi đè các file này';
 $lang_module['autoinstall_theme_overwrite'] = 'Thực hiện';
 
