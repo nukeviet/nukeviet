@@ -579,7 +579,7 @@ class Request
 			{
 				$attrSubSet[1] = $attrSubSet[0];
 			}
-			$newSet[] = $attrSubSet[0] . '=[:' . $attrSubSet[1] . ':]';
+			$newSet[] = $attrSubSet[0] . '=[@{' . $attrSubSet[1] . '}@]';
 		}
 		return $newSet;
 	}
@@ -702,7 +702,7 @@ class Request
 
 			if( ! $isCloseTag )
 			{
-				$preTag .= '{:' . $tagName;
+				$preTag .= '{@[' . $tagName;
 
 				if( ! empty( $attrSet ) )
 				{
@@ -710,11 +710,11 @@ class Request
 					$preTag .= ' ' . implode( ' ', $attrSet );
 				}
 
-				$preTag .= ( strpos( $fromTagOpen, '</' . $tagName ) ) ? ':}' : ' /:}';
+				$preTag .= ( strpos( $fromTagOpen, '</' . $tagName ) ) ? ']@}' : ' /]@}';
 			}
 			else
 			{
-				$preTag .= '{:/' . $tagName . ':}';
+				$preTag .= '{@[/' . $tagName . ']@}';
 			}
 
 			$postTag = substr( $postTag, ( $tagLength + 2 ) );
@@ -722,8 +722,8 @@ class Request
 		}
 
 		$preTag .= $postTag;
-
-		return $preTag;
+		$preTag = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $preTag );
+		return trim( str_replace( array( "[@{", "}@]", "{@[", "]@}" ), array( '"', '"', "<", '>' ), $preTag ) );
 	}
 
 	/**
@@ -791,9 +791,6 @@ class Request
 				$value = str_replace( $matches[0], $matches[1], $value );
 			}
 			$value = $this->filterTags( $value );
-			$value = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $value );
-			//$value = str_replace( array( "[:", ":]", "{:", ":}" ), array( '"', '"', "<", '>' ), $value );
-			$value = trim( str_replace( array( '{:', ':}' ), array( '<', '>' ), $value ) );
 		}
 		return $value;
 	}
