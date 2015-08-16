@@ -10,7 +10,7 @@
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $bid = $nv_Request->get_int( 'bid', 'post' );
-$pos_new = htmlspecialchars( $nv_Request->get_string( 'pos', 'post' ), ENT_QUOTES );
+$pos_new = nv_unhtmlspecialchars( $nv_Request->get_title( 'pos', 'post', '', 0 ) );
 
 list( $bid, $theme, $pos_old ) = $db->query( 'SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid )->fetch( 3 );
 
