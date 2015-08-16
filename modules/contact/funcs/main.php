@@ -37,7 +37,11 @@ if ( ! empty( $array_department ) )
     }
 }
 
-if ( empty( $dpDefault ) ) $dpDefault = array_keys( $array_department )[0];
+if ( empty( $dpDefault ) )
+{
+	$key_department= array_keys( $array_department );
+	$dpDefault = $key_department[0];
+}
 
 $fname = '';
 $femail = '';
@@ -128,8 +132,8 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
     $fphone = nv_substr( $nv_Request->get_title( 'fphone', 'post', '', 1 ), 0, 100 );
     $sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
-    $sth = $db->prepare( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send 
-    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES 
+    $sth = $db->prepare( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
+    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES
     (" . $fpart . ", :cat, :title, :content, " . NV_CURRENTTIME . ", " . $sender_id . ", :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)" );
     $sth->bindParam( ':cat', $fcat, PDO::PARAM_STR );
     $sth->bindParam( ':title', $ftitle, PDO::PARAM_STR );

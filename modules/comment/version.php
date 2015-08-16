@@ -12,8 +12,8 @@ if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $module_version = array(
 	'name' => 'Comment',
-	'modfuncs' => 'main,post,like,delete',
-	'submenu' => 'main',
+	'modfuncs' => '',
+	'submenu' => '',
 	'is_sysmod' => 0,
 	'virtual' => 0,
 	'version' => '4.0.21',

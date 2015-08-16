@@ -23,7 +23,7 @@ $sth->execute( array('seek', 'seek', 'seek', 'seek', 'Recherche', '', NV_CURRENT
 $sth->execute( array('menu', 'menu', 'menu', 'menu', 'Menu Site', '', NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 9, 1, '', 0, 0) );
 $sth->execute( array('feeds', 'feeds', 'feeds', 'feeds', 'Rss Feeds', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 10, 1, '', 0, 0) );
 $sth->execute( array('page', 'page', 'page', 'page', 'Page', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 11, 1, '', 1, 0) );
-$sth->execute( array('comment', 'comment', 'comment', 'comment', 'Comment', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 12, 1, '', 0, 0) );
+$sth->execute( array('comment', 'comment', 'comment', 'comment', 'Comment', '', NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 12, 1, '', 0, 0) );
 $sth->execute( array('siteterms', 'page', 'siteterms', 'siteterms', 'Conditions d\'utilisation', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 13, 1, '', 1, 0) );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
@@ -42,16 +42,16 @@ $sth->execute( array(13, 'search', 'search', 'Search', 'news', 1, 0, 4, '') );
 $sth->execute( array(14, 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, '') );
 $sth->execute( array(15, 'topic', 'topic', 'Topic', 'news', 1, 0, 5, '') );
 $sth->execute( array(16, 'viewcat', 'viewcat', 'Viewcat', 'news', 1, 0, 6, '') );
-$sth->execute( array(17, 'active', 'active', 'Active', 'users', 1, 0, 8, '') );
-$sth->execute( array(18, 'changepass', 'changepass', 'Changer le mot de passe', 'users', 1, 1, 6, '') );
-$sth->execute( array(19, 'editinfo', 'editinfo', 'Editinfo', 'users', 1, 0, 10, '') );
+$sth->execute( array(17, 'active', 'active', 'Active', 'users', 1, 0, 5, '') );
+$sth->execute( array(18, 'changepass', 'changepass', 'Changer le mot de passe', 'users', 1, 1, 9, '') );
+$sth->execute( array(19, 'editinfo', 'editinfo', 'Edit User Info', 'users', 1, 1, 7, '') );
 $sth->execute( array(20, 'login', 'login', 'Se connecter', 'users', 1, 1, 2, '') );
-$sth->execute( array(21, 'logout', 'logout', 'Logout', 'users', 1, 1, 3, '') );
-$sth->execute( array(22, 'lostactivelink', 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 9, '') );
-$sth->execute( array(23, 'lostpass', 'lostpass', 'Mot de passe oublié?', 'users', 1, 1, 5, '') );
+$sth->execute( array(21, 'logout', 'logout', 'Logout', 'users', 1, 1, 14, '') );
+$sth->execute( array(22, 'lostactivelink', 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 6, '') );
+$sth->execute( array(23, 'lostpass', 'lostpass', 'Mot de passe oublié?', 'users', 1, 1, 4, '') );
 $sth->execute( array(24, 'main', 'main', 'Main', 'users', 1, 0, 1, '') );
-$sth->execute( array(25, 'openid', 'openid', 'Openid', 'users', 1, 1, 7, '') );
-$sth->execute( array(26, 'register', 'register', 'S&#039;inscrire', 'users', 1, 1, 4, '') );
+$sth->execute( array(25, 'openid', 'openid', 'Openid', 'users', 1, 1, 13, '') );
+$sth->execute( array(26, 'register', 'register', 'S&#039;inscrire', 'users', 1, 1, 3, '') );
 $sth->execute( array(27, 'main', 'main', 'Main', 'contact', 1, 0, 1, '') );
 $sth->execute( array(28, 'allbots', 'allbots', 'Par Moteur de recherche', 'statistics', 1, 1, 6, '') );
 $sth->execute( array(29, 'allbrowsers', 'allbrowsers', 'Par Navigateur', 'statistics', 1, 1, 4, '') );
@@ -72,8 +72,8 @@ $sth->execute( array(43, 'stats', 'stats', 'Stats', 'banners', 1, 0, 4, '') );
 $sth->execute( array(44, 'viewmap', 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '') );
 $sth->execute( array(46, 'main', 'main', 'Main', 'seek', 1, 0, 1, '') );
 $sth->execute( array(47, 'main', 'main', 'Main', 'feeds', 1, 0, 1, '') );
-$sth->execute( array(48, 'regroups', 'regroups', 'Regroups', 'users', 1, 0, 11, '') );
-$sth->execute( array(50, 'memberlist', 'memberlist', 'Liste des membres', 'users', 1, 1, 12, '') );
+$sth->execute( array(48, 'regroups', 'regroups', 'Regroups', 'users', 1, 0, 8, '') );
+$sth->execute( array(50, 'memberlist', 'memberlist', 'Liste des membres', 'users', 1, 1, 10, '') );
 $sth->execute( array(51, 'groups', 'groups', 'Groups', 'news', 1, 0, 7, '') );
 $sth->execute( array(52, 'tag', 'tag', 'Tag', 'news', 1, 0, 2, '') );
 $sth->execute( array(53, 'main', 'main', 'Main', 'page', 1, 0, 1, '') );
@@ -81,12 +81,12 @@ $sth->execute( array(54, 'main', 'main', 'main', 'comment', 1, 0, 1, '') );
 $sth->execute( array(55, 'post', 'post', 'post', 'comment', 1, 0, 2, '') );
 $sth->execute( array(56, 'like', 'like', 'Like', 'comment', 1, 0, 3, '') );
 $sth->execute( array(57, 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, '') );
-$sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 13, '') );
+$sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 11, '') );
 $sth->execute( array(59, 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '') );
 $sth->execute( array(60, 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, '') );
 $sth->execute( array(61, 'rss', 'rss', 'Rss', 'page', 0, 0, 0, '') );
 $sth->execute( array(62, 'rss', 'rss', 'Rss', 'about', 0, 0, 0, '') );
-$sth->execute( array(63, 'changequestion', 'changequestion', 'Change Question', 'users', 1, 1, 14, '') );
+$sth->execute( array(63, 'changequestion', 'changequestion', 'Change Question', 'users', 1, 1, 12, '') );
 $sth->execute( array(64, 'main', 'main', 'Main', 'siteterms', 1, 0, 1, '') );
 $sth->execute( array(65, 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, '') );
 $sth->execute( array(66, 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
@@ -101,16 +101,23 @@ $sth->execute( array(7, 'left-body-right', 'default') );
 $sth->execute( array(13, 'left-body-right', 'default') );
 $sth->execute( array(15, 'left-body-right', 'default') );
 $sth->execute( array(16, 'left-body-right', 'default') );
-$sth->execute( array(17, 'left-body-right', 'default') );
-$sth->execute( array(18, 'left-body-right', 'default') );
-$sth->execute( array(20, 'left-body-right', 'default') );
-$sth->execute( array(21, 'left-body-right', 'default') );
-$sth->execute( array(22, 'left-body-right', 'default') );
-$sth->execute( array(23, 'left-body-right', 'default') );
-$sth->execute( array(24, 'left-body-right', 'default') );
-$sth->execute( array(25, 'left-body-right', 'default') );
-$sth->execute( array(19, 'left-body-right', 'default') );
-$sth->execute( array(26, 'left-body-right', 'default') );
+
+//Default -> User
+$sth->execute( array(17, 'left-body', 'default') );
+$sth->execute( array(18, 'left-body', 'default') );
+$sth->execute( array(19, 'left-body', 'default') );
+$sth->execute( array(20, 'left-body', 'default') );
+$sth->execute( array(21, 'left-body', 'default') );
+$sth->execute( array(22, 'left-body', 'default') );
+$sth->execute( array(23, 'left-body', 'default') );
+$sth->execute( array(24, 'left-body', 'default') );
+$sth->execute( array(25, 'left-body', 'default') );
+$sth->execute( array(26, 'left-body', 'default') );
+$sth->execute( array(48, 'left-body', 'default') );
+$sth->execute( array(50, 'left-body', 'default') );
+$sth->execute( array(58, 'left-body', 'default') );
+$sth->execute( array(63, 'left-body', 'default') );
+
 $sth->execute( array(27, 'left-body', 'default') );
 $sth->execute( array(28, 'left-body', 'default') );
 $sth->execute( array(29, 'left-body', 'default') );
@@ -119,18 +126,15 @@ $sth->execute( array(31, 'left-body', 'default') );
 $sth->execute( array(32, 'left-body', 'default') );
 $sth->execute( array(33, 'left-body', 'default') );
 $sth->execute( array(34, 'left-body', 'default') );
+$sth->execute( array(35, 'left-body-right', 'default') );
 $sth->execute( array(36, 'left-body-right', 'default') );
 $sth->execute( array(39, 'left-body-right', 'default') );
 $sth->execute( array(42, 'left-body-right', 'default') );
 $sth->execute( array(43, 'left-body-right', 'default') );
 $sth->execute( array(46, 'left-body-right', 'default') );
 $sth->execute( array(47, 'left-body-right', 'default') );
-$sth->execute( array(48, 'left-body-right', 'default') );
 $sth->execute( array(52, 'left-body-right', 'default') );
 $sth->execute( array(53, 'body', 'default') );
-$sth->execute( array(35, 'left-body-right', 'default') );
-$sth->execute( array(50, 'left-body-right', 'default') );
-$sth->execute( array(63, 'left-body-right', 'default') );
 $sth->execute( array(64, 'left-body-right', 'default') );
 $sth->execute( array(65, 'left-body-right', 'default') );
 
@@ -174,32 +178,44 @@ $sth->execute( array(64, 'body', 'mobile_default') );
 $sth->execute( array(65, 'body', 'mobile_default') );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
-$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (bid, theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array(1, 'default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, '1', '6', 1, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}') );
-$sth->execute( array(2, 'default', 'statistics', 'global.counter_button.php', 'Online button', '', 'no_title', '[QR_CODE]', 0, '1', '6', 1, 2, '') );
-$sth->execute( array(3, 'default', 'banners', 'global.banners.php', 'Publicité à côté', '', '', '[LEFT]', 0, '1', '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
-$sth->execute( array(4, 'default', 'about', 'global.about.php', 'À Propos', '', 'border', '[RIGHT]', 0, '1', '6', 1, 1, '') );
-$sth->execute( array(5, 'default', 'users', 'global.user_button.php', 'Identification', '', 'no_title', '[PERSONALAREA]', 0, '1', '6', 1, 1, '') );
-$sth->execute( array(6, 'default', 'voting', 'global.voting.php', 'Sondage', '', '', '[RIGHT]', 0, '1', '6', 1, 3, '') );
-$sth->execute( array(7, 'default', 'news', 'module.block_headline.php', 'Hot news', '', 'no_title', '[TOP]', 0, '1', '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
-$sth->execute( array(8, 'default', 'banners', 'global.banners.php', 'Publicité du centre', '', 'no_title', '[TOP]', 0, '1', '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
-$sth->execute( array(9, 'default', 'theme', 'global.company_info.php', 'Management Company', '', 'simple', '[COMPANY_INFO]', 0, '1', '6', 1, 1, 'a:11:{s:12:"company_name";s:51:"Vietnam Open Source Development Joint Stock Company";s:16:"company_sortname";s:12:"VINADES.,JSC";s:15:"company_regcode";s:0:"";s:16:"company_regplace";s:0:"";s:21:"company_licensenumber";s:0:"";s:22:"company_responsibility";s:0:"";s:15:"company_address";s:74:"Room 2004 - CT2 Nang Huong Building, 583 Nguyen Trai str., Ha Noi, VietNam";s:13:"company_phone";s:14:"+84-4-85872007";s:11:"company_fax";s:14:"+84-4-35500914";s:13:"company_email";s:18:"contact@vinades.vn";s:15:"company_website";s:17:"http://vinades.vn";}') );
-$sth->execute( array(10, 'default', 'theme', 'global.QR_code.php', 'QR code', '', 'no_title', '[QR_CODE]', 0, '1', '6', 1, 1, 'a:3:{s:5:"level";s:1:"M";s:15:"pixel_per_point";i:4;s:11:"outer_frame";i:1;}') );
-$sth->execute( array(11, 'default', 'contact', 'global.contact_form.php', 'Feedback', '', 'no_title', '[FOOTER_SITE]', 0, '1', '6', 1, 2, '') );
-$sth->execute( array(17, 'default', 'theme', 'global.bootstrap.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, '1', '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:20;}') );
-$sth->execute( array(18, 'default', 'contact', 'global.contact_default.php', 'Contact Default', '', 'no_title', '[CONTACT_DEFAULT]', 0, '1', '6', 1, 1, '') );
-$sth->execute( array(19, 'default', 'theme', 'global.copyright.php', 'Copyright', '', 'no_title', '[FOOTER_SITE]', 0, '1', '6', 1, 1, 'a:5:{s:12:"copyright_by";s:0:"";s:13:"copyright_url";s:0:"";s:9:"design_by";s:12:"VINADES.,JSC";s:10:"design_url";s:18:"http://vinades.vn/";s:13:"siteterms_url";s:'. ( 38 + strlen( NV_BASE_SITEURL ) ).':"' . NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&amp;nv=siteterms";}') );
-$sth->execute( array(21, 'default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
-$sth->execute( array(22, 'default', 'theme', 'global.menu_footer.php', 'Menu', '', 'simple', '[MENU_FOOTER]', 0, '1', '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}') );
-$sth->execute( array(20, 'mobile_default', 'menu', 'global.metismenu.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, '1', '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}') );
-$sth->execute( array(23, 'mobile_default', 'theme', 'global.copyright.php', 'Copyright', '', 'no_title', '[FOOTER_SITE]', 0, '1', '6', 1, 1, 'a:5:{s:12:"copyright_by";s:0:"";s:13:"copyright_url";s:0:"";s:9:"design_by";s:12:"VINADES.,JSC";s:10:"design_url";s:18:"http://vinades.vn/";s:13:"siteterms_url";s:35:"/index.php?language=fr&nv=siteterms";}') );
-$sth->execute( array(25, 'mobile_default', 'users', 'global.user_button.php', 'Sign In', '', 'no_title', '[MENU_SITE]', 0, '1', '6', 1, 1, '') );
-$sth->execute( array(26, 'mobile_default', 'theme', 'global.menu_footer.php', 'Catégories', '', 'primary', '[MENU_FOOTER]', 0, '1', '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:9:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";i:8;s:9:"siteterms";}}') );
-$sth->execute( array(27, 'mobile_default', 'theme', 'global.company_info.php', 'Management Company', '', 'primary', '[COMPANY_INFO]', 0, '1', '6', 1, 1, 'a:11:{s:12:"company_name";s:51:"Vietnam Open Source Development Joint Stock Company";s:16:"company_sortname";s:12:"VINADES.,JSC";s:15:"company_regcode";s:0:"";s:16:"company_regplace";s:0:"";s:21:"company_licensenumber";s:0:"";s:22:"company_responsibility";s:0:"";s:15:"company_address";s:74:"Room 2004 - CT2 Nang Huong Building, 583 Nguyen Trai str., Ha Noi, VietNam";s:13:"company_phone";s:14:"+84-4-85872007";s:11:"company_fax";s:14:"+84-4-35500914";s:13:"company_email";s:18:"contact@vinades.vn";s:15:"company_website";s:17:"http://vinades.vn";}') );
-$sth->execute( array(28, 'mobile_default', 'contact', 'global.contact_default.php', 'Contact Default', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 1, '') );
-$sth->execute( array(29, 'mobile_default', 'theme', 'global.social.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 3, 'a:4:{s:8:"facebook";s:32:"http://www.facebook.com/nukeviet";s:11:"google_plus";s:32:"https://www.google.com/+nukeviet";s:7:"youtube";s:37:"https://www.youtube.com/user/nukeviet";s:7:"twitter";s:28:"https://twitter.com/nukeviet";}') );
-$sth->execute( array(30, 'mobile_default', 'theme', 'global.QR_code.php', 'QR code', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 4, 'a:3:{s:5:"level";s:1:"L";s:15:"pixel_per_point";i:4;s:11:"outer_frame";i:1;}') );
-$sth->execute( array(31, 'mobile_default', 'contact', 'global.contact_form.php', 'Feedback', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 2, '') );
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
+
+//Theme Default
+$sth->execute( array('default', 'news', 'module.block_headline.php', 'Hot news', '', 'no_title', '[TOP]', 0, '1', '6', 0, 1, 'a:3:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";}') );
+$sth->execute( array('default', 'banners', 'global.banners.php', 'Publicité du centre', '', 'no_title', '[TOP]', 0, '1', '6', 0, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
+
+$sth->execute( array('default', 'news', 'global.block_category.php', 'Menu', '', '', '[LEFT]', 0, '1', '6', 0, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}') );
+$sth->execute( array('default', 'theme', 'global.module_menu.php', 'Module Menu', '', 'no_title', '[LEFT]', 0, '1', '6', 0, 2, '') );
+$sth->execute( array('default', 'banners', 'global.banners.php', 'Publicité à côté', '', '', '[LEFT]', 0, '1', '6', 1, 3, 'a:1:{s:12:"idplanbanner";i:2;}') );
+
+$sth->execute( array('default', 'about', 'global.about.php', 'À Propos', '', 'border', '[RIGHT]', 0, '1', '6', 1, 1, '') );
+$sth->execute( array('default', 'voting', 'global.voting.php', 'Sondage', '', '', '[RIGHT]', 0, '1', '6', 1, 2, '') );
+
+$sth->execute( array('default', 'theme', 'global.copyright.php', 'Copyright', '', 'no_title', '[FOOTER_SITE]', 0, '1', '6', 1, 1, 'a:5:{s:12:"copyright_by";s:0:"";s:13:"copyright_url";s:0:"";s:9:"design_by";s:12:"VINADES.,JSC";s:10:"design_url";s:18:"http://vinades.vn/";s:13:"siteterms_url";s:'. ( 38 + strlen( NV_BASE_SITEURL ) ).':"' . NV_BASE_SITEURL . 'index.php?language=' . $lang_data . '&amp;nv=siteterms";}') );
+$sth->execute( array('default', 'contact', 'global.contact_form.php', 'Feedback', '', 'no_title', '[FOOTER_SITE]', 0, '1', '6', 1, 2, '') );
+
+$sth->execute( array('default', 'theme', 'global.QR_code.php', 'QR code', '', 'no_title', '[QR_CODE]', 0, '1', '6', 1, 1, 'a:3:{s:5:"level";s:1:"M";s:15:"pixel_per_point";i:4;s:11:"outer_frame";i:1;}') );
+$sth->execute( array('default', 'statistics', 'global.counter_button.php', 'Online button', '', 'no_title', '[QR_CODE]', 0, '1', '6', 1, 2, '') );
+
+$sth->execute( array('default', 'users', 'global.user_button.php', 'Identification', '', 'no_title', '[PERSONALAREA]', 0, '1', '6', 1, 1, '') );
+$sth->execute( array('default', 'theme', 'global.company_info.php', 'Management Company', '', 'simple', '[COMPANY_INFO]', 0, '1', '6', 1, 1, 'a:11:{s:12:"company_name";s:51:"Vietnam Open Source Development Joint Stock Company";s:16:"company_sortname";s:12:"VINADES.,JSC";s:15:"company_regcode";s:0:"";s:16:"company_regplace";s:0:"";s:21:"company_licensenumber";s:0:"";s:22:"company_responsibility";s:0:"";s:15:"company_address";s:74:"Room 2004 - CT2 Nang Huong Building, 583 Nguyen Trai str., Ha Noi, VietNam";s:13:"company_phone";s:14:"+84-4-85872007";s:11:"company_fax";s:14:"+84-4-35500914";s:13:"company_email";s:18:"contact@vinades.vn";s:15:"company_website";s:17:"http://vinades.vn";}') );
+$sth->execute( array('default', 'theme', 'global.bootstrap.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, '1', '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:20;}') );
+$sth->execute( array('default', 'contact', 'global.contact_default.php', 'Contact Default', '', 'no_title', '[CONTACT_DEFAULT]', 0, '1', '6', 1, 1, '') );
+$sth->execute( array('default', 'page', 'global.html.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 1, 'a:1:{s:11:"htmlcontent";s:310:"<ul><li><a href="#"><i class="fa fa-facebook">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-google-plus">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-youtube">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-twitter">&nbsp;</i></a></li><li><a href="#"><i class="fa fa-rss">&nbsp;</i></a></li></ul>";}') );
+$sth->execute( array('default', 'theme', 'global.menu_footer.php', 'Menu', '', 'simple', '[MENU_FOOTER]', 0, '1', '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:8:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";}}') );
+
+//Theme Mobile
+$sth->execute( array('mobile_default', 'menu', 'global.metismenu.php', 'Menu Site', '', 'no_title', '[MENU_SITE]', 0, '1', '6', 1, 1, 'a:2:{s:6:"menuid";i:1;s:12:"title_length";i:0;}') );
+$sth->execute( array('mobile_default', 'users', 'global.user_button.php', 'Sign In', '', 'no_title', '[MENU_SITE]', 0, '1', '6', 1, 2, '') );
+
+$sth->execute( array('mobile_default', 'contact', 'global.contact_default.php', 'Contact Default', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 1, '') );
+$sth->execute( array('mobile_default', 'contact', 'global.contact_form.php', 'Feedback', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 2, '') );
+$sth->execute( array('mobile_default', 'theme', 'global.social.php', 'Social icon', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 3, 'a:4:{s:8:"facebook";s:32:"http://www.facebook.com/nukeviet";s:11:"google_plus";s:32:"https://www.google.com/+nukeviet";s:7:"youtube";s:37:"https://www.youtube.com/user/nukeviet";s:7:"twitter";s:28:"https://twitter.com/nukeviet";}') );
+$sth->execute( array('mobile_default', 'theme', 'global.QR_code.php', 'QR code', '', 'no_title', '[SOCIAL_ICONS]', 0, '1', '6', 1, 4, 'a:3:{s:5:"level";s:1:"L";s:15:"pixel_per_point";i:4;s:11:"outer_frame";i:1;}') );
+
+$sth->execute( array('mobile_default', 'theme', 'global.copyright.php', 'Copyright', '', 'no_title', '[FOOTER_SITE]', 0, '1', '6', 1, 1, 'a:5:{s:12:"copyright_by";s:0:"";s:13:"copyright_url";s:0:"";s:9:"design_by";s:12:"VINADES.,JSC";s:10:"design_url";s:18:"http://vinades.vn/";s:13:"siteterms_url";s:35:"/index.php?language=fr&nv=siteterms";}') );
+$sth->execute( array('mobile_default', 'theme', 'global.menu_footer.php', 'Catégories', '', 'primary', '[MENU_FOOTER]', 0, '1', '6', 1, 1, 'a:1:{s:14:"module_in_menu";a:9:{i:0;s:5:"about";i:1;s:4:"news";i:2;s:5:"users";i:3;s:7:"contact";i:4;s:6:"voting";i:5;s:7:"banners";i:6;s:4:"seek";i:7;s:5:"feeds";i:8;s:9:"siteterms";}}') );
+$sth->execute( array('mobile_default', 'theme', 'global.company_info.php', 'Management Company', '', 'primary', '[COMPANY_INFO]', 0, '1', '6', 1, 1, 'a:11:{s:12:"company_name";s:51:"Vietnam Open Source Development Joint Stock Company";s:16:"company_sortname";s:12:"VINADES.,JSC";s:15:"company_regcode";s:0:"";s:16:"company_regplace";s:0:"";s:21:"company_licensenumber";s:0:"";s:22:"company_responsibility";s:0:"";s:15:"company_address";s:74:"Room 2004 - CT2 Nang Huong Building, 583 Nguyen Trai str., Ha Noi, VietNam";s:13:"company_phone";s:14:"+84-4-85872007";s:11:"company_fax";s:14:"+84-4-35500914";s:13:"company_email";s:18:"contact@vinades.vn";s:15:"company_website";s:17:"http://vinades.vn";}') );
 
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
@@ -224,7 +240,7 @@ while( $row = $func_result->fetch() )
 	}
 	else
 	{
-		$array_funcid_i = $array_funcid_mod[$row['module']];
+		$array_funcid_i = isset( $array_funcid_mod[$row['module']] ) ? $array_funcid_mod[$row['module']] : array();
 
 		$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $row['theme'] . '/config.ini' );
 		$blocks = $xml->xpath( 'setblocks/block' );
@@ -244,13 +260,12 @@ while( $row = $func_result->fetch() )
 					$func_array = explode( ',', $func_list );
 					foreach( $func_array as $_func )
 					{
-						if( isset( $array_funcid_mod[$row['module']][$_func] ))
+						if( isset( $array_funcid_mod[$mod][$_func] ))
 						{
-							$array_funcid_i[] = $array_funcid_mod[$row['module']][$_func];
+							$array_funcid_i[] = $array_funcid_mod[$mod][$_func];
 						}
 					}
 				}
-				break;
 			}
 		}
 	}
