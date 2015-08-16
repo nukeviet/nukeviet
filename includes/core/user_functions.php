@@ -522,7 +522,7 @@ function nv_html_links( $html = true )
     {
         $return = array_merge_recursive( $return, $nv_html_css );
     }
-    
+
     if ( ! $html ) return $return;
 
     $res = '';
@@ -663,6 +663,10 @@ function nv_html_site_js( $html = true )
 	if ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/js/' . $module_file . '.js' ) )
 	{
 		$return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/js/' . $module_file . '.js' );
+	}
+	elseif ( file_exists( NV_ROOTDIR . '/themes/default/js/' . $module_file . '.js' ) )
+	{
+		$return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . 'themes/default/js/' . $module_file . '.js' );
 	}
 
     if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
