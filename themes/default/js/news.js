@@ -49,3 +49,16 @@ function get_alias() {
 	}
 	return false;
 }
+
+$(window).load(function(){
+	var newsW = $('#news-bodyhtml').innerWidth();
+	$.each($('#news-bodyhtml img'), function(){
+		var w = $(this).innerWidth();
+		var h = $(this).innerHeight();
+		
+		if( w > newsW ){
+			$(this).prop('width', newsW);
+			$(this).prop('height', h * newsW / w);
+		}
+	});
+});
