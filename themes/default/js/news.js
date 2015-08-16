@@ -49,3 +49,22 @@ function get_alias() {
 	}
 	return false;
 }
+
+$(document).ready(function(){
+	//$('#news-bodyhtml img').addClass('hidden');
+});
+
+$(window).load(function(){
+	var newsW = $('#news-bodyhtml').innerWidth();
+	$.each($('#news-bodyhtml img'), function(){
+		var w = $(this).innerWidth();
+		var h = $(this).innerHeight();
+		
+		if( w > newsW ){
+			$(this).prop('width', newsW);
+			$(this).prop('height', h * newsW / w);
+		}
+	});
+	
+	//$('#news-bodyhtml img').removeClass('hidden');
+});
