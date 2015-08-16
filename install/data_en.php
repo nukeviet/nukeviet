@@ -262,7 +262,7 @@ while( $row = $func_result->fetch() )
 		for( $i = 0, $count = sizeof( $blocks ); $i < $count; ++$i )
 		{
 			$rowini = (array)$blocks[$i];
-			if( $rowini['module'] == $row['module'] AND $rowini['file_name'] == $row['file_name'] )
+			if( isset( $rowini['funcs'] ) and $rowini['module'] == $row['module'] and $rowini['file_name'] == $row['file_name'] )
 			{
 				$array_funcid_i = array();
 				if( ! is_array( $rowini['funcs'] ) )

@@ -320,7 +320,7 @@ function nv_get_viewImage( $fileName )
 	else
 	{
 		$size = @getimagesize( NV_ROOTDIR . '/' . $fileName );
-		return array( $viewFile, $size[0], $size[1] );
+		return array( $fileName, $size[0], $size[1] );
 	}
 	return false;
 }
