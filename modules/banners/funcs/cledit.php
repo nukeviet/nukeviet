@@ -35,7 +35,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	if( ! empty( $check_email ) ) die( strip_tags( $check_email ) . '|email_iavim' );
 	elseif( ! empty( $pass ) and ! empty( $check_pass ) ) die( strip_tags( $check_pass ) . '|pass_iavim' );
 	elseif( ! empty( $pass ) and empty( $re_pass ) ) die( strip_tags( $lang_global['re_password_empty'] ) . '|pass_iavim' );
-	elseif( ! empty( $pass ) and $pass != $re_pass ) die( strip_tags( sprintf( $lang_global['passwordsincorrect'], $pass, $re_pass ) ) . '|pass_iavim' );
+	elseif( ! empty( $pass ) and $pass != $re_pass ) die( $lang_global['passwordsincorrect'] . '|pass_iavim' );
 	elseif( empty( $full_name ) ) die( strip_tags( $lang_module['full_name_empty'] ) . '|full_name' );
 	elseif( ! empty( $website ) and ! nv_is_url( $website ) ) die( strip_tags( $lang_module['website_incorrect'] ) . '|website_iavim' );
 	elseif( ! empty( $yim ) and ! preg_match( '/^[a-zA-Z0-9\.\-\_]+$/', $yim ) ) die( strip_tags( $lang_module['yim_incorrect'] ) . '|yim_iavim' );

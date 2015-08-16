@@ -19,7 +19,7 @@ if( isset( $array_op[0] ) )
 	exit();
 }
 
-if( ! $global_config['allowuserlogin'] )
+if( ! defined( 'NV_IS_ADMIN' ) and ! $global_config['allowuserlogin'] )
 {
 	$contents = user_info_exit( $lang_module['notallowuserlogin'] );
 }
@@ -27,18 +27,8 @@ else
 {
 	if( ! defined( 'NV_IS_USER' ) )
 	{
-		$gfx_chk = ( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) ) ? 1 : 0;
-		$array_login = array(
-			"nv_login" => '',
-			"nv_password" => '',
-			"nv_redirect" => $nv_Request->get_title( 'nv_redirect', 'post,get', '' )
-		);
-		$array_login['openid_info'] = $lang_module['what_is_openid'];
-		if( $global_config['allowuserreg'] == 2 )
-		{
-			$array_login['openid_info'] .= "<br />" . $lang_module['or_activate_account'];
-		}
-		$contents = user_login( $gfx_chk, $array_login );
+        Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login', true ) );
+        exit();
 	}
 	else
 	{
