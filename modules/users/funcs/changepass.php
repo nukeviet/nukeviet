@@ -52,7 +52,7 @@ if( $checkss == $array_data['checkss'] )
 	}
 	elseif( $array_data['new_password'] != $array_data['re_password'] )
 	{
-		$error = sprintf( $lang_global['passwordsincorrect'], $array_data['new_password'], $array_data['re_password'] );
+		$error = $lang_global['passwordsincorrect'];
 		$error = str_replace( $lang_global['password'], $lang_module['pass_new'], $error );
 	}
 	else
