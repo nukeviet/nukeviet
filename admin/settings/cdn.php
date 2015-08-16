@@ -66,7 +66,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 							{
 								foreach( $m[1] as $fimg )
 								{
-									if( preg_match( '/\.(gif|jpg|jpeg|png)$/i', $fimg ) )
+									if( preg_match( '/\.(gif|jpg|jpeg|png|bmp)$/i', $fimg ) )
 									{
 										$filename = $thisdir . '/' . $fimg;
 										while( preg_match( '/([^\/(\.\.)]+)\/\.\.\//', $filename ) )
