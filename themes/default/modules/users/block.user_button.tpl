@@ -1,106 +1,35 @@
 <!-- BEGIN: main -->
-<span><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" data-toggle="tip" data-target="#guestBlock" data-click="y"><em class="fa fa-user fa-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
+<span><a title="{GLANG.signin} - {GLANG.register}" class="pa pointer button" data-toggle="tip" data-target="#guestBlock_{BLOCKID}" data-click="y"><em class="fa fa-user fa-lg"></em><span class="hidden">{GLANG.signin}</span></a></span>
 <!-- START FORFOOTER -->
-<div id="guestBlock" class="hidden">
+<div id="guestBlock_{BLOCKID}" class="hidden">
     <div class="guestBlock">
         <h3><a href="#" onclick="switchTab(this);tipAutoClose(true);" class="guest-sign pointer margin-right current" data-switch=".log-area, .reg-area" data-obj=".guestBlock">{GLANG.signin}</a> <!-- BEGIN: allowuserreg2 --><a href="#" onclick="switchTab(this);tipAutoClose(false);" class="guest-reg pointer" data-switch=".reg-area, .log-area" data-obj=".guestBlock">{GLANG.register}</a> <!-- END: allowuserreg2 --></h3>
         <div class="log-area">
-            <div class="nv-info margin-bottom">{GLANG.logininfo}</div>
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
-                    <input type="text" class="required form-control" placeholder="{GLANG.username}" value="" name="blogin" maxlength="100" onkeypress="inputSignIn(event);">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                    <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="bpass" maxlength="100" onkeypress="inputSignIn(event);">
-                </div>
-            </div>
-            <!-- BEGIN: captcha -->
-            <div class="form-group">
-                <div class="middle text-right clearfix">
-                    <img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" /><em class="fa fa-pointer fa-refresh margin-left margin-right" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.bsec');"></em><input type="text" style="width:100px;" class="bsec required form-control display-inline-block" name="bsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputSignIn(event);" />
-                </div>
-            </div>
-        	<!-- END: captcha -->
-            <div class="text-center">
-        	   <a href="{USER_LOSTPASS}" class="margin-right">{GLANG.lostpass}?</a>
-               <button class="bsubmit btn btn-primary" type="button" onclick="buttonSignIn('.log-area');" data-errorMessage="{LANG.errorMessage}" data-loginOk="{LANG.login_ok}">{GLANG.loginsubmit}</button>
-        	</div>
-            <!-- BEGIN: openid -->
-        	<hr />
-        	<div class="text-center">
-        		<!-- BEGIN: server -->
-        		<a title="{OPENID.title}" href="{OPENID.href}" class="margin-right"><img alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /></a>
-        		<!-- END: server -->
-        	</div>
-        	<!-- END: openid -->
+            {FILE "login_form.tpl"}
         </div>
         <!-- BEGIN: allowuserreg -->
         <div class="reg-area hidden">
-            <div class="nv-info margin-bottom">{LANG.info}</div>
-            <div class="inputs">
-                <div class="form-group">
-                    <span><input type="text" class="form-control" name="brlname" value="" maxlength="255" placeholder="{LANG.last_name}" onkeypress="inputReg(event);" /></span>
-                </div>
-                <div class="form-group">
-                    <span><input type="text" class="form-control" name="brfname" value="" maxlength="255" placeholder="{LANG.first_name}" onkeypress="inputReg(event);" /></span>
-                </div>
-                
-                <div class="form-group">
-                    <span><input type="text" class="required form-control" name="brlogin" value="" maxlength="{NICK_MAXLENGTH}" placeholder="{LANG.account}" onkeypress="inputReg(event);" /></span>
-                </div>
-                <div class="form-group">
-                    <span><input type="email" class="required form-control" name="bremail" value="" maxlength="255" placeholder="{LANG.email}" onkeypress="inputReg(event);" /></span>
-            	</div>
-                
-                <div class="form-group">
-                    <span><input type="password" class="required password form-control" name="brpass" value="" maxlength="{PASS_MAXLENGTH}" placeholder="{LANG.password}" onkeypress="inputReg(event);" /></span>
-                </div>
-                <div class="form-group">
-                    <span><input type="password" class="required password form-control" name="brpass2" value="" maxlength="{PASS_MAXLENGTH}" placeholder="{LANG.re_password}" onkeypress="inputReg(event);" /></span>
-            	</div>
-            
-                <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="required form-control" name="bryq" value="" maxlength="255" placeholder="{LANG.question}" onkeypress="inputReg(event);" />
-                        <span class="input-group-btn"><a type="button" class="btql btn btn-default" onclick="showQlist()" data-show="no"><em class="fa fa-caret-down fa-lg"></em></a></span>
-                        <div class="qlist"></div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <span><input type="text" class="required form-control" name="brya" value="" maxlength="255" placeholder="{LANG.answer_question}" onkeypress="inputReg(event);" /></span>
-                </div>
-                <!-- BEGIN: captcha_reg -->
-                <div class="form-group">
-                    <div class="middle text-right clearfix">
-                        <img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" /><em class="fa fa-pointer fa-refresh margin-left margin-right" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.brsec');"></em><input type="text" style="width:100px;" class="brsec required form-control display-inline-block" name="brsec" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" onkeypress="inputReg(event);" />
-                    </div>
-                </div>
-                <!-- END: captcha_reg -->
-                <div class="form-group">
-                    <div class="checkbox">
-            		  <input type="checkbox" class="required fix-box" value="1" name="bragr">{LANG.accept2} <a href="#" onclick="usageTermsShow('{LANG.usage_terms}');"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
-                    </div>
-                </div>
-                <div class="text-center">
-                   <input type="hidden" name="checkss" value="{CHECKSESS}" />
-                   <button class="brsubmit btn btn-primary" type="button" onclick="buttonReg('.reg-area');" data-errorMessage="{LANG.errorMessage}" data-regOK="{LANG.register_ok}">{GLANG.register}</button>
-            	</div>
-            </div>
+            {FILE "register_form.tpl"}
         </div>
         <!-- END: allowuserreg -->
     </div>
 </div>
 <!-- END FORFOOTER -->
+<!-- BEGIN: datepicker -->
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<!-- END: datepicker -->
 <script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
 <!-- END: main -->
+
 <!-- BEGIN: signed -->
-<span><a title="{USER.full_name}" class="pointer button user" data-toggle="tip" data-target="#userBlock" data-click="y" style="background-image:url({AVATA})"><span class="hidden">{USER.full_name}</span></a></span>
+<span><a title="{USER.full_name}" class="pointer button user" data-toggle="tip" data-target="#userBlock_{BLOCKID}" data-click="y" style="background-image:url({AVATA})"><span class="hidden">{USER.full_name}</span></a></span>
 <!-- START FORFOOTER -->
-<div id="userBlock" class="hidden">
+<div id="userBlock_{BLOCKID}" class="hidden">
     <div class="nv-info" style="display:none"></div>
     <div class="userBlock clearfix">
     	<h3 class="text-center"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> {USER.full_name}</h3>

@@ -188,6 +188,32 @@
     background-color:#82B1FE;
 }
 
+.bg-lavender{
+    background-color:#E6E6FA
+}
+
+/*Load_Bar*/
+.load-bar{
+    display: inline-block;
+    vertical-align: middle;
+    width: 33px;
+    height: 8px;
+    background: transparent url(../../../assets/images/load_bar.gif);
+    margin: auto 10px
+}
+
+/*Center DIV*/
+.centered {
+   text-align: center;
+   font-size: 0;
+}
+.centered > div {
+   float: none;
+   display: inline-block;
+   text-align: left;
+   font-size: 13px;
+}
+
 /*nv-info*/
 .nv-info {
     border-width:1px;
@@ -197,7 +223,7 @@
     -webkit-border-radius:3px;
     background-color:#f7f7f7;
     color:#333;
-    padding:5px 10px;
+    padding:10px;
 }
 
 .nv-info.error {
@@ -211,7 +237,6 @@
 }
 
 .nv-info:before {
-    content:" \f05a ";
     display:inline-block;
     font-family:FontAwesome;
     font-size:20px;
@@ -340,10 +365,35 @@ input[type=tel].required,
 input[type=time].required,
 input[type=url].required,
 input[type=url].required,
-textarea.required {
+textarea.required,
+select.required,
+label.required {
     background-image:url(../images/icons/required.png);
     background-position:right center;
     background-repeat:no-repeat;
+}
+textarea.required{
+    background-position: right 10px;
+}
+select.required{
+    background-position: calc(100% - 15px) 10px;
+}
+label.required{
+    background-position: left center;
+    text-indent: 17px
+}
+
+label.radio-box,label.check-box{
+    font-weight: normal;
+    margin-right: 20px;
+    cursor: pointer;
+}
+div.radio-box,div.check-box{
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    padding: 10px
 }
 
 .display-inline-block {
@@ -532,6 +582,10 @@ figure figcaption {
     font-size: 12px;
     color: #fff;
     font-weight: normal;
+}
+
+.rel{
+    position: relative
 }
 
 /* Global */

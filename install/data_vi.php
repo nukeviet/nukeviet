@@ -197,7 +197,7 @@ $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . 
 
 //Theme Default
 $sth->execute( array('default', 'news', 'module.block_newscenter.php', 'Tin mới nhất', '', 'no_title', '[TOP]', 0, '1', '6', 0, 1, 'a:5:{s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:5:"width";s:3:"400";s:6:"height";s:0:"";}') );
-$sth->execute( array('default', 'banners', 'global.banners.php', 'Quảng cáo giữa trang', '', 'no_title', '[TOP]', 0, '1', '6', 1, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
+$sth->execute( array('default', 'banners', 'global.banners.php', 'Quảng cáo giữa trang', '', 'no_title', '[TOP]', 0, '1', '6', 0, 2, 'a:1:{s:12:"idplanbanner";i:1;}') );
 
 $sth->execute( array('default', 'news', 'global.block_category.php', 'Chủ đề', '', 'no_title', '[LEFT]', 0, '1', '6', 0, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}') );
 $sth->execute( array('default', 'theme', 'global.module_menu.php', 'Module Menu', '', 'no_title', '[LEFT]', 0, '1', '6', 0, 2, '') );
@@ -283,7 +283,6 @@ while( $row = $func_result->fetch() )
 						}
 					}
 				}
-                break;
 			}
 		}
 	}

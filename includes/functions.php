@@ -284,8 +284,8 @@ function nv_check_valid_login( $login, $max, $min )
 	$login = trim( strip_tags( $login ) );
 
 	if( empty( $login ) ) return $lang_global['username_empty'];
-	if( isset( $login{$max} ) ) return sprintf( $lang_global['usernamelong'], $login, $max );
-	if( ! isset( $login{$min - 1} ) ) return sprintf( $lang_global['usernameadjective'], $login, $min );
+	if( isset( $login{$max} ) ) return sprintf( $lang_global['usernamelong'], $max );
+	if( ! isset( $login{$min - 1} ) ) return sprintf( $lang_global['usernameadjective'], $min );
 
 	$type = $global_config['nv_unick_type'];
 	switch( $type )
@@ -300,14 +300,8 @@ function nv_check_valid_login( $login, $max, $min )
 			$pattern = '/^[0-9a-z]+[0-9a-z\-\_\\s]+[0-9a-z]+$/i';
 			break;
 		case 4:
-			if( $login == strip_punctuation( $login ) )
-			{
-				return '';
-			}
-			else
-			{
-				return $lang_global['unick_type_' . $type];
-			}
+			return ( $login != strip_punctuation( $login ) ? $lang_global['unick_type_' . $type] : '' );
+            break;
 		default:
 			return '';
 	}
@@ -333,8 +327,8 @@ function nv_check_valid_pass( $pass, $max, $min )
 	$pass = trim( strip_tags( $pass ) );
 
 	if( empty( $pass ) ) return $lang_global['password_empty'];
-	if( isset( $pass{$max} ) ) return sprintf( $lang_global['passwordlong'], $pass, $max );
-	if( ! isset( $pass{$min - 1} ) ) return sprintf( $lang_global['passwordadjective'], $pass, $min );
+	if( isset( $pass{$max} ) ) return sprintf( $lang_global['passwordlong'], $max );
+	if( ! isset( $pass{$min - 1} ) ) return sprintf( $lang_global['passwordadjective'], $min );
 
 	$type = $global_config['nv_upass_type'];
 	if( $type == 1 )
@@ -389,11 +383,11 @@ function nv_check_valid_email( $mail )
 
 	if( empty( $mail ) ) return $lang_global['email_empty'];
 
-	if( function_exists( 'filter_var' ) and filter_var( $mail, FILTER_VALIDATE_EMAIL ) === false ) return sprintf( $lang_global['email_incorrect'], $mail );
+	if( function_exists( 'filter_var' ) and filter_var( $mail, FILTER_VALIDATE_EMAIL ) === false ) return $lang_global['email_incorrect'];
 
-	if( ! preg_match( $global_config['check_email'], $mail ) ) return sprintf( $lang_global['email_incorrect'], $mail );
+	if( ! preg_match( $global_config['check_email'], $mail ) ) return $lang_global['email_incorrect'];
 
-	if( ! preg_match( '/\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw|xxx)$/', $mail ) ) return sprintf( $lang_global['email_incorrect'], $mail );
+	if( ! preg_match( '/\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw|xxx)$/', $mail ) ) return $lang_global['email_incorrect'];
 
 	return '';
 }
