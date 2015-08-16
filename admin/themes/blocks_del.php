@@ -25,7 +25,7 @@ if( intval( $bid ) > 0 )
 	$sth->bindParam( ':theme', $theme, PDO::PARAM_STR );
 	$sth->bindParam( ':position', $position, PDO::PARAM_STR );
 	$sth->execute();
-	while( list( $bid_i ) = $result->fetch( 3 ) )
+	while( list( $bid_i ) = $sth->fetch( 3 ) )
 	{
 		++$weight;
 		$db->query( 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $weight . ' WHERE bid=' . $bid_i );

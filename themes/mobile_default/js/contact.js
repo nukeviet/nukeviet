@@ -9,19 +9,19 @@
 function nv_validReset(a)
 {
     $(".has-error",a).removeClass("has-error");
-    $(".info",a).removeClass("error success").html($(".info",a).attr("data-mess"));
+    $(".nv-info",a).removeClass("error success").html($(".nv-info",a).attr("data-mess"));
     $(a)[0].reset();
 }
 
 function nv_validErrorShow(a) {
 	$(a).parent().parent().addClass("has-error");
-    $(a).parent().parent().parent().find(".info").removeClass("success").addClass("error").html($(a).attr("data-current-mess"));
+    $(a).parent().parent().parent().find(".nv-info").removeClass("success").addClass("error").html($(a).attr("data-current-mess"));
 	$(a).focus()
 }
 function nv_validErrorHidden(a) {
     a = $(a).parent().parent().parent();
 	$(".has-error",a).removeClass("has-error");
-    $(".info",a).removeClass("error success").html($(".info",a).attr("data-mess"));
+    $(".nv-info",a).removeClass("error success").html($(".nv-info",a).attr("data-mess"));
 }
 
 function nv_validCheck(a) {
@@ -36,7 +36,7 @@ function nv_validCheck(a) {
 
 function nv_validForm(a) {
 	$(".has-error", a).removeClass("has-error");
-    $(".info",a).removeClass("error success").html($(".info",a).attr("data-mess"));
+    $(".nv-info",a).removeClass("error success").html($(".nv-info",a).attr("data-mess"));
 	var c = 0;
 	$(a).find(".required").each(function() {
 		$(this).val(trim(strip_tags($(this).val())));
@@ -55,7 +55,7 @@ function nv_validForm(a) {
 				nv_validErrorShow(this)
 			}), setTimeout(function() {
 				$(a).find("[type='submit']").prop("disabled", !1)
-			}, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".info",a).html(b.mess).removeClass("success").addClass("error") : $(".info",a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function() {
+			}, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".nv-info",a).html(b.mess).removeClass("success").addClass("error") : $(".nv-info",a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function() {
 				$("input,select,button,textarea", a).not(".disabled").prop("disabled", !1);
                 nv_validReset(a)
 			}, 2E4))

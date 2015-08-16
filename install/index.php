@@ -801,7 +801,7 @@ elseif( $step == 6 )
 		}
 		elseif( $array_data['nv_password'] != $array_data['re_password'] )
 		{
-			$error = sprintf( $lang_global['passwordsincorrect'], $array_data['nv_password'], $array_data['re_password'] );
+			$error = $lang_global['passwordsincorrect'];
 		}
 		elseif( empty( $array_data['question'] ) )
 		{

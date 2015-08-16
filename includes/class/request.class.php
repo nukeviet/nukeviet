@@ -21,8 +21,6 @@ class Request
 {
 	const IS_HEADERS_SENT = 'Warning: Headers already sent';
 	const INCORRECT_IP = 'Incorrect IP address specified';
-	const SESSION_SAVE_PATH_NOT_SET = 'session.save_path directory not set! Please set your session.save_path in your system file';
-	const INCORRECT_SESSION_ID = 'We\'re sorry, but you must have cookies enabled in your browser in order to use this part of the website. Please see your browser\'s documentation to learn how to enable cookies and return to the site once you have done so to continue';
 	public $session_id;
 	public $doc_root;
 	public $site_url;
@@ -470,7 +468,7 @@ class Request
 
 	/**
 	 * Request::chr_hexdec_callback()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -481,7 +479,7 @@ class Request
 
 	/**
 	 * Request::chr_callback()
-	 * 
+	 *
 	 * @param mixed $m
 	 * @return
 	 */
@@ -492,7 +490,7 @@ class Request
 
 	/**
 	 * Request::color_hex2rgb_callback()
-	 * 
+	 *
 	 * @param mixed $hex
 	 * @return
 	 */
@@ -581,7 +579,7 @@ class Request
 			{
 				$attrSubSet[1] = $attrSubSet[0];
 			}
-			$newSet[] = $attrSubSet[0] . '=[:' . $attrSubSet[1] . ':]';
+			$newSet[] = $attrSubSet[0] . '=[@{' . $attrSubSet[1] . '}@]';
 		}
 		return $newSet;
 	}
@@ -704,7 +702,7 @@ class Request
 
 			if( ! $isCloseTag )
 			{
-				$preTag .= '{:' . $tagName;
+				$preTag .= '{@[' . $tagName;
 
 				if( ! empty( $attrSet ) )
 				{
@@ -712,11 +710,11 @@ class Request
 					$preTag .= ' ' . implode( ' ', $attrSet );
 				}
 
-				$preTag .= ( strpos( $fromTagOpen, '</' . $tagName ) ) ? ':}' : ' /:}';
+				$preTag .= ( strpos( $fromTagOpen, '</' . $tagName ) ) ? ']@}' : ' /]@}';
 			}
 			else
 			{
-				$preTag .= '{:/' . $tagName . ':}';
+				$preTag .= '{@[/' . $tagName . ']@}';
 			}
 
 			$postTag = substr( $postTag, ( $tagLength + 2 ) );
@@ -724,8 +722,8 @@ class Request
 		}
 
 		$preTag .= $postTag;
-
-		return $preTag;
+		$preTag = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $preTag );
+		return trim( str_replace( array( "[@{", "}@]", "{@[", "]@}" ), array( '"', '"', "<", '>' ), $preTag ) );
 	}
 
 	/**
@@ -785,15 +783,14 @@ class Request
 		}
 		else
 		{
-			//$value = preg_replace( "/\t+/", ' ', $value );
+			// Fix block tag
+			$value = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $value );
+
 			if( preg_match_all( '/<!\[cdata\[(.*?)\]\]>/is', $value, $matches ) )
 			{
 				$value = str_replace( $matches[0], $matches[1], $value );
 			}
 			$value = $this->filterTags( $value );
-			$value = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $value );
-			$value = str_replace( array( "[:", ":]", "{:", ":}" ), array( '"', '"', "<", '>' ), $value );
-			$value = trim( $value );
 		}
 		return $value;
 	}
@@ -1203,7 +1200,7 @@ class Request
 
     /**
      * Request::_get_title()
-     * 
+     *
      * @param mixed $value
      * @param mixed $specialchars
      * @param mixed $preg_replace
@@ -1248,10 +1245,10 @@ class Request
 		$value = ( string )$this->get_value( $name, $mode, $default );
 		return $this->_get_title( $value, $specialchars, $preg_replace );
 	}
-    
+
     /**
      * Request::_get_editor()
-     * 
+     *
      * @param mixed $value
      * @param mixed $allowed_html_tags
      * @return
@@ -1281,10 +1278,10 @@ class Request
 		$value = ( string )$this->get_value( $name, 'post', $default );
         return $this->_get_editor( $value, $allowed_html_tags );
 	}
-    
+
     /**
      * Request::_get_textarea()
-     * 
+     *
      * @param mixed $value
      * @param mixed $allowed_html_tags
      * @param mixed $save
