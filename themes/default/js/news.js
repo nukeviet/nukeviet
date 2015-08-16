@@ -50,10 +50,6 @@ function get_alias() {
 	return false;
 }
 
-$(document).ready(function(){
-	//$('#news-bodyhtml img').addClass('hidden');
-});
-
 $(window).load(function(){
 	var newsW = $('#news-bodyhtml').innerWidth();
 	$.each($('#news-bodyhtml img'), function(){
@@ -65,6 +61,4 @@ $(window).load(function(){
 			$(this).prop('height', h * newsW / w);
 		}
 	});
-	
-	//$('#news-bodyhtml img').removeClass('hidden');
 });
