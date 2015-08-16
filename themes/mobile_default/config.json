@@ -401,16 +401,19 @@
     "wells.less",
     "component-animations.less",
     "dropdowns.less",
+    "tooltip.less",
     "modals.less"
   ],
   "js": [
     "dropdown.js",
     "modal.js",
+    "tooltip.js",
+    "popover.js",
     "tab.js",
     "affix.js",
     "collapse.js",
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=9c35654940b7275cdeb7"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=799d963088b1316c5f17"
 }
