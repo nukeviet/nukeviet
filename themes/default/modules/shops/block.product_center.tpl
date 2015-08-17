@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: lib -->
-<script data-show="after" type="text/javascript" src="{THEME_TEM}/js/responsiveCarousel.min.js"></script>
+<script data-show="after" type="text/javascript" src="{JS_PATH}/responsiveCarousel.min.js"></script>
 <!-- END: lib -->
 <script data-show="after" type="text/javascript">
 	jQuery(document).ready(function($){
