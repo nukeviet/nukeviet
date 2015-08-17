@@ -5,6 +5,13 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1 - 31 - 2010 5 : 12
  */
+function changeAvatar(a)
+{
+    var b = nv_siteroot  + "index.php?" + nv_name_variable  + "=users&" + nv_fc_variable  + "=avatar";
+    if(a) b += "&u=1";
+    nv_open_browse( b, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+    return !1;
+}
 
 function datepickerShow(a)
 {
@@ -205,6 +212,7 @@ UAV.config = {
 	max_height: 1500,
 	target: 'preview',
 	uploadInfo: 'uploadInfo',
+    uploadGuide: 'guide',
 	x1: 'x1',
 	y1: 'y1',
 	x2: 'x2',
@@ -259,6 +267,7 @@ UAV.tool = {
 // Please use this package with Jcrop http://deepliquid.com/content/Jcrop.html
 UAV.common = {
 	read: function(file){
+	   $('#' + UAV.config.uploadIcon).hide();
 		var fRead = new FileReader();
 		fRead.onload = function(e){
 			$('#' + UAV.config.target).show();
@@ -280,7 +289,7 @@ UAV.common = {
 
 				if( ! UAV.data.error ){
 					// Hide and show data
-					$('#' + UAV.config.uploadIcon).hide();
+                    $('#' + UAV.config.uploadGuide).hide();
 					$('#' + UAV.config.uploadInfo).show();
 
 					$('#' + UAV.config.imageType).html( file.type );
@@ -289,6 +298,7 @@ UAV.common = {
 
 					$('#' + UAV.config.target).Jcrop({
 						minSize: [UAV.config.avatar_width, UAV.config.avatar_height],
+                        setSelect:   [ 300, 300, 55, 55 ],
 						aspectRatio : 1,
 						bgFade: true,
 						bgOpacity: .3,
@@ -299,10 +309,14 @@ UAV.common = {
 						var bounds = this.getBounds();
 						$('#' + UAV.config.w).val(bounds[0]);
 						$('#' + UAV.config.h).val(bounds[1]);
-						$('#' + UAV.config.displayDimension).html( bounds[0] + ' + ' + bounds[1] );
+						$('#' + UAV.config.displayDimension).html( bounds[0] + ' x ' + bounds[1] );
 						UAV.data.jcropApi = this;
 					});
 				}
+                else
+                {
+                    $('#' + UAV.config.uploadIcon).show();
+                }
 			});
 		};
 
@@ -348,6 +362,7 @@ UAV.common = {
 		$('#' + UAV.config.target).removeAttr('src').removeAttr('style').hide();
 		$('#' + UAV.config.uploadIcon).show();
 		$('#' + UAV.config.uploadInfo).hide();
+        $('#' + UAV.config.uploadGuide).show();
 		$('#' + UAV.config.imageType).html('');
 		$('#' + UAV.config.imageSize).html('');
 		$('#' + UAV.config.originalDimension).html('');
@@ -378,6 +393,7 @@ UAV.init = function(){
 	$('#' + UAV.config.btnReset).click(function(){
 		if( ! UAV.data.busy ){
 			UAV.common.reset();
+            $('#' + UAV.config.uploadIcon).trigger('click');
 		}
 	});
 	$('#' + UAV.config.uploadForm).submit(function(){
