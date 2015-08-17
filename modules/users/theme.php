@@ -828,25 +828,13 @@ function user_welcome()
 	$xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' );
 	$xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
 
-	$groups_list = nv_groups_list_pub();
-
-	if( defined( 'NV_OPENID_ALLOWED' ) )
-	{
-		$xtpl->parse( 'main.allowopenid' );
-	}
-
-	if( ( ! empty( $groups_list ) ) and ( $global_config['allowuserpublic'] == 1 ) )
-	{
-		$xtpl->parse( 'main.regroups' );
-	}
-
 	if( ! empty( $user_info['photo'] ) and file_exists( NV_ROOTDIR . '/' . $user_info['photo'] ) )
 	{
-		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . $user_info['photo'] );
+		$xtpl->assign( 'IMG', array('src' => NV_BASE_SITEURL . $user_info['photo'], 'title' => $lang_module['img_size_title'] ) );
 	}
 	else
 	{
-		$xtpl->assign( 'SRC_IMG', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png' );
+        $xtpl->assign( 'IMG', array('src' => NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png', 'title' => $lang_module['change_avatar'] ) );
 	}
     
     $_user_info = $user_info;
@@ -1253,7 +1241,7 @@ function user_info_exit_redirect( $info, $nv_redirect )
  */
 function nv_avatar( $array )
 {
-	global $module_info, $module_file, $module_name, $lang_module, $global_config;
+	global $module_info, $module_file, $module_name, $lang_module, $lang_global, $global_config;
 
 	$xtpl = new XTemplate( 'avatar.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
@@ -1272,21 +1260,27 @@ function nv_avatar( $array )
 	$lang_module['avata_smallsize'] = sprintf( $lang_module['avata_smallsize'], $global_config['avatar_width'], $global_config['avatar_height'] );
 
 	$xtpl->assign( 'LANG', $lang_module );
+    $xtpl->assign( 'GLANG', $lang_global );
+    $xtpl->assign( 'U', $array['u'] );
 
 	if( $array['error'] )
 	{
 		$xtpl->assign( 'ERROR', $array['error'] );
 		$xtpl->parse( 'main.error' );
 	}
-	if( ! $array['success'] )
-	{
-		$xtpl->parse( 'main.init' );
-	}
-	else
+	if( $array['success'] == 1 )
 	{
 		$xtpl->assign( 'FILENAME', $array['filename'] );
 		$xtpl->parse( 'main.complete' );
 	}
+    elseif( $array['success'] == 2 )
+	{
+		$xtpl->parse( 'main.complete2' );
+	}
+    else
+    {
+        $xtpl->parse( 'main.init' );
+    }
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
