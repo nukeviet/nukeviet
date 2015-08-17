@@ -254,6 +254,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$xtpl = new XTemplate( 'block.bxproduct_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . 'themes/' . $block_theme );
+		$xtpl->assign( 'LIB_PATH', NV_BASE_SITEURL . 'themes/default/' );
 		$xtpl->assign( 'AUTO', $auto );
 		$xtpl->assign( 'MODE', $mode );
 		$xtpl->assign( 'SPEED', $speed );

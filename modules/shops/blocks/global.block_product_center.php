@@ -195,6 +195,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$xtpl = new XTemplate( 'block.product_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . 'themes/' . $block_theme );
+		$xtpl->assign( 'JS_PATH', NV_BASE_SITEURL . 'themes/default/js' );
 		$xtpl->assign( 'NUMVIEW', $num_view );
 		//$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
 
