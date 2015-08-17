@@ -43,7 +43,7 @@ if( $file != $newname )
 	$newname = $newname2;
 	if( ! @rename( NV_ROOTDIR . '/' . $path . '/' . $file, NV_ROOTDIR . '/' . $path . '/' . $newname ) ) die( 'ERROR_' . $lang_module['errorNotRenameFile'] );
 
-	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $path . '/' . $file, $m ) )
+	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $path . '/' . $file, $m ) )
 	{
 		@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] );
 	}
