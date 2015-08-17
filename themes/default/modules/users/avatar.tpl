@@ -1,37 +1,48 @@
 <!-- BEGIN: main -->
 <script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.Jcrop.min.js" type="text/javascript"></script>
 <link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
-<div class="page">
-    <div class="users-avupload form-tooltip">
-    	<div class="panel-body">
-    		<form id="upload-form" method="post" enctype="multipart/form-data" action="{NV_AVATAR_UPLOAD}">
-    			<input type="hidden" id="x1" name="x1"/>
-    			<input type="hidden" id="y1" name="y1"/>
-    			<input type="hidden" id="x2" name="x2"/>
-    			<input type="hidden" id="y2" name="y2"/>
-    			<input type="hidden" id="w" name="w"/>
-    			<input type="hidden" id="h" name="h"/>
-    			<input type="file" name="image_file" id="image_file" class="hide"/>
-    			<h1 id="upload_icon" class="upload-button text-center">
-    				<em class="fa fa-upload fa-5x">&nbsp;</em><br />
-    				<span>{LANG.avata_select_img}</span>
-    			</h1>
-    			<div class="img-area"><img id="preview"/></div>
-    			<div class="info" id="uploadInfo">
-    				<div class="text-center">
-    					<p>
-    						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_filesize}"><em class="fa fa-asterisk">&nbsp;</em> <span id="image-size">&nbsp;</span></span>
-    						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_ftype}"><em class="fa fa-bolt">&nbsp;</em> <span id="image-type">&nbsp;</span></span>
-    						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_filedimension}"><em class="fa fa-bullseye">&nbsp;</em> <span id="original-dimension">&nbsp;</span></span>
-    						<span class="icon-stack" data-toggle="tooltip" data-placement="bottom" title="{LANG.avata_displaydimension}"><em class="fa fa-circle-o">&nbsp;</em> <span id="display-dimension">&nbsp;</span></span>
-    					</p>
-    					<input id="btn-submit" type="submit" class="btn btn-primary btn-sm" value="{LANG.avata_crop}" />
-    					<input id="btn-reset" type="button" class="btn btn-primary btn-sm" value="{LANG.avata_chosen_other}" />
-    				</div>
-    			</div>
-    		</form>
-    	</div>
-    </div>
+<div class="users-av-wraper">
+    <form id="upload-form" method="post" enctype="multipart/form-data" action="{NV_AVATAR_UPLOAD}">
+        <div class="col-md-15">
+            <div class="users-avupload">
+                <div title="{LANG.avata_select_img}" id="upload_icon" class="upload-button">
+                    <div class="text-center">
+                        <span><em class="fa fa-upload"></em></span>
+        			</div>
+                </div>
+                <div class="img-area"><img id="preview" style="display: none;"/></div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <h2 class="margin-bottom-lg">{LANG.change_avatar}</h2>
+            <div class="guide" id="guide">
+                <div class="margin-bottom"><strong>{LANG.avata_guide}:</strong></div>
+                <div>- {LANG.avata_chosen}</div>
+                <div>- {LANG.avata_upload}</div>
+            </div>
+            <div style="display:none" id="uploadInfo">
+				<div>- {LANG.avata_filesize}: <span id="image-size"></span></div>
+				<div>- {LANG.avata_ftype}: <span id="image-type"></span></div>
+				<div>- {LANG.avata_filedimension}: <span id="original-dimension"></span></div>
+				<div>- {LANG.avata_displaydimension}: <span id="display-dimension"></span></div>
+				<div class="margin-top-lg">
+                    <input id="btn-submit" type="submit" class="btn btn-primary btn-sm" value="{LANG.avata_crop}" />
+                    <input id="btn-reset" type="button" class="btn btn-primary btn-sm" value="{LANG.avata_chosen_other}" />
+				</div>
+ 			</div>
+            <div class="exit-bt">
+                <button class="btn btn-primary btn-sm" onclick=" window.close();return!1">{GLANG.cancel}</button>
+            </div>
+        </div>
+        <input type="hidden" id="x1" name="x1"/>
+        <input type="hidden" id="y1" name="y1"/>
+        <input type="hidden" id="x2" name="x2"/>
+        <input type="hidden" id="y2" name="y2"/>
+        <input type="hidden" id="w" name="w"/>
+        <input type="hidden" id="h" name="h"/>
+        <input type="hidden" name="u" value="{U}"/>
+        <input type="file" name="image_file" id="image_file" class="hide"/>
+    </form>
 </div>
 <script type="text/javascript">
 	UAV.config.maxsize = {NV_UPLOAD_MAX_FILESIZE};
@@ -49,6 +60,10 @@
 		$("#avatar", opener.document).val('{FILENAME}');
 		window.close();
 		<!-- END: complete -->
+        <!-- BEGIN: complete2 -->
+        window.opener.location.href = window.opener.location.href;
+		window.close();
+		<!-- END: complete2 -->
 		<!-- BEGIN: init -->UAV.init();<!-- END: init -->
 		<!-- BEGIN: error -->alert('{ERROR}');<!-- END: error -->
 	});

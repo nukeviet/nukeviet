@@ -73,7 +73,7 @@ $sth->execute( array(43, 'stats', 'stats', 'Stats', 'banners', 1, 0, 4, '') );
 $sth->execute( array(44, 'viewmap', 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '') );
 $sth->execute( array(46, 'main', 'main', 'Main', 'seek', 1, 0, 1, '') );
 $sth->execute( array(47, 'main', 'main', 'Main', 'feeds', 1, 0, 1, '') );
-$sth->execute( array(48, 'regroups', 'regroups', 'Register Groups', 'users', 1, 0, 8, '') );
+$sth->execute( array(48, 'regroups', 'regroups', 'Register Groups', 'users', 1, 1, 8, '') );
 $sth->execute( array(50, 'memberlist', 'memberlist', 'Memberlist', 'users', 1, 1, 10, '') );
 $sth->execute( array(51, 'groups', 'groups', 'Groups', 'news', 1, 0, 9, '') );
 $sth->execute( array(52, 'tag', 'tag', 'Tag', 'news', 1, 0, 2, '') );

@@ -10,10 +10,45 @@
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
+function updateAvatar( $file )
+{
+    global $db, $user_info, $module_upload;
+    
+    $tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file;
+    $new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/';
+    $new_photo_name = $file;
+    $i = 1;
+    while( file_exists( $new_photo_path . $new_photo_name ) )
+    {
+        $new_photo_name = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $file );
+        ++ $i;
+    }
+
+    if( nv_copyfile( $tmp_photo, $new_photo_path . $new_photo_name ) )
+    {
+        $sql = 'SELECT photo FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_info['userid'];
+        $result = $db->query( $sql );
+        $oldAvatar = $result->fetchColumn();
+        $result->closeCursor();
+
+        if( ! empty( $oldAvatar ) and file_exists( NV_ROOTDIR . '/' . $oldAvatar ) )
+        {
+            nv_deletefile( NV_ROOTDIR . '/' . $oldAvatar );
+        }
+        
+        $photo = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $new_photo_name;
+        $stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET photo=:photo WHERE userid=' . $user_info['userid'] );
+        $stmt->bindParam( ':photo', $photo, PDO::PARAM_STR );
+        $stmt->execute();
+    }
+
+    nv_deletefile( $tmp_photo );
+}
+
 $page_title = $lang_module['avata_pagetitle'];
 
 $array = array();
-$array['success'] = false;
+$array['success'] = 0;
 $array['error'] = '';
 
 //global config
@@ -36,6 +71,7 @@ if( isset( $_FILES['image_file'] ) and is_uploaded_file( $_FILES['image_file']['
 	$array['y2'] = $nv_Request->get_int( 'y2', 'post', 0 );
 	$array['w'] = $nv_Request->get_int( 'w', 'post', 0 );
 	$array['h'] = $nv_Request->get_int( 'h', 'post', 0 );
+    $array['u'] = $nv_Request->get_int( 'u', 'post', 0 );
 
 	// Caculate crop size
 	$array['avatar_width'] = intval( $array['x2'] - $array['x1'] );
@@ -73,8 +109,16 @@ if( isset( $_FILES['image_file'] ) and is_uploaded_file( $_FILES['image_file']['
 
 			if( file_exists( $image->create_Image_info['src'] ) )
 			{
-				$array['success'] = true;
 				$array['filename'] = str_replace( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/', '', $image->create_Image_info['src'] );
+                if( $array['u'] )
+                {
+                    updateAvatar( $array['filename'] );
+                    $array['success'] = 2;
+                }
+                else
+                {
+                    $array['success'] = 1;
+                }
 			}
 			else
 			{
@@ -88,7 +132,7 @@ if( isset( $_FILES['image_file'] ) and is_uploaded_file( $_FILES['image_file']['
 		}
 	}
 }
-
+$array['u'] = $nv_Request->get_int( 'u', 'get', 0 );
 $contents = nv_avatar( $array );
 
 include NV_ROOTDIR . '/includes/header.php';
