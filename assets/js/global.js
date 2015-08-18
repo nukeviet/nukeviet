@@ -1,5 +1,5 @@
-if ("undefined" == typeof nv_siteroot) var nv_siteroot = "/";
-if ("undefined" == typeof nv_sitelang) var nv_sitelang = "en";
+if ("undefined" == typeof nv_base_siteurl) var nv_base_siteurl = "/";
+if ("undefined" == typeof nv_lang_data) var nv_lang_data = "en";
 if ("undefined" == typeof nv_name_variable) var nv_name_variable = "nv";
 if ("undefined" == typeof nv_fc_variable) var nv_fc_variable = "op";
 if ("undefined" == typeof nv_lang_variable) var nv_lang_variable = "language";
@@ -80,7 +80,7 @@ function nv_setCookie(name, value, expiredays) {
 	var domainName = document.domain;
 	domainName = domainName.replace(/www\./g, '');
 	domainName = is_url.test(domainName) ? '.' + domainName : '';
-	document.cookie = name + "=" + escape(value) + ((expiredays) ? "; expires=" + expires : "") + ((domainName) ? "; domain=" + domainName : "") + "; path=" + nv_siteroot;
+	document.cookie = name + "=" + escape(value) + ((expiredays) ? "; expires=" + expires : "") + ((domainName) ? "; domain=" + domainName : "") + "; path=" + nv_base_siteurl;
 }
 
 function nv_getCookie(name) {
@@ -114,7 +114,7 @@ function nv_check_timezone() {
 	var giomuahe = new Date(Date.UTC(2005, 6, 30, 0, 0, 0, 0));
 	var giomuadong = new Date(Date.UTC(2005, 12, 30, 0, 0, 0, 0));
 	var new_value = -giomuahe.getTimezoneOffset() + '.' + -giomuadong.getTimezoneOffset() + '.' + -giohientai.getTimezoneOffset();
-	new_value += '|' + nv_siteroot;
+	new_value += '|' + nv_base_siteurl;
 	new_value += '|' + domainName;
 
 	if (rawurldecode(cookie_timezone) != new_value) {

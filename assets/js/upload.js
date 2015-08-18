@@ -209,7 +209,7 @@ function insertvaluetofield(){
 	var selFile = $("input[name=selFile]").val();
 	var imageInfo = $("img[title='" + selFile + "']").attr("name").split("|");
 	var path = ( imageInfo[7] == "" ) ? $("span#foldervalue").attr("title") : imageInfo[7];
-	var fullPath = nv_siteroot + path + "/" + selFile;
+	var fullPath = nv_base_siteurl + path + "/" + selFile;
 
 	if( area != '' ){
 		$("#" + area, opener.document).val( fullPath );
@@ -268,8 +268,8 @@ function preview(){
 	if( selFileData[3] == "image" || selFileData[2] == "swf" ){
 		var size = calSize( selFileData[0], selFileData[1], 360, 230 );
 		html += selFileData[0] + " x " + selFileData[1] + " pixels (" + selFileData[4] + ")<br />";
-		selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_siteroot + fullPath + "/" + selFile + '?' + selFileData[8] + '" />') : $("#fileView").flash({
-			src : nv_siteroot + fullPath + "/" + selFile,
+		selFileData[3] == "image" ? $("div#fileView").html('<img width="' + size[0] + '" height="' + size[1] + '" src="' + nv_base_siteurl + fullPath + "/" + selFile + '?' + selFileData[8] + '" />') : $("#fileView").flash({
+			src : nv_base_siteurl + fullPath + "/" + selFile,
 			width : size[0],
 			height : size[1]
 		}, {
@@ -318,7 +318,7 @@ function create(){
 
 		DisSize = calSize( selFileData[0], selFileData[1], 360, 230 );
 
-		$("img[name=myFile2]").width( DisSize[0] ).height( DisSize[1] ).attr( "src", nv_siteroot + path + "/" + selFile + "?" + selFileData[8] );
+		$("img[name=myFile2]").width( DisSize[0] ).height( DisSize[1] ).attr( "src", nv_base_siteurl + path + "/" + selFile + "?" + selFileData[8] );
 		$("#fileInfoDetail2").html(LANG.origSize + ": " + selFileData[0] + " x " + selFileData[1] + " pixels");
 		$("#fileInfoName2").html( selFile );
 
@@ -657,7 +657,7 @@ function cropfile(){
 	$('#cropContent').css({
 		'width' : size[0] + 4,
 		'height' : size[1] + 4
-	}).html('<img class="crop-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+	}).html('<img class="crop-image" src="' + nv_base_siteurl + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
 	// Check size
 	if( selFileData[0] < 10 || selFileData[1] < 10 || ( selFileData[0] < 16 && selFileData[1] < 16 ) ){
@@ -696,7 +696,7 @@ function cropfile(){
 
 		// Init watermark
 		$('#cropContent img.crop-image').Watermarker({
-			watermark_img : nv_siteroot + 'themes/admin_default/images/transparent.png',
+			watermark_img : nv_base_siteurl + 'themes/admin_default/images/transparent.png',
 			x : markX,
 			y : markY,
 			w : markW,
@@ -759,7 +759,7 @@ function addlogo(){
 	$('#addlogoContent').css({
 		'width' : size[0] + 4,
 		'height' : size[1] + 4
-	}).html('<img class="addlogo-image" src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+	}).html('<img class="addlogo-image" src="' + nv_base_siteurl + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
 	// Check size
 	if( selFileData[0] < 10 || selFileData[1] < 10 || ( selFileData[0] < 16 && selFileData[1] < 16 ) ){
@@ -890,7 +890,7 @@ function rotatefile(){
 		'height' : size[1],
 		'margin-top' : contentMargin,
 		'margin-bottom' : contentMargin + 10
-	}).html('<img src="' + nv_siteroot + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
+	}).html('<img src="' + nv_base_siteurl + path + "/" + selFile + '?' + selFileData[8] + '"  width="' + size[0] + '" height="' + size[1] + '"/>');
 
 	$("div#rorateimage").dialog({
 		autoOpen : false,
@@ -1571,8 +1571,8 @@ var NVUPLOAD = {
 				runtimes : 'html5,flash,silverlight,html4',
 				browse_button : 'upload-local',
 				url : nv_module_url + "upload&path=" + folderPath + "&random=" + nv_randomNum(10),
-				flash_swf_url : nv_siteroot + 'assets/js/plupload/Moxie.swf',
-				silverlight_xap_url : nv_siteroot+ 'assets/js/plupload/Moxie.xap',
+				flash_swf_url : nv_base_siteurl + 'assets/js/plupload/Moxie.swf',
+				silverlight_xap_url : nv_base_siteurl+ 'assets/js/plupload/Moxie.xap',
 				drop_element : 'upload-content',
 				file_data_name : 'upload',
 				filters : nv_filters,

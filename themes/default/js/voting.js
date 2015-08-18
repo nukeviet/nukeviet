@@ -22,7 +22,7 @@ function nv_sendvoting(a, d, c, e, g) {
 	"0" == f && 0 < c ? alert(g) : $.ajax({
 		type: "POST",
 		cache: !1,
-		url: nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + d + "&checkss=" + e + "&lid=" + f,
+		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + d + "&checkss=" + e + "&lid=" + f,
 		data: "nv_ajax_voting=1",
 		dataType: "html",
 		success: function(a) {

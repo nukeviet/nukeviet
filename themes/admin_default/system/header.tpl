@@ -20,8 +20,9 @@
 		<!-- END: css_module -->
 
 		<script type="text/javascript">
-			var nv_siteroot = '{NV_BASE_SITEURL}';
-			var nv_sitelang = '{NV_LANG_INTERFACE}';
+			var nv_base_siteurl = '{NV_BASE_SITEURL}';
+			var nv_lang_data = '{NV_LANG_DATA}';
+			var nv_lang_interface = '{NV_LANG_INTERFACE}';
 			var nv_name_variable = '{NV_NAME_VARIABLE}';
 			var nv_fc_variable = '{NV_OP_VARIABLE}';
 			var nv_lang_variable = '{NV_LANG_VARIABLE}';

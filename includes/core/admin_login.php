@@ -141,6 +141,17 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) and $nv_Request
 
 					$nv_Request->set_Session( 'admin', $admin_serialize );
 					$nv_Request->set_Session( 'online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0' );
+
+					if( $global_config['lang_multi'] )
+					{
+						$sql = 'SELECT setup FROM ' . $db_config['prefix'] . '_setup_language WHERE lang=' . $db->quote( NV_LANG_INTERFACE );
+						$setup = $db->query( $sql )->fetchColumn();
+						if( $setup )
+						{
+							$nv_Request->set_Cookie( 'data_lang', NV_LANG_INTERFACE, NV_LIVE_COOKIE_TIME );
+						}
+					}
+
 					define( 'NV_IS_ADMIN', true );
 
 					$redirect = NV_BASE_SITEURL . NV_ADMINDIR;
