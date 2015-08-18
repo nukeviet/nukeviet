@@ -272,4 +272,47 @@ $(document).ready(function() {
 			});
 		}
 	});
+	
+	// Config blocks show device
+	$('body').delegate( '.blocks_show_device', 'click', function(e){
+		var list = [];
+		$("input[name=idlist]:checked").each(function() {
+			list.push($(this).val());
+		});
+		if (list.length < 1) {
+			alert(LANG.block_error_noblock);
+			return false;
+		}
+		e.preventDefault();
+		$('#modal_show_device').data('title', $(this).data('title')).modal('toggle');
+	});
+
+	$('#modal_show_device .submit').click(function(){
+		var $this = $(this);
+		$this.prop('disabled', true);
+
+		var list = [];
+		$("input[name=idlist]:checked").each(function() {
+			list.push($(this).val());
+		});
+		
+		var active_device = [];
+		$("input[name=active_device]:checked").each(function() {
+			active_device.push($(this).val());
+		});
+
+		$.ajax({
+			type : "POST",
+			url : MODULE_URL + "=blocks_change_active",
+			data : "list=" + list+"&active_device=" + active_device,
+			success : function(data) {
+				alert(data);
+				$('#modal_show_device').modal('hide');
+				$this.prop('disabled', false);
+				$("input[name=idlist]:checkbox").each(function() {
+					$(this).prop("checked", false);
+				});
+			}
+		});
+	});	
 });

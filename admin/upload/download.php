@@ -7,6 +7,7 @@
  * @Createdate 16-03-2015 12:55
  */
 
+$mod_name = $nv_Request->get_title( 'module_name' , 'post', '' );
 $path = nv_check_path_upload( NV_UPLOADS_DIR . '/' . $mod_name );
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
@@ -16,7 +17,6 @@ if( isset( $check_allow_upload_dir['upload_file'] ) and in_array( 'images', $adm
 {
 	$imageMatch = array_unique( $matches[1] );
 
-	$mod_name = $nv_Request->get_title( 'module_name' , 'post', '' );
     $pathsave = $nv_Request->get_title( 'pathsave' , 'post', '' );
 	$upload_real_dir_page = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $mod_name;
     if( !empty( $pathsave ))

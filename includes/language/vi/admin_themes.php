@@ -135,7 +135,7 @@ $lang_module['autoinstall_theme_overwrite'] = 'Thực hiện';
 $lang_module['config'] = 'Thiết lập giao diện';
 $lang_module['config_not_exit'] = 'Giao diện %s không có chức năng cấu hình';
 
-$lang_module['show_device'] = 'Hiển thị tên thiết bị';
+$lang_module['show_device'] = 'Hiển thị trên thiết bị';
 $lang_module['show_device_1'] = 'Tất cả';
 $lang_module['show_device_2'] = 'Hiển thị di động';
 $lang_module['show_device_3'] = 'Hiển thị máy tính bảng';

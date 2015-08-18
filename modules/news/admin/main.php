@@ -410,7 +410,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		'hitstotal' => number_format( $hitstotal, 0, ',', '.' ),
 		'hitscm' => number_format( $hitscm, 0, ',', '.' ),
 		'numtags' => 0,
-		'feature' => implode( '&nbsp;-&nbsp;', $admin_funcs )
+		'feature' => implode( ' ', $admin_funcs )
 	);
 
 	$array_ids[] = $id;
