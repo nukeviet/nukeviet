@@ -12,7 +12,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		var url = $(this).attr("href");
 		$("#checkchmod").hide();
-		$("#wait").html('<img class="refresh" src="' + nv_siteroot + 'assets/images/load_bar.gif" alt=""/>');
+		$("#wait").html('<img class="refresh" src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt=""/>');
 		$.ajax({
 			type : "POST",
 			url : url,
@@ -69,7 +69,7 @@ $(document).ready(function(){
 		var f_user = $('select[name=user]').val();
 		if ((f_q != LANG.filter_enterkey && f_q != '' ) || f_from != '' || f_to != '' || f_lang != '' || f_user != '' || f_module != '') {
 			$('#filter-form input, #filter-form select').attr('disabled', 'disabled');
-			window.location = script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + '=logs&filter=1&checksess=' + CFG.checksess + '&q=' + f_q + '&from=' + f_from + '&to=' + f_to + '&lang=' + f_lang + '&module=' + f_module + '&user=' + f_user;
+			window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + '=logs&filter=1&checksess=' + CFG.checksess + '&q=' + f_q + '&from=' + f_from + '&to=' + f_to + '&lang=' + f_lang + '&module=' + f_module + '&user=' + f_user;
 		} else {
 			alert(LANG.filter_err_submit);
 		}

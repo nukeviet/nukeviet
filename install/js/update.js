@@ -12,7 +12,7 @@ $(document).ready(function(){
     // Delete update package
 	$('.delete_update_backage').click(function(){
 		if( confirm( nv_is_del_confirm[0] ) ){
-			$('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_siteroot + 'assets/images/load_bar.gif" alt="Waiting..."/></div>');
+			$('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></div>');
 			$.get( $(this).attr('href') , function(e){
 				$('#dpackagew').remove()
 				if( e == 'OK' ){
@@ -26,7 +26,7 @@ $(document).ready(function(){
 	});
 	
 	$('.update_dump').click(function(){
-		$('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_siteroot + 'assets/images/load_bar.gif" alt="Waiting..."/></div>');
+		$('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></div>');
 		$.get( $(this).attr('href') , function(e){
 			$('#dpackagew').remove();
 			$('#infodetectedupg').append('<br />' + e);
@@ -38,7 +38,7 @@ $(document).ready(function(){
 	$('.delete_update_backage_end').click(function(){
 		if( completeUpdate == 0 ){
 			if( confirm( nv_is_del_confirm[0] ) ){
-				$('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_siteroot + 'assets/images/load_bar.gif" alt="Waiting..."/></div>');
+				$('#infodetectedupg').append('<div id="dpackagew"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></div>');
 				$.get( $(this).attr('href') , function(e){
 					$('#dpackagew').remove()
 					if( e == 'OK' ){
@@ -87,7 +87,7 @@ NVU.Start = function(){
 NVU.load = function(){
 	var url;
 	if( NVU.NextUrl == '' ){
-		url = nv_siteroot + 'install/update.php?step=2&substep=3&load=' + NVU.NextFuncs;
+		url = nv_base_siteurl + 'install/update.php?step=2&substep=3&load=' + NVU.NextFuncs;
 	}else{
 		url = NVU.NextUrl;
 	}
@@ -149,7 +149,7 @@ NVU.SetComplete = function(){
 	$('#control_t').append('<li><span class="next_step"><a href="' + NVU.NextStepUrl + '">' + next_step + '</a></span></li>');
 }
 NVU.ShowLoad = function(m){
-	$('#nv-loading').html('<img src="' + nv_siteroot + 'assets/images/load_bar.gif" alt=""/><br />' + update_task_load + ' <strong>' + m + '</strong><br />' + update_task_load_message + '.');
+	$('#nv-loading').html('<img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt=""/><br />' + update_task_load + ' <strong>' + m + '</strong><br />' + update_task_load_message + '.');
 	$('#nv-loading').show();
 }
 NVU.HideLoad = function(){
@@ -169,7 +169,7 @@ NVMF.NavigateConfirm = 'update_nav_confirm';
 NVMF.OkMessage = '';
 NVMF.Start = function(){
 	NVMF.IsStart = 1;
-	$('#nv-message').html('<img src="' + nv_siteroot + 'assets/images/load_bar.gif" alt="Loading..."/><br />' + update_load_waiting);
+	$('#nv-message').html('<img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Loading..."/><br />' + update_load_waiting);
 	if( NVMF.ftp_nosupport ){
 		$('#ftp_nosupport').slideUp(400);
 	}
@@ -178,7 +178,7 @@ NVMF.Start = function(){
 	}
 	$('#nv-toolmove').slideUp(200, function(){
 		$('#nv-message').slideDown(200, function(){
-			$.get( nv_siteroot + 'install/update.php?step=2&substep=4&move', function(r){
+			$.get( nv_base_siteurl + 'install/update.php?step=2&substep=4&move', function(r){
 				NVMF.IsStart = 0;
 				if( r == 'OK' ){
 					$('.workitem').removeClass('ierror').removeClass('iload').removeClass('iwarn').addClass('iok');

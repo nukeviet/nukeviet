@@ -64,7 +64,7 @@ function contentScrt() {
 
 /*Change Captcha*/
 function change_captcha(a) {
-	$("img.captchaImg").attr("src", nv_siteroot + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
+	$("img.captchaImg").attr("src", nv_base_siteurl + "index.php?scaptcha=captcha&nocache=" + nv_randomPassword(10));
 	"undefined" != typeof a && "" != a && $(a).val("");
 	return !1
 }
@@ -122,7 +122,7 @@ function ctbtLoad(a) {
 	"yes" != a.attr("data-load") && $.ajax({
 		type: "POST",
 		cache: !1,
-		url: nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=contact",
+		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=contact",
 		data: "loadForm=1&checkss=" + a.attr("data-cs"),
 		dataType: "html",
 		success: function(c) {
@@ -141,7 +141,7 @@ function qrcodeLoad(a) {
 		$(c).attr("src", b.src);
 		$(a).attr("data-load", "yes").click()
 	});
-	b.src = nv_siteroot + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
+	b.src = nv_base_siteurl + "index.php?second=qr&u=" + encodeURIComponent($(a).data("url")) + "&l=" + $(a).data("level") + "&ppp=" + $(a).data("ppp") + "&of=" + $(a).data("of")
 }
 
 // Switch tab
@@ -271,7 +271,7 @@ $(function() {
 	});
     //FeedBack Button
     if( $('#contactButton').length ){
-        var script = $('<script type="text/javascript">').attr("src",nv_siteroot + "themes/mobile_default/js/contact.js");
+        var script = $('<script type="text/javascript">').attr("src",nv_base_siteurl + "themes/mobile_default/js/contact.js");
         $("body").append(script);
     }
     // Google map
@@ -331,12 +331,12 @@ $(window).load(function() {
     (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
         var fb_app_id = ( $('[property="fb:app_id"]').length > 0 ) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
-        var fb_locale = ( $('[property="og:locale"]').length > 0 ) ? $('[property="og:locale"]').attr("content") : ((nv_sitelang=="vi") ? 'vi_VN' : 'en_US');
+        var fb_locale = ( $('[property="og:locale"]').length > 0 ) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data=="vi") ? 'vi_VN' : 'en_US');
         a.getElementById(c) || (a = a.createElement(b), a.id = c, a.src = "//connect.facebook.net/" + fb_locale + "/all.js#xfbml=1" + fb_app_id, d.parentNode.insertBefore(a, d));
     }(document, "script", "facebook-jssdk"));
 
     0 < $(".g-plusone").length && (window.___gcfg = {
-        lang: nv_sitelang
+        lang: nv_lang_data
     }, function() {
         var a = document.createElement("script");
         a.type = "text/javascript";

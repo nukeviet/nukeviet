@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/style.css" />
         <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}install/css/table.css" />
         <script type="text/javascript">
-		var nv_siteroot = '{NV_BASE_SITEURL}';
+		var nv_base_siteurl = '{NV_BASE_SITEURL}';
 		</script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
         <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{NV_LANG_UPDATE}.js"></script>
