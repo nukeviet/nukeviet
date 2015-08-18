@@ -243,7 +243,34 @@
     background-color:#C0C0C0
 }
 
-.info {
+.bg-lavender{
+    background-color:#EEEEEE
+}
+
+/*Load_Bar*/
+.load-bar{
+    display: inline-block;
+    vertical-align: middle;
+    width: 33px;
+    height: 8px;
+    background: transparent url(../../../assets/images/load_bar.gif);
+    margin: auto 10px
+}
+
+/*Center DIV*/
+.centered {
+   text-align: center;
+   font-size: 0;
+}
+.centered > div {
+   float: none;
+   display: inline-block;
+   text-align: left;
+   font-size: 13px;
+}
+
+/*nv-info*/
+.nv-info {
     border-width:1px;
     border-style:solid;
     border-color:#D4D4D4;
@@ -251,21 +278,20 @@
     -webkit-border-radius:3px;
     background-color:#f7f7f7;
     color:#333;
-    padding:5px 10px;
+    padding:10px;
 }
 
-.info.error {
+.nv-info.error {
     background-color:#EFD7D7 !important;
     border-color:#DCA8A6 !important;
 }
 
-.info.success {
+.nv-info.success {
     background-color:#E5F1FB !important;
     border-color:#8DC1ED !important;
 }
 
-.info:before {
-    content:" \f05a ";
+.nv-info:before {
     display:inline-block;
     font-family:FontAwesome;
     font-size:20px;
@@ -274,12 +300,12 @@
     margin-right:5px;
 }
 
-.info.error:before {
+.nv-info.error:before {
     content:" \f057 ";
     color:#A94442;
 }
 
-.info.success:before {
+.nv-info.success:before {
     content:" \f13a ";
     color:#449D44;
 }
@@ -371,10 +397,38 @@ input[type=tel].required,
 input[type=time].required,
 input[type=url].required,
 input[type=url].required,
-textarea.required {
+textarea.required,
+select.required,
+label.required {
     background-image:url(../images/icons/required.png);
     background-position:right center;
     background-repeat:no-repeat;
+}
+textarea.required{
+    background-position: right 10px;
+}
+select.required{
+    background-position: calc(100% - 15px) 10px;
+}
+label.required{
+    background-position: left center;
+    text-indent: 17px
+}
+
+label.radio-box,label.check-box{
+    font-weight: normal;
+    margin-right: 20px;
+    cursor: pointer;
+}
+div.radio-box,div.check-box{
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    padding: 10px
+}
+.has-error div.radio-box,.has-error div.check-box{
+    border-color: #a94442;
 }
 
 .display-inline-block{
@@ -401,7 +455,9 @@ textarea.required {
     color:#fff;
     text-align:left !important;
     background-color:#0C2138;
-    border-radius:4px
+    border-radius:4px;
+    height: auto;
+    overflow: auto
 }
 
 .tooltip-inner img.pull-left{
@@ -435,12 +491,15 @@ textarea.required {
 }
 
 figure {
-    background: #949494;
+    position: relative;
     padding: 3px;
     display: block;
     float: left;
     margin: 5px 10px 10px 0;
     text-align: center
+}
+figure.article{
+    background: #949494;
 }
 figure.left{
     float: left;
@@ -468,11 +527,25 @@ figcaption{
 }
 figure figcaption {
     font-size: 12px;
-    color: #fff;
     font-weight: normal;
 }
-figure.center figcaption {
-    color: inherit;
+figure.article figcaption {
+    color: #fff;
+}
+figure.article.center figcaption{
+    color: inherit
+}
+figure.avatar{
+    margin-top:0 !important
+}
+figure.avatar figcaption{
+    position: absolute;
+    bottom: 12px;
+    left: 3px;
+    width:calc(100% - 6px);
+    background: #1182C8;
+    color:#fff;
+    font-size:11px
 }
 
 /* Global */
@@ -602,7 +675,7 @@ iframe {
     margin:0 auto;
 }
 
-.container {
+.container,.rel {
     position:relative;
 }
 
@@ -1874,4 +1947,44 @@ button.close {
     z-index:2;
     padding:30px 20px;
     display:none
+}
+
+/* Block module-menu */
+.module-menu{
+    display:block;
+    float:left;
+    width:100%;
+    background: #333
+}
+.module-menu ul{
+    margin:0;
+    padding:0
+}
+.module-menu a {
+    display:block;
+    border-bottom:1px solid rgba(0,0,0,0.1);
+    background:#4189C7;
+    background-image:linear-gradient(to right,#428BCA 4px,#4189C7 4px);
+    background-repeat:repeat-x;
+    color:#fff;
+    text-decoration: none;
+    margin:0;
+    padding: 9px 10px 9px 20px;
+    cursor: pointer;
+}
+.module-menu a:before{
+    font-family:'FontAwesome';
+    content:" \f105 ";
+    margin-right:5px;
+}
+.module-menu a.home:before{
+    content:" \f07c ";
+}
+.module-menu a.active{
+    background:#205FA0;
+}
+.module-menu a:hover,.module-menu a.active,.module-menu a:focus{
+    color:#fff;
+    text-decoration:none;
+    background-image:linear-gradient(to right,#FF6600 4px,rgba(0,0,0,0) 4px);
 }

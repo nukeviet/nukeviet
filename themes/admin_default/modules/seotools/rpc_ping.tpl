@@ -37,11 +37,34 @@
 </div>
 <script type="text/javascript">
 //<![CDATA[
-var LANG = [];
-var CFG = [];
-LANG.rpc_finish = '{LANG.rpc_finish}';
-CFG.load_data = '{LOAD_DATA}';
-
+function sload(c) {
+	$.ajax({
+		type : "POST",
+		url : '{LOAD_DATA}',
+		dataType : "xml",
+		data : "total=" + c + "&rand=" + nv_randomPassword(8),
+		success : function(b) {
+			jQuery(b).find("service").each(function() {
+				var a = jQuery(this).find("id").text(), b = jQuery(this).find("flerrorCode").text(), c = jQuery(this).find("message").text();
+				$("#res" + a).removeClass("load");
+				$("#mes" + a).removeClass("load");
+				b == "0" ? $("#res" + a).addClass("ok") : $("#res" + a).addClass("error");
+				$("#mes" + a).text(c);
+			});
+			var c = jQuery(b).find("break").text(), b = jQuery(b).find("finish").text();
+			if (b == "OK") {
+				$("#rpc .ld").removeClass("load");
+				if (confirm('{LANG.rpc_finish}')) {
+					window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name
+				}
+			} else {
+				b == "WAIT" ? sload(c) : ( b = b.split("|"), alert(b[1]), $("#rpc .ld").removeClass("load"));
+			}
+			return !1
+		}
+	});
+	return !1
+}
 $("#rpc .borderRed").removeClass("borderRed");
 $("#rpc .ok").removeClass("ok");
 $("#rpc .error").removeClass("error");

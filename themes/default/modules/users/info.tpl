@@ -101,7 +101,7 @@
 					</span>
 					<input type="text" class="form-control" id="avatar" name="avatar" value="" readonly="readonly"/>
 					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" id="btn_upload" data-toggle="tooltip" data-placement="right" title="{LANG.avata_pagetitle}"> <em class="fa fa-folder-open-o fa-fix">&nbsp;</em></button>
+						<button class="btn btn-default" type="button" id="btn_upload" data-toggle="tooltip" data-placement="right" title="{LANG.avata_pagetitle}" onclick="changeAvatar(false);return!1"> <em class="fa fa-folder-open-o fa-fix">&nbsp;</em></button>
 					</span>
 				</div>
 			</div>
@@ -191,10 +191,6 @@ $(document).ready(function() {
 	});
 	$('#birthday-btn').click(function(){
 		$("#birthday").datepicker('show');
-	});
-	$("#btn_upload").click(function() {
-		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
-		return false;
 	});
 	$('#current-photo-btn').click(function(){
 		$('#current-photo').hide();

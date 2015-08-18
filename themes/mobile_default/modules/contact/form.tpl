@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div>
 	<form method="post" action="{ACTION_FILE}" onsubmit="return nv_validForm(this);" novalidate>
-        <div class="info margin-bottom-lg" data-mess="{LANG.note}">{LANG.note}</div>
+        <div class="nv-info margin-bottom-lg" data-mess="{LANG.note}">{LANG.note}</div>
 		<!-- BEGIN: cats -->
 		<div class="form-group">
 			<div class="input-group">

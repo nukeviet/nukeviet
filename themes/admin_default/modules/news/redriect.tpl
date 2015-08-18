@@ -19,5 +19,14 @@
 	}
 </script>
 <!-- END: removelocalstorage-->
+
+<!-- BEGIN: meta_refresh -->
 <meta http-equiv="refresh" content="2;url={NV_REDIRECT}" />
+<!-- END: meta_refresh -->
+<!-- BEGIN: go_back -->
+<script type="text/javascript">
+	setTimeout('history.back()',2000)
+</script>
+<!-- END: go_back -->
+
 <!-- END: main -->
