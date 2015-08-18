@@ -7,7 +7,7 @@
  */
 function changeAvatar(a)
 {
-    var b = nv_siteroot  + "index.php?" + nv_name_variable  + "=users&" + nv_fc_variable  + "=avatar";
+    var b = nv_base_siteurl  + "index.php?" + nv_name_variable  + "=users&" + nv_fc_variable  + "=avatar";
     if(a) b += "&u=1";
     nv_open_browse( b, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
     return !1;
@@ -49,7 +49,7 @@ function usageTermsShow(t)
     $.ajax({
         type: 'POST',
         cache: !0,
-        url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register',
+        url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register',
         data: 'get_usage_terms=1',
         dataType: 'html',
         success: function(e){
@@ -184,7 +184,7 @@ function bt_logout(a){
     $.ajax({
         type: 'POST',
         cache: !1,
-        url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=logout&nocache=' + new Date().getTime(),
+        url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=logout&nocache=' + new Date().getTime(),
         data: 'nv_ajax_login=1',
         dataType: 'html',
         success: function(e){
