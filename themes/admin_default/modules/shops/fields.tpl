@@ -335,7 +335,7 @@
 	}
 
 	function nv_edit_field(fid) {
-		window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid + '#ffields';
+		window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid + '#ffields';
 	}
 
 	function nv_load_current_date() {
@@ -349,7 +349,7 @@
 				changeMonth : true,
 				changeYear : true,
 				showOtherMonths : true,
-				buttonImage : nv_siteroot + "assets/images/calendar.gif",
+				buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 				buttonImageOnly : true
 			});
 			$("input[name=default_date]").removeAttr("disabled");
@@ -454,7 +454,7 @@
 		changeMonth : true,
 		changeYear : true,
 		showOtherMonths : true,
-		buttonImage : nv_siteroot + "assets/images/calendar.gif",
+		buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 		buttonImageOnly : true
 	});
 	function nv_users_check_choicetypes(elemnet) {
