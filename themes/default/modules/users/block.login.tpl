@@ -50,7 +50,7 @@
     	<h3 class="text-center margin-bottom-lg"><span class="lev-{LEVEL} text-normal margin-right">{WELCOME}:</span>{USER.full_name}</h3>
         <div class="row margin-bottom-lg">
     		<div class="col-xs-8 text-center">
-    			<a title="{LANG.edituser}" href="#" onclick="changeAvatar(1)"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
+    			<a title="{LANG.edituser}" href="#" onclick="changeAvatar('{URL_AVATAR}')"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
     		</div>
     		<div class="col-xs-16">
     			<ul class="nv-list-item sm">
@@ -59,12 +59,6 @@
     				</li>
     				<li>
     					<a href="{URL_HREF}editinfo">{LANG.editinfo}</a>
-    				</li>
-    				<li>
-    					<a href="{URL_HREF}changepass">{LANG.changepass_title}</a>
-    				</li>
-    				<li>
-    					<a href="{URL_HREF}changequestion">{LANG.question2}</a>
     				</li>
     				<!-- BEGIN: allowopenid -->
     				<li>

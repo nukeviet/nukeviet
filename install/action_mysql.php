@@ -103,6 +103,8 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
 	last_agent varchar(255) DEFAULT '',
 	last_openid varchar(255) DEFAULT '',
 	idsite int(11) NOT NULL DEFAULT '0',
+    safemode tinyint(1) unsigned NOT NULL DEFAULT '0',
+    safekey varchar(40) DEFAULT '',
 	PRIMARY KEY (userid),
 	UNIQUE KEY username (username),
 	UNIQUE KEY md5username (md5username),

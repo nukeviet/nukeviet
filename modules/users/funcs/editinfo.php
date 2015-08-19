@@ -18,7 +18,7 @@ if( ! defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 
 if( defined( 'NV_IS_USER_FORUM' ) )
 {
-	require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/editinfo.php' ;
+	require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/editinfo.php';
 	exit();
 }
 
@@ -99,91 +99,138 @@ function nv_check_email_change( $email )
 	return '';
 }
 
-$array_field_config = array();
-$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC' );
-while( $row_field = $result_field->fetch() )
+function get_field_config()
 {
-	$language = unserialize( $row_field['language'] );
-	$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
-	$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
-	if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
-	elseif( ! empty( $row_field['sql_choices'] ) )
+	global $db;
+
+	$array_field_config = array();
+
+	$result_field = $db->query( 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC' );
+	while( $row_field = $result_field->fetch() )
 	{
-		$row_field['sql_choices'] = explode( '|', $row_field['sql_choices'] );
-		$query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
-		$result = $db->query( $query );
-		$weight = 0;
-		while( list( $key, $val ) = $result->fetch( 3 ) )
+		$language = unserialize( $row_field['language'] );
+		$row_field['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row_field['field'];
+		$row_field['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
+		if( ! empty( $row_field['field_choices'] ) ) $row_field['field_choices'] = unserialize( $row_field['field_choices'] );
+		elseif( ! empty( $row_field['sql_choices'] ) )
 		{
-			$row_field['field_choices'][$key] = $val;
+			$row_field['sql_choices'] = explode( '|', $row_field['sql_choices'] );
+			$query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+			$result = $db->query( $query );
+			$weight = 0;
+			while( list( $key, $val ) = $result->fetch( 3 ) )
+			{
+				$row_field['field_choices'][$key] = $val;
+			}
 		}
+		$array_field_config[] = $row_field;
 	}
-	$array_field_config[] = $row_field;
+
+	return $array_field_config;
 }
 
-if( defined( 'NV_EDITOR' ) )
-{
-	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php' ;
-}
+$array_data = array();
+$array_data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
+
+$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 
 $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_info['userid'];
 $query = $db->query( $sql );
 $row = $query->fetch();
 
-$array_data = array();
-$info = '';
-$array_data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
-$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
+//Tat safemode
+if( ( int )$row['safemode'] > 0 )
+{
+	$type = $nv_Request->get_title( 'type', 'post', '' );
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $user_info['userid'];
-$result = $db->query( $sql );
-$custom_fields = $result->fetch();
+	if( $checkss == $array_data['checkss'] and $type == 'safe_deactivate' )
+	{
+		$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
 
-// Thay doi thong tin khac
-$page_title = $mod_title = $lang_module['editinfo_pagetitle'];
-$key_words = $module_info['keywords'];
+		if( ! empty( $row['password'] ) and ! $crypt->validate_password( $nv_password, $row['password'] ) )
+		{
+			die( json_encode( array(
+				'status' => 'error',
+				'input' => 'nv_password',
+				'mess' => $lang_global['incorrect_password'] ) ) );
+		}
 
-$array_data['username'] = $row['username'];
-$array_data['email'] = $row['email'];
+		if( $nv_Request->isset_request( 'resend', 'post' ) )
+		{
+			$ss_safesend = $nv_Request->get_int( 'safesend', 'session', 0 );
+			if( $ss_safesend < NV_CURRENTTIME )
+			{
+				$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
+				$name = array_filter( $name );
+				$name = implode( " ", $name );
+				$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+				$message = sprintf( $lang_module['safe_send_content'], $name, $sitename, $row['safekey'] );
+				@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message );
+
+				$ss_safesend = NV_CURRENTTIME + 600;
+				$nv_Request->set_Session( 'safesend', $ss_safesend );
+			}
+
+			$ss_safesend = ceil( ( $ss_safesend - NV_CURRENTTIME ) / 60 );
+
+			die( json_encode( array(
+				'status' => 'ok',
+				'input' => '',
+				'mess' => sprintf( $lang_module['safe_send_ok'], $ss_safesend ) ) ) );
+		}
+
+		$safe_key = nv_substr( $nv_Request->get_title( 'safe_key', 'post', '', 1 ), 0, 32 );
+
+		if( empty( $row['safekey'] ) or $safe_key != $row['safekey'] )
+		{
+			die( json_encode( array(
+				'status' => 'error',
+				'input' => 'safe_key',
+				'mess' => $lang_module['verifykey_error'] ) ) );
+		}
+
+		$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . " SET safemode=0, safekey='' WHERE userid=" . $user_info['userid'] );
+		$stmt->execute();
+
+		die( json_encode( array(
+			'status' => 'ok',
+			'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true ),
+			'mess' => $lang_module['safe_deactivate_ok'] ) ) );
+	}
+
+	$contents = safe_deactivate( $array_data );
+
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_site_theme( $contents );
+	include NV_ROOTDIR . '/includes/footer.php';
+	exit;
+}
 
 $array_data['allowmailchange'] = $global_config['allowmailchange'];
 $array_data['allowloginchange'] = ( $global_config['allowloginchange'] or ( ! empty( $row['last_openid'] ) and empty( $user_info['last_login'] ) and empty( $user_info['last_agent'] ) and empty( $user_info['last_ip'] ) and empty( $user_info['last_openid'] ) ) ) ? 1 : 0;
 
-if( $checkss == $array_data['checkss'] )
-{
-	$error = array();
+$array_field_config = get_field_config();
 
+$types = array(
+	"basic",
+	"avatar",
+	"password",
+	"question" );
+if( $array_data['allowloginchange'] ) $types[] = 'username';
+if( $array_data['allowmailchange'] ) $types[] = 'email';
+if( ! empty( $array_field_config ) ) $types[] = 'others';
+$types[] = 'safemode';
+
+$array_data['type'] = ( isset( $array_op[1] ) and ! empty( $array_op[1] ) and in_array( $array_op[1], $types ) ) ? $array_op[1] : "basic";
+
+//Basic
+if( $checkss == $array_data['checkss'] and $array_data['type'] == 'basic' )
+{
 	$array_data['first_name'] = nv_substr( $nv_Request->get_title( 'first_name', 'post', '', 1 ), 0, 255 );
 	$array_data['last_name'] = nv_substr( $nv_Request->get_title( 'last_name', 'post', '', 1 ), 0, 255 );
 	$array_data['gender'] = nv_substr( $nv_Request->get_title( 'gender', 'post', '', 1 ), 0, 1 );
-	$array_data['photo'] = nv_substr( $nv_Request->get_title( 'avatar', 'post', '', 1 ), 0, 255 );
 	$array_data['birthday'] = nv_substr( $nv_Request->get_title( 'birthday', 'post', '', 0 ), 0, 10 );
-	$array_data['view_mail'] = $nv_Request->get_int( 'view_mail', 'post', 0 );
-	$array_data['photo_delete'] = $nv_Request->get_int( 'photo_delete', 'post', 0 );
-
-	if( $array_data['allowloginchange'] )
-	{
-		$array_data['username'] = nv_substr( $nv_Request->get_title( 'username', 'post', '', 1 ), 0, NV_UNICKMAX );
-		if( $array_data['username'] != $row['username'] )
-		{
-			$checkusername = nv_check_username_change( $array_data['username'] );
-			if( $checkusername != '' )
-			{
-				$array_data['username'] = $row['username'];
-				$error[] = $checkusername;
-			}
-		}
-	}
-
-	if( empty( $array_data['first_name'] ) )
-	{
-		$array_data['first_name'] = $row['first_name'];
-		$error[] = $lang_module['name'];
-		if( empty( $array_data['first_name'] ) )
-		{
-			$array_data['first_name'] = $row['username'];
-		}
-	}
+	$array_data['view_mail'] = ( int )$nv_Request->get_bool( 'view_mail', 'post', false );
 
 	if( $array_data['gender'] != 'M' and $array_data['gender'] != 'F' ) $array_data['gender'] = '';
 
@@ -196,245 +243,438 @@ if( $checkss == $array_data['checkss'] )
 		$array_data['birthday'] = 0;
 	}
 
-	if( ! empty( $array_data['yim'] ) and ! preg_match( '/^([a-zA-Z0-9\_\.]+)$/', $array_data['yim'] ) )
+	if( empty( $array_data['first_name'] ) )
 	{
-		$array_data['yim'] = $row['yim'];
-		$error[] = $lang_module['yahoo'];
+		$array_data['first_name'] = ! empty( $row['first_name'] ) ? $row['first_name'] : $row['username'];
 	}
 
-	if( $array_data['gender'] == 'N' ) $array_data['gender'] = '';
+	$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET first_name= :first_name, last_name= :last_name, gender= :gender, birthday=' . $array_data['birthday'] . ', view_mail=' . $array_data['view_mail'] . ' WHERE userid=' . $user_info['userid'] );
 
-	if( $array_data['view_mail'] != 1 ) $array_data['view_mail'] = 0;
-
-	if( $array_data['allowmailchange'] )
-	{
-		$email_new = nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 );
-		if( $email_new != $row['email'] )
-		{
-			$checknum = nv_genpass( 10 );
-			$checknum = md5( $checknum . $email_new );
-			$md5_username = nv_md5safe( $array_data['username'] );
-
-			$stmt = $db->prepare( 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE md5username= :md5username' );
-			$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
-			$stmt->execute();
-			$error_email_change = nv_check_email_change( $email_new );
-			if( ! empty( $error_email_change ) )
-			{
-				$error[] = $error_email_change;
-			}
-			else
-			{
-				$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info) VALUES (
-					'CHANGE_EMAIL_USERID_" . $user_info['userid'] . "',
-					:md5_username,
-					'',
-					:email_new,
-					'',
-					'',
-					" . NV_CURRENTTIME . ",
-					'',
-					'',
-					:checknum,
-					'' )";
-
-				$data_insert = array();
-				$data_insert['md5_username'] = $md5_username;
-				$data_insert['email_new'] = $email_new;
-				$data_insert['checknum'] = $checknum;
-
-				$userid_check = $db->insert_id( $sql, 'userid', $data_insert );
-
-				if( $userid_check > 0 )
-				{
-					$subject = $lang_module['email_active'];
-					$message = sprintf( $lang_module['email_active_info'], $array_data['first_name'], $array_data['username'], NV_MY_DOMAIN . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=active&userid=" . $userid_check . "&checknum=" . $checknum, nv_date( "H:i d/m/Y", NV_CURRENTTIME + 86400 ), $global_config['site_name'] );
-					$send = nv_sendmail( $global_config['site_email'], $email_new, $subject, $message );
-					if( $send )
-					{
-						$error[] = $lang_module['email_active_mes'];
-					}
-					else
-					{
-						$error[] = $lang_module['email_active_error_mail'];
-					}
-				}
-			}
-		}
-	}
-
-	// Check photo
-	if( $array_data['photo_delete'] or empty( $row['photo'] ) )
-	{
-		if( ! empty( $array_data['photo'] ) )
-		{
-			$tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $array_data['photo'];
-
-			if( ! file_exists( $tmp_photo ) )
-			{
-				$array_data['photo'] = '';
-				$error[] = $lang_module['avata_news_not_exists'];
-			}
-			else
-			{
-				$new_photo_name = $array_data['photo'];
-				$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/';
-
-				$new_photo_name2 = $new_photo_name;
-				$i = 1;
-				while( file_exists( $new_photo_path . $new_photo_name2 ) )
-				{
-					$new_photo_name2 = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $new_photo_name );
-					++ $i;
-				}
-				$new_photo = $new_photo_path . $new_photo_name2;
-
-				if( nv_copyfile( $tmp_photo, $new_photo ) )
-				{
-					$array_data['photo'] = substr( $new_photo, strlen( NV_ROOTDIR . '/' ) );
-				}
-				else
-				{
-					$array_data['photo'] = '';
-					$error[] = $lang_module['avata_news_copy_error'];
-				}
-
-				nv_deletefile( $tmp_photo );
-			}
-		}
-
-		// Delete old photo
-		if( $array_data['photo_delete'] and ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) )
-		{
-			nv_deletefile( NV_ROOTDIR . '/' . $row['photo'] );
-		}
-	}
-	else
-	{
-		$array_data['photo'] = $row['photo'];
-
-		if( ! empty( $array_data['photo'] ) )
-		{
-			if( ! file_exists( NV_ROOTDIR . '/' . $array_data['photo'] ) )
-			{
-				$array_data['photo'] = '';
-				$error[] = $lang_module['avata_old_not_exists'];
-			}
-		}
-	}
-
-	$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET
-		username= :username,
-		md5username= :md5username,
-		email= :email,
-		first_name= :first_name,
-		last_name= :last_name,
-		gender= :gender,
-		photo= :photo,
-		birthday= :birthday,
-		view_mail= :view_mail
-		WHERE userid=' . $user_info['userid'] );
-
-	$md5username = nv_md5safe( $array_data['username'] );
-	$photo = nv_unhtmlspecialchars( $array_data['photo'] );
-
-	$stmt->bindParam( ':username', $array_data['username'], PDO::PARAM_STR );
-	$stmt->bindParam( ':md5username', $md5username, PDO::PARAM_STR );
-	$stmt->bindParam( ':email', $array_data['email'], PDO::PARAM_STR );
 	$stmt->bindParam( ':first_name', $array_data['first_name'], PDO::PARAM_STR );
 	$stmt->bindParam( ':last_name', $array_data['last_name'], PDO::PARAM_STR );
 	$stmt->bindParam( ':gender', $array_data['gender'], PDO::PARAM_STR );
-	$stmt->bindParam( ':photo', $photo, PDO::PARAM_STR );
-	$stmt->bindParam( ':birthday', $array_data['birthday'], PDO::PARAM_STR );
-	$stmt->bindParam( ':view_mail', $array_data['view_mail'], PDO::PARAM_STR );
 	$stmt->execute();
 
-	$info = $lang_module['editinfo_ok'];
-	$sec = 3;
-	if( ! empty( $error ) )
-	{
-		$error = implode( '<br />', $error );
-		$info = $info . ', ' . sprintf( $lang_module['editinfo_error'], '<span style="color:#fb490b;">' . $error . '</span>' );
-		$sec = 5;
-	}
-	$query_field = array();
-	if( ! empty( $array_field_config ) )
-	{
-		$userid = $user_info['userid'];
-		$error = '';
-		$custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
-		require NV_ROOTDIR . '/modules/users/fields.check.php';
-		if( empty( $error ) )
-		{
-			$db->query( 'UPDATE ' . NV_USERS_GLOBALTABLE . '_info SET ' . implode( ', ', $query_field ) . ' WHERE userid=' . $user_info['userid'] );
-			$contents = user_info_exit( $info );
-			$contents .= '<meta http-equiv="refresh" content="' . $sec . ';url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
+	die( json_encode( array(
+		'status' => 'ok',
+		'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/basic', true ),
+		'mess' => $lang_module['editinfo_ok'] ) ) );
+}
+//Avatar
+elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'avatar' )
+{
 
-			include NV_ROOTDIR . '/includes/header.php';
-			echo nv_site_theme( $contents );
-			include NV_ROOTDIR . '/includes/footer.php';
-		}
-		else
+}
+//Username
+elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'username' )
+{
+	$nv_username = nv_substr( $nv_Request->get_title( 'username', 'post', '', 1 ), 0, NV_UNICKMAX );
+	$nv_password = $nv_Request->get_title( 'password', 'post', '' );
+
+	if( ! $crypt->validate_password( $nv_password, $row['password'] ) )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'password',
+			'mess' => $lang_global['incorrect_password'] ) ) );
+	}
+
+	if( $nv_username != $row['username'] )
+	{
+		$checkusername = nv_check_username_change( $nv_username );
+		if( ! empty( $checkusername ) )
 		{
-			$info = $error;
+			die( json_encode( array(
+				'status' => 'error',
+				'input' => 'username',
+				'mess' => $checkusername ) ) );
 		}
+	}
+
+	$md5_username = nv_md5safe( $nv_username );
+
+	$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET username= :username, md5username= :md5username WHERE userid=' . $user_info['userid'] );
+	$stmt->bindParam( ':username', $nv_username, PDO::PARAM_STR );
+	$stmt->bindParam( ':md5username', $md5_username, PDO::PARAM_STR );
+	$stmt->execute();
+
+	$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
+	$name = array_filter( $name );
+	$name = implode( " ", $name );
+	$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+	$message = sprintf( $lang_module['edit_mail_content'], $name, $sitename, $lang_global['username'], $nv_username );
+	@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message );
+
+	die( json_encode( array(
+		'status' => 'ok',
+		'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/username', true ),
+		'mess' => $lang_module['editinfo_ok'] ) ) );
+}
+//Email
+elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'email' )
+{
+	$nv_email = nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 );
+	$nv_password = $nv_Request->get_title( 'password', 'post', '' );
+	$nv_verikeysend = ( int )$nv_Request->get_bool( 'vsend', 'post', false );
+	if( ! $nv_Request->get_bool( 'verikey', 'session' ) ) $nv_verikeysend = 1;
+
+	if( $nv_email == $row['email'] )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'email',
+			'mess' => $lang_module['email_not_change'] ) ) );
+	}
+
+	if( ! empty( $row['password'] ) and ! $crypt->validate_password( $nv_password, $row['password'] ) )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'password',
+			'mess' => $lang_global['incorrect_password'] ) ) );
+	}
+
+	$checkemail = nv_check_email_change( $nv_email );
+	if( ! empty( $checkemail ) )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'email',
+			'mess' => $checkemail ) ) );
+	}
+
+	if( $nv_verikeysend )
+	{
+		$p = 0;
+		$verikey = '';
+
+		if( $nv_Request->get_bool( 'verikey', 'session' ) )
+		{
+			$ss_verifykey = $nv_Request->get_title( 'verikey', 'session', '' );
+			$ss_verifykey = explode( "|", $ss_verifykey );
+			if( ( int )$ss_verifykey[0] > NV_CURRENTTIME )
+			{
+				die( json_encode( array(
+					'status' => 'error',
+					'input' => 'verifykey',
+					'mess' => sprintf( $lang_module['verifykey_issend'], ceil( ( ( int )$ss_verifykey[0] - NV_CURRENTTIME ) / 60 ) ) ) ) );
+			}
+			else
+			{
+				$p = ( int )$ss_verifykey[1];
+				$verikey = $ss_verifykey[2];
+				$nv_Request->set_Session( 'verikey', ( NV_CURRENTTIME + 300 ) . '|' . $p . '|' . $verikey );
+			}
+		}
+
+		if( empty( $p ) or empty( $verikey ) )
+		{
+			$rand = rand( NV_UPASSMIN, NV_UPASSMAX );
+			if( $rand < 6 ) $rand = 6;
+			$p = NV_CURRENTTIME + 86400;
+			$verikey = nv_genpass( $rand );
+			$nv_Request->set_Session( 'verikey', ( NV_CURRENTTIME + 300 ) . '|' . $p . '|' . md5( $row['userid'] . $nv_email . $verikey . $global_config['sitekey'] ) );
+		}
+
+		$p = nv_date( "H:i d/m/Y", $p );
+		$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
+		$name = array_filter( $name );
+		$name = implode( " ", $name );
+		$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+		$message = sprintf( $lang_module['email_active_info'], $name, $sitename, $verikey, $p );
+		@nv_sendmail( $global_config['site_email'], $nv_email, $lang_module['email_active'], $message );
+
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'verifykey',
+			'mess' => $lang_module['email_active_mes'] ) ) );
 	}
 	else
 	{
-		$contents = user_info_exit( $info );
-		$contents .= '<meta http-equiv="refresh" content="' . $sec . ';url=' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ) . '" />';
+		$nv_verifykey = $nv_Request->get_title( 'verifykey', 'post', '' );
 
-		include NV_ROOTDIR . '/includes/header.php';
-		echo nv_site_theme( $contents );
-		include NV_ROOTDIR . '/includes/footer.php';
+		if( empty( $nv_verifykey ) )
+		{
+			die( json_encode( array(
+				'status' => 'error',
+				'input' => 'verifykey',
+				'mess' => $lang_module['verifykey_empty'] ) ) );
+		}
+
+		$ss_verifykey = $nv_Request->get_title( 'verikey', 'session', '' );
+		$ss_verifykey = explode( "|", $ss_verifykey );
+
+		if( ( int )$ss_verifykey[1] < NV_CURRENTTIME )
+		{
+			$nv_Request->unset_request( 'verifykey', 'session' );
+
+			die( json_encode( array(
+				'status' => 'error',
+				'input' => 'verifykey',
+				'mess' => $lang_module['verifykey_exp'] ) ) );
+		}
+
+		if( $nv_verifykey != $ss_verifykey[2] )
+		{
+			die( json_encode( array(
+				'status' => 'error',
+				'input' => 'verifykey',
+				'mess' => $lang_module['verifykey_error'] ) ) );
+		}
+
+		$nv_Request->unset_request( 'verifykey', 'session' );
+
+		$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET email= :email WHERE userid=' . $user_info['userid'] );
+		$stmt->bindParam( ':email', $nv_email, PDO::PARAM_STR );
+		$stmt->execute();
+
+		$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
+		$name = array_filter( $name );
+		$name = implode( " ", $name );
+		$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+		$message = sprintf( $lang_module['edit_mail_content'], $name, $sitename, $lang_global['email'], $nv_email );
+		@nv_sendmail( $global_config['site_email'], $nv_email, $lang_module['edit_mail_subject'], $message );
+
+		die( json_encode( array(
+			'status' => 'ok',
+			'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/email', true ),
+			'mess' => $lang_module['editinfo_ok'] ) ) );
 	}
+}
+//Password
+elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'password' )
+{
+	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
+	$new_password = $nv_Request->get_title( 'new_password', 'post', '' );
+	$re_password = $nv_Request->get_title( 're_password', 'post', '' );
+
+	if( ! empty( $row['password'] ) and ! $crypt->validate_password( $nv_password, $row['password'] ) )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'password',
+			'mess' => $lang_global['incorrect_password'] ) ) );
+	}
+
+	if( ( $check_new_password = nv_check_valid_pass( $new_password, NV_UPASSMAX, NV_UPASSMIN ) ) != '' )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'new_password',
+			'mess' => $check_new_password ) ) );
+	}
+
+	if( $new_password != $re_password )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 're_password',
+			'mess' => $lang_global['passwordsincorrect'] ) ) );
+	}
+
+	$re_password = $crypt->hash_password( $new_password, $global_config['hashprefix'] );
+
+	$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET password= :password WHERE userid=' . $user_info['userid'] );
+	$stmt->bindParam( ':password', $re_password, PDO::PARAM_STR );
+	$stmt->execute();
+
+	$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
+	$name = array_filter( $name );
+	$name = implode( " ", $name );
+	$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+	$message = sprintf( $lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password );
+	@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message );
+
+	die( json_encode( array(
+		'status' => 'ok',
+		'input' => 'ok',
+		'mess' => $lang_module['editinfo_ok'] ) ) );
+}
+//Question
+elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'question' )
+{
+	$your_question = nv_substr( $nv_Request->get_title( 'your_question', 'post', '', 1 ), 0, 255 );
+	$answer = nv_substr( $nv_Request->get_title( 'answer', 'post', '', 1 ), 0, 255 );
+	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
+
+	if( empty( $your_question ) )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'your_question',
+			'mess' => $lang_module['your_question_empty'] ) ) );
+	}
+
+	if( empty( $answer ) )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'answer',
+			'mess' => $lang_module['answer_empty'] ) ) );
+	}
+
+	if( ! empty( $row['password'] ) and ! $crypt->validate_password( $nv_password, $row['password'] ) )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'nv_password',
+			'mess' => $lang_global['incorrect_password'] ) ) );
+	}
+
+	$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET question= :question, answer= :answer WHERE userid=' . $user_info['userid'] );
+	$stmt->bindParam( ':question', $your_question, PDO::PARAM_STR );
+	$stmt->bindParam( ':answer', $answer, PDO::PARAM_STR );
+	$stmt->execute();
+
+	die( json_encode( array(
+		'status' => 'ok',
+		'input' => 'ok',
+		'mess' => $lang_module['change_question_ok'] ) ) );
+}
+//Others
+elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'others' )
+{
+	$query_field = array();
+	$userid = $user_info['userid'];
+	$custom_fields = $nv_Request->get_array( 'custom_fields', 'post' );
+	require NV_ROOTDIR . '/modules/users/fields.check.php';
+
+	$db->query( 'UPDATE ' . NV_USERS_GLOBALTABLE . '_info SET ' . implode( ', ', $query_field ) . ' WHERE userid=' . $user_info['userid'] );
+
+	die( json_encode( array(
+		'status' => 'ok',
+		'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/others', true ),
+		'mess' => $lang_module['editinfo_ok'] ) ) );
+}
+//Bat safemode
+elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'safemode' )
+{
+	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
+	if( ! empty( $row['password'] ) and ! $crypt->validate_password( $nv_password, $row['password'] ) )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'nv_password',
+			'mess' => $lang_global['incorrect_password'] ) ) );
+	}
+
+	if( $nv_Request->isset_request( 'resend', 'post' ) )
+	{
+		if( empty( $row['safekey'] ) )
+		{
+			$rand = rand( NV_UPASSMIN, NV_UPASSMAX );
+			if( $rand < 6 ) $rand = 6;
+			$row['safekey'] = md5( nv_genpass( $rand ) );
+
+			$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . " SET safekey= :safekey WHERE userid=" . $user_info['userid'] );
+			$stmt->bindParam( ':safekey', $row['safekey'], PDO::PARAM_STR );
+			$stmt->execute();
+            $nv_Request->set_Session( 'safesend', 0 );
+		}
+
+		$ss_safesend = $nv_Request->get_int( 'safesend', 'session', 0 );
+		if( $ss_safesend < NV_CURRENTTIME )
+		{
+			$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
+			$name = array_filter( $name );
+			$name = implode( " ", $name );
+			$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+			$message = sprintf( $lang_module['safe_send_content'], $name, $sitename, $row['safekey'] );
+			@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message );
+
+			$ss_safesend = NV_CURRENTTIME + 600;
+			$nv_Request->set_Session( 'safesend', $ss_safesend );
+		}
+
+		$ss_safesend = ceil( ( $ss_safesend - NV_CURRENTTIME ) / 60 );
+
+		die( json_encode( array(
+			'status' => 'ok',
+			'input' => '',
+			'mess' => sprintf( $lang_module['safe_send_ok'], $ss_safesend ) ) ) );
+	}
+
+	$safe_key = nv_substr( $nv_Request->get_title( 'safe_key', 'post', '', 1 ), 0, 32 );
+
+	if( empty( $row['safekey'] ) or $safe_key != $row['safekey'] )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'safe_key',
+			'mess' => $lang_module['verifykey_error'] ) ) );
+	}
+
+	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . " SET safemode=1, safekey= :safekey WHERE userid=" . $user_info['userid'] );
+	$stmt->bindParam( ':safekey', $row['safekey'], PDO::PARAM_STR );
+	$stmt->execute();
+
+	die( json_encode( array(
+		'status' => 'ok',
+		'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true ),
+		'mess' => $lang_module['safe_activate_ok'] ) ) );
+}
+
+$page_title = $mod_title = $lang_module['editinfo_pagetitle'];
+$key_words = $module_info['keywords'];
+
+if( defined( 'NV_EDITOR' ) )
+{
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
+
+$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $user_info['userid'];
+$result = $db->query( $sql );
+$custom_fields = $result->fetch();
+
+$array_data['username'] = $row['username'];
+$array_data['email'] = $row['email'];
+$array_data['first_name'] = $row['first_name'];
+$array_data['last_name'] = $row['last_name'];
+$array_data['gender'] = $row['gender'];
+$array_data['birthday'] = ! empty( $row['birthday'] ) ? date( 'd/m/Y', $row['birthday'] ) : '';
+$array_data['view_mail'] = $row['view_mail'] ? ' selected="selected"' : '';
+$array_data['photo'] = ( ! empty( $row['photo'] ) and file_exists( NV_ROOTDIR . '/' . $row['photo'] ) ) ? NV_BASE_SITEURL . $row['photo'] : "";
+
+if( empty( $array_data['photo'] ) )
+{
+	$array_data['photo'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png';
+	$array_data['photoWidth'] = 80;
+	$array_data['photoHeight'] = 80;
+	$array_data['imgDisabled'] = " disabled=\"disabled\"";
 }
 else
 {
-	$array_data['first_name'] = $row['first_name'];
-	$array_data['last_name'] = $row['last_name'];
-	$array_data['gender'] = $row['gender'];
-	$array_data['birthday'] = ! empty( $row['birthday'] ) ? date( 'd/m/Y', $row['birthday'] ) : '';
-	$array_data['view_mail'] = intval( $row['view_mail'] );
-	$array_data['photo'] = $row['photo'];
-	$array_data['photo_delete'] = 0;
+	$size = @getimagesize( NV_ROOTDIR . '/' . $row['photo'] );
+	$array_data['photoWidth'] = $size[0];
+	$array_data['photoHeight'] = $size[1];
+	$array_data['imgDisabled'] = "";
 }
-
-// Checked viewmail
-$array_data['view_mail'] = $array_data['view_mail'] ? ' selected="selected"' : '';
 
 // Gender data
-$array_data['gender_array'] = array();
-$array_data['gender_array']['N'] = array(
-	'value' => 'N',
-	'title' => 'N/A',
-	'selected' => ''
-);
-$array_data['gender_array']['M'] = array(
-	'value' => 'M',
-	'title' => $lang_module['male'],
-	'selected' => ( $array_data['gender'] == 'M' ? ' selected="selected"' : '' )
-);
-$array_data['gender_array']['F'] = array(
-	'value' => 'F',
-	'title' => $lang_module['female'],
-	'selected' => ( $array_data['gender'] == 'F' ? ' selected="selected"' : '' )
-);
+$array_data['gender_array'] = array(
+	'N' => array(
+		'value' => 'N',
+		'title' => 'N/A',
+		'selected' => '' ),
+	'M' => array(
+		'value' => 'M',
+		'title' => $lang_module['male'],
+		'selected' => ( $array_data['gender'] == 'M' ? ' selected="selected"' : '' ) ),
+	'F' => array(
+		'value' => 'F',
+		'title' => $lang_module['female'],
+		'selected' => ( $array_data['gender'] == 'F' ? ' selected="selected"' : '' ) ) //
+		);
 
-// Check photo path
-if( ! empty( $array_data['photo'] ) )
+$data_questions = array();
+$sql = "SELECT qid, title FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+$result = $db->query( $sql );
+while( $row = $result->fetch() )
 {
-	if( file_exists( NV_ROOTDIR . '/' . $array_data['photo'] ) )
-	{
-		$array_data['photo'] = NV_BASE_SITEURL . $array_data['photo'];
-	}
-	else
-	{
-		$array_data['photo'] = '';
-	}
+	$data_questions[$row['qid']] = array( 'qid' => $row['qid'], 'title' => $row['title'] );
 }
 
-$contents = user_info( $array_data, $array_field_config, $custom_fields, $info );
+$contents = user_info( $array_data, $array_field_config, $custom_fields, $types, $data_questions );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

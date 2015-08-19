@@ -13,6 +13,7 @@ if ("undefined" == typeof nv_my_abbr) var nv_my_abbr = "ICT";
 if ("undefined" == typeof nv_cookie_prefix) var nv_cookie_prefix = "nv4";
 if ("undefined" == typeof nv_check_pass_mstime) var nv_check_pass_mstime = 1738E3;
 if ("undefined" == typeof theme_responsive) var theme_responsive = 0;
+if ("undefined" == typeof nv_safemode) var nv_safemode = 0;
 
 var OP = (navigator.userAgent.indexOf('Opera') != -1 );
 var IE = (navigator.userAgent.indexOf('MSIE') != -1 && !OP );
