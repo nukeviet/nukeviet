@@ -7,10 +7,24 @@
  */
 function changeAvatar(a)
 {
-    var b = nv_base_siteurl  + "index.php?" + nv_name_variable  + "=users&" + nv_fc_variable  + "=avatar";
-    if(a) b += "&u=1";
-    nv_open_browse( b, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+    nv_open_browse( a, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
     return !1;
+}
+
+function deleteAvatar(a,b,c)
+{
+    $(c).prop("disabled",!0);
+    $.ajax({
+        type: 'POST',
+        cache: !1,
+        url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=avatar/del',
+        data: 'checkss=' + b + '&del=1',
+        dataType: 'json',
+        success: function(e){
+            $(a).attr("src",$(a).attr("data-default"));
+        }
+    });
+    return!1
 }
 
 function datepickerShow(a)
@@ -22,7 +36,8 @@ function datepickerShow(a)
         	changeMonth: !0,
         	changeYear: !0,
         	showOtherMonths: !0,
-        	showOn: "focus"
+        	showOn: "focus",
+            yearRange: "-90:+0"
         });
         $(a).css("z-index", "1000").datepicker('show');
     }
@@ -31,6 +46,18 @@ function button_datepickerShow(a)
 {
     var b = $(a).parent();
     datepickerShow($(".datepicker",b))
+}
+function verkeySend(a)
+{
+    $(".has-error", a).removeClass("has-error");
+	var d = 0;
+	$(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+		var b = $(this).prop("tagName");
+		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
+		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+	});
+    d || ($("[name=vsend]",a).val("1"), $("[type=submit]",a).click());
+    return!1
 }
 function showQlist(a) {
 	var b = $(".qlist",$(a).parent().parent());
@@ -100,7 +127,6 @@ function validErrorHidden(a,b) {
     d.tooltip("destroy");
     c.removeClass("has-error")
 }
-
 function formErrorHidden(a) {
 	$(".has-error", a).removeClass("has-error");
 	$("[data-mess]", a).tooltip("destroy")
@@ -108,6 +134,7 @@ function formErrorHidden(a) {
 function validReset(a) {
     $(".nv-info", a).removeClass("error success").text($(".nv-info", a).attr("data-default"));
 	formErrorHidden(a);
+    $("input,button,select,textarea",a).prop("disabled",!1);
 	$(a)[0].reset()
 }
 
@@ -119,7 +146,7 @@ function login_validForm(a) {
 		"password" == $(a).prop("type") && $(this).val(trim(strip_tags($(this).val())));
 		if (!nv_validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
 	});
-	c || (b.type = $(a).prop("method"), b.url = $(a).prop("action"), b.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button").prop("disabled", !0), $.ajax({
+	c || (b.type = $(a).prop("method"), b.url = $(a).prop("action"), b.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
 		type: b.type,
 		cache: !1,
 		url: b.url,
@@ -131,9 +158,9 @@ function login_validForm(a) {
 			"error" == d.status ? ($("input,button", a).not("[type=submit]").prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != d.input ? $(a).find("[name=" + d.input + "]").each(function() {
 				$(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
 				validErrorShow(this)
-			}) : $(".nv-info", a).html(d.mess).addClass("error"), setTimeout(function() {
+			}) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
 				$("[type=submit]", a).prop("disabled", !1)
-			}, 1E3)) : ($(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success"), $(".form-detail", a).hide(), setTimeout(function() {
+			}, 1E3)) : ($(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
 				window.location.href = window.location.href
 			}, 3E3))
 		}
@@ -150,7 +177,7 @@ function reg_validForm(a) {
 		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
 		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
 	});
-	d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button").prop("disabled", !0), $.ajax({
+	d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
 		type: c.type,
 		cache: !1,
 		url: c.url,
@@ -159,21 +186,60 @@ function reg_validForm(a) {
 		success: function(b) {
 			var c = $("[onclick*='change_captcha']", a);
 			c && c.click();
-			"error" == b.status ? ($("input,button", a).not("[type=submit]").prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find("[name=" + b.input + "]").each(function() {
+			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find("[name=" + b.input + "]").each(function() {
 				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
 				validErrorShow(this)
-			}) : ($(".nv-info", a).html(b.mess).addClass("error"), $("html, body").animate({
+			}) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
 				scrollTop: $(".nv-info", a).offset().top
-			}, 800), setTimeout(function() {
-				$("[type=submit]", a).prop("disabled", !1)
-			}, 1E3))) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success"), $("html, body").animate({
+			}, 800))) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
+					$(".nv-info", a).fadeOut();
+                    $("input,button,select,textarea", a).prop("disabled", !1);
+                    $("[onclick*=validReset]",a).click()
+				}, 6E3) : $("html, body").animate({
 				scrollTop: $(".nv-info", a).offset().top
 			}, 800, function() {
 				$(".form-detail", a).hide();
 				setTimeout(function() {
 					window.location.href = "" != b.input ? b.input : window.location.href
 				}, 6E3)
-			}))
+			})))
+		}
+	}));
+	return !1
+}
+
+function changemail_validForm(a)
+{
+    $(".has-error", a).removeClass("has-error");
+	var d = 0,
+		c = [];
+	$(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+		var b = $(this).prop("tagName");
+		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
+		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+	});
+	d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+		type: c.type,
+		cache: !1,
+		url: c.url,
+		data: c.data,
+		dataType: "json",
+		success: function(b) {
+		    $("[name=vsend]",a).val("0");
+			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
+				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+				validErrorShow(this)
+			})) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
+					$(".nv-info", a).fadeOut();
+                    $("input,button,select,textarea", a).prop("disabled", !1)
+				}, 6E3) : $("html, body").animate({
+				scrollTop: $(".nv-info", a).offset().top
+			}, 800, function() {
+				$(".form-detail", a).hide();
+				setTimeout(function() {
+					window.location.href = "" != b.input ? b.input : window.location.href
+				}, 6E3)
+			})))
 		}
 	}));
 	return !1

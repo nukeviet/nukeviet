@@ -67,6 +67,7 @@ if ( $global_config['allowuserlogin'] )
         $xtpl->assign( 'WELCOME', defined( 'NV_IS_ADMIN' ) ? $lang_global['admin_account'] : $lang_global['your_account'] );
         $xtpl->assign( 'LEVEL', defined( 'NV_IS_ADMIN' ) ? $admin_info['level'] : 'user' );
         $xtpl->assign( 'URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users' );
+        $xtpl->assign( 'URL_AVATAR', nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=avatar/upd', true ) );
         $xtpl->assign( 'URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=' );
 
         if ( defined( 'NV_OPENID_ALLOWED' ) )
