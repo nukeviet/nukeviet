@@ -694,21 +694,6 @@ function user_info( $data, $array_field_config, $custom_fields, $types, $data_qu
 		$xtpl->parse( 'main.tab_edit_others' );
 	}
 
-	/*
-
-	// Parse photo
-	if( ! empty( $data['photo'] ) )
-	{
-	$xtpl->parse( 'main.photo' );
-	}
-	else
-	{
-	$xtpl->parse( 'main.add_photo' );
-	}
-
-	
-
-	*/
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -1190,5 +1175,22 @@ function nv_avatar( $array )
 	}
 
 	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
+
+function safe_deactivate( $data )
+{
+    global $user_info, $module_info, $module_file, $module_name, $lang_module, $lang_global;
+    
+    $xtpl = new XTemplate( 'safe.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
+	$xtpl->assign( 'EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo' );
+    $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'LANG', $lang_module );
+    $xtpl->assign( 'GLANG', $lang_global );
+    $xtpl->assign( 'PASS_MAXLENGTH', NV_UPASSMAX );
+	$xtpl->assign( 'PASS_MINLENGTH', NV_UPASSMIN );
+    $xtpl->assign( 'DATA', $data );
+    
+    $xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

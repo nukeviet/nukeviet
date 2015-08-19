@@ -16,6 +16,12 @@ if( ! defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 	die();
 }
 
+if( (int)$user_info['safemode'] >= 0 )
+{
+	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true ) );
+	die();
+}
+
 function updateAvatar( $file )
 {
 	global $db, $user_info, $module_upload;

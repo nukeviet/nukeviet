@@ -129,16 +129,87 @@ function get_field_config()
 	return $array_field_config;
 }
 
+$array_data = array();
+$array_data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
+
+$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
+
 $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_info['userid'];
 $query = $db->query( $sql );
 $row = $query->fetch();
 
-$array_field_config = get_field_config();
+//Tat safemode
+if( ( int )$row['safemode'] > 0 )
+{
+	$type = $nv_Request->get_title( 'type', 'post', '' );
 
-$array_data = array();
-$array_data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
+	if( $checkss == $array_data['checkss'] and $type == 'safe_deactivate' )
+	{
+		$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
+
+		if( ! empty( $row['password'] ) and ! $crypt->validate_password( $nv_password, $row['password'] ) )
+		{
+			die( json_encode( array(
+				'status' => 'error',
+				'input' => 'nv_password',
+				'mess' => $lang_global['incorrect_password'] ) ) );
+		}
+
+		if( $nv_Request->isset_request( 'resend', 'post' ) )
+		{
+			$ss_safesend = $nv_Request->get_int( 'safesend', 'session', 0 );
+			if( $ss_safesend < NV_CURRENTTIME )
+			{
+				$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
+				$name = array_filter( $name );
+				$name = implode( " ", $name );
+				$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+				$message = sprintf( $lang_module['safe_send_content'], $name, $sitename, $row['safekey'] );
+				@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message );
+
+				$ss_safesend = NV_CURRENTTIME + 600;
+				$nv_Request->set_Session( 'safesend', $ss_safesend );
+			}
+
+			$ss_safesend = ceil( ( $ss_safesend - NV_CURRENTTIME ) / 60 );
+
+			die( json_encode( array(
+				'status' => 'ok',
+				'input' => '',
+				'mess' => sprintf( $lang_module['safe_send_ok'], $ss_safesend ) ) ) );
+		}
+
+		$safe_key = nv_substr( $nv_Request->get_title( 'safe_key', 'post', '', 1 ), 0, 32 );
+
+		if( empty( $row['safekey'] ) or $safe_key != $row['safekey'] )
+		{
+			die( json_encode( array(
+				'status' => 'error',
+				'input' => 'safe_key',
+				'mess' => $lang_module['verifykey_error'] ) ) );
+		}
+
+		$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . " SET safemode=0, safekey='' WHERE userid=" . $user_info['userid'] );
+		$stmt->execute();
+
+		die( json_encode( array(
+			'status' => 'ok',
+			'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true ),
+			'mess' => $lang_module['safe_deactivate_ok'] ) ) );
+	}
+
+	$contents = safe_deactivate( $array_data );
+
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_site_theme( $contents );
+	include NV_ROOTDIR . '/includes/footer.php';
+	exit;
+}
+
 $array_data['allowmailchange'] = $global_config['allowmailchange'];
 $array_data['allowloginchange'] = ( $global_config['allowloginchange'] or ( ! empty( $row['last_openid'] ) and empty( $user_info['last_login'] ) and empty( $user_info['last_agent'] ) and empty( $user_info['last_ip'] ) and empty( $user_info['last_openid'] ) ) ) ? 1 : 0;
+
+$array_field_config = get_field_config();
 
 $types = array(
 	"basic",
@@ -148,10 +219,9 @@ $types = array(
 if( $array_data['allowloginchange'] ) $types[] = 'username';
 if( $array_data['allowmailchange'] ) $types[] = 'email';
 if( ! empty( $array_field_config ) ) $types[] = 'others';
+$types[] = 'safemode';
 
 $array_data['type'] = ( isset( $array_op[1] ) and ! empty( $array_op[1] ) and in_array( $array_op[1], $types ) ) ? $array_op[1] : "basic";
-
-$checkss = $nv_Request->get_title( 'checkss', 'post', '' );
 
 //Basic
 if( $checkss == $array_data['checkss'] and $array_data['type'] == 'basic' )
@@ -475,6 +545,73 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'others' )
 		'status' => 'ok',
 		'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/others', true ),
 		'mess' => $lang_module['editinfo_ok'] ) ) );
+}
+//Bat safemode
+elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'safemode' )
+{
+	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
+	if( ! empty( $row['password'] ) and ! $crypt->validate_password( $nv_password, $row['password'] ) )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'nv_password',
+			'mess' => $lang_global['incorrect_password'] ) ) );
+	}
+
+	if( $nv_Request->isset_request( 'resend', 'post' ) )
+	{
+		if( empty( $row['safekey'] ) )
+		{
+			$rand = rand( NV_UPASSMIN, NV_UPASSMAX );
+			if( $rand < 6 ) $rand = 6;
+			$row['safekey'] = md5( nv_genpass( $rand ) );
+
+			$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . " SET safekey= :safekey WHERE userid=" . $user_info['userid'] );
+			$stmt->bindParam( ':safekey', $row['safekey'], PDO::PARAM_STR );
+			$stmt->execute();
+            $nv_Request->set_Session( 'safesend', 0 );
+		}
+
+		$ss_safesend = $nv_Request->get_int( 'safesend', 'session', 0 );
+		if( $ss_safesend < NV_CURRENTTIME )
+		{
+			$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
+			$name = array_filter( $name );
+			$name = implode( " ", $name );
+			$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
+			$message = sprintf( $lang_module['safe_send_content'], $name, $sitename, $row['safekey'] );
+			@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message );
+
+			$ss_safesend = NV_CURRENTTIME + 600;
+			$nv_Request->set_Session( 'safesend', $ss_safesend );
+		}
+
+		$ss_safesend = ceil( ( $ss_safesend - NV_CURRENTTIME ) / 60 );
+
+		die( json_encode( array(
+			'status' => 'ok',
+			'input' => '',
+			'mess' => sprintf( $lang_module['safe_send_ok'], $ss_safesend ) ) ) );
+	}
+
+	$safe_key = nv_substr( $nv_Request->get_title( 'safe_key', 'post', '', 1 ), 0, 32 );
+
+	if( empty( $row['safekey'] ) or $safe_key != $row['safekey'] )
+	{
+		die( json_encode( array(
+			'status' => 'error',
+			'input' => 'safe_key',
+			'mess' => $lang_module['verifykey_error'] ) ) );
+	}
+
+	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . " SET safemode=1, safekey= :safekey WHERE userid=" . $user_info['userid'] );
+	$stmt->bindParam( ':safekey', $row['safekey'], PDO::PARAM_STR );
+	$stmt->execute();
+
+	die( json_encode( array(
+		'status' => 'ok',
+		'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true ),
+		'mess' => $lang_module['safe_activate_ok'] ) ) );
 }
 
 $page_title = $mod_title = $lang_module['editinfo_pagetitle'];
