@@ -49,7 +49,7 @@
 					</ul>
 					<script type="text/javascript" data-show="after">
 						window.___gcfg = {
-							lang : nv_sitelang
+							lang : nv_lang_data
 						};
 						(function() {
 							var po = document.createElement('script');

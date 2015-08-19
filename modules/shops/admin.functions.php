@@ -1404,7 +1404,7 @@ function nv_create_form_file( $array_template_id )
 			$content_2 .= "\t	changeMonth : true,\n";
 			$content_2 .= "\t	changeYear : true,\n";
 			$content_2 .= "\t	showOtherMonths : true,\n";
-			$content_2 .= "\t	buttonImage : nv_siteroot + \"assets/images/calendar.gif\",\n";
+			$content_2 .= "\t	buttonImage : nv_base_siteurl + \"assets/images/calendar.gif\",\n";
 			$content_2 .= "\t	buttonImageOnly : true\n";
 			$content_2 .= "\t});\n";
 			$content_2 .= "});\n";
