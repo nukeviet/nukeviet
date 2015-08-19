@@ -20,6 +20,7 @@ if( preg_match( $global_config['check_theme'], $theme1 ) and preg_match( $global
 {
 	foreach( $position as $pos )
 	{
+		$pos = nv_unhtmlspecialchars( $pos );
 		// Begin drop all exist blocks behavior with theme 2 and position relative
 		$sth = $db->prepare( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid IN (SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme = :theme AND position= :position)' );
 		$sth->bindParam( ':theme', $theme2, PDO::PARAM_STR );

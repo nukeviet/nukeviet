@@ -41,7 +41,7 @@ var EXT = {
 			$.ajax({
 				type: 'POST',
 				url: script_name,
-				data: nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&data=' + CFG.string_data,
+				data: nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=download&data=' + CFG.string_data,
 				success: function(e){
 					$('#file-download .waiting').hide();
 					e = e.split('|');
@@ -72,7 +72,7 @@ var EXT = {
 		$('#file-download-response').html('<div class="alert alert-danger">' + m + '</div>');
 	},
 	redirect: function(){
-		var url = script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=extensions&' + nv_fc_variable + '=upload&uploaded=1';
+		var url = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=extensions&' + nv_fc_variable + '=upload&uploaded=1';
 		window.location = url;
 	}
 };
