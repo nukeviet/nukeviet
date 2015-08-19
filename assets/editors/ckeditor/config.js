@@ -5,7 +5,7 @@
 
 CKEDITOR.editorConfig = function( config ) {
     config.enterMode = CKEDITOR.ENTER_BR;
-	config.language = nv_sitelang;
+	config.language = nv_lang_interface;
 	config.allowedContent = true;
 	config.extraPlugins = 'video,eqneditor,switchbar,tbvdownload,googledocs';
 	config.entities = false;

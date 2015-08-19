@@ -45,7 +45,7 @@
         	<script src="http://www.google.com/jsapi" type="text/javascript"></script>
         	<script type="text/javascript">
         		google.load('search', '1', {
-        			language : nv_sitelang
+        			language : nv_lang_data
         		});
         	</script>
         	<link rel="stylesheet" href="http://www.google.com/cse/style/look/default.css" type="text/css" />
@@ -75,7 +75,7 @@ $("a.advSearch").click(function(e){
 	if("all" == b){
 		return alert("{LANG.chooseModule}"), $("#form_search #search_query_mod").focus(), !1
 	}
-	var b = nv_siteroot + "index.php?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = strip_tags(a);
+	var b = nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + b + "&" + nv_fc_variable + "=search", a = $("#form_search #search_query").val(), a = strip_tags(a);
 	{NV_MIN_SEARCH_LENGTH} <= a.length && {NV_MAX_SEARCH_LENGTH} >= a.length && (a = rawurlencode(a), b = b + "&q=" + a);
 
 	window.location.href = b;
