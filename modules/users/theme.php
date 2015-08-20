@@ -21,7 +21,7 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
  */
 function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config, $custom_fields )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $nv_Request;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $nv_Request, $op;
 
 	$xtpl = new XTemplate( 'register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register' );
@@ -202,6 +202,26 @@ function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config
 		$xtpl->assign( 'LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink' );
 		$xtpl->parse( 'main.lostactivelink' );
 	}
+    
+    $_lis = $module_info['funcs'];
+	$_alias = $module_info['alias'];
+	foreach( $_lis as $_li )
+	{
+		if( $_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main' )
+		{
+            if( $_li['func_name'] == 'regroups' and ! $global_config['allowuserpublic'] ) continue;
+            if( $_li['func_name'] == 'openid' and ! defined( 'NV_OPENID_ALLOWED' ) ) continue;
+			if( $_li['func_name'] == $op OR $_li['func_name'] == "avatar" ) continue;
+
+			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			$li = array(
+				'href' => $href,
+				'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name'] );
+			$xtpl->assign( 'NAVBAR', $li );
+			$xtpl->parse( 'main.navbar' );
+		}
+	}
+    
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -248,7 +268,7 @@ function openid_register( $array_register, $siteterms, $data_questions )
  */
 function user_login( $gfx_chk, $nv_header, $nv_redirect )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op;
 
 	$xtpl = new XTemplate( 'login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users' );
 
@@ -285,6 +305,25 @@ function user_login( $gfx_chk, $nv_header, $nv_redirect )
 		}
 
 		$xtpl->parse( 'main.openid' );
+	}
+    
+    $_lis = $module_info['funcs'];
+	$_alias = $module_info['alias'];
+	foreach( $_lis as $_li )
+	{
+		if( $_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main' )
+		{
+            if( $_li['func_name'] == 'regroups' and ! $global_config['allowuserpublic'] ) continue;
+            if( $_li['func_name'] == 'openid' and ! defined( 'NV_OPENID_ALLOWED' ) ) continue;
+			if( $_li['func_name'] == $op OR $_li['func_name'] == "avatar" ) continue;
+
+			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			$li = array(
+				'href' => $href,
+				'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name'] );
+			$xtpl->assign( 'NAVBAR', $li );
+			$xtpl->parse( 'main.navbar' );
+		}
 	}
 
 	$xtpl->parse( 'main' );
@@ -399,7 +438,7 @@ function user_openid_login2( $attribs, $array_user_login )
  */
 function user_lostpass( $data, $question )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op;
 
 	$xtpl = new XTemplate( 'lostpass.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
@@ -429,6 +468,25 @@ function user_lostpass( $data, $question )
 		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.step1' );
+	}
+    
+    $_lis = $module_info['funcs'];
+	$_alias = $module_info['alias'];
+	foreach( $_lis as $_li )
+	{
+		if( $_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main' )
+		{
+            if( $_li['func_name'] == 'regroups' and ! $global_config['allowuserpublic'] ) continue;
+            if( $_li['func_name'] == 'openid' and ! defined( 'NV_OPENID_ALLOWED' ) ) continue;
+			if( $_li['func_name'] == $op OR $_li['func_name'] == "avatar" ) continue;
+
+			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			$li = array(
+				'href' => $href,
+				'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name'] );
+			$xtpl->assign( 'NAVBAR', $li );
+			$xtpl->parse( 'main.navbar' );
+		}
 	}
 
 	$xtpl->parse( 'main' );
@@ -503,7 +561,7 @@ function user_lostactivelink( $data, $question )
  */
 function user_info( $data, $array_field_config, $custom_fields, $types, $data_questions )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op;
 
 	$xtpl = new XTemplate( 'info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo' );
@@ -694,6 +752,25 @@ function user_info( $data, $array_field_config, $custom_fields, $types, $data_qu
 		$xtpl->parse( 'main.tab_edit_others' );
 	}
 
+	$_lis = $module_info['funcs'];
+	$_alias = $module_info['alias'];
+	foreach( $_lis as $_li )
+	{
+		if( $_li['show_func'])
+		{
+            if( $_li['func_name'] == 'regroups' and ! $global_config['allowuserpublic'] ) continue;
+            if( $_li['func_name'] == 'openid' and ! defined( 'NV_OPENID_ALLOWED' ) ) continue;
+			if( $_li['func_name'] == $op OR $_li['func_name'] == "avatar" ) continue;
+
+			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			$li = array(
+				'href' => $href,
+				'title' => $_li['func_name'] == 'main' ? $lang_module['user_info'] : $_li['func_custom_name'] );
+			$xtpl->assign( 'NAVBAR', $li );
+			$xtpl->parse( 'main.navbar' );
+		}
+	}
+
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -705,7 +782,7 @@ function user_info( $data, $array_field_config, $custom_fields, $types, $data_qu
  */
 function user_welcome()
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $user_info, $lang_global, $module_config;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $user_info, $lang_global, $module_config, $op;
 
 	$xtpl = new XTemplate( 'userinfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -764,6 +841,25 @@ function user_welcome()
 	if( empty( $user_info['valid_question'] ) )
 	{
 		$xtpl->parse( 'main.question_empty_note' );
+	}
+    
+    $_lis = $module_info['funcs'];
+	$_alias = $module_info['alias'];
+	foreach( $_lis as $_li )
+	{
+		if( $_li['show_func'])
+		{
+            if( $_li['func_name'] == 'regroups' and ! $global_config['allowuserpublic'] ) continue;
+            if( $_li['func_name'] == 'openid' and ! defined( 'NV_OPENID_ALLOWED' ) ) continue;
+			if( $_li['func_name'] == $op OR $_li['func_name'] == "avatar" ) continue;
+
+			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			$li = array(
+				'href' => $href,
+				'title' => $_li['func_name'] == 'main' ? $lang_module['user_info'] : $_li['func_custom_name'] );
+			$xtpl->assign( 'NAVBAR', $li );
+			$xtpl->parse( 'main.navbar' );
+		}
 	}
 
 	$xtpl->parse( 'main' );
@@ -1180,7 +1276,7 @@ function nv_avatar( $array )
 
 function safe_deactivate( $data )
 {
-	global $user_info, $module_info, $module_file, $module_name, $lang_module, $lang_global;
+	global $user_info, $module_info, $module_file, $module_name, $lang_module, $lang_global, $global_config, $op;
 
 	$xtpl = new XTemplate( 'safe.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo' );
@@ -1198,6 +1294,25 @@ function safe_deactivate( $data )
 	else
 	{
 		$xtpl->assign( 'SHOW2', " style=\"display:none\"" );
+	}
+    
+    $_lis = $module_info['funcs'];
+	$_alias = $module_info['alias'];
+	foreach( $_lis as $_li )
+	{
+		if( $_li['show_func'])
+		{
+            if( $_li['func_name'] == 'regroups' and ! $global_config['allowuserpublic'] ) continue;
+            if( $_li['func_name'] == 'openid' and ! defined( 'NV_OPENID_ALLOWED' ) ) continue;
+			if( $_li['func_name'] == $op OR $_li['func_name'] == "avatar" ) continue;
+
+			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			$li = array(
+				'href' => $href,
+				'title' => $_li['func_name'] == 'main' ? $lang_module['user_info'] : $_li['func_custom_name'] );
+			$xtpl->assign( 'NAVBAR', $li );
+			$xtpl->parse( 'main.navbar' );
+		}
 	}
 
 	$xtpl->parse( 'main' );

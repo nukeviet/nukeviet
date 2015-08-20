@@ -7,6 +7,9 @@
             {FILE "login_form.tpl"}
         </div>
     </div>
+    <ul class="nav navbar-nav">
+        <!-- BEGIN: navbar --><li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
+    </ul>
 </div>
 </div>
 <!-- END: main -->

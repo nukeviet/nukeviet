@@ -97,6 +97,9 @@
         	</div>
         </form>
         <!-- END: new_pass -->
+        <ul class="nav navbar-nav margin-bottom-lg">
+            <!-- BEGIN: navbar --><li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
+        </ul>
     </div>
 </div>
 <script type="text/javascript">

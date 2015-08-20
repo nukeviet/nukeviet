@@ -1172,8 +1172,10 @@ a.btn {
 }
 
 .contactDefault {
+    position: absolute;
+    top:0;
+    left:0;
     line-height:51px;
-    float:left;
     margin:0 10px;
 }
 
