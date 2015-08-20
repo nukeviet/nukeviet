@@ -197,6 +197,8 @@ if( ( int )$row['safemode'] > 0 )
 			'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true ),
 			'mess' => $lang_module['safe_deactivate_ok'] ) ) );
 	}
+    
+    $array_data['safeshow'] = ( isset( $array_op[1]) and $array_op[1] == 'safeshow' ) ? true : false;
 
 	$contents = safe_deactivate( $array_data );
 

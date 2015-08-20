@@ -122,6 +122,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'MODULE_FILE', $module_file );
 	$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
+    $xtpl->assign( 'NV_SAFEMODE', $admin_info['safemode'] );
 	$xtpl->assign( 'LANG', $lang_global );
 
 	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/css/' . $module_file . '.css' ) )

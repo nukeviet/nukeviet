@@ -3,11 +3,11 @@
     <div class="col-md-16">
         <div class="page panel panel-default bg-lavender box-shadow">
             <div class="panel-body">
-                <div class="safe_active_info">
+                <div class="safe_active_info"{SHOW1}>
                     <h2 class="text-center margin-bottom-lg"><em class="fa fa-shield fa-lg margin-right text-danger"></em>{LANG.safe_mode}</h2>
                     {LANG.safe_active_info} <a href="#" onclick="safe_deactivate_show('.safe-deactivate','.safe_active_info')">{LANG.safe_deactivate}?</a>
                 </div>
-                <div class="safe-deactivate" style="display:none">
+                <div class="safe-deactivate"{SHOW2}>
                     <h2 class="text-center margin-bottom-lg">{LANG.safe_deactivate}</h2>
                     <form action="{EDITINFO_FORM}" method="post" onsubmit="return login_validForm(this);" autocomplete="off" novalidate>
                         <div class="nv-info margin-bottom" data-default="{LANG.safe_deactivate_info}">{LANG.safe_deactivate_info}</div>
