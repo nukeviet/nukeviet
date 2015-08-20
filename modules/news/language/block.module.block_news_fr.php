@@ -15,7 +15,7 @@ $lang_translator['author'] = 'Nguyễn Phú Thành';
 $lang_translator['createdate'] = '31/07/2015, 16:30';
 $lang_translator['copyright'] = 'phuthanh.nguyen215@gmail.com';
 $lang_translator['info'] = '';
-$lang_translator['langtype'] = 'lang_module';
+$lang_translator['langtype'] = 'lang_block';
 
 $lang_block['numrow'] = 'Nombre d\'articles affichés';
 $lang_block['showtooltip'] = 'Afficher tooltip';
