@@ -374,8 +374,8 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'email' )
 			$rand = rand( NV_UPASSMIN, NV_UPASSMAX );
 			if( $rand < 6 ) $rand = 6;
 			$p = NV_CURRENTTIME + 86400;
-			$verikey = nv_genpass( $rand );
-			$nv_Request->set_Session( 'verikey', ( NV_CURRENTTIME + 300 ) . '|' . $p . '|' . md5( $row['userid'] . $nv_email . $verikey . $global_config['sitekey'] ) );
+			$verikey = md5( $row['userid'] . $nv_email . nv_genpass( $rand ) . $global_config['sitekey'] );
+			$nv_Request->set_Session( 'verikey', ( NV_CURRENTTIME + 300 ) . '|' . $p . '|' . $verikey );
 		}
 
 		$p = nv_date( "H:i d/m/Y", $p );

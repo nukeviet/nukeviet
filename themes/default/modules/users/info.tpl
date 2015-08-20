@@ -198,7 +198,7 @@
                                 <label for="verifykey" class="control-label col-md-6 text-normal">{LANG.verifykey}</label>
                                 <div class="col-md-12">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="{LANG.verifykey}" value="" name="verifykey" maxlength="32" onkeypress="validErrorHidden(this);" data-mess="{LANG.verifykey_empty}">
+                                        <input type="text" class="form-control" placeholder="{LANG.verifykey}" value="" name="verifykey" maxlength="32" data-pattern="/^[a-zA-Z0-9]{32,32}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.verifykey_empty}">
                                         <span class="input-group-btn"><button type="button" class="send-bt btn btn-warning pointer" onclick="verkeySend(this.form);">{LANG.verifykey_send}</button></span>
                                     </div>
                                 </div>
