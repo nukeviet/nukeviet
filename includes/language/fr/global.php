@@ -304,3 +304,4 @@ $lang_global['design_by'] = 'Conçu par';
 $lang_global['design_url'] = 'URL de la page qui a le droit de conception';
 $lang_global['signin'] = 'Connexion';
 $lang_global['feedback'] = 'Réaction';
+$lang_global['required'] = 'Note: Vous devez declarer toute les zones cochés avec l\'étoile (*)';
