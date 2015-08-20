@@ -448,7 +448,7 @@ function openidLogin_Res1( $attribs )
                     $row = $db->query( $sql )->fetch();
                     if ( ! empty( $row ) )
                     {
-                        if ( $row['username'] == $nv_username and $crypt->validate( $nv_password, $row['password'] ) )
+                        if ( $row['username'] == $nv_username and $crypt->validate_password( $nv_password, $row['password'] ) )
                         {
                             if ( ! $row['active'] )
                             {
