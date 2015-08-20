@@ -72,7 +72,7 @@
                             <div class="form-group">
                                 <label for="birthday" class="control-label col-md-6 text-normal">{LANG.birthday}</label>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control datepicker" name="birthday" value="{DATA.birthday}" readonly="readonly" onfocus="datepickerShow(this);" data-mess="">
+                                    <input type="text" class="form-control calendar-icon datepicker" name="birthday" value="{DATA.birthday}" readonly="readonly" onfocus="datepickerShow(this);" data-mess="">
                                 </div>
                             </div>
                             
