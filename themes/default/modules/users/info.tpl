@@ -19,7 +19,7 @@
         <li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" href="#edit_safemode">{LANG.safe_mode}</a></li>
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content margin-bottom-lg">
 
         <div id="edit_basic" class="tab-pane fade {TAB_BASIC_ACTIVE}">
             <div class="page panel panel-default">
@@ -167,7 +167,8 @@
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
                     <form action="{EDITINFO_FORM}/email" method="post" role="form" class="form-horizontal" onsubmit="return changemail_validForm(this);" autocomplete="off" novalidate>
-                        <div class="nv-info margin-bottom" data-default="{LANG.edit_email_warning}">{LANG.edit_email_warning}</div>
+                        <div class="nv-info margin-bottom">{LANG.edit_email_warning}</div>
+                        <div class="nv-info-default hidden">{LANG.edit_email_warning}</div>
                         
                         <div class="form-detail">
                             <div class="form-group">
@@ -180,26 +181,26 @@
                             </div>
                             
                             <div class="form-group">
+                                <label for="password" class="control-label col-md-6 text-normal">{LANG.password}</label>
+                                <div class="col-md-12">
+                                    <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
                                 <label for="email" class="control-label col-md-6 text-normal">{LANG.newemail}</label>
                                 <div class="col-md-12">
-                                    <div class="input-group">
-                                        <input type="email" class="required form-control" placeholder="{LANG.newemail}" value="" name="email" maxlength="100" onkeypress="validErrorHidden(this);" data-mess="{GLANG.email_empty}">
-                                        <span class="input-group-btn"><button type="button" class="send-bt btn btn-warning pointer" onclick="verkeySend(this.form);">{LANG.verifykey_send}</button></span>
-                                    </div>
+                                    <input type="email" class="required form-control" placeholder="{LANG.newemail}" value="" name="email" maxlength="100" onkeypress="validErrorHidden(this);" data-mess="{GLANG.email_empty}">
                                 </div>
                             </div>
                             
                             <div class="form-group">
                                 <label for="verifykey" class="control-label col-md-6 text-normal">{LANG.verifykey}</label>
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" placeholder="{LANG.verifykey}" value="" name="verifykey" maxlength="32" onkeypress="validErrorHidden(this);" data-mess="{LANG.verifykey_empty}">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="password" class="control-label col-md-6 text-normal">{LANG.password}</label>
-                                <div class="col-md-12">
-                                    <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="{LANG.verifykey}" value="" name="verifykey" maxlength="32" onkeypress="validErrorHidden(this);" data-mess="{LANG.verifykey_empty}">
+                                        <span class="input-group-btn"><button type="button" class="send-bt btn btn-warning pointer" onclick="verkeySend(this.form);">{LANG.verifykey_send}</button></span>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -269,6 +270,13 @@
                         <div class="nv-info margin-bottom" data-default="{LANG.edit_question_warning}">{LANG.edit_question_warning}</div>
                         
                         <div class="form-detail">
+                            <div class="form-group">
+                                <label for="nv_password" class="control-label col-md-6 text-normal">{LANG.password}</label>
+                                <div class="col-md-12">
+                                    <input type="password" class="required form-control" placeholder="{LANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                                </div>
+                            </div>
+                            
                             <div class="form-group rel">
                                 <label for="your_question" class="control-label col-md-6 text-normal">{LANG.question}</label>
                                 <div class="col-md-12">
@@ -290,13 +298,6 @@
                                 <label for="answer" class="control-label col-md-6 text-normal">{LANG.answer_your_question}</label>
                                 <div class="col-md-12">
                                     <input type="text" class="required form-control" placeholder="{LANG.answer_your_question}" value="" name="answer" maxlength="255" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.answer_empty}">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="nv_password" class="control-label col-md-6 text-normal">{LANG.password}</label>
-                                <div class="col-md-12">
-                                    <input type="password" class="required form-control" placeholder="{LANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
                                 </div>
                             </div>
                             
@@ -449,26 +450,28 @@
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
                     <form action="{EDITINFO_FORM}/safemode" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
-                        <div class="nv-info margin-bottom" data-default="{LANG.safe_activate_info}">{LANG.safe_activate_info}</div>
+                        <h2 class="margin-bottom-lg text-center"><em class="fa fa-shield fa-lg margin-right text-danger"></em>{LANG.safe_activate}</h2>
+                        <div class="nv-info margin-bottom">{LANG.safe_activate_info}</div>
+                        <div class="nv-info-default hidden">{LANG.safe_activate_info}</div>
                         
                         <div class="form-detail">
-                            
                             <div class="form-group">
-                                <label for="safe_key" class="control-label col-md-6 text-normal">{LANG.safe_key}</label>
-                                <div class="col-md-12">
+                                <label for="nv_password" class="control-label col-md-6 text-normal">{GLANG.password}</label>
+                                <div class="col-md-14">
                                     <div class="input-group">
-                                        <span class="input-group-addon"><em class="fa fa-shield fa-lg"></em></span>
-                                        <input type="text" class="required form-control" placeholder="{LANG.safe_key}" value="" name="safe_key" maxlength="32" data-pattern="/^[a-zA-Z0-9]{32,32}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.required}">
+                                        <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
+                                        <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="form-group">
-                                <label for="nv_password" class="control-label col-md-6 text-normal">{GLANG.password}</label>
-                                <div class="col-md-12">
+                                <label for="safe_key" class="control-label col-md-6 text-normal">{LANG.safe_key}</label>
+                                <div class="col-md-14">
                                     <div class="input-group">
-                                        <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
-                                        <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                                        <span class="input-group-addon"><em class="fa fa-shield fa-lg"></em></span>
+                                        <input type="text" class="required form-control" placeholder="{LANG.safe_key}" value="" name="safe_key" maxlength="32" data-pattern="/^[a-zA-Z0-9]{32,32}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.required}">
+                                        <span class="input-group-btn"><input type="button" value="{LANG.verifykey_send}" class="safekeySend btn btn-warning" onclick="safekeySend(this.form);" /></span>
                                     </div>
                                 </div>
                             </div>
@@ -478,9 +481,8 @@
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
                                 </div>
                                 <div class="col-md-10">
-                                    <input type="button" value="{LANG.verifykey_send}" class="safekeySend btn btn-warning" onclick="safekeySend(this.form);" />
-                                    <button class="bsubmit btn btn-primary" type="submit">{LANG.editinfo_confirm}</button>
                                     <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
+                                    <button class="bsubmit btn btn-primary" type="submit">{LANG.editinfo_confirm}</button>
                                 </div>
                             </div>
                         </div>
@@ -489,5 +491,9 @@
             </div>
         </div>
     </div>
+    
+    <ul class="nav navbar-nav">
+        <!-- BEGIN: navbar --><li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
+    </ul>
 </div>
 <!-- END: main -->

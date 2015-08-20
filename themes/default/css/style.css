@@ -1172,8 +1172,10 @@ a.btn {
 }
 
 .contactDefault {
+    position: absolute;
+    top:0;
+    left:0;
     line-height:51px;
-    float:left;
     margin:0 10px;
 }
 
@@ -1726,7 +1728,7 @@ input[type="radio"] {
     display:inline-block;
     line-height:0;
     height:16px;
-    margin:0 4px 0 0;
+    margin:3px 4px 0 0;
     outline:0;
     padding:0 !important;
     text-align:center;
@@ -1745,7 +1747,7 @@ input[type="radio"] {
 input[type=radio] {
     border-radius:50%;
     margin-right:4px;
-    line-height:10px;
+    line-height: inherit;
 }
 
 input[type=checkbox]:disabled,

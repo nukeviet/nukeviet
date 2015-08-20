@@ -6,6 +6,9 @@
         <h3><a href="#" onclick="switchTab(this);tipAutoClose(true);" class="guest-sign pointer margin-right current" data-switch=".log-area, .reg-area" data-obj=".guestBlock">{GLANG.signin}</a> <!-- BEGIN: allowuserreg2 --><a href="#" onclick="switchTab(this);tipAutoClose(false);" class="guest-reg pointer" data-switch=".reg-area, .log-area" data-obj=".guestBlock">{GLANG.register}</a> <!-- END: allowuserreg2 --></h3>
         <div class="log-area">
             {FILE "login_form.tpl"}
+            <div class="text-center">
+                <a href="{USER_LOSTPASS}">{GLANG.lostpass}?</a>
+            </div>
         </div>
         <!-- BEGIN: allowuserreg -->
         <div class="reg-area hidden">
