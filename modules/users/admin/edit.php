@@ -223,6 +223,11 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		require NV_ROOTDIR . '/modules/users/fields.check.php';
 	}
+    
+    if( empty( $_user['first_name'] ) )
+	{
+		$_user['first_name'] = $_user['username'];
+	}
 
 	$_user['sig'] = nv_nl2br( $_user['sig'], '<br />' );
 	if( $_user['gender'] != 'M' and $_user['gender'] != 'F' )

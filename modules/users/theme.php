@@ -1083,7 +1083,7 @@ function nv_regroup_theme( $groups )
  */
 function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 {
-	global $module_info, $module_file, $lang_module;
+	global $module_info, $module_name, $global_config, $module_file, $lang_module, $op;
 
 	$xtpl = new XTemplate( 'memberslist.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1109,6 +1109,25 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 		$xtpl->assign( 'GENERATE_PAGE', $generate_page );
 		$xtpl->parse( 'main.generate_page' );
 	}
+    
+    $_lis = $module_info['funcs'];
+	$_alias = $module_info['alias'];
+	foreach( $_lis as $_li )
+	{
+		if( $_li['show_func'])
+		{
+            if( $_li['func_name'] == 'regroups' and ! $global_config['allowuserpublic'] ) continue;
+            if( $_li['func_name'] == 'openid' and ! defined( 'NV_OPENID_ALLOWED' ) ) continue;
+			if( $_li['func_name'] == $op OR $_li['func_name'] == "avatar" ) continue;
+
+			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			$li = array(
+				'href' => $href,
+				'title' => $_li['func_name'] == 'main' ? $lang_module['user_info'] : $_li['func_custom_name'] );
+			$xtpl->assign( 'NAVBAR', $li );
+			$xtpl->parse( 'main.navbar' );
+		}
+	}
 
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
@@ -1122,7 +1141,7 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
  */
 function nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields )
 {
-	global $module_info, $module_file, $lang_module, $module_name, $global_config;
+	global $module_info, $module_file, $lang_module, $module_name, $global_config, $op;
 
 	$xtpl = new XTemplate( 'viewdetailusers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -1182,6 +1201,25 @@ function nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields
 			}
 		}
 		$xtpl->parse( 'main.field' );
+	}
+    
+    $_lis = $module_info['funcs'];
+	$_alias = $module_info['alias'];
+	foreach( $_lis as $_li )
+	{
+		if( $_li['show_func'])
+		{
+            if( $_li['func_name'] == 'regroups' and ! $global_config['allowuserpublic'] ) continue;
+            if( $_li['func_name'] == 'openid' and ! defined( 'NV_OPENID_ALLOWED' ) ) continue;
+			if( $_li['func_name'] == $op OR $_li['func_name'] == "avatar" ) continue;
+
+			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			$li = array(
+				'href' => $href,
+				'title' => $_li['func_name'] == 'main' ? $lang_module['user_info'] : $_li['func_custom_name'] );
+			$xtpl->assign( 'NAVBAR', $li );
+			$xtpl->parse( 'main.navbar' );
+		}
 	}
 
 	$xtpl->parse( 'main' );
