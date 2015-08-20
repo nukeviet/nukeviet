@@ -25,7 +25,7 @@ elseif( defined( 'NV_IS_USER_FORUM' ) )
 	if( isset( $user_info['userid'] ) and $user_info['userid'] > 0 )
 	{
 		$_sql = 'SELECT userid, username, email, first_name, last_name, gender, photo, birthday, regdate,
-			view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip, last_openid, password
+			view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip, last_openid, password, safemode 
 			FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval( $user_info['userid'] ) . ' AND active=1';
 
 		$user_info = $db->query( $_sql )->fetch();
@@ -64,7 +64,7 @@ else
 				{
 					$_sql = 'SELECT userid, username, email, first_name, last_name, gender, photo, birthday, regdate,
 						view_mail, remember, in_groups, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
-						last_openid AS current_openid, password, question, answer
+						last_openid AS current_openid, password, question, answer, safemode 
 						FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
 
 					$user_info = $db->query( $_sql )->fetch();

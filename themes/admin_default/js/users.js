@@ -6,6 +6,20 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+function user_validForm(a) {
+    $.ajax({
+		type: $(a).prop("method"),
+		cache: !1,
+		url: $(a).prop("action"),
+		data: $(a).serialize(),
+		dataType: "json",
+		success: function(b) {
+			"error" == b.status ? (alert(b.mess), $("[name=" + b.input + "]", a).focus()) : window.location.href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable
+		}
+	});
+	return false
+}
+
 function nv_chang_question(qid) {
 	var nv_timer = nv_settimeout_disable('id_weight_' + qid, 5000);
 	var new_vid = $('#id_weight_' + qid).val();
@@ -389,7 +403,7 @@ $(document).ready(function(){
 	});
 	
 	$("#btn_upload").click(function() {
-		nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+		nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$('#current-photo-btn').click(function(){

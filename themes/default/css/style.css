@@ -121,6 +121,11 @@
 }
 
 /* Fix bootstrap */
+.form-horizontal .control-label {
+    margin-bottom: 0;
+    padding-top: 7px;
+    text-align: right;
+}
 
 .visible-xs-block,
 .visible-xs-inline,
@@ -330,6 +335,14 @@
     vertical-align:middle
 }
 
+.align-bottom{
+    vertical-align: bottom
+}
+
+.align-top{
+    vertical-align: top
+}
+
 ul,
 ol {
     list-style:none;
@@ -411,8 +424,7 @@ select.required{
     background-position: calc(100% - 15px) 10px;
 }
 label.required{
-    background-position: left center;
-    text-indent: 17px
+    padding-right: 20px;
 }
 
 label.radio-box,label.check-box{
