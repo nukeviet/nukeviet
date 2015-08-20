@@ -20,18 +20,19 @@
 		<!-- END: css_module -->
 
 		<script type="text/javascript">
-			var nv_base_siteurl = '{NV_BASE_SITEURL}';
-			var nv_lang_data = '{NV_LANG_DATA}';
-			var nv_lang_interface = '{NV_LANG_INTERFACE}';
-			var nv_name_variable = '{NV_NAME_VARIABLE}';
-			var nv_fc_variable = '{NV_OP_VARIABLE}';
-			var nv_lang_variable = '{NV_LANG_VARIABLE}';
-			var nv_module_name = '{MODULE_NAME}';
-			var nv_my_ofs = {NV_SITE_TIMEZONE_OFFSET};
-			var nv_my_abbr = '{NV_CURRENTTIME}';
-			var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
-			var nv_check_pass_mstime = '{NV_CHECK_PASS_MSTIME}';
-			var nv_area_admin = 1;
+			var  nv_base_siteurl = '{NV_BASE_SITEURL}',
+			     nv_lang_data = '{NV_LANG_DATA}',
+			     nv_lang_interface = '{NV_LANG_INTERFACE}',
+			     nv_name_variable = '{NV_NAME_VARIABLE}',
+			     nv_fc_variable = '{NV_OP_VARIABLE}',
+			     nv_lang_variable = '{NV_LANG_VARIABLE}',
+			     nv_module_name = '{MODULE_NAME}',
+			     nv_my_ofs = {NV_SITE_TIMEZONE_OFFSET},
+			     nv_my_abbr = '{NV_CURRENTTIME}',
+			     nv_cookie_prefix = '{NV_COOKIE_PREFIX}',
+			     nv_check_pass_mstime = '{NV_CHECK_PASS_MSTIME}',
+                 nv_safemode = {NV_SAFEMODE},
+                 nv_area_admin = 1;
 		</script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.min.js"></script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{NV_LANG_INTERFACE}.js"></script>
