@@ -9,7 +9,7 @@
 		<!-- END: resultn -->
 		<!-- BEGIN: result1 -->
 		<div class="radio">
-			<label><input type="radio" name="option"  value="{RESULT.id}"> {RESULT.title}</label>
+			<label><input type="radio" name="option" value="{RESULT.id}"> {RESULT.title}</label>
 		</div>
 		<!-- END: result1 -->
 		<div class="clearfix">

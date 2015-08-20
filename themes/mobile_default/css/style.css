@@ -1349,7 +1349,7 @@ input[type="radio"] {
     display:inline-block;
     line-height:0;
     height:16px;
-    margin:0 4px 0 0;
+    margin:3px 4px 0 0;
     outline:0;
     padding:0 !important;
     text-align:center;
