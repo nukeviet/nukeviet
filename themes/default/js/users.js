@@ -22,7 +22,9 @@ function safekeySend(a) {
 		dataType: "json",
 		success: function(e) {
             "error" == e.status ? ($(".safekeySend", a).prop("disabled", !1),$(".tooltip-current", a).removeClass("tooltip-current"), $("[name=" + e.input + "]",a).addClass("tooltip-current").attr("data-current-mess", $("[name=" + e.input + "]",a).attr("data-mess")), validErrorShow($("[name=" + e.input + "]",a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(),setTimeout(function() {
-				$(".nv-info", a).removeClass("error success").text($(".nv-info", a).attr("data-default"));
+				var d = $(".nv-info", a).attr("data-default");
+                if(!d) d = $(".nv-info-default", a).html();
+                $(".nv-info", a).removeClass("error success").html(d);
 				$(".safekeySend", a).prop("disabled", !1);
 			}, 6E3))
 		}
@@ -162,7 +164,10 @@ function formErrorHidden(a) {
 }
 
 function validReset(a) {
-	$(".nv-info", a).removeClass("error success").text($(".nv-info", a).attr("data-default"));
+    var d = $(".nv-info", a).attr("data-default");
+    if(!d) d = $(".nv-info-default", a).html();
+    
+	$(".nv-info", a).removeClass("error success").html(d);
 	formErrorHidden(a);
 	$("input,button,select,textarea", a).prop("disabled", !1);
 	$(a)[0].reset()

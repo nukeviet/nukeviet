@@ -36,7 +36,7 @@
     <em class="fa fa-exclamation-triangle ">&nbsp;</em> {USER.question_empty_note}
 </div>
 <!-- END: question_empty_note -->
-<div class="table-responsive">
+<div class="table-responsive margin-bottom-lg">
     <table class="table table-bordered table-striped">
         <tbody>
             <tr>
@@ -70,4 +70,8 @@
         </tbody>
     </table>
 </div>
+
+<ul class="nav navbar-nav">
+    <!-- BEGIN: navbar --><li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
+</ul>
 <!-- END: main -->

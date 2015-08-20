@@ -29,9 +29,7 @@
             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
             <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
        	</div>
-        <div class="text-center">
-            <a href="{USER_LOSTPASS}">{GLANG.lostpass}?</a>
-        </div>
+
         <!-- BEGIN: openid -->
        	<hr />
        	<div class="text-center">
