@@ -86,6 +86,15 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	// Kiểm tra module có trong hệ thống hay không
 	if( isset( $site_mods[$module_name] ) )
 	{
+		// SSL
+		if( $global_config['ssl_https'] === 3 and ! empty( $global_config['ssl_https_modules'] ) and in_array( $module_name, $global_config['ssl_https_modules'] ) and ( ! isset( $_SERVER['HTTPS'] ) or $_SERVER['HTTPS'] == 'off' ) )
+		{
+			header( "HTTP/1.1 301 Moved Permanently" );
+			header( "Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] );
+			exit();
+		}
+
+		// Global variable for module
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
@@ -144,7 +153,10 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				{
 					$drag_block = $nv_Request->get_int( 'drag_block', 'get', 0 );
 					$nv_Request->set_Session( 'drag_block', $drag_block );
-					Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+
+					$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
+					$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+					Header( 'Location: ' . nv_url_rewrite( $nv_redirect, true ) );
 					die();
 				}
 				if( $drag_block )

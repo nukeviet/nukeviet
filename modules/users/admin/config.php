@@ -72,7 +72,6 @@ else
 		$array_config['allowuserlogin'] = $nv_Request->get_int( 'allowuserlogin', 'post', 0 );
 		$array_config['allowuserloginmulti'] = $nv_Request->get_int( 'allowuserloginmulti', 'post', 0 );
 		$array_config['allowuserreg'] = $nv_Request->get_int( 'allowuserreg', 'post', 0 );
-		$array_config['openid_mode'] = $nv_Request->get_int( 'openid_mode', 'post', 0 );
 		$array_config['is_user_forum'] = $nv_Request->get_int( 'is_user_forum', 'post', 0 );
 		$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
 		$array_config['openid_servers'] = ! empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : '';
@@ -169,7 +168,6 @@ else
 	$array_config['allowloginchange'] = ! empty( $array_config['allowloginchange'] ) ? ' checked="checked"' : '';
 	$array_config['allowuserlogin'] = ! empty( $array_config['allowuserlogin'] ) ? ' checked="checked"' : '';
 	$array_config['allowuserloginmulti'] = ! empty( $array_config['allowuserloginmulti'] ) ? ' checked="checked"' : '';
-	$array_config['openid_mode'] = ! empty( $array_config['openid_mode'] ) ? ' checked="checked"' : '';
 	$array_config['is_user_forum'] = ! empty( $array_config['is_user_forum'] ) ? ' checked="checked"' : '';
 
 	$sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";

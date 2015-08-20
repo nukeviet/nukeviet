@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <button type="button" class="btn btn-primary active btn-xs text-black" title="{LANG.viewstats}" data-toggle="ftip" data-target=".view-stats" data-click="y"><em class="fa fa-eye"></em>&nbsp;{LANG.online}: {COUNT_ONLINE}</button>
 <div class="view-stats hidden">
-<ul class="list-none display-table">
+<ul class="counter list-none display-table">
 	<li><span><em class="fa fa-eye fa-lg fa-horizon"></em>{LANG.online}</span><span>{COUNT_ONLINE}</span></li>
 	<!-- BEGIN: users --><li><span><em class="fa fa-user fa-lg fa-horizon"></em>{LANG.users}</span><span>{COUNT_USERS}</span></li><!-- END: users -->
 	<!-- BEGIN: bots --><li><span><em class="fa fa-magic fa-lg fa-horizon"></em>{LANG.bots}</span><span>{COUNT_BOTS}</span></li><!-- END: bots -->

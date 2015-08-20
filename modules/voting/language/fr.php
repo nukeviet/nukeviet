@@ -31,6 +31,6 @@ $lang_module['timeoutmsg'] = 'Vous avez voté! Merci d\'attendre %s minutes pour
 $lang_module['errormsg'] = 'Vous devez choisir une réponse!';
 $lang_module['errorupdate'] = 'Erreur de mise à jour du compteur';
 $lang_module['goback'] = 'Retourner';
+$lang_module['voting_total'] = 'Totale';
 $lang_module['voting_counter'] = 'votes';
 $lang_module['voting_pubtime'] = 'depuis';
-$lang_module['voting_total'] = 'Totale';

@@ -874,7 +874,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$url = 'javascript: history.go(-1)';
 		$msg1 = implode( '<br />', $error );
 		$msg2 = $lang_module['content_back'];
-		redriect( $msg1, $msg2, $url );
+		redriect( $msg1, $msg2, $url, $module_data . '_bodyhtml', 'back' );
 	}
 	$id_block_content = $id_block_content_post;
 }

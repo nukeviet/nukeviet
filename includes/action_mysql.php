@@ -76,8 +76,7 @@ function nv_create_table_sys( $lang )
 		 template varchar(55) DEFAULT NULL,
 		 position varchar(55) DEFAULT NULL,
 		 exp_time int(11) DEFAULT '0',
-		 active tinyint(4) DEFAULT '0',
-		 hide_device tinyint(4) DEFAULT '0',
+		 active varchar(10) DEFAULT '1',
 		 groups_view varchar(255) DEFAULT '',
 		 all_func tinyint(4) NOT NULL DEFAULT '0',
 		 weight int(11) NOT NULL DEFAULT '0',
@@ -167,14 +166,14 @@ function nv_create_table_sys( $lang )
 	$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
 	 	('" . $lang . "', 'global', 'site_domain', ''),
 	 	('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 4.x'),
-	 	('" . $lang . "', 'global', 'site_logo', '" . NV_UPLOADS_DIR . "/logo.png'),
+	 	('" . $lang . "', 'global', 'site_logo', ''),
 	 	('" . $lang . "', 'global', 'site_description', 'Sharing success, connect passions'),
 	 	('" . $lang . "', 'global', 'site_keywords', ''),
         ('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
 	 	('" . $lang . "', 'global', 'mobile_theme', 'mobile_default'),
 	 	('" . $lang . "', 'global', 'site_home_module', 'users'),
 	 	('" . $lang . "', 'global', 'switch_mobi_des', '1'),
-		('" . $lang . "', 'global', 'upload_logo', '" . NV_UPLOADS_DIR . "/logo.png'),
+		('" . $lang . "', 'global', 'upload_logo', ''),
 		('" . $lang . "', 'global', 'autologosize1', '50'),
 		('" . $lang . "', 'global', 'autologosize2', '40'),
 		('" . $lang . "', 'global', 'autologosize3', '30'),
@@ -182,6 +181,7 @@ function nv_create_table_sys( $lang )
 		('" . $lang . "', 'global', 'name_show', '" . ( $lang!='vi' ? 1 : 0 ) . "'),
 		('" . $lang . "', 'global', 'cronjobs_next_time', '" . NV_CURRENTTIME . "'),
 		('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!'),
+		('" . $lang . "', 'global', 'ssl_https_modules', ''),
 		('" . $lang . "', 'seotools', 'prcservice', '')";
 
 	$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup) VALUES('" . $lang . "', 1)";

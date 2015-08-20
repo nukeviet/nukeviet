@@ -8,7 +8,7 @@
 
 function sendrating(id, point, newscheckss) {
 	if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
-		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
+		$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
 			$('#stringrating').html(res);
 		});
 	}
@@ -16,7 +16,7 @@ function sendrating(id, point, newscheckss) {
 
 function nv_del_content(id, checkss, base_adminurl, detail) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$.post(base_adminurl + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
+		$.post(base_adminurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del_content&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + checkss, function(res) {
 			var r_split = res.split('_');
 			if (r_split[0] == 'OK') {
 				if( detail ){
@@ -50,10 +50,15 @@ function get_alias() {
 	return false;
 }
 
-$(document).ready(function() {
-	$("[data-rel='tooltip'][data-content!=''][data-position!='']").removeAttr("title").tooltip({
-		placement: $(this).data('position'),
-		html: true,
-		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
+$(window).load(function(){
+	var newsW = $('#news-bodyhtml').innerWidth();
+	$.each($('#news-bodyhtml img'), function(){
+		var w = $(this).innerWidth();
+		var h = $(this).innerHeight();
+		
+		if( w > newsW ){
+			$(this).prop('width', newsW);
+			$(this).prop('height', h * newsW / w);
+		}
 	});
 });

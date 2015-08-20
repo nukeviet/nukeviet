@@ -8,7 +8,7 @@
             <div class="footer display-table">
                 <div>
                     <div>
-                        <span data-toggle="winHelp"><em class="fa fa-info-circle fa-lg pointer mbt"></em></span>
+                        <span data-toggle="winHelp"><em class="fa fa-ellipsis-v fa-lg pointer mbt"></em></span>
                     </div>
                     <div class="text-right">
                         <div class="fr">
@@ -31,16 +31,17 @@
         <div class="logo-small padding"></div>
         [MENU_FOOTER]
         [COMPANY_INFO]
-        <div class="padding">
-        [FOOTER_SITE]
+        <div class="padding margin-bottom-lg">
+            <!-- BEGIN: theme_type -->
+            <div class="theme-change margin-bottom-lg">
+                {LANG.theme_type_chose2}:
+                <!-- BEGIN: loop -->
+                <!-- BEGIN: other --><span><a href="{STHEME_TYPE}" title="{STHEME_INFO}">{STHEME_TITLE}</a></span><!-- END: other -->
+                <!-- END: loop -->
+            </div>
+            <!-- END: theme_type -->
+            [FOOTER_SITE]
         </div>
-        <!-- BEGIN: theme_type -->
-        <div class="theme-change margin-bottom-lg">
-            <!-- BEGIN: loop -->
-            <!-- BEGIN: other --><a href="{STHEME_TYPE}" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg mbt-circle"></em></a><!-- END: other --><!-- BEGIN: current --><span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span><!-- END: current -->
-            <!-- END: loop -->
-        </div>
-        <!-- END: theme_type -->
     </div>
 </div>
 <!-- Search form -->

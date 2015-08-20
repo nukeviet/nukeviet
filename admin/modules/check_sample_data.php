@@ -17,7 +17,7 @@ if( $nv_Request->isset_request( 'module', 'post' ) )
 
 	$contents = array(
 		'status' => 'error',
-		'module' => $module,
+		'module' => $module_name,
 		'message' => array( 0 => 'Module not exists' ),
 		'code' => 0
 	);

@@ -38,13 +38,6 @@ $(document).ready(function(){
 		window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cdn&cdndl=' + CFG.cdndl;
 	});
 	
-	$('#ssl_https').change(function() {
-		if ($(this).is(":checked")) {
-			var returnVal = confirm(LANG.note_ssl);
-			$(this).attr("checked", returnVal);
-		}
-	});
-	
 	// Smtp
 	$("input[name=mailer_mode]").click(function() {
 		var type = $(this).val();
@@ -63,7 +56,7 @@ $(document).ready(function(){
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "assets/images/calendar.gif",
+			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true
 		});
 	}
@@ -90,7 +83,7 @@ $(document).ready(function(){
 				data : '',
 				success : function(data) {
 					alert(LANG.banip_del_success);
-					window.location = script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security";
+					window.location = script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=security";
 				}
 			});
 		}
@@ -103,7 +96,7 @@ $(document).ready(function(){
 		var path = "";
 		var currentpath = "images";
 		var type = "image";
-		nv_open_browse(script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+		nv_open_browse(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
 	
@@ -138,5 +131,22 @@ $(document).ready(function(){
 				$('#autodetectftp').removeAttr('disabled');
 			}
 		});
+	});
+	
+	// 
+	$('#ssl_https').change(function(){
+		var val = $(this).data('val');
+		var mode = $(this).val();
+		
+		if( mode != 0 && val == 0 && ! confirm(LANG.note_ssl) ){
+			$(this).val('0');
+			return;
+		}
+		
+		if( mode == '3' ){
+			$('#ssl_https_modules').removeClass('hidden');
+		}else{
+			$('#ssl_https_modules').addClass('hidden');
+		}
 	});
 });

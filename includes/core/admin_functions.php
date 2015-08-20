@@ -208,7 +208,8 @@ function nv_save_file_config_global()
 	$content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
 	$content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . floatval( $upload_max_filesize ) . ");\n";
 
-	if( $config_variable['openid_mode'] )
+
+	if( ! empty( $config_variable['openid_servers'] ) )
 	{
 		$content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
 	}
@@ -230,11 +231,6 @@ function nv_save_file_config_global()
 	$config_variable['error_send_email'] = $config_variable['error_send_email'];
 
 	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'openid_servers', 'allow_request_mods', 'config_sso' );
-
-	if( empty( $config_variable['openid_servers'] ) )
-	{
-		$config_variable['openid_mode'] = 0;
-	}
 
 	if( $config_variable['is_user_forum'] )
 	{
@@ -378,7 +374,7 @@ function nv_geVersion( $updatetime = 3600 )
 
 		$args = array(
 			'headers' => array(
-				'Referer' => NUKEVIET_STORE_APIURL,
+				'Referer' => NV_SERVER_NAME,
 			),
 			'body' => array(
 				'lang' > NV_LANG_INTERFACE,
@@ -622,7 +618,7 @@ function nv_rewrite_change( $array_config_global )
 		$rewrite_rule .= "RewriteEngine On\n";
 		$rewrite_rule .= "#RewriteBase " . NV_BASE_SITEURL . "\n";
 
-		if( $array_config_global['ssl_https'] )
+		if( $array_config_global['ssl_https'] == 1 )
 		{
 			$rewrite_rule .= "RewriteCond %{SERVER_PORT} !^443$\n";
 			$rewrite_rule .= "RewriteRule (.*)  https://%{SERVER_NAME}%{REQUEST_URI} [L,R]\n";

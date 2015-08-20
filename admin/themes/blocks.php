@@ -63,6 +63,17 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 	$xtpl->assign( 'SELECTTHEMES', $selectthemes );
 
+	$new_drag_block = $nv_Request->get_int( 'drag_block', 'session', 0 ) ? 0 : 1;
+	$lang_drag_block = ( $new_drag_block ) ? $lang_global['drag_block'] : $lang_global['no_drag_block'];
+
+	$url_dblock = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;drag_block=' . $new_drag_block;
+	if( empty( $new_drag_block ) )
+	{
+		$url_dblock .= '&amp;nv_redirect=' . nv_base64_encode( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks&selectthemes=' . $selectthemes );
+	}
+	$xtpl->assign( 'URL_DBLOCK', $url_dblock );
+	$xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );
+
 	$result = $db->query( 'SELECT title, custom_title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC' );
 	while( list( $m_title, $m_custom_title ) = $result->fetch( 3 ) )
 	{
@@ -138,6 +149,17 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 
 	$xtpl->assign( 'BLOCKREDIRECT', nv_base64_encode( $client_info['selfurl'] ) );
 	$xtpl->assign( 'CHECKSS', md5( $selectthemes . $global_config['sitekey'] . session_id() ) );
+
+	$active_device = array( 1 );
+	for( $i = 1; $i <= 4; ++$i )
+	{
+		$xtpl->assign( 'ACTIVE_DEVICE', array(
+			'key' => $i,
+			'checked' => ( in_array( $i, $active_device ) ) ? ' checked="checked"' : '',
+			'title' => $lang_module['show_device_' . $i]
+		) );
+		$xtpl->parse( 'main.active_device' );
+	}
 
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );

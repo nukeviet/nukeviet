@@ -11,7 +11,6 @@
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
 $submenu['siteDiagnostic'] = $lang_module['siteDiagnostic'];
-$submenu['keywordRank'] = $lang_module['keywordRank'];
 $submenu['sitemapPing'] = $lang_module['sitemapPing'];
 $submenu['googleplus'] = $lang_module['googleplus'];
 $submenu['pagetitle'] = $lang_module['pagetitle'];

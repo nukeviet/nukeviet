@@ -31,6 +31,9 @@
     #footer .footer-copyright .theme-change {
         text-align:center;
     }
+    .column-margin-left{
+        margin-left:0 !important
+    }
 }
 @media (max-width:767px) {
     .body-bg,
@@ -55,8 +58,8 @@
     .contactList li {
         display:block;
     }
-    .contactList li .fa {
-        width:20px;
+    .contactList li .fa, .contactList li [class^="icon-"], .contactList li [class*=" icon-"] {
+        width:20px !important
     }
     .breadcrumbs{
         display:none
@@ -147,12 +150,6 @@
         display:none;
     }
 }
-@media (max-width:640px) {
-    body {
-        font-size:14px;
-        line-height:24px;
-    }
-}
 @media (max-width:499px) {
     .nv-infodie {
         width:100%;
@@ -165,9 +162,6 @@
     #header .logo img {
         max-height:40px;
         width:auto;
-    }
-    #header .logo h2 {
-        font-size:20px;
     }
     .visible-ss-block {
         display:block !important;

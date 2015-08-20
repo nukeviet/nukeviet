@@ -79,7 +79,7 @@ html, body {
 
 body, input, button, select {
 	font-family: 'Roboto', sans-serif;
-	font-size: 12px;
+	font-size: 13px;
 	font-weight: 400;
 	line-height: 18px;
 }
@@ -135,8 +135,11 @@ a.link:hover {
 	margin-bottom: 10px;
 }
 
+.pointer,.fa-pointer,.icon-pointer{
+    cursor: pointer;
+}
+
 .icon-pointer {
-	cursor: pointer;
 	margin-top: 10px;
 }
 
@@ -710,7 +713,7 @@ label {
  ========================================================================== */
 .ui-widget {
 	font-family: 'Roboto', sans-serif !important;
-	font-size: 12px !important;
+	font-size: 13px !important;
 	font-weight: 400 !important;
 	line-height: 18px !important;
 }
@@ -781,7 +784,7 @@ label {
 	color: #333 !important;
 	border: 1px solid #c6c6c6;
 	display: block;
-	font-size: 12px;
+	font-size: 13px;
 	font-weight: bold;
 	line-height: 26px;
 	margin-bottom: 1px;

@@ -1,5 +1,5 @@
-if ("undefined" == typeof nv_siteroot) var nv_siteroot = "/";
-if ("undefined" == typeof nv_sitelang) var nv_sitelang = "en";
+if ("undefined" == typeof nv_base_siteurl) var nv_base_siteurl = "/";
+if ("undefined" == typeof nv_lang_data) var nv_lang_data = "en";
 if ("undefined" == typeof nv_name_variable) var nv_name_variable = "nv";
 if ("undefined" == typeof nv_fc_variable) var nv_fc_variable = "op";
 if ("undefined" == typeof nv_lang_variable) var nv_lang_variable = "language";
@@ -13,6 +13,7 @@ if ("undefined" == typeof nv_my_abbr) var nv_my_abbr = "ICT";
 if ("undefined" == typeof nv_cookie_prefix) var nv_cookie_prefix = "nv4";
 if ("undefined" == typeof nv_check_pass_mstime) var nv_check_pass_mstime = 1738E3;
 if ("undefined" == typeof theme_responsive) var theme_responsive = 0;
+if ("undefined" == typeof nv_safemode) var nv_safemode = 0;
 
 var OP = (navigator.userAgent.indexOf('Opera') != -1 );
 var IE = (navigator.userAgent.indexOf('MSIE') != -1 && !OP );
@@ -80,7 +81,7 @@ function nv_setCookie(name, value, expiredays) {
 	var domainName = document.domain;
 	domainName = domainName.replace(/www\./g, '');
 	domainName = is_url.test(domainName) ? '.' + domainName : '';
-	document.cookie = name + "=" + escape(value) + ((expiredays) ? "; expires=" + expires : "") + ((domainName) ? "; domain=" + domainName : "") + "; path=" + nv_siteroot;
+	document.cookie = name + "=" + escape(value) + ((expiredays) ? "; expires=" + expires : "") + ((domainName) ? "; domain=" + domainName : "") + "; path=" + nv_base_siteurl;
 }
 
 function nv_getCookie(name) {
@@ -114,7 +115,7 @@ function nv_check_timezone() {
 	var giomuahe = new Date(Date.UTC(2005, 6, 30, 0, 0, 0, 0));
 	var giomuadong = new Date(Date.UTC(2005, 12, 30, 0, 0, 0, 0));
 	var new_value = -giomuahe.getTimezoneOffset() + '.' + -giomuadong.getTimezoneOffset() + '.' + -giohientai.getTimezoneOffset();
-	new_value += '|' + nv_siteroot;
+	new_value += '|' + nv_base_siteurl;
 	new_value += '|' + domainName;
 
 	if (rawurldecode(cookie_timezone) != new_value) {

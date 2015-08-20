@@ -97,9 +97,11 @@
 				<tr>
 					<td class="text-center">{ROW.stt}</td>
 					<td class="text-right">{ROW.lang_key}</td>
-					<td class="text-left"><input type="text" value="{ROW.datalang}" name="pozlang[{ROW.id}]" size="90" class="form-control" />
-					<br />
-					{ROW.sourcelang} </td>
+					<td class="text-left">
+						<textarea rows="1" name="pozlang[{ROW.id}]" class="form-control">{ROW.datalang}</textarea>
+						<br />
+						{ROW.sourcelang}
+					</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>

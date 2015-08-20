@@ -11,8 +11,6 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <ul class="nav nav-tabs m-bottom">
 	<li><a href="{URL_MODULE}">{LANG.user_info}</a></li>
-	<li><a href="{URL_HREF}changepass">{LANG.changepass_title}</a></li>
-	<li><a href="{URL_HREF}changequestion">{LANG.question2}</a></li>
 	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
 	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
 	<li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li>
@@ -193,7 +191,7 @@ $(document).ready(function() {
 		$("#birthday").datepicker('show');
 	});
 	$("#btn_upload").click(function() {
-		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+		nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$('#current-photo-btn').click(function(){

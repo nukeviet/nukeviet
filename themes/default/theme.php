@@ -45,12 +45,6 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'NV_CURRENTTIME', nv_date( $global_config['date_pattern'] . ', ' . $global_config['time_pattern'], NV_CURRENTTIME ) );
 	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
 
-	$xtpl->assign( 'LANG_TIMEOUTSESS_NOUSER', $lang_global['timeoutsess_nouser'] );
-	$xtpl->assign( 'LANG_TIMEOUTSESS_CLICK', $lang_global['timeoutsess_click'] );
-	$xtpl->assign( 'LANG_TIMEOUTSESS_SEC', $lang_global['sec'] );
-	$xtpl->assign( 'LANG_TIMEOUTSESS_TIMEOUT', $lang_global['timeoutsess_timeout'] );
-	$xtpl->assign( 'MSGBEFOREUNLOAD', $lang_global['msgbeforeunload'] );
-
 	// System variables
     $xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title( false ) );
 
@@ -71,7 +65,7 @@ function nv_site_theme( $contents, $full = true )
     }
 
     //Links
-    $html_links = nv_html_links( false );
+    $html_links = array();
     $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/default/css/font-awesome.min.css' );
     if ( $global_config['current_theme_type'] == 'r' )
     {
@@ -89,6 +83,7 @@ function nv_site_theme( $contents, $full = true )
     {
         $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/admin.css' );
     }
+    $html_links = array_merge_recursive( $html_links, nv_html_links( false ) );
 
     // Customs Style
     if ( isset( $module_config['themes'][$global_config['module_theme']] ) and ! empty( $module_config['themes'][$global_config['module_theme']] ) )
@@ -198,24 +193,27 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->assign( 'THEME_SEARCH_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=seek&q=' );
 
 		// Breadcrumbs
-        $array_mod_title_copy = $array_mod_title;
-        if ( $global_config['rewrite_op_mod'] != $module_name )
+        if( ! $home )
         {
-            $arr_cat_title_i = array(
-                'catid' => 0,
-                'title' => $module_info['custom_title'],
-                'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
-            array_unshift( $array_mod_title_copy, $arr_cat_title_i );
-        }
-        if ( ! empty( $array_mod_title_copy ) )
-        {
-            foreach ( $array_mod_title_copy as $arr_cat_title_i )
+            $array_mod_title_copy = $array_mod_title;
+            if ( $global_config['rewrite_op_mod'] != $module_name )
             {
-                $xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
-                $xtpl->parse( 'main.breadcrumbs.loop' );
+                $arr_cat_title_i = array(
+                    'catid' => 0,
+                    'title' => $module_info['custom_title'],
+                    'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name );
+                array_unshift( $array_mod_title_copy, $arr_cat_title_i );
             }
+            if ( ! empty( $array_mod_title_copy ) )
+            {
+                foreach ( $array_mod_title_copy as $arr_cat_title_i )
+                {
+                    $xtpl->assign( 'BREADCRUMBS', $arr_cat_title_i );
+                    $xtpl->parse( 'main.breadcrumbs.loop' );
+                }
+            }
+            $xtpl->parse( 'main.breadcrumbs' );
         }
-        $xtpl->parse( 'main.breadcrumbs' );
 
 		// Statistics image
 		$theme_stat_img = '';
@@ -263,11 +261,6 @@ function nv_site_theme( $contents, $full = true )
         {
             $xtpl->parse( 'main.currenttime' );
         }
-
-        if( defined( 'NV_IS_ADMIN' ) )
-		{
-            $xtpl->assign( 'ADMINTOOLBAR', nv_admin_menu() );
-		}
 	}
 
     $xtpl->parse( 'main' );
@@ -282,6 +275,11 @@ function nv_site_theme( $contents, $full = true )
 
     if ( ! empty( $my_head ) ) $sitecontent = preg_replace( '/(<\/head>)/i', $my_head . '\\1', $sitecontent, 1 );
     if ( ! empty( $my_footer ) ) $sitecontent = preg_replace( '/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1 );
+
+    if( defined ('NV_IS_ADMIN' ) && $full )
+    {
+        $sitecontent = preg_replace( '/(<\/body>)/i', PHP_EOL . nv_admin_menu() . PHP_EOL . '\\1', $sitecontent, 1 );
+    }
 
 	return $sitecontent;
 }
