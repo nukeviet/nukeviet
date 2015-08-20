@@ -10,16 +10,19 @@
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-if( ! defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
+if( ! defined( "NV_IS_ADMIN" ) )
 {
-	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
-	die();
-}
+	if( ! defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
+	{
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+		die();
+	}
 
-if( (int)$user_info['safemode'] != 0 )
-{
-	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true ) );
-	die();
+	if( ( int )$user_info['safemode'] > 0 )
+	{
+		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true ) );
+		die();
+	}
 }
 
 function updateAvatar( $file )
