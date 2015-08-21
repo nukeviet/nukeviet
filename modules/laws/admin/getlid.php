@@ -24,6 +24,7 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'MODULE_FILE', $module_file );
 $xtpl->assign( 'AREA', $area );
+$xtpl->assign( 'NV_ASSETS_DIR', NV_ASSETS_DIR );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&area=" . $area );
 
 $array = array();
@@ -91,7 +92,7 @@ if ( $nv_Request->isset_request( 'submit', 'get' ) )
     {
         $array['eto1'] = "";
     }
-	
+
     $sql = "FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id!=0";
 
     $is_null = true;
@@ -189,7 +190,7 @@ if ( $nv_Request->isset_request( 'submit', 'get' ) )
 
         while ( $row = $query2->fetch() )
         {
-            $array_user[$row['id']] = array( 
+            $array_user[$row['id']] = array(
 				"id" => $row['id'], //
                 "title" => $row['title'], //
                 "code" => $row['code'], //
