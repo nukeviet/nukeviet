@@ -322,11 +322,10 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	elseif( isset( $sys_mods[$module_name] ) )
 	{
 		$groups_view = ( string )$sys_mods[$module_name]['groups_view'];
-		if( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
+		if( ! defined( 'NV_IS_USER' ) and $groups_view == '4' )
 		{
-			// Login users
-			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-			die();
+			$redirect =  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] );
+			nv_info_die( $lang_global['site_info'], $lang_global['site_info'], "<br />" . $lang_global['logininfo']. " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />" );
 		}
 		elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
 		{
