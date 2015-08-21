@@ -176,6 +176,11 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			'input' => 'answer',
 			'mess' => $lang_module['edit_error_answer'] ) ) );
 	}
+    
+    if( empty( $_user['first_name'] ) )
+	{
+		$_user['first_name'] = $_user['username'];
+	}
 
 	$query_field = array( 'userid' => 0 );
 	if( ! empty( $array_field_config ) )
