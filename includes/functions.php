@@ -1649,31 +1649,7 @@ function nv_site_mods( $module_name = '' )
 	{
 		foreach( $site_mods as $m_title => $row )
 		{
-			$allowed = true;
-			$groups_view = ( string )$row['groups_view'];
-
-			if( defined( 'NV_IS_SPADMIN' ) )
-			{
-				$site_mods[$m_title]['is_modadmin'] = true;
-			}
-			elseif( defined( 'NV_IS_ADMIN' ) and ! empty( $row['admins'] ) and ! empty( $admin_info['admin_id'] ) and in_array( $admin_info['admin_id'], explode( ',', $row['admins'] ) ) )
-			{
-				$site_mods[$m_title]['is_modadmin'] = true;
-			}
-			elseif( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
-			{
-				$allowed = false;
-			}
-			elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
-			{
-				$allowed = false;
-			}
-			elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
-			{
-				$allowed = false;
-			}
-
-			if( ! $allowed )
+			if( ! nv_user_in_groups( $row['groups_view'] ) )
 			{
 				unset( $site_mods[$m_title] );
 			}
