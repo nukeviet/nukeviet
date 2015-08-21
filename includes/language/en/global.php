@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -43,17 +43,27 @@ $lang_global['firewallincorrect'] = 'Firewall system is blocked to access your A
 $lang_global['username_empty'] = 'Username has not been declared';
 $lang_global['usernamelong'] = 'Username too length. Limit %1$d characters';
 $lang_global['usernameadjective'] = 'Username too short. Minimum %1$d characters';
+$lang_global['unick_type_1'] = 'Account used only numbers';
+$lang_global['unick_type_2'] = 'Account used only numbers and letters';
+$lang_global['unick_type_3'] = 'Account used only numbers, letters and following characters between: dash, underline, space';
+$lang_global['unick_type_4'] = 'Account used only Unicode, no special characters';
 $lang_global['password_empty'] = 'Password has not been declared';
 $lang_global['passwordlong'] = 'Password too length. limit %1$d characters';
 $lang_global['passwordadjective'] = 'Password too short. Minimum %1$d characters';
 $lang_global['passwordsincorrect'] = 'The two entered passwords are not identical. Please declare again';
 $lang_global['re_password_empty'] = 'You do not write your password into the second password box';
+$lang_global['upass_type_1'] = 'Password should combin number and letter';
+$lang_global['upass_type_2'] = 'Password should combin number and letter, have special characters';
+$lang_global['upass_type_3'] = 'Password should combin number and letter, have uppercase letter';
+$lang_global['upass_type_4'] = 'Password should combin number and letter, have uppercase letter and special characters';
+$lang_global['upass_type_simple'] = 'Password is using easily guessed password, enter the password more complex';
 $lang_global['securitycodeincorrect'] = 'Security Code is invalid';
 $lang_global['loginincorrect'] = 'The system can not find information correctly with your declaration. Username or password do not match';
 $lang_global['admin_loginsuccessfully'] = 'You have successfully logged. The system will transfer you to the site administration area';
 $lang_global['incorrect_password'] = 'Password is incorrect';
 $lang_global['relogin_info'] = 'You were not online for a long time. Please declare your password again. Please enter your password in the box below. You only enter password maximum %1$d times. If the %1$d times that you did not verify the password, the system will forfeit the right to access your Administration';
 $lang_global['relogin_error_info'] = '%1$s. Please enter your password in the box below. You only enter password maximum %2$d times. You only enter password maximum %2$d times. If the %1$d times that you did not verify the password, the system will forfeit the right to access your Administration';
+$lang_global['memory_time_usage'] = 'Memory: %1$s. Processing time: %2$s seconds';
 $lang_global['for_admin'] = 'For Admin';
 $lang_global['admin_account'] = 'Admin Account';
 $lang_global['admin_view'] = 'Your admin account';
@@ -61,6 +71,7 @@ $lang_global['admin_page'] = 'Administration';
 $lang_global['admin_module_sector'] = 'Module Management';
 $lang_global['adminlogin'] = 'Login to Administration';
 $lang_global['module_for_admin'] = 'We are Sorry but this section of our site is for <em>Administrators Only.</em>';
+$lang_global['in_groups'] = 'Members Groups';
 $lang_global['username'] = 'Username';
 $lang_global['password'] = 'Password';
 $lang_global['password2'] = 'Repeat password';
@@ -70,7 +81,7 @@ $lang_global['loginsubmit'] = 'Login';
 $lang_global['register'] = 'Register';
 $lang_global['lostpass'] = 'Forgot password';
 $lang_global['logininfo'] = 'All tools on this site will be available when you\'re logged in';
-$lang_global['adminlogininfo']  = 'Please use a valid username and password to login to the Control Panel';
+$lang_global['adminlogininfo'] = 'Please use a valid username and password to login to the Control Panel';
 $lang_global['site_rss'] = 'RSS - NEWS';
 $lang_global['copyright'] = '&copy; Copyright %s. All right reserved';
 $lang_global['phonenumber'] = 'Phone';
@@ -177,6 +188,7 @@ $lang_global['unlimited'] = 'unlimited';
 $lang_global['status'] = 'Status';
 $lang_global['actions'] = 'Action';
 $lang_global['never'] = 'Never';
+$lang_global['page'] = 'Page';
 $lang_global['pageprev'] = 'Previous page';
 $lang_global['pagenext'] = 'Next page';
 $lang_global['langinterface'] = 'Language';
@@ -243,8 +255,6 @@ $lang_global['error_upload_forbidden'] = 'Error: The folder containing the file 
 $lang_global['error_upload_writable'] = 'Directory %s is not writable';
 $lang_global['error_upload_urlfile'] = 'The URL is not valid and cannot be loaded';
 $lang_global['error_upload_url_notfound'] = 'The url was not found';
-$lang_global['in_groups'] = 'Members Groups';
-$lang_global['page'] = 'Page';
 $lang_global['theme_type_r'] = 'Responsive';
 $lang_global['theme_type_d'] = 'Desktop';
 $lang_global['theme_type_m'] = 'Mobile';
@@ -259,17 +269,6 @@ $lang_global['ftp_err_rawlist'] = 'Error: Unable to determine the directory list
 $lang_global['ftp_err_list_detail'] = 'Error: Unrecognized parameter files, folders';
 $lang_global['ftp_err_fget'] = 'Error: Can not read the text file';
 $lang_global['ftp_err_NVbuffet'] = 'Error: Missing class NVbuffer';
-$lang_global['unick_type_1'] = 'Account used only numbers';
-$lang_global['unick_type_2'] = 'Account used only numbers and letters';
-$lang_global['unick_type_3'] = 'Account used only numbers, letters and following characters between: dash, underline, space';
-$lang_global['unick_type_4'] = 'Account used only Unicode, no special characters';
-$lang_global['upass_type_1'] = 'Password should combin number and letter';
-$lang_global['upass_type_2'] = 'Password should combin number and letter, have special characters';
-$lang_global['upass_type_3'] = 'Password should combin number and letter, have uppercase letter';
-$lang_global['upass_type_4'] = 'Password should combin number and letter, have uppercase letter and special characters';
-$lang_global['upass_type_simple'] = 'Password is using easily guessed password, enter the password more complex';
-$lang_global['memory_time_usage'] = 'Memory: %1$s. Processing time: %2$s seconds';
-
 $lang_global['groups_view'] = 'Group viewed';
 $lang_global['level1'] = 'Super administrator';
 $lang_global['level2'] = 'General administrator';
@@ -277,7 +276,6 @@ $lang_global['level3'] = 'Module administrator';
 $lang_global['level4'] = 'Member';
 $lang_global['level5'] = 'Guest';
 $lang_global['level6'] = 'All';
-
 $lang_global['msgbeforeunload'] = 'Are you sure you go to other sites, if done the data will not be stored';
 $lang_global['timeoutsess_nouser'] = 'You did not use the site';
 $lang_global['timeoutsess_click'] = 'Click here to remain logged';
@@ -285,7 +283,6 @@ $lang_global['timeoutsess_timeout'] = 'Timeout';
 $lang_global['unknown'] = 'Unknown';
 $lang_global['joinnow'] = 'Join Now';
 $lang_global['contactUs'] = 'Contact Us';
-
 $lang_global['company_name'] = 'Company name';
 $lang_global['company_sortname'] = 'Sort name';
 $lang_global['company_regcode'] = 'Business registration number';
@@ -307,3 +304,4 @@ $lang_global['design_by'] = 'Design by';
 $lang_global['design_url'] = 'Design by URL';
 $lang_global['signin'] = 'Sign In';
 $lang_global['feedback'] = 'Feedback';
+$lang_global['required'] = 'Note: You need to declare all the boxes marked with an asterisk (*).';
