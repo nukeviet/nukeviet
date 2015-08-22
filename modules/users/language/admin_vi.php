@@ -415,3 +415,5 @@ $lang_module['user_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩ
 $lang_module['safe_mode'] = 'Chế độ an toàn';
 $lang_module['safe_active_info'] = 'Tài khoản của bạn đang ở chế độ an toàn nên tất cả các tính năng chỉnh sửa thông tin tài khoản đã bị khóa.';
 $lang_module['safe_deactivate'] = 'Tắt chế độ an toàn';
+$lang_module['group_description'] = 'Mô tả';
+$lang_module['group_description_empty'] = 'Hãy mô tả ngắn gọn về nhóm';

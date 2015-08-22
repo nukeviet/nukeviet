@@ -62,12 +62,12 @@
     				</li>
     				<!-- BEGIN: allowopenid -->
     				<li>
-    					<a href="{URL_HREF}openid">{LANG.openid_administrator}</a>
+    					<a href="{URL_HREF}editinfo/openid">{LANG.openid_administrator}</a>
     				</li>
     				<!-- END: allowopenid -->
     				<!-- BEGIN: regroups -->
     				<li>
-    					<a href="{URL_HREF}regroups">{LANG.in_group}</a>
+    					<a href="{URL_HREF}editinfo/group">{LANG.in_group}</a>
     				</li>
     				<!-- END: regroups -->
     			</ul>

@@ -12,8 +12,8 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $module_version = array(
 	'name' => 'Users',
-	'modfuncs' => 'main,login,logout,register,lostpass,active,editinfo,avatar,lostactivelink,openid,regroups,thu,memberlist',
-	'submenu' => 'main,login,logout,register,lostpass,active,editinfo,openid,lostactivelink,regroups,memberlist',
+	'modfuncs' => 'main,login,logout,register,lostpass,active,editinfo,avatar,lostactivelink,thu,memberlist',
+	'submenu' => 'main,login,logout,register,lostpass,active,editinfo,lostactivelink,memberlist',
 	'is_sysmod' => 1,
 	'virtual' => 0,
 	'version' => '4.0.21',

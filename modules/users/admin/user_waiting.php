@@ -51,7 +51,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 		'', '', 0, " . $row['regdate'] . ",
 		:question,
 		:answer,
-		'', 0, 0, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
+		'', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
 	$data_insert = array();
 	$data_insert['username'] = $row['username'];
@@ -65,6 +65,17 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	$userid = $db->insert_id( $sql, 'userid', $data_insert );
 	if( $userid )
 	{
+		// Luu vao bang OpenID
+		if( ! empty( $row['openid_info'] ) )
+		{
+			$reg_attribs = unserialize( nv_base64_decode( $row['openid_info'] ) );
+			$stmt = $db->prepare( 'INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $userid . ', :server, :opid , :email)' );
+			$stmt->bindParam( ':server', $reg_attribs['server'], PDO::PARAM_STR );
+			$stmt->bindParam( ':opid', $reg_attribs['opid'], PDO::PARAM_STR );
+			$stmt->bindParam( ':email', $reg_attribs['email'], PDO::PARAM_STR );
+			$stmt->execute();
+		}
+
 		$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 		$users_info = unserialize( nv_base64_decode( $row['users_info'] ) );
 		$query_field = array();
@@ -102,38 +113,36 @@ $methods = array(
 		'key' => 'userid',
 		'sql' => 'userid',
 		'value' => $lang_module['search_id'],
-		'selected' => ''
-	),
+		'selected' => '' ),
 	'username' => array(
 		'key' => 'username',
 		'sql' => 'username',
 		'value' => $lang_module['search_account'],
-		'selected' => ''
-	),
+		'selected' => '' ),
 	'fullname' => array(
 		'key' => 'fullname',
 		'sql' => $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)",
 		'value' => $lang_module['search_name'],
-		'selected' => ''
-	),
+		'selected' => '' ),
 	'email' => array(
 		'key' => 'email',
 		'sql' => 'email',
 		'value' => $lang_module['search_mail'],
-		'selected' => ''
-	)
-);
+		'selected' => '' ) );
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
 $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ( $nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '' );
 
-$orders = array( 'userid', 'username', 'first_name', 'email', 'regdate' );
+$orders = array(
+	'userid',
+	'username',
+	'first_name',
+	'email',
+	'regdate' );
 $orderby = $nv_Request->get_string( 'sortby', 'get', '' );
 $ordertype = $nv_Request->get_string( 'sorttype', 'get', '' );
 if( $ordertype != 'ASC' ) $ordertype = 'DESC';
 
-$db->sqlreset()
-	->select( 'COUNT(*)' )
-	->from( NV_USERS_GLOBALTABLE . '_reg' );
+$db->sqlreset()->select( 'COUNT(*)' )->from( NV_USERS_GLOBALTABLE . '_reg' );
 
 if( ! empty( $method ) and isset( $methods[$method] ) and ! empty( $methodvalue ) )
 {
@@ -149,9 +158,7 @@ $per_page = 30;
 
 $num_items = $db->query( $db->sql() )->fetchColumn();
 
-$db->select( '*' )
-	->limit( $per_page )
-	->offset( ( $page - 1 ) * $per_page );
+$db->select( '*' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 
 if( ! empty( $orderby ) and in_array( $orderby, $orders ) )
 {
@@ -169,8 +176,7 @@ while( $row = $result->fetch() )
 		'username' => $row['username'],
 		'first_name' => $row['first_name'],
 		'email' => $row['email'],
-		'regdate' => date( 'd/m/Y H:i', $row['regdate'] )
-	);
+		'regdate' => date( 'd/m/Y H:i', $row['regdate'] ) );
 }
 
 $generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );

@@ -181,7 +181,6 @@ $lang_module['lostpass_question'] = 'Question';
 $lang_module['step1'] = 'Step 1';
 $lang_module['step2'] = 'Step 2';
 $lang_module['lostactivelink_question_empty'] = 'You doesn\'t specific secret question or answer. We can\'t provide new activate link for you. Please contact site admin for more information';
-$lang_module['openid_lostactivelink_info'] = 'You account register through OpenID. We can\'t provide new activate link for you. Please contact site admin for more information';
 $lang_module['lostactivelink_no_info1'] = 'Empty user name or email';
 $lang_module['lostactivelink_no_info2'] = 'Can\'t find account match your provided information';
 $lang_module['lostactivelink_send'] = 'Activate link sent to email %s';

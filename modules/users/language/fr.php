@@ -181,7 +181,6 @@ $lang_module['lostpass_question'] = 'Répondez au question';
 $lang_module['step1'] = 'Étape 1';
 $lang_module['step2'] = 'Étape 2';
 $lang_module['lostactivelink_question_empty'] = 'La question secrète ou la réponse n\'a pas été fourni lors de l\'inscription. Donc, il nous est impossible de vous donner un nouveau lien d\'activation. Merci de contacter l\'administrateur';
-$lang_module['openid_lostactivelink_info'] = 'Vous avez inscrit par OpenID. Donc, il nous est impossible de vous donner un nouveau lien d\'activation. Merci de contacter l\'administrateur';
 $lang_module['lostactivelink_no_info1'] = 'Erreur: manque d\'identifiant ou de mail';
 $lang_module['lostactivelink_no_info2'] = 'Impossible de trouver le compte correspondant à votre demande';
 $lang_module['lostactivelink_send'] = 'Lien d\'activation du compte est envoyé à votre mail %s,  si vous ne le trouvez pas dans la boite de mail arrivé, le cherchez dans le dossier Spam';
