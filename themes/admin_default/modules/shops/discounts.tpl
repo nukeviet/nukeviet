@@ -13,6 +13,13 @@
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
+			<!-- BEGIN: generate_page -->
+			<tfoot>
+				<tr>
+					<td colspan="6" class="text-center">{NV_GENERATE_PAGE}</td>
+				</tr>
+			</tfoot>
+			<!-- END: generate_page -->
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
