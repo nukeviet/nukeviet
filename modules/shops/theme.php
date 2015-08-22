@@ -1315,7 +1315,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 		$xtpl->assign( 'SRC_PRO_FULL', $global_config['site_url'] . $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO', $data_content['homeimgthumb'] );
 		$xtpl->assign( 'SRC_PRO_LAGE', $data_content['homeimgfile'] );
-		if( file_exists( NV_ROOTDIR . $data_content['homeimgfile'] ) )
+		if( !empty( $data_content['homeimgfile'] ) and file_exists( NV_ROOTDIR . $data_content['homeimgfile'] ) )
 		{
 			$xtpl->assign( 'SRC_PRO_LAGE_INFO', nv_is_image( NV_ROOTDIR . $data_content['homeimgfile'] ) );
 		}
@@ -3109,7 +3109,7 @@ function nv_display_othersimage( $otherimage )
 			{
 				$otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $otherimage_i;
 				$xtpl->assign( 'IMG_SRC_OTHER', $otherimage_i );
-				if( file_exists( NV_ROOTDIR . $otherimage_i ) )
+				if( !empty( $otherimage_i ) and file_exists( NV_ROOTDIR . $otherimage_i ) )
 				{
 					$xtpl->assign( 'IMG_SRC_OTHER_INFO', nv_is_image( NV_ROOTDIR . $otherimage_i ) );
 				}
