@@ -125,6 +125,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_reg (
 	answer varchar(255) NOT NULL DEFAULT '',
 	checknum varchar(50) NOT NULL DEFAULT '',
 	users_info text,
+    openid_info text,
 	PRIMARY KEY (userid),
 	UNIQUE KEY login (username),
 	UNIQUE KEY md5username (md5username),
@@ -196,6 +197,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 	group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	title varchar(255) NOT NULL,
+    description text,
 	content text,
 	add_time int(11) NOT NULL,
 	exp_time int(11) NOT NULL,

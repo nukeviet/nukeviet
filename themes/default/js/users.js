@@ -6,6 +6,11 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+function addpass()
+{
+    $("a[href*=edit_password]").click();
+    return!1
+}
 function safe_deactivate_show(a, b) {
 	$(b).hide(0);
 	$(a).fadeIn();
@@ -179,7 +184,7 @@ function login_validForm(a) {
 		b = [];
 	$(a).find(".required").each(function() {
 		"password" == $(a).prop("type") && $(this).val(trim(strip_tags($(this).val())));
-		if (!nv_validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+		if (!validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
 	});
 	c || (b.type = $(a).prop("method"), b.url = $(a).prop("action"), b.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
 		type: b.type,

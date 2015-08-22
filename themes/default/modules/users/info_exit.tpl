@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="page">
-    <div class="alert alert-info text-center">
+    <div class="alert <!-- BEGIN: info -->alert-info<!-- END: info --><!-- BEGIN: danger -->alert-danger<!-- END: danger --> text-center">
     	{INFO}
     </div>
 </div>

@@ -1983,3 +1983,17 @@ button.close {
     background-repeat: no-repeat;
     padding-right: 26px;
 }
+
+/*alert*/
+.nv-alert {
+    position:fixed !important;
+    top:25% !important;
+    right:0;
+    left:0;
+    width:350px !important;
+    margin:auto;
+    z-index:99999999999999 !important;
+    text-align:center !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important
+}

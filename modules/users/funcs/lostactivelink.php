@@ -86,11 +86,7 @@ if( $checkss == $data['checkss'] )
 					$question = $row['question'];
 
 					$info = '';
-					if( ! empty( $row['opid'] ) and empty( $row['password'] ) )
-					{
-						$info = $lang_module['openid_lostactivelink_info'];
-					}
-					elseif( empty( $row['question'] ) or empty( $row['answer'] ) )
+					if( empty( $row['question'] ) or empty( $row['answer'] ) )
 					{
 						$info = $lang_module['lostactivelink_question_empty'];
 					}
