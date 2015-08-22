@@ -127,10 +127,11 @@ function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 function nv_comment_module( $module, $checkss, $area, $id, $allowed, $page, $status_comment = '' )
 {
 	global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info, $per_page_comment;
+
 	// Kiểm tra module có được Sử dụng chức năng bình luận
 	if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 	{
-		if( $id > 0 and $module_config[$module]['activecomm'] == 1 )
+		if( $id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX ) )
 		{
 			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment;
 
@@ -259,13 +260,13 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 
 		$xtpl->parse( 'main.sortcomm' );
 	}
-    
+
     if( !empty( $comment ) )
     {
         $xtpl->assign( 'COMMENTCONTENT', $comment );
         $xtpl->parse( 'main.showContent' );
     }
-	
+
 	$allowed_comm = nv_user_in_groups( $allowed_comm );
 	if( $allowed_comm )
 	{
