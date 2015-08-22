@@ -10,17 +10,17 @@
 
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-if( ! nv_function_exists( 'nv_global_product_center' ) )
+if( ! nv_function_exists( 'nv_global_bxproduct_center' ) )
 {
 	/**
-	 * nv_block_config_product_center_blocks()
+	 * nv_block_config_bxproduct_center_blocks()
 	 *
 	 * @param mixed $module
 	 * @param mixed $data_block
 	 * @param mixed $lang_block
 	 * @return
 	 */
-	function nv_block_config_product_center_blocks( $module, $data_block, $lang_block )
+	function nv_block_config_bxproduct_center_blocks( $module, $data_block, $lang_block )
 	{
 		global $db_config, $site_mods;
 
@@ -50,17 +50,62 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_numrow\" size=\"5\" value=\"" . $data_block['numrow'] . "\"/></td>";
 		$html .= "</tr>";
 
+		$html .= "<tr>";
+		$html .= "  <td>" . $lang_block['auto'] . "</td>";
+		$auto = ($data_block['auto']==1)? 'checked="checked"': '';
+		$html .= "  <td><input type=\"checkbox\" name=\"config_auto\" value=\"1\" ".$auto." \></td>";
+		$html .= "</tr>";
+
+		$html .= "<tr>";
+		$html .= "<td>". $lang_block['mode'] ."</td>";
+		$html .= "<td>";
+		$sorting_array1 = array( 'horizontal' => 'Ngang', 'vertical' => 'Dọc');
+		$html .= '<select name="config_mode">';
+		foreach( $sorting_array1 as $key1 => $value1 )
+		{
+			$html .= '<option value="' . $key1 . '" ' . ( $data_block['mode'] == $key1 ? 'selected="selected"' : '') . '>' . $value1 . '</option>';
+		}
+		$html .= '</select>';
+		$html .= "</td";
+		$html .= "	</tr>";
+
+		$html .= "<tr>";
+		$html .= "	<td>" . $lang_block['speed'] . "</td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_speed\" size=\"5\" value=\"" . $data_block['speed'] . "\"/></td>";
+		$html .= "</tr>";
+
+		$html .= "<tr>";
+		$html .= "	<td>" . $lang_block['width'] . "</td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_width\" size=\"5\" value=\"" . $data_block['width'] . "\"/></td>";
+		$html .= "</tr>";
+
+		$html .= "<tr>";
+		$html .= "	<td>" . $lang_block['margin'] . "</td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_margin\" size=\"5\" value=\"" . $data_block['margin'] . "\"/></td>";
+		$html .= "</tr>";
+
+		$html .= "<tr>";
+		$html .= "	<td>" . $lang_block['move'] . "</td>";
+		$html .= "	<td><input class=\"form-control w100\" type=\"text\" name=\"config_move\" size=\"5\" value=\"" . $data_block['move'] . "\"/></td>";
+		$html .= "</tr>";
+
+		$html .= "<tr>";
+		$html .= "  <td>" . $lang_block['pager'] . "</td>";
+		$pager = ($data_block['pager']==1)? 'checked="checked"': '';
+		$html .= "  <td><input type=\"checkbox\" name=\"config_pager\" value=\"1\" ".$pager." \></td>";
+		$html .= "</tr>";
+
 		return $html;
 	}
 
 	/**
-	 * nv_block_config_product_center_blocks_submit()
+	 * nv_block_config_bxproduct_center_blocks_submit()
 	 *
 	 * @param mixed $module
 	 * @param mixed $lang_block
 	 * @return
 	 */
-	function nv_block_config_product_center_blocks_submit( $module, $lang_block )
+	function nv_block_config_bxproduct_center_blocks_submit( $module, $lang_block )
 	{
 		global $nv_Request;
 		$return = array();
@@ -69,6 +114,13 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$return['config']['blockid'] = $nv_Request->get_int( 'config_blockid', 'post', 0 );
 		$return['config']['numrow'] = $nv_Request->get_int( 'config_numrow', 'post', 0 );
 		$return['config']['numget'] = $nv_Request->get_int( 'config_numget', 'post', 0 );
+		$return['config']['auto'] = $nv_Request->get_int( 'config_auto', 'post', 0 );
+		$return['config']['mode'] = $nv_Request->get_string( 'config_mode', 'post', 0 );
+		$return['config']['speed'] = $nv_Request->get_int( 'config_speed', 'post', 0 );
+		$return['config']['width'] = $nv_Request->get_int( 'config_width', 'post', 0 );
+		$return['config']['margin'] = $nv_Request->get_int( 'config_margin', 'post', 0 );
+		$return['config']['move'] = $nv_Request->get_int( 'config_move', 'post', 0 );
+		$return['config']['pager'] = $nv_Request->get_int( 'config_pager', 'post', 0 );
 		return $return;
 	}
 
@@ -92,12 +144,12 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 	}
 
 	/**
-	 * nv_global_product_center()
+	 * nv_global_bxproduct_center()
 	 *
 	 * @param mixed $block_config
 	 * @return
 	 */
-	function nv_global_product_center( $block_config )
+	function nv_global_bxproduct_center( $block_config )
 	{
 		global $site_mods, $global_config, $module_config, $lang_module, $module_name, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config, $blockID;
 
@@ -106,11 +158,18 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$mod_file = $site_mods[$module]['module_file'];
 		$num_view = $block_config['numrow'];
 		$num_get = $block_config['numget'];
+		$auto = $block_config['auto']== 1 ? 'true':'false';
+		$mode = $block_config['mode'];
+		$speed = $block_config['speed'];
+		$width = $block_config['width'];
+		$margin = $block_config['margin'];
+		$move = $block_config['move'];
+		$pager = $block_config['pager'] == 1 ? 'false':'true';
 
 		$i = 1;
 		$j = 1;
 		$page_i = '';
-		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $mod_file . "/block.product_center.tpl" ) )
+		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $mod_file . "/block.bxproduct_center.tpl" ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}
@@ -192,11 +251,20 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			}
 		}
 
-		$xtpl = new XTemplate( 'block.product_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
+		$xtpl = new XTemplate( 'block.bxproduct_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . 'themes/' . $block_theme );
-		$xtpl->assign( 'JS_PATH', NV_BASE_SITEURL . 'themes/default/js' );
+		$xtpl->assign( 'LIB_PATH', NV_BASE_SITEURL . 'themes/default/' );
+		$xtpl->assign( 'AUTO', $auto );
+		$xtpl->assign( 'MODE', $mode );
+		$xtpl->assign( 'SPEED', $speed );
+		$xtpl->assign( 'WIDTH', $width );
+		$xtpl->assign( 'MARGIN', $margin );
+		$xtpl->assign( 'MOVE', $move );
 		$xtpl->assign( 'NUMVIEW', $num_view );
+		$xtpl->assign( 'PAGER', $pager );
+		$xtpl->assign( 'BLOCKID', $blockID );
+		
 		//$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
 
 		$db->sqlreset()
@@ -233,8 +301,6 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			$xtpl->assign( 'TITLE', $row['title'] );
 			$xtpl->assign( 'TITLE0', nv_clean60( $row['title'], 30 ) );
 			$xtpl->assign( 'SRC_IMG', $src_img );
-			$xtpl->assign( 'BLOCKID', $blockID );
-			
 
 			if( $pro_config['active_price'] == '1' )
 			{
@@ -260,12 +326,12 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 
 			$xtpl->parse( 'main.items' );
 		}
-		
-		if( ! defined( 'LIB' ) )
+		if( ! defined( 'BXLIB' ) )
 		{
-			define( 'LIB', true );
+			define( 'BXLIB', true );
 			$xtpl->parse( 'main.lib' );
 		}
+
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}
@@ -273,5 +339,5 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 
 if( defined( 'NV_SYSTEM' ) )
 {
-	$content = nv_global_product_center( $block_config );
+	$content = nv_global_bxproduct_center( $block_config );
 }
