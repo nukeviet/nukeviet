@@ -39,6 +39,8 @@ if ( ! $global_config['allowuserreg'] )
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+
 /**
  * nv_check_username_reg()
  * Ham kiem tra ten dang nhap kha dung
@@ -117,6 +119,16 @@ function nv_check_email_reg( $email )
     if ( $stmt->fetchColumn() ) return sprintf( $lang_module['email_registered_name'], $email );
 
     return '';
+}
+
+function reg_result( $array )
+{
+	global $nv_redirect;
+
+	$redirect = nv_redirect_decrypt( $nv_redirect, true );
+	$array['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$string = json_encode( $array );
+	return $string;
 }
 
 // Cau hoi lay lai mat khau
@@ -198,7 +210,7 @@ if ( $checkss == $array_register['checkss'] )
 
     if ( ! $check_seccode )
     {
-        die( json_encode( array(
+        die( reg_result( array(
             'status' => 'error',
             'input' => 'nv_seccode',
             'mess' => $lang_global['securitycodeincorrect'] ) ) );
@@ -206,7 +218,7 @@ if ( $checkss == $array_register['checkss'] )
 
     if ( ( ( $check_login = nv_check_username_reg( $array_register['username'] ) ) ) != '' )
     {
-        die( json_encode( array(
+        die( reg_result( array(
             'status' => 'error',
             'input' => 'username',
             'mess' => $check_login ) ) );
@@ -214,7 +226,7 @@ if ( $checkss == $array_register['checkss'] )
 
     if ( ( $check_email = nv_check_email_reg( $array_register['email'] ) ) != '' )
     {
-        die( json_encode( array(
+        die( reg_result( array(
             'status' => 'error',
             'input' => 'email',
             'mess' => $check_email ) ) );
@@ -222,7 +234,7 @@ if ( $checkss == $array_register['checkss'] )
 
     if ( ( $check_pass = nv_check_valid_pass( $array_register['password'], NV_UPASSMAX, NV_UPASSMIN ) ) != '' )
     {
-        die( json_encode( array(
+        die( reg_result( array(
             'status' => 'error',
             'input' => 'password',
             'mess' => $check_pass ) ) );
@@ -230,7 +242,7 @@ if ( $checkss == $array_register['checkss'] )
 
     if ( $array_register['password'] != $array_register['re_password'] )
     {
-        die( json_encode( array(
+        die( reg_result( array(
             'status' => 'error',
             'input' => 're_password',
             'mess' => $lang_global['passwordsincorrect'] ) ) );
@@ -238,7 +250,7 @@ if ( $checkss == $array_register['checkss'] )
 
     if ( empty( $array_register['your_question'] ) and empty( $array_register['question'] ) )
     {
-        die( json_encode( array(
+        die( reg_result( array(
             'status' => 'error',
             'input' => 'your_question',
             'mess' => $lang_global['your_question_empty'] ) ) );
@@ -246,7 +258,7 @@ if ( $checkss == $array_register['checkss'] )
 
     if ( empty( $array_register['answer'] ) )
     {
-        die( json_encode( array(
+        die( reg_result( array(
             'status' => 'error',
             'input' => 'answer',
             'mess' => $lang_global['answer_empty'] ) ) );
@@ -254,7 +266,7 @@ if ( $checkss == $array_register['checkss'] )
 
     if ( empty( $array_register['agreecheck'] ) )
     {
-        die( json_encode( array(
+        die( reg_result( array(
             'status' => 'error',
             'input' => 'agreecheck',
             'mess' => $lang_global['agreecheck_empty'] ) ) );
@@ -304,7 +316,7 @@ if ( $checkss == $array_register['checkss'] )
 
         if ( ! $userid )
         {
-            die( json_encode( array(
+            die( reg_result( array(
                 'status' => 'error',
                 'input' => '',
                 'mess' => $lang_module['err_no_save_account'] ) ) );
@@ -331,7 +343,8 @@ if ( $checkss == $array_register['checkss'] )
                 $info = $lang_module['account_register_to_admin'];
             }
 
-            die( json_encode( array(
+            $nv_redirect = '';
+            die( reg_result( array(
                 'status' => 'ok',
                 'input' => '',
                 'mess' => $info ) ) );
@@ -367,7 +380,7 @@ if ( $checkss == $array_register['checkss'] )
 
         if ( ! $userid )
         {
-            die( json_encode( array(
+            die( reg_result( array(
                 'status' => 'error',
                 'input' => '',
                 'mess' => $lang_module['err_no_save_account'] ) ) );
@@ -382,9 +395,12 @@ if ( $checkss == $array_register['checkss'] )
             $message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'] );
             nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
 
-            die( json_encode( array(
+            $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login';
+            if( !empty( $nv_redirect ) ) $url .= '&nv_redirect=' . $nv_redirect;
+            $nv_redirect = '';
+            die( reg_result( array(
                 'status' => 'ok',
-                'input' => nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true ),
+                'input' => nv_url_rewrite( $url, true ),
                 'mess' => $lang_module['register_ok'] ) ) );
         }
     }
@@ -400,8 +416,10 @@ if ( $nv_Request->isset_request( 'get_usage_terms', 'post' ) )
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
+$full = empty( $nv_redirect ) ? true : false;
+
 $contents = user_register( $gfx_chk, $array_register['checkss'], $data_questions, $array_field_config, $custom_fields );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme( $contents );
+echo nv_site_theme( $contents, $full );
 include NV_ROOTDIR . '/includes/footer.php';

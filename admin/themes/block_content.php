@@ -453,7 +453,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				nv_del_moduleCache( 'themes' );
 
 				// Chuyen huong
-				$xtpl->assign( 'BLOCKREDIRECT', nv_base64_decode( $blockredirect ) );
+				$xtpl->assign( 'BLOCKREDIRECT', nv_redirect_encrypt( $blockredirect ) );
 				$xtpl->parse( 'blockredirect' );
 				$contents = $xtpl->text( 'blockredirect' );
 

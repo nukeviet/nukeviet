@@ -69,7 +69,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	$url_dblock = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;drag_block=' . $new_drag_block;
 	if( empty( $new_drag_block ) )
 	{
-		$url_dblock .= '&amp;nv_redirect=' . nv_base64_encode( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks&selectthemes=' . $selectthemes );
+		$url_dblock .= '&amp;nv_redirect=' . nv_redirect_encrypt( NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks&selectthemes=' . $selectthemes );
 	}
 	$xtpl->assign( 'URL_DBLOCK', $url_dblock );
 	$xtpl->assign( 'LANG_DBLOCK', $lang_drag_block );

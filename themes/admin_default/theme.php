@@ -150,12 +150,6 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->parse( 'main.module_js' );
 	}
 
-	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
-	{
-		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js() );
-		$xtpl->parse( 'main.nv_add_editor_js' );
-	}
-
 	if( $head_site == 1 )
 	{
 		$xtpl->assign( 'NV_GO_CLIENTSECTOR', $lang_global['go_clientsector'] );

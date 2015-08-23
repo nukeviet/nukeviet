@@ -1759,3 +1759,43 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 	}
 	return true;
 }
+
+/**
+ * nv_redirect_encrypt()
+ *
+ * @param string $array
+ * @return string
+ *
+ */
+function nv_redirect_encrypt( $url )
+{
+	global $global_config, $crypt, $client_info;
+	$key = md5( $global_config['sitekey'] . $client_info['session_id'] );
+	return nv_base64_encode( $crypt->aes_encrypt( $url, $key ) );
+}
+
+/**
+ * nv_redirect_decrypt()
+ *
+ * @param tring $string
+ * @param boolean $insite
+ * @return string
+ *
+ */
+function nv_redirect_decrypt( $string, $insite = true )
+{
+	global $global_config, $crypt, $client_info;
+
+    if( empty( $string ) ) return '';
+
+	$key = md5( $global_config['sitekey'] . $client_info['session_id'] );
+	$url = $crypt->aes_decrypt( nv_base64_decode( $string ), $key );
+	if( $insite and preg_match( '/^(http|https|ftp|gopher)\:\/\//', $url ) )
+	{
+		if( ! preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN ) . '/', $url ) )
+		{
+			$url = '';
+		}
+	}
+	return $url;
+}

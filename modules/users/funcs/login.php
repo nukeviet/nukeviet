@@ -16,11 +16,29 @@ if( defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 	die();
 }
 
+$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+
 $gfx_chk = ( in_array( $global_config['gfx_chk'], array(
 	2,
 	4,
 	5,
 	7 ) ) ) ? 1 : 0;
+
+/**
+ * login_result()
+ * 
+ * @param mixed $array
+ * @return
+ */
+function signin_result( $array )
+{
+	global $nv_redirect;
+
+	$redirect = nv_redirect_decrypt( $nv_redirect, true );
+	$array['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$string = json_encode( $array );
+	return $string;
+}
 
 /**
  * opidr()
@@ -30,9 +48,12 @@ $gfx_chk = ( in_array( $global_config['gfx_chk'], array(
  */
 function opidr( $openid_info )
 {
-	global $lang_module, $nv_Request;
+	global $lang_module, $nv_Request, $nv_redirect;
 
 	$nv_Request->unset_request( 'openid_attribs', 'session' );
+
+	$redirect = nv_redirect_decrypt( $nv_redirect );
+	$openid_info['redirect'] = ! empty( $redirect ) ? $redirect : '';
 
 	$contents = openid_callback( $openid_info );
 
@@ -547,7 +568,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 
 	if( ! $check_seccode )
 	{
-		die( json_encode( array(
+		die( signin_result( array(
 			'status' => 'error',
 			'input' => 'nv_seccode',
 			'mess' => $lang_global['securitycodeincorrect'] ) ) );
@@ -555,7 +576,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 
 	if( empty( $nv_username ) )
 	{
-		die( json_encode( array(
+		die( signin_result( array(
 			'status' => 'error',
 			'input' => 'nv_login',
 			'mess' => $lang_global['username_empty'] ) ) );
@@ -563,7 +584,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 
 	if( empty( $nv_password ) )
 	{
-		die( json_encode( array(
+		die( signin_result( array(
 			'status' => 'error',
 			'input' => 'nv_password',
 			'mess' => $lang_global['password_empty'] ) ) );
@@ -575,7 +596,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
 		if( ! empty( $error ) )
 		{
-			die( json_encode( array(
+			die( signin_result( array(
 				'status' => 'error',
 				'input' => 'nv_login',
 				'mess' => $error ) ) );
@@ -618,14 +639,14 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 
 		if( ! empty( $error1 ) )
 		{
-			die( json_encode( array(
+			die( signin_result( array(
 				'status' => 'error',
 				'input' => '',
 				'mess' => $error1 ) ) );
 		}
 	}
 
-	die( json_encode( array(
+	die( signin_result( array(
 		'status' => 'ok',
 		'input' => '',
 		'mess' => $lang_module['login_ok'] ) ) );
@@ -638,6 +659,7 @@ $mod_title = $lang_module['login'];
 $nv_header = $nv_Request->get_title( 'nv_header', 'get, post', '' );
 
 $full = ( $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ) ? false : true;
+if( !empty( $nv_redirect ) ) $full = false;
 
 $contents = user_login( $gfx_chk, $nv_header );
 

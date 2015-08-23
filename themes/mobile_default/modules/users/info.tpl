@@ -433,8 +433,8 @@
                  			<!-- END: textarea -->
                             <!-- BEGIN: editor -->
                  			<div class="form-group">
-                                <label class="control-label text-normal">{FIELD.title}</label>
-                                <div class="col-md-24">
+                                <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
+                                <div class="col-md-18">
                                     {EDITOR}
                                 </div>
                             </div>
@@ -520,6 +520,13 @@
                             </div>
                         </div>
                     </form>
+					<!-- BEGIN: ckeditor -->
+					<script type="text/javascript">
+						for (var i in CKEDITOR.instances) {
+						    CKEDITOR.instances[i].on('change', function() { CKEDITOR.instances[i].updateElement() });
+						}					
+					</script>
+					<!-- END: ckeditor -->                    
                 </div>
             </div>
         </div>
