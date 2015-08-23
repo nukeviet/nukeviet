@@ -19,7 +19,7 @@ foreach ( $array_field_config as $row_f )
         if ( $row_f['field_type'] == 'number' )
         {
             $number_type = $row_f['field_choices']['number_type'];
-            $pattern = ( $number_type == 1 ) ? "/^[0-9]+$/" : "/^[0-9\.]+$/";
+            $pattern = ( $number_type == 1 ) ? '/^[0-9]+$/' : '/^[0-9\.]+$/';
 
             if ( ! preg_match( $pattern, $value ) )
             {
@@ -43,7 +43,7 @@ foreach ( $array_field_config as $row_f )
         }
         elseif ( $row_f['field_type'] == 'date' )
         {
-            if ( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $value, $m ) )
+            if ( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $value, $m ) )
             {
                 $value = mktime( 0, 0, 0, $m[2], $m[1], $m[3] );
 
@@ -67,7 +67,7 @@ foreach ( $array_field_config as $row_f )
         {
             if ( $row_f['match_type'] == 'alphanumeric' )
             {
-                if ( ! preg_match( "/^[a-zA-Z0-9\_]+$/", $value ) )
+                if ( ! preg_match( '/^[a-zA-Z0-9\_]+$/', $value ) )
                 {
                     die( json_encode( array(
                         'status' => 'error',
@@ -97,7 +97,7 @@ foreach ( $array_field_config as $row_f )
             }
             elseif ( $row_f['match_type'] == 'regex' )
             {
-                if ( ! preg_match( "/" . $row_f['match_regex'] . "/", $value ) )
+                if ( ! preg_match( '/' . $row_f['match_regex'] . '/', $value ) )
                 {
                     die( json_encode( array(
                         'status' => 'error',
@@ -122,7 +122,7 @@ foreach ( $array_field_config as $row_f )
                     die( json_encode( array(
                         'status' => 'error',
                         'input' => $row_f['title'],
-                        'mess' => "error function not exists " . $row_f['func_callback'] ) ) );
+                        'mess' => 'error function not exists ' . $row_f['func_callback'] ) ) );
                 }
             }
             else
@@ -142,14 +142,12 @@ foreach ( $array_field_config as $row_f )
         }
         elseif ( $row_f['field_type'] == 'textarea' or $row_f['field_type'] == 'editor' )
         {
-            $allowed_html_tags = array_map( "trim", explode( ',', NV_ALLOWED_HTML_TAGS ) );
-            $allowed_html_tags = "<" . implode( "><", $allowed_html_tags ) . ">";
+            $allowed_html_tags = array_map( 'trim', explode( ',', NV_ALLOWED_HTML_TAGS ) );
+            $allowed_html_tags = '<' . implode( '><', $allowed_html_tags ) . '>';
             $value = strip_tags( $value, $allowed_html_tags );
-            $value = nv_nl2br( $value, '<br />' );
-
             if ( $row_f['match_type'] == 'regex' )
             {
-                if ( ! preg_match( "/" . $row_f['match_regex'] . "/", $value ) )
+                if ( ! preg_match( '/' . $row_f['match_regex'] . '/', $value ) )
                 {
                     die( json_encode( array(
                         'status' => 'error',
@@ -174,11 +172,11 @@ foreach ( $array_field_config as $row_f )
                     die( json_encode( array(
                         'status' => 'error',
                         'input' => $row_f['title'],
-                        'mess' => "error function not exists " . $row_f['func_callback'] ) ) );
+                        'mess' => 'error function not exists ' . $row_f['func_callback'] ) ) );
                 }
             }
 
-            $value = ( $row_f['field_type'] == 'textarea' ) ? nv_nl2br( $value, '<br />' ) : nv_editor_nl2br( $value );
+            $value = ( $row_f['field_type'] == 'textarea' ) ? nv_nl2br( $value, '<br />' ) : $value;
             $strlen = nv_strlen( $value );
 
             if ( $strlen < $row_f['min_length'] or $strlen > $row_f['max_length'] )
@@ -226,7 +224,7 @@ foreach ( $array_field_config as $row_f )
 
     if ( $userid )
     {
-        $query_field[] = $row_f['field'] . "=" . $db->quote( $value );
+        $query_field[] = $row_f['field'] . '=' . $db->quote( $value );
     }
     else
     {
