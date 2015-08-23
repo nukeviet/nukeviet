@@ -63,7 +63,9 @@ if( !empty( $_GET['code'] ) )
 	$nv_Request->set_Session( 'openid_attribs', serialize( $attribs ) );
 
 	$op_redirect = ( defined( 'NV_IS_USER' )) ? 'editinfo/openid' : 'login';
-	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' );
+    $nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+    if( !empty( $nv_redirect ) ) $nv_redirect = '&nv_redirect=' . $nv_redirect;
+	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect );
 	exit();
 }
 else

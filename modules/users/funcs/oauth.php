@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 if( $global_config['allowuserlogin'] and defined( 'NV_OPENID_ALLOWED' ) )
 {
-	$server = $nv_Request->get_string( 'server', 'get', '' );
+    $server = $nv_Request->get_string( 'server', 'get', '' );
 	if( ! empty( $server ) and in_array( $server, $global_config['openid_servers'] ) )
 	{
 		if( file_exists(NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php') )
@@ -52,7 +52,9 @@ if( $global_config['allowuserlogin'] and defined( 'NV_OPENID_ALLOWED' ) )
 				$nv_Request->set_Session( 'openid_attribs', $attribs );
 
 				$op_redirect = ( defined( 'NV_IS_USER' ) ) ? 'editinfo' : 'login';
-				Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' );
+                $nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+                if( !empty( $nv_redirect ) ) $nv_redirect = '&nv_redirect=' . $nv_redirect;
+				Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect );
 				exit();
 			}
 

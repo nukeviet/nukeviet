@@ -21,7 +21,7 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
  */
 function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config, $custom_fields )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $nv_Request, $op;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $nv_Request, $op, $nv_redirect;
 
 	$xtpl = new XTemplate( 'register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register' );
@@ -197,6 +197,39 @@ function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.reg_captcha' );
 	}
+    
+    if( ! empty( $nv_redirect ) )
+	{
+		$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+		$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
+		$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+		$logo = preg_replace( '/\.[a-z]+$/i', '.svg', $global_config['site_logo'] );
+		if( ! file_exists( NV_ROOTDIR . '/' . $logo ) )
+		{
+			$logo = $global_config['site_logo'];
+		}
+		$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $logo );
+		$xtpl->assign( 'LOGO_WIDTH', $size[0] );
+		$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
+
+		if( isset( $size['mime'] ) and $size['mime'] == 'application/x-shockwave-flash' )
+		{
+			$xtpl->parse( 'main.redirect2.swf' );
+		}
+		else
+		{
+			$xtpl->parse( 'main.redirect2.image' );
+		}
+
+		$xtpl->assign( 'REDIRECT', $nv_redirect );
+		$xtpl->parse( 'main.redirect' );
+        $xtpl->parse( 'main.redirect2' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.not_redirect' );
+	}
+    
 	if( $global_config['allowuserreg'] == 2 )
 	{
 		$xtpl->assign( 'LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink' );
@@ -213,6 +246,7 @@ function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config
 			if( $_li['func_name'] == 'register' and ! $global_config['allowuserreg'] ) continue;
 
 			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			if( ! empty( $nv_redirect ) ) $href .= '&nv_redirect=' . $nv_redirect;
 			$li = array( 'href' => $href, 'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name'] );
 			$xtpl->assign( 'NAVBAR', $li );
 			$xtpl->parse( 'main.navbar' );
@@ -232,7 +266,7 @@ function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config
  */
 function user_login( $gfx_chk, $nv_header )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect;
 
 	$xtpl = new XTemplate( 'login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users' );
 
@@ -253,12 +287,45 @@ function user_login( $gfx_chk, $nv_header )
 		$xtpl->parse( 'main.captcha' );
 	}
 
+	if( ! empty( $nv_redirect ) )
+	{
+		$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
+		$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
+		$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
+		$logo = preg_replace( '/\.[a-z]+$/i', '.svg', $global_config['site_logo'] );
+		if( ! file_exists( NV_ROOTDIR . '/' . $logo ) )
+		{
+			$logo = $global_config['site_logo'];
+		}
+		$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $logo );
+		$xtpl->assign( 'LOGO_WIDTH', $size[0] );
+		$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
+
+		if( isset( $size['mime'] ) and $size['mime'] == 'application/x-shockwave-flash' )
+		{
+			$xtpl->parse( 'main.redirect2.swf' );
+		}
+		else
+		{
+			$xtpl->parse( 'main.redirect2.image' );
+		}
+
+		$xtpl->assign( 'REDIRECT', $nv_redirect );
+		$xtpl->parse( 'main.redirect' );
+        $xtpl->parse( 'main.redirect2' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.not_redirect' );
+	}
+
 	if( defined( 'NV_OPENID_ALLOWED' ) )
 	{
 		$assigns = array();
 		foreach( $global_config['openid_servers'] as $server )
 		{
 			$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server;
+			if( ! empty( $nv_redirect ) ) $assigns['href'] .= '&nv_redirect=' . $nv_redirect;
 			$assigns['title'] = ucfirst( $server );
 			$assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/' . $server . '.png';
 			$assigns['img_width'] = $assigns['img_height'] = 24;
@@ -280,6 +347,7 @@ function user_login( $gfx_chk, $nv_header )
 			if( $_li['func_name'] == 'register' and ! $global_config['allowuserreg'] ) continue;
 
 			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			if( ! empty( $nv_redirect ) ) $href .= '&nv_redirect=' . $nv_redirect;
 			$li = array( 'href' => $href, 'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name'] );
 			$xtpl->assign( 'NAVBAR', $li );
 			$xtpl->parse( 'main.navbar' );
@@ -301,7 +369,7 @@ function user_login( $gfx_chk, $nv_header )
  */
 function user_openid_login( $gfx_chk, $attribs )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $nv_redirect;
 
 	$xtpl = new XTemplate( 'openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users' );
 
@@ -330,6 +398,12 @@ function user_openid_login( $gfx_chk, $attribs )
 	}
 
 	$xtpl->assign( 'INFO', $info );
+
+	if( ! empty( $nv_redirect ) )
+	{
+		$xtpl->assign( 'REDIRECT', $nv_redirect );
+		$xtpl->parse( 'main.redirect' );
+	}
 
 	$xtpl->parse( 'main' );
 

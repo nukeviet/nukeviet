@@ -1785,6 +1785,9 @@ function nv_redirect_encrypt( $url )
 function nv_redirect_decrypt( $string, $insite = true )
 {
 	global $global_config, $crypt, $client_info;
+
+    if( empty( $string ) ) return '';
+
 	$key = md5( $global_config['sitekey'] . $client_info['session_id'] );
 	$url = $crypt->aes_decrypt( nv_base64_decode( $string ), $key );
 	if( $insite and preg_match( '/^(http|https|ftp|gopher)\:\/\//', $url ) )
