@@ -10,8 +10,8 @@
 
 @font-face {
     font-family:'NukeVietIcons';
-    src:url('../fonts/NukeVietIcons.eot?avyewf');
-    src:url('../fonts/NukeVietIcons.eot?#iefixavyewf') format('embedded-opentype'),url('../fonts/NukeVietIcons.ttf?avyewf') format('truetype'),url('../fonts/NukeVietIcons.woff?avyewf') format('woff'),url('../fonts/NukeVietIcons.svg?avyewf#NukeVietIcons') format('svg');
+    src:url('../../default/fonts/NukeVietIcons.eot?avyewf');
+    src:url('../../default/fonts/NukeVietIcons.eot?#iefixavyewf') format('embedded-opentype'),url('../../default/fonts/NukeVietIcons.ttf?avyewf') format('truetype'),url('../../default/fonts/NukeVietIcons.woff?avyewf') format('woff'),url('../../default/fonts/NukeVietIcons.svg?avyewf#NukeVietIcons') format('svg');
     font-weight:normal;
     font-style:normal;
 }

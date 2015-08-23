@@ -1653,6 +1653,14 @@ function nv_site_mods( $module_name = '' )
 			{
 				unset( $site_mods[$m_title] );
 			}
+			elseif( defined( 'NV_IS_SPADMIN' ) )
+			{
+				$site_mods[$m_title]['is_modadmin'] = true;
+			}
+			elseif( defined( 'NV_IS_ADMIN' ) and ! empty( $row['admins'] ) and ! empty( $admin_info['admin_id'] ) and in_array( $admin_info['admin_id'], explode( ',', $row['admins'] ) ) )
+			{
+				$site_mods[$m_title]['is_modadmin'] = true;
+			}
 		}
 		if( isset( $site_mods['users'] ) )
 		{

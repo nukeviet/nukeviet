@@ -872,3 +872,7 @@ button.close {
 	opacity: .2;
 	filter: alpha(opacity=20);
 }
+
+#digclock {
+	margin-right: 10px;
+}
