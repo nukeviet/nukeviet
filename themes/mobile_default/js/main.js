@@ -133,6 +133,20 @@ function ctbtLoad(a) {
 	})
 }
 
+function openID_load(a) {
+	var s = $(this).attr("src");
+	nv_open_browse(a, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+	return !1;
+}
+
+function openID_result() {
+	$("#openidResult").fadeIn();
+	setTimeout(function() {
+		"success" == $("#openidResult").attr("data-result") ? window.location.href = window.location.href : $("#openidResult").hide(0).text("").attr("data-result", "")
+	}, 5E3);
+	return !1
+}
+
 // QR-code
 function qrcodeLoad(a) {
 	var b = new Image,
@@ -300,6 +314,15 @@ $(function() {
 				b = $(this).val();
 			b.length > a && $(this).val(b.substr(0, a))
 		}
+	});
+    //Alerts
+	$("[data-dismiss=alert]").on("click", function(a) {
+		$(this).is(".close") && $(this).parent().remove()
+	});
+	//OpenID
+	$("#openidBt").on("click", function() {
+		openID_result();
+		return !1
 	})
 });
 

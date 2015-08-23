@@ -1658,7 +1658,7 @@ function nv_site_mods( $module_name = '' )
 		{
 			if( defined( 'NV_IS_USER' ) )
 			{
-				$user_ops = array( 'main', 'logout', 'openid', 'editinfo', 'regroups', 'avatar' );
+				$user_ops = array( 'main', 'logout', 'editinfo', 'avatar' );
 			}
 			else
 			{

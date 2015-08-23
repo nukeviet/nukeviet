@@ -56,11 +56,9 @@ $sth->execute( array( 'lostpass', 'lostpass', 'Lostpass', 'users', 1, 1, 4, '') 
 $sth->execute( array( 'active', 'active', 'Active', 'users', 1, 0, 5, '') );
 $sth->execute( array( 'lostactivelink', 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 6, '') );
 $sth->execute( array( 'editinfo', 'editinfo', 'Edit User Info', 'users', 1, 1, 7, '') );
-$sth->execute( array( 'regroups', 'regroups', 'Register Groups', 'users', 1, 1, 8, '') );
-$sth->execute( array( 'memberlist', 'memberlist', 'Memberlist', 'users', 1, 1, 9, '') );
-$sth->execute( array( 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 10, '') );
-$sth->execute( array( 'openid', 'openid', 'Openid', 'users', 1, 1, 11, '') );
-$sth->execute( array( 'logout', 'logout', 'Logout', 'users', 1, 1, 12, '') );
+$sth->execute( array( 'memberlist', 'memberlist', 'Memberlist', 'users', 1, 1, 8, '') );
+$sth->execute( array( 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 9, '') );
+$sth->execute( array( 'logout', 'logout', 'Logout', 'users', 1, 1, 10, '') );
 $sth->execute( array( 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '') );
 //Statistics
 $sth->execute( array( 'main', 'main', 'Main', 'statistics', 1, 0, 1, '') );
@@ -144,9 +142,7 @@ $themes_default['left-body'] = array(
 	$array_funcid_mod['users']['lostactivelink'],
 	$array_funcid_mod['users']['lostpass'],
 	$array_funcid_mod['users']['main'],
-	$array_funcid_mod['users']['openid'],
 	$array_funcid_mod['users']['register'],
-	$array_funcid_mod['users']['regroups'],
 	$array_funcid_mod['users']['memberlist'],
 	$array_funcid_mod['users']['avatar'],
 	$array_funcid_mod['contact']['main'],
@@ -176,7 +172,6 @@ $themes_mobile['body'] = array(
 	$array_funcid_mod['users']['lostactivelink'],
 	$array_funcid_mod['users']['lostpass'],
 	$array_funcid_mod['users']['main'],
-	$array_funcid_mod['users']['openid'],
 	$array_funcid_mod['users']['register'],
 	$array_funcid_mod['contact']['main'],
 	$array_funcid_mod['statistics']['allbots'],
@@ -193,7 +188,6 @@ $themes_mobile['body'] = array(
 	$array_funcid_mod['banners']['stats'],
 	$array_funcid_mod['seek']['main'],
 	$array_funcid_mod['feeds']['main'],
-	$array_funcid_mod['users']['regroups'],
 	$array_funcid_mod['users']['memberlist'],
 	$array_funcid_mod['news']['groups'],
 	$array_funcid_mod['news']['tag'],

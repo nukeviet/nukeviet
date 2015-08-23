@@ -25,6 +25,7 @@
         
         <div class="text-center margin-bottom-lg">
             <input name="nv_header" value="{NV_HEADER}" type="hidden" />
+            <input name="nv_redirect" value="{NV_REDIRECT}" type="hidden" />
             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
             <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
        	</div>
