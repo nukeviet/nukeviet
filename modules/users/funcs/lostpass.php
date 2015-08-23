@@ -161,7 +161,7 @@ else
 								$info = $lang_global['error_sendmail'];
 							}
 
-							$nv_redirect = ! empty( $data['nv_redirect'] ) ? nv_base64_decode( $data['nv_redirect'] ) : nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true );
+							$nv_redirect = ! empty( $data['nv_redirect'] ) ? nv_redirect_decrypt( $data['nv_redirect'] ) : nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true );
 							$contents = user_info_exit( $info );
 							$contents .= '<meta http-equiv="refresh" content="10;url=' . $nv_redirect . '" />';
 
