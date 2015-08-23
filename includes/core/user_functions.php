@@ -670,13 +670,6 @@ function nv_html_site_js( $html = true )
 		$return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . 'themes/default/js/' . $module_file . '.js' );
 	}
 
-    if ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
-    {
-        $editor_js = nv_add_editor_js();
-        preg_match( "/src\s*=\s*[\"']([^\"']+)[\"']/i", $editor_js, $matches );
-        $return[] = array( 'ext' => 1, 'content' => $matches[1] );
-    }
-
     if ( defined( 'NV_IS_DRAG_BLOCK' ) )
     {
         $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/ui/jquery.ui.core.min.js" );

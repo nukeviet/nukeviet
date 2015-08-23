@@ -42,9 +42,6 @@
 		<!-- BEGIN: module_js -->
 		<script type="text/javascript" src="{NV_JS_MODULE}"></script>
 		<!-- END: module_js -->
-		<!-- BEGIN: nv_add_editor_js -->
-		{NV_ADD_EDITOR_JS}
-		<!-- END: nv_add_editor_js -->
 
 		<!--[if IE]>
 		<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=EmulateIE8; IE=EDGE" />

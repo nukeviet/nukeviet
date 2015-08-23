@@ -111,7 +111,7 @@
 				</tr>
 				<tr id="editorfields" {DATAFORM.editordisabled}>
 					<td>{LANG.field_size}</td>
-					<td>width: <input class="form-control" style="width:50px" type="text" value="{DATAFORM.editor_width}" name="editor_width" maxlength="5"> height: <input class="form-control" style="width:50px" type="text" value="{DATAFORM.editor_height}" name="editor_height" maxlength="5"></td>
+					<td>width: <input class="form-control w100" type="text" value="{DATAFORM.editor_width}" name="editor_width" maxlength="5"> height: <input class="form-control w100" type="text" value="{DATAFORM.editor_height}" name="editor_height" maxlength="5"></td>
 				</tr>
 			</tbody>
 		</table>

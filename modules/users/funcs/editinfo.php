@@ -44,7 +44,7 @@ function nv_check_username_change( $login )
 	$deny_name = $result->fetchColumn();
 	$result->closeCursor();
 
-	if( ! empty( $deny_name ) and preg_match( "/" . $deny_name . "/i", $login ) ) return sprintf( $lang_module['account_deny_name'], $login );
+	if( ! empty( $deny_name ) and preg_match( '/' . $deny_name . '/i', $login ) ) return sprintf( $lang_module['account_deny_name'], $login );
 
 	$sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe( $login ) . "'";
 	if( $db->query( $sql )->fetchColumn() ) return sprintf( $lang_module['account_registered_name'], $login );
@@ -75,11 +75,11 @@ function nv_check_email_change( $email )
 
 	if( ! empty( $deny_email ) and preg_match( "/" . $deny_email . "/i", $email ) ) return sprintf( $lang_module['email_deny_name'], $email );
 
-	list( $left, $right ) = explode( "@", $email );
+	list( $left, $right ) = explode( '@', $email );
 	$left = preg_replace( '/[\.]+/', '', $left );
 	$pattern = str_split( $left );
-	$pattern = implode( ".?", $pattern );
-	$pattern = "^" . $pattern . "@" . $right . "$";
+	$pattern = implode( '.?', $pattern );
+	$pattern = '^' . $pattern . '@' . $right . '$';
 
 	$stmt = $db->prepare( 'SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern' );
 	$stmt->bindParam( ':pattern', $pattern, PDO::PARAM_STR );
@@ -152,7 +152,7 @@ function nv_groups_list_pub2()
 	global $db, $global_config;
 
 	$groups_list = array();
-	
+
 	$resul = $db->query( 'SELECT group_id, title, description, exp_time, publics, numbers FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight' );
 	while( $row = $resul->fetch() )
 	{
@@ -198,7 +198,7 @@ if( ( int )$row['safemode'] > 0 )
 			{
 				$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
 				$name = array_filter( $name );
-				$name = implode( " ", $name );
+				$name = implode( ' ', $name );
 				$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
 				$message = sprintf( $lang_module['safe_send_content'], $name, $sitename, $row['safekey'] );
 				@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message );
@@ -251,10 +251,10 @@ $array_field_config = get_field_config();
 $groups_list = array();
 
 $types = array(
-	"basic",
-	"avatar",
-	"password",
-	"question" );
+	'basic',
+	'avatar',
+	'password',
+	'question' );
 if( $array_data['allowloginchange'] ) $types[] = 'username';
 if( $array_data['allowmailchange'] ) $types[] = 'email';
 if( defined( 'NV_OPENID_ALLOWED' ) ) $types[] = 'openid';
@@ -266,10 +266,10 @@ if( $global_config['allowuserpublic'] )
 if( ! empty( $array_field_config ) ) $types[] = 'others';
 $types[] = 'safemode';
 
-$array_data['type'] = ( isset( $array_op[1] ) and ! empty( $array_op[1] ) and in_array( $array_op[1], $types ) ) ? $array_op[1] : "basic";
+$array_data['type'] = ( isset( $array_op[1] ) and ! empty( $array_op[1] ) and in_array( $array_op[1], $types ) ) ? $array_op[1] : 'basic';
 
 //OpenID add
-if( in_array( "openid", $types ) and $nv_Request->isset_request( 'server', 'get' ) )
+if( in_array( 'openid', $types ) and $nv_Request->isset_request( 'server', 'get' ) )
 {
 	$server = $nv_Request->get_string( 'server', 'get', '' );
 	$result = $nv_Request->isset_request( 'result', 'get' );
@@ -419,7 +419,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'username'
 
 	$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
 	$name = array_filter( $name );
-	$name = implode( " ", $name );
+	$name = implode( ' ', $name );
 	$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
 	$message = sprintf( $lang_module['edit_mail_content'], $name, $sitename, $lang_global['username'], $nv_username );
 	@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message );
@@ -470,7 +470,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'email' )
 		if( $nv_Request->get_bool( 'verikey', 'session' ) )
 		{
 			$ss_verifykey = $nv_Request->get_title( 'verikey', 'session', '' );
-			$ss_verifykey = explode( "|", $ss_verifykey );
+			$ss_verifykey = explode( '|', $ss_verifykey );
 			if( ( int )$ss_verifykey[0] > NV_CURRENTTIME )
 			{
 				die( json_encode( array(
@@ -495,10 +495,10 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'email' )
 			$nv_Request->set_Session( 'verikey', ( NV_CURRENTTIME + 300 ) . '|' . $p . '|' . $verikey );
 		}
 
-		$p = nv_date( "H:i d/m/Y", $p );
+		$p = nv_date( 'H:i d/m/Y', $p );
 		$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
 		$name = array_filter( $name );
-		$name = implode( " ", $name );
+		$name = implode( ' ', $name );
 		$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
 		$message = sprintf( $lang_module['email_active_info'], $name, $sitename, $verikey, $p );
 		@nv_sendmail( $global_config['site_email'], $nv_email, $lang_module['email_active'], $message );
@@ -521,7 +521,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'email' )
 		}
 
 		$ss_verifykey = $nv_Request->get_title( 'verikey', 'session', '' );
-		$ss_verifykey = explode( "|", $ss_verifykey );
+		$ss_verifykey = explode( '|', $ss_verifykey );
 
 		if( ( int )$ss_verifykey[1] < NV_CURRENTTIME )
 		{
@@ -549,7 +549,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'email' )
 
 		$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
 		$name = array_filter( $name );
-		$name = implode( " ", $name );
+		$name = implode( ' ', $name );
 		$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
 		$message = sprintf( $lang_module['edit_mail_content'], $name, $sitename, $lang_global['email'], $nv_email );
 		@nv_sendmail( $global_config['site_email'], $nv_email, $lang_module['edit_mail_subject'], $message );
@@ -599,7 +599,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'password'
 
 	$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
 	$name = array_filter( $name );
-	$name = implode( " ", $name );
+	$name = implode( ' ', $name );
 	$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
 	$message = sprintf( $lang_module['edit_mail_content'], $name, $sitename, $lang_global['password'], $new_password );
 	@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['edit_mail_subject'], $message );
@@ -682,7 +682,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'openid' )
 elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'group' )
 {
 	$array_old_groups = array();
-	$result_gru = $db->query( "SELECT group_id FROM " . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $user_info['userid'] );
+	$result_gru = $db->query( 'SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid'] );
 	while( $row_gru = $result_gru->fetch() )
 	{
 		$array_old_groups[] = $row_gru['group_id'];
@@ -752,7 +752,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
 			if( $rand < 6 ) $rand = 6;
 			$row['safekey'] = md5( nv_genpass( $rand ) );
 
-			$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . " SET safekey= :safekey WHERE userid=" . $user_info['userid'] );
+			$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET safekey= :safekey WHERE userid=' . $user_info['userid'] );
 			$stmt->bindParam( ':safekey', $row['safekey'], PDO::PARAM_STR );
 			$stmt->execute();
 			$nv_Request->set_Session( 'safesend', 0 );
@@ -763,7 +763,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
 		{
 			$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
 			$name = array_filter( $name );
-			$name = implode( " ", $name );
+			$name = implode( ' ', $name );
 			$sitename = '<a href="' . NV_MY_DOMAIN . NV_BASE_SITEURL . '">' . $global_config['site_name'] . '</a>';
 			$message = sprintf( $lang_module['safe_send_content'], $name, $sitename, $row['safekey'] );
 			@nv_sendmail( $global_config['site_email'], $row['email'], $lang_module['safe_send_subject'], $message );
@@ -790,7 +790,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
 			'mess' => $lang_module['verifykey_error'] ) ) );
 	}
 
-	$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . " SET safemode=1, safekey= :safekey WHERE userid=" . $user_info['userid'] );
+	$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET safemode=1, safekey= :safekey WHERE userid=' . $user_info['userid'] );
 	$stmt->bindParam( ':safekey', $row['safekey'], PDO::PARAM_STR );
 	$stmt->execute();
 
@@ -803,10 +803,11 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
 $page_title = $mod_title = $lang_module['editinfo_pagetitle'];
 $key_words = $module_info['keywords'];
 
-if( defined( 'NV_EDITOR' ) )
+if( ! defined( 'NV_EDITOR' ) )
 {
-	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+	define( 'NV_EDITOR', 'ckeditor' );
 }
+require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 
 $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $user_info['userid'];
 $result = $db->query( $sql );
@@ -833,7 +834,7 @@ else
 	$size = @getimagesize( NV_ROOTDIR . '/' . $row['photo'] );
 	$array_data['photoWidth'] = $size[0];
 	$array_data['photoHeight'] = $size[1];
-	$array_data['imgDisabled'] = "";
+	$array_data['imgDisabled'] = '';
 }
 
 // Gender data
@@ -849,7 +850,7 @@ $array_data['gender_array'] = array(
 	'F' => array(
 		'value' => 'F',
 		'title' => $lang_module['female'],
-		'selected' => ( $array_data['gender'] == 'F' ? ' selected="selected"' : '' ) ) //
+		'selected' => ( $array_data['gender'] == 'F' ? ' selected="selected"' : '' ) )
 		);
 
 $data_questions = array();
@@ -861,7 +862,7 @@ while( $row2 = $result->fetch() )
 }
 
 $data_openid = array();
-if( in_array( "openid", $types ) )
+if( in_array( 'openid', $types ) )
 {
 	$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $user_info['userid'];
 	$query = $db->query( $sql );
@@ -876,10 +877,10 @@ if( in_array( "openid", $types ) )
 }
 
 $groups = array();
-if( in_array( "group", $types ) )
+if( in_array( 'group', $types ) )
 {
 	$my_groups = array();
-	$result_gru = $db->query( "SELECT group_id FROM " . NV_GROUPS_GLOBALTABLE . "_users WHERE userid=" . $user_info['userid'] );
+	$result_gru = $db->query( 'SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid'] );
 	while( $row_gru = $result_gru->fetch() )
 	{
 		$my_groups[] = $row_gru['group_id'];
