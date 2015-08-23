@@ -143,7 +143,7 @@ function openID_load(a) {
 function openID_result() {
 	$("#openidResult").fadeIn();
 	setTimeout(function() {
-		"success" == $("#openidResult").attr("data-result") ? window.location.href = window.location.href : $("#openidResult").hide(0).text("").attr("data-result", "")
+		"" != $("#openidResult").attr("data-redirect") ? window.location.href = $("#openidResult").attr("data-redirect") : "success" == $("#openidResult").attr("data-result") ? window.location.href = window.location.href : $("#openidResult").hide(0).text("").attr("data-result", "").attr("data-redirect", "")
 	}, 5E3);
 	return !1
 }

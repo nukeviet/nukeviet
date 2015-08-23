@@ -50,6 +50,7 @@
 				<!-- END: captcha -->
 				<div class="text-center margin-bottom-lg">
 					<input name="nv_login" value="1" type="hidden" />
+                    <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
 					<input type="reset" value="{GLANG.reset}" class="btn btn-default"/>
 					<button class="bsubmit btn btn-primary" type="submit">
 						{GLANG.loginsubmit}

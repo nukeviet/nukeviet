@@ -51,8 +51,8 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-$info = $lang_module['logout_ok'] . '<br /><br />\n';
-$info .= '<img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif"><br /><br />\n';
+$info = $lang_module['logout_ok'] . '<br /><br />';
+$info .= '<img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif"><br /><br />';
 $info .= '[<a href="' . $url_redirect . '">' . $lang_module['redirect_to_back'] . '</a>]';
 
 $contents = user_info_exit( $info );
