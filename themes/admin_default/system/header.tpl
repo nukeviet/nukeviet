@@ -14,7 +14,7 @@
 
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
-		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/main.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/style.css">
 		<!-- BEGIN: css_module -->
 		<link rel="stylesheet" href="{NV_CSS_MODULE_THEME}" type="text/css">
 		<!-- END: css_module -->
