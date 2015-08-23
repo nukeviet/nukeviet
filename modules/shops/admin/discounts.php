@@ -176,8 +176,9 @@ $show_view = false;
 if( !$nv_Request->isset_request( 'id', 'post,get' ) )
 {
 	$show_view = true;
-	$per_page = 5;
+	$per_page = 10;
 	$page = $nv_Request->get_int( 'page', 'post,get', 1 );
+
 	$db->sqlreset()->select( 'COUNT(*)' )->from( '' . $db_config['prefix'] . '_' . $module_data . '_discounts' );
 	$sth = $db->prepare( $db->sql() );
 	$sth->execute();
@@ -204,6 +205,14 @@ $xtpl->assign( 'CAPTION', ($row['did']) ? $lang_module['discount_edit'] : $lang_
 
 if( $show_view )
 {
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+	$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
+	if( !empty( $generate_page ) )
+	{
+		$xtpl->assign( 'NV_GENERATE_PAGE', $generate_page );
+		$xtpl->parse( 'main.view.generate_page' );
+	}
+
 	while( $view = $sth->fetch() )
 	{
 		$view['begin_time'] = ( empty( $view['begin_time'] )) ? '' : nv_date( 'd/m/Y', $view['begin_time'] );
