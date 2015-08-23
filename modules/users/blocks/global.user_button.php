@@ -142,7 +142,7 @@ if( $global_config['allowuserlogin'] )
 			foreach( $global_config['openid_servers'] as $server )
 			{
 				$assigns = array();
-				$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] );
+				$assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] );
 				$assigns['title'] = $lang_global['openid_login'] . " " . ucfirst( $server );
 				$assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/' . $server . '.png';
 				$assigns['img_width'] = $assigns['img_height'] = 24;

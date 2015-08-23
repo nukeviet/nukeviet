@@ -22,7 +22,7 @@ if( defined( 'NV_IS_ADMIN' ) )
 	$nv_Request->unset_request( 'admin,online', 'session' );
 }
 
-$url_redirect = ! empty( $client_info['referer'] ) ? $client_info['referer'] : ( isset( $_SERVER['SCRIPT_URI'] ) ? $_SERVER['SCRIPT_URI'] : NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA );
+$url_redirect = ! empty( $client_info['referer'] ) ? $client_info['referer'] : ( isset( $_SERVER['SCRIPT_URI'] ) ? $_SERVER['SCRIPT_URI'] : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 if( defined( 'NV_IS_USER_FORUM' ) )
 {
 	require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/logout.php' ;
@@ -40,7 +40,7 @@ else
 $nv_ajax_login = $nv_Request->get_int( 'nv_ajax_login', 'post', 0 );
 if( $nv_ajax_login )
 {
-    $info = $lang_module['logout_ok'] . "<br /><br /><img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\">";
+    $info = $lang_module['logout_ok'] . '<br /><br /><img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif">';
     include NV_ROOTDIR . '/includes/header.php';
     echo $info;
     include NV_ROOTDIR . '/includes/footer.php';
@@ -51,12 +51,12 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-$info = $lang_module['logout_ok'] . "<br /><br />\n";
-$info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
-$info .= "[<a href=\"" . $url_redirect . "\">" . $lang_module['redirect_to_back'] . "</a>]";
+$info = $lang_module['logout_ok'] . '<br /><br />\n';
+$info .= '<img border="0" src="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif"><br /><br />\n';
+$info .= '[<a href="' . $url_redirect . '">' . $lang_module['redirect_to_back'] . '</a>]';
 
 $contents = user_info_exit( $info );
-$contents .= "<meta http-equiv=\"refresh\" content=\"2;url=" . nv_url_rewrite( $url_redirect ) . "\" />";
+$contents .= '<meta http-equiv="refresh" content="2;url=' . nv_url_rewrite( $url_redirect ) . '" />';
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

@@ -48,10 +48,10 @@ function BoldKeywordInStr( $str, $keyword )
 
 $key = $nv_Request->get_title( 'q', 'get', '' );
 $key = str_replace( '+', ' ', $key );
-$key = trim( nv_substr( $key , 0, NV_MAX_SEARCH_LENGTH ) );
+$key = trim( nv_substr( $key, 0, NV_MAX_SEARCH_LENGTH ) );
 $keyhtml = nv_htmlspecialchars( $key );
 
-$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name. '&' . NV_OP_VARIABLE . '=' . $op;
+$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 if( ! empty( $key ) )
 {
 	$base_url_rewrite .= '&q=' . $key;
@@ -85,9 +85,9 @@ if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_da
 $page = $nv_Request->get_int( 'page', 'get', 1 );
 if( ! empty( $page ) )
 {
-	$page .= '&page=' . $page;
+	$base_url_rewrite .= '&page=' . $page;
 }
-$base_url_rewrite = nv_url_rewrite($base_url_rewrite , true );
+$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
 
 $request_uri = urldecode( $_SERVER['REQUEST_URI'] );
 if( $request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite )
@@ -111,14 +111,13 @@ $array_cat_search[0]['title'] = $lang_module['search_all'];
 $contents = call_user_func( 'search_theme', $key, $choose, $date_array, $array_cat_search );
 $where = '';
 $tbl_src = '';
-if( empty( $key ) AND ( $catid == 0 ) AND empty( $from_date ) AND empty( $to_date ) )
+if( empty( $key ) and ( $catid == 0 ) and empty( $from_date ) and empty( $to_date ) )
 {
-	$contents .= '<div class="alert alert-danger">'.$lang_module['empty_data_search'].'</div>';
+	$contents .= '<div class="alert alert-danger">' . $lang_module['empty_data_search'] . '</div>';
 }
-else {
-
-	$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search&amp;q='. $key , true );
-	$canonicalUrl = NV_MY_DOMAIN . $base_url_rewrite;
+else
+{
+	$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search&amp;q=' . $key, true );
 
 	$dbkey = $db->dblikeescape( $key );
 	$dbkeyhtml = $db->dblikeescape( $keyhtml );
@@ -173,17 +172,11 @@ else {
 		$table_search = NV_PREFIXLANG . '_' . $module_data . '_rows';
 	}
 
-	$db->sqlreset()
-		->select( 'COUNT(*)' )
-		->from( $table_search . ' as tb1 ' . $tbl_src )
-		->where( 'tb1.status=1 ' . $where );
+	$db->sqlreset()->select( 'COUNT(*)' )->from( $table_search . ' as tb1 ' . $tbl_src )->where( 'tb1.status=1 ' . $where );
 
 	$numRecord = $db->query( $db->sql() )->fetchColumn();
 
-	$db->select( 'tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid' )
-		->order( 'tb1.publtime DESC' )
-		->limit( $per_page )
-		->offset( ( $page - 1 ) * $per_page );
+	$db->select( 'tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid' )->order( 'tb1.publtime DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 
 	$result = $db->query( $db->sql() );
 
@@ -192,19 +185,19 @@ else {
 
 	while( list( $id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid ) = $result->fetch( 3 ) )
 	{
-		if( $homeimgthumb == 1 ) //image thumb
+		if( $homeimgthumb == 1 ) // image thumb
 		{
 			$img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 2 ) //image file
+		elseif( $homeimgthumb == 2 ) // image file
 		{
 			$img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 		}
-		elseif( $homeimgthumb == 3 ) //image url
+		elseif( $homeimgthumb == 3 ) // image url
 		{
 			$img_src = $homeimgfile;
 		}
-		elseif( ! empty( $show_no_image ) ) //no image
+		elseif( ! empty( $show_no_image ) ) // no image
 		{
 			$img_src = NV_BASE_SITEURL . $show_no_image;
 		}
@@ -235,11 +228,11 @@ if( empty( $key ) )
 else
 {
 	$page_title = $key . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_module['search_title'];
-	if( $page > 2)
+	if( $page > 2 )
 	{
 		$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
 	}
-	$page_title .=' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
+	$page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'];
 }
 
 $key_words = $description = 'no';

@@ -12,7 +12,7 @@ if ( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
 
-$content = "";
+$content = '';
 
 if ( $global_config['allowuserlogin'] )
 {
@@ -143,8 +143,8 @@ if ( $global_config['allowuserlogin'] )
             foreach ( $global_config['openid_servers'] as $server )
             {
                 $assigns = array();
-                $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] );
-                $assigns['title'] = $lang_global['openid_login'] . " " . ucfirst( $server );
+                $assigns['href'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=oauth&amp;server=' . $server . '&amp;nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] );
+                $assigns['title'] = $lang_global['openid_login'] . ' ' . ucfirst( $server );
                 $assigns['img_src'] = NV_BASE_SITEURL . 'themes/' . $block_theme . '/images/users/' . $server . '.png';
                 $assigns['img_width'] = $assigns['img_height'] = 24;
 
@@ -335,7 +335,7 @@ if ( $global_config['allowuserlogin'] )
             $xtpl->parse( 'main.allowuserreg' );
             $xtpl->parse( 'main.allowuserreg2' );
             $xtpl->parse( 'main.allowuserreg3' );
-            
+
             if ( $datepicker )
             {
                 $xtpl->parse( 'main.datepicker' );
