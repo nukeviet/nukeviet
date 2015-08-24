@@ -1403,3 +1403,11 @@ img.calendar {
 	border: none;
 	box-shadow: none
 }
+.controls{
+	padding: 8px 8px 6px 10px;
+	margin-top: 10px;
+    font-weight:bold;
+}
+img#imageproduct, .gallery img{
+	cursor: pointer;
+}
