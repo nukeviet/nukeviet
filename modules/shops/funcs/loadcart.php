@@ -62,7 +62,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 	$total_old = $total;
 }
 
-if( ( empty( $counpons['total_amount'] ) or $total > $counpons['total_amount'] ) and NV_CURRENTTIME >= $counpons['date_start'] and ( empty( $counpons['uses_per_coupon'] ) or $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
+if( ( empty( $counpons['total_amount'] ) or $total >= $counpons['total_amount'] ) and NV_CURRENTTIME >= $counpons['date_start'] and ( empty( $counpons['uses_per_coupon'] ) or $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
 {
 	// Ap dung giam gia cho tung san pham dac biet
 	if( $total_coupons > 0 )

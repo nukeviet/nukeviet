@@ -1005,6 +1005,7 @@ img.calendar {
 	overflow: hidden;
 	margin: 1em 0 1em;
 	font-weight: 300;
+	z-index: 0
 }
 
 /* Nav */
