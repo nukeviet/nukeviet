@@ -13,6 +13,7 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 
 $pro_id = $nv_Request->get_int( 'pro_id', 'get', 0 );
 $nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
+$nv_redirect = nv_redirect_decrypt( $nv_redirect );
 
 if( empty( $pro_id ) )
 {
@@ -51,7 +52,7 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
-$xtpl->assign( 'C_LIST', nv_base64_decode( $nv_redirect ) );
+$xtpl->assign( 'C_LIST', nv_redirect_encrypt( $nv_redirect ) );
 
 $db->select( 't2.order_name, t2.order_email, t2.order_phone, t2.order_address, t2.unit_total, t2.order_time, t1.num, t1.price' )
 	->order( 't1.order_id DESC' )
