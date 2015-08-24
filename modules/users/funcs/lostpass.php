@@ -186,7 +186,7 @@ if( $checkss == $data['checkss'] )
 				'input' => 'verifykey',
 				'step' => 'step3',
                 'info' => $lang_module['lostpass_content_mess'],
-				'mess' => $row['lostpass_content_mess'] ) ) );
+				'mess' => $lang_module['lostpass_content_mess'] ) ) );
 		}
 	}
 
@@ -203,7 +203,7 @@ if( $checkss == $data['checkss'] )
 			'input' => 'verifykey',
 			'step' => 'step3',
             'info' => $lang_module['lostpass_content_mess'],
-			'mess' => $row['lostpass_content_mess'] ) ) );
+			'mess' => $lang_module['lostpass_content_mess'] ) ) );
 	}
 
 	if( empty( $data['verifykey'] ) or $passlostkey[1] != md5( $row['userid'] . $data['verifykey'] . $global_config['sitekey'] ) )
