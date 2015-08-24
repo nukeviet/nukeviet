@@ -13,8 +13,8 @@ if( !defined( 'NV_IS_MOD_SHOPS' ) )
 
 if( !defined( 'NV_IS_USER' ) and !$pro_config['active_guest_order'] )
 {
-	$redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cart';
-	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $redirect ) );
+	$redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart';
+	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt( $redirect ) );
 	die( );
 }
 $contents = '';
@@ -160,7 +160,7 @@ if( $post_order == 1 )
 	}
 	$total += $total_weight_price;
 
-	if( ( $total > $counpons['total_amount'] or empty( $total ) ) and NV_CURRENTTIME >= $counpons['date_start'] and ( $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] or empty( $counpons['uses_per_coupon'] ) ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
+	if( ( $total >= $counpons['total_amount'] or empty( $total ) ) and NV_CURRENTTIME >= $counpons['date_start'] and ( $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] or empty( $counpons['uses_per_coupon'] ) ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
 	{
 		// Ap dung giam gia cho tung san pham dac biet
 		if( $total_coupons > 0 )
