@@ -23,12 +23,12 @@
     "@font-size-base": "13px",
     "@font-size-large": "ceil((@font-size-base * 1.25))",
     "@font-size-small": "ceil((@font-size-base * 0.85))",
-    "@font-size-h1": "floor((@font-size-base * 2))",
-    "@font-size-h2": "floor((@font-size-base * 1.8))",
-    "@font-size-h3": "ceil((@font-size-base * 1.25))",
-    "@font-size-h4": "ceil((@font-size-base * 1.0))",
-    "@font-size-h5": "ceil((@font-size-base * 0.85))",
-    "@font-size-h6": "ceil((@font-size-base * 0.75))",
+    "@font-size-h1": "18px",
+    "@font-size-h2": "16px",
+    "@font-size-h3": "14px",
+    "@font-size-h4": "13px",
+    "@font-size-h5": "12px",
+    "@font-size-h6": "11px",
     "@line-height-base": "1.428571429",
     "@line-height-computed": "floor((@font-size-base * @line-height-base))",
     "@headings-font-family": "inherit",
@@ -82,6 +82,9 @@
     "@btn-danger-bg": "@brand-danger",
     "@btn-danger-border": "darken(@btn-danger-bg, 5%)",
     "@btn-link-disabled-color": "@gray-light",
+    "@btn-border-radius-base": "@border-radius-base",
+    "@btn-border-radius-large": "@border-radius-large",
+    "@btn-border-radius-small": "@border-radius-small",
     "@input-bg": "#fff",
     "@input-bg-disabled": "@gray-lighter",
     "@input-color": "@gray",
@@ -213,6 +216,7 @@
     "@jumbotron-bg": "@gray-lighter",
     "@jumbotron-heading-color": "inherit",
     "@jumbotron-font-size": "ceil((@font-size-base * 1.5))",
+    "@jumbotron-heading-font-size": "ceil((@font-size-base * 4.5))",
     "@state-success-text": "#3c763d",
     "@state-success-bg": "#dff0d8",
     "@state-success-border": "darken(spin(@state-success-bg, -10), 5%)",
@@ -377,7 +381,6 @@
     "@hr-border": "@gray-lighter"
   },
   "css": [
-    "print.less",
     "type.less",
     "code.less",
     "grid.less",
@@ -386,22 +389,21 @@
     "buttons.less",
     "button-groups.less",
     "input-groups.less",
-    "navs.less",
-    "navbar.less",
     "breadcrumbs.less",
     "pagination.less",
     "pager.less",
     "labels.less",
     "thumbnails.less",
     "alerts.less",
-    "progress-bars.less",
     "media.less",
     "list-group.less",
     "panels.less",
+    "responsive-embed.less",
     "wells.less",
     "component-animations.less",
     "dropdowns.less",
-    "tooltip.less"
+    "tooltip.less",
+    "modals.less"
   ],
   "js": [
     "dropdown.js",
@@ -414,5 +416,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=02f4df2ba27aa55a206d"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=448074377d78be4a90fc"
 }

@@ -40,9 +40,8 @@ else
 {
 	$filename = NV_TEMPNAM_PREFIX . 'auto_' . md5( $global_config['sitekey'] . session_id() ) . '.zip';
 
-	require( NV_ROOTDIR . '/includes/class/http.class.php' );
 	$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
-	
+
 	$args = array(
 		'headers' => array(
 			'Referer' => NUKEVIET_STORE_APIURL,
@@ -50,16 +49,16 @@ else
 		'stream' => true,
 		'filename' => NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename,
 		'body' => $request,
-	);	
-	
+	);
+
 	// Delete temp file if exists
 	if( file_exists( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename ) )
 	{
 		@nv_deletefile( NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename );
 	}
-	
+
 	$array = $NV_Http->post( NUKEVIET_STORE_APIURL, $args );
-	
+
 	if( ! empty( NV_Http::$error ) )
 	{
 		$contents = "ERR|" . nv_http_get_lang( NV_Http::$error );

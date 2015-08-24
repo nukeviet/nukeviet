@@ -10,14 +10,13 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-$allow_func = array( 'main', 'pagetitle', 'metatags', 'statistics', 'sitemapPing', 'googleplus', 'siteDiagnostic', 'keywordRank' );
+$allow_func = array( 'main', 'pagetitle', 'metatags', 'sitemapPing', 'googleplus', 'siteDiagnostic' );
 if( empty( $global_config['idsite'] ) )
 {
 	$allow_func[] = 'rpc';
 }
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-	$allow_func[] = 'bots';
 	$allow_func[] = 'robots';
 }
 

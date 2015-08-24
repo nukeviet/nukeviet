@@ -57,6 +57,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	if( strip_tags( $mess_content ) != '' )
 	{
 		$from = $db->query( 'SELECT email FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE id=' . $row['cid'] )->fetchColumn();
+        if( !empty( $from ) )
+        {
+            $from = explode( ",", $from );
+            $from = trim( $from[0] );
+        }
 		if( nv_check_valid_email( $from ) != '' )
 		{
 			$from = $admin_info['email'];

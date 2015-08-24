@@ -37,10 +37,9 @@ if( $nv_Request->get_string( 'checksessseting', 'post' ) == md5( session_id() . 
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
-$lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
+$lang_array_exit = nv_scandir( NV_ROOTDIR . '/includes/language', '/^[a-z]{2}+$/' );
 $lang_array_data_exit = array();
 
 $columns_array = $db->columns_array( NV_LANGUAGE_GLOBALTABLE . '_file' );
@@ -66,7 +65,7 @@ while( list( $key, $value ) = each( $language_array ) )
 	$arr_lang_func = array();
 	$check_lang_exit = false;
 
-	if( file_exists( NV_ROOTDIR . '/language/' . $key . '/global.php' ) )
+	if( file_exists( NV_ROOTDIR . '/includes/language/' . $key . '/global.php' ) )
 	{
 		$check_lang_exit = true;
 		$arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&amp;dirlang=" . $key . "&amp;checksess=" . md5( "readallfile" . session_id() ) . "\">" . $lang_module['nv_admin_read_all'] . "</a>";

@@ -110,7 +110,7 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.captcha} <span class="txtrequired">(*)</span></label>
 		<div class="col-sm-20">
-			<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control pull-left" style="width: 150px;" /><img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{LANG.captcha}" id="vimg" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="nv_change_captcha('vimg','fcode_iavim');" />
+			<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control pull-left" style="width: 150px;" /><img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{LANG.captcha}" class="captchaImg" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="change_captcha('#fcode_iavim');" />
 		</div>
 	</div>
 
@@ -126,22 +126,6 @@
 		<li><input type="submit" class="btn btn-primary" value="{LANG.save_content}" name="status1"></li>
 		<!-- END: postcontent -->
 	</ul>
-
 	<br />
 </form>
-<script type="text/javascript">
-	function get_alias() {
-		var title = strip_tags(document.getElementById('idtitle').value);
-		if (title != '') {
-			$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'get_alias=' + encodeURIComponent(title), function(res) {
-				if (res != "") {
-					document.getElementById('idalias').value = res;
-				} else {
-					document.getElementById('idalias').value = '';
-				}
-			});
-		}
-		return false;
-	}
-</script>
 <!-- END: main -->

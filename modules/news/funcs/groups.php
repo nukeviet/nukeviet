@@ -34,7 +34,7 @@ if( isset( $array_op[1] ) )
 		{
 			Header( 'Location: ' . $base_url_rewrite );
 			die();
-		}		
+		}
 
 		$array_mod_title[] = array(
 			'catid' => 0,
@@ -63,11 +63,11 @@ if( isset( $array_op[1] ) )
 		{
 			if( $item['homeimgthumb'] == 1 )//image thumb
 			{
-				$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 2 )//image file
 			{
-				$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 3 )//image url
 			{
@@ -94,26 +94,28 @@ if( isset( $array_op[1] ) )
 		unset( $query, $row );
 
 		$item_array_other = array();
-		$db->sqlreset()
-			->select( 't1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal' )
-			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
-			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
-			->where( 't2.bid= ' . $bid . ' AND t2.weight > ' . $end_weight )
-			->order( 't2.weight ASC' )
-			->limit( $st_links );
-		$result = $db->query( $db->sql() );
-		while( $item = $result->fetch() )
+		if ( $st_links > 0)
 		{
-			$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
-			$item_array_other[] = $item;
+			$db->sqlreset()
+				->select( 't1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal' )
+				->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
+				->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
+				->where( 't2.bid= ' . $bid . ' AND t2.weight > ' . $end_weight )
+				->order( 't2.weight ASC' )
+				->limit( $st_links );
+			$result = $db->query( $db->sql() );
+			while( $item = $result->fetch() )
+			{
+				$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
+				$item_array_other[] = $item;
+			}
+			unset( $query, $row );
 		}
-
-		unset( $query, $row );
 
 		$generate_page = nv_alias_page( $page_title, $base_url, $num_items, $per_page, $page );
 		if( ! empty( $image_group ) )
 		{
-			$image_group = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $image_group;
+			$image_group = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $image_group;
 		}
 		$contents = topic_theme( $item_array, $item_array_other, $generate_page, $page_title, $description, $image_group );
 	}
@@ -147,11 +149,11 @@ else
 		{
 			if( $item['homeimgthumb'] == 1 )//image thumb
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 2 )//image file
 			{
-				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $item['homeimgfile'];
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
 			}
 			elseif( $item['homeimgthumb'] == 3 )//image url
 			{

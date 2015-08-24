@@ -15,6 +15,17 @@ $theme = $nv_Request->get_string( 'selectthemes', 'cookie', $global_config['site
 
 if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . session_id() ) )
 {
+	
+	// load position file
+	$xml = simplexml_load_file( NV_ROOTDIR . '/themes/' . $theme . '/config.ini' );
+	$position = $xml->xpath( 'positions' );
+	$positions = $position[0]->position;
+	$array_pos = array();
+	for( $j = 0, $count = sizeof( $positions ); $j < $count; ++$j )
+	{
+		$array_pos[] = trim( $positions[$j]->tag );
+	}	
+	
 	// Cap nhat block hien thi toan site cho cac function moi phat sinh - Danh cho lap trinh vien
 	$array_bid = array();
 	// Danh sac tat ca cac block se kiem tra
@@ -25,7 +36,16 @@ if( ! empty( $theme ) and $checkss == md5( $theme . $global_config['sitekey'] . 
 
 	while( list( $bid, $position ) = $sth->fetch( 3 ) )
 	{
-		$array_bid[$bid] = $position;
+		if( in_array( $position, $array_pos ) )
+		{
+			$array_bid[$bid] = $position;
+		}
+		else 
+		{
+			// Xóa các block không còn phần cấu hình.
+			$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid = ' . $bid );
+			$db->query( 'DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid = ' . $bid );
+		}
 	}
 
 	$array_funcid = array();

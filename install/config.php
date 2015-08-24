@@ -16,6 +16,7 @@ $db_config['dbport'] = '';
 $db_config['dbname'] = '';
 $db_config['dbuname'] = '';
 $db_config['dbpass'] = '';
+$db_config['dbdetete'] = 0;
 $db_config['prefix'] = 'nv4';
 $db_config['persistent'] = false;
 $db_config['collation'] = 'utf8_general_ci';// mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
@@ -29,16 +30,20 @@ $array_data['nv_password'] = '';
 $array_data['re_password'] = '';
 $array_data['question'] = '';
 $array_data['answer_question'] = '';
+$array_data['socialbutton'] = 1;
 
-$global_config['version'] = '4.0.17';// NukeViet 4.0 OpenBeta 5
+$global_config['version'] = '4.0.23';// NukeViet 4.0 OpenBeta 9 (No release)
 $global_config['site_email'] = '';
+$global_config['error_set_logs'] = 1;
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';
 $global_config['cookie_prefix'] = '';
 $global_config['session_prefix'] = '';
 $global_config['cookie_secure'] = 0;
 $global_config['cookie_httponly'] = 1;
+
 $global_config['sitekey'] = '';
+$global_config['site_home_module'] = 'news';
 $global_config['idsite'] = 0;
 
 $global_config['site_timezone'] = 'byCountry';
@@ -85,8 +90,10 @@ define( 'NV_UNICKMIN', 4 );
 
 define( 'NV_LIVE_COOKIE_TIME', 31104000 );
 
+define( 'NV_LIVE_SESSION_TIME', 0 );
+
 // Ma HTML duoc chap nhan
-define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, iframe, figure, figcaption, video, source, track, code, pre' );
+define( 'NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, audio, source, track, code, pre' );
 
 //Chống IFRAME
 define( 'NV_ANTI_IFRAME', 0 );

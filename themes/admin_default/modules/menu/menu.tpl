@@ -1,4 +1,7 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
@@ -22,7 +25,7 @@
 				<tr>
 					<td class="text-right"><strong>{LANG.action_menu}: </strong></td>
 					<td>
-						<select name="action_menu" class="form-control w500">
+						<select name="action_menu" id="action_menu" class="form-control w500">
 							<option value="">&nbsp;</option>
 							<option value="sys_mod">{LANG.action_menu_sys_1}</option>
 							<option value="sys_mod_sub">{LANG.action_menu_sys_2}</option>
@@ -38,4 +41,9 @@
 	</table>
 </div>
 </form>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#action_menu").select2();
+	});
+</script>
 <!-- END: main -->

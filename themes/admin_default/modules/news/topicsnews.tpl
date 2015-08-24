@@ -12,7 +12,7 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="3"><em class="fa fa-check-square-o fa-lg">&nbsp;</em> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <em class="fa fa-square-o ">&nbsp;</em> <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete" href="{URL_DELETE}">{LANG.topic_del}</a></td>
+					<td colspan="3"><em class="fa fa-check-square-o fa-lg">&nbsp;</em> <a id="checkall" href="javascript:void(0);">{LANG.checkall}</a>&nbsp;&nbsp; <em class="fa fa-square-o ">&nbsp;</em> <a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>&nbsp;&nbsp; </span><span style="width:100px;display:inline-block">&nbsp;</span> <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a id="delete-topic" href="{URL_DELETE}">{LANG.topic_del}</a></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -32,37 +32,10 @@
 	<!-- END: empty -->
 </div>
 <script type="text/javascript">
-$('#checkall').click(function() {
-	$('input:checkbox').each(function() {
-		$(this).attr('checked', 'checked');
-	});
-});
-$('#uncheckall').click(function() {
-	$('input:checkbox').each(function() {
-		$(this).removeAttr('checked');
-	});
-});
-$('a.delete').click(function() {
-	var list = [];
-	$('input[name=newsid]:checked').each(function() {
-		list.push($(this).val());
-	});
-	if (list.length < 1) {
-		alert('{LANG.topic_nocheck}');
-		return false;
-	}
-	if (confirm('{LANG.topic_delete_confirm}')) {
-		$.ajax({
-			type : 'POST',
-			url : 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicdelnews',
-			data : 'list=' + list,
-			success : function(data) {
-				alert(data);
-				window.location = 'index.php?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topicsnews&topicid={TOPICID}';
-			}
-		});
-	}
-	return false;
-});
+var LANG = [];
+var CFG = [];
+LANG.topic_nocheck = '{LANG.topic_nocheck}';
+LANG.topic_delete_confirm = '{LANG.topic_delete_confirm}';
+CFG.topicid = '{TOPICID}';
 </script>
 <!-- END: main -->

@@ -37,7 +37,7 @@ if( ! empty( $savecat ) )
 	$logo = $nv_Request->get_title( 'logo', 'post', '' );
 	if( ! nv_is_url( $logo ) and file_exists( NV_DOCUMENT_ROOT . $logo ) )
 	{
-		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/source/' );
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' );
 		$logo = substr( $logo, $lu );
 	}
 	elseif( ! nv_is_url( $logo ) )
@@ -50,10 +50,10 @@ if( ! empty( $savecat ) )
 		$_count = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid != ' . $sourceid .' AND logo =' . $db->quote( basename( $logo_old ) ) )->fetchColumn();
 		if( empty( $_count ) )
 		{
-			@unlink( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_name . '/source/' . $logo_old );
-			@unlink( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/source/' . $logo_old );
-	
-			$_did = $db->query( 'SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname=' . $db->quote( dirname( NV_UPLOADS_DIR . '/' . $module_name . '/source/' . $logo_old ) ) )->fetchColumn();
+			@unlink( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old );
+			@unlink( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/source/' . $logo_old );
+
+			$_did = $db->query( 'SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname=' . $db->quote( dirname( NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old ) ) )->fetchColumn();
 			$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $_did . ' AND title=' . $db->quote( basename( $logo_old ) ) );
 		}
 	}
@@ -71,7 +71,7 @@ if( ! empty( $savecat ) )
 		$data_insert['link'] = $link;
 		$data_insert['logo'] = $logo;
 		$data_insert['weight'] = $weight;
-		
+
 		if( $db->insert_id( $sql, 'sourceid', $data_insert ) )
 		{
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'log_add_source', ' ', $admin_info['userid'] );
@@ -111,7 +111,7 @@ if( $sourceid > 0 )
 
 if( ! empty( $logo ) )
 {
-	$logo = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/source/' . $logo;
+	$logo = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo;
 }
 
 $xtpl = new XTemplate( 'sources.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -120,6 +120,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'MODULE_UPLOAD', $module_upload );
 $xtpl->assign( 'NV_UPLOADS_DIR', NV_UPLOADS_DIR );
 $xtpl->assign( 'OP', $op );
 

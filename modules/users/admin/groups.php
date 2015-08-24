@@ -287,7 +287,6 @@ if( $nv_Request->isset_request( 'userlist', 'get' ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 //Them + sua nhom
@@ -325,6 +324,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			{
 				die( $lang_module['title_empty'] );
 			}
+            
 
 			// Kiểm tra trùng tên nhóm
 			$stmt = $db->prepare( 'SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval( $post['id'] ) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))' );
@@ -333,6 +333,12 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			if( $stmt->fetchColumn() )
 			{
 				die( sprintf( $lang_module['error_title_exists'], $post['title'] ) );
+			}
+            
+            $post['description'] = $nv_Request->get_title( 'description', 'post', '', 1 );
+			if( empty( $post['description'] ) )
+			{
+				die( $lang_module['group_description_empty'] );
 			}
 
 			$post['content'] = $nv_Request->get_editor( 'content', '', NV_ALLOWED_HTML_TAGS );
@@ -358,6 +364,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 			{
 				$stmt = $db->prepare( "UPDATE " . NV_GROUPS_GLOBALTABLE . " SET
 					title= :title,
+                    description= :description,
 					content= :content,
 					exp_time='" . $post['exp_time'] . "',
 					publics='" . $post['publics'] . "',
@@ -365,6 +372,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 					WHERE group_id=" . $post['id'] );
 
 				$stmt->bindParam( ':title', $post['title'], PDO::PARAM_STR );
+                $stmt->bindParam( ':description', $post['description'], PDO::PARAM_STR );
 				$stmt->bindParam( ':content', $post['content'], PDO::PARAM_STR, strlen( $post['content'] ) );
 				$ok = $stmt->execute();
 			}
@@ -374,11 +382,12 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 				$weight = intval( $weight ) + 1;
 
 				$_sql = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . "
-					(title, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus)
-					VALUES ( :title, :content, " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $post['publics'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
+					(title, description, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus)
+					VALUES ( :title, :description, :content, " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $post['publics'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
 
 				$data_insert = array();
 				$data_insert['title'] = $post['title'];
+                $data_insert['description'] = $post['description'];
 				$data_insert['content'] = $post['content'];
 
 				$ok = $post['id'] = $db->insert_id( $_sql, 'group_id', $data_insert );
@@ -405,7 +414,7 @@ if( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'e
 		}
 		else
 		{
-			$post['title'] = $post['content'] = $post['exp_time'] = '';
+			$post['title'] = $post['description'] = $post['content'] = $post['exp_time'] = '';
 			$post['publics'] = '';
 		}
 

@@ -34,11 +34,10 @@ if( ! empty( $request['username'] ) and ! empty( $request['password'] ) )
 	$request['basever'] = $global_config['version'];
 	$request['mode'] = 'login';
 	$request['domain'] = NV_MY_DOMAIN;
-	
-	require( NV_ROOTDIR . '/includes/class/http.class.php' );
+
 	$NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 	$stored_cookies = nv_get_cookies();
-	
+
 	// Debug
 	$args = array(
 		'headers' => array(
@@ -52,7 +51,7 @@ if( ! empty( $request['username'] ) and ! empty( $request['password'] ) )
 
 	$cookies = $array['cookies'];
 	$array = ! empty( $array['body'] ) ? ( is_serialized_string( $array['body'] ) ? unserialize( $array['body'] ) : array() ) : array();
-	
+
 	$error = '';
 	if( ! empty( NV_Http::$error ) )
 	{
@@ -66,28 +65,28 @@ if( ! empty( $request['username'] ) and ! empty( $request['password'] ) )
 	{
 		$error = $array['error']['message'];
 	}
-	
+
 	// Show error
 	if( ! empty( $error ) )
 	{
 		$xtpl->assign( 'ERROR', $error );
 		$xtpl->parse( 'main.error' );
-		
+
 		$contents = $xtpl->text( 'main.error' );
 	}
 	else
 	{
 		// Save cookies
 		nv_store_cookies( nv_object2array( $cookies ), $stored_cookies );
-		
-		$redirect = $request['redirect'] ? nv_base64_decode( $request['redirect'] ) : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-		
+
+		$redirect = $request['redirect'] ? nv_redirect_decrypt( $request['redirect'] ) : NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+
 		$xtpl->assign( 'REDIRECT_LINK', $redirect );
 		$xtpl->parse( 'main.ok' );
-		
+
 		$contents = $xtpl->text( 'main.ok' );
 	}
-	
+
 	include NV_ROOTDIR . '/includes/header.php';
 	echo $contents;
 	include NV_ROOTDIR . '/includes/footer.php';

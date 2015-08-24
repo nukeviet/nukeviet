@@ -5,7 +5,7 @@
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 08 Apr 2012 00:00:00 GMT GMT
+ * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
@@ -410,7 +410,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		'hitstotal' => number_format( $hitstotal, 0, ',', '.' ),
 		'hitscm' => number_format( $hitscm, 0, ',', '.' ),
 		'numtags' => 0,
-		'feature' => implode( '&nbsp;-&nbsp;', $admin_funcs )
+		'feature' => implode( ' ', $admin_funcs )
 	);
 
 	$array_ids[] = $id;

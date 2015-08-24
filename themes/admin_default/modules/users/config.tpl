@@ -179,10 +179,7 @@
 					<td>{LANG.allow_change_email}</td>
 					<td><input name="allowmailchange" value="1" type="checkbox"{DATA.allowmailchange} /></td>
 				</tr>
-				<tr>
-					<td>{LANG.allow_openid}</td>
-					<td><input name="openid_mode" value="1" type="checkbox"{DATA.openid_mode} /></td>
-				</tr>
+
 				<tr>
 					<td>{LANG.openid_servers}</td>
 					<td>
@@ -198,6 +195,16 @@
 					<!-- END: openid_servers -->
 					</td>
 				</tr>
+				<tr>
+					<td>{LANG.openid_processing}</td>
+					<td>
+						<select class="form-control" name="openid_processing">
+							<!-- BEGIN: openid_processing -->
+							<option value="{OPENID_PROCESSING.id}"{OPENID_PROCESSING.select}> {OPENID_PROCESSING.value}</option>
+							<!-- END: openid_processing -->
+						</select>
+					</td>
+				</tr>			
 				<tr>
 					<td>{LANG.deny_email}</td>
 					<td><textarea name="deny_email" rows="7" cols="70" class="form-control">{DATA.deny_email}</textarea></td>

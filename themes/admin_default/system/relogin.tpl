@@ -13,29 +13,23 @@
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/main.css">
 		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/{SITELANG}.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{SITELANG}.js"></script>
 		<script type="text/javascript">
-			function nv_checkadminlogin_submit() {
-				var password = document.getElementById('password');
-				if (password.value == '') {
-					return false;
-				}
-				return true;
-			}
-
-			function nv_admin_logout() {
-				if (confirm(nv_admlogout_confirm[0])) {
-					window.location.href = '{NV_BASE_SITEURL}index.php?second=admin_logout&ok=1';
-				}
+		function nv_checkadminlogin_submit() {
+			var password = document.getElementById('password');
+			if (password.value == '') {
 				return false;
 			}
+			return true;
+		}
+
+		function nv_admin_logout() {
+			if (confirm(nv_admlogout_confirm[0])) {
+				window.location.href = '{NV_BASE_SITEURL}index.php?second=admin_logout&ok=1';
+			}
+			return false;
+		}
 		</script>
-		<!--[if IE 6]>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
-		<script type="text/javascript">
-		DD_belatedPNG.fix('.submitform, img');
-		</script>
-		<![endif]-->
 	</head>
 	<body>
 		<div id="wrapper">

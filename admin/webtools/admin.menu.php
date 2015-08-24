@@ -10,13 +10,10 @@
 
 if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
 
+$submenu['statistics'] = $lang_module['global_statistics'];
+$submenu['clearsystem'] = $lang_module['clearsystem'];
 if( empty( $global_config['idsite'] ) )
 {
-    $submenu['clearsystem'] = $lang_module['clearsystem'];
 	$submenu['checkupdate'] = $lang_module['checkupdate'];
 	$submenu['config'] = $lang_module['config'];
-	if( NV_LANG_INTERFACE == 'vi' )
-	{
-		$submenu['mudim'] = $lang_module['mudim'];
-	}
 }

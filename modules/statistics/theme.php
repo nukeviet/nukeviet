@@ -184,8 +184,10 @@ function nv_theme_statistics_allos( $num_items, $os_list, $cts )
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
+				$const = 'PLATFORM_' . strtoupper( $key );
+				$key = defined( $const ) ? constant( $const ) : $lang_global['unknown'];
 
+				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
 
@@ -236,8 +238,10 @@ function nv_theme_statistics_allbrowsers( $num_items, $browsers_list, $cts )
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
+				$const = 'BROWSER_' . strtoupper( $key );
+				$key = defined( $const ) ? constant( $const ) : $lang_global['unknown'];
 
+                $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
 
@@ -289,7 +293,8 @@ function nv_theme_statistics_allcountries( $num_items, $countries_list, $cts )
 			$a = 0;
 			foreach( $cts['rows'] as $key => $value )
 			{
-				$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
+				if ( $key == 'ZZ' ) $value[0] = $lang_global['unknown'];
+                $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 				$xtpl->assign( 'CLASS', $class );
 				$xtpl->assign( 'KEY', $key );
@@ -530,7 +535,8 @@ function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $
 	$a = 0;
 	foreach( $ctsc['rows'] as $key => $value )
 	{
-		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
+		if ( $key == 'ZZ' ) $value[0] = $lang_global['unknown'];
+        $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
 
@@ -567,7 +573,10 @@ function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $
 	$a = 0;
 	foreach( $ctsb['rows'] as $key => $value )
 	{
-		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
+		$const = 'BROWSER_' . strtoupper( $key );
+        $key = defined( $const ) ? constant( $const ) : $lang_global['unknown'];
+
+        $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
 
@@ -603,8 +612,10 @@ function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $
 	$a = 0;
 	foreach( $ctso['rows'] as $key => $value )
 	{
-		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
+		$const = 'PLATFORM_' . strtoupper( $key );
+        $key = defined( $const ) ? constant( $const ) : $lang_global['unknown'];
 
+        $class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
 		$xtpl->assign( 'KEY', $key );
 

@@ -39,8 +39,6 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 		}
 		else
 		{
-			require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
-
 			$zip = new PclZip( $filename );
 			$ziplistContent = $zip->listContent();
 
@@ -400,7 +398,6 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 		include NV_ROOTDIR . '/includes/header.php';
 		echo $contents;
 		include NV_ROOTDIR . '/includes/footer.php';
-		exit();
 	}
 
 	die('Error Access!!!');
@@ -449,8 +446,6 @@ else
 		$error = $lang_module['autoinstall_error_downloaded'];
 	}
 }
-
-require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 
 $error = '';
 $info = array();

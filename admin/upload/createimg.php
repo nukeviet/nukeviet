@@ -29,7 +29,6 @@ while( file_exists( NV_ROOTDIR . '/' . $path . '/' . $file ) )
 	++$i;
 }
 
-require_once NV_ROOTDIR . '/includes/class/image.class.php';
 $createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $imagename, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 $createImage->resizeXY( $width, $height );
 $createImage->save( NV_ROOTDIR . '/' . $path, $file, 75 );

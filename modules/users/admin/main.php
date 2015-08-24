@@ -14,44 +14,51 @@ $page_title = $table_caption = $lang_module['list_module_title'];
 
 $usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 3 );
 $usactive = $nv_Request->get_int( 'usactive', 'post,get', $usactive_old );
+$method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
+
 if( $usactive_old != $usactive )
 {
 	$nv_Request->set_Cookie( 'usactive', $usactive );
 }
-$_where = 'active=' . ( $usactive % 2 );
+$_arr_where = array();
+if( $usactive > -1 )
+{
+	$_arr_where[] = 'active=' . ( $usactive % 2 );
+}
 if( $usactive > 1 )
 {
-	$_where .= ' AND (idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
+	$_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
 }
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&usactive=' . $usactive;
 
-$where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
-
 $methods = array(
 	'userid' => array(
 		'key' => 'userid',
+		'sql' => 'userid',
 		'value' => $lang_module['search_id'],
 		'selected' => ''
 	),
 	'username' => array(
 		'key' => 'username',
+		'sql' => 'username',
 		'value' => $lang_module['search_account'],
 		'selected' => ''
 	),
-	$where_fullname => array(
-		'key' => $where_fullname,
+	'fullname' => array(
+		'key' => 'fullname',
+		'sql' => $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)",
 		'value' => $lang_module['search_name'],
 		'selected' => ''
 	),
 	'email' => array(
 		'key' => 'email',
+		'sql' => 'email',
 		'value' => $lang_module['search_mail'],
 		'selected' => ''
 	)
 );
 
-$method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
 $methodvalue = $nv_Request->isset_request( 'value', 'post' ) ? $nv_Request->get_string( 'value', 'post' ) : ( $nv_Request->isset_request( 'value', 'get' ) ? urldecode( $nv_Request->get_string( 'value', 'get', '' ) ) : '' );
 
 $orders = array( 'userid', 'username', 'full_name', 'email', 'regdate' );
@@ -64,17 +71,16 @@ if( ! empty( $methodvalue ) )
 {
 	if( empty( $method ) )
 	{
-		$key_methods = array_keys( $methods );
 		$array_like = array();
-		foreach( $key_methods as $method_i )
+		foreach( $methods as $method_i )
 		{
-			$array_like[] = $method_i . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
+			$array_like[] = $method_i['sql'] . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%'";
 		}
-		$_where .= ' AND (' . implode( ' OR ', $array_like ) . ')';
+		$_arr_where[] = '(' . implode( ' OR ', $array_like ) . ')';
 	}
 	else
 	{
-		$_where .= " AND (" . $method . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%')";
+		$_arr_where[] = " (" . $methods[$method]['sql'] . " LIKE '%" . $db->dblikeescape( $methodvalue ) . "%')";
 		$methods[$method]['selected'] = ' selected="selected"';
 	}
 	$base_url .= '&amp;method=' . urlencode( $method ) . '&amp;value=' . urlencode( $methodvalue );
@@ -87,10 +93,14 @@ $per_page = 30;
 
 $db->sqlreset()
 	->select( 'COUNT(*)' )
-	->from( NV_USERS_GLOBALTABLE )
-	->where( $_where );
+	->from( NV_USERS_GLOBALTABLE );
 
-	$num_items = $db->query( $db->sql() )->fetchColumn();
+if( ! empty( $_arr_where ) )
+{
+	$db->where( implode( ' AND ', $_arr_where ) );
+}
+
+$num_items = $db->query( $db->sql() )->fetchColumn();
 
 $db->select( '*' )
 	->limit( $per_page )
@@ -237,7 +247,7 @@ for( $i = $_bg; $i >= 0; $i-- )
 {
 	$m = array(
 		'key' => $i,
-		'selected' => ( $i == $usactive ) ? 'selected="selected"' : '',
+		'selected' => ( $i == $usactive ) ? ' selected="selected"' : '',
 		'value' => $lang_module['usactive_' . $i]
 	);
 	$xtpl->assign( 'USACTIVE', $m );

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
+	<table class="table table-striped table-bordered table-hover" data-is-default="fa-check-square-o" data-not-default="fa-square-o">
 		<colgroup>
 			<col span="3" />
 			<col span="2" class="w100"/>
@@ -31,7 +31,7 @@
                         <!-- END: option -->
                     </select>
                 </td>
-				<td><a title="{LANG.url_for_iframe}" href="{ROW.url_part}" target="_blank">{ROW.full_name}</a></td>
+				<td>{ROW.full_name}</td>
 				<td>{ROW.email}</td>
 				<td>{ROW.phone}</td>
 				<td>{ROW.fax}</td>
@@ -42,8 +42,9 @@
 					<!-- END: status -->
 				</select></td>
 				<td class="text-center">
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_department('{ROW.id}')">{GLANG.delete}</a>
+                    <a href="javascript:void(0);" onclick="nv_change_default('{ROW.id}',this)"><em class="fa <!-- BEGIN: check -->fa-check-square-o<!-- END: check --><!-- BEGIN: notcheck -->fa-square-o<!-- END: notcheck --> fa-lg">&nbsp;</em> {LANG.is_default}</a> &nbsp;
+					<a href="{ROW.url_edit}"><em class="fa fa-edit fa-lg">&nbsp;</em> {GLANG.edit}</a> &nbsp;
+					<a href="javascript:void(0);" onclick="nv_del_department('{ROW.id}')"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {GLANG.delete}</a>
 				</td>
 			</tr>
 			<!-- END: row -->

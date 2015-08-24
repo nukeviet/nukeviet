@@ -141,6 +141,17 @@ if( $nv_Request->isset_request( 'nv_login,nv_password', 'post' ) and $nv_Request
 
 					$nv_Request->set_Session( 'admin', $admin_serialize );
 					$nv_Request->set_Session( 'online', '1|' . NV_CURRENTTIME . '|' . NV_CURRENTTIME . '|0' );
+
+					if( $global_config['lang_multi'] )
+					{
+						$sql = 'SELECT setup FROM ' . $db_config['prefix'] . '_setup_language WHERE lang=' . $db->quote( NV_LANG_INTERFACE );
+						$setup = $db->query( $sql )->fetchColumn();
+						if( $setup )
+						{
+							$nv_Request->set_Cookie( 'data_lang', NV_LANG_INTERFACE, NV_LIVE_COOKIE_TIME );
+						}
+					}
+
 					define( 'NV_IS_ADMIN', true );
 
 					$redirect = NV_BASE_SITEURL . NV_ADMINDIR;
@@ -171,16 +182,16 @@ else
 	$nv_username = '';
 }
 
-if( file_exists( NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_global.php' ) )
+if( file_exists( NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php' ) )
 {
-	require_once NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/admin_global.php';
+	require_once NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php';
 }
-elseif( file_exists( NV_ROOTDIR . '/language/en/admin_global.php' ) )
+elseif( file_exists( NV_ROOTDIR . '/includes/language/en/admin_global.php' ) )
 {
-	require_once NV_ROOTDIR . '/language/en/admin_global.php';
+	require_once NV_ROOTDIR . '/includes/language/en/admin_global.php';
 }
 
-$info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['logininfo'] . '</div>';
+$info = ( ! empty( $error ) ) ? '<div class="error">' . $error . '</div>' : '<div class="normal">' . $lang_global['adminlogininfo'] . '</div>';
 $size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
 
 $dir_template = '';
@@ -202,6 +213,7 @@ $xtpl->assign( 'ADMIN_THEME', $global_config['admin_theme'] );
 $xtpl->assign( 'SITELANG', NV_LANG_INTERFACE );
 $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
+$xtpl->assign( 'NV_ASSETS_DIR', NV_ASSETS_DIR );
 $xtpl->assign( 'CHECK_SC', ( $global_config['gfx_chk'] == 1 ) ? 1 : 0 );
 $xtpl->assign( 'LOGIN_TITLE', $lang_global['adminlogin'] );
 $xtpl->assign( 'LOGIN_INFO', $info );
@@ -244,19 +256,20 @@ $xtpl->assign( 'LINKLOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE
 if( $global_config['gfx_chk'] == 1 )
 {
 	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
+	$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
 	$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 	$xtpl->assign( 'GFX_NUM', NV_GFX_NUM );
 	$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 	$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
 	$xtpl->parse( 'main.captcha' );
 }
+
 if( $global_config['lang_multi'] == 1 )
 {
-	$_language_array = nv_scandir(  NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
+	$_language_array = nv_scandir(  NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/' );
 	foreach( $_language_array as $lang_i )
 	{
-		if( file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/global.php' ) and file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/admin_global.php' ) )
+		if( file_exists( NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php' ) and file_exists( NV_ROOTDIR . '/includes/language/' . $lang_i . '/admin_global.php' ) )
 		{
 			$xtpl->assign( 'LANGOP', NV_BASE_ADMINURL . 'index.php?langinterface=' . $lang_i );
 			$xtpl->assign( 'LANGTITLE', $lang_global['langinterface'] );
@@ -268,8 +281,6 @@ if( $global_config['lang_multi'] == 1 )
 	$xtpl->parse( 'main.lang_multi' );
 }
 $xtpl->parse( 'main' );
-
-$global_config['mudim_active'] = 0;
 
 include NV_ROOTDIR . '/includes/header.php';
 $xtpl->out( 'main' );

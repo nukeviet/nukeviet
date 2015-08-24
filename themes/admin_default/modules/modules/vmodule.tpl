@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="alert alert-info <!-- BEGIN: error --> alert-danger <!-- END: error -->"><span>{LANG.vmodule_blockquote}</div>
 
@@ -31,7 +31,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td class="right top">
+					<td class="text-right top">
 					<br />
 					<strong>{LANG.vmodule_note}:</strong></td>
 					<td><textarea style="width: 450px" name="note" cols="80" rows="5" class="form-control">{NOTE}</textarea></td>

@@ -12,8 +12,6 @@ if( ! defined( 'E_STRICT' ) ) define( 'E_STRICT', 2048 ); //khong sua
 if( ! defined( 'E_RECOVERABLE_ERROR' ) ) define( 'E_RECOVERABLE_ERROR', 4096 ); //khong sua
 if( ! defined( 'E_DEPRECATED' ) ) define( 'E_DEPRECATED', 8192 ); //khong sua
 if( ! defined( 'E_USER_DEPRECATED' ) ) define( 'E_USER_DEPRECATED', 16384 ); //khong sua
-if( ! defined( 'NV_CURRENTTIME' ) ) define( 'NV_CURRENTTIME', time() );
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
 
 class Error
 {
@@ -21,9 +19,11 @@ class Error
 	const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log
 	const LOG_FILE_EXT_DEFAULT = 'log'; //duoi file log
 	private $log_errors_list;
+    private $site_logo = 'assets/images/logo.png';
 	private $display_errors_list;
 	private $send_errors_list;
 	private $error_send_mail;
+	private $error_set_logs = false;
 	private $error_log_path;
 	private $error_log_tmp = false;
 	private $error_log_filename;
@@ -70,6 +70,8 @@ class Error
 		$this->send_errors_list = $this->parse_error_num( ( int )$config['send_errors_list'] );
 		$this->error_log_path = $this->get_error_log_path( ( string )$config['error_log_path'] );
 		$this->error_send_mail = ( string )$config['error_send_email'];
+		$this->error_set_logs = $config['error_set_logs'];
+        if( ! empty ( $config['site_logo'] ) ) $this->site_logo = $config['site_logo'];
 
 		if( isset( $config['error_log_filename'] ) and preg_match( '/[a-z0-9\_]+/i', $config['error_log_filename'] ) )
 		{
@@ -294,7 +296,7 @@ class Error
 		$error_code2 = md5( $error_code );
 		$error_file = $this->error_log_256 . '/' . $this->month . '__' . $error_code2 . '__' . $error_code . '.' . $this->error_log_fileext;
 
-		if( ! file_exists( $error_file ) )
+		if( $this->error_set_logs and ! file_exists( $error_file ) )
 		{
 			$content = "TIME: " . $this->error_date . "\r\n";
 			if( ! empty( $this->ip ) ) $content .= "IP: " . $this->ip . "\r\n";
@@ -314,7 +316,7 @@ class Error
 			$strEncodedEmail .= "&#" . ord( substr( $this->error_send_mail, $i ) ) . ";";
 		}
 
-		$size = @getimagesize( NV_ROOTDIR . '/images/' . $this->site_logo );
+		$size = @getimagesize( NV_ROOTDIR . '/' . $this->site_logo );
 		echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n";
 		echo "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
 		echo "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n";
@@ -395,10 +397,10 @@ class Error
 		$track_errors = $this->day . '_' . md5( $this->errno . ( string )$this->errfile . ( string )$this->errline . $this->ip );
 		$track_errors = $this->error_log_tmp . '/' . $track_errors . '.' . $this->error_log_fileext;
 
-		if( ! file_exists( $track_errors ) )
+		if( $this->error_set_logs and ! file_exists( $track_errors ) )
 		{
 			file_put_contents( $track_errors, '', FILE_APPEND );
-			
+
 			if( ! empty( $this->log_errors_list ) and isset( $this->log_errors_list[$errno] ) )
 			{
 				$this->_log();

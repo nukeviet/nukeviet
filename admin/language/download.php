@@ -47,30 +47,50 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . se
 			}
 		}
 
-		if( is_dir( NV_ROOTDIR . '/language/' . $dirlang ) )
+		if( is_dir( NV_ROOTDIR . '/includes/language/' . $dirlang ) )
 		{
-			$allowfolder[] = NV_ROOTDIR . '/language/' . $dirlang;
+			$allowfolder[] = NV_ROOTDIR . '/includes/language/' . $dirlang;
 		}
 
 		//package js language
-		if( file_exists( NV_ROOTDIR . '/js/language/' . $dirlang . '.js' ) )
+		if( file_exists( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language/' . $dirlang . '.js' ) )
 		{
-			$allowfolder[] = NV_ROOTDIR . '/js/language/' . $dirlang . '.js';
+			$allowfolder[] = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language/' . $dirlang . '.js';
 		}
-		elseif( file_exists( NV_ROOTDIR . '/js/language/en.js' ) )
+		elseif( file_exists( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language/en.js' ) )
 		{
-			$allowfolder[] = NV_ROOTDIR . '/js/language/en.js';
+			$allowfolder[] = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language/en.js';
 		}
 
 		$pattern_lang_js = '/[a-zA-Z0-9\-\_\.]+\-' . $dirlang . '\.js$/';
-		$array_lang_js = nv_scandir( NV_ROOTDIR . '/js/language', $pattern_lang_js );
+		$array_lang_js = nv_scandir( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language', $pattern_lang_js );
 
 		if( ! empty( $array_lang_js ) )
 		{
 			foreach( $array_lang_js as $fjs )
 			{
-				$allowfolder[] = NV_ROOTDIR . '/js/language/' . $fjs;
+				$allowfolder[] = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/language/' . $fjs;
 			}
+		}
+
+		// Lang theme default
+		if( file_exists( NV_ROOTDIR . '/themes/default/language/' . $dirlang . '.php' ) )
+		{
+			$allowfolder[] = NV_ROOTDIR . '/themes/default/language/' . $dirlang . '.php';
+		}
+		if( file_exists( NV_ROOTDIR . '/themes/default/language/admin_' . $dirlang . '.php' ) )
+		{
+			$allowfolder[] = NV_ROOTDIR . '/themes/default/language/admin_' . $dirlang . '.php';
+		}
+
+		// Lang theme mobile_default
+		if( file_exists( NV_ROOTDIR . '/themes/mobile_default/language/' . $dirlang . '.php' ) )
+		{
+			$allowfolder[] = NV_ROOTDIR . '/themes/mobile_default/language/' . $dirlang . '.php';
+		}
+		if( file_exists( NV_ROOTDIR . '/themes/mobile_default/language/admin_' . $dirlang . '.php' ) )
+		{
+			$allowfolder[] = NV_ROOTDIR . '/themes/mobile_default/language/admin_' . $dirlang . '.php';
 		}
 
 		//package samples data
@@ -78,30 +98,22 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . se
 		{
 			$allowfolder[] = NV_ROOTDIR . '/install/data_' . $dirlang . '.php';
 		}
-		elseif( file_exists( NV_ROOTDIR . '/js/install/data_en.php' ) )
+		elseif( file_exists( NV_ROOTDIR . '/install/data_en.php' ) )
 		{
-			$allowfolder[] = NV_ROOTDIR . '/js/install/data_en.php';
-		}
-
-		if( file_exists( NV_ROOTDIR . '/includes/phpmailer/language/phpmailer.lang-' . $dirlang . '.php' ) )
-		{
-			$allowfolder[] = NV_ROOTDIR . '/includes/phpmailer/language/phpmailer.lang-' . $dirlang . '.php';
+			$allowfolder[] = NV_ROOTDIR . '/install/data_en.php';
 		}
 
 		$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $dirlang . '.zip';
-
 		if( file_exists( $file_src ) )
 		{
 			unlink( $file_src );
 		}
 
 		//Zip file
-		require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 		$zip = new PclZip( $file_src );
 		$zip->create( $allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR );
 
 		//Download file
-		require_once NV_ROOTDIR . '/includes/class/download.class.php';
 		$file_basename = 'Language_' . $dirlang . '.zip';
 		$download = new download( $file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, $file_basename );
 		$download->download_file();

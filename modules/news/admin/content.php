@@ -17,19 +17,19 @@ if( defined( 'NV_EDITOR' ) )
 
 $username_alias = change_alias( $admin_info['username'] );
 $array_structure_image = array();
-$array_structure_image[''] = $module_name;
-$array_structure_image['Y'] = $module_name . '/' . date( 'Y' );
-$array_structure_image['Ym'] = $module_name . '/' . date( 'Y_m' );
-$array_structure_image['Y_m'] = $module_name . '/' . date( 'Y/m' );
-$array_structure_image['Ym_d'] = $module_name . '/' . date( 'Y_m/d' );
-$array_structure_image['Y_m_d'] = $module_name . '/' . date( 'Y/m/d' );
-$array_structure_image['username'] = $module_name . '/' . $username_alias;
+$array_structure_image[''] = $module_upload;
+$array_structure_image['Y'] = $module_upload . '/' . date( 'Y' );
+$array_structure_image['Ym'] = $module_upload . '/' . date( 'Y_m' );
+$array_structure_image['Y_m'] = $module_upload . '/' . date( 'Y/m' );
+$array_structure_image['Ym_d'] = $module_upload . '/' . date( 'Y_m/d' );
+$array_structure_image['Y_m_d'] = $module_upload . '/' . date( 'Y/m/d' );
+$array_structure_image['username'] = $module_upload . '/' . $username_alias;
 
-$array_structure_image['username_Y'] = $module_name . '/' . $username_alias . '/' . date( 'Y' );
-$array_structure_image['username_Ym'] = $module_name . '/' . $username_alias . '/' . date( 'Y_m' );
-$array_structure_image['username_Y_m'] = $module_name . '/' . $username_alias . '/' . date( 'Y/m' );
-$array_structure_image['username_Ym_d'] = $module_name . '/' . $username_alias . '/' . date( 'Y_m/d' );
-$array_structure_image['username_Y_m_d'] = $module_name . '/' . $username_alias . '/' . date( 'Y/m/d' );
+$array_structure_image['username_Y'] = $module_upload . '/' . $username_alias . '/' . date( 'Y' );
+$array_structure_image['username_Ym'] = $module_upload . '/' . $username_alias . '/' . date( 'Y_m' );
+$array_structure_image['username_Y_m'] = $module_upload . '/' . $username_alias . '/' . date( 'Y/m' );
+$array_structure_image['username_Ym_d'] = $module_upload . '/' . $username_alias . '/' . date( 'Y_m/d' );
+$array_structure_image['username_Y_m_d'] = $module_upload . '/' . $username_alias . '/' . date( 'Y/m/d' );
 
 $structure_upload = isset( $module_config[$module_name]['structure_upload'] ) ? $module_config[$module_name]['structure_upload'] : 'Ym';
 $currentpath = isset( $array_structure_image[$structure_upload] ) ? $array_structure_image[$structure_upload] : '';
@@ -40,7 +40,7 @@ if( file_exists( NV_UPLOADS_REAL_DIR . '/' . $currentpath ) )
 }
 else
 {
-	$upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_name;
+	$upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_upload;
 	$e = explode( '/', $currentpath );
 	if( ! empty( $e ) )
 	{
@@ -67,13 +67,13 @@ else
 }
 
 $currentpath = str_replace( NV_ROOTDIR . '/', '', $upload_real_dir_page );
-$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_name;
+$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload;
 if( ! defined( 'NV_IS_SPADMIN' ) and strpos( $structure_upload, 'username' ) !== false )
 {
 	$array_currentpath = explode( '/', $currentpath );
 	if( $array_currentpath[2] == $username_alias )
 	{
-		$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_name . '/' . $username_alias;
+		$uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $username_alias;
 	}
 }
 
@@ -391,7 +391,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['alias'] = $alias;
 	}
 
-	$rowcontent['hometext'] = $nv_Request->get_textarea( 'hometext', 'post', '', 'br', 1 );
+	$rowcontent['hometext'] = $nv_Request->get_textarea( 'hometext', '', 'br', 1 );
 
 	$rowcontent['homeimgfile'] = $nv_Request->get_title( 'homeimg', 'post', '' );
 	$rowcontent['homeimgalt'] = $nv_Request->get_title( 'homeimgalt', 'post', '', 1 );
@@ -455,7 +455,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				}
 			}
 		}
-		$rowcontent['keywords'] = implode( ',', $keywords );
+		$rowcontent['keywords'] = implode( ',', $keywords_return );
 	}
 
 	if( empty( $rowcontent['title'] ) )
@@ -541,9 +541,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['homeimgthumb'] = 0;
 		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and is_file( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
-			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
-			if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+			if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 			{
 				$rowcontent['homeimgthumb'] = 1;
 			}
@@ -874,16 +874,17 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$url = 'javascript: history.go(-1)';
 		$msg1 = implode( '<br />', $error );
 		$msg2 = $lang_module['content_back'];
-		redriect( $msg1, $msg2, $url );
+		redriect( $msg1, $msg2, $url, $module_data . '_bodyhtml', 'back' );
 	}
 	$id_block_content = $id_block_content_post;
 }
 
+$rowcontent['hometext'] = nv_htmlspecialchars( nv_br2nl( $rowcontent['hometext'] ) );
 $rowcontent['bodyhtml'] = htmlspecialchars( nv_editor_br2nl( $rowcontent['bodyhtml'] ) );
 
-if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+if( ! empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 {
-	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
+	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
 }
 
 $array_catid_in_row = explode( ',', $rowcontent['listcatid'] );

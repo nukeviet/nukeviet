@@ -10,7 +10,10 @@
 
 define( 'NV_SYSTEM', true );
 
-require str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php';
+// Xac dinh thu muc goc cua site
+define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
+
+require NV_ROOTDIR .'/includes/mainfile.php';
 
 require NV_ROOTDIR . '/includes/core/user_functions.php';
 
@@ -83,9 +86,19 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	// Kiểm tra module có trong hệ thống hay không
 	if( isset( $site_mods[$module_name] ) )
 	{
+		// SSL
+		if( $global_config['ssl_https'] === 3 and ! empty( $global_config['ssl_https_modules'] ) and in_array( $module_name, $global_config['ssl_https_modules'] ) and ( ! isset( $_SERVER['HTTPS'] ) or $_SERVER['HTTPS'] == 'off' ) )
+		{
+			header( "HTTP/1.1 301 Moved Permanently" );
+			header( "Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] );
+			exit();
+		}
+
+		// Global variable for module
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
+		$module_upload = $module_info['module_upload'];
 		$include_file = NV_ROOTDIR . '/modules/' . $module_file . '/funcs/main.php';
 
 		if( file_exists( $include_file ) )
@@ -106,7 +119,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 
 				if( in_array( $theme_type, $array_theme_type ) ) $nv_Request->set_Cookie( 'nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME );
 
-				$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+				$nv_redirect = ! empty( $nv_redirect ) ? nv_redirect_decrypt( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 				Header( 'Location: ' . nv_url_rewrite( $nv_redirect ) );
 				die();
 			}
@@ -140,7 +153,10 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				{
 					$drag_block = $nv_Request->get_int( 'drag_block', 'get', 0 );
 					$nv_Request->set_Session( 'drag_block', $drag_block );
-					Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+
+					$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
+					$nv_redirect = ! empty( $nv_redirect ) ? nv_redirect_decrypt( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+					Header( 'Location: ' . nv_url_rewrite( $nv_redirect, true ) );
 					die();
 				}
 				if( $drag_block )
@@ -164,18 +180,26 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				require NV_ROOTDIR . '/modules/' . $module_file . '/language/en.php';
 			}
 
+			// Xac dinh kieu giao dien mac dinh
+			$global_config['current_theme_type'] = $nv_Request->get_string( 'nv' . NV_LANG_DATA . 'themever', 'cookie', '' );
+
 			// Xac dinh giao dien chung
 			$is_mobile = false;
 			$theme_type = '';
-			$_theme = ( ! empty( $module_info['mobile'] ) ) ? $module_info['mobile'] : $global_config['mobile_theme'];
-			if( ( ( ! empty( $client_info['is_mobile'] ) and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == 'm' and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
+			$_theme_mobile = ( ! empty( $module_info['mobile'] ) ) ? $module_info['mobile'] : $global_config['mobile_theme'];
+			if( ( ( $client_info['is_mobile'] and ( empty( $global_config['current_theme_type'] ) or empty( $global_config['switch_mobi_des'] ) ) ) or ( $global_config['current_theme_type'] == 'm' and ! empty( $global_config['switch_mobi_des'] ) ) ) and ! empty( $_theme_mobile ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme_mobile . '/theme.php' ) )
 			{
-				$global_config['module_theme'] = $_theme;
+				$global_config['module_theme'] = $_theme_mobile;
 				$is_mobile = true;
 				$theme_type = 'm';
 			}
 			else
 			{
+				if( empty( $global_config['current_theme_type'] ) and ( $client_info['is_mobile'] or empty( $_theme_mobile ) ) )
+				{
+					$global_config['current_theme_type'] = 'r';
+				}
+
 				$_theme = ( ! empty( $module_info['theme'] ) ) ? $module_info['theme'] : $global_config['site_theme'];
 				if( ! empty( $_theme ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/theme.php' ) )
 				{
@@ -298,11 +322,10 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	elseif( isset( $sys_mods[$module_name] ) )
 	{
 		$groups_view = ( string )$sys_mods[$module_name]['groups_view'];
-		if( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
+		if( ! defined( 'NV_IS_USER' ) and $groups_view == '4' )
 		{
-			// Login users
-			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-			die();
+			$redirect =  NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] );
+			nv_info_die( $lang_global['site_info'], $lang_global['site_info'], "<br />" . $lang_global['logininfo']. " \n <meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />" );
 		}
 		elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
 		{

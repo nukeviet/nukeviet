@@ -36,7 +36,6 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 	if( $config_logo['w'] > 0 and $config_logo['h'] > 0 )
 	{
-		require_once NV_ROOTDIR . '/includes/class/image.class.php';
 		$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT );
         $createImage->cropFromLeft( $config_logo['x'], $config_logo['y'], $config_logo['w'], $config_logo['h'] );
 		$createImage->save( NV_ROOTDIR . '/' . $path, $file );
@@ -44,7 +43,7 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 		if( isset( $array_dirname[$path] ) )
 		{
-			if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $path . '/' . $file, $m ) )
+			if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $path . '/' . $file, $m ) )
 			{
 				@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] );
 			}

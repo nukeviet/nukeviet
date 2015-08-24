@@ -38,6 +38,13 @@ $sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'i
 
 //Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
+define( 'NV_FILES_DIR', NV_ASSETS_DIR );
+
+// Register given function autoload implementation
+spl_autoload_register( function ( $classname )
+{
+	include NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php';
+} );
 
 require_once realpath( NV_ROOTDIR . '/install/config.php' );
 
@@ -47,7 +54,6 @@ $global_config['my_domains'] = $_SERVER['SERVER_NAME'];
 $global_config['allowed_html_tags'] = array_map( "trim", explode( ',', NV_ALLOWED_HTML_TAGS ) );
 
 //Xac dinh IP cua client
-require NV_ROOTDIR . '/includes/class/ips.class.php';
 $ips = new ips();
 $client_info['ip'] = $ips->remote_ip;
 if( $client_info['ip'] == "none" ) die( 'Error: Your IP address is not correct' );
@@ -74,7 +80,6 @@ $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 //Ket noi voi class Error_handler
-require NV_ROOTDIR . '/includes/class/error.class.php';
 $ErrorHandler = new Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
@@ -86,16 +91,13 @@ require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/core/cache_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
-require NV_ROOTDIR . '/includes/class/xtemplate.class.php';
 
 $global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map( "trim", explode( ',', NV_ALLOW_REQUEST_MODS ) ) : "request";
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim( NV_REQUEST_DEFAULT_MODE ) : 'request';
-$global_config['session_save_path'] = NV_SESSION_SAVE_PATH;
 
 $language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 
 //Ket noi voi class xu ly request
-require NV_ROOTDIR . '/includes/class/request.class.php';
 $nv_Request = new Request( $global_config, $client_info['ip'] );
 
 define( 'NV_SERVER_NAME', $nv_Request->server_name );
@@ -125,7 +127,7 @@ define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) );
 
 //Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
-require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/global.php';
+require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 
 $global_config['cookie_path'] = $nv_Request->cookie_path;
 //vd: /ten_thu_muc_chua_site/
@@ -170,5 +172,4 @@ if( $nv_Request->isset_request( 'scaptcha', 'get' ) )
 }
 
 //Class ma hoa du lieu
-require NV_ROOTDIR . '/includes/class/crypt.class.php';
 $crypt = new nv_Crypt( $global_config['sitekey'] );

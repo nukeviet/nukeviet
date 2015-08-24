@@ -31,7 +31,9 @@ if( $id )
 
 	if( ! empty( $rowdetail['image'] ) && ! nv_is_url( $rowdetail['image'] ) )
 	{
-		$rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowdetail['image'];
+        $imagesize = @getimagesize( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowdetail['image'] );
+		$rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'];
+        $rowdetail['imageWidth'] = $imagesize[0] > 500 ? 500 : $imagesize[0];
 	}
 	$rowdetail['add_time'] = nv_date( 'H:i T l, d/m/Y', $rowdetail['add_time'] );
 	$rowdetail['edit_time'] = nv_date( 'H:i T l, d/m/Y', $rowdetail['edit_time'] );
@@ -90,9 +92,6 @@ if( $id )
 	    require_once NV_ROOTDIR . '/modules/comment/comment.php';
 	    $area = ( defined( 'NV_COMM_AREA' ) ) ? NV_COMM_AREA : 0;
 	    $checkss = md5( $module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX );
-
-	    //get url comment
-	    $url_info = parse_url( $client_info['selfurl'] );
 
 	    $content_comment = nv_comment_module( $module_name, $checkss, $area, NV_COMM_ID, $allowed, 1 );
 	}

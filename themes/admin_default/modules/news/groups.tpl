@@ -22,7 +22,7 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td class="text-right"><strong>{LANG.name}: </strong></td>
+					<td class="text-right"><strong>{LANG.name}: </strong><sup class="required">(∗)</sup></td>
 					<td>
 						<input class="form-control w500" name="title" id="idtitle" type="text" value="{title}" maxlength="255" />
 						<span class="text-middle">{GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max}</span>
@@ -45,13 +45,16 @@
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.content_homeimg}</strong></td>
-					<td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="image" id="image" value="{image}"/> <input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+					<td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="image" id="image" value="{image}"/> <input id="select-img-group" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </form>
 <script type="text/javascript">
+var CFG = [];
+CFG.upload_current = '{UPLOAD_CURRENT}';
+$(document).ready(function(){
 	$("#titlelength").html($("#idtitle").val().length);
 	$("#idtitle").bind("keyup paste", function() {
 		$("#titlelength").html($(this).val().length);
@@ -61,20 +64,11 @@
 	$("#description").bind("keyup paste", function() {
 		$("#descriptionlength").html($(this).val().length);
 	});
-	$("input[name=selectimg]").click(function() {
-		var area = "image";
-		var path = "{UPLOAD_CURRENT}";
-		var currentpath = "{UPLOAD_CURRENT}";
-		var type = "image";
-		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
-</script>
-<!-- BEGIN: getalias -->
-<script type="text/javascript">
+	<!-- BEGIN: getalias -->
 	$("#idtitle").change(function() {
 		get_alias("blockcat", '{bid}');
 	});
+	<!-- END: getalias -->
+});
 </script>
-<!-- END: getalias -->
 <!-- END: main -->

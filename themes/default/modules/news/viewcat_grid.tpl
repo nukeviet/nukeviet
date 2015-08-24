@@ -52,7 +52,7 @@
 	<div class="thumbnail">
 		<a title="{CONTENT.title}" href="{CONTENT.link}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail"/></a>
 		<div class="caption text-center">
-			<h4><a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip" title="{CONTENT.title}">{CONTENT.title}</a></h4>
+			<h4><a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext_clean}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}" title="{CONTENT.title}">{CONTENT.title}</a></h4>
 			<span>{ADMINLINK}</span>
 		</div>
 	</div>
@@ -65,7 +65,6 @@
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
-
 <script type="text/javascript">
 $(window).load(function(){
 	$.each( $('.thumbnail'), function(k,v){
@@ -77,18 +76,4 @@ $(window).load(function(){
 	});
 });
 </script>
-
-<!-- BEGIN: tooltip -->
-<script type="text/javascript">
-$(document).ready(function() {
-	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
-	$("[data-rel='tooltip'][data-content!='']").tooltip({
-		placement: "{TOOLTIP_POSITION}",
-		html: true,
-		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-	});
-});
-</script>
-<!-- END: tooltip -->
-
 <!-- END: main -->

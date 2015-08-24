@@ -39,7 +39,6 @@ if( empty( $array_lang_exit ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 $language_array_source = array( 'vi', 'en' );
@@ -200,6 +199,7 @@ if( $submit > 0 and in_array( $sourcelang, $array_lang_exit ) and in_array( $typ
 			'savedata' => md5( $global_config['sitekey'] . session_id() )
 		) );
 
+		$i = 0;
 		foreach( $array_lang_data as $idfile_i => $array_lang_file )
 		{
 			$xtpl->assign( 'CAPTION', $array_files[$idfile_i] );

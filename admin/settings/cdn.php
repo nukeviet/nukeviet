@@ -16,17 +16,10 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 	$allowzip = array();
 	$allowzip[] = $dir . '/.htaccess';
 	$allowzip[] = $dir . '/web.config';
-	$allowzip[] = $dir . '/CJzip.php';
-	$allowzip[] = $dir . '/images/index.html';
-	$allowzip[] = $dir . '/js/index.html';
 	$allowzip[] = $dir . '/modules/index.html';
 	$allowzip[] = $dir . '/themes/index.html';
 	$allowzip[] = $dir . '/' . NV_EDITORSDIR . '/index.html';
 	$dir_no_scan = array( NV_ROOTDIR . '/' . 'install', NV_ROOTDIR . '/' . NV_ADMINDIR, NV_ROOTDIR . '/' . NV_UPLOADS_DIR, NV_ROOTDIR . '/' . NV_FILES_DIR, NV_ROOTDIR . '/' . NV_LOGS_DIR, NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_ROOTDIR . '/' . NV_DATADIR, NV_ROOTDIR . '/' . NV_CACHEDIR );
-	if( NV_SESSION_SAVE_PATH != '' )
-	{
-		$dir_no_scan[] = NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH;
-	}
 	$error = array();
 	//Ten thu muc luu data
 	$stack[] = $dir;
@@ -73,7 +66,7 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 							{
 								foreach( $m[1] as $fimg )
 								{
-									if( preg_match( '/\.(gif|jpg|jpeg|png)$/i', $fimg ) )
+									if( preg_match( '/\.(gif|jpg|jpeg|png|bmp)$/i', $fimg ) )
 									{
 										$filename = $thisdir . '/' . $fimg;
 										while( preg_match( '/([^\/(\.\.)]+)\/\.\.\//', $filename ) )
@@ -114,13 +107,11 @@ if( md5( $global_config['sitekey'] . $admin_info['admin_id'] . session_id() ) ==
 	{
 		$allowzip = array_unique( $allowzip );
 		$file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'cdn_' . md5( nv_genpass( 10 ) . session_id() ) . '.zip';
-		require_once NV_ROOTDIR . '/includes/class/pclzip.class.php';
 		$zip = new PclZip( $file_src );
 		$zip->add( $allowzip, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR );
 		$zip->add( NV_ROOTDIR . '/themes/index.html', PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes' );
 
 		//Download file
-		require_once NV_ROOTDIR . '/includes/class/download.class.php';
 		$download = new download( $file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, 'js_css_cdn_' . date( 'Ymd' ) . '.zip' );
 		$download->download_file();
 		exit();

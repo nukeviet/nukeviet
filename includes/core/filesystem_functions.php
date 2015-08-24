@@ -178,7 +178,7 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 
 	if( empty( $mime ) or $mime == 'application/octet-stream' )
 	{
-		if( nv_class_exists( 'finfo' ) )
+		if( nv_class_exists( 'finfo', false ) )
 		{
 			$finfo = new finfo( FILEINFO_MIME );
 			if( $finfo )
@@ -470,9 +470,6 @@ function nv_deletefile( $file, $delsub = false )
 		$ftp_user_name = nv_unhtmlspecialchars( $global_config['ftp_user_name'] );
 		$ftp_user_pass = nv_unhtmlspecialchars( $global_config['ftp_user_pass'] );
 		$ftp_path = nv_unhtmlspecialchars( $global_config['ftp_path'] );
-
-		// Goi file Class xu ly
-		if( ! defined( 'NV_FTP_CLASS' ) ) require NV_ROOTDIR . '/includes/class/ftp.class.php';
 
 		// Ket noi, dang nhap
 		$ftp = new NVftp( $ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port );
@@ -819,7 +816,7 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 	$original_name = rtrim( $original_name, '\\/' );
 
 	unset( $matches );
-	if( ! preg_match( '/^' . nv_preg_quote( NV_ROOTDIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $original_name, $matches ) ) return false;
+	if( ! preg_match( '/^' . nv_preg_quote( NV_ROOTDIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $original_name, $matches ) ) return false;
 
 	$imageinfo = array();
 
@@ -886,8 +883,6 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 
 		if( $is_create )
 		{
-			include NV_ROOTDIR . '/includes/class/image.class.php' ;
-
 			$image = new image( $original_name, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$image->resizeXY( $width );
 			$image->save( NV_ROOTDIR . '/' . $thumb_path, $matches[3] . '_' . md5( $original_name . $width ) . $matches[4] );

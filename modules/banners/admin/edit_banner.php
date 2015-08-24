@@ -49,7 +49,6 @@ if( empty( $contents['file_allowed_ext'] ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( nv_edit_banner_theme( $contents ) );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 $sql = 'SELECT id,login,full_name FROM ' . NV_BANNERS_GLOBALTABLE. '_clients ORDER BY login ASC';
@@ -115,7 +114,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		if( isset( $_FILES['banner'] ) and is_uploaded_file( $_FILES['banner']['tmp_name'] ) )
 		{
-			require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 			$upload = new upload( $contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			$upload_info = $upload->save_file( $_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 			@unlink( $_FILES['banner']['tmp_name'] );
@@ -144,7 +142,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		{
 			if( isset( $_FILES['imageforswf'] ) and is_uploaded_file( $_FILES['imageforswf']['tmp_name'] ) )
 			{
-				require_once NV_ROOTDIR . '/includes/class/upload.class.php';
 				$upload = new upload( $contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 				$upload_info = $upload->save_file( $_FILES['imageforswf'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 				@unlink( $_FILES['imageforswf']['tmp_name'] );
@@ -248,7 +245,7 @@ $contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid 
 
 $imageforswf = ( ! empty( $imageforswf ) ) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf : '';
 
-$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "rel=\"shadowbox;height=" . $height . ";width=" . $width . "\"", NV_BASE_SITEURL . "images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . "images/ico_" . substr( $imageforswf, -3 ) . ".gif" );
+$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "data-width=" . $width . " id=" . ( $file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image' ) . "", NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr( $imageforswf, -3 ) . ".gif" );
 
 $contents['upload'] = array( sprintf( $lang_module['re_upload'], $contents['file_allowed_ext'] ), 'banner', $lang_module['imageforswf'], 'imageforswf' );
 $contents['file_alt'] = array( $lang_module['file_alt'], 'file_alt', $file_alt, 255 );
@@ -258,13 +255,6 @@ $contents['target'] = array( $lang_module['target'], 'target', $targets, $target
 
 $contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10 );
 $contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10 );
-
-$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-$my_footer .= "<script type=\"text/javascript\">\n";
-$my_footer .= "Shadowbox.init({\n";
-$my_footer .= "});\n";
-$my_footer .= "</script>\n";
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme( nv_edit_banner_theme( $contents ) );

@@ -33,7 +33,6 @@ if( empty( $contents['file_allowed_ext'] ) )
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( nv_add_banner_theme( $contents ) );
 	include NV_ROOTDIR . '/includes/footer.php';
-	exit();
 }
 
 $sql = 'SELECT id,login,full_name FROM ' . NV_BANNERS_GLOBALTABLE. '_clients ORDER BY login ASC';
@@ -101,8 +100,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	}
 	else
 	{
-		require_once NV_ROOTDIR . '/includes/class/upload.class.php';
-
 		$upload = new upload( $contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 		$upload_info = $upload->save_file( $_FILES['banner'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false );
 		@unlink( $_FILES['banner']['tmp_name'] );
@@ -149,7 +146,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				( :title, " . $pid . ", " . $clid . ", :file_name, :file_ext, :file_mime,
 				" . $width . ", " . $height . ", :file_alt, '', :click_url, :target, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
 				0, 1, 0)";
-			
+
 			$data_insert = array();
 			$data_insert['title'] = $title;
 			$data_insert['file_name'] = $file_name;

@@ -30,6 +30,7 @@ function cron_auto_check_version()
 
 		if( defined( 'NV_IS_GODADMIN' ) )
 		{
+			define( 'NV_ADMIN', true );
 			include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
 			nv_geVersion( $global_config['autoupdatetime'] * 3600 );
 		}

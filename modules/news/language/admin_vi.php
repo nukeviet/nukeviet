@@ -212,7 +212,7 @@ $lang_module['topic_nocheck'] = 'Hãy chọn ít nhất 1 bài viết để có 
 $lang_module['topic_delete_confirm'] = 'Bạn có chắc muốn xóa nhóm tin liên quan ra khỏi bài viết ?';
 $lang_module['topic_delete_success'] = 'Loại bỏ thành công !';
 $lang_module['topic_nonews'] = 'Hiện tại không có bài viết nào thuộc nhóm tin liên quan này !';
-$lang_module['addtotopics'] = 'Thêm vào nhóm tin liên quan';
+$lang_module['addtotopics'] = 'Thêm vào Theo dòng sự kiện';
 $lang_module['topic_update_success'] = 'Cập nhật thành công!';
 $lang_module['topic_num_news'] = ' bài viết';
 
@@ -283,7 +283,6 @@ $lang_module['input_title_blocks'] = 'Nhập tiêu đề nhóm tin...';
 $lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
 
 $lang_module['alias_empty_notice'] = 'Liên kết tĩnh còn trống, hệ thống sẽ tự động tạo liên kết tĩnh phù hợp';
-
 $lang_module['functional'] = 'Chức năng';
 $lang_module['featured'] = 'Tin nổi bật';
 $lang_module['addtocat'] = 'Thêm bài viết nổi bật vào chuyên mục';

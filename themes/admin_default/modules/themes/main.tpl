@@ -52,37 +52,8 @@
 	</table>
 </div>
 <script type="text/javascript">
-	//<![CDATA[
-	$(function() {
-		$("a.activate").click(function() {
-			var theme = $(this).attr("title");
-			$.ajax({
-				type : "POST",
-				url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=activatetheme",
-				data : "theme=" + theme,
-				success : function(data) {
-					if (data != "OK_" + theme) {
-						alert(data);
-					}
-					window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}";
-				}
-			});
-		});
-		$("a.delete").click(function() {
-			var theme = $(this).attr("title");
-			if (confirm("{LANG.theme_delete_confirm}" + theme + " ?")) {
-				$.ajax({
-					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=deletetheme",
-					data : "theme=" + theme,
-					success : function(data) {
-						alert(data);
-						window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}";
-					}
-				});
-			}
-		});
-	});
-	//]]>
+//<![CDATA[
+LANG.theme_delete_confirm = '{LANG.theme_delete_confirm}';
+//]]>
 </script>
 <!-- END: main -->

@@ -93,21 +93,11 @@ if( file_exists( $cache_file ) )
 }
 else
 {
-	$robots_data['/' . NV_CACHEDIR . '/'] = 0;
 	$robots_data['/' . NV_DATADIR . '/'] = 0;
-	$robots_data['/' . NV_EDITORSDIR . '/'] = 0;
 	$robots_data['/includes/'] = 0;
 	$robots_data['/install/'] = 0;
-	$robots_data['/language/'] = 0;
-	$robots_data['/' . NV_LOGS_DIR . '/'] = 0;
-	$robots_data['/mainfile.php'] = 0;
 	$robots_data['/modules/'] = 0;
 	$robots_data['/robots.php'] = 0;
-	if( NV_SESSION_SAVE_PATH != '' )
-	{
-		$robots_data['/' . NV_SESSION_SAVE_PATH . '/'] = 0;
-	}
-	$robots_data['/tmp/'] = 0;
 	$robots_data['/web.config'] = 0;
 }
 $robots_other[''] = 0;

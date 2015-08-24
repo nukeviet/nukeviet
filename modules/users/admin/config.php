@@ -8,13 +8,14 @@
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
-if( !defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 /**
  * valid_name_config()
  *
  * @param mixed $array_name
  * @return
+ *
  */
 function valid_name_config( $array_name )
 {
@@ -22,7 +23,7 @@ function valid_name_config( $array_name )
 	foreach( $array_name as $v )
 	{
 		$v = trim( $v );
-		if( !empty( $v ) and preg_match( '/^[a-z0-9\-\.\_]+$/', $v ) )
+		if( ! empty( $v ) and preg_match( '/^[a-z0-9\-\.\_]+$/', $v ) )
 		{
 			$array_retutn[] = $v;
 		}
@@ -45,7 +46,7 @@ else
 	if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$array_config_define['dir_forum'] = $nv_Request->get_string( 'dir_forum', 'post', 0 );
-		if( !is_dir( NV_ROOTDIR . '/' . $array_config_define['dir_forum'] . '/nukeviet' ) )
+		if( ! is_dir( NV_ROOTDIR . '/' . $array_config_define['dir_forum'] . '/nukeviet' ) )
 		{
 			$array_config_define['dir_forum'] = '';
 		}
@@ -71,10 +72,10 @@ else
 		$array_config['allowuserlogin'] = $nv_Request->get_int( 'allowuserlogin', 'post', 0 );
 		$array_config['allowuserloginmulti'] = $nv_Request->get_int( 'allowuserloginmulti', 'post', 0 );
 		$array_config['allowuserreg'] = $nv_Request->get_int( 'allowuserreg', 'post', 0 );
-		$array_config['openid_mode'] = $nv_Request->get_int( 'openid_mode', 'post', 0 );
 		$array_config['is_user_forum'] = $nv_Request->get_int( 'is_user_forum', 'post', 0 );
 		$array_config['openid_servers'] = $nv_Request->get_typed_array( 'openid_servers', 'post', 'string' );
-		$array_config['openid_servers'] = !empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : '';
+		$array_config['openid_servers'] = ! empty( $array_config['openid_servers'] ) ? implode( ',', $array_config['openid_servers'] ) : '';
+		$array_config['openid_processing'] = $nv_Request->get_int( 'openid_processing', 'post', 0 );
 		$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
 		$array_config['user_check_pass_time'] = 60 * $nv_Request->get_int( 'user_check_pass_time', 'post' );
 
@@ -96,7 +97,7 @@ else
 		$sth->bindParam( ':config_value', $array_config['name_show'], PDO::PARAM_INT );
 		$sth->execute();
 
-		//cau hinh kich thuoc avatar
+		// Cau hinh kich thuoc avatar
 		$array_config['avatar_width'] = $nv_Request->get_int( 'avatar_width', 'post', 120 );
 		$stmt = $db->prepare( "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_width'" );
 		$stmt->bindParam( ':content', $array_config['avatar_width'], PDO::PARAM_STR );
@@ -109,7 +110,7 @@ else
 
 		$array_config['deny_email'] = $nv_Request->get_title( 'deny_email', 'post', '', 1 );
 
-		if( !empty( $array_config['deny_email'] ) )
+		if( ! empty( $array_config['deny_email'] ) )
 		{
 			$array_config['deny_email'] = valid_name_config( explode( ',', $array_config['deny_email'] ) );
 			$array_config['deny_email'] = implode( '|', $array_config['deny_email'] );
@@ -120,7 +121,7 @@ else
 		$stmt->execute();
 
 		$array_config['deny_name'] = $nv_Request->get_title( 'deny_name', 'post', '', 1 );
-		if( !empty( $array_config['deny_name'] ) )
+		if( ! empty( $array_config['deny_name'] ) )
 		{
 			$array_config['deny_name'] = valid_name_config( explode( ',', $array_config['deny_name'] ) );
 			$array_config['deny_name'] = implode( '|', $array_config['deny_name'] );
@@ -130,7 +131,7 @@ else
 		$stmt->execute();
 
 		$array_config['password_simple'] = $nv_Request->get_title( 'password_simple', 'post', '', 1 );
-		if( !empty( $array_config['password_simple'] ) )
+		if( ! empty( $array_config['password_simple'] ) )
 		{
 			$array_config['password_simple'] = array_map( 'trim', explode( ',', $array_config['password_simple'] ) );
 			$array_config['password_simple'] = array_unique( $array_config['password_simple'] );
@@ -161,16 +162,15 @@ else
 		$array_config = $global_config;
 	}
 
-	$array_config['allowmailchange'] = !empty( $array_config['allowmailchange'] ) ? ' checked="checked"' : '';
-	$array_config['allowuserpublic'] = !empty( $array_config['allowuserpublic'] ) ? ' checked="checked"' : '';
-	$array_config['allowquestion'] = !empty( $array_config['allowquestion'] ) ? ' checked="checked"' : '';
-	$array_config['allowloginchange'] = !empty( $array_config['allowloginchange'] ) ? ' checked="checked"' : '';
-	$array_config['allowuserlogin'] = !empty( $array_config['allowuserlogin'] ) ? ' checked="checked"' : '';
-	$array_config['allowuserloginmulti'] = !empty( $array_config['allowuserloginmulti'] ) ? ' checked="checked"' : '';
-	$array_config['openid_mode'] = !empty( $array_config['openid_mode'] ) ? ' checked="checked"' : '';
-	$array_config['is_user_forum'] = !empty( $array_config['is_user_forum'] ) ? ' checked="checked"' : '';
+	$array_config['allowmailchange'] = ! empty( $array_config['allowmailchange'] ) ? ' checked="checked"' : '';
+	$array_config['allowuserpublic'] = ! empty( $array_config['allowuserpublic'] ) ? ' checked="checked"' : '';
+	$array_config['allowquestion'] = ! empty( $array_config['allowquestion'] ) ? ' checked="checked"' : '';
+	$array_config['allowloginchange'] = ! empty( $array_config['allowloginchange'] ) ? ' checked="checked"' : '';
+	$array_config['allowuserlogin'] = ! empty( $array_config['allowuserlogin'] ) ? ' checked="checked"' : '';
+	$array_config['allowuserloginmulti'] = ! empty( $array_config['allowuserloginmulti'] ) ? ' checked="checked"' : '';
+	$array_config['is_user_forum'] = ! empty( $array_config['is_user_forum'] ) ? ' checked="checked"' : '';
 
-	$sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'" ;
+	$sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";
 	$result = $db->query( $sql );
 	while( list( $config, $content ) = $result->fetch( 3 ) )
 	{
@@ -195,6 +195,11 @@ else
 		1 => $lang_module['whoview_user'],
 		2 => $lang_module['whoview_admin']
 	);
+	$array_openid_processing = array(
+		0 => $lang_module['openid_processing_0'],
+		3 => $lang_module['openid_processing_3'],
+		4 => $lang_module['openid_processing_4']
+	);
 
 	$ignorefolders = array(
 		'',
@@ -211,10 +216,10 @@ else
 	$xtpl->assign( 'DATA', $array_config );
 	$xtpl->assign( 'USER_CHECK_PASS_TIME', round( $global_config['user_check_pass_time'] / 60 ) );
 
-	if( !in_array( DIR_FORUM, $ignorefolders ) and file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' ) )
+	if( ! in_array( DIR_FORUM, $ignorefolders ) and file_exists( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' ) )
 	{
 		$forum_files = @scandir( NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet' );
-		if( !empty( $forum_files ) and in_array( 'is_user.php', $forum_files ) and in_array( 'changepass.php', $forum_files ) and in_array( 'editinfo.php', $forum_files ) and in_array( 'login.php', $forum_files ) and in_array( 'logout.php', $forum_files ) and in_array( 'lostpass.php', $forum_files ) and in_array( 'register.php', $forum_files ) )
+		if( ! empty( $forum_files ) and in_array( 'is_user.php', $forum_files ) and in_array( 'changepass.php', $forum_files ) and in_array( 'editinfo.php', $forum_files ) and in_array( 'login.php', $forum_files ) and in_array( 'logout.php', $forum_files ) and in_array( 'lostpass.php', $forum_files ) and in_array( 'register.php', $forum_files ) )
 		{
 			$xtpl->parse( 'main.user_forum' );
 		}
@@ -224,7 +229,7 @@ else
 	{
 		$array = array(
 			'id' => $id,
-			'select' => (NV_UNICKMIN == $id) ? ' selected="selected"' : '',
+			'select' => ( NV_UNICKMIN == $id ) ? ' selected="selected"' : '',
 			'value' => $id
 		);
 		$xtpl->assign( 'OPTION', $array );
@@ -234,7 +239,7 @@ else
 	{
 		$array = array(
 			'id' => $id,
-			'select' => (NV_UNICKMAX == $id) ? ' selected="selected"' : '',
+			'select' => ( NV_UNICKMAX == $id ) ? ' selected="selected"' : '',
 			'value' => $id
 		);
 		$xtpl->assign( 'OPTION', $array );
@@ -246,7 +251,7 @@ else
 	{
 		$array = array(
 			'id' => $id,
-			'select' => ($global_config['nv_unick_type'] == $id) ? ' selected="selected"' : '',
+			'select' => ( $global_config['nv_unick_type'] == $id ) ? ' selected="selected"' : '',
 			'value' => $lang_global['unick_type_' . $id]
 		);
 		$xtpl->assign( 'OPTION', $array );
@@ -257,7 +262,7 @@ else
 	{
 		$array = array(
 			'id' => $id,
-			'select' => (NV_UPASSMIN == $id) ? ' selected="selected"' : '',
+			'select' => ( NV_UPASSMIN == $id ) ? ' selected="selected"' : '',
 			'value' => $id
 		);
 		$xtpl->assign( 'OPTION', $array );
@@ -267,7 +272,7 @@ else
 	{
 		$array = array(
 			'id' => $id,
-			'select' => (NV_UPASSMAX == $id) ? ' selected="selected"' : '',
+			'select' => ( NV_UPASSMAX == $id ) ? ' selected="selected"' : '',
 			'value' => $id
 		);
 		$xtpl->assign( 'OPTION', $array );
@@ -279,7 +284,7 @@ else
 	{
 		$array = array(
 			'id' => $id,
-			'select' => ($global_config['nv_upass_type'] == $id) ? ' selected="selected"' : '',
+			'select' => ( $global_config['nv_upass_type'] == $id ) ? ' selected="selected"' : '',
 			'value' => $lang_global['upass_type_' . $id]
 		);
 		$xtpl->assign( 'OPTION', $array );
@@ -290,7 +295,7 @@ else
 	{
 		$array = array(
 			'id' => $id,
-			'select' => ($array_config['allowuserreg'] == $id) ? ' selected="selected"' : '',
+			'select' => ( $array_config['allowuserreg'] == $id ) ? ' selected="selected"' : '',
 			'value' => $titleregister
 		);
 		$xtpl->assign( 'REGISTERTYPE', $array );
@@ -302,11 +307,11 @@ else
 	{
 		if( is_dir( NV_ROOTDIR . '/' . $value ) )
 		{
-			if( !in_array( $value, $ignorefolders ) and is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
+			if( ! in_array( $value, $ignorefolders ) and is_dir( NV_ROOTDIR . '/' . $value . '/nukeviet' ) )
 			{
 				$array = array(
 					'id' => $value,
-					'select' => ($value == DIR_FORUM) ? ' selected="selected"' : '',
+					'select' => ( $value == DIR_FORUM ) ? ' selected="selected"' : '',
 					'value' => $value
 				);
 				$xtpl->assign( 'DIR_FORUM', $array );
@@ -338,6 +343,18 @@ else
 		$xtpl->parse( 'main.whoviewlistuser' );
 	}
 
+	foreach( $array_openid_processing as $id => $titleregister )
+	{
+		$select = ( $array_config['openid_processing'] == $id ) ? ' selected="selected"' : '';
+		$array = array(
+			'id' => $id,
+			'select' => $select,
+			'value' => $titleregister
+		);
+		$xtpl->assign( 'OPENID_PROCESSING', $array );
+		$xtpl->parse( 'main.openid_processing' );
+	}
+
 	$servers = $array_config['openid_servers'];
 
 	$openid_files = @scandir( NV_ROOTDIR . '/modules/users/login' );
@@ -345,12 +362,27 @@ else
 	{
 		if( preg_match( '/^(cas|oauth|openid)\-([a-z0-9\-\_]+)\.php$/', $server, $m ) )
 		{
-			$checked = (!empty( $servers ) and in_array( $m[2], $servers )) ? ' checked="checked"' : '';
+			$checked = ( ! empty( $servers ) and in_array( $m[2], $servers ) ) ? ' checked="checked"' : '';
+			$disabled = '';
+
+			if( $server == 'cas-single-sign-on.php' and ! isset( $global_config['config_sso']['cas_hostname'] ) )
+			{
+				$disabled = ' disabled="disabled" ';
+			}
+			elseif( $server == 'oauth-facebook.php' and ( empty( $global_config['facebook_client_id'] ) or empty( $global_config['facebook_client_secret'] ) ) )
+			{
+				$disabled = ' disabled="disabled" ';
+			}
+			elseif( $server == 'oauth-google.php' and ( empty( $global_config['google_client_id'] ) or empty( $global_config['google_client_secret'] ) ) )
+			{
+				$disabled = ' disabled="disabled" ';
+			}
+
 			$openid_assign = array(
 				'name' => $m[2],
 				'title' => $m[1] . ' ' . $m[2],
 				'checked' => $checked,
-				'disabled' => ($server=='cas-single-sign-on.php' and ! isset( $global_config['config_sso']['cas_hostname'] ) ) ? ' disabled="disabled" ' : '',
+				'disabled' => $disabled,
 				'link_config' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;oauth_config=' . $m[2],
 				'note' => sprintf( $lang_module['oauth_config'], $m[1] . ' ' . $m[2] )
 			);
@@ -386,12 +418,12 @@ else
 	foreach( $array_access as $access )
 	{
 		$level = $access['id'];
-		$access['checked_addus'] = (isset( $access_admin['access_addus'][$level] ) and $access_admin['access_addus'][$level] == 1) ? ' checked="checked" ' : '';
-		$access['checked_waiting'] = (isset( $access_admin['access_waiting'][$level] ) and $access_admin['access_waiting'][$level] == 1) ? ' checked="checked" ' : '';
-		$access['checked_editus'] = (isset( $access_admin['access_editus'][$level] ) and $access_admin['access_editus'][$level] == 1) ? ' checked="checked" ' : '';
-		$access['checked_delus'] = (isset( $access_admin['access_delus'][$level] ) and $access_admin['access_delus'][$level] == 1) ? ' checked="checked" ' : '';
-		$access['checked_passus'] = (isset( $access_admin['access_passus'][$level] ) and $access_admin['access_passus'][$level] == 1) ? ' checked="checked" ' : '';
-		$access['checked_groups'] = (isset( $access_admin['access_groups'][$level] ) and $access_admin['access_groups'][$level] == 1) ? ' checked="checked" ' : '';
+		$access['checked_addus'] = ( isset( $access_admin['access_addus'][$level] ) and $access_admin['access_addus'][$level] == 1 ) ? ' checked="checked" ' : '';
+		$access['checked_waiting'] = ( isset( $access_admin['access_waiting'][$level] ) and $access_admin['access_waiting'][$level] == 1 ) ? ' checked="checked" ' : '';
+		$access['checked_editus'] = ( isset( $access_admin['access_editus'][$level] ) and $access_admin['access_editus'][$level] == 1 ) ? ' checked="checked" ' : '';
+		$access['checked_delus'] = ( isset( $access_admin['access_delus'][$level] ) and $access_admin['access_delus'][$level] == 1 ) ? ' checked="checked" ' : '';
+		$access['checked_passus'] = ( isset( $access_admin['access_passus'][$level] ) and $access_admin['access_passus'][$level] == 1 ) ? ' checked="checked" ' : '';
+		$access['checked_groups'] = ( isset( $access_admin['access_groups'][$level] ) and $access_admin['access_groups'][$level] == 1 ) ? ' checked="checked" ' : '';
 		$xtpl->assign( 'ACCESS', $access );
 		$xtpl->parse( 'main.access' );
 	}

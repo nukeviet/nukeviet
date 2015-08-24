@@ -29,7 +29,7 @@ if( empty( $file ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $file ) )
 if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request( 'direction', 'post' ) )
 {
 	$direction = $nv_Request->get_int( 'direction', 'post', 0 );
-	
+
 	if( $direction < 0 )
 	{
 		$direction = 0;
@@ -41,15 +41,14 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 	if( $direction > 0 and $direction != 360 )
 	{
-		require_once NV_ROOTDIR . '/includes/class/image.class.php';
 		$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 		$createImage->rotate( $direction );
 		$createImage->save( NV_ROOTDIR . '/' . $path, $file );
 		$createImage->close();
-		
+
 		if( isset( $array_dirname[$path] ) )
 		{
-			if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $path . '/' . $file, $m ) )
+			if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $path . '/' . $file, $m ) )
 			{
 				@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] );
 			}
@@ -60,7 +59,7 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 			$db->query( "UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET filesize=" . $info['filesize'] . ", src='" . $info['src'] . "', srcwidth=" . $info['srcwidth'] . ", srcheight=" . $info['srcheight'] . ", sizes='" . $info['size'] . "', userid=" . $admin_info['userid'] . ", mtime=" . $info['mtime'] . " WHERE did = " . $did . " AND title = '" . $file . "'" );
 		}
 	}
-	
+
 	die( 'OK' );
 }
 

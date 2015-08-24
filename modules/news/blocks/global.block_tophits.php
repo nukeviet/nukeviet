@@ -111,11 +111,11 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		{
 			if( $homeimgthumb == 1 ) // image thumb
 			{
-				$imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $homeimgfile;
+				$imgurl = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 2 ) // image file
 			{
-				$imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $homeimgfile;
+				$imgurl = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 3 ) // image url
 			{

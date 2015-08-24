@@ -90,16 +90,16 @@ if( $id > 0 and $catid > 0 )
 				'author' => $content['author'],
 				'source' => $sourcetext
 			);
-			
+
 			$page_title = $result['title'];
-			
+
 			if( ! empty( $content['homeimgfile'] ) and $content['imgposition'] > 0 )
 			{
 				$src = $alt = $note = '';
 				$width = $height = 0;
-				if( $content['homeimgthumb'] == 1 and $content['imgposition'] == 1 and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
+				if( $content['homeimgthumb'] == 1 and $content['imgposition'] == 1 and file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $content['homeimgfile'] ) )
 				{
-					$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
+					$src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $content['homeimgfile'];
 					$width = $module_config[$module_name]['homewidth'];
 				}
 				elseif( $content['homeimgthumb'] == 3 )
@@ -107,9 +107,9 @@ if( $id > 0 and $catid > 0 )
 					$src = $content['homeimgfile'];
 					$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 				}
-				elseif( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $content['homeimgfile'] ) )
+				elseif( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $content['homeimgfile'] ) )
 				{
-					$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $content['homeimgfile'];
+					$src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $content['homeimgfile'];
 					$width = ( $content['imgposition'] == 1 ) ? $module_config[$module_name]['homewidth'] : $module_config[$module_name]['imagefull'];
 				}
 				$alt = ( empty( $content['homeimgalt'] ) ) ? $content['title'] : $content['homeimgalt'];
@@ -126,7 +126,6 @@ if( $id > 0 and $catid > 0 )
 			header( "Content-Type: text/x-delimtext; name=\"" . $result['alias'] . ".html\"" );
 			header( "Content-disposition: attachment; filename=" . $result['alias'] . ".html" );
 
-			$global_config['mudim_active'] = 0;
 			include NV_ROOTDIR . '/includes/header.php';
 			echo preg_replace_callback( "/(src|href)\=\"([^\"]+)\"/", "nv_src_href_callback", nv_url_rewrite( nv_site_theme( $contents, false ) ) );
 			include NV_ROOTDIR . '/includes/footer.php';

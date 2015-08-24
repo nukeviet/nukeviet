@@ -10,14 +10,6 @@
 
 if( ! defined( 'NV_IS_FILE_EXTENSIONS' ) ) die( 'Stop!!!' );
 
-if( ! defined( 'SHADOWBOX' ) )
-{
-	$my_head = "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-	$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-
-	define( 'SHADOWBOX', true );
-}
-
 $page_title = $lang_global['mod_extensions'];
 
 $request = array();
@@ -51,7 +43,6 @@ $xtpl->assign( 'NV_LANG_DATA', NV_LANG_DATA );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 
-require( NV_ROOTDIR . '/includes/class/http.class.php' );
 $NV_Http = new NV_Http( $global_config, NV_TEMP_DIR );
 $stored_cookies = nv_get_cookies();
 
@@ -91,7 +82,7 @@ if( ! empty( $error ) )
 }
 elseif( $array['status'] == 'notlogin' )
 {
-	$xtpl->assign( 'LOGIN_NOTE', sprintf( $lang_module['login_require'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_base64_encode( $client_info['selfurl'] ) ) );
+	$xtpl->assign( 'LOGIN_NOTE', sprintf( $lang_module['login_require'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt( $client_info['selfurl'] ) ) );
 	$xtpl->parse( 'main.login' );
 }
 elseif( empty( $array['data'] ) )

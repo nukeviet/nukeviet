@@ -40,8 +40,6 @@ function nv_CreateXML_bannerPlan()
 		}
 	}
 
-	include NV_ROOTDIR . '/includes/class/array2xml.class.php' ;
-
 	$sql = 'SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE act = 1';
 	$result = $db->query( $sql );
 
@@ -568,9 +566,10 @@ function nv_add_banner_theme( $contents )
  */
 function nv_edit_banner_theme( $contents )
 {
-	global $global_config, $module_file;
+	global $global_config, $module_file, $lang_module;
 
 	$xtpl = new XTemplate( 'edit_banner.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'CONTENTS', $contents );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );

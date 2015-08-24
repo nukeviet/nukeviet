@@ -8,17 +8,12 @@
  * @Createdate 12/28/2009 14:30
  */
 
-if( defined( 'NV_CLASS_IMAGE_PHP' ) ) return;
-define( 'NV_CLASS_IMAGE_PHP', true );
-
 if( ! defined( 'ERROR_IMAGE1' ) ) define( 'ERROR_IMAGE1', 'The file is not a known image format' );
 if( ! defined( 'ERROR_IMAGE2' ) ) define( 'ERROR_IMAGE2', 'The file is not readable' );
 if( ! defined( 'ERROR_IMAGE3' ) ) define( 'ERROR_IMAGE3', 'File is not supplied or is not a file' );
 if( ! defined( 'ERROR_IMAGE4' ) ) define( 'ERROR_IMAGE4', 'Image type not supported' );
 if( ! defined( 'ERROR_IMAGE5' ) ) define( 'ERROR_IMAGE5', 'Image mime type not supported' );
 if( ! defined( 'ERROR_IMAGE6' ) ) define( 'ERROR_IMAGE6', 'Error loading Image' );
-
-if( ! defined( 'NV_ROOTDIR' ) ) define( 'NV_ROOTDIR', preg_replace( "/[\/]+$/", '', str_replace( '\\', '/', realpath( dirname( __file__ ) . '/../../' ) ) ) );
 
 class image
 {
@@ -156,6 +151,9 @@ class image
 			case IMAGETYPE_PNG:
 				$this->createImage = ImageCreateFromPng( $this->filename );
 				break;
+			case IMAGETYPE_BMP:
+				$this->createImage = $this->ImageCreateFromBmp( $this->filename );
+				break;
 		}
 
 		if( ! $this->createImage )
@@ -177,9 +175,9 @@ class image
 	 */
 	function set_tempnam( $filename )
 	{
-		$tmpfname = tempnam( NV_ROOTDIR . "/tmp", "tmp" );
-		$input = fopen( $filename, "rb" );
-		$output = fopen( $tmpfname, "wb" );
+		$tmpfname = tempnam( NV_ROOTDIR . '/tmp', 'tmp' );
+		$input = fopen( $filename, 'rb' );
+		$output = fopen( $tmpfname, 'wb' );
 		while( $data = fread( $input, 1024 ) )
 		{
 			fwrite( $output, $data );
@@ -199,9 +197,191 @@ class image
 		if( $this->fileinfo == array() ) return ERROR_IMAGE1;
 		if( ! is_readable( $this->filename ) ) return ERROR_IMAGE2;
 		if( $this->fileinfo['src'] == '' || $this->fileinfo['width'] == 0 || $this->fileinfo['height'] == 0 || $this->fileinfo['mime'] == '' ) return ERROR_IMAGE3;
-		if( ! in_array( $this->fileinfo['type'], array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG ) ) ) return ERROR_IMAGE4;
-		if( ! preg_match( "#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png)#is", $this->fileinfo['mime'] ) ) return ERROR_IMAGE5;
+		if( ! in_array( $this->fileinfo['type'], array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP ) ) ) return ERROR_IMAGE4;
+		if( ! preg_match( "#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png|bmp|ms-bmp)#is", $this->fileinfo['mime'] ) ) return ERROR_IMAGE5;
 		return '';
+	}
+
+	function ImageCreateFromBmp( $filename )
+	{
+		// Author: DHKold
+		// Date: The 15th of June 2005
+		// Version: 2.0B
+		// Purpose: To create an image from a BMP file.
+		// Param in: BMP file to open.
+		// Param out: Return a resource like the other ImageCreateFrom functions
+		// Reference: http://us3.php.net/manual/en/function.imagecreate.php#53879
+		// Bug fix: Author: domelca at terra dot es
+		// Date: 06 March 2008
+		// Fix: Correct 16bit BMP support: https://github.com/Oberto/php-image-magician
+
+		// Ouverture du fichier en mode binaire
+		if( ! $f1 = fopen( $filename, 'rb' ) ) return false;
+
+		// 1 : Chargement des ent�tes FICHIER
+		$FILE = unpack( "vfile_type/Vfile_size/Vreserved/Vbitmap_offset", fread( $f1, 14 ) );
+		if( $FILE['file_type'] != 19778 ) return false;
+
+		// 2 : Chargement des ent�tes BMP
+		$BMP = unpack( 'Vheader_size/Vwidth/Vheight/vplanes/vbits_per_pixel' . '/Vcompression/Vsize_bitmap/Vhoriz_resolution' . '/Vvert_resolution/Vcolors_used/Vcolors_important', fread( $f1, 40 ) );
+		$BMP['colors'] = pow( 2, $BMP['bits_per_pixel'] );
+
+		if( $BMP['size_bitmap'] == 0 ) $BMP['size_bitmap'] = $FILE['file_size'] - $FILE['bitmap_offset'];
+
+		$BMP['bytes_per_pixel'] = $BMP['bits_per_pixel'] / 8;
+		$BMP['bytes_per_pixel2'] = ceil( $BMP['bytes_per_pixel'] );
+		$BMP['decal'] = ( $BMP['width'] * $BMP['bytes_per_pixel'] / 4 );
+		$BMP['decal'] -= floor( $BMP['width'] * $BMP['bytes_per_pixel'] / 4 );
+		$BMP['decal'] = 4 - ( 4 * $BMP['decal'] );
+
+		if( $BMP['decal'] == 4 ) $BMP['decal'] = 0;
+
+		// 3 : Chargement des couleurs de la palette
+		$PALETTE = array();
+		if( $BMP['colors'] < 16777216 )
+		{
+			$PALETTE = unpack( 'V' . $BMP['colors'], fread( $f1, $BMP['colors'] * 4 ) );
+		}
+
+		// 4 : Cr�ation de l'image
+		$IMG = fread( $f1, $BMP['size_bitmap'] );
+		$VIDE = chr( 0 );
+
+		$res = imagecreatetruecolor( $BMP['width'], $BMP['height'] );
+		$P = 0;
+		$Y = $BMP['height'] - 1;
+		while( $Y >= 0 )
+		{
+			$X = 0;
+			while( $X < $BMP['width'] )
+			{
+				if( $BMP['bits_per_pixel'] == 24 ) $COLOR = unpack( "V", substr( $IMG, $P, 3 ) . $VIDE );
+				elseif( $BMP['bits_per_pixel'] == 16 )
+				{
+					/*
+					 * BMP 16bit fix
+					 * =================
+					 * Ref: http://us3.php.net/manual/en/function.imagecreate.php#81604
+					 * Notes:
+					 * "don't work with bmp 16 bits_per_pixel. change pixel
+					 * generator for this."
+					 */
+
+					// *** Original code (don't work)
+					// $COLOR = unpack("n",substr($IMG,$P,2));
+					// $COLOR[1] = $PALETTE[$COLOR[1]+1];
+
+					$COLOR = unpack( "v", substr( $IMG, $P, 2 ) );
+					$blue = ( $COLOR[1] & 0x001f ) << 3;
+					$green = ( $COLOR[1] & 0x07e0 ) >> 3;
+					$red = ( $COLOR[1] & 0xf800 ) >> 8;
+					$COLOR[1] = $red * 65536 + $green * 256 + $blue;
+
+				}
+				elseif( $BMP['bits_per_pixel'] == 8 )
+				{
+					$COLOR = unpack( "n", $VIDE . substr( $IMG, $P, 1 ) );
+					$COLOR[1] = $PALETTE[$COLOR[1] + 1];
+				}
+				elseif( $BMP['bits_per_pixel'] == 4 )
+				{
+					$COLOR = unpack( "n", $VIDE . substr( $IMG, floor( $P ), 1 ) );
+					if( ( $P * 2 ) % 2 == 0 ) $COLOR[1] = ( $COLOR[1] >> 4 );
+					else
+						$COLOR[1] = ( $COLOR[1] & 0x0F );
+					$COLOR[1] = $PALETTE[$COLOR[1] + 1];
+				}
+				elseif( $BMP['bits_per_pixel'] == 1 )
+				{
+					$COLOR = unpack( "n", $VIDE . substr( $IMG, floor( $P ), 1 ) );
+					if( ( $P * 8 ) % 8 == 0 ) $COLOR[1] = $COLOR[1] >> 7;
+					elseif( ( $P * 8 ) % 8 == 1 ) $COLOR[1] = ( $COLOR[1] & 0x40 ) >> 6;
+					elseif( ( $P * 8 ) % 8 == 2 ) $COLOR[1] = ( $COLOR[1] & 0x20 ) >> 5;
+					elseif( ( $P * 8 ) % 8 == 3 ) $COLOR[1] = ( $COLOR[1] & 0x10 ) >> 4;
+					elseif( ( $P * 8 ) % 8 == 4 ) $COLOR[1] = ( $COLOR[1] & 0x8 ) >> 3;
+					elseif( ( $P * 8 ) % 8 == 5 ) $COLOR[1] = ( $COLOR[1] & 0x4 ) >> 2;
+					elseif( ( $P * 8 ) % 8 == 6 ) $COLOR[1] = ( $COLOR[1] & 0x2 ) >> 1;
+					elseif( ( $P * 8 ) % 8 == 7 ) $COLOR[1] = ( $COLOR[1] & 0x1 );
+					$COLOR[1] = $PALETTE[$COLOR[1] + 1];
+				}
+				else
+					return false;
+
+				imagesetpixel( $res, $X, $Y, $COLOR[1] );
+				$X++;
+				$P += $BMP['bytes_per_pixel'];
+			}
+
+			$Y--;
+			$P += $BMP['decal'];
+		}
+
+		// Fermeture du fichier
+		fclose( $f1 );
+
+		return $res;
+	}
+
+	function GD2BMPstring( &$gd_image )
+	{
+		// Author: James Heinrich
+		// Purpose: Save file as type bmp
+		// Param in: The image canvas (passed as ref)
+
+		$imageX = ImageSX( $gd_image );
+		$imageY = ImageSY( $gd_image );
+
+		$BMP = '';
+		for( $y = ( $imageY - 1 ); $y >= 0; $y-- )
+		{
+			$thisline = '';
+			for( $x = 0; $x < $imageX; $x++ )
+			{
+				$argb = ImageColorsForIndex( $gd_image, @ImageColorAt( $gd_image, $x, $y ) );
+				$thisline .= chr( $argb['blue'] ) . chr( $argb['green'] ) . chr( $argb['red'] );
+			}
+			while( strlen( $thisline ) % 4 )
+			{
+				$thisline .= "\x00";
+			}
+			$BMP .= $thisline;
+		}
+
+		$bmpSize = strlen( $BMP ) + 14 + 40;
+		// BITMAPFILEHEADER [14 bytes] - http://msdn.microsoft.com/library/en-us/gdi/bitmaps_62uq.asp
+		$BITMAPFILEHEADER = 'BM'; // WORD bfType;
+		$BITMAPFILEHEADER .= $this->LittleEndian2String( $bmpSize, 4 ); // DWORD bfSize;
+		$BITMAPFILEHEADER .= $this->LittleEndian2String( 0, 2 ); // WORD bfReserved1;
+		$BITMAPFILEHEADER .= $this->LittleEndian2String( 0, 2 ); // WORD bfReserved2;
+		$BITMAPFILEHEADER .= $this->LittleEndian2String( 54, 4 ); // DWORD bfOffBits;
+
+		// BITMAPINFOHEADER - [40 bytes] http://msdn.microsoft.com/library/en-us/gdi/bitmaps_1rw2.asp
+		$BITMAPINFOHEADER = $this->LittleEndian2String( 40, 4 ); // DWORD biSize;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( $imageX, 4 ); // LONG biWidth;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( $imageY, 4 ); // LONG biHeight;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( 1, 2 ); // WORD biPlanes;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( 24, 2 ); // WORD biBitCount;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( 0, 4 ); // DWORD biCompression;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( 0, 4 ); // DWORD biSizeImage;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( 2835, 4 ); // LONG biXPelsPerMeter;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( 2835, 4 ); // LONG biYPelsPerMeter;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( 0, 4 ); // DWORD biClrUsed;
+		$BITMAPINFOHEADER .= $this->LittleEndian2String( 0, 4 ); // DWORD biClrImportant;
+
+		return $BITMAPFILEHEADER . $BITMAPINFOHEADER . $BMP;
+	}
+
+	function LittleEndian2String( $number, $minbytes = 1 )
+	{
+		// Author: James Heinrich
+		// Purpose: BMP SUPPORT (SAVING)
+		$intstring = '';
+		while( $number > 0 )
+		{
+			$intstring = $intstring . chr( $number & 255 );
+			$number >>= 8;
+		}
+		return str_pad( $intstring, $minbytes, "\x00", STR_PAD_RIGHT );
 	}
 
 	/**
@@ -656,6 +836,9 @@ class image
 						case IMAGETYPE_PNG:
 							$this->logoimg = ImageCreateFromPng( $logo );
 							break;
+						case IMAGETYPE_BMP:
+							$this->logoimg = $this->ImageCreateFromBmp( $logo );
+							break;
 					}
 
 					ImageCopyResampled( $this->createImage, $this->logoimg, $X, $Y, 0, 0, $dst_w, $dst_h, $logo_info['width'], $logo_info['height'] );
@@ -830,6 +1013,11 @@ class image
 
 					case IMAGETYPE_PNG:
 						ImagePng( $this->createImage, $newname );
+						break;
+
+					case IMAGETYPE_BMP:
+						file_put_contents( $newname, $this->GD2BMPstring( $this->createImage ) );
+						break;
 				}
 
 				$this->create_Image_info['src'] = $newname;

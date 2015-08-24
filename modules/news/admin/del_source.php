@@ -36,10 +36,10 @@ if( $sourceid > 0 )
 		$_count = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid != ' . $sourceid .' AND logo =' . $db->quote( basename( $logo_old ) ) )->fetchColumn();
 		if( empty( $_count ) )
 		{
-			@unlink( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_name . '/source/' . $logo_old );
-			@unlink( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/source/' . $logo_old );
+			@unlink( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old );
+			@unlink( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/source/' . $logo_old );
 	
-			$_did = $db->query( 'SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname=' . $db->quote( dirname( NV_UPLOADS_DIR . '/' . $module_name . '/source/' . $logo_old ) ) )->fetchColumn();
+			$_did = $db->query( 'SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname=' . $db->quote( dirname( NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old ) ) )->fetchColumn();
 			$db->query( 'DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $_did . ' AND title=' . $db->quote( basename( $logo_old ) ) );
 		}
 	}	

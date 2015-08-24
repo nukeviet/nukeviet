@@ -4,14 +4,14 @@
 <!-- BEGIN: main -->
 <div class="alert alert-info">{CONTENTS.info}</div>
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <form id="frm" method="post" enctype="multipart/form-data" action="{CONTENTS.action}">
 	<input type="hidden" value="1" name="save" id="save" />
@@ -50,9 +50,9 @@
 				<tr>
 					<td>{CONTENTS.file_name.0}:</td>
 					<td>&nbsp;</td>
-					<td><a href="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a>
+					<td><a href="javascript:void(0)" data-src="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a>
 					<!-- BEGIN: imageforswf1 -->
-					<a href="{CONTENTS.file_name.5}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.6}" width="16" height="16" style="cursor: pointer; margin-left: 20px;" /></a>
+					<a href="javascript:void(0)" data-src="{CONTENTS.file_name.5}" class="open_modal_image" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.6}" width="16" height="16" style="cursor: pointer; margin-left: 20px;" /></a>
 					<!-- END: imageforswf1 -->
 					</td>
 				</tr>
@@ -105,6 +105,23 @@
 		<input type="submit" value="{CONTENTS.submit}" class="btn btn-primary" />
 	</div>
 </form>
+
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">{LANG.file_name}</h4>
+			</div>
+			<div class="modal-body">
+
+			</div>
+		</div>
+	</div>
+</div>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#frm').validate();
@@ -114,8 +131,20 @@
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true
+		});
+
+		$("#open_modal_image").on("click", function() {
+			$('#imagemodal .modal-dialog').css({'width': $(this).data('width')+23});
+			$('#imagemodal .modal-body').html('<img src="' + $(this).data('src') + '" />');
+			$('#imagemodal').modal('show');
+		});
+
+		$("#open_modal_flash").on("click", function() {
+			$('#imagemodal .modal-dialog').css({'width': $(this).data('width')+23});
+			$('#imagemodal .modal-body').html('<object type="application/x-shockwave-flash" data="' + $(this).data('src') + '" width="' + $(this).data('width') + '"><param name="movie" value="' + $(this).data('src') + '"><param name="wmode" value="transparent"></object>');
+			$('#imagemodal').modal('show');
 		});
 	});
 </script>

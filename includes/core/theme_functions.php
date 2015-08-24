@@ -137,6 +137,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $template );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'NV_ASSETS_DIR', NV_ASSETS_DIR );
 	$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
 
 	if( isset( $size[1] ) )
@@ -176,8 +177,6 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
 
 	$xtpl->parse( 'main' );
 
-	$global_config['mudim_active'] = 0;
-
 	include NV_ROOTDIR . '/includes/header.php';
 	$xtpl->out( 'main' );
 	include NV_ROOTDIR . '/includes/footer.php';
@@ -193,7 +192,7 @@ function nv_info_die( $page_title = '', $info_title, $info_content, $admin_link 
  */
 function nv_xmlOutput( $content, $lastModified )
 {
-	if( class_exists( 'tidy' ) )
+	if( class_exists( 'tidy', false ) )
 	{
 		$tidy_options = array(
 			'input-xml' => true,
@@ -361,7 +360,7 @@ function nv_rss_generate( $channel, $items )
 		$xtpl->parse( 'main.pubDate' );
 	}
 
-	$image = file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) ? NV_ROOTDIR . '/' . $global_config['site_logo'] : NV_ROOTDIR . '/images/logo.png';
+	$image = file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) ? NV_ROOTDIR . '/' . $global_config['site_logo'] : NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/images/logo.png';
 	$image = nv_ImageInfo( $image, 144, true, NV_UPLOADS_REAL_DIR );
 
 	if( ! empty( $image ) )
@@ -511,35 +510,27 @@ function nv_xmlSitemapIndex_generate()
  */
 function nv_css_setproperties( $tag, $property_array )
 {
-    $css = $line = '';
-    if( empty( $tag ) ) return '';
+    if ( empty( $tag ) ) return '';
+    if ( ! is_array( $property_array ) ) return $property_array;
 
-    if( is_array( $property_array ) )
+    $css = '';
+    foreach ( $property_array as $property => $value )
     {
-        foreach( $property_array as $property => $value )
+        if ( $property != 'customcss' )
         {
-            if( $property != 'customcss' )
+            if ( ! empty( $property ) and ! empty( $value ) )
             {
-                if( ! empty( $property ) and ! empty( $value ) )
-                {
-                    $property = str_replace( '_', '-', $property );
-                    if( $property == 'background-image' ) $value = "url('" . $value . "')";
-                    $css .= $property . ':' . $value . ';';
-                }
-            }
-            elseif( ! empty( $value ) )
-            {
-                $value = substr(trim($value), -1) == ';' ? $value : $value . ';';
-                $css .= $value;
+                $property = str_replace( '_', '-', $property );
+                if ( $property == 'background-image' ) $value = "url('" . $value . "')";
+                $css .= $property . ':' . $value . ';';
             }
         }
-        $line .= $css == '' ? '' : $tag . '{' . $css . '}';
+        elseif ( ! empty( $value ) )
+        {
+            $value = substr( trim( $value ), -1 ) == ';' ? $value : $value . ';';
+            $css .= $value;
+        }
     }
-    else
-    {
-        $css .= $property_array;
-        $line .= $css == '' ? '' : $css;
-    }
-
-    return $line;
+    ! empty( $css ) && $css = $tag . '{' . $css . '}';
+    return $css;
 }

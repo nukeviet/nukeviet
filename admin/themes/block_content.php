@@ -27,7 +27,7 @@ $row = array(
 	'title' => '',
 	'link' => '',
 	'template' => '',
-	'position' => $nv_Request->get_string( 'tag', 'get', '' ),
+	'position' => $nv_Request->get_title( 'tag', 'get', '' ),
 	'exp_time' => 0,
 	'active' => 1,
 	'groups_view' => '6',
@@ -80,7 +80,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$array_file_name = explode( '|', $list_file_name );
 
 	$file_name = $row['file_name'] = trim( $array_file_name[0] );
-	$module = $row['module'] = nv_substr( $nv_Request->get_title( 'module', 'post', '', 0 ), 0, 55 );
+	$module = $row['module'] = nv_substr( $nv_Request->get_title( 'module_type', 'post', '', 0 ), 0, 55 );
 	$row['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
 
 	$path_file_php = $path_file_ini = $path_file_lang = '';
@@ -151,7 +151,8 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 
 	$row['link'] = $nv_Request->get_title( 'link', 'post', '' );
 	$row['template'] = nv_substr( $nv_Request->get_title( 'template', 'post', '', 0 ), 0, 55 );
-	$row['position'] = nv_substr( $nv_Request->get_title( 'position', 'post', '', 0 ), 0, 55 );
+	$row['position'] = $nv_Request->get_title( 'position', 'post', '', 0 );
+	$row['position'] = nv_substr( nv_unhtmlspecialchars( $row['position'] ), 0, 55 );
 
 	if( preg_match( '/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $nv_Request->get_string( 'exp_time', 'post' ), $m ) )
 	{
@@ -161,7 +162,16 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		$row['exp_time'] = 0;
 	}
-	$row['active'] = $nv_Request->get_int( 'active', 'post', 0 );
+
+	$row['active_device'] = $nv_Request->get_typed_array( 'active_device', 'post', 'int' );
+	if( in_array( '1', $row['active_device'] ) or ( in_array( '2', $row['active_device'] ) and in_array( '3', $row['active_device'] ) and in_array( '4', $row['active_device'] ) ) )
+	{
+		$row['active'] = 1;
+	}
+	else
+	{
+		$row['active'] = implode( ',', $row['active_device'] );
+	}
 
 	$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
 	$row['groups_view'] = ! empty( $groups_view ) ? implode( ',', nv_groups_post( array_intersect( $groups_view, array_keys( $groups_list ) ) ) ) : '';
@@ -229,7 +239,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 						{
 							$xmlkey = $xml->xpath( 'config' );
 							$language = ( array )$xmlkey[0];
-							
+
 							$key = array_keys( $language );
 							$lang_block = array_combine( $key, $key );
 						}
@@ -355,7 +365,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$sth->execute();
 				$row['weight'] = intval( $sth->fetchColumn() ) + 1;
 
-				$_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', '" . $row['active'] . "', :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )";
+				$_sql = "INSERT INTO " . NV_BLOCKS_TABLE . "_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES ( :selectthemes, :module, :file_name, :title, :link, :template, :position, '" . $row['exp_time'] . "', :active, :groups_view, '" . $row['all_func'] . "', '" . $row['weight'] . "', :config )";
 				$data = array();
 				$data['selectthemes'] = $selectthemes;
 				$data['module'] = $row['module'];
@@ -364,6 +374,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$data['link'] = $row['link'];
 				$data['template'] = $row['template'];
 				$data['position'] = $row['position'];
+				$data['active'] = $row['active'];
 				$data['groups_view'] = $row['groups_view'];
 				$data['config'] = $row['config'];
 				$row['bid'] = $db->insert_id( $_sql, 'bid', $data );
@@ -442,7 +453,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				nv_del_moduleCache( 'themes' );
 
 				// Chuyen huong
-				$xtpl->assign( 'BLOCKREDIRECT', nv_base64_decode( $blockredirect ) );
+				$xtpl->assign( 'BLOCKREDIRECT', nv_redirect_decrypt( $blockredirect ) );
 				$xtpl->parse( 'blockredirect' );
 				$contents = $xtpl->text( 'blockredirect' );
 
@@ -501,8 +512,7 @@ while( $row_i = $result->fetch() )
 $xtpl->assign( 'ROW', array(
 	'title' => $row['title'],
 	'exp_time' => ( $row['exp_time'] > 0 ) ? date( 'd/m/Y', $row['exp_time'] ) : '',
-	'block_active' => ( intval( $row['active'] ) == 1 ) ? ' checked="checked"' : '',
-	'link' => $row['link'],
+	'link' => nv_htmlspecialchars( $row['link'] ),
 	'bid' => $row['bid'],
 	'module' => $row['module'],
 	'file_name' => $row['file_name']
@@ -522,6 +532,17 @@ foreach( $templ_list as $value )
 		) );
 		$xtpl->parse( 'main.template' );
 	}
+}
+
+$active_device = ! empty( $row['active'] ) ? explode( ',', $row['active'] ) : array();
+for( $i = 1; $i <= 4; ++$i )
+{
+	$xtpl->assign( 'ACTIVE_DEVICE', array(
+		'key' => $i,
+		'checked' => ( in_array( $i, $active_device ) ) ? ' checked="checked"' : '',
+		'title' => $lang_module['show_device_' . $i]
+	) );
+	$xtpl->parse( 'main.active_device' );
 }
 
 for( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )

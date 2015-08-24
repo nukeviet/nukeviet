@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript">
 	var cat = '{LANG.cat}';
 	var caton = '{LANG.caton}';
@@ -119,12 +119,14 @@
 				<tr>
 					<td><strong>{LANG.chomodule}</strong></td>
 					<td>
+						<div class="form-group">
 						<select name="module_name" id="module_name_{module.key}" onchange="nv_link_module('{module.key}');" class="form-control w200">
 							<option value="0">{LANG.cho_module}</option>
 							<!-- BEGIN: module -->
 							<option value="{module.key}"{module.selected}>{module.title}</option>
 							<!-- END: module -->
 						</select>
+						</div>
 						<span id="thu">
 							<!-- BEGIN: link -->
 							<select name="op" id="module_sub_menu" onchange="nv_link_settitle('{item.alias}','{item.module}');" class="form-control w200">
@@ -152,7 +154,7 @@
 					<td><strong>{LANG.icon}</strong></td>
 					<td>
 						<input class="form-control w200 pull-left" type="text" name="icon" id="icon" value="{DATA.icon}"/>
-						&nbsp;<input type="button" value="Browse" name="selectimg" class="btn btn-info" />
+						&nbsp;<input id="select-img-menurow" type="button" value="Browse" name="selectimg" class="btn btn-info" />
 					</td>
                     <td>&nbsp;</td>
 				</tr>
@@ -201,17 +203,10 @@
 	</div>
 </form>
 <script type="text/javascript">
-	$(document).ready(function() {
-		$("#parentid, #module_name_page").select2();
-	});
-
-	$("input[name=selectimg]").click(function() {
-		var area = "icon";
-		var path = "{UPLOAD_CURRENT}";
-		var currentpath = "{UPLOAD_CURRENT}";
-		var type = "image";
-		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
+var CFG = [];
+CFG.upload_current = '{UPLOAD_CURRENT}';
+$(document).ready(function() {
+	$("#parentid, #module_name_page").select2();
+});
 </script>
 <!-- END: main -->

@@ -69,6 +69,16 @@ function nv_check_allow_upload_dir( $dir )
 		return $level;
 	}
 
+	$mod_name = '';
+	foreach ( $site_mods as $_mod_name_i => $_row_i )
+	{
+		if( $_row_i['module_upload'] == $_dir_mod )
+		{
+			$mod_name = $_mod_name_i;
+			break;
+		}
+	}
+
 	// Quyen cua dieu hanh toi cao va dieu hanh chung
 	if( defined( 'NV_IS_SPADMIN' ) )
 	{
@@ -87,7 +97,7 @@ function nv_check_allow_upload_dir( $dir )
 			$level['delete_dir'] = true;
 
 			// Khong doi ten, xoa thu muc upload cua module hoac thu muc co chua thu muc con
-			if( isset( $site_mods[$_dir_mod] ) and ! empty( $_dir_mod_sub ) )
+			if( isset( $site_mods[$mod_name] ) and ! empty( $_dir_mod_sub ) )
 			{
 				unset( $level['rename_dir'], $level['delete_dir'] );
 			}
@@ -110,7 +120,7 @@ function nv_check_allow_upload_dir( $dir )
             $level['rotate_file'] = true;
 		}
 	}
-	elseif( isset( $site_mods[$_dir_mod] ) )
+	elseif( isset( $site_mods[$mod_name] ) )
 	{
 		$level['view_dir'] = true;
 
@@ -204,7 +214,7 @@ function nv_get_viewImage( $fileName )
 {
 	global $array_thumb_config;
 
-	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|ico)))$/i', $fileName, $m ) )
+	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|ico)))$/i', $fileName, $m ) )
 	{
 		$viewFile = NV_FILES_DIR . '/' . $m[1];
 
@@ -262,7 +272,6 @@ function nv_get_viewImage( $fileName )
 					}
 				}
 			}
-			include_once NV_ROOTDIR . '/includes/class/image.class.php' ;
 			$image = new image( NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 			if( $thumb_config['thumb_type'] == 4 )
 			{
@@ -311,7 +320,7 @@ function nv_get_viewImage( $fileName )
 	else
 	{
 		$size = @getimagesize( NV_ROOTDIR . '/' . $fileName );
-		return array( $viewFile, $size[0], $size[1] );
+		return array( $fileName, $size[0], $size[1] );
 	}
 	return false;
 }
@@ -345,7 +354,7 @@ function nv_getFileInfo( $pathimg, $file )
 	$stat = @stat( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
 	$info['filesize'] = $stat['size'];
 
-	$info['src'] = 'images/file.gif';
+	$info['src'] = NV_FILES_DIR . '/images/file.gif';
 	$info['srcwidth'] = 32;
 	$info['srcheight'] = 32;
 	$info['size'] = '|';
@@ -385,7 +394,7 @@ function nv_getFileInfo( $pathimg, $file )
 	elseif( in_array( $ext, $array_flash ) )
 	{
 		$info['type'] = 'flash';
-		$info['src'] = 'images/flash.gif';
+		$info['src'] = NV_FILES_DIR . '/images/flash.gif';
 
 		if( $matches[2] == 'swf' )
 		{
@@ -398,25 +407,25 @@ function nv_getFileInfo( $pathimg, $file )
 	}
 	elseif( in_array( $ext, $array_archives ) )
 	{
-		$info['src'] = 'images/zip.gif';
+		$info['src'] = NV_FILES_DIR . '/images/zip.gif';
 	}
 	elseif( in_array( $ext, $array_documents ) )
 	{
 		if( $ext == 'doc' or $ext == 'docx' )
 		{
-			$info['src'] = 'images/msword.png';
+			$info['src'] = NV_FILES_DIR . '/images/msword.png';
 		}
 		elseif( $ext == 'xls' or $ext == 'xlsx' )
 		{
-			$info['src'] = 'images/excel.png';
+			$info['src'] = NV_FILES_DIR . '/images/excel.png';
 		}
 		elseif( $ext == 'pdf' )
 		{
-			$info['src'] = 'images/pdf.png';
+			$info['src'] = NV_FILES_DIR . '/images/pdf.png';
 		}
 		else
 		{
-			$info['src'] = 'images/doc.gif';
+			$info['src'] = NV_FILES_DIR . '/images/doc.gif';
 		}
 	}
 
@@ -533,10 +542,10 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 	return $real_dirlist;
 }
 
-$allow_upload_dir = array( 'images', SYSTEM_UPLOADS_DIR );
+$allow_upload_dir = array( SYSTEM_UPLOADS_DIR );
 $array_hidefolders = array( '.', '..', 'index.html', '.htaccess', '.tmp' );
 
-$array_images = array( 'gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'ico' );
+$array_images = array( 'gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'bmp', 'ico' );
 $array_flash = array( 'swf', 'swc', 'flv' );
 $array_archives = array( 'rar', 'zip', 'tar' );
 $array_documents = array( 'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' );

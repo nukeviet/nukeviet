@@ -5,7 +5,7 @@
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2010 - 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Sun, 08 Apr 2012 00:00:00 GMT GMT
+ * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
@@ -166,9 +166,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	else
 	{
 		$dataform['field'] = nv_substr( $nv_Request->get_title( 'field', 'post', '', 0, $validatefield ), 0, 50);
-		
+
 		require_once NV_ROOTDIR . '/includes/field_not_allow.php' ;
-		
+
 		if( in_array( $dataform['field'], $field_not_allow ) )
 		{
 			$error = $lang_module['field_error_not_allow'];

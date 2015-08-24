@@ -52,7 +52,7 @@ function nv_get_notification(timestamp) {
 					$('#notification').hide();
 				}
 				// call the function again
-				timer = setTimeout("nv_get_notification()", 10000);// load step 10 giay
+				timer = setTimeout("nv_get_notification()", 30000);// load step 30 sec
 			}
 		});
 	}
