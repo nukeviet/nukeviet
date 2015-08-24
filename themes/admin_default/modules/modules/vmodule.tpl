@@ -17,11 +17,11 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td class="w250 text-right"><strong>{LANG.vmodule_name}: </strong></td>
+					<td class="w250 text-right"><strong>{LANG.vmodule_name}: </strong><sup class="required">(*)</sup></td>
 					<td><input class="w250 required form-control" style="margin-right: 10px;" name="title" type="text" value="{TITLE}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td class="text-right"><strong>{LANG.vmodule_file}: </strong></td>
+					<td class="text-right"><strong>{LANG.vmodule_file}: </strong><sup class="required">(*)</sup></td>
 					<td>
 					<select name="module_file" class="required form-control w250" style="margin-right: 10px;">
 						<option value="">{LANG.vmodule_select}</option>
