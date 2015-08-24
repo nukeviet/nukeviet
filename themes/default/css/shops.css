@@ -1411,3 +1411,6 @@ img.calendar {
 img#imageproduct, .gallery img{
 	cursor: pointer;
 }
+.modal-body{
+	overflow: auto;
+}
