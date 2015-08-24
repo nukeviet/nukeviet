@@ -16,7 +16,7 @@
 				<col />
 				<tbody>
 					<tr>
-						<td><strong>{LANG.name}</strong></td>
+						<td><strong>{LANG.name}</strong>: <sup class="required">(∗)</sup></td>
 						<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
@@ -67,13 +67,13 @@
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
 					<tr>
-						<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+						<td><strong>{LANG.content_hometext}</strong> <i>{LANG.content_notehome}.</i> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 					</tr>
 					<tr>
 						<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:14px; width: 100%; height:100px;" class="form-control">{rowcontent.hometext}</textarea></td>
 					</tr>
 					<tr>
-						<td><strong>{LANG.content_bodytext}</strong>{LANG.content_bodytext_note}</td>
+						<td><strong>{LANG.content_bodytext}</strong> <sup class="required">(∗)</sup> <i>{LANG.content_bodytext_note}</i></td>
 					</tr>
 					<tr>
 						<td>
@@ -98,7 +98,7 @@
 					<ul style="padding-left:4px; margin:0">
 						<li>
 							<p class="message_head">
-								<cite>{LANG.content_cat}:</cite>
+								<cite>{LANG.content_cat}:</cite> <sup class="required">(∗)</sup>
 							</p>
 							<div class="message_body" style="height:260px; overflow: auto">
 								<table class="table table-striped table-bordered table-hover">
