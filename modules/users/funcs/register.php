@@ -416,10 +416,8 @@ if ( $nv_Request->isset_request( 'get_usage_terms', 'post' ) )
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$full = empty( $nv_redirect ) ? true : false;
-
 $contents = user_register( $gfx_chk, $array_register['checkss'], $data_questions, $array_field_config, $custom_fields );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme( $contents, $full );
+echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';

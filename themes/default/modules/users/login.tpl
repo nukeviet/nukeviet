@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="centered">
-<div class="col-md-12" style="min-width:300px">
+<div class="login-box">
     <div class="page panel panel-default margin-top-lg box-shadow<!-- BEGIN: not_redirect --> bg-lavender<!-- END: not_redirect -->">
         <div class="panel-body">
             <!-- BEGIN: redirect2 -->
@@ -34,10 +34,8 @@
             <!-- END: redirect2 -->
             <h2 class="text-center margin-bottom-lg">{LANG.login}</h2>
             {FILE "login_form.tpl"}
-            <div class="margin-top-lg">
-                <ul class="users-menu nav navbar-nav">
-                    <!-- BEGIN: navbar --><li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
-                </ul>
+            <div class="text-center margin-top-lg">
+                <!-- BEGIN: navbar --><a href="{NAVBAR.href}" class="margin-right-lg"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a><!-- END: navbar -->
             </div>
         </div>
     </div>
