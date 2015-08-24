@@ -74,7 +74,7 @@
 			<div class="modal-body">
 				<form class="form-horizontal">
 					<div class="form-group">
-						<label for="block-title" class="col-sm-5 control-label">{LANG.block_title}</label>
+						<label for="block-title" class="col-sm-5 control-label">{LANG.block_title}<sup class="required">(*)</sup></label>
 						<div class="col-sm-19">
 							<input type="text" class="form-control txt" id="block-title" name="title">
 						</div>
@@ -86,7 +86,7 @@
 						</div>
 					</div>
 					<input type="hidden" name="bid" id="block-bid" value="" class="txt">
-				</form>			
+				</form>
 			</div>
 			<div class="modal-footer">
 				<span class="per-loading"> <i class="fa fa-circle-o-notch fa-spin"></i> </span>
@@ -107,11 +107,11 @@
 				<p class="text-danger confirm">{LANG.block_delete_confirm}</p>
 				<p class="text-center loading">
 					<em class="fa fa-circle-o-notch fa-spin fa-2x"></em>
-				</p>	
-				<p class="text-center message"></p>	
+				</p>
+				<p class="text-center message"></p>
 				<p class="text-center success text-success">
 					<em class="fa fa-check-circle fa-2x"></em>
-				</p>	
+				</p>
 			</div>
 			<div class="modal-footer">
 				<input type="hidden" name="bid" value="">

@@ -10,7 +10,7 @@
 			<col />
 			<tbody>
 				<tr>
-					<td><strong>{LANG.part_row_title}</strong></td>
+					<td><strong>{LANG.part_row_title}</strong><sup class="required">(*)</sup></td>
 					<td><input class="w300 form-control pull-left" type="text" value="{DATA.full_name}" name="full_name" id="idfull_name" maxlength="255" /></td>
 				</tr>
 				<tr>
@@ -76,7 +76,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.list_admin_row_title}</caption>
 			<thead>
-				<tr>				    
+				<tr>
 					<th>{LANG.username_admin_row_title}</th>
 					<th>{LANG.name_admin_row_title}</th>
 					<th>{GLANG.email}</th>
