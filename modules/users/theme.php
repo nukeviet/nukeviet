@@ -406,7 +406,6 @@ function user_lostpass( $data )
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'DATA', $data );
 	$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
-	$xtpl->assign( 'FORM1_ACTION', $form_action );
 	$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
 	$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
