@@ -22,7 +22,7 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td class="text-right"><strong>{LANG.name}: </strong></td>
+					<td class="text-right"><strong>{LANG.name}: </strong><sup class="required">(∗)</sup></td>
 					<td><input class="form-control w500" name="title" id="idtitle" type="text" value="{DATA.title}" maxlength="255" /></td>
 				</tr>
 				<tr>
