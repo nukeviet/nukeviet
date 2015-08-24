@@ -172,9 +172,7 @@
 
 		$('.open_modal').click(function(e){
 			e.preventDefault();
-			var maxwidth = 800;
-     		$('#idmodals .modal-dialog').css( {'width': $(this).data('width') + 23, 'max-width': maxwidth + 23 } );
-     		$('#idmodals .modal-body').html( '<img src="' + $(this).data('src') + '" alt="" style="max-width: ' + maxwidth + 'px" />' );
+     		$('#idmodals .modal-body').html( '<img src="' + $(this).data('src') + '" alt="" class="img-responsive" />' );
      		$('#idmodals').modal('show');
 		});
 
