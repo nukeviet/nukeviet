@@ -22,7 +22,7 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td class="text-right"><strong>{LANG.name}: </strong></td>
+					<td class="text-right"><strong>{LANG.name}: </strong><sup class="required">(∗)</sup></td>
 					<td>
 						<input class="form-control w500" name="title" id="idtitle" type="text" value="{title}" maxlength="255" />
 						<span class="text-middle">{GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max}</span>
