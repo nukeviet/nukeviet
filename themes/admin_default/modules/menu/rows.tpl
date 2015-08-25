@@ -141,12 +141,12 @@
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.title}</strong></td>
+					<td><strong>{LANG.title}</strong><sup class="required">(*)</sup></td>
 					<td><input type="text" name="title" id="title" class="w300 form-control" value="{DATA.title}"/></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.link}</strong></td>
+					<td><strong>{LANG.link}</strong><sup class="required">(*)</sup></td>
 					<td><input type="text" name="link" class="w300 form-control" value="{DATA.link}" id="link"/></td>
 					<td>&nbsp;</td>
 				</tr>

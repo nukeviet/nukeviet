@@ -14,7 +14,7 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<td class="text-right"> {LANG.title}</td>
+							<td class="text-right"> {LANG.title} <sup class="required">(*)</sup></td>
 							<td><input class="w300 form-control pull-left" type="text" value="{DATA.title}" name="title" id="idtitle" maxlength="255" />&nbsp;<span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 						</tr>
 						<tr>
@@ -34,7 +34,7 @@
 							<td ><textarea class="form-control" id="description" name="description" cols="100" rows="5">{DATA.description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 						</tr>
 						<tr>
-							<td colspan="2" class="strong"> {LANG.bodytext}
+							<td colspan="2" class="strong" > {LANG.bodytext} <sup class="required">(*)</sup>
 								<div>
 									{BODYTEXT}
 								</div>
