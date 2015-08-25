@@ -198,36 +198,10 @@ function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config
 		$xtpl->parse( 'main.reg_captcha' );
 	}
 
-    if( ! empty( $nv_redirect ) )
+	if( ! empty( $nv_redirect ) )
 	{
-		$xtpl->assign( 'SITE_NAME', $global_config['site_name'] );
-		$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
-		$size = @getimagesize( NV_ROOTDIR . '/' . $global_config['site_logo'] );
-		$logo = preg_replace( '/\.[a-z]+$/i', '.svg', $global_config['site_logo'] );
-		if( ! file_exists( NV_ROOTDIR . '/' . $logo ) )
-		{
-			$logo = $global_config['site_logo'];
-		}
-		$xtpl->assign( 'LOGO_SRC', NV_BASE_SITEURL . $logo );
-		$xtpl->assign( 'LOGO_WIDTH', $size[0] );
-		$xtpl->assign( 'LOGO_HEIGHT', $size[1] );
-
-		if( isset( $size['mime'] ) and $size['mime'] == 'application/x-shockwave-flash' )
-		{
-			$xtpl->parse( 'main.redirect2.swf' );
-		}
-		else
-		{
-			$xtpl->parse( 'main.redirect2.image' );
-		}
-
 		$xtpl->assign( 'REDIRECT', $nv_redirect );
 		$xtpl->parse( 'main.redirect' );
-        $xtpl->parse( 'main.redirect2' );
-	}
-	else
-	{
-		$xtpl->parse( 'main.not_redirect' );
 	}
 
 	if( $global_config['allowuserreg'] == 2 )
@@ -312,7 +286,7 @@ function user_login( $gfx_chk, $nv_header )
 
 		$xtpl->assign( 'REDIRECT', $nv_redirect );
 		$xtpl->parse( 'main.redirect' );
-        $xtpl->parse( 'main.redirect2' );
+		$xtpl->parse( 'main.redirect2' );
 	}
 	else
 	{
@@ -390,9 +364,15 @@ function user_openid_login( $gfx_chk, $attribs )
 
 	$info = $lang_module['openid_note1'];
 
+	$xtpl->assign( 'REDIRECT', $nv_redirect );
+
 	if( $global_config['allowuserreg'] != 0 )
 	{
 		$info = $lang_module['openid_note2'];
+		if( ! empty( $nv_redirect ) )
+		{
+			$xtpl->parse( 'main.allowuserreg.redirect2' );
+		}
 		$xtpl->parse( 'main.allowuserreg' );
 		$xtpl->parse( 'main.allowuserreg2' );
 	}
@@ -401,7 +381,6 @@ function user_openid_login( $gfx_chk, $attribs )
 
 	if( ! empty( $nv_redirect ) )
 	{
-		$xtpl->assign( 'REDIRECT', $nv_redirect );
 		$xtpl->parse( 'main.redirect' );
 	}
 
@@ -417,38 +396,27 @@ function user_openid_login( $gfx_chk, $attribs )
  * @param mixed $question
  * @return
  */
-function user_lostpass( $data, $question )
+function user_lostpass( $data )
 {
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op;
+	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect;
 
 	$xtpl = new XTemplate( 'lostpass.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'DATA', $data );
+	$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
+	$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
+	$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
+	$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
+	$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
+	$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
+	$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 
-	$form_action = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass';
-	if( ! empty( $data['nv_redirect'] ) )
+	if( ! empty( $nv_redirect ) )
 	{
-		$form_action .= '&nv_redirect=' . $data['nv_redirect'];
-	}
-
-	if( $data['step'] == 2 )
-	{
-		$xtpl->assign( 'FORM2_ACTION', $form_action );
-		$xtpl->assign( 'QUESTION', $question );
-		$xtpl->parse( 'main.step2' );
-	}
-	else
-	{
-		$xtpl->assign( 'FORM1_ACTION', $form_action );
-		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
-		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
-		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
-		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
-		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
-		$xtpl->parse( 'main.step1' );
+		$xtpl->assign( 'REDIRECT', $nv_redirect );
+		$xtpl->parse( 'main.redirect' );
 	}
 
 	$_lis = $module_info['funcs'];
@@ -461,34 +429,13 @@ function user_lostpass( $data, $question )
 			if( $_li['func_name'] == 'register' and ! $global_config['allowuserreg'] ) continue;
 
 			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			if( ! empty( $nv_redirect ) ) $href .= '&nv_redirect=' . $nv_redirect;
 			$li = array( 'href' => $href, 'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name'] );
 			$xtpl->assign( 'NAVBAR', $li );
 			$xtpl->parse( 'main.navbar' );
 		}
 	}
 
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
-}
-
-/**
- * user_lostpass_new()
- *
- * @param mixed $data
- * @param mixed $question
- * @return
- */
-function user_lostpass_new( $userid, $k )
-{
-	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name;
-
-	$xtpl = new XTemplate( 'lostpass.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
-	$xtpl->assign( 'USERID', $userid );
-	$xtpl->assign( 'K', $k );
-
-	$xtpl->parse( 'main.new_pass' );
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
@@ -525,6 +472,22 @@ function user_lostactivelink( $data, $question )
 		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.step1' );
+	}
+    
+    $_lis = $module_info['funcs'];
+	$_alias = $module_info['alias'];
+	foreach( $_lis as $_li )
+	{
+		if( $_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main' )
+		{
+			if( $_li['func_name'] == $op or $_li['func_name'] == 'avatar' ) continue;
+			if( $_li['func_name'] == 'register' and ! $global_config['allowuserreg'] ) continue;
+
+			$href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
+			$li = array( 'href' => $href, 'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name'] );
+			$xtpl->assign( 'NAVBAR', $li );
+			$xtpl->parse( 'main.navbar' );
+		}
 	}
 
 	$xtpl->parse( 'main' );

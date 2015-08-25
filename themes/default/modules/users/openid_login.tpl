@@ -15,6 +15,7 @@
 						{LANG.openid_note5}
 					</span>
 					<input type="hidden" name="nv_reg" value="1" />
+                    <!-- BEGIN: redirect2 --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect2 -->
 					<input type="submit" class="btn btn-danger btn-sm" value="{LANG.openid_note4}">
 				</form>
 				<!-- END: allowuserreg -->

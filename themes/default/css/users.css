@@ -98,3 +98,13 @@
 .users-menu > li > a{
     padding: 8px 10px !important;
 }
+
+/*Login-box*/
+.login-box{
+    width:400px
+}
+@media (max-width:399px) {
+    .login-box{
+    width:100%
+}
+}

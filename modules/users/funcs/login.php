@@ -560,7 +560,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->isset_request( 'server', 'ge
 //Dang nhap kieu thong thuong
 if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 {
-	$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
+	$nv_username = nv_substr( $nv_Request->get_title( 'nv_login', 'post', '', 1 ), 0, 100 );
 	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
 	$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 
