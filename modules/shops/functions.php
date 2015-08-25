@@ -335,7 +335,7 @@ function SetSessionProView( $id, $title, $alias, $addtime, $link, $homeimgthumb 
  */
 function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtemplate )
 {
-	global $module_data, $module_info, $module_file, $lang_module, $db_config, $db, $global_config;
+	global $module_data, $module_info, $module_name, $module_file, $lang_module, $db_config, $db, $global_config;
 
 	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field';
 	$result = $db->query( $sql );
@@ -353,18 +353,9 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 			}
 		}
 	}
+
 	$html ='';
-
-	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '/' . $name_file ) )
-	{
-		$theme_tpl = $global_config['module_theme'];
-	}
-	else
-	{
-		$theme_tpl = 'default';
-	}
-
-	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/themes/' . $theme_tpl . '/modules/' . $module_file );
+	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl' );
 	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
 	$xtpl->assign( 'CUSTOM_DATA', $array_custom );
 	$count = 0;
