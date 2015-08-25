@@ -355,7 +355,7 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 	}
 
 	$html ='';
-	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/files_tpl/' . $module_name );
+	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl' );
 	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
 	$xtpl->assign( 'CUSTOM_DATA', $array_custom );
 	$count = 0;
