@@ -171,10 +171,13 @@ function switchTab(a) {
 
 // ModalShow
 function modalShow(a, b) {
-	"" == a && (a = "&nbsp;");
+	"" != a && 'undefined' != typeof a && $("#sitemodal .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + a + '</h2></div>');
 	$("#sitemodal").find(".modal-title").html(a);
 	$("#sitemodal").find(".modal-body").html(b);
-	$("#sitemodal").modal()
+    $('#sitemodal').on('hidden.bs.modal', function () {
+            $("#sitemodal .modal-content").find(".modal-header").remove()
+		});
+    $("#sitemodal").modal({backdrop: "static"})
 }
 
 function modalShowByObj(a)
