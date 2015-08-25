@@ -177,6 +177,25 @@ function change_captcha(a) {
 	"undefined" != typeof a && "" != a && $(a).val("");
 	return !1
 }
+
+//Form Ajax-login
+
+function loginForm()
+{
+    if(nv_is_user == 1) return!1;
+    $.ajax({
+        type: 'POST',
+		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
+		cache: !1,
+        data: '&nv_ajax=1',
+		dataType: "html",
+	}).done(function(a) {
+		modalShow('', a)
+	});
+    return!1
+}
+
+
 // ModalShow
 
 function modalShow(a, b) {

@@ -238,11 +238,12 @@ function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config
  * @param mixed $array_login
  * @return
  */
-function user_login( $gfx_chk, $nv_header )
+function user_login( $gfx_chk, $nv_header, $is_ajax = false )
 {
 	global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect;
 
-	$xtpl = new XTemplate( 'login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users' );
+	if( $is_ajax ) $xtpl = new XTemplate( 'ajax_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users' );
+    else $xtpl = new XTemplate( 'login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users' );
 
 	$xtpl->assign( 'USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login' );
 	$xtpl->assign( 'USER_LOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass' );
