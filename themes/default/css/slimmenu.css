@@ -1,30 +1,34 @@
 ul.slimmenu {
 	background-color: #0855a1;
 	border-color: #064481;
-	width: 100%
+	width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
 }
 
 ul.slimmenu li {
+    position: relative;
+	display: inline-block;
 	text-align: left;
 }
 
 .menu-collapser {
-	position: relative;
-	background-color: #0855a1;
+	position: absolute;
+    top:0;
+    left:0;
+	background: transparent;
 	color: #FFF;
 	text-shadow: 0 1px 0 rgba(0,0,0,0.5);
 	width: 100%;
 	height: 48px;
 	line-height: 48px;
 	font-size: 16px;
-	padding: 0 8px;
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box
+	padding: 0;
 }
 .collapse-button {
 	position: absolute;
-	right: 8px;
+	right: -40px;
 	top: 50%;
 	width: 40px;
 	background-color: #0E0E0E;
@@ -52,7 +56,7 @@ ul.slimmenu li {
 }
 .collapse-button:hover, .collapse-button:focus {
 	background-image: none;
-	background-color: #333;
+	background-color: #1182C8;
 	color: #FFF;
 }
 .collapse-button .icon-bar {
@@ -64,27 +68,29 @@ ul.slimmenu li {
 	width: 18px;
 	margin: 2px 0;
 }
+
+ul.slimmenu li a{
+    padding: 15px 26px;
+}
+ul.slimmenu li ul li a, ul.slimmenu.collapsed li a {
+	padding: 10px;
+}
+
+ul.slimmenu.collapsed{
+    z-index:3
+}
+ul.slimmenu.collapsed li a{
+    display:block;
+    min-width: 200px
+}
 ul.slimmenu.collapsed li ul li {
 	padding: 0px;
 	clear: both;
 }
-ul.slimmenu.collapsed li ul li a {
-	padding: 15px 10px;
-}
 ul.slimmenu.collapsed li ul li a i {
 	padding: 0px 5px;
 }
-ul.slimmenu {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	width: 100%;
-}
-ul.slimmenu li {
-	position: relative;
-	display: inline-block;
-	/*background-color: #AAA;*/
-}
+
 ul.slimmenu > li {
 	margin-right: -5px;
 }
@@ -94,10 +100,9 @@ ul.slimmenu > li:first-child {
 ul.slimmenu > li:last-child {
 	margin-right: 0
 }
-ul.slimmenu li a {
+ul.slimmenu > li > a {
 	display: block;
 	color: #fff;
-	padding: 16px 26px 16px 16px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 13px;
 	font-weight: 400;
@@ -112,7 +117,7 @@ ul.slimmenu li a:hover, ul.slimmenu li a:focus, ul.slimmenu li.current {
 ul.slimmenu li .sub-collapser {
 	background: none;
 	position: absolute;
-	right: 0;
+    right: 0;
 	top: 0;
 	width: 28px;
 	height: 100%;
@@ -133,6 +138,15 @@ ul.slimmenu li .sub-collapser > i {
 	display: inline-block;
 	vertical-align: middle;
 }
+ul.slimmenu.collapsed li .sub-collapser > i{
+    vertical-align: top;
+    margin-top: 14px;
+}
+
+ul.slimmenu.collapsed li  .sub-collapser > i{
+    vertical-align: top;
+    margin-top: 14px;
+}
 
 ul.slimmenu li ul {
 	margin: 0;
@@ -151,7 +165,6 @@ ul.slimmenu li ul li a {
 	display: block;
 	font-weight: normal;
 	line-height: 1.42857;
-	padding: 3px 20px;
 	white-space: nowrap;
 }
 ul.slimmenu li ul li a:hover, ul.slimmenu li ul li a:focus {
@@ -194,26 +207,16 @@ ul.slimmenu.collapsed li {
 }
 ul.slimmenu.collapsed li a {
 	display: block;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.075);
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box
-}
-ul.slimmenu.collapsed li .sub-collapser {
-	height: 50px;
 }
 ul.slimmenu.collapsed li > ul {
 	display: none;
 	position: static;
 }
 @media (max-width: 768px) {
-	ul.slimmenu li .sub-collapser > i {
-		color: #FFFFFF;
-		font-size: 12px;
-		display: inline-block;
-		vertical-align: middle;
-		padding-right: 16px;
-	}
 	ul.slimmenu li > ul {
 		border-radius: 0px;
 		box-shadow: none;
