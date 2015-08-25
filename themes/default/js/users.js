@@ -122,6 +122,7 @@ function validErrorShow(a) {
 	$(a).parent().parent().addClass("has-error");
 	$("[data-mess]", $(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
 	$(a).tooltip({
+	   container: "body",
 		placement: "bottom",
 		title: function() {
 			return "" != $(a).attr("data-current-mess") ? $(a).attr("data-current-mess") : nv_required

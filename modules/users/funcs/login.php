@@ -658,8 +658,10 @@ $mod_title = $lang_module['login'];
 
 $nv_header = $nv_Request->get_title( 'nv_header', 'get, post', '' );
 
-$full = ( $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ) ? false : true;
+$full = $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ? false : true;
 if( !empty( $nv_redirect ) ) $full = false;
+
+if( $nv_Request->get_int( 'nv_ajax', 'post', 0 ) == 1 ) die( user_login( $gfx_chk, $nv_header, true ) ); 
 
 $contents = user_login( $gfx_chk, $nv_header );
 
