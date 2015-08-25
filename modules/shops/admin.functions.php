@@ -1191,10 +1191,8 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
  * @param mixed $idshop
  * @return
  */
-
 function Insertabl_catfields( $table, $array, $idshop )
 {
-
 	global $db, $module_name, $module_file, $db, $link, $module_info, $global_array_shops_cat, $global_config;
 
 	$result = $db->query( "SHOW COLUMNS FROM " . $table );

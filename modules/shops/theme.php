@@ -1340,7 +1340,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 		// Hien thi du lieu tuy bien o phan gioi thieu
 		if( !empty( $data_content['array_custom'] ) and !empty( $data_content['array_custom_lang'] ) )
 		{
-			$custom_data = nv_custom_tpl( 'tab_introduce.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
+			$custom_data = nv_custom_tpl( 'tab-introduce-' . NV_LANG_DATA . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
 			$xtpl->assign( 'CUSTOM_DATA', $custom_data );
 			$xtpl->parse( 'main.custom_data' );
 
@@ -1409,7 +1409,7 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 					{
 						if( !empty( $data_content['array_custom'] ) and !empty( $data_content['array_custom_lang'] ) )
 						{
-							$tabs_content = nv_custom_tpl( 'tab_' . str_replace( '-', '_', strtolower( change_alias( $data_content['tabs'][$tabs_id][NV_LANG_DATA.'_title'] ) ) ) . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
+							$tabs_content = nv_custom_tpl( 'tab-' . strtolower( change_alias( $data_content['tabs'][$tabs_id][NV_LANG_DATA.'_title'] ) ) . '-' . NV_LANG_DATA . '.tpl', $data_content['array_custom'], $data_content['array_custom_lang'], $idtemplate );
 						}
 					}
 

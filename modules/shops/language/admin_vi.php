@@ -131,6 +131,7 @@ $lang_module['setting_tags_remind'] = 'Nhắc nhở các từ khóa không có m
 $lang_module['setting_facebookAppID'] = 'Facebook App ID';
 $lang_module['setting_facebookAppIDNote'] = ' (Có dạng 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xem chi tiết</a>)';
 $lang_module['setting_socialbutton'] = 'Hiển thị các công cụ Like facebook, G+, Twitter khi xem bài viết';
+$lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
 $lang_module['setup_payment'] = 'Tích hợp cổng thanh toán';
 $lang_module['setup_payment_guide'] = 'Xem hướng dẫn Tích hợp cổng thanh toán';
 $lang_module['setting_stt'] = 'STT';
@@ -566,6 +567,7 @@ $lang_module['listtemplate_error'] = "Chưa chọn nhóm dữ liệu";
 
 //field
 $lang_module['fields'] = 'Tùy biến dữ liệu';
+$lang_module['field_tab_page'] = 'Cấu hình hiển thị dữ liệu tùy biến';
 $lang_module['captionform_add'] = 'Thêm trường dữ liệu';
 $lang_module['captionform_edit'] = 'Sửa trường dữ liệu';
 $lang_module['field_edit'] = 'Sửa';
@@ -617,6 +619,8 @@ $lang_module['field_options_choice'] = 'Các tùy chọn';
 $lang_module['field_number'] = 'STT';
 $lang_module['field_value'] = 'Giá trị';
 $lang_module['field_text'] = 'Miêu tả';
+$lang_module['field_info_list'] = 'Thông tin sản phẩm';
+$lang_module['field_info_list_note'] = 'Hiển thị trong phần thông tin sản phẩm';
 $lang_module['field_add_choice'] = 'Thêm lựa chọn';
 $lang_module['field_date_error'] = 'Giá trị của Min Date cần nhỏ hơn Max Date';
 $lang_module['field_number_error'] = 'Giá trị của Min Value cần nhỏ hơn Max Value';
@@ -679,8 +683,6 @@ $lang_module['download_setting_active'] = 'Sử dụng chức Quản lý file t�
 $lang_module['download_setting_groups'] = 'Ai được phép tải tập tin';
 $lang_module['download_setting_groups_module'] = 'Theo cấu hình module';
 
-$lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
-
 //Lang for function tabs
 $lang_module['tabs'] = 'Quản lý tab';
 $lang_module['tabs_icon'] = 'Biểu tượng';
@@ -693,10 +695,6 @@ $lang_module['tabs_content_rate'] = 'Đánh giá sản phẩm';
 $lang_module['tabs_content_customdata'] = 'Dữ liệu tùy biến';
 $lang_module['error_required_content'] = 'Lỗi: bạn cần nhập dữ liệu cho Nội dung';
 
-//Lang for function field
-$lang_module['field_tab_page'] = 'Hiển thị dữ liệu cho tab';
-$lang_module['introduce'] = 'Giới thiệu';
-
-$lang_module['updateprice']='Cập nhật giá theo loại';
+$lang_module['updateprice'] = 'Cập nhật giá theo loại';
 $lang_module['cateid'] = 'Loại sản phẩm';
 $lang_module['newprice'] = 'Giá mới';
