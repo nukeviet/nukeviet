@@ -382,7 +382,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 			foreach( $array_cat[$key]['content'] as $array_row_i )
 			{
 				$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
-				$array_row_i['publtime'] = nv_date( 'd/m/Y', $array_row_i['publtime'] );
+				$array_row_i['publtime'] = nv_date( 'd/m/Y H:i', $array_row_i['publtime'] );
 				$array_row_i['hometext'] = nv_clean60( $array_row_i['hometext'], 120 );
 				++$a;
 
@@ -704,19 +704,13 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	if( $module_config[$module_name]['socialbutton'] )
 	{
 		global $meta_property;
-		if( ! defined( 'FACEBOOK_JSSDK' ) )
+
+		if( ! empty( $module_config[$module_name]['facebookappid'] ) )
 		{
-			$lang = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
-			$facebookappid = $module_config[$module_name]['facebookappid'];
-			$xtpl->assign( 'FACEBOOK_LANG', $lang );
-			$xtpl->assign( 'FACEBOOK_APPID', $facebookappid );
-			$xtpl->parse( 'main.facebookjssdk' );
-			if( ! empty( $facebookappid ) )
-			{
-				$meta_property['fb:app_id'] = $facebookappid;
-			}
-			define( 'FACEBOOK_JSSDK', true );
+			$meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
+			$meta_property['og:locale'] = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
 		}
+
 		$xtpl->parse( 'main.socialbutton' );
 	}
 
@@ -872,7 +866,7 @@ function sendmail_themme( $sendmail )
 	if( $global_config['gfx_chk'] > 0 )
 	{
 		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
+		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
 		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );

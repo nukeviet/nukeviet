@@ -18,7 +18,7 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
 	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
-	
+
 	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 1 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
 		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
@@ -113,7 +113,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH1', $module_config[$module_name]['homewidth'] );
 	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
-	
+
 	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 0 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
 		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
@@ -367,7 +367,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 	$xtpl = new XTemplate( $viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
-	
+
 	// Hien thi cac chu de con
 	foreach( $array_cat as $key => $array_row_i )
 	{
@@ -396,7 +396,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 			foreach( $array_cat[$key]['content'] as $array_row_i )
 			{
 				$newday = $array_row_i['publtime'] + ( 86400 * $array_row_i['newday'] );
-				$array_row_i['publtime'] = nv_date( 'd/m/Y h:i:s A', $array_row_i['publtime'] );
+				$array_row_i['publtime'] = nv_date( 'd/m/Y H:i', $array_row_i['publtime'] );
 				++$a;
 
 				if( $a == 1 )
@@ -468,7 +468,7 @@ function viewcat_two_column( $array_content, $array_catpage )
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'IMGWIDTH0', $module_config[$module_name]['homewidth'] );
 	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
-	
+
 	if( ( $global_array_cat[$catid]['viewdescription'] and $page == 1 ) or $global_array_cat[$catid]['viewdescription'] == 2 )
 	{
 		$xtpl->assign( 'CONTENT', $global_array_cat[$catid] );
@@ -613,7 +613,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TOOLTIP_POSITION', $module_config[$module_name]['showtooltip'] ? $module_config[$module_name]['tooltip_position'] : '' );
-	
+
 	$news_contents['addtime'] = nv_date( 'd/m/Y h:i:s', $news_contents['addtime'] );
 
 	$xtpl->assign( 'NEWSID', $news_contents['id'] );
@@ -664,10 +664,22 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 		{
 			if( $news_contents['image']['position'] == 1 )
 			{
+                if( !empty( $news_contents['image']['note'] ) )
+                {
+                    $xtpl->parse( 'main.showhometext.imgthumb.note' );
+                }
+                else
+                {
+                    $xtpl->parse( 'main.showhometext.imgthumb.empty' );
+                }
 				$xtpl->parse( 'main.showhometext.imgthumb' );
 			}
 			elseif( $news_contents['image']['position'] == 2 )
 			{
+                if( !empty( $news_contents['image']['note'] ) )
+                {
+                    $xtpl->parse( 'main.showhometext.imgfull.note' );
+                }
 				$xtpl->parse( 'main.showhometext.imgfull' );
 			}
 		}
@@ -724,18 +736,11 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 	if( $module_config[$module_name]['socialbutton'] )
 	{
 		global $meta_property;
-		if( ! defined( 'FACEBOOK_JSSDK' ) )
+
+		if( ! empty( $module_config[$module_name]['facebookappid'] ) )
 		{
-			$lang = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
-			$facebookappid = $module_config[$module_name]['facebookappid'];
-			$xtpl->assign( 'FACEBOOK_LANG', $lang );
-			$xtpl->assign( 'FACEBOOK_APPID', $facebookappid );
-			$xtpl->parse( 'main.facebookjssdk' );
-			if( ! empty( $facebookappid ) )
-			{
-				$meta_property['fb:app_id'] = $facebookappid;
-			}
-			define( 'FACEBOOK_JSSDK', true );
+			$meta_property['fb:app_id'] = $module_config[$module_name]['facebookappid'];
+			$meta_property['og:locale'] = ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US';
 		}
 		$xtpl->parse( 'main.socialbutton' );
 	}
@@ -752,6 +757,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 			}
 			$related_new_array_i['time'] = nv_date( 'd/m/Y', $related_new_array_i['time'] );
 			$xtpl->assign( 'RELATED_NEW', $related_new_array_i );
+            !empty( $module_config[$module_name]['showtooltip'] ) && $xtpl->parse( 'main.related_new.loop.tooltip' );
 			$xtpl->parse( 'main.related_new.loop' );
 		}
 		unset( $key );
@@ -770,6 +776,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 			}
 			$related_array_i['time'] = nv_date( 'd/m/Y', $related_array_i['time'] );
 			$xtpl->assign( 'RELATED', $related_array_i );
+            !empty( $module_config[$module_name]['showtooltip'] ) && $xtpl->parse( 'main.related.loop.tooltip' );
 			$xtpl->parse( 'main.related.loop' );
 		}
 		$xtpl->parse( 'main.related' );
@@ -787,6 +794,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 			}
 			$topic_array_i['time'] = nv_date( 'd/m/Y', $topic_array_i['time'] );
 			$xtpl->assign( 'TOPIC', $topic_array_i );
+            !empty( $module_config[$module_name]['showtooltip'] ) && $xtpl->parse( 'main.topic.loop.tooltip' );
 			$xtpl->parse( 'main.topic.loop' );
 		}
 		$xtpl->parse( 'main.topic' );
@@ -895,7 +903,7 @@ function sendmail_themme( $sendmail )
 	if( $global_config['gfx_chk'] > 0 )
 	{
 		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
+		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
 		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );

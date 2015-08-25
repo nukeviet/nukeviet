@@ -18,32 +18,32 @@ define( 'NV_CONFIG_FILENAME', 'config.php' );
 //Ten thu muc admin
 define( 'NV_ADMINDIR', 'admin' );
 
+//Ten thu muc luu data
+define( 'NV_DATADIR', 'data/config' );
+
+//Thu muc chua cac file logs
+define( 'NV_LOGS_DIR', 'data/logs' );
+
+//Thu muc chua cac file tam thoi
+define( 'NV_TEMP_DIR', 'data/tmp' );
+
+//Ten thu muc cache
+define( 'NV_CACHEDIR', 'data/cache' );
+
+//Thu muc chua IP
+define( 'NV_IP_DIR', 'data/ip' );
+
+//Thu muc assets
+define( 'NV_ASSETS_DIR', 'assets' );
+
 //Ten thu muc editors
-define( 'NV_EDITORSDIR', 'editors' );
+define( 'NV_EDITORSDIR', NV_ASSETS_DIR . '/editors' );
 
 //Thu muc uploads
 define( 'NV_UPLOADS_DIR', 'uploads' );
 
-//Thu muc files
-define( 'NV_FILES_DIR', 'files' );
-
 //Thu muc uploads banner
 define( 'NV_BANNER_DIR', 'banners' );
-
-//Thu muc chua cac file logs
-define( 'NV_LOGS_DIR', 'logs' );
-
-//Thu muc chua sessions
-define( 'NV_SESSION_SAVE_PATH', 'sess' );
-
-//Thu muc chua cac file tam thoi
-define( 'NV_TEMP_DIR', 'tmp' );
-
-//Ten thu muc cache
-define( 'NV_CACHEDIR', 'cache' );
-
-//Ten thu muc luu data
-define( 'NV_DATADIR', 'data' );
 
 //TDT file tam thoi, toi da 3 ky tu
 define( 'NV_TEMPNAM_PREFIX', 'nv_' );
@@ -124,7 +124,7 @@ define( 'BROWSER_OPERA', 'Opera' );
 define( 'BROWSER_OPERAMINI', 'Opera Mini' );
 define( 'BROWSER_WEBTV', 'WebTV' );
 define( 'BROWSER_EXPLORER', 'Internet Explorer' );
-define( 'BROWSER_EDGE', 'Microsoft Edger' );
+define( 'BROWSER_EDGE', 'Microsoft Edge' );
 define( 'BROWSER_POCKET', 'Pocket Internet Explorer' );
 define( 'BROWSER_KONQUEROR', 'Konqueror' );
 define( 'BROWSER_ICAB', 'iCab' );

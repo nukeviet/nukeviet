@@ -816,7 +816,7 @@ function nv_ImageInfo( $original_name, $width = 0, $is_create_thumb = false, $th
 	$original_name = rtrim( $original_name, '\\/' );
 
 	unset( $matches );
-	if( ! preg_match( '/^' . nv_preg_quote( NV_ROOTDIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $original_name, $matches ) ) return false;
+	if( ! preg_match( '/^' . nv_preg_quote( NV_ROOTDIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $original_name, $matches ) ) return false;
 
 	$imageinfo = array();
 

@@ -1,84 +1,111 @@
 <!-- BEGIN: main -->
 <div id="nv-block-login" class="text-center">
-	<em class="fa fa-sign-in">&nbsp;</em> <a href="{USER_LOGIN}" class="login">{LANG.loginsubmit}</a> 
-	<!-- BEGIN: allowuserreg -->
-	<em class="fa fa-user-plus">&nbsp;</em> <a href="{USER_REGISTER}" class="register">{LANG.register}</a> 
-	<!-- END: allowuserreg -->
-</div>
-<script type="text/javascript">
-$.fn.user.defaults = $.extend({}, $.fn.user.defaults, {
-	captchaW: {GFX_WIDTH},
-	captchaH: {GFX_HEIGHT},
-	captchaLen: {GFX_MAXLENGTH},
-	timeStamp: {NV_CURRENTTIME},
-	checkss: '{CHECKSESS}',
-	<!-- BEGIN: captcha_login -->isCaptchaLogin: true,<!-- END: captcha_login -->
-	<!-- BEGIN: captcha_reg -->isCaptchaReg: true,<!-- END: captcha_reg -->
-	<!-- BEGIN: allowuserreg1 -->allowreg: true,<!-- END: allowuserreg1 -->
-	lostpassLink: '{USER_LOSTPASS}',
-});
-$.fn.user.defaults.lang = $.extend({}, $.fn.user.defaults.lang, {
-	close: '{LANG.cancel}',
-	login: '{LANG.loginsubmit}',
-	loginSubmit: '{LANG.loginsubmit}',
-	securitycode: '{LANG.securitycode}',
-	username: '{LANG.username}',
-	password: '{LANG.password}',
-	lostpass: '{LANG.lostpass}',
+	<button type="button" class="login btn btn-success btn-sm" onclick="modalShowByObj('#guestLogin_{BLOCKID}')">
+		{GLANG.signin}
+	</button>
 	<!-- BEGIN: allowuserreg2 -->
-	register: '{LANG.register}',
-	firstName: '{LANG.first_name}',
-	lastName: '{LANG.last_name}',
-	email: '{LANG.email}',
-	account: '{LANG.username}',
-	rePassword: '{LANG.password2}',
-	question: '{LANG.question}',
-	yourQuestion: '{LANG.your_question}',
-	answerYourQuestion: '{LANG.answer_your_question}',
-	inGroup: '{LANG.in_group}',
-	usageTerms: '{LANG.usage_terms}',
-	captcha: '{LANG.securitycode}',
-	accept: '{LANG.accept}',
+	<button type="button" class="register btn btn-primary btn-sm" onclick="modalShowByObj('#guestReg_{BLOCKID}')">
+		{GLANG.register}
+	</button>
 	<!-- END: allowuserreg2 -->
-	openidLogin: '{LANG.openid_login}'
-});
-<!-- BEGIN: openid -->
-$.fn.user.defaults.isOpenID = true;
-<!-- BEGIN: server -->
-$.fn.user.defaults.openIDSV.push({
-	title: '{OPENID.title}',
-	href: '{OPENID.href}',
-	imgSRC: '{OPENID.img_src}',
-	imgW: '{OPENID.img_width}',
-	imgH: '{OPENID.img_height}'
-});
-<!-- END: server -->
-<!-- END: openid -->
-</script>
+</div>
+<!-- START FORFOOTER -->
+<div id="guestLogin_{BLOCKID}" class="hidden">
+	<div class="page panel panel-default bg-lavender box-shadow">
+		<div class="panel-body">
+			<h2 class="text-center margin-bottom-lg">
+				{LANG.login}
+			</h2>
+			{FILE "login_form.tpl"}
+		</div>
+	</div>
+</div>
+<!-- BEGIN: allowuserreg -->
+<div id="guestReg_{BLOCKID}" class="hidden">
+	<div class="page panel panel-default bg-lavender box-shadow">
+		<div class="panel-body">
+			<h2 class="text-center margin-bottom-lg">
+				{LANG.register}
+			</h2>
+			{FILE "register_form.tpl"}
+		</div>
+	</div>
+</div>
+<!-- END: allowuserreg -->
+<!-- END FORFOOTER -->
+<!-- BEGIN: datepicker -->
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<!-- END: datepicker -->
+<script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
 <!-- END: main -->
 <!-- BEGIN: signed -->
 <div class="content signed clearfix">
-	<p class="text-center">{LANG.wellcome}:
-	    <strong>
-	           {USER.full_name}
-	    </strong>
-	</p>
-	<hr />
-	<div class="row">
-		<div class="col-xs-8 text-center">
-			<a title="{LANG.edituser}" href="{CHANGE_INFO}"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail" /></a>
-		</div>
-		<div class="col-xs-16">
-		    <ul class="nv-list-item sm">
-		    	<li class="active"><a href="{URL_MODULE}">{LANG.user_info}</a></li>
-		    	<li><a href="{URL_HREF}editinfo">{LANG.editinfo}</a></li>
-		    	<li><a href="{URL_HREF}changepass">{LANG.changepass_title}</a></li>
-		    	<li><a href="{URL_HREF}changequestion">{LANG.question2}</a></li>
-		    	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
-		    	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
-		    	<li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li>
-		    </ul>
-		</div>
-	</div>
+    <div class="nv-info" style="display:none"></div>
+    <div class="userBlock">
+    	<h3 class="text-center margin-bottom-lg"><span class="lev-{LEVEL} text-normal margin-right">{WELCOME}:</span>{USER.full_name}</h3>
+        <div class="row margin-bottom-lg">
+    		<div class="col-xs-8 text-center">
+    			<a title="{LANG.edituser}" href="#" onclick="changeAvatar('{URL_AVATAR}')"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
+    		</div>
+    		<div class="col-xs-16">
+    			<ul class="nv-list-item sm">
+    				<li class="active">
+    					<a href="{URL_MODULE}">{LANG.user_info}</a>
+    				</li>
+    				<li>
+    					<a href="{URL_HREF}editinfo">{LANG.editinfo}</a>
+    				</li>
+    				<!-- BEGIN: allowopenid -->
+    				<li>
+    					<a href="{URL_HREF}editinfo/openid">{LANG.openid_administrator}</a>
+    				</li>
+    				<!-- END: allowopenid -->
+    				<!-- BEGIN: regroups -->
+    				<li>
+    					<a href="{URL_HREF}editinfo/group">{LANG.in_group}</a>
+    				</li>
+    				<!-- END: regroups -->
+    			</ul>
+    		</div>
+    	</div>
+    	<!-- BEGIN: admintoolbar -->
+    	<div class="margin-top boder-top padding-top margin-bottom-lg">
+    		<p class="margin-bottom-sm"><strong>{GLANG.for_admin}</strong></p>
+    		<ul class="nv-list-item sm">
+    			<li>
+    				<em class="fa fa-cog fa-horizon margin-right-sm"></em><a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}" title="{GLANG.admin_page}"><span>{GLANG.admin_page}</span></a>
+    			</li>
+    			<!-- BEGIN: is_modadmin -->
+    			<li>
+    				<em class="fa fa-key fa-horizon margin-right-sm"></em><a href="{URL_ADMINMODULE}" title="{GLANG.admin_module_sector} {MODULENAME}"><span>{GLANG.admin_module_sector} {MODULENAME}</span></a>
+    			</li>
+    			<!-- END: is_modadmin -->
+    			<!-- BEGIN: is_spadadmin -->
+    			<li>
+    				<em class="fa fa-arrows fa-horizon margin-right-sm"></em><a href="{URL_DBLOCK}" title="{LANG_DBLOCK}"><span>{LANG_DBLOCK}</span></a>
+    			</li>
+    			<!-- END: is_spadadmin -->
+    			<li>
+    				<em class="fa fa-user fa-horizon margin-right-sm"></em><a href="{URL_AUTHOR}" title="{GLANG.admin_view}"><span>{GLANG.admin_view}</span></a>
+    			</li>
+    		</ul>
+    	</div>
+    	<!-- END: admintoolbar -->
+    	<div class="row">
+    		<div class="col-xs-16 small">
+    			<em class="button btn-sm icon-enter" title="{LANG.current_login}"></em>{USER.current_login_txt}
+    		</div>
+    		<div class="col-xs-8 text-right">
+    			<button type="button" class="btn btn-default btn-sm active" onclick="{URL_LOGOUT}(this);">
+    				<em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;
+    			</button>
+    		</div>
+    	</div>
+    </div>
 </div>
 <!-- END: signed -->

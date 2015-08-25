@@ -105,24 +105,9 @@ else
 
 				if( $global_config['autologomod'] == 'all' or ( $arr_dir[0] == NV_UPLOADS_DIR and isset( $arr_dir[1] ) and in_array( $arr_dir[1], $autologomod ) ) )
 				{
-					$upload_logo = '';
-
-					if( file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
+					if( ! empty( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
 					{
-						$upload_logo = $global_config['upload_logo'];
-					}
-					elseif( file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
-					{
-						$upload_logo = $global_config['site_logo'];
-					}
-					elseif( file_exists( NV_ROOTDIR . '/images/logo.png' ) )
-					{
-						$upload_logo = 'images/logo.png';
-					}
-
-					if( ! empty( $upload_logo ) )
-					{
-						$logo_size = getimagesize( NV_ROOTDIR . '/' . $upload_logo );
+						$logo_size = getimagesize( NV_ROOTDIR . '/' . $global_config['upload_logo'] );
 						$file_size = $upload_info['img_info'];
 
 						if( $file_size[0] <= 150 )
@@ -156,7 +141,7 @@ else
 						$config_logo['h'] = $h;
 
 						$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
-						$createImage->addlogo( NV_ROOTDIR . '/' . $upload_logo, '', '', $config_logo );
+						$createImage->addlogo( NV_ROOTDIR . '/' . $global_config['upload_logo'], '', '', $config_logo );
 						$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'] );
 					}
 				}

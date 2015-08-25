@@ -21,8 +21,6 @@ class Request
 {
 	const IS_HEADERS_SENT = 'Warning: Headers already sent';
 	const INCORRECT_IP = 'Incorrect IP address specified';
-	const SESSION_SAVE_PATH_NOT_SET = 'session.save_path directory not set! Please set your session.save_path in your system file';
-	const INCORRECT_SESSION_ID = 'We\'re sorry, but you must have cookies enabled in your browser in order to use this part of the website. Please see your browser\'s documentation to learn how to enable cookies and return to the site once you have done so to continue';
 	public $session_id;
 	public $doc_root;
 	public $site_url;
@@ -48,9 +46,9 @@ class Request
 	public $search_engine = '';
 	private $request_default_mode = 'request';
 	private $allow_request_mods = array( 'get', 'post', 'request', 'cookie', 'session', 'env', 'server' );
-	private $cookie_prefix = 'NV3';
-	private $session_prefix = 'NV3';
-	private $cookie_key = 'nv3';
+	private $cookie_prefix = 'NV4';
+	private $session_prefix = 'NV4';
+	private $cookie_key = 'nv4';
 	private $secure = false;
 	private $httponly = true;
 	private $ip_addr;
@@ -129,7 +127,6 @@ class Request
 		if( extension_loaded( 'filter' ) && filter_id( ini_get( 'filter.default' ) ) !== FILTER_UNSAFE_RAW ) $this->is_filter = true;
 		$this->Initialize( $config['my_domains'] );
 		$this->get_cookie_save_path();
-		$this->get_session_save_path( $config['session_save_path'] );
 		$this->sessionStart();
 		$_REQUEST = array_merge( $_POST, array_diff_key( $_GET, $_POST ) );
 	}
@@ -408,11 +405,7 @@ class Request
 			header( 'Location: ' . $this->site_url );
 			exit();
 		}
-		if( sizeof( $_POST ) and $this->referer_key !== 1 )
-		{
-			header( 'Location: ' . $this->site_url );
-			exit();
-		}
+
 		$user_agent = ( string )$this->get_Env( 'HTTP_USER_AGENT' );
 		$user_agent = substr( htmlspecialchars( $user_agent ), 0, 255 );
 		if( empty( $user_agent ) or $user_agent == '-' ) $user_agent = 'none';
@@ -430,58 +423,6 @@ class Request
 		$this->cookie_path = $this->base_siteurl . '/';
 		$cookie_domain = preg_replace( '/^([w]{3})\./', '', $this->server_name );
 		$this->cookie_domain = ( preg_match( '/^([0-9a-z][0-9a-z-]+\.)+[a-z]{2,6}$/', $cookie_domain ) ) ? '.' . $cookie_domain : '';
-	}
-
-	/**
-	 * Request::get_session_save_path()
-	 *
-	 * @param mixed $path
-	 * @return
-	 */
-	private function get_session_save_path( $path )
-	{
-		$save_path = session_save_path();
-		if ( is_dir( $save_path ) && is_writable( $save_path ) ) {
-			$this->session_save_path = $save_path;
-		}
-		else
-		{
-			$save_path = '';
-			$disable_functions = ( ini_get( 'disable_functions' ) != '' and ini_get( 'disable_functions' ) != false ) ? array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'disable_functions' ) ) ) : array();
-			if( extension_loaded( 'suhosin' ) )
-			{
-				$disable_functions = array_merge( $disable_functions, array_map( 'trim', preg_split( "/[\s,]+/", ini_get( 'suhosin.executor.func.blacklist' ) ) ) );
-			}
-
-			if( function_exists( 'session_save_path' ) and ! in_array( 'session_save_path', $disable_functions ) )
-			{
-				if( preg_match( '/^[a-zA-Z]{1}[a-zA-Z0-9_]*$/', $path ) )
-				{
-					$save_path = NV_ROOTDIR . '/' . $path;
-					if( ! is_writable( $save_path ) )
-					{
-						if( ! is_dir( $save_path ) )
-						{
-							$oldumask = umask( 0 );
-							$res = @mkdir( $save_path, 0755 );
-							umask( $oldumask );
-						}
-						if( ! @is_writable( $save_path ) )
-						{
-							if( ! @chmod( $save_path ) ) $save_path = '';
-						}
-						clearstatcache();
-						if( ! is_writable( $save_path ) )
-						{
-							trigger_error( Request::SESSION_SAVE_PATH_NOT_SET, 256 );
-						}
-					}
-					session_save_path( $save_path . '/' );
-				}
-				$save_path = session_save_path();
-			}
-			$this->session_save_path = $save_path;
-		}
 	}
 
 	/**
@@ -525,16 +466,34 @@ class Request
 		$this->session_id = $session_id;
 	}
 
+	/**
+	 * Request::chr_hexdec_callback()
+	 *
+	 * @param mixed $m
+	 * @return
+	 */
 	private function chr_hexdec_callback( $m )
 	{
 		return chr( hexdec( $m[1] ) );
 	}
 
+	/**
+	 * Request::chr_callback()
+	 *
+	 * @param mixed $m
+	 * @return
+	 */
 	private function chr_callback( $m )
 	{
 		return chr( $m[1] );
 	}
 
+	/**
+	 * Request::color_hex2rgb_callback()
+	 *
+	 * @param mixed $hex
+	 * @return
+	 */
 	private function color_hex2rgb_callback( $hex )
 	{
 		if( preg_match( '/[^0-9ABCDEFabcdef]/', $hex[1] ) ) return $hex[0];
@@ -620,7 +579,7 @@ class Request
 			{
 				$attrSubSet[1] = $attrSubSet[0];
 			}
-			$newSet[] = $attrSubSet[0] . '=[:' . $attrSubSet[1] . ':]';
+			$newSet[] = $attrSubSet[0] . '=[@{' . $attrSubSet[1] . '}@]';
 		}
 		return $newSet;
 	}
@@ -743,7 +702,7 @@ class Request
 
 			if( ! $isCloseTag )
 			{
-				$preTag .= '{:' . $tagName;
+				$preTag .= '{@[' . $tagName;
 
 				if( ! empty( $attrSet ) )
 				{
@@ -751,11 +710,11 @@ class Request
 					$preTag .= ' ' . implode( ' ', $attrSet );
 				}
 
-				$preTag .= ( strpos( $fromTagOpen, '</' . $tagName ) ) ? ':}' : ' /:}';
+				$preTag .= ( strpos( $fromTagOpen, '</' . $tagName ) ) ? ']@}' : ' /]@}';
 			}
 			else
 			{
-				$preTag .= '{:/' . $tagName . ':}';
+				$preTag .= '{@[/' . $tagName . ']@}';
 			}
 
 			$postTag = substr( $postTag, ( $tagLength + 2 ) );
@@ -763,8 +722,8 @@ class Request
 		}
 
 		$preTag .= $postTag;
-
-		return $preTag;
+		$preTag = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $preTag );
+		return trim( str_replace( array( "[@{", "}@]", "{@[", "]@}" ), array( '"', '"', "<", '>' ), $preTag ) );
 	}
 
 	/**
@@ -824,15 +783,14 @@ class Request
 		}
 		else
 		{
-			//$value = preg_replace( "/\t+/", ' ', $value );
+			// Fix block tag
+			$value = str_replace( array( '[', ']' ), array( '&#91;', '&#93;' ), $value );
+
 			if( preg_match_all( '/<!\[cdata\[(.*?)\]\]>/is', $value, $matches ) )
 			{
 				$value = str_replace( $matches[0], $matches[1], $value );
 			}
 			$value = $this->filterTags( $value );
-			$value = str_replace( array( "'", '"', '<', '>' ), array( "&#039;", "&quot;", "&lt;", "&gt;" ), $value );
-			$value = str_replace( array( "[:", ":]", "{:", ":}" ), array( '"', '"', "<", '>' ), $value );
-			$value = trim( $value );
 		}
 		return $value;
 	}
@@ -1240,20 +1198,17 @@ class Request
 		return ( string )$this->get_value( $name, $mode, $default, $decode );
 	}
 
-	/**
-	 * Request::get_title()
-	 *
-	 * @param mixed $name
-	 * @param mixed $mode
-	 * @param mixed $default
-	 * @param bool $specialchars
-	 * @param mixed $preg_replace
-	 * @return
-	 */
-	public function get_title( $name, $mode = null, $default = null, $specialchars = false, $preg_replace = array() )
-	{
-		$value = ( string )$this->get_value( $name, $mode, $default );
-		$value = strip_tags( $value );
+    /**
+     * Request::_get_title()
+     *
+     * @param mixed $value
+     * @param mixed $specialchars
+     * @param mixed $preg_replace
+     * @return
+     */
+    private function _get_title( $value, $specialchars, $preg_replace )
+    {
+        $value = strip_tags( $value );
 		if( ( bool )$specialchars == true )
 		{
 			$search = array( '&', '\'', '"', '<', '>', '\\', '/', '(', ')', '*', '[', ']', '!', '=', '%', '^', ':', '{', '}', '`', '~' );
@@ -1273,7 +1228,41 @@ class Request
 			}
 		}
 		return trim( $value );
+    }
+
+	/**
+	 * Request::get_title()
+	 *
+	 * @param mixed $name
+	 * @param mixed $mode
+	 * @param mixed $default
+	 * @param bool $specialchars
+	 * @param mixed $preg_replace
+	 * @return
+	 */
+	public function get_title( $name, $mode = null, $default = null, $specialchars = false, $preg_replace = array() )
+	{
+		$value = ( string )$this->get_value( $name, $mode, $default );
+		return $this->_get_title( $value, $specialchars, $preg_replace );
 	}
+
+    /**
+     * Request::_get_editor()
+     *
+     * @param mixed $value
+     * @param mixed $allowed_html_tags
+     * @return
+     */
+    private function _get_editor( $value, $allowed_html_tags )
+    {
+        if( ! empty( $allowed_html_tags ) )
+		{
+			$allowed_html_tags = array_map( 'trim', explode( ',', $allowed_html_tags ) );
+			$allowed_html_tags = '<' . implode( '><', $allowed_html_tags ) . '>';
+			$value = strip_tags( $value, $allowed_html_tags );
+		}
+		return trim( $value );
+    }
 
 	/**
 	 * Request::get_editor()
@@ -1287,28 +1276,20 @@ class Request
 	public function get_editor( $name, $default = '', $allowed_html_tags = '' )
 	{
 		$value = ( string )$this->get_value( $name, 'post', $default );
-		if( ! empty( $allowed_html_tags ) )
-		{
-			$allowed_html_tags = array_map( 'trim', explode( ',', $allowed_html_tags ) );
-			$allowed_html_tags = '<' . implode( '><', $allowed_html_tags ) . '>';
-			$value = strip_tags( $value, $allowed_html_tags );
-		}
-		return trim( $value );
+        return $this->_get_editor( $value, $allowed_html_tags );
 	}
 
-	/**
-	 * Request::get_textarea()
-	 *
-	 * @param mixed $name
-	 * @param mixed $default
-	 * @param bool $allowed_html_tags
-	 * @param mixed $save
-	 * @return
-	 */
-	public function get_textarea( $name, $default = '', $allowed_html_tags = '', $save = false )
-	{
-		$value = ( string )$this->get_value( $name, 'post', $default );
-		if( ! empty( $allowed_html_tags ) )
+    /**
+     * Request::_get_textarea()
+     *
+     * @param mixed $value
+     * @param mixed $allowed_html_tags
+     * @param mixed $save
+     * @return
+     */
+    private function _get_textarea( $value, $allowed_html_tags, $save )
+    {
+        if( ! empty( $allowed_html_tags ) )
 		{
 			$allowed_html_tags = array_map( 'trim', explode( ',', $allowed_html_tags ) );
 			$allowed_html_tags = '<' . implode( '><', $allowed_html_tags ) . '>';
@@ -1323,6 +1304,21 @@ class Request
 				) );
 		}
 		return trim( $value );
+    }
+
+	/**
+	 * Request::get_textarea()
+	 *
+	 * @param mixed $name
+	 * @param mixed $default
+	 * @param bool $allowed_html_tags
+	 * @param mixed $save
+	 * @return
+	 */
+	public function get_textarea( $name, $default = '', $allowed_html_tags = '', $save = false )
+	{
+		$value = ( string )$this->get_value( $name, 'post', $default );
+        return $this->_get_textarea( $value, $allowed_html_tags, $save );
 	}
 
 	/**
@@ -1348,7 +1344,7 @@ class Request
 	 * @param mixed $default
 	 * @return
 	 */
-	public function get_typed_array( $name, $mode = null, $type = null, $default = null )
+	public function get_typed_array( $name, $mode = null, $type = null, $default = null, $specialchars = false, $preg_replace = array(), $allowed_html_tags = '', $save = false )
 	{
 		$arr = $this->get_array( $name, $mode, $default );
 		$array_keys = array_keys( $arr );
@@ -1371,6 +1367,14 @@ class Request
 				case 'array':
 					$arr[$key] = ( array )$arr[$key];
 					break;
+                case 'title':
+                    $arr[$key] = ( string )$this->_get_title( $arr[$key], $specialchars, $preg_replace );
+                    break;
+                case 'textarea':
+                    $arr[$key] = ( string )$this->_get_textarea( $arr[$key], $allowed_html_tags, $save );
+                    break;
+                case 'editor':
+                    $arr[$key] = ( string )$this->_get_editor( $arr[$key], $allowed_html_tags );
 			}
 		}
 		return $arr;

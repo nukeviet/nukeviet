@@ -164,7 +164,7 @@ $(function(){
 	$(function() {
 		$("input[name=install_content_overwrite]").click(function() {
 			if (confirm("{LANG.autoinstall_error_warning_overwrite}")) {
-				$("#checkmessage").html('<div style="text-align:center"><strong>{LANG.autoinstall_package_processing}</strong><br /><br /><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" /></div>');
+				$("#checkmessage").html('<div style="text-align:center"><strong>{LANG.autoinstall_package_processing}</strong><br /><br /><img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="" /></div>');
 				$("#checkmessage").load("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=install_check&overwrite={CHECKSESS}");
 			}
 		});

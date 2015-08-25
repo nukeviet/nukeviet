@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 
 <div id="module_show_list">
 	{CAT_LIST}
@@ -27,7 +27,7 @@
 				</caption>
 				<tbody>
 					<tr>
-						<th class="col-md-4 text-right">{LANG.name}: </th>
+						<th class="col-md-4 text-right">{LANG.name}: <sup class="required">(∗)</sup></th>
 						<td class="col-md-20 text-left"><input class="form-control w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>

@@ -7,7 +7,7 @@
  */
 
 function nv_login_info(containerid) {
-	$('#' + containerid).load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logininfo&nocache=' + new Date().getTime());
+	$('#' + containerid).load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logininfo&nocache=' + new Date().getTime());
 	return false;
 }
 
@@ -49,7 +49,7 @@ function nv_cl_login_submit(nick_max, nick_min, pass_max, pass_min, gfx_count, g
 		request_query += '&seccode=' + sec.value;
 	}
 	var nv_timer = nv_settimeout_disable(button_id, 5000);
-	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logininfo&nocache=' + new Date().getTime(), request_query, function(res) {
+	$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=logininfo&nocache=' + new Date().getTime(), request_query, function(res) {
 		if (res == 'OK') {
 			window.location.href = window.location.href;
 			return false;
@@ -61,12 +61,12 @@ function nv_cl_login_submit(nick_max, nick_min, pass_max, pass_min, gfx_count, g
 }
 
 function nv_cl_info(containerid) {
-	$('#' + containerid).load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=clinfo&nocache=' + new Date().getTime());
+	$('#' + containerid).load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=clinfo&nocache=' + new Date().getTime());
 	return false;
 }
 
 function nv_cl_edit(containerid) {
-	$('#' + containerid).load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cledit' + '&nocache=' + new Date().getTime());
+	$('#' + containerid).load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cledit' + '&nocache=' + new Date().getTime());
 	return false;
 }
 
@@ -85,7 +85,7 @@ function nv_cl_edit_save(full_name, email, website, location, yim, phone, fax, m
 	request_query += '&num=' + nv_randomPassword(8);
 
 	var nv_timer = nv_settimeout_disable(button_id, 5000);
-	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cledit&nocache=' + new Date().getTime(), request_query, function(res) {
+	$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=cledit&nocache=' + new Date().getTime(), request_query, function(res) {
 		var r_split = res.split("|");
 		if (r_split[0] == 'OK') {
 			nv_cl_info(r_split[1]);

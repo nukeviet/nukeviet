@@ -1,13 +1,6 @@
                 </div>
             </section>
         </div>
-        <nav class="footerNav">
-            <div class="wraper">
-                <div class="container">
-                    Tam thoi chua biet cho gi vao day
-                </div>
-            </div>
-        </nav>
         <footer id="footer">
             <div class="wraper">
                 <div class="container">
@@ -28,7 +21,7 @@
                                 [QR_CODE]
                             </div>
                             <div id="ftip" data-content="">
-                                <div class="bg bg-gradient"></div>
+                                <div class="bg"></div>
                             </div>
                         </div>
                         <div class="col-xs-24 col-sm-24 col-md-16">
@@ -57,6 +50,20 @@
             </div>
         </nav>
         {ADMINTOOLBAR}
+    </div>
+    <!-- SiteModal Required!!! -->
+    <div id="sitemodal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">&nbsp;</h3>
+                </div>
+                <div class="modal-body">
+                    <em class="fa fa-spinner fa-spin">&nbsp;</em>
+                </div>
+            </div>
+        </div>
     </div>
 	<div class="fix_banner_left">
 		[FIX_BANNER_LEFT]

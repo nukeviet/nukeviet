@@ -26,14 +26,16 @@ function sendcommment(module, id_content, area, id, allowed, newscheckss, gfx_co
 	} else {
 		var sd = document.getElementById('buttoncontent');
 		sd.disabled = true;
-		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=post&nocache=' + new Date().getTime(), 'module=' + module + '&area=' + area + '&id=' + id + '&pid=' + $('#commentpid').val() + '&allowed=' + allowed + '&checkss=' + newscheckss + '&name=' + commentname.value + '&email=' + commentemail.value + '&code=' + code + '&content=' + encodeURIComponent(commentcontent), function(res) {
+		$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=post&nocache=' + new Date().getTime(), 'module=' + module + '&area=' + area + '&id=' + id + '&pid=' + $('#commentpid').val() + '&allowed=' + allowed + '&checkss=' + newscheckss + '&name=' + commentname.value + '&email=' + commentemail.value + '&code=' + code + '&content=' + encodeURIComponent(commentcontent), function(res) {
 			var rs = res.split('_');
 			if (rs[0] == 'OK') {
-				$("#idcomment").load(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=comment&module=' + module + '&area=' + area + '&id=' + id + '&allowed=' + allowed + '&status_comment=' + rs[1] + '&checkss=' + newscheckss + '&nocache=' + new Date().getTime());
-				document.location = "#idcomment";
+				$("#idcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + module + '&area=' + area + '&id=' + id + '&allowed=' + allowed + '&status_comment=' + rs[1] + '&checkss=' + newscheckss + '&nocache=' + new Date().getTime());
+				$('html, body').animate({
+                    scrollTop: $("#idcomment").offset().top
+                }, 800);
 			} else {
 				if (gfx_count > 0 ) {
-					nv_change_captcha('vimg', 'commentseccode_iavim');
+					change_captcha('#commentseccode_iavim');
 				}
 				if (rs[0] == 'ERR') {
 					alert(rs[1]);
@@ -54,7 +56,7 @@ function nv_commment_feedback(cid, post_name) {
 }
 
 function nv_commment_like(cid, checkss, like) {
-	$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=like&nocache=' + new Date().getTime(), 'cid=' + cid + '&like=' + like + '&checkss=' + checkss, function(res) {
+	$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=like&nocache=' + new Date().getTime(), 'cid=' + cid + '&like=' + like + '&checkss=' + checkss, function(res) {
 		var rs = res.split('_');
 		if (rs[0] == 'OK') {
 			$("#" + rs[1]).text(rs[2]);
@@ -66,7 +68,7 @@ function nv_commment_like(cid, checkss, like) {
 
 function nv_commment_delete(cid, checkss) {
 	if (confirm(nv_is_del_confirm[0])) {
-		$.post(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=delete&nocache=' + new Date().getTime(), 'cid=' + cid + '&checkss=' + checkss, function(res) {
+		$.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=delete&nocache=' + new Date().getTime(), 'cid=' + cid + '&checkss=' + checkss, function(res) {
 			var rs = res.split('_');
 			if (rs[0] == 'OK') {
 				$("#cid_" + cid).remove();

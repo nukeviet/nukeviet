@@ -19,16 +19,6 @@
         text-align:left;
         padding:10px;
     }
-    #header .breadcrumb {
-        position:relative !important;
-        margin:5px 10px 10px !important;
-        text-align:right !important;
-        font-size:18px;
-    }
-    .footerNav .breadcrumb {
-        position:relative !important;
-        font-size:18px;
-    }
     #menu-site-default .navbar-right {
         display:none;
     }
@@ -41,14 +31,25 @@
     #footer .footer-copyright .theme-change {
         text-align:center;
     }
+    .column-margin-left{
+        margin-left:0 !important
+    }
 }
 @media (max-width:767px) {
     .body-bg,
     .container {
         width:100%;
     }
+    .box-shadow {
+        box-shadow:none;
+        -webkit-box-shadow:none;
+    }
+    .contactDefault{
+        position: relative
+    }
     .social-icons,
-    .contactDefault {
+    .contactDefault,
+    .personalArea {
         float:right;
         margin-right:10px;
         margin-left:0;
@@ -60,8 +61,11 @@
     .contactList li {
         display:block;
     }
-    .contactList li .fa {
-        width:20px;
+    .contactList li .fa, .contactList li [class^="icon-"], .contactList li [class*=" icon-"] {
+        width:20px !important
+    }
+    .breadcrumbs{
+        display:none
     }
     .hidden-ss-block,
     .hidden-ss-inline,
@@ -72,6 +76,12 @@
         position:absolute;
         left:0;
         top:0;
+    }
+    .third-nav .bg{
+        padding: 10px 5px;
+    }
+    .third-nav .current-time{
+        display:none
     }
     .navbar-default {
         background:#2463a6 url(../images/hbg2.jpg) repeat-x left top !important;
@@ -106,7 +116,9 @@
     .navbar-collapse {
         padding-left:15px !important;
         padding-right:15px !important;
+        margin-top: -51px
     }
+  
     .navbar-toggle {
         margin-left:10px !important;
         margin-right:-45px;
@@ -142,12 +154,6 @@
         display:none;
     }
 }
-@media (max-width:640px) {
-    body {
-        font-size:14px;
-        line-height:24px;
-    }
-}
 @media (max-width:499px) {
     .nv-infodie {
         width:100%;
@@ -160,9 +166,6 @@
     #header .logo img {
         max-height:40px;
         width:auto;
-    }
-    #header .logo h2 {
-        font-size:20px;
     }
     .visible-ss-block {
         display:block !important;
@@ -181,6 +184,9 @@
     #tip, #footer-tip {
         max-width:100%;
         margin-right:0 !important;
+    }
+    .guestBlock{
+        width:100%
     }
 }
 @media (min-width:500px) and (max-width:991px) {

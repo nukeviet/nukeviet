@@ -4,7 +4,7 @@ Khi báo lỗi bạn vui lòng cung cấp các thông tin sau để chúng tôi 
 
 1. Tiêu đề thông báo lỗi ngắn gọn, xúc tích, đảm bảo tóm tắt được nội dung.
 
-2. Mô tả chi tiết lỗi gặp phải, quá trình hoặc thao tác dẫn đến lỗi.
+2. Mô tả chi tiết lỗi gặp phải, quá trình hoặc thao tác dẫn đến lỗi.Việc mô tả quá trình dẫn đến lỗi đặc biệt quan trọng vì nhiều khi lỗi chỉ xảy ra đúng với một số thao tác nhất định màvới các thao tác khác thì hệ thống không bị lỗi. Ví dụ trường hợp này: https://github.com/nukeviet/nukeviet/issues/1178
 
 3. Cung cấp thông tin máy chủ
 
@@ -21,9 +21,6 @@ Nếu NukeViet cài trên hosting (website đang chạy thực tế) cần có t
 > + Các thông tin khác về phần mềm webserver, PHP và cơ sở dữ liệu: (Ví dụ: Apache 2.4.7, MySQL 5.5.36, PHP 5.4.25)
 
  
-* Nếu xác định lỗi từ giao diện, vui lòng cung cấp thêm thông tin về giao diện
-> + Tên gói giao diện (Chỉ kiểm tra đối với giao diện tích hợp sẵn trong source NukeViet)
+* Nếu xác định lỗi từ giao diện, vui lòng cung cấp thêm thông tin về  Tên gói giao diện (Chỉ kiểm tra đối với giao diện tích hợp sẵn trong source NukeViet)
  
 * Nếu là các lỗi nhỏ, cơ bản, dễ xác định lỗi... hay các câu hỏi, đề xuất, góp ý... thì không cần cung cấp thông tin về máy chủ, giao diện tại phần 2, 3.
-
-

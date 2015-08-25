@@ -38,6 +38,7 @@ $sys_info['ini_set_support'] = ( function_exists( 'ini_set' ) and ! in_array( 'i
 
 //Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
+define( 'NV_FILES_DIR', NV_ASSETS_DIR );
 
 // Register given function autoload implementation
 spl_autoload_register( function ( $classname )
@@ -93,7 +94,6 @@ require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
 $global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map( "trim", explode( ',', NV_ALLOW_REQUEST_MODS ) ) : "request";
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim( NV_REQUEST_DEFAULT_MODE ) : 'request';
-$global_config['session_save_path'] = NV_SESSION_SAVE_PATH;
 
 $language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 
@@ -127,7 +127,7 @@ define( 'NV_CACHE_PREFIX', md5( $global_config['sitekey'] . NV_BASE_SITEURL ) );
 
 //Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
-require NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/global.php';
+require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/global.php';
 
 $global_config['cookie_path'] = $nv_Request->cookie_path;
 //vd: /ten_thu_muc_chua_site/

@@ -127,10 +127,11 @@ function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 function nv_comment_module( $module, $checkss, $area, $id, $allowed, $page, $status_comment = '' )
 {
 	global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info, $per_page_comment;
+
 	// Kiểm tra module có được Sử dụng chức năng bình luận
 	if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 	{
-		if( $id > 0 and $module_config[$module]['activecomm'] == 1 )
+		if( $id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX ) )
 		{
 			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment;
 
@@ -221,6 +222,7 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
 	$xtpl->assign( 'LANG', $lang_module_comment );
+    $xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $template );
 	$xtpl->assign( 'CHECKSS_COMM', $checkss );
 	$xtpl->assign( 'MODULE_COMM', $module );
@@ -259,7 +261,12 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 		$xtpl->parse( 'main.sortcomm' );
 	}
 
-	$xtpl->assign( 'COMMENTCONTENT', $comment );
+    if( !empty( $comment ) )
+    {
+        $xtpl->assign( 'COMMENTCONTENT', $comment );
+        $xtpl->parse( 'main.showContent' );
+    }
+
 	$allowed_comm = nv_user_in_groups( $allowed_comm );
 	if( $allowed_comm )
 	{
@@ -310,7 +317,7 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 			$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 			$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-			$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . 'images/refresh.png' );
+			$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
 			$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 			$xtpl->parse( 'main.allowed_comm.captcha' );
 		}
@@ -330,7 +337,7 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 	}
 	elseif( $form_login )
 	{
-		$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] . '#formcomment' );
+		$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] . '#formcomment' );
 		$xtpl->assign( 'COMMENT_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module_comment['comment_login'] . '</a>' );
 		$xtpl->parse( 'main.form_login' );
 	}
@@ -345,13 +352,13 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 
 	$template = file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/comment.tpl' ) ? $global_config['module_theme'] : 'default';
 
-	$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
-	$xtpl->assign( 'TEMPLATE', $template );
-	$xtpl->assign( 'LANG', $lang_module_comment );
-
 	if( ! empty( $comment_array['comment'] ) )
 	{
-		foreach( $comment_array['comment'] as $comment_array_i )
+		$xtpl = new XTemplate( 'comment.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment' );
+        $xtpl->assign( 'TEMPLATE', $template );
+        $xtpl->assign( 'LANG', $lang_module_comment );
+
+        foreach( $comment_array['comment'] as $comment_array_i )
 		{
 			if( ! empty( $comment_array_i['subcomment'] ) )
 			{
@@ -365,13 +372,13 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 			{
 				$comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
 			}
-			elseif( is_file(  NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg' ) )
+			elseif( is_file(  NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png' ) )
 			{
-				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg';
+				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';
 			}
 			else
 			{
-				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.jpg';
+				$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/default/images/users/no_avatar.png';
 			}
 
 			if( ! empty( $comment_array_i['userid'] ) )
@@ -397,10 +404,13 @@ function nv_comment_module_data( $module, $comment_array, $is_delete )
 		{
 			$xtpl->assign( 'PAGE', $comment_array['page'] );
 		}
+        $xtpl->parse( 'main' );
+        return $xtpl->text( 'main' );
 	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
+    else
+    {
+        return '';
+    }
 }
 
 function nv_comment_module_data_reply( $module, $comment_array, $is_delete )
@@ -429,7 +439,7 @@ function nv_comment_module_data_reply( $module, $comment_array, $is_delete )
 		}
 		else
 		{
-			$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.jpg';
+			$comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';
 		}
 
 		if( ! empty( $comment_array_i['userid'] ) )

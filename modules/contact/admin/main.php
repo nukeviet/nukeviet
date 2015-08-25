@@ -49,20 +49,20 @@ if( ! empty( $contact_allowed['view'] ) )
 
 		while( $row = $result->fetch() )
 		{
-			$image = array( NV_BASE_SITEURL . 'images/mail_new.gif', 12, 9 );
+			$image = array( NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_new.gif', 12, 9 );
 			$status = 'New';
 			$style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
 
 			if( $row['is_read'] == 1 )
 			{
-				$image = array( NV_BASE_SITEURL . 'images/mail_old.gif', 12, 11 );
+				$image = array( NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_old.gif', 12, 11 );
 				$status = $lang_module['tt1_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
 
 			if( $row['is_reply'] )
 			{
-				$image = array( NV_BASE_SITEURL . 'images/mail_reply.gif', 13, 14 );
+				$image = array( NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_reply.gif', 13, 14 );
 				$status = $lang_module['tt2_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
@@ -73,8 +73,9 @@ if( ! empty( $contact_allowed['view'] ) )
 				'id' => $row['id'],
 				'sender_name' => $row['sender_name'],
 				'path' => $contact_allowed['view'][$row['cid']],
+                'cat' => $row['cat'],
 				'title' => nv_clean60( $row['title'], 60 ),
-				'time' => $row['send_time'] >= $currday ? nv_date( 'H:i', $row['send_time'] ) : nv_date( 'd/m/Y', $row['send_time'] ),
+				'time' => $row['send_time'] >= $currday ? nv_date( 'H:i d/m/Y', $row['send_time'] ) : nv_date( 'd/m/Y', $row['send_time'] ),
 				'style' => $style,
 				'onclick' => $onclick,
 				'status' => $status,

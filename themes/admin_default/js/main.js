@@ -4,7 +4,7 @@ var myTimersecField = '';
 function timeoutsesscancel() {
 	clearInterval(myTimersecField);
 	$.ajax({
-		url : nv_siteroot + 'index.php?second=statimg',
+		url : nv_base_siteurl + 'index.php?second=statimg',
 		cache : false
 	}).done(function() {
 		$("#timeoutsess").hide();
@@ -31,6 +31,14 @@ function timeoutsessrun() {
 			window.location.reload();
 		}
 	}, 1000);
+}
+
+// ModalShow
+function modalShow(a, b) {
+	"" == a && (a = "&nbsp;");
+	$("#sitemodal").find(".modal-title").html(a);
+	$("#sitemodal").find(".modal-body").html(b);
+	$("#sitemodal").modal()
 }
 
 var NV = {

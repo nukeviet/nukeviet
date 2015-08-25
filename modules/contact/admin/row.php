@@ -63,8 +63,6 @@ if( defined( 'NV_EDITOR' ) )
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$listdepartment = nv_departmentList();
-
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
 	$full_name = $nv_Request->get_title( 'full_name', 'post', '', 1 );
@@ -72,15 +70,27 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$phone = $nv_Request->get_title( 'phone', 'post', '', 1 );
 	$fax = $nv_Request->get_title( 'fax', 'post', '', 1 );
 	$email = $nv_Request->get_title( 'email', 'post', '', 1 );
-    $yahoo = $nv_Request->get_title( 'yahoo', 'post', '', 1 );
-    $skype = $nv_Request->get_title( 'skype', 'post', '', 1 );
+    $otherVar = $nv_Request->get_typed_array( 'otherVar', 'post', 'title', '' );
+    $otherVal = $nv_Request->get_typed_array( 'otherVal', 'post', 'title', '' );
+    $cats = $nv_Request->get_typed_array( 'cats', 'post', 'title', '' );
 	$note = $nv_Request->get_editor( 'note', '', NV_ALLOWED_HTML_TAGS );
 
 	$view_level = $nv_Request->get_array( 'view_level', 'post', array() );
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
 	$obt_level = $nv_Request->get_array( 'obt_level', 'post', array() );
 
-	$check_valid_email = nv_check_valid_email( $email );
+    if( !empty( $email ) )
+    {
+        $_email = array_map( "trim", explode( ",", $email ) );
+        $email = array();
+        foreach($_email as $e)
+        {
+            $check_valid_email = nv_check_valid_email( $e );
+            if( empty( $check_valid_email ) ) $email[] = $e;
+        }
+        $email = implode( ", ", $email );
+    }
+    
 
 	$admins = array();
 
@@ -122,10 +132,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['error_alias'];
 	}
-	elseif( ! empty( $email ) and ! empty( $check_valid_email ) )
-	{
-		$error = $check_valid_email;
-	}
 	else
 	{
 		$alias = empty( $alias ) ? change_alias( $full_name ) : change_alias( $alias );
@@ -146,19 +152,33 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			}
 		}
 		$admins_list = implode( ';', $admins_list );
+        
+        $others = array();
+        if( !empty( $otherVar ) )
+        {
+            foreach( $otherVar as $k => $var )
+            {
+                if( !empty( $var ) AND isset( $otherVal[$k] ) AND !empty( $otherVal[$k] ) )
+                {
+                    $others[$var] = $otherVal[$k];
+                }
+            }
+        }
+        $others = json_encode( $others );
+        $_cats = array_filter( $cats );
+        $_cats = !empty( $_cats ) ? implode( "|", $_cats) : "";
 
 		if( $id )
 		{
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, phone = :phone, fax=:fax, email=:email, yahoo=:yahoo, skype=:skype, note=:note, admins=:admins WHERE id =' . $id;
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, phone = :phone, fax=:fax, email=:email, others=:others, cats=:cats, note=:note, admins=:admins WHERE id =' . $id;
 			$name_key = 'log_edit_row';
 			$note_action = 'id: ' . $id .' ' . $full_name;
 		}
 		else
 		{
-			$weight = 0;
-			$weight = count( $listdepartment );
+			$weight = $db->query( 'SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department' )->fetchColumn();
 			$weight++;
-			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, yahoo, skype, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :yahoo, :skype, :note, :admins, 1, :weight, 0)';
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, others, cats, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :others, :cats, :note, :admins, 1, :weight, 0)';
 			$name_key = 'log_add_row';
 			$note_action = $full_name;
 		}
@@ -171,8 +191,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
 			$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
 			$sth->bindParam( ':email', $email, PDO::PARAM_STR );
-	        $sth->bindParam( ':yahoo', $yahoo, PDO::PARAM_STR );
-	        $sth->bindParam( ':skype', $skype, PDO::PARAM_STR );
+	        $sth->bindParam( ':others', $others, PDO::PARAM_STR );
+	        $sth->bindParam( ':cats', $_cats, PDO::PARAM_STR );
 			$sth->bindParam( ':note', $note, PDO::PARAM_STR );
 			$sth->bindParam( ':admins', $admins_list, PDO::PARAM_STR );
 			if( !$id )
@@ -204,8 +224,9 @@ else
 		$phone = $frow['phone'];
 		$fax = $frow['fax'];
 		$email = $frow['email'];
-        $yahoo = $frow['yahoo'];
-        $skype = $frow['skype'];
+        $others = json_decode( $frow['others'], true );
+        $cats = !empty( $frow['cats'] ) ? explode("|", $frow['cats'] ) : array();
+        
 		$note = nv_editor_br2nl( $frow['note'] );
 
 		$admins_list = $frow['admins'];
@@ -258,8 +279,8 @@ else
 	}
 	else
 	{
-		$full_name = $alias = $phone = $fax = $email = $yahoo = $skype = $note = '';
-		$view_level = $reply_level = $obt_level = array();
+		$full_name = $alias = $phone = $fax = $email = $note = '';
+		$others = $cats = $view_level = $reply_level = $obt_level = array();
 
 		foreach( $adms as $admid => $values )
 		{
@@ -297,10 +318,30 @@ $xtpl->assign( 'DATA', array(
 	'phone' => $phone,
 	'fax' => $fax,
 	'email' => $email,
-    'yahoo' => $yahoo,
-    'skype' => $skype,
 	'note' => $note
 ) );
+
+if( !empty( $others ) )
+{
+    foreach( $others as $var => $val )
+    {
+        $xtpl->assign( 'OTHER', array(
+        	'var' => $var,
+        	'val' => $val
+        ) );
+        $xtpl->parse( 'main.other' );
+    }
+}
+
+if( !empty( $cats ) )
+{
+    foreach( $cats as $val )
+    {
+        $xtpl->assign( 'CATS', $val );
+        $xtpl->parse( 'main.cats' );
+    }
+}
+
 //list danh sách bộ phận liên hệ
 $a = 0;
 foreach( $adms as $admid => $values )

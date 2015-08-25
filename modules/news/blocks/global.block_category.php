@@ -104,7 +104,7 @@ if( !nv_function_exists( 'nv_news_category' ) )
 					$html .= "<a title=\"" . $cat['title'] . "\" href=\"" . $cat['link'] . "\">" . nv_clean60( $cat['title'], $title_length ) . "</a>\n";
 					if( !empty( $cat['subcatid'] ) )
 					{
-						$html .= "<span class=\"arrow expand\">+</span>";
+						$html .= "<span class=\"fa arrow expand\"></span>";
 						$html .= nv_news_sub_category( $cat['subcatid'], $title_length );
 					}
 					$html .= "</li>\n";

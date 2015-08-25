@@ -82,7 +82,7 @@ if( ! empty( $error ) )
 }
 elseif( $array['status'] == 'notlogin' )
 {
-	$xtpl->assign( 'LOGIN_NOTE', sprintf( $lang_module['login_require'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_base64_encode( $client_info['selfurl'] ) ) );
+	$xtpl->assign( 'LOGIN_NOTE', sprintf( $lang_module['login_require'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt( $client_info['selfurl'] ) ) );
 	$xtpl->parse( 'main.login' );
 }
 elseif( empty( $array['data'] ) )

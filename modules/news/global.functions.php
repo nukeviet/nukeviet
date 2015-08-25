@@ -115,24 +115,33 @@ function nv_del_content_module( $id )
 				}
 			}
 		}
-		if( $number_no_del == 0 )
+		
+		$_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
+		if( ! $db->exec( $_sql ) )
 		{
-			$_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
-			if( ! $db->exec( $_sql ) )
-			{
-				++$number_no_del;
-			}
+			++$number_no_del;
 		}
-		$number_no_del = 0;
+
+		$_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $id / 2000 ) . ' WHERE id = ' . $id;
+		if( ! $db->exec( $_sql ) )
+		{
+			++$number_no_del;
+		}
+		
+		$_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext WHERE id = ' . $id;
+		if( ! $db->exec( $_sql ) )
+		{
+			++$number_no_del;
+		}
+		
+		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
+		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $id );
+		
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid IN (SELECT tid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ')' );
+		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id );
+		
 		if( $number_no_del == 0 )
 		{
-			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $id / 2000 ) . ' WHERE id = ' . $id );
-			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext WHERE id = ' . $id );
-			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
-			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $id );
-
-			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid IN (SELECT tid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ')' );
-			$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id );
 			$content_del = 'OK_' . $id .'_' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true );
 		}
 		else
@@ -174,7 +183,7 @@ function nv_archive_content_module( $id, $listcatid )
 function nv_link_edit_page( $id )
 {
 	global $lang_global, $module_name;
-	$link = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\">" . $lang_global['edit'] . "</a>";
+	$link = "<a class=\"btn btn-primary btn-xs\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\"><em class=\"fa fa-edit margin-right\"></em> " . $lang_global['edit'] . "</a>";
 	return $link;
 }
 
@@ -187,7 +196,7 @@ function nv_link_edit_page( $id )
 function nv_link_delete_page( $id, $detail = 0)
 {
 	global $lang_global, $module_name;
-	$link = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "', " . $detail . ")\">" . $lang_global['delete'] . "</a>";
+	$link = "<a class=\"btn btn-danger btn-xs\" href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5( $id . session_id() ) . "','" . NV_BASE_ADMINURL . "', " . $detail . ")\"><em class=\"fa fa-trash-o margin-right\"></em> " . $lang_global['delete'] . "</a>";
 	return $link;
 }
 

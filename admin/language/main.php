@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_LANG' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['nv_lang_data'];
 
 $lang_module['nv_data_note'] = sprintf( $lang_module['nv_data_note'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=system' );
-$lang_array_exit = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}+$/' );
+$lang_array_exit = nv_scandir( NV_ROOTDIR . '/includes/language', '/^[a-z]{2}+$/' );
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
@@ -172,11 +172,11 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 						//xoa du lieu tai bang nvx_setup_extensions
 						$db->query( "DELETE FROM " . $db_config['prefix'] . "_setup_extensions WHERE basename NOT IN ('" . implode( "', '", $modules_exit ) . "') AND type='module'" );
 
-						//xoa du lieu tai bang nvx_vi_blocks
-						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight WHERE bid in (SELECT bid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules))' );
-
 						//xoa du lieu tai bang nvx_vi_blocks_groups
-						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)' );
+						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups WHERE module!=\'theme\' AND module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules)' );
+
+						//xoa du lieu tai bang nvx_vi_blocks
+						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight WHERE bid NOT IN (SELECT bid FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups)' );
 
 						//xoa du lieu tai bang nvx_vi_modthemes
 						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes WHERE func_id in (SELECT func_id FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE in_module NOT IN (SELECT title FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules))' );

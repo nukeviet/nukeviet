@@ -14,14 +14,14 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$upload_logo = $nv_Request->get_title( 'upload_logo', 'post' );
 
-	if( ! nv_is_url( $upload_logo ) and file_exists( NV_DOCUMENT_ROOT . $upload_logo ) )
+	if( ! empty ( $upload_logo ) and ! nv_is_url( $upload_logo ) and file_exists( NV_DOCUMENT_ROOT . $upload_logo ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL );
 		$upload_logo = substr( $upload_logo, $lu );
 	}
 	else
 	{
-		$upload_logo = 'images/logo.png';
+		$upload_logo = '';
 	}
 
 	$autologosize1 = $nv_Request->get_int( 'autologosize1', 'post', 50 );
@@ -57,13 +57,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 $page_title = $lang_module['configlogo'];
 
-if( ! nv_is_url( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
+if( ! empty( $global_config['upload_logo'] ) and ! nv_is_url( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
 {
 	$upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
 }
 else
 {
-	$upload_logo = $global_config['site_logo'];
+	$upload_logo = '';
 }
 
 $array_autologosize = array(

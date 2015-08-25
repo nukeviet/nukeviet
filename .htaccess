@@ -14,11 +14,6 @@
   deny from all
 </Files>
 
-<Files mainfile.php>
-  order allow,deny
-  deny from all
-</Files>
-
 <IfModule mod_deflate.c>
 
   <FilesMatch "\.(css|js|xml)$">
@@ -62,10 +57,10 @@ RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?language=
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*)(\/|\.html)$ index.php
-RewriteRule (.*)tag\/(.*)$ index.php
-RewriteRule ^seek\/q\=(.*)$ index.php?nv=seek&q=$1 [L]
-RewriteRule ^search\/q\=(.*)$ index.php?nv=news&op=search&q=$1 [L]
-RewriteRule ^([a-zA-Z0-9\-]+)\/search\/q\=(.*)$ index.php?nv=$1&op=search&q=$2 [L]
+RewriteRule (.*)tag\/([^?]+)$ index.php
+RewriteRule ^seek\/q\=([^?]+)$ index.php?nv=seek&q=$1 [L]
+RewriteRule ^search\/q\=([^?]+)$ index.php?nv=news&op=search&q=$1 [L]
+RewriteRule ^([a-zA-Z0-9\-]+)\/search\/q\=([^?]+)$ index.php?nv=$1&op=search&q=$2 [L]
 RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ /$1/$2/ [L,R=301]
 RewriteRule ^([a-zA-Z0-9-]+)$ /$1/ [L,R=301]
 </IfModule>

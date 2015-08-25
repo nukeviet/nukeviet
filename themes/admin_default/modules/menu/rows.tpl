@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript">
 	var cat = '{LANG.cat}';
 	var caton = '{LANG.caton}';
@@ -141,12 +141,12 @@
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.title}</strong></td>
+					<td><strong>{LANG.title}</strong><sup class="required">(*)</sup></td>
 					<td><input type="text" name="title" id="title" class="w300 form-control" value="{DATA.title}"/></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.link}</strong></td>
+					<td><strong>{LANG.link}</strong><sup class="required">(*)</sup></td>
 					<td><input type="text" name="link" class="w300 form-control" value="{DATA.link}" id="link"/></td>
 					<td>&nbsp;</td>
 				</tr>

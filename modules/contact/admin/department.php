@@ -24,10 +24,9 @@ foreach ($array_department as $row )
 	$xtpl->assign( 'ROW', array(
 		'full_name' => $row['full_name'],
 		'email' => $row['email'],
-		'phone' => $row['phone'],
+		'phone' => preg_replace( "/(\[|&#91;)[^\]]*(&#93;|\])$/","",$row['phone'] ),
 		'fax' => $row['fax'],
 		'id' => $row['id'],
-		'url_part' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . '/0/1',
 		'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row&amp;id=' . $row['id']
 	) );
 
@@ -63,6 +62,7 @@ if( empty( $a ) )
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=row' );
 	die();
 }
+
 $xtpl->assign( 'URL_ADD', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=row' );
 
 $xtpl->parse( 'main' );

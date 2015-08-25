@@ -31,7 +31,7 @@ if( isset( $language_array[$dirlang] ) and isset( $language_array[$dirlang] ) an
 	$langtype = isset( $lang_translator['langtype'] ) ? strip_tags( $lang_translator['langtype'] ) : 'lang_module';
 
 	$lang_translator_save['author'] = isset( $lang_translator['author'] ) ? nv_htmlspecialchars( strip_tags( $lang_translator['author'] ) ) : 'VINADES.,JSC (contact@vinades.vn)';
-	$lang_translator_save['createdate'] = isset( $lang_translator['createdate'] ) ? nv_htmlspecialchars( strip_tags( $lang_translator['createdate'] ) ) : date( 'd/m/Y, H:i' );
+	$lang_translator_save['createdate'] = isset( $lang_translator['createdate'] ) ? nv_unhtmlspecialchars( strip_tags( $lang_translator['createdate'] ) ) : date( 'd/m/Y, H:i' );
 	$lang_translator_save['copyright'] = isset( $lang_translator['copyright'] ) ? nv_htmlspecialchars( strip_tags( $lang_translator['copyright'] ) ) : '@Copyright (C) ' . date( 'Y' ) .' VINADES.,JSC. All rights reserved';
 	$lang_translator_save['info'] = isset( $lang_translator['info'] ) ? nv_htmlspecialchars( strip_tags( $lang_translator['info'] ) ) : '';
 	$lang_translator_save['langtype'] = $langtype;

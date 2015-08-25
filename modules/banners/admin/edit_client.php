@@ -65,7 +65,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	}
 	elseif( ! empty( $pass ) and $pass != $re_pass )
 	{
-		$error = sprintf( $lang_global['passwordsincorrect'], $pass, $re_pass );
+		$error = $lang_global['passwordsincorrect'];
 		$pass = $re_pass = '';
 	}
 	elseif( empty( $full_name ) )

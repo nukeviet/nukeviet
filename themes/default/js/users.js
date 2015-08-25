@@ -6,8 +6,343 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-var UAV = {};
+function addpass() {
+	$("a[href*=edit_password]").click();
+	return !1
+}
 
+function safe_deactivate_show(a, b) {
+	$(b).hide(0);
+	$(a).fadeIn();
+	return !1
+}
+
+function safekeySend(a) {
+	$(".safekeySend", a).prop("disabled", !0);
+	$.ajax({
+		type: $(a).prop("method"),
+		cache: !1,
+		url: $(a).prop("action"),
+		data: $(a).serialize() + '&resend=1',
+		dataType: "json",
+		success: function(e) {
+			"error" == e.status ? ($(".safekeySend", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $("[name=" + e.input + "]", a).addClass("tooltip-current").attr("data-current-mess", $("[name=" + e.input + "]", a).attr("data-mess")), validErrorShow($("[name=" + e.input + "]", a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(), setTimeout(function() {
+				var d = $(".nv-info", a).attr("data-default");
+				if (!d) d = $(".nv-info-default", a).html();
+				$(".nv-info", a).removeClass("error success").html(d);
+				$(".safekeySend", a).prop("disabled", !1);
+			}, 6E3))
+		}
+	});
+	return !1
+}
+
+function changeAvatar(a) {
+	if (nv_safemode) return !1;
+	nv_open_browse(a, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+	return !1;
+}
+
+function deleteAvatar(a, b, c) {
+	if (nv_safemode) return !1;
+	$(c).prop("disabled", !0);
+	$.ajax({
+		type: 'POST',
+		cache: !1,
+		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=avatar/del',
+		data: 'checkss=' + b + '&del=1',
+		dataType: 'json',
+		success: function(e) {
+			$(a).attr("src", $(a).attr("data-default"));
+		}
+	});
+	return !1
+}
+
+function datepickerShow(a) {
+	if ("object" == typeof $.datepicker) {
+		$(a).datepicker({
+			dateFormat: "dd/mm/yy",
+			changeMonth: !0,
+			changeYear: !0,
+			showOtherMonths: !0,
+			showOn: "focus",
+			yearRange: "-90:+0"
+		});
+		$(a).css("z-index", "1000").datepicker('show');
+	}
+}
+
+function button_datepickerShow(a) {
+	var b = $(a).parent();
+	datepickerShow($(".datepicker", b))
+}
+
+function verkeySend(a) {
+	$(".has-error", a).removeClass("has-error");
+	var d = 0;
+	$(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+		var b = $(this).prop("tagName");
+		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
+		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+	});
+	d || ($("[name=vsend]", a).val("1"), $("[type=submit]", a).click());
+	return !1
+}
+
+function showQlist(a) {
+	var b = $(".qlist", $(a).parent().parent());
+	if ("no" == b.attr("data-show")) b.attr("data-show", "yes").show();
+	else b.attr("data-show", "no").hide();
+	return !1
+}
+
+function addQuestion(a) {
+	var b = $(a).parent().parent().parent().parent();
+	$("[name=your_question]", b).val($(a).text());
+	$(".qlist", b).attr("data-show", "no").hide();
+	return !1
+}
+
+function usageTermsShow(t) {
+	$.ajax({
+		type: 'POST',
+		cache: !0,
+		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register',
+		data: 'get_usage_terms=1',
+		dataType: 'html',
+		success: function(e) {
+			modalShow(t, e)
+		}
+	});
+	return !1
+}
+
+function validErrorShow(a) {
+	$(a).parent().parent().addClass("has-error");
+	$("[data-mess]", $(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
+	$(a).tooltip({
+		placement: "bottom",
+		title: function() {
+			return "" != $(a).attr("data-current-mess") ? $(a).attr("data-current-mess") : nv_required
+		}
+	});
+	$(a).focus().tooltip("show");
+	"DIV" == $(a).prop("tagName") && $("input", a)[0].focus()
+}
+
+function validCheck(a) {
+	var c = $(a).attr("data-pattern"),
+		d = $(a).val(),
+		b = $(a).prop("tagName"),
+		e = $(a).prop("type");
+	if ("INPUT" == b && "email" == e) {
+		if (!nv_mailfilter.test(d)) return !1
+	} else if ("SELECT" == b) {
+		if (!$("option:selected", a).length) return !1
+	} else if ("DIV" == b && $(a).is(".radio-box")) {
+		if (!$("[type=radio]:checked", a).length) return !1
+	} else if ("DIV" == b && $(a).is(".check-box")) {
+		if (!$("[type=checkbox]:checked", a).length) return !1
+	} else if ("INPUT" == b || "TEXTAREA" == b) if ("undefined" == typeof c || "" == c) {
+		if ("" == d) return !1
+	} else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
+	return !0
+}
+
+function validErrorHidden(a, b) {
+	if (!b) b = 2;
+	b = parseInt(b);
+	var c = $(a),
+		d = $(a);
+	for (var i = 0; i < b; i++) {
+		c = c.parent();
+		if (i >= 2) d = d.parent()
+	}
+	d.tooltip("destroy");
+	c.removeClass("has-error")
+}
+
+function formErrorHidden(a) {
+	$(".has-error", a).removeClass("has-error");
+	$("[data-mess]", a).tooltip("destroy")
+}
+
+function validReset(a) {
+	var d = $(".nv-info", a).attr("data-default");
+	if (!d) d = $(".nv-info-default", a).html();
+	$(".nv-info", a).removeClass("error success").html(d);
+	formErrorHidden(a);
+	$("input,button,select,textarea", a).prop("disabled", !1);
+	$(a)[0].reset()
+}
+
+function login_validForm(a) {
+	$(".has-error", a).removeClass("has-error");
+	var c = 0,
+		b = [];
+	$(a).find(".required").each(function() {
+		"password" == $(a).prop("type") && $(this).val(trim(strip_tags($(this).val())));
+		if (!validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+	});
+	c || (b.type = $(a).prop("method"), b.url = $(a).prop("action"), b.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+		type: b.type,
+		cache: !1,
+		url: b.url,
+		data: b.data,
+		dataType: "json",
+		success: function(d) {
+			var b = $("[onclick*='change_captcha']", a);
+			b && b.click();
+			"error" == d.status ? ($("input,button", a).not("[type=submit]").prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != d.input ? $(a).find("[name=" + d.input + "]").each(function() {
+				$(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
+				validErrorShow(this)
+			}) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
+				$("[type=submit]", a).prop("disabled", !1)
+			}, 1E3)) : ($(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
+				window.location.href = "undefined" != typeof d.redirect && "" != d.redirect ? d.redirect : window.location.href
+			}, 3E3))
+		}
+	}));
+	return !1
+}
+
+function reg_validForm(a) {
+	$(".has-error", a).removeClass("has-error");
+	var d = 0,
+		c = [];
+	$(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+		var b = $(this).prop("tagName");
+		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
+		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+	});
+	d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+		type: c.type,
+		cache: !1,
+		url: c.url,
+		data: c.data,
+		dataType: "json",
+		success: function(b) {
+			var c = $("[onclick*='change_captcha']", a);
+			c && c.click();
+			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find("[name=" + b.input + "]").each(function() {
+				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+				validErrorShow(this)
+			}) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
+				scrollTop: $(".nv-info", a).offset().top
+			}, 800))) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
+				$(".nv-info", a).fadeOut();
+				$("input,button,select,textarea", a).prop("disabled", !1);
+				$("[onclick*=validReset]", a).click()
+			}, 6E3) : $("html, body").animate({
+				scrollTop: $(".nv-info", a).offset().top
+			}, 800, function() {
+				$(".form-detail", a).hide();
+				setTimeout(function() {
+					window.location.href = "" != b.input ? b.input : window.location.href
+				}, 6E3)
+			})))
+		}
+	}));
+	return !1
+}
+
+function lostpass_validForm(a) {
+	$(".has-error", a).removeClass("has-error");
+	var d = 0,
+		c = [];
+	$(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+		var b = $(this).prop("tagName");
+		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
+		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+	});
+	d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+		type: c.type,
+		cache: !1,
+		url: c.url,
+		data: c.data,
+		dataType: "json",
+		success: function(b) {
+			if (b.status == "error") {
+			    $("[name=step]",a).val(b.step);
+			     if(b.step == 'step1') $("[onclick*='change_captcha']", a).click();
+                 if("undefined" != typeof b.info && "" != b.info) $(".nv-info",a).removeClass('error success').text(b.info);
+				$("input,button", a).prop("disabled", !1);
+                $(".required",a).removeClass("required");
+				$(".tooltip-current", a).removeClass("tooltip-current");
+				$("[class*=step]", a).hide();
+                $("." + b.step + " input", a).addClass("required");
+				$("." + b.step, a).show();
+				$(a).find("[name=" + b.input + "]").each(function() {
+					$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+					validErrorShow(this)
+				})
+			} else {
+			     $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
+                 setTimeout(function() {
+				window.location.href = b.input
+				}, 6E3)
+			}
+		}
+	}));
+	return !1
+}
+
+function changemail_validForm(a) {
+	$(".has-error", a).removeClass("has-error");
+	var d = 0,
+		c = [];
+	$(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+		var b = $(this).prop("tagName");
+		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
+		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+	});
+	d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+		type: c.type,
+		cache: !1,
+		url: c.url,
+		data: c.data,
+		dataType: "json",
+		success: function(b) {
+			$("[name=vsend]", a).val("0");
+			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
+				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+				validErrorShow(this)
+			})) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
+				$(".nv-info", a).fadeOut();
+				$("input,button,select,textarea", a).prop("disabled", !1)
+			}, 6E3) : $("html, body").animate({
+				scrollTop: $(".nv-info", a).offset().top
+			}, 800, function() {
+				$(".form-detail", a).hide();
+				setTimeout(function() {
+					window.location.href = "" != b.input ? b.input : window.location.href
+				}, 6E3)
+			})))
+		}
+	}));
+	return !1
+}
+
+function bt_logout(a) {
+	$(a).prop("disabled", !0);
+	$.ajax({
+		type: 'POST',
+		cache: !1,
+		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=logout&nocache=' + new Date().getTime(),
+		data: 'nv_ajax_login=1',
+		dataType: 'html',
+		success: function(e) {
+			$('.userBlock', $(a).parent().parent().parent().parent()).hide();
+			$('.nv-info', $(a).parent().parent().parent().parent()).addClass("text-center success").html(e).show();
+			setTimeout(function() {
+				window.location.href = window.location.href
+			}, 2E3)
+		}
+	});
+	return !1
+}
+var UAV = {};
 // Default config, replace it with your own
 UAV.config = {
 	inputFile: 'image_file',
@@ -20,6 +355,7 @@ UAV.config = {
 	max_height: 1500,
 	target: 'preview',
 	uploadInfo: 'uploadInfo',
+	uploadGuide: 'guide',
 	x1: 'x1',
 	y1: 'y1',
 	x2: 'x2',
@@ -34,7 +370,6 @@ UAV.config = {
 	btnReset: 'btn-reset',
 	uploadForm: 'upload-form'
 };
-
 // Default language, replace it with your own
 UAV.lang = {
 	bigsize: 'File too large',
@@ -43,118 +378,114 @@ UAV.lang = {
 	bigfile: 'File too big',
 	upload: 'Please upload and drag to crop'
 };
-
 UAV.data = {
 	error: false,
 	busy: false,
 	jcropApi: null
 };
-
 UAV.tool = {
-	bytes2Size: function( bytes ){
+	bytes2Size: function(bytes) {
 		var sizes = ['Bytes', 'KB', 'MB'];
-		if( bytes == 0 ) return 'n/a';
-		var i = parseInt( Math.floor( Math.log(bytes) / Math.log(1024) ) );
-		return ( bytes / Math.pow(1024, i) ).toFixed(1) + ' ' + sizes[i];
+		if (bytes == 0) return 'n/a';
+		var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+		return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
 	},
-	update: function(e){
+	update: function(e) {
 		$('#' + UAV.config.x1).val(e.x);
 		$('#' + UAV.config.y1).val(e.y);
 		$('#' + UAV.config.x2).val(e.x2);
 		$('#' + UAV.config.y2).val(e.y2);
 	},
-	clear: function(e){
+	clear: function(e) {
 		$('#' + UAV.config.x1).val(0);
 		$('#' + UAV.config.y1).val(0);
 		$('#' + UAV.config.x2).val(0);
 		$('#' + UAV.config.y2).val(0);
 	}
 };
-
 // Please use this package with Jcrop http://deepliquid.com/content/Jcrop.html
 UAV.common = {
-	read: function(file){
+	read: function(file) {
+		$('#' + UAV.config.uploadIcon).hide();
 		var fRead = new FileReader();
-		fRead.onload = function(e){
+		fRead.onload = function(e) {
 			$('#' + UAV.config.target).show();
 			$('#' + UAV.config.target).attr('src', e.target.result);
-			$('#' + UAV.config.target).load(function(){
+			$('#' + UAV.config.target).load(function() {
 				var img = document.getElementById(UAV.config.target);
-
-				if( img.naturalWidth > UAV.config.max_width || img.naturalHeight > UAV.config.max_height ){
+				if (img.naturalWidth > UAV.config.max_width || img.naturalHeight > UAV.config.max_height) {
 					UAV.common.error(UAV.lang.bigsize);
 					UAV.data.error = true;
 					return false;
 				}
-
-				if( img.naturalWidth < UAV.config.avatar_width || img.naturalHeight < UAV.config.avatar_height ){
+				if (img.naturalWidth < UAV.config.avatar_width || img.naturalHeight < UAV.config.avatar_height) {
 					UAV.common.error(UAV.lang.smallsize);
 					UAV.data.error = true;
 					return false;
 				}
-
-				if( ! UAV.data.error ){
+				if (!UAV.data.error) {
 					// Hide and show data
-					$('#' + UAV.config.uploadIcon).hide();
+					$('#' + UAV.config.uploadGuide).hide();
 					$('#' + UAV.config.uploadInfo).show();
-
-					$('#' + UAV.config.imageType).html( file.type );
-					$('#' + UAV.config.imageSize).html( UAV.tool.bytes2Size( file.size ) );
-					$('#' + UAV.config.originalDimension).html( img.naturalWidth + ' x ' + img.naturalHeight );
-
+					$('#' + UAV.config.imageType).html(file.type);
+					$('#' + UAV.config.imageSize).html(UAV.tool.bytes2Size(file.size));
+					$('#' + UAV.config.originalDimension).html(img.naturalWidth + ' x ' + img.naturalHeight);
 					$('#' + UAV.config.target).Jcrop({
 						minSize: [UAV.config.avatar_width, UAV.config.avatar_height],
-						aspectRatio : 1,
+						setSelect: [300, 300, 55, 55],
+						aspectRatio: 1,
 						bgFade: true,
 						bgOpacity: .3,
-						onChange: function(e){ UAV.tool.update(e); },
-						onSelect: function(e){ UAV.tool.update(e); },
-						onRelease: function(e){ UAV.tool.clear(e); }
-					}, function(){
+						onChange: function(e) {
+							UAV.tool.update(e);
+						},
+						onSelect: function(e) {
+							UAV.tool.update(e);
+						},
+						onRelease: function(e) {
+							UAV.tool.clear(e);
+						}
+					}, function() {
 						var bounds = this.getBounds();
 						$('#' + UAV.config.w).val(bounds[0]);
 						$('#' + UAV.config.h).val(bounds[1]);
-						$('#' + UAV.config.displayDimension).html( bounds[0] + ' + ' + bounds[1] );
+						$('#' + UAV.config.displayDimension).html(bounds[0] + ' x ' + bounds[1]);
 						UAV.data.jcropApi = this;
 					});
+				} else {
+					$('#' + UAV.config.uploadIcon).show();
 				}
 			});
 		};
-
 		fRead.readAsDataURL(file);
 	},
-	init: function(){
+	init: function() {
 		UAV.data.error = false;
-
-		if( $('#' + UAV.config.inputFile).val() == '' ){
+		if ($('#' + UAV.config.inputFile).val() == '') {
 			UAV.data.error = true;
 		}
-
 		var image = $('#' + UAV.config.inputFile)[0].files[0];
-
 		// Check ext
-		if( ! UAV.config.pattern.test( image.type ) ){
+		if (!UAV.config.pattern.test(image.type)) {
 			UAV.common.error(UAV.lang.filetype);
 			UAV.data.error = true;
 		}
-
 		// Check size
-		if( image.size > UAV.config.maxsize){
+		if (image.size > UAV.config.maxsize) {
 			UAV.common.error(UAV.lang.bigfile);
 			UAV.data.error = true;
 		}
-
-		if( ! UAV.data.error ){
+		if (!UAV.data.error) {
 			// Read image
 			UAV.common.read(image);
 		}
 	},
-	error: function(e){
+	error: function(e) {
 		UAV.common.reset();
 		alert(e);
 	},
-	reset: function(){
-		if( UAV.data.jcropApi != null ){
+	reset: function() {
+		if (UAV.data.jcropApi != null) {
 			UAV.data.jcropApi.destroy();
 		}
 		UAV.data.error = false;
@@ -163,6 +494,7 @@ UAV.common = {
 		$('#' + UAV.config.target).removeAttr('src').removeAttr('style').hide();
 		$('#' + UAV.config.uploadIcon).show();
 		$('#' + UAV.config.uploadInfo).hide();
+		$('#' + UAV.config.uploadGuide).show();
 		$('#' + UAV.config.imageType).html('');
 		$('#' + UAV.config.imageSize).html('');
 		$('#' + UAV.config.originalDimension).html('');
@@ -170,9 +502,9 @@ UAV.common = {
 		$('#' + UAV.config.h).val('');
 		$('#' + UAV.config.displayDimension).html('');
 	},
-	submit: function(){
-		if( ! UAV.data.busy ){
-			if( $('#' + UAV.config.x2).val() == '' || $('#' + UAV.config.x2).val() == '0' ){
+	submit: function() {
+		if (!UAV.data.busy) {
+			if ($('#' + UAV.config.x2).val() == '' || $('#' + UAV.config.x2).val() == '0') {
 				alert(UAV.lang.upload);
 				return false;
 			}
@@ -182,430 +514,20 @@ UAV.common = {
 		return false;
 	}
 };
-
-UAV.init = function(){
-	$('#' + UAV.config.uploadIcon).click(function(){
+UAV.init = function() {
+	$('#' + UAV.config.uploadIcon).click(function() {
 		$('#' + UAV.config.inputFile).trigger('click');
 	});
-	$('#' + UAV.config.inputFile).change(function(){
+	$('#' + UAV.config.inputFile).change(function() {
 		UAV.common.init();
 	});
-	$('#' + UAV.config.btnReset).click(function(){
-		if( ! UAV.data.busy ){
+	$('#' + UAV.config.btnReset).click(function() {
+		if (!UAV.data.busy) {
 			UAV.common.reset();
+			$('#' + UAV.config.uploadIcon).trigger('click');
 		}
 	});
-	$('#' + UAV.config.uploadForm).submit(function(){
+	$('#' + UAV.config.uploadForm).submit(function() {
 		return UAV.common.submit();
 	});
 };
-
-// User login and register
-(function($){
-	$.fn.user = function( options ){
-		var opts = $.extend( {}, $.fn.user.defaults, options );
-		var ajaxLoaded = false;
-		var openID = "";
-		
-		if( opts.isOpenID && opts.openIDSV.length ){
-			for( i = 0, j = opts.openIDSV.length; i < j; i ++ ){
-				openID += "\
-					<a title=\"" + opts.openIDSV[i].title + "\" href=\"" + opts.openIDSV[i].href + "\">\
-				 		<img alt=\"" + opts.openIDSV[i].title + "\" src=\"" + opts.openIDSV[i].imgSRC + "\" width=\"" + opts.openIDSV[i].imgW + "\" height=\"" + opts.openIDSV[i].imgH + "\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"" + opts.openIDSV[i].title + "\"/>\
-					</a>\
-				";
-			}
-		}
-		
-	    opts.loginHTML = "\
-		<div class=\"modal fade\" id=\"loginModal\"> \
-		  <div class=\"modal-dialog\">\
-		    <div class=\"modal-content\">\
-		      <div class=\"modal-header\">\
-		        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"" + opts.lang.close + "\"><span aria-hidden=\"true\">&times;</span></button>\
-		        <h4 class=\"modal-title\">" + opts.lang.login + "</h4>\
-		      </div>\
-		      <div class=\"modal-body\">\
-		      	<div class=\"container-fluid\">\
-					<form action=\"\" method=\"post\" role=\"form\" class=\"form-tooltip\">\
-						<div class=\"form-group\">\
-							<div class=\"input-group\">\
-								<span class=\"input-group-addon\"><em class=\"fa fa-user fa-lg\"></em></span>\
-								<input type=\"text\" class=\"form-control\" id=\"block_login_iavim\" name=\"nv_login\" value=\"\" placeholder=\"" + opts.lang.username + "\">\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<div class=\"input-group\">\
-								<span class=\"input-group-addon\"><em class=\"fa fa-key fa-lg fa-fix\"></em></span>\
-								<input type=\"password\" class=\"form-control\" id=\"block_password_iavim\" name=\"nv_password\" value=\"\" placeholder=\"" + opts.lang.password + "\">\
-							</div>\
-						</div>\
-						" + ( opts.isCaptchaLogin ?
-						"<div class=\"form-group text-right\">\
-							<img id=\"block_vimg\" src=\"" + opts.siteroot + "index.php?scaptcha=captcha&t=" + opts.timeStamp + "\" width=\"" + opts.captchaW + "\" height=\"" + opts.captchaH + "\"/>\
-							<em class=\"fa fa-pointer fa-refresh fa-lg\" onclick=\"nv_change_captcha('block_vimg','block_seccode_iavim');\"></em>\
-						</div>\
-						<div class=\"form-group\">\
-							<div class=\"input-group\">\
-								<span class=\"input-group-addon\"><em class=\"fa fa-shield fa-lg fa-fix\"></em></span>\
-								<input id=\"block_seccode_iavim\" name=\"nv_seccode\" type=\"text\" class=\"form-control\" maxlength=\"" + opts.captchaLen + "\" placeholder=\"" + opts.lang.securitycode + "\"/>\
-							</div>\
-						</div>" : "" ) + "\
-						<div class=\"form-group\">\
-							<a class=\"pull-right\" title=\"" + opts.lang.lostpass + "\" href=\"" + opts.lostpassLink + "\">" + opts.lang.lostpass + "?</a>\
-						</div>\
-						" + ( opts.isOpenID ? "\
-						<div class=\"clearfix\">\
-							<hr />\
-							<p class=\"text-center\">\
-						 		<i class=\"fa fa-openid\"></i> " + opts.lang.openidLogin + "\
-							</p>\
-							<div class=\"text-center\">\
-								" + openID + "\
-							</div>\
-						</div>" : "" ) + "\
-						<!-- END: openid -->\
-					</form>\
-		      	</div>\
-		      </div>\
-		      <div class=\"modal-footer\">\
-		        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">" + opts.lang.close + "</button>\
-		        <button type=\"button\" class=\"btn btn-primary\" id=\"block-login-submit\">" + opts.lang.loginSubmit + "</button>\
-		      </div>\
-		    </div>\
-		  </div>\
-		</div>";
-
-	    opts.registerHTML = "\
-		<div class=\"modal fade\" id=\"registerModal\"> \
-		  <div class=\"modal-dialog\">\
-		    <div class=\"modal-content\">\
-		      <div class=\"modal-header\">\
-		        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"" + opts.lang.close + "\"><span aria-hidden=\"true\">&times;</span></button>\
-		        <h4 class=\"modal-title\">" + opts.lang.register + "</h4>\
-		      </div>\
-		      <div class=\"modal-body\">\
-		      	<div class=\"container-fluid\">\
-		      		<form id=\"registerForm\" action=\"\" method=\"post\" role=\"form\" class=\"form-horizontal form-tooltip m-bottom\">\
-						<div class=\"form-group\">\
-							<label for=\"first_name\" class=\"col-sm-8 control-label\">" + opts.lang.firstName + ":</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"text\" class=\"form-control\" id=\"first_name\" name=\"first_name\" value=\"\" maxlength=\"255\" />\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-					        <label for=\"last_name\" class=\"col-sm-8 control-label\">" + opts.lang.lastName + ":</label>\
-					        <div class=\"col-sm-16\">\
-					            <input type=\"text\" class=\"form-control\" id=\"last_name\" name=\"last_name\" value=\"\" maxlength=\"255\" />\
-					        </div>\
-					    </div>\
-						<div class=\"form-group\">\
-							<label for=\"nv_email_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.email + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"email\" class=\"email required form-control\" name=\"email\" value=\"\" id=\"nv_email_iavim\" maxlength=\"100\" />\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"nv_username_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.account + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"text\" class=\"required form-control\" name=\"username\" value=\"\" id=\"nv_username_iavim\" maxlength=\"{NICK_MAXLENGTH}\" />\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"nv_password_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.password + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input class=\"form-control required password\" name=\"password\" value=\"\" id=\"nv_password_iavim\" type=\"password\" maxlength=\"{PASS_MAXLENGTH}\" autocomplete=\"off\"/>\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"nv_re_password_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.rePassword + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input class=\"form-control required password\" name=\"re_password\" value=\"\" id=\"nv_re_password_iavim\" type=\"password\" maxlength=\"{PASS_MAXLENGTH}\" autocomplete=\"off\"/>\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"question\" class=\"col-sm-8 control-label\">" + opts.lang.question + ":</label>\
-							<div class=\"col-sm-16\">\
-								<select name=\"question\" id=\"question\" class=\"form-control\"></select>\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"your_question\" class=\"col-sm-8 control-label\">" + opts.lang.yourQuestion + ":</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"text\" class=\"form-control\" name=\"your_question\" id=\"your_question\" value=\"\" />\
-							</div>\
-						</div>\
-						<div class=\"form-group\">\
-							<label for=\"answer\" class=\"col-sm-8 control-label\">" + opts.lang.answerYourQuestion + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-16\">\
-								<input type=\"text\" class=\"form-control required\" name=\"answer\" id=\"answer\" value=\"\" />\
-							</div>\
-						</div>\
-						" + ( opts.isCaptchaReg ? "\
-						<div class=\"form-group\">\
-							<label for=\"nv_seccode_iavim\" class=\"col-sm-8 control-label\">" + opts.lang.captcha + "<span class=\"text-danger\"> (*)</span>:</label>\
-							<div class=\"col-sm-8\">\
-								<input type=\"text\" name=\"nv_seccode\" id=\"nv_seccode_iavim\" class=\"required form-control\" maxlength=\"" + opts.captchaLen + "\" />\
-							</div>\
-							<div class=\"col-sm-8\">\
-								<label class=\"control-label\">\
-									<img id=\"vimg\" src=\"" + opts.siteroot + "index.php?scaptcha=captcha&t=" + opts.timeStamp + "\" width=\"" + opts.captchaW + "\" height=\"" + opts.captchaH + "\" />\
-									&nbsp;<em class=\"fa fa-pointer fa-refresh fa-lg\" onclick=\"nv_change_captcha('vimg','nv_seccode_iavim');\">&nbsp;</em>\
-								</label>\
-							</div>\
-						</div>\
-						" : "" ) + "\
-						<div class=\"form-group\">\
-							<label for=\"question\" class=\"col-sm-8 control-label\"><a id=\"show-usage-terns\" href=\"\">" + opts.lang.usageTerms + " <i class=\"fa fa-globe\"></i></a>:</label>\
-							<div class=\"col-sm-16\">\
-								<div class=\"checkbox\">\
-									<label>\
-										<input class=\"required\" type=\"checkbox\" name=\"agreecheck\" id=\"agreecheck\" value=\"1\"/>\
-										" + opts.lang.accept + "\
-									</label>\
-								</div>\
-							</div>\
-						</div>\
-		      		</div>\
-		      </div>\
-		      <div class=\"modal-footer\">\
-		      	<input type=\"hidden\" name=\"checkss\" id=\"checkss\" value=\"" + opts.checkss + "\" />\
-		      	<i id=\"block-register-loading\" class=\"fa fa-circle-o-notch fa-spin hidden\"></i>\
-		        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">" + opts.lang.close + "</button>\
-		        <button type=\"button\" class=\"btn btn-primary\" id=\"block-register-submit\">" + opts.lang.register + "</button>\
-		      </div>\
-		    </div>\
-		  </div>\
-		</div>";
-		
-		// Render html
-		if(this.length){
-			$('body').append(opts.loginHTML);
-			
-			if( opts.allowreg ){
-				$('body').append(opts.registerHTML);
-				
-				$('#registerModal').on('show.bs.modal', function(e){
-					if( ! ajaxLoaded ){
-						$('#block-register-submit').attr('disabled', 'disabled');
-						$('#block-register-loading').removeClass('hidden');
-						
-						$.ajax({
-							type: 'POST',
-							cache: true,
-							url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register&nocache=' + new Date().getTime(),
-							data: 'get_question=1',
-							dataType: 'json',
-							success: function(e){
-								var html = '';
-								$.each(e, function(k, v){
-									html += '<option value="' + v.qid + '"' + v.selected + '>' + v.title + '</option>';
-								});
-								$('select#question').html(html);
-								ajaxLoaded = true;
-								$('#block-register-loading').addClass('hidden');
-								$('#block-register-submit').removeAttr('disabled');
-							}
-						});
-					}
-					
-					$('#agreecheck').attr('disabled', 'disabled');
-				});
-				
-				$('#show-usage-terns').click(function(e){
-					e.preventDefault();
-					
-					if( $('#usage-terns').length ){
-						$('#usage-terns').modal('toggle');
-						$('#agreecheck').removeAttr('disabled');
-					}else{
-						$('body').append(
-							"<div id=\"usage-terns\" class=\"modal fade\">\
-							  <div class=\"modal-dialog\">\
-							    <div class=\"modal-content\">\
-							      <div class=\"modal-header\">\
-							        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
-							        <h4 class=\"modal-title\">" + opts.lang.usageTerms + "</h4>\
-							      </div>\
-							      <div class=\"modal-body\">\
-							        <div class=\"text-center\"><i class=\"fa fa-circle-o-notch fa-spin fa-3x\"></i></div>\
-							      </div>\
-							    </div>\
-							  </div>\
-							</div>"
-						);
-						$('#usage-terns').modal('toggle');
-						
-						$.ajax({
-							type: 'POST',
-							cache: true,
-							url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register&nocache=' + new Date().getTime(),
-							data: 'get_usage_terms=1',
-							dataType: 'html',
-							success: function(e){
-								$('#usage-terns').find('.modal-body').html(e);
-								$('#agreecheck').removeAttr('disabled');
-							}
-						});
-					}
-				});
-			}
-		}
-		
-		$('#block-login-submit').click(function(){
-			$this = $(this);
-			$this.attr('disabled', 'disabled');
-			$.ajax({
-				type: 'POST',
-				cache: false,
-				url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login&nocache=' + new Date().getTime(),
-				data: 'nv_login=' + encodeURIComponent($('#block_login_iavim').val()) + '&nv_password=' + encodeURIComponent($('#block_password_iavim').val()) + '&' + ( opts.isCaptchaLogin ? '&nv_seccode=' + encodeURIComponent($('#block_seccode_iavim').val()) : '' ) + '&nv_ajax_login=1',
-				dataType: 'json',
-				success: function(e){
-					$this.removeAttr('disabled');
-					if( e.length ){
-						$.each(e, function(k, v){
-							if( v.name == '' ){
-								alert( v.value );
-							}else{
-								$('#loginModal [name=' + v.name + ']').attr({
-									'title': v.value,
-									'data-trigger': 'focus'
-								}).tooltip().parent().parent().addClass('has-error');
-							}
-						});
-						
-						$('#loginModal .has-error:first input').focus();
-					}else{
-						opts.loginComplete.call(undefined, e, opts);
-					}
-				}
-			});
-		});		
-		
-		$('#block-register-submit').click(function(){
-			var data = {
-				first_name		: $('#first_name').val(),
-				last_name		: $('#last_name').val(),
-				email			: $('#nv_email_iavim').val(),
-				username		: $('#nv_username_iavim').val(),
-				password		: $('#nv_password_iavim').val(),
-				re_password		: $('#nv_re_password_iavim').val(),
-				question		: $('#question').val(),
-				your_question	: $('#your_question').val(),
-				answer			: $('#answer').val(),
-				nv_seccode		: $('#nv_seccode_iavim').length ? $('#nv_seccode_iavim').val() : "",
-				agreecheck		: $('#agreecheck:checked').length ? 1 : 0,
-				checkss			: $('#checkss').val()
-			};
-			
-			$this = $(this);
-			$this.attr('disabled', 'disabled');
-			$('#registerModal .has-error').removeClass('has-error');
-			$('#registerModal input, #registerModal select').tooltip('destroy');
-			
-			$.ajax({
-				type: 'POST',
-				cache: false,
-				url: nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=register&nocache=' + new Date().getTime(),
-				data: $.param( data ) + '&nv_ajax_register=1',
-				dataType: 'json',
-				success: function(e){
-					$this.removeAttr('disabled');
-					nv_change_captcha('vimg','nv_seccode_iavim');
-					
-					if( e.status == 'success' ){
-						opts.registerComplete.call(undefined, e.message, opts);
-					}else{
-						e = e.error;
-						$.each(e, function(k, v){
-							if( v.name == '' ){
-								alert( v.value );
-							}else{
-								$('#registerModal [name=' + v.name + ']').attr({
-									'title': v.value,
-									'data-trigger': 'focus'
-								}).tooltip().parent().parent().addClass('has-error');
-							}
-						});
-						
-						$('#registerModal .has-error:first input').focus();
-					}
-				}
-			});
-		});
-		
-		return this.each(function(){
-			$(this).find('.login').click(function(e){
-				e.preventDefault();
-				$('#loginModal').modal('toggle');
-			});
-			$(this).find('.register').click(function(e){
-				e.preventDefault();
-				$('#registerModal').modal('toggle');
-				$('#registerModal [type="text"]').val('');
-				$('#registerModal [type="email"]').val('');
-				$('#registerModal [type="password"]').val('');
-				$('#registerModal [type="checkbox"]').removeAttr('checked');
-				$('#registerModal select option').removeAttr('selected');
-			});
-		});
-	};
-	
-	// Debug
-	function debug(msg){
-        if( window.console && window.console.log ){
-            window.console.log( msg );
-        }
-    };
-}(jQuery));
-
-$.fn.user.defaults = {
-	isCaptchaLogin: false,
-	isCaptchaReg: false,
-	captchaW: 120,
-	captchaH: 25,
-	captchaLen: 6,
-	timeStamp: 0,
-	siteroot: "/",
-	lostpassLink: "/",
-	isOpenID: false,
-	openIDSV: new Array(),
-	allowreg: false,
-	checkss: "",
-	lang: {
-		close: "Close",
-		login: "Login",
-		loginSubmit: "Login",
-		username: "Username",
-		password: "Password",
-		securitycode: "Security code",
-		lostpass: "Lost password",
-		openidLogin: "Openid login",
-		register: "Register",
-		firstName: "First name",
-		lastName: "Last name",
-		email: "Email",
-		account: "Account",
-		rePassword: "Repeat password",
-		question: "Question",
-		yourQuestion: "Your question",
-		answerYourQuestion: "Answer your question",
-		inGroup: "Group",
-		usageTerms: "Usage terms",
-		captcha: "Captcha",
-		accept: "Accept"
-	},
-    loginComplete: function(res, opts){
-    	window.location.href = window.location.href;
-    },
-    registerComplete: function(res, opts){
-    	alert(res);
-    	window.location.href = window.location.href;
-    }
-};
-
-// Trigger login & register
-$(document).ready(function(){
-	$('#nv-block-login').user();
-});
