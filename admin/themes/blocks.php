@@ -147,7 +147,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 		$xtpl->parse( 'main.loop' );
 	}
 
-	$xtpl->assign( 'BLOCKREDIRECT', nv_base64_encode( $client_info['selfurl'] ) );
+	$xtpl->assign( 'BLOCKREDIRECT', '' );
 	$xtpl->assign( 'CHECKSS', md5( $selectthemes . $global_config['sitekey'] . session_id() ) );
 
 	$active_device = array( 1 );
