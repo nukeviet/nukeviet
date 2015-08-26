@@ -38,11 +38,12 @@ function nv_link_module(module) {
 	}
 }
 
-function nv_link_menu(blog_menu) {
+function nv_link_menu(blog_menu, parentid) {
 	var nv_timer = nv_settimeout_disable('item_menu_' + blog_menu, 2000);
 	var new_status = document.getElementById('item_menu_' + blog_menu).options[document.getElementById('item_menu_' + blog_menu).selectedIndex].value;
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_menu&nocache=' + new Date().getTime(), 'mid=' + new_status, function(res) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_menu&nocache=' + new Date().getTime(), 'mid=' + new_status + '&parentid=' + parentid, function(res) {
 		$('#parentid').html(res);
+		$('#parentid').select2();
 	});
 }
 

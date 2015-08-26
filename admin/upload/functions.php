@@ -554,7 +554,7 @@ unset( $array_dirname[''] );
 
 if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 {
-	$real_dirlist = nv_listUploadDir( NV_UPLOADS_DIR, $real_dirlist );
+	$real_dirlist = nv_listUploadDir( NV_UPLOADS_DIR );
 	$dirlist = array_keys( $array_dirname );
 	$result_no_exit = array_diff( $dirlist, $real_dirlist );
 	foreach( $result_no_exit as $dirname )
