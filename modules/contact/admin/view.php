@@ -29,8 +29,22 @@ if( ! isset( $contact_allowed['view'][$row['cid']] ) )
 }
 
 $is_read = intval( $row['is_read'] );
+$mark = $nv_Request->get_title( 'mark', 'post', '' );
+
+if( $mark == 'unread' )
+{
+	if( $is_read )
+	{
+		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=0 WHERE id=' . $id );
+		//Cho nay con can cap nhat NV_NOTIFICATION_GLOBALTABLE
+	}
+
+	die( json_encode( array( 'status' => 'ok', 'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name ) ) );
+}
+
 if( ! $is_read )
 {
+	nv_status_notification( NV_LANG_DATA, $module_name, 'contact_new', $row['id'] );
 	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=1 WHERE id=' . $id );
 	$is_read = 1;
 }

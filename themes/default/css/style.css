@@ -832,7 +832,9 @@ a.btn {
 }
 
 /* SECOND NAV */
-
+.second-nav{
+    z-index:3
+}
 .second-nav .bg {
     background:#ccc;
     background-image:linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 100%) !important;
@@ -1842,6 +1844,49 @@ button.close {
     opacity:.2;
 }
 
+.modal-body{
+    padding:15px
+}
+
+#sitemodal .modal-dialog {
+  position: relative;
+  width: auto !important;
+  max-width: 600px;
+  text-align: center;
+  font-size: 0;
+}
+#sitemodal .modal-content{
+    width: auto;
+    display: inline-block;
+    font-size: 14px;
+    text-align: left
+}
+#sitemodal .close{
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    width: 24px;
+    height:24px;
+    background: #000;
+    color:#fff;
+    font-size:11px;
+    opacity:0.8;
+    border:2px solid #ccc;
+    border-radius: 12px
+}
+#sitemodal .close:hover{
+    opacity:1;
+}
+@media (max-width: 619px) {
+    #sitemodal .modal-dialog{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+  #sitemodal .modal-content{
+        display: block
+    }
+}
+
 #sb-container {
     z-index:99999999 !important;
 }
@@ -1929,7 +1974,7 @@ button.close {
 /* module Contact*/
 .contact-result{
     position:absolute;
-    bottom:20px;
+    top:40px;
     left:5%;
     width:90%;
     float:left;

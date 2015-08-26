@@ -337,9 +337,11 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 	}
 	elseif( $form_login )
 	{
-		$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] . '#formcomment' );
-		$xtpl->assign( 'COMMENT_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module_comment['comment_login'] . '</a>' );
-		$xtpl->parse( 'main.form_login' );
+		//$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] . '#formcomment' );
+		//$xtpl->assign( 'COMMENT_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module_comment['comment_login'] . '</a>' );
+		//Ajax login
+        $xtpl->assign( 'COMMENT_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="#" onclick="return loginForm();">' . $lang_module_comment['comment_login'] . '</a>' );
+        $xtpl->parse( 'main.form_login' );
 	}
 
 	$xtpl->parse( 'main' );
