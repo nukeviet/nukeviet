@@ -161,7 +161,7 @@ while( $row = $sth->fetch() )
 	$xtpl->parse( 'main.loop' );
 }
 
-$xtpl->assign( 'BLOCKREDIRECT', nv_base64_encode( $client_info['selfurl'] ) );
+$xtpl->assign( 'BLOCKREDIRECT', '' );
 $xtpl->assign( 'FUNC_ID', $func_id );
 $xtpl->assign( 'SELECTEDMODULE', $selectedmodule );
 
