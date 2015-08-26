@@ -1591,11 +1591,11 @@ function nv_change_buffer( $buffer )
 
     if ( ! empty( $global_config['cdn_url'] ) )
     {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"//" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
     }
     else
     {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
     }
 
     return $buffer;
@@ -1756,6 +1756,33 @@ function nv_insert_notification( $module, $type, $content = array(), $obid = 0, 
 		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
 		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
 		$sth->bindParam( ':content', $content, PDO::PARAM_STR );
+		$sth->execute();
+	}
+	return true;
+}
+
+/**
+ * nv_delete_notification()
+ *
+ * @param string $language
+ * @param string $module
+ * @param integer $obid
+ * @param string $type
+ * @param integer $send_from
+ * @param integer $area
+ * @return
+ */
+function nv_delete_notification( $language, $module, $type, $obid )
+{
+	global $db_config, $db, $global_config;
+
+	if( $global_config['notification_active'] )
+	{
+		$sth = $db->prepare( 'DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid = :obid AND type = :type' );
+		$sth->bindParam( ':language', $language, PDO::PARAM_STR );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
 		$sth->execute();
 	}
 	return true;

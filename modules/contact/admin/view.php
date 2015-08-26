@@ -36,7 +36,7 @@ if( $mark == 'unread' )
 	if( $is_read )
 	{
 		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=0 WHERE id=' . $id );
-		//Cho nay con can cap nhat NV_NOTIFICATION_GLOBALTABLE
+		nv_status_notification( NV_LANG_DATA, $module_name, 'contact_new', $id, 0 );
 	}
 
 	die( json_encode( array( 'status' => 'ok', 'mess' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name ) ) );
