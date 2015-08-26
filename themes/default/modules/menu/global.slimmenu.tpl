@@ -41,7 +41,7 @@
 		easingEffect:'easeInOutQuint',
 		animSpeed: 'medium',
 		indentChildren: true,
-		childrenIndenter: '&raquo;'
+		childrenIndenter: '&nbsp;&nbsp; '
 	});
 </script>
 <!-- END: main -->
