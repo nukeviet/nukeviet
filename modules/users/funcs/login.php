@@ -16,7 +16,18 @@ if( defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 	die();
 }
 
-$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+$nv_header = '';
+if( $nv_Request->isset_request( 'nv_header', 'post,get' ) )
+{
+	$nv_header = $nv_Request->get_title( 'nv_header', 'post,get', '' );
+	if( $nv_header != md5( $client_info['session_id'] . $global_config['sitekey'] ) ) $nv_header = '';
+}
+
+$nv_redirect = '';
+if( $nv_Request->isset_request( 'nv_redirect', 'post,get' ) )
+{
+	$nv_redirect = nv_get_redirect();
+}
 
 $gfx_chk = ( in_array( $global_config['gfx_chk'], array(
 	2,
@@ -34,8 +45,7 @@ function signin_result( $array )
 {
 	global $nv_redirect;
 
-	$redirect = nv_redirect_decrypt( $nv_redirect, true );
-	$array['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$array['redirect'] = nv_redirect_decrypt( $nv_redirect );
 	$string = json_encode( $array );
 	return $string;
 }
@@ -52,8 +62,7 @@ function opidr( $openid_info )
 
 	$nv_Request->unset_request( 'openid_attribs', 'session' );
 
-	$redirect = nv_redirect_decrypt( $nv_redirect );
-	$openid_info['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$openid_info['redirect'] = nv_redirect_decrypt( $nv_redirect );
 
 	$contents = openid_callback( $openid_info );
 
@@ -652,18 +661,15 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		'mess' => $lang_module['login_ok'] ) ) );
 }
 
+if( $nv_Request->get_int( 'nv_ajax', 'post', 0 ) == 1 ) die( user_login( true ) );
+
 $page_title = $lang_module['login'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['login'];
 
-$nv_header = $nv_Request->get_title( 'nv_header', 'get, post', '' );
+$contents = user_login();
 
-$full = $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ? false : true;
-if( !empty( $nv_redirect ) ) $full = false;
-
-if( $nv_Request->get_int( 'nv_ajax', 'post', 0 ) == 1 ) die( user_login( $gfx_chk, $nv_header, true ) ); 
-
-$contents = user_login( $gfx_chk, $nv_header );
+$full = empty( $nv_redirect ) ? ( ! empty( $nv_header ) ? false : true ) : false;
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents, $full );

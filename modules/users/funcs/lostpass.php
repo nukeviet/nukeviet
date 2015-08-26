@@ -52,7 +52,11 @@ function lost_pass_sendMail( $row )
 	}
 }
 
-$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get, post', '' );
+$nv_redirect = '';
+if( $nv_Request->isset_request( 'nv_redirect', 'post,get' ) )
+{
+	$nv_redirect = nv_get_redirect();
+}
 
 $data = array();
 $data['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
