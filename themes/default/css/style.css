@@ -1974,7 +1974,7 @@ button.close {
 /* module Contact*/
 .contact-result{
     position:absolute;
-    bottom:20px;
+    top:40px;
     left:5%;
     width:90%;
     float:left;
