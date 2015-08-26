@@ -6,6 +6,32 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+function mark_as_unread() {
+	$.ajax({
+		type: "POST",
+		url: window.location.href,
+		cache: !1,
+		data: "&mark=unread",
+		dataType: "json"
+	}).done(function(a) {
+		"error" == a.status ? alert(a.mess) : window.location.href = a.mess
+	});
+	return !1
+}
+function multimark(a, b) {
+	"unread" != b && (b = "read");
+	$.ajax({
+		type: "POST",
+		url: window.location.href,
+		cache: !1,
+		data: "&mark=" + b + "&" + $(a).serialize(),
+		dataType: "json"
+	}).done(function(a) {
+		"error" == a.status ? alert(a.mess) : window.location.href = "" != a.mess ? a.mess : window.location.href
+	});
+	return !1
+}
+
 function nv_chang_status(a) {
 	nv_settimeout_disable("change_status_" + a, 5E3);
 	var b = $("#change_status_" + a).val();
