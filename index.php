@@ -119,7 +119,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 
 				if( in_array( $theme_type, $array_theme_type ) ) $nv_Request->set_Cookie( 'nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME );
 
-				$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+				$nv_redirect = ! empty( $nv_redirect ) ? nv_redirect_decrypt( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 				Header( 'Location: ' . nv_url_rewrite( $nv_redirect ) );
 				die();
 			}
@@ -155,7 +155,7 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 					$nv_Request->set_Session( 'drag_block', $drag_block );
 
 					$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
-					$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+					$nv_redirect = ! empty( $nv_redirect ) ? nv_redirect_decrypt( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 					Header( 'Location: ' . nv_url_rewrite( $nv_redirect, true ) );
 					die();
 				}
@@ -322,11 +322,10 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	elseif( isset( $sys_mods[$module_name] ) )
 	{
 		$groups_view = ( string )$sys_mods[$module_name]['groups_view'];
-		if( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
+		if( ! defined( 'NV_IS_USER' ) and $groups_view == '4' )
 		{
-			// Login users
-			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-			die();
+			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] ), true ) );
+            die();
 		}
 		elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
 		{

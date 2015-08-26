@@ -25,11 +25,11 @@ if( ! nv_function_exists( 'nv_block_data_config_html' ) )
 		$htmlcontent = htmlspecialchars( nv_editor_br2nl( $data_block['htmlcontent'] ) );
 		if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) )
 		{
-			$html = nv_add_editor_js() . nv_aleditor( "htmlcontent", '100%', '150px', $htmlcontent );
+			$html = nv_aleditor( 'htmlcontent', '100%', '150px', $htmlcontent );
 		}
 		else
 		{
-			$html = "<textarea style=\"width: 100%\" name=\"htmlcontent\" id=\"htmlcontent\" cols=\"20\" rows=\"8\">" . $htmlcontent . "</textarea>";
+			$html = '<textarea style="width: 100%" name="htmlcontent" id="htmlcontent" cols="20" rows="8">' . $htmlcontent . '</textarea>';
 		}
 
 		return '<tr><td colspan="2">' . $lang_block['htmlcontent'] . '<br>' . $html . '</td></tr>';

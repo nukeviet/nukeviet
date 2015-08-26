@@ -37,7 +37,7 @@ if ( ! empty( $array_department ) )
     }
 }
 
-if ( empty( $dpDefault ) )
+if ( empty( $dpDefault ) and ! empty( $array_department ) )
 {
 	$key_department= array_keys( $array_department );
 	$dpDefault = $key_department[0];

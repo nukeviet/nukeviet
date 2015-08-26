@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 29, 2010, 02:24:00 AM
@@ -55,10 +55,13 @@ $lang_module['is_support'] = 'Should be support';
 $lang_module['supports_rewrite'] = 'Supports rewrite';
 $lang_module['opendir_support'] = 'PHP support opendir';
 $lang_module['gd_support'] = 'PHP support GD library';
+$lang_module['mcrypt_support'] = 'PHP supported encryption mcrypt library';
 $lang_module['session_support'] = 'PHP support session';
 $lang_module['fileuploads_support'] = 'PHP support file upload';
 $lang_module['dir_noexit'] = 'Not exists derectory';
 $lang_module['dir_not_writable'] = 'Not writable';
+$lang_module['dir_not_writable_ip_files'] = 'Can not write files in %1$s folder';
+$lang_module['file_not_writable'] = 'Error: System could not write file %1$s';
 $lang_module['dir_writable'] = 'OK';
 $lang_module['checkchmod_detail'] = 'Check files CHMOD on server';
 $lang_module['if_chmod'] = 'If exists files or folders on server has CHMOD';
@@ -77,8 +80,11 @@ $lang_module['ftp_pass'] = 'Password';
 $lang_module['ftp_pass_note'] = 'FTP password';
 $lang_module['ftp_path'] = 'Remote path';
 $lang_module['ftp_path_note'] = 'Path to website\'s folder';
+$lang_module['ftp_path_find'] = 'Auto find';
 $lang_module['ftp_error_account'] = 'Error: Can\'t connect to FTP server, please check FTP configuration';
 $lang_module['ftp_error_path'] = 'Error: Wrong configuration in Remote path';
+$lang_module['ftp_error_empty'] = 'Please enter the parameters to automatically find the Remove Path';
+$lang_module['ftp_error_detect_root'] = 'Can not determined automatically Remove Path. Manually enter, please';
 $lang_module['refesh'] = 'Submit';
 $lang_module['database'] = 'Database declare';
 $lang_module['properties'] = 'Properties';
@@ -126,16 +132,14 @@ $lang_module['your_question_empty'] = 'Question can\'t empty.';
 $lang_module['answer_empty'] = 'Please give an answer';
 $lang_module['question_note'] = 'You should need security question and answer question if you have been lost your password';
 $lang_module['answer_question_note'] = 'You must remember this answer in response to the system.';
-$lang_module['dir_not_writable_ip_files'] = 'Can not write files in %1$s folder';
+$lang_module['lang_multi'] = 'Multi-language website';
+$lang_module['lang_multi_note'] = 'If you have plans to build a multi-language site, you should select this feature';
 $lang_module['s2_winhost_info'] = 'You are using window hosting, the function CHMOD will not be functional';
 $lang_module['s2_winhost_info1'] = 'Verification results';
 $lang_module['s2_winhost_info2'] = 'however, be sure all listed folders and sub-folders are writable before go to <strong>Next step</strong>, if not the system may be not functional';
 $lang_module['s2_winhost_info3'] = 'Please access to hosting administration to CHMOD all listed folders and sub-folders then click';
 $lang_module['s2_winhost_info4'] = 'here';
 $lang_module['s2_winhost_info5'] = 'to verify';
-$lang_module['ftp_path_find'] = 'Auto find';
-$lang_module['ftp_error_empty'] = 'Please enter the parameters to automatically find the Remove Path';
-$lang_module['ftp_error_detect_root'] = 'Can not determined automatically Remove Path. Manually enter, please';
 $lang_module['update_site_title_update'] = 'NukeViet Upgrade';
 $lang_module['update_site_title_upgrade'] = 'NukeViet Update';
 $lang_module['update_step_1'] = 'Info';
@@ -250,7 +254,5 @@ $lang_module['updatemod_title_update'] = 'Upgrade module "%s"';
 $lang_module['updatemod_title_upgrade'] = 'Update module "%s"';
 $lang_module['updatemod_notexist'] = 'You did not install this module on system so that do not have any work to execute, you should delete this updating pack to website run back';
 $lang_module['updatemod_notcertified'] = 'This module is not certificated so that system could not control risks which could occur';
-$lang_module['file_not_writable'] = 'Error: System could not write file %1$s';
-$lang_module['mcrypt_support'] = 'PHP supported encryption mcrypt library';
-$lang_module['lang_multi'] = 'Multi-language website';
-$lang_module['lang_multi_note'] = 'If you have plans to build a multi-language site, you should select this feature';
+$lang_module['dbcheck_error_files'] = 'To install NukeViet for this kind database, you need to download program additional support. Click here to learn about the program additional support and the appropriate download . After downloading, extract and upload the files and folders on your website ,reload this page and choose  this database to test.';
+$lang_module['dbcheck_error_driver'] = 'Error: System does not support this kind of database, please select the kind other.';

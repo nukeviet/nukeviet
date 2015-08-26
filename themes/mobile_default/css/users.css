@@ -79,3 +79,7 @@
 #change-photo{
 	display: none;
 }
+
+.users-menu > li > a{
+    padding: 8px 10px !important;
+}

@@ -3,7 +3,7 @@
 <link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
 <div class="users-av-wraper">
     <form id="upload-form" method="post" enctype="multipart/form-data" action="{NV_AVATAR_UPLOAD}">
-        <div class="col-md-15">
+        <div class="col-xs-16">
             <div class="users-avupload">
                 <div title="{LANG.avata_select_img}" id="upload_icon" class="upload-button">
                     <div class="text-center">
@@ -13,7 +13,7 @@
                 <div class="img-area"><img id="preview" style="display: none;"/></div>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-xs-8">
             <h2 class="margin-bottom-lg">{LANG.change_avatar}</h2>
             <div class="guide" id="guide">
                 <div class="margin-bottom"><strong>{LANG.avata_guide}:</strong></div>
@@ -40,7 +40,6 @@
         <input type="hidden" id="y2" name="y2"/>
         <input type="hidden" id="w" name="w"/>
         <input type="hidden" id="h" name="h"/>
-        <input type="hidden" name="u" value="{U}"/>
         <input type="file" name="image_file" id="image_file" class="hide"/>
     </form>
 </div>
@@ -64,6 +63,11 @@
         window.opener.location.href = window.opener.location.href;
 		window.close();
 		<!-- END: complete2 -->
+        <!-- BEGIN: complete3 -->
+        $("#myavatar", opener.document).attr('src', '{FILENAME}');
+        $("#delavatar", opener.document).prop("disabled",!1);
+		window.close();
+		<!-- END: complete3 -->
 		<!-- BEGIN: init -->UAV.init();<!-- END: init -->
 		<!-- BEGIN: error -->alert('{ERROR}');<!-- END: error -->
 	});

@@ -19,7 +19,7 @@
 }
 .users-av-wraper > form > div{
     position: relative;
-    padding: 0 0 0 15px
+    padding: 15px 0 0 15px
 }
 .users-av-wraper > form > div:first-child{
     background-color: #efefef;
@@ -93,4 +93,18 @@
 /* EDIT INFO */
 #change-photo{
 	display: none;
+}
+
+.users-menu > li > a{
+    padding: 8px 10px !important;
+}
+
+/*Login-box*/
+.login-box{
+    width:400px
+}
+@media (max-width:399px) {
+    .login-box{
+    width:100%
+}
 }

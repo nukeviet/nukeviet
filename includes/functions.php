@@ -1649,10 +1649,11 @@ function nv_site_mods( $module_name = '' )
 	{
 		foreach( $site_mods as $m_title => $row )
 		{
-			$allowed = true;
-			$groups_view = ( string )$row['groups_view'];
-
-			if( defined( 'NV_IS_SPADMIN' ) )
+			if( ! nv_user_in_groups( $row['groups_view'] ) )
+			{
+				unset( $site_mods[$m_title] );
+			}
+			elseif( defined( 'NV_IS_SPADMIN' ) )
 			{
 				$site_mods[$m_title]['is_modadmin'] = true;
 			}
@@ -1660,29 +1661,12 @@ function nv_site_mods( $module_name = '' )
 			{
 				$site_mods[$m_title]['is_modadmin'] = true;
 			}
-			elseif( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
-			{
-				$allowed = false;
-			}
-			elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
-			{
-				$allowed = false;
-			}
-			elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
-			{
-				$allowed = false;
-			}
-
-			if( ! $allowed )
-			{
-				unset( $site_mods[$m_title] );
-			}
 		}
 		if( isset( $site_mods['users'] ) )
 		{
 			if( defined( 'NV_IS_USER' ) )
 			{
-				$user_ops = array( 'main', 'logout', 'changepass', 'openid', 'editinfo', 'changequestion', 'regroups', 'avatar' );
+				$user_ops = array( 'main', 'logout', 'editinfo', 'avatar' );
 			}
 			else
 			{
@@ -1774,4 +1758,44 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 		$sth->execute();
 	}
 	return true;
+}
+
+/**
+ * nv_redirect_encrypt()
+ *
+ * @param string $array
+ * @return string
+ *
+ */
+function nv_redirect_encrypt( $url )
+{
+	global $global_config, $crypt, $client_info;
+	$key = md5( $global_config['sitekey'] . $client_info['session_id'] );
+	return nv_base64_encode( $crypt->aes_encrypt( $url, $key ) );
+}
+
+/**
+ * nv_redirect_decrypt()
+ *
+ * @param tring $string
+ * @param boolean $insite
+ * @return string
+ *
+ */
+function nv_redirect_decrypt( $string, $insite = true )
+{
+	global $global_config, $crypt, $client_info;
+
+    if( empty( $string ) ) return '';
+
+	$key = md5( $global_config['sitekey'] . $client_info['session_id'] );
+	$url = $crypt->aes_decrypt( nv_base64_decode( $string ), $key );
+	if( $insite and preg_match( '/^(http|https|ftp|gopher)\:\/\//', $url ) )
+	{
+		if( ! preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN ) . '/', $url ) )
+		{
+			$url = '';
+		}
+	}
+	return $url;
 }

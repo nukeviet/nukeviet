@@ -121,7 +121,7 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 		if( ! empty( $array['full_name'] ) )
 		{
 			$base_url .= '&amp;full_name=' . rawurlencode( $array['full_name'] );
-			
+
 			$where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
 			$array_where[] =  "(" . $where_fullname ." LIKE '%" . $db->dblikeescape( $array['full_name'] ) . "%' )";
 		}
@@ -277,6 +277,10 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 
 	$xtpl->parse( 'resultdata' );
 	$contents = $xtpl->text( 'resultdata' );
+
+	include NV_ROOTDIR . '/includes/header.php';
+	echo $contents;
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 else
 {
@@ -306,8 +310,8 @@ else
 
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
-}
 
-include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme( $contents, 0 );
-include NV_ROOTDIR . '/includes/footer.php';
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_admin_theme( $contents, 0 );
+	include NV_ROOTDIR . '/includes/footer.php';
+}
