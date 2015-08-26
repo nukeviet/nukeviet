@@ -48,6 +48,7 @@ $lang_module['reply_user_send_title'] = 'Phản hồi tới';
 $lang_module['reply_user_title'] = 'Tiêu đề gửi';
 $lang_module['name_user_send_title'] = 'Tên người gửi';
 $lang_module['title_send_title'] = 'Tiêu đề gửi';
+$lang_module['send_time'] = 'Thời gian gửi';
 $lang_module['status_send_title'] = 'Trạng thái';
 $lang_module['content'] = 'Nội dung thông báo';
 $lang_module['content_title'] = 'Tên bài viết';
