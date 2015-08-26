@@ -31,6 +31,7 @@ if( ! isset( $contact_allowed['view'][$row['cid']] ) )
 $is_read = intval( $row['is_read'] );
 if( ! $is_read )
 {
+	nv_status_notification( NV_LANG_DATA, $module_name, 'contact_new', $row['id'] );
 	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=1 WHERE id=' . $id );
 	$is_read = 1;
 }
