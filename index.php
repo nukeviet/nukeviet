@@ -106,8 +106,6 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Tuy chon kieu giao dien
 			if( $nv_Request->isset_request( 'nv' . NV_LANG_DATA . 'themever', 'get' ) )
 			{
-				$theme_type = $nv_Request->get_title( 'nv' . NV_LANG_DATA . 'themever', 'get', '', 1 );
-				$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
 				if( empty( $global_config['switch_mobi_des'] ) )
 				{
 					$array_theme_type  = array_diff( $global_config['array_theme_type'], array( 'm' ) );
@@ -116,10 +114,12 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				{
 					$array_theme_type  =  $global_config['array_theme_type'];
 				}
-
+                
+                $theme_type = $nv_Request->get_title( 'nv' . NV_LANG_DATA . 'themever', 'get', '', 1 );
 				if( in_array( $theme_type, $array_theme_type ) ) $nv_Request->set_Cookie( 'nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME );
 
-				$nv_redirect = ! empty( $nv_redirect ) ? nv_redirect_decrypt( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+                $nv_redirect = nv_get_redirect( 'get' );
+				if( empty ( $nv_redirect ) ) $nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 				Header( 'Location: ' . nv_url_rewrite( $nv_redirect ) );
 				die();
 			}
@@ -154,8 +154,8 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 					$drag_block = $nv_Request->get_int( 'drag_block', 'get', 0 );
 					$nv_Request->set_Session( 'drag_block', $drag_block );
 
-					$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
-					$nv_redirect = ! empty( $nv_redirect ) ? nv_redirect_decrypt( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+					$nv_redirect = nv_get_redirect( 'get' );
+                    if( empty( $nv_redirect ) ) $nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 					Header( 'Location: ' . nv_url_rewrite( $nv_redirect, true ) );
 					die();
 				}
