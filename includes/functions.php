@@ -1762,6 +1762,33 @@ function nv_insert_notification( $module, $type, $content = array(), $obid = 0, 
 }
 
 /**
+ * nv_delete_notification()
+ *
+ * @param string $language
+ * @param string $module
+ * @param integer $obid
+ * @param string $type
+ * @param integer $send_from
+ * @param integer $area
+ * @return
+ */
+function nv_delete_notification( $language, $module, $type, $obid )
+{
+	global $db_config, $db, $global_config;
+
+	if( $global_config['notification_active'] )
+	{
+		$sth = $db->prepare( 'DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid = :obid AND type = :type' );
+		$sth->bindParam( ':language', $language, PDO::PARAM_STR );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+		$sth->execute();
+	}
+	return true;
+}
+
+/**
  * nv_status_notification()
  *
  * @param string $language

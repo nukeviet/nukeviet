@@ -160,6 +160,7 @@ $(function() {
 </div>
 <!-- END: comment -->
 
+<!-- BEGIN: others -->
 <div class="news_column panel panel-default">
 	<div class="panel-body other-news">
     	<!-- BEGIN: topic -->
@@ -222,6 +223,7 @@ $(function() {
     	<!-- END: related -->
     </div>
 </div>
+<!-- END: others -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->

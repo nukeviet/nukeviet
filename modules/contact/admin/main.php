@@ -21,6 +21,11 @@ if( ! empty( $mark ) and ( $mark == 'read' or $mark == 'unread' ) )
 		die( json_encode( array( 'status' => 'error', 'mess' => $lang_module['please_choose'] ) ) );
 	}
 
+	foreach( $sends as $id )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'contact_new', $id, $mark );
+	}
+
 	$sends = implode( ',', $sends );
 	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')' );
     die( json_encode( array( 'status' => 'ok', 'mess' => '' ) ) );
