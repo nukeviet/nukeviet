@@ -1723,16 +1723,16 @@ function nv_site_mods( $module_name = '' )
 /**
  * nv_insert_notification()
  *
- * @param integer $send_to
- * @param integer $send_from
- * @param int $module
  * @param string $module
  * @param string $type
- * @param integer $add_time
  * @param array $content
+ * @param int $obid
+ * @param integer $send_to
+ * @param integer $send_from
+ * @param integer $area
  * @return
  */
-function nv_insert_notification( $module, $type, $content = array(), $send_to = 0, $send_from = 0, $area = 1 )
+function nv_insert_notification( $module, $type, $content = array(), $obid = 0, $send_to = 0, $send_from = 0, $area = 1 )
 {
 	global $db_config, $db, $global_config;
 
@@ -1747,14 +1747,43 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 		!empty( $content ) && $content = serialize( $content );
 
 		$sth = $db->prepare( 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
-		(send_to, send_from, area, language, module, type, content, add_time, view)	VALUES
-		(:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
+		(send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
+		(:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
 		$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
 		$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
 		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
 		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
 		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
 		$sth->bindParam( ':content', $content, PDO::PARAM_STR );
+		$sth->execute();
+	}
+	return true;
+}
+
+/**
+ * nv_status_notification()
+ *
+ * @param string $language
+ * @param string $module
+ * @param integer $obid
+ * @param string $type
+ * @param integer $area
+ * @return
+ */
+function nv_status_notification( $language, $module, $type, $obid, $status = 1, $area = 1 )
+{
+	global $db_config, $db, $global_config;
+
+	if( $global_config['notification_active'] )
+	{
+		$sth = $db->prepare( 'UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view = :view WHERE language = :language AND module = :module AND obid = :obid AND type = :type AND area = :area' );
+		$sth->bindParam( ':view', $status, PDO::PARAM_INT );
+		$sth->bindParam( ':language', $language, PDO::PARAM_STR );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
 		$sth->execute();
 	}
 	return true;
