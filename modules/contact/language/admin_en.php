@@ -48,6 +48,7 @@ $lang_module['reply_user_send_title'] = 'Reply to';
 $lang_module['reply_user_title'] = 'Subject';
 $lang_module['name_user_send_title'] = 'Sender';
 $lang_module['title_send_title'] = 'Subject';
+$lang_module['send_time'] = 'Send time';
 $lang_module['status_send_title'] = 'Status';
 $lang_module['content'] = 'Content';
 $lang_module['content_title'] = 'Content title';
