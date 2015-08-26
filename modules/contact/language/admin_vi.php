@@ -78,3 +78,6 @@ $lang_module['otherVal'] = 'Giá trị';
 $lang_module['addNew'] = 'Thêm mới';
 $lang_module['cats'] = 'Các chủ đề liên quan';
 $lang_module['cat'] = 'Chủ đề';
+$lang_module['mark_as_unread'] = 'Đánh dấu là chưa đọc';
+$lang_module['mark_as_read'] = 'Đánh dấu là đã đọc';
+$lang_module['please_choose'] = 'Hãy chọn ít nhất một thư trong danh sách trên.';
