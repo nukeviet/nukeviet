@@ -10,23 +10,6 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$mark = $nv_Request->get_title( 'mark', 'post', '' );
-
-if( ! empty( $mark ) and ( $mark == 'read' or $mark == 'unread' ) )
-{
-	$mark = $mark == 'read' ? 1 : 0;
-	$sends = $nv_Request->get_array( 'sends', 'post', array() );
-	if( empty( $sends ) )
-	{
-		die( json_encode( array( 'status' => 'error', 'mess' => $lang_module['please_choose'] ) ) );
-	}
-
-	$sends = implode( ',', $sends );
-	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')' );
-    //Cho nay con can cap nhat NV_NOTIFICATION_GLOBALTABLE
-    die( json_encode( array( 'status' => 'ok', 'mess' => '' ) ) );
-}
-
 $page_title = $module_info['custom_title'];
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -43,7 +26,10 @@ if( ! empty( $contact_allowed['view'] ) )
 	$per_page = 30;
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 
-	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_' . $module_data . '_send' )->where( 'cid IN (' . $in . ')' );
+	$db->sqlreset()
+		->select( 'COUNT(*)' )
+		->from( NV_PREFIXLANG . '_' . $module_data . '_send' )
+		->where( 'cid IN (' . $in . ')' );
 
 	$num_items = $db->query( $db->sql() )->fetchColumn();
 
@@ -54,35 +40,29 @@ if( ! empty( $contact_allowed['view'] ) )
 		$a = 0;
 		$currday = mktime( 0, 0, 0, date( 'n' ), date( 'j' ), date( 'Y' ) );
 
-		$db->select( '*' )->order( 'id DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+		$db->select( '*' )
+			->order('id DESC')
+			->limit( $per_page )
+			->offset( ( $page - 1 ) * $per_page );
 
 		$result = $db->query( $db->sql() );
 
 		while( $row = $result->fetch() )
 		{
-			$image = array(
-				NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_new.gif',
-				12,
-				9 );
+			$image = array( NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_new.gif', 12, 9 );
 			$status = 'New';
 			$style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
 
 			if( $row['is_read'] == 1 )
 			{
-				$image = array(
-					NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_old.gif',
-					12,
-					11 );
+				$image = array( NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_old.gif', 12, 11 );
 				$status = $lang_module['tt1_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
 
 			if( $row['is_reply'] )
 			{
-				$image = array(
-					NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_reply.gif',
-					13,
-					14 );
+				$image = array( NV_BASE_SITEURL . NV_FILES_DIR . '/images/mail_reply.gif', 13, 14 );
 				$status = $lang_module['tt2_row_title'];
 				$style = " style=\"cursor:pointer;white-space:nowrap;\"";
 			}
@@ -93,13 +73,14 @@ if( ! empty( $contact_allowed['view'] ) )
 				'id' => $row['id'],
 				'sender_name' => $row['sender_name'],
 				'path' => $contact_allowed['view'][$row['cid']],
-				'cat' => $row['cat'],
+                'cat' => $row['cat'],
 				'title' => nv_clean60( $row['title'], 60 ),
 				'time' => $row['send_time'] >= $currday ? nv_date( 'H:i d/m/Y', $row['send_time'] ) : nv_date( 'd/m/Y', $row['send_time'] ),
 				'style' => $style,
 				'onclick' => $onclick,
 				'status' => $status,
-				'image' => $image ) );
+				'image' => $image
+			) );
 
 			$xtpl->parse( 'main.data.row' );
 		}
