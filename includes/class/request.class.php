@@ -280,7 +280,7 @@ class Request
 		}
 		elseif( defined( 'NV_ADMIN' ) )
 		{
-			$base_siteurl = preg_replace( '#/' . NV_ADMINDIR . '(.*)$#', '', $base_siteurl );
+			$base_siteurl = preg_replace( '#/' . NV_ADMINDIR . '(.*)$#i', '', $base_siteurl );
 		}
 		elseif( ! empty( $base_siteurl ) )
 		{
