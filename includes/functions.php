@@ -1870,6 +1870,7 @@ function nv_redirect_decrypt( $string, $insite = true )
  * nv_get_redirect()
  * 
  * @param string $mode
+ * @param bool $decode
  * @return
  */
 function nv_get_redirect( $mode = 'post,get', $decode = false )
