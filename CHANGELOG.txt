@@ -11,6 +11,7 @@ NUKEVIET 4.0.29 (No release)
 - Update Language Français, thank Nguyễn Phú Thành.
 - Update CKEditor 4.5.3
 - Class resquest: Fix block tag
+- Update notification	
 - Class image:  support image bmp 
 - Module siteinfo: fix check chmod dir
 - Seotools: Sorts siteDiagnostic
@@ -20,8 +21,9 @@ NUKEVIET 4.0.29 (No release)
 - Theme mobile: fix comment
 - Theme admin: update font size
 - Module news: Fix news detail, Fix rpc ping
+- Add function nv_redirect_encrypt, nv_redirect_decrypt
+- Update config CDN: support js, css, jpg, png, gif
 - Fix and update something...
-
 
 NUKEVIET 4.0.22 (Open beta 8)
 - Restructuring of NukeViet directory
