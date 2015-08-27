@@ -9,16 +9,16 @@
 <div class="page">
     <h2 class="margin-bottom-lg margin-top-lg">{LANG.editinfo_pagetitle}</h2>
     <ul class="users-menu nav nav-pills margin-bottom">
-        <li class="{BASIC_ACTIVE}"><a data-toggle="tab" href="#edit_basic">{LANG.edit_basic}</a></li>
-        <li class="{AVATAR_ACTIVE}"><a data-toggle="tab" href="#edit_avatar">{LANG.edit_avatar}</a></li>
-        <!-- BEGIN: edit_username --><li class="{USERNAME_ACTIVE}"><a data-toggle="tab" href="#edit_username">{LANG.edit_login}</a></li><!-- END: edit_username -->
-        <!-- BEGIN: edit_email --><li class="{EMAIL_ACTIVE}"><a data-toggle="tab" href="#edit_email">{LANG.edit_email}</a></li><!-- END: edit_email -->
-        <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" href="#edit_password">{LANG.edit_password}</a></li>
-        <li class="{QUESTION_ACTIVE}"><a data-toggle="tab" href="#edit_question">{LANG.edit_question}</a></li>
-        <!-- BEGIN: edit_openid --><li class="{OPENID_ACTIVE}"><a data-toggle="tab" href="#edit_openid">{LANG.openid_administrator}</a></li><!-- END: edit_openid -->
-        <!-- BEGIN: edit_group --><li class="{GROUP_ACTIVE}"><a data-toggle="tab" href="#edit_group">{LANG.group}</a></li><!-- END: edit_group -->
-        <!-- BEGIN: edit_others --><li class="{OTHERS_ACTIVE}"><a data-toggle="tab" href="#edit_others">{LANG.edit_others}</a></li><!-- END: edit_others -->
-        <li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" href="#edit_safemode">{LANG.safe_mode}</a></li>
+        <li class="{BASIC_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/basic" href="#edit_basic">{LANG.edit_basic}</a></li>
+        <li class="{AVATAR_ACTIVE}"><a data-toggle="tab" href="#edit_avatar" data-location="{EDITINFO_FORM}/avatar">{LANG.edit_avatar}</a></li>
+        <!-- BEGIN: edit_username --><li class="{USERNAME_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/username" href="#edit_username">{LANG.edit_login}</a></li><!-- END: edit_username -->
+        <!-- BEGIN: edit_email --><li class="{EMAIL_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/email" href="#edit_email">{LANG.edit_email}</a></li><!-- END: edit_email -->
+        <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/password" href="#edit_password">{LANG.edit_password}</a></li>
+        <li class="{QUESTION_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/question" href="#edit_question">{LANG.edit_question}</a></li>
+        <!-- BEGIN: edit_openid --><li class="{OPENID_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/openid" href="#edit_openid">{LANG.openid_administrator}</a></li><!-- END: edit_openid -->
+        <!-- BEGIN: edit_group --><li class="{GROUP_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/group" href="#edit_group">{LANG.group}</a></li><!-- END: edit_group -->
+        <!-- BEGIN: edit_others --><li class="{OTHERS_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/others" href="#edit_others">{LANG.edit_others}</a></li><!-- END: edit_others -->
+        <li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/safemode" href="#edit_safemode">{LANG.safe_mode}</a></li>
     </ul>
 
     <div class="tab-content margin-bottom-lg">
