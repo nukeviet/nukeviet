@@ -1,7 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.0.29 (No release)
+NUKEVIET 4.0.29 (Open beta 9)
 - Update module Contact
 - Update module Users.
 - Change Admin-toolbar
@@ -23,6 +23,7 @@ NUKEVIET 4.0.29 (No release)
 - Module news: Fix news detail, Fix rpc ping
 - Add function nv_redirect_encrypt, nv_redirect_decrypt
 - Update config CDN: support js, css, jpg, png, gif
+- Remove font Roboto
 - Fix and update something...
 
 NUKEVIET 4.0.22 (Open beta 8)
