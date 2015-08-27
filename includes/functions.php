@@ -1591,11 +1591,11 @@ function nv_change_buffer( $buffer )
 
     if ( ! empty( $global_config['cdn_url'] ) )
     {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"//" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
     }
     else
     {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
     }
 
     return $buffer;
@@ -1842,16 +1842,48 @@ function nv_redirect_decrypt( $string, $insite = true )
 {
 	global $global_config, $crypt, $client_info;
 
-    if( empty( $string ) ) return '';
+	if( empty( $string ) ) return '';
 
-	$key = md5( $global_config['sitekey'] . $client_info['session_id'] );
-	$url = $crypt->aes_decrypt( nv_base64_decode( $string ), $key );
-	if( $insite and preg_match( '/^(http|https|ftp|gopher)\:\/\//', $url ) )
+	if( preg_match( '/[^a-z0-9\-\_\,]/i', $string ) ) return '';
+
+	$string = nv_base64_decode( $string );
+	if( ! $string ) return '';
+
+	$url = $crypt->aes_decrypt( $string, md5( $global_config['sitekey'] . $client_info['session_id'] ) );
+	if( empty( $url ) ) return '';
+
+	if( preg_match( '/^(http|https|ftp|gopher)\:\/\//i', $url ) )
 	{
-		if( ! preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN ) . '/', $url ) )
+		if( $insite and ! preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN ) . '/', $url ) )
 		{
-			$url = '';
+			return '';
 		}
+
+		if( ! nv_is_url( $url ) ) return '';
 	}
+	elseif( ! nv_is_url( NV_MY_DOMAIN . $url ) ) return '';
+
 	return $url;
+}
+
+/**
+ * nv_get_redirect()
+ * 
+ * @param string $mode
+ * @return
+ */
+function nv_get_redirect( $mode = 'post,get' )
+{
+	global $nv_Request;
+
+	$nv_redirect = '';
+    if( $mode != 'post' and $mode != 'get' ) $mode = 'post,get';
+
+	if( $nv_Request->isset_request( 'nv_redirect', $mode ) )
+	{
+		$nv_redirect = $nv_Request->get_title( 'nv_redirect', $mode, '' );
+		if( nv_redirect_decrypt( $nv_redirect ) == '' ) $nv_redirect = '';
+	}
+    
+    return $nv_redirect;
 }

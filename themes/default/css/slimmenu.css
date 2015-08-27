@@ -138,6 +138,9 @@ ul.slimmenu li .sub-collapser > i {
 	display: inline-block;
 	vertical-align: middle;
 }
+ul.slimmenu li ul li .sub-collapser > i {
+    color: #333;
+}
 ul.slimmenu.collapsed li .sub-collapser > i{
     vertical-align: top;
     margin-top: 14px;
@@ -154,7 +157,7 @@ ul.slimmenu li ul {
 }
 ul.slimmenu li ul li {
 	display: block;
-	padding: 3px 0;
+	padding: 0;
 	text-align: left;
 	z-index: 1000;
 	clear: both;

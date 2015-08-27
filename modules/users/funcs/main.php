@@ -9,15 +9,15 @@
  */
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-$page_title = $module_info['custom_title'];
-$key_words = $module_info['keywords'];
-$mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
-
 if( isset( $array_op[0] ) )
 {
 	Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 	exit();
 }
+
+$page_title = $module_info['custom_title'];
+$key_words = $module_info['keywords'];
+$mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
 if( ! defined( 'NV_IS_ADMIN' ) and ! $global_config['allowuserlogin'] )
 {
@@ -27,8 +27,11 @@ else
 {
 	if( ! defined( 'NV_IS_USER' ) )
 	{
-        Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login', true ) );
-        exit();
+		$url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login';
+		$nv_redirect = nv_get_redirect();
+		if( ! empty( $nv_redirect ) ) $url .= '&nv_redirect=' . $nv_redirect;
+		Header( 'Location: ' . nv_url_rewrite( $url, true ) );
+		exit();
 	}
 	else
 	{

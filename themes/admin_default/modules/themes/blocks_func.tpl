@@ -31,7 +31,7 @@
 		</thead>
 		<tfoot>
 			<tr class="aright">
-				<td colspan="7">
+				<td colspan="7" class="text-right">
 					<em class="fa fa-plus-circle fa-lg">&nbsp;</em> <a class="block_content_fucs" href="javascript:void(0);">{LANG.block_add}</a>&nbsp;&nbsp;
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete_group_fucs" href="javascript:void(0);">{GLANG.delete}</a>&nbsp;&nbsp;
 					<em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.block_checkall}</a>&nbsp;&nbsp;
