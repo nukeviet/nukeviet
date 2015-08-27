@@ -81,7 +81,7 @@
 			</div>
 		</div>
 		<div class="col-sm-12">
-			<div id="upload-button-area">&nbsp;</div>
+			<div id="upload-button-area" title="{LANG.nv_max_size}: {NV_MAX_SIZE}">&nbsp;</div>
 		</div>
 	</div>
 	<div class="clearfix"></div>

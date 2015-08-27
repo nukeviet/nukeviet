@@ -1591,7 +1591,7 @@ function nv_change_buffer( $buffer )
 
     if ( ! empty( $global_config['cdn_url'] ) )
     {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"//" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+        $buffer = preg_replace( "/\<(script|link|img)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css|jpg|png|gif))['\"](.*?)\>/", "<\\1\\2\\3=\"//" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
     }
     else
     {
@@ -1868,7 +1868,7 @@ function nv_redirect_decrypt( $string, $insite = true )
 
 /**
  * nv_get_redirect()
- * 
+ *
  * @param string $mode
  * @param bool $decode
  * @return
@@ -1883,13 +1883,13 @@ function nv_get_redirect( $mode = 'post,get', $decode = false )
 	if( $nv_Request->isset_request( 'nv_redirect', $mode ) )
 	{
 		$nv_redirect = $nv_Request->get_title( 'nv_redirect', $mode, '' );
-        
+
         $rdirect = nv_redirect_decrypt( $nv_redirect );
 
         if( $decode ) return $rdirect;
 
 		if( empty( $rdirect ) ) $nv_redirect = '';
 	}
-    
+
     return $nv_redirect;
 }

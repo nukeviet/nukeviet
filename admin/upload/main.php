@@ -29,6 +29,7 @@ $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 if( $popup )
 {
 	$lang_module['browse_file'] = $lang_global['browse_file'];
+	$sys_max_size = min( $global_config['nv_max_size'], nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) );
 
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'ADMIN_THEME', $global_config['module_theme'] );
@@ -37,6 +38,7 @@ if( $popup )
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'NV_MAX_SIZE', nv_convertfromBytes( $sys_max_size ) );
 	$xtpl->assign( 'NV_MAX_WIDTH', NV_MAX_WIDTH );
 	$xtpl->assign( 'NV_MAX_HEIGHT', NV_MAX_HEIGHT );
 	$xtpl->assign( 'NV_MIN_WIDTH', 10 );
