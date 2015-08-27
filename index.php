@@ -154,7 +154,8 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 					$drag_block = $nv_Request->get_int( 'drag_block', 'get', 0 );
 					$nv_Request->set_Session( 'drag_block', $drag_block );
 
-					$nv_redirect = nv_get_redirect( 'get' );
+					$nv_redirect = nv_get_redirect( 'get', true );
+
                     if( empty( $nv_redirect ) ) $nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
 					Header( 'Location: ' . nv_url_rewrite( $nv_redirect, true ) );
 					die();
