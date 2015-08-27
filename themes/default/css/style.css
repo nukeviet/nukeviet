@@ -845,6 +845,9 @@ a.btn {
 .third-nav {
     position:relative;
     margin-bottom:6px;
+}
+
+.third-nav .row{
     border-bottom:1px solid #ddd;
 }
 
