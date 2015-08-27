@@ -1870,9 +1870,10 @@ function nv_redirect_decrypt( $string, $insite = true )
  * nv_get_redirect()
  * 
  * @param string $mode
+ * @param bool $decode
  * @return
  */
-function nv_get_redirect( $mode = 'post,get' )
+function nv_get_redirect( $mode = 'post,get', $decode = false )
 {
 	global $nv_Request;
 
@@ -1882,7 +1883,12 @@ function nv_get_redirect( $mode = 'post,get' )
 	if( $nv_Request->isset_request( 'nv_redirect', $mode ) )
 	{
 		$nv_redirect = $nv_Request->get_title( 'nv_redirect', $mode, '' );
-		if( nv_redirect_decrypt( $nv_redirect ) == '' ) $nv_redirect = '';
+        
+        $rdirect = nv_redirect_decrypt( $nv_redirect );
+
+        if( $decode ) return $rdirect;
+
+		if( empty( $rdirect ) ) $nv_redirect = '';
 	}
     
     return $nv_redirect;
