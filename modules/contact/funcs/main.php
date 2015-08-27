@@ -37,7 +37,7 @@ if ( ! empty( $array_department ) )
     }
 }
 
-if ( empty( $dpDefault ) )
+if ( empty( $dpDefault ) and ! empty( $array_department ) )
 {
 	$key_department= array_keys( $array_department );
 	$dpDefault = $key_department[0];
@@ -132,17 +132,19 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
     $fphone = nv_substr( $nv_Request->get_title( 'fphone', 'post', '', 1 ), 0, 100 );
     $sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
-    $sth = $db->prepare( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
+    $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
     (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES
-    (" . $fpart . ", :cat, :title, :content, " . NV_CURRENTTIME . ", " . $sender_id . ", :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)" );
-    $sth->bindParam( ':cat', $fcat, PDO::PARAM_STR );
-    $sth->bindParam( ':title', $ftitle, PDO::PARAM_STR );
-    $sth->bindParam( ':content', $fcon, PDO::PARAM_STR, strlen( $fcon ) );
-    $sth->bindParam( ':sender_name', $fname, PDO::PARAM_STR );
-    $sth->bindParam( ':sender_email', $femail, PDO::PARAM_STR );
-    $sth->bindParam( ':sender_phone', $fphone, PDO::PARAM_STR );
-    $sth->bindParam( ':sender_ip', $client_info['ip'], PDO::PARAM_STR );
-    if ( $sth->execute() )
+    (" . $fpart . ", :cat, :title, :content, " . NV_CURRENTTIME . ", " . $sender_id . ", :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)";
+	$data_insert = array();
+    $data_insert['cat'] = $fcat;
+    $data_insert['title'] = $ftitle;
+    $data_insert['content'] = $fcon;
+    $data_insert['sender_name'] = $fname;
+    $data_insert['sender_email'] = $femail;
+    $data_insert['sender_phone'] = $fphone;
+    $data_insert['sender_ip'] = $client_info['ip'];
+	$row_id = $db->insert_id( $sql, 'id', $data_insert );
+    if ( $row_id > 0 )
     {
         $xtpl = new XTemplate( 'sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
         $xtpl->assign( 'LANG', $lang_module );
@@ -202,7 +204,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
             @nv_sendmail( $from, $email_list, $ftitle, $fcon );
         }
 
-        nv_insert_notification( $module_name, 'contact_new', array( 'title' => $ftitle ), 0, $sender_id, 1 );
+        nv_insert_notification( $module_name, 'contact_new', array( 'title' => $ftitle ), $row_id, 0, $sender_id, 1 );
 
         die( json_encode( array(
             'status' => 'ok',

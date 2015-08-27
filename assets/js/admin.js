@@ -7,8 +7,8 @@
  */
 
 function nv_admin_logout() {
-	confirm(nv_admlogout_confirm[0]) && $.get(nv_siteroot + "index.php?second=admin_logout&js=1&nocache=" + (new Date).getTime(), function(b) {
-		1 == b && (alert(nv_admlogout_confirm[1]), window.location.href = 1 == nv_area_admin ? nv_siteroot + "index.php" : strHref)
+	confirm(nv_admlogout_confirm[0]) && $.get(nv_base_siteurl + "index.php?second=admin_logout&js=1&nocache=" + (new Date).getTime(), function(b) {
+		1 == b && (alert(nv_admlogout_confirm[1]), window.location.href = 1 == nv_area_admin ? nv_base_siteurl + "index.php" : strHref)
 	});
 	return !1
 }

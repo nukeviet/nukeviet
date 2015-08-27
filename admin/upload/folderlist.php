@@ -20,7 +20,7 @@ function nv_set_dir_class( $array )
 {
 	$class = array( 'folder' );
 	$menu = false;
-	
+
 	if( ! empty( $array ) )
 	{
 		foreach( $array as $key => $item )
@@ -33,12 +33,12 @@ function nv_set_dir_class( $array )
 	}
 
 	$class = implode( ' ', $class );
-	
+
 	if( $menu )
 	{
 		$class .= ' menu';
 	}
-	
+
 	return $class;
 }
 
@@ -77,18 +77,18 @@ function viewdirtree( $dir, $currentpath )
 
 			$xtpl = new XTemplate( 'foldlist.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 			$xtpl->assign( 'DIRTREE', $tree );
-			
+
 			if( empty( $content2 ) )
 			{
 				$content2 = '<li class="hide">&nbsp;</li>';
 			}
-			
+
 			if( ! empty( $content2 ) )
 			{
 				$xtpl->assign( 'TREE_CONTENT', $content2 );
 				$xtpl->parse( 'tree.tree_content' );
 			}
-			
+
 			$xtpl->parse( 'tree' );
 			$content .= $xtpl->text( 'tree' );
 		}
@@ -98,17 +98,11 @@ function viewdirtree( $dir, $currentpath )
 }
 
 $path = nv_check_path_upload( $nv_Request->get_string( 'path', 'get,post', NV_UPLOADS_DIR ) );
-
 if( empty( $path ) )
 {
-	if( $global_config['idsite'] or ! defined( 'NV_IS_SPADMIN' ) )
-	{
-		$path = NV_UPLOADS_DIR;
-	}
+	$path = NV_UPLOADS_DIR;
 }
-
 $currentpath = nv_check_path_upload( $nv_Request->get_string( 'currentpath', 'request', NV_UPLOADS_DIR ) );
-
 $check_allow_upload_dir = nv_check_allow_upload_dir( $path );
 
 $data = array();

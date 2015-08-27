@@ -211,7 +211,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
 			data: 'module=' + $this.data('title'),
 			dataType: 'json',
 			success: function(e){
@@ -244,7 +244,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=recreate_mod&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=recreate_mod&nocache=' + new Date().getTime(),
 			data: 'mod=' + $container.data('title') + '&sample=' + $container.find('.option').val(),
 			success: function(e){
 				$container.modal('hide');
@@ -278,7 +278,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
 			data: 'module=' + $this.data('title') + '&setup=1',
 			dataType: 'json',
 			success: function(e){

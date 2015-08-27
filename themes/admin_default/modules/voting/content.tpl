@@ -68,7 +68,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>{LANG.voting_question}</td>
+							<td>{LANG.voting_question}<sup class="required">(*)</sup></td>
 							<td><input class="form-control" type="text" name="question" size="60" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}"  oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')"/></td>
 						</tr>
 						<tr>
@@ -95,7 +95,7 @@
 							</tr>
 							<!-- END: item -->
 							<tr>
-								<td class="text-right">{LANG.voting_question_num} {NEW_ITEM}</td>
+								<td class="text-right">{LANG.voting_question_num} {NEW_ITEM}<sup class="required">(*)</sup></td>
 								<td><input class="form-control" type="text" value="" name="answervotenews[]" /></td>
 								<td><input class="form-control" type="text" value="" name="urlvotenews[]"/></td>
 							</tr>
@@ -138,7 +138,7 @@ $(document).ready(function() {
 		changeMonth : true,
 		changeYear : true,
 		showOtherMonths : true,
-		buttonImage : nv_siteroot + "assets/images/calendar.gif",
+		buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 		buttonImageOnly : true
 	});
 });

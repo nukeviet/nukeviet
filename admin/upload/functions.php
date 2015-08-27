@@ -178,30 +178,11 @@ function nv_check_path_upload( $path )
 
 	$path = str_replace( "\\", '/', $path );
 	$path = str_replace( NV_ROOTDIR . '/', '', $path );
-
-	$result = false;
-	if( $global_config['idsite'] )
+	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '/', $path ) or $path = NV_UPLOADS_DIR )
 	{
-		if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '/', $path ) or $path = NV_UPLOADS_DIR )
-		{
-			$result = true;
-		}
+		return $path;
 	}
-	else
-	{
-		foreach( $allow_upload_dir as $dir )
-		{
-			$dir = nv_preg_quote( $dir );
-			if( preg_match( '/^' . $dir . '/', $path ) )
-			{
-				$result = true;
-				break;
-			}
-		}
-	}
-
-	if( $result === false ) return '';
-	return $path;
+	return '';
 }
 
 /**
@@ -214,7 +195,7 @@ function nv_get_viewImage( $fileName )
 {
 	global $array_thumb_config;
 
-	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|ico)))$/i', $fileName, $m ) )
+	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|ico)))$/i', $fileName, $m ) )
 	{
 		$viewFile = NV_FILES_DIR . '/' . $m[1];
 
@@ -320,7 +301,7 @@ function nv_get_viewImage( $fileName )
 	else
 	{
 		$size = @getimagesize( NV_ROOTDIR . '/' . $fileName );
-		return array( $viewFile, $size[0], $size[1] );
+		return array( $fileName, $size[0], $size[1] );
 	}
 	return false;
 }
@@ -542,10 +523,10 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 	return $real_dirlist;
 }
 
-$allow_upload_dir = array( SYSTEM_UPLOADS_DIR );
+$allow_upload_dir = array( NV_UPLOADS_DIR );
 $array_hidefolders = array( '.', '..', 'index.html', '.htaccess', '.tmp' );
 
-$array_images = array( 'gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'ico' );
+$array_images = array( 'gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'bmp', 'ico' );
 $array_flash = array( 'swf', 'swc', 'flv' );
 $array_archives = array( 'rar', 'zip', 'tar' );
 $array_documents = array( 'doc', 'xls', 'chm', 'pdf', 'docx', 'xlsx' );
@@ -573,18 +554,7 @@ unset( $array_dirname[''] );
 
 if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 {
-	$real_dirlist = array();
-	if( $global_config['idsite'] )
-	{
-		$real_dirlist = nv_listUploadDir( NV_UPLOADS_DIR, $real_dirlist );
-	}
-	else
-	{
-		foreach( $allow_upload_dir as $dir )
-		{
-			$real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
-		}
-	}
+	$real_dirlist = nv_listUploadDir( NV_UPLOADS_DIR );
 	$dirlist = array_keys( $array_dirname );
 	$result_no_exit = array_diff( $dirlist, $real_dirlist );
 	foreach( $result_no_exit as $dirname )

@@ -97,7 +97,7 @@ $(function() {
 		changeMonth : true,
 		changeYear : true,
 		showOtherMonths : true,
-		buttonImage : nv_siteroot + "assets/images/calendar.gif",
+		buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 		buttonImageOnly : true
 	});
 

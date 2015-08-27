@@ -8,12 +8,48 @@
  * @Createdate 21-04-2011 11:17
  */
 
-if( !defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $arr = array();
 $arr['title'] = '';
 $arr['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 $error = '';
+
+/**
+ * @param int $mid
+ * @param int $parentid
+ * @param int $sort
+ * @param int $lev
+ * @param string $mod_name
+ * @param array $array_item
+ * @param int $key
+ */
+function nv_menu_insert_submenu( $mid, $parentid, &$sort, $lev, $mod_name, $array_item, $key )
+{
+	global $db, $module_data;
+
+	$array_sub_id = array();
+	$subweight = 0;
+	$sublev = $lev + 1;
+	foreach( $array_item as $subkey => $subitem )
+	{
+		if( isset( $subitem['parentid'] ) and $subitem['parentid'] == $key )
+		{
+			++$subweight;
+			++$sort;
+			$groups_view = ( isset( $subitem['groups_view'] ) ) ? $subitem['groups_view'] : '6';
+			$subparentid = nv_menu_insert_id( $mid, $parentid, $subitem['title'], $subweight, $sort, $lev, $mod_name, $subitem['alias'], $groups_view );
+			$array_sub_id[] = $subparentid;
+
+			nv_menu_insert_submenu( $mid, $subparentid, $sort, $sublev, $mod_name, $array_item, $subkey );
+		}
+	}
+
+	if( ! empty( $array_sub_id ) )
+	{
+		$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $array_sub_id ) . "' WHERE id=" . $parentid );
+	}
+}
 
 /**
  * nv_menu_insert_id()
@@ -28,6 +64,7 @@ $error = '';
  * @param mixed $op_mod
  * @param mixed $groups_view
  * @return
+ *
  */
 function nv_menu_insert_id( $mid, $parentid, $title, $weight, $sort, $lev, $mod_name, $op_mod, $groups_view )
 {
@@ -53,7 +90,7 @@ function nv_menu_insert_id( $mid, $parentid, $title, $weight, $sort, $lev, $mod_
 	)";
 
 	$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod_name;
-	if( !empty( $op_mod ) )
+	if( ! empty( $op_mod ) )
 	{
 		$link .= '&amp;' . NV_OP_VARIABLE . '=' . $op_mod;
 	}
@@ -90,7 +127,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	{
 		$stmt = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title= :title WHERE id =' . $arr['id'] );
 		$stmt->bindParam( ':title', $arr['title'], PDO::PARAM_STR );
-		if( !$stmt->execute() )
+		if( ! $stmt->execute() )
 		{
 			$error = $lang_module['errorsave'];
 		}
@@ -124,18 +161,20 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 						include NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php';
 						foreach( $array_item as $key => $item )
 						{
-							$pid = ( isset( $item['parentid'] )) ? $item['parentid'] : 0;
+							$pid = ( isset( $item['parentid'] ) ) ? $item['parentid'] : 0;
 							if( empty( $pid ) )
 							{
 								++$subweight;
 								++$sort;
-								$groups_view = ( isset( $item['groups_view'] )) ? $item['groups_view'] : '6';
-								$array_sub_id[] = nv_menu_insert_id( $mid, $parentid, $item['title'], $subweight, $sort, 1, $mod_name, $item['alias'], $groups_view );
+								$groups_view = ( isset( $item['groups_view'] ) ) ? $item['groups_view'] : '6';
+								$subparentid = nv_menu_insert_id( $mid, $parentid, $item['title'], $subweight, $sort, 1, $mod_name, $item['alias'], $groups_view );
+								$array_sub_id[] = $subparentid;
+								nv_menu_insert_submenu( $mid, $subparentid, $sort, 2, $mod_name, $array_item, $key );
 							}
 						}
 					}
 					// Thêm menu từ các funtion
-					if( !empty( $modvalues['funcs'] ) )
+					if( ! empty( $modvalues['funcs'] ) )
 					{
 						foreach( $modvalues['funcs'] as $key => $sub_item )
 						{
@@ -147,7 +186,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 							}
 						}
 					}
-					if( !empty( $array_sub_id ) )
+					if( ! empty( $array_sub_id ) )
 					{
 						$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $array_sub_id ) . "' WHERE id=" . $parentid );
 					}
@@ -162,40 +201,26 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 			// Thêm menu từ các chủ đề của module
 			if( file_exists( NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php' ) )
 			{
-				$array_item = array();
 				$mod_data = $modvalues['module_data'];
+
+				$array_item = array();
 				include NV_ROOTDIR . '/modules/' . $modvalues['module_file'] . '/menu.php';
 				foreach( $array_item as $key => $item )
 				{
-					$pid = ( isset( $item['parentid'] )) ? $item['parentid'] : 0;
+					$pid = ( isset( $item['parentid'] ) ) ? $item['parentid'] : 0;
 					if( empty( $pid ) )
 					{
 						++$weight;
 						++$sort;
-						$groups_view = ( isset( $item['groups_view'] )) ? $item['groups_view'] : '6';
+						$groups_view = ( isset( $item['groups_view'] ) ) ? $item['groups_view'] : '6';
 						$parentid = nv_menu_insert_id( $mid, 0, $item['title'], $weight, $sort, 0, $mod_name, $item['alias'], $groups_view );
-						$array_sub_id = array();
-						$subweight = 0;
-						foreach( $array_item as $subitem )
-						{
-							if( isset( $subitem['parentid'] ) and $subitem['parentid'] == $key )
-							{
-								++$subweight;
-								++$sort;
-								$groups_view = ( isset( $subitem['groups_view'] )) ? $subitem['groups_view'] : '6';
-								$array_sub_id[] = nv_menu_insert_id( $mid, $parentid, $subitem['title'], $subweight, $sort, 1, $mod_name, $subitem['alias'], $groups_view );
-							}
-						}
-						if( !empty( $array_sub_id ) )
-						{
-							$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $array_sub_id ) . "' WHERE id=" . $parentid );
-						}
+						nv_menu_insert_submenu( $mid, $parentid, $sort, 1, $mod_name, $array_item, $key );
 					}
 				}
 			}
 
 			// Thêm menu từ các funtion
-			if( !empty( $modvalues['funcs'] ) )
+			if( ! empty( $modvalues['funcs'] ) )
 			{
 				foreach( $modvalues['funcs'] as $key => $sub_item )
 				{
@@ -214,7 +239,7 @@ if( $nv_Request->get_int( 'save', 'post' ) )
 	}
 
 }
-elseif( !empty( $arr['id'] ) )
+elseif( ! empty( $arr['id'] ) )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $arr['id'];
 	$result = $db->query( $sql );
@@ -232,7 +257,7 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'OP', $op );
-if( !empty( $error ) )
+if( ! empty( $error ) )
 {
 	$xtpl->assign( 'ERROR', $error );
 	$xtpl->parse( 'main.error' );

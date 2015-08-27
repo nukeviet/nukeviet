@@ -48,6 +48,11 @@ if ( ! nv_function_exists( 'nv_module_menu' ) )
         {
             if( $_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main' )
             {
+                if( $module_name == "users"  )
+                {
+                    if( $_li['func_name'] == 'register' and ! $global_config['allowuserreg'] ) continue;
+                }
+
                 if( $_li['func_name'] == $op )
                 {
                     $active = "active";

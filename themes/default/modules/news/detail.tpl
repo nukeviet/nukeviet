@@ -33,7 +33,7 @@
 		<div class="clearfix margin-bottom-lg">
 			<!-- BEGIN: imgthumb -->
             <!-- BEGIN: note -->
-			<figure class="left pointer" onclick="modalShowByObj('#imgpreview');">
+			<figure class="article left pointer" onclick="modalShowByObj('#imgpreview');">
                 <div id="imgpreview" style="width:{DETAIL.image.width}px;">
                     <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
                     <figcaption>{DETAIL.image.note}</figcaption>
@@ -41,13 +41,13 @@
             </figure>
             <!-- END: note -->
             <!-- BEGIN: empty -->
-            <figure class="left noncaption pointer" style="width:{DETAIL.image.width}px;" onclick="modalShowByObj(this);">
+            <figure class="article left noncaption pointer" style="width:{DETAIL.image.width}px;" onclick="modalShowByObj(this);">
                     <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
             </figure>
             <!-- END: empty -->
 			<!-- END: imgthumb -->
     		<!-- BEGIN: imgfull -->
-    		<figure class="center">
+    		<figure class="article center">
     			<img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
     			<!-- BEGIN: note --><figcaption>{DETAIL.image.note}</figcaption><!-- END: note -->
     		</figure>
@@ -160,6 +160,7 @@ $(function() {
 </div>
 <!-- END: comment -->
 
+<!-- BEGIN: others -->
 <div class="news_column panel panel-default">
 	<div class="panel-body other-news">
     	<!-- BEGIN: topic -->
@@ -222,6 +223,7 @@ $(function() {
     	<!-- END: related -->
     </div>
 </div>
+<!-- END: others -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->

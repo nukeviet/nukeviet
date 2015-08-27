@@ -4,7 +4,7 @@ var myTimersecField = '';
 function timeoutsesscancel() {
 	clearInterval(myTimersecField);
 	$.ajax({
-		url : nv_siteroot + 'index.php?second=statimg',
+		url : nv_base_siteurl + 'index.php?second=statimg',
 		cache : false
 	}).done(function() {
 		$("#timeoutsess").hide();

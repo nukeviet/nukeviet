@@ -127,26 +127,43 @@ function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 function nv_comment_module( $module, $checkss, $area, $id, $allowed, $page, $status_comment = '' )
 {
 	global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info, $per_page_comment;
+
 	// Kiểm tra module có được Sử dụng chức năng bình luận
 	if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) )
 	{
-		if( $id > 0 and $module_config[$module]['activecomm'] == 1 )
+		if( $id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5( $module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX ) )
 		{
 			$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment;
 
 			// Kiểm tra quyền xem bình luận
-			$form_login = 0;
+			$form_login = array( 'display' => 0 );
 			$view_comm = nv_user_in_groups( $module_config[$module]['view_comm'] );
 
 			$allowed_comm = nv_user_in_groups( $allowed );
 			if( ! ( $view_comm and $allowed_comm ) and ! defined( 'NV_IS_USER' ) )
 			{
-				$form_login = 1;
+				$form_login['display'] = 1;
+				$allowed_tmp = explode( ',', $allowed );
+				if( sizeof( $allowed_tmp ) == 1 )
+				{
+					if( !empty( array_intersect( $allowed_tmp, array( 1, 2, 3 ) ) ) )
+					{
+						$form_login['display'] = 0;
+					}
+					else
+					{
+						$form_login['list_groups'] = $allowed;
+					}
+				}
+				else
+				{
+					$form_login['list_groups'] = $allowed;
+				}
 			}
-			$array_data = array();
 
 			$page_title = $module_info['custom_title'];
 			$key_words = $module_info['keywords'];
+			$array_data = array();
 
 			$sortcomm_old = $nv_Request->get_int( 'sortcomm', 'cookie', $module_config[$module]['sortcomm'] );
 			$sortcomm = $nv_Request->get_int( 'sortcomm', 'post,get', $sortcomm_old );
@@ -259,13 +276,13 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 
 		$xtpl->parse( 'main.sortcomm' );
 	}
-    
+
     if( !empty( $comment ) )
     {
         $xtpl->assign( 'COMMENTCONTENT', $comment );
         $xtpl->parse( 'main.showContent' );
     }
-	
+
 	$allowed_comm = nv_user_in_groups( $allowed_comm );
 	if( $allowed_comm )
 	{
@@ -334,11 +351,39 @@ function nv_theme_comment_module( $module, $area, $id, $allowed_comm, $checkss, 
 
 		$xtpl->parse( 'main.allowed_comm' );
 	}
-	elseif( $form_login )
+	elseif( $form_login['display'] )
 	{
-		$link_login = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=login&amp;nv_redirect=' . nv_base64_encode( $client_info['selfurl'] . '#formcomment' );
-		$xtpl->assign( 'COMMENT_LOGIN', '<a title="' . $lang_global['loginsubmit'] . '" href="' . $link_login . '">' . $lang_module_comment['comment_login'] . '</a>' );
-		$xtpl->parse( 'main.form_login' );
+		//Ajax login
+		if( $form_login['list_groups'] == 4 )
+		{
+			$xtpl->parse( 'main.form_login.message_login' );
+		}
+		else
+		{
+			$list_groups_name = '';
+			$list_groups = nv_groups_list_pub();
+			$form_login['list_groups'] = explode( ',', $form_login['list_groups'] );
+			$i=0;
+			foreach( $form_login['list_groups'] as $group_id )
+			{
+				if( isset( $list_groups[$group_id] ) )
+				{
+					if( $i == 0 )
+					{
+						$list_groups_name .= $list_groups[$group_id];
+					}
+					else
+					{
+						$list_groups_name .= ', ' . $list_groups[$group_id];
+					}
+					$i++;
+				}
+			}
+			$url_groups = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo';
+			$xtpl->assign( 'LANG_REG_GROUPS', sprintf( $lang_module_comment['comment_register_groups'], $list_groups_name, $url_groups ) );
+			$xtpl->parse( 'main.form_login.message_register_group' );
+		}
+        $xtpl->parse( 'main.form_login' );
 	}
 
 	$xtpl->parse( 'main' );
