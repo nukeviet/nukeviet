@@ -13,7 +13,7 @@ if( !defined( 'NV_IS_FILE_ADMIN' ) )
 $table_name = $db_config['prefix'] . '_' . $module_data . '_tabs';
 
 $arr_tab = array( );
-$arr_tab['introduce'] = $lang_module['status_1'];
+$arr_tab['introduce'] = 'introduce';
 $sql = 'SELECT * FROM ' . $table_name . ' where content = ' . $db->quote( 'content_customdata' ) . ' ORDER BY weight ASC';
 $result = $db->query( $sql );
 $field_lang = nv_file_table( $table_name );
@@ -87,11 +87,15 @@ $xtpl->assign( 'template', $template );
 
 if( $show_view )
 {
-	foreach( $arr_tab as $key => $value )
+	$arr_tab_tmp = $arr_tab;
+	$arr_tab_tmp['introduce'] = $lang_module['field_info_list'];
+	foreach( $arr_tab_tmp as $key => $value )
 	{
 		$xtpl->assign( 'title_tab', $value );
 		$xtpl->parse( 'main.view.title_tab' );
 	}
+	unset( $arr_tab_tmp );
+
 	while( $view = $sth->fetch( ) )
 	{
 		$arr_display_tab = unserialize( $view['tab'] );
@@ -180,16 +184,22 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )// luu lai
 			}
 		}
 	}
+
 	foreach( $arr as $key => $value )// loai bo phan tu trung nhau
 	{
 		$arr_tab_tpl[$key] = array_unique( $value );
 	}
-	file_put_contents( NV_ROOTDIR . '/themes/default/modules/' . $module_file . '/tab_introduce.tpl', '', LOCK_EX );
+
+	if( !file_exists( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl' ) )
+	{
+		nv_mkdir( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name, 'files_tpl' );
+	}
+
 	foreach( $arr_tab_tpl as $key => $value )
 	{
-		$name_file = 'tab_' . str_replace( '-', '_', strtolower( change_alias( $arr_tab[$key] ) ) ) . '.tpl';
+		$name_file = 'tab-' . strtolower( change_alias( $arr_tab[$key] ) ) . '-' . NV_LANG_DATA .  '.tpl';
 		$html_tpl = "<!-- BEGIN: main -->\n";
-		$html_tpl .= "\t<ul>\n\n";
+		$html_tpl .= "\t<ul>\n";
 
 		foreach( $value as $key => $val )
 		{
@@ -197,13 +207,13 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )// luu lai
 			$html_tpl .= "\t\t\t<li>\n";
 			$html_tpl .= "\t\t\t\t<p> <strong>{CUSTOM_LANG." . $val . "}:</strong> {CUSTOM_DATA." . $val . "}</p>\n";
 			$html_tpl .= "\t\t\t</li>\n";
-			$html_tpl .= "\t\t<!-- END: " . $val . " -->\n\n";
+			$html_tpl .= "\t\t<!-- END: " . $val . " -->\n";
 		}
 
-		$html_tpl .= "\t<ul>\n";
+		$html_tpl .= "\t</ul>\n";
 		$html_tpl .= "<!-- END: main -->";
 
-		file_put_contents( NV_ROOTDIR . '/themes/default/modules/' . $module_file . '/' . $name_file, $html_tpl, LOCK_EX );
+		file_put_contents( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/' . $name_file, $html_tpl, LOCK_EX );
 	}
 	Header( 'Location:' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=template' );
 	exit ;

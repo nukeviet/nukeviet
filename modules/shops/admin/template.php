@@ -59,16 +59,19 @@ if( !empty( $savecat ) )
 
 	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '' ), 0, 50 );
 	$data['alias'] = strtolower( change_alias( $data['title'] ) );
-	$stmt = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias=' . $db->quote( $data['alias'] ) )->fetchColumn( );
+
+	$count = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias=' . $db->quote( $data['alias'] ) . ' AND id!=' . $data['id'] )->fetchColumn();
+	if( $count > 0 )
+	{
+		$_tem_id = $db->query( 'SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias=' . $db->quote( $data['alias'] ) )->fetchColumn();
+		$data['alias'] = $data['alias'] . '-' . $_tem_id;
+	}
 
 	if( empty( $data['title'] ) )
 	{
 		$error = $lang_module['template_error_name'];
 	}
-	elseif( !empty( $stmt ) )
-	{
-		$error = $lang_module['block_error_alias'];
-	}
+
 	else
 	{
 		if( $data['id'] == 0 )

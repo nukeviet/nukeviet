@@ -574,7 +574,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 
 					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
-
 					Insertabl_catfields( $table_insert, $array_custom, $rowcontent['id'] );
 				}
 				if( !empty( $rowcontent['group_id'] ) )

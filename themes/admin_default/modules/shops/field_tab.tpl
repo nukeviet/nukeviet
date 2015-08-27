@@ -7,7 +7,6 @@
 			<colgroup>
 				<col class="w100" />
 				<col />
-				<col class="w100" />
 			</colgroup>
 			<thead>
 				<tr>
@@ -29,7 +28,7 @@
 					</select></td>
 					<td> {VIEW.field} </td>
 					<!-- BEGIN: tab -->
-					<td class="text-center"><input type="checkbox" name="check[{VIEW.fid}][{tab}]" value="{tab}" {CHECK} /></td>
+					<td class="text-center w200"><input type="checkbox" name="check[{VIEW.fid}][{tab}]" value="{tab}" {CHECK} /></td>
 					<!-- END: tab -->
 				</tr>
 				<!-- END: loop -->
