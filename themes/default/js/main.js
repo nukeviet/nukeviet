@@ -62,6 +62,13 @@ function timeoutsessrun() {
 	}, 1E3)
 }
 
+function locationReplace(url)
+{
+    if(history.pushState) {
+        history.pushState(null, null, url);
+    }
+}
+
 function checkWidthMenu() {
 	theme_responsive && "absolute" == $("#menusite").css("position") ? ($("li.dropdown ul").removeClass("dropdown-menu"), $("li.dropdown ul").addClass("dropdown-submenu"), $("li.dropdown a").addClass("dropdown-mobile"), $("#menu-site-default ul li a.dropdown-toggle").addClass("dropdown-mobile"), $("li.dropdown ul li a").removeClass("dropdown-mobile")) : ($("li.dropdown ul").addClass("dropdown-menu"), $("li.dropdown ul").removeClass("dropdown-submenu"), $("li.dropdown a").removeClass("dropdown-mobile"), $("li.dropdown ul li a").removeClass("dropdown-mobile"), $("#menu-site-default ul li a.dropdown-toggle").removeClass("dropdown-mobile"));
 	$("#menu-site-default .dropdown").hover(function() {
@@ -355,7 +362,11 @@ $(function() {
 	$("#openidBt").on("click", function() {
 		openID_result();
 		return !1
-	})
+	});
+    //Change Localtion
+    $("[data-location]").on("click",function(){
+        locationReplace($(this).data("location"))
+    })
 });
 // Fix bootstrap multiple modal
 $(document).on({
