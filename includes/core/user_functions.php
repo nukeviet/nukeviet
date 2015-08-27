@@ -237,12 +237,9 @@ function nv_blocks_content( $sitecontent )
 					if( defined( 'NV_IS_DRAG_BLOCK' ) )
 					{
 						$content = '<div class="portlet" id="bl_' . ( $_row['bid'] ) . '">
-							 <p>
-							 <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '">
-							 <img style="border:none" src="' . NV_BASE_SITEURL . NV_FILES_DIR . '/images/edit.png" alt="' . $lang_global['edit_block'] . '"/> ' . $lang_global['edit_block'] . '</a> | <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '">
-							 <img style="border:none" src="' . NV_BASE_SITEURL . NV_FILES_DIR . '/images/delete.png" alt="' . $lang_global['delete_block'] . '"/> ' . $lang_global['delete_block'] . '</a> | <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '">
-							 <img style="border:none" src="' . NV_BASE_SITEURL . NV_FILES_DIR . '/images/outgroup.png" alt="' . $lang_global['outgroup_block'] . '"/> ' . $lang_global['outgroup_block'] . '</a>
-							 </p>
+							 <div class="tool">
+							     <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '" alt="' . $lang_global['edit_block'] . '" title="' . $lang_global['edit_block'] . '"><em class="fa fa-wrench"></em></a><a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '" alt="' . $lang_global['delete_block'] . '" title="' . $lang_global['delete_block'] . '"><em class="fa fa-trash"></em></a><a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '" alt="' . $lang_global['outgroup_block'] . '" title="' . $lang_global['outgroup_block'] . '"><em class="fa fa-share-square-o"></em></a>
+							 </div>
 							 ' . $content . '</div>';
 					}
 
@@ -262,8 +259,9 @@ function nv_blocks_content( $sitecontent )
 		$array_keys = array_keys( $_posReal );
 		foreach( $array_keys as $__pos )
 		{
-			$_posReal[$__pos] = '<div class="column" id="' . ( preg_replace( '#\[|\]#', '', $__pos ) ) . '">' . $_posReal[$__pos];
-			$_posReal[$__pos] .= '	<span><a class="block_content" id="' . $__pos . '" href="javascript:void(0)"><img style="border:none" src="' . NV_BASE_SITEURL . NV_FILES_DIR . '/images/add.png" alt="' . $lang_global['add_block'] . '"/> ' . $lang_global['add_block'] . '</a></span>';
+			$__pos_name = str_replace( array( '[', ']' ),array('',''), $__pos );
+            $_posReal[$__pos] = '<div class="column" id="' . ( preg_replace( '#\[|\]#', '', $__pos ) ) . '">' . $_posReal[$__pos];
+			$_posReal[$__pos] .= '<a href="javascript:void(0);" class="add block_content" id="' . $__pos . '" title="' . $lang_global['add_block'] . ' ' . $__pos_name . '" alt="' . $lang_global['add_block'] . '"><em class="fa fa-plus"></em></a>';
 			$_posReal[$__pos] .= '</div>';
 		}
 	}
