@@ -284,8 +284,8 @@ function nv_check_valid_login( $login, $max, $min )
 	$login = trim( strip_tags( $login ) );
 
 	if( empty( $login ) ) return $lang_global['username_empty'];
-	if( isset( $login{$max} ) ) return sprintf( $lang_global['usernamelong'], $login, $max );
-	if( ! isset( $login{$min - 1} ) ) return sprintf( $lang_global['usernameadjective'], $login, $min );
+	if( isset( $login{$max} ) ) return sprintf( $lang_global['usernamelong'], $max );
+	if( ! isset( $login{$min - 1} ) ) return sprintf( $lang_global['usernameadjective'], $min );
 
 	$type = $global_config['nv_unick_type'];
 	switch( $type )
@@ -300,14 +300,8 @@ function nv_check_valid_login( $login, $max, $min )
 			$pattern = '/^[0-9a-z]+[0-9a-z\-\_\\s]+[0-9a-z]+$/i';
 			break;
 		case 4:
-			if( $login == strip_punctuation( $login ) )
-			{
-				return '';
-			}
-			else
-			{
-				return $lang_global['unick_type_' . $type];
-			}
+			return ( $login != strip_punctuation( $login ) ? $lang_global['unick_type_' . $type] : '' );
+            break;
 		default:
 			return '';
 	}
@@ -333,8 +327,8 @@ function nv_check_valid_pass( $pass, $max, $min )
 	$pass = trim( strip_tags( $pass ) );
 
 	if( empty( $pass ) ) return $lang_global['password_empty'];
-	if( isset( $pass{$max} ) ) return sprintf( $lang_global['passwordlong'], $pass, $max );
-	if( ! isset( $pass{$min - 1} ) ) return sprintf( $lang_global['passwordadjective'], $pass, $min );
+	if( isset( $pass{$max} ) ) return sprintf( $lang_global['passwordlong'], $max );
+	if( ! isset( $pass{$min - 1} ) ) return sprintf( $lang_global['passwordadjective'], $min );
 
 	$type = $global_config['nv_upass_type'];
 	if( $type == 1 )
@@ -389,11 +383,11 @@ function nv_check_valid_email( $mail )
 
 	if( empty( $mail ) ) return $lang_global['email_empty'];
 
-	if( function_exists( 'filter_var' ) and filter_var( $mail, FILTER_VALIDATE_EMAIL ) === false ) return sprintf( $lang_global['email_incorrect'], $mail );
+	if( function_exists( 'filter_var' ) and filter_var( $mail, FILTER_VALIDATE_EMAIL ) === false ) return $lang_global['email_incorrect'];
 
-	if( ! preg_match( $global_config['check_email'], $mail ) ) return sprintf( $lang_global['email_incorrect'], $mail );
+	if( ! preg_match( $global_config['check_email'], $mail ) ) return $lang_global['email_incorrect'];
 
-	if( ! preg_match( '/\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw|xxx)$/', $mail ) ) return sprintf( $lang_global['email_incorrect'], $mail );
+	if( ! preg_match( '/\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw|xxx)$/', $mail ) ) return $lang_global['email_incorrect'];
 
 	return '';
 }
@@ -662,57 +656,54 @@ function nv_show_name_user( $first_name, $last_name,  $user_name = '' )
  */
 function nv_date( $format, $time = 0 )
 {
-	global $lang_global;
+    global $lang_global;
 
-	if( ! $time ) $time = NV_CURRENTTIME;
-	$return = date( $format, $time );
+    if ( ! $time ) $time = NV_CURRENTTIME;
+    $format = str_replace( "r", "D, d M Y H:i:s O", $format );
+    $format = str_replace( array( "D", "M" ), array( "[D]", "[M]" ), $format );
+    $return = date( $format, $time );
 
-	$replaces = array(
-		'Sunday' => $lang_global['sunday'],
-		'Monday' => $lang_global['monday'],
-		'Tuesday' => $lang_global['tuesday'],
-		'Wednesday' => $lang_global['wednesday'],
-		'Thursday' => $lang_global['thursday'],
-		'Friday' => $lang_global['friday'],
-		'Saturday' => $lang_global['saturday'],
-		'January' => $lang_global['january'],
-		'February' => $lang_global['february'],
-		'March' => $lang_global['march'],
-		'April' => $lang_global['april'],
-		'May' => $lang_global['may'],
-		'June' => $lang_global['june'],
-		'July' => $lang_global['july'],
-		'August' => $lang_global['august'],
-		'September' => $lang_global['september'],
-		'October' => $lang_global['october'],
-		'November' => $lang_global['november'],
-		'December' => $lang_global['december']
-	);
-	$return = str_replace( array_keys( $replaces ), array_values( $replaces ), $return );
+    $replaces = array(
+        '/\[Sun\](\W|$)/' => $lang_global['sun'] . "$1",
+        '/\[Mon\](\W|$)/' => $lang_global['mon'] . "$1",
+        '/\[Tue\](\W|$)/' => $lang_global['tue'] . "$1",
+        '/\[Wed\](\W|$)/' => $lang_global['wed'] . "$1",
+        '/\[Thu\](\W|$)/' => $lang_global['thu'] . "$1",
+        '/\[Fri\](\W|$)/' => $lang_global['fri'] . "$1",
+        '/\[Sat\](\W|$)/' => $lang_global['sat'] . "$1",
+        '/\[Jan\](\W|$)/' => $lang_global['jan'] . "$1",
+        '/\[Feb\](\W|$)/' => $lang_global['feb'] . "$1",
+        '/\[Mar\](\W|$)/' => $lang_global['mar'] . "$1",
+        '/\[Apr\](\W|$)/' => $lang_global['apr'] . "$1",
+        '/\[May\](\W|$)/' => $lang_global['may2'] . "$1",
+        '/\[Jun\](\W|$)/' => $lang_global['jun'] . "$1",
+        '/\[Jul\](\W|$)/' => $lang_global['jul'] . "$1",
+        '/\[Aug\](\W|$)/' => $lang_global['aug'] . "$1",
+        '/\[Sep\](\W|$)/' => $lang_global['sep'] . "$1",
+        '/\[Oct\](\W|$)/' => $lang_global['oct'] . "$1",
+        '/\[Nov\](\W|$)/' => $lang_global['nov'] . "$1",
+        '/\[Dec\](\W|$)/' => $lang_global['dec'] . "$1",
+        '/Sunday(\W|$)/' => $lang_global['sunday'] . "$1",
+        '/Monday(\W|$)/' => $lang_global['monday'] . "$1",
+        '/Tuesday(\W|$)/' => $lang_global['tuesday'] . "$1",
+        '/Wednesday(\W|$)/' => $lang_global['wednesday'] . "$1",
+        '/Thursday(\W|$)/' => $lang_global['thursday'] . "$1",
+        '/Friday(\W|$)/' => $lang_global['friday'] . "$1",
+        '/Saturday(\W|$)/' => $lang_global['saturday'] . "$1",
+        '/January(\W|$)/' => $lang_global['january'] . "$1",
+        '/February(\W|$)/' => $lang_global['february'] . "$1",
+        '/March(\W|$)/' => $lang_global['march'] . "$1",
+        '/April(\W|$)/' => $lang_global['april'] . "$1",
+        '/May(\W|$)/' => $lang_global['may'] . "$1",
+        '/June(\W|$)/' => $lang_global['june'] . "$1",
+        '/July(\W|$)/' => $lang_global['july'] . "$1",
+        '/August(\W|$)/' => $lang_global['august'] . "$1",
+        '/September(\W|$)/' => $lang_global['september'] . "$1",
+        '/October(\W|$)/' => $lang_global['october'] . "$1",
+        '/November(\W|$)/' => $lang_global['november'] . "$1",
+        '/December(\W|$)/' => $lang_global['december'] . "$1" );
 
-	$replaces = array(
-		'Sun' => $lang_global['sun'],
-		'Mon' => $lang_global['mon'],
-		'Tue' => $lang_global['tue'],
-		'Wed' => $lang_global['wed'],
-		'Thu' => $lang_global['thu'],
-		'Fri' => $lang_global['fri'],
-		'Sat' => $lang_global['sat'],
-		'Jan' => $lang_global['jan'],
-		'Feb' => $lang_global['feb'],
-		'Mar' => $lang_global['mar'],
-		'Apr' => $lang_global['apr'],
-		'May' => $lang_global['may2'],
-		'Jun' => $lang_global['jun'],
-		'Jul' => $lang_global['jul'],
-		'Aug' => $lang_global['aug'],
-		'Sep' => $lang_global['sep'],
-		'Oct' => $lang_global['oct'],
-		'Nov' => $lang_global['nov'],
-		'Dec' => $lang_global['dec']
-	);
-
-	return str_replace( array_keys( $replaces ), array_values( $replaces ), $return );
+    return preg_replace( array_keys( $replaces ), array_values( $replaces ), $return );
 }
 
 /**
@@ -1001,7 +992,7 @@ function nv_sendmail( $from, $to, $subject, $message, $files = '' )
 	try
 	{
 		$mail = new PHPMailer;
-		$mail->SetLanguage( NV_LANG_INTERFACE, NV_ROOTDIR . '/language/' . NV_LANG_INTERFACE . '/' );
+		$mail->SetLanguage( NV_LANG_INTERFACE, NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/' );
 		$mail->CharSet = $global_config['site_charset'];
 
 		$mailer_mode = strtolower( $global_config['mailer_mode'] );
@@ -1600,11 +1591,11 @@ function nv_change_buffer( $buffer )
 
     if ( ! empty( $global_config['cdn_url'] ) )
     {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"//" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
     }
     else
     {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
+        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
     }
 
     return $buffer;
@@ -1658,10 +1649,11 @@ function nv_site_mods( $module_name = '' )
 	{
 		foreach( $site_mods as $m_title => $row )
 		{
-			$allowed = true;
-			$groups_view = ( string )$row['groups_view'];
-
-			if( defined( 'NV_IS_SPADMIN' ) )
+			if( ! nv_user_in_groups( $row['groups_view'] ) )
+			{
+				unset( $site_mods[$m_title] );
+			}
+			elseif( defined( 'NV_IS_SPADMIN' ) )
 			{
 				$site_mods[$m_title]['is_modadmin'] = true;
 			}
@@ -1669,29 +1661,12 @@ function nv_site_mods( $module_name = '' )
 			{
 				$site_mods[$m_title]['is_modadmin'] = true;
 			}
-			elseif( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
-			{
-				$allowed = false;
-			}
-			elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
-			{
-				$allowed = false;
-			}
-			elseif( defined( 'NV_IS_USER' ) and ! nv_user_in_groups( $groups_view ) )
-			{
-				$allowed = false;
-			}
-
-			if( ! $allowed )
-			{
-				unset( $site_mods[$m_title] );
-			}
 		}
 		if( isset( $site_mods['users'] ) )
 		{
 			if( defined( 'NV_IS_USER' ) )
 			{
-				$user_ops = array( 'main', 'logout', 'changepass', 'openid', 'editinfo', 'changequestion', 'regroups', 'avatar' );
+				$user_ops = array( 'main', 'logout', 'editinfo', 'avatar' );
 			}
 			else
 			{
@@ -1748,16 +1723,16 @@ function nv_site_mods( $module_name = '' )
 /**
  * nv_insert_notification()
  *
- * @param integer $send_to
- * @param integer $send_from
- * @param int $module
  * @param string $module
  * @param string $type
- * @param integer $add_time
  * @param array $content
+ * @param int $obid
+ * @param integer $send_to
+ * @param integer $send_from
+ * @param integer $area
  * @return
  */
-function nv_insert_notification( $module, $type, $content = array(), $send_to = 0, $send_from = 0, $area = 1 )
+function nv_insert_notification( $module, $type, $content = array(), $obid = 0, $send_to = 0, $send_from = 0, $area = 1 )
 {
 	global $db_config, $db, $global_config;
 
@@ -1769,18 +1744,146 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 
 	if( $global_config['notification_active'] )
 	{
-		$content = !empty( $content ) ? serialize( $content ) : '';
+		!empty( $content ) && $content = serialize( $content );
 
 		$sth = $db->prepare( 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
-		(send_to, send_from, area, language, module, type, content, add_time, view)	VALUES
-		(:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
+		(send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
+		(:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
 		$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
 		$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
 		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
 		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
 		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
 		$sth->bindParam( ':content', $content, PDO::PARAM_STR );
 		$sth->execute();
 	}
 	return true;
+}
+
+/**
+ * nv_delete_notification()
+ *
+ * @param string $language
+ * @param string $module
+ * @param integer $obid
+ * @param string $type
+ * @param integer $send_from
+ * @param integer $area
+ * @return
+ */
+function nv_delete_notification( $language, $module, $type, $obid )
+{
+	global $db_config, $db, $global_config;
+
+	if( $global_config['notification_active'] )
+	{
+		$sth = $db->prepare( 'DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid = :obid AND type = :type' );
+		$sth->bindParam( ':language', $language, PDO::PARAM_STR );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+		$sth->execute();
+	}
+	return true;
+}
+
+/**
+ * nv_status_notification()
+ *
+ * @param string $language
+ * @param string $module
+ * @param integer $obid
+ * @param string $type
+ * @param integer $area
+ * @return
+ */
+function nv_status_notification( $language, $module, $type, $obid, $status = 1, $area = 1 )
+{
+	global $db_config, $db, $global_config;
+
+	if( $global_config['notification_active'] )
+	{
+		$sth = $db->prepare( 'UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view = :view WHERE language = :language AND module = :module AND obid = :obid AND type = :type AND area = :area' );
+		$sth->bindParam( ':view', $status, PDO::PARAM_INT );
+		$sth->bindParam( ':language', $language, PDO::PARAM_STR );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
+		$sth->execute();
+	}
+	return true;
+}
+
+/**
+ * nv_redirect_encrypt()
+ *
+ * @param string $array
+ * @return string
+ *
+ */
+function nv_redirect_encrypt( $url )
+{
+	global $global_config, $crypt, $client_info;
+	$key = md5( $global_config['sitekey'] . $client_info['session_id'] );
+	return nv_base64_encode( $crypt->aes_encrypt( $url, $key ) );
+}
+
+/**
+ * nv_redirect_decrypt()
+ *
+ * @param tring $string
+ * @param boolean $insite
+ * @return string
+ *
+ */
+function nv_redirect_decrypt( $string, $insite = true )
+{
+	global $global_config, $crypt, $client_info;
+
+	if( empty( $string ) ) return '';
+
+	if( preg_match( '/[^a-z0-9\-\_\,]/i', $string ) ) return '';
+
+	$string = nv_base64_decode( $string );
+	if( ! $string ) return '';
+
+	$url = $crypt->aes_decrypt( $string, md5( $global_config['sitekey'] . $client_info['session_id'] ) );
+	if( empty( $url ) ) return '';
+
+	if( preg_match( '/^(http|https|ftp|gopher)\:\/\//i', $url ) )
+	{
+		if( $insite and ! preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN ) . '/', $url ) )
+		{
+			return '';
+		}
+
+		if( ! nv_is_url( $url ) ) return '';
+	}
+	elseif( ! nv_is_url( NV_MY_DOMAIN . $url ) ) return '';
+
+	return $url;
+}
+
+/**
+ * nv_get_redirect()
+ * 
+ * @param string $mode
+ * @return
+ */
+function nv_get_redirect( $mode = 'post,get' )
+{
+	global $nv_Request;
+
+	$nv_redirect = '';
+    if( $mode != 'post' and $mode != 'get' ) $mode = 'post,get';
+
+	if( $nv_Request->isset_request( 'nv_redirect', $mode ) )
+	{
+		$nv_redirect = $nv_Request->get_title( 'nv_redirect', $mode, '' );
+		if( nv_redirect_decrypt( $nv_redirect ) == '' ) $nv_redirect = '';
+	}
+    
+    return $nv_redirect;
 }

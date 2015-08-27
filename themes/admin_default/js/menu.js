@@ -12,7 +12,7 @@ function nv_link_settitle(alias, module) {
 	if (new_status != 0) {
 		$('input#module').val(module);
 		$('input#op').val(new_status);
-		$('input#link').val(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + module + "&" + nv_fc_variable + "=" + new_status);
+		$('input#link').val(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + module + "&" + nv_fc_variable + "=" + new_status);
 		var new_text = document.getElementById('module_sub_menu').options[document.getElementById('module_sub_menu').selectedIndex].text;
 		$('input#title').val(trim(new_text));
 	}
@@ -26,7 +26,7 @@ function nv_link_module(module) {
 
 	$('input#title').val(trim(new_text));
 	if (new_status != 0) {
-		$('input#link').val(nv_siteroot + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + new_status);
+		$('input#link').val(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + new_status);
 		$('input#module').val(new_status);
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_module&nocache=' + new Date().getTime(), 'module=' + new_status, function(res) {
 			$('#thu').html(res);
@@ -38,11 +38,12 @@ function nv_link_module(module) {
 	}
 }
 
-function nv_link_menu(blog_menu) {
+function nv_link_menu(blog_menu, parentid) {
 	var nv_timer = nv_settimeout_disable('item_menu_' + blog_menu, 2000);
 	var new_status = document.getElementById('item_menu_' + blog_menu).options[document.getElementById('item_menu_' + blog_menu).selectedIndex].value;
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_menu&nocache=' + new Date().getTime(), 'mid=' + new_status, function(res) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=link_menu&nocache=' + new Date().getTime(), 'mid=' + new_status + '&parentid=' + parentid, function(res) {
 		$('#parentid').html(res);
+		$('#parentid').select2();
 	});
 }
 

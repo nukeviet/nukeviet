@@ -124,7 +124,7 @@ if( file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 	elseif( $nv_Request->isset_request( 'saveall', 'post' ) and $nv_Request->isset_request( 'layout', 'post' ) )
 	{
 		$layout = $nv_Request->get_string( 'layout', 'post' );
-		$module = $nv_Request->get_string( 'module', 'post' );
+		$module = $nv_Request->get_string( 'block_module', 'post' );
 		if( in_array( $layout, $layout_array) )
 		{
 			if( empty( $module ) )

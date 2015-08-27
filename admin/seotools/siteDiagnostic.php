@@ -47,7 +47,10 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 		$refresh = 0;
 		$imgs = array();
 		$a = 1;
-		foreach( $info['item'] as $inf )
+
+		$info_item = $info['item'];
+		krsort($info_item);
+		foreach( $info_item as $inf )
 		{
 			$refresh = strtotime( $inf['date'] );
 			$class_PageRank = ( isset( $imgs['PageRank'] ) and $imgs['PageRank'] > $inf['PageRank'] ) ? 'down' : ( ( isset( $imgs['PageRank'] ) and $imgs['PageRank'] < $inf['PageRank'] ) ? 'up' : 'pix' );
@@ -75,7 +78,7 @@ if( $nv_Request->isset_request( 'i', 'get' ) )
 				'PageRank' => array(
 					'class' => ' class="' . $class_PageRank . '"',
 					'style' => 'text-align:right',
-					'content' => '<img alt="' . $inf['PageRank'] . '" src="' . NV_BASE_SITEURL . 'images/rank/' . $inf['PageRank'] . '.gif" width="42" height="7" /> ' . number_format( $inf['PageRank'] )
+					'content' => '<img alt="' . $inf['PageRank'] . '" src="' . NV_BASE_SITEURL . NV_FILES_DIR . '/images/rank/' . $inf['PageRank'] . '.gif" width="42" height="7" /> ' . number_format( $inf['PageRank'] )
 				),
 				'AlexaRank' => array(
 					'class' => ' class="' . $class_AlexaRank . '"',

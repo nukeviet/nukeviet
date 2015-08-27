@@ -70,14 +70,10 @@ if( defined( 'NV_IS_GODADMIN' ) and substr( $sys_info['os'], 0, 3 ) != 'WIN' )
 		{
 			if( preg_match( '/^([a-z0-9\_]+)$/', $modname ) )
 			{
-				$info['chmod']['field'][] = array( 'key' => NV_CACHEDIR . '/' .$modname, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) );
+				$info['chmod']['field'][] = array( 'key' => NV_CACHEDIR . '/' .$modname, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' .$modname ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) );
 			}
 		}
 		closedir( $dh );
-	}
-	if( NV_SESSION_SAVE_PATH != '' )
-	{
-		$info['chmod']['field'][] = array( 'key' => NV_SESSION_SAVE_PATH, 'value' => ( is_writable( NV_ROOTDIR . '/' . NV_SESSION_SAVE_PATH ) ? $lang_module['chmod_noneed'] : $lang_module['chmod_need'] ) );
 	}
 }
 

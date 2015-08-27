@@ -26,7 +26,7 @@ $closed_site_Modes[3] = $lang_module['closed_site_3'];
 $allow_sitelangs = array();
 foreach( $global_config['allow_sitelangs'] as $lang_i )
 {
-	if( file_exists( NV_ROOTDIR . '/language/' . $lang_i . '/global.php' ) )
+	if( file_exists( NV_ROOTDIR . '/includes/language/' . $lang_i . '/global.php' ) )
 	{
 		$allow_sitelangs[] = $lang_i;
 	}
@@ -88,7 +88,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$my_domains = array_map( 'trim', explode( ',', $my_domains ) );
 			foreach( $my_domains as $dm )
 			{
-				$dm = preg_replace( '/^(http|https|ftp|gopher)\:\/\//', '', $dm );
+				$dm = preg_replace( '/^(http|https)\:\/\//', '', $dm );
 				$dm = preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $dm );
 				$_p  = '';
 				if( preg_match( '/(.*)\:([0-9]+)$/', $dm, $m ) )
@@ -107,6 +107,12 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$array_config_global['my_domains'] = implode( ',', $array_config_global['my_domains'] );
 
 		$array_config_global['ssl_https'] = $nv_Request->get_int( 'ssl_https', 'post' );
+
+		if( $array_config_global['ssl_https'] < 0 or $array_config_global['ssl_https'] > 3 )
+		{
+			$array_config_global['ssl_https'] = 0;
+		}
+
 		$array_config_global['gzip_method'] = $nv_Request->get_int( 'gzip_method', 'post' );
 		$array_config_global['lang_multi'] = $nv_Request->get_int( 'lang_multi', 'post' );
 
@@ -140,14 +146,31 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			$array_config_global['rewrite_op_mod'] = '';
 		}
 
-        $error_send_email = nv_substr( $nv_Request->get_title( 'error_send_email', 'post', '', 1 ), 0, 255 );
+		$array_config_global['error_set_logs'] = $nv_Request->get_int( 'error_set_logs', 'post', 0 );
+		$error_send_email = nv_substr( $nv_Request->get_title( 'error_send_email', 'post', '', 1 ), 0, 255 );
         if( nv_check_valid_email( $error_send_email ) == '' )
         {
             $array_config_global['error_send_email'] = $error_send_email;
         }
 
+        $array_config_global['cdn_url'] = '';
 		$cdn_url = rtrim( $nv_Request->get_string( 'cdn_url', 'post' ), '/' );
-		$array_config_global['cdn_url'] = ( nv_is_url( $cdn_url ) ) ? $cdn_url : '';
+		if( ! empty( $cdn_url ) )
+		{
+			$cdn_url = preg_replace( '/^(http|https)\:\/\//', '', $cdn_url );
+			$cdn_url = preg_replace( '/^([^\/]+)\/*(.*)$/', '\\1', $cdn_url );
+			$_p  = '';
+			if( preg_match( '/(.*)\:([0-9]+)$/', $cdn_url, $m ) )
+			{
+				$cdn_url = $m[1];
+				$_p  = ':' . $m[2];
+			}
+			$cdn_url = nv_check_domain( nv_strtolower( $cdn_url ) );
+			if( ! empty( $cdn_url ) )
+			{
+				$array_config_global['cdn_url'] = $cdn_url . $_p;
+			}
+		}
 
 		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name" );
 		foreach( $array_config_global as $config_name => $config_value )
@@ -197,8 +220,6 @@ $xtpl->assign( 'CDNDL', md5( $global_config['sitekey'] . $admin_info['admin_id']
 
 if( defined( 'NV_IS_GODADMIN' ) )
 {
-    $xtpl->parse( 'main.error_send_email' );
-
 	$result = $db->query( "SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'" );
 	while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 	{
@@ -206,10 +227,10 @@ if( defined( 'NV_IS_GODADMIN' ) )
 	}
 
 	$lang_multi = $array_config_global['lang_multi'];
-	$xtpl->assign( 'CHECKED_SSL_HTTPS', ( $array_config_global['ssl_https'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_GZIP_METHOD', ( $array_config_global['gzip_method'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_LANG_MULTI', ( $array_config_global['lang_multi'] ) ? ' checked="checked"' : '' );
 	$xtpl->assign( 'CHECKED_NOTIFI_ACTIVE', ( $array_config_global['notification_active'] ) ? ' checked="checked"' : '' );
+	$xtpl->assign( 'CHECKED_ERROR_SET_LOGS', ( $array_config_global['error_set_logs'] ) ? ' checked="checked"' : '' );
 
 	$xtpl->assign( 'MY_DOMAINS', $array_config_global['my_domains'] );
 
@@ -261,6 +282,25 @@ if( defined( 'NV_IS_GODADMIN' ) )
 		$xtpl->assign( 'TIMEZONELANGVALUE', $site_timezone_i );
 		$xtpl->parse( 'main.system.opsite_timezone' );
 	}
+
+	for( $i = 0; $i <= 3; $i ++ )
+	{
+		$ssl_https = array(
+			'key' => $i,
+			'title' => $lang_module['ssl_https_' . $i],
+			'selected' => $i == $array_config_global['ssl_https'] ? ' selected="selected"' : ''
+		);
+
+		$xtpl->assign( 'SSL_HTTPS', $ssl_https );
+		$xtpl->parse( 'main.system.ssl_https' );
+	}
+
+	if( intval( $array_config_global['ssl_https'] ) !== 3 )
+	{
+		$xtpl->parse( 'main.system.ssl_https_modules_hide' );
+	}
+	$xtpl->assign( 'LINK_SSL_MODULES', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&show_ssl_modules=1' );
+
 	$xtpl->parse( 'main.system' );
 }
 

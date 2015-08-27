@@ -63,21 +63,6 @@ function nv_chang_act(modname) {
 	return;
 }
 
-function nv_recreate_mod(modname) {
-	if (confirm(nv_is_recreate_confirm[0])) {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=recreate_mod&nocache=' + new Date().getTime(), 'mod=' + modname, function(res) {
-			var r_split = res.split("_");
-			if (r_split[0] != 'OK') {
-				alert(nv_is_recreate_confirm[2]);
-			} else {
-				alert(nv_is_recreate_confirm[1]);
-				nv_show_list_mods();
-			}
-		});
-	}
-	return;
-}
-
 function nv_mod_del(modname) {
 	if (confirm(nv_is_del_confirm[0])) {
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=del&nocache=' + new Date().getTime(), 'mod=' + modname, function(res) {
@@ -208,3 +193,114 @@ function nv_del_bl(bl_id) {
 	}
 	return false;
 }
+
+$(document).ready(function(){
+	// Re-install module
+	$('body').delegate( '.nv-reinstall-module', 'click', function(e){
+		e.preventDefault();
+		$('#modal-reinstall-module').data('title', $(this).data('title')).modal('toggle');
+	});
+
+	$('#modal-reinstall-module').on('show.bs.modal', function(e){
+		var $this = $(this);
+		
+		$this.find('.load').removeClass('hidden');
+		$this.find('.content').addClass('hidden');
+		$this.find('.submit').prop('disabled', true);
+		
+		$.ajax({
+			type: 'POST',
+			cache: false,
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
+			data: 'module=' + $this.data('title'),
+			dataType: 'json',
+			success: function(e){
+				if( e.status == 'success' ){
+					var option = $this.find('option');
+					option.removeClass('hidden');
+					option.prop('selected', false);
+					if( e.code != 1 ){
+						$this.find('.showoption').addClass('hidden');
+						$(option[1]).addClass('hidden');
+					}else{
+						$this.find('.showoption').removeClass('hidden');
+					}
+					$this.find('.message').html( e.message.join('. ') + '.' );
+					$this.find('.load').addClass('hidden');
+					$this.find('.content').removeClass('hidden');
+					$this.find('.submit').prop('disabled', false);
+				}
+			}
+		});
+	});
+	
+	// Submit re-install
+	$('#modal-reinstall-module .submit').click(function(){
+		var $container = $('#modal-reinstall-module');
+		var $this = $(this);
+		
+		$this.prop('disabled', true);
+		
+		$.ajax({
+			type: 'POST',
+			cache: false,
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=recreate_mod&nocache=' + new Date().getTime(),
+			data: 'mod=' + $container.data('title') + '&sample=' + $container.find('.option').val(),
+			success: function(e){
+				$container.modal('hide');
+				var r_split = e.split("_");
+				if (r_split[0] != 'OK') {
+					alert(nv_is_recreate_confirm[2]);
+				} else {
+					alert(nv_is_recreate_confirm[1]);
+					nv_show_list_mods();
+				}
+			}
+		});
+	});
+	
+	// Setup module
+	$('.nv-setup-module').click(function(e){
+		e.preventDefault();
+		
+		var $this = $(this);
+		var $container = $('#modal-setup-module');
+		var link = $this.prop('href');
+		
+		$('#modal-setup-module').data('link', link);
+		
+		if( $this.prev().is('.fa-spin') || link == '' || link == '#' || link.match(/javascript\:void/g) ){
+			return;
+		}
+		
+		$this.prev().addClass('fa-spin');
+		
+		$.ajax({
+			type: 'POST',
+			cache: false,
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=check_sample_data&nocache=' + new Date().getTime(),
+			data: 'module=' + $this.data('title') + '&setup=1',
+			dataType: 'json',
+			success: function(e){
+				$this.prev().removeClass('fa-spin');
+				
+				if( e.status == 'success' ){
+					if( e.code == 0 ){
+						window.location = link;
+						return;
+					}
+					
+					$container.find('.message').html( e.message.splice(1, 2).join('. ') + '.' );
+					$container.modal('show');
+				}
+			}
+		});
+	});
+	
+	// Submit setup option
+	$('#modal-setup-module .submit').click(function(){
+		var $this = $('#modal-setup-module');
+		$this.modal('hide');
+		window.location = $this.data('link') + '&sample=' + $this.find('.option').val();
+	});
+});

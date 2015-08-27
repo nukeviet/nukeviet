@@ -56,8 +56,8 @@
 			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
 				<div class="col-xs-14">
-					<img id="vimg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-					&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','commentseccode_iavim');">&nbsp;</em>
+					<img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+					&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode_iavim');">&nbsp;</em>
 				</div>
 				<div class="col-xs-10">
 					<input id="commentseccode_iavim" type="text" class="form-control" maxlength="{GFX_NUM}"/>

@@ -58,7 +58,7 @@ $(document).ready(function(){
 		}
 		$.ajax({
 			type : "POST",
-			url : script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=active",
+			url : script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=active",
 			data : "list=" + list + "&active=1",
 			success : function(data) {
 				alert(data);
@@ -79,7 +79,7 @@ $(document).ready(function(){
 		}
 		$.ajax({
 			type : "POST",
-			url : script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=active",
+			url : script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=active",
 			data : "list=" + list + "&active=0",
 			success : function(data) {
 				alert(data);
@@ -101,7 +101,7 @@ $(document).ready(function(){
 		if (confirm(LANG.delete_confirm)) {
 			$.ajax({
 				type : "POST",
-				url : script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del",
+				url : script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=del",
 				data : "list=" + list,
 				success : function(data) {
 					alert(data);

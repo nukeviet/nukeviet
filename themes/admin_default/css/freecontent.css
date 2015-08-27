@@ -35,3 +35,19 @@
 .content-title{
 	margin: 0 0 10px 0;
 }
+
+.ct-status0, .ct-status0:hover, .ct-status0:focus{
+	color: #ccc;
+}
+
+.ct-status1, .ct-status1:hover, .ct-status1:focus{
+	color: #2E8B57;
+}
+
+.ct-status2, .ct-status2:hover, .ct-status2:focus{
+	color: #FFC1C1;
+}
+
+.ct-status-disabled, .ct-status-disabled:hover, .ct-status-disabled:focus, .ct-status-disabled:active{
+	color: #EDEDED;
+}

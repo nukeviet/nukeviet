@@ -16,11 +16,11 @@
 	<tr>
 		<th scope="row" class="spec">{LANG.database_type} <span
 			class="highlight_red">*</span></th>
-		<td><select name="dbtype">
+		<td><select name="dbtype" data-url="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={CURRENTLANG}&amp;step=5">
 			<!-- BEGIN: dbtype -->
 			<option value="{DBTYPE.value}" {DBTYPE.selected}>{DBTYPE.text}</option>
 			<!-- END: dbtype -->
-		</select></td>
+		</select> <img id="dbtype-check" class="hide" src="{BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif"></td>
 		<td>{LANG.database_default} <strong>MySQL</strong></td>
 	</tr>
 	<tr>

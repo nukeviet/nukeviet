@@ -6,34 +6,82 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
-$(document).ready(function(){
-	var $this;
-	var cfg = {
-		load: '.per-loading',
-		
-		blockAddBtn: '.block-add-trigger',
-		blockModal: '#block-data',
-		blockModalDelete: '#block-delete',
-		blockSubmitBtn: '.block-submit-trigger',
-		blockDelBtn: '.block-delete-trigger',
-		blockEditLink: '.block-edit',
-		blockDelLink: '.block-delete',
-		blockRow: '#block-row-',
-		blockList: '#block-list-container',
-		
-		ctAddBtn: '.content-add-trigger',
-		ctModal: '#content-data',
-		ctModalDelete: '#content-delete',
-		ctSelectImg: '#content-select-image',
-		ctEditor: 'content-description',
-		ctSubmitBtn: '.content-submit-trigger',
-		ctDelBtn: '.content-delete-trigger',
-		ctEditLink: '.content-edit',
-		ctDelLink: '.content-delete',
-		ctRow: '#content-row-',
-		ctList: '#content-list-container'
-	};
+var $this;
+var cfg = {
+	load: '.per-loading',
 	
+	blockAddBtn: '.block-add-trigger',
+	blockModal: '#block-data',
+	blockModalDelete: '#block-delete',
+	blockSubmitBtn: '.block-submit-trigger',
+	blockDelBtn: '.block-delete-trigger',
+	blockEditLink: '.block-edit',
+	blockDelLink: '.block-delete',
+	blockRow: '#block-row-',
+	blockList: '#block-list-container',
+	
+	ctAddBtn: '.content-add-trigger',
+	ctModal: '#content-data',
+	ctModalDelete: '#content-delete',
+	ctSelectImg: '#content-select-image',
+	ctEditor: 'content-description',
+	ctSubmitBtn: '.content-submit-trigger',
+	ctDelBtn: '.content-delete-trigger',
+	ctEditLink: '.content-edit',
+	ctDelLink: '.content-delete',
+	ctRow: '#content-row-',
+	ctList: '#content-list-container',
+	ctStatusBtn: '.content-status',
+	ctStatusPrefix: 'ct-status',
+	ctCouter: '#content-couter'
+};
+
+function nv_pare_data(id, isEditor){
+	// Add content: Clear editor
+	if( id == '' ){
+		if( isEditor ){
+			CKEDITOR.instances[cfg.ctEditor].setData('');
+		}
+	}else{
+		$.ajax({
+			type: 'POST',
+			cache: false,
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
+			data: 'id=' + id + '&getinfo=1',
+			dataType: 'json',
+			success: function(e){
+				$(cfg.ctModal).find(cfg.load).hide();
+				if( e.status == 'success' ){
+					$(cfg.ctSubmitBtn).removeAttr('disabled');
+					$(cfg.ctModal + ' .ip').removeAttr('disabled');
+					
+					$.each(e.data, function(k, v){
+						$this = $(cfg.ctModal + ' [name=' + k + ']');
+						var t = $this.prop('type');
+
+						if( t == 'text' ){
+							$this.val(v);
+						}else if( t == 'checkbox' ){
+							$this.prop('checked', v);
+						}else if( t == 'select-one' ){
+							$this.val(v);
+						}else if( t == 'textarea' ){
+							$this.val(v);
+							
+							if( isEditor ){
+								CKEDITOR.instances[cfg.ctEditor].setData(v);
+							}
+						}
+					});
+				}else{
+					alert(e.message);
+				}
+			}
+		});
+	}
+}
+
+$(document).ready(function(){	
 	// Add block click
 	$(cfg.blockAddBtn).click(function(e){
 		$(cfg.blockModal).find(cfg.load).hide();
@@ -54,7 +102,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
 			data: 'bid=' + $this.data('bid') + '&getinfo=1',
 			dataType: 'json',
 			success: function(e){
@@ -110,7 +158,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
 			data: $.param(data) + '&submit=1',
 			dataType: 'json',
 			success: function(e){
@@ -147,7 +195,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
 			data: 'bid=' + $(cfg.blockModalDelete).find('[name="bid"]').val() + '&del=1',
 			dataType: 'json',
 			success: function(e){
@@ -193,58 +241,24 @@ $(document).ready(function(){
 		// Build/Rebuild editor
 		if( isEditor ){
 			var instance = CKEDITOR.instances[cfg.ctEditor];
-		    if( instance ){
-		        instance.destroy();
-		    }
-			CKEDITOR.replace(cfg.ctEditor, {
-			    width: '100%',
-			    height: $(cfg.ctModal + ' [name="description"]').height() - 30,
-			    toolbar: [{ name: 'Tools', items: [ 'Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', '-', 'RemoveFormat', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'Source', '-', 'Maximize' ] }],
-				toolbarLocation: 'bottom',
-				removePlugins: 'elementspath,resize'
-			});
-			
-		}
-		
-		// Add content: Clear editor
-		if( id == '' ){
-			CKEDITOR.instances[cfg.ctEditor].setData('');
-		}else{
-			$.ajax({
-				type: 'POST',
-				cache: false,
-				url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
-				data: 'id=' + id + '&getinfo=1',
-				dataType: 'json',
-				success: function(e){
-					$(cfg.ctModal).find(cfg.load).hide();
-					if( e.status == 'success' ){
-						$(cfg.ctSubmitBtn).removeAttr('disabled');
-						$(cfg.ctModal + ' .ip').removeAttr('disabled');
-						
-						$.each(e.data, function(k, v){
-							$this = $(cfg.ctModal + ' [name=' + k + ']');
-							var t = $this.prop('type');
-							
-							if( t == 'text' ){
-								$this.val(v);
-							}else if( t == 'checkbox' ){
-								$this.prop('checked', v);
-							}else if( t == 'select-one' ){
-								$this.val(v);
-							}else if( t == 'textarea' ){
-								$this.val(v);
-								
-								if( isEditor ){
-									CKEDITOR.instances[cfg.ctEditor].setData(v);
-								}
-							}
-						});
-					}else{
-						alert(e.message);
+		    if( ! instance ){
+				CKEDITOR.replace(cfg.ctEditor, {
+				    width: '100%',
+				    height: $(cfg.ctModal + ' [name="description"]').height() - 30,
+				    toolbar: [{ name: 'Tools', items: [ 'Undo', 'Redo', '-', 'Bold', 'Italic', 'Underline', '-', 'RemoveFormat', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'Source', '-', 'Maximize' ] }],
+					toolbarLocation: 'bottom',
+					removePlugins: 'elementspath,resize',
+					on: {
+					    instanceReady: function(e) {
+					        nv_pare_data(id, isEditor);
+					    }
 					}
-				}
-			});
+				});
+		    }else{
+		    	nv_pare_data(id, isEditor);
+		    }
+		}else{
+			nv_pare_data(id, isEditor);
 		}
 	});
 
@@ -285,7 +299,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
 			data: $.param(data) + '&submit=1',
 			dataType: 'json',
 			success: function(e){
@@ -346,7 +360,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
 			data: 'id=' + $(cfg.ctModalDelete).find('[name="id"]').val() + '&del=1',
 			dataType: 'json',
 			success: function(e){
@@ -356,9 +370,11 @@ $(document).ready(function(){
 					$(cfg.ctModalDelete).find('.success').show();
 					
 					setTimeout(function(){
+						var total = $(cfg.ctCouter).data('total') - 1;
 						$(cfg.ctModalDelete).modal('toggle');
 						$(cfg.ctRow + $(cfg.ctModalDelete).find('[name="id"]').val()).remove();
-						if( $(cfg.ctList + ' > div').length < 1 ){
+						$(cfg.ctCouter).data('total', total).html(total);
+						if( total <= 0 ){
 							window.location.href = window.location.href;
 						}
 					}, 1000);
@@ -367,5 +383,31 @@ $(document).ready(function(){
 				}
 			}
 		});
+	});
+	
+	// Change content status
+	$(cfg.ctStatusBtn).click(function(e){
+		e.preventDefault();
+		$this = $(this);
+		
+		if( ! $this.is('.' + cfg.ctStatusPrefix + '-disabled') ){
+			$this.removeClass(cfg.ctStatusPrefix + $this.data('status')).addClass(cfg.ctStatusPrefix + '-disabled');
+			$.ajax({
+				type: 'POST',
+				cache: false,
+				url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
+				data: 'id=' + $this.data('id') + '&changestatus=1',
+				dataType: 'json',
+				success: function(e){
+					if( e.status == 'success' ){
+						$this.data('status', '' + e.responCode);
+						$this.removeClass(cfg.ctStatusPrefix + '-disabled').addClass(cfg.ctStatusPrefix + e.responCode).prop('title', e.responText);
+					}else{
+						$this.removeClass(cfg.ctStatusPrefix + '-disabled').addClass(cfg.ctStatusPrefix + $this.data('status'));
+						alert( e.message );
+					}
+				}
+			});
+		}	
 	});
 });

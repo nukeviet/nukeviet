@@ -31,15 +31,3 @@ function nv_vote_add_item(mess) {
 	newitem += '	</tr>';
 	$("#items").append(newitem);
 }
-
-$(document).ready(function() {
-	$("#publ_date,#exp_date").datepicker({
-		showOn : "both",
-		dateFormat : "dd/mm/yy",
-		changeMonth : true,
-		changeYear : true,
-		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
-		buttonImageOnly : true
-	});
-});

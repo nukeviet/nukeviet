@@ -96,6 +96,86 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	include NV_ROOTDIR . '/includes/footer.php';	
 }
 
+// Change content status
+if( $nv_Request->isset_request( 'changestatus', 'post' ) )
+{
+	$id = $nv_Request->get_int( 'id', 'post', '0' );
+	$message = '';
+	$status = 0;
+	
+	if( $id )
+	{
+		$sth = $db->prepare( 'SELECT status, start_time, end_time FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=:id' );
+		$sth->bindParam( ':id', $id, PDO::PARAM_INT );
+		$sth->execute();
+		$row = $sth->fetchAll();
+		
+		if( sizeof( $row ) == 1 )
+		{
+			$row = $row[0];
+			
+			if( $row['status'] == 1 ) // In-active
+			{
+				$status = 0;
+				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = :status WHERE id=:id';
+			}
+			else // Re-active, Active
+			{
+				$status = 1;
+				$start_time = 0;
+				$end_time = 0;
+				
+				if( empty( $row['start_time'] ) or ( ! empty( $row['end_time'] ) and $row['end_time'] <= NV_CURRENTTIME ) )
+				{
+					$start_time = NV_CURRENTTIME;
+					$end_time = ! empty( $row['end_time'] ) ? ( ( $row['end_time'] - $row['start_time'] ) + $start_time ) : 0;
+				}
+				else
+				{
+					$start_time = $row['start_time'];
+					$end_time = $row['end_time'];
+				}
+				
+				$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = :status, start_time = ' . $start_time . ', end_time = ' . $end_time . ' WHERE id=:id';
+			}
+			
+			$sth = $db->prepare( $sql );
+			$sth->bindParam( ':status', $status, PDO::PARAM_INT );
+			$sth->bindParam( ':id', $id, PDO::PARAM_INT );
+			$sth->execute();
+
+			// Get next execute
+			$sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE end_time > 0 AND status = 1';
+			$result = $db->query( $sql );
+			$next_execute = intval( $result->fetchColumn() );
+			$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'" );
+			$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
+			$sth->bindParam( ':config_value', $next_execute, PDO::PARAM_STR );
+			$sth->execute();
+			
+			nv_insert_logs( NV_LANG_DATA, $module_name, 'Change Status', 'ID:' . $id . ' - ' . $status, $admin_info['userid'] );
+			nv_del_moduleCache( $module_name );
+		}
+		else
+		{
+			$message = 'Nothing to do!';
+		}
+	}
+	else
+	{
+		$message = 'Invalid post data';
+	}
+	
+	include NV_ROOTDIR . '/includes/header.php';
+	echo json_encode( array(
+		'status' => ! $message ? 'success' : 'error',
+		'message' => $message,
+		'responCode' => $status,
+		'responText' => $lang_module['content_status_' . $status]
+	) );
+	include NV_ROOTDIR . '/includes/footer.php';	
+}
+
 $bid = $nv_Request->get_int( 'bid', 'post', '' );
 $block = array();
 
@@ -167,7 +247,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	
 	// Prosess time
 	$data['start_time'] = $data['status'] ? NV_CURRENTTIME : 0;
-	$data['end_time'] = ( $data['start_time'] and $data['exptime'] ) ? ( $data['start_time'] + ( $data['exptime'] * 3600 ) ) : 0;
+	$data['end_time'] = $data['exptime'] ? ( $data['start_time'] + ( $data['exptime'] * 3600 ) ) : 0;
 	
 	if( empty( $error ) )
 	{
@@ -199,6 +279,15 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 			if( $sth->rowCount() )
 			{
+				// Get next execute
+				$sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE end_time > 0 AND status = 1';
+				$result = $db->query( $sql );
+				$next_execute = intval( $result->fetchColumn() );
+				$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'" );
+				$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
+				$sth->bindParam( ':config_value', $next_execute, PDO::PARAM_STR );
+				$sth->execute();
+				
 				if( $data['id'] )
 				{
 					nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit Content', 'ID: ' . $data['id'], $admin_info['userid'] );
@@ -208,6 +297,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					nv_insert_logs( NV_LANG_DATA, $module_name, 'Add Content', $data['title'], $admin_info['userid'] );
 				}
 
+				nv_del_moduleCache( 'settings' );
 				nv_del_moduleCache( $module_name );
 				$message = $lang_module['save_success'];
 			}

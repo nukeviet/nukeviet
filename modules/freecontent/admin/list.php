@@ -30,11 +30,19 @@ if( defined( 'NV_EDITOR' ) )
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
-$xtpl->assign( 'EDITOR', ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) ) ? 'true' : 'false' );
+$allow_editor = ( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_aleditor' ) ) ? true : false;
+
+if( ! defined( 'CKEDITOR' ) and $allow_editor )
+{
+	define( 'CKEDITOR', true );
+	$my_head .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
+}
+
+$xtpl->assign( 'EDITOR', $allow_editor ? 'true' : 'false' );
 $xtpl->assign( 'UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload );
 $xtpl->assign( 'BID', $bid );
 
-$sql = 'SELECT id, title, description, link, image, start_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows ORDER BY bid DESC';
+$sql = 'SELECT id, title, description, link, image, start_time, end_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE bid=' . $bid . ' ORDER BY bid DESC';
 $array = $db->query( $sql )->fetchAll();
 $num_rows = sizeof( $array );
 
@@ -61,6 +69,18 @@ else
 			else
 			{
 				$row['image'] = '';
+			}
+		}
+		
+		$row['status_text'] = $lang_module['content_status_' . $row['status']];
+		
+		if( $row['start_time'] > 0 )
+		{
+			$row['status_text'] .= '. ' . $lang_module['content_status_note0'] . ' ' . nv_date( 'H:i:s d/m/Y', $row['start_time'] );
+			
+			if( $row['end_time'] > 0 )
+			{
+				$row['status_text'] .= '. ' .  sprintf( $row['status'] == 2 ? $lang_module['content_status_note2'] : $lang_module['content_status_note1'], nv_date( 'H:i:s d/m/Y', $row['end_time'] ) );
 			}
 		}
 		

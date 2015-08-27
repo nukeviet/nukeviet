@@ -208,7 +208,8 @@ function nv_save_file_config_global()
 	$content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
 	$content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . floatval( $upload_max_filesize ) . ");\n";
 
-	if( $config_variable['openid_mode'] )
+
+	if( ! empty( $config_variable['openid_servers'] ) )
 	{
 		$content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
 	}
@@ -220,7 +221,6 @@ function nv_save_file_config_global()
 	$config_variable['check_rewrite_file'] = nv_check_rewrite_file();
 	$config_variable['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? NV_ALLOW_REQUEST_MODS : "request";
 	$config_variable['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim( NV_REQUEST_DEFAULT_MODE ) : 'request';
-	$config_variable['session_save_path'] = NV_SESSION_SAVE_PATH;
 
 	$config_variable['log_errors_list'] = NV_LOG_ERRORS_LIST;
 	$config_variable['display_errors_list'] = NV_DISPLAY_ERRORS_LIST;
@@ -231,11 +231,6 @@ function nv_save_file_config_global()
 	$config_variable['error_send_email'] = $config_variable['error_send_email'];
 
 	$config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'openid_servers', 'allow_request_mods', 'config_sso' );
-
-	if( empty( $config_variable['openid_servers'] ) )
-	{
-		$config_variable['openid_mode'] = 0;
-	}
 
 	if( $config_variable['is_user_forum'] )
 	{
@@ -306,7 +301,7 @@ function nv_save_file_config_global()
 
 	$language_array = nv_parse_ini_file( NV_ROOTDIR . '/includes/ini/langs.ini', true );
 	$tmp_array = array();
-	$lang_array_exit = nv_scandir( NV_ROOTDIR . "/language", "/^[a-z]{2}+$/" );
+	$lang_array_exit = nv_scandir( NV_ROOTDIR . '/includes/language', "/^[a-z]{2}+$/" );
 	foreach( $lang_array_exit as $lang )
 	{
 		$tmp_array[$lang] = $language_array[$lang];
@@ -379,7 +374,7 @@ function nv_geVersion( $updatetime = 3600 )
 
 		$args = array(
 			'headers' => array(
-				'Referer' => NUKEVIET_STORE_APIURL,
+				'Referer' => NV_SERVER_NAME,
 			),
 			'body' => array(
 				'lang' > NV_LANG_INTERFACE,
@@ -623,7 +618,7 @@ function nv_rewrite_change( $array_config_global )
 		$rewrite_rule .= "RewriteEngine On\n";
 		$rewrite_rule .= "#RewriteBase " . NV_BASE_SITEURL . "\n";
 
-		if( $array_config_global['ssl_https'] )
+		if( $array_config_global['ssl_https'] == 1 )
 		{
 			$rewrite_rule .= "RewriteCond %{SERVER_PORT} !^443$\n";
 			$rewrite_rule .= "RewriteRule (.*)  https://%{SERVER_NAME}%{REQUEST_URI} [L,R]\n";
@@ -638,7 +633,7 @@ function nv_rewrite_change( $array_config_global )
 		$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
 		$rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
 		$rewrite_rule .= "RewriteRule (.*)(" . $endurl . ")\$ index.php\n";
-		$rewrite_rule .= "RewriteRule (.*)tag\/(.*)$ index.php\n";
+		$rewrite_rule .= "RewriteRule (.*)tag\/([^?]+)$ index.php\n";
 
 		if( $array_config_global['rewrite_optional'] )
 		{
@@ -646,26 +641,26 @@ function nv_rewrite_change( $array_config_global )
 			{
 				if( $array_config_global['rewrite_op_mod'] == 'seek' )
 				{
-					$rewrite_rule .= "RewriteRule ^q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";
+					$rewrite_rule .= "RewriteRule ^q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";
 				}
 				else
 				{
-					$rewrite_rule .= "RewriteRule ^seek\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";
+					$rewrite_rule .= "RewriteRule ^seek\/q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";
 				}
 
-				$rewrite_rule .= "RewriteRule ^search\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&" . NV_OP_VARIABLE . "=search&q=$1 [L]\n";
+				$rewrite_rule .= "RewriteRule ^search\/q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&" . NV_OP_VARIABLE . "=search&q=$1 [L]\n";
 			}
 			else
 			{
-				$rewrite_rule .= "RewriteRule ^seek\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";;
+				$rewrite_rule .= "RewriteRule ^seek\/q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";;
 			}
 
-			$rewrite_rule .= "RewriteRule ^([a-zA-Z0-9\-]+)\/search\/q\=(.*)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=search&q=$2 [L]\n";;
+			$rewrite_rule .= "RewriteRule ^([a-zA-Z0-9\-]+)\/search\/q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=search&q=$2 [L]\n";;
 		}
 		else
 		{
-			$rewrite_rule .= "RewriteRule ^([a-z]{2})\/seek\/q\=(.*)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=seek&q=$2 [L]\n";;
-			$rewrite_rule .= "RewriteRule ^([a-z]{2})\/([a-zA-Z0-9\-]+)\/search\/q\=(.*)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=search&q=$3 [L]\n";;
+			$rewrite_rule .= "RewriteRule ^([a-z]{2})\/seek\/q\=([^?]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=seek&q=$2 [L]\n";;
+			$rewrite_rule .= "RewriteRule ^([a-z]{2})\/([a-zA-Z0-9\-]+)\/search\/q\=([^?]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=search&q=$3 [L]\n";;
 		}
 
 		$rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ " . NV_BASE_SITEURL . "$1/$2/ [L,R=301]\n";

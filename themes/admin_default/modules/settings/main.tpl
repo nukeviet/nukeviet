@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<link rel="stylesheet" href="{NV_BASE_SITEURL}js/select2/select2.min.css">
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>
@@ -9,6 +9,9 @@
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col class="w300"/>
+		</colgroup>
 		<tfoot>
 			<tr>
 				<td colspan="2" class="text-center"><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary w100" /></td>
@@ -77,6 +80,21 @@
 			<tr>
 				<th>{LANG.allow_switch_mobi_des}</th>
 				<td><input type="checkbox" name="switch_mobi_des" value="1"{VALUE.switch_mobi_des}/></td>
+			</tr>
+			<tr<!-- BEGIN: ssl_https_modules_hide --> class="hidden"<!-- END: ssl_https_modules_hide -->>
+				<td><strong>{LANG.ssl_https_module}</strong></td>
+				<td>
+					<div class="row">
+						<!-- BEGIN: ssl_https_modules -->
+						<div class="col-xs-6">
+							<label>
+								<input type="checkbox" value="{MOD_TITLE}" name="ssl_https_modules[]"{MOD_CHECKED}> {MOD_TITLE}
+							</label>
+						</div>
+						<!-- END: ssl_https_modules -->
+					</div>
+					<input type="hidden" name="show_ssl_modules" value="{SHOW_SSL_MODULES}">
+				</td>
 			</tr>
 			<tr>
 				<th>{LANG.disable_content}</th>

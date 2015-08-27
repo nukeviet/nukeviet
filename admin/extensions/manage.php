@@ -108,12 +108,12 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 			{
 				$files_folders[] = NV_ROOTDIR . '/' . NV_ADMINDIR . '/' . $row['basename'] . '/';
 
-				$langs_admin = nv_scandir( NV_ROOTDIR . '/language', '/^[a-z]{2}$/' );
+				$langs_admin = nv_scandir( NV_ROOTDIR . '/includes/language', '/^[a-z]{2}$/' );
 				foreach( $langs_admin as $langi )
 				{
-					if( file_exists( NV_ROOTDIR . '/language/' . $langi . '/admin_' . $row['basename'] . '.php' ) )
+					if( file_exists( NV_ROOTDIR . '/includes/language/' . $langi . '/admin_' . $row['basename'] . '.php' ) )
 					{
-						$files_folders[] = NV_ROOTDIR . '/language/' . $langi . '/admin_' . $row['basename'] . '.php';
+						$files_folders[] = NV_ROOTDIR . '/includes/language/' . $langi . '/admin_' . $row['basename'] . '.php';
 					}
 				}
 			}
@@ -137,7 +137,7 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/' . $theme_package . '/css/' . $row['basename'] . '.css';
 				}
-				
+
 				$_files = glob( NV_ROOTDIR . '/themes/' . $theme_package . '/js/' . $row['basename'] . '*.js' );
 				foreach( $_files as $_file )
 				{
@@ -157,12 +157,12 @@ if( md5( 'package_' . $request['type'] . '_' . $request['title'] . '_' . $global
 				{
 					$files_folders[] = NV_ROOTDIR . '/themes/admin_default/css/' . $row['basename'] . '.css';
 				}
-				
+
 				$_files = glob( NV_ROOTDIR . '/themes/admin_default/js/' . $row['basename'] . '*.js' );
 				foreach( $_files as $_file )
 				{
 					$files_folders[] = $_file;
-				}				
+				}
 
 				if( file_exists( NV_ROOTDIR . '/themes/admin_default/images/' . $row['basename'] . '/' ) )
 				{
@@ -447,6 +447,13 @@ if( md5( 'delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_
 
 				foreach( $theme_list as $theme )
 				{
+					// Xóa tất cả các file js của module
+					$_files = glob( NV_ROOTDIR . '/themes/' . $theme . '/js/' . $request['title'] . '*.js' );
+					foreach( $_files as $_file )
+					{
+						nv_deletefile( $_file );
+					}
+
 					if( file_exists( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $request['title'] . '.css' ) )
 					{
 						nv_deletefile( NV_ROOTDIR . '/themes/' . $theme . '/css/' . $request['title'] . '.css' );
@@ -639,10 +646,35 @@ foreach( $array_langs as $lang )
 }
 
 // Array themes exists
+$array_themes_indb = array();
 
 // Array blocks exists
+$array_blocks_exists = array();
+
+foreach( $array_langs as $lang )
+{
+	$sql = 'SELECT DISTINCT file_name FROM ' . $db_config['prefix'] . '_' . $lang . '_blocks_groups';
+	$result = $db->query( $sql );
+
+	while( $row = $result->fetch() )
+	{
+		$array_blocks_exists[$row['file_name']] = $row['file_name'];
+	}
+}
 
 // Array crons exists
+$array_crons_exists = array();
+
+foreach( $array_langs as $lang )
+{
+	$sql = 'SELECT DISTINCT run_file FROM ' . NV_CRONJOBS_GLOBALTABLE;
+	$result = $db->query( $sql );
+
+	while( $row = $result->fetch() )
+	{
+		$array_crons_exists[$row['run_file']] = $row['run_file'];
+	}
+}
 
 // List extensions
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename';
@@ -657,6 +689,11 @@ $result = $db->query( $sql );
 $array_parse = array();
 while( $row = $result->fetch() )
 {
+	if( $row['type'] == 'theme' )
+	{
+		$array_themes_indb[] = $row['basename'];
+	}
+
 	$row['icon'] = $row['is_sys'] ? array( $theme_config['sys_icon'] ) : array();
 	$row['is_admin'] = false;
 	$row['delete_allowed'] = $row['is_sys'] == 0 ? true : false;
@@ -666,6 +703,14 @@ while( $row = $result->fetch() )
 		$row['delete_allowed'] = false;
 	}
 	elseif( $row['type'] == 'theme' and ( $global_config['site_theme'] == $row['basename'] or $row['basename'] == 'default' ) )
+	{
+		$row['delete_allowed'] = false;
+	}
+	elseif( $row['type'] == 'block' and isset( $array_blocks_exists[$row['basename']] ) )
+	{
+		$row['delete_allowed'] = false;
+	}
+	elseif( $row['type'] == 'cronjob' and isset( $array_crons_exists[$row['basename']] ) )
 	{
 		$row['delete_allowed'] = false;
 	}
@@ -683,7 +728,7 @@ while( $row = $result->fetch() )
 	{
 		$row['version'] = 'N/A';
 	}
-
+	
 	$array_parse[] = $row;
 }
 
@@ -708,6 +753,46 @@ if( $selecttype == '' or $selecttype == 'admin' )
 // Them cac theme admin
 if( $selecttype == '' or $selecttype == 'theme' )
 {
+	$theme_list = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme'] );
+	$theme_mobile_list = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile'] );
+	$theme_list = array_merge( $theme_list, $theme_mobile_list );
+	foreach( $theme_list as $_theme )
+	{
+		if( ! in_array( $_theme, $array_themes_indb ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/config.ini' ))
+		{
+			if( $xml = @simplexml_load_file( NV_ROOTDIR . '/themes/' . $_theme . '/config.ini' ) )
+			{
+				$info = $xml->xpath( 'info' );
+				$table_prefix = preg_replace( '/(\W+)/i', '_', $_theme );
+				$version = '4.0.0 ' . NV_CURRENTTIME;
+				$note = ( string )$info[0]->description;
+				$author = ( string )$info[0]->author;
+
+				$array_parse[] = array(
+					'type' => $lang_module['extType_theme'],
+					'basename' => $_theme,
+					'author' => $author,
+					'version' => '',
+					'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $_theme . '&amp;checksess=' . md5( 'package_theme_' . $_theme . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id ),
+					'is_admin' => false,
+					'icon' => array(),
+					'delete_allowed' => true,
+				);
+
+				// Save to database
+				$sql = 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES( 0, \'theme\', :title, 0, 0, :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note )';
+				$sth = $db->prepare( $sql );
+				$sth->bindParam( ':title', $_theme, PDO::PARAM_STR );
+				$sth->bindParam( ':basename', $_theme, PDO::PARAM_STR );
+				$sth->bindParam( ':author', $author, PDO::PARAM_STR );
+				$sth->bindParam( ':table_prefix', $table_prefix, PDO::PARAM_STR );
+				$sth->bindParam( ':version', $version, PDO::PARAM_STR );
+				$sth->bindParam( ':note', $note, PDO::PARAM_STR );
+				$sth->execute();
+			}
+		}
+	}
+
 	foreach( $array_theme_admin as $row )
 	{
 		$array_parse[] = array(
@@ -722,6 +807,7 @@ if( $selecttype == '' or $selecttype == 'theme' )
 		);
 	}
 }
+
 foreach( $array_parse as $row )
 {
 	$xtpl->assign( 'ROW', $row );

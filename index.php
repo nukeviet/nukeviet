@@ -10,7 +10,10 @@
 
 define( 'NV_SYSTEM', true );
 
-require str_replace( DIRECTORY_SEPARATOR, '/', dirname( __file__ ) ) . '/mainfile.php';
+// Xac dinh thu muc goc cua site
+define( 'NV_ROOTDIR', pathinfo( str_replace( DIRECTORY_SEPARATOR, '/', __file__ ), PATHINFO_DIRNAME ) );
+
+require NV_ROOTDIR .'/includes/mainfile.php';
 
 require NV_ROOTDIR . '/includes/core/user_functions.php';
 
@@ -83,6 +86,15 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	// Kiểm tra module có trong hệ thống hay không
 	if( isset( $site_mods[$module_name] ) )
 	{
+		// SSL
+		if( $global_config['ssl_https'] === 3 and ! empty( $global_config['ssl_https_modules'] ) and in_array( $module_name, $global_config['ssl_https_modules'] ) and ( ! isset( $_SERVER['HTTPS'] ) or $_SERVER['HTTPS'] == 'off' ) )
+		{
+			header( "HTTP/1.1 301 Moved Permanently" );
+			header( "Location: https://" . $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"] );
+			exit();
+		}
+
+		// Global variable for module
 		$module_info = $site_mods[$module_name];
 		$module_file = $module_info['module_file'];
 		$module_data = $module_info['module_data'];
@@ -94,8 +106,6 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 			// Tuy chon kieu giao dien
 			if( $nv_Request->isset_request( 'nv' . NV_LANG_DATA . 'themever', 'get' ) )
 			{
-				$theme_type = $nv_Request->get_title( 'nv' . NV_LANG_DATA . 'themever', 'get', '', 1 );
-				$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'get', '' );
 				if( empty( $global_config['switch_mobi_des'] ) )
 				{
 					$array_theme_type  = array_diff( $global_config['array_theme_type'], array( 'm' ) );
@@ -104,10 +114,12 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				{
 					$array_theme_type  =  $global_config['array_theme_type'];
 				}
-
+                
+                $theme_type = $nv_Request->get_title( 'nv' . NV_LANG_DATA . 'themever', 'get', '', 1 );
 				if( in_array( $theme_type, $array_theme_type ) ) $nv_Request->set_Cookie( 'nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME );
 
-				$nv_redirect = ! empty( $nv_redirect ) ? nv_base64_decode( $nv_redirect ) : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
+                $nv_redirect = nv_get_redirect( 'get' );
+				if( empty ( $nv_redirect ) ) $nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA;
 				Header( 'Location: ' . nv_url_rewrite( $nv_redirect ) );
 				die();
 			}
@@ -141,7 +153,10 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 				{
 					$drag_block = $nv_Request->get_int( 'drag_block', 'get', 0 );
 					$nv_Request->set_Session( 'drag_block', $drag_block );
-					Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
+
+					$nv_redirect = nv_get_redirect( 'get' );
+                    if( empty( $nv_redirect ) ) $nv_redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+					Header( 'Location: ' . nv_url_rewrite( $nv_redirect, true ) );
 					die();
 				}
 				if( $drag_block )
@@ -307,11 +322,10 @@ if( preg_match( $global_config['check_module'], $module_name ) )
 	elseif( isset( $sys_mods[$module_name] ) )
 	{
 		$groups_view = ( string )$sys_mods[$module_name]['groups_view'];
-		if( ! defined( 'NV_IS_USER' ) and $groups_view == 4 )
+		if( ! defined( 'NV_IS_USER' ) and $groups_view == '4' )
 		{
-			// Login users
-			Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
-			die();
+			Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt( $client_info['selfurl'] ), true ) );
+            die();
 		}
 		elseif( ! defined( 'NV_IS_ADMIN' ) and ( $groups_view == '2' or $groups_view == '1' ) )
 		{

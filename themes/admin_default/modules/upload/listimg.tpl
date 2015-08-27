@@ -21,7 +21,7 @@
 <script type="text/javascript">
 //<![CDATA[
 $('img.previewimg').lazyload({
-	placeholder : "{NV_BASE_SITEURL}images/grey.gif",
+	placeholder : "{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/grey.gif",
 	container : $(".filebrowse")
 });
 

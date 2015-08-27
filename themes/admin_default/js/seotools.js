@@ -106,33 +106,21 @@ function nv_mod_googleplus(title) {
 	return;
 }
 
-function sload(c) {
-	$.ajax({
-		type : "POST",
-		url : CFG.load_data,
-		dataType : "xml",
-		data : "total=" + c + "&rand=" + nv_randomPassword(8),
-		success : function(b) {
-			jQuery(b).find("service").each(function() {
-				var a = jQuery(this).find("id").text(), b = jQuery(this).find("flerrorCode").text(), c = jQuery(this).find("message").text();
-				$("#res" + a).removeClass("load");
-				$("#mes" + a).removeClass("load");
-				b == "0" ? $("#res" + a).addClass("ok") : $("#res" + a).addClass("error");
-				$("#mes" + a).text(c);
-			});
-			var c = jQuery(b).find("break").text(), b = jQuery(b).find("finish").text();
-			if (b == "OK") {
-				$("#rpc .ld").removeClass("load");
-				if (confirm(LANG.rpc_finish)) {
-					window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name
-				}
-			} else {
-				b == "WAIT" ? sload(c) : ( b = b.split("|"), alert(b[1]), $("#rpc .ld").removeClass("load"));
-			}
-			return !1
-		}
-	});
-	return !1
+function formatStringAsUriComponent(s) {
+	// replace html with whitespace
+	s = s.replace(/<\/?[^>]*>/gm, " ");
+
+	// remove entities
+	s = s.replace(/&[\w]+;/g, "");
+
+	// remove 'punctuation'
+	s = s.replace(/[\.\,\"\'\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\^\_\{\}\|\~]/g, "");
+
+	// replace multiple whitespace with single whitespace
+	s = s.replace(/\s{2,}/g, " ");
+
+	// trim whitespace at start and end of title
+	return s.replace(/^\s+|\s+$/g, "");
 }
 
 $(document).ready(function(){
@@ -141,26 +129,5 @@ $(document).ready(function(){
 		var a = $(this).attr("title");
 		a != "" && alert(a);
 		return !1
-	});
-	
-	// Keywords rank check
-	$("#keywordRankCheck").click(function() {
-		var keyword = $("#keyword").val();
-		keyword = formatStringAsUriComponent(keyword);
-		$("#keyword").attr('value', keyword);
-		if (keyword.length < 3 || keyword.length > 60) {
-			alert(LANG.keywordInfo);
-			return false;
-		}
-		keyword = rawurlencode(keyword);
-		var lr = $("#lr").val();
-		var accuracy = $("#accuracy").val();
-		$("#keyword").attr('disabled', 'disabled');
-		$("#lr").attr('disabled', 'disabled');
-		$("#accuracy").attr('disabled', 'disabled');
-		$("#fsubmit").hide();
-		$("#load_img").html('<p style="text-align:center;"><img alt="" src="' + nv_siteroot + 'images/load.gif" width="16" height="16" /></p>');
-		$("#keywordRankResult").text("").load(script_name + "?" + nv_lang_variable + "=" + nv_sitelang + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=keywordRank&i=process&k=" + keyword + "&l=" + lr + "&a=" + accuracy + "&num=" + nv_randomPassword(10));
-		return false;
 	});
 });

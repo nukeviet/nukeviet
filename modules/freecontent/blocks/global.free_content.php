@@ -85,10 +85,31 @@ if( ! nv_function_exists( 'nv_block_freecontent' ) )
 	 */
 	function nv_block_freecontent( $block_config )
 	{
-		global $global_config, $site_mods;
+		global $global_config, $site_mods, $module_config, $db;
 		
 		$module = $block_config['module'];
-
+		
+		// Set content status
+		if( ! empty( $module_config[$module]['next_execute'] ) and $module_config[$module]['next_execute'] <= NV_CURRENTTIME )
+		{
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows SET status = 2 WHERE end_time > 0 AND end_time < ' . NV_CURRENTTIME;
+			$db->query( $sql );
+			
+			// Get next execute
+			$sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE end_time > 0 AND status = 1';
+			$result = $db->query( $sql );
+			$next_execute = intval( $result->fetchColumn() );
+			$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = 'next_execute'" );
+			$sth->bindParam( ':module_name', $module, PDO::PARAM_STR );
+			$sth->bindParam( ':config_value', $next_execute, PDO::PARAM_STR );
+			$sth->execute();
+			
+			nv_del_moduleCache( 'settings' );
+			nv_del_moduleCache( $module );
+			
+			unset( $next_execute );
+		}
+		
 		if( ! isset( $site_mods[$module] ) or empty( $block_config['blockid'] ) ) return '';
 
 		$sql = 'SELECT id, title, description, image, link, target FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE status = 1 AND bid = ' . $block_config['blockid'];

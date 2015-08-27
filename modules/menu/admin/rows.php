@@ -516,17 +516,8 @@ foreach( $arr_menu as $arr )
 
 foreach( $arr_item as $arr_items )
 {
+	$arr_items['selected'] = ( $post['parentid'] == $arr_items['key'] ) ? 'selected="selected"' : '';
 	$xtpl->assign( 'cat', $arr_items );
-
-	if( $post['parentid'] == $arr_items['key'] )
-	{
-		$xtpl->assign( 'selected', 'selected="selected"' );
-	}
-	else
-	{
-		$xtpl->assign( 'selected', '' );
-	}
-
 	$xtpl->parse( 'main.cat' );
 }
 

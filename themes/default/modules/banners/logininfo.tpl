@@ -20,8 +20,8 @@
 				<input name="{CAPTCHA_NAME}" id="{CAPTCHA_NAME}" type="text" maxlength="{CAPTCHA_MAXLENGTH}" class="form-control"/>
 			</div>
 			<div class="col-sm-8">
-				<img id="vimg" alt="{CAPTCHA_LANG}"src="{CAPTCHA_IMG}" />
-				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','{CAPTCHA_NAME}');">&nbsp;</em>
+				<img class="captchaImg" alt="{CAPTCHA_LANG}"src="{CAPTCHA_IMG}" />
+				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#{CAPTCHA_NAME}');">&nbsp;</em>
 			</div>
 		</div>
 		<!-- END: captcha -->

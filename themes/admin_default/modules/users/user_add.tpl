@@ -6,22 +6,20 @@
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <!-- BEGIN: edit_user -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<form id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data" class="form-inline">
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<form action="{FORM_ACTION}" method="post" class="form-inline" onsubmit="return user_validForm(this);">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
 					<td> {LANG.account} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input type="text" class="form-control required" value="{DATA.username}" name="username" id="username_iavim" style="width: 300px" /></td>
+					<td><input type="text" class="form-control required" value="{DATA.username}" name="username" id="username_iavim" style="width: 300px" maxlength="{NV_UNICKMAX}" /></td>
 				</tr>
 				<tr>
 					<td> {LANG.email} </td>
@@ -31,7 +29,7 @@
 				<tr>
 					<td> {LANG.password} </td>
 					<td style="width:10px"> (<span style="color:#FF0000">*</span>) </td>
-					<td><input class="form-control required password" type="password" id="pass_iavim" name="password1" value="{DATA.password1}" style="width: 300px" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
+					<td><input class="form-control required password" type="password" id="pass_iavim" name="password1" value="{DATA.password1}" style="width: 300px" maxlength="{NV_UPASSMAX}" /> <a href="javascript:void(0);" onclick="return nv_genpass();" class="btn btn-primary btn-xs">{LANG.random_password}</a></td>
 				</tr>
 				<tr>
 					<td> {LANG.repassword} </td>
@@ -83,7 +81,14 @@
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.avata} </td>
-					<td><input type="file" name='photo' /></td>
+					<td>
+                        <div class="input-group">
+					       <input type="text" class="form-control" id="avatar" name="photo" value="" readonly="readonly"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" id="btn_upload"> <em class="fa fa-folder-open-o fa-fix">&nbsp;</em></button>
+                                </span>
+					   </div>
+                    </td>
 				</tr>
 				<tr>
 					<td colspan="2"> {LANG.birthday} </td>
@@ -171,32 +176,17 @@
 		<!-- END: field -->
 	</div>
 	<div class="text-center">
-		<input class="btn btn-primary" type="submit" name="confirm" value="{LANG.member_add}" />
+        <input type="hidden" name="confirm" value="1" />
+		<input class="btn btn-primary" type="submit" value="{LANG.member_add}" />
 	</div>
 </form>
 <script type="text/javascript">
 //<![CDATA[
-document.getElementById('form_user').setAttribute("autocomplete", "off");
 $(function() {
 	$.toggleShowPassword({
 	    field: '#password2',
 	    control: '#methods'
-	});
-	$('#form_user').validate({
-		rules : {
-			username : {
-				minlength : '{NV_UNICKMIN}',
-				maxlength : '{NV_UNICKMAX}',
-			},
-			password : {
-				minlength : '{NV_UPASSMAX}',
-				maxlength : '{NV_UPASSMAX}',
-			},
-			password2 : {
-				equalTo : "#pass_iavim"
-			}
-		}
-	});
+	})
 });
 //]]>
 </script>

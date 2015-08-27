@@ -57,42 +57,12 @@ if( $popup )
 	$xtpl->assign( 'SFILE', $sfile );
 
 	// Find logo config
-	if( file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
+    $upload_logo = $upload_logo_config = '';
+	if( ! empty( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
 	{
-		$upload_logo = $global_config['upload_logo'];
-	}
-	elseif( file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
-	{
-		$upload_logo = $global_config['site_logo'];
-	}
-	elseif( file_exists( NV_ROOTDIR . '/images/logo.png' ) )
-	{
-		$upload_logo = 'images/logo.png';
-	}
-	else
-	{
-		$upload_logo = '';
-	}
-
-	// Get logo size
-	if( $upload_logo )
-	{
-		$logo_size = getimagesize( NV_ROOTDIR . '/' . $upload_logo );
-
-		$upload_logo_config = array(
-			'w' => $logo_size[0],
-			'h' => $logo_size[1],
-			'autologosize1' => $global_config['autologosize1'],
-			'autologosize2' => $global_config['autologosize2'],
-			'autologosize3' => $global_config['autologosize3'],
-		);
-
-		$upload_logo_config = implode( '|', $upload_logo_config );
-		$upload_logo = NV_BASE_SITEURL . $upload_logo;
-	}
-	else
-	{
-		$upload_logo_config = '';
+		$upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
+        $logo_size = getimagesize( NV_ROOTDIR . '/' . $global_config['upload_logo'] );
+        $upload_logo_config = $logo_size[0] . '|' . $logo_size[1] . '|' . $global_config['autologosize1'] . '|' . $global_config['autologosize2'] . '|' . $global_config['autologosize3'];
 	}
 
 	$xtpl->assign( 'UPLOAD_LOGO', $upload_logo );

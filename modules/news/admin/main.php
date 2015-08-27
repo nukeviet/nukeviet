@@ -224,11 +224,11 @@ if( $checkss == md5( session_id() ) )
 		{
 			$arr_from[] = "(r." . $val . " LIKE '%" . $db->dblikeescape( $q ) . "%')";
 		}
-		$where = " r.author LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
+		$where = " (r.author LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
 			OR r.title LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
 			OR c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'
 			OR u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
-			OR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%'";
+			OR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
 	}
 	if( $sstatus != -1 )
 	{
@@ -410,7 +410,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		'hitstotal' => number_format( $hitstotal, 0, ',', '.' ),
 		'hitscm' => number_format( $hitscm, 0, ',', '.' ),
 		'numtags' => 0,
-		'feature' => implode( '&nbsp;-&nbsp;', $admin_funcs )
+		'feature' => implode( ' ', $admin_funcs )
 	);
 
 	$array_ids[] = $id;
