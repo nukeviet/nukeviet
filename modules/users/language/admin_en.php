@@ -395,3 +395,5 @@ $lang_module['user_check_pass_time'] = 'Check pass time';
 $lang_module['safe_mode'] = 'Safe mode';
 $lang_module['safe_active_info'] = 'Your account is in safe mode,  all the features to edit your account information is protected.';
 $lang_module['safe_deactivate'] = 'Safe mode turn off';
+$lang_module['group_description'] = 'Description';
+$lang_module['group_description_empty'] = 'Take a brief description of the group.';

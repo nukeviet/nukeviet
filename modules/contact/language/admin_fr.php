@@ -77,3 +77,6 @@ $lang_module['otherVal'] = 'Valeur';
 $lang_module['addNew'] = 'Ajouter un nouveau';
 $lang_module['cats'] = 'Catégories connexes';
 $lang_module['cat'] = 'Catégorie';
+$lang_module['mark_as_unread'] = 'Cocher comme ne pas encore être lu';
+$lang_module['mark_as_read'] = 'Cocher comme déjà lu';
+$lang_module['please_choose'] = 'Choisissez au moins un mail dans la liste au dessus';
