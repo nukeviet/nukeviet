@@ -28,7 +28,7 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-xs-24 col-sm-6 text-center">
-					<img src="{SRC_PRO_LAGE}" title="{TITLE}" alt="{TITLE}" width="140px" class="img-thumbnail" id="imageproduct"/>
+					<a href="" data-src="{SRC_PRO_LAGE}" data-width="{SRC_PRO_LAGE_INFO.width}" class="open_modal" title="{TITLE}"><img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail" id="imageproduct"></a>
 					<br />
 					<!-- BEGIN: adminlink -->
 					<p class="tab-pane">
@@ -305,17 +305,18 @@
 	<!-- END: product_detail -->
 </div>
 
-<div class="modal fade" id="GalleryModal" tabindex="-1" role="dialog" aria-labelledby="GalleryModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-	<div class="modal-content">
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				&nbsp;
 			</div>
-	  <div class="modal-body">
-	  </div>
+			<div class="modal-body">
+				<p class="text-center"><em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em></p>
+			</div>
+		</div>
 	</div>
-  </div>
 </div>
 
 <div class="msgshow" id="msgshow"></div>
