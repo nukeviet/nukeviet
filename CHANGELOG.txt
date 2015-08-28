@@ -1,7 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.0.29 (Open beta 9)
+NUKEVIET 4.0.23 (Open beta 9)
 - Update module Contact
 - Update module Users.
 - Change Admin-toolbar
