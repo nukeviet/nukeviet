@@ -93,13 +93,13 @@ function nv_blocks_content( $sitecontent )
 				$in[] = $row['func_id'];
 			}
 		}
-
-		$_result = $db->query( "SELECT t1.*, t2.func_id FROM " . NV_BLOCKS_TABLE . "_groups t1
+        
+        $_result = $db->query( "SELECT t1.*, t2.func_id FROM " . NV_BLOCKS_TABLE . "_groups t1
 			 INNER JOIN " . NV_BLOCKS_TABLE . "_weight t2
 			 ON t1.bid = t2.bid
 			 WHERE t2.func_id IN (" . implode( ',', $in ) . ")
 			 AND t1.theme ='" . $global_config['module_theme'] . "'
-			 AND t1.active!=''
+			 AND t1.active!='' 
 			 ORDER BY t2.weight ASC" );
 
 		while( $_row = $_result->fetch() )
@@ -124,6 +124,7 @@ function nv_blocks_content( $sitecontent )
 				'template' => $_row['template'],
 				'exp_time' => $_row['exp_time'],
 				'show_device' => ! empty( $_row['active'] ) ? explode( ',', $_row['active'] ) : array(),
+                'act' => $_row['act'],
 				'groups_view' => $_row['groups_view'],
 				'all_func' => $_row['all_func'],
 				'block_config' => $block_config
@@ -153,6 +154,11 @@ function nv_blocks_content( $sitecontent )
 				$unact[] = $_row['bid'];
 				continue;
 			}
+            
+            if( ! defined( 'NV_IS_DRAG_BLOCK' ) and ! $_row['act'] )
+            {
+                continue;
+            }
 
 			// Kiem hien thi tren cac thiet bi
 			$_active = false;
@@ -236,11 +242,18 @@ function nv_blocks_content( $sitecontent )
 
 					if( defined( 'NV_IS_DRAG_BLOCK' ) )
 					{
-						$content = '<div class="portlet" id="bl_' . ( $_row['bid'] ) . '">
+						$act_class = $_row['act'] ? '' : ' act0';
+                        $act_title = $_row['act'] ? $lang_global['act_block'] : $lang_global['deact_block'];
+                        $act_icon = $_row['act'] ? 'fa fa-check-square-o' : 'fa fa-square-o';
+                        $content = '<div class="portlet" id="bl_' . ( $_row['bid'] ) . '">
 							 <div class="tool">
-							     <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '" alt="' . $lang_global['edit_block'] . '" title="' . $lang_global['edit_block'] . '"><em class="fa fa-wrench"></em></a><a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '" alt="' . $lang_global['delete_block'] . '" title="' . $lang_global['delete_block'] . '"><em class="fa fa-trash"></em></a><a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '" alt="' . $lang_global['outgroup_block'] . '" title="' . $lang_global['outgroup_block'] . '"><em class="fa fa-share-square-o"></em></a>
+							     <a href="javascript:void(0)" class="block_content" name="' . $_row['bid'] . '" alt="' . $lang_global['edit_block'] . '" title="' . $lang_global['edit_block'] . '"><em class="fa fa-wrench"></em></a>
+                                 <a href="javascript:void(0)" class="delblock" name="' . $_row['bid'] . '" alt="' . $lang_global['delete_block'] . '" title="' . $lang_global['delete_block'] . '"><em class="fa fa-trash"></em></a>
+                                 <a href="javascript:void(0)" class="actblock" name="' . $_row['bid'] . '" alt="' . $act_title . '" title="' . $act_title . '" data-act="' . $lang_global['act_block'] . '" data-deact="' . $lang_global['deact_block'] . '"><em class="' . $act_icon . '" data-act="fa fa-check-square-o" data-deact="fa fa-square-o"></em></a>
+                                 <a href="javascript:void(0)" class="outgroupblock" name="' . $_row['bid'] . '" alt="' . $lang_global['outgroup_block'] . '" title="' . $lang_global['outgroup_block'] . '"><em class="fa fa-share-square-o"></em></a>
 							 </div>
-							 ' . $content . '</div>';
+                             <div class="blockct' . $act_class . '">' . $content . '</div>
+                             </div>';
 					}
 
 					$_posReal[$_row['position']] .= $content;
@@ -249,7 +262,7 @@ function nv_blocks_content( $sitecontent )
 		}
 		if( ! empty( $unact ) )
 		{
-			$db->query( "UPDATE " . NV_BLOCKS_TABLE . "_groups SET active='' WHERE bid IN (" . implode( ',', $unact ) . ")" );
+			$db->query( "UPDATE " . NV_BLOCKS_TABLE . "_groups SET act=0 WHERE bid IN (" . implode( ',', $unact ) . ")" );
 			unlink( $cache_file );
 		}
 	}
