@@ -38,7 +38,8 @@ if( $popup )
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'NV_MAX_SIZE', nv_convertfromBytes( $sys_max_size ) );
+	$xtpl->assign( 'NV_MAX_SIZE',nv_convertfromBytes( $sys_max_size ) );
+	$xtpl->assign( 'NV_MAX_SIZE_BYTES', $sys_max_size );
 	$xtpl->assign( 'NV_MAX_WIDTH', NV_MAX_WIDTH );
 	$xtpl->assign( 'NV_MAX_HEIGHT', NV_MAX_HEIGHT );
 	$xtpl->assign( 'NV_MIN_WIDTH', 10 );
@@ -113,6 +114,11 @@ if( $popup )
 	if( ! empty( $global_config['upload_auto_alt'] ) )
 	{
 		$xtpl->parse( 'main.auto_alt' );
+	}
+
+	if( ! $global_config['nv_auto_resize'] )
+	{
+		$xtpl->parse( 'main.no_auto_resize' );
 	}
 
 	$xtpl->parse( 'main' );
