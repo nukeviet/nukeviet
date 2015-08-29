@@ -58,6 +58,7 @@ if( $savesetting == 1 )
 	$data['format_order_id'] = $nv_Request->get_string( 'format_order_id', 'post', '' );
 	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );
 	$data['facebookappid'] = $nv_Request->get_string( 'facebookappid', 'post', '' );
+	$data['alias_lower'] = $nv_Request->get_int( 'alias_lower', 'post', 0 );
 	$data['active_order'] = $nv_Request->get_int( 'active_order', 'post', 0 );
 	$data['active_order_popup'] = $nv_Request->get_int( 'active_order_popup', 'post', 0 );
 	$data['active_order_non_detail'] = $nv_Request->get_int( 'active_order_non_detail', 'post', 0 );
@@ -200,6 +201,9 @@ $xtpl->assign( 'ck_active_showhomtext', $check );
 
 $check = ( $data['active_tooltip'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_tooltip', $check );
+
+$check = ( $data['alias_lower'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_alias_lower', $check );
 
 $check = ! empty( $data['show_product_code'] ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_show_product_code', $check );

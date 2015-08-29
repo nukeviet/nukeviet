@@ -164,6 +164,10 @@
 					<td><input class="form-control w150" name="facebookappid" value="{DATA.facebookappid}" type="text"/><span class="text-middle">{LANG.setting_facebookAppIDNote}</span></td>
 				</tr>
 				<tr>
+					<th>{LANG.setting_alias_lower}</th>
+					<td><input type="checkbox" value="1" name="alias_lower"{ck_alias_lower} id="alias_lower"/></td>
+				</tr>
+				<tr>
 					<td><strong>{LANG.setting_show_product_code}</strong></td>
 					<td><input type="checkbox" value="1" name="show_product_code" {ck_show_product_code} id="show_product_code" /></td>
 				</tr>
