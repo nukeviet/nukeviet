@@ -122,6 +122,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'MODULE_FILE', $module_file );
 	$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
+    $xtpl->assign( 'NV_SAFEMODE', $admin_info['safemode'] );
 	$xtpl->assign( 'LANG', $lang_global );
 
 	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/css/' . $module_file . '.css' ) )
@@ -147,12 +148,6 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	{
 		$xtpl->assign( 'NV_JS_MODULE', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/js/' . $module_file . '.js' );
 		$xtpl->parse( 'main.module_js' );
-	}
-
-	if( defined( 'NV_EDITOR' ) and nv_function_exists( 'nv_add_editor_js' ) )
-	{
-		$xtpl->assign( 'NV_ADD_EDITOR_JS', nv_add_editor_js() );
-		$xtpl->parse( 'main.nv_add_editor_js' );
 	}
 
 	if( $head_site == 1 )

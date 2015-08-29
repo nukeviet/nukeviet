@@ -10,8 +10,8 @@
 
 @font-face {
     font-family:'NukeVietIcons';
-    src:url('../fonts/NukeVietIcons.eot?avyewf');
-    src:url('../fonts/NukeVietIcons.eot?#iefixavyewf') format('embedded-opentype'),url('../fonts/NukeVietIcons.ttf?avyewf') format('truetype'),url('../fonts/NukeVietIcons.woff?avyewf') format('woff'),url('../fonts/NukeVietIcons.svg?avyewf#NukeVietIcons') format('svg');
+    src:url('../../default/fonts/NukeVietIcons.eot?avyewf');
+    src:url('../../default/fonts/NukeVietIcons.eot?#iefixavyewf') format('embedded-opentype'),url('../../default/fonts/NukeVietIcons.ttf?avyewf') format('truetype'),url('../../default/fonts/NukeVietIcons.woff?avyewf') format('woff'),url('../../default/fonts/NukeVietIcons.svg?avyewf#NukeVietIcons') format('svg');
     font-weight:normal;
     font-style:normal;
 }
@@ -121,6 +121,11 @@
 }
 
 /* Fix bootstrap */
+.form-horizontal .control-label {
+    margin-bottom: 0;
+    padding-top: 7px;
+    text-align: right;
+}
 
 .visible-xs-block,
 .visible-xs-inline,
@@ -260,13 +265,13 @@
 /*Center DIV*/
 .centered {
    text-align: center;
-   font-size: 0;
+   font-size: 0
 }
 .centered > div {
    float: none;
    display: inline-block;
    text-align: left;
-   font-size: 13px;
+   font-size: 14px;
 }
 
 /*nv-info*/
@@ -328,6 +333,14 @@
 
 .middle{
     vertical-align:middle
+}
+
+.align-bottom{
+    vertical-align: bottom
+}
+
+.align-top{
+    vertical-align: top
 }
 
 ul,
@@ -411,8 +424,7 @@ select.required{
     background-position: calc(100% - 15px) 10px;
 }
 label.required{
-    background-position: left center;
-    text-indent: 17px
+    padding-right: 20px;
 }
 
 label.radio-box,label.check-box{
@@ -619,31 +631,6 @@ h5,
 h6 {
     font-weight:700;
 }
-h1,
-.h1{
-    font-size:18px;
-}
-h2,
-.h2{
-    font-size:16px;
-}
-
-h3,
-.h3{
-    font-size:14px;
-}
-h4,
-.h4{
-    font-size:13px;
-}
-h5,
-.h5{
-    font-size:12px;
-}
-h6,
-.h6{
-    font-size:11px;
-}
 
 .title{
     font-size:22px
@@ -845,7 +832,9 @@ a.btn {
 }
 
 /* SECOND NAV */
-
+.second-nav{
+    z-index:3
+}
 .second-nav .bg {
     background:#ccc;
     background-image:linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0) 100%) !important;
@@ -856,6 +845,9 @@ a.btn {
 .third-nav {
     position:relative;
     margin-bottom:6px;
+}
+
+.third-nav .row{
     border-bottom:1px solid #ddd;
 }
 
@@ -1160,8 +1152,10 @@ a.btn {
 }
 
 .contactDefault {
+    position: absolute;
+    top:0;
+    left:0;
     line-height:51px;
-    float:left;
     margin:0 10px;
 }
 
@@ -1714,7 +1708,7 @@ input[type="radio"] {
     display:inline-block;
     line-height:0;
     height:16px;
-    margin:0 4px 0 0;
+    margin:3px 4px 0 0;
     outline:0;
     padding:0 !important;
     text-align:center;
@@ -1733,7 +1727,7 @@ input[type="radio"] {
 input[type=radio] {
     border-radius:50%;
     margin-right:4px;
-    line-height:10px;
+    line-height: inherit;
 }
 
 input[type=checkbox]:disabled,
@@ -1853,6 +1847,49 @@ button.close {
     opacity:.2;
 }
 
+.modal-body{
+    padding:15px
+}
+
+#sitemodal .modal-dialog {
+  position: relative;
+  width: auto !important;
+  max-width: 600px;
+  text-align: center;
+  font-size: 0;
+}
+#sitemodal .modal-content{
+    width: auto;
+    display: inline-block;
+    font-size: 14px;
+    text-align: left
+}
+#sitemodal .close{
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    width: 24px;
+    height:24px;
+    background: #000;
+    color:#fff;
+    font-size:11px;
+    opacity:0.8;
+    border:2px solid #ccc;
+    border-radius: 12px
+}
+#sitemodal .close:hover{
+    opacity:1;
+}
+@media (max-width: 619px) {
+    #sitemodal .modal-dialog{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+  #sitemodal .modal-content{
+        display: block
+    }
+}
+
 #sb-container {
     z-index:99999999 !important;
 }
@@ -1940,7 +1977,7 @@ button.close {
 /* module Contact*/
 .contact-result{
     position:absolute;
-    bottom:20px;
+    top:40px;
     left:5%;
     width:90%;
     float:left;
@@ -1987,4 +2024,24 @@ button.close {
     color:#fff;
     text-decoration:none;
     background-image:linear-gradient(to right,#FF6600 4px,rgba(0,0,0,0) 4px);
+}
+.calendar-icon{
+    background-image: url(../../../assets/images/calendar.jpg);
+    background-position: right 6px center;
+    background-repeat: no-repeat;
+    padding-right: 26px;
+}
+
+/*alert*/
+.nv-alert {
+    position:fixed !important;
+    top:25% !important;
+    right:0;
+    left:0;
+    width:350px !important;
+    margin:auto;
+    z-index:99999999999999 !important;
+    text-align:center !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important
 }

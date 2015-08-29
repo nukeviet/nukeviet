@@ -6,6 +6,9 @@
         <h3><a href="#" onclick="switchTab(this);tipAutoClose(true);" class="guest-sign pointer margin-right current" data-switch=".log-area, .reg-area" data-obj=".guestBlock">{GLANG.signin}</a> <!-- BEGIN: allowuserreg2 --><a href="#" onclick="switchTab(this);tipAutoClose(false);" class="guest-reg pointer" data-switch=".reg-area, .log-area" data-obj=".guestBlock">{GLANG.register}</a> <!-- END: allowuserreg2 --></h3>
         <div class="log-area">
             {FILE "login_form.tpl"}
+            <div class="text-center margin-top-lg">
+                <a href="{USER_LOSTPASS}">{GLANG.lostpass}?</a>
+            </div>
         </div>
         <!-- BEGIN: allowuserreg -->
         <div class="reg-area hidden">
@@ -35,16 +38,14 @@
     	<h3 class="text-center"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> {USER.full_name}</h3>
     	<div class="row">
     		<div class="col-xs-8 text-center">
-    			<a title="{LANG.edituser}" href="#" onclick="changeAvatar(1)"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
+    			<a title="{LANG.edituser}" href="#" onclick="changeAvatar('{URL_AVATAR}')"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
     		</div>
     		<div class="col-xs-16">
     		    <ul class="nv-list-item sm">
     		    	<li class="active"><a href="{URL_MODULE}">{LANG.user_info}</a></li>
     		    	<li><a href="{URL_HREF}editinfo">{LANG.editinfo}</a></li>
-    		    	<li><a href="{URL_HREF}changepass">{LANG.changepass_title}</a></li>
-    		    	<li><a href="{URL_HREF}changequestion">{LANG.question2}</a></li>
-    		    	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
-    		    	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
+    		    	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}editinfo/openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
+    		    	<!-- BEGIN: regroups --><li><a href="{URL_HREF}editinfo/group">{LANG.in_group}</a></li><!-- END: regroups -->
     		    </ul>
     		</div>
     	</div>

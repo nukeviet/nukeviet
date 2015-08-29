@@ -7,30 +7,36 @@
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<colgroup>
-				<col style="width:30px" />
-				<col style="width:30px" />
-				<col span="5" />
+				<col class="w50" />
+				<col width="30" />
+				<col span="4" />
+				<col class="w150" />
 			</colgroup>
 			<thead>
 				<tr>
-					<th><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);" /></th>
+					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);" /></th>
 					<th colspan="2">{LANG.name_user_send_title}</th>
 					<th>{LANG.part_row_title}</th>
                     <th>{LANG.cat}</th>
 					<th>{LANG.title_send_title}</th>
-					<th>&nbsp;</th>
+					<th>{LANG.send_time}</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);" /></td>
-					<td colspan="5"><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_submit(document.myform, 'sends[]');">{LANG.bt_del_row_title}</a> &nbsp; <em class="fa fa-trash-o">&nbsp;</em> <a href="javascript:void(0)" onclick="nv_delall_submit();">{LANG.delall}</a></td>
+					<td class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'sends[]', 'check_all[]',this.checked);" /></td>
+					<td colspan="6">
+                        <a class="btn btn-default" href="javascript:void(0);" onclick="nv_del_submit(document.myform, 'sends[]');"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.bt_del_row_title}</a> &nbsp; 
+                        <a class="btn btn-default" href="javascript:void(0)" onclick="nv_delall_submit();"><em class="fa fa-trash-o">&nbsp;</em> {LANG.delall}</a> &nbsp; 
+                        <a class="btn btn-default" href="javascript:void(0);" onclick="multimark('#myform','unread');"><em class="fa fa-bookmark">&nbsp;</em> {LANG.mark_as_unread}</a> &nbsp; 
+                        <a class="btn btn-default" href="javascript:void(0);" onclick="multimark('#myform','read');"><em class="fa fa-bookmark-o">&nbsp;</em> {LANG.mark_as_read}</a>
+                    </td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<!-- BEGIN: row -->
 				<tr>
-					<td><input name="sends[]" type="checkbox" value="{ROW.id}" onclick="nv_UncheckAll(this.form, 'sends[]', 'check_all[]', this.checked);" /></td>
+					<td class="text-center"><input name="sends[]" type="checkbox" value="{ROW.id}" onclick="nv_UncheckAll(this.form, 'sends[]', 'check_all[]', this.checked);" /></td>
 					<td {ROW.style} {ROW.onclick}><img alt="{ROW.status}" src="{ROW.image.0}" width="{ROW.image.1}" height="{ROW.image.2}" /></td>
 					<td {ROW.style} {ROW.onclick}> {ROW.sender_name}</td>
 					<td {ROW.style} {ROW.onclick}> {ROW.path}</td>

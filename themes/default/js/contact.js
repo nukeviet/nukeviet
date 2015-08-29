@@ -61,7 +61,7 @@ function nv_validForm(a) {
 				$(a).next().hide();
 				$("input,select,button,textarea", a).not(".disabled").prop("disabled", !1);
                 nv_validReset(a)
-			}, 2E4))
+			}, 5E3))
 		}
 	}));
 	return !1

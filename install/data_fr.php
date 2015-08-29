@@ -27,155 +27,200 @@ $sth->execute( array('comment', 'comment', 'comment', 'comment', 'Comment', '', 
 $sth->execute( array('siteterms', 'page', 'siteterms', 'siteterms', 'Conditions d\'utilisation', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 13, 1, '', 1, 0) );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs' );
-$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_id, func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)' );
-$sth->execute( array(1, 'sitemap', 'sitemap', 'Sitemap', 'about', 0, 0, 0, '') );
-$sth->execute( array(2, 'main', 'main', 'Main', 'about', 1, 0, 1, '') );
-$sth->execute( array(3, 'sitemap', 'sitemap', 'Sitemap', 'news', 0, 0, 0, '') );
-$sth->execute( array(5, 'content', 'content', 'Content', 'news', 1, 0, 1, '') );
-$sth->execute( array(6, 'detail', 'detail', 'Detail', 'news', 1, 0, 2, '') );
-$sth->execute( array(7, 'main', 'main', 'Main', 'news', 1, 0, 3, '') );
-$sth->execute( array(9, 'print', 'print', 'Print', 'news', 0, 0, 0, '') );
-$sth->execute( array(10, 'rating', 'rating', 'Rating', 'news', 0, 0, 0, '') );
-$sth->execute( array(11, 'rss', 'rss', 'Rss', 'news', 0, 0, 0, '') );
-$sth->execute( array(12, 'savefile', 'savefile', 'Savefile', 'news', 0, 0, 0, '') );
-$sth->execute( array(13, 'search', 'search', 'Search', 'news', 1, 0, 4, '') );
-$sth->execute( array(14, 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, '') );
-$sth->execute( array(15, 'topic', 'topic', 'Topic', 'news', 1, 0, 5, '') );
-$sth->execute( array(16, 'viewcat', 'viewcat', 'Viewcat', 'news', 1, 0, 6, '') );
-$sth->execute( array(17, 'active', 'active', 'Active', 'users', 1, 0, 5, '') );
-$sth->execute( array(18, 'changepass', 'changepass', 'Changer le mot de passe', 'users', 1, 1, 9, '') );
-$sth->execute( array(19, 'editinfo', 'editinfo', 'Edit User Info', 'users', 1, 1, 7, '') );
-$sth->execute( array(20, 'login', 'login', 'Se connecter', 'users', 1, 1, 2, '') );
-$sth->execute( array(21, 'logout', 'logout', 'Logout', 'users', 1, 1, 14, '') );
-$sth->execute( array(22, 'lostactivelink', 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 6, '') );
-$sth->execute( array(23, 'lostpass', 'lostpass', 'Mot de passe oublié?', 'users', 1, 1, 4, '') );
-$sth->execute( array(24, 'main', 'main', 'Main', 'users', 1, 0, 1, '') );
-$sth->execute( array(25, 'openid', 'openid', 'Openid', 'users', 1, 1, 13, '') );
-$sth->execute( array(26, 'register', 'register', 'S&#039;inscrire', 'users', 1, 1, 3, '') );
-$sth->execute( array(27, 'main', 'main', 'Main', 'contact', 1, 0, 1, '') );
-$sth->execute( array(28, 'allbots', 'allbots', 'Par Moteur de recherche', 'statistics', 1, 1, 6, '') );
-$sth->execute( array(29, 'allbrowsers', 'allbrowsers', 'Par Navigateur', 'statistics', 1, 1, 4, '') );
-$sth->execute( array(30, 'allcountries', 'allcountries', 'Par Pays', 'statistics', 1, 1, 3, '') );
-$sth->execute( array(31, 'allos', 'allos', 'Par Système d&#039;exploitation', 'statistics', 1, 1, 5, '') );
-$sth->execute( array(32, 'allreferers', 'allreferers', 'Par Site', 'statistics', 1, 1, 2, '') );
-$sth->execute( array(33, 'main', 'main', 'Main', 'statistics', 1, 0, 1, '') );
-$sth->execute( array(34, 'referer', 'referer', 'referer', 'statistics', 1, 0, 7, '') );
-$sth->execute( array(35, 'main', 'main', 'Main', 'voting', 1, 0, 1, '') );
-$sth->execute( array(36, 'addads', 'addads', 'Addads', 'banners', 1, 0, 1, '') );
-$sth->execute( array(37, 'cledit', 'cledit', 'Cledit', 'banners', 0, 0, 0, '') );
-$sth->execute( array(38, 'click', 'click', 'Click', 'banners', 0, 0, 0, '') );
-$sth->execute( array(39, 'clientinfo', 'clientinfo', 'Clientinfo', 'banners', 1, 0, 2, '') );
-$sth->execute( array(40, 'clinfo', 'clinfo', 'Clinfo', 'banners', 0, 0, 0, '') );
-$sth->execute( array(41, 'logininfo', 'logininfo', 'Logininfo', 'banners', 0, 0, 0, '') );
-$sth->execute( array(42, 'main', 'main', 'Main', 'banners', 1, 0, 3, '') );
-$sth->execute( array(43, 'stats', 'stats', 'Stats', 'banners', 1, 0, 4, '') );
-$sth->execute( array(44, 'viewmap', 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '') );
-$sth->execute( array(46, 'main', 'main', 'Main', 'seek', 1, 0, 1, '') );
-$sth->execute( array(47, 'main', 'main', 'Main', 'feeds', 1, 0, 1, '') );
-$sth->execute( array(48, 'regroups', 'regroups', 'Regroups', 'users', 1, 1, 8, '') );
-$sth->execute( array(50, 'memberlist', 'memberlist', 'Liste des membres', 'users', 1, 1, 10, '') );
-$sth->execute( array(51, 'groups', 'groups', 'Groups', 'news', 1, 0, 7, '') );
-$sth->execute( array(52, 'tag', 'tag', 'Tag', 'news', 1, 0, 2, '') );
-$sth->execute( array(53, 'main', 'main', 'Main', 'page', 1, 0, 1, '') );
-$sth->execute( array(54, 'main', 'main', 'main', 'comment', 1, 0, 1, '') );
-$sth->execute( array(55, 'post', 'post', 'post', 'comment', 1, 0, 2, '') );
-$sth->execute( array(56, 'like', 'like', 'Like', 'comment', 1, 0, 3, '') );
-$sth->execute( array(57, 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, '') );
-$sth->execute( array(58, 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 11, '') );
-$sth->execute( array(59, 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '') );
-$sth->execute( array(60, 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, '') );
-$sth->execute( array(61, 'rss', 'rss', 'Rss', 'page', 0, 0, 0, '') );
-$sth->execute( array(62, 'rss', 'rss', 'Rss', 'about', 0, 0, 0, '') );
-$sth->execute( array(63, 'changequestion', 'changequestion', 'Change Question', 'users', 1, 1, 12, '') );
-$sth->execute( array(64, 'main', 'main', 'Main', 'siteterms', 1, 0, 1, '') );
-$sth->execute( array(65, 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, '') );
-$sth->execute( array(66, 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?)' );
+//About
+$sth->execute( array( 'main', 'main', 'Main', 'about', 1, 0, 1, '') );
+$sth->execute( array( 'sitemap', 'sitemap', 'Sitemap', 'about', 0, 0, 0, '') );
+$sth->execute( array( 'rss', 'rss', 'Rss', 'about', 0, 0, 0, '') );
+//News
+$sth->execute( array( 'main', 'main', 'Main', 'news', 1, 0, 1, '') );
+$sth->execute( array( 'viewcat', 'viewcat', 'Viewcat', 'news', 1, 0, 2, '') );
+$sth->execute( array( 'topic', 'topic', 'Topic', 'news', 1, 0, 3, '') );
+$sth->execute( array( 'content', 'content', 'Content', 'news', 1, 1, 4, '') );
+$sth->execute( array( 'detail', 'detail', 'Detail', 'news', 1, 0, 5, '') );
+$sth->execute( array( 'tag', 'tag', 'Tag', 'news', 1, 0, 6, '') );
+$sth->execute( array( 'rss', 'rss', 'Rss', 'news', 1, 1, 7, '') );
+$sth->execute( array( 'search', 'search', 'Search', 'news', 1, 1, 8, '') );
+$sth->execute( array( 'groups', 'groups', 'Groups', 'news', 1, 0, 9, '') );
+$sth->execute( array( 'sitemap', 'sitemap', 'Sitemap', 'news', 0, 0, 0, '') );
+$sth->execute( array( 'print', 'print', 'Print', 'news', 0, 0, 0, '') );
+$sth->execute( array( 'rating', 'rating', 'Rating', 'news', 0, 0, 0, '') );
+$sth->execute( array( 'savefile', 'savefile', 'Savefile', 'news', 0, 0, 0, '') );
+$sth->execute( array( 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, '') );
+//Users
+$sth->execute( array( 'main', 'main', 'Main', 'users', 1, 0, 1, '') );
+$sth->execute( array( 'login', 'login', 'Se connecter', 'users', 1, 1, 2, '') );
+$sth->execute( array( 'register', 'register', 'S&#039;inscrire', 'users', 1, 1, 3, '') );
+$sth->execute( array( 'lostpass', 'lostpass', 'Mot de passe oublié?', 'users', 1, 1, 4, '') );
+$sth->execute( array( 'active', 'active', 'Active', 'users', 1, 0, 5, '') );
+$sth->execute( array( 'lostactivelink', 'lostactivelink', 'Lostactivelink', 'users', 1, 0, 6, '') );
+$sth->execute( array( 'editinfo', 'editinfo', 'Edit User Info', 'users', 1, 1, 7, '') );
+$sth->execute( array( 'memberlist', 'memberlist', 'Liste des membres', 'users', 1, 1, 8, '') );
+$sth->execute( array( 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 9, '') );
+$sth->execute( array( 'logout', 'logout', 'Logout', 'users', 1, 1, 10, '') );
+$sth->execute( array( 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, '') );
+//Statistics
+$sth->execute( array( 'main', 'main', 'Main', 'statistics', 1, 0, 1, '') );
+$sth->execute( array( 'allreferers', 'allreferers', 'Par Site', 'statistics', 1, 1, 2, '') );
+$sth->execute( array( 'allcountries', 'allcountries', 'Par Pays', 'statistics', 1, 1, 3, '') );
+$sth->execute( array( 'allbrowsers', 'allbrowsers', 'Par Navigateur', 'statistics', 1, 1, 4, '') );
+$sth->execute( array( 'allos', 'allos', 'Par Système d&#039;exploitation', 'statistics', 1, 1, 5, '') );
+$sth->execute( array( 'allbots', 'allbots', 'Par Moteur de recherche', 'statistics', 1, 1, 6, '') );
+$sth->execute( array( 'referer', 'referer', 'referer', 'statistics', 1, 0, 7, '') );
+//Banners
+$sth->execute( array( 'main', 'main', 'Main', 'banners', 1, 0, 1, '') );
+$sth->execute( array( 'addads', 'addads', 'Addads', 'banners', 1, 0, 2, '') );
+$sth->execute( array( 'clientinfo', 'clientinfo', 'Clientinfo', 'banners', 1, 0, 3, '') );
+$sth->execute( array( 'stats', 'stats', 'Stats', 'banners', 1, 0, 4, '') );
+$sth->execute( array( 'cledit', 'cledit', 'Cledit', 'banners', 0, 0, 0, '') );
+$sth->execute( array( 'click', 'click', 'Click', 'banners', 0, 0, 0, '') );
+$sth->execute( array( 'clinfo', 'clinfo', 'Clinfo', 'banners', 0, 0, 0, '') );
+$sth->execute( array( 'logininfo', 'logininfo', 'Logininfo', 'banners', 0, 0, 0, '') );
+$sth->execute( array( 'viewmap', 'viewmap', 'Viewmap', 'banners', 0, 0, 0, '') );
+//Comment
+$sth->execute( array( 'main', 'main', 'main', 'comment', 1, 0, 1, '') );
+$sth->execute( array( 'post', 'post', 'post', 'comment', 1, 0, 2, '') );
+$sth->execute( array( 'like', 'like', 'Like', 'comment', 1, 0, 3, '') );
+$sth->execute( array( 'delete', 'delete', 'Delete', 'comment', 1, 0, 4, '') );
+//Page
+$sth->execute( array( 'main', 'main', 'Main', 'page', 1, 0, 1, '') );
+$sth->execute( array( 'sitemap', 'sitemap', 'Sitemap', 'page', 0, 0, 0, '') );
+$sth->execute( array( 'rss', 'rss', 'Rss', 'page', 0, 0, 0, '') );
+//Siteterms
+$sth->execute( array( 'main', 'main', 'Main', 'siteterms', 1, 0, 1, '') );
+$sth->execute( array( 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, '') );
+$sth->execute( array( 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
+//Others
+$sth->execute( array( 'main', 'main', 'Main', 'contact', 1, 0, 1, '') );
+$sth->execute( array( 'main', 'main', 'Main', 'voting', 1, 0, 1, '') );
+$sth->execute( array( 'main', 'main', 'Main', 'seek', 1, 0, 1, '') );
+$sth->execute( array( 'main', 'main', 'Main', 'feeds', 1, 0, 1, '') );
+
+$array_funcid = array();
+$array_funcid_mod = array();
+
+$func_result = $db->query( 'SELECT func_id, func_name, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
+while( list( $func_id_i, $func_name, $in_module ) = $func_result->fetch( 3 ) )
+{
+	$array_funcid[] = $func_id_i;
+    if( ! isset($array_funcid_mod[$in_module] ) ) $array_funcid_mod[$in_module] = array();
+	$array_funcid_mod[$in_module][$func_name] = $func_id_i;
+}
+
+$themes_default = array();
+$themes_default['left-body-right'] = array(
+	$array_funcid_mod['about']['main'],
+	$array_funcid_mod['news']['content'],
+	$array_funcid_mod['news']['detail'],
+	$array_funcid_mod['news']['main'],
+	$array_funcid_mod['news']['rss'],
+	$array_funcid_mod['news']['search'],
+	$array_funcid_mod['news']['topic'],
+	$array_funcid_mod['news']['viewcat'],
+	$array_funcid_mod['banners']['addads'],
+	$array_funcid_mod['banners']['clientinfo'],
+	$array_funcid_mod['banners']['main'],
+	$array_funcid_mod['banners']['stats'],
+	$array_funcid_mod['seek']['main'],
+	$array_funcid_mod['feeds']['main'],
+	$array_funcid_mod['news']['groups'],
+	$array_funcid_mod['news']['tag'],
+	$array_funcid_mod['comment']['main'],
+	$array_funcid_mod['comment']['post'],
+	$array_funcid_mod['comment']['like'],
+	$array_funcid_mod['comment']['delete'],
+	$array_funcid_mod['siteterms']['main'],
+	$array_funcid_mod['siteterms']['rss']
+	);
+
+$themes_default['left-body'] = array(
+	$array_funcid_mod['users']['active'],
+	$array_funcid_mod['users']['editinfo'],
+	$array_funcid_mod['users']['login'],
+	$array_funcid_mod['users']['logout'],
+	$array_funcid_mod['users']['lostactivelink'],
+	$array_funcid_mod['users']['lostpass'],
+	$array_funcid_mod['users']['main'],
+	$array_funcid_mod['users']['register'],
+	$array_funcid_mod['users']['memberlist'],
+	$array_funcid_mod['users']['avatar'],
+	$array_funcid_mod['contact']['main'],
+	$array_funcid_mod['statistics']['allbots'],
+	$array_funcid_mod['statistics']['allbrowsers'],
+	$array_funcid_mod['statistics']['allcountries'],
+	$array_funcid_mod['statistics']['allos'],
+	$array_funcid_mod['statistics']['allreferers'],
+	$array_funcid_mod['statistics']['main'],
+	$array_funcid_mod['statistics']['referer'],
+	$array_funcid_mod['voting']['main'],
+	$array_funcid_mod['page']['main'] );
+
+$themes_mobile = array();
+$themes_mobile['body'] = array(
+	$array_funcid_mod['about']['main'],
+	$array_funcid_mod['news']['content'],
+	$array_funcid_mod['news']['detail'],
+	$array_funcid_mod['news']['main'],
+	$array_funcid_mod['news']['search'],
+	$array_funcid_mod['news']['topic'],
+	$array_funcid_mod['news']['viewcat'],
+	$array_funcid_mod['users']['active'],
+	$array_funcid_mod['users']['editinfo'],
+	$array_funcid_mod['users']['login'],
+	$array_funcid_mod['users']['logout'],
+	$array_funcid_mod['users']['lostactivelink'],
+	$array_funcid_mod['users']['lostpass'],
+	$array_funcid_mod['users']['main'],
+	$array_funcid_mod['users']['register'],
+	$array_funcid_mod['contact']['main'],
+	$array_funcid_mod['statistics']['allbots'],
+	$array_funcid_mod['statistics']['allbrowsers'],
+	$array_funcid_mod['statistics']['allcountries'],
+	$array_funcid_mod['statistics']['allos'],
+	$array_funcid_mod['statistics']['allreferers'],
+	$array_funcid_mod['statistics']['main'],
+	$array_funcid_mod['statistics']['referer'],
+	$array_funcid_mod['voting']['main'],
+	$array_funcid_mod['banners']['addads'],
+	$array_funcid_mod['banners']['clientinfo'],
+	$array_funcid_mod['banners']['main'],
+	$array_funcid_mod['banners']['stats'],
+	$array_funcid_mod['seek']['main'],
+	$array_funcid_mod['feeds']['main'],
+	$array_funcid_mod['users']['memberlist'],
+	$array_funcid_mod['news']['groups'],
+	$array_funcid_mod['news']['tag'],
+	$array_funcid_mod['page']['main'],
+	$array_funcid_mod['comment']['main'],
+	$array_funcid_mod['comment']['post'],
+	$array_funcid_mod['comment']['like'],
+	$array_funcid_mod['comment']['delete'],
+	$array_funcid_mod['siteterms']['main'],
+	$array_funcid_mod['siteterms']['rss'] );
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes' );
-$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES  (?, ?, ?)' );
-$sth->execute( array(0, 'left-body-right', 'default') );
-$sth->execute( array(2, 'left-body-right', 'default') );
-$sth->execute( array(5, 'left-body-right', 'default') );
-$sth->execute( array(6, 'left-body-right', 'default') );
-$sth->execute( array(7, 'left-body-right', 'default') );
-$sth->execute( array(13, 'left-body-right', 'default') );
-$sth->execute( array(15, 'left-body-right', 'default') );
-$sth->execute( array(16, 'left-body-right', 'default') );
-
-//Default -> User
-$sth->execute( array(17, 'left-body', 'default') );
-$sth->execute( array(18, 'left-body', 'default') );
-$sth->execute( array(19, 'left-body', 'default') );
-$sth->execute( array(20, 'left-body', 'default') );
-$sth->execute( array(21, 'left-body', 'default') );
-$sth->execute( array(22, 'left-body', 'default') );
-$sth->execute( array(23, 'left-body', 'default') );
-$sth->execute( array(24, 'left-body', 'default') );
-$sth->execute( array(25, 'left-body', 'default') );
-$sth->execute( array(26, 'left-body', 'default') );
-$sth->execute( array(48, 'left-body', 'default') );
-$sth->execute( array(50, 'left-body', 'default') );
-$sth->execute( array(58, 'left-body', 'default') );
-$sth->execute( array(63, 'left-body', 'default') );
-
-$sth->execute( array(27, 'left-body', 'default') );
-$sth->execute( array(28, 'left-body', 'default') );
-$sth->execute( array(29, 'left-body', 'default') );
-$sth->execute( array(30, 'left-body', 'default') );
-$sth->execute( array(31, 'left-body', 'default') );
-$sth->execute( array(32, 'left-body', 'default') );
-$sth->execute( array(33, 'left-body', 'default') );
-$sth->execute( array(34, 'left-body', 'default') );
-$sth->execute( array(35, 'left-body-right', 'default') );
-$sth->execute( array(36, 'left-body-right', 'default') );
-$sth->execute( array(39, 'left-body-right', 'default') );
-$sth->execute( array(42, 'left-body-right', 'default') );
-$sth->execute( array(43, 'left-body-right', 'default') );
-$sth->execute( array(46, 'left-body-right', 'default') );
-$sth->execute( array(47, 'left-body-right', 'default') );
-$sth->execute( array(52, 'left-body-right', 'default') );
-$sth->execute( array(53, 'body', 'default') );
-$sth->execute( array(64, 'left-body-right', 'default') );
-$sth->execute( array(65, 'left-body-right', 'default') );
-
+$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)' );
+$sth->execute( array( 0, 'left-body-right', 'default') );
 $sth->execute( array(0, 'body', 'mobile_default') );
-$sth->execute( array(2, 'body', 'mobile_default') );
-$sth->execute( array(5, 'body', 'mobile_default') );
-$sth->execute( array(6, 'body', 'mobile_default') );
-$sth->execute( array(7, 'body', 'mobile_default') );
-$sth->execute( array(13, 'body', 'mobile_default') );
-$sth->execute( array(15, 'body', 'mobile_default') );
-$sth->execute( array(16, 'body', 'mobile_default') );
-$sth->execute( array(17, 'body', 'mobile_default') );
-$sth->execute( array(18, 'body', 'mobile_default') );
-$sth->execute( array(19, 'body', 'mobile_default') );
-$sth->execute( array(20, 'body', 'mobile_default') );
-$sth->execute( array(21, 'body', 'mobile_default') );
-$sth->execute( array(22, 'body', 'mobile_default') );
-$sth->execute( array(23, 'body', 'mobile_default') );
-$sth->execute( array(24, 'body', 'mobile_default') );
-$sth->execute( array(25, 'body', 'mobile_default') );
-$sth->execute( array(26, 'body', 'mobile_default') );
-$sth->execute( array(27, 'body', 'mobile_default') );
-$sth->execute( array(28, 'body', 'mobile_default') );
-$sth->execute( array(29, 'body', 'mobile_default') );
-$sth->execute( array(30, 'body', 'mobile_default') );
-$sth->execute( array(31, 'body', 'mobile_default') );
-$sth->execute( array(32, 'body', 'mobile_default') );
-$sth->execute( array(33, 'body', 'mobile_default') );
-$sth->execute( array(34, 'body', 'mobile_default') );
-$sth->execute( array(36, 'body', 'mobile_default') );
-$sth->execute( array(39, 'body', 'mobile_default') );
-$sth->execute( array(42, 'body', 'mobile_default') );
-$sth->execute( array(43, 'body', 'mobile_default') );
-$sth->execute( array(46, 'body', 'mobile_default') );
-$sth->execute( array(47, 'body', 'mobile_default') );
-$sth->execute( array(48, 'body', 'mobile_default') );
-$sth->execute( array(35, 'body', 'mobile_default') );
-$sth->execute( array(50, 'body', 'mobile_default') );
-$sth->execute( array(63, 'body', 'mobile_default') );
-$sth->execute( array(64, 'body', 'mobile_default') );
-$sth->execute( array(65, 'body', 'mobile_default') );
+
+foreach( $array_funcid as $funcid )
+{
+    foreach( $themes_default as $_key => $_vals )
+    {
+        if( in_array( $funcid, $_vals ) )
+        {
+            $sth->execute( array( $funcid, $_key, 'default') );
+        }
+    }
+    
+    foreach( $themes_mobile as $_key => $_vals )
+    {
+        if( in_array( $funcid, $_vals ) )
+        {
+            $sth->execute( array( $funcid, $_key, 'mobile_default') );
+        }
+    }
+}
 
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups' );
 $sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' );
@@ -220,18 +265,8 @@ $sth->execute( array('mobile_default', 'theme', 'global.company_info.php', 'Mana
 // Thiết lập Block
 $db->query( 'TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_weight' );
 
-$array_funcid = array();
-$array_funcid_mod = array();
-$array_weight_block = array();
-
-$func_result = $db->query( 'SELECT func_id, func_name, in_module FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs WHERE show_func = 1 ORDER BY in_module ASC, subweight ASC' );
-while( list( $func_id_i, $func_name, $in_module ) = $func_result->fetch( 3 ) )
-{
-	$array_funcid[] = $func_id_i;
-	$array_funcid_mod[$in_module][$func_name] = $func_id_i;
-}
-
 $func_result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups ORDER BY theme ASC, position ASC, weight ASC' );
+$array_weight_block = array();
 while( $row = $func_result->fetch() )
 {
 	if( $row['all_func']==1 )

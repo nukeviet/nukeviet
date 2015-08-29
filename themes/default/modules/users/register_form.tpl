@@ -39,7 +39,7 @@
         
         <div class="form-group rel">
             <div class="input-group">
-                <input type="text" class="required form-control" placeholder="{GLANG.your_question}" value="" name="your_question" maxlength="255" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.your_question_empty}">
+                <input type="text" class="required form-control" placeholder="{LANG.question}" value="" name="your_question" maxlength="255" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.your_question_empty}">
                 <span class="input-group-addon pointer" title="{LANG.select_question}" onclick="showQlist(this);"><em class="fa fa-caret-down fa-lg"></em></span>
             </div>
             <div class="qlist" data-show="no">
@@ -174,6 +174,7 @@
         </div>
     	<div class="text-center margin-bottom-lg">
             <input type="hidden" name="checkss" value="{CHECKSS}" />
+            <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
             <input type="submit" class="btn btn-primary" value="{LANG.register}" />
     	</div>
