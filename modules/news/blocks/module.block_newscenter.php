@@ -115,6 +115,8 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
             $xtpl = new XTemplate( 'block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
             $xtpl->assign( 'lang', $lang_module );
             $xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );
+            $xtpl->assign( 'TEMPLATE', $block_theme );
+
 			$_first = true;
             foreach ( $list as $row )
             {
