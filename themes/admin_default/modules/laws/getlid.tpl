@@ -13,7 +13,7 @@
 		<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/themes/{GLOBAL_CONFIG.module_theme}/css/{MODULE_FILE}.css" rel="stylesheet" />
 		<script type="text/javascript">
 			//<![CDATA[
-			var nv_siteroot = "{NV_BASE_SITEURL}";
+			var nv_base_siteurl = "{NV_BASE_SITEURL}";
 			//]]>
 		</script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{NV_LANG_INTERFACE}.js"></script>
@@ -86,7 +86,7 @@ $("#pfrom,#pto,#efrom,#eto").datepicker({
 	changeMonth: true,
 	changeYear: true,
 	showOtherMonths: true,
-	//buttonImage: nv_siteroot+"assets/images/calendar.gif",
+	buttonImage: nv_base_siteurl+"assets/images/calendar.gif",
 	//buttonImageOnly: true,
 	buttonText: '{LANG.select}',
 	showButtonPanel: true,

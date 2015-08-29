@@ -188,7 +188,7 @@
 								</select>
 								<div id="exptimearea" style="display:{DATA.display}">
 									<input class="form-control" name="exptime" id="exptime" value="{DATA.exptime}" style="width: 110px;" maxlength="10" type="text" />
-									<img src="{NV_BASE_SITEURL}images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'exptime', 'dd.mm.yyyy', true);" alt="" height="17" /> ({LANG.prm})
+									<img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/calendar.jpg" style="cursor: pointer; vertical-align: middle;" onclick="popCalendar.show(this, 'exptime', 'dd.mm.yyyy', true);" alt="" height="17" /> ({LANG.prm})
 								</div>
 								<script type="text/javascript">
 									$(document).ready(function() {
@@ -324,7 +324,7 @@
 		changeMonth : true,
 		changeYear : true,
 		showOtherMonths : true,
-		buttonImage : nv_siteroot + "assets/images/calendar.gif",
+		buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 		buttonImageOnly : true
 	});
 
