@@ -129,6 +129,7 @@ $lang_module['setting_auto_tags'] = 'Automatically generate keywords for article
 $lang_module['setting_tags_remind'] = 'Remind tag has no description';
 $lang_module['setting_facebookAppID'] = 'Facebook App ID';
 $lang_module['setting_facebookAppIDNote'] = '(There format 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
+$lang_module['setting_alias_lower'] = 'Alias to lowercase when creating a new';
 $lang_module['setting_socialbutton'] = 'Show tools Like facebook, G +, Twitter while watching posts';
 $lang_module['setup_payment'] = 'Integrate the on-line payment';
 $lang_module['setup_payment_guide'] = 'See the tutorial';

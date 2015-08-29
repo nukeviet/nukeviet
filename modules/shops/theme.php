@@ -500,7 +500,7 @@ function view_home_all( $data_content, $compare_id, $html_pages = '', $sort = 0,
 			$xtpl->assign( 'hometext', $data_row['hometext'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 
-			if( $pro_config['active_gift'] and $data_row['gift_content'] != '' )
+			if( $pro_config['active_gift'] and !empty($data_row['gift_content']) )
 			{
 				$xtpl->parse( 'main.items.gift_content' );
 			}

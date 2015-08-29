@@ -130,6 +130,7 @@ $lang_module['setting_auto_tags'] = 'Tự động tạo từ khóa cho bài vi�
 $lang_module['setting_tags_remind'] = 'Nhắc nhở các từ khóa không có mô tả';
 $lang_module['setting_facebookAppID'] = 'Facebook App ID';
 $lang_module['setting_facebookAppIDNote'] = ' (Có dạng 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xem chi tiết</a>)';
+$lang_module['setting_alias_lower'] = 'Chuyển Liên kết tĩnh về chữ thường khi tạo mới';
 $lang_module['setting_socialbutton'] = 'Hiển thị các công cụ Like facebook, G+, Twitter khi xem bài viết';
 $lang_module['template_setting_active'] = 'Sử dụng chức Tùy biến dữ liệu';
 $lang_module['setup_payment'] = 'Tích hợp cổng thanh toán';
