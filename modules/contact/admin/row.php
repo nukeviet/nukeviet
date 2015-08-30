@@ -36,24 +36,20 @@ $xtpl = new XTemplate( 'row.tpl', NV_ROOTDIR . '/themes/' . $global_config['modu
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
+$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
 
-$sql = 'SELECT t1.admin_id as id, t1.lev as lev, t2.username as admin_login, t2.email as admin_email, t2.first_name as admin_firstname, t2.last_name as admin_lastname
+$sql = 'SELECT t1.admin_id, t1.lev as level, t1.is_suspend, t2.username, t2.email, t2.first_name, t2.last_name, t2.active
 	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
 	INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2
 	ON t1.admin_id = t2.userid
-	WHERE t1.lev!=0 AND t1.is_suspend=0';
+	WHERE t1.lev!=0';
 $result = $db->query( $sql );
 
 $adms = array();
 while( $row = $result->fetch() )
 {
-	$adms[$row['id']] = array(
-		'login' => $row['admin_login'],
-		'first_name' => $row['admin_firstname'],
-		'last_name' => $row['admin_lastname'],
-		'email' => $row['admin_email'],
-		'level' => intval( $row['lev'] )
-	);
+	$row['is_suspend'] = ( $row['is_suspend'] or empty( $row['active'] ) ) ? true : false;
+	$adms[$row['admin_id']] = $row;
 }
 
 $error = '';
@@ -346,11 +342,13 @@ $a = 0;
 foreach( $adms as $admid => $values )
 {
 	$xtpl->assign( 'ADMIN', array(
-		'login' => $values['login'],
-		'first_name' => $values['first_name'],
-		'last_name' => $values['last_name'],
+		'suspend' => ( $values['is_suspend'] ) ? 'class="warning" title="' . $lang_global['admin_suspend'] . '"' : '',
+		'username' => $values['username'],
+		'full_name' => nv_show_name_user( $values['first_name'], $values['last_name'], $values['username'] ),
 		'email' => $values['email'],
 		'admid' => $admid,
+		'img' => 'admin' . $values['level'],
+		'level' => $lang_global['level' . $values['level']],
 		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? ' checked="checked"' : '',
 		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? ' checked="checked"' : '',
 		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? ' checked="checked"' : '',
