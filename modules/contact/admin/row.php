@@ -70,27 +70,26 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$phone = $nv_Request->get_title( 'phone', 'post', '', 1 );
 	$fax = $nv_Request->get_title( 'fax', 'post', '', 1 );
 	$email = $nv_Request->get_title( 'email', 'post', '', 1 );
-    $otherVar = $nv_Request->get_typed_array( 'otherVar', 'post', 'title', '' );
-    $otherVal = $nv_Request->get_typed_array( 'otherVal', 'post', 'title', '' );
-    $cats = $nv_Request->get_typed_array( 'cats', 'post', 'title', '' );
+	$otherVar = $nv_Request->get_typed_array( 'otherVar', 'post', 'title', '' );
+	$otherVal = $nv_Request->get_typed_array( 'otherVal', 'post', 'title', '' );
+	$cats = $nv_Request->get_typed_array( 'cats', 'post', 'title', '' );
 	$note = $nv_Request->get_editor( 'note', '', NV_ALLOWED_HTML_TAGS );
 
 	$view_level = $nv_Request->get_array( 'view_level', 'post', array() );
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
 	$obt_level = $nv_Request->get_array( 'obt_level', 'post', array() );
 
-    if( !empty( $email ) )
-    {
-        $_email = array_map( "trim", explode( ",", $email ) );
-        $email = array();
-        foreach($_email as $e)
-        {
-            $check_valid_email = nv_check_valid_email( $e );
-            if( empty( $check_valid_email ) ) $email[] = $e;
-        }
-        $email = implode( ", ", $email );
-    }
-    
+	if( ! empty( $email ) )
+	{
+		$_email = array_map( 'trim', explode( ',', $email ) );
+		$email = array();
+		foreach( $_email as $e )
+		{
+			$check_valid_email = nv_check_valid_email( $e );
+			if( empty( $check_valid_email ) ) $email[] = $e;
+		}
+		$email = implode( ', ', $email );
+	}
 
 	$admins = array();
 
@@ -128,7 +127,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['err_part_row_title'];
 	}
-	elseif( empty ( $alias ) )
+	elseif( empty( $alias ) )
 	{
 		$error = $lang_module['error_alias'];
 	}
@@ -152,27 +151,27 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			}
 		}
 		$admins_list = implode( ';', $admins_list );
-        
-        $others = array();
-        if( !empty( $otherVar ) )
-        {
-            foreach( $otherVar as $k => $var )
-            {
-                if( !empty( $var ) AND isset( $otherVal[$k] ) AND !empty( $otherVal[$k] ) )
-                {
-                    $others[$var] = $otherVal[$k];
-                }
-            }
-        }
-        $others = json_encode( $others );
-        $_cats = array_filter( $cats );
-        $_cats = !empty( $_cats ) ? implode( "|", $_cats) : "";
+
+		$others = array();
+		if( ! empty( $otherVar ) )
+		{
+			foreach( $otherVar as $k => $var )
+			{
+				if( ! empty( $var ) and isset( $otherVal[$k] ) and ! empty( $otherVal[$k] ) )
+				{
+					$others[$var] = $otherVal[$k];
+				}
+			}
+		}
+		$others = json_encode( $others );
+		$_cats = array_filter( $cats );
+		$_cats = ! empty( $_cats ) ? implode( '|', $_cats ) : '';
 
 		if( $id )
 		{
 			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, phone = :phone, fax=:fax, email=:email, others=:others, cats=:cats, note=:note, admins=:admins WHERE id =' . $id;
 			$name_key = 'log_edit_row';
-			$note_action = 'id: ' . $id .' ' . $full_name;
+			$note_action = 'id: ' . $id . ' ' . $full_name;
 		}
 		else
 		{
@@ -185,24 +184,24 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		try
 		{
-			$sth = $db->prepare( $sql);
+			$sth = $db->prepare( $sql );
 			$sth->bindParam( ':full_name', $full_name, PDO::PARAM_STR );
 			$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
 			$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
 			$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
 			$sth->bindParam( ':email', $email, PDO::PARAM_STR );
-	        $sth->bindParam( ':others', $others, PDO::PARAM_STR );
-	        $sth->bindParam( ':cats', $_cats, PDO::PARAM_STR );
+			$sth->bindParam( ':others', $others, PDO::PARAM_STR );
+			$sth->bindParam( ':cats', $_cats, PDO::PARAM_STR );
 			$sth->bindParam( ':note', $note, PDO::PARAM_STR );
 			$sth->bindParam( ':admins', $admins_list, PDO::PARAM_STR );
-			if( !$id )
+			if( ! $id )
 			{
 				$sth->bindParam( ':weight', $weight, PDO::PARAM_STR );
 			}
 			$sth->execute();
-			if ($sth->rowCount() )
+			if( $sth->rowCount() )
 			{
-				nv_insert_logs( NV_LANG_DATA, $module_name, $name_key , $note_action, $admin_info['userid'] );
+				nv_insert_logs( NV_LANG_DATA, $module_name, $name_key, $note_action, $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
 			}
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department' );
@@ -224,9 +223,9 @@ else
 		$phone = $frow['phone'];
 		$fax = $frow['fax'];
 		$email = $frow['email'];
-        $others = json_decode( $frow['others'], true );
-        $cats = !empty( $frow['cats'] ) ? explode("|", $frow['cats'] ) : array();
-        
+		$others = json_decode( $frow['others'], true );
+		$cats = ! empty( $frow['cats'] ) ? explode( '|', $frow['cats'] ) : array();
+
 		$note = nv_editor_br2nl( $frow['note'] );
 
 		$admins_list = $frow['admins'];
@@ -295,7 +294,7 @@ else
 
 if( ! empty( $note ) ) $note = nv_htmlspecialchars( $note );
 
-if( empty( $row['alias'] ) ) $xtpl->parse( 'main.get_alias' );
+if( empty( $id ) ) $xtpl->parse( 'main.get_alias' );
 
 if( ! empty( $error ) )
 {
@@ -321,28 +320,28 @@ $xtpl->assign( 'DATA', array(
 	'note' => $note
 ) );
 
-if( !empty( $others ) )
+if( ! empty( $others ) )
 {
-    foreach( $others as $var => $val )
-    {
-        $xtpl->assign( 'OTHER', array(
-        	'var' => $var,
-        	'val' => $val
-        ) );
-        $xtpl->parse( 'main.other' );
-    }
+	foreach( $others as $var => $val )
+	{
+		$xtpl->assign( 'OTHER', array(
+			'var' => $var,
+			'val' => $val
+		) );
+		$xtpl->parse( 'main.other' );
+	}
 }
 
-if( !empty( $cats ) )
+if( ! empty( $cats ) )
 {
-    foreach( $cats as $val )
-    {
-        $xtpl->assign( 'CATS', $val );
-        $xtpl->parse( 'main.cats' );
-    }
+	foreach( $cats as $val )
+	{
+		$xtpl->assign( 'CATS', $val );
+		$xtpl->parse( 'main.cats' );
+	}
 }
 
-//list danh sách bộ phận liên hệ
+// list danh sách bộ phận liên hệ
 $a = 0;
 foreach( $adms as $admid => $values )
 {

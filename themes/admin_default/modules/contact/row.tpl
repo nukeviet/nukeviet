@@ -105,7 +105,6 @@
 		</table>
 	</div>
 </form>
-<!-- BEGIN: get_alias -->
 <script type="text/javascript">
 function removefieldset(a){
     var b = $(a).parent().parent();
@@ -119,11 +118,12 @@ function addfieldset(a){
     $(a).parent().find(".new fieldset").last().append('&nbsp;<em class="fa fa-remove fa-pointer" onclick="removefieldset(this);">&nbsp;</em>');
     return!1
 }
-    $(function() {
-        $('#idfull_name').change(function() {
-            get_alias('{ID}');
-        });
+<!-- BEGIN: get_alias -->
+$(function() {
+    $('#idfull_name').change(function() {
+        get_alias('{ID}');
     });
-</script>
+});
 <!-- END: get_alias -->
+</script>
 <!-- END: main -->
