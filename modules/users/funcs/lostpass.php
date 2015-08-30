@@ -24,7 +24,7 @@ if( defined( 'NV_IS_USER_FORUM' ) )
 
 /**
  * lost_pass_sendMail()
- * 
+ *
  * @param mixed $row
  * @return void
  */
@@ -42,7 +42,7 @@ function lost_pass_sendMail( $row )
 
 		$sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
 		$db->query( $sql );
-        
+
 		$name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
 		$name = array_filter( $name );
 		$name = implode( ' ', $name );
@@ -95,7 +95,7 @@ if( $checkss == $data['checkss'] )
 	if( empty( $check_email ) )
 	{
 		$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email= :userField AND active=1';
-		$userField = $data['userField'];
+		$userField = nv_strtolower( $data['userField'] );
 	}
 	else
 	{

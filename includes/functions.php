@@ -300,7 +300,8 @@ function nv_check_valid_login( $login, $max, $min )
 			$pattern = '/^[0-9a-z]+[0-9a-z\-\_\\s]+[0-9a-z]+$/i';
 			break;
 		case 4:
-			return ( $login != strip_punctuation( $login ) ? $lang_global['unick_type_' . $type] : '' );
+			$_login = str_replace( '@', '', $login );
+			return ( $login != strip_punctuation( $_login ) ? $lang_global['unick_type_' . $type] : '' );
             break;
 		default:
 			return '';
