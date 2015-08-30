@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( $nv_Request->isset_request( 'nv_genpass', 'post' ) )
 {
 	$_len = round( ( NV_UPASSMIN + NV_UPASSMAX ) / 2 );
-	echo nv_genpass( $_len );
+	echo nv_genpass( $_len, $global_config['nv_upass_type'] );
 	exit();
 }
 
