@@ -940,6 +940,10 @@ function news_print( $result )
 		$xtpl->parse( 'main.author' );
 	}
 
+	if( $result['status'] != 1 )
+	{
+		$xtpl->parse( 'main.no_public' );
+	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
