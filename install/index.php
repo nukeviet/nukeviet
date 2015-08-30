@@ -1048,6 +1048,7 @@ elseif( $step == 6 )
 
 	$array_data['error'] = $error;
 	$title = $lang_module['website_info'];
+	$lang_module['admin_pass_note'] = $lang_global['upass_type_' . $global_config['nv_upass_type']];
 	$contents = nv_step_6( $array_data, $nextstep );
 }
 elseif( $step == 7 )

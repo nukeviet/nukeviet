@@ -68,7 +68,7 @@ $global_config['gfx_chk'] = 3;
 $global_config['nv_unick_type'] = 4;
 
 // Mật khẩu cần kết hợp số và chữ
-$global_config['nv_upass_type'] = 0;
+$global_config['nv_upass_type'] = 2;
 
 // Thời gian lặp lại việc sao lưu CSDL tính bằng ngày
 $global_config['dump_interval'] = 1;
@@ -80,7 +80,7 @@ $global_config['hashprefix'] = '{SSHA}';
 define( 'NV_UPASSMAX', 20 );
 
 //so ky tu toi thieu cua password doi voi user
-define( 'NV_UPASSMIN', 5 );
+define( 'NV_UPASSMIN', 8 );
 
 //so ky tu toi da cua ten tai khoan doi voi user
 define( 'NV_UNICKMAX', 20 );
