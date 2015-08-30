@@ -12,7 +12,8 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];
 
-$usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 3 );
+$usactive = ( $global_config['idsite'] ) ? 3 : -1;
+$usactive_old = $nv_Request->get_int( 'usactive', 'cookie', $usactive );
 $usactive = $nv_Request->get_int( 'usactive', 'post,get', $usactive_old );
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
 
