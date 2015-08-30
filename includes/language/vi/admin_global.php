@@ -40,6 +40,7 @@ $lang_global['admin_password_empty'] = 'Mật khẩu quản trị của bạn ch
 $lang_global['adminpassincorrect'] = 'Mật khẩu quản trị &ldquo;<strong>%s</strong>&rdquo; không chính xác. Hãy thử lại lần nữa';
 $lang_global['admin_password'] = 'Mật khẩu của bạn';
 $lang_global['admin_no_allow_func'] = 'Bạn không có quyền truy cập chức năng này';
+$lang_global['admin_suspend'] = 'Tài khoản Bị đình chỉ';
 
 $lang_global['block_modules'] = 'Block của modules';
 $lang_global['hello_admin1'] = 'Xin chào %1$s ! Lần đăng nhập Quản trị trước vào %2$s';

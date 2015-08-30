@@ -36,24 +36,20 @@ $xtpl = new XTemplate( 'row.tpl', NV_ROOTDIR . '/themes/' . $global_config['modu
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
+$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
 
-$sql = 'SELECT t1.admin_id as id, t1.lev as lev, t2.username as admin_login, t2.email as admin_email, t2.first_name as admin_firstname, t2.last_name as admin_lastname
+$sql = 'SELECT t1.admin_id, t1.lev as level, t1.is_suspend, t2.username, t2.email, t2.first_name, t2.last_name, t2.active
 	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
 	INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2
 	ON t1.admin_id = t2.userid
-	WHERE t1.lev!=0 AND t1.is_suspend=0';
+	WHERE t1.lev!=0';
 $result = $db->query( $sql );
 
 $adms = array();
 while( $row = $result->fetch() )
 {
-	$adms[$row['id']] = array(
-		'login' => $row['admin_login'],
-		'first_name' => $row['admin_firstname'],
-		'last_name' => $row['admin_lastname'],
-		'email' => $row['admin_email'],
-		'level' => intval( $row['lev'] )
-	);
+	$row['is_suspend'] = ( $row['is_suspend'] or empty( $row['active'] ) ) ? true : false;
+	$adms[$row['admin_id']] = $row;
 }
 
 $error = '';
@@ -70,27 +66,26 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$phone = $nv_Request->get_title( 'phone', 'post', '', 1 );
 	$fax = $nv_Request->get_title( 'fax', 'post', '', 1 );
 	$email = $nv_Request->get_title( 'email', 'post', '', 1 );
-    $otherVar = $nv_Request->get_typed_array( 'otherVar', 'post', 'title', '' );
-    $otherVal = $nv_Request->get_typed_array( 'otherVal', 'post', 'title', '' );
-    $cats = $nv_Request->get_typed_array( 'cats', 'post', 'title', '' );
+	$otherVar = $nv_Request->get_typed_array( 'otherVar', 'post', 'title', '' );
+	$otherVal = $nv_Request->get_typed_array( 'otherVal', 'post', 'title', '' );
+	$cats = $nv_Request->get_typed_array( 'cats', 'post', 'title', '' );
 	$note = $nv_Request->get_editor( 'note', '', NV_ALLOWED_HTML_TAGS );
 
 	$view_level = $nv_Request->get_array( 'view_level', 'post', array() );
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
 	$obt_level = $nv_Request->get_array( 'obt_level', 'post', array() );
 
-    if( !empty( $email ) )
-    {
-        $_email = array_map( "trim", explode( ",", $email ) );
-        $email = array();
-        foreach($_email as $e)
-        {
-            $check_valid_email = nv_check_valid_email( $e );
-            if( empty( $check_valid_email ) ) $email[] = $e;
-        }
-        $email = implode( ", ", $email );
-    }
-    
+	if( ! empty( $email ) )
+	{
+		$_email = array_map( 'trim', explode( ',', $email ) );
+		$email = array();
+		foreach( $_email as $e )
+		{
+			$check_valid_email = nv_check_valid_email( $e );
+			if( empty( $check_valid_email ) ) $email[] = $e;
+		}
+		$email = implode( ', ', $email );
+	}
 
 	$admins = array();
 
@@ -128,7 +123,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['err_part_row_title'];
 	}
-	elseif( empty ( $alias ) )
+	elseif( empty( $alias ) )
 	{
 		$error = $lang_module['error_alias'];
 	}
@@ -152,27 +147,27 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			}
 		}
 		$admins_list = implode( ';', $admins_list );
-        
-        $others = array();
-        if( !empty( $otherVar ) )
-        {
-            foreach( $otherVar as $k => $var )
-            {
-                if( !empty( $var ) AND isset( $otherVal[$k] ) AND !empty( $otherVal[$k] ) )
-                {
-                    $others[$var] = $otherVal[$k];
-                }
-            }
-        }
-        $others = json_encode( $others );
-        $_cats = array_filter( $cats );
-        $_cats = !empty( $_cats ) ? implode( "|", $_cats) : "";
+
+		$others = array();
+		if( ! empty( $otherVar ) )
+		{
+			foreach( $otherVar as $k => $var )
+			{
+				if( ! empty( $var ) and isset( $otherVal[$k] ) and ! empty( $otherVal[$k] ) )
+				{
+					$others[$var] = $otherVal[$k];
+				}
+			}
+		}
+		$others = json_encode( $others );
+		$_cats = array_filter( $cats );
+		$_cats = ! empty( $_cats ) ? implode( '|', $_cats ) : '';
 
 		if( $id )
 		{
 			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, phone = :phone, fax=:fax, email=:email, others=:others, cats=:cats, note=:note, admins=:admins WHERE id =' . $id;
 			$name_key = 'log_edit_row';
-			$note_action = 'id: ' . $id .' ' . $full_name;
+			$note_action = 'id: ' . $id . ' ' . $full_name;
 		}
 		else
 		{
@@ -185,24 +180,24 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		try
 		{
-			$sth = $db->prepare( $sql);
+			$sth = $db->prepare( $sql );
 			$sth->bindParam( ':full_name', $full_name, PDO::PARAM_STR );
 			$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
 			$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
 			$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
 			$sth->bindParam( ':email', $email, PDO::PARAM_STR );
-	        $sth->bindParam( ':others', $others, PDO::PARAM_STR );
-	        $sth->bindParam( ':cats', $_cats, PDO::PARAM_STR );
+			$sth->bindParam( ':others', $others, PDO::PARAM_STR );
+			$sth->bindParam( ':cats', $_cats, PDO::PARAM_STR );
 			$sth->bindParam( ':note', $note, PDO::PARAM_STR );
 			$sth->bindParam( ':admins', $admins_list, PDO::PARAM_STR );
-			if( !$id )
+			if( ! $id )
 			{
 				$sth->bindParam( ':weight', $weight, PDO::PARAM_STR );
 			}
 			$sth->execute();
-			if ($sth->rowCount() )
+			if( $sth->rowCount() )
 			{
-				nv_insert_logs( NV_LANG_DATA, $module_name, $name_key , $note_action, $admin_info['userid'] );
+				nv_insert_logs( NV_LANG_DATA, $module_name, $name_key, $note_action, $admin_info['userid'] );
 				nv_del_moduleCache( $module_name );
 			}
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department' );
@@ -224,9 +219,9 @@ else
 		$phone = $frow['phone'];
 		$fax = $frow['fax'];
 		$email = $frow['email'];
-        $others = json_decode( $frow['others'], true );
-        $cats = !empty( $frow['cats'] ) ? explode("|", $frow['cats'] ) : array();
-        
+		$others = json_decode( $frow['others'], true );
+		$cats = ! empty( $frow['cats'] ) ? explode( '|', $frow['cats'] ) : array();
+
 		$note = nv_editor_br2nl( $frow['note'] );
 
 		$admins_list = $frow['admins'];
@@ -295,7 +290,7 @@ else
 
 if( ! empty( $note ) ) $note = nv_htmlspecialchars( $note );
 
-if( empty( $row['alias'] ) ) $xtpl->parse( 'main.get_alias' );
+if( empty( $id ) ) $xtpl->parse( 'main.get_alias' );
 
 if( ! empty( $error ) )
 {
@@ -321,37 +316,39 @@ $xtpl->assign( 'DATA', array(
 	'note' => $note
 ) );
 
-if( !empty( $others ) )
+if( ! empty( $others ) )
 {
-    foreach( $others as $var => $val )
-    {
-        $xtpl->assign( 'OTHER', array(
-        	'var' => $var,
-        	'val' => $val
-        ) );
-        $xtpl->parse( 'main.other' );
-    }
+	foreach( $others as $var => $val )
+	{
+		$xtpl->assign( 'OTHER', array(
+			'var' => $var,
+			'val' => $val
+		) );
+		$xtpl->parse( 'main.other' );
+	}
 }
 
-if( !empty( $cats ) )
+if( ! empty( $cats ) )
 {
-    foreach( $cats as $val )
-    {
-        $xtpl->assign( 'CATS', $val );
-        $xtpl->parse( 'main.cats' );
-    }
+	foreach( $cats as $val )
+	{
+		$xtpl->assign( 'CATS', $val );
+		$xtpl->parse( 'main.cats' );
+	}
 }
 
-//list danh sách bộ phận liên hệ
+// list danh sách bộ phận liên hệ
 $a = 0;
 foreach( $adms as $admid => $values )
 {
 	$xtpl->assign( 'ADMIN', array(
-		'login' => $values['login'],
-		'first_name' => $values['first_name'],
-		'last_name' => $values['last_name'],
+		'suspend' => ( $values['is_suspend'] ) ? 'class="warning" title="' . $lang_global['admin_suspend'] . '"' : '',
+		'username' => $values['username'],
+		'full_name' => nv_show_name_user( $values['first_name'], $values['last_name'], $values['username'] ),
 		'email' => $values['email'],
 		'admid' => $admid,
+		'img' => 'admin' . $values['level'],
+		'level' => $lang_global['level' . $values['level']],
 		'view_level' => ( $values['level'] === 1 or ( ! empty( $view_level ) and in_array( $admid, $view_level ) ) ) ? ' checked="checked"' : '',
 		'reply_level' => ( $values['level'] === 1 or ( ! empty( $reply_level ) and in_array( $admid, $reply_level ) ) ) ? ' checked="checked"' : '',
 		'obt_level' => ( ! empty( $obt_level ) and in_array( $admid, $obt_level ) ) ? ' checked="checked"' : '',

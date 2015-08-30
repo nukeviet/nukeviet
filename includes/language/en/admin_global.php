@@ -37,6 +37,8 @@ $lang_global['admin_password_empty'] = 'Administrator password has not been decl
 $lang_global['adminpassincorrect'] = 'Administrator password &ldquo;<strong>%s</strong>&rdquo; is inaccurate. Try again';
 $lang_global['admin_password'] = 'Password';
 $lang_global['admin_no_allow_func'] = 'You can\'t access this function';
+$lang_global['admin_suspend'] = 'Account Suspended';
+
 $lang_global['block_modules'] = 'Block in modules';
 $lang_global['hello_admin1'] = 'Wellcome %1$s ! Last login to administration at: %2$s';
 $lang_global['hello_admin2'] = 'Account: %1$s ! Your session was opened %2$s ago';

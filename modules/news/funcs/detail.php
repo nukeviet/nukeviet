@@ -107,7 +107,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 			{
 				$publtime = intval( $news_contents['publtime'] );
 			}
-			
+
 			$meta_property['og:type'] = 'article';
 			$meta_property['article:published_time'] = date( 'Y-m-dTH:i:s', $news_contents['publtime'] );
 			$meta_property['article:modified_time'] = date( 'Y-m-dTH:i:s', $news_contents['edittime'] );
@@ -121,7 +121,8 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		if( defined( 'NV_IS_MODADMIN' ) and $news_contents['status'] != 1 )
 		{
 			$alert = sprintf( $lang_module['status_alert'], $lang_module['status_' . $news_contents['status']] );
-			$my_head .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
+			$my_footer .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
+			$news_contents['allowed_send'] = 0;
 		}
 	}
 
@@ -257,7 +258,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		$related->closeCursor();
 		unset( $related, $row );
 	}
-	
+
 	$topic_array = array();
 	if( $news_contents['topicid'] > 0 & $st_links > 0)
 	{

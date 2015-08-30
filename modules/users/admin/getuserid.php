@@ -11,6 +11,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $area = $nv_Request->get_title( 'area', 'get', '' );
+$return = $nv_Request->get_title( 'return', 'get,post', '' );
 if( empty( $area ) )
 {
 	nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
@@ -30,11 +31,12 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'MODULE_FILE', $module_file );
 $xtpl->assign( 'AREA', $area );
+$xtpl->assign( 'RETURN', $return );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&area=' . $area . '&filtersql=' . $filtersql );
 
 $array = array();
 
-$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&amp;area=' . $area . '&amp;submit=1';
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&amp;area=' . $area . '&amp;return=' . $return . '&amp;submit=1';
 
 if( $nv_Request->isset_request( 'submit', 'get' ) )
 {
@@ -110,143 +112,137 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 
 	$array_where = array();
 
-	if( ! $is_null )
+	if( ! empty( $array['username'] ) )
 	{
-		if( ! empty( $array['username'] ) )
+		$base_url .= '&amp;username=' . rawurlencode( $array['username'] );
+		$array_where[] = "( username LIKE '%" . $db->dblikeescape( $array['username'] ) . "%' )";
+	}
+
+	if( ! empty( $array['full_name'] ) )
+	{
+		$base_url .= '&amp;full_name=' . rawurlencode( $array['full_name'] );
+
+		$where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
+		$array_where[] =  "(" . $where_fullname ." LIKE '%" . $db->dblikeescape( $array['full_name'] ) . "%' )";
+	}
+
+	if( ! empty( $array['email'] ) )
+	{
+		$base_url .= '&amp;email=' . rawurlencode( $array['email'] );
+		$array_where[] = "( email LIKE '%" . $db->dblikeescape( $array['email'] ) . "%' )";
+	}
+
+	if( ! empty( $array['sig'] ) )
+	{
+		$base_url .= '&amp;sig=' . rawurlencode( $array['sig'] );
+		$array_where[] = "( sig LIKE '%" . $db->dblikeescape( $array['sig'] ) . "%' )";
+	}
+
+	if( ! empty( $array['last_ip'] ) )
+	{
+		$base_url .= '&amp;last_ip=' . rawurlencode( $array['last_ip'] );
+		$array_where[] = "( last_ip LIKE '%" . $db->dblikeescape( $array['last_ip'] ) . "%' )";
+	}
+
+	if( ! empty( $array['gender'] ) )
+	{
+		$base_url .= '&amp;gender=' . rawurlencode( $array['gender'] );
+		$array_where[] = '( gender =' . $db->quote( $array['gender'] ) . ' )';
+	}
+
+	if( ! empty( $array['regdatefrom1'] ) )
+	{
+		$base_url .= '&amp;regdatefrom=' . rawurlencode( nv_date( 'd/m/Y', $array['regdatefrom1'] ) );
+		$array_where[] = '( regdate >= ' . $array['regdatefrom1'] . ' )';
+	}
+
+	if( ! empty( $array['regdateto1'] ) )
+	{
+		$base_url .= '&amp;regdateto=' . rawurlencode( nv_date( 'd/m/Y', $array['regdateto1'] ) );
+		$array_where[] = '( regdate <= ' . $array['regdateto1'] . ' )';
+	}
+
+	if( ! empty( $array['last_loginfrom1'] ) )
+	{
+		$base_url .= '&amp;last_loginfrom=' . rawurlencode( nv_date( 'd/m/Y', $array['last_loginfrom1'] ) );
+		$array_where[] = '( last_login >= ' . $array['last_loginfrom1'] . ' )';
+	}
+
+	if( ! empty( $array['last_loginto1'] ) )
+	{
+		$base_url .= '&amp;last_loginto=' . rawurlencode( nv_date( 'd/m/Y', $array['last_loginto1'] ) );
+		$array_where[] = '( last_login <= ' . $array['last_loginto1'] . ' )';
+	}
+	if( ! empty( $filtersql ) )
+	{
+		$data_str = $crypt->aes_decrypt( nv_base64_decode( $filtersql ), md5( $global_config['sitekey'] . $client_info['session_id'] ) );
+		if( ! empty( $data_str ) )
 		{
-			$base_url .= '&amp;username=' . rawurlencode( $array['username'] );
-			$array_where[] = "( username LIKE '%" . $db->dblikeescape( $array['username'] ) . "%' )";
+			$array_where[] = $data_str;
 		}
+	}
 
-		if( ! empty( $array['full_name'] ) )
-		{
-			$base_url .= '&amp;full_name=' . rawurlencode( $array['full_name'] );
+	// Order data
+	$orderida = array( 'url' => ( $orderid == 'ASC' ) ? $base_url . '&amp;orderid=DESC' : $base_url . '&amp;orderid=ASC', 'class' => ( $orderid == '' ) ? 'nooder' : strtolower( $orderid ) );
 
-			$where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
-			$array_where[] =  "(" . $where_fullname ." LIKE '%" . $db->dblikeescape( $array['full_name'] ) . "%' )";
-		}
+	$orderusernamea = array( 'url' => ( $orderusername == 'ASC' ) ? $base_url . '&amp;orderusername=DESC' : $base_url . '&amp;orderusername=ASC', 'class' => ( $orderusername == '' ) ? 'nooder' : strtolower( $orderusername ) );
 
-		if( ! empty( $array['email'] ) )
-		{
-			$base_url .= '&amp;email=' . rawurlencode( $array['email'] );
-			$array_where[] = "( email LIKE '%" . $db->dblikeescape( $array['email'] ) . "%' )";
-		}
+	$orderemaila = array( 'url' => ( $orderemail == 'ASC' ) ? $base_url . '&amp;orderemail=DESC' : $base_url . '&amp;orderemail=ASC', 'class' => ( $orderemail == '' ) ? 'nooder' : strtolower( $orderemail ) );
 
-		if( ! empty( $array['sig'] ) )
-		{
-			$base_url .= '&amp;sig=' . rawurlencode( $array['sig'] );
-			$array_where[] = "( sig LIKE '%" . $db->dblikeescape( $array['sig'] ) . "%' )";
-		}
+	$orderregdatea = array( 'url' => ( $orderregdate == 'ASC' ) ? $base_url . '&amp;orderregdate=DESC' : $base_url . '&amp;orderregdate=ASC', 'class' => ( $orderregdate == '' ) ? 'nooder' : strtolower( $orderregdate ) );
 
-		if( ! empty( $array['last_ip'] ) )
-		{
-			$base_url .= '&amp;last_ip=' . rawurlencode( $array['last_ip'] );
-			$array_where[] = "( last_ip LIKE '%" . $db->dblikeescape( $array['last_ip'] ) . "%' )";
-		}
+	// SQL data
+	$order_by = '';
+	if( ! empty( $orderid ) )
+	{
+		$base_url .= '&amp;orderid=' . $orderid;
+		$order_by = 'userid ' . $orderid;
+	}
+	elseif( ! empty( $orderusername ) )
+	{
+		$base_url .= '&amp;orderusername=' . $orderusername;
+		$order_by = 'username ' . $orderusername;
+	}
+	elseif( ! empty( $orderemail ) )
+	{
+		$base_url .= '&amp;orderemail=' . $orderemail;
+		$order_by = 'email ' . $orderemail;
+	}
+	elseif( ! empty( $orderregdate ) )
+	{
+		$base_url .= '&amp;orderregdate=' . $orderregdate;
+		$order_by = 'regdate ' . $orderregdate;
+	}
 
-		if( ! empty( $array['gender'] ) )
-		{
-			$base_url .= '&amp;gender=' . rawurlencode( $array['gender'] );
-			$array_where[] = '( gender =' . $db->quote( $array['gender'] ) . ' )';
-		}
+	$page = $nv_Request->get_int( 'page', 'get', 1 );
+	$per_page = 10;
 
-		if( ! empty( $array['regdatefrom1'] ) )
-		{
-			$base_url .= '&amp;regdatefrom=' . rawurlencode( nv_date( 'd/m/Y', $array['regdatefrom1'] ) );
-			$array_where[] = '( regdate >= ' . $array['regdatefrom1'] . ' )';
-		}
+	$db->sqlreset()
+		->select( 'COUNT(*)' )
+		->from( NV_USERS_GLOBALTABLE );
+	if( ! empty( $array_where ) )
+	{
+		$db->where( implode( ' AND ', $array_where ) );
+	}
 
-		if( ! empty( $array['regdateto1'] ) )
-		{
-			$base_url .= '&amp;regdateto=' . rawurlencode( nv_date( 'd/m/Y', $array['regdateto1'] ) );
-			$array_where[] = '( regdate <= ' . $array['regdateto1'] . ' )';
-		}
+	$num_items = $db->query( $db->sql() )->fetchColumn();
 
-		if( ! empty( $array['last_loginfrom1'] ) )
-		{
-			$base_url .= '&amp;last_loginfrom=' . rawurlencode( nv_date( 'd/m/Y', $array['last_loginfrom1'] ) );
-			$array_where[] = '( last_login >= ' . $array['last_loginfrom1'] . ' )';
-		}
+	$select_return = 'userid, username, email, regdate';
+	$_array_f_return = explode( ',', $select_return );
+	$_array_f_return = array_map( 'trim', $_array_f_return );
+	$return = ( in_array( $return, $_array_f_return ) ) ? $return : 'userid';
 
-		if( ! empty( $array['last_loginto1'] ) )
-		{
-			$base_url .= '&amp;last_loginto=' . rawurlencode( nv_date( 'd/m/Y', $array['last_loginto1'] ) );
-			$array_where[] = '( last_login <= ' . $array['last_loginto1'] . ' )';
-		}
-		if( ! empty( $filtersql ) )
-		{
-			$data_str = $crypt->aes_decrypt( nv_base64_decode( $filtersql ), md5( $global_config['sitekey'] . $client_info['session_id'] ) );
-			if( ! empty( $data_str ) )
-			{
-				$array_where[] = $data_str;
-			}
-		}
-
-		// Order data
-		$orderida = array( 'url' => ( $orderid == 'ASC' ) ? $base_url . '&amp;orderid=DESC' : $base_url . '&amp;orderid=ASC', 'class' => ( $orderid == '' ) ? 'nooder' : strtolower( $orderid ) );
-
-		$orderusernamea = array( 'url' => ( $orderusername == 'ASC' ) ? $base_url . '&amp;orderusername=DESC' : $base_url . '&amp;orderusername=ASC', 'class' => ( $orderusername == '' ) ? 'nooder' : strtolower( $orderusername ) );
-
-		$orderemaila = array( 'url' => ( $orderemail == 'ASC' ) ? $base_url . '&amp;orderemail=DESC' : $base_url . '&amp;orderemail=ASC', 'class' => ( $orderemail == '' ) ? 'nooder' : strtolower( $orderemail ) );
-
-		$orderregdatea = array( 'url' => ( $orderregdate == 'ASC' ) ? $base_url . '&amp;orderregdate=DESC' : $base_url . '&amp;orderregdate=ASC', 'class' => ( $orderregdate == '' ) ? 'nooder' : strtolower( $orderregdate ) );
-
-		// SQL data
-		$order_by = '';
-		if( ! empty( $orderid ) )
-		{
-			$base_url .= '&amp;orderid=' . $orderid;
-			$order_by = 'userid ' . $orderid;
-		}
-		elseif( ! empty( $orderusername ) )
-		{
-			$base_url .= '&amp;orderusername=' . $orderusername;
-			$order_by = 'username ' . $orderusername;
-		}
-		elseif( ! empty( $orderemail ) )
-		{
-			$base_url .= '&amp;orderemail=' . $orderemail;
-			$order_by = 'email ' . $orderemail;
-		}
-		elseif( ! empty( $orderregdate ) )
-		{
-			$base_url .= '&amp;orderregdate=' . $orderregdate;
-			$order_by = 'regdate ' . $orderregdate;
-		}
-
-		$page = $nv_Request->get_int( 'page', 'get', 1 );
-		$per_page = 10;
-
-		$db->sqlreset()
-			->select( 'COUNT(*)' )
-			->from( NV_USERS_GLOBALTABLE );
-		if( ! empty( $array_where ) )
-		{
-			$db->where( implode( ' AND ', $array_where ) );
-		}
-
-		$num_items = $db->query( $db->sql() )->fetchColumn();
-
-		$db->select( 'userid, username, email, regdate' )
-			->limit( $per_page )
-			->offset( ( $page - 1 ) * $per_page );
-		if( ! empty( $order_by ) )
-		{
-			$db->order( $order_by );
-		}
-
-		$result2 = $db->query( $db->sql() );
-		while( $row = $result2->fetch() )
-		{
-			$array_user[$row['userid']] = array(
-				'userid' => $row['userid'],
-				'username' => $row['username'],
-				'email' => $row['email'],
-				'regdate' => nv_date( 'd/m/Y H:i', $row['regdate'] )
-			);
-		}
-
-		$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
+	$db->select( $select_return )
+		->limit( $per_page )
+		->offset( ( $page - 1 ) * $per_page );
+	if( ! empty( $order_by ) )
+	{
+		$db->order( $order_by );
+	}
+	$result2 = $db->query( $db->sql() );
+	while( $row = $result2->fetch() )
+	{
+		$array_user[$row['userid']] = $row;
 	}
 
 	if( ! empty( $array_user ) )
@@ -258,10 +254,13 @@ if( $nv_Request->isset_request( 'submit', 'get' ) )
 
 		foreach( $array_user as $row )
 		{
+			$row['regdate'] = nv_date( 'd/m/Y H:i', $row['regdate'] );
+			$row['return'] = $row[$return];
 			$xtpl->assign( 'ROW', $row );
 			$xtpl->parse( 'resultdata.data.row' );
 		}
 
+		$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page );
 		if( ! empty( $generate_page ) )
 		{
 			$xtpl->assign( 'GENERATE_PAGE', $generate_page );

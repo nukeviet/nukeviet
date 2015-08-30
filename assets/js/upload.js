@@ -1575,11 +1575,13 @@ var NVUPLOAD = {
 				runtimes : 'html5,flash,silverlight,html4',
 				browse_button : 'upload-local',
 				url : nv_module_url + "upload&path=" + folderPath + "&random=" + nv_randomNum(10),
+				max_file_size : nv_max_size_bytes,
 				flash_swf_url : nv_base_siteurl + 'assets/js/plupload/Moxie.swf',
 				silverlight_xap_url : nv_base_siteurl+ 'assets/js/plupload/Moxie.xap',
 				drop_element : 'upload-content',
 				file_data_name : 'upload',
 				filters : nv_filters,
+		        resize: nv_resize,
 				multipart : true,
 				init: {
 					// Event on init uploader
@@ -1712,7 +1714,7 @@ var NVUPLOAD = {
 
 					// Event on error
 					Error: function(up, err){
-						$("div#errorInfo").html( "Error #" + err.code + ": " + err.message ).dialog("open");
+						$("div#errorInfo").html( "Error #" + err.message + ": <br>" + err.file.name ).dialog("open");
 
 						if( err.code === plupload.INIT_ERROR ){
 							setTimeout( "NVUPLOAD.destroyUpload()", 1000 );

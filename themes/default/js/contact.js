@@ -92,7 +92,7 @@ $(function() {
 			return b.is(".ld") ? (b.addClass("fs").hide(), c.fadeIn(), !1) : ($.ajax({
 				type: "POST",
 				cache: !1,
-				url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=contact",
+				url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + b.attr( "data-module" ),
 				data: "loadForm=1&checkss=" + e.data("cs"),
 				dataType: "html",
 				success: function(a) {

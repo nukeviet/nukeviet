@@ -432,7 +432,7 @@ elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'username'
 //Email
 elseif( $checkss == $array_data['checkss'] and $array_data['type'] == 'email' )
 {
-	$nv_email = nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 );
+	$nv_email = nv_strtolower( nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 ) );
 	$nv_password = $nv_Request->get_title( 'password', 'post', '' );
 	$nv_verikeysend = ( int )$nv_Request->get_bool( 'vsend', 'post', false );
 	if( empty( $nv_password ) or ! $nv_Request->get_bool( 'verikey', 'session' ) ) $nv_verikeysend = 1;

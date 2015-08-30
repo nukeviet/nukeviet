@@ -112,7 +112,6 @@ $lang_module['admin_account_note'] = 'Tài khoản cần ít nhất 5 ký tự, 
 $lang_module['admin_email'] = 'Email';
 $lang_module['admin_email_note'] = 'Nhập email.';
 $lang_module['admin_pass'] = 'Mật khẩu';
-$lang_module['admin_pass_note'] = 'Mật khẩu phải dài hơn 6 kí tự, và có cả chữ và số.';
 $lang_module['admin_repass'] = 'Nhập lại mật khẩu';
 $lang_module['admin_repass_note'] = 'Nhập lại mật khẩu.';
 $lang_module['success'] = 'Bạn đã cài đặt thành công!';

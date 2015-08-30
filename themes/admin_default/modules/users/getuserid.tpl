@@ -9,6 +9,7 @@
 <div id="getuidcontent">
 	<form class="form-inline" id="formgetuid" method="get" action="{FORM_ACTION}">
 		<input type="hidden" name="area" value="{AREA}" />
+		<input type="hidden" name="return" value="{RETURN}" />
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
@@ -103,7 +104,7 @@
 				<td> {ROW.username} </td>
 				<td> {ROW.email} </td>
 				<td> {ROW.regdate} </td>
-				<td class="text-center"><a title="" onclick="nv_close_pop('{ROW.userid}');" href="javascript:void(0);">{LANG.select}</a></td>
+				<td class="text-center"><a title="" onclick="nv_close_pop('{ROW.return}');" href="javascript:void(0);">{LANG.select}</a></td>
 			</tr>
 			<!-- END: row -->
 		</tbody>

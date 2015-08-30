@@ -76,6 +76,9 @@ if( ! nv_function_exists( 'nv_comment_new' ) )
 			}
 
 			$xtpl = new XTemplate( 'block_new_comment.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
+			$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+			$xtpl->assign( 'TEMPLATE', $block_theme );
+
 			foreach( $array_comment as $comment )
 			{
 				if( isset( $array_news_id[$comment['id']] ) )
