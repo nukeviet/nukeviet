@@ -57,7 +57,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	$data_insert['username'] = $row['username'];
 	$data_insert['md5_username'] = nv_md5safe( $row['username'] );
 	$data_insert['password'] = $row['password'];
-	$data_insert['email'] = $row['email'];
+	$data_insert['email'] = nv_strtolower( $row['email'] );
 	$data_insert['first_name'] = $row['first_name'];
 	$data_insert['last_name'] = $row['last_name'];
 	$data_insert['question'] = $row['question'];

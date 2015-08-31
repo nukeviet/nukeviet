@@ -63,6 +63,6 @@ $sth->bindValue( ':is_default', $is_default, PDO::PARAM_INT );
 $sth->execute();
 
 $bodytext = 'If you have any questions or comments, please contact us below and we will get back to you as soon as possible.';
-$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('vi', 'contact', 'bodytext', :bodytext)" );
+$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('vi', '" . $module_name . "', 'bodytext', :bodytext)" );
 $sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodytext ) );
 $sth->execute();

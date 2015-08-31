@@ -39,6 +39,7 @@ $lang_global['admin_password_empty'] = 'Manque de Mot de passe';
 $lang_global['adminpassincorrect'] = 'Mot de passe &ldquo;<strong>%s</strong>&rdquo; incorrect. Essayez de nouveau';
 $lang_global['admin_password'] = 'Votre mot de passe';
 $lang_global['admin_no_allow_func'] = 'Vous n\'êtes pas authorisé d\'accéder à cette fonction';
+$lang_global['admin_suspend'] = 'Est suspendu';
 $lang_global['block_modules'] = 'Blocks de modules';
 $lang_global['hello_admin1'] = 'Bonjour %1$s ! Votre dernière session était à %2$s';
 $lang_global['hello_admin2'] = 'Compte: %1$s ! Votre session est ouverte depuis %2$s';
