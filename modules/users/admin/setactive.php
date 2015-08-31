@@ -19,12 +19,12 @@ if( ! $userid or $admin_info['admin_id'] == $userid )
 	die( 'NO' );
 }
 
-$sql = "SELECT a.lev, b.username, b.active, b.idsite FROM " . NV_AUTHORS_GLOBALTABLE . " a, " . NV_USERS_GLOBALTABLE . " b WHERE a.admin_id=" . $userid . " AND a.admin_id=b.userid";
+$sql = 'SELECT a.lev, b.username, b.active, b.idsite FROM ' . NV_AUTHORS_GLOBALTABLE . ' a, ' . NV_USERS_GLOBALTABLE . ' b WHERE a.admin_id=' . $userid . ' AND a.admin_id=b.userid';
 $row = $db->query( $sql )->fetch( 3 );
 if( empty( $row ) )
 {
 	$level = 0;
-	$sql = "SELECT username, active, idsite FROM " . NV_USERS_GLOBALTABLE . " WHERE userid=" . $userid;
+	$sql = 'SELECT username, active, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
 	list( $username, $active, $idsite ) = $db->query( $sql )->fetch( 3 );
 }
 else
@@ -40,10 +40,10 @@ if( empty( $level ) or $admin_info['level'] < $level )
 		die( 'NO' );
 	}
 	$active = $active ? 0 : 1;
-	$sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET active=" . $active . " WHERE userid=" . $userid;
+	$sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active=' . $active . ' WHERE userid=' . $userid;
 	$result = $db->query( $sql );
 
 	$note = ( $active ) ? $lang_module['active_users'] : $lang_module['unactive_users'];
 	nv_insert_logs( NV_LANG_DATA, $module_name, $note, 'userid: ' . $userid . ' - username: ' . $username, $admin_info['userid'] );
-	echo "OK";
+	echo 'OK';
 }

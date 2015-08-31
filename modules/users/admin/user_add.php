@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if( $nv_Request->isset_request( 'nv_genpass', 'post' ) )
 {
 	$_len = round( ( NV_UPASSMIN + NV_UPASSMAX ) / 2 );
-	echo nv_genpass( $_len );
+	echo nv_genpass( $_len, $global_config['nv_upass_type'] );
 	exit();
 }
 
@@ -53,7 +53,7 @@ $userid = 0;
 if( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
 	$_user['username'] = $nv_Request->get_title( 'username', 'post', '', 1 );
-	$_user['email'] = $nv_Request->get_title( 'email', 'post', '', 1 );
+	$_user['email'] = nv_strtolower( $nv_Request->get_title( 'email', 'post', '', 1 ) );
 	$_user['password1'] = $nv_Request->get_title( 'password1', 'post', '', 0 );
 	$_user['password2'] = $nv_Request->get_title( 'password2', 'post', '', 0 );
 	$_user['question'] = nv_substr( $nv_Request->get_title( 'question', 'post', '', 1 ), 0, 255 );
@@ -176,7 +176,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			'input' => 'answer',
 			'mess' => $lang_module['edit_error_answer'] ) ) );
 	}
-    
+
     if( empty( $_user['first_name'] ) )
 	{
 		$_user['first_name'] = $_user['username'];

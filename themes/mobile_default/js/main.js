@@ -122,7 +122,7 @@ function ctbtLoad(a) {
 	"yes" != a.attr("data-load") && $.ajax({
 		type: "POST",
 		cache: !1,
-		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=contact",
+		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + a.attr( "data-module" ),
 		data: "loadForm=1&checkss=" + a.attr("data-cs"),
 		dataType: "html",
 		success: function(c) {

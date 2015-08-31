@@ -798,7 +798,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 			}
 			$xtpl->parse( 'main.others.topic' );
 		}
-        
+
         $xtpl->parse( 'main.others' );
 	}
 
@@ -979,6 +979,10 @@ function news_print( $result )
 		$xtpl->parse( 'main.author' );
 	}
 
+	if( $result['status'] != 1 )
+	{
+		$xtpl->parse( 'main.no_public' );
+	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }
