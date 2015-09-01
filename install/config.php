@@ -32,7 +32,7 @@ $array_data['question'] = '';
 $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
 
-$global_config['version'] = '4.0.23';// NukeViet 4.0 OpenBeta 9 (No release)
+$global_config['version'] = '4.0.23';// NukeViet 4.0 OpenBeta 9
 $global_config['site_email'] = '';
 $global_config['error_set_logs'] = 1;
 $global_config['error_send_email'] = 'support@nukeviet.vn';
@@ -68,7 +68,7 @@ $global_config['gfx_chk'] = 3;
 $global_config['nv_unick_type'] = 4;
 
 // Mật khẩu cần kết hợp số và chữ
-$global_config['nv_upass_type'] = 0;
+$global_config['nv_upass_type'] = 2;
 
 // Thời gian lặp lại việc sao lưu CSDL tính bằng ngày
 $global_config['dump_interval'] = 1;
@@ -80,7 +80,7 @@ $global_config['hashprefix'] = '{SSHA}';
 define( 'NV_UPASSMAX', 20 );
 
 //so ky tu toi thieu cua password doi voi user
-define( 'NV_UPASSMIN', 5 );
+define( 'NV_UPASSMIN', 8 );
 
 //so ky tu toi da cua ten tai khoan doi voi user
 define( 'NV_UNICKMAX', 20 );

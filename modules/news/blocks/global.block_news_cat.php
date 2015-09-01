@@ -102,6 +102,9 @@ if( ! nv_function_exists( 'nv_block_news_cat' ) )
 			}
 
 			$xtpl = new XTemplate( 'block_groups.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news' );
+			$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+			$xtpl->assign( 'TEMPLATE', $block_theme );
+
 			foreach( $list as $l )
 			{
 				$l['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$l['catid']]['alias'] . '/' . $l['alias'] . '-' . $l['id'] . $global_config['rewrite_exturl'];

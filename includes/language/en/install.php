@@ -112,7 +112,6 @@ $lang_module['admin_account_note'] = 'Account must be at least 5 characters, avo
 $lang_module['admin_email'] = 'Email';
 $lang_module['admin_email_note'] = 'Please enter Email';
 $lang_module['admin_pass'] = 'Password';
-$lang_module['admin_pass_note'] = 'Password must be at least 6 characters, include letters and numerals.';
 $lang_module['admin_repass'] = 'Re-enter password';
 $lang_module['admin_repass_note'] = 'Repeat password. It must match the password above!';
 $lang_module['success'] = 'Setup successful!';

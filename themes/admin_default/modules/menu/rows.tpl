@@ -98,7 +98,7 @@
 				<tr>
 					<td><strong>{LANG.name_block}</strong></td>
 					<td>
-						<select name="item_menu" id="item_menu_{key}" onchange="nv_link_menu('{key}');" class="form-control w200">
+						<select name="item_menu" id="item_menu_{key}" onchange="nv_link_menu('{key}', {DATA.parentid});" class="form-control w200">
 							<!-- BEGIN: loop -->
 							<option value="{key}" {select}>{val}</option>
 							<!-- END: loop -->
@@ -111,7 +111,7 @@
 					<td>
 					<select name="parentid" id="parentid" class="form-control w200">
 						<!-- BEGIN: cat -->
-						<option value="{cat.key}" {selected}>{cat.title}</option>
+						<option value="{cat.key}" {cat.selected}>{cat.title}</option>
 						<!-- END: cat -->
 					</select></td>
 					<td>&nbsp;</td>
@@ -141,12 +141,12 @@
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.title}</strong></td>
+					<td><strong>{LANG.title}</strong><sup class="required">(*)</sup></td>
 					<td><input type="text" name="title" id="title" class="w300 form-control" value="{DATA.title}"/></td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td><strong>{LANG.link}</strong></td>
+					<td><strong>{LANG.link}</strong><sup class="required">(*)</sup></td>
 					<td><input type="text" name="link" class="w300 form-control" value="{DATA.link}" id="link"/></td>
 					<td>&nbsp;</td>
 				</tr>

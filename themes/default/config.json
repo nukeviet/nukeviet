@@ -409,9 +409,11 @@
     "dropdowns.less",
     "tooltip.less",
     "popovers.less",
-    "modals.less"
+    "modals.less",
+    "carousel.less"
   ],
   "js": [
+    "carousel.js",
     "dropdown.js",
     "modal.js",
     "tooltip.js",
@@ -422,5 +424,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=3764cbae52cb373d4a9a"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=671a594eff14a52d359e"
 }

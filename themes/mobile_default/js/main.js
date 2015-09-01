@@ -122,7 +122,7 @@ function ctbtLoad(a) {
 	"yes" != a.attr("data-load") && $.ajax({
 		type: "POST",
 		cache: !1,
-		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=contact",
+		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + a.attr( "data-module" ),
 		data: "loadForm=1&checkss=" + a.attr("data-cs"),
 		dataType: "html",
 		success: function(c) {
@@ -169,12 +169,31 @@ function switchTab(a) {
 	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
 }
 
+//Form Ajax-login
+function loginForm()
+{
+    if(nv_is_user == 1) return!1;
+    $.ajax({
+        type: 'POST',
+		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
+		cache: !1,
+        data: '&nv_ajax=1',
+		dataType: "html",
+	}).done(function(a) {
+		modalShow('', a)
+	});
+    return!1
+}
+
 // ModalShow
 function modalShow(a, b) {
-	"" == a && (a = "&nbsp;");
+	"" != a && 'undefined' != typeof a && $("#sitemodal .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + a + '</h2></div>');
 	$("#sitemodal").find(".modal-title").html(a);
 	$("#sitemodal").find(".modal-body").html(b);
-	$("#sitemodal").modal()
+    $('#sitemodal').on('hidden.bs.modal', function () {
+            $("#sitemodal .modal-content").find(".modal-header").remove()
+		});
+    $("#sitemodal").modal({backdrop: "static"})
 }
 
 function modalShowByObj(a)

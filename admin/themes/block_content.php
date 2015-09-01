@@ -14,7 +14,7 @@ $functionid = $nv_Request->get_int( 'func', 'get' );
 $blockredirect = $nv_Request->get_string( 'blockredirect', 'get' );
 
 $selectthemes = $nv_Request->get_string( 'selectthemes', 'post,get', $global_config['site_theme'] );
-if( ! ( preg_match( $global_config['check_theme'], $selectthemes ) OR preg_match( $global_config['check_theme_mobile'], $selectthemes ) ) )
+if( ! ( preg_match( $global_config['check_theme'], $selectthemes ) or preg_match( $global_config['check_theme_mobile'], $selectthemes ) ) )
 {
 	nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
 }
@@ -33,12 +33,10 @@ $row = array(
 	'groups_view' => '6',
 	'all_func' => 1,
 	'weight' => 0,
-	'config' => ''
-);
+	'config' => '' );
 $row_old = array();
 
 $row['bid'] = $nv_Request->get_int( 'bid', 'get,post', 0 );
-
 if( $row['bid'] > 0 )
 {
 	$row = $db->query( 'SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid'] )->fetch();
@@ -51,6 +49,11 @@ if( $row['bid'] > 0 )
 	{
 		$row_old = $row;
 	}
+    $is_add = false;
+}
+else
+{
+    $is_add = true;
 }
 
 $groups_list = nv_groups_list();
@@ -70,11 +73,6 @@ $xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 
 if( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
-	if( empty( $blockredirect ) )
-	{
-		$blockredirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=blocks';
-	}
-
 	$error = array();
 	$list_file_name = $nv_Request->get_title( 'file_name', 'post', '', 0 );
 	$array_file_name = explode( '|', $list_file_name );
@@ -176,7 +174,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	$groups_view = $nv_Request->get_array( 'groups_view', 'post', array() );
 	$row['groups_view'] = ! empty( $groups_view ) ? implode( ',', nv_groups_post( array_intersect( $groups_view, array_keys( $groups_list ) ) ) ) : '';
 
-	$all_func = ( $nv_Request->get_int( 'all_func', 'post' ) == 1 and ( ( preg_match( $global_config['check_block_module'], $row['file_name'] ) OR preg_match( $global_config['check_block_theme'], $row['file_name'] ) ) AND preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name'] ) ) ) ? 1 : 0;
+	$all_func = ( $nv_Request->get_int( 'all_func', 'post' ) == 1 and ( ( preg_match( $global_config['check_block_module'], $row['file_name'] ) or preg_match( $global_config['check_block_theme'], $row['file_name'] ) ) and preg_match( '/^global\.([a-zA-Z0-9\-\_\.]+)\.php$/', $row['file_name'] ) ) ) ? 1 : 0;
 	$array_funcid_post = $nv_Request->get_array( 'func_id', 'post' );
 
 	if( empty( $all_func ) and empty( $array_funcid_post ) )
@@ -274,9 +272,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	else
 	{
 		$array_funcid_module = array();
-		foreach ( $site_mods as $mod => $_arr_mod )
+		foreach( $site_mods as $mod => $_arr_mod )
 		{
-			foreach ( $_arr_mod['funcs'] as $_func => $_row )
+			foreach( $_arr_mod['funcs'] as $_func => $_row )
 			{
 				if( $_row['show_func'] )
 				{
@@ -300,7 +298,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			{
 				if( preg_match( $global_config['check_block_theme'], $row['file_name'], $matches ) )
 				{
-					foreach ($site_mods as $mod => $row_i)
+					foreach( $site_mods as $mod => $row_i )
 					{
 						if( $row_i['module_file'] == $matches[1] )
 						{
@@ -315,7 +313,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			}
 
 			$array_funcid = array();
-			foreach ($array_funcid_module as $func_id => $mod)
+			foreach( $array_funcid_module as $func_id => $mod )
 			{
 				if( in_array( $mod, $array_in_module ) and in_array( $func_id, $array_funcid_post ) )
 				{
@@ -453,7 +451,16 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				nv_del_moduleCache( 'themes' );
 
 				// Chuyen huong
-				$xtpl->assign( 'BLOCKREDIRECT', nv_redirect_encrypt( $blockredirect ) );
+                $xtpl->assign( 'BLOCKMESS', $is_add ? $lang_module['block_add_success'] : $lang_module['block_update_success'] );
+				if( empty( $blockredirect ) )
+				{
+					$xtpl->parse( 'blockredirect.refresh' );
+				}
+				else
+				{
+				    $xtpl->assign( 'BLOCKREDIRECT', nv_redirect_decrypt( $blockredirect ) );
+					$xtpl->parse( 'blockredirect.redirect' );
+				}
 				$xtpl->parse( 'blockredirect' );
 				$contents = $xtpl->text( 'blockredirect' );
 
@@ -504,8 +511,7 @@ while( $row_i = $result->fetch() )
 	$xtpl->assign( 'MODULE', array(
 		'key' => $row_i['title'],
 		'selected' => ( $row_i['title'] == $row['module'] ) ? ' selected="selected"' : '',
-		'title' => $row_i['custom_title']
-	) );
+		'title' => $row_i['custom_title'] ) );
 	$xtpl->parse( 'main.module' );
 }
 
@@ -515,8 +521,7 @@ $xtpl->assign( 'ROW', array(
 	'link' => nv_htmlspecialchars( $row['link'] ),
 	'bid' => $row['bid'],
 	'module' => $row['module'],
-	'file_name' => $row['file_name']
-) );
+	'file_name' => $row['file_name'] ) );
 
 $templ_list = nv_scandir( NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', '/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/' );
 $templ_list = preg_replace( '/^block\.([a-zA-Z0-9\-\_]+)\.tpl$/', '\\1', $templ_list );
@@ -528,8 +533,7 @@ foreach( $templ_list as $value )
 		$xtpl->assign( 'TEMPLATE', array(
 			'key' => $value,
 			'selected' => ( $row['template'] == $value ) ? ' selected="selected"' : '',
-			'title' => $value
-		) );
+			'title' => $value ) );
 		$xtpl->parse( 'main.template' );
 	}
 }
@@ -540,8 +544,7 @@ for( $i = 1; $i <= 4; ++$i )
 	$xtpl->assign( 'ACTIVE_DEVICE', array(
 		'key' => $i,
 		'checked' => ( in_array( $i, $active_device ) ) ? ' checked="checked"' : '',
-		'title' => $lang_module['show_device_' . $i]
-	) );
+		'title' => $lang_module['show_device_' . $i] ) );
 	$xtpl->parse( 'main.active_device' );
 }
 
@@ -550,8 +553,7 @@ for( $i = 0, $count = sizeof( $positions ); $i < $count; ++$i )
 	$xtpl->assign( 'POSITION', array(
 		'key' => ( string )$positions[$i]->tag,
 		'selected' => ( $row['position'] == $positions[$i]->tag ) ? ' selected="selected"' : '',
-		'title' => ( string )$positions[$i]->name
-	) );
+		'title' => ( string )$positions[$i]->name ) );
 	$xtpl->parse( 'main.position' );
 }
 
@@ -560,8 +562,7 @@ foreach( $groups_list as $group_id => $grtl )
 	$xtpl->assign( 'GROUPS_LIST', array(
 		'key' => $group_id,
 		'selected' => ( in_array( $group_id, $groups_view ) ) ? ' checked="checked"' : '',
-		'title' => $grtl
-	) );
+		'title' => $grtl ) );
 	$xtpl->parse( 'main.groups_list' );
 }
 

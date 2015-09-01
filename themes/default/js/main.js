@@ -62,6 +62,13 @@ function timeoutsessrun() {
 	}, 1E3)
 }
 
+function locationReplace(url)
+{
+    if(history.pushState) {
+        history.pushState(null, null, url);
+    }
+}
+
 function checkWidthMenu() {
 	theme_responsive && "absolute" == $("#menusite").css("position") ? ($("li.dropdown ul").removeClass("dropdown-menu"), $("li.dropdown ul").addClass("dropdown-submenu"), $("li.dropdown a").addClass("dropdown-mobile"), $("#menu-site-default ul li a.dropdown-toggle").addClass("dropdown-mobile"), $("li.dropdown ul li a").removeClass("dropdown-mobile")) : ($("li.dropdown ul").addClass("dropdown-menu"), $("li.dropdown ul").removeClass("dropdown-submenu"), $("li.dropdown a").removeClass("dropdown-mobile"), $("li.dropdown ul li a").removeClass("dropdown-mobile"), $("#menu-site-default ul li a.dropdown-toggle").removeClass("dropdown-mobile"));
 	$("#menu-site-default .dropdown").hover(function() {
@@ -177,13 +184,35 @@ function change_captcha(a) {
 	"undefined" != typeof a && "" != a && $(a).val("");
 	return !1
 }
+
+//Form Ajax-login
+
+function loginForm()
+{
+    if(nv_is_user == 1) return!1;
+    $.ajax({
+        type: 'POST',
+		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
+		cache: !1,
+        data: '&nv_ajax=1',
+		dataType: "html",
+	}).done(function(a) {
+		modalShow('', a)
+	});
+    return!1
+}
+
+
 // ModalShow
 
 function modalShow(a, b) {
-	"" == a && (a = "&nbsp;");
+	"" != a && 'undefined' != typeof a && $("#sitemodal .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + a + '</h2></div>');
 	$("#sitemodal").find(".modal-title").html(a);
 	$("#sitemodal").find(".modal-body").html(b);
-	$("#sitemodal").modal()
+    $('#sitemodal').on('hidden.bs.modal', function () {
+            $("#sitemodal .modal-content").find(".modal-header").remove()
+		});
+    $("#sitemodal").modal({backdrop: "static"})
 }
 
 function modalShowByObj(a) {
@@ -333,14 +362,18 @@ $(function() {
 	$("#openidBt").on("click", function() {
 		openID_result();
 		return !1
-	})
+	});
+    //Change Localtion
+    $("[data-location]").on("click",function(){
+        locationReplace($(this).data("location"))
+    })
 });
 // Fix bootstrap multiple modal
 $(document).on({
 	'show.bs.modal': function() {
 		var zIndex = 1040 + (10 * $('.modal:visible').length);
 		$(this).css('z-index', zIndex);
-		setTimeout(function() {
+        setTimeout(function() {
 			$('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
 		}, 0);
 	},

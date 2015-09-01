@@ -58,7 +58,7 @@ function nv_validForm(a) {
 			}, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".nv-info",a).html(b.mess).removeClass("success").addClass("error") : $(".nv-info",a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function() {
 				$("input,select,button,textarea", a).not(".disabled").prop("disabled", !1);
                 nv_validReset(a)
-			}, 2E4))
+			}, 5E3))
 		}
 	}));
 	return !1

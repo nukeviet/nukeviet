@@ -39,7 +39,11 @@ if ( ! $global_config['allowuserreg'] )
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+$nv_redirect = '';
+if( $nv_Request->isset_request( 'nv_redirect', 'post,get' ) )
+{
+	$nv_redirect = nv_get_redirect();
+}
 
 /**
  * nv_check_username_reg()
@@ -125,8 +129,7 @@ function reg_result( $array )
 {
 	global $nv_redirect;
 
-	$redirect = nv_redirect_decrypt( $nv_redirect, true );
-	$array['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$array['redirect'] = nv_redirect_decrypt( $nv_redirect );
 	$string = json_encode( $array );
 	return $string;
 }
@@ -192,7 +195,7 @@ if ( $checkss == $array_register['checkss'] )
     $array_register['username'] = $nv_Request->get_title( 'username', 'post', '', 1 );
     $array_register['password'] = $nv_Request->get_title( 'password', 'post', '' );
     $array_register['re_password'] = $nv_Request->get_title( 're_password', 'post', '' );
-    $array_register['email'] = nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 );
+    $array_register['email'] = nv_strtolower( nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 ) );
 
     $array_register['question'] = $nv_Request->get_int( 'question', 'post', 0 );
     if ( ! isset( $data_questions[$array_register['question']] ) ) $array_register['question'] = 0;
@@ -416,10 +419,8 @@ if ( $nv_Request->isset_request( 'get_usage_terms', 'post' ) )
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$full = empty( $nv_redirect ) ? true : false;
-
 $contents = user_register( $gfx_chk, $array_register['checkss'], $data_questions, $array_field_config, $custom_fields );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme( $contents, $full );
+echo nv_site_theme( $contents );
 include NV_ROOTDIR . '/includes/footer.php';

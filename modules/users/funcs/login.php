@@ -16,7 +16,18 @@ if( defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 	die();
 }
 
-$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+$nv_header = '';
+if( $nv_Request->isset_request( 'nv_header', 'post,get' ) )
+{
+	$nv_header = $nv_Request->get_title( 'nv_header', 'post,get', '' );
+	if( $nv_header != md5( $client_info['session_id'] . $global_config['sitekey'] ) ) $nv_header = '';
+}
+
+$nv_redirect = '';
+if( $nv_Request->isset_request( 'nv_redirect', 'post,get' ) )
+{
+	$nv_redirect = nv_get_redirect();
+}
 
 $gfx_chk = ( in_array( $global_config['gfx_chk'], array(
 	2,
@@ -26,7 +37,7 @@ $gfx_chk = ( in_array( $global_config['gfx_chk'], array(
 
 /**
  * login_result()
- * 
+ *
  * @param mixed $array
  * @return
  */
@@ -34,15 +45,14 @@ function signin_result( $array )
 {
 	global $nv_redirect;
 
-	$redirect = nv_redirect_decrypt( $nv_redirect, true );
-	$array['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$array['redirect'] = nv_redirect_decrypt( $nv_redirect );
 	$string = json_encode( $array );
 	return $string;
 }
 
 /**
  * opidr()
- * 
+ *
  * @param mixed $openid_info
  * @return void
  */
@@ -52,8 +62,7 @@ function opidr( $openid_info )
 
 	$nv_Request->unset_request( 'openid_attribs', 'session' );
 
-	$redirect = nv_redirect_decrypt( $nv_redirect );
-	$openid_info['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$openid_info['redirect'] = nv_redirect_decrypt( $nv_redirect );
 
 	$contents = openid_callback( $openid_info );
 
@@ -182,7 +191,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->isset_request( 'server', 'ge
 		opidr( array( 'status' => 'error', 'mess' => $lang_module['logged_in_failed'] ) );
 		die();
 	}
-
+	$email = nv_strtolower( $email );
 	$opid = $crypt->hash( $attribs['id'] );
 	$current_mode = isset( $attribs['current_mode'] ) ? $attribs['current_mode'] : 1;
 
@@ -560,7 +569,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->isset_request( 'server', 'ge
 //Dang nhap kieu thong thuong
 if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 {
-	$nv_username = $nv_Request->get_title( 'nv_login', 'post', '', 1 );
+	$nv_username = nv_substr( $nv_Request->get_title( 'nv_login', 'post', '', 1 ), 0, 100 );
 	$nv_password = $nv_Request->get_title( 'nv_password', 'post', '' );
 	$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 
@@ -609,6 +618,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		if( nv_check_valid_email( $nv_username ) == '' )
 		{
 			// Email login
+			$nv_username = nv_strtolower( $nv_username );
 			$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE email =" . $db->quote( $nv_username );
 			$login_email = true;
 		}
@@ -652,16 +662,15 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		'mess' => $lang_module['login_ok'] ) ) );
 }
 
+if( $nv_Request->get_int( 'nv_ajax', 'post', 0 ) == 1 ) die( user_login( true ) );
+
 $page_title = $lang_module['login'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['login'];
 
-$nv_header = $nv_Request->get_title( 'nv_header', 'get, post', '' );
+$contents = user_login();
 
-$full = ( $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ) ? false : true;
-if( !empty( $nv_redirect ) ) $full = false;
-
-$contents = user_login( $gfx_chk, $nv_header );
+$full = empty( $nv_redirect ) && empty( $nv_header );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents, $full );

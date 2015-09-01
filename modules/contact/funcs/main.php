@@ -25,7 +25,7 @@ if ( ! empty( $array_department ) )
     {
         if ( ! empty( $department['cats'] ) )
         {
-            $_cats = array_map( "trim", explode( "|", $department['cats'] ) );
+            $_cats = array_map( 'trim', explode( '|', $department['cats'] ) );
             foreach ( $_cats as $_cats2 )
             {
                 $cats[] = array( $department['id'], $_cats2 );
@@ -51,7 +51,7 @@ if ( defined( 'NV_IS_USER' ) )
 {
     $fname = ! empty( $user_info['full_name'] ) ? $user_info['full_name'] : $user_info['username'];
     $femail = $user_info['email'];
-    $fphone = isset( $user_info['phone'] ) ? $user_info['phone'] : "";
+    $fphone = isset( $user_info['phone'] ) ? $user_info['phone'] : '';
 }
 
 /**
@@ -92,16 +92,16 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
             'input' => 'fname',
             'mess' => $lang_module['error_fullname'] ) ) );
 
-    if ( ( $check_valid_email = nv_check_valid_email( $femail ) ) != "" ) die( json_encode( array(
+    if ( ( $check_valid_email = nv_check_valid_email( $femail ) ) != '' ) die( json_encode( array(
             'status' => 'error',
             'input' => 'femail',
             'mess' => $check_valid_email ) ) );
 
-    if ( ( $ftitle = nv_substr( $nv_Request->get_title( 'ftitle', 'post', '', 1 ), 0, 255 ) ) == "" ) die( json_encode( array(
+    if ( ( $ftitle = nv_substr( $nv_Request->get_title( 'ftitle', 'post', '', 1 ), 0, 255 ) ) == '' ) die( json_encode( array(
             'status' => 'error',
             'input' => 'ftitle',
             'mess' => $lang_module['error_title'] ) ) );
-    if ( ( $fcon = $nv_Request->get_editor( 'fcon', '', NV_ALLOWED_HTML_TAGS ) ) == "" ) die( json_encode( array(
+    if ( ( $fcon = $nv_Request->get_editor( 'fcon', '', NV_ALLOWED_HTML_TAGS ) ) == '' ) die( json_encode( array(
             'status' => 'error',
             'input' => 'fcon',
             'mess' => $lang_module['error_content'] ) ) );
@@ -132,17 +132,19 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
     $fphone = nv_substr( $nv_Request->get_title( 'fphone', 'post', '', 1 ), 0, 100 );
     $sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
-    $sth = $db->prepare( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_send
+    $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
     (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES
-    (" . $fpart . ", :cat, :title, :content, " . NV_CURRENTTIME . ", " . $sender_id . ", :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)" );
-    $sth->bindParam( ':cat', $fcat, PDO::PARAM_STR );
-    $sth->bindParam( ':title', $ftitle, PDO::PARAM_STR );
-    $sth->bindParam( ':content', $fcon, PDO::PARAM_STR, strlen( $fcon ) );
-    $sth->bindParam( ':sender_name', $fname, PDO::PARAM_STR );
-    $sth->bindParam( ':sender_email', $femail, PDO::PARAM_STR );
-    $sth->bindParam( ':sender_phone', $fphone, PDO::PARAM_STR );
-    $sth->bindParam( ':sender_ip', $client_info['ip'], PDO::PARAM_STR );
-    if ( $sth->execute() )
+    (' . $fpart . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $sender_id . ', :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)';
+	$data_insert = array();
+    $data_insert['cat'] = $fcat;
+    $data_insert['title'] = $ftitle;
+    $data_insert['content'] = $fcon;
+    $data_insert['sender_name'] = $fname;
+    $data_insert['sender_email'] = $femail;
+    $data_insert['sender_phone'] = $fphone;
+    $data_insert['sender_ip'] = $client_info['ip'];
+	$row_id = $db->insert_id( $sql, 'id', $data_insert );
+    if ( $row_id > 0 )
     {
         $xtpl = new XTemplate( 'sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
         $xtpl->assign( 'LANG', $lang_module );
@@ -163,7 +165,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
         $email_list = array();
         if ( ! empty( $array_department[$fpart]['email'] ) )
         {
-            $_emails = array_map( "trim", explode( ",", $array_department[$fpart]['email'] ) );
+            $_emails = array_map( 'trim', explode( ',', $array_department[$fpart]['email'] ) );
             $email_list[] = $_emails[0];
         }
 
@@ -182,7 +184,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
             {
                 $a_l = implode( ',', $a_l );
 
-                $sql = 'SELECT t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t1.admin_id IN (' . $a_l . ')';
+                $sql = 'SELECT t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1 AND t1.admin_id IN (' . $a_l . ')';
                 $result = $db->query( $sql );
 
                 while ( $row = $result->fetch() )
@@ -202,7 +204,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
             @nv_sendmail( $from, $email_list, $ftitle, $fcon );
         }
 
-        nv_insert_notification( $module_name, 'contact_new', array( 'title' => $ftitle ), 0, $sender_id, 1 );
+        nv_insert_notification( $module_name, 'contact_new', array( 'title' => $ftitle ), $row_id, 0, $sender_id, 1 );
 
         die( json_encode( array(
             'status' => 'ok',

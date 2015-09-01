@@ -10,6 +10,27 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
+$mark = $nv_Request->get_title( 'mark', 'post', '' );
+
+if( ! empty( $mark ) and ( $mark == 'read' or $mark == 'unread' ) )
+{
+	$mark = $mark == 'read' ? 1 : 0;
+	$sends = $nv_Request->get_array( 'sends', 'post', array() );
+	if( empty( $sends ) )
+	{
+		die( json_encode( array( 'status' => 'error', 'mess' => $lang_module['please_choose'] ) ) );
+	}
+
+	foreach( $sends as $id )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'contact_new', $id, $mark );
+	}
+
+	$sends = implode( ',', $sends );
+	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')' );
+    die( json_encode( array( 'status' => 'ok', 'mess' => '' ) ) );
+}
+
 $page_title = $module_info['custom_title'];
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
