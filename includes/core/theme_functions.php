@@ -360,7 +360,7 @@ function nv_rss_generate( $channel, $items )
 		$xtpl->parse( 'main.pubDate' );
 	}
 
-	$image = file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) ? NV_ROOTDIR . '/' . $global_config['site_logo'] : NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png';
+	$image = file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) ? NV_ROOTDIR . '/' . $global_config['site_logo'] : NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/images/logo.png';
 	$image = nv_ImageInfo( $image, 144, true, NV_UPLOADS_REAL_DIR );
 
 	if( ! empty( $image ) )

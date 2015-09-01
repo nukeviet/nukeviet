@@ -1,10 +1,16 @@
 <!-- BEGIN: main -->
-<!-- BEGIN: error -->
-<div class="alert alert-danger">{ERROR}</div>
-<!-- END: error -->
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript">
+	var items = '{NEW_ITEM_NUM}';
+</script>
+<!-- BEGIN: error -->
+<div class="alert alert-danger">{ERROR}</div>
+<!-- END: error -->
 <form id="votingcontent" method="post" action="{FORM_ACTION}">
 	<div class="row">
 		<div class="col-sm-24 col-md-18">
@@ -62,7 +68,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td>{LANG.voting_question}</td>
+							<td>{LANG.voting_question}<sup class="required">(*)</sup></td>
 							<td><input class="form-control" type="text" name="question" size="60" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}"  oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')"/></td>
 						</tr>
 						<tr>
@@ -89,7 +95,7 @@
 							</tr>
 							<!-- END: item -->
 							<tr>
-								<td class="text-right">{LANG.voting_question_num} {NEW_ITEM}</td>
+								<td class="text-right">{LANG.voting_question_num} {NEW_ITEM}<sup class="required">(*)</sup></td>
 								<td><input class="form-control" type="text" value="" name="answervotenews[]" /></td>
 								<td><input class="form-control" type="text" value="" name="urlvotenews[]"/></td>
 							</tr>
@@ -124,11 +130,17 @@
 		<input type="submit" name="submit" value="{LANG.voting_confirm}" class="btn btn-primary" />
 	</div>
 </form>
-
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<script type="text/javascript">
-	var items = '{NEW_ITEM_NUM}';
+<script>
+$(document).ready(function() {
+	$("#publ_date,#exp_date").datepicker({
+		showOn : "both",
+		dateFormat : "dd/mm/yy",
+		changeMonth : true,
+		changeYear : true,
+		showOtherMonths : true,
+		buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
+		buttonImageOnly : true
+	});
+});
 </script>
 <!-- END: main -->

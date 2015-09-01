@@ -21,7 +21,7 @@
         <div class="hometext margin-bottom-lg">{CONTENT.description}</div>
         <!-- END: description -->
     	<!-- BEGIN: image -->
-        <figure class="center pointer" onclick="modalShowByObj(this);">
+        <figure class="article center pointer" onclick="modalShowByObj(this);">
     			<p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" /></p>
     			<!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
    		</figure>

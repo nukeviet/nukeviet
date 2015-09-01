@@ -14,10 +14,30 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
 {
     function nv_block_config_news_newscenter( $module, $data_block, $lang_block )
     {
+		global $site_mods;
+
         $html = '<tr>';
+        $html .= '	<td>' . $lang_block['numrow'] . '</td>';
+        $html .= '	<td><input type="text" name="config_numrow" class="form-control w100 pull-left" size="5" value="' . $data_block['numrow'] . '"/>';
+        $html .= '	<span class="text-middle pull-left">&nbsp; ' . $lang_block['width'] . '&nbsp; </span>';
+        $html .= '	<input type="width" name="config_width" class="form-control w100 pull-left" value="' . $data_block['width'] . '"/>';
+        $html .= '	<span class="text-middle pull-left">&nbsp; ' . $lang_block['height'] . '&nbsp; </span>';
+        $html .= '	<input type="height" name="config_height" class="form-control w100 pull-left" value="' . $data_block['height'] . '"/>';
+        $html .= '</td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
+        $html .= '	<td>' . $lang_block['length_title'] . '</td>';
+        $html .= '	<td>';
+        $html .= '	<input type="text" class="form-control w100 pull-left" name="config_length_title" size="5" value="' . $data_block['length_title'] . '"/>';
+        $html .= '	<span class="text-middle pull-left">&nbsp;' . $lang_block['length_hometext'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_length_hometext" size="5" value="' . $data_block['length_hometext'] . '"/>';
+        $html .= '</td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
         $html .= '<td>' . $lang_block['showtooltip'] . '</td>';
         $html .= '<td>';
-        $html .= '<input type="checkbox" value="1" name="config_showtooltip" ' . ( $data_block['showtooltip'] == 1 ? 'checked="checked"' : '' ) . ' /><br /><br />';
+        $html .= '<div class="text-middle pull-left" ><input type="checkbox" value="1" name="config_showtooltip" ' . ( $data_block['showtooltip'] == 1 ? 'checked="checked"' : '' ) . ' /></div>';
         $tooltip_position = array(
             'top' => $lang_block['tooltip_position_top'],
             'bottom' => $lang_block['tooltip_position_bottom'],
@@ -29,14 +49,30 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
             $html .= '<option value="' . $key . '" ' . ( $data_block['tooltip_position'] == $key ? 'selected="selected"' : '' ) . '>' . $value . '</option>';
         }
         $html .= '</select>';
-        $html .= '&nbsp;<span class="text-middle pull-left">' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
+        $html .= '	<span class="text-middle pull-left">&nbsp;' . $lang_block['tooltip_length'] . '&nbsp;</span><input type="text" class="form-control w100 pull-left" name="config_tooltip_length" size="5" value="' . $data_block['tooltip_length'] . '"/>';
         $html .= '</td>';
         $html .= '</tr>';
+
         $html .= '<tr>';
-        $html .= '	<td>' . $lang_block['width'] . '</td>';
-        $html .= '	<td><input type="width" name="config_width" class="form-control w100 pull-left" value="' . $data_block['width'] . '"/>';
-        $html .= '	<span class="text-middle pull-left">&nbsp; ' . $lang_block['height'] . '&nbsp; </span>';
-        $html .= '	<input type="height" name="config_height" class="form-control w100 pull-left" value="' . $data_block['height'] . '"/></td>';
+        $html .= '<td>' . $lang_block['nocatid'] . '</td>';
+        $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
+        $list = nv_db_cache( $sql, '', $module );
+        $html .= '<td>';
+        $html .= '<div style="height: 160px; overflow: auto">';
+        foreach( $list as $l )
+        {
+        	$xtitle_i = '';
+        	if( $l['lev'] > 0 )
+        	{
+        		for( $i = 1; $i <= $l['lev']; ++$i )
+        		{
+        			$xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        		}
+        	}
+        	$html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ( ( in_array( $l['catid'], $data_block['nocatid'] ) ) ? ' checked="checked"' : '' ) . '</input>' . $l['title'] . '</label><br />';
+        }
+        $html .= '</div>';
+        $html .= '</td>';
         $html .= '</tr>';
         return $html;
     }
@@ -47,11 +83,15 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
         $return = array();
         $return['error'] = array();
         $return['config'] = array();
+        $return['config']['numrow'] = $nv_Request->get_int( 'config_numrow', 'post', 0 );
         $return['config']['showtooltip'] = $nv_Request->get_int( 'config_showtooltip', 'post', 0 );
         $return['config']['tooltip_position'] = $nv_Request->get_title( 'config_tooltip_position', 'post', 0 );
-        $return['config']['tooltip_length'] = $nv_Request->get_int( 'config_tooltip_length', 'post', 0 );
+        $return['config']['tooltip_length'] = $nv_Request->get_title( 'config_tooltip_length', 'post', 0 );
+        $return['config']['length_title'] = $nv_Request->get_int( 'config_length_title', 'post', 0 );
+        $return['config']['length_hometext'] = $nv_Request->get_int( 'config_length_hometext', 'post', 0 );
         $return['config']['width'] = $nv_Request->get_int( 'config_width', 'post', '' );
         $return['config']['height'] = $nv_Request->get_int( 'config_height', 'post', '' );
+		$return['config']['nocatid'] = $nv_Request->get_typed_array( 'config_nocatid', 'post', 'int', array() );
         return $return;
     }
 
@@ -59,23 +99,32 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
     {
         global $module_data, $module_name, $module_file, $module_upload, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
 
-        $db->sqlreset()->select( 'id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile' )->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )->where( 'status= 1' )->order( 'publtime DESC' )->limit( 5 );
+        $db->sqlreset()->select( 'id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile' )->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )->order( 'publtime DESC' )->limit( $block_config['numrow'] );
+        if( empty( $block_config['nocatid'] ) )
+        {
+        	$db->where( 'status= 1' );
+        }
+        else
+        {
+        	$db->where( 'status= 1 AND catid NOT IN ('.implode( ',', $block_config['nocatid'] ) . ')' );
+        }
+
         $list = nv_db_cache( $db->sql(), 'id', $module_name );
-        $list = array_values( $list );
         if ( ! empty( $list ) )
         {
             $xtpl = new XTemplate( 'block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
             $xtpl->assign( 'lang', $lang_module );
             $xtpl->assign( 'TOOLTIP_POSITION', $block_config['tooltip_position'] );
+            $xtpl->assign( 'TEMPLATE', $module_info['template'] );
 
-            foreach ( $list as $i => $row )
+			$_first = true;
+            foreach ( $list as $row )
             {
                 $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
-                $row['hometext'] = nv_clean60( strip_tags( $row['hometext'] ), 360 );
-                $row['titleclean60'] = nv_clean60( $row['title'], 60 );
-
-                if ( $i == 0 )
+                $row['titleclean60'] = nv_clean60( $row['title'], $block_config['length_title'] );
+                if ( $_first )
                 {
+                	$_first = false;
                     $width = isset( $block_config['width'] ) ? $block_config['width'] : 400;
                     $height = isset( $block_config['height'] ) ? $block_config['height'] : 268;
 
@@ -125,6 +174,8 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
                         $row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
                         $row['width'] = $width;
                     }
+
+                    $row['hometext'] = nv_clean60( strip_tags( $row['hometext'] ), $block_config['length_hometext'] );
                     $xtpl->assign( 'main', $row );
                 }
                 else
@@ -150,8 +201,7 @@ if ( ! nv_function_exists( 'nv_news_block_newscenter' ) )
                         $row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
                     }
 
-                    $row['hometext'] = nv_clean60( $row['hometext'], $block_config['tooltip_length'], true );
-
+                    $row['hometext'] = nv_clean60( strip_tags( $row['hometext'] ), $block_config['tooltip_length'] );
                     $xtpl->assign( 'othernews', $row );
 
                     if ( ! $block_config['showtooltip'] )

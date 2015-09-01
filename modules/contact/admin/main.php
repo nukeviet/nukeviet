@@ -10,6 +10,27 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
+$mark = $nv_Request->get_title( 'mark', 'post', '' );
+
+if( ! empty( $mark ) and ( $mark == 'read' or $mark == 'unread' ) )
+{
+	$mark = $mark == 'read' ? 1 : 0;
+	$sends = $nv_Request->get_array( 'sends', 'post', array() );
+	if( empty( $sends ) )
+	{
+		die( json_encode( array( 'status' => 'error', 'mess' => $lang_module['please_choose'] ) ) );
+	}
+
+	foreach( $sends as $id )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'contact_new', $id, $mark );
+	}
+
+	$sends = implode( ',', $sends );
+	$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_send SET is_read=' . $mark . ' WHERE id IN (' . $sends . ')' );
+    die( json_encode( array( 'status' => 'ok', 'mess' => '' ) ) );
+}
+
 $page_title = $module_info['custom_title'];
 
 $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -73,8 +94,9 @@ if( ! empty( $contact_allowed['view'] ) )
 				'id' => $row['id'],
 				'sender_name' => $row['sender_name'],
 				'path' => $contact_allowed['view'][$row['cid']],
+                'cat' => $row['cat'],
 				'title' => nv_clean60( $row['title'], 60 ),
-				'time' => $row['send_time'] >= $currday ? nv_date( 'H:i', $row['send_time'] ) : nv_date( 'd/m/Y', $row['send_time'] ),
+				'time' => $row['send_time'] >= $currday ? nv_date( 'H:i d/m/Y', $row['send_time'] ) : nv_date( 'd/m/Y', $row['send_time'] ),
 				'style' => $style,
 				'onclick' => $onclick,
 				'status' => $status,

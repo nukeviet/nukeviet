@@ -40,6 +40,7 @@ $lang_global['admin_password_empty'] = 'Mật khẩu quản trị của bạn ch
 $lang_global['adminpassincorrect'] = 'Mật khẩu quản trị &ldquo;<strong>%s</strong>&rdquo; không chính xác. Hãy thử lại lần nữa';
 $lang_global['admin_password'] = 'Mật khẩu của bạn';
 $lang_global['admin_no_allow_func'] = 'Bạn không có quyền truy cập chức năng này';
+$lang_global['admin_suspend'] = 'Tài khoản Bị đình chỉ';
 
 $lang_global['block_modules'] = 'Block của modules';
 $lang_global['hello_admin1'] = 'Xin chào %1$s ! Lần đăng nhập Quản trị trước vào %2$s';
@@ -47,7 +48,7 @@ $lang_global['hello_admin2'] = 'Tài khoản Quản trị: %1$s ! Bạn đã đ�
 $lang_global['hello_admin3'] = 'Xin chào mừng %1$s. Đây là lần đăng nhập Quản trị đầu tiên của bạn';
 $lang_global['ftp_error_account'] = 'Lỗi: hệ thống không kết nối được FTP server vui lòng kiểm tra lại các thông số FTP';
 $lang_global['ftp_error_path'] = 'Lỗi: thông số Remote path không đúng';
-$lang_global['login_error_account'] = 'Lỗi: Tài khoản Admin chưa được khai báo hoặc khai báo không hợp lệ! (Không ít hơn %1$s ký tự, không nhiều hơn %2$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới)';
+$lang_global['login_error_account'] = 'Lỗi: Tên đăng nhập tài khoản Admin chưa được khai báo hoặc khai báo không hợp lệ! (Không ít hơn %1$s ký tự, không nhiều hơn %2$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới)';
 $lang_global['login_error_password'] = 'Lỗi: Password của Admin chưa được khai báo hoặc khai báo không hợp lệ! (Không ít hơn %1$s ký tự, không nhiều hơn %2$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin, số và dấu gạch dưới)';
 $lang_global['login_error_security'] = 'Lỗi: Mã kiểm tra chưa được khai báo hoặc khai báo không hợp lệ! (Phải có %1$s ký tự. Chỉ chứa các ký tự có trong bảng chữ cái latin và số)';
 $lang_global['error_zlib_support'] = 'Lỗi: Máy chủ của bạn không hỗ trợ thư viện zlib, bạn cần liên hệ với nhà cung cấp dịch vụ hosting bật thư viện zlib để có thể sử dụng tính năng này.';

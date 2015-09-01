@@ -76,17 +76,13 @@ var htmlload = '<tr><td class="text-center" colspan="2"><img src="{NV_BASE_SITEU
 					<td class="exp_time"><input name="exp_time" id="exp_time" value="{ROW.exp_time}" style="width: 90px" maxlength="10" type="text" class="form-control" /><span class="text-middle"> (dd/mm/yyyy) </span></td>
 				</tr>
 				<tr>
-					<td>{LANG.block_active}:</td>
-					<td><input type="checkbox" name="active" value="1"{ROW.block_active}/> {LANG.block_yes}</td>
-				</tr>
-				<tr>
-					<td>{LANG.hide_device}:</td>
+					<td>{LANG.show_device}:</td>
 					<td>
-						<!-- BEGIN: hide_device -->
-							<label id="hide_device_{HIDE_DEVICE.key}" style="padding-right: 20px">
-								<input name="hide_device[]" type="checkbox" value="{HIDE_DEVICE.key}"{HIDE_DEVICE.checked}/>&nbsp;{HIDE_DEVICE.title}
+						<!-- BEGIN: active_device -->
+							<label id="active_{ACTIVE_DEVICE.key}" style="padding-right: 20px">
+								<input name="active_device[]" id="active_device_{ACTIVE_DEVICE.key}" type="checkbox" value="{ACTIVE_DEVICE.key}"{ACTIVE_DEVICE.checked}/>&nbsp;{ACTIVE_DEVICE.title}
 							</label>
-						<!-- END: hide_device -->
+						<!-- END: active_device -->
 					</td>
 				</tr>
 				<tr>
@@ -159,7 +155,13 @@ var htmlload = '<tr><td class="text-center" colspan="2"><img src="{NV_BASE_SITEU
 <!-- END: main -->
 <!-- BEGIN: blockredirect -->
 <script type="text/javascript">
-	window.opener.location.href = '{BLOCKREDIRECT}';
+    alert('{BLOCKMESS}');
+    <!-- BEGIN: redirect -->
+    window.opener.location.href = '{BLOCKREDIRECT}';
+    <!-- END: redirect -->
+    <!-- BEGIN: refresh -->
+    window.opener.location.href = window.opener.location.href
+    <!-- END: refresh -->
 	window.opener.focus();
 	window.close();
 </script>

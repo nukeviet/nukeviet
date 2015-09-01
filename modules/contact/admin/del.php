@@ -16,6 +16,11 @@ nv_insert_logs( NV_LANG_DATA, $module_name, 'log_del', 'id ' . $t, $admin_info['
 
 if( $t == 3 )
 {
+	$result = $db->query( 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send' );
+	while( list( $id ) = $result->fetch( 3 ) )
+	{
+		nv_delete_notification( NV_LANG_DATA, $module_name, 'contact_new', $id );
+	}
 	$db->query( 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_send' );
 	$db->query( 'TRUNCATE TABLE ' . NV_PREFIXLANG . '_' . $module_data . '_reply' );
 }
@@ -28,6 +33,10 @@ elseif( $t == 2 )
 		$in = implode( ',', $sends );
 		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id IN (' . $in . ')' );
 		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reply WHERE id IN (' . $in . ')' );
+		foreach( $sends as $id )
+		{
+			nv_delete_notification( NV_LANG_DATA, $module_name, 'contact_new', $id );
+		}
 	}
 }
 else
@@ -38,6 +47,7 @@ else
 	{
 		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_send WHERE id = ' . $id );
 		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_reply WHERE id = ' . $id );
+		nv_delete_notification( NV_LANG_DATA, $module_name, 'contact_new', $id );
 	}
 }
 

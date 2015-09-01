@@ -19,6 +19,10 @@
 						<td>{LANG.title} <span style="color:red">*</span>:</td>
 						<td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="255" /></td>
 					</tr>
+                    <tr>
+						<td>{LANG.group_description} <span style="color:red">*</span>:</td>
+						<td><input title="{LANG.group_description}" class="form-control" type="text" name="description" value="{DATA.description}" maxlength="255" /></td>
+					</tr>
 					<tr>
 						<td>{LANG.exp_time}:</td>
 						<td><input type="text" name="exp_time" class="form-control w150 datepicker pull-left" value="{DATA.exp_time}" maxlength="10" /> &nbsp;&nbsp;&nbsp;{LANG.emptyIsUnlimited} </td>
@@ -55,7 +59,7 @@
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "assets/images/calendar.gif",
+			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true
 		});
 	});

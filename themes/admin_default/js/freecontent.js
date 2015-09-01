@@ -46,7 +46,7 @@ function nv_pare_data(id, isEditor){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
 			data: 'id=' + id + '&getinfo=1',
 			dataType: 'json',
 			success: function(e){
@@ -102,7 +102,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
 			data: 'bid=' + $this.data('bid') + '&getinfo=1',
 			dataType: 'json',
 			success: function(e){
@@ -158,7 +158,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
 			data: $.param(data) + '&submit=1',
 			dataType: 'json',
 			success: function(e){
@@ -195,7 +195,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(),
 			data: 'bid=' + $(cfg.blockModalDelete).find('[name="bid"]').val() + '&del=1',
 			dataType: 'json',
 			success: function(e){
@@ -299,7 +299,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
 			data: $.param(data) + '&submit=1',
 			dataType: 'json',
 			success: function(e){
@@ -360,7 +360,7 @@ $(document).ready(function(){
 		$.ajax({
 			type: 'POST',
 			cache: false,
-			url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
+			url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
 			data: 'id=' + $(cfg.ctModalDelete).find('[name="id"]').val() + '&del=1',
 			dataType: 'json',
 			success: function(e){
@@ -395,7 +395,7 @@ $(document).ready(function(){
 			$.ajax({
 				type: 'POST',
 				cache: false,
-				url: script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
+				url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=manager&nocache=' + new Date().getTime(),
 				data: 'id=' + $this.data('id') + '&changestatus=1',
 				dataType: 'json',
 				success: function(e){

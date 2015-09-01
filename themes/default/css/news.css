@@ -1,4 +1,4 @@
-#topnews {
+﻿#topnews {
     border:1px solid #c3d3e0;
     margin-bottom:10px;
     padding:4px;
@@ -109,6 +109,14 @@ div.news_column ul.related a:hover {
 
 .content-box {
     padding:10px;
+}
+
+.panel-body.other-news > div.clearfix{
+    margin-bottom: 15px;
+}
+
+.panel-body.other-news > div.clearfix:last-child{
+    margin-bottom: 0;
 }
 
 ul.other-news {
@@ -259,6 +267,11 @@ p {
     cursor:pointer;
 }
 
+#news-bodyhtml{
+	overflow-x: hidden;
+	overflow-y: visible
+}
+
 .bodytext figure.image figcaption {
     padding:5px;
 }
@@ -280,7 +293,6 @@ p {
 }
 
 /* Responsive news */
-
 @media (max-width:499px) {
     div.news_column ul.related {
         padding:4px;

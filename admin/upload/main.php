@@ -29,6 +29,7 @@ $xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $global_config['mod
 if( $popup )
 {
 	$lang_module['browse_file'] = $lang_global['browse_file'];
+	$sys_max_size = min( $global_config['nv_max_size'], nv_converttoBytes( ini_get( 'upload_max_filesize' ) ), nv_converttoBytes( ini_get( 'post_max_size' ) ) );
 
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'ADMIN_THEME', $global_config['module_theme'] );
@@ -37,6 +38,8 @@ if( $popup )
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'NV_LANG_INTERFACE', NV_LANG_INTERFACE );
 	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'NV_MAX_SIZE',nv_convertfromBytes( $sys_max_size ) );
+	$xtpl->assign( 'NV_MAX_SIZE_BYTES', $sys_max_size );
 	$xtpl->assign( 'NV_MAX_WIDTH', NV_MAX_WIDTH );
 	$xtpl->assign( 'NV_MAX_HEIGHT', NV_MAX_HEIGHT );
 	$xtpl->assign( 'NV_MIN_WIDTH', 10 );
@@ -57,42 +60,12 @@ if( $popup )
 	$xtpl->assign( 'SFILE', $sfile );
 
 	// Find logo config
-	if( file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
+    $upload_logo = $upload_logo_config = '';
+	if( ! empty( $global_config['upload_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['upload_logo'] ) )
 	{
-		$upload_logo = $global_config['upload_logo'];
-	}
-	elseif( file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
-	{
-		$upload_logo = $global_config['site_logo'];
-	}
-	elseif( file_exists( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png' ) )
-	{
-		$upload_logo = NV_UPLOADS_DIR . '/logo.png';
-	}
-	else
-	{
-		$upload_logo = '';
-	}
-
-	// Get logo size
-	if( $upload_logo )
-	{
-		$logo_size = getimagesize( NV_ROOTDIR . '/' . $upload_logo );
-
-		$upload_logo_config = array(
-			'w' => $logo_size[0],
-			'h' => $logo_size[1],
-			'autologosize1' => $global_config['autologosize1'],
-			'autologosize2' => $global_config['autologosize2'],
-			'autologosize3' => $global_config['autologosize3'],
-		);
-
-		$upload_logo_config = implode( '|', $upload_logo_config );
-		$upload_logo = NV_BASE_SITEURL . $upload_logo;
-	}
-	else
-	{
-		$upload_logo_config = '';
+		$upload_logo = NV_BASE_SITEURL . $global_config['upload_logo'];
+        $logo_size = getimagesize( NV_ROOTDIR . '/' . $global_config['upload_logo'] );
+        $upload_logo_config = $logo_size[0] . '|' . $logo_size[1] . '|' . $global_config['autologosize1'] . '|' . $global_config['autologosize2'] . '|' . $global_config['autologosize3'];
 	}
 
 	$xtpl->assign( 'UPLOAD_LOGO', $upload_logo );
@@ -141,6 +114,11 @@ if( $popup )
 	if( ! empty( $global_config['upload_auto_alt'] ) )
 	{
 		$xtpl->parse( 'main.auto_alt' );
+	}
+
+	if( ! $global_config['nv_auto_resize'] )
+	{
+		$xtpl->parse( 'main.no_auto_resize' );
 	}
 
 	$xtpl->parse( 'main' );

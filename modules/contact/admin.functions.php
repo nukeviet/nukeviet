@@ -17,10 +17,7 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
  */
 function nv_getAllowed()
 {
-	global $module_data, $db, $admin_info;
-
-	$sql = 'SELECT id,full_name,admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department';
-	$result = $db->query( $sql );
+	global $module_data, $db, $admin_info, $lang_module;
 
 	$contact_allowed = array(
 		'view' => array(),
@@ -28,6 +25,15 @@ function nv_getAllowed()
 		'obt' => array()
 	);
 
+	if( defined( 'NV_IS_SPADMIN' ) )
+	{
+		$contact_allowed['view'][0] = $lang_module['is_default'];
+		$contact_allowed['reply'][0] =$lang_module['is_default'];
+		$contact_allowed['obt'][0] = $lang_module['is_default'];
+	}
+
+	$sql = 'SELECT id,full_name,admins FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department';
+	$result = $db->query( $sql );
 	while( $row = $result->fetch() )
 	{
 		$id = intval( $row['id'] );
@@ -58,33 +64,6 @@ function nv_getAllowed()
 	}
 
 	return $contact_allowed;
-}
-
-function nv_departmentList()
-{
-	global $db, $module_data, $db_config;
-	
-	$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_department ORDER BY weight DESC";
-
-	$result = $db->query( $sql );
-	$list = array();
-	while( $row = $result->fetch() )
-	{
-
-		$list[$row['id']] = array(
-			'id' => $row['id'],
-			'full_name' => $row['full_name'],
-			'phone' => $row['phone'],
-			'fax' => $row['fax'],
-			'email' => $row['email'],
-			'yahoo' => $row['yahoo'],
-			'skype' => $row['skype'],
-			'note' => $row['note'],
-			'admins' => $row['admins'],
-			'act' => $row['act'],
-			'weight' => $row['weight']);
-	}
-	return $list;
 }
 
 define( 'NV_IS_FILE_ADMIN', true );

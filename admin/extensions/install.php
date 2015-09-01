@@ -188,7 +188,7 @@ else
 						}
 						elseif( $array['compatible']['status'] == 'notlogin' ) // Dang nhap de kiem tra
 						{
-							$xtpl->assign( 'LOGIN_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_base64_encode( $client_info['selfurl'] ) );
+							$xtpl->assign( 'LOGIN_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt( $client_info['selfurl'] ) );
 							$xtpl->parse( 'main.install.not_install.notlogin' );
 						}
 						else // Chua thanh toan, xuat link thanh toan

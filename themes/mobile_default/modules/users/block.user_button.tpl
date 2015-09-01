@@ -5,7 +5,7 @@
     <div class="guestBlock">
         <h3><a href="#" onclick="switchTab(this);tipAutoClose(true);" class="guest-sign pointer margin-right current" data-switch=".log-area, .reg-area" data-obj=".guestBlock">{GLANG.signin}</a> <!-- BEGIN: allowuserreg2 --><a href="#" onclick="switchTab(this);tipAutoClose(false);" class="guest-reg pointer" data-switch=".reg-area, .log-area" data-obj=".guestBlock">{GLANG.register}</a> <!-- END: allowuserreg2 --></h3>
         <div class="log-area">
-            <div class="info margin-bottom">{GLANG.logininfo}</div>
+            <div class="nv-info margin-bottom">{GLANG.logininfo}</div>
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
@@ -39,8 +39,8 @@
         	<!-- END: openid -->
         </div>
         <!-- BEGIN: allowuserreg -->
-        <div class="reg-area margin-bottom-lg hidden">
-            <div class="info margin-bottom">{LANG.info}</div>
+        <div class="reg-area hidden">
+            <div class="nv-info margin-bottom">{LANG.info}</div>
             <div class="inputs">
                 <div class="form-group">
                     <span><input type="text" class="form-control" name="brlname" value="" maxlength="255" placeholder="{LANG.last_name}" onkeypress="inputReg(event);" /></span>
@@ -101,9 +101,9 @@
 <span data-toggle="tip" data-target="#userBlock" data-click="y"><strong class="pointer bg-gainsboro" style="background-image:url({AVATA})"></strong><span class="hidden">{LANG.full_name}</span></span>
 <!-- START FORFOOTER -->
 <div id="userBlock" class="hidden">
-    <div class="info" style="display:none"></div>
+    <div class="nv-info" style="display:none"></div>
     <div class="userBlock clearfix">
-    	<h3 class="text-center"><span class="text-normal">{GLANG.wellcome}:</span> {USER.full_name}</h3>
+    	<h3 class="text-center"><span class="lev-{LEVEL} text-normal">{WELCOME}:</span> {USER.full_name}</h3>
     	<div class="row">
     		<div class="col-xs-8 text-center">
     			<a title="{LANG.edituser}" href="#"><img src="{AVATA}" alt="{USER.full_name}" class="img-thumbnail bg-gainsboro" /></a>
@@ -112,13 +112,26 @@
     		    <ul class="nv-list-item sm">
     		    	<li class="active"><a href="{URL_MODULE}">{LANG.user_info}</a></li>
     		    	<li><a href="{URL_HREF}editinfo">{LANG.editinfo}</a></li>
-    		    	<li><a href="{URL_HREF}changepass">{LANG.changepass_title}</a></li>
-    		    	<li><a href="{URL_HREF}changequestion">{LANG.question2}</a></li>
-    		    	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
-    		    	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
+    		    	<!-- BEGIN: allowopenid --><li><a href="{URL_HREF}editinfo/openid">{LANG.openid_administrator}</a></li><!-- END: allowopenid -->
+    		    	<!-- BEGIN: regroups --><li><a href="{URL_HREF}editinfo/group">{LANG.in_group}</a></li><!-- END: regroups -->
     		    </ul>
     		</div>
     	</div>
+        <!-- BEGIN: admintoolbar -->
+        <div class="margin-top boder-top padding-top">
+            <p class="margin-bottom-sm"><strong>{GLANG.for_admin}</strong></p>
+            <ul class="nv-list-item sm">
+                <li><em class="fa fa-cog fa-horizon margin-right-sm"></em><a href="{NV_BASE_SITEURL}{NV_ADMINDIR}/index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}" title="{GLANG.admin_page}"><span>{GLANG.admin_page}</span></a></li>
+                <!-- BEGIN: is_modadmin -->
+        		<li><em class="fa fa-key fa-horizon margin-right-sm"></em><a href="{URL_ADMINMODULE}" title="{GLANG.admin_module_sector} {MODULENAME}"><span>{GLANG.admin_module_sector} {MODULENAME}</span></a></li>
+        		<!-- END: is_modadmin -->
+                <!-- BEGIN: is_spadadmin -->
+        		<li><em class="fa fa-arrows fa-horizon margin-right-sm"></em><a href="{URL_DBLOCK}" title="{LANG_DBLOCK}"><span>{LANG_DBLOCK}</span></a></li>
+        		<!-- END: is_spadadmin -->
+                <li><em class="fa fa-user fa-horizon margin-right-sm"></em><a href="{URL_AUTHOR}" title="{GLANG.admin_view}"><span>{GLANG.admin_view}</span></a></li>
+            </ul>
+        </div>
+        <!-- END: admintoolbar -->
     </div>
     <div class="tip-footer">
         <div class="row">
@@ -126,7 +139,7 @@
                 <em class="button btn-sm icon-enter" title="{LANG.current_login}"></em>{USER.current_login_txt}
             </div>
             <div class="col-xs-8 text-right">
-                <button type="button" class="btn btn-default btn-sm active" onclick="bt_logout(this);"><em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
+                <button type="button" class="btn btn-default btn-sm active" onclick="{URL_LOGOUT}(this);"><em class="icon-exit"></em>&nbsp;{LANG.logout_title}&nbsp;</button>
             </div>
         </div>
     </div>

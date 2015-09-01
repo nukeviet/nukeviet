@@ -75,7 +75,19 @@
     content:"\e606";
 }
 
+.icon-icq:before {
+	content: "\e605";
+}
+.icon-viber:before {
+	content: "\e60a";
+}
+
 /* Fix bootstrap */
+.form-horizontal .control-label {
+    margin-bottom: 0;
+    padding-top: 7px;
+    text-align: right;
+}
 
 .min-width {
     width:319px;
@@ -145,11 +157,70 @@
     margin-bottom:15px;
 }
 
+.padding-top{
+    padding-top: 10px
+}
+
+.padding-left{
+    padding-left: 10px
+}
+
+.padding-right{
+    padding-right: 10px
+}
+
+.padding-bottom{
+    padding-bottom: 10px
+}
+
+.boder-top{
+    border-top: 1px solid #ccc;
+}
+
+.boder-bottom{
+    border-bottom: 1px solid #ccc;
+}
+
+.border-left{
+    border-left: 1px solid #ccc;
+}
+
+.border-right{
+    border-right: 1px solid #ccc;
+}
+
 .bg-gainsboro {
     background-color:#82B1FE;
 }
 
-.info {
+.bg-lavender{
+    background-color:#E6E6FA
+}
+
+/*Load_Bar*/
+.load-bar{
+    display: inline-block;
+    vertical-align: middle;
+    width: 33px;
+    height: 8px;
+    background: transparent url(../../../assets/images/load_bar.gif);
+    margin: auto 10px
+}
+
+/*Center DIV*/
+.centered {
+   text-align: center;
+   font-size: 0;
+}
+.centered > div {
+   float: none;
+   display: inline-block;
+   text-align: left;
+   font-size: 13px;
+}
+
+/*nv-info*/
+.nv-info {
     border-width:1px;
     border-style:solid;
     border-color:#D4D4D4;
@@ -157,21 +228,20 @@
     -webkit-border-radius:3px;
     background-color:#f7f7f7;
     color:#333;
-    padding:5px 10px;
+    padding:10px;
 }
 
-.info.error {
+.nv-info.error {
     background-color:#EFD7D7 !important;
     border-color:#DCA8A6 !important;
 }
 
-.info.success {
+.nv-info.success {
     background-color:#E5F1FB !important;
     border-color:#8DC1ED !important;
 }
 
-.info:before {
-    content:" \f05a ";
+.nv-info:before {
     display:inline-block;
     font-family:FontAwesome;
     font-size:20px;
@@ -180,12 +250,12 @@
     margin-right:5px;
 }
 
-.info.error:before {
+.nv-info.error:before {
     content:" \f057 ";
     color:#A94442;
 }
 
-.info.success:before {
+.nv-info.success:before {
     content:" \f13a ";
     color:#449D44;
 }
@@ -265,6 +335,14 @@
     vertical-align:middle;
 }
 
+.align-bottom{
+    vertical-align: bottom
+}
+
+.align-top{
+    vertical-align: top
+}
+
 .pointer {
     cursor:pointer;
 }
@@ -284,9 +362,11 @@ ol {
 }
 
 .well {
-    padding:8px;
-    line-height:18px;
-    text-align:justify;
+    padding:8px
+}
+
+.well p {
+    margin:0;
 }
 
 input[type=text].required,
@@ -297,10 +377,35 @@ input[type=search].required,
 input[type=tel].required,
 input[type=time].required,
 input[type=url].required,
-input[type=url].required {
+input[type=url].required,
+textarea.required,
+select.required,
+label.required {
     background-image:url(../images/icons/required.png);
     background-position:right center;
     background-repeat:no-repeat;
+}
+textarea.required{
+    background-position: right 10px;
+}
+select.required{
+    background-position: calc(100% - 15px) 10px;
+}
+label.required{
+    padding-right: 20px;
+}
+
+label.radio-box,label.check-box{
+    font-weight: normal;
+    margin-right: 20px;
+    cursor: pointer;
+}
+div.radio-box,div.check-box{
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    padding: 10px
 }
 
 .display-inline-block {
@@ -417,14 +522,12 @@ input[type=url].required {
     vertical-align:middle;
 }
 
-/* panel-body */
-
-.panel-body {
-    padding:5px;
+/* panel */
+.panel,.panel-heading{
+    border-radius: 0
 }
-
-.panel-body h3 {
-    color:#0066cc;
+.panel-body p {
+    margin:0;
 }
 
 .panel-body ul {
@@ -444,27 +547,9 @@ input[type=url].required {
     margin-bottom:0;
 }
 
-.panel {
-    border:1px solid transparent;
-}
 
 .nv-infodie .logo {
     max-width:90% !important;
-}
-
-.panel-heading {
-    border-bottom:1px solid rgba(0,0,0,0);
-    border-top-left-radius:3px;
-    border-top-right-radius:3px;
-    padding:10px;
-}
-
-.panel-primary > .panel-heading > a {
-    color:#fff;
-}
-
-.panel-primary > .panel-heading > a:hover {
-    color:#ddd;
 }
 
 table caption {
@@ -509,6 +594,10 @@ figure figcaption {
     font-size: 12px;
     color: #fff;
     font-weight: normal;
+}
+
+.rel{
+    position: relative
 }
 
 /* Global */
@@ -586,31 +675,6 @@ h5,
 h6 {
     font-weight:700;
 }
-h1,
-.h1{
-    font-size:18px;
-}
-h2,
-.h2{
-    font-size:16px;
-}
-
-h3,
-.h3{
-    font-size:14px;
-}
-h4,
-.h4{
-    font-size:13px;
-}
-h5,
-.h5{
-    font-size:12px;
-}
-h6,
-.h6{
-    font-size:11px;
-}
 
 .title{
     font-size:22px
@@ -638,6 +702,14 @@ h6,
 
 .fa-pointer {
     cursor:pointer;
+}
+
+.fa-horizon {
+    width:14px;
+}
+
+.fa-lg.fa-horizon {
+    width:22px;
 }
 
 h3.sm {
@@ -816,8 +888,8 @@ header.first-child {
     margin-right:-4px;
 }
 
-.contactList li .fa {
-    width:20px;
+.contactList li .fa, .contactList li [class^="icon-"], .contactList li [class*=" icon-"] {
+    width:20px !important
 }
 
 .qlist {
@@ -854,6 +926,10 @@ header.first-child {
     background:#D0D0D0;
 }
 
+.guestBlock .reg-area{
+    margin-bottom: 50px;
+}
+
 /* TIP */
 
 .tip,.ftip {
@@ -873,30 +949,23 @@ header.first-child {
     padding:10px 14px 20px 10px;
     background:#eee;
     box-shadow:0 2px 10px rgba(0,0,0,0.2);
-    -webkit-border-bottom-left-radius:5px;
-    border-bottom-left-radius:5px;
-    -webkit-border-bottom-right-radius:5px;
-    border-bottom-right-radius:5px;
     display:none;
 }
 
 #ftip {
-    position:absolute;
+    position:fixed;
     bottom:41px;
     right:0;
     float:right;
     z-index:9;
     min-width:100px;
     min-height:50px;
+    max-height: calc(100% - 42px);
     overflow-y:auto;
     overflow-x:hidden;
     padding:10px 14px 20px 10px;
     background:#eee;
     box-shadow:0 2px 10px rgba(0,0,0,0.2);
-    -webkit-border-top-left-radius:5px;
-    border-top-left-radius:5px;
-    -webkit-border-top-right-radius:5px;
-    border-top-right-radius:5px;
     display:none;
 }
 
@@ -911,10 +980,6 @@ header.first-child {
     background:#e1e1e1;
     border:1px solid #ccc;
     padding:10px;
-    -webkit-border-bottom-left-radius:5px;
-    border-bottom-left-radius:5px;
-    -webkit-border-bottom-right-radius:5px;
-    border-bottom-right-radius:5px;
     margin:10px -15px -16px;
 }
 
@@ -996,7 +1061,6 @@ header.first-child {
 
 .footer a {
     color:#333;
-    font-weight:bold;
     text-decoration:none;
 }
 
@@ -1154,7 +1218,7 @@ header.first-child {
 }
 
 .page {
-    padding:15px 10px;
+    padding:15px 5px;
 }
 
 .page h1 {
@@ -1260,7 +1324,7 @@ input[type="radio"] {
     display:inline-block;
     line-height:0;
     height:16px;
-    margin:0 4px 0 0;
+    margin:3px 4px 0 0;
     outline:0;
     padding:0 !important;
     text-align:center;
@@ -1408,6 +1472,49 @@ button.close {
     opacity:.2;
 }
 
+.modal-body{
+    padding:15px
+}
+
+#sitemodal .modal-dialog {
+  position: relative;
+  width: auto !important;
+  max-width: 600px;
+  text-align: center;
+  font-size: 0;
+}
+#sitemodal .modal-content{
+    width: auto;
+    display: inline-block;
+    font-size: 14px;
+    text-align: left
+}
+#sitemodal .close{
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    width: 24px;
+    height:24px;
+    background: #000;
+    color:#fff;
+    font-size:11px;
+    opacity:0.8;
+    border:2px solid #ccc;
+    border-radius: 12px
+}
+#sitemodal .close:hover{
+    opacity:1;
+}
+@media (max-width: 619px) {
+    #sitemodal .modal-dialog{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+  #sitemodal .modal-content{
+        display: block
+    }
+}
+
 .sidebar-nav {
     margin:0 !important;
 }
@@ -1421,7 +1528,50 @@ hr {
     margin-bottom:10px;
 }
 
-@media (max-width:319px) {
+/* Account Level */
+[class^="lev-"],
+[class*=" lev-"]{
+    display:inline-block;
+}
+[class^="lev-"]:before,
+[class*=" lev-"]:before{
+    font-family: FontAwesome;
+    font-size:inherit;
+    margin-right: 5px
+}
+.lev-1:before{
+    content: " \f005 \f005 \f005 "
+}
+.lev-2:before{
+    content: " \f005 \f005 \f006 "
+}
+.lev-3:before{
+    content: " \f005 \f006 \f006 "
+}
+.lev-user:before{
+    content: " \f007 "
+}
+
+/* block Contact*/
+.contactForm{
+    position: relative;
+    width: 350px;
+    height:100%;
+    margin: -10px -14px -20px -10px
+}
+
+.contactForm .panel{
+    margin-bottom:0;
+    color: #333
+}
+
+@media (max-height:599px) and (min-width:350px) {
+    .contactForm .panel{
+        margin-right: 14px
+    }
+}
+
+@media (max-width:349px) {
     .min-width {
         width:100% !important;
     }
@@ -1433,5 +1583,12 @@ hr {
     }
     .winHelp {
         width:calc(100% - 80px);
+    }
+    .contactForm {
+        width: 100%;
+        margin: 0
+    }
+    .contactForm .panel{
+        width: 100%
     }
 }

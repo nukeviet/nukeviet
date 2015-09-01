@@ -11,14 +11,14 @@
 		<title>{SITE_NAME} {NV_TITLEBAR_DEFIS} {PAGE_TITLE}</title>
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
-		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/main.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/style.css">
 		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
 		<script type="text/javascript">
 		var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{GFX_NUM}');
 		var login_error_security = '{LOGIN_ERROR_SECURITY}';
 		var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
 		</script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}{ASSETS_DIR}/js/global.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/js/login.js"></script>
 	</head>
 	<body>

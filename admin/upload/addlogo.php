@@ -34,14 +34,6 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 	{
 		$upload_logo = NV_ROOTDIR . '/' . $global_config['upload_logo'];
 	}
-	elseif( file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
-	{
-		$upload_logo = NV_ROOTDIR . '/' . $global_config['site_logo'];
-	}
-	elseif( file_exists( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png' ) )
-	{
-		$upload_logo = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/logo.png';
-	}
 	else
 	{
 		die( 'ERROR#' . $lang_module['notlogo'] );
@@ -62,7 +54,7 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 		if( isset( $array_dirname[$path] ) )
 		{
-			if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png)))$/i', $path . '/' . $file, $m ) )
+			if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp)))$/i', $path . '/' . $file, $m ) )
 			{
 				@nv_deletefile( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $m[1] );
 			}

@@ -6,6 +6,20 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+function user_validForm(a) {
+    $.ajax({
+		type: $(a).prop("method"),
+		cache: !1,
+		url: $(a).prop("action"),
+		data: $(a).serialize(),
+		dataType: "json",
+		success: function(b) {
+			"error" == b.status ? (alert(b.mess), $("[name=" + b.input + "]", a).focus()) : window.location.href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable
+		}
+	});
+	return false
+}
+
 function nv_chang_question(qid) {
 	var nv_timer = nv_settimeout_disable('id_weight_' + qid, 5000);
 	var new_vid = $('#id_weight_' + qid).val();
@@ -316,7 +330,7 @@ function nv_choice_fields_additem() {
 }
 
 function nv_show_list_field() {
-	$('#module_show_list').html('<center><img alt="" src="' + nv_siteroot + 'assets/images/load_bar.gif"></center>').load(script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&qlist=1&nocache=' + new Date().getTime());
+	$('#module_show_list').html('<center><img alt="" src="' + nv_base_siteurl + 'assets/images/load_bar.gif"></center>').load(script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&qlist=1&nocache=' + new Date().getTime());
 	return;
 }
 
@@ -361,7 +375,7 @@ function nv_load_current_date() {
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "assets/images/calendar.gif",
+			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true
 		});
 		$("input[name=default_date]").removeAttr("disabled");
@@ -389,7 +403,7 @@ $(document).ready(function(){
 	});
 	
 	$("#btn_upload").click(function() {
-		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
+		nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
 		return false;
 	});
 	$('#current-photo-btn').click(function(){
@@ -415,7 +429,7 @@ $(document).ready(function(){
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "assets/images/calendar.gif",
+			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true
 		});
 		$("#birthday").datepicker({
@@ -424,7 +438,7 @@ $(document).ready(function(){
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "assets/images/calendar.gif",
+			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true,
 			yearRange: "-99:+0",
 			beforeShow: function() {
@@ -438,7 +452,7 @@ $(document).ready(function(){
 	// Export user
 	$("input[name=data_export]").click(function() {
 		$("input[name=data_export]").attr("disabled", "disabled");
-		$('#users').html('<center>' + export_note + '<br /><br /><img src="' + nv_siteroot + 'assets/images/load_bar.gif" alt="" /></center>');
+		$('#users').html('<center>' + export_note + '<br /><br /><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="" /></center>');
 		nv_data_export(1);
 	});
 

@@ -141,10 +141,18 @@ elseif( $step == 2 )
 	{
 		if( $sys_info['supports_rewrite'] == 'rewrite_mode_apache' )
 		{
+			if( ! file_exists( NV_ROOTDIR . '/.htaccess' ) )
+			{
+				@file_put_contents( NV_ROOTDIR . '/.htaccess', file_get_contents( NV_ROOTDIR . '/install/default.htaccess.txt' ) );
+			}
 			$array_dir[] = '.htaccess';
 		}
 		else
 		{
+			if( ! file_exists( NV_ROOTDIR . '/web.config' ) )
+			{
+				@file_put_contents( NV_ROOTDIR . '/web.config', file_get_contents( NV_ROOTDIR . '/install/default.web.config.txt' ) );
+			}
 			$array_dir[] = 'web.config';
 		}
 	}
@@ -801,7 +809,7 @@ elseif( $step == 6 )
 		}
 		elseif( $array_data['nv_password'] != $array_data['re_password'] )
 		{
-			$error = sprintf( $lang_global['passwordsincorrect'], $array_data['nv_password'], $array_data['re_password'] );
+			$error = $lang_global['passwordsincorrect'];
 		}
 		elseif( empty( $array_data['question'] ) )
 		{
@@ -1048,6 +1056,7 @@ elseif( $step == 6 )
 
 	$array_data['error'] = $error;
 	$title = $lang_module['website_info'];
+	$lang_module['admin_pass_note'] = $lang_global['upass_type_' . $global_config['nv_upass_type']];
 	$contents = nv_step_6( $array_data, $nextstep );
 }
 elseif( $step == 7 )
