@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
 /**
  * user_register()
- * 
+ *
  * @param mixed $gfx_chk
  * @param mixed $checkss
  * @param mixed $data_questions
@@ -193,7 +193,7 @@ function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config
 		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
+		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png' );
 		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.reg_captcha' );
@@ -234,7 +234,7 @@ function user_register( $gfx_chk, $checkss, $data_questions, $array_field_config
 
 /**
  * user_login()
- * 
+ *
  * @param bool $is_ajax
  * @return
  */
@@ -345,7 +345,7 @@ function user_login( $is_ajax = false )
 
 /**
  * user_openid_login()
- * 
+ *
  * @param mixed $gfx_chk
  * @param mixed $attribs
  * @return
@@ -400,7 +400,7 @@ function user_openid_login( $gfx_chk, $attribs )
 
 /**
  * user_lostpass()
- * 
+ *
  * @param mixed $data
  * @return
  */
@@ -476,7 +476,7 @@ function user_lostactivelink( $data, $question )
 		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
+		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png' );
 		$xtpl->assign( 'SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME );
 		$xtpl->assign( 'GFX_MAXLENGTH', NV_GFX_NUM );
 		$xtpl->parse( 'main.step1' );
@@ -504,7 +504,7 @@ function user_lostactivelink( $data, $question )
 
 /**
  * user_info()
- * 
+ *
  * @param mixed $data
  * @param mixed $array_field_config
  * @param mixed $custom_fields
@@ -813,7 +813,7 @@ function user_info( $data, $array_field_config, $custom_fields, $types, $data_qu
 
 /**
  * openid_callback()
- * 
+ *
  * @param mixed $openid_info
  * @return
  */
@@ -918,7 +918,7 @@ function user_welcome()
 
 /**
  * user_info_exit()
- * 
+ *
  * @param mixed $info
  * @param bool $error
  * @return
@@ -1100,7 +1100,7 @@ function nv_memberslist_theme( $users_array, $array_order_new, $generate_page )
 
 /**
  * nv_memberslist_detail_theme()
- * 
+ *
  * @param mixed $item
  * @param mixed $array_field_config
  * @param mixed $custom_fields
@@ -1192,7 +1192,7 @@ function nv_memberslist_detail_theme( $item, $array_field_config, $custom_fields
 
 /**
  * user_info_exit_redirect()
- * 
+ *
  * @param mixed $info
  * @param mixed $nv_redirect
  * @return void
@@ -1278,7 +1278,7 @@ function nv_avatar( $array )
 
 /**
  * safe_deactivate()
- * 
+ *
  * @param mixed $data
  * @return
  */
