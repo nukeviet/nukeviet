@@ -271,7 +271,7 @@ $(function() {
 	$(".headerSearch input").on("keypress", function(a) {
 		13 != a.which || a.shiftKey || (a.preventDefault(), $(".headerSearch button").trigger("click"))
 	});
-	// Show messger timeout login users 
+	// Show messger timeout login users
 	nv_is_user && (myTimerPage = setTimeout(function() {
 		timeoutsessrun()
 	}, nv_check_pass_mstime));
@@ -290,7 +290,7 @@ $(function() {
 		container: "body",
 		html: !0,
 		title: function() {
-			return ("" == $(this).data("img") ? "" : '<img class="img-thumbnail pull-left" src="' + $(this).data("img") + '" width="90" />') + $(this).data("content")
+			return ("" == $(this).data("img") || !$(this).data("img") ? "" : '<img class="img-thumbnail pull-left" src="' + $(this).data("img") + '" width="90" />') + $(this).data("content")
 		}
 	});
 	// Change site lang
