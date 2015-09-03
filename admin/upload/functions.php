@@ -335,7 +335,7 @@ function nv_getFileInfo( $pathimg, $file )
 	$stat = @stat( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
 	$info['filesize'] = $stat['size'];
 
-	$info['src'] = NV_FILES_DIR . '/images/file.gif';
+	$info['src'] = NV_ASSETS_DIR . '/images/file.gif';
 	$info['srcwidth'] = 32;
 	$info['srcheight'] = 32;
 	$info['size'] = '|';
@@ -375,7 +375,7 @@ function nv_getFileInfo( $pathimg, $file )
 	elseif( in_array( $ext, $array_flash ) )
 	{
 		$info['type'] = 'flash';
-		$info['src'] = NV_FILES_DIR . '/images/flash.gif';
+		$info['src'] = NV_ASSETS_DIR . '/images/flash.gif';
 
 		if( $matches[2] == 'swf' )
 		{
@@ -388,25 +388,25 @@ function nv_getFileInfo( $pathimg, $file )
 	}
 	elseif( in_array( $ext, $array_archives ) )
 	{
-		$info['src'] = NV_FILES_DIR . '/images/zip.gif';
+		$info['src'] = NV_ASSETS_DIR . '/images/zip.gif';
 	}
 	elseif( in_array( $ext, $array_documents ) )
 	{
 		if( $ext == 'doc' or $ext == 'docx' )
 		{
-			$info['src'] = NV_FILES_DIR . '/images/msword.png';
+			$info['src'] = NV_ASSETS_DIR . '/images/msword.png';
 		}
 		elseif( $ext == 'xls' or $ext == 'xlsx' )
 		{
-			$info['src'] = NV_FILES_DIR . '/images/excel.png';
+			$info['src'] = NV_ASSETS_DIR . '/images/excel.png';
 		}
 		elseif( $ext == 'pdf' )
 		{
-			$info['src'] = NV_FILES_DIR . '/images/pdf.png';
+			$info['src'] = NV_ASSETS_DIR . '/images/pdf.png';
 		}
 		else
 		{
-			$info['src'] = NV_FILES_DIR . '/images/doc.gif';
+			$info['src'] = NV_ASSETS_DIR . '/images/doc.gif';
 		}
 	}
 
