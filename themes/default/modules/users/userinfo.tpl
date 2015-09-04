@@ -11,10 +11,10 @@
             </figure>
         	<div>
         		<ul class="nv-list-item xsm">
-        			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
-        			<li><em class="fa fa-chevron-right ">&nbsp;</em> {USER.current_mode}</li>
-        			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.current_login}: {USER.current_login}</li>
-        			<li><em class="fa fa-chevron-right ">&nbsp;</em> {LANG.ip}: {USER.current_ip}</li>
+        			<li><em class="fa fa-angle-right">&nbsp;</em> {LANG.account2}: <strong>{USER.username}</strong> ({USER.email})</li>
+        			<li><em class="fa fa-angle-right">&nbsp;</em> {USER.current_mode}</li>
+        			<li><em class="fa fa-angle-right">&nbsp;</em> {LANG.current_login}: {USER.current_login}</li>
+        			<li><em class="fa fa-angle-right">&nbsp;</em> {LANG.ip}: {USER.current_ip}</li>
         		</ul>
         	</div>
         </div>
@@ -36,8 +36,11 @@
     <em class="fa fa-exclamation-triangle ">&nbsp;</em> {USER.question_empty_note}
 </div>
 <!-- END: question_empty_note -->
-<div class="table-responsive">
+<div class="table-responsive margin-bottom-lg">
     <table class="table table-bordered table-striped">
+        <colgroup>
+ 			<col style="width:30%"/>
+  		</colgroup>
         <tbody>
             <tr>
                 <td>{LANG.name}</td>
@@ -70,4 +73,8 @@
         </tbody>
     </table>
 </div>
+
+<ul class="nav navbar-nav">
+    <!-- BEGIN: navbar --><li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
+</ul>
 <!-- END: main -->

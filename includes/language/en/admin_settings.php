@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -30,10 +30,18 @@ $lang_module['default_module'] = 'Default module';
 $lang_module['description'] = 'Site\'s description';
 $lang_module['rewrite'] = 'Activate rewrite';
 $lang_module['rewrite_optional'] = 'Remove language characters on URL';
+$lang_module['rewrite_op_mod'] = 'Remove module name in the url';
 $lang_module['disable_content'] = 'Site closing notification';
 $lang_module['submit'] = 'Submit';
 $lang_module['err_writable'] = 'Error system can\'t write file %s. Please chmod or check server config!';
 $lang_module['err_supports_rewrite'] = 'Error, server doesn\'t support rewrite.';
+$lang_module['security'] = 'Setup security';
+$lang_module['is_flood_blocker'] = 'Active anti-flood';
+$lang_module['max_requests_60'] = 'The maximum number of requests per minute';
+$lang_module['max_requests_300'] = 'The maximum number of requests in 5 minute';
+$lang_module['nv_anti_iframe'] = 'Anti-Iframe';
+$lang_module['nv_anti_agent'] = 'Check and block computer if the agent does not exist';
+$lang_module['nv_allowed_html_tags'] = 'HTML code was approved in the system';
 $lang_module['captcha_type'] = 'Captcha type';
 $lang_module['captcha_type_0'] = 'Default captcha';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
@@ -46,6 +54,8 @@ $lang_module['captcha_4'] = 'When user login or guest register';
 $lang_module['captcha_5'] = 'When admin or user login';
 $lang_module['captcha_6'] = 'When admin login or guest register';
 $lang_module['captcha_7'] = 'Display at all';
+$lang_module['captcha_num'] = 'Number characters of captcha';
+$lang_module['captcha_size'] = 'Size of captcha';
 $lang_module['ftp_config'] = 'FTP Configuration';
 $lang_module['smtp_config'] = 'SMTP Configuration';
 $lang_module['server'] = 'Server or Url';
@@ -89,8 +99,15 @@ $lang_module['proxy_blocker_2'] = 'Medium';
 $lang_module['proxy_blocker_3'] = 'High';
 $lang_module['str_referer_blocker'] = 'Activate block referers';
 $lang_module['my_domains'] = 'Domains';
+$lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>)';
+$lang_module['variables'] = 'Setup cookie session';
 $lang_module['cookie_prefix'] = 'Cookie prefix';
 $lang_module['session_prefix'] = 'Session\'s prefix';
+$lang_module['live_cookie_time'] = 'The lifetime of the cookie';
+$lang_module['live_session_time'] = 'The lifetime of the session';
+$lang_module['live_session_time0'] = '=0 exist when closing the browser';
+$lang_module['cookie_secure'] = 'Cookie secure';
+$lang_module['cookie_httponly'] = 'Cookie httponly';
 $lang_module['is_user_forum'] = 'Switch users management to forum';
 $lang_module['banip'] = 'Ban IP Management';
 $lang_module['banip_ip'] = 'Ip address';
@@ -99,6 +116,8 @@ $lang_module['banip_timeendban'] = 'Ban end time';
 $lang_module['banip_funcs'] = 'Feature';
 $lang_module['banip_checkall'] = 'Check all';
 $lang_module['banip_uncheckall'] = 'Uncheck all';
+$lang_module['banip_title_add'] = 'Add IP block';
+$lang_module['banip_title_edit'] = 'Edit IP block';
 $lang_module['banip_address'] = 'Address';
 $lang_module['banip_begintime'] = 'Begin time';
 $lang_module['banip_endtime'] = 'End time';
@@ -168,7 +187,13 @@ $lang_module['closed_site_1'] = 'Closing of the site only has access to the Supr
 $lang_module['closed_site_2'] = 'Moderator\'s closing general site access';
 $lang_module['closed_site_3'] = 'Close all of the site admin access';
 $lang_module['ssl_https'] = 'Enable the use of SSL';
+$lang_module['ssl_https_module'] = 'These modules enable SSL';
+$lang_module['ssl_https_0'] = 'Turn off SSL';
+$lang_module['ssl_https_1'] = 'Activate whole site';
+$lang_module['ssl_https_2'] = 'Activate the admin area';
+$lang_module['ssl_https_3'] = 'Activation in the selected module';
 $lang_module['note_ssl'] = 'Are you sure your site support https does not? If not supported site will be inaccessible after saving?';
+$lang_module['note_ssl_modules'] = 'Each language will have different modules, click to select the module';
 $lang_module['timezoneAuto'] = 'By computer of visitor';
 $lang_module['timezoneByCountry'] = 'By country of visitor';
 $lang_module['allow_switch_mobi_des'] = 'Allow to switch mobile, desktop theme';
@@ -176,25 +201,6 @@ $lang_module['ftp_auto_detect_root'] = 'Auto detection';
 $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detection the Remote path';
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
 $lang_module['ftp_error_support'] = 'Your server is blocking or does not support FTP library, please contact the provider to be enabled.';
-$lang_module['searchEngineUniqueID'] = 'Google search Engine ID<br />(format 000329275761967753447:sr7yxqgv294 , <a href="http://nukeviet.vn/vi/faq/Su-dung-Google-Custom-Search-tren-NukeViet/" target="_blank">view details</a>)';
-$lang_module['rewrite_op_mod'] = 'Remove module name in the url';
-$lang_module['security'] = 'Setup security';
-$lang_module['is_flood_blocker'] = 'Active anti-flood';
-$lang_module['max_requests_60'] = 'The maximum number of requests per minute';
-$lang_module['max_requests_300'] = 'The maximum number of requests in 5 minute';
-$lang_module['nv_anti_iframe'] = 'Anti-Iframe';
-$lang_module['nv_anti_agent'] = 'Check and block computer if the agent does not exist';
-$lang_module['nv_allowed_html_tags'] = 'HTML code was approved in the system';
-$lang_module['captcha_num'] = 'Number characters of captcha';
-$lang_module['captcha_size'] = 'Size of captcha';
-$lang_module['variables'] = 'Setup cookie session';
-$lang_module['live_cookie_time'] = 'The lifetime of the cookie';
-$lang_module['live_session_time'] = 'The lifetime of the session';
-$lang_module['live_session_time0'] = '=0 exist when closing the browser';
-$lang_module['cookie_secure'] = 'cookie secure';
-$lang_module['cookie_httponly'] = 'cookie httponly';
-$lang_module['banip_title_add'] = 'Add IP block';
-$lang_module['banip_title_edit'] = 'Edit IP block';
 $lang_module['cdn_url'] = 'Hosting CDN for javascript, css';
 $lang_module['cdn_download'] = 'Download javascript, css';
 $lang_module['plugin'] = 'Configuration Plugin';
@@ -212,4 +218,4 @@ $lang_module['notification_config'] = 'Notification config';
 $lang_module['notification_active'] = 'Show notification when a new activity';
 $lang_module['notification_autodel'] = 'Automatically deleted after a period of notice';
 $lang_module['notification_autodel_note'] = 'Fill <strong>0</strong> if you do not want to automatically delete';
-$lang_module['notification_day'] = 'day';
+$lang_module['notification_day'] = 'Day';

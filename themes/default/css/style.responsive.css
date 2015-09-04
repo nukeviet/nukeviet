@@ -44,6 +44,9 @@
         box-shadow:none;
         -webkit-box-shadow:none;
     }
+    .contactDefault{
+        position: relative
+    }
     .social-icons,
     .contactDefault,
     .personalArea {
@@ -115,6 +118,7 @@
         padding-right:15px !important;
         margin-top: -51px
     }
+  
     .navbar-toggle {
         margin-left:10px !important;
         margin-right:-45px;

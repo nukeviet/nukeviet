@@ -645,7 +645,9 @@ foreach( $array_langs as $lang )
 	}
 }
 
-// Array themes exists - Unnecessary
+// Array themes exists
+$array_themes_indb = array();
+
 // Array blocks exists
 $array_blocks_exists = array();
 
@@ -687,6 +689,11 @@ $result = $db->query( $sql );
 $array_parse = array();
 while( $row = $result->fetch() )
 {
+	if( $row['type'] == 'theme' )
+	{
+		$array_themes_indb[] = $row['basename'];
+	}
+
 	$row['icon'] = $row['is_sys'] ? array( $theme_config['sys_icon'] ) : array();
 	$row['is_admin'] = false;
 	$row['delete_allowed'] = $row['is_sys'] == 0 ? true : false;
@@ -721,7 +728,7 @@ while( $row = $result->fetch() )
 	{
 		$row['version'] = 'N/A';
 	}
-
+	
 	$array_parse[] = $row;
 }
 
@@ -746,6 +753,46 @@ if( $selecttype == '' or $selecttype == 'admin' )
 // Them cac theme admin
 if( $selecttype == '' or $selecttype == 'theme' )
 {
+	$theme_list = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme'] );
+	$theme_mobile_list = nv_scandir( NV_ROOTDIR . '/themes/', $global_config['check_theme_mobile'] );
+	$theme_list = array_merge( $theme_list, $theme_mobile_list );
+	foreach( $theme_list as $_theme )
+	{
+		if( ! in_array( $_theme, $array_themes_indb ) and file_exists( NV_ROOTDIR . '/themes/' . $_theme . '/config.ini' ))
+		{
+			if( $xml = @simplexml_load_file( NV_ROOTDIR . '/themes/' . $_theme . '/config.ini' ) )
+			{
+				$info = $xml->xpath( 'info' );
+				$table_prefix = preg_replace( '/(\W+)/i', '_', $_theme );
+				$version = '4.0.0 ' . NV_CURRENTTIME;
+				$note = ( string )$info[0]->description;
+				$author = ( string )$info[0]->author;
+
+				$array_parse[] = array(
+					'type' => $lang_module['extType_theme'],
+					'basename' => $_theme,
+					'author' => $author,
+					'version' => '',
+					'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $_theme . '&amp;checksess=' . md5( 'package_theme_' . $_theme . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id ),
+					'is_admin' => false,
+					'icon' => array(),
+					'delete_allowed' => true,
+				);
+
+				// Save to database
+				$sql = 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES( 0, \'theme\', :title, 0, 0, :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note )';
+				$sth = $db->prepare( $sql );
+				$sth->bindParam( ':title', $_theme, PDO::PARAM_STR );
+				$sth->bindParam( ':basename', $_theme, PDO::PARAM_STR );
+				$sth->bindParam( ':author', $author, PDO::PARAM_STR );
+				$sth->bindParam( ':table_prefix', $table_prefix, PDO::PARAM_STR );
+				$sth->bindParam( ':version', $version, PDO::PARAM_STR );
+				$sth->bindParam( ':note', $note, PDO::PARAM_STR );
+				$sth->execute();
+			}
+		}
+	}
+
 	foreach( $array_theme_admin as $row )
 	{
 		$array_parse[] = array(

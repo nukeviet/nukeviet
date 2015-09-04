@@ -24,19 +24,17 @@
         <!-- END: captcha -->
         
         <div class="text-center margin-bottom-lg">
-            <input name="nv_header" value="{NV_HEADER}" type="hidden" />
-            <input name="nv_redirect" value="{NV_REDIRECT}" type="hidden" />
+            <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden" /><!-- END: header -->
+            <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
             <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
        	</div>
-        <div class="text-center">
-            <a href="{USER_LOSTPASS}">{GLANG.lostpass}?</a>
-        </div>
+
         <!-- BEGIN: openid -->
        	<hr />
        	<div class="text-center">
       		<!-- BEGIN: server -->
-      		<a title="{OPENID.title}" href="{OPENID.href}" class="margin-right"><img alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /></a>
+      		<a title="{OPENID.title}" href="{OPENID.href}" class="openid margin-right" onclick="return openID_load(this);"><img alt="{OPENID.title}" title="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" /></a>
       		<!-- END: server -->
        	</div>
        	<!-- END: openid -->

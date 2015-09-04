@@ -6,6 +6,11 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+function addpass() {
+	$("a[href*=edit_password]").click();
+	return !1
+}
+
 function safe_deactivate_show(a, b) {
 	$(b).hide(0);
 	$(a).fadeIn();
@@ -21,8 +26,10 @@ function safekeySend(a) {
 		data: $(a).serialize() + '&resend=1',
 		dataType: "json",
 		success: function(e) {
-            "error" == e.status ? ($(".safekeySend", a).prop("disabled", !1),$(".tooltip-current", a).removeClass("tooltip-current"), $("[name=" + e.input + "]",a).addClass("tooltip-current").attr("data-current-mess", $("[name=" + e.input + "]",a).attr("data-mess")), validErrorShow($("[name=" + e.input + "]",a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(),setTimeout(function() {
-				$(".nv-info", a).removeClass("error success").text($(".nv-info", a).attr("data-default"));
+			"error" == e.status ? ($(".safekeySend", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $("[name=" + e.input + "]", a).addClass("tooltip-current").attr("data-current-mess", $("[name=" + e.input + "]", a).attr("data-mess")), validErrorShow($("[name=" + e.input + "]", a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(), setTimeout(function() {
+				var d = $(".nv-info", a).attr("data-default");
+				if (!d) d = $(".nv-info-default", a).html();
+				$(".nv-info", a).removeClass("error success").html(d);
 				$(".safekeySend", a).prop("disabled", !1);
 			}, 6E3))
 		}
@@ -31,13 +38,13 @@ function safekeySend(a) {
 }
 
 function changeAvatar(a) {
-    if(nv_safemode) return!1;
+	if (nv_safemode) return !1;
 	nv_open_browse(a, "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
 	return !1;
 }
 
 function deleteAvatar(a, b, c) {
-    if(nv_safemode) return!1;
+	if (nv_safemode) return !1;
 	$(c).prop("disabled", !0);
 	$.ajax({
 		type: 'POST',
@@ -115,6 +122,7 @@ function validErrorShow(a) {
 	$(a).parent().parent().addClass("has-error");
 	$("[data-mess]", $(a).parent().parent().parent()).not(".tooltip-current").tooltip("destroy");
 	$(a).tooltip({
+	   container: "body",
 		placement: "bottom",
 		title: function() {
 			return "" != $(a).attr("data-current-mess") ? $(a).attr("data-current-mess") : nv_required
@@ -162,7 +170,9 @@ function formErrorHidden(a) {
 }
 
 function validReset(a) {
-	$(".nv-info", a).removeClass("error success").text($(".nv-info", a).attr("data-default"));
+	var d = $(".nv-info", a).attr("data-default");
+	if (!d) d = $(".nv-info-default", a).html();
+	$(".nv-info", a).removeClass("error success").html(d);
 	formErrorHidden(a);
 	$("input,button,select,textarea", a).prop("disabled", !1);
 	$(a)[0].reset()
@@ -174,7 +184,7 @@ function login_validForm(a) {
 		b = [];
 	$(a).find(".required").each(function() {
 		"password" == $(a).prop("type") && $(this).val(trim(strip_tags($(this).val())));
-		if (!nv_validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+		if (!validCheck(this)) return c++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
 	});
 	c || (b.type = $(a).prop("method"), b.url = $(a).prop("action"), b.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
 		type: b.type,
@@ -191,7 +201,7 @@ function login_validForm(a) {
 			}) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
 				$("[type=submit]", a).prop("disabled", !1)
 			}, 1E3)) : ($(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
-				window.location.href = window.location.href
+				window.location.href = "undefined" != typeof d.redirect && "" != d.redirect ? d.redirect : window.location.href
 			}, 3E3))
 		}
 	}));
@@ -233,6 +243,47 @@ function reg_validForm(a) {
 					window.location.href = "" != b.input ? b.input : window.location.href
 				}, 6E3)
 			})))
+		}
+	}));
+	return !1
+}
+
+function lostpass_validForm(a) {
+	$(".has-error", a).removeClass("has-error");
+	var d = 0,
+		c = [];
+	$(a).find("input.required,textarea.required,select.required,div.required").each(function() {
+		var b = $(this).prop("tagName");
+		"INPUT" != b && "TEXTAREA" != b || "password" == $(a).prop("type") || "radio" == $(a).prop("type") || "checkbox" == $(a).prop("type") || $(this).val(trim(strip_tags($(this).val())));
+		if (!validCheck(this)) return d++, $(".tooltip-current", a).removeClass("tooltip-current"), $(this).addClass("tooltip-current").attr("data-current-mess", $(this).attr("data-mess")), validErrorShow(this), !1
+	});
+	d || (c.type = $(a).prop("method"), c.url = $(a).prop("action"), c.data = $(a).serialize(), formErrorHidden(a), $(a).find("input,button,select,textarea").prop("disabled", !0), $.ajax({
+		type: c.type,
+		cache: !1,
+		url: c.url,
+		data: c.data,
+		dataType: "json",
+		success: function(b) {
+			if (b.status == "error") {
+			    $("[name=step]",a).val(b.step);
+			     if(b.step == 'step1') $("[onclick*='change_captcha']", a).click();
+                 if("undefined" != typeof b.info && "" != b.info) $(".nv-info",a).removeClass('error success').text(b.info);
+				$("input,button", a).prop("disabled", !1);
+                $(".required",a).removeClass("required");
+				$(".tooltip-current", a).removeClass("tooltip-current");
+				$("[class*=step]", a).hide();
+                $("." + b.step + " input", a).addClass("required");
+				$("." + b.step, a).show();
+				$(a).find("[name=" + b.input + "]").each(function() {
+					$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
+					validErrorShow(this)
+				})
+			} else {
+			     $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
+                 setTimeout(function() {
+				window.location.href = b.input
+				}, 6E3)
+			}
 		}
 	}));
 	return !1

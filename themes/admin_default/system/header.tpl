@@ -14,7 +14,7 @@
 
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
-		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/main.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/style.css">
 		<!-- BEGIN: css_module -->
 		<link rel="stylesheet" href="{NV_CSS_MODULE_THEME}" type="text/css">
 		<!-- END: css_module -->
@@ -42,9 +42,6 @@
 		<!-- BEGIN: module_js -->
 		<script type="text/javascript" src="{NV_JS_MODULE}"></script>
 		<!-- END: module_js -->
-		<!-- BEGIN: nv_add_editor_js -->
-		{NV_ADD_EDITOR_JS}
-		<!-- END: nv_add_editor_js -->
 
 		<!--[if IE]>
 		<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=EmulateIE8; IE=EDGE" />

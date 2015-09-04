@@ -393,7 +393,7 @@ if( $nv_Request->get_title( 'checksess', 'get', '' ) == md5( 'check' . $eid . $f
 		$array['class'] = 'warning';
 
 		$redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checksess=' . md5( $eid . $fid . $global_config['sitekey'] . session_id() );
-		$xtpl->assign( 'MESSAGE', sprintf( $lang_module['extUpdLoginRequire'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_base64_encode( $redirect ) ) );
+		$xtpl->assign( 'MESSAGE', sprintf( $lang_module['extUpdLoginRequire'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt( $redirect ) ) );
 		$xtpl->parse( 'check.message' );
 	}
 	elseif( $array['fileInfo'] == 'unpaid' )

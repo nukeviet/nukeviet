@@ -178,30 +178,11 @@ function nv_check_path_upload( $path )
 
 	$path = str_replace( "\\", '/', $path );
 	$path = str_replace( NV_ROOTDIR . '/', '', $path );
-
-	$result = false;
-	if( $global_config['idsite'] )
+	if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '/', $path ) or $path = NV_UPLOADS_DIR )
 	{
-		if( preg_match( '/^' . nv_preg_quote( NV_UPLOADS_DIR ) . '/', $path ) or $path = NV_UPLOADS_DIR )
-		{
-			$result = true;
-		}
+		return $path;
 	}
-	else
-	{
-		foreach( $allow_upload_dir as $dir )
-		{
-			$dir = nv_preg_quote( $dir );
-			if( preg_match( '/^' . $dir . '/', $path ) )
-			{
-				$result = true;
-				break;
-			}
-		}
-	}
-
-	if( $result === false ) return '';
-	return $path;
+	return '';
 }
 
 /**
@@ -354,7 +335,7 @@ function nv_getFileInfo( $pathimg, $file )
 	$stat = @stat( NV_ROOTDIR . '/' . $pathimg . '/' . $file );
 	$info['filesize'] = $stat['size'];
 
-	$info['src'] = NV_FILES_DIR . '/images/file.gif';
+	$info['src'] = NV_ASSETS_DIR . '/images/file.gif';
 	$info['srcwidth'] = 32;
 	$info['srcheight'] = 32;
 	$info['size'] = '|';
@@ -394,7 +375,7 @@ function nv_getFileInfo( $pathimg, $file )
 	elseif( in_array( $ext, $array_flash ) )
 	{
 		$info['type'] = 'flash';
-		$info['src'] = NV_FILES_DIR . '/images/flash.gif';
+		$info['src'] = NV_ASSETS_DIR . '/images/flash.gif';
 
 		if( $matches[2] == 'swf' )
 		{
@@ -407,25 +388,25 @@ function nv_getFileInfo( $pathimg, $file )
 	}
 	elseif( in_array( $ext, $array_archives ) )
 	{
-		$info['src'] = NV_FILES_DIR . '/images/zip.gif';
+		$info['src'] = NV_ASSETS_DIR . '/images/zip.gif';
 	}
 	elseif( in_array( $ext, $array_documents ) )
 	{
 		if( $ext == 'doc' or $ext == 'docx' )
 		{
-			$info['src'] = NV_FILES_DIR . '/images/msword.png';
+			$info['src'] = NV_ASSETS_DIR . '/images/msword.png';
 		}
 		elseif( $ext == 'xls' or $ext == 'xlsx' )
 		{
-			$info['src'] = NV_FILES_DIR . '/images/excel.png';
+			$info['src'] = NV_ASSETS_DIR . '/images/excel.png';
 		}
 		elseif( $ext == 'pdf' )
 		{
-			$info['src'] = NV_FILES_DIR . '/images/pdf.png';
+			$info['src'] = NV_ASSETS_DIR . '/images/pdf.png';
 		}
 		else
 		{
-			$info['src'] = NV_FILES_DIR . '/images/doc.gif';
+			$info['src'] = NV_ASSETS_DIR . '/images/doc.gif';
 		}
 	}
 
@@ -542,7 +523,7 @@ function nv_listUploadDir( $dir, $real_dirlist = array() )
 	return $real_dirlist;
 }
 
-$allow_upload_dir = array( SYSTEM_UPLOADS_DIR );
+$allow_upload_dir = array( NV_UPLOADS_DIR );
 $array_hidefolders = array( '.', '..', 'index.html', '.htaccess', '.tmp' );
 
 $array_images = array( 'gif', 'jpg', 'jpeg', 'pjpeg', 'png', 'bmp', 'ico' );
@@ -573,18 +554,7 @@ unset( $array_dirname[''] );
 
 if( $nv_Request->isset_request( 'dirListRefresh', 'get' ) )
 {
-	$real_dirlist = array();
-	if( $global_config['idsite'] )
-	{
-		$real_dirlist = nv_listUploadDir( NV_UPLOADS_DIR, $real_dirlist );
-	}
-	else
-	{
-		foreach( $allow_upload_dir as $dir )
-		{
-			$real_dirlist = nv_listUploadDir( $dir, $real_dirlist );
-		}
-	}
+	$real_dirlist = nv_listUploadDir( NV_UPLOADS_DIR );
 	$dirlist = array_keys( $array_dirname );
 	$result_no_exit = array_diff( $dirlist, $real_dirlist );
 	foreach( $result_no_exit as $dirname )

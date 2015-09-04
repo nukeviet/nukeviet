@@ -122,7 +122,7 @@ function ctbtLoad(a) {
 	"yes" != a.attr("data-load") && $.ajax({
 		type: "POST",
 		cache: !1,
-		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=contact",
+		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + a.attr( "data-module" ),
 		data: "loadForm=1&checkss=" + a.attr("data-cs"),
 		dataType: "html",
 		success: function(c) {
@@ -131,6 +131,20 @@ function ctbtLoad(a) {
 			a.attr("data-load", "yes").click()
 		}
 	})
+}
+
+function openID_load(a) {
+	var s = $(this).attr("src");
+	nv_open_browse(a, "NVOPID", 550, 500, "resizable=no,scrollbars=1,toolbar=no,location=no,titlebar=no,menubar=0,location=no,status=no");
+	return !1;
+}
+
+function openID_result() {
+	$("#openidResult").fadeIn();
+	setTimeout(function() {
+		"" != $("#openidResult").attr("data-redirect") ? window.location.href = $("#openidResult").attr("data-redirect") : "success" == $("#openidResult").attr("data-result") ? window.location.href = window.location.href : $("#openidResult").hide(0).text("").attr("data-result", "").attr("data-redirect", "")
+	}, 5E3);
+	return !1
 }
 
 // QR-code
@@ -155,12 +169,31 @@ function switchTab(a) {
 	for (i = 1; i < b.length; i++) $(c + " " + b[i]).addClass("hidden")
 }
 
+//Form Ajax-login
+function loginForm()
+{
+    if(nv_is_user == 1) return!1;
+    $.ajax({
+        type: 'POST',
+		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
+		cache: !1,
+        data: '&nv_ajax=1',
+		dataType: "html",
+	}).done(function(a) {
+		modalShow('', a)
+	});
+    return!1
+}
+
 // ModalShow
 function modalShow(a, b) {
-	"" == a && (a = "&nbsp;");
+	"" != a && 'undefined' != typeof a && $("#sitemodal .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + a + '</h2></div>');
 	$("#sitemodal").find(".modal-title").html(a);
 	$("#sitemodal").find(".modal-body").html(b);
-	$("#sitemodal").modal()
+    $('#sitemodal').on('hidden.bs.modal', function () {
+            $("#sitemodal .modal-content").find(".modal-header").remove()
+		});
+    $("#sitemodal").modal({backdrop: "static"})
 }
 
 function modalShowByObj(a)
@@ -300,6 +333,15 @@ $(function() {
 				b = $(this).val();
 			b.length > a && $(this).val(b.substr(0, a))
 		}
+	});
+    //Alerts
+	$("[data-dismiss=alert]").on("click", function(a) {
+		$(this).is(".close") && $(this).parent().remove()
+	});
+	//OpenID
+	$("#openidBt").on("click", function() {
+		openID_result();
+		return !1
 	})
 });
 

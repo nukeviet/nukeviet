@@ -4,7 +4,7 @@
     	<li><a href="{URL_MODULE}">{LANG.user_info}</a></li>
     	<li><a href="{URL_HREF}editinfo">{LANG.editinfo}</a></li>
     	<li class="active"><a href="{URL_HREF}openid">{LANG.openid_administrator}</a></li>
-    	<!-- BEGIN: regroups --><li><a href="{URL_HREF}regroups">{LANG.in_group}</a></li><!-- END: regroups -->
+    	<!-- BEGIN: regroups --><li><a href="{URL_HREF}editinfo/group">{LANG.in_group}</a></li><!-- END: regroups -->
     	<li><a href="{URL_HREF}logout">{LANG.logout_title}</a></li>
     </ul>
     <h2>{LANG.openid_administrator}</h2>
