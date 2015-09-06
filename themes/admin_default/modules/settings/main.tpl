@@ -45,7 +45,15 @@
 			</tr>
 			<tr>
 				<th>{LANG.site_logo}</th>
-				<td><input type="text" class="w300 form-control pull-left" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="margin-right: 10px" /><button id="select-site-logo" name="selectimg" class="btn btn-default"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
+				<td><input type="text" class="w300 form-control pull-left" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="margin-right: 10px" /><button data-name="site_logo" name="logo_select" class="btn btn-default selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
+			</tr>
+			<tr>
+				<th>{LANG.site_banner}</th>
+				<td><input type="text" class="w300 form-control pull-left" name="site_banner" id="site_banner" value="{VALUE.site_banner}" style="margin-right: 10px" /><button data-name="site_banner" name="banner_select" class="btn btn-default selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
+			</tr>
+			<tr>
+				<th>{LANG.site_favicon}</th>
+				<td><input type="text" class="w300 form-control pull-left" name="site_favicon" id="site_favicon" value="{VALUE.site_favicon}" style="margin-right: 10px" /><button data-name="site_favicon" name="favicon_select" class="btn btn-default selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
 			</tr>
 			<tr>
 				<th>{LANG.theme}</th>
