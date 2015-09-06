@@ -15,16 +15,13 @@
 </Files>
 
 <IfModule mod_deflate.c>
-
-  <FilesMatch "\.(css|js|xml)$">
+  <FilesMatch "\.(css|js|xml|ttf)$">
     SetOutputFilter DEFLATE
   </FilesMatch>
-
 </IfModule>
 
 <IfModule mod_headers.c>
-
-  <FilesMatch "\.(js|css|xml|gz)$">
+  <FilesMatch "\.(js|css|xml|ttf)$">
     Header append Vary Accept-Encoding
   </FilesMatch>
   
@@ -32,12 +29,9 @@
     Header set X-Robots-Tag "noarchive, nosnippet"
   </FilesMatch>
   
-  <FilesMatch "\.(jpe?g|JPE?G|png|PNG|gif|GIF|swf|SWF|ico|ICO|xsl|XSL|woff)(\?[0-9]{9,11})?$">
-	Header append Cache-Control "public"
-	Header add "Expires" "Tue, 31 Dec 2019 23:59:59 GMT"
-	Header add "Cache-Control" "max-age=2592000"
+  <FilesMatch "\.(js|css|jpe?g|png|gif|swf|svg|ico|woff|ttf|xsl|pdf|flv|mp3|mp4)(\?[0-9]{9,11})?$">
+	Header set Cache-Control "max-age=2592000, public"
   </FilesMatch>
-
 </IfModule>
 
 ##################################################################################

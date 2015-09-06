@@ -1605,18 +1605,7 @@ function nv_change_buffer( $buffer )
     if ( ! empty( $body_replace ) ) $buffer = preg_replace( '/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1 );
 
 	$optimizer = new optimizer( $buffer,  NV_BASE_SITEURL );
-	$buffer = $optimizer->process();
-
-    if ( ! empty( $global_config['cdn_url'] ) )
-    {
-        $buffer = preg_replace( "/\<(script|link|img)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css|jpg|png|gif))['\"](.*?)\>/", "<\\1\\2\\3=\"//" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-    }
-    else
-    {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-    }
-
-    return $buffer;
+	return $optimizer->process();
 }
 
 /**
