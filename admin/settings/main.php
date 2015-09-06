@@ -25,8 +25,7 @@ if( $submit )
     $array_config['mobile_theme'] = nv_substr( $nv_Request->get_title( 'mobile_theme', 'post', '', 1 ), 0, 255 );
 	$array_config['site_name'] = nv_substr( $nv_Request->get_title( 'site_name', 'post', '', 1 ), 0, 255 );
 	$array_config['switch_mobi_des'] = $nv_Request->get_int( 'switch_mobi_des', 'post', 0 );
-	$site_logo = $nv_Request->get_title( 'site_logo', 'post' );
-    
+
 	$array_config['site_keywords'] = nv_substr( $nv_Request->get_title( 'site_keywords', 'post', '', 1 ), 0, 255 );
 
 	if( ! empty( $array_config['site_keywords'] ) )
@@ -48,7 +47,8 @@ if( $submit )
 		$array_config['site_keywords'] = ( ! empty( $array_config['site_keywords'] ) ) ? implode( ', ', $array_config['site_keywords'] ) : '';
 	}
 
-    if( empty( $site_logo ) OR $site_logo == NV_ASSETS_DIR . '/images/logo.png' )
+	$site_logo = $nv_Request->get_title( 'site_logo', 'post' );
+	if( empty( $site_logo ) OR $site_logo == NV_ASSETS_DIR . '/images/logo.png' )
     {
         $array_config['site_logo'] = '';
     }
@@ -63,6 +63,42 @@ if( $submit )
         {
             $array_config['site_logo'] = '';
         }
+    }
+
+    $site_banner = $nv_Request->get_title( 'site_banner', 'post' );
+    if( empty( $site_banner ) )
+    {
+    	$array_config['site_banner'] = '';
+    }
+    elseif( ! nv_is_url( $site_banner ) )
+    {
+    	if( file_exists( NV_DOCUMENT_ROOT . $site_banner ) )
+    	{
+    		$lu = strlen( NV_BASE_SITEURL );
+    		$array_config['site_banner'] = substr( $site_banner, $lu );
+    	}
+    	else
+    	{
+    		$array_config['site_banner'] = '';
+    	}
+    }
+
+    $site_favicon = $nv_Request->get_title( 'site_favicon', 'post' );
+    if( empty( $site_favicon ) OR $site_favicon == NV_ASSETS_DIR . '/favicon.ico' )
+    {
+    	$array_config['site_favicon'] = '';
+    }
+    elseif( ! nv_is_url( $site_favicon ) )
+    {
+    	if( file_exists( NV_DOCUMENT_ROOT . $site_favicon ) )
+    	{
+    		$lu = strlen( NV_BASE_SITEURL );
+    		$array_config['site_favicon'] = substr( $site_favicon, $lu );
+    	}
+    	else
+    	{
+    		$array_config['site_favicon'] = '';
+    	}
     }
 
 	$array_config['site_home_module'] = nv_substr( $nv_Request->get_title( 'site_home_module', 'post', '', 1 ), 0, 255 );
@@ -114,7 +150,7 @@ if( $submit )
 				$module_config[$c_module][$c_config_name] = $c_config_value;
 			}
 		}
-		
+
 		$global_config['ssl_https_modules'] = empty( $global_config['ssl_https_modules'] ) ? array() : array_intersect( array_map( "trim", explode( ',', $global_config['ssl_https_modules'] ) ), array_keys( $site_mods ) );
 	}
 }
@@ -142,15 +178,28 @@ while( list( $theme ) = $result->fetch( 3 ) )
 $global_config['switch_mobi_des'] = ! empty( $global_config['switch_mobi_des'] ) ? ' checked="checked"' : '';
 
 $site_logo = '';
-
 if( ! empty( $global_config['site_logo'] ) and $global_config['site_logo'] != NV_ASSETS_DIR . '/images/logo.png' and ! nv_is_url( $global_config['site_logo'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_logo'] ) )
 {
    	$site_logo = NV_BASE_SITEURL . $global_config['site_logo'];
 }
 
+$site_banner = '';
+if( ! empty( $global_config['site_banner'] ) and ! nv_is_url( $global_config['site_banner'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_banner'] ) )
+{
+	$site_banner = NV_BASE_SITEURL . $global_config['site_banner'];
+}
+
+$site_favicon = '';
+if( ! empty( $global_config['site_favicon'] ) and $global_config['site_favicon'] != NV_ASSETS_DIR . '/favicon.ico' and ! nv_is_url( $global_config['site_favicon'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_favicon'] ) )
+{
+	$site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
+}
+
 $value_setting = array(
 	'sitename' => $global_config['site_name'],
 	'site_logo' => $site_logo,
+	'site_banner' => $site_banner,
+	'site_favicon' => $site_favicon,
 	'site_keywords' => $global_config['site_keywords'],
 	'description' => $global_config['site_description'],
 	'switch_mobi_des' => $global_config['switch_mobi_des']
@@ -231,7 +280,7 @@ foreach( $site_mods as $_mod_title => $_mod_values )
 {
 	$xtpl->assign( 'MOD_TITLE', $_mod_title );
 	$xtpl->assign( 'MOD_CHECKED', in_array( $_mod_title, $global_config['ssl_https_modules'] ) ? ' checked="checked"' : '' );
-	
+
 	$xtpl->parse( 'main.ssl_https_modules' );
 }
 
