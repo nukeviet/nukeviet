@@ -591,6 +591,7 @@ else
 	            $row['exptime'] = $row['exptime'] ? date( "d-m-Y", $row['exptime'] ) : "N/A";
 	            $row['selected'] = $row['status'] == 1 ? " selected=\"selected\"" : "";
 	            $row['url_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op . "&amp;edit=1&amp;id=" . $row['id'];
+	            $row['url_view'] = nv_url_rewrite( NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'], true );
 	            $xtpl->assign( 'CLASS', $a % 2 ? " class=\"second\"" : "" );
 	            $xtpl->assign( 'DATA', $row );
 	            $xtpl->parse( 'list.loop' );

@@ -19,7 +19,7 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td>{DATA.title}</td>
+				<td><a href="{DATA.url_view}" target="_blank" title="{DATA.title}">{DATA.title}</a></td>
 				<td><strong>{DATA.code}</strong></td>
 				<td>{DATA.publtime}</td>
 				<td>{DATA.exptime}</td>
