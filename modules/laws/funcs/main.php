@@ -40,7 +40,7 @@ while ( $row = $result->fetch() )
 	$row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
 	$row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
 	$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'];
-	$row['stt'] = $stt;
+	$row['stt'] = $stt++;
 
 	if( $nv_laws_setting['down_in_home'] )
 	{
@@ -50,10 +50,10 @@ while ( $row = $result->fetch() )
 			$row['files'] = explode( ",", $row['files'] );
 			$files = $row['files'];
 			$row['files'] = array();
-			
+
 			foreach( $files as $id => $file )
 			{
-				
+
 				$file_title = basename( $file );
 				$row['files'][] = array(
 					"title" => $file_title,
@@ -65,7 +65,6 @@ while ( $row = $result->fetch() )
 	}
 
 	$array_data[] = $row;
-	$stt ++;
 }
 
 $contents = nv_theme_laws_main( $array_data, $generate_page );
