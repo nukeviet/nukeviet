@@ -468,6 +468,13 @@ class upload
 			elseif( $this->file_extension == 'xlsm' ) $mime = 'application/vnd.ms-excel.sheet.macroEnabled.12';
 			elseif( $this->file_extension == 'xltm' ) $mime = 'application/vnd.ms-excel.template.macroEnabled.12';
 		}
+		elseif( $mime == 'application/vnd.ms-office' )
+		{
+			if( $this->file_extension == 'doc' ) $mime = 'application/msword';
+			elseif( $this->file_extension == 'xls' ) $mime = 'application/excel';
+			elseif( $this->file_extension == 'ppt' ) $mime = 'application/vnd.ms-powerpoint';
+			elseif( $this->file_extension == 'pps' ) $mime = 'application/vnd.ms-powerpoint';
+		}
 		return $mime;
 	}
 
