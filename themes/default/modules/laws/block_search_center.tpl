@@ -9,15 +9,15 @@
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="search"/>
 	<div class="form-group">
-		<label class="col-sm-3 control-label">{LANG.s_key}</label>
-		<div class="col-sm-9">
+		<label class="col-sm-6 control-label">{LANG.s_key}</label>
+		<div class="col-sm-18">
 			<input class="form-control" id="ls_key" type="text" name="q" value="{Q}"/>
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label">{LANG.s_pubtime}</label>
-		<div class="col-sm-9 form-inline">
+		<label class="col-sm-6 control-label">{LANG.s_pubtime}</label>
+		<div class="col-sm-18 form-inline">
 			<input class="form-control" id="ls_from" style="width:110px" type="text" name="sfrom" value="{FROM}" readonly="readonly"/>
 			{LANG.to}
 			<input class="form-control" id="ls_to" style="width:110px" type="text" name="sto" value="{TO}" readonly="readonly"/>
@@ -25,9 +25,9 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label">{LANG.area}</label>
-		<div class="col-sm-9">
-			<select class="form-control" style="width: 200px" id="ls_area" name="area">
+		<label class="col-sm-6 control-label">{LANG.area}</label>
+		<div class="col-sm-18">
+			<select class="form-control" id="ls_area" name="area">
 				<!-- BEGIN: area -->
 				<option value="{KEY}"{SELECTED}>{TITLE}</option>
 				<!-- END: area -->
@@ -36,9 +36,9 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label">{LANG.cat}</label>
-		<div class="col-sm-9">
-			<select class="form-control" style="width: 200px" id="ls_cat" name="cat">
+		<label class="col-sm-6 control-label">{LANG.cat}</label>
+		<div class="col-sm-18">
+			<select class="form-control" id="ls_cat" name="cat">
 				<!-- BEGIN: cat -->
 				<option value="{KEY}"{SELECTED}>{TITLE}</option>
 				<!-- END: cat -->
@@ -47,9 +47,9 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label">{LANG.s_status}</label>
-		<div class="col-sm-9">
-			<select class="form-control" style="width: 200px" id="ls_status" name="status">
+		<label class="col-sm-6 control-label">{LANG.s_status}</label>
+		<div class="col-sm-18">
+			<select class="form-control" id="ls_status" name="status">
 				<!-- BEGIN: status -->
 				<option value="{status.id}"{status.selected}>{status.title}</option>
 				<!-- END: status -->
@@ -58,9 +58,9 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label">{LANG.s_signer}</label>
-		<div class="col-sm-9">
-			<select class="form-control" style="width: 200px" id="ls_signer" name="signer">
+		<label class="col-sm-6 control-label">{LANG.s_signer}</label>
+		<div class="col-sm-18">
+			<select class="form-control" id="ls_signer" name="signer">
 				<!-- BEGIN: signer -->
 				<option value="{KEY}"{SELECTED}>{TITLE}</option>
 				<!-- END: signer -->
@@ -69,9 +69,9 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label">{LANG.subject}</label>
-		<div class="col-sm-9">
-			<select class="form-control" style="width: 200px" id="ls_subject" name="subject">
+		<label class="col-sm-6 control-label">{LANG.subject}</label>
+		<div class="col-sm-18">
+			<select class="form-control" id="ls_subject" name="subject">
 				<!-- BEGIN: subject -->
 				<option value="{KEY}"{SELECTED}>{TITLE}</option>
 				<!-- END: subject -->
@@ -80,8 +80,8 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label">&nbsp;</label>
-		<div class="col-sm-9">
+		<label class="col-sm-6 control-label">&nbsp;</label>
+		<div class="col-sm-18">
 			<input class="btn btn-primary" type="submit" value="{LANG.search}"/>
 			<input class="btn btn-danger" id="lclearform" type="button" value="{LANG.clear}"/>
 		</div>
