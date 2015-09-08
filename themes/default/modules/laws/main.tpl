@@ -13,7 +13,7 @@
 				<th class="text-center">{LANG.stt}</th>
 				<th class="text-center">{LANG.code}</th>
 				<th class="text-center">{LANG.publtime}</th>
-				<th class="text-center">{LANG.introtext}</th>
+				<th class="text-center">{LANG.trichyeu}</th>
 				<!-- BEGIN: down_in_home -->
 				<th>{LANG.files}</th>
 				<!-- END: down_in_home -->
@@ -23,9 +23,9 @@
 		<!-- BEGIN: loop -->
 			<tr>
 				<td class="text-center">{ROW.stt}</td>
-				<td><a href="{ROW.url}" title="{ROW.title}">{ROW.code}</a></td>
+				<td><a href="{ROW.url}" title="{ROW.code}">{ROW.code}</a></td>
 				<td class="text-center">{ROW.publtime}</td>
-				<td><a href="{ROW.url}" title="{ROW.title}">{ROW.title}</a></td>
+				<td><a href="{ROW.url}" title="{ROW.introtext}">{ROW.introtext}</a></td>
 				<!-- BEGIN: down_in_home -->
 				<td>
 					<!-- BEGIN: files -->
