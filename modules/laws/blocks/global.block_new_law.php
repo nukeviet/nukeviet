@@ -45,7 +45,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 
     function nv_law_block_newg ( $block_config )
     {
-        global $module_info, $lang_module, $site_mods, $db, $my_head, $module_name;
+        global $module_info, $lang_module, $global_config, $site_mods, $db, $my_head, $module_name;
 
         $module = $block_config['module'];
         $data = $site_mods[$module]['module_data'];
