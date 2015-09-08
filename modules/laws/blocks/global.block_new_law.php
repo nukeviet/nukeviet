@@ -62,9 +62,9 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 
         if ( ! empty( $numrow ) )
         {
-            if ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $modfile . '/block_new_law.tpl' ) )
+            if ( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $modfile . '/block_new_law.tpl' ) )
             {
-                $block_theme = $module_info['template'];
+                $block_theme = $global_config['module_theme'];
             }
             else
             {
@@ -105,7 +105,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 				}
 
 				$row['publtime'] = nv_date( 'd/m/Y', $row['publtime'] );
-				
+
 				$xtpl->assign( 'ROW', $row );
 
 				if( $show_code )

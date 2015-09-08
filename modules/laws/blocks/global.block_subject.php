@@ -27,7 +27,7 @@ if ( ! function_exists( 'nv_laws_block_subject' ) )
 		$html .= "</select>\n";
         $html .= '</td>';
         $html .= '</tr>';
-		
+
 		return $html;
 	}
 
@@ -40,37 +40,46 @@ if ( ! function_exists( 'nv_laws_block_subject' ) )
 		$return['config']['title_length'] = $nv_Request->get_int( 'config_title_length', 'post', 0 );
 		return $return;
 	}
-	
+
     function nv_laws_block_subject( $block_config )
     {
-        global $lang_module, $module_info, $site_mods, $module_file, $nv_laws_listsubject, $module_name;
+        global $lang_module, $module_info, $site_mods, $global_config, $nv_laws_listsubject, $module_name;
 
 		$module = $block_config['module'];
-		$module_data = $site_mods[$module]['module_data'];
-		$module_file = $site_mods[$module]['module_file'];
+		$mod_data = $site_mods[$module]['module_data'];
+		$mod_file = $site_mods[$module]['module_file'];
 
 		if( $module != $module_name )
 		{
 			$nv_laws_listsubject = array();
-			$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_subject ORDER BY weight ASC";
+			$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $mod_data . "_subject ORDER BY weight ASC";
 			$list = nv_db_cache( $sql, 'id' );
 			foreach ( $list as $row )
 			{
 				$nv_laws_listsubject[$row['id']] = $row;
 			}
 		}
-		
-        $xtpl = new XTemplate( "block_subject.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-		
+
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $mod_file . '/block_subject.tpl' ) )
+		{
+			$block_theme = $global_config['module_theme'];
+		}
+		else
+		{
+			$block_theme = 'default';
+		}
+
+        $xtpl = new XTemplate( "block_subject.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
+
         foreach ( $nv_laws_listsubject as $cat )
         {
 			$cat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=subject/" . $cat['alias'];
 			$cat['title0'] = nv_clean60( $cat['title'], $block_config['title_length'] );
-			
+
 			$xtpl->assign( 'DATA', $cat );
 			$xtpl->parse( 'main.loop' );
         }
-		
+
         $xtpl->parse( 'main' );
         return $xtpl->text( 'main' );
     }

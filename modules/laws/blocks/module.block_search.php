@@ -42,14 +42,24 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 
     function nv_law_block_search( $block_config )
     {
-        global $my_head, $lang_module, $site_mods, $module_info, $module_file, $nv_laws_listsubject, $nv_laws_listarea, $nv_laws_listcat, $module_name, $nv_Request, $module_data;
+        global $my_head, $lang_module, $site_mods, $global_config, $module_info, $module_file, $nv_laws_listsubject, $nv_laws_listarea, $nv_laws_listcat, $module_name, $nv_Request, $module_data;
 
 		$module = $block_config['module'];
 		$module_data = $site_mods[$module]['module_data'];
 		$module_file = $site_mods[$module]['module_file'];
 
 		$block_file_name = $block_config['style'] == 'center' ? 'block_search_center.tpl' : 'block_search_vertical.tpl';
-        $xtpl = new XTemplate( $block_file_name, NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '/' . $block_file_name ) )
+		{
+			$block_theme = $global_config['module_theme'];
+		}
+		else
+		{
+			$block_theme = 'default';
+		}
+
+        $xtpl = new XTemplate( $block_file_name, NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_file );
         $xtpl->assign( 'LANG', $lang_module );
         $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
         $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );

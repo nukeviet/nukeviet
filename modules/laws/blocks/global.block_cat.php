@@ -27,7 +27,7 @@ if ( ! function_exists( 'nv_laws_block_cat' ) )
 		$html .= "</select>\n";
         $html .= '</td>';
         $html .= '</tr>';
-		
+
 		return $html;
 	}
 
@@ -40,19 +40,28 @@ if ( ! function_exists( 'nv_laws_block_cat' ) )
 		$return['config']['title_length'] = $nv_Request->get_int( 'config_title_length', 'post', 0 );
 		return $return;
 	}
-	
+
     function nv_laws_block_cat( $block_config )
     {
-        global $lang_module, $module_info, $module_file, $site_mods, $nv_laws_listcat, $module_name;
-		
+        global $lang_module, $module_info, $global_config, $site_mods, $nv_laws_listcat, $module_name;
+
 		$module = $block_config['module'];
-		$module_data = $site_mods[$module]['module_data'];
-		$module_file = $site_mods[$module]['module_file'];
-		
-        $xtpl = new XTemplate( "block_cat.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
-		
+		$mod_data = $site_mods[$module]['module_data'];
+		$mod_file = $site_mods[$module]['module_file'];
+
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $mod_file . '/block_cat.tpl' ) )
+		{
+			$block_theme = $global_config['module_theme'];
+		}
+		else
+		{
+			$block_theme = 'default';
+		}
+
+        $xtpl = new XTemplate( "block_cat.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $mod_file );
+
         $html = "";
-		
+
 		$i = 1;
         foreach ( $nv_laws_listcat as $cat )
         {
@@ -64,7 +73,7 @@ if ( ! function_exists( 'nv_laws_block_cat' ) )
 				$html .= "<em class=\"fa fa-comment-o fa-lg\">&nbsp;</em><a title=\"" . $cat['title'] . "\" href=\"" . $link . "\">" . nv_clean60( $cat['title'], $block_config['title_length'] ) . "</a>\n";
 				if ( ! empty( $cat['subcats'] ) ) $html .= nv_content_subcat( $cat['subcats'], $block_config['title_length'] );
 				$html .= "</li>";
-				
+
 				if( $i >= 10 ) break;
 				$i ++;
             }
@@ -77,7 +86,7 @@ if ( ! function_exists( 'nv_laws_block_cat' ) )
     function nv_content_subcat ( $list_sub, $title_length )
     {
         global $nv_laws_listcat, $module_name;
-		
+
         if ( empty( $list_sub ) ) return "";
         else
         {
@@ -100,7 +109,7 @@ if( defined( 'NV_SYSTEM' ) )
 {
 	global $site_mods, $module_name, $nv_laws_listcat, $module_array_cat;
 	$module = $block_config['module'];
-	
+
 	if( isset( $site_mods[$module] ) )
 	{
 		if( $module != $module_name )

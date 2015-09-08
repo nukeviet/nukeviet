@@ -14,16 +14,25 @@ if ( ! function_exists( 'nv_law_block_area' ) )
 {
     function nv_law_block_area ()
     {
-        global $lang_module, $module_info, $module_file, $nv_laws_listarea, $module_name;
-		
-        $xtpl = new XTemplate( "block_area.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+        global $lang_module, $module_info, $module_file, $global_config, $nv_laws_listarea, $module_name;
+
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '/block_area.tpl' ) )
+		{
+			$block_theme = $global_config['module_theme'];
+		}
+		else
+		{
+			$block_theme = 'default';
+		}
+
+        $xtpl = new XTemplate( "block_area.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_file );
         $xtpl->assign( 'LANG', $lang_module );
         $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
         $xtpl->assign( 'TEMPLATE', $module_info['template'] );
         $xtpl->assign( 'MODULE_FILE', $module_file );
-		
+
         $title_length = 24;
-		
+
         $html = "";
 		$i = 1;
         foreach ( $nv_laws_listarea as $cat )
@@ -35,7 +44,7 @@ if ( ! function_exists( 'nv_law_block_area' ) )
 				$html .= "<a title=\"" . $cat['title'] . "\" href=\"" . $link . "\">" . nv_clean60( $cat['title'], $title_length ) . "</a>\n";
 				if ( ! empty( $cat['subcats'] ) ) $html .= nv_content_subcat1( $cat['subcats'], $title_length );
 				$html .= "</li>\n";
-				
+
 				if( $i >= 10 ) break;
 				$i ++;
             }
@@ -48,7 +57,7 @@ if ( ! function_exists( 'nv_law_block_area' ) )
     function nv_content_subcat1 ( $list_sub, $title_length )
     {
         global $nv_laws_listarea, $module_name;
-		
+
         if ( empty( $list_sub ) ) return "";
         else
         {

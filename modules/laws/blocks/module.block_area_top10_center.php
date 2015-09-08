@@ -14,18 +14,27 @@ if ( ! function_exists( 'nv_law_block_10area' ) )
 {
     function nv_law_block_10area ()
     {
-        global $lang_module, $module_info, $module_file, $nv_laws_listarea, $module_name, $db, $module_data;
-		
-        $xtpl = new XTemplate( "block_top10_area.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+        global $lang_module, $module_info, $module_file, $global_config, $nv_laws_listarea, $module_name, $db, $module_data;
+
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '/block_top10_area.tpl' ) )
+		{
+			$block_theme = $global_config['module_theme'];
+		}
+		else
+		{
+			$block_theme = 'default';
+		}
+
+        $xtpl = new XTemplate( "block_top10_area.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_file );
         $xtpl->assign( 'LANG', $lang_module );
         $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-        $xtpl->assign( 'TEMPLATE', $module_info['template'] );
+        $xtpl->assign( 'TEMPLATE', $block_theme );
         $xtpl->assign( 'MODULE_FILE', $module_file );
-		
+
         $title_length = 34;
-		
+
 		unset( $nv_laws_listarea[0] );
-		
+
 		$i = 1;
         foreach ( $nv_laws_listarea as $cat )
         {
@@ -41,28 +50,28 @@ if ( ! function_exists( 'nv_law_block_10area' ) )
 					$in = $cat['subcats'];
 					$in = " aid IN(" . implode( ",", $in ) . ")";
 				}
-				
+
 				$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE" . $in . " AND status=1";
 				$result = $db->query( $sql );
 				$num = $result->fetchColumn();
-				
+
 				$cat['name'] = nv_clean60( $cat['title'], $title_length );
 				$cat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=area/" . $cat['alias'];
-				
+
 				$xtpl->assign( 'NUM_LAW', $num );
 				$xtpl->assign( 'CAT', $cat );
 				$xtpl->parse( 'main.loop' );
-				
-				if( $i >= 10 ) break; 
-				
+
+				if( $i >= 10 ) break;
+
 				$i ++;
             }
         }
-        
+
 		$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1";
 		$result = $db->query( $sql );
 		$num = $result->fetchColumn();
-		
+
 		$xtpl->assign( 'INFO_NUM', sprintf( $lang_module['info_num'], $num ) );
 
         $xtpl->parse( 'main' );
