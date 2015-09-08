@@ -49,7 +49,7 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		$module_file = $site_mods[$module]['module_file'];
 
 		$block_file_name = $block_config['style'] == 'center' ? 'block_search_center.tpl' : 'block_search_vertical.tpl';
-        $xtpl = new XTemplate( $block_file_name, NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+        $xtpl = new XTemplate( $block_file_name, NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
         $xtpl->assign( 'LANG', $lang_module );
         $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
         $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
