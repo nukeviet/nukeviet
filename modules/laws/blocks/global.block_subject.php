@@ -43,7 +43,7 @@ if ( ! function_exists( 'nv_laws_block_subject' ) )
 
     function nv_laws_block_subject( $block_config )
     {
-        global $lang_module, $module_info, $site_mods, $global_config, $nv_laws_listsubject, $module_name;
+        global $db, $lang_module, $module_info, $site_mods, $global_config, $nv_laws_listsubject, $module_name;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
@@ -73,6 +73,7 @@ if ( ! function_exists( 'nv_laws_block_subject' ) )
 
         foreach ( $nv_laws_listsubject as $cat )
         {
+        	$cat['count'] = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_row WHERE sid=' . $cat['id'] )->fetchColumn();
 			$cat['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=subject/" . $cat['alias'];
 			$cat['title0'] = nv_clean60( $cat['title'], $block_config['title_length'] );
 
