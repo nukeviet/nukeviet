@@ -77,3 +77,6 @@ $lang_module['otherVal'] = 'Value';
 $lang_module['addNew'] = 'Add new';
 $lang_module['cats'] = 'Related categories';
 $lang_module['cat'] = 'Category';
+$lang_module['mark_as_unread'] = 'Mark as unread';
+$lang_module['mark_as_read'] = 'Mark as read';
+$lang_module['please_choose'] = 'Please choose at least one  letter in the list.';

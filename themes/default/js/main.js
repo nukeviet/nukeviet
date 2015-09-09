@@ -62,6 +62,13 @@ function timeoutsessrun() {
 	}, 1E3)
 }
 
+function locationReplace(url)
+{
+    if(history.pushState) {
+        history.pushState(null, null, url);
+    }
+}
+
 function checkWidthMenu() {
 	theme_responsive && "absolute" == $("#menusite").css("position") ? ($("li.dropdown ul").removeClass("dropdown-menu"), $("li.dropdown ul").addClass("dropdown-submenu"), $("li.dropdown a").addClass("dropdown-mobile"), $("#menu-site-default ul li a.dropdown-toggle").addClass("dropdown-mobile"), $("li.dropdown ul li a").removeClass("dropdown-mobile")) : ($("li.dropdown ul").addClass("dropdown-menu"), $("li.dropdown ul").removeClass("dropdown-submenu"), $("li.dropdown a").removeClass("dropdown-mobile"), $("li.dropdown ul li a").removeClass("dropdown-mobile"), $("#menu-site-default ul li a.dropdown-toggle").removeClass("dropdown-mobile"));
 	$("#menu-site-default .dropdown").hover(function() {
@@ -264,7 +271,7 @@ $(function() {
 	$(".headerSearch input").on("keypress", function(a) {
 		13 != a.which || a.shiftKey || (a.preventDefault(), $(".headerSearch button").trigger("click"))
 	});
-	// Show messger timeout login users 
+	// Show messger timeout login users
 	nv_is_user && (myTimerPage = setTimeout(function() {
 		timeoutsessrun()
 	}, nv_check_pass_mstime));
@@ -283,7 +290,7 @@ $(function() {
 		container: "body",
 		html: !0,
 		title: function() {
-			return ("" == $(this).data("img") ? "" : '<img class="img-thumbnail pull-left" src="' + $(this).data("img") + '" width="90" />') + $(this).data("content")
+			return ("" == $(this).data("img") || !$(this).data("img") ? "" : '<img class="img-thumbnail pull-left" src="' + $(this).data("img") + '" width="90" />') + $(this).data("content")
 		}
 	});
 	// Change site lang
@@ -355,7 +362,11 @@ $(function() {
 	$("#openidBt").on("click", function() {
 		openID_result();
 		return !1
-	})
+	});
+    //Change Localtion
+    $("[data-location]").on("click",function(){
+        locationReplace($(this).data("location"))
+    })
 });
 // Fix bootstrap multiple modal
 $(document).on({

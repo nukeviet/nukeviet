@@ -151,6 +151,8 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		}
 
 		$xtpl = new XTemplate( 'block_tophits.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/'. $mod_file );
+		$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+		$xtpl->assign( 'TEMPLATE', $block_theme );
 
 		foreach( $array_block_news as $array_news )
 		{

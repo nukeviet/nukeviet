@@ -112,7 +112,6 @@ $lang_module['admin_account_note'] = '5 caractères au minimum, éviter admin ou
 $lang_module['admin_email'] = 'E-mail';
 $lang_module['admin_email_note'] = 'Entrez l\'e-mail.';
 $lang_module['admin_pass'] = 'Mot de passe';
-$lang_module['admin_pass_note'] = 'Plus de 6 caractères, combinés de lettres latines et chiffres.';
 $lang_module['admin_repass'] = 'Confirmer le mot de passe';
 $lang_module['admin_repass_note'] = 'Confirmez le mot de passe.';
 $lang_module['success'] = 'Installation réussie!';

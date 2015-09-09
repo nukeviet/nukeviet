@@ -27,4 +27,6 @@ $lang_block['tooltip_position_right'] = 'A droite';
 $lang_block['tooltip_length'] = 'Numero';
 $lang_block['width'] = 'Image Largeur';
 $lang_block['height'] = 'Image Hauteur';
+$lang_block['length_title'] = 'Nombre de caractère du titre';
+$lang_block['length_hometext'] = 'Nombre de caractère de la présentation';
 $lang_block['nocatid'] = 'N\'affiche pas dans les rubriques';

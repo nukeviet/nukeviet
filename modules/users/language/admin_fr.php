@@ -395,3 +395,5 @@ $lang_module['user_check_pass_time'] = 'Le temps de vérifier les mots de passe,
 $lang_module['safe_mode'] = 'Mode sans échec';
 $lang_module['safe_active_info'] = 'Votre compte est en mode sans échec donc tous les fonctionnements de modification des infos du compte sont bloqués';
 $lang_module['safe_deactivate'] = 'Désactiver le mode sans échec';
+$lang_module['group_description'] = 'Description';
+$lang_module['group_description_empty'] = 'Prenez une brève description du groupe';

@@ -91,8 +91,8 @@ $(document).ready(function(){
 	});
 	
 	// Site setting
-	$("#select-site-logo").click(function() {
-		var area = "site_logo";
+	$(".selectimg").click(function() {
+		var area = $(this).attr('data-name');
 		var path = "";
 		var currentpath = "images";
 		var type = "image";

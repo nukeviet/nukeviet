@@ -798,7 +798,7 @@ function detail_theme( $news_contents, $array_keyword, $related_new_array, $rela
 			}
 			$xtpl->parse( 'main.others.topic' );
 		}
-        
+
         $xtpl->parse( 'main.others' );
 	}
 
@@ -905,7 +905,7 @@ function sendmail_themme( $sendmail )
 	if( $global_config['gfx_chk'] > 0 )
 	{
 		$xtpl->assign( 'CAPTCHA_REFRESH', $lang_global['captcharefresh'] );
-		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_FILES_DIR . '/images/refresh.png' );
+		$xtpl->assign( 'CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png' );
 		$xtpl->assign( 'N_CAPTCHA', $lang_global['securitycode'] );
 		$xtpl->assign( 'GFX_WIDTH', NV_GFX_WIDTH );
 		$xtpl->assign( 'GFX_HEIGHT', NV_GFX_HEIGHT );
@@ -979,6 +979,10 @@ function news_print( $result )
 		$xtpl->parse( 'main.author' );
 	}
 
+	if( $result['status'] != 1 )
+	{
+		$xtpl->parse( 'main.no_public' );
+	}
 	$xtpl->parse( 'main' );
 	return $xtpl->text( 'main' );
 }

@@ -87,9 +87,12 @@
 			</thead>
 			<tbody>
 				<!-- BEGIN: admin -->
-				<tr>
-					<td>{ADMIN.login}</td>
-					<td>{ADMIN.last_name}&nbsp;{ADMIN.first_name}</td>
+				<tr {ADMIN.suspend}>
+					<td>
+						<img style="vertical-align:middle;" alt="{ADMIN.level}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/{ADMIN.img}.png" width="38" height="18" />
+						{ADMIN.username}
+					</td>
+					<td>{ADMIN.full_name}</td>
 					<td>{ADMIN.email}</td>
 					<td class="text-center"><input type="checkbox" name="view_level[]" value="{ADMIN.admid}"{ADMIN.view_level}{ADMIN.disabled} /></td>
 					<td class="text-center"><input type="checkbox" name="reply_level[]" value="{ADMIN.admid}"{ADMIN.reply_level}{ADMIN.disabled} /></td>
@@ -105,7 +108,6 @@
 		</table>
 	</div>
 </form>
-<!-- BEGIN: get_alias -->
 <script type="text/javascript">
 function removefieldset(a){
     var b = $(a).parent().parent();
@@ -119,11 +121,12 @@ function addfieldset(a){
     $(a).parent().find(".new fieldset").last().append('&nbsp;<em class="fa fa-remove fa-pointer" onclick="removefieldset(this);">&nbsp;</em>');
     return!1
 }
-    $(function() {
-        $('#idfull_name').change(function() {
-            get_alias('{ID}');
-        });
+<!-- BEGIN: get_alias -->
+$(function() {
+    $('#idfull_name').change(function() {
+        get_alias('{ID}');
     });
-</script>
+});
 <!-- END: get_alias -->
+</script>
 <!-- END: main -->
