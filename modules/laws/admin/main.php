@@ -305,6 +305,9 @@ else
 					$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_set_replace VALUES( NULL, " . $post['id'] . ", " . $rep . " )" );
 				}
 
+				// Cap nhat lai so luong van ban o chu de
+				$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_subject SET numcount=(SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $post['sid'] . ') WHERE id=' . $post['sid'] );
+
 	            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['editRow'], "Id: " . $post['id'], $admin_info['userid'] );
 	        }
 	        else
@@ -345,6 +348,9 @@ else
 				{
 					$db->query( "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_set_replace VALUES( NULL, " . $_id . ", " . $rep . " )" );
 				}
+
+				// Cap nhat lai so luong van ban o chu de
+				$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_subject SET numcount=(SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $post['sid'] . ') WHERE id=' . $post['sid'] );
 
 	            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addRow'], "Id: " . $_id, $admin_info['userid'] );
 	        }
@@ -499,14 +505,22 @@ else
 	{
 	    $id = $nv_Request->get_int( 'id', 'post', 0 );
 
-	    $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id = " . $id;
-	    $db->query( $query );
+		$data = $db->query( 'SELECT sid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE id=' . $id )->fetch();
+		if( !empty( $data ) )
+		{
+		    $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE id = " . $id;
+		    $db->query( $query );
 
-	    $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_set_replace WHERE oid = " . $id;
-	    $db->query( $query );
+		    $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_set_replace WHERE oid = " . $id;
+		    $db->query( $query );
 
-	    nv_del_moduleCache( $module_name );
-	    die( 'OK' );
+			// Cap nhat lai so luong van ban o chu de
+			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_subject SET numcount=(SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $data['sid'] . ') WHERE id=' . $data['sid'] );
+
+		    nv_del_moduleCache( $module_name );
+		    die( 'OK' );
+		}
+		die( 'NO' );
 	}
 
 	if ( $nv_Request->isset_request( 'changestatus', 'post' ) )

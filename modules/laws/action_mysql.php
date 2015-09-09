@@ -54,6 +54,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   title varchar(255) NOT NULL,
   introduction mediumtext NOT NULL,
   keywords varchar(255) NOT NULL,
+  numcount int(10) NOT NULL DEFAULT '0',
   addtime int(11) unsigned NOT NULL DEFAULT '0',
   weight smallint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
