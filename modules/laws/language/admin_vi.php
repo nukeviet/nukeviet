@@ -19,7 +19,7 @@ $lang_translator['langtype'] = "lang_module";
 $lang_module['main'] = "Quản lý Văn bản";
 $lang_module['area'] = "Quản lý Lĩnh vực";
 $lang_module['cat'] = "Quản lý Thể loại";
-$lang_module['subject'] = "Quản lý Cơ quan ban hành";
+$lang_module['subject'] = "Cơ quan ban hành";
 $lang_module['save'] = "Thực hiện";
 $lang_module['add'] = "Thêm";
 $lang_module['status'] = "Trạng thái";
@@ -141,6 +141,7 @@ $lang_module['config_down_in_home'] = "Download trên trang chính";
 
 $lang_module['type_view_0'] = "Mới nhất lên trên";
 $lang_module['type_view_1'] = "Cũ nhất lên trên";
+$lang_module['type_view_2'] = "Phân theo cơ quan ban hành";
 
 $lang_module['wait'] = "Vui lòng đợi...";
 

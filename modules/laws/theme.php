@@ -20,6 +20,7 @@ function nv_theme_laws_main ( $array_data, $generate_page )
 
     foreach( $array_data as $row )
 	{
+		$row['url_subject'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=subject/" . $row['alias'];
 		$row['publtime'] = nv_date( "d/m/Y", $row['publtime'] );
 		$row['exptime'] = nv_date( "d/m/Y", $row['exptime'] );
 		$xtpl->assign( 'ROW', $row );
@@ -38,6 +39,61 @@ function nv_theme_laws_main ( $array_data, $generate_page )
 					$xtpl->parse( 'main.loop.down_in_home.files' );
 				}
 			}
+			$xtpl->parse( 'main.loop.down_in_home' );
+		}
+		$xtpl->parse( 'main.loop' );
+	}
+
+	if( $nv_laws_setting['down_in_home'] )
+	{
+		$xtpl->parse( 'main.down_in_home' );
+	}
+
+    $xtpl->parse( 'main' );
+    return $xtpl->text( 'main' );
+}
+
+function nv_theme_laws_maincat ( $mod, $array_data )
+{
+    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
+
+    $xtpl = new XTemplate( 'main_' . $mod . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+    $xtpl->assign( 'LANG', $lang_module );
+
+    foreach( $array_data as $data )
+	{
+		$data['numcount'] = sprintf( $lang_module['s_result_num'], $data['numcount'] );
+		$xtpl->assign( 'DATA', $data );
+
+		if( !empty( $data['rows'] ) )
+		{
+			foreach( $data['rows'] as $rows )
+			{
+				$rows['publtime'] = !empty( $rows['publtime'] ) ? nv_date( 'd/m/Y', $rows['publtime'] ) : 'N/A';
+				$xtpl->assign( 'ROW', $rows );
+
+				if( $nv_laws_setting['down_in_home'] )
+				{
+					if ( nv_user_in_groups( $rows['groups_download'] ) )
+					{
+						if( ! empty( $rows['files'] ) )
+						{
+							foreach( $rows['files'] as $file )
+							{
+								$xtpl->assign( 'FILE', $file );
+								$xtpl->parse( 'main.loop.row.down_in_home.files.loopfile' );
+							}
+							$xtpl->parse( 'main.loop.row.down_in_home.files' );
+						}
+					}
+					$xtpl->parse( 'main.loop.row.down_in_home' );
+				}
+
+				$xtpl->parse( 'main.loop.row' );
+			}
+		}
+		if( $nv_laws_setting['down_in_home'] )
+		{
 			$xtpl->parse( 'main.loop.down_in_home' );
 		}
 		$xtpl->parse( 'main.loop' );
