@@ -144,6 +144,7 @@ $lang_module['type_view_1'] = "Cũ nhất lên trên";
 $lang_module['type_view_2'] = "Phân theo cơ quan ban hành";
 
 $lang_module['wait'] = "Vui lòng đợi...";
+$lang_module['numlink'] = "Số liên kết";
 
 $lang_module['search_error'] = "Chọn ít nhất một điều kiện tìm kiếm";
 

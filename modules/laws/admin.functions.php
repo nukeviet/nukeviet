@@ -18,7 +18,7 @@ if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_
 //$submenu['subject'] = $lang_module['subject'];
 //$submenu['config'] = $lang_module['config'];
 
-$allow_func = array( 'main', 'area', 'cat', 'subject', 'getlid', 'signer', 'scontent', 'config' );
+$allow_func = array( 'main', 'area', 'cat', 'subject', 'getlid', 'signer', 'scontent', 'config', 'change_cat' );
 
 define( 'NV_IS_FILE_ADMIN', true );
 
@@ -169,6 +169,7 @@ function nv_sList()
             'id' => ( int )$row['id'], //
             'title' => $row['title'], //
             'alias' => $row['alias'], //
+            'numlink' => $row['numlink'], //
             'weight' => ( int )$row['weight'] //
             );
     }

@@ -91,6 +91,7 @@
 		<tr>
 			<th style="width:100px"> {LANG.pos} </th>
 			<th> {LANG.title} </th>
+			<th class="w100"> {LANG.numlink} </th>
 			<th style="width:120px">&nbsp;</th>
 		</tr>
 	</thead>
@@ -105,6 +106,13 @@
 				</select>
 			</td>
 			<td> {LOOP.title} </td>
+			<td>
+				<select name="numlink" id="id_numlinks_{LOOP.id}" class="form-control" onchange="nv_chang_cat('{LOOP.id}','numlinks');">
+					<!-- BEGIN: numlinks -->
+					<option value="{NUMLINKS.key}" {NUMLINKS.selected}>{NUMLINKS.title}</option>
+					<!-- END: numlinks -->
+				</select>
+			</td>
 			<td><em class="fa fa-edit fa-lg">&nbsp;</em><a href="{MODULE_URL}=subject&edit&id={LOOP.id}">{GLANG.edit}</a> - <em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="del" href="{LOOP.id}">{GLANG.delete}</a></td>
 		</tr>
 		<!-- END: loop -->

@@ -128,11 +128,11 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 
         if ( isset( $post['id'] ) )
         {
-            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_subject SET 
-                    alias=" . $db->quote( $alias . "-" . $post['id'] ) . ", 
-                    title=" . $db->quote( $post['title'] ) . ", 
-                    introduction=" . $db->quote( $post['introduction'] ) . ", 
-                    keywords=" . $db->quote( $post['keywords'] ) . " 
+            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_subject SET
+                    alias=" . $db->quote( $alias . "-" . $post['id'] ) . ",
+                    title=" . $db->quote( $post['title'] ) . ",
+                    introduction=" . $db->quote( $post['introduction'] ) . ",
+                    keywords=" . $db->quote( $post['keywords'] ) . "
                     WHERE id=" . $post['id'];
             $db->query( $query );
         }
@@ -140,13 +140,13 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         {
             $weight = $scount + 1;
 
-            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_subject 
-                VALUES (NULL, '', " . $db->quote( $post['title'] ) . ", 
-                " . $db->quote( $post['introduction'] ) . ", " . $db->quote( $post['keywords'] ) . ", 
+            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_subject
+                VALUES (NULL, '', " . $db->quote( $post['title'] ) . ",
+                " . $db->quote( $post['introduction'] ) . ", " . $db->quote( $post['keywords'] ) . ",
                 " . NV_CURRENTTIME . ", " . $weight . ");";
             $post['id'] = $db->insert_id( $query );
 
-            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_subject SET 
+            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_subject SET
                 alias=" . $db->quote( $alias . "-" . $post['id'] ) . " WHERE id=" . $post['id'];
             $db->query( $query );
         }
@@ -204,6 +204,17 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
 
         if ( $loop['count'] != 0 ) $xtpl->parse( 'list.loop.count' );
         else  $xtpl->parse( 'list.loop.countEmpty' );
+
+		for( $i = 0; $i <= 20; ++$i )
+		{
+			$xtpl->assign( 'NUMLINKS', array(
+				'key' => $i,
+				'title' => $i,
+				'selected' => $i == $values['numlink'] ? ' selected="selected"' : ''
+			) );
+			$xtpl->parse( 'list.loop.numlinks' );
+		}
+
         $xtpl->parse( 'list.loop' );
         $a++;
     }
