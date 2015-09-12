@@ -401,7 +401,7 @@ $(document).ready(function(){
 	   $('#imagepreview').attr('src', $('#imageresource').attr('src'));
 	   $('#imagemodal').modal('show');
 	});
-	
+
 	$("#btn_upload").click(function() {
 		nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
 		return false;
@@ -411,7 +411,7 @@ $(document).ready(function(){
 		$('#photo_delete').val('1');
 		$('#change-photo').show();
 	});
-	
+
 	if ($.fn.validate){
 		$('#form_user').validate({
 			rules : {
@@ -420,7 +420,7 @@ $(document).ready(function(){
 				}
 			}
 		});
-		
+
 	}
 	if ($.fn.datepicker){
 		$(".datepicker").datepicker({
@@ -430,7 +430,8 @@ $(document).ready(function(){
 			changeYear : true,
 			showOtherMonths : true,
 			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
-			buttonImageOnly : true
+			buttonImageOnly : true,
+			yearRange: "-90:+90"
 		});
 		$("#birthday").datepicker({
 			showOn : "both",
@@ -448,7 +449,7 @@ $(document).ready(function(){
 	    	}
 		});
 	}
-	
+
 	// Export user
 	$("input[name=data_export]").click(function() {
 		$("input[name=data_export]").attr("disabled", "disabled");
@@ -489,7 +490,7 @@ $(document).ready(function(){
 		});
 		return !1
 	});
-	
+
 	// User field
 	$("input[name=field_type]").click(function() {
 		var field_type = $("input[name='field_type']:checked").val();
