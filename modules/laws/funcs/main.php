@@ -76,7 +76,7 @@ elseif( $nv_laws_setting['typeview'] == 2 ) // Hien thi theo phan muc
 	{
 		foreach( $nv_laws_listsubject as $subjectid => $subject )
 		{
-			$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $subjectid . ' LIMIT ' . $subject['numlink'] );
+			$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $subjectid . ' ORDER BY addtime DESC LIMIT ' . $subject['numlink'] );
 			while( $row = $result->fetch() )
 			{
 				$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'];
