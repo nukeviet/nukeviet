@@ -2,8 +2,10 @@
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover" data-is-default="fa-check-square-o" data-not-default="fa-square-o">
 		<colgroup>
-			<col span="3" />
-			<col span="2" class="w100"/>
+		<col class="w100" />
+			<col span="4" />
+			<col class="w150" />
+			<col class="w250"/>
 		</colgroup>
 		<thead>
 			<tr class="text-center">
@@ -36,7 +38,7 @@
 				<td>{ROW.phone}</td>
 				<td>{ROW.fax}</td>
 				<td class="text-center">
-				<select id="change_status_{ROW.id}" onchange="nv_chang_status('{ROW.id}');" class="form-control w100">
+				<select id="change_status_{ROW.id}" onchange="nv_chang_status('{ROW.id}');" class="form-control">
 					<!-- BEGIN: status -->
 					   <option value="{STATUS.key}"{STATUS.selected}>{STATUS.title}</option>
 					<!-- END: status -->
