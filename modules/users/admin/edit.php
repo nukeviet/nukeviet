@@ -351,6 +351,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	die( json_encode( array(
 		'status' => 'ok',
 		'input' => '',
+		'admin_add' => 'no',
 		'mess' => '' ) ) );
 }
 

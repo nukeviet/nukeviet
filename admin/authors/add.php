@@ -139,12 +139,13 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 else
 {
 	$position = '';
-	$userid = 0;
+	$userid = $nv_Request->get_title( 'userid', 'get' );
 	$editor = 'ckeditor';
 	$lev = 3;
 	$modules = array();
-	$allow_files_type = array( 'images', 'archives' );
-	$allow_modify_files = $allow_create_subdirectories = $allow_modify_subdirectories = 0;
+	$allow_files_type = explode( ',', 'adobe,application,archives,audio,documents,flash,images,real,video' );
+	$allow_modify_files = $allow_modify_subdirectories = 0;
+	$allow_create_subdirectories = 1;
 }
 
 $page_title = $lang_module['nv_admin_add'];
