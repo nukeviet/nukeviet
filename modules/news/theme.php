@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 {
-	global $module_name, $module_file, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page;
+	global $site_mods, $module_name, $module_file, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page;
 
 	$xtpl = new XTemplate( 'viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -65,6 +65,11 @@ function viewcat_grid_new( $array_catpage, $catid, $generate_page )
 			if( $newday >= NV_CURRENTTIME )
 			{
 				$xtpl->parse( 'main.featuredloop.newday' );
+			}
+
+			if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) and $module_config[$module_name]['activecomm'] )
+			{
+				$xtpl->parse( 'main.featuredloop.comment' );
 			}
 
 			$xtpl->set_autoreset();
@@ -168,7 +173,7 @@ function viewcat_list_new( $array_catpage, $catid, $page, $generate_page )
 
 function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 {
-	global $global_array_cat, $module_name, $module_file, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
+	global $site_mods, $global_array_cat, $module_name, $module_file, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
 	$xtpl = new XTemplate( 'viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -225,6 +230,11 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 				$xtpl->parse( 'main.viewcatloop.featured.newday' );
 			}
 
+			if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) and $module_config[$module_name]['activecomm'] )
+			{
+				$xtpl->parse( 'main.viewcatloop.featured.comment' );
+			}
+
 			$xtpl->parse( 'main.viewcatloop.featured' );
 		}
 		else
@@ -248,6 +258,11 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 			if( $newday >= NV_CURRENTTIME )
 			{
 				$xtpl->parse( 'main.viewcatloop.news.newday' );
+			}
+
+			if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) and $module_config[$module_name]['activecomm'] )
+			{
+				$xtpl->parse( 'main.viewcatloop.news.comment' );
 			}
 
 			$xtpl->set_autoreset();
@@ -288,7 +303,7 @@ function viewcat_page_new( $array_catpage, $array_cat_other, $generate_page )
 
 function viewcat_top( $array_catcontent, $generate_page )
 {
-	global $module_name, $module_file, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
+	global $site_mods, $module_name, $module_file, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
 	$xtpl = new XTemplate( 'viewcat_top.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -333,6 +348,10 @@ function viewcat_top( $array_catcontent, $generate_page )
 				{
 					$xtpl->parse( 'main.catcontent.newday' );
 				}
+				if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) and $module_config[$module_name]['activecomm'] )
+				{
+					$xtpl->parse( 'main.catcontent.comment' );
+				}
 				$xtpl->parse( 'main.catcontent' );
 			}
 			else
@@ -346,6 +365,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 			++$a;
 		}
 	}
+
 	// Het cac bai viet phan dau
 	if( ! empty( $generate_page ) )
 	{
@@ -359,7 +379,7 @@ function viewcat_top( $array_catcontent, $generate_page )
 
 function viewsubcat_main( $viewcat, $array_cat )
 {
-	global $module_name, $module_file, $global_array_cat, $lang_module, $module_config, $module_info;
+	global $module_name, $module_file, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info;
 
 	$xtpl = new XTemplate( $viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -449,6 +469,11 @@ function viewsubcat_main( $viewcat, $array_cat )
 				$xtpl->parse( 'main.listcat.related' );
 			}
 
+			if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) and $module_config[$module_name]['activecomm'] )
+			{
+				$xtpl->parse( 'main.listcat.comment' );
+			}
+
 			$xtpl->parse( 'main.listcat' );
 		}
 	}
@@ -459,7 +484,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 
 function viewcat_two_column( $array_content, $array_catpage )
 {
-	global $module_name, $module_file, $module_upload, $module_config, $module_info, $lang_module, $global_array_cat, $catid, $page;
+	global $site_mods, $module_name, $module_file, $module_upload, $module_config, $module_info, $lang_module, $global_array_cat, $catid, $page;
 
 	$xtpl = new XTemplate( 'viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -505,6 +530,12 @@ function viewcat_two_column( $array_content, $array_catpage )
 				{
 					$xtpl->parse( 'main.catcontent.content.newday' );
 				}
+
+				if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) and $module_config[$module_name]['activecomm'] )
+				{
+					$xtpl->parse( 'main.catcontent.content.comment' );
+				}
+
 				$xtpl->parse( 'main.catcontent.content' );
 			}
 			else
@@ -560,6 +591,11 @@ function viewcat_two_column( $array_content, $array_catpage )
 			if( $newday >= NV_CURRENTTIME )
 			{
 				$xtpl->parse( 'main.loopcat.content.newday' );
+			}
+
+			if( isset( $site_mods['comment'] ) and isset( $module_config[$module_name]['activecomm'] ) and $module_config[$module_name]['activecomm'] )
+			{
+				$xtpl->parse( 'main.loopcat.content.comment' );
 			}
 
 			$xtpl->parse( 'main.loopcat.content' );

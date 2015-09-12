@@ -28,7 +28,9 @@
 				<ul class="list-unstyled list-inline">
 					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
 					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}</li>
+					<!-- BEGIN: comment -->
 					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}</li>
+					<!-- END: comment -->
 				</ul>
 			</div>
 			<p>
