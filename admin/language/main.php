@@ -150,6 +150,17 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 				}
 
 				// Cai dat du lieu mau
+				$global_config['site_home_module'] = 'users';
+				$_site_home_module = $db->query( "SELECT config_value FROM " . $db_config['prefix'] . "_config WHERE module = 'global' AND config_name = 'site_home_module' AND lang=" . $db->quote( $global_config['site_lang'] ) )->fetchColumn();
+				if( ! empty( $_site_home_module ) )
+				{
+					$result = $db->query( "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $keylang . "_modules where title=" .  $db->quote( $_site_home_module ) );
+					if( $result->fetchColumn() )
+					{
+						$global_config['site_home_module'] = $_site_home_module;
+					}
+				}
+				
 				$filesavedata = '';
 				$lang_data = $keylang;
 				if( file_exists( NV_ROOTDIR . '/install/data_' . $keylang . '.php' ) )
@@ -292,7 +303,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 
 		nv_delete_all_cache();
 
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&rand=' . nv_genpass() );
 		exit();
 	}
 }
