@@ -3,6 +3,9 @@
 <form method="post" action="{ACTION}">
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col class="w250">
+		</colgroup>	
 		<tfoot>
 			<tr>
 				<td colspan="2" class="text-center"><input name="save" id="save" type="hidden" value="1" /><input name="go_edit" type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
@@ -28,7 +31,7 @@
 			<tr>
 				<td> {EDITOR0}: </td>
 				<td>
-				<select name="editor" id="editor" class="form-control">
+				<select name="editor" id="editor" class="form-control w200">
 					<option value="">{EDITOR3}</option>
 					<!-- BEGIN: loop -->
 					<option value="{VALUE}" {SELECTED}>{VALUE} </option>
@@ -77,14 +80,15 @@
 				<br/>
 				<!-- END: if -->
 				<div id="modslist" style="margin-top:10px; {STYLE}">
-					{LEV1}:
-					<br/>
-					<div>
-						<!-- BEGIN: loop -->
-						<p>
-							<input name="modules[]" type="checkbox" value="{VALUE}" {CHECKED} />&nbsp; {CUSTOM_TITLE}
-						</p>
-						<!-- END: loop -->
+					{LEV1}: <em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; <em class="fa fa-circle-o fa-lg">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>
+						<div class="clear"><br /></div>
+						<div class="row">
+							<!-- BEGIN: loop -->
+							<div class="col-sm-8 col-md-6">
+								<input name="modules[]" type="checkbox" value="{VALUE}" {CHECKED} />&nbsp; {CUSTOM_TITLE}
+							</div>
+							<!-- END: loop -->
+						</div>
 					</div>
 				</div></td>
 			</tr>

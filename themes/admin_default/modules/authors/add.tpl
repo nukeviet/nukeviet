@@ -4,7 +4,7 @@
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<colgroup>
-			<col class="w250">
+				<col class="w250">
 			</colgroup>
 			<tfoot>
 				<tr>
@@ -33,7 +33,7 @@
 				<!-- BEGIN: editor -->
 				<tr>
 					<td>{EDITOR0}:</td>
-					<td><select name="editor" id="editor" class="form-control">
+					<td><select name="editor" id="editor" class="form-control w200">
 							<option value="">{EDITOR3}</option>
 							<!-- BEGIN: loop -->
 							<option value="{EDITOR}"{SELECTED}>{EDITOR}</option>
