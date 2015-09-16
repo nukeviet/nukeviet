@@ -43,3 +43,10 @@ function nv_chang_act(mid, act) {
 	}
 	return;
 }
+
+$("#checkall").click(function(){
+	$("input[name='modules[]']:checkbox").prop("checked", true);
+});
+$("#uncheckall").click(function() {
+	$("input[name='modules[]']:checkbox").prop("checked", false);
+});
