@@ -195,7 +195,7 @@ if ( $checkss == $array_register['checkss'] )
     $array_register['username'] = $nv_Request->get_title( 'username', 'post', '', 1 );
     $array_register['password'] = $nv_Request->get_title( 'password', 'post', '' );
     $array_register['re_password'] = $nv_Request->get_title( 're_password', 'post', '' );
-    $array_register['email'] = nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 );
+    $array_register['email'] = nv_strtolower( nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 ) );
 
     $array_register['question'] = $nv_Request->get_int( 'question', 'post', 0 );
     if ( ! isset( $data_questions[$array_register['question']] ) ) $array_register['question'] = 0;

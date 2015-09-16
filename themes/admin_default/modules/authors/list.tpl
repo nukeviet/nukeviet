@@ -5,8 +5,8 @@
 			<tr>
 				<th>{LANG.login}</th>
 				<th>{LANG.email}</th>
-				<th>{LANG.lev}</th>
 				<th>{LANG.position}</th>
+				<th>{LANG.lev}</th>
 				<th>{LANG.is_suspend}</th>
 				<th>{LANG.adminip_funcs}</th>
 			</tr>
@@ -16,8 +16,8 @@
 			<tr>
 				<td><img alt="{OPTION_LEV}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/admin{THREAD_LEV}.png" width="38" height="18" /><a href="{DATA.link}" title="{DATA.full_name}"><strong>{DATA.login}</strong></a></td>
 				<td>{DATA.email}</td>
-				<td>{DATA.lev}</td>
 				<td>{DATA.position}</td>
+				<td>{DATA.lev}</td>
 				<td>{DATA.is_suspend}</td>
 				<td>
 				<!-- BEGIN: edit -->

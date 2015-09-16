@@ -122,7 +122,7 @@ function ctbtLoad(a) {
 	"yes" != a.attr("data-load") && $.ajax({
 		type: "POST",
 		cache: !1,
-		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=contact",
+		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + a.attr( "data-module" ),
 		data: "loadForm=1&checkss=" + a.attr("data-cs"),
 		dataType: "html",
 		success: function(c) {
@@ -178,7 +178,7 @@ function loginForm()
 		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
 		cache: !1,
         data: '&nv_ajax=1',
-		dataType: "html",
+		dataType: "html"
 	}).done(function(a) {
 		modalShow('', a)
 	});

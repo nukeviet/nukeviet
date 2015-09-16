@@ -300,7 +300,8 @@ function nv_check_valid_login( $login, $max, $min )
 			$pattern = '/^[0-9a-z]+[0-9a-z\-\_\\s]+[0-9a-z]+$/i';
 			break;
 		case 4:
-			return ( $login != strip_punctuation( $login ) ? $lang_global['unick_type_' . $type] : '' );
+			$_login = str_replace( '@', '', $login );
+			return ( $login != strip_punctuation( $_login ) ? $lang_global['unick_type_' . $type] : '' );
             break;
 		default:
 			return '';
@@ -432,16 +433,33 @@ function nv_capcha_txt( $seccode )
  * @param integer $length
  * @return
  */
-function nv_genpass( $length = 8 )
+function nv_genpass( $length = 8, $type = 0 )
 {
-	$pass = chr( mt_rand( 65, 90 ) );
+	$array_chars = array();
+	$array_chars[0] = 'abcdefghijklmnopqrstuvwxyz';
+	$array_chars[1] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$array_chars[2] = '0123456789';
+	$array_chars[3] = '-=~!@#$%^&*()_+,./<>?;:[]{}\|';
 
-	for( $k = 0; $k < $length - 1; ++$k )
+	$_arr_m = array();
+	$_arr_m[] = 0; // Chữ
+	$_arr_m[] = 2; // 1. Số
+	$_arr_m[] = ( $type == 2 or $type == 4 ) ? 3 : mt_rand( 0, 2 ); // 2. Đặc biệt
+	$_arr_m[] = ( $type == 3 or $type == 4 ) ? 1 : mt_rand( 0, 2 ); // 3. HOA
+
+	$length = $length - 4;
+	for( $k = 0; $k < $length; ++$k )
 	{
-		$probab = mt_rand( 1, 10 );
-		$pass .= ( $probab <= 8 ) ? chr( mt_rand( 97, 122 ) ) : chr( mt_rand( 48, 57 ) );
+		$_arr_m[] = ( $type == 2 or $type == 4 ) ? mt_rand( 0, 3 ) : mt_rand( 0, 2 );
 	}
 
+	$pass = '';
+	foreach( $_arr_m as $m )
+	{
+		$chars = $array_chars[$m];
+		$max = strlen( $chars ) - 1;
+		$pass .= $chars[mt_rand( 0, $max )];
+	}
 	return $pass;
 }
 
@@ -1587,18 +1605,7 @@ function nv_change_buffer( $buffer )
     if ( ! empty( $body_replace ) ) $buffer = preg_replace( '/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1 );
 
 	$optimizer = new optimizer( $buffer,  NV_BASE_SITEURL );
-	$buffer = $optimizer->process();
-
-    if ( ! empty( $global_config['cdn_url'] ) )
-    {
-        $buffer = preg_replace( "/\<(script|link|img)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css|jpg|png|gif))['\"](.*?)\>/", "<\\1\\2\\3=\"//" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-    }
-    else
-    {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-    }
-
-    return $buffer;
+	return $optimizer->process();
 }
 
 /**

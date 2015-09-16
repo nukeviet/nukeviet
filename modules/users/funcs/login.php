@@ -37,7 +37,7 @@ $gfx_chk = ( in_array( $global_config['gfx_chk'], array(
 
 /**
  * login_result()
- * 
+ *
  * @param mixed $array
  * @return
  */
@@ -52,7 +52,7 @@ function signin_result( $array )
 
 /**
  * opidr()
- * 
+ *
  * @param mixed $openid_info
  * @return void
  */
@@ -191,7 +191,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->isset_request( 'server', 'ge
 		opidr( array( 'status' => 'error', 'mess' => $lang_module['logged_in_failed'] ) );
 		die();
 	}
-
+	$email = nv_strtolower( $email );
 	$opid = $crypt->hash( $attribs['id'] );
 	$current_mode = isset( $attribs['current_mode'] ) ? $attribs['current_mode'] : 1;
 
@@ -618,6 +618,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		if( nv_check_valid_email( $nv_username ) == '' )
 		{
 			// Email login
+			$nv_username = nv_strtolower( $nv_username );
 			$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE email =" . $db->quote( $nv_username );
 			$login_email = true;
 		}

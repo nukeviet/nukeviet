@@ -56,7 +56,7 @@ if( $admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1 )
     $xtpl->assign( 'SAFEMODE_DEACT', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=editinfo/safeshow' );
     $xtpl->parse( 'main' );
     $contents = $xtpl->text( 'main' );
-    
+
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme( $contents );
     include NV_ROOTDIR . '/includes/footer.php';
@@ -106,7 +106,7 @@ $access_passus = ( isset( $access_admin['access_passus'][$admin_info['level']] )
 if( $nv_Request->isset_request( 'confirm', 'post' ) )
 {
 	$_user['username'] = $nv_Request->get_title( 'username', 'post', '', 1 );
-	$_user['email'] = $nv_Request->get_title( 'email', 'post', '', 1 );
+	$_user['email'] = nv_strtolower( $nv_Request->get_title( 'email', 'post', '', 1 ) );
 	if( $access_passus )
 	{
 		$_user['password1'] = $nv_Request->get_title( 'password1', 'post', '', 0 );
@@ -223,7 +223,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	{
 		require NV_ROOTDIR . '/modules/users/fields.check.php';
 	}
-    
+
     if( empty( $_user['first_name'] ) )
 	{
 		$_user['first_name'] = $_user['username'];
@@ -351,6 +351,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	die( json_encode( array(
 		'status' => 'ok',
 		'input' => '',
+		'admin_add' => 'no',
 		'mess' => '' ) ) );
 }
 

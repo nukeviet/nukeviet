@@ -195,7 +195,7 @@ function loginForm()
 		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
 		cache: !1,
         data: '&nv_ajax=1',
-		dataType: "html",
+		dataType: "html"
 	}).done(function(a) {
 		modalShow('', a)
 	});
@@ -271,7 +271,7 @@ $(function() {
 	$(".headerSearch input").on("keypress", function(a) {
 		13 != a.which || a.shiftKey || (a.preventDefault(), $(".headerSearch button").trigger("click"))
 	});
-	// Show messger timeout login users 
+	// Show messger timeout login users
 	nv_is_user && (myTimerPage = setTimeout(function() {
 		timeoutsessrun()
 	}, nv_check_pass_mstime));
@@ -290,7 +290,7 @@ $(function() {
 		container: "body",
 		html: !0,
 		title: function() {
-			return ("" == $(this).data("img") ? "" : '<img class="img-thumbnail pull-left" src="' + $(this).data("img") + '" width="90" />') + $(this).data("content")
+			return ("" == $(this).data("img") || !$(this).data("img") ? "" : '<img class="img-thumbnail pull-left" src="' + $(this).data("img") + '" width="90" />') + $(this).data("content")
 		}
 	});
 	// Change site lang

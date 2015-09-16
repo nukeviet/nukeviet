@@ -70,12 +70,16 @@ if( defined( 'NV_CONFIG_DIR' ) )
     define( 'NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir'] );
     define( 'NV_FILES_DIR', NV_ASSETS_DIR . '/' . $global_config['site_dir'] );
     define( 'NV_CACHEDIR', SYSTEM_CACHEDIR . '/' . $global_config['site_dir'] );
+    define( 'NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_groups' );
+    define( 'NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users' );
 }
 else
 {
     define( 'SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR );
     define( 'NV_FILES_DIR', NV_ASSETS_DIR );
     define( 'SYSTEM_CACHEDIR', NV_CACHEDIR );
+    define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
+    define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
 }
 
 // Xac dinh IP cua client
@@ -287,8 +291,6 @@ unset( $db_config['dbpass'] );
 
 // Ten cac table cua CSDL dung chung cho he thong
 define( 'NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors' );
-define( 'NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_groups' );
-define( 'NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users' );
 define( 'NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions' );
 define( 'NV_COOKIES_GLOBALTABLE', $db_config['prefix'] . '_cookies' );
 define( 'NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language' );

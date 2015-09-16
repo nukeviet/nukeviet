@@ -18,6 +18,11 @@
 			<li class="hidden-print txtrequired"><em class="fa fa-power-off">&nbsp;</em><a title="{LANG.print_close}" href="javascript:;" onclick="window.close()">{LANG.print_close}</a></li>
 		</ul>
 		<div class="clear"></div>
+		<!-- BEGIN: no_public -->
+		<div class="alert alert-warning">
+			{LANG.no_public}
+		</div>
+		<!-- END: no_public -->
 		<div id="hometext">
 			<!-- BEGIN: image -->
 			<div class="pull-left imghome">
@@ -67,7 +72,7 @@
 		</div>
 		<!-- END: copyright -->
 	</div>
-	<div id="footer">
+	<div id="footer" style="min-height: 30px;">
 		<div id="url">
 			<strong>{LANG.print_link}: </strong>{CONTENT.link}
 		</div>

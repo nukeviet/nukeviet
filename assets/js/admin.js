@@ -25,8 +25,9 @@ $(function() {
 			})
 		});
 		$("a.outgroupblock").click(function() {
-			confirm(block_outgroup_confirm) && $.post(post_url + "front_outgroup", "func_id=" + func_id + "&bid=" + $(this).attr("name"), function(a) {
-				alert(a)
+			confirm(block_outgroup_confirm) && $.post(post_url + "block_outgroup", "func_id=" + func_id + "&bid=" + $(this).attr("name"), function(a) {
+				alert(a);
+				window.location.href = selfurl
 			})
 		});
 		$("a.block_content").click(function() {

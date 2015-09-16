@@ -18,6 +18,11 @@
 			<li class="hidden-print txtrequired"><em class="fa fa-power-off">&nbsp;</em><a title="{LANG.print_close}" href="javascript:;" onclick="window.close()">{LANG.print_close}</a></li>
 		</ul>
 		<div class="clear"></div>
+		<!-- BEGIN: no_public -->
+		<div class="alert alert-warning">
+			{LANG.no_public}
+		</div>
+		<!-- END: no_public -->		
 		<div id="hometext">
 			<!-- BEGIN: image -->
 			<div class="pull-left imghome">

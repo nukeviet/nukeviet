@@ -383,9 +383,10 @@ if( isset( $contents['allow_modify_subdirectories'] ) )
 if( isset( $contents['lev'] ) )
 {
 	$xtpl->assign( 'LEV0', $contents['lev'][0] );
+	$xtpl->assign( 'LEV1', $contents['lev'][1] );
+	
 	if( isset( $contents['lev'][3] ) )
 	{
-		$xtpl->assign( 'LEV1', $contents['lev'][1] );
 		$xtpl->assign( 'LEV4', $contents['lev'][4] );
 		$xtpl->assign( 'LEV5', $contents['lev'][5] );
 		$xtpl->assign( 'CHECKED2', $contents['lev'][3] == 2 ? ' checked="checked"' : '' );

@@ -168,6 +168,8 @@ function nv_create_table_sys( $lang )
 	 	('" . $lang . "', 'global', 'site_domain', ''),
 	 	('" . $lang . "', 'global', 'site_name', 'NukeViet CMS 4.x'),
 	 	('" . $lang . "', 'global', 'site_logo', ''),
+	 	('" . $lang . "', 'global', 'site_banner', ''),
+	 	('" . $lang . "', 'global', 'site_favicon', ''),
 	 	('" . $lang . "', 'global', 'site_description', 'Sharing success, connect passions'),
 	 	('" . $lang . "', 'global', 'site_keywords', ''),
         ('" . $lang . "', 'global', 'site_theme', '" . $global_config['site_theme'] . "'),
