@@ -85,7 +85,7 @@ foreach( $listid as $id )
 			'product_price_total' => $listprice[$i] * $listnum[$i],
 			'product_code' => $product_code,
 			'product_unit' => $unit,
-			'link_pro' => $link . $global_array_shops_cat[$_catid]['alias'] . '/' . $alias . '-' . $id,
+			'link_pro' => $link . $global_array_shops_cat[$_catid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 			'product_number' => $listnum[$i],
 			'product_group' => isset( $listgroup[$i] ) ? $listgroup[$i] : ''
 		);
