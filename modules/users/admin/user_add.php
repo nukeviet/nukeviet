@@ -316,7 +316,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	die( json_encode( array(
 		'status' => 'ok',
 		'input' => '',
-		'mess' => '' ) ) );
+		'username' => $_user['username'],
+		'admin_add' => ( isset( $admin_mods['authors'] ) and defined( 'NV_IS_GODADMIN' ) or ( defined( 'NV_IS_SPADMIN' ) and ( $global_config['spadmin_add_admin'] == 1 or $global_config['idsite'] > 0 ) ) ) ? 'yes' : 'no',
+		'mess' => sprintf( $lang_module['admin_add'], $_user['username']) ) ) );
 }
 
 $_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2'] = $_user['question'] = $_user['answer'] = '';
