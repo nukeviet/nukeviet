@@ -108,11 +108,9 @@ if( ! empty( $savecat ) )
 			$listfield .= ', ' . $flang . '_' . $fname;
 			$listvalue .= ', :' . $flang . '_' . $fname;
 		}
-		$stmt = $db->prepare( 'SELECT max(weight) FROM ' . $table_name . ' WHERE parentid= :parentid' );
-		$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
-		$stmt->execute();
-		$weight = $stmt->fetchColumn();
-
+		$w='SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid']; 
+		$rw = $db->query( $w );			
+		$weight = $rw->fetch( );
 		$weight = intval( $weight ) + 1;
 
 		$sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price, viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
@@ -178,10 +176,9 @@ if( ! empty( $savecat ) )
 
 				if( $data['parentid'] != $data['parentid_old'] )
 				{
-					$stmt = $db->prepare( 'SELECT max(weight) FROM ' . $table_name . ' WHERE parentid= :parentid ' );
-					$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
-					$stmt->execute();
-					$weight->fetchColumn();
+					$w='SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid']; 
+					$rw = $db->query( $w );			
+					$weight = $rw->fetch( );
 					$weight = intval( $weight ) + 1;
 					$sql = 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE catid=' . intval( $data['catid'] );
 					$db->query( $sql );
