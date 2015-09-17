@@ -26,7 +26,7 @@
 				<td>{ROW.stt}</td>
 				<td><a href="{ROW.url}" title="{ROW.title}">{ROW.code}</a></td>
 				<td class="text-center">{ROW.publtime}</td>
-				<td>{ROW.introtext}</td>
+				<td><a href="{ROW.url}" title="{ROW.introtext}">{ROW.introtext}</a></td>
 				<!-- BEGIN: down_in_home -->
 				<td>
 					<!-- BEGIN: files -->

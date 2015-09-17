@@ -22,7 +22,7 @@
 				<td class="text-center">{ROW.stt}</td>
 				<td><a href="{ROW.url}" title="{ROW.title}">{ROW.code}</a></td>
 				<td class="text-center">{ROW.publtime}</td>
-				<td><a href="{ROW.url}" title="{ROW.title}">{ROW.introtext}</a></td>
+				<td><a href="{ROW.url}" title="{ROW.introtext}">{ROW.introtext}</a></td>
 			</tr>
 		<!-- END: loop -->
 		<tbody>
