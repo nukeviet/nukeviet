@@ -33,7 +33,7 @@ $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_
 	(5, 'Khác', '', '', 1412265295)" );
 
 $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_subject VALUES
-	(1, 'Bo-GD-DT', 'Bộ GD&amp;ĐT', '', '', 1412265295, 1),
-	(2, 'So-GD-DT', 'Sở GD&amp;ĐT', '', '', 1412265295, 2),
-	(3, 'Phong-GD-DT', 'Phòng GD', '', '', 1412265295, 3),
-	(4, 'Khac', 'Khác', '', '', 1412265295, 4)" );
+	(1, 'Bo-GD-DT', 'Bộ GD&amp;ĐT', '', '', 0, 5, 1412265295, 1),
+	(2, 'So-GD-DT', 'Sở GD&amp;ĐT', '', '', 0, 5, 1412265295, 2),
+	(3, 'Phong-GD-DT', 'Phòng GD', '', '', 0, 5, 1412265295, 3),
+	(4, 'Khac', 'Khác', '', '', 0, 5, 1412265295, 4)" );
