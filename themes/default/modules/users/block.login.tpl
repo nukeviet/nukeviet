@@ -43,6 +43,7 @@
 <!-- END: datepicker -->
 <script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
 <!-- END: main -->
+
 <!-- BEGIN: signed -->
 <div class="content signed clearfix">
     <div class="nv-info" style="display:none"></div>
@@ -108,4 +109,5 @@
     	</div>
     </div>
 </div>
+<script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
 <!-- END: signed -->

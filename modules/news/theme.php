@@ -458,7 +458,7 @@ function viewsubcat_main( $viewcat, $array_cat )
 				}
 				else
 				{
-					$xtpl->assign( 'WCT', '' );
+					$xtpl->assign( 'WCT', 'col-md-24' );
 				}
 
 				$xtpl->set_autoreset();

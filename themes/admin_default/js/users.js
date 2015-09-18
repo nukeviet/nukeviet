@@ -14,7 +14,21 @@ function user_validForm(a) {
 		data: $(a).serialize(),
 		dataType: "json",
 		success: function(b) {
-			"error" == b.status ? (alert(b.mess), $("[name=" + b.input + "]", a).focus()) : window.location.href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable
+			if( b.status == "error" )
+			{
+				alert(b.mess);
+				$("[name=" + b.input + "]", a).focus();
+			}
+			else
+			{
+				location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
+				if( b.admin_add == "yes" ) {
+					if (confirm( b.mess )) {
+						location_href = script_name + "?" + nv_name_variable + "=authors&" + nv_fc_variable + '=add&userid=' + b.username;
+					}
+				}
+				window.location.href = location_href;
+			}
 		}
 	});
 	return false
