@@ -29,6 +29,12 @@ if( $id > 0 and $catid > 0 )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id;
 	$result = $db->query( $sql );
+	
+	if( $result->rowCount() !== 1 )
+	{
+		nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
+	}
+
 	$content = $result->fetch();
 
 	$body_contents = $db->query( 'SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_print FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $content['id'] / 2000 ) . ' where id=' . $content['id'] )->fetch();
