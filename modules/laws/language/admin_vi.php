@@ -136,8 +136,15 @@ $lang_module['scontent_error_exist'] = "Lỗi: Người ký này đã có";
 $lang_module['config'] = "Cấu hình module";
 $lang_module['config_nummain'] = "Số văn bản tại trang chủ";
 $lang_module['config_numsub'] = "Số văn bản tại các trang con";
-$lang_module['config_typeview'] = "Cách hiển thị";
+$lang_module['config_typeview'] = "Phương án hiển thị";
 $lang_module['config_down_in_home'] = "Download trên trang chính";
+$lang_module['config_down_in_home_note'] = "Cho phép nguời tải tập tin đính kèm ở danh sách văn bản, không cần vào trang xem chi tiết.";
+$lang_module['config_detail_other'] = "Hiển thị các văn bản cùng loại";
+$lang_module['config_detail_other_cat'] = "Cùng thể loại";
+$lang_module['config_detail_other_area'] = "Cùng lĩnh vực";
+$lang_module['config_detail_other_signer'] = "Cùng người ký";
+$lang_module['config_detail_other_subject'] = "Cùng cơ quan ban hành";
+$lang_module['config_detail_other_numlinks'] = "Số liên kết cùng loại";
 
 $lang_module['type_view_0'] = "Mới nhất lên trên";
 $lang_module['type_view_1'] = "Cũ nhất lên trên";

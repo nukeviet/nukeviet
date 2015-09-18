@@ -120,4 +120,7 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('nummain', '50'),
 ('numsub', '50'),
 ('typeview', '0'),
-('down_in_home', '1')";
+('down_in_home', '1'),
+('detail_other', ''),
+('other_numlinks', '5')
+";

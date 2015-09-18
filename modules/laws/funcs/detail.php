@@ -161,7 +161,52 @@ if( ! in_array( $row['id'], $lawsviewed ) )
 	$nv_Request->set_Session( 'lawsviewed', $lawsviewed );
 }
 
-$contents = nv_theme_laws_detail( $row );
+$nv_laws_setting['detail_other'] = unserialize( $nv_laws_setting['detail_other'] );
+$other_cat = array();
+if( in_array( 'cat', $nv_laws_setting['detail_other'] ) )
+{
+	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE cid=' . $row['cid'] . ' AND id!=' . $row['id'] . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
+	while( $data = $result->fetch() )
+	{
+		$data['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $data['alias'];
+		$other_cat[$data['id']] = $data;
+	}
+}
+
+$other_area = array();
+if( in_array( 'area', $nv_laws_setting['detail_other'] ) )
+{
+	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE aid=' . $row['aid'] . ' AND id!=' . $row['id'] . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
+	while( $data = $result->fetch() )
+	{
+		$data['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $data['alias'];
+		$other_area[$data['id']] = $data;
+	}
+}
+
+$other_subject = array();
+if( in_array( 'subject', $nv_laws_setting['detail_other'] ) )
+{
+	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $row['sid'] . ' AND id!=' . $row['id'] . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
+	while( $data = $result->fetch() )
+	{
+		$data['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $data['alias'];
+		$other_subject[$data['id']] = $data;
+	}
+}
+
+$other_signer = array();
+if( in_array( 'singer', $nv_laws_setting['detail_other'] ) )
+{
+	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sgid=' . $row['sgid'] . ' AND id!=' . $row['id'] . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
+	while( $data = $result->fetch() )
+	{
+		$data['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $data['alias'];
+		$other_signer[$data['id']] = $data;
+	}
+}
+
+$contents = nv_theme_laws_detail( $row, $other_cat, $other_area, $other_subject, $other_signer );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

@@ -20,12 +20,17 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
     $array_config['numsub'] = $nv_Request->get_int( 'numsub', 'post', 0 );
     $array_config['typeview'] = $nv_Request->get_int( 'typeview', 'post', 0 );
 	$array_config['down_in_home'] = $nv_Request->get_int( 'down_in_home', 'post', 0 );
+	$array_config['other_numlinks'] = $nv_Request->get_int( 'other_numlinks', 'post', 5 );
+	$array_config['detail_other'] = $nv_Request->get_array( 'detail_other', 'post', array() );
+	$array_config['detail_other'] = serialize( $array_config['detail_other'] );
 
-    foreach ( $array_config as $config_name => $config_value )
-    {
-		$query = "REPLACE INTO " . NV_PREFIXLANG . "_" . $module_data . "_config VALUES (" . $db->quote( $config_name ) . "," . $db->quote( $config_value ) . ")";
-		$db->query( $query );
-    }
+	$sth = $db->prepare( "UPDATE " . NV_PREFIXLANG . '_' . $module_data . "_config SET config_value = :config_value WHERE config_name = :config_name" );
+	foreach( $array_config as $config_name => $config_value )
+	{
+		$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR, 30 );
+		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+		$sth->execute();
+	}
 
     nv_del_moduleCache( $module_name );
 
@@ -37,6 +42,8 @@ $array_config['nummain'] = 50;
 $array_config['numsub'] = 50;
 $array_config['typeview'] = 0;
 $array_config['down_in_home'] = 1;
+$array_config['other_numlinks'] = 5;
+$array_config['detail_other'] = 'a:0:{}';
 
 $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
 $result = $db->query( $sql );
@@ -66,6 +73,20 @@ foreach ( $typeview as $type )
 {
     $xtpl->assign( 'typeview', $type );
     $xtpl->parse( 'main.typeview' );
+}
+
+$array_other = array(
+	'cat' => $lang_module['config_detail_other_cat'],
+	'area' => $lang_module['config_detail_other_area'],
+	'subject' => $lang_module['config_detail_other_subject'],
+	'singer' => $lang_module['config_detail_other_signer']
+);
+$array_config['detail_other'] = !empty( $array_config['detail_other'] ) ? unserialize( $array_config['detail_other'] ) : array();
+foreach( $array_other as $key => $value )
+{
+	$ck = in_array( $key, $array_config['detail_other'] ) ? 'checked="checked"' : '';
+    $xtpl->assign( 'OTHER', array( 'key' => $key, 'value' => $value, 'checked' => $ck ) );
+    $xtpl->parse( 'main.detail_other' );
 }
 
 $xtpl->parse( 'main' );

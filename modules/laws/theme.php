@@ -108,7 +108,7 @@ function nv_theme_laws_maincat ( $mod, $array_data )
     return $xtpl->text( 'main' );
 }
 
-function nv_theme_laws_detail ( $array_data )
+function nv_theme_laws_detail ( $array_data, $other_cat = array(), $other_area = array(), $other_subject = array(), $other_signer = array() )
 {
     global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $client_info;
     $xtpl = new XTemplate( $module_info['funcs'][$op]['func_name'] . ".tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
@@ -177,6 +177,30 @@ function nv_theme_laws_detail ( $array_data )
 	else
 	{
 		$xtpl->parse( 'main.nodownload' );
+	}
+
+	if( !empty( $other_cat ) )
+	{
+		$xtpl->assign( 'OTHER_CAT', nv_theme_laws_list_other( $other_cat ) );
+		$xtpl->parse( 'main.other_cat' );
+	}
+
+	if( !empty( $other_area ) )
+	{
+		$xtpl->assign( 'OTHER_AREA', nv_theme_laws_list_other( $other_area ) );
+		$xtpl->parse( 'main.other_area' );
+	}
+
+	if( !empty( $other_subject ) )
+	{
+		$xtpl->assign( 'OTHER_SUBECT', nv_theme_laws_list_other( $other_subject ) );
+		$xtpl->parse( 'main.other_subject' );
+	}
+
+	if( !empty( $other_signer ) )
+	{
+		$xtpl->assign( 'OTHER_SIGNER', nv_theme_laws_list_other( $other_signer ) );
+		$xtpl->parse( 'main.other_signer' );
 	}
 
     $xtpl->parse( 'main' );
@@ -371,6 +395,27 @@ function nv_theme_laws_signer( $array_data, $generate_page, $cat )
 	if( $nv_laws_setting['down_in_home'] )
 	{
 		$xtpl->parse( 'main.down_in_home' );
+	}
+
+    $xtpl->parse( 'main' );
+    return $xtpl->text( 'main' );
+}
+
+function nv_theme_laws_list_other ( $array_data )
+{
+    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
+
+    $xtpl = new XTemplate( "list_other.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+    $xtpl->assign( 'LANG', $lang_module );
+
+	$i = 1;
+    foreach( $array_data as $row )
+	{
+		$row['publtime'] = nv_date( "d/m/Y", $row['publtime'] );
+		$row['exptime'] = nv_date( "d/m/Y", $row['exptime'] );
+		$xtpl->assign( 'ROW', $row );
+		$xtpl->parse( 'main.loop' );
+		$i++;
 	}
 
     $xtpl->parse( 'main' );

@@ -297,3 +297,12 @@ h3.lawh3{
 	margin-top: 0px;
     color:#02659d;
 }
+
+h3.subtitle{
+	font-size: 20px;
+	line-height: 25px;
+	margin-bottom: 5px;
+	padding-top: 10px;
+	margin-top: 0px;
+    color:#02659d;
+}
