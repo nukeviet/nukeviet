@@ -82,10 +82,10 @@
 <!-- END: bodytext -->
 
 <!-- BEGIN: files -->
-<h3 class="lawh3">{LANG.files}</h3>
+<h3 class="lawh3"><em class="fa fa-download">&nbsp;</em>{LANG.files}</h3>
 <ul class="list-item">
 	<!-- BEGIN: loop -->
-	<li><a href="{FILE.url}" title="{FILE.title}">{FILE.titledown}</a></li>
+	<li><a href="{FILE.url}" title="{FILE.titledown}{FILE.title}">{FILE.titledown} <strong>{FILE.title}</strong></a></li>
 	<!-- END: loop -->
 </ul>
 <!-- END: files -->
