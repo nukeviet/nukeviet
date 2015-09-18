@@ -128,6 +128,7 @@ if( ! empty( $row['sgid'] ) )
 	$result = $db->query( $sql );
 	$row['relatement'] = array();
 	list( $row['signer'] ) = $result->fetch( 3 );
+	$row['signer_url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=signer/" . $row['sgid'] . "/" . change_alias( $row['signer'] );
 }
 
 // File download

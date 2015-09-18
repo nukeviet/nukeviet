@@ -119,8 +119,11 @@ function nv_theme_laws_detail ( $array_data )
 	$array_data['exptime'] = $array_data['exptime'] ? nv_date( "d/m/Y", $array_data['exptime'] ) : "N/A";
 
 	$array_data['cat'] = $nv_laws_listcat[$array_data['cid']]['title'];
+	$array_data['cat_url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $nv_laws_listcat[$array_data['cid']]['alias'];
 	$array_data['area'] = $nv_laws_listarea[$array_data['aid']]['title'];
+	$array_data['area_url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=area/" . $nv_laws_listarea[$array_data['cid']]['alias'];
 	$array_data['subject'] = $nv_laws_listsubject[$array_data['sid']]['title'];
+	$array_data['subject_url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=subject/" . $nv_laws_listsubject[$array_data['sid']]['alias'];
 
     $xtpl->assign( 'DATA', $array_data );
 

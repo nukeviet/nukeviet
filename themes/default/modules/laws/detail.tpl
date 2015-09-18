@@ -22,19 +22,19 @@
 			</tr>
 			<tr class="hoatim">
 				<td class="text-right">{LANG.cat}</td>
-				<td>{DATA.cat}</td>
+				<td><a href="{DATA.cat_url}" title="{DATA.cat}">{DATA.cat}</a></td>
 			</tr>
 			<tr class="hoatim">
 				<td class="text-right">{LANG.area}</td>
-				<td>{DATA.area}</td>
+				<td><a href="{DATA.area_url}" title="{DATA.area}">{DATA.area}</a></td>
 			</tr>
 			<tr class="hoatim">
 				<td class="text-right">{LANG.subject}</td>
-				<td>{DATA.subject}</td>
+				<td><a href="{DATA.subject_url}" title="{DATA.subject}">{DATA.subject}</a></td>
 			</tr>
 			<tr class="hoatim">
 				<td class="text-right">{LANG.signer}</td>
-				<td>{DATA.signer}</td>
+				<td><a href="{DATA.signer_url}" title="{DATA.signer}">{DATA.signer}</a></td>
 			</tr>
 		<!-- BEGIN: replacement -->
 			<tr>
