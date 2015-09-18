@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8">
 		<title>{NV_SITE_TITLE}</title>
 		<meta name="description" content="{SITE_DESCRIPTION}">
 		<meta name="viewport" content="width=device-width">
 		<meta name="author" content="{NV_SITE_COPYRIGHT}">
 		<meta name="generator" content="{NV_SITE_NAME}">
 		<meta name="robots" content="noindex, nofollow">
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		
 		<link rel="shortcut icon" href="{NV_BASE_SITEURL}themes/default/favicon.ico">
 		<link rel="apple-touch-icon" href="{NV_BASE_SITEURL}themes/default/apple-touch-icon.png">

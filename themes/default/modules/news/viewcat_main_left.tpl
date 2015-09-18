@@ -13,7 +13,7 @@
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
- 
+
 		<div class="panel-body">
 			<div class="row">
 				<!-- BEGIN: related -->
@@ -42,7 +42,9 @@
 						<ul class="list-unstyled list-inline">
 							<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
 							<li><em class="fa fa-eye">&nbsp;</em> {CONTENT.hitstotal}</li>
+							<!-- BEGIN: comment -->
 							<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
+							<!-- END: comment -->
 						</ul>
 					</div>
 					<p>{CONTENT.hometext}</p>

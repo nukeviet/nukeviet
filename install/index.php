@@ -1158,6 +1158,8 @@ function nv_save_file_config()
 		$content .= "\$db_config['persistent'] = " . $persistent . ";\n";
 		$content .= "\$db_config['prefix'] = '" . $db_config['prefix'] . "';\n";
 		$content .= "\n";
+		$content .= "\$global_config['site_domain'] = '';\n";
+		$content .= "\$global_config['name_show'] = 0;\n";
 		$content .= "\$global_config['idsite'] = 0;\n";
 		$content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
 		$content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";
