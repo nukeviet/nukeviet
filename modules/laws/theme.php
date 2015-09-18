@@ -193,7 +193,7 @@ function nv_theme_laws_detail ( $array_data, $other_cat = array(), $other_area =
 
 	if( !empty( $other_subject ) )
 	{
-		$xtpl->assign( 'OTHER_SUBECT', nv_theme_laws_list_other( $other_subject ) );
+		$xtpl->assign( 'OTHER_SUBJECT', nv_theme_laws_list_other( $other_subject ) );
 		$xtpl->parse( 'main.other_subject' );
 	}
 
