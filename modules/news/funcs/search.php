@@ -79,7 +79,7 @@ $to_date = $nv_Request->get_title( 'to_date', 'get', '', 0 );
 $date_array['to_date'] = preg_replace( '/[^0-9]/', '.', urldecode( $to_date ) );
 if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_date'] ) )
 {
-	$base_url_rewrite .= '&from_date=' . $date_array['to_date'];
+	$base_url_rewrite .= '&to_date=' . $date_array['to_date'];
 }
 
 $page = $nv_Request->get_int( 'page', 'get', 1 );
