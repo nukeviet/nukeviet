@@ -97,7 +97,7 @@ function nv_menu_del_sub( $id, $parentid )
 	$sql = 'SELECT title, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
 	$row = $db->query( $sql )->fetch();
 
-	if( empty( $row ) ) die( 'NO_' . $id );
+	if( empty( $row ) ) return false;
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
 	if( $db->exec( $sql ) )
@@ -127,6 +127,7 @@ function nv_menu_del_sub( $id, $parentid )
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
 		}
 	}
+	return true;
 }
 
 /**

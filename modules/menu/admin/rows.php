@@ -15,7 +15,7 @@ if( $nv_Request->isset_request( 'reload', 'post,get' ) )
 	$id = $nv_Request->get_int( 'id', 'post,get', 0 );
 	$mid = $nv_Request->get_int( 'mid', 'post,get', 0 );
 
-	$rows = $db->query( 'SELECT id, parentid, module_name, lev FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id )->fetch();
+	$rows = $db->query( 'SELECT id, parentid, module_name, lev, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id )->fetch();
 
 	if( empty( $rows ) ) die( 'NO_' . $lang_module['action_menu_reload_none_success'] );
 
@@ -29,49 +29,58 @@ if( $nv_Request->isset_request( 'reload', 'post,get' ) )
 
 		list( $sort, $weight ) = $db->query( 'SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'] )->fetch( 3 );
 
-		$result = $db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $mid . ' AND parentid=' . $id );
-		if( $result )
+		// Xoa menu cu
+		if( !empty( $rows['subitem'] ) )
 		{
-			$array_sub_id = array();
-			foreach( $array_item as $key => $item )
+			$rows['subitem'] = explode( ',', $rows['subitem'] );
+			foreach( $rows['subitem'] as $subid )
 			{
-				$pid = ( isset( $item['parentid'] ) ) ? $item['parentid'] : 0;
-				if( empty( $pid ) )
+				$sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $subid;
+
+				list( $parentid ) = $db->query( $sql )->fetch( 3 );
+				nv_menu_del_sub( $subid, $parentid );
+			}
+		}
+
+		// Nap lai menu moi
+		$array_sub_id = array();
+		foreach( $array_item as $key => $item )
+		{
+			$pid = ( isset( $item['parentid'] ) ) ? $item['parentid'] : 0;
+			if( empty( $pid ) )
+			{
+				++$weight;
+				++$sort;
+				$groups_view = ( isset( $item['groups_view'] ) ) ? $item['groups_view'] : '6';
+				$parentid = nv_menu_insert_id( $mid, $id, $item['title'], $weight, $sort, 0, $mod_name, $item['alias'], $groups_view );
+				nv_menu_insert_submenu( $mid, $parentid, $sort, $weight, $mod_name, $array_item, $key );
+				$array_sub_id[] = $parentid;
+			}
+		}
+
+		// Thêm menu từ các funtion
+		if( ! empty( $site_mods[$mod_name]['funcs'] ) )
+		{
+			foreach( $site_mods[$mod_name]['funcs'] as $key => $sub_item )
+			{
+				if( $sub_item['in_submenu'] == 1 )
 				{
 					++$weight;
 					++$sort;
-					$groups_view = ( isset( $item['groups_view'] ) ) ? $item['groups_view'] : '6';
-					$parentid = nv_menu_insert_id( $mid, $id, $item['title'], $weight, $sort, 0, $mod_name, $item['alias'], $groups_view );
-					nv_menu_insert_submenu( $mid, $parentid, $sort, $weight, $mod_name, $array_item, $key );
-					$array_sub_id[] = $parentid;
+					$array_sub_id[] = nv_menu_insert_id( $mid, $id, $sub_item['func_custom_name'], $weight, $sort, 0, $mod_name, $key, $site_mods[$mod_name]['groups_view'] );
 				}
 			}
-
-			// Thêm menu từ các funtion
-			if( ! empty( $site_mods[$mod_name]['funcs'] ) )
-			{
-				foreach( $site_mods[$mod_name]['funcs'] as $key => $sub_item )
-				{
-					$count = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . $mid . ' AND module_name=' . $db->quote( $mod_name ) . ' AND op=' . $db->quote( $item['alias'] ) )->fetchColumn();
-					if( $sub_item['in_submenu'] == 1 )
-					{
-						++$weight;
-						++$sort;
-						$array_sub_id[] = nv_menu_insert_id( $mid, $id, $sub_item['func_custom_name'], $weight, $sort, 0, $mod_name, $key, $site_mods[$mod_name]['groups_view'] );
-					}
-				}
-			}
-
-			if( ! empty( $array_sub_id ) )
-			{
-				$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $array_sub_id ) . "' WHERE id=" . $id );
-			}
-
-			menu_fix_order( $mid, $id );
-			nv_del_moduleCache( $module_name );
-
-			die( 'OK_' . $lang_module['action_menu_reload_success'] );
 		}
+
+		if( ! empty( $array_sub_id ) )
+		{
+			$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $array_sub_id ) . "' WHERE id=" . $id );
+		}
+
+		menu_fix_order( $mid, $id );
+		nv_del_moduleCache( $module_name );
+
+		die( 'OK_' . $lang_module['action_menu_reload_success'] );
 	}
 	die( 'NO_' . $lang_module['action_menu_reload_none_success'] );
 }
