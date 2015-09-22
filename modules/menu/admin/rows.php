@@ -14,36 +14,36 @@ if( $nv_Request->isset_request( 'reload', 'post,get' ) )
 {
 	$id = $nv_Request->get_int( 'id', 'post,get', 0 );
 	$mid = $nv_Request->get_int( 'mid', 'post,get', 0 );
+	$array_sub_id = array();
 
 	$rows = $db->query( 'SELECT id, parentid, module_name, lev, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id )->fetch();
 
+	$mod_name = $rows['module_name'];
+	$mod_data = $site_mods[$rows['module_name']]['module_data'];
+	$mod_file = $site_mods[$rows['module_name']]['module_file'];
+
 	if( empty( $rows ) ) die( 'NO_' . $lang_module['action_menu_reload_none_success'] );
+
+	// Xoa menu cu
+	if( !empty( $rows['subitem'] ) )
+	{
+		$rows['subitem'] = explode( ',', $rows['subitem'] );
+		foreach( $rows['subitem'] as $subid )
+		{
+			$sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $subid;
+
+			list( $parentid ) = $db->query( $sql )->fetch( 3 );
+			nv_menu_del_sub( $subid, $parentid );
+		}
+	}
 
 	if( file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php' ) )
 	{
-		$mod_name = $rows['module_name'];
-		$mod_data = $site_mods[$rows['module_name']]['module_data'];
-		$mod_file = $site_mods[$rows['module_name']]['module_file'];
-
 		include NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php';
 
 		list( $sort, $weight ) = $db->query( 'SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'] )->fetch( 3 );
 
-		// Xoa menu cu
-		if( !empty( $rows['subitem'] ) )
-		{
-			$rows['subitem'] = explode( ',', $rows['subitem'] );
-			foreach( $rows['subitem'] as $subid )
-			{
-				$sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $subid;
-
-				list( $parentid ) = $db->query( $sql )->fetch( 3 );
-				nv_menu_del_sub( $subid, $parentid );
-			}
-		}
-
 		// Nap lai menu moi
-		$array_sub_id = array();
 		foreach( $array_item as $key => $item )
 		{
 			$pid = ( isset( $item['parentid'] ) ) ? $item['parentid'] : 0;
@@ -57,32 +57,29 @@ if( $nv_Request->isset_request( 'reload', 'post,get' ) )
 				$array_sub_id[] = $parentid;
 			}
 		}
+	}
 
-		// Thêm menu từ các funtion
-		if( ! empty( $site_mods[$mod_name]['funcs'] ) )
+	// Thêm menu từ các funtion
+	if( ! empty( $site_mods[$mod_name]['funcs'] ) )
+	{
+		foreach( $site_mods[$mod_name]['funcs'] as $key => $sub_item )
 		{
-			foreach( $site_mods[$mod_name]['funcs'] as $key => $sub_item )
+			if( $sub_item['in_submenu'] == 1 )
 			{
-				if( $sub_item['in_submenu'] == 1 )
-				{
-					++$weight;
-					++$sort;
-					$array_sub_id[] = nv_menu_insert_id( $mid, $id, $sub_item['func_custom_name'], $weight, $sort, 0, $mod_name, $key, $site_mods[$mod_name]['groups_view'] );
-				}
+				++$weight;
+				++$sort;
+				$array_sub_id[] = nv_menu_insert_id( $mid, $id, $sub_item['func_custom_name'], $weight, $sort, 0, $mod_name, $key, $site_mods[$mod_name]['groups_view'] );
 			}
 		}
+	}
 
-		if( ! empty( $array_sub_id ) )
-		{
-			$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $array_sub_id ) . "' WHERE id=" . $id );
-		}
-
+	if( ! empty( $array_sub_id ) )
+	{
+		$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $array_sub_id ) . "' WHERE id=" . $id );
 		menu_fix_order( $mid, $id );
 		nv_del_moduleCache( $module_name );
-
-		die( 'OK_' . $lang_module['action_menu_reload_success'] );
 	}
-	die( 'NO_' . $lang_module['action_menu_reload_none_success'] );
+	die( 'OK_' . $lang_module['action_menu_reload_success'] );
 }
 
 // Default variable
@@ -512,9 +509,23 @@ if( ! empty( $arr_table ) )
 			$xtpl->parse( 'main.table.loop1.sub' );
 		}
 
-		if( empty( $rows['op'] ) and isset( $site_mods[$rows['module_name']] ) and file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php' ) )
+		$func_menu = 0;
+		if( isset( $site_mods[$rows['module_name']] ) )
 		{
-			$xtpl->parse( 'main.table.loop1.reload' );
+			$mod_site = $site_mods[$rows['module_name']];
+			$mod_file = $mod_site['module_file'];
+			foreach( $mod_site['funcs'] as $funcs )
+			{
+				if( $funcs['in_submenu'] )
+				{
+					$func_menu++;
+				}
+			}
+
+			if( empty( $rows['op'] ) and ( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php' ) or $func_menu > 0 ) )
+			{
+				$xtpl->parse( 'main.table.loop1.reload' );
+			}
 		}
 
 		$xtpl->parse( 'main.table.loop1' );
