@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
-
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_DATA}.js"></script>
 <div class="well">
 	<form action="{NV_BASE_ADMINURL}index.php" method="get">
 		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -123,7 +123,9 @@
 <!-- END: generate_page -->
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#catid").select2();
+		$("#catid").select2({
+			language: '{NV_LANG_DATA}'
+		});
 	});
 </script>
 <!-- END: main -->
