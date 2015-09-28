@@ -27,6 +27,7 @@ $lang_module['number'] = 'Thứ tự';
 $lang_module['err_row_title'] = 'Không có';
 $lang_module['part_row_title'] = 'Tên bộ phận';
 $lang_module['email_row_title'] = 'Email';
+$lang_module['address'] = 'Địa chỉ';
 $lang_module['note_row_title'] = 'Ghi chú';
 $lang_module['bt_save_row_title'] = 'Ghi lại';
 $lang_module['bt_reset_row_title'] = 'Làm trắng';

@@ -29,6 +29,10 @@
 					<td><strong>{GLANG.email}</strong></td>
 					<td><input class="w300 form-control" type="text" name="email" value="{DATA.email}"/><span>{GLANG.multi_email_note}</span></td>
 				</tr>
+				<tr>
+					<td><strong>{LANG.address}</strong></td>
+					<td><input class="w300 form-control" type="text" name="address" value="{DATA.address}"/></td>
+				</tr>
                 <tr>
 					<td><strong>{LANG.otherContacts}</strong></td>
 					<td>
