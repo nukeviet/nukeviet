@@ -54,7 +54,7 @@
 	<div class="thumbnail">
 		<a title="{CONTENT.title}" href="{CONTENT.link}"><img alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail"/></a>
 		<div class="caption text-center">
-			<h4><a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext_clean}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}" title="{CONTENT.title}">{CONTENT.title}</a></h4>
+			<h4><a class="show" href="{CONTENT.link}" <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext_clean}" data-img="" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">{CONTENT.title}</a></h4>
 			<span>{ADMINLINK}</span>
 		</div>
 	</div>
