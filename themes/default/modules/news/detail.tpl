@@ -30,7 +30,7 @@
 		</div>
 		<!-- END: no_public -->
 		<!-- BEGIN: showhometext -->
-		<div class="clearfix margin-bottom-lg">
+		<div class="clearfix">
 			<!-- BEGIN: imgthumb -->
             <!-- BEGIN: note -->
 			<figure class="article left pointer" onclick="modalShowByObj('#imgpreview');">
@@ -45,14 +45,15 @@
                     <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
             </figure>
             <!-- END: empty -->
+            <div class="hometext">{DETAIL.hometext}</div>
 			<!-- END: imgthumb -->
     		<!-- BEGIN: imgfull -->
+    		<div class="hometext m-bottom">{DETAIL.hometext}</div>
     		<figure class="article center">
     			<img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
     			<!-- BEGIN: note --><figcaption>{DETAIL.image.note}</figcaption><!-- END: note -->
     		</figure>
     		<!-- END: imgfull -->
-            <div class="hometext">{DETAIL.hometext}</div>
 		</div>
 		<!-- END: showhometext -->
 		<div id="news-bodyhtml" class="bodytext margin-bottom-lg">
@@ -185,7 +186,7 @@ $(function() {
         	</p>
         </div>
     	<!-- END: topic -->
-        
+
     	<!-- BEGIN: related_new -->
     	<p class="h3"><strong>{LANG.related_new}</strong></p>
     	<div class="clearfix">
@@ -203,7 +204,7 @@ $(function() {
         	</ul>
         </div>
     	<!-- END: related_new -->
-        
+
     	<!-- BEGIN: related -->
     	<p class="h3"><strong>{LANG.related}</strong></p>
     	<div class="clearfix">
