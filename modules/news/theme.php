@@ -397,12 +397,24 @@ function viewsubcat_main( $viewcat, $array_cat )
 			if( $array_row_i['subcatid'] != '' )
 			{
 				$_arr_subcat = explode( ',', $array_row_i['subcatid'] );
+				$limit = 0;
 				foreach( $_arr_subcat as $catid_i )
 				{
 					if( $global_array_cat[$catid_i]['inhome'] == 1 )
 					{
 						$xtpl->assign( 'SUBCAT', $global_array_cat[$catid_i] );
 						$xtpl->parse( 'main.listcat.subcatloop' );
+						$limit++;
+					}
+					if( $limit >= 3 )
+					{
+						$more = array(
+							'title' => $lang_module['more'],
+							'link' => $global_array_cat[$catid]['link']
+						);
+						$xtpl->assign( 'MORE', $more );
+						$xtpl->parse( 'main.listcat.subcatmore' );
+						break;
 					}
 				}
 			}

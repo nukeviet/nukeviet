@@ -9,7 +9,7 @@
 				<li class="hidden-xs"><h4><a class="dimgray" title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></h4></li>
 				<!-- END: subcatloop -->
 				<!-- BEGIN: subcatmore -->
-				<li class="pull-right hidden-xs"><h4><a class="dimgray" title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a></h4></li>
+				<a class="dimgray pull-right hidden-xs" title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a>
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
