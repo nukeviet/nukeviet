@@ -186,13 +186,13 @@ function change_captcha(a) {
 }
 
 //Form Ajax-login
-
-function loginForm()
+function loginForm(redirect)
 {
     if(nv_is_user == 1) return!1;
+    if(redirect != '') redirect = '&nv_redirect=' + redirect;
     $.ajax({
         type: 'POST',
-		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login',
+		url: nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=users&' + nv_fc_variable + '=login' + redirect,
 		cache: !1,
         data: '&nv_ajax=1',
 		dataType: "html"

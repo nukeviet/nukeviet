@@ -19,6 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['fullname'] = 'Họ và tên';
 $lang_module['email'] = 'Email';
+$lang_module['address'] = 'Địa chỉ';
 $lang_module['captcha'] = 'Mã bảo mật';
 $lang_module['title'] = 'Tiêu đề';
 $lang_module['cat'] = 'Chủ đề';
