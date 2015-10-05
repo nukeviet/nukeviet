@@ -11,6 +11,12 @@
 					<td><!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><!-- BEGIN: href --><a href="tel:{PHONE.href}"><!-- END: href -->{PHONE.number}<!-- BEGIN: href2 --></a><!-- END: href2 --><!-- END: item --></td>
 				</tr>
 				<!-- END: phone -->
+				<!-- BEGIN: address -->
+				<tr>
+					<td>{LANG.address}</td>
+					<td>{DEPARTMENT.address}</td>
+				</tr>
+				<!-- END: address -->
 				<!-- BEGIN: fax -->
 				<tr>
 					<td>{LANG.fax}</td>

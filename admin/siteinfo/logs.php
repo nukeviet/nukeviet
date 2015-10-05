@@ -262,7 +262,7 @@ foreach( $list_module as $module )
 {
 	$array_module[] = array(
 		'key' => $module,
-		'title' => $module,
+		'title' => isset( $site_mods[$module] ) ? $site_mods[$module]['custom_title'] : ( isset( $admin_mods[$module] ) ? $admin_mods[$module]['custom_title'] : $module ),
 		'selected' => ( $data_search['module'] == $module ) ? ' selected="selected"' : ''
 	);
 }
@@ -336,6 +336,8 @@ foreach( $data as $data_i )
 	{
 		$data_i['username'] = 'unknown';
 	}
+
+	$data_i['custom_title'] = isset( $site_mods[$data_i['module_name']] ) ? $site_mods[$data_i['module_name']]['custom_title'] : ( isset( $admin_mods[$data_i['module_name']] ) ? $admin_mods[$data_i['module_name']]['custom_title'] : $data_i['module_name'] );
 
 	$xtpl->assign( 'DATA', $data_i );
 	if( $logs_del )

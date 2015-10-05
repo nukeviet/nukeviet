@@ -80,7 +80,7 @@ if( ! nv_function_exists( 'nv_department_info' ) )
 		}
 
 		//Danh sach cac bo phan
-		$sql = 'SELECT id, full_name, phone, fax, email, others, note, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 AND id=' . $block_config['departmentid'];
+		$sql = 'SELECT id, full_name, phone, fax, email, address, others, note, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 AND id=' . $block_config['departmentid'];
 		$array_department = nv_db_cache( $sql, 'id', $module );
 
 		$xtpl = new XTemplate( 'block.department.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $module );
@@ -93,7 +93,7 @@ if( ! nv_function_exists( 'nv_department_info' ) )
 				if( ! empty( $row ) )
 				{
 				    $row['emailhref'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
-                    
+
 					$xtpl->assign( 'DEPARTMENT', $row );
 
 					if( ! empty( $row['phone'] ) )
@@ -111,7 +111,7 @@ if( ! nv_function_exists( 'nv_department_info' ) )
                             }
                             else
                             {
-                                
+
                                 $num = preg_replace( "/\[[^\]]*\]/", "", $num );
                                 $phone = array( 'number' => nv_htmlspecialchars( $num ) );
                                 $xtpl->assign( 'PHONE', $phone );
@@ -119,7 +119,7 @@ if( ! nv_function_exists( 'nv_department_info' ) )
                             if ( $k ) $xtpl->parse( 'main.phone.item.comma' );
                             $xtpl->parse( 'main.phone.item' );
                         }
-                        
+
                         $xtpl->parse( 'main.phone' );
 					}
 
@@ -138,14 +138,14 @@ if( ! nv_function_exists( 'nv_department_info' ) )
                             if ( $k ) $xtpl->parse( 'main.email.item.comma' );
                             $xtpl->parse( 'main.email.item' );
                         }
-            
+
                         $xtpl->parse( 'main.email' );
 					}
-                    
+
                     if ( ! empty( $row['others'] ) )
                     {
                         $others = json_decode( $row['others'],true );
-                        
+
                         if( !empty( $others ) )
                         {
                             foreach( $others as $key => $value )
@@ -160,7 +160,7 @@ if( ! nv_function_exists( 'nv_department_info' ) )
                                             $xtpl->assign( 'YAHOO', array('name' => $key, 'value' => $y ) );
                                             if ( $k ) $xtpl->parse( 'main.yahoo.item.comma' );
                                             $xtpl->parse( 'main.yahoo.item' );
-                                        }                        
+                                        }
                                         $xtpl->parse( 'main.yahoo' );
                                     }
                                     elseif( strtolower( $key ) == "skype" )
@@ -216,6 +216,11 @@ if( ! nv_function_exists( 'nv_department_info' ) )
                             }
                         }
                     }
+
+					if( !empty( $row['address'] ) )
+					{
+						$xtpl->parse( 'main.address' );
+					}
 				}
 				else
 				{
