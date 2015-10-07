@@ -25,6 +25,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  phone varchar(255) NOT NULL,
  fax varchar(255) NOT NULL,
  email varchar(100) NOT NULL,
+ address varchar(255) NOT NULL,
  note text NOT NULL,
  others text NOT NULL,
  cats text NOT NULL,
