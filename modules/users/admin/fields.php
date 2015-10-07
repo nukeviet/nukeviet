@@ -69,7 +69,7 @@ if( $nv_Request->isset_request( 'choicesql', 'post' ) )
 	elseif( $choice == 'table' )
 	{
 		$module = $nv_Request->get_string( 'module', 'post', '' );
-		if( $module == '' ) exit();
+		if( $module == '' or ! preg_match( $global_config['check_module'], $module ) ) exit();
 		$_items = $db->query( "SHOW TABLE STATUS LIKE '%\_" . $module . "%'" )->fetchAll();
 		$num_table = sizeof( $_items );
 
@@ -358,7 +358,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 					match_regex, func_callback, min_length, max_length,
 					required, show_register, user_editable,
 					show_profile, class, language, default_value) VALUES
-					('" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', '" . $dataform['sql_choices'] . "', '" . $dataform['match_type'] . "',
+					('" . $dataform['field'] . "', " . $weight . ", '" . $dataform['field_type'] . "', '" . $dataform['field_choices'] . "', " . $db->quote( $dataform['sql_choices'] ) . ", '" . $dataform['match_type'] . "',
 					'" . $dataform['match_regex'] . "', '" . $dataform['func_callback'] . "',
 					" . $dataform['min_length'] . ", " . $dataform['max_length'] . ",
 					" . $dataform['required'] . ", " . $dataform['show_register'] . ", '" . $dataform['user_editable'] . "',
