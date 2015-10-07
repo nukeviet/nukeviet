@@ -28,7 +28,7 @@ function nv_clear_files( $dir, $base )
 	{
 		while( ( $file = readdir( $dh ) ) !== false )
 		{
-			if( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and $file != "index.html" and is_file( $dir . '/' . $file ) and $file != "sess_" . $client_info['session_id'] )
+			if( ! preg_match( "/^[\.]{1,2}([a-zA-Z0-9]*)$/", $file ) and $file != "index.html" and is_file( $dir . '/' . $file ) )
 			{
 				if( unlink( $dir . '/' . $file ) )
 				{
