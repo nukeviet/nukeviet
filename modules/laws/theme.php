@@ -62,6 +62,7 @@ function nv_theme_laws_maincat ( $mod, $array_data )
 
     foreach( $array_data as $data )
 	{
+		$data['url_subject'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=subject/" . $data['alias'];
 		$data['numcount'] = sprintf( $lang_module['s_result_num'], $data['numcount'] );
 		$xtpl->assign( 'DATA', $data );
 
