@@ -309,7 +309,7 @@ function changemail_validForm(a) {
 			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
 				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
 				validErrorShow(this)
-			})) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
+			})) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.status ? setTimeout(function() {
 				$(".nv-info", a).fadeOut();
 				$("input,button,select,textarea", a).prop("disabled", !1)
 			}, 6E3) : $("html, body").animate({
