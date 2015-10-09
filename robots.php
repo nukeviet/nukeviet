@@ -71,6 +71,10 @@ foreach( $robots_data as $key => $value )
 	{
 		$contents[] = 'Disallow: ' . $key;
 	}
+	elseif( $value == 2 )
+	{
+		$contents[] = 'Allow: ' . $key;
+	}
 }
 foreach( $robots_other as $key => $value )
 {
@@ -78,6 +82,10 @@ foreach( $robots_other as $key => $value )
 	{
 		$contents[] = 'Disallow: ' . $key;
 	}
+	elseif( $value == 2 )
+	{
+		$contents[] = 'Allow: ' . $key;
+	}	
 }
 $contents[] = 'Sitemap: http' . ( $global_config['ssl_https'] == 1 ? 's' : '' ) . '://' . $host . $base_siteurl . 'sitemap.xml';
 $contents = implode( "\n", $contents );

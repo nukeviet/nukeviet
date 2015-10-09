@@ -57,6 +57,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 			{
 				$rbcontents[] = 'Disallow: ' . $key;
 			}
+			elseif( $value == 2 )
+			{
+				$rbcontents[] = 'Allow: ' . $key;
+			}			
 		}
 
 		$rbcontents[] = 'Sitemap: ' . $global_config['site_url'] . '/index.php/SitemapIndex' . $global_config['rewrite_endurl'];
@@ -119,7 +123,7 @@ foreach( $files as $file )
 
 		$type = isset( $robots_data[$file] ) ? $robots_data[$file] : 1;
 
-		for( $i = 0; $i < 2; $i++ )
+		for( $i = 0; $i <= 2; $i++ )
 		{
 			$option = array(
 				'value' => $i,
@@ -140,7 +144,7 @@ foreach( $robots_other as $file => $value )
 	$data = array( 'number' => ++$number, 'filename' => $file );
 	$xtpl->assign( 'DATA', $data );
 
-	for( $i = 0; $i < 2; $i++ )
+	for( $i = 0; $i <= 2; $i++ )
 	{
 		$option = array(
 			'value' => $i,
