@@ -66,11 +66,31 @@ else
 	}
 	elseif( preg_match( '#image\/[x\-]*([a-z]+)#', $upload_info['mime'] ) )
 	{
+		if( isset( $array_thumb_config[$path] ) )
+		{
+			$thumb_config = $array_thumb_config[$path];
+		}
+		else
+		{
+			$thumb_config = $array_thumb_config[''];
+			$_arr_path = explode( '/', $path );
+			while( sizeof( $_arr_path ) > 1 )
+			{
+				array_pop( $_arr_path );
+				$_path = implode( '/', $_arr_path );
+				if( isset( $array_thumb_config[$_path] ) )
+				{
+					$thumb_config = $array_thumb_config[$_path];
+					break;
+				}
+			}
+		}
+
 		if( $global_config['nv_auto_resize'] and ( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT ) )
 		{
 			$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1] );
 			$createImage->resizeXY( NV_MAX_WIDTH, NV_MAX_HEIGHT );
-			$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], 90 );
+			$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality'] );
 			$createImage->close();
 			$info = $createImage->create_Image_info;
 			$upload_info['img_info'][0] = $info['width'];
@@ -143,7 +163,7 @@ else
 
 						$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
 						$createImage->addlogo( NV_ROOTDIR . '/' . $global_config['upload_logo'], '', '', $config_logo );
-						$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'] );
+						$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality'] );
 					}
 				}
 			}
