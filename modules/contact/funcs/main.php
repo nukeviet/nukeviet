@@ -157,7 +157,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
         $xtpl->assign( 'CAT', $fcat );
         $xtpl->assign( 'PART', $array_department[$fpart]['full_name'] );
         $xtpl->assign( 'TITLE', $ftitle );
-        $xtpl->assign( 'CONTENT', $fcon );
+        $xtpl->assign( 'CONTENT', nv_htmlspecialchars( $fcon ) );
 
         $xtpl->parse( 'main' );
         $fcon = $xtpl->text( 'main' );

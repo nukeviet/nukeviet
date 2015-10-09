@@ -81,7 +81,7 @@ if( $nv_Request->isset_request( 'op', 'post' ) )
 }
 else
 {
-	$op = $nv_Request->get_string( NV_OP_VARIABLE, 'get', '' );
+	$op = $nv_Request->get_title( NV_OP_VARIABLE, 'get', '' );
 	$theme_list = nv_scandir( NV_ROOTDIR . '/themes', array( $global_config['check_theme'], $global_config['check_theme_mobile'] ) );
 	foreach( $theme_list as $themes_i )
 	{

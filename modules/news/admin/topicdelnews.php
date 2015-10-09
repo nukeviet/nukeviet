@@ -11,11 +11,11 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_string( 'list', 'post,get' );
-$id = explode( ',', $id );
+$id = array_map( "trim", array_unique( array_filter( explode( ',', $id ) ) ) );
 
 foreach( $id as $value )
 {
-	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET topicid=0 WHERE id='" . $value . "'";
+	$sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET topicid=0 WHERE id = " . intval( $value );
 	$db->query( $sql );
 }
 
