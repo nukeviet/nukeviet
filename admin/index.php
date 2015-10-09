@@ -55,22 +55,21 @@ while( $row = $result->fetch() )
 }
 
 $module_name = strtolower( $nv_Request->get_title( NV_NAME_VARIABLE, 'post,get', 'siteinfo' ) );
-if( ! empty( $module_name ) and preg_match( $global_config['check_module'], $module_name ) )
+if( preg_match( $global_config['check_module'], $module_name ) )
 {
 	$include_functions = $include_file = $include_menu = $lang_file = $mod_theme_file = '';
 	$module_data = $module_file = $module_name;
 
 	$op = $nv_Request->get_title( NV_OP_VARIABLE, 'post,get', 'main' );
 	
-	if( ! preg_match( '/^[a-z0-9\-\_\/\+]+$/i', $op ) )
-	{
-		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-		die();
-	}
-	
 	if( empty( $op ) or $op == 'functions' )
 	{
 		$op = 'main';
+	}
+	elseif( ! preg_match( '/^[a-z0-9\-\_\/\+]+$/i', $op ) )
+	{
+		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
+		die();
 	}
 
 	$site_mods = nv_site_mods();
