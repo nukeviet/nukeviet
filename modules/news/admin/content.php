@@ -466,7 +466,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		$error[] = $lang_module['error_cat'];
 	}
-	elseif( trim( strip_tags( $rowcontent['bodyhtml'] ) ) == '' )
+	elseif( trim( strip_tags( $rowcontent['bodyhtml'] ) ) == '' and ! preg_match( "/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'] ) )
 	{
 		$error[] = $lang_module['error_bodytext'];
 	}

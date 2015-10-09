@@ -53,6 +53,7 @@ $lang_module['robots_filename'] = 'Tên file';
 $lang_module['robots_type'] = 'Chế độ';
 $lang_module['robots_type_0'] = 'Cấm truy cập';
 $lang_module['robots_type_1'] = 'Không hiển thị trong file robots.txt';
+$lang_module['robots_type_2'] = 'Cho phép truy cập';
 $lang_module['robots_error_writable'] = 'Lỗi: Hệ thống không ghi được file robots.txt, hãy tạo file robots.txt với nội dung bên dưới và đặt vào thư mục gốc của website';
 
 $lang_module['pagetitle2'] = 'Phương án hiển thị tag "title"';
