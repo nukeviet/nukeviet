@@ -39,7 +39,7 @@ $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = $nv_laws_setting['numsub'];
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $nv_laws_listcat[$catid]['alias'];
 
-$order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
+$order = ( $nv_laws_setting['typeview'] == 1 ) ? "ASC" : "DESC";
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 AND" . $in . " ORDER BY addtime " . $order . " LIMIT " . $page . "," . $per_page;
 

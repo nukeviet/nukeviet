@@ -25,7 +25,7 @@ $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DA
 
 if( in_array( $nv_laws_setting['typeview'], array( 0, 1 ) ) ) // Hien thi danh sach van ban
 {
-	$order = $nv_laws_setting['typeview'] == 1 ? "ASC" : "DESC";
+	$order = ( $nv_laws_setting['typeview'] == 1 ) ? "ASC" : "DESC";
 
 	$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
 

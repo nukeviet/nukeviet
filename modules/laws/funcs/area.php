@@ -62,7 +62,7 @@ $description = empty( $nv_laws_listarea[$catid]['introduction'] ) ? $page_title 
 $per_page = $nv_laws_setting['numsub'];
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=area/" . $nv_laws_listarea[$catid]['alias'];
 
-$order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
+$order = ( $nv_laws_setting['typeview'] == 1 ) ? "ASC" : "DESC";
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 AND" . $in . " ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
 $result = $db->query( $sql );

@@ -41,7 +41,7 @@ if( isset( $array_op[3] ) and substr( $array_op[3], 0, 5 ) == 'page-' )
 $per_page = $nv_laws_setting['numsub'];
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=signer/" . $signer['id'] . "/" . change_alias( $signer['title'] );
 
-$order = $nv_laws_setting['typeview'] ? "ASC" : "DESC";
+$order = ( $nv_laws_setting['typeview'] == 1 ) ? "ASC" : "DESC";
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 AND sgid=" . $signer['id'] . " ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
 $result = $db->query( $sql );
