@@ -9,6 +9,13 @@
 			//1) Added ability to select a particular slide when the page first loads using a URL parameter (ie: mypage.htm?myslider=4 to select 4th slide in "myslider")
 			//2) Fixed bug where the first slide disappears when the mouse clicks or mouses over it when page first loads.
 
+//** Dec 20th, 12'- v 2.41: Fixed bug with slider failing to load if the same script is used on different pages with different # of contents
+
+//** Jan 23rd, 13'- v2.5: Modified onChange event handler behaviour for more robustness , plus added section on embedding YouTube videos inside the Slider.
+				//Important: onChange(previndex, curindex, contentdivs) now uses a 0 based index system, where 0=1st slide, 1=2nd slide etc. Previously the count started at 1.
+
+//** July 18th, 15'- v2.51: Set revealtype to always "click" in mobile browsers (instead of "mouseover")
+
 var featuredcontentslider={
 
 //3 variables below you can customize if desired:
@@ -17,6 +24,7 @@ bustajaxcache: true, //bust caching of external ajax page after 1st request?
 enablepersist: true, //persist to last content viewed when returning to page?
 
 settingcaches: {}, //object to cache "setting" object of each script instance
+ismobile:navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i) != null, //boolean check for popular mobile browsers
 
 jumpTo:function(fcsid, pagenumber){ //public function to go to a slide manually.
 	this.turnpage(this.settingcaches[fcsid], pagenumber)
@@ -63,6 +71,10 @@ buildcontentdivs:function(setting){
 			setting.contentdivs.push(alldivs[i])
 				alldivs[i].style.display="none" //collapse all content DIVs to begin with
 		}
+	}
+	if (setting.currentpage > setting.contentdivs.length){
+		setting.currentpage=1
+		setting.prevpage=1
 	}
 },
 
@@ -128,13 +140,6 @@ turnpage:function(setting, thepage, autocall){
 	if (turntopage==setting.currentpage && typeof autocall=="undefined") //if a pagination link is clicked on repeatedly
 		return
 	setting.currentpage=turntopage
-	if(turntopage==1 && setting.topzindex > 100)
-	{
-		setting.topzindex = 0
-		for (var i=0; i < totalpages; i++) {
-			setting.contentdivs[i].style.zIndex=++setting.topzindex
-		};
-	}	
 	setting.contentdivs[turntopage-1].style.zIndex=++setting.topzindex
 	this.cleartimer(setting, window["fcsfade"+setting.id])
 	setting.cacheprevpage=setting.prevpage
@@ -144,7 +149,9 @@ turnpage:function(setting, thepage, autocall){
 	}
 	if (setting.enablefade[0]==false){ //if fade is disabled, fire onChange event immediately (verus after fade is complete)
 		setting.contentdivs[setting.prevpage-1].style.display="none" //collapse last content div shown (it was set to "block")
-		setting.onChange(setting.prevpage, setting.currentpage)
+		try{
+		setting.onChange(setting.prevpage-1, setting.currentpage-1, setting.contentdivs)
+		} catch(e){console.log(e.message)}
 	}
 	setting.contentdivs[turntopage-1].style.visibility="visible"
 	setting.contentdivs[turntopage-1].style.display="block"
@@ -180,7 +187,9 @@ fadeup:function(setting){
 	else{ //when fade is complete
 		if (setting.cacheprevpage!=setting.currentpage) //if previous content isn't the same as the current shown div (happens the first time the page loads/ script is run)
 			setting.contentdivs[setting.cacheprevpage-1].style.display="none" //collapse last content div shown (it was set to "block")
-		setting.onChange(setting.cacheprevpage, setting.currentpage)
+		try{
+			setting.onChange(setting.cacheprevpage-1, setting.currentpage-1, setting.contentdivs)
+		} catch(e){console.log(e.message)}
 	}
 },
 
@@ -230,6 +239,8 @@ init:function(setting){
 	setting.topzindex=0
 	setting.currentpage=urlselectedpage || ((this.enablepersist)? persistedpage : 1)
 	setting.prevpage=setting.currentpage
+	if (this.ismobile)
+		setting.revealtype = "click"
 	setting.revealtype="on"+(setting.revealtype || "click")
 	setting.curopacity=0
 	setting.onChange=setting.onChange || function(){}
