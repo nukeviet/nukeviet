@@ -68,7 +68,7 @@ else
 
 if( preg_match( $global_config['check_module'], $module_name ) )
 {
-	$site_mods = nv_site_mods( $module_name );
+	$site_mods = nv_site_mods();
 	// IMG thong ke truy cap + online
 	if( $global_config['statistic'] and isset( $sys_mods['statistics'] ) and $nv_Request->get_string( 'second', 'get' ) == 'statimg' )
 	{

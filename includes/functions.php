@@ -1643,11 +1643,9 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 /**
  * nv_site_mods()
  *
- * @param string $module_name
- *
  * @return
  */
-function nv_site_mods( $module_name = '' )
+function nv_site_mods()
 {
 	global $sys_mods, $admin_info, $global_config;
 
