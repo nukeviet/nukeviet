@@ -22,7 +22,7 @@ if( isset( $check_allow_upload_dir['view_dir'] ) and isset( $array_dirname[$path
 	}
 
 	$page = $nv_Request->get_int( 'page', 'get', 1 );
-	$type = $nv_Request->get_string( 'type', 'get', 'file' );
+	$type = $nv_Request->get_title( 'type', 'get', 'file' );
 	$order = $nv_Request->get_int( 'order', 'get', 0 );
 
 	$q = nv_string_to_filename( htmlspecialchars( trim( $nv_Request->get_string( 'q', 'get' ) ), ENT_QUOTES ) );
