@@ -17,19 +17,19 @@ if( defined( 'NV_EDITOR' ) )
 
 $page_title = $lang_module['siteterms'];
 
+$error = $content = '';
+
 $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
 $row = $db->query( $sql )->fetch();
 if( empty( $row ) )
 {
 	$mode = 'add';
-	$row = array( 'content' => '' );
 }
 else
 {
+	$content = $row['content'];
 	$mode = 'edit';
 }
-
-$error = $content = '';
 
 if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 {

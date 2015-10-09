@@ -34,7 +34,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  weight smallint(5) NOT NULl,
  is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
- UNIQUE KEY full_name (full_name)
+ UNIQUE KEY full_name (full_name),
+ UNIQUE KEY alias (alias)	
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send (

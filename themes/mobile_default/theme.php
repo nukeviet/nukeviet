@@ -27,10 +27,17 @@ function nv_site_theme( $contents, $full = true )
 		$global_config['timestamp'] += $global_config['sitetimestamp'];
 	}
 
+	$site_favicon = NV_BASE_SITEURL . 'favicon.ico';
+	if( ! empty( $global_config['site_favicon'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_favicon'] ) )
+	{
+		$site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
+	}
+
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );
 	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
+	$xtpl->assign( 'SITE_FAVICON', $site_favicon );
 
 	// System variables
     $xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title( false ) );

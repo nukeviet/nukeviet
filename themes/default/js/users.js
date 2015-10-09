@@ -200,7 +200,7 @@ function login_validForm(a) {
 				validErrorShow(this)
 			}) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
 				$("[type=submit]", a).prop("disabled", !1)
-			}, 1E3)) : ($(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), setTimeout(function() {
+			}, 1E3)) : ($(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function() {
 				window.location.href = "undefined" != typeof d.redirect && "" != d.redirect ? d.redirect : window.location.href
 			}, 3E3))
 		}
