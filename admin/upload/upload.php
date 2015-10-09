@@ -47,6 +47,7 @@ else
 		$allow_files_type = array();
 	}
 
+	include_once NV_ROOTDIR . '/includes/class/upload.class.php';
 	$upload = new upload( $allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 
 	if( isset( $_FILES['upload']['tmp_name'] ) and is_uploaded_file( $_FILES['upload']['tmp_name'] ) )
