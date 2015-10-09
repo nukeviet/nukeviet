@@ -249,7 +249,7 @@ elseif( $nv_Request->isset_request( 'checksess', 'get' ) and $nv_Request->get_st
 {
 	$dirlang = $nv_Request->get_string( 'dirlang', 'get', '' );
 
-	if( $dirlang != '' )
+	if( $dirlang != '' and preg_match( "/^([a-z]{2})$/", $dirlang ) )
 	{
 		nv_mkdir( NV_ROOTDIR . '/includes/language/', $dirlang );
 

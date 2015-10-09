@@ -22,7 +22,8 @@ $array_table = array(
 	'sources',
 	'tags',
 	'tags_id',
-	'topics'
+	'topics',
+	'logs'
 );
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $result = $db->query( 'SHOW TABLE STATUS LIKE ' . $db->quote( $table . '_%' ) );

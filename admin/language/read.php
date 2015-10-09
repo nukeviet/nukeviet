@@ -219,7 +219,7 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 $dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
 $page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_read'];
 
-if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'readallfile' . session_id() ) )
+if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'readallfile' . session_id() ) and preg_match( "/^([a-z]{2})$/", $dirlang ) )
 {
 	if( ! empty( $dirlang ) and is_dir( NV_ROOTDIR . '/includes/language/' . $dirlang ) )
 	{
