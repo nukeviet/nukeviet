@@ -162,6 +162,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		$others = json_encode( $others );
 		$_cats = array_filter( $cats );
+		$_cats = array_unique( $_cats );
 		$_cats = ! empty( $_cats ) ? implode( '|', $_cats ) : '';
 
 		if( $id )
@@ -277,7 +278,7 @@ else
 	}
 	else
 	{
-		$full_name = $alias = $phone = $fax = $email = $note = '';
+		$full_name = $alias = $phone = $fax = $email = $note = $address = '';
 		$others = $cats = $view_level = $reply_level = $obt_level = array();
 
 		foreach( $adms as $admid => $values )
