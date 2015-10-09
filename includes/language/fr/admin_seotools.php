@@ -51,6 +51,7 @@ $lang_module['robots_filename'] = 'Nom du fichier';
 $lang_module['robots_type'] = 'Mode';
 $lang_module['robots_type_0'] = 'Accès interdit';
 $lang_module['robots_type_1'] = 'Ne pas afficher dans le fichier robots.txt';
+$lang_module['robots_type_2'] = 'Autoriser l\'accès';
 $lang_module['robots_error_writable'] = 'Erreur: impossible d\'enregistrer le fichier robots.txt, veuillez créer un fichier robots.txt avec le contenu ci-dessous et mettre dans la répertoire parente du site';
 $lang_module['pagetitle2'] = 'Méthode d\'affichage de tag "title"';
 $lang_module['pagetitleNote'] = '<strong>Variables acceptés:</strong><br /><br />- <strong>pagetitle</strong>: Titre de page pour des cas définis,<br />- <strong>funcname</strong>: Nom de la function,<br />- <strong>modulename</strong>: Nom de module,<br />- <strong>sitename</strong>: Nom du site';
