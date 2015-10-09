@@ -71,7 +71,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		else
 		{
 			$xtpl->assign( 'TITLE', $lang_module['robots_error_writable'] );
-			$xtpl->assign( 'CONTENT', str_replace( array( '\n', '\t' ), array( '<br />', '&nbsp;&nbsp;&nbsp;&nbsp;' ), nv_htmlspecialchars( $rbcontents ) ) );
+			$xtpl->assign( 'CONTENT', str_replace( array( "\n", "\t" ), array( '<br />', '&nbsp;&nbsp;&nbsp;&nbsp;' ), nv_htmlspecialchars( $rbcontents ) ) );
 			$xtpl->parse( 'main.nowrite' );
 		}
 	}
