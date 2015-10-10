@@ -171,8 +171,13 @@ else
 	}
 }
 
-$editor = $nv_Request->get_string( 'editor', 'post,get' );
-$CKEditorFuncNum = $nv_Request->get_string( 'CKEditorFuncNum', 'post,get', 0 );
+$editor = $nv_Request->get_title( 'editor', 'post,get', '' );
+$CKEditorFuncNum = $nv_Request->get_int( 'CKEditorFuncNum', 'post,get', 0 );
+
+if( ! preg_match( "/^([a-zA-Z0-9\-\_]+)$/", $editor ) )
+{
+	$editor = '';
+}
 
 if( empty( $error ) )
 {
