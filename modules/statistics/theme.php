@@ -560,7 +560,7 @@ function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $
 	{
 		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
-		$xtpl->assign( 'URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allcountries'] );
+		$xtpl->assign( 'URL', NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allcountries'] );
 		$xtpl->parse( 'main.ct.ot' );
 	}
 
@@ -599,7 +599,7 @@ function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $
 	{
 		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 		$xtpl->assign( 'CLASS', $class );
-		$xtpl->assign( 'URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbrowsers'] );
+		$xtpl->assign( 'URL', NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allbrowsers'] );
 		$xtpl->parse( 'main.br.ot' );
 	}
 
@@ -639,7 +639,7 @@ function nv_theme_statistics_main( $ctsy, $ctsm, $ctsdm, $ctsdw, $ctsc, $ctsb, $
 		$class = ( $a % 2 == 0 ) ? " class=\"second\"" : "";
 
 		$xtpl->assign( 'CLASS', $class );
-		$xtpl->assign( 'URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allos'] );
+		$xtpl->assign( 'URL', NV_BASE_MOD_URL . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['allos'] );
 		$xtpl->parse( 'main.os.ot' );
 	}
 
