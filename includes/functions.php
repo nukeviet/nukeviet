@@ -1375,6 +1375,10 @@ function nv_check_domain( $domain )
 		{
 			return $domain_ascii;
 		}
+		elseif( $domain == NV_SERVER_NAME )
+		{
+			return $domain;
+		}
 	}
 	return '';
 }
