@@ -241,6 +241,8 @@ p {
 #print #footer {
     margin-top:10px;
     border-top:2px solid #DC0312;
+    min-height: 30px!important;
+    padding: 10px;
 }
 
 #print #footer #url {
@@ -265,6 +267,10 @@ p {
 #print #footer #contact a:hover {
     text-decoration:none;
     cursor:pointer;
+}
+
+#print #footer a{
+	color: #fff;
 }
 
 #news-bodyhtml{

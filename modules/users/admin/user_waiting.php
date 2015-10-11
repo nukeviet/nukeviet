@@ -211,7 +211,7 @@ $xtpl = new XTemplate( 'user_waitting.tpl', NV_ROOTDIR . '/themes/' . $global_co
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting' );
 $xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-$xtpl->assign( 'SEARCH_VALUE', $methodvalue );
+$xtpl->assign( 'SEARCH_VALUE', nv_htmlspecialchars( $methodvalue ) );
 $xtpl->assign( 'TABLE_CAPTION', $table_caption );
 
 if( defined( 'NV_IS_USER_FORUM' ) )
