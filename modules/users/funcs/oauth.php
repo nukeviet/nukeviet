@@ -13,8 +13,20 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 if( $global_config['allowuserlogin'] and defined( 'NV_OPENID_ALLOWED' ) )
 {
     $server = $nv_Request->get_string( 'server', 'get', '' );
+    
 	if( ! empty( $server ) and in_array( $server, $global_config['openid_servers'] ) )
 	{
+		// Add to Global config
+		$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";
+		$result = $db->query( $sql );
+		$global_config['avatar_width'] = $result->fetchColumn();
+		$result->closeCursor();
+		
+		$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_height'";
+		$result = $db->query( $sql );
+		$global_config['avatar_height'] = $result->fetchColumn();
+		$result->closeCursor();
+
 		if( file_exists(NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php') )
 		{
 			include NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php';

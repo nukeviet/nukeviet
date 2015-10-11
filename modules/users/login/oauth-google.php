@@ -41,6 +41,7 @@ if( !empty( $_GET['code'] ) )
 
 	// Send a request with it
 	$result = json_decode( $googleService->request( 'https://www.googleapis.com/oauth2/v1/userinfo' ), true );
+	
 	if( isset( $result['email'] ) )
 	{
 		$attribs = array(
@@ -53,6 +54,8 @@ if( !empty( $_GET['code'] ) )
 			'namePerson' => $result['name'],
 			'person/gender' => $result['gender'],
 			'server' => $server,
+			'picture_url' => $result['picture'],
+			'picture_mode' => 0, // 0: Remote picture
 			'current_mode' => 3
 		);
 	}
