@@ -19,6 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['fullname'] = 'Nom complet';
 $lang_module['email'] = 'E-mail';
+$lang_module['address'] = 'Adresse';
 $lang_module['captcha'] = 'Code de sécurité';
 $lang_module['title'] = 'Objet';
 $lang_module['cat'] = 'Сatégorie';
