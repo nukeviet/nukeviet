@@ -22,7 +22,7 @@ define( '_ERROR_UPLOAD_EXTENSION', isset( $lang_global['error_upload_extension']
 define( '_ERROR_UPLOAD_UNKNOWN', isset( $lang_global['error_upload_unknown'] ) ? $lang_global['error_upload_unknown'] : 'Unknown upload error' );
 define( '_ERROR_UPLOAD_TYPE_NOT_ALLOWED', isset( $lang_global['error_upload_type_not_allowed'] ) ? $lang_global['error_upload_type_not_allowed'] : 'Files of this type are not allowed' );
 define( '_ERROR_UPLOAD_MIME_NOT_RECOGNIZE', isset( $lang_global['error_upload_mime_not_recognize'] ) ? $lang_global['error_upload_mime_not_recognize'] : 'System does not recognize the mime type of uploaded file' );
-define( '_ERROR_UPLOAD_MAX_USER_SIZE', isset( $lang_global['error_upload_max_user_size'] ) ? $lang_global['error_upload_max_user_size'] : 'The file exceeds the maximum size allowed. Maximum size is %d bytes' );
+define( '_ERROR_UPLOAD_MAX_USER_SIZE', isset( $lang_global['error_upload_max_user_size'] ) ? $lang_global['error_upload_max_user_size'] : 'The file exceeds the maximum size allowed. Maximum size is %s' );
 define( '_ERROR_UPLOAD_NOT_IMAGE', isset( $lang_global['error_upload_not_image'] ) ? $lang_global['error_upload_not_image'] : 'The file is not a known image format' );
 define( '_ERROR_UPLOAD_IMAGE_FAILED', isset( $lang_global['error_upload_image_failed'] ) ? $lang_global['error_upload_image_failed'] : 'Image Content is failed' );
 define( '_ERROR_UPLOAD_IMAGE_WIDTH', isset( $lang_global['error_upload_image_width'] ) ? $lang_global['error_upload_image_width'] : 'The image is not allowed because the width is greater than the maximum of %d pixels' );
@@ -610,7 +610,7 @@ class upload
 		{
 			if( ! ( $no_check_size and preg_match( '#image\/[x\-]*([a-z]+)#', $this->file_mime ) ) )
 			{
-				return sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, $this->config['maxsize'] );
+				return sprintf( _ERROR_UPLOAD_MAX_USER_SIZE, nv_convertfromBytes( $this->config['maxsize'] ) );
 			}
 		}
 

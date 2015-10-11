@@ -32,6 +32,13 @@ $submenu['allcountries'] = $lang_module['country'];
 $submenu['allos'] = $lang_module['os'];
 $submenu['allreferers'] = $lang_module['referer'];
 
+$module_info['alias'] = array();
+$module_info['alias']['allbots'] = 'allbots';
+$module_info['alias']['allbrowsers'] = 'allbrowsers';
+$module_info['alias']['allcountries'] = 'allcountries';
+$module_info['alias']['allos'] = 'allos';
+$module_info['alias']['allreferers'] = 'allreferers';
+
 define( 'NV_IS_MOD_STATISTICS', true );
 define( 'NV_BASE_MOD_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
 

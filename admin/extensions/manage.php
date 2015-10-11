@@ -606,7 +606,13 @@ foreach ($array_extType as $_type)
 
 $selecttype_old = $nv_Request->get_string( 'selecttype', 'cookie', '' );
 $selecttype = $nv_Request->get_string( 'selecttype', 'get', $selecttype_old );
-if( $selecttype_old != $selecttype )
+
+if( ! in_array( $selecttype, $array_extType ) )
+{
+	$selecttype = '';
+}
+
+if( $selecttype_old != $selecttype and ! empty( $selecttype ) )
 {
 	$nv_Request->set_Cookie( 'selecttype', $selecttype, NV_LIVE_COOKIE_TIME );
 }

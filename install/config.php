@@ -32,7 +32,7 @@ $array_data['question'] = '';
 $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
 
-$global_config['version'] = '4.0.23';// NukeViet 4.0 OpenBeta 9
+$global_config['version'] = '4.0.24';// NukeViet 4.0 (No release)
 $global_config['site_email'] = '';
 $global_config['error_set_logs'] = 1;
 $global_config['error_send_email'] = 'support@nukeviet.vn';
