@@ -79,6 +79,12 @@ $lang_module['add_type_css'] = 'Nom de la classe CSS';
 $lang_module['add_type_css_info'] = 'Nom de la classe (CSS) pour déterminer ce menu';
 $lang_module['add_error_module'] = 'Erreur: aucun module désigné';
 $lang_module['add_error_module_exist'] = 'Erreur: module inexistant';
+
+$lang_module['action_menu_reload'] = 'Recharger';
+$lang_module['action_menu_reload_confirm'] = 'Cette action va recharger les ingrédients est le sujet du module courant. Voulez-vous continuer?';
+$lang_module['action_menu_reload_success'] = 'Menu Déjà rechargé avec succès!';
+$lang_module['action_menu_reload_none_success'] = 'Chargez le menu échoué. S\'il vous plaît vérifier le fonctionnement.';
+$lang_module['action_menu_reload_note'] = 'Recharger les enfants a fait l\'objet du module';
 $lang_module['action_menu'] = 'Ajouter menu à partir de';
 $lang_module['action_menu_sys_1'] = 'Les menus sont les modules';
 $lang_module['action_menu_sys_2'] = 'Les menus sont les modules, sous-menus sont les sujets ou les fonctionnements';
