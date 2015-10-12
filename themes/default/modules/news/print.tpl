@@ -72,7 +72,7 @@
 		</div>
 		<!-- END: copyright -->
 	</div>
-	<div id="footer" style="min-height: 30px;">
+	<div id="footer" class="clearfix">
 		<div id="url">
 			<strong>{LANG.print_link}: </strong>{CONTENT.link}
 		</div>
