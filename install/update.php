@@ -1748,11 +1748,11 @@ elseif( $nv_update_config['step'] == 2 ) // Buoc nang cap: Backup => List cong v
 			}
 
 			$array['ftpdata'] = array(
-				'ftp_server' => $global_config['ftp_server'],
+				'ftp_server' => nv_htmlspecialchars( $global_config['ftp_server'] ),
 				'ftp_port' => $global_config['ftp_port'],
-				'ftp_user_name' => $global_config['ftp_user_name'],
-				'ftp_user_pass' => $global_config['ftp_user_pass'],
-				'ftp_path' => $global_config['ftp_path'],
+				'ftp_user_name' => nv_htmlspecialchars( $global_config['ftp_user_name'] ),
+				'ftp_user_pass' => nv_htmlspecialchars( $global_config['ftp_user_pass'] ),
+				'ftp_path' => nv_htmlspecialchars( $global_config['ftp_path'] ),
 				'error' => '',
 				'show_ftp_error' => $show_ftp_error
 			);

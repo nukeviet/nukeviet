@@ -233,11 +233,11 @@ if( defined( 'NV_IS_ADMIN_FULL_MODULE' ) or ! in_array( 'admins', $allow_func ) 
 	if( ! empty( $savepost ) )
 	{
 		$array_config = array();
-		$array_group_id = $nv_Request->get_typed_array( 'array_group_id', 'post' );
-		$array_addcontent = $nv_Request->get_typed_array( 'array_addcontent', 'post' );
-		$array_postcontent = $nv_Request->get_typed_array( 'array_postcontent', 'post' );
-		$array_editcontent = $nv_Request->get_typed_array( 'array_editcontent', 'post' );
-		$array_delcontent = $nv_Request->get_typed_array( 'array_delcontent', 'post' );
+		$array_group_id = $nv_Request->get_typed_array( 'array_group_id', 'post', 'int', array() );
+		$array_addcontent = $nv_Request->get_typed_array( 'array_addcontent', 'post', 'int', array() );
+		$array_postcontent = $nv_Request->get_typed_array( 'array_postcontent', 'post', 'int', array() );
+		$array_editcontent = $nv_Request->get_typed_array( 'array_editcontent', 'post', 'int', array() );
+		$array_delcontent = $nv_Request->get_typed_array( 'array_delcontent', 'post', 'int', array() );
 
 		foreach( $array_group_id as $group_id )
 		{

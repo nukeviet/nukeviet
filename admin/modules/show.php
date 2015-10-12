@@ -17,7 +17,7 @@ if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
  */
 function nv_show_funcs()
 {
-	global $db, $lang_module, $global_config, $site_mods, $nv_Request, $module_file;
+	global $db, $lang_module, $global_config, $site_mods, $nv_Request, $module_file, $module_upload;
 
 	$mod = $nv_Request->get_title( 'mod', 'get', '' );
 

@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="row centered margin-top-lg margin-bottom-lg">
-<div class="col-md-13" style="min-width:300px">
+<div style="min-width:300px">
     <div class="page panel panel-default box-shadow bg-lavender">
         <div class="panel-body">
             <h2 class="text-center margin-bottom-lg">{LANG.register}</h2>

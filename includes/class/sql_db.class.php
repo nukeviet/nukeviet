@@ -468,7 +468,7 @@ class sql_db extends pdo
 		}
 		if( $this->_having )
 		{
-			$return .= ' HAVING BY ' . $this->_having;
+			$return .= ' HAVING ' . $this->_having;
 		}
 		if( $this->_order )
 		{

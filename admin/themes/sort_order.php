@@ -11,7 +11,7 @@
 
 if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
-$array_bid = $nv_Request->get_array( 'bl', 'post' );
+$array_bid = $nv_Request->get_typed_array( 'bl', 'post', 'int', array() );
 $func_id = $nv_Request->get_int( 'func_id', 'post' );
 
 $position = $nv_Request->get_string( 'position', 'post' );
