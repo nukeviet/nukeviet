@@ -156,10 +156,31 @@ else
 						$y = $file_size[1] - $h - 5;
 
 						$config_logo = array();
-						$config_logo['x'] = $file_size[0] - $w - 5;
-						$config_logo['y'] = $file_size[1] - $h - 5;
 						$config_logo['w'] = $w;
 						$config_logo['h'] = $h;
+						
+						$config_logo['x'] = $file_size[0] - $w - 5; // Horizontal: Right
+						$config_logo['y'] = $file_size[1] - $h - 5; // Vertical: Bottom
+						
+						// Logo vertical
+						if( preg_match( "/^top/", $global_config['upload_logo_pos'] ) )
+						{
+							$config_logo['y'] = 5;
+						}
+						elseif( preg_match( "/^center/", $global_config['upload_logo_pos'] ) )
+						{
+							$config_logo['y'] = round( ( $file_size[1] / 2 ) - ( $h / 2 ) );
+						}
+						
+						// Logo horizontal
+						if( preg_match( "/Left$/", $global_config['upload_logo_pos'] ) )
+						{
+							$config_logo['x'] = 5;
+						}
+						elseif( preg_match( "/Center$/", $global_config['upload_logo_pos'] ) )
+						{
+							$config_logo['x'] = round( ( $file_size[0] / 2 ) - ( $w / 2 ) );
+						}
 
 						$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
 						$createImage->addlogo( NV_ROOTDIR . '/' . $global_config['upload_logo'], '', '', $config_logo );

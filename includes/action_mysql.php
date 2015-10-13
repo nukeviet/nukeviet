@@ -177,6 +177,7 @@ function nv_create_table_sys( $lang )
 	 	('" . $lang . "', 'global', 'site_home_module', 'users'),
 	 	('" . $lang . "', 'global', 'switch_mobi_des', '1'),
 		('" . $lang . "', 'global', 'upload_logo', ''),
+		('" . $lang . "', 'global', 'upload_logo_pos', 'bottomRight'),
 		('" . $lang . "', 'global', 'autologosize1', '50'),
 		('" . $lang . "', 'global', 'autologosize2', '40'),
 		('" . $lang . "', 'global', 'autologosize3', '30'),
