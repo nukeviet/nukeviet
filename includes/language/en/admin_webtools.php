@@ -67,7 +67,7 @@ $lang_module['autocheckupdate'] = 'Enable automatic version checking';
 $lang_module['updatetime'] = 'Time to check new version';
 $lang_module['clearip_logs'] = 'Delete ip logs';
 $lang_module['update_manual_delete'] = 'Please delete it manually.';
-$lang_module['error_unknow'] = 'Unspecified error';
+$lang_module['error_unknow'] = 'Unknown error';
 $lang_module['get_update'] = 'Upgrade System';
 $lang_module['get_update_error_file_download'] = 'Download the update package failed';
 $lang_module['get_update_ok'] = 'Package upgrade safety, <a href="%s"> At least here </a> to conduct decompression upgrade package';
