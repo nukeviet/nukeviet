@@ -167,7 +167,7 @@ elseif( $ext == 'os' )
 			$robots[$key][1] = ( $sum > 0 ) ? round( $click_count * 100 / $sum, 1 ) : 0;
 			$robots[$key][2] = $click_count;
 		}
-		elseif( $os_key != 'Unspecified' )
+		elseif( $os_key != 'Unknown' )
 		{
 			$key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','" . $os_key . "','statistic',0);";
 			$cts[$key][0] = $os_name;
@@ -184,7 +184,7 @@ elseif( $ext == 'os' )
 
 	if( ! empty( $unknown ) )
 	{
-		$key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unspecified','statistic',0);";
+		$key = "nv_show_list_stat(" . $id . "," . $data_month . ",'" . $ext . "','Unknown','statistic',0);";
 		$cts[$key][0] = $lang_module['unknown'];
 		$cts[$key][1] = ( $sum > 0 ) ? round( $unknown * 100 / $sum ) : 0;
 		$cts[$key][2] = $unknown;
