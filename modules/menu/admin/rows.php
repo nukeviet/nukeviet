@@ -219,6 +219,10 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	{
 		$error = $lang_module['error_menu_name'];
 	}
+	elseif( empty( $post['module_name'] ) )
+	{
+		$error = $lang_module['error_module_name'];
+	}
 	elseif( empty( $post['link'] ) )
 	{
 		$error = $lang_module['error_menu_link'];

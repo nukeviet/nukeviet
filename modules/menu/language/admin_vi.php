@@ -24,6 +24,7 @@ $lang_module['edit_menu'] = 'Sửa menu';
 $lang_module['menu_name'] = 'Tên menu';
 $lang_module['menu_description'] = 'Mô tả';
 $lang_module['error_menu_name'] = 'Lỗi: Bạn chưa nhập tên menu';
+$lang_module['error_module_name'] = 'Lỗi: Bạn chưa chưa chọn module liên kết';
 $lang_module['menu_number'] = 'Số phần tử';
 $lang_module['save'] = 'Lưu';
 $lang_module['edit'] = 'Sửa';
