@@ -51,12 +51,12 @@
 			<div class="row">
 				<div class="col-sm-1">
 					<div class="refresh text-right">
-						<em title="{LANG.refresh}" class="fa fa-refresh fa-lg fa-pointer">&nbsp;</em>
+						<em title="{LANG.refresh}" class="fa fa-refresh fa-pointer">&nbsp;</em>
 					</div>
 				</div>
 				<div class="col-sm-1">
 					<div class="viewmode text-right">
-						<em class="fa fa-hourglass-o fa-lg fa-pointer fa-spin" data-auto="true" data-langthumb="{LANG.upload_view_thumbnail}" data-langdetail="{LANG.upload_view_detail}"></em>
+						<em class="fa fa-hourglass-o fa-pointer fa-spin" data-auto="true" data-langthumb="{LANG.upload_view_thumbnail}" data-langdetail="{LANG.upload_view_detail}"></em>
 					</div>
 				</div>
 				<div class="col-sm-5">
