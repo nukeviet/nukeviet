@@ -417,3 +417,4 @@ $lang_module['safe_active_info'] = 'Tài khoản của bạn đang ở chế đ�
 $lang_module['safe_deactivate'] = 'Tắt chế độ an toàn';
 $lang_module['group_description'] = 'Mô tả';
 $lang_module['group_description_empty'] = 'Hãy mô tả ngắn gọn về nhóm';
+$lang_module['auto_login_after_reg'] = 'Tự động đăng nhập sau khi đăng ký thành công';

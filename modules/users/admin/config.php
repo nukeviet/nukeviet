@@ -78,6 +78,7 @@ else
 		$array_config['openid_processing'] = $nv_Request->get_int( 'openid_processing', 'post', 0 );
 		$array_config['whoviewuser'] = $nv_Request->get_int( 'whoviewuser', 'post', 0 );
 		$array_config['user_check_pass_time'] = 60 * $nv_Request->get_int( 'user_check_pass_time', 'post' );
+		$array_config['auto_login_after_reg'] = $nv_Request->get_int( 'auto_login_after_reg', 'post', 0 );
 
 		if( $array_config['user_check_pass_time'] < 120 )
 		{
@@ -169,6 +170,7 @@ else
 	$array_config['allowuserlogin'] = ! empty( $array_config['allowuserlogin'] ) ? ' checked="checked"' : '';
 	$array_config['allowuserloginmulti'] = ! empty( $array_config['allowuserloginmulti'] ) ? ' checked="checked"' : '';
 	$array_config['is_user_forum'] = ! empty( $array_config['is_user_forum'] ) ? ' checked="checked"' : '';
+	$array_config['auto_login_after_reg'] = ! empty( $array_config['auto_login_after_reg'] ) ? ' checked="checked"' : '';
 
 	$sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";
 	$result = $db->query( $sql );
