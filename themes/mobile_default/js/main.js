@@ -22,7 +22,10 @@ var tip_active = !1,
 	oldScrt = 0,
 	scrtRangeY = 0,
 	wrapWidth = 0,
-	winHelp = !1;
+	winHelp = !1,
+	breadcrumbs = $('.breadcrumbs'),
+	subbreadcrumbs = $('.sub-breadcrumbs'),
+	tempbreadcrumbs = $('.temp-breadcrumbs');
 
 function winResize() {
 	oldWinX = winX;
@@ -242,6 +245,29 @@ function headerSearchKeypress(a) {
 	return !1
 }
 
+function showSubBreadcrumbs(a, b) {
+  b.preventDefault();
+  b.stopPropagation();
+  $("em", a).is(".fa-angle-right") ? $("em", a).removeClass("fa-angle-right").addClass("fa-angle-down") : $("em", a).removeClass("fa-angle-down").addClass("fa-angle-right");
+  subbreadcrumbs.toggleClass("open");
+  $(document).on("click", function() {
+    $("em", a).is(".fa-angle-down") && ($("em", a).removeClass("fa-angle-down").addClass("fa-angle-right"), subbreadcrumbs.removeClass("open"));
+  });
+}
+
+function nvbreadcrumbs() {
+  var b = $(".breadcrumb", breadcrumbs), e = $(".toggle", breadcrumbs), f = breadcrumbs.innerWidth() - 75, a = [], d = !1, c;
+  if (b.length && subbreadcrumbs.length && tempbreadcrumbs.length) {
+    for (b.html(""), subbreadcrumbs.html(""), tempbreadcrumbs.find("a").each(function() {
+      a.push([$(this).attr("title"), $(this).attr("href")]);
+    }), i = a.length - 1;0 <= i;i--) {
+      d || (c = 0, b.prepend('<li id="brcr_' + i + '" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title">' + a[i][0] + "</span></a></li>"), b.find("li").each(function() {
+        c += $(this).outerWidth(!0);
+      }), c > f && ($("#brcr_" + i, b).remove(), d = !0)), d ? (e.show(), subbreadcrumbs.append('<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title"><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>")) : e.hide();
+    }
+  }
+}
+
 // NukeViet Default Custom JS
 $(function() {
 	winResize();
@@ -365,11 +391,13 @@ $(document).on({
 
 $(window).on("resize", function() {
 	winResize();
+	nvbreadcrumbs();
 	if (150 < cRangeX || 150 < cRangeY) tip_active && tipHide(), winHelp && winHelpHide()
 });
 
 // Load Social script - lasest
 $(window).load(function() {
+	nvbreadcrumbs();
     (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
         var fb_app_id = ( $('[property="fb:app_id"]').length > 0 ) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
