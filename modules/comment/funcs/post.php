@@ -102,14 +102,16 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 
 				try
 				{
-					$stmt = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status) VALUES (:module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')' );
-					$stmt->bindParam( ':module', $module, PDO::PARAM_STR );
-					$stmt->bindParam( ':content', $content, PDO::PARAM_STR, strlen( $content ) );
-					$stmt->bindParam( ':post_name', $name, PDO::PARAM_STR );
-					$stmt->bindParam( ':post_email', $email, PDO::PARAM_STR );
-					$stmt->bindValue( ':post_ip', NV_CLIENT_IP, PDO::PARAM_STR );
-					$stmt->execute();
-					if( $stmt->rowCount() )
+					$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (module, area, id, pid, content, post_time, userid, post_name, post_email, post_ip, status) VALUES (:module, ' . $area . ', ' . $id . ', ' . $pid . ', :content, ' . NV_CURRENTTIME . ', ' . $userid . ', :post_name, :post_email, :post_ip, ' . $status . ')';
+					$data_insert = array();
+					$data_insert['module'] = $module;
+					$data_insert['content'] = $content;
+					$data_insert['post_name'] = $name;
+					$data_insert['post_email'] = $email;
+					$data_insert['post_ip'] = NV_CLIENT_IP;
+					$new_id = $db->insert_id( $_sql, 'cid', $data_insert );
+
+					if( $new_id > 0 )
 					{
 						$nv_Request->set_Cookie( $site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, NV_CURRENTTIME, $difftimeout );
 						if( $status )
@@ -124,7 +126,17 @@ if( ! empty( $module ) and isset( $module_config[$module]['activecomm'] ) and is
 							}
 						}
 
-						$comment_success = $status ? $lang_module['comment_success'] : $lang_module['comment_success_queue'];
+						if( !$status )
+						{
+							$comment_success = $lang_module['comment_success_queue'];
+
+							// Gui thong bao kiem duyet
+							nv_insert_notification( $module_name, 'comment_queue', array( 'content' => $content ), $new_id );
+						}
+						else
+						{
+							$comment_success = $lang_module['comment_success'];
+						}
 						$contents = 'OK_' . nv_base64_encode( $comment_success );
 					}
 				}

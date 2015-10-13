@@ -33,8 +33,13 @@ if( isset( $site_mod_comm[$row['module']] ) )
 	}
 }
 
+if( $new_status )
+{
+	nv_status_notification( NV_LANG_DATA, $module_name, 'comment_queue', $cid );
+}
+
 nv_del_moduleCache( $module_name );
 
 include NV_ROOTDIR . '/includes/header.php';
-echo 'OK_' . $id;
+echo 'OK_' . $cid;
 include NV_ROOTDIR . '/includes/footer.php';

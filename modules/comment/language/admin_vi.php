@@ -88,3 +88,4 @@ $lang_module['captcha_2'] = 'Nếu không phải người quản lý bình luậ
 $lang_module['captcha_3'] = 'Hiển thị trong mọi trường hợp';
 
 $lang_module['siteinfo_queue_comments'] = 'Số bình luận chờ duyệt';
+$lang_module['notification_comment_queue'] = 'Kiểm duyệt bình luận gửi bởi %s<br /><em>%s</em>';
