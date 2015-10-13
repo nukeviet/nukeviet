@@ -427,6 +427,16 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 					$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', ' . $db->quote( $rowcontent['bodytext'] ) . ')' );
 					$user_content = defined( 'NV_IS_USER' ) ? ' | ' . $user_info['username'] : '';
 
+					// Them vao thong bao
+					if( empty( $rowcontent['status'] ) )
+					{
+						$content = array(
+							'title' => $rowcontent['title'],
+							'hometext' => $rowcontent['hometext']
+						);
+						nv_insert_notification( $module_name, 'post_queue', $content, $rowcontent['id'] );
+					}
+
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['add_content'], $rowcontent['title'] . ' | ' . $client_info['ip'] . $user_content, 0 );
 				}
 				else
