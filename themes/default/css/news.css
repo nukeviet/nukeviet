@@ -273,11 +273,6 @@ p {
 	color: #fff;
 }
 
-#news-bodyhtml{
-	overflow-x: hidden;
-	overflow-y: visible
-}
-
 .bodytext figure.image figcaption {
     padding:5px;
 }
