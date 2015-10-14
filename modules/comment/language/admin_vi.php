@@ -75,6 +75,7 @@ $lang_module['adminscomm'] = 'Admin quản lý bình luận';
 $lang_module['view_comm'] = 'Ai được phép xem bình luận';
 $lang_module['allowed_comm'] = 'Ai được phép đăng bình luận';
 $lang_module['allowed_comm_item'] = 'Theo cấu hình bài viết';
+$lang_module['adminscomm_note'] = 'Chức năng "Admin quản lý bình luận" chỉ áp dụng cho admin Quản lý module, Bạn cần thêm người Quản lý module trước khi phân quyền';
 
 $lang_module['sortcomm'] = 'Sắp xếp bình luận theo';
 $lang_module['sortcomm_0'] = 'Mới trước';
