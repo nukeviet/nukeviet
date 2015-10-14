@@ -109,11 +109,17 @@ function nv_admin_theme( $contents, $head_site = 1 )
 
 	$global_config['site_name'] = empty( $global_config['site_name'] ) ? NV_SERVER_NAME : $global_config['site_name'];
 
+	$site_favicon = NV_BASE_SITEURL . 'favicon.ico';
+	if( ! empty( $global_config['site_favicon'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_favicon'] ) )
+	{
+		$site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
+	}
+
 	$xtpl = new XTemplate( $file_name_tpl, $dir_template );
 	$xtpl->assign( 'NV_SITE_COPYRIGHT', $global_config['site_name'] . ' [' . $global_config['site_email'] . '] ' );
 	$xtpl->assign( 'NV_SITE_NAME', $global_config['site_name'] );
 	$xtpl->assign( 'NV_SITE_TITLE', $global_config['site_name'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['admin_page'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['custom_title'] );
-	$xtpl->assign( 'SITE_DESCRIPTION', $global_config['site_description'] );
+	$xtpl->assign( 'SITE_DESCRIPTION', empty( $global_config['site_description'] ) ? $page_title : $global_config['site_description'] );
 	$xtpl->assign( 'NV_CHECK_PASS_MSTIME', (intval( $global_config['admin_check_pass_time'] ) - 62) * 1000 );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'NV_ADMINDIR', NV_ADMINDIR );
@@ -124,6 +130,7 @@ function nv_admin_theme( $contents, $head_site = 1 )
 	$xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
     $xtpl->assign( 'NV_SAFEMODE', $admin_info['safemode'] );
 	$xtpl->assign( 'LANG', $lang_global );
+	$xtpl->assign( 'SITE_FAVICON', $site_favicon );
 
 	if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/css/' . $module_file . '.css' ) )
 	{

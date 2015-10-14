@@ -12,10 +12,10 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-	$thumb_type = $nv_Request->get_array( 'thumb_type', 'post' );
-	$thumb_width = $nv_Request->get_array( 'thumb_width', 'post' );
-	$thumb_height = $nv_Request->get_array( 'thumb_height', 'post' );
-	$thumb_quality = $nv_Request->get_array( 'thumb_quality', 'post' );
+	$thumb_type = $nv_Request->get_typed_array( 'thumb_type', 'post', 'int', array() );
+	$thumb_width = $nv_Request->get_typed_array( 'thumb_width', 'post', 'int', array() );
+	$thumb_height = $nv_Request->get_typed_array( 'thumb_height', 'post', 'int', array() );
+	$thumb_quality = $nv_Request->get_typed_array( 'thumb_quality', 'post', 'int', array() );
 
 	$did = $nv_Request->get_int( 'other_dir', 'post', 0 );
 	$other_type = $nv_Request->get_int( 'other_type', 'post', 0 );

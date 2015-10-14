@@ -39,7 +39,11 @@ if ( ! $global_config['allowuserreg'] )
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+$nv_redirect = '';
+if( $nv_Request->isset_request( 'nv_redirect', 'post,get' ) )
+{
+	$nv_redirect = nv_get_redirect();
+}
 
 /**
  * nv_check_username_reg()
@@ -121,12 +125,17 @@ function nv_check_email_reg( $email )
     return '';
 }
 
+/**
+ * reg_result()
+ * 
+ * @param mixed $array
+ * @return
+ */
 function reg_result( $array )
 {
 	global $nv_redirect;
 
-	$redirect = nv_redirect_decrypt( $nv_redirect, true );
-	$array['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$array['redirect'] = nv_redirect_decrypt( $nv_redirect );
 	$string = json_encode( $array );
 	return $string;
 }
@@ -141,11 +150,7 @@ while ( $row = $result->fetch() )
 }
 
 // Captcha
-$gfx_chk = ( in_array( $global_config['gfx_chk'], array(
-    3,
-    4,
-    6,
-    7 ) ) ) ? 1 : 0;
+$gfx_chk = ( in_array( $global_config['gfx_chk'], array( 3, 4, 6, 7 ) ) ) ? 1 : 0;
 
 $array_register = array();
 $array_register['checkss'] = md5( $client_info['session_id'] . $global_config['sitekey'] );
@@ -192,7 +197,7 @@ if ( $checkss == $array_register['checkss'] )
     $array_register['username'] = $nv_Request->get_title( 'username', 'post', '', 1 );
     $array_register['password'] = $nv_Request->get_title( 'password', 'post', '' );
     $array_register['re_password'] = $nv_Request->get_title( 're_password', 'post', '' );
-    $array_register['email'] = nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 );
+    $array_register['email'] = nv_strtolower( nv_substr( $nv_Request->get_title( 'email', 'post', '', 1 ), 0, 100 ) );
 
     $array_register['question'] = $nv_Request->get_int( 'question', 'post', 0 );
     if ( ! isset( $data_questions[$array_register['question']] ) ) $array_register['question'] = 0;
@@ -289,18 +294,19 @@ if ( $checkss == $array_register['checkss'] )
     if ( $global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3 )
     {
         $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info) VALUES (
-					:username,
-					:md5username,
-					:password,
-					:email,
-					:first_name,
-					:last_name,
-					" . NV_CURRENTTIME . ",
-					:your_question,
-					:answer,
-					:checknum,
-					:users_info
-				)";
+			:username,
+			:md5username,
+			:password,
+			:email,
+			:first_name,
+			:last_name,
+			" . NV_CURRENTTIME . ",
+			:your_question,
+			:answer,
+			:checknum,
+			:users_info
+		)";
+		
         $data_insert = array();
         $data_insert['username'] = $array_register['username'];
         $data_insert['md5username'] = nv_md5safe( $array_register['username'] );
@@ -312,7 +318,8 @@ if ( $checkss == $array_register['checkss'] )
         $data_insert['answer'] = $array_register['answer'];
         $data_insert['checknum'] = $checknum;
         $data_insert['users_info'] = nv_base64_encode( serialize( $query_field ) );
-        $userid = $db->insert_id( $sql, 'userid', $data_insert );
+        
+		$userid = $db->insert_id( $sql, 'userid', $data_insert );
 
         if ( ! $userid )
         {
@@ -353,19 +360,19 @@ if ( $checkss == $array_register['checkss'] )
     else
     {
         $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
-					(username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
-					question, answer, passlostkey, view_mail, remember, in_groups,
-					active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-					:username,
-					:md5username,
-					:password,
-					:email,
-					:first_name,
-					:last_name,
-					'', '', 0, " . NV_CURRENTTIME . ",
-					:your_question,
-					:answer,
-					'', 0, 1, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+		(username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
+		question, answer, passlostkey, view_mail, remember, in_groups,
+		active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
+		:username,
+		:md5username,
+		:password,
+		:email,
+		:first_name,
+		:last_name,
+		'', '', 0, " . NV_CURRENTTIME . ",
+		:your_question,
+		:answer,
+		'', 0, 1, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
         $data_insert = array();
         $data_insert['username'] = $array_register['username'];
@@ -376,7 +383,8 @@ if ( $checkss == $array_register['checkss'] )
         $data_insert['last_name'] = $array_register['last_name'];
         $data_insert['your_question'] = $your_question;
         $data_insert['answer'] = $array_register['answer'];
-        $userid = $db->insert_id( $sql, userid, $data_insert );
+        
+		$userid = $db->insert_id( $sql, userid, $data_insert );
 
         if ( ! $userid )
         {
@@ -394,10 +402,29 @@ if ( $checkss == $array_register['checkss'] )
             $subject = $lang_module['account_register'];
             $message = sprintf( $lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username'] );
             nv_sendmail( $global_config['site_email'], $array_register['email'], $subject, $message );
-
-            $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login';
-            if( !empty( $nv_redirect ) ) $url .= '&nv_redirect=' . $nv_redirect;
-            $nv_redirect = '';
+			
+			if( ! empty( $global_config['auto_login_after_reg'] ) )
+			{
+				// Auto login
+				$array_user = array(
+					'userid' => $userid,
+					'last_agent' => '',
+					'last_ip' => '',
+					'last_login' => 0,
+					'last_openid' => ''
+				);
+				validUserLog( $array_user, 1, '' );
+				
+				$nv_redirect = nv_redirect_decrypt( $nv_redirect );
+				$url = ! empty( $nv_redirect ) ? $nv_redirect : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+			}
+			else
+			{
+	            $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login';
+	            if( ! empty( $nv_redirect ) ) $url .= '&nv_redirect=' . $nv_redirect;
+			}
+			
+			$nv_redirect = '';
             die( reg_result( array(
                 'status' => 'ok',
                 'input' => nv_url_rewrite( $url, true ),

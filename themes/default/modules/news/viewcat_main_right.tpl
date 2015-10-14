@@ -9,7 +9,7 @@
 				<li class="hidden-xs"><h4><a class="dimgray" title="{SUBCAT.title}" href="{SUBCAT.link}">{SUBCAT.title}</a></h4></li>
 				<!-- END: subcatloop -->
 				<!-- BEGIN: subcatmore -->
-				<li class="pull-right hidden-xs"><h4><a class="dimgray" title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out"></em></a></h4></li>
+				<a class="dimgray pull-right hidden-xs" title="{MORE.title}" href="{MORE.link}"><em class="fa fa-sign-out">&nbsp;</em></a>
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
@@ -30,7 +30,9 @@
 						<ul class="list-unstyled list-inline">
 							<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
 							<li><em class="fa fa-eye">&nbsp;</em> {CONTENT.hitstotal}</li>
+							<!-- BEGIN: comment -->
 							<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
+							<!-- END: comment -->
 						</ul>
 					</div>
 					<p>{CONTENT.hometext}</p>
@@ -41,7 +43,7 @@
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">
-							<a class="show h4" href="{OTHER.link}" title="{OTHER.title}" data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}">{OTHER.title}</a>
+							<a class="show h4" href="{OTHER.link}" title="{OTHER.title}" <!-- BEGIN: tooltip -->data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip -->>{OTHER.title}</a>
 						</li>
 						<!-- END: loop -->
 					</ul>

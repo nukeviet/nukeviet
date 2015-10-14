@@ -12,7 +12,8 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $table_caption = $lang_module['list_module_title'];
 
-$usactive_old = $nv_Request->get_int( 'usactive', 'cookie', 3 );
+$usactive = ( $global_config['idsite'] ) ? 3 : -1;
+$usactive_old = $nv_Request->get_int( 'usactive', 'cookie', $usactive );
 $usactive = $nv_Request->get_int( 'usactive', 'post,get', $usactive_old );
 $method = $nv_Request->isset_request( 'method', 'post' ) ? $nv_Request->get_string( 'method', 'post', '' ) : ( $nv_Request->isset_request( 'method', 'get' ) ? urldecode( $nv_Request->get_string( 'method', 'get', '' ) ) : '' );
 
@@ -229,7 +230,7 @@ $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php' );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-$xtpl->assign( 'SEARCH_VALUE', $methodvalue );
+$xtpl->assign( 'SEARCH_VALUE', nv_htmlspecialchars( $methodvalue ) );
 $xtpl->assign( 'TABLE_CAPTION', $table_caption );
 
 if( defined( 'NV_IS_USER_FORUM' ) )

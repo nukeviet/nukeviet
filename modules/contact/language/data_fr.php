@@ -16,7 +16,7 @@ if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
  * 	- Accept global var: $db, $db_config, $global_config
  */
 
-$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)" );
+$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)" );
 
 $full_name = 'Consumer Care Division';
 $alias = 'Consumer-Care';
@@ -62,7 +62,7 @@ $sth->bindValue( ':weight', $weight, PDO::PARAM_INT );
 $sth->bindValue( ':is_default', $is_default, PDO::PARAM_INT );
 $sth->execute();
 
-$bodytext = 'Si vous avez des questions ou désirez obtenir de plus amples informations à propos de nous, vous pouvez remplir le formulaire de contact ci-dessous et nous présenter, ou de trouver un service approprié comme ci-dessous pour fax ou e-mail nous vos questions , des enquêtes et des commentaires etc. Nous fournirons une assistance rapide et essayer de revenir vers vous dès que nous le pouvons.';
-$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('vi', 'contact', 'bodytext', :bodytext)" );
+$bodytext = 'Si vous avez des questions ou dÃ©sirez obtenir de plus amples informations Ã  propos de nous, vous pouvez remplir le formulaire de contact ci-dessous et nous prÃ©senter, ou de trouver un service appropriÃ© comme ci-dessous pour fax ou e-mail nous vos questions , des enquÃªtes et des commentaires etc. Nous fournirons une assistance rapide et essayer de revenir vers vous dÃ¨s que nous le pouvons.';
+$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('vi', '" . $module_name . "', 'bodytext', :bodytext)" );
 $sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodytext ) );
 $sth->execute();

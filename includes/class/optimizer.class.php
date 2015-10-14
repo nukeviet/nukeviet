@@ -228,7 +228,7 @@ class optimizer
 		$head = "";
 		if( ! empty( $meta ) ) $head .= implode( $this->eol, $meta ) . $this->eol;
 		if( ! empty( $this->_links ) ) $head .= implode( $this->eol, $this->_links ) . $this->eol;
-		if( ! empty( $this->_cssLinks ) ) $head .= implode( $this->eol, $this->_cssLinks ) . $this->eol;
+		if( ! empty( $this->_cssLinks ) ) $head .= implode( $this->eol, array_unique( $this->_cssLinks ) ) . $this->eol;
 		if( ! empty( $this->_style ) ) $head .= '<style type="text/css">' . implode( $this->eol, $this->_style ) . '</style>' . $this->eol;
 
 		if( preg_match( '/\<head\>/', $this->_content ) )

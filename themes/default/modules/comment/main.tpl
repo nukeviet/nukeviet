@@ -80,7 +80,13 @@
 		<!-- END: allowed_comm -->
 		<!-- BEGIN: form_login-->
 		<div class="alert alert-danger fade in">
-			{COMMENT_LOGIN}
+			<!-- BEGIN: message_login -->
+			<a title="{GLANG.loginsubmit}" href="#" onclick="return loginForm('');">{LANG.comment_login}</a>
+			<!-- END: message_login -->
+
+			<!-- BEGIN: message_register_group -->
+			{LANG_REG_GROUPS}
+			<!-- END: message_register_group -->
 		</div>
 		<!-- END: form_login -->
 	</div>

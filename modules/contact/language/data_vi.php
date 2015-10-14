@@ -16,7 +16,7 @@ if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
  * 	- Accept global var: $db, $db_config, $global_config
  */
 
-$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)" );
+$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)" );
 
 $full_name = 'Phòng Chăm sóc khách hàng';
 $alias = 'Cham-soc-khach-hang';
@@ -63,6 +63,6 @@ $sth->bindValue( ':is_default', $is_default, PDO::PARAM_INT );
 $sth->execute();
 
 $bodytext = 'Để không ngừng nâng cao chất lượng dịch vụ và đáp ứng tốt hơn nữa các yêu cầu của Quý khách, chúng tôi mong muốn nhận được các thông tin phản hồi. Nếu Quý khách có bất kỳ thắc mắc hoặc đóng góp nào, xin vui lòng liên hệ với chúng tôi theo thông tin dưới đây. Chúng tôi sẽ phản hồi lại Quý khách trong thời gian sớm nhất.';
-$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('vi', 'contact', 'bodytext', :bodytext)" );
+$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('vi', '" . $module_name . "', 'bodytext', :bodytext)" );
 $sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodytext ) );
 $sth->execute();

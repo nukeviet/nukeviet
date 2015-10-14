@@ -422,7 +422,7 @@ function filedelete(){
 				if( e[0] != 'OK' ){
 					alert( e[1] );
 				}else{
-					$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + path + "&type=" + imgtype + author + "&order=" + order + "&num=" + +nv_randomNum(10));
+					$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + path + "&type=" + imgtype + author + "&order=" + order + "&num=" + +nv_randomNum(10), function(){ LFILE.setViewMode(); });
 				}
 			}
 		});
@@ -553,7 +553,7 @@ function folderMouseup( folder, e ){
 				var selFile = $("input[name=selFile]").val();
 				var author = $("select[name=author]").val() == 1 ? "&author" : "";
 
-				$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + folderPath + "&imgfile=" + selFile + "&type=" + imgtype + author + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+				$("div#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + folderPath + "&imgfile=" + selFile + "&type=" + imgtype + author + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); })
 			}else{
 				$("div#imglist").text("");
 			}
@@ -625,7 +625,7 @@ function deletefolder(){
 					b = $("select[name=imgtype]").val();
 					var d = $("select[name=author]").val() == 1 ? "&author" : "", e = $("span#path").attr("title"), g = $("input[name=selFile]").val();
 					$("#imgfolder").load(nv_module_url + "folderlist&path=" + e + "&currentpath=" + a + "&random=" + nv_randomNum(10));
-					$("div#imglist").load(nv_module_url + "imglist&path=" + a + "&imgfile=" + g + "&type=" + b + d + "&order=" + $("select[name=order]").val() + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+					$("div#imglist").load(nv_module_url + "imglist&path=" + a + "&imgfile=" + g + "&type=" + b + d + "&order=" + $("select[name=order]").val() + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); })
 				}
 			}
 		})
@@ -637,7 +637,7 @@ function searchfile(){
 	a = $("select[name=searchPath]").val(), q = $("input[name=q]").val();
 	b = $("select[name=imgtype]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
 	$("div#filesearch").dialog("close");
-	$("#imglist").html(nv_loading_data).load(nv_module_url + 'imglist&path=' + a + '&type=' + b + e + '&q=' + rawurlencode(q) + '&order=' + $('select[name=order]').val() + '&random=' + nv_randomNum(10))
+	$("#imglist").html(nv_loading_data).load(nv_module_url + 'imglist&path=' + a + '&type=' + b + e + '&q=' + rawurlencode(q) + '&order=' + $('select[name=order]').val() + '&random=' + nv_randomNum(10), function(){ LFILE.setViewMode(); })
 	return false;
 }
 
@@ -947,7 +947,7 @@ ICON.addlogo = 'fa-file-image-o';
 
 $(".vchange").change(function(){
 	var a = $("span#foldervalue").attr("title"), b = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $(this).val() == 1 ? "&author" : "";
-	$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + d + "&imgfile=" + b + e + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+	$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + d + "&imgfile=" + b + e + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); })
 });
 
 $(".refresh em").click(function(){
@@ -958,9 +958,15 @@ $(".refresh em").click(function(){
 		g = $("span#path").attr("title");
 
 	$("#imgfolder").html(nv_loading_data).load(nv_module_url + "folderlist&path=" + g + "&currentpath=" + a + "&dirListRefresh&random=" + nv_randomNum(10));
-	$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10));
+	$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); });
 
 	return false
+});
+
+$(".viewmode em").click(function(){
+	$(this).data('auto', false);
+	$('#imglist').toggleClass('view-detail');
+	LFILE.setViewIcon();
 });
 
 $(".search em").click(function (){
@@ -1074,7 +1080,7 @@ $("div#createfolder").dialog({
 						e = $("select[name=imgtype]").val();
 						var g = $("select[name=author]").val() == 1 ? "&author" : "", h = $("span#path").attr("title");
 						$("#imgfolder").load(nv_module_url + "folderlist&path=" + h + "&currentpath=" + d + "&random=" + nv_randomNum(10));
-						$("div#imglist").load(nv_module_url + "imglist&path=" + d + "&type=" + e + g + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10))
+						$("div#imglist").load(nv_module_url + "imglist&path=" + d + "&type=" + e + g + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); })
 					}
 				}
 			});
@@ -1122,7 +1128,7 @@ $("[name=newSizeOK]").click(function(){
 						$("input[name=selFile]").val(h);
 						$("[name=newSizeOK]").removeAttr("disabled");
 						$("div#imgcreate").dialog("close");
-						$("#imglist").load(nv_module_url + "imglist&path=" + g + "&type=" + j + "&imgfile=" + h + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10))
+						$("#imglist").load(nv_module_url + "imglist&path=" + g + "&type=" + j + "&imgfile=" + h + k + "&order=" + $("select[name=order]").val() + "&num=" + +nv_randomNum(10), function(){ LFILE.setViewMode(); })
 					}
 				}
 			})
@@ -1166,9 +1172,9 @@ $("input[name=newPathOK]").click(function(){
 					if( goNewPath == 1 ){
 						goNewPath = $("span#path").attr("title");
 						$("#imgfolder").load(nv_module_url + "folderlist&path=" + goNewPath + "&currentpath=" + newPath + "&random=" + nv_randomNum(10));
-						$("#imglist").load(nv_module_url + "imglist&path=" + newPath + "&type=" + imgtype + "&imgfile=" + imgfile + author + "&order=" + order + "&num=" + +nv_randomNum(10));
+						$("#imglist").load(nv_module_url + "imglist&path=" + newPath + "&type=" + imgtype + "&imgfile=" + imgfile + author + "&order=" + order + "&num=" + +nv_randomNum(10), function(){ LFILE.setViewMode(); });
 					}else{
-						$("#imglist").load(nv_module_url + "imglist&path=" + currentFolder + "&type=" + imgtype + "&imgfile=" + imgfile + author + "&order=" + order + "&num=" + +nv_randomNum(10));
+						$("#imglist").load(nv_module_url + "imglist&path=" + currentFolder + "&type=" + imgtype + "&imgfile=" + imgfile + author + "&order=" + order + "&num=" + +nv_randomNum(10), function(){ LFILE.setViewMode(); });
 					}
 				}
 			}
@@ -1207,7 +1213,7 @@ $("input[name=filerenameOK]").click(function(){
 						var j = $("select[name=author]").val() == 1 ? "&author" : "";
 						$("input[name=filerenameOK]").removeAttr("disabled");
 						$("div#filerename").dialog("close");
-						$("#imglist").load(nv_module_url + "imglist&path=" + p + "&type=" + h + "&imgfile=" + g + j + "&order=" + $("select[name=order]").val() + "&num=" + nv_randomNum(10));
+						$("#imglist").load(nv_module_url + "imglist&path=" + p + "&type=" + h + "&imgfile=" + g + j + "&order=" + $("select[name=order]").val() + "&num=" + nv_randomNum(10), function(){ LFILE.setViewMode(); });
 					}
 				}
 			});
@@ -1256,6 +1262,9 @@ $('[name="uploadremoteFileOK"]').click(function(){
 	var folderPath = $("span#foldervalue").attr("title");
 	var check = fileUrl + " " + folderPath;
 	var fileAlt = $('#uploadremoteFileAlt').val();
+    
+    if( /^(https?|ftp):\/\//i.test( fileUrl ) === false) fileUrl = 'http://' + fileUrl;
+    $("input[name=uploadremoteFile]").val(fileUrl);
 
 	if( /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test( fileUrl ) && currUrl != check && ( ( nv_alt_require && fileAlt != '' ) || ! nv_alt_require ) ){
 		$(this).attr('disabled', 'disabled');
@@ -1284,6 +1293,7 @@ $('[name="uploadremoteFileOK"]').click(function(){
 	}else if( nv_alt_require && fileAlt == '' && fileUrl != '' ){
 		$("div#errorInfo").html(LANG.upload_alt_note).dialog("open");
 	}
+    else alert(nv_url)
 });
 
 /* List File Handle */
@@ -1296,7 +1306,7 @@ var LFILE = {
 		// Reset shift offset
 		KEYPR.shiftOffset = 0;
 
-		$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + path + "&type=" + imgtype + "&imgfile=" + file + author + "&order=" + order + "&num=" + nv_randomNum(10) );
+		$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + path + "&type=" + imgtype + "&imgfile=" + file + author + "&order=" + order + "&num=" + nv_randomNum(10), function(){ LFILE.setViewMode(); });
 	},
 	setSelFile : function(){
 		$("input[name=selFile]").val('');
@@ -1309,6 +1319,28 @@ var LFILE = {
 			fileName = fileName.join('|');
 
 			$("input[name=selFile]").val(fileName);
+		}
+	},
+	setViewMode : function(){
+		var numFiles = $('[data-img="false"]').length;
+		var numImage = $('[data-img="true"]').length;
+		var autoMode = $(".viewmode em").data('auto');
+		
+		if( autoMode ){
+			if( numImage > numFiles ){
+				$('#imglist').removeClass('view-detail');
+			}else if( numFiles > 0 ){
+				$('#imglist').addClass('view-detail');
+			}
+		}
+		
+		LFILE.setViewIcon();
+	},
+	setViewIcon : function(){
+		if( $('#imglist').is('.view-detail') ){
+			$('.viewmode em').removeClass('fa-hourglass-o fa-spin fa-list').addClass('fa-file-image-o').attr('title', $('.viewmode em').data('langthumb'));
+		}else{
+			$('.viewmode em').removeClass('fa-hourglass-o fa-spin fa-file-image-o').addClass('fa-list').attr('title', $('.viewmode em').data('langdetail'));
 		}
 	}
 }
@@ -1571,11 +1603,13 @@ var NVUPLOAD = {
 				runtimes : 'html5,flash,silverlight,html4',
 				browse_button : 'upload-local',
 				url : nv_module_url + "upload&path=" + folderPath + "&random=" + nv_randomNum(10),
+				max_file_size : nv_max_size_bytes,
 				flash_swf_url : nv_base_siteurl + 'assets/js/plupload/Moxie.swf',
 				silverlight_xap_url : nv_base_siteurl+ 'assets/js/plupload/Moxie.xap',
 				drop_element : 'upload-content',
 				file_data_name : 'upload',
 				filters : nv_filters,
+		        resize: nv_resize,
 				multipart : true,
 				init: {
 					// Event on init uploader
@@ -1708,7 +1742,7 @@ var NVUPLOAD = {
 
 					// Event on error
 					Error: function(up, err){
-						$("div#errorInfo").html( "Error #" + err.code + ": " + err.message ).dialog("open");
+						$("div#errorInfo").html( "Error #" + err.message + ": <br>" + err.file.name ).dialog("open");
 
 						if( err.code === plupload.INIT_ERROR ){
 							setTimeout( "NVUPLOAD.destroyUpload()", 1000 );

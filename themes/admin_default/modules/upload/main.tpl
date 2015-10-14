@@ -22,6 +22,7 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jQueryRotate.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/plupload/plupload.full.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/plupload-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="content">
 	<div class="row upload-wrap">
@@ -48,9 +49,14 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="row">
-				<div class="col-sm-2">
+				<div class="col-sm-1">
 					<div class="refresh text-right">
-						<em title="{LANG.refresh}" class="fa fa-refresh fa-lg fa-pointer">&nbsp;</em>
+						<em title="{LANG.refresh}" class="fa fa-refresh fa-pointer">&nbsp;</em>
+					</div>
+				</div>
+				<div class="col-sm-1">
+					<div class="viewmode text-right">
+						<em class="fa fa-hourglass-o fa-pointer fa-spin" data-auto="true" data-langthumb="{LANG.upload_view_thumbnail}" data-langdetail="{LANG.upload_view_detail}"></em>
 					</div>
 				</div>
 				<div class="col-sm-5">
@@ -81,7 +87,7 @@
 			</div>
 		</div>
 		<div class="col-sm-12">
-			<div id="upload-button-area">&nbsp;</div>
+			<div id="upload-button-area" title="{LANG.nv_max_size}: {NV_MAX_SIZE}">&nbsp;</div>
 		</div>
 	</div>
 	<div class="clearfix"></div>
@@ -334,6 +340,7 @@ LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
 LANG.altimage = "{LANG.altimage}";
 LANG.upload_alt_note = "{LANG.upload_alt_note}";
 
+var nv_max_size_bytes = '{NV_MAX_SIZE_BYTES}';
 var nv_max_width = '{NV_MAX_WIDTH}';
 var nv_max_height = '{NV_MAX_HEIGHT}';
 var nv_min_width = '{NV_MIN_WIDTH}';
@@ -344,10 +351,22 @@ var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
 var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em><br />{LANG.waiting}...</p>';
 var nv_filters = {
 	mime_types : [
-		<!-- BEGIN: mime -->{ title : "{MIMI_TYPE} files", extensions : "{MIME_EXTS}" },
+		<!-- BEGIN: mime -->
+		{ title : "{MIMI_TYPE} files", extensions : "{MIME_EXTS}" },
 		<!-- END: mime -->
 	]
 };
+//Resize images on clientside if we can
+var nv_resize = {
+    width : {NV_MAX_WIDTH},
+    height : {NV_MAX_HEIGHT},
+    quality : 99,
+    crop: false // crop to exact dimensions
+};
+<!-- BEGIN: no_auto_resize -->
+var nv_resize = false;
+<!-- END: no_auto_resize -->
+
 var nv_alt_require = {UPLOAD_ALT_REQUIRE};
 var nv_auto_alt = {UPLOAD_AUTO_ALT};
 //]]>
@@ -356,7 +375,7 @@ var nv_auto_alt = {UPLOAD_AUTO_ALT};
 <script type="text/javascript">
 $(function(){
 	$("#imgfolder").load(nv_module_url + "folderlist&path={PATH}&currentpath={CURRENTPATH}&random=" + nv_randomNum(10));
-	$("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10))
+	$("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); });
 });
 </script>
 <!--  END: main  -->

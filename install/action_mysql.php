@@ -472,6 +472,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   area tinyint(1) unsigned NOT NULL,
   language char(3) NOT NULL,
   module varchar(50) NOT NULL,
+  obid int(11) unsigned NOT NULL DEFAULT '0',
   type varchar(255) NOT NULL,
   content text NOT NULL,
   add_time int(11) unsigned NOT NULL,

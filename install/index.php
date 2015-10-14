@@ -141,10 +141,18 @@ elseif( $step == 2 )
 	{
 		if( $sys_info['supports_rewrite'] == 'rewrite_mode_apache' )
 		{
+			if( ! file_exists( NV_ROOTDIR . '/.htaccess' ) )
+			{
+				@file_put_contents( NV_ROOTDIR . '/.htaccess', file_get_contents( NV_ROOTDIR . '/install/default.htaccess.txt' ) );
+			}
 			$array_dir[] = '.htaccess';
 		}
 		else
 		{
+			if( ! file_exists( NV_ROOTDIR . '/web.config' ) )
+			{
+				@file_put_contents( NV_ROOTDIR . '/web.config', file_get_contents( NV_ROOTDIR . '/install/default.web.config.txt' ) );
+			}
 			$array_dir[] = 'web.config';
 		}
 	}
@@ -1016,14 +1024,12 @@ elseif( $step == 6 )
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Mobile', 0, 0, 0)" );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'bots', 0, 0, 0)" );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)" );
-					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unspecified', 0, 0, 0)" );
 
 					$tmp_array = array('unknown', 'win', 'win10', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
 					foreach( $tmp_array as $_os )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote( $_os ) . ", 0, 0, 0)" );
 					}
-					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', 'Unspecified', 0, 0, 0)" );
 
 					foreach( $countries as $_country => $v )
 					{
@@ -1048,6 +1054,7 @@ elseif( $step == 6 )
 
 	$array_data['error'] = $error;
 	$title = $lang_module['website_info'];
+	$lang_module['admin_pass_note'] = $lang_global['upass_type_' . $global_config['nv_upass_type']];
 	$contents = nv_step_6( $array_data, $nextstep );
 }
 elseif( $step == 7 )
@@ -1149,6 +1156,8 @@ function nv_save_file_config()
 		$content .= "\$db_config['persistent'] = " . $persistent . ";\n";
 		$content .= "\$db_config['prefix'] = '" . $db_config['prefix'] . "';\n";
 		$content .= "\n";
+		$content .= "\$global_config['site_domain'] = '';\n";
+		$content .= "\$global_config['name_show'] = 0;\n";
 		$content .= "\$global_config['idsite'] = 0;\n";
 		$content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
 		$content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";

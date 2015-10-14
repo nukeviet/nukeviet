@@ -29,7 +29,7 @@ $credentials = new Credentials( $global_config['facebook_client_id'], $global_co
 
 // Instantiate the Facebook service using the credentials, http client and storage mechanism for the token
 /** @var $facebookService Facebook */
-$facebookService = $serviceFactory->createService( 'facebook', $credentials, $storage, array( 'email' ) );
+$facebookService = $serviceFactory->createService( 'facebook', $credentials, $storage, array( 'email', 'user_photos' ) );
 
 if( !empty( $_GET['code'] ) )
 {
@@ -38,6 +38,7 @@ if( !empty( $_GET['code'] ) )
 
 	// Send a request with it
 	$result = json_decode( $facebookService->request( '/me' ), true );
+	
 	if( isset( $result['email'] ) )
 	{
 		$attribs = array(
@@ -50,6 +51,8 @@ if( !empty( $_GET['code'] ) )
 			'namePerson' => $result['name'],
 			'person/gender' => $result['gender'],
 			'server' => $server,
+			'picture_url' => 'https://graph.facebook.com/' . $result['id'] . '/picture?width=' . $global_config['avatar_width'] . '&height=' . $global_config['avatar_height'] . '&access_token=' . $token,
+			'picture_mode' => 0, // 0: Remote picture
 			'current_mode' => 3
 		);
 	}
@@ -61,7 +64,7 @@ if( !empty( $_GET['code'] ) )
 	$nv_Request->set_Session( 'openid_attribs', serialize( $attribs ) );
 
 	$op_redirect = ( defined( 'NV_IS_USER' )) ? 'editinfo/openid' : 'login';
-    $nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+    $nv_redirect = nv_get_redirect();
     if( !empty( $nv_redirect ) ) $nv_redirect = '&nv_redirect=' . $nv_redirect;
 	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect );
 	exit();

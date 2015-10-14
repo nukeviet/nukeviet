@@ -98,13 +98,14 @@ $lang_module['allow_create_subdirectories'] = 'Được phép tạo thư mục';
 $lang_module['allow_modify_subdirectories'] = 'Được phép đổi tên, xóa thư mục';
 $lang_module['admin_login_incorrect'] = 'Tài khoản &ldquo;<strong>%s</strong>&rdquo; đã có trong danh sách quản trị. Hãy sử dụng một tài khoản khác';
 $lang_module['config'] = 'Cấu hình';
+$lang_module['funcs'] = 'Chức năng';
+$lang_module['checkall'] = 'Chọn tất cả';
+$lang_module['uncheckall'] = 'Bỏ chọn tất cả';
+
 $lang_module['adminip'] = 'Quản lý IP truy cập khu vực quản trị';
 $lang_module['adminip_ip'] = 'Ip';
 $lang_module['adminip_timeban'] = 'Thời gian bắt đầu';
 $lang_module['adminip_timeendban'] = 'Thời gian kết thúc';
-$lang_module['adminip_funcs'] = 'Chức năng';
-$lang_module['adminip_checkall'] = 'Chọn tất cả';
-$lang_module['adminip_uncheckall'] = 'Bỏ chọn tất cả';
 $lang_module['adminip_add'] = 'Thêm địa chỉ IP';
 $lang_module['adminip_address'] = 'Địa chỉ';
 $lang_module['adminip_begintime'] = 'Thời gian bắt đầu';

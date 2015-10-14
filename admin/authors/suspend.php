@@ -48,7 +48,7 @@ if( ! empty( $row['susp_reason'] ) )
 	$last_reason = ( ! empty( $susp_reason ) ) ? $susp_reason[0] : '';
 }
 
-$old_suspend = intval( $row['is_suspend'] );
+$old_suspend = ( $row['is_suspend'] or empty( $row_user['active'] ) ) ? 1 : 0;
 
 if( empty( $old_suspend ) )
 {
@@ -123,6 +123,10 @@ if( $allow_change )
 			$sth->bindValue( ':susp_reason', serialize( $susp_reason ), PDO::PARAM_STR );
 			if( $sth->execute() )
 			{
+				if( empty( $row_user['active'] ) )
+				{
+					$db->query( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET active= 1 WHERE userid=' . $admin_id );
+				}
 				nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['suspend' . $new_suspend] . ' ', ' Username : ' . $row_user['username'], $admin_info['userid'] );
 				if( ! empty( $sendmail ) )
 				{

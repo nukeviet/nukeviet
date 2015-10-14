@@ -16,17 +16,24 @@ if( defined( 'NV_IS_USER' ) or ! $global_config['allowuserlogin'] )
 	die();
 }
 
-$nv_redirect = $nv_Request->get_title( 'nv_redirect', 'post,get', '' );
+$nv_header = '';
+if( $nv_Request->isset_request( 'nv_header', 'post,get' ) )
+{
+	$nv_header = $nv_Request->get_title( 'nv_header', 'post,get', '' );
+	if( $nv_header != md5( $client_info['session_id'] . $global_config['sitekey'] ) ) $nv_header = '';
+}
 
-$gfx_chk = ( in_array( $global_config['gfx_chk'], array(
-	2,
-	4,
-	5,
-	7 ) ) ) ? 1 : 0;
+$nv_redirect = '';
+if( $nv_Request->isset_request( 'nv_redirect', 'post,get' ) )
+{
+	$nv_redirect = nv_get_redirect();
+}
+
+$gfx_chk = ( in_array( $global_config['gfx_chk'], array( 2, 4, 5, 7 ) ) ) ? 1 : 0;
 
 /**
  * login_result()
- * 
+ *
  * @param mixed $array
  * @return
  */
@@ -34,15 +41,14 @@ function signin_result( $array )
 {
 	global $nv_redirect;
 
-	$redirect = nv_redirect_decrypt( $nv_redirect, true );
-	$array['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$array['redirect'] = nv_redirect_decrypt( $nv_redirect );
 	$string = json_encode( $array );
 	return $string;
 }
 
 /**
  * opidr()
- * 
+ *
  * @param mixed $openid_info
  * @return void
  */
@@ -52,8 +58,7 @@ function opidr( $openid_info )
 
 	$nv_Request->unset_request( 'openid_attribs', 'session' );
 
-	$redirect = nv_redirect_decrypt( $nv_redirect );
-	$openid_info['redirect'] = ! empty( $redirect ) ? $redirect : '';
+	$openid_info['redirect'] = nv_redirect_decrypt( $nv_redirect );
 
 	$contents = openid_callback( $openid_info );
 
@@ -71,7 +76,7 @@ function opidr( $openid_info )
  */
 function set_reg_attribs( $attribs )
 {
-	global $crypt, $db, $db_config;
+	global $crypt, $db, $db_config, $global_config, $module_upload;
 
 	$reg_attribs = array();
 	$reg_attribs['server'] = $attribs['server'];
@@ -81,6 +86,7 @@ function set_reg_attribs( $attribs )
 	$reg_attribs['last_name'] = '';
 	$reg_attribs['gender'] = '';
 	$reg_attribs['yim'] = '';
+	$reg_attribs['photo'] = '';
 	$reg_attribs['openid'] = $attribs['id'];
 	$reg_attribs['opid'] = $crypt->hash( $attribs['id'] );
 
@@ -138,6 +144,37 @@ function set_reg_attribs( $attribs )
 	{
 		$reg_attribs['gender'] = $attribs['person/gender'];
 	}
+	
+	if( $global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2 )
+	{
+		if( ! empty( $attribs['picture_url'] ) and empty( $attribs['picture_mode'] ) )
+		{
+			$upload = new upload( array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
+			
+			$upload_info = $upload->save_urlfile( $attribs['picture_url'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false );
+			
+			if( empty( $upload_info['error'] ) )
+			{
+				$basename = change_alias( $reg_attribs['username'] ) . '.' . nv_getextension( $upload_info['basename'] );
+				$newname = $basename;
+				$fullname = $upload_info['name'];
+				
+				$i = 1;
+				while( file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname ) )
+				{
+					$newname = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $basename );
+					++$i;
+				}
+				
+				$check = nv_renamefile( $fullname, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname );
+				
+				if( $check[0] == 1 )
+				{
+					$reg_attribs['photo'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $newname;
+				}
+			}
+		}
+	}
 
 	return $reg_attribs;
 }
@@ -182,7 +219,7 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->isset_request( 'server', 'ge
 		opidr( array( 'status' => 'error', 'mess' => $lang_module['logged_in_failed'] ) );
 		die();
 	}
-
+	$email = nv_strtolower( $email );
 	$opid = $crypt->hash( $attribs['id'] );
 	$current_mode = isset( $attribs['current_mode'] ) ? $attribs['current_mode'] : 1;
 
@@ -196,7 +233,9 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->isset_request( 'server', 'ge
 	$stmt->bindParam( ':opid', $opid, PDO::PARAM_STR );
 	$stmt->bindParam( ':email', $email, PDO::PARAM_STR );
 	$stmt->execute();
+	
 	list( $user_id, $op_email, $user_active, $safemode ) = $stmt->fetch( 3 );
+	
 	if( $user_id )
 	{
 		if( $safemode == 1 )
@@ -430,20 +469,20 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->isset_request( 'server', 'ge
 		}
 
 		$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
-				(username, md5username, password, email, first_name, last_name, gender, photo, birthday,  regdate,
-				question, answer, passlostkey, view_mail, remember, in_groups,
-				active, checknum, last_login, last_ip, last_agent, last_openid, idsite)  VALUES (
-				:username,
-				:md5username,
-				'',
-				:email,
-				:first_name,
-				:last_name,
-				:gender,
-				'', 0,
-				" . NV_CURRENTTIME . ",
-				'', '', '', 0, 0, '', 1, '', 0, '', '', '', " . intval( $global_config['idsite'] ) . "
-			)";
+			(username, md5username, password, email, first_name, last_name, gender, photo, birthday,  regdate,
+			question, answer, passlostkey, view_mail, remember, in_groups,
+			active, checknum, last_login, last_ip, last_agent, last_openid, idsite)  VALUES (
+			:username,
+			:md5username,
+			'',
+			:email,
+			:first_name,
+			:last_name,
+			:gender,
+			'', 0,
+			" . NV_CURRENTTIME . ",
+			'', '', '', 0, 0, '', 1, '', 0, '', '', '', " . intval( $global_config['idsite'] ) . "
+		)";
 
 		$data_insert = array();
 		$data_insert['username'] = $reg_attribs['username'];
@@ -452,13 +491,23 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->isset_request( 'server', 'ge
 		$data_insert['first_name'] = $reg_attribs['first_name'];
 		$data_insert['last_name'] = $reg_attribs['last_name'];
 		$data_insert['gender'] = ! empty( $reg_attribs['gender'] ) ? ucfirst( substr( $reg_attribs['gender'], 0, 1 ) ) : 'N';
+		
 		$userid = $db->insert_id( $sql, 'userid', $data_insert );
+		
 		if( ! $userid )
 		{
 			opidr( array( 'status' => 'error', 'mess' => $lang_module['err_no_save_account'] ) );
 			die();
 		}
-
+		
+		// Cap nhat thong tin anh dai dien
+		if( ! empty( $reg_attribs['photo'] ) )
+		{
+			$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET photo=:photo WHERE userid=' . $userid );
+			$stmt->bindParam( ':photo', $reg_attribs['photo'], PDO::PARAM_STR );
+			$stmt->execute();
+		}
+		
 		// Cap nhat so thanh vien
 		$db->query( 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4' );
 
@@ -511,19 +560,20 @@ if( defined( 'NV_OPENID_ALLOWED' ) and $nv_Request->isset_request( 'server', 'ge
 		}
 
 		$sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info, openid_info) VALUES (
-					:username,
-					:md5username,
-					'',
-					:email,
-					:first_name,
-					:last_name,
-					" . NV_CURRENTTIME . ",
-					'',
-					'',
-					'',
-					:users_info,
-                    :openid_info
-				)";
+			:username,
+			:md5username,
+			'',
+			:email,
+			:first_name,
+			:last_name,
+			" . NV_CURRENTTIME . ",
+			'',
+			'',
+			'',
+			:users_info,
+            :openid_info
+		)";
+		
 		$data_insert = array();
 		$data_insert['username'] = $reg_attribs['username'];
 		$data_insert['md5username'] = nv_md5safe( $reg_attribs['username'] );
@@ -609,6 +659,7 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		if( nv_check_valid_email( $nv_username ) == '' )
 		{
 			// Email login
+			$nv_username = nv_strtolower( $nv_username );
 			$sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE email =" . $db->quote( $nv_username );
 			$login_email = true;
 		}
@@ -652,16 +703,15 @@ if( $nv_Request->isset_request( 'nv_login', 'post' ) )
 		'mess' => $lang_module['login_ok'] ) ) );
 }
 
+if( $nv_Request->get_int( 'nv_ajax', 'post', 0 ) == 1 ) die( user_login( true ) );
+
 $page_title = $lang_module['login'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['login'];
 
-$nv_header = $nv_Request->get_title( 'nv_header', 'get, post', '' );
+$contents = user_login();
 
-$full = ( $nv_header == md5( $client_info['session_id'] . $global_config['sitekey'] ) ) ? false : true;
-if( !empty( $nv_redirect ) ) $full = false;
-
-$contents = user_login( $gfx_chk, $nv_header );
+$full = empty( $nv_redirect ) && empty( $nv_header );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents, $full );

@@ -300,7 +300,8 @@ function nv_check_valid_login( $login, $max, $min )
 			$pattern = '/^[0-9a-z]+[0-9a-z\-\_\\s]+[0-9a-z]+$/i';
 			break;
 		case 4:
-			return ( $login != strip_punctuation( $login ) ? $lang_global['unick_type_' . $type] : '' );
+			$_login = str_replace( '@', '', $login );
+			return ( $login != strip_punctuation( $_login ) ? $lang_global['unick_type_' . $type] : '' );
             break;
 		default:
 			return '';
@@ -432,16 +433,33 @@ function nv_capcha_txt( $seccode )
  * @param integer $length
  * @return
  */
-function nv_genpass( $length = 8 )
+function nv_genpass( $length = 8, $type = 0 )
 {
-	$pass = chr( mt_rand( 65, 90 ) );
+	$array_chars = array();
+	$array_chars[0] = 'abcdefghijklmnopqrstuvwxyz';
+	$array_chars[1] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$array_chars[2] = '0123456789';
+	$array_chars[3] = '-=~!@#$%^&*()_+,./<>?;:[]{}\|';
 
-	for( $k = 0; $k < $length - 1; ++$k )
+	$_arr_m = array();
+	$_arr_m[] = 0; // Chữ
+	$_arr_m[] = 2; // 1. Số
+	$_arr_m[] = ( $type == 2 or $type == 4 ) ? 3 : mt_rand( 0, 2 ); // 2. Đặc biệt
+	$_arr_m[] = ( $type == 3 or $type == 4 ) ? 1 : mt_rand( 0, 2 ); // 3. HOA
+
+	$length = $length - 4;
+	for( $k = 0; $k < $length; ++$k )
 	{
-		$probab = mt_rand( 1, 10 );
-		$pass .= ( $probab <= 8 ) ? chr( mt_rand( 97, 122 ) ) : chr( mt_rand( 48, 57 ) );
+		$_arr_m[] = ( $type == 2 or $type == 4 ) ? mt_rand( 0, 3 ) : mt_rand( 0, 2 );
 	}
 
+	$pass = '';
+	foreach( $_arr_m as $m )
+	{
+		$chars = $array_chars[$m];
+		$max = strlen( $chars ) - 1;
+		$pass .= $chars[mt_rand( 0, $max )];
+	}
 	return $pass;
 }
 
@@ -1357,6 +1375,10 @@ function nv_check_domain( $domain )
 		{
 			return $domain_ascii;
 		}
+		elseif( $domain == NV_SERVER_NAME )
+		{
+			return $domain;
+		}
 	}
 	return '';
 }
@@ -1587,18 +1609,7 @@ function nv_change_buffer( $buffer )
     if ( ! empty( $body_replace ) ) $buffer = preg_replace( '/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1 );
 
 	$optimizer = new optimizer( $buffer,  NV_BASE_SITEURL );
-	$buffer = $optimizer->process();
-
-    if ( ! empty( $global_config['cdn_url'] ) )
-    {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-    }
-    else
-    {
-        $buffer = preg_replace( "/\<(script|link)(.*?)(src|href)=['\"]((?!http(s?)|ftp\:\/\/).*?\.(js|css))['\"](.*?)\>/", "<\\1\\2\\3=\"\\4?t=" . $global_config['timestamp'] . "\"\\7>", $buffer );
-    }
-
-    return $buffer;
+	return $optimizer->process();
 }
 
 /**
@@ -1636,11 +1647,9 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 /**
  * nv_site_mods()
  *
- * @param string $module_name
- *
  * @return
  */
-function nv_site_mods( $module_name = '' )
+function nv_site_mods()
 {
 	global $sys_mods, $admin_info, $global_config;
 
@@ -1723,16 +1732,16 @@ function nv_site_mods( $module_name = '' )
 /**
  * nv_insert_notification()
  *
- * @param integer $send_to
- * @param integer $send_from
- * @param int $module
  * @param string $module
  * @param string $type
- * @param integer $add_time
  * @param array $content
+ * @param int $obid
+ * @param integer $send_to
+ * @param integer $send_from
+ * @param integer $area
  * @return
  */
-function nv_insert_notification( $module, $type, $content = array(), $send_to = 0, $send_from = 0, $area = 1 )
+function nv_insert_notification( $module, $type, $content = array(), $obid = 0, $send_to = 0, $send_from = 0, $area = 1 )
 {
 	global $db_config, $db, $global_config;
 
@@ -1747,14 +1756,70 @@ function nv_insert_notification( $module, $type, $content = array(), $send_to = 
 		!empty( $content ) && $content = serialize( $content );
 
 		$sth = $db->prepare( 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
-		(send_to, send_from, area, language, module, type, content, add_time, view)	VALUES
-		(:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
+		(send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
+		(:send_to, :send_from, :area, ' . $db->quote( NV_LANG_DATA ) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)' );
 		$sth->bindParam( ':send_to', $send_to, PDO::PARAM_STR );
 		$sth->bindParam( ':send_from', $send_from, PDO::PARAM_INT );
 		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
 		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
 		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
 		$sth->bindParam( ':content', $content, PDO::PARAM_STR );
+		$sth->execute();
+	}
+	return true;
+}
+
+/**
+ * nv_delete_notification()
+ *
+ * @param string $language
+ * @param string $module
+ * @param integer $obid
+ * @param string $type
+ * @param integer $send_from
+ * @param integer $area
+ * @return
+ */
+function nv_delete_notification( $language, $module, $type, $obid )
+{
+	global $db_config, $db, $global_config;
+
+	if( $global_config['notification_active'] )
+	{
+		$sth = $db->prepare( 'DELETE FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language = :language AND module = :module AND obid = :obid AND type = :type' );
+		$sth->bindParam( ':language', $language, PDO::PARAM_STR );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+		$sth->execute();
+	}
+	return true;
+}
+
+/**
+ * nv_status_notification()
+ *
+ * @param string $language
+ * @param string $module
+ * @param integer $obid
+ * @param string $type
+ * @param integer $area
+ * @return
+ */
+function nv_status_notification( $language, $module, $type, $obid, $status = 1, $area = 1 )
+{
+	global $db_config, $db, $global_config;
+
+	if( $global_config['notification_active'] )
+	{
+		$sth = $db->prepare( 'UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view = :view WHERE language = :language AND module = :module AND obid = :obid AND type = :type AND area = :area' );
+		$sth->bindParam( ':view', $status, PDO::PARAM_INT );
+		$sth->bindParam( ':language', $language, PDO::PARAM_STR );
+		$sth->bindParam( ':module', $module, PDO::PARAM_STR );
+		$sth->bindParam( ':obid', $obid, PDO::PARAM_INT );
+		$sth->bindParam( ':type', $type, PDO::PARAM_STR );
+		$sth->bindParam( ':area', $area, PDO::PARAM_INT );
 		$sth->execute();
 	}
 	return true;
@@ -1786,16 +1851,54 @@ function nv_redirect_decrypt( $string, $insite = true )
 {
 	global $global_config, $crypt, $client_info;
 
-    if( empty( $string ) ) return '';
+	if( empty( $string ) ) return '';
 
-	$key = md5( $global_config['sitekey'] . $client_info['session_id'] );
-	$url = $crypt->aes_decrypt( nv_base64_decode( $string ), $key );
-	if( $insite and preg_match( '/^(http|https|ftp|gopher)\:\/\//', $url ) )
+	if( preg_match( '/[^a-z0-9\-\_\,]/i', $string ) ) return '';
+
+	$string = nv_base64_decode( $string );
+	if( ! $string ) return '';
+
+	$url = $crypt->aes_decrypt( $string, md5( $global_config['sitekey'] . $client_info['session_id'] ) );
+	if( empty( $url ) ) return '';
+
+	if( preg_match( '/^(http|https|ftp|gopher)\:\/\//i', $url ) )
 	{
-		if( ! preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN ) . '/', $url ) )
+		if( $insite and ! preg_match( '/^' . nv_preg_quote( NV_MY_DOMAIN ) . '/', $url ) )
 		{
-			$url = '';
+			return '';
 		}
+
+		if( ! nv_is_url( $url ) ) return '';
 	}
+	elseif( ! nv_is_url( NV_MY_DOMAIN . $url ) ) return '';
+
 	return $url;
+}
+
+/**
+ * nv_get_redirect()
+ *
+ * @param string $mode
+ * @param bool $decode
+ * @return
+ */
+function nv_get_redirect( $mode = 'post,get', $decode = false )
+{
+	global $nv_Request;
+
+	$nv_redirect = '';
+    if( $mode != 'post' and $mode != 'get' ) $mode = 'post,get';
+
+	if( $nv_Request->isset_request( 'nv_redirect', $mode ) )
+	{
+		$nv_redirect = $nv_Request->get_title( 'nv_redirect', $mode, '' );
+
+        $rdirect = nv_redirect_decrypt( $nv_redirect );
+
+        if( $decode ) return $rdirect;
+
+		if( empty( $rdirect ) ) $nv_redirect = '';
+	}
+
+    return $nv_redirect;
 }

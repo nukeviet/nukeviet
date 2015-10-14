@@ -155,7 +155,13 @@ var htmlload = '<tr><td class="text-center" colspan="2"><img src="{NV_BASE_SITEU
 <!-- END: main -->
 <!-- BEGIN: blockredirect -->
 <script type="text/javascript">
-	window.opener.location.href = '{BLOCKREDIRECT}';
+    alert('{BLOCKMESS}');
+    <!-- BEGIN: redirect -->
+    window.opener.location.href = '{BLOCKREDIRECT}';
+    <!-- END: redirect -->
+    <!-- BEGIN: refresh -->
+    window.opener.location.href = window.opener.location.href
+    <!-- END: refresh -->
 	window.opener.focus();
 	window.close();
 </script>

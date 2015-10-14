@@ -40,7 +40,8 @@
 				<a class="btn btn-default" href="{URL_REPLY}">{LANG.send_title}</a>
 				<!-- END: reply -->
 				<a class="btn btn-default" href="javascript:void(0);" onclick="nv_del_mess({DATA.id});">{GLANG.delete}</a>
-				<a class="btn btn-default" href="{DATA.url_back}">{LANG.back_title}</a></td>
+				<a class="btn btn-default" href="{DATA.url_back}">{LANG.back_title}</a>
+                <a class="btn btn-default" href="javascript:void(0);" onclick="mark_as_unread();">{LANG.mark_as_unread}</a></td>
 			</tr>
 		</tbody>
 	</table>

@@ -57,7 +57,7 @@ if( $nv_Request->isset_request( 'act', 'get' ) )
 	$data_insert['username'] = $row['username'];
 	$data_insert['md5_username'] = nv_md5safe( $row['username'] );
 	$data_insert['password'] = $row['password'];
-	$data_insert['email'] = $row['email'];
+	$data_insert['email'] = nv_strtolower( $row['email'] );
 	$data_insert['first_name'] = $row['first_name'];
 	$data_insert['last_name'] = $row['last_name'];
 	$data_insert['question'] = $row['question'];
@@ -211,7 +211,7 @@ $xtpl = new XTemplate( 'user_waitting.tpl', NV_ROOTDIR . '/themes/' . $global_co
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting' );
 $xtpl->assign( 'SORTURL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-$xtpl->assign( 'SEARCH_VALUE', $methodvalue );
+$xtpl->assign( 'SEARCH_VALUE', nv_htmlspecialchars( $methodvalue ) );
 $xtpl->assign( 'TABLE_CAPTION', $table_caption );
 
 if( defined( 'NV_IS_USER_FORUM' ) )

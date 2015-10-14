@@ -16,7 +16,7 @@ if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
  * 	- Accept global var: $db, $db_config, $global_config
  */
 
-$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)" );
+$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)" );
 
 $full_name = 'Consumer Care Division';
 $alias = 'Consumer-Care';
@@ -63,6 +63,6 @@ $sth->bindValue( ':is_default', $is_default, PDO::PARAM_INT );
 $sth->execute();
 
 $bodytext = 'If you have any questions or comments, please contact us below and we will get back to you as soon as possible.';
-$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('vi', 'contact', 'bodytext', :bodytext)" );
+$sth = $db->prepare( "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('vi', '" . $module_name . "', 'bodytext', :bodytext)" );
 $sth->bindParam( ':bodytext', $bodytext, PDO::PARAM_STR, strlen( $bodytext ) );
 $sth->execute();

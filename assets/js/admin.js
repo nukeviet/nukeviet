@@ -25,13 +25,28 @@ $(function() {
 			})
 		});
 		$("a.outgroupblock").click(function() {
-			confirm(block_outgroup_confirm) && $.post(post_url + "front_outgroup", "func_id=" + func_id + "&bid=" + $(this).attr("name"), function(a) {
-				alert(a)
+			confirm(block_outgroup_confirm) && $.post(post_url + "block_outgroup", "func_id=" + func_id + "&bid=" + $(this).attr("name"), function(a) {
+				alert(a);
+				window.location.href = selfurl
 			})
 		});
 		$("a.block_content").click(function() {
 			nv_open_browse(post_url + "block_content&selectthemes=" + module_theme + "&tag=" + $(this).attr("id") + "&bid=" + $(this).attr("name") + "&blockredirect=" + blockredirect, "ChangeBlock", 800, 500, "resizable=no,scrollbars=yes,toolbar=no,location=no,status=no")
 		});
+        $("a.actblock").click(function() {
+        	$(this).prop("disabled", !0);
+        	var a = this;
+        	$.ajax({
+        		type: "post",
+        		url: post_url + "block_change_show",
+        		data: "bid=" + $(this).attr("name"),
+        		cache: !1,
+        		dataType: "json"
+        	}).done(function(b) {
+        		$(a).prop("disabled", !1);
+        		"ok" == b.status && ($(a).attr("title", $(a).attr("data-" + b.act)).attr("alt", $(a).attr("data-" + b.act)).find("em").attr("class", $("em", a).attr("data-" + b.act)), "act" == b.act ? $(a).parent().parent().find(".blockct").removeClass("act0") : $(a).parent().parent().find(".blockct").addClass("act0"))
+        	})
+        });
 		var b = !1;
 		$(".column").sortable({
 			connectWith: ".column",

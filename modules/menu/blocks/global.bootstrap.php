@@ -119,44 +119,48 @@ if( ! nv_function_exists( 'nv_menu_bootstrap' ) )
 		$xtpl->assign( 'BLOCK_THEME', $block_theme );
 		$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 
-		foreach( $array_menu[0] as $id => $item )
+		if( !empty( $array_menu ) )
 		{
-			$classcurrent = array();
-			$submenu_active = array();
-			if( isset( $array_menu[$id] ) )
+			foreach( $array_menu[0] as $id => $item )
 			{
-				$classcurrent[] = 'dropdown';
-				$submenu = nv_get_bootstrap_submenu( $id, $array_menu, $submenu_active, $block_theme );
-				$xtpl->assign( 'SUB', $submenu );
-				$xtpl->parse( 'main.top_menu.sub' );
-				$xtpl->parse( 'main.top_menu.has_sub' );
-			}
-			if( nv_menu_bootstrap_check_current( $item['link'], $item['active_type'] ) )
-			{
-				$classcurrent[] = 'active';
-			}
-			elseif( ! empty( $submenu_active ) )
-			{
-				$classcurrent[] = 'active';
-			}
-			if( ! empty( $item['class'] ) )
-			{
-				$classcurrent[] = $item['class'];
-			}
-			$item['current'] = empty( $classcurrent ) ? '' : ' class="' . ( implode( ' ', $classcurrent ) ) . '"';
+				$classcurrent = array();
+				$submenu_active = array();
+				if( isset( $array_menu[$id] ) )
+				{
+					$classcurrent[] = 'dropdown';
+					$submenu = nv_get_bootstrap_submenu( $id, $array_menu, $submenu_active, $block_theme );
+					$xtpl->assign( 'SUB', $submenu );
+					$xtpl->parse( 'main.top_menu.sub' );
+					$xtpl->parse( 'main.top_menu.has_sub' );
+				}
+				if( nv_menu_bootstrap_check_current( $item['link'], $item['active_type'] ) )
+				{
+					$classcurrent[] = 'active';
+				}
+				elseif( ! empty( $submenu_active ) )
+				{
+					$classcurrent[] = 'active';
+				}
+				if( ! empty( $item['class'] ) )
+				{
+					$classcurrent[] = $item['class'];
+				}
+				$item['current'] = empty( $classcurrent ) ? '' : ' class="' . ( implode( ' ', $classcurrent ) ) . '"';
 
-			if( nv_menu_bootstrap_check_current( $item['link'], $item['active_type'] ) )
-			{
-				$classcurrent[] = 'active';
-			}
+				if( nv_menu_bootstrap_check_current( $item['link'], $item['active_type'] ) )
+				{
+					$classcurrent[] = 'active';
+				}
 
-			$xtpl->assign( 'TOP_MENU', $item );
-			if( ! empty( $item['icon'] ) )
-			{
-				$xtpl->parse( 'main.top_menu.icon' );
+				$xtpl->assign( 'TOP_MENU', $item );
+				if( ! empty( $item['icon'] ) )
+				{
+					$xtpl->parse( 'main.top_menu.icon' );
+				}
+				$xtpl->parse( 'main.top_menu' );
 			}
-			$xtpl->parse( 'main.top_menu' );
 		}
+
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}

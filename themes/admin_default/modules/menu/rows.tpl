@@ -16,7 +16,7 @@
 				<col span="2">
 				<col class="w150">
 				<col class="w100">
-				<col class="w150">
+				<col class="w200">
 			</colgroup>
 			<thead>
 				<tr>
@@ -64,6 +64,9 @@
 					<td class="text-center">{ROW.groups_view}</td>
 					<td class="text-center"> <input type="checkbox" id="change_active_{ROW.id}" onclick="nv_change_active({ROW.id})" {ROW.active} /> </td>
 					<td class="text-center">
+						<!-- BEGIN: reload -->
+						<em class="fa fa-refresh fa-lg">&nbsp;</em> <a href="#" onclick="nv_menu_reload( {DATA.mid}, {ROW.id}, {ROW.parentid}, '{LANG.action_menu_reload_confirm}' );" data-toggle="tooltip" data-placement="top" title="" data-original-title="{LANG.action_menu_reload_note}">{LANG.action_menu_reload}</a>&nbsp;
+						<!-- END: reload -->
 						<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
 						<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
 					</td>
@@ -98,7 +101,7 @@
 				<tr>
 					<td><strong>{LANG.name_block}</strong></td>
 					<td>
-						<select name="item_menu" id="item_menu_{key}" onchange="nv_link_menu('{key}');" class="form-control w200">
+						<select name="item_menu" id="item_menu_{key}" onchange="nv_link_menu('{key}', {DATA.parentid});" class="form-control w200">
 							<!-- BEGIN: loop -->
 							<option value="{key}" {select}>{val}</option>
 							<!-- END: loop -->
@@ -111,7 +114,7 @@
 					<td>
 					<select name="parentid" id="parentid" class="form-control w200">
 						<!-- BEGIN: cat -->
-						<option value="{cat.key}" {selected}>{cat.title}</option>
+						<option value="{cat.key}" {cat.selected}>{cat.title}</option>
 						<!-- END: cat -->
 					</select></td>
 					<td>&nbsp;</td>

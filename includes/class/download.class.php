@@ -203,7 +203,7 @@ class download
 			{
 				$mime = finfo_file( $finfo, realpath( $path ) );
 				finfo_close( $finfo );
-				$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
+				$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 			}
 		}
 
@@ -215,7 +215,7 @@ class download
 				if( $finfo )
 				{
 					$mime = $finfo->file( realpath( $path ) );
-					$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
+					$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 				}
 			}
 		}
@@ -232,7 +232,7 @@ class download
 					$m = trim( $m );
 					if( ! empty( $m ) )
 					{
-						$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m );
+						$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m );
 					}
 				}
 				elseif( $this->func_exists( 'exec' ) )
@@ -241,7 +241,7 @@ class download
 					$m = trim( $m );
 					if( ! empty( $m ) )
 					{
-						$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $m );
+						$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $m );
 					}
 				}
 			}
@@ -252,7 +252,7 @@ class download
 			if( $this->func_exists( 'mime_content_type' ) )
 			{
 				$mime = mime_content_type( $path );
-				$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
+				$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 			}
 		}
 
@@ -266,7 +266,7 @@ class download
 					if( array_key_exists( 'mime', $img_info ) and ! empty( $img_info['mime'] ) )
 					{
 						$mime = trim( $img_info['mime'] );
-						$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', $mime );
+						$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', $mime );
 					}
 
 					if( empty( $mime ) and isset( $img_info[2] ) )
