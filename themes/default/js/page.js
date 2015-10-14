@@ -19,3 +19,34 @@ function nv_del_content(id, checkss, base_adminurl) {
 	}
 	return false;
 }
+
+function fix_page_image(){
+	var postHtml = $('#page-bodyhtml'), postHtmlW, w, h;
+	if( postHtml.length ){
+		var postHtmlW = postHtml.innerWidth();
+		$.each($('img', postHtml), function(){
+			if( typeof $(this).data('width') == "undefined" ){
+				w = $(this).innerWidth();
+				h = $(this).innerHeight();
+				$(this).data('width', w);
+				$(this).data('height', h);
+			}else{
+				w = $(this).data('width');
+				h = $(this).data('height');
+			}
+			
+			if( w > postHtmlW ){
+				$(this).prop('width', postHtmlW);
+				$(this).prop('height', h * postHtmlW / w);
+			}
+		});
+	}
+}
+
+$(window).load(function(){
+	fix_page_image();
+});
+
+$(window).on("resize", function() {
+	fix_page_image();
+});
