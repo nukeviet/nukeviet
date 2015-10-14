@@ -212,6 +212,26 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 		$post['icon'] = '';
 	}
 
+	if( empty( $post['module_name'] ) and ! empty( $post['link'] ) )
+	{
+		// Kiểm tra để tách link module nếu nhập trực tiếp link đúng cấu trúc của module
+		foreach( $rewrite_keys as $pattern_i )
+		{
+			if( preg_match( $pattern_i, '"' . $post['link'] . '"', $m ) )
+			{
+				if( isset( $site_mods[$m[3]] ) )
+				{
+					$post['module_name'] = $m[3];
+					if( empty( $post['op'] ) and isset( $m[4] ) and isset( $site_mods[$m[3]]['funcs'][$m[4]] ) )
+					{
+						$post['op'] = $m[4];
+					}
+					break;
+				}
+			}
+		}
+	}
+
 	$mid_old = $nv_Request->get_int( 'mid', 'post', 0 );
 	$pa_old = $nv_Request->get_int( 'pa', 'post', 0 );
 

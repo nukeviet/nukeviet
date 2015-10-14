@@ -42,6 +42,11 @@ if( ! empty( $listcid ) )
 		die();
 	}
 
+	foreach( $cid_array as $cid )
+	{
+		nv_delete_notification( NV_LANG_DATA, $module_name, 'comment_queue', $cid );
+	}
+
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_delete'], 'listcid ' . $listcid, $admin_info['userid'] );
 
 	foreach( $array_row_id as $row )
