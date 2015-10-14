@@ -91,7 +91,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 
 			try
 			{
-			  $db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation'] );
 			}
 			catch( PDOException $e )
 			{
@@ -160,7 +160,7 @@ if( defined( 'NV_IS_GODADMIN' ) or ( $global_config['idsite'] > 0 and defined( '
 						$global_config['site_home_module'] = $_site_home_module;
 					}
 				}
-				
+
 				$filesavedata = '';
 				$lang_data = $keylang;
 				if( file_exists( NV_ROOTDIR . '/install/data_' . $keylang . '.php' ) )

@@ -19,8 +19,8 @@ $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
- title varchar(255) NOT NULL,
- alias varchar(255) NOT NULL,
+ title varchar(250) NOT NULL,
+ alias varchar(250) NOT NULL,
  image varchar(255) DEFAULT '',
  imagealt varchar(255) DEFAULT '',
  description text,

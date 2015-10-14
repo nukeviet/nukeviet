@@ -44,7 +44,7 @@ class sql_db extends pdo
 
 		if( in_array( $config['dbtype'], $AvailableDrivers ) and in_array( $config['dbtype'], $aray_type ) )
 		{
-			$dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=utf8';
+			$dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=' . $config['charset'];
 			if( !empty ( $config['dbport'] ) )
 			{
 				$dsn .= ';port=' . $config['dbport'];

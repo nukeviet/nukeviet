@@ -20,8 +20,8 @@ $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
- full_name varchar(255) NOT NULL,
- alias varchar(255) NOT NULL,
+ full_name varchar(250) NOT NULL,
+ alias varchar(250) NOT NULL,
  phone varchar(255) NOT NULL,
  fax varchar(255) NOT NULL,
  email varchar(100) NOT NULL,
@@ -35,7 +35,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  UNIQUE KEY full_name (full_name),
- UNIQUE KEY alias (alias)	
+ UNIQUE KEY alias (alias)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send (
