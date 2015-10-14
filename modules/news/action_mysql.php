@@ -47,9 +47,9 @@ $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (
 	  catid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	  parentid smallint(5) unsigned NOT NULL DEFAULT '0',
-	  title varchar(255) NOT NULL,
-	  titlesite varchar(255) DEFAULT '',
-	  alias varchar(255) NOT NULL DEFAULT '',
+	  title varchar(250) NOT NULL,
+	  titlesite varchar(250) DEFAULT '',
+	  alias varchar(250) NOT NULL DEFAULT '',
 	  description text,
 	  descriptionhtml text,
 	  image varchar(255) DEFAULT '',
@@ -76,7 +76,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources (
 	 sourceid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-	 title varchar(255) NOT NULL DEFAULT '',
+	 title varchar(250) NOT NULL DEFAULT '',
 	 link varchar(255) DEFAULT '',
 	 logo varchar(255) DEFAULT '',
 	 weight mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -88,8 +88,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_topics (
 	 topicid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-	 title varchar(255) NOT NULL DEFAULT '',
-	 alias varchar(255) NOT NULL DEFAULT '',
+	 title varchar(250) NOT NULL DEFAULT '',
+	 alias varchar(250) NOT NULL DEFAULT '',
 	 image varchar(255) DEFAULT '',
 	 description varchar(255) DEFAULT '',
 	 weight smallint(5) NOT NULL DEFAULT '0',
@@ -105,8 +105,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 bid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	 adddefault tinyint(4) NOT NULL DEFAULT '0',
 	 numbers smallint(5) NOT NULL DEFAULT '10',
-	 title varchar(255) NOT NULL DEFAULT '',
-	 alias varchar(255) NOT NULL DEFAULT '',
+	 title varchar(250) NOT NULL DEFAULT '',
+	 alias varchar(250) NOT NULL DEFAULT '',
 	 image varchar(255) DEFAULT '',
 	 description varchar(255) DEFAULT '',
 	 weight smallint(5) NOT NULL DEFAULT '0',
@@ -139,8 +139,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 publtime int(11) unsigned NOT NULL default '0',
 	 exptime int(11) unsigned NOT NULL default '0',
 	 archive tinyint(1) unsigned NOT NULL default '0',
-	 title varchar(255) NOT NULL default '',
-	 alias varchar(255) NOT NULL default '',
+	 title varchar(250) NOT NULL default '',
+	 alias varchar(250) NOT NULL default '',
 	 hometext text NOT NULL,
 	 homeimgfile varchar(255) default '',
 	 homeimgalt varchar(255) default '',
@@ -219,7 +219,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags (
 	 tid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	 numnews mediumint(8) NOT NULL DEFAULT '0',
-	 alias varchar(255) NOT NULL DEFAULT '',
+	 alias varchar(250) NOT NULL DEFAULT '',
 	 image varchar(255) DEFAULT '',
 	 description text,
 	 keywords varchar(255) DEFAULT '',
