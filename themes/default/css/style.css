@@ -641,7 +641,10 @@ h6 {
 }
 
 .bodytext {
-    word-break:keep-all
+    word-break:keep-all;
+	max-width: 100%;
+	overflow-x: hidden;
+	overflow-y: visible
 }
 
 .bodytext p{
