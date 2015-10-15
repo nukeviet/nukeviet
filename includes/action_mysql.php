@@ -122,7 +122,7 @@ function nv_create_table_sys( $lang )
 	) ENGINE=MyISAM";
 
 	$sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_referer_stats (
-		 host varchar(255) NOT NULL,
+		 host varchar(250) NOT NULL,
 		 total int(11) NOT NULL DEFAULT '0',
 		 month01 int(11) NOT NULL DEFAULT '0',
 		 month02 int(11) NOT NULL DEFAULT '0',

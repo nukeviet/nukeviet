@@ -468,7 +468,7 @@ elseif( $step == 5 )
 		die();
 	}
 
-	if( in_array( $db_config['dbtype'], $PDODrivers ) and ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
+	if( in_array( $db_config['dbtype'], $PDODrivers ) and ! empty( $db_config['dbhost'] ) and preg_match( '#[a-z]#ui', $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
 	{
 		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbuname'] );
 		$db_config['dbname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbname'] );
@@ -489,7 +489,8 @@ elseif( $step == 5 )
 			$db_config['dbsystem'] = $db_config['dbuname'];
 		}
 
-		// Bat dau phien lam viec cua MySQL
+			// Bat dau phien lam viec cua MySQL
+		$db_config['charset'] = strstr( $db_config['collation'], '_', true );
 		$db = new sql_db( $db_config );
 		$connect = $db->connect;
 		if( ! $connect )
@@ -506,7 +507,7 @@ elseif( $step == 5 )
 					{
 						$db->query( 'CREATE DATABASE ' . $db_config['dbname'] );
 						$db->exec( 'USE ' . $db_config['dbname'] );
-
+						
 						$db_config['error'] = '';
 						$connect = 1;
 					}
@@ -522,7 +523,7 @@ elseif( $step == 5 )
 		{
 			try
 			{
-				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation'] );
 			}
 			catch( PDOException $e )
 			{
@@ -530,7 +531,7 @@ elseif( $step == 5 )
 			}
 
 			$row = $db->query( 'SELECT @@session.character_set_database AS character_set_database,  @@session.collation_database AS collation_database')->fetch();
-			if( $row['character_set_database'] != 'utf8' or $row['collation_database'] != $db_config['collation'] )
+			if( $row['character_set_database'] != $db_config['charset'] or $row['collation_database'] != $db_config['collation'] )
 			{
 				$db_config['error'] = 'Error character set database';
 				$connect = 0;
@@ -1135,6 +1136,7 @@ function nv_save_file_config()
 		$db_config['dbsystem'] = ( isset( $db_config['dbsystem'] ) ) ? $db_config['dbsystem'] : $db_config['dbuname'];
 		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? '' : $db_config['dbpass'];
 		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? 'nv4' : $db_config['prefix'];
+		$db_config['charset'] = strstr( $db_config['collation'], '_', true );
 
 		$persistent = ( $db_config['persistent'] ) ? 'true' : 'false';
 
@@ -1153,6 +1155,7 @@ function nv_save_file_config()
 		$content .= "\$db_config['dbpass'] = '" . $db_config['dbpass'] . "';\n";
 		$content .= "\$db_config['dbtype'] = '" . $db_config['dbtype'] . "';\n";
 		$content .= "\$db_config['collation'] = '" . $db_config['collation'] . "';\n";
+		$content .= "\$db_config['charset'] = '" . $db_config['charset'] . "';\n";
 		$content .= "\$db_config['persistent'] = " . $persistent . ";\n";
 		$content .= "\$db_config['prefix'] = '" . $db_config['prefix'] . "';\n";
 		$content .= "\n";
