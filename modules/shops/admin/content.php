@@ -22,8 +22,13 @@ if( empty( $global_array_shops_cat ) )
 	die( );
 }
 
+$currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' );
+if( !file_exists( $currentpath ) )
+{
+	nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, date( 'Y_m' ), true );
+}
+
 $table_name = $db_config['prefix'] . '_' . $module_data . '_rows';
-$month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, date( 'Y_m' ), true );
 $array_block_cat_module = array( );
 $id_block_content = array( );
 $array_custom = array( );
@@ -930,6 +935,7 @@ elseif( $rowcontent['id'] > 0 )
 if( !empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 {
 	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
+	$currentpath = dirname( $rowcontent['homeimgfile'] );
 }
 
 $tdate = date( 'H|i', $rowcontent['publtime'] );
@@ -980,7 +986,7 @@ $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 $xtpl->assign( 'MODULE_NAME', $module_name );
 $xtpl->assign( 'MODULE_UPLOAD', $module_upload );
-$xtpl->assign( 'CURRENT', NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' ) );
+$xtpl->assign( 'CURRENT', $currentpath );
 
 if( $error != '' )
 {
