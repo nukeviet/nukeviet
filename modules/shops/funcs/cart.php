@@ -195,7 +195,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 				$product_number = $product_number + ( isset( $_SESSION[$module_data . '_cart'][$id]['num_old'] ) ? $_SESSION[$module_data . '_cart'][$id]['num_old'] : $_SESSION[$module_data . '_cart'][$id]['num'] );
 			}
 
-			if( !empty( $group ) )
+			if( !empty( $group ) and $pro_config['active_warehouse'] )
 			{
 				$group = explode( ',', $group );
 				asort( $group );
