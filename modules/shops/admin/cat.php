@@ -23,6 +23,12 @@ if( defined( 'NV_EDITOR' ) )
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
+$currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' );
+if( !file_exists( $currentpath ) )
+{
+	nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, date( 'Y_m' ), true );
+}
+
 list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice'] ) = array( 0, 0, '', '', '', '', '', '6', 0, 0, 0, '', '', $pro_config['group_price'], 0, 7, 1);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
@@ -108,8 +114,8 @@ if( ! empty( $savecat ) )
 			$listfield .= ', ' . $flang . '_' . $fname;
 			$listvalue .= ', :' . $flang . '_' . $fname;
 		}
-		$w='SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid']; 
-		$rw = $db->query( $w );			
+		$w='SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid'];
+		$rw = $db->query( $w );
 		$weight = $rw->fetchColumn( );
 		$weight = intval( $weight ) + 1;
 
@@ -176,8 +182,8 @@ if( ! empty( $savecat ) )
 
 				if( $data['parentid'] != $data['parentid_old'] )
 				{
-					$w='SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid']; 
-					$rw = $db->query( $w );			
+					$w='SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid'];
+					$rw = $db->query( $w );
 					$weight = $rw->fetchColumn( );
 					$weight = intval( $weight ) + 1;
 					$sql = 'UPDATE ' . $table_name . ' SET weight=' . $weight . ' WHERE catid=' . intval( $data['catid'] );
@@ -248,6 +254,7 @@ $lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_
 if( ! empty( $data['image'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $data['image'] ) )
 {
 	$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data['image'];
+	$currentpath = dirname( $data['image'] );
 }
 $data['description'] = nv_br2nl( $data['description'] );
 if( $pro_config['point_active'] )
@@ -284,7 +291,7 @@ $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'CAPTION', ( $data['catid'] > 0 ) ? $lang_module['edit_cat'] : $lang_module['add_cat'] );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'CAT_LIST', shops_show_cat_list( $data['parentid'] ) );
-$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload );
+$xtpl->assign( 'UPLOAD_CURRENT', $currentpath );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;catid=' . $data['catid'] . '&amp;parentid=' . $data['parentid'] );
 
 if( $error != '' )
