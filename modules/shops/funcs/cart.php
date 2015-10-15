@@ -202,7 +202,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 				$group = implode( ',', $group );
 				$product_number = 1;
 				$_result = $db->query( 'SELECT quantity FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id . ' AND listgroup="' . $group . '"' );
-				if( $_result )
+				if( $_result->rowCount() > 0 )
 				{
 					$product_number = $_result->fetchColumn();
 				}
