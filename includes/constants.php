@@ -11,6 +11,7 @@
 if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 //Neu thay doi bat ky gia tri trong file nay ban can vao admin phan cau hinh he thong va luu lai
+//Luu y: Tat ca ten thu muc va file can viet thuong, chi bao gom chu cai, so va dau -, ten file co the bao gom dau _
 
 //Ten file config
 define( 'NV_CONFIG_FILENAME', 'config.php' );

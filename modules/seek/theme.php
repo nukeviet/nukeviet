@@ -74,6 +74,19 @@ function search_main_theme( $is_search, $search, $array_modul )
 }
 
 /**
+ * encode URLs according to RFC 3986
+ *
+ * @param string $string
+ * @return string
+ */
+function urlencode_rfc_3986( $string )
+{
+	$entities = array( '%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D' );
+	$replacements = array( '!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "%", "#", "[", "]" );
+	return str_replace( $entities, $replacements, urlencode( $string ) );
+}
+
+/**
  * result_theme()
  *
  * @param mixed $result_array
@@ -100,9 +113,9 @@ function search_result_theme( $result_array, $mod, $mod_custom_title, $search, $
 		$xtpl->parse( 'main.result' );
 	}
 
-	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&q=" . urlencode( $search['key'] );
+	$base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&q=" . urlencode_rfc_3986( $search['key'] );
 	if( $mod != "all" ) $base_url .= "&m=" . $mod;
-	$base_url .= "&l=" . $search['logic'];
+	if( empty( $search['logic'] ) ) $base_url .= "&l=" . $search['logic'];
 
 	if( $is_generate_page )
 	{

@@ -16,7 +16,10 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 $mid = $nv_Request->get_int( 'mid', 'post', 0 );
 $parentid = $nv_Request->get_int( 'parentid', 'post', 0 );
 
-nv_menu_del_sub( $id, $parentid );
+if( !nv_menu_del_sub( $id, $parentid ) )
+{
+	die( 'NO_' . $id );
+}
 menu_fix_order( $mid );
 nv_del_moduleCache( $module_name );
 

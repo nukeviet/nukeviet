@@ -592,7 +592,26 @@ if( empty( $contents ) )
 			$result = $db->query( $db->sql() );
 			while( $item = $result->fetch() )
 			{
-				$item['imghome'] = '';
+				if( $item['homeimgthumb'] == 1 ) //image thumb
+				{
+					$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+				}
+				elseif( $item['homeimgthumb'] == 2 ) //image file
+				{
+					$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+				}
+				elseif( $item['homeimgthumb'] == 3 ) //image url
+				{
+					$item['imghome'] = $item['homeimgfile'];
+				}
+				elseif( !empty( $show_no_image ) ) //no image
+				{
+					$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
+				}
+				else
+				{
+					$item['imghome'] = '';
+				}
 				$item['newday'] = $global_array_cat[$catid]['newday'];
 				$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 				$array_catpage[] = $item;
@@ -614,7 +633,26 @@ if( empty( $contents ) )
 		$results = $db->query( $db->sql() );
 		while( $item = $results->fetch() )
 		{
-			$item['imghome'] = '';
+			if( $item['homeimgthumb'] == 1 ) //image thumb
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 2 ) //image file
+			{
+				$item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
+			}
+			elseif( $item['homeimgthumb'] == 3 ) //image url
+			{
+				$item['imghome'] = $item['homeimgfile'];
+			}
+			elseif( !empty( $show_no_image ) ) //no image
+			{
+				$item['imghome'] = NV_BASE_SITEURL . $show_no_image;
+			}
+			else
+			{
+				$item['imghome'] = '';
+			}
 			$item['newday'] = $global_array_cat[$catid]['newday'];
 			$item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
 			$array_catpage[] = $item;

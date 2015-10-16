@@ -4,8 +4,7 @@
 		<title>{THEME_PAGE_TITLE}</title>
 		<!-- BEGIN: metatags --><meta {THEME_META_TAGS.name}="{THEME_META_TAGS.value}" content="{THEME_META_TAGS.content}">
 		<!-- END: metatags -->
-		<link rel="shortcut icon" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/favicon.ico">
-		<link rel="apple-touch-icon" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/apple-touch-icon.png">
+		<link rel="shortcut icon" href="{SITE_FAVICON}">
 		<!-- BEGIN: links -->
 		<link<!-- BEGIN: attr --> {LINKS.key}="{LINKS.value}"<!-- END: attr -->>
 		<!-- END: links -->

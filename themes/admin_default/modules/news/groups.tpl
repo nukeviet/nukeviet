@@ -31,7 +31,7 @@
 				<tr>
 					<td class="text-right"><strong>{LANG.alias}: </strong></td>
 					<td>
-						<input class="form-control w500 pull-left" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /> 
+						<input class="form-control w500 pull-left" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" />
 						&nbsp; <span class="text-middle"><em class="fa fa-refresh fa-lg fa-pointer"onclick="get_alias('blockcat', {bid});">&nbsp;</em></span>
 					</td>
 				</tr>
@@ -54,6 +54,7 @@
 <script type="text/javascript">
 var CFG = [];
 CFG.upload_current = '{UPLOAD_CURRENT}';
+CFG.upload_path = '{UPLOAD_PATH}';
 $(document).ready(function(){
 	$("#titlelength").html($("#idtitle").val().length);
 	$("#idtitle").bind("keyup paste", function() {

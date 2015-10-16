@@ -10,6 +10,78 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
+if( $nv_Request->isset_request( 'reload', 'post,get' ) )
+{
+	$id = $nv_Request->get_int( 'id', 'post,get', 0 );
+	$mid = $nv_Request->get_int( 'mid', 'post,get', 0 );
+	$array_sub_id = array();
+
+	$rows = $db->query( 'SELECT id, parentid, module_name, lev, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id )->fetch();
+
+	$mod_name = $rows['module_name'];
+	$mod_data = $site_mods[$rows['module_name']]['module_data'];
+	$mod_file = $site_mods[$rows['module_name']]['module_file'];
+
+	if( empty( $rows ) ) die( 'NO_' . $lang_module['action_menu_reload_none_success'] );
+
+	// Xoa menu cu
+	if( !empty( $rows['subitem'] ) )
+	{
+		$rows['subitem'] = explode( ',', $rows['subitem'] );
+		foreach( $rows['subitem'] as $subid )
+		{
+			$sql = 'SELECT parentid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $subid;
+
+			list( $parentid ) = $db->query( $sql )->fetch( 3 );
+			nv_menu_del_sub( $subid, $parentid );
+		}
+	}
+
+	if( file_exists( NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php' ) )
+	{
+		include NV_ROOTDIR . '/modules/' . $site_mods[$rows['module_name']]['module_file'] . '/menu.php';
+
+		list( $sort, $weight ) = $db->query( 'SELECT MAX(weight), MAX(sort) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE parentid=' . $rows['parentid'] )->fetch( 3 );
+
+		// Nap lai menu moi
+		foreach( $array_item as $key => $item )
+		{
+			$pid = ( isset( $item['parentid'] ) ) ? $item['parentid'] : 0;
+			if( empty( $pid ) )
+			{
+				++$weight;
+				++$sort;
+				$groups_view = ( isset( $item['groups_view'] ) ) ? $item['groups_view'] : '6';
+				$parentid = nv_menu_insert_id( $mid, $id, $item['title'], $weight, $sort, 0, $mod_name, $item['alias'], $groups_view );
+				nv_menu_insert_submenu( $mid, $parentid, $sort, $weight, $mod_name, $array_item, $key );
+				$array_sub_id[] = $parentid;
+			}
+		}
+	}
+
+	// Thêm menu từ các funtion
+	if( ! empty( $site_mods[$mod_name]['funcs'] ) )
+	{
+		foreach( $site_mods[$mod_name]['funcs'] as $key => $sub_item )
+		{
+			if( $sub_item['in_submenu'] == 1 )
+			{
+				++$weight;
+				++$sort;
+				$array_sub_id[] = nv_menu_insert_id( $mid, $id, $sub_item['func_custom_name'], $weight, $sort, 0, $mod_name, $key, $site_mods[$mod_name]['groups_view'] );
+			}
+		}
+	}
+
+	if( ! empty( $array_sub_id ) )
+	{
+		$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $array_sub_id ) . "' WHERE id=" . $id );
+		menu_fix_order( $mid, $id );
+		nv_del_moduleCache( $module_name );
+	}
+	die( 'OK_' . $lang_module['action_menu_reload_success'] );
+}
+
 // Default variable
 $error = '';
 $post['active_type'] = 0;
@@ -138,6 +210,26 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	else
 	{
 		$post['icon'] = '';
+	}
+
+	if( empty( $post['module_name'] ) and ! empty( $post['link'] ) )
+	{
+		// Kiểm tra để tách link module nếu nhập trực tiếp link đúng cấu trúc của module
+		foreach( $rewrite_keys as $pattern_i )
+		{
+			if( preg_match( $pattern_i, '"' . $post['link'] . '"', $m ) )
+			{
+				if( isset( $site_mods[$m[3]] ) )
+				{
+					$post['module_name'] = $m[3];
+					if( empty( $post['op'] ) and isset( $m[4] ) and isset( $site_mods[$m[3]]['funcs'][$m[4]] ) )
+					{
+						$post['op'] = $m[4];
+					}
+					break;
+				}
+			}
+		}
 	}
 
 	$mid_old = $nv_Request->get_int( 'mid', 'post', 0 );
@@ -365,6 +457,8 @@ while( $row = $result->fetch() )
 		'weight' => $row['weight'],
 		'title' => $row['title'],
 		'groups_view' => implode( '<br>', $groups_view ),
+		'module_name' => $row['module_name'],
+		'op' => $row['op'],
 		'active' => $row['status'] ? 'checked="checked"' : '',
 		'url_title' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;parentid=' . $row['id'],
 		'edit_url' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=rows&amp;mid=' . $post['mid'] . '&amp;id=' . $row['id'] . '#edit',
@@ -433,6 +527,25 @@ if( ! empty( $arr_table ) )
 		if( $rows['sub'] )
 		{
 			$xtpl->parse( 'main.table.loop1.sub' );
+		}
+
+		$func_menu = 0;
+		if( isset( $site_mods[$rows['module_name']] ) )
+		{
+			$mod_site = $site_mods[$rows['module_name']];
+			$mod_file = $mod_site['module_file'];
+			foreach( $mod_site['funcs'] as $funcs )
+			{
+				if( $funcs['in_submenu'] )
+				{
+					$func_menu++;
+				}
+			}
+
+			if( empty( $rows['op'] ) and ( file_exists( NV_ROOTDIR . '/modules/' . $mod_file . '/menu.php' ) or $func_menu > 0 ) )
+			{
+				$xtpl->parse( 'main.table.loop1.reload' );
+			}
 		}
 
 		$xtpl->parse( 'main.table.loop1' );
