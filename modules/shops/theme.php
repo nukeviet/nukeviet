@@ -905,7 +905,7 @@ function viewcat_page_gird( $data_content, $compare_id, $pages, $sort = 0, $view
 
 		foreach( $data_content['data'] as $data_row )
 		{
-			$xtpl->assign( 'id', $data_row['id'] );
+			$xtpl->assign( 'ID', $data_row['id'] );
 			$xtpl->assign( 'title_pro', $data_row['title'] );
 			$xtpl->assign( 'title_pro0', nv_clean60( $data_row['title'], 40 ) );
 			$xtpl->assign( 'link_pro', $data_row['link_pro'] );
