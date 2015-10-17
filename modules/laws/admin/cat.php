@@ -12,8 +12,14 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['cat'];
 
-$contents = "";
+if ( $nv_Request->isset_request( 'get_alias_title', 'post' ) )
+{
+	$alias = $nv_Request->get_title( 'get_alias_title', 'post', '' );
+	$alias = change_alias( $alias );
+	die( $alias );
+}
 
+$contents = "";
 $catList = nv_catList();
 
 if ( empty( $catList ) and ! $nv_Request->isset_request( 'add', 'get' ) )
@@ -109,23 +115,30 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
             $post['keywords'] = implode( ",", $post['keywords'] );
         }
 
+		$post['alias'] = $nv_Request->get_title( 'alias', 'post', '', 1 );
+		if( empty( $post['alias'] ) )
+		{
+			$post['alias'] = change_alias( $post['title'] );
+
+			$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_area WHERE id !=' . $post['id'] . ' AND alias = :alias' );
+			$stmt->bindParam( ':alias', $post['alias'], PDO::PARAM_STR );
+			$stmt->execute();
+
+			if( $stmt->fetchColumn() )
+			{
+				$weight = $db->query( 'SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_area' )->fetchColumn();
+				$weight = intval( $weight ) + 1;
+				$post['alias'] = $post['alias'] . '-' . $weight;
+			}
+		}
+
         if ( empty( $post['title'] ) )
         {
             die( $lang_module['errorIsEmpty'] . ": " . $lang_module['title'] );
         }
 
-        $alias = change_alias( $post['title'] );
-
         $_catList = $catList;
         if ( isset( $post['id'] ) ) unset( $_catList[$post['id']] );
-
-        foreach ( $_catList as $_cat )
-        {
-            if ( $_cat['parentid'] == $post['parentid'] AND preg_match( "/^(" . nv_preg_quote( $alias ) . ")\-([\d]+)$/", $_cat['alias'] ) )
-            {
-                die( $lang_module['errorIsExists'] );
-            }
-        }
 
         if ( ! isset( $catList[$post['parentid']] ) ) $post['parentid'] = 0;
 
@@ -149,12 +162,12 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
                 $if_fixWeight = $catList[$post['id']]['parentid'];
             }
 
-            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET 
-                    parentid=" . $post['parentid'] . ", 
-                    alias=" . $db->quote( $alias . "-" . $post['id'] ) . ", 
-                    title=" . $db->quote( $post['title'] ) . ", 
-                    introduction=" . $db->quote( $post['introduction'] ) . ", 
-                    keywords=" . $db->quote( $post['keywords'] ) . ", 
+            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET
+                    parentid=" . $post['parentid'] . ",
+                    alias=" . $db->quote( $post['alias'] ) . ",
+                    title=" . $db->quote( $post['title'] ) . ",
+                    introduction=" . $db->quote( $post['introduction'] ) . ",
+                    keywords=" . $db->quote( $post['keywords'] ) . ",
                     weight=" . $weight . " WHERE id=" . $post['id'];
             $db->query( $query );
         }
@@ -171,14 +184,14 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
                 $weight = 1;
             }
 
-            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat 
-                VALUES (NULL, " . $post['parentid'] . ", '', " . $db->quote( $post['title'] ) . ", 
-                " . $db->quote( $post['introduction'] ) . ", " . $db->quote( $post['keywords'] ) . ", 
+            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat
+                VALUES (NULL, " . $post['parentid'] . ", '', " . $db->quote( $post['title'] ) . ",
+                " . $db->quote( $post['introduction'] ) . ", " . $db->quote( $post['keywords'] ) . ",
                 " . NV_CURRENTTIME . ", " . $weight . ");";
             $post['id'] = $db->insert_id( $query );
 
-            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET 
-                alias=" . $db->quote( $alias . "-" . $post['id'] ) . " WHERE id=" . $post['id'];
+            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET
+                alias=" . $db->quote( $post['alias'] ) . " WHERE id=" . $post['id'];
             $db->query( $query );
         }
 
@@ -194,6 +207,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         $result = $db->query( $sql );
         $row = $result->fetch();
         $post['title'] = $row['title'];
+        $post['alias'] = $row['alias'];
         $post['parentid'] = $row['parentid'];
         $post['introduction'] = nv_br2nl( $row['introduction'] );
         $post['keywords'] = $row['keywords'];
@@ -201,6 +215,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     else
     {
         $post['title'] = "";
+        $post['alias'] = "";
         $post['parentid'] = 0;
         $post['introduction'] = "";
         $post['keywords'] = "";
@@ -234,6 +249,12 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
     $select = $xtpl->text( 'dListOption' );
     $xtpl->assign( 'PARENTID', $select );
     $xtpl->assign( 'CAT', $post );
+
+	if( empty( $post['id'] ) )
+	{
+		$xtpl->parse( 'action.auto_get_alias' );
+	}
+
     $xtpl->parse( 'action' );
     $contents = $xtpl->text( 'action' );
 

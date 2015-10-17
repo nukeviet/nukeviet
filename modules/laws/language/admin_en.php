@@ -40,6 +40,7 @@ $lang_module['editCat'] = 'Edit category';
 $lang_module['addCat'] = 'Add category';
 $lang_module['errorIsExists'] = 'Error! This category is exist';
 $lang_module['title'] = 'Title';
+$lang_module['alias'] = 'Alias';
 $lang_module['catParent'] = 'Category';
 $lang_module['catParent0'] = 'Main category';
 $lang_module['introduction'] = 'Introduction';
