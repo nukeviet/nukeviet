@@ -10,14 +10,6 @@
 
 if ( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
-//$submenu['main'] = $lang_module['main'];
-//$submenu['signer'] = $lang_module['signer'];
-//$submenu['scontent'] = $lang_module['scontent_add'];
-//$submenu['area'] = $lang_module['area'];
-//$submenu['cat'] = $lang_module['cat'];
-//$submenu['subject'] = $lang_module['subject'];
-//$submenu['config'] = $lang_module['config'];
-
 $allow_func = array( 'main', 'area', 'cat', 'subject', 'getlid', 'signer', 'scontent', 'config', 'change_cat' );
 
 define( 'NV_IS_FILE_ADMIN', true );
@@ -210,4 +202,27 @@ function fix_subjectWeight()
         $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_subject SET weight=" . $weight . " WHERE id=" . $row['id'];
         $db->query( $query );
     }
+}
+
+function nv_GetCatidInParent( $id, $array_cat )
+{
+	$array_id = array();
+	$array_id[] = $id;
+
+	if( !empty( $array_cat ) )
+	{
+		foreach( $array_cat as $cat )
+		{
+			if( $cat['parentid'] == $id )
+			{
+				$array_id[] = $cat['id'];
+				$array_id_tmp = nv_GetCatidInParent( $cat['id'], $array_cat );
+				foreach( $array_id_tmp as $id_tmp )
+				{
+					$array_id[] = $id_tmp;
+				}
+			}
+		}
+	}
+	return array_unique( $array_id );
 }

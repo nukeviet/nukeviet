@@ -85,23 +85,23 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		$sstatus = $nv_Request->get_int( 'status', 'get', 0 );
 		$ssigner = $nv_Request->get_int( 'signer', 'get', 0 );
 
-		$nv_laws_listarea = array( 0 => array( "id" => 0, "title" => $lang_module['search_area'], "alias" => "" ) ) + $nv_laws_listarea;
+		$nv_laws_listarea = array( 0 => array( "id" => 0, "name" => $lang_module['search_area'], "alias" => "" ) ) + $nv_laws_listarea;
 
 		foreach( $nv_laws_listarea as $area )
 		{
 			$xtpl->assign( 'KEY', $area['id'] );
-			$xtpl->assign( 'TITLE', $area['title'] );
+			$xtpl->assign( 'TITLE', $area['name'] );
 
 			$xtpl->assign( 'SELECTED', $area['id'] == $sarea ? " selected=\"selected\"" : "" );
 			$xtpl->parse( 'main.area' );
 		}
 
-		$nv_laws_listcat = array( 0 => array( "id" => 0, "title" => $lang_module['search_cat'], "alias" => "" ) ) + $nv_laws_listcat;
+		$nv_laws_listcat = array( 0 => array( "id" => 0, "name" => $lang_module['search_cat'], "alias" => "" ) ) + $nv_laws_listcat;
 
 		foreach( $nv_laws_listcat as $area )
 		{
 			$xtpl->assign( 'KEY', $area['id'] );
-			$xtpl->assign( 'TITLE', $area['title'] );
+			$xtpl->assign( 'TITLE', $area['name'] );
 
 			$xtpl->assign( 'SELECTED', $area['id'] == $scat ? " selected=\"selected\"" : "" );
 			$xtpl->parse( 'main.cat' );

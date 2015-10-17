@@ -563,13 +563,13 @@ else
 
 	        if ( ! empty( $cid ) and isset( $catList[$cid] ) )
 	        {
-	            $where .= " AND cid=" . $cid;
+	            $where .= " AND cid IN (" . implode( ',', nv_GetCatidInParent( $cid, $catList ) ) . ")";
 	            $base_url .= "&cat=" . $cid;
 	        }
 
 	        if ( ! empty( $aid ) and isset( $aList[$aid] ) )
 	        {
-	            $where .= " AND aid=" . $aid;
+	            $where .= " AND aid IN (" . implode( ',', nv_GetCatidInParent( $aid, $aList ) ) . ")";
 	            $base_url .= "&aid=" . $aid;
 	        }
 

@@ -217,11 +217,6 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
             $xtpl->parse( 'list.loop.option' );
         }
 
-        $xtpl->assign( 'CLASS', $a % 2 ? " class=\"second\"" : "" );
-
-        if ( $loop['count'] != 0 ) $xtpl->parse( 'list.loop.count' );
-        else  $xtpl->parse( 'list.loop.countEmpty' );
-
 		for( $i = 0; $i <= 20; ++$i )
 		{
 			$xtpl->assign( 'NUMLINKS', array(

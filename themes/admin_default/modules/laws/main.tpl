@@ -51,7 +51,7 @@
 			<select class="form-control" name="cid">
 				<option value="">---{LANG.catParent}---</option>
 				<!-- BEGIN: catParent -->
-				<option value="{CATOPT.id}">{CATOPT.title}</option>
+				<option value="{CATOPT.id}">{CATOPT.name}</option>
 				<!-- END: catParent -->
 			</select>
 		</div>
@@ -60,7 +60,7 @@
 			<select class="form-control" name="aid" style="max-width: 200px">
 				<option value="">---{LANG.areaSel}---</option>
 				<!-- BEGIN: alist -->
-				<option value="{ALIST.id}">{ALIST.title}</option>
+				<option value="{ALIST.id}">{ALIST.name}</option>
 				<!-- END: alist -->
 			</select>
 		</div>
