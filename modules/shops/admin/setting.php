@@ -96,10 +96,16 @@ if( $savesetting == 1 )
 
 	if( $error == '' )
 	{
+		
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name" );
+		$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
 		foreach( $data as $config_name => $config_value )
 		{
-			$db->query( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', " . $db->quote( $module_name ) . ", " . $db->quote( $config_name ) . ", " . $db->quote( $config_value ) . ")" );
+			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
+			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+			$sth->execute();
 		}
+
 		$mid = intval( $currencies_array[$data['money_unit']]['numeric'] );
 
 		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " SET exchange = '1' WHERE id = " . $mid;
