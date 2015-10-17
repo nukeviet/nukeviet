@@ -12,8 +12,14 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['subject'];
 
-$contents = "";
+if ( $nv_Request->isset_request( 'get_alias_title', 'post' ) )
+{
+	$alias = $nv_Request->get_title( 'get_alias_title', 'post', '' );
+	$alias = change_alias( $alias );
+	die( $alias );
+}
 
+$contents = "";
 $sList = nv_sList();
 $scount = count( $sList );
 
@@ -108,28 +114,35 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
             $post['keywords'] = implode( ",", $post['keywords'] );
         }
 
+		$post['alias'] = $nv_Request->get_title( 'alias', 'post', '', 1 );
+		if( empty( $post['alias'] ) )
+		{
+			$post['alias'] = change_alias( $post['title'] );
+
+			$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_subject WHERE id !=' . $post['id'] . ' AND alias = :alias' );
+			$stmt->bindParam( ':alias', $post['alias'], PDO::PARAM_STR );
+			$stmt->execute();
+
+			if( $stmt->fetchColumn() )
+			{
+				$weight = $db->query( 'SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_subject' )->fetchColumn();
+				$weight = intval( $weight ) + 1;
+				$post['alias'] = $post['alias'] . '-' . $weight;
+			}
+		}
+
         if ( empty( $post['title'] ) )
         {
             die( $lang_module['errorIsEmpty'] . ": " . $lang_module['title'] );
         }
 
-        $alias = change_alias( $post['title'] );
-
         $_sList = $sList;
         if ( isset( $post['id'] ) ) unset( $_sList[$post['id']] );
-
-        foreach ( $_sList as $_sub )
-        {
-            if ( preg_match( "/^(" . nv_preg_quote( $alias ) . ")\-([\d]+)$/", $_sub['alias'] ) )
-            {
-                die( $lang_module['errorIsExists'] );
-            }
-        }
 
         if ( isset( $post['id'] ) )
         {
             $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_subject SET
-                    alias=" . $db->quote( $alias . "-" . $post['id'] ) . ",
+                    alias=" . $db->quote( $post['alias'] ) . ",
                     title=" . $db->quote( $post['title'] ) . ",
                     introduction=" . $db->quote( $post['introduction'] ) . ",
                     keywords=" . $db->quote( $post['keywords'] ) . "
@@ -141,13 +154,9 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
             $weight = $scount + 1;
 
             $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_subject
-                VALUES (NULL, '', " . $db->quote( $post['title'] ) . ",
+                VALUES (NULL, " . $db->quote( $post['alias'] ) . ", " . $db->quote( $post['title'] ) . ",
                 " . $db->quote( $post['introduction'] ) . ", " . $db->quote( $post['keywords'] ) . ",
-                " . NV_CURRENTTIME . ", " . $weight . ");";
-            $post['id'] = $db->insert_id( $query );
-
-            $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_subject SET
-                alias=" . $db->quote( $alias . "-" . $post['id'] ) . " WHERE id=" . $post['id'];
+                0, 5, " . NV_CURRENTTIME . ", " . $weight . ");";
             $db->query( $query );
         }
 
@@ -162,17 +171,25 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         $result = $db->query( $sql );
         $row = $result->fetch();
         $post['title'] = $row['title'];
+        $post['alias'] = $row['alias'];
         $post['introduction'] = nv_br2nl( $row['introduction'] );
         $post['keywords'] = $row['keywords'];
     }
     else
     {
         $post['title'] = "";
+        $post['alias'] = "";
         $post['introduction'] = "";
         $post['keywords'] = "";
     }
 
     $xtpl->assign( 'CAT', $post );
+
+	if( empty( $post['id'] ) )
+	{
+		$xtpl->parse( 'action.auto_get_alias' );
+	}
+
     $xtpl->parse( 'action' );
     $contents = $xtpl->text( 'action' );
 

@@ -120,13 +120,13 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
 		{
 			$post['alias'] = change_alias( $post['title'] );
 
-			$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_area WHERE id !=' . $post['id'] . ' AND alias = :alias' );
+			$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE id !=' . $post['id'] . ' AND alias = :alias' );
 			$stmt->bindParam( ':alias', $post['alias'], PDO::PARAM_STR );
 			$stmt->execute();
 
 			if( $stmt->fetchColumn() )
 			{
-				$weight = $db->query( 'SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_area' )->fetchColumn();
+				$weight = $db->query( 'SELECT MAX(id) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat' )->fetchColumn();
 				$weight = intval( $weight ) + 1;
 				$post['alias'] = $post['alias'] . '-' . $weight;
 			}
