@@ -39,21 +39,21 @@ if( ! nv_user_in_groups( $row['groups_view'] ) )
 if( $nv_Request->isset_request( 'download', 'get' ) )
 {
 	$fileid = $nv_Request->get_int( 'id', 'get', 0 );
-	
+
 	$row['files'] = explode( ',', $row['files'] );
-	
+
 	if( ! isset( $row['files'][$fileid] ) )
 	{
 		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 		exit();
 	}
-	
+
 	if( ! file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid] ) )
 	{
 		Header( 'Location: ' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true ) );
 		exit();
 	}
-	
+
 	// Update download
 	$lawsdownloaded = $nv_Request->get_string( 'lawsdownloaded', 'session', '' );
 	$lawsdownloaded = ! empty( $lawsdownloaded ) ? unserialize( $lawsdownloaded ) : array();
@@ -65,7 +65,7 @@ if( $nv_Request->isset_request( 'download', 'get' ) )
 		$lawsdownloaded = serialize( $lawsdownloaded );
 		$nv_Request->set_Session( 'lawsdownloaded', $lawsdownloaded );
 	}
-	
+
 	$file_info = pathinfo( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid] );
 	$download = new download( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid], $file_info['dirname'], $file_info['basename'], true );
 	$download->download_file();
@@ -87,7 +87,7 @@ if( ! empty( $row['replacement'] ) )
 		$row['replacement'][] = array(
 			'title' => $_title,
 			'code' => $_code,
-			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $_alias 
+			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $_alias
 		);
 	}
 }
@@ -101,7 +101,7 @@ while( list( $_title, $_alias, $_code ) = $result->fetch( 3 ) )
 	$row['unreplacement'][] = array(
 		'title' => $_title,
 		'code' => $_code,
-		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $_alias 
+		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $_alias
 	);
 }
 
@@ -116,7 +116,7 @@ if( ! empty( $row['relatement'] ) )
 		$row['relatement'][] = array(
 			'title' => $_title,
 			'code' => $_code,
-			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $_alias 
+			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $_alias
 		);
 	}
 }
@@ -137,14 +137,14 @@ if( ! empty( $row['files'] ) )
 	$row['files'] = explode( ',', $row['files'] );
 	$files = $row['files'];
 	$row['files'] = array();
-	
+
 	foreach( $files as $id => $file )
 	{
 		$file_title = basename( $file );
 		$row['files'][] = array(
 			'title' => $file_title,
 			'titledown' => $lang_module['download'] . ' ' . ( count( $files ) > 1 ? $id + 1 : '' ),
-			'url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;download=1&amp;id=' . $id 
+			'url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;download=1&amp;id=' . $id
 		);
 	}
 }
@@ -164,46 +164,50 @@ if( ! in_array( $row['id'], $lawsviewed ) )
 $order = ( $nv_laws_setting['typeview'] == 1 ) ? 'ASC' : 'DESC';
 $nv_laws_setting['detail_other'] = unserialize( $nv_laws_setting['detail_other'] );
 $other_cat = array();
-if( in_array( 'cat', $nv_laws_setting['detail_other'] ) )
-{
-	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE cid=' . $row['cid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
-	while( $data = $result->fetch() )
-	{
-		$data['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $data['alias'];
-		$other_cat[$data['id']] = $data;
-	}
-}
-
 $other_area = array();
-if( in_array( 'area', $nv_laws_setting['detail_other'] ) )
-{
-	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE aid=' . $row['aid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
-	while( $data = $result->fetch() )
-	{
-		$data['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $data['alias'];
-		$other_area[$data['id']] = $data;
-	}
-}
-
 $other_subject = array();
-if( in_array( 'subject', $nv_laws_setting['detail_other'] ) )
-{
-	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $row['sid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
-	while( $data = $result->fetch() )
-	{
-		$data['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $data['alias'];
-		$other_subject[$data['id']] = $data;
-	}
-}
-
 $other_signer = array();
-if( in_array( 'singer', $nv_laws_setting['detail_other'] ) )
+
+if( $nv_laws_setting['detail_other'] )
 {
-	$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sgid=' . $row['sgid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
-	while( $data = $result->fetch() )
+	if( in_array( 'cat', $nv_laws_setting['detail_other'] ) )
 	{
-		$data['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $data['alias'];
-		$other_signer[$data['id']] = $data;
+		$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE cid=' . $row['cid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
+		while( $data = $result->fetch() )
+		{
+			$data['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $data['alias'];
+			$other_cat[$data['id']] = $data;
+		}
+	}
+
+	if( in_array( 'area', $nv_laws_setting['detail_other'] ) )
+	{
+		$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE aid=' . $row['aid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
+		while( $data = $result->fetch() )
+		{
+			$data['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $data['alias'];
+			$other_area[$data['id']] = $data;
+		}
+	}
+
+	if( in_array( 'subject', $nv_laws_setting['detail_other'] ) )
+	{
+		$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $row['sid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
+		while( $data = $result->fetch() )
+		{
+			$data['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $data['alias'];
+			$other_subject[$data['id']] = $data;
+		}
+	}
+
+	if( in_array( 'singer', $nv_laws_setting['detail_other'] ) )
+	{
+		$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sgid=' . $row['sgid'] . ' AND id!=' . $row['id'] . ' ORDER BY addtime ' . $order . ' LIMIT ' . $nv_laws_setting['other_numlinks'] );
+		while( $data = $result->fetch() )
+		{
+			$data['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=detail/' . $data['alias'];
+			$other_signer[$data['id']] = $data;
+		}
 	}
 }
 
