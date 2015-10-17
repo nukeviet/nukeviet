@@ -1,7 +1,7 @@
 <!-- BEGIN: dListOption -->
 <option{OPTION.style} value="{OPTION.value}"{OPTION.selected}>
 	{OPTION.name}
-</option> 
+</option>
 <!-- END: dListOption -->
 
 <!-- BEGIN: main -->
@@ -30,10 +30,13 @@
 
 <!-- BEGIN: action -->
 <div id="pageContent">
-	<form class="form-inline" id="addCat" method="post" action="{ACTION_URL}">
+	<form id="addCat" method="post" action="{ACTION_URL}">
 		<h3 class="myh3">{PTITLE}</h3>
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
+				<colgroup>
+					<col class="w200" />
+				</colgroup>
 				<tbody>
 					<tr>
 						<td>{LANG.title} <span style="color:red">*</span></td>
@@ -42,9 +45,21 @@
 						</td>
 					</tr>
 					<tr>
+						<td>{LANG.alias}</td>
+						<td>
+							<div class="input-group w300">
+								<input class="form-control" type="text" name="alias" value="{CAT.alias}" id="id_alias" />
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button">
+										<i class="fa fa-refresh fa-lg" onclick="nv_get_alias('id_alias');">&nbsp;</i>
+									</button> </span>
+							</div>
+						</td>
+					</tr>
+					<tr>
 						<td>{LANG.areaParent}</td>
 						<td>
-							<select class="form-control" title="{LANG.areaParent}" name="parentid">
+							<select class="form-control w300" title="{LANG.areaParent}" name="parentid">
 								<option value="0">{LANG.areaParent0}</option>
 								{PARENTID}
 							</select>
@@ -71,8 +86,28 @@
 	</form>
 </div>
 
+<!-- BEGIN: auto_get_alias -->
 <script type="text/javascript">
 	//<![CDATA[
+	$("[name='title']").change(function() {
+		nv_get_alias('id_alias');
+	});
+	//]]>
+</script>
+<!-- END: auto_get_alias -->
+
+<script type="text/javascript">
+	//<![CDATA[
+	function nv_get_alias(id) {
+		var title = strip_tags($("[name='title']").val());
+		if (title != '') {
+			$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=area&nocache=' + new Date().getTime(), 'get_alias_title=' + encodeURIComponent(title), function(res) {
+				$("#" + id).val(strip_tags(res));
+			});
+		}
+		return false;
+	}
+
 	$("form#addCat").submit(function() {
 		var a = $("input[name=title]").val();
 		a = trim(a);
@@ -127,7 +162,7 @@
 					<!-- BEGIN: count -->
 					<a class="yessub" href="{LOOP.id}">{LOOP.title}</a><span class="red">({LOOP.count})</span>
 					<!-- END: count -->
-					
+
 					<!-- BEGIN: countempty -->
 					{LOOP.title}
 					<!-- END: countempty -->

@@ -41,6 +41,7 @@ $lang_module['editCat'] = "Sửa Thể loại";
 $lang_module['addCat'] = "Thêm Thể loại";
 $lang_module['errorIsExists'] = "Lỗi! Tiêu đề này đã tồn tại";
 $lang_module['title'] = "Tiêu đề";
+$lang_module['alias'] = "Liên kết tĩnh";
 $lang_module['catParent'] = "Thuộc Thể loại";
 $lang_module['catParent0'] = "Là thể loại chính";
 $lang_module['introduction'] = "Mô tả";
