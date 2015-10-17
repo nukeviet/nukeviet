@@ -25,12 +25,14 @@
 /themes/*
 !/themes/admin_default/css/laws.css
 !/themes/admin_default/js/laws.js
+!/themes/admin_default/js/laws_*.js
 !/themes/admin_default/images/laws
 !/themes/admin_default/images/laws/*
 !/themes/admin_default/modules/laws
 !/themes/admin_default/modules/laws/*
 !/themes/default/css/laws.css
 !/themes/default/js/laws.js
+!/themes/default/js/laws_*.js
 !/themes/default/images/laws
 !/themes/default/images/laws/*
 !/themes/default/modules/laws

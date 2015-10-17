@@ -28,6 +28,31 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 		$ck = $data_block['show_code'] ? 'checked="checked"' : '';
 		$html .= '<td><input type="checkbox" name="config_show_code" value="1" ' . $ck . ' /></td>';
         $html .= '</tr>';
+        $html .= '<tr>';
+		$html .= '<td>' . $lang_block['direction'] . '</td>';
+		$html .= '<td><select name="config_direction" class="form-control">';
+		$sl = $data_block['direction'] == 'none' ? 'selected="selected"' : '';
+		$html .= '<option value="none" ' . $sl . ' >' . $lang_block['direction_none'] . '</option>';
+		$sl = $data_block['direction'] == 'up' ? 'selected="selected"' : '';
+		$html .= '<option value="up" ' . $sl . ' >' . $lang_block['direction_up'] . '</option>';
+		$sl = $data_block['direction'] == 'down' ? 'selected="selected"' : '';
+		$html .= '<option value="down" ' . $sl . ' >' . $lang_block['direction_down'] . '</option>';
+		$html .= '</select></td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
+		$html .= '<td>' . $lang_block['duration'] . '</td>';
+		$html .= '<td><input type="text" class="form-control" name="config_duration" value="' . $data_block['duration'] . '" /></td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
+		$html .= '<td>' . $lang_block['pauseOnHover'] . '</td>';
+		$ck = $data_block['pauseOnHover'] ? 'checked="checked"' : '';
+		$html .= '<td><input type="checkbox" name="config_pauseOnHover" value="1" ' . $ck . ' /></td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
+		$html .= '<td>' . $lang_block['duplicated'] . '</td>';
+		$ck = $data_block['duplicated'] ? 'checked="checked"' : '';
+		$html .= '<td><input type="checkbox" name="config_duplicated" value="1" ' . $ck . ' /></td>';
+        $html .= '</tr>';
 		return $html;
 	}
 
@@ -40,6 +65,10 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 		$return['config']['numrow'] = $nv_Request->get_int( 'config_numrow', 'post', 0 );
 		$return['config']['title_length'] = $nv_Request->get_int( 'config_title_length', 'post', 0 );
 		$return['config']['show_code'] = $nv_Request->get_int( 'config_show_code', 'post', 0 );
+		$return['config']['direction'] = $nv_Request->get_title( 'config_direction', 'post', 'none' );
+		$return['config']['duration'] = $nv_Request->get_int( 'config_duration', 'post', 0 );
+		$return['config']['pauseOnHover'] = $nv_Request->get_int( 'config_pauseOnHover', 'post', 0 );
+		$return['config']['duplicated'] = $nv_Request->get_int( 'config_duplicated', 'post', 0 );
 		return $return;
 	}
 
@@ -71,8 +100,6 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
                 $block_theme = 'default';
             }
 
-            $xtpl = new XTemplate( 'block_new_law.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $modfile );
-
 			if( $module_name != $module )
 			{
 				$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/css/laws.css\" />";
@@ -88,7 +115,9 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 				$lang_block_module = $lang_module;
 			}
 
+            $xtpl = new XTemplate( 'block_new_law.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $modfile );
 			$xtpl->assign( 'LANG', $lang_block_module );
+			$xtpl->assign( 'TEMPLATE', $block_theme );
 
 			while( $row = $result->fetch() )
 			{
@@ -115,6 +144,15 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 
 				$xtpl->parse( 'main.loop' );
             }
+
+			if( $block_config['direction'] != 'none' )
+			{
+				$block_config['pauseOnHover'] = $block_config['pauseOnHover'] ? 'true' : 'false';
+				$block_config['duplicated'] = $block_config['duplicated'] ? 'true' : 'false';
+				$xtpl->assign( 'DATA', $block_config );
+				$xtpl->parse( 'main.marquee_data' );
+				$xtpl->parse( 'main.marquee_js' );
+			}
 
             $xtpl->parse( 'main' );
             return $xtpl->text( 'main' );
