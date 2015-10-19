@@ -24,15 +24,15 @@ if( ! function_exists( 'nv_view_product_price' ) )
 	{
 		$html = '<tr>';
 		$html .= '	<td>' . $lang_block['price_begin'] . '</td>';
-		$html .= '	<td><input type="text" name="config_price_begin" value="' . $data_block['price_begin'] . '"/></td>';
+		$html .= '	<td><input type="text" name="config_price_begin" class="form-control w200" value="' . $data_block['price_begin'] . '"/></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '	<td>' . $lang_block['price_end'] . '</td>';
-		$html .= '	<td><input type="text" name="config_price_end" value="' . $data_block['price_end'] . '"/></td>';
+		$html .= '	<td><input type="text" name="config_price_end" class="form-control w200" value="' . $data_block['price_end'] . '"/></td>';
 		$html .= '</tr>';
 		$html .= '<tr>';
 		$html .= '	<td>' . $lang_block['price_step'] . '</td>';
-		$html .= '	<td><input type="text" name="config_price_step" value="' . $data_block['price_step'] . '"/></td>';
+		$html .= '	<td><input type="text" name="config_price_step" class="form-control w200" value="' . $data_block['price_step'] . '"/></td>';
 		$html .= '</tr>';
 		return $html;
 	}
