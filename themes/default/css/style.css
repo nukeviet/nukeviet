@@ -731,11 +731,11 @@ a.btn {
     padding:20px 15px 30px 25px;
 }
 
-#header .logo h1 {
+#header .logo h1, #header .logo .site_name {
     display:none;
 }
 
-#header .logo h2 {
+#header .logo h2, #header .logo .site_description {
     color:#D8EAF8;
     font-size:24px;
     font-weight:bold;
@@ -746,6 +746,7 @@ a.btn {
     line-height:1.1;
     margin:0;
     padding:0;
+    display: block;
 }
 
 /* breadcrumb */
