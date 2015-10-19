@@ -1600,16 +1600,18 @@ a.btn {
 .nv-social-share {
     list-style:none;
     margin:0;
-    padding:0;
+    padding:4px 5px 0 5px!important;
 }
 
 .nv-social-share li {
     display:inline-block;
+    margin-bottom: 0!important;
+    height: 20px;
 }
 
 .nv-social-share li.facebook {
     position:relative;
-    top:-4px;
+	top:-4px;
     padding-right:40px;
 }
 
