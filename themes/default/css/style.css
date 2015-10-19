@@ -658,6 +658,7 @@ h6 {
 .bodytext ul{
 	list-style-type: disc!important;
 	padding-left: 40px!important;
+	margin-bottom: 10px!important;
 }
 
 iframe {
