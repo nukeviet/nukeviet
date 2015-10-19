@@ -130,7 +130,17 @@ else
 	            die( $lang_module['erroNotSelectSubject'] );
 	        }
 
-	        $post['sgid'] = $nv_Request->get_int( 'sgid', 'post', 0);
+	        $post['sgid'] = $nv_Request->get_title( 'sgid', 'post', '' );
+			if( !is_numeric( $post['sgid'] ) and !empty( $post['sgid'] ) )
+			{
+				$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_signer(title, addtime) VALUES(' . $db->quote( $post['sgid'] ) . ', ' . NV_CURRENTTIME . ')';
+				$post['sgid'] = $db->insert_id( $sql );
+			}
+			else
+			{
+				$post['sgid'] = intval( $post['sgid'] );
+			}
+
 	        $post['introtext'] = $nv_Request->get_title( 'introtext', 'post', '', 1 );
 	        $post['introtext'] = nv_nl2br( $post['introtext'], "<br />" );
 	        if ( empty( $post['introtext'] ) )

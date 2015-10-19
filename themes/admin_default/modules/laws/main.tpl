@@ -61,7 +61,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.areaSel}</label>
-			<select class="form-control select2" name="aid" style="max-width: 200px">
+			<select class="form-control select2" name="aid">
 				<option value="">---{LANG.areaSel}---</option>
 				<!-- BEGIN: alist -->
 				<option value="{ALIST.id}">{ALIST.name}</option>
@@ -70,7 +70,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.subjectSel}</label>
-			<select class="form-control select2" name="sid" style="max-width: 200px">
+			<select class="form-control select2" name="sid">
 				<option value="">---{LANG.subjectSel}---</option>
 				<!-- BEGIN: slist -->
 				<option value="{SLIST.id}">{SLIST.title}</option>
@@ -79,7 +79,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.signer}</label>
-			<select class="form-control select2" name="sgid" style="max-width: 200px">
+			<select class="form-control select2" name="sgid">
 				<option value="">---{LANG.signer}---</option>
 				<!-- BEGIN: sglist -->
 				<option value="{SGLIST.id}">{SGLIST.title}</option>
@@ -287,7 +287,7 @@
 						</tr>
 						<tr>
 							<td>
-							<select class="form-control select2" title="{LANG.signer}" name="sgid">
+							<select class="form-control" title="{LANG.signer}" name="sgid" id="signer">
 								<!-- BEGIN: singers -->
 								<option value="{SINGER.id}"{SINGER.selected}>{SINGER.title}</option>
 								<!-- END: singers -->
@@ -342,6 +342,11 @@
 
 	$(document).ready(function() {
 		$('.select2').select2();
+		$('#signer').select2({
+			tags: true,
+			multiple: false,
+			tokenSeparators: [',']
+		});
 
 		$("#replacementSearch").click(function() {
 			nv_open_browse("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=getlid&area=replacement", "NVImg", "850", "600", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
