@@ -651,6 +651,15 @@ h6 {
     margin-bottom: 15px !important
 }
 
+.bodytext ol{
+	list-style-type: decimal!important;
+}
+
+.bodytext ul{
+	list-style-type: disc!important;
+	padding-left: 40px!important;
+}
+
 iframe {
     border:0;
 }
