@@ -20,9 +20,9 @@ $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lan
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config";
 
 $sql_create_module = $sql_drop_module;
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_area (
-  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  parentid mediumint(8) unsigned NOT NULL DEFAULT '0',
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_area(
+  id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
+  parentid smallint(4) unsigned NOT NULL DEFAULT '0',
   alias varchar(255) NOT NULL,
   title varchar(255) NOT NULL,
   introduction mediumtext NOT NULL,
@@ -32,24 +32,25 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   PRIMARY KEY (id),
   UNIQUE KEY alias (alias,parentid),
   KEY weight (weight)
-) ENGINE=MyISAM;";
+) ENGINE=MyISAM";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (
-  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  parentid mediumint(8) unsigned NOT NULL DEFAULT '0',
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat(
+  id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
+  parentid smallint(4) unsigned NOT NULL DEFAULT '0',
   alias varchar(255) NOT NULL,
   title varchar(255) NOT NULL,
   introduction mediumtext NOT NULL,
   keywords varchar(255) NOT NULL,
+  newday tinyint(2) unsigned NOT NULL DEFAULT '5',
   addtime int(11) unsigned NOT NULL DEFAULT '0',
   weight smallint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   UNIQUE KEY alias (alias,parentid),
   KEY weight (weight)
-) ENGINE=MyISAM;";
+) ENGINE=MyISAM";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_subject (
-  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_subject(
+  id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
   alias varchar(255) NOT NULL,
   title varchar(255) NOT NULL,
   introduction mediumtext NOT NULL,
@@ -61,19 +62,19 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   PRIMARY KEY (id),
   UNIQUE KEY alias (alias),
   KEY weight (weight)
-) ENGINE=MyISAM;";
+) ENGINE=MyISAM";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_row (
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_row(
   id int(10) NOT NULL AUTO_INCREMENT,
   replacement varchar(255) NOT NULL DEFAULT '',
   relatement varchar(255) NOT NULL DEFAULT '',
-  title text NOT NULL,
-  alias text NOT NULL,
-  code varchar(255) NOT NULL,
-  aid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  cid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  sid mediumint(8) unsigned NOT NULL DEFAULT '0',
-  sgid mediumint(8) unsigned NOT NULL DEFAULT '0',
+  title varchar(255) NOT NULL,
+  alias varchar(255) NOT NULL,
+  code varchar(50) NOT NULL,
+  aid smallint(4) unsigned NOT NULL DEFAULT '0',
+  cid smallint(4) unsigned NOT NULL DEFAULT '0',
+  sid smallint(4) unsigned NOT NULL DEFAULT '0',
+  sgid smallint(4) unsigned NOT NULL DEFAULT '0',
   note text NOT NULL,
   introtext text NOT NULL,
   bodytext text NOT NULL,
@@ -92,16 +93,16 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   admin_add mediumint(8) unsigned NOT NULL DEFAULT '0',
   admin_edit mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
-) ENGINE=MyISAM;";
+) ENGINE=MyISAM";
 
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer (
-  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer(
+  id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
   title varchar(255) NOT NULL,
   offices varchar(255) NOT NULL,
   positions varchar(255) NOT NULL,
   addtime int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
-) ENGINE=MyISAM;";
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_set_replace (
   id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
