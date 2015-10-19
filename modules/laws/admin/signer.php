@@ -14,32 +14,32 @@ if ( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 if ( $nv_Request->isset_request( 'del', 'post' ) )
 {
     if ( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
-    
+
     $id = $nv_Request->get_int( 'id', 'post', 0 );
-    
+
     if ( empty( $id ) )
     {
         die( 'NO' );
     }
-    
+
     $sql = "SELECT title FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id=" . $id;
     $result = $db->query( $sql );
     $title = $result->fetchColumn();
-    
+
     if ( empty( $title ) )
     {
         die( 'NO' );
     }
-	
+
     $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer WHERE id=" . $id;
     $db->query( $sql );
-	
-    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE signer=" . $id;
+
+    $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE sgid=" . $id;
     $db->query( $sql );
-	
+
     nv_del_moduleCache( $module_name );
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['scontent_delete'] , $title, $admin_info['userid'] );
-    
+
     die( 'OK' );
 }
 
