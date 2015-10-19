@@ -23,8 +23,8 @@ $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_area(
   id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
   parentid smallint(4) unsigned NOT NULL DEFAULT '0',
-  alias varchar(255) NOT NULL,
-  title varchar(255) NOT NULL,
+  alias varchar(249) NOT NULL,
+  title varchar(249) NOT NULL,
   introduction mediumtext NOT NULL,
   keywords varchar(255) NOT NULL,
   addtime int(11) unsigned NOT NULL DEFAULT '0',
@@ -37,8 +37,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat(
   id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
   parentid smallint(4) unsigned NOT NULL DEFAULT '0',
-  alias varchar(255) NOT NULL,
-  title varchar(255) NOT NULL,
+  alias varchar(249) NOT NULL,
+  title varchar(249) NOT NULL,
   introduction mediumtext NOT NULL,
   keywords varchar(255) NOT NULL,
   newday tinyint(2) unsigned NOT NULL DEFAULT '5',
@@ -51,8 +51,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_subject(
   id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
-  alias varchar(255) NOT NULL,
-  title varchar(255) NOT NULL,
+  alias varchar(250) NOT NULL,
+  title varchar(250) NOT NULL,
   introduction mediumtext NOT NULL,
   keywords varchar(255) NOT NULL,
   numcount int(10) NOT NULL DEFAULT '0',
