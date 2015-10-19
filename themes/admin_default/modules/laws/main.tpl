@@ -40,6 +40,10 @@
 <!-- END: list -->
 
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_DATA}.js"></script>
+
 <div class="well">
 	<form class="form-inline">
 		<div class="form-group">
@@ -48,7 +52,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.catParent}</label>
-			<select class="form-control" name="cid">
+			<select class="form-control select2" name="cid">
 				<option value="">---{LANG.catParent}---</option>
 				<!-- BEGIN: catParent -->
 				<option value="{CATOPT.id}">{CATOPT.name}</option>
@@ -57,7 +61,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.areaSel}</label>
-			<select class="form-control" name="aid" style="max-width: 200px">
+			<select class="form-control select2" name="aid" style="max-width: 200px">
 				<option value="">---{LANG.areaSel}---</option>
 				<!-- BEGIN: alist -->
 				<option value="{ALIST.id}">{ALIST.name}</option>
@@ -66,7 +70,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.subjectSel}</label>
-			<select class="form-control" name="sid" style="max-width: 200px">
+			<select class="form-control select2" name="sid" style="max-width: 200px">
 				<option value="">---{LANG.subjectSel}---</option>
 				<!-- BEGIN: slist -->
 				<option value="{SLIST.id}">{SLIST.title}</option>
@@ -75,7 +79,7 @@
 		</div>
 		<div class="form-group">
 			<label class="sr-only">{LANG.signer}</label>
-			<select class="form-control" name="sgid" style="max-width: 200px">
+			<select class="form-control select2" name="sgid" style="max-width: 200px">
 				<option value="">---{LANG.signer}---</option>
 				<!-- BEGIN: sglist -->
 				<option value="{SGLIST.id}">{SGLIST.title}</option>
@@ -97,6 +101,8 @@
 </div>
 
 <script type="text/javascript">
+	$('.select2').select2();
+
 	function nv_load_laws(url, area) {
 		$('#lawlist').load(rawurldecode(url));
 	}
@@ -126,9 +132,12 @@
 <!-- END: main -->
 
 <!-- BEGIN: add -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_DATA}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
@@ -244,7 +253,7 @@
 						</tr>
 						<tr>
 							<td>
-							<select class="form-control" title="{LANG.catSel}" name="cid">
+							<select class="form-control select2" title="{LANG.catSel}" name="cid" id="cid">
 								<!-- BEGIN: catopt -->
 								<option value="{CATOPT.id}"{CATOPT.selected}>{CATOPT.name}</option>
 								<!-- END: catopt -->
@@ -256,7 +265,7 @@
 						</tr>
 						<tr>
 							<td>
-							<select class="form-control" title="{LANG.areaSel}" name="aid">
+							<select class="form-control select2" title="{LANG.areaSel}" name="aid">
 								<!-- BEGIN: areaopt -->
 								<option value="{AREAOPT.id}"{AREAOPT.selected}>{AREAOPT.name}</option>
 								<!-- END: areaopt -->
@@ -267,7 +276,7 @@
 						</tr>
 						<tr>
 							<td>
-							<select class="form-control" title="{LANG.subjectSel}" name="sid">
+							<select class="form-control select2" title="{LANG.subjectSel}" name="sid">
 								<!-- BEGIN: subopt -->
 								<option value="{SUBOPT.id}"{SUBOPT.selected}>{SUBOPT.title}</option>
 								<!-- END: subopt -->
@@ -278,7 +287,7 @@
 						</tr>
 						<tr>
 							<td>
-							<select class="form-control" title="{LANG.signer}" name="sgid">
+							<select class="form-control select2" title="{LANG.signer}" name="sgid">
 								<!-- BEGIN: singers -->
 								<option value="{SINGER.id}"{SINGER.selected}>{SINGER.title}</option>
 								<!-- END: singers -->
@@ -332,6 +341,8 @@
 	var nv_is_editor = '{IS_EDITOR}';
 
 	$(document).ready(function() {
+		$('.select2').select2();
+
 		$("#replacementSearch").click(function() {
 			nv_open_browse("{NV_BASE_ADMINURL}index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=getlid&area=replacement", "NVImg", "850", "600", "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 			return false;
