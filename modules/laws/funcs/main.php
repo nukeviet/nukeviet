@@ -19,92 +19,109 @@ if( isset( $array_op[0] ) and substr( $array_op[0], 0, 5 ) == 'page-' )
 	$page = intval( substr( $array_op[0], 5 ) );
 }
 
-$contents = '';
+$contents = $cache_file = '';
 $per_page = $nv_laws_setting['nummain'];
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name;
 
-if( in_array( $nv_laws_setting['typeview'], array( 0, 1 ) ) ) // Hien thi danh sach van ban
+if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 {
-	$order = ( $nv_laws_setting['typeview'] == 1 ) ? "ASC" : "DESC";
-
-	$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
-
-	$result = $db->query( $sql );
-	$query = $db->query( "SELECT FOUND_ROWS()" );
-	$all_page = $query->fetchColumn();
-
-	$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
-
-	$array_data = array();
-	$stt = nv_get_start_id( $page, $per_page );
-	while ( $row = $result->fetch() )
+	$cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
+	if( ( $cache = nv_get_cache( $module_name, $cache_file ) ) != false )
 	{
-		$row['areatitle'] = $nv_laws_listarea[$row['aid']]['title'];
-		$row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
-		$row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
-		$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'];
-		$row['stt'] = $stt++;
-
-		if( $nv_laws_setting['down_in_home'] )
-		{
-			// File download
-			if( ! empty( $row['files'] ) )
-			{
-				$row['files'] = explode( ",", $row['files'] );
-				$files = $row['files'];
-				$row['files'] = array();
-
-				foreach( $files as $id => $file )
-				{
-					$file_title = basename( $file );
-					$row['files'][] = array(
-						"title" => $file_title,
-						"titledown" => $lang_module['download'] . ' ' . ( count( $files ) > 1 ? $id + 1 : '' ),
-						"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
-					);
-				}
-			}
-		}
-
-		$array_data[] = $row;
+		$contents = $cache;
 	}
-	$contents = nv_theme_laws_main( $array_data, $generate_page );
 }
-elseif( $nv_laws_setting['typeview'] == 2 ) // Hien thi theo phan muc
-{
-	if( !empty( $nv_laws_listsubject ) )
-	{
-		foreach( $nv_laws_listsubject as $subjectid => $subject )
-		{
-			$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $subjectid . ' ORDER BY addtime DESC LIMIT ' . $subject['numlink'] );
-			while( $row = $result->fetch() )
-			{
-				$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'];
-				if( $nv_laws_setting['down_in_home'] )
-				{
-					// File download
-					if( ! empty( $row['files'] ) )
-					{
-						$row['files'] = explode( ",", $row['files'] );
-						$files = $row['files'];
-						$row['files'] = array();
 
-						foreach( $files as $id => $file )
-						{
-							$file_title = basename( $file );
-							$row['files'][] = array(
-								"title" => $file_title,
-								"titledown" => $lang_module['download'] . ' ' . ( count( $files ) > 1 ? $id + 1 : '' ),
-								"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
-							);
-						}
+if( empty( $contents ) )
+{
+	if( in_array( $nv_laws_setting['typeview'], array( 0, 1 ) ) ) // Hien thi danh sach van ban
+	{
+		$order = ( $nv_laws_setting['typeview'] == 1 ) ? "ASC" : "DESC";
+
+		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
+
+		$result = $db->query( $sql );
+		$query = $db->query( "SELECT FOUND_ROWS()" );
+		$all_page = $query->fetchColumn();
+
+		$generate_page = nv_alias_page( $page_title, $base_url, $all_page, $per_page, $page );
+
+		$array_data = array();
+		$stt = nv_get_start_id( $page, $per_page );
+		while ( $row = $result->fetch() )
+		{
+			$row['areatitle'] = $nv_laws_listarea[$row['aid']]['title'];
+			$row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
+			$row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
+			$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'];
+			$row['stt'] = $stt++;
+
+			if( $nv_laws_setting['down_in_home'] )
+			{
+				// File download
+				if( ! empty( $row['files'] ) )
+				{
+					$row['files'] = explode( ",", $row['files'] );
+					$files = $row['files'];
+					$row['files'] = array();
+
+					foreach( $files as $id => $file )
+					{
+						$file_title = basename( $file );
+						$row['files'][] = array(
+							"title" => $file_title,
+							"titledown" => $lang_module['download'] . ' ' . ( count( $files ) > 1 ? $id + 1 : '' ),
+							"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
+						);
 					}
 				}
-				$nv_laws_listsubject[$subjectid]['rows'][] = $row;
+			}
+
+			$array_data[] = $row;
+		}
+		$contents = nv_theme_laws_main( $array_data, $generate_page );
+	}
+	elseif( $nv_laws_setting['typeview'] == 2 ) // Hien thi theo phan muc
+	{
+		if( !empty( $nv_laws_listsubject ) )
+		{
+			foreach( $nv_laws_listsubject as $subjectid => $subject )
+			{
+				$result = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $subjectid . ' ORDER BY addtime DESC LIMIT ' . $subject['numlink'] );
+				while( $row = $result->fetch() )
+				{
+					$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'];
+					if( $nv_laws_setting['down_in_home'] )
+					{
+						// File download
+						if( ! empty( $row['files'] ) )
+						{
+							$row['files'] = explode( ",", $row['files'] );
+							$files = $row['files'];
+							$row['files'] = array();
+
+							foreach( $files as $id => $file )
+							{
+								$file_title = basename( $file );
+								$row['files'][] = array(
+									"title" => $file_title,
+									"titledown" => $lang_module['download'] . ' ' . ( count( $files ) > 1 ? $id + 1 : '' ),
+									"url" => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'] . "&amp;download=1&amp;id=" . $id
+								);
+							}
+						}
+					}
+					$nv_laws_listsubject[$subjectid]['rows'][] = $row;
+				}
 			}
 		}
+		$contents = nv_theme_laws_maincat( 'subject', $nv_laws_listsubject );
 	}
-	$contents = nv_theme_laws_maincat( 'subject', $nv_laws_listsubject );
+
+	if( ! defined( 'NV_IS_MODADMIN' ) and $contents != '' and $cache_file != '' )
+	{
+		nv_set_cache( $module_name, $cache_file, $contents );
+	}
 }
 
 include NV_ROOTDIR . '/includes/header.php';
