@@ -53,7 +53,10 @@ function nv_laws_listcat ( $is_link = false, $is_parentlink = true, $where = 'ca
 {
     global $module_data, $module_name, $module_info;
 
-    $sql = "SELECT id, parentid, alias, title, introduction , keywords
+	$field = '';
+	if( $where == 'cat' ) $field = ', newday';
+
+    $sql = "SELECT id, parentid, alias, title, introduction, keywords " . $field . "
     FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $where . " ORDER BY parentid,weight ASC";
 
     $list = nv_db_cache( $sql, 'id' );

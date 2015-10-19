@@ -137,11 +137,17 @@
 <!-- BEGIN: list -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover" summary="{PARENTID}">
+		<colgroup>
+			<col class="w100" />
+			<col />
+			<col class="w150" span="2" />
+		</colgroup>
 		<thead>
 			<tr>
-				<th style="width:100px"> {LANG.pos} </th>
+				<th> {LANG.pos} </th>
 				<th> {LANG.title} </th>
-				<th style="width:120px"></th>
+				<th>{LANG.newicon} ({LANG.day})</th>
+				<th>&nbsp;</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -159,6 +165,13 @@
 					<a class="yessub" href="{LOOP.id}">{LOOP.title}</a><span class="red">({LOOP.count})</span>
 					<!-- END: count -->
 					<!-- BEGIN: countEmpty --> {LOOP.title} <!-- END: countEmpty -->
+				</td>
+				<td>
+					<select class="form-control newDay" name="p_{LOOP.id}">
+						<!-- BEGIN: newday -->
+						<option value="{NEWDAY.value}" {NEWDAY.selected}>{NEWDAY.value}</option>
+						<!-- END: newday -->
+					</select>
 				</td>
 				<td><em class="fa fa-edit fa-lg">&nbsp;</em><a href="{MODULE_URL}=cat&edit&id={LOOP.id}">{GLANG.edit}</a> - <em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="del" href="{LOOP.id}">{GLANG.delete}</a></td>
 			</tr>
@@ -202,7 +215,21 @@
 			url : "{MODULE_URL}=cat",
 			data : "cWeight=" + b + "&id=" + a,
 			success : function(a) {
-				a == "OK" ? ( a = $("table.tab1").attr("summary"), $("div#pageContent").load("{MODULE_URL}=cat&list&parentid=" + a + "&random=" + nv_randomPassword(10))) : alert("{LANG.errorChangeWeight}");
+				a == "OK" ? ( a = $("table.tab1").attr("summary"), $("div#pageContent").load("{MODULE_URL}=cat&list&parentid={PARENTID}&random=" + nv_randomPassword(10))) : alert("{LANG.errorChangeWeight}");
+				$(c).removeAttr("disabled");
+			}
+		});
+		return !1;
+	});
+	$("select.newDay").change(function() {
+		var a = $(this).attr("name").split("_"), b = $(this).val(), c = this, a = a[1];
+		$(this).attr("disabled", "disabled");
+		$.ajax({
+			type : "POST",
+			url : "{MODULE_URL}=cat",
+			data : "newday=1&new_vid=" + b + "&catid=" + a,
+			success : function(res) {
+				res == "OK" ? ( res = $("table.tab1").attr("summary"), $("div#pageContent").load("{MODULE_URL}=cat&list&parentid={PARENTID}&random=" + nv_randomPassword(10))) : alert("{LANG.errorChangeWeight}");
 				$(c).removeAttr("disabled");
 			}
 		});

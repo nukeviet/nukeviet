@@ -26,6 +26,7 @@ $lang_module['status'] = "Trạng thái";
 $lang_module['status1'] = "Hoạt động";
 $lang_module['status0'] = "Đình chỉ";
 $lang_module['feature'] = "Chức năng";
+$lang_module['day'] = "Ngày";
 
 $lang_module['hl0'] = "Còn hiệu lực";
 $lang_module['hl1'] = "Hết hiệu lực";
@@ -39,6 +40,7 @@ $lang_module['errorCatYesRow'] = "Lỗi! Thể loại này có chứa các Văn 
 $lang_module['logDelCat'] = "Xóa thể loại";
 $lang_module['editCat'] = "Sửa Thể loại";
 $lang_module['addCat'] = "Thêm Thể loại";
+$lang_module['newicon'] = "Tin mới";
 $lang_module['errorIsExists'] = "Lỗi! Tiêu đề này đã tồn tại";
 $lang_module['title'] = "Tiêu đề";
 $lang_module['alias'] = "Liên kết tĩnh";

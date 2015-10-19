@@ -74,7 +74,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 
     function nv_law_block_newg ( $block_config )
     {
-        global $module_info, $lang_module, $global_config, $site_mods, $db, $my_head, $module_name;
+        global $module_info, $lang_module, $global_config, $site_mods, $db, $my_head, $module_name, $nv_laws_listcat;
 
         $module = $block_config['module'];
         $data = $site_mods[$module]['module_data'];
@@ -85,7 +85,6 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 		$show_code = ( isset( $block_config['show_code'] ) ) ? $block_config['show_code'] : 1;
 
 		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $data . '_row WHERE status=1 ORDER BY addtime DESC LIMIT 0,' . $numrow;
-
 		$result = $db->query( $sql );
 		$numrow = $result->rowCount();
 
@@ -121,6 +120,8 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 
 			while( $row = $result->fetch() )
 			{
+				$newday = $row['publtime'] + ( 86400 * $nv_laws_listcat[$row['cid']]['newday'] );
+
 				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '='.$site_mods[$module]['alias']['detail'].'/' . $row['alias'];
 				$row['link'] = $link;
 
@@ -140,6 +141,11 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 				if( $show_code )
 				{
 					$xtpl->parse( 'main.loop.code' );
+				}
+
+				if( $newday >= NV_CURRENTTIME )
+				{
+					$xtpl->parse( 'main.loop.newday' );
 				}
 
 				$xtpl->parse( 'main.loop' );

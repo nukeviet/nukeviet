@@ -2,7 +2,12 @@
 <div class="block-law marquee" <!-- BEGIN: marquee_data -->data-direction='{DATA.direction}' data-duration='{DATA.duration}' data-pauseOnHover="{DATA.pauseOnHover}" data-duplicated="{DATA.duplicated}" style="height: 200px; overflow: hidden;"<!-- END: marquee_data --> >
 	<!-- BEGIN: loop -->
 	<div class="m-bottom">
-		<h3><a href="{ROW.link}" title="{ROW.title}">{ROW.code}</a></h3>
+		<h3>
+			<a href="{ROW.link}" title="{ROW.title}">{ROW.code}</a>
+			<!-- BEGIN: newday -->
+			<span class="icon_new"></span>
+			<!-- END: newday -->
+		</h3>
 		<p>{ROW.title}</p>
 		<!-- BEGIN: code -->
 		<em class="text-muted">Lượt xem:{ROW.view_hits} | {LANG.download_hits}:{ROW.download_hits}</em>

@@ -55,7 +55,8 @@ function nv_catList()
             'title' => $row['title'], //
             'alias' => $row['alias'], //
             'weight' => ( int )$row['weight'], //
-            'name' => $row['title'] //
+            'name' => $row['title'], //
+            'newday' => $row['newday'] //
             );
     }
 

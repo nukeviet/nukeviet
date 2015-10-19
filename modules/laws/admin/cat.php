@@ -53,6 +53,20 @@ if ( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
     die( 'OK' );
 }
 
+if ( $nv_Request->isset_request( 'newday', 'post' ) )
+{
+	$catid = $nv_Request->get_int( 'catid', 'post', 0 );
+	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
+
+	$result = $db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET newday=' . $new_vid . ' WHERE id=' . $catid );
+	if( $result )
+	{
+		nv_del_moduleCache( $module_name );
+		die( 'OK' );
+	}
+	die( 'NO' );
+}
+
 if ( $nv_Request->isset_request( 'del', 'post' ) )
 {
     $id = $nv_Request->get_int( 'del', 'post', 0 );
@@ -184,7 +198,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
                 $weight = 1;
             }
 
-            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat
+            $query = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (id, parentid, alias, title, introduction, keywords, addtime, weight)
                 VALUES (NULL, " . $post['parentid'] . ", '', " . $db->quote( $post['title'] ) . ",
                 " . $db->quote( $post['introduction'] ) . ", " . $db->quote( $post['keywords'] ) . ",
                 " . NV_CURRENTTIME . ", " . $weight . ");";
@@ -290,10 +304,16 @@ if ( $nv_Request->isset_request( 'list', 'get' ) )
                 $xtpl->parse( 'list.loop.option' );
             }
 
-            $xtpl->assign( 'CLASS', $a % 2 ? " class=\"second\"" : "" );
+			for ( $i = 1; $i <= 10; $i++ )
+            {
+                $opt = array( 'value' => $i, 'selected' => $i == $values['newday'] ? " selected=\"selected\"" : "" );
+                $xtpl->assign( 'NEWDAY', $opt );
+                $xtpl->parse( 'list.loop.newday' );
+            }
 
             if ( $loop['count'] != 0 ) $xtpl->parse( 'list.loop.count' );
             else  $xtpl->parse( 'list.loop.countEmpty' );
+
             $xtpl->parse( 'list.loop' );
             $a++;
         }
