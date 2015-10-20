@@ -8,10 +8,7 @@
 		<meta name="generator" content="{NV_SITE_NAME}">
 		<meta name="robots" content="noindex, nofollow">
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		
-		<link rel="shortcut icon" href="{NV_BASE_SITEURL}themes/default/favicon.ico">
-		<link rel="apple-touch-icon" href="{NV_BASE_SITEURL}themes/default/apple-touch-icon.png">
-
+		<link rel="shortcut icon" href="{SITE_FAVICON}">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/css/style.css">

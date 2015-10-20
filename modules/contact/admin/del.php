@@ -26,7 +26,7 @@ if( $t == 3 )
 }
 elseif( $t == 2 )
 {
-	$sends = $nv_Request->get_array( 'sends', 'post', array() );
+	$sends = $nv_Request->get_typed_array( 'sends', 'post', 'int', array() );
 
 	if( ! empty( $sends ) )
 	{

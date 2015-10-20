@@ -820,3 +820,8 @@ button.close {
 #digclock {
 	margin-right: 10px;
 }
+
+.select2-container--default .select2-selection--single{
+	height: 32px !important;
+    padding-top: 2px;
+}

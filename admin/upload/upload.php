@@ -47,6 +47,7 @@ else
 		$allow_files_type = array();
 	}
 
+	include_once NV_ROOTDIR . '/includes/class/upload.class.php';
 	$upload = new upload( $allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 
 	if( isset( $_FILES['upload']['tmp_name'] ) and is_uploaded_file( $_FILES['upload']['tmp_name'] ) )
@@ -65,11 +66,31 @@ else
 	}
 	elseif( preg_match( '#image\/[x\-]*([a-z]+)#', $upload_info['mime'] ) )
 	{
+		if( isset( $array_thumb_config[$path] ) )
+		{
+			$thumb_config = $array_thumb_config[$path];
+		}
+		else
+		{
+			$thumb_config = $array_thumb_config[''];
+			$_arr_path = explode( '/', $path );
+			while( sizeof( $_arr_path ) > 1 )
+			{
+				array_pop( $_arr_path );
+				$_path = implode( '/', $_arr_path );
+				if( isset( $array_thumb_config[$_path] ) )
+				{
+					$thumb_config = $array_thumb_config[$_path];
+					break;
+				}
+			}
+		}
+
 		if( $global_config['nv_auto_resize'] and ( $upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT ) )
 		{
 			$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1] );
 			$createImage->resizeXY( NV_MAX_WIDTH, NV_MAX_HEIGHT );
-			$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], 90 );
+			$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality'] );
 			$createImage->close();
 			$info = $createImage->create_Image_info;
 			$upload_info['img_info'][0] = $info['width'];
@@ -135,14 +156,35 @@ else
 						$y = $file_size[1] - $h - 5;
 
 						$config_logo = array();
-						$config_logo['x'] = $file_size[0] - $w - 5;
-						$config_logo['y'] = $file_size[1] - $h - 5;
 						$config_logo['w'] = $w;
 						$config_logo['h'] = $h;
+						
+						$config_logo['x'] = $file_size[0] - $w - 5; // Horizontal: Right
+						$config_logo['y'] = $file_size[1] - $h - 5; // Vertical: Bottom
+						
+						// Logo vertical
+						if( preg_match( "/^top/", $global_config['upload_logo_pos'] ) )
+						{
+							$config_logo['y'] = 5;
+						}
+						elseif( preg_match( "/^center/", $global_config['upload_logo_pos'] ) )
+						{
+							$config_logo['y'] = round( ( $file_size[1] / 2 ) - ( $h / 2 ) );
+						}
+						
+						// Logo horizontal
+						if( preg_match( "/Left$/", $global_config['upload_logo_pos'] ) )
+						{
+							$config_logo['x'] = 5;
+						}
+						elseif( preg_match( "/Center$/", $global_config['upload_logo_pos'] ) )
+						{
+							$config_logo['x'] = round( ( $file_size[0] / 2 ) - ( $w / 2 ) );
+						}
 
 						$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT );
 						$createImage->addlogo( NV_ROOTDIR . '/' . $global_config['upload_logo'], '', '', $config_logo );
-						$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'] );
+						$createImage->save( NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality'] );
 					}
 				}
 			}
@@ -150,8 +192,13 @@ else
 	}
 }
 
-$editor = $nv_Request->get_string( 'editor', 'post,get' );
-$CKEditorFuncNum = $nv_Request->get_string( 'CKEditorFuncNum', 'post,get', 0 );
+$editor = $nv_Request->get_title( 'editor', 'post,get', '' );
+$CKEditorFuncNum = $nv_Request->get_int( 'CKEditorFuncNum', 'post,get', 0 );
+
+if( ! preg_match( "/^([a-zA-Z0-9\-\_]+)$/", $editor ) )
+{
+	$editor = '';
+}
 
 if( empty( $error ) )
 {

@@ -20,7 +20,7 @@ function nv_link_settitle(alias, module) {
 }
 
 function nv_link_module(module) {
-	var nv_timer = nv_settimeout_disable('module_name_' + module, 2000);
+	$('#module_name_' + module ).attr( 'readonly', 'readonly' );
 	var new_status = document.getElementById('module_name_' + module).options[document.getElementById('module_name_' + module).selectedIndex].value;
 	var new_text = document.getElementById('module_name_' + module).options[document.getElementById('module_name_' + module).selectedIndex].text;
 
@@ -36,6 +36,9 @@ function nv_link_module(module) {
 		$('input#link').val('');
 		$('#thu').hide();
 	}
+	setTimeout(function(){
+		$('#module_name_' + module ).removeAttr( 'readonly' );
+	}, 1000);
 }
 
 function nv_link_menu(blog_menu, parentid) {

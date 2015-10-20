@@ -85,36 +85,40 @@ function nv_menu_blocks( $block_config )
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 	$xtpl->assign( 'THEME_SITE_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA );
 
-	foreach( $list_cats as $cat )
+	if( !empty( $list_cats ) )
 	{
-		if( empty( $cat['parentid'] ) )
+		foreach( $list_cats as $cat )
 		{
-			if( ! empty( $cat['subcats'] ) )
+			if( empty( $cat['parentid'] ) )
 			{
-				$submenu_active = array();
-				$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'], $submenu_active, $block_theme );
-				$xtpl->assign( 'HTML_CONTENT', $html_content );
-				if( $html_content != '' )
+				if( ! empty( $cat['subcats'] ) )
 				{
-					$xtpl->parse( 'main.loopcat1.cat2' );
-					$xtpl->parse( 'main.loopcat1.expand' );
+					$submenu_active = array();
+					$html_content = nv_smenu_blocks( $block_config['block_name'], $list_cats, $cat['subcats'], $submenu_active, $block_theme );
+					$xtpl->assign( 'HTML_CONTENT', $html_content );
+					if( $html_content != '' )
+					{
+						$xtpl->parse( 'main.loopcat1.cat2' );
+						$xtpl->parse( 'main.loopcat1.expand' );
+					}
+					if( ! empty( $submenu_active ) )
+					{
+						$cat['current'] = true;
+					}
 				}
-				if( ! empty( $submenu_active ) )
-				{
-					$cat['current'] = true;
-				}
-			}
-			$cat['class'] = nv_menu_blocks_active( $cat );
+				$cat['class'] = nv_menu_blocks_active( $cat );
 
-			$xtpl->assign( 'CAT1', $cat );
-			if( ! empty( $cat['icon'] ) )
-			{
-				$xtpl->parse( 'main.loopcat1.icon' );
+				$xtpl->assign( 'CAT1', $cat );
+				if( ! empty( $cat['icon'] ) )
+				{
+					$xtpl->parse( 'main.loopcat1.icon' );
+				}
+				$xtpl->parse( 'main.loopcat1' );
 			}
-			$xtpl->parse( 'main.loopcat1' );
 		}
+		$xtpl->assign( 'MENUID', $block_config['bid'] );
 	}
-	$xtpl->assign( 'MENUID', $block_config['bid'] );
+
 	$xtpl->parse( 'main' );
 
 	return $xtpl->text( 'main' );

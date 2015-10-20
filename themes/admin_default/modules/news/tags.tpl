@@ -57,6 +57,7 @@
 <script type="text/javascript">
 var CFG = [];
 CFG.upload_current = '{UPLOAD_CURRENT}';
+CFG.upload_path = '{UPLOAD_PATH}';
 $(document).ready(function(){
 	$("#aliaslength").html($("#idalias").val().length);
 	$("#idalias").bind("keyup paste", function() {

@@ -18,7 +18,7 @@ $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lan
 $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
  vid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
- question varchar(255) NOT NULL,
+ question varchar(250) NOT NULL,
  link varchar(255) default '',
  acceptcm int(2) NOT NULL DEFAULT '1',
  admin_id mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -33,7 +33,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows (
  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  vid smallint(5) unsigned NOT NULL,
- title varchar(255) NOT NULL DEFAULT '',
+ title varchar(245) NOT NULL DEFAULT '',
  url varchar(255) DEFAULT '',
  hitstotal int(11) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
