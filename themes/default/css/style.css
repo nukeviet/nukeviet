@@ -644,7 +644,8 @@ h6 {
     word-break:keep-all;
 	max-width: 100%;
 	overflow-x: hidden;
-	overflow-y: visible
+	overflow-y: visible;
+	line-height: 1.7em;
 }
 
 .bodytext p{
@@ -659,6 +660,15 @@ h6 {
 	list-style-type: disc!important;
 	padding-left: 40px!important;
 	margin-bottom: 10px!important;
+}
+
+.bodytext li{
+	margin-bottom: 0!important;
+}
+
+.bodytext div.alert{
+	margin-bottom: 7px;
+	margin-top: 4px;
 }
 
 iframe {
