@@ -32,8 +32,14 @@
                             <!--> <![endif]-->
                         </object>
                         <!-- END: swf -->
+                        <!-- BEGIN: site_name_h1 -->
                         <h1>{SITE_NAME}</h1>
                         <h2>{SITE_DESCRIPTION}</h2>
+                        <!-- END: site_name_h1 -->
+                        <!-- BEGIN: site_name_span -->
+                        <span class="site_name">{SITE_NAME}</span>
+                        <span class="site_description">{SITE_DESCRIPTION}</span>
+                        <!-- END: site_name_span -->
                     </div>
 				</div>
 			</div>

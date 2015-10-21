@@ -644,11 +644,31 @@ h6 {
     word-break:keep-all;
 	max-width: 100%;
 	overflow-x: hidden;
-	overflow-y: visible
+	overflow-y: visible;
+	line-height: 1.7em;
 }
 
 .bodytext p{
     margin-bottom: 15px !important
+}
+
+.bodytext ol{
+	list-style-type: decimal!important;
+}
+
+.bodytext ul{
+	list-style-type: disc!important;
+	padding-left: 40px!important;
+	margin-bottom: 10px!important;
+}
+
+.bodytext li{
+	margin-bottom: 0!important;
+}
+
+.bodytext div.alert{
+	margin-bottom: 7px;
+	margin-top: 4px;
 }
 
 iframe {
@@ -731,11 +751,11 @@ a.btn {
     padding:20px 15px 30px 25px;
 }
 
-#header .logo h1 {
+#header .logo h1, #header .logo .site_name {
     display:none;
 }
 
-#header .logo h2 {
+#header .logo h2, #header .logo .site_description {
     color:#D8EAF8;
     font-size:24px;
     font-weight:bold;
@@ -746,6 +766,7 @@ a.btn {
     line-height:1.1;
     margin:0;
     padding:0;
+    display: block;
 }
 
 /* breadcrumb */
@@ -1589,16 +1610,18 @@ a.btn {
 .nv-social-share {
     list-style:none;
     margin:0;
-    padding:0;
+    padding:4px 5px 0 5px!important;
 }
 
 .nv-social-share li {
     display:inline-block;
+    margin-bottom: 0!important;
+    height: 20px;
 }
 
 .nv-social-share li.facebook {
     position:relative;
-    top:-4px;
+	top:-4px;
     padding-right:40px;
 }
 
