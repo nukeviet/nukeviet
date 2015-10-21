@@ -290,10 +290,10 @@
 //<![CDATA[
 var LANG = [];
 var CFG = [];
-CFG.uploads_dir_user = '{UPLOADS_DIR_USER}';
-CFG.upload_current = '{UPLOAD_CURRENT}';
-LANG.content_tags_empty = '{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->';
-LANG.alias_empty_notice = '{LANG.alias_empty_notice}';
+CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
+CFG.upload_current = "{UPLOAD_CURRENT}";
+LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
+LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
 var content_checkcatmsg = "{LANG.content_checkcatmsg}";
 <!-- BEGIN: getalias -->
 $("#idtitle").change(function() {
