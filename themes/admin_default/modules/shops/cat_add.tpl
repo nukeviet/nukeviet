@@ -23,6 +23,10 @@
 					<td><input class="form-control" style="width: 500px" name="alias" type="text" value="{DATA.alias}" maxlength="255" id="idalias"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('cat', {DATA.catid});">&nbsp;</em>
 				</tr>
 				<tr>
+					<th class="text-right">{LANG.catalog_name_seo}</th>
+					<td><input class="form-control" style="width: 500px" name="title_custom" type="text" value="{DATA.title_custom}" maxlength="255" id="titlesite"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+				</tr>
+				<tr>
 					<th class="text-right">{LANG.cat_sub}</th>
 					<td>
 					<select class="form-control" name="parentid">
@@ -158,6 +162,11 @@
 	$("#titlelength").html($("#idtitle").val().length);
 	$("#idtitle").bind("keyup paste", function() {
 		$("#titlelength").html($(this).val().length);
+	});
+	
+	$("#titlesitelength").html($("#titlesite").val().length);
+	$("#titlesite").bind("keyup paste", function() {
+		$("#titlesitelength").html($(this).val().length);
 	});
 
 	$("#descriptionlength").html($("#description").val().length);
