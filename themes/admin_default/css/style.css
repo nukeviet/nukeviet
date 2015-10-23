@@ -563,6 +563,12 @@ sup.required {
 	}
 }
 
+@media (max-width: 370px) {
+	#footer div.imgstat{
+		display: none;
+	}
+}
+
 /* Form Element
  -----------------------------------------------------------------------------*/
 input[type="checkbox"], input[type="radio"] {
