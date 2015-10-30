@@ -17,11 +17,11 @@
 				<tbody>
 					<tr>
 						<td><strong>{LANG.name}</strong>: <sup class="required">(∗)</sup></td>
-						<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+						<td><input type="text" maxlength="250" value="{rowcontent.title}" id="idtitle" name="title" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<td><strong>{LANG.alias}: </strong></td>
-						<td><input class="form-control" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"  style="width:350px"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
+						<td><input class="form-control" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="250"  style="width:350px"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
 					</tr>
 				</tbody>
 			</table>
