@@ -69,7 +69,7 @@
 						</tr>
 						<tr>
 							<td>{LANG.voting_question}<sup class="required">(*)</sup></td>
-							<td><input class="form-control" type="text" name="question" size="60" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}"  oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')"/></td>
+							<td><input class="form-control" type="text" name="question" size="60" maxlength="250" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}"  oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')"/></td>
 						</tr>
 						<tr>
 							<td>{LANG.voting_link}</td>
@@ -90,13 +90,13 @@
 							<!-- BEGIN: item -->
 							<tr>
 								<td class="text-right">{LANG.voting_question_num} {ITEM.stt}</td>
-								<td><input class="form-control" type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" /></td>
+								<td><input class="form-control" type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" maxlength="245"/></td>
 								<td><input  class="form-control"type="text" value="{ITEM.link}" name="urlvote[{ITEM.id}]"/></td>
 							</tr>
 							<!-- END: item -->
 							<tr>
 								<td class="text-right">{LANG.voting_question_num} {NEW_ITEM}<sup class="required">(*)</sup></td>
-								<td><input class="form-control" type="text" value="" name="answervotenews[]" /></td>
+								<td><input class="form-control" type="text" value="" name="answervotenews[]" maxlength="245"/></td>
 								<td><input class="form-control" type="text" value="" name="urlvotenews[]"/></td>
 							</tr>
 						</tbody>
