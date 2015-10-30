@@ -22,6 +22,7 @@ $lang_module['topics'] = 'Theo dòng sự kiện';
 $lang_module['topics_error_title'] = 'Lỗi: Bạn không nhập vào tiêu đề sự kiện';
 $lang_module['sources'] = 'Nguồn tin';
 $lang_module['save'] = 'Lưu thay đổi';
+$lang_module['send'] = 'Gửi';
 $lang_module['action'] = 'Thực hiện';
 $lang_module['move'] = 'Di chuyển bài viết';
 $lang_module['save_temp'] = 'Lưu tạm';

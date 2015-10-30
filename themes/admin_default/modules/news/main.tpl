@@ -97,7 +97,12 @@
                     <td class="text-center">{ROW.hitstotal}</td>
                     <td class="text-center">{ROW.hitscm}</td>
                     <td class="text-center">{ROW.numtags}</td>
-					<td class="text-center">{ROW.feature}</td>
+					<td class="text-center">
+						<!-- BEGIN: excdata -->
+						<a href="{ROW.url_send}" class="btn btn-success btn-xs"><em class="fa fa-paper-plane-o fa-lg">&nbsp;</em>{LANG.send}</a> &nbsp;
+						<!-- END: excdata -->
+						{ROW.feature}
+					</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>

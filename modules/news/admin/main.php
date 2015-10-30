@@ -482,7 +482,25 @@ foreach( $search_status as $status_view )
 
 foreach( $data as $row )
 {
+	$is_excdata = 0;
+	$global_config['idsite'] = 1;
+	if( $global_config['idsite'] > 0 and isset( $site_mods['excdata'] ) and isset( $push_content['module'][$module_name] ) )
+	{
+		$count = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db->quote( $module_name ) )->fetchColumn();
+		if( $count == 0 )
+		{
+			$is_excdata = 1;
+			$row['url_send'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=excdata&amp;' . NV_OP_VARIABLE . '=send&amp;module=' . $module_name . '&amp;id=' . $row['id'];
+		}
+	}
+
 	$xtpl->assign( 'ROW', $row );
+
+	if( $is_excdata )
+	{
+		$xtpl->parse( 'main.loop.excdata' );
+	}
+
 	$xtpl->parse( 'main.loop' );
 }
 
