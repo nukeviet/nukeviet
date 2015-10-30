@@ -404,6 +404,7 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 		'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
 		'title' => $title,
 		'publtime' => $publtime,
+		'status_id' => $status,
 		'status' => $lang_module['status_' . $status],
 		'class' => $array_status_class[$status],
 		'username' => $username,
@@ -483,7 +484,7 @@ foreach( $search_status as $status_view )
 foreach( $data as $row )
 {
 	$is_excdata = 0;
-	if( $global_config['idsite'] > 0 and isset( $site_mods['excdata'] ) and isset( $push_content['module'][$module_name] ) )
+	if( $global_config['idsite'] > 0 and isset( $site_mods['excdata'] ) and isset( $push_content['module'][$module_name] ) and $row['status_id'] == 1 )
 	{
 		$count = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db->quote( $module_name ) )->fetchColumn();
 		if( $count == 0 )
