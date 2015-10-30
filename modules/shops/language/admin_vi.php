@@ -63,6 +63,7 @@ $lang_module['siteinfo_expired'] = 'Số sản phẩm đã hết hạn';
 $lang_module['siteinfo_exptime'] = 'Số sản phẩm sắp hết hạn';
 $lang_module['siteinfo_tags_incomplete'] = 'Số tags chưa có mô tả';
 $lang_module['catalog_name'] = 'Tên loại sản phẩm';
+$lang_module['catalog_name_seo'] = 'Tùy chỉnh Tiêu đề site';
 $lang_module['cat_form'] = 'Dữ liệu tùy biến';
 $lang_module['newday'] = 'Icon tin mới (ngày)';
 

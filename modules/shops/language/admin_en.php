@@ -63,6 +63,7 @@ $lang_module['siteinfo_expired'] = 'Product has expired';
 $lang_module['siteinfo_exptime'] = 'Products to expire';
 $lang_module['siteinfo_tags_incomplete'] = 'Tags no description';
 $lang_module['catalog_name'] = 'Category name';
+$lang_module['catalog_name_seo'] = 'Modification Le titre du site';
 $lang_module['cat_form'] = 'Custom';
 $lang_module['newday'] = 'New day';
 $lang_module['add_block_cat'] = 'Add a block group';
