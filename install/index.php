@@ -722,6 +722,7 @@ elseif( $step == 5 )
 						$module_name = $row['title'];
 						$module_file = $row['module_file'];
 						$module_data = $row['module_data'];
+						$module_upload = $row['module_upload'];
 
 						if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php' ) )
 						{
