@@ -1,4 +1,7 @@
 # Ignore some static files and directories.
+/.project
+/.settings/
+/.buildpath
 /.htaccess
 /config.php
 /CHANGELOG.txt
@@ -37,4 +40,3 @@
 !/themes/default/images/laws/*
 !/themes/default/modules/laws
 !/themes/default/modules/laws/*
-/.project

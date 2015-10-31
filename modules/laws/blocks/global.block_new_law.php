@@ -128,7 +128,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 				$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '='.$site_mods[$module]['alias']['detail'].'/' . $row['alias'];
 				$row['link'] = $link;
 
-				if( ! empty( $block_config['title_length'] ) )
+				if( $title_length > 0 )
 				{
 					$row['stitle'] = nv_clean60( $row['title'], $title_length );
 				}
