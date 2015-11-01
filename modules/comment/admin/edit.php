@@ -58,6 +58,8 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	die();
 }
 
+nv_status_notification( NV_LANG_DATA, $module_name, 'comment_queue', $cid );
+
 $row['content'] = nv_htmlspecialchars( nv_br2nl( $row['content'] ) );
 $row['status'] = ( $row['status'] ) ? 'checked="checked"' : '';
 

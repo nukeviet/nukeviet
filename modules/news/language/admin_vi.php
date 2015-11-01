@@ -22,6 +22,7 @@ $lang_module['topics'] = 'Theo dòng sự kiện';
 $lang_module['topics_error_title'] = 'Lỗi: Bạn không nhập vào tiêu đề sự kiện';
 $lang_module['sources'] = 'Nguồn tin';
 $lang_module['save'] = 'Lưu thay đổi';
+$lang_module['send'] = 'Gửi';
 $lang_module['action'] = 'Thực hiện';
 $lang_module['move'] = 'Di chuyển bài viết';
 $lang_module['save_temp'] = 'Lưu tạm';
@@ -288,3 +289,5 @@ $lang_module['featured'] = 'Tin nổi bật';
 $lang_module['addtocat'] = 'Thêm bài viết nổi bật vào chuyên mục';
 $lang_module['delete_from_cat'] = 'Xóa bài viết khỏi chuyên mục';
 $lang_module['not_featured'] = 'Không có bài viết nào';
+
+$lang_module['notification_post_queue'] = 'Kiểm duyệt bài viết <strong>%s</strong> gửi bởi <strong>%s</strong><br /><em>%s</em>';

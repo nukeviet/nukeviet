@@ -563,6 +563,12 @@ sup.required {
 	}
 }
 
+@media (max-width: 370px) {
+	#footer div.imgstat{
+		display: none;
+	}
+}
+
 /* Form Element
  -----------------------------------------------------------------------------*/
 input[type="checkbox"], input[type="radio"] {
@@ -819,4 +825,9 @@ button.close {
 
 #digclock {
 	margin-right: 10px;
+}
+
+.select2-container--default .select2-selection--single{
+	height: 32px !important;
+    padding-top: 2px;
 }

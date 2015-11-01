@@ -45,6 +45,12 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . se
 			{
 				$allowfolder[] = NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php';
 			}
+
+			// Lang data sample
+			if( file_exists( NV_ROOTDIR . '/modules/' . $module . '/language/data_' . $dirlang . '.php' ) )
+			{
+				$allowfolder[] = NV_ROOTDIR . '/modules/' . $module . '/language/data_' . $dirlang . '.php';
+			}
 		}
 
 		if( is_dir( NV_ROOTDIR . '/includes/language/' . $dirlang ) )

@@ -359,22 +359,28 @@ if( $result->fetchColumn() )
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu (id, title) VALUES (1, 'Top Menu')");
 
 $result = $db->query( "INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . "_menu_rows VALUES
-(1, 0, 1, 'Giới thiệu', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=about', '', '', 1, 1, 0, '2,3', '6', 'about', '', 1, '', 1, 1),
-(2, 1, 1, 'Giới thiệu về NukeViet 3.0', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=about&amp;op=Gioi-thieu-ve-NukeViet-3-0" . $global_config['rewrite_exturl'] . "', '', '', 1, 2, 1, '', '6', 'about', 'Gioi-thieu-ve-NukeViet-3-0" . $global_config['rewrite_exturl'] . "', 1, '', 1, 1),
-(3, 1, 1, 'Giới thiệu về công ty chuyên quản NukeViet', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=about&amp;op=Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet" . $global_config['rewrite_exturl'] . "', '', '', 2, 3, 1, '', '6', 'about', 'Gioi-thieu-ve-cong-ty-chuyen-quan-NukeViet" . $global_config['rewrite_exturl'] . "', 1, '', 1, 1),
-(4, 0, 1, 'Tin Tức', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news', '', '', 2, 4, 0, '5,6,7,8,9,10,11', '6', 'news', '', 1, '', 1, 1),
-(5, 4, 1, 'Đối tác', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&amp;op=Doi-tac', '', '', 1, 7, 1, '', '6', 'news', 'Doi-tac', 1, '', 1, 1),
-(6, 4, 1, 'Tuyển dụng', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&amp;op=Tuyen-dung', '', '', 2, 8, 1, '', '6', 'news', 'Tuyen-dung', 1, '', 1, 1),
-(7, 4, 1, 'Rss', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=rss', '', '', 3, 9, 1, '', '6', 'news', 'rss', 1, '', 0, 1),
-(8, 4, 1, 'Đăng bài viết', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=content', '', '', 4, 10, 1, '', '6', 'news', 'content', 1, '', 0, 1),
-(9, 4, 1, 'Tìm kiếm', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=search', '', '', 5, 11, 1, '', '6', 'news', 'search', 1, '', 0, 1),
-(10, 4, 1, 'Tin tức', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&amp;op=Tin-tuc', '', '', 6, 5, 1, '', '6', 'news', 'Tin-tuc', 1, '', 1, 1),
-(11, 4, 1, 'Sản phẩm', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&amp;op=San-pham', '', '', 7, 6, 1, '', '6', 'news', 'San-pham', 1, '', 1, 1),
-(12, 0, 1, 'Thành viên', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users', '', '', 3, 12, 0, '', '6', 'users', '', 1, '', 1, 1),
-(13, 0, 1, 'Thống kê', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics', '', '', 4, 13, 0, '', '2', 'statistics', '', 1, '', 1, 1),
-(14, 0, 1, 'Thăm dò ý kiến', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=voting', '', '', 5, 14, 0, '', '6', 'voting', '', 1, '', 1, 1),
-(15, 0, 1, 'Tìm kiếm', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=seek', '', '', 6, 15, 0, '', '6', 'seek', '', 1, '', 1, 1),
-(16, 0, 1, 'Liên hệ', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=contact', '', '', 7, 16, 0, '', '6', 'contact', '', 1, '', 1, 1)" );
+(1, 0, 1, 'Giới thiệu', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=about', '', '', 1, 1, 0, '2,3,4,5,6,7,8,9', '6', 'about', '', 1, '', 1, 1),
+(2, 1, 1, 'Giới thiệu về NukeViet', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=gioi-thieu-ve-nukeviet" . $global_config['rewrite_exturl'] . "', '', '', 1, 2, 1, '', '6', 'about', 'gioi-thieu-ve-nukeviet" . $global_config['rewrite_exturl'] . "', 1, '', 0, 1),
+(3, 1, 1, 'Giới thiệu về NukeViet CMS', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=gioi-thieu-ve-nukeviet-cms" . $global_config['rewrite_exturl'] . "', '', '', 2, 3, 1, '', '6', 'about', 'gioi-thieu-ve-nukeviet-cms" . $global_config['rewrite_exturl'] . "', 1, '', 0, 1),
+(4, 1, 1, 'Logo và tên gọi NukeViet', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=logo-va-ten-goi-nukeviet" . $global_config['rewrite_exturl'] . "', '', '', 3, 4, 1, '', '6', 'about', 'logo-va-ten-goi-nukeviet" . $global_config['rewrite_exturl'] . "', 1, '', 0, 1),
+(5, 1, 1, 'Giấy phép sử dụng NukeViet', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=giay-phep-su-dung-nukeviet" . $global_config['rewrite_exturl'] . "', '', '', 4, 5, 1, '', '6', 'about', 'giay-phep-su-dung-nukeviet" . $global_config['rewrite_exturl'] . "', 1, '', 0, 1),
+(6, 1, 1, 'Những tính năng của NukeViet CMS 4.0', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=nhung-tinh-nang-cua-nukeviet-cms-4-0" . $global_config['rewrite_exturl'] . "', '', '', 5, 6, 1, '', '6', 'about', 'nhung-tinh-nang-cua-nukeviet-cms-4-0" . $global_config['rewrite_exturl'] . "', 1, '', 0, 1),
+(7, 1, 1, 'Các yêu cầu cài đặt', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=cac-yeu-cau-cai-dat" . $global_config['rewrite_exturl'] . "', '', '', 6, 7, 1, '', '6', 'about', 'cac-yeu-cau-cai-dat" . $global_config['rewrite_exturl'] . "', 1, '', 0, 1),
+(8, 1, 1, 'Giới thiệu về Công ty cổ phần phát triển nguồn mở Việt Nam', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=gioi-thieu-ve-cong-ty-co-phan-phat-trien-nguon-mo-viet-nam" . $global_config['rewrite_exturl'] . "', '', '', 7, 8, 1, '', '6', 'about', 'gioi-thieu-ve-cong-ty-co-phan-phat-trien-nguon-mo-viet-nam" . $global_config['rewrite_exturl'] . "', 1, '', 0, 1),
+(9, 1, 1, 'Ủng hộ, hỗ trợ và tham gia phát triển NukeViet', '" . NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=ung-ho-ho-tro-va-tham-gia-phat-trien-nukeviet" . $global_config['rewrite_exturl'] . "', '', '', 8, 9, 1, '', '6', 'about', 'ung-ho-ho-tro-va-tham-gia-phat-trien-nukeviet" . $global_config['rewrite_exturl'] . "', 1, '', 0, 1),
+(10, 0, 1, 'Tin Tức', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news', '', '', 2, 10, 0, '11,12,13,14,15,16,17', '6', 'news', '', 1, '', 1, 1),
+(11, 10, 1, 'Đối tác', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&amp;op=Doi-tac', '', '', 1, 11, 1, '', '6', 'news', 'Doi-tac', 1, '', 1, 1),
+(12, 10, 1, 'Tuyển dụng', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&amp;op=Tuyen-dung', '', '', 2, 12, 1, '', '6', 'news', 'Tuyen-dung', 1, '', 1, 1),
+(13, 10, 1, 'Rss', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=rss', '', '', 3, 13, 1, '', '6', 'news', 'rss', 1, '', 0, 1),
+(14, 10, 1, 'Đăng bài viết', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=content', '', '', 4, 14, 1, '', '6', 'news', 'content', 1, '', 0, 1),
+(15, 10, 1, 'Tìm kiếm', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&op=search', '', '', 5, 15, 1, '', '6', 'news', 'search', 1, '', 0, 1),
+(16, 10, 1, 'Tin tức', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&amp;op=Tin-tuc', '', '', 6, 16, 1, '', '6', 'news', 'Tin-tuc', 1, '', 1, 1),
+(17, 10, 1, 'Sản phẩm', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news&amp;op=San-pham', '', '', 7, 17, 1, '', '6', 'news', 'San-pham', 1, '', 1, 1),
+(18, 0, 1, 'Thành viên', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users', '', '', 3, 18, 0, '', '6', 'users', '', 1, '', 1, 1),
+(19, 0, 1, 'Thống kê', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics', '', '', 4, 19, 0, '', '2', 'statistics', '', 1, '', 1, 1),
+(20, 0, 1, 'Thăm dò ý kiến', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=voting', '', '', 5, 20, 0, '', '6', 'voting', '', 1, '', 1, 1),
+(21, 0, 1, 'Tìm kiếm', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=seek', '', '', 6, 21, 0, '', '6', 'seek', '', 1, '', 1, 1),
+(22, 0, 1, 'Liên hệ', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=contact', '', '', 7, 22, 0, '', '6', 'contact', '', 1, '', 1, 1)" );
 
 $result = $db->query( "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (10, 'NukeViet-Fans', 'Nhóm những người hâm mộ hệ thống NukeViet', '', " . NV_CURRENTTIME . ", 0, 1, 7, 1, 0, 0, 0)");
 $result = $db->query( "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, add_time, exp_time, publics, weight, act, idsite, numbers, siteus) VALUES (11, 'NukeViet-Admins', 'Nhóm những người quản lý website xây dựng bằng hệ thống NukeViet', '', " . NV_CURRENTTIME . ", 0, 1, 8, 1, 0, 0, 0)");

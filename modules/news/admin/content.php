@@ -220,6 +220,16 @@ if( $rowcontent['id'] > 0 )
 	{
 		$id_block_content[] = $bid_i;
 	}
+
+	if( empty( $rowcontent['status'] ) )
+	{
+		nv_status_notification( NV_LANG_DATA, $module_name, 'post_queue', $rowcontent['id'] );
+	}
+
+	if( !empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR ) )
+	{
+		$currentpath = NV_UPLOADS_DIR . '/'. $module_upload . '/' . dirname( $rowcontent['homeimgfile'] );
+	}
 }
 
 $array_cat_add_content = $array_cat_pub_content = $array_cat_edit_content = $array_censor_content = array();

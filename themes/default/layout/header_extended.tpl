@@ -32,8 +32,14 @@
                             <!--> <![endif]-->
                         </object>
                         <!-- END: swf -->
+                        <!-- BEGIN: site_name_h1 -->
                         <h1>{SITE_NAME}</h1>
                         <h2>{SITE_DESCRIPTION}</h2>
+                        <!-- END: site_name_h1 -->
+                        <!-- BEGIN: site_name_span -->
+                        <span class="site_name">{SITE_NAME}</span>
+                        <span class="site_description">{SITE_DESCRIPTION}</span>
+                        <!-- END: site_name_span -->
                     </div>
 				</div>
 			</div>
@@ -71,10 +77,17 @@
                         <div class="clearfix">
                             <div class="col-xs-24 col-sm-18 col-md-18">
                                 <!-- BEGIN: breadcrumbs -->
-                                <ul class="breadcrumbs list-none">
-                                    <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></li>
-                                    <!-- BEGIN: loop --><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span class="txt" itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
-                                </ul>
+                                <div class="breadcrumbs-wrap">
+                                	<div class="display">
+                                		<a class="show-subs-breadcrumbs hidden" href="#" onclick="showSubBreadcrumbs(this, event);"><em class="fa fa-lg fa-angle-right"></em></a>
+		                                <ul class="breadcrumbs list-none"></ul>
+									</div>
+									<ul class="subs-breadcrumbs"></ul>
+	                                <ul class="temp-breadcrumbs hidden">
+	                                    <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></li>
+	                                    <!-- BEGIN: loop --><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span class="txt" itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
+	                                </ul>
+								</div>
                                 <!-- END: breadcrumbs -->
                                 <!-- BEGIN: currenttime --><span class="current-time">{NV_CURRENTTIME}</span><!-- END: currenttime -->
                             </div>

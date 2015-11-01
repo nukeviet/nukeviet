@@ -123,5 +123,6 @@
 		</table>
 	</div>
 </form>
+<div class="alert alert-info">{LANG.adminscomm_note}</div>
 <!-- END: config -->
 <!-- END: main -->

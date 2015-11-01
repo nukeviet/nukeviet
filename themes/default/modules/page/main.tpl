@@ -26,7 +26,7 @@
     			<!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
    		</figure>
     	<!-- END: image -->
-	<div class="bodytext margin-bottom-lg">
+	<div id="page-bodyhtml" class="bodytext margin-bottom-lg">
 		{CONTENT.bodytext}
 	</div>
  </div>

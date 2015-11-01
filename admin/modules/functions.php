@@ -184,7 +184,7 @@ function nv_setup_data_module( $lang, $module_name, $sample = 0 )
 
 			try
 			{
-				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation'] );
 			}
 			catch( PDOException $e )
 			{

@@ -19,7 +19,7 @@ $db_config['dbpass'] = '';
 $db_config['dbdetete'] = 0;
 $db_config['prefix'] = 'nv4';
 $db_config['persistent'] = false;
-$db_config['collation'] = 'utf8_general_ci';// mysql 5.6 support utf8_general_ci, utf8_vietnamese_ci
+$db_config['collation'] = 'utf8_general_ci';// mysql 5.6 support utf8_general_ci, utf8mb4_unicode_ci, utf8_vietnamese_ci
 
 $array_data = array();
 $array_data['lang_multi'] = 0;

@@ -1,6 +1,28 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.24
+- Module users: update login email, search users, update generate password, fix rules register, get profile picture automatic, auto login after register
+- Module contact: support virtual module, update list admin
+- Module news: fix content no public, fix print post
+- Module menu: add reload menu function, fix error add menu, fix check link in module.
+- Module contact: add address field department, update block global department
+- Module upload: fix language upload, save thumb image quality follow, add viewmode, config upload logo position
+- Module comment: add note for config admin module
+- Fix change suspend admin
+- Check rule pass when install
+- Update lang
+- Add plugin cdn for js, css, image
+- Theme default: Fix breadcrumbs
+- Theme mobile: Fix user login, user register, breadcrumbs
+- Improving system security
+- Up to CKEditor 4.5.4
+- Fix some sys function
+- Update rule in file constants
+- Update statistics
+- Add notification for modules: news, comment
+- Support full Unicode in MySQL databases
+
 NUKEVIET 4.0.23 (Open beta 9)
 - Update module Contact
 - Update module Users.

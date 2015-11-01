@@ -39,8 +39,15 @@ if( ! empty( $listcid ) )
 		die();
 	}
 
-	$lang_enable = ( $status == 1 ) ? $lang_module['enable'] : $lang_module['disable'];
+	if( !empty( $cid_array ) and $status == 1 )
+	{
+		foreach( $cid_array as $cid )
+		{
+			nv_status_notification( NV_LANG_DATA, $module_name, 'comment_queue', $cid );
+		}
+	}
 
+	$lang_enable = ( $status == 1 ) ? $lang_module['enable'] : $lang_module['disable'];
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['edit_active'] . ': ' . $lang_enable, 'listcid: ' . $listcid, $admin_info['userid'] );
 
 	// Xac dinh ID cac bai viet

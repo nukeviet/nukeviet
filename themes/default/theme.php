@@ -190,6 +190,15 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->parse( 'main.image' );
 	}
 
+	if( preg_match( "/<h1[^\>]*\>/i", $contents ) )
+	{
+		$xtpl->parse( 'main.site_name_span' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.site_name_h1' );
+	}
+
 	// Only full theme
 	if( $full )
 	{
@@ -263,7 +272,7 @@ function nv_site_theme( $contents, $full = true )
         }
         $xtpl->parse( 'main.theme_type' );
 
-        if( $home || empty( $array_mod_title ) )
+        if( $home or empty( $array_mod_title_copy ) )
         {
             $xtpl->parse( 'main.currenttime' );
         }
