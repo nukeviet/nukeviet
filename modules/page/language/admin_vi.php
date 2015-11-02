@@ -19,6 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['list'] = 'Danh sách các bài';
 $lang_module['add'] = 'Thêm bài mới';
+$lang_module['send'] = 'Gửi';
 $lang_module['title'] = 'Tên bài viết';
 $lang_module['order'] = 'Thứ tự';
 $lang_module['status'] = 'Trạng thái';

@@ -17,7 +17,7 @@
 				<tbody>
 					<tr>
 						<td>{LANG.title} <span style="color:red">*</span>:</td>
-						<td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="255" /></td>
+						<td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="240" /></td>
 					</tr>
                     <tr>
 						<td>{LANG.group_description} <span style="color:red">*</span>:</td>

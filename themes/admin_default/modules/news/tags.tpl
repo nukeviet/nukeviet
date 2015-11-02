@@ -36,7 +36,7 @@
 			<tbody>
 				<tr>
 					<td class="text-right"><strong>{LANG.alias}: </strong> <sup class="required">(∗)</sup></td>
-					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" /><span class="text-middle">{GLANG.length_characters}: <span id="aliaslength" class="red">0</span>. {GLANG.title_suggest_max}</span></td>
+					<td><input class="form-control w500" name="alias" id="idalias" type="text" value="{alias}" maxlength="250" /><span class="text-middle">{GLANG.length_characters}: <span id="aliaslength" class="red">0</span>. {GLANG.title_suggest_max}</span></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.keywords}: </strong></td>

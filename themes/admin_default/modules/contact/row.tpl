@@ -11,11 +11,11 @@
 			<tbody>
 				<tr>
 					<td><strong>{LANG.part_row_title}</strong><sup class="required">(*)</sup></td>
-					<td><input class="w300 form-control pull-left" type="text" value="{DATA.full_name}" name="full_name" id="idfull_name" maxlength="255" /></td>
+					<td><input class="w300 form-control pull-left" type="text" value="{DATA.full_name}" name="full_name" id="idfull_name" maxlength="250" /></td>
 				</tr>
 				<tr>
                     <td><strong>{LANG.alias}</strong></td>
-                    <td><input class="w300 form-control pull-left" type="text" name="alias" value="{DATA.alias}" id="idalias" maxlength="255" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('{ID}');">&nbsp;</em></td>
+                    <td><input class="w300 form-control pull-left" type="text" name="alias" value="{DATA.alias}" id="idalias" maxlength="250" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('{ID}');">&nbsp;</em></td>
                 </tr>
 				<tr>
 					<td><strong>{GLANG.phonenumber}</strong></td>
