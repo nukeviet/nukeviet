@@ -273,7 +273,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 		else
 		{
 			$new_photo_name = $_user['photo'];
-			$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/';
+			$new_photo_path = NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/';
 
 			$new_photo_name2 = $new_photo_name;
 			$i = 1;
