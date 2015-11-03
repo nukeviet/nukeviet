@@ -20,6 +20,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['facebookapi'] = $nv_Request->get_string( 'facebookapi', 'post', '' );
 	$array_config['per_page'] = $nv_Request->get_int( 'per_page', 'post', '0' );
 	$array_config['related_articles'] = $nv_Request->get_int( 'related_articles', 'post', '0' );
+	$array_config['fisrt_news'] = $nv_Request->get_int( 'fisrt_news', 'post', 0 );
 
 	$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config SET config_value = :config_value WHERE config_name = :config_name');
 	foreach( $array_config as $config_name => $config_value )
@@ -30,7 +31,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	}
 
 	nv_del_moduleCache( $module_name );
-
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
 	die();
 }
@@ -39,6 +39,7 @@ $array_config['viewtype'] = 0;
 $array_config['facebookapi'] = '';
 $array_config['per_page'] = '5';
 $array_config['related_articles'] = '5';
+$array_config['fisrt_news'] = 1;
 
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $result = $db->query( $sql );
@@ -51,14 +52,13 @@ $xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
-
+$xtpl->assign( 'FISRT_NEWS', $array_config['fisrt_news'] ? ' checked="checked"' : '' );
 $view_array = array( $lang_module['config_view_type_0'], $lang_module['config_view_type_1'] );
 foreach( $view_array as $key => $title )
 {
 	$xtpl->assign( 'VIEWTYPE', array( 'id' => $key, 'title' => $title, 'selected' => $array_config['viewtype'] == $key ? 'selected="selected"' : '' ) );
 	$xtpl->parse( 'main.loop' );
 }
-
 for( $i = 5; $i <= 30; ++$i )
 {
 	$xtpl->assign( 'PER_PAGE', array(
@@ -76,7 +76,6 @@ for( $i = 0; $i <= 30; ++$i )
 		'selected' => $i == $array_config['related_articles'] ? 'selected="selected"' : '' ) );
 	$xtpl->parse( 'main.related_articles' );
 }
-
 $xtpl->parse( 'main' );
 $contents = $xtpl->text( 'main' );
 

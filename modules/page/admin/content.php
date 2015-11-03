@@ -8,19 +8,22 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if( !defined( 'NV_IS_FILE_ADMIN' ) )
+	die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'post,get', 0 );
+
+// xong, dung $page_config['fisrt_news']
 
 if( $id )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
-	$row = $db->query( $sql )->fetch();
+	$row = $db->query( $sql )->fetch( );
 
-	if(empty( $row ) )
+	if( empty( $row ) )
 	{
 		Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
-		die();
+		die( );
 	}
 
 	$page_title = $lang_module['edit'];
@@ -32,10 +35,10 @@ else
 	$action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
-$selectthemes = ( ! empty( $site_mods[$module_name]['theme'] ) ) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
+$selectthemes = (!empty( $site_mods[$module_name]['theme'] )) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $layout_array = nv_scandir( NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout'] );
 $error = '';
-$groups_list = nv_groups_list();
+$groups_list = nv_groups_list( );
 
 if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 {
@@ -62,8 +65,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$row['layout_func'] = $nv_Request->get_title( 'layout_func', 'post', '' );
 	$row['gid'] = $nv_Request->get_int( 'gid', 'post', 0 );
 
-	$_groups_post = $nv_Request->get_array( 'activecomm', 'post', array() );
-	$row['activecomm'] = ! empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
+	$_groups_post = $nv_Request->get_array( 'activecomm', 'post', array( ) );
+	$row['activecomm'] = !empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	if( empty( $row['title'] ) )
 	{
@@ -97,9 +100,33 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
-			$weight = intval( $weight ) + 1;
+			$sql = "SELECT config_name,config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
+			$list = nv_db_cache( $sql );
+			$page_config = array( );
+			foreach( $list as $values )
+			{
+				$page_config[$values['fisrt_new']] = $values['config_value'];
+			}
 
+			if( $page_config[$values['fisrt_new']] == 1 )
+			{
+				$weight = $db->query( "SELECT MIN(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn( );
+				$weight = intval( $weight );
+
+				$w_sql = "SELECT id, weight FROM " . NV_PREFIXLANG . "_" . $module_data;
+				$result=$db->query($w_sql);
+				while( $w_row = $result->fetch( ) )
+				{
+					++$w_row['weight'];
+					$sqlw = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $w_row['weight'] . ' WHERE id=' . $w_row['id'];
+					$db->query( $sqlw );
+				}
+			}
+			else
+			{
+				$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn( );
+				$weight = intval( $weight ) + 1;
+			}
 			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES (:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
 
 			$publtime = NV_CURRENTTIME;
@@ -120,9 +147,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$sth->bindParam( ':layout_func', $row['layout_func'], PDO::PARAM_STR );
 			$sth->bindParam( ':gid', $row['gid'], PDO::PARAM_INT );
 			$sth->bindParam( ':admin_id', $admin_info['admin_id'], PDO::PARAM_INT );
-			$sth->execute();
+			$sth->execute( );
 
-			if( $sth->rowCount() )
+			if( $sth->rowCount( ) )
 			{
 				if( $id )
 				{
@@ -135,7 +162,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 				nv_del_moduleCache( $module_name );
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=main' );
-				die();
+				die( );
 			}
 			else
 			{
@@ -148,18 +175,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 	}
 }
-elseif( empty( $id)  )
+elseif( empty( $id ) )
 {
 	$row['image'] = '';
 	$row['layout_func'] = '';
-	$row['description']='';
+	$row['description'] = '';
 	$row['bodytext'] = '';
 	$row['activecomm'] = $module_config[$module_name]['setcomm'];
 	$row['socialbutton'] = 1;
 	$row['gid'] = 0;
 }
 
-if( defined( 'NV_EDITOR' ) ) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+if( defined( 'NV_EDITOR' ) )
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 
 $row['description'] = nv_htmlspecialchars( nv_br2nl( $row['description'] ) );
 $row['bodytext'] = htmlspecialchars( nv_editor_br2nl( $row['bodytext'] ) );
@@ -172,7 +200,7 @@ else
 	$row['bodytext'] = '<textarea style="width:100%;height:300px" name="bodytext">' . $row['bodytext'] . '</textarea>';
 }
 
-if( ! empty( $row['image'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'] ) )
+if( !empty( $row['image'] ) and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'] ) )
 {
 	$row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
 }
@@ -187,28 +215,37 @@ $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
 $xtpl->assign( 'UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload );
 $xtpl->assign( 'DATA', $row );
 $xtpl->assign( 'BODYTEXT', $row['bodytext'] );
-$xtpl->assign( 'SOCIALBUTTON', ( $row['socialbutton'] ) ? ' checked="checked"' : '' );
+$xtpl->assign( 'SOCIALBUTTON', ($row['socialbutton']) ? ' checked="checked"' : '' );
 
 foreach( $layout_array as $value )
 {
 	$value = preg_replace( $global_config['check_op_layout'], '\\1', $value );
-	$xtpl->assign( 'LAYOUT_FUNC', array( 'key' => $value, 'selected' => ( $row['layout_func'] == $value ) ? ' selected="selected"' : '' ) );
+	$xtpl->assign( 'LAYOUT_FUNC', array(
+		'key' => $value,
+		'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : ''
+	) );
 	$xtpl->parse( 'main.layout_func' );
 }
 $sql = "SELECT * FROM " . $db_config['prefix'] . "_googleplus ORDER BY weight ASC";
-$_grows = $db->query( $sql )->fetchAll();
+$_grows = $db->query( $sql )->fetchAll( );
 if( sizeof( $_grows ) )
 {
-	$array_googleplus = array();
-	$array_googleplus[] = array( 'gid' => - 1, 'title' => $lang_module['googleplus_1'] );
-	$array_googleplus[] = array( 'gid' => 0, 'title' => $lang_module['googleplus_0'] );
-	foreach ( $_grows as $grow )
+	$array_googleplus = array( );
+	$array_googleplus[] = array(
+		'gid' => -1,
+		'title' => $lang_module['googleplus_1']
+	);
+	$array_googleplus[] = array(
+		'gid' => 0,
+		'title' => $lang_module['googleplus_0']
+	);
+	foreach( $_grows as $grow )
 	{
 		$array_googleplus[] = $grow;
 	}
 	foreach( $array_googleplus as $grow )
 	{
-		$grow['selected'] = ( $row['gid'] == $grow['gid'] ) ? ' selected="selected"' : '';
+		$grow['selected'] = ($row['gid'] == $grow['gid']) ? ' selected="selected"' : '';
 		$xtpl->assign( 'GOOGLEPLUS', $grow );
 		$xtpl->parse( 'main.googleplus.gid' );
 	}
@@ -226,7 +263,8 @@ foreach( $groups_list as $_group_id => $_title )
 	$xtpl->parse( 'main.activecomm' );
 }
 
-if( empty( $row['alias'] ) ) $xtpl->parse( 'main.get_alias' );
+if( empty( $row['alias'] ) )
+	$xtpl->parse( 'main.get_alias' );
 
 if( $error )
 {
