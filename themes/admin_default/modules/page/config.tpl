@@ -41,8 +41,8 @@
 						</select></td>
 					</tr>
 					<tr>
-						<td>{LANG.fisrt_news}</td>
-						<td><input type="checkbox" value="1" name="fisrt_news"{FISRT_NEWS}/></td>
+						<td>{LANG.first_news}</td>
+						<td><input type="checkbox" value="1" name="news_first"{NEWS_FIRST}/></td>
 					</tr>
 					<tr>
 						<td>{LANG.config_facebookapi}</td>

@@ -8,12 +8,9 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( !defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $id = $nv_Request->get_int( 'id', 'post,get', 0 );
-
-// xong, dung $page_config['fisrt_news']
 
 if( $id )
 {
@@ -100,33 +97,16 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			$sql = "SELECT config_name,config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
-			$list = nv_db_cache( $sql );
-			$page_config = array( );
-			foreach( $list as $values )
+			if( $page_config[$values['news_first']] == 1 )
 			{
-				$page_config[$values['fisrt_new']] = $values['config_value'];
-			}
-
-			if( $page_config[$values['fisrt_new']] == 1 )
-			{
-				$weight = $db->query( "SELECT MIN(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn( );
-				$weight = intval( $weight );
-
-				$w_sql = "SELECT id, weight FROM " . NV_PREFIXLANG . "_" . $module_data;
-				$result=$db->query($w_sql);
-				while( $w_row = $result->fetch( ) )
-				{
-					++$w_row['weight'];
-					$sqlw = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $w_row['weight'] . ' WHERE id=' . $w_row['id'];
-					$db->query( $sqlw );
-				}
+				$weight = 0;
 			}
 			else
 			{
 				$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn( );
 				$weight = intval( $weight ) + 1;
 			}
+
 			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES (:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
 
 			$publtime = NV_CURRENTTIME;
@@ -157,6 +137,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				}
 				else
 				{
+					nv_page_fix_weight( $page_config['news_first'] );
 					nv_insert_logs( NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid'] );
 				}
 

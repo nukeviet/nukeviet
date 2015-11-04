@@ -20,7 +20,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$array_config['facebookapi'] = $nv_Request->get_string( 'facebookapi', 'post', '' );
 	$array_config['per_page'] = $nv_Request->get_int( 'per_page', 'post', '0' );
 	$array_config['related_articles'] = $nv_Request->get_int( 'related_articles', 'post', '0' );
-	$array_config['fisrt_news'] = $nv_Request->get_int( 'fisrt_news', 'post', 0 );
+	$array_config['news_first'] = $nv_Request->get_int( 'news_first', 'post', 0 );
 
 	$sth = $db->prepare( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_config SET config_value = :config_value WHERE config_name = :config_name');
 	foreach( $array_config as $config_name => $config_value )
@@ -29,6 +29,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
 		$sth->execute();
 	}
+
+
+		nv_page_fix_weight( $array_config['news_first'] );
 
 	nv_del_moduleCache( $module_name );
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -39,7 +42,7 @@ $array_config['viewtype'] = 0;
 $array_config['facebookapi'] = '';
 $array_config['per_page'] = '5';
 $array_config['related_articles'] = '5';
-$array_config['fisrt_news'] = 1;
+$array_config['news_first'] = 0;
 
 $sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $result = $db->query( $sql );
@@ -47,12 +50,11 @@ while( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 {
 	$array_config[$c_config_name] = $c_config_value;
 }
-
 $xtpl = new XTemplate( 'config.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
-$xtpl->assign( 'FISRT_NEWS', $array_config['fisrt_news'] ? ' checked="checked"' : '' );
+$xtpl->assign( 'NEWS_FIRST', $array_config['news_first'] ? ' checked="checked"' : '' );
 $view_array = array( $lang_module['config_view_type_0'], $lang_module['config_view_type_1'] );
 foreach( $view_array as $key => $title )
 {
