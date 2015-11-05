@@ -30,8 +30,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$sth->execute();
 	}
 
-
-		nv_page_fix_weight( $array_config['news_first'] );
+	nv_page_fix_weight( $array_config['news_first'] );
 
 	nv_del_moduleCache( $module_name );
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
@@ -55,6 +54,7 @@ $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'DATA', $array_config );
 $xtpl->assign( 'NEWS_FIRST', $array_config['news_first'] ? ' checked="checked"' : '' );
+
 $view_array = array( $lang_module['config_view_type_0'], $lang_module['config_view_type_1'] );
 foreach( $view_array as $key => $title )
 {
