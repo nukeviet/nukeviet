@@ -97,10 +97,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
-			$weight = intval( $weight ) + 1;
+			if( $page_config['news_first'] )
+			{
+				$weight = 1;
+			}
+			else
+			{
+				$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
+				$weight = intval( $weight ) + 1;
+			}
 
-			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES (:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
+			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '
+				(title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES
+				(:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
 
 			$publtime = NV_CURRENTTIME;
 		}
@@ -130,8 +139,11 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				}
 				else
 				{
-				    $_id = $db->query( 'SELECT max(id) FROM '. NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
-					nv_page_fixweight($_id, $weight, $page_config['news_first'] );
+					if( $page_config['news_first'] )
+					{
+						$id = $db->lastInsertId();
+						$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=weight+1 WHERE id!=' . $id );
+					}
 
 					nv_insert_logs( NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid'] );
 				}
