@@ -30,7 +30,10 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		$sth->execute();
 	}
 
-	nv_page_fix_weight( $array_config['news_first'] );
+	if( $page_config['news_first'] != $array_config['news_first'] )
+	{
+		nv_page_fixweight( 0, 0, $array_config['news_first'] );
+	}
 
 	nv_del_moduleCache( $module_name );
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op );
