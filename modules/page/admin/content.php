@@ -130,6 +130,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				}
 				else
 				{
+				    $_id = $db->query( 'SELECT max(id) FROM '. NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
+					nv_page_fixweight($_id, $weight, $page_config['news_first'] );
+
 					nv_insert_logs( NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid'] );
 				}
 
@@ -148,18 +151,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 	}
 }
-elseif( empty( $id)  )
+elseif( empty( $id ) )
 {
 	$row['image'] = '';
 	$row['layout_func'] = '';
-	$row['description']='';
+	$row['description'] = '';
 	$row['bodytext'] = '';
 	$row['activecomm'] = $module_config[$module_name]['setcomm'];
 	$row['socialbutton'] = 1;
 	$row['gid'] = 0;
 }
 
-if( defined( 'NV_EDITOR' ) ) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+if( defined( 'NV_EDITOR' ) )
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 
 $row['description'] = nv_htmlspecialchars( nv_br2nl( $row['description'] ) );
 $row['bodytext'] = htmlspecialchars( nv_editor_br2nl( $row['bodytext'] ) );
