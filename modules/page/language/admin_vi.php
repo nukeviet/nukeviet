@@ -38,6 +38,7 @@ $lang_module['keywords'] = 'Từ khóa';
 $lang_module['feature'] = 'Chức năng';
 $lang_module['description'] = 'Miêu tả';
 $lang_module['image'] = 'Hình minh họa';
+$lang_module['first_news'] = 'Khi đăng bài mới sẽ lên đầu tiên';
 $lang_module['imagealt'] = 'Chú thích cho hình';
 $lang_module['socialbutton'] = 'Các công cụ Like';
 $lang_module['socialbuttonnote'] = 'Hiển thị các công cụ Like facebook, G+, Twitter';
