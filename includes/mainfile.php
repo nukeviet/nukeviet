@@ -29,7 +29,11 @@ $editor = false;
 // Register given function autoload implementation
 spl_autoload_register( function ( $classname )
 {
-	include NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php';
+	if( file_exists( NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php' ) )
+	{
+		include NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php';
+	}
+	
 } );
 
 // Ket noi voi cac file constants, config
