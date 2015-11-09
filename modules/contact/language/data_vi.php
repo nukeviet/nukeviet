@@ -16,7 +16,9 @@ if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
  * 	- Accept global var: $db, $db_config, $global_config
  */
 
-$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (full_name, alias, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)" );
+$sth = $db->prepare( "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department
+	(full_name, alias, image, phone, fax, email, address, note, others, cats, admins, act, weight, is_default) VALUES
+	(:full_name, :alias, '', :phone, :fax, :email, '', :note, :others, :cats, '1/1/1/0;', 1, :weight, :is_default)" );
 
 $full_name = 'Phòng Chăm sóc khách hàng';
 $alias = 'Cham-soc-khach-hang';
