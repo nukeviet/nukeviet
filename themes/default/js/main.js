@@ -426,7 +426,7 @@ $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();
 	nvbreadcrumbs();
-	if (150 < cRangeX || 150 < cRangeY) tipHide(), ftipHide()
+	//if (150 < cRangeX || 150 < cRangeY) tipHide(), ftipHide()
 });
 // Load Social script - lasest
 $(window).load(function() {
