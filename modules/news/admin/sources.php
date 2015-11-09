@@ -40,9 +40,13 @@ if( ! empty( $savecat ) )
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' );
 		$logo = substr( $logo, $lu );
 	}
-	elseif( ! nv_is_url( $logo ) )
+	elseif( ! nv_is_url( $logo ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/source/' . $logo_old ) )
 	{
 		$logo = $logo_old;
+	}
+	else
+	{
+		$logo = '';
 	}
 
 	if( ( $logo != $logo_old ) and ! empty( $logo_old ) )
