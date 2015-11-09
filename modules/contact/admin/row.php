@@ -37,6 +37,7 @@ $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'FORM_ACTION', $action );
 $xtpl->assign( 'NV_ADMIN_THEME', $global_config['admin_theme'] );
+$xtpl->assign( 'PATH', NV_UPLOADS_DIR . '/' . $module_upload );
 
 $sql = 'SELECT t1.admin_id, t1.lev as level, t1.is_suspend, t2.username, t2.email, t2.first_name, t2.last_name, t2.active
 	FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1
@@ -71,6 +72,17 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$otherVal = $nv_Request->get_typed_array( 'otherVal', 'post', 'title', '' );
 	$cats = $nv_Request->get_typed_array( 'cats', 'post', 'title', '' );
 	$note = $nv_Request->get_editor( 'note', '', NV_ALLOWED_HTML_TAGS );
+
+	$image = $nv_Request->get_string( 'image', 'post', '', 1 );
+	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	{
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
+		$image = substr( $image, $lu );
+	}
+	else
+	{
+		$image = '';
+	}
 
 	$view_level = $nv_Request->get_array( 'view_level', 'post', array() );
 	$reply_level = $nv_Request->get_array( 'reply_level', 'post', array() );
@@ -167,7 +179,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 
 		if( $id )
 		{
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, phone = :phone, fax=:fax, email=:email, address=:address, others=:others, cats=:cats, note=:note, admins=:admins WHERE id =' . $id;
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, image = :image, phone = :phone, fax=:fax, email=:email, address=:address, others=:others, cats=:cats, note=:note, admins=:admins WHERE id =' . $id;
 			$name_key = 'log_edit_row';
 			$note_action = 'id: ' . $id . ' ' . $full_name;
 		}
@@ -175,7 +187,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		{
 			$weight = $db->query( 'SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department' )->fetchColumn();
 			$weight++;
-			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, address, others, cats, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :address, :others, :cats, :note, :admins, 1, :weight, 0)';
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, image, phone, fax, email, address, others, cats, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :image, :phone, :fax, :email, :address, :others, :cats, :note, :admins, 1, :weight, 0)';
 			$name_key = 'log_add_row';
 			$note_action = $full_name;
 		}
@@ -185,6 +197,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$sth = $db->prepare( $sql );
 			$sth->bindParam( ':full_name', $full_name, PDO::PARAM_STR );
 			$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
+			$sth->bindParam( ':image', $image, PDO::PARAM_STR );
 			$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
 			$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
 			$sth->bindParam( ':email', $email, PDO::PARAM_STR );
@@ -219,6 +232,7 @@ else
 	{
 		$full_name = $frow['full_name'];
 		$alias = $frow['alias'];
+		$image = $frow['image'];
 		$phone = $frow['phone'];
 		$fax = $frow['fax'];
 		$email = $frow['email'];
@@ -311,9 +325,15 @@ else
 	$note = '<textarea style="width:100%;height:150px" name="note" id="note">' . $note . '</textarea>';
 }
 
+if( ! empty( $image ) and is_file( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image ) )
+{
+	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
+}
+
 $xtpl->assign( 'DATA', array(
 	'full_name' => $full_name,
 	'alias' => $alias,
+	'image' => $image,
 	'phone' => $phone,
 	'fax' => $fax,
 	'email' => $email,
