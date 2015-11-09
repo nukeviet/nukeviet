@@ -13,15 +13,15 @@ if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
 $filename = $nv_Request->get_title( 'filename', 'get', '' );
 $checkss = $nv_Request->get_title( 'checkss', 'get', '' );
 
-$log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
+$log_dir = NV_LOGS_DIR . '/dump_backup';
 if( $global_config['idsite'] )
 {
 	$log_dir .= '/' . $global_config['site_dir'];
 }
 
-$path_filename = $log_dir . '/' . $filename;
+$path_filename = NV_BASE_SITEURL . '/' . $log_dir . '/' . $filename;
 
-if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info['session_id'] . $global_config['sitekey'] ) )
+if( nv_is_file( $path_filename, $log_dir ) === true and $checkss == md5( $filename . $client_info['session_id'] . $global_config['sitekey'] ) )
 {
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download'], 'File name: ' . basename( $filename ), $admin_info['userid'] );
 
@@ -34,7 +34,7 @@ if( file_exists( $path_filename ) and $checkss == md5( $filename . $client_info[
 		$name = substr( $name, 33 );
 	}
 
-	$download = new download( $path_filename, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup', $name );
+	$download = new download( NV_DOCUMENT_ROOT . '/' . $path_filename, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup', $name );
 	$download->download_file();
 	exit();
 }

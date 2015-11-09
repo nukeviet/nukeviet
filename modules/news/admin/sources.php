@@ -35,7 +35,7 @@ if( ! empty( $savecat ) )
 	$logo_old = $db->query( 'SELECT logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid =' . $sourceid )->fetchColumn();
 
 	$logo = $nv_Request->get_title( 'logo', 'post', '' );
-	if( ! nv_is_url( $logo ) and file_exists( NV_DOCUMENT_ROOT . $logo ) )
+	if( ! nv_is_url( $logo ) and nv_is_file( $logo, NV_UPLOADS_DIR . '/' . $module_upload . '/source' ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' );
 		$logo = substr( $logo, $lu );

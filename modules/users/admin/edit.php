@@ -249,9 +249,9 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 	// Check photo
 	if( ! empty( $_user['photo'] ) )
 	{
-		$tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $_user['photo'];
+		$tmp_photo = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $_user['photo'];
 
-		if( ! file_exists( $tmp_photo ) )
+		if( ! nv_is_file( $tmp_photo, NV_TEMP_DIR ) )
 		{
 			$_user['photo'] = '';
 		}
@@ -269,7 +269,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 			}
 			$new_photo = $new_photo_path . $new_photo_name2;
 
-			if( nv_copyfile( $tmp_photo, $new_photo ) )
+			if( nv_copyfile( NV_DOCUMENT_ROOT . $tmp_photo, $new_photo ) )
 			{
 				$_user['photo'] = substr( $new_photo, strlen( NV_ROOTDIR . '/' ) );
 			}
@@ -278,7 +278,7 @@ if( $nv_Request->isset_request( 'confirm', 'post' ) )
 				$_user['photo'] = '';
 			}
 
-			nv_deletefile( $tmp_photo );
+			nv_deletefile( NV_DOCUMENT_ROOT . $tmp_photo );
 		}
 	}
 
