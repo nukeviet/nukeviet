@@ -54,7 +54,7 @@ if( $submit )
     }
     elseif( ! nv_is_url( $site_logo ) )
     {
-        if( file_exists( NV_DOCUMENT_ROOT . $site_logo ) )
+        if( nv_is_file( $site_logo ) === true )
         {
             $lu = strlen( NV_BASE_SITEURL );
             $array_config['site_logo'] = substr( $site_logo, $lu );
@@ -72,7 +72,7 @@ if( $submit )
     }
     elseif( ! nv_is_url( $site_banner ) )
     {
-    	if( file_exists( NV_DOCUMENT_ROOT . $site_banner ) )
+    	if( nv_is_file( $site_banner ) === true )
     	{
     		$lu = strlen( NV_BASE_SITEURL );
     		$array_config['site_banner'] = substr( $site_banner, $lu );
@@ -90,7 +90,7 @@ if( $submit )
     }
     elseif( ! nv_is_url( $site_favicon ) )
     {
-    	if( file_exists( NV_DOCUMENT_ROOT . $site_favicon ) )
+    	if( nv_is_file( $site_favicon ) === true )
     	{
     		$lu = strlen( NV_BASE_SITEURL );
     		$array_config['site_favicon'] = substr( $site_favicon, $lu );
