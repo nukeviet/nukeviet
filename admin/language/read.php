@@ -219,72 +219,69 @@ function nv_admin_read_lang( $dirlang, $module, $admin_file = 1 )
 $dirlang = $nv_Request->get_title( 'dirlang', 'get', '' );
 $page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_read'];
 
-if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'readallfile' . session_id() ) and preg_match( "/^([a-z]{2})$/", $dirlang ) )
+if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'readallfile' . session_id() ) and preg_match( "/^([a-z]{2})$/", $dirlang ) and is_dir( NV_ROOTDIR . '/includes/language/' . $dirlang ) )
 {
-	if( preg_match( '/^([a-z]{2})$/', $dirlang ) and is_dir( NV_ROOTDIR . '/includes/language/' . $dirlang ) )
+	$array_filename = array();
+
+	nv_admin_add_field_lang( $dirlang );
+	nv_admin_read_lang( $dirlang, 'global', 0 );
+	nv_admin_read_lang( $dirlang, 'install', 0 );
+
+	$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
+	nv_admin_read_lang( $dirlang, 'global', 1 );
+
+	$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
+	$dirs = nv_scandir( NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module'] );
+
+	foreach( $dirs as $module )
 	{
-		$array_filename = array();
-
-		nv_admin_add_field_lang( $dirlang );
-		nv_admin_read_lang( $dirlang, 'global', 0 );
-		nv_admin_read_lang( $dirlang, 'install', 0 );
-
+		nv_admin_read_lang( $dirlang, $module, 1 );
 		$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
-		nv_admin_read_lang( $dirlang, 'global', 1 );
-
-		$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
-		$dirs = nv_scandir( NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config['check_module'] );
-
-		foreach( $dirs as $module )
-		{
-			nv_admin_read_lang( $dirlang, $module, 1 );
-			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
-		}
-
-		$dirs = nv_scandir( NV_ROOTDIR . '/includes/language/' . $dirlang, '/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/' );
-		foreach( $dirs as $file_i )
-		{
-			nv_admin_read_lang( $dirlang, 'global', $file_i );
-		}
-
-		$dirs = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
-		foreach( $dirs as $module )
-		{
-			nv_admin_read_lang( $dirlang, $module, 0 );
-			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
-
-			nv_admin_read_lang( $dirlang, $module, 1 );
-			$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
-
-			$blocks = nv_scandir( NV_ROOTDIR . '/modules/' . $module . '/language/', '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/' );
-			foreach( $blocks as $file_i )
-			{
-				nv_admin_read_lang( $dirlang, $module, $file_i );
-			}
-		}
-
-		$nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
-
-		$xtpl = new XTemplate( 'read.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-		$xtpl->assign( 'LANG', $lang_module );
-		$xtpl->assign( 'GLANG', $lang_global );
-		$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface' );
-
-		foreach( $array_filename as $name )
-		{
-			if( ! $name ) continue;
-
-			$xtpl->assign( 'NAME', $name );
-			$xtpl->parse( 'main.loop' );
-		}
-
-		$xtpl->parse( 'main' );
-		$contents = $xtpl->text( 'main' );
-
-		include NV_ROOTDIR . '/includes/header.php';
-		echo nv_admin_theme( $contents );
-		include NV_ROOTDIR . '/includes/footer.php';
 	}
+
+	$dirs = nv_scandir( NV_ROOTDIR . '/includes/language/' . $dirlang, '/^block\.global\.([a-zA-Z0-9\-\_]+)\.php$/' );
+	foreach( $dirs as $file_i )
+	{
+		nv_admin_read_lang( $dirlang, 'global', $file_i );
+	}
+
+	$dirs = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
+	foreach( $dirs as $module )
+	{
+		nv_admin_read_lang( $dirlang, $module, 0 );
+		$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
+
+		nv_admin_read_lang( $dirlang, $module, 1 );
+		$array_filename[] = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $include_lang ) );
+
+		$blocks = nv_scandir( NV_ROOTDIR . '/modules/' . $module . '/language/', '/^block\.(global|module)\.([a-zA-Z0-9\-\_]+)\_' . $dirlang . '\.php$/' );
+		foreach( $blocks as $file_i )
+		{
+			nv_admin_read_lang( $dirlang, $module, $file_i );
+		}
+	}
+
+	$nv_Request->set_Cookie( 'dirlang', $dirlang, NV_LIVE_COOKIE_TIME );
+
+	$xtpl = new XTemplate( 'read.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'GLANG', $lang_global );
+	$xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=interface' );
+
+	foreach( $array_filename as $name )
+	{
+		if( ! $name ) continue;
+
+		$xtpl->assign( 'NAME', $name );
+		$xtpl->parse( 'main.loop' );
+	}
+
+	$xtpl->parse( 'main' );
+	$contents = $xtpl->text( 'main' );
+
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_admin_theme( $contents );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name );
