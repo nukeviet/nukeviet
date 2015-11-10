@@ -68,7 +68,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_config (
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_question (
 	qid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-	title varchar(255) NOT NULL DEFAULT '',
+	title varchar(240) NOT NULL DEFAULT '',
 	lang char(2) NOT NULL DEFAULT '',
 	weight mediumint(8) unsigned NOT NULL DEFAULT '0',
 	add_time int(11) unsigned NOT NULL DEFAULT '0',
@@ -196,7 +196,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
 
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 	group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-	title varchar(255) NOT NULL,
+	title varchar(240) NOT NULL,
     description text,
 	content text,
 	add_time int(11) NOT NULL,
@@ -230,7 +230,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
 $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
 	idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	module varchar(50) NOT NULL,
-	admin_file varchar(255) NOT NULL DEFAULT '0',
+	admin_file varchar(200) NOT NULL DEFAULT '0',
 	langtype varchar(50) NOT NULL,
 	PRIMARY KEY (idfile),
 	UNIQUE KEY module (module,admin_file)
@@ -407,7 +407,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
 	did mediumint(8) NOT NULL AUTO_INCREMENT,
-	dirname varchar(255) DEFAULT NULL,
+	dirname varchar(250) DEFAULT NULL,
 	time int(11) NOT NULL DEFAULT '0',
 	thumb_type tinyint(4) NOT NULL DEFAULT '0',
 	thumb_width smallint(6) NOT NULL DEFAULT '0',
@@ -418,7 +418,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
-	name varchar(255) NOT NULL,
+	name varchar(245) NOT NULL,
 	ext varchar(10) NOT NULL DEFAULT '',
 	type varchar(5) NOT NULL DEFAULT '',
 	filesize int(11) NOT NULL DEFAULT '0',
@@ -429,7 +429,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	mtime int(11) NOT NULL DEFAULT '0',
 	did int(11) NOT NULL DEFAULT '0',
-	title varchar(255) NOT NULL DEFAULT '',
+	title varchar(245) NOT NULL DEFAULT '',
 	alt varchar(255) NOT NULL DEFAULT '',
 	UNIQUE KEY did (did,title),
 	KEY userid (userid),

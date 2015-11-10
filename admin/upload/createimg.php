@@ -29,9 +29,29 @@ while( file_exists( NV_ROOTDIR . '/' . $path . '/' . $file ) )
 	++$i;
 }
 
+if( isset( $array_thumb_config[$path] ) )
+{
+	$thumb_config = $array_thumb_config[$path];
+}
+else
+{
+	$thumb_config = $array_thumb_config[''];
+	$_arr_path = explode( '/', $path );
+	while( sizeof( $_arr_path ) > 1 )
+	{
+		array_pop( $_arr_path );
+		$_path = implode( '/', $_arr_path );
+		if( isset( $array_thumb_config[$_path] ) )
+		{
+			$thumb_config = $array_thumb_config[$_path];
+			break;
+		}
+	}
+}
+
 $createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $imagename, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 $createImage->resizeXY( $width, $height );
-$createImage->save( NV_ROOTDIR . '/' . $path, $file, 75 );
+$createImage->save( NV_ROOTDIR . '/' . $path, $file, $thumb_config['thumb_quality'] );
 $createImage->close();
 
 if( isset( $array_dirname[$path] ) )

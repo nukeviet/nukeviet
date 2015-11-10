@@ -23,7 +23,7 @@ if( ! isset( $check_allow_upload_dir['delete_file'] ) )
 $file = htmlspecialchars( trim( $nv_Request->get_string( 'file', 'post,get' ) ), ENT_QUOTES );
 $file = basename( $file );
 
-if( empty( $file ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $file ) )
+if( empty( $file ) or ! nv_is_file( NV_BASE_SITEURL . $path . '/' . $file, $path ) )
 {
 	die( 'ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file );
 }
@@ -47,9 +47,29 @@ if( $nv_Request->isset_request( 'path', 'post' ) and $nv_Request->isset_request(
 
 	if( $config_logo['w'] > 0 and $config_logo['h'] > 0 )
 	{
+		if( isset( $array_thumb_config[$path] ) )
+		{
+			$thumb_config = $array_thumb_config[$path];
+		}
+		else
+		{
+			$thumb_config = $array_thumb_config[''];
+			$_arr_path = explode( '/', $path );
+			while( sizeof( $_arr_path ) > 1 )
+			{
+				array_pop( $_arr_path );
+				$_path = implode( '/', $_arr_path );
+				if( isset( $array_thumb_config[$_path] ) )
+				{
+					$thumb_config = $array_thumb_config[$_path];
+					break;
+				}
+			}
+		}
+
 		$createImage = new image( NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT );
 		$createImage->addlogo( $upload_logo, '', '', $config_logo );
-		$createImage->save( NV_ROOTDIR . '/' . $path, $file );
+		$createImage->save( NV_ROOTDIR . '/' . $path, $file, $thumb_config['thumb_quality'] );
 		$createImage->close();
 
 		if( isset( $array_dirname[$path] ) )

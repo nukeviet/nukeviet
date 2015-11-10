@@ -64,7 +64,7 @@
     .contactList li .fa, .contactList li [class^="icon-"], .contactList li [class*=" icon-"] {
         width:20px !important
     }
-    .breadcrumbs{
+    .breadcrumbs-wrap{
         display:none
     }
     .hidden-ss-block,

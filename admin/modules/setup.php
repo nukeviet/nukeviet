@@ -213,7 +213,10 @@ $result = $db->query( 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight AS
 while( $row = $result->fetch() )
 {
 	$modules_for_title[$row['title']] = $row;
-	$modules_for_file[$row['module_file']] = $row;
+	if( $row['title'] == $row['module_file'] )
+	{
+		$modules_for_file[$row['module_file']] = $row;
+	}	
 }
 
 // Kiem tra module moi

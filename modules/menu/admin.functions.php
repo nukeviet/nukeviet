@@ -10,6 +10,8 @@
 
 if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
 
+define( 'NV_IS_FILE_ADMIN', true );
+
 $allow_func = array( 'main', 'menu', 'rows', 'link_menu', 'link_module', 'change_weight_row', 'del_row', 'change_active' );
 
 // Loai lien ket
@@ -95,7 +97,7 @@ function nv_menu_del_sub( $id, $parentid )
 	$sql = 'SELECT title, subitem FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id . ' AND parentid=' . $parentid;
 	$row = $db->query( $sql )->fetch();
 
-	if( empty( $row ) ) die( 'NO_' . $id );
+	if( empty( $row ) ) return false;
 
 	$sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
 	if( $db->exec( $sql ) )
@@ -125,6 +127,7 @@ function nv_menu_del_sub( $id, $parentid )
 			nv_insert_logs( NV_LANG_DATA, $module_name, 'Delete menu item', 'Item ID ' . $id, $admin_info['userid'] );
 		}
 	}
+	return true;
 }
 
 /**
@@ -149,4 +152,91 @@ function nv_menu_get_submenu( $id, $alias_selected, $array_item, $sp_i )
 	}
 }
 
-define( 'NV_IS_FILE_ADMIN', true );
+/**
+ * nv_menu_insert_id()
+ *
+ * @param mixed $mid
+ * @param mixed $parentid
+ * @param mixed $title
+ * @param mixed $weight
+ * @param mixed $sort
+ * @param mixed $lev
+ * @param mixed $mod_name
+ * @param mixed $op_mod
+ * @param mixed $groups_view
+ * @return
+ *
+ */
+function nv_menu_insert_id( $mid, $parentid, $title, $weight, $sort, $lev, $mod_name, $op_mod, $groups_view )
+{
+	global $module_data, $db;
+
+	$sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (parentid, mid, title, link, note, weight, sort, lev, subitem, groups_view, module_name, op, target, css, active_type, status) VALUES (
+		" . $parentid . ",
+		" . $mid . ",
+		:title,
+		:link,
+		:note,
+		" . $weight . ",
+		" . $sort . ",
+		" . $lev . ",
+		'',
+		:groups_view,
+		:module_name,
+		:op,
+		1,
+		'',
+		1,
+		1
+	)";
+
+	$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod_name;
+	if( ! empty( $op_mod ) )
+	{
+		$link .= '&amp;' . NV_OP_VARIABLE . '=' . $op_mod;
+	}
+	$data_insert = array();
+	$data_insert['title'] = $title;
+	$data_insert['link'] = $link;
+	$data_insert['note'] = '';
+	$data_insert['groups_view'] = $groups_view;
+	$data_insert['module_name'] = $mod_name;
+	$data_insert['op'] = $op_mod;
+	return $db->insert_id( $sql, 'id', $data_insert );
+}
+
+/**
+ * @param int $mid
+ * @param int $parentid
+ * @param int $sort
+ * @param int $lev
+ * @param string $mod_name
+ * @param array $array_item
+ * @param int $key
+ */
+function nv_menu_insert_submenu( $mid, $parentid, &$sort, $lev, $mod_name, $array_item, $key )
+{
+	global $db, $module_data;
+
+	$array_sub_id = array();
+	$subweight = 0;
+	$sublev = $lev + 1;
+	foreach( $array_item as $subkey => $subitem )
+	{
+		if( isset( $subitem['parentid'] ) and $subitem['parentid'] == $key )
+		{
+			++$subweight;
+			++$sort;
+			$groups_view = ( isset( $subitem['groups_view'] ) ) ? $subitem['groups_view'] : '6';
+			$subparentid = nv_menu_insert_id( $mid, $parentid, $subitem['title'], $subweight, $sort, $lev, $mod_name, $subitem['alias'], $groups_view );
+			$array_sub_id[] = $subparentid;
+
+			nv_menu_insert_submenu( $mid, $subparentid, $sort, $sublev, $mod_name, $array_item, $subkey );
+		}
+	}
+
+	if( ! empty( $array_sub_id ) )
+	{
+		$db->query( "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode( ',', $array_sub_id ) . "' WHERE id=" . $parentid );
+	}
+}

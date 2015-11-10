@@ -27,6 +27,12 @@ function nv_site_theme( $contents, $full = true )
 		$global_config['timestamp'] += $global_config['sitetimestamp'];
 	}
 
+	$site_favicon = NV_BASE_SITEURL . 'favicon.ico';
+	if( ! empty( $global_config['site_favicon'] ) and file_exists( NV_ROOTDIR . '/' . $global_config['site_favicon'] ) )
+	{
+		$site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
+	}
+
 	$xtpl = new XTemplate( $layout_file, NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout' );
 	$xtpl->assign( 'LANG', $lang_global );
 	$xtpl->assign( 'TEMPLATE', $global_config['module_theme'] );
@@ -44,7 +50,7 @@ function nv_site_theme( $contents, $full = true )
 	$xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
 	$xtpl->assign( 'NV_CURRENTTIME', nv_date( $global_config['date_pattern'] . ', ' . $global_config['time_pattern'], NV_CURRENTTIME ) );
 	$xtpl->assign( 'NV_COOKIE_PREFIX', $global_config['cookie_prefix'] );
-
+	$xtpl->assign( 'SITE_FAVICON', $site_favicon );
 	// System variables
     $xtpl->assign( 'THEME_PAGE_TITLE', nv_html_page_title( false ) );
 
@@ -184,6 +190,15 @@ function nv_site_theme( $contents, $full = true )
 		$xtpl->parse( 'main.image' );
 	}
 
+	if( preg_match( "/<h1[^\>]*\>/i", $contents ) )
+	{
+		$xtpl->parse( 'main.site_name_span' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.site_name_h1' );
+	}
+
 	// Only full theme
 	if( $full )
 	{
@@ -257,7 +272,7 @@ function nv_site_theme( $contents, $full = true )
         }
         $xtpl->parse( 'main.theme_type' );
 
-        if( $home || empty( $array_mod_title ) )
+        if( $home or empty( $array_mod_title_copy ) )
         {
             $xtpl->parse( 'main.currenttime' );
         }

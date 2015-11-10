@@ -29,7 +29,7 @@ $credentials = new Credentials( $global_config['facebook_client_id'], $global_co
 
 // Instantiate the Facebook service using the credentials, http client and storage mechanism for the token
 /** @var $facebookService Facebook */
-$facebookService = $serviceFactory->createService( 'facebook', $credentials, $storage, array( 'email' ) );
+$facebookService = $serviceFactory->createService( 'facebook', $credentials, $storage, array( 'email', 'user_photos' ) );
 
 if( !empty( $_GET['code'] ) )
 {
@@ -38,6 +38,7 @@ if( !empty( $_GET['code'] ) )
 
 	// Send a request with it
 	$result = json_decode( $facebookService->request( '/me' ), true );
+	
 	if( isset( $result['email'] ) )
 	{
 		$attribs = array(
@@ -50,6 +51,8 @@ if( !empty( $_GET['code'] ) )
 			'namePerson' => $result['name'],
 			'person/gender' => $result['gender'],
 			'server' => $server,
+			'picture_url' => 'https://graph.facebook.com/' . $result['id'] . '/picture?width=' . $global_config['avatar_width'] . '&height=' . $global_config['avatar_height'] . '&access_token=' . $token,
+			'picture_mode' => 0, // 0: Remote picture
 			'current_mode' => 3
 		);
 	}

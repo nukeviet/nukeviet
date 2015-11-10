@@ -17,6 +17,7 @@ if( defined( 'NV_EDITOR' ) )
 	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
 
+$currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 $error = $admins = '';
 $savecat = 0;
 list( $catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured ) = array(
@@ -126,7 +127,7 @@ if( !empty( $savecat ) )
 	$groups_view = !empty( $_groups_post ) ? implode( ',', nv_groups_post( array_intersect( $_groups_post, array_keys( $groups_list ) ) ) ) : '';
 
 	$image = $nv_Request->get_string( 'image', 'post', '' );
-	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	if( nv_is_file( $image, NV_UPLOADS_DIR . '/' . $module_upload ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$image = substr( $image, $lu );
@@ -294,6 +295,12 @@ if( !empty( $array_cat_list ) )
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
 $lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );
 
+if( !empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image ) )
+{
+	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
+	$currentpath = dirname( $image );
+}
+
 $xtpl = new XTemplate( 'cat.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
@@ -310,13 +317,9 @@ $xtpl->assign( 'alias', $alias );
 $xtpl->assign( 'parentid', $parentid );
 $xtpl->assign( 'keywords', $keywords );
 $xtpl->assign( 'description', nv_htmlspecialchars( nv_br2nl( $description ) ) );
-
 $xtpl->assign( 'CAT_LIST', nv_show_cat_list( $parentid ) );
-$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload );
-if( !empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image ) )
-{
-	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
-}
+$xtpl->assign( 'UPLOAD_CURRENT', $currentpath );
+$xtpl->assign( 'UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload );
 $xtpl->assign( 'image', $image );
 
 for( $i = 0; $i <= 2; $i++ )

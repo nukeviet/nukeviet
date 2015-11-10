@@ -1375,6 +1375,10 @@ function nv_check_domain( $domain )
 		{
 			return $domain_ascii;
 		}
+		elseif( $domain == NV_SERVER_NAME )
+		{
+			return $domain;
+		}
 	}
 	return '';
 }
@@ -1643,11 +1647,9 @@ function nv_insert_logs( $lang = '', $module_name = '', $name_key = '', $note_ac
 /**
  * nv_site_mods()
  *
- * @param string $module_name
- *
  * @return
  */
-function nv_site_mods( $module_name = '' )
+function nv_site_mods()
 {
 	global $sys_mods, $admin_info, $global_config;
 
@@ -1751,7 +1753,7 @@ function nv_insert_notification( $module, $type, $content = array(), $obid = 0, 
 
 	if( $global_config['notification_active'] )
 	{
-		!empty( $content ) && $content = serialize( $content );
+		!empty( $content ) and $content = serialize( $content );
 
 		$sth = $db->prepare( 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
 		(send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
@@ -1770,13 +1772,11 @@ function nv_insert_notification( $module, $type, $content = array(), $obid = 0, 
 
 /**
  * nv_delete_notification()
- *
- * @param string $language
- * @param string $module
- * @param integer $obid
- * @param string $type
- * @param integer $send_from
- * @param integer $area
+ * 
+ * @param mixed $language
+ * @param mixed $module
+ * @param mixed $type
+ * @param mixed $obid
  * @return
  */
 function nv_delete_notification( $language, $module, $type, $obid )

@@ -14,6 +14,7 @@ $page_title = $lang_module['block'];
 $error = '';
 $savecat = 0;
 list( $bid, $title, $alias, $description, $image, $keywords ) = array( 0, '', '', '', '', '' );
+$currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 if( ! empty( $savecat ) )
@@ -27,7 +28,7 @@ if( ! empty( $savecat ) )
 	$alias = ( $alias == '' ) ? change_alias( $title ) : change_alias( $alias );
 
 	$image = $nv_Request->get_string( 'image', 'post', '' );
-	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	if( is_file( $image, NV_UPLOADS_DIR . '/' . $module_upload ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$image = substr( $image, $lu );
@@ -117,9 +118,11 @@ $xtpl->assign( 'description', nv_htmlspecialchars( nv_br2nl( $description ) ) );
 if( ! empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_upload . "/" . $image ) )
 {
 	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_upload . "/" . $image;
+	$currentpath = dirname( $image );
 }
 $xtpl->assign( 'image', $image );
-$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload );
+$xtpl->assign( 'UPLOAD_CURRENT', $currentpath );
+$xtpl->assign( 'UPLOAD_PATH', NV_UPLOADS_DIR . '/' . $module_upload );
 
 if( ! empty( $error ) )
 {

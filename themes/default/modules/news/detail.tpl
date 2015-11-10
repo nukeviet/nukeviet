@@ -5,7 +5,7 @@
 <link href="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <div class="news_column panel panel-default">
 	<div class="panel-body">
-		<h3 class="title margin-bottom-lg">{DETAIL.title}</h3>
+		<h1 class="title margin-bottom-lg">{DETAIL.title}</h1>
         <div class="row margin-bottom-lg">
             <div class="col-md-12">
                 <span class="h5">{DETAIL.publtime}</span>
@@ -30,7 +30,7 @@
 		</div>
 		<!-- END: no_public -->
 		<!-- BEGIN: showhometext -->
-		<div class="clearfix margin-bottom-lg">
+		<div class="clearfix">
 			<!-- BEGIN: imgthumb -->
             <!-- BEGIN: note -->
 			<figure class="article left pointer" onclick="modalShowByObj('#imgpreview');">
@@ -45,14 +45,15 @@
                     <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
             </figure>
             <!-- END: empty -->
+            <div class="hometext">{DETAIL.hometext}</div>
 			<!-- END: imgthumb -->
     		<!-- BEGIN: imgfull -->
+    		<div class="hometext m-bottom">{DETAIL.hometext}</div>
     		<figure class="article center">
     			<img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
     			<!-- BEGIN: note --><figcaption>{DETAIL.image.note}</figcaption><!-- END: note -->
     		</figure>
     		<!-- END: imgfull -->
-            <div class="hometext">{DETAIL.hometext}</div>
 		</div>
 		<!-- END: showhometext -->
 		<div id="news-bodyhtml" class="bodytext margin-bottom-lg">
@@ -171,7 +172,7 @@ $(function() {
             		<!-- BEGIN: loop -->
             		<li>
             			<em class="fa fa-angle-right">&nbsp;</em>
-            			<a href="{TOPIC.link}"<!-- BEGIN: tooltip --> data-placement="{TOOLTIP_POSITION}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{TOPIC.title}">{TOPIC.title}</a>
+            			<a href="{TOPIC.link}" <!-- BEGIN: tooltip -->data-placement="{TOOLTIP_POSITION}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{TOPIC.title}">{TOPIC.title}</a>
             			<em>({TOPIC.time})</em>
             			<!-- BEGIN: newday -->
             			<span class="icon_new">&nbsp;</span>
@@ -185,7 +186,7 @@ $(function() {
         	</p>
         </div>
     	<!-- END: topic -->
-        
+
     	<!-- BEGIN: related_new -->
     	<p class="h3"><strong>{LANG.related_new}</strong></p>
     	<div class="clearfix">
@@ -193,7 +194,7 @@ $(function() {
         		<!-- BEGIN: loop -->
         		<li>
         			<em class="fa fa-angle-right">&nbsp;</em>
-        			<a href="{RELATED_NEW.link}"<!-- BEGIN: tooltip --> data-placement="{TOOLTIP_POSITION}" data-content="{RELATED_NEW.hometext}" data-img="{RELATED_NEW.imghome}" data-rel="tooltip"<!-- END: tooltip -->>{RELATED_NEW.title}</a>
+        			<a href="{RELATED_NEW.link}" <!-- BEGIN: tooltip -->data-placement="{TOOLTIP_POSITION}" data-content="{RELATED_NEW.hometext}" data-img="{RELATED_NEW.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{RELATED_NEW.title}">{RELATED_NEW.title}</a>
         			<em>({RELATED_NEW.time})</em>
         			<!-- BEGIN: newday -->
         			<span class="icon_new">&nbsp;</span>
@@ -203,7 +204,7 @@ $(function() {
         	</ul>
         </div>
     	<!-- END: related_new -->
-        
+
     	<!-- BEGIN: related -->
     	<p class="h3"><strong>{LANG.related}</strong></p>
     	<div class="clearfix">
@@ -211,7 +212,7 @@ $(function() {
         		<!-- BEGIN: loop -->
         		<li>
         			<em class="fa fa-angle-right">&nbsp;</em>
-        			<a class="list-inline" href="{RELATED.link}"<!-- BEGIN: tooltip --> data-placement="{TOOLTIP_POSITION}" data-content="{RELATED.hometext}" data-img="{RELATED.imghome}" data-rel="tooltip"<!-- END: tooltip -->>{RELATED.title}</a>
+        			<a class="list-inline" href="{RELATED.link}"<!-- BEGIN: tooltip --> data-placement="{TOOLTIP_POSITION}" data-content="{RELATED.hometext}" data-img="{RELATED.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{RELATED.title}">{RELATED.title}</a>
         			<em>({RELATED.time})</em>
         			<!-- BEGIN: newday -->
         			<span class="icon_new">&nbsp;</span>

@@ -16,7 +16,7 @@
 				<col span="2">
 				<col class="w150">
 				<col class="w100">
-				<col class="w150">
+				<col class="w200">
 			</colgroup>
 			<thead>
 				<tr>
@@ -64,6 +64,9 @@
 					<td class="text-center">{ROW.groups_view}</td>
 					<td class="text-center"> <input type="checkbox" id="change_active_{ROW.id}" onclick="nv_change_active({ROW.id})" {ROW.active} /> </td>
 					<td class="text-center">
+						<!-- BEGIN: reload -->
+						<em class="fa fa-refresh fa-lg">&nbsp;</em> <a href="#" onclick="nv_menu_reload( {DATA.mid}, {ROW.id}, {ROW.parentid}, '{LANG.action_menu_reload_confirm}' );" data-toggle="tooltip" data-placement="top" title="" data-original-title="{LANG.action_menu_reload_note}">{LANG.action_menu_reload}</a>&nbsp;
+						<!-- END: reload -->
 						<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.edit_url}">{LANG.edit}</a>&nbsp;
 						<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_menu_item_delete({ROW.id},{ROW.mid},{ROW.parentid},{ROW.nu});">{LANG.delete}</a>
 					</td>

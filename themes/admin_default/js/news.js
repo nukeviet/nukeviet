@@ -411,7 +411,7 @@ $(document).ready(function(){
 			$(this).removeAttr('checked');
 		});
 	});
-	
+
 	// Topic
 	$('#delete-topic').click(function() {
 		var list = [];
@@ -445,17 +445,17 @@ $(document).ready(function(){
 		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
-	
+
 	// Tags
 	$("#select-img-tag").click(function() {
 		var area = "image";
-		var path = CFG.upload_current;
+		var path = CFG.upload_path;
 		var currentpath = CFG.upload_current;
 		var type = "image";
 		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
-	
+
 	// Sources
 	$("#select-img-source").click(function() {
 		var area = "logo";
@@ -478,7 +478,7 @@ $(document).ready(function(){
 	// Groups
 	$("#select-img-group").click(function() {
 		var area = "image";
-		var path = CFG.upload_current;
+		var path = CFG.upload_path;
 		var currentpath = CFG.upload_current;
 		var type = "image";
 		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
@@ -534,11 +534,11 @@ $(document).ready(function(){
 		});
 		return false;
 	});
-	
+
 	// Cat
 	$("#select-img-cat").click(function() {
 		var area = "image";
-		var path = CFG.upload_current;
+		var path = CFG.upload_path;
 		var currentpath = CFG.upload_current;
 		var type = "image";
 		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");

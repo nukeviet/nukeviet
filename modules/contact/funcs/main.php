@@ -14,6 +14,9 @@ if ( ! defined( 'NV_IS_MOD_CONTACT' ) ) die( 'Stop!!!' );
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 ORDER BY weight';
 $array_department = nv_db_cache( $sql, 'id' );
 
+$alias_url = isset( $array_op[0] ) ? $array_op[0] : '';
+$alias_department = '';
+
 $cats = array();
 $cats[] = array( 0, '' );
 $catsName = array();
@@ -23,13 +26,27 @@ if ( ! empty( $array_department ) )
 {
     foreach ( $array_department as $k => $department )
     {
+    	if( $department['alias'] == $alias_url )
+    	{
+    		$alias_department = $department['alias'];
+    		$dpDefault = $department['id'];
+    		$array_department = array( $department['id'] => $department );
+    		$cats = array();
+    		$catsName = array_map( 'trim', explode( '|', $department['cats'] ) );
+    		foreach ( $catsName as $_cats2 )
+    		{
+    			$cats[] = array( $department['id'], $_cats2 );
+    		}
+    		break;
+    	}
+    	
         if ( ! empty( $department['cats'] ) )
         {
             $_cats = array_map( 'trim', explode( '|', $department['cats'] ) );
             foreach ( $_cats as $_cats2 )
             {
                 $cats[] = array( $department['id'], $_cats2 );
-                $catsName[] = $_cats2;
+				$catsName[] = in_array( $_cats2, $catsName ) ? $_cats2 . ', ' . $department['full_name'] : $_cats2;
             }
         }
 
@@ -157,7 +174,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
         $xtpl->assign( 'CAT', $fcat );
         $xtpl->assign( 'PART', $array_department[$fpart]['full_name'] );
         $xtpl->assign( 'TITLE', $ftitle );
-        $xtpl->assign( 'CONTENT', $fcon );
+        $xtpl->assign( 'CONTENT', nv_htmlspecialchars( $fcon ) );
 
         $xtpl->parse( 'main' );
         $fcon = $xtpl->text( 'main' );
@@ -223,8 +240,12 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset( $lang_module['main_title'] ) ? $lang_module['main_title'] : $module_info['custom_title'];
 
-$base_url = $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
-$base_url_rewrite = nv_url_rewrite( $base_url_rewrite, true );
+$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+if( ! empty( $alias_department ) )
+{
+	$base_url .= '&amp;' . NV_OP_VARIABLE . '=' . $alias_department;
+}
+$base_url_rewrite = nv_url_rewrite( $base_url, true );
 if ( $_SERVER['REQUEST_URI'] == $base_url_rewrite )
 {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;

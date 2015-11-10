@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
-
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_DATA}.js"></script>
 <div class="well">
 	<form action="{NV_BASE_ADMINURL}index.php" method="get">
 		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -97,7 +97,12 @@
                     <td class="text-center">{ROW.hitstotal}</td>
                     <td class="text-center">{ROW.hitscm}</td>
                     <td class="text-center">{ROW.numtags}</td>
-					<td class="text-center">{ROW.feature}</td>
+					<td class="text-center">
+						<!-- BEGIN: excdata -->
+						<a href="{ROW.url_send}" class="btn btn-success btn-xs"><em class="fa fa-paper-plane-o fa-lg">&nbsp;</em>{LANG.send}</a> &nbsp;
+						<!-- END: excdata -->
+						{ROW.feature}
+					</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>
@@ -123,7 +128,9 @@
 <!-- END: generate_page -->
 <script type="text/javascript">
 	$(document).ready(function() {
-		$("#catid").select2();
+		$("#catid").select2({
+			language: '{NV_LANG_DATA}'
+		});
 	});
 </script>
 <!-- END: main -->

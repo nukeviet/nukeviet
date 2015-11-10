@@ -115,7 +115,7 @@ function nv_del_content_module( $id )
 				}
 			}
 		}
-		
+
 		$_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $id;
 		if( ! $db->exec( $_sql ) )
 		{
@@ -127,19 +127,21 @@ function nv_del_content_module( $id )
 		{
 			++$number_no_del;
 		}
-		
+
 		$_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext WHERE id = ' . $id;
 		if( ! $db->exec( $_sql ) )
 		{
 			++$number_no_del;
 		}
-		
+
 		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $module_name ) . ' AND id = ' . $id );
 		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $id );
-		
+
 		$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid IN (SELECT tid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $id . ')' );
 		$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id );
-		
+
+		nv_delete_notification( NV_LANG_DATA, $module_name, 'post_queue', $id );
+
 		if( $number_no_del == 0 )
 		{
 			$content_del = 'OK_' . $id .'_' . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true );

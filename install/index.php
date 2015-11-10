@@ -468,7 +468,7 @@ elseif( $step == 5 )
 		die();
 	}
 
-	if( in_array( $db_config['dbtype'], $PDODrivers ) and ! empty( $db_config['dbhost'] ) and ! empty( $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
+	if( in_array( $db_config['dbtype'], $PDODrivers ) and ! empty( $db_config['dbhost'] ) and preg_match( '#[a-z]#ui', $db_config['dbname'] ) and ! empty( $db_config['dbuname'] ) and ! empty( $db_config['prefix'] ) )
 	{
 		$db_config['dbuname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbuname'] );
 		$db_config['dbname'] = preg_replace( array( '/[^a-z0-9]/i', '/[\_]+/', '/^[\_]+/', '/[\_]+$/' ), array( '_', '_', '', '' ), $db_config['dbname'] );
@@ -490,6 +490,13 @@ elseif( $step == 5 )
 		}
 
 		// Bat dau phien lam viec cua MySQL
+		$db_config['autosetcollation'] = false;
+		if( empty( $db_config['collation'] ) )
+		{
+			$db_config['collation'] = 'utf8_general_ci';
+			$db_config['autosetcollation'] = true;
+		}
+		$db_config['charset'] = strstr( $db_config['collation'], '_', true );
 		$db = new sql_db( $db_config );
 		$connect = $db->connect;
 		if( ! $connect )
@@ -520,9 +527,24 @@ elseif( $step == 5 )
 
 		if( $connect AND $db_config['dbtype'] == 'mysql' )
 		{
+			if( $db_config['autosetcollation'] )
+			{
+				$mysql_server_version = $db->getAttribute( PDO::ATTR_SERVER_VERSION );
+				if( version_compare( $mysql_server_version, '5.5.3' ) >= 0 and $db_config['charset'] != 'utf8mb4' )
+				{
+					$db_config['charset'] = 'utf8mb4';
+					$db_config['collation'] = 'utf8mb4_unicode_ci';
+				}
+				elseif( version_compare( $mysql_server_version, '5.5.3' ) < 0 and $db_config['charset'] != 'utf8' )
+				{
+					$db_config['charset'] = 'utf8';
+					$db_config['collation'] = 'utf8_general_ci';
+				}
+			}
+
 			try
 			{
-				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET utf8 COLLATE ' . $db_config['collation'] );
+				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation'] );
 			}
 			catch( PDOException $e )
 			{
@@ -530,7 +552,7 @@ elseif( $step == 5 )
 			}
 
 			$row = $db->query( 'SELECT @@session.character_set_database AS character_set_database,  @@session.collation_database AS collation_database')->fetch();
-			if( $row['character_set_database'] != 'utf8' or $row['collation_database'] != $db_config['collation'] )
+			if( $row['character_set_database'] != $db_config['charset'] or $row['collation_database'] != $db_config['collation'] )
 			{
 				$db_config['error'] = 'Error character set database';
 				$connect = 0;
@@ -721,6 +743,7 @@ elseif( $step == 5 )
 						$module_name = $row['title'];
 						$module_file = $row['module_file'];
 						$module_data = $row['module_data'];
+						$module_upload = $row['module_upload'];
 
 						if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php' ) )
 						{
@@ -1024,14 +1047,12 @@ elseif( $step == 6 )
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Mobile', 0, 0, 0)" );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'bots', 0, 0, 0)" );
 					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unknown', 0, 0, 0)" );
-					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', 'Unspecified', 0, 0, 0)" );
 
 					$tmp_array = array('unknown', 'win', 'win10', 'win8', 'win7', 'win2003', 'winvista', 'wince', 'winxp', 'win2000', 'apple', 'linux', 'os2', 'beos', 'iphone', 'ipod', 'ipad', 'blackberry', 'nokia', 'freebsd', 'openbsd', 'netbsd', 'sunos', 'opensolaris', 'android', 'irix', 'palm');
 					foreach( $tmp_array as $_os )
 					{
 						$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', " . $db->quote( $_os ) . ", 0, 0, 0)" );
 					}
-					$db->query( "INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('os', 'Unspecified', 0, 0, 0)" );
 
 					foreach( $countries as $_country => $v )
 					{
@@ -1137,6 +1158,7 @@ function nv_save_file_config()
 		$db_config['dbsystem'] = ( isset( $db_config['dbsystem'] ) ) ? $db_config['dbsystem'] : $db_config['dbuname'];
 		$db_config['dbpass'] = ( ! isset( $db_config['dbpass'] ) ) ? '' : $db_config['dbpass'];
 		$db_config['prefix'] = ( ! isset( $db_config['prefix'] ) ) ? 'nv4' : $db_config['prefix'];
+		$db_config['charset'] = strstr( $db_config['collation'], '_', true );
 
 		$persistent = ( $db_config['persistent'] ) ? 'true' : 'false';
 
@@ -1155,6 +1177,7 @@ function nv_save_file_config()
 		$content .= "\$db_config['dbpass'] = '" . $db_config['dbpass'] . "';\n";
 		$content .= "\$db_config['dbtype'] = '" . $db_config['dbtype'] . "';\n";
 		$content .= "\$db_config['collation'] = '" . $db_config['collation'] . "';\n";
+		$content .= "\$db_config['charset'] = '" . $db_config['charset'] . "';\n";
 		$content .= "\$db_config['persistent'] = " . $persistent . ";\n";
 		$content .= "\$db_config['prefix'] = '" . $db_config['prefix'] . "';\n";
 		$content .= "\n";

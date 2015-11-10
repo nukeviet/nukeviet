@@ -66,6 +66,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$phone = $nv_Request->get_title( 'phone', 'post', '', 1 );
 	$fax = $nv_Request->get_title( 'fax', 'post', '', 1 );
 	$email = $nv_Request->get_title( 'email', 'post', '', 1 );
+	$address = $nv_Request->get_title( 'address', 'post', '', 1 );
 	$otherVar = $nv_Request->get_typed_array( 'otherVar', 'post', 'title', '' );
 	$otherVal = $nv_Request->get_typed_array( 'otherVal', 'post', 'title', '' );
 	$cats = $nv_Request->get_typed_array( 'cats', 'post', 'title', '' );
@@ -161,11 +162,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		$others = json_encode( $others );
 		$_cats = array_filter( $cats );
+		$_cats = array_unique( $_cats );
 		$_cats = ! empty( $_cats ) ? implode( '|', $_cats ) : '';
 
 		if( $id )
 		{
-			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, phone = :phone, fax=:fax, email=:email, others=:others, cats=:cats, note=:note, admins=:admins WHERE id =' . $id;
+			$sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET full_name=:full_name, alias=:alias, phone = :phone, fax=:fax, email=:email, address=:address, others=:others, cats=:cats, note=:note, admins=:admins WHERE id =' . $id;
 			$name_key = 'log_edit_row';
 			$note_action = 'id: ' . $id . ' ' . $full_name;
 		}
@@ -173,7 +175,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		{
 			$weight = $db->query( 'SELECT MAX(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department' )->fetchColumn();
 			$weight++;
-			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, others, cats, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :others, :cats, :note, :admins, 1, :weight, 0)';
+			$sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_department (full_name, alias, phone, fax, email, address, others, cats, note, admins, act, weight, is_default) VALUES (:full_name, :alias, :phone, :fax, :email, :address, :others, :cats, :note, :admins, 1, :weight, 0)';
 			$name_key = 'log_add_row';
 			$note_action = $full_name;
 		}
@@ -186,6 +188,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 			$sth->bindParam( ':phone', $phone, PDO::PARAM_STR );
 			$sth->bindParam( ':fax', $fax, PDO::PARAM_STR );
 			$sth->bindParam( ':email', $email, PDO::PARAM_STR );
+			$sth->bindParam( ':address', $address, PDO::PARAM_STR );
 			$sth->bindParam( ':others', $others, PDO::PARAM_STR );
 			$sth->bindParam( ':cats', $_cats, PDO::PARAM_STR );
 			$sth->bindParam( ':note', $note, PDO::PARAM_STR );
@@ -219,6 +222,7 @@ else
 		$phone = $frow['phone'];
 		$fax = $frow['fax'];
 		$email = $frow['email'];
+		$address = $frow['address'];
 		$others = json_decode( $frow['others'], true );
 		$cats = ! empty( $frow['cats'] ) ? explode( '|', $frow['cats'] ) : array();
 
@@ -274,7 +278,7 @@ else
 	}
 	else
 	{
-		$full_name = $alias = $phone = $fax = $email = $note = '';
+		$full_name = $alias = $phone = $fax = $email = $note = $address = '';
 		$others = $cats = $view_level = $reply_level = $obt_level = array();
 
 		foreach( $adms as $admid => $values )
@@ -313,6 +317,7 @@ $xtpl->assign( 'DATA', array(
 	'phone' => $phone,
 	'fax' => $fax,
 	'email' => $email,
+	'address' => $address,
 	'note' => $note
 ) );
 

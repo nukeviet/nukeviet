@@ -10,11 +10,23 @@
 
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
+$array_logo_position = array(
+	'bottomRight' => $lang_module['logoposbottomright'],
+	'bottomLeft' => $lang_module['logoposbottomleft'],
+	'bottomCenter' => $lang_module['logoposbottomcenter'],
+	'centerRight' => $lang_module['logoposcenterright'],
+	'centerLeft' => $lang_module['logoposcenterleft'],
+	'centerCenter' => $lang_module['logoposcentercenter'],
+	'topRight' => $lang_module['logopostopright'],
+	'topLeft' => $lang_module['logopostopleft'],
+	'topCenter' => $lang_module['logopostopcenter']
+);
+
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
-	$upload_logo = $nv_Request->get_title( 'upload_logo', 'post' );
+	$upload_logo = $nv_Request->get_title( 'upload_logo', 'post', '' );
 
-	if( ! empty ( $upload_logo ) and ! nv_is_url( $upload_logo ) and file_exists( NV_DOCUMENT_ROOT . $upload_logo ) )
+	if( ! empty ( $upload_logo ) and ! nv_is_url( $upload_logo ) and nv_is_file( $upload_logo ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL );
 		$upload_logo = substr( $upload_logo, $lu );
@@ -23,6 +35,9 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	{
 		$upload_logo = '';
 	}
+	
+	$upload_logo_pos = $nv_Request->get_title( 'upload_logo_pos', 'post', '' );
+	if( ! isset( $array_logo_position[$upload_logo_pos] ) ) $upload_logo_pos = 'bottomRight';
 
 	$autologosize1 = $nv_Request->get_int( 'autologosize1', 'post', 50 );
 	$autologosize2 = $nv_Request->get_int( 'autologosize2', 'post', 40 );
@@ -48,6 +63,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize2 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize2'" );
 	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologosize3 . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologosize3'" );
 	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologomod . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologomod'" );
+	$db->query( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $upload_logo_pos . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'upload_logo_pos'" );
 
 	nv_delete_all_cache();
 
@@ -119,6 +135,19 @@ $xtpl->assign( 'CUSTOM_TITLE', '<strong>' . $lang_module['autologomodall'] . '</
 
 $xtpl->parse( 'main.loop1.loop2' );
 $xtpl->parse( 'main.loop1' );
+
+foreach( $array_logo_position as $pos => $posName )
+{
+	$upload_logo_pos = array(
+		'key' => $pos,
+		'title' => $posName,
+		'selected' => $pos == $global_config['upload_logo_pos'] ? ' selected="selected"' : ''
+	);
+	
+	$xtpl->assign( 'UPLOAD_LOGO_POS', $upload_logo_pos );
+	$xtpl->parse( 'main.upload_logo_pos' );
+}
+
 $xtpl->parse( 'main' );
 
 $contents = $xtpl->text( 'main' );

@@ -49,9 +49,14 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="row">
-				<div class="col-sm-2">
+				<div class="col-sm-1">
 					<div class="refresh text-right">
-						<em title="{LANG.refresh}" class="fa fa-refresh fa-lg fa-pointer">&nbsp;</em>
+						<em title="{LANG.refresh}" class="fa fa-refresh fa-pointer">&nbsp;</em>
+					</div>
+				</div>
+				<div class="col-sm-1">
+					<div class="viewmode text-right">
+						<em class="fa fa-hourglass-o fa-pointer fa-spin" data-auto="true" data-langthumb="{LANG.upload_view_thumbnail}" data-langdetail="{LANG.upload_view_detail}"></em>
 					</div>
 				</div>
 				<div class="col-sm-5">
@@ -370,7 +375,7 @@ var nv_auto_alt = {UPLOAD_AUTO_ALT};
 <script type="text/javascript">
 $(function(){
 	$("#imgfolder").load(nv_module_url + "folderlist&path={PATH}&currentpath={CURRENTPATH}&random=" + nv_randomNum(10));
-	$("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10))
+	$("#imglist").load(nv_module_url + "imglist&path={CURRENTPATH}&type={TYPE}&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); });
 });
 </script>
 <!--  END: main  -->

@@ -43,7 +43,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$row['alias'] = $nv_Request->get_title( 'alias', 'post', '', 1 );
 
 	$image = $nv_Request->get_string( 'image', 'post', '' );
-	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	if( nv_is_file( $image, NV_UPLOADS_DIR . '/' . $module_upload ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$row['image'] = substr( $image, $lu );
@@ -97,10 +97,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 		else
 		{
-			$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
-			$weight = intval( $weight ) + 1;
+			if( $page_config['news_first'] )
+			{
+				$weight = 1;
+			}
+			else
+			{
+				$weight = $db->query( "SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data )->fetchColumn();
+				$weight = intval( $weight ) + 1;
+			}
 
-			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES (:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
+			$_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '
+				(title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES
+				(:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
 
 			$publtime = NV_CURRENTTIME;
 		}
@@ -130,6 +139,12 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 				}
 				else
 				{
+					if( $page_config['news_first'] )
+					{
+						$id = $db->lastInsertId();
+						$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=weight+1 WHERE id!=' . $id );
+					}
+
 					nv_insert_logs( NV_LANG_DATA, $module_name, 'Add', ' ', $admin_info['userid'] );
 				}
 
@@ -148,18 +163,19 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 		}
 	}
 }
-elseif( empty( $id)  )
+elseif( empty( $id ) )
 {
 	$row['image'] = '';
 	$row['layout_func'] = '';
-	$row['description']='';
+	$row['description'] = '';
 	$row['bodytext'] = '';
 	$row['activecomm'] = $module_config[$module_name]['setcomm'];
 	$row['socialbutton'] = 1;
 	$row['gid'] = 0;
 }
 
-if( defined( 'NV_EDITOR' ) ) require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+if( defined( 'NV_EDITOR' ) )
+	require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 
 $row['description'] = nv_htmlspecialchars( nv_br2nl( $row['description'] ) );
 $row['bodytext'] = htmlspecialchars( nv_editor_br2nl( $row['bodytext'] ) );

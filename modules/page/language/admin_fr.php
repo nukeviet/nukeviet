@@ -37,6 +37,7 @@ $lang_module['keywords'] = 'Mot clé';
 $lang_module['feature'] = 'Fonctionnalités';
 $lang_module['description'] = 'Description';
 $lang_module['image'] = 'L\'image d\'illustration';
+$lang_module['first_news'] = 'Lorsque le nouveau poste sera dabord';
 $lang_module['imagealt'] = 'Explication de l\'image';
 $lang_module['socialbutton'] = 'Outils de LIKE';
 $lang_module['socialbuttonnote'] = 'Afficher les outils de Like facebook, G+, Twitter';

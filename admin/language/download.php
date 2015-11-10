@@ -15,7 +15,7 @@ $page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_
 
 if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . session_id() ) )
 {
-	if( ! empty( $dirlang ) )
+	if( preg_match( '/^([a-z]{2})$/', $dirlang ) )
 	{
 		$allowfolder = array();
 		$dirs = nv_scandir( NV_ROOTDIR . '/modules', $global_config['check_module'] );
@@ -44,6 +44,12 @@ if( $nv_Request->get_string( 'checksess', 'get' ) == md5( 'downloadallfile' . se
 			if( file_exists( NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php' ) )
 			{
 				$allowfolder[] = NV_ROOTDIR . '/modules/' . $module . '/language/' . $dirlang . '.php';
+			}
+
+			// Lang data sample
+			if( file_exists( NV_ROOTDIR . '/modules/' . $module . '/language/data_' . $dirlang . '.php' ) )
+			{
+				$allowfolder[] = NV_ROOTDIR . '/modules/' . $module . '/language/data_' . $dirlang . '.php';
 			}
 		}
 

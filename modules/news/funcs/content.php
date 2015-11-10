@@ -294,7 +294,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 		// Xu ly anh minh hoa
 		$rowcontent['homeimgthumb'] = 0;
-		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and is_file( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
+		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and nv_is_file( $rowcontent['homeimgfile'], NV_UPLOADS_DIR . '/' . $module_upload ) )
 		{
 			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
@@ -349,7 +349,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 		else
 		{
 			if( ( $array_post_user['postcontent'] ) && $nv_Request->isset_request( 'status1', 'post' ) ) $rowcontent['status'] = 1;
-			elseif( $nv_Request->isset_request( 'status0', 'post' ) ) $rowcontent['status'] = 0;
+			elseif( $nv_Request->isset_request( 'status0', 'post' ) ) $rowcontent['status'] = 5;
 			elseif( $nv_Request->isset_request( 'status4', 'post' ) ) $rowcontent['status'] = 4;
 			$rowcontent['catid'] = in_array( $rowcontent['catid'], $catids ) ? $rowcontent['catid'] : $catids[0];
 			$rowcontent['bodytext'] = nv_news_get_bodytext( $rowcontent['bodyhtml'] );
@@ -426,6 +426,16 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 					$db->query( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', ' . $db->quote( $rowcontent['bodytext'] ) . ')' );
 					$user_content = defined( 'NV_IS_USER' ) ? ' | ' . $user_info['username'] : '';
+
+					// Them vao thong bao
+					if( empty( $rowcontent['status'] ) )
+					{
+						$content = array(
+							'title' => $rowcontent['title'],
+							'hometext' => $rowcontent['hometext']
+						);
+						nv_insert_notification( $module_name, 'post_queue', $content, $rowcontent['id'] );
+					}
 
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['add_content'], $rowcontent['title'] . ' | ' . $client_info['ip'] . $user_content, 0 );
 				}
