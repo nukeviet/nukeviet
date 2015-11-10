@@ -34,7 +34,7 @@ while( $cron_row = $cron_result->fetch() )
 			set_time_limit( 0 );
 		}
 
-		if( ! empty( $cron_row['run_file'] ) and preg_match( '/^([a-zA-Z0-9\-\_\.]+)\.php$/', $cron_row['run_file'] ) and nv_is_file( NV_BASE_SITEURL . 'includes/cronjobs/' . $cron_row['run_file'], 'includes/cronjobs' ) )
+		if( ! empty( $cron_row['run_file'] ) and preg_match( '/^([a-zA-Z0-9\-\_\.]+)\.php$/', $cron_row['run_file'] ) and is_file( NV_ROOTDIR . '/includes/cronjobs/' . $cron_row['run_file'] ) )
 		{
 			if( ! defined( 'NV_IS_CRON' ) ) define( 'NV_IS_CRON', true );
 			require_once NV_ROOTDIR . '/includes/cronjobs/' . $cron_row['run_file'];
