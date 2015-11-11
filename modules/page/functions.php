@@ -12,8 +12,8 @@ if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
 
 define( 'NV_IS_MOD_PAGE', true );
 
-// Cau hinh
-$sql = "SELECT config_name,config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
+// Get Config Module
+$sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
 $list = nv_db_cache( $sql );
 $page_config = array();
 foreach( $list as $values )

@@ -68,7 +68,7 @@ if( $id )
 	$related_articles = intval( $page_config['related_articles'] );
 	if( $related_articles )
 	{
-	    $db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data )->where( 'id !=' . $id )->order( 'weight ASC' )->limit( $related_articles );
+	    $db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data )->where( 'status=1 AND id !=' . $id )->order( 'weight ASC' )->limit( $related_articles );
 	    $result = $db->query($db->sql());
 		while( $_other = $result->fetch() )
 		{
@@ -111,7 +111,7 @@ else
 	$per_page = $page_config['per_page'];
 
 	$array_data = array();
-    $db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_' . $module_data );
+    $db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_' . $module_data )->where( 'status=1');
     $num_items = $db->query( $db->sql() )->fetchColumn();
 
     $db->select( '*' )->order( 'weight' )->limit( $per_page )->offset( ($page - 1) * $per_page);

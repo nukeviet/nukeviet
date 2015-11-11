@@ -941,3 +941,41 @@ function nv_imageResize( $origX, $origY, $maxX, $maxY )
 	}
 	return $return;
 }
+
+/**
+ * nv_is_file()
+ * 
+ * @param mixed $filepath
+ * @param mixed $folders
+ * @return
+ */
+function nv_is_file( $filepath, $folders = array() )
+{
+	if( empty( $folders ) )
+	{
+		$folders = array( NV_UPLOADS_DIR, NV_ASSETS_DIR . '/images' );
+	}
+	elseif( ! is_array( $folders ) )
+	{
+		$folders = array( $folders );
+	}
+	
+	$filepath = htmlspecialchars( trim( NV_DOCUMENT_ROOT . $filepath ), ENT_QUOTES );
+	$filepath = rtrim( $filepath, '/' );
+	
+	if( empty( $filepath ) ) return false;
+	if( ( $filepath = realpath( $filepath ) ) === false ) return false;
+	
+	$filepath = str_replace( "\\", '/', $filepath );
+	
+	$file_exists = 0;
+	foreach( $folders as $folder )
+	{
+		if( preg_match( '/^' . nv_preg_quote( NV_ROOTDIR . '/' . $folder ) . '/', $filepath ) and is_file( $filepath ) )
+		{
+			$file_exists ++;
+		}
+	}
+	
+	return $file_exists > 0 ? true : false;
+}

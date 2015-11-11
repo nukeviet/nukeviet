@@ -17,7 +17,8 @@ if( $nv_Request->isset_request( 'plugin_file', 'post' ) )
 {
 	$config_plugin = array();
 	$plugin_file = $nv_Request->get_title( 'plugin_file', 'post' );
-	if( preg_match( $pattern_plugin, $plugin_file ) and is_file( NV_ROOTDIR . '/includes/plugin/' . $plugin_file ) )
+	
+	if( preg_match( $pattern_plugin, $plugin_file ) and nv_is_file( NV_BASE_SITEURL . 'includes/plugin/' . $plugin_file, 'includes/plugin' ) )
 	{
 		$plugin_area = $nv_Request->get_int( 'plugin_area', 'post' );
 		if( $nv_Request->isset_request( 'delete', 'post' ) )

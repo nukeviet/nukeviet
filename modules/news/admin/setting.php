@@ -48,7 +48,7 @@ if( ! empty( $savesetting ) )
 	$array_config['auto_tags'] = $nv_Request->get_int( 'auto_tags', 'post', 0 );
 	$array_config['tags_remind'] = $nv_Request->get_int( 'tags_remind', 'post', 0 );
 
-	if( ! nv_is_url( $array_config['show_no_image'] ) and file_exists( NV_DOCUMENT_ROOT . $array_config['show_no_image'] ) )
+	if( ! nv_is_url( $array_config['show_no_image'] ) and nv_is_file( $array_config['show_no_image'] ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL );
 		$array_config['show_no_image'] = substr( $array_config['show_no_image'], $lu );

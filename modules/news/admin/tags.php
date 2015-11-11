@@ -129,7 +129,7 @@ if( ! empty( $savecat ) )
 	$alias = str_replace( ' ', '-', strip_punctuation( $alias ) );
 
 	$image = $nv_Request->get_string( 'image', 'post', '' );
-	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	if( nv_is_file( $image, NV_UPLOADS_DIR . '/' . $module_upload ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$image = substr( $image, $lu );

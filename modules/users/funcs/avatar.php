@@ -30,7 +30,7 @@ function updateAvatar( $file )
 	global $db, $user_info, $module_upload;
 
 	$tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file;
-	$new_photo_path = NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/';
+	$new_photo_path = NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/';
 	$new_photo_name = $file;
 	$i = 1;
 	while( file_exists( $new_photo_path . $new_photo_name ) )
@@ -51,7 +51,7 @@ function updateAvatar( $file )
 			nv_deletefile( NV_ROOTDIR . '/' . $oldAvatar );
 		}
 
-		$photo = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $new_photo_name;
+		$photo = SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/' . $new_photo_name;
 		$stmt = $db->prepare( 'UPDATE ' . NV_USERS_GLOBALTABLE . ' SET photo=:photo WHERE userid=' . $user_info['userid'] );
 		$stmt->bindParam( ':photo', $photo, PDO::PARAM_STR );
 		$stmt->execute();
@@ -170,7 +170,7 @@ if( isset( $_FILES['image_file'] ) and is_uploaded_file( $_FILES['image_file']['
 				elseif( $array['u'] == "src" )
 				{
 					updateAvatar( $array['filename'] );
-					$array['filename'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $array['filename'];
+					$array['filename'] = NV_BASE_SITEURL . SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/' . $array['filename'];
 					$array['success'] = 3;
 				}
 				else
