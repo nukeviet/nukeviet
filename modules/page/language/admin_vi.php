@@ -19,6 +19,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['list'] = 'Danh sách các bài';
 $lang_module['add'] = 'Thêm bài mới';
+$lang_module['send'] = 'Gửi';
 $lang_module['title'] = 'Tên bài viết';
 $lang_module['order'] = 'Thứ tự';
 $lang_module['status'] = 'Trạng thái';
@@ -37,6 +38,7 @@ $lang_module['keywords'] = 'Từ khóa';
 $lang_module['feature'] = 'Chức năng';
 $lang_module['description'] = 'Miêu tả';
 $lang_module['image'] = 'Hình minh họa';
+$lang_module['first_news'] = 'Khi đăng bài mới sẽ lên đầu tiên';
 $lang_module['imagealt'] = 'Chú thích cho hình';
 $lang_module['socialbutton'] = 'Các công cụ Like';
 $lang_module['socialbuttonnote'] = 'Hiển thị các công cụ Like facebook, G+, Twitter';

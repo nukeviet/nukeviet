@@ -294,7 +294,7 @@ if( $nv_Request->isset_request( 'contentid', 'get,post' ) and $fcheckss == $chec
 
 		// Xu ly anh minh hoa
 		$rowcontent['homeimgthumb'] = 0;
-		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and is_file( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
+		if( ! nv_is_url( $rowcontent['homeimgfile'] ) and nv_is_file( $rowcontent['homeimgfile'], NV_UPLOADS_DIR . '/' . $module_upload ) )
 		{
 			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );

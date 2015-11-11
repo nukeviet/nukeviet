@@ -23,7 +23,7 @@ if( ! isset( $check_allow_upload_dir['delete_file'] ) )
 $file = htmlspecialchars( trim( $nv_Request->get_string( 'file', 'post,get' ) ), ENT_QUOTES );
 $file = basename( $file );
 
-if( empty( $file ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $file ) )
+if( empty( $file ) or ! nv_is_file( NV_BASE_SITEURL . $path . '/' . $file, $path ) )
 {
 	die( 'ERROR#' . $lang_module['errorNotSelectFile'] . NV_ROOTDIR . '/' . $path . '/' . $file );
 }

@@ -18,7 +18,7 @@ if( ! isset( $check_allow_upload_dir['rename_file'] ) ) die( 'ERROR_' . $lang_mo
 $file = htmlspecialchars( trim( $nv_Request->get_string( 'file', 'post' ) ), ENT_QUOTES );
 $file = basename( $file );
 
-if( empty( $file ) or ! is_file( NV_ROOTDIR . '/' . $path . '/' . $file ) ) die( 'ERROR_' . $lang_module['errorNotSelectFile'] );
+if( empty( $file ) or ! nv_is_file( NV_BASE_SITEURL . $path . '/' . $file, $path ) ) die( 'ERROR_' . $lang_module['errorNotSelectFile'] );
 
 $newname = htmlspecialchars( trim( $nv_Request->get_string( 'newname', 'post' ) ), ENT_QUOTES );
 $newname = nv_string_to_filename( basename( $newname ) );

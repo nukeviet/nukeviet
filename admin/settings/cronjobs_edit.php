@@ -48,7 +48,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	{
 		$error = $lang_module['cron_name_empty'];
 	}
-	elseif( ! empty( $run_file ) and ! file_exists( NV_ROOTDIR . '/includes/cronjobs/' . $run_file ) )
+	elseif( ! empty( $run_file ) and ! nv_is_file( NV_BASE_SITEURL . 'includes/cronjobs/' . $run_file, 'includes/cronjobs' ) )
 	{
 		$error = $lang_module['file_not_exist'];
 	}

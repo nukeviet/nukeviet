@@ -489,7 +489,13 @@ elseif( $step == 5 )
 			$db_config['dbsystem'] = $db_config['dbuname'];
 		}
 
-			// Bat dau phien lam viec cua MySQL
+		// Bat dau phien lam viec cua MySQL
+		$db_config['autosetcollation'] = false;
+		if( empty( $db_config['collation'] ) )
+		{
+			$db_config['collation'] = 'utf8_general_ci';
+			$db_config['autosetcollation'] = true;
+		}
 		$db_config['charset'] = strstr( $db_config['collation'], '_', true );
 		$db = new sql_db( $db_config );
 		$connect = $db->connect;
@@ -507,7 +513,7 @@ elseif( $step == 5 )
 					{
 						$db->query( 'CREATE DATABASE ' . $db_config['dbname'] );
 						$db->exec( 'USE ' . $db_config['dbname'] );
-						
+
 						$db_config['error'] = '';
 						$connect = 1;
 					}
@@ -521,6 +527,21 @@ elseif( $step == 5 )
 
 		if( $connect AND $db_config['dbtype'] == 'mysql' )
 		{
+			if( $db_config['autosetcollation'] )
+			{
+				$mysql_server_version = $db->getAttribute( PDO::ATTR_SERVER_VERSION );
+				if( version_compare( $mysql_server_version, '5.5.3' ) >= 0 and $db_config['charset'] != 'utf8mb4' )
+				{
+					$db_config['charset'] = 'utf8mb4';
+					$db_config['collation'] = 'utf8mb4_unicode_ci';
+				}
+				elseif( version_compare( $mysql_server_version, '5.5.3' ) < 0 and $db_config['charset'] != 'utf8' )
+				{
+					$db_config['charset'] = 'utf8';
+					$db_config['collation'] = 'utf8_general_ci';
+				}
+			}
+
 			try
 			{
 				$db->exec( 'ALTER DATABASE ' . $db_config['dbname'] . ' DEFAULT CHARACTER SET ' . $db_config['charset'] . ' COLLATE ' . $db_config['collation'] );
@@ -722,6 +743,7 @@ elseif( $step == 5 )
 						$module_name = $row['title'];
 						$module_file = $row['module_file'];
 						$module_data = $row['module_data'];
+						$module_upload = $row['module_upload'];
 
 						if( file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php' ) )
 						{

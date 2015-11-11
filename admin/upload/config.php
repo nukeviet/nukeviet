@@ -26,7 +26,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$upload_logo = $nv_Request->get_title( 'upload_logo', 'post', '' );
 
-	if( ! empty ( $upload_logo ) and ! nv_is_url( $upload_logo ) and file_exists( NV_DOCUMENT_ROOT . $upload_logo ) )
+	if( ! empty ( $upload_logo ) and ! nv_is_url( $upload_logo ) and nv_is_file( $upload_logo ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL );
 		$upload_logo = substr( $upload_logo, $lu );

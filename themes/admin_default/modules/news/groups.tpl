@@ -24,14 +24,14 @@
 				<tr>
 					<td class="text-right"><strong>{LANG.name}: </strong><sup class="required">(∗)</sup></td>
 					<td>
-						<input class="form-control w500" name="title" id="idtitle" type="text" value="{title}" maxlength="255" />
+						<input class="form-control w500" name="title" id="idtitle" type="text" value="{title}" maxlength="250" />
 						<span class="text-middle">{GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max}</span>
 						</td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.alias}: </strong></td>
 					<td>
-						<input class="form-control w500 pull-left" name="alias" id="idalias" type="text" value="{alias}" maxlength="255" />
+						<input class="form-control w500 pull-left" name="alias" id="idalias" type="text" value="{alias}" maxlength="250" />
 						&nbsp; <span class="text-middle"><em class="fa fa-refresh fa-lg fa-pointer"onclick="get_alias('blockcat', {bid});">&nbsp;</em></span>
 					</td>
 				</tr>
