@@ -25,7 +25,7 @@ if( $id > 0 )
 	$check = false;
 	if( $checkss == md5( $id . session_id() . $global_config['sitekey'] ) and $allowed_send == 1 )
 	{
-		$link = $global_config['site_url'] . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
+		$link = $global_config['site_url'] . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$catid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'];
 		$link = '<a href="' . $link . '" title="' . $title . '">$link</a>';
 		$nv_seccode = $nv_Request->get_title( 'nv_seccode', 'post', '' );
 

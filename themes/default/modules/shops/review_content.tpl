@@ -23,8 +23,8 @@
 					<div class="form-group">
 						<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control pull-left" style="width: 40%" placeholder="{LANG.rate_captcha}" />
 						<div class="pull-left" style="margin-top: 5px">
-							&nbsp;&nbsp;<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{LANG.captcha}" id="vimg" />
-							&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimg','fcode_iavim');">&nbsp;</em>
+							&nbsp;&nbsp;<img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" alt="{LANG.captcha}" class="captchaImg" />
+							&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#fcode_iavim');">&nbsp;</em>
 						</div>
 						<div class="clear"></div>
 					</div>
@@ -44,7 +44,7 @@
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$("#rate_list").load('{LINK_REVIEW}&showdata=1');
 	var rating = 0;
 	$('.rate-btn').hover(function() {

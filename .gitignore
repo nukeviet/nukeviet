@@ -1,32 +1,29 @@
 # Ignore some static files and directories.
+/.gitignore
+/.settings/
+/.buildpath
 /.project
 /.htaccess
-/CJzip.php
 /config.php
 /CHANGELOG.txt
 /COPYRIGHT.txt
 /favicon.ico
 /index.php
 /LICENSE.txt
-/mainfile.php
 /robots.php
 /robots.txt
 /web.config
 /admin/
-/cache/
+/assets/
 /data/
-/editors/
-/images/
 /includes/
 /install/
-/js/
-/language/
-/logs/
-/sess/
-/tmp/
+/uploads/
 /README.md
 
 # Ignore fix module files and directories.
+!/assets/shops
+!/assets/shops/*
 /modules/*
 !/modules/shops
 !/modules/shops/*
@@ -44,4 +41,5 @@
 !/service_shops_nganluong.php
 !/includes/class/nusoap.php
 !/includes/class/PayPal/*
-/.gitignore
+!/uploads/shops
+!/uploads/shops/*

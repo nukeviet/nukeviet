@@ -24,32 +24,10 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 	{
 		global $db, $language_array, $db_config;
 
-		$sh = $sv = "";
-
-		if( $data_block['type'] == 'v' )
-		{
-			$sv = "selected=\"selected\"";
-			$sh = "";
-		}
-		if( $data_block['type'] == 'h' )
-		{
-			$sh = "selected=\"selected\"";
-			$sv = "";
-		}
-
 		$html = "";
 		$html .= "<tr>";
 		$html .= "	<td>" . $lang_block['cut_num'] . "</td>";
-		$html .= "	<td><input type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></td>";
-		$html .= "</tr>";
-		$html .= "<tr>";
-		$html .= "	<td>" . $lang_block['type'] . "</td>";
-		$html .= "	<td>
-						<select name=\"config_type\">
-							<option value=\"h\" " . $sh . ">Horizontal</option>
-							<option value=\"v\" " . $sv . ">Vertical</option>
-						</select>
-					</td>";
+		$html .= "	<td><input class=\"form-control w150\" type=\"text\" name=\"config_cut_num\" size=\"5\" value=\"" . $data_block['cut_num'] . "\"/></td>";
 		$html .= "</tr>";
 		return $html;
 	}
@@ -68,7 +46,6 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 		$return['error'] = array();
 		$return['config'] = array();
 		$return['config']['cut_num'] = $nv_Request->get_int( 'config_cut_num', 'post', 0 );
-		$return['config']['type'] = $nv_Request->get_string( 'config_type', 'post', 0 );
 		return $return;
 	}
 
@@ -88,21 +65,11 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 		$pro_config = $module_config[$module];
 		$array_cat_shops = array();
 
-		$block_tpl_name = "";
-		if( $block_config['type'] == 'v' )
-		{
-			$block_tpl_name = "block.catalogsv.tpl";
-		}
-		elseif( $block_config['type'] == 'h' )
-		{
-			$block_tpl_name = "block.catalogsh.tpl";
-		}
-
+		$block_tpl_name = "block.catalogsv.tpl";
 		if( file_exists( NV_ROOTDIR . "/themes/" . $global_config['site_theme'] . "/modules/" . $mod_file . "/" . $block_tpl_name ) )
 		{
 			$block_theme = $global_config['site_theme'];
-		}
-		else
+		}		else
 		{
 			$block_theme = "default";
 		}
@@ -143,6 +110,7 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 		$xtpl->assign( 'ID', $block_config['bid'] );
 		$cut_num = $block_config['cut_num'];
 		$html = "";
+
 		foreach( $array_cat_shops as $cat )
 		{
 			if( $cat['parentid'] == 0 )
@@ -151,7 +119,11 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 				{
 					$html .= "<li>\n";
 					$html .= "<a title=\"" . $cat['title'] . "\" href=\"" . $cat['link'] . "\">" . nv_clean60( $cat['title'], $cut_num ) . "</a>\n";
-					if( ! empty( $cat['subcatid'] ) ) $html .= html_viewsub( $cat['subcatid'], $block_config );
+					if( ! empty( $cat['subcatid'] ) )
+					{
+						$html .= "<span class=\"fa arrow expand\"></span>";
+						$html .= html_viewsub( $cat['subcatid'], $block_config );
+					}
 					$html .= "</li>\n";
 				}
 			}
@@ -183,7 +155,8 @@ if( ! function_exists( 'nv_pro_catalogs' ) )
 				{
 					$html .= "<li>\n";
 					$html .= "<a title=\"" . $array_cat_shops[$catid]['title'] . "\" href=\"" . $array_cat_shops[$catid]['link'] . "\">" . nv_clean60( $array_cat_shops[$catid]['title'], $cut_num ) . "</a>\n";
-					if( ! empty( $array_cat_shops[$catid]['subcatid'] ) ) $html .= html_viewsub( $array_cat_shops[$catid]['subcatid'], $block_config );
+					if( ! empty( $array_cat_shops[$catid]['subcatid'] ) )
+					$html .= html_viewsub( $array_cat_shops[$catid]['subcatid'], $block_config );
 					$html .= "</li>\n";
 				}
 			}

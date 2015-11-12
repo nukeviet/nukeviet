@@ -17,6 +17,7 @@ if( $pid == 0 )
 	$cateid = $nv_Request->get_string( 'cid', 'get', '' );
 	$cateid = nv_base64_decode( $cateid );
 	$cateid = unserialize( $cateid );
+	$cateid = $cateid ? $cateid : array();
 
 	$table = $db_config['prefix'] . "_" . $module_data . "_catalogs";
 

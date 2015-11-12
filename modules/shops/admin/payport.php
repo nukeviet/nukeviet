@@ -114,12 +114,12 @@ if( $nv_Request->isset_request( 'saveconfigpaymentedit', 'post' ) )
 
 	if( ! nv_is_url( $images_button ) and file_exists( NV_DOCUMENT_ROOT . $images_button ) )
 	{
-		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" );
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$images_button = substr( $images_button, $lu );
 	}
 	elseif( ! nv_is_url( $images_button ) )
 	{
-		$images_button = "";
+		$images_button = '';
 	}
 
 	$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_payment SET paymentname = :paymentname, domain = :domain, active=" . $active . ", config = '" . nv_base64_encode( serialize( $array_config ) ) . "',images_button= :images_button WHERE payment = :payment" );

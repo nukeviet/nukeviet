@@ -12,6 +12,12 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $page_title = $lang_module['group'];
 
+$currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' );
+if( !file_exists( $currentpath ) )
+{
+	nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, date( 'Y_m' ), true );
+}
+
 $table_name = $db_config['prefix'] . '_' . $module_data . '_group';
 $error = $admins = '';
 $savegroup = 0;
@@ -64,7 +70,7 @@ if( ! empty( $savegroup ) )
 	$image = $nv_Request->get_string( 'image', 'post', '' );
 	if( is_file( NV_DOCUMENT_ROOT . $image ) )
 	{
-		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$data['image'] = substr( $image, $lu );
 	}
 	else
@@ -118,7 +124,7 @@ if( ! empty( $savegroup ) )
 		$subgroupid = '';
 
 		$sql = "INSERT INTO " . $table_name . " (parentid, image,  weight, sort, lev, viewgroup, numsubgroup, subgroupid, inhome, indetail, add_time, edit_time, numpro, in_order, is_require " . $listfield . " )
- 			VALUES (" . $data['parentid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '1',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1, " . $data['require'] . " " . $listvalue . " )";
+ 			VALUES (" . $data['parentid'] . ", :image ," . (int)$weight . ", '0', '0', :viewgroup, '0', :subgroupid, '1', '0',  " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ",'0', 1, " . $data['require'] . " " . $listvalue . " )";
 
 		$data_insert = array();
 		$data_insert['viewgroup'] = $viewgroup;
@@ -220,9 +226,10 @@ while( list( $groupid_i, $title_i, $lev_i ) = $result->fetch( 3 ) )
 $lang_global['title_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 65 );
 $lang_global['description_suggest_max'] = sprintf( $lang_global['length_suggest_max'], 160 );
 
-if( ! empty( $data['image'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $data['image'] ) )
+if( ! empty( $data['image'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $data['image'] ) )
 {
-	$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data['image'];
+	$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data['image'];
+	$currentpath = dirname( $data['image'] );
 }
 $data['description'] = nv_br2nl( $data['description'] );
 
@@ -234,7 +241,7 @@ $xtpl->assign( 'CAPTION', $caption );
 $xtpl->assign( 'DATA', $data );
 $xtpl->assign( 'URL', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=getcatalog&pid=' . $data['parentid'] . '&cid=' . nv_base64_encode( serialize( $data['cateid_old'] ) ) );
 $xtpl->assign( 'GROUP_LIST', shops_show_group_list( $data['parentid'] ) );
-$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
+$xtpl->assign( 'UPLOAD_CURRENT', $currentpath );
 $xtpl->assign( 'FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;groupid=' . $data['groupid'] . '&amp;parentid=' . $data['parentid'] );
 
 if( $error != '' )

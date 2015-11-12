@@ -79,7 +79,7 @@ if( $num_items )
 		$catid = explode( ',', $listcatid );
 		$catid = end( $catid );
 
-		$url = $link . $array_cat_alias[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
+		$url = $link . $array_cat_alias[$catid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'];
 
 		$result_array[] = array(
 			'link' => $url,

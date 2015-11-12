@@ -87,12 +87,12 @@
 <!-- END: pages -->
 <div class="msgshow" id="msgshow">&nbsp;</div>
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	var lang_del_confirm = '{LANG.wishlist_del_item_confirm}';
 </script>
 
 <!-- BEGIN: tooltip_js -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(document).ready(function() {$("[data-rel='tooltip']").tooltip({
 		placement: "bottom",
 		html: true,

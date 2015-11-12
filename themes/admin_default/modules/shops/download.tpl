@@ -94,11 +94,16 @@
 				</div>
 				<div class="form-group">
 					<label class="col-sm-3 control-label"><strong>{LANG.download_file_path}</strong> <span class="red">*</span></label>
-					<div class="col-sm-18">
-						<input type="text" name="path" id="path" value="{DATA.path}" class="form-control" readonly="readonly" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')">
-					</div>
-					<div class="col-sm-3">
-						<button class="btn btn-primary" id="open_files"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.download_file_chose}</button>
+					<div class="col-sm-21">
+						<div class="input-group">
+							<input type="text" name="path" id="path" value="{FILE_PATH}" class="form-control" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')">
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" id="open_files">
+									<em class="fa fa-folder-open-o fa-fix">&nbsp;</em>
+								</button>
+							</span>
+						</div>
+						<em class="help-block">{LANG.download_file_path_note}</em>
 					</div>
 				</div>
 				<div class="form-group">
@@ -130,7 +135,7 @@
 <!-- END: non_popup -->
 
 <!-- BEGIN: popup -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 
 <div id="divsuccess" class="alert alert-info" style="display: none">{LANG.download_file_add_success}</div>
 
@@ -143,8 +148,17 @@
 		</tr>
 		<tr>
 			<td>{LANG.download_file_path}</td>
-			<td><input type="text" name="path" id="path" value="{DATA.path}" class="form-control" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')" style="width: 100%"></td>
-			<td><button class="btn btn-primary" id="open_files"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.download_file_chose}</button></td>
+			<td colspan="2">
+				<div class="input-group">
+					<input type="text" name="path" id="path" value="{FILE_PATH}" class="form-control" required="required" oninvalid="setCustomValidity( nv_required )" oninput="setCustomValidity('')">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" id="open_files">
+							<em class="fa fa-folder-open-o fa-fix">&nbsp;</em>
+						</button>
+					</span>
+				</div>
+				<em class="help-block">{LANG.download_file_path_note}</em>
+			</td>
 		</tr>
 		<tr>
 			<td>{LANG.download_file_description}</td>

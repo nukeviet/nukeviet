@@ -136,7 +136,7 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 				'money_unit' => $money_unit,
 				'discount_id' => $discount_id,
 				'product_group' => $temppro[$id]['group'],
-				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 				'product_number' => $temppro[$id]['num']
 			);
 		}
@@ -167,9 +167,9 @@ if( $order_id > 0 and $checkss == md5( $order_id . $global_config['sitekey'] . s
 
 				$url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;order_id=' . $order_id . '&amp;payment=' . $row['payment'] . '&amp;checksum=' . md5( $order_id . $row['payment'] . $global_config['sitekey'] . session_id() );
 
-				if( ! empty( $images_button ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $images_button ) )
+				if( ! empty( $images_button ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $images_button ) )
 				{
-					$images_button = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $images_button;
+					$images_button = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $images_button;
 				}
 
 				$url_checkout[] = array(
@@ -271,10 +271,17 @@ elseif( $order_id > 0 and $nv_Request->isset_request( 'payment', 'get' ) and $nv
 		$listid[] = $row['proid'];
 		$listnum[] = $row['num'];
 		$listprice[] = $row['price'];
-		$listgroup[] = $row['group_id'];
+
+		$result_group = $db->query( 'SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id'] );
+		$group = array();
+		while( list( $group_id ) = $result_group->fetch( 3 ) )
+		{
+			$group[] = $group_id;
+		}
+		$listgroup[] = $group;
 	}
 
-	if( isset( $data['transaction_status'] ) and intval( $data['transaction_status'] ) == 0 and preg_match( '/^[a-zA-Z0-9]+$/', $payment ) and $checksum == md5( $order_id . $payment . $global_config['sitekey'] . session_id() ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/payment/' . $payment . '.checkout_url.php' ) )
+	if( isset( $data['transaction_status'] ) and intval( $data['transaction_status'] ) == 0 and preg_match( '/^[a-zA-Z0-9_]+$/', $payment ) and $checksum == md5( $order_id . $payment . $global_config['sitekey'] . session_id() ) and file_exists( NV_ROOTDIR . '/modules/' . $module_file . '/payment/' . $payment . '.checkout_url.php' ) )
 	{
 		$config = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_payment WHERE payment = '" . $payment . "'" )->fetch();
 		$payment_config = unserialize( nv_base64_decode( $config['config'] ) );

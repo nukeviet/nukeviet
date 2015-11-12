@@ -58,6 +58,7 @@ if( $savesetting == 1 )
 	$data['format_order_id'] = $nv_Request->get_string( 'format_order_id', 'post', '' );
 	$data['format_code_id'] = $nv_Request->get_string( 'format_code_id', 'post', '' );
 	$data['facebookappid'] = $nv_Request->get_string( 'facebookappid', 'post', '' );
+	$data['alias_lower'] = $nv_Request->get_int( 'alias_lower', 'post', 0 );
 	$data['active_order'] = $nv_Request->get_int( 'active_order', 'post', 0 );
 	$data['active_order_popup'] = $nv_Request->get_int( 'active_order_popup', 'post', 0 );
 	$data['active_order_non_detail'] = $nv_Request->get_int( 'active_order_non_detail', 'post', 0 );
@@ -95,10 +96,16 @@ if( $savesetting == 1 )
 
 	if( $error == '' )
 	{
+		
+		$sth = $db->prepare( "UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name" );
+		$sth->bindParam( ':module_name', $module_name, PDO::PARAM_STR );
 		foreach( $data as $config_name => $config_value )
 		{
-			$db->query( "REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', " . $db->quote( $module_name ) . ", " . $db->quote( $config_name ) . ", " . $db->quote( $config_value ) . ")" );
+			$sth->bindParam( ':config_name', $config_name, PDO::PARAM_STR );
+			$sth->bindParam( ':config_value', $config_value, PDO::PARAM_STR );
+			$sth->execute();
 		}
+
 		$mid = intval( $currencies_array[$data['money_unit']]['numeric'] );
 
 		$sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . NV_LANG_DATA . " SET exchange = '1' WHERE id = " . $mid;
@@ -200,6 +207,9 @@ $xtpl->assign( 'ck_active_showhomtext', $check );
 
 $check = ( $data['active_tooltip'] == '1' ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_active_tooltip', $check );
+
+$check = ( $data['alias_lower'] == '1' ) ? "checked=\"checked\"" : "";
+$xtpl->assign( 'ck_alias_lower', $check );
 
 $check = ! empty( $data['show_product_code'] ) ? "checked=\"checked\"" : "";
 $xtpl->assign( 'ck_show_product_code', $check );
@@ -312,9 +322,9 @@ if( ! empty( $array_setting_payment ) )
 		$value['titleactive'] = ( ! empty( $value['active'] ) ) ? $lang_global['yes'] : $lang_global['no'];
 		$value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=payport&amp;payment=" . $value['payment'];
 		$value['active'] = ( $value['active'] == '1' ) ? "checked=\"checked\"" : "";
-		if( ! empty( $value['images_button'] ) and file_exists( NV_UPLOADS_REAL_DIR . "/" . $module_name . "/" . $value['images_button'] ) )
+		if( ! empty( $value['images_button'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $value['images_button'] ) )
 		{
-			$value['images_button'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . "/" . $module_name . "/" . $value['images_button'];
+			$value['images_button'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $value['images_button'];
 		}
 		$value['slect_weight'] = drawselect_number( $value['payment'], 1, $all_page + 1, $value['weight'], "nv_chang_pays('" . $value['payment'] . "',this,url_change_weight,url_back);" );
 		$xtpl->assign( 'DATA_PM', $value );

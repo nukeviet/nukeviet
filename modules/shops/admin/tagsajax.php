@@ -14,10 +14,10 @@ $q = $nv_Request->get_title( 'term', 'get', '', 1 );
 if( empty( $q ) ) return;
 
 $db->sqlreset()
-	->select(NV_LANG_DATA . '_keywords')
-	->from( $db_config['prefix'] . '_' . $module_data . '_tags')
-	->where( NV_LANG_DATA . '_alias LIKE :alias OR ' . NV_LANG_DATA . '_keywords LIKE :keywords' )
-	->order( NV_LANG_DATA . '_alias ASC' )
+	->select( 'keywords')
+	->from( $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA )
+	->where( 'alias LIKE :alias OR keywords LIKE :keywords' )
+	->order( 'alias ASC' )
 	->limit( 50 );
 
 $sth = $db->prepare( $db->sql() );

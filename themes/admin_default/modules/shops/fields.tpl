@@ -73,14 +73,14 @@
 <div id="module_show_list">
 	&nbsp;
 </div>
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- BEGIN: error -->
 <div class="alert alert-danger">
 	{ERROR}
@@ -335,7 +335,7 @@
 	}
 
 	function nv_edit_field(fid) {
-		window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_sitelang + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid + '#ffields';
+		window.location.href = script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=fields&fid=' + fid + '#ffields';
 	}
 
 	function nv_load_current_date() {
@@ -349,7 +349,7 @@
 				changeMonth : true,
 				changeYear : true,
 				showOtherMonths : true,
-				buttonImage : nv_siteroot + "images/calendar.gif",
+				buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 				buttonImageOnly : true
 			});
 			$("input[name=default_date]").removeAttr("disabled");
@@ -454,7 +454,7 @@
 		changeMonth : true,
 		changeYear : true,
 		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
+		buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 		buttonImageOnly : true
 	});
 	function nv_users_check_choicetypes(elemnet) {

@@ -13,8 +13,8 @@ if( !defined( 'NV_IS_MOD_SHOPS' ) )
 
 if( !defined( 'NV_IS_USER' ) and !$pro_config['active_guest_order'] )
 {
-	$redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cart';
-	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_base64_encode( $redirect ) );
+	$redirect = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart';
+	Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=users&' . NV_OP_VARIABLE . '=login&nv_redirect=' . nv_redirect_encrypt( $redirect ) );
 	die( );
 }
 $contents = '';
@@ -25,12 +25,11 @@ $action = 0;
 $post_order = $nv_Request->get_int( 'postorder', 'post', 0 );
 $order_info = array();
 $error = array( );
-$user_info['full_name'] = $user_info['first_name'] . ' ' . $user_info['last_name'];
 
 $data_order = array(
-	'user_id' => $user_info['userid'],
-	'order_name' => (!empty( $user_info['full_name'] )) ? $user_info['full_name'] : $user_info['username'],
-	'order_email' => $user_info['email'],
+	'user_id' => isset( $user_info['userid'] ) ? $user_info['userid'] : 0,
+	'order_name' => isset( $user_info['full_name'] ) ? $user_info['full_name'] : '',
+	'order_email' => isset( $user_info['email'] ) ? $user_info['email'] : '',
 	'order_phone' => '',
 	'order_note' => '',
 	'admin_id' => 0,
@@ -71,7 +70,7 @@ $shipping_data = array( 'list_location' => array(), 'list_carrier' => array(), '
 // Ma giam gia
 $array_counpons = array( 'code' => '', 'discount' => 0, 'check' => 0 );
 $counpons = array( 'id' => 0, 'total_amount' => 0, 'date_start' => 0, 'uses_per_coupon_count' => 0, 'uses_per_coupon' => 0, 'type' => 0, 'discount' => 0 );
-if( ! empty( $_SESSION[$module_data . '_coupons'] ) and $_SESSION[$module_data . '_coupons']['discount'] > 0 )
+if( isset( $_SESSION[$module_data . '_coupons']['discount'] ) and $_SESSION[$module_data . '_coupons']['discount'] > 0 )
 {
 	$array_counpons = $_SESSION[$module_data . '_coupons'];
 }
@@ -142,6 +141,7 @@ if( $post_order == 1 )
 	$data_order['order_name'] = nv_substr( $nv_Request->get_title( 'order_name', 'post', '', 1 ), 0, 200 );
 	$data_order['order_email'] = nv_substr( $nv_Request->get_title( 'order_email', 'post', '', 1 ), 0, 250 );
 	$data_order['order_phone'] = nv_substr( $nv_Request->get_title( 'order_phone', 'post', '', 1 ), 0, 20 );
+	$data_order['order_address'] = nv_substr( $nv_Request->get_title( 'order_address', 'post', '', 1 ), 0, 255 );
 	$data_order['order_note'] = nv_substr( $nv_Request->get_title( 'order_note', 'post', '', 1 ), 0, 2000 );
 	$data_order['order_shipping'] = $nv_Request->get_int( 'order_shipping', 'post', 0 );
 	$check = $nv_Request->get_int( 'check', 'post', 0 );
@@ -160,7 +160,7 @@ if( $post_order == 1 )
 	}
 	$total += $total_weight_price;
 
-	if( ( $total > $counpons['total_amount'] or empty( $total ) ) and NV_CURRENTTIME >= $counpons['date_start'] and ( $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] or empty( $counpons['uses_per_coupon'] ) ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
+	if( ( $total >= $counpons['total_amount'] or empty( $total ) ) and NV_CURRENTTIME >= $counpons['date_start'] and ( $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] or empty( $counpons['uses_per_coupon'] ) ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
 	{
 		// Ap dung giam gia cho tung san pham dac biet
 		if( $total_coupons > 0 )
@@ -212,15 +212,19 @@ if( $post_order == 1 )
 		{
 			$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_orders SET
 			order_name = :order_name, order_email = :order_email,
-			order_phone = :order_phone, order_note = :order_note, order_total = ' . doubleval( $data_order['order_total'] ) . ',
+			order_phone = :order_phone, order_address = :order_address, order_note = :order_note, order_total = ' . doubleval( $data_order['order_total'] ) . ',
 			unit_total = :unit_total, edit_time = ' . NV_CURRENTTIME . ' WHERE order_id=' . $order_info['order_id'] );
 
 			$sth->bindParam( ':order_name', $data_order['order_name'], PDO::PARAM_STR );
 			$sth->bindParam( ':order_email', $data_order['order_email'], PDO::PARAM_STR );
 			$sth->bindParam( ':order_phone', $data_order['order_phone'], PDO::PARAM_STR );
+			$sth->bindParam( ':order_address', $data_order['order_address'], PDO::PARAM_STR );
 			$sth->bindParam( ':order_note', $data_order['order_note'], PDO::PARAM_STR );
 			$sth->bindParam( ':unit_total', $data_order['unit_total'], PDO::PARAM_STR );
-			$sth->execute();
+			if( $sth->execute() )
+			{
+				$order_id = 1;
+			}
 		}
 		else
 		{
@@ -232,11 +236,11 @@ if( $post_order == 1 )
 			$transaction_status = ( empty( $pro_config['auto_check_order'] )) ? -1 : 0;
 
 			$sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_orders (
-				lang, order_code, order_name, order_email, order_phone, order_note,
+				lang, order_code, order_name, order_email, order_phone, order_address, order_note,
 				user_id, admin_id, shop_id, who_is, unit_total, order_total, order_time, postip, order_view,
 				transaction_status, transaction_id, transaction_count
 			) VALUES (
-				'" . NV_LANG_DATA . "', :order_code, :order_name, :order_email, :order_phone, :order_note,
+				'" . NV_LANG_DATA . "', :order_code, :order_name, :order_email, :order_phone, :order_address, :order_note,
 				" . intval( $data_order['user_id'] ) . ", " . intval( $data_order['admin_id'] ) . ", " . intval( $data_order['shop_id'] ) . ",
 				" . intval( $data_order['who_is'] ) . ", :unit_total, " . doubleval( $data_order['order_total'] ) . ",
 				" . intval( $data_order['order_time'] ) . ", :ip, 0, " . $transaction_status . ", 0, 0
@@ -246,6 +250,7 @@ if( $post_order == 1 )
 			$data_insert['order_name'] = $data_order['order_name'];
 			$data_insert['order_email'] = $data_order['order_email'];
 			$data_insert['order_phone'] = $data_order['order_phone'];
+			$data_insert['order_address'] = $data_order['order_address'];
 			$data_insert['order_note'] = $data_order['order_note'];
 			$data_insert['ip'] = $client_info['ip'];
 			$data_insert['unit_total'] = $data_order['unit_total'];
@@ -253,7 +258,7 @@ if( $post_order == 1 )
 			$order_id = $db->insert_id( $sql, 'order_id', $data_insert );
 		}
 
-		if( $sth or $order_id > 0 )
+		if( $order_id > 0 )
 		{
 			if( empty( $order_info ) ) // Them don hang
 			{
@@ -522,25 +527,21 @@ if( $post_order == 1 )
 				$global_config['site_email']
 			), $data_order['order_email'], sprintf( $email_title, $module_info['custom_title'], $data_order['order_code'] ), $email_contents );
 
-			// Them vao notification
-			$content = array( 'order_id' => $data_order['id'], 'order_code' => $data_order['order_code'], 'order_name' => $data_order['order_name'] );
-			$userid = isset( $user_info['userid'] ) and !empty( $user_info['userid'] ) ? $user_info['userid'] : 0;
-			nv_insert_notification( $module_name, empty( $order_info ) ? 'order_new' : 'order_edit', $content, 0, $userid, 1 );
-
 			// Gui mail thong bao den nguoi quan ly shops
-			$order_url = $global_config['site_url'] . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=or_view&amp;order_id=' . $data_order['id'];
-			$lang_module['order_email_thanks'] = sprintf( $lang_module['order_email_thanks_to_admin'], $data_order['order_name'] );
-			$lang_module['order_email_review'] = sprintf( $lang_module['order_email_review_to_admin'], $order_url );
-
 			$listmail_notify = nv_listmail_notify();
 			if( !empty( $listmail_notify ) )
 			{
-				$email_contents_to_admin = call_user_func( 'email_new_order', $data_order, $data_pro );
+				$email_contents_to_admin = call_user_func( 'email_new_order', $content, $data_order, $data_pro );
 				nv_sendmail( array(
 					$global_config['site_name'],
 					$global_config['site_email']
 				), $listmail_notify, sprintf( $email_title, $module_info['custom_title'], $data_order['order_code'] ), $email_contents_to_admin );
 			}
+
+			// Them vao notification
+			$content = array( 'order_id' => $data_order['id'], 'order_code' => $data_order['order_code'], 'order_name' => $data_order['order_name'] );
+			$userid = isset( $user_info['userid'] ) and !empty( $user_info['userid'] ) ? $user_info['userid'] : 0;
+			nv_insert_notification( $module_name, empty( $order_info ) ? 'order_new' : 'order_edit', $content, 0, $userid, 1 );
 
 			// Chuyen trang xem thong tin don hang vua dat
 			unset( $_SESSION[$module_data . '_cart'] );
@@ -594,11 +595,11 @@ if( $action == 0 )
 		{
 			if( $homeimgthumb == 1 )//image thumb
 			{
-				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 2 )//image file
 			{
-				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 			}
 			elseif( $homeimgthumb == 3 )//image url
 			{
@@ -632,7 +633,7 @@ if( $action == 0 )
 				'product_unit' => $unit,
 				'money_unit' => $money_unit,
 				'group' => $group,
-				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+				'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 				'num' => $num
 			);
 			++$i;

@@ -19,7 +19,7 @@ if( ! function_exists( 'nv_product_center' ) )
 	 */
 	function nv_product_center( $block_config )
 	{
-		global $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $pro_config, $global_config;
+		global $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $pro_config, $global_config, $site_mods;
 
 		$module = $block_config['module'];
 
@@ -27,13 +27,13 @@ if( ! function_exists( 'nv_product_center' ) )
 		$num = 30;
 		$array = array();
 
-		$xtpl = new XTemplate( "block.product_center.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file );
+		$xtpl = new XTemplate( 'block.product_center.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 		$xtpl->assign( 'LANG', $lang_module );
-		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . "themes/" . $module_info['template'] );
+		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . 'themes/' . $module_info['template'] );
 		$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
 		$xtpl->assign( 'NUMVIEW', $num_view );
 
-		$cache_file = NV_LANG_DATA . "_block_module_product_center_" . NV_CACHE_PREFIX . ".cache";
+		$cache_file = NV_LANG_DATA . '_block_module_product_center_' . NV_CACHE_PREFIX . '.cache';
 		if( ( $cache = nv_get_cache( $module_name, $cache_file ) ) != false )
 		{
 			$array = unserialize( $cache );
@@ -42,7 +42,7 @@ if( ! function_exists( 'nv_product_center' ) )
 		{
 			$db->sqlreset()
 				->select( 'bid' )
-				->from( $db_config['prefix'] . "_" . $module_data . "_block_cat" )
+				->from( $db_config['prefix'] . '_' . $module_data . '_block_cat' )
 				->order( 'weight ASC' )
 				->limit( 1 );
 
@@ -50,10 +50,10 @@ if( ! function_exists( 'nv_product_center' ) )
 			$bid = $result->fetchColumn();
 
 			$db->sqlreset()
-				->select( "t1.id, t1.listcatid, t1." . NV_LANG_DATA . "_title AS title, t1." . NV_LANG_DATA . "_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt, t1.showprice, t1.discount_id" )
-				->from( $db_config['prefix'] . "_" . $module_data . "_rows t1" )
-				->join( "INNER JOIN " . $db_config['prefix'] . "_" . $module_data . "_block t2 ON t1.id = t2.id" )
-				->where( "t2.bid= " . $bid . " AND t1.status =1" )
+				->select( 't1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt, t1.showprice, t1.discount_id' )
+				->from( $db_config['prefix'] . '_' . $module_data . '_rows t1' )
+				->join( 'INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
+				->where( 't2.bid= ' . $bid . ' AND t1.status =1' )
 				->order( 't1.id DESC' )
 				->limit( $num );
 
@@ -64,15 +64,15 @@ if( ! function_exists( 'nv_product_center' ) )
 
 		foreach( $array as $row )
 		{
-			$link = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $global_array_shops_cat[$row['listcatid']]['alias'] . "/" . $row['alias'] . "-" . $row['id'] . $global_config['rewrite_exturl'];
+			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'];
 
 			if( $row['homeimgthumb'] == 1 ) //image thumb
 			{
-				$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $row['homeimgfile'];
+				$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
 			}
 			elseif( $row['homeimgthumb'] == 2 ) //image file
 			{
-				$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $row['homeimgfile'];
+				$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
 			}
 			elseif( $row['homeimgthumb'] == 3 ) //image url
 			{

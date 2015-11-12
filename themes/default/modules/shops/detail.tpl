@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div id="fb-root"></div>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	( function(d, s, id) {
 			var js, fjs = d.getElementsByTagName(s)[0];
 			if (d.getElementById(id))
@@ -28,20 +28,7 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-xs-24 col-sm-6 text-center">
-					<img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail pointer" id="imageproduct" data-target="#imagemodal">
-               		<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-									<h4 class="modal-title" id="myModalLabel">{TITLE}</h4>
-								</div>
-								<div class="modal-body">
-									<img src="{SRC_PRO_LAGE}" id="imagepreview" class="img-thumbnail" >
-								</div>
-							</div>
-						</div>
-					</div>
+					<a href="" data-src="{SRC_PRO_LAGE}" data-width="{SRC_PRO_LAGE_INFO.width}" class="open_modal" title="{TITLE}"><img src="{SRC_PRO}" alt="" width="140px" class="img-thumbnail" id="imageproduct"></a>
 					<br />
 					<!-- BEGIN: adminlink -->
 					<p class="tab-pane">
@@ -60,9 +47,9 @@
 							<div class="g-plusone" data-size="medium"></div>
 						</li>
 					</ul>
-					<script type="text/javascript">
+					<script type="text/javascript" data-show="after">
 						window.___gcfg = {
-							lang : nv_sitelang
+							lang : nv_lang_data
 						};
 						(function() {
 							var po = document.createElement('script');
@@ -185,7 +172,9 @@
 								<!-- END: header -->
 								<div class="col-xs-16 col-sm-19 itemsgroup" data-groupid="{GROUPID}" data-header="{HEADER}">
 									<!-- BEGIN: loop -->
-									<label class="label_group <!-- BEGIN: active -->active<!-- END: active -->"><input type="radio" class="groupid" name="groupid[{GROUPID}]" value="{GROUP.groupid}" <!-- BEGIN: checked -->checked="checked" <!-- END: checked -->>{GROUP.title}</label>
+									<label class="label_group <!-- BEGIN: active -->active<!-- END: active -->">
+										<input type="radio" class="groupid" onclick="check_quantity( $(this) )" name="groupid[{GROUPID}]" value="{GROUP.groupid}" <!-- BEGIN: checked -->checked="checked" <!-- END: checked -->>{GROUP.title}
+									</label>
 									<!-- END: loop -->
 								</div>
 							</div>
@@ -195,19 +184,21 @@
 					</div>
 					<!-- END: group -->
 
-					<!-- BEGIN: product_number -->
+					<!-- BEGIN: order_number -->
 					<div class="well">
 						<div class="row">
 							<div class="col-xs-8 col-sm-5">
 								{LANG.detail_pro_number}
 							</div>
 							<div class="col-xs-16 col-sm-19">
-								<input type="number" name="num" value="1" min="1" max="{PRODUCT_NUMBER}" id="pnum" class="pull-left form-control" style="width: 100px; margin-right: 5px">
+								<input type="number" name="num" value="1" min="1" id="pnum" class="pull-left form-control" style="width: 100px; margin-right: 5px">
+								<!-- BEGIN: product_number -->
 								<span class="help-block pull-left" id="product_number">{LANG.detail_pro_number}: <strong>{PRODUCT_NUMBER}</strong> {pro_unit}</span>
+								<!-- END: product_number -->
 							</div>
 						</div>
 					</div>
-					<!-- END: product_number -->
+					<!-- END: order_number -->
 
 					<div class="clearfix"></div>
 
@@ -249,62 +240,89 @@
 	</div>
 
 	<!-- BEGIN: product_detail -->
-	<!-- BEGIN: tabs -->
-	<div role="tabpanel" class="tabs">
-		<ul class="nav nav-tabs" role="tablist">
-			<!-- BEGIN: tabs_title -->
-			<li role="presentation" <!-- BEGIN: active -->class="active"<!-- END: active -->>
-				<a href="#{TABS_KEY}-{TABS_ID}" aria-controls="{TABS_KEY}-{TABS_ID}" role="tab" data-toggle="tab">
-					<!-- BEGIN: icon -->
-					<img src="{TABS_ICON}" />
-					<!-- END: icon -->
-					<!-- BEGIN: icon_default -->
-					<em class="fa fa-bars">&nbsp;</em>
-					<!-- END: icon_default -->
-					<span>{TABS_TITLE}</span>
-				</a>
-			</li>
-			<!-- END: tabs_title -->
-		</ul>
+		<!-- BEGIN: tabs -->
+		<div role="tabpanel" class="tabs">
+			<ul class="nav nav-tabs" role="tablist">
+				<!-- BEGIN: tabs_title -->
+				<li role="presentation" <!-- BEGIN: active -->class="active"<!-- END: active -->>
+					<a href="#{TABS_KEY}-{TABS_ID}" aria-controls="{TABS_KEY}-{TABS_ID}" role="tab" data-toggle="tab">
+						<!-- BEGIN: icon -->
+						<img src="{TABS_ICON}" />
+						<!-- END: icon -->
+						<!-- BEGIN: icon_default -->
+						<em class="fa fa-bars">&nbsp;</em>
+						<!-- END: icon_default -->
+						<span>{TABS_TITLE}</span>
+					</a>
+				</li>
+				<!-- END: tabs_title -->
+			</ul>
 
-		<div class="tab-content">
-			<!-- BEGIN: tabs_content -->
-			<div role="tabpanel" class="tab-pane fade <!-- BEGIN: active -->active in<!-- END: active -->" id="{TABS_KEY}-{TABS_ID}">
-				{TABS_CONTENT}
+			<div class="tab-content">
+				<!-- BEGIN: tabs_content -->
+				<div role="tabpanel" class="tab-pane fade <!-- BEGIN: active -->active in<!-- END: active -->" id="{TABS_KEY}-{TABS_ID}">
+					{TABS_CONTENT}
+				</div>
+				<!-- END: tabs_content -->
 			</div>
-			<!-- END: tabs_content -->
 		</div>
-	</div>
-	<!-- END: tabs -->
+		<!-- END: tabs -->
 
-	<!-- BEGIN: other -->
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			{LANG.detail_others}
+		<!-- BEGIN: keywords -->
+	    <div class="panel panel-default">
+		    <div class="panel-body">
+				<div class="keywords">
+					<em class="fa fa-tags">&nbsp;</em><strong>{LANG.keywords}: </strong>
+					<!-- BEGIN: loop -->
+						<a title="{KEYWORD}" href="{LINK_KEYWORDS}"><em>{KEYWORD}</em></a>{SLASH}
+					<!-- END: loop -->
+				</div>
+			</div>
 		</div>
-		<div class="panel-body">
-			{OTHER}
-		</div>
-	</div>
-	<!-- END: other -->
+		<!-- END: keywords -->
 
-	<!-- BEGIN: other_view -->
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			{LANG.detail_others_view}
+		<!-- BEGIN: other -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{LANG.detail_others}
+			</div>
+			<div class="panel-body">
+				{OTHER}
+			</div>
 		</div>
-		<div class="panel-body">
-			{OTHER_VIEW}
+		<!-- END: other -->
+
+		<!-- BEGIN: other_view -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				{LANG.detail_others_view}
+			</div>
+			<div class="panel-body">
+				{OTHER_VIEW}
+			</div>
 		</div>
-	</div>
-	<!-- END: other_view -->
+		<!-- END: other_view -->
 	<!-- END: product_detail -->
+</div>
+
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				&nbsp;
+			</div>
+			<div class="modal-body">
+				<p class="text-center"><em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em></p>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="msgshow" id="msgshow"></div>
 
 <!-- BEGIN: allowed_print_js -->
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(function() {
 		$('#click_print').click(function(event) {
 			var href = $(this).attr("href");
@@ -317,33 +335,40 @@
 <!-- END: allowed_print_js -->
 
 <!-- BEGIN: imagemodal -->
-<script type="text/javascript">
-    $("#imageproduct").on("click", function() {
-    	$('#imagemodal').modal('show');
-    });
+<script type="text/javascript" data-show="after">
+	$('.open_modal').click(function(e){
+		e.preventDefault();
+ 		$('#idmodals .modal-body').html( '<img src="' + $(this).data('src') + '" alt="" class="img-responsive" />' );
+ 		$('#idmodals').modal('show');
+	});
 </script>
 <!-- END: imagemodal -->
 
-<script type="text/javascript">
-	var detail_error_group = '{LANG.detail_error_group}';
-
-	$('.groupid').click(function() {
-		var _this = $('input[name="'+$(this).attr('name')+'"]');
-		$('input[name="'+$(this).attr('name')+'"]').parent().css('border-color', '#ccc');
-		if( $(this).is(':checked') )
-		{
-		    $(this).parent().css('border-color', 'blue');
-		}
-		$('#group_error').css( 'display', 'none' );
-		check_price( '{proid}', '{pro_unit}' );
-	});
-
+<!-- BEGIN: order_number_limit -->
+<script type="text/javascript" data-show="after">
+	$('#pnum').attr( 'max', '{PRODUCT_NUMBER}' );
 	$('#pnum').change(function(){
 		if( intval($(this).val()) > intval($(this).attr('max')) ){
 			alert('{LANG.detail_error_number} ' + $(this).attr('max') );
 			$(this).val( $(this).attr('max') );
 		}
 	});
+</script>
+<!-- END: order_number_limit -->
+
+<script type="text/javascript">
+	var detail_error_group = '{LANG.detail_error_group}';
+	function check_quantity( _this ){
+		$('input[name="'+_this.attr('name')+'"]').parent().css('border-color', '#ccc');
+		if( _this.is(':checked') )
+		{
+		    _this.parent().css('border-color', 'blue');
+		}
+		$('#group_error').css( 'display', 'none' );
+		<!-- BEGIN: check_price -->
+		check_price( '{proid}', '{pro_unit}' );
+		<!-- END: check_price -->
+	}
 </script>
 
 <!-- END: main -->

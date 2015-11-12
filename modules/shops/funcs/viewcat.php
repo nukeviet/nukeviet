@@ -53,8 +53,14 @@ foreach( $array_op as $_inurl )
 		$array_url_group[$m[1]][] = $m[2];
 	}
 }
-
-$page_title = $global_array_shops_cat[$catid]['title'];
+if( empty ( $global_array_shops_cat[$catid]['title_custom'] ) )
+{
+	$page_title = $global_array_shops_cat[$catid]['title_custom'];
+}
+else{
+	$page_title = $global_array_shops_cat[$catid]['title'];
+}
+$page_title = $global_array_shops_cat[$catid]['title_custom'];
 $key_words = $global_array_shops_cat[$catid]['keywords'];
 $description = $global_array_shops_cat[$catid]['description'];
 
@@ -174,11 +180,11 @@ if( empty( $contents ) )
 			{
 				if( $homeimgthumb == 1 )//image thumb
 				{
-					$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_name . '/' . $homeimgfile;
+					$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
 				}
 				elseif( $homeimgthumb == 2 )//image file
 				{
-					$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $homeimgfile;
+					$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
 				}
 				elseif( $homeimgthumb == 3 )//image url
 				{
@@ -207,7 +213,7 @@ if( empty( $contents ) )
 					'gift_content' => $gift_content,
 					'gift_from' => $gift_from,
 					'gift_to' => $gift_to,
-					'link_pro' => $link . $global_array_shops_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+					'link_pro' => $link . $global_array_shops_cat[$catid_i]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
 					'link_order' => $link . 'setcart&amp;id=' . $id
 				);
 			}

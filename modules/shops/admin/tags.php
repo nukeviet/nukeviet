@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 /**
  * nv_show_tags_list()
- * 
+ *
  * @param string $q
  * @param integer $incomplete
  * @return
@@ -21,7 +21,7 @@ function nv_show_tags_list( $q = '', $incomplete = false )
 {
 	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
 
-	$db->sqlreset()->select( '*' )->from( $db_config['prefix'] . '_' . $module_data . '_tags' )->order( NV_LANG_DATA . '_alias ASC' );
+	$db->sqlreset()->select( '*' )->from( $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA )->order( 'alias ASC' );
 
 	if( $incomplete === true )
 	{
@@ -31,11 +31,11 @@ function nv_show_tags_list( $q = '', $incomplete = false )
 	if( ! empty( $q ) )
 	{
 		$q = strip_punctuation( $q );
-		$db->where( NV_LANG_DATA . '_keywords LIKE :keywords' );
+		$db->where( 'keywords LIKE :keywords' );
 	}
 	else
 	{
-		$db->order( NV_LANG_DATA . '_alias ASC' );
+		$db->order( 'alias ASC' )->limit( 50 );
 	}
 
 	$sth = $db->prepare( $db->sql() );
@@ -52,20 +52,20 @@ function nv_show_tags_list( $q = '', $incomplete = false )
 	$number = 0;
 	while( $row = $sth->fetch() )
 	{
-		$row['alias'] = $row[NV_LANG_DATA . '_alias'];
-		$row['keywords'] = $row[NV_LANG_DATA . '_keywords'];
-		$row['numpro'] = $row[NV_LANG_DATA . '_numpro'];
+		$row['alias'] = $row[ 'alias'];
+		$row['keywords'] = $row['keywords'];
+		$row['numpro'] = $row['numpro'];
 		$row['number'] = ++$number;
-		$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['tag'] . '/' . $row[NV_LANG_DATA . '_alias'];
+		$row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['tag'] . '/' . $row['alias'];
 		$row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;tid=' . $row['tid'] . ( $incomplete === true ? '&amp;incomplete=1' : '' ) . '#edit';
 
 		$xtpl->assign( 'ROW', $row );
-		
-		if( empty( $row[NV_LANG_DATA . '_description'] ) and $incomplete === false )
+
+		if( empty( $row['description'] ) and $incomplete === false )
 		{
 			$xtpl->parse( 'main.loop.incomplete' );
 		}
-		
+
 		$xtpl->parse( 'main.loop' );
 	}
 	$sth->closeCursor();
@@ -89,8 +89,8 @@ if( $nv_Request->isset_request( 'del_tid', 'get' ) )
 	$tid = $nv_Request->get_int( 'del_tid', 'get', 0 );
 	if( $tid )
 	{
-		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags WHERE tid=' . $tid );
-		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE tid=' . $tid );
+		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' WHERE tid=' . $tid );
+		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' WHERE tid=' . $tid );
 	}
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_show_tags_list();
@@ -133,7 +133,7 @@ if( ! empty( $savecat ) )
 	$image = $nv_Request->get_string( 'image', 'post', '' );
 	if( is_file( NV_DOCUMENT_ROOT . $image ) )
 	{
-		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$image = substr( $image, $lu );
 	}
 	else
@@ -148,12 +148,12 @@ if( ! empty( $savecat ) )
 	{
 		if( $tid == 0 )
 		{
-			$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_tags (' . NV_LANG_DATA . '_numpro, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_image, ' . NV_LANG_DATA . '_keywords) VALUES (0, :alias, :description, :image, :keywords)' );
+			$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' (numpro, alias, description, image,  keywords) VALUES (0, :alias, :description, :image, :keywords)' );
 			$msg_lg = 'add_tags';
 		}
 		else
 		{
-			$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_alias = :alias, ' . NV_LANG_DATA . '_description = :description, ' . NV_LANG_DATA . '_image = :image, ' . NV_LANG_DATA . '_keywords = :keywords WHERE tid =' . $tid );
+			$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' SET  alias = :alias, description = :description, image = :image, keywords = :keywords WHERE tid =' . $tid );
 			$msg_lg = 'edit_tags';
 		}
 
@@ -180,7 +180,7 @@ $tid = $nv_Request->get_int( 'tid', 'get', 0 );
 
 if( $tid > 0 )
 {
-	list( $tid, $alias, $description, $image, $keywords ) = $db->query( 'SELECT tid, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_image, ' . NV_LANG_DATA . '_keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags where tid=' . $tid )->fetch( 3 );
+	list( $tid, $alias, $description, $image, $keywords ) = $db->query( 'SELECT tid, alias, description, image, keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' where tid=' . $tid )->fetch( 3 );
 	$lang_module['add_tags'] = $lang_module['edit_tags'];
 }
 
@@ -202,12 +202,12 @@ $xtpl->assign( 'alias', $alias );
 $xtpl->assign( 'keywords', $keywords );
 $xtpl->assign( 'description', nv_htmlspecialchars( nv_br2nl( $description ) ) );
 
-if( ! empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $image ) )
+if( ! empty( $image ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $image ) )
 {
-	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $image;
+	$image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $image;
 }
 $xtpl->assign( 'image', $image );
-$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_name );
+$xtpl->assign( 'UPLOAD_CURRENT', NV_UPLOADS_DIR . '/' . $module_upload );
 
 if( ! empty( $error ) )
 {
@@ -219,7 +219,7 @@ if( ! empty( $error ) )
 if( $incomplete )
 {
 	$xtpl->assign( 'ALL_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op );
-	
+
 	$xtpl->parse( 'main.incomplete' );
 	$xtpl->parse( 'main.incomplete_link' );
 }

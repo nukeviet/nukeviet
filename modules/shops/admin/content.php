@@ -22,8 +22,13 @@ if( empty( $global_array_shops_cat ) )
 	die( );
 }
 
+$currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' );
+if( !file_exists( $currentpath ) )
+{
+	nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, date( 'Y_m' ), true );
+}
+
 $table_name = $db_config['prefix'] . '_' . $module_data . '_rows';
-$month_dir_module = nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_name, date( 'Y_m' ), true );
 $array_block_cat_module = array( );
 $id_block_content = array( );
 $array_custom = array( );
@@ -106,10 +111,10 @@ if( $rowcontent['id'] > 0 )
 
 	// Old keywords
 	$array_keywords_old = array( );
-	$_query = $db->query( 'SELECT tid, ' . NV_LANG_DATA . '_keyword FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE id=' . $rowcontent['id'] . ' ORDER BY ' . NV_LANG_DATA . '_keyword ASC' );
+	$_query = $db->query( 'SELECT tid, keyword FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' WHERE id=' . $rowcontent['id'] . ' ORDER BY keyword ASC' );
 	while( $row = $_query->fetch( ) )
 	{
-		$array_keywords_old[$row['tid']] = $row[NV_LANG_DATA . '_keyword'];
+		$array_keywords_old[$row['tid']] = $row['keyword'];
 	}
 	$rowcontent['keywords'] = implode( ', ', $array_keywords_old );
 	$rowcontent['keywords_old'] = $rowcontent['keywords'];
@@ -180,7 +185,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	$rowcontent['address'] = $nv_Request->get_title( 'address', 'post', '', 1 );
 	$rowcontent['files'] = $nv_Request->get_typed_array( 'files', 'post', 'int', array() );
 
-	$rowcontent['gift_content'] = $nv_Request->get_title( 'gift_content', 'post', '', 1 );
+	$rowcontent['gift_content'] = $nv_Request->get_textarea( 'gift_content', '', 'br' );
 	$rowcontent['gift_from'] = $nv_Request->get_title( 'gift_from', 'post', '' );
 	$rowcontent['gift_to'] = $nv_Request->get_title( 'gift_to', 'post', '' );
 	if( !empty( $rowcontent['gift_content'] ) and preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $rowcontent['gift_from'], $m ) )
@@ -207,6 +212,23 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 	$alias = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$rowcontent['alias'] = ($alias == '') ? change_alias( $rowcontent['title'] ) : change_alias( $alias );
+
+	if( !empty( $rowcontent['alias'] ) )
+	{
+		$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows WHERE id !=' . $rowcontent['id'] . ' AND '  . NV_LANG_DATA . '_alias = :alias' );
+		$stmt->bindParam( ':alias', $rowcontent['alias'], PDO::PARAM_STR );
+		$stmt->execute();
+		if( $stmt->fetchColumn() )
+		{
+			$rows_id = $rowcontent['id'];
+			if( $rows_id == 0 )
+			{
+				$rows_id = $db->query( 'SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows' )->fetchColumn();
+				$rows_id = intval( $rows_id ) + 1;
+			}
+			$rowcontent['alias'] = $rowcontent['alias'] . '-' . $rows_id;
+		}
+	}
 
 	$hometext = $nv_Request->get_string( 'hometext', 'post', '' );
 	$rowcontent['hometext'] = defined( 'NV_EDITOR' ) ? nv_nl2br( $hometext, '' ) : nv_nl2br( nv_htmlspecialchars( strip_tags( $hometext ) ), '<br />' );
@@ -289,7 +311,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 	{
 		if( !nv_is_url( $otherimage_i ) and file_exists( NV_DOCUMENT_ROOT . $otherimage_i ) )
 		{
-			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 			$otherimage_i = substr( $otherimage_i, $lu );
 		}
 		elseif( !nv_is_url( $otherimage_i ) )
@@ -410,7 +432,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			// Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
 			$keywords_return = array( );
-			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . "_" . $module_data . '_tags_id where ' . NV_LANG_DATA . '_keyword = :keyword' );
+			$sth = $db->prepare( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . "_" . $module_data . '_tags_id_' . NV_LANG_DATA . ' where keyword = :keyword' );
 			foreach( $keywords as $keyword_i )
 			{
 				$sth->bindParam( ':keyword', $keyword_i, PDO::PARAM_STR );
@@ -424,6 +446,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					}
 				}
 			}
+			$sth->closeCursor();
 
 			if( sizeof( $keywords_return ) < 20 )
 			{
@@ -447,9 +470,9 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 		$rowcontent['homeimgthumb'] = 0;
 		if( !nv_is_url( $rowcontent['homeimgfile'] ) and is_file( NV_DOCUMENT_ROOT . $rowcontent['homeimgfile'] ) )
 		{
-			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' );
+			$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 			$rowcontent['homeimgfile'] = substr( $rowcontent['homeimgfile'], $lu );
-			if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+			if( file_exists( NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 			{
 				$rowcontent['homeimgthumb'] = 1;
 			}
@@ -556,7 +579,6 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 
 					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
-
 					Insertabl_catfields( $table_insert, $array_custom, $rowcontent['id'] );
 				}
 				if( !empty( $rowcontent['group_id'] ) )
@@ -794,7 +816,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					{
 						$alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias( $keyword ) : str_replace( ' ', '-', $keyword );
 						$alias_i = nv_strtolower( $alias_i );
-						$sth = $db->prepare( 'SELECT tid, ' . NV_LANG_DATA . '_alias, ' . NV_LANG_DATA . '_description, ' . NV_LANG_DATA . '_keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags where ' . NV_LANG_DATA . '_alias= :alias OR FIND_IN_SET(:keyword, ' . NV_LANG_DATA . '_keywords)>0' );
+						$sth = $db->prepare( 'SELECT tid, alias, description, keywords FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0' );
 						$sth->bindParam( ':alias', $alias_i, PDO::PARAM_STR );
 						$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 						$sth->execute( );
@@ -806,7 +828,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 							$array_insert['alias'] = $alias_i;
 							$array_insert['keyword'] = $keyword;
 
-							$tid = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags (" . NV_LANG_DATA . "_numpro, " . NV_LANG_DATA . "_alias, " . NV_LANG_DATA . "_description, " . NV_LANG_DATA . "_image, " . NV_LANG_DATA . "_keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert );
+							$tid = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_tags_" . NV_LANG_DATA . " (numpro, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert );
 						}
 						else
 						{
@@ -824,24 +846,24 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 								}
 								if( $keywords_i != $keywords_i2 )
 								{
-									$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_keywords= :keywords WHERE tid =' . $tid );
+									$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' SET keywords= :keywords WHERE tid =' . $tid );
 									$sth->bindParam( ':keywords', $keywords_i2, PDO::PARAM_STR );
 									$sth->execute( );
 								}
 							}
-							$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_numpro = ' . NV_LANG_DATA . '_numpro+1 WHERE tid = ' . $tid );
+							$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' SET numpro = numpro+1 WHERE tid = ' . $tid );
 						}
 
 						// insert keyword for table _tags_id
 						try
 						{
-							$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_tags_id (id, tid, ' . NV_LANG_DATA . '_keyword) VALUES (' . $rowcontent['id'] . ', ' . intval( $tid ) . ', :keyword)' );
+							$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' (id, tid,  keyword) VALUES (' . $rowcontent['id'] . ', ' . intval( $tid ) . ', :keyword)' );
 							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 							$sth->execute( );
 						}
 						catch( PDOException $e )
 						{
-							$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_id SET ' . NV_LANG_DATA . '_keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . intval( $tid ) );
+							$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' SET  keyword = :keyword WHERE id = ' . $rowcontent['id'] . ' AND tid=' . intval( $tid ) );
 							$sth->bindParam( ':keyword', $keyword, PDO::PARAM_STR );
 							$sth->execute( );
 						}
@@ -853,8 +875,8 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				{
 					if( !in_array( $keyword, $keywords ) )
 					{
-						$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags SET ' . NV_LANG_DATA . '_numpro = ' . NV_LANG_DATA . '_numpro-1 WHERE tid = ' . $tid );
-						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid );
+						$db->query( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . NV_LANG_DATA . ' SET numpro = numpro-1 WHERE tid = ' . $tid );
+						$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . NV_LANG_DATA . ' WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid );
 					}
 				}
 			}
@@ -910,9 +932,10 @@ elseif( $rowcontent['id'] > 0 )
 	}
 }
 
-if( !empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'] ) )
+if( !empty( $rowcontent['homeimgfile'] ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'] ) )
 {
-	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $rowcontent['homeimgfile'];
+	$rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
+	$currentpath = dirname( $rowcontent['homeimgfile'] );
 }
 
 $tdate = date( 'H|i', $rowcontent['publtime'] );
@@ -961,8 +984,9 @@ $xtpl->assign( 'rowcontent', $rowcontent );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );
-$xtpl->assign( 'module_name', $module_name );
-$xtpl->assign( 'CURRENT', NV_UPLOADS_DIR . '/' . $module_name . '/' . date( 'Y_m' ) );
+$xtpl->assign( 'MODULE_NAME', $module_name );
+$xtpl->assign( 'MODULE_UPLOAD', $module_upload );
+$xtpl->assign( 'CURRENT', $currentpath );
 
 if( $error != '' )
 {
@@ -985,9 +1009,9 @@ if( !empty( $otherimage ) )
 {
 	foreach( $otherimage as $otherimage_i )
 	{
-		if( !empty( $otherimage_i ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_name . '/' . $otherimage_i ) )
+		if( !empty( $otherimage_i ) and file_exists( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $otherimage_i ) )
 		{
-			$otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $otherimage_i;
+			$otherimage_i = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $otherimage_i;
 		}
 		$data_otherimage_i = array(
 			'id' => $items,
@@ -1118,11 +1142,22 @@ if( count( $array_block_cat_module ) > 0 )
 	$xtpl->parse( 'main.block_cat' );
 }
 
+if( !empty( $money_config ) )
+{
+	foreach( $money_config as $code => $info )
+	{
+		$info['select'] = ($rowcontent['money_unit'] == $code) ? "selected=\"selected\"" : "";
+		$xtpl->assign( 'MON', $info );
+		$xtpl->parse( 'main.product_price.money_unit' );
+		$xtpl->parse( 'main.typeprice2.money_unit' );
+	}
+}
+
 $typeprice = ($rowcontent['listcatid']) ? $global_array_shops_cat[$rowcontent['listcatid']]['typeprice'] : 1;
 if( $typeprice == 1 )
 {
 	// List discount
-	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
+	$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts ORDER BY add_time DESC';
 	$_result = $db->query( $sql );
 	while( $_discount = $_result->fetch( ) )
 	{
@@ -1131,6 +1166,7 @@ if( $typeprice == 1 )
 		$xtpl->parse( 'main.typeprice1.discount' );
 	}
 	$xtpl->parse( 'main.typeprice1' );
+
 	$xtpl->parse( 'main.product_price' );
 }
 elseif( $typeprice == 2 )
@@ -1237,16 +1273,6 @@ $xtpl->assign( 'allowed_save_checked', $allowed_save_checked );
 $showprice_checked = ($rowcontent['showprice']) ? " checked=\"checked\"" : "";
 $xtpl->assign( 'ck_showprice', $showprice_checked );
 
-if( !empty( $money_config ) )
-{
-	foreach( $money_config as $code => $info )
-	{
-		$info['select'] = ($rowcontent['money_unit'] == $code) ? "selected=\"selected\"" : "";
-		$xtpl->assign( 'MON', $info );
-		$xtpl->parse( 'main.money_unit' );
-	}
-}
-
 if( !empty( $weight_config ) )
 {
 	foreach( $weight_config as $code => $info )
@@ -1286,7 +1312,7 @@ if( !$pro_config['active_warehouse'] )
 }
 
 // Custom fiels
-if( $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
+if( $pro_config['template_active'] and $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
 {
 	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_shops_cat[$rowcontent['listcatid']]['form'], $custom );
 	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );

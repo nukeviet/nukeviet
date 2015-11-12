@@ -1,15 +1,19 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: view -->
-<form class="form-inline" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
+<form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 	<input type="hidden" name="template" value="{template}" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
+			<colgroup>
+				<col class="w100" />
+				<col />
+			</colgroup>
 			<thead>
 				<tr>
 					<th>{LANG.weight}</th>
 					<th>{LANG.field_title}</th>
 					<!-- BEGIN: title_tab -->
-					<th>{title_tab}</th>
+					<th class="text-center">{title_tab}</th>
 					<!-- END: title_tab -->
 				</tr>
 			</thead>
@@ -17,31 +21,26 @@
 				<!-- BEGIN: loop -->
 				<tr>
 					<td>
-						<select class="form-control" id="id_weight_{VIEW.fid}" onchange="nv_change_weight('{VIEW.fid}');">
+					<select class="form-control" id="id_weight_{VIEW.fid}" onchange="nv_change_weight('{VIEW.fid}');">
 						<!-- BEGIN: weight_loop -->
-							<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
+						<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 						<!-- END: weight_loop -->
-					</select>
-				</td>
+					</select></td>
 					<td> {VIEW.field} </td>
 					<!-- BEGIN: tab -->
-					<td>
-						<input type="checkbox" name="check[{VIEW.fid}][{tab}]" value="{tab}" {CHECK} />
-					</td>
+					<td class="text-center w200"><input type="checkbox" name="check[{VIEW.fid}][{tab}]" value="{tab}" {CHECK} /></td>
 					<!-- END: tab -->
 				</tr>
 				<!-- END: loop -->
 			</tbody>
 		</table>
 	</div>
-	<div style="text-align: center"><input class="btn btn-primary" name="submit" type="submit" value="{LANG.save}" />
+	<div class="text-center"><input class="btn btn-primary" name="submit" type="submit" value="{LANG.save}" /></div>
 </form>
 <!-- END: view -->
 
-<a id="edit"></a>
-
 <script type="text/javascript">
-//<![CDATA[
+	//<![CDATA[
 	function nv_change_weight(id) {
 		var nv_timer = nv_settimeout_disable('id_weight_' + id, 5000);
 		var new_vid = $('#id_weight_' + id).val();
@@ -57,7 +56,6 @@
 		return;
 	}
 
-
-//]]>
+	//]]>
 </script>
 <!-- END: main -->

@@ -34,7 +34,7 @@
     <div class="col-sm-12 col-md-{num}">
         <div class="thumbnail">
             <div style="height: {height}px">
-                <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" data-content='{intro}' data-rel="tooltip" class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
+                <a href="{link_pro}" title="{title_pro}"><img src="{img_pro}" alt="{title_pro}" <!-- BEGIN: tooltip_js -->data-content='{intro}' data-rel="tooltip" data-img="{img_pro}"<!-- END: tooltip_js -->class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
             </div>
             <div class="info_pro">
             	<!-- BEGIN: new -->
@@ -126,13 +126,4 @@
 
 <div class="msgshow" id="msgshow">
 </div>
-<!-- BEGIN: tooltip_js -->
-<script type="text/javascript">
-	$(document).ready(function() {$("[data-rel='tooltip']").tooltip({
-		placement: "bottom",
-		html: true,
-		title: function(){return '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-	});});
-</script>
-<!-- END: tooltip_js -->
 <!-- END: main -->

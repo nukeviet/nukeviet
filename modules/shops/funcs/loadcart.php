@@ -12,12 +12,21 @@ if( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
 
 $num = isset( $_SESSION[$module_data . '_cart'] ) ? count( $_SESSION[$module_data . '_cart'] ) : 0;
 $total = 0;
-
+$total_old = 0;
 $total_coupons = 0;
-$counpons = array();
+
 $coupons_check = $nv_Request->get_int( 'coupons_check', 'get', 0 );
 $coupons_load = $nv_Request->get_int( 'coupons_load', 'get', 0 );
 $coupons_code = $nv_Request->get_title( 'coupons_code', 'get', '' );
+
+$counpons = array(
+	'title' => '',
+	'type' => 'p',
+	'discount' => 0,
+	'total_amount' => 0,
+	'date_start' => 0,
+	'date_end' => 0
+);
 
 if( !empty( $coupons_code ) )
 {
@@ -53,7 +62,7 @@ if( ! empty( $_SESSION[$module_data . '_cart'] ) )
 	$total_old = $total;
 }
 
-if( ( empty( $counpons['total_amount'] ) or $total > $counpons['total_amount'] ) and NV_CURRENTTIME >= $counpons['date_start'] and ( empty( $counpons['uses_per_coupon'] ) or $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
+if( ( empty( $counpons['total_amount'] ) or $total >= $counpons['total_amount'] ) and NV_CURRENTTIME >= $counpons['date_start'] and ( empty( $counpons['uses_per_coupon'] ) or $counpons['uses_per_coupon_count'] < $counpons['uses_per_coupon'] ) and ( empty( $counpons['date_end'] ) or NV_CURRENTTIME < $counpons['date_end'] ) )
 {
 	// Ap dung giam gia cho tung san pham dac biet
 	if( $total_coupons > 0 )

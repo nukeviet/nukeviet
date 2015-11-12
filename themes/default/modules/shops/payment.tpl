@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
 <div class="block clearfix">
-	<div class="row panel panel-default">
+	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="col-xs-14">
 				<div class="row">
@@ -29,6 +29,17 @@
 						{DATA.order_phone}
 					</div>
 				</div>
+
+				<!-- BEGIN: order_address -->
+				<div class="row">
+					<div class="col-md-10">
+						<strong>{LANG.order_address}:</strong>
+					</div>
+					<div class="col-md-14">
+						{DATA.order_address}
+					</div>
+				</div>
+				<!-- END: order_address -->
 
 				<div class="row">
 					<div class="col-md-10">
@@ -92,7 +103,11 @@
 						<!-- END: group -->
 					</p><!-- END: display_group --></td>
 					<!-- BEGIN: sub_group -->
-	    			<td><a href="{SUB_GROUP.link}" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a></td>
+	    			<td>
+	    				<!-- BEGIN: loop -->
+	    				<a href="{SUB_GROUP.link}" title="{SUB_GROUP.title}">{SUB_GROUP.title}</a>
+	    				<!-- END: loop -->
+	    			</td>
 	    			<!-- END: sub_group -->
 					<!-- BEGIN: price2 -->
 					<td class="money text-right"><strong>{product_price}</strong></td>
@@ -136,23 +151,24 @@
 		</table>
 	</div>
 	<!-- END: data_shipping -->
-
-	<div class="row">
-		<div class="col-xs-12">
-			<!-- BEGIN: order_note -->
-			<em>{LANG.cart_note} : {DATA.order_note}</em>
-			<!-- END: order_note -->
-		</div>
-		<div class="col-xs-12 text-right">
-			<!-- BEGIN: price3 -->
-			<!-- BEGIN: total_coupons -->
-			<p class="pull-right">
-				{LANG.coupon}: <strong>{order_coupons}</strong> {unit}
-			</p>
-			<div class="clear"></div>
-			<!-- END: total_coupons -->
-			{LANG.cart_total}: <strong id="total">{order_total}</strong> {unit} <!-- END: price3 -->
-		</div>
+    <div class="panel panel-default">
+    	<div class="panel-body">
+    		<div class="col-xs-12">
+    			<!-- BEGIN: order_note -->
+    			<em>{LANG.cart_note} : {DATA.order_note}</em>
+    			<!-- END: order_note -->
+    		</div>
+    		<div class="col-xs-12 text-right">
+    			<!-- BEGIN: price3 -->
+    			<!-- BEGIN: total_coupons -->
+    			<p class="pull-right">
+    				{LANG.coupon}: <strong>{order_coupons}</strong> {unit}
+    			</p>
+    			<div class="clear"></div>
+    			<!-- END: total_coupons -->
+    			{LANG.cart_total}: <strong id="total">{order_total}</strong> {unit} <!-- END: price3 -->
+    		</div>
+    	</div>
 	</div>
 
 	<!-- BEGIN: actpay -->
@@ -213,7 +229,7 @@
 <form action="" method="post">
 	<input type="hidden" value="{order_id}" name="order_id"><input type="hidden" value="1" name="save">
 </form>
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$(function() {
 		$('[data-toggle="tooltip"]').tooltip();
 

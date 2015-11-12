@@ -8,40 +8,39 @@
  * @Createdate Thu, 28 May 2015 03:54:03 GMT
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) )
-	die( 'Stop!!!' );
+if( !defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
-$row = array( );
-$error = array( );
+$row = array();
+$error = array();
 $row['id'] = $nv_Request->get_int( 'id', 'post,get', 0 );
 if( $nv_Request->isset_request( 'submit', 'post' ) )
 {
 	$row['catid'] = $nv_Request->get_int( 'catid', 'post', 0 );
-	$row['newprice'] = $nv_Request->get_int( 'newprice', 'post', 0 );
+	$row['newprice'] = $nv_Request->get_string( 'newprice', 'post', 0 );
+	$row['newprice'] = floatval( preg_replace( '/[^0-9\.]/', '', $row['newprice'] ) );
 
 	$_sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs where catid=' . $row['catid'];
 	$_query = $db->query( $_sql );
-	while( $row1 = $_query->fetch( ) )
+	while( $row1 = $_query->fetch() )
 	{
 		$_sql1 = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_rows
-			 SET product_price=' . $row['newprice'] . ' where listcatid=' . $row1['catid'];
+			 SET product_price=' . $db->quote( $row['newprice'] ) . ' where listcatid=' . $row1['catid'];
 		if( $row1['subcatid'] != 0 )
 		{
 			$_sql1 .= ' OR listcatid IN (' . $row1['subcatid'] . ')';
 		}
-		$stmt = $db->prepare( $_sql1 );
-		if( $stmt->execute( ) )
+		$execute = $db->query( $_sql1 );
+		if( $execute )
 		{
-			$error[] = 'đã thực hiện thành công';
 			Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items&listcatid=' . $row1['catid'] );
-			die( );
+			die();
 		}
 	}
 }
 else
 {
 	$row['id'] = 0;
-	$row['cateid'] = 0;
+	$row['catid'] = 0;
 	$row['newprice'] = 0;
 }
 
@@ -74,7 +73,7 @@ foreach( $global_array_shops_cat as $catid_i => $rowscat )
 	}
 	$rowscat['key'] = $rowscat['catid'];
 	$rowscat['title'] = $xtitle_i . $rowscat['title'];
-	$rowscat['selected'] = ($catid_i == $row['listcatid']) ? ' selected="selected"' : '';
+	$rowscat['selected'] = ($catid_i == $row['catid']) ? ' selected="selected"' : '';
 
 	$xtpl->assign( 'OPTION', $rowscat );
 	$xtpl->parse( 'main.select_cateid' );

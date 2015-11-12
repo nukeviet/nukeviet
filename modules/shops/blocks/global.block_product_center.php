@@ -38,6 +38,11 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		}
 
 		$html .= "	</select></td>\n";
+		$html .= '<script type="text/javascript">';
+		$html .= '	$("select[name=config_blockid]").change(function() {';
+		$html .= '		$("input[name=title]").val($("select[name=config_blockid] option:selected").text());';
+		$html .= '	});';
+		$html .= '</script>';
 		$html .= "</tr>";
 
 		$html .= "<tr>";
@@ -99,7 +104,7 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 	 */
 	function nv_global_product_center( $block_config )
 	{
-		global $site_mods, $global_config, $module_config, $lang_module, $module_name, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config;
+		global $site_mods, $global_config, $module_config, $lang_module, $module_name, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config, $blockID;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
@@ -195,8 +200,9 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$xtpl = new XTemplate( 'block.product_center.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $mod_file );
 		$xtpl->assign( 'LANG', $lang_module );
 		$xtpl->assign( 'THEME_TEM', NV_BASE_SITEURL . 'themes/' . $block_theme );
+		$xtpl->assign( 'JS_PATH', NV_BASE_SITEURL . 'themes/default/js' );
 		$xtpl->assign( 'NUMVIEW', $num_view );
-		$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
+		//$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
 
 		$db->sqlreset()
 			->select( 't1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt, t1.showprice, t1.discount_id' )
@@ -209,15 +215,15 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		$list = nv_db_cache( $db->sql(), '', $module );
 		foreach( $list as $row )
 		{
-			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
+			$link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'];
 
 			if( $row['homeimgthumb'] == 1 ) //image thumb
 			{
-				$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $row['homeimgfile'];
+				$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
 			}
 			elseif( $row['homeimgthumb'] == 2 ) //image file
 			{
-				$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $row['homeimgfile'];
+				$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
 			}
 			elseif( $row['homeimgthumb'] == 3 ) //image url
 			{
@@ -232,6 +238,8 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 			$xtpl->assign( 'TITLE', $row['title'] );
 			$xtpl->assign( 'TITLE0', nv_clean60( $row['title'], 30 ) );
 			$xtpl->assign( 'SRC_IMG', $src_img );
+			$xtpl->assign( 'BLOCKID', $blockID );
+			
 
 			if( $pro_config['active_price'] == '1' )
 			{
@@ -257,7 +265,12 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 
 			$xtpl->parse( 'main.items' );
 		}
-
+		
+		if( ! defined( 'LIB' ) )
+		{
+			define( 'LIB', true );
+			$xtpl->parse( 'main.lib' );
+		}
 		$xtpl->parse( 'main' );
 		return $xtpl->text( 'main' );
 	}

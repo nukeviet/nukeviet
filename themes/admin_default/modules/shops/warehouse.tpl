@@ -1,29 +1,23 @@
 <!-- BEGIN: main -->
 <style type="text/css">
-	#form_quantity .form-group{
+	.form-group{
 		margin-bottom: 4px
 	}
 </style>
-<form action="" method="post" class="form-horizontal">
+<form action="" method="post">
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="form-group">
-				<label class="col-sm-3 control-label">{LANG.title}</label>
-				<div class="col-sm-21">
-					<input type="text" name="title" value="{WAREHOUSE.title}" class="form-control" placeholder="{LANG.title}">
-				</div>
+				<label class="control-label"><strong>{LANG.title}</strong></label>
+				<input type="text" name="title" value="{WAREHOUSE.title}" class="form-control" />
 			</div>
 			<div class="form-group">
-				<label class="col-sm-3 control-label">{LANG.content_note}</label>
-				<div class="col-sm-21">
-					<textarea name="note" class="form-control" rows="4" placeholder="{LANG.content_note}">{WAREHOUSE.note}</textarea>
-				</div>
+				<label class="control-label"><strong>{LANG.content_note}</strong></label>
+				<textarea name="note" class="form-control" rows="4">{WAREHOUSE.note}</textarea>
 			</div>
 		</div>
 	</div>
-</form>
 
-<form action="" method="post" id="form_quantity">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<colgroup>

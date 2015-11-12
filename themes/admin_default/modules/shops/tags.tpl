@@ -75,7 +75,7 @@
 		return false;
 	});
 
-	var load_bar = '<p class="text-center"><img src="' + nv_siteroot + 'images/load_bar.gif" alt="Waiting..."/></p>';
+	var load_bar = '<p class="text-center"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></p>';
 
 	function nv_search_tag(tid) {
 		$("#module_show_list").html(load_bar).load("index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=tags&q=" + rawurlencode($("#q").val()) + "&num=" + nv_randomPassword(10))

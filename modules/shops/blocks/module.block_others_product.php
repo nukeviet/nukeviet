@@ -25,7 +25,7 @@ if( ! function_exists( 'nv_others_product' ) )
 
 		if( $op == 'detail' )
 		{
-			global $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config;
+			global $site_mods, $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $id, $catid, $pro_config, $global_config;
 
 			$xtpl = new XTemplate( 'block.others_product.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 			$xtpl->assign( 'LANG', $lang_module );
@@ -46,11 +46,11 @@ if( ! function_exists( 'nv_others_product' ) )
 			{
 				if( $homeimgthumb_i == 1 ) //image thumb
 				{
-					$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module . '/' . $homeimgfile_i;
+					$src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile_i;
 				}
 				elseif( $homeimgthumb_i == 2 ) //image file
 				{
-					$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module . '/' . $homeimgfile_i;
+					$src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $homeimgfile_i;
 				}
 				elseif( $homeimgthumb_i == 3 ) //image url
 				{
@@ -61,7 +61,7 @@ if( ! function_exists( 'nv_others_product' ) )
 					$src_img = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/shops/no-image.jpg';
 				}
 
-				$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$listcatid_i]['alias'] . '/' . $alias_i . '-' . $id_i . $global_config['rewrite_exturl'] );
+				$xtpl->assign( 'link', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$listcatid_i]['alias'] . '/' . $alias_i . $global_config['rewrite_exturl'] );
 				$xtpl->assign( 'title', $title_i );
 				$xtpl->assign( 'src_img', $src_img );
 				$xtpl->assign( 'time', nv_date( 'd-m-Y h:i:s A', $addtime_i ) );

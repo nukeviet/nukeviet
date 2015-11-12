@@ -152,7 +152,7 @@ if( $array_search['status'] >= 0 )
 
 while( $view = $sth->fetch( ) )
 {
-	$view['link_product'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$view['listcatid']]['alias'] . '/' . $view['alias'] . '-' . $view['product_id'] . $global_config['rewrite_exturl'];
+	$view['link_product'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$view['listcatid']]['alias'] . '/' . $view['alias'] . $global_config['rewrite_exturl'];
 	$view['add_time'] = nv_date( 'H:i d/m/Y', $view['add_time'] );
 	$view['status'] = $lang_module['review_status_' . $view['status']];
 	$xtpl->assign( 'VIEW', $view );

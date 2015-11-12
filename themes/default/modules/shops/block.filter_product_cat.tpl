@@ -27,7 +27,7 @@
 	<!-- END: group -->
 </div>
 
-<script type="text/javascript">
+<script type="text/javascript" data-show="after">
 	$('input[name="groupid[]"]').click(function() {
 		$('.ajax-load-qa').show();
 
