@@ -43,7 +43,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == '1' )
 	$row['alias'] = $nv_Request->get_title( 'alias', 'post', '', 1 );
 
 	$image = $nv_Request->get_string( 'image', 'post', '' );
-	if( is_file( NV_DOCUMENT_ROOT . $image ) )
+	if( nv_is_file( $image, NV_UPLOADS_DIR . '/' . $module_upload ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$row['image'] = substr( $image, $lu );

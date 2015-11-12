@@ -202,7 +202,7 @@ if( $nv_Request->isset_request( 'submit1', 'post' ) )
 	$post['css'] = nv_substr( $nv_Request->get_title( 'css', 'post', '', 1 ), 0, 255 );
 
 	$post['icon'] = $nv_Request->get_string( 'icon', 'post', '' );
-	if( is_file( NV_DOCUMENT_ROOT . $post['icon'] ) )
+	if( nv_is_file( $post['icon'], NV_UPLOADS_DIR . '/' . $module_upload ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' );
 		$post['icon'] = substr( $post['icon'], $lu );

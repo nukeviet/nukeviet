@@ -30,7 +30,7 @@ if( empty( $images ) )
 // Check file exists
 foreach( $images as  $file )
 {
-	if( ! is_file( NV_ROOTDIR . '/' . $path . '/' . $file ) )
+	if( ! nv_is_file( NV_BASE_SITEURL . $path . '/' . $file, $path ) )
 	{
 		die( 'ERROR#' . $lang_module['file_no_exists'] . ': ' . $file );
 	}
