@@ -317,6 +317,7 @@ $lang_module['update_order'] = 'Thông báo: Hệ thống đã cập nhật lạ
 $lang_module['no_update_order'] = 'Thông báo: Hệ thống không tìm thấy các giao dịch nào mới';
 $lang_module['active_order_dis'] = 'Chức năng đặt hàng trực truyến đã bị tắt';
 $lang_module['group_title'] = 'Nhóm sản phẩm';
+$lang_module['block_cat'] = 'Khối sản phẩm';
 $lang_module['notresult'] = 'Không tìm thấy kết quả nào!!';
 $lang_module['sort_by'] = 'Sắp xếp';
 $lang_module['sort_by_name_az'] = 'Tên tăng dần';

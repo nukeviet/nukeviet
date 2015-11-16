@@ -317,6 +317,7 @@ $lang_module['update_order'] = 'Notification: The systeme updated information of
 $lang_module['no_update_order'] = 'Notification: The systeme can not find any new order';
 $lang_module['active_order_dis'] = 'On-line shopping function is disable';
 $lang_module['group_title'] = 'Category';
+$lang_module['block_cat'] = 'Block shops';
 $lang_module['notresult'] = 'Not found!';
 $lang_module['sort_by'] = 'Sort by';
 $lang_module['sort_by_name_az'] = 'Name ascending (a-z)';
