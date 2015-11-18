@@ -35,6 +35,11 @@ if( ! nv_function_exists( 'nv_relates_product' ) )
 			$html .= "<option value=\"" . $l['bid'] . "\" " . $sel . ">" . $l[NV_LANG_DATA . '_title'] . "</option>\n";
 		}
 		$html .= "	</select></td>\n";
+		$html .= '<script type="text/javascript">';
+		$html .= '	$("select[name=config_blockid]").change(function() {';
+		$html .= '		$("input[name=title]").val($("select[name=config_blockid] option:selected").text());';
+		$html .= '	});';
+		$html .= '</script>';
 		$html .= "</tr>";
 
 		$html .= "<tr>";

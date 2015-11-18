@@ -38,6 +38,11 @@ if( ! nv_function_exists( 'nv_global_bxproduct_center' ) )
 		}
 
 		$html .= "	</select></td>\n";
+		$html .= '<script type="text/javascript">';
+		$html .= '	$("select[name=config_blockid]").change(function() {';
+		$html .= '		$("input[name=title]").val($("select[name=config_blockid] option:selected").text());';
+		$html .= '	});';
+		$html .= '</script>';
 		$html .= "</tr>";
 
 		$html .= "<tr>";
@@ -60,7 +65,7 @@ if( ! nv_function_exists( 'nv_global_bxproduct_center' ) )
 		$html .= "<td>". $lang_block['mode'] ."</td>";
 		$html .= "<td>";
 		$sorting_array1 = array( 'horizontal' => 'Ngang', 'vertical' => 'Dọc');
-		$html .= '<select name="config_mode">';
+		$html .= '<select name="config_mode" class="form-control w100">';
 		foreach( $sorting_array1 as $key1 => $value1 )
 		{
 			$html .= '<option value="' . $key1 . '" ' . ( $data_block['mode'] == $key1 ? 'selected="selected"' : '') . '>' . $value1 . '</option>';

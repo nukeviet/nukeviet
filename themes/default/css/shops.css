@@ -1404,3 +1404,7 @@ img.calendar {
 	border: none;
 	box-shadow: none
 }
+.tab-content img{
+	width: 100%;
+	height: auto;
+}

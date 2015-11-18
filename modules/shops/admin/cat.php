@@ -29,7 +29,7 @@ if( !file_exists( $currentpath ) )
 	nv_mkdir( NV_UPLOADS_REAL_DIR . '/' . $module_upload, date( 'Y_m' ), true );
 }
 
-list( $data['catid'], $data['parentid'], $data['title'], $data['alias'], $data['description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice'] ) = array( 0, 0, '', '', '', '', '', '6', 0, 0, 0, '', '', $pro_config['group_price'], 0, 7, 1);
+list( $data['catid'], $data['parentid'], $data['title'], $data['title_custom'], $data['alias'], $data['description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice'] ) = array( 0, 0, '', '', '', '', '', '', '6', 0, 0, 0, '', '', $pro_config['group_price'], 0, 7, 1);
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
@@ -51,6 +51,7 @@ if( ! empty( $savecat ) )
 	$data['parentid_old'] = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$data['parentid'] = $nv_Request->get_int( 'parentid', 'post', 0 );
 	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '', 1 ), 0, 255 );
+	$data['title_custom'] = nv_substr( $nv_Request->get_title( 'title_custom', 'post', '', 1 ), 0, 255 );
 	$data['keywords'] = nv_substr( $nv_Request->get_title( 'keywords', 'post', '', 1 ), 0, 255 );
 	$data['alias'] = nv_substr( $nv_Request->get_title( 'alias', 'post', '', 1 ), 0, 255 );
 	$data['description'] = $nv_Request->get_string( 'description', 'post', '' );
@@ -160,9 +161,10 @@ if( ! empty( $savecat ) )
 	{
 		try
 		{
-			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, viewdescriptionhtml = :viewdescriptionhtml, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_descriptionhtml = :descriptionhtml, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, viewdescriptionhtml = :viewdescriptionhtml, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_title_custom= :title_custom, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_descriptionhtml = :descriptionhtml, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid'] );
 			$stmt->bindParam( ':parentid', $data['parentid'], PDO::PARAM_INT );
 			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
+			$stmt->bindParam( ':title_custom', $data['title_custom'], PDO::PARAM_STR );
 			$stmt->bindParam( ':image', $data['image'], PDO::PARAM_STR );
 			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 			$stmt->bindParam( ':description', $data['description'], PDO::PARAM_STR );
@@ -176,6 +178,7 @@ if( ! empty( $savecat ) )
 			$stmt->bindParam( ':cat_allow_point', $data['cat_allow_point'], PDO::PARAM_INT );
 			$stmt->bindParam( ':cat_number_point', $data['cat_number_point'], PDO::PARAM_INT );
 			$stmt->bindParam( ':cat_number_product', $data['cat_number_product'], PDO::PARAM_INT );
+			
 			if( $stmt->execute() )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_catalog', 'id ' . $data['catid'], $admin_info['userid'] );
@@ -215,6 +218,7 @@ else
 			die();
 		}
 		$data['title'] = $data[NV_LANG_DATA . '_title'];
+		$data['title_custom'] = $data[NV_LANG_DATA . '_title_custom'];
 		$data['alias'] = $data[NV_LANG_DATA . '_alias'];
 		$data['description'] = $data[NV_LANG_DATA . '_description'];
 		$data['keywords'] = $data[NV_LANG_DATA . '_keywords'];

@@ -38,6 +38,11 @@ if( ! nv_function_exists( 'nv_global_product_center' ) )
 		}
 
 		$html .= "	</select></td>\n";
+		$html .= '<script type="text/javascript">';
+		$html .= '	$("select[name=config_blockid]").change(function() {';
+		$html .= '		$("input[name=title]").val($("select[name=config_blockid] option:selected").text());';
+		$html .= '	});';
+		$html .= '</script>';
 		$html .= "</tr>";
 
 		$html .= "<tr>";
