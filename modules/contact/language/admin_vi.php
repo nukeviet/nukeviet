@@ -21,6 +21,7 @@ $lang_module['edit_title'] = 'Xem nội dung gửi';
 $lang_module['add_row_title'] = 'Thêm bộ phận';
 $lang_module['department_title'] = 'Các bộ phận';
 $lang_module['alias'] = 'Liên kết tĩnh';
+$lang_module['image'] = 'Hình ảnh';
 $lang_module['error_alias'] = 'Lỗi: chưa có liên kết tĩnh';
 $lang_module['duplicate_alias'] = 'Lỗi: Tiêu đề hoặc liên kết tính đã tồn tại';
 $lang_module['number'] = 'Thứ tự';
