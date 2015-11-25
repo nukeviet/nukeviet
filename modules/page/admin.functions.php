@@ -13,3 +13,12 @@ if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_M
 $allow_func = array( 'main', 'content', 'alias', 'change_status', 'change_weight', 'del', 'view', 'config' );
 
 define( 'NV_IS_FILE_ADMIN', true );
+
+// Get Config Module
+$sql = 'SELECT config_name, config_value FROM ' . NV_PREFIXLANG . '_' . $module_data . '_config';
+$list = nv_db_cache( $sql );
+$page_config = array();
+foreach( $list as $values )
+{
+	$page_config[$values['config_name']] = $values['config_value'];
+}

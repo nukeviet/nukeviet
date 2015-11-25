@@ -49,6 +49,7 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('viewtype', '0'),
 ('facebookapi', ''),
 ('per_page', '5'),
+('news_first', '0'),
 ('related_articles', '5')";
 
 // Comments

@@ -19,7 +19,7 @@ $db_config['dbpass'] = '';
 $db_config['dbdetete'] = 0;
 $db_config['prefix'] = 'nv4';
 $db_config['persistent'] = false;
-$db_config['collation'] = 'utf8_general_ci';// mysql 5.6 support utf8_general_ci, utf8mb4_unicode_ci, utf8_vietnamese_ci
+$db_config['collation'] = '';//utf8_general_ci, utf8mb4_unicode_ci, utf8mb4_vietnamese_ci
 
 $array_data = array();
 $array_data['lang_multi'] = 0;
@@ -32,7 +32,7 @@ $array_data['question'] = '';
 $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
 
-$global_config['version'] = '4.0.24';// NukeViet 4.0 (No release)
+$global_config['version'] = '4.0.24 Not release';// NukeViet 4.0 (Not release)
 $global_config['site_email'] = '';
 $global_config['error_set_logs'] = 1;
 $global_config['error_send_email'] = 'support@nukeviet.vn';

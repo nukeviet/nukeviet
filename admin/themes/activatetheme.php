@@ -12,7 +12,7 @@ if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
 
 $selectthemes = $nv_Request->get_title( 'theme', 'post', '' );
 
-if( empty( $selectthemes ) or !(preg_match( $global_config['check_theme'], $selectthemes ) or preg_match( $global_config['check_theme_mobile'], $selectthemes )) ) die();
+if( empty( $selectthemes ) or ! ( preg_match( $global_config['check_theme'], $selectthemes ) or preg_match( $global_config['check_theme_mobile'], $selectthemes ) ) ) die();
 
 $sth = $db->prepare('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id=0 AND theme= :theme');
 $sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );
@@ -29,7 +29,7 @@ if( preg_match( $global_config['check_theme'], $selectthemes ) and $sth->fetchCo
 
 	echo 'OK_' . $selectthemes;
 }
-elseif( ! empty($selectthemes) and file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
+elseif( ! empty( $selectthemes ) and file_exists( NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini' ) )
 {
 	$sth = $db->prepare('SELECT count(*) FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id = 0 AND theme= :theme');
 	$sth->bindParam( ':theme', $selectthemes, PDO::PARAM_STR );

@@ -16,7 +16,7 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 if( $global_config['rewrite_optional'] )
 {
 	// Rewrite module page
-	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=page\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-]+)" . $global_config['rewrite_exturl'] . "\"#"] = "\"\\1\\3" . $global_config['rewrite_exturl'] . "\"";
+	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=page\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-]+)" . preg_quote( $global_config['rewrite_exturl'], '#' ) . "\"#"] = "\"\\1\\3" . $global_config['rewrite_exturl'] . "\"";
 
 	// Rewrite to remove module name on url
 	if( $global_config['rewrite_op_mod'] != '' )
@@ -29,7 +29,7 @@ if( $global_config['rewrite_optional'] )
 		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\&[amp;]*" . NV_OP_VARIABLE . "=tag/([^\"]+)\"#"] = "\"\\1tag/\\3\"";
 
 		// Module
-		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)" . $global_config['rewrite_exturl'] . "\"#"] = "\"\\1\\3" . $global_config['rewrite_exturl'] . "\"";
+		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)" . preg_quote( $global_config['rewrite_exturl'], '#' ) . "\"#"] = "\"\\1\\3" . $global_config['rewrite_exturl'] . "\"";
 		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)\"#"] = "\"\\1\\3" . $global_config['rewrite_endurl'] . "\"";
 		$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=" . $global_config['rewrite_op_mod'] . "/([a-zA-Z0-9-/]+)\"#"] = "\"\\1\\3" . $global_config['rewrite_endurl'] . "\"";
 		if( $global_config['rewrite_op_mod'] == $global_config['site_home_module'] )
@@ -49,7 +49,7 @@ if( $global_config['rewrite_optional'] )
 	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=tag/([^\"]+)\"#"] = "\"\\1\\3/tag/\\4\"";
 
 	// Rewrite module has funcs url
-	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)" . $global_config['rewrite_exturl'] . "\"#"] = "\"\\1\\3/\\4" . $global_config['rewrite_exturl'] . "\"";
+	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)" . preg_quote( $global_config['rewrite_exturl'], '#' ) . "\"#"] = "\"\\1\\3/\\4" . $global_config['rewrite_exturl'] . "\"";
 	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)\"#"] = "\"\\1\\3/\\4" . $global_config['rewrite_endurl'] . "\"";
 
 	// Rewrite module url
@@ -69,7 +69,7 @@ else
 	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=tag/([^\"]+)\"#"] = "\"\\1\\2/\\3/tag/\\4\"";
 
 	// Rewrite module has funcs url
-	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)" . $global_config['rewrite_exturl'] . "\"#"] = "\"\\1\\2/\\3/\\4" . $global_config['rewrite_exturl'] . "\"";
+	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)" . preg_quote( $global_config['rewrite_exturl'], '#' ) . "\"#"] = "\"\\1\\2/\\3/\\4" . $global_config['rewrite_exturl'] . "\"";
 	$rewrite["#\"(" . NV_BASE_SITEURL . ")index.php\?" . NV_LANG_VARIABLE . "=([a-z-]+)\&[amp;]*" . NV_NAME_VARIABLE . "=([a-zA-Z0-9-]+)\&[amp;]*" . NV_OP_VARIABLE . "=([a-zA-Z0-9-/]+)\"#"] = "\"\\1\\2/\\3/\\4" . $global_config['rewrite_endurl'] . "\"";
 
 	// Rewrite module url

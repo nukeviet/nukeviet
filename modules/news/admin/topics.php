@@ -37,7 +37,7 @@ if( ! empty( $savecat ) )
 
 	// Xu ly anh minh hoa
 	$array['image'] = $nv_Request->get_title( 'homeimg', 'post', '' );
-	if( ! nv_is_url( $array['image'] ) and file_exists( NV_DOCUMENT_ROOT . $array['image'] ) )
+	if( ! nv_is_url( $array['image'] ) and nv_is_file( $array['image'], NV_UPLOADS_DIR . '/' . $module_upload . '/topics' ) )
 	{
 		$lu = strlen( NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' );
 		$array['image'] = substr( $array['image'], $lu );
