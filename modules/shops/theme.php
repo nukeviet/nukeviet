@@ -250,17 +250,17 @@ function view_home_group( $data_content, $compare_id, $html_pages = '', $sort = 
 function view_home_blockcat( $data_content, $compare_id, $html_pages = '', $data_title, $description, $image_group )
 {
 	global $module_info, $lang_module, $module_name, $module_file, $pro_config, $array_wishlist_id, $global_array_shops_cat, $global_array_blockcat, $my_head;
-	
+
 	$xtpl = new XTemplate( 'blockcat.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'TEMPLATE', $module_info['template'] );
 	$xtpl->assign( 'MODULE_NAME', $module_name );
 	$xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
-	
+
 
 	$num_view = $pro_config['per_row'];
-	
-	
+
+
 	$xtpl->assign( 'CSS_PRODUCT_CODE', !empty( $pro_config['show_product_code'] ) ? ' show-product-code' : '' );
 
 	if( !empty( $data_content ) )
@@ -273,25 +273,25 @@ function view_home_blockcat( $data_content, $compare_id, $html_pages = '', $data
 			$xtpl->assign( 'ID', $data_row['id'] );
 			$xtpl->assign( 'TITLE', $data_row[NV_LANG_DATA . '_title'] );
 			$xtpl->assign( 'IMG_SRC', $data_row['src'] );
-			
+
 			$xtpl->assign( 'LINK', $data_row['link'] );
 			$xtpl->assign( 'HOMETEXT', $data_row[NV_LANG_DATA . '_hometext'] );
-			
+
 			$xtpl->assign( 'HEIGHT', $pro_config['homeheight'] );
-			$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );			
+			$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
 			$xtpl->assign( 'PRODUCT_CODE', $data_row['product_code'] );
 			$xtpl->assign( 'TIME', $lang_module['detail_dateup'] . ' ' . nv_date( 'd-m-Y h:i:s A', $data_row['publtime'] ) );
-			
+
 			foreach( $global_array_shops_cat as $cat_shop)
 			{
 				$newday = $cat_shop['newday'];
 				$newday = $data_row['publtime'] + (86400 * $newday);
-			
+
 				if( $newday >= NV_CURRENTTIME )
 				{
 					$xtpl->parse( 'main.loop.new' );
 				}
-			}		
+			}
 
 			$price = nv_get_price( $data_row['id'], $pro_config['money_unit'] );
 			if( $pro_config['active_price'] == '1' )
@@ -417,7 +417,7 @@ function view_home_blockcat( $data_content, $compare_id, $html_pages = '', $data
 		$xtpl->parse( 'main.modal_loaded' );
 		define( 'MODAL_LOADED', true );
 	}
-	
+
 	if( !empty( $html_pages ) )
 	{
 		$xtpl->assign( 'generate_page', $html_pages );
