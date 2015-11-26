@@ -25,7 +25,7 @@ if( $num_table > 0 )
 	{
 		$array_lang_module_setup[] = str_replace( $db_config['prefix'] . "_" . $module_data . "_money_", "", $item['name'] );
 	}
-	
+
 	if( $lang != $global_config['site_lang'] and in_array( $global_config['site_lang'], $array_lang_module_setup ) )
 	{
 		$set_lang_data = $global_config['site_lang'];
@@ -87,6 +87,9 @@ if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_files
 	 DROP ' . $lang . '_title,
 	 DROP ' . $lang . '_description';
+
+	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_tabs
+	 DROP ' . $lang . '_title';
 }
 elseif( $op != 'setup' )
 {
@@ -804,15 +807,6 @@ if( ! empty( $set_lang_data ) )
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET " . $lang . "_description = " . $set_lang_data . "_description";
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group SET " . $lang . "_keywords = " . $set_lang_data . "_keywords";
 	}
-
-	/*
-	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_block_cat" )->fetchColumn();
-	if( $numrow )
-	{
-		$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_money_" . $set_lang_data;
-		$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $set_lang_data;
-	}
-	*/
 
 	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_files" )->fetchColumn();
 	if( $numrow )
