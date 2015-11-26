@@ -94,7 +94,7 @@ if( NV_CLIENT_IP == 'none' ) die( 'Error: Your IP address is not correct' );
 
 // Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
-$client_info['country'] = nv_getCountry_from_cookie( NV_CLIENT_IP );
+$client_info['country'] = isset( $_SERVER['GEOIP_COUNTRY_CODE'] ) ? $_SERVER['GEOIP_COUNTRY_CODE'] : nv_getCountry_from_cookie( NV_CLIENT_IP );
 $client_info['ip'] = NV_CLIENT_IP;
 
 // Mui gio

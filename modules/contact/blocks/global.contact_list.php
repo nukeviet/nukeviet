@@ -29,7 +29,7 @@ if ( ! nv_function_exists( 'nv_contact_list_info' ) )
             $block_theme = 'default';
         }
 
-        $sql = 'SELECT id, full_name, alias, phone, email, others FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 ORDER BY weight';
+        $sql = 'SELECT id, full_name, alias, phone, email, others, image FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 ORDER BY weight';
         $_array_department = nv_db_cache( $sql, 'id', $module );
 
         if ( empty( $_array_department ) ) return '';
@@ -46,7 +46,19 @@ if ( ! nv_function_exists( 'nv_contact_list_info' ) )
 
 	        $row['emailhref'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=contact&amp;' . NV_OP_VARIABLE . '=' . $row['alias'];
 
+			$is_image = 0;
+			if( !empty( $row['image'] ) and file_exists( NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'] ) )
+			{
+				$is_image = 1;
+				$row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'];
+			}
+
 	        $xtpl->assign( 'DEPARTMENT', $row );
+
+			if( $is_image )
+			{
+				$xtpl->parse( 'main.loop.image' );
+			}
 
 	        if ( ! empty( $row['phone'] ) )
 	        {
