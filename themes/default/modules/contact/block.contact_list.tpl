@@ -1,6 +1,13 @@
 <!-- BEGIN: main -->
 
 <!-- BEGIN: loop -->
+
+<!-- BEGIN: image -->
+<div class="text-center m-bottom">
+	<img src="{DEPARTMENT.image}" class="img-thumbnail" alt="{DEPARTMENT.full_name}" />
+</div>
+<!-- END: image -->
+
 <p class="text-center m-bottom"><strong>{DEPARTMENT.full_name}</strong></p>
 <ul class="contactList">
 <!-- BEGIN: phone --><li><em class="fa fa-phone"></em>&nbsp;<!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><!-- BEGIN: href --><a href="tel:{PHONE.href}"><!-- END: href -->{PHONE.number}<!-- BEGIN: href2 --></a><!-- END: href2 --><!-- END: item --></li><!-- END: phone -->
