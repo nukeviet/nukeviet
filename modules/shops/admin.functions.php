@@ -1411,7 +1411,8 @@ function nv_create_form_file( $array_template_id )
 
 		$content_2 .= "<!-- END: main -->";
 
-		file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
+		$file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/cat_form_' . preg_replace( '/[\-]/', '_', $array_template[$templateids_i]['alias'] ) . '.tpl';
+		file_put_contents( $file, $content_2, LOCK_EX );
 	}
 }
 
