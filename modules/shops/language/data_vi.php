@@ -17,7 +17,7 @@ if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
  */
 
 global $op;
- 
+
 $result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $module_data . "\_money\_%'" );
 $num_table = intval( $result->rowCount() );
 
