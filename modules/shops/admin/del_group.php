@@ -125,8 +125,7 @@ if( $groupid > 0 )
 							}
 						}
 
-						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid );
-						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_cateid WHERE groupid=" . $groupid );
+						nv_del_group( $groupid );
 
 						nv_fix_group_order();
 						nv_fix_group_count( $groupidnews );
