@@ -1666,6 +1666,8 @@ function detail_product( $data_content, $data_unit, $data_others, $array_other_v
 
 			if( $data_content['rating_total'] > 0 and $data_content['rating_point'] > 0 )
 			{
+				$xtpl->assign( 'RATE_TOTAL', $data_content['rating_total'] );
+				$xtpl->assign( 'RATE_VALUE', $data_content['rating_point'] );
 				$xtpl->parse( 'main.allowed_rating_snippets' );
 			}
 
