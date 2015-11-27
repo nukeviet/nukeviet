@@ -70,7 +70,7 @@ $shipping_data = array( 'list_location' => array(), 'list_carrier' => array(), '
 // Ma giam gia
 $array_counpons = array( 'code' => '', 'discount' => 0, 'check' => 0 );
 $counpons = array( 'id' => 0, 'total_amount' => 0, 'date_start' => 0, 'uses_per_coupon_count' => 0, 'uses_per_coupon' => 0, 'type' => 0, 'discount' => 0 );
-if( isset( $_SESSION[$module_data . '_coupons']['discount'] ) and $_SESSION[$module_data . '_coupons']['discount'] > 0 )
+if( isset( $_SESSION[$module_data . '_coupons']['check'] ) and $_SESSION[$module_data . '_coupons']['check'] == 1 and isset( $_SESSION[$module_data . '_coupons']['discount'] ) and $_SESSION[$module_data . '_coupons']['discount'] > 0 )
 {
 	$array_counpons = $_SESSION[$module_data . '_coupons'];
 }

@@ -163,7 +163,7 @@
 	        			<th>{MAIN_GROUP.title}</th>
 	        			<!-- END: main_group -->
         				<!-- BEGIN: price1 -->
-        				<th class="price text-right">
+        				<th class="price text-right form-tooltip">
         					{LANG.cart_price}
         					<span class="info_icon" data-toggle="tooltip" title="" data-original-title="{LANG.cart_price_note}">&nbsp;</span>
         				</th>
@@ -216,6 +216,7 @@
 		<p class="pull-right">{LANG.coupon}: <strong>{price_coupons}</strong> {unit_config}</p>
 		<div class="clear"></div>
 		<!-- END: total_coupons -->
+
 		<p class="pull-right">{LANG.cart_total}: <strong id="total">{price_total}</strong> {unit_config}</p>
 		<!-- END: price3 -->
 
@@ -240,7 +241,6 @@
 	var order_shipping = '{DATA.order_shipping}';
 
 	$(document).ready(function() {
-		$('[data-toggle="tooltip"]').tooltip();
 
 		$("#location").select2({
 			language: "en"

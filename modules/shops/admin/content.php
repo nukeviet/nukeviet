@@ -18,8 +18,14 @@ if( defined( 'NV_EDITOR' ) )
 
 if( empty( $global_array_shops_cat ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
-	die( );
+	$url_back = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat';
+	nv_theme_alert( $lang_module['error_cat_empty_title'], $lang_module['error_cat_empty_content'], 'warning', $url_back, $lang_module['continue'] );
+}
+
+if( empty( $money_config  ) )
+{
+	$url_back = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=money';
+	nv_theme_alert( $lang_module['error_munit_empty_title'], $lang_module['error_munit_empty_content'], 'warning', $url_back, $lang_module['continue'] );
 }
 
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' );
@@ -1208,8 +1214,8 @@ $sql = 'SELECT id, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_
 $result_unit = $db->query( $sql );
 if( $result_unit->rowCount( ) == 0 )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=prounit' );
-	die( );
+	$url_back = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=prounit';
+	nv_theme_alert( $lang_module['error_punit_empty_title'], $lang_module['error_punit_empty_content'], 'warning', $url_back, $lang_module['continue'] );
 }
 
 while( list( $unitid_i, $title_i ) = $result_unit->fetch( 3 ) )

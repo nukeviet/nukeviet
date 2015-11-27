@@ -226,7 +226,7 @@ if( nv_user_in_groups( $global_array_shops_cat[$catid]['groups_view'] ) )
 	$key_words = !empty( $key_words ) ? implode( ',', $key_words ) : '';
 
 	//metatag image facebook
-	$meta_property['og:image'] = NV_MY_DOMAIN . $data_content['homeimgthumb'];
+	$meta_property['og:image'] = NV_MY_DOMAIN . $data_content['homeimgfile'];
 
 	// Fetch Limit
 	$db->sqlreset()->select( ' id, listcatid, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, homeimgfile, homeimgthumb, addtime, publtime, product_code, product_number, product_price, price_config, money_unit, discount_id, showprice, ' . NV_LANG_DATA . '_hometext,' . NV_LANG_DATA . '_gift_content, gift_from, gift_to' )->from( $db_config['prefix'] . '_' . $module_data . '_rows' )->where( 'id!=' . $id . ' AND listcatid = ' . $data_content['listcatid'] . ' AND status=1' )->order( 'ID DESC' )->limit( $pro_config['per_row'] * 2 );
