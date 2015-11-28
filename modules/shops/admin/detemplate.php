@@ -36,7 +36,7 @@ if( $id > 0 )
 					$listtemplate = implode( '|', $listtemplate );
 					$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET listtemplate = " . $listtemplate . " WHERE fid = " . $fid );
 
-					$file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/cat_form_' . preg_replace( '/[\-]/', '_', $template['alias'] ) . '.tpl';
+					$file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/cat_form_' . preg_replace( '/[\-]/', '_', $template['alias'] ) . '.tpl';
 					@nv_deletefile( $file );
 
 					$contents = "OK_" . $id;
@@ -57,7 +57,7 @@ if( $id > 0 )
 	{
 		$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id );
 
-		$file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/cat_form_' . preg_replace( '/[\-]/', '_', $template['alias'] ) . '.tpl';
+		$file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/cat_form_' . preg_replace( '/[\-]/', '_', $template['alias'] ) . '.tpl';
 		@nv_deletefile( $file );
 
 		$contents = "OK_" . $id;
@@ -92,7 +92,7 @@ else
 							$listtemplate = implode( '|', $listtemplate );
 							$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_field SET listtemplate = " . $listtemplate . " WHERE fid = " . $fid );
 
-							$file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/cat_form_' . preg_replace( '/[\-]/', '_', $template['alias'] ) . '.tpl';
+							$file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/cat_form_' . preg_replace( '/[\-]/', '_', $template['alias'] ) . '.tpl';
 							@nv_deletefile( $file );
 						}
 						else

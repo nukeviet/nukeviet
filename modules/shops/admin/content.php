@@ -1320,8 +1320,12 @@ if( !$pro_config['active_warehouse'] )
 // Custom fiels
 if( $pro_config['template_active'] and $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
 {
-	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_shops_cat[$rowcontent['listcatid']]['form'], $custom );
-	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
+	$form = 'cat_form_' . $global_array_shops_cat[$rowcontent['listcatid']]['form'] . '.tpl';
+	if( nv_is_file( NV_BASE_SITEURL . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/' . $form, NV_ASSETS_DIR . '/' . $module_name ) )
+	{
+		$datacustom_form = nv_show_custom_form( $rowcontent['id'], $form, $custom );
+		$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
+	}
 }
 
 $xtpl->parse( 'main' );
