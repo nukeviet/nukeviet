@@ -95,7 +95,7 @@ function nv_del_moduleCache( $module_name, $lang = NV_LANG_DATA )
  */
 function nv_get_cache( $module_name, $filename )
 {
-	if( empty( $filename ) or ! preg_match( '/([a-z0-9\_]+)\.cache/', $filename ) ) return false;
+	if( ! preg_match( '/([a-z0-9\_]+)\.cache/', $filename ) ) return false;
 
 	if( ! file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $filename ) ) return false;
 
@@ -112,10 +112,13 @@ function nv_get_cache( $module_name, $filename )
  */
 function nv_set_cache( $module_name, $filename, $content )
 {
-	if( empty( $filename ) or ! preg_match( '/([a-z0-9\_]+)\.cache/', $filename ) ) return false;
+	if( ! preg_match( '/([a-z0-9\_]+)\.cache/', $filename ) ) return false;
 
-	nv_mkdir( NV_ROOTDIR . '/' . NV_CACHEDIR, $module_name );
-
+	if( ! is_dir( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name ) )
+	{
+		mkdir( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name, 0777, true );
+	}
+	
 	return nv_gz_put_contents( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $filename, $content );
 }
 
