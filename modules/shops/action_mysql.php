@@ -90,6 +90,9 @@ if( in_array( $lang, $array_lang_module_setup ) and $num_table > 1 )
 
 	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_tabs
 	 DROP ' . $lang . '_title';
+
+	$sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_template
+	 DROP ' . $lang . '_title';
 }
 elseif( $op != 'setup' )
 {
@@ -144,7 +147,7 @@ $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $mod
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_weight_' . $lang;
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_tags_' . $lang;
 $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_tags_id_' . $lang;
-
+$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $db_config['prefix'] . '_' . $module_data . '_field_' . $lang;
 
 $sql_create_module = $sql_drop_module;
 
@@ -186,18 +189,13 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_template (
   id mediumint(8) NOT NULL AUTO_INCREMENT,
   status tinyint(1) NOT NULL DEFAULT '1',
-  title varchar(250) NOT NULL default '',
-  alias varchar(250) NOT NULL default '',
-  PRIMARY KEY (id) ,
-  UNIQUE KEY alias (alias)
-) ENGINE=MyISAM ";
-
-$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_info (
-  id mediumint(8) NOT NULL AUTO_INCREMENT,
-  shopid mediumint(8) unsigned NOT NULL default '0',
-  status tinyint(1) NOT NULL DEFAULT '1',
+  alias VARCHAR( 250 ) NOT NULL DEFAULT '',
+  UNIQUE alias (alias),
   PRIMARY KEY (id)
 ) ENGINE=MyISAM ";
+
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_template
+ ADD " . $lang . "_title VARCHAR( 250 ) NOT NULL DEFAULT ''";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_field (
   fid mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -219,6 +217,15 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   PRIMARY KEY (fid),
   UNIQUE KEY field (field)
 ) ENGINE=MyISAM ";
+
+$sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_field_value_" . $lang . " (
+  id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  rows_id int(11) unsigned NOT NULL,
+  field_id mediumint(8) NOT NULL,
+  field_value mediumtext NOT NULL DEFAULT '',
+  PRIMARY KEY (id),
+  UNIQUE KEY rows_id (rows_id,field_id)
+) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_group (
  groupid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -821,11 +828,18 @@ if( ! empty( $set_lang_data ) )
 		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_tabs SET " . $lang . "_title = " . $set_lang_data . "_title";
 	}
 
+	$numrow = $db->query( "SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_template" )->fetchColumn();
+	if( $numrow )
+	{
+		$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_template SET " . $lang . "_title = " . $set_lang_data . "_title";
+	}
+
 	$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " SET exchange = '1'";
 	$sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " SET exchange = '1'";
 }
 
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'alias_lower', '1')";
+
 // Comments config
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'allowed_comm', '-1')";

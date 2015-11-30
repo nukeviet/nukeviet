@@ -29,7 +29,6 @@ if( $id > 0 )
 				if( count( $listtemplate ) > 1 )
 				{
 					$db->exec( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_template WHERE id=" . $id );
-					$db->query( "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $module_data . "_info_" . $id );
 
 					unset( $listtemplate[array_search( $id, $listtemplate )] );
 

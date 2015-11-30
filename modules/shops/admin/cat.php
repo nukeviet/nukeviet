@@ -34,7 +34,7 @@ list( $data['catid'], $data['parentid'], $data['title'], $data['title_custom'], 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
 $cat_form_exit = array();
-$_form_exit = scandir( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file );
+$_form_exit = scandir( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/files_tpl' );
 foreach ( $_form_exit as $_form ) {
 	if( preg_match( '/^cat\_form\_([a-zA-Z0-9\-\_]+)\.tpl$/', $_form, $m ) )
 	{

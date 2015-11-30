@@ -197,7 +197,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )// luu lai
 
 	foreach( $arr_tab_tpl as $key => $value )
 	{
-		$name_file = 'tab-' . strtolower( change_alias( $arr_tab[$key] ) ) . '-' . NV_LANG_DATA .  '.tpl';
+		$name_file = 'tab-' . strtolower( change_alias( $arr_tab[$key] ) ) .  '.tpl';
 		$html_tpl = "<!-- BEGIN: main -->\n";
 		$html_tpl .= "\t<ul>\n";
 

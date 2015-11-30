@@ -34,10 +34,11 @@ if( $nv_Request->isset_request( 'change_active', 'post' ) )
 {
 	$id = $nv_Request->get_int( 'id', 'post', 0 );
 
-	$sql = 'SELECT id FROM ' . $table_name . ' WHERE id=' . $id;
-	$id = $db->query( $sql )->fetchColumn( );
+	$id = $db->query( 'SELECT id FROM ' . $table_name . ' WHERE id=' . $id )->fetchColumn( );
 	if( empty( $id ) )
+	{
 		die( 'NO_' . $id );
+	}
 
 	$new_status = $nv_Request->get_bool( 'new_status', 'post' );
 	$new_status = ( int )$new_status;
@@ -60,7 +61,7 @@ if( !empty( $savecat ) )
 	$data['title'] = nv_substr( $nv_Request->get_title( 'title', 'post', '' ), 0, 50 );
 	$data['alias'] = strtolower( change_alias( $data['title'] ) );
 
-	$count = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias=' . $db->quote( $data['alias'] ) . ' AND id!=' . $data['id'] )->fetchColumn();
+	$count = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias=' . $db->quote( $data['alias'] ) . ' AND id!=' . $data['id'] )->fetchColumn();
 	if( $count > 0 )
 	{
 		$_tem_id = $db->query( 'SELECT MAX(id) FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias=' . $db->quote( $data['alias'] ) )->fetchColumn();
@@ -79,17 +80,10 @@ if( !empty( $savecat ) )
 			$listfield = "";
 			$listvalue = "";
 
-			$sql = "INSERT INTO " . $table_name . " VALUES (NULL ,1, '" . $data['title'] . "','" . $data['alias'] . "')";
+			$sql = "INSERT INTO " . $table_name . " (status, " . NV_LANG_DATA . "_title, alias) VALUES (1, " . $db->quote( $data['title'] ) . ", " . $db->quote( $data['alias'] ) . ")";
 			$templaid = $db->insert_id( $sql );
 			if( $templaid != 0 )
 			{
-				$sql = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_info_" . $templaid . "(
-			  shopid mediumint(8) unsigned NOT NULL DEFAULT '0',
-			  status tinyint(1) NOT NULL DEFAULT '1',
-			  PRIMARY KEY (shopid)
-			) ENGINE=MyISAM ";
-
-				$db->query( $sql );
 				nv_del_moduleCache( $module_name );
 				Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 				die( );
@@ -101,9 +95,8 @@ if( !empty( $savecat ) )
 		}
 		else
 		{
-			$stmt = $db->prepare( "UPDATE " . $table_name . " SET " . "title= :title, alias = :alias WHERE id =" . $data['id'] );
+			$stmt = $db->prepare( "UPDATE " . $table_name . " SET " . NV_LANG_DATA . "_title= :title WHERE id =" . $data['id'] );
 			$stmt->bindParam( ':title', $data['title'], PDO::PARAM_STR );
-			$stmt->bindParam( ':alias', $data['alias'], PDO::PARAM_STR );
 			if( $stmt->execute( ) )
 			{
 				$error = $lang_module['saveok'];
@@ -126,7 +119,7 @@ else
 		$data_old = $db->query( "SELECT * FROM " . $table_name . " WHERE id=" . $data['id'] )->fetch( );
 		$data = array(
 			"id" => $data_old['id'],
-			"title" => $data_old['title'],
+			"title" => $data_old[NV_LANG_DATA . '_title'],
 			"alias" => $data_old['alias']
 		);
 	}
@@ -139,7 +132,7 @@ $xtpl->assign( 'caption', empty( $data['id'] ) ? $lang_module['template_add'] : 
 $xtpl->assign( 'TEM_ADD', NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=template#add" );
 
 $count = 0;
-$result = $db->query( "SELECT id, title,alias, status FROM " . $table_name . " ORDER BY id DESC" );
+$result = $db->query( "SELECT id, " . NV_LANG_DATA . "_title, alias, status FROM " . $table_name . " ORDER BY id DESC" );
 
 while( list( $id, $title, $alias, $status ) = $result->fetch( 3 ) )
 {

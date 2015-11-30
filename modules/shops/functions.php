@@ -359,6 +359,7 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
 	$xtpl->assign( 'CUSTOM_DATA', $array_custom );
 	$count = 0;
+
 	foreach ($array_custom as $key => $value)
 	{
 		if( isset($arr[$key]) and !empty($value) )
@@ -373,5 +374,6 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 		$xtpl->parse( 'main' );
 		$html = $xtpl->text( 'main' );
 	}
+
 	return $html;
 }
