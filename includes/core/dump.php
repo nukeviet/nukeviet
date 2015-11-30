@@ -115,10 +115,6 @@ function nv_dump_save( $params )
 		return false;
 	}
 	
-	$result_database = $db->query( 'SHOW VARIABLES LIKE "character_set_database"' )->fetch();
-	$dbcharacter = $result_database['value'];
-	$db_config['collation'] = ( $dbcharacter == 'utf8' ) ? 'utf8_general_ci' : $db_config['collation'];
-	
 	$params['tables'] = array_map( 'trim', $params['tables'] );
 	$tables = array();
 	$dbsize = 0;
@@ -164,7 +160,7 @@ function nv_dump_save( $params )
 	$template = explode( '@@@', file_get_contents( $path_dump ) );
 
 	$patterns = array( "/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/", "/\{\|DB_CHARACTER\|\}/", "/\{\|DB_COLLATION\|\}/" );
-	$replacements = array( $db->server, gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT", $db->getAttribute( PDO::ATTR_SERVER_VERSION ), PHP_VERSION, $db->dbname, $dbcharacter, $db_config['collation'] );
+	$replacements = array( $db->server, gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT", $db->getAttribute( PDO::ATTR_SERVER_VERSION ), PHP_VERSION, $db->dbname, $db_config['charset'], $db_config['collation'] );
 
 	if( ! $dumpsave->write( preg_replace( $patterns, $replacements, $template[0] ) ) )
 	{
