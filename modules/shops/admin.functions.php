@@ -1020,7 +1020,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 {
 	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_shops_cat, $global_config, $module_file;
 
-	$xtpl = new XTemplate( $form, NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl' );
+	$xtpl = new XTemplate( 'cat_form_' . $form . '.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
