@@ -143,8 +143,8 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 			foreach( $del_modules as $mod )
 			{
 				$admins = ( ! empty( $site_mods[$mod]['admins'] ) ) ? explode( ',', $site_mods[$mod]['admins'] ) : array();
-				$admins = array_map( 'intval', $admins );
 				$admins = array_diff( $admins, array( $admin_id, 0 ) );
+				$admins = array_map( 'intval', $admins );
 				$admins = ( ! empty( $admins ) ) ? implode( ',', $admins ) : '';
 				
 				$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod' );
