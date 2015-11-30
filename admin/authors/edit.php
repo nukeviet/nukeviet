@@ -127,7 +127,11 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 		{
 			foreach( $add_modules as $mod )
 			{
-				$admins = $site_mods[$mod]['admins'] . ( ! empty( $site_mods[$mod]['admins'] ) ? ',' : '' ) . $admin_id;
+				$admins = ( ! empty( $site_mods[$mod]['admins'] ) ) ? explode( ',', $site_mods[$mod]['admins'] ) : array();
+				array_push($admins, $admin_id);
+				$admins = array_map( 'intval', $admins );
+				$admins = ( ! empty( $admins ) ) ? implode( ',', $admins ) : '';
+
 				$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod' );
 				$sth->bindParam( ':admins', $admins, PDO::PARAM_STR );
 				$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
@@ -136,14 +140,16 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 		}
 		if( ! empty( $del_modules ) )
 		{
-			foreach( $del_modules as $del )
+			foreach( $del_modules as $mod )
 			{
-				$admins = ( ! empty( $site_mods[$del]['admins'] ) ) ? explode( ',', $site_mods[$del]['admins'] ) : array();
-				$admins = array_diff( $admins, array( $admin_id ) );
+				$admins = ( ! empty( $site_mods[$mod]['admins'] ) ) ? explode( ',', $site_mods[$mod]['admins'] ) : array();
+				$admins = array_map( 'intval', $admins );
+				$admins = array_diff( $admins, array( $admin_id, 0 ) );
 				$admins = ( ! empty( $admins ) ) ? implode( ',', $admins ) : '';
+				
 				$sth = $db->prepare( 'UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod' );
 				$sth->bindParam( ':admins', $admins, PDO::PARAM_STR );
-				$sth->bindParam( ':mod', $del, PDO::PARAM_STR );
+				$sth->bindParam( ':mod', $mod, PDO::PARAM_STR );
 				$sth->execute();
 			}
 		}
