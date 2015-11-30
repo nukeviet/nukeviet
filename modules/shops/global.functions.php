@@ -174,6 +174,9 @@ function nv_del_content_module( $id )
 			$groupid = GetGroupID( $id );
 			if( $db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE pro_id = ' . $id ) )
 			{
+				// Xoa chi tiet nhap kho
+				$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $id );
+
 				nv_fix_group_count( $groupid );
 			}
 
@@ -188,6 +191,38 @@ function nv_del_content_module( $id )
 		}
 	}
 	return $content_del;
+}
+
+/**
+ * nv_del_group()
+ *
+ * @param mixed $groupid
+ * @return
+ */
+function nv_del_group( $groupid )
+{
+	global $db, $module_data, $db_config;
+
+	$allgroupid = GetGroupID( $groupid );
+	if( $db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid ) )
+	{
+		// Loai bo san pham ra khoi nhom
+		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE group_id = ' . $groupid );
+
+		// Xoa cateid
+		$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid WHERE groupid = ' . $groupid );
+
+		// Xoa chi tiet nhap kho, neu nhu chi tiet nhap kho co nhom nay, thi xoa luon chi tiet nhap kho
+		$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity' );
+		while( $row = $result->fetch() )
+		{
+			if( in_array( $groupid, explode( ',', $listgroup ) ) )
+			{
+				$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_quantity WHERE pro_id = ' . $row['pro_id'] . ' AND listgroup=' . $db->quote( $row['listgroup'] ) );
+			}
+		}
+		nv_fix_group_count( $allgroupid );
+	}
 }
 
 /**

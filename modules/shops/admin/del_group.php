@@ -85,13 +85,16 @@ if( $groupid > 0 )
 				elseif( ! empty( $delgroupandrows ) )
 				{
 					$result = $db->query( "SELECT pro_id FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE group_id='" . $groupid . "'" );
-
 					while( $row = $result->fetch() )
 					{
+						// Xoa san pham
 						nv_del_content_module( $row['pro_id'] );
 					}
 
-					$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid );
+					// Xoa nhom
+					nv_del_group( $groupid );
+
+					// Xoa cua loai san pham
 					$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_cateid WHERE groupid=" . $groupid );
 
 					nv_fix_group_order();
@@ -107,21 +110,22 @@ if( $groupid > 0 )
 					if( $groupidnews > 0 )
 					{
 						$result = $db->query( "SELECT pro_id FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE group_id='" . $groupid . "'" );
-
 						while( $row = $result->fetch() )
 						{
-							$row['group_id'] = $row['group_id'] ? explode( ",", $row['group_id'] ) : array();
-							$row['group_id'] = array_diff( $row['group_id'], array( $groupid ) );
-							$row['group_id'][] = $groupidnews;
-							$row['group_id'] = array_unique( $row['group_id'] );
-
-							$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group_items SET group_id= :group_id WHERE pro_id =" . $row['pro_id'] );
-							$stmt->bindParam( ':group_id', $groupidnews, PDO::PARAM_STR );
-							$stmt->execute();
+							$count = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_group_items WHERE group_id=' . $groupidnews . ' AND pro_id=' . $row['pro_id'] )->fetchColumn();
+							if( $count == 0 )
+							{
+								$stmt = $db->prepare( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_group_items SET group_id=:group_id WHERE pro_id=" . $row['pro_id'] . ' AND group_id=' . $groupid );
+								$stmt->bindParam( ':group_id', $groupidnews, PDO::PARAM_STR );
+								$stmt->execute();
+							}
+							else
+							{
+								$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE pro_id=" . $row['pro_id'] . ' AND group_id=' . $groupid );
+							}
 						}
 
-						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE groupid=" . $groupid );
-						$db->query( "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_cateid WHERE groupid=" . $groupid );
+						nv_del_group( $groupid );
 
 						nv_fix_group_order();
 						nv_fix_group_count( $groupidnews );
@@ -138,6 +142,7 @@ if( $groupid > 0 )
 			}
 		}
 	}
+
 	if( $contents == "NO_" . $groupid )
 	{
 		$sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_items WHERE group_id=" . $groupid;

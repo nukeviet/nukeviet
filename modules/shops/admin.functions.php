@@ -1020,7 +1020,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 {
 	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_shops_cat, $global_config, $module_file;
 
-	$xtpl = new XTemplate( 'cat_form_' . $form . '.tpl', NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'cat_form_' . $form . '.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -1411,7 +1411,13 @@ function nv_create_form_file( $array_template_id )
 
 		$content_2 .= "<!-- END: main -->";
 
-		file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
+		if( !file_exists( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl' ) )
+		{
+			nv_mkdir( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name, 'files_tpl' );
+		}
+
+		$file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/cat_form_' . preg_replace( '/[\-]/', '_', $array_template[$templateids_i]['alias'] ) . '.tpl';
+		file_put_contents( $file, $content_2, LOCK_EX );
 	}
 }
 

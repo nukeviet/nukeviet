@@ -281,6 +281,14 @@ function nv_check_movecat(oForm, msgnocheck) {
 	}
 }
 
+function nv_check_movegroup(oForm, msgnocheck) {
+	var fa = oForm['groupidnews'];
+	if (fa.value == 0) {
+		alert(msgnocheck);
+		return false;
+	}
+}
+
 function nv_del_content_result(res) {
 	var r_split = res.split('_');
 	if (r_split[0] == 'OK') {

@@ -925,7 +925,7 @@ elseif( $rowcontent['id'] > 0 )
 	if( $idtemplate )
 	{
 		$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
-		$custom = $db->query( "SELECT * FROM " . $table_insert . " where shopid=" . $rowcontent['id'] )->fetch( );
+		$custom = $db->query( "SELECT * FROM " . $table_insert . " WHERE shopid=" . $rowcontent['id'] )->fetch( );
 	}
 
 	$id_block_content = array( );
@@ -1320,8 +1320,12 @@ if( !$pro_config['active_warehouse'] )
 // Custom fiels
 if( $pro_config['template_active'] and $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
 {
-	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_shops_cat[$rowcontent['listcatid']]['form'], $custom );
-	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
+	$form = $global_array_shops_cat[$rowcontent['listcatid']]['form'];
+	if( nv_is_file( NV_BASE_SITEURL . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/cat_form_' . $form . '.tpl', NV_ASSETS_DIR . '/' . $module_name ) )
+	{
+		$datacustom_form = nv_show_custom_form( $rowcontent['id'], $form, $custom );
+		$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
+	}
 }
 
 $xtpl->parse( 'main' );
