@@ -10,7 +10,8 @@ Khi báo lỗi bạn vui lòng cung cấp các thông tin sau để chúng tôi 
 
 * Nếu xác định lỗi từ code, vui lòng cung cấp thêm các thông tin về WebServer và trình duyệt
 ```
-    - Phiên bản NukeViet: 4.0.16
+    - Phiên bản NukeViet: 4.0.23
+    - Phiên bản Shops: 4.0.18
     - Môi trường thử Nghiệm: Localhost/ hosting
     - Hệ điều hành: (Ví dụ: Ubuntu 13.10 32-bit)
     - Trình duyệt web: (Ví dụ: Mozilla Firefox 27.0)
