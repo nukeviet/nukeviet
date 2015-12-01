@@ -48,7 +48,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
 ('viewtype', '0'),
 ('facebookapi', ''),
-('per_page', '5'),
+('per_page', '20'),
 ('news_first', '0'),
 ('related_articles', '5')";
 

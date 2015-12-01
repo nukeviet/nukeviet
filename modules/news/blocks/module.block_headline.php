@@ -83,7 +83,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 					->select( 't1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt, t1.hometext' )
 					->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
 					->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
-					->where( 't2.bid=' . $array_bid['bid'] )
+					->where( 't1.status= 1 AND t2.bid=' . $array_bid['bid'] )
 					->order( 't2.weight ASC' )
 					->limit( $array_bid['number'] );
 
