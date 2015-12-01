@@ -51,7 +51,7 @@ if( $id > 0 and $catid > 0 )
 		$content = array_merge( $content, $body_contents );
 		unset( $body_contents );
 
-		if( $content['allowed_save'] == 1 and ( defined( 'NV_IS_MODADMIN' ) or ( $news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ( $news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME ) ) ) )
+		if( $content['allowed_save'] == 1 and ( defined( 'NV_IS_MODADMIN' ) or ( $content['status'] == 1 and $content['publtime'] < NV_CURRENTTIME and ( $content['exptime'] == 0 or $content['exptime'] > NV_CURRENTTIME ) ) ) )
 		{
 			$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=savefile/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true );
 			if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
