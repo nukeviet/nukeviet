@@ -954,9 +954,8 @@ else
 if( empty( $array_cat_check_content ) )
 {
 	$redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat';
+	$contents = nv_theme_alert( $lang_module['note_cat_title'], $lang_module['note_cat_content'], 'warning', $redirect, $lang_module['categories'] );
 
-	$contents = '<p class="note_cat">' . $lang_module['note_cat'] . '</p>';
-	$contents .= "<meta http-equiv=\"refresh\" content=\"3;URL=" . $redirect . "\" />";
 	include NV_ROOTDIR . '/includes/header.php';
 	echo nv_admin_theme( $contents );
 	include NV_ROOTDIR . '/includes/footer.php';
