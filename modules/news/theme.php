@@ -936,7 +936,7 @@ function no_permission()
 
 function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image )
 {
-	global $lang_module, $module_info, $module_name, $module_file, $topicalias, $module_config;
+	global $lang_module, $module_info, $module_name, $module_file, $topicalias, $module_config, $topicid;
 
 	$xtpl = new XTemplate( 'topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -965,7 +965,7 @@ function topic_theme( $topic_array, $topic_other_array, $generate_page, $page_ti
 				$xtpl->parse( 'main.topic.homethumb' );
 			}
 
-			if( defined( 'NV_IS_MODADMIN' ) )
+			if( $topicid and defined( 'NV_IS_MODADMIN' ) )
 			{
 				$xtpl->assign( 'ADMINLINK', nv_link_edit_page( $topic_array_i['id'] ) . ' ' . nv_link_delete_page( $topic_array_i['id'] ) );
 				$xtpl->parse( 'main.topic.adminlink' );

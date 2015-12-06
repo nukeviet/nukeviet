@@ -21,6 +21,7 @@ $array_mod_title[] = array(
 $alias = isset( $array_op[1] ) ? trim( $array_op[1] ) : '';
 $topic_array = array();
 
+$topicid = 0;
 if( !empty( $alias ) )
 {
 	$page = ( isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-' ) ? intval( substr( $array_op[2], 5 ) ) : 1;
