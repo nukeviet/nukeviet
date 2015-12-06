@@ -733,7 +733,6 @@ elseif( $step == 5 )
 						$nv_Request->set_Session( 'maxstep', 4 );
 						$db_config['error'] = $e->getMessage();
 						trigger_error( $e->getMessage() );
-						break;
 					}
 
 					// Cai dat du lieu mau module

@@ -102,7 +102,7 @@ require NV_ROOTDIR . '/includes/timezone.php';
 define( 'NV_CURRENTTIME', isset( $_SERVER['REQUEST_TIME'] ) ? $_SERVER['REQUEST_TIME'] : time() );
 
 // Ket noi voi class Error_handler
-$ErrorHandler = new Error( $global_config );
+$ErrorHandler = new nv_Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
 if( empty( $global_config['allow_sitelangs'] ) )
