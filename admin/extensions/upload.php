@@ -117,11 +117,9 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 
 			foreach( $extract as $extract_i )
 			{
-				$filename_i = str_replace( NV_ROOTDIR, '', str_replace( '\\', '/', $extract_i['filename'] ) );
-
 				if( $extract_i['status'] != 'ok' and $extract_i['status'] != 'already_a_directory' )
 				{
-					$no_extract[] = $filename_i;
+					$no_extract[] = $extract_i['stored_filename'];
 				}
 
 				if( $extract_i['stored_filename'] == 'config.ini' and empty( $extract_i['folder'] ) and $extract_i['status'] == 'ok' )
@@ -133,7 +131,7 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 				if( preg_match( "/^modules\/[a-zA-Z0-9\-]+\/version\.php$/", $extract_i['stored_filename'] ) )
 				{
 					$module_version = array();
-					include NV_ROOTDIR . '/' . $filename_i;
+					include $extract_i['filename'];
 
 					if( isset( $module_version['is_sysmod'] ) )
 					{
@@ -146,6 +144,14 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 					}
 
 					unset( $module_version );
+				}
+				
+				// Delete .htaccess file
+				$array_name_i = explode( '/', $extract_i['stored_filename'] );
+				
+				if( $array_name_i[sizeof( $array_name_i ) - 1] == '.htaccess' )
+				{
+					nv_deletefile( $extract_i['filename'] );
 				}
 			}
 
@@ -169,157 +175,234 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 			}
 			elseif( empty( $no_extract ) )
 			{
-				// Tao thu muc tren he thong neu chua co
-				$extract_dir = NV_ROOTDIR;
-				if( isset( $extConfig['extension']['type'] ) and $extConfig['extension']['type'] == 'theme')
-				{
-					$extract_dir .= '/themes';
-					if( ! ( $ftp_check_login == 1 and ftp_mkdir( $conn_id, 'themes') ) )
-					{
-						@mkdir( $extract_dir );
-					}
-				}
-
-				foreach( $ziplistContent as $array_file )
-				{
-					$dir_name = '';
-
-					if( ! empty( $array_file['folder'] ) and ! file_exists( $extract_dir . '/' . $array_file['filename'] ) )
-					{
-						$dir_name = $array_file['filename'];
-					}
-					elseif( ! file_exists( $extract_dir . '/' . dirname( $array_file['filename'] ) ) )
-					{
-						$dir_name = dirname( $array_file['filename'] );
-					}
-
-					if( ! empty( $dir_name ) )
-					{
-						$cp = '';
-						$e = explode( '/', $dir_name );
-						foreach( $e as $p )
-						{
-							if( ! empty( $p ) and ! is_dir( $extract_dir . '/' . $cp . $p ) )
-							{
-								if( ! ( $ftp_check_login == 1 and ftp_mkdir( $conn_id, $cp . $p ) ) )
-								{
-									@mkdir( $extract_dir . '/' . $cp . $p );
-								}
-								if( ! is_dir( $extract_dir . '/' . $cp . $p ) )
-								{
-									$error_create_folder[] = $cp . $p;
-									break;
-								}
-							}
-							$cp .= $p . '/';
-						}
-					}
-				}
-
+				$array_error_mine = array();
 				$error_create_folder = array_unique( $error_create_folder );
 				$array_cute_files = array();
 				$array_exists_files = array();
-
-				// Di chuyen cac file vao thu muc trong site
-				if( empty( $error_create_folder ) )
-				{
-					foreach( $ziplistContent as $array_file )
+				$dimiss_mime = $nv_Request->get_title( 'dismiss', 'get', '' ) == md5( 'dismiss' . $filename . $global_config['sitekey'] . session_id() ) ? true : false;
+				
+				// Kiem tra mime
+				if( ! $dimiss_mime )
+				{			
+					$all_ini = array();
+			
+					$data = file( NV_ROOTDIR . '/includes/ini/mime.ini' );
+					$section = '';
+					foreach( $data as $line )
 					{
-						if( empty( $array_file['folder'] ) and $array_file['filename'] != 'config.ini' )
+						$line = trim( $line );
+						if( empty( $line ) || preg_match( '/^;/', $line ) ) continue;
+			
+						if( preg_match( '/^\[(.*?)\]$/', $line, $match ) )
 						{
-							// Xoa file neu ton tai
-							if( file_exists( NV_ROOTDIR . '/' . $array_file['filename'] ) )
-							{
-								if( ! ( $ftp_check_login == 1 and ftp_delete( $conn_id, $array_file['filename'] ) ) )
-								{
-									nv_deletefile( NV_ROOTDIR . '/' . $array_file['filename'] );
-								}
-
-								$array_exists_files[] = $array_file['filename'];
-							}
-
-							// Di chuyen file
-							if( ! ( $ftp_check_login == 1 and ftp_rename( $conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename'] ) ) )
-							{
-								@rename( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], $extract_dir . '/' . $array_file['filename'] );
-							}
-
-							// Di chuyen that bai
-							if( file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
-							{
-								$error_move_folder[] = $array_file['filename'];
-							}
-
-							// Danh sach file quy chuan
-							$array_cute_files[] = $array_file['filename'];
+							$section = $match[1];
+							continue;
+						}
+			
+						if( ! strpos( $line, '=' ) ) continue;
+			
+						list( $key, $value ) = explode( '=', $line );
+						$key = trim( $key );
+						$value = trim( $value );
+						$value = str_replace( array( '"', "'" ), array( '', '' ), $value );
+			
+						if( preg_match( '/^(.*?)\[\]$/', $key, $match ) )
+						{
+							$all_ini[$section][$match[1]][] = $value;
+						}
+						else
+						{
+							$all_ini[$section][$key][] = $value;
 						}
 					}
-
-					// Xoa file da upload va thu muc tam
-					if( empty( $error_move_folder ) )
+			
+					$ini = array();
+					foreach( $all_ini as $section => $line )
 					{
-						nv_deletefile( $filename );
-						nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
-
-						// Luu vao bang extensions neu ung dung chua co
-						$sql = 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=:type AND title=:title';
-						$sth = $db->prepare( $sql );
-						$sth->bindParam( ':type', $extConfig['extension']['type'], PDO::PARAM_STR );
-						$sth->bindParam( ':title', $extConfig['extension']['name'], PDO::PARAM_STR );
-						$sth->execute();
-
-						if( ! $sth->fetchColumn() )
+						$ini = array_merge( $ini, $line );
+					}
+					
+					// Kiem tra mime file
+					foreach( $ziplistContent as $array_file )
+					{
+						$array_name_i = explode( '/', $array_file['stored_filename'] );
+						
+						if( ! preg_match( "/\.(tpl|php)$/i", $array_file['stored_filename'] ) and empty( $array_file['folder'] ) and $array_name_i[sizeof( $array_name_i ) - 1] != '.htaccess' )
 						{
-							$sql = 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES( ' . intval( $extConfig['extension']['id'] ) . ', :type, :title, ' . ( intval( $extConfig['extension']['sys'] ) == 1 ? 1 : 0 ) . ', ' . ( intval( $extConfig['extension']['virtual'] ) == 1 ? 1 : 0 ) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note )';
-							$table_prefix = preg_replace( '/(\W+)/i', '_', $extConfig['extension']['name'] );
-							$author = $extConfig['author']['name'] . ' (' . $extConfig['author']['email'] . ')';
-							$version = $extConfig['extension']['version'] . ' ' . NV_CURRENTTIME;
-
+							$mime_real = $mime_check =  nv_get_mime_type( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] );
+							
+							if( ! empty( $mime_check ) and ! in_array( $mime_check, $ini[nv_getextension( $array_file['filename'] )] ) )
+							{
+								$mime_check = '';
+							}
+							
+							if( empty( $mime_check ) )
+							{
+								$array_error_mine[] = array(
+									'mime' => $mime_real,
+									'filename' => $array_file['stored_filename']
+								);
+							}
+							
+						}
+					}
+				}
+				
+				if( empty( $array_error_mine ) )
+				{
+					// Tao thu muc tren he thong neu chua co
+					$extract_dir = NV_ROOTDIR;
+					if( isset( $extConfig['extension']['type'] ) and $extConfig['extension']['type'] == 'theme')
+					{
+						$extract_dir .= '/themes';
+						if( ! ( $ftp_check_login == 1 and ftp_mkdir( $conn_id, 'themes') ) )
+						{
+							@mkdir( $extract_dir );
+						}
+					}
+	
+					foreach( $ziplistContent as $array_file )
+					{
+						$dir_name = '';
+	
+						if( ! empty( $array_file['folder'] ) and ! file_exists( $extract_dir . '/' . $array_file['filename'] ) )
+						{
+							$dir_name = $array_file['filename'];
+						}
+						elseif( ! file_exists( $extract_dir . '/' . dirname( $array_file['filename'] ) ) )
+						{
+							$dir_name = dirname( $array_file['filename'] );
+						}
+	
+						if( ! empty( $dir_name ) )
+						{
+							$cp = '';
+							$e = explode( '/', $dir_name );
+							foreach( $e as $p )
+							{
+								if( ! empty( $p ) and ! is_dir( $extract_dir . '/' . $cp . $p ) )
+								{
+									if( ! ( $ftp_check_login == 1 and ftp_mkdir( $conn_id, $cp . $p ) ) )
+									{
+										@mkdir( $extract_dir . '/' . $cp . $p );
+									}
+									if( ! is_dir( $extract_dir . '/' . $cp . $p ) )
+									{
+										$error_create_folder[] = $cp . $p;
+										break;
+									}
+								}
+								$cp .= $p . '/';
+							}
+						}
+					}
+	
+					// Di chuyen cac file vao thu muc trong site
+					if( empty( $error_create_folder ) )
+					{
+						foreach( $ziplistContent as $array_file )
+						{
+							$array_name_i = explode( '/', $extract_i['stored_filename'] );
+							
+							if( empty( $array_file['folder'] ) and $array_file['filename'] != 'config.ini' and $array_name_i[sizeof( $array_name_i ) - 1] != '.htaccess' )
+							{
+								// Xoa file neu ton tai
+								if( file_exists( NV_ROOTDIR . '/' . $array_file['filename'] ) )
+								{
+									if( ! ( $ftp_check_login == 1 and ftp_delete( $conn_id, $array_file['filename'] ) ) )
+									{
+										nv_deletefile( NV_ROOTDIR . '/' . $array_file['filename'] );
+									}
+	
+									$array_exists_files[] = $array_file['filename'];
+								}
+	
+								// Di chuyen file
+								if( ! ( $ftp_check_login == 1 and ftp_rename( $conn_id, $temp_extract_dir . '/' . $array_file['filename'], $array_file['filename'] ) ) )
+								{
+									@rename( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'], $extract_dir . '/' . $array_file['filename'] );
+								}
+	
+								// Di chuyen that bai
+								if( file_exists( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] ) )
+								{
+									$error_move_folder[] = $array_file['filename'];
+								}
+	
+								// Danh sach file quy chuan
+								$array_cute_files[] = $array_file['filename'];
+							}
+						}
+	
+						if( empty( $error_move_folder ) )
+						{	
+							// Luu vao bang extensions neu ung dung chua co
+							$sql = 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type=:type AND title=:title';
 							$sth = $db->prepare( $sql );
 							$sth->bindParam( ':type', $extConfig['extension']['type'], PDO::PARAM_STR );
 							$sth->bindParam( ':title', $extConfig['extension']['name'], PDO::PARAM_STR );
-							$sth->bindParam( ':basename', $extConfig['extension']['name'], PDO::PARAM_STR );
-							$sth->bindParam( ':table_prefix', $table_prefix, PDO::PARAM_STR );
-							$sth->bindParam( ':version', $version, PDO::PARAM_STR );
-							$sth->bindParam( ':author', $author, PDO::PARAM_STR );
-							$sth->bindParam( ':note', $extConfig['note']['text'], PDO::PARAM_STR );
 							$sth->execute();
-						}
-
-						// Danh sach file moi trong mang $array_cute_files
-						// Lay danh sach file neu ung dung da co tren he thong
-						$sql = 'SELECT path FROM ' . $db_config['prefix'] . '_extension_files WHERE type=' . $db->quote( $extConfig['extension']['type'] ) . ' AND title=' . $db->quote( $extConfig['extension']['name'] );
-						$files = $db->query( $sql )->fetchAll( PDO::FETCH_COLUMN, 0 );
-
-						$new_files = array_diff( $array_cute_files, $files );
-						$array_exists_files = array_diff( $array_exists_files, $files );
-
-						// Luu danh sach file moi vao CSDL
-						if( ! empty( $new_files ) )
-						{
-							foreach( $new_files as $file )
+	
+							if( ! $sth->fetchColumn() )
 							{
-								$sql = 'INSERT INTO ' . $db_config['prefix'] . '_extension_files VALUES( NULL, :type, :title, :path, ' . NV_CURRENTTIME . ', 0 )';
+								$sql = 'INSERT INTO ' . $db_config['prefix'] . '_setup_extensions VALUES( ' . intval( $extConfig['extension']['id'] ) . ', :type, :title, ' . ( intval( $extConfig['extension']['sys'] ) == 1 ? 1 : 0 ) . ', ' . ( intval( $extConfig['extension']['virtual'] ) == 1 ? 1 : 0 ) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note )';
+								$table_prefix = preg_replace( '/(\W+)/i', '_', $extConfig['extension']['name'] );
+								$author = $extConfig['author']['name'] . ' (' . $extConfig['author']['email'] . ')';
+								$version = $extConfig['extension']['version'] . ' ' . NV_CURRENTTIME;
+	
 								$sth = $db->prepare( $sql );
 								$sth->bindParam( ':type', $extConfig['extension']['type'], PDO::PARAM_STR );
 								$sth->bindParam( ':title', $extConfig['extension']['name'], PDO::PARAM_STR );
-								$sth->bindParam( ':path', $file, PDO::PARAM_STR );
+								$sth->bindParam( ':basename', $extConfig['extension']['name'], PDO::PARAM_STR );
+								$sth->bindParam( ':table_prefix', $table_prefix, PDO::PARAM_STR );
+								$sth->bindParam( ':version', $version, PDO::PARAM_STR );
+								$sth->bindParam( ':author', $author, PDO::PARAM_STR );
+								$sth->bindParam( ':note', $extConfig['note']['text'], PDO::PARAM_STR );
 								$sth->execute();
 							}
-						}
-
-						// Cap nhat cac file da co
-						if( ! empty( $array_exists_files ) )
-						{
-							foreach( $array_exists_files as $file )
+	
+							// Danh sach file moi trong mang $array_cute_files
+							// Lay danh sach file neu ung dung da co tren he thong
+							$sql = 'SELECT path FROM ' . $db_config['prefix'] . '_extension_files WHERE type=' . $db->quote( $extConfig['extension']['type'] ) . ' AND title=' . $db->quote( $extConfig['extension']['name'] );
+							$files = $db->query( $sql )->fetchAll( PDO::FETCH_COLUMN, 0 );
+	
+							$new_files = array_diff( $array_cute_files, $files );
+							$array_exists_files = array_diff( $array_exists_files, $files );
+	
+							// Luu danh sach file moi vao CSDL
+							if( ! empty( $new_files ) )
 							{
-								$sql = 'UPDATE ' . $db_config['prefix'] . '_extension_files SET duplicate = duplicate + 1 WHERE path = :path';
-								$sth = $db->prepare( $sql );
-								$sth->bindParam( ':path', $file, PDO::PARAM_STR );
-								$sth->execute();
+								foreach( $new_files as $file )
+								{
+									$sql = 'INSERT INTO ' . $db_config['prefix'] . '_extension_files VALUES( NULL, :type, :title, :path, ' . NV_CURRENTTIME . ', 0 )';
+									$sth = $db->prepare( $sql );
+									$sth->bindParam( ':type', $extConfig['extension']['type'], PDO::PARAM_STR );
+									$sth->bindParam( ':title', $extConfig['extension']['name'], PDO::PARAM_STR );
+									$sth->bindParam( ':path', $file, PDO::PARAM_STR );
+									$sth->execute();
+								}
+							}
+	
+							// Cap nhat cac file da co
+							if( ! empty( $array_exists_files ) )
+							{
+								foreach( $array_exists_files as $file )
+								{
+									$sql = 'UPDATE ' . $db_config['prefix'] . '_extension_files SET duplicate = duplicate + 1 WHERE path = :path';
+									$sth = $db->prepare( $sql );
+									$sth->bindParam( ':path', $file, PDO::PARAM_STR );
+									$sth->execute();
+								}
 							}
 						}
 					}
+				}
+				
+				// Xoa file da upload va thu muc tam
+				if( empty( $array_error_mine ) )
+				{
+					nv_deletefile( $filename );
+					nv_deletefile( NV_ROOTDIR . '/' . $temp_extract_dir, true );
 				}
 
 				if( $ftp_check_login > 0 )
@@ -361,6 +444,21 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 						++$i;
 					}
 					$xtpl->parse( 'extract.complete.error_move_folder' );
+				}
+				elseif( ! empty( $array_error_mine ) )
+				{
+					$xtpl->assign( 'DISMISS_LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&extract=' . md5( $filename . $global_config['sitekey'] . session_id() ) . '&dismiss=' . md5( 'dismiss' . $filename . $global_config['sitekey'] . session_id() ) );
+
+					$i = 0;
+					asort( $array_error_mine );
+					foreach( $array_error_mine as $tmp )
+					{
+						$xtpl->assign( 'FILENAME', $tmp['filename'] );
+						$xtpl->assign( 'MIME', $tmp['mime'] );
+						$xtpl->parse( 'extract.complete.error_mine.loop' );
+						++$i;
+					}
+					$xtpl->parse( 'extract.complete.error_mine' );
 				}
 				else
 				{
@@ -546,7 +644,8 @@ if( empty( $error ) )
 
 		// Duyet danh sach file lay thong tin va kiem tra
 		if( empty( $error ) )
-		{			$info['classcfg'] = array( 'invaild' => 'fa-exclamation-triangle', 'exists' => 'fa-info' );
+		{
+			$info['classcfg'] = array( 'invaild' => 'fa-exclamation-triangle', 'exists' => 'fa-info' );
 			$info['extname'] = $extConfig['extension']['name'];
 			$info['exttype'] = $extConfig['extension']['type'];
 			$info['extversion'] = $extConfig['extension']['version'];
@@ -595,6 +694,9 @@ if( empty( $error ) )
 					$info['invaildnum'] ++;
 					$info['filelist'][$j]['class'][] = $info['classcfg']['invaild'];
 					$info['checkresult'] = 'fail';
+					
+					// Delete file
+					nv_deletefile( $filename );
 				}
 			}
 		}
