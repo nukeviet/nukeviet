@@ -117,11 +117,11 @@ $(function(){
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="text-center"><strong style="color:red">{LANG.autoinstall_error_warning_fileexist}</strong></td>
+				<td class="text-center"><strong class="text-danger">{LANG.autoinstall_error_warning_fileexist}</strong></td>
 			</tr>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td style="color:red">{FILENAME}</td>
+				<td class="text-danger">{FILENAME}</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
@@ -133,11 +133,11 @@ $(function(){
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="text-center"><strong style="color:red">{LANG.autoinstall_error_warning_invalidfolder}</strong></td>
+				<td class="text-center"><strong class="text-danger">{LANG.autoinstall_error_warning_invalidfolder}</strong></td>
 			</tr>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td style="color:red">{FILENAME}</td>
+				<td class="text-danger">{FILENAME}</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
@@ -150,7 +150,7 @@ $(function(){
 		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
-					<td class="text-center"><strong style="color:red">{LANG.autoinstall_error_warning_overwrite}</strong></td>
+					<td class="text-center"><strong class="text-danger">{LANG.autoinstall_error_warning_overwrite}</strong></td>
 				</tr>
 				<tr>
 					<td class="text-center"><input type="button" name="install_content_overwrite" value="{LANG.autoinstall_overwrite}" class="btn btn-primary"/></td>
@@ -178,11 +178,11 @@ $(function(){
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="text-center"><strong style="color:red">{LANG.autoinstall_cantunzip}</strong></td>
+				<td class="text-center"><strong class="text-danger">{LANG.autoinstall_cantunzip}</strong></td>
 			</tr>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td style="color:red">{FILENAME}</td>
+				<td class="text-danger">{FILENAME}</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
@@ -194,11 +194,11 @@ $(function(){
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="text-center"><strong style="color:red">{LANG.autoinstall_error_warning_permission_folder}</strong></td>
+				<td class="text-center"><strong class="text-danger">{LANG.autoinstall_error_warning_permission_folder}</strong></td>
 			</tr>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td style="color:red">{FILENAME}</td>
+				<td class="text-danger">{FILENAME}</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
@@ -210,17 +210,43 @@ $(function(){
 	<table class="table table-striped table-bordered table-hover">
 		<tbody>
 			<tr>
-				<td class="text-center"><strong style="color:red">{LANG.autoinstall_error_movefile}</strong></td>
+				<td class="text-center"><strong class="text-danger">{LANG.autoinstall_error_movefile}</strong></td>
 			</tr>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td style="color:red">{FILENAME}</td>
+				<td class="text-danger">{FILENAME}</td>
 			</tr>
 			<!-- END: loop -->
 		</tbody>
 	</table>
 </div>
 <!-- END: error_move_folder -->
+<!-- BEGIN: error_mine -->
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<tbody>
+			<tr>
+				<td class="text-center" colspan="2"><p><strong class="text-warning">{LANG.autoinstall_error_mimetype}</strong></p><a href="#" class="btn btn-warning upload-dismiss-mime">{LANG.autoinstall_error_mimetype_pass}</a></td>
+			</tr>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td class="text-warning">{FILENAME}</td>
+				<td class="text-warning">{MIME}</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+$(function(){
+	$('.upload-dismiss-mime').click(function(e){
+		e.preventDefault();
+		$("#filelist").html('<div class="text-center"><strong>{LANG.autoinstall_package_processing}</strong><br /><em class="fa fa-spin fa-spinner fa-2x m-bottom wt-icon-loading"></em></div>');
+		$("#filelist").load("{DISMISS_LINK}");
+	});
+});
+</script>
+<!-- END: error_mine -->
 <!-- BEGIN: ok -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
@@ -245,4 +271,3 @@ $(function(){
 </script>
 <!-- END: ok -->
 <!-- END: complete -->
-<!-- END: extract -->

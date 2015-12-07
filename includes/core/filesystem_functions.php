@@ -123,11 +123,13 @@ function nv_scandir( $directory, $pattern, $sorting_order = 0 )
 
 /**
  * nv_get_mime_type()
- *
+ * 
  * @param mixed $filename
+ * @param string $magic_path
+ * @param string $default_mime
  * @return
  */
-function nv_get_mime_type( $filename, $magic_path = '' )
+function nv_get_mime_type( $filename, $magic_path = '', $default_mime = 'application/octet-stream' )
 {
 	global $sys_info;
 
@@ -136,7 +138,7 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 	$ext = strtolower( array_pop( $_array_name ) );
 	if( empty( $ext ) ) return false;
 
-	$mime = 'application/octet-stream';
+	$mime = $default_mime;
 
 	if( nv_function_exists( 'finfo_open' ) )
 	{
@@ -172,7 +174,7 @@ function nv_get_mime_type( $filename, $magic_path = '' )
 		{
 			$mime = finfo_file( $finfo, realpath( $filename ) );
 			finfo_close( $finfo );
-			$mime = preg_replace( '/^([\.-\w]+)\/([\.-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
+			$mime = preg_replace( '/^([\.\-\w]+)\/([\.\-\w]+)(.*)$/i', '$1/$2', trim( $mime ) );
 		}
 	}
 
