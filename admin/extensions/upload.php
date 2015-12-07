@@ -227,7 +227,7 @@ if( $nv_Request->isset_request( 'extract', 'get' ) )
 					{
 						$array_name_i = explode( '/', $array_file['stored_filename'] );
 						
-						if( ! preg_match( "/\.(tpl|php)$/i", $array_file['stored_filename'] ) and empty( $array_file['folder'] ) and $array_name_i[sizeof( $array_name_i ) - 1] != '.htaccess' )
+						if( ! preg_match( "/\.(tpl|php)$/i", $array_file['stored_filename'] ) and empty( $array_file['folder'] ) and $array_name_i[sizeof( $array_name_i ) - 1] != '.htaccess' and $array_file['stored_filename'] != 'config.ini' )
 						{
 							$mime_real = $mime_check =  nv_get_mime_type( NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'] );
 							
