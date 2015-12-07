@@ -163,11 +163,12 @@ if( ! nv_function_exists( 'nv_block_data_config_rss' ) )
 	function nv_block_global_rss( $block_config )
 	{
 		global $global_config;
-		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/blocks/global.rss.tpl' ) )
+
+		if( file_exists( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/feeds/global.rss.tpl' ) )
 		{
 			$block_theme = $global_config['module_theme'];
 		}
-		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/blocks/global.rss.tpl' ) )
+		elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/feeds/global.rss.tpl' ) )
 		{
 			$block_theme = $global_config['site_theme'];
 		}

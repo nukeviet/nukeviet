@@ -66,7 +66,7 @@ define( 'NV_CLIENT_IP', $client_info['ip'] );
 
 //Xac dinh Quoc gia
 require NV_ROOTDIR . '/includes/countries.php';
-$client_info['country'] = nv_getCountry_from_cookie( $client_info['ip'] );
+$client_info['country'] = isset( $_SERVER['GEOIP_COUNTRY_CODE'] ) ? $_SERVER['GEOIP_COUNTRY_CODE'] : nv_getCountry_from_cookie( NV_CLIENT_IP );
 
 //Mui gio
 require NV_ROOTDIR . '/includes/timezone.php';
@@ -80,7 +80,7 @@ $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 //Ket noi voi class Error_handler
-$ErrorHandler = new Error( $global_config );
+$ErrorHandler = new nv_Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
 //Ket noi voi cac file cau hinh, function va template

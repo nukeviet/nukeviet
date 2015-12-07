@@ -1577,30 +1577,21 @@ function nv_change_buffer( $buffer )
         $body_replace .= "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>" . PHP_EOL;
     }
 
-    if ( defined( 'NV_SYSTEM' ) and preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
+    if ( defined( 'NV_SYSTEM' ) and ( defined( 'GOOGLE_ANALYTICS_SYSTEM' ) or preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) ) )
     {
-        if ( $global_config['googleAnalyticsMethod'] == 'universal' )
+		$internal .= "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
+		$internal .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," . PHP_EOL;
+		$internal .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" . PHP_EOL;
+		$internal .= "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');" . PHP_EOL;
+		if ( preg_match( '/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'] ) )
         {
-            $internal .= "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
-            $internal .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," . PHP_EOL;
-            $internal .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" . PHP_EOL;
-            $internal .= "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');" . PHP_EOL;
-            $internal .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');" . PHP_EOL;
-            $internal .= "ga('send', 'pageview');" . PHP_EOL;
+    		$internal .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');" . PHP_EOL;
         }
-        else
+        if( defined( 'GOOGLE_ANALYTICS_SYSTEM' ) )
         {
-            $dp = '';
-            if ( $global_config['googleAnalyticsSetDomainName'] == 1 )
-            {
-                $dp .= "_gaq.push([\"_setDomainName\",\"" . $global_config['cookie_domain'] . "\"]);";
-            }
-            elseif ( $global_config['googleAnalyticsSetDomainName'] == 2 )
-            {
-                $dp .= "_gaq.push([\"_setDomainName\",\"none\"]);_gaq.push([\"_setAllowLinker\",true]);";
-            }
-            $internal .= "var _gaq=_gaq||[];_gaq.push([\"_setAccount\",\"" . $global_config['googleAnalyticsID'] . "\"]);" . $dp . "_gaq.push([\"_trackPageview\"]);(function(){var a=document.createElement(\"script\");a.type=\"text/javascript\";a.async=true;a.src=(\"https:\"==document.location.protocol?\"https://ssl\":\"http://www\")+\".google-analytics.com/ga.js\";var b=document.getElementsByTagName(\"script\")[0];b.parentNode.insertBefore(a,b)})();" . PHP_EOL;
+        	$internal .= "ga('create', '" . GOOGLE_ANALYTICS_SYSTEM . "', 'auto');" . PHP_EOL;
         }
+		$internal .= "ga('send', 'pageview');" . PHP_EOL;
     }
 
     if ( ! empty( $internal ) ) $internal = "<script>" . PHP_EOL . $internal . "</script>" . PHP_EOL;
@@ -1772,7 +1763,7 @@ function nv_insert_notification( $module, $type, $content = array(), $obid = 0, 
 
 /**
  * nv_delete_notification()
- * 
+ *
  * @param mixed $language
  * @param mixed $module
  * @param mixed $type

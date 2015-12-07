@@ -534,3 +534,85 @@ function nv_css_setproperties( $tag, $property_array )
     ! empty( $css ) && $css = $tag . '{' . $css . '}';
     return $css;
 }
+
+/**
+ * nv_theme_alert()
+ *
+ * @param mixed $message_title
+ * @param mixed $message_content
+ * @param mixed $type
+ * @param mixed $url_back
+ * @param mixed $lang_back
+ * @param mixed $time_back
+ * @return
+ */
+function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $lang_back = '', $time_back = 5 )
+{
+	global $global_config, $module_file, $module_info, $lang_module, $page_title;
+
+	if( defined( 'NV_ADMIN' ) and file_exists( NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/alert.tpl' ) )
+	{
+		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
+	}
+	elseif( defined( 'NV_ADMIN' ) )
+	{
+		$tpl_path = NV_ROOTDIR . '/themes/admin_default/system';
+	}
+	elseif( file_exists( NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/alert.tpl' ) )
+	{
+		$tpl_path = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system';
+	}
+	else
+	{
+		$tpl_path = NV_ROOTDIR . '/themes/default/system';
+	}
+
+	$xtpl = new XTemplate( 'alert.tpl', $tpl_path );
+	$xtpl->assign( 'LANG', $lang_module );
+	$xtpl->assign( 'LANG_BACK', $lang_back );
+	$xtpl->assign( 'CONTENT', $message_content );
+
+	if( $type == 'success' )
+	{
+		$xtpl->parse( 'main.success' );
+	}
+	elseif( $type == 'warning' )
+	{
+		$xtpl->parse( 'main.warning' );
+	}
+	elseif( $type == 'danger' )
+	{
+		$xtpl->parse( 'main.danger' );
+	}
+	else
+	{
+		$xtpl->parse( 'main.info' );
+	}
+
+	if( !empty( $message_title ) )
+	{
+		$page_title = $message_title;
+		$xtpl->assign( 'TITLE', $message_title );
+		$xtpl->parse( 'main.title' );
+	}
+	else
+	{
+		$page_title = $module_info['custom_title'];
+	}
+
+	if( !empty( $url_back ) )
+	{
+		$xtpl->assign( 'TIME', $time_back );
+		$xtpl->assign( 'URL', $url_back );
+		$xtpl->parse( 'main.url_back' );
+		$xtpl->parse( 'main.loading_icon' );
+
+		if( !empty( $lang_back ) )
+		{
+			$xtpl->parse( 'main.url_back_button' );
+		}
+	}
+
+	$xtpl->parse( 'main' );
+	return $xtpl->text( 'main' );
+}
