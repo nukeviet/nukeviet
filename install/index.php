@@ -1222,7 +1222,11 @@ function nv_save_file_config()
 		}
 
 		file_put_contents( NV_ROOTDIR . '/' . $file_config_temp, trim( $content ), LOCK_EX );
-
+		//Resets the contents of the opcode cache
+		if( function_exists( 'opcache_reset' ) )
+		{
+			opcache_reset();
+		}
 		return true;
 	}
 	else
