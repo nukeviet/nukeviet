@@ -1185,7 +1185,8 @@ function nv_save_file_config()
 		$content .= "\$global_config['idsite'] = 0;\n";
 		$content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
 		$content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";
-
+		$content .= "\$global_config['cached'] = 'files';\n";
+		
 		if( $step < 7 )
 		{
 			$content .= "\$global_config['cookie_prefix'] = '" . $global_config['cookie_prefix'] . "';\n";

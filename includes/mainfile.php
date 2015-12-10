@@ -115,7 +115,14 @@ require NV_ROOTDIR . '/includes/ini.php';
 require NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php';
 require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
-require NV_ROOTDIR . '/includes/core/cache_functions.php';
+if( preg_match( '/^[a-zA-Z0-9\_]+$/', $global_config['cached'] ) )
+{
+	require NV_ROOTDIR . '/includes/core/cache_' . $global_config['cached'] . '.php';
+}
+else 
+{
+	require NV_ROOTDIR . '/includes/core/cache_file.php';
+}
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
