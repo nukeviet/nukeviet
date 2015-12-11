@@ -22,7 +22,7 @@ if( $sys_info['ini_set_support'] )
 
 	if( ! isset( $_SESSION ) )
 	{
-		ini_set( 'session.save_handler', 'files' );
+		//ini_set( 'session.save_handler', 'files' );
 		ini_set( 'session.use_trans_sid', 0 );
 		ini_set( 'session.auto_start', 0 );
 		ini_set( 'session.use_cookies', 1 );
