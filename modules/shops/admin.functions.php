@@ -1040,7 +1040,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 	}
 
 	$array_custom_lang = array( );
-	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $form ) . '"' )->fetchColumn( );
+	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias = "' . preg_replace( "/[\_]/", "-", $form ) . '"' )->fetchColumn( );
 	if( $idtemplate )
 	{
 		$array_tmp = array( );
@@ -1062,9 +1062,12 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 					}
 					else
 					{
-						$temp = array_keys( $row['field_choices'] );
-						$tempkey = intval( $row['default_value'] ) - 1;
-						$array_custom[$row['field']] = ( isset( $temp[$tempkey] )) ? $temp[$tempkey] : '';
+						if( !empty( $row['field_choices'] ) )
+						{
+							$temp = array_keys( $row['field_choices'] );
+							$tempkey = intval( $row['default_value'] ) - 1;
+							$array_custom[$row['field']] = ( isset( $temp[$tempkey] )) ? $temp[$tempkey] : '';
+						}
 					}
 				}
 				elseif( !empty( $row['field_choices'] ) )
@@ -1146,7 +1149,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 				}
 
 				// Du lieu hien thi tieu de
-				$array_tmp[$row['field']] = unserialize( $row['language'] );
+				$array_tmp[$row['fid']] = unserialize( $row['language'] );
 			}
 		}
 
@@ -1156,7 +1159,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 			{
 				foreach( $field as $key_lang => $lang_data )
 				{
-					if( $key_lang == NV_LANG_DATA )
+					if( $key_lang == NV_LANG_INTERFACE )
 					{
 						$array_custom_lang[$f_key] = array(
 							'title' => $lang_data[0],
@@ -1238,13 +1241,13 @@ function nv_create_form_file( $array_template_id )
 	foreach( $array_template_id as $templateids_i )
 	{
 		$array_views = array();
-		$result = $db->query( "SELECT field, field_type, listtemplate FROM " . $db_config['prefix'] . '_' . $module_data . "_field" );
+		$result = $db->query( "SELECT fid, field, field_type, listtemplate FROM " . $db_config['prefix'] . '_' . $module_data . "_field" );
 		while( $column = $result->fetch( ) )
 		{
 			$column['listtemplate'] = explode( '|', $column['listtemplate'] );
 			if( in_array( $templateids_i, $column['listtemplate'] ) )
 			{
-				$array_views[$column['field']] = $column['field_type'];
+				$array_views[$column['fid']] = $column['field_type'];
 			}
 		}
 
@@ -1458,67 +1461,4 @@ function nv_get_data_type( $dataform )
 	}
 
 	return $type_date;
-}
-
-/**
- * nv_theme_alert()
- *
- * @param mixed $message
- * @param mixed $type
- * @return
- */
-function nv_theme_alert( $message_title, $message_content, $type = 'info', $url_back = '', $lang_back = '', $time_back = 5 )
-{
-	global $global_config, $module_file, $module_info, $lang_module, $page_title;
-
-	$lang_back = empty( $lang_back ) ? $lang_module['back'] : $lang_back;
-
-	$xtpl = new XTemplate( 'alert.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'LANG_BACK', $lang_back );
-	$xtpl->assign( 'CONTENT', $message_content );
-
-	if( $type == 'success' )
-	{
-		$xtpl->parse( 'main.success' );
-	}
-	elseif( $type == 'warning' )
-	{
-		$xtpl->parse( 'main.warning' );
-	}
-	elseif( $type == 'danger' )
-	{
-		$xtpl->parse( 'main.danger' );
-	}
-	else
-	{
-		$xtpl->parse( 'main.info' );
-	}
-
-	if( !empty( $message_title ) )
-	{
-		$page_title = $message_title;
-		$xtpl->assign( 'TITLE', $message_title );
-		$xtpl->parse( 'main.title' );
-	}
-	else
-	{
-		$page_title = $module_info['custom_title'];
-	}
-
-	if( !empty( $url_back ) )
-	{
-		$xtpl->assign( 'TIME', $time_back );
-		$xtpl->assign( 'URL', $url_back );
-		$xtpl->parse( 'main.url_back' );
-		$xtpl->parse( 'main.url_back_button' );
-	}
-
-	$xtpl->parse( 'main' );
-	$contents = $xtpl->text( 'main' );
-
-	include (NV_ROOTDIR . "/includes/header.php");
-	echo nv_admin_theme( $contents );
-	include (NV_ROOTDIR . "/includes/footer.php");
-	exit( );
 }

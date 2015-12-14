@@ -103,16 +103,19 @@ if( $global_array_shops_cat[$data_content['listcatid']]['form'] != '' )
 			$listtemplate = explode( '|', $row['listtemplate'] );
 			if( in_array( $idtemplate, $listtemplate ) )
 			{
-				$listfield[] = $row['field'];
+				$listfield[] = $row['fid'];
 				$array_tmp[$row['field']] = unserialize( $row['language'] );
 			}
 		}
 
 		if( !empty( $listfield ) )
 		{
-			$sql = $db->query( 'SELECT ' . implode( ',', $listfield ) . ' FROM ' . $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate . ' WHERE shopid = ' . $id . ' AND status=1' );
+			$result = $db->query( 'SELECT t1.field_value, t2.field FROM ' . $db_config['prefix'] . "_" . $module_data . "_field_value_" . NV_LANG_DATA . ' t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_field t2 WHERE t1.field_id=t2.fid AND t1.rows_id=' . $id );
 			$data_content['template'] = $global_array_shops_cat[$data_content['listcatid']]['form'];
-			$data_content['array_custom'] = $sql->fetch();
+			while( $row = $result->fetch() )
+			{
+				$data_content['array_custom'][$row['field']] = $row['field_value'];
+			}
 
 			if( !empty( $array_tmp ) )
 			{
