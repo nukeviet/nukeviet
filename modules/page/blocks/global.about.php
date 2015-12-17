@@ -20,7 +20,7 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 	 */
 	function nv_message_page( $block_config )
 	{
-		global $global_config, $site_mods, $db, $module_name;
+		global $global_config, $site_mods, $db_slave, $module_name;
 		$module = $block_config['module'];
 
 		if( ! isset( $site_mods[$module] ) ) return '';
@@ -53,7 +53,7 @@ if( ! nv_function_exists( 'nv_message_page' ) )
 		{
 			$sql = 'SELECT id,title,alias,bodytext,keywords,add_time,edit_time FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . ' WHERE status=1 ORDER BY rand() DESC';
 
-			if( ( $query = $db->query( $sql ) ) !== false )
+			if( ( $query = $db_slave->query( $sql ) ) !== false )
 			{
 				if( ( $row = $query->fetch() ) !== false )
 				{

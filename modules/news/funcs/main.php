@@ -48,21 +48,21 @@ if( empty( $contents ) )
 	elseif( $viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old' )
 	{
 		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 'publtime DESC' : 'publtime ASC';
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 			->where( 'status= 1 AND inhome=1' );
 
-		$num_items = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-		$db->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+		$db_slave->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
 
 		$end_publtime = 0;
 
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -94,21 +94,21 @@ if( empty( $contents ) )
 
 		if( $st_links > 0)
 		{
-			$db->sqlreset()
+			$db_slave->sqlreset()
 				->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
 				->from( NV_PREFIXLANG . '_' . $module_data . '_rows' );
 
 			if( $viewcat == 'viewcat_page_new' )
 			{
-				$db->where( 'status= 1 AND inhome=1 AND publtime < ' . $end_publtime );
+				$db_slave->where( 'status= 1 AND inhome=1 AND publtime < ' . $end_publtime );
 			}
 			else
 			{
-				$db->where( 'status= 1 AND inhome=1 AND publtime > ' . $end_publtime );
+				$db_slave->where( 'status= 1 AND inhome=1 AND publtime > ' . $end_publtime );
 			}
-			$db->order( $order_by )->limit( $st_links );
+			$db_slave->order( $order_by )->limit( $st_links );
 
-			$result = $db->query( $db->sql() );
+			$result = $db_slave->query( $db_slave->sql() );
 			while( $item = $result->fetch() )
 			{
 				$item['newday'] = $global_array_cat[$item['catid']]['newday'];
@@ -126,7 +126,7 @@ if( empty( $contents ) )
 		$array_cat = array();
 
 		$key = 0;
-		$db->sqlreset()
+		$db_slave->sqlreset()
 		->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 		->order( 'publtime DESC' );
 
@@ -138,7 +138,7 @@ if( empty( $contents ) )
 				$featured = 0;
 				if( $array_cat_i['featured'] != 0 )
 				{
-					$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1' )->sql() );
+					$result = $db_slave->query( $db_slave->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1' )->sql() );
 					if( $item = $result->fetch() )
 					{
 						if( $item['homeimgthumb'] == 1 )
@@ -171,14 +171,14 @@ if( empty( $contents ) )
 
 				if( $featured )
 				{
-					$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 );
+					$db_slave->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 );
 				}
 				else
 				{
-					$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1' )->limit( $array_cat_i['numlinks'] );
+					$db_slave->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1' )->limit( $array_cat_i['numlinks'] );
 				}
 
-				$result = $db->query( $db->sql() );
+				$result = $db_slave->query( $db_slave->sql() );
 				while( $item = $result->fetch() )
 				{
 					if( $item['homeimgthumb'] == 1 )
@@ -221,7 +221,7 @@ if( empty( $contents ) )
 		// cac bai viet cua cac chu de con
 		$key = 0;
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
 			->where( 'status= 1 AND inhome=1' )
 			->order( 'publtime DESC' );
@@ -233,7 +233,7 @@ if( empty( $contents ) )
 				$featured = 0;
 				if( $array_cat_i['featured'] != 0 )
 				{
-					$result = $db->query( $db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1' )->limit($array_cat_i['numlinks'])->sql() );
+					$result = $db_slave->query( $db_slave->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'id=' . $array_cat_i['featured'] . ' and status= 1 AND inhome=1' )->limit($array_cat_i['numlinks'])->sql() );
 					while( $item = $result->fetch() )
 					{
 						if( $item['homeimgthumb'] == 1 )
@@ -265,13 +265,13 @@ if( empty( $contents ) )
 				}
 				if( $featured )
 				{
-					$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 );
+					$db_slave->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 );
 				}
 				else
 				{
-					$db->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1' )->limit( $array_cat_i['numlinks'] );
+					$db_slave->from( NV_PREFIXLANG . '_' . $module_data . '_' . $_catid )->where( 'status= 1 AND inhome=1' )->limit( $array_cat_i['numlinks'] );
 				}
-				$result = $db->query( $db->sql() );
+				$result = $db_slave->query( $db_slave->sql() );
 
 				while( $item = $result->fetch() )
 				{
@@ -311,19 +311,19 @@ if( empty( $contents ) )
 	elseif( $viewcat == 'viewcat_grid_new' or $viewcat == 'viewcat_grid_old' )
 	{
 		$order_by = ( $viewcat == 'viewcat_grid_new' ) ? ' publtime DESC' : ' publtime ASC';
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'COUNT(*) ')
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 			->where( 'status= 1 AND inhome=1' );
 
-		$num_items = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+		$db_slave->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
 			->limit($per_page )
 			->offset( ( $page - 1 ) * $per_page );
 
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 )
@@ -360,19 +360,19 @@ if( empty( $contents ) )
 	{
 		$order_by = ( $viewcat == 'viewcat_list_new' ) ? 'publtime DESC' : 'publtime ASC';
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'COUNT(*) ')
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 			->where( 'status= 1 AND inhome=1' );
 
-		$num_items = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-		$db->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+		$db_slave->select( 'id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
 			->limit($per_page )
 			->offset( ( $page - 1 ) * $per_page );
 
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb

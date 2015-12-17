@@ -64,20 +64,20 @@ if( empty( $contents ) )
 	{
 		$order_by = ( $viewcat == 'viewcat_page_new' ) ? 'publtime DESC' : 'publtime ASC';
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 			->where( 'status=1' );
 
-		$num_items = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-		$db->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' );
+		$db_slave->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' );
 
 		$featured = 0;
 		if( $global_array_cat[$catid]['featured'] != 0 )
 		{
-			$db->where( 'status=1 AND id=' . $global_array_cat[$catid]['featured'] );
-			$result = $db->query( $db->sql() );
+			$db_slave->where( 'status=1 AND id=' . $global_array_cat[$catid]['featured'] );
+			$result = $db_slave->query( $db_slave->sql() );
 			if( $item = $result->fetch() )
 			{
 				if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -107,11 +107,11 @@ if( empty( $contents ) )
 			}
 		}
 
-		$db->where( 'status=1 AND id != ' . $featured )
+		$db_slave->where( 'status=1 AND id != ' . $featured )
 			->order( $order_by )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		$end_publtime = 0;
 		while( $item = $result->fetch() )
 		{
@@ -142,20 +142,20 @@ if( empty( $contents ) )
 		}
 		if( $st_links > 0)
 		{
-			$db->sqlreset()
+			$db_slave->sqlreset()
 				->select( 'id, listcatid, addtime, edittime, publtime, title, alias, hitstotal' )
 				->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 				->order( $order_by )
 				->limit( $st_links );
 			if( $viewcat == 'viewcat_page_new' )
 			{
-				$db->where( 'status=1 AND publtime < ' . $end_publtime );
+				$db_slave->where( 'status=1 AND publtime < ' . $end_publtime );
 			}
 			else
 			{
-				$db->where( 'status=1 AND publtime > ' . $end_publtime );
+				$db_slave->where( 'status=1 AND publtime > ' . $end_publtime );
 			}
-			$result = $db->query( $db->sql() );
+			$result = $db_slave->query( $db_slave->sql() );
 			while( $item = $result->fetch() )
 			{
 				$item['newday'] = $global_array_cat[$catid]['newday'];
@@ -171,20 +171,20 @@ if( empty( $contents ) )
 		$array_catcontent = array();
 		$array_subcatpage = array();
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 			->where( 'status=1' );
 
-		$num_items = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-		$db->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' );
+		$db_slave->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' );
 
 		$featured = 0;
 		if( $global_array_cat[$catid]['featured'] != 0 )
 		{
-			$db->where( 'status=1 AND id=' . $global_array_cat[$catid]['featured'] );
-			$result = $db->query( $db->sql() );
+			$db_slave->where( 'status=1 AND id=' . $global_array_cat[$catid]['featured'] );
+			$result = $db_slave->query( $db_slave->sql() );
 			if( $item = $result->fetch() )
 			{
 				if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -215,12 +215,12 @@ if( empty( $contents ) )
 			}
 		}
 
-		$db->order( 'id DESC' )
+		$db_slave->order( 'id DESC' )
 			->where( 'status=1 AND id != ' . $featured )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
 
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -260,15 +260,15 @@ if( empty( $contents ) )
 			foreach( $array_catid as $catid_i )
 			{
 				$array_cat_other[$key] = $global_array_cat[$catid_i];
-				$db->sqlreset()
+				$db_slave->sqlreset()
 					->select( 'id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 					->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i );
 
 				$featured = 0;
 				if( $global_array_cat[$catid_i]['featured'] != 0 )
 				{
-					$db->where( 'status=1 and id=' . $global_array_cat[$catid_i]['featured'] );
-					$result = $db->query( $db->sql() );
+					$db_slave->where( 'status=1 and id=' . $global_array_cat[$catid_i]['featured'] );
+					$result = $db_slave->query( $db_slave->sql() );
 					if( $item = $result->fetch() )
 					{
 						if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -301,14 +301,14 @@ if( empty( $contents ) )
 
 				if( $featured )
 				{
-					$db->where( 'status=1 AND id!=' . $featured )->limit( $global_array_cat[$catid_i]['numlinks'] -1 );
+					$db_slave->where( 'status=1 AND id!=' . $featured )->limit( $global_array_cat[$catid_i]['numlinks'] -1 );
 				}
 				else
 				{
-					$db->where( 'status=1' )->limit( $global_array_cat[$catid_i]['numlinks'] );
+					$db_slave->where( 'status=1' )->limit( $global_array_cat[$catid_i]['numlinks'] );
 				}
-				$db->order( 'publtime DESC' );
-				$result = $db->query( $db->sql() );
+				$db_slave->order( 'publtime DESC' );
+				$result = $db_slave->query( $db_slave->sql() );
 				while( $item = $result->fetch() )
 				{
 					if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -352,15 +352,15 @@ if( empty( $contents ) )
 		// Cac bai viet phan dau
 		$array_catcontent = array();
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 			->where( 'status=1' );
 		$featured = 0;
 		if( $global_array_cat[$catid]['featured'] != 0 )
 		{
-			$db->where( 'id=' . $global_array_cat[$catid]['featured'] . ' and status= 1' );
-			$result = $db->query( $db->sql() );
+			$db_slave->where( 'id=' . $global_array_cat[$catid]['featured'] . ' and status= 1' );
+			$result = $db_slave->query( $db_slave->sql() );
 			while( $item = $result->fetch() )
 			{
 				if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -392,16 +392,16 @@ if( empty( $contents ) )
 		}
 		if( $featured )
 		{
-			$db->where( 'status= 1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 );
+			$db_slave->where( 'status= 1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 );
 		}
 		else
 		{
-			$db->where( 'status= 1' )->limit( $array_cat_i['numlinks'] );
+			$db_slave->where( 'status= 1' )->limit( $array_cat_i['numlinks'] );
 		}
 
-		$db->order( 'publtime DESC' )
+		$db_slave->order( 'publtime DESC' )
 			->offset( ( $page - 1 ) * $per_page );
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -439,7 +439,7 @@ if( empty( $contents ) )
 		foreach( $array_catid as $catid_i )
 		{
 			$array_cat_other[$key] = $global_array_cat[$catid_i];
-			$db->sqlreset()
+			$db_slave->sqlreset()
 				->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 				->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i )
 				->where( 'status=1' );
@@ -447,8 +447,8 @@ if( empty( $contents ) )
 			$featured = 0;
 			if( $global_array_cat[$catid_i]['featured'] != 0 )
 			{
-				$db->where( 'id=' . $global_array_cat[$catid_i]['featured'] . ' and status= 1' );
-				$result = $db->query( $db->sql() );
+				$db_slave->where( 'id=' . $global_array_cat[$catid_i]['featured'] . ' and status= 1' );
+				$result = $db_slave->query( $db_slave->sql() );
 				while( $item = $result->fetch() )
 				{
 					if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -481,14 +481,14 @@ if( empty( $contents ) )
 
 			if( $featured )
 			{
-				$db->where( 'status= 1 AND inhome=1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 )->order( 'publtime DESC' );;
+				$db_slave->where( 'status= 1 AND inhome=1 AND id!=' . $featured )->limit( $array_cat_i['numlinks'] - 1 )->order( 'publtime DESC' );;
 			}
 			else
 			{
-				$db->where( 'status= 1 AND inhome=1' )->limit( $array_cat_i['numlinks'] )->order( 'publtime DESC' );;
+				$db_slave->where( 'status= 1 AND inhome=1' )->limit( $array_cat_i['numlinks'] )->order( 'publtime DESC' );;
 			}
 
-			$result = $db->query( $db->sql() );
+			$result = $db_slave->query( $db_slave->sql() );
 			while( $item = $result->fetch() )
 			{
 				if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -528,19 +528,19 @@ if( empty( $contents ) )
 	{
 		$order_by = ( $viewcat == 'viewcat_grid_new' ) ? 'publtime DESC' : 'publtime ASC';
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 			->where( 'status=1' );
 
-		$num_items = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-		$db->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+		$db_slave->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
 
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -578,18 +578,18 @@ if( empty( $contents ) )
 	{
 		$order_by = ( $viewcat == 'viewcat_list_new' ) ? 'publtime DESC' : 'publtime ASC';
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 			->where( 'status=1' );
 
-		$num_items = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 		$featured = 0;
 		if( $global_array_cat[$catid]['featured'] != 0 )
 		{
-			$db->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+			$db_slave->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 				->where( 'id=' . $global_array_cat[$catid]['featured'] );
-			$result = $db->query( $db->sql() );
+			$result = $db_slave->query( $db_slave->sql() );
 			while( $item = $result->fetch() )
 			{
 				if( $item['homeimgthumb'] == 1 ) //image thumb
@@ -620,17 +620,17 @@ if( empty( $contents ) )
 		}
 		if( $featured )
 		{
-			$db->where( 'status= 1 AND inhome=1 AND id!=' . $featured );
+			$db_slave->where( 'status= 1 AND inhome=1 AND id!=' . $featured );
 		}
 		else
 		{
-			$db->where( 'status= 1 AND inhome=1' );
+			$db_slave->where( 'status= 1 AND inhome=1' );
 		}
-		$db->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
+		$db_slave->select( 'id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating' )
 			->order( $order_by )
 			->limit( $per_page )
 			->offset( ( $page - 1) * $per_page );
-		$results = $db->query( $db->sql() );
+		$results = $db_slave->query( $db_slave->sql() );
 		while( $item = $results->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 ) //image thumb

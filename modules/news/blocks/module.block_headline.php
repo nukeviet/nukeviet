@@ -46,7 +46,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 
 	function nv_block_headline( $block_config )
 	{
-		global $module_name, $module_data, $db, $my_head, $my_footer, $module_info, $module_file, $module_upload, $global_array_cat, $global_config;
+		global $module_name, $module_data, $db_slave, $my_head, $my_footer, $module_info, $module_file, $module_upload, $global_array_cat, $global_config;
 
 		$array_bid_content = array();
 
@@ -59,12 +59,12 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 		else
 		{
 			$id = 0;
-			$db->sqlreset()
+			$db_slave->sqlreset()
 				->select( 'bid, title, numbers' )
 				->from( NV_PREFIXLANG . '_' . $module_data . '_block_cat' )
 				->order( 'weight ASC' )
 				->limit( 2 );
-			$result = $db->query( $db->sql() );
+			$result = $db_slave->query( $db_slave->sql() );
 
 			while( list( $bid, $titlebid, $numberbid ) = $result->fetch( 3 ) )
 			{
@@ -79,7 +79,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 
 			foreach( $array_bid_content as $i => $array_bid )
 			{
-				$db->sqlreset()
+				$db_slave->sqlreset()
 					->select( 't1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt, t1.hometext' )
 					->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
 					->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
@@ -87,7 +87,7 @@ if( ! nv_function_exists( 'nv_block_headline' ) )
 					->order( 't2.weight ASC' )
 					->limit( $array_bid['number'] );
 
-				$result = $db->query( $db->sql() );
+				$result = $db_slave->query( $db_slave->sql() );
 				$array_content = array();
 				while( list( $id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt, $hometext ) = $result->fetch( 3 ) )
 				{

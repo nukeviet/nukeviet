@@ -23,39 +23,39 @@ $per_page_comment = ( defined( 'NV_PER_PAGE_COMMENT' ) ) ? NV_PER_PAGE_COMMENT :
  */
 function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base_url )
 {
-	global $db, $global_config, $module_config, $db_config, $per_page_comment;
+	global $db_slave, $global_config, $module_config, $db_config, $per_page_comment;
 
 	$comment_array = array();
-	$_where = 'a.module=' . $db->quote( $module );
+	$_where = 'a.module=' .$db_slave->quote( $module );
 	if( $area )
 	{
 		$_where .= ' AND a.area= ' . $area;
 	}
 	$_where .= ' AND a.id= ' . $id . ' AND a.status=1 AND a.pid=0';
 
-	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comment a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( $_where );
+	$db_slave->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comment a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( $_where );
 
-	$num_items = $db->query( $db->sql() )->fetchColumn();
+	$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 	if( $num_items )
 	{
 		$emailcomm = $module_config[$module]['emailcomm'];
-		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail' )->limit( $per_page_comment )->offset( ( $page - 1 ) * $per_page_comment );
+		$db_slave->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail' )->limit( $per_page_comment )->offset( ( $page - 1 ) * $per_page_comment );
 
 		if( $sortcomm == 1 )
 		{
-			$db->order( 'a.cid ASC' );
+			$db_slave->order( 'a.cid ASC' );
 		}
 		elseif( $sortcomm == 2 )
 		{
-			$db->order( 'a.likes DESC, a.cid DESC' );
+			$db_slave->order( 'a.likes DESC, a.cid DESC' );
 		}
 		else
 		{
-			$db->order( 'a.cid DESC' );
+			$db_slave->order( 'a.cid DESC' );
 		}
 		$session_id = session_id() . '_' . $global_config['sitekey'];
 
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		$comment_list_id = array();
 		while( $row = $result->fetch() )
 		{
@@ -92,30 +92,30 @@ function nv_comment_data( $module, $area, $id, $allowed, $page, $sortcomm, $base
 
 function nv_comment_get_reply( $cid, $module, $session_id, $sortcomm )
 {
-	global $db, $module_config;
-	$db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comment a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( 'a.pid=' . $cid . ' AND a.status=1' );
+	global $db_slave, $module_config;
+	$db_slave->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_comment a' )->join( 'LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' b ON a.userid =b.userid' )->where( 'a.pid=' . $cid . ' AND a.status=1' );
 
 	$data_reply_comment = array();
 
-	$num_items_sub = $db->query( $db->sql() )->fetchColumn();
+	$num_items_sub = $db_slave->query( $db_slave->sql() )->fetchColumn();
 	if( $num_items_sub )
 	{
 		$emailcomm = $module_config[$module]['emailcomm'];
-		$db->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail' );
+		$db_slave->select( 'a.cid, a.pid, a.content, a.post_time, a.post_name, a.post_email, a.likes, a.dislikes, b.userid, b.email, b.first_name, b.last_name, b.photo, b.view_mail' );
 
 		if( $sortcomm == 1 )
 		{
-			$db->order( 'a.cid ASC' );
+			$db_slave->order( 'a.cid ASC' );
 		}
 		elseif( $sortcomm == 2 )
 		{
-			$db->order( 'a.likes DESC, a.cid DESC' );
+			$db_slave->order( 'a.likes DESC, a.cid DESC' );
 		}
 		else
 		{
-			$db->order( 'a.cid DESC' );
+			$db_slave->order( 'a.cid DESC' );
 		}
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		$comment_list_id_reply = array();
 		while( $row = $result->fetch() )
 		{

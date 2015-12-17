@@ -25,11 +25,11 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 if( $id > 0 and $catid > 0 )
 {
 	$sql = 'SELECT id, title, alias, hometext FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id . ' AND status=1';
-	$result = $db->query( $sql );
+	$result = $db_slave->query( $sql );
 	list( $id, $title, $alias, $hometext ) = $result->fetch( 3 );
 	if( $id > 0 )
 	{
-		$allowed_send = $db->query( 'SELECT allowed_send FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $id / 2000 ) . ' where id=' . $id )->fetchColumn();
+		$allowed_send = $db_slave->query( 'SELECT allowed_send FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $id / 2000 ) . ' where id=' . $id )->fetchColumn();
 		if( $allowed_send == 1 )
 		{
 			unset( $sql, $result );
