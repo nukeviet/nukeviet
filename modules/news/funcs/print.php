@@ -28,8 +28,8 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 if( $id > 0 and $catid > 0 )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id;
-	$result = $db->query( $sql );
-	
+	$result = $db_slave->query( $sql );
+
 	if( $result->rowCount() !== 1 )
 	{
 		nv_info_die( $lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] );
@@ -37,10 +37,10 @@ if( $id > 0 and $catid > 0 )
 
 	$content = $result->fetch();
 
-	$body_contents = $db->query( 'SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_print FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $content['id'] / 2000 ) . ' where id=' . $content['id'] )->fetch();
+	$body_contents = $db_slave->query( 'SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_print FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $content['id'] / 2000 ) . ' where id=' . $content['id'] )->fetch();
 	$content = array_merge( $content, $body_contents );
 	unset( $sql, $result, $body_contents );
-	
+
 	if( $content['allowed_print'] == 1 and ( defined( 'NV_IS_MODADMIN' ) or ( $content['status'] == 1 and $content['publtime'] < NV_CURRENTTIME and ( $content['exptime'] == 0 or $content['exptime'] > NV_CURRENTTIME ) ) ) )
 	{
 		$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true );
@@ -51,7 +51,7 @@ if( $id > 0 and $catid > 0 )
 		}
 
 		$sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $content['sourceid'];
-		$result = $db->query( $sql );
+		$result = $db_slave->query( $sql );
 		$sourcetext = $result->fetchColumn();
 		unset( $sql, $result );
 

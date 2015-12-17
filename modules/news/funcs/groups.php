@@ -16,7 +16,7 @@ if( isset( $array_op[1] ) )
 	$alias = trim( $array_op[1] );
 	$page = (isset( $array_op[2] ) and substr( $array_op[2], 0, 5 ) == 'page-') ? intval( substr( $array_op[2], 5 ) ) : 1;
 
-	$stmt = $db->prepare( 'SELECT bid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias= :alias' );
+	$stmt = $db_slave->prepare( 'SELECT bid, title, alias, image, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat WHERE alias= :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
 	$stmt->execute();
 	list( $bid, $page_title, $alias, $image_group, $description, $key_words ) = $stmt->fetch( 3 );
@@ -45,20 +45,20 @@ if( isset( $array_op[1] ) )
 		$item_array = array();
 		$end_weight = 0;
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'COUNT(*)' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
 			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
 			->where( 't2.bid= ' . $bid . ' AND t1.status= 1' );
 
-		$num_items = $db->query( $db->sql() )->fetchColumn();
+		$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-		$db->select( 't1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight' )
+		$db_slave->select( 't1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating, t2.weight' )
 			->order( 't2.weight ASC' )
 			->limit( $per_page )
 			->offset( ($page - 1) * $per_page );
 
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 )//image thumb
@@ -96,14 +96,14 @@ if( isset( $array_op[1] ) )
 		$item_array_other = array();
 		if ( $st_links > 0)
 		{
-			$db->sqlreset()
+			$db_slave->sqlreset()
 				->select( 't1.id, t1.catid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hitstotal' )
 				->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
 				->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
 				->where( 't2.bid= ' . $bid . ' AND t2.weight > ' . $end_weight )
 				->order( 't2.weight ASC' )
 				->limit( $st_links );
-			$result = $db->query( $db->sql() );
+			$result = $db_slave->query( $db_slave->sql() );
 			while( $item = $result->fetch() )
 			{
 				$item['link'] = $global_array_cat[$item['catid']]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
@@ -125,7 +125,7 @@ else
 	$array_cat = array();
 	$key = 0;
 
-	$query_cat = $db->query( 'SELECT bid, numbers, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC' );
+	$query_cat = $db_slave->query( 'SELECT bid, numbers, title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC' );
 
 	while( list( $bid, $numberlink, $btitle, $balias ) = $query_cat->fetch( 3 ) )
 	{
@@ -137,14 +137,14 @@ else
 			'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['groups'] . '/' . $balias
 		);
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 't1.id, t1.catid, t1.admin_id, t1.author, t1.sourceid, t1.addtime, t1.edittime, t1.publtime, t1.title, t1.alias, t1.hometext, t1.homeimgfile, t1.homeimgalt, t1.homeimgthumb, t1.allowed_rating, t1.hitstotal, t1.hitscm, t1.total_rating, t1.click_rating' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
 			->join( 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id' )
 			->where( 't2.bid= ' . $bid . ' AND t1.status= 1' )
 			->order( 't2.weight ASC' )
 			->limit( $numberlink );
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( $item = $result->fetch() )
 		{
 			if( $item['homeimgthumb'] == 1 )//image thumb

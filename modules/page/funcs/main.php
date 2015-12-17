@@ -68,8 +68,8 @@ if( $id )
 	$related_articles = intval( $page_config['related_articles'] );
 	if( $related_articles )
 	{
-	    $db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data )->where( 'status=1 AND id !=' . $id )->order( 'weight ASC' )->limit( $related_articles );
-	    $result = $db->query($db->sql());
+	    $db_slave->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data )->where( 'status=1 AND id !=' . $id )->order( 'weight ASC' )->limit( $related_articles );
+	    $result = $db_slave->query($db_slave->sql());
 		while( $_other = $result->fetch() )
 		{
 			$_other['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $_other['alias'] . $global_config['rewrite_exturl'];
@@ -111,12 +111,12 @@ else
 	$per_page = $page_config['per_page'];
 
 	$array_data = array();
-    $db->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_' . $module_data )->where( 'status=1');
-    $num_items = $db->query( $db->sql() )->fetchColumn();
+    $db_slave->sqlreset()->select( 'COUNT(*)' )->from( NV_PREFIXLANG . '_' . $module_data )->where( 'status=1');
+    $num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-    $db->select( '*' )->order( 'weight' )->limit( $per_page )->offset( ($page - 1) * $per_page);
+    $db_slave->select( '*' )->order( 'weight' )->limit( $per_page )->offset( ($page - 1) * $per_page);
 
-    $result = $db->query($db->sql());
+    $result = $db_slave->query($db_slave->sql());
 	while( $row = $result->fetch() )
 	{
 		$row['link'] = $base_url . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];

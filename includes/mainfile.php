@@ -119,9 +119,9 @@ if( preg_match( '/^[a-zA-Z0-9\_]+$/', $global_config['cached'] ) )
 {
 	require NV_ROOTDIR . '/includes/core/cache_' . $global_config['cached'] . '.php';
 }
-else 
+else
 {
-	require NV_ROOTDIR . '/includes/core/cache_file.php';
+	require NV_ROOTDIR . '/includes/core/cache_files.php';
 }
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
@@ -289,7 +289,7 @@ if( isset( $nv_plugin_area[1] ) )
 }
 
 // Bat dau phien lam viec cua MySQL
-$db = new sql_db( $db_config );
+$db = $db_slave = new sql_db( $db_config );
 if( empty( $db->connect ) )
 {
 	trigger_error( 'Sorry! Could not connect to data server', 256 );
