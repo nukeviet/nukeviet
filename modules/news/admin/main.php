@@ -196,11 +196,11 @@ if( $checkss == md5( session_id() ) )
 	if( $stype == 'bodytext' )
 	{
 		$from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext c ON (r.id=c.id)';
-		$where = " c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'";
+		$where = " c.bodytext LIKE '%" . $db_slave->dblikeescape( $q ) . "%'";
 	}
 	elseif( $stype == "author" or $stype == "title" )
 	{
-		$where = " r." . $stype . " LIKE '%" . $db->dblikeescape( $qhtml ) . "%'";
+		$where = " r." . $stype . " LIKE '%" . $db_slave->dblikeescape( $qhtml ) . "%'";
 	}
 	elseif( $stype == 'sourcetext' )
 	{
@@ -210,11 +210,11 @@ if( $checkss == md5( session_id() ) )
 		{
 			$qurl = $url_info['scheme'] . '://' . $url_info['host'];
 		}
-		$where = " r.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db->dblikeescape( $q ) . "%' OR link like '%" . $db->dblikeescape( $qurl ) . "%')";
+		$where = " r.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape( $q ) . "%' OR link like '%" . $db_slave->dblikeescape( $qurl ) . "%')";
 	}
 	elseif( $stype == 'admin_id' )
 	{
-		$where = " (u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%' OR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
+		$where = " (u.username LIKE '%" . $db_slave->dblikeescape( $qhtml ) . "%' OR u.first_name LIKE '%" . $db_slave->dblikeescape( $qhtml ) . "%')";
 	}
 	elseif( ! empty( $q ) )
 	{
@@ -222,13 +222,13 @@ if( $checkss == md5( session_id() ) )
 		$arr_from = array();
 		foreach( $array_in_rows as $key => $val )
 		{
-			$arr_from[] = "(r." . $val . " LIKE '%" . $db->dblikeescape( $q ) . "%')";
+			$arr_from[] = "(r." . $val . " LIKE '%" . $db_slave->dblikeescape( $q ) . "%')";
 		}
-		$where = " (r.author LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
-			OR r.title LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
-			OR c.bodytext LIKE '%" . $db->dblikeescape( $q ) . "%'
-			OR u.username LIKE '%" . $db->dblikeescape( $qhtml ) . "%'
-			OR u.first_name LIKE '%" . $db->dblikeescape( $qhtml ) . "%')";
+		$where = " (r.author LIKE '%" . $db_slave->dblikeescape( $qhtml ) . "%'
+			OR r.title LIKE '%" . $db_slave->dblikeescape( $qhtml ) . "%'
+			OR c.bodytext LIKE '%" . $db_slave->dblikeescape( $q ) . "%'
+			OR u.username LIKE '%" . $db_slave->dblikeescape( $qhtml ) . "%'
+			OR u.first_name LIKE '%" . $db_slave->dblikeescape( $qhtml ) . "%')";
 	}
 	if( $sstatus != -1 )
 	{
@@ -301,11 +301,11 @@ while( $i <= 500 )
 $order2 = ( $order == 'asc' ) ? 'desc' : 'asc';
 $ord_sql = ' r.' . $ordername . ' ' . $order;
 
-$db->sqlreset()->select( 'COUNT(*)' )->from( $from )->where( $where );
-$num_items = $db->query( $db->sql() )->fetchColumn();
+$db_slave->sqlreset()->select( 'COUNT(*)' )->from( $from )->where( $where );
+$num_items = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-$db->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, r.hitstotal, r.hitscm, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
-$result = $db->query( $db->sql() );
+$db_slave->select( 'r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, r.hitstotal, r.hitscm, u.username' )->order( 'r.' . $ordername . ' ' . $order )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+$result = $db_slave->query( $db_slave->sql() );
 
 $data = $array_ids = array();
 while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $username ) = $result->fetch( 3 ) )
@@ -420,8 +420,8 @@ while( list( $id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publ
 // Lay so tags
 if( ! empty( $array_ids ) )
 {
-	$db->sqlreset()->select( 'COUNT(*) AS numtags, id' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags_id' )->where( 'id IN( ' . implode( ',', $array_ids ) . ' )' )->group( 'id' );
-	$result = $db->query( $db->sql() );
+	$db_slave->sqlreset()->select( 'COUNT(*) AS numtags, id' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags_id' )->where( 'id IN( ' . implode( ',', $array_ids ) . ' )' )->group( 'id' );
+	$result = $db_slave->query( $db_slave->sql() );
 
 	while( list( $numtags, $id ) = $result->fetch( 3 ) )
 	{
@@ -486,7 +486,7 @@ foreach( $data as $row )
 	$is_excdata = 0;
 	if( $global_config['idsite'] > 0 and isset( $site_mods['excdata'] ) and isset( $push_content['module'][$module_name] ) and $row['status_id'] == 1 )
 	{
-		$count = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db->quote( $module_name ) )->fetchColumn();
+		$count = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $site_mods['excdata']['module_data'] . '_sended WHERE id_content=' . $row['id'] . ' AND module=' . $db_slave->quote( $module_name ) )->fetchColumn();
 		if( $count == 0 )
 		{
 			$is_excdata = 1;

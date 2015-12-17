@@ -75,9 +75,8 @@ else
 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
-if( !empty( $savecat ) )
+if( ! empty( $savecat ) )
 {
-
 	$catid = $nv_Request->get_int( 'catid', 'post', 0 );
 	$parentid_old = $nv_Request->get_int( 'parentid_old', 'post', 0 );
 	$parentid = $nv_Request->get_int( 'parentid', 'post', 0 );

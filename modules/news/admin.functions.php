@@ -54,7 +54,7 @@ require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 global $global_array_cat;
 $global_array_cat = array();
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
-$result = $db->query( $sql );
+$result = $db_slave->query( $sql );
 while( $row = $result->fetch() )
 {
 	$global_array_cat[$row['catid']] = $row;
@@ -438,10 +438,10 @@ function nv_show_cat_list( $parentid = 0 )
  */
 function nv_show_topics_list()
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $global_config, $module_file, $module_info;
+	global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $global_config, $module_file, $module_info;
 
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC';
-	$_array_topic = $db->query( $sql )->fetchAll();
+	$_array_topic = $db_slave->query( $sql )->fetchAll();
 	$num = sizeof( $_array_topic );
 
 	if( $num > 0 )
@@ -451,7 +451,7 @@ function nv_show_topics_list()
 		$xtpl->assign( 'GLANG', $lang_global );
 		foreach ( $_array_topic as $row )
 		{
-			$numnews = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where topicid=' . $row['topicid'] )->fetchColumn();
+			$numnews = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where topicid=' . $row['topicid'] )->fetchColumn();
 
 			$xtpl->assign( 'ROW', array(
 				'topicid' => $row['topicid'],
@@ -493,10 +493,10 @@ function nv_show_topics_list()
  */
 function nv_show_block_cat_list()
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
+	global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info;
 
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
-	$_array_block_cat = $db->query( $sql )->fetchAll();
+	$_array_block_cat = $db_slave->query( $sql )->fetchAll();
 	$num = sizeof( $_array_block_cat );
 
 	if( $num > 0 )
@@ -512,7 +512,7 @@ function nv_show_block_cat_list()
 
 		foreach ( $_array_block_cat as $row)
 		{
-			$numnews = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where bid=' . $row['bid'] )->fetchColumn();
+			$numnews = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where bid=' . $row['bid'] )->fetchColumn();
 
 			$xtpl->assign( 'ROW', array(
 				'bid' => $row['bid'],
@@ -574,12 +574,12 @@ function nv_show_block_cat_list()
  */
 function nv_show_sources_list()
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $nv_Request, $module_file, $global_config;
+	global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $nv_Request, $module_file, $global_config;
 
-	$num = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
+	$num = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources' )->fetchColumn();
 	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_data . '&amp;' . NV_OP_VARIABLE . '=sources';
 	$num_items = ($num > 1) ? $num : 1;
-	$per_page = 15;
+	$per_page = 20;
 	$page = $nv_Request->get_int( 'page', 'get', 1 );
 
 	$xtpl = new XTemplate( 'sources_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
@@ -588,14 +588,14 @@ function nv_show_sources_list()
 
 	if( $num > 0 )
 	{
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( '*' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_sources' )
 			->order( 'weight' )
 			->limit( $per_page )
 			->offset( ( $page - 1 ) * $per_page );
 
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( $row = $result->fetch() )
 		{
 			$xtpl->assign( 'ROW', array(
@@ -645,7 +645,7 @@ function nv_show_sources_list()
  */
 function nv_show_block_list( $bid )
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_cat, $module_file, $global_config;
+	global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_cat, $module_file, $global_config;
 
 	$xtpl = new XTemplate( 'block_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
@@ -660,7 +660,7 @@ function nv_show_block_list( $bid )
 	$global_array_cat[0] = array( 'alias' => 'Other' );
 
 	$sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
-	$array_block = $db->query( $sql )->fetchAll();
+	$array_block = $db_slave->query( $sql )->fetchAll();
 
 	$num = sizeof( $array_block );
 	if( $num > 0 )

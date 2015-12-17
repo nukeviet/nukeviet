@@ -19,26 +19,26 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
  */
 function nv_show_tags_list( $q = '', $incomplete = false )
 {
-	global $db, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $module_config;
+	global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $module_config;
 
-	$db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags' )->order( 'alias ASC' );
+	$db_slave->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data . '_tags' )->order( 'alias ASC' );
 
 	if( $incomplete === true )
 	{
-		$db->where( 'description = \'\'' );
+		$db_slave->where( 'description = \'\'' );
 	}
 
 	if( ! empty( $q ) )
 	{
 		$q = strip_punctuation( $q );
-		$db->where( 'keywords LIKE :keywords' );
+		$db_slave->where( 'keywords LIKE :keywords' );
 	}
 	else
 	{
-		$db->order( 'alias ASC' )->limit( $module_config[$module_name]['per_page'] );
+		$db_slave->order( 'alias ASC' )->limit( $module_config[$module_name]['per_page'] );
 	}
 
-	$sth = $db->prepare( $db->sql() );
+	$sth = $db_slave->prepare( $db_slave->sql() );
 	if( ! empty( $q ) )
 	{
 		$sth->bindValue( ':keywords', '%' . $q . '%', PDO::PARAM_STR );
@@ -178,7 +178,7 @@ $tid = $nv_Request->get_int( 'tid', 'get', 0 );
 
 if( $tid > 0 )
 {
-	list( $tid, $alias, $description, $image, $keywords ) = $db->query( 'SELECT tid, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid )->fetch( 3 );
+	list( $tid, $alias, $description, $image, $keywords ) = $db_slave->query( 'SELECT tid, alias, description, image, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where tid=' . $tid )->fetch( 3 );
 	$lang_module['add_tags'] = $lang_module['edit_tags'];
 }
 

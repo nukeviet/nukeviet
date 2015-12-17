@@ -20,13 +20,13 @@ $mod = $nv_Request->get_string( 'mod', 'post', '' );
 if( $mod == 'cat' )
 {
 	$tab = NV_PREFIXLANG . '_' . $module_data . '_cat';
-	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE catid!=' . $id . ' AND alias= :alias' );
+	$stmt = $db_slave->prepare( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE catid!=' . $id . ' AND alias= :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
 	$stmt->execute();
 	$nb = $stmt->fetchColumn();
 	if( ! empty( $nb ) )
 	{
-		$nb = $db->query( 'SELECT MAX(catid) FROM ' . $tab )->fetchColumn();
+		$nb = $db_slave->query( 'SELECT MAX(catid) FROM ' . $tab )->fetchColumn();
 
 		$alias .= '-' . ( intval( $nb ) + 1 );
 	}
@@ -34,13 +34,13 @@ if( $mod == 'cat' )
 elseif( $mod == 'topics' )
 {
 	$tab = NV_PREFIXLANG . '_' . $module_data . '_topics';
-	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE topicid!=' . $id . ' AND alias= :alias' );
+	$stmt = $db_slave->prepare( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE topicid!=' . $id . ' AND alias= :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
 	$stmt->execute();
 	$nb = $stmt->fetchColumn();
 	if( ! empty( $nb ) )
 	{
-		$nb = $db->query( 'SELECT MAX(topicid) FROM ' . $tab )->fetchColumn();
+		$nb = $db_slave->query( 'SELECT MAX(topicid) FROM ' . $tab )->fetchColumn();
 
 		$alias .= '-' . ( intval( $nb ) + 1 );
 	}
@@ -48,13 +48,13 @@ elseif( $mod == 'topics' )
 elseif( $mod == 'blockcat' )
 {
 	$tab = NV_PREFIXLANG . '_' . $module_data . '_block_cat';
-	$stmt = $db->prepare( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE bid!=' . $id . ' AND alias= :alias' );
+	$stmt = $db_slave->prepare( 'SELECT COUNT(*) FROM ' . $tab . ' WHERE bid!=' . $id . ' AND alias= :alias' );
 	$stmt->bindParam( ':alias', $alias, PDO::PARAM_STR );
 	$stmt->execute();
 	$nb = $stmt->fetchColumn();
 	if( ! empty( $nb ) )
 	{
-		$nb = $db->query( 'SELECT MAX(bid) FROM ' . $tab )->fetchColumn();
+		$nb = $db_slave->query( 'SELECT MAX(bid) FROM ' . $tab )->fetchColumn();
 
 		$alias .= '-' . ( intval( $nb ) + 1 );
 	}
