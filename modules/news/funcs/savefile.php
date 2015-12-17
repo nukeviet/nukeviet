@@ -42,16 +42,16 @@ foreach( $global_array_cat as $catid_i => $array_cat_i )
 if( $id > 0 and $catid > 0 )
 {
 	$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id =' . $id;
-	$result = $db->query( $sql );
+	$result = $db_slave->query( $sql );
 	$content = $result->fetch();
 	unset( $sql, $result );
 	if( $content['id'] > 0 )
 	{
-		$body_contents = $db->query( 'SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $content['id'] / 2000 ) . ' where id=' . $content['id'] )->fetch();
+		$body_contents = $db_slave->query( 'SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $content['id'] / 2000 ) . ' where id=' . $content['id'] )->fetch();
 		$content = array_merge( $content, $body_contents );
 		unset( $body_contents );
 
-		if( $content['allowed_save'] == 1 and ( defined( 'NV_IS_MODADMIN' ) or ( $news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ( $news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME ) ) ) )
+		if( $content['allowed_save'] == 1 and ( defined( 'NV_IS_MODADMIN' ) or ( $content['status'] == 1 and $content['publtime'] < NV_CURRENTTIME and ( $content['exptime'] == 0 or $content['exptime'] > NV_CURRENTTIME ) ) ) )
 		{
 			$base_url_rewrite = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=savefile/' . $global_array_cat[$catid]['alias'] . '/' . $content['alias'] . '-' . $id . $global_config['rewrite_exturl'], true );
 			if( $_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite )
@@ -61,7 +61,7 @@ if( $id > 0 and $catid > 0 )
 			}
 
 			$sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $content['sourceid'];
-			$result = $db->query( $sql );
+			$result = $db_slave->query( $sql );
 			$sourcetext = $result->fetchColumn();
 			unset( $sql, $result );
 
@@ -70,7 +70,7 @@ if( $id > 0 and $catid > 0 )
 			$canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
 			$meta_tags = nv_html_meta_tags();
-			$content['bodytext'] = $db->query( 'SELECT bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $content['id'] / 2000 ) . ' where id=' . $content['id'] )->fetchColumn();
+			$content['bodytext'] = $db_slave->query( 'SELECT bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $content['id'] / 2000 ) . ' where id=' . $content['id'] )->fetchColumn();
 
 			$result = array(
 				'url' => $global_config['site_url'],

@@ -13,7 +13,7 @@ if( ! defined( 'E_RECOVERABLE_ERROR' ) ) define( 'E_RECOVERABLE_ERROR', 4096 ); 
 if( ! defined( 'E_DEPRECATED' ) ) define( 'E_DEPRECATED', 8192 ); //khong sua
 if( ! defined( 'E_USER_DEPRECATED' ) ) define( 'E_USER_DEPRECATED', 16384 ); //khong sua
 
-class Error
+class nv_Error
 {
 	const INCORRECT_IP = 'Incorrect IP address specified';
 	const LOG_FILE_NAME_DEFAULT = 'error_log'; //ten file log

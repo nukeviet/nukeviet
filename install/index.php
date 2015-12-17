@@ -733,7 +733,6 @@ elseif( $step == 5 )
 						$nv_Request->set_Session( 'maxstep', 4 );
 						$db_config['error'] = $e->getMessage();
 						trigger_error( $e->getMessage() );
-						break;
 					}
 
 					// Cai dat du lieu mau module
@@ -1186,7 +1185,8 @@ function nv_save_file_config()
 		$content .= "\$global_config['idsite'] = 0;\n";
 		$content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
 		$content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";
-
+		$content .= "\$global_config['cached'] = 'files';\n";
+		
 		if( $step < 7 )
 		{
 			$content .= "\$global_config['cookie_prefix'] = '" . $global_config['cookie_prefix'] . "';\n";
@@ -1223,7 +1223,11 @@ function nv_save_file_config()
 		}
 
 		file_put_contents( NV_ROOTDIR . '/' . $file_config_temp, trim( $content ), LOCK_EX );
-
+		//Resets the contents of the opcode cache
+		if( function_exists( 'opcache_reset' ) )
+		{
+			opcache_reset();
+		}
 		return true;
 	}
 	else

@@ -80,7 +80,7 @@ $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 //Ket noi voi class Error_handler
-$ErrorHandler = new Error( $global_config );
+$ErrorHandler = new nv_Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
 //Ket noi voi cac file cau hinh, function va template
@@ -88,7 +88,7 @@ require NV_ROOTDIR . '/install/ini.php';
 require NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php';
 require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
-require NV_ROOTDIR . '/includes/core/cache_functions.php';
+require NV_ROOTDIR . '/includes/core/cache_files.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 

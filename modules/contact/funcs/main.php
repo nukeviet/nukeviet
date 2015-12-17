@@ -39,7 +39,7 @@ if ( ! empty( $array_department ) )
     		}
     		break;
     	}
-    	
+
         if ( ! empty( $department['cats'] ) )
         {
             $_cats = array_map( 'trim', explode( '|', $department['cats'] ) );
@@ -202,7 +202,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
                 $a_l = implode( ',', $a_l );
 
                 $sql = 'SELECT t2.email as admin_email FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1 AND t1.admin_id IN (' . $a_l . ')';
-                $result = $db->query( $sql );
+                $result = $db_slave->query( $sql );
 
                 while ( $row = $result->fetch() )
                 {

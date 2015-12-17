@@ -21,7 +21,7 @@ if( ( $cache = nv_get_cache( $module_name, $cacheFile ) ) != false and filemtime
 else
 {
 	$sql = 'SELECT alias,add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1';
-	$result = $db->query( $sql );
+	$result = $db_slave->query( $sql );
 
 	while( list( $alias, $publtime ) = $result->fetch( 3 ) )
 	{
