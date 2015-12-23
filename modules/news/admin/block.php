@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 $page_title = $lang_module['block'];
 
 $sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
-$result = $db->query( $sql );
+$result = $db_slave->query( $sql );
 
 $array_block = array();
 while( list( $bid_i, $title_i ) = $result->fetch( 3 ) )
@@ -47,7 +47,7 @@ $page_title = $array_block[$bid];
 if( $nv_Request->isset_request( 'checkss,idcheck', 'post' ) and $nv_Request->get_string( 'checkss', 'post' ) == md5( session_id() ) )
 {
 	$sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid;
-	$result = $db->query( $sql );
+	$result = $db_slave->query( $sql );
 	$_id_array_exit = array();
 	while( list( $_id ) = $result->fetch( 3 ) )
 	{
@@ -100,9 +100,9 @@ else
 	$page_title = $lang_module['addtoblock'];
 	$id_array = array_map( 'intval', explode( ',', $listid ) );
 
-	$db->sqlreset()->select( 'id, title' )->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )->order( 'publtime DESC' )->where( 'status=1 AND id IN (' . implode( ',', $id_array ) . ')' );
+	$db_slave->sqlreset()->select( 'id, title' )->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )->order( 'publtime DESC' )->where( 'status=1 AND id IN (' . implode( ',', $id_array ) . ')' );
 
-	$result = $db->query( $db->sql() );
+	$result = $db_slave->query( $db_slave->sql() );
 
 	while( list( $id, $title ) = $result->fetch( 3 ) )
 	{
