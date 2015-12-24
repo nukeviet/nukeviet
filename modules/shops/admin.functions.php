@@ -1020,7 +1020,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 {
 	global $db, $db_config, $lang_module, $lang_global, $module_name, $module_data, $op, $global_array_shops_cat, $global_config, $module_file;
 
-	$xtpl = new XTemplate( 'cat_form_' . $form . '.tpl', NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file );
+	$xtpl = new XTemplate( 'cat_form_' . $form . '.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl' );
 	$xtpl->assign( 'LANG', $lang_module );
 	$xtpl->assign( 'GLANG', $lang_global );
 	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
@@ -1040,7 +1040,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 	}
 
 	$array_custom_lang = array( );
-	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $form ) . '"' )->fetchColumn( );
+	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias = "' . preg_replace( "/[\_]/", "-", $form ) . '"' )->fetchColumn( );
 	if( $idtemplate )
 	{
 		$array_tmp = array( );
@@ -1062,9 +1062,12 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 					}
 					else
 					{
-						$temp = array_keys( $row['field_choices'] );
-						$tempkey = intval( $row['default_value'] ) - 1;
-						$array_custom[$row['field']] = ( isset( $temp[$tempkey] )) ? $temp[$tempkey] : '';
+						if( !empty( $row['field_choices'] ) )
+						{
+							$temp = array_keys( $row['field_choices'] );
+							$tempkey = intval( $row['default_value'] ) - 1;
+							$array_custom[$row['field']] = ( isset( $temp[$tempkey] )) ? $temp[$tempkey] : '';
+						}
 					}
 				}
 				elseif( !empty( $row['field_choices'] ) )
@@ -1146,7 +1149,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 				}
 
 				// Du lieu hien thi tieu de
-				$array_tmp[$row['field']] = unserialize( $row['language'] );
+				$array_tmp[$row['fid']] = unserialize( $row['language'] );
 			}
 		}
 
@@ -1156,7 +1159,7 @@ function nv_show_custom_form( $is_edit, $form, $array_custom )
 			{
 				foreach( $field as $key_lang => $lang_data )
 				{
-					if( $key_lang == NV_LANG_DATA )
+					if( $key_lang == NV_LANG_INTERFACE )
 					{
 						$array_custom_lang[$f_key] = array(
 							'title' => $lang_data[0],
@@ -1238,13 +1241,13 @@ function nv_create_form_file( $array_template_id )
 	foreach( $array_template_id as $templateids_i )
 	{
 		$array_views = array();
-		$result = $db->query( "SELECT field, field_type, listtemplate FROM " . $db_config['prefix'] . '_' . $module_data . "_field" );
+		$result = $db->query( "SELECT fid, field, field_type, listtemplate FROM " . $db_config['prefix'] . '_' . $module_data . "_field" );
 		while( $column = $result->fetch( ) )
 		{
 			$column['listtemplate'] = explode( '|', $column['listtemplate'] );
 			if( in_array( $templateids_i, $column['listtemplate'] ) )
 			{
-				$array_views[$column['field']] = $column['field_type'];
+				$array_views[$column['fid']] = $column['field_type'];
 			}
 		}
 
@@ -1411,7 +1414,13 @@ function nv_create_form_file( $array_template_id )
 
 		$content_2 .= "<!-- END: main -->";
 
-		file_put_contents( NV_ROOTDIR . "/themes/admin_default/modules/" . $module_file . "/cat_form_" . preg_replace( "/[\-]/", "_", $array_template[$templateids_i]['alias'] ) . ".tpl", $content_2, LOCK_EX );
+		if( !file_exists( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl' ) )
+		{
+			nv_mkdir( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name, 'files_tpl' );
+		}
+
+		$file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/cat_form_' . preg_replace( '/[\-]/', '_', $array_template[$templateids_i]['alias'] ) . '.tpl';
+		file_put_contents( $file, $content_2, LOCK_EX );
 	}
 }
 

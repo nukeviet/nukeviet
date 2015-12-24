@@ -31,7 +31,7 @@ elseif( file_exists( NV_ROOTDIR . '/modules/users/language/admin_en.php' ) )
 	require NV_ROOTDIR . '/modules/users/language/admin_en.php';
 }
 
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where status =1 ';
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE status=1';
 $_rows = $db->query( $sql )->fetchAll( );
 $num = sizeof( $_rows );
 if( $num < 1 )
@@ -46,7 +46,7 @@ while( $row = $result->fetch( ) )
 {
 	$array_template[$row['id']] = array(
 		'id' => $row['id'],
-		'title' => $row["title"],
+		'title' => $row[NV_LANG_DATA . "_title"],
 		'alias' => $row["alias"],
 	);
 }
@@ -54,8 +54,7 @@ while( $row = $result->fetch( ) )
 // Chinh thu tu
 if( $nv_Request->isset_request( 'changeweight', 'post' ) )
 {
-	if( !defined( 'NV_IS_AJAX' ) )
-		die( 'Wrong URL' );
+	if( !defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
 
 	$fid = $nv_Request->get_int( 'fid', 'post', 0 );
 	$new_vid = $nv_Request->get_int( 'new_vid', 'post', 0 );
@@ -258,6 +257,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 		}
 	}
 
+	$language = unserialize( $dataform_old['language'] );
 	$language[NV_LANG_DATA] = array(
 		$dataform['title'],
 		$dataform['description']
@@ -449,11 +449,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 				if( $dataform['fid'] )
 				{
 					$type_date = nv_get_data_type( $dataform );
-
-					foreach( $templateids as $templateids_i )
-					{
-						$db->exec( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $templateids_i . " ADD " . $dataform['field'] . " " . $type_date );
-					}
 					nv_create_form_file( $templateids );
 
 					Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
@@ -488,35 +483,6 @@ if( $nv_Request->isset_request( 'submit', 'post' ) )
 
 				if( $save )
 				{
-					$type_date = nv_get_data_type( $dataform );
-
-					$listtemid_old = explode( ',', $dataform_old['listtemplate'] );
-					if( $listtemid_old != $templateids )
-					{
-						foreach( $templateids as $template_i )
-						{
-							if( !in_array( $template_i, $listtemid_old ) )
-							{
-								$db->query( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $template_i . " ADD " . $dataform['field'] . " " . $type_date );
-							}
-						}
-
-						foreach( $listtemid_old as $temid_old )
-						{
-							if( ! in_array( $temid_old, $templateids ) )
-							{
-								$db->query( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $temid_old . " DROP " . $dataform['field'] );
-							}
-						}
-					}
-
-					if( $dataform['max_length'] != $dataform_old['max_length'] )
-					{
-						foreach( $templateids as $templateids_i )
-						{
-							$save = $db->exec( "ALTER TABLE " . $db_config['prefix'] . '_' . $module_data . "_info_" . $templateids_i . " CHANGE " . $dataform_old['field'] . " " . $dataform_old['field'] . " " . $type_date );
-						}
-					}
 					nv_create_form_file( $templateids );
 				}
 				Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass( ) );
@@ -539,15 +505,6 @@ if( $nv_Request->isset_request( 'del', 'post' ) )
 	$fid = $nv_Request->get_int( 'fid', 'post,get', 0 );
 
 	list( $fid, $listtemplate, $field, $weight ) = $db->query( 'SELECT fid,listtemplate, field, weight FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $fid )->fetch( 3 );
-	if( $listtemplate != '' )
-	{
-		$listtemplate = explode( ",", $listtemplate );
-		foreach( $listtemplate as $array_template_i )
-		{
-			$db->query( ' ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_info_' . $array_template_i . '  DROP ' . $field );
-		}
-	}
-
 	if( $fid and !empty( $field ) )
 	{
 		$query1 = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE fid=' . $fid;

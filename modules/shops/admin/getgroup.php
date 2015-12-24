@@ -41,8 +41,12 @@ function getgroup_ckhtml( $subgroupid_i, $array_groupid_in_row )
 
 $cid = $nv_Request->get_int( 'cid', 'get', 0 );
 $inrow = $nv_Request->get_string( 'inrow', 'get', '' );
-$inrow = nv_base64_decode( $inrow );
-$array_groupid_in_row = unserialize( $inrow );
+$array_groupid_in_row = array();
+if( !empty( $inrow ) )
+{
+	$inrow = nv_base64_decode( $inrow );
+	$array_groupid_in_row = unserialize( $inrow );
+}
 $contents_temp_cate = '';
 
 if( $cid > 0 )

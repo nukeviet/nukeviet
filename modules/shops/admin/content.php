@@ -18,8 +18,20 @@ if( defined( 'NV_EDITOR' ) )
 
 if( empty( $global_array_shops_cat ) )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat' );
-	die( );
+	$url_back = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat';
+	$contents = nv_theme_alert( $lang_module['error_cat_empty_title'], $lang_module['error_cat_empty_content'], 'warning', $url_back, $lang_module['continue'] );
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_admin_theme( $contents );
+	include NV_ROOTDIR . '/includes/footer.php';
+}
+
+if( empty( $money_config  ) )
+{
+	$url_back = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=money';
+	$contents = nv_theme_alert( $lang_module['error_munit_empty_title'], $lang_module['error_munit_empty_content'], 'warning', $url_back, $lang_module['continue'] );
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_admin_theme( $contents );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date( 'Y_m' );
@@ -29,10 +41,10 @@ if( !file_exists( $currentpath ) )
 }
 
 $table_name = $db_config['prefix'] . '_' . $module_data . '_rows';
-$array_block_cat_module = array( );
-$id_block_content = array( );
-$array_custom = array( );
-$custom = array( );
+$array_block_cat_module = array();
+$id_block_content = array();
+$array_custom = $array_custom_old = array();
+$custom = array();
 
 $sql = 'SELECT bid, adddefault, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query( $sql );
@@ -106,6 +118,8 @@ $rowcontent['id'] = $nv_Request->get_int( 'id', 'get,post', 0 );
 $group_id_old = array( );
 if( $rowcontent['id'] > 0 )
 {
+	$rowcontent['listcatid'] = $db->query( "SELECT listcatid FROM " . $db_config['prefix'] . "_" . $module_data . "_rows where id=" . $rowcontent['id'] )->fetchColumn();
+
 	// Old group
 	$group_id_old = getGroupID( $rowcontent['id'] );
 
@@ -128,6 +142,18 @@ if( $rowcontent['id'] > 0 )
 			$rowcontent['files'][] = $id_files;
 		}
 		$rowcontent['files_old'] = $rowcontent['files'];
+	}
+
+	// Custom fields
+	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
+	if( $idtemplate )
+	{
+		$result = $db->query( "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_field_value_" . NV_LANG_DATA . " WHERE rows_id=" . $rowcontent['id'] );
+		while( $row = $result->fetch() )
+		{
+			$custom[$row['field_id']] = $row['field_value'];
+			$array_custom_old[] = $row['field_id'];
+		}
 	}
 }
 
@@ -572,15 +598,18 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 
 			if( $rowcontent['id'] > 0 )
 			{
+				// Them du lieu tuy bien
 				if( $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
 				{
-					$form = $db->query( 'SELECT form FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs where catid=' . $rowcontent['listcatid'] )->fetchColumn( );
+					$form = $db->query( 'SELECT form FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE catid=' . $rowcontent['listcatid'] )->fetchColumn( );
 
-					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
+					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
 
 					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
 					Insertabl_catfields( $table_insert, $array_custom, $rowcontent['id'] );
 				}
+
+				// Them nhom san pham
 				if( !empty( $rowcontent['group_id'] ) )
 				{
 					$stmt = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_group_items VALUES(' . $rowcontent['id'] . ', :group_id)' );
@@ -592,6 +621,7 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					}
 				}
 
+				// Cap nhat ma san pham
 				$auto_product_code = '';
 				if( !empty( $pro_config['format_code_id'] ) and empty( $rowcontent['product_code'] ) )
 				{
@@ -756,27 +786,26 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 					}
 				}
 
-				// Tim va xoa du lieu tuy bien
 				if( $global_array_shops_cat[$rowcontent_old['listcatid']]['form'] != '' )
 				{
-					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent_old['listcatid']]['form'] ) . '"' )->fetchColumn( );
-					if( $idtemplate )
+					foreach( $array_custom as $field_id => $value )
 					{
-						$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
-						$db->query( "DELETE FROM " . $table_insert . " WHERE shopid =" . $rowcontent['id'] );
+						$count = $db->query( 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . NV_LANG_DATA . ' WHERE rows_id=' . $rowcontent['id'] . ' AND field_id=' . $field_id )->fetchColumn();
+						if( $count > 0 )
+						{
+							$sth = $db->prepare( 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . NV_LANG_DATA . ' SET field_value = :field_value WHERE rows_id = :rows_id AND field_id = :field_id' );
+						}
+						else
+						{
+							$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . NV_LANG_DATA . '(rows_id, field_id, field_value) VALUES (:rows_id, :field_id, :field_value)' );
+						}
+						$sth->bindParam( ':rows_id', $rowcontent['id'], PDO::PARAM_INT );
+						$sth->bindParam( ':field_id', $field_id, PDO::PARAM_INT );
+						$sth->bindParam( ':field_value', $value, PDO::PARAM_STR, strlen( $value ) );
+						$sth->execute();
 					}
 				}
 
-				if( $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
-				{
-					// Them lai du lieu tuy bien
-					$idtemplate_new = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
-					if( $idtemplate_new )
-					{
-						$table_insert_new = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate_new;
-						Insertabl_catfields( $table_insert_new, $array_custom, $rowcontent['id'] );
-					}
-				}
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'Edit A Product', 'ID: ' . $rowcontent['id'], $admin_info['userid'] );
 			}
 			else
@@ -914,16 +943,8 @@ elseif( $rowcontent['id'] > 0 )
 		$rowcontent['status'] = 0;
 	}
 
-	// Custom fields
-	$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template where alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
-	if( $idtemplate )
-	{
-		$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
-		$custom = $db->query( "SELECT * FROM " . $table_insert . " where shopid=" . $rowcontent['id'] )->fetch( );
-	}
-
 	$id_block_content = array( );
-	$sql = 'SELECT bid FROM ' . $db_config['prefix'] . '_' . $module_data . '_block where id=' . $rowcontent['id'];
+	$sql = 'SELECT bid FROM ' . $db_config['prefix'] . '_' . $module_data . '_block WHERE id=' . $rowcontent['id'];
 	$result = $db->query( $sql );
 
 	while( list( $bid_i ) = $result->fetch( 3 ) )
@@ -1208,8 +1229,11 @@ $sql = 'SELECT id, ' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_
 $result_unit = $db->query( $sql );
 if( $result_unit->rowCount( ) == 0 )
 {
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=prounit' );
-	die( );
+	$url_back = NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=prounit';
+	$contents = nv_theme_alert( $lang_module['error_punit_empty_title'], $lang_module['error_punit_empty_content'], 'warning', $url_back, $lang_module['continue'] );
+	include NV_ROOTDIR . '/includes/header.php';
+	echo nv_admin_theme( $contents );
+	include NV_ROOTDIR . '/includes/footer.php';
 }
 
 while( list( $unitid_i, $title_i ) = $result_unit->fetch( 3 ) )
@@ -1314,8 +1338,12 @@ if( !$pro_config['active_warehouse'] )
 // Custom fiels
 if( $pro_config['template_active'] and $rowcontent['listcatid'] AND !empty( $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) )
 {
-	$datacustom_form = nv_show_custom_form( $rowcontent['id'], $global_array_shops_cat[$rowcontent['listcatid']]['form'], $custom );
-	$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
+	$form = $global_array_shops_cat[$rowcontent['listcatid']]['form'];
+	if( nv_is_file( NV_BASE_SITEURL . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/cat_form_' . $form . '.tpl', NV_ASSETS_DIR . '/' . $module_name ) )
+	{
+		$datacustom_form = nv_show_custom_form( $rowcontent['id'], $form, $custom );
+		$xtpl->assign( 'DATACUSTOM_FORM', $datacustom_form );
+	}
 }
 
 $xtpl->parse( 'main' );

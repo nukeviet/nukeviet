@@ -70,7 +70,7 @@ $shipping_data = array( 'list_location' => array(), 'list_carrier' => array(), '
 // Ma giam gia
 $array_counpons = array( 'code' => '', 'discount' => 0, 'check' => 0 );
 $counpons = array( 'id' => 0, 'total_amount' => 0, 'date_start' => 0, 'uses_per_coupon_count' => 0, 'uses_per_coupon' => 0, 'type' => 0, 'discount' => 0 );
-if( isset( $_SESSION[$module_data . '_coupons']['discount'] ) and $_SESSION[$module_data . '_coupons']['discount'] > 0 )
+if( isset( $_SESSION[$module_data . '_coupons']['check'] ) and $_SESSION[$module_data . '_coupons']['check'] == 1 and isset( $_SESSION[$module_data . '_coupons']['discount'] ) and $_SESSION[$module_data . '_coupons']['discount'] > 0 )
 {
 	$array_counpons = $_SESSION[$module_data . '_coupons'];
 }
@@ -491,12 +491,12 @@ if( $post_order == 1 )
 				'order_name' => $data_order['order_name'],
 				'order_email' => $data_order['order_email'],
 				'order_phone' => $data_order['order_phone'],
-				'order_address' => $data_order['order_address'],
+				'order_address' => !empty( $data_order['order_address'] ) ? $data_order['order_address'] : '-',
 				'order_note' => $data_order['order_note'],
 				'order_total' => $data_order['order_total'],
 				'unit_total' => $data_order['unit_total'],
-				'dateup' => nv_date( "d-m-Y", $data_content['order_time'] ),
-				'moment' => nv_date( "H:i", $data_content['order_time'] ),
+				'dateup' => nv_date( "d-m-Y", $data_order['order_time'] ),
+				'moment' => nv_date( "H:i", $data_order['order_time'] ),
 				'review_url' => '<a href="' . $global_config['site_url'] . $data_order['review_url'] . '">' . $lang_module['content_here'] . '</a>',
 				'table_product' => $email_contents_table,
 				'site_url' => $global_config['site_url'],

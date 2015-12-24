@@ -34,7 +34,7 @@ list( $data['catid'], $data['parentid'], $data['title'], $data['title_custom'], 
 $savecat = $nv_Request->get_int( 'savecat', 'post', 0 );
 
 $cat_form_exit = array();
-$_form_exit = scandir( NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
+$_form_exit = scandir( NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/files_tpl' );
 foreach ( $_form_exit as $_form ) {
 	if( preg_match( '/^cat\_form\_([a-zA-Z0-9\-\_]+)\.tpl$/', $_form, $m ) )
 	{
@@ -178,7 +178,7 @@ if( ! empty( $savecat ) )
 			$stmt->bindParam( ':cat_allow_point', $data['cat_allow_point'], PDO::PARAM_INT );
 			$stmt->bindParam( ':cat_number_point', $data['cat_number_point'], PDO::PARAM_INT );
 			$stmt->bindParam( ':cat_number_product', $data['cat_number_product'], PDO::PARAM_INT );
-			
+
 			if( $stmt->execute() )
 			{
 				nv_insert_logs( NV_LANG_DATA, $module_name, 'log_edit_catalog', 'id ' . $data['catid'], $admin_info['userid'] );

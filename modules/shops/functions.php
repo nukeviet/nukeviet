@@ -359,6 +359,7 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 	$xtpl->assign( 'CUSTOM_LANG', $array_custom_lang );
 	$xtpl->assign( 'CUSTOM_DATA', $array_custom );
 	$count = 0;
+
 	foreach ($array_custom as $key => $value)
 	{
 		if( isset($arr[$key]) and !empty($value) )
@@ -373,32 +374,6 @@ function nv_custom_tpl( $name_file, $array_custom, $array_custom_lang, $idtempla
 		$xtpl->parse( 'main' );
 		$html = $xtpl->text( 'main' );
 	}
+
 	return $html;
-}
-
-/**
- * nv_tpl()
- *
- * @param mixed $name_file
- * @param mixed $array_data
- * @return
- */
-function nv_tpl( $name_file, $array_data )
-{
-	global $module_data, $module_info, $module_file, $lang_module, $db_config, $db;
-
-	$html ='';
-	$xtpl = new XTemplate( $name_file, NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
-
-	foreach ($array_data as $value) {
-		$xtpl->assign( 'DATA', $value );
-		$xtpl->parse( 'main.loop' );
-	}
-
-	$xtpl->parse( 'main' );
-	$html = $xtpl->text( 'main' );
-	return $html;
-
 }
