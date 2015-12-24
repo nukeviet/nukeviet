@@ -1,0 +1,19 @@
+{
+    "name": "nukeviet/nukeviet",
+    "type": "cms",
+    "description": "NukeViet is the first opensource CMS in Vietnam.",
+    "keywords": ["cms","nukeviet"],
+    "homepage": "https://github.com/nukeviet/nukeviet",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "VINADES.,JSC",
+            "email": "contact@vinades.vn",
+            "homepage": "http://vinades.vn"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+        "and/oauth": "*"
+    }
+}
