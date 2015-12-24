@@ -16,6 +16,7 @@
 /uploads/logo_*
 /install/default.php
 
+/vendor/
 #vendor test ignore 
 /vendor/**/demo/
 /vendor/**/example/
