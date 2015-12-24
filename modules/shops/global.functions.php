@@ -182,7 +182,10 @@ function nv_del_content_module( $id )
 
 			// Xoa tai lieu
 			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_files_rows WHERE id_rows=' . $id );
-
+			
+			// Xoa du lieu tuy bien
+			$db->query( 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_field_value_'.NV_LANG_DATA.' WHERE rows_id = ' . $id );
+			
 			$content_del = 'OK_' . $id;
 		}
 		else

@@ -601,12 +601,15 @@ if( $nv_Request->get_int( 'save', 'post' ) == 1 )
 				// Them du lieu tuy bien
 				if( $global_array_shops_cat[$rowcontent['listcatid']]['form'] != '' )
 				{
-					$form = $db->query( 'SELECT form FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs WHERE catid=' . $rowcontent['listcatid'] )->fetchColumn( );
-
-					$idtemplate = $db->query( 'SELECT id FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE alias = "' . preg_replace( "/[\_]/", "-", $global_array_shops_cat[$rowcontent['listcatid']]['form'] ) . '"' )->fetchColumn( );
-
-					$table_insert = $db_config['prefix'] . "_" . $module_data . "_info_" . $idtemplate;
-					Insertabl_catfields( $table_insert, $array_custom, $rowcontent['id'] );
+					foreach( $array_custom as $field_id => $value )
+					{
+						$sth = $db->prepare( 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . NV_LANG_DATA . '(rows_id, field_id, field_value) VALUES (:rows_id, :field_id, :field_value)' );
+						
+						$sth->bindParam( ':rows_id', $rowcontent['id'], PDO::PARAM_INT );
+						$sth->bindParam( ':field_id', $field_id, PDO::PARAM_INT );
+						$sth->bindParam( ':field_value', $value, PDO::PARAM_STR, strlen( $value ) );
+						$sth->execute();
+					}
 				}
 
 				// Them nhom san pham
