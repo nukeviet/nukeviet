@@ -22,24 +22,24 @@ if( $idtemplate )
 		$row['title'] = ( isset( $language[NV_LANG_DATA] ) ) ? $language[NV_LANG_DATA][0] : $row['field'];
 		$row['description'] = ( isset( $language[NV_LANG_DATA] ) ) ? nv_htmlspecialchars( $language[NV_LANG_DATA][1] ) : '';
 
-		$value = ( isset( $array_custom[$row['field']] )) ? $array_custom[$row['field']] : '';
+		$value = ( isset( $array_custom[$row['fid']] )) ? $array_custom[$row['fid']] : '';
 
 		if( !empty( $row['field_choices'] ) )
 		{
 			$row['field_choices'] = unserialize( $row['field_choices'] );
 			if( $row['field_type'] == 'date' )
 			{
-				$array_custom[$row['field']] = ( $row['field_choices']['current_date'] ) ? NV_CURRENTTIME : $row['default_value'];
+				$array_custom[$row['fid']] = ( $row['field_choices']['current_date'] ) ? NV_CURRENTTIME : $row['default_value'];
 			}
 			elseif( $row['field_type'] == 'number' )
 			{
-				$array_custom[$row['field']] = $row['default_value'];
+				$array_custom[$row['fid']] = $row['default_value'];
 			}
 			else
 			{
 				$temp = array_keys( $row['field_choices'] );
 				$tempkey = intval( $row['default_value'] ) - 1;
-				$array_custom[$row['field']] = ( isset( $temp[$tempkey] ) ) ? $temp[$tempkey] : '';
+				$array_custom[$row['fid']] = ( isset( $temp[$tempkey] ) ) ? $temp[$tempkey] : '';
 			}
 		}
 		elseif( !empty( $row['sql_choices'] ) )
@@ -202,7 +202,7 @@ if( $idtemplate )
 				}
 			}
 
-			$array_custom[$row['field']] = $value;
+			$array_custom[$row['fid']] = $value;
 		}
 	}
 }
