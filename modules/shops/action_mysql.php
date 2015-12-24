@@ -548,7 +548,8 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
   id int(11) NOT NULL,
   tid mediumint(9) NOT NULL,
   keyword varchar(65) NOT NULL,
-  UNIQUE KEY sid (id,tid)
+  UNIQUE KEY sid (id,tid),
+  KEY tid (tid)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_coupons (
