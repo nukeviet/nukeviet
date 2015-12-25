@@ -82,7 +82,7 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 
 	function nv_news_block_tophits( $block_config, $mod_data )
 	{
-		global $module_array_cat, $site_mods, $module_info, $db, $module_config, $global_config;
+		global $module_array_cat, $site_mods, $module_info, $db_slave, $module_config, $global_config;
 
 		$module = $block_config['module'];
 		$mod_file = $site_mods[$module]['module_file'];
@@ -92,21 +92,21 @@ if( ! nv_function_exists( 'nv_news_block_tophits' ) )
 		$publtime = NV_CURRENTTIME - $block_config['number_day'] * 86400;
 
 		$array_block_news = array();
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext' )
 			->from( NV_PREFIXLANG . '_' . $mod_data . '_rows' )
 			->order( 'hitstotal DESC' )
 			->limit( $block_config['numrow'] );
 		if( empty( $block_config['nocatid'] ) )
 		{
-			$db->where( 'status= 1 AND publtime > ' . $publtime );
+			$db_slave->where( 'status= 1 AND publtime > ' . $publtime );
 		}
 		else
 		{
-			$db->where( 'status= 1 AND publtime > ' . $publtime .' AND catid NOT IN ('.implode( ',', $block_config['nocatid'] ) . ')' );
+			$db_slave->where( 'status= 1 AND publtime > ' . $publtime .' AND catid NOT IN ('.implode( ',', $block_config['nocatid'] ) . ')' );
 		}
 
-		$result = $db->query( $db->sql() );
+		$result = $db_slave->query( $db_slave->sql() );
 		while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext ) = $result->fetch( 3 ) )
 		{
 			if( $homeimgthumb == 1 ) // image thumb

@@ -15,11 +15,11 @@ $publtime = 0;
 
 if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 {
-	$query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id );
+	$query = $db_slave->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id );
 	$news_contents = $query->fetch();
 	if( $news_contents['id'] > 0 )
 	{
-		$body_contents = $db->query( 'SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $news_contents['id'] / 2000 ) . ' where id=' . $news_contents['id'] )->fetch();
+		$body_contents = $db_slave->query( 'SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil( $news_contents['id'] / 2000 ) . ' where id=' . $news_contents['id'] )->fetch();
 		$news_contents = array_merge( $news_contents, $body_contents );
 		unset( $body_contents );
 
@@ -153,7 +153,7 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$news_contents['url_savefile'] = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=savefile/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
 
 	$sql = 'SELECT title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $news_contents['sourceid'];
-	$result = $db->query( $sql );
+	$result = $db_slave->query( $sql );
 
 	list( $sourcetext, $source_link, $source_logo ) = $result->fetch( 3 );
 	unset( $sql, $result );
@@ -168,14 +168,14 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$related_array = array();
 	if ( $st_links > 0)
 	{
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'id, title, alias, publtime, homeimgfile, homeimgthumb, hometext' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 			->where( 'status=1 AND publtime > ' . $publtime )
 			->order( 'id ASC' )
 			->limit( $st_links );
 
-		$related = $db->query( $db->sql() );
+		$related = $db_slave->query( $db_slave->sql() );
 		while( $row = $related->fetch() )
 		{
 			if( $row['homeimgthumb'] == 1 ) //image thumb
@@ -213,14 +213,14 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 
 		sort( $related_new_array, SORT_NUMERIC );
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'id, title, alias, publtime, homeimgfile, homeimgthumb, hometext' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_' . $catid )
 			->where( 'status=1 AND publtime < ' . $publtime )
 			->order( 'id DESC' )
 			->limit( $st_links );
 
-		$related = $db->query( $db->sql() );
+		$related = $db_slave->query( $db_slave->sql() );
 		while( $row = $related->fetch() )
 		{
 			if( $row['homeimgthumb'] == 1 ) //image thumb
@@ -262,17 +262,17 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 	$topic_array = array();
 	if( $news_contents['topicid'] > 0 & $st_links > 0)
 	{
-		list( $topic_title, $topic_alias ) = $db->query( 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'] )->fetch( 3 );
+		list( $topic_title, $topic_alias ) = $db_slave->query( 'SELECT title, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid = ' . $news_contents['topicid'] )->fetch( 3 );
 
 		$topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 
-		$db->sqlreset()
+		$db_slave->sqlreset()
 			->select( 'id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext' )
 			->from( NV_PREFIXLANG . '_' . $module_data . '_rows t1' )
 			->where( 'status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id )
 			->order( 'id DESC' )
 			->limit( $st_links );
-		$topic = $db->query( $db->sql() );
+		$topic = $db_slave->query( $db_slave->sql() );
 		while( $row = $topic->fetch() )
 		{
 			if( $row['homeimgthumb'] == 1 ) //image thumb
@@ -335,12 +335,12 @@ if( nv_user_in_groups( $global_array_cat[$catid]['groups_view'] ) )
 		);
 	}
 
-	list( $post_username, $post_first_name, $post_last_name ) = $db->query( 'SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] )->fetch( 3 );
+	list( $post_username, $post_first_name, $post_last_name ) = $db_slave->query( 'SELECT username, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $news_contents['admin_id'] )->fetch( 3 );
 	$news_contents['post_name'] = nv_show_name_user( $post_first_name, $post_last_name, $post_username );
 
 	$array_keyword = array();
 	$key_words = array();
-	$_query = $db->query( 'SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $news_contents['id'] );
+	$_query = $db_slave->query( 'SELECT a1.keyword, a2.alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id a1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_tags a2 ON a1.tid=a2.tid WHERE a1.id=' . $news_contents['id'] );
 	while( $row = $_query->fetch() )
 	{
 		$array_keyword[] = $row;

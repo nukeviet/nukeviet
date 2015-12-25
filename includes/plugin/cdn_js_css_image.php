@@ -8,6 +8,8 @@
  * @Createdate Sat, 07 Mar 2015 03:43:56 GMT
  */
 
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+
 if( ! empty( $global_config['cdn_url'] ) )
 {
 	$contents = preg_replace( "/\<(script|link|img)([^\>]*)(src|href)=['\"]((?!http(s?)\:\/\/)([^\>]*)\.(css|js|jpg|png|gif))['\"]([^\>]*)\>/i", "<\\1\\2\\3=\"//" . $global_config['cdn_url'] . "\\4?t=" . $global_config['timestamp'] . "\"\\8>", $contents );

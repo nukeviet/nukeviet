@@ -231,7 +231,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 id int(11) NOT NULL,
 	 tid mediumint(9) NOT NULL,
 	 keyword varchar(65) NOT NULL,
-	 UNIQUE KEY sid (id,tid)
+	 UNIQUE KEY id_tid (id,tid),
+	 KEY tid (tid)
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";

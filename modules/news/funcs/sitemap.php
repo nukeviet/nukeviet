@@ -20,13 +20,13 @@ if( ( $cache = nv_get_cache( $module_name, $cacheFile ) ) != false and filemtime
 }
 else
 {
-	$db->sqlreset()
+	$db_slave->sqlreset()
 		->select( 'id, catid, publtime, alias' )
 		->from( NV_PREFIXLANG . '_' . $module_data . '_rows' )
 		->where( 'status=1' )
 		->order( 'publtime DESC' )
 		->limit( 1000 );
-	$result = $db->query( $db->sql() );
+	$result = $db_slave->query( $db_slave->sql() );
 
 	$url = array();
 

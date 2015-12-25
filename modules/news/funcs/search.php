@@ -12,12 +12,12 @@ if( ! defined( 'NV_IS_MOD_NEWS' ) ) die( 'Stop!!!' );
 
 function GetSourceNews( $sourceid )
 {
-	global $db, $module_data;
+	global $db_slave, $module_data;
 
 	if( $sourceid > 0 )
 	{
 		$sql = 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $sourceid;
-		$re = $db->query( $sql );
+		$re = $db_slave->query( $sql );
 
 		if( list( $title ) = $re->fetch( 3 ) )
 		{
@@ -119,8 +119,8 @@ else
 {
 	$canonicalUrl = NV_MY_DOMAIN . nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search&amp;q=' . $key, true );
 
-	$dbkey = $db->dblikeescape( $key );
-	$dbkeyhtml = $db->dblikeescape( $keyhtml );
+	$dbkey = $db_slave->dblikeescape( $key );
+	$dbkeyhtml = $db_slave->dblikeescape( $keyhtml );
 
 	if( $choose == 1 )
 	{
@@ -139,7 +139,7 @@ else
 		{
 			$qurl = $url_info['scheme'] . '://' . $url_info['host'];
 		}
-		$where = "AND (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db->dblikeescape( $dbkey ) . "%' OR link like '%" . $db->dblikeescape( $qurl ) . "%'))";
+		$where = "AND (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape( $dbkey ) . "%' OR link like '%" . $db_slave->dblikeescape( $qurl ) . "%'))";
 	}
 	else
 	{
@@ -151,7 +151,7 @@ else
 		}
 		$tbl_src = ' LEFT JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext tb2 ON ( tb1.id = tb2.id )';
 		$where = " AND ( tb1.title LIKE '%" . $dbkeyhtml . "%' OR tb1.hometext LIKE '%" . $dbkey . "%' ";
-		$where .= " OR tb1.author LIKE '%" . $dbkeyhtml . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%') OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db->dblikeescape( $dbkey ) . "%' OR link like '%" . $db->dblikeescape( $qurl ) . "%'))";
+		$where .= " OR tb1.author LIKE '%" . $dbkeyhtml . "%' OR tb2.bodytext LIKE '%" . $dbkey . "%') OR (tb1.sourceid IN (SELECT sourceid FROM " . NV_PREFIXLANG . "_" . $module_data . "_sources WHERE title like '%" . $db_slave->dblikeescape( $dbkey ) . "%' OR link like '%" . $db_slave->dblikeescape( $qurl ) . "%'))";
 	}
 
 	if( preg_match( '/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $to_date, $m ) )
@@ -172,13 +172,13 @@ else
 		$table_search = NV_PREFIXLANG . '_' . $module_data . '_rows';
 	}
 
-	$db->sqlreset()->select( 'COUNT(*)' )->from( $table_search . ' as tb1 ' . $tbl_src )->where( 'tb1.status=1 ' . $where );
+	$db_slave->sqlreset()->select( 'COUNT(*)' )->from( $table_search . ' as tb1 ' . $tbl_src )->where( 'tb1.status=1 ' . $where );
 
-	$numRecord = $db->query( $db->sql() )->fetchColumn();
+	$numRecord = $db_slave->query( $db_slave->sql() )->fetchColumn();
 
-	$db->select( 'tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid' )->order( 'tb1.publtime DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
+	$db_slave->select( 'tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid' )->order( 'tb1.publtime DESC' )->limit( $per_page )->offset( ( $page - 1 ) * $per_page );
 
-	$result = $db->query( $db->sql() );
+	$result = $db_slave->query( $db_slave->sql() );
 
 	$array_content = array();
 	$show_no_image = $module_config[$module_name]['show_no_image'];

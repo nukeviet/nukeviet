@@ -20,7 +20,7 @@ $channel['description'] = ! empty( $module_info['description'] ) ? $module_info[
 if( $module_info['rss'] )
 {
 	$sql = 'SELECT id, title, alias, image, imagealt, description, add_time FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 ORDER BY weight ASC LIMIT 20';
-	$result = $db->query( $sql );
+	$result = $db_slave->query( $sql );
 	while ( $row = $result->fetch() )
 	{
 		$rimages = ( ! empty( $row['image'] ) ) ? '<img src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'] . '" width="100" align="left" border="0">' : '';
