@@ -50,7 +50,7 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 
 	function nv_news_block_news( $block_config, $mod_data )
 	{
-		global $module_array_cat, $module_info, $db, $module_config, $global_config, $site_mods;
+		global $module_array_cat, $module_info, $db_slave, $module_config, $global_config, $site_mods;
 
 		$module = $block_config['module'];
 		$blockwidth = $module_config[$module]['blockwidth'];
@@ -66,13 +66,13 @@ if( ! nv_function_exists( 'nv_news_block_news' ) )
 		{
 			$array_block_news = array();
 
-			$db->sqlreset()
+			$db_slave->sqlreset()
 				->select( 'id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext' )
 				->from( NV_PREFIXLANG . '_' . $mod_data . '_rows' )
 				->where( 'status= 1' )
 				->order( 'publtime DESC' )
 				->limit( $numrow );
-			$result = $db->query( $db->sql() );
+			$result = $db_slave->query( $db_slave->sql() );
 
 			while( list( $id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext ) = $result->fetch( 3 ) )
 			{

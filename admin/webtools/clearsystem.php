@@ -83,7 +83,7 @@ if( $nv_Request->isset_request( 'submit', 'post' ) and $nv_Request->isset_reques
 			}
 			closedir( $dh );
 		}
-
+		nv_delete_all_cache();
 		if( defined( 'NV_IS_GODADMIN' ) )
 		{
 			$timestamp = intval( $global_config['timestamp'] ) + 1;

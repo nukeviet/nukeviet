@@ -345,6 +345,11 @@ function nv_save_file_config_global()
 	$return = file_put_contents( NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim( $content_config ), LOCK_EX );
 	nv_delete_all_cache();
 
+	//Resets the contents of the opcode cache
+	if( function_exists( 'opcache_reset' ) )
+	{
+		opcache_reset();
+	}
 	return $return;
 }
 

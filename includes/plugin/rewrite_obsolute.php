@@ -7,8 +7,10 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Sat, 07 Mar 2015 03:43:56 GMT
  */
- 
-//plugin rewrite obsolute url 
+
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+
+//plugin rewrite obsolute url
 
 foreach ($rewrite_values as $key => $value)
 {

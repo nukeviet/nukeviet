@@ -45,7 +45,7 @@ foreach( $array_cat_admin as $userid_i => $value )
 if( empty( $module_info['admins'] ) )
 {
 	// Thong bao khong co nguoi dieu hanh chung
-	$contents = "<br /><br /><br /><center><b>" . $lang_module['admin_no_user'] . "</b></center><br /><br /><br />";
+	$contents = nv_theme_alert( $lang_module['admin_no_user_title'], $lang_module['admin_no_user_content'] );
 }
 
 foreach( $module_admin as $userid_i )

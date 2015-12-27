@@ -114,7 +114,7 @@ function nv_dump_save( $params )
 	{
 		return false;
 	}
-
+	
 	$params['tables'] = array_map( 'trim', $params['tables'] );
 	$tables = array();
 	$dbsize = 0;
@@ -159,8 +159,8 @@ function nv_dump_save( $params )
 
 	$template = explode( '@@@', file_get_contents( $path_dump ) );
 
-	$patterns = array( "/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/", "/\{\|DB_COLLATION\|\}/" );
-	$replacements = array( $db->server, gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT", $db->getAttribute( PDO::ATTR_SERVER_VERSION ), PHP_VERSION, $db->dbname, $db_config['collation'] );
+	$patterns = array( "/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/", "/\{\|DB_CHARACTER\|\}/", "/\{\|DB_COLLATION\|\}/" );
+	$replacements = array( $db->server, gmdate( "F j, Y, h:i A", NV_CURRENTTIME ) . " GMT", $db->getAttribute( PDO::ATTR_SERVER_VERSION ), PHP_VERSION, $db->dbname, $db_config['charset'], $db_config['collation'] );
 
 	if( ! $dumpsave->write( preg_replace( $patterns, $replacements, $template[0] ) ) )
 	{

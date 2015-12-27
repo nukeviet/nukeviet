@@ -19,7 +19,7 @@ if( $sys_info['ini_set_support'] )
 {
 	ini_set( 'magic_quotes_runtime', 'Off' );
 	ini_set( 'magic_quotes_sybase', 'Off' );
-	ini_set( 'session.save_handler', 'files' );
+	//ini_set( 'session.save_handler', 'files' );
 	ini_set( 'session.use_trans_sid', 0 );
 	ini_set( 'session.auto_start', 0 );
 	ini_set( 'session.use_cookies', 1 );
@@ -47,7 +47,7 @@ if( $sys_info['ini_set_support'] )
 }
 
 $sys_info['safe_mode'] = ( ini_get( 'safe_mode' ) == '1' || strtolower( ini_get( 'safe_mode' ) ) == 'on' ) ? 1 : 0;
-$sys_info['php_required'] = '5.3.7';
+$sys_info['php_required'] = '5.4.0';
 $sys_info['opendir_support'] = ( function_exists( 'opendir' ) and ! in_array( 'opendir', $sys_info['disable_functions'] ) ) ? 1 : 0;
 $sys_info['gd_support'] = ( extension_loaded( 'gd' ) ) ? 1 : 0;
 $sys_info['fileuploads_support'] = ( ini_get( 'file_uploads' ) ) ? 1 : 0;

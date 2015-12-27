@@ -83,6 +83,7 @@ if( $nv_Request->get_int( 'save', 'post', 0 ) )
 			{
 				$site_mods_admins = ( ( ! empty( $site_mods[$mod]['admins'] ) ) ? $site_mods[$mod]['admins'] . ',' : '' ) . $userid;
 				$site_mods_admins = explode( ',', $site_mods_admins );
+				$site_mods_admins = array_map( 'intval', $site_mods_admins );
 				$site_mods_admins = array_unique( $site_mods_admins );
 				$site_mods_admins = implode( ',', $site_mods_admins );
 				$titles[$i] = $db->quote( $mod );

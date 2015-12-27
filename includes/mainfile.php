@@ -32,6 +32,9 @@ spl_autoload_register( function ( $classname )
 	include NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php';
 } );
 
+// vendor autoload
+require NV_ROOTDIR . '/vendor/autoload.php';
+
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
 if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_FILENAME ) )
@@ -102,7 +105,7 @@ require NV_ROOTDIR . '/includes/timezone.php';
 define( 'NV_CURRENTTIME', isset( $_SERVER['REQUEST_TIME'] ) ? $_SERVER['REQUEST_TIME'] : time() );
 
 // Ket noi voi class Error_handler
-$ErrorHandler = new Error( $global_config );
+$ErrorHandler = new nv_Error( $global_config );
 set_error_handler( array( &$ErrorHandler, 'error_handler' ) );
 
 if( empty( $global_config['allow_sitelangs'] ) )
@@ -115,7 +118,14 @@ require NV_ROOTDIR . '/includes/ini.php';
 require NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php';
 require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
-require NV_ROOTDIR . '/includes/core/cache_functions.php';
+if( preg_match( '/^[a-zA-Z0-9\_]+$/', $global_config['cached'] ) )
+{
+	require NV_ROOTDIR . '/includes/core/cache_' . $global_config['cached'] . '.php';
+}
+else
+{
+	require NV_ROOTDIR . '/includes/core/cache_files.php';
+}
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
@@ -282,7 +292,7 @@ if( isset( $nv_plugin_area[1] ) )
 }
 
 // Bat dau phien lam viec cua MySQL
-$db = new sql_db( $db_config );
+$db = $db_slave = new sql_db( $db_config );
 if( empty( $db->connect ) )
 {
 	trigger_error( 'Sorry! Could not connect to data server', 256 );

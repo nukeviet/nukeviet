@@ -11,7 +11,7 @@
 if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
 
 $topicid = $nv_Request->get_int( 'topicid', 'get' );
-$topictitle = $db->query( 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid =' . $topicid )->fetchColumn();
+$topictitle = $db_slave->query( 'SELECT title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE topicid =' . $topicid )->fetchColumn();
 if( empty( $topictitle ) )
 {
 	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=topics' );
@@ -23,14 +23,14 @@ $page_title = $lang_module['topic_page'] . ': ' . $topictitle;
 $global_array_cat = array();
 
 $sql = 'SELECT catid, alias FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
-$result = $db->query( $sql );
+$result = $db_slave->query( $sql );
 while( list( $catid_i, $alias_i ) = $result->fetch( 3 ) )
 {
 	$global_array_cat[$catid_i] = array( 'alias' => $alias_i );
 }
 
 $sql = 'SELECT id, catid, alias, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE topicid=' . $topicid . ' ORDER BY id ASC';
-$result = $db->query( $sql );
+$result = $db_slave->query( $sql );
 
 $xtpl = new XTemplate( 'topicsnews.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file );
 $xtpl->assign( 'LANG', $lang_module );

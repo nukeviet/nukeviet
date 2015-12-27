@@ -34,8 +34,8 @@ if( substr( $alias, 0, 5) == 'page-' )
 }
 elseif( empty( $alias ) and empty( $page_config['viewtype'] ) )
 {
-    $db->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data )->order( 'weight ASC' )->limit( 1 );
-    $rowdetail = $db->query($db->sql())->fetch();
+    $db_slave->sqlreset()->select( '*' )->from( NV_PREFIXLANG . '_' . $module_data )->order( 'weight ASC' )->limit( 1 );
+    $rowdetail = $db_slave->query($db_slave->sql())->fetch();
 	if( ! empty( $rowdetail ) )
 	{
 		$id = $rowdetail['id'];
@@ -43,7 +43,7 @@ elseif( empty( $alias ) and empty( $page_config['viewtype'] ) )
 }
 elseif( ! empty( $alias ) )
 {
-	$sth = $db->prepare( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND alias=:alias' );
+	$sth = $db_slave->prepare( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE status=1 AND alias=:alias' );
 	$sth->bindParam( ':alias', $alias, PDO::PARAM_STR );
 	$sth->execute();
 	$rowdetail = $sth->fetch();

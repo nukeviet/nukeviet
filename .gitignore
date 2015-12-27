@@ -16,6 +16,36 @@
 /uploads/logo_*
 /install/default.php
 
+/vendor/
+#vendor test ignore 
+/vendor/**/demo/
+/vendor/**/example/
+/vendor/**/examples/
+/vendor/**/test/
+/vendor/**/tests/
+/vendor/**/Tests/
+/vendor/**/travis/
+/vendor/**/.travis.yml
+/vendor/**/.scrutinizer.yml
+/vendor/**/phpunit.xml*
+/vendor/**/phpunit.php
+
+#vendor docs ignore
+/vendor/**/doc/
+/vendor/**/docs/
+/vendor/**/readme*
+/vendor/**/README*
+/vendor/**/CHANGELOG*
+/vendor/**/FAQ*
+/vendor/**/CONTRIBUTING*
+/vendor/**/HISTORY*
+/vendor/**/UPGRADING*
+/vendor/**/UPGRADE*
+/vendor/**/package*
+/vendor/**/phpunit.php
+/vendor/**/.gitignore
+/vendor/**/composer.json
+
 # Ignore some class
 /includes/class/PHPExcel/
 /includes/class/PHPExcel.php
