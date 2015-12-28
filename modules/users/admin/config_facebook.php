@@ -42,4 +42,6 @@ else
 
 	$xtpl->parse( 'main' );
 	$contents = $xtpl->text( 'main' );
+
+	$array_url_instruction['config'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:users:oauth#c%E1%BA%A5u_hinh_v%E1%BB%9Bi_oauth_facebook';
 }
