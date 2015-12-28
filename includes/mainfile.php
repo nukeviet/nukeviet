@@ -32,6 +32,9 @@ spl_autoload_register( function ( $classname )
 	include NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php';
 } );
 
+// vendor autoload
+require NV_ROOTDIR . '/vendor/autoload.php';
+
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
 if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_FILENAME ) )

@@ -63,9 +63,9 @@ $sys_info['curl_support'] = ( extension_loaded( 'curl' ) and ( empty( $sys_info[
 $sys_info['ftp_support'] = ( function_exists( 'ftp_connect' ) and ! in_array( 'ftp_connect', $sys_info['disable_functions'] ) and function_exists( 'ftp_chmod' ) and ! in_array( 'ftp_chmod', $sys_info['disable_functions'] ) and function_exists( 'ftp_mkdir' ) and ! in_array( 'ftp_mkdir', $sys_info['disable_functions'] ) and function_exists( 'ftp_chdir' ) and ! in_array( 'ftp_chdir', $sys_info['disable_functions'] ) and function_exists( 'ftp_nlist' ) and ! in_array( 'ftp_nlist', $sys_info['disable_functions'] ) ) ? 1 : 0;
 
 //Neu he thong khong ho tro php se bao loi
-if( version_compare( PHP_VERSION, '5.3.7' ) < 0 )
+if( version_compare( PHP_VERSION, '5.4.0' ) < 0 )
 {
-	trigger_error( 'You are running an unsupported PHP version. Please upgrade to PHP 5.3.7 or higher before trying to install Nukeviet Portal', 256 );
+	trigger_error( 'You are running an unsupported PHP version. Please upgrade to PHP 5.4 or higher before trying to install Nukeviet Portal', 256 );
 }
 
 //Neu he thong khong ho tro opendir se bao loi

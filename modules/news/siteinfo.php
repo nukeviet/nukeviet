@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_FILE_SITEINFO' ) ) die( 'Stop!!!' );
 $lang_siteinfo = nv_get_lang_module( $mod );
 
 // Tong so bai viet
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE status= 1' )->fetchColumn();
+$number = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE status= 1' )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_publtime'], 'value' => $number );
@@ -28,40 +28,40 @@ else
 {
 	$admins_module = array();
 }
-$result = $db->query( 'SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE lev=1 OR lev=2' );
+$result = $db_slave->query( 'SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE lev=1 OR lev=2' );
 while( $row = $result->fetch() )
 {
 	$admins_module[] = $row['admin_id'];
 }
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE admin_id NOT IN (' . implode( ',', $admins_module ) . ')' )->fetchColumn();
+$number = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE admin_id NOT IN (' . implode( ',', $admins_module ) . ')' )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_users_send'], 'value' => $number );
 }
 
 // So bai viet cho dang tu dong
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE status= 1 AND publtime > ' . NV_CURRENTTIME . ' AND (exptime=0 OR exptime>' . NV_CURRENTTIME . ')' )->fetchColumn();
+$number = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE status= 1 AND publtime > ' . NV_CURRENTTIME . ' AND (exptime=0 OR exptime>' . NV_CURRENTTIME . ')' )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_pending'], 'value' => $number );
 }
 
 // So bai viet da het han
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE exptime > 0 AND exptime<' . NV_CURRENTTIME )->fetchColumn();
+$number = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE exptime > 0 AND exptime<' . NV_CURRENTTIME )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_expired'], 'value' => $number );
 }
 
 // So bai viet sap het han
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE status = 1 AND exptime>' . NV_CURRENTTIME )->fetchColumn();
+$number = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_rows WHERE status = 1 AND exptime>' . NV_CURRENTTIME )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_exptime'], 'value' => $number );
 }
 
 // Tong so binh luan duoc dang
-$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db->quote( $mod ) . ' AND status = 1' )->fetchColumn();
+$number = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment WHERE module=' . $db_slave->quote( $mod ) . ' AND status = 1' )->fetchColumn();
 if( $number > 0 )
 {
 	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_comment'], 'value' => $number );
@@ -70,7 +70,7 @@ if( $number > 0 )
 // Nhac nho cac tu khoa chua co mo ta
 if( ! empty( $module_config[$mod]['tags_remind'] ) )
 {
-	$number = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_tags WHERE description = \'\'' )->fetchColumn();
+	$number = $db_slave->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_tags WHERE description = \'\'' )->fetchColumn();
 
 	if( $number > 0 )
 	{

@@ -10,9 +10,6 @@
 
 if( !defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-// Load the CAS lib
-include NV_ROOTDIR . '/modules/users/CAS.php';
-
 // Enable debugging
 phpCAS::setDebug();
 
