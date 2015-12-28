@@ -23,6 +23,7 @@
     },
     "require": {
         "php": ">=5.4.0",
+        "nukeviet/xtemplate": "*",
         "phpmailer/phpmailer": "^5.2",
         "and/oauth": "^0.7-dev",
         "phpwhois/idna-convert": "*",

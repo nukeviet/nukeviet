@@ -13,6 +13,7 @@ return array(
     'POP3' => $vendorDir . '/phpmailer/phpmailer/class.pop3.php',
     'PclZip' => $vendorDir . '/pclzip/pclzip/pclzip.lib.php',
     'SMTP' => $vendorDir . '/phpmailer/phpmailer/class.smtp.php',
+    'XTemplate' => $vendorDir . '/nukeviet/xtemplate/xtemplate.class.php',
     'ntlm_sasl_client_class' => $vendorDir . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
     'phpmailerException' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
 );
