@@ -99,6 +99,45 @@ $array_viewcat_nosub = array(
 	'viewcat_page_gird' => $lang_module['viewcat_page_gird']
 );
 
+// Tài liệu hướng dẫn
+$array_url_instruction['carrier_config_items'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:shipping_config';
+$array_url_instruction['carrier_config'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:shipping_config';
+$array_url_instruction['carrier'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:shipping_config';
+$array_url_instruction['shops'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:shipping_config';
+$array_url_instruction['shipping_config'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:shipping_config';
+$array_url_instruction['shipping'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:shipping';
+
+$array_url_instruction['coupons'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:coupons';
+$array_url_instruction['coupons_view'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:coupons';
+
+$array_url_instruction['template'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:template';
+$array_url_instruction['template'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:template';
+
+$array_url_instruction['warehouse'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:warehouse';
+$array_url_instruction['warehouse_logs'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:warehouse';
+
+$array_url_instruction['order'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:order';
+$array_url_instruction['order_view'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:order';
+
+$array_url_instruction['content'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:content';
+$array_url_instruction['cat'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:cat';
+$array_url_instruction['discount'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:discount';
+$array_url_instruction['docpay'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:docpay';
+$array_url_instruction['download'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:download';
+$array_url_instruction['group'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:group';
+$array_url_instruction['items'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:list';
+$array_url_instruction['money'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:money';
+$array_url_instruction['payport'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:payport';
+$array_url_instruction['point'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:point';
+$array_url_instruction['unit'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:unit';
+$array_url_instruction['review'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:review';
+$array_url_instruction['setting'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:setting';
+$array_url_instruction['tabs'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:tabs';
+$array_url_instruction['tags'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:tags';
+$array_url_instruction['weight'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:weight';
+$array_url_instruction['block'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:block';
+$array_url_instruction['discounts'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:shops:discount';
+
 define( 'NV_IS_FILE_ADMIN', true );
 
 require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
