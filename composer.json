@@ -26,8 +26,7 @@
         "phpmailer/phpmailer": "^5.2"
     },
     "require-dev": {
-        "facebook/php-sdk-v4": "*",
-        "google/apiclient": "*",
+    	"phpoffice/phpexcel": "*",	
         "jasig/phpcas": "*"
     } 
 }
