@@ -6,4 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'TrueBV\\' => array($vendorDir . '/true/punycode/src'),
+    'OAuth\\' => array($vendorDir . '/and/oauth/src'),
+    'League\\Url\\' => array($vendorDir . '/league/url/src'),
 );

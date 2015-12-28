@@ -23,10 +23,10 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "phpmailer/phpmailer": "^5.2"
+        "phpmailer/phpmailer": "^5.2",
+        "and/oauth": "^0.7-dev"
+        
     },
     "require-dev": {
-    	"phpoffice/phpexcel": "*",	
-        "jasig/phpcas": "*"
     } 
 }
