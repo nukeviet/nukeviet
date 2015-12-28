@@ -362,7 +362,7 @@ else
 	$openid_files = @scandir( NV_ROOTDIR . '/modules/users/login' );
 	foreach( $openid_files as $server )
 	{
-		if( preg_match( '/^(cas|oauth|openid)\-([a-z0-9\-\_]+)\.php$/', $server, $m ) )
+		if( preg_match( '/^(cas|oauth)\-([a-z0-9\-\_]+)\.php$/', $server, $m ) )
 		{
 			$checked = ( ! empty( $servers ) and in_array( $m[2], $servers ) ) ? ' checked="checked"' : '';
 			$disabled = '';
