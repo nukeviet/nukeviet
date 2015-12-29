@@ -18,7 +18,7 @@ if( $number > 0 )
 {
 	$pendinginfo[] = array(
 		'key' => $lang_siteinfo['siteinfo_queue_comments'],
-		'value' => $number,
+		'value' => number_format( $number ),
 		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $mod . '&amp;sstatus=0',
 	);
 }

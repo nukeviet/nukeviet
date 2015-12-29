@@ -18,7 +18,7 @@ if( $number > 0 )
 {
 	$pendinginfo[] = array(
 		'key' => $lang_siteinfo['siteinfo_new'],
-		'value' => $number,
+		'value' => number_format( $number ),
 		'link' => NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $mod
 	);
 }
