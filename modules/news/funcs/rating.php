@@ -18,7 +18,7 @@ $id = $nv_Request->get_int( 'id', 'post', 0 );
 $point = $nv_Request->get_int( 'point', 'post', 0 );
 $checkss = $nv_Request->get_title( 'checkss', 'post' );
 
-$time_set = $nv_Request->get_int( $module_name . '_' . $op . '_' . $id, 'session', 0 );
+$time_set = $nv_Request->get_int( $module_data . '_' . $op . '_' . $id, 'session', 0 );
 
 if( $id > 0 and in_array( $point, $array_point ) and $checkss == md5( $id . $client_info['session_id'] . $global_config['sitekey'] ) )
 {
@@ -27,7 +27,7 @@ if( $id > 0 and in_array( $point, $array_point ) and $checkss == md5( $id . $cli
 		die( $lang_module['rating_error2'] );
 	}
 
-	$nv_Request->set_Session( $module_name . '_' . $op . '_' . $id, NV_CURRENTTIME );
+	$nv_Request->set_Session( $module_data . '_' . $op . '_' . $id, NV_CURRENTTIME );
 	$query = $db->query( "SELECT listcatid, allowed_rating, total_rating, click_rating FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id = " . $id . " AND status=1" );
 	$row = $query->fetch();
 	if( isset( $row['allowed_rating'] ) and $row['allowed_rating'] == 1 )

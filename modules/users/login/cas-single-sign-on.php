@@ -28,6 +28,8 @@ phpCAS::setNoCasServerValidation();
 // set the language to french
 //phpCAS::setLang(PHPCAS_LANG_FRENCH);
 
+phpCAS::handleLogoutRequests( false );// https://wiki.jasig.org/display/casum/single+sign+out#SingleSignOut-Howitworks
+
 // force CAS authentication
 phpCAS::forceAuthentication();
 

@@ -16,7 +16,6 @@
 /uploads/logo_*
 /install/default.php
 
-/vendor/
 #vendor test ignore 
 /vendor/**/demo/
 /vendor/**/example/
@@ -45,10 +44,6 @@
 /vendor/**/phpunit.php
 /vendor/**/.gitignore
 /vendor/**/composer.json
-
-# Ignore some class
-/includes/class/PHPExcel/
-/includes/class/PHPExcel.php
 
 # Ignore some uploads, assets dir
 /assets/download
