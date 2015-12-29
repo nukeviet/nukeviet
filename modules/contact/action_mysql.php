@@ -8,7 +8,9 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_MODULES')) {
+    die('Stop!!!');
+}
 
 $sql_drop_module = array();
 

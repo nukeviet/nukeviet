@@ -9,14 +9,14 @@
  */
 
 $module_version = array(
-	'name' => 'Module Menu',
-	'modfuncs' => '',
-	'submenu' => '',
-	'is_sysmod' => 1,
-	'virtual' => 0,
-	'version' => '4.0.21',
-	'date' => 'Fri, 7 May 2010 09:47:15 GMT',
-	'author' => 'VINADES (contact@vinades.vn)',
-	'note' => '',
+    'name' => 'Module Menu',
+    'modfuncs' => '',
+    'submenu' => '',
+    'is_sysmod' => 1,
+    'virtual' => 0,
+    'version' => '4.0.21',
+    'date' => 'Fri, 7 May 2010 09:47:15 GMT',
+    'author' => 'VINADES (contact@vinades.vn)',
+    'note' => '',
     'uploads_dir' => array( $module_upload)
 );

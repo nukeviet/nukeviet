@@ -8,16 +8,18 @@
  * @Createdate Sun, 08 Apr 2012 00:00:00 GMT
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $module_version = array(
-	'name' => 'Users',
-	'modfuncs' => 'main,login,logout,register,lostpass,active,editinfo,avatar,lostactivelink,thu,memberlist',
-	'submenu' => 'main,login,logout,register,lostpass,active,editinfo,lostactivelink,memberlist',
-	'is_sysmod' => 1,
-	'virtual' => 0,
-	'version' => '4.0.21',
-	'date' => 'Wed, 20 Oct 2010 00:00:00 GMT',
-	'author' => 'VINADES (contact@vinades.vn)',
-	'note' => ''
+    'name' => 'Users',
+    'modfuncs' => 'main,login,logout,register,lostpass,active,editinfo,avatar,lostactivelink,thu,memberlist',
+    'submenu' => 'main,login,logout,register,lostpass,active,editinfo,lostactivelink,memberlist',
+    'is_sysmod' => 1,
+    'virtual' => 0,
+    'version' => '4.0.21',
+    'date' => 'Wed, 20 Oct 2010 00:00:00 GMT',
+    'author' => 'VINADES (contact@vinades.vn)',
+    'note' => ''
 );

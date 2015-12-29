@@ -8,7 +8,9 @@
  * @Createdate 2/3/2012, 19:53
  */
 
-if( ! defined( 'NV_BUFFER_CLASS' ) ) define( 'NV_BUFFER_CLASS', true );
+if (! defined('NV_BUFFER_CLASS')) {
+    define('NV_BUFFER_CLASS', true);
+}
 
 /**
  * NVbuffer
@@ -21,156 +23,146 @@ if( ! defined( 'NV_BUFFER_CLASS' ) ) define( 'NV_BUFFER_CLASS', true );
  */
 class NVbuffer
 {
-	var $position = 0;
-	var $varname = null;
+    public $position = 0;
+    public $varname = null;
 
-	/**
-	 * NVbuffer::stream_open()
-	 * 
-	 * @param mixed $path
-	 * @param mixed $mode
-	 * @param mixed $options
-	 * @param mixed $opened_path
-	 * @return
-	 */
-	function stream_open( $path, $mode, $options, &$opened_path )
-	{
-		$url = parse_url( $path );
-		$this->varname = $url["host"];
-		$this->position = 0;
+    /**
+     * NVbuffer::stream_open()
+     * 
+     * @param mixed $path
+     * @param mixed $mode
+     * @param mixed $options
+     * @param mixed $opened_path
+     * @return
+     */
+    public function stream_open($path, $mode, $options, &$opened_path)
+    {
+        $url = parse_url($path);
+        $this->varname = $url["host"];
+        $this->position = 0;
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * NVbuffer::stream_read()
-	 * 
-	 * @param mixed $count
-	 * @return
-	 */
-	function stream_read( $count )
-	{
-		$ret = substr( $GLOBALS[$this->varname], $this->position, $count );
-		$this->position += strlen( $ret );
+    /**
+     * NVbuffer::stream_read()
+     * 
+     * @param mixed $count
+     * @return
+     */
+    public function stream_read($count)
+    {
+        $ret = substr($GLOBALS[$this->varname], $this->position, $count);
+        $this->position += strlen($ret);
 
-		return $ret;
-	}
+        return $ret;
+    }
 
-	/**
-	 * NVbuffer::stream_write()
-	 * 
-	 * @param mixed $data
-	 * @return
-	 */
-	function stream_write( $data )
-	{
-		if( ! isset( $GLOBALS[$this->varname] ) ) $GLOBALS[$this->varname] = '';
+    /**
+     * NVbuffer::stream_write()
+     * 
+     * @param mixed $data
+     * @return
+     */
+    public function stream_write($data)
+    {
+        if (! isset($GLOBALS[$this->varname])) {
+            $GLOBALS[$this->varname] = '';
+        }
 
-		$left = substr( $GLOBALS[$this->varname], 0, $this->position );
-		$right = substr( $GLOBALS[$this->varname], $this->position + strlen( $data ) );
-		$GLOBALS[$this->varname] = $left . $data . $right;
-		$this->position += strlen( $data );
+        $left = substr($GLOBALS[$this->varname], 0, $this->position);
+        $right = substr($GLOBALS[$this->varname], $this->position + strlen($data));
+        $GLOBALS[$this->varname] = $left . $data . $right;
+        $this->position += strlen($data);
 
-		return strlen( $data );
-	}
+        return strlen($data);
+    }
 
-	/**
-	 * NVbuffer::stream_tell()
-	 * 
-	 * @return
-	 */
-	function stream_tell()
-	{
-		return $this->position;
-	}
+    /**
+     * NVbuffer::stream_tell()
+     * 
+     * @return
+     */
+    public function stream_tell()
+    {
+        return $this->position;
+    }
 
-	/**
-	 * NVbuffer::stream_eof()
-	 * 
-	 * @return
-	 */
-	function stream_eof()
-	{
-		return $this->position >= strlen( $GLOBALS[$this->varname] );
-	}
+    /**
+     * NVbuffer::stream_eof()
+     * 
+     * @return
+     */
+    public function stream_eof()
+    {
+        return $this->position >= strlen($GLOBALS[$this->varname]);
+    }
 
-	/**
-	 * NVbuffer::stream_seek()
-	 * 
-	 * @param mixed $offset
-	 * @param mixed $whence
-	 * @return
-	 */
-	function stream_seek( $offset, $whence )
-	{
-		switch( $whence )
-		{
-			case SEEK_SET:
-				if( $offset < strlen( $GLOBALS[$this->varname] ) && $offset >= 0 )
-				{
-					$this->position = $offset;
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+    /**
+     * NVbuffer::stream_seek()
+     * 
+     * @param mixed $offset
+     * @param mixed $whence
+     * @return
+     */
+    public function stream_seek($offset, $whence)
+    {
+        switch ($whence) {
+            case SEEK_SET:
+                if ($offset < strlen($GLOBALS[$this->varname]) && $offset >= 0) {
+                    $this->position = $offset;
+                    return true;
+                } else {
+                    return false;
+                }
 
-				break;
+                break;
 
-			case SEEK_CUR:
-				if( $offset >= 0 )
-				{
-					$this->position += $offset;
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+            case SEEK_CUR:
+                if ($offset >= 0) {
+                    $this->position += $offset;
+                    return true;
+                } else {
+                    return false;
+                }
 
-				break;
+                break;
 
-			case SEEK_END:
-				if( strlen( $GLOBALS[$this->varname] ) + $offset >= 0 )
-				{
-					$this->position = strlen( $GLOBALS[$this->varname] ) + $offset;
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+            case SEEK_END:
+                if (strlen($GLOBALS[$this->varname]) + $offset >= 0) {
+                    $this->position = strlen($GLOBALS[$this->varname]) + $offset;
+                    return true;
+                } else {
+                    return false;
+                }
 
-				break;
+                break;
 
-			default:
-				return false;
-		}
-	}
+            default:
+                return false;
+        }
+    }
 
-	/**
-	 * NVbuffer::stream_metadata()
-	 * 
-	 * @param mixed $path
-	 * @param mixed $option
-	 * @param mixed $var
-	 * @return
-	 */
-	function stream_metadata( $path, $option, $var )
-	{
-		if( $option == STREAM_META_TOUCH )
-		{
-			$url = parse_url( $path );
-			$varname = $url["host"];
+    /**
+     * NVbuffer::stream_metadata()
+     * 
+     * @param mixed $path
+     * @param mixed $option
+     * @param mixed $var
+     * @return
+     */
+    public function stream_metadata($path, $option, $var)
+    {
+        if ($option == STREAM_META_TOUCH) {
+            $url = parse_url($path);
+            $varname = $url["host"];
 
-			if( ! isset( $GLOBALS[$varname] ) )
-			{
-				$GLOBALS[$varname] = '';
-			}
+            if (! isset($GLOBALS[$varname])) {
+                $GLOBALS[$varname] = '';
+            }
 
-			return true;
-		}
-		return false;
-	}
+            return true;
+        }
+        return false;
+    }
 }
