@@ -16,7 +16,7 @@ $lang_siteinfo = nv_get_lang_module( $mod );
 $number = $db->query( 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE )->fetchColumn();
 if( $number > 0 )
 {
-	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_user'], 'value' => $number );
+	$siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_user'], 'value' => number_format( $number ) );
 }
 
 // So thanh vien doi kich hoat
@@ -25,7 +25,7 @@ if( $number > 0 )
 {
 	$pendinginfo[] = array(
 		'key' => $lang_siteinfo['siteinfo_waiting'],
-		'value' => $number,
+		'value' => number_format( $number ),
 		'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $mod . '&amp;' . NV_OP_VARIABLE . '=user_waiting'
 	);
 }
