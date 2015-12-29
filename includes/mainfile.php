@@ -82,6 +82,9 @@ spl_autoload_register( function ( $classname )
 	include NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php';
 } );
 
+// Vendor autoload
+require NV_ROOTDIR . '/vendor/autoload.php';
+
 // Xac dinh IP cua client
 $ips = new ips();
 // define( 'NV_SERVER_IP', $ips->server_ip );
@@ -449,9 +452,6 @@ elseif( ! defined( 'NV_ADMIN' ) and ! defined( 'NV_IS_ADMIN' ) )
 unset( $nv_check_update );
 
 define( 'PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' );
-
-// Vendor autoload
-require NV_ROOTDIR . '/vendor/autoload.php';
 
 if( isset( $nv_plugin_area[2] ) )
 {
