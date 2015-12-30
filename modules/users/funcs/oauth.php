@@ -13,7 +13,7 @@ if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 if( $global_config['allowuserlogin'] and defined( 'NV_OPENID_ALLOWED' ) )
 {
     $server = $nv_Request->get_string( 'server', 'get', '' );
-    
+
 	if( ! empty( $server ) and in_array( $server, $global_config['openid_servers'] ) )
 	{
 		// Add to Global config
@@ -21,7 +21,7 @@ if( $global_config['allowuserlogin'] and defined( 'NV_OPENID_ALLOWED' ) )
 		$result = $db->query( $sql );
 		$global_config['avatar_width'] = $result->fetchColumn();
 		$result->closeCursor();
-		
+
 		$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_height'";
 		$result = $db->query( $sql );
 		$global_config['avatar_height'] = $result->fetchColumn();
@@ -34,51 +34,6 @@ if( $global_config['allowuserlogin'] and defined( 'NV_OPENID_ALLOWED' ) )
 		elseif( file_exists(NV_ROOTDIR . '/modules/users/login/cas-' . $server . '.php') )
 		{
 			include NV_ROOTDIR . '/modules/users/login/cas-' . $server . '.php';
-		}
-		else
-		{
-			$openid = new LightOpenID();
-
-			if( $nv_Request->isset_request( 'openid_mode', 'get' ) )
-			{
-				$openid_mode = $nv_Request->get_string( 'openid_mode', 'get', '' );
-
-				if( $openid_mode == 'cancel' )
-				{
-					$attribs = array( 'result' => 'cancel' );
-				}
-				elseif( ! $openid->validate() )
-				{
-					$attribs = array( 'result' => 'notlogin' );
-				}
-				else
-				{
-					$attribs = array(
-						'result' => 'is_res',
-						'id' => $openid->identity,
-						'server' => $server
-					) + $openid->getAttributes();
-				}
-
-				$attribs = serialize( $attribs );
-				$nv_Request->set_Session( 'openid_attribs', $attribs );
-
-				$op_redirect = ( defined( 'NV_IS_USER' ) ) ? 'editinfo/openid' : 'login';
-                $nv_redirect = nv_get_redirect();
-                if( !empty( $nv_redirect ) ) $nv_redirect = '&nv_redirect=' . $nv_redirect;
-				Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect );
-				exit();
-			}
-
-			if( ! $nv_Request->isset_request( 'result', 'get' ) )
-			{
-				include_once NV_ROOTDIR . '/modules/users/login/openid-' . $server . '.php' ;
-				$openid->identity = $openid_server_config['identity'];
-				$openid->required = array_values( $openid_server_config['required'] );
-				header( 'Location: ' . $openid->authUrl() );
-				die();
-			}
-			exit();
 		}
 	}
 }

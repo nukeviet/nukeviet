@@ -10,14 +10,9 @@
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-require_once NV_ROOTDIR . '/modules/users/oAuthLib/autoload.php';
-
 use OAuth\OAuth2\Service\Facebook;
 use OAuth\Common\Storage\Session;
 use OAuth\Common\Consumer\Credentials;
-
-// Bootstrap the example
-require_once NV_ROOTDIR . '/modules/users/oAuthLib/OAuth/bootstrap.php';
 
 // Session storage
 $storage = new Session();
@@ -37,7 +32,7 @@ if( !empty( $_GET['code'] ) )
 	$token = $facebookService->requestAccessToken( $_GET['code'] );
 
 	// Send a request with it
-	$result = json_decode( $facebookService->request( '/me' ), true );
+	$result = json_decode( $facebookService->request( '/me?fields=id,name,email' ), true );
 	
 	if( isset( $result['email'] ) )
 	{

@@ -10,14 +10,9 @@
 
 if( ! defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
 
-require_once NV_ROOTDIR . '/modules/users/oAuthLib/autoload.php';
-
 use OAuth\OAuth2\Service\Google;
 use OAuth\Common\Storage\Session;
 use OAuth\Common\Consumer\Credentials;
-
-// Bootstrap the example
-require_once NV_ROOTDIR . '/modules/users/oAuthLib/OAuth/bootstrap.php';
 
 // Session storage
 $storage = new Session();

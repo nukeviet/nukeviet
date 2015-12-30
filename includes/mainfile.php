@@ -26,15 +26,6 @@ $db_config = $global_config = $module_config = $client_info = $user_info = $admi
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
-// Register given function autoload implementation
-spl_autoload_register( function ( $classname )
-{
-	include NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php';
-} );
-
-// vendor autoload
-require NV_ROOTDIR . '/vendor/autoload.php';
-
 // Ket noi voi cac file constants, config
 require NV_ROOTDIR . '/includes/constants.php';
 if( file_exists( NV_ROOTDIR . '/' . NV_CONFIG_FILENAME ) )
@@ -84,6 +75,12 @@ else
     define( 'NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups' );
     define( 'NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users' );
 }
+
+// Register given function autoload implementation
+spl_autoload_register( function ( $classname )
+{
+	include NV_ROOTDIR . '/includes/class/' . strtolower( $classname ) . '.class.php';
+} );
 
 // Xac dinh IP cua client
 $ips = new ips();
@@ -452,6 +449,9 @@ elseif( ! defined( 'NV_ADMIN' ) and ! defined( 'NV_IS_ADMIN' ) )
 unset( $nv_check_update );
 
 define( 'PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' );
+
+// Vendor autoload
+require NV_ROOTDIR . '/vendor/autoload.php';
 
 if( isset( $nv_plugin_area[2] ) )
 {
