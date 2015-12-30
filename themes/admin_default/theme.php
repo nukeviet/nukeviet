@@ -338,19 +338,12 @@ function nv_admin_theme( $contents, $head_site = 1 )
 		$xtpl->assign( 'NV_GO_CLIENTMOD', $lang_global['go_clientmod'] );
 		$xtpl->parse( 'main.site_mods' );
 	}
-
-	if( !empty( $array_url_instruction ) )
+	
+	if( isset( $array_url_instruction[$op] ) )
 	{
-		foreach( $array_url_instruction as $key => $value )
-		{
-			if( $op == $key and filter_var( $value, FILTER_VALIDATE_URL ) )
-			{
-				$xtpl->assign( 'NV_INSTRUCTION', $lang_global['go_instrucion'] );
-				$xtpl->assign( 'NV_URL_INSTRUCTION', $value );
-				$xtpl->parse( 'main.url_instruction' );
-				break;
-			}
-		}
+		$xtpl->assign( 'NV_INSTRUCTION', $lang_global['go_instrucion'] );
+		$xtpl->assign( 'NV_URL_INSTRUCTION', $array_url_instruction[$op] );
+		$xtpl->parse( 'main.url_instruction' );
 	}
 
 	/**

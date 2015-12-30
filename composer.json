@@ -23,11 +23,12 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "phpmailer/phpmailer": "^5.2"
+        "nukeviet/xtemplate": "*",
+        "phpmailer/phpmailer": "^5.2",
+        "and/oauth": "^0.7-dev",
+        "phpwhois/idna-convert": "*",
+        "pclzip/pclzip": "^2.8"
     },
     "require-dev": {
-        "facebook/php-sdk-v4": "*",
-        "google/apiclient": "*",
-        "jasig/phpcas": "*"
     } 
 }
