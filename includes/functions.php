@@ -456,22 +456,13 @@ function nv_capcha_txt($seccode)
     $maxran = 1000000;
     $random = mt_rand(0, $maxran);
 
-    if ($global_config['captcha_type'] == 1) {
-        $scaptcha = isset($_SESSION['scaptcha']) ? $_SESSION['scaptcha'] : '';
-        $_SESSION['scaptcha'] = $random;
-        if (! empty($scaptcha) and strtolower($scaptcha) == strtolower($seccode)) {
-            return true;
-        }
-        return false;
-    } else {
-        $seccode = strtoupper($seccode);
-        $random_num = $nv_Request->get_string('random_num', 'session', 0);
-        $datekey = date('F j');
-        $rcode = strtoupper(md5(NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey));
+    $seccode = strtoupper($seccode);
+    $random_num = $nv_Request->get_string('random_num', 'session', 0);
+    $datekey = date('F j');
+    $rcode = strtoupper(md5(NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey));
 
-        $nv_Request->set_Session('random_num', $random);
-        return (preg_match('/^[a-zA-Z0-9]{' . NV_GFX_NUM . '}$/', $seccode) and $seccode == substr($rcode, 2, NV_GFX_NUM));
-    }
+    $nv_Request->set_Session('random_num', $random);
+    return (preg_match('/^[a-zA-Z0-9]{' . NV_GFX_NUM . '}$/', $seccode) and $seccode == substr($rcode, 2, NV_GFX_NUM));
 }
 
 /**
@@ -1559,7 +1550,7 @@ function nv_change_buffer($buffer)
         $buffer = preg_replace('/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1);
     }
 
-    $optimizer = new optimizer($buffer,  NV_BASE_SITEURL);
+    $optimizer = new NukeViet\Core\Optimizer($buffer,  NV_BASE_SITEURL);
     return $optimizer->process();
 }
 

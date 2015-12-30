@@ -38,10 +38,8 @@ $sys_info['ini_set_support'] = (function_exists('ini_set') and ! in_array('ini_s
 require NV_ROOTDIR . '/includes/constants.php';
 define('NV_FILES_DIR', NV_ASSETS_DIR);
 
-// Register given function autoload implementation
-spl_autoload_register(function ($classname) {
-    include NV_ROOTDIR . '/includes/class/' . strtolower($classname) . '.class.php';
-});
+// Vendor autoload
+require NV_ROOTDIR . '/vendor/autoload.php';
 
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
@@ -51,7 +49,7 @@ $global_config['my_domains'] = $_SERVER['SERVER_NAME'];
 $global_config['allowed_html_tags'] = array_map("trim", explode(',', NV_ALLOWED_HTML_TAGS));
 
 //Xac dinh IP cua client
-$ips = new ips();
+$ips = new NukeViet\Core\Ips();
 $client_info['ip'] = $ips->remote_ip;
 if ($client_info['ip'] == "none") {
     die('Error: Your IP address is not correct');
@@ -79,7 +77,7 @@ $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 //Ket noi voi class Error_handler
-$ErrorHandler = new nv_Error($global_config);
+$ErrorHandler = new NukeViet\Core\Error($global_config);
 set_error_handler(array( &$ErrorHandler, 'error_handler' ));
 
 //Ket noi voi cac file cau hinh, function va template
@@ -97,7 +95,7 @@ $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim(NV
 $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
 
 //Ket noi voi class xu ly request
-$nv_Request = new Request($global_config, $client_info['ip']);
+$nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
 
 define('NV_SERVER_NAME', $nv_Request->server_name);
 //vd: mydomain1.com
@@ -169,4 +167,4 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 }
 
 //Class ma hoa du lieu
-$crypt = new nv_Crypt($global_config['sitekey']);
+$crypt = new NukeViet\Core\Encryption($global_config['sitekey']);

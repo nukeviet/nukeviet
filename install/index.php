@@ -407,13 +407,13 @@ if ($step == 1) {
             $db_config['autosetcollation'] = true;
         }
         $db_config['charset'] = strstr($db_config['collation'], '_', true);
-        $db = new sql_db($db_config);
+        $db = new NukeViet\Core\Database($db_config);
         $connect = $db->connect;
         if (! $connect) {
             $db_config['error'] = 'Could not connect to data server';
             if ($db_config['dbtype'] == 'mysql') {
                 $db_config['dbname'] = '';
-                $db = new sql_db($db_config);
+                $db = new NukeViet\Core\Database($db_config);
                 $db_config['dbname'] = $db_config['dbsystem'];
                 if ($db->connect) {
                     try {
@@ -643,7 +643,7 @@ if ($step == 1) {
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
 
     // Bat dau phien lam viec cua MySQL
-    $db = new sql_db($db_config);
+    $db = new NukeViet\Core\Database($db_config);
     if (! empty($db->error)) {
         $error = (! empty($db->error['user_message'])) ? $db->error['user_message'] : $db->error['message'];
     }
@@ -977,7 +977,7 @@ function nv_save_file_config()
         $content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
         $content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";
         $content .= "\$global_config['cached'] = 'files';\n";
-        
+
         if ($step < 7) {
             $content .= "\$global_config['cookie_prefix'] = '" . $global_config['cookie_prefix'] . "';\n";
             $content .= "\$global_config['session_prefix'] = '" . $global_config['session_prefix'] . "';\n";

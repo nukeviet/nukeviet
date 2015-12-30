@@ -75,17 +75,15 @@ if (defined('NV_CONFIG_DIR')) {
     define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups');
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
 }
-
 // Register given function autoload implementation
 spl_autoload_register(function ($classname) {
-    include NV_ROOTDIR . '/includes/class/' . strtolower($classname) . '.class.php';
+    die( NV_ROOTDIR . '/includes/class/' . strtolower($classname) . '.class.php');
 });
-
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
 
 // Xac dinh IP cua client
-$ips = new ips();
+$ips = new NukeViet\Core\Ips();
 // define( 'NV_SERVER_IP', $ips->server_ip );
 define('NV_FORWARD_IP', $ips->forward_ip);
 define('NV_REMOTE_ADDR', $ips->remote_addr);
@@ -106,7 +104,7 @@ require NV_ROOTDIR . '/includes/timezone.php';
 define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time());
 
 // Ket noi voi class Error_handler
-$ErrorHandler = new nv_Error($global_config);
+$ErrorHandler = new NukeViet\Core\Error($global_config);
 set_error_handler(array( &$ErrorHandler, 'error_handler' ));
 
 if (empty($global_config['allow_sitelangs'])) {
@@ -144,7 +142,7 @@ if (defined('NV_SYSTEM')) {
 }
 
 // Ket noi voi class xu ly request
-$nv_Request = new Request($global_config, NV_CLIENT_IP);
+$nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
 
 define('NV_SERVER_NAME', $nv_Request->server_name);
 // vd: mydomain1.com
@@ -237,7 +235,7 @@ if (NV_USER_AGENT == 'NUKEVIET CMS ' . $global_config['version'] . '. Developed 
 }
 
 // Xac dinh borwser cua client
-$browser = new Browser(NV_USER_AGENT);
+$browser = new NukeViet\Client\Browser(NV_USER_AGENT);
 $client_info['browser'] = array();
 $client_info['browser']['key'] = $browser->getBrowserKey();
 $client_info['browser']['name'] = $browser->getBrowser();
@@ -268,7 +266,7 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
     require NV_ROOTDIR . '/includes/core/captcha.php';
 }
 // Class ma hoa du lieu
-$crypt = new nv_Crypt($global_config['sitekey']);
+$crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
 $global_config['ftp_user_pass'] = $crypt->aes_decrypt(nv_base64_decode($global_config['ftp_user_pass']));
 
 if (isset($nv_plugin_area[1])) {
@@ -278,8 +276,8 @@ if (isset($nv_plugin_area[1])) {
     }
 }
 
-// Bat dau phien lam viec cua MySQL
-$db = $db_slave = new sql_db($db_config);
+// Bat dau phien lam viec cua Database
+$db = $db_slave = new NukeViet\Core\Database($db_config);
 if (empty($db->connect)) {
     trigger_error('Sorry! Could not connect to data server', 256);
 }

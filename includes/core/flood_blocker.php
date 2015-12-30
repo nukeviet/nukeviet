@@ -14,7 +14,7 @@ if (! defined('NV_MAINFILE')) {
 
 $rules = array( '60' => $global_config['max_requests_60'], '300' => $global_config['max_requests_300'] );
 
-$flb = new FloodBlocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', $rules, NV_CLIENT_IP);
+$flb = new NukeViet\Core\FloodBlocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', $rules, NV_CLIENT_IP);
 
 if ($flb->is_blocker) {
     if (! defined('NV_IS_AJAX') and file_exists(NV_ROOTDIR . '/themes/default/system/flood_blocker.tpl')) {

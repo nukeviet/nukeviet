@@ -188,7 +188,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $config_value = array_filter($config_theme);
-    !empty($css) && $config_value['css_content'] = Minify_CSS_Compressor::process($css);
+    !empty($css) && $config_value['css_content'] = $css;
     $config_value = serialize($config_value);
 
     if (isset($module_config['themes'][$selectthemes])) {
