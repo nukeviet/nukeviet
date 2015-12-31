@@ -349,13 +349,9 @@ if (defined('NV_ADMIN')) {
     }
 }
 
-// Second execute
-if ($nv_Request->isset_request('second', 'get')) {
-    if ($nv_Request->get_string('second', 'get') == 'cronjobs') {
-        require NV_ROOTDIR . '/includes/core/cronjobs.php';
-    } elseif ($nv_Request->get_string('second', 'get') == 'qr') {
-        require NV_ROOTDIR . '/includes/core/qr.php';
-    }
+// Cronjobs execute
+if ($nv_Request->get_string('second', 'get') == 'cronjobs') {
+    require NV_ROOTDIR . '/includes/core/cronjobs.php';
 }
 
 // Kiem tra tu cach admin
@@ -404,17 +400,9 @@ if ($nv_check_update and ! defined('NV_IS_UPDATE')) {
         exit();
     }
 }
-
 unset($nv_check_update);
 
-define('PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/');
 
-if (isset($nv_plugin_area[2])) {
-    // Kết nối với các plugin Trước khi gọi các module
-    foreach ($nv_plugin_area[2] as $_fplugin) {
-        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
-    }
-}
 
 $cache_file = NV_LANG_DATA . '_sitemods_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = nv_get_cache('modules', $cache_file)) != false) {
@@ -462,5 +450,14 @@ if (($cache = nv_get_cache('modules', $cache_file)) != false) {
         unset($cache, $result);
     } catch (PDOException $e) {
         //trigger_error( $e->getMessage() );
+    }
+}
+
+define('PCLZIP_TEMPORARY_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR . '/');
+
+if (isset($nv_plugin_area[2])) {
+    // Kết nối với các plugin Trước khi gọi các module
+    foreach ($nv_plugin_area[2] as $_fplugin) {
+        include NV_ROOTDIR . '/includes/plugin/' . $_fplugin;
     }
 }
