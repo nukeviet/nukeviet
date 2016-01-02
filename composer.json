@@ -23,11 +23,15 @@
     },
     "require": {
         "php": ">=5.4.0",
+        "ext-gd": "*",
+        "vinades/nukeviet": "dev-master",
         "nukeviet/xtemplate": "*",
-        "phpmailer/phpmailer": "^5.2",
+        "gregwar/captcha": "1.*",
         "and/oauth": "^0.7-dev",
+        "phpmailer/phpmailer": "5.4.x-dev",
         "phpwhois/idna-convert": "*",
-        "pclzip/pclzip": "^2.8"
+        "pclzip/pclzip": "^2.8",
+        "endroid/qrcode": "^1.5"
     },
     "require-dev": {
     } 

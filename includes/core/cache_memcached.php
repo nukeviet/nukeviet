@@ -8,10 +8,12 @@
  * @Createdate 1/9/2010, 3:21
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $memcached = new Memcached();
-$memcached->addServer( NV_MEMCACHED_HOST, NV_MEMCACHED_PORT );
+$memcached->addServer(NV_MEMCACHED_HOST, NV_MEMCACHED_PORT);
 
 /**
  * nv_delete_all_cache()
@@ -19,10 +21,10 @@ $memcached->addServer( NV_MEMCACHED_HOST, NV_MEMCACHED_PORT );
  *
  * @return
  */
-function nv_delete_all_cache( $sys = true )
+function nv_delete_all_cache($sys = true)
 {
-	global $memcached;
-	$memcached->flush();
+    global $memcached;
+    $memcached->flush();
 }
 
 /**
@@ -33,17 +35,15 @@ function nv_delete_all_cache( $sys = true )
  *
  * @return void
  */
-function nv_del_moduleCache( $module_name, $lang = NV_LANG_DATA )
+function nv_del_moduleCache($module_name, $lang = NV_LANG_DATA)
 {
-	global $memcached;
-	$AllKeys = $memcached->getAllKeys();
-	foreach( $AllKeys as $_key )
-	{
-		if( preg_match( '/^' . $module_name . '\_/', $_key ) )
-		{
-			$memcached->delete( $_key );
-		}
-	}
+    global $memcached;
+    $AllKeys = $memcached->getAllKeys();
+    foreach ($AllKeys as $_key) {
+        if (preg_match('/^' . $module_name . '\_/', $_key)) {
+            $memcached->delete($_key);
+        }
+    }
 }
 
 /**
@@ -53,10 +53,10 @@ function nv_del_moduleCache( $module_name, $lang = NV_LANG_DATA )
  * @param mixed $filename
  * @return
  */
-function nv_get_cache( $module_name, $filename )
+function nv_get_cache($module_name, $filename)
 {
-	global $memcached;
-	return $memcached->get( $module_name . '_' . md5( $filename ) . '_' . NV_CACHE_PREFIX );
+    global $memcached;
+    return $memcached->get($module_name . '_' . md5($filename) . '_' . NV_CACHE_PREFIX);
 }
 
 /**
@@ -67,10 +67,10 @@ function nv_get_cache( $module_name, $filename )
  * @param mixed $content
  * @return
  */
-function nv_set_cache( $module_name, $filename, $content )
+function nv_set_cache($module_name, $filename, $content)
 {
-	global $memcached;
-	$memcached->set( $module_name . '_' . md5( $filename ) . '_' . NV_CACHE_PREFIX, $content );
+    global $memcached;
+    $memcached->set($module_name . '_' . md5($filename) . '_' . NV_CACHE_PREFIX, $content);
 }
 
 /**
@@ -82,33 +82,34 @@ function nv_set_cache( $module_name, $filename, $content )
  * @param mixed $lang
  * @return
  */
-function nv_db_cache( $sql, $key = '', $modname = '', $lang = NV_LANG_DATA )
+function nv_db_cache($sql, $key = '', $modname = '', $lang = NV_LANG_DATA)
 {
-	global $memcached, $db, $module_name;
+    global $memcached, $db, $module_name;
 
-	$_rows = array();
+    $_rows = array();
 
-	if( empty( $sql ) ) return $_rows;
+    if (empty($sql)) {
+        return $_rows;
+    }
 
-	if( empty( $modname ) ) $modname = $module_name;
+    if (empty($modname)) {
+        $modname = $module_name;
+    }
 
-	$cache_key = $modname . '_' . $lang . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX;
+    $cache_key = $modname . '_' . $lang . '_' . md5($sql) . '_' . NV_CACHE_PREFIX;
 
-	if( ! ( $_rows = $memcached->get( $cache_key ) ) )
-	{
-		if( ( $result = $db->query( $sql ) ) !== false )
-		{
-			$a = 0;
-			while( $row = $result->fetch() )
-			{
-				$key2 = ( ! empty( $key ) and isset( $row[$key] ) ) ? $row[$key] : $a;
-				$_rows[$key2] = $row;
-				++$a;
-			}
-			$result->closeCursor();
-			$memcached->set( $cache_key , $_rows);
-		}
-	}
+    if (! ($_rows = $memcached->get($cache_key))) {
+        if (($result = $db->query($sql)) !== false) {
+            $a = 0;
+            while ($row = $result->fetch()) {
+                $key2 = (! empty($key) and isset($row[$key])) ? $row[$key] : $a;
+                $_rows[$key2] = $row;
+                ++$a;
+            }
+            $result->closeCursor();
+            $memcached->set($cache_key, $_rows);
+        }
+    }
 
-	return $_rows;
+    return $_rows;
 }

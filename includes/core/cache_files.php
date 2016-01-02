@@ -8,7 +8,9 @@
  * @Createdate 1/9/2010, 3:21
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 /**
  * nv_delete_cache()
@@ -16,21 +18,18 @@ if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
  * @param mixed $pattern
  * @return
  */
-function nv_delete_cache( $modname, $pattern )
+function nv_delete_cache($modname, $pattern)
 {
-	$dir = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname;
-	
-	if( is_dir( $dir ) and $dh = opendir( $dir ) )
-	{
-		while( ( $file = readdir( $dh ) ) !== false )
-		{
-			if( preg_match( $pattern, $file ) )
-			{
-				unlink( $dir . '/' . $file );
-			}
-		}
-		closedir( $dh );
-	}
+    $dir = NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $modname;
+    
+    if (is_dir($dir) and $dh = opendir($dir)) {
+        while (($file = readdir($dh)) !== false) {
+            if (preg_match($pattern, $file)) {
+                unlink($dir . '/' . $file);
+            }
+        }
+        closedir($dh);
+    }
 }
 
 /**
@@ -39,29 +38,23 @@ function nv_delete_cache( $modname, $pattern )
  *
  * @return
  */
-function nv_delete_all_cache( $sys = true )
+function nv_delete_all_cache($sys = true)
 {
-	if( $dh = opendir( NV_ROOTDIR . '/' . NV_CACHEDIR ) )
-	{
-		if( $sys )
-		{
-			$pattern = '/(.*)\.cache$/';
-		}
-		else
-		{
-			$pattern = '/^' . NV_LANG_DATA . '\_(.*)\.cache$/';
-		}
-		
-		while( ( $modname = readdir( $dh ) ) !== false )
-		{
-			if( preg_match( '/^([a-z0-9\_]+)$/', $modname ) )
-			{
-				nv_delete_cache( $modname, $pattern );
-			}
-		}
-		
-		closedir( $dh );
-	}
+    if ($dh = opendir(NV_ROOTDIR . '/' . NV_CACHEDIR)) {
+        if ($sys) {
+            $pattern = '/(.*)\.cache$/';
+        } else {
+            $pattern = '/^' . NV_LANG_DATA . '\_(.*)\.cache$/';
+        }
+        
+        while (($modname = readdir($dh)) !== false) {
+            if (preg_match('/^([a-z0-9\_]+)$/', $modname)) {
+                nv_delete_cache($modname, $pattern);
+            }
+        }
+        
+        closedir($dh);
+    }
 }
 
 /**
@@ -72,18 +65,15 @@ function nv_delete_all_cache( $sys = true )
  *
  * @return void
  */
-function nv_del_moduleCache( $module_name, $lang = NV_LANG_DATA )
+function nv_del_moduleCache($module_name, $lang = NV_LANG_DATA)
 {
-	if( ! empty( $lang ) )
-	{
-		$pattern = '/^' . $lang . '\_(.*)\.cache$/';
-	}
-	else
-	{
-		$pattern = '/(.*)\.cache$/';
-	}
-	
-	nv_delete_cache( $module_name, $pattern );
+    if (! empty($lang)) {
+        $pattern = '/^' . $lang . '\_(.*)\.cache$/';
+    } else {
+        $pattern = '/(.*)\.cache$/';
+    }
+    
+    nv_delete_cache($module_name, $pattern);
 }
 
 /**
@@ -93,13 +83,17 @@ function nv_del_moduleCache( $module_name, $lang = NV_LANG_DATA )
  * @param mixed $filename
  * @return
  */
-function nv_get_cache( $module_name, $filename )
+function nv_get_cache($module_name, $filename)
 {
-	if( ! preg_match( '/([a-z0-9\_]+)\.cache/', $filename ) ) return false;
+    if (! preg_match('/([a-z0-9\_]+)\.cache/', $filename)) {
+        return false;
+    }
 
-	if( ! file_exists( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $filename ) ) return false;
+    if (! file_exists(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $filename)) {
+        return false;
+    }
 
-	return nv_gz_get_contents( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $filename );
+    return nv_gz_get_contents(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $filename);
 }
 
 /**
@@ -110,16 +104,17 @@ function nv_get_cache( $module_name, $filename )
  * @param mixed $content
  * @return
  */
-function nv_set_cache( $module_name, $filename, $content )
+function nv_set_cache($module_name, $filename, $content)
 {
-	if( ! preg_match( '/([a-z0-9\_]+)\.cache/', $filename ) ) return false;
+    if (! preg_match('/([a-z0-9\_]+)\.cache/', $filename)) {
+        return false;
+    }
 
-	if( ! is_dir( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name ) )
-	{
-		mkdir( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name, 0777, true );
-	}
-	
-	return nv_gz_put_contents( NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $filename, $content );
+    if (! is_dir(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name)) {
+        mkdir(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name, 0777, true);
+    }
+    
+    return nv_gz_put_contents(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $filename, $content);
 }
 
 /**
@@ -131,39 +126,38 @@ function nv_set_cache( $module_name, $filename, $content )
  * @param mixed $lang
  * @return
  */
-function nv_db_cache( $sql, $key = '', $modname = '', $lang = NV_LANG_DATA )
+function nv_db_cache($sql, $key = '', $modname = '', $lang = NV_LANG_DATA)
 {
-	global $db, $module_name, $global_config;
+    global $db, $module_name, $global_config;
 
-	$list = array();
+    $list = array();
 
-	if( empty( $sql ) ) return $list;
+    if (empty($sql)) {
+        return $list;
+    }
 
-	if( empty( $modname ) ) $modname = $module_name;
+    if (empty($modname)) {
+        $modname = $module_name;
+    }
 
-	$cache_file = $lang . '_' . md5( $sql ) . '_' . NV_CACHE_PREFIX . '.cache';
+    $cache_file = $lang . '_' . md5($sql) . '_' . NV_CACHE_PREFIX . '.cache';
 
-	if( ( $cache = nv_get_cache( $modname, $cache_file ) ) != false )
-	{
-		$list = unserialize( $cache );
-	}
-	else
-	{
-		if( ( $result = $db->query( $sql ) ) !== false )
-		{
-			$a = 0;
-			while( $row = $result->fetch() )
-			{
-				$key2 = ( ! empty( $key ) and isset( $row[$key] ) ) ? $row[$key] : $a;
-				$list[$key2] = $row;
-				++$a;
-			}
-			$result->closeCursor();
+    if (($cache = nv_get_cache($modname, $cache_file)) != false) {
+        $list = unserialize($cache);
+    } else {
+        if (($result = $db->query($sql)) !== false) {
+            $a = 0;
+            while ($row = $result->fetch()) {
+                $key2 = (! empty($key) and isset($row[$key])) ? $row[$key] : $a;
+                $list[$key2] = $row;
+                ++$a;
+            }
+            $result->closeCursor();
 
-			$cache = serialize( $list );
-			nv_set_cache( $modname, $cache_file, $cache );
-		}
-	}
+            $cache = serialize($list);
+            nv_set_cache($modname, $cache_file, $cache);
+        }
+    }
 
-	return $list;
+    return $list;
 }
