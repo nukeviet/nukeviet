@@ -112,7 +112,7 @@ function nv_scandir($directory, $pattern, $sorting_order = 0)
 
 /**
  * nv_get_mime_type()
- * 
+ *
  * @param mixed $filename
  * @param string $magic_path
  * @param string $default_mime
@@ -856,7 +856,7 @@ function nv_ImageInfo($original_name, $width = 0, $is_create_thumb = false, $thu
         }
 
         if ($is_create) {
-            $image = new image($original_name, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+            $image = new NukeViet\Files\Image($original_name, NV_MAX_WIDTH, NV_MAX_HEIGHT);
             $image->resizeXY($width);
             $image->save(NV_ROOTDIR . '/' . $thumb_path, $matches[3] . '_' . md5($original_name . $width) . $matches[4]);
             $image_info = $image->create_Image_info;
@@ -908,7 +908,7 @@ function nv_imageResize($origX, $origY, $maxX, $maxY)
 
 /**
  * nv_is_file()
- * 
+ *
  * @param mixed $filepath
  * @param mixed $folders
  * @return
@@ -920,25 +920,25 @@ function nv_is_file($filepath, $folders = array())
     } elseif (! is_array($folders)) {
         $folders = array( $folders );
     }
-    
+
     $filepath = htmlspecialchars(trim(NV_DOCUMENT_ROOT . $filepath), ENT_QUOTES);
     $filepath = rtrim($filepath, '/');
-    
+
     if (empty($filepath)) {
         return false;
     }
     if (($filepath = realpath($filepath)) === false) {
         return false;
     }
-    
+
     $filepath = str_replace("\\", '/', $filepath);
-    
+
     $file_exists = 0;
     foreach ($folders as $folder) {
         if (preg_match('/^' . nv_preg_quote(NV_ROOTDIR . '/' . $folder) . '/', $filepath) and is_file($filepath)) {
             $file_exists ++;
         }
     }
-    
+
     return $file_exists > 0 ? true : false;
 }

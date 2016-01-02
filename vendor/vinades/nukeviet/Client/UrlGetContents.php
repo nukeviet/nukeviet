@@ -8,7 +8,7 @@
  * @Createdate 5-8-2010 1:13
  */
 
-namespace NukeViet\Files;
+namespace NukeViet\Client;
 
 class UrlGetContents
 {

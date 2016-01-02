@@ -17,7 +17,7 @@ if (! defined('NV_IS_CRON')) {
 }
 
 if (! isset($Diagnostic) or ! is_object($Diagnostic)) {
-    $Diagnostic = new Diagnostic();
+    $Diagnostic = new NukeViet\Client\Diagnostic();
 }
 
 /**

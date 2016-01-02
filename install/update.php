@@ -994,7 +994,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                 $NvUpdate->log($nv_update_config, $lang_module['update_log_dump_file_down'], true);
 
                 //Download file
-                $download = new download(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs', 'backup_update_' . date('Y_m_d') . '.zip');
+                $download = new NukeViet\Files\Download(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/' . $file, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs', 'backup_update_' . date('Y_m_d') . '.zip');
                 $download->download_file();
                 exit();
             }

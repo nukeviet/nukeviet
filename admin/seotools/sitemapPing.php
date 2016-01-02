@@ -154,7 +154,7 @@ if ($nv_Request->isset_request('submit', 'post') and empty($global_config['idsit
     }
 
     if (! empty($searchEngines['searchEngine'])) {
-        $array2XML = new Array2XML();
+        $array2XML = new NukeViet\Xml\Array2XML();
         $array2XML->saveXML($searchEngines, 'searchEngines', $file_searchEngines, $global_config['site_charset']);
     }
 } else {

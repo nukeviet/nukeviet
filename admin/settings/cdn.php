@@ -89,7 +89,7 @@ if (md5($global_config['sitekey'] . $admin_info['admin_id'] . session_id()) == $
         $zip->add(NV_ROOTDIR . '/themes/index.html', PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes');
 
         //Download file
-        $download = new download($file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, 'js_css_cdn_' . date('Ymd') . '.zip');
+        $download = new NukeViet\Files\Download($file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, 'js_css_cdn_' . date('Ymd') . '.zip');
         $download->download_file();
         exit();
     } else {

@@ -133,26 +133,26 @@ function set_reg_attribs($attribs)
     if (isset($attribs['person/gender']) and ! empty($attribs['person/gender'])) {
         $reg_attribs['gender'] = $attribs['person/gender'];
     }
-    
+
     if ($global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2) {
         if (! empty($attribs['picture_url']) and empty($attribs['picture_mode'])) {
-            $upload = new upload(array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-            
+            $upload = new NukeViet\Files\Upload(array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+
             $upload_info = $upload->save_urlfile($attribs['picture_url'], NV_UPLOADS_REAL_DIR . '/' . $module_upload, false);
-            
+
             if (empty($upload_info['error'])) {
                 $basename = change_alias($reg_attribs['username']) . '.' . nv_getextension($upload_info['basename']);
                 $newname = $basename;
                 $fullname = $upload_info['name'];
-                
+
                 $i = 1;
                 while (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname)) {
                     $newname = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $basename);
                     ++$i;
                 }
-                
+
                 $check = nv_renamefile($fullname, NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $newname);
-                
+
                 if ($check[0] == 1) {
                     $reg_attribs['photo'] = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $newname;
                 }
@@ -211,9 +211,9 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
-    
+
     list($user_id, $op_email, $user_active, $safemode) = $stmt->fetch(3);
-    
+
     if ($user_id) {
         if ($safemode == 1) {
             opidr(array( 'status' => 'error', 'mess' => $lang_module['safe_deactivate_openidlogin'] ));
@@ -432,21 +432,21 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $data_insert['first_name'] = $reg_attribs['first_name'];
         $data_insert['last_name'] = $reg_attribs['last_name'];
         $data_insert['gender'] = ! empty($reg_attribs['gender']) ? ucfirst(substr($reg_attribs['gender'], 0, 1)) : 'N';
-        
+
         $userid = $db->insert_id($sql, 'userid', $data_insert);
-        
+
         if (! $userid) {
             opidr(array( 'status' => 'error', 'mess' => $lang_module['err_no_save_account'] ));
             die();
         }
-        
+
         // Cap nhat thong tin anh dai dien
         if (! empty($reg_attribs['photo'])) {
             $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET photo=:photo WHERE userid=' . $userid);
             $stmt->bindParam(':photo', $reg_attribs['photo'], PDO::PARAM_STR);
             $stmt->execute();
         }
-        
+
         // Cap nhat so thanh vien
         $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4');
 
@@ -508,7 +508,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 			:users_info,
             :openid_info
 		)";
-        
+
         $data_insert = array();
         $data_insert['username'] = $reg_attribs['username'];
         $data_insert['md5username'] = nv_md5safe($reg_attribs['username']);

@@ -63,7 +63,7 @@ class Diagnostic
         $this->disable_functions = $disable_functions;
         $this->myDomain = NV_SERVER_NAME;
         $_config = array( 'version' => '4.0.21', 'sitekey' => mt_rand() );
-        $this->getContent = new UrlGetContents($_config);
+        $this->getContent = new NukeViet\Client\UrlGetContents($_config);
     }
 
     /**

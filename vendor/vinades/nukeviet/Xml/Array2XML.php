@@ -8,7 +8,8 @@
  * @Createdate 6/5/2010 2:18
  */
 
-namespace NukeViet;
+namespace NukeViet\Xml;
+use DOMDocument;
 
 class Array2XML
 {
@@ -54,7 +55,7 @@ class Array2XML
             return $rootname;
         } else {
             $key = key($array);
-            if (preg_match("/^[0-9](.*)$/", $key)) {
+            if (preg_match('/^[0-9](.*)$/', $key)) {
                 return $rootname;
             } else {
                 return $key;
@@ -73,7 +74,7 @@ class Array2XML
     private function addArray($array, &$root, $lastname)
     {
         foreach ($array as $key => $val) {
-            if (preg_match("/^[0-9](.*)$/", $key)) {
+            if (preg_match('/^[0-9](.*)$/', $key)) {
                 $newKey = $lastname . '_' . $this->itemname_default;
             } else {
                 $newKey = $key;
@@ -108,7 +109,7 @@ class Array2XML
         }
 
         $rootname = $this->setRootName($array, $rootname);
-        $this->xml = new DOMDocument("1.0", $encoding);
+        $this->xml = new DOMDocument('1.0', $encoding);
         $this->xml->formatOutput = true;
         $root = $this->xml->createElement($rootname);
         $root = $this->xml->appendchild($root);
@@ -161,7 +162,7 @@ class Array2XML
             return $content;
         }
 
-        @Header('Last-Modified: ' . gmdate('D, d M Y H:i:s', strtotime('-1 day')) . " GMT");
+        @Header('Last-Modified: ' . gmdate('D, d M Y H:i:s', strtotime('-1 day')) . ' GMT');
         @Header('Content-Type: text/xml; charset=' . $encoding);
         if (! empty($_SERVER['SERVER_SOFTWARE']) and strstr($_SERVER['SERVER_SOFTWARE'], 'Apache/2')) {
             @Header('Cache-Control: no-cache, pre-check=0, post-check=0');

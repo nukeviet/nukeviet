@@ -219,7 +219,7 @@ function nv_get_viewImage($fileName)
                     }
                 }
             }
-            $image = new image(NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+            $image = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT);
             if ($thumb_config['thumb_type'] == 4) {
                 $thumb_width = $thumb_config['thumb_width'];
                 $thumb_height = $thumb_config['thumb_height'];

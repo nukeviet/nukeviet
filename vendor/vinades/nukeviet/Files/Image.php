@@ -29,7 +29,7 @@ if (! defined('ERROR_IMAGE6')) {
     define('ERROR_IMAGE6', 'Error loading Image');
 }
 
-class image
+class Image
 {
     public $filename;
     public $is_url = false;
@@ -44,14 +44,13 @@ class image
     public $is_createWorkingImage = false;
 
     /**
-     * image::image()
      *
      * @param mixed $filename
      * @param integer $gmaxX
      * @param integer $gmaxY
      * @return
      */
-    public function image($filename, $gmaxX = 0, $gmaxY = 0)
+    public function __construct($filename, $gmaxX = 0, $gmaxY = 0)
     {
         if (preg_match("/(http|https|ftp):\/\//i", $filename)) {
             $this->is_url = true;
@@ -72,7 +71,6 @@ class image
     }
 
     /**
-     * image::is_image()
      *
      * @param mixed $img
      * @return
@@ -114,7 +112,6 @@ class image
     }
 
     /**
-     * image::set_memory_limit()
      *
      * @return
      */
@@ -143,7 +140,6 @@ class image
     }
 
     /**
-     * image::get_createImage()
      *
      * @return
      */
@@ -173,7 +169,6 @@ class image
     }
 
     /**
-     * image::set_tempnam()
      *
      * @param mixed $filename
      * @return
@@ -192,7 +187,6 @@ class image
     }
 
     /**
-     * image::check_file()
      *
      * @return
      */
@@ -404,7 +398,6 @@ class image
     }
 
     /**
-     * image::resizeXY()
      *
      * @param integer $maxX
      * @param integer $maxY
@@ -482,7 +475,6 @@ class image
     }
 
     /**
-     * image::resizePercent()
      *
      * @param integer $percent
      * @return
@@ -557,7 +549,6 @@ class image
     }
 
     /**
-     * image::cropFromLeft()
      *
      * @param mixed $leftX
      * @param mixed $leftY
@@ -623,7 +614,6 @@ class image
     }
 
     /**
-     * image::cropFromCenter()
      *
      * @param mixed $newwidth
      * @param mixed $newheight
@@ -681,7 +671,6 @@ class image
     }
 
     /**
-     * image::addstring()
      *
      * @param mixed $string
      * @param string $align
@@ -737,7 +726,6 @@ class image
     }
 
     /**
-     * image::addlogo()
      *
      * @param mixed $logo
      * @param string $align
@@ -823,7 +811,6 @@ class image
     }
 
     /**
-     * image::rotate()
      *
      * @param mixed $direction
      * @return
@@ -851,7 +838,6 @@ class image
     }
 
     /**
-     * image::reflection()
      *
      * @return
      */
@@ -887,7 +873,6 @@ class image
     }
 
     /**
-     * image::show()
      *
      * @param integer $quality
      * @return
@@ -926,7 +911,6 @@ class image
     }
 
     /**
-     * image::save()
      *
      * @param mixed $path
      * @param string $newname
@@ -992,7 +976,6 @@ class image
     }
 
     /**
-     * image::Destroy()
      *
      * @return
      */

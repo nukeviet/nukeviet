@@ -68,7 +68,7 @@ if (defined('NV_IS_BANNER_CLIENT')) {
         } elseif (! isset($_FILES['image'])) {
             $error[] = $lang_module['file_upload_empty'];
         } else {
-            $upload = new upload($file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+            $upload = new NukeViet\Files\Upload($file_allowed_ext, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
             $upload_info = $upload->save_file($_FILES['image'], NV_UPLOADS_REAL_DIR . '/' . NV_BANNER_DIR, false);
             @unlink($_FILES['image']['tmp_name']);
 

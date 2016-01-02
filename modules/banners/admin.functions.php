@@ -92,7 +92,7 @@ function nv_CreateXML_bannerPlan()
             );
         }
         if (sizeof($plan['banners'])) {
-            $array2XML = new Array2XML();
+            $array2XML = new NukeViet\Xml\Array2XML();
             $array2XML->saveXML($plan, 'plan', $xmlfile, $encoding = $global_config['site_charset']);
         }
     }

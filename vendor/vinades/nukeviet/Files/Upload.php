@@ -34,7 +34,7 @@ define('_ERROR_UPLOAD_WRITABLE', isset($lang_global['error_upload_writable']) ? 
 define('_ERROR_UPLOAD_URLFILE', isset($lang_global['error_upload_urlfile']) ? $lang_global['error_upload_urlfile'] : 'The URL is not valid and cannot be loaded');
 define('_ERROR_UPLOAD_URL_NOTFOUND', isset($lang_global['error_upload_url_notfound']) ? $lang_global['error_upload_url_notfound'] : 'The url was not found');
 
-class upload
+class Upload
 {
     private $config = array(
         'allowed_files' => array(),

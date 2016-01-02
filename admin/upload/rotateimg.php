@@ -51,7 +51,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('d
             }
         }
 
-        $createImage = new image(NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT);
         $createImage->rotate($direction);
         $createImage->save(NV_ROOTDIR . '/' . $path, $file, $thumb_config['thumb_quality']);
         $createImage->close();

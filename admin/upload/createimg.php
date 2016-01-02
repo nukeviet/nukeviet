@@ -47,7 +47,7 @@ if (isset($array_thumb_config[$path])) {
     }
 }
 
-$createImage = new image(NV_ROOTDIR . '/' . $path . '/' . $imagename, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+$createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $imagename, NV_MAX_WIDTH, NV_MAX_HEIGHT);
 $createImage->resizeXY($width, $height);
 $createImage->save(NV_ROOTDIR . '/' . $path, $file, $thumb_config['thumb_quality']);
 $createImage->close();

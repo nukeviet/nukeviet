@@ -33,7 +33,7 @@ if (nv_is_file($path_filename, $log_dir) === true and $checkss == md5($filename 
         $name = substr($name, 33);
     }
 
-    $download = new download(NV_DOCUMENT_ROOT . $path_filename, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup', $name);
+    $download = new NukeViet\Files\Download(NV_DOCUMENT_ROOT . $path_filename, NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup', $name);
     $download->download_file();
     exit();
 } else {

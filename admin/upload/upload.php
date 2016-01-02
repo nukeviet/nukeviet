@@ -36,7 +36,7 @@ if (! isset($check_allow_upload_dir['upload_file'])) {
     }
 
     include_once NV_ROOTDIR . '/includes/class/upload.class.php';
-    $upload = new upload($allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+    $upload = new NukeViet\Files\Upload($allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
 
     if (isset($_FILES['upload']['tmp_name']) and is_uploaded_file($_FILES['upload']['tmp_name'])) {
         $upload_info = $upload->save_file($_FILES['upload'], NV_ROOTDIR . '/' . $path, false, $global_config['nv_auto_resize']);
@@ -64,7 +64,7 @@ if (! isset($check_allow_upload_dir['upload_file'])) {
         }
 
         if ($global_config['nv_auto_resize'] and ($upload_info['img_info'][0] > NV_MAX_WIDTH or $upload_info['img_info'][0] > NV_MAX_HEIGHT)) {
-            $createImage = new image(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1]);
+            $createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], $upload_info['img_info'][0], $upload_info['img_info'][1]);
             $createImage->resizeXY(NV_MAX_WIDTH, NV_MAX_HEIGHT);
             $createImage->save(NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality']);
             $createImage->close();
@@ -115,7 +115,7 @@ if (! isset($check_allow_upload_dir['upload_file'])) {
                         $config_logo = array();
                         $config_logo['w'] = $w;
                         $config_logo['h'] = $h;
-                        
+
                         $config_logo['x'] = $file_size[0] - $w - 5; // Horizontal: Right
                         $config_logo['y'] = $file_size[1] - $h - 5; // Vertical: Bottom
 
@@ -125,7 +125,7 @@ if (! isset($check_allow_upload_dir['upload_file'])) {
                         } elseif (preg_match("/^center/", $global_config['upload_logo_pos'])) {
                             $config_logo['y'] = round(($file_size[1] / 2) - ($h / 2));
                         }
-                        
+
                         // Logo horizontal
                         if (preg_match("/Left$/", $global_config['upload_logo_pos'])) {
                             $config_logo['x'] = 5;
@@ -133,7 +133,7 @@ if (! isset($check_allow_upload_dir['upload_file'])) {
                             $config_logo['x'] = round(($file_size[0] / 2) - ($w / 2));
                         }
 
-                        $createImage = new image(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
+                        $createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
                         $createImage->addlogo(NV_ROOTDIR . '/' . $global_config['upload_logo'], '', '', $config_logo);
                         $createImage->save(NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality']);
                     }

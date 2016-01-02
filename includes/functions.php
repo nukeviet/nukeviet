@@ -1024,7 +1024,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '')
     global $db, $global_config, $sys_info;
 
     try {
-        $mail = new PHPMailer;
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
         $mail->SetLanguage(NV_LANG_INTERFACE);
         $mail->CharSet = $global_config['site_charset'];
 

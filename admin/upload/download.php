@@ -44,7 +44,7 @@ if (isset($check_allow_upload_dir['upload_file']) and in_array('images', $admin_
 
     foreach ($imageMatch as $imageSrc) {
         if (nv_check_url($imageSrc)) {
-            $_image = new image($imageSrc);
+            $_image = new NukeViet\Files\Image($imageSrc);
             if ($_image->fileinfo['width'] > 50) {
                 if ($_image->fileinfo['width'] > NV_MAX_WIDTH) {
                     $_image->resizeXY(NV_MAX_WIDTH, NV_MAX_HEIGHT);

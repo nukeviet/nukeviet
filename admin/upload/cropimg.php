@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
     $config_logo['h'] = $nv_Request->get_int('h', 'post', 0);
 
     if ($config_logo['w'] > 0 and $config_logo['h'] > 0) {
-        $createImage = new image(NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT);
         $createImage->cropFromLeft($config_logo['x'], $config_logo['y'], $config_logo['w'], $config_logo['h']);
         $createImage->save(NV_ROOTDIR . '/' . $path, $file);
         $createImage->close();

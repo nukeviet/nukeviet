@@ -75,10 +75,7 @@ if (defined('NV_CONFIG_DIR')) {
     define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups');
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
 }
-// Register given function autoload implementation
-spl_autoload_register(function ($classname) {
-    die( NV_ROOTDIR . '/includes/class/' . strtolower($classname) . '.class.php');
-});
+
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
 

@@ -113,7 +113,7 @@ function nv_site_theme($contents, $full = true)
 
         if (isset($config_theme['gfont']) && ! empty($config_theme['gfont']) && isset($config_theme['gfont']['family']) && !empty($config_theme['gfont']['family'])) {
             $subset = isset($config_theme['gfont']['subset']) ? $config_theme['gfont']['subset'] : '';
-            $gf = new Gfonts(array('fonts' => array($config_theme['gfont']), 'subset' => $subset), $client_info);
+            $gf = new NukeViet\Client\Gfonts(array('fonts' => array($config_theme['gfont']), 'subset' => $subset), $client_info);
             $webFontFile = $gf->getUrlCss();
             array_unshift($html_links, array( 'rel' => 'StyleSheet', 'href' => $webFontFile ));
         }

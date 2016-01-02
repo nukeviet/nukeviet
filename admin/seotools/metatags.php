@@ -48,7 +48,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     if (! empty($metatags['meta'])) {
-        $array2XML = new Array2XML();
+        $array2XML = new NukeViet\Xml\Array2XML();
         $array2XML->saveXML($metatags, 'metatags', $file_metatags, $global_config['site_charset']);
     }
     $metaTagsOgp = (int)$nv_Request->get_bool('metaTagsOgp', 'post');

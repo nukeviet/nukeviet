@@ -126,7 +126,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
         $array['h'] ))) < 4 or $array['avatar_width'] < $global_config['avatar_width'] or $array['avatar_height'] < $global_config['avatar_height']) {
         $array['error'] = $lang_module['avata_error_data'];
     } else {
-        $upload = new upload(array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $upload = new NukeViet\Files\Upload(array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
 
         // Storage in temp dir
         $upload_info = $upload->save_file($_FILES['image_file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
@@ -138,7 +138,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
             $basename = $upload_info['basename'];
             $basename = preg_replace('/(.*)(\.[a-zA-Z]+)$/', '\1_' . nv_genpass(8) . "_" . $user_info['userid'] . '\2', $basename);
 
-            $image = new image($upload_info['name'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
+            $image = new NukeViet\Files\Image($upload_info['name'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
 
             // Resize image, crop image
             $image->resizeXY($array['w'], $array['h']);

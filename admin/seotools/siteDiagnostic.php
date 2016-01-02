@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('i', 'get')) {
         }
 
         if (! isset($Diagnostic) or ! is_object($Diagnostic)) {
-            $Diagnostic = new Diagnostic();
+            $Diagnostic = new NukeViet\Client\Diagnostic();
         }
 
         $info = ($i == 'process') ? $Diagnostic->process() : $Diagnostic->process(300);

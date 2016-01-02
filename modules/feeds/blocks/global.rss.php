@@ -111,7 +111,7 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
             }
         }
         if (empty($array_data)) {
-            $getContent = new UrlGetContents($global_config);
+            $getContent = new NukeViet\Client\UrlGetContents($global_config);
             $xml_source = $getContent->get($url);
             $allowed_html_tags = array_map("trim", explode(',', NV_ALLOWED_HTML_TAGS));
             $allowed_html_tags = "<" . implode("><", $allowed_html_tags) . ">";

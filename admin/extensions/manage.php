@@ -299,7 +299,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . $global_
             $filesize = @filesize($file_src);
 
             if ($filesize > 0) {
-                $download = new download($file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, 'nv4_' . $row['type'] . '_' . $row['basename'] . '.zip');
+                $download = new NukeViet\Files\Download($file_src, NV_ROOTDIR . '/' . NV_TEMP_DIR, 'nv4_' . $row['type'] . '_' . $row['basename'] . '.zip');
                 $download->download_file();
                 exit();
             }
@@ -611,7 +611,7 @@ while ($row = $result->fetch()) {
     } else {
         $row['version'] = 'N/A';
     }
-    
+
     $array_parse[] = $row;
 }
 

@@ -14,7 +14,7 @@ if (! defined('NV_MIME_INI_FILE')) {
     define("NV_MIME_INI_FILE", str_replace("\\", "/", realpath(dirname(__file__) . "/..") . '/ini/mime.ini'));
 }
 
-class download
+class Download
 {
     private $properties = array(
         'path' => '',

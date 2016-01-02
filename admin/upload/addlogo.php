@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-2-2010 12:55
  */
-
 if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -57,7 +56,7 @@ if ($nv_Request->isset_request('path', 'post') and $nv_Request->isset_request('x
             }
         }
 
-        $createImage = new image(NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $createImage = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $path . '/' . $file, NV_MAX_WIDTH, NV_MAX_HEIGHT);
         $createImage->addlogo($upload_logo, '', '', $config_logo);
         $createImage->save(NV_ROOTDIR . '/' . $path, $file, $thumb_config['thumb_quality']);
         $createImage->close();

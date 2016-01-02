@@ -53,7 +53,7 @@ if ($checkss == md5($client_info['session_id'] . $global_config['sitekey'])) {
         }
 
         //Download file
-        $download = new download($result[0], NV_ROOTDIR . '/' . NV_TEMP_DIR, basename($contents['fname']));
+        $download = new NukeViet\Files\Download($result[0], NV_ROOTDIR . '/' . NV_TEMP_DIR, basename($contents['fname']));
         $download->download_file();
         exit();
     }
