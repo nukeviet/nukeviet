@@ -26,7 +26,7 @@ $xtpl->assign('LANG', $lang_module);
 
 $request['id'] = $nv_Request->get_int('id', 'get', 0);
 
-$NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+$NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
 // Debug
 $args = array(

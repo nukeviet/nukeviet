@@ -83,7 +83,7 @@ if ($step == 1) {
             die('ERROR|' . $lang_module['ftp_error_empty']);
         }
 
-        $ftp = new NVftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
 
         if (! empty($ftp->error)) {
             $ftp->close();

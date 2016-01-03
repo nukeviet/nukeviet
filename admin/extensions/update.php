@@ -204,7 +204,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
-    $NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+    $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
 
     $filename = NV_TEMPNAM_PREFIX . 'extupd_' . md5($global_config['sitekey'] . session_id()) . '.zip';
@@ -277,7 +277,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
-    $NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+    $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
 
     // Lay thong tin ung dung cung nhu lay quyen nang cap

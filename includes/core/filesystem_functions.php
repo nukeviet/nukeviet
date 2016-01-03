@@ -466,7 +466,7 @@ function nv_deletefile($file, $delsub = false)
         $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
 
         // Ket noi, dang nhap
-        $ftp = new NVftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
 
         // Chuyen thu muc
         if ($ftp->chdir($ftp_path) === true) {

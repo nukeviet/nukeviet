@@ -13,7 +13,6 @@ namespace NukeViet\Http;
 class Streams
 {
     /**
-     * NV_http_streams::request()
      *
      * @param mixed $url
      * @param mixed $args
@@ -308,8 +307,8 @@ class Streams
             $process['body'] = NV_Http::chunkTransferDecode($process['body']);
         }
 
-        if ($args['decompress'] === true and NV_http_encoding::should_decode($arrHeaders['headers']) === true) {
-            $process['body'] = NV_http_encoding::decompress($process['body']);
+        if ($args['decompress'] === true and NukeViet\Http\Encoding::should_decode($arrHeaders['headers']) === true) {
+            $process['body'] = NukeViet\Http\Encoding::decompress($process['body']);
         }
 
         if (isset($args['limit_response_size']) and strlen($process['body']) > $args['limit_response_size']) {
@@ -322,7 +321,6 @@ class Streams
     }
 
     /**
-     * NV_http_streams::verify_ssl_certificate()
      *
      * @param mixed $stream
      * @param mixed $host
@@ -384,7 +382,6 @@ class Streams
     }
 
     /**
-     * NV_http_streams::test()
      *
      * @param mixed $args
      * @return

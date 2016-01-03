@@ -43,7 +43,7 @@ $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 
-$NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+$NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 $stored_cookies = nv_get_cookies();
 
 // Debug
