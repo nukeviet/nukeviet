@@ -312,7 +312,7 @@ function nv_geVersion($updatetime = 3600)
     if (file_exists($my_file) and @filemtime($my_file) > $p) {
         $xmlcontent = simplexml_load_file($my_file);
     } else {
-        $NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+        $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
         $args = array(
             'headers' => array(
@@ -731,7 +731,7 @@ function nv_getExtVersion($updatetime = 3600)
         }
 
         if (! empty($array_ext_ids)) {
-            $NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+            $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
             $args = array(
                 'headers' => array(

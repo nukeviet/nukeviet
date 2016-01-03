@@ -44,7 +44,6 @@ class Cookie
     public $domain;
 
     /**
-     * Cookie::__construct()
      *
      * @param mixed $data
      * @param string $requested_url
@@ -116,7 +115,6 @@ class Cookie
     }
 
     /**
-     * Cookie::test()
      *
      * @param mixed $url
      * @return
@@ -166,7 +164,6 @@ class Cookie
     }
 
     /**
-     * Cookie::getHeaderValue()
      *
      * @return
      */
@@ -180,7 +177,6 @@ class Cookie
     }
 
     /**
-     * Cookie::getFullHeader()
      *
      * @return
      */

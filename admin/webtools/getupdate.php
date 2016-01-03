@@ -203,7 +203,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
     $xtpl = new XTemplate('getupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
-    $NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+    $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
     $filename = NV_TEMPNAM_PREFIX . 'sysupd_' . md5($global_config['sitekey'] . session_id()) . '.zip';
 

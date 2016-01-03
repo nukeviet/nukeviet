@@ -251,7 +251,7 @@ class NvUpdate
             $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
 
-            $ftp = new NVftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 20 ), $ftp_port);
+            $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 20 ), $ftp_port);
 
             if (empty($ftp->error) and $ftp->chdir($ftp_path)) {
                 $is_ftp = true;
@@ -1473,7 +1473,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                 die('ERROR|' . $lang_module['ftp_error_empty']);
             }
 
-            $ftp = new NVftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+            $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
 
             if (! empty($ftp->error)) {
                 $ftp->close();
@@ -1586,7 +1586,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                     $ftp_user_pass = nv_unhtmlspecialchars($global_config['ftp_user_pass']);
                     $ftp_path = nv_unhtmlspecialchars($global_config['ftp_path']);
 
-                    $ftp = new NVftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 20 ), $ftp_port);
+                    $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 20 ), $ftp_port);
 
                     if (! empty($ftp->error)) {
                         $array['check_FTP'] = true;

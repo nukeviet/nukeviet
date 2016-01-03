@@ -36,7 +36,7 @@ if (empty($request['id']) or empty($request['fid']) or ! isset($array['tid'])) {
 } else {
     $filename = NV_TEMPNAM_PREFIX . 'auto_' . md5($global_config['sitekey'] . session_id()) . '.zip';
 
-    $NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+    $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
     $args = array(
         'headers' => array(

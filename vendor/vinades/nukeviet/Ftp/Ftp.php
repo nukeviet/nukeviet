@@ -8,7 +8,7 @@
  * @Createdate 2/3/2012, 9:10
  */
 
-namespace NukeViet;
+namespace NukeViet\Ftp;
 
 // Ngon ngu
 define('NV_FTP_ERR_CONNECT', isset($lang_global['ftp_err_connect']) ? $lang_global['ftp_err_connect'] : 'Error: Couldn\'t connect to FTP server');
@@ -30,19 +30,6 @@ if (! defined('FTP_BINARY')) {
 if (! defined('FTP_ASCII')) {
     define('FTP_ASCII', 0);
 }
-
-// Kiem tra thu vien FTP hoat dong
-$disable_functions = (ini_get("disable_functions") != '' and ini_get("disable_functions") != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get("disable_functions"))) : array();
-if (extension_loaded('suhosin')) {
-    $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get("suhosin.executor.func.blacklist"))));
-}
-
-if (extension_loaded('ftp') and (empty($disable_functions) or (! empty($disable_functions) and ! preg_grep('/^ftp\_/', $disable_functions)))) {
-    define('IS_ALLOW_FTP', 1);
-} else {
-    define('IS_ALLOW_FTP', 0);
-}
-unset($disable_functions);
 
 /**
  *
@@ -82,11 +69,10 @@ class Ftp
     );
 
     // Loai file xac nhan trong mode FTP_AUTOASCII
-    private $AutoAscii = array( "asp", "bat", "c", "cpp", "csv", "h", "htm", "html", "shtml", "ini", "inc", "log", "php", "php3", "pl", "perl", "sh", "sql", "txt", "xhtml", "xml" );
+    private $AutoAscii = array( 'asp', 'bat', 'c', 'cpp', 'csv', 'h', 'htm', 'html', 'shtml', 'ini', 'inc', 'log', 'php', 'php3', 'pl', 'perl', 'sh', 'sql', 'txt', 'xhtml', 'xml' );
     private $current_path = null;
 
     /**
-     * NVftp::__construct()
      *
      * @param string $host
      * @param string $user
@@ -97,10 +83,17 @@ class Ftp
      */
     public function __construct($host = '', $user = 'root', $pass = '', $config = array(), $port = 21)
     {
-        if (IS_ALLOW_FTP == 0) {
+        // Kiem tra thu vien FTP hoat dong
+        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : array();
+        if (extension_loaded('suhosin')) {
+            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
+        }
+
+        if (! (extension_loaded('ftp') and (empty($disable_functions) or (! empty($disable_functions) and ! preg_grep('/^ftp\_/', $disable_functions))))) {
             $this->error = NV_FTP_ERR_DISABLED_FTP;
             return false;
         }
+        unset($disable_functions);
 
         if (! empty($host)) {
             $this->host = $host;
@@ -160,7 +153,6 @@ class Ftp
     }
 
     /**
-     * NVftp::check_login()
      *
      * @return
      */
@@ -174,7 +166,6 @@ class Ftp
     }
 
     /**
-     * NVftp::detectFtpRoot()
      *
      * @param mixed $list_valid
      * @param string $path_root
@@ -248,7 +239,6 @@ class Ftp
     }
 
     /**
-     * NVftp::listDetail()
      *
      * @param mixed $path
      * @param string $type
@@ -319,7 +309,7 @@ class Ftp
                 $tmp_array = null;
 
                 if (preg_match($regexp, $file, $regs)) {
-                    $fType = ( int )strpos("-dl", $regs[1]{0});
+                    $fType = ( int )strpos('-dl', $regs[1]{0});
 
                     $tmp_array['type'] = $fType;
                     $tmp_array['rights'] = $regs[1];
@@ -350,7 +340,7 @@ class Ftp
                 $tmp_array = null;
 
                 if (preg_match($regexp, $file, $regs)) {
-                    $fType = ( int )strpos("-dl", $regs[1]{0});
+                    $fType = ( int )strpos('-dl', $regs[1]{0});
 
                     $tmp_array['type'] = $fType;
                     $tmp_array['rights'] = $regs[1];
@@ -414,7 +404,6 @@ class Ftp
     }
 
     /**
-     * NVftp::read()
      *
      * @param mixed $remote
      * @param mixed $buffer
@@ -431,7 +420,7 @@ class Ftp
         }
 
         if (! in_array('nvbuffer', stream_get_wrappers())) {
-            stream_wrapper_register("nvbuffer", "NukeViet\Ftp\Buffer");
+            stream_wrapper_register('nvbuffer', 'NukeViet\Ftp\Buffer');
         }
 
         $tmp = fopen('nvbuffer://tmp', 'br+');
@@ -454,7 +443,6 @@ class Ftp
     }
 
     /**
-     * NVftp::pwd()
      *
      * @return
      */
@@ -468,7 +456,6 @@ class Ftp
     }
 
     /**
-     * NVftp::mkdir()
      *
      * @return
      */
@@ -482,7 +469,6 @@ class Ftp
     }
 
     /**
-     * NVftp::unlink()
      *
      * @return
      */
@@ -496,7 +482,6 @@ class Ftp
     }
 
     /**
-     * NVftp::rmdir()
      *
      * @return
      */
@@ -510,7 +495,6 @@ class Ftp
     }
 
     /**
-     * NVftp::rename()
      *
      * @return
      */
@@ -524,7 +508,6 @@ class Ftp
     }
 
     /**
-     * NVftp::chdir()
      *
      * @param mixed $path
      * @return
@@ -542,7 +525,6 @@ class Ftp
     }
 
     /**
-     * NVftp::close()
      *
      * @return
      */
@@ -556,7 +538,6 @@ class Ftp
     }
 
     /**
-     * NVftp::DetectedMode()
      *
      * @param mixed $fileName
      * @return

@@ -1312,6 +1312,7 @@ function nv_check_domain($domain)
         if (function_exists('idn_to_ascii')) {
             $domain_ascii = idn_to_ascii($domain);
         } else {
+            require_once NV_ROOTDIR . '/includes/class/idna_convert.class.php';
             $IDN = new idna_convert(array( 'idn_version' => 2008 ));
             $domain_ascii = $IDN->encode($domain);
         }

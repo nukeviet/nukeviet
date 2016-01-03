@@ -34,7 +34,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $error = '';
 $message = '';
 
-$NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+$NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 $stored_cookies = nv_get_cookies();
 
 // Find file

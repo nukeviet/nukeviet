@@ -8,7 +8,7 @@
  * @Createdate 2/3/2012, 9:10
  */
 
-namespace NukeViet;
+namespace NukeViet\Http;
 
 class Http
 {
@@ -35,7 +35,6 @@ class Http
     public static $error = array();
 
     /**
-     * NV_Http::__construct()
      *
      * @param mixed $config
      * @param string $tmp_dir
@@ -83,7 +82,6 @@ class Http
     }
 
     /**
-     * NV_Http::request()
      *
      * @param mixed $url
      * @param mixed $args
@@ -196,7 +194,7 @@ class Http
         Http::mbstring_binary_safe_encoding();
 
         if (! isset($args['headers']['Accept-Encoding'])) {
-            if ($encoding = NV_http_encoding::accept_encoding($url, $args)) {
+            if ($encoding = NukeViet\Http\Encoding::accept_encoding($url, $args)) {
                 $args['headers']['Accept-Encoding'] = $encoding;
             }
         }
@@ -249,7 +247,6 @@ class Http
     }
 
     /**
-     * NV_Http::get_Env()
      *
      * @param mixed $key
      * @return
@@ -276,7 +273,6 @@ class Http
     }
 
     /**
-     * NV_Http::parse_str()
      *
      * @param mixed $str
      * @return
@@ -287,14 +283,13 @@ class Http
         parse_str($str, $r);
 
         if (get_magic_quotes_gpc()) {
-            $r = array_map("stripslashes", $r);
+            $r = array_map('stripslashes', $r);
         }
 
         return $r;
     }
 
     /**
-     * NV_Http::set_error()
      *
      * @param mixed $code
      * @return
@@ -302,21 +297,21 @@ class Http
     public static function set_error($code)
     {
         $code = intval($code);
-        $message = "";
+        $message = '';
 
         switch ($code) {
-            case 1: $message = "A valid URL was not provided."; break;
-            case 2: $message = "User has blocked requests through HTTP."; break;
-            case 3: $message = "Destination directory for file streaming does not exist or is not writable."; break;
-            case 4: $message = "There are no HTTP transports available which can complete the requested request."; break;
-            case 5: $message = "Too many redirects."; break;
-            case 6: $message = "The SSL certificate for the host could not be verified."; break;
-            case 7: $message = "HTTP request failed."; break;
-            case 8: $message = "Could not open stream file."; break;
-            case 9: $message = "Failed to write request to temporary file."; break;
-            case 10: $message = "Could not open handle for fopen() to streamfile."; break;
-            case 11: $message = "HTTP Curl request failed."; break;
-            default: $message = "There are some unknow errors had been occurred.";
+            case 1: $message = 'A valid URL was not provided.'; break;
+            case 2: $message = 'User has blocked requests through HTTP.'; break;
+            case 3: $message = 'Destination directory for file streaming does not exist or is not writable.'; break;
+            case 4: $message = 'There are no HTTP transports available which can complete the requested request.'; break;
+            case 5: $message = 'Too many redirects.'; break;
+            case 6: $message = 'The SSL certificate for the host could not be verified.'; break;
+            case 7: $message = 'HTTP request failed.'; break;
+            case 8: $message = 'Could not open stream file.'; break;
+            case 9: $message = 'Failed to write request to temporary file.'; break;
+            case 10: $message = 'Could not open handle for fopen() to streamfile.'; break;
+            case 11: $message = 'HTTP Curl request failed.'; break;
+            default: $message = 'There are some unknow errors had been occurred.';
         }
 
         self::$error['code'] = $code;
@@ -324,7 +319,6 @@ class Http
     }
 
     /**
-     * NV_Http::_dispatch_request()
      *
      * @param mixed $url
      * @param mixed $args
@@ -352,7 +346,6 @@ class Http
     }
 
     /**
-     * NV_Http::mbstring_binary_safe_encoding()
      *
      * @param bool $reset
      * @return
@@ -383,7 +376,6 @@ class Http
     }
 
     /**
-     * NV_Http::reset_mbstring_encoding()
      *
      * @return
      */
@@ -393,7 +385,6 @@ class Http
     }
 
     /**
-     * NV_Http::handle_redirects()
      *
      * @param mixed $url
      * @param mixed $args
@@ -454,7 +445,6 @@ class Http
     }
 
     /**
-     * NV_Http::make_absolute_url()
      *
      * @param mixed $maybe_relative_path
      * @param mixed $url
@@ -518,7 +508,6 @@ class Http
     }
 
     /**
-     * NV_Http::reset()
      *
      * @return
      */
@@ -528,7 +517,6 @@ class Http
     }
 
     /**
-     * NV_Http::is_error()
      *
      * @param mixed $resources
      * @return
@@ -543,7 +531,6 @@ class Http
     }
 
     /**
-     * NV_Http::_get_first_available_transport()
      *
      * @param mixed $args
      * @param mixed $url
@@ -551,11 +538,11 @@ class Http
      */
     public function _get_first_available_transport($args, $url = null)
     {
-        $request_order = array( 'curl', 'streams' );
+        $request_order = array( 'Curl', 'Streams' );
 
         // Loop over each transport on each HTTP request looking for one which will serve this request's needs
         foreach ($request_order as $transport) {
-            $class = 'NV_http_' . $transport;
+            $class = 'NukeViet\\Http\\' . $transport;
 
             // Check to see if this transport is a possibility, calls the transport statically
             if (! call_user_func(array( $class, 'test' ), $args, $url)) {
@@ -569,7 +556,6 @@ class Http
     }
 
     /**
-     * NV_Http::build_args()
      *
      * @param mixed $args
      * @param mixed $defaults
@@ -587,7 +573,6 @@ class Http
     }
 
     /**
-     * NV_Http::processResponse()
      *
      * @param mixed $strResponse
      * @return
@@ -600,7 +585,6 @@ class Http
     }
 
     /**
-     * NV_Http::processHeaders()
      *
      * @param mixed $headers
      * @param string $url
@@ -659,7 +643,7 @@ class Http
             }
 
             if ('set-cookie' == $key) {
-                $cookies[] = new NV_http_cookie($value, $url);
+                $cookies[] = new NukeViet\Http\Cookie($value, $url);
             }
         }
 
@@ -671,7 +655,6 @@ class Http
     }
 
     /**
-     * NV_Http::buildCookieHeader()
      *
      * @param mixed $args
      * @return
@@ -682,7 +665,7 @@ class Http
             // Upgrade any name => value cookie pairs to NV_http_cookie instances
             foreach ($args['cookies'] as $name => $value) {
                 if (! is_object($value)) {
-                    $args['cookies'][$name] = new NV_http_cookie(array( 'name' => $name, 'value' => $value ));
+                    $args['cookies'][$name] = new NukeViet\Http\Cookie(array( 'name' => $name, 'value' => $value ));
                 }
             }
 
@@ -697,7 +680,6 @@ class Http
     }
 
     /**
-     * NV_Http::is_ip_address()
      *
      * @param mixed $maybe_ip
      * @return
@@ -716,7 +698,6 @@ class Http
     }
 
     /**
-     * NV_Http::post()
      *
      * @param mixed $url
      * @param mixed $args
@@ -730,7 +711,6 @@ class Http
     }
 
     /**
-     * NV_Http::get()
      *
      * @param mixed $url
      * @param mixed $args
@@ -744,7 +724,6 @@ class Http
     }
 
     /**
-     * NV_Http::head()
      *
      * @param mixed $url
      * @param mixed $args

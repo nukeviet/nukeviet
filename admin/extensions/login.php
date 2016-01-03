@@ -36,7 +36,7 @@ if (! empty($request['username']) and ! empty($request['password'])) {
     $request['mode'] = 'login';
     $request['domain'] = NV_MY_DOMAIN;
 
-    $NV_Http = new NV_Http($global_config, NV_TEMP_DIR);
+    $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
 
     // Debug

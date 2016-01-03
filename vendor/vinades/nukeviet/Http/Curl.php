@@ -49,7 +49,6 @@ class Curl
     public $error = array();
 
     /**
-     * NV_http_curl::request()
      *
      * @param mixed $url
      * @param mixed $args
@@ -283,8 +282,8 @@ class Curl
             return $redirect_response;
         }
 
-        if ($args['decompress'] === true and NV_http_encoding::should_decode($theHeaders['headers']) === true) {
-            $theBody = NV_http_encoding::decompress($theBody);
+        if ($args['decompress'] === true and NukeViet\Http\Encoding::should_decode($theHeaders['headers']) === true) {
+            $theBody = NukeViet\Http\Encoding::decompress($theBody);
         }
 
         $response['body'] = str_replace("\xEF\xBB\xBF", "", $theBody);
@@ -293,7 +292,6 @@ class Curl
     }
 
     /**
-     * NV_http_curl::stream_headers()
      *
      * @param mixed $handle
      * @param mixed $headers
@@ -306,7 +304,6 @@ class Curl
     }
 
     /**
-     * NV_http_curl::stream_body()
      *
      * @param mixed $handle
      * @param mixed $data
@@ -331,7 +328,6 @@ class Curl
     }
 
     /**
-     * NV_http_curl::test()
      *
      * @param mixed $args
      * @return

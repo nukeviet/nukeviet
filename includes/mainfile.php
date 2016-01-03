@@ -79,6 +79,8 @@ if (defined('NV_CONFIG_DIR')) {
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
 
+use NukeViet\Core\XTemplate as XTemplate;
+
 // Xac dinh IP cua client
 $ips = new NukeViet\Core\Ips();
 // define( 'NV_SERVER_IP', $ips->server_ip );

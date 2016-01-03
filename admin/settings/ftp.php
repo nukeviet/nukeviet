@@ -45,7 +45,7 @@ if ($sys_info['ftp_support']) {
             die('ERROR|' . $lang_module['ftp_error_full']);
         }
 
-        $ftp = new NVftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+        $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
 
         if (! empty($ftp->error)) {
             $ftp->close();
@@ -77,7 +77,7 @@ if ($sys_info['ftp_support']) {
             $ftp_user_pass = nv_unhtmlspecialchars($array_config['ftp_user_pass']);
             $ftp_path = nv_unhtmlspecialchars($array_config['ftp_path']);
 
-            $ftp = new NVftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
+            $ftp = new NukeViet\Ftp\Ftp($ftp_server, $ftp_user_name, $ftp_user_pass, array( 'timeout' => 10 ), $ftp_port);
 
             if (! empty($ftp->error)) {
                 $array_config['ftp_check_login'] = 3;
