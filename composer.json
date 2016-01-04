@@ -23,14 +23,17 @@
     },
     "require": {
         "php": ">=5.4.0",
+        "ext-mbstring": "*",
         "ext-gd": "*",
+        "ext-mcrypt": "*",
         "vinades/nukeviet": "dev-master",
         "nukeviet/xtemplate": "*",
         "gregwar/captcha": "1.*",
         "and/oauth": "^0.7-dev",
         "phpmailer/phpmailer": "5.4.x-dev",
         "pclzip/pclzip": "^2.8",
-        "endroid/qrcode": "^1.5"
+        "endroid/qrcode": "^1.5",
+        "true/punycode": "^2.0"
     },
     "require-dev": {
     } 
