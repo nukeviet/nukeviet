@@ -329,8 +329,8 @@ function nv_geVersion($updatetime = 3600)
         $array = ! empty($array['body']) ? @unserialize($array['body']) : array();
 
         $error = '';
-        if (! empty(NV_Http::$error)) {
-            $error = nv_http_get_lang(NV_Http::$error);
+        if (! empty(NukeViet\Http\Http::$error)) {
+            $error = nv_http_get_lang(NukeViet\Http\Http::$error);
         } elseif (! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
             $error = $lang_global['error_valid_response'];
         } elseif (! empty($array['error']['message'])) {
@@ -749,8 +749,8 @@ function nv_getExtVersion($updatetime = 3600)
             $apidata = ! empty($apidata['body']) ? @unserialize($apidata['body']) : array();
 
             $error = '';
-            if (! empty(NV_Http::$error)) {
-                $error = nv_http_get_lang(NV_Http::$error);
+            if (! empty(NukeViet\Http\Http::$error)) {
+                $error = nv_http_get_lang(NukeViet\Http\Http::$error);
             } elseif (! isset($apidata['error']) or ! isset($apidata['data']) or ! isset($apidata['pagination']) or ! is_array($apidata['error']) or ! is_array($apidata['data']) or ! is_array($apidata['pagination']) or (! empty($apidata['error']) and (! isset($apidata['error']['level']) or empty($apidata['error']['message'])))) {
                 $error = $lang_global['error_valid_response'];
             } elseif (! empty($apidata['error']['message'])) {
