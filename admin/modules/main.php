@@ -8,12 +8,13 @@
  * @Createdate 2-10-2010 9:32
  */
 
-if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_MODULES')) {
+    die('Stop!!!');
+}
 
-if( sizeof( $site_mods ) < 1 )
-{
-	Header( 'Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup' );
-	exit();
+if (sizeof($site_mods) < 1) {
+    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup');
+    exit();
 }
 
 $page_title = $lang_module['main'];
@@ -21,8 +22,8 @@ $page_title = $lang_module['main'];
 $contents['div_id'] = 'list_mods';
 $contents['ajax'] = 'nv_show_list_mods();';
 
-$contents = call_user_func( 'main_theme', $contents );
+$contents = call_user_func('main_theme', $contents);
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_admin_theme( $contents );
+echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

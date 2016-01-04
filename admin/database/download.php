@@ -8,59 +8,54 @@
  * @Createdate 2-1-2010 21:49
  */
 
-if( ! defined( 'NV_IS_FILE_DATABASE' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_DATABASE')) {
+    die('Stop!!!');
+}
 
-$checkss = $nv_Request->get_title( 'checkss', 'post,get' );
+$checkss = $nv_Request->get_title('checkss', 'post,get');
 
-if( $checkss == md5( $client_info['session_id'] . $global_config['sitekey'] ) )
-{
-	$tables = $nv_Request->get_array( 'tables', 'post', array() );
-	$type = $nv_Request->get_title( 'type', 'post', '' );
-	$ext = $nv_Request->get_title( 'ext', 'post', '' );
+if ($checkss == md5($client_info['session_id'] . $global_config['sitekey'])) {
+    $tables = $nv_Request->get_array('tables', 'post', array());
+    $type = $nv_Request->get_title('type', 'post', '');
+    $ext = $nv_Request->get_title('ext', 'post', '');
 
-	if( empty( $tables ) )
-	{
-		$tables = array();
-	}
-	elseif( ! is_array( $tables ) )
-	{
-		$tables = array( $tables );
-	}
+    if (empty($tables)) {
+        $tables = array();
+    } elseif (! is_array($tables)) {
+        $tables = array( $tables );
+    }
 
-	$tab_list = array();
+    $tab_list = array();
 
-	$result = $db->query( "SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'" );
-	while( $item = $result->fetch( 3 ) )
-	{
-		$tab_list[] = $item[0];
-	}
-	$result->closeCursor();
+    $result = $db->query("SHOW TABLES LIKE '" . $db_config['prefix'] . "_%'");
+    while ($item = $result->fetch(3)) {
+        $tab_list[] = $item[0];
+    }
+    $result->closeCursor();
 
-	$contents = array();
-	$contents['tables'] = ( empty( $tables ) ) ? $tab_list : array_values( array_intersect( $tab_list, $tables ) );
-	$contents['type'] = ( $type != 'str' ) ? 'all' : 'str';
-	$contents['savetype'] = ( $ext != 'sql' ) ? 'gz' : 'sql';
-	$contents['filename'] = tempnam( NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX );
+    $contents = array();
+    $contents['tables'] = (empty($tables)) ? $tab_list : array_values(array_intersect($tab_list, $tables));
+    $contents['type'] = ($type != 'str') ? 'all' : 'str';
+    $contents['savetype'] = ($ext != 'sql') ? 'gz' : 'sql';
+    $contents['filename'] = tempnam(NV_ROOTDIR . '/' . NV_TEMP_DIR, NV_TEMPNAM_PREFIX);
 
-	include NV_ROOTDIR . '/includes/core/dump.php' ;
+    include NV_ROOTDIR . '/includes/core/dump.php' ;
 
-	$result = nv_dump_save( $contents );
-	if( ! empty( $result ) )
-	{
-		nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['download'], 'File name: ' . basename( $contents['filename'] ), $admin_info['userid'] );
+    $result = nv_dump_save($contents);
+    if (! empty($result)) {
+        nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['download'], 'File name: ' . basename($contents['filename']), $admin_info['userid']);
 
-		$content['mime'] = ( $contents['savetype'] == 'gz' ) ? 'application/x-gzip' : 'text/x-sql';
-		$contents['fname'] = $db->dbname . '.sql';
+        $content['mime'] = ($contents['savetype'] == 'gz') ? 'application/x-gzip' : 'text/x-sql';
+        $contents['fname'] = $db->dbname . '.sql';
 
-		if( $contents['savetype'] == 'gz' )
-		{
-			$contents['fname'] .= '.gz';
-		}
+        if ($contents['savetype'] == 'gz') {
+            $contents['fname'] .= '.gz';
+        }
 
-		//Download file
-		$download = new download( $result[0], NV_ROOTDIR . '/' . NV_TEMP_DIR, basename( $contents['fname'] ) );
-		$download->download_file();
-		exit();
-	}
+        //Download file
+        $download = new NukeViet\Files\Download($result[0], NV_ROOTDIR . '/' . NV_TEMP_DIR, basename($contents['fname']));
+        $download->download_file();
+        exit();
+    }
 }
 die();

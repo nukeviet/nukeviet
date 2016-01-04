@@ -1,5 +1,55 @@
 [
     {
+        "name": "nukeviet/xtemplate",
+        "version": "0.4.0",
+        "version_normalized": "0.4.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/nukeviet/xtemplate.git",
+            "reference": "04c146ff3e16ef7cf09298c3d8f983b44edc58eb"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/nukeviet/xtemplate/zipball/04c146ff3e16ef7cf09298c3d8f983b44edc58eb",
+            "reference": "04c146ff3e16ef7cf09298c3d8f983b44edc58eb",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0.0"
+        },
+        "time": "2015-12-28 18:51:42",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "xtemplate.class.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD",
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Barnab's Debreceni",
+                "email": "cranx@users.sourceforge.net"
+            },
+            {
+                "name": "Jeremy Coates",
+                "email": "cocomp@users.sourceforge.net"
+            }
+        ],
+        "description": "PHP XTemplate is a cool templating engine for PHP",
+        "homepage": "http://www.phpxtemplate.org",
+        "keywords": [
+            "XTPL",
+            "XTemplate",
+            "php",
+            "template"
+        ]
+    },
+    {
         "name": "true/punycode",
         "version": "v2.0.1",
         "version_normalized": "2.0.1.0",
@@ -288,7 +338,7 @@
                 "dev-master": "0.7-dev"
             }
         },
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
                 "OAuth\\": "src"
@@ -368,43 +418,36 @@
     },
     {
         "name": "phpmailer/phpmailer",
-        "version": "v5.2.14",
-        "version_normalized": "5.2.14.0",
+        "version": "5.4.x-dev",
+        "version_normalized": "5.4.9999999.9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "e774bc9152de85547336e22b8926189e582ece95"
+            "reference": "32a99356ef0ebf27aeaf46e9b10d378de7cc9e1c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/e774bc9152de85547336e22b8926189e582ece95",
-            "reference": "e774bc9152de85547336e22b8926189e582ece95",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/32a99356ef0ebf27aeaf46e9b10d378de7cc9e1c",
+            "reference": "32a99356ef0ebf27aeaf46e9b10d378de7cc9e1c",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.0.0"
+            "php": ">=5.4.0"
         },
         "require-dev": {
-            "phpdocumentor/phpdocumentor": "*",
-            "phpunit/phpunit": "4.7.*"
+            "phpdocumentor/phpdocumentor": "2.*",
+            "phpunit/phpunit": "4.*"
         },
         "suggest": {
-            "league/oauth2-client": "Needed for XOAUTH2 authentication",
-            "league/oauth2-google": "Needed for Gmail XOAUTH2"
+            "league/oauth2-client": "Needed for XOAUTH2 authentication"
         },
-        "time": "2015-11-01 10:15:28",
+        "time": "2015-12-22 08:35:50",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
-            "classmap": [
-                "class.phpmailer.php",
-                "class.phpmaileroauth.php",
-                "class.phpmaileroauthgoogle.php",
-                "class.smtp.php",
-                "class.pop3.php",
-                "extras/EasyPeasyICS.php",
-                "extras/ntlm_sasl_client.php"
-            ]
+            "psr-4": {
+                "PHPMailer\\PHPMailer\\": "src/"
+            }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
@@ -428,58 +471,6 @@
             }
         ],
         "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
-    },
-    {
-        "name": "phpwhois/idna-convert",
-        "version": "v0.9.0",
-        "version_normalized": "0.9.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/phpWhois/idna-convert.git",
-            "reference": "663c4b170d4e542946e04840ee212e6c896ac80b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/phpWhois/idna-convert/zipball/663c4b170d4e542946e04840ee212e6c896ac80b",
-            "reference": "663c4b170d4e542946e04840ee212e6c896ac80b",
-            "shasum": ""
-        },
-        "time": "2015-01-09 03:31:11",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.9.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "idna_convert.class.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-2.1"
-        ],
-        "authors": [
-            {
-                "name": "Matthias Sommerfeld",
-                "email": "phlymail@phlylabs.de",
-                "role": "Developer"
-            },
-            {
-                "name": "Dmitry Lukashin",
-                "email": "dmitry@lukashin.ru",
-                "role": "Maintainer"
-            }
-        ],
-        "description": "idna-convert library based on http://idnaconv.phlymail.de/",
-        "homepage": "http://idnaconv.phlymail.de/",
-        "keywords": [
-            "idn",
-            "idna",
-            "php"
-        ]
     },
     {
         "name": "pclzip/pclzip",
@@ -521,53 +512,151 @@
         ]
     },
     {
-        "name": "nukeviet/xtemplate",
-        "version": "0.4.0",
-        "version_normalized": "0.4.0.0",
+        "name": "gregwar/captcha",
+        "version": "v1.1.1",
+        "version_normalized": "1.1.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/nukeviet/xtemplate.git",
-            "reference": "04c146ff3e16ef7cf09298c3d8f983b44edc58eb"
+            "url": "https://github.com/Gregwar/Captcha.git",
+            "reference": "1240ab993ca713680573b2d4166900da5f758623"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/nukeviet/xtemplate/zipball/04c146ff3e16ef7cf09298c3d8f983b44edc58eb",
-            "reference": "04c146ff3e16ef7cf09298c3d8f983b44edc58eb",
+            "url": "https://api.github.com/repos/Gregwar/Captcha/zipball/1240ab993ca713680573b2d4166900da5f758623",
+            "reference": "1240ab993ca713680573b2d4166900da5f758623",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.0.0"
+            "ext-gd": "*",
+            "php": ">=5.3.0"
         },
-        "time": "2015-12-28 18:51:42",
-        "type": "library",
+        "time": "2015-09-11 15:23:20",
+        "type": "captcha",
         "installation-source": "dist",
         "autoload": {
-            "classmap": [
-                "xtemplate.class.php"
-            ]
+            "psr-4": {
+                "Gregwar\\Captcha\\": "/"
+            }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "BSD",
-            "LGPL"
+            "MIT"
         ],
         "authors": [
             {
-                "name": "Barnab's Debreceni",
-                "email": "cranx@users.sourceforge.net"
+                "name": "Grégoire Passault",
+                "email": "g.passault@gmail.com",
+                "homepage": "http://www.gregwar.com/"
             },
             {
-                "name": "Jeremy Coates",
-                "email": "cocomp@users.sourceforge.net"
+                "name": "Jeremy Livingston",
+                "email": "jeremy.j.livingston@gmail.com"
             }
         ],
-        "description": "PHP XTemplate is a cool templating engine for PHP",
-        "homepage": "http://www.phpxtemplate.org",
+        "description": "Captcha generator",
+        "homepage": "https://github.com/Gregwar/Captcha",
         "keywords": [
-            "XTPL",
-            "XTemplate",
-            "php",
-            "template"
+            "bot",
+            "captcha",
+            "spam"
+        ]
+    },
+    {
+        "name": "vinades/nukeviet",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/vinades/nukeviet.git",
+            "reference": "44dbcfcae7bd590921805db13e1d1db1e3253671"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/vinades/nukeviet/zipball/44dbcfcae7bd590921805db13e1d1db1e3253671",
+            "reference": "44dbcfcae7bd590921805db13e1d1db1e3253671",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0"
+        },
+        "time": "2015-12-30 17:16:23",
+        "type": "project",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "NukeViet\\": "/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "VINADES.,JSC",
+                "email": "contact@vinades.vn",
+                "homepage": "http://vinades.vn",
+                "role": "Developer"
+            }
+        ],
+        "description": "class for NukeViet 4",
+        "homepage": "https://github.com/nukeviet/nukeviet",
+        "keywords": [
+            "cms",
+            "nukeviet",
+            "nukeviet4"
+        ]
+    },
+    {
+        "name": "endroid/qrcode",
+        "version": "1.5.7",
+        "version_normalized": "1.5.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/endroid/QrCode.git",
+            "reference": "7b32cc5e4bd2f5e5191382926b18001b7cd78695"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/endroid/QrCode/zipball/7b32cc5e4bd2f5e5191382926b18001b7cd78695",
+            "reference": "7b32cc5e4bd2f5e5191382926b18001b7cd78695",
+            "shasum": ""
+        },
+        "require": {
+            "ext-gd": "*",
+            "php": ">=5.3.0"
+        },
+        "time": "2016-01-01 19:08:49",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Endroid\\QrCode\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jeroen van den Enden",
+                "email": "info@endroid.nl",
+                "homepage": "http://endroid.nl/"
+            }
+        ],
+        "description": "Endroid QR Code",
+        "homepage": "https://github.com/endroid/QrCode",
+        "keywords": [
+            "code",
+            "endroid",
+            "qr",
+            "qrcode"
         ]
     }
 ]
