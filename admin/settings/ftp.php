@@ -86,7 +86,7 @@ if ($sys_info['ftp_support']) {
                 $array_config['ftp_check_login'] = 2;
                 $error = $lang_global['ftp_error_path'];
             } else {
-                $check_files = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'index.php', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR );
+                $check_files = array( NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor' );
                 $list_files = $ftp->listDetail($ftp_path, 'all');
 
                 $a = 0;

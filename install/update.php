@@ -1479,7 +1479,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                 $ftp->close();
                 die('ERROR|' . ( string )$ftp->error);
             } else {
-                $list_valid = array( NV_CACHEDIR, NV_DATADIR, 'images', 'includes', 'js', 'language', NV_LOGS_DIR, 'modules', 'themes', NV_TEMP_DIR, NV_UPLOADS_DIR );
+                $list_valid = array( NV_ASSETS_DIR, 'includes', 'index.php', 'modules', 'themes', 'vendor' );
 
                 $ftp_root = $ftp->detectFtpRoot($list_valid, NV_ROOTDIR);
 
