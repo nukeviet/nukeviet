@@ -54,8 +54,8 @@ if (empty($request['id']) or empty($request['fid']) or ! isset($array['tid'])) {
 
     $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 
-    if (! empty(NV_Http::$error)) {
-        $contents = "ERR|" . nv_http_get_lang(NV_Http::$error);
+    if (! empty(NukeViet\Http\Http::$error)) {
+        $contents = "ERR|" . nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($array['filename']) or ! file_exists($array['filename'])) {
         $contents = "ERR|" . $lang_module['download_error_save'];
     } else {
