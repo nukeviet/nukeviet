@@ -108,7 +108,7 @@ $lang_module['extUpdErrorDownload'] = 'Error download upgrade';
 $lang_module['get_update_error_file_download'] = 'Download the update package failed';
 $lang_module['get_update_ok'] = 'Safety upgrade package, click <a href="%s"> In this </a> to conduct decompression upgrade package';
 $lang_module['get_update_warning'] = 'This upgrade package can be detrimental to your website if any errors occur, so you should back up your entire website before done, click <a href="%s" /> Click here  to proceed unzip the package upgrade';
-$lang_module['get_update_warning_permission_folder'] = 'Error can not create folders, check and disable safe_mode';
+$lang_module['get_update_warning_permission_folder'] = 'Error can not create folders.';
 $lang_module['get_update_error_movefile'] = 'Error Can not move file';
 $lang_module['get_update_cantunzip'] = 'Error can not be unpacked. Please check chmod the directory.';
 $lang_module['get_update_okunzip'] = 'Unzip successful, the system will redirect momentarily';

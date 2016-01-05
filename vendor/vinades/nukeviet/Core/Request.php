@@ -29,8 +29,6 @@ class Request
     public $session_save_path;
     public $cookie_path;
     public $cookie_domain;
-    public $is_register_globals = false;
-    public $is_magic_quotes_gpc = false;
     public $referer;
     public $referer_key;
     public $referer_host = '';
@@ -120,14 +118,7 @@ class Request
         $this->ip_addr = $ip2long;
 
         $this->cookie_key = md5($this->cookie_key);
-        if (ini_get('register_globals') == '1' || strtolower(ini_get('register_globals')) == 'on') {
-            $this->is_register_globals = true;
-        }
-        if (function_exists('get_magic_quotes_gpc')) {
-            if (get_magic_quotes_gpc()) {
-                $this->is_magic_quotes_gpc = true;
-            }
-        }
+
         if (extension_loaded('filter') && filter_id(ini_get('filter.default')) !== FILTER_UNSAFE_RAW) {
             $this->is_filter = true;
         }
@@ -176,9 +167,6 @@ class Request
             if (is_array($var[$k])) {
                 $this->fixQuery($var[$k], $mode);
             } elseif (is_string($var[$k])) {
-                if ($this->is_magic_quotes_gpc) {
-                    $var[$k] = stripslashes($var[$k]);
-                }
                 if ($mode == 'get') {
                     $var[$k] = $this->security_get($var[$k]);
                 }
@@ -197,13 +185,6 @@ class Request
         if (sizeof($_GET)) {
             $array_keys = array_keys($_GET);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
                 if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
                     unset($_GET[$k]);
                 }
@@ -213,13 +194,6 @@ class Request
         if (sizeof($_POST)) {
             $array_keys = array_keys($_POST);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
                 if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
                     unset($_POST[$k]);
                 }
@@ -229,13 +203,6 @@ class Request
         if (sizeof($_COOKIE)) {
             $array_keys = array_keys($_COOKIE);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
                 if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
                     @setcookie($k, '', NV_CURRENTTIME - 3600);
                     unset($_COOKIE[$k]);
@@ -246,13 +213,6 @@ class Request
         if (sizeof($_FILES) && strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
             $array_keys = array_keys($_FILES);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
                 if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
                     unset($_FILES[$k]);
                 }
@@ -428,13 +388,6 @@ class Request
         if (sizeof($_SESSION)) {
             $array_keys = array_keys($_SESSION);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
                 if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
                     unset($_SESSION[$k]);
                 }
