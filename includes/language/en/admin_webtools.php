@@ -9,7 +9,9 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -82,9 +84,4 @@ $lang_module['global_statistics'] = 'Statistics config';
 $lang_module['statistic'] = 'Activate statistics';
 $lang_module['statistics_timezone'] = 'Time zone for statistics';
 $lang_module['online_upd'] = 'Activate monitoring online users';
-$lang_module['googleAnalyticsSetDomainName_title'] = 'Domain properties when declared with Google Analytics';
-$lang_module['googleAnalyticsSetDomainName_0'] = 'A single domain';
-$lang_module['googleAnalyticsSetDomainName_1'] = 'One domain with multiple subdomains';
-$lang_module['googleAnalyticsSetDomainName_2'] = 'Multiple top-level domains';
 $lang_module['googleAnalyticsID'] = 'Google Analytics ID<br />(UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">Detail</a>)';
-$lang_module['googleAnalyticsMethod'] = 'Choose your method of Google Analytics tracking site';

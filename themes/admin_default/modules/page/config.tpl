@@ -16,40 +16,39 @@
 					<tr>
 						<td>{LANG.config_view_type}</td>
 						<td>
-							<select name="viewtype" class="form-control w200">
-								<!-- BEGIN: loop -->
-								<option value="{VIEWTYPE.id}" {VIEWTYPE.selected}>{VIEWTYPE.title}</option>
-								<!-- END: loop -->
-							</select>
-						</td>
+						<select name="viewtype" class="form-control w200">
+							<!-- BEGIN: loop -->
+							<option value="{VIEWTYPE.id}" {VIEWTYPE.selected}>{VIEWTYPE.title}</option>
+							<!-- END: loop -->
+						</select></td>
 					</tr>
 					<tr>
-                        <td>{LANG.config_view_type_page}</td>
-                        <td>
-                            <select class="form-control w200" name="per_page">
-                                <!-- BEGIN: per_page -->
-                                <option value="{PER_PAGE.key}"{PER_PAGE.selected}>{PER_PAGE.title}</option>
-                                <!-- END: per_page -->
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{LANG.config_view_related_articles}</td>
-                        <td>
-                            <select class="form-control w200" name="related_articles">
-                                <!-- BEGIN: related_articles -->
-                                <option value="{RELATED_ARTICLES.key}"{RELATED_ARTICLES.selected}>{RELATED_ARTICLES.title}</option>
-                                <!-- END: related_articles -->
-                            </select>
-                        </td>
-                    </tr>
+						<td>{LANG.config_view_type_page}</td>
+						<td>
+						<select class="form-control w200" name="per_page">
+							<!-- BEGIN: per_page -->
+							<option value="{PER_PAGE.key}"{PER_PAGE.selected}>{PER_PAGE.title}</option>
+							<!-- END: per_page -->
+						</select></td>
+					</tr>
+					<tr>
+						<td>{LANG.config_view_related_articles}</td>
+						<td>
+						<select class="form-control w200" name="related_articles">
+							<!-- BEGIN: related_articles -->
+							<option value="{RELATED_ARTICLES.key}"{RELATED_ARTICLES.selected}>{RELATED_ARTICLES.title}</option>
+							<!-- END: related_articles -->
+						</select></td>
+					</tr>
+					<tr>
+						<td>{LANG.first_news}</td>
+						<td><input type="checkbox" value="1" name="news_first"{NEWS_FIRST}/></td>
+					</tr>
 					<tr>
 						<td>{LANG.config_facebookapi}</td>
-						<td>
-							<input class="form-control w200" name="facebookapi" value="{DATA.facebookapi}" />
-							<span class="help-block">{LANG.config_facebookapi_note}</span>
-						</td>
+						<td><input class="form-control w200" name="facebookapi" value="{DATA.facebookapi}" /><span class="help-block">{LANG.config_facebookapi_note}</span></td>
 					</tr>
+
 				</tbody>
 			</table>
 		</div>

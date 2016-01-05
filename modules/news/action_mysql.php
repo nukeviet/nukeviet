@@ -8,39 +8,38 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_MODULES')) {
+    die('Stop!!!');
+}
 
 $sql_drop_module = array();
 $array_table = array(
-	'admins',
-	'block',
-	'block_cat',
-	'bodytext',
-	'cat',
-	'config_post',
-	'rows',
-	'sources',
-	'tags',
-	'tags_id',
-	'topics',
-	'logs'
+    'admins',
+    'block',
+    'block_cat',
+    'bodytext',
+    'cat',
+    'config_post',
+    'rows',
+    'sources',
+    'tags',
+    'tags_id',
+    'topics',
+    'logs'
 );
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
-$result = $db->query( 'SHOW TABLE STATUS LIKE ' . $db->quote( $table . '_%' ) );
-while( $item = $result->fetch( ) )
-{
-	$name = substr( $item['name'], strlen( $table ) + 1 );
-	if( preg_match( '/^' . $db_config['prefix'] . '\_' . $lang . '\_' . $module_data . '\_/', $item['name'] ) and ( preg_match( '/^([0-9]+)$/', $name ) or in_array( $name, $array_table ) or preg_match( '/^bodyhtml\_([0-9]+)$/', $name ) ) )
-	{
-		$sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $item['name'];
-	}
+$result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($table . '_%'));
+while ($item = $result->fetch()) {
+    $name = substr($item['name'], strlen($table) + 1);
+    if (preg_match('/^' . $db_config['prefix'] . '\_' . $lang . '\_' . $module_data . '\_/', $item['name']) and (preg_match('/^([0-9]+)$/', $name) or in_array($name, $array_table) or preg_match('/^bodyhtml\_([0-9]+)$/', $name))) {
+        $sql_drop_module[] = 'DROP TABLE IF EXISTS ' . $item['name'];
+    }
 }
 
-$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_comment'" );
+$result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $lang . "\_comment'");
 $rows = $result->fetchAll();
-if( sizeof( $rows ) )
-{
-	$sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $lang . "_comment WHERE module='" . $module_name . "'";
+if (sizeof($rows)) {
+    $sql_drop_module[] = "DELETE FROM " . $db_config['prefix'] . "_" . $lang . "_comment WHERE module='" . $module_name . "'";
 }
 $sql_create_module = $sql_drop_module;
 
@@ -231,7 +230,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 id int(11) NOT NULL,
 	 tid mediumint(9) NOT NULL,
 	 keyword varchar(65) NOT NULL,
-	 UNIQUE KEY sid (id,tid)
+	 UNIQUE KEY id_tid (id,tid),
+	 KEY tid (tid)
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";

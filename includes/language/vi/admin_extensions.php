@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -165,6 +167,8 @@ $lang_module['autoinstall_error_cfg_content'] = 'Gói ứng dụng không đầy
 $lang_module['autoinstall_error_cfg_type'] = 'Loại ứng dụng không xác định';
 $lang_module['autoinstall_error_cfg_version'] = 'Phiên bản ứng dụng không hợp lệ';
 $lang_module['autoinstall_error_cfg_name'] = 'Tên ứng dụng theo loại ứng dụng không đúng chuẩn quy định';
+$lang_module['autoinstall_error_mimetype'] = 'Cảnh báo: Hệ thống không kiểm tra được loại file của các tệp tin sau. Nếu chắc chắn các tệp tin đó không chứa mã độc, hãy nhấp nút &quot;Bỏ qua cảnh báo&quot;';
+$lang_module['autoinstall_error_mimetype_pass'] = 'Bỏ qua cảnh báo';
 $lang_module['autoinstall_note_invaild'] = 'Vị trí không được phép';
 $lang_module['autoinstall_note_exists'] = 'Tệp tin đã tồn tại';
 
