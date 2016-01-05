@@ -32,7 +32,7 @@ if ($order > 0 and $bid > 0) {
     }
 
     $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET weight=' . $order . ' WHERE bid=' . $bid);
-    nv_del_moduleCache('themes');
+    $nv_Cache->delMod('themes');
 
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     echo 'OK';

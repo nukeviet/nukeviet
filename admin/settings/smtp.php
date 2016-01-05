@@ -42,7 +42,7 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
-    nv_del_moduleCache('settings');
+    $nv_Cache->delMod('settings');
 
     if ($array_config['smtp_ssl'] == 1 and $array_config['mailer_mode'] == 'smtp') {
         require_once NV_ROOTDIR . '/includes/core/phpinfo.php';

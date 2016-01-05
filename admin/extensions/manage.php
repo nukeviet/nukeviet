@@ -446,7 +446,7 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_c
                             $sth->bindParam(':theme', $request['title'], PDO::PARAM_STR);
                             $sth->execute();
                         }
-                        nv_del_moduleCache('themes');
+                        $nv_Cache->delMod('themes');
 
                         $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_modthemes');
                         $db->query('OPTIMIZE TABLE ' . $db_config['prefix'] . '_' . $_lang . '_blocks_weight');

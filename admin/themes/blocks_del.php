@@ -49,7 +49,7 @@ if (intval($bid) > 0) {
         $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=' . $weight . ' WHERE bid=' . $bid_i . ' AND func_id=' . $func_id_i);
     }
 
-    nv_del_moduleCache('themes');
+    $nv_Cache->delMod('themes');
 
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');

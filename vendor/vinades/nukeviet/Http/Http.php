@@ -194,7 +194,7 @@ class Http
         Http::mbstring_binary_safe_encoding();
 
         if (! isset($args['headers']['Accept-Encoding'])) {
-            if ($encoding = NukeViet\Http\Encoding::accept_encoding($url, $args)) {
+            if ($encoding = Encoding::accept_encoding($url, $args)) {
                 $args['headers']['Accept-Encoding'] = $encoding;
             }
         }
@@ -396,7 +396,7 @@ class Http
         static $nv_http;
 
         // If no redirects are present, or, redirects were not requested, perform no action.
-        if (! isset($response['headers']['location']) or $args['_redirection'] === 0) {
+        if (! isset($response['headers']['location']) or $args['redirection'] === 0) {
             return false;
         }
 
@@ -643,7 +643,7 @@ class Http
             }
 
             if ('set-cookie' == $key) {
-                $cookies[] = new NukeViet\Http\Cookie($value, $url);
+                $cookies[] = new Cookie($value, $url);
             }
         }
 
@@ -665,7 +665,7 @@ class Http
             // Upgrade any name => value cookie pairs to NV_http_cookie instances
             foreach ($args['cookies'] as $name => $value) {
                 if (! is_object($value)) {
-                    $args['cookies'][$name] = new NukeViet\Http\Cookie(array( 'name' => $name, 'value' => $value ));
+                    $args['cookies'][$name] = new Cookie(array( 'name' => $name, 'value' => $value ));
                 }
             }
 

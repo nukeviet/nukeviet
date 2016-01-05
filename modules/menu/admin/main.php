@@ -37,7 +37,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     if ($db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = ' . $id)) {
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $id);
         nv_insert_logs(NV_LANG_DATA, $module_name, 'delete menu id: ' . $id, $title, $admin_info['userid']);
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     } else {
         die('NO_' . $id);
     }

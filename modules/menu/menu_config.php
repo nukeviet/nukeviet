@@ -14,13 +14,14 @@ if (! defined('NV_MAINFILE')) {
 
 function nv_block_config_menu($module, $data_block, $lang_block)
 {
+    global $nv_Cache;
     $html = '';
     $html .= "<tr>";
     $html .= "	<td>" . $lang_block['menu'] . "</td>";
     $html .= "	<td><select name=\"menuid\" class=\"w300 form-control\">\n";
 
     $sql = "SELECT * FROM " . NV_PREFIXLANG . "_menu ORDER BY id DESC";
-    $list = nv_db_cache($sql, 'id', $module);
+    $list = $nv_Cache->db($sql, 'id', $module);
     foreach ($list as $l) {
         $sel = ($data_block['menuid'] == $l['id']) ? ' selected' : '';
         $html .= "<option value=\"" . $l['id'] . "\" " . $sel . ">" . $l['title'] . "</option>\n";

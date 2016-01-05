@@ -14,7 +14,7 @@ if (! defined('NV_IS_MOD_CONTACT')) {
 
 //Danh sach cac bo phan
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 ORDER BY weight';
-$array_department = nv_db_cache($sql, 'id');
+$array_department = $nv_Cache->db($sql, 'id', $module_name);
 
 $alias_url = isset($array_op[0]) ? $array_op[0] : '';
 $alias_department = '';

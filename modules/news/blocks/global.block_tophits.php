@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_news_block_tophits')) {
     function nv_block_config_tophits_blocks($module, $data_block, $lang_block)
     {
-        global $site_mods;
+        global $nv_Cache, $site_mods;
         $html = '';
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['number_day'] . '</td>';
@@ -42,7 +42,7 @@ if (! nv_function_exists('nv_news_block_tophits')) {
         $html .= '<tr>';
         $html .= '<td>' . $lang_block['nocatid'] . '</td>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
-        $list = nv_db_cache($sql, '', $module);
+        $list = $nv_Cache->db($sql, '', $module);
         $html .= '<td>';
         $html .= '<div style="height: 200px; overflow: auto">';
         foreach ($list as $l) {
@@ -168,7 +168,7 @@ if (! nv_function_exists('nv_news_block_tophits')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    global $site_mods, $module_name, $global_array_cat, $module_array_cat;
+    global $nv_Cache, $site_mods, $module_name, $global_array_cat, $module_array_cat;
     $module = $block_config['module'];
     if (isset($site_mods[$module])) {
         $mod_data = $site_mods[$module]['module_data'];
@@ -178,7 +178,7 @@ if (defined('NV_SYSTEM')) {
         } else {
             $module_array_cat = array();
             $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
-            $list = nv_db_cache($sql, 'catid', $module);
+            $list = $nv_Cache->db($sql, 'catid', $module);
             foreach ($list as $l) {
                 $module_array_cat[$l['catid']] = $l;
                 $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];

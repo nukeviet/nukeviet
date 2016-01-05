@@ -193,7 +193,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     }
                 }
             }
-            nv_delete_all_cache();
+            $nv_Cache->delAll();
             nv_insert_logs(NV_LANG_DATA, $module_name, sprintf($lang_module['edit'], $mod), '', $admin_info['userid']);
 
             Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);

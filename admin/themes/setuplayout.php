@@ -187,8 +187,8 @@ if (file_exists(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini')) {
     }
 
     if ($set_layout_site) {
-        nv_del_moduleCache('themes');
-        nv_del_moduleCache('modules');
+        $nv_Cache->delMod('themes');
+        $nv_Cache->delMod('modules');
     }
 
     foreach ($layout_array as $_layout) {

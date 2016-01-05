@@ -694,43 +694,6 @@ function nv_chmod_dir($conn_id, $dir, $subdir = false)
 }
 
 /**
- * nv_gz_get_contents()
- *
- * @param mixed $filename
- * @return
- */
-function nv_gz_get_contents($filename)
-{
-    global $sys_info;
-
-    $content = file_get_contents($filename);
-
-    if (isset($sys_info['str_compress']) and ! empty($sys_info['str_compress'])) {
-        $content = call_user_func($sys_info['str_compress'][1], $content);
-    }
-
-    return $content;
-}
-
-/**
- * nv_gz_put_contents()
- *
- * @param mixed $filename
- * @param mixed $content
- * @return
- */
-function nv_gz_put_contents($filename, $content)
-{
-    global $sys_info;
-
-    if (isset($sys_info['str_compress']) and ! empty($sys_info['str_compress'])) {
-        $content = call_user_func($sys_info['str_compress'][0], $content, 9);
-    }
-
-    return file_put_contents($filename, $content, LOCK_EX);
-}
-
-/**
  * nv_is_image()
  *
  * @param mixed $img

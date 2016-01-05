@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $mod_info = $site_mods[$row['module']];
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
                 include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
-                nv_del_moduleCache($row['module']);
+                $nv_Cache->delMod($row['module']);
             }
         }
     }

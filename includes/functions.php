@@ -535,14 +535,14 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
  */
 function nv_user_groups($in_groups)
 {
-    global $db, $db_config, $global_config;
+    global $nv_Cache, $db, $db_config, $global_config;
 
     if (empty($in_groups)) {
         return '';
     }
 
     $query = 'SELECT group_id, title, exp_time, publics FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
-    $list = nv_db_cache($query, '', 'users');
+    $list = $nv_Cache->db($query, '', 'users');
 
     if (empty($list)) {
         return '';
@@ -562,7 +562,7 @@ function nv_user_groups($in_groups)
 
     if ($reload) {
         $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
-        nv_del_moduleCache('users');
+        $nv_Cache->delMod('users');
     }
 
     return $groups;

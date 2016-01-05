@@ -87,14 +87,3 @@ if (! function_exists('mcrypt_encrypt')) {
 
 //Xac dinh tien ich mo rong lam viec voi string
 $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ($sys_info['iconv_support'] ? 'iconv' : 'php');
-
-//Xac dinh function nen string
-$sys_info['str_compress'] = array();
-
-if ($sys_info['zlib_support']) {
-    if (function_exists('gzcompress') and function_exists('gzuncompress')) {
-        $sys_info['str_compress'] = array( 'gzcompress', 'gzuncompress' );
-    } elseif (function_exists('gzdeflate') and function_exists('gzinflate')) {
-        $sys_info['str_compress'] = array( 'gzdeflate', 'gzinflate' );
-    }
-}

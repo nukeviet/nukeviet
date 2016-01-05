@@ -48,7 +48,7 @@ if (! empty($listcid)) {
             $mod_info = $site_mod_comm[$row['module']];
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
                 include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
-                nv_del_moduleCache($row['module']);
+                $nv_Cache->delMod($row['module']);
             }
         }
     }

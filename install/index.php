@@ -342,7 +342,6 @@ if ($step == 1) {
 
         if ($dbtype == 'mysql') {
             // Not check default dbtype
-
             $respon['status'] = 'success';
         } else {
             if (! in_array($dbtype, $PDODrivers)) {

@@ -60,7 +60,7 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
             die('NO_' . $modname);
         }
 
-        nv_del_moduleCache('themes');
+        $nv_Cache->delMod('themes');
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_modthemes WHERE func_id IN (SELECT func_id FROM ' . NV_MODFUNCS_TABLE . ' WHERE in_module= :module)');
         $sth->bindParam(':module', $modname, PDO::PARAM_STR);
         if (! $sth->execute()) {
@@ -121,7 +121,7 @@ if (! empty($modname) and preg_match($global_config['check_module'], $modname)) 
             }
         }
 
-        nv_delete_all_cache();
+        $nv_Cache->delAll();
     }
 }
 

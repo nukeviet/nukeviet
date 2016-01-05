@@ -37,13 +37,13 @@ if ($sourceid > 0) {
         if (empty($_count)) {
             @unlink(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old);
             @unlink(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/source/' . $logo_old);
-    
+
             $_did = $db->query('SELECT did FROM ' . NV_UPLOAD_GLOBALTABLE . '_dir WHERE dirname=' . $db->quote(dirname(NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $logo_old)))->fetchColumn();
             $db->query('DELETE FROM ' . NV_UPLOAD_GLOBALTABLE . '_file WHERE did = ' . $_did . ' AND title=' . $db->quote(basename($logo_old)));
         }
     }
     nv_fix_source();
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     $contents = 'OK_' . $sourceid;
 }
 

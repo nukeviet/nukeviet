@@ -233,8 +233,8 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
 
     $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 
-    if (! empty(NV_Http::$error)) {
-        $error = nv_http_get_lang(NV_Http::$error);
+    if (! empty(NukeViet\Http\Http::$error)) {
+        $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($apidata['filename']) or ! file_exists($apidata['filename']) or filesize($apidata['filename']) == 0) {
         $error = $lang_module['extUpdErrorDownload'];
     }
@@ -299,8 +299,8 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
     $array = ! empty($array['body']) ? @unserialize($array['body']) : array();
 
     $error = '';
-    if (! empty(NV_Http::$error)) {
-        $error = nv_http_get_lang(NV_Http::$error);
+    if (! empty(NukeViet\Http\Http::$error)) {
+        $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
         $error = $lang_global['error_valid_response'];
     } elseif (! empty($array['error']['message'])) {

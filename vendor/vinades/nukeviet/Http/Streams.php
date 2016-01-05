@@ -307,8 +307,8 @@ class Streams
             $process['body'] = NV_Http::chunkTransferDecode($process['body']);
         }
 
-        if ($args['decompress'] === true and NukeViet\Http\Encoding::should_decode($arrHeaders['headers']) === true) {
-            $process['body'] = NukeViet\Http\Encoding::decompress($process['body']);
+        if ($args['decompress'] === true and Encoding::should_decode($arrHeaders['headers']) === true) {
+            $process['body'] = Encoding::decompress($process['body']);
         }
 
         if (isset($args['limit_response_size']) and strlen($process['body']) > $args['limit_response_size']) {

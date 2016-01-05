@@ -40,6 +40,7 @@ define('NV_FILES_DIR', NV_ASSETS_DIR);
 
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
+require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
@@ -85,7 +86,6 @@ require NV_ROOTDIR . '/install/ini.php';
 require NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php';
 require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
-require NV_ROOTDIR . '/includes/core/cache_files.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
@@ -168,3 +168,5 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 
 //Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
+
+$nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);

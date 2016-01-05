@@ -68,7 +68,7 @@ if (preg_match($global_config['check_theme'], $theme1) and preg_match($global_co
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['xcopyblock'], $lang_module['xcopyblock_from'] . ' ' . $theme1 . ' ' . $lang_module['xcopyblock_to'] . ' ' . $theme2, $admin_info['userid']);
-    nv_del_moduleCache('themes');
+    $nv_Cache->delMod('themes');
 
     echo $lang_module['xcopyblock_success'];
 } else {

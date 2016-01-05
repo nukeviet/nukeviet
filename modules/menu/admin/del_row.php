@@ -24,7 +24,7 @@ if (!nv_menu_del_sub($id, $parentid)) {
     die('NO_' . $id);
 }
 menu_fix_order($mid);
-nv_del_moduleCache($module_name);
+$nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $id . '_' . $mid . '_' . $parentid;
