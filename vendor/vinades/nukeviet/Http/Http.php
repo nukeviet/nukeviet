@@ -396,7 +396,7 @@ class Http
         static $nv_http;
 
         // If no redirects are present, or, redirects were not requested, perform no action.
-        if (! isset($response['headers']['location']) or $args['_redirection'] === 0) {
+        if (! isset($response['headers']['location']) or $args['redirection'] === 0) {
             return false;
         }
 
