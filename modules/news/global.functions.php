@@ -75,8 +75,8 @@ function nv_set_status_module()
     $sth->bindValue(':config_value', intval($timecheckstatus), PDO::PARAM_STR);
     $sth->execute();
 
-    nv_del_moduleCache('settings');
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod('settings');
+    $nv_Cache->delMod($module_name);
 
     unlink($check_run_cronjobs);
     clearstatcache();

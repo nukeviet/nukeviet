@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'PclZip' => $vendorDir . '/pclzip/pclzip/pclzip.lib.php',
-    'XTemplate' => $vendorDir . '/nukeviet/xtemplate/xtemplate.class.php',
 );

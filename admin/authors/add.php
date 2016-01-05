@@ -96,7 +96,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         if (! empty($titles)) {
             $update .= 'END WHERE title IN (' . implode(',', $titles) . ')';
             $db->query($update);
-            nv_del_moduleCache('modules');
+            $nv_Cache->delMod('modules');
         }
     }
 

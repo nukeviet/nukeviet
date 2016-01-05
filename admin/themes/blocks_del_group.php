@@ -60,7 +60,7 @@ if (! empty($array_expression)) {
         }
     }
 
-    nv_del_moduleCache('themes');
+    $nv_Cache->delMod('themes');
 
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');

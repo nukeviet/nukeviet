@@ -19,8 +19,9 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
  */
 function nv_groups_list()
 {
+    global $nv_Cache;
     $cache_file = NV_LANG_DATA . '_groups_list_' . NV_CACHE_PREFIX . '.cache';
-    if (($cache = nv_get_cache('users', $cache_file)) != false) {
+    if (($cache = $nv_Cache->getItem('users', $cache_file)) != false) {
         return unserialize($cache);
     } else {
         global $db, $db_config, $global_config, $lang_global;
@@ -33,7 +34,7 @@ function nv_groups_list()
             }
             $groups[$row['group_id']] = ($global_config['idsite'] > 0 and empty($row['idsite'])) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
         }
-        nv_set_cache('users', $cache_file, serialize($groups));
+        $nv_Cache->setItem('users', $cache_file, serialize($groups));
 
         return $groups;
     }
@@ -90,7 +91,7 @@ function nv_var_export($var_array)
  */
 function nv_save_file_config_global()
 {
-    global $db, $sys_info, $global_config, $db_config;
+    global $nv_Cache, $db, $sys_info, $global_config, $db_config;
 
     if ($global_config['idsite']) {
         return false;
@@ -284,7 +285,7 @@ function nv_save_file_config_global()
     $content_config .= "\$rewrite_values=" . nv_var_export(array_values($rewrite)) . ";\n";
 
     $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config), LOCK_EX);
-    nv_delete_all_cache();
+    $nv_Cache->delAll();
 
     //Resets the contents of the opcode cache
     if (function_exists('opcache_reset')) {

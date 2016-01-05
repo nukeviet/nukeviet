@@ -27,7 +27,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
     $sth->execute();
 
     $global_config['site_theme'] = $selectthemes;
-    nv_delete_all_cache();
+    $nv_Cache->delAll();
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_active'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 
     echo 'OK_' . $selectthemes;

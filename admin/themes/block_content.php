@@ -329,7 +329,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 $sth->execute();
 
                 if (isset($site_mods[$module])) {
-                    nv_del_moduleCache($module);
+                    $nv_Cache->delMod($module);
                 }
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_edit'], 'Name : ' . $row['title'], $admin_info['userid']);
@@ -361,7 +361,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                     }
                 }
 
-                nv_del_moduleCache('themes');
+                $nv_Cache->delMod('themes');
 
                 // Chuyen huong
                 $xtpl->assign('BLOCKMESS', $is_add ? $lang_module['block_add_success'] : $lang_module['block_update_success']);
@@ -383,7 +383,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid']);
             $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
 
-            nv_del_moduleCache('themes');
+            $nv_Cache->delMod('themes');
         }
     }
 }

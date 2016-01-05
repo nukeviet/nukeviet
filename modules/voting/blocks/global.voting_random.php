@@ -20,7 +20,7 @@ if (! nv_function_exists('nv_block_voting')) {
      */
     function nv_block_voting()
     {
-        global $db, $my_footer, $site_mods, $global_config, $client_info;
+        global $nv_Cache, $db, $my_footer, $site_mods, $global_config, $client_info;
 
         $content = '';
 
@@ -30,7 +30,7 @@ if (! nv_function_exists('nv_block_voting')) {
 
         $sql = 'SELECT vid, question, link, acceptcm, groups_view, publ_time, exp_time FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' WHERE act=1';
 
-        $list = nv_db_cache($sql, 'vid', 'voting');
+        $list = $nv_Cache->db($sql, 'vid', 'voting');
 
         if (empty($list)) {
             return '';
@@ -55,7 +55,7 @@ if (! nv_function_exists('nv_block_voting')) {
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . ' SET act=0 WHERE vid IN (' . $is_update . ')';
             $db->query($sql);
 
-            nv_del_moduleCache('voting');
+            $nv_Cache->delMod('voting');
         }
 
         if ($allowed) {
@@ -65,7 +65,7 @@ if (! nv_function_exists('nv_block_voting')) {
 
             $sql = 'SELECT id, vid, title, url FROM ' . NV_PREFIXLANG . '_' . $site_mods['voting']['module_data'] . '_rows WHERE vid = ' . $current_voting['vid'] . ' ORDER BY id ASC';
 
-            $list = nv_db_cache($sql, '', 'voting');
+            $list = $nv_Cache->db($sql, '', 'voting');
 
             if (empty($list)) {
                 return '';

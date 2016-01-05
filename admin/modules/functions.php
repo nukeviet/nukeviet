@@ -38,7 +38,7 @@ function nv_parse_vers($ver)
  */
 function nv_fix_module_weight()
 {
-    global $db;
+    global $db, $nv_Cache;
 
     $result = $db->query('SELECT title FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC');
     $weight = 0;
@@ -49,7 +49,7 @@ function nv_fix_module_weight()
         $sth->execute();
     }
 
-    nv_del_moduleCache('modules');
+    $nv_Cache->delMod('modules');
 }
 
 /**
@@ -81,7 +81,7 @@ function nv_fix_subweight($mod)
  */
 function nv_setup_block_module($mod, $func_id = 0)
 {
-    global $db;
+    global $db, $nv_Cache;
 
     if (empty($func_id)) {
         //xoa du lieu tai bang blocks
@@ -127,7 +127,7 @@ function nv_setup_block_module($mod, $func_id = 0)
         }
     }
 
-    nv_del_moduleCache('themes');
+    $nv_Cache->delMod('themes');
 }
 
 /**
@@ -140,7 +140,7 @@ function nv_setup_block_module($mod, $func_id = 0)
  */
 function nv_setup_data_module($lang, $module_name, $sample = 0)
 {
-    global $db, $db_config, $global_config;
+    global $nv_Cache, $db, $db_config, $global_config;
 
     $return = 'NO_' . $module_name;
 
@@ -165,7 +165,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
         $sth->bindParam(':module', $module_name, PDO::PARAM_STR);
         $sth->execute();
 
-        nv_delete_all_cache();
+        $nv_Cache->delAll();
 
         // Re-Creat all module table
         if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/action_' . $db->dbtype . '.php')) {
@@ -364,7 +364,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
 
         $return = 'OK_' . $module_name;
 
-        nv_delete_all_cache();
+        $nv_Cache->delAll();
     }
 
     return $return;

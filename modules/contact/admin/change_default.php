@@ -28,7 +28,7 @@ if (empty($id)) {
 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET is_default=1 WHERE id=' . $id);
 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET is_default=0 WHERE id!=' . $id);
 
-nv_del_moduleCache($module_name);
+$nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK';

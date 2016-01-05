@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_contact_default_info')) {
     function nv_contact_default_info($module)
     {
-        global $db, $site_mods, $global_config, $lang_global;
+        global $nv_Cache, $site_mods, $global_config, $lang_global;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods[$module]['module_file'] . '/block.contact_default.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -26,10 +26,10 @@ if (! nv_function_exists('nv_contact_default_info')) {
         }
 
         $sql = 'SELECT id, alias, phone, email, others FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 AND is_default=1';
-        $array_department = nv_db_cache($sql, 'id', $module);
+        $array_department = $nv_Cache->db($sql, 'id', $module);
         if (empty($array_department)) {
             $sql = 'SELECT id, alias, phone, email, others FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 ORDER BY weight LIMIT 1';
-            $array_department = nv_db_cache($sql, 'id', $module);
+            $array_department = $nv_Cache->db($sql, 'id', $module);
         }
 
         if (empty($array_department)) {

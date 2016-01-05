@@ -21,7 +21,7 @@ if (! nv_function_exists('nv_message_page')) {
      */
     function nv_message_page($block_config)
     {
-        global $global_config, $site_mods, $db_slave, $module_name;
+        global $nv_Cache, $global_config, $site_mods, $db_slave, $module_name;
         $module = $block_config['module'];
 
         if (! isset($site_mods[$module])) {
@@ -43,7 +43,7 @@ if (! nv_function_exists('nv_message_page')) {
             --$num;
             $cache_file = $cache_files[$num];
 
-            if (($cache = nv_get_cache($module, $cache_file)) != false) {
+            if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
                 $cache = unserialize($cache);
                 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $cache['alias'] . $global_config['rewrite_exturl'];
                 $title = $cache['page_title'];

@@ -71,7 +71,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
     if (! empty($array_sub_id)) {
         $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $id);
         menu_fix_order($mid, $id);
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     }
     die('OK_' . $lang_module['action_menu_reload_success']);
 }
@@ -266,7 +266,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                     $db->query($sql);
                 }
 
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
                 exit();
             } else {
@@ -341,7 +341,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                     $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid=" . $mid_old . " AND id=" . $pa_old);
                 }
 
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
                 exit();
             } else {
@@ -357,7 +357,7 @@ if ($nv_Request->get_title('action', 'post') =='delete' and $nv_Request->isset_r
         nv_menu_del_sub($id, $post['parentid']);
     }
     menu_fix_order($post['mid']);
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
 }
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $post['mid'] . ' AND parentid=' . $post['parentid'] . ' ORDER BY weight';

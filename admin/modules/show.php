@@ -19,7 +19,7 @@ if (! defined('NV_IS_FILE_MODULES')) {
  */
 function nv_show_funcs()
 {
-    global $db, $lang_module, $global_config, $site_mods, $nv_Request, $module_file, $module_upload;
+    global $nv_Cache, $db, $lang_module, $global_config, $site_mods, $nv_Request, $module_file, $module_upload;
 
     $mod = $nv_Request->get_title('mod', 'get', '');
 
@@ -199,8 +199,8 @@ function nv_show_funcs()
     }
 
     if ($is_delCache) {
-        nv_del_moduleCache('modules');
-        nv_del_moduleCache('themes');
+        $nv_Cache->delMod('modules');
+        $nv_Cache->delMod('themes');
     }
 
     $fun_change_alias = (isset($module_version['change_alias'])) ? explode(',', $module_version['change_alias']) : array();

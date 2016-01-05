@@ -16,7 +16,7 @@ $checkss = $nv_Request->get_string('checkss', 'post');
 $theme = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 
 if (! empty($theme) and $checkss == md5($theme . $global_config['sitekey'] . session_id())) {
-    
+
     // load position file
     $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $theme . '/config.ini');
     $position = $xml->xpath('positions');
@@ -25,7 +25,7 @@ if (! empty($theme) and $checkss == md5($theme . $global_config['sitekey'] . ses
     for ($j = 0, $count = sizeof($positions); $j < $count; ++$j) {
         $array_pos[] = trim($positions[$j]->tag);
     }
-    
+
     // Cap nhat block hien thi toan site cho cac function moi phat sinh - Danh cho lap trinh vien
     $array_bid = array();
     // Danh sac tat ca cac block se kiem tra
@@ -119,7 +119,7 @@ if (! empty($theme) and $checkss == md5($theme . $global_config['sitekey'] . ses
     }
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_weight'], 'reset position all block', $admin_info['userid']);
-    nv_del_moduleCache('themes');
+    $nv_Cache->delMod('themes');
 
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
     $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');

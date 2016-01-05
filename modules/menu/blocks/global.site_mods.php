@@ -64,7 +64,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
      */
     function nv_menu_site_mods($block_config)
     {
-        global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
+        global $nv_Cache, $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -101,7 +101,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
 
                     if ($modvalues['module_file'] == 'news' or $modvalues['module_file'] == 'weblinks') {
                         $db->sqlreset()->select('title, alias')->from(NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_cat')->where('parentid=0 AND inhome=1')->order('weight ASC')->limit(10);
-                        $list = nv_db_cache($db->sql(), '', $modname);
+                        $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
                             $sub_nav_item[] = array(
                                 'note' => $l['title'],
@@ -112,7 +112,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
                     }
                     if ($modvalues['module_file'] == 'shops') {
                         $db->sqlreset()->select(NV_LANG_DATA . '_title as title, ' . NV_LANG_DATA . '_alias as alias')->from($db_config['prefix'] . '_' . $modvalues['module_data'] . '_catalogs')->where('parentid=0 AND inhome=1')->order('weight ASC')->limit(10);
-                        $list = nv_db_cache($db->sql(), '', $modname);
+                        $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
                             $sub_nav_item[] = array(
                                 'note' => $l['title'],
@@ -130,7 +130,7 @@ if (! nv_function_exists('nv_menu_site_mods')) {
                         }
                     } elseif ($modvalues['module_file'] == 'download' or $modvalues['module_file'] == 'faq' or $modvalues['module_file'] == 'saas') {
                         $db->sqlreset()->select('title, alias')->from(NV_PREFIXLANG . '_' . $modvalues['module_data'] . '_categories')->where('parentid=0 AND status=1')->order('weight ASC')->limit(10);
-                        $list = nv_db_cache($db->sql(), '', $modname);
+                        $list = $nv_Cache->db($db->sql(), '', $modname);
                         foreach ($list as $l) {
                             $sub_nav_item[] = array(
                                 'note' => $l['title'],

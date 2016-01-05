@@ -99,7 +99,7 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
                 }
             }
             if ($is_delCache) {
-                nv_del_moduleCache('modules');
+                $nv_Cache->delMod('modules');
             }
         }
         $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $admin_id);

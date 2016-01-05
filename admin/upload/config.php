@@ -33,7 +33,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     } else {
         $upload_logo = '';
     }
-    
+
     $upload_logo_pos = $nv_Request->get_title('upload_logo_pos', 'post', '');
     if (! isset($array_logo_position[$upload_logo_pos])) {
         $upload_logo_pos = 'bottomRight';
@@ -62,7 +62,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $autologomod . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'autologomod'");
     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $upload_logo_pos . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'upload_logo_pos'");
 
-    nv_delete_all_cache();
+    $nv_Cache->delAll();
 
     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     die();
@@ -130,7 +130,7 @@ foreach ($array_logo_position as $pos => $posName) {
         'title' => $posName,
         'selected' => $pos == $global_config['upload_logo_pos'] ? ' selected="selected"' : ''
     );
-    
+
     $xtpl->assign('UPLOAD_LOGO_POS', $upload_logo_pos);
     $xtpl->parse('main.upload_logo_pos');
 }

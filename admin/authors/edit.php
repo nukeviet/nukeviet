@@ -122,7 +122,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
                 $admins = array_diff($admins, array( $admin_id, 0 ));
                 $admins = array_map('intval', $admins);
                 $admins = (! empty($admins)) ? implode(',', $admins) : '';
-                
+
                 $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admins= :admins WHERE title= :mod');
                 $sth->bindParam(':admins', $admins, PDO::PARAM_STR);
                 $sth->bindParam(':mod', $mod, PDO::PARAM_STR);
@@ -131,7 +131,7 @@ if ($nv_Request->get_int('save', 'post', 0)) {
         }
 
         if (! empty($add_modules) or ! empty($del_modules)) {
-            nv_del_moduleCache('modules');
+            $nv_Cache->delMod('modules');
         }
 
         $allow_files_type = array_values(array_intersect($global_config['file_allowed_ext'], $allow_files_type));
@@ -326,7 +326,7 @@ if (isset($contents['allow_modify_subdirectories'])) {
 if (isset($contents['lev'])) {
     $xtpl->assign('LEV0', $contents['lev'][0]);
     $xtpl->assign('LEV1', $contents['lev'][1]);
-    
+
     if (isset($contents['lev'][3])) {
         $xtpl->assign('LEV4', $contents['lev'][4]);
         $xtpl->assign('LEV5', $contents['lev'][5]);

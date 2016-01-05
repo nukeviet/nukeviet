@@ -109,7 +109,7 @@ if (! empty($array_bid) and $func_id > 0) {
     }
 }
 
-nv_del_moduleCache('themes');
+$nv_Cache->delMod('themes');
 
 $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
 $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');

@@ -121,7 +121,7 @@ if (! empty($submit)) {
             $sql = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . " SET question=" . $db->quote($question) . ", link=" . $db->quote($link) . ", acceptcm = " . $maxoption . ", admin_id = " . $admin_info['admin_id'] . ", groups_view = " . $db->quote($groups_view) . ", publ_time=" . $begindate . ", exp_time=" . $enddate . ", act=" . $act . " WHERE vid =" . $vid;
             if ($db->query($sql)) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid']);
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
                 $error = '';
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
                 die();

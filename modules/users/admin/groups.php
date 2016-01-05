@@ -62,7 +62,7 @@ if ($nv_Request->isset_request('cWeight, id', 'post')) {
     $query = 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET weight = CASE ' . implode(' ', $query) . ' END';
     $db->query($query);
 
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['changeGroupWeight'], 'group_id: ' . $group_id, $admin_info['userid']);
     die('OK');
 }
@@ -78,7 +78,7 @@ if ($nv_Request->isset_request('act', 'post')) {
     $query = 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=' . $act . ' WHERE group_id=' . $group_id;
     $db->query($query);
 
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['ChangeGroupAct'], 'group_id: ' . $group_id, $admin_info['userid']);
     die('OK|' . $act);
 }
@@ -118,7 +118,7 @@ if ($nv_Request->isset_request('del', 'post')) {
         $db->query($query);
     }
 
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['delGroup'], 'group_id: ' . $group_id, $admin_info['userid']);
     die('OK');
 }
@@ -154,7 +154,7 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
     }
     $db->exec("UPDATE " . NV_USERS_GLOBALTABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
 
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['addMemberToGroup'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
 
     die('OK');
@@ -191,7 +191,7 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
     }
     $db->query("UPDATE " . NV_USERS_GLOBALTABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
 
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['exclude_user2'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
     die('OK');
 }
@@ -296,7 +296,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             if (empty($post['title'])) {
                 die($lang_module['title_empty']);
             }
-            
+
 
             // Kiểm tra trùng tên nhóm
             $stmt = $db->prepare('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
@@ -305,7 +305,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             if ($stmt->fetchColumn()) {
                 die(sprintf($lang_module['error_title_exists'], $post['title']));
             }
-            
+
             $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
             if (empty($post['description'])) {
                 die($lang_module['group_description_empty']);
@@ -361,7 +361,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $ok = $post['id'] = $db->insert_id($_sql, 'group_id', $data_insert);
             }
             if ($ok) {
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
                 nv_insert_logs(NV_LANG_DATA, $module_name, $log_title, 'Id: ' . $post['id'], $admin_info['userid']);
                 die('OK');
             } else {

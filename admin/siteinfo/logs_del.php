@@ -15,7 +15,7 @@ if (! defined('NV_IS_FILE_SITEINFO')) {
 // Delete all log
 if ($nv_Request->get_title('logempty', 'post', '') == md5('siteinfo_' . session_id() . '_' . $admin_info['userid'])) {
     if ($db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_logs')) {
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['log_empty_log'], 'All', $admin_info['userid']);
         die('OK');
     } else {

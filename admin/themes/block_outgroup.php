@@ -50,7 +50,7 @@ if ($func_id > 0 and isset($row['bid'])) {
             $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET all_func=0 WHERE bid=' . $bid);
         }
 
-        nv_del_moduleCache('themes');
+        $nv_Cache->delMod('themes');
 
         echo $lang_module['block_front_outgroup_success'] . $new_bid;
     } catch (PDOException $e) {

@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_block_news_groups')) {
     function nv_block_config_news_groups($module, $data_block, $lang_block)
     {
-        global $site_mods;
+        global $nv_Cache, $site_mods;
 
         $html_input = '';
         $html = '';
@@ -24,7 +24,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
         $html .= '<td><select name="config_blockid" class="form-control w200">';
         $html .= '<option value="0"> -- </option>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_block_cat ORDER BY weight ASC';
-        $list = nv_db_cache($sql, '', $module);
+        $list = $nv_Cache->db($sql, '', $module);
         foreach ($list as $l) {
             $html_input .= '<input type="hidden" id="config_blockid_' . $l['bid'] . '" value="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module]['alias']['groups'] . '/' . $l['alias'] . '" />';
             $html .= '<option value="' . $l['bid'] . '" ' . (($data_block['blockid'] == $l['bid']) ? ' selected="selected"' : '') . '>' . $l['title'] . '</option>';
@@ -74,7 +74,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
 
     function nv_block_news_groups($block_config)
     {
-        global $module_array_cat, $module_info, $site_mods, $module_config, $global_config, $db;
+        global $module_array_cat, $module_info, $site_mods, $module_config, $global_config, $nv_Cache, $db;
         $module = $block_config['module'];
         $show_no_image = $module_config[$module]['show_no_image'];
         $blockwidth = $module_config[$module]['blockwidth'];
@@ -86,7 +86,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
             ->where('t2.bid= ' . $block_config['blockid'] . ' AND t1.status= 1')
             ->order('t2.weight ASC')
             ->limit($block_config['numrow']);
-        $list = nv_db_cache($db->sql(), '', $module);
+        $list = $nv_Cache->db($db->sql(), '', $module);
 
         if (! empty($list)) {
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_groups.tpl')) {
@@ -138,7 +138,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
     }
 }
 if (defined('NV_SYSTEM')) {
-    global $site_mods, $module_name, $global_array_cat, $module_array_cat;
+    global $site_mods, $module_name, $global_array_cat, $module_array_cat, $nv_Cache, $db;
     $module = $block_config['module'];
     if (isset($site_mods[$module])) {
         if ($module == $module_name) {
@@ -147,7 +147,7 @@ if (defined('NV_SYSTEM')) {
         } else {
             $module_array_cat = array();
             $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
-            $list = nv_db_cache($sql, 'catid', $module);
+            $list = $nv_Cache->db($sql, 'catid', $module);
             foreach ($list as $l) {
                 $module_array_cat[$l['catid']] = $l;
                 $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
