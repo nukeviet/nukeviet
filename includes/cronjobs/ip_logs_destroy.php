@@ -8,11 +8,7 @@
  * @Createdate 3/27/2010 5:16
  */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
-}
-
-if (! defined('NV_IS_CRON')) {
+if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
     die('Stop!!!');
 }
 

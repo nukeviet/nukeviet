@@ -10,6 +10,8 @@
 
 namespace NukeViet\Client;
 
+use SimpleXMLElement;
+
 class Diagnostic
 {
     private $googleDomains = array( 'toolbarqueries.google.com' );
@@ -59,11 +61,10 @@ class Diagnostic
         if (extension_loaded('suhosin')) {
             $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
         }
-
         $this->disable_functions = $disable_functions;
         $this->myDomain = NV_SERVER_NAME;
-        $_config = array( 'version' => '4.0.21', 'sitekey' => mt_rand() );
-        $this->getContent = new NukeViet\Client\UrlGetContents($_config);
+        $_config = array( 'version' => '4.0.24', 'sitekey' => mt_rand() );
+        $this->getContent = new UrlGetContents($_config);
     }
 
     /**

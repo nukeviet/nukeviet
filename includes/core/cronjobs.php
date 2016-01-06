@@ -46,7 +46,7 @@ while ($cron_row = $cron_result->fetch()) {
         if (file_exists($check_run_cronjobs) and @filemtime($check_run_cronjobs) > $p) {
             continue;
         }
-        file_put_contents($check_run_cronjobs, '');
+        file_put_contents($check_run_cronjobs, var_export($cron_row, true));
 
         $params = (! empty($cron_row['params'])) ? array_map('trim', explode(',', $cron_row['params'])) : array();
         $result2 = call_user_func_array($cron_row['run_func'], $params);

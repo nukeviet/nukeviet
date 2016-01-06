@@ -90,8 +90,6 @@ class Streams
         $ssl_verify = isset($args['sslverify']) and $args['sslverify'];
 
         // NukeViet has no proxy setup
-        //$proxy = new WP_http_proxy();
-
         $context = stream_context_create(array(
             'ssl' => array(
                 'verify_peer' => $ssl_verify,
