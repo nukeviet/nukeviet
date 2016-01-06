@@ -282,10 +282,6 @@ class Http
         $r = array();
         parse_str($str, $r);
 
-        if (get_magic_quotes_gpc()) {
-            $r = array_map('stripslashes', $r);
-        }
-
         return $r;
     }
 

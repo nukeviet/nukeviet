@@ -202,12 +202,6 @@ $global_config['site_url'] = $nv_Request->site_url;
 // vd: array( 'mydomain1.com', 'mydomain2.com' )
 $global_config['my_domains'] = $nv_Request->my_domains;
 
-$sys_info['register_globals'] = $nv_Request->is_register_globals;
-// 0 = khong, 1 = bat
-
-$sys_info['magic_quotes_gpc'] = $nv_Request->is_magic_quotes_gpc;
-// 0 = khong, 1 = co
-
 // vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
 $sys_info['sessionpath'] = $nv_Request->session_save_path;
 

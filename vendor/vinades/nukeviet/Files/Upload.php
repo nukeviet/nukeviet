@@ -54,7 +54,6 @@ class Upload
     private $img_info = array();
     private $disable_functions = array();
     private $disable_classes = array();
-    private $safe_mode;
     private $user_agent;
 
     /**
@@ -98,7 +97,6 @@ class Upload
         $this->disable_functions = $disable_functions;
 
         $this->disable_classes = (ini_get('disable_classes') != '' and ini_get('disable_classes') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_classes'))) : array();
-        $this->safe_mode = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
 
         $userAgents = array(
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
@@ -111,7 +109,7 @@ class Upload
         $rand = array_rand($userAgents);
         $this->user_agent = $userAgents[$rand];
 
-        if (! $this->safe_mode and function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
             set_time_limit(120);
         }
 
@@ -892,7 +890,6 @@ class Upload
                 'Mozilla/4.8 [en] (Windows NT 6.0; U)',
                 'Opera/9.25 (Windows NT 6.0; U; en)'
             );
-            $safe_mode = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
             $open_basedir = (ini_get('open_basedir') == '1' || strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
             srand(( float )microtime() * 10000000);
@@ -905,7 +902,7 @@ class Upload
 
             curl_setopt($curl, CURLOPT_PORT, $port);
 
-            if (! $safe_mode and $open_basedir) {
+            if ($open_basedir) {
                 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
             }
 

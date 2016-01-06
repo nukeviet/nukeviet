@@ -46,7 +46,6 @@ $lang_module['php_support'] = 'Suppor de PHP';
 $lang_module['php_version'] = 'Version de PHP';
 $lang_module['pdo_support'] = 'Compatible avec PHP Data Objects';
 $lang_module['request'] = 'Obligatoire';
-$lang_module['safe_mode'] = 'Mode sans échec';
 $lang_module['required_off'] = 'Inactif obligatoire';
 $lang_module['required_on'] = 'Support obligatoire';
 $lang_module['recommnet'] = 'Recommandé';
