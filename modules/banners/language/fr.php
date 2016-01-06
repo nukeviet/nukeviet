@@ -29,7 +29,7 @@ $lang_module['size'] = 'Taille';
 $lang_module['form'] = 'Type d\'affichage';
 $lang_module['description'] = 'Description';
 $lang_module['blang_all'] = 'Tous';
-$lang_module['client_info'] = 'Si vous n\'avez pas encore un compte client, veuillez <a href="%s">nous contacter</a>. Identifiez-vous si vous l\'avez déjà';
+$lang_module['client_info'] = 'Détails du client';
 $lang_module['login'] = 'Identifiant';
 $lang_module['password'] = 'Mot de passe';
 $lang_module['reg_time'] = 'Date d\'inscription';

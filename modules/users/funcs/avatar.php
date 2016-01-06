@@ -75,7 +75,7 @@ function deleteAvatar()
     }
 }
 
-$page_title = $lang_module['avata_pagetitle'];
+$page_title = $lang_module['avatar_pagetitle'];
 
 $array = array();
 $array['success'] = 0;
@@ -124,7 +124,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
         $array['y2'],
         $array['w'],
         $array['h'] ))) < 4 or $array['avatar_width'] < $global_config['avatar_width'] or $array['avatar_height'] < $global_config['avatar_height']) {
-        $array['error'] = $lang_module['avata_error_data'];
+        $array['error'] = $lang_module['avatar_error_data'];
     } else {
         $upload = new NukeViet\Files\Upload(array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
 
@@ -163,7 +163,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
                     $array['success'] = 1;
                 }
             } else {
-                $array['error'] = $lang_module['avata_error_save'];
+                $array['error'] = $lang_module['avatar_error_save'];
             }
             @nv_deletefile($upload_info['name']);
         } else {
