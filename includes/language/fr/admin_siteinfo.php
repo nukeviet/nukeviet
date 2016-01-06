@@ -9,7 +9,9 @@
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';

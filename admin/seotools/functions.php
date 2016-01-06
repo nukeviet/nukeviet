@@ -8,22 +8,22 @@
  * @Createdate 12/31/2009 2:29
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+    die('Stop!!!');
+}
 
 $allow_func = array( 'main', 'pagetitle', 'metatags', 'sitemapPing', 'googleplus', 'siteDiagnostic' );
-if( empty( $global_config['idsite'] ) )
-{
-	$allow_func[] = 'rpc';
+if (empty($global_config['idsite'])) {
+    $allow_func[] = 'rpc';
 }
-if( defined( 'NV_IS_GODADMIN' ) )
-{
-	$allow_func[] = 'robots';
+if (defined('NV_IS_GODADMIN')) {
+    $allow_func[] = 'robots';
 }
 
 $menu_top = array(
-	'title' => $module_name,
-	'module_file' => '',
-	'custom_title' => $lang_global['mod_seotools']
+    'title' => $module_name,
+    'module_file' => '',
+    'custom_title' => $lang_global['mod_seotools']
 );
 
-define( 'NV_IS_FILE_SEOTOOLS', true );
+define('NV_IS_FILE_SEOTOOLS', true);

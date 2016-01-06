@@ -8,6 +8,8 @@
  * @Createdate 21-04-2011 11:17
  */
 
-if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
+if (! defined('NV_SYSTEM')) {
+    die('Stop!!!');
+}
 
-define( 'NV_IS_MOD_MENU', true );
+define('NV_IS_MOD_MENU', true);

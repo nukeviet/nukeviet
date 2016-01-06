@@ -8,7 +8,9 @@
  * @Createdate 12-02-2013 14:43
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 /**
  * Chu y:

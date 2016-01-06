@@ -9,7 +9,9 @@
 * @Createdate Aug 21, 2015, 08:56:50 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Trương Đắc Ngọc (truongdacngoc1993@gmail.com)';
 $lang_translator['createdate'] = '21/08/2015, 08:56';

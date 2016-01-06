@@ -8,7 +8,9 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_MOD_RSS')) {
+    die('Stop!!!');
+}
 
 /**
  * nv_rss_main_theme()
@@ -16,13 +18,13 @@ if( ! defined( 'NV_IS_MOD_RSS' ) ) die( 'Stop!!!' );
  * @param mixed $array
  * @return
  */
-function nv_rss_main_theme( $array )
+function nv_rss_main_theme($array)
 {
-	global $img_dir, $module_name, $module_info;
-	
-	$array .= '<div class="tree well"><ul>';
-	$array .= nv_get_rss_link();
-	$array .= '</ul></div>';
+    global $img_dir, $module_name, $module_info;
+    
+    $array .= '<div class="tree well"><ul>';
+    $array .= nv_get_rss_link();
+    $array .= '</ul></div>';
 
-	return $array;
+    return $array;
 }

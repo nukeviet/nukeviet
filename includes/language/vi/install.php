@@ -9,7 +9,9 @@
  * @Createdate Jun 06, 2011, 12:55:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '06/06/2011, 13:55';
@@ -44,7 +46,6 @@ $lang_module['php_support'] = 'Hỗ trợ PHP';
 $lang_module['php_version'] = 'Phiên bản PHP';
 $lang_module['pdo_support'] = 'Hỗ trợ PHP Data Objects';
 $lang_module['request'] = 'Yêu cầu';
-$lang_module['safe_mode'] = 'Safe mode';
 $lang_module['required_off'] = 'Bắt buộc tắt';
 $lang_module['required_on'] = 'Bắt buộc hỗ trợ';
 $lang_module['recommnet'] = 'Khuyến cáo';

@@ -8,9 +8,10 @@
  * @Createdate Sun, 04 May 2014 12:41:32 GMT
  */
 
-if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN')) {
+    die('Stop!!!');
+}
 
-if( defined( 'NV_IS_SPADMIN' ) )
-{
-	$submenu['config'] = $lang_module['config'];
+if (defined('NV_IS_SPADMIN')) {
+    $submenu['config'] = $lang_module['config'];
 }

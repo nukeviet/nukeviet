@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -118,7 +120,7 @@ $lang_module['extUpdErrorDownload'] = 'Lỗi tải gói nâng cấp';
 $lang_module['get_update_error_file_download'] = 'Tải gói cập nhật thất bại';
 $lang_module['get_update_ok'] = 'Gói nâng cấp an toàn, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
 $lang_module['get_update_warning'] = 'Gói nâng cấp này có thể gây nguy hại đến website của bạn nếu có bất kỳ lỗi nào xảy ra, do đó bạn nên sao lưu toàn bộ website trước khi thực hiện, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
-$lang_module['get_update_warning_permission_folder'] = 'Lỗi không thể tạo thư mục, hãy kiểm tra và tắt chế độ safe_mode';
+$lang_module['get_update_warning_permission_folder'] = 'Lỗi không thể tạo thư mục.';
 $lang_module['get_update_error_movefile'] = 'Lỗi không thể di chuyển file';
 $lang_module['get_update_cantunzip'] = 'Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.';
 $lang_module['get_update_okunzip'] = 'Giải nén thành công, hệ thống sẽ chuyển trang trong giây lát';
