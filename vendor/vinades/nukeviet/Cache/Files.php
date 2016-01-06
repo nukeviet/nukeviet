@@ -94,7 +94,7 @@ class Files
      *
      * @return void
      */
-    public function delMod($module_name, $lang)
+    public function delMod($module_name, $lang = '')
     {
         if (!empty($lang)) {
             $pattern = '/^' . $lang . '\_(.*)\.cache$/';
