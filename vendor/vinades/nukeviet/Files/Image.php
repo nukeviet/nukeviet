@@ -10,25 +10,6 @@
 
 namespace NukeViet\Files;
 
-if (! defined('ERROR_IMAGE1')) {
-    define('ERROR_IMAGE1', 'The file is not a known image format');
-}
-if (! defined('ERROR_IMAGE2')) {
-    define('ERROR_IMAGE2', 'The file is not readable');
-}
-if (! defined('ERROR_IMAGE3')) {
-    define('ERROR_IMAGE3', 'File is not supplied or is not a file');
-}
-if (! defined('ERROR_IMAGE4')) {
-    define('ERROR_IMAGE4', 'Image type not supported');
-}
-if (! defined('ERROR_IMAGE5')) {
-    define('ERROR_IMAGE5', 'Image mime type not supported');
-}
-if (! defined('ERROR_IMAGE6')) {
-    define('ERROR_IMAGE6', 'Error loading Image');
-}
-
 class Image
 {
     public $filename;
@@ -43,6 +24,13 @@ class Image
     public $is_destroy = false;
     public $is_createWorkingImage = false;
 
+    const ERROR_IMAGE1 = 'The file is not a known image format';
+    const ERROR_IMAGE2 = 'The file is not readable';
+    const ERROR_IMAGE3 = 'File is not supplied or is not a file';
+    const ERROR_IMAGE4 = 'Image type not supported';
+    const ERROR_IMAGE5 = 'Image mime type not supported';
+    const ERROR_IMAGE6 = 'Error loading Image';
+
     /**
      *
      * @param mixed $filename
@@ -52,7 +40,7 @@ class Image
      */
     public function __construct($filename, $gmaxX = 0, $gmaxY = 0)
     {
-        if (preg_match("/(http|https|ftp):\/\//i", $filename)) {
+        if (preg_match('/(http|https|ftp):\/\//i', $filename)) {
             $this->is_url = true;
             $this->filename = $this->set_tempnam($filename);
         } else {
@@ -122,9 +110,9 @@ class Image
         $tweakfactor = 1.8;
         $memoryNeeded = round(($this->fileinfo['width'] * $this->fileinfo['height'] * $this->fileinfo['bits'] * $this->fileinfo['channels'] / 8 + $k64) * $tweakfactor);
 
-        $disable_functions = (ini_get("disable_functions") != '' and ini_get("disable_functions") != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get("disable_functions"))) : array();
+        $disable_functions = (ini_get('disable_functions') != '' and ini_get('disable_functions') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_functions'))) : array();
         if (extension_loaded('suhosin')) {
-            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get("suhosin.executor.func.blacklist"))));
+            $disable_functions = array_merge($disable_functions, array_map('trim', preg_split("/[\s,]+/", ini_get('suhosin.executor.func.blacklist'))));
         }
 
         $memoryHave = ((function_exists('memory_get_usage') and ! in_array('memory_get_usage', $disable_functions))) ? @memory_get_usage() : 0;
@@ -161,7 +149,7 @@ class Image
         }
 
         if (! $this->createImage) {
-            $this->error = ERROR_IMAGE6;
+            $this->error = self::ERROR_IMAGE6;
         } else {
             $this->create_Image_info = $this->fileinfo;
             $this->is_destroy = false;
@@ -193,19 +181,19 @@ class Image
     public function check_file()
     {
         if ($this->fileinfo == array()) {
-            return ERROR_IMAGE1;
+            return self::ERROR_IMAGE1;
         }
         if (! is_readable($this->filename)) {
-            return ERROR_IMAGE2;
+            return self::ERROR_IMAGE2;
         }
         if ($this->fileinfo['src'] == '' || $this->fileinfo['width'] == 0 || $this->fileinfo['height'] == 0 || $this->fileinfo['mime'] == '') {
-            return ERROR_IMAGE3;
+            return self::ERROR_IMAGE3;
         }
         if (! in_array($this->fileinfo['type'], array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP ))) {
-            return ERROR_IMAGE4;
+            return self::ERROR_IMAGE4;
         }
-        if (! preg_match("#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png|bmp|ms-bmp)#is", $this->fileinfo['mime'])) {
-            return ERROR_IMAGE5;
+        if (! preg_match('#image\/[x\-]*(jpg|jpeg|pjpeg|gif|png|bmp|ms-bmp)#is', $this->fileinfo['mime'])) {
+            return self::ERROR_IMAGE5;
         }
         return '';
     }
@@ -229,7 +217,7 @@ class Image
         }
 
         // 1 : Chargement des ent�tes FICHIER
-        $FILE = unpack("vfile_type/Vfile_size/Vreserved/Vbitmap_offset", fread($f1, 14));
+        $FILE = unpack('vfile_type/Vfile_size/Vreserved/Vbitmap_offset', fread($f1, 14));
         if ($FILE['file_type'] != 19778) {
             return false;
         }
@@ -269,7 +257,7 @@ class Image
             $X = 0;
             while ($X < $BMP['width']) {
                 if ($BMP['bits_per_pixel'] == 24) {
-                    $COLOR = unpack("V", substr($IMG, $P, 3) . $VIDE);
+                    $COLOR = unpack('V', substr($IMG, $P, 3) . $VIDE);
                 } elseif ($BMP['bits_per_pixel'] == 16) {
                     /*
                      * BMP 16bit fix
@@ -284,16 +272,16 @@ class Image
                     // $COLOR = unpack("n",substr($IMG,$P,2));
                     // $COLOR[1] = $PALETTE[$COLOR[1]+1];
 
-                    $COLOR = unpack("v", substr($IMG, $P, 2));
+                    $COLOR = unpack('v', substr($IMG, $P, 2));
                     $blue = ($COLOR[1] & 0x001f) << 3;
                     $green = ($COLOR[1] & 0x07e0) >> 3;
                     $red = ($COLOR[1] & 0xf800) >> 8;
                     $COLOR[1] = $red * 65536 + $green * 256 + $blue;
                 } elseif ($BMP['bits_per_pixel'] == 8) {
-                    $COLOR = unpack("n", $VIDE . substr($IMG, $P, 1));
+                    $COLOR = unpack('n', $VIDE . substr($IMG, $P, 1));
                     $COLOR[1] = $PALETTE[$COLOR[1] + 1];
                 } elseif ($BMP['bits_per_pixel'] == 4) {
-                    $COLOR = unpack("n", $VIDE . substr($IMG, floor($P), 1));
+                    $COLOR = unpack('n', $VIDE . substr($IMG, floor($P), 1));
                     if (($P * 2) % 2 == 0) {
                         $COLOR[1] = ($COLOR[1] >> 4);
                     } else {
@@ -301,7 +289,7 @@ class Image
                     }
                     $COLOR[1] = $PALETTE[$COLOR[1] + 1];
                 } elseif ($BMP['bits_per_pixel'] == 1) {
-                    $COLOR = unpack("n", $VIDE . substr($IMG, floor($P), 1));
+                    $COLOR = unpack('n', $VIDE . substr($IMG, floor($P), 1));
                     if (($P * 8) % 8 == 0) {
                         $COLOR[1] = $COLOR[1] >> 7;
                     } elseif (($P * 8) % 8 == 1) {
@@ -441,7 +429,7 @@ class Image
                         $newwidth = $maxX;
                     }
                 }
-                $workingImage = function_exists("ImageCreateTrueColor") ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
+                $workingImage = function_exists('ImageCreateTrueColor') ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
                 if ($workingImage != false) {
                     $this->is_createWorkingImage = true;
                     $this->set_memory_limit();
@@ -515,7 +503,7 @@ class Image
                         $newwidth = $X;
                     }
                 }
-                $workingImage = function_exists("ImageCreateTrueColor") ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
+                $workingImage = function_exists('ImageCreateTrueColor') ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
                 if ($workingImage != false) {
                     $this->is_createWorkingImage = true;
                     $this->set_memory_limit();
@@ -580,7 +568,7 @@ class Image
                 $newheight = $this->create_Image_info['height'] - $leftY;
             }
             if ($newwidth != $this->create_Image_info['width'] || $newheight != $this->create_Image_info['height']) {
-                $workingImage = function_exists("ImageCreateTrueColor") ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
+                $workingImage = function_exists('ImageCreateTrueColor') ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
                 if ($workingImage != false) {
                     $this->is_createWorkingImage = true;
                     $this->set_memory_limit();
@@ -637,7 +625,7 @@ class Image
             if ($newwidth < $this->create_Image_info['width'] || $newheight < $this->create_Image_info['height']) {
                 $leftX = ($this->create_Image_info['width'] - $newwidth) / 2;
                 $leftY = ($this->create_Image_info['height'] - $newheight) / 2;
-                $workingImage = function_exists("ImageCreateTrueColor") ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
+                $workingImage = function_exists('ImageCreateTrueColor') ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
                 if ($workingImage != false) {
                     $this->is_createWorkingImage = true;
                     $this->set_memory_limit();
@@ -851,7 +839,7 @@ class Image
 
             $newheight = $this->create_Image_info['height'] + ($this->create_Image_info['height'] / 2);
             $newwidth = $this->create_Image_info['width'];
-            $workingImage = function_exists("ImageCreateTrueColor") ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
+            $workingImage = function_exists('ImageCreateTrueColor') ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
             imagealphablending($workingImage, false);
             imagesavealpha($workingImage, true);
             imagecopy($workingImage, $this->createImage, 0, 0, 0, 0, $this->create_Image_info['width'], $this->create_Image_info['height']);
@@ -884,7 +872,7 @@ class Image
                 $this->get_createImage();
             }
 
-            header("Content-type: " . $this->create_Image_info['mime']);
+            header('Content-type: ' . $this->create_Image_info['mime']);
             switch ($this->create_Image_info['type']) {
                 case IMAGETYPE_GIF:
                     ImageGif($this->createImage);
@@ -930,7 +918,7 @@ class Image
                     if (defined('PATHINFO_FILENAME')) {
                         $basename = pathinfo($this->create_Image_info['src'], PATHINFO_FILENAME);
                     } else {
-                        $basename = strstr($this->create_Image_info['src'], '.') ? substr($this->create_Image_info['src'], 0, strrpos($this->create_Image_info['src'], '.')) : "";
+                        $basename = strstr($this->create_Image_info['src'], '.') ? substr($this->create_Image_info['src'], 0, strrpos($this->create_Image_info['src'], '.')) : '';
                     }
 
                     if (! empty($basename)) {
@@ -946,7 +934,7 @@ class Image
                 $newname = preg_replace("/." . array_pop($_array_name) . "$/", '', $newname);
 
                 if (! preg_match("/\/$/", $path)) {
-                    $path = $path . "/";
+                    $path = $path . '/';
                 }
                 $newname = $path . $newname . '.' . $_ext;
 
