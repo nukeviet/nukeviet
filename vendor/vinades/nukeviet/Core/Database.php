@@ -37,9 +37,7 @@ class Database extends pdo
      */
     public function __construct($config)
     {
-        $aray_type = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
-
-        $AvailableDrivers = PDO::getAvailableDrivers();
+        $_alldbtype = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
 
         $driver_options = array(
             PDO::ATTR_EMULATE_PREPARES => false,
@@ -48,7 +46,7 @@ class Database extends pdo
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         );
 
-        if (in_array($config['dbtype'], $AvailableDrivers) and in_array($config['dbtype'], $aray_type)) {
+        if (in_array($config['dbtype'], $_alldbtype)) {
             $dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=' . $config['charset'];
             if (!empty($config['dbport'])) {
                 $dsn .= ';port=' . $config['dbport'];
