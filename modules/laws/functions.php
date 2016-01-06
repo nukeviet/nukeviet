@@ -14,10 +14,10 @@ define( 'NV_IS_MOD_LAWS', true );
 
 function nv_module_setting()
 {
-    global $module_data, $nv_Cache;
+    global $module_data, $module_name, $nv_Cache;
 
     $sql = "SELECT config_name, config_value FROM " . NV_PREFIXLANG . "_" . $module_data . "_config";
-    $list = $nv_Cache->db( $sql );
+    $list = $nv_Cache->db( $sql, '', $module_name );
 
     $array = array();
     foreach ( $list as $values )
@@ -59,7 +59,7 @@ function nv_laws_listcat ( $is_link = false, $is_parentlink = true, $where = 'ca
     $sql = "SELECT id, parentid, alias, title, introduction, keywords " . $field . "
     FROM " . NV_PREFIXLANG . "_" . $module_data . "_" . $where . " ORDER BY parentid,weight ASC";
 
-    $list = $nv_Cache->db( $sql, 'id' );
+    $list = $nv_Cache->db( $sql, 'id', $module_name );
 
     $list2 = array();
 
@@ -107,7 +107,7 @@ $nv_laws_listarea = nv_laws_listcat( false, false, 'area' );
 $nv_laws_setting = nv_module_setting();
 
 $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_subject ORDER BY weight ASC";
-$list = $nv_Cache->db( $sql, 'id' );
+$list = $nv_Cache->db( $sql, 'id', $module_name);
 foreach ( $list as $row )
 {
 	$nv_laws_listsubject[$row['id']] = $row;

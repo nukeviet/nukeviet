@@ -53,7 +53,7 @@ if ( ! function_exists( 'nv_laws_block_subject' ) )
 		{
 			$nv_laws_listsubject = array();
 			$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $mod_data . "_subject ORDER BY weight ASC";
-			$list = $nv_Cache->db( $sql, 'id' );
+			$list = $nv_Cache->db( $sql, 'id', $module_name);
 			foreach ( $list as $row )
 			{
 				$nv_laws_listsubject[$row['id']] = $row;
