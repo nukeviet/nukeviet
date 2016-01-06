@@ -107,7 +107,7 @@ if ( ! function_exists( 'nv_laws_block_cat' ) )
 
 if( defined( 'NV_SYSTEM' ) )
 {
-	global $site_mods, $module_name, $nv_laws_listcat, $module_array_cat;
+	global $site_mods, $module_name, $nv_laws_listcat, $module_array_cat, $nv_Cache;
 	$module = $block_config['module'];
 
 	if( isset( $site_mods[$module] ) )
@@ -116,7 +116,7 @@ if( defined( 'NV_SYSTEM' ) )
 		{
 			$module_array_cat = array();
     		$sql = "SELECT id, parentid, alias, title, introduction, keywords FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_cat ORDER BY parentid, weight ASC";
-			$list = nv_db_cache( $sql, 'id', $module );
+			$list = $nv_Cache->db( $sql, 'id', $module );
 			foreach( $list as $l )
 			{
 				$module_array_cat[$l['id']] = $l;

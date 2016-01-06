@@ -74,7 +74,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 
     function nv_law_block_newg ( $block_config )
     {
-        global $module_info, $lang_module, $global_config, $site_mods, $db, $my_head, $module_name, $nv_laws_listcat;
+        global $module_info, $lang_module, $global_config, $site_mods, $db, $my_head, $module_name, $nv_laws_listcat, $nv_Cache;
 
         $module = $block_config['module'];
         $data = $site_mods[$module]['module_data'];
@@ -102,7 +102,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 			if( $module_name != $module )
 			{
 				$sql = "SELECT id, parentid, alias, title, introduction, keywords, newday FROM " . NV_PREFIXLANG . "_" . $data . "_cat ORDER BY parentid,weight ASC";
-				$nv_laws_listcat = nv_db_cache( $sql, 'id', $module );
+				$nv_laws_listcat = $nv_Cache->db( $sql, 'id', $module );
 
 				$my_head .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"" . NV_BASE_SITEURL . "themes/" . $block_theme . "/css/laws.css\" />";
 

@@ -43,7 +43,7 @@ if ( ! function_exists( 'nv_laws_block_subject' ) )
 
     function nv_laws_block_subject( $block_config )
     {
-        global $db, $lang_module, $module_info, $site_mods, $global_config, $nv_laws_listsubject, $module_name;
+        global $db, $lang_module, $module_info, $site_mods, $global_config, $nv_laws_listsubject, $module_name, $nv_Cache;
 
 		$module = $block_config['module'];
 		$mod_data = $site_mods[$module]['module_data'];
@@ -53,7 +53,7 @@ if ( ! function_exists( 'nv_laws_block_subject' ) )
 		{
 			$nv_laws_listsubject = array();
 			$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $mod_data . "_subject ORDER BY weight ASC";
-			$list = nv_db_cache( $sql, 'id' );
+			$list = $nv_Cache->db( $sql, 'id' );
 			foreach ( $list as $row )
 			{
 				$nv_laws_listsubject[$row['id']] = $row;

@@ -48,7 +48,7 @@ if ( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
     }
     $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_cat SET weight=" . $cWeight . " WHERE id=" . $id;
     $db->query( $query );
-    nv_del_moduleCache( $module_name );
+    $nv_Cache->delMod( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['logChangeWeight'], "Id: " . $id, $admin_info['userid'] );
     die( 'OK' );
 }
@@ -61,7 +61,7 @@ if ( $nv_Request->isset_request( 'newday', 'post' ) )
 	$result = $db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET newday=' . $new_vid . ' WHERE id=' . $catid );
 	if( $result )
 	{
-		nv_del_moduleCache( $module_name );
+		$nv_Cache->delMod( $module_name );
 		die( 'OK' );
 	}
 	die( 'NO' );
@@ -80,7 +80,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_cat WHERE id = " . $id;
     $db->query( $query );
     fix_catWeight( $catList[$id]['parentid'] );
-    nv_del_moduleCache( $module_name );
+    $nv_Cache->delMod( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['logDelCat'], "Id: " . $id, $admin_info['userid'] );
     die( 'OK' );
 }
@@ -210,7 +210,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         }
 
         if ( $if_fixWeight !== false ) fix_catWeight( $if_fixWeight );
-        nv_del_moduleCache( $module_name );
+        $nv_Cache->delMod( $module_name );
         nv_insert_logs( NV_LANG_DATA, $module_name, $log_title, "Id: " . $post['id'], $admin_info['userid'] );
         die( 'OK' );
     }

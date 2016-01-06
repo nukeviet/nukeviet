@@ -48,7 +48,7 @@ if ( $nv_Request->isset_request( 'cWeight, id', 'post' ) )
     }
     $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_area SET weight=" . $cWeight . " WHERE id=" . $id;
     $db->query( $query );
-    nv_del_moduleCache( $module_name );
+    $nv_Cache->delMod( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['logChangeaWeight'], "Id: " . $id, $admin_info['userid'] );
     die( 'OK' );
 }
@@ -66,7 +66,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     $query = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_area WHERE id = " . $id;
     $db->query( $query );
     fix_aWeight( $aList[$id]['parentid'] );
-    nv_del_moduleCache( $module_name );
+    $nv_Cache->delMod( $module_name );
     nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['logDelArea'], "Id: " . $id, $admin_info['userid'] );
     die( 'OK' );
 }
@@ -196,7 +196,7 @@ if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( '
         }
 
         if ( $if_fixWeight !== false ) fix_aWeight( $if_fixWeight );
-        nv_del_moduleCache( $module_name );
+        $nv_Cache->delMod( $module_name );
         nv_insert_logs( NV_LANG_DATA, $module_name, $log_title, "Id: " . $post['id'], $admin_info['userid'] );
         die( 'OK' );
     }

@@ -89,7 +89,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 				if ( $db->insert_id( $sql ) )
 				{
 					//$xxx->closeCursor();
-					nv_del_moduleCache( $module_name );
+					$nv_Cache->delMod( $module_name );
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['scontent_add'], $array['title'], $admin_info['userid'] );
 					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=signer" );
 					die();
@@ -122,7 +122,7 @@ if ( $nv_Request->isset_request( 'submit', 'post' ) )
 				if ( $db->query( $sql ) )
 				{
 					//$xxx->closeCursor();
-					nv_del_moduleCache( $module_name );
+					$nv_Cache->delMod( $module_name );
 					nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['scontent_edit'], $array_old['title'] . "&nbsp;=&gt;&nbsp;" . $array['title'], $admin_info['userid'] );
 					Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=signer" );
 					exit();

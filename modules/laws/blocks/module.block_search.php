@@ -42,7 +42,7 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 
     function nv_law_block_search( $block_config )
     {
-        global $my_head, $lang_module, $site_mods, $global_config, $module_info, $module_file, $nv_laws_listsubject, $nv_laws_listarea, $nv_laws_listcat, $module_name, $nv_Request, $module_data;
+        global $my_head, $lang_module, $site_mods, $global_config, $module_info, $module_file, $nv_laws_listsubject, $nv_laws_listarea, $nv_laws_listcat, $module_name, $nv_Request, $module_data, $nv_Cache;
 
 		$module = $block_config['module'];
 		$module_data = $site_mods[$module]['module_data'];
@@ -133,7 +133,7 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		}
 
 		$sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_signer ORDER BY title ASC";
-		$list = array( 0 => array( "id" => 0, "title" => $lang_module['s_signer_all'], "alias" => "" ) ) + nv_db_cache( $sql, 'id', $module_name );
+		$list = array( 0 => array( "id" => 0, "title" => $lang_module['s_signer_all'], "alias" => "" ) ) + $nv_Cache->db( $sql, 'id', $module_name );
 		foreach ( $list as $row )
 		{
 			$xtpl->assign( 'KEY', $row['id'] );

@@ -372,7 +372,7 @@ else
 
 	            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addRow'], "Id: " . $_id, $admin_info['userid'] );
 	        }
-	        nv_del_moduleCache( $module_name );
+	        $nv_Cache->delMod( $module_name );
 	        die( 'OK' );
 	    }
 
@@ -535,7 +535,7 @@ else
 			// Cap nhat lai so luong van ban o chu de
 			$db->query( 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_subject SET numcount=(SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row WHERE sid=' . $data['sid'] . ') WHERE id=' . $data['sid'] );
 
-		    nv_del_moduleCache( $module_name );
+		    $nv_Cache->delMod( $module_name );
 		    die( 'OK' );
 		}
 		die( 'NO' );
@@ -556,7 +556,7 @@ else
 	    $query = "UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_row SET status=" . $status . " WHERE id=" . $id;
 	    if ( $db->query( $query ) === false ) die( "ERROR" );
 
-	    nv_del_moduleCache( $module_name );
+	    $nv_Cache->delMod( $module_name );
 
 	    die( 'OK' );
 	}

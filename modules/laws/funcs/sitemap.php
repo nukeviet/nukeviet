@@ -14,7 +14,7 @@ $url = array();
 $cacheFile = NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . NV_LANG_DATA . "_" . $module_name . "_Sitemap.cache";
 $pa = NV_CURRENTTIME - 7200;
 
-if ( ( $cache = nv_get_cache( $cacheFile ) ) != false and filemtime( $cacheFile ) >= $pa )
+if ( ( $cache = $nv_Cache->getItem( $cacheFile ) ) != false and filemtime( $cacheFile ) >= $pa )
 {
     $url = unserialize( $cache );
 }
@@ -31,7 +31,7 @@ else
     }
     
     $cache = serialize($url);
-    nv_set_cache( $cacheFile, $cache );
+    $nv_Cache->setItem( $cacheFile, $cache );
 }
 
 nv_xmlSitemap_generate( $url );

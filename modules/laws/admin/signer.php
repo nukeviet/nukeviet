@@ -37,7 +37,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     $sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE sgid=" . $id;
     $db->query( $sql );
 
-    nv_del_moduleCache( $module_name );
+    $nv_Cache->delMod( $module_name );
 	nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['scontent_delete'] , $title, $admin_info['userid'] );
 
     die( 'OK' );

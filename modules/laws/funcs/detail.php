@@ -67,7 +67,7 @@ if( $nv_Request->isset_request( 'download', 'get' ) )
 	}
 
 	$file_info = pathinfo( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid] );
-	$download = new download( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid], $file_info['dirname'], $file_info['basename'], true );
+	$download = new NukeViet\Files\Download( NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid], $file_info['dirname'], $file_info['basename'], true );
 	$download->download_file();
 	exit();
 }
