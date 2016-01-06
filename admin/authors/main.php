@@ -61,7 +61,7 @@ if ($numrows) {
         $last_login = $last_login ? nv_date('l, d/m/Y H:i', $last_login) : $lang_module['last_login0'];
         $last_agent = $row['last_agent'];
 
-        $_browser = new Browser($last_agent);
+        $_browser = new NukeViet\Client\Browser($last_agent);
         $browser = array( 'key' => $_browser->getBrowserKey(), 'name' => $_browser->getBrowser() );
         $os = array( 'key' => $_browser->getPlatformKey(), 'name' => $_browser->getPlatform() );
 
