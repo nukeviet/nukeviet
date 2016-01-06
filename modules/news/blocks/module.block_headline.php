@@ -46,13 +46,13 @@ if (! nv_function_exists('nv_block_headline')) {
 
     function nv_block_headline($block_config)
     {
-        global $module_name, $module_data, $db_slave, $my_head, $my_footer, $module_info, $module_file, $module_upload, $global_array_cat, $global_config;
+        global $nv_Cache, $module_name, $module_data, $db_slave, $my_head, $my_footer, $module_info, $module_file, $module_upload, $global_array_cat, $global_config;
 
         $array_bid_content = array();
 
         $cache_file = NV_LANG_DATA . '_block_headline_' . NV_CACHE_PREFIX . '.cache';
 
-        if (($cache = nv_get_cache($module_name, $cache_file)) != false) {
+        if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
             $array_bid_content = unserialize($cache);
         } else {
             $id = 0;
@@ -97,7 +97,7 @@ if (! nv_function_exists('nv_block_headline')) {
                 $array_bid_content[$i]['content'] = $array_content;
             }
             $cache = serialize($array_bid_content);
-            nv_set_cache($module_name, $cache_file, $cache);
+            $nv_Cache->setItem($module_name, $cache_file, $cache);
         }
 
         $xtpl = new XTemplate('block_headline.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);

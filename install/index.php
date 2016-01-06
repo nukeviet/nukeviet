@@ -295,11 +295,6 @@ if ($step == 1) {
 
     $array_suport = array();
     $array_support['supports_rewrite'] = (empty($sys_info['supports_rewrite'])) ? 0 : 1;
-    $array_support['safe_mode'] = ($sys_info['safe_mode']) ? 0 : 1;
-    $array_support['register_globals'] = (ini_get('register_globals') == '1' || strtolower(ini_get('register_globals')) == 'on') ? 0 : 1;
-    $array_support['magic_quotes_runtime'] = (ini_get('magic_quotes_runtime') == '1' || strtolower(ini_get('magic_quotes_runtime')) == 'on') ? 0 : 1;
-    $array_support['magic_quotes_gpc'] = (ini_get('magic_quotes_gpc') == '1' || strtolower(ini_get('magic_quotes_gpc')) == 'on') ? 0 : 1;
-    $array_support['magic_quotes_sybase'] = (ini_get('magic_quotes_sybase') == '1' || strtolower(ini_get('magic_quotes_sybase')) == 'on') ? 0 : 1;
     $array_support['output_buffering'] = (ini_get('output_buffering') == '1' || strtolower(ini_get('output_buffering')) == 'on') ? 0 : 1;
     $array_support['session_auto_start'] = (ini_get('session.auto_start') == '1' || strtolower(ini_get('session.auto_start')) == 'on') ? 0 : 1;
     $array_support['display_errors'] = (ini_get('display_errors') == '1' || strtolower(ini_get('display_errors')) == 'on') ? 0 : 1;
@@ -342,7 +337,6 @@ if ($step == 1) {
 
         if ($dbtype == 'mysql') {
             // Not check default dbtype
-
             $respon['status'] = 'success';
         } else {
             if (! in_array($dbtype, $PDODrivers)) {

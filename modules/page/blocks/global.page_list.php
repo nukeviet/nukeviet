@@ -46,7 +46,7 @@ if (! nv_function_exists('nv_page_list')) {
      */
     function nv_page_list($block_config)
     {
-        global $global_config, $site_mods, $db, $module_name;
+        global $nv_Cache, $global_config, $site_mods, $db, $module_name;
         $module = $block_config['module'];
 
         if (! isset($site_mods[$module])) {
@@ -60,7 +60,7 @@ if (! nv_function_exists('nv_page_list')) {
             ->order('weight ASC')
             ->limit($block_config['numrow']);
 
-        $list = nv_db_cache($db->sql(), 'id', $module);
+        $list = $nv_Cache->db($db->sql(), 'id', $module);
 
         if (!empty($list)) {
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/page/block.page_list.tpl')) {

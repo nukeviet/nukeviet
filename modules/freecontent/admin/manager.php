@@ -17,15 +17,15 @@ $page_title = $lang_module['mng'];
 // Get content info
 if ($nv_Request->isset_request('getinfo', 'post')) {
     $id = $nv_Request->get_int('id', 'post', '0');
-    
+
     $array = array();
-    
+
     if ($id) {
         $sth = $db->prepare('SELECT title, description, link, target, image, start_time, end_time, status FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=:id');
         $sth->bindParam(':id', $id, PDO::PARAM_INT);
         $sth->execute();
         $array = $sth->fetch();
-        
+
         if (! empty($array)) {
             // Check image exists
             if (! empty($array['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $array['image'])) {
@@ -33,20 +33,20 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
             } else {
                 $array['image'] = '';
             }
-            
+
             $array['status'] = $array['status'] == 1 ? true : false;
             $array['exptime'] = 0;
-            
+
             if ($array['end_time']) {
                 $array['exptime'] = round(($array['end_time'] - $array['start_time']) / 3600);
             }
-            
+
             unset($array['start_time'], $array['end_time']);
         }
     }
-    
+
     $message = $array ? '' : 'Invalid post data';
-    
+
     include NV_ROOTDIR . '/includes/header.php';
     echo json_encode(array(
         'status' => ! empty($array) ? 'success' : 'error',
@@ -60,22 +60,22 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 if ($nv_Request->isset_request('del', 'post')) {
     $id = $nv_Request->get_int('id', 'post', '0');
     $message = '';
-    
+
     if ($id) {
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=:id');
         $sth->bindParam(':id', $id, PDO::PARAM_INT);
         $sth->execute();
-        
+
         if ($sth->rowCount()) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Del Content', 'ID:' . $id, $admin_info['userid']);
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
         } else {
             $message = 'Nothing to do!';
         }
     } else {
         $message = 'Invalid post data';
     }
-    
+
     include NV_ROOTDIR . '/includes/header.php';
     echo json_encode(array(
         'status' => ! $message ? 'success' : 'error',
@@ -89,16 +89,16 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
     $id = $nv_Request->get_int('id', 'post', '0');
     $message = '';
     $status = 0;
-    
+
     if ($id) {
         $sth = $db->prepare('SELECT status, start_time, end_time FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=:id');
         $sth->bindParam(':id', $id, PDO::PARAM_INT);
         $sth->execute();
         $row = $sth->fetchAll();
-        
+
         if (sizeof($row) == 1) {
             $row = $row[0];
-            
+
             if ($row['status'] == 1) {
                 // In-active
 
@@ -110,7 +110,7 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
                 $status = 1;
                 $start_time = 0;
                 $end_time = 0;
-                
+
                 if (empty($row['start_time']) or (! empty($row['end_time']) and $row['end_time'] <= NV_CURRENTTIME)) {
                     $start_time = NV_CURRENTTIME;
                     $end_time = ! empty($row['end_time']) ? (($row['end_time'] - $row['start_time']) + $start_time) : 0;
@@ -118,10 +118,10 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
                     $start_time = $row['start_time'];
                     $end_time = $row['end_time'];
                 }
-                
+
                 $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET status = :status, start_time = ' . $start_time . ', end_time = ' . $end_time . ' WHERE id=:id';
             }
-            
+
             $sth = $db->prepare($sql);
             $sth->bindParam(':status', $status, PDO::PARAM_INT);
             $sth->bindParam(':id', $id, PDO::PARAM_INT);
@@ -135,16 +135,16 @@ if ($nv_Request->isset_request('changestatus', 'post')) {
             $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
             $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
             $sth->execute();
-            
+
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Change Status', 'ID:' . $id . ' - ' . $status, $admin_info['userid']);
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
         } else {
             $message = 'Nothing to do!';
         }
     } else {
         $message = 'Invalid post data';
     }
-    
+
     include NV_ROOTDIR . '/includes/header.php';
     echo json_encode(array(
         'status' => ! $message ? 'success' : 'error',
@@ -177,7 +177,7 @@ if (empty($block)) {
 if ($nv_Request->isset_request('submit', 'post')) {
     $data = $error = array();
     $message = '';
-    
+
     $data['id'] = $nv_Request->get_int('id', 'post', 0);
     $data['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 255);
     $data['description'] = $nv_Request->get_editor('description', '', NV_ALLOWED_HTML_TAGS);
@@ -186,19 +186,19 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $data['image'] = nv_substr($nv_Request->get_title('image', 'post', ''), 0, 255);
     $data['status'] = ($nv_Request->get_int('status', 'post', 0) == 0) ? 0 : 1;
     $data['exptime'] = $nv_Request->get_int('exptime', 'post', 0);
-    
+
     if (empty($data['title'])) {
         $error[] = array(
             'name' => 'title',
             'value' => $lang_module['content_title_error']
         );
     }
-    
+
     if (! empty($data['link'])) {
         if (! preg_match("/\:\/\//i", $data['link'])) {
             $data['link'] = 'http://' . $data['link'];
         }
-        
+
         if (! nv_is_url($data['link'])) {
             $error[] = array(
                 'name' => 'link',
@@ -206,21 +206,21 @@ if ($nv_Request->isset_request('submit', 'post')) {
             );
         }
     }
-    
+
     // Prosess image
     if (is_file(NV_DOCUMENT_ROOT . $data['image'])) {
         $data['image'] = substr($data['image'], strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/'));
     } else {
         $data['image'] = '';
     }
-    
+
     // Prosess time
     $data['start_time'] = $data['status'] ? NV_CURRENTTIME : 0;
     $data['end_time'] = $data['exptime'] ? ($data['start_time'] + ($data['exptime'] * 3600)) : 0;
-    
+
     if (empty($error)) {
         if ($data['id']) {
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET 
+            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET
 				title = :title, description = :description, link = :link, target = :target, image = :image, start_time = :start_time, end_time = :end_time, status = :status
 			WHERE id = ' . $data['id'];
         } else {
@@ -228,7 +228,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
 				' . $bid . ', :title, :description, :link, :target, :image, :start_time, :end_time, :status
 			)';
         }
-        
+
         try {
             $sth = $db->prepare($sql);
             $sth->bindParam(':title', $data['title'], PDO::PARAM_STR);
@@ -250,15 +250,15 @@ if ($nv_Request->isset_request('submit', 'post')) {
                 $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
                 $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
                 $sth->execute();
-                
+
                 if ($data['id']) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit Content', 'ID: ' . $data['id'], $admin_info['userid']);
                 } else {
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'Add Content', $data['title'], $admin_info['userid']);
                 }
 
-                nv_del_moduleCache('settings');
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod('settings');
+                $nv_Cache->delMod($module_name);
                 $message = $lang_module['save_success'];
             } else {
                 $error[] = array(
@@ -273,7 +273,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             );
         }
     }
-    
+
     include NV_ROOTDIR . '/includes/header.php';
     echo json_encode(array(
         'status' => empty($error) ? 'success' : 'error',

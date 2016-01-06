@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_block_freecontent')) {
     /**
      * nv_block_config_freecontent()
-     * 
+     *
      * @param mixed $module
      * @param mixed $data_block
      * @param mixed $lang_block
@@ -23,45 +23,45 @@ if (! nv_function_exists('nv_block_freecontent')) {
      */
     function nv_block_config_freecontent($module, $data_block, $lang_block)
     {
-        global $site_mods;
-        
+        global $site_mods, $nv_Cache;
+
         $html = '';
-        
+
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['blockid'] . '</td>';
         $html .= '	<td>';
         $html .= '		<select name="config_blockid" class="form-control">';
-        
+
         $sql = 'SELECT bid, title FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_blocks ORDER BY title ASC';
-        $list = nv_db_cache($sql, '', $module);
-        
+        $list = $nv_Cache->db($sql, '', $module);
+
         foreach ($list as $row) {
             $html .= '	<option value="' . $row['bid'] . '"' . ($row['bid'] == $data_block['blockid'] ? ' selected="selected"' : '') . '>' . $row['title'] . '</option>';
         }
-        
+
         $html .= '		</select>';
         $html .= '	</td>';
         $html .= '</tr>';
-        
+
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['numrows'] . '</td>';
         $html .= '	<td>';
         $html .= '		<select name="config_numrows" class="form-control">';
-        
+
         for ($i = 1; $i <= 10; $i ++) {
             $html .= '	<option value="' . $i . '"' . ($i == $data_block['numrows'] ? ' selected="selected"' : '') . '>' . $i . '</option>';
         }
-        
+
         $html .= '		</select>';
         $html .= '	</td>';
         $html .= '</tr>';
-        
+
         return $html;
     }
 
     /**
      * nv_block_config_freecontent_submit()
-     * 
+     *
      * @param mixed $module
      * @param mixed $lang_block
      * @return
@@ -84,15 +84,15 @@ if (! nv_function_exists('nv_block_freecontent')) {
      */
     function nv_block_freecontent($block_config)
     {
-        global $global_config, $site_mods, $module_config, $db;
-        
+        global $global_config, $site_mods, $module_config, $nv_Cache, $db;
+
         $module = $block_config['module'];
-        
+
         // Set content status
         if (! empty($module_config[$module]['next_execute']) and $module_config[$module]['next_execute'] <= NV_CURRENTTIME) {
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows SET status = 2 WHERE end_time > 0 AND end_time < ' . NV_CURRENTTIME;
             $db->query($sql);
-            
+
             // Get next execute
             $sql = 'SELECT MIN(end_time) next_execute FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE end_time > 0 AND status = 1';
             $result = $db->query($sql);
@@ -101,20 +101,20 @@ if (! nv_function_exists('nv_block_freecontent')) {
             $sth->bindParam(':module_name', $module, PDO::PARAM_STR);
             $sth->bindParam(':config_value', $next_execute, PDO::PARAM_STR);
             $sth->execute();
-            
-            nv_del_moduleCache('settings');
-            nv_del_moduleCache($module);
-            
+
+            $nv_Cache->delMod('settings');
+            $nv_Cache->delMod($module);
+
             unset($next_execute);
         }
-        
+
         if (! isset($site_mods[$module]) or empty($block_config['blockid'])) {
             return '';
         }
 
         $sql = 'SELECT id, title, description, image, link, target FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows WHERE status = 1 AND bid = ' . $block_config['blockid'];
-        $list = nv_db_cache($sql, 'id', $module);
-        
+        $list = $nv_Cache->db($sql, 'id', $module);
+
         if (! empty($list)) {
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods[$module]['module_file'] . '/block.free_content.tpl')) {
                 $block_theme = $global_config['module_theme'];
@@ -125,48 +125,48 @@ if (! nv_function_exists('nv_block_freecontent')) {
             }
 
             $xtpl = new XTemplate('block.free_content.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods[$module]['module_file']);
-            
+
             shuffle($list);
             if ($block_config['numrows'] <= sizeof($list)) {
                 $list = array_slice($list, 0, $block_config['numrows']);
             }
-            
+
             foreach ($list as $row) {
                 if (! empty($row['image'])) {
                     $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['image'];
                 }
-                
+
                 $xtpl->assign('ROW', $row);
-                
+
                 if (! empty($row['link'])) {
                     if (! empty($row['target'])) {
                         $xtpl->parse('main.loop.title_link.target');
                     }
-                    
+
                     $xtpl->parse('main.loop.title_link');
                 } else {
                     $xtpl->parse('main.loop.title_text');
                 }
-                
+
                 if (! empty($row['image'])) {
                     if (! empty($row['link'])) {
                         if (! empty($row['target'])) {
                             $xtpl->parse('main.loop.image_link.target');
                         }
-                    
+
                         $xtpl->parse('main.loop.image_link');
                     } else {
                         $xtpl->parse('main.loop.image_only');
                     }
                 }
-                
+
                 $xtpl->parse('main.loop');
             }
 
             $xtpl->parse('main');
             return $xtpl->text('main');
         }
-        
+
         return '';
     }
 }

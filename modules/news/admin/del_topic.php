@@ -50,7 +50,7 @@ if ($topicid > 0) {
             $contents = 'OK_' . $topicid;
         }
     }
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
 }
 
 include NV_ROOTDIR . '/includes/header.php';

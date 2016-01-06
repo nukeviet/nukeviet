@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_contact_list_info')) {
     function nv_contact_list_info($module)
     {
-        global $db, $site_mods, $global_config, $lang_global;
+        global $nv_Cache, $site_mods, $global_config, $lang_global;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods[$module]['module_file'] . '/block.contact_list.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -26,7 +26,7 @@ if (! nv_function_exists('nv_contact_list_info')) {
         }
 
         $sql = 'SELECT id, full_name, alias, phone, email, others, image FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 ORDER BY weight';
-        $_array_department = nv_db_cache($sql, 'id', $module);
+        $_array_department = $nv_Cache->db($sql, 'id', $module);
 
         if (empty($_array_department)) {
             return '';

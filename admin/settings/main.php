@@ -103,7 +103,7 @@ if ($submit) {
         $sth->execute();
     }
 
-    nv_delete_all_cache();
+    $nv_Cache->delAll();
 
     if (empty($errormess)) {
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . ($show_ssl_modules ? '&show_ssl_modules=1' : '') . '&rand=' . nv_genpass());

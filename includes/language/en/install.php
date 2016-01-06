@@ -46,7 +46,6 @@ $lang_module['php_support'] = 'Support php';
 $lang_module['php_version'] = 'PHP version';
 $lang_module['pdo_support'] = 'Support PHP Data Objects';
 $lang_module['request'] = 'Require';
-$lang_module['safe_mode'] = 'Safe mode';
 $lang_module['required_off'] = 'Require off';
 $lang_module['required_on'] = 'Require on';
 $lang_module['recommnet'] = 'Recommend';

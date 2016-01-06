@@ -63,7 +63,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
      */
     function nv_menu_bootstrap($block_config)
     {
-        global $db, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
+        global $nv_Cache, $db_config, $global_config, $site_mods, $module_info, $module_name, $module_file, $module_data, $lang_global, $catid, $home;
 
         if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/menu/global.bootstrap.tpl')) {
             $block_theme = $global_config['module_theme'];
@@ -75,7 +75,7 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
 
         $array_menu = array();
         $sql = 'SELECT id, parentid, title, link, icon, note, subitem, groups_view, module_name, op, target, css, active_type FROM ' . NV_PREFIXLANG . '_menu_rows WHERE status=1 AND mid = ' . $block_config['menuid'] . ' ORDER BY weight ASC';
-        $list = nv_db_cache($sql, '', $block_config['module']);
+        $list = $nv_Cache->db($sql, '', $block_config['module']);
         foreach ($list as $row) {
             if (nv_user_in_groups($row['groups_view'])) {
                 switch ($row['target']) {

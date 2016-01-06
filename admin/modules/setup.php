@@ -70,7 +70,7 @@ if (! empty($setmodule) and preg_match($global_config['check_module'], $setmodul
                 trigger_error($e->getMessage());
             }
 
-            nv_del_moduleCache('modules');
+            $nv_Cache->delMod('modules');
             $return = nv_setup_data_module(NV_LANG_DATA, $setmodule, $sample);
             if ($return == 'OK_' . $setmodule) {
                 nv_setup_block_module($setmodule);
@@ -112,7 +112,7 @@ while ($row = $result->fetch()) {
 }
 
 if ($is_delCache) {
-    nv_del_moduleCache('modules');
+    $nv_Cache->delMod('modules');
 }
 
 $check_addnews_modules = false;

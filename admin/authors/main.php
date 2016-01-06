@@ -38,7 +38,7 @@ if ($nv_Request->isset_request('id', 'get')) {
 
 if ($numrows) {
     $sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
-    $list_modules = nv_db_cache($sql, '', 'modules');
+    $list_modules = $nv_Cache->db($sql, '', 'modules');
     foreach ($adminrows as $row) {
         $login = $row['username'];
         $email = (defined('NV_IS_SPADMIN')) ? $row['email'] : (($row['admin_id'] == $admin_info['admin_id']) ? $row['email'] : (intval($row['view_mail']) ? $row['email'] : ''));

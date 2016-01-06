@@ -535,14 +535,14 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
  */
 function nv_user_groups($in_groups)
 {
-    global $db, $db_config, $global_config;
+    global $nv_Cache, $db, $db_config, $global_config;
 
     if (empty($in_groups)) {
         return '';
     }
 
     $query = 'SELECT group_id, title, exp_time, publics FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
-    $list = nv_db_cache($query, '', 'users');
+    $list = $nv_Cache->db($query, '', 'users');
 
     if (empty($list)) {
         return '';
@@ -562,7 +562,7 @@ function nv_user_groups($in_groups)
 
     if ($reload) {
         $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
-        nv_del_moduleCache('users');
+        $nv_Cache->delMod('users');
     }
 
     return $groups;
@@ -1312,9 +1312,8 @@ function nv_check_domain($domain)
         if (function_exists('idn_to_ascii')) {
             $domain_ascii = idn_to_ascii($domain);
         } else {
-            require_once NV_ROOTDIR . '/includes/class/idna_convert.class.php';
-            $IDN = new idna_convert(array( 'idn_version' => 2008 ));
-            $domain_ascii = $IDN->encode($domain);
+            $Punycode = new TrueBV\Punycode();
+            $domain_ascii = $Punycode->encode($domain);
         }
         if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mf|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|post|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|xxx|ye|yt|za|zm|zw|xn--0zwm56d|xn--11b5bs3a9aj6g|xn--3e0b707e|xn--45brj9c|xn--54b7fta0cc|xn--80akhbyknj4f|xn--80ao21a|xn--90a3ac|xn--9t4b11yi5a|xn--clchc0ea0b2g2a9gcd|xn--deba0ad|xn--fiqs8s|xn--fiqz9s|xn--fpcrj9c3d|xn--fzc2c9e2c|xn--g6w251d|xn--gecrj9c|xn--h2brj9c|xn--hgbk6aj7f53bba|xn--hlcj6aya9esc7a|xn--j1amh|xn--j6w193g|xn--jxalpdlp|xn--kgbechtv|xn--kprw13d|xn--kpry57d|xn--l1acc|xn--lgbbat1ad8j|xn--mgb9awbf|xn--mgba3a4f16a|xn--mgbaam7a8h|xn--mgbai9azgqp6j|xn--mgbayh7gpa|xn--mgbbh1a71e|xn--mgbc0a9azcg|xn--mgberp4a5d4ar|xn--mgbx4cd0ab|xn--node|xn--o3cw4h|xn--ogbpf8fl|xn--p1ai|xn--pgbs0dh|xn--s9brj9c|xn--wgbh1c|xn--wgbl6a|xn--xkc2al3hye2a|xn--xkc2dl3a5ee0h|xn--yfro4i67o|xn--ygbi2ammx|xn--zckzah)$/', $domain_ascii)) {
             return $domain_ascii;
@@ -1397,7 +1396,6 @@ function nv_check_url($url, $is_200 = 0)
             'Opera/9.25 (Windows NT 6.0; U; en)'
         );
 
-        $safe_mode = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
         $open_basedir = (ini_get('open_basedir') == '1' || strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
         srand(( float )microtime() * 10000000);
@@ -1409,7 +1407,7 @@ function nv_check_url($url, $is_200 = 0)
         curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_setopt($curl, CURLOPT_PORT, $port);
 
-        if (! $safe_mode and $open_basedir) {
+        if ($open_basedir) {
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
         }
 

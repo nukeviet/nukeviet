@@ -22,7 +22,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
         $sth->bindParam(':config_value', $prcservice, PDO::PARAM_STR);
         $sth->execute();
 
-        nv_del_moduleCache('settings');
+        $nv_Cache->delMod('settings');
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
         die();
     }

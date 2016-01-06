@@ -40,6 +40,7 @@ define('NV_FILES_DIR', NV_ASSETS_DIR);
 
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
+require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
@@ -85,7 +86,6 @@ require NV_ROOTDIR . '/install/ini.php';
 require NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php';
 require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
-require NV_ROOTDIR . '/includes/core/cache_files.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
@@ -135,10 +135,6 @@ $global_config['site_url'] = $nv_Request->site_url;
 $global_config['my_domains'] = $nv_Request->my_domains;
 //vd: "mydomain1.com,mydomain2.com"
 
-$sys_info['register_globals'] = $nv_Request->is_register_globals;
-//0 = khong, 1 = bat
-$sys_info['magic_quotes_gpc'] = $nv_Request->is_magic_quotes_gpc;
-// 0 = khong, 1 = co
 $sys_info['sessionpath'] = $nv_Request->session_save_path;
 //vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
 
@@ -168,3 +164,5 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 
 //Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
+
+$nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);

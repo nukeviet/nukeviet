@@ -210,7 +210,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         }
     }
 
-    nv_del_moduleCache('settings');
+    $nv_Cache->delMod('settings');
 
     if (file_exists(NV_ROOTDIR . "/" . NV_ASSETS_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css")) {
         nv_deletefile(NV_ROOTDIR . "/" . NV_ASSETS_DIR . "/css/" . $selectthemes . "." . NV_LANG_DATA . "." . $global_config['idsite'] . ".css");

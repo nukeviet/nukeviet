@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_news_block_newscenter')) {
     function nv_block_config_news_newscenter($module, $data_block, $lang_block)
     {
-        global $site_mods;
+        global $nv_Cache, $site_mods;
 
         $html = '<tr>';
         $html .= '	<td>' . $lang_block['numrow'] . '</td>';
@@ -56,7 +56,7 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
         $html .= '<tr>';
         $html .= '<td>' . $lang_block['nocatid'] . '</td>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
-        $list = nv_db_cache($sql, '', $module);
+        $list = $nv_Cache->db($sql, '', $module);
         $html .= '<td>';
         $html .= '<div style="height: 160px; overflow: auto">';
         foreach ($list as $l) {
@@ -94,7 +94,7 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
 
     function nv_news_block_newscenter($block_config)
     {
-        global $module_data, $module_name, $module_file, $module_upload, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
+        global $nv_Cache, $module_data, $module_name, $module_file, $module_upload, $global_array_cat, $global_config, $lang_module, $db, $module_config, $module_info;
 
         $db->sqlreset()->select('id, catid, publtime, title, alias, hometext, homeimgthumb, homeimgfile')->from(NV_PREFIXLANG . '_' . $module_data . '_rows')->order('publtime DESC')->limit($block_config['numrow']);
         if (empty($block_config['nocatid'])) {
@@ -103,7 +103,7 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
             $db->where('status= 1 AND catid NOT IN ('.implode(',', $block_config['nocatid']) . ')');
         }
 
-        $list = nv_db_cache($db->sql(), 'id', $module_name);
+        $list = $nv_Cache->db($db->sql(), 'id', $module_name);
         if (! empty($list)) {
             $xtpl = new XTemplate('block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
             $xtpl->assign('lang', $lang_module);

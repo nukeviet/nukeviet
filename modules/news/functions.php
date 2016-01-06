@@ -39,7 +39,7 @@ $alias_cat_url = isset($array_op[0]) ? $array_op[0] : '';
 $array_mod_title = array();
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
-$list = nv_db_cache($sql, 'catid', $module_name);
+$list = $nv_Cache->db($sql, 'catid', $module_name);
 foreach ($list as $l) {
     $global_array_cat[$l['catid']] = $l;
     $global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];

@@ -17,18 +17,18 @@ $page_title = $lang_module['block_list'];
 // Get block info
 if ($nv_Request->isset_request('getinfo', 'post')) {
     $bid = $nv_Request->get_int('bid', 'post', '0');
-    
+
     $array = array();
-    
+
     if ($bid) {
         $sth = $db->prepare('SELECT title, description FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=:bid');
         $sth->bindParam(':bid', $bid, PDO::PARAM_INT);
         $sth->execute();
         $array = $sth->fetch();
     }
-    
+
     $message = $array ? '' : 'Invalid post data';
-    
+
     include NV_ROOTDIR . '/includes/header.php';
     echo json_encode(array(
         'status' => ! empty($array) ? 'success' : 'error',
@@ -42,26 +42,26 @@ if ($nv_Request->isset_request('getinfo', 'post')) {
 if ($nv_Request->isset_request('del', 'post')) {
     $bid = $nv_Request->get_int('bid', 'post', '0');
     $message = '';
-    
+
     if ($bid) {
         $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_blocks WHERE bid=:bid');
         $sth->bindParam(':bid', $bid, PDO::PARAM_INT);
         $sth->execute();
-        
+
         if ($sth->rowCount()) {
             $sth = $db->prepare('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE bid=:bid');
             $sth->bindParam(':bid', $bid, PDO::PARAM_INT);
             $sth->execute();
-            
+
             nv_insert_logs(NV_LANG_DATA, $module_name, 'Del Block', 'ID:' . $bid, $admin_info['userid']);
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
         } else {
             $message = 'Nothing to do!';
         }
     } else {
         $message = 'Invalid post data';
     }
-    
+
     include NV_ROOTDIR . '/includes/header.php';
     echo json_encode(array(
         'status' => ! $message ? 'success' : 'error',
@@ -74,11 +74,11 @@ if ($nv_Request->isset_request('del', 'post')) {
 if ($nv_Request->isset_request('submit', 'post')) {
     $data = $error = array();
     $message = '';
-    
+
     $data['bid'] = $nv_Request->get_int('bid', 'post', 0);
     $data['title'] = nv_substr($nv_Request->get_title('title', 'post', ''), 0, 255);
     $data['description'] = $nv_Request->get_title('description', 'post', '');
-    
+
     if (empty($data['title'])) {
         $error[] = array(
             'name' => 'title',
@@ -90,7 +90,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         } else {
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_blocks (title, description) VALUES (:title, :description)';
         }
-        
+
         try {
             $sth = $db->prepare($sql);
             $sth->bindParam(':title', $data['title'], PDO::PARAM_STR);
@@ -104,7 +104,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'Add Block', $data['title'], $admin_info['userid']);
                 }
 
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
                 $message = $lang_module['save_success'];
             } else {
                 $error[] = array(
@@ -119,7 +119,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             );
         }
     }
-    
+
     include NV_ROOTDIR . '/includes/header.php';
     echo json_encode(array(
         'status' => empty($error) ? 'success' : 'error',
@@ -142,11 +142,11 @@ if (sizeof($array) < 1) {
 } else {
     foreach ($array as $row) {
         $row['link'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=list&amp;bid=' . $row['bid'];
-        
+
         $xtpl->assign('ROW', $row);
         $xtpl->parse('main.rows.loop');
     }
-    
+
     $xtpl->parse('main.rows');
 }
 

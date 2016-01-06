@@ -40,7 +40,7 @@ while (list($m, $mod_file, $is_sys, $version) = $result->fetch(3)) {
 }
 
 if ($is_delCache) {
-    nv_del_moduleCache('modules');
+    $nv_Cache->delMod('modules');
 }
 
 // Lay danh sach cac module co trong ngon ngu
@@ -108,7 +108,7 @@ while ($row = $result->fetch()) {
 $result->closeCursor();
 
 if ($is_delCache) {
-    nv_del_moduleCache('modules');
+    $nv_Cache->delMod('modules');
 }
 
 $contents['caption'] = array( $lang_module['caption_actmod'], $lang_module['caption_deactmod'], $lang_module['caption_badmod'], $lang_module['caption_newmod'] );

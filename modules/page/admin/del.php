@@ -30,7 +30,7 @@ if (md5($id . $global_config['sitekey'] . session_id()) == $checkss) {
             $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET weight=' . $weight . ' WHERE id=' . $row['id'];
             $db->query($sql);
         }
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
 
         $content = 'OK_' . $id;
     }

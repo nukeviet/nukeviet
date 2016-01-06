@@ -17,9 +17,6 @@ if (headers_sent() || connection_status() != 0 || connection_aborted()) {
 }
 
 if ($sys_info['ini_set_support']) {
-    ini_set('magic_quotes_runtime', 'Off');
-    ini_set('magic_quotes_sybase', 'Off');
-
     if (! isset($_SESSION)) {
         //ini_set( 'session.save_handler', 'files' );
         ini_set('session.use_trans_sid', 0);
@@ -49,11 +46,10 @@ if ($sys_info['ini_set_support']) {
     ini_set('auto_detect_line_endings', 0);
 }
 
-$sys_info['safe_mode'] = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
 $sys_info['zlib_support'] = (extension_loaded('zlib')) ? 1 : 0;
 $sys_info['mb_support'] = (extension_loaded('mbstring')) ? 1 : 0;
 $sys_info['iconv_support'] = (extension_loaded('iconv')) ? 1 : 0;
-$sys_info['allowed_set_time_limit'] = (! $sys_info['safe_mode'] and function_exists('set_time_limit') and ! in_array('set_time_limit', $sys_info['disable_functions'])) ? 1 : 0;
+$sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and ! in_array('set_time_limit', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['os'] = strtoupper((function_exists('php_uname') and ! in_array('php_uname', $sys_info['disable_functions']) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
 
 $sys_info['fileuploads_support'] = (ini_get('file_uploads')) ? 1 : 0;
@@ -87,14 +83,3 @@ if (! function_exists('mcrypt_encrypt')) {
 
 //Xac dinh tien ich mo rong lam viec voi string
 $sys_info['string_handler'] = $sys_info['mb_support'] ? 'mb' : ($sys_info['iconv_support'] ? 'iconv' : 'php');
-
-//Xac dinh function nen string
-$sys_info['str_compress'] = array();
-
-if ($sys_info['zlib_support']) {
-    if (function_exists('gzcompress') and function_exists('gzuncompress')) {
-        $sys_info['str_compress'] = array( 'gzcompress', 'gzuncompress' );
-    } elseif (function_exists('gzdeflate') and function_exists('gzinflate')) {
-        $sys_info['str_compress'] = array( 'gzdeflate', 'gzinflate' );
-    }
-}

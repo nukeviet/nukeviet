@@ -56,31 +56,6 @@
 		<td><span class="{DATA_SUPPORT.class_supports_rewrite}">{DATA_SUPPORT.supports_rewrite}</span></td>
 	</tr>
 	<tr>
-		<th scope="row" class="specalt">{LANG.safe_mode}</th>
-		<td class="alt">{LANG.turnoff}</td>
-		<td class="alt"><span class="{DATA_SUPPORT.class_safe_mode}">{DATA_SUPPORT.safe_mode}</span></td>
-	</tr>
-	<tr>
-		<th scope="row" class="spec">Register Global</th>
-		<td>{LANG.turnoff}</td>
-		<td><span class="{DATA_SUPPORT.class_register_globals}">{DATA_SUPPORT.register_globals}</span></td>
-	</tr>
-	<tr>
-		<th scope="row" class="specalt">Magic Quotes Runtime</th>
-		<td class="alt">{LANG.turnoff}</td>
-		<td class="alt"><span class="{DATA_SUPPORT.class_magic_quotes_runtime}">{DATA_SUPPORT.magic_quotes_runtime}</span></td>
-	</tr>
-	<tr>
-		<th scope="row" class="spec">Magic Quotes GPC</th>
-		<td>{LANG.turnoff}</td>
-		<td><span class="{DATA_SUPPORT.class_magic_quotes_gpc}">{DATA_SUPPORT.magic_quotes_gpc}</span></td>
-	</tr>
-	<tr>
-		<th scope="row" class="specalt">Magic Quotes Sybase</th>
-		<td class="alt">{LANG.turnoff}</td>
-		<td class="alt"><span class="{DATA_SUPPORT.class_magic_quotes_sybase}">{DATA_SUPPORT.magic_quotes_sybase}</span></td>
-	</tr>
-	<tr>
 		<th scope="row" class="spec">Output Buffering</th>
 		<td>{LANG.turnoff}</td>
 		<td><span class="{DATA_SUPPORT.class_output_buffering}">{DATA_SUPPORT.output_buffering}</span></td>

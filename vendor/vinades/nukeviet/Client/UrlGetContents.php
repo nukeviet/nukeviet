@@ -13,7 +13,6 @@ namespace NukeViet\Client;
 class UrlGetContents
 {
     private $allow_methods = array();
-    private $safe_mode;
     private $open_basedir;
     private $url_info = false;
     private $login = '';
@@ -39,11 +38,9 @@ class UrlGetContents
         }
         $this->disable_functions = $disable_functions;
 
-        $safe_mode = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
-
         $this->time_limit = ( int )$time_limit;
 
-        if (!$safe_mode and function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions)) {
             set_time_limit($this->time_limit);
         }
 
@@ -77,12 +74,6 @@ class UrlGetContents
 
         if (function_exists('file') and !in_array('file', $this->disable_functions)) {
             $this->allow_methods[] = 'file';
-        }
-
-        if (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') {
-            $this->safe_mode = true;
-        } else {
-            $this->safe_mode = false;
         }
 
         $this->open_basedir = @ini_get('open_basedir') ? true : false;
@@ -120,7 +111,7 @@ class UrlGetContents
             curl_setopt($curl, CURLOPT_NOBODY, true);
 
             curl_setopt($curl, CURLOPT_PORT, $port);
-            if (!$this->safe_mode and !$this->open_basedir) {
+            if (!$this->open_basedir) {
                 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
             }
 
@@ -239,7 +230,7 @@ class UrlGetContents
             curl_setopt($curlHandle, CURLOPT_REFERER, $this->url_info['uri']);
         }
 
-        if (!$this->safe_mode and !$this->open_basedir) {
+        if (!$this->open_basedir) {
             curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($curlHandle, CURLOPT_MAXREDIRS, 10);
         }
@@ -262,7 +253,7 @@ class UrlGetContents
 
         $response = curl_getinfo($curlHandle);
 
-        if ($this->safe_mode or $this->open_basedir) {
+        if ($this->open_basedir) {
             if ($response['http_code'] == 301 || $response['http_code'] == 302 || $response['http_code'] == 303) {
                 if (preg_match('/^(Location:|URI:)[\s]*(.*?)$/m', $header, $matches) and $this->redirectCount <= 5) {
                     ++$this->redirectCount;

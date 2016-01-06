@@ -36,4 +36,4 @@ if ($sth->execute()) {
     echo $lang_module['setup_error_layout'];
 }
 
-nv_del_moduleCache('themes');
+$nv_Cache->delMod('themes');

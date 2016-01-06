@@ -43,8 +43,8 @@ try {
         $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
         $sth->execute();
 
-        nv_del_moduleCache('themes');
-        nv_del_moduleCache('modules');
+        $nv_Cache->delMod('themes');
+        $nv_Cache->delMod('modules');
 
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_modthemes');
         $db->query('OPTIMIZE TABLE ' . NV_PREFIXLANG . '_blocks_weight');

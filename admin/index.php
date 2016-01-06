@@ -52,7 +52,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
     $module_data = $module_file = $module_name;
 
     $op = $nv_Request->get_title(NV_OP_VARIABLE, 'post,get', 'main');
-    
+
     if (empty($op) or $op == 'functions') {
         $op = 'main';
     } elseif (! preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
@@ -184,7 +184,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
         $sth->execute();
 
-        nv_del_moduleCache('modules');
+        $nv_Cache->delMod('modules');
     }
 }
 

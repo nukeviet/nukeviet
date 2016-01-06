@@ -23,7 +23,7 @@ if ($nv_Request->isset_request('save', 'post')) {
     $sth->bindParam(':config_value', $pageTitleMode, PDO::PARAM_STR, 255);
     $sth->execute();
 
-    nv_delete_all_cache(false);
+    $nv_Cache->delAll(false);
     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     exit();
 }
