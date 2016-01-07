@@ -9,6 +9,7 @@
  */
 
 namespace NukeViet\Xml;
+
 use DOMDocument;
 
 class Array2XML
@@ -18,7 +19,6 @@ class Array2XML
     private $xml;
 
     /**
-     * Array2XML::__construct()
      *
      * @return
      */
@@ -27,7 +27,6 @@ class Array2XML
     }
 
     /**
-     * Array2XML::checkArray()
      *
      * @param mixed $array
      * @return
@@ -39,7 +38,6 @@ class Array2XML
     }
 
     /**
-     * Array2XML::setRootName()
      *
      * @param mixed $array
      * @param mixed $rootname
@@ -64,7 +62,6 @@ class Array2XML
     }
 
     /**
-     * Array2XML::addArray()
      *
      * @param mixed $array
      * @param mixed $root
@@ -93,7 +90,6 @@ class Array2XML
     }
 
     /**
-     * Array2XML::createXML()
      *
      * @param mixed $array
      * @param mixed $rootname
@@ -133,7 +129,6 @@ class Array2XML
     }
 
     /**
-     * Array2XML::saveXML()
      *
      * @param mixed $array
      * @param mixed $rootname
@@ -147,7 +142,6 @@ class Array2XML
     }
 
     /**
-     * Array2XML::showXML()
      *
      * @param mixed $array
      * @param mixed $rootname
