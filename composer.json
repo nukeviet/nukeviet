@@ -34,5 +34,6 @@
         "true/punycode": "^2.0"
     },
     "require-dev": {
+        "jasig/phpcas": "*"
     } 
 }
