@@ -658,7 +658,7 @@ class Http
     public static function buildCookieHeader(&$args)
     {
         if (! empty($args['cookies'])) {
-            // Upgrade any name => value cookie pairs to NV_http_cookie instances
+            // Upgrade any name => value cookie pairs to NukeViet\Http\Cookie instances
             foreach ($args['cookies'] as $name => $value) {
                 if (! is_object($value)) {
                     $args['cookies'][$name] = new Cookie(array( 'name' => $name, 'value' => $value ));

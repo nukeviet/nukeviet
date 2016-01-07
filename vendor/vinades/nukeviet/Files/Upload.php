@@ -10,7 +10,11 @@
 
 namespace NukeViet\Files;
 
-define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
+use finfo;
+
+if (! defined('NV_MIME_INI_FILE')) {
+    define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
+}
 define('NV_TEMP_REAL_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR);
 define('_ERROR_UPLOAD_NAMEEMPTY', isset($lang_global['error_uploadNameEmpty']) ? $lang_global['error_uploadNameEmpty'] : 'Upload failed: UserFile Name is empty');
 define('_ERROR_UPLOAD_SIZEEMPTY', isset($lang_global['error_uploadSizeEmpty']) ? $lang_global['error_uploadSizeEmpty'] : 'Upload failed: UserFile Size is empty');

@@ -8,7 +8,7 @@
  * @Createdate 30/07/2015 10:00
  */
 
-namespace NukeViet\Http;
+namespace NukeViet\Client;
 
 class Gfonts
 {

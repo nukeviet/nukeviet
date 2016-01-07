@@ -51,7 +51,7 @@ class Memcacheds
      *
      * @return void
      */
-    public function delMod($module_name, $lang)
+    public function delMod($module_name, $lang = '')
     {
         $AllKeys = $this->getAllKeys();
         foreach ($AllKeys as $_key) {

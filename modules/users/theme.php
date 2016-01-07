@@ -1127,9 +1127,9 @@ function nv_avatar($array)
     }
     $xtpl->assign('NV_AVATAR_UPLOAD', $form_action);
 
-    $lang_module['avata_bigfile'] = sprintf($lang_module['avata_bigfile'], nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
-    $lang_module['avata_bigsize'] = sprintf($lang_module['avata_bigsize'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
-    $lang_module['avata_smallsize'] = sprintf($lang_module['avata_smallsize'], $global_config['avatar_width'], $global_config['avatar_height']);
+    $lang_module['avatar_bigfile'] = sprintf($lang_module['avatar_bigfile'], nv_convertfromBytes(NV_UPLOAD_MAX_FILESIZE));
+    $lang_module['avatar_bigsize'] = sprintf($lang_module['avatar_bigsize'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
+    $lang_module['avatar_smallsize'] = sprintf($lang_module['avatar_smallsize'], $global_config['avatar_width'], $global_config['avatar_height']);
 
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);

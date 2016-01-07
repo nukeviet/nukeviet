@@ -29,7 +29,7 @@ $lang_module['size'] = 'Size';
 $lang_module['form'] = 'Method';
 $lang_module['description'] = 'Description';
 $lang_module['blang_all'] = 'ALl';
-$lang_module['client_info'] = 'If you are not a member, Please <a href="%s">contact us</a>. If you are e member, Please login';
+$lang_module['client_info'] = 'Customer Details';
 $lang_module['login'] = 'Account';
 $lang_module['password'] = 'Password';
 $lang_module['reg_time'] = 'Registration date';
