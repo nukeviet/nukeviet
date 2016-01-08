@@ -112,6 +112,8 @@ $xtpl->assign('DESCRIPTION_LENGTH', $global_config['description_length']);
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
+$array_url_instruction['metatags'] = 'http://wiki.nukeviet.vn/nukeviet4:admin:seotools:metatags';
+
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

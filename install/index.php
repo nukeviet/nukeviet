@@ -401,15 +401,25 @@ if ($step == 1) {
             $db_config['autosetcollation'] = true;
         }
         $db_config['charset'] = strstr($db_config['collation'], '_', true);
-        $db = new NukeViet\Core\Database($db_config);
-        $connect = $db->connect;
+
+        try {
+            $db = new NukeViet\Core\Database($db_config);
+            $connect = $db->connect;
+        } catch (PDOException $e) {
+            $connect = 0;
+        }
         if (! $connect) {
             $db_config['error'] = 'Could not connect to data server';
             if ($db_config['dbtype'] == 'mysql') {
                 $db_config['dbname'] = '';
-                $db = new NukeViet\Core\Database($db_config);
+                try {
+                    $db = new NukeViet\Core\Database($db_config);
+                    $connect = $db->connect;
+                } catch (PDOException $e) {
+                    $connect = 0;
+                }
                 $db_config['dbname'] = $db_config['dbsystem'];
-                if ($db->connect) {
+                if ($connect) {
                     try {
                         $db->query('CREATE DATABASE ' . $db_config['dbname']);
                         $db->exec('USE ' . $db_config['dbname']);

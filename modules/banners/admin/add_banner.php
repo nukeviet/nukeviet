@@ -42,12 +42,13 @@ while ($row = $result->fetch()) {
     $clients[$row['id']] = $row['full_name'] . ' (' . $row['login'] . ')';
 }
 
-$sql = 'SELECT id,title,blang FROM ' . NV_BANNERS_GLOBALTABLE. '_plans ORDER BY blang, title ASC';
-$result = $db->query($sql);
-
 $plans = array();
+$plans_form = array();
+$sql = 'SELECT id, title, blang, form FROM ' . NV_BANNERS_GLOBALTABLE. '_plans ORDER BY blang, title ASC';
+$result = $db->query($sql);
 while ($row = $result->fetch()) {
     $plans[$row['id']] = $row['title'] . ' (' . (! empty($row['blang']) ? $language_array[$row['blang']]['name'] : $lang_module['blang_all']) . ')';
+    $plans_form[$row['id']] = $row['form'];
 }
 
 if (empty($plans)) {
@@ -130,10 +131,15 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $exptime = $publtime;
             }
 
+            $_weight = 0;
+            if ($plans_form[$pid] == 'sequential') {
+                $_weight = $db->query('SELECT MAX(weight) FROM ' . NV_BANNERS_GLOBALTABLE. '_rows WHERE pid=' . $pid)->fetchColumn();
+                $_weight = intval($_weight) + 1;
+            }
             $_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_rows ( title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
 				( :title, " . $pid . ", " . $clid . ", :file_name, :file_ext, :file_mime,
 				" . $width . ", " . $height . ", :file_alt, '', :click_url, :target, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
-				0, 1, 0)";
+				0, 1, " . $_weight . ")";
 
             $data_insert = array();
             $data_insert['title'] = $title;
@@ -145,7 +151,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $data_insert['target'] = $target;
             $id = $db->insert_id($_sql, 'id', $data_insert);
 
-            nv_fix_banner_weight($pid);
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_banner', 'bannerid ' . $id, $admin_info['userid']);
             nv_CreateXML_bannerPlan();
             $op2 = ($file_ext == 'swf') ? 'edit_banner' : 'info_banner';

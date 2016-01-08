@@ -29,6 +29,9 @@ if (! defined('NV_IS_ADMIN') or ! isset($admin_info) or empty($admin_info)) {
     exit();
 }
 
+// Khong cho xac dinh tu do cac variables
+$array_url_instruction = $select_options = array();
+
 if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php')) {
     require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php';
 } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_global.php')) {

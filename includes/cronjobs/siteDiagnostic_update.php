@@ -8,16 +8,8 @@
  * @Createdate 23/12/2010, 18:6
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
     die('Stop!!!');
-}
-
-if (! defined('NV_IS_CRON')) {
-    die('Stop!!!');
-}
-
-if (! isset($Diagnostic) or ! is_object($Diagnostic)) {
-    $Diagnostic = new NukeViet\Client\Diagnostic();
 }
 
 /**
@@ -27,7 +19,7 @@ if (! isset($Diagnostic) or ! is_object($Diagnostic)) {
  */
 function cron_siteDiagnostic_update()
 {
-    global $Diagnostic;
+    $Diagnostic = new NukeViet\Client\Diagnostic();
 
     $cacheFile = $Diagnostic->currentCache;
     $updtime = 0;
