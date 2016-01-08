@@ -9,7 +9,9 @@
 * @Createdate May 30, 2010, 05:07:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '31/05/2010, 00:07';
@@ -55,8 +57,8 @@ $lang_module['name_show'] = 'Type display name';
 $lang_module['firstname_lastname'] = 'Firstname and Lastname';
 $lang_module['lastname_firstname'] = 'Lastname and Firstname';
 $lang_module['error_language'] = 'Error: You do not select the type of display Name';
-$lang_module['avata'] = 'Avatar';
-$lang_module['avata_chosen'] = 'Chosen avatar';
+$lang_module['avatar'] = 'Avatar';
+$lang_module['avatar_chosen'] = 'Chosen avatar';
 $lang_module['birthday'] = 'Birthday';
 $lang_module['date'] = 'Day';
 $lang_module['month'] = 'Month';
@@ -72,7 +74,7 @@ $lang_module['errornotitle'] = 'Error: Empty secret question';
 $lang_module['errorsave'] = 'Error: Can\'t update data, please check topic title';
 $lang_module['weight'] = 'position';
 $lang_module['save'] = 'Save';
-$lang_module['siteterms'] = 'Site rules';
+$lang_module['siteterms'] = 'Rules register';
 $lang_module['error_content'] = 'Error: Empty site rules';
 $lang_module['saveok'] = 'Update successful';
 $lang_module['config'] = 'Configuration';
@@ -130,8 +132,11 @@ $lang_module['adduser_email'] = 'Send notification email:';
 $lang_module['adduser_email_yes'] = 'Yes';
 $lang_module['adduser_register'] = 'Your account was created';
 $lang_module['adduser_register_info'] = 'Hi %1$s,<br />Your account at website %2$s activated. Your login information:<br />URL: <a href="%3$s">%3$s</a><br />Account: %4$s<br />Password: %5$s<br />This is email automatic sending from website %2$s.<br />Site administrator';
-$lang_module['allow_openid'] = 'Allow using Oauth, OpenID';
-$lang_module['openid_servers'] = 'Oauth, OpenID accepted list';
+$lang_module['openid_servers'] = 'Oauth accepted list';
+$lang_module['openid_processing'] = 'The default processing mode after Oauth login';
+$lang_module['openid_processing_0'] = 'Users can choose the mode of processing';
+$lang_module['openid_processing_3'] = 'Register a new account and link this OauthID';
+$lang_module['openid_processing_4'] = 'Login with account create automatic by system';
 $lang_module['allow_change_login'] = 'Allow change login name';
 $lang_module['is_user_forum'] = 'Use forum\'s users';
 $lang_module['search_page_title'] = 'Result';
@@ -386,7 +391,11 @@ $lang_module['update_LDAP_config'] = 'Updated data from LDAP to website';
 $lang_module['update_LDAP_config_name'] = 'First Name';
 $lang_module['update_LDAP_config_lname'] = 'Last Name';
 $lang_module['default'] = 'Default';
-$lang_module['info'] = 'Updated data from LDAP to the website is optional. You can choose to pre-fill some NukeViet user information with information from the <b /> LDAP fields  is shown here. <p> <br  /> If you leave these fields blank, then no What have been converted from LDAP and the default value of NukeViet will be used to replace  <p> <br  /> In other cases, users will be able to prepare all This after school starts.  <p> <b /> Update site:  If enabled, the entry will be updated (from external authentication) each time the user logged in or have synced users. </p> <hr /> <p> <br  /> <b /> Note:  to update the data you require an external LDAP settings and bindpw binddn to bind a user has the right to edit all User log. Currently it does not preserve multi-valued attributes, and will remove the added value when updating. </p>';
-
-$lang_module['allowuserloginmulti']='Allow user login multi';
+$lang_module['info'] = 'Updated data from LDAP to the website is optional. You can choose to pre-fill some NukeViet user information with information from the <b /> LDAP fields  is shown here. <p> <br /> If you leave these fields blank, then no What have been converted from LDAP and the default value of NukeViet will be used to replace  <p> <br /> In other cases, users will be able to prepare all This after school starts.  <p> <b /> Update site:  If enabled, the entry will be updated (from external authentication) each time the user logged in or have synced users. </p> <hr /> <p> <br /> <b /> Note:  to update the data you require an external LDAP settings and bindpw binddn to bind a user has the right to edit all User log. Currently it does not preserve multi-valued attributes, and will remove the added value when updating. </p>';
+$lang_module['allowuserloginmulti'] = 'Allow user login multi';
 $lang_module['user_check_pass_time'] = 'Check pass time';
+$lang_module['safe_mode'] = 'Safe mode';
+$lang_module['safe_active_info'] = 'Your account is in safe mode,  all the features to edit your account information is protected.';
+$lang_module['safe_deactivate'] = 'Safe mode turn off';
+$lang_module['group_description'] = 'Description';
+$lang_module['group_description_empty'] = 'Take a brief description of the group.';

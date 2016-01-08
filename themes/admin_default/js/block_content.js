@@ -24,7 +24,7 @@ function checkallmodsecond() {
 
 function file_name_change() {
 	var file_name = $("select[name=file_name]").val();
-	var type = $("select[name=module]").val();
+	var module_type = $("select[name=module_type]").val();
 
 	var blok_file_name = "";
 	if (file_name != "") {
@@ -48,15 +48,18 @@ function file_name_change() {
 		$("tr.funclist").css({
 			"display" : "none"
 		});
-		if (type == "theme") {
-			var arr = arr_file[2].split(".");
-			for (var i = 0; i < arr.length; i++) {
-				$("#idmodule_" + arr[i]).css({
-					"display" : "block"
-				});
-			}
+		if (module_type == "theme") {
+			if("undefined" != typeof arr_file)
+            {
+                var arr = arr_file[2].split(".");
+    			for (var i = 0; i < arr.length; i++) {
+    				$("#idmodule_" + arr[i]).css({
+    					"display" : "block"
+    				});
+    			}
+            }
 		} else {
-			$("#idmodule_" + type).css({
+			$("#idmodule_" + module_type).css({
 				"display" : "block"
 			});
 		}
@@ -69,7 +72,7 @@ function file_name_change() {
 	if (blok_file_name != "") {
 		$("#block_config").show();
 		$("#block_config").html(htmlload);
-		$.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=block_config&bid=" + bid + "&module=" + type + "&selectthemes=" + selectthemes + "&file_name=" + blok_file_name + "&nocache=" + new Date().getTime(), function(theResponse) {
+		$.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=block_config&bid=" + bid + "&module=" + module_type + "&selectthemes=" + selectthemes + "&file_name=" + blok_file_name + "&nocache=" + new Date().getTime(), function(theResponse) {
 			if (theResponse.length > 10) {
 				theResponse = theResponse.replace("<head/><tr><td", "<tr><td");//fix for Centmin Mod 1.2.3-eva2000.07
 				$("#block_config").html(theResponse);
@@ -94,17 +97,17 @@ $(function() {
 		changeMonth : true,
 		changeYear : true,
 		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
+		buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 		buttonImageOnly : true
 	});
 
-	$("select[name=module]").change(function() {
-		var type = $("select[name=module]").val();
+	$("select[name=module_type]").change(function() {
+		var module_type = $("select[name=module_type]").val();
 		$("select[name=file_name]").html("");
-		if (type != "") {
+		if (module_type != "") {
 			$("#block_config").html("");
 			$("#block_config").hide();
-			$("select[name=file_name]").load(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=loadblocks&bid=" + bid + "&module=" + type + "&nocache=" + new Date().getTime());
+			$("select[name=file_name]").load(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=loadblocks&bid=" + bid + "&module=" + module_type + "&nocache=" + new Date().getTime());
 		}
 	});
 
@@ -113,16 +116,17 @@ $(function() {
 	});
 
 	$("input[name=all_func]").click(function() {
-		var module = $("select[name=module]").val();
+		var module_type = $("select[name=module_type]").val();
 		var af = $(this).val();
-		if (af == "0" && module != "global") {
+		if (af == "0" && module_type != "global") {
 			$("#shows_all_func").show();
-		} else if (module == "global" && af == 0) {
+		} else if (module_type == "global" && af == 0) {
 			$("#shows_all_func").show();
 		} else if (af == 1) {
 			$("#shows_all_func").hide();
 		}
 	});
+	
 	$("input[name=leavegroup]").click(function() {
 		var lv = $("input[name='leavegroup']:checked").val();
 		if (lv == "1") {

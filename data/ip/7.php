@@ -1,0 +1,3 @@
+<?php
+
+$ranges = array();

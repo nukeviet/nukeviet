@@ -6,7 +6,7 @@
 		<!-- BEGIN: image -->
 		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
 		<!-- END: image -->
-		<p class="text-justify">{CONTENT.description}</p>
+		<p>{CONTENT.description}</p>
 	</div>
 </div>
 <!-- END: viewdescription -->
@@ -30,12 +30,14 @@
 					<li>
 						<em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}
 					</li>
+					<!-- BEGIN: comment -->
 					<li>
 						<em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}
 					</li>
+					<!-- END: comment -->
 				</ul>
 			</div>
-			<p class="text-justify">
+			<p>
 				{CONTENT.hometext}
 			</p>
 			<!-- BEGIN: adminlink -->
@@ -62,10 +64,12 @@
 				<ul class="list-unstyled list-inline">
 					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
 					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}</li>
+					<!-- BEGIN: comment -->
 					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}</li>
+					<!-- END: comment -->
 				</ul>
 			</div>
-			<p class="text-justify">
+			<p>
 				{CONTENT.hometext}
 			</p>
 			<!-- BEGIN: adminlink -->

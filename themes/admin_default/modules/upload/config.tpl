@@ -33,6 +33,16 @@
 						<td>{LANG.imagewith} &gt; = 350px</td>
 						<td><span class="text-middle pull-left"> {LANG.logosize3} &nbsp;</span><input type="text" class="form-control pull-left w50" value="{AUTOLOGOSIZE.autologosize3}" maxlength="2" name="autologosize3"/>&nbsp;<span class="text-middle pull-left">&nbsp; % {LANG.fileimage} </span></td>
 					</tr>
+					<tr>
+						<td>{LANG.upload_logo_pos}</td>
+						<td>
+							<select class="form-control w250" name="upload_logo_pos">
+								<!-- BEGIN: upload_logo_pos -->
+								<option value="{UPLOAD_LOGO_POS.key}"{UPLOAD_LOGO_POS.selected}>{UPLOAD_LOGO_POS.title}</option>
+								<!-- END: upload_logo_pos -->
+							</select>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -41,16 +51,4 @@
 		<input name="submit" type="submit" value="{LANG.pubdate}" class="btn btn-primary" />
 	</div>
 </form>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("input[name=selectimg]").click(function() {
-			var area = "upload_logo";
-			var path = "";
-			var currentpath = "images";
-			var type = "image";
-			nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-			return false;
-		});
-	}); 
-</script>
 <!--  END: main  -->

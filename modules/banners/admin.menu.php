@@ -8,7 +8,9 @@
  * @Createdate 07/30/2013 10:27
  */
 
-if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN')) {
+    die('Stop!!!');
+}
 
 $submenu['client_list'] = $lang_module['client_list'];
 $submenu['add_client'] = $lang_module['add_client'];

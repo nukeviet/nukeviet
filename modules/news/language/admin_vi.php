@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -22,6 +24,7 @@ $lang_module['topics'] = 'Theo dòng sự kiện';
 $lang_module['topics_error_title'] = 'Lỗi: Bạn không nhập vào tiêu đề sự kiện';
 $lang_module['sources'] = 'Nguồn tin';
 $lang_module['save'] = 'Lưu thay đổi';
+$lang_module['send'] = 'Gửi';
 $lang_module['action'] = 'Thực hiện';
 $lang_module['move'] = 'Di chuyển bài viết';
 $lang_module['save_temp'] = 'Lưu tạm';
@@ -81,7 +84,8 @@ $lang_module['edit_block_cat'] = 'Sửa nhóm tin';
 $lang_module['link'] = 'Website nguồn tin';
 $lang_module['cat_sub'] = 'Thuộc chuyên mục';
 $lang_module['cat_sub_sl'] = 'Là chuyên mục chính';
-$lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
+$lang_module['note_cat_title'] = 'Chưa có chuyên mục';
+$lang_module['note_cat_content'] = 'Bạn cần chuyên mục trước khi thêm bài viết mới. Hệ thống sẽ chuyển bạn đến trang <strong>Quản lý chuyên mục</strong> trong giây lát!';
 $lang_module['topic_sl'] = 'Chọn nhóm tin liên quan hoặc tự điền';
 $lang_module['delcat_msg_cat'] = 'Chuyên mục này có %s Chuyên mục thành phần, bạn cần xóa hoặc di chuyển các Chuyên mục thành phần trước';
 $lang_module['delcat_msg_rows'] = 'Chuyên mục có %s bài viết, bạn có chắc chắn xóa hoặc di chuyển sang Chuyên mục khác';
@@ -194,7 +198,7 @@ $lang_module['show_no_image'] = 'Hiển thị ảnh No-Image nếu không bài v
 $lang_module['imgposition'] = 'Trình bày hình trong bài viết';
 $lang_module['imgpositiondefault'] = 'Cấu hình mặc định, Trình bày hình trong bài viết khi đăng bài';
 $lang_module['imgposition_0'] = 'Không hiển thị';
-$lang_module['imgposition_1'] = 'Hiển thị theo cấu hình module';
+$lang_module['imgposition_1'] = 'Hiển thị bên trái phần mở đầu';
 $lang_module['imgposition_2'] = 'Hiển thị dưới phần mở đầu';
 $lang_module['addtoblock'] = 'Thêm bài viết vào nhóm tin';
 $lang_module['delete_from_block'] = 'Xóa bài viết khỏi nhóm tin';
@@ -240,7 +244,8 @@ $lang_module['admin_module'] = 'Quản lý module';
 $lang_module['admin_module_for_user'] = 'Bạn có tất cả các quyền hạn của module, trừ chức năng phân quyền quản lý';
 $lang_module['admin_cat'] = 'Quản lý Chuyên mục';
 $lang_module['admin_cat_for_user'] = 'Quyền hạn của bạn tại các chuyên mục';
-$lang_module['admin_no_user'] = 'Chức năng phân quyền cho module này chỉ áp dụng cho người điều hành module, bạn cần thêm người điều hành module trước khi tiến hành phân quyền.';
+$lang_module['admin_no_user_title'] = 'Chưa có người quản lý module';
+$lang_module['admin_no_user_content'] = 'Chức năng phân quyền cho module này chỉ áp dụng cho người điều hành module, bạn cần thêm người điều hành module trước khi tiến hành phân quyền.';
 $lang_module['admin_userid'] = 'userid';
 $lang_module['admin_username'] = 'Tài khoản';
 $lang_module['admin_full_name'] = 'Họ tên';
@@ -283,9 +288,10 @@ $lang_module['input_title_blocks'] = 'Nhập tiêu đề nhóm tin...';
 $lang_module['input_keyword_tags'] = 'Nhập từ khóa...';
 
 $lang_module['alias_empty_notice'] = 'Liên kết tĩnh còn trống, hệ thống sẽ tự động tạo liên kết tĩnh phù hợp';
-
 $lang_module['functional'] = 'Chức năng';
 $lang_module['featured'] = 'Tin nổi bật';
 $lang_module['addtocat'] = 'Thêm bài viết nổi bật vào chuyên mục';
 $lang_module['delete_from_cat'] = 'Xóa bài viết khỏi chuyên mục';
 $lang_module['not_featured'] = 'Không có bài viết nào';
+
+$lang_module['notification_post_queue'] = 'Kiểm duyệt bài viết <strong>%s</strong> gửi bởi <strong>%s</strong><br /><em>%s</em>';

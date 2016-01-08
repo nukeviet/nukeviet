@@ -13,10 +13,8 @@ NukeViet includes works under other copyright notices and distributed according 
 	XTemplate: http://www.phpxtemplate.org
 	jQuery: http://jquery.com/
 	Ckeditor: http://ckeditor.com/
-	LightOpenID: https://code.google.com/p/lightopenid/
 	phpCAS: https://github.com/Jasig/phpCAS
 	PHPoAuthLib: https://github.com/Lusitanian/PHPoAuthLib
 	PHPMailer: https://github.com/PHPMailer/PHPMailer
-	MUDIM: http://mudim.googlecode.com
-	Mobile-Detect: https://github.com/serbanghita/Mobile-Detect
+	Browser-Detect: https://github.com/cbschuld/Browser.php
 	... see copyright information at the header of source code file.

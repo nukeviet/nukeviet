@@ -9,7 +9,9 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -29,7 +31,6 @@ $lang_module['statbybrowser'] = 'Statistics by browser';
 $lang_module['statbyos'] = 'Statistics by Operating System';
 $lang_module['statbybot'] = 'By Search Engine';
 $lang_module['statbyreferer'] = 'Statistics by site path';
-$lang_module['unknown'] = 'unknown';
 $lang_module['others'] = 'other';
 $lang_module['viewall'] = 'View all';
 $lang_module['country'] = 'Country';

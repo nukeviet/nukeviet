@@ -1,97 +1,126 @@
-.arrow {
-	float: right;
-	margin: -32px 12px 0;
-	padding: 4px 8px 4px 8px;
-	color: #fff;
-	cursor: pointer;
+.metismenu a{
+    color:#fff !important;
+    text-decoration: none !important;
 }
 
-.fa.arrow:before {
-	content: "\f104";
+.metismenu .arrow {
+    float:right;
+    margin-top:-33px;
+    margin-right:6px;
+    color:#fff;
+    cursor:pointer;
+    text-align:center;
+    width:28px;
+    line-height:28px;
+    text-align:center;
+    background:rgba(0,0,0,0);
+    border-radius:14px;
+    -webkit-border-radius:14px;
+    font-size:15px;
 }
 
-.active > a > .fa.arrow:before {
-	content: "\f107";
+.metismenu .arrow:hover {
+    background:rgba(0,0,0,.15);
 }
 
-.plus-times {
-	float: right;
+.metismenu .fa.arrow:before {
+    content:" \f107 ";
 }
 
-.fa.plus-times:before {
-	content: "\f067";
+.metismenu .active > .fa.arrow:before {
+    content:" \f106 ";
 }
 
-.active > a > .fa.plus-times {
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
-	transform: rotate(45deg);
+.metismenu .plus-times {
+    float:right;
 }
 
-.plus-minus {
-	float: right;
+.metismenu .fa.plus-times:before {
+    content:"\f067";
 }
 
-.fa.plus-minus:before {
-	content: "\f067";
+.metismenu .active > a > .fa.plus-times {
+    -webkit-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    -ms-transform:rotate(45deg);
+    -o-transform:rotate(45deg);
+    transform:rotate(45deg);
 }
 
-.active > a > .fa.plus-minus:before {
-	content: "\f068";
+.metismenu .plus-minus {
+    float:right;
 }
 
-.sidebar {
-	display: block;
-	float: left;
-	width: 100%;
-	background: #333;
-}
-.content {
-	display: block;
-	overflow: hidden;
-	width: auto;
+.metismenu .fa.plus-minus:before {
+    content:"\f067";
 }
 
-.sidebar-nav {
-	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-	background-image: -webkit-linear-gradient(left, color-stop(#333333 10px), color-stop(#222222 10px));
-	background-image: linear-gradient(to right, #0855A1 10px, #043C72 10px);
-	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333333', endColorstr='#ff222222', GradientType=1);
-	margin: 0px;
+.metismenu .metismenu .active > a > .fa.plus-minus:before {
+    content:"\f068";
 }
-.sidebar-nav ul {
-	padding: 0;
-	margin: 0;
-	list-style: none;
+
+.metismenu .sidebar {
+    display:block;
+    float:left;
+    width:100%;
+    background:#333;
 }
-.sidebar-nav ul li, .sidebar-nav ul a{
-	display: block;
+
+.metismenu .content {
+    display:block;
+    overflow:hidden;
+    width:auto;
 }
+
+.metismenu .sidebar-nav {
+    border-bottom:1px solid rgba(0,0,0,0.2);
+    background:#205FA0;
+    background-image:linear-gradient(to right,#2671B5 4px,#205FA0 4px);
+    background-repeat:repeat-x;
+    margin:0;
+}
+
+.metismenu .sidebar-nav ul {
+    padding:0;
+    margin:0;
+    list-style:none;
+}
+
+.metismenu .sidebar-nav ul li,
 .sidebar-nav ul a {
-	padding: 10px 20px;
-	color: #e2e2e2;
-	border-top: 1px solid rgba(0, 0, 0, 0.3);
-	box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.05) inset;
-	text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.5);
+    display:block;
 }
-.sidebar-nav ul a:hover, .sidebar-nav ul a:focus, .sidebar-nav ul a:active {
-	color: #fff;
-	text-decoration: none;
+
+.metismenu .sidebar-nav ul a {
+    padding:10px 20px;
+    color:#fff;
+    border-top:1px solid rgba(0,0,0,0.2);
+    box-shadow:0 1px 0 rgba(255,255,255,0.05) inset;
 }
-.sidebar-nav ul ul a {
-	padding: 10px 30px;
-	background-color: rgba(255, 255, 255, 0.1);
+
+.metismenu .sidebar-nav ul a:hover,
+.metismenu .sidebar-nav ul a:focus,
+.metismenu .sidebar-nav ul a:active {
+    color:#fff;
+    text-decoration:none;
+    background-image:linear-gradient(to right,#FF6600 4px,rgba(0,0,0,0) 4px);
 }
-.sidebar-nav ul ul a:hover, .sidebar-nav ul ul a:focus, .sidebar-nav ul ul a:active {
-	background-color: rgba(255, 255, 255, 0.2);
+
+.metismenu .sidebar-nav ul ul a {
+    padding:10px 30px;
+    background-color:#4189C7;
 }
-.sidebar-nav-item {
-	padding-left: 5px;
+
+.metismenu .sidebar-nav ul ul a:hover,
+.metismenu .sidebar-nav ul ul a:focus,
+.metismenu .sidebar-nav ul ul a:active {
+    background-color:#367CB8;
 }
-.sidebar-nav-item-icon {
-	padding-right: 5px;
+
+.metismenu .sidebar-nav-item {
+    padding-left:5px;
+}
+
+.metismenu .sidebar-nav-item-icon {
+    padding-right:5px;
 }

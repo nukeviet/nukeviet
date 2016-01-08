@@ -8,15 +8,13 @@
  * @Createdate 07/30/2013 10:27
  */
 
-if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN')) {
+    die('Stop!!!');
+}
 
-if( empty( $global_config['idsite'] ) )
-{
-    $submenu['clearsystem'] = $lang_module['clearsystem'];
-	$submenu['checkupdate'] = $lang_module['checkupdate'];
-	$submenu['config'] = $lang_module['config'];
-	if( NV_LANG_INTERFACE == 'vi' )
-	{
-		$submenu['mudim'] = $lang_module['mudim'];
-	}
+$submenu['statistics'] = $lang_module['global_statistics'];
+$submenu['clearsystem'] = $lang_module['clearsystem'];
+if (empty($global_config['idsite'])) {
+    $submenu['checkupdate'] = $lang_module['checkupdate'];
+    $submenu['config'] = $lang_module['config'];
 }

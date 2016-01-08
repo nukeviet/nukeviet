@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -53,11 +55,11 @@ $lang_module['rating_average'] = 'Xếp hạng';
 $lang_module['rating_count'] = 'phiếu bầu';
 $lang_module['stringrating'] = 'Tổng số điểm của bài viết là: %1$s trong %2$s đánh giá';
 $lang_module['star_note'] = 'Click để đánh giá bài viết';
-$lang_module['star_verypoor'] = 'bài viết rất kém';
-$lang_module['star_poor'] = 'bài viết kém';
-$lang_module['star_ok'] = 'bài viết đạt';
-$lang_module['star_good}'] = 'bài viết tốt';
-$lang_module['star_verygood'] = 'bài viết rất tốt';
+$lang_module['star_verypoor'] = 'Bài viết rất kém';
+$lang_module['star_poor'] = 'Bài viết kém';
+$lang_module['star_ok'] = 'Bài viết đạt';
+$lang_module['star_good}'] = 'Bài viết tốt';
+$lang_module['star_verygood'] = 'Bài viết rất tốt';
 $lang_module['main_title'] = 'Tìm kiếm thông tin';
 $lang_module['info_title'] = 'Tìm kiếm nâng cao mục Tin tức';
 $lang_module['key_title'] = 'Từ tìm kiếm';
@@ -104,7 +106,7 @@ $lang_module['search_all'] = ' Tất cả các chủ đề';
 $lang_module['search_date_rule'] = 'dd.mm.yyyy';
 $lang_module['content'] = 'Quản lý bài viết';
 $lang_module['add_content'] = 'Đăng bài viết';
-$lang_module['topic_sl'] = 'Chọn nhóm tin liên quan';
+$lang_module['topic_sl'] = 'Chọn dòng sự kiện';
 $lang_module['imgposition'] = 'Hình ảnh tại bài viết';
 $lang_module['imgposition_0'] = 'Không hiển thị';
 $lang_module['imgposition_1'] = 'Hiển thị theo cấu hình module';
@@ -112,7 +114,7 @@ $lang_module['imgposition_2'] = 'Hiển thị dưới phần mở đầu';
 $lang_module['name'] = 'Tiêu đề';
 $lang_module['alias'] = 'Liên kết tĩnh';
 $lang_module['content_cat'] = 'Chủ đề của bài viết';
-$lang_module['content_topic'] = 'Nhóm tin liên quan';
+$lang_module['content_topic'] = 'Thuộc dòng sự kiện';
 $lang_module['content_homeimg'] = 'Hình Minh họa';
 $lang_module['content_homeimgalt'] = 'Chú thích cho hình minh họa';
 $lang_module['content_hometext'] = 'Giới thiệu ngắn gọn';
@@ -122,11 +124,11 @@ $lang_module['content_keywords'] = 'Từ khóa dành cho máy chủ tìm kiếm'
 $lang_module['save_temp'] = 'Gửi bài viết đến quản trị site';
 $lang_module['save_draft'] = 'Lưu nháp';
 $lang_module['save_content'] = 'Đăng bài viết';
-$lang_module['captcha'] = 'Mã chống spam';
+$lang_module['captcha'] = 'Mã bảo mật';
 $lang_module['error_cat'] = 'Lỗi: Bài viết chưa có chủ đề';
 $lang_module['error_title'] = 'Lỗi: Bài viết chưa có tiêu đề';
 $lang_module['error_bodytext'] = 'Lỗi: Bài viết chưa có nội dung';
-$lang_module['error_captcha'] = 'Lỗi: Mã chống spam chưa đúng';
+$lang_module['error_captcha'] = 'Lỗi: Mã bảo mật chưa đúng';
 $lang_module['save_content_ok'] = 'Đăng bài viết thành công. <br />Trình duyệt sẽ tự động chuyển về trang quản lý bài viết.';
 $lang_module['save_content_view_page'] = 'Đăng bài viết thành công. <br />Trình duyệt sẽ tự động chuyển về bài viết bạn vừa đăng.';
 $lang_module['save_content_waite'] = 'Bài viết bạn gửi đã được hệ thống ghi nhận, <br />ban quản trị site sẽ kiểm tra bài viết và đăng bài viết trong thời gian sớm nhất, <br />trình duyệt sẽ tự động chuyển về trang quản lý bài viết.';

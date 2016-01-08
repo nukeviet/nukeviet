@@ -14,12 +14,12 @@
 					</colgroup>
 					<tbody>
 						<tr>
-							<td class="text-right"> {LANG.title}</td>
-							<td><input class="w300 form-control pull-left" type="text" value="{DATA.title}" name="title" id="idtitle" maxlength="255" />&nbsp;<span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+							<td class="text-right"> {LANG.title} <sup class="required">(*)</sup></td>
+							<td><input class="w300 form-control pull-left" type="text" value="{DATA.title}" name="title" id="idtitle" maxlength="250" />&nbsp;<span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 						</tr>
 						<tr>
 							<td class="text-right">{LANG.alias}</td>
-							<td><input class="w300 form-control pull-left" type="text" value="{DATA.alias}" name="alias" id="idalias" maxlength="255" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('{ID}');">&nbsp;</em></td>
+							<td><input class="w300 form-control pull-left" type="text" value="{DATA.alias}" name="alias" id="idalias" maxlength="250" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('{ID}');">&nbsp;</em></td>
 						</tr>
 						<tr>
 							<td class="text-right">{LANG.image}</td>
@@ -34,7 +34,7 @@
 							<td ><textarea class="form-control" id="description" name="description" cols="100" rows="5">{DATA.description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 						</tr>
 						<tr>
-							<td colspan="2" class="strong"> {LANG.bodytext}
+							<td colspan="2" class="strong" > {LANG.bodytext} <sup class="required">(*)</sup>
 								<div>
 									{BODYTEXT}
 								</div>
@@ -103,24 +103,16 @@
 	<div class="row text-center"><input type="submit" value="{LANG.save}" class="btn btn-primary"/></div>
 </form>
 <script type="text/javascript">
-	$("#titlelength").html($("#idtitle").val().length);
-	$("#idtitle").bind('keyup paste', function() {
-		$("#titlelength").html($(this).val().length);
-	});
+var uploads_dir_user = '{UPLOADS_DIR_USER}';
+$("#titlelength").html($("#idtitle").val().length);
+$("#idtitle").bind('keyup paste', function() {
+	$("#titlelength").html($(this).val().length);
+});
 
-	$("#descriptionlength").html($("#description").val().length);
-	$("#description").bind('keyup paste', function() {
-		$("#descriptionlength").html($(this).val().length);
-	});
-
-	$("input[name=selectimg]").click(function() {
-		var area = "image";
-		var alt = "imagealt";
-		var path = "{UPLOADS_DIR_USER}";
-		var type = "image";
-		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-		return false;
-	});
+$("#descriptionlength").html($("#description").val().length);
+$("#description").bind('keyup paste', function() {
+	$("#descriptionlength").html($(this).val().length);
+});
 </script>
 <!-- BEGIN: get_alias -->
 <script type="text/javascript">

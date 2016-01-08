@@ -4,11 +4,12 @@
 	<div id="extUpd" class="hide"></div>
 </div>
 <script type="text/javascript">
-var nv_loading = '<div class="text-center"><em class="fa fa-spin fa-spinner fa-2x m-bottom wt-icon-loading"></em></div>';
 //<![CDATA[
 $(document).ready(function(){
 	$('#sysUpd').html(nv_loading).removeClass('hide').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=checkupdate&i=sysUpd&num=" + nv_randomPassword(10), function(){
-		$("#extUpd").html(nv_loading).removeClass('hide').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=checkupdate&i=extUpd&num=" + nv_randomPassword(10))
+		$("#extUpd").html(nv_loading).removeClass('hide').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=checkupdate&i=extUpd&num=" + nv_randomPassword(10), function(){
+			start_tooltip();
+		});
 	});
 });
 //]]>
@@ -49,16 +50,6 @@ $(document).ready(function(){
 <div class="text-right">
 	{LANG.checkDate}: {SYSUPDDATE} (<a id="sysUpdRefresh" href="#">{LANG.reCheck}</a>)
 </div>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-	$("#sysUpdRefresh").click(function() {
-		$("#sysUpd").html(nv_loading).load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=checkupdate&i=sysUpdRef&num=" + nv_randomPassword(10));
-		return false
-	})
-});
-//]]>
-</script>
 <!-- END: sysUpd -->
 <!-- BEGIN: extUpd -->
 <div class="table-responsive">
@@ -134,30 +125,6 @@ $(document).ready(function() {
 <div class="text-right">
 	{LANG.checkDate}: {EXTUPDDATE} (<a id="extUpdRefresh" href="#">{LANG.reCheck}</a>)
 </div>
-<script type="text/javascript">
-	//<![CDATA[
-	$(document).ready(function() {
-		$("#extUpdRefresh").click(function() {
-			$("#extUpd").html(nv_loading).load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=checkupdate&i=extUpdRef&num=" + nv_randomPassword(10));
-			return false
-		});
-		$(".ninfo").click(function() {
-			$(".ninfo").each(function() {
-				$(this).show()
-			});
-			$(".wttooltip").each(function() {
-				$(this).hide()
-			});
-			$(this).hide().next(".wttooltip").show();
-			return false
-		});
-		$(".wttooltip").click(function() {
-			$(this).hide().prev(".ninfo").show()
-		});
-		$('[data-toggle="tooltip"]').tooltip();
-	});
-	//]]>
-</script>
 <div>
 	<a class="btn btn-primary" href="{LINKNEWEXT}">{LANG.extNew}</a>
 </div>

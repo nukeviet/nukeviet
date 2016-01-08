@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -21,14 +23,14 @@ $lang_module['edit_title'] = 'Xem nội dung gửi';
 $lang_module['add_row_title'] = 'Thêm bộ phận';
 $lang_module['department_title'] = 'Các bộ phận';
 $lang_module['alias'] = 'Liên kết tĩnh';
+$lang_module['image'] = 'Hình ảnh';
 $lang_module['error_alias'] = 'Lỗi: chưa có liên kết tĩnh';
 $lang_module['duplicate_alias'] = 'Lỗi: Tiêu đề hoặc liên kết tính đã tồn tại';
 $lang_module['number'] = 'Thứ tự';
 $lang_module['err_row_title'] = 'Không có';
 $lang_module['part_row_title'] = 'Tên bộ phận';
 $lang_module['email_row_title'] = 'Email';
-$lang_module['yahoo_row_title'] = 'Yahoo';
-$lang_module['skype_row_title'] = 'Skype';
+$lang_module['address'] = 'Địa chỉ';
 $lang_module['note_row_title'] = 'Ghi chú';
 $lang_module['bt_save_row_title'] = 'Ghi lại';
 $lang_module['bt_reset_row_title'] = 'Làm trắng';
@@ -50,6 +52,7 @@ $lang_module['reply_user_send_title'] = 'Phản hồi tới';
 $lang_module['reply_user_title'] = 'Tiêu đề gửi';
 $lang_module['name_user_send_title'] = 'Tên người gửi';
 $lang_module['title_send_title'] = 'Tiêu đề gửi';
+$lang_module['send_time'] = 'Thời gian gửi';
 $lang_module['status_send_title'] = 'Trạng thái';
 $lang_module['content'] = 'Nội dung thông báo';
 $lang_module['content_title'] = 'Tên bài viết';
@@ -72,3 +75,13 @@ $lang_module['no_row_contact'] = 'Không có liên hệ nào gửi đến bạn'
 $lang_module['url_for_iframe'] = 'Liên kết dùng chèn cho iframe';
 
 $lang_module['notification_contact_new'] = '<strong>%s</strong> gửi thư liên hệ với tiêu đề <strong>%s</strong>';
+$lang_module['is_default'] = 'Mặc định';
+$lang_module['otherContacts'] = 'Liên hệ khác';
+$lang_module['otherVar'] = 'Tên gọi';
+$lang_module['otherVal'] = 'Giá trị';
+$lang_module['addNew'] = 'Thêm mới';
+$lang_module['cats'] = 'Các chủ đề liên quan';
+$lang_module['cat'] = 'Chủ đề';
+$lang_module['mark_as_unread'] = 'Đánh dấu là chưa đọc';
+$lang_module['mark_as_read'] = 'Đánh dấu là đã đọc';
+$lang_module['please_choose'] = 'Hãy chọn ít nhất một thư trong danh sách trên.';

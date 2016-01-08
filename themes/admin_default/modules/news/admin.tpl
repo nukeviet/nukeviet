@@ -96,66 +96,13 @@
     </table>
 </form>
 <script type="text/javascript">
-	function check_add_first() {
-		$(this).one("dblclick", check_add_second);
-		$("input[name='add_content[]']:checkbox").prop("checked", true);
-	}
-	function check_add_second() {
-		$(this).one("dblclick", check_add_first);
-		$("input[name='add_content[]']:checkbox").prop("checked", false);
-	}
+$(document).ready(function(){
 	$("#check_add_content").one("dblclick", check_add_first);
-
-	function check_app_first() {
-		$(this).one("dblclick", check_app_second);
-		$("input[name='app_content[]']:checkbox").prop("checked", true);
-	}
-	function check_app_second() {
-		$(this).one("dblclick", check_app_first);
-		$("input[name='app_content[]']:checkbox").prop("checked", false);
-	}
 	$("#check_app_content").one("dblclick", check_app_first);
-
-	function check_pub_first() {
-		$(this).one("dblclick", check_pub_second);
-		$("input[name='pub_content[]']:checkbox").prop("checked", true);
-	}
-	function check_pub_second() {
-		$(this).one("dblclick", check_pub_first);
-		$("input[name='pub_content[]']:checkbox").prop("checked", false);
-	}
 	$("#check_pub_content").one("dblclick", check_pub_first);
-
-	function check_edit_first() {
-		$(this).one("dblclick", check_edit_second);
-		$("input[name='edit_content[]']:checkbox").prop("checked", true);
-	}
-	function check_edit_second() {
-		$(this).one("dblclick", check_edit_first);
-		$("input[name='edit_content[]']:checkbox").prop("checked", false);
-	}
 	$("#check_edit_content").one("dblclick", check_edit_first);
-
-	function check_del_first() {
-		$(this).one("dblclick", check_del_second);
-		$("input[name='del_content[]']:checkbox").prop("checked", true);
-	}
-	function check_del_second() {
-		$(this).one("dblclick", check_del_first);
-		$("input[name='del_content[]']:checkbox").prop("checked", false);
-	}
 	$("#check_del_content").one("dblclick", check_del_first);
-
-	function check_admin_first() {
-		$(this).one("dblclick", check_admin_second);
-		$("input[name='admin_content[]']:checkbox").prop("checked", true);
-	}
-	function check_admin_second() {
-		$(this).one("dblclick", check_admin_first);
-		$("input[name='admin_content[]']:checkbox").prop("checked", false);
-	}
 	$("#check_admin_content").one("dblclick", check_admin_first);
-
     $("input[name=admin_module]").click(function(){
         var type = $(this).val();
         if (type == 0) {
@@ -165,6 +112,7 @@
             $("#id_admin_module").hide();
         }
     });
+});
 </script>
 <!-- END: edit -->
 <!-- END: main -->

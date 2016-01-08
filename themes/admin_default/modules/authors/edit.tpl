@@ -3,89 +3,92 @@
 <form method="post" action="{ACTION}">
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col class="w250">
+		</colgroup>	
 		<tfoot>
 			<tr>
-				<td colspan="4" class="text-center"><input name="save" id="save" type="hidden" value="1" /><input name="go_edit" type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
+				<td colspan="2" class="text-center"><input name="save" id="save" type="hidden" value="1" /><input name="go_edit" type="submit" value="{LANG.save}" class="btn btn-primary" /></td>
 			</tr>
 		</tfoot>
 		<tbody>
 			<!-- BEGIN: position -->
 			<tr>
-				<td> {POSITION0}: </td>
-				<td><sup class="required"> &lowast; </sup></td>
-				<td><input class="form-control" name="position" id="position" type="text" value="{POSITION1}" maxlength="250" /></td>
-				<td><span>&lArr;</span> {POSITION2} </td>
+				<td> {POSITION0}: <sup class="required">(*)</sup></td>
+				<td>
+					<div class="row">
+						<div class="col-sm-8 col-md-6">
+							<input class="form-control" name="position" id="position" type="text" value="{POSITION1}" maxlength="250" />
+						</div>
+						<div class="col-sm-16 col-md-18">
+							<span>&lArr;</span> {POSITION2}
+						</div>
+					</div>
+				</td>
 			</tr>
 			<!-- END: position -->
 			<!-- BEGIN: editor -->
 			<tr>
 				<td> {EDITOR0}: </td>
-				<td>&nbsp;</td>
 				<td>
-				<select name="editor" id="editor" class="form-control">
+				<select name="editor" id="editor" class="form-control w200">
 					<option value="">{EDITOR3}</option>
 					<!-- BEGIN: loop -->
 					<option value="{VALUE}" {SELECTED}>{VALUE} </option>
 					<!-- END: loop -->
 				</select></td>
-				<td>&nbsp;</td>
 			</tr>
 			<!-- END: editor -->
 			<!-- BEGIN: allow_files_type -->
 			<tr>
 				<td> {ALLOW_FILES_TYPE}: </td>
-				<td>&nbsp;</td>
 				<td>
-				<!-- BEGIN: loop -->
-				<input name="allow_files_type[]" type="checkbox" value="{VALUE}" {CHECKED} /> {VALUE}
-				<br/>
-				<!-- END: loop -->
-				</td>
-				<td>&nbsp;</td>
+					<div class="row">
+						<!-- BEGIN: loop --> 
+						<div class="col-sm-8 col-md-6">
+							<input name="allow_files_type[]" type="checkbox" value="{VALUE}" {CHECKED} /> {VALUE}
+						</div>
+						 <!-- END: loop -->
+					</div>
+				</td>				
 			</tr>
 			<!-- END: allow_files_type -->
 			<!-- BEGIN: allow_modify_files -->
 			<tr>
 				<td> {ALLOW_MODIFY_FILES}: </td>
-				<td>&nbsp;</td>
 				<td><input name="allow_modify_files" type="checkbox" value="1"{CHECKED} /></td>
-				<td>&nbsp;</td>
 			</tr>
 			<!-- END: allow_modify_files -->
 			<!-- BEGIN: allow_create_subdirectories -->
 			<tr>
 				<td> {ALLOW_CREATE_SUBDIRECTORIES}: </td>
-				<td>&nbsp;</td>
 				<td><input name="allow_create_subdirectories" type="checkbox" value="1"{CHECKED} /></td>
-				<td>&nbsp;</td>
 			</tr>
 			<!-- END: allow_create_subdirectories -->
 			<!-- BEGIN: allow_modify_subdirectories -->
 			<tr>
 				<td> {ALLOW_MODIFY_SUBDIRECTORIES}: </td>
-				<td>&nbsp;</td>
 				<td><input name="allow_modify_subdirectories" type="checkbox" value="1"{CHECKED} /></td>
-				<td>&nbsp;</td>
 			</tr>
 			<!-- END: allow_modify_subdirectories -->
 			<!-- BEGIN: lev -->
 			<tr>
 				<td> {LEV0}: </td>
-				<td>&nbsp;</td>
-				<td colspan="2">
+				<td>
 				<!-- BEGIN: if -->
 				<label> <input name="lev" type="radio" value="2" onclick="nv_show_hidden('modslist',0);"{CHECKED2} /> &nbsp;{LEV4} </label> &nbsp;&nbsp;&nbsp; <label> <input name="lev" type="radio" value="3" onclick="nv_show_hidden('modslist',1);"{CHECKED3} /> &nbsp; {LEV5} </label>
 				<br/>
 				<!-- END: if -->
 				<div id="modslist" style="margin-top:10px; {STYLE}">
-					{LEV1}:
-					<br/>
-					<div>
-						<!-- BEGIN: loop -->
-						<p>
-							<input name="modules[]" type="checkbox" value="{VALUE}" {CHECKED} />&nbsp; {CUSTOM_TITLE}
-						</p>
-						<!-- END: loop -->
+					{LEV1}: <em class="fa fa-check-square-o fa-lg">&nbsp;</em><a id="checkall" href="javascript:void(0);">{LANG.checkall}</a> &nbsp;&nbsp; <em class="fa fa-circle-o fa-lg">&nbsp;</em><a id="uncheckall" href="javascript:void(0);">{LANG.uncheckall}</a>
+						<div class="clear"><br /></div>
+						<div class="row">
+							<!-- BEGIN: loop -->
+							<div class="col-sm-8 col-md-6">
+								<input name="modules[]" type="checkbox" value="{VALUE}" {CHECKED} />&nbsp; {CUSTOM_TITLE}
+							</div>
+							<!-- END: loop -->
+						</div>
 					</div>
 				</div></td>
 			</tr>

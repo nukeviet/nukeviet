@@ -1,7 +1,97 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.0.19 (Release Candidate 1)
+NUKEVIET 4.0.24
+- Module users: update login email, search users, update generate password, fix rules register, get profile picture automatic, auto login after register
+- Module contact: support virtual module, update list admin
+- Module news: fix content no public, fix print post
+- Module menu: add reload menu function, fix error add menu, fix check link in module.
+- Module contact: add address field department, update block global department
+- Module upload: fix language upload, save thumb image quality follow, add viewmode, config upload logo position
+- Module comment: add note for config admin module
+- Fix change suspend admin
+- Check rule pass when install
+- Update lang
+- Add plugin cdn for js, css, image
+- Theme default: Fix breadcrumbs
+- Theme mobile: Fix user login, user register, breadcrumbs
+- Improving system security
+- Up to CKEditor 4.5.4
+- Fix some sys function
+- Update rule in file constants
+- Update statistics
+- Add notification for modules: news, comment
+- Support full Unicode in MySQL databases
+
+NUKEVIET 4.0.23 (Open beta 9)
+- Update module Contact
+- Update module Users.
+- Change Admin-toolbar
+- Update variables for javascript: 
+	 nv_siteroot -> nv_base_siteurl
+	 nv_sitelang -> nv_lang_data
+- Update Language Français, thank Nguyễn Phú Thành.
+- Update CKEditor 4.5.3
+- Class resquest: Fix block tag
+- Update notification	
+- Class image:  support image bmp 
+- Module siteinfo: fix check chmod dir
+- Seotools: Sorts siteDiagnostic
+- Fix error "ASSETS_DIR"
+- Fix sample data English
+- Add variable $blockID
+- Theme mobile: fix comment
+- Theme admin: update font size
+- Module news: Fix news detail, Fix rpc ping
+- Add function nv_redirect_encrypt, nv_redirect_decrypt
+- Update config CDN: support js, css, jpg, png, gif
+- Remove font Roboto
+- Fix and update something...
+
+NUKEVIET 4.0.22 (Open beta 8)
+- Restructuring of NukeViet directory
+- Add Language Français, thank Nguyễn Phú Thành.
+- Add module free_content
+- Update theme default, mobile_default
+- Change the sample data into the module
+- Add a management area for google fonts
+- Update SSL setting
+- Optimize in-line javascript in tpl
+- Optime social sharing
+- Move config statistics to module webtools
+- Move javascript from module to theme
+- Remove code zip file css, javascript.
+- config: Recorded of system error
+- Install: check collation database
+- fix rewrite for XAMPP 5.6.8 (PHP 5.6.8)
+- Add QR-code block
+- Remove shadowbox library
+- Update CKEditor 4.5.2
+- Update oAuthLib
+- Update FontAwesome 4.4.0
+
+NUKEVIET 4.0.21 (Open beta 7)
+- Add data-show for javascript
+- Fix module comment
+- Update block global.slimmenu for default menu
+- Update getbootstrap v3.3.5
+- Remove module Download
+- fix Redirect link
+- theme default: resize the left column
+- module users: Rewrite for function changequestion
+- Fix and update something...
+
+NUKEVIET 4.0.20 (No release)
+- Add class Browser-Detect
+- remove function: nv_check_bot, nv_getBrowser, nv_getOs
+- Add Autoload Class
+- Update PHPMailer 5.2.10
+- update class optimezer.class
+- Remove do not use file
+- Add data-show="after" for <script type="text/javascript"  ...
+- Fix and update something...
+
+NUKEVIET 4.0.19 (No release)
 - Add class Mobile-Detect
 - Add instruction url function
 - ckeditor: change plugins googledocs, remove addon magicline

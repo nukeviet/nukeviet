@@ -8,26 +8,25 @@
  * @Createdate 12/31/2009 2:29
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) or ! defined( 'NV_IS_MODADMIN' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+    die('Stop!!!');
+}
 
-$allow_func = array( 'main', 'clearsystem' );
-if( empty( $global_config['idsite'] ) )
-{
-	$allow_func[] = 'checkupdate';
-	$allow_func[] = 'config';
-	$allow_func[] = 'mudim';
+$allow_func = array( 'main', 'statistics', 'clearsystem' );
+if (empty($global_config['idsite'])) {
+    $allow_func[] = 'checkupdate';
+    $allow_func[] = 'config';
 }
 
 $menu_top = array(
-	'title' => $module_name,
-	'module_file' => '',
-	'custom_title' => $lang_global['mod_webtools']
+    'title' => $module_name,
+    'module_file' => '',
+    'custom_title' => $lang_global['mod_webtools']
 );
 
-if( defined( 'NV_IS_GODADMIN' ) )
-{
-	$allow_func[] = 'deleteupdate';
-	$allow_func[] = 'getupdate';
+if (defined('NV_IS_GODADMIN')) {
+    $allow_func[] = 'deleteupdate';
+    $allow_func[] = 'getupdate';
 }
 
-define( 'NV_IS_FILE_WEBTOOLS', true );
+define('NV_IS_FILE_WEBTOOLS', true);
