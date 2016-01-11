@@ -38,7 +38,7 @@ $db_config_slave['collation'] = $db_config['collation'];
 $db_config_slave['charset'] = $db_config['charset'];
 $db_config_slave['persistent'] = $db_config['persistent'];
 
-$db_slave = new sql_db($db_config_slave);
+$db_slave = new NukeViet\Core\Database($db_config_slave);
 if (empty($db_slave->connect)) {
     trigger_error('Sorry! Could not connect to data server slave ' . $db_config_slave['dbhost']);
     $db_slave = $db;
