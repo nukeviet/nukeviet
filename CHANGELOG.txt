@@ -1,7 +1,17 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.0.24
+NUKEVIET 4.0.25
+- Update jQuery v2.2.0 
+- Update jQuery Validation Plugin - v1.14.0
+- Optimizer class XTemplate for NukeViet
+- Update utf8 lookup: fix check email 
+
+NUKEVIET 4.0.24 (Open beta 10)
+- Add Composer, Move class to vendor dir
+- http://www.php-fig.org/psr/ standard code formats
+- Support Memcached, mysql master slave
+- Update Data demo
 - Module users: update login email, search users, update generate password, fix rules register, get profile picture automatic, auto login after register
 - Module contact: support virtual module, update list admin
 - Module news: fix content no public, fix print post
@@ -16,12 +26,14 @@ NUKEVIET 4.0.24
 - Theme default: Fix breadcrumbs
 - Theme mobile: Fix user login, user register, breadcrumbs
 - Improving system security
-- Up to CKEditor 4.5.4
+- Up to CKEditor 4.5.6
+- Update Bootstrap v3.3.6
 - Fix some sys function
 - Update rule in file constants
 - Update statistics
 - Add notification for modules: news, comment
 - Support full Unicode in MySQL databases
+- Remove class LightOpenID, remove PHPoAuthLib
 
 NUKEVIET 4.0.23 (Open beta 9)
 - Update module Contact
