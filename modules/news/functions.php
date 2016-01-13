@@ -95,40 +95,40 @@ $per_page = $module_config[$module_name]['per_page'];
 $st_links = $module_config[$module_name]['st_links'];
 $count_op = sizeof($array_op);
 if (! empty($array_op) and $op == 'main') {
-    if ($catid == 0) {
-        $contents = $lang_module['nocatpage'] . $array_op[0];
-        if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
-            $page = intval(substr($array_op[0], 5));
-        } elseif (! empty($alias_cat_url)) {
-            $redirect = '<meta http-equiv="Refresh" content="3;URL=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect);
+    $op = 'main';
+    if ($count_op == 1 or substr($array_op[1], 0, 5) == 'page-') {
+        $op = 'viewcat';
+        if ($count_op > 1) {
+            $page = intval(substr($array_op[1], 5));
         }
-    } else {
-        $op = 'main';
-        if ($count_op == 1 or substr($array_op[1], 0, 5) == 'page-') {
-            $op = 'viewcat';
-            if ($count_op > 1) {
-                $page = intval(substr($array_op[1], 5));
-            }
-        } elseif ($count_op == 2) {
-            $array_page = explode('-', $array_op[1]);
-            $id = intval(end($array_page));
-            $number = strlen($id) + 1;
-            $alias_url = substr($array_op[1], 0, -$number);
-            if ($id > 0 and $alias_url != '') {
-                $op = 'detail';
-            }
+    } elseif ($count_op == 2) {
+        $array_page = explode('-', $array_op[1]);
+        $id = intval(end($array_page));
+        $number = strlen($id) + 1;
+        $alias_url = substr($array_op[1], 0, -$number);
+        if ($id > 0 and $alias_url != '') {
+            if( $catid > 0 ){
+				$op = 'detail';
+			}else{
+				//muc tieu neu xoa chuyen muc cu hoac doi ten alias chuyen muc thi van rewrite duoc bai viet
+				$query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $id );
+				$news_contents = $query->fetch();
+				$url_Permanently = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
+				header( "HTTP/1.1 301 Moved Permanently" );
+				header( 'Location:' . $url_Permanently );
+				exit();
+			}
         }
-        $parentid = $catid;
-        while ($parentid > 0) {
-            $array_cat_i = $global_array_cat[$parentid];
-            $array_mod_title[] = array(
-                'catid' => $parentid,
-                'title' => $array_cat_i['title'],
-                'link' => $array_cat_i['link']
-            );
-            $parentid = $array_cat_i['parentid'];
-        }
-        sort($array_mod_title, SORT_NUMERIC);
     }
+    $parentid = $catid;
+    while ($parentid > 0) {
+        $array_cat_i = $global_array_cat[$parentid];
+        $array_mod_title[] = array(
+            'catid' => $parentid,
+            'title' => $array_cat_i['title'],
+            'link' => $array_cat_i['link']
+        );
+        $parentid = $array_cat_i['parentid'];
+    }
+    sort($array_mod_title, SORT_NUMERIC);
 }

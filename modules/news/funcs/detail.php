@@ -100,6 +100,13 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $my_footer .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
             $news_contents['allowed_send'] = 0;
         }
+		if( $alias_url != $news_contents['alias'] ){
+			//chuyen huong neu doi alias
+			$url_Permanently = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
+			header( "HTTP/1.1 301 Moved Permanently" );
+			header( 'Location:' . $url_Permanently );
+			exit();
+		}
     }
 
     if ($publtime == 0) {
