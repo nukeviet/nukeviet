@@ -8,13 +8,15 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $sql_drop_module = array();
-$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_comments";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_comment";
 
 $sql_create_module = $sql_drop_module;
-$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_comments (
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_comment (
  cid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
  module varchar(55) NOT NULL,
  area int(11) NOT NULL DEFAULT '0',
@@ -26,7 +28,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  post_name varchar(100) NOT NULL,
  post_email varchar(100) NOT NULL,
  post_ip varchar(15) NOT NULL,
- url_comment varchar(250) NOT NULL,
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
  likes mediumint(9) NOT NULL DEFAULT '0',
  dislikes mediumint(9) NOT NULL DEFAULT '0',

@@ -9,7 +9,7 @@
 			<div class="row">
 				<div class="col-xs-12 col-md-6">
 					<div class="form-group">
-						<input class="form-control" type="text" name="value" id="f_value" value="{LANG.search_key}" />
+						<input class="form-control" type="text" name="value" value="{SEARCH_VALUE}" id="f_value" placeholder="{LANG.search_key}" />
 					</div>
 				</div>
 				<div class="col-xs-12 col-md-6">
@@ -25,6 +25,7 @@
 				<div class="col-xs-12 col-md-6">
 					<div class="form-group">
 						<select class="form-control" name="usactive">
+							<option value="-1">---{LANG.usactive}---</option>
 							<!-- BEGIN: usactive -->
 							<option value="{USACTIVE.key}"{USACTIVE.selected}>{USACTIVE.value}</option>
 							<!-- END: usactive -->
@@ -73,8 +74,7 @@
 					<img style="vertical-align:middle;" alt="{CONTENT_TD.level}" src="{NV_BASE_SITEURL}themes/{NV_ADMIN_THEME}/images/{CONTENT_TD.img}.png" width="38" height="18" />
 					<!-- END: is_admin -->
 					{CONTENT_TD.username} </td>
-					<td> {CONTENT_TD.first_name} </td>
-					<td> {CONTENT_TD.last_name} </td>
+					<td> {CONTENT_TD.full_name} </td>
 					<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 					<td> {CONTENT_TD.regdate} </td>
 					<td class="text-center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
@@ -93,31 +93,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-	function nv_data_export(set_export) {
-		$.ajax({
-			type : "POST",
-			url : "index.php?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=export&nocache=" + new Date().getTime(),
-			data : "step=1&set_export=" + set_export + "&method=" + $("select[name=method]").val() + "&value=" + $("input[name=value]").val() + "&usactive=" + $("select[name=usactive]").val(),
-			success : function(response) {
-				if (response == "OK_GETFILE") {
-					nv_data_export(0);
-				} else if (response == "OK_COMPLETE") {
-					$("#users").hide();
-					alert('{LANG.export_complete}');
-					window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=export&step=2';
-				} else {
-					$("#users").hide();
-					alert(response);
-					window.location.href = script_name + '?' + nv_name_variable + '=' + nv_module_name;
-				}
-			}
-		});
-	}
-
-	$("input[name=data_export]").click(function() {
-		$("input[name=data_export]").attr("disabled", "disabled");
-		$('#users').html('<center>{LANG.export_note}<br /><br /><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" /></center>');
-		nv_data_export(1);
-	});
+ var export_note = '{LANG.export_note}';
+ var export_complete = '{LANG.export_complete}';
 </script>
 <!-- END: main -->

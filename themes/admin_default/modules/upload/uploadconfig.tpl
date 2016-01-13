@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
@@ -19,11 +20,11 @@
 				<tr>
 					<td><strong>{LANG.nv_max_size}:</strong></td>
 					<td>
-					<select name="nv_max_size" class="form-control w200 pull-left">
+					<select name="nv_max_size" id="nv_max_size" class="form-control w200">
 						<!-- BEGIN: size -->
 						<option value="{SIZE.key}"{SIZE.selected}>{SIZE.title}</option>
 						<!-- END: size -->
-					</select><span class="pull-left text-middle">&nbsp; ({LANG.sys_max_size}: {SYS_MAX_SIZE}) </span></td>
+					</select><span class="text-middle">&nbsp; ({LANG.sys_max_size}: {SYS_MAX_SIZE}) </span></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.upload_checking_mode}:</strong></td>
@@ -77,6 +78,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#frm').validate();
-	}); 
+	});
 </script>
 <!-- END: main -->

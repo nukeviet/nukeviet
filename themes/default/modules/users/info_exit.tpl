@@ -1,5 +1,7 @@
 <!-- BEGIN: main -->
-<div class="alert alert-info text-center">
-	{INFO}
+<div class="page">
+    <div class="alert <!-- BEGIN: info -->alert-info<!-- END: info --><!-- BEGIN: danger -->alert-danger<!-- END: danger --> text-center">
+    	{INFO}
+    </div>
 </div>
 <!-- END: main -->

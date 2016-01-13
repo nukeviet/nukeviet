@@ -92,6 +92,10 @@
 						<!-- END: nv_upass_type -->
 					</select></td>
 				</tr>
+				<tr>
+					<td>{LANG.auto_login_after_reg}</td>
+					<td><input type="checkbox" value="1" name="auto_login_after_reg"{DATA.auto_login_after_reg}/></td>
+				</tr>
 			</tbody>
 		</table>
 
@@ -152,6 +156,14 @@
 					</select></td>
 				</tr>
 				<tr>
+					<td>{LANG.user_check_pass_time}</td>
+					<td><input class="form-control pull-left" style="width:50px;" type="text" value="{USER_CHECK_PASS_TIME}" name="user_check_pass_time" maxlength="3"/>({GLANG.min})</td>
+				</tr>
+				<tr>
+					<td>{LANG.allowuserloginmulti}</td>
+					<td><input name="allowuserloginmulti" value="1" type="checkbox" {DATA.allowuserloginmulti} /></td>
+				</tr>
+				<tr>
 					<td>{LANG.allow_login}</td>
 					<td><input name="allowuserlogin" value="1" type="checkbox"{DATA.allowuserlogin} /></td>
 				</tr>
@@ -171,15 +183,12 @@
 					<td>{LANG.allow_change_email}</td>
 					<td><input name="allowmailchange" value="1" type="checkbox"{DATA.allowmailchange} /></td>
 				</tr>
-				<tr>
-					<td>{LANG.allow_openid}</td>
-					<td><input name="openid_mode" value="1" type="checkbox"{DATA.openid_mode} /></td>
-				</tr>
+
 				<tr>
 					<td>{LANG.openid_servers}</td>
 					<td>
 					<!-- BEGIN: openid_servers -->
-					<input name="openid_servers[]" value="{OPENID.name}" type="checkbox"{OPENID.checked} />
+					<input name="openid_servers[]" {OPENID.disabled} value="{OPENID.name}" type="checkbox"{OPENID.checked} />
 					<!-- BEGIN: config -->
 						<a href="{OPENID.link_config}" title="{OPENID.note}">{OPENID.title}</a>
 					<!-- END: config -->
@@ -190,6 +199,16 @@
 					<!-- END: openid_servers -->
 					</td>
 				</tr>
+				<tr>
+					<td>{LANG.openid_processing}</td>
+					<td>
+						<select class="form-control" name="openid_processing">
+							<!-- BEGIN: openid_processing -->
+							<option value="{OPENID_PROCESSING.id}"{OPENID_PROCESSING.select}> {OPENID_PROCESSING.value}</option>
+							<!-- END: openid_processing -->
+						</select>
+					</td>
+				</tr>			
 				<tr>
 					<td>{LANG.deny_email}</td>
 					<td><textarea name="deny_email" rows="7" cols="70" class="form-control">{DATA.deny_email}</textarea></td>

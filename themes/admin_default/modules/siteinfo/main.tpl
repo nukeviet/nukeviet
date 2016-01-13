@@ -5,26 +5,6 @@
 	<strong><a href="{URL_UPDATE}" title="{LANG.update_package_do}">{LANG.update_package_do}</a></strong>
 	 - 
 	<strong><a href="{URL_DELETE_PACKAGE}" title="{LANG.update_package_delete}" class="delete_update_backage">{LANG.update_package_delete}</a></strong>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('.delete_update_backage').click(function() {
-				if (confirm(nv_is_del_confirm[0])) {
-					$('#infodetectedupg').append('<div id="dpackagew"><em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading"></em></div>');
-					$.get($(this).attr('href'), function(e) {
-						$('#dpackagew').remove()
-						if (e == 'OK') {
-							$('#infodetectedupg').slideUp(500, function() {
-								$('#infodetectedupg').remove()
-							});
-						} else {
-							alert(e);
-						}
-					});
-				}
-				return !1;
-			});
-		});
-	</script>
 </div>
 <!-- END: updateinfo -->
 <!-- BEGIN: pendinginfo -->
@@ -113,4 +93,9 @@
 </div>
 <!-- END: inf -->
 <!-- END: version -->
+<script type="text/javascript">
+	$(function () {
+	    $("img.imgstatnkv").attr("src","http://static.nukeviet.vn/img.jpg");
+	});
+</script>
 <!-- END: main -->

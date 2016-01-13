@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 <div class="well">
 	<form action="{NV_BASE_ADMINURL}index.php" method="get">
 		<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -130,11 +130,13 @@
 		<tbody>
 			<!-- BEGIN: loop -->
 			<tr>
-				<td class="text-center"><input name="commentid" type="checkbox" value="{ROW.cid}"/></td>
+				<td class="text-center"><input name="commentid" id="checkboxid" type="checkbox" value="{ROW.cid}"/></td>
 				<td>{ROW.module}</td>
 				<td><a target="_blank" href="{ROW.link}" title="{ROW.content}">{ROW.title}</a></td>
 				<td>{ROW.email}</td>
-				<td class="text-center"><em class="fa fa-{ROW.status} fa-lg">&nbsp;</em></td>
+				<td class="text-center">
+				    <input type="checkbox" name="activecheckbox" id="change_active_{ROW.cid}" onclick="nv_change_active('{ROW.cid}')" {ROW.active}>
+                </td>
 				<td class="text-center"><em class="fa fa-edit fa-lg">&nbsp;</em><a href="{ROW.linkedit}">{LANG.edit}</a> &nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em><a class="deleteone" href="{ROW.linkdelete}">{LANG.delete}</a></td>
 			</tr>
 			<!-- END: loop -->
@@ -142,115 +144,12 @@
 	</table>
 </div>
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
-	$(function() {
-		$("#from_date, #to_date").datepicker({
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			showOn : 'focus'
-		});
-		$('#to-btn').click(function(){
-			$("#to_date").datepicker('show');
-		});
-		$('#from-btn').click(function(){
-			$("#from_date").datepicker('show');
-		});
-	});
-
-	$("#checkall").click(function() {
-		$("input:checkbox").each(function() {
-			$(this).prop("checked", true);
-		});
-	});
-	$("#uncheckall").click(function() {
-		$("input:checkbox").each(function() {
-			$(this).prop("checked", false);
-		});
-	});
-	$("a.enable").click(function() {
-		var list = [];
-		$("input[name=commentid]:checked").each(function() {
-			list.push($(this).val());
-		});
-		if (list.length < 1) {
-			alert("{LANG.nocheck}");
-			return false;
-		}
-		$.ajax({
-			type : "POST",
-			url : "index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=active",
-			data : "list=" + list + "&active=1",
-			success : function(data) {
-				alert(data);
-				window.location = window.location.href;
-				;
-			}
-		});
-		return false;
-	});
-	$("a.disable").click(function() {
-		var list = [];
-		$("input[name=commentid]:checked").each(function() {
-			list.push($(this).val());
-		});
-		if (list.length < 1) {
-			alert("{LANG.nocheck}");
-			return false;
-		}
-		$.ajax({
-			type : "POST",
-			url : "index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=active",
-			data : "list=" + list + "&active=0",
-			success : function(data) {
-				alert(data);
-				window.location = window.location.href;
-				;
-			}
-		});
-		return false;
-	});
-	$("a.delete").click(function() {
-		var list = [];
-		$("input[name=commentid]:checked").each(function() {
-			list.push($(this).val());
-		});
-		if (list.length < 1) {
-			alert("{LANG.nocheck}");
-			return false;
-		}
-		if (confirm("{LANG.delete_confirm}")) {
-			$.ajax({
-				type : "POST",
-				url : "index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=del",
-				data : "list=" + list,
-				success : function(data) {
-					alert(data);
-					window.location = window.location.href;
-				}
-			});
-		}
-		return false;
-	});
-	$("a.deleteone").click(function() {
-		if (confirm("{LANG.delete_confirm}")) {
-			var url = $(this).attr("href");
-			$.ajax({
-				type : "POST",
-				url : url,
-				data : "",
-				success : function(data) {
-					alert(data);
-					window.location = window.location.href;
-				}
-			});
-		}
-		return false;
-	});
+var LANG = [];
+LANG.nocheck = '{LANG.nocheck}';
+LANG.delete_confirm = '{LANG.delete_confirm}';
 </script>
 <!-- END: main -->

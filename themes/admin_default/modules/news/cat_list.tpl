@@ -7,17 +7,18 @@
 <!-- BEGIN: data -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
-		<col class="w100" />
 		<col span="6" style="white-space: nowrap;" />
+		<col class="w250" />
+		<col style="white-space: nowrap;" />
 		<thead>
 			<tr>
 				<th class="text-center">{LANG.weight}</th>
 				<th class="text-center">{LANG.name}</th>
 				<th class="text-center">{LANG.inhome}</th>
-				<th class="text-center">{LANG.viewcat_page}</th>
 				<th class="text-center">{LANG.numlinks}</th>
-				<th class="text-center">{LANG.newday}</th>
-				<th>&nbsp;</th>
+				<th class="text-center"><img src="{NV_BASE_SITEURL}themes/default/images/icons/new.gif" title="{LANG.newday}"/></th>
+				<th class="text-center">{LANG.viewcat_page}</th>
+				<th class="text-center">{LANG.functional}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -52,18 +53,6 @@
 				</select>
 				<!-- END: inhome -->
 				</td>
-				<td class="text-left">
-				<!-- BEGIN: disabled_viewcat -->
-				{VIEWCAT}
-				<!-- END: disabled_viewcat -->
-				<!-- BEGIN: viewcat -->
-				<select class="form-control" id="id_viewcat_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','viewcat');">
-					<!-- BEGIN: loop -->
-					<option value="{VIEWCAT.key}"{VIEWCAT.selected}>{VIEWCAT.title}</option>
-					<!-- END: loop -->
-				</select>
-				<!-- END: viewcat -->
-				</td>
 				<td class="text-center">
 				<!-- BEGIN: title_numlinks -->
 				{NUMLINKS}
@@ -87,6 +76,18 @@
 					<!-- END: loop -->
 				</select>
 				<!-- END: newday -->
+				</td>
+				<td class="text-left">
+				<!-- BEGIN: disabled_viewcat -->
+				{VIEWCAT}
+				<!-- END: disabled_viewcat -->
+				<!-- BEGIN: viewcat -->
+				<select class="form-control" id="id_viewcat_{ROW.catid}" onchange="nv_chang_cat('{ROW.catid}','viewcat');">
+					<!-- BEGIN: loop -->
+					<option value="{VIEWCAT.key}"{VIEWCAT.selected}>{VIEWCAT.title}</option>
+					<!-- END: loop -->
+				</select>
+				<!-- END: viewcat -->
 				</td>
 				<td class="text-center">{ROW.adminfuncs}</td>
 			</tr>

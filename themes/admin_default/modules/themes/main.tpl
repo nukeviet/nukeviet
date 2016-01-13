@@ -20,9 +20,15 @@
 			<p><img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" style="max-width:300px;max-height:200px"/>
 			</p>
 			<p style="font-size:13px;margin-top:10px;font-weight:bold">
+				<!-- BEGIN: link_setting -->
+				<em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_setting}</a>
+				<!-- END: link_setting -->
 				<!-- BEGIN: link_active -->
-				<a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_activate}</a>
+				<em class="fa fa-sun-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" class="activate" title="{ROW.value}" style="color:#3B5998">{LANG.theme_created_activate}</a>
 				<!-- END: link_active -->
+				<!-- BEGIN: link_delete -->
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" class="delete" title="{ROW.value}" style="color:#3B5998">{LANG.theme_delete}</a>
+				<!-- END: link_delete -->
 			<p style="font-size:13px">
 				{ROW.description}
 			</p>
@@ -46,37 +52,8 @@
 	</table>
 </div>
 <script type="text/javascript">
-	//<![CDATA[
-	$(function() {
-		$("a.activate").click(function() {
-			var theme = $(this).attr("title");
-			$.ajax({
-				type : "POST",
-				url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=activatetheme",
-				data : "theme=" + theme,
-				success : function(data) {
-					if (data != "OK_" + theme) {
-						alert(data);
-					}
-					window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}";
-				}
-			});
-		});
-		$("a.delete").click(function() {
-			var theme = $(this).attr("title");
-			if (confirm("{LANG.theme_created_delete_theme}" + theme + " ?")) {
-				$.ajax({
-					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=deletetheme",
-					data : "theme=" + theme,
-					success : function(data) {
-						alert(data);
-						window.location = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}";
-					}
-				});
-			}
-		});
-	});
-	//]]>
+//<![CDATA[
+LANG.theme_delete_confirm = '{LANG.theme_delete_confirm}';
+//]]>
 </script>
 <!-- END: main -->

@@ -14,7 +14,7 @@
 
 <div class="list-group">
 	<!-- BEGIN: viewcatloop -->
-	<a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip">
+	<a class="show h4" href="{CONTENT.link}" <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">
 		<h4 class="list-group-item-heading">
 			<span class="label label-default">{NUMBER}</span>&nbsp;&nbsp;{CONTENT.title}
 			<!-- BEGIN: newday -->
@@ -30,13 +30,4 @@
 	{GENERATE_PAGE}
 </div>
 <!-- END: generate_page -->
-<!-- BEGIN: tooltip -->
-<script type="text/javascript">
-	$(document).ready(function() {$("[data-rel='tooltip'][data-content!='']").tooltip({
-		placement: "{TOOLTIP_POSITION}",
-		html: true,
-		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-	});});
-</script>
-<!-- END: tooltip -->
 <!-- END: main -->

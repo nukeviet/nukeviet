@@ -6,12 +6,49 @@
 		<!-- BEGIN: image -->
 		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
 		<!-- END: image -->
-		<p class="text-justify">{CONTENT.description}</p>
+		<p>{CONTENT.description}</p>
 	</div>
 </div>
 <!-- END: viewdescription -->
 <!-- BEGIN: viewcatloop -->
 <div class="news_column">
+	<!-- BEGIN: featured -->
+	<div class="panel panel-default">
+		<div class="panel-body featured">
+			<!-- BEGIN: image -->
+			<a href="{CONTENT.link}" title="{CONTENT.title}"><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" /></a>
+			<!-- END: image -->
+			<h2>
+				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+				<!-- BEGIN: newday --><span class="icon_new">&nbsp;</span><!-- END: newday -->
+			</h2>
+			<div class="text-muted">
+				<ul class="list-unstyled list-inline">
+					<li>
+						<em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}
+					</li>
+					<li>
+						<em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}
+					</li>
+					<!-- BEGIN: comment -->
+					<li>
+						<em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}
+					</li>
+					<!-- END: comment -->
+				</ul>
+			</div>
+			<p>
+				{CONTENT.hometext}
+			</p>
+			<!-- BEGIN: adminlink -->
+			<p class="text-right">
+				{ADMINLINK}
+			</p>
+			<!-- END: adminlink -->
+		</div>
+	</div>
+	<!-- END: featured -->
+	<!-- BEGIN: news -->
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<!-- BEGIN: image -->
@@ -23,7 +60,16 @@
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
-			<p class="text-justify">
+			<div class="text-muted">
+				<ul class="list-unstyled list-inline">
+					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
+					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}</li>
+					<!-- BEGIN: comment -->
+					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}</li>
+					<!-- END: comment -->
+				</ul>
+			</div>
+			<p>
 				{CONTENT.hometext}
 			</p>
 			<!-- BEGIN: adminlink -->
@@ -33,6 +79,7 @@
 			<!-- END: adminlink -->
 		</div>
 	</div>
+	<!-- END: news -->
 </div>
 <!-- END: viewcatloop -->
 <!-- BEGIN: related -->
@@ -50,6 +97,7 @@
 </ul>
 <!-- END: related -->
 <!-- BEGIN: generate_page -->
+<div class="clearfix"></div>
 <div class="text-center">
 	{GENERATE_PAGE}
 </div>

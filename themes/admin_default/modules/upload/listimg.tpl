@@ -1,17 +1,19 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: loopimg -->
-<div class="imgcontent{IMG.sel}" title="{IMG.title}">
-	<div style="width:100px;height:86px;display:table-cell; vertical-align:middle;">
+<div class="imgcontent{IMG.sel}" title="{IMG.title}" data-img="{IMG.is_img}">
+	<div class="imgIcon">
 		<img class="previewimg" alt="{IMG.alt}" title="{IMG.title}" name="{IMG.data}" src="{IMG.src}" width="{IMG.srcwidth}" height="{IMG.srcheight}" />
 	</div>
 	<div class="imgInfo">
-		{IMG.name}
-		<br />
-		{IMG.size}
+		<span class="nameSort">{IMG.name}</span>
+		<span class="nameLong">{IMG.nameLong}</span>
+		<span>{IMG.size}</span>
 	</div>
 </div>
 <!-- END: loopimg -->
 <!-- BEGIN: generate_page -->
+<div class="clearfix"></div>
+<hr />
 <div class="text-center">
 	{GENERATE_PAGE}
 </div>
@@ -19,7 +21,7 @@
 <script type="text/javascript">
 //<![CDATA[
 $('img.previewimg').lazyload({
-	placeholder : "{NV_BASE_SITEURL}images/grey.gif",
+	placeholder : "{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/grey.gif",
 	container : $(".filebrowse")
 });
 
@@ -45,7 +47,7 @@ $( "#imglist" ).selectable({
 	},
 	stop: function( e, ui ){
 		fileSelectStop(e, ui);
-		
+
 		setTimeout(function(){
 			KEYPR.isSelectable = false;
 			KEYPR.isFileSelectable = false;

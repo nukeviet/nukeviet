@@ -9,7 +9,9 @@
 * @Createdate Jan 26, 2014, 05:08:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '27/01/2014, 00:08';
@@ -82,3 +84,5 @@ $lang_module['captcha_0'] = 'Hide';
 $lang_module['captcha_1'] = 'If not a user';
 $lang_module['captcha_2'] = 'If not the manager comment';
 $lang_module['captcha_3'] = 'Display at all';
+
+$lang_module['siteinfo_queue_comments'] = 'Total commments need approval';

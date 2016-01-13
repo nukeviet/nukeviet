@@ -5,6 +5,9 @@
 <meta http-equiv="Refresh" content="3;URL={URL}" />
 <!-- END: empty -->
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+
 <form action="{NV_BASE_ADMINURL}index.php" method="get">
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
@@ -39,7 +42,7 @@
 				<tr>
 					<td> {LANG.nv_lang_area}:</td>
 					<td>
-					<select name="idfile" class="form-control w200">
+					<select name="idfile" id="idfile" class="form-control w200">
 						<option value="0">{LANG.nv_lang_checkallarea}</option>
 						<!-- BEGIN: language_area -->
 						<option value="{LANGUAGE_AREA.key}"{LANGUAGE_AREA.selected}>{LANGUAGE_AREA.title}</option>
@@ -94,9 +97,11 @@
 				<tr>
 					<td class="text-center">{ROW.stt}</td>
 					<td class="text-right">{ROW.lang_key}</td>
-					<td class="text-left"><input type="text" value="{ROW.datalang}" name="pozlang[{ROW.id}]" size="90" class="form-control" />
-					<br />
-					{ROW.sourcelang} </td>
+					<td class="text-left">
+						<textarea rows="1" name="pozlang[{ROW.id}]" class="form-control">{ROW.datalang}</textarea>
+						<br />
+						{ROW.sourcelang}
+					</td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>
@@ -108,4 +113,11 @@
 	</div>
 </form>
 <!-- END: data -->
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#idfile").select2();
+	});
+</script>
+
 <!-- END: main -->

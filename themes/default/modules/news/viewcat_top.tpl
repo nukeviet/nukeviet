@@ -12,17 +12,26 @@
 <!-- END: viewdescription -->
 <div class="news_column">
 	<div class="panel panel-default">
-		<div class="panel-body">
+		<div class="panel-body featured">
 			<!-- BEGIN: catcontent -->
 				<!-- BEGIN: image -->
-				<a href="{CONTENT.link}" title="{CONTENT.title}"><img id="imghome" alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left" /></a>
+				<a href="{CONTENT.link}" title="{CONTENT.title}"><img id="imghome" alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
 				<!-- END: image -->
-				<h3>
+				<h2>
 					<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
 					<!-- BEGIN: newday -->
 					<span class="icon_new"></span>
 					<!-- END: newday -->
-				</h3>
+				</h2>
+				<div class="text-muted">
+					<ul class="list-unstyled list-inline">
+						<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
+						<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}</li>
+						<!-- BEGIN: comment -->
+						<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}</li>
+						<!-- END: comment -->
+					</ul>
+				</div>
 				<p class="text-justify">
 					{CONTENT.hometext}
 				</p>

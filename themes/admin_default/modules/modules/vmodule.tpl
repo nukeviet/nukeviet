@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="alert alert-info <!-- BEGIN: error --> alert-danger <!-- END: error -->"><span>{LANG.vmodule_blockquote}</div>
 
@@ -17,11 +17,11 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td class="w250 text-right"><strong>{LANG.vmodule_name}: </strong></td>
+					<td class="w250 text-right"><strong>{LANG.vmodule_name}: </strong><sup class="required">(*)</sup></td>
 					<td><input class="w250 required form-control" style="margin-right: 10px;" name="title" type="text" value="{TITLE}" maxlength="255" /></td>
 				</tr>
 				<tr>
-					<td class="text-right"><strong>{LANG.vmodule_file}: </strong></td>
+					<td class="text-right"><strong>{LANG.vmodule_file}: </strong><sup class="required">(*)</sup></td>
 					<td>
 					<select name="module_file" class="required form-control w250" style="margin-right: 10px;">
 						<option value="">{LANG.vmodule_select}</option>
@@ -31,7 +31,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td class="right top">
+					<td class="text-right top">
 					<br />
 					<strong>{LANG.vmodule_note}:</strong></td>
 					<td><textarea style="width: 450px" name="note" cols="80" rows="5" class="form-control">{NOTE}</textarea></td>

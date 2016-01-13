@@ -17,9 +17,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-md-24">
 		[FOOTER]
-	</div>
 </div>
 {FILE "footer_extended.tpl"}
 {FILE "footer_only.tpl"}

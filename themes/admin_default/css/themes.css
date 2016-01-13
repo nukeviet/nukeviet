@@ -1,4 +1,25 @@
-﻿.hr {
+.exp_time {
+	line-height: 20px
+}
+
+.exp_time input {
+	float: left
+}
+
+.exp_time img {
+	float: left;
+	margin: 2px
+}
+
+.content{
+	padding: 5px;
+}
+
+.bg-gainsboro{
+    background-color:#C0C0C0
+}
+
+.hr {
 	border-bottom-style: solid;
 	border-bottom-width: 1px;
 	border-bottom-color: #dadada;

@@ -2,16 +2,16 @@
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 
-<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css">
-<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css">
-<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css">
+<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css">
+<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css">
+<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css">
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <form action="{NV_BASE_ADMINURL}index.php" method="post" id="frm">
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
@@ -19,7 +19,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
 				<tr>
-					<td colspan="2">{LANG.config}</td>
+					<th colspan="2">{LANG.config}</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -36,7 +36,7 @@
 					<td>{LANG.block_admin_ip}</td>
 					<td><input type="checkbox" value="1" name="block_admin_ip"{DATA.block_admin_ip} /></td>
 				</tr>
-	
+
 				<tr>
 					<td>{LANG.authors_detail_main}</td>
 					<td><input type="checkbox" value="1" name="authors_detail_main"{DATA.authors_detail_main} /></td>
@@ -81,7 +81,7 @@
 				<td class="text-center">{ROW.dbbegintime}</td>
 				<td class="text-center">{ROW.dbendtime}</td>
 				<td class="text-center">
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> 
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a class="edit" href="{ROW.url_edit}">{GLANG.edit}</a>
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteuser" href="{ROW.url_delete}">{GLANG.delete}</a>
 				</td>
 			</tr>
@@ -96,6 +96,11 @@
 	<input type="hidden" name="uid" value="{FIREWALLDATA.uid}" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
+			<thead>
+				<tr>
+					<th colspan="2">{LANG.username_add}</th>
+				</tr>
+			</thead>
 			<tfoot>
 				<tr>
 					<td colspan="2"><input type="submit" value="{LANG.save}" name="submituser" class="btn btn-primary"/>
@@ -109,10 +114,6 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td colspan="2"><strong>{LANG.username_add}</strong></td>
-				</tr>
-	
-				<tr>
 					<td class="w150">{GLANG.username} (<span style="color:red">*</span>)</td>
 					<td><input class="w200 form-control" type="text" name="username" value="{FIREWALLDATA.username}" /></td>
 				</tr>
@@ -120,7 +121,7 @@
 					<td>{GLANG.password} (<span style="color:red">*</span>)</td>
 					<td><input class="w200 form-control" type="password" name="password" value="{FIREWALLDATA.password}" /></td>
 				</tr>
-	
+
 				<tr>
 					<td>{GLANG.password2} (<span style="color:red">*</span>)</td>
 					<td><input class="w200 form-control" type="password" name="password2" value="{FIREWALLDATA.password2}" /></td>
@@ -129,7 +130,7 @@
 					<td>{LANG.adminip_begintime}</td>
 					<td><input type="text" name="begintime1" class="w100 datepicker form-control pull-left" value="{FIREWALLDATA.begintime1}" /></td>
 				</tr>
-	
+
 				<tr>
 					<td>{LANG.adminip_endtime}</td>
 					<td><input type="text" name="endtime1" class="w100 datepicker form-control pull-left" value="{FIREWALLDATA.endtime1}" /></td>
@@ -164,7 +165,7 @@
 				<td class="text-center">{ROW.dbbegintime}</td>
 				<td class="text-center">{ROW.dbendtime}</td>
 				<td class="text-center">
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a title="{GLANG.edit}" class="edit" href="{ROW.url_edit}">{GLANG.edit}</a> 
+					<em class="fa fa-edit fa-lg">&nbsp;</em> <a title="{GLANG.edit}" class="edit" href="{ROW.url_edit}">{GLANG.edit}</a>
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a title="{GLANG.delete}" class="deleteone" href="{ROW.url_delete}">{GLANG.delete}</a>
 				</td>
 			</tr>
@@ -179,15 +180,16 @@
 	<input type="hidden" name="cid" value="{IPDATA.cid}" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
-			<tbody>
+			<thead>
 				<tr>
-					<td colspan="2"><strong>{LANG.adminip_add}</strong></td>
+					<th colspan="2">{LANG.adminip_add}</th>
 				</tr>
+			</thead>
+			<tbody>
 				<tr>
 					<td class="w150">{LANG.adminip_address} (<span style="color:red">*</span>)</td>
 					<td><input class="w200 required form-control pull-left" type="text" name="keyname" value="{IPDATA.keyname}" /> <span class="text-middle">(xxx.xxx.xxx.xxx)</span></td>
 				</tr>
-	
 				<tr>
 					<td>{LANG.adminip_mask}</td>
 					<td>
@@ -202,7 +204,7 @@
 					<td>{LANG.adminip_begintime}</td>
 					<td><input type="text" name="begintime" class="datepicker form-control pull-left" value="{IPDATA.begintime}" style="width:80px"/></td>
 				</tr>
-	
+
 				<tr>
 					<td>{LANG.adminip_endtime}</td>
 					<td><input type="text" name="endtime" class="datepicker form-control pull-left" value="{IPDATA.endtime}" style="width:80px"/></td>
@@ -230,7 +232,7 @@
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true,
 			yearRange: "-90:+0"
 		});

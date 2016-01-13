@@ -8,19 +8,29 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if( ! defined( 'NV_IS_FILE_THEMES' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_THEMES')) {
+    die('Stop!!!');
+}
 
-$bid = $nv_Request->get_int( 'bid', 'post,get' );
+$list = $nv_Request->get_string('list', 'post,get');
+$array_bid = explode(',', $list);
+if (! empty($array_bid)) {
+    $array_bid = array_map('intval', $array_bid);
 
-$sql = 'SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $bid;
-$bid = $db->query( $sql )->fetchColumn();
-if( empty( $bid ) ) die( 'NO_' . $bid );
+    $list = $nv_Request->get_string('active_device', 'post,get');
 
-$new_status = $nv_Request->get_bool( 'new_status', 'post' );
-$new_status = ( int )$new_status;
+    $array_active_device = explode(',', $list);
+    $array_active_device = array_map('intval', $array_active_device);
+    if (in_array('1', $array_active_device) or (in_array('2', $array_active_device) and in_array('3', $array_active_device) and in_array('4', $array_active_device))) {
+        $active = 1;
+    } else {
+        $active = implode(',', $array_active_device);
+    }
 
-$sql = 'UPDATE ' . NV_BLOCKS_TABLE . '_groups SET active=' . $new_status . ' WHERE bid=' . $bid;
-$db->query( $sql );
-nv_del_moduleCache( 'themes' );
+    $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET active=' . $db->quote($active) . ' WHERE bid in (' . implode(',', $array_bid) . ')');
+    $nv_Cache->delMod('themes');
 
-echo 'OK_' . $id;
+    echo $lang_module['block_update_success'];
+} else {
+    echo $lang_module['block_error_noblock'];
+}

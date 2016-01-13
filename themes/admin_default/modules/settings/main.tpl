@@ -1,10 +1,17 @@
 <!-- BEGIN: main -->
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
+
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post">
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
+		<colgroup>
+			<col class="w300"/>
+		</colgroup>
 		<tfoot>
 			<tr>
 				<td colspan="2" class="text-center"><input type="submit" name="submit" value="{LANG.submit}" class="btn btn-primary w100" /></td>
@@ -38,7 +45,15 @@
 			</tr>
 			<tr>
 				<th>{LANG.site_logo}</th>
-				<td><input type="text" class="w300 form-control pull-left" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="margin-right: 10px" /><button name="selectimg" class="btn btn-default"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
+				<td><input type="text" class="w300 form-control pull-left" name="site_logo" id="site_logo" value="{VALUE.site_logo}" style="margin-right: 10px" /><button data-name="site_logo" name="logo_select" class="btn btn-default selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
+			</tr>
+			<tr>
+				<th>{LANG.site_banner}</th>
+				<td><input type="text" class="w300 form-control pull-left" name="site_banner" id="site_banner" value="{VALUE.site_banner}" style="margin-right: 10px" /><button data-name="site_banner" name="banner_select" class="btn btn-default selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
+			</tr>
+			<tr>
+				<th>{LANG.site_favicon}</th>
+				<td><input type="text" class="w300 form-control pull-left" name="site_favicon" id="site_favicon" value="{VALUE.site_favicon}" style="margin-right: 10px" /><button data-name="site_favicon" name="favicon_select" class="btn btn-default selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
 			</tr>
 			<tr>
 				<th>{LANG.theme}</th>
@@ -64,7 +79,7 @@
 			<tr>
 				<th>{LANG.default_module}</th>
 				<td>
-				<select name="site_home_module" class="form-control w200">
+				<select name="site_home_module" id="site_home_module" class="form-control w200">
 					<!-- BEGIN: module -->
 					<option value="{MODULE.title}"{SELECTED}>{MODULE.custom_title} </option>
 					<!-- END: module -->
@@ -73,6 +88,21 @@
 			<tr>
 				<th>{LANG.allow_switch_mobi_des}</th>
 				<td><input type="checkbox" name="switch_mobi_des" value="1"{VALUE.switch_mobi_des}/></td>
+			</tr>
+			<tr<!-- BEGIN: ssl_https_modules_hide --> class="hidden"<!-- END: ssl_https_modules_hide -->>
+				<td><strong>{LANG.ssl_https_module}</strong></td>
+				<td>
+					<div class="row">
+						<!-- BEGIN: ssl_https_modules -->
+						<div class="col-xs-6">
+							<label>
+								<input type="checkbox" value="{MOD_TITLE}" name="ssl_https_modules[]"{MOD_CHECKED}> {MOD_TITLE}
+							</label>
+						</div>
+						<!-- END: ssl_https_modules -->
+					</div>
+					<input type="hidden" name="show_ssl_modules" value="{SHOW_SSL_MODULES}">
+				</td>
 			</tr>
 			<tr>
 				<th>{LANG.disable_content}</th>
@@ -85,14 +115,7 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$(document).ready(function() {
-		$("button[name=selectimg]").click(function() {
-			var area = "site_logo";
-			var path = "";
-			var currentpath = "images";
-			var type = "image";
-			nv_open_browse("{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-			return false;
-		});
+		$("#site_home_module").select2();
 	});
 	//]]>
 </script>

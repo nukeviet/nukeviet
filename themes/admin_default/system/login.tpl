@@ -11,21 +11,15 @@
 		<title>{SITE_NAME} {NV_TITLEBAR_DEFIS} {PAGE_TITLE}</title>
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css">
-		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/main.css">
+		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/style.css">
 		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
 		<script type="text/javascript">
-			var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{GFX_NUM}');
-			var login_error_security = '{LOGIN_ERROR_SECURITY}';
-			var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
+		var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{GFX_NUM}');
+		var login_error_security = '{LOGIN_ERROR_SECURITY}';
+		var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
 		</script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/global.js"></script>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/admin_login.js"></script>
-		<!--[if IE 6]>
-		<script type="text/javascript" src="{NV_BASE_SITEURL}js/fix-png-ie6.js"></script>
-		<script type="text/javascript">
-		DD_belatedPNG.fix('#');
-		</script>
-		<![endif]-->
+		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
+		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/js/login.js"></script>
 	</head>
 	<body>
 		<div id="wrapper">
@@ -59,7 +53,7 @@
 			<div id="login-content">
 				<h3>{LOGIN_TITLE}</h3>
 				<div class="inner-message">{LOGIN_INFO}</div>
-				<form class="loginform" method="post" action="{NV_BASE_ADMINURL}index.php" onsubmit="return nv_checkadminlogin_submit();">
+				<form class="loginform form-horizontal" method="post" action="{NV_BASE_ADMINURL}index.php" onsubmit="return nv_checkadminlogin_submit();">
 					<!-- BEGIN: lang_multi -->
 					<p class="muti-lang form-inline">
 						<label for="langinterface">{LANGTITLE}:</label>
@@ -81,9 +75,19 @@
 					<!-- BEGIN: captcha -->
 					<p>
 						<label for="nv_seccode">{N_CAPTCHA}:</label>
-						<input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" class="captcha"/>
-						<img id="vimg" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-						<em class="fa fa-refresh fa-lg icon-pointer" onclick="nv_change_captcha();">&nbsp;</em>
+						<div class="row">
+							<div class="col-xs-11">
+								<input name="nv_seccode" type="text" id="seccode" maxlength="{GFX_NUM}" class="form-control captcha"/>
+							</div>
+							<div class="col-xs-11">
+								<label class="control-label">
+									<img id="vimg" alt="{N_CAPTCHA}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+								</label>
+							</div>
+							<div class="col-xs-2">
+								<em class="fa fa-refresh fa-lg icon-pointer" onclick="nv_change_captcha();">&nbsp;</em>
+							</div>
+						</div>
 					</p>
 					<!-- END: captcha -->
 					<div id="smb">

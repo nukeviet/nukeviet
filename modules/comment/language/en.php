@@ -9,7 +9,9 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -19,7 +21,9 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['comment'] = 'Reader Comments';
 $lang_module['comment_login'] = 'You must login to comment this article';
+$lang_module['comment_register_groups'] = 'You need is member of groups <strong>%1$s</strong> must can comment this post. Click <a href="%2$s" title="Register groups">here</a> to register!';
 $lang_module['comment_success'] = 'Successful comments';
+$lang_module['comment_success_queue'] = 'Sended success. Your comment will display after approval';
 $lang_module['comment_unsuccess'] = 'Error processing the data or incomplete data';
 $lang_module['comment_title'] = 'Your comments';
 $lang_module['comment_view'] = 'View comments';

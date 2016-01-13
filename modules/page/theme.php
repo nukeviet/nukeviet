@@ -8,7 +8,9 @@
  * @Createdate Jul 11, 2010 8:43:46 PM
  */
 
-if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_MOD_PAGE')) {
+    die('Stop!!!');
+}
 
 /**
  * nv_page_main()
@@ -17,71 +19,58 @@ if( ! defined( 'NV_IS_MOD_PAGE' ) ) die( 'Stop!!!' );
  * @param mixed $ab_links
  * @return
  */
-function nv_page_main( $row, $ab_links )
+function nv_page_main($row, $ab_links, $content_comment)
 {
-	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config;
+    global $module_name, $module_file, $lang_global, $module_info, $meta_property, $client_info, $page_config, $global_config;
 
-	if( ! defined( 'SHADOWBOX' ) )
-	{
-		$my_head .= "<link type=\"text/css\" rel=\"Stylesheet\" href=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.css\" />\n";
-		$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "js/shadowbox/shadowbox.js\"></script>\n";
-		$my_head .= "<script type=\"text/javascript\">Shadowbox.init({ handleOversize: \"drag\" });</script>";
-		define( 'SHADOWBOX', true );
-	}
+    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('CONTENT', $row);
+    
+    if (!empty($row['description'])) {
+        $xtpl->parse('main.description');
+    }
 
-	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
-	$xtpl->assign( 'CONTENT', $row );
+    if ($row['socialbutton']) {
+        if (! empty($page_config['facebookapi'])) {
+            $meta_property['fb:app_id'] = $page_config['facebookapi'];
+            $meta_property['og:locale'] = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
 
-	if( $row['socialbutton'] )
-	{
-		if( ! defined( 'FACEBOOK_JSSDK' ) )
-		{
-			$xtpl->assign( 'FACEBOOK_LANG', ( NV_LANG_DATA == 'vi' ) ? 'vi_VN' : 'en_US' );
-			if( ! empty( $page_config['facebookapi']  ) )
-			{
-				$xtpl->assign( 'FACEBOOK_APPID', $page_config['facebookapi'] );
-				$meta_property['fb:app_id'] = $page_config['facebookapi'];
-			}
+            $xtpl->assign('SELFURL', $client_info['selfurl']);
+            $xtpl->parse('main.socialbutton.facebook');
+        }
 
-			$xtpl->parse( 'main.facebookjssdk' );
+        $xtpl->parse('main.socialbutton');
+    }
 
-			define( 'FACEBOOK_JSSDK', true );
-		}
+    if (! empty($row['image'])) {
+        if (! empty($row['imagealt'])) {
+            $xtpl->parse('main.image.alt');
+        }
+        $xtpl->parse('main.image');
+    }
 
-		if( defined( 'FACEBOOK_JSSDK' ) )
-		{
-			$xtpl->assign( 'SELFURL', $client_info['selfurl'] );
+    if (defined('NV_IS_MODADMIN')) {
+        $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . $global_config['sitekey'] . session_id()));
+        $xtpl->assign('ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id']);
+        $xtpl->parse('main.adminlink');
+    }
 
-			$xtpl->parse( 'main.socialbutton.facebook' );
-		}
+    if (! empty($ab_links)) {
+        foreach ($ab_links as $row) {
+            $xtpl->assign('OTHER', $row);
+            $xtpl->parse('main.other.loop');
+        }
+        $xtpl->parse('main.other');
+    }
 
-		$xtpl->parse( 'main.socialbutton' );
-	}
+    if (!empty($content_comment)) {
+        $xtpl->assign('CONTENT_COMMENT', $content_comment);
+        $xtpl->parse('main.comment');
+    }
 
-	if( ! empty( $row['image'] ) )
-	{
-		$xtpl->parse( 'main.image' );
-	}
-
-	if( ! empty( $ab_links ) )
-	{
-		foreach( $ab_links as $row )
-		{
-			$xtpl->assign( 'OTHER', $row );
-			$xtpl->parse( 'main.other.loop' );
-		}
-		$xtpl->parse( 'main.other' );
-	}
-
-	if( defined( 'NV_COMM_URL' ) )
-	{
-		$xtpl->assign( 'NV_COMM_URL', NV_COMM_URL );
-		$xtpl->parse( 'main.comment' );
-	}
-
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
+    $xtpl->parse('main');
+    return $xtpl->text('main');
 }
 
 /**
@@ -90,40 +79,39 @@ function nv_page_main( $row, $ab_links )
  * @param mixed $array_data
  * @return
  */
-function nv_page_main_list( $array_data, $generate_page )
+function nv_page_main_list($array_data, $generate_page)
 {
-	global $module_file, $lang_module, $module_info, $meta_property, $my_head, $client_info, $page_config, $module_name;
+    global $global_config, $module_file, $lang_global, $module_upload, $module_info, $module_name;
 
-	$template = ( file_exists( NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file .'/main_list.tpl' ) ) ? $module_info['template'] : 'default';
+    $template = (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file .'/main_list.tpl')) ? $module_info['template'] : 'default';
 
-	$xtpl = new XTemplate( 'main_list.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_file );
-	$xtpl->assign( 'LANG', $lang_module );
+    $xtpl = new XTemplate('main_list.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_file);
+    $xtpl->assign('GLANG', $lang_global);
 
-	if( ! empty( $array_data ) )
-	{
-		foreach( $array_data as $data )
-		{
-			if( ! empty( $data['image'] ) )
-			{
-				$data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_name . '/' . $data['image'];
-				$data['imagealt'] = ! empty( $data['imagealt'] ) ? $data['imagealt'] : $data['title'];
-			}
+    if (! empty($array_data)) {
+        foreach ($array_data as $row) {
+            if (! empty($row['image'])) {
+                $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
+                $row['imagealt'] = ! empty($row['imagealt']) ? $row['imagealt'] : $row['title'];
+            }
 
-			$xtpl->assign( 'DATA', $data );
+            $xtpl->assign('DATA', $row);
 
-			if( ! empty( $data['image'] ) )
-			{
-				$xtpl->parse( 'main.loop.image' );
-			}
+            if (! empty($row['image'])) {
+                $xtpl->parse('main.loop.image');
+            }
+            if (defined('NV_IS_MODADMIN')) {
+                $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . $global_config['sitekey'] . session_id()));
+                $xtpl->assign('ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id']);
+                $xtpl->parse('main.loop.adminlink');
+            }
+            $xtpl->parse('main.loop');
+        }
+        if ($generate_page != '') {
+            $xtpl->assign('GENERATE_PAGE', $generate_page);
+        }
+    }
 
-			$xtpl->parse( 'main.loop' );
-		}
-		if( $generate_page != '' )
-		{
-	        $xtpl->assign( 'GENERATE_PAGE', $generate_page );
-	    }
-	}
-	
-	$xtpl->parse( 'main' );
-	return $xtpl->text( 'main' );
+    $xtpl->parse('main');
+    return $xtpl->text('main');
 }

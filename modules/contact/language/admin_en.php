@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -27,9 +29,7 @@ $lang_module['number'] = 'Number';
 $lang_module['err_row_title'] = 'Not exists';
 $lang_module['part_row_title'] = 'Department';
 $lang_module['email_row_title'] = 'Email';
-$lang_module['email_row_title'] = 'Email';
-$lang_module['yahoo_row_title'] = 'Yahoo';
-$lang_module['skype_row_title'] = 'Skype';
+$lang_module['address'] = 'Address';
 $lang_module['note_row_title'] = 'Note';
 $lang_module['bt_save_row_title'] = 'Save';
 $lang_module['bt_reset_row_title'] = 'Clear';
@@ -51,6 +51,7 @@ $lang_module['reply_user_send_title'] = 'Reply to';
 $lang_module['reply_user_title'] = 'Subject';
 $lang_module['name_user_send_title'] = 'Sender';
 $lang_module['title_send_title'] = 'Subject';
+$lang_module['send_time'] = 'Send time';
 $lang_module['status_send_title'] = 'Status';
 $lang_module['content'] = 'Content';
 $lang_module['content_title'] = 'Content title';
@@ -71,3 +72,14 @@ $lang_module['delall'] = 'Delete all';
 $lang_module['siteinfo_new'] = 'Unread contact';
 $lang_module['no_row_contact'] = 'Any Contact';
 $lang_module['url_for_iframe'] = 'Url for iframe';
+$lang_module['notification_contact_new'] = '<strong />%s mailing contact title<strong />%s';
+$lang_module['is_default'] = 'Default';
+$lang_module['otherContacts'] = 'Other contact';
+$lang_module['otherVar'] = 'Name';
+$lang_module['otherVal'] = 'Value';
+$lang_module['addNew'] = 'Add new';
+$lang_module['cats'] = 'Related categories';
+$lang_module['cat'] = 'Category';
+$lang_module['mark_as_unread'] = 'Mark as unread';
+$lang_module['mark_as_read'] = 'Mark as read';
+$lang_module['please_choose'] = 'Please choose at least one  letter in the list.';

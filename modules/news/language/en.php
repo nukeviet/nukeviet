@@ -9,7 +9,9 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -71,6 +73,7 @@ $lang_module['search_on_internet'] = 'Internet search';
 $lang_module['search_adv_internet'] = 'Advanced internet search';
 $lang_module['search_on_nuke'] = 'Search on site';
 $lang_module['search_none'] = 'No result match';
+$lang_module['empty_data_search'] = 'empty  search data';
 $lang_module['search_in_module'] = 'Search in module';
 $lang_module['view_all_title'] = 'View all results';
 $lang_module['pages_title'] = 'Page';
@@ -108,7 +111,7 @@ $lang_module['imgposition_2'] = 'Show under the Home text';
 $lang_module['name'] = 'Title';
 $lang_module['alias'] = 'alias';
 $lang_module['content_cat'] = 'Category';
-$lang_module['content_topic'] = 'Relevant groups';
+$lang_module['content_topic'] = 'Relevant topic';
 $lang_module['content_homeimg'] = 'Illustrations images';
 $lang_module['content_homeimgalt'] = 'Captions for illustrations';
 $lang_module['content_hometext'] = 'Home text';
@@ -137,10 +140,14 @@ $lang_module['rating_count'] = 'vote';
 
 $lang_module['no_public'] = 'Note: This article has not yet been published, only those with the right manipulation can view the content.';
 $lang_module['status_alert'] = 'Article are in state: % 1$s';
-$lang_module['status_0'] = 'Waitting';
+$lang_module['status_0'] = 'Stop effect';
 $lang_module['status_1'] = 'Published';
 $lang_module['status_2'] = 'Still waitting';
 $lang_module['status_3'] = 'Expired';
 $lang_module['status_4'] = 'Draft';
-$lang_module['status_5'] = 'Reject';
-$lang_module['status_6'] = 'Switch Editor';
+$lang_module['status_5'] = 'Send Approve';
+$lang_module['status_6'] = 'Reject Approve';
+$lang_module['status_7'] = 'Checking for Approve';
+$lang_module['status_8'] = 'Send Publish';
+$lang_module['status_9'] = 'Reject Publish';
+$lang_module['status_10'] = 'Checking for Publish';

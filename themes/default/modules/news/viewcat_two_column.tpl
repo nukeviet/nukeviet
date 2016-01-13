@@ -24,6 +24,15 @@
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
+			<div class="text-muted">
+				<ul class="list-unstyled list-inline">
+					<li><em class="fa fa-clock-o">&nbsp;</em> {NEWSTOP.publtime}</li>
+					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {NEWSTOP.hitstotal}</li>
+					<!-- BEGIN: comment -->
+					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {NEWSTOP.hitscm}</li>
+					<!-- END: comment -->
+				</ul>
+			</div>
 			<p class="text-justify">
 				{NEWSTOP.hometext}
 			</p>
@@ -37,7 +46,7 @@
 		<ul class="related">
 			<!-- BEGIN: other -->
 			<li>
-				<a class="show" href="{NEWSTOP.link}" data-content="{NEWSTOP.hometext}" data-img="{NEWSTOP.imghome}" rel="tooltip">{NEWSTOP.title}</a>
+				<a class="show h4" href="{NEWSTOP.link}" <!-- BEGIN: tooltip -->data-content="{NEWSTOP.hometext}" data-img="{NEWSTOP.imghome}" data-placement="{TOOLTIP_POSITION}" data-rel="tooltip"<!-- END: tooltip --> title="{NEWSTOP.title}">{NEWSTOP.title}</a>
 			</li>
 			<!-- END: other -->
 		</ul>
@@ -48,7 +57,7 @@
 <div class="news_column two_column col-md-12">
 	<div class="panel panel-default clearfix">
 		<div class="panel-heading">
-			<h2><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h2>
+			<h4 class="cat-icon"><a title="{CAT.title}" href="{CAT.link}"><span>{CAT.title}</span></a></h4>
 		</div>
 
 		<div class="panel-body">
@@ -59,12 +68,19 @@
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
 			</h3>
+			<div class="text-muted">
+				<ul class="list-unstyled list-inline">
+					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
+					<li><em class="fa fa-eye">&nbsp;</em> {CONTENT.hitstotal}</li>
+					<!-- BEGIN: comment -->
+					<li><em class="fa fa-comment-o">&nbsp;</em> {CONTENT.hitscm}</li>
+					<!-- END: comment -->
+				</ul>
+			</div>
 			<!-- BEGIN: image -->
 			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
-			<p class="text-justify">
-				{CONTENT.hometext}
-			</p>
+			<p>{CONTENT.hometext}</p>
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
 				{ADMINLINK}
@@ -74,7 +90,7 @@
 			<ul class="related">
 				<!-- BEGIN: other -->
 				<li class="{CLASS}">
-					<a class="show" href="{CONTENT.link}" data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip">{CONTENT.title}</a>
+					<a class="show h4" href="{CONTENT.link}" <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">{CONTENT.title}</a>
 				</li>
 				<!-- END: other -->
 			</ul>
@@ -86,7 +102,6 @@
 <!-- END: clear -->
 <!-- END: loopcat -->
 <div class="clear">&nbsp;</div>
-
 <script type="text/javascript">
 $(window).load(function(){
     $.each( $('.two_column .panel-body'), function(k,v){
@@ -101,15 +116,4 @@ $(window).load(function(){
     });
 });
 </script>
-
-<!-- BEGIN: tooltip -->
-<script type="text/javascript">
-$(document).ready(function() {$("[data-rel='tooltip'][data-content!='']").tooltip({
-	placement: "{TOOLTIP_POSITION}",
-	html: true,
-	title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-});});
-</script>
-<!-- END: tooltip -->
-
 <!-- END: main -->

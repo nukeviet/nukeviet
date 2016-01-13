@@ -3,7 +3,7 @@
 <!-- BEGIN: loop -->
 <div class="notify_item">
 	<a href="{DATA.link}" title="">
-		<img src="{DATA.photo}" alt="" class="pull-left" />
+		<img src="{DATA.photo}" alt="" class="pull-left bg-gainsboro" />
 		<div class="pull-left" style="width: 89%">
 			{DATA.title}
 			<br />

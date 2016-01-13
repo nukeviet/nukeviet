@@ -7,10 +7,13 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate Sat, 07 Mar 2015 03:43:56 GMT
  */
- 
-//plugin rewrite obsolute url 
 
-foreach ($rewrite_values as $key => $value)
-{
-	$rewrite_values[$key] = str_replace('"\\1', '"'.NV_MY_DOMAIN.'\\1', $value);
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
+
+//plugin rewrite obsolute url
+
+foreach ($rewrite_values as $key => $value) {
+    $rewrite_values[$key] = str_replace('"\\1', '"'.NV_MY_DOMAIN.'\\1', $value);
 }

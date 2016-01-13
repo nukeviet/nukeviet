@@ -2,13 +2,13 @@
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{error}</div>
 <!-- END: error -->
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.menu.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 
-<form class="form-inline m-bottom" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post" class="confirm-reload">
+<form class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post">
 	<div class="row">
 		<div class="col-sm-24 col-md-18">
 			<table class="table table-striped table-bordered">
@@ -16,12 +16,12 @@
 				<col />
 				<tbody>
 					<tr>
-						<td><strong>{LANG.name}</strong></td>
-						<td><input type="text" maxlength="255" value="{rowcontent.title}" id="idtitle" name="title" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+						<td><strong>{LANG.name}</strong>: <sup class="required">(∗)</sup></td>
+						<td><input type="text" maxlength="250" value="{rowcontent.title}" id="idtitle" name="title" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<td><strong>{LANG.alias}: </strong></td>
-						<td><input class="form-control" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="255"  style="width:350px"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
+						<td><input class="form-control" name="alias" id="idalias" type="text" value="{rowcontent.alias}" maxlength="250"  style="width:350px"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias();">&nbsp;</em></td>
 					</tr>
 				</tbody>
 			</table>
@@ -47,7 +47,7 @@
 				<tbody>
 					<tr>
 						<td><strong>{LANG.content_homeimg}</strong></td>
-						<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+						<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input id="select-img-post" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.content_homeimgalt}</td>
@@ -67,13 +67,13 @@
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
 					<tr>
-						<td><strong>{LANG.content_hometext}</strong> {LANG.content_notehome}. {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+						<td><strong>{LANG.content_hometext}</strong> <i>{LANG.content_notehome}.</i> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
 					</tr>
 					<tr>
 						<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:14px; width: 100%; height:100px;" class="form-control">{rowcontent.hometext}</textarea></td>
 					</tr>
 					<tr>
-						<td><strong>{LANG.content_bodytext}</strong>{LANG.content_bodytext_note}</td>
+						<td><strong>{LANG.content_bodytext}</strong> <sup class="required">(∗)</sup> <i>{LANG.content_bodytext_note}</i></td>
 					</tr>
 					<tr>
 						<td>
@@ -95,10 +95,10 @@
 		<div class="col-sm-24 col-md-6">
 			<div class="row">
 				<div class="col-sm-12 col-md-24">
-					<ul style="padding:4px; margin:0">
+					<ul style="padding-left:4px; margin:0">
 						<li>
 							<p class="message_head">
-								<cite>{LANG.content_cat}:</cite>
+								<cite>{LANG.content_cat}:</cite> <sup class="required">(∗)</sup>
 							</p>
 							<div class="message_body" style="height:260px; overflow: auto">
 								<table class="table table-striped table-bordered table-hover">
@@ -158,7 +158,7 @@
 								<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
 							</p>
 							<div class="message_body">
-								<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 80px;" maxlength="10" readonly="readonly" type="text"/>
+								<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" type="text"/>
 								<select class="form-control" name="phour">
 									{phour}
 								</select>
@@ -173,7 +173,7 @@
 								<cite>{LANG.content_exp_date}:</cite><span class="timestamp">{LANG.content_notetime}</span>
 							</p>
 							<div class="message_body">
-								<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 80px;" maxlength="10" readonly="readonly" type="text"/>
+								<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" type="text"/>
 								<select class="form-control" name="ehour">
 									{ehour}
 								</select>
@@ -269,17 +269,17 @@
 		<input type="hidden" value="1" name="save" />
 		<input type="hidden" value="{rowcontent.id}" name="id" />
 		<!-- BEGIN:status -->
-		<input class="btn btn-primary" name="statussave" type="submit" value="{LANG.save}" />
+		<input class="btn btn-primary submit-post" name="statussave" type="submit" value="{LANG.save}" />
 		<!-- END:status -->
 		<!-- BEGIN:status0 -->
-		<input class="btn btn-primary" name="status4" type="submit" value="{LANG.save_temp}" />
-		<input class="btn btn-primary" name="status1" type="submit" value="{LANG.publtime}" />
+		<input class="btn btn-primary submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
+		<input class="btn btn-primary submit-post" name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status0 -->
         <!-- BEGIN:status1 -->
-		<input class="btn btn-primary" name="status4" type="submit" value="{LANG.save_temp}" />
-		<input class="btn btn-primary" name="status6" type="submit" value="{LANG.save_send_admin}" />
+		<input class="btn btn-primary submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
+		<input class="btn btn-primary submit-post" name="status6" type="submit" value="{LANG.save_send_admin}" />
             <!-- BEGIN:status0 -->
-            <input class="btn btn-primary" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
+            <input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
             <!-- END:status0 -->
 		<!-- END:status1 -->
 		<br />
@@ -288,47 +288,24 @@
 <div id="message"></div>
 <script type="text/javascript">
 //<![CDATA[
+var LANG = [];
+var CFG = [];
+CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
+CFG.upload_current = "{UPLOAD_CURRENT}";
+LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
+LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
 var content_checkcatmsg = "{LANG.content_checkcatmsg}";
-$("input[name=selectimg]").click(function() {
-	var area = "homeimg";
-	var alt = "homeimgalt";
-	var path = "{UPLOADS_DIR_USER}";
-	var currentpath = "{UPLOAD_CURRENT}";
-	var type = "image";
-	nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
-	return false;
-});
-$('[type="submit"]').hover(function(){
-	if( $('[name="keywords[]"]').length == 0 ){
-		if( $('#message-tags').length == 0 ){
-			$('#message').append('<div id="message-tags" class="alert alert-danger">{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags --></div>');
-		}
-	}else{
-		$('#message-tags').remove();
-	}
-	if( $('[name="alias"]').val() == '' ){
-		if( $('#message-alias').length == 0 ){
-			$('#message').append('<div id="message-alias" class="alert alert-danger">{LANG.alias_empty_notice}.</div>');
-		}
-	}else{
-		$('#message-alias').remove();
-	}
-});
-//]]>
-</script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.menu.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.autocomplete.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}modules/news/js/content.js"></script>
 <!-- BEGIN: getalias -->
-<script type="text/javascript">
-//<![CDATA[
 $("#idtitle").change(function() {
 	get_alias();
 });
+<!-- END: getalias -->
 //]]>
 </script>
-<!-- END: getalias -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.menu.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.autocomplete.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/news_content.js"></script>
 <!-- END:main -->

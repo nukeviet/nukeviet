@@ -1,10 +1,10 @@
 <!-- BEGIN: add -->
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <div id="pageContent">
 	<form id="addCat" method="post" action="{ACTION_URL}">
 		<h3 class="myh3">{PTITLE}</h3>
@@ -17,7 +17,11 @@
 				<tbody>
 					<tr>
 						<td>{LANG.title} <span style="color:red">*</span>:</td>
-						<td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="255" /></td>
+						<td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="240" /></td>
+					</tr>
+                    <tr>
+						<td>{LANG.group_description} <span style="color:red">*</span>:</td>
+						<td><input title="{LANG.group_description}" class="form-control" type="text" name="description" value="{DATA.description}" maxlength="255" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.exp_time}:</td>
@@ -55,7 +59,7 @@
 			changeMonth : true,
 			changeYear : true,
 			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
+			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true
 		});
 	});
@@ -209,7 +213,7 @@
 			<tr>
 				<th> {LANG.userid} </th>
 				<th> {LANG.account} </th>
-				<th> {LANG.name} </th>
+				<th> {LANG.nametitle} </th>
 				<th> {LANG.email} </th>
 				<th> {GLANG.actions} </th>
 			</tr>
@@ -219,8 +223,7 @@
 			<tr>
 				<td> {LOOP.userid} </td>
 				<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
-				<td>{LOOP.first_name}</td>
-				<td>{LOOP.last_name}</td>
+				<td>{LOOP.full_name}</td>
 				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 				<td>
 				<!-- BEGIN: delete -->
@@ -235,7 +238,7 @@
 <script type="text/javascript">
 	//<![CDATA[
 	$("a.delete").click(function() {
-		$.ajax({
+		confirm("{LANG.delConfirm} ?") && $.ajax({
 			type : "POST",
 			url : "{MODULE_URL}={OP}",
 			data : "gid={GID}&exclude=" + $(this).attr("title"),

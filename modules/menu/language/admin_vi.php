@@ -9,7 +9,9 @@
  * @Createdate Apr 15, 2011, 02:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '15/04/2011, 15:22';
@@ -41,6 +43,7 @@ $lang_module['module_name'] = 'Chọn module';
 $lang_module['cho_module'] = 'Chọn module';
 $lang_module['error_menu_block'] = 'Lỗi: Chưa nhập khối menu';
 $lang_module['action'] = 'Hoạt động';
+$lang_module['display'] = 'Hiển thị';
 $lang_module['data_no'] = 'Hệ thống chưa có dữ liệu';
 $lang_module['back'] = 'Trở về mục trước ';
 $lang_module['title_exit_cat'] = 'Tên này đã tồn tại';
@@ -79,8 +82,15 @@ $lang_module['add_type_css_info'] = 'Tên class (CSS) để xác định giao di
 $lang_module['add_error_module'] = 'Lỗi: Không có module nào được chỉ định';
 $lang_module['add_error_module_exist'] = 'Lỗi: Module không tồn tại';
 
+$lang_module['action_menu_reload'] = 'Nạp lại';
+$lang_module['action_menu_reload_confirm'] = 'Hành động này sẽ nạp lại các thành phần là chủ đề của module hiện tại. Bạn có muốn tiếp tục?';
+$lang_module['action_menu_reload_success'] = 'Đã nạp lại menu thành công!';
+$lang_module['action_menu_reload_none_success'] = 'Nạp menu không thành công. Vui lòng kiểm tra lại thao tác.';
+$lang_module['action_menu_reload_note'] = 'Nạp lại các thành phần con là chủ đề của module';
 $lang_module['action_menu'] = 'Nạp menu từ';
 $lang_module['action_menu_sys_1'] = 'Các menu là các module';
 $lang_module['action_menu_sys_2'] = 'Các menu là các module, submenu là các chủ đề hoặc chức năng';
 $lang_module['action_menu_sys_3'] = 'Các menu là chủ đề hoặc chức năng module';
 $lang_module['icon'] = 'Icon menu';
+$lang_module['action_form'] = 'Thực hiện';
+$lang_module['msgnocheck'] = 'Bạn cần chọn ít nhất 1 bài viết để thực hiện';

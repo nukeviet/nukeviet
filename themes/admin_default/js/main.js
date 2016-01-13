@@ -4,7 +4,7 @@ var myTimersecField = '';
 function timeoutsesscancel() {
 	clearInterval(myTimersecField);
 	$.ajax({
-		url : nv_siteroot + 'index.php?second=statimg',
+		url : nv_base_siteurl + 'index.php?second=statimg',
 		cache : false
 	}).done(function() {
 		$("#timeoutsess").hide();
@@ -33,6 +33,14 @@ function timeoutsessrun() {
 	}, 1000);
 }
 
+// ModalShow
+function modalShow(a, b) {
+	"" == a && (a = "&nbsp;");
+	$("#sitemodal").find(".modal-title").html(a);
+	$("#sitemodal").find(".modal-body").html(b);
+	$("#sitemodal").modal()
+}
+
 var NV = {
 	menuBusy: false,
 	menuTimer: null,
@@ -58,7 +66,7 @@ var NV = {
 				wrap.css('min-height', '100%');
 			}
 		}
-	},
+	}
 };
 
 $(document).ready(function(){
@@ -69,7 +77,7 @@ $(document).ready(function(){
 	});
 
 	// Show submenu
-	$('#menu-horizontal .dropdown, .menu .dropdown, #left-menu .dropdown:not(.active)').hover(function(){
+	$('#menu-horizontal .dropdown, #left-menu .dropdown:not(.active)').hover(function(){
 		NV.openMenu(this);
 	}, function(){
 		NV.closeMenu(this);

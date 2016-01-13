@@ -7,8 +7,8 @@
 		<table class="table table-striped table-bordered table-hover">
 			<tbody>
 				<tr>
-					<td class="text-right" colspan="2"><strong class="text-middle">{LANG.autoinstall_package_module_select}: </strong><input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/></td>
-					<td width="200">
+					<th class="text-right">{LANG.autoinstall_method_theme_none}:<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}"/></th>
+					<td>
 						<select name="themename" class="form-control w200">
 							<option value="0">{LANG.autoinstall_method_theme_none}</option>
 							<!-- BEGIN: theme -->
@@ -16,20 +16,20 @@
 							<!-- END: theme -->
 						</select>
 					</td>
+				</tr>
+				<tr>
+					<th class="text-right">{LANG.autoinstall_method_module_none}:</th>
 					<td>
-						<select name="modulename" class="form-control w200">
-							<option value="0">{LANG.autoinstall_method__module_none}</option>
-							<!-- BEGIN: module -->
-							<option value="{MODULE.module_file}">{MODULE.custom_title}</option>
-							<!-- END: module -->
-						</select>
+						<!-- BEGIN: module -->
+						<input type="checkbox" value="{MODULE.module_file}" name="module_file[]"> {MODULE.custom_title}<br>
+						<!-- END: module -->
 					</td>
 				</tr>
 				<tr>
-					<td colspan="4" class="text-center"><input name="continue" type="button" value="{LANG.autoinstall_continue}" class="btn btn-primary" /> <input name="back" type="button" value="{LANG.back}" class="btn btn-primary" /></td>
+					<td colspan="2" class="text-center"><input name="continue_ptm" type="button" value="{LANG.autoinstall_continue}" class="btn btn-primary" /></td>
 				</tr>
 				<tr>
-					<td colspan="4" class="text-center">
+					<td colspan="2" class="text-center">
 					<p id="message" style="color: red;display:none">
 						&nbsp;
 					</p></td>
@@ -39,37 +39,9 @@
 	</div>
 </form>
 <script type="text/javascript">
-	//<![CDATA[
-	$(function() {
-		$("input[name=continue]").click(function() {
-			var themename = $("select[name=themename]").val();
-			var modulename = $("select[name=modulename]").val();
-			if (themename != 0 && modulename != 0) {
-				$("#message").html('<img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="" />{LANG.autoinstall_package_processing}');
-				$("#message").fadeIn();
-				$("input[name=continue]").attr("disabled", "disabled");
-				$("input[name=back]").attr("disabled", "disabled");
-				$("#step1").slideUp();
-				$.ajax({
-					type : "POST",
-					url : "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}",
-					data : "themename=" + themename + "&modulename=" + modulename + "&{NV_OP_VARIABLE}={OP}",
-					success : function(data) {
-						$("input[name=back]").removeAttr("disabled");
-						$("input[name=continue]").removeAttr("disabled");
-						$("#message").html(data);
-					}
-				});
-			} else {
-				alert("{LANG.autoinstall_package_noselect_module_theme}");
-				return false;
-			}
-		});
-		$("input[name=back]").click(function() {
-			$("#content").slideUp();
-			$("#step1").slideDown();
-		});
-	});
-	//]]>
+//<![CDATA[
+LANG.autoinstall_package_processing = "{LANG.autoinstall_package_processing}";
+LANG.package_noselect_module_theme = "{LANG.package_noselect_module_theme}";
+//]]>
 </script>
 <!-- END: main -->
