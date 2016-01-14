@@ -34,19 +34,7 @@ See [LICENSE.txt](LICENSE.txt) for the full license.
   - http://twitter.com/nukeviet
   - https://groups.google.com/forum/?fromgroups#!forum/nukeviet
   - http://google.com/+nukeviet
-  
-##Project work on NukeViet
-  - Trung Tâm Dạy Tốt: http://daytot.vn
-    - http://thpt.daytot.vn
-    - http://thcs.daytot.vn
-    - http://tieuhoc.daytot.vn
-  - Trung tâm luyện thi đại học Tô Hoàng: http://luyenthitohoang.com
-    - Lịch học trung tâm: http://luyenthitohoang.com/lich-hoc/
-    - Giáo viên trung tâm http://luyenthitohoang.com/Giao-vien/
-    - Lịch khai giảng trung tâm: http://luyenthitohoang.com/Lich-khai-giang/
-  - Tài liệu thi vào lớp 10: http://thivao10.vn
-  - Cho thuê hội trường tại Hà Nội: http://chothuehoitruong.vn
-  - Cho thuê phòng học tại Hà Nội: http://chothuephonghoc.vn
+
 
 
 ##Nukeviet Centre for Research and Development
