@@ -24,7 +24,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
  full_name varchar(250) NOT NULL,
  alias varchar(250) NOT NULL,
- image varchar(255) NOT NULL,
+ image varchar(255) NOT NULL  DEFAULT '',
  phone varchar(255) NOT NULL,
  fax varchar(255) NOT NULL,
  email varchar(100) NOT NULL,

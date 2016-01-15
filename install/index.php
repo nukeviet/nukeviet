@@ -607,25 +607,30 @@ if ($step == 1) {
 
                     // Cai dat du lieu mau module
                     $lang = NV_LANG_DATA;
-                    foreach ($modules as $key => $row) {
-                        $module_name = $row['title'];
-                        $module_file = $row['module_file'];
-                        $module_data = $row['module_data'];
-                        $module_upload = $row['module_upload'];
-
-                        if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php')) {
-                            include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php';
-                        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php')) {
-                            include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
-                        }
-
-                        if (empty($array_data['socialbutton'])) {
-                            if ($module_file == 'news') {
-                                $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = '" . $module_name . "' AND config_name = 'socialbutton' AND lang='" . $lang . "'");
+                    try {
+                        foreach ($modules as $row) {
+                            $module_name = $row['title'];
+                            $module_file = $row['module_file'];
+                            $module_data = $row['module_data'];
+                            $module_upload = $row['module_upload'];
+    
+                            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php')) {
+                                include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php';
+                            } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php')) {
+                                include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
+                            }
+    
+                            if (empty($array_data['socialbutton'])) {
+                                if ($module_file == 'news') {
+                                    $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = '" . $module_name . "' AND config_name = 'socialbutton' AND lang='" . $lang . "'");
+                                }
                             }
                         }
+                    } catch (PDOException $e) {
+                        $db_config['error'] = $e->getMessage();
+                        trigger_error($e->getMessage());
                     }
-
+                    
                     if (empty($db_config['error'])) {
                         ++ $step;
                         $nv_Request->set_Session('maxstep', $step);

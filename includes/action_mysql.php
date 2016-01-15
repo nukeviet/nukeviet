@@ -115,7 +115,7 @@ function nv_create_table_sys($lang)
 
     $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_searchkeys (
 		 id varchar(32) NOT NULL DEFAULT '',
-		 skey varchar(255) NOT NULL,
+		 skey varchar(250) NOT NULL,
 		 total int(11) NOT NULL DEFAULT '0',
 		 search_engine varchar(50) NOT NULL,
 		 KEY (id),
