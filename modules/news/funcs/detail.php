@@ -19,6 +19,18 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $query = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id);
     $news_contents = $query->fetch();
     if ($news_contents['id'] > 0) {
+        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
+        if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
+            $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+        } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
+            //chuyen huong neu doi alias
+            header('HTTP/1.1 301 Moved Permanently');
+            Header('Location: ' . $base_url_rewrite);
+            die();
+        } else {
+            $canonicalUrl = $base_url_rewrite;
+        }
+        
         $body_contents = $db_slave->query('SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($news_contents['id'] / 2000) . ' where id=' . $news_contents['id'])->fetch();
         $news_contents = array_merge($news_contents, $body_contents);
         unset($body_contents);
@@ -82,12 +94,10 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             } elseif (! empty($show_no_image)) {
                 $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
             }
-            if ($alias_url == $news_contents['alias']) {
-                $publtime = intval($news_contents['publtime']);
-            }
-
+            
+            $publtime = intval($news_contents['publtime']);
             $meta_property['og:type'] = 'article';
-            $meta_property['article:published_time'] = date('Y-m-dTH:i:s', $news_contents['publtime']);
+            $meta_property['article:published_time'] = date('Y-m-dTH:i:s', $publtime);
             $meta_property['article:modified_time'] = date('Y-m-dTH:i:s', $news_contents['edittime']);
             if ($news_contents['exptime']) {
                 $meta_property['article:expiration_time'] = date('Y-m-dTH:i:s', $news_contents['exptime']);
@@ -100,29 +110,11 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $my_footer .= "<script type=\"text/javascript\">alert('". $alert ."')</script>";
             $news_contents['allowed_send'] = 0;
         }
-		if( $alias_url != $news_contents['alias'] ){
-			//chuyen huong neu doi alias
-			$url_Permanently = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
-			header( "HTTP/1.1 301 Moved Permanently" );
-			header( 'Location:' . $url_Permanently );
-			exit();
-		}
     }
 
     if ($publtime == 0) {
         $redirect = '<meta http-equiv="Refresh" content="3;URL=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
         nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect);
-    }
-
-
-    $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
-    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-        Header('Location: ' . $base_url_rewrite);
-        die();
-    } else {
-        $canonicalUrl = $base_url_rewrite;
     }
 
     $news_contents['url_sendmail'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
@@ -159,19 +151,15 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         while ($row = $related->fetch()) {
             if ($row['homeimgthumb'] == 1) {
                 //image thumb
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 2) {
                 //image file
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 3) {
                 //image url
-
                 $row['imghome'] = $row['homeimgfile'];
             } elseif (! empty($show_no_image)) {
                 //no image
-
                 $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $row['imghome'] = '';
@@ -202,19 +190,15 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         while ($row = $related->fetch()) {
             if ($row['homeimgthumb'] == 1) {
                 //image thumb
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 2) {
                 //image file
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 3) {
                 //image url
-
                 $row['imghome'] = $row['homeimgfile'];
             } elseif (! empty($show_no_image)) {
                 //no image
-
                 $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $row['imghome'] = '';
@@ -251,19 +235,15 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         while ($row = $topic->fetch()) {
             if ($row['homeimgthumb'] == 1) {
                 //image thumb
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 2) {
                 //image file
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 3) {
                 //image url
-
                 $row['imghome'] = $row['homeimgfile'];
             } elseif (! empty($show_no_image)) {
                 //no image
-
                 $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $row['imghome'] = '';

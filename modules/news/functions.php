@@ -107,9 +107,9 @@ if (! empty($array_op) and $op == 'main') {
         $number = strlen($id) + 1;
         $alias_url = substr($array_op[1], 0, -$number);
         if ($id > 0 and $alias_url != '') {
-            if( $catid > 0 ){
+            if ($catid > 0) {
 				$op = 'detail';
-			}else{
+			} else {
 				//muc tieu neu xoa chuyen muc cu hoac doi ten alias chuyen muc thi van rewrite duoc bai viet
 				$query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $id );
 				$news_contents = $query->fetch();
