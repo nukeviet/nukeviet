@@ -28,15 +28,15 @@
 				<tbody>
 					<tr>
 						<th class="col-md-4 text-right">{LANG.name}: <sup class="required">(∗)</sup></th>
-						<td class="col-md-20 text-left"><input class="form-control w500" name="title" type="text" value="{title}" maxlength="255" id="idtitle"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+						<td class="col-md-20 text-left"><input class="form-control w500" name="title" type="text" value="{title}" maxlength="250" id="idtitle"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.alias}: </th>
-						<td><input class="form-control w500 pull-left" name="alias" type="text" value="{alias}" maxlength="255" id="idalias"/> &nbsp;<em class="fa fa-refresh fa-lg fa-pointer text-middle" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
+						<td><input class="form-control w500 pull-left" name="alias" type="text" value="{alias}" maxlength="250" id="idalias"/> &nbsp;<em class="fa fa-refresh fa-lg fa-pointer text-middle" onclick="get_alias('cat', {catid});">&nbsp;</em></td>
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.titlesite}: </th>
-						<td><input class="form-control w500" name="titlesite" type="text" value="{titlesite}" maxlength="255" id="titlesite"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+						<td><input class="form-control w500" name="titlesite" type="text" value="{titlesite}" maxlength="250" id="titlesite"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.cat_sub}: </th>
@@ -109,6 +109,7 @@
 <script type="text/javascript">
 var CFG = [];
 CFG.upload_current = '{UPLOAD_CURRENT}';
+CFG.upload_path = '{UPLOAD_PATH}';
 $(document).ready(function() {
 	$("#parentid").select2();
 	$("#titlelength").html($("#idtitle").val().length);

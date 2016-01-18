@@ -392,7 +392,7 @@ $(document).on({
 $(window).on("resize", function() {
 	winResize();
 	nvbreadcrumbs();
-	if (150 < cRangeX || 150 < cRangeY) tip_active && tipHide(), winHelp && winHelpHide()
+	//if (150 < cRangeX || 150 < cRangeY) tip_active && tipHide(), winHelp && winHelpHide()
 });
 
 // Load Social script - lasest

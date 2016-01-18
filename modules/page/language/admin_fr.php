@@ -9,7 +9,9 @@
 * @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
 $lang_translator['createdate'] = '31/07/2015, 16:30';
@@ -37,6 +39,7 @@ $lang_module['keywords'] = 'Mot clé';
 $lang_module['feature'] = 'Fonctionnalités';
 $lang_module['description'] = 'Description';
 $lang_module['image'] = 'L\'image d\'illustration';
+$lang_module['first_news'] = 'Lorsque le nouveau poste sera dabord';
 $lang_module['imagealt'] = 'Explication de l\'image';
 $lang_module['socialbutton'] = 'Outils de LIKE';
 $lang_module['socialbuttonnote'] = 'Afficher les outils de Like facebook, G+, Twitter';

@@ -5,7 +5,7 @@
 <link href="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <div class="news_column panel panel-default">
 	<div class="panel-body">
-		<h3 class="title margin-bottom-lg">{DETAIL.title}</h3>
+		<h1 class="title margin-bottom-lg">{DETAIL.title}</h1>
         <div class="row margin-bottom-lg">
             <div class="col-md-12">
                 <span class="h5">{DETAIL.publtime}</span>
@@ -45,10 +45,11 @@
                     <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
             </figure>
             <!-- END: empty -->
-            <div class="hometext">{DETAIL.hometext}</div>
 			<!-- END: imgthumb -->
+			 
+			 <div class="hometext m-bottom">{DETAIL.hometext}</div>
+			
     		<!-- BEGIN: imgfull -->
-    		<div class="hometext m-bottom">{DETAIL.hometext}</div>
     		<figure class="article center">
     			<img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
     			<!-- BEGIN: note --><figcaption>{DETAIL.image.note}</figcaption><!-- END: note -->

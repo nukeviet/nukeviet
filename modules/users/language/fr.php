@@ -9,7 +9,9 @@
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -48,29 +50,29 @@ $lang_module['retype_captcha'] = 'Entrez le code de sécurité';
 $lang_module['usage_terms'] = 'Les termes et conditions générales de l\'inscription et l\'utilisation de notre site';
 $lang_module['accept'] = 'J\'accepte!';
 $lang_module['accept2'] = 'J\'accepte';
-$lang_module['avata'] = 'L\'image du profile';
-$lang_module['avata_pagetitle'] = 'Mise en ligne l\'image comme l\'image du profile';
-$lang_module['avata_bigfile'] = 'Volume du fichier au maximum: <= %1$s';
-$lang_module['avata_bigsize'] = 'Les dimensions de l\'images au maximum (px): %1$s x %2$s';
-$lang_module['avata_smallsize'] = 'Les dimensions de l\'images au minimum (px): %1$s x %2$s';
-$lang_module['avata_filetype'] = 'Les extensions de fichier acceptées: *.jpg, *.png';
-$lang_module['avata_filesize'] = 'Volume';
-$lang_module['avata_ftype'] = 'Type';
-$lang_module['avata_filedimension'] = 'Dimension réelle';
-$lang_module['avata_displaydimension'] = 'Dimension d\'affichage';
-$lang_module['avata_guide'] = 'S\'il vous plaît suivez les étapes ci-dessous pour changer votre avatar';
-$lang_module['avata_crop'] = 'Couper l\'image';
-$lang_module['avata_chosen'] = 'Choisir une image en cliquant sur la case à droite';
-$lang_module['avata_chosen_other'] = 'Choisir un autre image';
-$lang_module['avata_upload'] = 'Choisir un zone d\'affichage après cliquer sur "Couper l\'image"';
-$lang_module['avata_delete'] = 'Effacer l\'images du profile';
-$lang_module['avata_clear'] = 'Effacer tous';
-$lang_module['avata_select_img'] = 'Cliquer ici pour choisir une image';
-$lang_module['avata_error_data'] = 'Erreur: Les données sont insuffisantes, veuillez refaire';
-$lang_module['avata_error_save'] = 'Erreur: Système ne peut pas traiter votre demande, veuillez re-essayer';
-$lang_module['avata_old_not_exists'] = 'L\'ancienne image de profile n\'existe plus';
-$lang_module['avata_news_not_exists'] = 'L\'image de profile n\'existe pas';
-$lang_module['avata_news_copy_error'] = 'Ne peux pas sauvegarder l\'image de profile';
+$lang_module['avatar'] = 'L\'image du profile';
+$lang_module['avatar_pagetitle'] = 'Mise en ligne l\'image comme l\'image du profile';
+$lang_module['avatar_bigfile'] = 'Volume du fichier au maximum: <= %1$s';
+$lang_module['avatar_bigsize'] = 'Les dimensions de l\'images au maximum (px): %1$s x %2$s';
+$lang_module['avatar_smallsize'] = 'Les dimensions de l\'images au minimum (px): %1$s x %2$s';
+$lang_module['avatar_filetype'] = 'Les extensions de fichier acceptées: *.jpg, *.png';
+$lang_module['avatar_filesize'] = 'Volume';
+$lang_module['avatar_ftype'] = 'Type';
+$lang_module['avatar_filedimension'] = 'Dimension réelle';
+$lang_module['avatar_displaydimension'] = 'Dimension d\'affichage';
+$lang_module['avatar_guide'] = 'S\'il vous plaît suivez les étapes ci-dessous pour changer votre avatar';
+$lang_module['avatar_crop'] = 'Couper l\'image';
+$lang_module['avatar_chosen'] = 'Choisir une image en cliquant sur la case à droite';
+$lang_module['avatar_chosen_other'] = 'Choisir un autre image';
+$lang_module['avatar_upload'] = 'Choisir un zone d\'affichage après cliquer sur "Couper l\'image"';
+$lang_module['avatar_delete'] = 'Effacer l\'images du profile';
+$lang_module['avatar_clear'] = 'Effacer tous';
+$lang_module['avatar_select_img'] = 'Cliquer ici pour choisir une image';
+$lang_module['avatar_error_data'] = 'Erreur: Les données sont insuffisantes, veuillez refaire';
+$lang_module['avatar_error_save'] = 'Erreur: Système ne peut pas traiter votre demande, veuillez re-essayer';
+$lang_module['avatar_old_not_exists'] = 'L\'ancienne image de profile n\'existe plus';
+$lang_module['avatar_news_not_exists'] = 'L\'image de profile n\'existe pas';
+$lang_module['avatar_news_copy_error'] = 'Ne peux pas sauvegarder l\'image de profile';
 $lang_module['birthday'] = 'Date de naissance';
 $lang_module['showmail'] = 'Afficher l’émail';
 $lang_module['login'] = 'Se connecter';

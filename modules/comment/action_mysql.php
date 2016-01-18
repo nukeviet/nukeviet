@@ -8,7 +8,9 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $sql_drop_module = array();
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_comment";

@@ -9,7 +9,9 @@
  * @Createdate Apr 15, 2011, 02:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '15/04/2011, 15:22';
@@ -24,7 +26,6 @@ $lang_module['edit_menu'] = 'Sửa menu';
 $lang_module['menu_name'] = 'Tên menu';
 $lang_module['menu_description'] = 'Mô tả';
 $lang_module['error_menu_name'] = 'Lỗi: Bạn chưa nhập tên menu';
-$lang_module['error_module_name'] = 'Lỗi: Bạn chưa chưa chọn module liên kết';
 $lang_module['menu_number'] = 'Số phần tử';
 $lang_module['save'] = 'Lưu';
 $lang_module['edit'] = 'Sửa';

@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -48,29 +50,29 @@ $lang_module['retype_captcha'] = 'Nhập vào mã xác nhận';
 $lang_module['usage_terms'] = 'Quy định đăng ký thành viên';
 $lang_module['accept'] = 'Tôi đồng ý với Quy định trên';
 $lang_module['accept2'] = 'Tôi đồng ý với';
-$lang_module['avata'] = 'Hình đại diện';
-$lang_module['avata_pagetitle'] = 'Tải lên hình đại diện';
-$lang_module['avata_bigfile'] = 'Dung lượng file cho phép: <= %1$s';
-$lang_module['avata_bigsize'] = 'Kích thước ảnh lớn nhất cho phép (px): %1$s x %2$s';
-$lang_module['avata_smallsize'] = 'Kích thước tối thiểu của hình là (px): %1$s x %2$s';
-$lang_module['avata_filetype'] = 'Định dạng file cho phép: *.jpg, *.png';
-$lang_module['avata_filesize'] = 'Dung lượng';
-$lang_module['avata_ftype'] = 'Kiểu';
-$lang_module['avata_filedimension'] = 'Kích thước thực tế';
-$lang_module['avata_displaydimension'] = 'Kích thước hiển thị';
-$lang_module['avata_guide'] = 'Để thay đổi hình đại diện hãy thực hiện theo các bước';
-$lang_module['avata_crop'] = 'Cắt hình';
-$lang_module['avata_chosen'] = 'Chọn hình bằng cách click vào ô bên';
-$lang_module['avata_chosen_other'] = 'Chọn hình khác';
-$lang_module['avata_upload'] = 'Chọn vùng hiển thị sau đó nhấn "Cắt hình"';
-$lang_module['avata_delete'] = 'Xóa hình đại diện';
-$lang_module['avata_clear'] = 'Xóa trắng';
-$lang_module['avata_select_img'] = 'Nhấn vào đây để chọn hình';
-$lang_module['avata_error_data'] = 'Lỗi: Dữ liệu không đầy đủ, vui lòng thực hiện lại';
-$lang_module['avata_error_save'] = 'Lỗi: Hệ thống không thực hiện được yêu cầu, vui lòng thử lại';
-$lang_module['avata_old_not_exists'] = 'Hình đại diện cũ không tồn tại';
-$lang_module['avata_news_not_exists'] = 'Hình đại diện đã chọn không tồn tại';
-$lang_module['avata_news_copy_error'] = 'Không thể lưu hình đại diện';
+$lang_module['avatar'] = 'Hình đại diện';
+$lang_module['avatar_pagetitle'] = 'Tải lên hình đại diện';
+$lang_module['avatar_bigfile'] = 'Dung lượng file cho phép: <= %1$s';
+$lang_module['avatar_bigsize'] = 'Kích thước ảnh lớn nhất cho phép (px): %1$s x %2$s';
+$lang_module['avatar_smallsize'] = 'Kích thước tối thiểu của hình là (px): %1$s x %2$s';
+$lang_module['avatar_filetype'] = 'Định dạng file cho phép: *.jpg, *.png';
+$lang_module['avatar_filesize'] = 'Dung lượng';
+$lang_module['avatar_ftype'] = 'Kiểu';
+$lang_module['avatar_filedimension'] = 'Kích thước thực tế';
+$lang_module['avatar_displaydimension'] = 'Kích thước hiển thị';
+$lang_module['avatar_guide'] = 'Để thay đổi hình đại diện hãy thực hiện theo các bước';
+$lang_module['avatar_crop'] = 'Cắt hình';
+$lang_module['avatar_chosen'] = 'Chọn hình bằng cách click vào ô bên';
+$lang_module['avatar_chosen_other'] = 'Chọn hình khác';
+$lang_module['avatar_upload'] = 'Chọn vùng hiển thị sau đó nhấn "Cắt hình"';
+$lang_module['avatar_delete'] = 'Xóa hình đại diện';
+$lang_module['avatar_clear'] = 'Xóa trắng';
+$lang_module['avatar_select_img'] = 'Nhấn vào đây để chọn hình';
+$lang_module['avatar_error_data'] = 'Lỗi: Dữ liệu không đầy đủ, vui lòng thực hiện lại';
+$lang_module['avatar_error_save'] = 'Lỗi: Hệ thống không thực hiện được yêu cầu, vui lòng thử lại';
+$lang_module['avatar_old_not_exists'] = 'Hình đại diện cũ không tồn tại';
+$lang_module['avatar_news_not_exists'] = 'Hình đại diện đã chọn không tồn tại';
+$lang_module['avatar_news_copy_error'] = 'Không thể lưu hình đại diện';
 $lang_module['birthday'] = 'Ngày tháng năm sinh';
 $lang_module['showmail'] = 'Hiển thị email';
 $lang_module['login'] = 'Thành viên đăng nhập';

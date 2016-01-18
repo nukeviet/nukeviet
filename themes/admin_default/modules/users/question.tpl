@@ -18,7 +18,7 @@
 						<option value="{WEIGHT.key}"{WEIGHT.selected}>{WEIGHT.title}</option>
 						<!-- END: weight -->
 					</select></td>
-					<td><input name="hidden_{ROW.qid}" id="hidden_{ROW.qid}" type="hidden" value="{ROW.title}" /><input class="form-control" type="text" name="title_{ROW.qid}" id="title_{ROW.qid}" value="{ROW.title}" style="width:550px" />&nbsp; <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_save_title({ROW.qid});">{LANG.save}</a> &nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_question({ROW.qid})">{GLANG.delete}</a></td>
+					<td><input name="hidden_{ROW.qid}" id="hidden_{ROW.qid}" type="hidden" value="{ROW.title}" /><input class="form-control" type="text" name="title_{ROW.qid}" id="title_{ROW.qid}" value="{ROW.title}" style="width:550px" maxlength="240"/>&nbsp; <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_save_title({ROW.qid});">{LANG.save}</a> &nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_question({ROW.qid})">{GLANG.delete}</a></td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>

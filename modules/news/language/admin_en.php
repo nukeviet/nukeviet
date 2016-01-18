@@ -9,7 +9,9 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -272,5 +274,3 @@ $lang_module['featured'] = 'Featured news';
 $lang_module['addtocat'] = 'Add featured article in the category';
 $lang_module['delete_from_cat'] = 'Delete posts from category';
 $lang_module['not_featured'] = 'No posts yet';
-
-?>

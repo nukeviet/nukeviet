@@ -9,7 +9,9 @@
  * @Createdate Jun 06, 2011, 12:55:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '06/06/2011, 13:55';
@@ -44,7 +46,6 @@ $lang_module['php_support'] = 'Hỗ trợ PHP';
 $lang_module['php_version'] = 'Phiên bản PHP';
 $lang_module['pdo_support'] = 'Hỗ trợ PHP Data Objects';
 $lang_module['request'] = 'Yêu cầu';
-$lang_module['safe_mode'] = 'Safe mode';
 $lang_module['required_off'] = 'Bắt buộc tắt';
 $lang_module['required_on'] = 'Bắt buộc hỗ trợ';
 $lang_module['recommnet'] = 'Khuyến cáo';
@@ -117,13 +118,13 @@ $lang_module['admin_repass_note'] = 'Nhập lại mật khẩu.';
 $lang_module['success'] = 'Bạn đã cài đặt thành công!';
 $lang_module['congratulations'] = 'Xin chúc mừng!!! Bạn đã cài đặt thành công hệ thống Nukeviet. Bạn cần đăng nhập vào khu vực quản trị để tiến hành các bước cấu hình site.';
 $lang_module['notesupport'] = 'Mọi nhu cầu về hỗ trợ kỹ thuật xin liên hệ tại <a href="http://nukeviet.vn" target="_blank"><strong>diễn đàn Nukeviet.VN</strong></a>.';
-$lang_module['noteuploads'] = '<strong>Chú ý:</strong> Hãy <strong>CHMOD thư mục uploads</strong> trên webroot và các thư mục con nằm trong nó ở chế độ 777. Nếu không làm việc này ngay, hệ thống sẽ không cho phép bạn upload các tập tin lên host.';
+$lang_module['noteuploads'] = '<strong>Chú ý:</strong> Hãy <strong>CHMOD thư mục uploads</strong> trên webroot và các thư mục con nằm trong nó ở chế độ php có thể ghi file. Nếu không làm việc này ngay, hệ thống sẽ không cho phép bạn upload các tập tin lên host.';
 $lang_module['thanks'] = 'Xin cảm ơn và chúc thành công!';
 $lang_module['gohome'] = 'Xem trang chủ';
 $lang_module['goadmin'] = 'Đăng nhập trang quản trị';
 $lang_module['finish'] = 'Kết thúc';
 $lang_module['checkfileconfig'] = 'Kiểm tra lại';
-$lang_module['movefileconfig'] = 'Bạn cần chuyển file config.php trong thư mục tmp ra thư mục gốc của site, sau đó click vào nút kiểm tra để hệ thống kiểm tra lại';
+$lang_module['movefileconfig'] = 'Bạn cần chuyển file <b>config.php</b> trong thư mục <b>data/tmp</b> ra thư mục gốc của site, sau đó click vào nút kiểm tra để hệ thống kiểm tra lại';
 $lang_module['copyright'] = 'Chú ý: Việc đăng lại bài viết trên ở website hoặc các phương tiện truyền thông khác mà không ghi rõ nguồn http://nukeviet.vn là vi phạm bản quyền';
 $lang_module['question'] = 'Điền câu hỏi bảo mật';
 $lang_module['answer_question'] = 'Câu trả lời của bạn';
@@ -230,7 +231,7 @@ $lang_module['update_file_backup_ok'] = 'Sao lưu thành công, nhấp vào đâ
 $lang_module['update_file_backup_error'] = 'Hệ thống không tự sao lưu được bạn hãy tự sao lưu';
 $lang_module['update_step5_info'] = 'Các bước thực hiện đã hoàn tất, bây giờ bạn hãy đọc và làm theo một số lưu ý sau trước khi chọn "<strong>Bước kế tiếp</strong>".';
 $lang_module['update_step5_info_error'] = 'Hệ thống không tìm thấy hướng dẫn nào, nhấp "<strong>Bước kế tiếp</strong>" để tiếp tục.';
-$lang_module['update_error_log_data'] = 'Lỗi: Hệ thống không ghi nhật kí được, hãy CHMOD 0777 thư mục "<strong>%s</strong>" sau đó nhấn F5 (tải lại trang) để tiếp tục.';
+$lang_module['update_error_log_data'] = 'Lỗi: Hệ thống không ghi nhật kí được, hãy CHMOD thư mục "<strong>%s</strong>" để php có thể ghi file, sau đó nhấn F5 (tải lại trang) để tiếp tục.';
 $lang_module['update_data_backuped'] = 'Bạn đã sao lưu CSDL vào lúc %s';
 $lang_module['update_file_backuped'] = 'Bạn đã sao lưu các file thay đổi vào lúc %s';
 $lang_module['update_data_not_allow'] = 'Việc sửa đổi CSDL đã diễn ra do đó bạn không được sao lưu CSDL nữa mà hãy tiếp tục thực hiện các công việc còn lại';

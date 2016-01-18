@@ -19,7 +19,8 @@ var myTimerPage = "",
 	cRangeX = 0,
 	cRangeY = 0,
 	docX = 0,
-	docY = 0;
+	docY = 0,
+	brcb = $('.breadcrumbs-wrap');
 
 function winResize() {
 	oldWinX = winX;
@@ -244,6 +245,42 @@ function initializeMap() {
 		animation: google.maps.Animation.DROP
 	});
 }
+
+// Breadcrumbs
+function nvbreadcrumbs() {
+  if (brcb.length) {
+    var g = $(".display", brcb).innerWidth() - 40, b = $(".breadcrumbs", brcb), h = $(".temp-breadcrumbs", brcb), e = $(".subs-breadcrumbs", brcb), f = $(".show-subs-breadcrumbs", brcb), a = [], c = !1;
+    h.find("a").each(function() {
+      a.push([$(this).attr("title"), $(this).attr("href")]);
+    });
+    b.html("");
+    e.html("");
+    for (i = a.length - 1;0 <= i;i--) {
+      if (!c) {
+        var d = 0;
+        b.prepend('<li id="brcr_' + i + '" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title">' + a[i][0] + "</span></a></li>");
+        b.find("li").each(function() {
+          d += $(this).outerWidth(!0);
+        });
+        d > g && (c = !0, $("#brcr_" + i, b).remove());
+      }
+      c && e.append('<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a itemprop="url" href="' + a[i][1] + '"><span itemprop="title"><em class="fa fa-long-arrow-up"></em> ' + a[i][0] + "</span></a></li>");
+    }
+    c ? f.removeClass("hidden") : f.addClass("hidden");
+  }
+}
+
+function showSubBreadcrumbs(a, b) {
+  b.preventDefault();
+  b.stopPropagation();
+  var c = $(".subs-breadcrumbs", brcb);
+  $("em", a).is(".fa-angle-right") ? $("em", a).removeClass("fa-angle-right").addClass("fa-angle-down") : $("em", a).removeClass("fa-angle-down").addClass("fa-angle-right");
+  c.toggleClass("open");
+  $(document).on("click", function() {
+    $("em", a).is(".fa-angle-down") && ($("em", a).removeClass("fa-angle-down").addClass("fa-angle-right"), c.removeClass("open"));
+  });
+}
+
 $(function() {
 	winResize();
 	fix_banner_center();
@@ -388,10 +425,12 @@ $(document).on({
 $(window).on("resize", function() {
 	winResize();
 	fix_banner_center();
-	if (150 < cRangeX || 150 < cRangeY) tipHide(), ftipHide()
+	nvbreadcrumbs();
+	//if (150 < cRangeX || 150 < cRangeY) tipHide(), ftipHide()
 });
 // Load Social script - lasest
 $(window).load(function() {
+	nvbreadcrumbs();
 	(0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
 		var d = a.getElementsByTagName(b)[0];
 		var fb_app_id = ($('[property="fb:app_id"]').length > 0) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
