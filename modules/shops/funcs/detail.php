@@ -140,7 +140,7 @@ if (nv_user_in_groups($global_array_shops_cat[$catid]['groups_view'])) {
 
     // Hien thi tabs
     $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_tabs where active=1 ORDER BY weight ASC';
-    $data_content['tabs'] = nv_db_cache($sql, 'id', $module_name);
+    $data_content['tabs'] = $nv_Cache->db($sql, 'id', $module_name);
 
     $data_content['files'] = array();
     if (!empty($data_content['tabs'])) {

@@ -32,7 +32,7 @@ if ($listid != "" and md5($global_config['sitekey'] . session_id()) == $checkss)
 }
 
 nv_set_status_module();
-nv_del_moduleCache($module_name);
+$nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;

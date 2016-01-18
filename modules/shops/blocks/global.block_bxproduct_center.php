@@ -23,14 +23,14 @@ if (! nv_function_exists('nv_global_bxproduct_center')) {
      */
     function nv_block_config_bxproduct_center_blocks($module, $data_block, $lang_block)
     {
-        global $db_config, $site_mods;
+        global $nv_Cache, $db_config, $site_mods;
 
         $html = "<tr>";
         $html .= "	<td>" . $lang_block['blockid'] . "</td>";
         $html .= "	<td><select name=\"config_blockid\" class=\"form-control w200\">\n";
 
         $sql = "SELECT bid, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM " . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
-        $list = nv_db_cache($sql, 'catid', $module);
+        $list = $nv_Cache->db($sql, 'catid', $module);
 
         foreach ($list as $l) {
             $sel = ($data_block['blockid'] == $l['bid']) ? ' selected' : '';
@@ -153,7 +153,7 @@ if (! nv_function_exists('nv_global_bxproduct_center')) {
      */
     function nv_global_bxproduct_center($block_config)
     {
-        global $site_mods, $global_config, $module_config, $lang_module, $module_name, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config, $blockID;
+        global $nv_Cache, $site_mods, $global_config, $module_config, $lang_module, $module_name, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config, $blockID;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
@@ -192,7 +192,7 @@ if (! nv_function_exists('nv_global_bxproduct_center')) {
             }
 
             $sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, typeprice FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
-            $list = nv_db_cache($sql, 'catid', $module);
+            $list = $nv_Cache->db($sql, 'catid', $module);
             foreach ($list as $row) {
                 $global_array_shops_cat[$row['catid']] = array(
                     'catid' => $row['catid'],
@@ -218,7 +218,7 @@ if (! nv_function_exists('nv_global_bxproduct_center')) {
             // Lay ty gia ngoai te
             $sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $mod_data . '_money_' . NV_LANG_DATA;
             $cache_file = NV_LANG_DATA . '_' . md5($sql) . '_' . NV_CACHE_PREFIX . '.cache';
-            if (($cache = nv_get_cache($module, $cache_file)) != false) {
+            if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
                 $money_config = unserialize($cache);
             } else {
                 $money_config = array();
@@ -236,7 +236,7 @@ if (! nv_function_exists('nv_global_bxproduct_center')) {
                 }
                 $result->closeCursor();
                 $cache = serialize($money_config);
-                nv_set_cache($module, $cache_file, $cache);
+                $nv_Cache->setItem($module, $cache_file, $cache);
             }
         }
 
@@ -253,7 +253,7 @@ if (! nv_function_exists('nv_global_bxproduct_center')) {
         $xtpl->assign('NUMVIEW', $num_view);
         $xtpl->assign('PAGER', $pager);
         $xtpl->assign('BLOCKID', $blockID);
-        
+
         //$xtpl->assign( 'WIDTH', $pro_config['homewidth'] );
 
         $db->sqlreset()
@@ -264,7 +264,7 @@ if (! nv_function_exists('nv_global_bxproduct_center')) {
             ->order('t1.id DESC')
             ->limit($num_get);
 
-        $list = nv_db_cache($db->sql(), '', $module);
+        $list = $nv_Cache->db($db->sql(), '', $module);
         foreach ($list as $row) {
             $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl'];
 

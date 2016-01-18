@@ -86,7 +86,7 @@ if ($groupid > 0) {
                     $db->query("DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_group_cateid WHERE groupid=" . $groupid);
 
                     nv_fix_group_order();
-                    nv_del_moduleCache($module_name);
+                    $nv_Cache->delMod($module_name);
 
                     Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&parentid=" . $parentid);
                     die();
@@ -110,7 +110,7 @@ if ($groupid > 0) {
 
                         nv_fix_group_order();
                         nv_fix_group_count($groupidnews);
-                        nv_del_moduleCache($module_name);
+                        $nv_Cache->delMod($module_name);
 
                         Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&parentid=" . $parentid);
                         die();
@@ -134,7 +134,7 @@ if ($groupid > 0) {
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['delgroupandrows'], $title, $admin_info['userid']);
         }
 
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     }
 }
 

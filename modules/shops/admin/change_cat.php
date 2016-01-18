@@ -65,7 +65,7 @@ if ($catid > 0) {
         $db->query($sql);
         $content = 'OK_' . $parentid;
     }
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
 }
 
 include NV_ROOTDIR . '/includes/header.php';

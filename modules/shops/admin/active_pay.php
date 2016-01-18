@@ -87,7 +87,7 @@ if ($save == 1) {
 
         $contents = $lang_module['order_submit_unpay_ok'];
 
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     } elseif ($action == 'pay') {
         $transaction_status = 4;
         $payment_id = 0;
@@ -154,7 +154,7 @@ if ($save == 1) {
 
         $contents = $lang_module['order_submit_pay_ok'];
 
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     }
 }
 die($contents);

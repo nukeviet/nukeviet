@@ -12,9 +12,6 @@ if (! defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
 
-// Gọi thư viện PayPal SDK
-require_once(NV_ROOTDIR . '/includes/class/PayPal/PPBootStrap.php');
-
 // Thông tin cấu hình gian hàng
 foreach ($payment_config as $ckey => $cval) {
     $payment_config[$ckey] = nv_unhtmlspecialchars($cval);

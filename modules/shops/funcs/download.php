@@ -35,7 +35,7 @@ if (nv_user_in_groups($download_groups)) {
             Header('Location: ' . $path);
             die();
         } else {
-            $download = new download(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload .'/files/'. $path, NV_UPLOADS_REAL_DIR);
+            $download = new NukeViet\Files\Download(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload .'/files/'. $path, NV_UPLOADS_REAL_DIR);
             $download->download_file();
             exit();
         }

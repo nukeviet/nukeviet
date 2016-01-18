@@ -138,7 +138,7 @@ if (! empty($savecat)) {
         if ($newcatid > 0) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_catalog', 'id ' . $newcatid, $admin_info['userid']);
             nv_fix_cat_order();
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
             die();
         } else {
@@ -176,15 +176,15 @@ if (! empty($savecat)) {
                     $db->query($sql);
                     nv_fix_cat_order();
                 }
-                
+
                 //cập nhật các form dữ liệu tùy biến cho các subcat
                 $_sql = 'SELECT catid FROM ' . $table_name . ' WHERE parentid=' . intval($data['catid']);
                 $_query = $db->query($_sql);
                 while ($row_catid = $_query->fetch()) {
                     $db->query('UPDATE ' . $table_name . ' SET form=' .$db->quote($data['form']). ' WHERE catid=' . intval($row_catid['catid']));
                 }
-                
-                nv_del_moduleCache($module_name);
+
+                $nv_Cache->delMod($module_name);
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
                 die();
             }

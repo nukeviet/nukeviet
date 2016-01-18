@@ -55,7 +55,7 @@ if ($mod == 'weight' and $new_vid > 0) {
     $content = 'OK_' . $bid;
 }
 
-nv_del_moduleCache($module_name);
+$nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $content;

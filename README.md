@@ -9,3 +9,12 @@ Trên kinh nghiệm thực tế phát triển các hệ thống bán hàng lớn
 ## Cài đặt 
 1. Cài đặt từ store http://nukeviet.vn/vi/store/modules/shops/
 2. Cài đặt từ github https://github.com/nukeviet/module-shops/releases
+3. Nếu sử dụng thanh toán online cần dùng Composer cài thêm các thư viện sau:
+
+```
+paypal/sdk-core-php
+paypal/permissions-sdk-php
+paypal/merchant-sdk-php
+nusphere/nusoap
+```
+

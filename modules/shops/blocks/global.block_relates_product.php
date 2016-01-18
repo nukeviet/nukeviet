@@ -23,13 +23,13 @@ if (! nv_function_exists('nv_relates_product')) {
      */
     function nv_block_config_relates_blocks($module, $data_block, $lang_block)
     {
-        global $db_config, $site_mods;
+        global $nv_Cache, $db_config, $site_mods;
 
         $html = "<tr>";
         $html .= "	<td>" . $lang_block['blockid'] . "</td>";
         $html .= "	<td><select name=\"config_blockid\" class=\"form-control w200\">\n";
         $sql = "SELECT bid, " . NV_LANG_DATA . "_title," . NV_LANG_DATA . "_alias FROM " . $db_config['prefix'] . "_" . $site_mods[$module]['module_data'] . "_block_cat ORDER BY weight ASC";
-        $list = nv_db_cache($sql, 'catid', $module);
+        $list = $nv_Cache->db($sql, 'catid', $module);
         foreach ($list as $l) {
             $sel = ($data_block['blockid'] == $l['bid']) ? ' selected' : '';
             $html .= "<option value=\"" . $l['bid'] . "\" " . $sel . ">" . $l[NV_LANG_DATA . '_title'] . "</option>\n";
@@ -99,7 +99,7 @@ if (! nv_function_exists('nv_relates_product')) {
      */
     function nv_relates_product($block_config)
     {
-        global $site_mods, $global_config, $lang_module, $module_config, $module_config, $module_name, $module_info, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config;
+        global $nv_Cache, $nv_Cache, $site_mods, $global_config, $lang_module, $module_config, $module_config, $module_name, $module_info, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
@@ -113,7 +113,7 @@ if (! nv_function_exists('nv_relates_product')) {
 
         if ($module != $module_name) {
             $sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, numlinks, ' . NV_LANG_DATA . '_description AS description, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, typeprice FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
-            $list = nv_db_cache($sql, 'catid', $module);
+            $list = $nv_Cache->db($sql, 'catid', $module);
             foreach ($list as $row) {
                 $global_array_shops_cat[$row['catid']] = array(
                     'catid' => $row['catid'],
@@ -150,7 +150,7 @@ if (! nv_function_exists('nv_relates_product')) {
             // Lay ty gia ngoai te
             $sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $mod_data . '_money_' . NV_LANG_DATA;
             $cache_file = NV_LANG_DATA . '_' . md5($sql) . '_' . NV_CACHE_PREFIX . '.cache';
-            if (($cache = nv_get_cache($module, $cache_file)) != false) {
+            if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
                 $money_config = unserialize($cache);
             } else {
                 $money_config = array();
@@ -168,7 +168,7 @@ if (! nv_function_exists('nv_relates_product')) {
                 }
                 $result->closeCursor();
                 $cache = serialize($money_config);
-                nv_set_cache($module, $cache_file, $cache);
+                $nv_Cache->setItem($module, $cache_file, $cache);
             }
         }
 
@@ -186,7 +186,7 @@ if (! nv_function_exists('nv_relates_product')) {
             ->order('t1.addtime DESC, t2.weight ASC')
             ->limit($block_config['numrow']);
 
-        $list = nv_db_cache($db->sql(), 'id', $module);
+        $list = $nv_Cache->db($db->sql(), 'id', $module);
 
         $i = 1;
         $cut_num = $block_config['cut_num'];

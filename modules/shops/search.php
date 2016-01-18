@@ -66,7 +66,7 @@ if ($num_items) {
     $array_cat_alias = array();
 
     $sql = 'SELECT catid, ' . NV_LANG_DATA . '_alias AS alias FROM ' . $db_config['prefix'] . '_' . $m_values['module_data'] . '_catalogs';
-    $array_cat_alias = nv_db_cache($sql, 'catid', $m_values['module_name']);
+    $array_cat_alias = $nv_Cache->db($sql, 'catid', $m_values['module_name']);
     $array_cat_alias[0] = array( 'alias' => 'Other' );
 
     $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $m_values['module_name'] . '&amp;' . NV_OP_VARIABLE . '=';

@@ -129,7 +129,7 @@ if ($order_id > 0 and $checkss == md5($order_id . $global_config['sitekey'] . se
     $contents = "OK_0";
 }
 
-nv_del_moduleCache($module_name);
+$nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;

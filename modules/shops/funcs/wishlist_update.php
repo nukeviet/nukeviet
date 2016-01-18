@@ -39,7 +39,7 @@ if ($ac == 'add') {
         if (! in_array($id, $listid)) {
             $listid[] = $id;
             $listid = implode(',', $listid);
-            
+
             $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_wishlist SET listid = ' . $db->quote($listid) . ' WHERE wid = ' . $wishlist['wid'];
             if (! $db->query($sql)) {
                 die('NO_0_' . $lang_module['wishlist_error']);
@@ -56,32 +56,32 @@ if ($ac == 'add') {
             die('NO_0_' . $lang_module['wishlist_error']);
         }
     }
-    
-    nv_del_moduleCache($module_name);
+
+    $nv_Cache->delMod($module_name);
 } elseif ($ac == 'del') {
     $listid = explode(',', $listid);
     $count = count($listid);
-    
+
     if (in_array($id, $listid)) {
         foreach ($listid as $key => $rid) {
             if ($rid == $id) {
                 unset($listid[$key]);
             }
         }
-        
+
         if (count($listid) > 0) {
             $listid = implode(',', $listid);
         } else {
             $listid = '';
         }
-        
+
         $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_wishlist SET listid = ' . $db->quote($listid) . ' WHERE user_id = ' . $user_info['userid'];
         if (! $db->query($sql)) {
             die('NO_0_' . $lang_module['wishlist_error']);
         } else {
             $count -= 1;
         }
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     }
 }
 

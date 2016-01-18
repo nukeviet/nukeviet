@@ -23,13 +23,13 @@ if (! function_exists('nv_filter_product_cat')) {
      */
     function nv_block_config_filter_product_cat($module, $data_block, $lang_block)
     {
-        global $db_config, $site_mods;
+        global $nv_Cache, $db_config, $site_mods;
 
         $html = '';
         $html .= "<tr>";
         $html .= "	<td>" . $lang_block['content'] . "</td>";
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[$module]['module_data'] . '_group WHERE parentid = 0 ORDER BY weight';
-        $list = nv_db_cache($sql, '', $module);
+        $list = $nv_Cache->db($sql, '', $module);
 
         $array_style = array( 'checkbox' => 'Checkbox', 'label' => 'Label', 'image' => 'Image'  );
 

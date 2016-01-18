@@ -21,7 +21,7 @@ if (! function_exists('nv_search_product')) {
      */
     function nv_search_product($block_config)
     {
-        global $site_mods, $my_head, $db_config, $module_name, $module_info, $nv_Request, $catid, $module_config;
+        global $nv_Cache, $site_mods, $my_head, $db_config, $module_name, $module_info, $nv_Request, $catid, $module_config;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
@@ -66,7 +66,7 @@ if (! function_exists('nv_search_product')) {
         $xtpl->assign('MODULE_NAME', $module);
 
         $sql = 'SELECT catid, lev, ' . NV_LANG_DATA . '_title AS title FROM ' . $db_config['prefix'] . '_' . $mod_data . '_catalogs ORDER BY sort ASC';
-        $list = nv_db_cache($sql, '', $module);
+        $list = $nv_Cache->db($sql, '', $module);
 
         foreach ($list as $row) {
             $xtitle_i = '';
@@ -85,7 +85,7 @@ if (! function_exists('nv_search_product')) {
 
         // Get money
         $sql = 'SELECT code, currency FROM ' . $db_config['prefix'] . '_' . $mod_data . '_money_' . NV_LANG_DATA;
-        $list = nv_db_cache($sql, '', $module);
+        $list = $nv_Cache->db($sql, '', $module);
 
         foreach ($list as $row) {
             $row['selected'] = ($typemoney == $row['code']) ? 'selected="selected"' : '';

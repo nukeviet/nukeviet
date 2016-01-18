@@ -63,8 +63,8 @@ if (!empty($pro_config['order_day']) and $pro_config['order_nexttime'] < NV_CURR
         }
     }
     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = " . (NV_CURRENTTIME + 86400) . " WHERE lang='" . NV_LANG_DATA . "' AND module=" . $db->quote($module_name) . ' AND config_name="order_nexttime"');
-    nv_del_moduleCache('settings');
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod('settings');
+    $nv_Cache->delMod($module_name);
 }
 
 // Xu ly viec dang san pham tu dong, cho het han san pham ...
@@ -79,7 +79,7 @@ if ($pro_config['timecheckstatus'] > 0 and $pro_config['timecheckstatus'] < NV_C
  */
 function nv_set_status_module()
 {
-    global $db, $module_name, $module_data, $global_config, $db_config;
+    global $nv_Cache, $db, $module_name, $module_data, $global_config, $db_config;
 
     $check_run_cronjobs = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/data_logs/cronjobs_' . md5($module_data . 'nv_set_status_module' . $global_config['sitekey']) . '.txt';
     $p = NV_CURRENTTIME - 300;
@@ -120,8 +120,8 @@ function nv_set_status_module()
     }
 
     $db->query("REPLACE INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES('" . NV_LANG_DATA . "', " . $db->quote($module_name) . ", 'timecheckstatus', '" . intval($timecheckstatus) . "')");
-    nv_del_moduleCache('settings');
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod('settings');
+    $nv_Cache->delMod($module_name);
 
     unlink($check_run_cronjobs);
     clearstatcache();
@@ -168,10 +168,10 @@ function nv_del_content_module($id)
 
             // Xoa tai lieu
             $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_files_rows WHERE id_rows=' . $id);
-            
+
             // Xoa du lieu tuy bien
             $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_field_value_'.NV_LANG_DATA.' WHERE rows_id = ' . $id);
-            
+
             $content_del = 'OK_' . $id;
         } else {
             $content_del = 'ERR_' . $lang_module['error_del_content'];

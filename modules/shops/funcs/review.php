@@ -108,7 +108,7 @@ if ($timeout == 0 or NV_CURRENTTIME - $timeout > $difftimeout) {
         if ($sth->execute()) {
             $content = array( 'product_id' => $id, 'content' => $comment, 'rating' => $rating, 'status' => $status );
             nv_insert_notification($module_name, 'review_new', $content, 0, $userid, 1);
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             $contents = "OK_" . ($pro_config['review_check'] ? $lang_module['rate_success_queue'] : $lang_module['rate_success_ok']);
         } else {
             $contents = "NO_" . $lang_module['rate_success_fail'];

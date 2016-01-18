@@ -25,7 +25,7 @@ if ($nv_Request->isset_request('compare', 'post')) {
         unset($array_id[$idss]);
         $array_id = serialize($array_id);
         $nv_Request->set_Session($module_data . '_compare_id', $array_id);
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
         die('OK');
     } else {
         $array_id[$idss] = $idss;
@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('compare', 'post')) {
         } else {
             $array_id = serialize($array_id);
             $nv_Request->set_Session($module_data . '_compare_id', $array_id);
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             die('OK');
         }
     }
@@ -66,7 +66,7 @@ if ($nv_Request->isset_request('compare_del', 'post') and $nv_Request->isset_req
         $array_id = serialize($array_id);
         $nv_Request->set_Session($module_data . '_compare_id', $array_id);
     }
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     die('OK');
 }
 

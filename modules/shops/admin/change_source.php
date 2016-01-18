@@ -45,7 +45,7 @@ if ($mod == 'weight' and $new_vid > 0) {
     $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_sources SET weight=' . $new_vid . ' WHERE sourceid=' . intval($sourceid);
     $db->query($sql);
 
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     $content = 'OK_' . $sourceid;
 }
 

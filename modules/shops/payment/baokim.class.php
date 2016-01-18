@@ -10,7 +10,6 @@
  *
  **/
 
-require_once NV_ROOTDIR . "/includes/class/nusoap.php";
 
 class NL_Checkout
 {
@@ -99,7 +98,7 @@ class NL_Checkout
  	<TOTAL>1</TOTAL>
  	<ORDER>
  		<ORDER_CODE>" . $order_code . "</ORDER_CODE>
- 		<PAYMENT_ID>" . $payment_id . "</PAYMENT_ID>		
+ 		<PAYMENT_ID>" . $payment_id . "</PAYMENT_ID>
  	</ORDER>
  </ORDERS>";
 
@@ -150,7 +149,7 @@ class NL_Checkout
             $payment_id = (empty($arr_order_i['payment_id'])) ? "" : $arr_order_i['payment_id'];
             $param .= "<ORDER>
  		<ORDER_CODE>" . $arr_order_i['order_code'] . "</ORDER_CODE>
- 		<PAYMENT_ID>" . $payment_id . "</PAYMENT_ID>		
+ 		<PAYMENT_ID>" . $payment_id . "</PAYMENT_ID>
  	</ORDER>";
         }
         $param .= "</ORDERS>";

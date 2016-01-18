@@ -58,7 +58,7 @@ if (! function_exists('nv_pro_catalogs')) {
      */
     function nv_pro_catalogs($block_config)
     {
-        global $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_shops_cat, $db, $db_config, $array_cat_shops;
+        global $nv_Cache, $site_mods, $global_config, $module_config, $module_name, $module_info, $global_array_shops_cat, $db, $db_config, $array_cat_shops;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
@@ -76,7 +76,7 @@ if (! function_exists('nv_pro_catalogs')) {
         if ($module != $module_name) {
             $sql = "SELECT catid, parentid, lev, " . NV_LANG_DATA . "_title AS title, " . NV_LANG_DATA . "_alias AS alias, viewcat, numsubcat, subcatid, numlinks, " . NV_LANG_DATA . "_description AS description, inhome, " . NV_LANG_DATA . "_keywords AS keywords, groups_view FROM " . $db_config['prefix'] . "_" . $mod_data . "_catalogs ORDER BY sort ASC";
 
-            $list = nv_db_cache($sql, "catid", $module);
+            $list = $nv_Cache->db($sql, "catid", $module);
             foreach ($list as $row) {
                 $array_cat_shops[$row['catid']] = array(
                     "catid" => $row['catid'],

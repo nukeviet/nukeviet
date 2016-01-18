@@ -16,7 +16,7 @@ $url = array();
 $cacheFile = NV_LANG_DATA . '_Sitemap.cache';
 $pa = NV_CURRENTTIME - 7200;
 
-if (($cache = nv_get_cache($module_name, $cacheFile)) != false and filemtime(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $cacheFile) >= $pa) {
+if (($cache = $nv_Cache->getItem($module_name, $cacheFile)) != false and filemtime(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $cacheFile) >= $pa) {
     $url = unserialize($cache);
 } else {
     $db->sqlreset()->select('id, listcatid, edittime, ' . NV_LANG_DATA . '_alias')->from($db_config['prefix'] . '_' . $module_data . '_rows')->where('status =1')->order('publtime DESC')->limit(1000);
@@ -29,7 +29,7 @@ if (($cache = nv_get_cache($module_name, $cacheFile)) != false and filemtime(NV_
     }
 
     $cache = serialize($url);
-    nv_set_cache($module_name, $cacheFile, $cache);
+    $nv_Cache->setItem($module_name, $cacheFile, $cache);
 }
 
 nv_xmlSitemap_generate($url);

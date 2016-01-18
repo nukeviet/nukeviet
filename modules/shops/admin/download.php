@@ -23,7 +23,7 @@ $groups_list = nv_groups_list();
 if ($nv_Request->isset_request('get_files', 'post,get')) {
     $option = '';
     $sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';
-    $array_files = nv_db_cache($sql, 'id', $module_name);
+    $array_files = $nv_Cache->db($sql, 'id', $module_name);
 
     if (!empty($array_files)) {
         foreach ($array_files as $files) {
@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('del', 'post,get')) {
         $result = $db->query('DELETE FROM ' . $table_name . ' WHERE id=' . $id);
         if ($result) {
             $result = $db->query('DELETE FROM ' . $table_name . '_rows WHERE id_files=' . $id);
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             die('OK');
         }
     }
@@ -65,7 +65,7 @@ if ($nv_Request->isset_request('change_active', 'get,post')) {
 
     $sql = 'UPDATE ' . $table_name . ' SET status=' . $new_status . ' WHERE id=' . $id;
     $db->query($sql);
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     die('OK');
 }
 
@@ -117,7 +117,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $stmt->bindParam(':download_groups', $data['download_groups'], PDO::PARAM_STR);
         $stmt->bindParam(':description', $data['description'], PDO::PARAM_STR);
         if ($stmt->execute()) {
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             die('OK');
         } else {
             die('NO_' . $lang_module['errorsave']);
@@ -142,7 +142,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $stmt->bindParam(':extension', $data['extension'], PDO::PARAM_STR);
         $stmt->bindParam(':download_groups', $data['download_groups'], PDO::PARAM_STR);
         if ($stmt->execute()) {
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             die('OK');
         } else {
             die('NO_' . $lang_module['errorsave']);

@@ -36,7 +36,7 @@ if (! empty($payment)) {
     $stmt->execute();
 
     $content = "OK_" . $payment;
-    nv_del_moduleCache($payment);
+    $nv_Cache->delMod($payment);
 }
 
 include NV_ROOTDIR . '/includes/header.php';

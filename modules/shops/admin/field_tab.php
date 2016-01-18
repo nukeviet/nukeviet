@@ -43,7 +43,7 @@ if ($nv_Request->isset_request('ajax_action', 'post')) {
         $db->query($sql);
         $content = 'OK_' . $fid;
     }
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     include NV_ROOTDIR . '/includes/header.php';
     echo $content;
     include NV_ROOTDIR . '/includes/footer.php';

@@ -39,7 +39,5 @@
 !/themes/default/modules/shops
 !/themes/default/modules/shops/*
 !/service_shops_nganluong.php
-!/includes/class/nusoap.php
-!/includes/class/PayPal/*
 !/uploads/shops
 !/uploads/shops/*

@@ -14,16 +14,16 @@ if (!defined('NV_MAINFILE')) {
 
 // Categories
 $sql = 'SELECT catid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_title_custom AS title_custom, ' . NV_LANG_DATA . '_alias AS alias, viewcat, numsubcat, subcatid, newday, typeprice, form, group_price, viewdescriptionhtml, numlinks, ' . NV_LANG_DATA . '_description AS description, ' . NV_LANG_DATA . '_descriptionhtml AS descriptionhtml, inhome, ' . NV_LANG_DATA . '_keywords AS keywords, groups_view, cat_allow_point, cat_number_point, cat_number_product, image FROM ' . $db_config['prefix'] . '_' . $module_data . '_catalogs ORDER BY sort ASC';
-$global_array_shops_cat = nv_db_cache($sql, 'catid', $module_name);
+$global_array_shops_cat = $nv_Cache->db($sql, 'catid', $module_name);
 
 // Groups
 $sql = 'SELECT groupid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . NV_LANG_DATA . '_alias AS alias, viewgroup, numsubgroup, subgroupid, ' . NV_LANG_DATA . '_description AS description, inhome, indetail, in_order, ' . NV_LANG_DATA . '_keywords AS keywords, numpro, image, is_require FROM ' . $db_config['prefix'] . '_' . $module_data . '_group ORDER BY sort ASC';
-$global_array_group = nv_db_cache($sql, 'groupid', $module_name);
+$global_array_group = $nv_Cache->db($sql, 'groupid', $module_name);
 
 // Lay ty gia ngoai te
 $sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
 $cache_file = NV_LANG_DATA . '_' . md5($sql) . '_' . NV_CACHE_PREFIX . '.cache';
-if (($cache = nv_get_cache($module_name, $cache_file)) != false) {
+if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
     $money_config = unserialize($cache);
 } else {
     $money_config = array();
@@ -42,14 +42,14 @@ if (($cache = nv_get_cache($module_name, $cache_file)) != false) {
     $result->closeCursor();
 
     $cache = serialize($money_config);
-    nv_set_cache($module_name, $cache_file, $cache);
+    $nv_Cache->setItem($module_name, $cache_file, $cache);
 }
 
 // Lay don vi khoi luong
 $sql = 'SELECT code, title, exchange, round FROM ' . $db_config['prefix'] . '_' . $module_data . '_weight_' . NV_LANG_DATA;
 
 $cache_file = NV_LANG_DATA . '_' . md5($sql) . '_' . NV_CACHE_PREFIX . '.cache';
-if (($cache = nv_get_cache($module_name, $cache_file)) != false) {
+if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
     $weight_config = unserialize($cache);
 } else {
     $weight_config = array();
@@ -67,25 +67,25 @@ if (($cache = nv_get_cache($module_name, $cache_file)) != false) {
     $result->closeCursor();
 
     $cache = serialize($weight_config);
-    nv_set_cache($module_name, $cache_file, $cache);
+    $nv_Cache->setItem($module_name, $cache_file, $cache);
 }
 
 // Lay dia diem
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_location ORDER BY sort ASC';
-$array_location = nv_db_cache($sql, 'id', $module_name);
+$array_location = $nv_Cache->db($sql, 'id', $module_name);
 
 // Lay nha van chuyen
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_carrier WHERE status = 1 ORDER BY weight ASC';
-$array_carrier = nv_db_cache($sql, 'id', $module_name);
+$array_carrier = $nv_Cache->db($sql, 'id', $module_name);
 
 // Lay cua hang
 $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_shops WHERE status = 1 ORDER BY weight ASC';
-$array_shops = nv_db_cache($sql, 'id', $module_name);
+$array_shops = $nv_Cache->db($sql, 'id', $module_name);
 
 // Lay Giam Gia
 $sql = 'SELECT did, title, begin_time, end_time, config FROM ' . $db_config['prefix'] . '_' . $module_data . '_discounts';
 $cache_file = NV_LANG_DATA . '_' . md5($sql) . '_' . NV_CACHE_PREFIX . '.cache';
-if (($cache = nv_get_cache($module_name, $cache_file)) != false) {
+if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
     $discounts_config = unserialize($cache);
 } else {
     $discounts_config = array();
@@ -101,7 +101,7 @@ if (($cache = nv_get_cache($module_name, $cache_file)) != false) {
     $result->closeCursor();
 
     $cache = serialize($discounts_config);
-    nv_set_cache($module_name, $cache_file, $cache);
+    $nv_Cache->setItem($module_name, $cache_file, $cache);
 }
 
 /**

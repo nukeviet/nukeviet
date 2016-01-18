@@ -44,8 +44,7 @@ if ($nv_Request->isset_request('change_active', 'post')) {
     $sql = 'UPDATE ' . $table_name . ' SET status=' . $new_status . ' WHERE id=' . $id;
     $db->query($sql);
 
-    nv_del_moduleCache($module_name);
-
+    $nv_Cache->delMod($module_name);
     die('OK_' . $pid);
 }
 
@@ -74,7 +73,7 @@ if (!empty($savecat)) {
             $sql = "INSERT INTO " . $table_name . " (status, " . NV_LANG_DATA . "_title, alias) VALUES (1, " . $db->quote($data['title']) . ", " . $db->quote($data['alias']) . ")";
             $templaid = $db->insert_id($sql);
             if ($templaid != 0) {
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
                 Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
                 die();
             } else {
@@ -86,7 +85,7 @@ if (!empty($savecat)) {
             if ($stmt->execute()) {
                 $error = $lang_module['saveok'];
 
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
                 Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
                 die();
             } else {

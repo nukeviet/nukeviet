@@ -109,8 +109,8 @@ if ($savesetting == 1) {
         $db->query($sql);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['setting'], "Setting", $admin_info['userid']);
-        nv_del_moduleCache('settings');
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod('settings');
+        $nv_Cache->delMod($module_name);
 
         Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . '=setting');
         die();

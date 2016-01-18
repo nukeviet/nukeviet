@@ -23,7 +23,7 @@ if ($bid > 0) {
         $db->query($sql);
 
         nv_fix_block_cat();
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
 
         $contents = "OK_" . $bid;
     }

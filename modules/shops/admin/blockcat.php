@@ -75,7 +75,7 @@ if (! empty($savecat)) {
                 }
 
                 if ($db->insert_id($sql, 'bid', $data_insert)) {
-                    nv_del_moduleCache($module_name);
+                    $nv_Cache->delMod($module_name);
                     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
                     die();
                 } else {
@@ -96,7 +96,7 @@ if (! empty($savecat)) {
                 $stmt->bindParam(':keywords', $data['keywords'], PDO::PARAM_STR);
                 if ($stmt->execute()) {
                     $error = $lang_module['saveok'];
-                    nv_del_moduleCache($module_name);
+                    $nv_Cache->delMod($module_name);
                     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
                     die();
                 } else {

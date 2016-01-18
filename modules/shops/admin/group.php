@@ -123,7 +123,7 @@ if (! empty($savegroup)) {
 
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_group', 'id ' . $newgroupid, $admin_info['userid']);
             nv_fix_group_order();
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
             die();
         } else {
@@ -166,7 +166,7 @@ if (! empty($savegroup)) {
                     nv_fix_group_order();
                 }
 
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
 
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
                 die();

@@ -29,20 +29,20 @@ $cache_file = '';
 if ($nv_Request->isset_request('changesprice', 'post')) {
     $sorts = $nv_Request->get_int('sort', 'post', 0);
     $nv_Request->set_Session('sorts', $sorts, NV_LIVE_SESSION_TIME);
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     die('OK');
 }
 
 if ($nv_Request->isset_request('changeviewtype', 'post')) {
     $viewtype = $nv_Request->get_string('viewtype', 'post', '');
     $nv_Request->set_Session('viewtype', $viewtype, NV_LIVE_SESSION_TIME);
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     die('OK');
 }
 
 if (! defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '_' . $op . '_' . $page . '_' . NV_CACHE_PREFIX . '.cache';
-    if (($cache = nv_get_cache($module_name, $cache_file)) != false) {
+    if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
         $contents = $cache;
     }
 }
@@ -297,7 +297,7 @@ if (empty($contents)) {
     $contents = call_user_func($pro_config['home_view'], $data_content, $compare_id, $html_pages, $sorts);
 
     if (! defined('NV_IS_MODADMIN') and $contents != '' and $cache_file != '') {
-        nv_set_cache($module_name, $cache_file, $contents);
+        $nv_Cache->setItem($module_name, $cache_file, $contents);
     }
 }
 

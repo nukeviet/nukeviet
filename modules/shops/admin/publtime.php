@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('ch
         }
     }
     nv_set_status_module();
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
 }
 
 Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=items");

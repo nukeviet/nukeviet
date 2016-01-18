@@ -517,7 +517,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 if ($global_array_shops_cat[$rowcontent['listcatid']]['form'] != '') {
                     foreach ($array_custom as $field_id => $value) {
                         $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_field_value_' . NV_LANG_DATA . '(rows_id, field_id, field_value) VALUES (:rows_id, :field_id, :field_value)');
-                        
+
                         $sth->bindParam(':rows_id', $rowcontent['id'], PDO::PARAM_INT);
                         $sth->bindParam(':field_id', $field_id, PDO::PARAM_INT);
                         $sth->bindParam(':field_value', $value, PDO::PARAM_STR, strlen($value));
@@ -776,12 +776,12 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 }
             }
 
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=items');
             die();
         }
 
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     }
 } elseif ($rowcontent['id'] > 0) {
     $files = $rowcontent['files'];
@@ -842,7 +842,7 @@ $rowcontent['gift_to'] = !empty($rowcontent['gift_to']) ? nv_date('d/m/Y', $rowc
 if (!empty($rowcontent['otherimage'])) {
     $otherimage = explode('|', $rowcontent['otherimage']);
 } else {
-    $otherimage = array( );
+    $otherimage = array();
 }
 
 $rowcontent['product_weight'] = empty($rowcontent['product_weight']) ? '' : $rowcontent['product_weight'];
@@ -850,7 +850,7 @@ $rowcontent['product_weight'] = empty($rowcontent['product_weight']) ? '' : $row
 $array_files = array();
 if ($pro_config['download_active']) {
     $sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';
-    $array_files = nv_db_cache($sql, 'id', $module_name);
+    $array_files = $nv_Cache->db($sql, 'id', $module_name);
 }
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

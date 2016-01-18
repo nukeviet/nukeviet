@@ -11,9 +11,6 @@ if (! defined('NV_IS_MOD_SHOPS')) {
     die('Stop!!!');
 }
 
-// Gọi thư viện PayPal SDK
-require_once(NV_ROOTDIR . '/includes/class/PayPal/PPBootStrap.php');
-
 // Thông tin cấu hình gian hàng
 foreach ($payment_config as $ckey => $cval) {
     $payment_config[$ckey] = nv_unhtmlspecialchars($cval);
@@ -27,16 +24,16 @@ $config = array(
     "acct1.Signature" => $payment_config['signature'],
 );
 
-/* 
+/*
  * DoExpressCheckoutPayment API
  */
 
 foreach ($array_order as $order_code => $order_data) {
     $payment_data = unserialize(nv_base64_decode($order_data['payment_data']));
-    
+
     if (! empty($payment_data)) {
         unset($getExpressCheckoutDetailsRequest, $getExpressCheckoutReq, $paypalService, $DoECResponse);
-    
+
         // Lấy thông tin
         $payerID = $payment_data['id'];
         $token = $payment_data['token'];
@@ -83,27 +80,27 @@ foreach ($array_order as $order_code => $order_data) {
             if ($DoECResponse->Ack == 'Success' or $DoECResponse->Ack == 'SuccessWithWarning') {
                 // Lấy thông tin chi tiết
                 $details = $DoECResponse->DoExpressCheckoutPaymentResponseDetails;
-                
+
                 $payment_info = $details->PaymentInfo[0];
                 $tran_ID = $payment_info->TransactionID;
-                
+
                 $amt_obj = $payment_info->GrossAmount;
                 $amt = $amt_obj->value;
                 $currency_cd = $amt_obj->currencyID;
-                
+
                 $PaymentStatus = $payment_info->PaymentStatus;
                 $PaymentDate = $payment_info->PaymentDate;
                 $PaymentDate = strtotime($PaymentDate);
                 if ($PaymentDate < 0) {
                     $PaymentDate = 0;
                 }
-                
+
                 /*
                     Thông số mặc định của PayPal
                     Completed - Thanh toán hoàn thành
                     Pending - Thanh toán đang chờ
                     Failed - Thanh toán không thành công
-                    Denied - Bị từ chối thanh toán 
+                    Denied - Bị từ chối thanh toán
                     Refunded - Được hoàn tiền thanh toán
                     Canceled_Reversal - Thanh toán ngược bị hủy
                     Reversed - Thanh toán ngược lại (hoàn trả)
@@ -112,7 +109,7 @@ foreach ($array_order as $order_code => $order_data) {
                     Voided - Bị hủy bỏ vì không được xác thực
                     Created - Đang khởi tạo
                  */
-                 
+
                 $Status = 0;
                 switch ($PaymentStatus) {
                     case 'Canceled_Reversal': $Status = 5; break;
@@ -128,17 +125,17 @@ foreach ($array_order as $order_code => $order_data) {
                     case 'Created': $Status = 0; break;
                     default: $Status = -1;
                 }
-                
+
                 $payment_data['transaction_status'] = $Status;
                 $payment_data['transaction_time'] = $PaymentDate;
                 $payment_data['transaction_id'] = $tran_ID;
                 $payment_data = nv_base64_encode(serialize($payment_data));
-                
+
                 if ($payment_data != $order_data['payment_data']) {
                     $order_id = $array_order[$order_code]['order_id'];
 
                     $transaction_id = $db->insert_id("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, " . NV_CURRENTTIME . ", '" . $Status . "', '" . $order_id . "', '0', '" . $payment . "', '" . $tran_ID . "', '" . $PaymentDate . "', '" . intval($amt) . "', '" . $payment_data . "')");
-                    
+
                     if ($transaction_id > 0) {
                         $db->query("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $Status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE order_id=" . $order_id);
                         $array_update_order[] = $order_code;

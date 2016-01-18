@@ -15,7 +15,7 @@ if (! defined('NV_ADMIN')) {
 // Menu dọc
 $shop_module_config = array();
 $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' and module='" . $module_name . "'";
-$list = nv_db_cache($sql, '', $module_name);
+$list = $nv_Cache->db($sql, '', $module_name);
 foreach ($list as $row) {
     $shop_module_config[$row['config_name']] = $row['config_value'];
 }

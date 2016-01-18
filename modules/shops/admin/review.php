@@ -23,7 +23,7 @@ if ($nv_Request->isset_request('del', 'post,get')) {
                 $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_review WHERE review_id=' . $review_id);
             }
         }
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
         die('OK');
     } else {
         $id = $nv_Request->get_int('id', 'post,get', 0);
@@ -33,7 +33,7 @@ if ($nv_Request->isset_request('del', 'post,get')) {
 
         $result = $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_review WHERE review_id=' . $id);
         if ($result) {
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             die('OK');
         }
     }
@@ -52,7 +52,7 @@ if ($nv_Request->isset_request('change_status', 'get,post')) {
             $db->query($sql);
         }
     }
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     die('OK');
 }
 

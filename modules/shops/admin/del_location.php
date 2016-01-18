@@ -23,7 +23,7 @@ if ($locationid > 0) {
     if ($result) {
         $contents = 'OK';
         nv_fix_location_order();
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     }
 }
 

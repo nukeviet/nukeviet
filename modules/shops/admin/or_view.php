@@ -44,7 +44,7 @@ if ($save == 1 and intval($data_content['transaction_status']) == - 1) {
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_process_product', "order_id " . $order_id, $admin_info['userid']);
     }
 
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=order');
 }
 

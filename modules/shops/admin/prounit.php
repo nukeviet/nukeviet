@@ -44,7 +44,7 @@ if (! empty($savecat)) {
         $sql = "INSERT INTO " . $table_name . " (id " . $listfield . ") VALUES (NULL " . $listvalue . ")";
 
         if ($db->insert_id($sql)) {
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
 
             Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
             die();
@@ -58,7 +58,7 @@ if (! empty($savecat)) {
         if ($stmt->execute()) {
             $error = $lang_module['saveok'];
 
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op);
             die();
         } else {

@@ -25,7 +25,7 @@ if ($sourceid > 0) {
         $sql = "DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_sources WHERE sourceid=" . $sourceid;
         if ($db->query($sql)) {
             nv_fix_source();
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             $contents = "OK_" . $sourceid;
         }
     }

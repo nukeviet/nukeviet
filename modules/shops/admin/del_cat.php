@@ -90,7 +90,7 @@ if ($catid > 0) {
                     $db->query("DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid=" . $catid);
 
                     nv_fix_cat_order();
-                    nv_del_moduleCache($module_name);
+                    $nv_Cache->delMod($module_name);
                     Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid);
                     die();
                 } elseif (! empty($movecat) and $catidnews > 0 and $catidnews != $catid) {
@@ -105,7 +105,7 @@ if ($catid > 0) {
                         }
                         $db->query("DELETE FROM " . $db_config['prefix'] . "_" . $module_data . "_catalogs WHERE catid=" . $catid);
                         nv_fix_cat_order();
-                        nv_del_moduleCache($module_name);
+                        $nv_Cache->delMod($module_name);
 
                         Header("Location: " . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=cat&parentid=" . $parentid);
                         die();
@@ -124,7 +124,7 @@ if ($catid > 0) {
             $contents = "OK_" . $parentid;
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_catalog', "id " . $catid, $admin_info['userid']);
         }
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     }
 }
 

@@ -40,7 +40,7 @@ if ($locationid > 0) {
         nv_fix_location_order();
         $content = 'OK_' . $parentid;
     }
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
 }
 
 include NV_ROOTDIR . '/includes/header.php';

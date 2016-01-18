@@ -71,7 +71,7 @@ if ($nv_Request->isset_request('paypoint', 'get')) {
                 $db->query("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_point SET point_total=point_total - " . $order_point . " WHERE userid=" . $userid);
                 $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_point_history(userid, order_id, point, time) VALUES (" . $userid . ", " . $order_id . ", -" . $order_point . ", " . NV_CURRENTTIME . ")");
             }
-            nv_del_moduleCache($module_name);
+            $nv_Cache->delMod($module_name);
             die('OK_' . $lang_module['payment_complete']);
         }
     }

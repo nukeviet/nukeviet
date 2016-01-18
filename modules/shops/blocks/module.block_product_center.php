@@ -20,7 +20,7 @@ if (! function_exists('nv_product_center')) {
      */
     function nv_product_center($block_config)
     {
-        global $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $pro_config, $global_config, $site_mods;
+        global $nv_Cache, $module_name, $lang_module, $module_info, $module_file, $global_array_shops_cat, $db, $module_data, $db_config, $pro_config, $global_config, $site_mods;
 
         $module = $block_config['module'];
 
@@ -35,7 +35,7 @@ if (! function_exists('nv_product_center')) {
         $xtpl->assign('NUMVIEW', $num_view);
 
         $cache_file = NV_LANG_DATA . '_block_module_product_center_' . NV_CACHE_PREFIX . '.cache';
-        if (($cache = nv_get_cache($module_name, $cache_file)) != false) {
+        if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
             $array = unserialize($cache);
         } else {
             $db->sqlreset()
@@ -55,9 +55,9 @@ if (! function_exists('nv_product_center')) {
                 ->order('t1.id DESC')
                 ->limit($num);
 
-            $array = nv_db_cache($db->sql(), 'id', $module_name);
+            $array = $nv_Cache->db($db->sql(), 'id', $module_name);
             $cache = serialize($array);
-            nv_set_cache($module_name, $cache_file, $cache);
+            $nv_Cache->setItem($module_name, $cache_file, $cache);
         }
 
         foreach ($array as $row) {
