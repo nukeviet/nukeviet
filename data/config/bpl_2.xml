@@ -5,7 +5,7 @@
   <title>Quang cao trai</title>
   <form>sequential</form>
   <width>212</width>
-  <height>500</height>
+  <height>800</height>
   <banners>
     <banners_item>
       <id>2</id>
@@ -20,7 +20,7 @@
       <file_alt></file_alt>
       <file_click>http://vinades.vn</file_click>
       <target>_blank</target>
-      <publ_time>1452828532</publ_time>
+      <publ_time>1453191549</publ_time>
       <exp_time>0</exp_time>
     </banners_item>
   </banners>
