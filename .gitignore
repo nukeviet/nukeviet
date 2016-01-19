@@ -19,6 +19,7 @@
 /includes/
 /install/
 /uploads/
+/vendor/
 /README.md
 
 # Ignore fix module files and directories.

@@ -13,6 +13,7 @@ if (! defined('NV_ADMIN')) {
 }
 
 // Menu dọc
+global $nv_Cache;
 $shop_module_config = array();
 $sql = "SELECT module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' and module='" . $module_name . "'";
 $list = $nv_Cache->db($sql, '', $module_name);

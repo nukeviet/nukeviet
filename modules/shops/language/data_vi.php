@@ -20,13 +20,11 @@ if (! defined('NV_ADMIN')) {
 
 global $op;
 
-$result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $module_data . "\_money\_%'");
+$result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_" . $module_data . "\_rows'");
 $num_table = intval($result->rowCount());
 
 // Truncate data
 if ($num_table == 1 and $op != 'setup') {
-    $db->query("TRUNCATE " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang);
-    $db->query("TRUNCATE " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang);
     $db->query("TRUNCATE " . $db_config['prefix'] . "_" . $module_data . "_block");
     $db->query("TRUNCATE " . $db_config['prefix'] . "_" . $module_data . "_block_cat");
     $db->query("TRUNCATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs");
@@ -41,12 +39,6 @@ if ($num_table == 1 and $op != 'setup') {
     $db->query("TRUNCATE " . $db_config['prefix'] . "_" . $module_data . "_warehouse");
     $db->query("TRUNCATE " . $db_config['prefix'] . "_" . $module_data . "_warehouse_logs");
 }
-
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round, number_format) VALUES (840, 'USD', 'US Dollar', 21000, '0.01', ',||.')");
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round, number_format) VALUES (704, 'VND', 'Vietnam Dong', 1, '100', ',||.')");
-
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (code, title, exchange, round) VALUES ('g', 'Gram', 1, '0.1')");
-$db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (code, title, exchange, round) VALUES ('kg', 'Kilogam', 1000, '0.1')");
 
 if ($num_table == 1) {
     $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block (bid, id, weight) VALUES('1', '11', '5');");
