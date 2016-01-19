@@ -199,6 +199,9 @@ function nv_site_theme($contents, $full = true)
             }
             $xtpl->parse('main.breadcrumbs');
         }
+        elseif (empty($array_mod_title_copy)) {
+            $xtpl->parse('main.currenttime');
+        }
 
         // Statistics image
         $theme_stat_img = '';
@@ -233,10 +236,6 @@ function nv_site_theme($contents, $full = true)
             $xtpl->parse('main.theme_type.loop');
         }
         $xtpl->parse('main.theme_type');
-
-        if ($home or empty($array_mod_title_copy)) {
-            $xtpl->parse('main.currenttime');
-        }
     }
 
     $xtpl->parse('main');
