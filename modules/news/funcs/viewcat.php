@@ -167,19 +167,15 @@ if (empty($contents)) {
             if ($item = $result->fetch()) {
                 if ($item['homeimgthumb'] == 1) {
                     //image thumb
-
                     $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                 } elseif ($item['homeimgthumb'] == 2) {
                     //image file
-
                     $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                 } elseif ($item['homeimgthumb'] == 3) {
                     //image url
-
                     $item['imghome'] = $item['homeimgfile'];
                 } elseif (!empty($show_no_image)) {
                     //no image
-
                     $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
                 } else {
                     $item['imghome'] = '';
@@ -192,7 +188,7 @@ if (empty($contents)) {
             }
         }
 
-        $db_slave->order('id DESC')
+        $db_slave->order('publtime DESC')
             ->where('status=1 AND id != ' . $featured)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -201,19 +197,15 @@ if (empty($contents)) {
         while ($item = $result->fetch()) {
             if ($item['homeimgthumb'] == 1) {
                 //image thumb
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 2) {
                 //image file
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 3) {
                 //image url
-
                 $item['imghome'] = $item['homeimgfile'];
             } elseif (!empty($show_no_image)) {
                 //no image
-
                 $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $item['imghome'] = '';
@@ -244,19 +236,15 @@ if (empty($contents)) {
                     if ($item = $result->fetch()) {
                         if ($item['homeimgthumb'] == 1) {
                             //image thumb
-
                             $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                         } elseif ($item['homeimgthumb'] == 2) {
                             //image file
-
                             $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                         } elseif ($item['homeimgthumb'] == 3) {
                             //image url
-
                             $item['imghome'] = $item['homeimgfile'];
                         } elseif (! empty($show_no_image)) {
                             //no image
-
                             $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
                         } else {
                             $item['imghome'] = '';
@@ -279,19 +267,15 @@ if (empty($contents)) {
                 while ($item = $result->fetch()) {
                     if ($item['homeimgthumb'] == 1) {
                         //image thumb
-
                         $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                     } elseif ($item['homeimgthumb'] == 2) {
                         //image file
-
                         $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                     } elseif ($item['homeimgthumb'] == 3) {
                         //image url
-
                         $item['imghome'] = $item['homeimgfile'];
                     } elseif (! empty($show_no_image)) {
                         //no image
-
                         $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
                     } else {
                         $item['imghome'] = '';
@@ -326,19 +310,15 @@ if (empty($contents)) {
             while ($item = $result->fetch()) {
                 if ($item['homeimgthumb'] == 1) {
                     //image thumb
-
                     $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                 } elseif ($item['homeimgthumb'] == 2) {
                     //image file
-
                     $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                 } elseif ($item['homeimgthumb'] == 3) {
                     //image url
-
                     $item['imghome'] = $item['homeimgfile'];
                 } elseif (! empty($show_no_image)) {
                     //no image
-
                     $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
                 } else {
                     $item['imghome'] = '';
@@ -362,19 +342,15 @@ if (empty($contents)) {
         while ($item = $result->fetch()) {
             if ($item['homeimgthumb'] == 1) {
                 //image thumb
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 2) {
                 //image file
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 3) {
                 //image url
-
                 $item['imghome'] = $item['homeimgfile'];
             } elseif (! empty($show_no_image)) {
                 //no image
-
                 $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $item['imghome'] = '';
@@ -405,19 +381,15 @@ if (empty($contents)) {
                 while ($item = $result->fetch()) {
                     if ($item['homeimgthumb'] == 1) {
                         //image thumb
-
                         $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                     } elseif ($item['homeimgthumb'] == 2) {
                         //image file
-
                         $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                     } elseif ($item['homeimgthumb'] == 3) {
                         //image url
-
                         $item['imghome'] = $item['homeimgfile'];
                     } elseif (! empty($show_no_image)) {
                         //no image
-
                         $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
                     } else {
                         $item['imghome'] = '';
@@ -442,19 +414,15 @@ if (empty($contents)) {
             while ($item = $result->fetch()) {
                 if ($item['homeimgthumb'] == 1) {
                     //image thumb
-
                     $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                 } elseif ($item['homeimgthumb'] == 2) {
                     //image file
-
                     $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                 } elseif ($item['homeimgthumb'] == 3) {
                     //image url
-
                     $item['imghome'] = $item['homeimgfile'];
                 } elseif (! empty($show_no_image)) {
                     //no image
-
                     $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
                 } else {
                     $item['imghome'] = '';
@@ -490,19 +458,15 @@ if (empty($contents)) {
         while ($item = $result->fetch()) {
             if ($item['homeimgthumb'] == 1) {
                 //image thumb
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 2) {
                 //image file
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 3) {
                 //image url
-
                 $item['imghome'] = $item['homeimgfile'];
             } elseif (!empty($show_no_image)) {
                 //no image
-
                 $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $item['imghome'] = '';
@@ -536,19 +500,15 @@ if (empty($contents)) {
             while ($item = $result->fetch()) {
                 if ($item['homeimgthumb'] == 1) {
                     //image thumb
-
                     $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                 } elseif ($item['homeimgthumb'] == 2) {
                     //image file
-
                     $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
                 } elseif ($item['homeimgthumb'] == 3) {
                     //image url
-
                     $item['imghome'] = $item['homeimgfile'];
                 } elseif (!empty($show_no_image)) {
                     //no image
-
                     $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
                 } else {
                     $item['imghome'] = '';
@@ -572,19 +532,15 @@ if (empty($contents)) {
         while ($item = $results->fetch()) {
             if ($item['homeimgthumb'] == 1) {
                 //image thumb
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 2) {
                 //image file
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 3) {
                 //image url
-
                 $item['imghome'] = $item['homeimgfile'];
             } elseif (!empty($show_no_image)) {
                 //no image
-
                 $item['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $item['imghome'] = '';

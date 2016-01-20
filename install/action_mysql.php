@@ -324,7 +324,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 	login varchar(60) NOT NULL,
 	pass varchar(80) NOT NULL,
 	reg_time int(11) unsigned NOT NULL DEFAULT '0',
-	full_name varchar(255) NOT NULL,
+	full_name varchar(250) NOT NULL,
 	email varchar(100) NOT NULL,
 	website varchar(255) NOT NULL,
 	location varchar(255) NOT NULL,
@@ -347,7 +347,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	blang char(2) DEFAULT '',
-	title varchar(255) NOT NULL,
+	title varchar(250) NOT NULL,
 	description varchar(255) DEFAULT '',
 	form varchar(100) NOT NULL,
 	width smallint(4) unsigned NOT NULL DEFAULT '0',

@@ -263,13 +263,11 @@ function inet_to_bits($inet)
 function nv_getCountry_from_file($ip)
 {
     global $countries;
-    if (preg_match('#^(?:(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(?:\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$#', $ip)) {
-        $numbers = preg_split('/\./', $ip);
-        $code = ($numbers[0] * 16777216) + ($numbers[1] * 65536) + ($numbers[2] * 256) + ($numbers[3]);
-
+    if (preg_match('/^([0-9]{1,3}+)\.([0-9]{1,3}+)\.([0-9]{1,3}+)\.([0-9]{1,3}+)$/', $ip, $numbers)) {
+        $code = ($numbers[1] * 16777216) + ($numbers[2] * 65536) + ($numbers[3] * 256) + ($numbers[4]);
+        
         $ranges = array();
-        include NV_ROOTDIR . '/' . NV_IP_DIR . '/' . $numbers[0] . '.php' ;
-
+        include NV_ROOTDIR . '/' . NV_IP_DIR . '/' . $numbers[1] . '.php' ;
         if (! empty($ranges)) {
             foreach ($ranges as $key => $value) {
                 if ($key <= $code and $value[0] >= $code) {
@@ -311,10 +309,7 @@ function nv_getCountry_from_file($ip)
 function nv_getCountry_from_cookie($ip)
 {
     global $global_config, $countries;
-
-    $numbers = preg_split('/\./', $ip);
-    $code = ($numbers[0] * 16777216) + ($numbers[1] * 65536) + ($numbers[2] * 256) + ($numbers[3]);
-
+    $code = preg_replace('/[^a-z0-9]/', '_', $ip);
     if (isset($_COOKIE[$global_config['cookie_prefix'] . '_ctr'])) {
         $codecountry = base64_decode($_COOKIE[$global_config['cookie_prefix'] . '_ctr']);
         if (preg_match('/^' . $code . '\.([A-Z]{2})$/', $codecountry, $matches)) {
