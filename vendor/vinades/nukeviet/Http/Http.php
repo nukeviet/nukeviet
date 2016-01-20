@@ -47,7 +47,7 @@ class Http
          * This class must be put in a file which be stored in 2 subdir with root dir
          * If you store this file on other folder, you must change $store_dir below
          */
-        $store_dir = '/../../';
+        $store_dir = '/../../../../';
         $this->root_dir = preg_replace('/[\/]+$/', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__file__) . $store_dir)));
 
         // Custom some config
