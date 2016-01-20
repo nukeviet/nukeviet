@@ -120,7 +120,7 @@ define('NV_FILEHEAD', "/**\n * @Project NUKEVIET 4.x\n * @Author VINADES.,JSC (c
 define('NV_THEME_TYPE', 'r,d,m');
 
 // Vui long khong thay doi gia tri nay
-define('NUKEVIET_STORE_APIURL', 'http://api.nukeviet.vn/store/');
+define('NUKEVIET_STORE_APIURL', 'https://api.nukeviet.vn/store/');
 
 //Browser Names
 define('BROWSER_OPERA', 'Opera');
