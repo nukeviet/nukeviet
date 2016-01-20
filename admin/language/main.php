@@ -190,6 +190,28 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                         include NV_ROOTDIR . '/includes/footer.php';
                     }
                 }
+
+                // Cai dat du lieu mau module
+                $lang = $lang_data;
+                try {
+                    $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $lang_data . '_modules ORDER BY weight ASC');
+                    while ($row = $result->fetch()) {
+                        $module_name = $row['title'];
+                        $module_file = $row['module_file'];
+                        $module_data = $row['module_data'];
+                        $module_upload = $row['module_upload'];
+
+                        if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $lang_data . '.php')) {
+                            include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . $lang_data . '.php';
+                        } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php')) {
+                            include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
+                        }
+                    }
+                } catch (PDOException $e) {
+                    include NV_ROOTDIR . '/includes/header.php';
+                    echo nv_admin_theme('ERROR SETUP: <br />' . $e->getMessage());
+                    include NV_ROOTDIR . '/includes/footer.php';
+                }
             }
 
             $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $keylang . '&' . NV_NAME_VARIABLE . '=settings&' . NV_OP_VARIABLE . '=main');
