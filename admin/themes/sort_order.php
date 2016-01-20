@@ -28,11 +28,11 @@ if (! empty($array_bid) && ! empty($position)) {
     if (!empty($row)) {
         list($bid, $theme, $pos_old) = $row;
 
-        $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET position= :position, weight=2147483647 WHERE bid=' . $bid);
+        $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET position= :position, weight=8388607 WHERE bid=' . $bid);
         $sth->bindParam(':position', $pos_new, PDO::PARAM_STR);
         $sth->execute();
 
-        $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=2147483647 WHERE bid=' . $bid);
+        $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=8388607 WHERE bid=' . $bid);
 
         //Update weight for old position
         $sth = $db->prepare('SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme= :theme AND position=:position ORDER BY weight ASC');

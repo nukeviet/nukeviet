@@ -170,11 +170,12 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES (0, 'theme', 'default', 0, 0, 'default', 'default', '4.0.21 1436199600', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES (0, 'theme', 'mobile_default', 0, 0, 'mobile_default', 'mobile_default', '4.0.21 1436199600', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (1, '', 'Quang cao giua trang', '', 'sequential', 510, 100, 1)";
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (2, '', 'Quang cao trai', '', 'sequential', 190, 500, 1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (1, '', 'Quang cao giua trang', '', 'sequential', 575, 72, 1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (2, '', 'Quang cao trai', '', 'sequential', 212, 800, 1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (3, '', 'Quang cao Phai', '', 'random', 250, 500, 1)";
 
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (1, 'Bo ngoai giao', 2, 0, 'bongoaigiao.jpg', 'jpg', 'image/jpeg', 160, 54, '', '', 'http://www.mofa.gov.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 190, 454, '', '', 'http://vinades.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,2)";
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (3, 'Quang cao giua trang', 1, 0, 'webnhanh_vn.png', 'png', 'image/png', 510, 65, '', '', 'http://webnhanh.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1,1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 212, 400, '', '', 'http://vinades.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 2)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (3, 'Quang cao giua trang', 1, 0, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (4, '123host_Nukeviet', 3, 0, '123host_nukeviet.jpg', 'jpg', 'image/jpeg', 250, 250, '', '', 'http://event.123host.vn/link/out/338', '_blank', 1453194858, 1453194858, 0, 0, 1, 0)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_plugin (`pid`, `plugin_file`, `plugin_area`, `weight`) VALUES (1, 'qrcode.php', 1, 1)";

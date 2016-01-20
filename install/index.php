@@ -278,6 +278,7 @@ if ($step == 1) {
     }
 
     $array_resquest['php_required'] = $sys_info['php_required'];
+    $array_resquest['php_version'] = PHP_VERSION;
     $sys_info['php_support'] = (version_compare(PHP_VERSION, $sys_info['php_required']) < 0) ? 0 : 1;
     $array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
     foreach ($array_resquest_key as $key) {
@@ -301,6 +302,8 @@ if ($step == 1) {
     $array_support['allowed_set_time_limit'] = ($sys_info['allowed_set_time_limit']) ? 1 : 0;
     $array_support['zlib_support'] = ($sys_info['zlib_support']) ? 1 : 0;
     $array_support['zip_support'] = (extension_loaded('zip')) ? 1 : 0;
+    $array_support['mbstring_support'] = (extension_loaded('mbstring')) ? 1 : 0;
+    $array_support['curl_support'] = (extension_loaded('curl')) ? 1 : 0;
     foreach ($array_support as $_key => $_support) {
         $array_support['class_' . $_key] = ($_support) ? 'highlight_green' : 'highlight_red';
         $array_support[$_key] = ($_support) ? $lang_module['compatible'] : $lang_module['not_compatible'];
@@ -613,13 +616,13 @@ if ($step == 1) {
                             $module_file = $row['module_file'];
                             $module_data = $row['module_data'];
                             $module_upload = $row['module_upload'];
-    
+
                             if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php')) {
                                 include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_' . NV_LANG_DATA . '.php';
                             } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php')) {
                                 include NV_ROOTDIR . '/modules/' . $module_file . '/language/data_en.php';
                             }
-    
+
                             if (empty($array_data['socialbutton'])) {
                                 if ($module_file == 'news') {
                                     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '0' WHERE module = '" . $module_name . "' AND config_name = 'socialbutton' AND lang='" . $lang . "'");
@@ -630,7 +633,7 @@ if ($step == 1) {
                         $db_config['error'] = $e->getMessage();
                         trigger_error($e->getMessage());
                     }
-                    
+
                     if (empty($db_config['error'])) {
                         ++ $step;
                         $nv_Request->set_Session('maxstep', $step);

@@ -58,7 +58,7 @@ if (! empty($setmodule) and preg_match($global_config['check_module'], $setmodul
             try {
                 $sth = $db->prepare("INSERT INTO " . NV_MODULES_TABLE . "
 					(title, module_file, module_data, module_upload, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss) VALUES
-					(:title, :module_file, :module_data, :module_upload, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 1, '',1)
+					(:title, :module_file, :module_data, :module_upload, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '',1)
 				");
                 $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
                 $sth->bindParam(':module_file', $modrow['basename'], PDO::PARAM_STR);
@@ -74,8 +74,12 @@ if (! empty($setmodule) and preg_match($global_config['check_module'], $setmodul
             $return = nv_setup_data_module(NV_LANG_DATA, $setmodule, $sample);
             if ($return == 'OK_' . $setmodule) {
                 nv_setup_block_module($setmodule);
+                
+                $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=1 WHERE title=:title');
+                $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
+                $sth->execute();
+                
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['modules'] . ' ' . $setmodule, '', $admin_info['userid']);
-
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=edit&mod=' . $setmodule);
                 die();
             }
