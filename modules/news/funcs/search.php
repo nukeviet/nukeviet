@@ -159,19 +159,15 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
     while (list($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid) = $result->fetch(3)) {
         if ($homeimgthumb == 1) {
             // image thumb
-
-            $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
         } elseif ($homeimgthumb == 2) {
             // image file
 
             $img_src = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
         } elseif ($homeimgthumb == 3) {
             // image url
-
             $img_src = $homeimgfile;
         } elseif (! empty($show_no_image)) {
             // no image
-
             $img_src = NV_BASE_SITEURL . $show_no_image;
         } else {
             $img_src = '';
