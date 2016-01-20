@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plan>
+  <id>3</id>
+  <lang></lang>
+  <title>Quang cao Phai</title>
+  <form>random</form>
+  <width>250</width>
+  <height>500</height>
+  <banners>
+    <banners_item>
+      <id>4</id>
+      <title>123host_Nukeviet</title>
+      <clid>0</clid>
+      <file_name>123host_nukeviet.jpg</file_name>
+      <imageforswf></imageforswf>
+      <file_ext>jpg</file_ext>
+      <file_mime>image/jpeg</file_mime>
+      <file_width>250</file_width>
+      <file_height>250</file_height>
+      <file_alt></file_alt>
+      <file_click>http://event.123host.vn/link/out/338</file_click>
+      <target>_blank</target>
+      <publ_time>1453194858</publ_time>
+      <exp_time>0</exp_time>
+    </banners_item>
+  </banners>
+</plan>

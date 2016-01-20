@@ -621,19 +621,15 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         while ($item = $result->fetch()) {
             if ($item['homeimgthumb'] == 1) {
                 // image thumb
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 2) {
                 // image file
-
                 $item['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 3) {
                 // image url
-
                 $item['imghome'] = $item['homeimgfile'];
             } else {
                 // no image
-
                 $item['imghome'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
             }
 
