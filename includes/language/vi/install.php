@@ -9,7 +9,9 @@
  * @Createdate Jun 06, 2011, 12:55:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '06/06/2011, 13:55';
@@ -44,7 +46,6 @@ $lang_module['php_support'] = 'Hỗ trợ PHP';
 $lang_module['php_version'] = 'Phiên bản PHP';
 $lang_module['pdo_support'] = 'Hỗ trợ PHP Data Objects';
 $lang_module['request'] = 'Yêu cầu';
-$lang_module['safe_mode'] = 'Safe mode';
 $lang_module['required_off'] = 'Bắt buộc tắt';
 $lang_module['required_on'] = 'Bắt buộc hỗ trợ';
 $lang_module['recommnet'] = 'Khuyến cáo';
@@ -123,7 +124,7 @@ $lang_module['gohome'] = 'Xem trang chủ';
 $lang_module['goadmin'] = 'Đăng nhập trang quản trị';
 $lang_module['finish'] = 'Kết thúc';
 $lang_module['checkfileconfig'] = 'Kiểm tra lại';
-$lang_module['movefileconfig'] = 'Bạn cần chuyển file config.php trong thư mục tmp ra thư mục gốc của site, sau đó click vào nút kiểm tra để hệ thống kiểm tra lại';
+$lang_module['movefileconfig'] = 'Bạn cần chuyển file <b>config.php</b> trong thư mục <b>data/tmp</b> ra thư mục gốc của site, sau đó click vào nút kiểm tra để hệ thống kiểm tra lại';
 $lang_module['copyright'] = 'Chú ý: Việc đăng lại bài viết trên ở website hoặc các phương tiện truyền thông khác mà không ghi rõ nguồn http://nukeviet.vn là vi phạm bản quyền';
 $lang_module['question'] = 'Điền câu hỏi bảo mật';
 $lang_module['answer_question'] = 'Câu trả lời của bạn';

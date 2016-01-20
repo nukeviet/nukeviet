@@ -9,7 +9,9 @@
 * @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
 $lang_translator['createdate'] = '31/07/2015, 16:30';

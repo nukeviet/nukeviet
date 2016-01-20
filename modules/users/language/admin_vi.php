@@ -9,7 +9,9 @@
  * @Createdate May 30, 2010, 10:57:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '30/05/2010, 23:57';
@@ -55,8 +57,8 @@ $lang_module['name_show'] = 'Kiểu hiển thị họ tên';
 $lang_module['firstname_lastname'] = 'Tên và Họ';
 $lang_module['lastname_firstname'] = 'Họ và Tên';
 $lang_module['error_language'] = 'Lỗi: bạn chưa chọn kiểu hiển thị Họ và Tên';
-$lang_module['avata'] = 'Hình đại diện';
-$lang_module['avata_chosen'] = 'Chọn ảnh';
+$lang_module['avatar'] = 'Hình đại diện';
+$lang_module['avatar_chosen'] = 'Chọn ảnh';
 $lang_module['birthday'] = 'Ngày tháng năm sinh';
 $lang_module['date'] = 'Ngày';
 $lang_module['month'] = 'Tháng';
@@ -132,10 +134,10 @@ $lang_module['adduser_email'] = 'Gửi email thông báo:';
 $lang_module['adduser_email_yes'] = 'Có';
 $lang_module['adduser_register'] = 'Tài khoản của bạn đã được tạo';
 $lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['openid_servers'] = 'Các nhà cung cấp Oauth, OpenID được chấp nhận';
-$lang_module['openid_processing'] = 'Chế độ mặc định xử lý sau khi login OpenID';
+$lang_module['openid_servers'] = 'Các nhà cung cấp Oauth được chấp nhận';
+$lang_module['openid_processing'] = 'Chế độ mặc định xử lý sau khi login Oauth';
 $lang_module['openid_processing_0'] = 'Người dùng tự chọn hình thức xử lý';
-$lang_module['openid_processing_3'] = 'Đăng ký một tài khoản mới và gán OpenID này vào tài khoản đó';
+$lang_module['openid_processing_3'] = 'Đăng ký một tài khoản mới và gán OauthID này vào tài khoản đó';
 $lang_module['openid_processing_4'] = 'Đăng nhập tự động bằng một tài khoản do hệ thống tự tạo';
 $lang_module['allow_change_login'] = 'Cho phép thay đổi tên đăng nhập';
 $lang_module['is_user_forum'] = 'Sử dụng tài khoản của Diễn đàn';

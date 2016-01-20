@@ -8,14 +8,15 @@
  * @Createdate 12/28/2009 20:8
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 // Ten cac table cua CSDL dung chung cho he thong
 
-$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
-while( $item = $result->fetch() )
-{
-	$sql_drop_table[] = 'DROP TABLE ' . $item['name'];
+$result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
+while ($item = $result->fetch()) {
+    $sql_drop_table[] = 'DROP TABLE ' . $item['name'];
 }
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
@@ -323,7 +324,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 	login varchar(60) NOT NULL,
 	pass varchar(80) NOT NULL,
 	reg_time int(11) unsigned NOT NULL DEFAULT '0',
-	full_name varchar(255) NOT NULL,
+	full_name varchar(250) NOT NULL,
 	email varchar(100) NOT NULL,
 	website varchar(255) NOT NULL,
 	location varchar(255) NOT NULL,
@@ -346,7 +347,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	blang char(2) DEFAULT '',
-	title varchar(255) NOT NULL,
+	title varchar(250) NOT NULL,
 	description varchar(255) DEFAULT '',
 	form varchar(100) NOT NULL,
 	width smallint(4) unsigned NOT NULL DEFAULT '0',

@@ -9,7 +9,9 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -35,7 +37,7 @@ $lang_module['voting_timeout'] = 'End time';
 $lang_module['voting_time'] = 'Start Time';
 $lang_module['voting_option'] = 'Order';
 $lang_module['voting_maxoption'] = 'How many option can i select to vote?';
-$lang_module['voting_confirm'] = 'Cornfirm';
+$lang_module['voting_confirm'] = 'Confirm';
 $lang_module['voting_error'] = 'Error:Data handling';
 $lang_module['voting_question'] = 'Voting content';
 $lang_module['voting_question_head'] = ': Please enter your comment';

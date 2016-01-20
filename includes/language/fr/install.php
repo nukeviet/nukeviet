@@ -9,7 +9,9 @@
 * @Createdate Jun 30, 2010, 03:30:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '30/06/2010, 10:30';
@@ -44,7 +46,6 @@ $lang_module['php_support'] = 'Suppor de PHP';
 $lang_module['php_version'] = 'Version de PHP';
 $lang_module['pdo_support'] = 'Compatible avec PHP Data Objects';
 $lang_module['request'] = 'Obligatoire';
-$lang_module['safe_mode'] = 'Mode sans échec';
 $lang_module['required_off'] = 'Inactif obligatoire';
 $lang_module['required_on'] = 'Support obligatoire';
 $lang_module['recommnet'] = 'Recommandé';
@@ -123,7 +124,7 @@ $lang_module['gohome'] = 'Accueil';
 $lang_module['goadmin'] = 'Administration';
 $lang_module['finish'] = 'Terminer';
 $lang_module['checkfileconfig'] = 'Vérifier';
-$lang_module['movefileconfig'] = 'Veuillez déplacer le fichier config.php dans le répertoire tmp vers le répertoire de racine du site, puis cliquez sur Vérifier';
+$lang_module['movefileconfig'] = 'Veuillez déplacer le fichier <b>config.php</b> dans le répertoire <b>data/tmp</b> vers le répertoire de racine du site, puis cliquez sur Vérifier';
 $lang_module['copyright'] = 'Merci de citer le lien vers l\'article original si vous le reproduisez sur les autres sites';
 $lang_module['question'] = 'Question secrète';
 $lang_module['answer_question'] = 'Votre réponse';

@@ -8,7 +8,9 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_MODULES')) {
+    die('Stop!!!');
+}
 
 $sql_drop_module = array();
 
@@ -48,7 +50,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
 ('viewtype', '0'),
 ('facebookapi', ''),
-('per_page', '5'),
+('per_page', '20'),
 ('news_first', '0'),
 ('related_articles', '5')";
 

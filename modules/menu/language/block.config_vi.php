@@ -9,7 +9,9 @@
  * @Createdate Jul 02, 2011, 10:30:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '02/07/2011, 23:30';
@@ -26,5 +28,3 @@ $lang_block['m_type2'] = 'Vertical';
 $lang_block['m_type3'] = 'Treeview';
 
 $lang_block['menu_note_auto'] = 'Lưu ý: Block này lấy menu tự động không tùy chỉnh được trong khu vực quản trị';
-
-
