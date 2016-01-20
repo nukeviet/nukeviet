@@ -157,7 +157,7 @@ if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
 
             $from = array( $admin_info['username'], $my_mail );
             $to = $row_user['email'];
-            $send = nv_sendmail($from, $to, nv_EncString($title), $content);
+            $send = nv_sendmail($from, $to, $title, $content);
             if (! $send) {
                 $page_title = $lang_global['error_info_caption'];
                 $contents = $lang_global['error_sendmail_admin'] . '<meta http-equiv="refresh" content="10;URL=' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '" />';
