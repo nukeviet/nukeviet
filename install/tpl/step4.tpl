@@ -1,6 +1,5 @@
 <!-- BEGIN: step -->
-<table id="checkserver" cellspacing="0"
-	summary="{LANG.checkserver_detail}">
+<table id="checkserver" cellspacing="0" summary="{LANG.checkserver_detail}">
 	<caption>{LANG.if_server} <span class="highlight_red">{LANG.not_compatible}</span>.
 	{LANG.please_checkserver}.</caption>
 	<tr>
@@ -9,12 +8,12 @@
 		<th scope="col">{LANG.result}</th>
 	</tr>
 	<tr>
-		<th scope="row" class="spec">{LANG.php_version}</th>
+		<th scope="row" class="spec">{LANG.php_version}: {DATA_REQUEST.php_version}</th>
 		<td>{LANG.required_on} >= {DATA_REQUEST.php_required}</td>
 		<td><span class="{DATA_REQUEST.class_php_support}">{DATA_REQUEST.php_support}</span></td>
 	</tr>
 	<tr>
-		<th scope="row" class="specalt">{LANG.pdo_support}</th>
+		<th scope="row" class="specalt">{LANG.pdo_support} (PDO)</th>
 		<td class="alt">{LANG.required_on}</td>
 		<td class="alt"><span class="{DATA_REQUEST.class_pdo_support}">{DATA_REQUEST.pdo_support}</span></td>
 	</tr>
@@ -56,6 +55,11 @@
 		<td><span class="{DATA_SUPPORT.class_supports_rewrite}">{DATA_SUPPORT.supports_rewrite}</span></td>
 	</tr>
 	<tr>
+		<th scope="row" class="specalt">Extension Mbstring Support</th>
+		<td class="alt">{LANG.is_support}</td>
+		<td class="alt"><span class="{DATA_SUPPORT.class_mbstring_support}">{DATA_SUPPORT.mbstring_support}</span></td>
+	</tr>	
+	<tr>
 		<th scope="row" class="spec">Output Buffering</th>
 		<td>{LANG.turnoff}</td>
 		<td><span class="{DATA_SUPPORT.class_output_buffering}">{DATA_SUPPORT.output_buffering}</span></td>
@@ -85,6 +89,11 @@
 		<td class="alt">{LANG.is_support}</td>
 		<td class="alt"><span class="{DATA_SUPPORT.class_zip_support}">{DATA_SUPPORT.zip_support}</span></td>
 	</tr>
+	<tr>
+		<th scope="row" class="spec">Client URL Library (curl)</th>
+		<td>{LANG.is_support}</td>
+		<td><span class="{DATA_SUPPORT.class_curl_support}">{DATA_SUPPORT.curl_support}</span></td>
+	</tr>	
 </table>
 <ul class="control_t fr">
 	<li><span class="back_step"><a
