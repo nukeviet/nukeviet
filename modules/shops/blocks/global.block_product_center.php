@@ -80,15 +80,13 @@ if (! nv_function_exists('nv_global_product_center')) {
     if (!nv_function_exists('nv_get_price_tmp')) {
         function nv_get_price_tmp($module_name, $module_data, $module_file, $pro_id)
         {
-            global $db, $db_config, $module_config, $discounts_config;
+            global $nv_Cache, $db, $db_config, $module_config, $discounts_config;
 
             $price = array();
             $pro_config = $module_config[$module_name];
 
-            if (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php')) {
-                require_once NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php';
-                $price = nv_get_price($pro_id, $pro_config['money_unit'], 1, false, $module_name);
-            }
+            require_once NV_ROOTDIR . '/modules/' . $module_file . '/site.functions.php';
+            $price = nv_get_price($pro_id, $pro_config['money_unit'], 1, false, $module_name);
 
             return $price;
         }
