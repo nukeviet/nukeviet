@@ -42,7 +42,7 @@ if (! nv_function_exists('nv_comment_new')) {
 
     function nv_comment_new($block_config)
     {
-        global $site_mods, $db_slave, $module_info, $global_config;
+        global $db, $site_mods, $db_slave, $module_info, $global_config;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
