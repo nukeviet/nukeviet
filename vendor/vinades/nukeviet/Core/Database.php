@@ -9,7 +9,9 @@
  */
 
 namespace NukeViet\Core;
+
 use PDO;
+use PDOException;
 
 /**
  * extends for PDO

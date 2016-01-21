@@ -18,7 +18,7 @@ $sth->execute(array('about', 'about', 'page', 'about', 'À propos', '', NV_CURRE
 $sth->execute(array('news', 'news', 'news', 'news', 'News', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0));
 $sth->execute(array('users', 'users', 'users', 'users', 'Compte d&#039;utilisateur', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0));
 $sth->execute(array('contact', 'contact', 'contact', 'contact', 'Contact', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0));
-$sth->execute(array('statistics', 'statistics', 'statistics', 'statistics', 'Statistiques', '', NV_CURRENTTIME, 1, 1, '', '', '', 'online, statistics', '2', 5, 1, '', 0, 0));
+$sth->execute(array('statistics', 'statistics', 'statistics', 'statistics', 'Statistiques', '', NV_CURRENTTIME, 1, 1, '', '', '', 'online, statistics', '6', 5, 1, '', 0, 0));
 $sth->execute(array('voting', 'voting', 'voting', 'voting', 'Sondage', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0));
 $sth->execute(array('banners', 'banners', 'banners', 'banners', 'Publicité', '', NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 7, 1, '', 0, 0));
 $sth->execute(array('seek', 'seek', 'seek', 'seek', 'Recherche', '', NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 8, 1, '', 0, 0));

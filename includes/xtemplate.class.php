@@ -325,22 +325,6 @@ class XTemplate {
 	public $output_type = 'HTML';
 
 	/**
-	 * Force all globals to be available in scan_globals
-	 * if PHP auto_globals_jit config is on (& working!)
-	 *
-	 * @var boolean
-	 */
-	public $force_globals = true;
-
-	/**
-	 * Debug mode
-	 *
-	 * @access public
-	 * @var boolean
-	 */
-	public $debug = false;
-
-	/**
 	 * Null string for unassigned vars
 	 *
 	 * @access protected
@@ -454,10 +438,6 @@ class XTemplate {
 						$this->allowed_callbacks = array_merge($this->allowed_callbacks, (array) $value);
 						break;
 
-					case 'debug':
-						$this->debug = $value;
-						break;
-
 					case 'file':
 					case 'files':
 					case 'mainblock':
@@ -566,7 +546,7 @@ class XTemplate {
 		// preprocess some stuff
 		$this->blocks = $this->_maketree($this->filecontents, '');
 		$this->filevar_parent = $this->_store_filevar_parents($this->blocks);
-		$this->scan_globals();
+		//$this->scan_globals();
 	}
 
 	/**
@@ -603,13 +583,13 @@ class XTemplate {
 		 * @author JRCoates
 		 * @since 04/09/2008
 		 */
-		if (is_array($name) || is_object($name)) {
+		if (is_array($name)) {
 
 			foreach ($name as $k => $v) {
 
 				$this->vars[$k] = $v;
 			}
-		} elseif (is_array($val) || is_object($val)) {
+		} elseif (is_array($val)) {
 
 			// Clear the existing values
     		if ($reset_array) {
@@ -1002,33 +982,6 @@ class XTemplate {
 
 		$text = '';
 
-		if ($this->debug && $this->output_type == 'HTML') {
-			// JC 20/11/02 echo the template filename if in development as
-			// html comment
-			/**
-			 * Altered to cater for template directory array
-			 * @since 24/07/2007
-			 */
-			$text .= '<!-- XTemplate debug TEXT: ' . $bname . ' ';
-			if (is_array($this->tpldir)) {
-
-				foreach ($this->tpldir as $dir) {
-
-					if (is_readable($dir . DIRECTORY_SEPARATOR . $this->filename)) {
-						$text .= realpath($dir . DIRECTORY_SEPARATOR . $this->filename);
-						break;
-					}
-				}
-			} elseif (!empty($this->tpldir)) {
-
-				$text .= realpath($this->tpldir. DIRECTORY_SEPARATOR . $this->filename);
-			} else {
-
-				$text .= $this->filename;
-			}
-			$text .= " -->\n";
-		}
-
 		$bname = !empty($bname) ? $bname : $this->mainblock;
 
 		$text .= isset($this->parsed_blocks[$bname]) ? $this->parsed_blocks[$bname] : $this->get_error();
@@ -1159,57 +1112,6 @@ class XTemplate {
 	public function clear_autoreset () {
 
 		$this->_autoreset = false;
-	}
-
-	/**
-     * scans global variables and assigns to PHP array
-     *
-     * @access public
-     */
-	public function scan_globals () {
-
-		$GLOB = array();
-
-		if ($this->force_globals && ini_get('auto_globals_jit') == true) {
-			$tmp = $_SERVER;
-			$tmp = $_ENV;
-			$tmp = $_REQUEST;
-			unset($tmp);
-		}
-
-		foreach ($GLOBALS as $k => $v) {
-
-			$GLOB[$k] = array();
-
-			switch ($k) {
-
-				case 'GLOBALS':
-					// Stop Recursion
-					break;
-
-				case '_COOKIE': // Cloning means changes made after calling this method won't be available
-				case '_SESSION': // Cloning means changes made after calling this method won't be available
-					$GLOB[$k] = array_merge($GLOB[$k], $v);
-					break;
-
-				case '_ENV':
-				case '_FILES':
-				case '_GET':
-				case '_POST':
-				case '_REQUEST':
-				case '_SERVER':
-				default:
-					$GLOB[$k] = $v;
-					break;
-			}
-		}
-
-		/**
-		 * Access global variables as:
-		 * @example {PHP._SERVER.HTTP_HOST}
-		 * in your template!
-		 */
-		$this->assign('PHP', $GLOB);
 	}
 
 	/**
@@ -1488,32 +1390,9 @@ class XTemplate {
 
 			$file_text .= $this->filecache[$file];
 
-			if ($this->debug && $this->output_type == 'HTML') {
-				$file_text = '<!-- XTemplate debug CACHED: ' . realpath($file) . ' -->' . "\n" . $file_text;
-			}
-
 		} else {
 
-			if (is_file($file) && is_readable($file)) {
-
-				if (filesize($file)) {
-
-					if (!($fh = fopen($file, 'r'))) {
-
-						$this->_set_error('Cannot open file: ' . realpath($file));
-						return '';
-					}
-
-					$file_text .= fread($fh,filesize($file));
-					fclose($fh);
-
-				}
-
-				if ($this->debug && $this->output_type == 'HTML') {
-					$file_text = '<!-- XTemplate debug: ' . realpath($file) . ' -->' . "\n" . $file_text;
-				}
-
-			} elseif (str_replace('.', '', phpversion()) >= '430' && $file_text = @file_get_contents($file, true)) {
+			if ($file_text = file_get_contents($file, true)) {
 				// Enable use of include path by using file_get_contents
 				// Implemented at suggestion of SF Feature Request ID #1529478 michaelgroh
 				if ($file_text === false) {
@@ -1521,22 +1400,12 @@ class XTemplate {
 					if ($this->output_type == 'HTML') {
 						$file_text = "<b>__XTemplate fatal error: file [$file] does not exist in the include path__</b>";
 					}
-				} elseif ($this->debug && $this->output_type == 'HTML') {
-					$file_text = '<!-- XTemplate debug (via include path): ' . realpath($file) . ' -->' . "\n" . $file_text;
 				}
-			} elseif (!is_file($file)) {
-
+			} else {
 				// NW 17 Oct 2002 : Added realpath around the file name to identify where the code is searching.
 				$this->_set_error("[" . realpath($file) . "] ($file) does not exist");
 				if ($this->output_type == 'HTML') {
 					$file_text .= "<b>__XTemplate fatal error: file [$file] does not exist__</b>";
-				}
-
-			} elseif (!is_readable($file)) {
-
-				$this->_set_error("[" . realpath($file) . "] ($file) is not readable");
-				if ($this->output_type == 'HTML') {
-					$file_text .= "<b>__XTemplate fatal error: file [$file] is not readable__</b>";
 				}
 			}
 
@@ -1594,35 +1463,5 @@ class XTemplate {
 		$after = $this->block_start_delim . $this->block_end_word . ' ' . $this->mainblock . ' ' . $this->block_end_delim;
 
 		$this->filecontents = $before . "\n" . $this->filecontents . "\n" . $after;
-	}
-
-	/**
-     * Debug function - var_dump wrapped in '<pre></pre>' tags
-     *
-     * @access protected
-     * @param multiple var_dumps all the supplied arguments
-     */
-	protected function _pre_var_dump ($args) {
-
-		if ($this->debug) {
-			echo '<pre>';
-			var_dump(func_get_args());
-			echo '</pre>';
-		}
-	}
-
-	/**
-	 * Debug function - var_dump and return
-	 *
-	 * @access protected
-	 * @param multiple var_dumps all the supplied arguments
-	 */
-	protected function _ob_var_dump ($args) {
-
-		if ($this->debug) {
-			ob_start();
-			$this->_pre_var_dump(func_get_args());
-			return ob_get_clean();
-		}
 	}
 }
