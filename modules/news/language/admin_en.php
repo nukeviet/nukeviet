@@ -9,7 +9,9 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -137,8 +139,8 @@ $lang_module['content_archive'] = 'Save after expire date';
 $lang_module['showhometext'] = 'Show hometext on view content';
 $lang_module['imgposition'] = 'Article image';
 $lang_module['imgposition_0'] = 'Not show';
-$lang_module['imgposition_1'] = 'To be shown based on modules configuration';
-$lang_module['imgposition_2'] = 'Show preamble';
+$lang_module['imgposition_1'] = 'Show left introduction';
+$lang_module['imgposition_2'] = 'Show bellow introduction';
 $lang_module['addtoblock'] = 'Add content to block';
 $lang_module['delete_from_block'] = 'Delete block\'s article';
 $lang_module['error_del_content'] = 'Error: System can\'t delete all block\'s article, please try agian';
@@ -272,5 +274,3 @@ $lang_module['featured'] = 'Featured news';
 $lang_module['addtocat'] = 'Add featured article in the category';
 $lang_module['delete_from_cat'] = 'Delete posts from category';
 $lang_module['not_featured'] = 'No posts yet';
-
-?>

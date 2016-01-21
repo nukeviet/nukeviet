@@ -1,27 +1,20 @@
 <!-- BEGIN: step -->
 <script type="text/javascript">
-    $(document).ready(function()
-    {
-        $("#site_config").validate(
-        {
-            rules :
-            {
-                nv_login :
-                {
-                    minlength : 5
-                },
-                nv_password :
-                {
-                    minlength : 6
-                },
-                re_password :
-                {
-                    equalTo : "#nv_password_iavim"
-                }
+$(document).ready(function(){
+    $("#site_config").validate({
+        rules :{
+            nv_login :{
+                minlength : 5
+            },
+            nv_password :{
+                minlength : 6
+            },
+            re_password :{
+                equalTo : "#nv_password_iavim"
             }
-        });
+        }
     });
-
+});
 </script>
 <form action="{ACTIONFORM}" id="site_config" method="post">
 	<table cellspacing="0" summary="{LANG.website_info}">
@@ -109,20 +102,8 @@
 	<!-- END: nextstep -->
 </ul>
 <script type="text/javascript">
-    //<![CDATA[
-    document.getElementById('site_config').setAttribute("autocomplete", "off");
-    //]]>
-</script>
-
-<!-- BEGIN: viet_keyboard -->
-<script type="text/javascript">
 //<![CDATA[
-var mudim_showPanel = true;
-var mudim_displayMode = 0;
-var mudim_method = 4;
+document.getElementById('site_config').setAttribute("autocomplete", "off");
 //]]>
 </script>
-<script type="text/javascript" src="{BASE_SITEURL}js/mudim.js"></script>
-<!-- BEGIN: viet_keyboard -->
-
 <!-- END: step -->

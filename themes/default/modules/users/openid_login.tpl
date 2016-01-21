@@ -1,55 +1,64 @@
 <!-- BEGIN: main -->
-<div class="page">
-    <h2>{LANG.openid_login}</h2>
-    <p class="text-center">
-    	<img alt="{LANG.openid_login}" src="{OPENID_IMG_SRC}" width="{OPENID_IMG_WIDTH}" height="{OPENID_IMG_HEIGHT}" />
-    </p>
-    <form id="loginForm" action="{USER_LOGIN}" method="post" role="form" class="form-horizontal form-tooltip m-bottom">
-    	<div class="m-bottom text-center">
-    		{DATA.login_info}
-    	</div>
-    	<div class="form-group">
-    		<label for="login_iavim" class="col-sm-6 control-label">{LANG.account}<span class="text-danger"> (*)</span>:</label>
-    		<div class="col-sm-18">
-    			<input type="text" id="login_iavim" name="nv_login" value="{DATA.nv_login}" class="required form-control" maxlength="{NICK_MAXLENGTH}" />
-    		</div>
-    	</div>
-    	<div class="form-group">
-    		<label for="password_iavim" class="col-sm-6 control-label">{LANG.password}<span class="text-danger"> (*)</span>:</label>
-    		<div class="col-sm-18">
-    			<input type="password" id="password_iavim" name="nv_password" value="{DATA.nv_password}" class="required password form-control" maxlength="{PASS_MAXLENGTH}" />
-    		</div>
-    	</div>
-    	<!-- BEGIN: captcha -->
-    	<div class="form-group">
-    		<label for="seccode_iavim" class="col-sm-6 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
-    		<div class="col-sm-8">
-    			<input type="text" name="nv_seccode" id="seccode_iavim" class="required form-control" maxlength="{GFX_MAXLENGTH}" />
-    		</div>
-    		<div class="col-sm-10">
-    			<label class="control-label">
-    				<img id="vimglogin" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-    				&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="nv_change_captcha('vimglogin','seccode_iavim');">&nbsp;</em>
-    			</label>
-    		</div>
-    	</div>
-    	<!-- END: captcha -->
-    	<div class="form-group">
-    		<div class="col-sm-offset-6 col-sm-18">
-    			<input name="nv_redirect" value="{DATA.nv_redirect}" type="hidden" />
-    			<input type="submit" value="{LANG.login_submit}" class="btn btn-primary" />
-    		</div>
-    	</div>
-    	<div class="form-group">
-    		<div class="col-sm-offset-6 col-sm-18">
-    			<a title="{LANG.register}" href="{USER_REGISTER}">{LANG.register}</a> - <a title="{LANG.lostpass}" href="{USER_LOSTPASS}">{LANG.lostpass}</a>
-    		</div>
-    	</div>
-    	<div class="text-center m-bottom">
-    		<!-- BEGIN: server -->
-    		<a href="{OPENID.href}">&nbsp;<img alt="{OPENID.title}" src="{OPENID.img_src}" width="{OPENID.img_width}" height="{OPENID.img_height}" data-toggle="tooltip" data-placement="top" title="{OPENID.title}"/>&nbsp;</a>
-    		<!-- END: server -->
-    	</div>
-    </form>
+<div class="page panel panel-default">
+	<div class="panel-body">
+		<div class="alert alert-info">
+			<h2 class="text-center margin-bottom-lg">
+				{LANG.mode_login_2}
+			</h2>
+			<div class="row">
+				<div class="nv-info margin-bottom-lg">
+					{INFO}
+				</div>
+				<!-- BEGIN: allowuserreg -->
+				<form action="{USER_LOGIN}" method="post" role="form" class="form-horizontal text-center margin-top-lg margin-bottom-lg">
+					<span class="btn btn-primary btn-sm margin-right-lg pointer" onclick="$('#loginForm').show();return!1">
+						{LANG.openid_note5}
+					</span>
+					<input type="hidden" name="nv_reg" value="1" />
+                    <!-- BEGIN: redirect2 --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect2 -->
+					<input type="submit" class="btn btn-danger btn-sm" value="{LANG.openid_note4}">
+				</form>
+				<!-- END: allowuserreg -->
+			</div>
+			<form id="loginForm" action="{USER_LOGIN}" method="post" role="form" class="form-horizontal margin-bottom-lg"<!-- BEGIN: allowuserreg2 --> style="display:none"<!-- END: allowuserreg2 -->>
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<em class="fa fa-user fa-lg">
+							</em>
+						</span>
+						<input type="text" class="required form-control" placeholder="{GLANG.username}" value="" name="login" maxlength="100"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<em class="fa fa-key fa-lg fa-fix">
+							</em>
+						</span>
+						<input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="100"/>
+					</div>
+				</div>
+				<!-- BEGIN: captcha -->
+				<div class="form-group">
+					<div class="middle text-center clearfix">
+						<img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{GLANG.securitycode}" title="{GLANG.securitycode}" />
+						<em class="fa fa-pointer fa-refresh margin-left margin-right" title="{GLANG.captcharefresh}" onclick="change_captcha('.bsec');">
+						</em>
+						<input type="text" style="width:100px;" class="bsec required form-control display-inline-block" name="nv_seccode" value="" maxlength="{GFX_MAXLENGTH}"/>
+					</div>
+				</div>
+				<!-- END: captcha -->
+				<div class="text-center margin-bottom-lg">
+					<input name="nv_login" value="1" type="hidden" />
+                    <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
+					<input type="reset" value="{GLANG.reset}" class="btn btn-default"/>
+					<button class="bsubmit btn btn-primary" type="submit">
+						{GLANG.loginsubmit}
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 <!-- END: main -->

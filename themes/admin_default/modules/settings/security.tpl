@@ -1,12 +1,12 @@
 <!-- BEGIN: main -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
 	<div class="table-responsive">
@@ -135,7 +135,7 @@
 				<td class="text-center">{ROW.dbendtime}</td>
 				<td class="text-center">
 					<em class="fa fa-edit fa-lg">&nbsp;</em> <a class="edit" title="{LANG.banip_edit}" href="{ROW.url_edit}#banip">{LANG.banip_edit}</a>
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteone" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a>
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteone-ip" title="{LANG.banip_delete}" href="{ROW.url_delete}">{LANG.banip_delete}</a>
 				</td>
 			</tr>
 			<!-- END: loop -->
@@ -167,7 +167,7 @@
 			</colgroup>
 			<tfoot>
 				<tr>
-					<td colspan="2" class="text-center"><input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary w100" /></td>
+					<td colspan="2" class="text-center"><input type="submit" value="{LANG.banip_confirm}" name="submit" class="btn btn-primary w100 submit-security" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -214,48 +214,12 @@
 	</div>
 </form>
 <script type="text/javascript">
-	//<![CDATA[
-	$(document).ready(function() {
-		$(".datepicker").datepicker({
-			showOn : "both",
-			dateFormat : "dd/mm/yy",
-			changeMonth : true,
-			changeYear : true,
-			showOtherMonths : true,
-			buttonImage : nv_siteroot + "images/calendar.gif",
-			buttonImageOnly : true
-		});
-
-		$('input[name=submit]').click(function() {
-			var ip = $('input[name=ip]').val();
-			$('input[name=ip]').focus();
-			if (ip == '') {
-				alert('{LANG.banip_error_ip}');
-				return false;
-			}
-			var area = $('select[name=area]').val();
-			$('select[name=area]').focus();
-			if (area == '0') {
-				alert('{LANG.banip_error_area}');
-				return false;
-			}
-		});
-		$('a.deleteone').click(function() {
-			if (confirm('{LANG.banip_delete_confirm}')) {
-				var url = $(this).attr('href');
-				$.ajax({
-					type : 'POST',
-					url : url,
-					data : '',
-					success : function(data) {
-						alert('{LANG.banip_del_success}');
-						window.location = 'index.php?{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}={OP}';
-					}
-				});
-			}
-			return false;
-		});
-	});
-	//]]>
+//<![CDATA[
+var LANG = [];
+LANG.banip_error_ip = '{LANG.banip_error_ip}';
+LANG.banip_error_area = '{LANG.banip_error_area}';
+LANG.banip_delete_confirm = '{LANG.banip_delete_confirm}';
+LANG.banip_del_success = '{LANG.banip_del_success}';
+//]]>
 </script>
 <!-- END: main -->

@@ -8,15 +8,14 @@
  * @Createdate 07/30/2013 10:27
  */
 
-if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
-
-if( defined( 'NV_IS_SPADMIN' ) )
-{
-	$submenu['department'] = $lang_module['department_title'];
-	$submenu['content'] = $lang_module['content'];
-	$allow_func = array( 'main', 'reply', 'del', 'department', 'row', 'del_department', 'content', 'view', 'change_status', 'change_weight', 'alias' );
+if (! defined('NV_ADMIN')) {
+    die('Stop!!!');
 }
-else
-{
-	$allow_func = array( 'main', 'reply', 'del', 'view' );
+
+if (defined('NV_IS_SPADMIN')) {
+    $submenu['department'] = $lang_module['department_title'];
+    $submenu['content'] = $lang_module['content'];
+    $allow_func = array( 'main', 'reply', 'del', 'department', 'row', 'del_department', 'content', 'view', 'change_status', 'change_weight', 'alias', 'change_default' );
+} else {
+    $allow_func = array( 'main', 'reply', 'del', 'view' );
 }

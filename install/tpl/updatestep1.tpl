@@ -4,22 +4,7 @@
 	{LANG.updatemod_notexist}<br />
 	<strong><a class="delete_update_backage" href="{URL_DELETE}" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
 	<script type="text/javascript">
-	$(document).ready(function(){
-		$('.delete_update_backage').click(function(){
-			if( confirm( nv_is_del_confirm[0] ) ){
-				$('#infodetectedupg').append('<div id="dpackagew"><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Waiting..."/></div>');
-				$.get( $(this).attr('href') , function(e){
-					$('#dpackagew').remove()
-					if( e == 'OK' ){
-						window.location = '{URL_RETURN}';
-					}else{
-						alert(e);
-					}
-				});
-			}
-			return !1;
-		});
-	});
+	ud_url_return = '{URL_RETURN}';
 	</script>
 </div>
 <!-- END: notexistmod -->
@@ -83,22 +68,7 @@
 	{LANG.update_cannot_start}.<br />
 	<strong><a class="delete_update_backage" href="{URL_DELETE}" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
 	<script type="text/javascript">
-	$(document).ready(function(){
-		$('.delete_update_backage').click(function(){
-			if( confirm( nv_is_del_confirm[0] ) ){
-				$('#infodetectedupg').append('<div id="dpackagew"><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Waiting..."/></div>');
-				$.get( $(this).attr('href') , function(e){
-					$('#dpackagew').remove()
-					if( e == 'OK' ){
-						window.location = '{URL_RETURN}';
-					}else{
-						alert(e);
-					}
-				});
-			}
-			return !1;
-		});
-	});
+	ud_url_return = '{URL_RETURN}';
 	</script>
 </div>
 <!-- END: cannotupdate -->

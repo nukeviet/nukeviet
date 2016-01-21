@@ -1,27 +1,55 @@
 # Base ignore
-/.project
 /.buildpath
+/.project
 /.settings
+/assets/css/*.opt.css
 /config.php
-/cache/
-/data/diagnostic-*.xml
-/files/css/*.opt.css
-/logs/data_logs/
-/logs/dump_backup/
-/logs/error_logs/
-/logs/ip_logs/
-/logs/ref_logs/
-/logs/voting_logs/
-/sess/sess_*
-/tmp/
+/data/cache/*
+/data/config/diagnostic-*.xml
+/data/logs/data_logs/
+/data/logs/dump_backup/
+/data/logs/error_logs/
+/data/logs/ip_logs/
+/data/logs/ref_logs/
+/data/logs/voting_logs/
+/data/tmp/
+/uploads/logo_*
+/install/default.php
 
-# Ignore some class
-/includes/class/PHPExcel/
-/includes/class/PHPExcel.php
+composer.lock
+#vendor test ignore 
+/vendor/**/demo/
+/vendor/**/example/
+/vendor/**/examples/
+/vendor/**/test/
+/vendor/**/tests/
+/vendor/**/Tests/
+/vendor/**/travis*
+/vendor/**/.travis.yml
+/vendor/**/.scrutinizer.yml
+/vendor/**/phpunit.xml*
+/vendor/**/phpunit.php
 
-# Ignore some uploads, files dir
-/files/download
-/files/*.jpg
+#vendor docs ignore
+/vendor/**/doc/
+/vendor/**/docs/
+/vendor/**/readme*
+/vendor/**/README*
+/vendor/**/changelog*
+/vendor/**/CHANGELOG*
+/vendor/**/FAQ*
+/vendor/**/CONTRIBUTING*
+/vendor/**/HISTORY*
+/vendor/**/UPGRADING*
+/vendor/**/UPGRADE*
+/vendor/**/package*
+/vendor/**/phpunit.php
+/vendor/**/.gitignore
+/vendor/**/composer.*
+
+# Ignore some uploads, assets dir
+/assets/download
+/assets/*.jpg
 /uploads/download
 /uploads/users/*.jpg
 /uploads/contact/*.jpg
@@ -29,9 +57,12 @@
 /uploads/banners/*.jpg
 /uploads/page/*.jpg
 /uploads/menu/
+/uploads/news/
 
 # Allow default file
 !/uploads/banners/bongoaigiao.jpg
 !/uploads/banners/vinades.jpg
 !/uploads/banners/vndads___05.jpg
-!/uploads/banners/webnhanh_vn.gif
+!/uploads/banners/webnhanh_vn.png
+!/data/cache/.htaccess
+!/data/cache/index.html

@@ -1,17 +1,8 @@
 <!-- BEGIN: main -->
-<link href="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
-<!-- BEGIN: facebookjssdk -->
-<div id="fb-root"></div>
-<script type="text/javascript">
-    (function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/{FACEBOOK_LANG}/all.js#xfbml=1&appId={FACEBOOK_APPID}";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-</script>
-<!-- END: facebookjssdk -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.pack.js"></script>
+<script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.MetaData.js" type="text/javascript"></script>
+<link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/star-rating/jquery.rating.css" type="text/css" rel="stylesheet"/>
+<link href="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/styles/github.css" rel="stylesheet">
 <div class="news_column panel panel-default">
 	<div class="panel-body">
 		<h1>{DETAIL.title}</h1>
@@ -81,20 +72,9 @@
 		<hr />
         <!-- BEGIN: socialbutton -->
         <div class="socialicon pull-left">
-        	<div style="width:60px" class="fb-share-button" data-href="{SELFURL}" data-layout="button">&nbsp;</div>
-	        <div class="fb-like" data-href="{SELFURL}" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="button_count" data-action="like" data-show-faces="true" data-send="false">&nbsp;</div>
+			<div class="fb-like" data-href="{SELFURL}" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true">&nbsp;</div>
 	        <div class="g-plusone" data-size="medium"></div>
-	        <script type="text/javascript">
-	          window.___gcfg = {lang: nv_sitelang};
-	          (function() {
-	            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-	            po.src = 'https://apis.google.com/js/plusone.js';
-	            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-	          })();
-	        </script>
-
 	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
-	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 	    </div>
         <!-- END: socialbutton -->
         <!-- BEGIN: adminlink -->
@@ -182,7 +162,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a href="{TOPIC.link}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip" title="{TOPIC.title}">{TOPIC.title}</a>
+			<a href="{TOPIC.link}" title="{TOPIC.title}">{TOPIC.title}</a>
 			<em>({TOPIC.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -203,7 +183,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a href="{RELATED_NEW.link}" data-content="{RELATED_NEW.hometext}" data-img="{RELATED_NEW.imghome}" data-rel="tooltip">{RELATED_NEW.title}</a>
+			<a href="{RELATED_NEW.link}" title="{RELATED_NEW.title}">{RELATED_NEW.title}</a>
 			<em>({RELATED_NEW.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -221,7 +201,7 @@
 		<!-- BEGIN: loop -->
 		<li>
 			<em class="fa fa-angle-right">&nbsp;</em>
-			<a class="list-inline" href="{RELATED.link}" data-content="{RELATED.hometext}" data-img="{RELATED.imghome}" data-rel="tooltip">{RELATED.title}</a>
+			<a class="list-inline" href="{RELATED.link}" title="{RELATED.title}">{RELATED.title}</a>
 			<em>({RELATED.time})</em>
 			<!-- BEGIN: newday -->
 			<span class="icon_new">&nbsp;</span>
@@ -239,17 +219,9 @@ $(document).ready(function() {
        $('#imagemodal').modal('show');
     });
 	$(".bodytext img").toggleClass('img-thumbnail');
-	<!-- BEGIN: tooltip -->
-	$("[data-rel='tooltip'][data-content!='']").removeAttr("title");
-	$("[data-rel='tooltip'][data-content!='']").tooltip({
-		placement: "{TOOLTIP_POSITION}",
-		html: true,
-		title: function(){return ( $(this).data('img') == '' ? '' : '<img class="img-thumbnail pull-left margin_image" src="' + $(this).data('img') + '" width="90" />' ) + '<p class="text-justify">' + $(this).data('content') + '</p><div class="clearfix"></div>';}
-	});
-	<!-- END: tooltip -->
 });
 </script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}editors/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_EDITORSDIR}/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
 <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 <!-- END: main -->
 <!-- BEGIN: no_permission -->

@@ -2,20 +2,15 @@
 <!-- BEGIN: is_forum -->
 <div class="alert alert-warning">{LANG.modforum}</div>
 <!-- END: is_forum -->
-<!-- BEGIN: error -->
-<div class="alert alert-danger">{ERROR}</div>
-<!-- END: error -->
 <!-- BEGIN: edit_user -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/jquery/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/ui/jquery.ui.datepicker.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
-<form  class="form-inline" role="form" id="form_user" action="{FORM_ACTION}" method="post" enctype="multipart/form-data">
+<form  class="form-inline" role="form" action="{FORM_ACTION}" method="post" onsubmit="return user_validForm(this);">
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<colgroup>
@@ -82,22 +77,7 @@
 					<td>
 						<!-- BEGIN: photo -->
 						<p id="current-photo" class="pull-left text-center">
-							<a href="#" id="pop" title="{DATA.username}">
-                                <img id="imageresource" alt="{DATA.username}" src="{IMG.src}" width="{IMG.width}" height="{IMG.height}" class="img-thumbnail" >
-                            </a>
-							<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-											<h4 class="modal-title" id="myModalLabel">{DETAIL.image.alt}</h4>
-										</div>
-										<div class="modal-body">
-											<img src="" id="imagepreview" class="img-thumbnail" >
-										</div>
-									</div>
-								</div>
-							</div>
+							<img id="imageresource" alt="{DATA.username}" src="{IMG.src}" width="{IMG.width}" height="{IMG.height}" class="img-thumbnail"/>
 							<span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.delete}</span>
 							<input type="hidden" name="delpic" id="photo_delete" value="{DATA.delpic}"/>
 						</p>
@@ -221,65 +201,17 @@
 		<!-- END: changepass -->
 	</div>
 	<div class="text-center">
-		<input class="btn btn-primary" type="submit" name="confirm" value="{LANG.edit_title}" />
+        <input type="hidden" name="confirm" value="1" />
+		<input class="btn btn-primary" type="submit" value="{LANG.edit_title}" />
 	</div>
 </form>
 <br />
 <script type="text/javascript">
 //<![CDATA[
-document.getElementById('form_user').setAttribute("autocomplete", "off");
 $(function() {
-    $("#pop").on("click", function() {
-       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
-       $('#imagemodal').modal('show');
-    });
 	$.toggleShowPassword({
 	    field: '#password2',
 	    control: '#methods'
-	});
-
-	$('#form_user').validate({
-		rules : {
-			username : {
-				minlength : 5
-			}
-		}
-	});
-
-	$(".datepicker").datepicker({
-		showOn : "both",
-		dateFormat : "dd/mm/yy",
-		changeMonth : true,
-		changeYear : true,
-		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
-		buttonImageOnly : true,
-	});
-
-	$("#birthday").datepicker({
-		showOn : "both",
-		dateFormat : "dd/mm/yy",
-		changeMonth : true,
-		changeYear : true,
-		showOtherMonths : true,
-		buttonImage : nv_siteroot + "images/calendar.gif",
-		buttonImageOnly : true,
-		yearRange: "-99:+0",
-		beforeShow: function() {
-	        setTimeout(function(){
-	            $('.ui-datepicker').css('z-index', 999999999);
-	        }, 0);
-    	}
-	});
-
-	$("#btn_upload").click(function() {
-		nv_open_browse( nv_siteroot  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar", "NVImg", 650, 650, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
-		return false;
-	});
-	$('#current-photo-btn').click(function(){
-		$('#current-photo').hide();
-		$('#photo_delete').val('1');
-		$('#change-photo').show();
 	});
 });
 //]]>

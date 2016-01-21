@@ -8,14 +8,14 @@
  * @Createdate 07/30/2013 10:27
  */
 
-if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN')) {
+    die('Stop!!!');
+}
 
-if( defined( 'NV_IS_SPADMIN' ) )
-{
-	$submenu['thumbconfig'] = $lang_module['thumbconfig'];
-	$submenu['config'] = $lang_module['configlogo'];
-	if( defined( 'NV_IS_GODADMIN' ) )
-	{
-		$submenu['uploadconfig'] = $lang_module['uploadconfig'];
-	}
+if (defined('NV_IS_SPADMIN')) {
+    $submenu['thumbconfig'] = $lang_module['thumbconfig'];
+    $submenu['config'] = $lang_module['configlogo'];
+    if (defined('NV_IS_GODADMIN')) {
+        $submenu['uploadconfig'] = $lang_module['uploadconfig'];
+    }
 }

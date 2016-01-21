@@ -129,15 +129,14 @@
 	</div>
 	<script type="text/javascript">
 	$('#tabs a').click(function(e){
-		e.preventDefault()
-		$(this).tab('show')
+		e.preventDefault();
+		$(this).tab('show');
 	});
 	$(document).ready(function(){
 		$('.ext-tip').tooltip();
 		$('.ext-install').click(function(e){
 			e.preventDefault();
 			parent.location = $(this).attr('href');
-			parent.Shadowbox.close();
 		});
 	});
 	</script>

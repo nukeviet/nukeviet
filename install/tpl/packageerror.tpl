@@ -6,7 +6,7 @@
 	$(document).ready(function(){
 		$('.delete_update_backage').click(function(){
 			if( confirm( nv_is_del_confirm[0] ) ){
-				$('#infodetectedupg').append('<div id="dpackagew"><img src="{NV_BASE_SITEURL}images/load_bar.gif" alt="Waiting..."/></div>');
+				$('#infodetectedupg').append('<div id="dpackagew"><img src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/images/load_bar.gif" alt="Waiting..."/></div>');
 				$.get( $(this).attr('href') , function(e){
 					$('#dpackagew').remove()
 					if( e == 'OK' ){

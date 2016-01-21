@@ -8,14 +8,15 @@
  * @Createdate 12/28/2009 20:8
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 // Ten cac table cua CSDL dung chung cho he thong
 
-$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
-while( $item = $result->fetch() )
-{
-	$sql_drop_table[] = 'DROP TABLE ' . $item['name'];
+$result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
+while ($item = $result->fetch()) {
+    $sql_drop_table[] = 'DROP TABLE ' . $item['name'];
 }
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
@@ -68,7 +69,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_config (
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_question (
 	qid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-	title varchar(255) NOT NULL DEFAULT '',
+	title varchar(240) NOT NULL DEFAULT '',
 	lang char(2) NOT NULL DEFAULT '',
 	weight mediumint(8) unsigned NOT NULL DEFAULT '0',
 	add_time int(11) unsigned NOT NULL DEFAULT '0',
@@ -103,6 +104,8 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
 	last_agent varchar(255) DEFAULT '',
 	last_openid varchar(255) DEFAULT '',
 	idsite int(11) NOT NULL DEFAULT '0',
+    safemode tinyint(1) unsigned NOT NULL DEFAULT '0',
+    safekey varchar(40) DEFAULT '',
 	PRIMARY KEY (userid),
 	UNIQUE KEY username (username),
 	UNIQUE KEY md5username (md5username),
@@ -123,6 +126,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_reg (
 	answer varchar(255) NOT NULL DEFAULT '',
 	checknum varchar(50) NOT NULL DEFAULT '',
 	users_info text,
+    openid_info text,
 	PRIMARY KEY (userid),
 	UNIQUE KEY login (username),
 	UNIQUE KEY md5username (md5username),
@@ -193,7 +197,8 @@ $sql_create_table[] = "CREATE TABLE " . NV_CRONJOBS_GLOBALTABLE . " (
 
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 	group_id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-	title varchar(255) NOT NULL,
+	title varchar(240) NOT NULL,
+    description text,
 	content text,
 	add_time int(11) NOT NULL,
 	exp_time int(11) NOT NULL,
@@ -226,7 +231,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . " (
 $sql_create_table[] = "CREATE TABLE " . NV_LANGUAGE_GLOBALTABLE . "_file (
 	idfile mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	module varchar(50) NOT NULL,
-	admin_file varchar(255) NOT NULL DEFAULT '0',
+	admin_file varchar(200) NOT NULL DEFAULT '0',
 	langtype varchar(50) NOT NULL,
 	PRIMARY KEY (idfile),
 	UNIQUE KEY module (module,admin_file)
@@ -319,7 +324,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 	login varchar(60) NOT NULL,
 	pass varchar(80) NOT NULL,
 	reg_time int(11) unsigned NOT NULL DEFAULT '0',
-	full_name varchar(255) NOT NULL,
+	full_name varchar(250) NOT NULL,
 	email varchar(100) NOT NULL,
 	website varchar(255) NOT NULL,
 	location varchar(255) NOT NULL,
@@ -342,7 +347,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	blang char(2) DEFAULT '',
-	title varchar(255) NOT NULL,
+	title varchar(250) NOT NULL,
 	description varchar(255) DEFAULT '',
 	form varchar(100) NOT NULL,
 	width smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -403,7 +408,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
 	did mediumint(8) NOT NULL AUTO_INCREMENT,
-	dirname varchar(255) DEFAULT NULL,
+	dirname varchar(250) DEFAULT NULL,
 	time int(11) NOT NULL DEFAULT '0',
 	thumb_type tinyint(4) NOT NULL DEFAULT '0',
 	thumb_width smallint(6) NOT NULL DEFAULT '0',
@@ -414,7 +419,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_dir (
 ) ENGINE=MyISAM";
 
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
-	name varchar(255) NOT NULL,
+	name varchar(245) NOT NULL,
 	ext varchar(10) NOT NULL DEFAULT '',
 	type varchar(5) NOT NULL DEFAULT '',
 	filesize int(11) NOT NULL DEFAULT '0',
@@ -425,7 +430,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_upload_file (
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
 	mtime int(11) NOT NULL DEFAULT '0',
 	did int(11) NOT NULL DEFAULT '0',
-	title varchar(255) NOT NULL DEFAULT '',
+	title varchar(245) NOT NULL DEFAULT '',
 	alt varchar(255) NOT NULL DEFAULT '',
 	UNIQUE KEY did (did,title),
 	KEY userid (userid),
@@ -468,6 +473,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_notification (
   area tinyint(1) unsigned NOT NULL,
   language char(3) NOT NULL,
   module varchar(50) NOT NULL,
+  obid int(11) unsigned NOT NULL DEFAULT '0',
   type varchar(255) NOT NULL,
   content text NOT NULL,
   add_time int(11) unsigned NOT NULL,

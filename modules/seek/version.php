@@ -8,15 +8,17 @@
  * @Createdate 05/07/2010 09:47
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $module_version = array(
-	'name' => 'Search',
-	'modfuncs' => 'main',
-	'is_sysmod' => 1,
-	'virtual' => 0,
-	'version' => '4.0.17',
-	'date' => 'Wed, 20 Oct 2010 00:00:00 GMT',
-	'author' => 'VINADES (contact@vinades.vn)',
-	'note' => ''
+    'name' => 'Search',
+    'modfuncs' => 'main',
+    'is_sysmod' => 1,
+    'virtual' => 0,
+    'version' => '4.0.21',
+    'date' => 'Wed, 20 Oct 2010 00:00:00 GMT',
+    'author' => 'VINADES (contact@vinades.vn)',
+    'note' => ''
 );

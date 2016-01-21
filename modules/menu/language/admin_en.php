@@ -9,7 +9,9 @@
 * @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '15/04/2011, 15:22';
@@ -80,6 +82,11 @@ $lang_module['add_error_module'] = 'Error: No any module selected';
 $lang_module['add_error_module_exist'] = 'Error: Module not exist';
 $lang_module['error_menu_block'] = 'Error: Enter name of menu block';
 
+$lang_module['action_menu_reload'] = 'Menu reload';
+$lang_module['action_menu_reload_confirm'] = 'This action will reload the ingredients is the subject of the current module. Do you want to continue?';
+$lang_module['action_menu_reload_success'] = 'Already successfully reloaded menu!';
+$lang_module['action_menu_reload_none_success'] = 'Load unsuccessful menu. Please check the operation.';
+$lang_module['action_menu_reload_note'] = 'Reload the children was the subject of module';
 $lang_module['action_menu'] = 'Import form';
 $lang_module['action_menu_sys_1'] = 'Module name';
 $lang_module['action_menu_sys_2'] = 'Module name, submenu is catalogs or functions';
