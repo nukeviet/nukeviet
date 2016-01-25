@@ -700,7 +700,6 @@ function nv_getExtVersion($updatetime = 3600)
     if (file_exists($my_file) and @filemtime($my_file) > $p) {
         $xmlcontent = simplexml_load_file($my_file);
     } else {
-        // Lấy các ứng dụng của hệ thống
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename ORDER BY title ASC';
         $result = $db->query($sql);
 
@@ -763,68 +762,69 @@ function nv_getExtVersion($updatetime = 3600)
             }
 
             $apidata = $apidata['data'];
-            $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<cms>\n";
+        }
 
-            // Xử lý dữ liệu
-            foreach ($array as $row) {
-                if (isset($apidata[$row['id']])) {
-                    $row['remote_version'] = $apidata[$row['id']]['lastest_version'];
-                    $row['remote_release'] = $apidata[$row['id']]['lastest_release'];
-                    $row['updateable'] = $apidata[$row['id']]['updateable'];
+        $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<cms>\n";
 
-                    if (empty($row['author'])) {
-                        $row['author'] = $apidata[$row['id']]['author'];
-                    }
-                    $row['license'] = $apidata[$row['id']]['license'];
-                    $row['message'] = $apidata[$row['id']]['note'];
-                    $row['link'] = $apidata[$row['id']]['link'];
-                    $row['support'] = $apidata[$row['id']]['support'];
-                    $row['origin'] = true;
+        foreach ($array as $row) {
+            if (isset($apidata[$row['id']])) {
+                $row['remote_version'] = $apidata[$row['id']]['lastest_version'];
+                $row['remote_release'] = $apidata[$row['id']]['lastest_release'];
+                $row['updateable'] = $apidata[$row['id']]['updateable'];
+
+                if (empty($row['author'])) {
+                    $row['author'] = $apidata[$row['id']]['author'];
                 }
 
-                $content .= "\t<extension>\n";
-                $content .= "\t\t<id><![CDATA[" . $row['id'] . "]]></id>\n";
-                $content .= "\t\t<type><![CDATA[" . $row['type'] . "]]></type>\n";
-                $content .= "\t\t<name><![CDATA[" . $row['name'] . "]]></name>\n";
-                $content .= "\t\t<version><![CDATA[" . $row['current_version'] . "]]></version>\n";
-                $content .= "\t\t<date><![CDATA[" . gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT]]></date>\n";
-                $content .= "\t\t<new_version><![CDATA[" . $row['remote_version'] . "]]></new_version>\n";
-                $content .= "\t\t<new_date><![CDATA[" . ($row['remote_release'] ? gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT" : "") . "]]></new_date>\n";
-                $content .= "\t\t<author><![CDATA[" . $row['author'] . "]]></author>\n";
-                $content .= "\t\t<license><![CDATA[" . $row['license'] . "]]></license>\n";
-                $content .= "\t\t<mode><![CDATA[" . $row['mode'] . "]]></mode>\n";
-                $content .= "\t\t<message><![CDATA[" . $row['message'] . "]]></message>\n";
-                $content .= "\t\t<link><![CDATA[" . $row['link'] . "]]></link>\n";
-                $content .= "\t\t<support><![CDATA[" . $row['support'] . "]]></support>\n";
-                $content .= "\t\t<updateable>\n";
+                $row['license'] = $apidata[$row['id']]['license'];
+                $row['message'] = $apidata[$row['id']]['note'];
+                $row['link'] = $apidata[$row['id']]['link'];
+                $row['support'] = $apidata[$row['id']]['support'];
+                $row['origin'] = true;
+            }
 
-                if (! empty($row['updateable'])) {
-                    $content .= "\t\t\t<upds>\n";
+            $content .= "\t<extension>\n";
+            $content .= "\t\t<id><![CDATA[" . $row['id'] . "]]></id>\n";
+            $content .= "\t\t<type><![CDATA[" . $row['type'] . "]]></type>\n";
+            $content .= "\t\t<name><![CDATA[" . $row['name'] . "]]></name>\n";
+            $content .= "\t\t<version><![CDATA[" . $row['current_version'] . "]]></version>\n";
+            $content .= "\t\t<date><![CDATA[" . gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT]]></date>\n";
+            $content .= "\t\t<new_version><![CDATA[" . $row['remote_version'] . "]]></new_version>\n";
+            $content .= "\t\t<new_date><![CDATA[" . ($row['remote_release'] ? gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT" : "") . "]]></new_date>\n";
+            $content .= "\t\t<author><![CDATA[" . $row['author'] . "]]></author>\n";
+            $content .= "\t\t<license><![CDATA[" . $row['license'] . "]]></license>\n";
+            $content .= "\t\t<mode><![CDATA[" . $row['mode'] . "]]></mode>\n";
+            $content .= "\t\t<message><![CDATA[" . $row['message'] . "]]></message>\n";
+            $content .= "\t\t<link><![CDATA[" . $row['link'] . "]]></link>\n";
+            $content .= "\t\t<support><![CDATA[" . $row['support'] . "]]></support>\n";
+            $content .= "\t\t<updateable>\n";
 
-                    foreach ($row['updateable'] as $updateable) {
-                        $content .= "\t\t\t\t<upd>\n";
-                        $content .= "\t\t\t\t\t<upd_fid><![CDATA[" . $updateable['fid'] . "]]></upd_fid>\n";
-                        $content .= "\t\t\t\t\t<upd_old><![CDATA[" . $updateable['old_ver'] . "]]></upd_old>\n";
-                        $content .= "\t\t\t\t\t<upd_new><![CDATA[" . $updateable['new_ver'] . "]]></upd_new>\n";
-                        $content .= "\t\t\t\t</upd>\n";
-                    }
-                    $content .= "\t\t\t</upds>\n";
+            if (! empty($row['updateable'])) {
+                $content .= "\t\t\t<upds>\n";
 
-                    unset($updateable);
+                foreach ($row['updateable'] as $updateable) {
+                    $content .= "\t\t\t\t<upd>\n";
+                    $content .= "\t\t\t\t\t<upd_fid><![CDATA[" . $updateable['fid'] . "]]></upd_fid>\n";
+                    $content .= "\t\t\t\t\t<upd_old><![CDATA[" . $updateable['old_ver'] . "]]></upd_old>\n";
+                    $content .= "\t\t\t\t\t<upd_new><![CDATA[" . $updateable['new_ver'] . "]]></upd_new>\n";
+                    $content .= "\t\t\t\t</upd>\n";
                 }
+                $content .= "\t\t\t</upds>\n";
 
-                $content .= "\t\t</updateable>\n";
-                $content .= "\t\t<origin><![CDATA[" . ($row['origin'] === true ? 'true' : 'false') . "]]></origin>\n";
-                $content .= "\t</extension>\n";
+                unset($updateable);
             }
 
-            $content .= "</cms>";
+            $content .= "\t\t</updateable>\n";
+            $content .= "\t\t<origin><![CDATA[" . ($row['origin'] === true ? 'true' : 'false') . "]]></origin>\n";
+            $content .= "\t</extension>\n";
+        }
 
-            $xmlcontent = simplexml_load_string($content);
+        $content .= "</cms>";
 
-            if ($xmlcontent !== false) {
-                file_put_contents($my_file, $content);
-            }
+        $xmlcontent = simplexml_load_string($content);
+
+        if ($xmlcontent !== false) {
+            file_put_contents($my_file, $content);
         }
     }
 

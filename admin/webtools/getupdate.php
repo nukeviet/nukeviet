@@ -229,8 +229,8 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
 
     $apidata = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 
-    if (! empty(NV_Http::$error)) {
-        $error = nv_http_get_lang(NV_Http::$error);
+    if (! empty(NukeViet\Http\Http::$error)) {
+        $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($apidata['filename']) or ! file_exists($apidata['filename'])) {
         $error = $lang_module['get_update_error_file_download'];
     }
