@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <div class="block-law marquee" <!-- BEGIN: marquee_data -->data-direction='{DATA.direction}' data-duration='{DATA.duration}' data-pauseOnHover="{DATA.pauseOnHover}" data-duplicated="{DATA.duplicated}" style="height: 200px; overflow: hidden;"<!-- END: marquee_data --> >
 	<!-- BEGIN: loop -->
-	<div class="m-bottom">
+	<div class="m-bottom item">
 		<h3 class="law-code">
 			<a href="{ROW.link}" title="{ROW.title}">{ROW.code}</a>
 			<!-- BEGIN: newday -->
