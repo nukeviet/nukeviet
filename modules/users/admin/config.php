@@ -283,8 +283,8 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
     $nv_files = @scandir(NV_ROOTDIR);
     foreach ($nv_files as $value) {
-        if (is_dir(NV_ROOTDIR . '/' . $value)) {
-            if (! in_array($value, $ignorefolders) and is_dir(NV_ROOTDIR . '/' . $value . '/nukeviet')) {
+        if (! in_array($value, $ignorefolders) and is_dir(NV_ROOTDIR . '/' . $value)) {
+            if (is_dir(NV_ROOTDIR . '/' . $value . '/nukeviet')) {
                 $array = array(
                     'id' => $value,
                     'select' => ($value == DIR_FORUM) ? ' selected="selected"' : '',
