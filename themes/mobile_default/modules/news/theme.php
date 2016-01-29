@@ -430,7 +430,6 @@ function viewcat_two_column($array_content, $array_catpage)
 
     //Theo chu de
     $a = 0;
-    $xtpl->assign('IMGWIDTH01', $module_config[$module_name]['homewidth']);
 
     foreach ($array_catpage as $key => $array_catpage_i) {
         $number_content = isset($array_catpage[$key]['content']) ? sizeof($array_catpage[$key]['content']) : 0;
