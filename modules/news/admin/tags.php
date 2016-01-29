@@ -117,6 +117,7 @@ if (! empty($savecat)) {
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
+    $alias = str_replace('&', ' ', $alias);
     $alias = str_replace('-', ' ', nv_unhtmlspecialchars($alias));
     $keywords = explode(',', $keywords);
     $keywords[] = $alias;
