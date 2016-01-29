@@ -99,7 +99,7 @@ if (! empty($array_op) and $op == 'main') {
     if ($count_op == 1 or substr($array_op[1], 0, 5) == 'page-') {
         if ($count_op > 1 or $catid > 0) {
             $op = 'viewcat';
-            if( substr($array_op[1], 0, 5) == 'page-' ){
+            if( isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-' ){
                 $page = intval(substr($array_op[1], 5));   
             }
         }
