@@ -1210,7 +1210,18 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
     return '<ul class="pagination">' . $page_string . '</ul>';
 }
 
-function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true)
+/**
+ * 
+ * @param mixed $title
+ * @param mixed $base_url
+ * @param mixed $num_items
+ * @param mixed $per_page
+ * @param mixed $on_page
+ * @param bool $add_prevnext_text
+ * @param bool $full_theme
+ * @return
+ */
+function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $full_theme = true)
 {
     global $lang_global;
 
@@ -1293,6 +1304,10 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
         } else {
             $page_string .= '<li class="disabled"><a href="#">&raquo;</a></li>';
         }
+    }
+
+    if ($full_theme !== true) {
+        return $page_string;
     }
 
     return '<ul class="pagination">' . $page_string . '</ul>';
