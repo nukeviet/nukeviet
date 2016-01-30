@@ -463,6 +463,32 @@ $(document).ready(function(){
 	    	}
 		});
 	}
+    
+    $('[name="group[]"]').change(function(){
+        var ingroup = $('[name="group[]"]:checked').length,
+            gdefault = $('[name="group_default"]:checked').val(),
+            groups = []
+        $('[name="group[]"]').each(function(){
+            if ($(this).is(':checked') && ingroup > 1) {
+                $('.group_default', $(this).parent().parent()).show()
+                
+                if (typeof gdefault == 'undefined') {
+                    gdefault = $(this).val()
+                    $('[name="group_default"]', $(this).parent().parent()).prop('checked', true)
+                }
+            } else {
+                $('.group_default', $(this).parent().parent()).hide()
+            }
+            if ($(this).is(':checked')) {
+                groups.push($(this).val())
+            }
+        })
+        
+        if (typeof gdefault != 'undefined' && $.inArray(gdefault, groups) == -1 && ingroup > 1) {
+            $('[name="group_default"]').prop('checked', false)
+            $('[name="group_default"]', $('[name="group[]"]:checked:first').parent().parent()).prop('checked', true)
+        }
+    })
 
 	// Export user
 	$("input[name=data_export]").click(function() {
