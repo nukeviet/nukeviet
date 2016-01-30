@@ -252,8 +252,8 @@
 <!-- END: main -->
 
 <!-- BEGIN: listUsers -->
+<!-- BEGIN: leaders -->
 <h3 class="myh3">{PTITLE}</h3>
-<!-- BEGIN: ifExists -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<col class="w50"/>
@@ -275,9 +275,10 @@
 				<td>{LOOP.full_name}</td>
 				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 				<td>
-				<!-- BEGIN: delete -->
-				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
-				<!-- END: delete -->
+				<!-- BEGIN: tools -->
+                <i class="fa fa-trash-o fa-lg"></i> <a class="demote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.demote}</a>
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteleader" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+				<!-- END: tools -->
 				</td>
 			</tr>
 			<!-- END: loop -->
@@ -285,21 +286,93 @@
 	</table>
 </div>
 <script type="text/javascript">
-	//<![CDATA[
-	$("a.delete").click(function() {
-		confirm("{LANG.delConfirm} ?") && $.ajax({
-			type : "POST",
-			url : "{MODULE_URL}={OP}",
-			data : "gid={GID}&exclude=" + $(this).attr("title"),
-			success : function(a) {
-				a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
-			}
-		});
-		return !1;
+//<![CDATA[
+$("a.deleteleader").click(function() {
+	confirm("{LANG.delConfirm} ?") && $.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&exclude=" + $(this).attr("title"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
 	});
-	//]]>
+	return !1;
+});
+$("a.demote").click(function() {
+	$.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&demote=" + $(this).data("id"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+//]]>
 </script>
-<!-- END: ifExists -->
+<!-- END: leaders -->
+
+<!-- BEGIN: members -->
+<h3 class="myh3">{PTITLE}</h3>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<col class="w50"/>
+		<col span="4" />
+		<thead>
+			<tr>
+				<th> {LANG.userid} </th>
+				<th> {LANG.account} </th>
+				<th> {LANG.nametitle} </th>
+				<th> {LANG.email} </th>
+				<th> {GLANG.actions} </th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td> {LOOP.userid} </td>
+				<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+				<td>{LOOP.full_name}</td>
+				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
+				<td>
+				<!-- BEGIN: tools -->
+                <i class="fa fa-star fa-lg"></i> <a class="promote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.promote}</a>
+				<i class="fa fa-trash-o fa-lg"></i> <a class="deletemember" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+				<!-- END: tools -->
+				</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+$("a.deletemember").click(function() {
+	confirm("{LANG.delConfirm} ?") && $.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&exclude=" + $(this).attr("title"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+$("a.promote").click(function() {
+	$.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&promote=" + $(this).data("id"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+//]]>
+</script>
+<!-- END: members -->
 <!-- END: listUsers -->
 
 <!-- BEGIN: userlist -->
