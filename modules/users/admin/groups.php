@@ -327,12 +327,12 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     }
     
     if ($num_members) {
-        $xtpl->assign('PTITLE', sprintf($lang_module['users_in_group_caption'], $title, $numberusers));
+        $xtpl->assign('PTITLE', sprintf($lang_module['users_in_group_caption'], $title, number_format($num_members, 0, ',', '.')));
         $xtpl->parse('listUsers.members');
     }
     
     if ($num_leaders) {
-        $xtpl->assign('PTITLE', sprintf($lang_module['leaders_in_group_caption'], $title, $numberusers));
+        $xtpl->assign('PTITLE', sprintf($lang_module['leaders_in_group_caption'], $title, number_format($num_leaders, 0, ',', '.')));
         $xtpl->parse('listUsers.leaders');
     }
     
