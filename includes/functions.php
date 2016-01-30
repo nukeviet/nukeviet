@@ -541,7 +541,7 @@ function nv_user_groups($in_groups)
         return '';
     }
 
-    $query = 'SELECT group_id, title, exp_time, publics FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+    $query = 'SELECT group_id, title, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
     $list = $nv_Cache->db($query, '', 'users');
 
     if (empty($list)) {

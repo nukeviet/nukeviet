@@ -28,8 +28,12 @@
 						<td><input type="text" name="exp_time" class="form-control w150 datepicker pull-left" value="{DATA.exp_time}" maxlength="10" /> &nbsp;&nbsp;&nbsp;{LANG.emptyIsUnlimited} </td>
 					</tr>
 					<tr>
-						<td>{LANG.public}:</td>
-						<td><input title="{LANG.publics}" type="checkbox" name="publics" value="1"{DATA.publics} /></td>
+						<td>{LANG.group_type}:</td>
+						<td>
+                            <select class="form-control w250" name="group_type">
+                                <!-- BEGIN: group_type --><option value="{GROUP_TYPE.key}"{GROUP_TYPE.selected}>{GROUP_TYPE.title}</option><!-- END: group_type -->
+                            </select>
+                        </td>
 					</tr>
 					<!-- BEGIN: siteus -->
 					<tr>
