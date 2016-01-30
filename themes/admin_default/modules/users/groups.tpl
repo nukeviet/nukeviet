@@ -252,6 +252,67 @@
 <!-- END: main -->
 
 <!-- BEGIN: listUsers -->
+<!-- BEGIN: pending -->
+<h3 class="myh3">{PTITLE}</h3>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<col class="w50"/>
+		<col span="4" />
+		<thead>
+			<tr>
+				<th> {LANG.userid} </th>
+				<th> {LANG.account} </th>
+				<th> {LANG.nametitle} </th>
+				<th> {LANG.email} </th>
+				<th> {GLANG.actions} </th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td> {LOOP.userid} </td>
+				<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+				<td>{LOOP.full_name}</td>
+				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
+				<td>
+				<!-- BEGIN: tools -->
+                <i class="fa fa-check fa-lg"></i> <a class="approved" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.approved}</a>
+                <i class="fa fa-times fa-lg"></i> <a class="denied" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.denied}</a>
+				<!-- END: tools -->
+				</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+$("a.approved").click(function() {
+	$.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&approved=" + $(this).data("id"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+$("a.denied").click(function() {
+	$.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&denied=" + $(this).data("id"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+//]]>
+</script>
+<!-- END: pending -->
+
 <!-- BEGIN: leaders -->
 <h3 class="myh3">{PTITLE}</h3>
 <div class="table-responsive">

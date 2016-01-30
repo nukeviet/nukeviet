@@ -111,7 +111,7 @@
     						<label class="pull-left w200">
     							<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
     						</label>
-                            <label class="pull-left group_default">
+                            <label class="pull-left group_default" style="display:none">
                                 <input type="radio" value="{GROUP.id}" name="group_default" /> {LANG.in_group_default}
                             </label>
                         </div>

@@ -256,6 +256,59 @@ if ($nv_Request->isset_request('gid,demote', 'post')) {
     die('OK');
 }
 
+// Duyet vao nhom
+if ($nv_Request->isset_request('gid,approved', 'post')) {
+    $gid = $nv_Request->get_int('gid', 'post', 0);
+    $uid = $nv_Request->get_int('approved', 'post', 0);
+    if (! isset($groupsList[$gid]) or $gid < 10) {
+        die($lang_module['error_group_not_found']);
+    }
+
+    if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
+        $row = $db->query('SELECT idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $uid)->fetch();
+        if (! empty($row)) {
+            if ($row['idsite'] != $global_config['idsite']) {
+                die($lang_module['error_group_in_site']);
+            }
+        } else {
+            die($lang_module['search_not_result']);
+        }
+    }
+    
+    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . '_users SET approved = 1 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id = ' . $gid);
+    
+    $nv_Cache->delMod($module_name);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['approved'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
+    die('OK');
+}
+
+// Tu choi gia nhap nhom
+if ($nv_Request->isset_request('gid,denied', 'post')) {
+    $gid = $nv_Request->get_int('gid', 'post', 0);
+    $uid = $nv_Request->get_int('denied', 'post', 0);
+    if (! isset($groupsList[$gid]) or $gid < 10) {
+        die($lang_module['error_group_not_found']);
+    }
+
+    if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
+        $row = $db->query('SELECT idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $uid)->fetch();
+        if (! empty($row)) {
+            if ($row['idsite'] != $global_config['idsite']) {
+                die($lang_module['error_group_in_site']);
+            }
+        } else {
+            die($lang_module['search_not_result']);
+        }
+    }
+    
+    $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    
+    $nv_Cache->delMod($module_name);
+    nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['denied'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
+    die('OK');
+}
+
 $lang_module['nametitle'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -274,7 +327,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         die($lang_module['error_group_not_found']);
     }
     
-    $sql = 'SELECT userid, is_leader FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id;
+    $sql = 'SELECT userid, is_leader, approved FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id;
     $result = $db->query($sql);
     $group_users = array();
     
@@ -286,20 +339,15 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     if (!empty($group_users)) {
         $sql = 'SELECT userid, username, first_name, last_name, email, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode( ',', array_keys($group_users) ) . ')';
         $_rows = $db->query($sql)->fetchAll();
-        $numberusers = sizeof($_rows);
     } else {
         $_rows = array();
-        $numberusers = 0;
-    }
-    
-    if ($numberusers != $groupsList[$group_id]['numbers']) {
-        $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = ' . $numberusers . ' WHERE group_id=' . $group_id);
     }
 
     $xtpl->assign('GID', $group_id);
 
     $num_members = 0;
     $num_leaders = 0;
+    $num_pending = 0;
     $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
     $title = ($group_id < 10) ? $lang_global['level' . $group_id] : $groupsList[$group_id]['title'];
      
@@ -307,7 +355,15 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
         $xtpl->assign('LOOP', $row);
         
-        if (empty($group_users[$row['userid']]['is_leader'])) {
+        if (empty($group_users[$row['userid']]['approved'])) {
+            $num_pending ++;
+            
+            if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite'])) {
+                $xtpl->parse('listUsers.pending.loop.tools');
+            }
+            
+            $xtpl->parse('listUsers.pending.loop');
+        } elseif (empty($group_users[$row['userid']]['is_leader'])) {
             $num_members ++;
             
             if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite'])) {
@@ -326,14 +382,25 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         }
     }
     
-    if ($num_members) {
-        $xtpl->assign('PTITLE', sprintf($lang_module['users_in_group_caption'], $title, number_format($num_members, 0, ',', '.')));
-        $xtpl->parse('listUsers.members');
+    if ($num_pending) {
+        $xtpl->assign('PTITLE', sprintf($lang_module['pending_in_group_caption'], $title, number_format($num_pending, 0, ',', '.')));
+        $xtpl->parse('listUsers.pending');
     }
     
     if ($num_leaders) {
         $xtpl->assign('PTITLE', sprintf($lang_module['leaders_in_group_caption'], $title, number_format($num_leaders, 0, ',', '.')));
         $xtpl->parse('listUsers.leaders');
+    }
+    
+    if ($num_members) {
+        $xtpl->assign('PTITLE', sprintf($lang_module['users_in_group_caption'], $title, number_format($num_members, 0, ',', '.')));
+        $xtpl->parse('listUsers.members');
+    }
+    
+    $numberusers = $num_members + $num_leaders;
+    
+    if ($numberusers != $groupsList[$group_id]['numbers']) {
+        $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = ' . $numberusers . ' WHERE group_id=' . $group_id);
     }
     
     $xtpl->parse('listUsers');

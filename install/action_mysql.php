@@ -221,6 +221,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . "_users (
 	group_id smallint(5) unsigned NOT NULL DEFAULT '0',
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
     is_leader tinyint(1) unsigned NOT NULL DEFAULT '0',
+    approved tinyint(1) unsigned NOT NULL DEFAULT '0',
 	data text NOT NULL,
 	PRIMARY KEY (group_id,userid)
 ) ENGINE=MyISAM";
