@@ -209,6 +209,7 @@ $lang_module['nametitle'] = $global_config['name_show'] == 0 ? $lang_module['las
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
+$xtpl->assign('TEMPLATE', $global_config['module_theme']);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('MODULE_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
@@ -301,73 +302,120 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         }
 
         if ($nv_Request->isset_request('save', 'post')) {
-            $post['title'] = $nv_Request->get_title('title', 'post', '', 1);
-            if (empty($post['title'])) {
-                die($lang_module['title_empty']);
-            }
-
-            // Kiểm tra trùng tên nhóm
-            $stmt = $db->prepare('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
-            $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
-            $stmt->execute();
-            if ($stmt->fetchColumn()) {
-                die(sprintf($lang_module['error_title_exists'], $post['title']));
-            }
-
-            $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
-            if (empty($post['description'])) {
-                die($lang_module['group_description_empty']);
-            }
-
-            $post['content'] = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
-
-            $post['exp_time'] = $nv_Request->get_title('exp_time', 'post', '');
-
-            if (preg_match('/^([\d]{1,2})\/([\d]{1,2})\/([\d]{4})$/', $post['exp_time'], $matches)) {
-                $post['exp_time'] = mktime(23, 59, 59, $matches[2], $matches[1], $matches[3]);
-            } else {
-                $post['exp_time'] = 0;
-            }
-
-            $post['group_type'] = $nv_Request->get_int('group_type', 'post', 0);
-            if (!in_array($post['group_type'], array(0, 1, 2))) {
-                $post['group_type'] = 0;
-            }
-
-            $post['siteus'] = $nv_Request->get_int('siteus', 'post', 0);
-            if ($post['siteus'] != 1) {
-                $post['siteus'] = 0;
-            }
-
-            if (isset($post['id']) and $post['id'] > 9) {
-                $stmt = $db->prepare("UPDATE " . NV_GROUPS_GLOBALTABLE . " SET
-					title= :title,
-                    description= :description,
-					content= :content,
-					group_type='" . $post['group_type'] . "',
-					exp_time='" . $post['exp_time'] . "',
-					siteus='" . $post['siteus'] . "'
-					WHERE group_id=" . $post['id']);
-
+            // Sửa / Thêm full thông tin
+            if (empty($post['id']) or $post['id'] > 9) {
+                $post['title'] = $nv_Request->get_title('title', 'post', '', 1);
+                if (empty($post['title'])) {
+                    die($lang_module['title_empty']);
+                }
+    
+                // Kiểm tra trùng tên nhóm
+                $stmt = $db->prepare('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
                 $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
-                $stmt->bindParam(':description', $post['description'], PDO::PARAM_STR);
-                $stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
-                $ok = $stmt->execute();
+                $stmt->execute();
+                if ($stmt->fetchColumn()) {
+                    die(sprintf($lang_module['error_title_exists'], $post['title']));
+                }
+    
+                $post['description'] = $nv_Request->get_title('description', 'post', '', 1);
+                if (empty($post['description'])) {
+                    die($lang_module['group_description_empty']);
+                }
+    
+                $post['content'] = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
+    
+                $post['exp_time'] = $nv_Request->get_title('exp_time', 'post', '');
+    
+                if (preg_match('/^([\d]{1,2})\/([\d]{1,2})\/([\d]{4})$/', $post['exp_time'], $matches)) {
+                    $post['exp_time'] = mktime(23, 59, 59, $matches[2], $matches[1], $matches[3]);
+                } else {
+                    $post['exp_time'] = 0;
+                }
+    
+                $post['group_type'] = $nv_Request->get_int('group_type', 'post', 0);
+                if (!in_array($post['group_type'], array(0, 1, 2))) {
+                    $post['group_type'] = 0;
+                }
+    
+                $post['siteus'] = $nv_Request->get_int('siteus', 'post', 0);
+                if ($post['siteus'] != 1) {
+                    $post['siteus'] = 0;
+                }
+                
+                $post['is_default'] = $nv_Request->get_int('is_default', 'post', 0);
+                if ($post['is_default'] != 1) {
+                    $post['is_default'] = 0;
+                }
+            }
+            
+            // Thông tin của tất cả các nhóm kể cả các nhóm hệ thống
+            $post['group_color'] = nv_substr($nv_Request->get_title('group_color', 'post', '', 1), 0, 10);
+            
+            if (preg_match("/^([0-9a-fA-F]{6})$/i", $post['group_color']) or preg_match("/^([0-9a-fA-F]{3})$/i", $post['group_color'])) {
+                $post['group_color'] = '#' . $post['group_color'];
+            }
+            
+            $post['group_avatar'] = $nv_Request->get_title('group_avatar', 'post', '');
+            
+            if (! nv_is_url($post['group_avatar']) and nv_is_file($post['group_avatar'], NV_UPLOADS_DIR . '/' . $module_upload)) {
+                $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
+                $post['group_avatar'] = substr($post['group_avatar'], $lu);
+            } elseif (!nv_is_url($post['group_avatar'])) {
+                $post['group_avatar'] = '';
+            }
+
+            if (isset($post['id'])) {
+                if ($post['id'] > 9) {
+                    // Sửa nhóm tự tạo
+                    $stmt = $db->prepare("UPDATE " . NV_GROUPS_GLOBALTABLE . " SET
+                        title = :title,
+                        description = :description,
+                        content = :content,
+                        group_type = '" . $post['group_type'] . "',
+                        group_color = :group_color,
+                        group_avatar = :group_avatar,
+                        is_default = " . $post['is_default'] . ",
+                        exp_time ='" . $post['exp_time'] . "',
+                        siteus = '" . $post['siteus'] . "'
+                    WHERE group_id = " . $post['id']);
+    
+                    $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
+                    $stmt->bindParam(':description', $post['description'], PDO::PARAM_STR);
+                    $stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
+                    $stmt->bindParam(':group_color', $post['group_color']);
+                    $stmt->bindParam(':group_avatar', $post['group_avatar']);
+                    
+                    $ok = $stmt->execute();
+                } else {
+                    // Sửa nhóm hệ thống
+                    $stmt = $db->prepare("UPDATE " . NV_GROUPS_GLOBALTABLE . " SET
+                        group_color = :group_color,
+                        group_avatar = :group_avatar
+                    WHERE group_id=" . $post['id']);
+    
+                    $stmt->bindParam(':group_color', $post['group_color']);
+                    $stmt->bindParam(':group_avatar', $post['group_avatar']);
+                    
+                    $ok = $stmt->execute();
+                }
             } elseif ($nv_Request->isset_request('add', 'get')) {
                 $weight = $db->query("SELECT max(weight) FROM " . NV_GROUPS_GLOBALTABLE . " WHERE idsite=" . $global_config['idsite'])->fetchColumn();
                 $weight = intval($weight) + 1;
 
                 $_sql = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . "
-					(title, description, content, group_type, add_time, exp_time, weight, act, idsite, numbers, siteus)
-					VALUES ( :title, :description, :content, " . $post['group_type'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
+					(title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus)
+					VALUES ( :title, :description, :content, " . $post['group_type'] . ", :group_color, :group_avatar, " . $post['is_default'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
 
                 $data_insert = array();
                 $data_insert['title'] = $post['title'];
                 $data_insert['description'] = $post['description'];
                 $data_insert['content'] = $post['content'];
+                $data_insert['group_color'] = $post['group_color'];
+                $data_insert['group_avatar'] = $post['group_avatar'];
 
                 $ok = $post['id'] = $db->insert_id($_sql, 'group_id', $data_insert);
             }
+            
             if ($ok) {
                 $nv_Cache->delMod($module_name);
                 nv_insert_logs(NV_LANG_DATA, $module_name, $log_title, 'Id: ' . $post['id'], $admin_info['userid']);
@@ -386,15 +434,20 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         } else {
             $post['title'] = $post['description'] = $post['content'] = $post['exp_time'] = '';
             $post['group_type'] = 0;
-            $post['id'] = 0;
+            $post['id'] = $post['is_default'] = 0;
         }
 
         $post['content'] = htmlspecialchars(nv_editor_br2nl($post['content']));
+        $post['is_default'] = $post['is_default'] ? ' checked="checked"' : '';
+
+        if (! empty($post['group_avatar']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['group_avatar'])) {
+            $post['group_avatar'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['group_avatar'];
+        }
 
         $xtpl->assign('DATA', $post);
 
         if (defined('NV_CONFIG_DIR') and empty($global_config['idsite'])) {
-            $xtpl->parse('add.siteus');
+            $xtpl->parse('add.basic_infomation.siteus');
         }
 
         if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
@@ -411,15 +464,21 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             );
             
             $xtpl->assign('GROUP_TYPE', $group_type);
-            $xtpl->parse('add.group_type');
+            $xtpl->parse('add.basic_infomation.group_type');
         }
         
         $xtpl->assign('CONTENT', $_cont);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
+        $xtpl->assign('AVATAR_PATH', NV_UPLOADS_DIR . '/' . $module_upload);
+        $xtpl->assign('AVATAR_CURENT_PATH', NV_UPLOADS_DIR . '/' . $module_upload . '/groups');
         
         if ($post['id'] > 9 or $post['id'] == 0) {
             $xtpl->parse('add.basic_infomation');
+        }
+        
+        if (!empty($post['group_color'])) {
+            $xtpl->parse('add.group_color');
         }
         
         $xtpl->parse('add');

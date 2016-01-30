@@ -2,9 +2,13 @@
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/colpick.css">
+
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/colpick.js"></script>
+
 <div id="pageContent">
 	<form id="addCat" method="post" action="{ACTION_URL}">
 		<h3 class="myh3">{PTITLE}</h3>
@@ -36,6 +40,10 @@
                             </select>
                         </td>
 					</tr>
+					<tr>
+						<td>{LANG.group_is_default}:</td>
+						<td><input type="checkbox" name="is_default" value="1"{DATA.is_default}/></td>
+					</tr>
 					<!-- BEGIN: siteus -->
 					<tr>
 						<td>{LANG.siteus}:</td>
@@ -45,13 +53,37 @@
 				</tbody>
 			</table>
 		</div>
-		<div>
+		<div class="clearfix">
 			{LANG.content}
 		</div>
-		<div>
+		<div class="clearfix m-bottom">
 			{CONTENT}
 		</div>
         <!-- END: basic_infomation -->
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<colgroup>
+					<col class="w300"/>
+					<col />
+				</colgroup>
+				<tbody>
+					<tr>
+						<td>{LANG.group_color}:</td>
+						<td class="form-inline">
+                            <input class="form-control w200" type="text" name="group_color" value="{DATA.group_color}" maxlength="10"/>
+                            <input name="group_color_demo" class="form-control w50"<!-- BEGIN: group_color --> style="background-color:{DATA.group_color}"<!-- END: group_color --> readonly="readonly"/>
+                        </td>
+					</tr>
+					<tr>
+						<td>{LANG.group_avatar}:</td>
+						<td class="form-inline">
+                            <input class="form-control" type="text" name="group_avatar" id="group_avatar" value="{DATA.group_avatar}" maxlength="10"/>
+                            <input type="button" name="browse-image" value="{LANG.select}" class="btn btn-default" data-area="group_avatar" data-path="{AVATAR_PATH}" data-currentpath="{AVATAR_CURENT_PATH}"/>
+                        </td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<input type="hidden" name="save" value="1" />
 		<p class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
 	</form>
@@ -68,6 +100,17 @@
 			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true
 		});
+        $('[name="group_color"]').colpick({
+            layout:'hex',
+            submit:0,
+            colorScheme:'dark',
+            onChange:function(hsb,hex,rgb,el,bySetColor) {
+                $('[name="group_color_demo"]').css('background-color','#'+hex);
+                if(!bySetColor) $(el).val('#' + hex);
+            }
+        }).keyup(function(){
+            $(this).colpickSetColor(this.value);
+        });
 	});
 	$("form#addCat").submit(function() {
 		var a = $("input[name=title]").val(), a = trim(a);
