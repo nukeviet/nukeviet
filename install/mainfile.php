@@ -13,7 +13,7 @@ if (! defined('NV_SYSTEM') and ! defined('NV_ADMIN') and ! defined('NV_WYSIWYG')
     exit();
 }
 
-error_reporting(0);
+//error_reporting(0);
 
 define('NV_MAINFILE', true);
 
@@ -78,8 +78,8 @@ $global_config['error_log_filename'] = NV_ERRORLOGS_FILENAME;
 $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 //Ket noi voi class Error_handler
-$ErrorHandler = new NukeViet\Core\Error($global_config);
-set_error_handler(array( &$ErrorHandler, 'error_handler' ));
+//$ErrorHandler = new NukeViet\Core\Error($global_config);
+//set_error_handler(array( &$ErrorHandler, 'error_handler' ));
 
 //Ket noi voi cac file cau hinh, function va template
 require NV_ROOTDIR . '/install/ini.php';
