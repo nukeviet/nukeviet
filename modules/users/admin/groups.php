@@ -359,7 +359,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
                 $_sql = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . "
 					(title, description, content, group_type, add_time, exp_time, weight, act, idsite, numbers, siteus)
-					VALUES ( :title, :description, :content, " . $post['group_type'] . ", " . NV_CURRENTTIME . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
+					VALUES ( :title, :description, :content, " . $post['group_type'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
 
                 $data_insert = array();
                 $data_insert['title'] = $post['title'];
