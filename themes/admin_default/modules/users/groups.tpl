@@ -2,12 +2,17 @@
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/colpick.css">
+
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/colpick.js"></script>
+
 <div id="pageContent">
 	<form id="addCat" method="post" action="{ACTION_URL}">
 		<h3 class="myh3">{PTITLE}</h3>
+        <!-- BEGIN: basic_infomation -->
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
 				<colgroup>
@@ -28,8 +33,16 @@
 						<td><input type="text" name="exp_time" class="form-control w150 datepicker pull-left" value="{DATA.exp_time}" maxlength="10" /> &nbsp;&nbsp;&nbsp;{LANG.emptyIsUnlimited} </td>
 					</tr>
 					<tr>
-						<td>{LANG.public}:</td>
-						<td><input title="{LANG.publics}" type="checkbox" name="publics" value="1"{DATA.publics} /></td>
+						<td>{LANG.group_type}:</td>
+						<td>
+                            <select class="form-control w250" name="group_type">
+                                <!-- BEGIN: group_type --><option value="{GROUP_TYPE.key}"{GROUP_TYPE.selected}>{GROUP_TYPE.title}</option><!-- END: group_type -->
+                            </select>
+                        </td>
+					</tr>
+					<tr>
+						<td>{LANG.group_is_default}:</td>
+						<td><input type="checkbox" name="is_default" value="1"{DATA.is_default}/></td>
 					</tr>
 					<!-- BEGIN: siteus -->
 					<tr>
@@ -40,11 +53,36 @@
 				</tbody>
 			</table>
 		</div>
-		<div>
+		<div class="clearfix">
 			{LANG.content}
 		</div>
-		<div>
+		<div class="clearfix m-bottom">
 			{CONTENT}
+		</div>
+        <!-- END: basic_infomation -->
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover">
+				<colgroup>
+					<col class="w300"/>
+					<col />
+				</colgroup>
+				<tbody>
+					<tr>
+						<td>{LANG.group_color}:</td>
+						<td class="form-inline">
+                            <input class="form-control w200" type="text" name="group_color" value="{DATA.group_color}" maxlength="10"/>
+                            <input name="group_color_demo" class="form-control w50"<!-- BEGIN: group_color --> style="background-color:{DATA.group_color}"<!-- END: group_color --> readonly="readonly"/>
+                        </td>
+					</tr>
+					<tr>
+						<td>{LANG.group_avatar}:</td>
+						<td class="form-inline">
+                            <input class="form-control" type="text" name="group_avatar" id="group_avatar" value="{DATA.group_avatar}" maxlength="10"/>
+                            <input type="button" name="browse-image" value="{LANG.select}" class="btn btn-default" data-area="group_avatar" data-path="{AVATAR_PATH}" data-currentpath="{AVATAR_CURENT_PATH}"/>
+                        </td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 		<input type="hidden" name="save" value="1" />
 		<p class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
@@ -62,6 +100,17 @@
 			buttonImage : nv_base_siteurl + "assets/images/calendar.gif",
 			buttonImageOnly : true
 		});
+        $('[name="group_color"]').colpick({
+            layout:'hex',
+            submit:0,
+            colorScheme:'dark',
+            onChange:function(hsb,hex,rgb,el,bySetColor) {
+                $('[name="group_color_demo"]').css('background-color','#'+hex);
+                if(!bySetColor) $(el).val('#' + hex);
+            }
+        }).keyup(function(){
+            $(this).colpickSetColor(this.value);
+        });
 	});
 	$("form#addCat").submit(function() {
 		var a = $("input[name=title]").val(), a = trim(a);
@@ -121,7 +170,7 @@
 				<td>
 				<!-- BEGIN: action -->
 				<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
-				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
+				<!-- BEGIN: delete --><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a><!-- END: delete -->
 				<!-- END: action -->
 				</td>
 			</tr>
@@ -203,8 +252,8 @@
 <!-- END: main -->
 
 <!-- BEGIN: listUsers -->
+<!-- BEGIN: pending -->
 <h3 class="myh3">{PTITLE}</h3>
-<!-- BEGIN: ifExists -->
 <div class="table-responsive">
 	<table class="table table-striped table-bordered table-hover">
 		<col class="w50"/>
@@ -226,9 +275,10 @@
 				<td>{LOOP.full_name}</td>
 				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 				<td>
-				<!-- BEGIN: delete -->
-				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="delete" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
-				<!-- END: delete -->
+				<!-- BEGIN: tools -->
+                <i class="fa fa-check fa-lg"></i> <a class="approved" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.approved}</a>
+                <i class="fa fa-times fa-lg"></i> <a class="denied" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.denied}</a>
+				<!-- END: tools -->
 				</td>
 			</tr>
 			<!-- END: loop -->
@@ -236,21 +286,154 @@
 	</table>
 </div>
 <script type="text/javascript">
-	//<![CDATA[
-	$("a.delete").click(function() {
-		confirm("{LANG.delConfirm} ?") && $.ajax({
-			type : "POST",
-			url : "{MODULE_URL}={OP}",
-			data : "gid={GID}&exclude=" + $(this).attr("title"),
-			success : function(a) {
-				a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
-			}
-		});
-		return !1;
+//<![CDATA[
+$("a.approved").click(function() {
+	$.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&approved=" + $(this).data("id"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
 	});
-	//]]>
+	return !1;
+});
+$("a.denied").click(function() {
+	$.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&denied=" + $(this).data("id"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+//]]>
 </script>
-<!-- END: ifExists -->
+<!-- END: pending -->
+
+<!-- BEGIN: leaders -->
+<h3 class="myh3">{PTITLE}</h3>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<col class="w50"/>
+		<col span="4" />
+		<thead>
+			<tr>
+				<th> {LANG.userid} </th>
+				<th> {LANG.account} </th>
+				<th> {LANG.nametitle} </th>
+				<th> {LANG.email} </th>
+				<th> {GLANG.actions} </th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td> {LOOP.userid} </td>
+				<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+				<td>{LOOP.full_name}</td>
+				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
+				<td>
+				<!-- BEGIN: tools -->
+                <i class="fa fa-star-half-o fa-lg"></i> <a class="demote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.demote}</a>
+				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteleader" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+				<!-- END: tools -->
+				</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+$("a.deleteleader").click(function() {
+	confirm("{LANG.delConfirm} ?") && $.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&exclude=" + $(this).attr("title"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+$("a.demote").click(function() {
+	$.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&demote=" + $(this).data("id"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+//]]>
+</script>
+<!-- END: leaders -->
+
+<!-- BEGIN: members -->
+<h3 class="myh3">{PTITLE}</h3>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover">
+		<col class="w50"/>
+		<col span="4" />
+		<thead>
+			<tr>
+				<th> {LANG.userid} </th>
+				<th> {LANG.account} </th>
+				<th> {LANG.nametitle} </th>
+				<th> {LANG.email} </th>
+				<th> {GLANG.actions} </th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- BEGIN: loop -->
+			<tr>
+				<td> {LOOP.userid} </td>
+				<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+				<td>{LOOP.full_name}</td>
+				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
+				<td>
+				<!-- BEGIN: tools -->
+                <i class="fa fa-star fa-lg"></i> <a class="promote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.promote}</a>
+				<i class="fa fa-trash-o fa-lg"></i> <a class="deletemember" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+				<!-- END: tools -->
+				</td>
+			</tr>
+			<!-- END: loop -->
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+$("a.deletemember").click(function() {
+	confirm("{LANG.delConfirm} ?") && $.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&exclude=" + $(this).attr("title"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+$("a.promote").click(function() {
+	$.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&promote=" + $(this).data("id"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
+//]]>
+</script>
+<!-- END: members -->
 <!-- END: listUsers -->
 
 <!-- BEGIN: userlist -->

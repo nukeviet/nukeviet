@@ -80,6 +80,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_question (
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
 	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+    group_id smallint(5) unsigned NOT NULL DEFAULT '0',
 	username varchar(100) NOT NULL DEFAULT '',
 	md5username char(32) NOT NULL DEFAULT '',
 	password varchar(80) NOT NULL DEFAULT '',
@@ -200,9 +201,12 @@ $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 	title varchar(240) NOT NULL,
     description text,
 	content text,
+	group_type tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '0:Sys, 1:approval, 2:public',
+    group_color varchar(10) NOT NULL,
+    group_avatar varchar(255) NOT NULL,
+    is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
 	add_time int(11) NOT NULL,
 	exp_time int(11) NOT NULL,
-	publics tinyint(1) unsigned NOT NULL DEFAULT '0',
 	weight int(11) unsigned NOT NULL DEFAULT '0',
 	act tinyint(1) unsigned NOT NULL,
 	idsite int(11) unsigned NOT NULL DEFAULT '0',
@@ -216,6 +220,8 @@ $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . "_users (
 	group_id smallint(5) unsigned NOT NULL DEFAULT '0',
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
+    is_leader tinyint(1) unsigned NOT NULL DEFAULT '0',
+    approved tinyint(1) unsigned NOT NULL DEFAULT '0',
 	data text NOT NULL,
 	PRIMARY KEY (group_id,userid)
 ) ENGINE=MyISAM";
