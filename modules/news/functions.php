@@ -97,9 +97,17 @@ $count_op = sizeof($array_op);
 if (! empty($array_op) and $op == 'main') {
     $op = 'main';
     if ($count_op == 1 or substr($array_op[1], 0, 5) == 'page-') {
-        $op = 'viewcat';
-        if ($count_op > 1) {
-            $page = intval(substr($array_op[1], 5));
+        if ($count_op > 1 or $catid > 0) {
+            $op = 'viewcat';
+            if( isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-' ){
+                $page = intval(substr($array_op[1], 5));   
+            }
+        }
+        elseif ($catid == 0) {
+            $contents = $lang_module['nocatpage'] . $array_op[0];       
+            if (isset($array_op[0]) and substr($array_op[0], 0, 5) == 'page-') {
+                $page = intval(substr($array_op[0], 5));
+            }
         }
     } elseif ($count_op == 2) {
         $array_page = explode('-', $array_op[1]);
