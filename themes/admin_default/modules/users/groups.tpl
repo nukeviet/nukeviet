@@ -276,7 +276,7 @@
 				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
 				<td>
 				<!-- BEGIN: tools -->
-                <i class="fa fa-trash-o fa-lg"></i> <a class="demote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.demote}</a>
+                <i class="fa fa-star-half-o fa-lg"></i> <a class="demote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.demote}</a>
 				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteleader" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
 				<!-- END: tools -->
 				</td>
