@@ -280,8 +280,9 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
     if (defined('NV_IS_SPADMIN')) {
         $post = array();
         $post['id'] = $nv_Request->get_int('id', 'get');
+        
         if ($nv_Request->isset_request('edit', 'get')) {
-            if (empty($post['id']) or ! isset($groupsList[$post['id']]) or $post['id'] < 10 or $groupsList[$post['id']]['idsite'] != $global_config['idsite']) {
+            if (empty($post['id']) or ! isset($groupsList[$post['id']]) or $groupsList[$post['id']]['idsite'] != $global_config['idsite']) {
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
                 die();
             }
@@ -304,7 +305,6 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             if (empty($post['title'])) {
                 die($lang_module['title_empty']);
             }
-
 
             // Kiểm tra trùng tên nhóm
             $stmt = $db->prepare('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
@@ -339,7 +339,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 $post['siteus'] = 0;
             }
 
-            if (isset($post['id']) and $post['id'] > 3) {
+            if (isset($post['id']) and $post['id'] > 9) {
                 $stmt = $db->prepare("UPDATE " . NV_GROUPS_GLOBALTABLE . " SET
 					title= :title,
                     description= :description,
@@ -382,9 +382,11 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $post['content'] = nv_editor_br2nl($post['content']);
             $post['exp_time'] = ! empty($post['exp_time']) ? date('d/m/Y', $post['exp_time']) : '';
             $post['siteus'] = $post['siteus'] ? ' checked="checked"' : '';
+            $post['id'] = $post['group_id'];
         } else {
             $post['title'] = $post['description'] = $post['content'] = $post['exp_time'] = '';
             $post['group_type'] = 0;
+            $post['id'] = 0;
         }
 
         $post['content'] = htmlspecialchars(nv_editor_br2nl($post['content']));
@@ -415,7 +417,11 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         $xtpl->assign('CONTENT', $_cont);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
-
+        
+        if ($post['id'] > 9 or $post['id'] == 0) {
+            $xtpl->parse('add.basic_infomation');
+        }
+        
         $xtpl->parse('add');
         $contents = $xtpl->text('add');
     } else {
@@ -428,7 +434,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
     die();
 }
 
-// Danh sach nhom
+// Danh sach nhom (AJAX)
 if ($nv_Request->isset_request('list', 'get')) {
     $weight_op = 1;
     foreach ($groupsList as $group_id => $values) {
@@ -450,13 +456,19 @@ if ($nv_Request->isset_request('list', 'get')) {
             'link_userlist' => $link_userlist
         );
 
-        if (defined('NV_IS_SPADMIN') and $group_id > 9 and $values['idsite'] == $global_config['idsite']) {
+        if (defined('NV_IS_SPADMIN') and $values['idsite'] == $global_config['idsite']) {
             $_bg = (empty($global_config['idsite'])) ? $weight_op : 1;
+            
             for ($i = $_bg; $i <= $groupcount; $i++) {
                 $opt = array( 'value' => $i, 'selected' => $i == $values['weight'] ? ' selected="selected"' : '' );
                 $xtpl->assign('NEWWEIGHT', $opt);
                 $xtpl->parse('list.loop.option');
             }
+            
+            if ($group_id > 9) {
+                $xtpl->parse('list.loop.action.delete');
+            }
+            
             $xtpl->parse('list.loop.action');
         } else {
             ++$weight_op;
@@ -472,9 +484,11 @@ if ($nv_Request->isset_request('list', 'get')) {
         $xtpl->assign('LOOP', $loop);
         $xtpl->parse('list.loop');
     }
+
     if (defined('NV_IS_SPADMIN')) {
         $xtpl->parse('list.action_js');
     }
+
     $xtpl->parse('list');
     $xtpl->out('list');
     exit();

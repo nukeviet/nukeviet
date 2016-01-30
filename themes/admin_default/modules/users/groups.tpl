@@ -8,6 +8,7 @@
 <div id="pageContent">
 	<form id="addCat" method="post" action="{ACTION_URL}">
 		<h3 class="myh3">{PTITLE}</h3>
+        <!-- BEGIN: basic_infomation -->
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
 				<colgroup>
@@ -50,6 +51,7 @@
 		<div>
 			{CONTENT}
 		</div>
+        <!-- END: basic_infomation -->
 		<input type="hidden" name="save" value="1" />
 		<p class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
 	</form>
@@ -125,7 +127,7 @@
 				<td>
 				<!-- BEGIN: action -->
 				<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{MODULE_URL}={OP}&edit&id={GROUP_ID}">{GLANG.edit}</a> &nbsp;
-				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a>
+				<!-- BEGIN: delete --><em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="del" href="{GROUP_ID}">{GLANG.delete}</a><!-- END: delete -->
 				<!-- END: action -->
 				</td>
 			</tr>
