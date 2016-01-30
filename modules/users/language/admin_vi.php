@@ -187,6 +187,7 @@ $lang_module['search_not_result'] = 'Tìm kiếm không kết quả';
 $lang_module['search_result_caption'] = 'Kết quả tìm kiếm';
 $lang_module['group_pgtitle'] = 'Thông tin chi tiết';
 $lang_module['group_info'] = 'Thông tin về nhóm &ldquo;%s&rdquo;';
+$lang_module['group_user_peding'] = 'Số thành viên xin gia nhập nhóm &quot;%s&quot;';
 $lang_module['add_user'] = 'Thêm tài khoản %1$s vào nhóm %2$s';
 $lang_module['exclude_user'] = 'Loại tài khoản %1$s khỏi nhóm %2$s';
 $lang_module['siteinfo_user'] = 'Số tài khoản';
