@@ -1039,7 +1039,7 @@ function nv_show_custom_form($is_edit, $form, $array_custom)
                     $array_custom[$row['field']] = htmlspecialchars(nv_editor_br2nl($array_custom[$row['field']]));
                     if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
                         $row['class'] = explode('@', $row['class']);
-                        $edits = nv_aleditor('custom[' . $row['field'] . ']', $row['class'][0], $row['class'][1], $array_custom[$row['field']]);
+                        $edits = nv_aleditor('custom[' . $row['fid'] . ']', $row['class'][0], $row['class'][1], $array_custom[$row['fid']]);
                         $array_custom[$row['field']] = $edits;
                     } else {
                         $row['class'] = '';
@@ -1094,7 +1094,6 @@ function nv_show_custom_form($is_edit, $form, $array_custom)
             }
         }
     }
-
     $xtpl->assign('ROW', $array_custom);
     $xtpl->assign('CUSTOM_LANG', $array_custom_lang);
 
@@ -1162,7 +1161,7 @@ function nv_create_form_file($array_template_id)
         while ($column = $result->fetch()) {
             $column['listtemplate'] = explode('|', $column['listtemplate']);
             if (in_array($templateids_i, $column['listtemplate'])) {
-                $array_views[$column['fid']] = $column['field_type'];
+                $array_views[$column['fid']] = $column;
             }
         }
 
@@ -1171,30 +1170,30 @@ function nv_create_form_file($array_template_id)
         $content_2 .= "\t<div class=\"panel panel-default\">\n\t\t<div class=\"panel-heading\">{LANG.tabs_content_customdata}</div>\n";
         $content_2 .= "\t\t<div class=\"panel-body\">\n";
 
-        foreach ($array_views as $key => $input_type_i) {
+        foreach ($array_views as $key => $column) {
             $content_2 .= "\t\t\t<div class=\"form-group\">\n";
             $content_2 .= "\t\t\t\t<label class=\"col-md-4 control-label\"> {CUSTOM_LANG." . $key . ".title} </label>\n";
 
             $content_2 .= "\t\t\t\t<div class=\"col-md-20\">";
 
-            if ($input_type_i == 'time') {
+            if ($column['field_type'] == 'time') {
                 $content_2 .= "<input class=\"form-control\" type=\"text\" pattern=\"^[0-9]{2,2}\$\" name=\"custom[" . $key . "_hour]\" value=\"{ROW." . $key . "_hour}\" >:";
                 $content_2 .= "<input class=\"form-control\" type=\"text\" pattern=\"^[0-9]{2,2}\$\" name=\"custom[" . $key . "_min]\" value=\"{ROW." . $key . "_min}\" >&nbsp;";
             }
 
-            if ($input_type_i == 'textarea') {
+            if ($column['field_type'] == 'textarea') {
                 $content_2 .= "<textarea class=\"form-control\" style=\"width: 98%; height:100px;\" cols=\"75\" rows=\"5\" name=\"custom[" . $key . "]\">{ROW." . $key . "}</textarea>";
-            } elseif ($input_type_i == 'editor') {
-                $content_2 .= "{ROW." . $key . "}";
-            } elseif ($input_type_i == 'select') {
+            } elseif ($column['field_type'] == 'editor') {
+                $content_2 .= "{ROW." . $column['field'] . "}";
+            } elseif ($column['field_type'] == 'select') {
                 $content_2 .= "<select class=\"form-control\" name=\"custom[" . $key . "]\">\n";
                 $content_2 .= "\t\t\t\t\t\t\t<option value=\"\"> --- </option>\n";
                 $content_2 .= "\t\t\t\t\t\t<!-- BEGIN: select_" . $key . " -->\n";
                 $content_2 .= "\t\t\t\t\t\t\t<option value=\"{OPTION.key}\" {OPTION.selected}>{OPTION.title}</option>\n";
                 $content_2 .= "\t\t\t\t\t\t\t<!-- END: select_" . $key . " -->\n";
                 $content_2 .= "\t\t\t\t\t</select>";
-            } elseif ($input_type_i == 'radio' or $input_type_i == 'checkbox') {
-                $type_html = ($input_type_i == 'radio') ? 'radio' : 'checkbox';
+            } elseif ($column['field_type'] == 'radio' or $column['field_type'] == 'checkbox') {
+                $type_html = ($column['field_type'] == 'radio') ? 'radio' : 'checkbox';
                 $content_2 .= "\n\t\t\t\t\t<!-- BEGIN: " . $type_html . "_" . $key . " -->\n";
                 $content_2 .= "\t\t\t\t\t<label><input class=\"form-control\" type=\"" . $type_html . "\" name=\"custom[" . $key . "]\" value=\"{OPTION.key}\" {OPTION.checked}";
 
@@ -1207,7 +1206,7 @@ function nv_create_form_file($array_template_id)
                 $content_2 .= ">{OPTION.title} &nbsp;</label>\n";
                 $content_2 .= "\t\t\t\t\t<!-- END: " . $type_html . "_" . $key . " -->\n";
                 $content_2 .= "\t\t\t\t";
-            } elseif ($input_type_i == 'multiselect') {
+            } elseif ($column['field_type'] == 'multiselect') {
                 $content_2 .= "\n\t\t\t\t\t<select class=\"form-control\" name=\"custom[" . $key . "][]\" multiple=\"multiple\" >\n";
                 $content_2 .= "\t\t\t\t\t\t\t<option value=\"\"> --- </option>\n";
                 $content_2 .= "\n\t\t\t\t\t<!-- BEGIN: " . $key . " -->\n";
@@ -1216,7 +1215,7 @@ function nv_create_form_file($array_template_id)
                 $content_2 .= "\t\t\t\t\t</select>\n";
                 $content_2 .= "\t\t\t\t";
             } else {
-                switch ($input_type_i) {
+                switch ($column['field_type']) {
                     case 'email':
                         $type_html = 'email';
                         break;
@@ -1232,24 +1231,24 @@ function nv_create_form_file($array_template_id)
 
                 $oninvalid = true;
                 $content_2 .= "<input class=\"form-control\" type=\"" . $type_html . "\" name=\"custom[" . $key . "]\" value=\"{ROW." . $key . "}\" ";
-                if ($input_type_i == 'date' or $input_type_i == 'time') {
+                if ($column['field_type'] == 'date' or $column['field_type'] == 'time') {
                     $content_2 .= 'id="' . $key . '" pattern="^[0-9]{2,2}\/[0-9]{2,2}\/[0-9]{1,4}$" ';
                     $array_field_js['date'][] = '#' . $key;
-                } elseif ($input_type_i == 'textfile') {
+                } elseif ($column['field_type'] == 'textfile') {
                     $content_2 .= 'id="id_' . $key . '" ';
                     $array_field_js['file'][] = $key;
-                } elseif ($input_type_i == 'textalias') {
+                } elseif ($column['field_type'] == 'textalias') {
                     $content_2 .= 'id="id_' . $key . '" ';
-                } elseif ($input_type_i == 'email') {
+                } elseif ($column['field_type'] == 'email') {
                     $content_2 .= "oninvalid=\"setCustomValidity( nv_email )\" oninput=\"setCustomValidity('')\" ";
                     $oninvalid = false;
-                } elseif ($input_type_i == 'url') {
+                } elseif ($column['field_type'] == 'url') {
                     $content_2 .= "oninvalid=\"setCustomValidity( nv_url )\" oninput=\"setCustomValidity('')\" ";
                     $oninvalid = false;
-                } elseif ($input_type_i == 'number_int') {
+                } elseif ($column['field_type'] == 'number_int') {
                     $content_2 .= "pattern=\"^[0-9]*$\"  oninvalid=\"setCustomValidity( nv_digits )\" oninput=\"setCustomValidity('')\" ";
                     $oninvalid = false;
-                } elseif ($input_type_i == 'number_float') {
+                } elseif ($column['field_type'] == 'number_float') {
                     $content_2 .= "pattern=\"^([0-9]*)(\.*)([0-9]+)$\" oninvalid=\"setCustomValidity( nv_number )\" oninput=\"setCustomValidity('')\" ";
                     $oninvalid = false;
                 }
@@ -1262,10 +1261,10 @@ function nv_create_form_file($array_template_id)
                 }
 
                 $content_2 .= "/>";
-                if ($input_type_i == 'textfile') {
+                if ($column['field_type'] == 'textfile') {
                     $content_2 .= '&nbsp;<button type="button" class="btn btn-info" id="img_' . $key . '"><i class="fa fa-folder-open-o">&nbsp;</i> Browse server </button>';
                 }
-                if ($input_type_i == 'textalias' and $array_field_js['textalias'] == $key) {
+                if ($column['field_type'] == 'textalias' and $array_field_js['textalias'] == $key) {
                     $content_2 .= "&nbsp;<i class=\"fa fa-refresh fa-lg icon-pointer\" onclick=\"nv_get_alias('id_" . $key . "');\">&nbsp;</i>";
                 }
             }
