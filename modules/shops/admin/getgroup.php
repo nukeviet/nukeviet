@@ -8,89 +8,70 @@
  * @Createdate 2-10-2010 18:49
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
-
-function getgroup_ckhtml( $data_group, $array_groupid_in_row, $pid )
-{
-	$contents_temp = "";
-	if( ! empty( $data_group ) )
-	{
-		foreach( $data_group as $groupid_i => $groupinfo_i )
-		{
-			if( $groupinfo_i['parentid'] == $pid )
-			{
-				$xtitle_i = "";
-				if( $groupinfo_i['lev'] > 0 )
-				{
-					for( $i = 1; $i <= $groupinfo_i['lev']; $i++ )
-					{
-						$xtitle_i .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-					}
-				}
-				$ch = "";
-				if( in_array( $groupid_i, $array_groupid_in_row ) )
-				{
-					$ch = " checked=\"checked\"";
-				}
-				$contents_temp .= "<li>" . $xtitle_i . "<input class=\"news_checkbox\" type=\"checkbox\" name=\"groupids[]\" value=\"" . $groupid_i . "\"" . $ch . " />" . $groupinfo_i['title'] . "</li>";
-				if( $groupinfo_i['numsubgroup'] > 0 )
-				{
-					$contents_temp .= getgroup_ckhtml( $data_group, $array_groupid_in_row, $groupid_i );
-				}
-			}
-		}
-	}
-	return $contents_temp;
+if (! defined('NV_IS_FILE_ADMIN')) {
+    die('Stop!!!');
 }
 
-$cid = $nv_Request->get_int( 'cid', 'get', 0 );
-$inrow = $nv_Request->get_string( 'inrow', 'get', '' );
-$inrow = nv_base64_decode( $inrow );
-$array_groupid_in_row = unserialize( $inrow );
-
-$array_cat = GetCatidInChild( $cid );
-
-$sql = "SELECT groupid, parentid, cateid, " . NV_LANG_DATA . "_title AS title, lev, numsubgroup FROM " . $db_config['prefix'] . "_" . $module_data . "_group ORDER BY sort ASC";
-$result_group = $db->query( $sql );
-
-$data_group = array();
-while( $row = $result_group->fetch() )
+function getgroup_ckhtml($subgroupid_i, $array_groupid_in_row)
 {
-	$data_group[$row['groupid']] = $row;
+    global $module_name, $global_array_group;
+
+    $contents_temp = '';
+    if (! empty($subgroupid_i)) {
+        foreach ($subgroupid_i as $groupid_i) {
+            $data_group = $global_array_group[$groupid_i];
+            $ch = '';
+            if (in_array($groupid_i, $array_groupid_in_row)) {
+                $ch = ' checked="checked"';
+            }
+
+            $image = '';
+            if (! empty($data_group['image']) and file_exists(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data_group['image'])) {
+                $image = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data_group['image'];
+                $image = '<img src="' . $image . '" style="margin-top: -3px; max-width: 16px; max-height: 16px" alt="' . $groupinfo_i['title'] . '" />';
+            }
+            $contents_temp .= '<label class="col-xs-24 col-sm-4"><input type="checkbox" name="groupids[]" value="' . $groupid_i . '"' . $ch . ' />' . $image . $data_group['title'] . '</label>';
+        }
+    }
+    return $contents_temp;
 }
 
-$contents_temp_none = "";
-$contents_temp_cate = "";
-foreach( $data_group as $groupid_i => $groupinfo_i )
-{
-	if( $groupinfo_i['parentid'] == 0 && $groupinfo_i['cateid'] == 0 )
-	{
-		$ch = "";
-		if( in_array( $groupid_i, $array_groupid_in_row ) )
-		{
-			$ch = " checked=\"checked\"";
-		}
-		$contents_temp_none .= "<li><input class=\"news_checkbox\" type=\"checkbox\" name=\"groupids[]\" value=\"" . $groupid_i . "\"" . $ch . " />" . $groupinfo_i['title'] . "</li>";
-		if( $groupinfo_i['numsubgroup'] > 0 )
-		{
-			$contents_temp_none .= getgroup_ckhtml( $data_group, $array_groupid_in_row, $groupid_i );
-		}
-	}
-	elseif( $groupinfo_i['parentid'] == 0 && in_array( $groupinfo_i['cateid'], $array_cat ) )
-	{
-		$ch = "";
-		if( in_array( $groupid_i, $array_groupid_in_row ) )
-		{
-			$ch = " checked=\"checked\"";
-		}
-		$contents_temp_cate .= "<li><input class=\"news_checkbox\" type=\"checkbox\" name=\"groupids[]\" value=\"" . $groupid_i . "\"" . $ch . " />" . $groupinfo_i['title'] . "</li>";
-		if( $groupinfo_i['numsubgroup'] > 0 )
-		{
-			$contents_temp_cate .= getgroup_ckhtml( $data_group, $array_groupid_in_row, $groupid_i );
-		}
-	}
+$cid = $nv_Request->get_int('cid', 'get', 0);
+$inrow = $nv_Request->get_string('inrow', 'get', '');
+$array_groupid_in_row = array();
+if (!empty($inrow)) {
+    $inrow = nv_base64_decode($inrow);
+    $array_groupid_in_row = unserialize($inrow);
+}
+$contents_temp_cate = '';
+
+if ($cid > 0) {
+    $cid = GetParentCatFilter($cid);
+
+    $arr_groupid = array();
+    $result = $db->query('SELECT t1.groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid t2 ON t1.groupid = t2.groupid WHERE t2.cateid = ' . $cid);
+    while (list($groupid) = $result->fetch(3)) {
+        $arr_groupid[$groupid] = GetGroupidInParent($groupid, 0, 1);
+    }
+
+    foreach ($arr_groupid as $groupid_i => $subgroupid_i) {
+        $data_group = $global_array_group[$groupid_i];
+
+        $require = '';
+        if ($data_group['is_require']) {
+            $require = ' <span class="require">(*)</span>';
+        }
+        $contents_temp_cate .= '<div class="row">';
+        $contents_temp_cate .= '<label class="col-sm-3 control-label"><strong>' . $data_group['title'] . $require . '</strong></label>';
+        $contents_temp_cate .= '<div class="col-sm-21">';
+        if ($data_group['numsubgroup'] > 0) {
+            $contents_temp_cate .= getgroup_ckhtml($subgroupid_i, $array_groupid_in_row);
+        }
+        $contents_temp_cate .= '</div>';
+        $contents_temp_cate .= '</div>';
+    }
 }
 
 include NV_ROOTDIR . '/includes/header.php';
-echo $contents_temp_none . "<hr />" . $contents_temp_cate;
+echo $contents_temp_cate;
 include NV_ROOTDIR . '/includes/footer.php';

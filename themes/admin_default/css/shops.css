@@ -1,4 +1,4 @@
-﻿.news {
+.news {
 	text-align: right;
 	margin: 2px 0;
 	clear: both;
@@ -231,4 +231,109 @@ table.tab1 caption {
 
 .tab2 .product-info .other {
 	color: #666;
+}
+
+/* as fb */
+.uiInlineTokenizer .uiToken {
+    top: 2px;
+}
+
+.uiInlineTokenizer {
+    border: 1px solid #BDC7D8;
+    cursor: text;
+}
+.uiCloseButtonSmall {
+    background-image: url("../images/delfb.png");
+    height: 11px;
+    margin-top: 1px;
+    width: 11px;
+}
+.uiCloseButton {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+.uiTypeahead{
+    border-top: 1px solid #ccc;
+}
+.uiTypeahead .innerWrap {
+    overflow: hidden;
+}
+.uiTypeahead .textInput {
+    background:none !important;
+    border: none!important;
+    border: 0 none;
+    outline: 0 none;
+    -webkit-box-shadow: 0 0 0 #fff;
+    -moz-box-shadow: 0 0 0 #fff;
+    box-shadow: 0 0 0 #fff;
+}
+.uiTypeahead .selected {
+    background-color: #E2E8F6;
+}
+.uiTypeaheadDisabled, .uiTypeaheadDisabled div.wrap {
+    border-color: #CCCCCC;
+}
+.uiTypeaheadDisabled div.wrap {
+    background: none repeat scroll 0 0 #E2E2E2;
+}
+.uiToken {
+    background: #E6E6E6;
+    border: 1px solid #ccc;
+    border-radius: 2px 2px 2px 2px;
+    color: #1C2A47;
+    cursor: default;
+    display: block;
+    float: left;
+    height: 25px;
+	line-height: 24px;
+    margin: 0 4px 4px 0;
+    padding: 0 3px;
+    position: relative;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.uiToken .remove {
+    margin: 2px 0 -2px 1px;
+    outline: medium none;
+}
+.uiTokenSelected {
+    background-color: #6D84B4;
+    border-color: #3B5998;
+    color: #FFFFFF;
+}
+.uiTokenGray {
+    background: none repeat scroll 0 0 #DDDDDD;
+    border-color: gray;
+}
+.uiTokenizer {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.tokenarea {
+    overflow: hidden;
+    padding-left: 3px;
+}
+.uiContextualTypeaheadView {
+    position: static;
+}
+.uiTypeaheadView ul {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #333333 #333333 #293E6A;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 2px;
+    overflow: hidden;
+    padding: 2px 0;
+}
+.uiTypeaheadView .freeform {
+    border-top-color: #DDDDDD;
+    padding: 2px 6px 1px;
+    text-align: center;
 }

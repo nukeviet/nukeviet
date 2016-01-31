@@ -1,0 +1,60 @@
+CHANGE LOG: MODULE SHOPS
+
+Module Shops 4.0.19
+	+ Upadte for NukeViet 4.0.24
+	+ Gallery in detaild product,  Fix modal-body thank anhyeuviolet
+	+ Fix cart error quantity empty 
+	+ Fix add title block for block shops 
+	+ Update custom title for seo
+	+ Fix use coupons code 
+	+ Support utf8mb4
+	+ Add More https://github.com/nukeviet/module-shops/compare/4.0.18...4.0.19 
+
+Module Shops 4.0.16
+	+ Sửa một số lỗi Module Shops 4.0.15
+	+ Cho phép xuống dòng trong nội dung quà tặng
+	+ Thêm đường dẫn đến bài viết giới thiệu từng chức trên wiki
+	+ Thêm dữ liệu mẫu sau khi cài đặt module.
+
+Module Shops 4.0.15
+	+ Sửa một số lỗi Module Shops 4.0.14
+	+ Loại bỏ ID sản phẩm trên URL sản phẩm
+	+ Thêm chức năng Quản lý tập tin đính kèm
+	+ Thêm chức năng Quản lý tab (trên trang chi tiết)
+
+Module Shops 4.0.14
+    + Bỏ tính năng hãng sản xuất
+    + Thay đổi cơ chế quản lý và sử dụng nhóm sản phẩm
+        * Thêm logo cho nhóm
+        * Cấu hình hiển thị nhóm tại trang xem chi tiết sản phẩm. Ví dụ: Quần áo có màu sắc xanh, đỏ, tím, vàng,..... Các size: S, M,.... Lựa chọn các thuộc tính khi đặt hàng.
+        * Thêm block filter_product, block filter_product_cat có chức năng hiển thị các nhóm sản phẩm tại site, chọn nhóm và hiển thị các sản phẩm có cùng thuộc tính.
+    + Thay đổi cơ chế giảm giá
+        * Bỏ nhập % giảm giá vào từng sản phẩm, thay vào đó là chọn nhóm giảm giá (những sản phẩm cùng nhóm sẽ được áp dụng chung một cơ chế giảm giá)
+        * Mỗi cơ chế giảm giá có các thông tin: Tiêu đề, ngày bắt đầu, ngày kết thúc, mỗi số lượng sản phẩm đặt hàng sẽ được áp dụng % giảm giá riêng. Ví dụ:
+        * Thêm cơ chế giảm gía theo số lượng sản phẩm đặt hàng.
+    + Thêm cơ chế làm tròn theo từng loại tiền tệ
+    + Thay đổi quản lý Loại sản phẩm
+        * Thêm chức năng tùy biến trường dữ liệu theo loại sản phẩm.
+        * Tính năng hiển thị icon giảm giá, new theo thời gian chỉ định sau thời gian này các icon sẽ biến mất, giống news.
+    + Thêm chức năng so sánh sản phẩm
+    + Thêm chức năng Sản phẩm yêu thích
+    + Thay thế từ khóa bằng tags
+    + Thêm tính năng quản lý chi phí vận chuyển
+    + Cho phép quản trị hủy xác nhận đơn hàng (nếu đã xác nhận)
+    + Thêm chức năng tính điểm tích lũy
+    + Thêm chức năng mã giảm gía
+    + Hiển thị nhóm sản phẩm đi kèm với thông tin sản phẩm
+    + Cho phép khách hàng có thể sửa lại đơn hàng đã đặt trước đó
+    + Thêm chức năng sao chép sản phẩm
+	+ Hiển thị gía / khuyến mãi ở các block sản phẩm
+	+ Thêm cấu hình định dạng gía tiền (ký tự phân cách chữ số thập phân,..)
+	+ Cho phép chon phương án hiển thị sản phẩm (lưới, danh sách) khi xem chủ đề.
+	+ Thêm Rich snippets - Products - bổ trợ SEO
+	+ Cho phép hiển thị popup xem thông tin sản phẩm khi ở danh sách sản phẩm.
+	+ Thay đổi hệ thống đánh gía sản phẩm. Có thể cho điểm và viết nhân xét.
+	+ Cấu hình các nhóm nhận thông tin (Các nhóm nhận được email khi có đơn hàng mới, thanh toán,....)
+	+ Các thay đổi khác
+        * Thêm bộ lọc các đơn hàng (ACP), hiển thị tổng số lượng đơn hàng, tổng giá trị các đơn hàng.
+        * Cho phép xuống dòng khi nhập "Giới thiệu ngắn gọn"
+        * Hiển thị số lượng hàng còn lại trong kho tại trang xem chi tiết sản phẩm, nếu hết hàng thì ẩn nút đặt hàng, thay thế bằng thông báo "Hết hàng"
+        * Hiển thị hướng dẫn thanh toán tại trang thông tin đơn hàng (không bắt buộc phải tích hợp ít nhất một cổng thanh toán như trước)

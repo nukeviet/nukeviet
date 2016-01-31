@@ -1,53 +1,81 @@
 <!-- BEGIN: main -->
-<div id="products">
+<div id="category">
 	<!-- BEGIN: catalogs -->
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<a href="{LINK_CATALOG}" title="{TITLE_CATALOG}">{TITLE_CATALOG} ({NUM_PRO} {LANG.title_products})</a>
+			<a class="pull-left" href="{LINK_CATALOG}" title="{TITLE_CATALOG}">{TITLE_CATALOG} ({NUM_PRO} {LANG.title_products})</a>
+			<span class="pull-right">
+			<!-- BEGIN: subcatloop -->
+			<a href="{SUBCAT.link}" title="{SUBCAT.title}">{SUBCAT.title}</a>&nbsp;&nbsp;&nbsp;
+			<!-- END: subcatloop -->
+			</span>
+			<div class="clear"></div>
 		</div>
 		<div class="panel-body">
 			<!-- BEGIN: items -->
-            <div class="col-sm-6 col-md-{num}">
+            <div class="col-sm-12 col-md-{num}">
                 <div class="thumbnail">
                     <div style="height: {height}px">
-                        <a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" data-toggle="tooltip" data-placement="bottom" rel="tooltip" data-html="true" title="<img class='img-thumbnail pull-left' style='margin: 0 5px 5px 0;' src='{IMG_SRC}' width='{width}' /><p class='text-justify'><strong>{TITLE}</strong><br />{hometext}</p><div class='clearfix'></div>" class="img-thumbnail custom_tooltip" style="max-height:{height}px;max-width:{width}px;"></a>
+                        <a href="{LINK}" title="{TITLE}"><img src="{IMG_SRC}" alt="{TITLE}" <!-- BEGIN: tooltip_js -->data-content='{hometext}' data-rel="tooltip" data-img="{IMG_SRC}"<!-- END: tooltip_js -->class="img-thumbnail" style="max-height:{height}px;max-width:{width}px;"></a>
                     </div>
+		            <div class="info_pro">
+		            	<!-- BEGIN: new -->
+		            	<span class="label label-success newday">{LANG.newday}</span>
+		            	<!-- END: new -->
+		            	<!-- BEGIN: discounts -->
+		            	<span class="label label-danger">-{PRICE.discount_percent}{PRICE.discount_unit}</span>
+		            	<!-- END: discounts -->
+		            	<!-- BEGIN: point -->
+		            	<span class="label label-info" title="{point_note}">+{point}</span>
+		            	<!-- END: point -->
+		            	<!-- BEGIN: gift -->
+		            	<span class="label label-success">+<em class="fa fa-gift fa-lg">&nbsp;</em></span>
+		            	<!-- END: gift -->
+		            </div>
 					<div class="caption text-center">
     					<h3><a href="{LINK}" title="{TITLE}">{TITLE0}</a></h3>
-    					
+
                         <!-- BEGIN: product_code -->
                         <p class="label label-default">{PRODUCT_CODE}</p>
                         <!-- END: product_code -->
-    					
+
                         <!-- BEGIN: adminlink -->
                         <p>{ADMINLINK}</p>
                         <!-- END: adminlink -->
-                        
-                        <!-- BEGIN: price -->
-                        <p class="price">
-                            <span class="{class_money}">{product_price} {money_unit}</span>
-                            <!-- BEGIN: discounts -->
-                            <br />
-                            <span class="money">{product_discounts} {money_unit}</span>
-                            <!-- END: discounts -->
-                        </p>
-                        <!-- END: price -->
-                        
-                        <!-- BEGIN: contact -->
-                        <p class="price">
-                            {LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span>
-                        </p>
-                        <!-- END: contact -->
-                        
+
+						<!-- BEGIN: price -->
+						<p class="price">
+		                    <!-- BEGIN: discounts -->
+		                    <span class="money">{PRICE.sale_format} {PRICE.unit}</span>
+		                    <span class="discounts_money">{PRICE.price_format} {PRICE.unit}</span>
+		                    <!-- END: discounts -->
+
+							<!-- BEGIN: no_discounts -->
+							<span class="money">{PRICE.price_format} {PRICE.unit}</span>
+							<!-- END: no_discounts -->
+						</p>
+						<!-- END: price -->
+
+		                <!-- BEGIN: contact -->
+		                <p class="price">{LANG.detail_pro_price}: <span class="money">{LANG.price_contact}</span></p>
+		                <!-- END: contact -->
+
                         <!-- BEGIN: compare -->
                         <p><input type="checkbox" value="{ID}"{ch} onclick="nv_compare({ID});" id="compare_{ID}"/><a href="#" onclick="nv_compare_click();" >&nbsp;{LANG.compare}</a></p>
                         <!-- END: compare -->
-    					
+
                         <div class="clearfix">
                             <!-- BEGIN: order -->
-                            <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this)"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
+                            <a href="javascript:void(0)" id="{ID}" title="{TITLE}" onclick="cartorder(this, {GROUP_REQUIE}, '{LINK}')"><button type="button" class="btn btn-primary btn-xs">{LANG.add_product}</button></a>
                             <!-- END: order -->
-                            <a href="{LINK}" title="{TITLE}" ><button type="button" class="btn btn-primary btn-xs">{LANG.detail_product}</button></a>
+
+							<!-- BEGIN: product_empty -->
+		                    <button class="btn btn-danger disabled btn-xs">{LANG.product_empty}</button>
+		                    <!-- END: product_empty -->
+
+		                    <!-- BEGIN: wishlist -->
+		                    <a href="javascript:void(0)" title="{TITLE}" ><button type="button" onclick="wishlist({ID}, this)" class="btn btn-primary btn-xs <!-- BEGIN: disabled -->disabled<!-- END: disabled -->">{LANG.wishlist}</button></a>
+		                    <!-- END: wishlist -->
                         </div>
 					</div>
 				</div>
@@ -57,10 +85,22 @@
 	</div>
 	<!-- END: catalogs -->
 </div>
-<div class="msgshow" id="msgshow"></div>
-<!-- BEGIN: tooltip_js -->
-<script type="text/javascript">
-    $(document).ready(function() {$("[rel='tooltip']").tooltip();});
-</script>
-<!-- END: tooltip_js -->
+
+<!-- BEGIN: modal_loaded -->
+<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{LANG.add_product}</h4>
+			</div>
+			<div class="modal-body">
+				<em class="fa fa-spinner fa-spin">&nbsp;</em>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END: modal_loaded -->
+
+<div class="msgshow" id="msgshow">&nbsp;</div>
 <!-- END: main -->
