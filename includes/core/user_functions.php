@@ -700,7 +700,7 @@ function nv_groups_list_pub()
 {
     global $nv_Cache, $db, $db_config, $global_config;
 
-    $query = 'SELECT group_id, title, exp_time, publics FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+    $query = 'SELECT group_id, title, group_type, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
     $list = $nv_Cache->db($query, '', 'users');
 
     if (empty($list)) {
@@ -712,7 +712,7 @@ function nv_groups_list_pub()
     for ($i = 0, $count = sizeof($list); $i < $count; ++$i) {
         if ($list[$i]['exp_time'] != 0 and $list[$i]['exp_time'] <= NV_CURRENTTIME) {
             $reload[] = $list[$i]['group_id'];
-        } elseif ($list[$i]['publics']) {
+        } elseif ($list[$i]['group_type'] == 2) {
             $groups[$list[$i]['group_id']] = $list[$i]['title'];
         }
     }

@@ -541,7 +541,7 @@ function nv_user_groups($in_groups)
         return '';
     }
 
-    $query = 'SELECT group_id, title, exp_time, publics FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+    $query = 'SELECT group_id, title, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
     $list = $nv_Cache->db($query, '', 'users');
 
     if (empty($list)) {
@@ -608,7 +608,7 @@ function nv_groups_add_user($group_id, $userid)
     $query = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid);
     if ($query->fetchColumn()) {
         try {
-            $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . "_users (group_id, userid, data) VALUES (" . $group_id . ", " . $userid . ", '" . $global_config['idsite'] . "')");
+            $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . "_users (group_id, userid, approved, data) VALUES (" . $group_id . ", " . $userid . ", 1, '" . $global_config['idsite'] . "')");
             $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . $group_id);
             return true;
         } catch (PDOException $e) {
@@ -654,6 +654,8 @@ function nv_groups_del_user($group_id, $userid)
 
         if ($set_number) {
             $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid);
+            
+            // Chỗ này chỉ xóa những thành viên đã được xét duyệt vào nhóm nên sẽ cập nhật luôn số thành viên, không cần kiểm tra approved = 1 hay không
             $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=' . $group_id);
         }
         return true;
