@@ -112,6 +112,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['sig'] = $nv_Request->get_textarea('sig', '', NV_ALLOWED_HTML_TAGS);
     $_user['birthday'] = $nv_Request->get_title('birthday', 'post');
     $_user['in_groups'] = $nv_Request->get_typed_array('group', 'post', 'int');
+    $_user['in_groups_default'] = $nv_Request->get_int('group_default', 'post', 0);
     $_user['delpic'] = $nv_Request->get_int('delpic', 'post', 0);
 
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
@@ -215,6 +216,46 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
     $password = ! empty($_user['password1']) ? $crypt->hash_password($_user['password1'], $global_config['hashprefix']) : $row['password'];
 
+    $in_groups = array();
+    foreach ($_user['in_groups'] as $_group_id) {
+        if ($_group_id > 9) {
+            $in_groups[] = $_group_id;
+        }
+    }
+    $in_groups = array_intersect($in_groups, array_keys($groups_list));
+    $in_groups_hiden = array_diff($array_old_groups, array_keys($groups_list));
+    $in_groups = array_unique(array_merge($in_groups, $in_groups_hiden));
+
+    $in_groups_del = array_diff($array_old_groups, $in_groups);
+    if (! empty($in_groups_del)) {
+        foreach ($in_groups_del as $gid) {
+            nv_groups_del_user($gid, $userid);
+        }
+    }
+
+    $in_groups_add = array_diff($in_groups, $array_old_groups);
+    if (! empty($in_groups_add)) {
+        foreach ($in_groups_add as $gid) {
+            nv_groups_add_user($gid, $userid);
+        }
+    }
+    
+    if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $in_groups)) {
+        $_user['in_groups_default'] = 0;
+    }
+    
+    if (!$_user['in_groups_default'] and sizeof($in_groups) == 1) {
+        $_user['in_groups_default'] = array_values($in_groups);
+        $_user['in_groups_default'] = $_user['in_groups_default'][0];
+    }
+    
+    if (empty($_user['in_groups_default']) and sizeof($in_groups)) {
+        die(json_encode(array(
+            'status' => 'error',
+            'input' => 'group_default',
+            'mess' => $lang_module['edit_error_group_default'] )));
+    }
+    
     // Check photo
     if (! empty($_user['photo'])) {
         $tmp_photo = NV_BASE_SITEURL . NV_TEMP_DIR . '/' . $_user['photo'];
@@ -255,46 +296,23 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $_user['photo'] = $row['photo'];
     }
 
-    $in_groups = array();
-    foreach ($_user['in_groups'] as $_group_id) {
-        if ($_group_id > 9) {
-            $in_groups[] = $_group_id;
-        }
-    }
-    $in_groups = array_intersect($in_groups, array_keys($groups_list));
-    $in_groups_hiden = array_diff($array_old_groups, array_keys($groups_list));
-    $in_groups = array_unique(array_merge($in_groups, $in_groups_hiden));
-
-    $in_groups_del = array_diff($array_old_groups, $in_groups);
-    if (! empty($in_groups_del)) {
-        foreach ($in_groups_del as $gid) {
-            nv_groups_del_user($gid, $userid);
-        }
-    }
-
-    $in_groups_add = array_diff($in_groups, $array_old_groups);
-    if (! empty($in_groups_add)) {
-        foreach ($in_groups_add as $gid) {
-            nv_groups_add_user($gid, $userid);
-        }
-    }
-
     $db->query("UPDATE " . NV_USERS_GLOBALTABLE . " SET
-				username=" . $db->quote($_user['username']) . ",
-				md5username='" . nv_md5safe($_user['username']) . "',
-				password=" . $db->quote($password) . ",
-				email=" . $db->quote($_user['email']) . ",
-				first_name=" . $db->quote($_user['first_name']) . ",
-				last_name=" . $db->quote($_user['last_name']) . ",
-				gender=" . $db->quote($_user['gender']) . ",
-				photo=" . $db->quote(nv_unhtmlspecialchars($_user['photo'])) . ",
-				birthday=" . $_user['birthday'] . ",
-				sig=" . $db->quote($_user['sig']) . ",
-				question=" . $db->quote($_user['question']) . ",
-				answer=" . $db->quote($_user['answer']) . ",
-				view_mail=" . $_user['view_mail'] . ",
-				in_groups='" . implode(',', $in_groups) . "'
-				WHERE userid=" . $userid);
+        group_id=" . $_user['in_groups_default'] . ",
+        username=" . $db->quote($_user['username']) . ",
+        md5username='" . nv_md5safe($_user['username']) . "',
+        password=" . $db->quote($password) . ",
+        email=" . $db->quote($_user['email']) . ",
+        first_name=" . $db->quote($_user['first_name']) . ",
+        last_name=" . $db->quote($_user['last_name']) . ",
+        gender=" . $db->quote($_user['gender']) . ",
+        photo=" . $db->quote(nv_unhtmlspecialchars($_user['photo'])) . ",
+        birthday=" . $_user['birthday'] . ",
+        sig=" . $db->quote($_user['sig']) . ",
+        question=" . $db->quote($_user['question']) . ",
+        answer=" . $db->quote($_user['answer']) . ",
+        view_mail=" . $_user['view_mail'] . ",
+        in_groups='" . implode(',', $in_groups) . "'
+    WHERE userid=" . $userid);
 
     if (! empty($array_field_config)) {
         $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);
@@ -348,7 +366,9 @@ if (! empty($groups_list)) {
         $groups[] = array(
             'id' => $group_id,
             'title' => $grtl,
-            'checked' => (in_array($group_id, $_user['in_groups'])) ? ' checked="checked"' : '' );
+            'checked' => (in_array($group_id, $_user['in_groups'])) ? ' checked="checked"' : '',
+            'default' => (in_array($group_id, $_user['in_groups']) and $_user['group_id'] == $group_id) ? ' checked="checked"' : ''
+        );
     }
 }
 
@@ -380,7 +400,9 @@ if (defined('NV_IS_USER_FORUM')) {
     } else {
         $xtpl->parse('main.edit_user.add_photo');
     }
-
+    
+    $xtpl->assign('GROUP_DEFAULT_STYLE', (sizeof($_user['in_groups']) > 1) ? '' : ' style="display:none"');
+    
     $a = 0;
     foreach ($groups as $group) {
         if ($group['id'] > 9) {

@@ -454,7 +454,8 @@ $info = array();
 // Lay thong tin file tai len
 if (empty($error)) {
     $arraySysOption = array(
-        'allowfolder' => array( 'themes', 'modules', 'uploads', 'includes/plugin' ),
+        'allowfolder' => array( 'assets', 'themes', 'modules', 'uploads', 'includes/plugin', 'vendor' ),
+        'forbidExt' => array( 'php', 'php3', 'php4', 'php5', 'phtml', 'inc' ),
         'allowExtType' => array( 'module', 'block', 'theme', 'cron' ),
         'checkName' => array(
             'module' => $global_config['check_module'],
@@ -563,7 +564,7 @@ if (empty($error)) {
                 // Check valid folder structure nukeviet (modules, themes, uploads)
                 $folder = explode('/', $listFiles[$i]['filename']);
 
-                if (trim($listFiles[$i]['filename']) != 'config.ini' and (($info['exttype'] == 'theme' and $folder[0] != $info['extname']) or ($info['exttype'] != 'theme' and ! in_array($folder[0], $arraySysOption['allowfolder']) and (isset($folder[1]) and ! in_array($folder[0] . '/' . $folder[1], $arraySysOption['allowfolder']))))) {
+                if (trim($listFiles[$i]['filename']) != 'config.ini' and (($info['exttype'] == 'theme' and $folder[0] != $info['extname']) or ($info['exttype'] != 'theme' and ! in_array($folder[0], $arraySysOption['allowfolder']) and (isset($folder[1]) and ! in_array($folder[0] . '/' . $folder[1], $arraySysOption['allowfolder']))) or ($folder[0] == 'assets' and in_array(nv_getextension($listFiles[$i]['filename']), $arraySysOption['forbidExt'])))) {
                     $info['invaildnum'] ++;
                     $info['filelist'][$j]['class'][] = $info['classcfg']['invaild'];
                     $info['checkresult'] = 'fail';

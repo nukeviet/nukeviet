@@ -684,6 +684,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $keywords = array_unique($keywords);
 
                 foreach ($keywords as $keyword) {
+                    $keyword = str_replace('&', ' ', $keyword);
                     if (! in_array($keyword, $array_keywords_old)) {
                         $alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias($keyword) : str_replace(' ', '-', $keyword);
                         $alias_i = nv_strtolower($alias_i);
@@ -1025,7 +1026,6 @@ $contents .= $xtpl->text('main');
 if ($rowcontent['id'] > 0) {
     $op = '';
 }
-
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

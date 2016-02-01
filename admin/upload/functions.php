@@ -383,7 +383,7 @@ function nv_filesListRefresh($pathimg)
                         $dif = array_diff_assoc($info, $results[$title]);
                         if (! empty($dif)) {
                             // Cập nhật CSDL file thay đổi
-                            $db->query("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET filesize=" . $info['filesize'] . ", src='" . $info['src'] . "', srcwidth=" . $info['srcwidth'] . ", srcheight=" . $info['srcheight'] . ", sizes='" . $info['sizes'] . "', userid=" . $admin_info['userid'] . ", mtime=" . $info['mtime'] . " WHERE did = " . $did . " AND title = " . $db->quote($title));
+                            $db->query("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET filesize=" . intval($info['filesize']) . ", src='" . $info['src'] . "', srcwidth=" . intval($info['srcwidth']) . ", srcheight=" . intval($info['srcheight']) . ", sizes='" . $info['sizes'] . "', userid=" . $admin_info['userid'] . ", mtime=" . $info['mtime'] . " WHERE did = " . $did . " AND title = " . $db->quote($title));
                         }
                         unset($results[$title]);
                     } else {
@@ -394,7 +394,7 @@ function nv_filesListRefresh($pathimg)
                         // Thêm file mới
                         $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
 							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
-							VALUES (:name, '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['sizes'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", :title, :newalt)");
+							VALUES (:name, '" . $info['ext'] . "', '" . $info['type'] . "', " . intval($info['filesize']) . ", '" . $info['src'] . "', " . intval($info['srcwidth']) . ", " . intval($info['srcheight']) . ", '" . $info['sizes'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", :title, :newalt)");
                         $sth->bindParam(':name', $info['name'], PDO::PARAM_STR);
                         $sth->bindParam(':title', $title, PDO::PARAM_STR);
                         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);

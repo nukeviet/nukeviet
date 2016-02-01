@@ -175,9 +175,9 @@ function nv_groups_list_pub2()
 
     $groups_list = array();
 
-    $resul = $db->query('SELECT group_id, title, description, exp_time, publics, numbers FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
+    $resul = $db->query('SELECT group_id, title, description, group_type, exp_time, numbers FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
     while ($row = $resul->fetch()) {
-        if ($row['publics'] and ($row['exp_time'] == 0 or $row['exp_time'] > NV_CURRENTTIME)) {
+        if ($row['group_type'] == 2 and ($row['exp_time'] == 0 or $row['exp_time'] > NV_CURRENTTIME)) {
             $groups_list[$row['group_id']] = $row;
         }
     }

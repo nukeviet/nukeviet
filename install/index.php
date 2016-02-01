@@ -701,8 +701,8 @@ if ($step == 1) {
             $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_authors');
 
             $sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_users
-				(userid, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
-				VALUES(" . $userid . ", :username, :md5username, :password, :email, :first_name, '', '', '', 0, '', " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)");
+				(userid, group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, sig,	regdate, question, answer, passlostkey, view_mail, remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
+				VALUES(" . $userid . ", 1, :username, :md5username, :password, :email, :first_name, '', '', '', 0, '', " . NV_CURRENTTIME . ", :question, :answer_question, '', 0, 1, '', 1, '', " . NV_CURRENTTIME . ", '', '', '', 0)");
             $sth->bindParam(':username', $array_data['nv_login'], PDO::PARAM_STR);
             $sth->bindValue(':md5username', nv_md5safe($array_data['nv_login']), PDO::PARAM_STR);
             $sth->bindParam(':password', $password, PDO::PARAM_STR);
@@ -717,7 +717,7 @@ if ($step == 1) {
             if ($ok1 and $ok2) {
                 try {
                     $db->query('INSERT INTO ' . $db_config['prefix'] . '_users_info (userid) VALUES (' . $userid . ')');
-                    $db->query("INSERT INTO " . $db_config['prefix'] . "_groups_users (group_id, userid, data) VALUES(1, " . $userid . ", '0')");
+                    $db->query("INSERT INTO " . $db_config['prefix'] . "_groups_users (group_id, userid, is_leader, approved, data) VALUES(1, " . $userid . ", 1, 1, '0')");
 
                     $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'statistics_timezone', " . $db->quote(NV_SITE_TIMEZONE_NAME) . ")");
                     $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'site_email', " . $db->quote($global_config['site_email']) . ")");
