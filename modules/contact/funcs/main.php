@@ -13,7 +13,7 @@ if (! defined('NV_IS_MOD_CONTACT')) {
 }
 
 //Danh sach cac bo phan
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 ORDER BY weight';
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act>0 ORDER BY weight';
 $array_department = $nv_Cache->db($sql, 'id', $module_name);
 
 $alias_url = isset($array_op[0]) ? $array_op[0] : '';
@@ -229,10 +229,17 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 
+$full_theme = true;
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 if (! empty($alias_department)) {
     $base_url .= '&amp;' . NV_OP_VARIABLE . '=' . $alias_department;
+    if(isset($array_op[1]) and $array_op[1] == 0)
+    {
+        $base_url .= '/0';
+        $full_theme = false;
+    }
 }
+
 $base_url_rewrite = nv_url_rewrite($base_url, true);
 if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
@@ -253,5 +260,5 @@ $checkss = md5($client_info['session_id'] . $global_config['sitekey']);
 $contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, $checkss);
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme($contents, 1);
+echo nv_site_theme($contents, $full_theme);
 include NV_ROOTDIR . '/includes/footer.php';

@@ -23,7 +23,7 @@ if (! defined('NV_IS_MOD_CONTACT')) {
  */
 function contact_main_theme($array_content, $array_department, $catsName, $base_url, $checkss)
 {
-    global $module_file, $lang_global, $lang_module, $module_info;
+    global $module_file, $lang_global, $lang_module, $module_info, $alias_url;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -37,6 +37,12 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
 
     if (! empty($array_department)) {
         foreach ($array_department as $dep) {
+            if (empty($alias_url) and $dep['act'] == 2)
+            {
+                // Không hiển thị các bộ phận theo cấu hình trong quản trị
+                continue;
+            }
+            
             $xtpl->assign('DEP', $dep);
 
             if (! empty($dep['note'])) {
