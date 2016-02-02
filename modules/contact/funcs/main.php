@@ -169,12 +169,21 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         $xtpl->assign('SITE_URL', $global_config['site_url']);
         $xtpl->assign('FULLNAME', $fname);
         $xtpl->assign('EMAIL', $femail);
-        $xtpl->assign('PHONE', $fphone);
+		$xtpl->assign('PART', $array_department[$fpart]['full_name']);
         $xtpl->assign('IP', $client_info['ip']);
-        $xtpl->assign('CAT', $fcat);
-        $xtpl->assign('PART', $array_department[$fpart]['full_name']);
         $xtpl->assign('TITLE', $ftitle);
         $xtpl->assign('CONTENT', nv_htmlspecialchars($fcon));
+        $xtpl->assign('URL_VIEW', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=view&amp;id=' . $row_id);
+
+		if (!empty($fcat)) {
+			$xtpl->assign('CAT', $fcat);
+			$xtpl->parse('main.cat');
+		}
+
+		if (!empty($fphone)) {
+			$xtpl->assign('PHONE', $fphone);
+			$xtpl->parse('main.phone');
+		}
 
         $xtpl->parse('main');
         $fcon = $xtpl->text('main');
