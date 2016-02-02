@@ -322,100 +322,128 @@ $xtpl->assign('OP', $op);
 // Danh sach thanh vien (AJAX)
 if ($nv_Request->isset_request('listUsers', 'get')) {
     $group_id = $nv_Request->get_int('listUsers', 'get', 0);
-	$page = $nv_Request->get_int('page', 'get', 1);
-	$per_page = 15;
-	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups&listUsers=' . $group_id;
-
-    if (! isset($groupsList[$group_id])) {
+    $page = $nv_Request->get_int('page', 'get', 1);
+    $type = $nv_Request->get_title('type', 'get', '');
+    $per_page = 15;
+    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups&listUsers=' . $group_id;
+    
+    if (!isset($groupsList[$group_id])) {
         die($lang_module['error_group_not_found']);
     }
-
-	$db->sqlreset()->select('COUNT(*)')->from(NV_GROUPS_GLOBALTABLE . '_users')->where('group_id=' . $group_id);
-	$num_items = $db->query($db->sql())->fetchColumn();
-
-	$db->select('userid, is_leader, approved')->limit($per_page)->offset(($page-1)*$per_page);
-    $result = $db->query($db->sql( ));
-
-    $group_users = array();
-
-    while ($row = $result->fetch()) {
-        $group_users[$row['userid']] = $row;
-    }
-    $result->closeCursor();
-
-    if (!empty($group_users)) {
-        $sql = 'SELECT userid, username, first_name, last_name, email, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode( ',', array_keys($group_users) ) . ')';
-        $_rows = $db->query($sql)->fetchAll();
-    } else {
-        $_rows = array();
-    }
-
     $xtpl->assign('GID', $group_id);
-
-    $num_members = 0;
-    $num_leaders = 0;
-    $num_pending = 0;
-    $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
     $title = ($group_id < 10) ? $lang_global['level' . $group_id] : $groupsList[$group_id]['title'];
-
-    foreach ($_rows as $row) {
-        $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
-        $xtpl->assign('LOOP', $row);
-
-        if (empty($group_users[$row['userid']]['approved'])) {
-            $num_pending ++;
-
-            if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite'])) {
-                $xtpl->parse('listUsers.pending.loop.tools');
+    
+    $array_userid = array();
+    $array_number = array();
+    $group_users = array();
+    
+    //Danh sách xin gia nhập nhóm
+    if (empty($type) or $type == 'pending') {
+        $db->sqlreset()
+            ->select('COUNT(*)')
+            ->from(NV_GROUPS_GLOBALTABLE . '_users')
+            ->where('group_id=' . $group_id . ' AND approved=0');
+        $array_number['pending'] = $db->query($db->sql())
+            ->fetchColumn();
+        if ($array_number['pending']) {
+            $db->select('userid')
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page);
+            $result = $db->query($db->sql());
+            while ($row = $result->fetch()) {
+                $group_users['pending'][] = $row['userid'];
+                $array_userid[] = $row['userid'];
             }
-
-            $xtpl->parse('listUsers.pending.loop');
-        } elseif (empty($group_users[$row['userid']]['is_leader'])) {
-            $num_members ++;
-
-            if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite'])) {
-                $xtpl->parse('listUsers.members.loop.tools');
-            }
-
-            $xtpl->parse('listUsers.members.loop');
-        } else {
-            $num_leaders ++;
-
-            if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite'])) {
-                $xtpl->parse('listUsers.leaders.loop.tools');
-            }
-
-            $xtpl->parse('listUsers.leaders.loop');
+            $result->closeCursor();
         }
     }
-
-    if ($num_pending) {
-        $xtpl->assign('PTITLE', sprintf($lang_module['pending_in_group_caption'], $title, number_format($num_pending, 0, ',', '.')));
-        $xtpl->parse('listUsers.pending');
+    
+    //Danh sách quản trị nhóm
+    if (empty($type) or $type == 'leaders') {
+        $db->sqlreset()
+            ->select('COUNT(*)')
+            ->from(NV_GROUPS_GLOBALTABLE . '_users')
+            ->where('group_id=' . $group_id . ' AND is_leader=1');
+        $array_number['leaders'] = $db->query($db->sql())
+            ->fetchColumn();
+        if ($array_number['leaders']) {
+            $db->select('userid')
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page);
+            $result = $db->query($db->sql());
+            while ($row = $result->fetch()) {
+                $group_users['leaders'][] = $row['userid'];
+                $array_userid[] = $row['userid'];
+            }
+            $result->closeCursor();
+        }
     }
-
-    if ($num_leaders) {
-        $xtpl->assign('PTITLE', sprintf($lang_module['leaders_in_group_caption'], $title, number_format($num_leaders, 0, ',', '.')));
-        $xtpl->parse('listUsers.leaders');
+    
+    //Danh sách thành viên của nhóm
+    if (empty($type) or $type == 'members') {
+        $db->sqlreset()
+            ->select('COUNT(*)')
+            ->from(NV_GROUPS_GLOBALTABLE . '_users')
+            ->where('group_id=' . $group_id . ' AND approved=1 AND is_leader=0');
+        $array_number['members'] = $db->query($db->sql())
+            ->fetchColumn();
+        if ($array_number['members']) {
+            $db->select('userid')
+                ->limit($per_page)
+                ->offset(($page - 1) * $per_page);
+            $result = $db->query($db->sql());
+            while ($row = $result->fetch()) {
+                $group_users['members'][] = $row['userid'];
+                $array_userid[] = $row['userid'];
+            }
+            $result->closeCursor();
+        }
     }
-
-    if ($num_members) {
-        $xtpl->assign('PTITLE', sprintf($lang_module['users_in_group_caption'], $title, number_format($num_members, 0, ',', '.')));
-        $xtpl->parse('listUsers.members');
+    
+    if (!empty($group_users)) {
+        $sql = 'SELECT userid, username, first_name, last_name, email, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode(',', $array_userid) . ')';
+        $result = $db->query($sql);
+        $array_userid = array();
+        while ($row = $result->fetch()) {
+            $array_userid[$row['userid']] = $row;
+        }
+        $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
+        foreach ($group_users as $_type => $arr_userids) {
+            $xtpl->assign('PTITLE', sprintf($lang_module[$_type . '_in_group_caption'], $title, number_format($array_number[$_type], 0, ',', '.')));
+            foreach ($arr_userids as $_userid) {
+                
+                $row = $array_userid[$_userid];
+                $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
+                $xtpl->assign('LOOP', $row);
+                if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite'])) {
+                    $xtpl->parse('listUsers.' . $_type . '.loop.tools');
+                }
+                $xtpl->parse('listUsers.' . $_type . '.loop');
+            }
+            
+            $generate_page = nv_generate_page($base_url . '&type=' . $_type, $array_number[$_type], $per_page, $page, 'true', 'false', 'nv_urldecode_ajax', 'id_' . $_type);
+            if (!empty($generate_page)) {
+                $xtpl->assign('PAGE', $generate_page);
+                $xtpl->parse('listUsers.' . $_type . '.page');
+            }
+            $xtpl->parse('listUsers.' . $_type);
+        }
+        
+        if (empty($type) or $type == 'leaders') {
+            // Đánh số lại số thành viên
+            $numberusers = 0;
+            if (isset($array_number['members'])) {
+                $numberusers += $array_number['members'];
+            }
+            if (isset($array_number['leaders'])) {
+                $numberusers += $array_number['leaders'];
+            }
+            if ($numberusers != $groupsList[$group_id]['numbers']) {
+                $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = ' . $numberusers . ' WHERE group_id=' . $group_id);
+            }
+        }
     }
-
-    $numberusers = $num_members + $num_leaders;
-
-    if ($numberusers != $groupsList[$group_id]['numbers']) {
-        $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = ' . $numberusers . ' WHERE group_id=' . $group_id);
-    }
-
-	$generate_page = nv_generate_page( $base_url, $num_items, $per_page, $page, 'true', 'false', 'nv_urldecode_ajax', 'pageContent' );
-	if (!empty($generate_page)) {
-		$xtpl->assign('PAGE', $generate_page);
-		$xtpl->parse('listUsers.page');
-	}
-
+    
     $xtpl->parse('listUsers');
     $xtpl->out('listUsers');
     exit();

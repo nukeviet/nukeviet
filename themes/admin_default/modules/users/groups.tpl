@@ -253,38 +253,43 @@
 
 <!-- BEGIN: listUsers -->
 <!-- BEGIN: pending -->
-<h3 class="myh3">{PTITLE}</h3>
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<col class="w50"/>
-		<col span="3" />
-		<col class="w250"/>
-		<thead>
-			<tr>
-				<th class="text-center"> {LANG.userid} </th>
-				<th> {LANG.account} </th>
-				<th> {LANG.nametitle} </th>
-				<th> {LANG.email} </th>
-				<th class="text-center"> {GLANG.actions} </th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td class="text-center"> {LOOP.userid} </td>
-				<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
-				<td>{LOOP.full_name}</td>
-				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
-				<td class="text-center">
-				<!-- BEGIN: tools -->
-                <i class="fa fa-check fa-lg"></i> <a class="approved" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.approved}</a>
-                <i class="fa fa-times fa-lg"></i> <a class="denied" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.denied}</a>
-				<!-- END: tools -->
-				</td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
+<div id="id_pending">
+	<h3 class="myh3">{PTITLE}</h3>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<col class="w50"/>
+			<col span="3" />
+			<col class="w250"/>
+			<thead>
+				<tr>
+					<th class="text-center"> {LANG.userid} </th>
+					<th> {LANG.account} </th>
+					<th> {LANG.nametitle} </th>
+					<th> {LANG.email} </th>
+					<th class="text-center"> {GLANG.actions} </th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- BEGIN: loop -->
+				<tr>
+					<td class="text-center"> {LOOP.userid} </td>
+					<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+					<td>{LOOP.full_name}</td>
+					<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
+					<td class="text-center">
+					<!-- BEGIN: tools -->
+	                <i class="fa fa-check fa-lg"></i> <a class="approved" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.approved}</a>
+	                <i class="fa fa-times fa-lg"></i> <a class="denied" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.denied}</a>
+					<!-- END: tools -->
+					</td>
+				</tr>
+				<!-- END: loop -->
+			</tbody>
+		</table>
+	</div>
+	<!-- BEGIN: page -->
+	<div class="text-center">{PAGE}</div>
+	<!-- END: page -->
 </div>
 <script type="text/javascript">
 //<![CDATA[
@@ -315,39 +320,44 @@ $("a.denied").click(function() {
 <!-- END: pending -->
 
 <!-- BEGIN: leaders -->
-<h3 class="myh3">{PTITLE}</h3>
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<col class="w50"/>
-		<col span="3" />
-		<col class="w250"/>
-		<thead>
-			<tr>
-				<th class="text-center"> {LANG.userid} </th>
-				<th> {LANG.account} </th>
-				<th> {LANG.nametitle} </th>
-				<th> {LANG.email} </th>
-				<th class="text-center"> {GLANG.actions} </th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td class="text-center"> {LOOP.userid} </td>
-				<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
-				<td>{LOOP.full_name}</td>
-				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
-				<td class="text-center">
-				<!-- BEGIN: tools -->
-                <i class="fa fa-star-half-o fa-lg"></i> <a class="demote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.demote}</a>
-				<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteleader" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
-				<!-- END: tools -->
-				</td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
-</div>
+<div id="id_leaders">
+	<h3 class="myh3">{PTITLE}</h3>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<col class="w50"/>
+			<col span="3" />
+			<col class="w250"/>
+			<thead>
+				<tr>
+					<th class="text-center"> {LANG.userid} </th>
+					<th> {LANG.account} </th>
+					<th> {LANG.nametitle} </th>
+					<th> {LANG.email} </th>
+					<th class="text-center"> {GLANG.actions} </th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- BEGIN: loop -->
+				<tr>
+					<td class="text-center"> {LOOP.userid} </td>
+					<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+					<td>{LOOP.full_name}</td>
+					<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
+					<td class="text-center">
+					<!-- BEGIN: tools -->
+	                <i class="fa fa-star-half-o fa-lg"></i> <a class="demote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.demote}</a>
+					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a class="deleteleader" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+					<!-- END: tools -->
+					</td>
+				</tr>
+				<!-- END: loop -->
+			</tbody>
+		</table>
+	</div>
+	<!-- BEGIN: page -->
+	<div class="text-center">{PAGE}</div>
+	<!-- END: page -->
+</div>	
 <script type="text/javascript">
 //<![CDATA[
 $("a.deleteleader").click(function() {
@@ -377,39 +387,44 @@ $("a.demote").click(function() {
 <!-- END: leaders -->
 
 <!-- BEGIN: members -->
-<h3 class="myh3">{PTITLE}</h3>
-<div class="table-responsive">
-	<table class="table table-striped table-bordered table-hover">
-		<col class="w50"/>
-		<col span="3" />
-		<col class="w250"/>
-		<thead>
-			<tr>
-				<th class="text-center"> {LANG.userid} </th>
-				<th> {LANG.account} </th>
-				<th> {LANG.nametitle} </th>
-				<th> {LANG.email} </th>
-				<th class="text-center"> {GLANG.actions} </th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- BEGIN: loop -->
-			<tr>
-				<td class="text-center"> {LOOP.userid} </td>
-				<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
-				<td>{LOOP.full_name}</td>
-				<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
-				<td class="text-center">
-				<!-- BEGIN: tools -->
-                <i class="fa fa-star fa-lg"></i> <a class="promote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.promote}</a> -
-				<i class="fa fa-trash-o fa-lg"></i> <a class="deletemember" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
-				<!-- END: tools -->
-				</td>
-			</tr>
-			<!-- END: loop -->
-		</tbody>
-	</table>
-</div>
+<div id="id_members">
+	<h3 class="myh3">{PTITLE}</h3>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<col class="w50"/>
+			<col span="3" />
+			<col class="w250"/>
+			<thead>
+				<tr>
+					<th class="text-center"> {LANG.userid} </th>
+					<th> {LANG.account} </th>
+					<th> {LANG.nametitle} </th>
+					<th> {LANG.email} </th>
+					<th class="text-center"> {GLANG.actions} </th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- BEGIN: loop -->
+				<tr>
+					<td class="text-center"> {LOOP.userid} </td>
+					<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+					<td>{LOOP.full_name}</td>
+					<td><a href="mailto:{LOOP.email}">{LOOP.email}</a></td>
+					<td class="text-center">
+					<!-- BEGIN: tools -->
+	                <i class="fa fa-star fa-lg"></i> <a class="promote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.promote}</a> -
+					<i class="fa fa-trash-o fa-lg"></i> <a class="deletemember" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+					<!-- END: tools -->
+					</td>
+				</tr>
+				<!-- END: loop -->
+			</tbody>
+		</table>
+	</div>
+	<!-- BEGIN: page -->
+	<div class="text-center">{PAGE}</div>
+	<!-- END: page -->
+</div>	
 <script type="text/javascript">
 //<![CDATA[
 $("a.deletemember").click(function() {
@@ -437,11 +452,6 @@ $("a.promote").click(function() {
 //]]>
 </script>
 <!-- END: members -->
-
-<!-- BEGIN: page -->
-<div class="text-center">{PAGE}</div>
-<!-- END: page -->
-
 <!-- END: listUsers -->
 
 <!-- BEGIN: userlist -->
