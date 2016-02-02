@@ -148,6 +148,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $fcon = nv_nl2br($fcon);
     $fphone = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
+	$fsendcopy = (int)$nv_Request->get_bool('sendcopy', 'post');
     $sender_id = intval(defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
@@ -163,21 +164,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $data_insert['sender_ip'] = $client_info['ip'];
     $row_id = $db->insert_id($sql, 'id', $data_insert);
     if ($row_id > 0) {
-        $xtpl = new XTemplate('sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('SITE_NAME', $global_config['site_name']);
-        $xtpl->assign('SITE_URL', $global_config['site_url']);
-        $xtpl->assign('FULLNAME', $fname);
-        $xtpl->assign('EMAIL', $femail);
-        $xtpl->assign('PHONE', $fphone);
-        $xtpl->assign('IP', $client_info['ip']);
-        $xtpl->assign('CAT', $fcat);
-        $xtpl->assign('PART', $array_department[$fpart]['full_name']);
-        $xtpl->assign('TITLE', $ftitle);
-        $xtpl->assign('CONTENT', nv_htmlspecialchars($fcon));
-
-        $xtpl->parse('main');
-        $fcon = $xtpl->text('main');
+    	$fcon_mail = contact_sendcontact( $row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart );
 
         $email_list = array();
         if (! empty($array_department[$fpart]['email'])) {
@@ -213,8 +200,15 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         if (! empty($email_list)) {
             $from = array( $fname, $femail );
             $email_list = array_unique($email_list);
-            @nv_sendmail($from, $email_list, $ftitle, $fcon);
+            @nv_sendmail($from, $email_list, $ftitle, $fcon_mail);
         }
+
+		// Gửi bản sao đến hộp thư người gửi
+		if ($fsendcopy) {
+			$from = array( $global_config['site_name'], $global_config['site_email'] );
+			$fcon_mail = contact_sendcontact( $row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, false );
+			@nv_sendmail($from, $femail, $ftitle, $fcon_mail);
+		}
 
         nv_insert_notification($module_name, 'contact_new', array( 'title' => $ftitle ), $row_id, 0, $sender_id, 1);
 
