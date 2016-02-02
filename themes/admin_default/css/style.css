@@ -254,11 +254,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Menu Horizontal
  -----------------------------------------------------------------------------*/
-@media (max-width: 1300px) and (min-width: 768px) {
-	#digclock {
-		display: none;
-	}
-}
 @media (max-width: 1070px) and (min-width: 768px) {
 	#menu-horizontal > ul > li > a {
 		padding-left: 10px;
@@ -864,10 +859,6 @@ button.close {
   #sitemodal .modal-content{
         display: block
     }
-}
-
-#digclock {
-	margin-right: 10px;
 }
 
 .select2-container--default .select2-selection--single{
