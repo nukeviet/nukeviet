@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
 <strong>{TITLE}</strong><br /><br />
 {CONTENT}<br /><br />
+<!-- BEGIN: sendinfo -->
 -------------------------------------<br /><br />
 {LANG.sendinfo}: {SITE_NAME} (<a href="{SITE_URL}">{SITE_URL}</a>)<br />
 {LANG.sendinfo2}:<br />
@@ -17,4 +18,5 @@
     <li>IP: {IP}</li>
 </ul>
 <a href="{URL_VIEW}" title="" target="_blank">{LANG.view_website}</a>
+<!-- END: sendinfo -->
 <!-- END: main -->
