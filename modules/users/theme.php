@@ -577,6 +577,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $group_check_all_checked = 1;
         $count = 0;
         foreach ($groups as $group) {
+        	$group['group_type'] = $lang_module['group_type_' . $group['group_type']];
             $xtpl->assign('GROUP_LIST', $group);
             $xtpl->parse('main.tab_edit_group.group_list');
             if (empty($group['checked'])) {

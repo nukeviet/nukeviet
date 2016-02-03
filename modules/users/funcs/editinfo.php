@@ -863,7 +863,7 @@ if (in_array('openid', $types)) {
 $groups = array();
 if (in_array('group', $types)) {
     $my_groups = array();
-    $result_gru = $db->query('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid']);
+    $result_gru = $db->query('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid'] . ' AND approved=1');
     while ($row_gru = $result_gru->fetch()) {
         $my_groups[] = $row_gru['group_id'];
     }
