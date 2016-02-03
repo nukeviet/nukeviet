@@ -288,3 +288,5 @@ $lang_module['group_userr'] = 'Thành viên';
 $lang_module['group_reg'] = 'Tham gia';
 $lang_module['in_group_ok'] = 'Thiết lập nhóm đã hoàn tất.';
 $lang_module['lostpass_key'] = 'Mã xác minh';
+$lang_module['group_join_queue'] = 'Yêu cầu tham gia nhóm';
+$lang_module['group_join_queue_message'] = 'Xin chào trưởng nhóm <strong>%1$s</strong>,<br /><br /><strong>%2$s</strong> đã gửi yêu cầu tham gia nhóm <strong>%3$s</strong> do bạn đang quản lý. Bạn cần xét duyệt yêu cầu này!<br /><br />Vui lòng truy cập <a href="%4$s title=""">liên kết này</a> để xét duyệt thành viên.';

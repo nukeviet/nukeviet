@@ -177,7 +177,7 @@ function nv_groups_list_pub2()
 
     $resul = $db->query('SELECT group_id, title, description, group_type, exp_time, numbers FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
     while ($row = $resul->fetch()) {
-        if ($row['group_type'] == 2 and ($row['exp_time'] == 0 or $row['exp_time'] > NV_CURRENTTIME)) {
+        if (($row['group_type'] == 1 or $row['group_type'] == 2) and ($row['exp_time'] == 0 or $row['exp_time'] > NV_CURRENTTIME)) {
             $groups_list[$row['group_id']] = $row;
         }
     }
@@ -684,7 +684,26 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     $in_groups_add = array_diff($in_groups, $array_old_groups);
     if (! empty($in_groups_add)) {
         foreach ($in_groups_add as $gid) {
-            nv_groups_add_user($gid, $user_info['userid']);
+            if (nv_groups_add_user($gid, $user_info['userid'])) {
+            	// Gửi thư thông báo kiểm duyệt
+            	if ($groups_list[$gid]['group_type'] == 1) {
+            		// Danh sách email trưởng nhóm
+            		$array_leader = array();
+					$result = $db->query('SELECT t2.email FROM ' . NV_GROUPS_GLOBALTABLE . '_users t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.userid=t2.userid WHERE t1.is_leader=1 AND t1.group_id=' . $gid);
+					while (list($email) = $result->fetch (3)) {
+						$array_leader[] = $email;
+					}
+					if (!empty($array_leader)) {
+						$array_leader = array_unique($array_leader);
+						foreach ($array_leader as $email) {
+							$mail_from = array($global_config['site_name'], $global_config['site_email']);
+							$url_group = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups&amp;userlist=' . $gid;
+							$message = sprintf($lang_module['group_join_queue_message'], $groups_list[$gid]['title'], $user_info['full_name'], $groups_list[$gid]['title'], $url_group);
+							@nv_sendmail($mail_from, $email, $lang_module['group_join_queue'], $message);
+						}
+					}
+            	}
+            }
         }
     }
 
