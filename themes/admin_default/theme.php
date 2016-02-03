@@ -187,7 +187,6 @@ function nv_admin_theme($contents, $head_site = 1)
         }
 
         $xtpl->parse('main.top_menu');
-        $xtpl->assign('NV_DIGCLOCK', nv_date('H:i T l, d/m/Y', NV_CURRENTTIME));
 
         if ($admin_info['current_login'] >= NV_CURRENTTIME - 60) {
             if (! empty($admin_info['last_login'])) {
