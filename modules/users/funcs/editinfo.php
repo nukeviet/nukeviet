@@ -684,7 +684,8 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     $in_groups_add = array_diff($in_groups, $array_old_groups);
     if (! empty($in_groups_add)) {
         foreach ($in_groups_add as $gid) {
-            if (nv_groups_add_user($gid, $user_info['userid'])) {
+        	$approved = $groups_list[$gid]['group_type'] == 1 ? 0 : 1;
+            if (nv_groups_add_user($gid, $user_info['userid'], $approved)) {
             	// Gửi thư thông báo kiểm duyệt
             	if ($groups_list[$gid]['group_type'] == 1) {
             		// Danh sách email trưởng nhóm
@@ -863,14 +864,23 @@ if (in_array('openid', $types)) {
 $groups = array();
 if (in_array('group', $types)) {
     $my_groups = array();
-    $result_gru = $db->query('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid'] . ' AND approved=1');
+    $result_gru = $db->query('SELECT group_id, approved FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid']);
     while ($row_gru = $result_gru->fetch()) {
-        $my_groups[] = $row_gru['group_id'];
+        $my_groups[$row_gru['group_id']] = $row_gru;
     }
 
     foreach ($groups_list as $gid => $gvalues) {
         $groups[$gid] = $gvalues;
-        $groups[$gid]['checked'] = (! empty($my_groups) and in_array($gid, $my_groups)) ? " checked=\"checked\"" : "";
+		$groups[$gid]['checked'] = '';
+		$groups[$gid]['status'] = 0;
+		if (! empty($my_groups) and in_array($gid, array_keys($my_groups))) {
+			$groups[$gid]['checked'] = " checked=\"checked\"";
+			$groups[$gid]['status'] = 1;
+
+			if (!$my_groups[$gid]['approved']) {
+				$groups[$gid]['status'] = 2;
+			}
+		}
     }
 }
 

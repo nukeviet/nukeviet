@@ -404,7 +404,11 @@
                 <div class="form-detail">
                     <table class="table table-bordered table-striped table-hover">
                         <colgroup>
-                            <col style="width:20px"/>
+                            <col width="20"/>
+                            <col width="240" />
+                            <col />
+                            <col width="100"/>
+                            <col width="120"/>
                         </colgroup>
                         <thead>
                             <tr class="bg-lavender">
@@ -415,12 +419,13 @@
                                 </td>
                                 <td class="text-uppercase">{LANG.group_name}</td>
                                 <td class="text-uppercase">{LANG.group_description}</td>
-                                <td class="text-uppercase text-right">{LANG.group_userr}</td>
+                                <td class="text-uppercase text-center">{LANG.group_userr}</td>
+                                <td class="text-uppercase"></td>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <td colspan="4">
+                                <td colspan="5">
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
                                     <input id="submit" type="submit" class="btn btn-primary" value="{LANG.group_reg}" />
                                 </td>
@@ -433,11 +438,12 @@
                                     <input name="in_groups[]" type="checkbox" value="{GROUP_LIST.group_id}" class="checkSingle" onclick="checkSingle(this.form);"{GROUP_LIST.checked} />
                                 </th>
                                 <td>
-                                    {GROUP_LIST.title}
+                                    <strong>{GROUP_LIST.title}</strong>
                                     <em class="show text-success">{GROUP_LIST.group_type}</em>
                                 </td>
                                 <td>{GROUP_LIST.description}</td>
-                                <td class="text-right">{GROUP_LIST.numbers}</td>
+                                <td class="text-center">{GROUP_LIST.numbers}</td>
+                                <td class="text-center">{GROUP_LIST.status}</td>
                             </tr>
                             <!-- END: group_list -->
                         </tbody>
