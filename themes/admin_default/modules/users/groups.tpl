@@ -294,7 +294,7 @@
 <script type="text/javascript">
 //<![CDATA[
 $("a.approved").click(function() {
-	$.ajax({
+	confirm(nv_is_add_user_confirm[0]) && $.ajax({
 		type : "POST",
 		url : "{MODULE_URL}={OP}",
 		data : "gid={GID}&approved=" + $(this).data("id"),
@@ -305,7 +305,7 @@ $("a.approved").click(function() {
 	return !1;
 });
 $("a.denied").click(function() {
-	$.ajax({
+	confirm(nv_is_exclude_user_confirm[0]) && $.ajax({
 		type : "POST",
 		url : "{MODULE_URL}={OP}",
 		data : "gid={GID}&denied=" + $(this).data("id"),
@@ -357,7 +357,7 @@ $("a.denied").click(function() {
 	<!-- BEGIN: page -->
 	<div class="text-center">{PAGE}</div>
 	<!-- END: page -->
-</div>	
+</div>
 <script type="text/javascript">
 //<![CDATA[
 $("a.deleteleader").click(function() {
@@ -424,7 +424,7 @@ $("a.demote").click(function() {
 	<!-- BEGIN: page -->
 	<div class="text-center">{PAGE}</div>
 	<!-- END: page -->
-</div>	
+</div>
 <script type="text/javascript">
 //<![CDATA[
 $("a.deletemember").click(function() {
