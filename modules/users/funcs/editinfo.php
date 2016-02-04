@@ -698,7 +698,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
 						$array_leader = array_unique($array_leader);
 						foreach ($array_leader as $email) {
 							$mail_from = array($global_config['site_name'], $global_config['site_email']);
-							$url_group = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups&amp;userlist=' . $gid;
+							$url_group = NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups&amp;userlist=' . $gid;
 							$message = sprintf($lang_module['group_join_queue_message'], $groups_list[$gid]['title'], $user_info['full_name'], $groups_list[$gid]['title'], $url_group);
 							@nv_sendmail($mail_from, $email, $lang_module['group_join_queue'], $message);
 						}
