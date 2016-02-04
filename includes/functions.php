@@ -1023,7 +1023,7 @@ function nv_get_keywords($content, $keyword_limit = 20)
  */
 function nv_sendmail($from, $to, $subject, $message, $files = '')
 {
-    global $db, $global_config, $sys_info;
+    global $global_config, $sys_info;
 
     try {
         $mail = new PHPMailer\PHPMailer\PHPMailer();
@@ -1531,7 +1531,7 @@ function nv_url_rewrite($buffer, $is_url = false)
  */
 function nv_change_buffer($buffer)
 {
-    global $db, $sys_info, $global_config, $client_info;
+    global $global_config, $client_info;
 
     if (NV_ANTI_IFRAME and ! $client_info['is_myreferer']) {
         $buffer = preg_replace('/(<body[^>]*>)/', "$1" . PHP_EOL . "<script>if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1);
