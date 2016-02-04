@@ -414,11 +414,21 @@ foreach ($data as $row) {
         }
     }
 
+	if ($row['status_id'] == 4 and empty($row['title'])) {
+		$row['title'] = $lang_module['no_name'];
+	}
+
     $xtpl->assign('ROW', $row);
 
     if ($is_excdata) {
         $xtpl->parse('main.loop.excdata');
     }
+
+	if ($row['status_id'] == 4) {
+		$xtpl->parse('main.loop.text');
+	} else {
+		$xtpl->parse('main.loop.url');
+	}
 
     $xtpl->parse('main.loop');
 }

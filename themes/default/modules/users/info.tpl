@@ -36,7 +36,7 @@
                                     <input type="text" class="form-control" placeholder="{LANG.last_name}" value="{DATA.last_name}" name="last_name" maxlength="255">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="first_name" class="control-label col-md-6 text-normal">{LANG.first_name}</label>
                                 <div class="col-md-12">
@@ -51,7 +51,7 @@
                                     <input type="text" class="form-control" placeholder="{LANG.first_name}" value="{DATA.first_name}" name="first_name" maxlength="255">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="last_name" class="control-label col-md-6 text-normal">{LANG.last_name}</label>
                                 <div class="col-md-12">
@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                             <!-- END: name_show_1 -->
-                            
+
                             <div class="form-group">
                                 <label for="gender" class="control-label col-md-6 text-normal">{LANG.gender}</label>
                                 <div class="col-md-4">
@@ -70,14 +70,14 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="birthday" class="control-label col-md-6 text-normal">{LANG.birthday}</label>
                                 <div class="col-md-4">
                                     <input type="text" class="form-control calendar-icon datepicker" name="birthday" value="{DATA.birthday}" readonly="readonly" onfocus="datepickerShow(this);" data-mess="">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="view_mail" class="control-label col-md-6 text-normal">{LANG.showmail}</label>
                                 <div class="col-md-4">
@@ -87,7 +87,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
@@ -102,7 +102,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="edit_avatar" class="tab-pane fade {TAB_AVATAR_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -116,7 +116,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- BEGIN: tab_edit_username -->
         <div id="edit_username" class="tab-pane fade {TAB_USERNAME_ACTIVE}">
             <div class="page panel panel-default">
@@ -138,21 +138,21 @@
                                     <strong>{DATA.username}</strong>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="username" class="control-label col-md-6 text-normal">{LANG.newlogin}</label>
                                 <div class="col-md-12">
                                     <input type="text" class="required form-control" placeholder="{LANG.newlogin}" value="" name="username" maxlength="{NICK_MAXLENGTH}" data-pattern="/^(.){{NICK_MINLENGTH},{NICK_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="password" class="control-label col-md-6 text-normal">{LANG.password}</label>
                                 <div class="col-md-12">
                                     <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
@@ -181,7 +181,7 @@
                     <form action="{EDITINFO_FORM}/email" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" onsubmit="return changemail_validForm(this);" autocomplete="off" novalidate>
                         <div class="nv-info margin-bottom">{LANG.edit_email_warning}</div>
                         <div class="nv-info-default hidden">{LANG.edit_email_warning}</div>
-                        
+
                         <div class="form-detail">
                             <div class="form-group">
                                 <div class="col-md-6 text-right">
@@ -191,21 +191,21 @@
                                     <strong>{DATA.email}</strong>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="password" class="control-label col-md-6 text-normal">{LANG.password}</label>
                                 <div class="col-md-12">
                                     <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="email" class="control-label col-md-6 text-normal">{LANG.newemail}</label>
                                 <div class="col-md-12">
                                     <input type="email" class="required form-control" placeholder="{LANG.newemail}" value="" name="email" maxlength="100" onkeypress="validErrorHidden(this);" data-mess="{GLANG.email_empty}">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="verifykey" class="control-label col-md-6 text-normal">{LANG.verifykey}</label>
                                 <div class="col-md-12">
@@ -215,7 +215,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
@@ -237,7 +237,7 @@
                 <div class="panel-body bg-lavender">
                     <form action="{EDITINFO_FORM}/password" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
                         <div class="nv-info margin-bottom" data-default="" style="display:none"></div>
-                        
+
                         <div class="form-detail">
                             <!-- BEGIN: is_old_pass -->
                             <div class="form-group">
@@ -247,21 +247,21 @@
                                 </div>
                             </div>
                             <!-- END: is_old_pass -->
-                            
+
                             <div class="form-group">
                                 <label for="new_password" class="control-label col-md-6 text-normal">{LANG.pass_new}</label>
                                 <div class="col-md-12">
                                     <input type="password" class="required form-control" placeholder="{LANG.pass_new}" value="" name="new_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.required}">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="re_password" class="control-label col-md-6 text-normal">{LANG.pass_new_re}</label>
                                 <div class="col-md-12">
                                     <input type="password" class="required form-control" placeholder="{LANG.pass_new_re}" value="" name="re_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.required}">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
@@ -276,7 +276,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="edit_question" class="tab-pane fade {TAB_QUESTION_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -287,7 +287,7 @@
                     <!-- END: question_empty_pass -->
                     <form action="{EDITINFO_FORM}/question" method="post" role="form" class="form-horizontal{FORM_HIDDEN}" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
                         <div class="nv-info margin-bottom" data-default="{LANG.edit_question_warning}">{LANG.edit_question_warning}</div>
-                        
+
                         <div class="form-detail">
                             <div class="form-group">
                                 <label for="nv_password" class="control-label col-md-6 text-normal">{LANG.password}</label>
@@ -295,7 +295,7 @@
                                     <input type="password" class="required form-control" placeholder="{LANG.password}" value="" name="nv_password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group rel">
                                 <label for="your_question" class="control-label col-md-6 text-normal">{LANG.question}</label>
                                 <div class="col-md-12">
@@ -312,14 +312,14 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="answer" class="control-label col-md-6 text-normal">{LANG.answer_your_question}</label>
                                 <div class="col-md-12">
                                     <input type="text" class="required form-control" placeholder="{LANG.answer_your_question}" value="" name="answer" maxlength="255" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.answer_empty}">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
@@ -334,13 +334,13 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- BEGIN: tab_edit_openid -->
         <div id="edit_openid" class="tab-pane fade {TAB_OPENID_ACTIVE}">
             <!-- BEGIN: openid_not_empty -->
             <form action="{EDITINFO_FORM}/openid" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
                 <div class="nv-info margin-bottom" data-default="" style="display:none"></div>
-                
+
                 <div class="form-detail">
                     <table class="table table-bordered table-striped table-hover">
                         <colgroup>
@@ -395,16 +395,20 @@
             </div>
         </div>
         <!-- END: tab_edit_openid -->
-        
+
         <!-- BEGIN: tab_edit_group -->
         <div id="edit_group" class="tab-pane fade {TAB_GROUP_ACTIVE}">
             <form action="{EDITINFO_FORM}/group" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
                 <div class="nv-info margin-bottom" data-default="" style="display:none"></div>
-                
+
                 <div class="form-detail">
                     <table class="table table-bordered table-striped table-hover">
                         <colgroup>
-                            <col style="width:20px"/>
+                            <col width="20"/>
+                            <col width="240" />
+                            <col />
+                            <col width="100"/>
+                            <col width="120"/>
                         </colgroup>
                         <thead>
                             <tr class="bg-lavender">
@@ -415,12 +419,13 @@
                                 </td>
                                 <td class="text-uppercase">{LANG.group_name}</td>
                                 <td class="text-uppercase">{LANG.group_description}</td>
-                                <td class="text-uppercase text-right">{LANG.group_userr}</td>
+                                <td class="text-uppercase text-center">{LANG.group_userr}</td>
+                                <td class="text-uppercase"></td>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <td colspan="4">
+                                <td colspan="5">
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
                                     <input id="submit" type="submit" class="btn btn-primary" value="{LANG.group_reg}" />
                                 </td>
@@ -432,9 +437,13 @@
                                 <th class="text-center">
                                     <input name="in_groups[]" type="checkbox" value="{GROUP_LIST.group_id}" class="checkSingle" onclick="checkSingle(this.form);"{GROUP_LIST.checked} />
                                 </th>
-                                <td>{GROUP_LIST.title}</td>
+                                <td>
+                                    <strong>{GROUP_LIST.title}</strong>
+                                    <em class="show text-success">{GROUP_LIST.group_type}</em>
+                                </td>
                                 <td>{GROUP_LIST.description}</td>
-                                <td class="text-right">{GROUP_LIST.numbers}</td>
+                                <td class="text-center">{GROUP_LIST.numbers}</td>
+                                <td class="text-center">{GROUP_LIST.status}</td>
                             </tr>
                             <!-- END: group_list -->
                         </tbody>
@@ -443,16 +452,16 @@
             </form>
         </div>
         <!-- END: tab_edit_group -->
-        
+
         <!-- BEGIN: tab_edit_others -->
         <div id="edit_others" class="tab-pane fade {TAB_OTHERS_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
                     <form action="{EDITINFO_FORM}/others" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
                         <div class="nv-info margin-bottom" data-default="{GLANG.required}">{GLANG.required}</div>
-                        
+
                         <div class="form-detail">
-                            
+
                             <!-- BEGIN: loop -->
                             <!-- BEGIN: textbox -->
                             <div class="form-group">
@@ -462,7 +471,7 @@
                                 </div>
                             </div>
                  			<!-- END: textbox -->
-                            
+
                             <!-- BEGIN: date -->
                             <div class="form-group">
                                 <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
@@ -471,7 +480,7 @@
                      			</div>
                             </div>
                  			<!-- END: date -->
-                            
+
                             <!-- BEGIN: textarea -->
                             <div class="form-group">
                                 <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
@@ -488,7 +497,7 @@
                                 </div>
                             </div>
                  			<!-- END: editor -->
-                            
+
                             <!-- BEGIN: select -->
                             <div class="form-group">
                                 <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
@@ -503,7 +512,7 @@
                                 </div>
                             </div>
                             <!-- END: select -->
-                            
+
                             <!-- BEGIN: radio -->
                             <div>
                                 <div>
@@ -523,7 +532,7 @@
                                 </div>
                             </div>
                             <!-- END: radio -->
-                            
+
                             <!-- BEGIN: checkbox -->
                             <div>
                                 <div>
@@ -543,7 +552,7 @@
                                 </div>
                             </div>
                             <!-- END: checkbox -->
-                            
+
                             <!-- BEGIN: multiselect -->
                             <div class="form-group">
                                 <label class="control-label col-md-6 text-normal">{FIELD.title}</label>
@@ -557,7 +566,7 @@
                             </div>
                             <!-- END: multiselect -->
                         	<!-- END: loop -->
-                            
+
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
@@ -573,14 +582,14 @@
 					<script type="text/javascript">
 						for (var i in CKEDITOR.instances) {
 						    CKEDITOR.instances[i].on('change', function() { CKEDITOR.instances[i].updateElement() });
-						}					
+						}
 					</script>
-					<!-- END: ckeditor -->  
+					<!-- END: ckeditor -->
                 </div>
             </div>
         </div>
         <!-- END: tab_edit_others -->
-        
+
         <div id="edit_safemode" class="tab-pane fade {TAB_SAFEMODE_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -593,7 +602,7 @@
                         <h2 class="margin-bottom-lg text-center"><em class="fa fa-shield fa-lg margin-right text-danger"></em>{LANG.safe_activate}</h2>
                         <div class="nv-info margin-bottom">{LANG.safe_activate_info}</div>
                         <div class="nv-info-default hidden">{LANG.safe_activate_info}</div>
-                        
+
                         <div class="form-detail">
                             <div class="form-group">
                                 <label for="nv_password" class="control-label col-md-6 text-normal">{GLANG.password}</label>
@@ -604,7 +613,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="safe_key" class="control-label col-md-6 text-normal">{LANG.safe_key}</label>
                                 <div class="col-md-14">
@@ -615,7 +624,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <div class="col-md-6">
                                     <input type="hidden" name="checkss" value="{DATA.checkss}" />
@@ -631,7 +640,7 @@
             </div>
         </div>
     </div>
-    
+
     <ul class="nav navbar-nav">
         <!-- BEGIN: navbar --><li><a href="{NAVBAR.href}"><em class="fa fa-caret-right margin-right-sm"></em>{NAVBAR.title}</a></li><!-- END: navbar -->
     </ul>

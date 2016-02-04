@@ -402,16 +402,18 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         $rowcontent['keywords'] = implode(',', $keywords_return);
     }
 
-    if (empty($rowcontent['title'])) {
-        $error[] = $lang_module['error_title'];
-    } elseif (empty($rowcontent['listcatid'])) {
-        $error[] = $lang_module['error_cat'];
-    } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '' and ! preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'])) {
-        $error[] = $lang_module['error_bodytext'];
-    }
+	if ($rowcontent['status'] != 4) {
+	    if (empty($rowcontent['title'])) {
+	        $error[] = $lang_module['error_title'];
+	    } elseif (empty($rowcontent['listcatid'])) {
+	        $error[] = $lang_module['error_cat'];
+	    } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '' and ! preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'])) {
+	        $error[] = $lang_module['error_bodytext'];
+	    }
+	}
 
     if (empty($error)) {
-        $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
+        $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $rowcontent['status'] == 4 ? 0 : $catids[0];
         $rowcontent['bodytext'] = nv_news_get_bodytext($rowcontent['bodyhtml']);
 
         if (! empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
@@ -635,14 +637,20 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $array_cat_old = explode(',', $rowcontent_old['listcatid']);
                 $array_cat_new = explode(',', $rowcontent['listcatid']);
 
-                $array_cat_diff = array_diff($array_cat_old, $array_cat_new);
-                foreach ($array_cat_diff as $catid) {
-                    $ct_query[] = $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
-                }
-                foreach ($array_cat_new as $catid) {
-                    $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
-                    $ct_query[] = $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
-                }
+				if ($array_cat_new != $array_cat_old) {
+	                $array_cat_diff = array_diff($array_cat_old, $array_cat_new);
+	                foreach ($array_cat_diff as $catid) {
+	                	if (!empty($catid)) {
+	                		$ct_query[] = $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
+	                	}
+	                }
+	                foreach ($array_cat_new as $catid) {
+	                	if (!empty($catid)) {
+		                    $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
+		                    $ct_query[] = $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
+						}
+	                }
+				}
 
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=:bodytext WHERE id =' . $rowcontent['id']);
                 $sth->bindParam(':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen($rowcontent['bodytext']));
@@ -761,6 +769,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
 $rowcontent['hometext'] = nv_htmlspecialchars(nv_br2nl($rowcontent['hometext']));
 $rowcontent['bodyhtml'] = htmlspecialchars(nv_editor_br2nl($rowcontent['bodyhtml']));
+$rowcontent['alias'] = ($rowcontent['status'] == 4 and empty($rowcontent['title'])) ? '' : $rowcontent['alias'];
 
 if (! empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'])) {
     $rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
