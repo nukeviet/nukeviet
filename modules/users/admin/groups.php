@@ -326,17 +326,17 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     $type = $nv_Request->get_title('type', 'get', '');
     $per_page = 15;
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups&listUsers=' . $group_id;
-    
+
     if (!isset($groupsList[$group_id])) {
         die($lang_module['error_group_not_found']);
     }
     $xtpl->assign('GID', $group_id);
     $title = ($group_id < 10) ? $lang_global['level' . $group_id] : $groupsList[$group_id]['title'];
-    
+
     $array_userid = array();
     $array_number = array();
     $group_users = array();
-    
+
     //Danh sách xin gia nhập nhóm
     if (empty($type) or $type == 'pending') {
         $db->sqlreset()
@@ -357,7 +357,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
             $result->closeCursor();
         }
     }
-    
+
     //Danh sách quản trị nhóm
     if (empty($type) or $type == 'leaders') {
         $db->sqlreset()
@@ -378,7 +378,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
             $result->closeCursor();
         }
     }
-    
+
     //Danh sách thành viên của nhóm
     if (empty($type) or $type == 'members') {
         $db->sqlreset()
@@ -399,7 +399,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
             $result->closeCursor();
         }
     }
-    
+
     if (!empty($group_users)) {
         $sql = 'SELECT userid, username, first_name, last_name, email, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode(',', $array_userid) . ')';
         $result = $db->query($sql);
@@ -411,7 +411,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         foreach ($group_users as $_type => $arr_userids) {
             $xtpl->assign('PTITLE', sprintf($lang_module[$_type . '_in_group_caption'], $title, number_format($array_number[$_type], 0, ',', '.')));
             foreach ($arr_userids as $_userid) {
-                
+
                 $row = $array_userid[$_userid];
                 $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
                 $xtpl->assign('LOOP', $row);
@@ -420,7 +420,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
                 }
                 $xtpl->parse('listUsers.' . $_type . '.loop');
             }
-            
+
             $generate_page = nv_generate_page($base_url . '&type=' . $_type, $array_number[$_type], $per_page, $page, 'true', 'false', 'nv_urldecode_ajax', 'id_' . $_type);
             if (!empty($generate_page)) {
                 $xtpl->assign('PAGE', $generate_page);
@@ -428,7 +428,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
             }
             $xtpl->parse('listUsers.' . $_type);
         }
-        
+
         if (empty($type) or $type == 'leaders') {
             // Đánh số lại số thành viên
             $numberusers = 0;
@@ -443,7 +443,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
             }
         }
     }
-    
+
     $xtpl->parse('listUsers');
     $xtpl->out('listUsers');
     exit();
@@ -564,7 +564,23 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             }
 
             if (isset($post['id'])) {
-                if ($post['id'] > 9) {
+				if ($nv_Request->isset_request('add', 'get')) {
+	                $weight = $db->query("SELECT max(weight) FROM " . NV_GROUPS_GLOBALTABLE . " WHERE idsite=" . $global_config['idsite'])->fetchColumn();
+	                $weight = intval($weight) + 1;
+
+	                $_sql = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . "
+						(title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus)
+						VALUES ( :title, :description, :content, " . $post['group_type'] . ", :group_color, :group_avatar, " . $post['is_default'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
+
+	                $data_insert = array();
+	                $data_insert['title'] = $post['title'];
+	                $data_insert['description'] = $post['description'];
+	                $data_insert['content'] = $post['content'];
+	                $data_insert['group_color'] = $post['group_color'];
+	                $data_insert['group_avatar'] = $post['group_avatar'];
+
+	                $ok = $post['id'] = $db->insert_id($_sql, 'group_id', $data_insert);
+         	   	} elseif ($post['id'] > 9) {
                     // Sửa nhóm tự tạo
                     $stmt = $db->prepare("UPDATE " . NV_GROUPS_GLOBALTABLE . " SET
                         title = :title,
@@ -597,22 +613,6 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
                     $ok = $stmt->execute();
                 }
-            } elseif ($nv_Request->isset_request('add', 'get')) {
-                $weight = $db->query("SELECT max(weight) FROM " . NV_GROUPS_GLOBALTABLE . " WHERE idsite=" . $global_config['idsite'])->fetchColumn();
-                $weight = intval($weight) + 1;
-
-                $_sql = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . "
-					(title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus)
-					VALUES ( :title, :description, :content, " . $post['group_type'] . ", :group_color, :group_avatar, " . $post['is_default'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
-
-                $data_insert = array();
-                $data_insert['title'] = $post['title'];
-                $data_insert['description'] = $post['description'];
-                $data_insert['content'] = $post['content'];
-                $data_insert['group_color'] = $post['group_color'];
-                $data_insert['group_avatar'] = $post['group_avatar'];
-
-                $ok = $post['id'] = $db->insert_id($_sql, 'group_id', $data_insert);
             }
 
             if ($ok) {
