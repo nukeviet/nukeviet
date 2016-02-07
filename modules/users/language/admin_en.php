@@ -3,15 +3,13 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate May 30, 2010, 05:07:00 PM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
-}
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '31/05/2010, 00:07';
@@ -66,6 +64,7 @@ $lang_module['year'] = 'Year';
 $lang_module['show_email'] = 'Display email';
 $lang_module['sig'] = 'Signature';
 $lang_module['in_group'] = 'Member of group';
+$lang_module['in_group_default'] = 'Group default';
 $lang_module['question'] = 'Secret question';
 $lang_module['addquestion'] = 'Add secret question';
 $lang_module['savequestion'] = 'Save secret question';
@@ -120,6 +119,7 @@ $lang_module['edit_add_error'] = 'Can\'t update member information!';
 $lang_module['edit_error_question'] = 'Empty secret question';
 $lang_module['edit_error_answer'] = 'Empty answer';
 $lang_module['edit_error_group'] = 'Please select group for member';
+$lang_module['edit_error_group_default'] = 'Choose default account groups';
 $lang_module['account_deny_name'] = 'Sorry, Account %s banned.';
 $lang_module['awaiting_active'] = 'Activate';
 $lang_module['delconfirm_message'] = 'Do you realy want to delete selected member?';
@@ -156,10 +156,19 @@ $lang_module['group_type'] = 'Loại nhóm';
 $lang_module['group_type_0'] = 'Nhóm cố định';
 $lang_module['group_type_1'] = 'Nhóm tham gia phải gửi yêu cầu';
 $lang_module['group_type_2'] = 'Nhóm tham gia tự do';
+$lang_module['group_color'] = 'Colour group';
+$lang_module['group_avatar'] = 'Avatar group';
+$lang_module['group_is_default'] = 'Default groups when members register';
 $lang_module['siteus'] = 'Allow subsite add members to the group';
 $lang_module['users'] = 'User';
+$lang_module['promote'] = 'Promote';
+$lang_module['demote'] = 'Demote';
+$lang_module['approved'] = 'Approved';
+$lang_module['denied'] = 'Denied';
 $lang_module['error_title_exists'] = 'Group name "%s" already exist';
 $lang_module['members_in_group_caption'] = 'Member list in group "%s" (%d group)';
+$lang_module['leaders_in_group_caption'] = 'Managing the list of group "%s" (%d accounts)';
+$lang_module['pending_in_group_caption'] = 'Acceding list of group "%s" (%d accounts)';
 $lang_module['error_group_not_found'] = 'Error: Can\'t find group';
 $lang_module['error_users_not_found'] = 'Group has not member';
 $lang_module['error_group_in_site'] = 'Error: You just added and deleted from the group account, the account management of your site.';
@@ -174,6 +183,7 @@ $lang_module['search_not_result'] = 'Not found any results';
 $lang_module['search_result_caption'] = 'Result';
 $lang_module['group_pgtitle'] = 'Detail';
 $lang_module['group_info'] = 'Group information &ldquo;%s&rdquo;';
+$lang_module['group_user_peding'] = 'Some members would like to join the group "%s"';
 $lang_module['add_user'] = 'Member %1$s group %2$s';
 $lang_module['exclude_user'] = 'Delete member %1$s in group %2$s';
 $lang_module['siteinfo_user'] = 'Members';
@@ -402,3 +412,4 @@ $lang_module['safe_active_info'] = 'Your account is in safe mode,  all the featu
 $lang_module['safe_deactivate'] = 'Safe mode turn off';
 $lang_module['group_description'] = 'Description';
 $lang_module['group_description_empty'] = 'Take a brief description of the group.';
+$lang_module['auto_login_after_reg'] = 'Automatically login after successful registration';
