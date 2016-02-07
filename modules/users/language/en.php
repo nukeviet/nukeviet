@@ -3,15 +3,13 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
-}
+if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -286,3 +284,13 @@ $lang_module['group_userr'] = 'Member';
 $lang_module['group_reg'] = 'Join';
 $lang_module['in_group_ok'] = 'Setting';
 $lang_module['lostpass_key'] = 'The Verification code';
+$lang_module['group_join_queue'] = 'Request to join group';
+$lang_module['group_join_queue_message'] = 'Hello leader  <strong>%1$s</strong>,<br  /><br  /><strong>%2$s</strong> has sent the request to join the group <strong>%3$s</strong> because you are managing. You need to approve this request! <br  /> <br  /> Please <a href="%4$s" title=""> visit this link </a> to approve membership.';
+$lang_module['group_status'] = 'Status';
+$lang_module['group_status_0'] = 'Not joined';
+$lang_module['group_status_1'] = 'Joined';
+$lang_module['group_status_2'] = 'Pending';
+$lang_module['group_type'] = 'Group type';
+$lang_module['group_type_0'] = 'Group fixed';
+$lang_module['group_type_1'] = 'Group must submit a request';
+$lang_module['group_type_2'] = 'Free group';
