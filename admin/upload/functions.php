@@ -84,9 +84,9 @@ function nv_check_allow_upload_dir($dir)
         if ($admin_info['allow_modify_subdirectories'] and ! in_array($dir, $allow_upload_dir)) {
             $level['rename_dir'] = true;
             $level['delete_dir'] = true;
-
-            // Khong doi ten, xoa thu muc upload cua module hoac thu muc co chua thu muc con
-            if (isset($site_mods[$mod_name]) and ! empty($_dir_mod_sub)) {
+            
+            // Khong doi ten, xoa thu muc upload cua module
+            if (isset($site_mods[$mod_name]) and $dir == NV_UPLOADS_DIR.'/'.$mod_name) {
                 unset($level['rename_dir'], $level['delete_dir']);
             }
         }
@@ -115,6 +115,10 @@ function nv_check_allow_upload_dir($dir)
         if (! empty($_dir_mod_sub) and $admin_info['allow_modify_subdirectories']) {
             $level['rename_dir'] = true;
             $level['delete_dir'] = true;
+            // Khong doi ten, xoa thu muc upload cua module hoac thu muc co chua thu muc con
+            if (isset($site_mods[$mod_name]) and ! empty($_dir_mod_sub)) {
+                unset($level['rename_dir'], $level['delete_dir']);
+            }
         }
 
         if (! empty($admin_info['allow_files_type'])) {
@@ -129,10 +133,6 @@ function nv_check_allow_upload_dir($dir)
             $level['crop_file'] = true;
             $level['rotate_file'] = true;
         }
-    }
-
-    if (preg_match('/^([\d]{4})\_([\d]{1,2})$/', $arr_dir[sizeof($arr_dir) - 1])) {
-        unset($level['rename_dir'], $level['delete_dir']);
     }
 
     return $level;
