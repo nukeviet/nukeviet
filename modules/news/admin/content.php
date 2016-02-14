@@ -250,24 +250,25 @@ foreach ($global_array_cat as $catid_i => $array_value) {
 
 if ($nv_Request->get_int('save', 'post') == 1) {
     $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', array()));
-    $id_block_content_post = array_unique($nv_Request->get_typed_array('bids', 'post', 'int', array()));
-
-    $rowcontent['catid'] = $nv_Request->get_int('catid', 'post', 0);
-
     $rowcontent['listcatid'] = implode(',', $catids);
-
+    $rowcontent['catid'] = $nv_Request->get_int('catid', 'post', 0);
+    
+    $id_block_content_post = array_unique($nv_Request->get_typed_array('bids', 'post', 'int', array()));
     if ($nv_Request->isset_request('status1', 'post')) {
         $rowcontent['status'] = 1;
-    } //dang tin
+        //Dang tin
+    } 
     elseif ($nv_Request->isset_request('status0', 'post')) {
         $rowcontent['status'] = 0;
-    } //cho tong bien tap duyet
+    } 
     elseif ($nv_Request->isset_request('status4', 'post')) {
         $rowcontent['status'] = 4;
-    } //luu tam
+        //Luu tam
+    } 
     else {
         $rowcontent['status'] = 6;
-    } //gui, cho bien tap
+        //Gui, cho bien tap
+    } 
 
     $message_error_show = $lang_module['permissions_pub_error'];
     if ($rowcontent['status'] == 1) {
@@ -413,9 +414,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 	}
 
     if (empty($error)) {
-        $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $rowcontent['status'] == 4 ? 0 : $catids[0];
+        $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
         $rowcontent['bodytext'] = nv_news_get_bodytext($rowcontent['bodyhtml']);
-
         if (! empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
             $weightopic = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
             $weightopic = intval($weightopic) + 1;
@@ -634,24 +634,24 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
                 $ct_query[] = ( int )$sth->execute();
 
-                $array_cat_old = explode(',', $rowcontent_old['listcatid']);
-                $array_cat_new = explode(',', $rowcontent['listcatid']);
-
-				if ($array_cat_new != $array_cat_old) {
-	                $array_cat_diff = array_diff($array_cat_old, $array_cat_new);
+				if ($rowcontent_old['listcatid'] != $rowcontent['listcatid']) {
+                    $array_cat_old = explode(',', $rowcontent_old['listcatid']);
+                    $array_cat_new = explode(',', $rowcontent['listcatid']);
+				    $array_cat_diff = array_diff($array_cat_old, $array_cat_new);
 	                foreach ($array_cat_diff as $catid) {
 	                	if (!empty($catid)) {
-	                		$ct_query[] = $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
+	                		$ct_query[] = $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . intval($rowcontent['id']));
 	                	}
 	                }
-	                foreach ($array_cat_new as $catid) {
-	                	if (!empty($catid)) {
-		                    $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
-		                    $ct_query[] = $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
-						}
-	                }
 				}
-
+				
+				foreach ($catids as $catid) {
+				    if (!empty($catid)) {
+				        $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
+				        $ct_query[] = $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
+				    }
+				}
+				
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=:bodytext WHERE id =' . $rowcontent['id']);
                 $sth->bindParam(':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen($rowcontent['bodytext']));
                 $ct_query[] = ( int )$sth->execute();
