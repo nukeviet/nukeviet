@@ -62,6 +62,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['sig'] = $nv_Request->get_textarea('sig', '', NV_ALLOWED_HTML_TAGS);
     $_user['birthday'] = $nv_Request->get_title('birthday', 'post');
     $_user['in_groups'] = $nv_Request->get_typed_array('group', 'post', 'int');
+    $_user['in_groups_default'] = $nv_Request->get_int('group_default', 'post', 0);
     $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255);
 
     $md5username = nv_md5safe($_user['username']);
@@ -190,28 +191,47 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
     }
     $_user['in_groups'] = array_intersect($in_groups, array_keys($groups_list));
+    
+    if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $_user['in_groups'])) {
+        $_user['in_groups_default'] = 0;
+    }
+    
+    if (!$_user['in_groups_default'] and sizeof($_user['in_groups']) == 1) {
+        $_user['in_groups_default'] = array_values($_user['in_groups']);
+        $_user['in_groups_default'] = $_user['in_groups_default'][0];
+    }
+    
+    if (empty($_user['in_groups_default']) and sizeof($_user['in_groups'])) {
+        die(json_encode(array(
+            'status' => 'error',
+            'input' => 'group_default',
+            'mess' => $lang_module['edit_error_group_default'] )));
+    }
 
     $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
-				username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
-				question, answer, passlostkey, view_mail,
-				remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
-				VALUES (
-				:username,
-				:md5_username,
-				:password,
-				:email,
-				:first_name,
-				:last_name,
-				:gender,
-				" . $_user['birthday'] . ",
-				:sig,
-				" . NV_CURRENTTIME . ",
-				:question,
-				:answer,
-				'',
-				 " . $_user['view_mail'] . ",
-				 1,
-				 '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+        group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
+        question, answer, passlostkey, view_mail,
+        remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
+    VALUES (
+        " . $_user['in_groups_default'] . ",
+        :username,
+        :md5_username,
+        :password,
+        :email,
+        :first_name,
+        :last_name,
+        :gender,
+        " . $_user['birthday'] . ",
+        :sig,
+        " . NV_CURRENTTIME . ",
+        :question,
+        :answer,
+        '',
+         " . $_user['view_mail'] . ",
+         1,
+         '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . "
+    )";
+
     $data_insert = array();
     $data_insert['username'] = $_user['username'];
     $data_insert['md5_username'] = $md5username;

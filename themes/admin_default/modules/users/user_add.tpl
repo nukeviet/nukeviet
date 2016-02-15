@@ -106,13 +106,16 @@
 				<tr>
 					<td style="vertical-align:top" colspan="2"> {LANG.in_group} </td>
 					<td>
-						<div class="row checkbox">
-							<!-- BEGIN: list -->
-							<label class="col-sm-20">
-								<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
-							</label>
-							<!-- END: list -->
-						</div>
+						<!-- BEGIN: list -->
+                        <div class="clearfix">
+    						<label class="pull-left w200">
+    							<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
+    						</label>
+                            <label class="pull-left group_default" style="display:none">
+                                <input type="radio" value="{GROUP.id}" name="group_default" /> {LANG.in_group_default}
+                            </label>
+                        </div>
+						<!-- END: list -->
 					</td>
 				</tr>
 				<!-- END: group -->

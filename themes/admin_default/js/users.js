@@ -463,6 +463,32 @@ $(document).ready(function(){
 	    	}
 		});
 	}
+    
+    $('[name="group[]"]').change(function(){
+        var ingroup = $('[name="group[]"]:checked').length,
+            gdefault = $('[name="group_default"]:checked').val(),
+            groups = []
+        $('[name="group[]"]').each(function(){
+            if ($(this).is(':checked') && ingroup > 1) {
+                $('.group_default', $(this).parent().parent()).show()
+                
+                if (typeof gdefault == 'undefined') {
+                    gdefault = $(this).val()
+                    $('[name="group_default"]', $(this).parent().parent()).prop('checked', true)
+                }
+            } else {
+                $('.group_default', $(this).parent().parent()).hide()
+            }
+            if ($(this).is(':checked')) {
+                groups.push($(this).val())
+            }
+        })
+        
+        if (typeof gdefault != 'undefined' && $.inArray(gdefault, groups) == -1 && ingroup > 1) {
+            $('[name="group_default"]').prop('checked', false)
+            $('[name="group_default"]', $('[name="group[]"]:checked:first').parent().parent()).prop('checked', true)
+        }
+    })
 
 	// Export user
 	$("input[name=data_export]").click(function() {
@@ -571,5 +597,15 @@ $(document).ready(function(){
 	$("select[name=choicetypes]").change(function() {
 		nv_users_check_choicetypes(this);
 	});
+    
+    // Group
+ 	$("[name='browse-image']").click(function(e) {
+        e.preventDefault()
+		var area = $(this).data('area'),
+            path = $(this).data('path'),
+            currentpath = $(this).data('currentpath'),
+            type = "image"
 
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+	});
 });

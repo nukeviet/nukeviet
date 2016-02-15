@@ -1,6 +1,13 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.26
+- Add management: leaders, avatar, color, default for groups
+- Contact: update show department
+- Add simple mode for generate pages
+- Fix check extension version
+- Fix and update something...
+
 NUKEVIET 4.0.25
 - Update Data demo
 - Update jQuery v2.2.0 

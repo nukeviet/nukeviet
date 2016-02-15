@@ -54,7 +54,7 @@ $(document).ready(function(){
 						alert(e);
 						$('#endupdate').append(
 							'<div class="infoerror">' +
-								'{LANG.update_package_not_deleted}<br />' +
+								update_package_not_deleted +
 								'<a href="' + URL_GOHOME + '" title="' + gohome + '">' + gohome + '</a> - ' +
 								'<a href="' + URL_GOADMIN + '" title="' + update_goadmin + '">' + update_goadmin + '</a>' +
 							'</div>'

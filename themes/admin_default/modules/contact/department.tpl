@@ -33,7 +33,7 @@
                         <!-- END: option -->
                     </select>
                 </td>
-				<td>{ROW.full_name}</td>
+				<td><a href="{ROW.url_department}" title="{LANG.url_for_iframe}">{ROW.full_name}</a></td>
 				<td>{ROW.email}</td>
 				<td>{ROW.phone}</td>
 				<td>{ROW.fax}</td>
