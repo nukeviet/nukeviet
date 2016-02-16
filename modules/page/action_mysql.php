@@ -25,6 +25,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  alias varchar(250) NOT NULL,
  image varchar(255) DEFAULT '',
  imagealt varchar(255) DEFAULT '',
+ imageposition tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
  description text,
  bodytext mediumtext NOT NULL,
  keywords text,
