@@ -217,11 +217,14 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
             $sth->execute();
         } else {
-            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_banip ( ip, mask, area, begintime, endtime, notice) VALUES ( :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )');
-            $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
-            $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
-            $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
-            $sth->execute();
+        	$result = $db->query('DELETE FROM ' . $db_config['prefix'] . '_banip WHERE ip=' . $db->quote($ip));
+			if ($result) {
+	            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_banip ( ip, mask, area, begintime, endtime, notice) VALUES ( :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )');
+	            $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
+	            $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
+	            $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
+	            $sth->execute();
+			}
         }
 
         $save = nv_save_file_banip();

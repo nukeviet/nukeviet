@@ -193,13 +193,16 @@ if ($nv_Request->isset_request('submitip', 'post')) {
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_edit'] . ' ID ' . $cid . ' -> ' . $keyname, $admin_info['userid']);
         } else {
-            $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )');
-            $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
-            $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
-            $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
-            $sth->execute();
+        	$result = $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE keyname=' . $db->quote($keyname));
+			if ($result) {
+	            $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )');
+	            $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
+	            $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
+	            $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
+	            $sth->execute();
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_add'] . ' ' . $keyname, $admin_info['userid']);
+	            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_add'] . ' ' . $keyname, $admin_info['userid']);
+			}
         }
         nv_save_file_admin_config();
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
