@@ -34,11 +34,12 @@ if( ! defined( 'NV_IS_MODADMIN' ) and $page < 5 )
 
 if( empty( $contents ) )
 {
-	if( in_array( $nv_laws_setting['typeview'], array( 0, 1 ) ) ) // Hien thi danh sach van ban
+	if( in_array( $nv_laws_setting['typeview'], array( 0, 1, 3, 4) ) ) // Hien thi danh sach van ban
 	{
-		$order = ( $nv_laws_setting['typeview'] == 1 ) ? "ASC" : "DESC";
-
-		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
+		$order = ( $nv_laws_setting['typeview'] == 1 OR $nv_laws_setting['typeview'] == 4 ) ? "ASC" : "DESC";
+		$order_param = ( $nv_laws_setting['typeview'] == 0 OR $nv_laws_setting['typeview'] == 1 ) ? "publtime" : "addtime";
+		
+		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY " . $order_param . " " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
 
 		$result = $db->query( $sql );
 		$query = $db->query( "SELECT FOUND_ROWS()" );

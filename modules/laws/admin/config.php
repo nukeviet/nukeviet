@@ -53,7 +53,7 @@ while ( list( $c_config_name, $c_config_value ) = $result->fetch( 3 ) )
 }
 
 $typeview = array();
-for( $i = 0; $i <= 2; $i++ )
+for( $i = 0; $i <= 4; $i++ )
 {
 	$typeview[] = array(
 		"id" => $i,  //

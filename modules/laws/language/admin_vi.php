@@ -149,9 +149,11 @@ $lang_module['config_detail_other_signer'] = "Cùng người ký";
 $lang_module['config_detail_other_subject'] = "Cùng cơ quan ban hành";
 $lang_module['config_detail_other_numlinks'] = "Số liên kết cùng loại";
 
-$lang_module['type_view_0'] = "Mới nhất lên trên";
-$lang_module['type_view_1'] = "Cũ nhất lên trên";
+$lang_module['type_view_0'] = "Ngày ban hành, mới lên trên";
+$lang_module['type_view_1'] = "Ngày ban hành, cũ lên trên";
 $lang_module['type_view_2'] = "Phân theo cơ quan ban hành";
+$lang_module['type_view_3'] = "Ngày thêm văn bản, mới lên trên";
+$lang_module['type_view_4'] = "Ngày thêm văn bản, cũ lên trên";
 
 $lang_module['wait'] = "Vui lòng đợi...";
 $lang_module['numlink'] = "Số liên kết";
