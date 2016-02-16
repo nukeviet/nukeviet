@@ -217,7 +217,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
             $sth->execute();
         } else {
-            $sth = $db->prepare('REPLACE INTO ' . $db_config['prefix'] . '_banip ( ip, mask, area, begintime, endtime, notice) VALUES ( :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )');
+            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_banip ( ip, mask, area, begintime, endtime, notice) VALUES ( :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )');
             $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
             $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
             $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
