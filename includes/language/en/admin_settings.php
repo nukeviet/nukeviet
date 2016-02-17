@@ -3,15 +3,13 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
-}
+if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -93,6 +91,7 @@ $lang_module['lang_geo'] = 'Enable the definition of language according to count
 $lang_module['lang_geo_config'] = 'Configure the function to define language by country';
 $lang_module['site_lang'] = 'Default language';
 $lang_module['site_timezone'] = 'Site\'s timezone';
+$lang_module['current_time'] = 'Current time: %s';
 $lang_module['date_pattern'] = 'Date format';
 $lang_module['time_pattern'] = 'Time display format';
 $lang_module['gzip_method'] = 'Activate gzip';

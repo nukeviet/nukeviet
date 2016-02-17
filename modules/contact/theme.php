@@ -23,7 +23,7 @@ if (! defined('NV_IS_MOD_CONTACT')) {
  */
 function contact_main_theme($array_content, $array_department, $catsName, $base_url, $checkss)
 {
-    global $module_file, $lang_global, $lang_module, $module_info;
+    global $module_file, $lang_global, $lang_module, $module_info, $alias_url;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -37,6 +37,12 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
 
     if (! empty($array_department)) {
         foreach ($array_department as $dep) {
+            if (empty($alias_url) and $dep['act'] == 2)
+            {
+                // Không hiển thị các bộ phận theo cấu hình trong quản trị
+                continue;
+            }
+            
             $xtpl->assign('DEP', $dep);
 
             if (! empty($dep['note'])) {
@@ -187,6 +193,39 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
         }
         $xtpl->parse('main.cats');
     }
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, $sendinfo = true)
+{
+    global $global_config, $module_name, $module_file, $lang_global, $lang_module, $module_info, $array_department, $client_info;
+
+    $xtpl = new XTemplate('sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('SITE_NAME', $global_config['site_name']);
+    $xtpl->assign('SITE_URL', $global_config['site_url']);
+    $xtpl->assign('FULLNAME', $fname);
+    $xtpl->assign('EMAIL', $femail);
+	$xtpl->assign('PART', $array_department[$fpart]['full_name']);
+    $xtpl->assign('IP', $client_info['ip']);
+    $xtpl->assign('TITLE', $ftitle);
+    $xtpl->assign('CONTENT', nv_htmlspecialchars($fcon));
+    $xtpl->assign('URL_VIEW', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=view&amp;id=' . $row_id);
+
+	if ($sendinfo) {
+		if (!empty($fcat)) {
+			$xtpl->assign('CAT', $fcat);
+			$xtpl->parse('main.sendinfo.cat');
+		}
+
+		if (!empty($fphone)) {
+			$xtpl->assign('PHONE', $fphone);
+			$xtpl->parse('main.sendinfo.phone');
+		}
+		$xtpl->parse('main.sendinfo');
+	}
 
     $xtpl->parse('main');
     return $xtpl->text('main');

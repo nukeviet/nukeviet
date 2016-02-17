@@ -71,15 +71,14 @@ if (! empty($contact_allowed['view'])) {
             $style = " style=\"font-weight:bold;cursor:pointer;white-space:nowrap;\"";
 
             if ($row['is_read'] == 1) {
-                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif', 12, 11 );
-                $status = $lang_module['tt1_row_title'];
-                $style = " style=\"cursor:pointer;white-space:nowrap;\"";
-            }
-
-            if ($row['is_reply']) {
-                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_reply.gif', 13, 14 );
-                $status = $lang_module['tt2_row_title'];
-                $style = " style=\"cursor:pointer;white-space:nowrap;\"";
+            	$style = " style=\"cursor:pointer;white-space:nowrap;\"";
+	            if ($row['is_reply']) {
+	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_reply.gif', 13, 14 );
+	                $status = $lang_module['tt2_row_title'];
+	            }else{
+	                $image = array( NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/mail_old.gif', 12, 11 );
+	                $status = $lang_module['tt1_row_title'];
+	            }
             }
 
             $onclick = "onclick=\"location.href='" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=view&amp;id=" . $row['id'] . "'\"";
