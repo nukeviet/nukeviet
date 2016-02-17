@@ -66,6 +66,7 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
                     $xtitle_i .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 }
             }
+			$data_block['nocatid'] = !empty( $data_block['nocatid'] ) ? $data_block['nocatid'] : array();
             $html .= $xtitle_i . '<label><input type="checkbox" name="config_nocatid[]" value="' . $l['catid'] . '" ' . ((in_array($l['catid'], $data_block['nocatid'])) ? ' checked="checked"' : '') . '</input>' . $l['title'] . '</label><br />';
         }
         $html .= '</div>';

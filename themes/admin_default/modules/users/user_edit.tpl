@@ -114,7 +114,8 @@
 						<!-- BEGIN: list -->
                         <div class="clearfix">
     						<label class="pull-left w200">
-    							<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
+    							<input type="checkbox" value="{GROUP.id}" name="group[]" {GROUP.checked} {GROUP.disabled}/>
+    							{GROUP.title}
     						</label>
                             <label class="pull-left group_default"{GROUP_DEFAULT_STYLE}>
                                 <input type="radio" value="{GROUP.id}" name="group_default"{GROUP.default}/> {LANG.in_group_default}

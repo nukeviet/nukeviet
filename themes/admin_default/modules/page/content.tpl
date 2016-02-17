@@ -29,6 +29,16 @@
 							<td class="text-right">{LANG.imagealt}</td>
 							<td><input class="w300 form-control" type="text" name="imagealt" id="imagealt" value="{DATA.imagealt}"/></td>
 						</tr>
+                        <tr>
+                            <td class="text-right">{LANG.imgposition}</td>
+                            <td>
+                                <select class="form-control w300" name="imageposition">
+                                    <!-- BEGIN: looppos -->
+                                    <option value="{id_imgposition}" {posl}>{title_imgposition}</option>
+                                    <!-- END: looppos -->
+                                </select>
+                            </td>
+                        </tr>
 						<tr>
 							<td class="text-right">{LANG.description} </td>
 							<td ><textarea class="form-control" id="description" name="description" cols="100" rows="5">{DATA.description}</textarea> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>

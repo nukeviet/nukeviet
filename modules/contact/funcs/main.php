@@ -13,7 +13,7 @@ if (! defined('NV_IS_MOD_CONTACT')) {
 }
 
 //Danh sach cac bo phan
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 ORDER BY weight';
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act>0 ORDER BY weight';
 $array_department = $nv_Cache->db($sql, 'id', $module_name);
 
 $alias_url = isset($array_op[0]) ? $array_op[0] : '';
@@ -148,6 +148,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $fcon = nv_nl2br($fcon);
     $fphone = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
+	$fsendcopy = (int)$nv_Request->get_bool('sendcopy', 'post');
     $sender_id = intval(defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
@@ -163,21 +164,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $data_insert['sender_ip'] = $client_info['ip'];
     $row_id = $db->insert_id($sql, 'id', $data_insert);
     if ($row_id > 0) {
-        $xtpl = new XTemplate('sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('SITE_NAME', $global_config['site_name']);
-        $xtpl->assign('SITE_URL', $global_config['site_url']);
-        $xtpl->assign('FULLNAME', $fname);
-        $xtpl->assign('EMAIL', $femail);
-        $xtpl->assign('PHONE', $fphone);
-        $xtpl->assign('IP', $client_info['ip']);
-        $xtpl->assign('CAT', $fcat);
-        $xtpl->assign('PART', $array_department[$fpart]['full_name']);
-        $xtpl->assign('TITLE', $ftitle);
-        $xtpl->assign('CONTENT', nv_htmlspecialchars($fcon));
-
-        $xtpl->parse('main');
-        $fcon = $xtpl->text('main');
+    	$fcon_mail = contact_sendcontact( $row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart );
 
         $email_list = array();
         if (! empty($array_department[$fpart]['email'])) {
@@ -213,8 +200,15 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         if (! empty($email_list)) {
             $from = array( $fname, $femail );
             $email_list = array_unique($email_list);
-            @nv_sendmail($from, $email_list, $ftitle, $fcon);
+            @nv_sendmail($from, $email_list, $ftitle, $fcon_mail);
         }
+
+		// Gửi bản sao đến hộp thư người gửi
+		if ($fsendcopy) {
+			$from = array( $global_config['site_name'], $global_config['site_email'] );
+			$fcon_mail = contact_sendcontact( $row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, false );
+			@nv_sendmail($from, $femail, $ftitle, $fcon_mail);
+		}
 
         nv_insert_notification($module_name, 'contact_new', array( 'title' => $ftitle ), $row_id, 0, $sender_id, 1);
 
@@ -235,10 +229,17 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 
+$full_theme = true;
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 if (! empty($alias_department)) {
     $base_url .= '&amp;' . NV_OP_VARIABLE . '=' . $alias_department;
+    if(isset($array_op[1]) and $array_op[1] == 0)
+    {
+        $base_url .= '/0';
+        $full_theme = false;
+    }
 }
+
 $base_url_rewrite = nv_url_rewrite($base_url, true);
 if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
@@ -259,5 +260,5 @@ $checkss = md5($client_info['session_id'] . $global_config['sitekey']);
 $contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, $checkss);
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme($contents, 1);
+echo nv_site_theme($contents, $full_theme);
 include NV_ROOTDIR . '/includes/footer.php';

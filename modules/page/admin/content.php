@@ -47,6 +47,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $row['image'] = '';
     }
     $row['imagealt'] = $nv_Request->get_title('imagealt', 'post', '', 1);
+    $row['imageposition'] = $nv_Request->get_int('imageposition', 'post', 0);
 
     $row['description'] = $nv_Request->get_textarea('description', '', 'br', 1);
     $row['bodytext'] = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);
@@ -78,7 +79,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
 
         if ($id) {
-            $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, gid = :gid, admin_id = :admin_id, edit_time = ' . NV_CURRENTTIME . ' WHERE id =' . $id;
+            $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, imageposition = :imageposition, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, gid = :gid, admin_id = :admin_id, edit_time = ' . NV_CURRENTTIME . ' WHERE id =' . $id;
             $publtime = $row['add_time'];
         } else {
             if ($page_config['news_first']) {
@@ -89,8 +90,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
 
             $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '
-				(title, alias, image, imagealt, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES
-				(:title, :alias, :image, :imagealt, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
+				(title, alias, image, imagealt, imageposition, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES
+				(:title, :alias, :image, :imagealt, :imageposition, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
 
             $publtime = NV_CURRENTTIME;
         }
@@ -101,6 +102,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $sth->bindParam(':alias', $row['alias'], PDO::PARAM_STR);
             $sth->bindParam(':image', $row['image'], PDO::PARAM_STR);
             $sth->bindParam(':imagealt', $row['imagealt'], PDO::PARAM_STR);
+            $sth->bindParam(':imageposition', $row['imageposition'], PDO::PARAM_INT);
             $sth->bindParam(':description', $row['description'], PDO::PARAM_STR);
             $sth->bindParam(':bodytext', $row['bodytext'], PDO::PARAM_STR, strlen($row['bodytext']));
             $sth->bindParam(':keywords', $row['keywords'], PDO::PARAM_STR);
@@ -135,6 +137,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 } elseif (empty($id)) {
     $row['image'] = '';
+    $row['imagealt'] = '';
+	$row['imageposition'] = 0;
     $row['layout_func'] = '';
     $row['description'] = '';
     $row['bodytext'] = '';
@@ -165,7 +169,6 @@ $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('FORM_ACTION', $action);
-$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('DATA', $row);
 $xtpl->assign('BODYTEXT', $row['bodytext']);
@@ -205,6 +208,20 @@ foreach ($groups_list as $_group_id => $_title) {
 
 if (empty($row['alias'])) {
     $xtpl->parse('main.get_alias');
+}
+
+// position images
+$array_imgposition = array(
+    0 => $lang_module['imgposition_0'],
+    1 => $lang_module['imgposition_1'],
+    2 => $lang_module['imgposition_2']
+);
+foreach($array_imgposition as $id_imgposition => $title_imgposition) {
+    $sl = ($id_imgposition == $row['imageposition']) ? ' selected="selected"' : '';
+    $xtpl->assign('id_imgposition', $id_imgposition);
+    $xtpl->assign('title_imgposition', $title_imgposition);
+    $xtpl->assign('posl', $sl);
+    $xtpl->parse('main.looppos');
 }
 
 if ($error) {

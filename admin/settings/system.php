@@ -234,7 +234,7 @@ if (defined('NV_IS_GODADMIN')) {
         }
         $xtpl->parse('main.system.lang_multi');
     }
-
+    $xtpl->assign('CURRENT_TIME', sprintf($lang_module['current_time'], nv_date('H:i T l, d/m/Y', NV_CURRENTTIME)));
     $xtpl->assign('TIMEZONEOP', 'byCountry');
     $xtpl->assign('TIMEZONESELECTED', ($array_config_global['site_timezone'] == 'byCountry') ? "selected='selected'" : "");
     $xtpl->assign('TIMEZONELANGVALUE', $lang_module['timezoneByCountry']);
