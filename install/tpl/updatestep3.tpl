@@ -8,8 +8,8 @@
 	</tr>
 	<!-- BEGIN: loop -->
 	<tr>
-		<th scope="col" class="spec text_normal">{ROW.basename}</th>
-		<td><span class="highlight_green">{ROW.version} ({ROW.time})</span></td>
+		<th scope="col" class="spec text_normal">{ROW.name}</th>
+		<td><span class="highlight_green">{ROW.version} ({ROW.date})</span></td>
 		<td><span class="highlight_green">{ROW.author}</span></td>
 		<td><span class="highlight_green">{ROW.note}</span></td>
 	</tr>

@@ -707,11 +707,10 @@ class NvUpdate
     /**
      * NvUpdate::module_info()
      *
-     * @param mixed $onlineModules
-     * @param mixed $userModules
+     * @param mixed $exts
      * @return
      */
-    public function module_info($onlineModules, $userModules)
+    public function module_info($exts)
     {
         global $global_config;
 
@@ -721,11 +720,11 @@ class NvUpdate
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
         $i = 0;
-        foreach ($userModules as $mod) {
-            if ($mod['mode'] != 'sys') {
-                $mod['note'] = $this->lang['update_mod_othermod'];
-            } else {
+        foreach ($exts as $mod) {
+            if (($mod['type'] == 'module' and in_array($mod['name'], array('banners', 'comment', 'contact', 'feeds', 'freecontent', 'menu', 'news', 'page', 'seek', 'statistics', 'users', 'voting'))) or ($mod['type'] == 'theme' and in_array($mod['name'], array('default', 'mobile_default')))) {
                 $mod['note'] = $this->lang['update_mod_uptodate'];
+            } else {
+                $mod['note'] = $this->lang['update_mod_othermod'];
             }
 
             $mod['class'] = $i++ % 2 ? 'specalt' : 'spec';
@@ -828,6 +827,18 @@ class NvUpdate
 
         $xtpl->parse('main');
         return $xtpl->text('main');
+    }
+    
+    /**
+     * NvUpdate::trigger_error()
+     * 
+     * @param mixed $message
+     * @return void
+     */
+    public function trigger_error($message)
+    {
+        echo $this->call_error($message);
+        die();
     }
 }
 
@@ -1691,62 +1702,75 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
 
         if ($type == 'ver') {
             $version = nv_geVersion(0);
+            
+            if ($version === false or is_string($version)) {
+                $NvUpdate->trigger_error($lang_module['update_error_check_version_sys']);
+            }
+
             $array['current_version'] = $global_config['version'];
-            $array['newVersion'] = ( string )$version['version'] . ' - ' . ( string )$version['name'];
+            $array['newVersionCode'] = ( string )$version->version;
+            $array['newVersion'] = $array['newVersionCode'] . ' - ' . ( string )$version->name;
 
             $array['checkversion'] = false;
-            if (nv_version_compare($global_config['version'], $version['version']) < 0) {
+            if (nv_version_compare($global_config['version'], $array['newVersionCode']) < 0) {
                 $array['checkversion'] = true;
             }
 
             $NvUpdate->version_info($array);
         } elseif ($type == 'mod') {
-            $_modules = nv_getExtVersion(0);
-            $_modules = nv_object2array($_modules);
-            $_modules = $_modules['module'];
-            $onlineModules = array();
-            foreach ($_modules as $m) {
-                $name = array_shift($m);
-                $onlineModules[$name] = $m;
-                unset($onlineModules[$name]['date']);
-                $onlineModules[$name]['pubtime'] = strtotime($m['date']);
+            $XML_exts = nv_getExtVersion(0);
+
+            if ($XML_exts === false or is_string($XML_exts)) {
+                $NvUpdate->trigger_error($lang_module['update_error_check_version_sys']);
             }
-
-            $userModules = array();
-
-            $lang_query = $db->query('SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-            while (list($lang) = $lang_query->fetch(3)) {
-                $sql = "SELECT b.basename, b.version, b.author FROM " . $db_config['prefix'] . "_" . $lang . "_modules a INNER JOIN " . $db_config['prefix'] . "_setup_extensions b ON a.title=b.title GROUP BY b.basename ORDER BY b.basename ASC";
-                $result = $db->query($sql);
-                while ($row = $result->fetch()) {
-                    if (isset($userModules[$row['basename']])) {
-                        continue;
+            
+            $XML_exts = $XML_exts->xpath('extension');
+            
+            $exts = array();
+            $i = 0;
+            foreach ($XML_exts as $extname => $values) {
+                $exts[$i] = array(
+                    'id' => ( int ) $values->id,
+                    'type' => ( string ) $values->type,
+                    'name' => ( string ) $values->name,
+                    'version' => ( string ) $values->version,
+                    'date' => ( string ) $values->date,
+                    'new_version' => ( string ) $values->new_version,
+                    'new_date' => ( string ) $values->new_date,
+                    'author' => ( string ) $values->author,
+                    'license' => ( string ) $values->license,
+                    'mode' => ( string ) $values->mode,
+                    'message' => ( string ) $values->message,
+                    'link' => ( string ) $values->link,
+                    'support' => ( string ) $values->support,
+                    'updateable' => array(),
+                    'origin' => (( string ) $values->origin) == 'true' ? true : false,
+                );
+                
+                // Xu ly update
+                $updateables = $values->xpath('updateable/upds/upd');
+                
+                if (! empty($updateables)) {
+                    foreach ($updateables as $updateable) {
+                        $exts[$i]['updateable'][] = array(
+                            'fid' => ( string ) $updateable->upd_fid,
+                            'old' => explode(',', ( string ) $updateable->upd_old),
+                            'new' => ( string ) $updateable->upd_new,
+                        );
                     }
-
-                    $v = '';
-                    $p = 0;
-                    if (preg_match("/^([^\s]+)\s+([\d]+)$/", $row['version'], $matches)) {
-                        $v = ( string )$matches[1];
-                        $p = ( int )$matches[2];
-                    }
-
-                    $userModules[$row['basename']] = array(
-                        'basename' => $row['basename'],
-                        'version' => $v,
-                        'mode' => isset($onlineModules[$row['basename']]['mode']) ? $onlineModules[$row['basename']]['mode'] : false,
-                        'time' => $p,
-                        'author' => $row['author']
-                    );
                 }
+                
+                $i ++;
+                unset($updateables, $updateable);
             }
 
-            $NvUpdate->module_info($onlineModules, $userModules);
+            $NvUpdate->module_info($exts);
         } elseif ($type == 'module') {
-            $_modules = nv_getExtVersion(0);
-            $_modules = nv_object2array($_modules);
-            $_modules = $_modules['module'];
+            $exts = nv_getExtVersion(0);
+            $exts = nv_object2array($exts);
+            $exts = $exts['module'];
             $onlineModules = array();
-            foreach ($_modules as $m) {
+            foreach ($exts as $m) {
                 $name = array_shift($m);
                 $onlineModules[$name] = $m;
                 unset($onlineModules[$name]['date']);
