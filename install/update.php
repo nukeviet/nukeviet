@@ -421,8 +421,8 @@ class NvUpdate
         $xtpl->assign('DATA', $array);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
-        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5($global_config['sitekey'] . session_id()));
-        $xtpl->assign('URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=siteinfo');
+        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5($global_config['sitekey'] . session_id()));
+        $xtpl->assign('URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo');
 
         $xtpl->assign('RELEASE_DATE', ! empty($this->config['release_date']) ? nv_date('d/m/Y H:i:s', $this->config['release_date']) : 'N/A');
         $xtpl->assign('ALLOW_OLD_VERSION', ! empty($this->config['allow_old_version']) ? implode(', ', $this->config['allow_old_version']) : 'N/A');
@@ -646,8 +646,8 @@ class NvUpdate
         $xtpl->assign('DATA', $array);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
-        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5($global_config['sitekey'] . session_id()));
-        $xtpl->assign('URL_GOHOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
+        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5($global_config['sitekey'] . session_id()));
+        $xtpl->assign('URL_GOHOME', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true));
         $xtpl->assign('URL_GOADMIN', NV_BASE_ADMINURL);
 
         if (empty($this->config['formodule'])) {
@@ -674,8 +674,8 @@ class NvUpdate
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
-        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5($global_config['sitekey'] . session_id()));
-        $xtpl->assign('URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=siteinfo');
+        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5($global_config['sitekey'] . session_id()));
+        $xtpl->assign('URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo');
 
         $xtpl->parse('main');
         return $xtpl->text('main');
@@ -971,7 +971,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                     $nv_update_config['updatelog']['data_backuped'] = NV_CURRENTTIME;
                     $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                    die($lang_module['update_dump_ok'] . ' ' . nv_convertfromBytes($dump[1]) . '<br /><a href="' . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=database&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file . "&amp;checkss=" . md5($file . $client_info['session_id'] . $global_config['sitekey']) . '" title="' . $lang_module['update_dump_download'] . '">' . $lang_module['update_dump_download'] . '</a>');
+                    die($lang_module['update_dump_ok'] . ' ' . nv_convertfromBytes($dump[1]) . '<br /><a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . "=database&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file . "&amp;checkss=" . md5($file . $client_info['session_id'] . $global_config['sitekey']) . '" title="' . $lang_module['update_dump_download'] . '">' . $lang_module['update_dump_download'] . '</a>');
                 }
             } else {
                 die($lang_module['update_dump_exist']);
@@ -1615,8 +1615,6 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                             $sth->execute();
                         }
 
-                        nv_save_file_config_global();
-
                         $nv_update_config['updatelog']['ftp_check_login'] = 1;
                         $NvUpdate->set_data_log($nv_update_config['updatelog']);
                     }
@@ -1759,6 +1757,12 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
         } else {
             die('&nbsp;');
         }
+    } else {
+        // Xoa toan bo cache
+        $nv_Cache->delAll();
+        
+        // Tao lai file cau hinh
+        nv_save_file_config_global();
     }
 
     $contents = $NvUpdate->step3($array);
