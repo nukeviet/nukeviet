@@ -138,6 +138,7 @@ if (! empty($error)) {
                     $installed = nv_extensions_is_installed($array['tid'], $array['name'], $array['compatible']['ver']);
 
                     if ($installed == 1) {
+                        $xtpl->assign('INSTALLED_MESSAGE', sprintf($lang_module['install_check_installed_error'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name));
                         $xtpl->parse('main.install.installed');
                     } else {
                         // Da thanh toan
