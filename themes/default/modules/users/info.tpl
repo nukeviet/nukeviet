@@ -435,11 +435,14 @@
                             <!-- BEGIN: group_list -->
                             <tr>
                                 <th class="text-center">
-                                    <input name="in_groups[]" type="checkbox" value="{GROUP_LIST.group_id}" class="checkSingle" onclick="checkSingle(this.form);"{GROUP_LIST.checked} />
+                                    <input name="in_groups[]" type="checkbox" value="{GROUP_LIST.group_id}" class="checkSingle" onclick="checkSingle(this.form);"{GROUP_LIST.checked} <!-- BEGIN: is_disable_checkbox -->disabled="disabled"<!-- END: is_disable_checkbox --> />
                                 </th>
                                 <td>
                                     <strong>{GROUP_LIST.title}</strong>
                                     <em class="show text-success">{GROUP_LIST.group_type}</em>
+                                    <!-- BEGIN: is_leader -->
+                                    <span class="text-danger"><em class="fa fa-users">&nbsp;</em><a href="{URL_IS_LEADER}" title="">{LANG.group_manage}</a></span>
+                                    <!-- END: is_leader -->
                                 </td>
                                 <td>{GROUP_LIST.description}</td>
                                 <td class="text-center">{GROUP_LIST.numbers}</td>
