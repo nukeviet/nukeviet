@@ -698,7 +698,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
 						$array_leader = array_unique($array_leader);
 						foreach ($array_leader as $email) {
 							$mail_from = array($global_config['site_name'], $global_config['site_email']);
-							$url_group = NV_MY_DOMAIN . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups&amp;userlist=' . $gid;
+							$url_group = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, true);
 							$message = sprintf($lang_module['group_join_queue_message'], $groups_list[$gid]['title'], $user_info['full_name'], $groups_list[$gid]['title'], $url_group);
 							@nv_sendmail($mail_from, $email, $lang_module['group_join_queue'], $message);
 						}
@@ -864,13 +864,14 @@ if (in_array('openid', $types)) {
 $groups = array();
 if (in_array('group', $types)) {
     $my_groups = array();
-    $result_gru = $db->query('SELECT group_id, approved FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid']);
+    $result_gru = $db->query('SELECT group_id, is_leader, approved FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid']);
     while ($row_gru = $result_gru->fetch()) {
         $my_groups[$row_gru['group_id']] = $row_gru;
     }
 
     foreach ($groups_list as $gid => $gvalues) {
         $groups[$gid] = $gvalues;
+		$groups[$gid]['is_leader'] = 0;
 		$groups[$gid]['checked'] = '';
 		$groups[$gid]['status'] = 0;
 		if (! empty($my_groups) and in_array($gid, array_keys($my_groups))) {
@@ -879,6 +880,10 @@ if (in_array('group', $types)) {
 
 			if (!$my_groups[$gid]['approved']) {
 				$groups[$gid]['status'] = 2;
+			}
+
+			if ($my_groups[$gid]['is_leader']) {
+				$groups[$gid]['is_leader'] = 1;
 			}
 		}
     }
