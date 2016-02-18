@@ -149,6 +149,7 @@ $themes_default['left-body-right'] = array(
 
 $themes_default['left-body'] = array(
     $array_funcid_mod['users']['editinfo'],
+    $array_funcid_mod['users']['groups'],
     $array_funcid_mod['contact']['main'],
     $array_funcid_mod['statistics']['allbots'],
     $array_funcid_mod['statistics']['allbrowsers'],

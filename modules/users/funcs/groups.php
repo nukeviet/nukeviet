@@ -41,14 +41,13 @@ if ($nv_Request->isset_request('get_user_json', 'post, get')) {
 }
 
 // Lay danh sach nhom
+$sql = 'SELECT * FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE idsite = ' . $global_config['idsite'] . ' or (idsite =0 AND group_id > 3 AND siteus = 1) ORDER BY idsite, weight';
+$result = $db->query($sql);
 $groupsList = array();
-$resul = $db->query('SELECT * FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
-while ($row = $resul->fetch()) {
+while ($row = $result->fetch()) {
 	$count = $db->query('SELECT COUNT(*) FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $row['group_id'] . ' AND userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();
 	if ($count > 0) {
-	    if (($row['group_type'] == 1 or $row['group_type'] == 2) and ($row['exp_time'] == 0 or $row['exp_time'] > NV_CURRENTTIME)) {
-	        $groupsList[$row['group_id']] = $row;
-	    }
+		$groupsList[$row['group_id']] = $row;
 	}
 }
 
@@ -419,20 +418,18 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
 // Danh sach nhom (AJAX)
 if ($nv_Request->isset_request('list', 'get')) {
     foreach ($groupsList as $group_id => $values) {
-    	if ($group_id > 9) {
-	        $xtpl->assign('GROUP_ID', $group_id);
+        $xtpl->assign('GROUP_ID', $group_id);
 
-	        $loop = array(
-	            'title' => $values['title'],
-	            'add_time' => nv_date('d/m/Y H:i', $values['add_time']),
-	            'exp_time' => ! empty($values['exp_time']) ? nv_date('d/m/Y H:i', $values['exp_time']) : $lang_global['unlimited'],
-	            'number' => number_format($values['numbers']),
-	            'link_userlist' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op .'/' . $group_id, true)
-	        );
+        $loop = array(
+            'title' => $values['title'],
+            'add_time' => nv_date('d/m/Y H:i', $values['add_time']),
+            'exp_time' => ! empty($values['exp_time']) ? nv_date('d/m/Y H:i', $values['exp_time']) : $lang_global['unlimited'],
+            'number' => number_format($values['numbers']),
+            'link_userlist' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op .'/' . $group_id, true)
+        );
 
-	        $xtpl->assign('LOOP', $loop);
-	        $xtpl->parse('list.loop');
-    	}
+        $xtpl->assign('LOOP', $loop);
+        $xtpl->parse('list.loop');
     }
 
     $xtpl->parse('list');
