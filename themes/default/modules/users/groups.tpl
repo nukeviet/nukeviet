@@ -60,7 +60,7 @@
 				<!-- BEGIN: loop -->
 				<tr>
 					<td class="text-center"> {LOOP.userid} </td>
-					<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+					<td>{LOOP.username}</td>
 					<td>{LOOP.full_name}</td>
 					<td class="text-center">
 					<!-- BEGIN: tools -->
@@ -125,7 +125,7 @@ $("a.denied").click(function() {
 				<!-- BEGIN: loop -->
 				<tr>
 					<td class="text-center"> {LOOP.userid} </td>
-					<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+					<td>{LOOP.username}</td>
 					<td>{LOOP.full_name}</td>
 					<td class="text-center">
 					<!-- BEGIN: tools -->
@@ -190,7 +190,7 @@ $("a.demote").click(function() {
 				<!-- BEGIN: loop -->
 				<tr>
 					<td class="text-center"> {LOOP.userid} </td>
-					<td><a title="{LANG.detail}" href="{MODULE_URL}=edit&userid={LOOP.userid}">{LOOP.username}</a></td>
+					<td>{LOOP.username}</td>
 					<td>{LOOP.full_name}</td>
 					<td class="text-center">
 					<!-- BEGIN: tools -->
