@@ -60,6 +60,7 @@ $sth->execute(array( 'editinfo', 'editinfo', 'Edit User Info', 'users', 1, 1, 7,
 $sth->execute(array( 'memberlist', 'memberlist', 'Liste des membres', 'users', 1, 1, 8, ''));
 $sth->execute(array( 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 9, ''));
 $sth->execute(array( 'logout', 'logout', 'Logout', 'users', 1, 1, 10, ''));
+$sth->execute(array( 'groups', 'groups', 'Gérerles groupes', 'users', 1, 0, 11, ''));
 $sth->execute(array( 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, ''));
 //Statistics
 $sth->execute(array( 'main', 'main', 'Main', 'statistics', 1, 0, 1, ''));
@@ -212,7 +213,7 @@ foreach ($array_funcid as $funcid) {
             $sth->execute(array( $funcid, $_key, 'default'));
         }
     }
-    
+
     foreach ($themes_mobile as $_key => $_vals) {
         if (in_array($funcid, $_vals)) {
             $sth->execute(array( $funcid, $_key, 'mobile_default'));

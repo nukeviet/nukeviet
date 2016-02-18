@@ -61,6 +61,7 @@ $sth->execute(array( 'editinfo', 'editinfo', 'Thiếp lập tài khoản', 'user
 $sth->execute(array( 'memberlist', 'memberlist', 'Danh sách thành viên', 'users', 1, 1, 8, ''));
 $sth->execute(array( 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 9, ''));
 $sth->execute(array( 'logout', 'logout', 'Thoát', 'users', 1, 1, 10, ''));
+$sth->execute(array( 'groups', 'groups', 'Quản lý nhóm', 'users', 1, 0, 11, ''));
 $sth->execute(array( 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, ''));
 //Statistics
 $sth->execute(array( 'main', 'main', 'Main', 'statistics', 1, 0, 1, ''));
