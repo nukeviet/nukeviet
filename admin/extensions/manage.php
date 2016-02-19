@@ -306,7 +306,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . $global_
         }
     }
 
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
 }
 
 // Xoa ung dung

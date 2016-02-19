@@ -15,7 +15,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 $area = $nv_Request->get_title('area', 'get', '');
 $return = $nv_Request->get_title('return', 'get,post', '');
 if (empty($area)) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
 }
 
 $page_title = $lang_module['pagetitle'];
