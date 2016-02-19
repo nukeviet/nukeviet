@@ -37,7 +37,7 @@ if (defined('NV_IS_AJAX')) {
             $save = true;
             if ($act == 3 and ($row['module'] == 'database' or $row['module'] == 'settings' or $row['module'] == 'site')) {
                 $save = false;
-            } elseif ($act == 1  and $row['module'] == 'authors') {
+            } elseif ($act == 1 and ($row['module'] == 'authors' or $row['module'] == 'siteinfo')) {
                 $save = false;
             }
 
@@ -66,6 +66,7 @@ $a = 0;
 $rows = $db->query('SELECT * FROM ' . NV_AUTHORS_GLOBALTABLE . '_module ORDER BY weight ASC')->fetchAll();
 $numrows = sizeof($rows);
 foreach ($rows as $row) {
+	if ($row['module'] == 'siteinfo') continue;
     for ($i = 1; $i <= $numrows; $i++) {
         $xtpl->assign('WEIGHT', array( 'key' => $i, 'selected' => ($i == $row['weight']) ? ' selected="selected"' : '' ));
         $xtpl->parse('main.loop.weight');
