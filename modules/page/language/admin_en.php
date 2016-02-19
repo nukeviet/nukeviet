@@ -9,7 +9,9 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+	die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -43,6 +45,10 @@ $lang_module['imagealt'] = 'Image note';
 $lang_module['socialbutton'] = 'Social button';
 $lang_module['socialbuttonnote'] = 'Display Like facebook, G+, Twitter';
 $lang_module['activecomm'] = 'Allow comment';
+$lang_module['imgposition'] = 'Imag position';
+$lang_module['imgposition_0'] = 'Hidden';
+$lang_module['imgposition_1'] = 'Left description';
+$lang_module['imgposition_2'] = 'Bellow description';
 $lang_module['layout_func'] = 'Layout';
 $lang_module['layout_default'] = 'Default';
 $lang_module['googleplus'] = 'authentication Google+ (copyright)';

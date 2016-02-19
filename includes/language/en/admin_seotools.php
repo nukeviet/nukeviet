@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+	die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -45,6 +45,8 @@ $lang_module['diagnosticBBL'] = 'Bing<br />BackLink';
 $lang_module['diagnosticABL'] = 'Alexa<br />BackLink';
 $lang_module['diagnosticGID'] = 'Google<br />Indexed';
 $lang_module['diagnosticBID'] = 'Bing<br />Indexed';
+$lang_module['submit'] = 'Submit';
+$lang_module['weight'] = 'No.';
 $lang_module['robots'] = 'Config. robots.txt';
 $lang_module['robots_number'] = 'Order number';
 $lang_module['robots_filename'] = 'File name';
@@ -60,13 +62,10 @@ $lang_module['metaTagsGroupValue'] = 'Group Name';
 $lang_module['metaTagsNote'] = 'The Meta-Tags: "%s" is determined automatically';
 $lang_module['metaTagsVar'] = 'Accept the following variables';
 $lang_module['metaTagsContent'] = 'Content';
-$lang_module['submit'] = 'Submit';
-$lang_module['weight'] = 'No.';
 $lang_module['metaTagsOgp'] = 'Active meta-Tag Open Graph protocol';
 $lang_module['metaTagsOgpNote'] = 'Open Graph protocol: Is a prepared  data to share on facebook, view detail in <a href="http://ogp.me" target="_blank">http://ogp.me</a>';
 $lang_module['description_length'] = 'Number of characters of meta description tag';
 $lang_module['description_note'] = ' = 0 unlimited number of characters';
-
 $lang_module['module'] = 'Module';
 $lang_module['custom_title'] = 'Outside site name';
 $lang_module['googleplus'] = 'Authentication Google+';

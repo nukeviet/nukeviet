@@ -9,7 +9,9 @@
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+	die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -282,10 +284,11 @@ $lang_module['group_name'] = 'Name of group';
 $lang_module['group_description'] = 'To introduce';
 $lang_module['group_userr'] = 'Member';
 $lang_module['group_reg'] = 'Join';
+$lang_module['group_manage'] = 'Group manage';
 $lang_module['in_group_ok'] = 'Setting';
 $lang_module['lostpass_key'] = 'The Verification code';
 $lang_module['group_join_queue'] = 'Request to join group';
-$lang_module['group_join_queue_message'] = 'Hello leader  <strong>%1$s</strong>,<br  /><br  /><strong>%2$s</strong> has sent the request to join the group <strong>%3$s</strong> because you are managing. You need to approve this request! <br  /> <br  /> Please <a href="%4$s" title=""> visit this link </a> to approve membership.';
+$lang_module['group_join_queue_message'] = 'Hello leader  <strong>%1$s</strong>,<br /><br /><strong>%2$s</strong> has sent the request to join the group <strong>%3$s</strong> because you are managing. You need to approve this request! <br /> <br /> Please <a href="%4$s" title=""> visit this link </a> to approve membership.';
 $lang_module['group_status'] = 'Status';
 $lang_module['group_status_0'] = 'Not joined';
 $lang_module['group_status_1'] = 'Joined';
@@ -294,3 +297,29 @@ $lang_module['group_type'] = 'Group type';
 $lang_module['group_type_0'] = 'Group fixed';
 $lang_module['group_type_1'] = 'Group must submit a request';
 $lang_module['group_type_2'] = 'Free group';
+$lang_module['group_manage_count'] = 'Group manage number';
+$lang_module['group_manage_list'] = 'List groups manage';
+$lang_module['lastname_firstname'] = 'Fullname';
+$lang_module['members_in_group_caption'] = 'List member group "%s" (%d account)';
+$lang_module['leaders_in_group_caption'] = 'List leader group "%s" (%d account)';
+$lang_module['pending_in_group_caption'] = 'List waiting approve group "%s" (%d account)';
+$lang_module['error_group_not_found'] = 'Error: Group not found';
+$lang_module['error_users_not_found'] = 'This group empty account';
+$lang_module['error_group_in_site'] = 'Error: You can add and delete account, is account your site manage';
+$lang_module['error_not_groups'] = 'Empty account. Click <a href="%s">here</a> to create group';
+$lang_module['add_users'] = 'Add account';
+$lang_module['exclude_user2'] = 'Remove';
+$lang_module['promote'] = 'Promote';
+$lang_module['demote'] = 'Demote';
+$lang_module['approved'] = 'Approved';
+$lang_module['denied'] = 'Denied';
+$lang_module['search_id'] = 'Account';
+$lang_module['addMemberToGroup'] = 'Add to group';
+$lang_module['delConfirm'] = 'You sure to delete?';
+$lang_module['choiceUserID'] = 'Please fill account';
+$lang_module['no_premission'] = 'No premission';
+$lang_module['no_premission_leader'] = 'Only leader have premission this area. Please back!';
+$lang_module['title'] = 'Group name';
+$lang_module['add_time'] = 'Start time';
+$lang_module['exp_time'] = 'End time';
+$lang_module['users'] = 'User';
