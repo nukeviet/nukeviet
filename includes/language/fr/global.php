@@ -280,6 +280,7 @@ $lang_global['level3'] = 'Administrateur de module';
 $lang_global['level4'] = 'Membre';
 $lang_global['level5'] = 'Visiteur';
 $lang_global['level6'] = 'Tous';
+$lang_global['level7'] = 'New Membre';
 $lang_global['msgbeforeunload'] = 'Vous pouvez passer dans une autre page mais les données ne sont pas sauvegardées';
 $lang_global['timeoutsess_nouser'] = 'Vous n\'avez pas utilisé le site Web';
 $lang_global['timeoutsess_click'] = 'Cliquer ici pour maintenir votre état de connexion';

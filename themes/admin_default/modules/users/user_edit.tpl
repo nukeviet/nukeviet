@@ -125,6 +125,12 @@
 					</td>
 				</tr>
 				<!-- END: group -->
+                <!-- BEGIN: is_official -->
+                <tr>
+					<td colspan="2"> {LANG.set_official_note} </td>
+					<td><input type="checkbox" name="is_official" value="1" /></td>
+                </tr>
+                <!-- END: is_official -->
 			</tbody>
 		</table>
 		<!-- BEGIN: field -->

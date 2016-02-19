@@ -100,7 +100,13 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'");
         $stmt->bindParam(':content', $array_config['avatar_height'], PDO::PARAM_STR);
         $stmt->execute();
-
+        
+        // Kich hoat chuc nang xet duyet thanh vien moi dang ky
+        $array_config['active_group_newusers'] = ($nv_Request->get_int('active_group_newusers', 'post', 0) ? 1 : 0);
+        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_group_newusers'");
+        $stmt->bindParam(':content', $array_config['active_group_newusers'], PDO::PARAM_STR);
+        $stmt->execute();
+        
         $array_config['deny_email'] = $nv_Request->get_title('deny_email', 'post', '', 1);
 
         if (! empty($array_config['deny_email'])) {
@@ -159,14 +165,16 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['is_user_forum'] = ! empty($array_config['is_user_forum']) ? ' checked="checked"' : '';
     $array_config['auto_login_after_reg'] = ! empty($array_config['auto_login_after_reg']) ? ' checked="checked"' : '';
 
-    $sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height'";
+    $sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height' OR config='active_group_newusers'";
     $result = $db->query($sql);
     while (list($config, $content) = $result->fetch(3)) {
         $content = array_map('trim', explode('|', $content));
         $array_config[$config] = implode(', ', $content);
     }
     $result->closeCursor();
-
+    
+    $array_config['active_group_newusers'] = ! empty($array_config['active_group_newusers']) ? ' checked="checked"' : '';
+    
     $array_name_show = array(
         0 => $lang_module['lastname_firstname'],
         1 => $lang_module['firstname_lastname']

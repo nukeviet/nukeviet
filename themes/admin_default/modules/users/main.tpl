@@ -26,6 +26,7 @@
 					<div class="form-group">
 						<select class="form-control" name="usactive">
 							<option value="-1">---{LANG.usactive}---</option>
+							<option value="-2"{SELECTED_NEW_USERS}>{GLANG.level7}</option>
 							<!-- BEGIN: usactive -->
 							<option value="{USACTIVE.key}"{USACTIVE.selected}>{USACTIVE.value}</option>
 							<!-- END: usactive -->
