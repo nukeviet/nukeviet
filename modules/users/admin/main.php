@@ -122,6 +122,8 @@ $is_delete = (in_array('del', $allow_func)) ? true : false;
 $is_setactive = (in_array('setactive', $allow_func)) ? true : false;
 
 while ($row = $result2->fetch()) {
+    $row['in_groups'] = explode(',', $row['in_groups']);
+    
     $users_list[$row['userid']] = array(
         'userid' =>  $row['userid'],
         'username' =>  $row['username'],
@@ -133,7 +135,8 @@ while ($row = $result2->fetch()) {
         'is_edit' => $is_edit,
         'is_delete' => $is_delete,
         'level' => $lang_module['level0'],
-        'is_admin' => false
+        'is_admin' => false,
+        'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups']))
     );
     if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite']) {
         $users_list[$row['userid']]['is_edit'] = false;
@@ -253,6 +256,9 @@ foreach ($users_list as $u) {
         }
         if ($u['is_delete']) {
             $xtpl->parse('main.xusers.del');
+        }
+        if ($u['is_newuser'] and in_array('setofficial', $allow_func)) {
+            $xtpl->parse('main.xusers.set_official');
         }
     }
 
