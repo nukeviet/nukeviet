@@ -28,8 +28,9 @@ $sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, titl
 $sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (2, 'General admin', 'General Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, 2, 1, 0, 0, 0)";
 $sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (3, 'Module admin', 'Module Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, 3, 1, 0, 0, 0)";
 $sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (4, 'Users', 'Users', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, 4, 1, 0, 1, 0)";
-$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (5, 'Guest', 'Guest', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, 5, 1, 0, 0, 0)";
-$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (6, 'All', 'All', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, 6, 1, 0, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (7, 'New Users', 'New Users', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, 5, 1, 0, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (5, 'Guest', 'Guest', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, 6, 1, 0, 0, 0)";
+$sql_create_table[] = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (6, 'All', 'All', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, 7, 1, 0, 0, 0)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_upload_dir (did, dirname, time, thumb_type, thumb_width, thumb_height, thumb_quality) VALUES ('-1', '', 0, 3, 100, 150, 90)";
 $sql_create_table[] = "UPDATE " . $db_config['prefix'] . "_upload_dir SET did = '0' WHERE did = '-1'";
@@ -40,6 +41,7 @@ $sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, 
 $sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, content, edit_time) VALUES ('deny_name', 'anonimo|anonymous|god|linux|nobody|operator|root', " . NV_CURRENTTIME . ")";
 $sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, content, edit_time) VALUES ('avatar_width', 80, " . NV_CURRENTTIME . ")";
 $sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, content, edit_time) VALUES ('avatar_height', 80, " . NV_CURRENTTIME . ")";
+$sql_create_table[] = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_config (config, content, edit_time) VALUES ('active_group_newusers', '0', " . NV_CURRENTTIME . ")";
 
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'closed_site', '0')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'admin_theme', 'admin_default')";

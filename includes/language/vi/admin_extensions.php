@@ -83,7 +83,7 @@ $lang_module['install_manual_install'] = 'Ứng dụng này không hỗ trợ c�
 $lang_module['install_manual_install_danger'] = 'Ứng dụng này không hỗ trợ cài đặt tự động, và cũng không có hướng dẫn cài đặt, bạn có thể click vào nút bên dưới để tải về cà cài đặt thủ công';
 $lang_module['install_documentation'] = 'Hướng dẫn cài đặt';
 $lang_module['install_check_installed'] = 'Kiểm tra ứng dụng chưa được cài đặt';
-$lang_module['install_check_installed_error'] = 'Ứng dụng này đã tồn tại trên hệ thống';
+$lang_module['install_check_installed_error'] = 'Ứng dụng này đã tồn tại trên hệ thống. Để cài đặt mới, trước tiên cần xóa ứng dụng này khỏi hệ thống, nhấp <a href="%s">Vào đây</a> để kiểm tra và xóa ứng dụng.';
 $lang_module['install_check_installed_unsure'] = 'Hệ thống không thể kiểm tra kiểu ứng dụng này một cách tối ưu, có thể việc cài mới sẽ ghi đẽ nội dung cũ, bạn nên lưu ý trước khi cài đặt';
 $lang_module['install_continue'] = 'Tiếp tục cài đặt';
 $lang_module['install_cancel'] = 'Hủy cài đặt';
