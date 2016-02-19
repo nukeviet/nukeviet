@@ -134,6 +134,18 @@ function nv_row_del(vid) {
 	return false;
 }
 
+function nv_set_official(vid) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setofficial&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
+		if (res == 'OK') {
+			window.location.href = window.location.href;
+		} else {
+			alert(res);
+		}
+
+	});
+	return false;
+}
+
 function nv_waiting_row_del(uid) {
 	if (confirm(nv_is_del_confirm[0])) {
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
