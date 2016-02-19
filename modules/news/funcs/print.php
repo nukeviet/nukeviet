@@ -27,7 +27,7 @@ if ($id > 0 and $catid > 0) {
     $result = $db_slave->query($sql);
 
     if ($result->rowCount() !== 1) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     }
 
     $content = $result->fetch();
