@@ -114,6 +114,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['in_groups'] = $nv_Request->get_typed_array('group', 'post', 'int');
     $_user['in_groups_default'] = $nv_Request->get_int('group_default', 'post', 0);
     $_user['delpic'] = $nv_Request->get_int('delpic', 'post', 0);
+    $_user['is_official'] = $nv_Request->get_int('is_official', 'post', 0);
     
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
     
@@ -310,6 +311,20 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     if (empty($_user['photo'])) {
         $_user['photo'] = $row['photo'];
     }
+
+    if ($row['group_id'] == 7) {
+        if (!$_user['is_official']) {
+            $_user['in_groups_default'] = 7;
+            $in_groups[] = 7;
+        } else {
+            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4');
+            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=7');
+            
+            if ($_user['in_groups_default'] == 7) {
+                $_user['in_groups_default'] = 4;
+            }
+        }
+    }
     
     $db->query("UPDATE " . NV_USERS_GLOBALTABLE . " SET
         group_id=" . $_user['in_groups_default'] . ",
@@ -442,6 +457,10 @@ if (defined('NV_IS_USER_FORUM')) {
     
     if ($access_passus) {
         $xtpl->parse('main.edit_user.changepass');
+    }
+
+    if ($_user['group_id'] == 7) {
+        $xtpl->parse('main.edit_user.is_official');
     }
     
     if (!empty($array_field_config)) {
