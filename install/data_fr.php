@@ -177,6 +177,7 @@ $themes_mobile['body'] = array(
     $array_funcid_mod['users']['lostpass'],
     $array_funcid_mod['users']['main'],
     $array_funcid_mod['users']['register'],
+    $array_funcid_mod['users']['groups'],
     $array_funcid_mod['contact']['main'],
     $array_funcid_mod['statistics']['allbots'],
     $array_funcid_mod['statistics']['allbrowsers'],

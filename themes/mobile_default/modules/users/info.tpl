@@ -16,6 +16,7 @@
         <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" href="#edit_password">{LANG.edit_password}</a></li>
         <li class="{QUESTION_ACTIVE}"><a data-toggle="tab" href="#edit_question">{LANG.edit_question}</a></li>
         <!-- BEGIN: edit_openid --><li class="{OPENID_ACTIVE}"><a data-toggle="tab" href="#edit_openid">{LANG.openid_administrator}</a></li><!-- END: edit_openid -->
+        <!-- BEGIN: edit_group --><li class="{GROUP_ACTIVE}"><a data-toggle="tab" href="#edit_group">{LANG.group}</a></li><!-- END: edit_group -->
         <!-- BEGIN: edit_others --><li class="{OTHERS_ACTIVE}"><a data-toggle="tab" href="#edit_others">{LANG.edit_others}</a></li><!-- END: edit_others -->
         <li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" href="#edit_safemode">{LANG.safe_mode}</a></li>
     </ul>
@@ -394,7 +395,67 @@
             </div>
         </div>
         <!-- END: tab_edit_openid -->
-        
+
+        <!-- BEGIN: tab_edit_group -->
+        <div id="edit_group" class="tab-pane fade {TAB_GROUP_ACTIVE}">
+            <form action="{EDITINFO_FORM}/group" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+                <div class="nv-info margin-bottom" data-default="" style="display:none"></div>
+
+                <div class="form-detail">
+                    <table class="table table-bordered table-striped table-hover">
+                        <colgroup>
+                            <col width="20"/>
+                            <col width="240" />
+                            <col />
+                            <col width="100"/>
+                            <col width="120"/>
+                        </colgroup>
+                        <thead>
+                            <tr class="bg-lavender">
+                                <td>
+                                    <!-- BEGIN: checkAll -->
+                                    <input type="checkbox" class="checkAll" onclick="checkAll(this.form);"{CHECK_ALL_CHECKED} />
+                                    <!-- END: checkAll -->
+                                </td>
+                                <td class="text-uppercase">{LANG.group_name}</td>
+                                <td class="text-uppercase">{LANG.group_description}</td>
+                                <td class="text-uppercase text-center">{LANG.group_userr}</td>
+                                <td class="text-uppercase"></td>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                                    <input id="submit" type="submit" class="btn btn-primary" value="{LANG.group_reg}" />
+                                </td>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <!-- BEGIN: group_list -->
+                            <tr>
+                                <th class="text-center">
+                                    <input name="in_groups[]" type="checkbox" value="{GROUP_LIST.group_id}" class="checkSingle" onclick="checkSingle(this.form);"{GROUP_LIST.checked} <!-- BEGIN: is_disable_checkbox -->disabled="disabled"<!-- END: is_disable_checkbox --> />
+                                </th>
+                                <td>
+                                    <strong>{GROUP_LIST.title}</strong>
+                                    <em class="show text-success">{GROUP_LIST.group_type}</em>
+                                    <!-- BEGIN: is_leader -->
+                                    <span class="text-danger"><em class="fa fa-users">&nbsp;</em><a href="{URL_IS_LEADER}" title="">{LANG.group_manage}</a></span>
+                                    <!-- END: is_leader -->
+                                </td>
+                                <td>{GROUP_LIST.description}</td>
+                                <td class="text-center">{GROUP_LIST.numbers}</td>
+                                <td class="text-center">{GROUP_LIST.status}</td>
+                            </tr>
+                            <!-- END: group_list -->
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <!-- END: tab_edit_group -->
+
         <!-- BEGIN: tab_edit_others -->
         <div id="edit_others" class="tab-pane fade {TAB_OTHERS_ACTIVE}">
             <div class="page panel panel-default">
