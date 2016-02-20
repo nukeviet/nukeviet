@@ -177,6 +177,11 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
     $idfile = $nv_Request->get_int('idfile', 'get');
     nv_mkdir(NV_ROOTDIR . '/includes/language/', $dirlang);
     $content = nv_admin_write_lang($dirlang, $idfile);
+    
+    //Resets the contents of the opcode cache
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }    
 
     if (empty($content)) {
         $xtpl->assign('INCLUDE_LANG', str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang)));

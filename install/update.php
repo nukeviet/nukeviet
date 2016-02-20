@@ -226,6 +226,11 @@ class NvUpdate
             echo $this->template($contents);
             include NV_ROOTDIR . '/includes/footer.php';
         }
+        
+        //Resets the contents of the opcode cache
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }        
     }
 
     /**
@@ -332,7 +337,12 @@ class NvUpdate
                 $logs_status[] = true;
             }
         }
-
+        
+        //Resets the contents of the opcode cache
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+        
         // Luu nhat ki
         $this->log($nv_update_config, $logs_message, $logs_status);
 
