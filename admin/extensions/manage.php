@@ -526,12 +526,18 @@ if (! in_array($selecttype, $array_extType)) {
 if ($selecttype_old != $selecttype and ! empty($selecttype)) {
     $nv_Request->set_Cookie('selecttype', $selecttype, NV_LIVE_COOKIE_TIME);
 }
-$xtpl->assign('SUBMIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload');
 
-if (! $sys_info['zlib_support']) {
-    $xtpl->parse('main.nozlib');
-} else {
-    $xtpl->parse('main.upload');
+// Cho phep upload
+if ($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) {
+    $xtpl->assign('SUBMIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload');
+    
+    if (! $sys_info['zlib_support']) {
+        $xtpl->parse('main.upload_allowed.nozlib');
+    } else {
+        $xtpl->parse('main.upload_allowed.upload');
+    }
+    
+    $xtpl->parse('main.upload_allowed');
 }
 
 // Array lang setup

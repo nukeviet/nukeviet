@@ -429,7 +429,7 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
     if (! file_exists($filename)) {
         $error = $lang_module['autoinstall_error_downloaded'];
     }
-} else {
+} elseif ($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) {
     if (! isset($_FILES, $_FILES['extfile'], $_FILES['extfile']['tmp_name'])) {
         $error = $lang_module['autoinstall_error_downloaded'];
     } elseif (! $sys_info['zlib_support']) {
