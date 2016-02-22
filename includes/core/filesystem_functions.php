@@ -482,14 +482,12 @@ function nv_deletefile($file, $delsub = false)
     if ($ftp_check_login == 1) {
         if (is_dir($realpath)) {
             // Xoa thu muc
-
             $check = nv_ftp_del_dir($ftp, $filename, $delsub);
             if ($check !== true) {
                 return array( 0, $check );
             }
-        } elseif ($ftp->unlink($realpath) === false) {
+        } elseif ($ftp->unlink($filename) === false) {
             // Xoa file bang FTP khong duoc thi xoa theo cach thong thuong
-
             @unlink($realpath);
         }
 
