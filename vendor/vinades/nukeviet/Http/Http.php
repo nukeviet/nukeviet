@@ -389,8 +389,6 @@ class Http
      */
     public static function handle_redirects($url, $args, $response)
     {
-        static $nv_http;
-
         // If no redirects are present, or, redirects were not requested, perform no action.
         if (! isset($response['headers']['location']) or $args['redirection'] === 0) {
             return false;
@@ -432,12 +430,7 @@ class Http
             }
         }
 
-        // Create object if null
-        if (is_null($nv_http)) {
-            $nv_http = new Http();
-        }
-
-        return $nv_http->request($redirect_location, $args);
+        return Http::request($redirect_location, $args);
     }
 
     /**
