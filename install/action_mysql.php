@@ -283,7 +283,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extension
 	type varchar(10) NOT NULL DEFAULT 'other',
 	title varchar(55) NOT NULL,
 	is_sys tinyint(1) NOT NULL DEFAULT '0',
-	virtual tinyint(1) NOT NULL DEFAULT '0',
+	is_virtual tinyint(1) NOT NULL DEFAULT '0',
 	basename varchar(50) NOT NULL DEFAULT '',
 	table_prefix varchar(55) NOT NULL DEFAULT '',
 	version varchar(50) NOT NULL,

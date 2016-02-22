@@ -53,6 +53,10 @@ if ($checksess == md5($global_config['sitekey'] . session_id()) and file_exists(
     }
 
     clearstatcache();
+    //Resets the contents of the opcode cache
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }    
 }
 
 if ($contents == '') {

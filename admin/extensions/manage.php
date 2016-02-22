@@ -461,6 +461,10 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_c
         // Delete other files
         if (! empty($files)) {
             clearstatcache();
+            //Resets the contents of the opcode cache
+            if (function_exists('opcache_reset')) {
+                opcache_reset();
+            }            
 
             foreach ($files as $file) {
                 if (file_exists(NV_ROOTDIR . '/' . $file['path'])) {
@@ -479,6 +483,12 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_c
                     $sth->execute();
                 }
             }
+            
+            clearstatcache();
+            //Resets the contents of the opcode cache
+            if (function_exists('opcache_reset')) {
+                opcache_reset();
+            }            
         }
 
         // Delete from table

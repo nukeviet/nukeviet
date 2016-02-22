@@ -20,7 +20,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -111,7 +111,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 0) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 0) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -173,7 +173,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -284,7 +284,7 @@ function viewcat_top($array_catcontent, $generate_page)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -446,7 +446,7 @@ function viewcat_two_column($array_content, $array_catpage)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
     
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);

@@ -20,7 +20,7 @@ function nv_site_theme($contents, $full = true)
     $layout_file = ($full) ? 'layout.' . $module_info['layout_funcs'][$op_file] . '.tpl' : 'simple.tpl';
 
     if (! file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/layout/' . $layout_file)) {
-        nv_info_die($lang_global['error_layout_title'], $lang_global['error_layout_title'], $lang_global['error_layout_content']);
+        $layout_file = 'body';
     }
 
     if (isset($global_config['sitetimestamp'])) {

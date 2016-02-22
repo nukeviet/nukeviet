@@ -94,12 +94,12 @@ function nv_admin_write_lang($dirlang, $idfile)
             $content_lang .= "*/\n";
 
             if ($admin_file) {
-                $content_lang .= "\nif( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) )";
+                $content_lang .= "\nif (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {";
             } else {
-                $content_lang .= "\nif( ! defined( 'NV_MAINFILE' ) )";
+                $content_lang .= "\nif (! defined('NV_MAINFILE')) {";
             }
 
-            $content_lang .= " die( 'Stop!!!' );\n\n";
+            $content_lang .= "\n\tdie( 'Stop!!!' );\n}\n\n";
 
             $array_translator['info'] = (isset($array_translator['info'])) ? $array_translator['info'] : "";
 
@@ -177,6 +177,11 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
     $idfile = $nv_Request->get_int('idfile', 'get');
     nv_mkdir(NV_ROOTDIR . '/includes/language/', $dirlang);
     $content = nv_admin_write_lang($dirlang, $idfile);
+    
+    //Resets the contents of the opcode cache
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }    
 
     if (empty($content)) {
         $xtpl->assign('INCLUDE_LANG', str_replace(NV_ROOTDIR, '', str_replace('\\', '/', $include_lang)));

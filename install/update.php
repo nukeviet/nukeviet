@@ -226,6 +226,11 @@ class NvUpdate
             echo $this->template($contents);
             include NV_ROOTDIR . '/includes/footer.php';
         }
+        
+        //Resets the contents of the opcode cache
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }        
     }
 
     /**
