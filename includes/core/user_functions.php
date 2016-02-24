@@ -239,7 +239,7 @@ function nv_blocks_content($sitecontent)
         }
         if (! empty($unact)) {
             $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET act=0 WHERE bid IN (' . implode(',', $unact) . ')');
-            unlink($cache_file);
+            $nv_Cache->delMod('themes', NV_LANG_DATA);
         }
     }
 
