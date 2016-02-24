@@ -23,11 +23,17 @@ if ($usactive_old != $usactive) {
     $nv_Request->set_Cookie('usactive', $usactive);
 }
 $_arr_where = array();
-if ($usactive > -1) {
-    $_arr_where[] = 'active=' . ($usactive % 2);
-}
-if ($usactive > 1) {
-    $_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
+if ($usactive == -3) {
+    $_arr_where[] = 'group_id!=7';
+} elseif ($usactive == -2) {
+    $_arr_where[] = 'group_id=7';
+} else {
+    if ($usactive > -1) {
+        $_arr_where[] = 'active=' . ($usactive % 2);
+    }
+    if ($usactive > 1) {
+        $_arr_where[] = '(idsite=' . $global_config['idsite'] .' OR userid = ' . $admin_info['admin_id'] . ')';
+    }
 }
 
 $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&usactive=' . $usactive;
@@ -116,6 +122,8 @@ $is_delete = (in_array('del', $allow_func)) ? true : false;
 $is_setactive = (in_array('setactive', $allow_func)) ? true : false;
 
 while ($row = $result2->fetch()) {
+    $row['in_groups'] = explode(',', $row['in_groups']);
+    
     $users_list[$row['userid']] = array(
         'userid' =>  $row['userid'],
         'username' =>  $row['username'],
@@ -127,7 +135,8 @@ while ($row = $result2->fetch()) {
         'is_edit' => $is_edit,
         'is_delete' => $is_delete,
         'level' => $lang_module['level0'],
-        'is_admin' => false
+        'is_admin' => false,
+        'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups']))
     );
     if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite']) {
         $users_list[$row['userid']]['is_edit'] = false;
@@ -199,6 +208,7 @@ foreach ($orders as $order) {
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', $lang_global);
 $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php');
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
@@ -224,6 +234,7 @@ for ($i = $_bg; $i >= 0; $i--) {
     $xtpl->assign('USACTIVE', $m);
     $xtpl->parse('main.usactive');
 }
+$xtpl->assign('SELECTED_NEW_USERS', $usactive == -2 ? ' selected="selected"' : '');
 
 foreach ($head_tds as $head_td) {
     $xtpl->assign('HEAD_TD', $head_td);
@@ -245,6 +256,9 @@ foreach ($users_list as $u) {
         }
         if ($u['is_delete']) {
             $xtpl->parse('main.xusers.del');
+        }
+        if ($u['is_newuser'] and in_array('setofficial', $allow_func)) {
+            $xtpl->parse('main.xusers.set_official');
         }
     }
 

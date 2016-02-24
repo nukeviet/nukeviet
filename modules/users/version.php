@@ -14,11 +14,11 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
 
 $module_version = array(
     'name' => 'Users',
-    'modfuncs' => 'main,login,logout,register,lostpass,active,editinfo,avatar,lostactivelink,thu,memberlist',
+    'modfuncs' => 'main,login,logout,register,lostpass,active,editinfo,avatar,lostactivelink,thu,memberlist,groups',
     'submenu' => 'main,login,logout,register,lostpass,active,editinfo,lostactivelink,memberlist',
     'is_sysmod' => 1,
     'virtual' => 0,
-    'version' => '4.0.21',
+    'version' => '4.0.27',
     'date' => 'Wed, 20 Oct 2010 00:00:00 GMT',
     'author' => 'VINADES (contact@vinades.vn)',
     'note' => ''

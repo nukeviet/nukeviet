@@ -61,6 +61,7 @@ $sth->execute(array( 'editinfo', 'editinfo', 'Edit User Info', 'users', 1, 1, 7,
 $sth->execute(array( 'memberlist', 'memberlist', 'Memberlist', 'users', 1, 1, 8, ''));
 $sth->execute(array( 'avatar', 'avatar', 'Avatar', 'users', 1, 0, 9, ''));
 $sth->execute(array( 'logout', 'logout', 'Logout', 'users', 1, 1, 10, ''));
+$sth->execute(array( 'groups', 'groups', 'Groups manage', 'users', 1, 0, 11, ''));
 $sth->execute(array( 'oauth', 'oauth', 'Oauth', 'users', 0, 0, 0, ''));
 //Statistics
 $sth->execute(array( 'main', 'main', 'Main', 'statistics', 1, 0, 1, ''));
@@ -148,6 +149,7 @@ $themes_default['left-body-right'] = array(
 
 $themes_default['left-body'] = array(
     $array_funcid_mod['users']['editinfo'],
+    $array_funcid_mod['users']['groups'],
     $array_funcid_mod['contact']['main'],
     $array_funcid_mod['statistics']['allbots'],
     $array_funcid_mod['statistics']['allbrowsers'],
@@ -176,6 +178,7 @@ $themes_mobile['body'] = array(
     $array_funcid_mod['users']['lostpass'],
     $array_funcid_mod['users']['main'],
     $array_funcid_mod['users']['register'],
+    $array_funcid_mod['users']['groups'],
     $array_funcid_mod['contact']['main'],
     $array_funcid_mod['statistics']['allbots'],
     $array_funcid_mod['statistics']['allbrowsers'],
@@ -225,7 +228,7 @@ $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_block
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
 //Theme Default
-$sth->execute(array('default', 'news', 'module.block_newscenter.php', 'News', '', 'no_title', '[TOP]', 0, '1', '6', 0, 1, 'a:9:{s:6:"numrow";i:5;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:12:"length_title";i:400;s:15:"length_hometext";i:0;s:5:"width";i:500;s:6:"height";i:0;s:7:"nocatid";a:0:{}}'));
+$sth->execute(array('default', 'news', 'module.block_newscenter.php', 'News', '', 'no_title', '[TOP]', 0, '1', '6', 0, 1, 'a:10:{s:6:"numrow";i:6;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:12:"length_title";i:0;s:15:"length_hometext";i:0;s:17:"length_othertitle";i:60;s:5:"width";i:500;s:6:"height";i:0;s:7:"nocatid";a:0:{}}'));
 $sth->execute(array('default', 'banners', 'global.banners.php', 'Center Banner', '', 'no_title', '[TOP]', 0, '1', '6', 0, 2, 'a:1:{s:12:"idplanbanner";i:1;}'));
 $sth->execute(array('default', 'news', 'global.block_category.php', 'category', '', 'no_title', '[LEFT]', 0, '1', '6', 0, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}'));
 $sth->execute(array('default', 'theme', 'global.module_menu.php', 'Module Menu', '', 'no_title', '[LEFT]', 0, '1', '6', 0, 2, ''));

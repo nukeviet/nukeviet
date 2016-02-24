@@ -43,6 +43,10 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
 }
 
+// Cau hinh xac thuc thanh vien moi
+$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='active_group_newusers'";
+$active_group_newusers = intval($db->query($sql)->fetchColumn());
+
 /**
  * nv_check_username_reg()
  * Ham kiem tra ten dang nhap kha dung
@@ -356,9 +360,10 @@ if ($checkss == $array_register['checkss']) {
         }
     } else {
         $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
-		(username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
+		(group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
 		question, answer, passlostkey, view_mail, remember, in_groups,
 		active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
+        " . ($active_group_newusers ? 7 : 4) . ", 
 		:username,
 		:md5username,
 		:password,
@@ -368,7 +373,7 @@ if ($checkss == $array_register['checkss']) {
 		'', '', 0, " . NV_CURRENTTIME . ",
 		:your_question,
 		:answer,
-		'', 0, 1, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+		'', 0, 1, '" . ($active_group_newusers ? '7' : '') . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
         $data_insert = array();
         $data_insert['username'] = $array_register['username'];
@@ -390,10 +395,10 @@ if ($checkss == $array_register['checkss']) {
         } else {
             $query_field['userid'] = $userid;
             $db->query('INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
-            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4');
+            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . ($active_group_newusers ? 7 : 4));
 
             $subject = $lang_module['account_register'];
-            $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $array_register['username']);
+            $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true), $array_register['username']);
             nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
             
             if (! empty($global_config['auto_login_after_reg'])) {

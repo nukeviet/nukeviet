@@ -8,7 +8,8 @@
  */
 
 $mod_name = $nv_Request->get_title('module_name', 'post', '');
-$path = nv_check_path_upload(NV_UPLOADS_DIR . '/' . $mod_name);
+$mod_upload = $site_mods[$mod_name]['module_upload'];
+$path = nv_check_path_upload(NV_UPLOADS_DIR . '/' . $mod_upload);
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 $data = $nv_Request->get_string('data', 'post', '');
@@ -17,12 +18,13 @@ if (isset($check_allow_upload_dir['upload_file']) and in_array('images', $admin_
     $imageMatch = array_unique($matches[1]);
 
     $pathsave = $nv_Request->get_title('pathsave', 'post', '');
-    $upload_real_dir_page = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $mod_name;
+    $upload_real_dir_page = NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $mod_upload;
     if (!empty($pathsave)) {
         if (! preg_match('/^[a-z0-9\-\_]+$/i', $module_name)) {
             $pathsave = change_alias($pathsave);
         }
-        $pathsave = $mod_name . '/' . $pathsave;
+		$pathsave = $mod_upload . '/' . $pathsave;
+
         $e = explode('/', $pathsave);
         if (! empty($e)) {
             $cp = '';
@@ -40,7 +42,7 @@ if (isset($check_allow_upload_dir['upload_file']) and in_array('images', $admin_
         }
     }
 
-    $currentpath = str_replace(NV_ROOTDIR . '/', '', $upload_real_dir_page);
+	$currentpath = str_replace(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $mod_upload . '/', '', $upload_real_dir_page);
 
     foreach ($imageMatch as $imageSrc) {
         if (nv_check_url($imageSrc)) {

@@ -1,6 +1,29 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.27
+- update class Punycode
+- update class phpmailer 
+- Module Users: add Group new users
+- Module users: add function groups manage for leader 
+- Theme mobile: file layout not exit
+- nv_info_die function: send http status code
+- Module authors: remove module siteinfo in grant system 
+- Module news: update block newscenter, fix edit content
+- update sample data
+- Fix module Extensions
+- Module page: add image position config, add og:image
+- Update ckeditor 4.5.7, fix when editor maximize
+- Blocks: fix variables $blockID 
+- Database: fix setting backup database
+
+NUKEVIET 4.0.26
+- Add management: leaders, avatar, color, default for groups
+- Contact: update show department
+- Add simple mode for generate pages
+- Fix check extension version
+- Fix and update something...
+
 NUKEVIET 4.0.25
 - Update Data demo
 - Update jQuery v2.2.0 

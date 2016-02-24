@@ -97,6 +97,7 @@ $lang_module['lang_geo'] = 'Kích hoạt chức năng xác định ngôn ngữ t
 $lang_module['lang_geo_config'] = 'Cấu hình chức năng xác định ngôn ngữ theo quốc gia';
 $lang_module['site_lang'] = 'Ngôn ngữ mặc định';
 $lang_module['site_timezone'] = 'Múi giờ của site';
+$lang_module['current_time'] = 'Giờ hiện tại: %s';
 $lang_module['date_pattern'] = 'Kiểu hiển thị ngày tháng năm';
 $lang_module['time_pattern'] = 'Kiểu hiển thị giờ phút';
 $lang_module['gzip_method'] = 'Bật chế độ gzip';

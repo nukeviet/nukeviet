@@ -105,7 +105,7 @@ if (! empty($error)) {
         }
 
         // Tuong thich moi cho cai dat
-        if (! empty($row['compatible'])) {
+        if (! empty($row['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
             $xtpl->parse('main.data.loop.install');
         }
 

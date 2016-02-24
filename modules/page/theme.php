@@ -26,7 +26,7 @@ function nv_page_main($row, $ab_links, $content_comment)
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CONTENT', $row);
-    
+
     if (!empty($row['description'])) {
         $xtpl->parse('main.description');
     }
@@ -44,10 +44,19 @@ function nv_page_main($row, $ab_links, $content_comment)
     }
 
     if (! empty($row['image'])) {
-        if (! empty($row['imagealt'])) {
-            $xtpl->parse('main.image.alt');
-        }
-        $xtpl->parse('main.image');
+    	if ($row['imageposition'] > 0) {
+    		if ($row['imageposition'] == 1) {
+		        if (! empty($row['imagealt'])) {
+		            $xtpl->parse('main.imageleft.alt');
+		        }
+    			$xtpl->parse('main.imageleft');
+    		} else {
+		        if (! empty($row['imagealt'])) {
+		            $xtpl->parse('main.imagecenter.alt');
+		        }
+    			$xtpl->parse('main.imagecenter');
+    		}
+    	}
     }
 
     if (defined('NV_IS_MODADMIN')) {

@@ -80,7 +80,6 @@
 						</li>
 						<!-- END: top_menu_loop -->
 					</ul>
-					<p class="navbar-text navbar-right" id="digclock">{NV_DIGCLOCK}</p>
 				</div>
 			</div>
 		</div>

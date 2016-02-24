@@ -86,7 +86,7 @@ if ($nv_Request->isset_request('act', 'get')) {
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid']);
             $first_name = (! empty($row['first_name'])) ? $row['first_name'] : $row['username'];
             $subject = $lang_module['adduser_register'];
-            $message = sprintf($lang_module['adduser_register_info'], $first_name, $global_config['site_name'], NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, $row['username']);
+            $message = sprintf($lang_module['adduser_register_info'], $first_name, $global_config['site_name'], NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true), $row['username']);
             @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
         } else {
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid']);

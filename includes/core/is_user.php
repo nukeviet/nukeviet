@@ -31,7 +31,6 @@ if (defined('NV_IS_ADMIN')) {
             define('NV_IS_USER', true);
 
             $user_info['full_name'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
-            ;
             $user_info['in_groups'] = nv_user_groups($user_info['in_groups']);
             $user_info['st_login'] = ! empty($user_info['password']) ? true : false;
             $user_info['current_mode'] = 1;

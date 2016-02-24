@@ -17,19 +17,31 @@
     		</ul>
     	</div>
     	<!-- END: socialbutton -->
+
+        <!-- BEGIN: imageleft -->
+        <figure class="article left noncaption pointer" style="width:100px" onclick="modalShow('', '<img src={CONTENT.image} />');">
+                <img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" />
+                <!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
+        </figure>
+        <!-- END: imageleft -->
+
         <!-- BEGIN: description -->
         <div class="hometext margin-bottom-lg">{CONTENT.description}</div>
         <!-- END: description -->
-    	<!-- BEGIN: image -->
+
+    	<!-- BEGIN: imagecenter -->
         <figure class="article center pointer" onclick="modalShowByObj(this);">
     			<p class="text-center"><img alt="{CONTENT.title}" src="{CONTENT.image}" width="{CONTENT.imageWidth}" class="img-thumbnail" /></p>
     			<!-- BEGIN: alt --><figcaption>{CONTENT.imagealt}</figcaption><!-- END: alt -->
    		</figure>
-    	<!-- END: image -->
-	<div id="page-bodyhtml" class="bodytext margin-bottom-lg">
-		{CONTENT.bodytext}
-	</div>
- </div>
+    	<!-- END: imagecenter -->
+
+    	<div class="clear"></div>
+
+    	<div id="page-bodyhtml" class="bodytext margin-bottom-lg">
+    		{CONTENT.bodytext}
+    	</div>
+    </div>
 </div>
 <!-- BEGIN: adminlink -->
 <p class="text-center margin-bottom-lg">

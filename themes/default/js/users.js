@@ -343,6 +343,7 @@ function bt_logout(a) {
 	});
 	return !1
 }
+
 var UAV = {};
 // Default config, replace it with your own
 UAV.config = {

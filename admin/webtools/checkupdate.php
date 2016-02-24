@@ -49,9 +49,9 @@ if ($nv_Request->isset_request('i', 'get')) {
                 
                 // Allow auto update to newest version 
                 if (( string ) $new_version->version == ( string ) $new_version->updateable) {
-                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . (( string ) $new_version->updateable) . '&amp;checksess=' . md5((( string ) $new_version->updateable) . $global_config['sitekey'] . session_id())));
+                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . (( string ) $new_version->updateable) . '&amp;package=' . (( string ) $new_version->updatepackage) . '&amp;checksess=' . md5((( string ) $new_version->updateable) . $global_config['sitekey'] . session_id())));
                 } elseif ((( string ) $new_version->updateable) != '') {
-                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info2'], (( string ) $new_version->updateable), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . (( string ) $new_version->updateable) . '&amp;checksess=' . md5((( string ) $new_version->updateable) . $global_config['sitekey'] . session_id())));
+                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info2'], (( string ) $new_version->updateable), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . (( string ) $new_version->updateable) . '&amp;package=' . (( string ) $new_version->updatepackage) . '&amp;checksess=' . md5((( string ) $new_version->updateable) . $global_config['sitekey'] . session_id())));
                 } else {
                     $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info3'], ( string ) $new_version->link));
                 }

@@ -272,7 +272,7 @@
 		<input class="btn btn-primary submit-post" name="statussave" type="submit" value="{LANG.save}" />
 		<!-- END:status -->
 		<!-- BEGIN:status0 -->
-		<input class="btn btn-primary submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
+		<input class="btn btn-warning submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
 		<input class="btn btn-primary submit-post" name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status0 -->
         <!-- BEGIN:status1 -->

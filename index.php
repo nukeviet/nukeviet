@@ -283,11 +283,11 @@ if (preg_match($global_config['check_module'], $module_name)) {
             die();
         } elseif (!defined('NV_IS_ADMIN') and ($groups_view == '2' or $groups_view == '1')) {
             // Exit
-            nv_info_die($lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin']);
+            nv_info_die($lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'], 404);
         } elseif (defined('NV_IS_USER') and !nv_user_in_groups($groups_view)) {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
         }
     }
 }
 
-nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);

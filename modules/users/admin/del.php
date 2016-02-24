@@ -24,13 +24,13 @@ if ($admin_id) {
     die('NO');
 }
 
-$sql = 'SELECT username, first_name, last_name, email, photo, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
+$sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch(3);
 if (empty($row)) {
     die('NO');
 }
 
-list($username, $first_name, $last_name, $email, $photo, $idsite) = $row;
+list($group_id, $username, $first_name, $last_name, $email, $photo, $in_groups, $idsite) = $row;
 
 if ($global_config['idsite'] > 0 and $idsite != $global_config['idsite']) {
     die('NO');
@@ -46,9 +46,11 @@ if ($query->fetchColumn()) {
     if (! $result) {
         die('NO');
     }
-
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid . ')');
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=4');
+    
+    $in_groups = explode(',', $in_groups);
+    
+    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid . ' AND approved = 1)');
+    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups)) ? 7 : 4));
     $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid);
     $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $userid);
     $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $userid);

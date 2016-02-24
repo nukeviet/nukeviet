@@ -45,6 +45,10 @@ $lang_module['imagealt'] = 'Chú thích cho hình';
 $lang_module['socialbutton'] = 'Các công cụ Like';
 $lang_module['socialbuttonnote'] = 'Hiển thị các công cụ Like facebook, G+, Twitter';
 $lang_module['activecomm'] = 'Cho phép thảo luận ';
+$lang_module['imgposition'] = 'Vị trí ảnh minh họa';
+$lang_module['imgposition_0'] = 'Không hiển thị';
+$lang_module['imgposition_1'] = 'Hiển thị bên trái mô tả';
+$lang_module['imgposition_2'] = 'Hiển thị dưới mô tả';
 
 $lang_module['layout_func'] = 'Sử dụng layout';
 $lang_module['layout_default'] = 'Mặc định';

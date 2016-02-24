@@ -175,7 +175,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -283,7 +283,7 @@ function user_login($is_ajax = false)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -388,7 +388,7 @@ function user_lostpass($data)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -444,7 +444,7 @@ function user_lostactivelink($data, $question)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -577,7 +577,14 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $group_check_all_checked = 1;
         $count = 0;
         foreach ($groups as $group) {
+        	$group['status'] = $lang_module['group_status_' . $group['status']];
+        	$group['group_type'] = $lang_module['group_type_' . $group['group_type']];
             $xtpl->assign('GROUP_LIST', $group);
+            if ($group['is_leader']) {
+            	$xtpl->assign('URL_IS_LEADER', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $group['group_id'], true));
+                $xtpl->parse('main.tab_edit_group.group_list.is_leader');
+				$xtpl->parse('main.tab_edit_group.group_list.is_disable_checkbox');
+            }
             $xtpl->parse('main.tab_edit_group.group_list');
             if (empty($group['checked'])) {
                 $group_check_all_checked = 0;
@@ -709,7 +716,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -760,6 +767,7 @@ function user_welcome()
     $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/upd', true));
+    $xtpl->assign('URL_GROUPS', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups', true));
 
     if (! empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
         $xtpl->assign('IMG', array( 'src' => NV_BASE_SITEURL . $user_info['photo'], 'title' => $lang_module['img_size_title'] ));
@@ -803,11 +811,15 @@ function user_welcome()
         $xtpl->parse('main.question_empty_note');
     }
 
+    if ($user_info['group_manage'] > 0) {
+        $xtpl->parse('main.group_manage');
+    }
+
     $_lis = $module_info['funcs'];
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -975,7 +987,7 @@ function nv_memberslist_theme($users_array, $array_order_new, $generate_page)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -1056,7 +1068,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -1183,7 +1195,7 @@ function safe_deactivate($data)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {

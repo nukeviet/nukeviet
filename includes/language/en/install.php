@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 29, 2010, 02:24:00 AM
 */
 
 if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+	die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -19,7 +19,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'Setup NukeViet 4.0 Beta';
+$lang_module['titlesetup'] = 'Setup NukeViet 4.0 RC2';
 $lang_module['select_language'] = 'Select languages';
 $lang_module['license'] = 'License';
 $lang_module['check_server'] = 'Check server';
@@ -256,3 +256,5 @@ $lang_module['updatemod_notexist'] = 'You did not install this module on system 
 $lang_module['updatemod_notcertified'] = 'This module is not certificated so that system could not control risks which could occur';
 $lang_module['dbcheck_error_files'] = 'To install NukeViet for this kind database, you need to download program additional support. Click here to learn about the program additional support and the appropriate download . After downloading, extract and upload the files and folders on your website ,reload this page and choose  this database to test.';
 $lang_module['dbcheck_error_driver'] = 'Error: System does not support this kind of database, please select the kind other.';
+$lang_module['update_error_check_version_sys'] = 'Error: Unable to check the version of the system';
+$lang_module['update_error_check_version_ext'] = 'Error: Unable to check the version of the extension';
