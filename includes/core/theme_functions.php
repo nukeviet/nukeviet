@@ -91,9 +91,11 @@ function nv_error_info()
  * @param string $site_title
  * @return
  */
-function nv_info_die($page_title = '', $info_title, $info_content, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
+function nv_info_die($page_title = '', $info_title, $info_content, $error_code = 200, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
 {
     global $lang_global, $global_config;
+
+	http_response_code($error_code); // only (PHP 5 >= 5.4.0, PHP 7)
 
     if (empty($page_title)) {
         $page_title = $global_config['site_description'];

@@ -20,7 +20,18 @@ $menu_top = array(
     'custom_title' => $lang_global['mod_extensions']
 );
 
-$allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'install', 'download', 'login', 'update', 'manage', 'upload' );
+$allow_func = array( 'main', 'newest', 'popular', 'featured', 'downloaded', 'favorites', 'detail', 'login', 'update', 'manage' );
+
+// Cho phep upload ung dung
+if (!empty($global_config['extension_setup'])) {
+    $allow_func[] = 'upload';
+}
+
+// Cho phep cai ung dung tu NukeViet Store
+if ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3) {
+    $allow_func[] = 'install';
+    $allow_func[] = 'download';
+}
 
 /**
  * nv_extensions_is_installed()

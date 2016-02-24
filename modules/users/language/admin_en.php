@@ -9,7 +9,9 @@
 * @Createdate May 30, 2010, 05:07:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+	die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '31/05/2010, 00:07';
@@ -65,6 +67,9 @@ $lang_module['show_email'] = 'Display email';
 $lang_module['sig'] = 'Signature';
 $lang_module['in_group'] = 'Member of group';
 $lang_module['in_group_default'] = 'Group default';
+$lang_module['is_official'] = 'Is an official member';
+$lang_module['is_official_note'] = 'If not selected, this account will be included in the group of new member registration';
+$lang_module['set_official_note'] = 'To make an official member';
 $lang_module['question'] = 'Secret question';
 $lang_module['addquestion'] = 'Add secret question';
 $lang_module['savequestion'] = 'Save secret question';
@@ -413,3 +418,5 @@ $lang_module['safe_deactivate'] = 'Safe mode turn off';
 $lang_module['group_description'] = 'Description';
 $lang_module['group_description_empty'] = 'Take a brief description of the group.';
 $lang_module['auto_login_after_reg'] = 'Automatically login after successful registration';
+$lang_module['active_group_newusers'] = 'Enable new member';
+$lang_module['active_group_newusers_note'] = 'If this function is activated, the new member registration will be automatically classified as "activated" until it has been removed from the team manager, at which new members are considered "Official members"';

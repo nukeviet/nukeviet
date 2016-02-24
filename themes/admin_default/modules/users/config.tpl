@@ -96,6 +96,10 @@
 					<td>{LANG.auto_login_after_reg}</td>
 					<td><input type="checkbox" value="1" name="auto_login_after_reg"{DATA.auto_login_after_reg}/></td>
 				</tr>
+				<tr>
+					<td>{LANG.active_group_newusers}</td>
+					<td><input type="checkbox" value="1" name="active_group_newusers"{DATA.active_group_newusers}/> <small>{LANG.active_group_newusers_note}</small></td>
+				</tr>
 			</tbody>
 		</table>
 

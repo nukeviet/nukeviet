@@ -67,6 +67,9 @@ $lang_module['show_email'] = 'Hiển thị email';
 $lang_module['sig'] = 'Chữ ký';
 $lang_module['in_group'] = 'Là tài khoản của nhóm';
 $lang_module['in_group_default'] = 'Là nhóm mặc định';
+$lang_module['is_official'] = 'Là thành viên chính thức';
+$lang_module['is_official_note'] = 'Nếu không chọn, tài khoản này sẽ được đưa vào nhóm thành viên mới đăng ký';
+$lang_module['set_official_note'] = 'Cho làm thành viên chính thức';
 
 $lang_module['question'] = 'Câu hỏi bảo mật';
 $lang_module['addquestion'] = 'Thêm câu hỏi bảo mật';
@@ -435,3 +438,5 @@ $lang_module['safe_deactivate'] = 'Tắt chế độ an toàn';
 $lang_module['group_description'] = 'Mô tả';
 $lang_module['group_description_empty'] = 'Hãy mô tả ngắn gọn về nhóm';
 $lang_module['auto_login_after_reg'] = 'Tự động đăng nhập sau khi đăng ký thành công';
+$lang_module['active_group_newusers'] = 'Kích hoạt chức năng xác thực thành viên';
+$lang_module['active_group_newusers_note'] = 'Nếu chức năng này được kích hoạt, những thành viên mới đăng ký sẽ được tự động xếp vào nhóm &quot;Thành Viên mới &quot; cho đến khi được người quản lý loại khỏi nhóm, lúc này thành viên mới được xem là &quot;Thành Viên chính thức&quot;';

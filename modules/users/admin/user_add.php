@@ -64,6 +64,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['in_groups'] = $nv_Request->get_typed_array('group', 'post', 'int');
     $_user['in_groups_default'] = $nv_Request->get_int('group_default', 'post', 0);
     $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255);
+    $_user['is_official'] = $nv_Request->get_int('is_official', 'post', 0);
 
     $md5username = nv_md5safe($_user['username']);
 
@@ -193,7 +194,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['in_groups'] = array_intersect($in_groups, array_keys($groups_list));
     
     if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $_user['in_groups'])) {
-        $_user['in_groups_default'] = 0;
+        $_user['in_groups_default'] = 4;
     }
     
     if (!$_user['in_groups_default'] and sizeof($_user['in_groups']) == 1) {
@@ -207,13 +208,17 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             'input' => 'group_default',
             'mess' => $lang_module['edit_error_group_default'] )));
     }
-
+    
+    if (!$_user['is_official']) {
+        $_user['in_groups'][] = 7;
+    }
+    
     $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
         group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
         question, answer, passlostkey, view_mail,
         remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
     VALUES (
-        " . $_user['in_groups_default'] . ",
+        " . ($_user['is_official'] ? $_user['in_groups_default'] : 7) . ",
         :username,
         :md5_username,
         :password,
@@ -294,10 +299,13 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
     if (! empty($_user['in_groups'])) {
         foreach ($_user['in_groups'] as $group_id) {
-            nv_groups_add_user($group_id, $userid);
+            if ($group_id != 7) {
+                nv_groups_add_user($group_id, $userid);
+            }
         }
     }
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4');
+    
+    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . ($_user['is_official'] ? 4 : 7));
 
     die(json_encode(array(
         'status' => 'ok',
@@ -311,6 +319,7 @@ $_user['username'] = $_user['email'] = $_user['password1'] = $_user['password2']
 $_user['first_name'] = $_user['last_name'] = $_user['gender'] = $_user['sig'] = $_user['birthday'] = '';
 $_user['view_mail'] = 0;
 $_user['in_groups'] = array();
+$_user['is_official'] = ' checked="checked"';
 
 $genders = array(
     'N' => array(

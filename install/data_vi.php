@@ -178,6 +178,7 @@ $themes_mobile['body'] = array(
     $array_funcid_mod['users']['lostpass'],
     $array_funcid_mod['users']['main'],
     $array_funcid_mod['users']['register'],
+    $array_funcid_mod['users']['groups'],
     $array_funcid_mod['contact']['main'],
     $array_funcid_mod['statistics']['allbots'],
     $array_funcid_mod['statistics']['allbrowsers'],
@@ -227,7 +228,7 @@ $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_block
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_blocks_groups (theme, module, file_name, title, link, template, position, exp_time, active, groups_view, all_func, weight, config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
 //Theme Default
-$sth->execute(array('default', 'news', 'module.block_newscenter.php', 'Tin mới nhất', '', 'no_title', '[TOP]', 0, '1', '6', 0, 1, 'a:9:{s:6:"numrow";i:6;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:12:"length_title";i:400;s:15:"length_hometext";i:0;s:5:"width";i:500;s:6:"height";i:0;s:7:"nocatid";a:0:{}}'));
+$sth->execute(array('default', 'news', 'module.block_newscenter.php', 'Tin mới nhất', '', 'no_title', '[TOP]', 0, '1', '6', 0, 1, 'a:10:{s:6:"numrow";i:6;s:11:"showtooltip";i:1;s:16:"tooltip_position";s:6:"bottom";s:14:"tooltip_length";s:3:"150";s:12:"length_title";i:0;s:15:"length_hometext";i:0;s:17:"length_othertitle";i:60;s:5:"width";i:500;s:6:"height";i:0;s:7:"nocatid";a:0:{}}'));
 $sth->execute(array('default', 'banners', 'global.banners.php', 'Quảng cáo giữa trang', '', 'no_title', '[TOP]', 0, '1', '6', 0, 2, 'a:1:{s:12:"idplanbanner";i:1;}'));
 
 $sth->execute(array('default', 'news', 'global.block_category.php', 'Chủ đề', '', 'no_title', '[LEFT]', 0, '1', '6', 0, 1, 'a:2:{s:5:"catid";i:0;s:12:"title_length";i:25;}'));
@@ -368,6 +369,6 @@ $result = $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang_data . 
 (21, 0, 1, 'Tìm kiếm', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=seek', '', '', 6, 21, 0, '', '6', 'seek', '', 1, '', 1, 1),
 (22, 0, 1, 'Liên hệ', '" . NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=contact', '', '', 7, 22, 0, '', '6', 'contact', '', 1, '', 1, 1)");
 
-$result = $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (10, 'NukeViet-Fans', 'Nhóm những người hâm mộ hệ thống NukeViet', '', 2, '', '', 1, " . NV_CURRENTTIME . ", 0, 7, 1, 0, 0, 0)");
-$result = $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (11, 'NukeViet-Admins', 'Nhóm những người quản lý website xây dựng bằng hệ thống NukeViet', '', 2, '', '', 0, " . NV_CURRENTTIME . ", 0, 8, 1, 0, 0, 0)");
-$result = $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (12, 'NukeViet-Programmers', 'Nhóm Lập trình viên hệ thống NukeViet', '', 1, '', '', 0, " . NV_CURRENTTIME . ", 0, 9, 1, 0, 0, 0)");
+$result = $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (10, 'NukeViet-Fans', 'Nhóm những người hâm mộ hệ thống NukeViet', '', 2, '', '', 1, " . NV_CURRENTTIME . ", 0, 8, 1, 0, 0, 0)");
+$result = $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (11, 'NukeViet-Admins', 'Nhóm những người quản lý website xây dựng bằng hệ thống NukeViet', '', 2, '', '', 0, " . NV_CURRENTTIME . ", 0, 9, 1, 0, 0, 0)");
+$result = $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (12, 'NukeViet-Programmers', 'Nhóm Lập trình viên hệ thống NukeViet', '', 1, '', '', 0, " . NV_CURRENTTIME . ", 0, 10, 1, 0, 0, 0)");

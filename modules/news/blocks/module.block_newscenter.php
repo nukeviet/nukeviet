@@ -36,6 +36,13 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
         $html .= '</tr>';
 
         $html .= '<tr>';
+        $html .= '	<td>' . $lang_block['length_othertitle'] . '</td>';
+        $html .= '	<td>';
+        $html .= '	<input type="text" class="form-control w100" name="config_length_othertitle" size="5" value="' . $data_block['length_othertitle'] . '"/>';
+        $html .= '</td>';
+        $html .= '</tr>';
+
+        $html .= '<tr>';
         $html .= '<td>' . $lang_block['showtooltip'] . '</td>';
         $html .= '<td>';
         $html .= '<div class="text-middle pull-left" ><input type="checkbox" value="1" name="config_showtooltip" ' . ($data_block['showtooltip'] == 1 ? 'checked="checked"' : '') . ' /></div>';
@@ -87,6 +94,7 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
         $return['config']['tooltip_length'] = $nv_Request->get_title('config_tooltip_length', 'post', 0);
         $return['config']['length_title'] = $nv_Request->get_int('config_length_title', 'post', 0);
         $return['config']['length_hometext'] = $nv_Request->get_int('config_length_hometext', 'post', 0);
+		$return['config']['length_othertitle'] = $nv_Request->get_int('config_length_othertitle', 'post', 0);
         $return['config']['width'] = $nv_Request->get_int('config_width', 'post', '');
         $return['config']['height'] = $nv_Request->get_int('config_height', 'post', '');
         $return['config']['nocatid'] = $nv_Request->get_typed_array('config_nocatid', 'post', 'int', array());
@@ -170,6 +178,7 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
                     if ($block_config['showtooltip']) {
                         $row['hometext'] = nv_clean60(strip_tags($row['hometext']), $block_config['tooltip_length']);
                     }
+					$row['titleclean60'] = nv_clean60($row['title'], $block_config['length_othertitle']);
                     $xtpl->assign('othernews', $row);
 
                     if ($block_config['showtooltip']) {
