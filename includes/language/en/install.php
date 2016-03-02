@@ -256,3 +256,5 @@ $lang_module['updatemod_notexist'] = 'You did not install this module on system 
 $lang_module['updatemod_notcertified'] = 'This module is not certificated so that system could not control risks which could occur';
 $lang_module['dbcheck_error_files'] = 'To install NukeViet for this kind database, you need to download program additional support. Click here to learn about the program additional support and the appropriate download . After downloading, extract and upload the files and folders on your website ,reload this page and choose  this database to test.';
 $lang_module['dbcheck_error_driver'] = 'Error: System does not support this kind of database, please select the kind other.';
+$lang_module['update_error_check_version_sys'] = 'Error: Unable to check the version of the system';
+$lang_module['update_error_check_version_ext'] = 'Error: Unable to check the version of the extension';
