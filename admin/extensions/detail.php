@@ -85,7 +85,7 @@ if (! empty($error)) {
         $xtpl->parse('main.data.empty_images');
     }
 
-    if (! empty($array['compatible'])) {
+    if (! empty($array['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
         $xtpl->parse('main.data.install');
     }
 
@@ -97,7 +97,7 @@ if (! empty($error)) {
 
         $xtpl->assign('FILE', $file);
 
-        if ($file['type'] == 1 and ! empty($file['compatible'])) {
+        if ($file['type'] == 1 and ! empty($file['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
             $xtpl->parse('main.data.file.install');
         } else {
             $xtpl->parse('main.data.file.download');

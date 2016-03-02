@@ -139,7 +139,7 @@ function nv_admin_checkdata($adm_session_value)
     }
 
     $query = 'SELECT a.admin_id AS admin_id, a.lev AS lev, a.position AS position, a.check_num AS check_num, a.last_agent AS current_agent,
-		a.last_ip AS current_ip, a.last_login AS current_login, a.files_level AS files_level, a.editor AS editor, b.userid AS userid,
+		a.last_ip AS current_ip, a.last_login AS current_login, a.files_level AS files_level, a.editor AS editor, b.userid AS userid, b.group_id AS group_id,
 		b.username AS username, b.email AS email, b.first_name AS first_name, b.last_name AS last_name, b.view_mail AS view_mail, b.regdate AS regdate,
 		b.sig AS sig, b.gender AS gender, b.photo AS photo, b.birthday AS birthday, b.in_groups AS in_groups, b.last_openid AS last_openid,
 		b.password AS password, b.question AS question, b.answer AS answer, b.safemode AS safemode 

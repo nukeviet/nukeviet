@@ -197,7 +197,7 @@ if ($nv_Request->isset_request('extract', 'get')) {
                     foreach ($ziplistContent as $array_file) {
                         $array_name_i = explode('/', $array_file['stored_filename']);
                         
-                        if (! preg_match("/\.(tpl|php)$/i", $array_file['stored_filename']) and empty($array_file['folder']) and $array_name_i[sizeof($array_name_i) - 1] != '.htaccess' and $array_file['stored_filename'] != 'config.ini') {
+                        if (! preg_match("/\.(tpl|php)$/i", $array_file['stored_filename']) and $array_file['size'] > 0 and $array_name_i[sizeof($array_name_i) - 1] != '.htaccess' and $array_file['stored_filename'] != 'config.ini') {
                             $mime_real = $mime_check =  nv_get_mime_type(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename']);
                             
                             if (! empty($mime_check) and ! in_array($mime_check, $ini[nv_getextension($array_file['filename'])])) {
@@ -205,6 +205,11 @@ if ($nv_Request->isset_request('extract', 'get')) {
                             }
                             
                             if (empty($mime_check)) {
+                                if (preg_match("/\.(ini)$/i", $array_file['stored_filename'])) {
+                                    if ($_xml = @simplexml_load_file(NV_ROOTDIR . '/' . $temp_extract_dir . '/' . $array_file['filename'])) {
+                                        continue;
+                                    } 
+                                }
                                 $array_error_mine[] = array(
                                     'mime' => $mime_real,
                                     'filename' => $array_file['stored_filename']
@@ -424,7 +429,7 @@ if ($nv_Request->isset_request('uploaded', 'get')) {
     if (! file_exists($filename)) {
         $error = $lang_module['autoinstall_error_downloaded'];
     }
-} else {
+} elseif ($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) {
     if (! isset($_FILES, $_FILES['extfile'], $_FILES['extfile']['tmp_name'])) {
         $error = $lang_module['autoinstall_error_downloaded'];
     } elseif (! $sys_info['zlib_support']) {

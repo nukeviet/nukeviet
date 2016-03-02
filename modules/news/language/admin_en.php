@@ -279,5 +279,3 @@ $lang_module['addtocat'] = 'Add featured article in the category';
 $lang_module['delete_from_cat'] = 'Delete posts from category';
 $lang_module['not_featured'] = 'No posts yet';
 $lang_module['notification_post_queue'] = 'Approve post <strong>%s</strong> by <strong>%s</strong><em>%s</em>';
-$lang_module['note_cat'] = 'You need to create a category before';
-$lang_module['admin_no_user'] = 'Decentralized functions for this module only apply to the modules, you need to add the admin modules prior to the separation of powers.';

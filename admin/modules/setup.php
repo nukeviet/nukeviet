@@ -167,7 +167,7 @@ foreach ($arr_module_news as $module_name_i => $arr) {
         // Chỉ cho phép ảo hóa module khi virtual = 1, Khi virtual = 2, chỉ đổi được tên các func
         $module_version['virtual'] = ($module_version['virtual'] == 1) ? 1 : 0;
 
-        $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES (
+        $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (
 			\'module\', :title, ' . intval($module_version['is_sysmod']) . ', ' . intval($module_version['virtual']) . ', :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)'
         );
 
@@ -215,7 +215,7 @@ foreach ($modules_data as $row) {
             $mod = array();
             $mod['title'] = $row['title'];
             $mod['is_sys'] = $row['is_sys'];
-            $mod['virtual'] = $row['virtual'];
+            $mod['virtual'] = $row['is_virtual'];
             $mod['module_file'] = $row['basename'];
             $mod['version'] = preg_replace_callback('/^([0-9a-zA-Z]+\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+)\s+(\d+)$/', 'nv_parse_vers', $row['version']);
             $mod['addtime'] = nv_date('H:i:s d/m/Y', $row['addtime']);
@@ -226,7 +226,7 @@ foreach ($modules_data as $row) {
             if ($mod['module_file'] == $mod['title']) {
                 $array_modules[] = $mod;
 
-                if ($row['virtual']) {
+                if ($row['is_virtual']) {
                     $mod_virtual[] = $mod['title'];
                 }
             } else {
