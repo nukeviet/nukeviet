@@ -52,7 +52,7 @@ function nv_groups_post($groups_view)
         return array( 6 );
     }
     if (in_array(4, $groups_view)) {
-        return array_intersect($groups_view, array( 4, 5 ));
+        return array_intersect($groups_view, array( 4, 5, 7 ));
     }
     if (in_array(3, $groups_view)) {
         return array_diff($groups_view, array( 1, 2 ));
