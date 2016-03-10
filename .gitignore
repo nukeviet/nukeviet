@@ -40,3 +40,6 @@
 !/themes/default/images/laws/*
 !/themes/default/modules/laws
 !/themes/default/modules/laws/*
+/vendor/
+/.gitattributes
+/composer.json
