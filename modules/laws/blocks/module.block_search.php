@@ -153,6 +153,7 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		}
         $xtpl->assign( 'Q', $skey );
 
+		$block_config['search_advance'] = !isset( $block_config['search_advance'] ) ? 0 : $block_config['search_advance'];
 		if( $block_config['search_advance'] )
 		{
 			if( !$is_advance )

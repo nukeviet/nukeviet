@@ -53,7 +53,7 @@ if( empty( $contents ) )
 		{
 			$row['areatitle'] = array();
 			$_result = $db->query( 'SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id'] );
-			while( list( $area_id ) = $result->fetch( 3 ) )
+			while( list( $area_id ) = $_result->fetch( 3 ) )
 			{
 				$row['areatitle'][] = $nv_laws_listarea[$area_id]['title'];
 			}
