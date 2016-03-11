@@ -265,11 +265,12 @@
 						</tr>
 						<tr>
 							<td>
-							<select class="form-control select2" title="{LANG.areaSel}" name="aid">
-								<!-- BEGIN: areaopt -->
-								<option value="{AREAOPT.id}"{AREAOPT.selected}>{AREAOPT.name}</option>
-								<!-- END: areaopt -->
-							</select></td>
+							    <div style="height: 200px; overflow: scroll">
+							        <!-- BEGIN: areaopt -->
+							        <label class="show"><input type="checkbox" name="aid[]" value="{AREAOPT.id}" {AREAOPT.checked} />{AREAOPT.name}</label>
+							        <!-- END: areaopt -->
+							    </div>
+						    </td>
 						</tr>
 						<tr>
 							<td>{LANG.subjectSel} <span class="red">*</span></td>

@@ -31,6 +31,13 @@ if( ( $row = $result->fetch() ) === false )
 	exit();
 }
 
+$row['aid'] = array();
+$result = $db->query( 'SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id'] );
+while( list( $area_id ) = $result->fetch( 3 ) )
+{
+	$row['aid'][] = $area_id;
+}
+
 if( ! nv_user_in_groups( $row['groups_view'] ) )
 {
 	nv_info_die( $lang_module['info_no_allow'], $lang_module['info_no_allow'], $lang_module['info_no_allow_detail'] );

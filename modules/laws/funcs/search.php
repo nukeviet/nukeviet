@@ -17,7 +17,7 @@ $key_words = $module_info['keywords'];
 $page = $nv_Request->get_int( 'page', 'get', 0 );
 $per_page = $nv_laws_setting['numsub'];
 $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $op;
-$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1";
+$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_row_area t2 WHERE status=1";
 
 $key = nv_substr( $nv_Request->get_title( 'q', 'get', '', 1 ), 0, NV_MAX_SEARCH_LENGTH);
 
@@ -54,14 +54,14 @@ $search = false;
 if( ! empty( $key ) or ! empty( $area ) or ! empty( $cat ) or ! empty( $subject ) or ! empty( $sstatus ) or ! empty( $ssigner ) or ! empty( $sfrom1 ) or ! empty( $sto1 ) )
 {
 	$search = true;
-	
+
 	if( ! empty( $key ) )
 	{
 		$dbkey = $db->dblikeescape( $key );
 		$base_url .= "&amp;q=" . $key;
 		$sql .= " AND ( title LIKE '%" . $dbkey . "%' OR introtext LIKE '%" . $dbkey . "%' OR code LIKE '%" . $dbkey . "%' OR bodytext LIKE '%" . $dbkey . "%' )";
 	}
-	
+
 	if( ! empty( $area ) )
 	{
 		$base_url .= "&amp;area=" . $area;
@@ -70,18 +70,18 @@ if( ! empty( $key ) or ! empty( $area ) or ! empty( $cat ) or ! empty( $subject 
 		$in = "";
 		if( empty( $tmp['subcats'] ) )
 		{
-			$in = " AND aid=" . $area;
+			$in = " t2.area_id=" . $area;
 		}
 		else
 		{
 			$in = $tmp['subcats'];
 			$in[] = $area;
-			$in = " AND aid IN(" . implode( ",", $in ) . ")";
+			$in = " AND t2.area_id IN(" . implode( ",", $in ) . ")";
 		}
 
 		$sql .= $in;
 	}
-	
+
 	if( ! empty( $cat ) )
 	{
 		$base_url .= "&amp;cat=" . $cat;
@@ -101,25 +101,25 @@ if( ! empty( $key ) or ! empty( $area ) or ! empty( $cat ) or ! empty( $subject 
 
 		$sql .= $in;
 	}
-	
+
 	if( ! empty( $subject ) )
 	{
 		$sql .= " AND sid=" . $subject;
 		$base_url .= "&amp;subject=" . $subject;
 	}
-	
+
 	if( ! empty( $sfrom1 ) )
 	{
 		$sql .= " AND publtime>=" . $sfrom1;
 		$base_url .= "&amp;sfrom=" . $sfrom;
 	}
-	
+
 	if( ! empty( $sto1 ) )
 	{
 		$sql .= " AND publtime<=" . $sto1;
 		$base_url .= "&amp;sto=" . $sto;
 	}
-	
+
 	if( ! empty( $sstatus ) )
 	{
 		if( $sstatus == 1 )
@@ -166,19 +166,25 @@ if ( ! $all_page or $page >= $all_page )
 		exit();
 	}
 }
-	
+
 $generate_page = nv_generate_page( $base_url, $all_page, $per_page, $page );
 
 $array_data = array();
 $stt = $page + 1;
 while ( $row = $result->fetch() )
 {
-	$row['areatitle'] = $nv_laws_listarea[$row['aid']]['title'];
+	$row['areatitle'] = array();
+	$_result = $db->query( 'SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id'] );
+	while( list( $area_id ) = $result->fetch( 3 ) )
+	{
+		$row['areatitle'][] = $nv_laws_listarea[$area_id]['title'];
+	}
+	$row['areatitle'] = !empty( $row['areatitle'] ) ? implode( ', ', $row['areatitle'] ) : '';
 	$row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
 	$row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
 	$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'];
 	$row['stt'] = $stt;
-	
+
 	$array_data[] = $row;
 	$stt ++;
 }

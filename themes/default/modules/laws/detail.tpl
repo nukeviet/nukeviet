@@ -26,7 +26,11 @@
 			</tr>
 			<tr class="hoatim">
 				<td class="text-right">{LANG.area}</td>
-				<td><a href="{DATA.area_url}" title="{DATA.area}">{DATA.area}</a></td>
+				<td>
+				    <!-- BEGIN: area -->
+				    <a href="{AREA.url}" title="{AREA.title}">{AREA.title}</a><br />
+				    <!-- END: area -->
+			    </td>
 			</tr>
 			<tr class="hoatim">
 				<td class="text-right">{LANG.subject}</td>

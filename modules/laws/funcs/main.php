@@ -38,7 +38,7 @@ if( empty( $contents ) )
 	{
 		$order = ( $nv_laws_setting['typeview'] == 1 OR $nv_laws_setting['typeview'] == 4 ) ? "ASC" : "DESC";
 		$order_param = ( $nv_laws_setting['typeview'] == 0 OR $nv_laws_setting['typeview'] == 1 ) ? "publtime" : "addtime";
-		
+
 		$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 ORDER BY " . $order_param . " " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
 
 		$result = $db->query( $sql );
@@ -51,7 +51,13 @@ if( empty( $contents ) )
 		$stt = nv_get_start_id( $page, $per_page );
 		while ( $row = $result->fetch() )
 		{
-			$row['areatitle'] = $nv_laws_listarea[$row['aid']]['title'];
+			$row['areatitle'] = array();
+			$_result = $db->query( 'SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id'] );
+			while( list( $area_id ) = $result->fetch( 3 ) )
+			{
+				$row['areatitle'][] = $nv_laws_listarea[$area_id]['title'];
+			}
+			$row['areatitle'] = !empty( $row['areatitle'] ) ? implode( ', ', $row['areatitle'] ) : '';
 			$row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
 			$row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
 			$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=".$module_info['alias']['detail']."/" . $row['alias'];

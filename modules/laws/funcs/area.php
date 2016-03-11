@@ -64,18 +64,18 @@ if( empty( $contents ) )
 	$in = "";
 	if( empty( $cat['subcats'] ) )
 	{
-		$in = " aid=" . $catid;
+		$in = " t2.area_id=" . $catid;
 	}
 	else
 	{
 		$in = $cat['subcats'];
 		$in[] = $catid;
-		$in = " aid IN(" . implode( ",", $in ) . ")";
+		$in = " t2.area_id IN(" . implode( ",", $in ) . ")";
 	}
 
 	$order = ( $nv_laws_setting['typeview'] == 1 ) ? "ASC" : "DESC";
 
-	$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status=1 AND" . $in . " ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
+	$sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_row_area t2 ON t1.id=t2.row_id WHERE status=1 AND" . $in . " ORDER BY addtime " . $order . " LIMIT " . $per_page . " OFFSET " . ( $page - 1 ) * $per_page;
 	$result = $db->query( $sql );
 	$query = $db->query( "SELECT FOUND_ROWS()" );
 	$all_page = $query->fetchColumn();

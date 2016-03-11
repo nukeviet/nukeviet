@@ -112,6 +112,7 @@ function nv_theme_laws_maincat( $mod, $array_data )
 function nv_theme_laws_detail( $array_data, $other_cat = array(), $other_area = array(), $other_subject = array(), $other_signer = array() )
 {
 	global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $client_info;
+
 	$xtpl = new XTemplate( $module_info['funcs'][$op]['func_name'] . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file );
 	$xtpl->assign( 'LANG', $lang_module );
 
@@ -121,12 +122,22 @@ function nv_theme_laws_detail( $array_data, $other_cat = array(), $other_area = 
 
 	$array_data['cat'] = $nv_laws_listcat[$array_data['cid']]['title'];
 	$array_data['cat_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $nv_laws_listcat[$array_data['cid']]['alias'];
-	$array_data['area'] = $nv_laws_listarea[$array_data['aid']]['title'];
-	$array_data['area_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=area/' . $nv_laws_listarea[$array_data['aid']]['alias'];
+
 	$array_data['subject'] = $nv_laws_listsubject[$array_data['sid']]['title'];
 	$array_data['subject_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=subject/' . $nv_laws_listsubject[$array_data['sid']]['alias'];
 
 	$xtpl->assign( 'DATA', $array_data );
+
+	if( !empty($array_data['aid']))
+	{
+		foreach( $array_data['aid'] as $aid )
+		{
+			$area['title'] = $nv_laws_listarea[$aid]['title'];
+			$area['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=area/' . $nv_laws_listarea[$aid]['alias'];
+			$xtpl->assign( 'AREA', $area );
+			$xtpl->parse( 'main.area' );
+		}
+	}
 
 	if( ! empty( $array_data['bodytext'] ) )
 	{

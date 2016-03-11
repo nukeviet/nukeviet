@@ -87,7 +87,7 @@ else
 {
 	if ( $nv_Request->isset_request( 'add', 'get' ) or $nv_Request->isset_request( 'edit, id', 'get' ) )
 	{
-	    $post = array();
+	    $row = array();
 	    if ( $nv_Request->isset_request( 'edit, id', 'get' ) )
 	    {
 	        $post['id'] = $nv_Request->get_int( 'id', 'get', 0 );
@@ -100,9 +100,19 @@ else
 	            Header( "Location: " . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op );
 	            die();
 	        }
-
 	        $row = $result->fetch();
+
+			$post['area_id'] = array();
+			$result = $db->query( 'SELECT area_id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE row_id=' . $row['id'] );
+			while( list( $area_id ) = $result->fetch( 3 ) )
+			{
+				$post['area_id'][] = $area_id;
+			}
+			$row['area_id_old'] = $row['area_id'] = $post['area_id'];
 	    }
+		else{
+			$row['area_id_old'] = $post['area_id'] = array();
+		}
 
 	    if ( $nv_Request->isset_request( 'save', 'post' ) )
 	    {
@@ -118,8 +128,8 @@ else
 	            die( $lang_module['erroNotSelectCat'] );
 	        }
 
-	        $post['aid'] = $nv_Request->get_int( 'aid', 'post', 0 );
-	        if ( ! isset( $aList[$post['aid']] ) )
+			$post['area_id'] = $nv_Request->get_typed_array( 'aid', 'post', 'int', array() );
+	        if ( empty($post['area_id'] ) )
 	        {
 	            die( $lang_module['erroNotSelectArea'] );
 	        }
@@ -293,7 +303,6 @@ else
 	                title=" . $db->quote( $post['title'] ) . ",
 	                alias=" . $db->quote( $alias . "-" . $post['id'] ) . ",
 	                code=" . $db->quote( $post['code'] ) . ",
-	                aid=" . $post['aid'] . ",
 	                cid=" . $post['cid'] . ",
 	                sid=" . $post['sid'] . ",
 	                sgid=" . $post['sgid'] . ",
@@ -311,6 +320,8 @@ else
 	                admin_edit=" . $admin_info['userid'] . "
 	                WHERE id=" . $post['id'];
 	            $db->query( $query );
+
+				$_id = $post['id'];
 
 				$sql = "DELETE FROM " . NV_PREFIXLANG . "_" . $module_data . "_set_replace WHERE nid=" . $post['id'];
 				$db->query( $sql );
@@ -337,7 +348,6 @@ else
 	                " . $db->quote( $post['title'] ) . ",
 	                '',
 	                " . $db->quote( $post['code'] ) . ",
-	                " . $post['aid'] . ",
 	                " . $post['cid'] . ",
 	                " . $post['sid'] . ",
 	                " . $post['sgid'] . ",
@@ -372,6 +382,29 @@ else
 
 	            nv_insert_logs( NV_LANG_DATA, $module_name, $lang_module['addRow'], "Id: " . $_id, $admin_info['userid'] );
 	        }
+
+			if( $post['area_id'] != $row['area_id_old'] )
+			{
+				$sth = $db->prepare( 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_row_area (row_id, area_id) VALUES( :row_id, :area_id )' );
+				foreach( $post['area_id'] as $area_id )
+				{
+					if( !in_array( $area_id, $row['area_id_old'] ) )
+					{
+						$sth->bindParam( ':row_id', $_id, PDO::PARAM_INT );
+						$sth->bindParam( ':area_id', $area_id, PDO::PARAM_INT );
+						$sth->execute();
+					}
+				}
+
+				foreach( $row['area_id_old'] as $area_id_old )
+				{
+					if( !in_array( $area_id_old, $post['area_id'] ) )
+					{
+						$db->query( 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_row_area WHERE area_id = ' . $area_id_old . ' AND row_id=' . $_id );
+					}
+				}
+			}
+
 	        $nv_Cache->delMod( $module_name );
 	        die( 'OK' );
 	    }
@@ -403,7 +436,7 @@ else
 	    {
 	        $post['relatement'] = $post['replacement'] = $post['title'] = $post['code'] = $post['introtext'] = $post['bodytext'] = $post['keywords'] = $post['author'] = $post['publtime'] = $post['exptime'] = "";
 	        $post['groups_view'] = $post['groups_download'] = $post['files'] = array( 6 );
-	        $post['aid'] = $post['cid'] = $post['sid'] = $post['sgid'] = $post['who_view'] = $post['who_download'] = 0;
+	        $post['cid'] = $post['sid'] = $post['sgid'] = $post['who_view'] = $post['who_download'] = 0;
 
 	        $post['groupcss'] = $post['groupcss2'] = "groupcss0";
 			$post['files'] = '';
@@ -430,7 +463,7 @@ else
 
 	    foreach ( $aList as $_a )
 	    {
-	        $_a['selected'] = $_a['id'] == $post['aid'] ? " selected=\"selected\"" : "";
+	        $_a['checked'] = in_array($_a['id'], $post['area_id']) ? " checked=\"checked\"" : "";
 	        $xtpl->assign( 'AREAOPT', $_a );
 	        $xtpl->parse( 'add.areaopt' );
 	    }
@@ -564,7 +597,7 @@ else
 	if ( $nv_Request->isset_request( 'list', 'get' ) )
 	{
 	    $base_url = NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=" . $op . "&list";
-	    $where = "";
+	    $where = $join = "";
 	    if ( $nv_Request->isset_request( 'cat', 'get' ) )
 	    {
 	    	$keywords = $nv_Request->get_string( 'keywords', 'get', '' );
@@ -587,7 +620,8 @@ else
 
 	        if ( ! empty( $aid ) and isset( $aList[$aid] ) )
 	        {
-	            $where .= " AND aid IN (" . implode( ',', nv_GetCatidInParent( $aid, $aList ) ) . ")";
+	        	$join .= 'INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_row_area t2 ON t1.id=t2.row_id';
+	            $where .= " AND t2.area_id IN (" . implode( ',', nv_GetCatidInParent( $aid, $aList ) ) . ")";
 	            $base_url .= "&aid=" . $aid;
 	        }
 
@@ -604,7 +638,7 @@ else
 	        }
 	    }
 
-	    $sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE 1=1 " . $where;
+	    $sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . " WHERE 1=1 " . $where;
 	    $result = $db->query( $sql );
 	    $all_page = $result->fetch();
 	    $all_page = $all_page['ccount'];
@@ -614,7 +648,7 @@ else
 
 	    if ( $all_page )
 	    {
-	        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE 1=1 " . $where . " ORDER BY addtime DESC LIMIT " . $page . "," . $per_page;
+	        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . " WHERE 1=1 " . $where . " ORDER BY addtime DESC LIMIT " . $page . "," . $per_page;
 	        $result = $db->query( $sql );
 	        $a = 0;
 	        while ( $row = $result->fetch() )
