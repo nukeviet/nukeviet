@@ -27,7 +27,8 @@ $lang_module['files'] = "File đính kèm";
 $lang_module['view_hits'] = "lượt xem";
 $lang_module['download_hits'] = "lượt tải";
 $lang_module['trichyeu'] = "Trích yếu";
-
+$lang_module['search_advance'] = "Nâng cao";
+$lang_module['search_simple'] = "Tìm nhanh";
 $lang_module['title'] = "Tên văn bản";
 $lang_module['replacement'] = "Văn bản thay thế";
 $lang_module['unreplacement'] = "Văn bản được thay thế";

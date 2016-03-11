@@ -26,6 +26,13 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		$html .= "</select>\n";
         $html .= '</td>';
         $html .= '</tr>';
+        $html .= '<tr>';
+		$html .= '<td>' . $lang_block['search_advance'] . '</td>';
+        $html .= '<td>';
+		$ck = (isset( $data_block['search_advance'] ) and $data_block['search_advance']) ? 'checked="checked"' : '';
+		$html .= "<label><input type=\"checkbox\" name=\"config_search_advance\" value=\"1\" " . $ck . ">" . $lang_block['search_advance_note'] . "</label>\n";
+        $html .= '</td>';
+        $html .= '</tr>';
 
 		return $html;
 	}
@@ -37,6 +44,7 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		$return['error'] = array();
 		$return['config'] = array();
 		$return['config']['style'] = $nv_Request->get_string( 'config_style', 'post', '' );
+		$return['config']['search_advance'] = $nv_Request->get_int( 'config_search_advance', 'post', 0 );
 		return $return;
 	}
 
@@ -84,6 +92,7 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 		$ssubject = $nv_Request->get_int( 'subject', 'get', 0 );
 		$sstatus = $nv_Request->get_int( 'status', 'get', 0 );
 		$ssigner = $nv_Request->get_int( 'signer', 'get', 0 );
+		$is_advance = $nv_Request->get_int( 'is_advance', 'get', 0 );
 
 		$nv_laws_listarea = array( 0 => array( "id" => 0, "name" => $lang_module['search_area'], "alias" => "" ) ) + $nv_laws_listarea;
 
@@ -142,8 +151,25 @@ if ( ! function_exists( 'nv_law_block_search' ) )
 			$xtpl->assign( 'SELECTED', $row['id'] == $ssigner ? " selected=\"selected\"" : "" );
 			$xtpl->parse( 'main.signer' );
 		}
-
         $xtpl->assign( 'Q', $skey );
+
+		if( $block_config['search_advance'] )
+		{
+			if( !$is_advance )
+			{
+				$xtpl->assign( 'LANG_ADVANCE', $lang_module['search_advance'] );
+				$xtpl->assign( 'IS_ADVANCE', 0 );
+				$xtpl->parse( 'main.is_advance' );
+				$xtpl->parse( 'main.is_advance_btn.is_advance_class' );
+			}else{
+				$xtpl->assign( 'LANG_ADVANCE', $lang_module['search_simple'] );
+			}
+			$xtpl->parse( 'main.is_advance_btn' );
+		}
+		else{
+			$xtpl->assign( 'LANG_ADVANCE', $lang_module['search_simple'] );
+			$xtpl->assign( 'IS_ADVANCE', 1 );
+		}
 
         $xtpl->parse( 'main' );
         return $xtpl->text( 'main' );
