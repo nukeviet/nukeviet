@@ -17,9 +17,9 @@ $module_version = array( //
 		'change_alias' => 'detail',
 		"is_sysmod" => 0, //
 		"virtual" => 1, //
-		"version" => "4.0", //
+		"version" => "4.0.27", //
 		"date" => "Wed, 27 Jul 2011 14:55:22 GMT", //
 		"author" => "VINADES (contact@vinades.vn)", //
-		"uploads_dir" => array($module_name), //
+		"uploads_dir" => array($module_upload), //
 		"note" => "" //
 	);
