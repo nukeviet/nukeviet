@@ -53,6 +53,20 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 		$ck = $data_block['duplicated'] ? 'checked="checked"' : '';
 		$html .= '<td><input type="checkbox" name="config_duplicated" value="1" ' . $ck . ' /></td>';
         $html .= '</tr>';
+		
+		$html .= '<tr>';
+		$html .= '<td>' . $lang_block['order'] . '</td>';
+		$html .= '<td><select name="config_order" class="form-control">';
+		$sel = $data_block['order'] == '1' ? 'selected="selected"' : '';
+		$html .= '<option value="1" ' . $sel . ' >' . $lang_block['order_pub_new'] . '</option>';
+		$sel = $data_block['order'] == '2' ? 'selected="selected"' : '';
+		$html .= '<option value="2" ' . $sel . ' >' . $lang_block['order_pub_old'] . '</option>';
+		$sel = $data_block['order'] == '3' ? 'selected="selected"' : '';
+		$html .= '<option value="3" ' . $sel . ' >' . $lang_block['order_addtime_new'] . '</option>';
+		$sel = $data_block['order'] == '4' ? 'selected="selected"' : '';
+		$html .= '<option value="4" ' . $sel . ' >' . $lang_block['order_addtime_old'] . '</option>';
+		$html .= '</select></td>';
+        $html .= '</tr>';
 		return $html;
 	}
 
@@ -69,6 +83,7 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 		$return['config']['duration'] = $nv_Request->get_int( 'config_duration', 'post', 0 );
 		$return['config']['pauseOnHover'] = $nv_Request->get_int( 'config_pauseOnHover', 'post', 0 );
 		$return['config']['duplicated'] = $nv_Request->get_int( 'config_duplicated', 'post', 0 );
+		$return['config']['order'] = $nv_Request->get_int( 'config_order', 'post', 1 );
 		return $return;
 	}
 
@@ -83,8 +98,11 @@ if ( ! nv_function_exists( 'nv_law_block_newg' ) )
 		$numrow = ( isset( $block_config['numrow'] ) ) ? $block_config['numrow'] : 10;
 		$title_length = ( isset( $block_config['title_length'] ) ) ? $block_config['title_length'] : 0;
 		$show_code = ( isset( $block_config['show_code'] ) ) ? $block_config['show_code'] : 1;
+		
+		$order = ( $block_config['order'] == 2 OR $block_config['order'] == 4 ) ? "ASC" : "DESC";
+		$order_param = ( $block_config['order'] == 1 OR $block_config['order'] == 2 ) ? "publtime" : "addtime";
 
-		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $data . '_row WHERE status=1 ORDER BY addtime DESC LIMIT 0,' . $numrow;
+		$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $data . '_row WHERE status=1 ORDER BY ' . $order_param . ' ' . $order . ' LIMIT 0,' . $numrow;
 		$result = $db->query( $sql );
 		$numrow = $result->rowCount();
 
