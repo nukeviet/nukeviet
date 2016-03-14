@@ -17,6 +17,5 @@
     <!-- END: phone -->
     <li>IP: {IP}</li>
 </ul>
-<a href="{URL_VIEW}" title="" target="_blank">{LANG.view_website}</a>
 <!-- END: sendinfo -->
 <!-- END: main -->
