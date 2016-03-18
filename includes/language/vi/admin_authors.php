@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -148,7 +150,7 @@ $lang_module['action_account'] = 'Tài khoản thành viên';
 $lang_module['action_account_nochange'] = 'Giữ nguyên tài khoản thành viên';
 $lang_module['action_account_suspend'] = 'Khóa tài khoản thành viên';
 $lang_module['action_account_del'] = 'Xóa tài khoản thành viên';
-$lang_module['module_admin'] = 'Quyền hạn module hệ thống';
+$lang_module['module_admin'] = 'Phân quyền hệ thống';
 $lang_module['users'] = 'Tài khoản';
 $lang_module['number'] = 'STT';
 $lang_module['module'] = 'Tên module';

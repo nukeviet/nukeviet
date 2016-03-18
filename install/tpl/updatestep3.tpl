@@ -8,8 +8,8 @@
 	</tr>
 	<!-- BEGIN: loop -->
 	<tr>
-		<th scope="col" class="spec text_normal">{ROW.basename}</th>
-		<td><span class="highlight_green">{ROW.version} ({ROW.time})</span></td>
+		<th scope="col" class="spec text_normal">{ROW.name}</th>
+		<td><span class="highlight_green">{ROW.version} ({ROW.date})</span></td>
 		<td><span class="highlight_green">{ROW.author}</span></td>
 		<td><span class="highlight_green">{ROW.note}</span></td>
 	</tr>
@@ -109,7 +109,7 @@ $(window).load(function(){
 <div id="endupdate">
 	<div class="infoalert" id="infodetectedupg">
 		{LANG.update_info_end}<br />
-		<strong><a class="delete_update_backage delete_update_backage_end" href="{URL_DELETE}" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
+		<strong><a class="delete_update_backage_end" href="{URL_DELETE}" title="{LANG.update_package_delete}">{LANG.update_package_delete}</a></strong>
 		<script type="text/javascript">
 		var completeUpdate = 0;
 		var URL_GOHOME = '{URL_GOHOME}';

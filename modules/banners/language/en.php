@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+	die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -27,7 +29,7 @@ $lang_module['size'] = 'Size';
 $lang_module['form'] = 'Method';
 $lang_module['description'] = 'Description';
 $lang_module['blang_all'] = 'ALl';
-$lang_module['client_info'] = 'If you are not a member, Please <a href="%s">contact us</a>. If you are e member, Please login';
+$lang_module['client_info'] = 'Customer Details';
 $lang_module['login'] = 'Account';
 $lang_module['password'] = 'Password';
 $lang_module['reg_time'] = 'Registration date';

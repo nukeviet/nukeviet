@@ -326,6 +326,31 @@ function nv_del_tags(tid) {
 	return false;
 }
 
+function nv_del_check_tags(oForm, checkss, msgnocheck) {
+	var fa = oForm['idcheck[]'];
+	var listid = '';
+	if (fa.length) {
+		for (var i = 0; i < fa.length; i++) {
+			if (fa[i].checked) {
+				listid = listid + fa[i].value + ',';
+			}
+		}
+	} else {
+		if (fa.checked) {
+			listid = listid + fa.value + ',';
+		}
+	}
+
+	if (listid != '') {
+		if (confirm(nv_is_del_confirm[0])) {
+			$("#module_show_list").html('<p class="text-center"><img src="' + nv_base_siteurl + 'assets/images/load_bar.gif" alt="Waiting..."/></p>').load(script_name + "?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=tags&q=" + rawurlencode($("#q").val()) + "&del_listid=" + listid + "&checkss=" + checkss+"&num=" + nv_randomPassword(10));
+		}
+	} else {
+		alert(msgnocheck);
+	}
+	return false;
+}
+
 function checkallfirst() {
     $(this).one("click", checkallsecond);
 	$('input:checkbox').each(function() {

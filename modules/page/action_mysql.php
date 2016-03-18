@@ -8,7 +8,9 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_MODULES')) {
+    die('Stop!!!');
+}
 
 $sql_drop_module = array();
 
@@ -23,6 +25,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  alias varchar(250) NOT NULL,
  image varchar(255) DEFAULT '',
  imagealt varchar(255) DEFAULT '',
+ imageposition tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
  description text,
  bodytext mediumtext NOT NULL,
  keywords text,

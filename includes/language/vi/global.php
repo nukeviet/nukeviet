@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -280,9 +282,10 @@ $lang_global['groups_view'] = 'Các nhóm được xem';
 $lang_global['level1'] = 'Quản trị tối cao';
 $lang_global['level2'] = 'Điều hành chung';
 $lang_global['level3'] = 'Quản lý module';
-$lang_global['level4'] = 'Thành viên';
+$lang_global['level4'] = 'Thành viên chính thức';
 $lang_global['level5'] = 'Khách';
 $lang_global['level6'] = 'Tất cả';
+$lang_global['level7'] = 'Thành viên mới';
 
 $lang_global['msgbeforeunload'] = 'Bạn có chắc chắn chuyển sang trang khác, Nếu thực hiện dữ liệu sẽ không được lưu';
 $lang_global['timeoutsess_nouser'] = 'Bạn đã không sử dụng Site';

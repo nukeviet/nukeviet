@@ -23,11 +23,17 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "phpmailer/phpmailer": "^5.2"
+        "ext-mbstring": "*",
+        "ext-gd": "*",
+        "vinades/nukeviet": "dev-master",
+        "gregwar/captcha": "1.*",
+        "and/oauth": "^0.7-dev",
+        "phpmailer/phpmailer": "5.4.x-dev",
+        "pclzip/pclzip": "^2.8",
+        "endroid/qrcode": "^1.5",
+        "true/punycode": "^2.0"
     },
     "require-dev": {
-        "facebook/php-sdk-v4": "*",
-        "google/apiclient": "*",
         "jasig/phpcas": "*"
     } 
 }

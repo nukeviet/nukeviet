@@ -8,13 +8,15 @@
  * @Createdate Sun, 26 Oct 2014 08:34:25 GMT
  */
 
-if( !defined( 'NV_IS_MOD_USER' ) ) die( 'Stop!!!' );
+if (!defined('NV_IS_MOD_USER')) {
+    die('Stop!!!');
+}
 
 // Enable debugging
 phpCAS::setDebug();
 
 // Initialize phpCAS
-phpCAS::client( $global_config['config_sso']['cas_version'], $global_config['config_sso']['cas_hostname'], $global_config['config_sso']['cas_port'], $global_config['config_sso']['cas_baseuri'] );
+phpCAS::client($global_config['config_sso']['cas_version'], $global_config['config_sso']['cas_hostname'], $global_config['config_sso']['cas_port'], $global_config['config_sso']['cas_baseuri']);
 
 // For production use set the CA certificate that is the issuer of the cert
 // on the CAS server and uncomment the line below
@@ -28,85 +30,76 @@ phpCAS::setNoCasServerValidation();
 // set the language to french
 //phpCAS::setLang(PHPCAS_LANG_FRENCH);
 
+phpCAS::handleLogoutRequests(false);// https://wiki.jasig.org/display/casum/single+sign+out#SingleSignOut-Howitworks
+
 // force CAS authentication
 phpCAS::forceAuthentication();
 
 // logout if desired
-if( defined( 'CAS_LOGOUT_URL_REDIRECT' ) )
-{
-	phpCAS::logoutWithRedirectService( CAS_LOGOUT_URL_REDIRECT );
+if (defined('CAS_LOGOUT_URL_REDIRECT')) {
+    phpCAS::logoutWithRedirectService(CAS_LOGOUT_URL_REDIRECT);
 }
 $username = phpCAS::getUser();
-if( !empty( $username ) )
-{
-	if( nv_function_exists( 'ldap_connect' ) )
-	{
-		$ldapconn = ldap_connect( $global_config['config_sso']['ldap_host_url'] );
-		ldap_set_option( $ldapconn, LDAP_OPT_PROTOCOL_VERSION, $global_config['config_sso']['ldap_version'] );
-    	ldap_set_option( $ldapconn, LDAP_OPT_REFERRALS, 0);
-		if( !empty( $global_config['config_sso']['ldap_bind_dn'] ) and !empty( $global_config['config_sso']['ldap_bind_pw'] ) )
-		{
-			$ldapbind = ldap_bind( $ldapconn, $global_config['config_sso']['ldap_bind_dn'], $global_config['config_sso']['ldap_bind_pw'] );
-		}
-		else
-		{
-			$ldapbind = ldap_bind( $ldapconn );
-		}
-		if( $ldapbind ) // verify binding
-		{
-			$result = ldap_search( $ldapconn, $global_config['config_sso']['user_contexts'], '(uid=' . $username . ')' );
-			$data = ldap_get_entries( $ldapconn, $result );
+if (!empty($username)) {
+    if (nv_function_exists('ldap_connect')) {
+        $ldapconn = ldap_connect($global_config['config_sso']['ldap_host_url']);
+        ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, $global_config['config_sso']['ldap_version']);
+        ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
+        if (!empty($global_config['config_sso']['ldap_bind_dn']) and !empty($global_config['config_sso']['ldap_bind_pw'])) {
+            $ldapbind = ldap_bind($ldapconn, $global_config['config_sso']['ldap_bind_dn'], $global_config['config_sso']['ldap_bind_pw']);
+        } else {
+            $ldapbind = ldap_bind($ldapconn);
+        }
+        if ($ldapbind) {
+            // verify binding
 
-			$attribs = array(
-				'identity' => md5( $username . '@' . $cas_host ),
-				'result' => 'is_res',
-				'id' => $username,
-				'server' => $server,
-				'current_mode' => 4
-			);
+            $result = ldap_search($ldapconn, $global_config['config_sso']['user_contexts'], '(uid=' . $username . ')');
+            $data = ldap_get_entries($ldapconn, $result);
 
-			foreach( $global_config['config_sso']['config_field'] as $key => $ckey )
-			{
-				if( !empty( $ckey ) and isset( $data[0][$ckey] ) )
-				{
-					$attribs[$key] = $data[0][$ckey][0];
-				}
-			}
-			if( isset( $attribs['email'] ) )
-			{
-				$attribs['contact/email'] = $attribs['email'];
-				unset( $attribs['email'] );
-			}
+            $attribs = array(
+                'identity' => md5($username . '@' . $cas_host),
+                'result' => 'is_res',
+                'id' => $username,
+                'server' => $server,
+                'current_mode' => 4
+            );
 
-			if( isset( $attribs['firstname'] ) )
-			{
-				$attribs['namePerson/first'] = $attribs['firstname'];
-				unset( $attribs['firstname'] );
-			}
-			if( isset( $attribs['lastname'] ) )
-			{
-				$attribs['namePerson/last'] = $attribs['lastname'];
-				unset( $attribs['lastname'] );
-			}
+            foreach ($global_config['config_sso']['config_field'] as $key => $ckey) {
+                if (!empty($ckey) and isset($data[0][$ckey])) {
+                    $attribs[$key] = $data[0][$ckey][0];
+                }
+            }
+            if (isset($attribs['email'])) {
+                $attribs['contact/email'] = $attribs['email'];
+                unset($attribs['email']);
+            }
 
-			if( isset( $attribs['gender'] ) )
-			{
-				$attribs['person/gender'] = $attribs['gender'];
-				unset( $attribs['gender'] );
-			}
-		}
-		ldap_close( $ldapconn );
-	}
-}
-else
-{
-	$attribs = array( 'result' => 'notlogin' );
+            if (isset($attribs['firstname'])) {
+                $attribs['namePerson/first'] = $attribs['firstname'];
+                unset($attribs['firstname']);
+            }
+            if (isset($attribs['lastname'])) {
+                $attribs['namePerson/last'] = $attribs['lastname'];
+                unset($attribs['lastname']);
+            }
+
+            if (isset($attribs['gender'])) {
+                $attribs['person/gender'] = $attribs['gender'];
+                unset($attribs['gender']);
+            }
+        }
+        ldap_close($ldapconn);
+    }
+} else {
+    $attribs = array( 'result' => 'notlogin' );
 }
 
-$nv_Request->set_Session( 'openid_attribs', serialize( $attribs ) );
+$nv_Request->set_Session('openid_attribs', serialize($attribs));
 
-$op_redirect = ( defined( 'NV_IS_USER' )) ? 'editinfo/openid' : 'login';
+$op_redirect = (defined('NV_IS_USER')) ? 'editinfo/openid' : 'login';
 $nv_redirect = nv_get_redirect();
-if( !empty( $nv_redirect ) ) $nv_redirect = '&nv_redirect=' . $nv_redirect;
-Header( 'Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect );
+if (!empty($nv_redirect)) {
+    $nv_redirect = '&nv_redirect=' . $nv_redirect;
+}
+Header('Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect);
 exit();

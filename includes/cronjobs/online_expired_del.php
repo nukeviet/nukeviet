@@ -8,9 +8,9 @@
  * @Createdate 1-27-2010 5:25
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-
-if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
+if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
+    die('Stop!!!');
+}
 
 /**
  * cron_online_expired_del()
@@ -19,8 +19,8 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
  */
 function cron_online_expired_del()
 {
-	global $db;
-	$db->query( 'DELETE FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time < ' . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME) );
+    global $db;
+    $db->query('DELETE FROM ' . NV_SESSIONS_GLOBALTABLE . ' WHERE onl_time < ' . (NV_CURRENTTIME - NV_ONLINE_UPD_TIME));
 
-	return true;
+    return true;
 }

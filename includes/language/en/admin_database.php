@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+	die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -69,8 +71,8 @@ $lang_module['save_ok'] = 'Save successfully';
 $lang_module['save_download'] = 'Click here to download the file.';
 $lang_module['dump_autobackup'] = 'Activate auto backup';
 $lang_module['dump_backup_ext'] = 'File extension';
-$lang_module['dump_backup_day'] = 'Time to save database files backup';
 $lang_module['dump_interval'] = 'Repeat following jobs';
+$lang_module['dump_backup_day'] = 'Time to save database files backup';
 $lang_module['file_backup'] = 'Backups';
 $lang_module['file_nb'] = 'No.';
 $lang_module['file_name'] = 'File name';

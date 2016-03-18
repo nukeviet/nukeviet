@@ -4,7 +4,7 @@
 	<div class="alert alert-info clearfix">
 		<h1>{CONTENT.title}</h1>
 		<!-- BEGIN: image -->
-		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" id="imghome" class="img-thumbnail pull-left" />
+		<img alt="{CONTENT.title}" src="{HOMEIMG1}" width="{IMGWIDTH1}" id="imghome" class="img-thumbnail pull-left imghome" />
 		<!-- END: image -->
 		<p class="text-justify">{CONTENT.description}</p>
 	</div>

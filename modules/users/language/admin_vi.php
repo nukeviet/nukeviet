@@ -9,7 +9,9 @@
  * @Createdate May 30, 2010, 10:57:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '30/05/2010, 23:57';
@@ -55,8 +57,8 @@ $lang_module['name_show'] = 'Kiểu hiển thị họ tên';
 $lang_module['firstname_lastname'] = 'Tên và Họ';
 $lang_module['lastname_firstname'] = 'Họ và Tên';
 $lang_module['error_language'] = 'Lỗi: bạn chưa chọn kiểu hiển thị Họ và Tên';
-$lang_module['avata'] = 'Hình đại diện';
-$lang_module['avata_chosen'] = 'Chọn ảnh';
+$lang_module['avatar'] = 'Hình đại diện';
+$lang_module['avatar_chosen'] = 'Chọn ảnh';
 $lang_module['birthday'] = 'Ngày tháng năm sinh';
 $lang_module['date'] = 'Ngày';
 $lang_module['month'] = 'Tháng';
@@ -64,6 +66,10 @@ $lang_module['year'] = 'Năm';
 $lang_module['show_email'] = 'Hiển thị email';
 $lang_module['sig'] = 'Chữ ký';
 $lang_module['in_group'] = 'Là tài khoản của nhóm';
+$lang_module['in_group_default'] = 'Là nhóm mặc định';
+$lang_module['is_official'] = 'Là thành viên chính thức';
+$lang_module['is_official_note'] = 'Nếu không chọn, tài khoản này sẽ được đưa vào nhóm thành viên mới đăng ký';
+$lang_module['set_official_note'] = 'Cho làm thành viên chính thức';
 
 $lang_module['question'] = 'Câu hỏi bảo mật';
 $lang_module['addquestion'] = 'Thêm câu hỏi bảo mật';
@@ -94,7 +100,7 @@ $lang_module['password_simple'] = 'Các từ cấm sử dụng các mật khẩu
 $lang_module['memberlist_active'] = 'Hoạt động';
 $lang_module['memberlist_unactive'] = 'Hoạt động';
 $lang_module['memberlist_error_method'] = 'Hãy chọn phương thức để tìm kiếm !';
-$lang_module['memberlist_error_value'] = 'Gía trị tìm kiếm không được để trống và không quá 64 kí tự !';
+$lang_module['memberlist_error_value'] = 'Giá trị tìm kiếm không được để trống và không quá 64 kí tự !';
 $lang_module['memberlist_nousers'] = 'Không tìm thấy tài khoản nào phù hợp !';
 $lang_module['memberlist_selectusers'] = 'Hãy chọn ít nhất 1 user để xóa !';
 $lang_module['checkall'] = 'Chọn tất cả';
@@ -120,6 +126,7 @@ $lang_module['edit_add_error'] = 'Lỗi: Không cập nhật được thông tin
 $lang_module['edit_error_question'] = 'Câu hỏi bảo mật không được để trống';
 $lang_module['edit_error_answer'] = 'Câu trả lời cho câu hỏi bảo mật không được để trống';
 $lang_module['edit_error_group'] = 'Hãy chọn group cho tài khoản';
+$lang_module['edit_error_group_default'] = 'Hãy chọn nhóm mặc định cho tài khoản';
 $lang_module['account_deny_name'] = 'Rất tiếc, tài khoản %s đã bị cấm sử dụng để đăng ký tài khoản mới';
 $lang_module['awaiting_active'] = 'Kích hoạt';
 $lang_module['delconfirm_message'] = 'Bạn có chắc muốn xóa tài khoản đã chọn không?';
@@ -132,10 +139,10 @@ $lang_module['adduser_email'] = 'Gửi email thông báo:';
 $lang_module['adduser_email_yes'] = 'Có';
 $lang_module['adduser_register'] = 'Tài khoản của bạn đã được tạo';
 $lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
-$lang_module['openid_servers'] = 'Các nhà cung cấp Oauth, OpenID được chấp nhận';
-$lang_module['openid_processing'] = 'Chế độ mặc định xử lý sau khi login OpenID';
+$lang_module['openid_servers'] = 'Các nhà cung cấp Oauth được chấp nhận';
+$lang_module['openid_processing'] = 'Chế độ mặc định xử lý sau khi login Oauth';
 $lang_module['openid_processing_0'] = 'Người dùng tự chọn hình thức xử lý';
-$lang_module['openid_processing_3'] = 'Đăng ký một tài khoản mới và gán OpenID này vào tài khoản đó';
+$lang_module['openid_processing_3'] = 'Đăng ký một tài khoản mới và gán OauthID này vào tài khoản đó';
 $lang_module['openid_processing_4'] = 'Đăng nhập tự động bằng một tài khoản do hệ thống tự tạo';
 $lang_module['allow_change_login'] = 'Cho phép thay đổi tên đăng nhập';
 $lang_module['is_user_forum'] = 'Sử dụng tài khoản của Diễn đàn';
@@ -152,11 +159,23 @@ $lang_module['title'] = 'Tên nhóm';
 $lang_module['content'] = 'Nội dung';
 $lang_module['add_time'] = 'Bắt đầu vào';
 $lang_module['exp_time'] = 'Hiệu lực đến';
-$lang_module['public'] = 'Công cộng';
+$lang_module['group_type'] = 'Loại nhóm';
+$lang_module['group_type_0'] = 'Nhóm cố định';
+$lang_module['group_type_1'] = 'Nhóm tham gia phải gửi yêu cầu';
+$lang_module['group_type_2'] = 'Nhóm tham gia tự do';
+$lang_module['group_color'] = 'Màu nhóm';
+$lang_module['group_avatar'] = 'Ảnh đại diện nhóm';
+$lang_module['group_is_default'] = 'Nhóm mặc định khi đăng ký thành viên vào';
 $lang_module['siteus'] = 'Cho phép các subsite thêm tài khoản vào nhóm';
 $lang_module['users'] = 'Thành viên';
+$lang_module['promote'] = 'Thăng cấp';
+$lang_module['demote'] = 'Giáng cấp';
+$lang_module['approved'] = 'Duyệt';
+$lang_module['denied'] = 'Từ chối';
 $lang_module['error_title_exists'] = 'Tên nhóm "%s" đã tồn tại';
-$lang_module['users_in_group_caption'] = 'Danh sách tài khoản của nhóm "%s" (%d tài khoản)';
+$lang_module['members_in_group_caption'] = 'Danh sách thành viên của nhóm "%s" (%d tài khoản)';
+$lang_module['leaders_in_group_caption'] = 'Danh sách quản trị của nhóm "%s" (%d tài khoản)';
+$lang_module['pending_in_group_caption'] = 'Danh sách xin gia nhập của nhóm "%s" (%d tài khoản)';
 $lang_module['error_group_not_found'] = 'Lỗi: Không tìm thấy nhóm';
 $lang_module['error_users_not_found'] = 'Hiện nhóm này chưa có tài khoản';
 $lang_module['error_group_in_site'] = 'Lỗi: Bạn chỉ được thêm và xóa tài khoản khỏi nhóm, là các tài khoản thuộc site bạn quản lý.';
@@ -171,6 +190,7 @@ $lang_module['search_not_result'] = 'Tìm kiếm không kết quả';
 $lang_module['search_result_caption'] = 'Kết quả tìm kiếm';
 $lang_module['group_pgtitle'] = 'Thông tin chi tiết';
 $lang_module['group_info'] = 'Thông tin về nhóm &ldquo;%s&rdquo;';
+$lang_module['group_user_peding'] = 'Số thành viên xin gia nhập nhóm &quot;%s&quot;';
 $lang_module['add_user'] = 'Thêm tài khoản %1$s vào nhóm %2$s';
 $lang_module['exclude_user'] = 'Loại tài khoản %1$s khỏi nhóm %2$s';
 $lang_module['siteinfo_user'] = 'Số tài khoản';
@@ -418,3 +438,5 @@ $lang_module['safe_deactivate'] = 'Tắt chế độ an toàn';
 $lang_module['group_description'] = 'Mô tả';
 $lang_module['group_description_empty'] = 'Hãy mô tả ngắn gọn về nhóm';
 $lang_module['auto_login_after_reg'] = 'Tự động đăng nhập sau khi đăng ký thành công';
+$lang_module['active_group_newusers'] = 'Kích hoạt chức năng xác thực thành viên';
+$lang_module['active_group_newusers_note'] = 'Nếu chức năng này được kích hoạt, những thành viên mới đăng ký sẽ được tự động xếp vào nhóm &quot;Thành Viên mới &quot; cho đến khi được người quản lý loại khỏi nhóm, lúc này thành viên mới được xem là &quot;Thành Viên chính thức&quot;';

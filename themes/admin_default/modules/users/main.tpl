@@ -26,6 +26,7 @@
 					<div class="form-group">
 						<select class="form-control" name="usactive">
 							<option value="-1">---{LANG.usactive}---</option>
+							<option value="-2"{SELECTED_NEW_USERS}>{GLANG.level7}</option>
 							<!-- BEGIN: usactive -->
 							<option value="{USACTIVE.key}"{USACTIVE.selected}>{USACTIVE.value}</option>
 							<!-- END: usactive -->
@@ -79,12 +80,15 @@
 					<td> {CONTENT_TD.regdate} </td>
 					<td class="text-center"><input type="checkbox" name="active" id="change_status_{CONTENT_TD.userid}" value="{CONTENT_TD.userid}"{CONTENT_TD.checked}{CONTENT_TD.disabled} /></td>
 					<td class="text-center">
-					<!-- BEGIN: edit -->
-					&nbsp;&nbsp; <em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{EDIT_URL}">{LANG.memberlist_edit}</a>
-					<!-- END: edit -->
-					<!-- BEGIN: del -->
-					&nbsp;&nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_row_del({CONTENT_TD.userid});">{LANG.delete}</a>
-					<!-- END: del -->
+    					<!-- BEGIN: set_official -->
+    					<a data-toggle="tooltip" title="{LANG.set_official_note}" href="javascript:void(0);" class="btn btn-xs btn-info" onclick="nv_set_official({CONTENT_TD.userid});"><em class="fa fa-user"></em></a>
+    					<!-- END: set_official -->
+    					<!-- BEGIN: edit -->
+    					<a data-toggle="tooltip" title="{LANG.memberlist_edit}" href="{EDIT_URL}" class="btn btn-xs btn-warning"><em class="fa fa-edit"></em></a>
+    					<!-- END: edit -->
+    					<!-- BEGIN: del -->
+    					<a data-toggle="tooltip" title="{LANG.delete}" href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="nv_row_del({CONTENT_TD.userid});"><em class="fa fa-trash-o"></em></a>
+    					<!-- END: del -->
 					</td>
 				</tr>
 				<!-- END: xusers -->

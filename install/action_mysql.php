@@ -8,14 +8,15 @@
  * @Createdate 12/28/2009 20:8
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 // Ten cac table cua CSDL dung chung cho he thong
 
-$result = $db->query( "SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'" );
-while( $item = $result->fetch() )
-{
-	$sql_drop_table[] = 'DROP TABLE ' . $item['name'];
+$result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
+while ($item = $result->fetch()) {
+    $sql_drop_table[] = 'DROP TABLE ' . $item['name'];
 }
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . " (
@@ -79,6 +80,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . "_question (
 
 $sql_create_table[] = "CREATE TABLE " . NV_USERS_GLOBALTABLE . " (
 	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+    group_id smallint(5) unsigned NOT NULL DEFAULT '0',
 	username varchar(100) NOT NULL DEFAULT '',
 	md5username char(32) NOT NULL DEFAULT '',
 	password varchar(80) NOT NULL DEFAULT '',
@@ -199,9 +201,12 @@ $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 	title varchar(240) NOT NULL,
     description text,
 	content text,
+	group_type tinyint(4) unsigned NOT NULL DEFAULT '0' COMMENT '0:Sys, 1:approval, 2:public',
+    group_color varchar(10) NOT NULL,
+    group_avatar varchar(255) NOT NULL,
+    is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
 	add_time int(11) NOT NULL,
 	exp_time int(11) NOT NULL,
-	publics tinyint(1) unsigned NOT NULL DEFAULT '0',
 	weight int(11) unsigned NOT NULL DEFAULT '0',
 	act tinyint(1) unsigned NOT NULL,
 	idsite int(11) unsigned NOT NULL DEFAULT '0',
@@ -215,6 +220,8 @@ $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . " (
 $sql_create_table[] = "CREATE TABLE " . NV_GROUPS_GLOBALTABLE . "_users (
 	group_id smallint(5) unsigned NOT NULL DEFAULT '0',
 	userid mediumint(8) unsigned NOT NULL DEFAULT '0',
+    is_leader tinyint(1) unsigned NOT NULL DEFAULT '0',
+    approved tinyint(1) unsigned NOT NULL DEFAULT '0',
 	data text NOT NULL,
 	PRIMARY KEY (group_id,userid)
 ) ENGINE=MyISAM";
@@ -276,7 +283,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_extension
 	type varchar(10) NOT NULL DEFAULT 'other',
 	title varchar(55) NOT NULL,
 	is_sys tinyint(1) NOT NULL DEFAULT '0',
-	virtual tinyint(1) NOT NULL DEFAULT '0',
+	is_virtual tinyint(1) NOT NULL DEFAULT '0',
 	basename varchar(50) NOT NULL DEFAULT '',
 	table_prefix varchar(55) NOT NULL DEFAULT '',
 	version varchar(50) NOT NULL,
@@ -323,7 +330,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 	login varchar(60) NOT NULL,
 	pass varchar(80) NOT NULL,
 	reg_time int(11) unsigned NOT NULL DEFAULT '0',
-	full_name varchar(255) NOT NULL,
+	full_name varchar(250) NOT NULL,
 	email varchar(100) NOT NULL,
 	website varchar(255) NOT NULL,
 	location varchar(255) NOT NULL,
@@ -346,7 +353,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	blang char(2) DEFAULT '',
-	title varchar(255) NOT NULL,
+	title varchar(250) NOT NULL,
 	description varchar(255) DEFAULT '',
 	form varchar(100) NOT NULL,
 	width smallint(4) unsigned NOT NULL DEFAULT '0',

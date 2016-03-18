@@ -110,7 +110,9 @@
 						<!-- BEGIN: opsite_timezone -->
 						<option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE} </option>
 						<!-- END: opsite_timezone -->
-					</select></td>
+					</select>
+					{CURRENT_TIME}
+					</td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.gzip_method}</strong></td>

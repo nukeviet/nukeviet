@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -35,10 +37,11 @@ $lang_module['error_title'] = 'Vui lòng nhập tiêu đề';
 $lang_module['error_content'] = 'Vui lòng nhập nội dung';
 $lang_module['sendcontactok'] = 'Cảm ơn bạn đã quan tâm! Chúng tôi sẽ trả lời thư của bạn trong thời gian sớm nhất.';
 $lang_module['sendinfo'] = "Thư này được gửi thông qua tiện ích Liên hệ tại website";
-$lang_module['sendinfo2'] = "Thông tin về người gửi";
+$lang_module['sendinfo2'] = "Thông tin người gửi";
 $lang_module['phone'] = 'Điện thoại';
 $lang_module['fax'] = 'Fax';
 $lang_module['note_s'] = 'Ghi chú';
 $lang_module['department'] = 'Bộ phận';
 $lang_module['sendcontactfailed'] = 'Phản hồi của bạn đã không được gửi đi vì lý do kỹ thuật. Thành thật xin lỗi vì sự bất tiện này.';
 $lang_module['note'] = 'Vui lòng điền vào mẫu dưới đây và chúng tôi sẽ liên lạc với bạn.';
+$lang_module['sendcopy'] = 'Gửi bản sao thư này cho tôi';

@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -20,6 +22,7 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['edit_title'] = 'Xem nội dung gửi';
 $lang_module['add_row_title'] = 'Thêm bộ phận';
 $lang_module['department_title'] = 'Các bộ phận';
+$lang_module['department_no_home'] = 'Không hiển thị tại trang chính module';
 $lang_module['alias'] = 'Liên kết tĩnh';
 $lang_module['image'] = 'Hình ảnh';
 $lang_module['error_alias'] = 'Lỗi: chưa có liên kết tĩnh';

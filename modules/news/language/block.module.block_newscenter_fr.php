@@ -9,7 +9,9 @@
 * @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
 $lang_translator['createdate'] = '31/07/2015, 16:30';
@@ -29,4 +31,5 @@ $lang_block['width'] = 'Image Largeur';
 $lang_block['height'] = 'Image Hauteur';
 $lang_block['length_title'] = 'Nombre de caractère du titre';
 $lang_block['length_hometext'] = 'Nombre de caractère de la présentation';
+$lang_block['length_othertitle'] = 'Nombre de caractère du titre';
 $lang_block['nocatid'] = 'N\'affiche pas dans les rubriques';

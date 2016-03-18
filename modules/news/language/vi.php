@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -73,7 +75,7 @@ $lang_module['search_on_internet'] = 'Tìm trên toàn mạng Internet';
 $lang_module['search_adv_internet'] = 'Mở rộng trên Internet';
 $lang_module['search_on_nuke'] = 'Tìm trong site';
 $lang_module['search_none'] = 'Không tìm thấy dữ liệu nào có liên quan đến';
-$lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 truờng tìm kiếm';
+$lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 trường tìm kiếm';
 $lang_module['search_in_module'] = 'trong mục';
 $lang_module['view_all_title'] = 'Xem tất cả các kết quả tìm kiếm';
 $lang_module['pages_title'] = 'Trang';

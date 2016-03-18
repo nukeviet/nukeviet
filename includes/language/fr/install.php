@@ -9,7 +9,9 @@
 * @Createdate Jun 30, 2010, 03:30:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '30/06/2010, 10:30';
@@ -17,7 +19,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. Tous droits r�
 $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'Installation de Nukeviet';
+$lang_module['titlesetup'] = 'Installation de Nukeviet 4 RC2';
 $lang_module['select_language'] = 'Sélectionner la langue';
 $lang_module['license'] = 'Licence';
 $lang_module['check_server'] = 'Vérification du système';
@@ -44,7 +46,6 @@ $lang_module['php_support'] = 'Suppor de PHP';
 $lang_module['php_version'] = 'Version de PHP';
 $lang_module['pdo_support'] = 'Compatible avec PHP Data Objects';
 $lang_module['request'] = 'Obligatoire';
-$lang_module['safe_mode'] = 'Mode sans échec';
 $lang_module['required_off'] = 'Inactif obligatoire';
 $lang_module['required_on'] = 'Support obligatoire';
 $lang_module['recommnet'] = 'Recommandé';

@@ -80,7 +80,6 @@
 						</li>
 						<!-- END: top_menu_loop -->
 					</ul>
-					<p class="navbar-text navbar-right" id="digclock">{NV_DIGCLOCK}</p>
 				</div>
 			</div>
 		</div>
@@ -146,11 +145,11 @@
 
 				<ul class="pull-right list-inline" style="margin: 0">
 					<!-- BEGIN: url_instruction -->
-					<li><a href="{NV_URL_INSTRUCTION}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_INSTRUCTION}"><em class="fa fa-book fa-lg">&nbsp;</em></a></li>
+					<li><a target="_blank" href="{NV_URL_INSTRUCTION}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_INSTRUCTION}"><em class="fa fa-book fa-lg">&nbsp;</em></a></li>
 					<!-- END: url_instruction -->
 
 					<!-- BEGIN: site_mods -->
-					<li><a href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_GO_CLIENTMOD}"><em class="fa fa-globe fa-lg">&nbsp;</em></a></li>
+					<li><a target="_blank" href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_GO_CLIENTMOD}"><em class="fa fa-globe fa-lg">&nbsp;</em></a></li>
 					<!-- END: site_mods -->
 				</ul>
 			</div>

@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate May 30, 2010, 05:07:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+	die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '31/05/2010, 00:07';
@@ -55,8 +57,8 @@ $lang_module['name_show'] = 'Type display name';
 $lang_module['firstname_lastname'] = 'Firstname and Lastname';
 $lang_module['lastname_firstname'] = 'Lastname and Firstname';
 $lang_module['error_language'] = 'Error: You do not select the type of display Name';
-$lang_module['avata'] = 'Avatar';
-$lang_module['avata_chosen'] = 'Chosen avatar';
+$lang_module['avatar'] = 'Avatar';
+$lang_module['avatar_chosen'] = 'Chosen avatar';
 $lang_module['birthday'] = 'Birthday';
 $lang_module['date'] = 'Day';
 $lang_module['month'] = 'Month';
@@ -64,6 +66,10 @@ $lang_module['year'] = 'Year';
 $lang_module['show_email'] = 'Display email';
 $lang_module['sig'] = 'Signature';
 $lang_module['in_group'] = 'Member of group';
+$lang_module['in_group_default'] = 'Group default';
+$lang_module['is_official'] = 'Is an official member';
+$lang_module['is_official_note'] = 'If not selected, this account will be included in the group of new member registration';
+$lang_module['set_official_note'] = 'To make an official member';
 $lang_module['question'] = 'Secret question';
 $lang_module['addquestion'] = 'Add secret question';
 $lang_module['savequestion'] = 'Save secret question';
@@ -118,6 +124,7 @@ $lang_module['edit_add_error'] = 'Can\'t update member information!';
 $lang_module['edit_error_question'] = 'Empty secret question';
 $lang_module['edit_error_answer'] = 'Empty answer';
 $lang_module['edit_error_group'] = 'Please select group for member';
+$lang_module['edit_error_group_default'] = 'Choose default account groups';
 $lang_module['account_deny_name'] = 'Sorry, Account %s banned.';
 $lang_module['awaiting_active'] = 'Activate';
 $lang_module['delconfirm_message'] = 'Do you realy want to delete selected member?';
@@ -130,10 +137,10 @@ $lang_module['adduser_email'] = 'Send notification email:';
 $lang_module['adduser_email_yes'] = 'Yes';
 $lang_module['adduser_register'] = 'Your account was created';
 $lang_module['adduser_register_info'] = 'Hi %1$s,<br />Your account at website %2$s activated. Your login information:<br />URL: <a href="%3$s">%3$s</a><br />Account: %4$s<br />Password: %5$s<br />This is email automatic sending from website %2$s.<br />Site administrator';
-$lang_module['openid_servers'] = 'Oauth, OpenID accepted list';
-$lang_module['openid_processing'] = 'The default processing mode after OpenID login';
+$lang_module['openid_servers'] = 'Oauth accepted list';
+$lang_module['openid_processing'] = 'The default processing mode after Oauth login';
 $lang_module['openid_processing_0'] = 'Users can choose the mode of processing';
-$lang_module['openid_processing_3'] = 'Register a new account and link this OpenID';
+$lang_module['openid_processing_3'] = 'Register a new account and link this OauthID';
 $lang_module['openid_processing_4'] = 'Login with account create automatic by system';
 $lang_module['allow_change_login'] = 'Allow change login name';
 $lang_module['is_user_forum'] = 'Use forum\'s users';
@@ -150,11 +157,23 @@ $lang_module['title'] = 'Group name';
 $lang_module['content'] = 'Content';
 $lang_module['add_time'] = 'Start date';
 $lang_module['exp_time'] = 'Expire date';
-$lang_module['public'] = 'Public';
+$lang_module['group_type'] = 'Loại nhóm';
+$lang_module['group_type_0'] = 'Nhóm cố định';
+$lang_module['group_type_1'] = 'Nhóm tham gia phải gửi yêu cầu';
+$lang_module['group_type_2'] = 'Nhóm tham gia tự do';
+$lang_module['group_color'] = 'Colour group';
+$lang_module['group_avatar'] = 'Avatar group';
+$lang_module['group_is_default'] = 'Default groups when members register';
 $lang_module['siteus'] = 'Allow subsite add members to the group';
 $lang_module['users'] = 'User';
+$lang_module['promote'] = 'Promote';
+$lang_module['demote'] = 'Demote';
+$lang_module['approved'] = 'Approved';
+$lang_module['denied'] = 'Denied';
 $lang_module['error_title_exists'] = 'Group name "%s" already exist';
-$lang_module['users_in_group_caption'] = 'Member list in group "%s" (%d group)';
+$lang_module['members_in_group_caption'] = 'Member list in group "%s" (%d group)';
+$lang_module['leaders_in_group_caption'] = 'Managing the list of group "%s" (%d accounts)';
+$lang_module['pending_in_group_caption'] = 'Acceding list of group "%s" (%d accounts)';
 $lang_module['error_group_not_found'] = 'Error: Can\'t find group';
 $lang_module['error_users_not_found'] = 'Group has not member';
 $lang_module['error_group_in_site'] = 'Error: You just added and deleted from the group account, the account management of your site.';
@@ -169,6 +188,7 @@ $lang_module['search_not_result'] = 'Not found any results';
 $lang_module['search_result_caption'] = 'Result';
 $lang_module['group_pgtitle'] = 'Detail';
 $lang_module['group_info'] = 'Group information &ldquo;%s&rdquo;';
+$lang_module['group_user_peding'] = 'Some members would like to join the group "%s"';
 $lang_module['add_user'] = 'Member %1$s group %2$s';
 $lang_module['exclude_user'] = 'Delete member %1$s in group %2$s';
 $lang_module['siteinfo_user'] = 'Members';
@@ -397,3 +417,6 @@ $lang_module['safe_active_info'] = 'Your account is in safe mode,  all the featu
 $lang_module['safe_deactivate'] = 'Safe mode turn off';
 $lang_module['group_description'] = 'Description';
 $lang_module['group_description_empty'] = 'Take a brief description of the group.';
+$lang_module['auto_login_after_reg'] = 'Automatically login after successful registration';
+$lang_module['active_group_newusers'] = 'Enable new member';
+$lang_module['active_group_newusers_note'] = 'If this function is activated, the new member registration will be automatically classified as "activated" until it has been removed from the team manager, at which new members are considered "Official members"';

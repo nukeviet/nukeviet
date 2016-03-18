@@ -16,7 +16,7 @@
 /uploads/logo_*
 /install/default.php
 
-/vendor/
+composer.lock
 #vendor test ignore 
 /vendor/**/demo/
 /vendor/**/example/
@@ -24,7 +24,7 @@
 /vendor/**/test/
 /vendor/**/tests/
 /vendor/**/Tests/
-/vendor/**/travis/
+/vendor/**/travis*
 /vendor/**/.travis.yml
 /vendor/**/.scrutinizer.yml
 /vendor/**/phpunit.xml*
@@ -35,6 +35,7 @@
 /vendor/**/docs/
 /vendor/**/readme*
 /vendor/**/README*
+/vendor/**/changelog*
 /vendor/**/CHANGELOG*
 /vendor/**/FAQ*
 /vendor/**/CONTRIBUTING*
@@ -44,11 +45,7 @@
 /vendor/**/package*
 /vendor/**/phpunit.php
 /vendor/**/.gitignore
-/vendor/**/composer.json
-
-# Ignore some class
-/includes/class/PHPExcel/
-/includes/class/PHPExcel.php
+/vendor/**/composer.*
 
 # Ignore some uploads, assets dir
 /assets/download

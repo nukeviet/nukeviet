@@ -62,6 +62,12 @@
                 <td>{LANG.regdate}</td>
                 <td>{USER.regdate}</td>
             </tr>
+            <!-- BEGIN: group_manage -->
+            <tr>
+                <td>{LANG.group_manage_count}</td>
+                <td>{USER.group_manage} <a href="{URL_GROUPS}" title="{LANG.group_manage_list}">({LANG.group_manage_list})</a></td>
+            </tr>
+            <!-- END: group_manage -->
             <tr>
                 <td>{LANG.st_login2}</td>
                 <td>{USER.st_login}</td>

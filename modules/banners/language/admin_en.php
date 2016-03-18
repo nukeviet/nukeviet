@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+	die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -80,6 +82,7 @@ $lang_module['add_banner_info'] = 'T add advertising, Please declare fully the b
 $lang_module['of_client'] = 'Client';
 $lang_module['upload'] = 'Image file for advertising (%s)';
 $lang_module['re_upload'] = 'Replace advertising image(%s)';
+$lang_module['imageforswf'] = 'Images for mobile browser';
 $lang_module['file_alt'] = 'Advertising note';
 $lang_module['click_url'] = 'Image\'s URL';
 $lang_module['add_date'] = 'Initial';
@@ -136,4 +139,3 @@ $lang_module['target_blank'] = 'New Window (_blank)';
 $lang_module['target_top'] = 'Topmost Window (_top)';
 $lang_module['target_self'] = 'Same Window (_self)';
 $lang_module['target_parent'] = 'Parent Window (_parent)';
-$lang_module['imageforswf'] = 'Images for mobile browser';

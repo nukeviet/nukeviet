@@ -9,7 +9,9 @@
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -55,8 +57,8 @@ $lang_module['name_show'] = 'Méthode d\'affichage de nom et prénom';
 $lang_module['firstname_lastname'] = 'Prénom et Nom';
 $lang_module['lastname_firstname'] = 'Nom et Prénom';
 $lang_module['error_language'] = 'Erreur: Vous avez choisir le format: Nom et Prénom';
-$lang_module['avata'] = 'L\'image de profile';
-$lang_module['avata_chosen'] = 'Choisir l\'image';
+$lang_module['avatar'] = 'L\'image de profile';
+$lang_module['avatar_chosen'] = 'Choisir l\'image';
 $lang_module['birthday'] = 'Date de naissance';
 $lang_module['date'] = 'Date';
 $lang_module['month'] = 'Mois';
@@ -130,10 +132,10 @@ $lang_module['adduser_email'] = 'Envoyer la notification:';
 $lang_module['adduser_email_yes'] = 'Oui';
 $lang_module['adduser_register'] = 'Votre compte a été créé';
 $lang_module['adduser_register_info'] = 'Bonjour %1$s,<br /><br /> Votre compte sur le site Web %2$s est activé. Les informations de connexion est au dessous: :<br /><br />URL: <a href="%3$s">%3$s</a><br />Nom de compte: %4$s<br /><br />Cela est un message automatique qui était envoyé à votre boîte mail à partir du site %2$s. Si vous ne comprenez pas le contenu de ce mail, vous pouvez simplement le supprimer .<br /><br />Administration du site';
-$lang_module['openid_servers'] = 'Les fournisseur d\'Oauth, OpenID est accepté';
-$lang_module['openid_processing'] = 'Le mode est par défaut de traiter après la connexion au OpenID';
+$lang_module['openid_servers'] = 'Les fournisseur d\'Oauth est accepté';
+$lang_module['openid_processing'] = 'Le mode est par défaut de traiter après la connexion au OauthID';
 $lang_module['openid_processing_0'] = 'Option de choisir la méthode de traiter';
-$lang_module['openid_processing_3'] = 'Créer un autre compte et le relier à ce OpenID';
+$lang_module['openid_processing_3'] = 'Créer un autre compte et le relier à ce OauthID';
 $lang_module['openid_processing_4'] = 'Connexion automatique par un compte crée par le système';
 $lang_module['allow_change_login'] = 'Autoriser le changement d\'identifiant';
 $lang_module['is_user_forum'] = 'Récupérer les utilisateurs de forum';
@@ -150,11 +152,14 @@ $lang_module['title'] = 'Nom du groupe';
 $lang_module['content'] = 'Description';
 $lang_module['add_time'] = 'Créer';
 $lang_module['exp_time'] = 'Expirer';
-$lang_module['public'] = 'Publique';
+$lang_module['group_type'] = 'Loại nhóm';
+$lang_module['group_type_0'] = 'Nhóm cố định';
+$lang_module['group_type_1'] = 'Nhóm tham gia phải gửi yêu cầu';
+$lang_module['group_type_2'] = 'Nhóm tham gia tự do';
 $lang_module['siteus'] = 'Permettre au sous-site d\'ajouter les membres dans le groupe';
 $lang_module['users'] = 'Utilisateurs';
 $lang_module['error_title_exists'] = 'Ce nom du groupe "%s" a été utilisé';
-$lang_module['users_in_group_caption'] = 'Liste des utilisateurs du groupe "%s" (%d utilisateurs)';
+$lang_module['members_in_group_caption'] = 'Liste des utilisateurs du groupe "%s" (%d utilisateurs)';
 $lang_module['error_group_not_found'] = 'Erreur: Groupe introuvable';
 $lang_module['error_users_not_found'] = 'Ce groupe n\'a pas encore d\'utilisateur';
 $lang_module['error_group_in_site'] = 'Erreur: Vous ne pouvez qu\'ajouter et effacer les comptes du groupe qui sont les comptes que votre site gère';
