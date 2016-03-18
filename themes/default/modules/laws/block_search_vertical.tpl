@@ -13,10 +13,10 @@
 	<div class="form-group">
 		<label class="control-label">{LANG.s_key}</label>
 		<div class="row">
-		    <div class="col-xs-20"><input class="form-control" id="ls_key" type="text" name="q" value="{Q}"/></div>
+		    <div class="col-xs-19"><input class="form-control" id="ls_key" type="text" name="q" value="{Q}"/></div>
 		    <!-- BEGIN: is_advance_btn -->
-            <div class="col-xs-4">
-                <div class="col-xs-4"><button class="btn btn-primary <!-- BEGIN: is_advance_class -->advance<!-- END: is_advance_class -->" id="btn-search">{LANG_ADVANCE}</button></div>
+            <div class="col-xs-5">
+                <a class="<!-- BEGIN: is_advance_class -->advance<!-- END: is_advance_class -->" id="btn-search"><em class="fa fa-search">&nbsp;</em>{LANG_ADVANCE}</a>
             </div>
             <!-- END: is_advance_btn -->
 		</div>
@@ -109,12 +109,12 @@
             var a = $(this);
             if( a.hasClass('advance')){
                 $('#advance').slideDown();
-                a.html('{LANG.search_simple}');
+                a.html('<em class="fa fa-search">&nbsp;</em>{LANG.search_simple}');
                 a.removeClass('advance');
                 $('input[name="is_advance"]').val(1);
             }else{
                 $('#advance').slideUp();
-                a.html('{LANG.search_advance}');
+                a.html('<em class="fa fa-search">&nbsp;</em>{LANG.search_advance}');
                 a.addClass('advance');
                 $('input[name="is_advance"]').val(0);
             }

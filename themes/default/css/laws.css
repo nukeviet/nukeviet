@@ -306,3 +306,9 @@ h3.subtitle{
 	margin-top: 0px;
     color:#02659d;
 }
+
+a#btn-search{
+	display: block;
+	font-size: 12px;
+	margin-top: 7px;
+}
