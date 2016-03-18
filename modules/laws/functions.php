@@ -192,21 +192,3 @@ foreach ( $nv_laws_listcat as $c )
 		'src' => NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=rss/" . $c['alias']
 	);
 }
-
-/**
- * nv_like_logic()
- *
- * @param mixed $field
- * @param mixed $dbkeyword
- * @param mixed $logic
- * @return
- */
-function nv_like_logic($field, $dbkeyword, $logic)
-{
-    if ($logic == 'AND') {
-        $return = $field . " LIKE '%" . $dbkeyword . "%'";
-    } else {
-        $return = $field . " LIKE '%" . str_replace(" ", "%' OR " . $field . " LIKE '%", $dbkeyword) . "%'";
-    }
-    return $return;
-}
