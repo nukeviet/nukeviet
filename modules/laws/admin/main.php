@@ -608,7 +608,9 @@ else
 
 	        if ( ! empty( $keywords ) )
 	        {
-	            $where .= " AND title like '%" . $keywords . "%' OR code like '%" . $keywords . "%' OR note like '%" . $keywords . "%' OR introtext like '%" . $keywords . "%' OR bodytext like '%" . $keywords . "%'";
+				$dbkey = $db->dblikeescape( $keywords );
+				$keyhtml = nv_htmlspecialchars($keywords);
+	            $where .= " AND title like '%" . $keyhtml . "%' OR code like '%" . $keyhtml . "%' OR note like '%" . $keyhtml . "%' OR introtext like '%" . $keyhtml . "%' OR bodytext like '%" . $dbkey . "%'";
 	            $base_url .= "&keywords=" . $keywords;
 	        }
 
