@@ -169,7 +169,6 @@ $db->sqlreset()
 $all_page = $db->query($db->sql())->fetchColumn();
 
 $array_data = array();
-$stt = $page + 1;
 
 $db->select('*')
     ->order( 'addtime ' . ($nv_laws_setting['typeview'] ? "ASC" : "DESC"))
@@ -178,6 +177,7 @@ $db->select('*')
 
     $result = $db->query($db->sql());
 
+$number = $page > 1 ? ($per_page * ( $page - 1 ) ) + 1 : 1;
 while ( $row = $result->fetch() )
 {
 	$row['areatitle'] = array();
@@ -190,10 +190,9 @@ while ( $row = $result->fetch() )
 	$row['subjecttitle'] = $nv_laws_listsubject[$row['sid']]['title'];
 	$row['cattitle'] = $nv_laws_listcat[$row['cid']]['title'];
 	$row['url'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=detail/" . $row['alias'];
-	$row['stt'] = $stt;
+	$row['stt'] = $number++;
 
 	$array_data[] = $row;
-	$stt ++;
 }
 
 $generate_page = '';
