@@ -276,12 +276,13 @@ function nv_clean60($string, $num = 60, $specialchars = false)
 
     $len = nv_strlen($string);
     if ($num and $num < $len) {
-        if (ord(nv_substr($string, $num, 1)) == 32) {
-            $string = nv_substr($string, 0, $num) . '...';
-        } elseif (strpos($string, ' ') === false) {
+        if (strpos($string, ' ') === false) {
             $string = nv_substr($string, 0, $num);
         } else {
-            $string = nv_clean60($string, $num - 1);
+            while (ord(nv_substr($string, $num, 1)) != 32) {
+                --$num;
+            }
+            $string = nv_substr($string, 0, $num) . '...';
         }
     }
     
