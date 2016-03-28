@@ -128,7 +128,7 @@ $methodvalue = $nv_Request->isset_request('value', 'post') ? $nv_Request->get_st
 $orders = array(
     'userid',
     'username',
-    'first_name',
+    'full_name',
     'email',
     'regdate' );
 $orderby = $nv_Request->get_string('sortby', 'get', '');
@@ -155,7 +155,8 @@ $num_items = $db->query($db->sql())->fetchColumn();
 $db->select('*')->limit($per_page)->offset(($page - 1) * $per_page);
 
 if (! empty($orderby) and in_array($orderby, $orders)) {
-    $db->order($orderby . ' ' . $ordertype);
+    $orderby_sql = $orderby != 'full_name' ? $orderby : ($global_config['name_show'] == 0 ? "concat(first_name,' ',last_name)" : "concat(last_name,' ',first_name)");
+    $db->order($orderby_sql . ' ' . $ordertype);
     $base_url .= '&amp;sortby=' . $orderby . '&amp;sorttype=' . $ordertype;
 }
 

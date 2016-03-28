@@ -198,6 +198,8 @@ $xtpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE .
 $xtpl->assign('FILTERSQL', nv_base64_encode($crypt->aes_encrypt($filtersql, md5($global_config['sitekey'] . $client_info['session_id']))));
 $xtpl->assign('ACTION', $contents['action']);
 
+$my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $global_config['module_theme'] . "/js/users.js\"></script>" . NV_EOL;
+
 if (isset($contents['editor'])) {
     $xtpl->assign('EDITOR0', $contents['editor'][0]);
     $xtpl->assign('EDITOR3', $contents['editor'][3]);

@@ -519,11 +519,10 @@ $(document).ready(function(){
 	});
 
 	// Get userid
-	$("thead a,.generatePage a").click(function() {
-		var a = $(this).attr("href");
-		$("#resultdata").load(a);
-		return !1
-	});
+    $("#resultdata").delegate("thead a,.generatePage a", "click", function(e) {
+		e.preventDefault()
+		$("#resultdata").load($(this).attr("href"))
+    });
 	if ($.fn.datepicker){
 		$("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
 			showOn : "both",
