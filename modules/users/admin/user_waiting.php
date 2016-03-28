@@ -84,9 +84,10 @@ if ($nv_Request->isset_request('act', 'get')) {
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE userid=' . $row['userid']);
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid']);
-            $first_name = (! empty($row['first_name'])) ? $row['first_name'] : $row['username'];
+
+            $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
             $subject = $lang_module['adduser_register'];
-            $message = sprintf($lang_module['adduser_register_info'], $first_name, $global_config['site_name'], NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true), $row['username']);
+            $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true), $row['username']);
             @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
         } else {
             $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $row['userid']);
@@ -111,8 +112,8 @@ $methods = array(
         'sql' => 'username',
         'value' => $lang_module['search_account'],
         'selected' => '' ),
-    'fullname' => array(
-        'key' => 'fullname',
+    'full_name' => array(
+        'key' => 'full_name',
         'sql' => $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)",
         'value' => $lang_module['search_name'],
         'selected' => '' ),
@@ -165,7 +166,7 @@ while ($row = $result->fetch()) {
     $users_list[$row['userid']] = array(
         'userid' => $row['userid'],
         'username' => $row['username'],
-        'first_name' => $row['first_name'],
+        'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
         'email' => $row['email'],
         'regdate' => date('d/m/Y H:i', $row['regdate']) );
 }
@@ -177,8 +178,8 @@ $head_tds['userid']['title'] = $lang_module['userid'];
 $head_tds['userid']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;sortby=userid&amp;sorttype=ASC';
 $head_tds['username']['title'] = $lang_module['account'];
 $head_tds['username']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;sortby=username&amp;sorttype=ASC';
-$head_tds['first_name']['title'] = $lang_module['name'];
-$head_tds['first_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;sortby=first_name;sorttype=ASC';
+$head_tds['full_name']['title'] = $lang_module['name'];
+$head_tds['full_name']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;sortby=full_name&amp;sorttype=ASC';
 $head_tds['email']['title'] = $lang_module['email'];
 $head_tds['email']['href'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=user_waiting&amp;sortby=email&amp;sorttype=ASC';
 $head_tds['regdate']['title'] = $lang_module['register_date'];
