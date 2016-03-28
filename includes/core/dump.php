@@ -117,6 +117,9 @@ function nv_dump_save($params)
     while ($item = $result->fetch()) {
         unset($m);
         if (in_array($item['name'], $params['tables'])) {
+            if ($item['engine'] != 'MyISAM') {
+                $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+            }
             $tables[$a]['name'] = $item['name'];
             $tables[$a]['size'] = intval($item['data_length']) + intval($item['index_length']);
             $tables[$a]['limit'] = 1 + round(1048576 / ($item['avg_row_length'] + 1));
