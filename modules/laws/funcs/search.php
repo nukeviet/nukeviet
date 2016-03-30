@@ -16,18 +16,27 @@ $key_words = $module_info['keywords'];
 //
 $per_page = $nv_laws_setting['numsub'];
 
-$key = $nv_Request->get_title('q', 'get', '');
+$array_search=array();
+$key= $nv_Request->get_title('q', 'get,post', '');
 $key = str_replace('+', ' ', $key);
 $key = trim(nv_substr($key, 0, NV_MAX_SEARCH_LENGTH));
+$array_search['key']=$key;
 
 $sfrom = nv_substr( $nv_Request->get_title( 'sfrom', 'get', '' ), 0, 10);
+$array_search['sfrom']=$sfrom;
 $sto = nv_substr( $nv_Request->get_title( 'sto', 'get', '' ), 0, 10);
+$array_search['sto']=$sto;
 
 $area = $nv_Request->get_int( 'area', 'get', 0 );
+$array_search['area']=$area;
 $cat = $nv_Request->get_int( 'cat', 'get', 0 );
+$array_search['cat']=$cat;
 $subject = $nv_Request->get_int( 'subject', 'get', 0 );
+$array_search['subject']=$subject;
 $sstatus = $nv_Request->get_int( 'status', 'get', 0 );
+$array_search['sstatus']=$sstatus;
 $is_advance = $nv_Request->get_int( 'is_advance', 'get', 0 );
+$array_search['is_advance']=$is_advance;
 
 unset( $m );
 if ( preg_match( "/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/", $sfrom, $m ) )
@@ -144,13 +153,6 @@ $page = $nv_Request->get_int('page', 'get', 1);
 if ($page>1) {
     $base_url_rewrite .= '&page=' . $page;
 }
-$base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
-
-$request_uri = urldecode($_SERVER['REQUEST_URI']);
-if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
-    header('Location: ' . $base_url_rewrite);
-    die();
-}
 
 if( ! $search )
 {
@@ -207,7 +209,7 @@ if( $all_page > $per_page ){
     $generate_page = nv_generate_page($_array_url, $all_page, $per_page, $page);	
 }
 
-$contents = nv_theme_laws_search( $array_data, $generate_page, $all_page );
+$contents = nv_theme_laws_search( $array_data, $generate_page, $all_page, $array_search );
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme( $contents );

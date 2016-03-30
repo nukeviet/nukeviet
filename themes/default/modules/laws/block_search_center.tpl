@@ -4,7 +4,7 @@
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.menu.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
 
-<form class="form-horizontal formsearch" action="{FORM_ACTION}" method="get" onsubmit="return nv_check_search_laws(this);">
+<form class="form-horizontal formsearch" action="{NV_BASE_SITEURL}index.php" method="get" onsubmit="return nv_check_search_laws(this);">
 	<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="search"/>
