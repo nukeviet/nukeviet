@@ -23,7 +23,9 @@ while (list ($lang) = $language_query->fetch(3)) {
 	$mquery = $db->query("SELECT title, module_data FROM " . $db_config['prefix'] . "_" . $lang . "_modules WHERE module_file = 'laws'");
 	while (list($mod, $mod_data) = $mquery->fetch(3)) {
 	    try {
-	        $db->query("CREATE TABLE IF NOT EXITS " . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_row_area ( row_id INT(10) UNSIGNED NOT NULL , area_id SMALLINT(4) UNSIGNED NOT NULL ) ENGINE = MyISAM;");
+	    	
+	        $db->query("CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_row_area ( row_id INT(10) UNSIGNED NOT NULL , area_id SMALLINT(4) UNSIGNED NOT NULL ) ENGINE = MyISAM;");
+			
 			$db->query("ALTER TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_row_area ADD UNIQUE( row_id, area_id)");
 				
 			$db->query("TRUNCATE " . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_row_area");
@@ -36,7 +38,7 @@ while (list ($lang) = $language_query->fetch(3)) {
 			}
 
 			// Xoa truong aid trong bang _row
-			$db->query("ALTER TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_row_area DROP aid");
+			$db->query("ALTER TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $mod_data . "_row DROP aid");
 
 			die('OK');
 
