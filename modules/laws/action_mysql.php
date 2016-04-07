@@ -15,6 +15,7 @@ $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lan
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_subject";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_row";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_row_area";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_set_replace";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config";
@@ -71,7 +72,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   title varchar(255) NOT NULL,
   alias varchar(255) NOT NULL,
   code varchar(50) NOT NULL,
-  aid smallint(4) unsigned NOT NULL DEFAULT '0',
   cid smallint(4) unsigned NOT NULL DEFAULT '0',
   sid smallint(4) unsigned NOT NULL DEFAULT '0',
   sgid smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -94,6 +94,12 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
   admin_edit mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (id)
 ) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_row_area ( 
+    row_id INT(10) UNSIGNED NOT NULL , 
+    area_id SMALLINT(4) UNSIGNED NOT NULL,
+    UNIQUE KEY alias (row_id, area_id),
+) ENGINE = MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer(
   id smallint(4) unsigned NOT NULL AUTO_INCREMENT,
