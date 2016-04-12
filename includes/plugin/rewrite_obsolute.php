@@ -13,7 +13,7 @@ if (! defined('NV_MAINFILE')) {
 }
 
 //plugin rewrite obsolute url
-
+global $rewrite_values;
 foreach ($rewrite_values as $key => $value) {
     $rewrite_values[$key] = str_replace('"\\1', '"'.NV_MY_DOMAIN.'\\1', $value);
 }
