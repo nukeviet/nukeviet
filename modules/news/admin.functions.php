@@ -687,3 +687,19 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 }
+
+/**
+ * get_firstimage()
+ *
+ * @param string $contents
+ * @return
+ */
+function get_firstimage( $contents ){
+	preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $contents, $img);
+	if( isset($img[1]) ){
+		return $img[1]; 
+	}else{
+		$img[1] = ''; 
+		return $img[1]; 
+	}
+}
