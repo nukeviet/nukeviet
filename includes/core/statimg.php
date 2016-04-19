@@ -23,7 +23,7 @@ $hits = $db->query("SELECT c_count FROM " . NV_COUNTER_GLOBALTABLE . " WHERE c_t
 
 $hits = str_pad($hits, 8, '0', STR_PAD_LEFT);
 
-$image = ImageCreateFromPNG(NV_ROOTDIR . '/images/banner88x31.png');
+$image = ImageCreateFromPNG(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/images/banner88x31.png');
 $text_color1 = ImageColorAllocate($image, 50, 50, 50);
 $text_color2 = ImageColorAllocate($image, 255, 255, 255);
 $font = NV_ROOTDIR . '/includes/fonts/visitor2.ttf';

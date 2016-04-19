@@ -385,7 +385,7 @@ if ($checkss == $array_register['checkss']) {
         $data_insert['your_question'] = $your_question;
         $data_insert['answer'] = $array_register['answer'];
         
-        $userid = $db->insert_id($sql, userid, $data_insert);
+        $userid = $db->insert_id($sql, 'userid', $data_insert);
 
         if (! $userid) {
             die(reg_result(array(
