@@ -64,10 +64,11 @@ function cartorder(a_ob, popup, url) {
 	}
 	else
 	{
-        $('#idmodals').removeData('bs.modal');
-     	$('#idmodals').on('show.bs.modal', function () {
-             $('#idmodals .modal-body').load( url + '&popup=1' );
-        }).modal();
+	        $('#idmodals').removeData('bs.modal');
+	     	$.post(url + '&popup=1', function(res) {
+			$('#idmodals .modal-body').html( res ); 
+			$('#idmodals').modal('show');
+		});
 	}
 }
 
