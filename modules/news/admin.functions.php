@@ -704,6 +704,12 @@ function get_firstimage( $contents ){
 	}
 }
 
+/**
+ * add_block_topcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
 function add_block_topcat_news( $catid ){
 	global $global_config;
 
@@ -745,7 +751,12 @@ function add_block_topcat_news( $catid ){
 	}
 }
 
-
+/**
+ * add_block_botcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
 function add_block_botcat_news( $catid ){
 	
 	global $global_config;
@@ -787,14 +798,19 @@ function add_block_botcat_news( $catid ){
 	}
 }
 
-// Remove Block
+/**
+ * remove_block_topcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
 function remove_block_topcat_news( $catid ){
 	global $global_config;
 	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
 	$contents = file_get_contents($ini_file);
 
 	$find1 = "/<name>BLOCK_TOPCAT_" . $catid . "<\/name>/";
-	$find2 = "/<tag>[BLOCK_TOPCAT_" . $catid . "]<\/tag>/";
+	$find2 = "/<tag>\[BLOCK_TOPCAT_" . $catid . "\]<\/tag>/";
 
 	if( preg_match( $find1, $contents ) AND preg_match( $find2, $contents ) ){
 
@@ -826,13 +842,19 @@ function remove_block_topcat_news( $catid ){
 	}
 }
 
+/**
+ * remove_block_botcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
 function remove_block_botcat_news( $catid ){
 	global $global_config;
 	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
 	$contents = file_get_contents($ini_file);
 
 	$find1 = "/<name>BLOCK_BOTTOMCAT_" . $catid . "<\/name>/";
-	$find2 = "/<tag>[BLOCK_BOTTOMCAT_" . $catid . "]<\/tag>/";
+	$find2 = "/<tag>\[BLOCK_BOTTOMCAT_" . $catid . "\]<\/tag>/";
 
 	if( preg_match( $find1, $contents ) AND preg_match( $find2, $contents ) ){
 
