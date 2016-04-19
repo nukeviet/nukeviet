@@ -21,7 +21,7 @@ if (defined('NV_EDITOR')) {
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload;
 $error = $admins = '';
 $savecat = 0;
-list($catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured) = array(
+list($catid, $parentid, $title, $titlesite, $alias, $description, $descriptionhtml, $keywords, $groups_view, $image, $viewdescription, $featured, $ad_block_cat ) = array(
     0,
     0,
     '',
@@ -33,7 +33,8 @@ list($catid, $parentid, $title, $titlesite, $alias, $description, $descriptionht
     '6',
     '',
     0,
-    0
+    0,
+	''
 );
 
 $groups_list = nv_groups_list();
@@ -54,6 +55,7 @@ if ($catid > 0 and isset($global_array_cat[$catid])) {
     $keywords = $global_array_cat[$catid]['keywords'];
     $groups_view = $global_array_cat[$catid]['groups_view'];
     $featured = $global_array_cat[$catid]['featured'];
+	$ad_block_cat = $global_array_cat[$catid]['ad_block_cat'];
 
     if (! defined('NV_IS_ADMIN_MODULE')) {
         if (!(isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) {
@@ -109,6 +111,9 @@ if (! empty($savecat)) {
 
     $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
     $groups_view = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+	
+	$_ad_block_cat = $nv_Request->get_array( 'ad_block_cat', 'post', array() );
+	$ad_block_cat = !empty( $_ad_block_cat ) ? implode( ',', $_ad_block_cat ) : array();
 
     $image = $nv_Request->get_string('image', 'post', '');
     if (nv_is_file($image, NV_UPLOADS_DIR . '/' . $module_upload)) {
@@ -131,8 +136,8 @@ if (! empty($savecat)) {
         $viewcat = 'viewcat_page_new';
         $subcatid = '';
 
-        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday,featured, keywords, admins, add_time, edit_time, groups_view) VALUES
-			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2',:featured, :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
+        $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_cat (parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, featured, ad_block_cat, keywords, admins, add_time, edit_time, groups_view) VALUES
+			(:parentid, :title, :titlesite, :alias, :description, :descriptionhtml, '', '" . $viewdescription . "', :weight, '0', '0', :viewcat, '0', :subcatid, '1', '3', '2', :featured, :ad_block_cat, :keywords, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view)";
 
         $data_insert = array();
         $data_insert['parentid'] = $parentid;
@@ -148,9 +153,11 @@ if (! empty($savecat)) {
         $data_insert['admins'] = $admins;
         $data_insert['groups_view'] = $groups_view;
         $data_insert['featured'] = $featured;
+        $data_insert['ad_block_cat'] = $ad_block_cat;
 
         $newcatid = $db->insert_id($sql, 'catid', $data_insert);
         if ($newcatid > 0) {
+			$check_ad_block_cat = $_ad_block_cat;
             require_once NV_ROOTDIR . '/includes/action_' . $db->dbtype . '.php';
 
             nv_copy_structure_table(NV_PREFIXLANG . '_' . $module_data . '_' . $newcatid, NV_PREFIXLANG . '_' . $module_data . '_rows');
@@ -159,6 +166,13 @@ if (! empty($savecat)) {
             if (! defined('NV_IS_ADMIN_MODULE')) {
                 $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_admins (userid, catid, admin, add_content, pub_content, edit_content, del_content) VALUES (' . $admin_id . ', ' . $newcatid . ', 1, 1, 1, 1, 1)');
             }
+			
+			if( in_array('1', $check_ad_block_cat ) ){
+				$ini_edit = add_block_topcat_news( $newcatid );
+			}
+			if( in_array('2', $check_ad_block_cat ) ){
+				$ini_edit2 = add_block_botcat_news( $newcatid );
+			}
 
             $nv_Cache->delMod($module_name);
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['add_cat'], $title, $admin_info['userid']);
@@ -168,7 +182,7 @@ if (! empty($savecat)) {
             $error = $lang_module['errorsave'];
         }
     } elseif ($catid > 0 and $title != '') {
-        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description = :description, descriptionhtml = :descriptionhtml, image= :image, viewdescription= :viewdescription,featured=:featured, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid);
+        $stmt = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_cat SET parentid= :parentid, title= :title, titlesite=:titlesite, alias = :alias, description = :description, descriptionhtml = :descriptionhtml, image= :image, viewdescription= :viewdescription,featured=:featured, ad_block_cat=:ad_block_cat, keywords= :keywords, groups_view= :groups_view, edit_time=' . NV_CURRENTTIME . ' WHERE catid =' . $catid);
         $stmt->bindParam(':parentid', $parentid, PDO::PARAM_INT);
         $stmt->bindParam(':title', $title, PDO::PARAM_STR);
         $stmt->bindParam(':titlesite', $titlesite, PDO::PARAM_STR);
@@ -180,9 +194,14 @@ if (! empty($savecat)) {
         $stmt->bindParam(':descriptionhtml', $descriptionhtml, PDO::PARAM_STR, strlen($descriptionhtml));
         $stmt->bindParam(':groups_view', $groups_view, PDO::PARAM_STR);
         $stmt->bindParam(':featured', $featured, PDO::PARAM_INT);
+        $stmt->bindParam(':ad_block_cat', $ad_block_cat, PDO::PARAM_STR);
         $stmt->execute();
 
         if ($stmt->rowCount()) {
+			$check_ad_block_cat = explode(',', $ad_block_cat);
+			
+			$_r_b = remove_block_botcat_news( $catid );
+			$_r_t = remove_block_topcat_news( $catid );
             if ($parentid != $parentid_old) {
                 $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid)->fetchColumn();
                 $weight = intval($weight) + 1;
@@ -193,6 +212,13 @@ if (! empty($savecat)) {
                 nv_fix_cat_order();
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['edit_cat'], $title, $admin_info['userid']);
             }
+			
+			if( in_array('1', $check_ad_block_cat ) ){
+				$ini_edit = add_block_topcat_news( $catid );
+			}
+			if( in_array('2', $check_ad_block_cat ) ){
+				$ini_edit2 = add_block_botcat_news( $catid );
+			}
 
             $nv_Cache->delMod($module_name);
             Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $parentid);
@@ -207,6 +233,11 @@ if (! empty($savecat)) {
 
 $groups_view = explode(',', $groups_view);
 
+if(!empty($ad_block_cat)){
+	$ad_block_cat = explode( ',', $ad_block_cat );
+}else{
+	$ad_block_cat = array();
+}
 $array_cat_list = array();
 if (defined('NV_IS_ADMIN_MODULE')) {
     $array_cat_list[0] = $lang_module['cat_sub_sl'];
@@ -247,6 +278,20 @@ if (!empty($array_cat_list)) {
             'title' => $grtl
         );
     }
+	
+	$ad_block_cats = array();
+	$ad_block_list = array(
+		1 => $lang_module['ad_block_top'],
+		2 => $lang_module['ad_block_bot']
+	);
+	foreach( $ad_block_list as $ad_block_id => $ad_block_tl )
+	{
+		$ad_block_cats[] = array(
+			'value' => $ad_block_id,
+			'checked' => in_array( $ad_block_id, $ad_block_cat ) ? ' checked="checked"' : '',
+			'title' => $ad_block_tl
+		);
+	}
 }
 
 $lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
@@ -330,7 +375,13 @@ if (!empty($array_cat_list)) {
         $xtpl->assign('groups_views', $data);
         $xtpl->parse('main.content.groups_views');
     }
-
+	
+	foreach( $ad_block_cats as $ads )
+	{
+		$xtpl->assign( 'ad_block_cats', $ads );
+		$xtpl->parse( 'main.content.ad_block_cats' );
+	}
+	
     $descriptionhtml = nv_htmlspecialchars(nv_editor_br2nl($descriptionhtml));
     if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
         $_uploads_dir = NV_UPLOADS_DIR . '/' . $module_upload;

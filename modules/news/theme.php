@@ -342,7 +342,7 @@ function viewcat_top($array_catcontent, $generate_page)
 function viewsubcat_main($viewcat, $array_cat)
 {
     global $module_name, $module_file, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info;
-
+	
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
@@ -354,6 +354,19 @@ function viewsubcat_main($viewcat, $array_cat)
             $array_row_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_row_i['alias'];
             $xtpl->assign('CAT', $array_row_i);
             $catid = intval($array_row_i['catid']);
+			$array_row_i['ad_block_cat'] = explode(',', $array_row_i['ad_block_cat']);
+			
+			if( in_array('1',$array_row_i['ad_block_cat']) ){
+				$_block_topcat_by_num = '[BLOCK_TOPCAT_'.$catid.']';
+				$xtpl->assign( 'BLOCK_TOPCAT', $_block_topcat_by_num );
+				$xtpl->parse( 'main.listcat.block_topcat' );
+			}
+			
+			if( in_array('2',$array_row_i['ad_block_cat']) ){
+				$_block_bottomcat_by_num = '[BLOCK_BOTTOMCAT_'.$catid.']';
+				$xtpl->assign( 'BLOCK_BOTTOMCAT', $_block_bottomcat_by_num );
+				$xtpl->parse( 'main.listcat.block_bottomcat' );
+			}
 
             if ($array_row_i['subcatid'] != '') {
                 $_arr_subcat = explode(',', $array_row_i['subcatid']);
@@ -433,7 +446,6 @@ function viewsubcat_main($viewcat, $array_cat)
             $xtpl->parse('main.listcat');
         }
     }
-
     $xtpl->parse('main');
     return $xtpl->text('main');
 }

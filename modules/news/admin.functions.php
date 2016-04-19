@@ -687,3 +687,201 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 }
+
+/**
+ * get_firstimage()
+ *
+ * @param string $contents
+ * @return
+ */
+function get_firstimage( $contents ){
+	preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $contents, $img);
+	if( isset($img[1]) ){
+		return $img[1]; 
+	}else{
+		$img[1] = ''; 
+		return $img[1]; 
+	}
+}
+
+/**
+ * add_block_topcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function add_block_topcat_news( $catid ){
+	global $global_config;
+
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+	$_new_pos1 = "/<name>BLOCK_TOPCAT_" . $catid . "<\/name>/";
+	$_new_pos2 = "/<tag>[BLOCK_TOPCAT_" . $catid . "]<\/tag>/";
+
+	if( !preg_match( $_new_pos1, $contents ) AND !preg_match( $_new_pos2, $contents ) AND !empty($contents) ){
+		$find = "/<positions>/";
+		$pos = "
+		<position>
+			<name>BLOCK_TOPCAT_" . $catid . "</name>
+			<tag>[BLOCK_TOPCAT_" . $catid . "]</tag>
+		</position>
+			";
+		$_replace = "<positions>".$pos;
+		$contents = preg_replace($find, $_replace, $contents);
+		$doc = new DOMDocument('1.0', 'utf-8');
+		$doc->formatOutput = true; 
+		$doc->loadXML($contents);
+		$contents = $doc->saveXML();
+		
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+
+		$fname = $ini_file;
+		$fhandle = fopen( $fname,"w" );
+		$fwrite = fwrite( $fhandle, $contents );
+		if($fwrite === false)
+		{
+			return false;
+		}
+		else
+		{
+			fclose( $fhandle );
+			return true;
+		}
+	}
+}
+
+/**
+ * add_block_botcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function add_block_botcat_news( $catid ){
+	
+	global $global_config;
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+	$_new_pos1 = "/<name>BLOCK_BOTTOMCAT_" . $catid . "<\/name>/";
+	$_new_pos2 = "/<tag>[BLOCK_BOTTOMCAT_" . $catid . "]<\/tag>/";
+
+	if( !preg_match( $_new_pos1, $contents ) AND !preg_match( $_new_pos2, $contents ) AND !empty($contents) ){
+		$find = "/<positions>/";
+		$pos = "
+		<position>
+			<name>BLOCK_BOTTOMCAT_" . $catid . "</name>
+			<tag>[BLOCK_BOTTOMCAT_" . $catid . "]</tag>
+		</position>
+			";
+		$_replace = "<positions>".$pos;
+		$contents = preg_replace($find, $_replace, $contents);
+		$doc = new DOMDocument('1.0', 'utf-8');
+		$doc->formatOutput = true; 
+		$doc->loadXML($contents);
+		$contents = $doc->saveXML();
+		
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+
+		$fname = $ini_file;
+		$fhandle = fopen( $fname,"w" );
+		$fwrite = fwrite( $fhandle, $contents );
+		if($fwrite === false)
+		{
+			return false;
+		}
+		else
+		{
+			fclose( $fhandle );
+			return true;
+		}
+	}
+}
+
+/**
+ * remove_block_topcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function remove_block_topcat_news( $catid ){
+	global $global_config;
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+
+	$find1 = "/<name>BLOCK_TOPCAT_" . $catid . "<\/name>/";
+	$find2 = "/<tag>\[BLOCK_TOPCAT_" . $catid . "\]<\/tag>/";
+
+	if( preg_match( $find1, $contents ) AND preg_match( $find2, $contents ) ){
+
+		$doc = new DOMDocument('1.0');
+		$doc->formatOutput = true; 
+
+		$doc->loadXML($contents);
+		$xpath = new DOMXpath($doc);
+		$positions = $xpath->query('//name[text()="BLOCK_TOPCAT_' . $catid . '"]/parent::position');
+		
+		foreach ($positions as $position) {
+			$position->parentNode->removeChild($position);
+		}
+		$contents = $doc->saveXML();
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+		$fname = $ini_file;
+		$fhandle = fopen( $fname,"w" );
+		$fwrite = fwrite( $fhandle, $contents );
+		if($fwrite === false)
+		{
+			return false;
+		}
+		else
+		{
+			fclose( $fhandle );
+			return true;
+		}
+	}
+}
+
+/**
+ * remove_block_botcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function remove_block_botcat_news( $catid ){
+	global $global_config;
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+
+	$find1 = "/<name>BLOCK_BOTTOMCAT_" . $catid . "<\/name>/";
+	$find2 = "/<tag>\[BLOCK_BOTTOMCAT_" . $catid . "\]<\/tag>/";
+
+	if( preg_match( $find1, $contents ) AND preg_match( $find2, $contents ) ){
+
+		$doc = new DOMDocument('1.0');
+		$doc->formatOutput = true; 
+
+		$doc->loadXML($contents);
+		$xpath = new DOMXpath($doc);
+		$positions = $xpath->query('//name[text()="BLOCK_BOTTOMCAT_' . $catid . '"]/parent::position');
+		
+		foreach ($positions as $position) {
+			$position->parentNode->removeChild($position);
+		}
+		$contents = $doc->saveXML();
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+		$fname = $ini_file;
+		$fhandle = fopen( $fname,"w" );
+		$fwrite = fwrite( $fhandle, $contents );
+		if($fwrite === false)
+		{
+			return false;
+		}
+		else
+		{
+			fclose( $fhandle );
+			return true;
+		}
+	}
+}

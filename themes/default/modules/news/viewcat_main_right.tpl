@@ -13,7 +13,11 @@
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
-
+		<!-- BEGIN: block_topcat -->
+		<div class="block-top clear">
+			{BLOCK_TOPCAT}
+		</div>
+		<!-- END: block_topcat -->
 		<div class="panel-body">
 			<div class="row">
 				<div class="{WCT}">
@@ -52,6 +56,11 @@
 			</div>
 		</div>
 	</div>
+	<!-- BEGIN: block_bottomcat -->
+	<div class="bottom-cat clear">
+		{BLOCK_BOTTOMCAT}
+	</div>
+	<!-- END: block_bottomcat -->
 </div>
 <!-- END: listcat -->
 <!-- END: main -->
