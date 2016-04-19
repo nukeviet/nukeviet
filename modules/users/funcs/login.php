@@ -602,7 +602,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
         $row = $db->query($sql)->fetch();
 
         if (! empty($row)) {
-            if ((($row['username'] == $nv_username and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password'])) {
+            if ((($row['md5username'] == nv_md5safe($nv_username) and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password'])) {
                 if (! $row['active']) {
                     $error1 = $lang_module['login_no_active'];
                 } else {

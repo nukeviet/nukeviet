@@ -140,14 +140,8 @@ function nv_dump_save($params)
     if (! $dumpsave->open()) {
         return false;
     }
-    $path_dump = '';
-    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/dump.tpl')) {
-        $path_dump = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/system/dump.tpl';
-    } else {
-        $path_dump = NV_ROOTDIR . '/themes/default/system/dump.tpl';
-    }
 
-    $template = explode('@@@', file_get_contents($path_dump));
+    $template = explode('@@@', file_get_contents(NV_ROOTDIR . '/themes/admin_default/system/dump.tpl'));
 
     $patterns = array( "/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/", "/\{\|DB_CHARACTER\|\}/", "/\{\|DB_COLLATION\|\}/" );
     $replacements = array( $db->server, gmdate("F j, Y, h:i A", NV_CURRENTTIME) . " GMT", $db->getAttribute(PDO::ATTR_SERVER_VERSION), PHP_VERSION, $db->dbname, $db_config['charset'], $db_config['collation'] );
