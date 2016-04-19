@@ -13,7 +13,11 @@
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
-
+		<!-- BEGIN: block_topcat -->
+		<div class="block-top clear">
+			{BLOCK_TOPCAT}
+		</div>
+		<!-- END: block_topcat -->
 		<div class="panel-body">
 			<!-- BEGIN: image -->
 			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT}" src="{HOMEIMG}" width="{IMGWIDTH}" class="img-thumbnail pull-left imghome" /></a>
@@ -53,6 +57,11 @@
 			<!-- END: related -->
 		</div>
 	</div>
+	<!-- BEGIN: block_bottomcat -->
+	<div class="bottom-cat clear">
+		{BLOCK_BOTTOMCAT}
+	</div>
+	<!-- END: block_bottomcat -->
 </div>
 <!-- END: listcat -->
 <!-- END: main -->
