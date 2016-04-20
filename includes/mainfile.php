@@ -182,6 +182,8 @@ if (!in_array(NV_SERVER_NAME, $domains)) {
 }
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {
+    ini_set('session.save_handler', 'memcached');
+    ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
     $nv_Cache = new NukeViet\Cache\Memcacheds(NV_MEMCACHED_HOST, NV_MEMCACHED_PORT, NV_LANG_DATA, NV_CACHE_PREFIX);
 } else {
     $nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);
