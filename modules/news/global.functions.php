@@ -228,7 +228,7 @@ function nv_get_firstimage( $contents ){
 	if( preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $contents, $img) ){
 		return $img[1]; 
 	}else{
-		return $img[1]; 
+		return ''; 
 	}
 }
 
