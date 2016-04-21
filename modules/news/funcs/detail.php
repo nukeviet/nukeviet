@@ -30,7 +30,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         } else {
             $canonicalUrl = $base_url_rewrite;
         }
-        
+
         $body_contents = $db_slave->query('SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($news_contents['id'] / 2000) . ' where id=' . $news_contents['id'])->fetch();
         $news_contents = array_merge($news_contents, $body_contents);
         unset($body_contents);
@@ -94,7 +94,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             } elseif (! empty($show_no_image)) {
                 $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
             }
-            
+
             $publtime = intval($news_contents['publtime']);
             $meta_property['og:type'] = 'article';
             $meta_property['article:published_time'] = date('Y-m-dTH:i:s', $publtime);

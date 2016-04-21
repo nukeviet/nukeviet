@@ -17,7 +17,7 @@ $blockredirect = $nv_Request->get_string('blockredirect', 'get');
 
 $selectthemes = $nv_Request->get_string('selectthemes', 'post,get', $global_config['site_theme']);
 if (! (preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
 }
 
 $row = array(
@@ -42,7 +42,7 @@ if ($row['bid'] > 0) {
     $row = $db->query('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid'])->fetch();
 
     if (empty($row)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     } else {
         $row_old = $row;
     }
@@ -398,7 +398,7 @@ while (list($id_i, $func_custom_name_i, $in_module_i) = $func_result->fetch(3)) 
 }
 
 // Load position file
-$xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini') or nv_info_die($lang_global['error_404_title'], $lang_module['block_error_fileconfig_title'], $lang_module['block_error_fileconfig_content']);
+$xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini') or nv_info_die($lang_global['error_404_title'], $lang_module['block_error_fileconfig_title'], $lang_module['block_error_fileconfig_content'], 404);
 $xmlpositions = $xml->xpath('positions');
 $positions = $xmlpositions[0]->position;
 

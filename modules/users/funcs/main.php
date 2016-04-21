@@ -32,6 +32,9 @@ if (! defined('NV_IS_ADMIN') and ! $global_config['allowuserlogin']) {
         Header('Location: ' . nv_url_rewrite($url, true));
         exit();
     } else {
+    	// So nhom dang quan ly
+    	$user_info['group_manage'] = $db->query('SELECT COUNT(*) FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();
+
         $contents = user_welcome();
     }
 }

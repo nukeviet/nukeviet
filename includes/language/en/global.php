@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+	die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -280,6 +280,7 @@ $lang_global['level3'] = 'Module administrator';
 $lang_global['level4'] = 'Member';
 $lang_global['level5'] = 'Guest';
 $lang_global['level6'] = 'All';
+$lang_global['level7'] = 'New member';
 $lang_global['msgbeforeunload'] = 'Are you sure you go to other sites, if done the data will not be stored';
 $lang_global['timeoutsess_nouser'] = 'You did not use the site';
 $lang_global['timeoutsess_click'] = 'Click here to remain logged';

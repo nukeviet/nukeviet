@@ -119,6 +119,10 @@
 					</td>
 				</tr>
 				<!-- END: group -->
+				<tr>
+					<td style="vertical-align:top" colspan="2"> {LANG.is_official} </td>
+					<td><input type="checkbox" name="is_official" value="1"{DATA.is_official}/> <small>{LANG.is_official_note}</small></td>
+				</tr>
 			</tbody>
 		</table>
 		<!-- BEGIN: field -->

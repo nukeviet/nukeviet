@@ -163,6 +163,15 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
     return $xtpl->text('main');
 }
 
+/**
+ * contact_form_theme()
+ * 
+ * @param mixed $array_content
+ * @param mixed $catsName
+ * @param mixed $base_url
+ * @param mixed $checkss
+ * @return
+ */
 function contact_form_theme($array_content, $catsName, $base_url, $checkss)
 {
     global $module_file, $lang_global, $lang_module, $module_info;
@@ -198,6 +207,20 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
     return $xtpl->text('main');
 }
 
+/**
+ * contact_sendcontact()
+ * 
+ * @param mixed $row_id
+ * @param mixed $fcat
+ * @param mixed $ftitle
+ * @param mixed $fname
+ * @param mixed $femail
+ * @param mixed $fphone
+ * @param mixed $fcon
+ * @param mixed $fpart
+ * @param bool $sendinfo
+ * @return
+ */
 function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, $sendinfo = true)
 {
     global $global_config, $module_name, $module_file, $lang_global, $lang_module, $module_info, $array_department, $client_info;
@@ -212,7 +235,6 @@ function contact_sendcontact($row_id, $fcat, $ftitle, $fname, $femail, $fphone, 
     $xtpl->assign('IP', $client_info['ip']);
     $xtpl->assign('TITLE', $ftitle);
     $xtpl->assign('CONTENT', nv_htmlspecialchars($fcon));
-    $xtpl->assign('URL_VIEW', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=view&amp;id=' . $row_id);
 
 	if ($sendinfo) {
 		if (!empty($fcat)) {

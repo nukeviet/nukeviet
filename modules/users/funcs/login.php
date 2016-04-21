@@ -403,26 +403,32 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
      * Vi ban than xac thuc cua OpenID da du dieu kien
      */
     if ($nv_Request->isset_request('nv_reg', 'post') and ($global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2)) {
+        // Cau hinh xac thuc thanh vien moi
+        $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='active_group_newusers'";
+        $active_group_newusers = intval($db->query($sql)->fetchColumn());
+        
         $reg_attribs = set_reg_attribs($attribs);
         if (empty($reg_attribs['username'])) {
             opidr(array( 'status' => 'error', 'mess' => $lang_module['logged_in_failed'] ));
             die();
         }
 
-        $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
-			(username, md5username, password, email, first_name, last_name, gender, photo, birthday,  regdate,
-			question, answer, passlostkey, view_mail, remember, in_groups,
-			active, checknum, last_login, last_ip, last_agent, last_openid, idsite)  VALUES (
-			:username,
-			:md5username,
-			'',
-			:email,
-			:first_name,
-			:last_name,
-			:gender,
-			'', 0,
-			" . NV_CURRENTTIME . ",
-			'', '', '', 0, 0, '', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . "
+        $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
+            group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday,  regdate,
+    		question, answer, passlostkey, view_mail, remember, in_groups,
+    		active, checknum, last_login, last_ip, last_agent, last_openid, idsite
+        ) VALUES (
+    		" . ($active_group_newusers ? 7 : 4) . ", 
+            :username,
+    		:md5username,
+    		'',
+    		:email,
+    		:first_name,
+    		:last_name,
+    		:gender,
+    		'', 0,
+    		" . NV_CURRENTTIME . ",
+    		'', '', '', 0, 0, '" . ($active_group_newusers ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . "
 		)";
 
         $data_insert = array();
@@ -448,7 +454,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         }
 
         // Cap nhat so thanh vien
-        $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4');
+        $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . ($active_group_newusers ? 7 : 4));
 
         $query = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid . ' AND active=1';
         $result = $db->query($query);
@@ -596,7 +602,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
         $row = $db->query($sql)->fetch();
 
         if (! empty($row)) {
-            if ((($row['username'] == $nv_username and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password'])) {
+            if ((($row['md5username'] == nv_md5safe($nv_username) and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password'])) {
                 if (! $row['active']) {
                     $error1 = $lang_module['login_no_active'];
                 } else {

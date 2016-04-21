@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+	die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -44,5 +44,4 @@ $lang_module['note_s'] = 'Note';
 $lang_module['department'] = 'Department';
 $lang_module['sendcontactfailed'] = 'Your feedback was not sent because of technical reasons. Sorry for the inconvenience.';
 $lang_module['note'] = 'Please complete all required fields.';
-$lang_module['view_website'] = 'View on website';
 $lang_module['sendcopy'] = 'Send as copy to mail';

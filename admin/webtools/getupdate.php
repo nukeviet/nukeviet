@@ -15,6 +15,7 @@ if (! defined('NV_IS_FILE_WEBTOOLS')) {
 $page_title = $lang_module['get_update'];
 
 $version = trim($nv_Request->get_title('version', 'get', ''));
+$package = $nv_Request->get_int('package', 'get', 0);
 
 if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $global_config['sitekey'] . session_id())) {
     $xtpl = new XTemplate('getupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -218,7 +219,8 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
             'lang' => NV_LANG_INTERFACE,
             'basever' => $global_config['version'],
             'mode' => 'getsysupd',
-            'version' => $version
+            'version' => $version,
+            'package' => $package
         )
     );
 
@@ -285,4 +287,4 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5($version . $global_con
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);

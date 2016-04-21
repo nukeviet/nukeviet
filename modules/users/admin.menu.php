@@ -25,6 +25,7 @@ if (isset($access_admin['access_waiting'][$level]) and $access_admin['access_wai
     $submenu['user_waiting'] = $lang_module['member_wating'];
     $allow_func[] = 'user_waiting';
     $allow_func[] = 'setactive';
+    $allow_func[] = 'setofficial';
 }
 if (isset($access_admin['access_editus'][$level]) and $access_admin['access_editus'][$level] == 1) {
     $allow_func[] = 'edit';

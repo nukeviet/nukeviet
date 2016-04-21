@@ -41,7 +41,10 @@ function nv_show_tables()
     $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
     while ($item = $result->fetch()) {
         $tables_size = floatval($item['data_length']) + floatval($item['index_length']);
-
+        
+        if ($item['engine'] != 'MyISAM') {
+            $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+        }
         $tables[$item['name']]['table_size'] = nv_convertfromBytes($tables_size);
         $tables[$item['name']]['table_max_size'] = ! empty($item['max_data_length']) ? nv_convertfromBytes(floatval($item['max_data_length'])) : 0;
         $tables[$item['name']]['table_datafree'] = ! empty($item['data_free']) ? nv_convertfromBytes(floatval($item['data_free'])) : 0;
@@ -133,6 +136,10 @@ function nv_show_tab()
         include NV_ROOTDIR . '/includes/footer.php';
     }
 
+    if ($item['engine'] != 'MyISAM') {
+        $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+    }
+    
     $tablename = substr($item['name'], strlen($db_config['prefix']) + 1);
     $contents = array();
     $contents['table']['caption'] = sprintf($lang_module['table_caption'], $tablename);
