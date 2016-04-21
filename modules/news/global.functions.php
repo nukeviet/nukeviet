@@ -283,8 +283,6 @@ function nv_add_block_topcat_news( $catid ){
 
 	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
 	$contents = file_get_contents($ini_file);
-	$_new_pos1 = "/<name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "<\/name>/";
-	$_new_pos2 = "/<tag>[" . strtoupper($module_name) . "_TOPCAT_" . $catid . "]<\/tag>/";
 
 	if( !nv_check_block_topcat_news( $catid ) AND !empty($contents) ){
 		$find = "/<positions>/";
@@ -296,14 +294,14 @@ function nv_add_block_topcat_news( $catid ){
 			";
 		$_replace = "<positions>".$pos;
 		$contents = preg_replace($find, $_replace, $contents);
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+
 		$doc = new DOMDocument('1.0', 'utf-8');
 		$doc->formatOutput = true; 
 		$doc->loadXML($contents);
 		$contents = $doc->saveXML();
 		
-		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
-		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
-
 		$fname = $ini_file;
 		$fhandle = fopen( $fname,"w" );
 		$fwrite = fwrite( $fhandle, $contents );
@@ -330,8 +328,6 @@ function nv_add_block_botcat_news( $catid ){
 	global $global_config, $module_name;
 	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
 	$contents = file_get_contents($ini_file);
-	$_new_pos1 = "/<name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "<\/name>/";
-	$_new_pos2 = "/<tag>[" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "]<\/tag>/";
 
 	if( !nv_check_block_block_botcat_news( $catid ) AND !empty($contents) ){
 		$find = "/<positions>/";
@@ -342,14 +338,14 @@ function nv_add_block_botcat_news( $catid ){
 		</position>
 			";
 		$_replace = "<positions>".$pos;
-		$contents = preg_replace($find, $_replace, $contents);
+		$contents = preg_replace($find, $_replace, $contents);		
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+
 		$doc = new DOMDocument('1.0', 'utf-8');
 		$doc->formatOutput = true; 
 		$doc->loadXML($contents);
 		$contents = $doc->saveXML();
-		
-		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
-		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
 
 		$fname = $ini_file;
 		$fhandle = fopen( $fname,"w" );
@@ -378,20 +374,19 @@ function nv_remove_block_topcat_news( $catid ){
 	$contents = file_get_contents($ini_file);
 
 	if( nv_check_block_topcat_news( $catid ) ){
+		
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
 
 		$doc = new DOMDocument('1.0');
 		$doc->formatOutput = true; 
-
 		$doc->loadXML($contents);
 		$xpath = new DOMXpath($doc);
 		$positions = $xpath->query('//name[text()="' . strtoupper($module_name) . '_TOPCAT_' . $catid . '"]/parent::position');
-		
 		foreach ($positions as $position) {
 			$position->parentNode->removeChild($position);
 		}
 		$contents = $doc->saveXML();
-		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
-		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
 		$fname = $ini_file;
 		$fhandle = fopen( $fname,"w" );
 		$fwrite = fwrite( $fhandle, $contents );
@@ -419,20 +414,19 @@ function nv_remove_block_botcat_news( $catid ){
 	$contents = file_get_contents($ini_file);
 
 	if( nv_check_block_block_botcat_news( $catid ) ){
+		
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
 
 		$doc = new DOMDocument('1.0');
 		$doc->formatOutput = true; 
-
 		$doc->loadXML($contents);
 		$xpath = new DOMXpath($doc);
 		$positions = $xpath->query('//name[text()="' . strtoupper($module_name) . '_BOTTOMCAT_' . $catid . '"]/parent::position');
-		
 		foreach ($positions as $position) {
 			$position->parentNode->removeChild($position);
 		}
 		$contents = $doc->saveXML();
-		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
-		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
 		$fname = $ini_file;
 		$fhandle = fopen( $fname,"w" );
 		$fwrite = fwrite( $fhandle, $contents );
