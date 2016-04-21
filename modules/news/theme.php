@@ -341,7 +341,7 @@ function viewcat_top($array_catcontent, $generate_page)
 
 function viewsubcat_main($viewcat, $array_cat)
 {
-    global $module_name, $module_file, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info, $themeConfig;
+    global $module_name, $module_file, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info;
 	
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
