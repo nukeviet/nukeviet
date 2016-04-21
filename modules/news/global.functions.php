@@ -216,3 +216,234 @@ function nv_news_get_bodytext($bodytext)
     $bodytext = str_replace('&nbsp;', ' ', strip_tags($bodytext));
     return preg_replace('/[ ]+/', ' ', $bodytext);
 }
+
+
+/**
+ * nv_get_firstimage()
+ *
+ * @param string $contents
+ * @return
+ */
+function nv_get_firstimage( $contents ){
+	if( preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $contents, $img) ){
+		return $img[1]; 
+	}else{
+		return $img[1]; 
+	}
+}
+
+/**
+ * nv_check_block_topcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function nv_check_block_topcat_news( $catid ){
+	global $global_config, $module_name;
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+
+	$find1 = "/<name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "<\/name>/";
+	$find2 = "/<tag>\[" . strtoupper($module_name) . "_TOPCAT_" . $catid . "\]<\/tag>/";
+	if( preg_match( $find1, $contents ) AND preg_match( $find2, $contents ) ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/**
+ * nv_check_block_block_botcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function nv_check_block_block_botcat_news( $catid ){
+	global $global_config, $module_name;
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+
+	$find1 = "/<name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "<\/name>/";
+	$find2 = "/<tag>\[" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "\]<\/tag>/";
+	if( preg_match( $find1, $contents ) AND preg_match( $find2, $contents ) ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/**
+ * nv_add_block_topcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function nv_add_block_topcat_news( $catid ){
+	global $global_config, $module_name;
+
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+	$_new_pos1 = "/<name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "<\/name>/";
+	$_new_pos2 = "/<tag>[" . strtoupper($module_name) . "_TOPCAT_" . $catid . "]<\/tag>/";
+
+	if( !nv_check_block_topcat_news( $catid ) AND !empty($contents) ){
+		$find = "/<positions>/";
+		$pos = "
+		<position>
+			<name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "</name>
+			<tag>[" . strtoupper($module_name) . "_TOPCAT_" . $catid . "]</tag>
+		</position>
+			";
+		$_replace = "<positions>".$pos;
+		$contents = preg_replace($find, $_replace, $contents);
+		$doc = new DOMDocument('1.0', 'utf-8');
+		$doc->formatOutput = true; 
+		$doc->loadXML($contents);
+		$contents = $doc->saveXML();
+		
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+
+		$fname = $ini_file;
+		$fhandle = fopen( $fname,"w" );
+		$fwrite = fwrite( $fhandle, $contents );
+		if($fwrite === false)
+		{
+			return false;
+		}
+		else
+		{
+			fclose( $fhandle );
+			return true;
+		}
+	}
+}
+
+/**
+ * nv_add_block_botcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function nv_add_block_botcat_news( $catid ){
+	
+	global $global_config, $module_name;
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+	$_new_pos1 = "/<name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "<\/name>/";
+	$_new_pos2 = "/<tag>[" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "]<\/tag>/";
+
+	if( !nv_check_block_block_botcat_news( $catid ) AND !empty($contents) ){
+		$find = "/<positions>/";
+		$pos = "
+		<position>
+			<name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "</name>
+			<tag>[" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "]</tag>
+		</position>
+			";
+		$_replace = "<positions>".$pos;
+		$contents = preg_replace($find, $_replace, $contents);
+		$doc = new DOMDocument('1.0', 'utf-8');
+		$doc->formatOutput = true; 
+		$doc->loadXML($contents);
+		$contents = $doc->saveXML();
+		
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+
+		$fname = $ini_file;
+		$fhandle = fopen( $fname,"w" );
+		$fwrite = fwrite( $fhandle, $contents );
+		if($fwrite === false)
+		{
+			return false;
+		}
+		else
+		{
+			fclose( $fhandle );
+			return true;
+		}
+	}
+}
+
+/**
+ * nv_remove_block_topcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function nv_remove_block_topcat_news( $catid ){
+	global $global_config, $module_name;
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+
+	if( nv_check_block_topcat_news( $catid ) ){
+
+		$doc = new DOMDocument('1.0');
+		$doc->formatOutput = true; 
+
+		$doc->loadXML($contents);
+		$xpath = new DOMXpath($doc);
+		$positions = $xpath->query('//name[text()="' . strtoupper($module_name) . '_TOPCAT_' . $catid . '"]/parent::position');
+		
+		foreach ($positions as $position) {
+			$position->parentNode->removeChild($position);
+		}
+		$contents = $doc->saveXML();
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+		$fname = $ini_file;
+		$fhandle = fopen( $fname,"w" );
+		$fwrite = fwrite( $fhandle, $contents );
+		if($fwrite === false)
+		{
+			return false;
+		}
+		else
+		{
+			fclose( $fhandle );
+			return true;
+		}
+	}
+}
+
+/**
+ * nv_remove_block_botcat_news()
+ *
+ * @param string $catid
+ * @return boolean
+ */
+function nv_remove_block_botcat_news( $catid ){
+	global $global_config, $module_name;
+	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	$contents = file_get_contents($ini_file);
+
+	if( nv_check_block_block_botcat_news( $catid ) ){
+
+		$doc = new DOMDocument('1.0');
+		$doc->formatOutput = true; 
+
+		$doc->loadXML($contents);
+		$xpath = new DOMXpath($doc);
+		$positions = $xpath->query('//name[text()="' . strtoupper($module_name) . '_BOTTOMCAT_' . $catid . '"]/parent::position');
+		
+		foreach ($positions as $position) {
+			$position->parentNode->removeChild($position);
+		}
+		$contents = $doc->saveXML();
+		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
+		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
+		$fname = $ini_file;
+		$fhandle = fopen( $fname,"w" );
+		$fwrite = fwrite( $fhandle, $contents );
+		if($fwrite === false)
+		{
+			return false;
+		}
+		else
+		{
+			fclose( $fhandle );
+			return true;
+		}
+	}
+}

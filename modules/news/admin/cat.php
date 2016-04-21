@@ -168,10 +168,10 @@ if (! empty($savecat)) {
             }
 			
 			if( in_array('1', $check_ad_block_cat ) ){
-				$ini_edit = add_block_topcat_news( $newcatid );
+				$ini_edit = nv_add_block_topcat_news( $newcatid );
 			}
 			if( in_array('2', $check_ad_block_cat ) ){
-				$ini_edit2 = add_block_botcat_news( $newcatid );
+				$ini_edit2 = nv_add_block_botcat_news( $newcatid );
 			}
 
             $nv_Cache->delMod($module_name);
@@ -200,8 +200,8 @@ if (! empty($savecat)) {
         if ($stmt->rowCount()) {
 			$check_ad_block_cat = explode(',', $ad_block_cat);
 			
-			$_r_b = remove_block_botcat_news( $catid );
-			$_r_t = remove_block_topcat_news( $catid );
+			$_r_b = nv_remove_block_botcat_news( $catid );
+			$_r_t = nv_remove_block_topcat_news( $catid );
             if ($parentid != $parentid_old) {
                 $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid=' . $parentid)->fetchColumn();
                 $weight = intval($weight) + 1;
@@ -214,10 +214,10 @@ if (! empty($savecat)) {
             }
 			
 			if( in_array('1', $check_ad_block_cat ) ){
-				$ini_edit = add_block_topcat_news( $catid );
+				$ini_edit = nv_add_block_topcat_news( $catid );
 			}
 			if( in_array('2', $check_ad_block_cat ) ){
-				$ini_edit2 = add_block_botcat_news( $catid );
+				$ini_edit2 = nv_add_block_botcat_news( $catid );
 			}
 
             $nv_Cache->delMod($module_name);

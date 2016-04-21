@@ -341,7 +341,7 @@ function viewcat_top($array_catcontent, $generate_page)
 
 function viewsubcat_main($viewcat, $array_cat)
 {
-    global $module_name, $module_file, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info;
+    global $module_name, $module_file, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info, $themeConfig;
 	
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -355,17 +355,31 @@ function viewsubcat_main($viewcat, $array_cat)
             $xtpl->assign('CAT', $array_row_i);
             $catid = intval($array_row_i['catid']);
 			$array_row_i['ad_block_cat'] = explode(',', $array_row_i['ad_block_cat']);
-			
-			if( in_array('1',$array_row_i['ad_block_cat']) ){
-				$_block_topcat_by_num = '[BLOCK_TOPCAT_'.$catid.']';
-				$xtpl->assign( 'BLOCK_TOPCAT', $_block_topcat_by_num );
+
+			$_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_row_i['catid'] . ']';
+			if( in_array( '1', $array_row_i['ad_block_cat']) ){
+				if( !nv_check_block_topcat_news( $array_row_i['catid'] ) ){
+					nv_add_block_topcat_news( $array_row_i['catid'] );
+				}
+				$xtpl->assign( 'BLOCK_TOPCAT', $_block_topcat_by_id );
 				$xtpl->parse( 'main.listcat.block_topcat' );
+			}else{
+				if( nv_check_block_topcat_news( $array_row_i['catid'] ) ){
+					nv_remove_block_topcat_news( $array_row_i['catid'] );
+				}
 			}
-			
-			if( in_array('2',$array_row_i['ad_block_cat']) ){
-				$_block_bottomcat_by_num = '[BLOCK_BOTTOMCAT_'.$catid.']';
-				$xtpl->assign( 'BLOCK_BOTTOMCAT', $_block_bottomcat_by_num );
+
+			$_block_bottomcat_by_id = '[' . strtoupper($module_name) . '_BOTTOMCAT_' . $array_row_i['catid'] . ']';
+			if( in_array( '2', $array_row_i['ad_block_cat']) ){
+				if( !nv_check_block_block_botcat_news( $array_row_i['catid'] )){
+					nv_add_block_botcat_news( $array_row_i['catid'] );
+				}
+				$xtpl->assign( 'BLOCK_BOTTOMCAT', $_block_bottomcat_by_id );
 				$xtpl->parse( 'main.listcat.block_bottomcat' );
+			}else{
+				if( nv_check_block_block_botcat_news( $array_row_i['catid'] ) ){
+					nv_remove_block_botcat_news( $array_row_i['catid'] );
+				}
 			}
 
             if ($array_row_i['subcatid'] != '') {
