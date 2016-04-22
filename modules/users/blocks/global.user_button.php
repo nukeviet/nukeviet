@@ -101,20 +101,18 @@ if ($global_config['allowuserlogin']) {
         $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
         $xtpl->assign('NV_HEADER', '');
         $xtpl->assign('NV_REDIRECT', '');
+        
+        $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);
+        $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], NV_UPASSMIN, NV_UPASSMAX) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], NV_UPASSMIN, NV_UPASSMAX);
+        
+        $xtpl->assign('USERNAME_RULE', $username_rule);
+        $xtpl->assign('PASSWORD_RULE', $password_rule);
 
-        if (in_array($global_config['gfx_chk'], array(
-            2,
-            4,
-            5,
-            7 ))) {
+        if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
             $xtpl->parse('main.captcha');
         }
 
-        if (in_array($global_config['gfx_chk'], array(
-            3,
-            4,
-            6,
-            7 ))) {
+        if (in_array($global_config['gfx_chk'], array(3, 4, 6, 7 ))) {
             $xtpl->parse('main.allowuserreg.reg_captcha');
         }
 
