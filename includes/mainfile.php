@@ -121,6 +121,11 @@ require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
+if ($global_config['cached'] == 'memcached') {
+    ini_set('session.save_handler', 'memcached');
+    ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
+}
+
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
     trigger_error('Hi and Good-bye!!!', 256);

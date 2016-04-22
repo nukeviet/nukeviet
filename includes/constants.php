@@ -184,6 +184,10 @@ define('PLATFORM_ANDROID', 'Android');
 define('PLATFORM_IRIX', 'Irix');
 define('PLATFORM_PALM', 'Palm');
 
+//memcached
+define('NV_MEMCACHED_HOST','127.0.0.1');
+define('NV_MEMCACHED_PORT','11211');
+
 $global_config['site_charset'] = 'utf-8';
 $global_config['check_module'] = '/^[a-zA-Z0-9\-]+$/';
 $global_config['check_op'] = '/^[a-zA-Z0-9\-]+$/';
