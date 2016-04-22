@@ -594,7 +594,7 @@ if ($step == 1) {
                     if (! file_exists(NV_ROOTDIR . '/install/data_' . $lang_data . '.php')) {
                         $filesavedata = 'en';
                     }
-                    include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php' ;
+                    include_once NV_ROOTDIR . '/install/data_by_lang.php';
 
                     try {
                         // Xoa du lieu tai bang nvx_vi_modules

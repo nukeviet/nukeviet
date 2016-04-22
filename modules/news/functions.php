@@ -24,12 +24,15 @@ $array_mod_title = array();
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 $list = $nv_Cache->db($sql, 'catid', $module_name);
-foreach ($list as $l) {
-    $global_array_cat[$l['catid']] = $l;
-    $global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
-    if ($alias_cat_url == $l['alias']) {
-        $catid = $l['catid'];
-        $parentid = $l['parentid'];
+if(!empty($list))
+{
+    foreach ($list as $l) {
+        $global_array_cat[$l['catid']] = $l;
+        $global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
+        if ($alias_cat_url == $l['alias']) {
+            $catid = $l['catid'];
+            $parentid = $l['parentid'];
+        }
     }
 }
 

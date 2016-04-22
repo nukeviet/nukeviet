@@ -53,10 +53,10 @@ class Memcacheds
      */
     public function delMod($module_name, $lang = '')
     {
-        $AllKeys = $this->getAllKeys();
+        $AllKeys = $this->_Cache->getAllKeys();
         foreach ($AllKeys as $_key) {
             if (preg_match('/^' . $module_name . '\_/', $_key)) {
-                $this->delete($_key);
+                $this->_Cache->delete($_key);
             }
         }
     }

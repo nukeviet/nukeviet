@@ -474,6 +474,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
         // Xu ly anh minh hoa
         $rowcontent['homeimgthumb'] = 0;
+		if(empty($rowcontent['homeimgfile']) AND ( $rowcontent['imgposition'] == 1 OR $rowcontent['imgposition'] == 2 ) ){
+			$rowcontent['homeimgfile'] = nv_get_firstimage($rowcontent['bodyhtml']);
+		}
         if (! nv_is_url($rowcontent['homeimgfile']) and nv_is_file($rowcontent['homeimgfile'], NV_UPLOADS_DIR . '/' . $module_upload) === true) {
             $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
             $rowcontent['homeimgfile'] = substr($rowcontent['homeimgfile'], $lu);
