@@ -63,6 +63,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	  numlinks tinyint(2) unsigned NOT NULL DEFAULT '3',
 	  newday tinyint(2) unsigned NOT NULL DEFAULT '2',
 	  featured int(11) NOT NULL DEFAULT '0',
+	  ad_block_cat varchar(255) NOT NULL DEFAULT '',
 	  keywords text,
 	  admins text,
 	  add_time int(11) unsigned NOT NULL DEFAULT '0',
