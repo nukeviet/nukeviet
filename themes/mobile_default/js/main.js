@@ -21,7 +21,11 @@ var tip_active = !1,
 	scrh = 0,
 	oldScrt = 0,
 	scrtRangeY = 0,
+    scrtRangeOffset = 5,
+    didScroll = false,
 	wrapWidth = 0,
+    headerH = 0,
+    footerH = 0,
 	winHelp = !1,
 	breadcrumbs = $('.breadcrumbs'),
 	subbreadcrumbs = $('.sub-breadcrumbs'),
@@ -36,7 +40,9 @@ function winResize() {
 	docY = $(document).height();
 	cRangeX = Math.abs(winX - oldWinX);
 	cRangeY = Math.abs(winY - oldWinY);
-	scrh = $(".wrap")[0].scrollHeight
+	scrh = $(window).scrollHeight;
+    headerH = $('header.first-child').outerHeight();
+    footerH = $('footer#footer').outerHeight();
 }
 
 function winHelpShow() {
@@ -58,11 +64,28 @@ function contentScrt() {
 	winHelp && winHelpHide();
 	tip_active && tipHide();
 	ftip_active && ftipHide();
-	oldScrt = scrt;
-	scrt = $(".wrap").scrollTop();
+	scrt = $(window).scrollTop();
 	scrtRangeY = scrt - oldScrt;
-	0 < scrtRangeY ? ($(".footer").toggleClass("pos-rel", !0), $("#mobilePage").is(".fixed") && $("#mobilePage").removeClass("fixed")) : ($(".footer").removeClass("pos-rel"), $("#mobilePage").not(".fixed") && $("#mobilePage").toggleClass("fixed", !0));
-	0 == scrt ? $(".bttop").find("em").removeClass("fa-chevron-up").toggleClass("fa-refresh", !0) : $(".bttop").find("em").removeClass("fa-refresh").toggleClass("fa-chevron-up", !0)
+    
+    0 == scrt ? $(".bttop").find("em").removeClass("fa-chevron-up").toggleClass("fa-refresh", !0) : $(".bttop").find("em").removeClass("fa-refresh").toggleClass("fa-chevron-up", !0)
+    
+    if(Math.abs(scrtRangeY) <= scrtRangeOffset)
+        return;
+        
+    if (scrt > oldScrt && scrt > headerH){
+        $('header.first-child').removeClass('header-down').addClass('header-up');
+    } else {
+        if(scrt + winY < docY) {
+            $('header.first-child').removeClass('header-up').addClass('header-down');
+        }
+    }
+    if ((docY - (scrt + winY)) <= footerH || scrt == 0) {
+        $('#footer').removeClass('footer-down').addClass('footer-up');
+    } else {
+        $('#footer').removeClass('up-down').addClass('footer-down');
+    }
+    
+    oldScrt = scrt;
 }
 
 /*Change Captcha*/
@@ -275,12 +298,9 @@ $(function() {
 	$('a[href="#"], a[href=""]').attr("href", "javascript:void(0);");
     // Smooth scroll to top
 	$(".bttop").click(function() {
-    	if($(this).find("em").is(".fa-chevron-up"))
-        {
-            $(".wrap").animate({scrollTop: 0}, 800);
-        }
-        else if($(this).find("em").is(".fa-refresh"))
-        {
+    	if($(this).find("em").is(".fa-chevron-up")) {
+            $('html,body').animate({scrollTop: 0}, 200);
+        } else if($(this).find("em").is(".fa-refresh")) {
             window.location.href = window.location.href
         }
     	return !1
@@ -325,9 +345,15 @@ $(function() {
 	$(".headerSearch input").on("keypress", function(a) {
 		13 != a.which || a.shiftKey || (a.preventDefault(), $(".headerSearch button").trigger("click"))
 	});
-	$(".wrap").on("scroll", function() {
-		contentScrt()
+	$(window).scroll(function(e) {
+		didScroll = true;
 	});
+    setInterval(function() {
+        if (didScroll) {
+            contentScrt();
+            didScroll = false;
+        }
+    }, 250);
     //FeedBack Button
     if( $('#contactButton').length ){
         var script = $('<script type="text/javascript">').attr("src",nv_base_siteurl + "themes/mobile_default/js/contact.js");
