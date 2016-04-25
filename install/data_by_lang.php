@@ -20,9 +20,9 @@ include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php';
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modules');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modules (title, module_file, module_data, module_upload, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss, gid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-$sth->execute(array( 'about', 'page', 'about', 'about', $my_lang['modules']['about'], $my_lang['modules']['about_for_admin'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 0));
-$sth->execute(array( 'news', 'news', 'news', 'news', $my_lang['modules']['news'], $my_lang['modules']['news_for_admin'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0));
-$sth->execute(array( 'users', 'users', 'users', 'users', $my_lang['modules']['users'], $my_lang['modules']['users_for_admin'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0));
+$sth->execute(array( 'about', 'page', 'about', 'about', $my_lang['modules']['about'], $my_lang['modules']['about_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 1, 1, '', 1, 0));
+$sth->execute(array( 'news', 'news', 'news', 'news', $my_lang['modules']['news'], $my_lang['modules']['news_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 2, 1, '', 1, 0));
+$sth->execute(array( 'users', 'users', 'users', 'users', $my_lang['modules']['users'], $my_lang['modules']['users_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 3, 1, '', 0, 0));
 $sth->execute(array( 'contact', 'contact', 'contact', 'contact', $my_lang['modules']['contact'], $my_lang['modules']['contact_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 4, 1, '', 0, 0));
 $sth->execute(array( 'statistics', 'statistics', 'statistics', 'statistics', $my_lang['modules']['statistics'], $my_lang['modules']['statistics_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', 'online, statistics', '6', 5, 1, '', 0, 0));
 $sth->execute(array( 'voting', 'voting', 'voting', 'voting', $my_lang['modules']['voting'], $my_lang['modules']['voting_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 6, 1, '', 1, 0));
@@ -405,6 +405,13 @@ if(!empty($menu_rows_lev0))
     }
 }
 
-$result = $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (10, 'NukeViet-Fans', '". $my_lang['groups']['NukeViet-Fans'] . "', '', 2, '', '', 1, " . NV_CURRENTTIME . ", 0, 8, 1, 0, 0, 0)");
-$result = $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (11, 'NukeViet-Admins', '" . $my_lang['groups']['NukeViet-Admins'] . "', '', 2, '', '', 0, " . NV_CURRENTTIME . ", 0, 9, 1, 0, 0, 0)");
-$result = $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (12, 'NukeViet-Programmers', '" . $my_lang['groups']['NukeViet-Programmers'] . "', '', 1, '', '', 0, " . NV_CURRENTTIME . ", 0, 10, 1, 0, 0, 0)");
+//Insert sample groups data 
+try {
+    $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (10, 'NukeViet-Fans', '". $my_lang['groups']['NukeViet-Fans'] . "', '', 2, '', '', 1, " . NV_CURRENTTIME . ", 0, 8, 1, 0, 0, 0)");
+    $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (11, 'NukeViet-Admins', '" . $my_lang['groups']['NukeViet-Admins'] . "', '', 2, '', '', 0, " . NV_CURRENTTIME . ", 0, 9, 1, 0, 0, 0)");
+    $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (12, 'NukeViet-Programmers', '" . $my_lang['groups']['NukeViet-Programmers'] . "', '', 1, '', '', 0, " . NV_CURRENTTIME . ", 0, 10, 1, 0, 0, 0)");
+}
+catch (PDOException $e)
+{
+    trigger_error($e->getMessage());
+}
