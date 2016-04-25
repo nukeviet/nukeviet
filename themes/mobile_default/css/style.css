@@ -735,6 +735,11 @@ a.btn {
     color:#fff;
 }
 
+.container-simple{
+    margin-top: -48px;
+    margin-bottom: -40px;
+}
+
 /* Header */
 
 header.first-child {
