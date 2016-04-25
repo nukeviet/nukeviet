@@ -201,11 +201,15 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     global $global_config, $module_file, $module_data, $module_config, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/main.tpl') ? $global_config['module_theme'] : 'default';
+    $templateCSS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/comment.css') ? $global_config['module_theme'] : 'default';
+    $templateJS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/comment.js') ? $global_config['module_theme'] : 'default';
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
     $xtpl->assign('LANG', $lang_module_comment);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('TEMPLATE', $template);
+    $xtpl->assign('TEMPLATE_CSS', $templateCSS);
+    $xtpl->assign('TEMPLATE_JS', $templateJS);
     $xtpl->assign('CHECKSS_COMM', $checkss);
     $xtpl->assign('MODULE_COMM', $module);
     $xtpl->assign('MODULE_DATA', $module_data);
@@ -215,16 +219,6 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     $xtpl->assign('BASE_URL_COMM', $base_url);
 
     if (defined('NV_COMM_ID')) {
-        // Check call module js file
-        if (file_exists(NV_ROOTDIR . '/themes/' . $template . '/js/comment.js')) {
-            $xtpl->parse('main.header.jsfile');
-        }
-
-        // Check call module css file
-        if (file_exists(NV_ROOTDIR . '/themes/' . $template . '/css/comment.css')) {
-            $xtpl->parse('main.header.cssfile');
-        }
-
         $xtpl->parse('main.header');
     }
 
