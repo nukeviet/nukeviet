@@ -254,7 +254,7 @@ class Diagnostic
         $url = sprintf($this->pattern['BingBackLink'], urlencode(':' . $this->currentDomain));
         $content = $this->getContent->get($url);
 
-        if (preg_match("/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match)) {
+        if (preg_match("/\<span class\=\"sb\_count\"[^\>]*>([0-9\,]+) ([^\<]+)\<\/span\>/isU", $content, $match)) {
             $bl = preg_replace('/\,/', '', $match[1]);
             return ( int )$bl;
         } else {
@@ -272,7 +272,7 @@ class Diagnostic
         $url = sprintf($this->pattern['BingIndexed'], urlencode(':' . $this->currentDomain));
         $content = $this->getContent->get($url);
 
-        if (preg_match("/\<span class\=\"sb\_count\" id\=\"count\"\>([0-9\,]+) results\<\/span\>/isU", $content, $match)) {
+        if (preg_match("/\<span class\=\"sb\_count\"[^\>]*>([0-9\,]+) ([^\<]+)\<\/span\>/isU", $content, $match)) {
             $bl = preg_replace('/\,/', '', $match[1]);
             return ( int )$bl;
         } else {
