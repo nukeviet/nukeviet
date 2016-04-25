@@ -751,7 +751,7 @@ header.first-child {
 }
 
 header.header-up {
-    top: -48px;
+    top: -50px;
 }
 
 #header {
@@ -1108,7 +1108,7 @@ header.header-up {
 }
 
 #footer.footer-down {
-    bottom: -40px;
+    bottom: -42px;
 }
 
 .footer {
