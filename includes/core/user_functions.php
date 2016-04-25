@@ -693,14 +693,15 @@ function nv_admin_menu()
 /**
  * nv_groups_list_pub()
  *
+ * @param string $mod_data
  * @return
  */
-function nv_groups_list_pub()
+function nv_groups_list_pub($mod_data = 'users')
 {
     global $nv_Cache, $db, $db_config, $global_config;
 
-    $query = 'SELECT group_id, title, group_type, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
-    $list = $nv_Cache->db($query, '', 'users');
+    $query = 'SELECT group_id, title, group_type, exp_time FROM ' . $db_config['prefix'] . '_' . $mod_data . '_groups WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+    $list = $nv_Cache->db($query, '', $mod_data);
 
     if (empty($list)) {
         return array();
@@ -717,8 +718,8 @@ function nv_groups_list_pub()
     }
 
     if ($reload) {
-        $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
-        $nv_Cache->delMod('users');
+        $db->query('UPDATE ' . $db_config['prefix'] . '_' . $mod_data . '_groups SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
+        $nv_Cache->delMod($mod_data);
     }
 
     return $groups;

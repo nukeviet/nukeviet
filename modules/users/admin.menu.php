@@ -12,7 +12,7 @@ if (! defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$access_admin = $db->query("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'")->fetchColumn();
+$access_admin = $db->query("SELECT content FROM " . $db_config['prefix'] . "_" . $module_data . "_config WHERE config='access_admin'")->fetchColumn();
 $access_admin = unserialize($access_admin);
 
 $allow_func = array( 'main', 'getuserid' );
@@ -39,7 +39,7 @@ if (isset($access_admin['access_groups'][$level]) and $access_admin['access_grou
     $allow_func[] = 'groups';
 }
 
-if (isset($admin_mods['authors'])) {
+if ($module_data == 'users' and isset($admin_mods['authors'])) {
     $submenu['authors'] = $lang_global['mod_authors'];
     $allow_func[] = 'authors';
 }

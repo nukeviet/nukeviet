@@ -30,7 +30,7 @@ if (defined('NV_IS_USER_FORUM')) {
  */
 function nv_check_username_change($login)
 {
-    global $db, $lang_module, $user_info, $db_config;
+    global $db, $lang_module, $user_info, $db_config, $module_data;
 
     $error = nv_check_valid_login($login, NV_UNICKMAX, NV_UNICKMIN);
     if ($error != '') {
@@ -40,7 +40,7 @@ function nv_check_username_change($login)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_name'";
+    $sql = "SELECT content FROM " . $db_config['prefix'] . "_" . $module_data . "_config WHERE config='deny_name'";
     $result = $db->query($sql);
     $deny_name = $result->fetchColumn();
     $result->closeCursor();
@@ -49,12 +49,12 @@ function nv_check_username_change($login)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . " WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe($login) . "'";
+    $sql = "SELECT userid FROM " . $db_config['prefix'] . "_" . $module_data . " WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe($login) . "'";
     if ($db->query($sql)->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
 
-    $sql = "SELECT userid FROM " . NV_USERS_GLOBALTABLE . "_reg WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe($login) . "'";
+    $sql = "SELECT userid FROM " . $db_config['prefix'] . "_" . $module_data . "_reg WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe($login) . "'";
     if ($db->query($sql)->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
@@ -70,14 +70,14 @@ function nv_check_username_change($login)
  */
 function nv_check_email_change($email)
 {
-    global $db, $lang_module, $user_info, $db_config;
+    global $db, $lang_module, $user_info, $db_config, $module_data;
 
     $error = nv_check_valid_email($email);
     if ($error != '') {
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
     }
 
-    $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email'";
+    $sql = "SELECT content FROM " . $db_config['prefix'] . "_" . $module_data . "_config WHERE config='deny_email'";
     $result = $db->query($sql);
     $deny_email = $result->fetchColumn();
     $result->closeCursor();
@@ -92,21 +92,21 @@ function nv_check_email_change($email)
     $pattern = implode('.?', $pattern);
     $pattern = '^' . $pattern . '@' . $right . '$';
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern');
+    $stmt = $db->prepare('SELECT userid FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         return sprintf($lang_module['email_registered_name'], $email);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email RLIKE :pattern');
+    $stmt = $db->prepare('SELECT userid FROM ' . $db_config['prefix'] . '_' . $module_data . '_reg WHERE email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         return sprintf($lang_module['email_registered_name'], $email);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern');
+    $stmt = $db->prepare('SELECT userid FROM ' . $db_config['prefix'] . '_' . $module_data . '_openid WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
@@ -118,11 +118,11 @@ function nv_check_email_change($email)
 
 function get_field_config()
 {
-    global $db;
+    global $db, $module_data;
 
     $array_field_config = array();
 
-    $result_field = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC');
+    $result_field = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field WHERE user_editable = 1 ORDER BY weight ASC');
     while ($row_field = $result_field->fetch()) {
         $language = unserialize($row_field['language']);
         $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row_field['field'];
@@ -171,11 +171,10 @@ function opidr($openid_info)
 
 function nv_groups_list_pub2()
 {
-    global $db, $global_config;
+    global $db, $global_config, $module_data;
 
     $groups_list = array();
-
-    $resul = $db->query('SELECT group_id, title, description, group_type, exp_time, numbers FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
+    $resul = $db->query('SELECT group_id, title, description, group_type, exp_time, numbers FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
     while ($row = $resul->fetch()) {
         if (($row['group_type'] == 1 or $row['group_type'] == 2) and ($row['exp_time'] == 0 or $row['exp_time'] > NV_CURRENTTIME)) {
             $groups_list[$row['group_id']] = $row;
@@ -190,7 +189,7 @@ $array_data['checkss'] = md5($client_info['session_id'] . $global_config['siteke
 
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $user_info['userid'];
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $user_info['userid'];
 $query = $db->query($sql);
 $row = $query->fetch();
 
@@ -239,7 +238,7 @@ if (( int )$row['safemode'] > 0) {
                 'mess' => $lang_module['verifykey_error'] )));
         }
 
-        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . " SET safemode=0, safekey='' WHERE userid=" . $user_info['userid']);
+        $stmt = $db->prepare("UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET safemode=0, safekey='' WHERE userid=" . $user_info['userid']);
         $stmt->execute();
 
         die(json_encode(array(
@@ -312,7 +311,7 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
 
     $opid = $crypt->hash($attribs['id']);
 
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid ');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_openid WHERE opid= :opid ');
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->execute();
     $count = $stmt->fetchColumn();
@@ -321,7 +320,7 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
         die();
     }
 
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email ');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email ');
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
     $count = $stmt->fetchColumn();
@@ -331,7 +330,7 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
     }
 
     if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3) {
-        $query = 'SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email ';
+        $query = 'SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_reg WHERE email= :email ';
         if ($global_config['allowuserreg'] == 2) {
             $query .= ' AND regdate>' . (NV_CURRENTTIME - 86400);
         }
@@ -345,7 +344,7 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
         }
     }
 
-    $stmt = $db->prepare('INSERT INTO ' . NV_USERS_GLOBALTABLE . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )');
+    $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )');
     $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -379,7 +378,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $array_data['first_name'] = ! empty($row['first_name']) ? $row['first_name'] : $row['username'];
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET first_name= :first_name, last_name= :last_name, gender= :gender, birthday=' . $array_data['birthday'] . ', view_mail=' . $array_data['view_mail'] . ' WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET first_name= :first_name, last_name= :last_name, gender= :gender, birthday=' . $array_data['birthday'] . ', view_mail=' . $array_data['view_mail'] . ' WHERE userid=' . $user_info['userid']);
 
     $stmt->bindParam(':first_name', $array_data['first_name'], PDO::PARAM_STR);
     $stmt->bindParam(':last_name', $array_data['last_name'], PDO::PARAM_STR);
@@ -418,7 +417,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username'
 
     $md5_username = nv_md5safe($nv_username);
 
-    $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET username= :username, md5username= :md5username WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET username= :username, md5username= :md5username WHERE userid=' . $user_info['userid']);
     $stmt->bindParam(':username', $nv_username, PDO::PARAM_STR);
     $stmt->bindParam(':md5username', $md5_username, PDO::PARAM_STR);
     $stmt->execute();
@@ -538,7 +537,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
 
         $nv_Request->unset_request('verifykey', 'session');
 
-        $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET email= :email WHERE userid=' . $user_info['userid']);
+        $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET email= :email WHERE userid=' . $user_info['userid']);
         $stmt->bindParam(':email', $nv_email, PDO::PARAM_STR);
         $stmt->execute();
 
@@ -584,7 +583,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password'
 
     $re_password = $crypt->hash_password($new_password, $global_config['hashprefix']);
 
-    $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET password= :password WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET password= :password WHERE userid=' . $user_info['userid']);
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 
@@ -627,7 +626,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question'
             'mess' => $lang_global['incorrect_password'] )));
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET question= :question, answer= :answer WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET question= :question, answer= :answer WHERE userid=' . $user_info['userid']);
     $stmt->bindParam(':question', $your_question, PDO::PARAM_STR);
     $stmt->bindParam(':answer', $answer, PDO::PARAM_STR);
     $stmt->execute();
@@ -650,7 +649,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'openid') 
 
     foreach ($openid_del as $opid) {
         if (! empty($opid) and (empty($user_info['current_openid']) or (! empty($user_info['current_openid']) and $user_info['current_openid'] != $opid))) {
-            $stmt = $db->prepare('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE opid= :opid');
+            $stmt = $db->prepare('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_openid WHERE opid= :opid');
             $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
             $stmt->execute();
         }
@@ -664,7 +663,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'openid') 
 //Groups
 elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     $array_old_groups = array();
-    $result_gru = $db->query('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid']);
+    $result_gru = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE userid=' . $user_info['userid']);
     while ($row_gru = $result_gru->fetch()) {
         $array_old_groups[] = $row_gru['group_id'];
     }
@@ -677,7 +676,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     $in_groups_del = array_diff($array_old_groups, $in_groups);
     if (! empty($in_groups_del)) {
         foreach ($in_groups_del as $gid) {
-            nv_groups_del_user($gid, $user_info['userid']);
+            nv_groups_del_user($gid, $user_info['userid'], $module_data);
         }
     }
 
@@ -685,12 +684,12 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     if (! empty($in_groups_add)) {
         foreach ($in_groups_add as $gid) {
         	$approved = $groups_list[$gid]['group_type'] == 1 ? 0 : 1;
-            if (nv_groups_add_user($gid, $user_info['userid'], $approved)) {
+            if (nv_groups_add_user($gid, $user_info['userid'], $approved, 1, $module_data)) {
             	// Gửi thư thông báo kiểm duyệt
             	if ($groups_list[$gid]['group_type'] == 1) {
             		// Danh sách email trưởng nhóm
             		$array_leader = array();
-					$result = $db->query('SELECT t2.email FROM ' . NV_GROUPS_GLOBALTABLE . '_users t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.userid=t2.userid WHERE t1.is_leader=1 AND t1.group_id=' . $gid);
+					$result = $db->query('SELECT t2.email FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . ' t2 ON t1.userid=t2.userid WHERE t1.is_leader=1 AND t1.group_id=' . $gid);
 					while (list($email) = $result->fetch (3)) {
 						$array_leader[] = $email;
 					}
@@ -708,7 +707,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
         }
     }
 
-    $db->query("UPDATE " . NV_USERS_GLOBALTABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $user_info['userid']);
+    $db->query("UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $user_info['userid']);
     die(json_encode(array(
         'status' => 'ok',
         'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/group', true),
@@ -721,7 +720,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'others') 
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
     require NV_ROOTDIR . '/modules/users/fields.check.php';
 
-    $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $user_info['userid']);
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $user_info['userid']);
 
     die(json_encode(array(
         'status' => 'ok',
@@ -746,7 +745,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
             }
             $row['safekey'] = md5(nv_genpass($rand));
 
-            $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET safekey= :safekey WHERE userid=' . $user_info['userid']);
+            $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET safekey= :safekey WHERE userid=' . $user_info['userid']);
             $stmt->bindParam(':safekey', $row['safekey'], PDO::PARAM_STR);
             $stmt->execute();
             $nv_Request->set_Session('safesend', 0);
@@ -782,7 +781,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
             'mess' => $lang_module['verifykey_error'] )));
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET safemode=1, safekey= :safekey WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET safemode=1, safekey= :safekey WHERE userid=' . $user_info['userid']);
     $stmt->bindParam(':safekey', $row['safekey'], PDO::PARAM_STR);
     $stmt->execute();
 
@@ -800,7 +799,7 @@ if (! defined('NV_EDITOR')) {
 }
 require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $user_info['userid'];
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_info WHERE userid=' . $user_info['userid'];
 $result = $db->query($sql);
 $custom_fields = $result->fetch();
 
@@ -842,7 +841,7 @@ $array_data['gender_array'] = array(
         );
 
 $data_questions = array();
-$sql = "SELECT qid, title FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+$sql = "SELECT qid, title FROM " . $db_config['prefix'] . "_" . $module_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
 $result = $db->query($sql);
 while ($row2 = $result->fetch()) {
     $data_questions[$row2['qid']] = array( 'qid' => $row2['qid'], 'title' => $row2['title'] );
@@ -850,7 +849,7 @@ while ($row2 = $result->fetch()) {
 
 $data_openid = array();
 if (in_array('openid', $types)) {
-    $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $user_info['userid'];
+    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_openid WHERE userid=' . $user_info['userid'];
     $query = $db->query($sql);
     while ($row3 = $query->fetch()) {
         $data_openid[] = array(
@@ -864,7 +863,7 @@ if (in_array('openid', $types)) {
 $groups = array();
 if (in_array('group', $types)) {
     $my_groups = array();
-    $result_gru = $db->query('SELECT group_id, is_leader, approved FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid']);
+    $result_gru = $db->query('SELECT group_id, is_leader, approved FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE userid=' . $user_info['userid']);
     while ($row_gru = $result_gru->fetch()) {
         $my_groups[$row_gru['group_id']] = $row_gru;
     }

@@ -67,14 +67,14 @@ if (defined('NV_CONFIG_DIR')) {
     define('NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir']);
     define('NV_FILES_DIR', NV_ASSETS_DIR . '/' . $global_config['site_dir']);
     define('NV_CACHEDIR', SYSTEM_CACHEDIR . '/' . $global_config['site_dir']);
-    define('NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_groups');
     define('NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users');
+    define('NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users_groups');
 } else {
     define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
     define('NV_FILES_DIR', NV_ASSETS_DIR);
     define('SYSTEM_CACHEDIR', NV_CACHEDIR);
-    define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups');
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
+    define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
 }
 
 // Vendor autoload
