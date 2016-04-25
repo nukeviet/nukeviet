@@ -98,7 +98,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_row_area ( 
     row_id INT(10) UNSIGNED NOT NULL , 
     area_id SMALLINT(4) UNSIGNED NOT NULL,
-    UNIQUE KEY alias (row_id, area_id),
+    UNIQUE KEY alias (row_id, area_id)
 ) ENGINE = MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_signer(
