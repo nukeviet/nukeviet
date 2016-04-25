@@ -112,7 +112,20 @@ function usageTermsShow(t) {
 		data: 'get_usage_terms=1',
 		dataType: 'html',
 		success: function(e) {
-			modalShow(t, e)
+            if ($('#sitemodal').length) {
+                if (!$('#sitemodalTerm').length) {
+                    $('body').append('<div id="sitemodalTerm" class="modal fade" role="dialog">' + $('#sitemodal').html() + '</div>')
+                }
+                "" != t && 'undefined' != typeof t && $("#sitemodalTerm .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + t + '</h2></div>');
+                $("#sitemodalTerm").find(".modal-title").html(t);
+                $("#sitemodalTerm").find(".modal-body").html(e);
+                $('#sitemodalTerm').on('hidden.bs.modal', function () {
+                    $("#sitemodalTerm .modal-content").find(".modal-header").remove()
+            	});
+                $("#sitemodalTerm").modal({backdrop: "static"})
+            } else {
+                alert(strip_tags(e))
+            }
 		}
 	});
 	return !1
