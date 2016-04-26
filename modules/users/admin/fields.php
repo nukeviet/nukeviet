@@ -135,9 +135,12 @@ $error = '';
 $field_choices = array();
 if ($nv_Request->isset_request('submit', 'post')) {
     $validatefield = array( 'pattern' => '/[^a-zA-Z\_]/', 'replacement' => '' );
+    $validatefieldCss = array( 'pattern' => '/[^a-zA-Z0-9\_\-]/', 'replacement' => '' );
     $preg_replace = array( 'pattern' => '/[^a-zA-Z0-9\_]/', 'replacement' => '' );
 
     $dataform = array();
+    $dataform['sql_choices'] = '';
+    
     $dataform['fid'] = $nv_Request->get_int('fid', 'post', 0);
 
     $dataform['title'] = $nv_Request->get_title('title', 'post', '');
@@ -147,7 +150,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $dataform['show_register'] = ($dataform['required']) ? 1 : $nv_Request->get_int('show_register', 'post', 0);
     $dataform['user_editable'] = $nv_Request->get_int('user_editable', 'post', 0);
     $dataform['show_profile'] = $nv_Request->get_int('show_profile', 'post', 0);
-    $dataform['class'] = nv_substr($nv_Request->get_title('class', 'post', '', 0, $preg_replace), 0, 50);
+    $dataform['class'] = nv_substr($nv_Request->get_title('class', 'post', '', 0, $validatefieldCss), 0, 50);
 
     $dataform['field_type'] = nv_substr($nv_Request->get_title('field_type', 'post', '', 0, $preg_replace), 0, 50);
 
@@ -253,7 +256,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $dataform['match_type'] = 'none';
         $dataform['match_regex'] = $dataform['func_callback'] = '';
         $field_choices['current_date'] = $dataform['current_date'];
-        if ($dataform['min_length'] >= $dataform['max_length']) {
+        if ($dataform['min_length'] >= $dataform['max_length'] and $dataform['min_length'] != 0) {
             $error = $lang_module['field_date_error'];
         } else {
             $dataform['field_choices'] = serialize(array( 'current_date' => $dataform['current_date'] ));
@@ -267,8 +270,6 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $dataform['default_value'] = $nv_Request->get_int('default_value_choice', 'post', 0);
 
         if ($dataform['choicetypes'] == 'field_choicetypes_text') {
-            $dataform['sql_choices'] = '';
-
             $field_choice_value = $nv_Request->get_array('field_choice', 'post');
             $field_choice_text = $nv_Request->get_array('field_choice_text', 'post');
             $field_choices = array_combine(array_map('strip_punctuation', $field_choice_value), array_map('strip_punctuation', $field_choice_text));
@@ -283,7 +284,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $choicesql_table = $nv_Request->get_string('choicesql_table', 'post', ''); //table trong module
             $choicesql_column_key = $nv_Request->get_string('choicesql_column_key', 'post', ''); //cot value cho fields
             $choicesql_column_val = $nv_Request->get_string('choicesql_column_val', 'post', ''); //cot key cho fields
-            $dataform['sql_choices'] = '';
+            
             if ($choicesql_module != '' && $choicesql_table != '' && $choicesql_column_key != '' && $choicesql_column_val != '') {
                 $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val;
             } else {
@@ -435,6 +436,10 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
+
+// Fix tpl parse
+$xtpl->assign('MATCH4', '{4}');
+$xtpl->assign('MATCH2', '{2}');
 
 // Danh sach cau hoi
 if ($nv_Request->isset_request('qlist', 'get')) {

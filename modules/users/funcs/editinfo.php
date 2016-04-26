@@ -116,9 +116,14 @@ function nv_check_email_change($email)
     return '';
 }
 
+/**
+ * get_field_config()
+ * 
+ * @return
+ */
 function get_field_config()
 {
-    global $db, $module_data;
+    global $db, $module_data, $db_config;
 
     $array_field_config = array();
 
@@ -144,6 +149,12 @@ function get_field_config()
     return $array_field_config;
 }
 
+/**
+ * opidr()
+ * 
+ * @param mixed $openid_info
+ * @return void
+ */
 function opidr($openid_info)
 {
     global $lang_module;
@@ -169,9 +180,14 @@ function opidr($openid_info)
     exit;
 }
 
+/**
+ * nv_groups_list_pub2()
+ * 
+ * @return
+ */
 function nv_groups_list_pub2()
 {
-    global $db, $global_config, $module_data;
+    global $db, $global_config, $module_data, $db_config;
 
     $groups_list = array();
     $resul = $db->query('SELECT group_id, title, description, group_type, exp_time, numbers FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
