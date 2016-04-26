@@ -12,15 +12,6 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-/**
- * dumpsave
- *
- * @package
- * @author NUKEVIET commercial version 1.0
- * @copyright Anh Tu Nguyen
- * @version 2010
- * @access public
- */
 class dumpsave
 {
     public $savetype;
@@ -30,13 +21,12 @@ class dumpsave
     public $fp = false;
 
     /**
-     * dumpsave::dumpsave()
      *
      * @param mixed $save_type
      * @param mixed $filesave_name
      * @return
      */
-    public function dumpsave($save_type, $filesave_name)
+    public function __construct($save_type, $filesave_name)
     {
         $this->filesavename = $filesave_name;
         if ($save_type == 'gz' and extension_loaded('zlib')) {
