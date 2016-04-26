@@ -628,8 +628,7 @@ function nv_html_site_js($html = true)
     }
 
     if (defined('NV_IS_DRAG_BLOCK')) {
-        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/ui/jquery.ui.core.min.js' );
-        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/ui/jquery.ui.sortable.min.js' );
+        $return[] = array( 'ext' => 1, 'content' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/jquery-ui/jquery-ui.min.js' );
     }
 
     if (! $html) {
