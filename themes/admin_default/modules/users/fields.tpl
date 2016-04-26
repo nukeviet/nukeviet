@@ -63,12 +63,12 @@
 			<tbody>
 				<!-- BEGIN: field -->
 				<tr>
-					<td>{LANG.field_id}:</td>
-					<td><label><input class="form-control w100" type="text" value="{DATAFORM.field}" name="field" {DATAFORM.fielddisabled}> {LANG.field_id_note}</label></td>
+					<td>{LANG.field_id} <span class="text-danger">(*)</span>:</td>
+					<td><label><input class="form-control required w100" type="text" value="{DATAFORM.field}" name="field" {DATAFORM.fielddisabled}> {LANG.field_id_note}</label></td>
 				</tr>
 				<!-- END: field -->
 				<tr>
-					<td>{LANG.field_title}</td>
+					<td>{LANG.field_title} <span class="text-danger">(*)</span>:</td>
 					<td><input class="form-control w350 required" type="text" value="{DATAFORM.title}" name="title"></td>
 				</tr>
 				<tr>
@@ -182,7 +182,11 @@
 				</tr>
 				<tr>
 					<td>{LANG.field_min_date}:</td>
-					<td><input class="form-control datepicker required date" style="width:100px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10"><span style="margin-left: 50px;">{LANG.field_max_date}:</span><input class="form-control datepicker required date" style="width:100px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10"></td>
+					<td>
+                        <input class="form-control datepicker validatefield" style="width:100px" type="text" value="{DATAFORM.min_date}" name="min_date" maxlength="10">
+                        <span style="margin-left: 50px;">{LANG.field_max_date}:</span>
+                        <input class="form-control datepicker validatefield" style="width:100px" type="text" value="{DATAFORM.max_date}" name="max_date" maxlength="10">
+                    </td>
 				</tr>
 			</tbody>
 		</table>
@@ -244,15 +248,15 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="4" ><input style="margin-left: 50px;" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem();" /></td>
+					<td colspan="4" ><input style="margin-left: 50px;" class="btn btn-default" type="button" value="{LANG.field_add_choice}" onclick="nv_choice_fields_additem();" /></td>
 				</tr>
 			</tfoot>
 			<tbody>
 				<!-- BEGIN: loop_field_choice -->
 				<tr class="text-center">
 					<td>{FIELD_CHOICES.number}</td>
-					<td><input class="form-control w100 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" /></td>
-					<td><input class="form-control w350" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" /></td>
+					<td><input class="form-control w200 validalphanumeric" type="text" value="{FIELD_CHOICES.key}" name="field_choice[{FIELD_CHOICES.number}]" placeholder="{LANG.field_match_type_alphanumeric}"/></td>
+					<td><input class="form-control w300" type="text" value="{FIELD_CHOICES.value}" name="field_choice_text[{FIELD_CHOICES.number}]" /></td>
 					<td><input type="radio" {FIELD_CHOICES.checked} value="{FIELD_CHOICES.number}" name="default_value_choice"></td>
 				</tr>
 				<!-- END: loop_field_choice -->
@@ -280,24 +284,18 @@ $(document).ready(function() {
 		}
 		var fieldCheck_rule = /^([a-zA-Z0-9_-])+$/;
 		return (fieldCheck_rule.test(str) ) ? true : false;
-	}, ' required a-z, 0-9, and _ only');
+	}, '{LANG.field_match_type_alphanumeric}');
 
 	$.validator.addMethod('validatefield', function(str) {
 		if (str == '') {
-			return true;
+			return true
 		}
-		var fieldCheck_rule = /^([a-zA-Z0-9_])+$/;
-		return (fieldCheck_rule.test(str) ) ? true : false;
-	}, ' required a-z, and _ only');
+        var re = new RegExp(/^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{MATCH2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{MATCH2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{MATCH2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/)
+        var m = str.match(re)
+        return (m ? true : false)
+	}, '{LANG.field_match_type_date}');
 
-	$('#ffields').validate({
-		rules : {
-			field : {
-				required : true,
-				validatefield : true
-			}
-		}
-	});
+	$('#ffields').validate();
 });
 
 function nv_load_sqlchoice(choice_name_select, choice_seltected) {

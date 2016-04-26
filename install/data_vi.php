@@ -91,7 +91,6 @@ $my_lang['cron']['cron_del_ip_logs'] = 'Xóa IP log files, Xóa các file nhật
 $my_lang['cron']['cron_auto_del_error_log'] = 'Xóa các file error_log quá hạn';
 $my_lang['cron']['cron_auto_sendmail_error_log'] = 'Gửi email các thông báo lỗi cho admin';
 $my_lang['cron']['cron_ref_expired_del'] = 'Xóa các referer quá hạn';
-$my_lang['cron']['cron_siteDiagnostic_update'] = 'Cập nhật đánh giá site từ các máy chủ tìm kiếm';
 $my_lang['cron']['cron_auto_check_version'] = 'Kiểm tra phiên bản NukeViet';
 $my_lang['cron']['cron_notification_autodel'] = 'Xóa thông báo cũ';
 
