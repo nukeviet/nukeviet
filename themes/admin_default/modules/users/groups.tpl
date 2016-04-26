@@ -119,7 +119,9 @@
 			return alert("{LANG.title_empty}"), $("input[name=title]").select(), false
 		}
 		if ( typeof (CKEDITOR) !== 'undefined') {
-			$("textarea[name=content]").val(CKEDITOR.instances.users_content.getData());
+			for ( instance in CKEDITOR.instances ){
+			    CKEDITOR.instances[instance].updateElement();
+			}
 		}
 		var a = $(this).serialize(), b = $(this).attr("action");
 		$("input[name=submit]").attr("disabled", "disabled");

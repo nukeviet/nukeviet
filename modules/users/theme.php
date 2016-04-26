@@ -905,7 +905,7 @@ function user_openid_administrator($data)
 {
     global $lang_global, $lang_module, $module_info, $module_file, $module_name, $global_config;
 
-    $groups_list = nv_groups_list_pub();
+    $groups_list = nv_groups_list_pub($module_info['module_data']);
 
     $xtpl = new XTemplate('openid_administrator.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);

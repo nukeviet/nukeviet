@@ -24,7 +24,7 @@ if ($admin_id) {
     die('NO');
 }
 
-$sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
+$sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch(3);
 if (empty($row)) {
     die('NO');
@@ -36,24 +36,24 @@ if ($global_config['idsite'] > 0 and $idsite != $global_config['idsite']) {
     die('NO');
 }
 
-$query = $db->query('SELECT COUNT(*) FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id IN (1,2,3) AND userid=' . $userid);
+$query = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE group_id IN (1,2,3) AND userid=' . $userid);
 if ($query->fetchColumn()) {
     die('ERROR_' . $lang_module['delete_group_system']);
 } else {
     $userdelete = (! empty($first_name)) ? $first_name . ' (' . $username . ')' : $username;
 
-    $result = $db->exec('DELETE FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid);
+    $result = $db->exec('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $userid);
     if (! $result) {
         die('NO');
     }
     
     $in_groups = explode(',', $in_groups);
     
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid . ' AND approved = 1)');
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups)) ? 7 : 4));
-    $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid);
-    $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid=' . $userid);
-    $db->query('DELETE FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $userid);
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = numbers-1 WHERE group_id IN (SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE userid=' . $userid . ' AND approved = 1)');
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = numbers-1 WHERE group_id=' . (($group_id == 7 or in_array(7, $in_groups)) ? 7 : 4));
+    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE userid=' . $userid);
+    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_openid WHERE userid=' . $userid);
+    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_info WHERE userid=' . $userid);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_del_user', 'userid ' . $userid, $admin_info['userid']);
 
