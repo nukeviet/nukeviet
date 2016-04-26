@@ -74,7 +74,7 @@ if (!nv_function_exists('nv_block_login')) {
      */
     function nv_block_login($block_config)
     {
-        global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID, $db, $module_info;
+        global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID, $db, $module_info, $site_mods, $db_config;
 
         $content = '';
 
@@ -200,7 +200,7 @@ if (!nv_function_exists('nv_block_login')) {
                         !empty($block_config['display_mode']) ? $xtpl->parse('main.' . $display_layout . '.allowuserreg_link') : $xtpl->parse('main.' . $display_layout . '.allowuserreg_linkform');
                     } else {
                         $data_questions = array();
-                        $sql = "SELECT qid, title FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+                        $sql = "SELECT qid, title FROM " . $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'] . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
                         $result = $db->query($sql);
                         while ($row = $result->fetch()) {
                             $data_questions[$row['qid']] = array('qid' => $row['qid'], 'title' => $row['title']);
@@ -214,7 +214,7 @@ if (!nv_function_exists('nv_block_login')) {
                         $datepicker = false;
     
                         $array_field_config = array();
-                        $result_field = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC');
+                        $result_field = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[$block_config['module']]['module_data'] . '_field ORDER BY weight ASC');
                         while ($row_field = $result_field->fetch()) {
                             $language = unserialize($row_field['language']);
                             $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];

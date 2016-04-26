@@ -1,11 +1,8 @@
 <!-- BEGIN: add -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/colpick.css">
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/colpick.js"></script>
 
@@ -119,7 +116,9 @@
 			return alert("{LANG.title_empty}"), $("input[name=title]").select(), false
 		}
 		if ( typeof (CKEDITOR) !== 'undefined') {
-			$("textarea[name=content]").val(CKEDITOR.instances.users_content.getData());
+			for ( instance in CKEDITOR.instances ){
+			    CKEDITOR.instances[instance].updateElement();
+			}
 		}
 		var a = $(this).serialize(), b = $(this).attr("action");
 		$("input[name=submit]").attr("disabled", "disabled");

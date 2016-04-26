@@ -39,7 +39,7 @@ function lost_pass_sendMail($row)
         $pa = NV_CURRENTTIME + 3600;
         $passlostkey = $pa . '|' . $passlostkey;
 
-        $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
+        $sql = "UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
         $db->query($sql);
 
         $name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
@@ -90,10 +90,10 @@ if ($checkss == $data['checkss']) {
 
     $check_email = nv_check_valid_email($data['userField']);
     if (empty($check_email)) {
-        $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email= :userField AND active=1';
+        $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE email= :userField AND active=1';
         $userField = nv_strtolower($data['userField']);
     } else {
-        $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=:userField AND active=1';
+        $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE md5username=:userField AND active=1';
         $userField = nv_md5safe($data['userField']);
     }
     $stmt = $db->prepare($sql);
@@ -238,7 +238,7 @@ if ($checkss == $data['checkss']) {
 
     $re_password = $crypt->hash_password($new_password, $global_config['hashprefix']);
 
-    $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . " SET password= :password, passlostkey='' WHERE userid=" . $row['userid']);
+    $stmt = $db->prepare("UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET password= :password, passlostkey='' WHERE userid=" . $row['userid']);
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 

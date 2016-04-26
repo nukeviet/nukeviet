@@ -26,7 +26,7 @@ $lang_module['in_groups'] = $lang_global['in_groups'];
  */
 function validUserLog($array_user, $remember, $opid, $current_mode = 0)
 {
-    global $db, $db_config, $global_config, $nv_Request;
+    global $db, $db_config, $global_config, $nv_Request, $module_data;
 
     $remember = intval($remember);
     $checknum = md5(nv_genpass(10));
@@ -47,7 +47,7 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
 
     $user = nv_base64_encode(serialize($user));
 
-    $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . " SET
+    $stmt = $db->prepare("UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET
 		checknum = :checknum,
 		last_login = " . NV_CURRENTTIME . ",
 		last_ip = :last_ip,

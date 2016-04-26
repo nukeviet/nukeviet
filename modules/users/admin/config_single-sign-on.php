@@ -113,7 +113,7 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('DATA', $array_config);
 $xtpl->assign('FIELD_LOCK', $field_lock);
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC';
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field ORDER BY weight ASC';
 $_query = $db->query($sql);
 foreach ($_query as $row) {
     $_language = unserialize($row['language']);

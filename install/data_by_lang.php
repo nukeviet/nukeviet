@@ -404,14 +404,3 @@ if(!empty($menu_rows_lev0))
         $sth->execute($execute);
     }
 }
-
-//Insert sample groups data 
-try {
-    $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (10, 'NukeViet-Fans', '". $my_lang['groups']['NukeViet-Fans'] . "', '', 2, '', '', 1, " . NV_CURRENTTIME . ", 0, 8, 1, 0, 0, 0)");
-    $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (11, 'NukeViet-Admins', '" . $my_lang['groups']['NukeViet-Admins'] . "', '', 2, '', '', 0, " . NV_CURRENTTIME . ", 0, 9, 1, 0, 0, 0)");
-    $db->query("INSERT INTO " . NV_GROUPS_GLOBALTABLE . " (group_id, title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus) VALUES (12, 'NukeViet-Programmers', '" . $my_lang['groups']['NukeViet-Programmers'] . "', '', 1, '', '', 0, " . NV_CURRENTTIME . ", 0, 10, 1, 0, 0, 0)");
-}
-catch (PDOException $e)
-{
-    trigger_error($e->getMessage());
-}

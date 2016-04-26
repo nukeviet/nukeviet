@@ -12,9 +12,9 @@ if (! defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
-global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
+global $site_mods, $db_config, $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
 
-$content = "";
+$content = '';
 
 if ($global_config['allowuserlogin']) {
     if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/users/block.user_button.tpl')) {
@@ -132,7 +132,7 @@ if ($global_config['allowuserlogin']) {
 
         if ($global_config['allowuserreg']) {
             $data_questions = array();
-            $sql = "SELECT qid, title FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+            $sql = "SELECT qid, title FROM " . $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'] . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
             $result = $db->query($sql);
             while ($row = $result->fetch()) {
                 $data_questions[$row['qid']] = array( 'qid' => $row['qid'], 'title' => $row['title'] );
@@ -146,7 +146,7 @@ if ($global_config['allowuserlogin']) {
             $datepicker = false;
 
             $array_field_config = array();
-            $result_field = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC');
+            $result_field = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[$block_config['module']]['module_data'] . '_field ORDER BY weight ASC');
             while ($row_field = $result_field->fetch()) {
                 $language = unserialize($row_field['language']);
                 $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];

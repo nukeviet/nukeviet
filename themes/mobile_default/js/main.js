@@ -62,8 +62,6 @@ function winHelpHide() {
 
 function contentScrt() {
 	winHelp && winHelpHide();
-	tip_active && tipHide();
-	ftip_active && ftipHide();
 	scrt = $(window).scrollTop();
 	scrtRangeY = scrt - oldScrt;
     
