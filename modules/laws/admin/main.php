@@ -26,7 +26,7 @@ $scount = count( $sList );
 $sgList = nv_sgList();
 $scount = count( $sgList );
 
-$sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE status = 1";
+$sql = "SELECT COUNT(*) as ccount FROM " . NV_PREFIXLANG . "_" . $module_data . "_row";
 $result = $db->query( $sql );
 $all_page = $result->fetch();
 $all_page = $all_page['ccount'];
