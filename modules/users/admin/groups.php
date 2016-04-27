@@ -520,7 +520,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 if (empty($post['description'])) {
                     die($lang_module['group_description_empty']);
                 }
-
+	
                 $post['content'] = $nv_Request->get_editor('content', '', NV_ALLOWED_HTML_TAGS);
 
                 $post['exp_time'] = $nv_Request->get_title('exp_time', 'post', '');
@@ -546,7 +546,29 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                     $post['is_default'] = 0;
                 }
             }
-
+			
+			if (empty($post['id']) or $post['id'] > 9 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 or $post['id'] == 4 or $post['id'] == 7) {
+				$post['email'] = $nv_Request->get_title('email', 'post', '', 1);
+				if ( !empty($post['email']) AND ($error_xemail = nv_check_valid_email($post['email'])) != '') {
+			        die($error_xemail);
+			    }
+			}
+			else {
+				$post['email']='';
+			}
+			
+			if (empty($post['id']) or $post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 ) {
+	            //lấy thông tin cấu hình phân quyền
+				$post['config']['access_groups_add'] = $nv_Request->get_int('access_groups_add', 'post', 0);
+				$post['config']['access_groups_del'] = $nv_Request->get_int('access_groups_del', 'post', 0);
+				$post['config']['access_addus'] = $nv_Request->get_int('access_addus', 'post', 0);
+				$post['config']['access_waiting'] = $nv_Request->get_int('access_waiting', 'post', 0);
+				$post['config']['access_editus'] = $nv_Request->get_int('access_editus', 'post', 0);
+				$post['config']['access_delus'] = $nv_Request->get_int('access_delus', 'post', 0);
+				$post['config']['access_passus'] = $nv_Request->get_int('access_passus', 'post', 0);
+				$post['config'] = serialize($post['config']);
+	        }
+			
             // Thông tin của tất cả các nhóm kể cả các nhóm hệ thống
             $post['group_color'] = nv_substr($nv_Request->get_title('group_color', 'post', '', 1), 0, 10);
 
@@ -569,21 +591,26 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 	                $weight = intval($weight) + 1;
 
 	                $_sql = "INSERT INTO " . NV_MOD_TABLE . "_groups
-						(title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus)
-						VALUES ( :title, :description, :content, " . $post['group_type'] . ", :group_color, :group_avatar, " . $post['is_default'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
+						(title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config)
+						VALUES ( :title, :email, :description, :content, " . $post['group_type'] . ", :group_color, 
+						:group_avatar, " . $post['is_default'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", 
+						" . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ", :config)";
 
 	                $data_insert = array();
 	                $data_insert['title'] = $post['title'];
+	                $data_insert['email'] = $post['email'];
 	                $data_insert['description'] = $post['description'];
 	                $data_insert['content'] = $post['content'];
 	                $data_insert['group_color'] = $post['group_color'];
 	                $data_insert['group_avatar'] = $post['group_avatar'];
+	                $data_insert['config'] = $post['config'];
 
 	                $ok = $post['id'] = $db->insert_id($_sql, 'group_id', $data_insert);
          	   	} elseif ($post['id'] > 9) {
                     // Sửa nhóm tự tạo
                     $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_groups SET
                         title = :title,
+                        email = :email,
                         description = :description,
                         content = :content,
                         group_type = '" . $post['group_type'] . "',
@@ -591,25 +618,32 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                         group_avatar = :group_avatar,
                         is_default = " . $post['is_default'] . ",
                         exp_time ='" . $post['exp_time'] . "',
-                        siteus = '" . $post['siteus'] . "'
+                        siteus = '" . $post['siteus'] . "',
+                        config = :config
                     WHERE group_id = " . $post['id']);
 
                     $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
+                    $stmt->bindParam(':email', $post['email'], PDO::PARAM_STR);
                     $stmt->bindParam(':description', $post['description'], PDO::PARAM_STR);
                     $stmt->bindParam(':content', $post['content'], PDO::PARAM_STR, strlen($post['content']));
                     $stmt->bindParam(':group_color', $post['group_color']);
                     $stmt->bindParam(':group_avatar', $post['group_avatar']);
-
+					$stmt->bindParam(':config', $post['config'], PDO::PARAM_STR);
+					
                     $ok = $stmt->execute();
                 } else {
                     // Sửa nhóm hệ thống
                     $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_groups SET
+                        email = :email,
                         group_color = :group_color,
-                        group_avatar = :group_avatar
+                        group_avatar = :group_avatar,
+                        config = :config
                     WHERE group_id=" . $post['id']);
 
+                    $stmt->bindParam(':email', $post['email']);
                     $stmt->bindParam(':group_color', $post['group_color']);
                     $stmt->bindParam(':group_avatar', $post['group_avatar']);
+                    $stmt->bindParam(':config', $post['config']);
 
                     $ok = $stmt->execute();
                 }
@@ -630,19 +664,40 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
             $post['exp_time'] = ! empty($post['exp_time']) ? date('d/m/Y', $post['exp_time']) : '';
             $post['siteus'] = $post['siteus'] ? ' checked="checked"' : '';
             $post['id'] = $post['group_id'];
+            
+            if(empty($post['config'])){
+            	$post['config']['access_groups_add'] = $post['config']['access_groups_del'] = 1;
+				$post['config']['access_addus'] = $post['config']['access_waiting'] = $post['config']['access_editus'] = $post['config']['access_delus'] = $post['config']['access_passus'] = $post['config']['access_passus'] = 0;
+            }
+			else {
+				$post['config'] = unserialize($post['config']);
+			}
         } else {
-            $post['title'] = $post['description'] = $post['content'] = $post['exp_time'] = '';
+            $post['title'] = $post['email'] =  $post['description'] = $post['content'] = $post['exp_time'] = '';
             $post['group_type'] = 0;
             $post['id'] = $post['is_default'] = 0;
+			
+			$post['config']['access_groups_add'] = $post['config']['access_groups_del'] = 1;
+			$post['config']['access_addus'] = $post['config']['access_waiting'] = $post['config']['access_editus'] = $post['config']['access_delus'] = $post['config']['access_passus'] = $post['config']['access_passus'] = 0;
         }
-
+		
+		
         $post['content'] = htmlspecialchars(nv_editor_br2nl($post['content']));
         $post['is_default'] = $post['is_default'] ? ' checked="checked"' : '';
-
+		
+		$post['config']['access_groups_add'] = $post['config']['access_groups_add'] ? ' checked="checked"' : '';
+		$post['config']['access_groups_del'] = $post['config']['access_groups_del'] ? ' checked="checked"' : '';
+		$post['config']['access_addus'] = $post['config']['access_addus'] ? ' checked="checked"' : '';
+		$post['config']['access_waiting'] = $post['config']['access_waiting'] ? ' checked="checked"' : '';
+		$post['config']['access_editus'] = $post['config']['access_editus'] ? ' checked="checked"' : '';
+		$post['config']['access_delus'] = $post['config']['access_delus'] ? ' checked="checked"' : '';
+		$post['config']['access_passus'] = $post['config']['access_passus'] ? ' checked="checked"' : '';
+		
         if (! empty($post['group_avatar']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['group_avatar'])) {
             $post['group_avatar'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['group_avatar'];
         }
-
+		
+		$xtpl->assign('CONFIG', $post['config']);
         $xtpl->assign('DATA', $post);
 
         if (defined('NV_CONFIG_DIR') and empty($global_config['idsite'])) {
@@ -675,7 +730,15 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
         if ($post['id'] > 9 or $post['id'] == 0) {
             $xtpl->parse('add.basic_infomation');
         }
-
+		
+		if ($post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 or $post['id'] == 4 or $post['id'] == 7) {
+    		$xtpl->parse('add.email');
+    	}
+		
+		if ($post['id'] > 9 or $post['id'] == 0 or $post['id'] == 1 or $post['id'] == 2 or $post['id'] == 3 ) {
+            $xtpl->parse('add.config');
+        }
+		
         if (!empty($post['group_color'])) {
             $xtpl->parse('add.group_color');
         }

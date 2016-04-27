@@ -240,6 +240,10 @@ $lang_module['access_editus'] = 'Modifier l\'utilisateur';
 $lang_module['access_delus'] = 'Supprimer l\'utilisateur';
 $lang_module['access_passus'] = 'Changer le mot de passe';
 $lang_module['access_groups'] = 'Gérer le groupe';
+$lang_module['access_caption_leader'] = 'Puissances du module de configuration de l\'utilisateur du leader';
+$lang_module['access_groups_add'] = 'Ajouter des membres au groupe';
+$lang_module['access_groups_del'] = 'Retirer membre du groupe';
+
 $lang_module['fields'] = 'Modification des données';
 $lang_module['captionform_add'] = 'Ajouter les lexiques de données';
 $lang_module['captionform_edit'] = 'Modifier la lexique de données';
