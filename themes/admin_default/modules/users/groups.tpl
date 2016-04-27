@@ -21,10 +21,6 @@
 						<td>{LANG.title} <span style="color:red">*</span>:</td>
 						<td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="240" /></td>
 					</tr>
-					<tr>
-						<td>{LANG.email}:</td>
-						<td><input title="{LANG.email}" class="form-control email required" id="email_iavim" type="text" name="email" value="{DATA.email}" maxlength="240" /></td>
-					</tr>
                     <tr>
 						<td>{LANG.group_description} <span style="color:red">*</span>:</td>
 						<td><input title="{LANG.group_description}" class="form-control" type="text" name="description" value="{DATA.description}" maxlength="255" /></td>
@@ -61,6 +57,7 @@
 			{CONTENT}
 		</div>
         <!-- END: basic_infomation -->
+        
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover">
 				<colgroup>
@@ -68,6 +65,12 @@
 					<col />
 				</colgroup>
 				<tbody>
+					<!-- BEGIN: email -->
+					<tr>
+						<td>{LANG.email}:</td>
+						<td><input title="{LANG.email}" class="form-control email required" id="email_iavim" type="text" name="email" value="{DATA.email}" maxlength="240" /></td>
+					</tr>
+					<!-- END: email -->
 					<tr>
 						<td>{LANG.group_color}:</td>
 						<td class="form-inline">
@@ -85,7 +88,7 @@
 				</tbody>
 			</table>
 		</div>
-		
+		<!-- BEGIN: config -->
 		<table class="table table-striped table-bordered table-hover">
 			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_caption_leader} </caption>
 			<thead>
@@ -111,6 +114,7 @@
 				</tr>
 			</tbody>
 		</table>
+		<!-- END: config -->
 		
 		<input type="hidden" name="save" value="1" />
 		<p class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
