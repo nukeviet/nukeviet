@@ -1,22 +1,12 @@
 <!-- BEGIN: uploadPage -->
-<iframe src="{IFRAME_SRC}" style="border: 0;width: 100%;height:400px">&nbsp;</iframe>
+<iframe src="{IFRAME_SRC}" style="border: 0;width: 100%;height:400px"></iframe>
 <!-- END: uploadPage -->
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.button.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.dialog.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.resizable.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.selectable.css" rel="stylesheet" />
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.css" rel="stylesheet" />
 
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.draggable.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.resizable.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.selectable.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.button.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.dialog.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.watermarker.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.watermarker.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.flash.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.lazyload.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.min.js"></script>
@@ -28,7 +18,7 @@
 	<div class="row upload-wrap">
 		<div class="col-lg-4 col-md-4 col-sm-6 imgfolder" id="imgfolder">
 			<p class="upload-loading">
-				<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em>
+				<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading"></em>
 				<br />
 				{LANG.waiting}...
 			</p>
@@ -36,7 +26,7 @@
 		<div id="upload-content" class="col-lg-20 col-md-20 col-sm-18 filebrowse">
 			<div id="imglist" class="clearfix">
 				<p class="upload-loading">
-					<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em>
+					<em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading"></em>
 					<br />
 					{LANG.waiting}...
 				</p>
@@ -51,7 +41,7 @@
 			<div class="row">
 				<div class="col-sm-1">
 					<div class="refresh text-right">
-						<em title="{LANG.refresh}" class="fa fa-refresh fa-pointer">&nbsp;</em>
+						<em title="{LANG.refresh}" class="fa fa-refresh fa-pointer" data-busy="false"></em>
 					</div>
 				</div>
 				<div class="col-sm-1">
@@ -81,7 +71,7 @@
 				</div>
 				<div class="col-sm-4">
 					<div class="search text-left">
-						<em title="{LANG.search}" class="fa fa-search fa-lg fa-pointer">&nbsp;</em>
+						<em title="{LANG.search}" class="fa fa-search fa-lg fa-pointer"></em>
 					</div>
 				</div>
 			</div>
@@ -153,7 +143,7 @@
 				</div>
 			</div>
 			<div class="text-center form-group">
-				<button class="btn btn-default" type="button" name="prView"><em class="fa fa-search fa-lg">&nbsp;</em>{LANG.prView}</button>
+				<button class="btn btn-default" type="button" name="prView"><em class="fa fa-search fa-lg"></em>{LANG.prView}</button>
 				<button class="btn btn-primary" type="button" name="newSizeOK">{LANG.addlogosave}</button>
 			</div>
 			<div title="createInfo" class="dynamic text-center text-muted"></div>
@@ -241,16 +231,16 @@
 	<div class="text-center form-inline">
 		<input type="text" class="form-control w50 dynamic" name="rorateDirection" value="0"/>
 		<button id="rorate90Anticlockwise" type="button" class="btn btn-default">
-			<em class="fa fa-lg fa-undo">&nbsp;</em> 90
+			<em class="fa fa-lg fa-undo"></em> 90
 		</button>
 		<button id="rorateLeft" type="button" class="btn btn-default btn-reset">
-			<em class="fa fa-lg fa-undo">&nbsp;</em>
+			<em class="fa fa-lg fa-undo"></em>
 		</button>
 		<button id="rorateRight" type="button" class="btn btn-default btn-reset">
-			<em class="fa fa-lg fa-repeat">&nbsp;</em>
+			<em class="fa fa-lg fa-repeat"></em>
 		</button>
 		<button id="rorate90Clockwise" type="button" class="btn btn-default">
-			<em class="fa fa-lg fa-repeat">&nbsp;</em> 90
+			<em class="fa fa-lg fa-repeat"></em> 90
 		</button>
 		<input id="rorateimageOK" type="button" class="btn btn-primary" value="{LANG.addlogosave}"/>
 	</div>
@@ -348,7 +338,7 @@ var nv_min_height = '{NV_MIN_HEIGHT}';
 var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&{NV_OP_VARIABLE}=";
 var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
 var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
-var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading">&nbsp;</em><br />{LANG.waiting}...</p>';
+var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom upload-fa-loading"></em><br />{LANG.waiting}...</p>';
 var nv_filters = {
 	mime_types : [
 		<!-- BEGIN: mime -->

@@ -91,7 +91,6 @@ $my_lang['cron']['cron_del_ip_logs'] = 'Delete IP log files';
 $my_lang['cron']['cron_auto_del_error_log'] = 'Delete expired error_log log files';
 $my_lang['cron']['cron_auto_sendmail_error_log'] = 'Send error logs to admin';
 $my_lang['cron']['cron_ref_expired_del'] = 'Delete expired referer';
-$my_lang['cron']['cron_siteDiagnostic_update'] = 'Update site diagnostic';
 $my_lang['cron']['cron_auto_check_version'] = 'Check NukeViet version';
 $my_lang['cron']['cron_notification_autodel'] = 'Delete old notification';
 

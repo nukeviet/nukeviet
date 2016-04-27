@@ -1,26 +1,29 @@
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="page">
-    <h2 class="margin-bottom-lg margin-top-lg">{LANG.editinfo_pagetitle}</h2>
-    <ul class="nav nav-pills margin-bottom">
-        <li class="{BASIC_ACTIVE}"><a data-toggle="tab" href="#edit_basic">{LANG.edit_basic}</a></li>
-        <li class="{AVATAR_ACTIVE}"><a data-toggle="tab" href="#edit_avatar">{LANG.edit_avatar}</a></li>
-        <!-- BEGIN: edit_username --><li class="{USERNAME_ACTIVE}"><a data-toggle="tab" href="#edit_username">{LANG.edit_login}</a></li><!-- END: edit_username -->
-        <!-- BEGIN: edit_email --><li class="{EMAIL_ACTIVE}"><a data-toggle="tab" href="#edit_email">{LANG.edit_email}</a></li><!-- END: edit_email -->
-        <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" href="#edit_password">{LANG.edit_password}</a></li>
-        <li class="{QUESTION_ACTIVE}"><a data-toggle="tab" href="#edit_question">{LANG.edit_question}</a></li>
-        <!-- BEGIN: edit_openid --><li class="{OPENID_ACTIVE}"><a data-toggle="tab" href="#edit_openid">{LANG.openid_administrator}</a></li><!-- END: edit_openid -->
-        <!-- BEGIN: edit_group --><li class="{GROUP_ACTIVE}"><a data-toggle="tab" href="#edit_group">{LANG.group}</a></li><!-- END: edit_group -->
-        <!-- BEGIN: edit_others --><li class="{OTHERS_ACTIVE}"><a data-toggle="tab" href="#edit_others">{LANG.edit_others}</a></li><!-- END: edit_others -->
-        <li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" href="#edit_safemode">{LANG.safe_mode}</a></li>
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="dropdown active">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <span class="text">{LANG.editinfo_pagetitle}</span> <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="{BASIC_ACTIVE}"><a data-toggle="tab" href="#edit_basic">{LANG.edit_basic}</a></li>
+                <li class="{AVATAR_ACTIVE}"><a data-toggle="tab" href="#edit_avatar">{LANG.edit_avatar}</a></li>
+                <!-- BEGIN: edit_username --><li class="{USERNAME_ACTIVE}"><a data-toggle="tab" href="#edit_username">{LANG.edit_login}</a></li><!-- END: edit_username -->
+                <!-- BEGIN: edit_email --><li class="{EMAIL_ACTIVE}"><a data-toggle="tab" href="#edit_email">{LANG.edit_email}</a></li><!-- END: edit_email -->
+                <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" href="#edit_password">{LANG.edit_password}</a></li>
+                <li class="{QUESTION_ACTIVE}"><a data-toggle="tab" href="#edit_question">{LANG.edit_question}</a></li>
+                <!-- BEGIN: edit_openid --><li class="{OPENID_ACTIVE}"><a data-toggle="tab" href="#edit_openid">{LANG.openid_administrator}</a></li><!-- END: edit_openid -->
+                <!-- BEGIN: edit_group --><li class="{GROUP_ACTIVE}"><a data-toggle="tab" href="#edit_group">{LANG.group}</a></li><!-- END: edit_group -->
+                <!-- BEGIN: edit_others --><li class="{OTHERS_ACTIVE}"><a data-toggle="tab" href="#edit_others">{LANG.edit_others}</a></li><!-- END: edit_others -->
+                <li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" href="#edit_safemode">{LANG.safe_mode}</a></li>
+            </ul>
+        </li>
     </ul>
-
+    
     <div class="tab-content margin-bottom-lg">
 
         <div id="edit_basic" class="tab-pane fade {TAB_BASIC_ACTIVE}">

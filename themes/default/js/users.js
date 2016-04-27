@@ -26,7 +26,7 @@ function safekeySend(a) {
 		data: $(a).serialize() + '&resend=1',
 		dataType: "json",
 		success: function(e) {
-			"error" == e.status ? ($(".safekeySend", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $("[name=" + e.input + "]", a).addClass("tooltip-current").attr("data-current-mess", $("[name=" + e.input + "]", a).attr("data-mess")), validErrorShow($("[name=" + e.input + "]", a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(), setTimeout(function() {
+			"error" == e.status ? ($(".safekeySend", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $("[name=\"" + e.input + "\"]", a).addClass("tooltip-current").attr("data-current-mess", $("[name=\"" + e.input + "\"]", a).attr("data-mess")), validErrorShow($("[name=\"" + e.input + "\"]", a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(), setTimeout(function() {
 				var d = $(".nv-info", a).attr("data-default");
 				if (!d) d = $(".nv-info-default", a).html();
 				$(".nv-info", a).removeClass("error success").html(d);
@@ -112,7 +112,20 @@ function usageTermsShow(t) {
 		data: 'get_usage_terms=1',
 		dataType: 'html',
 		success: function(e) {
-			modalShow(t, e)
+            if ($('#sitemodal').length) {
+                if (!$('#sitemodalTerm').length) {
+                    $('body').append('<div id="sitemodalTerm" class="modal fade" role="dialog">' + $('#sitemodal').html() + '</div>')
+                }
+                "" != t && 'undefined' != typeof t && $("#sitemodalTerm .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + t + '</h2></div>');
+                $("#sitemodalTerm").find(".modal-title").html(t);
+                $("#sitemodalTerm").find(".modal-body").html(e);
+                $('#sitemodalTerm').on('hidden.bs.modal', function () {
+                    $("#sitemodalTerm .modal-content").find(".modal-header").remove()
+            	});
+                $("#sitemodalTerm").modal({backdrop: "static"})
+            } else {
+                alert(strip_tags(e))
+            }
 		}
 	});
 	return !1
@@ -195,7 +208,7 @@ function login_validForm(a) {
 		success: function(d) {
 			var b = $("[onclick*='change_captcha']", a);
 			b && b.click();
-			"error" == d.status ? ($("input,button", a).not("[type=submit]").prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != d.input ? $(a).find("[name=" + d.input + "]").each(function() {
+			"error" == d.status ? ($("input,button", a).not("[type=submit]").prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
 				$(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
 				validErrorShow(this)
 			}) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
@@ -226,7 +239,7 @@ function reg_validForm(a) {
 		success: function(b) {
 			var c = $("[onclick*='change_captcha']", a);
 			c && c.click();
-			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find("[name=" + b.input + "]").each(function() {
+			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find("[name=\"" + b.input + "\"]").each(function() {
 				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
 				validErrorShow(this)
 			}) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({

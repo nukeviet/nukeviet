@@ -144,7 +144,7 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                 }
                 if (! empty($filesavedata)) {
                     try {
-                        include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php' ;
+                        include_once NV_ROOTDIR . '/install/data_by_lang.php';
 
                         //xoa du lieu tai bang nvx_vi_modules
                         $db->query("DELETE FROM " . $db_config['prefix'] . "_" . $lang_data . "_modules WHERE module_file NOT IN ('" . implode("', '", $modules_exit) . "')");

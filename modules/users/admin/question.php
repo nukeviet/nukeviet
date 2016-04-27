@@ -26,7 +26,7 @@ if ($nv_Request->isset_request('edit', 'post')) {
     if (empty($title)) {
         die('NO');
     }
-    $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_question SET
+    $stmt = $db->prepare("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_question SET
 		title= :title, edit_time=" . NV_CURRENTTIME . "
 		WHERE qid=" . $qid . " AND lang='" . NV_LANG_DATA . "'");
 
@@ -49,10 +49,10 @@ if ($nv_Request->isset_request('add', 'post')) {
         die('NO');
     }
 
-    $sql = "SELECT MAX(weight) FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "'";
+    $sql = "SELECT MAX(weight) FROM " . $db_config['prefix'] . "_" . $module_data . "_question WHERE lang='" . NV_LANG_DATA . "'";
     $weight = $db->query($sql)->fetchColumn();
     $weight = intval($weight) + 1;
-    $_sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_question
+    $_sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_question
 		(title, lang, weight, add_time, edit_time) VALUES
 		( :title, '" .  NV_LANG_DATA  . "', " . $weight . ", " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
 
@@ -74,13 +74,13 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
     $qid = $nv_Request->get_int('qid', 'post', 0);
     $new_vid = $nv_Request->get_int('new_vid', 'post', 0);
 
-    $query = "SELECT COUNT(*) FROM " . NV_USERS_GLOBALTABLE . "_question WHERE qid=" . $qid . " AND lang='" . NV_LANG_DATA . "'";
+    $query = "SELECT COUNT(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_question WHERE qid=" . $qid . " AND lang='" . NV_LANG_DATA . "'";
     $numrows = $db->query($query)->fetchColumn();
     if ($numrows != 1) {
         die('NO');
     }
 
-    $query = "SELECT qid FROM " . NV_USERS_GLOBALTABLE . "_question WHERE qid!=" . $qid . " AND lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+    $query = "SELECT qid FROM " . $db_config['prefix'] . "_" . $module_data . "_question WHERE qid!=" . $qid . " AND lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
     $result = $db->query($query);
     $weight = 0;
     while ($row = $result->fetch()) {
@@ -88,10 +88,10 @@ if ($nv_Request->isset_request('changeweight', 'post')) {
         if ($weight == $new_vid) {
             ++$weight;
         }
-        $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . '_question SET weight=' . $weight . ' WHERE qid=' . $row['qid'];
+        $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_question SET weight=' . $weight . ' WHERE qid=' . $row['qid'];
         $db->query($sql);
     }
-    $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . '_question SET weight=' . $new_vid . ' WHERE qid=' . $qid;
+    $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_question SET weight=' . $new_vid . ' WHERE qid=' . $qid;
     $db->query($sql);
     die('OK');
 }
@@ -104,20 +104,20 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     $qid = $nv_Request->get_int('qid', 'post', 0);
 
-    list($qid, $title) = $db->query('SELECT qid, title FROM ' . NV_USERS_GLOBALTABLE . '_question WHERE qid=' . $qid)->fetch(3);
+    list($qid, $title) = $db->query('SELECT qid, title FROM ' . $db_config['prefix'] . '_' . $module_data . '_question WHERE qid=' . $qid)->fetch(3);
 
     if ($qid) {
-        $sql = 'DELETE FROM ' . NV_USERS_GLOBALTABLE . '_question WHERE qid=' . $qid;
+        $sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_question WHERE qid=' . $qid;
         if ($db->exec($sql)) {
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['deletequestion'], 'id: '. $qid . '; ' .$title);
 
             // fix weight question
-            $sql = "SELECT qid FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+            $sql = "SELECT qid FROM " . $db_config['prefix'] . "_" . $module_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
             $result = $db->query($sql);
             $weight = 0;
             while ($row = $result->fetch()) {
                 ++$weight;
-                $sql = 'UPDATE ' . NV_USERS_GLOBALTABLE . '_question SET weight=' . $weight . ' WHERE qid=' . $row['qid'];
+                $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_question SET weight=' . $weight . ' WHERE qid=' . $row['qid'];
                 $db->query($sql);
             }
             $result->closeCursor();
@@ -137,7 +137,7 @@ if ($nv_Request->isset_request('qlist', 'post')) {
         die('Wrong URL');
     }
 
-    $sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+    $sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
     $_rows = $db->query($sql)->fetchAll();
     $num = sizeof($_rows);
     if ($num) {
