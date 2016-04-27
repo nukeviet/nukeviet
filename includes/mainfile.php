@@ -67,14 +67,14 @@ if (defined('NV_CONFIG_DIR')) {
     define('NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir']);
     define('NV_FILES_DIR', NV_ASSETS_DIR . '/' . $global_config['site_dir']);
     define('NV_CACHEDIR', SYSTEM_CACHEDIR . '/' . $global_config['site_dir']);
-    define('NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_groups');
     define('NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users');
+    define('NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users_groups');
 } else {
     define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
     define('NV_FILES_DIR', NV_ASSETS_DIR);
     define('SYSTEM_CACHEDIR', NV_CACHEDIR);
-    define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups');
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
+    define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
 }
 
 // Vendor autoload
@@ -120,6 +120,11 @@ require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
+
+if ($global_config['cached'] == 'memcached') {
+    ini_set('session.save_handler', 'memcached');
+    ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
+}
 
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {

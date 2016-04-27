@@ -16,7 +16,7 @@ $page_title = $lang_global['mod_groups'];
 $contents = '';
 
 // Lay danh sach nhom
-$sql = 'SELECT * FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE idsite = ' . $global_config['idsite'] . ' or (idsite =0 AND group_id > 3 AND siteus = 1) ORDER BY idsite, weight';
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups WHERE idsite = ' . $global_config['idsite'] . ' or (idsite =0 AND group_id > 3 AND siteus = 1) ORDER BY idsite, weight';
 $result = $db->query($sql);
 $groupsList = array();
 $groupcount = 0;
@@ -60,7 +60,7 @@ if ($nv_Request->isset_request('cWeight, id', 'post')) {
         $query[] = 'WHEN group_id = ' . $idList[$i] . ' THEN ' . $weight;
     }
 
-    $query = 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET weight = CASE ' . implode(' ', $query) . ' END';
+    $query = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET weight = CASE ' . implode(' ', $query) . ' END';
     $db->query($query);
 
     $nv_Cache->delMod($module_name);
@@ -76,7 +76,7 @@ if ($nv_Request->isset_request('act', 'post')) {
     }
 
     $act = $groupsList[$group_id]['act'] ? 0 : 1;
-    $sql = 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=' . $act . ' WHERE group_id=' . $group_id;
+    $sql = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET act=' . $act . ' WHERE group_id=' . $group_id;
     $db->query($sql);
 
     $nv_Cache->delMod($module_name);
@@ -93,7 +93,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
 
     $array_groups = array();
-    $result = $db->query('SELECT group_id, userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid IN (SELECT userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ')');
+    $result = $db->query('SELECT group_id, userid FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE userid IN (SELECT userid FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE group_id=' . $group_id . ')');
 
     while ($row = $result->fetch()) {
         $array_groups[$row['userid']][$row['group_id']] = 1;
@@ -102,11 +102,11 @@ if ($nv_Request->isset_request('del', 'post')) {
     foreach ($array_groups as $userid => $gr) {
         unset($gr[$group_id]);
         $in_groups = array_keys($gr);
-        $db->exec("UPDATE " . NV_USERS_GLOBALTABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $userid);
+        $db->exec("UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $userid);
     }
 
-    $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE group_id = ' . $group_id);
-    $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id = ' . $group_id);
+    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups WHERE group_id = ' . $group_id);
+    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE group_id = ' . $group_id);
 
     /**
      * Cho nay can xu ly nhom mac dinh cua thanh vien khi xoa nhom
@@ -122,7 +122,7 @@ if ($nv_Request->isset_request('del', 'post')) {
     }
 
     if (! empty($query)) {
-        $query = 'UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET weight = CASE ' . implode(' ', $query) . ' END';
+        $query = 'UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET weight = CASE ' . implode(' ', $query) . ' END';
         $db->query($query);
     }
 
@@ -140,7 +140,7 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $uid)->fetch();
+        $row = $db->query('SELECT idsite FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $uid)->fetch();
         if (! empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 die($lang_module['error_group_in_site']);
@@ -150,17 +150,17 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
         }
     }
 
-    if (! nv_groups_add_user($gid, $uid)) {
+    if (! nv_groups_add_user($gid, $uid, 1, $module_data)) {
         die($lang_module['search_not_result']);
     }
 
     // Update for table users
     $in_groups = array();
-    $result_gru = $db->query('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $uid);
+    $result_gru = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE userid=' . $uid);
     while ($row_gru = $result_gru->fetch()) {
         $in_groups[] = $row_gru['group_id'];
     }
-    $db->exec("UPDATE " . NV_USERS_GLOBALTABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
+    $db->exec("UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['addMemberToGroup'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -177,7 +177,7 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $uid)->fetch();
+        $row = $db->query('SELECT idsite FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $uid)->fetch();
         if (! empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 die($lang_module['error_group_in_site']);
@@ -187,17 +187,17 @@ if ($nv_Request->isset_request('gid,exclude', 'post')) {
         }
     }
 
-    if (! nv_groups_del_user($gid, $uid)) {
+    if (! nv_groups_del_user($gid, $uid, $module_data)) {
         die($lang_module['UserNotInGroup']);
     }
 
     // Update for table users
     $in_groups = array();
-    $result_gru = $db->query('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $uid);
+    $result_gru = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE userid=' . $uid);
     while ($row_gru = $result_gru->fetch()) {
         $in_groups[] = $row_gru['group_id'];
     }
-    $db->query("UPDATE " . NV_USERS_GLOBALTABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
+    $db->query("UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['exclude_user2'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -213,7 +213,7 @@ if ($nv_Request->isset_request('gid,promote', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $uid)->fetch();
+        $row = $db->query('SELECT idsite FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $uid)->fetch();
         if (! empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 die($lang_module['error_group_in_site']);
@@ -223,7 +223,7 @@ if ($nv_Request->isset_request('gid,promote', 'post')) {
         }
     }
 
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . '_users SET is_leader = 1 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups_users SET is_leader = 1 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['promote'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -239,7 +239,7 @@ if ($nv_Request->isset_request('gid,demote', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $uid)->fetch();
+        $row = $db->query('SELECT idsite FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $uid)->fetch();
         if (! empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 die($lang_module['error_group_in_site']);
@@ -249,7 +249,7 @@ if ($nv_Request->isset_request('gid,demote', 'post')) {
         }
     }
 
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . '_users SET is_leader = 0 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups_users SET is_leader = 0 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['demote'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -265,7 +265,7 @@ if ($nv_Request->isset_request('gid,approved', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $uid)->fetch();
+        $row = $db->query('SELECT idsite FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $uid)->fetch();
         if (! empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 die($lang_module['error_group_in_site']);
@@ -275,8 +275,8 @@ if ($nv_Request->isset_request('gid,approved', 'post')) {
         }
     }
 
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . '_users SET approved = 1 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id = ' . $gid);
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups_users SET approved = 1 WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = numbers+1 WHERE group_id = ' . $gid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['approved'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -292,7 +292,7 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
     }
 
     if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
-        $row = $db->query('SELECT idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $uid)->fetch();
+        $row = $db->query('SELECT idsite FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $uid)->fetch();
         if (! empty($row)) {
             if ($row['idsite'] != $global_config['idsite']) {
                 die($lang_module['error_group_in_site']);
@@ -302,7 +302,7 @@ if ($nv_Request->isset_request('gid,denied', 'post')) {
         }
     }
 
-    $db->query('DELETE FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id = ' . $gid . ' AND userid=' . $uid);
+    $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE group_id = ' . $gid . ' AND userid=' . $uid);
 
     $nv_Cache->delMod($module_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['denied'], 'Member Id: ' . $uid . ' group ID: ' . $gid, $admin_info['userid']);
@@ -341,7 +341,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     if (empty($type) or $type == 'pending') {
         $db->sqlreset()
             ->select('COUNT(*)')
-            ->from(NV_GROUPS_GLOBALTABLE . '_users')
+            ->from($db_config['prefix'] . '_' . $module_data . '_groups_users')
             ->where('group_id=' . $group_id . ' AND approved=0');
         $array_number['pending'] = $db->query($db->sql())
             ->fetchColumn();
@@ -362,7 +362,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     if (empty($type) or $type == 'leaders') {
         $db->sqlreset()
             ->select('COUNT(*)')
-            ->from(NV_GROUPS_GLOBALTABLE . '_users')
+            ->from($db_config['prefix'] . '_' . $module_data . '_groups_users')
             ->where('group_id=' . $group_id . ' AND is_leader=1');
         $array_number['leaders'] = $db->query($db->sql())
             ->fetchColumn();
@@ -383,7 +383,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     if (empty($type) or $type == 'members') {
         $db->sqlreset()
             ->select('COUNT(*)')
-            ->from(NV_GROUPS_GLOBALTABLE . '_users')
+            ->from($db_config['prefix'] . '_' . $module_data . '_groups_users')
             ->where('group_id=' . $group_id . ' AND approved=1 AND is_leader=0');
         $array_number['members'] = $db->query($db->sql())
             ->fetchColumn();
@@ -401,7 +401,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
     }
 
     if (!empty($group_users)) {
-        $sql = 'SELECT userid, username, first_name, last_name, email, idsite FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN (' . implode(',', $array_userid) . ')';
+        $sql = 'SELECT userid, username, first_name, last_name, email, idsite FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid IN (' . implode(',', $array_userid) . ')';
         $result = $db->query($sql);
         $array_userid = array();
         while ($row = $result->fetch()) {
@@ -439,7 +439,7 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
                 $numberusers += $array_number['leaders'];
             }
             if ($numberusers != $groupsList[$group_id]['numbers']) {
-                $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = ' . $numberusers . ' WHERE group_id=' . $group_id);
+                $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = ' . $numberusers . ' WHERE group_id=' . $group_id);
             }
         }
     }
@@ -457,7 +457,7 @@ if ($nv_Request->isset_request('userlist', 'get')) {
         die();
     }
 
-    $filtersql = ' userid NOT IN (SELECT userid FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE group_id=' . $group_id . ')';
+    $filtersql = ' userid NOT IN (SELECT userid FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE group_id=' . $group_id . ')';
     if ($groupsList[$group_id]['idsite'] != $global_config['idsite'] and $groupsList[$group_id]['idsite'] == 0) {
         $filtersql .= ' AND idsite=' . $global_config['idsite'];
     }
@@ -509,7 +509,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                 }
 
                 // Kiểm tra trùng tên nhóm
-                $stmt = $db->prepare('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE title LIKE :title AND group_id!= ' . intval($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
+                $stmt = $db->prepare('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups WHERE title LIKE :title AND group_id!= ' . intval($post['id']) . ' AND (idsite=' . $global_config['idsite'] . ' or (idsite=0 AND siteus=1))');
                 $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
                 $stmt->execute();
                 if ($stmt->fetchColumn()) {
@@ -565,10 +565,10 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 
             if (isset($post['id'])) {
 				if ($nv_Request->isset_request('add', 'get')) {
-	                $weight = $db->query("SELECT max(weight) FROM " . NV_GROUPS_GLOBALTABLE . " WHERE idsite=" . $global_config['idsite'])->fetchColumn();
+	                $weight = $db->query("SELECT max(weight) FROM " . $db_config['prefix'] . "_" . $module_data . "_groups WHERE idsite=" . $global_config['idsite'])->fetchColumn();
 	                $weight = intval($weight) + 1;
 
-	                $_sql = "INSERT INTO " . NV_GROUPS_GLOBALTABLE . "
+	                $_sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_groups
 						(title, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus)
 						VALUES ( :title, :description, :content, " . $post['group_type'] . ", :group_color, :group_avatar, " . $post['is_default'] . ", " . NV_CURRENTTIME . ", " . $post['exp_time'] . ", " . $weight . ", 1, " . $global_config['idsite'] . ", 0, " . $post['siteus'] . ")";
 
@@ -582,7 +582,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
 	                $ok = $post['id'] = $db->insert_id($_sql, 'group_id', $data_insert);
          	   	} elseif ($post['id'] > 9) {
                     // Sửa nhóm tự tạo
-                    $stmt = $db->prepare("UPDATE " . NV_GROUPS_GLOBALTABLE . " SET
+                    $stmt = $db->prepare("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_groups SET
                         title = :title,
                         description = :description,
                         content = :content,
@@ -603,7 +603,7 @@ if ($nv_Request->isset_request('add', 'get') or $nv_Request->isset_request('edit
                     $ok = $stmt->execute();
                 } else {
                     // Sửa nhóm hệ thống
-                    $stmt = $db->prepare("UPDATE " . NV_GROUPS_GLOBALTABLE . " SET
+                    $stmt = $db->prepare("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_groups SET
                         group_color = :group_color,
                         group_avatar = :group_avatar
                     WHERE group_id=" . $post['id']);

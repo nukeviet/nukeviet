@@ -933,6 +933,13 @@ function fileSelectStop(e, ui){
 	LFILE.setSelFile();
 }
 
+function enRefreshBtn(btn, state) {
+    if (state >= 2) {
+        btn.removeClass(ICON.spin)
+        btn.data('busy', false)
+    }
+}
+
 var ICON = [];
 ICON.select = 'fa-check-square-o';
 ICON.download = 'fa-download';
@@ -944,6 +951,7 @@ ICON.filedelete = 'fa-trash-o';
 ICON.filecrop = 'fa-crop';
 ICON.filerotate = 'fa-repeat';
 ICON.addlogo = 'fa-file-image-o';
+ICON.spin = 'fa-spin';
 
 $(".vchange").change(function(){
 	var a = $("span#foldervalue").attr("title"), b = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $(this).val() == 1 ? "&author" : "";
@@ -951,15 +959,30 @@ $(".vchange").change(function(){
 });
 
 $(".refresh em").click(function(){
-	var a = $("span#foldervalue").attr("title"),
+    var $this = $(this)
+    if ($this.data('busy')) {
+        return
+    }
+    $this.data('busy', true)
+    $this.addClass(ICON.spin)
+	
+    var a = $("span#foldervalue").attr("title"),
 		b = $("select[name=imgtype]").val(),
 		d = $("input[name=selFile]").val(),
 		e = $("select[name=author]").val() == 1 ? "&author" : "",
-		g = $("span#path").attr("title");
+		g = $("span#path").attr("title"),
+        loaded = 0;
 
-	$("#imgfolder").html(nv_loading_data).load(nv_module_url + "folderlist&path=" + g + "&currentpath=" + a + "&dirListRefresh&random=" + nv_randomNum(10));
-	$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); });
-
+	$("#imgfolder").html(nv_loading_data).load(nv_module_url + "folderlist&path=" + g + "&currentpath=" + a + "&dirListRefresh&random=" + nv_randomNum(10), function(){
+	   loaded ++
+       enRefreshBtn($this, loaded)
+	});
+	$("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + b + "&imgfile=" + d + e + "&refresh&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10), function(){
+	   loaded ++
+       enRefreshBtn($this, loaded)
+       LFILE.setViewMode()
+	});
+    
 	return false
 });
 

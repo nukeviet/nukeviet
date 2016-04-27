@@ -54,10 +54,10 @@ if ($module_info['rss']) {
 
         if ($homeimgthumb == 1) {
             // image thumb
-            $rimages = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
+            $rimages = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
         } elseif ($homeimgthumb == 2) {
             // image file
-            $rimages = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
+            $rimages = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
         } elseif ($homeimgthumb == 3) {
             // image url
             $rimages = $homeimgfile;

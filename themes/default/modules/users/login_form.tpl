@@ -29,6 +29,22 @@
             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
             <button class="bsubmit btn btn-primary" type="submit">{GLANG.loginsubmit}</button>
        	</div>
+        
+        <!-- BEGIN: allowuserreg2_form -->
+        <div class="form-group">
+            <div class="text-right clearfix">
+                <a href="#" onclick="modalShowByObj('#guestReg_{BLOCKID}')">{GLANG.register}</a>
+            </div>
+        </div>
+        <!-- END: allowuserreg2_form -->
+        
+        <!-- BEGIN: allowuserreg_linkform -->
+        <div class="form-group">
+            <div class="text-right clearfix">
+                <a href="{USER_REGISTER}">{GLANG.register}</a>
+            </div>
+        </div>
+        <!-- END: allowuserreg_linkform -->
 
         <!-- BEGIN: openid -->
        	<hr />

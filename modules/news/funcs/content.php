@@ -525,6 +525,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('OP', $module_info['alias']['content']);
     $xtpl->assign('DATA', $rowcontent);
     $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
 
@@ -590,7 +591,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     if (empty($rowcontent['alias'])) {
         $contents .= "<script type=\"text/javascript\">\n";
         $contents .= '$("#idtitle").change(function () {
- 		get_alias();
+ 		get_alias("' . $module_info['alias']['content'] . '");
 		});';
         $contents .= "</script>\n";
     }

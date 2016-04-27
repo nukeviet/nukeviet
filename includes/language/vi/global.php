@@ -50,6 +50,8 @@ $lang_global['unick_type_1'] = 'Tên đăng nhập chỉ được sử dụng ch
 $lang_global['unick_type_2'] = 'Tên đăng nhập chỉ được sử dụng chữ số và chữ cái';
 $lang_global['unick_type_3'] = 'Tên đăng nhập chỉ được sử dụng chữ số, chữ cái, và các ký tự sau nằm giữa: gạch ngang, gạch dưới, cách trống';
 $lang_global['unick_type_4'] = 'Tên đăng nhập chỉ được sử dụng Unicode, không có các ký tự đặc biệt';
+$lang_global['username_rule_limit'] = 'Tên đăng nhập không hợp lệ: %1$s và có từ %2$d đến %3$d ký tự';
+$lang_global['username_rule_nolimit'] = 'Tên đăng nhập phải từ %1$d đến %2$d ký tự';
 
 $lang_global['password_empty'] = 'Mật khẩu đăng nhập chưa được khai báo';
 $lang_global['passwordlong'] = 'Mật khẩu quá dài. Chỉ chấp nhận mật khẩu có số ký tự tối đa là %1$d';
@@ -61,6 +63,8 @@ $lang_global['upass_type_2'] = 'Mật khẩu cần kết hợp số và chữ, y
 $lang_global['upass_type_3'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA';
 $lang_global['upass_type_4'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA, có ký tự đặc biệt';
 $lang_global['upass_type_simple'] = 'Mật khẩu bạn đã sử dụng là mật khẩu dễ đoán, cần nhập mật khẩu phức tạp hơn';
+$lang_global['password_rule_limit'] = 'Mật khẩu không hợp lệ: %1$s và có từ %2$d đến %3$d ký tự';
+$lang_global['password_rule_nolimit'] = 'Mật khẩu phải từ %1$d đến %2$d ký tự';
 
 $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
 $lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai Tên đăng nhập hoặc Mật khẩu truy cập';

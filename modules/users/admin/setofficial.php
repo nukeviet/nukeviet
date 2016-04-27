@@ -22,7 +22,7 @@ if (! $userid or $admin_info['admin_id'] == $userid) {
     die('NO');
 }
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $userid;
+$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid = ' . $userid;
 $row = $db->query($sql)->fetch();
 
 if (!empty($row)) {
@@ -37,9 +37,9 @@ if (!empty($row)) {
     }
     $row['in_groups'] = array_diff($row['in_groups'], array(7));
     
-    $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET group_id = ' . $row['group_id'] . ", in_groups='" . implode(',', $row['in_groups']) . "' WHERE userid = " . $userid);
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=7');
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4');
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET group_id = ' . $row['group_id'] . ", in_groups='" . implode(',', $row['in_groups']) . "' WHERE userid = " . $userid);
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = numbers-1 WHERE group_id=7');
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = numbers+1 WHERE group_id=4');
     
     die('OK');
 }

@@ -36,7 +36,9 @@
             <div class="theme-change margin-bottom-lg">
                 {LANG.theme_type_chose2}:
                 <!-- BEGIN: loop -->
-                <!-- BEGIN: other --><span><a href="{STHEME_TYPE}" title="{STHEME_INFO}">{STHEME_TITLE}</a></span><!-- END: other -->
+                    <!-- BEGIN: other -->
+                    <span><a href="{STHEME_TYPE}" rel="nofollow" title="{STHEME_INFO}">{STHEME_TITLE}</a></span>
+                    <!-- END: other -->
                 <!-- END: loop -->
             </div>
             <!-- END: theme_type -->

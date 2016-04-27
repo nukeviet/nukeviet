@@ -35,6 +35,12 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CHECKSS', $checkss);
+        
+    $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);
+    $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], NV_UPASSMIN, NV_UPASSMAX) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], NV_UPASSMIN, NV_UPASSMAX);
+    
+    $xtpl->assign('USERNAME_RULE', $username_rule);
+    $xtpl->assign('PASSWORD_RULE', $password_rule);
 
     foreach ($data_questions as $array_question_i) {
         $xtpl->assign('QUESTION', $array_question_i['title']);
@@ -899,7 +905,7 @@ function user_openid_administrator($data)
 {
     global $lang_global, $lang_module, $module_info, $module_file, $module_name, $global_config;
 
-    $groups_list = nv_groups_list_pub();
+    $groups_list = nv_groups_list_pub($module_info['module_data']);
 
     $xtpl = new XTemplate('openid_administrator.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);

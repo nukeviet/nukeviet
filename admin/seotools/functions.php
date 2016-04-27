@@ -12,7 +12,7 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
     die('Stop!!!');
 }
 
-$allow_func = array( 'main', 'pagetitle', 'metatags', 'sitemapPing', 'googleplus', 'siteDiagnostic' );
+$allow_func = array('main', 'pagetitle', 'metatags', 'sitemapPing', 'googleplus');
 if (empty($global_config['idsite'])) {
     $allow_func[] = 'rpc';
 }

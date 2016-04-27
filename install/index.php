@@ -490,8 +490,8 @@ if ($step == 1) {
 
             define('NV_AUTHORS_GLOBALTABLE', $db_config['prefix'] . '_authors');
             define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
+            define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
             define('NV_CONFIG_GLOBALTABLE', $db_config['prefix'] . '_config');
-            define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups');
             define('NV_LANGUAGE_GLOBALTABLE', $db_config['prefix'] . '_language');
             define('NV_SESSIONS_GLOBALTABLE', $db_config['prefix'] . '_sessions');
             define('NV_COOKIES_GLOBALTABLE', $db_config['prefix'] . '_cookies');
@@ -594,7 +594,7 @@ if ($step == 1) {
                     if (! file_exists(NV_ROOTDIR . '/install/data_' . $lang_data . '.php')) {
                         $filesavedata = 'en';
                     }
-                    include_once NV_ROOTDIR . '/install/data_' . $filesavedata . '.php' ;
+                    include_once NV_ROOTDIR . '/install/data_by_lang.php';
 
                     try {
                         // Xoa du lieu tai bang nvx_vi_modules
@@ -666,9 +666,8 @@ if ($step == 1) {
 } elseif ($step == 6) {
     $nextstep = 0;
     $error  = '';
-
+    
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
-
     $array_data['site_name'] = $nv_Request->get_title('site_name', 'post', $array_data['site_name'], 1);
     $array_data['nv_login'] = nv_substr($nv_Request->get_title('nv_login', 'post', $array_data['nv_login'], 1), 0, NV_UNICKMAX);
     $array_data['nv_email'] = $nv_Request->get_title('nv_email', 'post', $array_data['nv_email']);
@@ -734,7 +733,7 @@ if ($step == 1) {
                 if ($ok1 and $ok2) {
                     try {
                         $db->query('INSERT INTO ' . $db_config['prefix'] . '_users_info (userid) VALUES (' . $userid . ')');
-                        $db->query("INSERT INTO " . $db_config['prefix'] . "_groups_users (group_id, userid, is_leader, approved, data) VALUES(1, " . $userid . ", 1, 1, '0')");
+                        $db->query("INSERT INTO " . $db_config['prefix'] . "_users_groups_users (group_id, userid, is_leader, approved, data) VALUES(1, " . $userid . ", 1, 1, '0')");
     
                         $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'statistics_timezone', " . $db->quote(NV_SITE_TIMEZONE_NAME) . ")");
                         $db->query("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'site', 'site_email', " . $db->quote($global_config['site_email']) . ")");
@@ -850,7 +849,6 @@ if ($step == 1) {
                         $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('total', 'hits', 0, 0, 0)");
     
                         $year = date('Y');
-                        ;
                         for ($i=0; $i < 9; $i++) {
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('year', '" . $year . "', 0, 0, 0)");
                             ++$year;
