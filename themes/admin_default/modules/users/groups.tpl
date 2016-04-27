@@ -22,7 +22,7 @@
 						<td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="240" /></td>
 					</tr>
 					<tr>
-						<td>{LANG.email} <span style="color:red">*</span>:</td>
+						<td>{LANG.email}:</td>
 						<td><input title="{LANG.email}" class="form-control email required" id="email_iavim" type="text" name="email" value="{DATA.email}" maxlength="240" /></td>
 					</tr>
                     <tr>
