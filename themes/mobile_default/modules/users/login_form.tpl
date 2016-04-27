@@ -4,7 +4,7 @@
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
-                <input type="text" class="required form-control" placeholder="{GLANG.username}" value="" name="nv_login" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
+                <input type="text" class="required form-control" placeholder="{GLANG.username_email}" value="" name="nv_login" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
             </div>
         </div>
         

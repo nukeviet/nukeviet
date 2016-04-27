@@ -16,7 +16,7 @@ $page_title = $lang_module['edit_title'];
 
 $userid = $nv_Request->get_int('userid', 'get', 0);
 
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $userid;
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -62,13 +62,13 @@ $_user = array();
 $groups_list = nv_groups_list($module_data);
 
 $array_old_groups = array();
-$result_gru = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_groups_users WHERE userid=' . $userid);
+$result_gru = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
 while ($row_gru = $result_gru->fetch()) {
     $array_old_groups[] = $row_gru['group_id'];
 }
 
 $array_field_config = array();
-$result_field = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field ORDER BY weight ASC');
+$result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
 while ($row_field = $result_field->fetch()) {
     $language = unserialize($row_field['language']);
     $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -134,7 +134,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
     
-    if ($db->query('SELECT userid FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote(nv_md5safe($_user['username'])))
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote(nv_md5safe($_user['username'])))
         ->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
@@ -151,7 +151,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
     
-    if ($db->query('SELECT userid FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
         ->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
@@ -160,7 +160,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
     
-    if ($db->query('SELECT userid FROM ' . $db_config['prefix'] . '_' . $module_data . '_reg WHERE email=' . $db->quote($_user['email']))
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email=' . $db->quote($_user['email']))
         ->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
@@ -169,7 +169,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
     
-    if ($db->query('SELECT userid FROM ' . $db_config['prefix'] . '_' . $module_data . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
         ->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
@@ -317,8 +317,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $_user['in_groups_default'] = 7;
             $in_groups[] = 7;
         } else {
-            $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = numbers+1 WHERE group_id=4');
-            $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = numbers-1 WHERE group_id=7');
+            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
+            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
             
             if ($_user['in_groups_default'] == 7) {
                 $_user['in_groups_default'] = 4;
@@ -326,7 +326,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
     }
     
-    $db->query("UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET
+    $db->query("UPDATE " . NV_MOD_TABLE . " SET
         group_id=" . $_user['in_groups_default'] . ",
         username=" . $db->quote($_user['username']) . ",
         md5username='" . nv_md5safe($_user['username']) . "',
@@ -345,7 +345,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     WHERE userid=" . $userid);
     
     if (!empty($array_field_config)) {
-        $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);
+        $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);
     }
     
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid']);
@@ -366,7 +366,7 @@ if (!empty($_user['sig'])) {
     $_user['sig'] = nv_br2nl($_user['sig']);
 }
 
-$sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_info WHERE userid=' . $userid;
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
 $result = $db->query($sql);
 $custom_fields = $result->fetch();
 
