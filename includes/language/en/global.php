@@ -75,6 +75,7 @@ $lang_global['adminlogin'] = 'Login to Administration';
 $lang_global['module_for_admin'] = 'We are Sorry but this section of our site is for <em>Administrators Only.</em>';
 $lang_global['in_groups'] = 'Members Groups';
 $lang_global['username'] = 'Username';
+$lang_global['username_email'] = 'Username or Email';
 $lang_global['password'] = 'Password';
 $lang_global['password2'] = 'Repeat password';
 $lang_global['captcharefresh'] = 'Refresh';

@@ -178,7 +178,6 @@ $lang_module['lostpass_no_info4'] = 'Mot de passe n\'est pas bon';
 $lang_module['lostpass_page_title'] = 'Réinitialiser le mot de passe';
 $lang_module['lostpass_question_empty'] = 'La question secrète ou la réponse n\'a pas été fourni lors de l\'inscription. Donc, il nous est impossible de vous donner un nouveau mot de passe. Merci de contacter l\'administrateur';
 $lang_module['answer_failed'] = 'Désolé! Votre réponse est incorrecte. Essayez de nouveau';
-$lang_module['field'] = 'Identifiant ou e-mail';
 $lang_module['lostpass_question'] = 'Répondez au question';
 $lang_module['step1'] = 'Étape 1';
 $lang_module['step2'] = 'Étape 2';
