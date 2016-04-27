@@ -27,7 +27,8 @@ function nv_groups_list($mod_data = 'users')
         global $db, $db_config, $global_config, $lang_global;
 
         $groups = array();
-        $result = $db->query('SELECT group_id, title, idsite FROM ' . $db_config['prefix'] . '_' . $mod_data . '_groups WHERE (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
+        $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
+        $result = $db->query('SELECT group_id, title, idsite FROM ' . $_mod_table . '_groups WHERE (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
         while ($row = $result->fetch()) {
             if ($row['group_id'] < 9) {
                 $row['title'] = $lang_global['level' . $row['group_id']];

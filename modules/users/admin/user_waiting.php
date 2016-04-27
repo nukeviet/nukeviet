@@ -16,7 +16,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 if ($nv_Request->isset_request('del', 'post')) {
     $userid = $nv_Request->get_int('userid', 'post', 0);
 
-    $sql = 'DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_reg WHERE userid=' . $userid;
+    $sql = 'DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
     if ($db->exec($sql)) {
         die('OK');
     }
@@ -27,14 +27,14 @@ if ($nv_Request->isset_request('del', 'post')) {
 if ($nv_Request->isset_request('act', 'get')) {
     $userid = $nv_Request->get_int('userid', 'get', 0);
 
-    $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_reg WHERE userid=' . $userid;
+    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
     $row = $db->query($sql)->fetch();
     if (empty($row)) {
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         die();
     }
 
-    $sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . " (
+    $sql = "INSERT INTO " . NV_MOD_TABLE . " (
 		username, md5username, password, email, first_name, last_name, gender, photo, birthday,
 		regdate, question,
 		answer, passlostkey, view_mail, remember, in_groups, active, checknum,
@@ -65,23 +65,23 @@ if ($nv_Request->isset_request('act', 'get')) {
         // Luu vao bang OpenID
         if (! empty($row['openid_info'])) {
             $reg_attribs = unserialize(nv_base64_decode($row['openid_info']));
-            $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_openid VALUES (' . $userid . ', :server, :opid , :email)');
+            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $userid . ', :server, :opid , :email)');
             $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
             $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
             $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
             $stmt->execute();
         }
 
-        $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = numbers+1 WHERE group_id=4');
+        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
         $users_info = unserialize(nv_base64_decode($row['users_info']));
         $query_field = array();
         $query_field['userid'] = $userid;
-        $result_field = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field ORDER BY fid ASC');
+        $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
             $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $db->quote($row_f['default_value']);
         }
-        if ($db->exec('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . '_reg WHERE userid=' . $row['userid']);
+        if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
+            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $row['userid']);
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid']);
 
@@ -90,7 +90,7 @@ if ($nv_Request->isset_request('act', 'get')) {
             $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true), $row['username']);
             @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
         } else {
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $row['userid']);
+            $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $row['userid']);
         }
     }
     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=user_waiting');
@@ -137,7 +137,7 @@ if ($ordertype != 'ASC') {
     $ordertype = 'DESC';
 }
 
-$db->sqlreset()->select('COUNT(*)')->from($db_config['prefix'] . '_' . $module_data . '_reg');
+$db->sqlreset()->select('COUNT(*)')->from(NV_MOD_TABLE . '_reg');
 
 if (! empty($method) and isset($methods[$method]) and ! empty($methodvalue)) {
     $base_url .= '&amp;method=' . urlencode($method) . '&amp;value=' . urlencode($methodvalue);

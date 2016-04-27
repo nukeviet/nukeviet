@@ -83,6 +83,7 @@ $lang_global['adminlogin'] = 'Đăng nhập quản trị hệ thống';
 $lang_global['module_for_admin'] = 'Khu vực chỉ dành cho <em>Người quản trị</em>';
 $lang_global['in_groups'] = 'Nhóm thành viên';
 $lang_global['username'] = 'Tên đăng nhập';
+$lang_global['username_email'] = 'Tên đăng nhập hoặc email';
 $lang_global['password'] = 'Mật khẩu';
 $lang_global['password2'] = 'Lặp lại mật khẩu';
 $lang_global['captcharefresh'] = 'Thay mới';

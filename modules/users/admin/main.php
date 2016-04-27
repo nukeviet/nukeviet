@@ -96,7 +96,7 @@ $per_page = 30;
 
 $db->sqlreset()
     ->select('COUNT(*)')
-    ->from($db_config['prefix'] . '_' . $module_data);
+    ->from(NV_MOD_TABLE);
 
 if (! empty($_arr_where)) {
     $db->where(implode(' AND ', $_arr_where));

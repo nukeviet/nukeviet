@@ -77,7 +77,7 @@ function opidr($openid_info)
  */
 function set_reg_attribs($attribs)
 {
-    global $crypt, $db, $db_config, $global_config, $module_upload, $module_data;
+    global $crypt, $db, $global_config, $module_upload;
 
     $reg_attribs = array();
     $reg_attribs['server'] = $attribs['server'];
@@ -106,10 +106,10 @@ function set_reg_attribs($attribs)
             $username2 = $username . str_pad($i, 2, '0', STR_PAD_LEFT);
         }
 
-        $query = "SELECT userid FROM " . $db_config['prefix'] . "_" . $module_data . " WHERE md5username='" . nv_md5safe($username2) . "'";
+        $query = "SELECT userid FROM " . NV_MOD_TABLE . " WHERE md5username='" . nv_md5safe($username2) . "'";
         $userid = $db->query($query)->fetchColumn();
         if (! $userid) {
-            $query = "SELECT userid FROM " . $db_config['prefix'] . "_" . $module_data . "_reg WHERE md5username='" . nv_md5safe($username2) . "'";
+            $query = "SELECT userid FROM " . NV_MOD_TABLE . "_reg WHERE md5username='" . nv_md5safe($username2) . "'";
             $userid = $db->query($query)->fetchColumn();
             if (! $userid) {
                 $reg_attribs['username'] = $username2;
@@ -204,7 +204,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     /**
      * Neu da co trong CSDL
      */
-    $stmt = $db->prepare('SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive, b.safemode AS safemode FROM ' . $db_config['prefix'] . '_' . $module_data . '_openid a, ' . $db_config['prefix'] . '_' . $module_data . ' b
+    $stmt = $db->prepare('SELECT a.userid AS uid, a.email AS uemail, b.active AS uactive, b.safemode AS safemode FROM ' . NV_MOD_TABLE . '_openid a, ' . NV_MOD_TABLE . ' b
 		WHERE a.opid= :opid
 		AND a.email= :email
 		AND a.userid=b.userid');
@@ -228,7 +228,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php')) {
             require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php';
         } else {
-            $query = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $user_id;
+            $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_id;
             $row = $db->query($query)->fetch();
             validUserLog($row, 1, $opid, $current_mode);
         }
@@ -240,7 +240,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     /**
      * Neu chua co trong CSDL nhung email da duoc su dung
      */
-    $stmt = $db->prepare('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE email= :email');
+    $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE email= :email');
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
     $nv_row = $stmt->fetch();
@@ -291,7 +291,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             }
         }
 
-        $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_openid VALUES (' . ( int )$nv_row['userid'] . ', :server, :opid, :email )');
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . ( int )$nv_row['userid'] . ', :server, :opid, :email )');
         $stmt->bindParam(':server', $attribs['server'], PDO::PARAM_STR);
         $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -343,7 +343,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
             if (nv_check_valid_email($nv_username) == '') {
                 // Email login
-                $sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . " WHERE email =" . $db->quote($nv_username);
+                $sql = "SELECT * FROM " . NV_MOD_TABLE . " WHERE email =" . $db->quote($nv_username);
                 $row = $db->query($sql)->fetch();
                 if (empty($row)) {
                     opidr(array( 'status' => 'error', 'mess' => $lang_global['loginincorrect'] ));
@@ -356,7 +356,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 }
             } else {
                 // Username login
-                $sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . " WHERE md5username ='" . nv_md5safe($nv_username) . "'";
+                $sql = "SELECT * FROM " . NV_MOD_TABLE . " WHERE md5username ='" . nv_md5safe($nv_username) . "'";
                 $row = $db->query($sql)->fetch();
                 if (empty($row)) {
                     opidr(array( 'status' => 'error', 'mess' => $lang_global['loginincorrect'] ));
@@ -387,7 +387,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             validUserLog($row, 1, '');
         }
 
-        $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_openid VALUES (' . ( int )$row['userid'] . ', :server, :opid, :email )');
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . ( int )$row['userid'] . ', :server, :opid, :email )');
         $stmt->bindParam(':server', $attribs['server'], PDO::PARAM_STR);
         $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -404,7 +404,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
      */
     if ($nv_Request->isset_request('nv_reg', 'post') and ($global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2)) {
         // Cau hinh xac thuc thanh vien moi
-        $sql = "SELECT content FROM " . $db_config['prefix'] . "_" . $module_data . "_config WHERE config='active_group_newusers'";
+        $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='active_group_newusers'";
         $active_group_newusers = intval($db->query($sql)->fetchColumn());
         
         $reg_attribs = set_reg_attribs($attribs);
@@ -413,7 +413,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             die();
         }
 
-        $sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . " (
+        $sql = "INSERT INTO " . NV_MOD_TABLE . " (
             group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday,  regdate,
     		question, answer, passlostkey, view_mail, remember, in_groups,
     		active, checknum, last_login, last_ip, last_agent, last_openid, idsite
@@ -448,15 +448,15 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         // Cap nhat thong tin anh dai dien
         if (! empty($reg_attribs['photo'])) {
-            $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET photo=:photo WHERE userid=' . $userid);
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET photo=:photo WHERE userid=' . $userid);
             $stmt->bindParam(':photo', $reg_attribs['photo'], PDO::PARAM_STR);
             $stmt->execute();
         }
 
         // Cap nhat so thanh vien
-        $db->query('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_groups SET numbers = numbers+1 WHERE group_id=' . ($active_group_newusers ? 7 : 4));
+        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($active_group_newusers ? 7 : 4));
 
-        $query = 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $userid . ' AND active=1';
+        $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid . ' AND active=1';
         $result = $db->query($query);
         $row = $result->fetch();
         $result->closeCursor();
@@ -464,14 +464,14 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         // Luu vao bang thong tin tuy chinh
         $query_field = array();
         $query_field['userid'] = $userid;
-        $result_field = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field ORDER BY fid ASC');
+        $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
             $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
         }
-        $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
+        $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
 
         // Luu vao bang OpenID
-        $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_openid VALUES (' . intval($row['userid']) . ', :server, :opid , :email)');
+        $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . intval($row['userid']) . ', :server, :opid , :email)');
         $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
         $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
@@ -495,12 +495,12 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         $query_field = array();
         $query_field['userid'] = $userid;
-        $result_field = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_field ORDER BY fid ASC');
+        $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
         while ($row_f = $result_field->fetch()) {
             $query_field[$row_f['field']] = $db->quote($row_f['default_value']);
         }
 
-        $sql = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info, openid_info) VALUES (
+        $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info, openid_info) VALUES (
 			:username,
 			:md5username,
 			'',
@@ -591,11 +591,11 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
         if (nv_check_valid_email($nv_username) == '') {
             // Email login
             $nv_username = nv_strtolower($nv_username);
-            $sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . " WHERE email =" . $db->quote($nv_username);
+            $sql = "SELECT * FROM " . NV_MOD_TABLE . " WHERE email =" . $db->quote($nv_username);
             $login_email = true;
         } else {
             // Username login
-            $sql = "SELECT * FROM " . $db_config['prefix'] . "_" . $module_data . " WHERE md5username ='" . nv_md5safe($nv_username) . "'";
+            $sql = "SELECT * FROM " . NV_MOD_TABLE . " WHERE md5username ='" . nv_md5safe($nv_username) . "'";
             $login_email = false;
         }
 

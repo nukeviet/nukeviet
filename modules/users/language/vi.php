@@ -178,7 +178,6 @@ $lang_module['lostpass_no_info4'] = 'Mật khẩu không khớp';
 $lang_module['lostpass_page_title'] = 'Khôi phục mật khẩu thành viên';
 $lang_module['lostpass_question_empty'] = 'Câu hỏi bảo mật hoặc câu trả lời chưa được khai báo khi đăng ký tài khoản nên chúng tôi không thể cung cấp mật khẩu mới cho bạn. Hãy liên hệ với quản trị site để biết thêm chi tiết';
 $lang_module['answer_failed'] = 'Rất tiếc là câu trả lời của bạn không đúng. Hãy thử lại lần nữa';
-$lang_module['field'] = 'Tên đăng nhập hoặc e-mail';
 $lang_module['lostpass_question'] = 'Hãy trả lời câu hỏi';
 $lang_module['step1'] = 'Bước 1';
 $lang_module['step2'] = 'Bước 2';

@@ -12,7 +12,8 @@ if (! defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$access_admin = $db->query("SELECT content FROM " . $db_config['prefix'] . "_" . $module_data . "_config WHERE config='access_admin'")->fetchColumn();
+$_mod_table = ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data;
+$access_admin = $db->query("SELECT content FROM " . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
 $access_admin = unserialize($access_admin);
 
 $allow_func = array( 'main', 'getuserid' );
