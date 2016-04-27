@@ -1,6 +1,26 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.28
+- Fix set tollower meta-tag name
+- Update javascript to lastest version: lazyload 1.9.7, Jcop 2.0.4, Select2 4.0.2, jquery-treeview v1.4.2, jquery.imgpreload 1.6.2, jquery.flash v1.3.3, jquery.flash v1.3.3, jquery-ui v1.12.0, jQuery v2.2.3
+- update CKEditor 4.5.8
+- Module Seotools: Remove site Diagnostic
+- Module Users: Allow virtual, fix user custom fields, fix block login, fix users login, fix search user waiting
+- Module Upload: Fix error on quickly refresh dir, fix error on refresh large dir
+- Module News: Fix check image exists, fix change alias op content, fix function and cat, add block by category 
+- Module Contact: Delete link in contact mail containing admin path
+- Update theme mobile_nukeviet
+- Fix comment on mobile theme
+- Fix function nv_xmlOutput
+- Fix class Memcacheds
+- Fix dump database
+- Fix plugin rewrite_obsolute
+- Fix backup MySQL Engine InnoDB
+- Update Font Awesome Version 4.6.1
+- Fix function nv_clean60
+- Theme default: fix block company_info
+
 NUKEVIET 4.0.27
 - update class Punycode
 - update class phpmailer 
