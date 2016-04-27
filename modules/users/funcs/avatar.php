@@ -8,25 +8,31 @@
  * @Createdate 10/03/2010 10:51
  */
 
-if (! defined('NV_IS_MOD_USER')) {
+if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
-if (! defined("NV_IS_ADMIN")) {
-    if (! defined('NV_IS_USER') or ! $global_config['allowuserlogin']) {
+if (!defined("NV_IS_ADMIN")) {
+    if (!defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
         Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
         die();
     }
 
-    if (( int )$user_info['safemode'] > 0) {
+    if ((int)$user_info['safemode'] > 0) {
         Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo', true));
         die();
     }
 }
 
+/**
+ * updateAvatar()
+ * 
+ * @param mixed $file
+ * @return void
+ */
 function updateAvatar($file)
 {
-    global $db, $user_info, $module_upload, $module_data;
+    global $db, $user_info, $module_upload, $module_data, $db_config;
 
     $tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file;
     $new_photo_path = NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/';
@@ -43,7 +49,7 @@ function updateAvatar($file)
         $oldAvatar = $result->fetchColumn();
         $result->closeCursor();
 
-        if (! empty($oldAvatar) and file_exists(NV_ROOTDIR . '/' . $oldAvatar)) {
+        if (!empty($oldAvatar) and file_exists(NV_ROOTDIR . '/' . $oldAvatar)) {
             nv_deletefile(NV_ROOTDIR . '/' . $oldAvatar);
         }
 
@@ -56,16 +62,21 @@ function updateAvatar($file)
     nv_deletefile($tmp_photo);
 }
 
+/**
+ * deleteAvatar()
+ * 
+ * @return void
+ */
 function deleteAvatar()
 {
-    global $db, $user_info, $module_data;
+    global $db, $user_info, $module_data, $db_config;
 
     $sql = 'SELECT photo FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $user_info['userid'];
     $result = $db->query($sql);
     $oldAvatar = $result->fetchColumn();
     $result->closeCursor();
 
-    if (! empty($oldAvatar)) {
+    if (!empty($oldAvatar)) {
         if (file_exists(NV_ROOTDIR . '/' . $oldAvatar)) {
             nv_deletefile(NV_ROOTDIR . '/' . $oldAvatar);
         }
@@ -90,7 +101,7 @@ if ($checkss == $array['checkss'] && $nv_Request->isset_request("del", "post")) 
     die(json_encode(array(
         'status' => 'ok',
         'input' => 'ok',
-        'mess' => $lang_module['editinfo_ok'] )));
+        'mess' => $lang_module['editinfo_ok'])));
 }
 
 //global config
@@ -104,7 +115,7 @@ $result = $db->query($sql);
 $global_config['avatar_height'] = $result->fetchColumn();
 $result->closeCursor();
 
-if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp_name']) and ! empty($array['u'])) {
+if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp_name']) and !empty($array['u'])) {
     // Get post data
     $array['x1'] = $nv_Request->get_int('x1', 'post', 0);
     $array['y1'] = $nv_Request->get_int('y1', 'post', 0);
@@ -123,10 +134,10 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
         $array['x2'],
         $array['y2'],
         $array['w'],
-        $array['h'] ))) < 4 or $array['avatar_width'] < $global_config['avatar_width'] or $array['avatar_height'] < $global_config['avatar_height']) {
+        $array['h']))) < 4 or $array['avatar_width'] < $global_config['avatar_width'] or $array['avatar_height'] < $global_config['avatar_height']) {
         $array['error'] = $lang_module['avatar_error_data'];
     } else {
-        $upload = new NukeViet\Files\Upload(array( 'images' ), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        $upload = new NukeViet\Files\Upload(array('images'), $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
 
         // Storage in temp dir
         $upload_info = $upload->save_file($_FILES['image_file'], NV_ROOTDIR . '/' . NV_TEMP_DIR, false);
@@ -141,7 +152,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
             $image = new NukeViet\Files\Image($upload_info['name'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
 
             // Resize image, crop image
-            $image->resizeXY($array['w'], $array['h']);
+            //$image->resizeXY($array['w'], $array['h']);
             $image->cropFromLeft($array['x1'], $array['y1'], $array['avatar_width'], $array['avatar_height']);
             $image->resizeXY($global_config['avatar_width'], $global_config['avatar_height']);
 
