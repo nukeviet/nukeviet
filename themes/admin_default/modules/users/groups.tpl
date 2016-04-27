@@ -21,6 +21,10 @@
 						<td>{LANG.title} <span style="color:red">*</span>:</td>
 						<td><input title="{LANG.title}" class="form-control" type="text" name="title" value="{DATA.title}" maxlength="240" /></td>
 					</tr>
+					<tr>
+						<td>{LANG.email} <span style="color:red">*</span>:</td>
+						<td><input title="{LANG.email}" class="form-control email required" id="email_iavim" type="text" name="email" value="{DATA.email}" maxlength="240" /></td>
+					</tr>
                     <tr>
 						<td>{LANG.group_description} <span style="color:red">*</span>:</td>
 						<td><input title="{LANG.group_description}" class="form-control" type="text" name="description" value="{DATA.description}" maxlength="255" /></td>
@@ -81,6 +85,33 @@
 				</tbody>
 			</table>
 		</div>
+		
+		<table class="table table-striped table-bordered table-hover">
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.access_caption_leader} </caption>
+			<thead>
+				<tr class="text-center">
+					<th class="text-center">{LANG.access_groups_add}</th>
+					<th class="text-center">{LANG.access_groups_del}</th>
+					<th class="text-center">{LANG.access_addus}</th>
+					<th class="text-center">{LANG.access_waiting}</th>
+					<th class="text-center">{LANG.access_editus}</th>
+					<th class="text-center">{LANG.access_delus}</th>
+					<th class="text-center">{LANG.access_passus}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="text-center"><input type="checkbox" {CONFIG.access_groups_add} value="1" name="access_groups_add"></td>
+					<td class="text-center"><input type="checkbox" {CONFIG.access_groups_del} value="1" name="access_groups_del"></td>
+					<td class="text-center"><input type="checkbox" {CONFIG.access_addus} value="1" name="access_addus"></td>
+					<td class="text-center"><input type="checkbox" {CONFIG.access_waiting} value="1" name="access_waiting"></td>
+					<td class="text-center"><input type="checkbox" {CONFIG.access_editus} value="1" name="access_editus"></td>
+					<td class="text-center"><input type="checkbox" {CONFIG.access_delus} value="1" name="access_delus"></td>
+					<td class="text-center"><input type="checkbox" {CONFIG.access_passus} value="1" name="access_passus"></td>
+				</tr>
+			</tbody>
+		</table>
+		
 		<input type="hidden" name="save" value="1" />
 		<p class="text-center"><input name="submit" type="submit" value="{LANG.save}" class="btn btn-primary w100" style="margin-top: 10px" /></p>
 	</form>

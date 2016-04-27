@@ -259,6 +259,9 @@ $lang_module['access_editus'] = 'Sửa tài khoản';
 $lang_module['access_delus'] = 'Xóa tài khoản';
 $lang_module['access_passus'] = 'Đổi mật khẩu';
 $lang_module['access_groups'] = 'Quản lý nhóm';
+$lang_module['access_caption_leader'] = 'Cấu hình quyền hạn sử dụng module của trưởng nhóm';
+$lang_module['access_groups_add'] = 'Thêm thành viên vào nhóm';
+$lang_module['access_groups_del'] = 'Xóa thành viên khỏi nhóm';
 
 $lang_module['fields'] = 'Tùy biến dữ liệu';
 $lang_module['captionform_add'] = 'Thêm trường dữ liệu';
