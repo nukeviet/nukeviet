@@ -428,6 +428,8 @@ UAV.common = {
 			$('#' + UAV.config.target).attr('src', e.target.result);
 			$('#' + UAV.config.target).load(function() {
 				var img = document.getElementById(UAV.config.target);
+                var boxWidth = $('#' + UAV.config.target).innerWidth();
+                var boxHeight = Math.round(boxWidth * img.naturalHeight / img.naturalWidth);
 				if (img.naturalWidth > UAV.config.max_width || img.naturalHeight > UAV.config.max_height) {
 					UAV.common.error(UAV.lang.bigsize);
 					UAV.data.error = true;
@@ -445,12 +447,15 @@ UAV.common = {
 					$('#' + UAV.config.imageType).html(file.type);
 					$('#' + UAV.config.imageSize).html(UAV.tool.bytes2Size(file.size));
 					$('#' + UAV.config.originalDimension).html(img.naturalWidth + ' x ' + img.naturalHeight);
+                    console.log()
 					$('#' + UAV.config.target).Jcrop({
 						minSize: [UAV.config.avatar_width, UAV.config.avatar_height],
 						setSelect: [300, 300, 55, 55],
 						aspectRatio: 1,
 						bgFade: true,
 						bgOpacity: .3,
+                        boxWidth: boxWidth,
+                        boxHeight: boxHeight,
 						onChange: function(e) {
 							UAV.tool.update(e);
 						},
@@ -461,10 +466,9 @@ UAV.common = {
 							UAV.tool.clear(e);
 						}
 					}, function() {
-						var bounds = this.getBounds();
-						$('#' + UAV.config.w).val(bounds[0]);
-						$('#' + UAV.config.h).val(bounds[1]);
-						$('#' + UAV.config.displayDimension).html(bounds[0] + ' x ' + bounds[1]);
+						$('#' + UAV.config.w).val(boxWidth);
+						$('#' + UAV.config.h).val(boxHeight);
+						$('#' + UAV.config.displayDimension).html(boxWidth + ' x ' + boxHeight);
 						UAV.data.jcropApi = this;
 					});
 				} else {
