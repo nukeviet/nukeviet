@@ -19,7 +19,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'Cài đặt Nukeviet 4.0 RC2';
+$lang_module['titlesetup'] = 'Cài đặt Nukeviet 4.0 RC3';
 $lang_module['select_language'] = 'Lựa chọn ngôn ngữ';
 $lang_module['license'] = 'Bản quyền';
 $lang_module['check_server'] = 'Kiểm tra máy chủ';

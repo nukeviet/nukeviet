@@ -290,6 +290,7 @@ $lang_module['field_options_text'] = 'Options for Text Fields';
 $lang_module['field_match_type'] = 'Value Match Requirements:<br>Empty values are always allowed.';
 $lang_module['field_match_type_none'] = 'none';
 $lang_module['field_match_type_alphanumeric'] = 'A-Z, 0-9, and _ only';
+$lang_module['field_match_type_date'] = 'Enter the date in the format dd/mm/yyyy';
 $lang_module['field_match_type_url'] = 'Url';
 $lang_module['field_match_type_regex'] = 'Regular expression';
 $lang_module['field_match_type_callback'] = 'Func callback';
