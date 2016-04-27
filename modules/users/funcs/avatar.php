@@ -32,7 +32,7 @@ if (!defined("NV_IS_ADMIN")) {
  */
 function updateAvatar($file)
 {
-    global $db, $user_info, $module_upload, $module_data, $db_config;
+    global $db, $user_info, $module_upload;
 
     $tmp_photo = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $file;
     $new_photo_path = NV_ROOTDIR . '/' . SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/';
@@ -44,7 +44,7 @@ function updateAvatar($file)
     }
 
     if (nv_copyfile($tmp_photo, $new_photo_path . $new_photo_name)) {
-        $sql = 'SELECT photo FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $user_info['userid'];
+        $sql = 'SELECT photo FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_info['userid'];
         $result = $db->query($sql);
         $oldAvatar = $result->fetchColumn();
         $result->closeCursor();
@@ -54,7 +54,7 @@ function updateAvatar($file)
         }
 
         $photo = SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/' . $new_photo_name;
-        $stmt = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . ' SET photo=:photo WHERE userid=' . $user_info['userid']);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET photo=:photo WHERE userid=' . $user_info['userid']);
         $stmt->bindParam(':photo', $photo, PDO::PARAM_STR);
         $stmt->execute();
     }
@@ -69,9 +69,9 @@ function updateAvatar($file)
  */
 function deleteAvatar()
 {
-    global $db, $user_info, $module_data, $db_config;
+    global $db, $user_info;
 
-    $sql = 'SELECT photo FROM ' . $db_config['prefix'] . '_' . $module_data . ' WHERE userid=' . $user_info['userid'];
+    $sql = 'SELECT photo FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_info['userid'];
     $result = $db->query($sql);
     $oldAvatar = $result->fetchColumn();
     $result->closeCursor();
@@ -81,7 +81,7 @@ function deleteAvatar()
             nv_deletefile(NV_ROOTDIR . '/' . $oldAvatar);
         }
 
-        $stmt = $db->prepare("UPDATE " . $db_config['prefix'] . "_" . $module_data . " SET photo='' WHERE userid=" . $user_info['userid']);
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET photo='' WHERE userid=" . $user_info['userid']);
         $stmt->execute();
     }
 }
@@ -105,12 +105,12 @@ if ($checkss == $array['checkss'] && $nv_Request->isset_request("del", "post")) 
 }
 
 //global config
-$sql = "SELECT content FROM " . $db_config['prefix'] . "_" . $module_data . "_config WHERE config='avatar_width'";
+$sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='avatar_width'";
 $result = $db->query($sql);
 $global_config['avatar_width'] = $result->fetchColumn();
 $result->closeCursor();
 
-$sql = "SELECT content FROM " . $db_config['prefix'] . "_" . $module_data . "_config WHERE config='avatar_height'";
+$sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='avatar_height'";
 $result = $db->query($sql);
 $global_config['avatar_height'] = $result->fetchColumn();
 $result->closeCursor();
