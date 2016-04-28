@@ -1,9 +1,11 @@
 # Ignore some static files and directories.
+/.gitattributes
 /.gitignore
 /.settings/
 /.buildpath
 /.project
 /.htaccess
+/composer.json
 /config.php
 /CHANGELOG.txt
 /COPYRIGHT.txt
