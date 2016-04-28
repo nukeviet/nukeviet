@@ -178,7 +178,6 @@ $lang_module['lostpass_no_info4'] = 'Password does not match';
 $lang_module['lostpass_page_title'] = 'Get password';
 $lang_module['lostpass_question_empty'] = 'You doesn\'t specify secret question or answer. We can\'t provide new password for you. Please contact site admin for more information';
 $lang_module['answer_failed'] = 'Your answer is not correct';
-$lang_module['field'] = 'User name or email';
 $lang_module['lostpass_question'] = 'Question';
 $lang_module['step1'] = 'Step 1';
 $lang_module['step2'] = 'Step 2';

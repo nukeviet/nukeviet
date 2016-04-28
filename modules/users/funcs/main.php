@@ -33,7 +33,7 @@ if (! defined('NV_IS_ADMIN') and ! $global_config['allowuserlogin']) {
         exit();
     } else {
     	// So nhom dang quan ly
-    	$user_info['group_manage'] = $db->query('SELECT COUNT(*) FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();
+    	$user_info['group_manage'] = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();
 
         $contents = user_welcome();
     }

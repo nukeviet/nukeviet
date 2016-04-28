@@ -38,7 +38,7 @@ if ($global_config['whoviewuser'] == 2 and ! defined('NV_IS_ADMIN')) {
             $md5 = $matches[2];
         }
         if (! empty($md5)) {
-            $stmt = $db->prepare('SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username = :md5');
+            $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE md5username = :md5');
             $stmt->bindParam(':md5', $md5, PDO::PARAM_STR);
             $stmt->execute();
             $item = $stmt->fetch();
@@ -55,7 +55,7 @@ if ($global_config['whoviewuser'] == 2 and ! defined('NV_IS_ADMIN')) {
                 );
 
                 $array_field_config = array();
-                $result_field = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC');
+                $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field WHERE user_editable = 1 ORDER BY weight ASC');
                 while ($row_field = $result_field->fetch()) {
                     $language = unserialize($row_field['language']);
                     $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -74,7 +74,7 @@ if ($global_config['whoviewuser'] == 2 and ! defined('NV_IS_ADMIN')) {
                     $array_field_config[] = $row_field;
                 }
 
-                $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $item['userid'];
+                $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $item['userid'];
                 $result = $db->query($sql);
                 $custom_fields = $result->fetch();
 
@@ -120,7 +120,7 @@ if ($global_config['whoviewuser'] == 2 and ! defined('NV_IS_ADMIN')) {
 
         $db->sqlreset()
             ->select('COUNT(*)')
-            ->from(NV_USERS_GLOBALTABLE)
+            ->from(NV_MOD_TABLE)
             ->where('active=1');
 
         $num_items = $db->query($db->sql())->fetchColumn();

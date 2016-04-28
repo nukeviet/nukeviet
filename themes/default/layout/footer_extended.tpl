@@ -39,7 +39,12 @@
                     <!-- BEGIN: theme_type -->
                     <div class="theme-change">
                     <!-- BEGIN: loop -->
-                    <!-- BEGIN: other --><a href="{STHEME_TYPE}" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></a><!-- END: other --><!-- BEGIN: current --><span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span><!-- END: current -->
+                        <!-- BEGIN: other -->
+                        <a href="{STHEME_TYPE}" rel="nofollow" title="{STHEME_INFO}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></a>
+                        <!-- END: other -->
+                        <!-- BEGIN: current -->
+                        <span title="{LANG.theme_type_select}: {STHEME_TITLE}"><em class="fa fa-{STHEME_ICON} fa-lg"></em></span>
+                        <!-- END: current -->
                     <!-- END: loop -->
                     </div>
                     <!-- END: theme_type -->

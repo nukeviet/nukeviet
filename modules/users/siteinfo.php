@@ -13,15 +13,16 @@ if (! defined('NV_IS_FILE_SITEINFO')) {
 }
 
 $lang_siteinfo = nv_get_lang_module($mod);
+$_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
 
 // So thanh vien
-$number = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE)->fetchColumn();
+$number = $db->query('SELECT COUNT(*) FROM ' . $_mod_table)->fetchColumn();
 if ($number > 0) {
     $siteinfo[] = array( 'key' => $lang_siteinfo['siteinfo_user'], 'value' => number_format($number) );
 }
 
 // So thanh vien doi kich hoat
-$number = $db->query('SELECT COUNT(*) FROM ' . NV_USERS_GLOBALTABLE . '_reg')->fetchColumn();
+$number = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . '_reg')->fetchColumn();
 if ($number > 0) {
     $pendinginfo[] = array(
         'key' => $lang_siteinfo['siteinfo_waiting'],
@@ -33,13 +34,13 @@ if ($number > 0) {
 // So thanh vien dang ky vao nhom
 $level = $admin_info['level'];
 
-$access_admin = $db->query("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'")->fetchColumn();
+$access_admin = $db->query("SELECT content FROM " . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
 $access_admin = unserialize($access_admin);
 
 if (isset($access_admin['access_groups'][$level]) and $access_admin['access_groups'][$level] == 1) {
     $pending_lists = $group_ids = array();
     
-    $sql = 'SELECT COUNT(*) num_users, group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE approved = 0 GROUP BY group_id';
+    $sql = 'SELECT COUNT(*) num_users, group_id FROM ' . $_mod_table . '_groups_users WHERE approved = 0 GROUP BY group_id';
     $result = $db->query($sql);
     
     while ($row = $result->fetch()) {
@@ -49,7 +50,7 @@ if (isset($access_admin['access_groups'][$level]) and $access_admin['access_grou
     }
 
     if (!empty($group_ids)) {
-        $sql = 'SELECT group_id, title FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE group_id > 9 AND group_id IN(' . implode(',', $group_ids) . ')';
+        $sql = 'SELECT group_id, title FROM ' . $_mod_table . '_groups WHERE group_id > 9 AND group_id IN(' . implode(',', $group_ids) . ')';
         $result = $db->query($sql);
 
         while ($row = $result->fetch()) {

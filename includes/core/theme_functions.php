@@ -225,6 +225,7 @@ function nv_xmlOutput($content, $lastModified)
     if ($encoding != 'none') {
         $content = gzencode($content, 6, $encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE);
         header('Content-Encoding: ' . $encoding);
+        header('Content-Length: ' . strlen($content));
         header('Vary: Accept-Encoding');
     }
 

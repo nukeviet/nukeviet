@@ -84,9 +84,9 @@ class Optimizer
                     if (! empty($matches2)) {
                         $combine = array_combine($matches2[1], $matches2[2]);
                         if (array_key_exists('http-equiv', $combine)) {
-                            $this->_meta['http-equiv'][strtolower($combine['http-equiv'])] = $combine['content'];
+                            $this->_meta['http-equiv'][$combine['http-equiv']] = $combine['content'];
                         } elseif (array_key_exists('name', $combine)) {
-                            $this->_meta['name'][strtolower($combine['name'])] = $combine['content'];
+                            $this->_meta['name'][$combine['name']] = $combine['content'];
                         } elseif (array_key_exists('charset', $combine)) {
                             $this->_meta['charset'] = $combine['charset'];
                         } else {

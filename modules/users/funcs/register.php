@@ -44,7 +44,7 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 }
 
 // Cau hinh xac thuc thanh vien moi
-$sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='active_group_newusers'";
+$sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='active_group_newusers'";
 $active_group_newusers = intval($db->query($sql)->fetchColumn());
 
 /**
@@ -56,7 +56,7 @@ $active_group_newusers = intval($db->query($sql)->fetchColumn());
  */
 function nv_check_username_reg($login)
 {
-    global $db, $db_config, $lang_module;
+    global $db, $lang_module;
 
     $error = nv_check_valid_login($login, NV_UNICKMAX, NV_UNICKMIN);
     if ($error != '') {
@@ -66,7 +66,7 @@ function nv_check_username_reg($login)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_name'";
+    $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='deny_name'";
     $result = $db->query($sql);
     $deny_name = $result->fetchColumn();
     $result->closeCursor();
@@ -75,14 +75,14 @@ function nv_check_username_reg($login)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE md5username= :md5username');
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE md5username= :md5username');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE md5username= :md5username');
     $stmt->bindValue(':md5username', nv_md5safe($login), PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
@@ -101,14 +101,14 @@ function nv_check_username_reg($login)
  */
 function nv_check_email_reg($email)
 {
-    global $db, $db_config, $lang_module;
+    global $db, $lang_module;
 
     $error = nv_check_valid_email($email);
     if ($error != '') {
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
     }
 
-    $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email'";
+    $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='deny_email'";
     $result = $db->query($sql);
     $deny_email = $result->fetchColumn();
     $result->closeCursor();
@@ -123,21 +123,21 @@ function nv_check_email_reg($email)
     $pattern = implode('.?', $pattern);
     $pattern = '^' . $pattern . '@' . $right . '$';
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email RLIKE :pattern');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         return sprintf($lang_module['email_registered_name'], $email);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email RLIKE :pattern');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
         return sprintf($lang_module['email_registered_name'], $email);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE email RLIKE :pattern');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
@@ -164,7 +164,7 @@ function reg_result($array)
 
 // Cau hoi lay lai mat khau
 $data_questions = array();
-$sql = "SELECT qid, title FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+$sql = "SELECT qid, title FROM " . NV_MOD_TABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
 $result = $db->query($sql);
 while ($row = $result->fetch()) {
     $data_questions[$row['qid']] = array( 'qid' => $row['qid'], 'title' => $row['title'] );
@@ -184,7 +184,7 @@ $key_words = $module_info['keywords'];
 $mod_title = $lang_module['register'];
 
 $array_field_config = array();
-$result_field = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC');
+$result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
 while ($row_field = $result_field->fetch()) {
     $language = unserialize($row_field['language']);
     $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -304,7 +304,7 @@ if ($checkss == $array_register['checkss']) {
     }
 
     if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3) {
-        $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info) VALUES (
+        $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info) VALUES (
 			:username,
 			:md5username,
 			:password,
@@ -359,7 +359,7 @@ if ($checkss == $array_register['checkss']) {
                 'mess' => $info )));
         }
     } else {
-        $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . "
+        $sql = "INSERT INTO " . NV_MOD_TABLE . "
 		(group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
 		question, answer, passlostkey, view_mail, remember, in_groups,
 		active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
@@ -394,8 +394,8 @@ if ($checkss == $array_register['checkss']) {
                 'mess' => $lang_module['err_no_save_account'] )));
         } else {
             $query_field['userid'] = $userid;
-            $db->query('INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
-            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . ($active_group_newusers ? 7 : 4));
+            $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
+            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($active_group_newusers ? 7 : 4));
 
             $subject = $lang_module['account_register'];
             $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true), $array_register['username']);
@@ -431,7 +431,7 @@ if ($checkss == $array_register['checkss']) {
 }
 
 if ($nv_Request->isset_request('get_usage_terms', 'post')) {
-    $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
+    $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
     $siteterms = $db->query($sql)->fetchColumn();
 
     include NV_ROOTDIR . '/includes/header.php';

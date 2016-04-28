@@ -75,6 +75,7 @@ $lang_global['adminlogin'] = 'Connexion à l\'Administration';
 $lang_global['module_for_admin'] = 'Cette section est reservée à l\'<em>Administrateur</em>';
 $lang_global['in_groups'] = 'Groupes  d\'utilisateurs';
 $lang_global['username'] = 'Identifiant';
+$lang_global['username_email'] = 'Identifiant ou E-mail';
 $lang_global['password'] = 'Mot de passe';
 $lang_global['password2'] = 'Confirmer le mot de passe';
 $lang_global['captcharefresh'] = 'Rafraîchir';

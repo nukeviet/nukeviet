@@ -296,3 +296,7 @@ $lang_module['delete_from_cat'] = 'Xóa bài viết khỏi chuyên mục';
 $lang_module['not_featured'] = 'Không có bài viết nào';
 
 $lang_module['notification_post_queue'] = 'Kiểm duyệt bài viết <strong>%s</strong> gửi bởi <strong>%s</strong><br /><em>%s</em>';
+
+$lang_module['ad_block_show'] = 'Hiển thị các block phụ';
+$lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
+$lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';

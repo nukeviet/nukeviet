@@ -96,7 +96,7 @@ $per_page = 30;
 
 $db->sqlreset()
     ->select('COUNT(*)')
-    ->from(NV_USERS_GLOBALTABLE);
+    ->from(NV_MOD_TABLE);
 
 if (! empty($_arr_where)) {
     $db->where(implode(' AND ', $_arr_where));
