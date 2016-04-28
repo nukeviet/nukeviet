@@ -168,7 +168,7 @@ $menu_rows_lev1['about'][] = array(
 $menu_rows_lev1['about'][] = array(
     'title' => 'Giấy phép sử dụng NukeViet',
     'link' => NV_BASE_SITEURL . "index.php?language=vi&nv=about&op=giay-phep-su-dung-nukeviet" . $global_config['rewrite_exturl'],
-    'groups_view' => '67',
+    'groups_view' => '6,7',
     'op' => 'giay-phep-su-dung-nukeviet'
 );
 $menu_rows_lev1['about'][] = array(
