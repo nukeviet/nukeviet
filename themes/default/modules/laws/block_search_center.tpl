@@ -1,7 +1,7 @@
 <!-- BEGIN: main -->
 <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
 
-<form class="form-horizontal formsearch" action="{NV_BASE_SITEURL}index.php" method="get" onsubmit="return nv_check_search_laws(this);">
+<form id="ltablesearch{BLOCKID}" class="form-horizontal formsearch" action="{NV_BASE_SITEURL}index.php" method="get" onsubmit="return nv_check_search_laws(this);">
 	<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="search"/>
@@ -88,7 +88,7 @@
 		<label class="col-sm-6 control-label">&nbsp;</label>
 		<div class="col-sm-18">
 			<input class="btn btn-primary" type="submit" value="{LANG.search}"/>
-			<input class="btn btn-danger" id="lclearform" type="button" value="{LANG.clear}"/>
+			<input class="btn btn-danger" id="lclearform{BLOCKID}" type="button" value="{LANG.clear}"/>
 		</div>
 	</div>
 </form>
@@ -96,9 +96,9 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#lclearform').click(function() {
-			$('#ltablesearch input[type=text]').val('');
-			$('#ltablesearch select').val('');
+		$('#lclearform{BLOCKID}').click(function() {
+			$('#ltablesearch{BLOCKID} input[type=text]').val('');
+			$('#ltablesearch{BLOCKID} select').val('0');
 		});
 		$("#ls_from,#ls_to").datepicker({
 			showOn : "both",
