@@ -44,5 +44,4 @@ $lang_module['note_s'] = 'Ghi chú';
 $lang_module['department'] = 'Bộ phận';
 $lang_module['sendcontactfailed'] = 'Phản hồi của bạn đã không được gửi đi vì lý do kỹ thuật. Thành thật xin lỗi vì sự bất tiện này.';
 $lang_module['note'] = 'Vui lòng điền vào mẫu dưới đây và chúng tôi sẽ liên lạc với bạn.';
-$lang_module['view_website'] = 'Xem liên hệ tại website';
 $lang_module['sendcopy'] = 'Gửi bản sao thư này cho tôi';

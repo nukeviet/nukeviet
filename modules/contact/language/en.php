@@ -44,5 +44,4 @@ $lang_module['note_s'] = 'Note';
 $lang_module['department'] = 'Department';
 $lang_module['sendcontactfailed'] = 'Your feedback was not sent because of technical reasons. Sorry for the inconvenience.';
 $lang_module['note'] = 'Please complete all required fields.';
-$lang_module['view_website'] = 'View on website';
 $lang_module['sendcopy'] = 'Send as copy to mail';

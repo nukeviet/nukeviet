@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
-                        <input type="text" class="required form-control" placeholder="{LANG.field}" value="" name="userField" maxlength="100">
+                        <input type="text" class="required form-control" placeholder="{GLANG.username_email}" value="" name="userField" maxlength="100">
                     </div>
                 </div>
 

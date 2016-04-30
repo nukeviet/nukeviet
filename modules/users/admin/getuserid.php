@@ -194,7 +194,7 @@ if ($nv_Request->isset_request('submit', 'get')) {
 
     $db->sqlreset()
         ->select('COUNT(*)')
-        ->from(NV_USERS_GLOBALTABLE);
+        ->from(NV_MOD_TABLE);
     if (! empty($array_where)) {
         $db->where(implode(' AND ', $array_where));
     }

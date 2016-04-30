@@ -3,7 +3,7 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES (contact@vinades.vn)
- * @Copyright ? 2014 VINADES. All rights reserved
+ * @Copyright (C) 2014 VINADES. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 04/05/2010
  */
@@ -16,7 +16,7 @@ $page_title = $lang_module['edit_title'];
 
 $userid = $nv_Request->get_int('userid', 'get', 0);
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid=' . $userid;
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch();
 if (empty($row)) {
     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -59,16 +59,16 @@ if ($admin_info['admin_id'] == $userid and $admin_info['safemode'] == 1) {
 
 $_user = array();
 
-$groups_list = nv_groups_list();
+$groups_list = nv_groups_list($module_data);
 
 $array_old_groups = array();
-$result_gru = $db->query('SELECT group_id FROM ' . NV_GROUPS_GLOBALTABLE . '_users WHERE userid=' . $userid);
+$result_gru = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $userid);
 while ($row_gru = $result_gru->fetch()) {
     $array_old_groups[] = $row_gru['group_id'];
 }
 
 $array_field_config = array();
-$result_field = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC');
+$result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
 while ($row_field = $result_field->fetch()) {
     $language = unserialize($row_field['language']);
     $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -134,7 +134,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
     
-    if ($db->query('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote(nv_md5safe($_user['username'])))
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND md5username=' . $db->quote(nv_md5safe($_user['username'])))
         ->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
@@ -151,7 +151,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
     
-    if ($db->query('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
         ->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
@@ -160,7 +160,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
     
-    if ($db->query('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email=' . $db->quote($_user['email']))
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email=' . $db->quote($_user['email']))
         ->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
@@ -169,7 +169,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
     
-    if ($db->query('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
+    if ($db->query('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE userid!=' . $userid . ' AND email=' . $db->quote($_user['email']))
         ->fetchColumn()) {
         die(json_encode(array(
             'status' => 'error',
@@ -244,14 +244,14 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $in_groups_del = array_diff($array_old_groups, $in_groups);
     if (!empty($in_groups_del)) {
         foreach ($in_groups_del as $gid) {
-            nv_groups_del_user($gid, $userid);
+            nv_groups_del_user($gid, $userid, $module_data);
         }
     }
     
     $in_groups_add = array_diff($in_groups, $array_old_groups);
     if (!empty($in_groups_add)) {
         foreach ($in_groups_add as $gid) {
-            nv_groups_add_user($gid, $userid);
+            nv_groups_add_user($gid, $userid, 1, $module_data);
         }
     }
     
@@ -317,8 +317,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $_user['in_groups_default'] = 7;
             $in_groups[] = 7;
         } else {
-            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=4');
-            $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers-1 WHERE group_id=7');
+            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
+            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
             
             if ($_user['in_groups_default'] == 7) {
                 $_user['in_groups_default'] = 4;
@@ -326,7 +326,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
     }
     
-    $db->query("UPDATE " . NV_USERS_GLOBALTABLE . " SET
+    $db->query("UPDATE " . NV_MOD_TABLE . " SET
         group_id=" . $_user['in_groups_default'] . ",
         username=" . $db->quote($_user['username']) . ",
         md5username='" . nv_md5safe($_user['username']) . "',
@@ -345,7 +345,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     WHERE userid=" . $userid);
     
     if (!empty($array_field_config)) {
-        $db->query('UPDATE ' . NV_USERS_GLOBALTABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);
+        $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);
     }
     
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid']);
@@ -366,7 +366,7 @@ if (!empty($_user['sig'])) {
     $_user['sig'] = nv_br2nl($_user['sig']);
 }
 
-$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $userid;
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $userid;
 $result = $db->query($sql);
 $custom_fields = $result->fetch();
 

@@ -18,6 +18,9 @@ $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path])) {
     if ($refresh) {
+        if ($sys_info['allowed_set_time_limit']) {
+            set_time_limit(0);
+        }        
         nv_filesListRefresh($path);
     }
 

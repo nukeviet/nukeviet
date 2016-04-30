@@ -36,10 +36,10 @@ function nv_del_content(id, checkss, base_adminurl, detail) {
 	return false;
 }
 
-function get_alias() {
+function get_alias(op) {
 	var title = strip_tags(document.getElementById('idtitle').value);
 	if (title != '') {
-		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'get_alias=' + encodeURIComponent(title), function(res) {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=' + op + '&nocache=' + new Date().getTime(), 'get_alias=' + encodeURIComponent(title), function(res) {
 			if (res != "") {
 				document.getElementById('idalias').value = res;
 			} else {

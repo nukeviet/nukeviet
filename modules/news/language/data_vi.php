@@ -326,15 +326,14 @@ $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_d
 $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_block_cat (bid, adddefault, numbers,title, alias, image, description, weight, keywords, add_time, edit_time) VALUES (2, 1, 4, 'Tin mới nhất', 'Tin-moi-nhat', '', 'Tin mới nhất', 2, '', 1279945725, 1279956445)");
 
 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (1, 1, 1)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 14, 4)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 12, 6)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 6, 9)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 13, 5)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 11, 7)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 1, 8)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 15, 3)');
-$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 16, 2)');
 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 17, 1)');
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 16, 2)');
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 15, 3)');
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 14, 4)');
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 12, 5)');
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 11, 6)');
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 1, 7)');
+$db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 6, 8)');
 
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags (tid, numnews, alias, image, description, keywords) VALUES (?, ?, ?, ?, ?, ?)');
 $sth->execute(array(1, 0, 'nguồn-mở', '', '', 'nguồn mở'));
