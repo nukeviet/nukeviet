@@ -762,7 +762,7 @@ a.btn {
     background-image:url(/themes/default/images/header.png),linear-gradient(to bottom,#428bca 0,#245682 51px,rgba(255,255,255,1) 51px,rgba(255,255,255,1) 100%);
     background-repeat:no-repeat,repeat-x;
     background-position:left 51px,left top;
-    background-size:auto,auto;
+    background-size:100%,auto;
 }
 
 /* Header */
