@@ -610,19 +610,20 @@ function nv_user_in_groups($groups_view)
 function nv_groups_add_user($group_id, $userid, $approved = 1, $mod_data = 'users')
 {
     global $db, $db_config, $global_config;
-    $query = $db->query('SELECT COUNT(*) FROM ' . $db_config['prefix'] . '_' . $mod_data . ' WHERE userid=' . $userid);
+    $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
+    $query = $db->query('SELECT COUNT(*) FROM ' . $_mod_table . ' WHERE userid=' . $userid);
     if ($query->fetchColumn()) {
         try {
-            $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $mod_data . "_groups_users (group_id, userid, approved, data) VALUES (" . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "')");
-            $db->query('UPDATE ' . $db_config['prefix'] . '_' . $mod_data . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
+            $db->query("INSERT INTO " . $_mod_table . "_groups_users (group_id, userid, approved, data) VALUES (" . $group_id . ", " . $userid . ", " . $approved . ", '" . $global_config['idsite'] . "')");
+            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers+1 WHERE group_id=' . $group_id);
             return true;
         } catch (PDOException $e) {
             if ($group_id <= 3) {
-                $data = $db->query('SELECT data FROM ' . $db_config['prefix'] . '_' . $mod_data . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetchColumn();
+                $data = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetchColumn();
                 $data = ($data != '') ? explode(',', $data) : array();
                 $data[] = $global_config['idsite'];
                 $data = implode(',', array_unique(array_map('intval', $data)));
-                $db->query("UPDATE " . $db_config['prefix'] . "_" . $mod_data . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);
+                $db->query("UPDATE " . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);
                 return true;
             }
         }
@@ -641,7 +642,8 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
 {
     global $db, $db_config, $global_config;
 
-    $row = $db->query('SELECT data FROM ' . $db_config['prefix'] . '_' . $mod_data . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
+    $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
+    $row = $db->query('SELECT data FROM ' . $_mod_table . '_groups_users WHERE group_id=' . $group_id . ' AND userid=' . $userid)->fetch();
     if (! empty($row)) {
         $set_number = false;
         if ($group_id > 3) {
@@ -652,15 +654,15 @@ function nv_groups_del_user($group_id, $userid, $mod_data = 'users')
             if ($data == '') {
                 $set_number = true;
             } else {
-                $db->query("UPDATE " . $db_config['prefix'] . "_" . $mod_data . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);
+                $db->query("UPDATE " . $_mod_table . "_groups_users SET data = '" . $data . "' WHERE group_id=" . $group_id . " AND userid=" . $userid);
             }
         }
 
         if ($set_number) {
-            $db->query('DELETE FROM ' . $db_config['prefix'] . '_' . $mod_data . '_groups_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid);
+            $db->query('DELETE FROM ' . $_mod_table . '_groups_users WHERE group_id = ' . $group_id . ' AND userid = ' . $userid);
 
             // Chỗ này chỉ xóa những thành viên đã được xét duyệt vào nhóm nên sẽ cập nhật luôn số thành viên, không cần kiểm tra approved = 1 hay không
-            $db->query('UPDATE ' . $db_config['prefix'] . '_' . $mod_data . '_groups SET numbers = numbers-1 WHERE group_id=' . $group_id);
+            $db->query('UPDATE ' . $_mod_table . '_groups SET numbers = numbers-1 WHERE group_id=' . $group_id);
         }
         return true;
     } else {
@@ -1025,7 +1027,7 @@ function nv_get_keywords($content, $keyword_limit = 20)
  * @param string $files
  * @return
  */
-function nv_sendmail($from, $to, $subject, $message, $files = '')
+function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false)
 {
     global $global_config, $sys_info;
 
@@ -1093,6 +1095,10 @@ function nv_sendmail($from, $to, $subject, $message, $files = '')
         $mail->Body = $message;
         $mail->AltBody = strip_tags($message);
         $mail->IsHTML(true);
+        
+        if($AddEmbeddedImage) {
+            $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
+        }
 
         if (! empty($files)) {
             $files = array_map('trim', explode(',', $files));
