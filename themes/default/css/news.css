@@ -273,6 +273,10 @@ p {
 	color: #fff;
 }
 
+.bodytext figure.image {
+	width: 100%
+}
+
 .bodytext figure.image figcaption {
     padding:5px;
 }

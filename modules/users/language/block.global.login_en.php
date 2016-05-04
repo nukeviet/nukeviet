@@ -4,7 +4,7 @@
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
  * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
- * @Language Tiếng Việt
+ * @Language English
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Apr 25, 2016, 05:03:00 PM
  */
@@ -19,9 +19,9 @@ $lang_translator['copyright'] = '@Copyright (C) 2016 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';
 
-$lang_block['display_mode'] = 'Kiểu hiển thị';
-$lang_block['display_mode0'] = 'Dạng form đăng nhập';
-$lang_block['display_mode1'] = 'Dạng nút';
-$lang_block['popup_register'] = 'Đăng ký dạng popup';
-$lang_block['popup_register0'] = 'Không';
-$lang_block['popup_register1'] = 'Có';
+$lang_block['display_mode'] = 'Display mode';
+$lang_block['display_mode0'] = 'Login form';
+$lang_block['display_mode1'] = 'button form';
+$lang_block['popup_register'] = 'Registration popup';
+$lang_block['popup_register0'] = 'No';
+$lang_block['popup_register1'] = 'Yes';
