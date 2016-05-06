@@ -1027,7 +1027,7 @@ function nv_get_keywords($content, $keyword_limit = 20)
  * @param string $files
  * @return
  */
-function nv_sendmail($from, $to, $subject, $message, $files = '')
+function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedImage = false)
 {
     global $global_config, $sys_info;
 
@@ -1095,6 +1095,10 @@ function nv_sendmail($from, $to, $subject, $message, $files = '')
         $mail->Body = $message;
         $mail->AltBody = strip_tags($message);
         $mail->IsHTML(true);
+        
+        if($AddEmbeddedImage) {
+            $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
+        }
 
         if (! empty($files)) {
             $files = array_map('trim', explode(',', $files));
