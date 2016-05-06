@@ -120,6 +120,10 @@ function nv_site_theme($contents, $full = true)
 
         unset($config_theme, $css_content, $webFontFile, $font, $subset, $gf);
     }
+    
+    if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/colorOpt.php')) {
+        include(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/colorOpt.php');
+    }
 
     foreach ($html_links as $links) {
         foreach ($links as $key => $value) {
