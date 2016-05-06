@@ -1242,50 +1242,50 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
     $title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'];
     $page_string = ($on_page == 1) ? '<li class="active"><a href="#">1</a></li>' : '<li><a rel="prev" title="' . $title . ' 1" href="' . $base_url . '">1</a></li>';
 
-    if ($total_pages > 10) {
-        $init_page_max = ($total_pages > 3) ? 3 : $total_pages;
-
-        for ($i = 2; $i <= $init_page_max; ++$i) {
-            if ($i == $on_page) {
-                $page_string .= '<li class="active"><a href="#">' . $i . '</a></li>';
-            } else {
-                $rel = ($i > $on_page) ? 'next' : 'prev';
-                $page_string .= '<li><a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
-            }
-        }
-
-        if ($total_pages > 3) {
-            if ($on_page > 1 && $on_page < $total_pages) {
-                if ($on_page > 5) {
-                    $page_string .= '<li class="disabled"><span>...</span></li>';
-                }
-
-                $init_page_min = ($on_page > 4) ? $on_page : 5;
-                $init_page_max = ($on_page < $total_pages - 4) ? $on_page : $total_pages - 4;
-
-                for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i) {
-                    if ($i == $on_page) {
-                        $page_string .= '<li class="active"><a href="#">' . $i . '</a></li>';
-                    } else {
-                        $rel = ($i > $on_page) ? 'next' : 'prev';
-                        $page_string .= '<li><a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
-                    }
-                }
-
-                if ($on_page < $total_pages - 4) {
-                    $page_string .= '<li class="disabled"><span>...</span></li>';
-                }
-            } else {
-                $page_string .= '<li class="disabled"><span>...</span></li>';
-            }
-
-            for ($i = $total_pages - 2; $i < $total_pages + 1; ++$i) {
+    if ($total_pages > 7) {
+        if ($on_page < 4) {
+            $init_page_max = ($total_pages > 2) ? 2 : $total_pages;
+            for ($i = 2; $i <= $init_page_max; ++$i) {
                 if ($i == $on_page) {
                     $page_string .= '<li class="active"><a href="#">' . $i . '</a></li>';
                 } else {
                     $rel = ($i > $on_page) ? 'next' : 'prev';
                     $page_string .= '<li><a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
                 }
+            }
+        }
+
+        if ($on_page > 1 && $on_page < $total_pages) {
+            if ($on_page > 3) {
+                $page_string .= '<li class="disabled"><span>...</span></li>';
+            }
+
+            $init_page_min = ($on_page > 3) ? $on_page : 4;
+            $init_page_max = ($on_page < $total_pages - 3) ? $on_page : $total_pages - 3;
+
+            for ($i = $init_page_min - 1; $i < $init_page_max + 2; ++$i) {
+                if ($i == $on_page) {
+                    $page_string .= '<li class="active"><a href="#">' . $i . '</a></li>';
+                } else {
+                    $rel = ($i > $on_page) ? 'next' : 'prev';
+                    $page_string .= '<li><a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
+                }
+            }
+
+            if ($on_page < $total_pages - 3) {
+                $page_string .= '<li class="disabled"><span>...</span></li>';
+            }
+        } else {
+            $page_string .= '<li class="disabled"><span>...</span></li>';
+        }
+        
+        $init_page_min = ($total_pages - $on_page > 3) ? $total_pages : $total_pages - 1;
+        for ($i = $init_page_min; $i <= $total_pages; ++$i) {
+            if ($i == $on_page) {
+                $page_string .= '<li class="active"><a href="#">' . $i . '</a></li>';
+            } else {
+                $rel = ($i > $on_page) ? 'next' : 'prev';
+                $page_string .= '<li><a rel="' . $rel . '" title="' . $title . ' ' . $i . '" href="' . $base_url . '/page-' . $i . '">' . $i . '</a></li>';
             }
         }
     } else {
