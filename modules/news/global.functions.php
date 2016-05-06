@@ -239,8 +239,14 @@ function nv_get_firstimage( $contents ){
  * @return boolean
  */
 function nv_check_block_topcat_news( $catid ){
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+	
+	global $global_config, $module_info, $module_name;
+	
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	$find1 = "/<name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "<\/name>/";
@@ -259,8 +265,14 @@ function nv_check_block_topcat_news( $catid ){
  * @return boolean
  */
 function nv_check_block_block_botcat_news( $catid ){
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+	
+	global $global_config, $module_info, $module_name;
+	
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	$find1 = "/<name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "<\/name>/";
@@ -279,9 +291,14 @@ function nv_check_block_block_botcat_news( $catid ){
  * @return boolean
  */
 function nv_add_block_topcat_news( $catid ){
-	global $global_config, $module_name;
-
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+	
+	global $global_config, $module_info, $module_name;
+	
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	if( !nv_check_block_topcat_news( $catid ) AND !empty($contents) ){
@@ -325,8 +342,13 @@ function nv_add_block_topcat_news( $catid ){
  */
 function nv_add_block_botcat_news( $catid ){
 	
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+	global $global_config, $module_info, $module_name;
+	
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	if( !nv_check_block_block_botcat_news( $catid ) AND !empty($contents) ){
@@ -369,8 +391,14 @@ function nv_add_block_botcat_news( $catid ){
  * @return boolean
  */
 function nv_remove_block_topcat_news( $catid ){
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+	
+	global $global_config, $module_info, $module_name;
+	
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	if( nv_check_block_topcat_news( $catid ) ){
@@ -409,8 +437,14 @@ function nv_remove_block_topcat_news( $catid ){
  * @return boolean
  */
 function nv_remove_block_botcat_news( $catid ){
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+	
+	global $global_config, $module_info, $module_name;
+	
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	if( nv_check_block_block_botcat_news( $catid ) ){

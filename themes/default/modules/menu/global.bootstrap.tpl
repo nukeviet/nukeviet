@@ -15,7 +15,7 @@
 <!-- END: submenu -->
 
 <!-- BEGIN: main -->
-<div class="navbar navbar-default navbar-static-top radius-top-left radius-top-right" role="navigation">
+<div class="navbar navbar-default navbar-static-top" role="navigation">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-site-default">
 			<span class="sr-only">&nbsp;</span>
