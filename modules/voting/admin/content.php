@@ -90,6 +90,9 @@ if (! empty($submit)) {
                 $title = nv_htmlspecialchars(strip_tags($title));
                 if ($title != '') {
                     $url = nv_unhtmlspecialchars(strip_tags($array_urlvote[$id]));
+                    if (!nv_is_url($url)) {
+                        $url = '';
+                    }                    
                     $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET title = " . $db->quote($title) . ", url = " . $db->quote($url) . " WHERE id ='" . intval($id) . "' AND vid =" . $vid);
                     ++$maxoption_data;
                 } else {
