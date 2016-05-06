@@ -759,7 +759,7 @@ a.btn {
     min-width:100%;
     min-height:100%;
     background-color: #ffffff;
-    background-image:url(/themes/default/images/header.png),linear-gradient(to bottom,#428bca 0,#245682 51px,rgba(255,255,255,1) 51px,rgba(255,255,255,1) 100%);
+    background-image:url(../images/header.png),linear-gradient(to bottom,#428bca 0,#245682 51px,rgba(255,255,255,1) 51px,rgba(255,255,255,1) 100%);
     background-repeat:no-repeat,repeat-x;
     background-position:left 51px,left top;
     background-size:100%,auto;
