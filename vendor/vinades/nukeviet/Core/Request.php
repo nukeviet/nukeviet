@@ -348,6 +348,7 @@ class Request
 
         $user_agent = ( string )$this->get_Env('HTTP_USER_AGENT');
         $user_agent = substr(htmlspecialchars($user_agent), 0, 255);
+        if(!empty($user_agent)) $user_agent = trim($user_agent);
         if (empty($user_agent) or $user_agent == '-') {
             $user_agent = 'none';
         }
