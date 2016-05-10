@@ -38,10 +38,6 @@ class Encoding
             return $compressed;
         }
 
-        if (($decompressed = @gzinflate($compressed)) !== false) {
-            return $decompressed;
-        }
-
         if (($decompressed = Encoding::compatible_gzinflate($compressed)) !== false) {
             return $decompressed;
         }
@@ -57,7 +53,11 @@ class Encoding
                 return $decompressed;
             }
         }
-
+        
+        if (($decompressed = @gzinflate($compressed)) !== false) {
+            return $decompressed;
+        }
+        
         return $compressed;
     }
 

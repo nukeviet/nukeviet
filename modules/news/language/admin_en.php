@@ -279,3 +279,7 @@ $lang_module['addtocat'] = 'Add featured article in the category';
 $lang_module['delete_from_cat'] = 'Delete posts from category';
 $lang_module['not_featured'] = 'No posts yet';
 $lang_module['notification_post_queue'] = 'Approve post <strong>%s</strong> by <strong>%s</strong><em>%s</em>';
+
+$lang_module['ad_block_show'] = 'Displaying the sub block';
+$lang_module['ad_block_top'] = 'Block top category';
+$lang_module['ad_block_bot'] = 'Block bottom category';
