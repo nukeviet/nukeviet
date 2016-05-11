@@ -13,7 +13,7 @@ if (! defined('NV_IS_MOD_USER')) {
 }
 
 // Dang nhap thanh vien thi khong duoc truy cap
-if (defined('NV_IS_USER')) {
+if (defined('NV_IS_USER') AND !defined('ACCESS_ADDUS')) {
     Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
     die();
 }
@@ -303,7 +303,7 @@ if ($checkss == $array_register['checkss']) {
         $array_register['first_name'] = $array_register['username'];
     }
 
-    if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3) {
+    if (!defined('ACCESS_ADDUS') AND ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 3)) {
         $sql = "INSERT INTO " . NV_MOD_TABLE . "_reg (username, md5username, password, email, first_name, last_name, regdate, question, answer, checknum, users_info) VALUES (
 			:username,
 			:md5username,
@@ -363,7 +363,7 @@ if ($checkss == $array_register['checkss']) {
 		(group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
 		question, answer, passlostkey, view_mail, remember, in_groups,
 		active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-        " . ($active_group_newusers ? 7 : 4) . ", 
+        " . ((defined('ACCESS_ADDUS') AND $group_id!=0) ? $group_id : ($active_group_newusers ? 7 : 4)) . ", 
 		:username,
 		:md5username,
 		:password,
@@ -373,7 +373,9 @@ if ($checkss == $array_register['checkss']) {
 		'', '', 0, " . NV_CURRENTTIME . ",
 		:your_question,
 		:answer,
-		'', 0, 1, '" . ($active_group_newusers ? '7' : '') . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+		'', 0, 1, 
+		'" . ((defined('ACCESS_ADDUS') AND $group_id!=0) ? $group_id : ($active_group_newusers ? 7 : 4)) . "', 
+		1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
         $data_insert = array();
         $data_insert['username'] = $array_register['username'];
@@ -395,13 +397,20 @@ if ($checkss == $array_register['checkss']) {
         } else {
             $query_field['userid'] = $userid;
             $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($active_group_newusers ? 7 : 4));
+			
+			if(defined('ACCESS_ADDUS') AND $group_id!=0){
+				$db->query('INSERT INTO ' . NV_MOD_TABLE . '_groups_users VALUES ('.$group_id.','.$userid.',0,1,0)');
+			}
+            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ((defined('ACCESS_ADDUS') AND $group_id!=0) ? $group_id : ($active_group_newusers ? 7 : 4)));
 
             $subject = $lang_module['account_register'];
             $message = sprintf($lang_module['account_register_info'], $array_register['first_name'], $global_config['site_name'], NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true), $array_register['username']);
             nv_sendmail($global_config['site_email'], $array_register['email'], $subject, $message);
             
-            if (! empty($global_config['auto_login_after_reg'])) {
+			if(defined('ACCESS_ADDUS') AND $group_id!=0){
+				 $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=groups/'.$group_id;
+			}
+			else if (! empty($global_config['auto_login_after_reg'])) {
                 // Auto login
                 $array_user = array(
                     'userid' => $userid,
@@ -439,7 +448,7 @@ if ($nv_Request->isset_request('get_usage_terms', 'post')) {
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-$contents = user_register($gfx_chk, $array_register['checkss'], $data_questions, $array_field_config, $custom_fields);
+$contents = user_register($gfx_chk, $array_register['checkss'], $data_questions, $array_field_config, $custom_fields,$group_id);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents);

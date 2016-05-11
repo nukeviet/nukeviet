@@ -47,10 +47,229 @@ $groupsList = array();
 while ($row = $result->fetch()) {
 	$count = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id=' . $row['group_id'] . ' AND userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();
 	if ($count > 0) {
+		$row['config']=unserialize($row['config']);
 		$groupsList[$row['group_id']] = $row;
 	}
 }
 
+//lấy danh sách user chưa kích hoạt
+if ($nv_Request->isset_request('gid,getuserid', 'post,get')){
+	$gid = $nv_Request->get_int('gid', 'post,get', 0);
+	
+	//Kich hoat thanh vien
+	if ($nv_Request->isset_request('act', 'get,post')) {
+	    $userid = $nv_Request->get_int('userid', 'get,post', 0);
+	
+	    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
+	    $row = $db->query($sql)->fetch();
+	    if (empty($row)) {
+	        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
+	        die();
+	    }
+	
+	    $sql = "INSERT INTO " . NV_MOD_TABLE . " (
+			username, md5username, password, email, first_name, last_name, gender, photo, birthday,
+			regdate, question,
+			answer, passlostkey, view_mail, remember, in_groups, active, checknum,
+			last_login, last_ip, last_agent, last_openid, idsite
+			) VALUES (
+			:username,
+			:md5_username,
+			:password,
+			:email,
+			:first_name,
+			:last_name,
+			'', '', 0, " . $row['regdate'] . ",
+			:question,
+			:answer,
+			'', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+	
+	    $data_insert = array();
+	    $data_insert['username'] = $row['username'];
+	    $data_insert['md5_username'] = nv_md5safe($row['username']);
+	    $data_insert['password'] = $row['password'];
+	    $data_insert['email'] = nv_strtolower($row['email']);
+	    $data_insert['first_name'] = $row['first_name'];
+	    $data_insert['last_name'] = $row['last_name'];
+	    $data_insert['question'] = $row['question'];
+	    $data_insert['answer'] = $row['answer'];
+	    $userid = $db->insert_id($sql, 'userid', $data_insert);
+	   	
+	    if ($userid) {
+	        // Luu vao bang OpenID
+	        if (! empty($row['openid_info'])) {
+	            $reg_attribs = unserialize(nv_base64_decode($row['openid_info']));
+	            $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $userid . ', :server, :opid , :email)');
+	            $stmt->bindParam(':server', $reg_attribs['server'], PDO::PARAM_STR);
+	            $stmt->bindParam(':opid', $reg_attribs['opid'], PDO::PARAM_STR);
+	            $stmt->bindParam(':email', $reg_attribs['email'], PDO::PARAM_STR);
+	            $stmt->execute();
+	        }
+			
+	        $db->query('INSERT INTO ' . NV_MOD_TABLE . '_groups_users VALUES('.$gid.','.$userid.',0,1,0)');
+			$db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4 or group_id='.$gid);
+			$db->query('UPDATE ' . NV_MOD_TABLE . ' SET group_id = '.$gid.', in_groups='.$gid.' WHERE userid='.$userid);
+	        $users_info = unserialize(nv_base64_decode($row['users_info']));
+	        $query_field = array();
+	        $query_field['userid'] = $userid;
+	        $result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY fid ASC');
+	        while ($row_f = $result_field->fetch()) {
+	            $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $db->quote($row_f['default_value']);
+	        }
+			 
+	        if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
+	            $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $row['userid']);
+
+	            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $user_info['userid']);
+
+	            $full_name = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
+	            $subject = $lang_module['adduser_register'];
+	            $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true), $row['username']);
+	            @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
+	        } else {
+	            $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $row['userid']);
+	        }
+	    }
+	    
+	    die('OK');
+	}
+	
+	$xtpl = new XTemplate('getuserid.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
+
+	$lang_module['fullname'] = $global_config['name_show'] == 0 ? $lang_module['lastname_firstname'] : $lang_module['firstname_lastname'];
+	$xtpl->assign('LANG', $lang_module);
+	$xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+	$xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
+	$xtpl->assign('GLOBAL_CONFIG', $global_config);
+	$xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
+	$xtpl->assign('MODULE_NAME', $module_name);
+	$xtpl->assign('MODULE_FILE', $module_file);
+	$xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&gid=' . $gid . '&getuserid=1');
+	
+	$array = array();
+	$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&amp;area=' . $area . '&amp;return=' . $return . '&amp;submit=1';
+	
+	if ($nv_Request->isset_request('submit', 'get')) {
+	    $array_user = array();
+	    $generate_page = '';
+	
+	    $array['user_id'] = $nv_Request->get_title('user_id', 'get', '');
+	    $array['username'] = $nv_Request->get_title('username', 'get', '');
+	    $array['full_name'] = $nv_Request->get_title('full_name', 'get', '');
+	    $array['email'] = $nv_Request->get_title('email', 'get', '');
+	
+	    $is_null = true;
+	    foreach ($array as $check) {
+	        if (! empty($check)) {
+	            $is_null = false;
+	            break;
+	        }
+	    }
+	
+	    $array_where = array();
+		
+		if (! empty($array['user_id'])) {
+	        $base_url .= '&amp;user_id=' . rawurlencode($array['user_id']);
+	        $array_where[] = "( userid = '" . $array['user_id'] . "' )";
+	    }
+	    
+	    if (! empty($array['username'])) {
+	        $base_url .= '&amp;username=' . rawurlencode($array['username']);
+	        $array_where[] = "( username LIKE '%" . $db->dblikeescape($array['username']) . "%' )";
+	    }
+	
+	    if (! empty($array['full_name'])) {
+	        $base_url .= '&amp;full_name=' . rawurlencode($array['full_name']);
+	
+	        $where_fullname = $global_config['name_show'] == 0 ? "concat(last_name,' ',first_name)" : "concat(first_name,' ',last_name)";
+	        $array_where[] =  "(" . $where_fullname ." LIKE '%" . $db->dblikeescape($array['full_name']) . "%' )";
+	    }
+	
+	    if (! empty($array['email'])) {
+	        $base_url .= '&amp;email=' . rawurlencode($array['email']);
+	        $array_where[] = "( email LIKE '%" . $db->dblikeescape($array['email']) . "%' )";
+	    }
+	
+	    $page = $nv_Request->get_int('page', 'get', 1);
+	    $per_page = 10;
+	
+	    $db->sqlreset()
+	        ->select('COUNT(*)')
+	        ->from(NV_MOD_TABLE.'_reg');
+	    if (! empty($array_where)) {
+	        $db->where(implode(' AND ', $array_where));
+	    }
+	
+	    $num_items = $db->query($db->sql())->fetchColumn();
+	
+	    $db->select('*')
+	        ->limit($per_page)
+	        ->offset(($page - 1) * $per_page);
+	    $result2 = $db->query($db->sql());
+	    while ($row = $result2->fetch()) {
+	        $array_user[$row['userid']] = $row;
+	    }
+	
+	    if (! empty($array_user)) {
+	        foreach ($array_user as $row) {
+	            $row['regdate'] = nv_date('d/m/Y H:i', $row['regdate']);
+	            $row['return'] = $row[$return];
+	            $xtpl->assign('ROW', $row);
+	            $xtpl->parse('resultdata.data.row');
+	        }
+	
+	        $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);
+	        if (! empty($generate_page)) {
+	            $xtpl->assign('GENERATE_PAGE', $generate_page);
+	            $xtpl->parse('resultdata.data.generate_page');
+	        }
+	
+	        $xtpl->parse('resultdata.data');
+	    } elseif ($nv_Request->isset_request('submit', 'get')) {
+	        $xtpl->parse('resultdata.nodata');
+	    }
+	
+	    $xtpl->parse('resultdata');
+	    $contents = $xtpl->text('resultdata');
+	
+	    echo $contents;
+		die();
+	}
+	else {
+	    $xtpl->parse('main');
+	    $contents = $xtpl->text('main');
+	
+	    echo $contents;
+		die();
+	}
+}
+
+// Xóa thành viên
+if ($nv_Request->isset_request('gid,del', 'post')) {
+	$gid = $nv_Request->get_int('gid', 'post', 0);
+    $uid = $nv_Request->get_int('del', 'post', 0);
+	if (! isset($groupsList[$gid]) or $gid < 10) {
+        die($lang_module['error_group_not_found']);
+    }
+
+	if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
+        $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
+        if (! empty($row)) {
+            if ($row['idsite'] != $global_config['idsite']) {
+                die($lang_module['error_group_in_site']);
+            }
+        } else {
+            die($lang_module['search_not_result']);
+        }
+    }
+
+    if (! nv_del_user( $uid)) {
+        die($lang_module['del_user_err']);
+    }
+
+    $nv_Cache->delMod($module_name);
+    die('OK');
+}
 // Them thanh vien vao nhom
 if ($nv_Request->isset_request('gid,uid', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
@@ -257,7 +476,18 @@ if (sizeof($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
 	    $xtpl->assign('GID', $group_id);
 
 	    if ($group_id > 9) {
-	        $xtpl->parse('userlist.adduser');
+	    	if($groupsList[$group_id]['config']['access_groups_add'] !=0){
+	    		$xtpl->parse('userlist.tools.addUserGroup');
+	    	}
+			if($groupsList[$group_id]['config']['access_addus'] !=0){
+	    		$xtpl->parse('userlist.tools.add_user');
+	    	}
+			if($groupsList[$group_id]['config']['access_waiting'] !=0){
+	    		$xtpl->parse('userlist.tools.user_waiting');
+	    	}
+			if($groupsList[$group_id]['config']['access_addus'] !=0 or $groupsList[$group_id]['config']['access_groups_add'] !=0 or $groupsList[$group_id]['config']['access_waiting'] !=0){
+	    		$xtpl->parse('userlist.tools');
+	    	}
 	    }
 	    $xtpl->parse('userlist');
 	    $contents = $xtpl->text('userlist');
@@ -373,18 +603,31 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
         $idsite = ($global_config['idsite'] == $groupsList[$group_id]['idsite']) ? 0 : $global_config['idsite'];
         foreach ($group_users as $_type => $arr_userids) {
             $xtpl->assign('PTITLE', sprintf($lang_module[$_type . '_in_group_caption'], $title, number_format($array_number[$_type], 0, ',', '.')));
+            $stt=1;
             foreach ($arr_userids as $_userid) {
 
                 $row = $array_userid[$_userid];
                 $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
+				$row['stt']=$stt;
                 $xtpl->assign('LOOP', $row);
 
-                if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite'])) {
+                if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite']) AND $_type != 'leaders') {
                 	if ($user_info['userid'] != $_userid) {
+                		if ($groupsList[$group_id]['config']['access_groups_del']) {
+	                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.deletemember');
+						}
+						if ($groupsList[$group_id]['config']['access_editus']) {
+							$xtpl->assign('LINK_EDIT', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/'.$group_id.'/'.$row['userid'],true));
+	                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.edituser');
+						}
+						if ($groupsList[$group_id]['config']['access_delus']) {
+	                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.deluser');
+						}
                 		$xtpl->parse('listUsers.' . $_type . '.loop.tools');
 					}
                 }
                 $xtpl->parse('listUsers.' . $_type . '.loop');
+				$stt++;
             }
 
             $generate_page = nv_generate_page($base_url . '&type=' . $_type, $array_number[$_type], $per_page, $page, 'true', 'false', 'nv_urldecode_ajax', 'id_' . $_type);
