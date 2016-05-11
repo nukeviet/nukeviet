@@ -1776,17 +1776,56 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
 
             $NvUpdate->module_info($exts);
         } elseif ($type == 'module') {
-            $exts = nv_getExtVersion(0);
-            $exts = nv_object2array($exts);
-            $exts = $exts['module'];
-            $onlineModules = array();
-            foreach ($exts as $m) {
-                $name = array_shift($m);
-                $onlineModules[$name] = $m;
-                unset($onlineModules[$name]['date']);
-                $onlineModules[$name]['pubtime'] = strtotime($m['date']);
+            $XML_exts = nv_getExtVersion(0);
+            
+            if ($XML_exts === false or is_string($XML_exts)) {
+                $NvUpdate->trigger_error($lang_module['update_error_check_version_ext']);
             }
-
+            
+            $XML_exts = $XML_exts->xpath('extension');
+            
+            $onlineModules = array();
+            foreach ($XML_exts as $extname => $values) {
+                $exts_type = trim((string )$values->type);
+                $exts_name = trim((string )$values->name);
+                if ($exts_type == 'module') {
+                    $onlineModules[$exts_name] = array(
+                        'id' => (int)$values->id,
+                        'type' => (string )$values->type,
+                        'name' => (string )$values->name,
+                        'version' => (string )$values->version,
+                        'date' => (string )$values->date,
+                        'new_version' => (string )$values->new_version,
+                        'new_date' => (string )$values->new_date,
+                        'author' => (string )$values->author,
+                        'license' => (string )$values->license,
+                        'mode' => (string )$values->mode,
+                        'message' => (string )$values->message,
+                        'link' => (string )$values->link,
+                        'support' => (string )$values->support,
+                        'updateable' => array(),
+                        'origin' => ((string )$values->origin) == 'true' ? true : false,
+                    );
+            
+                    $onlineModules[$exts_name]['pubtime'] = strtotime($onlineModules[$exts_name]['date']);
+            
+                    // Xu ly update
+                    $updateables = $values->xpath('updateable/upds/upd');
+            
+                    if (!empty($updateables)) {
+                        foreach ($updateables as $updateable) {
+                            $onlineModules[$exts_name]['updateable'][] = array(
+                                'fid' => (string )$updateable->upd_fid,
+                                'old' => explode(',', (string )$updateable->upd_old),
+                                'new' => (string )$updateable->upd_new,
+                            );
+                        }
+                    }
+            
+                    unset($updateables, $updateable);
+                }
+            }
+            
             $NvUpdate->module_com_info($onlineModules);
         } else {
             die('&nbsp;');
