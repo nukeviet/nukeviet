@@ -223,7 +223,8 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
             'mode' => 'getupdfile',
             'eid' => $eid,
             'fid' => $fid
-        )
+        ),
+        'timeout' => 0
     );
 
     // Delete temp file if exists

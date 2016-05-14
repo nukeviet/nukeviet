@@ -26,7 +26,7 @@
 				<tr>
 					<td>{LANG.theme}:</td>
 					<td>
-					<select name="theme" id="theme" class="form-control w200">
+					<select name="theme" id="theme" class="form-control w300">
 						<option value="">{DATA.theme.1}</option>
 						<!-- BEGIN: theme -->
 						<option value="{THEME.key}"{THEME.selected}>{THEME.key}</option>
@@ -37,10 +37,9 @@
 				<tr>
 					<td>{DATA.mobile.0}:</td>
 					<td>
-					<select name="mobile" id="mobile" class="form-control w200">
-						<option value="">{DATA.mobile.1}</option>
+					<select name="mobile" id="mobile" class="form-control w300">
 						<!-- BEGIN: loop -->
-						<option value="{MOBILE.key}"{MOBILE.selected}>{MOBILE.key}</option>
+						<option value="{MOBILE.key}"{MOBILE.selected}>{MOBILE.title}</option>
 						<!-- END: loop -->
 					</select></td>
 				</tr>
