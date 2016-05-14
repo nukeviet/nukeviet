@@ -3,7 +3,7 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-	$('#getUpd').html(nv_loading).removeClass('hide').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=getupdate&version={VERSION}&checksess={CHECKSESS}&num=" + nv_randomPassword(10));
+	$('#getUpd').html(nv_loading).removeClass('hide').load("index.php?{NV_NAME_VARIABLE}=webtools&{NV_OP_VARIABLE}=getupdate&version={VERSION}&package={PACKAGE}&checksess={CHECKSESS}&num=" + nv_randomPassword(10));
 });
 //]]>
 </script>

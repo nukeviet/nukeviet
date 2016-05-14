@@ -216,7 +216,7 @@ function nv_site_theme($contents, $full = true)
         $xtpl->assign('THEME_STAT_IMG', $theme_stat_img);
 
         // Change theme types
-        $mobile_theme = empty($module_info['mobile']) ? $global_config['mobile_theme'] : $module_info['mobile'];
+        $mobile_theme = empty($module_info['mobile']) ? $global_config['mobile_theme'] : (($module_info['mobile'] != ':pcmod' and $module_info['mobile'] != ':pcsite') ? $module_info['mobile'] : '');
         if (empty($mobile_theme) or empty($global_config['switch_mobi_des'])) {
             $array_theme_type = array_diff($global_config['array_theme_type'], array( 'm' ));
         } else {

@@ -92,8 +92,10 @@ class Database extends pdo
             }
             $i =0;
             $stmt = $this->prepare($_sql);
-            foreach ($data as $key => $value) {
-                $stmt->bindParam(':' . $key, $data[$key], PDO::PARAM_STR, strlen($value));
+            if(!empty($data)) {
+                foreach ($data as $key => $value) {
+                    $stmt->bindParam(':' . $key, $data[$key], PDO::PARAM_STR, strlen($value));
+                }
             }
             if ($this->dbtype == 'oci') {
                 $stmt->bindParam(':primary_key', $primary_key, PDO::PARAM_INT, 11);
