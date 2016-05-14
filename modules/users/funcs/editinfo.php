@@ -28,7 +28,7 @@ if (defined('NV_IS_USER_FORUM')) {
  * @param mixed $login
  * @return
  */
-function nv_check_username_change($login)
+function nv_check_username_change($login, $edit_userid)
 {
     global $db, $lang_module, $user_info;
 
@@ -49,12 +49,12 @@ function nv_check_username_change($login)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $sql = "SELECT userid FROM " . NV_MOD_TABLE . " WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe($login) . "'";
+    $sql = "SELECT userid FROM " . NV_MOD_TABLE . " WHERE userid!=" . $edit_userid . " AND md5username='" . nv_md5safe($login) . "'";
     if ($db->query($sql)->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
 
-    $sql = "SELECT userid FROM " . NV_MOD_TABLE . "_reg WHERE userid!=" . $user_info['userid'] . " AND md5username='" . nv_md5safe($login) . "'";
+    $sql = "SELECT userid FROM " . NV_MOD_TABLE . "_reg WHERE userid!=" . $edit_userid . " AND md5username='" . nv_md5safe($login) . "'";
     if ($db->query($sql)->fetchColumn()) {
         return sprintf($lang_module['account_registered_name'], $login);
     }
@@ -68,7 +68,7 @@ function nv_check_username_change($login)
  * @param mixed $email
  * @return
  */
-function nv_check_email_change($email)
+function nv_check_email_change($email, $edit_userid)
 {
     global $db, $lang_module, $user_info;
 
@@ -92,7 +92,7 @@ function nv_check_email_change($email)
     $pattern = implode('.?', $pattern);
     $pattern = '^' . $pattern . '@' . $right . '$';
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $edit_userid . ' AND email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
@@ -106,7 +106,7 @@ function nv_check_email_change($email)
         return sprintf($lang_module['email_registered_name'], $email);
     }
 
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE userid!=' . $user_info['userid'] . ' AND email RLIKE :pattern');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE userid!=' . $edit_userid . ' AND email RLIKE :pattern');
     $stmt->bindParam(':pattern', $pattern, PDO::PARAM_STR);
     $stmt->execute();
     if ($stmt->fetchColumn()) {
@@ -205,10 +205,17 @@ $array_data['checkss'] = md5($client_info['session_id'] . $global_config['siteke
 
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-//nếu là trưởng nhóm sửa thì $user_info['userid'] = $userid được sửa còn không thì là $user_info['userid'] của thành viên tự sửa
-$user_info['userid'] = (defined('ACCESS_EDITUS')) ? $userid : $user_info['userid'];
+if (isset($array_op[0]) and isset($array_op[1]) and ! defined('ACCESS_EDITUS')) {
+	die(json_encode(array(
+	    'status' => 'error',
+	    'input' => 'last_name',
+	    'mess' => $lang_module['no_premission_leader'] )));
+}
 
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_info['userid'];
+//nếu là trưởng nhóm sửa thì $edit_userid  = $userid được sửa còn không thì là $user_info['userid'] của thành viên tự sửa
+$edit_userid = (defined('ACCESS_EDITUS')) ? $userid : $user_info['userid'];
+
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $edit_userid;
 $query = $db->query($sql);
 $row = $query->fetch();
 
@@ -257,7 +264,7 @@ if (( int )$row['safemode'] > 0) {
                 'mess' => $lang_module['verifykey_error'] )));
         }
 
-        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET safemode=0, safekey='' WHERE userid=" . $user_info['userid']);
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET safemode=0, safekey='' WHERE userid=" . $edit_userid);
         $stmt->execute();
 
         die(json_encode(array(
@@ -285,23 +292,23 @@ $groups_list = array();
 $types = array(
     'basic' );
 
-if (!defined('ACCESS_EDITUS')) {// quyền sửa
+if (! defined('ACCESS_EDITUS')) {// quyền sửa
     $types[] = 'avatar';
     $types[] = 'question';
 }
-if (!defined('ACCESS_EDITUS') OR (defined('ACCESS_EDITUS') AND defined('ACCESS_PASSUS'))) {//quyền đổi mk
+if (! defined('ACCESS_EDITUS') or (defined('ACCESS_EDITUS') and defined('ACCESS_PASSUS'))) {//quyền đổi mk
     $types[] = 'password';
 }
-if ($array_data['allowloginchange'] AND !defined('ACCESS_EDITUS')) {
+if ($array_data['allowloginchange'] and ! defined('ACCESS_EDITUS')) {
     $types[] = 'username';
 }
-if ($array_data['allowmailchange'] AND !defined('ACCESS_EDITUS')) {
+if ($array_data['allowmailchange'] and ! defined('ACCESS_EDITUS')) {
     $types[] = 'email';
 }
-if (defined('NV_OPENID_ALLOWED') AND !defined('ACCESS_EDITUS')) {
+if (defined('NV_OPENID_ALLOWED') and ! defined('ACCESS_EDITUS')) {
     $types[] = 'openid';
 }
-if ($global_config['allowuserpublic'] AND !defined('ACCESS_EDITUS')) {
+if ($global_config['allowuserpublic'] and ! defined('ACCESS_EDITUS')) {
     $groups_list = nv_groups_list_pub2();
     if (! empty($groups_list)) {
         $types[] = 'group';
@@ -310,19 +317,19 @@ if ($global_config['allowuserpublic'] AND !defined('ACCESS_EDITUS')) {
 if (! empty($array_field_config)) {
     $types[] = 'others';
 }
-if (! empty($array_field_config) AND !defined('ACCESS_EDITUS')) {
+if (! empty($array_field_config) and ! defined('ACCESS_EDITUS')) {
     $types[] = 'safemode';
 }
 
-if(defined('ACCESS_EDITUS')){//trường hợp trưởng nhóm truy cập sửa thông tin member
+if (defined('ACCESS_EDITUS')) {//trường hợp trưởng nhóm truy cập sửa thông tin member
 	$array_data['group_id'] = $group_id;
-	$array_data['userid'] = $user_info['userid'];
-	$array_data['type'] = (isset($array_op[3]) and ! empty($array_op[3]) and in_array($array_op[3], $types)) ? $array_op[3] : 'basic';
-	$base_url=NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $group_id . '/' . $user_info['userid'];
-}
-else {
+	$array_data['userid'] = $edit_userid;
+	$array_data['type'] = (isset($array_op[3]) and ! empty($array_op[3]) and in_array($array_op[3], $types)) ? $array_op[3] : ((isset($array_op[3]) and ! empty($array_op[3]) and $array_op[3] == 'password') ? $array_op[3] : 'basic');
+	
+	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $group_id . '/' . $edit_userid;
+}else {
 	$array_data['type'] = (isset($array_op[1]) and ! empty($array_op[1]) and in_array($array_op[1], $types)) ? $array_op[1] : 'basic';
-	$base_url=NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo';
+	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo';
 }
 
 //OpenID add
@@ -355,7 +362,7 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
         die();
     }
 
-    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $user_info['userid'] . ' AND email= :email ');
+    $stmt = $db->prepare('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . ' WHERE userid!=' . $edit_userid . ' AND email= :email ');
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
     $count = $stmt->fetchColumn();
@@ -379,7 +386,7 @@ if (in_array('openid', $types) and $nv_Request->isset_request('server', 'get')) 
         }
     }
 
-    $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $user_info['userid'] . ', :openid, :opid, :email )');
+    $stmt = $db->prepare('INSERT INTO ' . NV_MOD_TABLE . '_openid VALUES (' . $edit_userid . ', :openid, :opid, :email )');
     $stmt->bindParam(':openid', $server, PDO::PARAM_STR);
     $stmt->bindParam(':opid', $opid, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -413,7 +420,7 @@ if ($checkss == $array_data['checkss'] and $array_data['type'] == 'basic') {
         $array_data['first_name'] = ! empty($row['first_name']) ? $row['first_name'] : $row['username'];
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET first_name= :first_name, last_name= :last_name, gender= :gender, birthday=' . $array_data['birthday'] . ', view_mail=' . $array_data['view_mail'] . ' WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET first_name= :first_name, last_name= :last_name, gender= :gender, birthday=' . $array_data['birthday'] . ', view_mail=' . $array_data['view_mail'] . ' WHERE userid=' . $edit_userid);
 
     $stmt->bindParam(':first_name', $array_data['first_name'], PDO::PARAM_STR);
     $stmt->bindParam(':last_name', $array_data['last_name'], PDO::PARAM_STR);
@@ -441,7 +448,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username'
     }
 
     if ($nv_username != $row['username']) {
-        $checkusername = nv_check_username_change($nv_username);
+        $checkusername = nv_check_username_change($nv_username, $edit_userid);
         if (! empty($checkusername)) {
             die(json_encode(array(
                 'status' => 'error',
@@ -452,7 +459,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username'
 
     $md5_username = nv_md5safe($nv_username);
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET username= :username, md5username= :md5username WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET username= :username, md5username= :md5username WHERE userid=' . $edit_userid);
     $stmt->bindParam(':username', $nv_username, PDO::PARAM_STR);
     $stmt->bindParam(':md5username', $md5_username, PDO::PARAM_STR);
     $stmt->execute();
@@ -492,7 +499,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
             'mess' => $lang_global['incorrect_password'] )));
     }
 
-    $checkemail = nv_check_email_change($nv_email);
+    $checkemail = nv_check_email_change($nv_email, $edit_userid);
     if (! empty($checkemail)) {
         die(json_encode(array(
             'status' => 'error',
@@ -572,7 +579,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
 
         $nv_Request->unset_request('verifykey', 'session');
 
-        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email= :email WHERE userid=' . $user_info['userid']);
+        $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET email= :email WHERE userid=' . $edit_userid);
         $stmt->bindParam(':email', $nv_email, PDO::PARAM_STR);
         $stmt->execute();
 
@@ -594,8 +601,16 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password'
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     $new_password = $nv_Request->get_title('new_password', 'post', '');
     $re_password = $nv_Request->get_title('re_password', 'post', '');
-
-    if (! empty($row['password']) and ! $crypt->validate_password($nv_password, $row['password']) and !defined('ACCESS_EDITUS')) {
+	
+	//kiểm tra lại quyền sửa mật khẩu
+	if (! empty($group_id) and ! empty($edit_userid) and ! defined('ACCESS_PASSUS')) {
+        die(json_encode(array(
+            'status' => 'error',
+            'input' => 'new_password',
+            'mess' => $lang_module['no_premission_pass'] )));
+    }
+	
+    if (! empty($row['password']) and ! $crypt->validate_password($nv_password, $row['password']) and ! defined('ACCESS_PASSUS')) {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'password',
@@ -618,7 +633,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password'
 
     $re_password = $crypt->hash_password($new_password, $global_config['hashprefix']);
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET password= :password WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET password= :password WHERE userid=' . $edit_userid);
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 
@@ -661,7 +676,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'question'
             'mess' => $lang_global['incorrect_password'] )));
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET question= :question, answer= :answer WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET question= :question, answer= :answer WHERE userid=' . $edit_userid);
     $stmt->bindParam(':question', $your_question, PDO::PARAM_STR);
     $stmt->bindParam(':answer', $answer, PDO::PARAM_STR);
     $stmt->execute();
@@ -698,7 +713,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'openid') 
 //Groups
 elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     $array_old_groups = array();
-    $result_gru = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $user_info['userid']);
+    $result_gru = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $edit_userid);
     while ($row_gru = $result_gru->fetch()) {
         $array_old_groups[] = $row_gru['group_id'];
     }
@@ -711,7 +726,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     $in_groups_del = array_diff($array_old_groups, $in_groups);
     if (! empty($in_groups_del)) {
         foreach ($in_groups_del as $gid) {
-            nv_groups_del_user($gid, $user_info['userid'], $module_data);
+            nv_groups_del_user($gid, $edit_userid, $module_data);
         }
     }
 
@@ -719,7 +734,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
     if (! empty($in_groups_add)) {
         foreach ($in_groups_add as $gid) {
         	$approved = $groups_list[$gid]['group_type'] == 1 ? 0 : 1;
-            if (nv_groups_add_user($gid, $user_info['userid'], $approved, $module_data)) {
+            if (nv_groups_add_user($gid, $edit_userid, $approved, $module_data)) {
             	// Gửi thư thông báo kiểm duyệt
             	if ($groups_list[$gid]['group_type'] == 1) {
             		// Danh sách email trưởng nhóm
@@ -742,7 +757,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
         }
     }
 
-    $db->query("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $user_info['userid']);
+    $db->query("UPDATE " . NV_MOD_TABLE . " SET in_groups='" . implode(',', $in_groups) . "' WHERE userid=" . $edit_userid);
     die(json_encode(array(
         'status' => 'ok',
         'input' => nv_url_rewrite($base_url . '/group', true),
@@ -751,11 +766,11 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
 //Others
 elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'others') {
     $query_field = array();
-    $userid = $user_info['userid'];
+    $userid = $edit_userid;
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
     require NV_ROOTDIR . '/modules/users/fields.check.php';
 
-    $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $user_info['userid']);
+    $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $edit_userid);
 
     die(json_encode(array(
         'status' => 'ok',
@@ -780,7 +795,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
             }
             $row['safekey'] = md5(nv_genpass($rand));
 
-            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET safekey= :safekey WHERE userid=' . $user_info['userid']);
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET safekey= :safekey WHERE userid=' . $edit_userid);
             $stmt->bindParam(':safekey', $row['safekey'], PDO::PARAM_STR);
             $stmt->execute();
             $nv_Request->set_Session('safesend', 0);
@@ -816,7 +831,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
             'mess' => $lang_module['verifykey_error'] )));
     }
 
-    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET safemode=1, safekey= :safekey WHERE userid=' . $user_info['userid']);
+    $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET safemode=1, safekey= :safekey WHERE userid=' . $edit_userid);
     $stmt->bindParam(':safekey', $row['safekey'], PDO::PARAM_STR);
     $stmt->execute();
 
@@ -834,7 +849,7 @@ if (! defined('NV_EDITOR')) {
 }
 require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $user_info['userid'];
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $edit_userid;
 $result = $db->query($sql);
 $custom_fields = $result->fetch();
 
@@ -884,7 +899,7 @@ while ($row2 = $result->fetch()) {
 
 $data_openid = array();
 if (in_array('openid', $types)) {
-    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $user_info['userid'];
+    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_openid WHERE userid=' . $edit_userid;
     $query = $db->query($sql);
     while ($row3 = $query->fetch()) {
         $data_openid[] = array(
@@ -898,7 +913,7 @@ if (in_array('openid', $types)) {
 $groups = array();
 if (in_array('group', $types)) {
     $my_groups = array();
-    $result_gru = $db->query('SELECT group_id, is_leader, approved FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $user_info['userid']);
+    $result_gru = $db->query('SELECT group_id, is_leader, approved FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $edit_userid);
     while ($row_gru = $result_gru->fetch()) {
         $my_groups[$row_gru['group_id']] = $row_gru;
     }

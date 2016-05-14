@@ -197,13 +197,13 @@ $("a.demote").click(function() {
 	                <!--<i class="fa fa-star">&nbsp;</i> <a class="promote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.promote}</a> - -->
 	                
 		                <!-- BEGIN: deletemember -->
-							<i class="fa fa-ban">&nbsp;</i> <a class="deletemember" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a> -
+							<i class="fa fa-ban">&nbsp;</i> <a class="deletemember" href="javascript:void(0);" data-userid="{LOOP.userid}">{LANG.exclude_user2}</a> -
 						<!-- END: deletemember -->
 						<!-- BEGIN: edituser -->
 							<i class="fa fa-pencil-square-o">&nbsp;</i> <a href="{LINK_EDIT}" class="edituser">{GLANG.edit}</a> -
 						<!-- END: edituser -->
 						<!-- BEGIN: deluser -->
-							<i class="fa fa-trash-o">&nbsp;</i> <a class="deluser" href="javascript:void(0);" title="{LOOP.userid}">{GLANG.delete}</a>
+							<i class="fa fa-trash-o">&nbsp;</i> <a class="deluser" href="javascript:void(0);" data-userid="{LOOP.userid}">{GLANG.delete}</a>
 						<!-- END: deluser -->
 					<!-- END: tools -->
 					</td>
@@ -222,7 +222,7 @@ $("a.deluser").click(function() {
 	confirm("{LANG.delConfirm} ?") && $.ajax({
 		type : "POST",
 		url : "{MODULE_URL}={OP}",
-		data : "gid={GID}&del=" + $(this).attr("title"),
+		data : "gid={GID}&del=" + $(this).attr("data-userid"),
 		success : function(a) {
 			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
 		}
@@ -233,7 +233,7 @@ $("a.deletemember").click(function() {
 	confirm("{LANG.delConfirm} ?") && $.ajax({
 		type : "POST",
 		url : "{MODULE_URL}={OP}",
-		data : "gid={GID}&exclude=" + $(this).attr("title"),
+		data : "gid={GID}&exclude=" + $(this).attr("data-userid"),
 		success : function(a) {
 			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
 		}
@@ -282,7 +282,7 @@ $("a.promote").click(function() {
         $("#uid").select2({
             placeholder: "{LANG.search_id}",
             ajax: {
-            url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&get_user_json=1',
+            url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&get_user_json=1&gid={GID}',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -305,7 +305,14 @@ $("a.promote").click(function() {
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
             minimumInputLength: 3,
             templateResult: formatRepo, // omitted for brevity, see the source of this page
-            templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+            templateSelection: formatRepoSelection, // omitted for brevity, see the source of this page
+           	language: {
+		    inputTooShort: function(args) {
+		      // args.minimum is the minimum required length
+		      // args.input is the user-typed text
+		      return "{MIN_SEARCH}";
+		    }
+		   }
         });
     });
 

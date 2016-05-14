@@ -15,10 +15,33 @@ if (! defined('NV_IS_MOD_USER')) {
 $page_title = $lang_module['group_manage'];
 $contents = '';
 
-if ($nv_Request->isset_request('get_user_json', 'post, get')) {
-    $q = $nv_Request->get_title('q', 'post, get', '');
+// Lay danh sach nhom
+$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_groups WHERE idsite = ' . $global_config['idsite'] . ' or (idsite =0 AND group_id > 3 AND siteus = 1) ORDER BY idsite, weight';
+$result = $db->query($sql);
+$groupsList = array();
+while ($row = $result->fetch()) {
+	$count = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id=' . $row['group_id'] . ' AND userid=' . $user_info['userid'] . ' AND is_leader=1')->rowCount();
+	
+	if ($count > 0) {
+		$row['config'] = unserialize($row['config']);
+		$groupsList[$row['group_id']] = $row;
+	}
+}
 
-    $db->sqlreset()->select('userid, username, email, first_name, last_name')->from(NV_MOD_TABLE)->where('( username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name ) AND userid NOT IN (SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users)')->order('username ASC')->limit(20);
+if ($nv_Request->isset_request('gid, get_user_json ', 'post, get')) {
+    $q = $nv_Request->get_title('q', 'post, get', '');
+	$gid = $nv_Request->get_int('gid', 'post, get', 0);
+	
+	if (! isset($groupsList[$gid])) {
+		die($lang_module['no_premission_leader']);
+	}
+	
+    $db->sqlreset()
+    	->select('userid, username, email, first_name, last_name')
+    	->from(NV_MOD_TABLE)
+    	->where('( username LIKE :username OR email LIKE :email OR first_name like :first_name OR last_name like :last_name ) AND userid NOT IN (SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users)')
+    	->order('username ASC')
+    	->limit(20);
 
     $sth = $db->prepare($db->sql());
     $sth->bindValue(':username', '%' . $q . '%', PDO::PARAM_STR);
@@ -40,25 +63,17 @@ if ($nv_Request->isset_request('get_user_json', 'post, get')) {
     exit();
 }
 
-// Lay danh sach nhom
-$sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_groups WHERE idsite = ' . $global_config['idsite'] . ' or (idsite =0 AND group_id > 3 AND siteus = 1) ORDER BY idsite, weight';
-$result = $db->query($sql);
-$groupsList = array();
-while ($row = $result->fetch()) {
-	$count = $db->query('SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id=' . $row['group_id'] . ' AND userid=' . $user_info['userid'] . ' AND is_leader=1')->fetchColumn();
-	if ($count > 0) {
-		$row['config']=unserialize($row['config']);
-		$groupsList[$row['group_id']] = $row;
-	}
-}
-
 //lấy danh sách user chưa kích hoạt
-if ($nv_Request->isset_request('gid,getuserid', 'post,get')){
-	$gid = $nv_Request->get_int('gid', 'post,get', 0);
+if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
+	$gid = $nv_Request->get_int('gid', 'post, get', 0);
+	
+	if (! isset($groupsList[$gid])) {
+		die($lang_module['no_premission_leader']);
+	}
 	
 	//Kich hoat thanh vien
-	if ($nv_Request->isset_request('act', 'get,post')) {
-	    $userid = $nv_Request->get_int('userid', 'get,post', 0);
+	if ($nv_Request->isset_request('act', 'get, post')) {
+	    $userid = $nv_Request->get_int('userid', 'get, post', 0);
 	
 	    $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
 	    $row = $db->query($sql)->fetch();
@@ -311,6 +326,11 @@ if ($nv_Request->isset_request('gid,uid', 'post')) {
 if ($nv_Request->isset_request('gid,exclude', 'post')) {
     $gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('exclude', 'post', 0);
+	
+	if ($uid == $user_info['userid']) {
+        die($lang_module['note_remove_leader']);
+    }
+	
     if (! isset($groupsList[$gid]) or $gid < 10) {
         die($lang_module['error_group_not_found']);
     }
@@ -461,34 +481,36 @@ $xtpl->assign('OP', $op);
 if (sizeof($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
     $group_id = $array_op[1];
     if (! isset($groupsList[$group_id]) or ! ($group_id < 4 or $group_id > 9)) {
-        Header('Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+        Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op, true));
         die();
     }
 
 	// Kiem tra lai quyen truong nhom
 	$count = $db->query( 'SELECT COUNT(*) FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id=' . $group_id . ' AND is_leader=1 AND userid=' . $user_info['userid'] )->fetchColumn();
-	if ($count>0) {
+	if ($count > 0) {
 	    $filtersql = ' userid NOT IN (SELECT userid FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id=' . $group_id . ')';
 	    if ($groupsList[$group_id]['idsite'] != $global_config['idsite'] and $groupsList[$group_id]['idsite'] == 0) {
 	        $filtersql .= ' AND idsite=' . $global_config['idsite'];
 	    }
 	    $xtpl->assign('FILTERSQL', nv_base64_encode($crypt->aes_encrypt($filtersql, md5($global_config['sitekey'] . $client_info['session_id']))));
 	    $xtpl->assign('GID', $group_id);
-
+		$xtpl->assign('MIN_SEARCH', sprintf($lang_module['min_search'], NV_MIN_SEARCH_LENGTH));
+		
 	    if ($group_id > 9) {
-	    	if($groupsList[$group_id]['config']['access_groups_add'] !=0){
+	    	if($groupsList[$group_id]['config']['access_groups_add'] != 0){
 	    		$xtpl->parse('userlist.tools.addUserGroup');
 	    	}
-			if($groupsList[$group_id]['config']['access_addus'] !=0){
+			if($groupsList[$group_id]['config']['access_addus'] != 0){
 	    		$xtpl->parse('userlist.tools.add_user');
 	    	}
-			if($groupsList[$group_id]['config']['access_waiting'] !=0){
+			if($groupsList[$group_id]['config']['access_waiting'] != 0){
 	    		$xtpl->parse('userlist.tools.user_waiting');
 	    	}
-			if($groupsList[$group_id]['config']['access_addus'] !=0 or $groupsList[$group_id]['config']['access_groups_add'] !=0 or $groupsList[$group_id]['config']['access_waiting'] !=0){
+			if($groupsList[$group_id]['config']['access_addus'] != 0 or $groupsList[$group_id]['config']['access_groups_add'] != 0 or $groupsList[$group_id]['config']['access_waiting'] != 0){
 	    		$xtpl->parse('userlist.tools');
 	    	}
 	    }
+		
 	    $xtpl->parse('userlist');
 	    $contents = $xtpl->text('userlist');
 	} else {
@@ -608,21 +630,28 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
 
                 $row = $array_userid[$_userid];
                 $row['full_name'] = nv_show_name_user($row['first_name'], $row['last_name'], $row['username']);
-				$row['stt']=$stt;
+				$row['stt'] = $stt;
                 $xtpl->assign('LOOP', $row);
 
-                if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite']) AND $_type != 'leaders') {
+                if ($group_id > 3 and ($idsite == 0 or $idsite == $row['idsite']) and $_type != 'leaders') {
                 	if ($user_info['userid'] != $_userid) {
                 		if ($groupsList[$group_id]['config']['access_groups_del']) {
 	                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.deletemember');
 						}
-						if ($groupsList[$group_id]['config']['access_editus']) {
-							$xtpl->assign('LINK_EDIT', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/'.$group_id.'/'.$row['userid'],true));
-	                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.edituser');
+						
+						//kiểm tra thành viên có phải là admin k.
+						$result_admin = $db->query('SELECT admin_id FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id = ' . $_userid );
+		
+						if (! $row_admin = $result_admin->fetch()) {
+							if ($groupsList[$group_id]['config']['access_editus']) {
+								$xtpl->assign('LINK_EDIT', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/' . $group_id . '/' . $row['userid'], true));
+		                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.edituser');
+							}
+							if ($groupsList[$group_id]['config']['access_delus']) {
+		                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.deluser');
+							}
 						}
-						if ($groupsList[$group_id]['config']['access_delus']) {
-	                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.deluser');
-						}
+						
                 		$xtpl->parse('listUsers.' . $_type . '.loop.tools');
 					}
                 }

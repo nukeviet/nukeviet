@@ -75,7 +75,7 @@ function validUserLog($array_user, $remember, $opid, $current_mode = 0)
  */
 function nv_del_user($userid)
 {
-    global $db, $global_config, $nv_Request, $module_name, $user_info;
+    global $db, $global_config, $nv_Request, $module_name, $user_info, $lang_module;
 
 	$sql = 'SELECT group_id, username, first_name, last_name, email, photo, in_groups, idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid;
 	$row = $db->query($sql)->fetch(3);
@@ -122,30 +122,40 @@ function nv_del_user($userid)
 	}
 }
 
-$group_id=0;
-if(defined('NV_IS_USER') AND isset($array_op[0]) AND ($array_op[0]=='register' OR $array_op[0]=='editinfo'))
+$group_id = 0;
+if (defined('NV_IS_USER') and isset($array_op[0]) and isset($array_op[1]) and ($array_op[0] == 'register' or $array_op[0] == 'editinfo'))
 {
-	$sql='SELECT group_id, title, config FROM ' . NV_MOD_TABLE . '_groups';
-	$group_lists=$nv_Cache->db($sql, 'group_id', $module_name);
+	$sql = 'SELECT group_id, title, config FROM ' . NV_MOD_TABLE . '_groups';
+	$_query = $db->query( $sql );
+	$group_lists = array();
+	while( $_row = $_query->fetch() )
+	{
+	  	$group_lists[$_row['group_id']] = $_row;
+	}
 	
-	if(isset($group_lists[$array_op[1]])){ // trường hợp trưởng nhóm truy cập sửa thông tin member thì $array_op[1]= group_id
+	//$group_lists = $nv_Cache->db($sql, 'group_id', $module_name);
+	
+	if (isset($group_lists[$array_op[1]])) { // trường hợp trưởng nhóm truy cập sửa thông tin member thì $array_op[1]= group_id
 		$result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users WHERE group_id = ' . $array_op[1] . ' AND userid = ' . $user_info['userid'] . ' AND is_leader = 1');
 		
 		if ($row = $result->fetch()) {
 			$group = $group_lists[$row['group_id']];
-			$group['config']=unserialize($group['config']);
-			if($group['config']['access_addus'] AND $array_op[0]=='register'){// đăng kí
+			$group['config'] = unserialize($group['config']);
+			
+			if($group['config']['access_addus'] and $array_op[0] == 'register'){// đăng kí
 				$op = 'register';
 				$module_info['funcs'][$op] = $sys_mods[$module_name]['funcs'][$op];
 				$group_id = $row['group_id'];
 				define('ACCESS_ADDUS', $group['config']['access_addus']);
-			}
-			elseif ($group['config']['access_editus'] AND $array_op[0]=='editinfo') {// sửa thông tin
+			}else if ($group['config']['access_editus'] and $array_op[0] == 'editinfo') {// sửa thông tin
 				$group_id = $row['group_id'];
+				
 				$result = $db->query('SELECT group_id FROM ' . NV_MOD_TABLE . '_groups_users 
-						WHERE group_id = ' . $group_id . ' AND userid = ' . $array_op[2]. ' AND is_leader = 0');
-				if ($row = $result->fetch()){// nếu tài khoản nằm trong nhóm đó thì được quyền sửa
+						WHERE group_id = ' . $group_id . ' and userid = ' . $array_op[2]. ' and is_leader = 0');
+				
+				if ($row = $result->fetch()) {// nếu tài khoản nằm trong nhóm đó thì được quyền sửa
 					$userid = $array_op[2];
+					
 					if ($group['config']['access_passus']) {
 						define('ACCESS_PASSUS', $group['config']['access_passus']);
 					}

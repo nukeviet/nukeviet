@@ -344,3 +344,7 @@ $lang_module['adduser_register'] = 'Tài khoản của bạn đã được tạo
 $lang_module['adduser_register_info'] = 'Xin chào %1$s,<br /><br />Tài khoản của bạn tại website %2$s đã được kích hoạt. Dưới đây là thông tin đăng nhập:<br /><br />URL: <a href="%3$s">%3$s</a><br />Tên tài khoản: %4$s<br /><br />Đây là thư tự động được gửi đến hòm thư điện tử của bạn từ website %2$s. Nếu bạn không hiểu gì về nội dung bức thư này, đơn giản hãy xóa nó đi.<br /><br />Quản trị site';
 $lang_module['noresult'] = 'Không có kết quả nào phù hợp với yêu cầu của bạn';
 $lang_module['STT']='STT';
+$lang_module['min_search']='Vui lòng nhập nhiều hơn %s ký tự';
+$lang_module['no_premission_pass']='Bạn không có quyền đổi mật khẩu thành viên!';
+$lang_module['info_user'] = 'Để đăng ký tài khoản, bạn cần khai báo tất cả các ô trống dưới đây';
+$lang_module['note_remove_leader'] = 'Bạn không thể loại bỏ chính mình ra khỏi nhóm!';
