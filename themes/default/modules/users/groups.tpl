@@ -197,13 +197,13 @@ $("a.demote").click(function() {
 	                <!--<i class="fa fa-star">&nbsp;</i> <a class="promote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.promote}</a> - -->
 	                
 		                <!-- BEGIN: deletemember -->
-							<i class="fa fa-ban">&nbsp;</i> <a class="deletemember" href="javascript:void(0);" data-userid="{LOOP.userid}">{LANG.exclude_user2}</a> -
+							<i class="fa fa-ban">&nbsp;</i><a class="deletemember" href="javascript:void(0);" data-userid="{LOOP.userid}">{LANG.exclude_user2}</a>&nbsp; 
 						<!-- END: deletemember -->
 						<!-- BEGIN: edituser -->
-							<i class="fa fa-pencil-square-o">&nbsp;</i> <a href="{LINK_EDIT}" class="edituser">{GLANG.edit}</a> -
+							<i class="fa fa-pencil-square-o">&nbsp;</i><a href="{LINK_EDIT}" class="edituser">{GLANG.edit}</a>&nbsp; 
 						<!-- END: edituser -->
 						<!-- BEGIN: deluser -->
-							<i class="fa fa-trash-o">&nbsp;</i> <a class="deluser" href="javascript:void(0);" data-userid="{LOOP.userid}">{GLANG.delete}</a>
+							<i class="fa fa-trash-o">&nbsp;</i><a class="deluser" href="javascript:void(0);" data-userid="{LOOP.userid}">{GLANG.delete}</a>
 						<!-- END: deluser -->
 					<!-- END: tools -->
 					</td>

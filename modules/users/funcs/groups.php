@@ -263,10 +263,24 @@ if ($nv_Request->isset_request('gid, getuserid', 'post, get')) {
 if ($nv_Request->isset_request('gid,del', 'post')) {
 	$gid = $nv_Request->get_int('gid', 'post', 0);
     $uid = $nv_Request->get_int('del', 'post', 0);
+	
 	if (! isset($groupsList[$gid]) or $gid < 10) {
         die($lang_module['error_group_not_found']);
     }
-
+	
+	//kiểm tra user_id xóa có nằm trong nhóm được quản lí k, hoặc nằm trong nhóm khác
+	$result_user = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $uid );
+	$array_groups_user = array();
+	while ($_row = $result_user->fetch()) {
+		$array_groups_user[$_row['group_id']] = $_row;
+	}
+	
+	if (! isset($array_groups_user[$gid])){// không nằm trong danh sách nhóm dc quản lí
+		die($lang_module['del_user_err']);
+	}else{// nằm ở 2 nhóm khác
+		die($lang_module['not_del_user']);
+	}
+	
 	if ($groupsList[$gid]['idsite'] != $global_config['idsite'] and $groupsList[$gid]['idsite'] == 0) {
         $row = $db->query('SELECT idsite FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $uid)->fetch();
         if (! empty($row)) {
@@ -647,7 +661,10 @@ if ($nv_Request->isset_request('listUsers', 'get')) {
 								$xtpl->assign('LINK_EDIT', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=editinfo/' . $group_id . '/' . $row['userid'], true));
 		                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.edituser');
 							}
-							if ($groupsList[$group_id]['config']['access_delus']) {
+							
+							$count = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_groups_users WHERE userid=' . $_userid )->rowCount();
+							
+							if ($groupsList[$group_id]['config']['access_delus'] and $count == 1) {
 		                		$xtpl->parse('listUsers.' . $_type . '.loop.tools.deluser');
 							}
 						}
