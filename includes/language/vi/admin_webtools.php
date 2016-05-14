@@ -74,6 +74,7 @@ $lang_module['error_unknow'] = 'Lỗi chưa xác định';
 
 $lang_module['get_update'] = 'Cập nhật hệ thống';
 $lang_module['get_update_error_file_download'] = 'Tải gói cập nhật thất bại';
+$lang_module['get_update_error_file_download1'] = 'Bạn có thể thử cách cập nhật khác theo hướng dẫn tại đây: <a href="%1$s" target="_blank">%1$s</a>';
 $lang_module['get_update_ok'] = 'Gói nâng cấp an toàn, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
 $lang_module['get_update_warning'] = 'Gói nâng cấp này có thể gây nguy hại đến website của bạn nếu có bất kỳ lỗi nào xảy ra, do đó bạn nên sao lưu toàn bộ website trước khi thực hiện, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
 $lang_module['get_update_warning_permission_folder'] = 'Lỗi không thể tạo thư mục.';
