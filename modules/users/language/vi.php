@@ -349,3 +349,4 @@ $lang_module['no_premission_pass']='Bạn không có quyền đổi mật kh
 $lang_module['info_user'] = 'Để đăng ký tài khoản, bạn cần khai báo tất cả các ô trống dưới đây';
 $lang_module['note_remove_leader'] = 'Bạn không thể loại bỏ chính mình ra khỏi nhóm!';
 $lang_module['not_del_user'] = 'Bạn không thể xóa thành viên, thành viên này đang ở một nhóm khác. Bạn chỉ có thể loại bỏ thành viên ra khỏi nhóm';
+$lang_module['UserNotInGroup'] = 'Thành viên không thuộc nhóm quản lí';
