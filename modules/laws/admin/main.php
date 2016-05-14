@@ -529,7 +529,7 @@ else
 	        {
 	            if ( ! empty( $_file ) )
 	            {
-	                $xtpl->assign( 'FILEUPL', array( 'id' => $_id, 'value' => '/'.NV_UPLOADS_DIR .'/'. $module_upload.'/'.$_file ) );
+	                $xtpl->assign( 'FILEUPL', array( 'id' => $_id, 'value' => NV_BASE_SITEURL . NV_UPLOADS_DIR .'/'. $module_upload.'/'.$_file ) );
 	                $xtpl->parse( 'add.files' );
 	            }
 	        }
