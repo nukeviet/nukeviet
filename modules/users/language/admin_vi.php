@@ -365,7 +365,7 @@ $lang_module['read_ignore'] = "Đọc các dữ liệu không đúng chuẩn";
 
 $lang_module['update_field'] = "Cập nhật site";
 $lang_module['update_field_oncreate'] = "Khi được tạo";
-$lang_module['update_field_onlogin'] = "Cập đăng site";
+$lang_module['update_field_onlogin'] = "Khi đăng nhập";
 
 $lang_module['cas_config'] = "Thiết lập máy chủ CAS";
 $lang_module['cas_config_hostname'] = "Hostname";
