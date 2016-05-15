@@ -877,7 +877,7 @@ if ($step == 1) {
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('bot', " . $db->quote($_bot) . ", 0, 0, 0)");
                         }
     
-                        $tmp_array = array('opera','operamini','webtv','explorer','edge','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
+                        $tmp_array = array('opera','operamini','webtv','explorer','edge','pocket','konqueror','icab','omniweb','firebird','firefox','iceweasel','shiretoko','mozilla','amaya','lynx','safari','iphone','ipod','ipad','chrome','chrome','android','googlebot','yahooslurp','w3cvalidator','blackberry','icecat','nokias60','nokia','msn','msnbot','bingbot','netscape','galeon','netpositive','phoenix');
                         foreach ($tmp_array as $_browser) {
                             $db->query("INSERT INTO " . $db_config['prefix'] . "_counter VALUES ('browser', " . $db->quote($_browser) . ", 0, 0, 0)");
                         }
