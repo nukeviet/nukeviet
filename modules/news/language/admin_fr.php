@@ -253,6 +253,7 @@ $lang_module['structure_image_upload'] = 'Les images envoyées du module est sto
 $lang_module['config_source'] = 'Méthode d\'afficher la source de l’article';
 $lang_module['config_source_title'] = 'Afficher le titre de la source';
 $lang_module['config_source_link'] = 'Afficher le lien de la source';
+$lang_module['config_source_link_nofollow'] = 'Afficher le lien de la source (rel= "nofollow")';
 $lang_module['config_source_logo'] = 'Afficher le logo de la source';
 $lang_module['tags'] = 'Gestion des tags';
 $lang_module['add_tags'] = 'Ajouter les tags';
