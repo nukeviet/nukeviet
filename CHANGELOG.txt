@@ -5,7 +5,7 @@ NUKEVIET 4.0.29
 - Requires PHP 5.5 or later
 - PHPMailer v6.0
 - Endroid/qrcode v1.6.5
-
+- CKEditor v4.5.9
 
 NUKEVIET 4.0.28
 - Fix set tollower meta-tag name
