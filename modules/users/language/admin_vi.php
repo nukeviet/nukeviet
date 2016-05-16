@@ -231,9 +231,6 @@ $lang_module['ChangeConfigModule'] = 'Thay đổi cấu hình module';
 $lang_module['active_users'] = 'Kích hoạt tài khoản';
 $lang_module['unactive_users'] = 'Ngưng Kích hoạt tài khoản';
 $lang_module['whoviewlistuser'] = 'Ai được xem danh sách tài khoản';
-$lang_module['whoview_all'] = 'Tất cả';
-$lang_module['whoview_user'] = 'Thành viên';
-$lang_module['whoview_admin'] = 'Quản trị';
 $lang_module['random_password'] = 'Tạo mật khẩu ngẫu nhiên';
 $lang_module['show_password'] = 'Hiển thị mật khẩu';
 
