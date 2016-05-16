@@ -272,6 +272,7 @@ $lang_module['structure_image_upload'] = 'Ảnh upload của module được lư
 $lang_module['config_source'] = 'Cấu hình hiển thị nguồn bài viết tại chi tiết tin';
 $lang_module['config_source_title'] = 'Hiển thị tiêu đề nguồn tin';
 $lang_module['config_source_link'] = 'Hiển thị link của nguồn tin';
+$lang_module['config_source_link_nofollow'] = 'Hiển thị link của nguồn tin (rel= "nofollow")';
 $lang_module['config_source_logo'] = 'Hiển thị logo của nguồn tin';
 
 $lang_module['tags'] = 'Quản lý Tags';

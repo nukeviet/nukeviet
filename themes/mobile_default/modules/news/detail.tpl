@@ -49,7 +49,7 @@
 		<!-- END: imgfull -->
 		<!-- END: showhometext -->
 		<div class="bodytext">
-			{DETAIL.bodytext}
+			{DETAIL.bodyhtml}
 		</div>
 		<!-- BEGIN: author -->
 		<!-- BEGIN: name -->

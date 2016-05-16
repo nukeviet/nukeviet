@@ -27,7 +27,7 @@ if ($id > 0 and $catid > 0) {
     $result = $db_slave->query($sql);
     list($id, $title, $alias, $hometext) = $result->fetch(3);
     if ($id > 0) {
-        $allowed_send = $db_slave->query('SELECT allowed_send FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($id / 2000) . ' where id=' . $id)->fetchColumn();
+        $allowed_send = $db_slave->query('SELECT allowed_send FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $id)->fetchColumn();
         if ($allowed_send == 1) {
             unset($sql, $result);
             $result = '';

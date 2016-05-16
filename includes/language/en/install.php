@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -19,7 +19,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'Setup NukeViet 4.0 RC3';
+$lang_module['titlesetup'] = 'Setup NukeViet 4';
 $lang_module['select_language'] = 'Select languages';
 $lang_module['license'] = 'License';
 $lang_module['check_server'] = 'Check server';

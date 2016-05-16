@@ -58,7 +58,7 @@
 		</div>
 		<!-- END: showhometext -->
 		<div id="news-bodyhtml" class="bodytext margin-bottom-lg">
-			{DETAIL.bodytext}
+			{DETAIL.bodyhtml}
 		</div>
 		<!-- BEGIN: author -->
         <div class="margin-bottom-lg">

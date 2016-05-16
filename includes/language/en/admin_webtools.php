@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -72,6 +72,7 @@ $lang_module['update_manual_delete'] = 'Please delete it manually.';
 $lang_module['error_unknow'] = 'Unknown error';
 $lang_module['get_update'] = 'Upgrade System';
 $lang_module['get_update_error_file_download'] = 'Download the update package failed';
+$lang_module['get_update_error_file_download1'] = 'Try another method update here: <a href="%1$s" target="_blank">%1$s</a>';
 $lang_module['get_update_ok'] = 'Package upgrade safety, <a href="%s"> At least here </a> to conduct decompression upgrade package';
 $lang_module['get_update_warning'] = 'This upgrade package can be detrimental to your website if any errors occur, so you should back up your entire website before done, click <a href="%s" /> Click here  to proceed unzip the package upgrade';
 $lang_module['get_update_warning_permission_folder'] = 'Error can not create folders.';

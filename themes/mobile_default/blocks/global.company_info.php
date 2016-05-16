@@ -189,19 +189,19 @@ if (! nv_function_exists('nv_company_info')) {
         $key = array();
         $i = 0;
         if (! empty($block_config['company_regcode'])) {
-            $key[$i] = $lang_global['company_regcode2'] . ": " . $block_config['company_regcode'];
+            $key[$i] = $lang_global['company_regcode2'] . ': ' . $block_config['company_regcode'];
             if (! empty($block_config['company_regplace'])) {
-                $key[$i] .= ", " . $lang_global['company_regplace'] . " " . $block_config['company_regplace'];
+                $key[$i] .= ', ' . $lang_global['company_regplace'] . ' ' . $block_config['company_regplace'];
             }
             ++$i;
         }
         if (! empty($block_config['company_licensenumber'])) {
-            $key[$i] = $lang_global['company_licensenumber'] . ": " . $block_config['company_licensenumber'];
+            $key[$i] = $lang_global['company_licensenumber'] . ': ' . $block_config['company_licensenumber'];
             ++$i;
         }
 
         if ($i) {
-            $key = implode(".<br>", $key);
+            $key = implode('.<br>', $key);
             $xtpl->assign('LICENSE', $key);
             $xtpl->parse('main.company_regcode');
         }
@@ -220,7 +220,7 @@ if (! nv_function_exists('nv_company_info')) {
         }
         
         if (! empty($block_config['company_phone'])) {
-            $nums = array_map("trim", explode("|", $block_config['company_phone']));
+            $nums = array_map('trim', explode('|', $block_config['company_phone']));
             foreach ($nums as $k => $num) {
                 unset($m);
                 if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m)) {
@@ -243,7 +243,7 @@ if (! nv_function_exists('nv_company_info')) {
             $xtpl->parse('main.company_fax');
         }
         if (! empty($block_config['company_email'])) {
-            $emails = array_map("trim", explode(",", $block_config['company_email']));
+            $emails = array_map('trim', explode(',', $block_config['company_email']));
             foreach ($emails as $k => $email) {
                 $xtpl->assign('EMAIL', $email);
                 if ($k) {
@@ -254,10 +254,10 @@ if (! nv_function_exists('nv_company_info')) {
             $xtpl->parse('main.company_email');
         }
         if (! empty($block_config['company_website'])) {
-            $webs = array_map("trim", explode(",", $block_config['company_website']));
+            $webs = array_map('trim', explode(',', $block_config['company_website']));
             foreach ($webs as $k => $web) {
                 if (! preg_match("/^http\:\/\//", $web)) {
-                    $web = "http://" . $web;
+                    $web = 'http://' . $web;
                 }
                 $xtpl->assign('WEBSITE', $web);
                 if ($k) {
