@@ -112,6 +112,11 @@
 	background-image: url('../images/arrows/tall-down-arrow.gif')
 }
 
+.group-allow-area{
+    max-height: 200px;
+    overflow: auto;
+}
+
 /* EDIT INFO */
 #change-photo{
 	display: none;

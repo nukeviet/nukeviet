@@ -305,8 +305,6 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $rowcontent['status'] = 4;
             }
             $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
-            $rowcontent['bodytext'] = nv_news_get_bodytext($rowcontent['bodyhtml']);
-
             $rowcontent['sourceid'] = 0;
             if (! empty($rowcontent['sourcetext'])) {
                 $url_info = @parse_url($rowcontent['sourcetext']);
@@ -358,9 +356,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                         $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $rowcontent['id']);
                     }
 
-                    $tbhtml = NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil($rowcontent['id'] / 2000);
-                    $db->query("CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', PRIMARY KEY (id)) ENGINE=MyISAM");
-                    $db->query("INSERT INTO " . $tbhtml . " (id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
+                    $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_detail (id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
 							" . $rowcontent['id'] . ",
 							" . $db->quote($rowcontent['bodyhtml']) . ",
 							" . $db->quote($rowcontent['sourcetext']) . ",
@@ -371,7 +367,6 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 			 				" . intval($rowcontent['allowed_save']) . ", 0
 						)");
 
-                    $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', ' . $db->quote($rowcontent['bodytext']) . ')');
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
 
                     // Them vao thong bao
@@ -427,7 +422,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                         $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
                     }
 
-                    $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil($rowcontent['id'] / 2000) . " SET
+                    $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_detail SET
 							bodyhtml=" . $db->quote($rowcontent['bodyhtml']) . ",
 							imgposition=" . intval($rowcontent['imgposition']) . ",
 							 sourcetext=" . $db->quote($rowcontent['sourcetext']) . ",
@@ -436,8 +431,6 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 							 allowed_print=" . intval($rowcontent['allowed_print']) . ",
 							 allowed_save=" . intval($rowcontent['allowed_save']) . "
 							WHERE id =" . $rowcontent['id']);
-
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=' . $db->quote($rowcontent['bodytext']) . ' WHERE id =' . $rowcontent['id']);
 
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
 
@@ -495,7 +488,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             die();
         }
 
-        $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($rowcontent['id'] / 2000) . ' where id=' . $rowcontent['id'])->fetch();
+        $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
         $rowcontent = array_merge($rowcontent, $body_contents);
         unset($body_contents);
     }

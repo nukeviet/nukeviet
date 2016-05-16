@@ -112,12 +112,7 @@ function nv_del_content_module($id)
             ++$number_no_del;
         }
 
-        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($id / 2000) . ' WHERE id = ' . $id;
-        if (! $db->exec($_sql)) {
-            ++$number_no_del;
-        }
-
-        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext WHERE id = ' . $id;
+        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $id;
         if (! $db->exec($_sql)) {
             ++$number_no_del;
         }
@@ -184,39 +179,6 @@ function nv_link_delete_page($id, $detail = 0)
     $link = "<a class=\"btn btn-danger btn-xs\" href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5($id . session_id()) . "','" . NV_BASE_ADMINURL . "', " . $detail . ")\"><em class=\"fa fa-trash-o margin-right\"></em> " . $lang_global['delete'] . "</a>";
     return $link;
 }
-
-/**
- * nv_news_get_bodytext()
- *
- * @param mixed $bodytext
- * @return
- */
-function nv_news_get_bodytext($bodytext)
-{
-    // Get image tags
-    if (preg_match_all("/\<img[^\>]*src=\"([^\"]*)\"[^\>]*\>/is", $bodytext, $match)) {
-        foreach ($match[0] as $key => $_m) {
-            $textimg = '';
-            if (strpos($match[1][$key], 'data:image/png;base64') === false) {
-                $textimg = " " . $match[1][$key];
-            }
-            if (preg_match_all("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $_m, $m_alt)) {
-                $textimg .= " " . $m_alt[1][0];
-            }
-            $bodytext = str_replace($_m, $textimg, $bodytext);
-        }
-    }
-    // Get link tags
-    if (preg_match_all("/\<a[^\>]*href=\"([^\"]+)\"[^\>]*\>(.*)\<\/a\>/isU", $bodytext, $match)) {
-        foreach ($match[0] as $key => $_m) {
-            $bodytext = str_replace($_m, $match[1][$key] . " " . $match[2][$key], $bodytext);
-        }
-    }
-
-    $bodytext = str_replace('&nbsp;', ' ', strip_tags($bodytext));
-    return preg_replace('/[ ]+/', ' ', $bodytext);
-}
-
 
 /**
  * nv_get_firstimage()

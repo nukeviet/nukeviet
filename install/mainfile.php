@@ -47,7 +47,7 @@ require_once realpath(NV_ROOTDIR . '/install/config.php');
 $global_config['my_domains'] = $_SERVER['SERVER_NAME'];
 
 // Xac dinh cac tags cho phep
-$global_config['allowed_html_tags'] = array_map("trim", explode(',', NV_ALLOWED_HTML_TAGS));
+$global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
 
 //Xac dinh IP cua client
 $ips = new NukeViet\Core\Ips();
@@ -89,7 +89,7 @@ require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
-$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map("trim", explode(',', NV_ALLOW_REQUEST_MODS)) : "request";
+$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map('trim', explode(',', NV_ALLOW_REQUEST_MODS)) : "request";
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim(NV_REQUEST_DEFAULT_MODE) : 'request';
 
 $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);

@@ -194,7 +194,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
     $email = (isset($attribs['contact/email']) and nv_check_valid_email($attribs['contact/email']) == '') ? $attribs['contact/email'] : '';
     if (empty($email)) {
-        opidr(array( 'status' => 'error', 'mess' => $lang_module['logged_in_failed'] ));
+        opidr(array( 'status' => 'error', 'mess' => $lang_module['logged_no_email'] ));
         die();
     }
     $email = nv_strtolower($email);
@@ -636,7 +636,7 @@ $mod_title = $lang_module['login'];
 
 $contents = user_login();
 
-$full = empty($nv_redirect) && empty($nv_header);
+$full = empty($nv_header);// && empty($nv_redirect);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents, $full);
