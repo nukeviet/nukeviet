@@ -25,6 +25,7 @@ $array_table = array(
     'tags',
     'tags_id',
     'topics',
+    'detail',
     'logs'
 );
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;

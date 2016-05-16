@@ -214,7 +214,7 @@ $sth->execute(array(
     'Báo điện tử Dân Trí',
     'http://dantri.com.vn',
     '',
-    4,
+    3,
     1322685396,
     1322685396
 ));
@@ -223,7 +223,7 @@ $sth->execute(array(
     'Bộ Thông tin và Truyền thông',
     'http://http://mic.gov.vn',
     '',
-    5,
+    4,
     1445309676,
     1445309676
 ));
