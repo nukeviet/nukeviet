@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+	die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -24,6 +24,7 @@ $lang_module['topics'] = 'Sujets';
 $lang_module['topics_error_title'] = 'Erreur: Vous ne saisissez pas le titre de l\'événement';
 $lang_module['sources'] = 'Source';
 $lang_module['save'] = 'Sauver';
+$lang_module['send'] = 'Publiez';
 $lang_module['action'] = 'Effectuer';
 $lang_module['move'] = 'Déplacer';
 $lang_module['save_temp'] = 'Sauvegarde temporairement';
@@ -51,6 +52,7 @@ $lang_module['saveok'] = 'Mise à jour réussie';
 $lang_module['clickgotomodule'] = 'Cliquez ici pour aller à la gestion des articles';
 $lang_module['alias'] = 'Alias';
 $lang_module['name'] = 'Titre';
+$lang_module['no_name'] = 'Aucun titre';
 $lang_module['titlesite'] = 'Modification Le titre du site';
 $lang_module['error_name'] = 'Erreur: Manque de titre';
 $lang_module['weight'] = 'Position';
@@ -81,6 +83,8 @@ $lang_module['edit_block_cat'] = 'Éditer le groupe de blocks';
 $lang_module['link'] = 'Lien de la source';
 $lang_module['cat_sub'] = 'Catégorie';
 $lang_module['cat_sub_sl'] = 'Catégorie principale';
+$lang_module['note_cat_title'] = 'Sans catégorie';
+$lang_module['note_cat_content'] = 'Vous avez besoin de la catégorie avant d\'ajouter de nouveaux messages. Le système vous passer à la <strong>Gérer les catégories</strong> dans le moment!';
 $lang_module['topic_sl'] = 'Sélectionnez ou tapez le sujet';
 $lang_module['delcat_msg_cat'] = 'Cette catégorie a  %s sous-catégories, il faut les supprimer ou les déplacer tout d\'abord';
 $lang_module['delcat_msg_rows'] = 'Cette catégorie a %s articles, êtes-vous sûr de vouloir les supprimer ou déplacer vers une autre catégorie';
@@ -231,6 +235,8 @@ $lang_module['admin_module'] = 'Administrateur de module';
 $lang_module['admin_module_for_user'] = 'Vous avez tous les pouvoirs du module, hors de la gestion décentralisée';
 $lang_module['admin_cat'] = 'Administrateur de Catégorie';
 $lang_module['admin_cat_for_user'] = 'Vos pouvoirs aux catégories';
+$lang_module['admin_no_user_title'] = 'Aucun module de gestionnaire';
+$lang_module['admin_no_user_content'] = 'Fonction du droit pour ce module s\'appliquent uniquement au module opérateur, vous devez ajouter le module d\'exploitation avant la séparation des pouvoirs.';
 $lang_module['admin_userid'] = 'Identifiant';
 $lang_module['admin_username'] = 'Nom d\'utilisateur';
 $lang_module['admin_full_name'] = 'Nom complet';
@@ -273,3 +279,7 @@ $lang_module['featured'] = 'Nouvelle spéciale';
 $lang_module['addtocat'] = 'Ajouter les articles spéciales dans les rubriques';
 $lang_module['delete_from_cat'] = 'Supprimer les articles des rubriques';
 $lang_module['not_featured'] = 'Aucun article';
+$lang_module['notification_post_queue'] = 'Modéré <strong>%s</strong> par <strong>%s</strong><br  /><em>%s</em>';
+$lang_module['ad_block_show'] = 'Affichage du sous-bloc';
+$lang_module['ad_block_top'] = 'Catégories du parti blocs';
+$lang_module['ad_block_bot'] = 'Catégories de blocs ci-dessous';

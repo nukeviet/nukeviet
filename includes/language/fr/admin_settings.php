@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+	die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -93,6 +93,7 @@ $lang_module['lang_geo'] = 'Activer la définition de langue selon pays';
 $lang_module['lang_geo_config'] = 'Configuration de la fonctionnalité de définir la langue selon pays';
 $lang_module['site_lang'] = 'Langue par défaut';
 $lang_module['site_timezone'] = 'Fuseau horaire';
+$lang_module['current_time'] = 'Heure: %s';
 $lang_module['date_pattern'] = 'Format de la date';
 $lang_module['time_pattern'] = 'Type d\'affichage: Heure Minute';
 $lang_module['gzip_method'] = 'Activer gzip';

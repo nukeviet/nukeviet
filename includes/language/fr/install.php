@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 30, 2010, 03:30:00 AM
 */
 
 if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+	die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -256,3 +256,5 @@ $lang_module['updatemod_notexist'] = 'Ce module n\'est pas installé sur votre s
 $lang_module['updatemod_notcertified'] = 'Ce module n\'est pas certifié et le système ne peut pas contrôler les risques';
 $lang_module['dbcheck_error_files'] = 'Pour installer Nukeviet avec ce type de CSDL, vous devez télécharger en plus un programme';
 $lang_module['dbcheck_error_driver'] = 'Erreur: Systeme n\'est pas compatible a ce type de CSDL, veuillez utiliser un autre type';
+$lang_module['update_error_check_version_sys'] = 'Erreur: Impossible de vérifier la version du système';
+$lang_module['update_error_check_version_ext'] = 'Erreur: Impossible de vérifier la version de l\'application';
