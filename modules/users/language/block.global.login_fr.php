@@ -6,11 +6,11 @@
 * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate May 16, 2016, 11:40:34 AM
+* @Createdate May 16, 2016, 11:48:37 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = '';

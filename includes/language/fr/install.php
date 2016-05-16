@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
