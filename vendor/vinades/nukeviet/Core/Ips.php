@@ -31,10 +31,10 @@ class Ips
      */
     public function __construct()
     {
-        $this->client_ip = $this->nv_get_clientip();
-        $this->forward_ip = $this->nv_get_forwardip();
-        $this->remote_addr = $this->nv_get_remote_addr();
-        $this->remote_ip = $this->nv_getip();
+        $this->client_ip = trim($this->nv_get_clientip());
+        $this->forward_ip = trim($this->nv_get_forwardip());
+        $this->remote_addr = trim($this->nv_get_remote_addr());
+        $this->remote_ip = trim($this->nv_getip());
     }
 
     /**
