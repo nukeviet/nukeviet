@@ -194,7 +194,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
     $email = (isset($attribs['contact/email']) and nv_check_valid_email($attribs['contact/email']) == '') ? $attribs['contact/email'] : '';
     if (empty($email)) {
-        opidr(array( 'status' => 'error', 'mess' => $lang_module['logged_in_failed'] ));
+        opidr(array( 'status' => 'error', 'mess' => $lang_module['logged_no_email'] ));
         die();
     }
     $email = nv_strtolower($email);
