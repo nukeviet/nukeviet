@@ -87,7 +87,7 @@ if (! nv_function_exists('nv_department_info')) {
                     $xtpl->assign('DEPARTMENT', $row);
 
                     if (! empty($row['phone'])) {
-                        $nums = array_map("trim", explode("|", nv_unhtmlspecialchars($row['phone'])));
+                        $nums = array_map('trim', explode('|', nv_unhtmlspecialchars($row['phone'])));
                         foreach ($nums as $k => $num) {
                             unset($m);
                             if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m)) {
@@ -96,7 +96,7 @@ if (! nv_function_exists('nv_department_info')) {
                                 $xtpl->parse('main.phone.item.href');
                                 $xtpl->parse('main.phone.item.href2');
                             } else {
-                                $num = preg_replace("/\[[^\]]*\]/", "", $num);
+                                $num = preg_replace("/\[[^\]]*\]/", '', $num);
                                 $phone = array( 'number' => nv_htmlspecialchars($num) );
                                 $xtpl->assign('PHONE', $phone);
                             }
@@ -114,7 +114,7 @@ if (! nv_function_exists('nv_department_info')) {
                     }
 
                     if (! empty($row['email'])) {
-                        $emails = array_map("trim", explode(",", $row['email']));
+                        $emails = array_map('trim', explode(',', $row['email']));
 
                         foreach ($emails as $k => $email) {
                             $xtpl->assign('EMAIL', $email);
@@ -133,8 +133,8 @@ if (! nv_function_exists('nv_department_info')) {
                         if (!empty($others)) {
                             foreach ($others as $key => $value) {
                                 if (!empty($value)) {
-                                    if (strtolower($key) == "yahoo") {
-                                        $ys = array_map("trim", explode(",", $value));
+                                    if (strtolower($key) == 'yahoo') {
+                                        $ys = array_map('trim', explode(',', $value));
                                         foreach ($ys as $k => $y) {
                                             $xtpl->assign('YAHOO', array('name' => $key, 'value' => $y ));
                                             if ($k) {
@@ -143,8 +143,8 @@ if (! nv_function_exists('nv_department_info')) {
                                             $xtpl->parse('main.yahoo.item');
                                         }
                                         $xtpl->parse('main.yahoo');
-                                    } elseif (strtolower($key) == "skype") {
-                                        $ss = array_map("trim", explode(",", $value));
+                                    } elseif (strtolower($key) == 'skype') {
+                                        $ss = array_map('trim', explode(',', $value));
                                         foreach ($ss as $k => $s) {
                                             $xtpl->assign('SKYPE', array('name' => $key, 'value' => $s ));
                                             if ($k) {
@@ -153,8 +153,8 @@ if (! nv_function_exists('nv_department_info')) {
                                             $xtpl->parse('main.skype.item');
                                         }
                                         $xtpl->parse('main.skype');
-                                    } elseif (strtolower($key) == "viber") {
-                                        $ss = array_map("trim", explode(",", $value));
+                                    } elseif (strtolower($key) == 'viber') {
+                                        $ss = array_map('trim', explode(',', $value));
                                         foreach ($ss as $k => $s) {
                                             $xtpl->assign('VIBER', array('name' => $key, 'value' => $s ));
                                             if ($k) {
@@ -163,8 +163,8 @@ if (! nv_function_exists('nv_department_info')) {
                                             $xtpl->parse('main.viber.item');
                                         }
                                         $xtpl->parse('main.viber');
-                                    } elseif (strtolower($key) == "icq") {
-                                        $ss = array_map("trim", explode(",", $value));
+                                    } elseif (strtolower($key) == 'icq') {
+                                        $ss = array_map('trim', explode(',', $value));
                                         foreach ($ss as $k => $s) {
                                             $xtpl->assign('ICQ', array('name' => $key, 'value' => $s ));
                                             if ($k) {
@@ -173,8 +173,8 @@ if (! nv_function_exists('nv_department_info')) {
                                             $xtpl->parse('main.icq.item');
                                         }
                                         $xtpl->parse('main.icq');
-                                    } elseif (strtolower($key) == "whatsapp") {
-                                        $ss = array_map("trim", explode(",", $value));
+                                    } elseif (strtolower($key) == 'whatsapp') {
+                                        $ss = array_map('trim', explode(',', $value));
                                         foreach ($ss as $k => $s) {
                                             $xtpl->assign('WHATSAPP', array('name' => $key, 'value' => $s ));
                                             if ($k) {

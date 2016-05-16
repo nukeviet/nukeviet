@@ -120,7 +120,7 @@ if ($submit) {
             }
         }
 
-        $global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_intersect(array_map("trim", explode(',', $global_config['ssl_https_modules'])), array_keys($site_mods));
+        $global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_intersect(array_map('trim', explode(',', $global_config['ssl_https_modules'])), array_keys($site_mods));
     }
 }
 

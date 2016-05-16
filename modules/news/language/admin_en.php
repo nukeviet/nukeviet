@@ -259,6 +259,7 @@ $lang_module['structure_image_upload'] = 'The module\'s upload images are archiv
 $lang_module['config_source'] = 'Configuration display writing source at detail information';
 $lang_module['config_source_title'] = 'Show title of information source';
 $lang_module['config_source_link'] = 'Show link of information source';
+$lang_module['config_source_link_nofollow'] = 'Show link of information source (rel= "nofollow")';
 $lang_module['config_source_logo'] = 'Show logo of information source';
 $lang_module['tags'] = 'Tags manage';
 $lang_module['add_tags'] = 'Add tag';

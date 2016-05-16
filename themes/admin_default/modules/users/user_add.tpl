@@ -77,7 +77,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td colspan="2"> {LANG.avata} </td>
+					<td colspan="2"> {LANG.avatar} </td>
 					<td>
                         <div class="input-group">
 					       <input type="text" class="form-control" id="avatar" name="photo" value="" readonly="readonly"/>

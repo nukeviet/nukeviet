@@ -10,6 +10,8 @@
 namespace Endroid\QrCode;
 
 use Endroid\QrCode\Exceptions\DataDoesntExistsException;
+use Endroid\QrCode\Exceptions\FreeTypeLibraryMissingException;
+use Endroid\QrCode\Exceptions\ImageFunctionFailedException;
 use Endroid\QrCode\Exceptions\VersionTooLargeException;
 use Endroid\QrCode\Exceptions\ImageSizeTooLargeException;
 use Endroid\QrCode\Exceptions\ImageFunctionUnknownException;
@@ -44,6 +46,44 @@ class QrCode
     /** @const string Image type wbmp */
     const IMAGE_TYPE_WBMP = 'wbmp';
 
+    /** @const int Horizontal label alignment to the center of image */
+    const LABEL_HALIGN_CENTER = 0;
+
+    /** @const int Horizontal label alignment to the left side of image */
+    const LABEL_HALIGN_LEFT = 1;
+
+    /** @const int Horizontal label alignment to the left border of QR Code */
+    const LABEL_HALIGN_LEFT_BORDER = 2;
+
+    /** @const int Horizontal label alignment to the left side of QR Code */
+    const LABEL_HALIGN_LEFT_CODE = 3;
+
+    /** @const int Horizontal label alignment to the right side of image */
+    const LABEL_HALIGN_RIGHT = 4;
+
+    /** @const int Horizontal label alignment to the right border of QR Code */
+    const LABEL_HALIGN_RIGHT_BORDER = 5;
+
+    /** @const int Horizontal label alignment to the right side of QR Code */
+    const LABEL_HALIGN_RIGHT_CODE = 6;
+
+    /** @const int Vertical label alignment to the top */
+    const LABEL_VALIGN_TOP = 1;
+
+    /** @const int Vertical label alignment to the top and hide border */
+    const LABEL_VALIGN_TOP_NO_BORDER = 2;
+
+    /** @const int Vertical label alignment to the middle*/
+    const LABEL_VALIGN_MIDDLE = 3;
+
+    /** @const int Vertical label alignment to the bottom */
+    const LABEL_VALIGN_BOTTOM = 4;
+
+    /** @var string */
+    protected $logo = null;
+
+    protected $logo_size = 48;
+
     /** @var string */
     protected $text = '';
 
@@ -52,6 +92,12 @@ class QrCode
 
     /** @var int */
     protected $padding = 16;
+
+    /** @var bool */
+    protected $draw_quiet_zone = false;
+
+    /** @var bool */
+    protected $draw_border = false;
 
     /** @var array */
     protected $color_foreground = array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0);
@@ -67,6 +113,12 @@ class QrCode
 
     /** @var string */
     protected $label_font_path = '';
+
+    /** @var int */
+    protected $label_halign = self::LABEL_HALIGN_CENTER;
+
+    /** @var int */
+    protected $label_valign = self::LABEL_VALIGN_MIDDLE;
 
     /** @var resource */
     protected $image = null;
@@ -324,6 +376,40 @@ class QrCode
     }
 
     /**
+     * Set logo in QR Code.
+     *
+     * @param string $logo Logo Path
+     *
+     * @throws Exceptions\DataDoesntExistsException
+     *
+     * @return QrCode
+     */
+    public function setLogo($logo)
+    {
+        if (!file_exists($logo)) {
+            throw new DataDoesntExistsException("$logo file does not exist");
+        }
+
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    /**
+     * Set logo size in QR Code(default 48).
+     *
+     * @param int $logo_size Logo Size
+     *
+     * @return QrCode
+     */
+    public function setLogoSize($logo_size)
+    {
+        $this->logo_size = $logo_size;
+
+        return $this;
+    }
+
+    /**
      * Set text to hide in QR Code.
      *
      * @param string $text Text to hide
@@ -396,9 +482,57 @@ class QrCode
     }
 
     /**
+     * Set draw required four-module wide margin.
+     *
+     * @param bool $draw_quiet_zone State of required four-module wide margin drawing
+     *
+     * @return QrCode
+     */
+    public function setDrawQuietZone($draw_quiet_zone)
+    {
+        $this->draw_quiet_zone = $draw_quiet_zone;
+
+        return $this;
+    }
+
+    /**
+     * Return draw required four-module wide margin.
+     *
+     * @return bool
+     */
+    public function getDrawQuietZone()
+    {
+        return $this->draw_quiet_zone;
+    }
+
+    /**
+     * Set draw border around QR Code.
+     *
+     * @param bool $draw_border State of border drawing
+     *
+     * @return QrCode
+     */
+    public function setDrawBorder($draw_border)
+    {
+        $this->draw_border = $draw_border;
+
+        return $this;
+    }
+
+    /**
+     * Return draw border around QR Code.
+     *
+     * @return bool
+     */
+    public function getDrawBorder()
+    {
+        return $this->draw_border;
+    }
+
+    /**
      * Set QR Code label (text).
      *
-     * @param int $label Label to print under QR code
+     * @param int|string $label Label to print under QR code
      *
      * @return QrCode
      */
@@ -465,6 +599,54 @@ class QrCode
     public function getLabelFontPath()
     {
         return $this->label_font_path;
+    }
+
+    /**
+     * Set label horizontal alignment.
+     *
+     * @param int $label_halign Label horizontal alignment
+     *
+     * @return QrCode
+     */
+    public function setLabelHalign($label_halign)
+    {
+        $this->label_halign = $label_halign;
+
+        return $this;
+    }
+
+    /**
+     * Return label horizontal alignment.
+     *
+     * @return int
+     */
+    public function getLabelHalign()
+    {
+        return $this->label_halign;
+    }
+
+    /**
+     * Set label vertical alignment.
+     *
+     * @param int $label_valign Label vertical alignment
+     *
+     * @return QrCode
+     */
+    public function setLabelValign($label_valign)
+    {
+        $this->label_valign = $label_valign;
+
+        return $this;
+    }
+
+    /**
+     * Return label vertical alignment.
+     *
+     * @return int
+     */
+    public function getLabelValign()
+    {
+        return $this->label_valign;
     }
 
     /**
@@ -577,6 +759,7 @@ class QrCode
      * @param null|string $format   Format of the file (png, jpeg, jpg, gif, wbmp)
      *
      * @throws ImageFunctionUnknownException
+     * @throws ImageFunctionFailedException
      *
      * @return QrCode
      */
@@ -597,9 +780,13 @@ class QrCode
         }
 
         if ($filename === null) {
-            call_user_func('image'.$format, $this->image);
+            $success = call_user_func('image'.$format, $this->image);
         } else {
-            call_user_func_array('image'.$format, array($this->image, $filename));
+            $success = call_user_func_array('image'.$format, array($this->image, $filename));
+        }
+
+        if ($success === false) {
+            throw new ImageFunctionFailedException('QRCode: function image'.$format.' failed.');
         }
 
         return $this;
@@ -611,6 +798,7 @@ class QrCode
      * @param string|null $format Image type (gif, png, wbmp, jpeg)
      *
      * @throws ImageFunctionUnknownException
+     * @throws ImageFunctionFailedException
      *
      * @return string
      */
@@ -631,9 +819,15 @@ class QrCode
         }
 
         ob_start();
-        call_user_func('image'.$format, $this->image);
+        $success = call_user_func('image'.$format, $this->image);
 
-        return ob_get_clean();
+        if ($success === false) {
+            throw new ImageFunctionFailedException('QRCode: function image'.$format.' failed.');
+        }
+
+        $content = ob_get_clean();
+
+        return $content;
     }
 
     /**
@@ -673,7 +867,7 @@ class QrCode
         }
         $data_length = strlen($qrcode_data_string);
         if ($data_length <= 0) {
-            throw new DataDoesntExistsException('QRCode: Data does not exists.');
+            throw new DataDoesntExistsException('QRCode: data does not exist.');
         }
         $data_counter = 0;
         if ($qrcode_structureappend_n > 1
@@ -713,9 +907,9 @@ class QrCode
             if (preg_match("/[^0-9A-Z \$\*\%\+\.\/\:\-]/", $qrcode_data_string) != 0) {
                 /*  --- 8bit byte mode */
 
-                $codeword_num_plus = array(0,0,0,0,0,0,0,0,0,0,
-        8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
-        8,8,8,8,8,8,8,8,8,8,8,8,8,8, );
+                $codeword_num_plus = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, );
 
                 $data_value[$data_counter] = 4;
                 ++$data_counter;
@@ -734,9 +928,9 @@ class QrCode
             } else {
                 /* ---- alphanumeric mode */
 
-                $codeword_num_plus = array(0,0,0,0,0,0,0,0,0,0,
-        2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-        4,4,4,4,4,4,4,4,4,4,4,4,4,4, );
+                $codeword_num_plus = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, );
 
                 $data_value[$data_counter] = 2;
                 ++$data_counter;
@@ -744,12 +938,12 @@ class QrCode
                 $data_bits[$data_counter] = 9;  /* #version 1-9 */
                 $codeword_num_counter_value = $data_counter;
 
-                $alphanumeric_character_hash = array('0' => 0,'1' => 1,'2' => 2,'3' => 3,'4' => 4,
-        '5' => 5,'6' => 6,'7' => 7,'8' => 8,'9' => 9,'A' => 10,'B' => 11,'C' => 12,'D' => 13,'E' => 14,
-        'F' => 15,'G' => 16,'H' => 17,'I' => 18,'J' => 19,'K' => 20,'L' => 21,'M' => 22,'N' => 23,
-        'O' => 24,'P' => 25,'Q' => 26,'R' => 27,'S' => 28,'T' => 29,'U' => 30,'V' => 31,
-        'W' => 32,'X' => 33,'Y' => 34,'Z' => 35,' ' => 36,'$' => 37,'%' => 38,'*' => 39,
-        '+' => 40,'-' => 41,'.' => 42,'/' => 43,':' => 44, );
+                $alphanumeric_character_hash = array('0' => 0, '1' => 1, '2' => 2, '3' => 3, '4' => 4,
+        '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9, 'A' => 10, 'B' => 11, 'C' => 12, 'D' => 13, 'E' => 14,
+        'F' => 15, 'G' => 16, 'H' => 17, 'I' => 18, 'J' => 19, 'K' => 20, 'L' => 21, 'M' => 22, 'N' => 23,
+        'O' => 24, 'P' => 25, 'Q' => 26, 'R' => 27, 'S' => 28, 'T' => 29, 'U' => 30, 'V' => 31,
+        'W' => 32, 'X' => 33, 'Y' => 34, 'Z' => 35, ' ' => 36, '$' => 37, '%' => 38, '*' => 39,
+        '+' => 40, '-' => 41, '.' => 42, '/' => 43, ':' => 44, );
 
                 $i = 0;
                 ++$data_counter;
@@ -768,9 +962,9 @@ class QrCode
         } else {
             /* ---- numeric mode */
 
-            $codeword_num_plus = array(0,0,0,0,0,0,0,0,0,0,
-        2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-        4,4,4,4,4,4,4,4,4,4,4,4,4,4, );
+            $codeword_num_plus = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, );
 
             $data_value[$data_counter] = 1;
             ++$data_counter;
@@ -828,25 +1022,25 @@ class QrCode
         $max_data_bits = 0;
 
         $max_data_bits_array = array(
-        0,128,224,352,512,688,864,992,1232,1456,1728,
-        2032,2320,2672,2920,3320,3624,4056,4504,5016,5352,
-        5712,6256,6880,7312,8000,8496,9024,9544,10136,10984,
-        11640,12328,13048,13800,14496,15312,15936,16816,17728,18672,
+        0, 128, 224, 352, 512, 688, 864, 992, 1232, 1456, 1728,
+        2032, 2320, 2672, 2920, 3320, 3624, 4056, 4504, 5016, 5352,
+        5712, 6256, 6880, 7312, 8000, 8496, 9024, 9544, 10136, 10984,
+        11640, 12328, 13048, 13800, 14496, 15312, 15936, 16816, 17728, 18672,
 
-        152,272,440,640,864,1088,1248,1552,1856,2192,
-        2592,2960,3424,3688,4184,4712,5176,5768,6360,6888,
-        7456,8048,8752,9392,10208,10960,11744,12248,13048,13880,
-        14744,15640,16568,17528,18448,19472,20528,21616,22496,23648,
+        152, 272, 440, 640, 864, 1088, 1248, 1552, 1856, 2192,
+        2592, 2960, 3424, 3688, 4184, 4712, 5176, 5768, 6360, 6888,
+        7456, 8048, 8752, 9392, 10208, 10960, 11744, 12248, 13048, 13880,
+        14744, 15640, 16568, 17528, 18448, 19472, 20528, 21616, 22496, 23648,
 
-        72,128,208,288,368,480,528,688,800,976,
-        1120,1264,1440,1576,1784,2024,2264,2504,2728,3080,
-        3248,3536,3712,4112,4304,4768,5024,5288,5608,5960,
-        6344,6760,7208,7688,7888,8432,8768,9136,9776,10208,
+        72, 128, 208, 288, 368, 480, 528, 688, 800, 976,
+        1120, 1264, 1440, 1576, 1784, 2024, 2264, 2504, 2728, 3080,
+        3248, 3536, 3712, 4112, 4304, 4768, 5024, 5288, 5608, 5960,
+        6344, 6760, 7208, 7688, 7888, 8432, 8768, 9136, 9776, 10208,
 
-        104,176,272,384,496,608,704,880,1056,1232,
-        1440,1648,1952,2088,2360,2600,2936,3176,3560,3880,
-        4096,4544,4912,5312,5744,6032,6464,6968,7288,7880,
-        8264,8920,9368,9848,10288,10832,11408,12016,12656,13328,
+        104, 176, 272, 384, 496, 608, 704, 880, 1056, 1232,
+        1440, 1648, 1952, 2088, 2360, 2600, 2936, 3176, 3560, 3880,
+        4096, 4544, 4912, 5312, 5744, 6032, 6464, 6968, 7288, 7880,
+        8264, 8920, 9368, 9848, 10288, 10832, 11408, 12016, 12656, 13328,
         );
         if (!is_numeric($qrcode_version)) {
             $qrcode_version = 0;
@@ -874,16 +1068,16 @@ class QrCode
         $total_data_bits += $codeword_num_plus[$qrcode_version];
         $data_bits[$codeword_num_counter_value] += $codeword_num_plus[$qrcode_version];
 
-        $max_codewords_array = array(0,26,44,70,100,134,172,196,242,
-        292,346,404,466,532,581,655,733,815,901,991,1085,1156,
-        1258,1364,1474,1588,1706,1828,1921,2051,2185,2323,2465,
-        2611,2761,2876,3034,3196,3362,3532,3706, );
+        $max_codewords_array = array(0, 26, 44, 70, 100, 134, 172, 196, 242,
+        292, 346, 404, 466, 532, 581, 655, 733, 815, 901, 991, 1085, 1156,
+        1258, 1364, 1474, 1588, 1706, 1828, 1921, 2051, 2185, 2323, 2465,
+        2611, 2761, 2876, 3034, 3196, 3362, 3532, 3706, );
 
         $max_codewords = $max_codewords_array[$qrcode_version];
         $max_modules_1side = 17 + ($qrcode_version << 2);
 
-        $matrix_remain_bit = array(0,0,7,7,7,7,7,0,0,0,0,0,0,0,3,3,3,3,3,3,3,
-        4,4,4,4,4,4,4,3,3,3,3,3,3,3,0,0,0,0,0,0, );
+        $matrix_remain_bit = array(0, 0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3,
+        4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, );
 
         /* ---- read version ECC data file */
 
@@ -908,8 +1102,8 @@ class QrCode
         $format_information_x2 = unpack('C*', $fi_x);
         $format_information_y2 = unpack('C*', $fi_y);
 
-        $format_information_x1 = array(0,1,2,3,4,5,7,8,8,8,8,8,8,8,8);
-        $format_information_y1 = array(8,8,8,8,8,8,8,8,7,5,4,3,2,1,0);
+        $format_information_x1 = array(0, 1, 2, 3, 4, 5, 7, 8, 8, 8, 8, 8, 8, 8, 8);
+        $format_information_y1 = array(8, 8, 8, 8, 8, 8, 8, 8, 7, 5, 4, 3, 2, 1, 0);
 
         $max_data_codewords = ($max_data_bits >> 3);
 
@@ -934,7 +1128,7 @@ class QrCode
                 $data_bits[$data_counter] = $max_data_bits - $total_data_bits;
             } else {
                 if ($total_data_bits > $max_data_bits) {
-                    throw new \OverflowException('QRCode : Overflow error');
+                    throw new \OverflowException('QRCode: overflow error');
                 }
             }
         }
@@ -1166,15 +1360,15 @@ class QrCode
         # --- format information
 
         $format_information_value = (($ec << 3) | $mask_number);
-        $format_information_array = array('101010000010010','101000100100101',
-        '101111001111100','101101101001011','100010111111001','100000011001110',
-        '100111110010111','100101010100000','111011111000100','111001011110011',
-        '111110110101010','111100010011101','110011000101111','110001100011000',
-        '110110001000001','110100101110110','001011010001001','001001110111110',
-        '001110011100111','001100111010000','000011101100010','000001001010101',
-        '000110100001100','000100000111011','011010101011111','011000001101000',
-        '011111100110001','011101000000110','010010010110100','010000110000011',
-        '010111011011010','010101111101101', );
+        $format_information_array = array('101010000010010', '101000100100101',
+        '101111001111100', '101101101001011', '100010111111001', '100000011001110',
+        '100111110010111', '100101010100000', '111011111000100', '111001011110011',
+        '111110110101010', '111100010011101', '110011000101111', '110001100011000',
+        '110110001000001', '110100101110110', '001011010001001', '001001110111110',
+        '001110011100111', '001100111010000', '000011101100010', '000001001010101',
+        '000110100001100', '000100000111011', '011010101011111', '011000001101000',
+        '011111100110001', '011101000000110', '010010010110100', '010000110000011',
+        '010111011011010', '010101111101101', );
         $i = 0;
         while ($i < 15) {
             $content = substr($format_information_array[$format_information_value], $i, 1);
@@ -1189,7 +1383,7 @@ class QrCode
         if ($this->size == 0) {
             $this->size = $mib * $qrcode_module_size;
             if ($this->size > 1480) {
-                throw new ImageSizeTooLargeException('QRCode : Image size too large');
+                throw new ImageSizeTooLargeException('QRCode: image size too large');
             }
         }
 
@@ -1197,25 +1391,30 @@ class QrCode
         $image_height = $this->size + $this->padding * 2;
 
         if (!empty($this->label)) {
+            if (!function_exists('imagettfbbox')) {
+                throw new FreeTypeLibraryMissingException('QRCode: missing function "imagettfbbox". Did you install the FreeType library?');
+            }
             $font_box = imagettfbbox($this->label_font_size, 0, $this->label_font_path, $this->label);
             $label_width = (int) $font_box[2] - (int) $font_box[0];
             $label_height = (int) $font_box[0] - (int) $font_box[7];
-            $image_height += $label_height + $this->padding;
+
+            if ($this->label_valign == self::LABEL_VALIGN_MIDDLE) {
+                $image_height += $label_height + $this->padding;
+            } else {
+                $image_height += $label_height;
+            }
         }
 
         $output_image = imagecreate($image_width, $image_height);
         imagecolorallocate($output_image, 255, 255, 255);
 
-        if (!empty($this->label)) {
-            $font_x = floor($image_width - $label_width) / 2;
-            $font_y = $image_height - $this->padding;
-            $color = imagecolorallocate($output_image, 0, 0, 0);
-            imagettftext($output_image, $this->label_font_size, 0, $font_x, $font_y, $color, $this->label_font_path, $this->label);
-        }
-
         $image_path = $image_path.'/qrv'.$qrcode_version.'.png';
 
         $base_image = imagecreatefrompng($image_path);
+        $code_size = $this->size;
+        $module_size = function ($size = 1) use ($code_size, $base_image) {
+            return round($code_size / imagesx($base_image) * $size);
+        };
 
         $col[1] = imagecolorallocate($base_image, 0, 0, 0);
         $col[0] = imagecolorallocate($base_image, 255, 255, 255);
@@ -1237,7 +1436,83 @@ class QrCode
             ++$ii;
         }
 
-        imagecopyresampled($output_image, $base_image, $this->padding, $this->padding, 4, 4, $this->size, $this->size, $mib - 8, $mib - 8);
+        if ($this->draw_quiet_zone == true) {
+            imagecopyresampled($output_image, $base_image, $this->padding, $this->padding, 0, 0, $this->size, $this->size, $mib, $mib);
+        } else {
+            imagecopyresampled($output_image, $base_image, $this->padding, $this->padding, 4, 4, $this->size, $this->size, $mib - 8, $mib - 8);
+        }
+
+        if ($this->draw_border == true) {
+            $border_width = $this->padding;
+            $border_height = $this->size + $this->padding - 1;
+            $border_color = imagecolorallocate($output_image, 0, 0, 0);
+            imagerectangle($output_image, $border_width, $border_width, $border_height, $border_height, $border_color);
+        }
+
+        if (!empty($this->label)) {
+            // Label horizontal alignment
+            switch ($this->label_halign) {
+                case self::LABEL_HALIGN_LEFT:
+                    $font_x = 0;
+                    break;
+
+                case self::LABEL_HALIGN_LEFT_BORDER:
+                    $font_x = $this->padding;
+                    break;
+
+                case self::LABEL_HALIGN_LEFT_CODE:
+                    if ($this->draw_quiet_zone == true) {
+                        $font_x = $this->padding + $module_size(4);
+                    } else {
+                        $font_x = $this->padding;
+                    }
+                    break;
+
+                case self::LABEL_HALIGN_RIGHT:
+                    $font_x = $this->size + ($this->padding * 2) - $label_width;
+                    break;
+
+                case self::LABEL_HALIGN_RIGHT_BORDER:
+                    $font_x = $this->size + $this->padding - $label_width;
+                    break;
+
+                case self::LABEL_HALIGN_RIGHT_CODE:
+                    if ($this->draw_quiet_zone == true) {
+                        $font_x = $this->size + $this->padding - $label_width - $module_size(4);
+                    } else {
+                        $font_x = $this->size + $this->padding - $label_width;
+                    }
+                    break;
+
+                default:
+                    $font_x = floor($image_width - $label_width) / 2;
+            }
+
+            // Label vertical alignment
+            switch ($this->label_valign) {
+                case self::LABEL_VALIGN_TOP_NO_BORDER:
+                    $font_y = $image_height - $this->padding - 1;
+                    break;
+
+                case self::LABEL_VALIGN_BOTTOM:
+                    $font_y = $image_height;
+                    break;
+
+                default:
+                    $font_y = $image_height - $this->padding;
+            }
+
+            $label_bg_x1 = $font_x - $module_size(2);
+            $label_bg_y1 = $font_y - $label_height;
+            $label_bg_x2 = $font_x + $label_width + $module_size(2);
+            $label_bg_y2 = $font_y;
+
+            $color = imagecolorallocate($output_image, 0, 0, 0);
+            $label_bg_color = imagecolorallocate($output_image, 255, 255, 255);
+
+            imagefilledrectangle($output_image, $label_bg_x1, $label_bg_y1, $label_bg_x2, $label_bg_y2, $label_bg_color);
+            imagettftext($output_image, $this->label_font_size, 0, $font_x, $font_y, $color, $this->label_font_path, $this->label);
+        }
 
         $imagecolorset_function = new ReflectionFunction('imagecolorset');
         $allow_alpha = $imagecolorset_function->getNumberOfParameters() == 6;
@@ -1260,6 +1535,23 @@ class QrCode
             }
         }
 
+        if (!empty($this->logo)) {
+            $logo_image = call_user_func('imagecreatefrom'.$this->image_type, $this->logo);
+            if (!$logo_image) {
+                throw new ImageFunctionFailedException('imagecreatefrom'.$this->image_type.' '.$this->logo.'failed');
+            }
+            $src_w = imagesx($logo_image);
+            $src_h = imagesy($logo_image);
+
+            $dst_x = ($image_width - $this->logo_size) / 2;
+            $dst_y = ($this->size + $this->padding * 2 - $this->logo_size) / 2;
+
+            $successful = imagecopyresampled($output_image, $logo_image, $dst_x, $dst_y, 0, 0, $this->logo_size, $this->logo_size, $src_w, $src_h);
+            if (!$successful) {
+                throw new ImageFunctionFailedException('add logo [image'.$this->format.'] failed.');
+            }
+            imagedestroy($logo_image);
+        }
         $this->image = $output_image;
     }
 }

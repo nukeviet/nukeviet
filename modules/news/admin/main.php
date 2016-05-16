@@ -166,8 +166,8 @@ $page = $nv_Request->get_int('page', 'get', 1);
 $checkss = $nv_Request->get_string('checkss', 'get', '');
 if ($checkss == md5(session_id())) {
     if ($stype == 'bodytext') {
-        $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext c ON (r.id=c.id)';
-        $where = " c.bodytext LIKE '%" . $db_slave->dblikeescape($q) . "%'";
+        $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
+        $where = " c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'";
     } elseif ($stype == "author" or $stype == "title") {
         $where = " r." . $stype . " LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'";
     } elseif ($stype == 'sourcetext') {
@@ -180,14 +180,14 @@ if ($checkss == md5(session_id())) {
     } elseif ($stype == 'admin_id') {
         $where = " (u.username LIKE '%" . $db_slave->dblikeescape($qhtml) . "%' OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
     } elseif (! empty($q)) {
-        $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext c ON (r.id=c.id)';
+        $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
         $arr_from = array();
         foreach ($array_in_rows as $key => $val) {
             $arr_from[] = "(r." . $val . " LIKE '%" . $db_slave->dblikeescape($q) . "%')";
         }
         $where = " (r.author LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
 			OR r.title LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
-			OR c.bodytext LIKE '%" . $db_slave->dblikeescape($q) . "%'
+			OR c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'
 			OR u.username LIKE '%" . $db_slave->dblikeescape($qhtml) . "%'
 			OR u.first_name LIKE '%" . $db_slave->dblikeescape($qhtml) . "%')";
     }
