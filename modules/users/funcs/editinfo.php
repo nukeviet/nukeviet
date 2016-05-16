@@ -208,7 +208,7 @@ $checkss = $nv_Request->get_title('checkss', 'post', '');
 if (isset($array_op[0]) and isset($array_op[1]) and ! defined('ACCESS_EDITUS')) {
 	die(json_encode(array(
 	    'status' => 'error',
-	    'input' => 'last_name',
+	    'input' => '',
 	    'mess' => $lang_module['no_premission_leader'] )));
 }
 
@@ -606,7 +606,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password'
 	if (! empty($group_id) and ! empty($edit_userid) and ! defined('ACCESS_PASSUS')) {
         die(json_encode(array(
             'status' => 'error',
-            'input' => 'new_password',
+            'input' => '',
             'mess' => $lang_module['no_premission_pass'] )));
     }
 	
