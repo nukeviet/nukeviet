@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -255,7 +255,6 @@ $lang_module['access_groups'] = 'Group manage';
 $lang_module['access_caption_leader'] = 'User configuration module powers of the leader';
 $lang_module['access_groups_add'] = 'Add members to the group';
 $lang_module['access_groups_del'] = 'Remove member from group';
-
 $lang_module['fields'] = 'Custom User Fields';
 $lang_module['captionform_add'] = 'Add User Fields';
 $lang_module['captionform_edit'] = 'Edit User Fields';

@@ -205,7 +205,7 @@ $array_data['checkss'] = md5($client_info['session_id'] . $global_config['siteke
 
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
-if (isset($array_op[0]) and isset($array_op[1]) and ! defined('ACCESS_EDITUS')) {
+if (isset($array_op[2]) and ! defined('ACCESS_EDITUS')) {
 	die(json_encode(array(
 	    'status' => 'error',
 	    'input' => '',

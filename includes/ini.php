@@ -58,7 +58,7 @@ $sys_info['ftp_support'] = (function_exists('ftp_connect') and ! in_array('ftp_c
 
 //Neu he thong khong ho tro php se bao loi
 if (version_compare(PHP_VERSION, '5.5.0') < 0) {
-    trigger_error('You are running an unsupported PHP version. Please upgrade to PHP 5.4 or higher before trying to install Nukeviet Portal', 256);
+    trigger_error('You are running an unsupported PHP version. Please upgrade to PHP 5.5 or higher before trying to install Nukeviet Portal', 256);
 }
 
 //Neu he thong khong ho tro opendir se bao loi

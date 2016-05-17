@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -42,6 +42,9 @@ $lang_module['author'] = 'Author';
 $lang_module['theme'] = 'Theme';
 $lang_module['mobile'] = 'Mobile theme';
 $lang_module['theme_default'] = 'Default';
+$lang_module['theme_mobiledefault'] = 'Mobile theme by site config';
+$lang_module['theme_mobile_bymod'] = 'PC theme by module config';
+$lang_module['theme_mobile_bysite'] = 'PC theme by site config';
 $lang_module['keywords'] = 'Keywords';
 $lang_module['keywords_info'] = 'Separated by commas';
 $lang_module['funcs_list'] = 'List of function modules &ldquo;%s&rdquo;';
