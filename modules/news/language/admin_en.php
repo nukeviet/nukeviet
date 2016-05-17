@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -259,6 +259,7 @@ $lang_module['structure_image_upload'] = 'The module\'s upload images are archiv
 $lang_module['config_source'] = 'Configuration display writing source at detail information';
 $lang_module['config_source_title'] = 'Show title of information source';
 $lang_module['config_source_link'] = 'Show link of information source';
+$lang_module['config_source_link_nofollow'] = 'Show link of information source (rel= "nofollow")';
 $lang_module['config_source_logo'] = 'Show logo of information source';
 $lang_module['tags'] = 'Tags manage';
 $lang_module['add_tags'] = 'Add tag';
@@ -279,7 +280,6 @@ $lang_module['addtocat'] = 'Add featured article in the category';
 $lang_module['delete_from_cat'] = 'Delete posts from category';
 $lang_module['not_featured'] = 'No posts yet';
 $lang_module['notification_post_queue'] = 'Approve post <strong>%s</strong> by <strong>%s</strong><em>%s</em>';
-
 $lang_module['ad_block_show'] = 'Displaying the sub block';
 $lang_module['ad_block_top'] = 'Block top category';
 $lang_module['ad_block_bot'] = 'Block bottom category';

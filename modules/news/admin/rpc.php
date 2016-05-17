@@ -97,9 +97,21 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                         $catid_i = $listcatid_arr[0];
 
                         $webtitle = htmlspecialchars(nv_unhtmlspecialchars($news_contents['title']), ENT_QUOTES);
-                        $webhome = nv_url_rewrite(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
-                        $linkpage = nv_url_rewrite(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'], 1);
-                        $webrss = nv_url_rewrite(NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $global_array_cat[$catid_i]['alias'], 1);
+
+                        $webhome = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
+                        if (strpos($webhome, NV_MY_DOMAIN) !== 0) {
+                            $webhome = NV_MY_DOMAIN . $webhome;
+                        }
+
+                        $linkpage = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], 1);
+                        if (strpos($linkpage, NV_MY_DOMAIN) !== 0) {
+                            $linkpage = NV_MY_DOMAIN . $linkpage;
+                        }
+
+                        $webrss = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['rss'] . '/' . $global_array_cat[$catid_i]['alias'], 1);
+                        if (strpos($webrss, NV_MY_DOMAIN) !== 0) {
+                            $webrss = NV_MY_DOMAIN . $webrss;
+                        }
 
                         $pingtotal = $nv_Request->get_int('total', 'post', 0);
                         if ($sys_info['allowed_set_time_limit']) {

@@ -43,7 +43,7 @@ if ($id > 0 and $catid > 0) {
     $content = $result->fetch();
     unset($sql, $result);
     if ($content['id'] > 0) {
-        $body_contents = $db_slave->query('SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($content['id'] / 2000) . ' where id=' . $content['id'])->fetch();
+        $body_contents = $db_slave->query('SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_save FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $content['id'])->fetch();
         $content = array_merge($content, $body_contents);
         unset($body_contents);
 
@@ -64,7 +64,7 @@ if ($id > 0 and $catid > 0) {
             $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
 
             $meta_tags = nv_html_meta_tags();
-            $content['bodytext'] = $db_slave->query('SELECT bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($content['id'] / 2000) . ' where id=' . $content['id'])->fetchColumn();
+            $content['bodytext'] = $db_slave->query('SELECT bodyhtml FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $content['id'])->fetchColumn();
 
             $result = array(
                 'url' => $global_config['site_url'],

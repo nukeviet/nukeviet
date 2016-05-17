@@ -325,7 +325,7 @@ if (empty($global_config['site_logo'])) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
 }
 
-$global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_map("trim", explode(',', $global_config['ssl_https_modules']));
+$global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_map('trim', explode(',', $global_config['ssl_https_modules']));
 
 define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
@@ -379,22 +379,13 @@ if (!empty($admin_cookie)) {
     require NV_ROOTDIR . '/includes/core/is_admin.php';
 }
 
-if (defined('NV_IS_ADMIN')) {
-    // Buoc admin khai bao lai pass neu khong online trong khoang thoi gian nhat dinh
-    if (empty($admin_info['checkpass'])) {
-        if ($nv_Request->isset_request(NV_ADMINRELOGIN_VARIABLE, 'get') and $nv_Request->get_int(NV_ADMINRELOGIN_VARIABLE, 'get') == 1) {
-            require NV_ROOTDIR . '/includes/core/admin_relogin.php';
-            exit();
-        }
-    }
-} else {
+// Dinh chi hoat dong cua site
+if (!defined('NV_IS_ADMIN')) {
     $site_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post', NV_LANG_DATA);
     if (!in_array($site_lang, $global_config['allow_sitelangs'])) {
         $global_config['closed_site'] = 1;
     }
 }
-
-// Dinh chi hoat dong cua site
 if ($nv_check_update and !defined('NV_IS_UPDATE')) {
     // Dinh chi neu khong la admin toi cao
     if (!defined('NV_ADMIN') and !defined('NV_IS_GODADMIN')) {

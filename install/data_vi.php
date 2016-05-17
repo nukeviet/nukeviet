@@ -12,135 +12,135 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$my_lang['modules'] = array();
-$my_lang['modules']['about'] = 'Giới thiệu';
-$my_lang['modules']['about_for_acp'] = '';
-$my_lang['modules']['news'] = 'Tin Tức';
-$my_lang['modules']['news_for_acp'] = '';
-$my_lang['modules']['users'] = 'Thành viên';
-$my_lang['modules']['users_for_acp'] = 'Tài khoản';
-$my_lang['modules']['contact'] = 'Liên hệ';
-$my_lang['modules']['contact_for_acp'] = '';
-$my_lang['modules']['statistics'] = 'Thống kê';
-$my_lang['modules']['statistics_for_acp'] = '';
-$my_lang['modules']['voting'] = 'Thăm dò ý kiến';
-$my_lang['modules']['voting_for_acp'] = '';
-$my_lang['modules']['banners'] = 'Quảng cáo';
-$my_lang['modules']['banners_for_acp'] = '';
-$my_lang['modules']['seek'] = 'Tìm kiếm';
-$my_lang['modules']['seek_for_acp'] = '';
-$my_lang['modules']['menu'] = 'Menu Site';
-$my_lang['modules']['menu_for_acp'] = '';
-$my_lang['modules']['comment'] = 'Bình luận';
-$my_lang['modules']['comment_for_acp'] = 'Quản lý bình luận';
-$my_lang['modules']['siteterms'] = 'Điều khoản sử dụng';
-$my_lang['modules']['siteterms_for_acp'] = '';
-$my_lang['modules']['feeds'] = 'RSS-feeds';
-$my_lang['modules']['Page'] = 'Page';
-$my_lang['modules']['Page_for_acp'] = '';
-$my_lang['modules']['freecontent'] = 'Giới thiệu sản phẩm';
-$my_lang['modules']['freecontent_for_acp'] = '';
+$install_lang['modules'] = array();
+$install_lang['modules']['about'] = 'Giới thiệu';
+$install_lang['modules']['about_for_acp'] = '';
+$install_lang['modules']['news'] = 'Tin Tức';
+$install_lang['modules']['news_for_acp'] = '';
+$install_lang['modules']['users'] = 'Thành viên';
+$install_lang['modules']['users_for_acp'] = 'Tài khoản';
+$install_lang['modules']['contact'] = 'Liên hệ';
+$install_lang['modules']['contact_for_acp'] = '';
+$install_lang['modules']['statistics'] = 'Thống kê';
+$install_lang['modules']['statistics_for_acp'] = '';
+$install_lang['modules']['voting'] = 'Thăm dò ý kiến';
+$install_lang['modules']['voting_for_acp'] = '';
+$install_lang['modules']['banners'] = 'Quảng cáo';
+$install_lang['modules']['banners_for_acp'] = '';
+$install_lang['modules']['seek'] = 'Tìm kiếm';
+$install_lang['modules']['seek_for_acp'] = '';
+$install_lang['modules']['menu'] = 'Menu Site';
+$install_lang['modules']['menu_for_acp'] = '';
+$install_lang['modules']['comment'] = 'Bình luận';
+$install_lang['modules']['comment_for_acp'] = 'Quản lý bình luận';
+$install_lang['modules']['siteterms'] = 'Điều khoản sử dụng';
+$install_lang['modules']['siteterms_for_acp'] = '';
+$install_lang['modules']['feeds'] = 'RSS-feeds';
+$install_lang['modules']['Page'] = 'Page';
+$install_lang['modules']['Page_for_acp'] = '';
+$install_lang['modules']['freecontent'] = 'Giới thiệu sản phẩm';
+$install_lang['modules']['freecontent_for_acp'] = '';
 
-$my_lang['modfuncs'] = array();
-$my_lang['modfuncs']['users'] = array();
-$my_lang['modfuncs']['users']['login'] = 'Đăng nhập';
-$my_lang['modfuncs']['users']['register'] = 'Đăng ký';
-$my_lang['modfuncs']['users']['lostpass'] = 'Khôi phục mật khẩu';
-$my_lang['modfuncs']['users']['active'] = 'Kích hoạt tài khoản';
-$my_lang['modfuncs']['users']['editinfo'] = 'Thiếp lập tài khoản';
-$my_lang['modfuncs']['users']['memberlist'] = 'Danh sách thành viên';
-$my_lang['modfuncs']['users']['logout'] = 'Thoát';
-$my_lang['modfuncs']['users']['groups'] = 'Quản lý nhóm';
+$install_lang['modfuncs'] = array();
+$install_lang['modfuncs']['users'] = array();
+$install_lang['modfuncs']['users']['login'] = 'Đăng nhập';
+$install_lang['modfuncs']['users']['register'] = 'Đăng ký';
+$install_lang['modfuncs']['users']['lostpass'] = 'Khôi phục mật khẩu';
+$install_lang['modfuncs']['users']['active'] = 'Kích hoạt tài khoản';
+$install_lang['modfuncs']['users']['editinfo'] = 'Thiếp lập tài khoản';
+$install_lang['modfuncs']['users']['memberlist'] = 'Danh sách thành viên';
+$install_lang['modfuncs']['users']['logout'] = 'Thoát';
+$install_lang['modfuncs']['users']['groups'] = 'Quản lý nhóm';
 
-$my_lang['modfuncs']['statistics'] = array();
-$my_lang['modfuncs']['statistics']['allreferers'] = 'Theo đường dẫn đến site';
-$my_lang['modfuncs']['statistics']['allcountries'] = 'Theo quốc gia';
-$my_lang['modfuncs']['statistics']['allbrowsers'] = 'Theo trình duyệt';
-$my_lang['modfuncs']['statistics']['allos'] = 'Theo hệ điều hành';
-$my_lang['modfuncs']['statistics']['allbots'] = 'Theo máy chủ tìm kiếm';
-$my_lang['modfuncs']['statistics']['referer'] = 'Đường dẫn đến site theo tháng';
+$install_lang['modfuncs']['statistics'] = array();
+$install_lang['modfuncs']['statistics']['allreferers'] = 'Theo đường dẫn đến site';
+$install_lang['modfuncs']['statistics']['allcountries'] = 'Theo quốc gia';
+$install_lang['modfuncs']['statistics']['allbrowsers'] = 'Theo trình duyệt';
+$install_lang['modfuncs']['statistics']['allos'] = 'Theo hệ điều hành';
+$install_lang['modfuncs']['statistics']['allbots'] = 'Theo máy chủ tìm kiếm';
+$install_lang['modfuncs']['statistics']['referer'] = 'Đường dẫn đến site theo tháng';
 
-$my_lang['blocks_groups'] = array();
-$my_lang['blocks_groups']['news'] = array();
-$my_lang['blocks_groups']['news']['module.block_newscenter'] = 'Tin mới nhất';
-$my_lang['blocks_groups']['news']['global.block_category'] = 'Chủ đề';
-$my_lang['blocks_groups']['news']['global.block_tophits'] = 'Tin xem nhiều';
-$my_lang['blocks_groups']['banners'] = array();
-$my_lang['blocks_groups']['banners']['global.banners1'] = 'Quảng cáo giữa trang';
-$my_lang['blocks_groups']['banners']['global.banners2'] = 'Quảng cáo cột trái';
-$my_lang['blocks_groups']['banners']['global.banners3'] = 'Quảng cáo cột phải';
-$my_lang['blocks_groups']['statistics'] = array();
-$my_lang['blocks_groups']['statistics']['global.counter'] = 'Thống kê';
-$my_lang['blocks_groups']['about'] = array();
-$my_lang['blocks_groups']['about']['global.about'] = 'Giới thiệu';
-$my_lang['blocks_groups']['voting'] = array();
-$my_lang['blocks_groups']['voting']['global.voting_random'] = 'Thăm dò ý kiến';
-$my_lang['blocks_groups']['users'] = array();
-$my_lang['blocks_groups']['users']['global.user_button'] = 'Đăng nhập thành viên';
-$my_lang['blocks_groups']['theme'] = array();
-$my_lang['blocks_groups']['theme']['global.company_info'] = 'Công ty chủ quản';
-$my_lang['blocks_groups']['theme']['global.menu_footer'] = 'Các chuyên mục chính';
-$my_lang['blocks_groups']['freecontent'] = array();
-$my_lang['blocks_groups']['freecontent']['global.free_content'] = 'Sản phẩm';
+$install_lang['blocks_groups'] = array();
+$install_lang['blocks_groups']['news'] = array();
+$install_lang['blocks_groups']['news']['module.block_newscenter'] = 'Tin mới nhất';
+$install_lang['blocks_groups']['news']['global.block_category'] = 'Chủ đề';
+$install_lang['blocks_groups']['news']['global.block_tophits'] = 'Tin xem nhiều';
+$install_lang['blocks_groups']['banners'] = array();
+$install_lang['blocks_groups']['banners']['global.banners1'] = 'Quảng cáo giữa trang';
+$install_lang['blocks_groups']['banners']['global.banners2'] = 'Quảng cáo cột trái';
+$install_lang['blocks_groups']['banners']['global.banners3'] = 'Quảng cáo cột phải';
+$install_lang['blocks_groups']['statistics'] = array();
+$install_lang['blocks_groups']['statistics']['global.counter'] = 'Thống kê';
+$install_lang['blocks_groups']['about'] = array();
+$install_lang['blocks_groups']['about']['global.about'] = 'Giới thiệu';
+$install_lang['blocks_groups']['voting'] = array();
+$install_lang['blocks_groups']['voting']['global.voting_random'] = 'Thăm dò ý kiến';
+$install_lang['blocks_groups']['users'] = array();
+$install_lang['blocks_groups']['users']['global.user_button'] = 'Đăng nhập thành viên';
+$install_lang['blocks_groups']['theme'] = array();
+$install_lang['blocks_groups']['theme']['global.company_info'] = 'Công ty chủ quản';
+$install_lang['blocks_groups']['theme']['global.menu_footer'] = 'Các chuyên mục chính';
+$install_lang['blocks_groups']['freecontent'] = array();
+$install_lang['blocks_groups']['freecontent']['global.free_content'] = 'Sản phẩm';
 
-$my_lang['cron'] = array();
-$my_lang['cron']['cron_online_expired_del'] = 'Xóa các dòng ghi trạng thái online đã cũ trong CSDL';
-$my_lang['cron']['cron_dump_autobackup'] = 'Tự động lưu CSDL';
-$my_lang['cron']['cron_auto_del_temp_download'] = 'Xóa các file tạm trong thư mục tmp';
-$my_lang['cron']['cron_del_ip_logs'] = 'Xóa IP log files, Xóa các file nhật ký truy cập';
-$my_lang['cron']['cron_auto_del_error_log'] = 'Xóa các file error_log quá hạn';
-$my_lang['cron']['cron_auto_sendmail_error_log'] = 'Gửi email các thông báo lỗi cho admin';
-$my_lang['cron']['cron_ref_expired_del'] = 'Xóa các referer quá hạn';
-$my_lang['cron']['cron_auto_check_version'] = 'Kiểm tra phiên bản NukeViet';
-$my_lang['cron']['cron_notification_autodel'] = 'Xóa thông báo cũ';
+$install_lang['cron'] = array();
+$install_lang['cron']['cron_online_expired_del'] = 'Xóa các dòng ghi trạng thái online đã cũ trong CSDL';
+$install_lang['cron']['cron_dump_autobackup'] = 'Tự động lưu CSDL';
+$install_lang['cron']['cron_auto_del_temp_download'] = 'Xóa các file tạm trong thư mục tmp';
+$install_lang['cron']['cron_del_ip_logs'] = 'Xóa IP log files, Xóa các file nhật ký truy cập';
+$install_lang['cron']['cron_auto_del_error_log'] = 'Xóa các file error_log quá hạn';
+$install_lang['cron']['cron_auto_sendmail_error_log'] = 'Gửi email các thông báo lỗi cho admin';
+$install_lang['cron']['cron_ref_expired_del'] = 'Xóa các referer quá hạn';
+$install_lang['cron']['cron_auto_check_version'] = 'Kiểm tra phiên bản NukeViet';
+$install_lang['cron']['cron_notification_autodel'] = 'Xóa thông báo cũ';
 
-$my_lang['groups']['NukeViet-Fans'] = 'Nhóm những người hâm mộ hệ thống NukeViet';
-$my_lang['groups']['NukeViet-Admins'] = 'Nhóm những người quản lý website xây dựng bằng hệ thống NukeViet';
-$my_lang['groups']['NukeViet-Programmers'] = 'Nhóm Lập trình viên hệ thống NukeViet';
+$install_lang['groups']['NukeViet-Fans'] = 'Nhóm những người hâm mộ hệ thống NukeViet';
+$install_lang['groups']['NukeViet-Admins'] = 'Nhóm những người quản lý website xây dựng bằng hệ thống NukeViet';
+$install_lang['groups']['NukeViet-Programmers'] = 'Nhóm Lập trình viên hệ thống NukeViet';
 
-$my_lang['vinades_fullname'] = "Công ty cổ phần phát triển nguồn mở Việt Nam";
-$my_lang['vinades_address'] = "Phòng 2004 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội";
-$my_lang['nukeviet_description'] = 'Chia sẻ thành công, kết nối đam mê';
-$my_lang['disable_site_content'] = 'Vì lý do kỹ thuật website tạm ngưng hoạt động. Thành thật xin lỗi các bạn vì sự bất tiện này!';
+$install_lang['vinades_fullname'] = "Công ty cổ phần phát triển nguồn mở Việt Nam";
+$install_lang['vinades_address'] = "Phòng 2004 - Tòa nhà CT2 Nàng Hương, 583 Nguyễn Trãi, Hà Nội";
+$install_lang['nukeviet_description'] = 'Chia sẻ thành công, kết nối đam mê';
+$install_lang['disable_site_content'] = 'Vì lý do kỹ thuật website tạm ngưng hoạt động. Thành thật xin lỗi các bạn vì sự bất tiện này!';
 
 $menu_rows_lev0['about'] = array(
-    'title' => $my_lang['modules']['about'],
+    'title' => $install_lang['modules']['about'],
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=about",
     'groups_view' => '6',
     'op' => ''
 );
 $menu_rows_lev0['news'] = array(
-    'title' => $my_lang['modules']['news'],
+    'title' => $install_lang['modules']['news'],
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=news",
     'groups_view' => '6',
     'op' => ''
 );
 $menu_rows_lev0['users'] = array(
-    'title' => $my_lang['modules']['users'],
+    'title' => $install_lang['modules']['users'],
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=users",
     'groups_view' => '6',
     'op' => ''
 );
 $menu_rows_lev0['statistics'] = array(
-    'title' => $my_lang['modules']['statistics'],
+    'title' => $install_lang['modules']['statistics'],
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=statistics",
     'groups_view' => '2',
     'op' => ''
 );
 $menu_rows_lev0['voting'] = array(
-    'title' => $my_lang['modules']['voting'],
+    'title' => $install_lang['modules']['voting'],
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=voting",
     'groups_view' => '6',
     'op' => ''
 );
 $menu_rows_lev0['seek'] = array(
-    'title' => $my_lang['modules']['seek'],
+    'title' => $install_lang['modules']['seek'],
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=seek",
     'groups_view' => '6',
     'op' => ''
 );
 $menu_rows_lev0['contact'] = array(
-    'title' => $my_lang['modules']['contact'],
+    'title' => $install_lang['modules']['contact'],
     'link' => NV_BASE_SITEURL . "index.php?language=" . $lang_data . "&nv=contact",
     'groups_view' => '6',
     'op' => ''

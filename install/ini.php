@@ -42,7 +42,7 @@ if ($sys_info['ini_set_support']) {
     ini_set('auto_detect_line_endings', 0);
 }
 
-$sys_info['php_required'] = '5.4.0';
+$sys_info['php_required'] = '5.5.0';
 $sys_info['opendir_support'] = (function_exists('opendir') and ! in_array('opendir', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['gd_support'] = (extension_loaded('gd')) ? 1 : 0;
 $sys_info['fileuploads_support'] = (ini_get('file_uploads')) ? 1 : 0;

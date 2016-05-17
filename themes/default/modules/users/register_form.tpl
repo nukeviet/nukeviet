@@ -167,6 +167,7 @@
             </div>
         </div>
     	<!-- END: reg_captcha -->
+    	<!-- BEGIN: agreecheck -->
         <div>
             <div>
                 <div class="form-group text-center check-box required" data-mess="">
@@ -174,6 +175,7 @@
                 </div>
             </div>
         </div>
+        <!-- END: agreecheck -->
     	<div class="text-center margin-bottom-lg">
             <input type="hidden" name="checkss" value="{CHECKSS}" />
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->

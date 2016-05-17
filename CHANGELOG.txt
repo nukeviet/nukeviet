@@ -1,6 +1,25 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.29
+- Requires PHP 5.5 or later
+- PHPMailer v6.0
+- Endroid/qrcode v1.6.5
+- CKEditor v4.5.9
+- Update theme default
+- Update theme admin default
+- Update Memcache class
+- Update Request class
+- Update DB class
+- Module upload: fix download image
+- Fix update, upgrade system and extentions
+- Fix check update, auto update
+- Module users: Add feature for group's leader (creat user, delete user, accept user, delete user, change password), update theme redirect login, update facebook login, change rule for view list users
+- Module extensions: Fix download file
+- Add more options for module's theme mobile
+- Support statisics for CocCoc browser
+- Module news: Optimize database, fix sample data
+
 NUKEVIET 4.0.28
 - Fix set tollower meta-tag name
 - Update javascript to lastest version: lazyload 1.9.7, Jcop 2.0.4, Select2 4.0.2, jquery-treeview v1.4.2, jquery.imgpreload 1.6.2, jquery.flash v1.3.3, jquery.flash v1.3.3, jquery-ui v1.12.0, jQuery v2.2.3

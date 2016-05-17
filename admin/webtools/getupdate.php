@@ -13,11 +13,12 @@ if (! defined('NV_IS_FILE_WEBTOOLS')) {
 }
 
 $page_title = $lang_module['get_update'];
+$set_active_op = 'checkupdate';
 
 $version = trim($nv_Request->get_title('version', 'get', ''));
 $package = $nv_Request->get_int('package', 'get', 0);
 
-if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $global_config['sitekey'] . session_id())) {
+if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $package . $global_config['sitekey'] . session_id())) {
     $xtpl = new XTemplate('getupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
@@ -200,7 +201,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $version . $
     die();
 }
 
-if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version . $global_config['sitekey'] . session_id())) {
+if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version . $package . $global_config['sitekey'] . session_id())) {
     $xtpl = new XTemplate('getupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
@@ -221,7 +222,8 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
             'mode' => 'getsysupd',
             'version' => $version,
             'package' => $package
-        )
+        ),
+        'timeout' => 0
     );
 
     // Delete temp file if exists
@@ -245,23 +247,41 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
     } else {
         $zip = new PclZip(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename);
         $ziplistContent = $zip->listContent();
+        
+        // Not exists (can not download)
+        $warning = 2;
 
-        $warning = false;
-
-        // Check security
-        foreach ($ziplistContent as $zipContent) {
-            if (! preg_match("/^install\//is", $zipContent['filename'])) {
-                $warning = true;
+        if (!empty($ziplistContent)) {
+            // Package ok
+            $warning = 0;
+            foreach ($ziplistContent as $zipContent) {
+                if (!preg_match("/^install\//is", $zipContent['filename'])) {
+                    // Package invald
+                    $warning = 1;
+                }
             }
         }
 
-        if ($warning === true) {
-            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_warning'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;checksess=' . md5('unzip' . $version . $global_config['sitekey'] . session_id())));
+        if ($warning == 1) {
+            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_warning'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checksess=' . md5('unzip' . $version . $package . $global_config['sitekey'] . session_id())));
 
             $xtpl->parse('warning');
             echo $xtpl->text('warning');
+        } elseif ($warning == 2) {
+            $error = $lang_module['get_update_error_file_download'];
+            $new_version = nv_geVersion(NV_CURRENTTIME);
+            if ($new_version !== false and !is_string($new_version)) {
+                $manual_link = (string)$new_version->link;
+                if (!empty($manual_link)) {
+                    $error .= ' ' . sprintf($lang_module['get_update_error_file_download1'], $manual_link);
+                }
+            }
+            
+            $xtpl->assign('ERROR', $error);
+            $xtpl->parse('error');
+            echo $xtpl->text('error');
         } else {
-            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_ok'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;checksess=' . md5('unzip' . $version . $global_config['sitekey'] . session_id())));
+            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_ok'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;version=' . $version . '&amp;package=' . $package . '&amp;checksess=' . md5('unzip' . $version . $package . $global_config['sitekey'] . session_id())));
 
             $xtpl->parse('ok');
             echo $xtpl->text('ok');
@@ -271,13 +291,14 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $version 
     die();
 }
 
-if ($nv_Request->get_title('checksess', 'get', '') == md5($version . $global_config['sitekey'] . session_id())) {
+if ($nv_Request->get_title('checksess', 'get', '') == md5($version . $package . $global_config['sitekey'] . session_id())) {
     $xtpl = new XTemplate('getupdate.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
     $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
     $xtpl->assign('VERSION', $version);
-    $xtpl->assign('CHECKSESS', md5('download' . $version . $global_config['sitekey'] . session_id()));
+    $xtpl->assign('PACKAGE', $package);
+    $xtpl->assign('CHECKSESS', md5('download' . $version . $package . $global_config['sitekey'] . session_id()));
 
     $xtpl->parse('main');
     $contents = $xtpl->text('main');

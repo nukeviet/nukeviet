@@ -1641,7 +1641,7 @@ function nv_site_mods()
                     $user_ops[] = 'active';
                 }
             }
-            if (($global_config['whoviewuser'] == 2 and defined('NV_IS_ADMIN')) or ($global_config['whoviewuser'] == 1 and defined('NV_IS_USER')) or $global_config['whoviewuser'] == 0) {
+            if (nv_user_in_groups($global_config['whoviewuser'])) {
                 $user_ops[] = 'memberlist';
             }
             if (defined('NV_OPENID_ALLOWED')) {
