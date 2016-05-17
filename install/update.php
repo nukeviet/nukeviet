@@ -738,7 +738,7 @@ class NvUpdate
             }
 
             $mod['class'] = $i++ % 2 ? 'specalt' : 'spec';
-            $mod['time'] = nv_date('d/m/y H:i', $mod['time']);
+            $mod['time'] = $mod['date'] ? nv_date('d/m/y H:i', strtotime($mod['date'])) : 'N/A';
 
             $xtpl->assign('ROW', $mod);
             $xtpl->parse('module_info.loop');
@@ -1786,25 +1786,25 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
             
             $onlineModules = array();
             foreach ($XML_exts as $extname => $values) {
-                $exts_type = trim((string )$values->type);
-                $exts_name = trim((string )$values->name);
+                $exts_type = trim((string)$values->type);
+                $exts_name = trim((string)$values->name);
                 if ($exts_type == 'module') {
                     $onlineModules[$exts_name] = array(
                         'id' => (int)$values->id,
-                        'type' => (string )$values->type,
-                        'name' => (string )$values->name,
-                        'version' => (string )$values->version,
-                        'date' => (string )$values->date,
-                        'new_version' => (string )$values->new_version,
-                        'new_date' => (string )$values->new_date,
-                        'author' => (string )$values->author,
-                        'license' => (string )$values->license,
-                        'mode' => (string )$values->mode,
-                        'message' => (string )$values->message,
-                        'link' => (string )$values->link,
-                        'support' => (string )$values->support,
+                        'type' => (string)$values->type,
+                        'name' => (string)$values->name,
+                        'version' => (string)$values->version,
+                        'date' => (string)$values->date,
+                        'new_version' => (string)$values->new_version,
+                        'new_date' => (string)$values->new_date,
+                        'author' => (string)$values->author,
+                        'license' => (string)$values->license,
+                        'mode' => (string)$values->mode,
+                        'message' => (string)$values->message,
+                        'link' => (string)$values->link,
+                        'support' => (string)$values->support,
                         'updateable' => array(),
-                        'origin' => ((string )$values->origin) == 'true' ? true : false,
+                        'origin' => ((string)$values->origin) == 'true' ? true : false,
                     );
             
                     $onlineModules[$exts_name]['pubtime'] = strtotime($onlineModules[$exts_name]['date']);
@@ -1815,9 +1815,9 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                     if (!empty($updateables)) {
                         foreach ($updateables as $updateable) {
                             $onlineModules[$exts_name]['updateable'][] = array(
-                                'fid' => (string )$updateable->upd_fid,
-                                'old' => explode(',', (string )$updateable->upd_old),
-                                'new' => (string )$updateable->upd_new,
+                                'fid' => (string)$updateable->upd_fid,
+                                'old' => explode(',', (string)$updateable->upd_old),
+                                'new' => (string)$updateable->upd_new,
                             );
                         }
                     }
