@@ -90,11 +90,10 @@ class Database extends pdo
             if ($this->dbtype == 'oci') {
                 $_sql .= ' RETURNING ' . $column . ' INTO :primary_key';
             }
-            $i =0;
             $stmt = $this->prepare($_sql);
             if(!empty($data)) {
                 foreach ($data as $key => $value) {
-                    $stmt->bindParam(':' . $key, $data[$key], PDO::PARAM_STR, strlen($value));
+                    $stmt->bindParam(':' . $key, $value, PDO::PARAM_STR, strlen($value));
                 }
             }
             if ($this->dbtype == 'oci') {
@@ -108,6 +107,32 @@ class Database extends pdo
                 return $this->lastInsertId();
             }
         } catch (PDOException $e) {
+            trigger_error($e->getMessage());
+        }
+        return false;
+    }
+    
+    /**
+     * Database::affected_rows_count()
+     * Get the number of affected rows by the last INSERT, UPDATE, REPLACE or DELETE query
+     *
+     * @param mixed $_sql
+     * @param mixed $data
+     * @return
+     */
+    public function affected_rows_count($_sql, $data = array())
+    {
+        try {
+            $stmt = $this->prepare($_sql);
+            if (!empty($data)) {
+                foreach ($data as $key => $value) {
+                    $stmt->bindParam(':' . $key, $value, PDO::PARAM_STR, strlen($value));
+                }
+            }
+            $stmt->execute();
+            return $stmt->rowCount();
+        }
+        catch (PDOException $e) {
             trigger_error($e->getMessage());
         }
         return false;
