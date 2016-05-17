@@ -380,7 +380,7 @@ function nv_xmlSitemap_generate($url)
                 $values['link'] = NV_MY_DOMAIN . $values['link'];
             }
             $row = $xml->addChild('url');
-            $row->addChild('loc', "'" . $values['link'] . "'");
+            $row->addChild('loc', $values['link']);
             $row->addChild('lastmod', date('c', $values['publtime']));
             $row->addChild('changefreq', 'daily');
             $row->addChild('priority', '0.8');
@@ -393,7 +393,6 @@ function nv_xmlSitemap_generate($url)
 
     $contents = $xml->asXML();
     $contents = nv_url_rewrite($contents);
-    $contents = preg_replace("/(<loc>)\'(.*?)\'(<\/loc>)/", "\\1\\2\\3", $contents);
 
     nv_xmlOutput($contents, $lastModified);
 }
