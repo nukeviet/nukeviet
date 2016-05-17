@@ -563,8 +563,8 @@ class NvUpdate
 
                 if (! empty($array['stopprocess'])) {
                     // Dung cong viec do loi
-
-                    $xtpl->assign('ERROR_MESSAGE', sprintf($this->lang['update_task_error_message'], $array['stopprocess']['title']));
+                    global $nv_update_config;
+                    $xtpl->assign('ERROR_MESSAGE', sprintf($this->lang['update_task_error_message'], $array['stopprocess']['title'], $nv_update_config['support_website']));
                     $xtpl->parse('main.step3.data.errorProcess');
                 } elseif ($array['AllPassed'] == true) {
                     // Hoan tat cong viec va chuyen sang buoc tiep theo
