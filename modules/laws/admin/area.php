@@ -58,7 +58,7 @@ if ( $nv_Request->isset_request( 'del', 'post' ) )
     $id = $nv_Request->get_int( 'del', 'post', 0 );
     if ( ! isset( $aList[$id] ) ) die( $lang_module['errorAreaNotExists'] );
     if ( $aList[$id]['count'] > 0 ) die( $lang_module['errorAreaYesSub'] );
-    $sql = "SELECT COUNT(*) as count FROM " . NV_PREFIXLANG . "_" . $module_data . "_row WHERE aid=" . $id;
+    $sql = "SELECT COUNT(*) as count FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_row_area t2 ON t1.id=t2.row_id WHERE area_id=" . $id;
     $result = $db->query( $sql );
     $row = $result->fetch();
     if ( $row['count'] ) die( $lang_module['errorAreaYesRow'] );

@@ -105,7 +105,7 @@
 <!-- END: other_cat -->
 
 <!-- BEGIN: other_area -->
-<h3 class="subtitle">{LANG.other_area} <a href="{DATA.area_url}" title="{DATA.area}">"{DATA.area}"</a></h3>
+<h3 class="subtitle">{LANG.other_area}</h3>
 {OTHER_AREA}
 <!-- END: other_area -->
 

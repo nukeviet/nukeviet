@@ -51,7 +51,8 @@ if ( ! function_exists( 'nv_law_block_10area' ) )
 					$in = " t2.area_id IN(" . implode( ",", $in ) . ")";
 				}
 
-				$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_row_area t2 WHERE" . $in . " AND status=1";
+				$sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 INNER JOIN " . NV_PREFIXLANG . "_" . $module_data . "_row_area t2 ON t1.id=t2.row_id WHERE" . $in . " AND status=1";
+
 				$result = $db->query( $sql );
 				$num = $result->fetchColumn();
 

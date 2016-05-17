@@ -435,7 +435,7 @@ else
 	    else
 	    {
 	        $post['relatement'] = $post['replacement'] = $post['title'] = $post['code'] = $post['introtext'] = $post['bodytext'] = $post['keywords'] = $post['author'] = $post['publtime'] = $post['exptime'] = "";
-	        $post['groups_view'] = $post['groups_download'] = $post['files'] = array( 6 );
+	        $post['groups_view'] = $post['groups_download'] = array( 6 );
 	        $post['cid'] = $post['sid'] = $post['sgid'] = $post['who_view'] = $post['who_download'] = 0;
 
 	        $post['groupcss'] = $post['groupcss2'] = "groupcss0";
@@ -645,12 +645,13 @@ else
 	    $all_page = $result->fetch();
 	    $all_page = $all_page['ccount'];
 
-	    $page = $nv_Request->get_int( 'page', 'get', 0 );
+	    $page = $nv_Request->get_int( 'page', 'get', 1 );
+		
 	    $per_page = 30;
 
 	    if ( $all_page )
 	    {
-	        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . " WHERE 1=1 " . $where . " ORDER BY addtime DESC LIMIT " . $page . "," . $per_page;
+	        $sql = "SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_row t1 " . $join . " WHERE 1=1 " . $where . " ORDER BY addtime DESC LIMIT " . (($page - 1) * $per_page) . "," . $per_page;
 	        $result = $db->query( $sql );
 	        $a = 0;
 	        while ( $row = $result->fetch() )
