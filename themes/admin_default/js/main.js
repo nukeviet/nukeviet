@@ -8,9 +8,13 @@ function timeoutsesscancel() {
         cache: false
     }).done(function() {
         $("#timeoutsess").hide();
+        load_notification = 1;
         myTimerPage = setTimeout(function() {
             timeoutsessrun();
         }, nv_check_pass_mstime);
+        if (typeof nv_get_notification === "function") { 
+            nv_get_notification();
+        }        
     });
 }
 
@@ -21,14 +25,16 @@ function timeoutsessrun() {
     jQuery("#timeoutsess").show();
     var msBegin = new Date().getTime();
     myTimersecField = setInterval(function() {
+        load_notification = 0;
         var msCurrent = new Date().getTime();
         var ms = Timeout - Math.round((msCurrent - msBegin) / 1000);
         if (ms >= 0) {
             document.getElementById('secField').innerHTML = ms;
-        } else if (ms < -3) {
-            clearInterval(myTimersecField);
-            $(window).unbind();
-            window.location.reload();
+        } else {
+        	clearInterval(myTimersecField);
+        	$.get(nv_base_siteurl + "index.php?second=admin_logout&js=1&nocache=" + (new Date).getTime(), function(re) {
+                window.location.reload();
+			});        	
         }
     }, 1000);
 }
