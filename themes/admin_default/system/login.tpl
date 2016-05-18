@@ -91,7 +91,7 @@
 					</p>
 					<!-- END: captcha -->
 					<div id="smb">
-						<input type="hidden" name="checkss" value="{CHECKSS}" />
+						<input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
 						<input class="btn btn-primary" type="submit" value="{N_SUBMIT}" />
 					</div>
 				</form>

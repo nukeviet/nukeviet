@@ -138,10 +138,10 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $news_contents['source'] = '<img width="100px" src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $source_logo . '">';
         }
     }
-    
+
     $news_contents['publtime'] = nv_date('l - d/m/Y H:i', $news_contents['publtime']);
-    $news_contents['newscheckss'] = md5($news_contents['id'] . session_id() . $global_config['sitekey']);
-    
+    $news_contents['newscheckss'] = md5($news_contents['id'] . NV_CHECK_SESSION);
+
     $related_new_array = array();
     $related_array = array();
     if ($st_links > 0) {

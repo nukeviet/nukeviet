@@ -14,7 +14,12 @@ NUKEVIET 4.0.29
 - Module upload: fix download image
 - Fix update, upgrade system and extentions
 - Fix check update, auto update
-- Module users: Add feature for group's leader (creat user, delete user, accept user, delete user, change password), update theme redirect login, update facebook login, change rule for view list users
+- Module users: 
+	Add feature for group's leader (creat user, delete user, accept user, delete user, change password), 
+	Update theme redirect login, 
+	Update facebook login
+	Change rule for view list users
+	Remove Admin Relogin
 - Module extensions: Fix download file
 - Add more options for module's theme mobile
 - Support statisics for CocCoc browser

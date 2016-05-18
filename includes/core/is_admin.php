@@ -134,8 +134,9 @@ if (! empty($admin_cookie)) {
     if ($admin_info['checkpass']) {
         if ((NV_CURRENTTIME - $admin_info['last_online']) > $global_config['admin_check_pass_time']) {
             $nv_Request->unset_request('admin,online', 'session');
-
-            Header('Location: ' . $client_info['selfurl']);
+            if (!defined('NV_IS_AJAX')) {
+                Header('Location: ' . $client_info['selfurl']);
+            }
             exit();
         }
     }

@@ -60,7 +60,7 @@ function nv_page_main($row, $ab_links, $content_comment)
     }
 
     if (defined('NV_IS_MODADMIN')) {
-        $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . $global_config['sitekey'] . session_id()));
+        $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . NV_CHECK_SESSION));
         $xtpl->assign('ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id']);
         $xtpl->parse('main.adminlink');
     }
@@ -110,7 +110,7 @@ function nv_page_main_list($array_data, $generate_page)
                 $xtpl->parse('main.loop.image');
             }
             if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . $global_config['sitekey'] . session_id()));
+                $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . NV_CHECK_SESSION));
                 $xtpl->assign('ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id']);
                 $xtpl->parse('main.loop.adminlink');
             }

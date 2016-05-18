@@ -15,7 +15,7 @@ if (! defined('NV_IS_FILE_WEBTOOLS')) {
 $contents = 'Error Access!!!';
 
 $checksess = $nv_Request->get_title('checksess', 'get', '');
-if ($checksess == md5($global_config['sitekey'] . session_id()) and file_exists(NV_ROOTDIR . '/install/update_data.php')) {
+if ($checksess == NV_CHECK_SESSION and file_exists(NV_ROOTDIR . '/install/update_data.php')) {
     $contents = '';
     $list_file_docs = nv_scandir(NV_ROOTDIR . '/install', '/^update_docs_([a-z]{2})\.html$/');
 
@@ -56,7 +56,7 @@ if ($checksess == md5($global_config['sitekey'] . session_id()) and file_exists(
     //Resets the contents of the opcode cache
     if (function_exists('opcache_reset')) {
         opcache_reset();
-    }    
+    }
 }
 
 if ($contents == '') {

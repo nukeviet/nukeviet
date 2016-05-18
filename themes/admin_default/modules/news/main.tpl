@@ -57,7 +57,7 @@
 				</div>
 			</div>
 		</div>
-		<input type="hidden" name="checkss" value="{CHECKSS}" />
+		<input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
 		<label><em>{LANG.search_note}</em></label>
 	</form>
 </div>
@@ -121,7 +121,7 @@
 							<option value="{ACTION.value}">{ACTION.title}</option>
 							<!-- END: action -->
 						</select>
-						<input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{SITEKEY}', '{LANG.msgnocheck}')" value="{LANG.action}" />
+						<input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{NV_CHECK_SESSION}', '{LANG.msgnocheck}')" value="{LANG.action}" />
 					</td>
 				</tr>
 			</tfoot>

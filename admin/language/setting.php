@@ -22,7 +22,7 @@ $xtpl = new XTemplate('setting.tpl', NV_ROOTDIR . '/themes/' . $global_config['m
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 
-if ($nv_Request->get_string('checksessseting', 'post') == md5(session_id() . 'seting')) {
+if ($nv_Request->get_string('checkss', 'post') == NV_CHECK_SESSION) {
     $read_type = $nv_Request->get_int('read_type', 'post', 0);
 
     $db->query("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $read_type . "' WHERE lang='sys' AND module = 'global' AND config_name = 'read_type'");
@@ -64,18 +64,18 @@ while (list($key, $value) = each($language_array)) {
 
     if (file_exists(NV_ROOTDIR . '/includes/language/' . $key . '/global.php')) {
         $check_lang_exit = true;
-        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&amp;dirlang=" . $key . "&amp;checksess=" . md5("readallfile" . session_id()) . "\">" . $lang_module['nv_admin_read_all'] . "</a>";
+        $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=read&amp;dirlang=" . $key . "&amp;checksess=" . md5("readallfile" . NV_CHECK_SESSION) . "\">" . $lang_module['nv_admin_read_all'] . "</a>";
 
         if (in_array($key, $lang_array_data_exit) and in_array('write', $allow_func)) {
-            $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $key . "&amp;checksess=" . md5("writeallfile" . session_id()) . "\">" . $lang_module['nv_admin_write'] . "</a>";
+            $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=write&amp;dirlang=" . $key . "&amp;checksess=" . md5("writeallfile" . NV_CHECK_SESSION) . "\">" . $lang_module['nv_admin_write'] . "</a>";
         }
 
         if ($check_lang_exit) {
-            $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=download&amp;dirlang=" . $key . "&amp;checksess=" . md5("downloadallfile" . session_id()) . "\">" . $lang_module['nv_admin_download'] . "</a>";
+            $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=download&amp;dirlang=" . $key . "&amp;checksess=" . md5("downloadallfile" . NV_CHECK_SESSION) . "\">" . $lang_module['nv_admin_download'] . "</a>";
         }
 
         if (! empty($arr_lang_func) and in_array('delete', $allow_func)) {
-            $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delete&amp;dirlang=" . $key . "&amp;checksess=" . md5("deleteallfile" . session_id()) . "\">" . $lang_module['nv_admin_delete'] . "</a>";
+            $arr_lang_func[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=delete&amp;dirlang=" . $key . "&amp;checksess=" . md5("deleteallfile" . NV_CHECK_SESSION) . "\">" . $lang_module['nv_admin_delete'] . "</a>";
         }
 
         $xtpl->assign('ROW', array(
@@ -105,8 +105,6 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-$xtpl->assign('CHECKSESSSHOW', md5(session_id() . 'show'));
-$xtpl->assign('CHECKSESSSETING', md5(session_id() . 'seting'));
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
