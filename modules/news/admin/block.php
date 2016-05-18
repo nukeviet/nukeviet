@@ -41,7 +41,7 @@ if ($cookie_bid != $bid) {
 }
 $page_title = $array_block[$bid];
 
-if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_string('checkss', 'post') == md5(session_id())) {
+if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_string('checkss', 'post') == NV_CHECK_SESSION) {
     $sql = 'SELECT id FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE bid=' . $bid;
     $result = $db_slave->query($sql);
     $_id_array_exit = array();
@@ -109,7 +109,6 @@ if ($listid == '' and $bid) {
         $xtpl->parse('main.news.bid');
     }
 
-    $xtpl->assign('CHECKSESS', md5(session_id()));
     $xtpl->parse('main.news');
 }
 

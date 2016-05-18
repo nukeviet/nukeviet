@@ -69,7 +69,7 @@ function nv_site_theme($contents, $full = true)
 
     //Links
     $html_links = array();
-    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/default/css/font-awesome.min.css' );
+    $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/font-awesome.min.css' );
     if ($global_config['current_theme_type'] == 'r') {
         $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/bootstrap.min.css' );
         $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/css/style.css' );
@@ -120,7 +120,7 @@ function nv_site_theme($contents, $full = true)
 
         unset($config_theme, $css_content, $webFontFile, $font, $subset, $gf);
     }
-    
+
     if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/colorOpt.php')) {
         include(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/colorOpt.php');
     }

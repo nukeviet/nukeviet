@@ -72,7 +72,7 @@ if (defined('NV_IS_USER')) {
  */
 if ($nv_Request->isset_request('checkss', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if ($checkss != md5($client_info['session_id'] . $global_config['sitekey'])) {
+    if ($checkss != NV_CHECK_SESSION) {
         die();
     }
 
@@ -85,11 +85,9 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'femail' => $femail,
             'fphone' => $fphone );
 
-        $checkss = md5($client_info['session_id'] . $global_config['sitekey']);
-
         $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
-        $form = contact_form_theme($array_content, $catsName, $base_url, $checkss);
+        $form = contact_form_theme($array_content, $catsName, $base_url, NV_CHECK_SESSION);
 
         exit($form);
     }
@@ -256,8 +254,7 @@ $array_content = array(
     'fphone' => $fphone );
 $array_content['bodytext'] = (isset($module_config[$module_name]['bodytext'])) ? nv_editor_br2nl($module_config[$module_name]['bodytext']) : '';
 
-$checkss = md5($client_info['session_id'] . $global_config['sitekey']);
-$contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, $checkss);
+$contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, NV_CHECK_SESSION);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents, $full_theme);
