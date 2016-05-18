@@ -209,7 +209,7 @@ $lang_module['update_taskierror'] = 'Thất bại';
 $lang_module['update_taskiok'] = 'Thành công';
 $lang_module['update_taskiwarn'] = 'Cảnh báo không thành công';
 $lang_module['update_taskiload'] = 'Đang thực hiện';
-$lang_module['update_task_error_message'] = 'Tiến trình không thể tiếp tục được do thất bại trong việc <strong>"%s"</strong>. Hãy thử đóng trình duyệt lại sau đó thực hiện lại toàn bộ công việc. Truy cập <a href="http://nukeviet.vn/phpbb/" title="Diễn đàn hỗ trợ mã nguồn mở NukeViet">diễn đàn</a> và thông báo về lỗi này để được hỗ trợ.';
+$lang_module['update_task_error_message'] = 'Tiến trình không thể tiếp tục được do thất bại trong việc <strong>"%s"</strong>. Hãy thử đóng trình duyệt lại sau đó thực hiện lại toàn bộ công việc. Truy cập <a href="%s">vào đây</a> và thông báo về lỗi này để được hỗ trợ.';
 $lang_module['update_task_all_complete'] = 'Các công việc đã hoàn tất, bạn có thể chuyển sang bước tiếp theo';
 $lang_module['update_task_all_complete_alert'] = 'Các công việc đã thực hiện hết, có một số công việc bị lỗi tuy nhiên có thể bỏ qua. Danh sách công việc lỗi được đanh dấu bên cạnh, bạn có thể kiểm tra lại sau.';
 $lang_module['update_task_load'] = 'Đang thực hiện';
@@ -217,7 +217,7 @@ $lang_module['update_task_load_message'] = 'Chúng tôi khuyến cáo bạn khô
 $lang_module['update_task_next'] = 'Công việc sắp thực hiện';
 $lang_module['update_task_start'] = 'Bắt đầu';
 $lang_module['update_task_do1_error'] = 'Công việc';
-$lang_module['update_task_do2_error'] = 'Bị lỗi do đó việc nâng cấp không thể tiếp tục được. Truy cập <a href="http://nukeviet.vn/phpbb/" title="Diễn đàn hỗ trợ mã nguồn mở NukeViet">diễn đàn</a> và thông báo về lỗi này để được hỗ trợ.';
+$lang_module['update_task_do2_error'] = 'Bị lỗi do đó việc nâng cấp không thể tiếp tục được. Truy cập <a href="%s">vào đây</a> và thông báo về lỗi này để được hỗ trợ.';
 $lang_module['update_nav_confirm'] = 'Các công việc đang thực hiện, chuyển trang hoặc tắt trình duyệt có thể dẫn tới lỗi.';
 $lang_module['update_file_info_win'] = 'Cảnh báo: Trên nền window việc di chuyển các file có thể sẽ không thực hiện được, chúng tôi khuyến khích bạn thực hiện di chuyển thủ công các files và folders trong <strong>install/update/</strong> ra ngoài thư mục gốc của website (thư mục chứa index.php, robots.php...).';
 $lang_module['update_file_info_win_manual'] = 'Sau khi di chuyển có thể nhấp vào đây để tiếp tục.';

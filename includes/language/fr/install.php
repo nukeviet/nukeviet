@@ -209,7 +209,7 @@ $lang_module['update_taskierror'] = 'Échoué';
 $lang_module['update_taskiok'] = 'Réussi';
 $lang_module['update_taskiwarn'] = 'Notification de l’échec';
 $lang_module['update_taskiload'] = 'En cours';
-$lang_module['update_task_error_message'] = 'Le processus ne peut pas continuer en raison d\'échec dans l\'étape  <strong>"%s"</strong>. Essayez à fermer votre navigateur et refaites à nouveau le travail.  Entrez dans <a href="http://nukeviet.vn/phpbb/" title="Diễn đàn hỗ trợ mã nguồn mở NukeViet"> ce forum</a> et annoncez cette erreur pour avoir des aides.';
+$lang_module['update_task_error_message'] = 'Le processus ne peut pas continuer en raison d\'échec dans l\'étape  <strong>"%s"</strong>. Essayez à fermer votre navigateur et refaites à nouveau le travail.  Entrez dans <a href="%s">lien de cette</a> et annoncez cette erreur pour avoir des aides.';
 $lang_module['update_task_all_complete'] = 'Tous les procès sont finis, vous pouvez continuer';
 $lang_module['update_task_all_complete_alert'] = 'Les procès sont termines, Il ys a des tâches erronées que vous trouvez dans la liste, veuillez les vérifiez après.';
 $lang_module['update_task_load'] = 'En cours';
@@ -217,7 +217,7 @@ $lang_module['update_task_load_message'] = 'Ne fermez pas la page et le navigate
 $lang_module['update_task_next'] = 'Prochains procès';
 $lang_module['update_task_start'] = 'Commencer';
 $lang_module['update_task_do1_error'] = 'Tâche';
-$lang_module['update_task_do2_error'] = 'Il est impossible de continuer. Rapporter cette erreur <a href="http://nukeviet.vn/phpbb/" title="Forum de NukeViet">au forum</a> pour avoir de l\'aide';
+$lang_module['update_task_do2_error'] = 'Il est impossible de continuer. Rapporter cette erreur <a href="%s">lien de cette</a> pour avoir de l\'aide';
 $lang_module['update_nav_confirm'] = 'Les procès sont en cours, ne pas fermer la page';
 $lang_module['update_file_info_win'] = 'Attention: Le déplacement automatique est impossible dans Windows, veuillez déplacer manuellement les fichiers et répertoires dans <strong>install/update/</strong> à la répertoire racine du site (même niveau que index.php, CJzip.php, robots.php...).';
 $lang_module['update_file_info_win_manual'] = 'Cliquez ici pour continuer après le déplacement';
