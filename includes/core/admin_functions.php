@@ -232,7 +232,6 @@ function nv_save_file_config_global()
             }
         }
     }
-    $content_config .= "\$global_config['array_theme_type']=" . nv_var_export(array_filter(array_map('trim', explode(',', NV_THEME_TYPE)))) . ";\n";
 
     //allowed_html_tags
     if (! empty($allowed_html_tags)) {
