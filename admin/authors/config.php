@@ -80,7 +80,6 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
 
     $array_config_global['spadmin_add_admin'] = $nv_Request->get_int('spadmin_add_admin', 'post');
     $array_config_global['authors_detail_main'] = $nv_Request->get_int('authors_detail_main', 'post');
-    $array_config_global['adminrelogin_max'] = $nv_Request->get_int('adminrelogin_max', 'post');
     $array_config_global['admin_check_pass_time'] = 60 * $nv_Request->get_int('admin_check_pass_time', 'post');
     if ($array_config_global['admin_check_pass_time'] < 120) {
         $array_config_global['admin_check_pass_time'] = 120;
@@ -226,18 +225,7 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 $xtpl->assign('ADMIN_CHECK_PASS_TIME', round($global_config['admin_check_pass_time'] / 60));
-
 $xtpl->assign('OP', $op);
-
-for ($i = 2; $i < 11; $i++) {
-    $array = array(
-        'value' => $i,
-        'select' => ($i == $global_config['adminrelogin_max']) ? ' selected="selected"' : '',
-        'text' => $i
-    );
-    $xtpl->assign('OPTION', $array);
-    $xtpl->parse('main.adminrelogin_max');
-}
 
 $xtpl->assign('DATA', array(
     'admfirewall' => $global_config['admfirewall'] ? ' checked="checked"' : '',

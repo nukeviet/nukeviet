@@ -66,9 +66,6 @@ define('NV_OP_VARIABLE', 'op');
 //Ten thay the cho bien ngon ngu
 define('NV_LANG_VARIABLE', 'language');
 
-//Ten bien kiem tra lai mat khau admin
-define('NV_ADMINRELOGIN_VARIABLE', 'adminrelogin');
-
 //Do nen trang khi bat che do nen
 define('ZLIB_OUTPUT_COMPRESSION_LEVEL', 6);
 
