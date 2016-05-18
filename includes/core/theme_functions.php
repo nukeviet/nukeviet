@@ -244,8 +244,8 @@ function nv_rss_generate($channel, $items)
 {
     global $db, $global_config, $client_info;
 
-    $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/themes/default/layout/');
-    $xtpl->assign('CSSPATH', NV_BASE_SITEURL . 'themes/default/css/rss.xsl');
+    $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
+    $xtpl->assign('CSSPATH', NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/rss.xsl');
     //Chi co tac dung voi IE6 va Chrome
 
     $channel['generator'] = 'NukeViet v4.0';
@@ -360,19 +360,9 @@ function nv_rss_generate($channel, $items)
  */
 function nv_xmlSitemap_generate($url)
 {
-    global $global_config;
-
-    if (file_exists(NV_ROOTDIR . 'themes/' . $global_config['site_theme'] . '/css/sitemap.xsl')) {
-        $path_css_sitemap = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/css/sitemap.xsl';
-    } else {
-        $path_css_sitemap = NV_BASE_SITEURL . 'themes/default/css/sitemap.xsl';
-    }
-
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $path_css_sitemap . '"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
-    $xml = new SimpleXMLElement($sitemapHeader);
-
     $lastModified = time() - 86400;
-
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+    $xml = new SimpleXMLElement($sitemapHeader);
     if (! empty($url)) {
         foreach ($url as $key => $values) {
             $values['link'] = nv_url_rewrite($values['link'], true);
@@ -406,13 +396,7 @@ function nv_xmlSitemapIndex_generate()
 {
     global $db_config, $db, $global_config, $nv_Request, $sys_info;
 
-    if (file_exists(NV_ROOTDIR . 'themes/' . $global_config['site_theme'] . '/css/sitemapindex.xsl')) {
-        $path_css_sitemap = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/css/sitemapindex.xsl';
-    } else {
-        $path_css_sitemap = NV_BASE_SITEURL . 'themes/default/css/sitemapindex.xsl';
-    }
-
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $path_css_sitemap . '"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);
 
     $lastModified = NV_CURRENTTIME - 86400;
