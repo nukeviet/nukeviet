@@ -20,7 +20,7 @@ if (defined('NV_IS_USER') or ! $global_config['allowuserlogin']) {
 $nv_header = '';
 if ($nv_Request->isset_request('nv_header', 'post,get')) {
     $nv_header = $nv_Request->get_title('nv_header', 'post,get', '');
-    if ($nv_header != md5($client_info['session_id'] . $global_config['sitekey'])) {
+    if ($nv_header != NV_CHECK_SESSION) {
         $nv_header = '';
     }
 }
@@ -406,7 +406,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         // Cau hinh xac thuc thanh vien moi
         $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='active_group_newusers'";
         $active_group_newusers = intval($db->query($sql)->fetchColumn());
-        
+
         $reg_attribs = set_reg_attribs($attribs);
         if (empty($reg_attribs['username'])) {
             opidr(array( 'status' => 'error', 'mess' => $lang_module['logged_in_failed'] ));
@@ -418,7 +418,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     		question, answer, passlostkey, view_mail, remember, in_groups,
     		active, checknum, last_login, last_ip, last_agent, last_openid, idsite
         ) VALUES (
-    		" . ($active_group_newusers ? 7 : 4) . ", 
+    		" . ($active_group_newusers ? 7 : 4) . ",
             :username,
     		:md5username,
     		'',

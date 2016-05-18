@@ -35,7 +35,7 @@ if ($nv_Request->isset_request('op', 'post')) {
                 if (file_exists(NV_ROOTDIR . '/themes/' . $themename . '/css/' . $_module_file . '.css')) {
                     $allowfolder[] = NV_ROOTDIR . '/themes/' . $themename . '/css/' . $_module_file . '.css';
                 }
-                
+
                 $_files = glob(NV_ROOTDIR . '/themes/' . $themename . '/js/' . $_module_file . '*.js');
                 foreach ($_files as $_file) {
                     $allowfolder[] = $_file;
@@ -48,7 +48,7 @@ if ($nv_Request->isset_request('op', 'post')) {
         }
         if (! empty($allowfolder)) {
             $all_module_file = implode('_', $modulearray);
-            $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . $all_module_file . '_' . md5(nv_genpass(10) . session_id()) . '.zip';
+            $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'theme_' . $themename . '_' . $all_module_file . '_' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '.zip';
 
             $zip = new PclZip($file_src);
             $zip->create($allowfolder, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes');
@@ -58,7 +58,7 @@ if ($nv_Request->isset_request('op', 'post')) {
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['package_theme_module'], 'file name : ' . $themename . '_' . $all_module_file . '.zip', $admin_info['userid']);
 
-            $linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv4_theme_' . $themename . '_' . $all_module_file . '.zip&amp;checkss=' . md5($file_name . $client_info['session_id'] . $global_config['sitekey']) . '&amp;filename=' . $file_name;
+            $linkgetfile = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;mod=nv4_theme_' . $themename . '_' . $all_module_file . '.zip&amp;checkss=' . md5($file_name . NV_CHECK_SESSION) . '&amp;filename=' . $file_name;
 
             $xtpl->assign('LINKGETFILE', $linkgetfile);
             $xtpl->assign('THEMENAME', $themename);

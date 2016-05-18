@@ -12,7 +12,7 @@ if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
-if (!defined("NV_IS_ADMIN")) {
+if (!defined('NV_IS_ADMIN')) {
     if (!defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
         Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
         die();
@@ -26,7 +26,7 @@ if (!defined("NV_IS_ADMIN")) {
 
 /**
  * updateAvatar()
- * 
+ *
  * @param mixed $file
  * @return void
  */
@@ -64,7 +64,7 @@ function updateAvatar($file)
 
 /**
  * deleteAvatar()
- * 
+ *
  * @return void
  */
 function deleteAvatar()
@@ -91,12 +91,12 @@ $page_title = $lang_module['avatar_pagetitle'];
 $array = array();
 $array['success'] = 0;
 $array['error'] = '';
-$array['u'] = (isset($array_op[1]) and ($array_op[1] == "upd" or $array_op[1] == "opener" or $array_op[1] == "src")) ? $array_op[1] : "";
-$array['checkss'] = md5($client_info['session_id'] . $global_config['sitekey']);
+$array['u'] = (isset($array_op[1]) and ($array_op[1] == 'upd' or $array_op[1] == 'opener' or $array_op[1] == 'src')) ? $array_op[1] : '';
+$array['checkss'] = NV_CHECK_SESSION;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 //Xoa avatar
-if ($checkss == $array['checkss'] && $nv_Request->isset_request("del", "post")) {
+if ($checkss == $array['checkss'] && $nv_Request->isset_request('del', 'post')) {
     deleteAvatar();
     die(json_encode(array(
         'status' => 'ok',
@@ -147,7 +147,7 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
 
         if (empty($upload_info['error'])) {
             $basename = $upload_info['basename'];
-            $basename = preg_replace('/(.*)(\.[a-zA-Z]+)$/', '\1_' . nv_genpass(8) . "_" . $user_info['userid'] . '\2', $basename);
+            $basename = preg_replace('/(.*)(\.[a-zA-Z]+)$/', '\1_' . nv_genpass(8) . '_' . $user_info['userid'] . '\2', $basename);
 
             $image = new NukeViet\Files\Image($upload_info['name'], NV_MAX_WIDTH, NV_MAX_HEIGHT);
 
@@ -163,10 +163,10 @@ if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp
             if (file_exists($image->create_Image_info['src'])) {
                 $array['filename'] = str_replace(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/', '', $image->create_Image_info['src']);
 
-                if ($array['u'] == "upd") {
+                if ($array['u'] == 'upd') {
                     updateAvatar($array['filename']);
                     $array['success'] = 2;
-                } elseif ($array['u'] == "src") {
+                } elseif ($array['u'] == 'src') {
                     updateAvatar($array['filename']);
                     $array['filename'] = NV_BASE_SITEURL . SYSTEM_UPLOADS_DIR . '/' . $module_upload . '/' . $array['filename'];
                     $array['success'] = 3;

@@ -15,7 +15,7 @@ if (!defined('NV_MAINFILE')) {
 if (!nv_function_exists('nv_block_login')) {
     /**
      * nv_block_config_login()
-     * 
+     *
      * @param mixed $module
      * @param mixed $data_block
      * @param mixed $lang_block
@@ -28,21 +28,21 @@ if (!nv_function_exists('nv_block_login')) {
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['display_mode'] . '</td>';
         $html .= '	<td><select class="w300 form-control" name="config_display_mode">';
-        
+
         for ($i = 0; $i <= 1; $i ++) {
             $html .= '	<option value="' . $i . '"' . ($data_block['display_mode'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['display_mode' . $i] . '</option>';
         }
-        
+
         $html .= '  </select></td>';
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '	<td>' . $lang_block['popup_register'] . '</td>';
         $html .= '	<td><select class="w300 form-control" name="config_popup_register">';
-        
+
         for ($i = 0; $i <= 1; $i ++) {
             $html .= '	<option value="' . $i . '"' . ($data_block['popup_register'] == $i ? ' selected="selected"' : '') . '>' . $lang_block['popup_register' . $i] . '</option>';
         }
-        
+
         $html .= '  </select></td>';
         $html .= '</tr>';
         return $html;
@@ -50,7 +50,7 @@ if (!nv_function_exists('nv_block_login')) {
 
     /**
      * nv_block_config_login_submit()
-     * 
+     *
      * @param mixed $module
      * @param mixed $lang_block
      * @return
@@ -68,7 +68,7 @@ if (!nv_function_exists('nv_block_login')) {
 
     /**
      * nv_block_login()
-     * 
+     *
      * @param mixed $block_config
      * @return void
      */
@@ -158,7 +158,6 @@ if (!nv_function_exists('nv_block_login')) {
                 $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
                 $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
                 $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-                $xtpl->assign('CHECKSS', md5($client_info['session_id'] . $global_config['sitekey']));
                 $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
                 $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
                 $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
@@ -167,9 +166,9 @@ if (!nv_function_exists('nv_block_login')) {
 
                 $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);
                 $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], NV_UPASSMIN, NV_UPASSMAX) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], NV_UPASSMIN, NV_UPASSMAX);
-                
+
                 $display_layout = empty($block_config['display_mode']) ? 'display_form' : 'display_button';
-                
+
                 $xtpl->assign('USERNAME_RULE', $username_rule);
                 $xtpl->assign('PASSWORD_RULE', $password_rule);
 
@@ -205,14 +204,14 @@ if (!nv_function_exists('nv_block_login')) {
                         while ($row = $result->fetch()) {
                             $data_questions[$row['qid']] = array('qid' => $row['qid'], 'title' => $row['title']);
                         }
-    
+
                         foreach ($data_questions as $array_question_i) {
                             $xtpl->assign('QUESTION', $array_question_i['title']);
                             $xtpl->parse('main.allowuserreg.frquestion');
                         }
-    
+
                         $datepicker = false;
-    
+
                         $array_field_config = array();
                         $result_field = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[$block_config['module']]['module_data'] . '_field ORDER BY weight ASC');
                         while ($row_field = $result_field->fetch()) {
@@ -232,12 +231,12 @@ if (!nv_function_exists('nv_block_login')) {
                             }
                             $array_field_config[] = $row_field;
                         }
-    
+
                         if (!empty($array_field_config)) {
                             $userid = 0;
                             foreach ($array_field_config as $_k => $row) {
                                 $row['customID'] = $_k;
-    
+
                                 if (($row['show_register'] and $userid == 0) or $userid > 0) {
                                     if ($userid == 0 and empty($custom_fields)) {
                                         if (!empty($row['field_choices'])) {
@@ -257,7 +256,7 @@ if (!nv_function_exists('nv_block_login')) {
                                         $row['value'] = (isset($custom_fields[$row['field']])) ? $custom_fields[$row['field']] : $row['default_value'];
                                     }
                                     $row['required'] = ($row['required']) ? 'required' : '';
-    
+
                                     $xtpl->assign('FIELD', $row);
                                     if ($row['required']) {
                                         $xtpl->parse('main.allowuserreg.field.loop.required');
@@ -333,23 +332,23 @@ if (!nv_function_exists('nv_block_login')) {
                             }
                             $xtpl->parse('main.allowuserreg.field');
                         }
-    
+
                         $xtpl->parse('main.allowuserreg');
                         !empty($block_config['display_mode']) ? $xtpl->parse('main.' . $display_layout . '.allowuserreg2') : $xtpl->parse('main.' . $display_layout . '.allowuserreg2_form');
-    
+
                         if ($datepicker) {
                             $xtpl->parse('main.datepicker');
                         }
                     }
                 }
-                
+
                 $xtpl->parse('main.' . $display_layout);
-                
+
                 $xtpl->parse('main');
                 $content = $xtpl->text('main');
             }
         }
-        
+
         return $content;
     }
 }

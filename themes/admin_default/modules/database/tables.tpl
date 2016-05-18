@@ -29,7 +29,7 @@
 							<option value="{KEY}">{VAL}</option>
 							<!-- END: ext -->
 						</select>
-						<input name="checkss" type="hidden" value="{CHECKSS}" />
+						<input name="checkss" type="hidden" value="{NV_CHECK_SESSION}" />
 						<input name="Submit1" id="subm_form" type="submit" value="{SUBMIT}" class="btn btn-primary" />
 					</td>
 				</tr>

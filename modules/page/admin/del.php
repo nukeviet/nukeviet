@@ -15,7 +15,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 $id = $nv_Request->get_int('id', 'post', 0);
 $checkss = $nv_Request->get_string('checkss', 'post', '');
 
-if (md5($id . $global_config['sitekey'] . session_id()) == $checkss) {
+if (md5($id . NV_CHECK_SESSION) == $checkss) {
     $content = 'NO_' . $id;
 
     $sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id = ' . $id;

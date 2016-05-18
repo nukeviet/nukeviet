@@ -201,10 +201,8 @@ function nv_groups_list_pub2()
 }
 
 $array_data = array();
-$array_data['checkss'] = md5($client_info['session_id'] . $global_config['sitekey']);
-
+$array_data['checkss'] = NV_CHECK_SESSION;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
-
 if (isset($array_op[2]) and ! defined('ACCESS_EDITUS')) {
 	die(json_encode(array(
 	    'status' => 'error',

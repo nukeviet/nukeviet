@@ -173,6 +173,9 @@ define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
 // Hau to cua file cache
 
+define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
+// Kiem tra session cua nguoi dung
+
 define('NV_USER_AGENT', $nv_Request->user_agent);
 
 // Ngon ngu

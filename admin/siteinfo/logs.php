@@ -46,7 +46,7 @@ $check_like = false;
 if ($nv_Request->isset_request('filter', 'get') and $nv_Request->isset_request('checksess', 'get')) {
     $checksess = $nv_Request->get_title('checksess', 'get', '');
 
-    if ($checksess != md5('siteinfo_' . session_id() . '_' . $admin_info['userid'])) {
+    if ($checksess != md5('siteinfo_' . NV_CHECK_SESSION . '_' . $admin_info['userid'])) {
         nv_insert_logs(NV_LANG_DATA, $module_name, sprintf($lang_module['filter_check_log'], $op), $admin_info['username'] . ' - ' . $admin_info['userid'], 0);
 
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
@@ -267,7 +267,7 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('checksess', md5('siteinfo_' . session_id() . '_' . $admin_info['userid']));
+$xtpl->assign('checksess', md5('siteinfo_' . NV_CHECK_SESSION . '_' . $admin_info['userid']));
 $xtpl->assign('URL_DEL', $base_url . '&' . NV_OP_VARIABLE . '=logs_del');
 $xtpl->assign('URL_CANCEL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 $xtpl->assign('DISABLE', $disabled);
