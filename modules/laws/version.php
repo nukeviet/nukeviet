@@ -10,16 +10,16 @@
 
 if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
 
-$module_version = array( //
-		"name" => "Laws", //
-		"modfuncs" => "main,detail,search,area,cat,subject,signer", //
-		"submenu" => "main,detail,search,area,cat,subject,signer", //
-		'change_alias' => 'detail',
-		"is_sysmod" => 0, //
-		"virtual" => 1, //
-		"version" => "4.0.28", //
-		"date" => "Thu, 28 Apr 2016 00:00:00 GMT", //
-		"author" => "VINADES (contact@vinades.vn)", //
-		"uploads_dir" => array($module_upload), //
-		"note" => "" //
-	);
+$module_version = array(
+	"name" => "Laws",
+	"modfuncs" => "main,detail,search,area,cat,subject,signer",
+	"submenu" => "main,detail,search,area,cat,subject,signer",
+	'change_alias' => 'detail',
+	"is_sysmod" => 0,
+	"virtual" => 1,
+	"version" => "4.0.29",
+	"date" => "Wed, 18 May 2016 17:00:00 GMT",
+	"author" => "VINADES (contact@vinades.vn)",
+	"uploads_dir" => array($module_upload),
+	"note" => "Modules văn bản pháp luật"
+);
