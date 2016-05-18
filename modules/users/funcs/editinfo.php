@@ -118,7 +118,7 @@ function nv_check_email_change($email, $edit_userid)
 
 /**
  * get_field_config()
- * 
+ *
  * @return
  */
 function get_field_config()
@@ -151,7 +151,7 @@ function get_field_config()
 
 /**
  * opidr()
- * 
+ *
  * @param mixed $openid_info
  * @return void
  */
@@ -182,7 +182,7 @@ function opidr($openid_info)
 
 /**
  * nv_groups_list_pub2()
- * 
+ *
  * @return
  */
 function nv_groups_list_pub2()
@@ -325,7 +325,7 @@ if (defined('ACCESS_EDITUS')) {//trường hợp trưởng nhóm truy cập
 	$array_data['group_id'] = $group_id;
 	$array_data['userid'] = $edit_userid;
 	$array_data['type'] = (isset($array_op[3]) and ! empty($array_op[3]) and in_array($array_op[3], $types)) ? $array_op[3] : ((isset($array_op[3]) and ! empty($array_op[3]) and $array_op[3] == 'password') ? $array_op[3] : 'basic');
-	
+
 	$base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $group_id . '/' . $edit_userid;
 }else {
 	$array_data['type'] = (isset($array_op[1]) and ! empty($array_op[1]) and in_array($array_op[1], $types)) ? $array_op[1] : 'basic';
@@ -601,7 +601,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password'
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     $new_password = $nv_Request->get_title('new_password', 'post', '');
     $re_password = $nv_Request->get_title('re_password', 'post', '');
-	
+
 	//kiểm tra lại quyền sửa mật khẩu
 	if (! empty($group_id) and ! empty($edit_userid) and ! defined('ACCESS_PASSUS')) {
         die(json_encode(array(
@@ -609,7 +609,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password'
             'input' => '',
             'mess' => $lang_module['no_premission_pass'] )));
     }
-	
+
     if (! empty($row['password']) and ! $crypt->validate_password($nv_password, $row['password']) and ! defined('ACCESS_PASSUS')) {
         die(json_encode(array(
             'status' => 'error',
@@ -747,7 +747,10 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'group') {
 						$array_leader = array_unique($array_leader);
 						foreach ($array_leader as $email) {
 							$mail_from = array($global_config['site_name'], $global_config['site_email']);
-							$url_group = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, true);
+							$url_group = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $gid, true);
+							if (strpos($url_group, NV_MY_DOMAIN) !== 0) {
+							    $url_group = NV_MY_DOMAIN . $url_group;
+							}
 							$message = sprintf($lang_module['group_join_queue_message'], $groups_list[$gid]['title'], $user_info['full_name'], $groups_list[$gid]['title'], $url_group);
 							@nv_sendmail($mail_from, $email, $lang_module['group_join_queue'], $message);
 						}

@@ -99,7 +99,7 @@ function nv_admin_write_lang($dirlang, $idfile)
                 $content_lang .= "\nif (! defined('NV_MAINFILE')) {";
             }
 
-            $content_lang .= "\n\tdie( 'Stop!!!' );\n}\n\n";
+            $content_lang .= "\n    die( 'Stop!!!' );\n}\n\n";
 
             $array_translator['info'] = (isset($array_translator['info'])) ? $array_translator['info'] : "";
 
