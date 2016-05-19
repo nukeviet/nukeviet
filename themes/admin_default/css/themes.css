@@ -46,7 +46,7 @@
 
 .list-funcs {
 	max-height: 330px;
-	width: 600px;
+	width: 100%;
 	overflow: auto
 }
 

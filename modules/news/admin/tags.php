@@ -48,7 +48,6 @@ function nv_show_tags_list($q = '', $incomplete = false)
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('MODULE_NAME', $module_name);
     $xtpl->assign('OP', $op);
-    $xtpl->assign('SITEKEY', md5($global_config['sitekey'] . session_id()));
 
     $number = 0;
     while ($row = $sth->fetch()) {
@@ -80,7 +79,7 @@ function nv_show_tags_list($q = '', $incomplete = false)
 
 $checkss = $nv_Request->get_string('checkss', 'get', '');
 $del_listid = $nv_Request->get_string('del_listid', 'get', '');
-if (!empty($del_listid) and md5($global_config['sitekey'] . session_id()) == $checkss) {
+if (!empty($del_listid) and NV_CHECK_SESSION == $checkss) {
     $del_listid = array_map('intval', explode(',', $del_listid));
     $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid IN (' . implode(',', $del_listid) . ')');
     $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid IN (' . implode(',', $del_listid) . ')');
@@ -117,6 +116,7 @@ if (! empty($savecat)) {
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
+    $alias = str_replace('&', ' ', $alias);
     $alias = str_replace('-', ' ', nv_unhtmlspecialchars($alias));
     $keywords = explode(',', $keywords);
     $keywords[] = $alias;

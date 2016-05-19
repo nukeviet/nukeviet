@@ -224,39 +224,39 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
     }
 
     if (preg_match('/^application\/(?:x-)?zip(?:-compressed)?$/is', $mime)) {
-        if ($this->file_extension == 'docx') {
+        if ($ext == 'docx') {
             $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-        } elseif ($this->file_extension == 'dotx') {
+        } elseif ($ext == 'dotx') {
             $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template';
-        } elseif ($this->file_extension == 'potx') {
+        } elseif ($ext == 'potx') {
             $mime = 'application/vnd.openxmlformats-officedocument.presentationml.template';
-        } elseif ($this->file_extension == 'ppsx') {
+        } elseif ($ext == 'ppsx') {
             $mime = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';
-        } elseif ($this->file_extension == 'pptx') {
+        } elseif ($ext == 'pptx') {
             $mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-        } elseif ($this->file_extension == 'xlsx') {
+        } elseif ($ext == 'xlsx') {
             $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-        } elseif ($this->file_extension == 'xltx') {
+        } elseif ($ext == 'xltx') {
             $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template';
-        } elseif ($this->file_extension == 'docm') {
+        } elseif ($ext == 'docm') {
             $mime = 'application/vnd.ms-word.document.macroEnabled.12';
-        } elseif ($this->file_extension == 'dotm') {
+        } elseif ($ext == 'dotm') {
             $mime = 'application/vnd.ms-word.template.macroEnabled.12';
-        } elseif ($this->file_extension == 'potm') {
+        } elseif ($ext == 'potm') {
             $mime = 'application/vnd.ms-powerpoint.template.macroEnabled.12';
-        } elseif ($this->file_extension == 'ppam') {
+        } elseif ($ext == 'ppam') {
             $mime = 'application/vnd.ms-powerpoint.addin.macroEnabled.12';
-        } elseif ($this->file_extension == 'ppsm') {
+        } elseif ($ext == 'ppsm') {
             $mime = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12';
-        } elseif ($this->file_extension == 'pptm') {
+        } elseif ($ext == 'pptm') {
             $mime = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12';
-        } elseif ($this->file_extension == 'xlam') {
+        } elseif ($ext == 'xlam') {
             $mime = 'application/vnd.ms-excel.addin.macroEnabled.12';
-        } elseif ($this->file_extension == 'xlsb') {
+        } elseif ($ext == 'xlsb') {
             $mime = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12';
-        } elseif ($this->file_extension == 'xlsm') {
+        } elseif ($ext == 'xlsm') {
             $mime = 'application/vnd.ms-excel.sheet.macroEnabled.12';
-        } elseif ($this->file_extension == 'xltm') {
+        } elseif ($ext == 'xltm') {
             $mime = 'application/vnd.ms-excel.template.macroEnabled.12';
         }
     }
@@ -482,14 +482,12 @@ function nv_deletefile($file, $delsub = false)
     if ($ftp_check_login == 1) {
         if (is_dir($realpath)) {
             // Xoa thu muc
-
             $check = nv_ftp_del_dir($ftp, $filename, $delsub);
             if ($check !== true) {
                 return array( 0, $check );
             }
-        } elseif ($ftp->unlink($realpath) === false) {
+        } elseif ($ftp->unlink($filename) === false) {
             // Xoa file bang FTP khong duoc thi xoa theo cach thong thuong
-
             @unlink($realpath);
         }
 

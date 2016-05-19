@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -72,6 +72,7 @@ $lang_module['update_manual_delete'] = 'Please delete it manually.';
 $lang_module['error_unknow'] = 'Unknown error';
 $lang_module['get_update'] = 'Upgrade System';
 $lang_module['get_update_error_file_download'] = 'Download the update package failed';
+$lang_module['get_update_error_file_download1'] = 'Try another method update here: <a href="%1$s" target="_blank">%1$s</a>';
 $lang_module['get_update_ok'] = 'Package upgrade safety, <a href="%s"> At least here </a> to conduct decompression upgrade package';
 $lang_module['get_update_warning'] = 'This upgrade package can be detrimental to your website if any errors occur, so you should back up your entire website before done, click <a href="%s" /> Click here  to proceed unzip the package upgrade';
 $lang_module['get_update_warning_permission_folder'] = 'Error can not create folders.';
@@ -79,7 +80,6 @@ $lang_module['get_update_error_movefile'] = 'Error Can not move file';
 $lang_module['get_update_cantunzip'] = 'Error can not be unpacked. Please check chmod the directory.';
 $lang_module['get_update_okunzip'] = 'Unzip successful, the system will redirect momentarily';
 $lang_module['get_update_okunzip_link'] = 'Visit upgrade web';
-
 $lang_module['global_statistics'] = 'Statistics config';
 $lang_module['statistic'] = 'Activate statistics';
 $lang_module['statistics_timezone'] = 'Time zone for statistics';

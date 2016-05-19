@@ -29,7 +29,7 @@ class Memcacheds
         $this->_Lang = $Lang;
         $this->_Cache_Prefix = $Cache_Prefix;
         $this->_Cache = new Memcached();
-        $this->_Cache->addServer($Host, $Post);
+        $this->_Cache->addServer($Host, $Port);
     }
 
     /**
@@ -53,10 +53,10 @@ class Memcacheds
      */
     public function delMod($module_name, $lang = '')
     {
-        $AllKeys = $this->getAllKeys();
+        $AllKeys = $this->_Cache->getAllKeys();
         foreach ($AllKeys as $_key) {
             if (preg_match('/^' . $module_name . '\_/', $_key)) {
-                $this->delete($_key);
+                $this->_Cache->delete($_key);
             }
         }
     }

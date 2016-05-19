@@ -81,7 +81,7 @@ if (!nv_function_exists('nv_block_voting_select')) {
                 $action = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=voting";
 
                 $voting_array = array(
-                    'checkss' => md5($current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey']),
+                    'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                     'accept' => $current_voting['acceptcm'],
                     'errsm' => $current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], $current_voting['acceptcm']) : $lang_module['voting_warning_accept1'],
                     'vid' => $current_voting['vid'],

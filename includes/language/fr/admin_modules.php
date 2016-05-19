@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 10:30:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -42,6 +42,9 @@ $lang_module['author'] = 'Auteur';
 $lang_module['theme'] = 'Interface';
 $lang_module['mobile'] = 'Theme mobile';
 $lang_module['theme_default'] = 'Défaut';
+$lang_module['theme_mobiledefault'] = 'Configuration de l\'interface de site mobile';
+$lang_module['theme_mobile_bymod'] = 'La configuration du module d\'interface PC';
+$lang_module['theme_mobile_bysite'] = 'Configuration du site Interface PC';
 $lang_module['keywords'] = 'Mots clés';
 $lang_module['keywords_info'] = 'Séparer par virgule';
 $lang_module['funcs_list'] = 'Liste des fonctions de module &ldquo;%s&rdquo;';

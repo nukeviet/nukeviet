@@ -20,7 +20,7 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -111,7 +111,7 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 0) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 0) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -173,7 +173,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -284,7 +284,7 @@ function viewcat_top($array_catcontent, $generate_page)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -342,16 +342,45 @@ function viewcat_top($array_catcontent, $generate_page)
 function viewsubcat_main($viewcat, $array_cat)
 {
     global $module_name, $module_file, $site_mods, $global_array_cat, $lang_module, $module_config, $module_info;
-
+	
     $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
-
+    $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
+    $xtpl->assign('IMGWIDTH', $module_config[$module_name]['homewidth']);
+    
     // Hien thi cac chu de con
     foreach ($array_cat as $key => $array_row_i) {
         if (isset($array_cat[$key]['content'])) {
             $array_row_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_row_i['alias'];
             $xtpl->assign('CAT', $array_row_i);
             $catid = intval($array_row_i['catid']);
+			$array_row_i['ad_block_cat'] = explode(',', $array_row_i['ad_block_cat']);
+
+			$_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_row_i['catid'] . ']';
+			if( in_array( '1', $array_row_i['ad_block_cat']) ){
+				if( !nv_check_block_topcat_news( $array_row_i['catid'] ) ){
+					nv_add_block_topcat_news( $array_row_i['catid'] );
+				}
+				$xtpl->assign( 'BLOCK_TOPCAT', $_block_topcat_by_id );
+				$xtpl->parse( 'main.listcat.block_topcat' );
+			}else{
+				if( nv_check_block_topcat_news( $array_row_i['catid'] ) ){
+					nv_remove_block_topcat_news( $array_row_i['catid'] );
+				}
+			}
+
+			$_block_bottomcat_by_id = '[' . strtoupper($module_name) . '_BOTTOMCAT_' . $array_row_i['catid'] . ']';
+			if( in_array( '2', $array_row_i['ad_block_cat']) ){
+				if( !nv_check_block_block_botcat_news( $array_row_i['catid'] )){
+					nv_add_block_botcat_news( $array_row_i['catid'] );
+				}
+				$xtpl->assign( 'BLOCK_BOTTOMCAT', $_block_bottomcat_by_id );
+				$xtpl->parse( 'main.listcat.block_bottomcat' );
+			}else{
+				if( nv_check_block_block_botcat_news( $array_row_i['catid'] ) ){
+					nv_remove_block_botcat_news( $array_row_i['catid'] );
+				}
+			}
 
             if ($array_row_i['subcatid'] != '') {
                 $_arr_subcat = explode(',', $array_row_i['subcatid']);
@@ -375,7 +404,6 @@ function viewsubcat_main($viewcat, $array_cat)
             }
 
             $a = 0;
-            $xtpl->assign('IMGWIDTH', $module_config[$module_name]['homewidth']);
 
             foreach ($array_cat[$key]['content'] as $array_row_i) {
                 $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
@@ -404,12 +432,11 @@ function viewsubcat_main($viewcat, $array_cat)
                     } else {
                         $xtpl->assign('CLASS', 'icon_list');
                     }
+                    $array_row_i['hometext'] = nv_clean60($array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true);
+                    $xtpl->assign('OTHER', $array_row_i);
                     if ($module_config[$module_name]['showtooltip']) {
-                        $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
-                        $array_row_i['hometext'] = nv_clean60($array_row_i['hometext'], $module_config[$module_name]['tooltip_length'], true);
                         $xtpl->parse('main.listcat.related.loop.tooltip');
                     }
-                    $xtpl->assign('OTHER', $array_row_i);
                     $xtpl->parse('main.listcat.related.loop');
                 }
 
@@ -433,7 +460,6 @@ function viewsubcat_main($viewcat, $array_cat)
             $xtpl->parse('main.listcat');
         }
     }
-
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
@@ -445,8 +471,8 @@ function viewcat_two_column($array_content, $array_catpage)
     $xtpl = new XTemplate('viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
-
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    
+    if ($catid and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -502,7 +528,6 @@ function viewcat_two_column($array_content, $array_catpage)
 
     // Theo chu de
     $a = 0;
-    $xtpl->assign('IMGWIDTH01', $module_config[$module_name]['homewidth']);
 
     foreach ($array_catpage as $key => $array_catpage_i) {
         $number_content = isset($array_catpage[$key]['content']) ? sizeof($array_catpage[$key]['content']) : 0;
@@ -585,11 +610,8 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
     $xtpl->assign('LANG', $lang_module);
-
-    if ($module_config[$module_name]['showtooltip']) {
-        $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
-    }
-
+    $xtpl->assign('TOOLTIP_POSITION', $module_config[$module_name]['tooltip_position']);
+    
     $news_contents['addtime'] = nv_date('d/m/Y h:i:s', $news_contents['addtime']);
 
     $xtpl->assign('NEWSID', $news_contents['id']);

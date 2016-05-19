@@ -243,7 +243,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
         }
     } else {
-        $full_name = $alias = $phone = $fax = $email = $note = $address = '';
+        $full_name = $alias = $image = $phone = $fax = $email = $note = $address = '';
         $others = $cats = $view_level = $reply_level = $obt_level = array();
 
         foreach ($adms as $admid => $values) {

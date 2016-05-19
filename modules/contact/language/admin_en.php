@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -22,7 +22,9 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['edit_title'] = 'Preview';
 $lang_module['add_row_title'] = 'Add department';
 $lang_module['department_title'] = 'List of departments';
+$lang_module['department_no_home'] = 'Not shown in the main page module';
 $lang_module['alias'] = 'Alias';
+$lang_module['image'] = 'Image';
 $lang_module['error_alias'] = 'Error: no static links';
 $lang_module['duplicate_alias'] = 'Error: title or static link exists';
 $lang_module['number'] = 'Number';

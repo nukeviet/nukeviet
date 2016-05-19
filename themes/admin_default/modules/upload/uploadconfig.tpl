@@ -67,7 +67,7 @@
 					<td style="vertical-align:top"><strong>{LANG.uploadconfig_ban_mime}</strong></td>
 					<td>
 					<!-- BEGIN: mimes -->
-					<label style="display:inline-block;width:48%"><input type="checkbox" name="ext[]" value="{MIMES.key}"{MIMES.checked} /> {MIMES.title}&nbsp;&nbsp;</label>
+					<label style="display:inline-block;width:48%"><input type="checkbox" name="mime[]" value="{MIMES.key}"{MIMES.checked} /> {MIMES.title}&nbsp;&nbsp;</label>
 					<!-- END: mimes -->
 					</td>
 				</tr>

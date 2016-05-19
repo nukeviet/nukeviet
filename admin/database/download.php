@@ -14,7 +14,7 @@ if (! defined('NV_IS_FILE_DATABASE')) {
 
 $checkss = $nv_Request->get_title('checkss', 'post,get');
 
-if ($checkss == md5($client_info['session_id'] . $global_config['sitekey'])) {
+if ($checkss == NV_CHECK_SESSION) {
     $tables = $nv_Request->get_array('tables', 'post', array());
     $type = $nv_Request->get_title('type', 'post', '');
     $ext = $nv_Request->get_title('ext', 'post', '');

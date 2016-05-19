@@ -37,7 +37,7 @@ $array_module_admin = nv_scandir(NV_ROOTDIR . '/' . NV_ADMINDIR, $global_config[
 $array_theme_admin = nv_scandir(NV_ROOTDIR . '/themes', $global_config['check_theme_admin']);
 
 // Package extensions (Odd feature: Package module, theme)
-if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id) == $request['checksess']) {
+if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_SESSION) == $request['checksess']) {
     // Kiem tra ung dung ton tai
     if (($request['type'] == 'module' and in_array($request['title'], $array_module_admin)) or ($request['type'] == 'theme' and in_array($request['title'], $array_theme_admin))) {
         $row = array( 0 => array(
@@ -260,7 +260,7 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . $global_
         }
 
         if (! empty($files_folders)) {
-            $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $row['type'] . '_' . $row['basename'] . '_' . md5(nv_genpass(10) . session_id()) . '.zip';
+            $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . $row['type'] . '_' . $row['basename'] . '_' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '.zip';
 
             if (file_exists($file_src)) {
                 @nv_deletefile($file_src);
@@ -306,11 +306,11 @@ if (md5('package_' . $request['type'] . '_' . $request['title'] . '_' . $global_
         }
     }
 
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
 }
 
 // Xoa ung dung
-if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id) == $request['checksess']) {
+if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_SESSION) == $request['checksess']) {
     $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE type = :type AND title = :title';
     $sth = $db->prepare($sql);
     $sth->bindValue(':type', $request['type']);
@@ -357,14 +357,18 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_c
                 // Kiem tra cac site con
                 $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site ORDER BY domain ASC');
                 while ($row = $result->fetch()) {
-                    $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-                    while (list($lang_i) = $result2->fetch(3)) {
-                        $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
-                        $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
-                        $sth->execute();
-                        if ($sth->fetchColumn()) {
-                            $module_exit[] = $row['title'] . ' :' . $lang_i;
+                    try {
+                        $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1');
+                        while (list($lang_i) = $result2->fetch(3)) {
+                            $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
+                            $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
+                            $sth->execute();
+                            if ($sth->fetchColumn()) {
+                                $module_exit[] = $row['title'] . ' :' . $lang_i;
+                            }
                         }
+                    } catch (PDOException $e) {
+                        // Nothinh
                     }
                 }
             }
@@ -461,6 +465,10 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_c
         // Delete other files
         if (! empty($files)) {
             clearstatcache();
+            //Resets the contents of the opcode cache
+            if (function_exists('opcache_reset')) {
+                opcache_reset();
+            }
 
             foreach ($files as $file) {
                 if (file_exists(NV_ROOTDIR . '/' . $file['path'])) {
@@ -478,6 +486,12 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . $global_c
                     $sth->bindValue(':path', $file['path']);
                     $sth->execute();
                 }
+            }
+
+            clearstatcache();
+            //Resets the contents of the opcode cache
+            if (function_exists('opcache_reset')) {
+                opcache_reset();
             }
         }
 
@@ -516,12 +530,18 @@ if (! in_array($selecttype, $array_extType)) {
 if ($selecttype_old != $selecttype and ! empty($selecttype)) {
     $nv_Request->set_Cookie('selecttype', $selecttype, NV_LIVE_COOKIE_TIME);
 }
-$xtpl->assign('SUBMIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload');
 
-if (! $sys_info['zlib_support']) {
-    $xtpl->parse('main.nozlib');
-} else {
-    $xtpl->parse('main.upload');
+// Cho phep upload
+if ($global_config['extension_setup'] == 1 or $global_config['extension_setup'] == 3) {
+    $xtpl->assign('SUBMIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=upload');
+
+    if (! $sys_info['zlib_support']) {
+        $xtpl->parse('main.upload_allowed.nozlib');
+    } else {
+        $xtpl->parse('main.upload_allowed.upload');
+    }
+
+    $xtpl->parse('main.upload_allowed');
 }
 
 // Array lang setup
@@ -601,8 +621,8 @@ while ($row = $result->fetch()) {
         $row['delete_allowed'] = false;
     }
 
-    $row['url_package'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('package_' . $row['type'] . '_' . $row['title'] . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id);
-    $row['url_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('delete_' . $row['type'] . '_' . $row['title'] . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id);
+    $row['url_package'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('package_' . $row['type'] . '_' . $row['title'] . '_' . NV_CHECK_SESSION);
+    $row['url_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=' . $row['type'] . '&amp;title=' . $row['title'] . '&amp;checksess=' . md5('delete_' . $row['type'] . '_' . $row['title'] . '_' . NV_CHECK_SESSION);
     $row['type'] = isset($lang_module['extType_' . $row['type']]) ? $lang_module['extType_' . $row['type']] : $lang_module['extType_other'];
     $row['version'] = array_filter(explode(" ", $row['version']));
 
@@ -623,7 +643,7 @@ if ($selecttype == '' or $selecttype == 'admin') {
             'basename' => $row,
             'author' => 'VINADES (contact@vinades.vn)',
             'version' => $global_config['version'],
-            'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=module&amp;title=' . $row . '&amp;checksess=' . md5('package_module_' . $row . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id),
+            'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=module&amp;title=' . $row . '&amp;checksess=' . md5('package_module_' . $row . '_' . NV_CHECK_SESSION),
             'is_admin' => true,
             'icon' => array( $theme_config['admin_icon'], $theme_config['sys_icon'] ),
             'delete_allowed' => false,
@@ -650,7 +670,7 @@ if ($selecttype == '' or $selecttype == 'theme') {
                     'basename' => $_theme,
                     'author' => $author,
                     'version' => '',
-                    'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $_theme . '&amp;checksess=' . md5('package_theme_' . $_theme . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id),
+                    'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $_theme . '&amp;checksess=' . md5('package_theme_' . $_theme . '_' . NV_CHECK_SESSION),
                     'is_admin' => false,
                     'icon' => array(),
                     'delete_allowed' => true,
@@ -676,7 +696,7 @@ if ($selecttype == '' or $selecttype == 'theme') {
             'basename' => $row,
             'author' => 'VINADES (contact@vinades.vn)',
             'version' => $global_config['version'],
-            'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $row . '&amp;checksess=' . md5('package_theme_' . $row . '_' . $global_config['sitekey'] . '_' . $nv_Request->session_id),
+            'url_package' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;type=theme&amp;title=' . $row . '&amp;checksess=' . md5('package_theme_' . $row . '_' . NV_CHECK_SESSION),
             'is_admin' => true,
             'icon' => array( $theme_config['admin_icon'], $theme_config['sys_icon'] ),
             'delete_allowed' => false,

@@ -22,7 +22,7 @@ if (defined('NV_IS_ADMIN')) {
     require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/is_user.php';
 
     if (isset($user_info['userid']) and $user_info['userid'] > 0) {
-        $_sql = 'SELECT userid, username, email, first_name, last_name, gender, photo, birthday, regdate,
+        $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,
 			view_mail, remember, in_groups, last_login AS current_login, last_agent AS current_agent, last_ip AS current_ip, last_openid, password, safemode 
 			FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . intval($user_info['userid']) . ' AND active=1';
 
@@ -31,10 +31,9 @@ if (defined('NV_IS_ADMIN')) {
             define('NV_IS_USER', true);
 
             $user_info['full_name'] = nv_show_name_user($user_info['first_name'], $user_info['last_name'], $user_info['username']);
-            ;
             $user_info['in_groups'] = nv_user_groups($user_info['in_groups']);
             $user_info['st_login'] = ! empty($user_info['password']) ? true : false;
-            $user_info['current_mode'] = 1;
+            $user_info['current_mode'] = 0;
             $user_info['valid_question'] = true;
 
             unset($user_info['password']);
@@ -52,7 +51,7 @@ if (defined('NV_IS_ADMIN')) {
             if (isset($user['userid']) and isset($user['checknum']) and isset($user['checkhash'])) {
                 $user['userid'] = intval($user['userid']);
                 if ($user['checkhash'] == md5($user['userid'] . $user['checknum'] . $global_config['sitekey'] . NV_USER_AGENT)) {
-                    $_sql = 'SELECT userid, username, email, first_name, last_name, gender, photo, birthday, regdate,
+                    $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,
 						view_mail, remember, in_groups, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
 						last_openid AS current_openid, password, question, answer, safemode 
 						FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
