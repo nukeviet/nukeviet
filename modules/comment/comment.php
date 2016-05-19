@@ -48,7 +48,6 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
         } else {
             $db_slave->order('a.cid DESC');
         }
-        $session_id = session_id() . '_' . $global_config['sitekey'];
 
         $result = $db_slave->query($db_slave->sql());
         $comment_list_id = array();
@@ -58,13 +57,13 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
                 $row['post_email'] = $row['email'];
                 $row['post_name'] = $row['first_name'];
             }
-            $row['check_like'] = md5($row['cid'] . '_' . $session_id);
+            $row['check_like'] = md5($row['cid'] . '_' . NV_CHECK_SESSION);
             $row['post_email'] = ($emailcomm) ? $row['post_email'] : '';
             $comment_array[$row['cid']] = $row;
         }
         if (! empty($comment_list_id)) {
             foreach ($comment_list_id as $cid) {
-                $comment_array[$cid]['subcomment'] = nv_comment_get_reply($cid, $module, $session_id, $sortcomm);
+                $comment_array[$cid]['subcomment'] = nv_comment_get_reply($cid, $module, NV_CHECK_SESSION, $sortcomm);
             }
             $result->closeCursor();
             unset($row, $result);
@@ -201,11 +200,15 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     global $global_config, $module_file, $module_data, $module_config, $admin_info, $user_info, $lang_global, $client_info, $lang_module_comment, $module_name;
 
     $template = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/comment/main.tpl') ? $global_config['module_theme'] : 'default';
+    $templateCSS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/css/comment.css') ? $global_config['module_theme'] : 'default';
+    $templateJS = file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/js/comment.js') ? $global_config['module_theme'] : 'default';
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/comment');
     $xtpl->assign('LANG', $lang_module_comment);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('TEMPLATE', $template);
+    $xtpl->assign('TEMPLATE_CSS', $templateCSS);
+    $xtpl->assign('TEMPLATE_JS', $templateJS);
     $xtpl->assign('CHECKSS_COMM', $checkss);
     $xtpl->assign('MODULE_COMM', $module);
     $xtpl->assign('MODULE_DATA', $module_data);
@@ -215,16 +218,6 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
     $xtpl->assign('BASE_URL_COMM', $base_url);
 
     if (defined('NV_COMM_ID')) {
-        // Check call module js file
-        if (file_exists(NV_ROOTDIR . '/themes/' . $template . '/js/comment.js')) {
-            $xtpl->parse('main.header.jsfile');
-        }
-
-        // Check call module css file
-        if (file_exists(NV_ROOTDIR . '/themes/' . $template . '/css/comment.css')) {
-            $xtpl->parse('main.header.cssfile');
-        }
-
         $xtpl->parse('main.header');
     }
 

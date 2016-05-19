@@ -22,10 +22,10 @@
 			<tr>
 				<th>{LANG.site_domain}</th>
 				<td>
-					<select name="site_domain" class="form-control w200">
+					<select name="site_domain" class="form-control w300">
 						<option value=""> -- </option>
 						<!-- BEGIN: loop -->
-						<option value="{site_domain}"{SELECTED}>{site_domain} </option>
+						<option value="{SITE_DOMAIN}"{SELECTED}>{SITE_DOMAIN} </option>
 						<!-- END: loop -->
 					</select>
 				</td>
@@ -55,10 +55,27 @@
 				<th>{LANG.site_favicon}</th>
 				<td><input type="text" class="w300 form-control pull-left" name="site_favicon" id="site_favicon" value="{VALUE.site_favicon}" style="margin-right: 10px" /><button data-name="site_favicon" name="favicon_select" class="btn btn-default selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.browse_image}</button></td>
 			</tr>
+            <tr>
+                <th>{LANG.default_module}</th>
+                <td>
+                <select name="site_home_module" id="site_home_module" class="form-control w300">
+                    <!-- BEGIN: module -->
+                    <option value="{MODULE.title}"{SELECTED}>{MODULE.custom_title} </option>
+                    <!-- END: module -->
+                </select></td>
+            </tr>   
+            <tr>
+                <th>{LANG.allow_theme_type}</th>
+                <td>
+                    <!-- BEGIN: theme_type -->
+                    <input class="form-control"  type="checkbox" name="theme_type[]" value="{THEME_TYPE}" {THEME_TYPE_CHECKED}/> {THEME_TYPE_TXT} &nbsp; &nbsp; &nbsp;
+                    <!-- END: theme_type -->                    
+                </td>
+            </tr>                      
 			<tr>
 				<th>{LANG.theme}</th>
 				<td>
-				<select name="site_theme" class="form-control w200">
+				<select name="site_theme" class="form-control w300">
 					<!-- BEGIN: site_theme -->
 					<option value="{SITE_THEME}"{SELECTED}>{SITE_THEME} </option>
 					<!-- END: site_theme -->
@@ -68,27 +85,18 @@
 			<tr>
 				<th>{LANG.mobile_theme}</th>
 				<td>
-				<select name="mobile_theme" class="form-control w200">
+				<select name="mobile_theme" class="form-control w300">
 					<option value="">{LANG.theme}</option>
 					<!-- BEGIN: loop -->
 					<option value="{SITE_THEME}"{SELECTED}>{SITE_THEME} </option>
 					<!-- END: loop -->
 				</select></td>
 			</tr>
-			<!-- END: mobile_theme -->
-			<tr>
-				<th>{LANG.default_module}</th>
-				<td>
-				<select name="site_home_module" id="site_home_module" class="form-control w200">
-					<!-- BEGIN: module -->
-					<option value="{MODULE.title}"{SELECTED}>{MODULE.custom_title} </option>
-					<!-- END: module -->
-				</select></td>
-			</tr>
 			<tr>
 				<th>{LANG.allow_switch_mobi_des}</th>
 				<td><input type="checkbox" name="switch_mobi_des" value="1"{VALUE.switch_mobi_des}/></td>
 			</tr>
+            <!-- END: mobile_theme -->
 			<tr<!-- BEGIN: ssl_https_modules_hide --> class="hidden"<!-- END: ssl_https_modules_hide -->>
 				<td><strong>{LANG.ssl_https_module}</strong></td>
 				<td>

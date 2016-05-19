@@ -88,7 +88,7 @@ $(function(){
 <p class="text-danger">
 	<em class="fa fa-lg fa-frown-o">&nbsp;</em> <strong>{LANG.install_check_installed}</strong>
 </p>
-<div class="alert alert-danger">{LANG.install_check_installed_error}</div>
+<div class="alert alert-danger">{INSTALLED_MESSAGE}</div>
 <!-- END: installed -->
 <!-- BEGIN: not_install -->
 <p class="text-success">

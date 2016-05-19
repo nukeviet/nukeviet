@@ -24,8 +24,11 @@ if (empty($id)) {
     die('NO');
 }
 
-$new_status = $nv_Request->get_bool('new_status', 'post');
-$new_status = ( int )$new_status;
+$new_status = $nv_Request->get_int('new_status', 'post');
+if ($new_status < 0 OR $new_status > 2)
+{
+    $new_status = 0;
+}
 
 $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_department SET act=' . $new_status . ' WHERE id=' . $id);
 

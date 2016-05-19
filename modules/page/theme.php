@@ -26,7 +26,7 @@ function nv_page_main($row, $ab_links, $content_comment)
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CONTENT', $row);
-    
+
     if (!empty($row['description'])) {
         $xtpl->parse('main.description');
     }
@@ -44,14 +44,23 @@ function nv_page_main($row, $ab_links, $content_comment)
     }
 
     if (! empty($row['image'])) {
-        if (! empty($row['imagealt'])) {
-            $xtpl->parse('main.image.alt');
-        }
-        $xtpl->parse('main.image');
+    	if ($row['imageposition'] > 0) {
+    		if ($row['imageposition'] == 1) {
+		        if (! empty($row['imagealt'])) {
+		            $xtpl->parse('main.imageleft.alt');
+		        }
+    			$xtpl->parse('main.imageleft');
+    		} else {
+		        if (! empty($row['imagealt'])) {
+		            $xtpl->parse('main.imagecenter.alt');
+		        }
+    			$xtpl->parse('main.imagecenter');
+    		}
+    	}
     }
 
     if (defined('NV_IS_MODADMIN')) {
-        $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . $global_config['sitekey'] . session_id()));
+        $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . NV_CHECK_SESSION));
         $xtpl->assign('ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id']);
         $xtpl->parse('main.adminlink');
     }
@@ -101,7 +110,7 @@ function nv_page_main_list($array_data, $generate_page)
                 $xtpl->parse('main.loop.image');
             }
             if (defined('NV_IS_MODADMIN')) {
-                $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . $global_config['sitekey'] . session_id()));
+                $xtpl->assign('ADMIN_CHECKSS', md5($row['id'] . NV_CHECK_SESSION));
                 $xtpl->assign('ADMIN_EDIT', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id']);
                 $xtpl->parse('main.loop.adminlink');
             }

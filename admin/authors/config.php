@@ -80,7 +80,6 @@ if ($nv_Request->isset_request('savesetting', 'post')) {
 
     $array_config_global['spadmin_add_admin'] = $nv_Request->get_int('spadmin_add_admin', 'post');
     $array_config_global['authors_detail_main'] = $nv_Request->get_int('authors_detail_main', 'post');
-    $array_config_global['adminrelogin_max'] = $nv_Request->get_int('adminrelogin_max', 'post');
     $array_config_global['admin_check_pass_time'] = 60 * $nv_Request->get_int('admin_check_pass_time', 'post');
     if ($array_config_global['admin_check_pass_time'] < 120) {
         $array_config_global['admin_check_pass_time'] = 120;
@@ -149,7 +148,7 @@ if ($nv_Request->isset_request('submituser', 'post')) {
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_edit'] . ' username: ' . $username, $admin_info['userid']);
         } else {
-            $sth = $db->prepare("REPLACE INTO " . NV_AUTHORS_GLOBALTABLE . "_config (keyname, mask, begintime, endtime, notice) VALUES (:username, '-1', " . $begintime1 . ", " . $endtime1 . ", '" . md5($password) . "' )");
+            $sth = $db->prepare("INSERT INTO " . NV_AUTHORS_GLOBALTABLE . "_config (keyname, mask, begintime, endtime, notice) VALUES (:username, '-1', " . $begintime1 . ", " . $endtime1 . ", '" . md5($password) . "' )");
             $sth->bindParam(':username', $username, PDO::PARAM_STR);
             $sth->execute();
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['title_username'], $lang_module['username_add'] . ' username: ' . $username, $admin_info['userid']);
@@ -193,13 +192,16 @@ if ($nv_Request->isset_request('submitip', 'post')) {
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_edit'] . ' ID ' . $cid . ' -> ' . $keyname, $admin_info['userid']);
         } else {
-            $sth = $db->prepare('REPLACE INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )');
-            $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
-            $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
-            $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
-            $sth->execute();
+        	$result = $db->query('DELETE FROM ' . NV_AUTHORS_GLOBALTABLE . '_config WHERE keyname=' . $db->quote($keyname));
+			if ($result) {
+	            $sth = $db->prepare('INSERT INTO ' . NV_AUTHORS_GLOBALTABLE . '_config (keyname, mask, begintime, endtime, notice) VALUES ( :keyname, :mask, ' . $begintime . ', ' . $endtime . ', :notice )');
+	            $sth->bindParam(':keyname', $keyname, PDO::PARAM_STR);
+	            $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
+	            $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
+	            $sth->execute();
 
-            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_add'] . ' ' . $keyname, $admin_info['userid']);
+	            nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['adminip'], $lang_module['adminip_add'] . ' ' . $keyname, $admin_info['userid']);
+			}
         }
         nv_save_file_admin_config();
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
@@ -223,18 +225,7 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 $xtpl->assign('ADMIN_CHECK_PASS_TIME', round($global_config['admin_check_pass_time'] / 60));
-
 $xtpl->assign('OP', $op);
-
-for ($i = 2; $i < 11; $i++) {
-    $array = array(
-        'value' => $i,
-        'select' => ($i == $global_config['adminrelogin_max']) ? ' selected="selected"' : '',
-        'text' => $i
-    );
-    $xtpl->assign('OPTION', $array);
-    $xtpl->parse('main.adminrelogin_max');
-}
 
 $xtpl->assign('DATA', array(
     'admfirewall' => $global_config['admfirewall'] ? ' checked="checked"' : '',

@@ -17,17 +17,17 @@ $page_title = $lang_module['extUpd'];
 $eid = $nv_Request->get_int('eid', 'get', 0);
 $fid = $nv_Request->get_int('fid', 'get', 0);
 
-if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid . $global_config['sitekey'] . session_id())) {
+if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid . NV_CHECK_SESSION)) {
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
-    $filename = NV_TEMPNAM_PREFIX . 'extupd_' . md5($global_config['sitekey'] . session_id()) . '.zip';
+    $filename = NV_TEMPNAM_PREFIX . 'extupd_' . NV_CHECK_SESSION . '.zip';
 
     if (file_exists(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename)) {
         $zip = new PclZip(NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename);
         $ziplistContent = $zip->listContent();
 
-        $temp_extract_dir = NV_TEMP_DIR . '/' . md5($filename . $global_config['sitekey'] . session_id());
+        $temp_extract_dir = NV_TEMP_DIR . '/' . md5($filename . NV_CHECK_SESSION);
 
         $no_extract = array();
         $error_create_folder = array();
@@ -200,14 +200,14 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
     die();
 }
 
-if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $fid . $global_config['sitekey'] . session_id())) {
+if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $fid . NV_CHECK_SESSION)) {
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
     $stored_cookies = nv_get_cookies();
 
-    $filename = NV_TEMPNAM_PREFIX . 'extupd_' . md5($global_config['sitekey'] . session_id()) . '.zip';
+    $filename = NV_TEMPNAM_PREFIX . 'extupd_' . NV_CHECK_SESSION . '.zip';
 
     // Debug
     $args = array(
@@ -223,7 +223,8 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
             'mode' => 'getupdfile',
             'eid' => $eid,
             'fid' => $fid
-        )
+        ),
+        'timeout' => 0
     );
 
     // Delete temp file if exists
@@ -258,12 +259,12 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
         }
 
         if ($warning === true) {
-            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_warning'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checksess=' . md5('unzip' . $eid . $fid . $global_config['sitekey'] . session_id())));
+            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_warning'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checksess=' . md5('unzip' . $eid . $fid . NV_CHECK_SESSION)));
 
             $xtpl->parse('warning');
             echo $xtpl->text('warning');
         } else {
-            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_ok'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checksess=' . md5('unzip' . $eid . $fid . $global_config['sitekey'] . session_id())));
+            $xtpl->assign('MESSAGE', sprintf($lang_module['get_update_ok'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;eid=' . $eid . '&amp;fid=' . $fid . '&amp;checksess=' . md5('unzip' . $eid . $fid . NV_CHECK_SESSION)));
 
             $xtpl->parse('ok');
             echo $xtpl->text('ok');
@@ -273,7 +274,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('download' . $eid . $f
     die();
 }
 
-if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid . $global_config['sitekey'] . session_id())) {
+if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid . NV_CHECK_SESSION)) {
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
 
@@ -323,14 +324,14 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
         $array['message'] = $lang_module['extUpdCheckSuccess'];
         $array['class'] = 'success';
 
-        $xtpl->assign('LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checksess=' . md5('download' . $eid . $fid . $global_config['sitekey'] . session_id()));
+        $xtpl->assign('LINK', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checksess=' . md5('download' . $eid . $fid . NV_CHECK_SESSION));
         $xtpl->parse('check.ready');
     } elseif ($array['fileInfo'] == 'notlogin') {
         $array['icon'] = 'fa-frown-o';
         $array['message'] = $lang_module['extUpdNotLogin'];
         $array['class'] = 'warning';
 
-        $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checksess=' . md5($eid . $fid . $global_config['sitekey'] . session_id());
+        $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=update&eid=' . $eid . '&fid=' . $fid . '&checksess=' . md5($eid . $fid . NV_CHECK_SESSION);
         $xtpl->assign('MESSAGE', sprintf($lang_module['extUpdLoginRequire'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;redirect=' . nv_redirect_encrypt($redirect)));
         $xtpl->parse('check.message');
     } elseif ($array['fileInfo'] == 'unpaid') {
@@ -356,14 +357,14 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('check' . $eid . $fid 
     die();
 }
 
-if ($nv_Request->get_title('checksess', 'get', '') == md5($eid . $fid . $global_config['sitekey'] . session_id())) {
+if ($nv_Request->get_title('checksess', 'get', '') == md5($eid . $fid . NV_CHECK_SESSION)) {
     $xtpl = new XTemplate('update.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
     $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
     $xtpl->assign('EID', $eid);
     $xtpl->assign('FID', $fid);
-    $xtpl->assign('CHECKSESS', md5('check' . $eid . $fid . $global_config['sitekey'] . session_id()));
+    $xtpl->assign('CHECKSESS', md5('check' . $eid . $fid . NV_CHECK_SESSION));
 
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
@@ -373,4 +374,4 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5($eid . $fid . $global_
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
-nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);

@@ -390,6 +390,7 @@
     "buttons.less",
     "button-groups.less",
     "input-groups.less",
+    "navs.less",
     "breadcrumbs.less",
     "pagination.less",
     "pager.less",
@@ -417,5 +418,5 @@
     "scrollspy.js",
     "transition.js"
   ],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=bc1e51a5bb2d76ae6bea"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=106d39d0689282f52b39c872dcef3661"
 }

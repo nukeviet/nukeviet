@@ -15,7 +15,7 @@
         
         <div class="form-group">
             <div>
-                <input type="text" class="required form-control" placeholder="{LANG.account}" value="" name="username" maxlength="{NICK_MAXLENGTH}" data-pattern="/^(.){{NICK_MINLENGTH},{NICK_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
+                <input type="text" class="required form-control" placeholder="{LANG.account}" value="" name="username" maxlength="{NICK_MAXLENGTH}" data-pattern="/^(.){{NICK_MINLENGTH},{NICK_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{USERNAME_RULE}">
             </div>
         </div>
        
@@ -27,7 +27,7 @@
     
         <div class="form-group">
             <div>
-                <input type="password" class="password required form-control" placeholder="{LANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                <input type="password" class="password required form-control" placeholder="{LANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{PASSWORD_RULE}">
             </div>
         </div>
     
@@ -167,6 +167,7 @@
             </div>
         </div>
     	<!-- END: reg_captcha -->
+    	<!-- BEGIN: agreecheck -->
         <div>
             <div>
                 <div class="form-group text-center check-box required" data-mess="">
@@ -174,6 +175,7 @@
                 </div>
             </div>
         </div>
+        <!-- END: agreecheck -->
     	<div class="text-center margin-bottom-lg">
             <input type="hidden" name="checkss" value="{CHECKSS}" />
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->

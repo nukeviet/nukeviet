@@ -30,6 +30,7 @@ if ($id) {
         $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowdetail['image']);
         $rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'];
         $rowdetail['imageWidth'] = $imagesize[0] > 500 ? 500 : $imagesize[0];
+		$meta_property['og:image'] = NV_MY_DOMAIN . $rowdetail['image'];
     }
     $rowdetail['add_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['add_time']);
     $rowdetail['edit_time'] = nv_date('H:i T l, d/m/Y', $rowdetail['edit_time']);

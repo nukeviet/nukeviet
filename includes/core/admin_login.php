@@ -32,8 +32,6 @@ if (! nv_admin_checkfirewall()) {
 
 $error = '';
 $login = '';
-$checkss = md5($global_config['sitekey'] . $client_info['session_id']);
-
 $array_gfx_chk = array( 1, 5, 6, 7 );
 if (in_array($global_config['gfx_chk'], $array_gfx_chk)) {
     $global_config['gfx_chk'] = 1;
@@ -41,7 +39,7 @@ if (in_array($global_config['gfx_chk'], $array_gfx_chk)) {
     $global_config['gfx_chk'] = 0;
 }
 $admin_login_redirect = $nv_Request->get_string('admin_login_redirect', 'session', '');
-if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->get_title('checkss', 'post') == $checkss) {
+if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
     $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     if ($global_config['gfx_chk'] == 1) {
@@ -184,7 +182,6 @@ $xtpl->assign('N_PASSWORD', $lang_global['password']);
 $xtpl->assign('SITEURL', $global_config['site_url']);
 $xtpl->assign('N_SUBMIT', $lang_global['loginsubmit']);
 $xtpl->assign('NV_COOKIE_PREFIX', $global_config['cookie_prefix']);
-$xtpl->assign('CHECKSS', $checkss);
 $xtpl->assign('NV_TITLEBAR_DEFIS', NV_TITLEBAR_DEFIS);
 
 $xtpl->assign('LOGIN_ERROR_SECURITY', addslashes(sprintf($lang_global['login_error_security'], NV_GFX_NUM)));

@@ -190,7 +190,6 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('CDNDL', md5($global_config['sitekey'] . $admin_info['admin_id'] . session_id()));
 
 if (defined('NV_IS_GODADMIN')) {
     $result = $db->query("SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");
@@ -234,7 +233,7 @@ if (defined('NV_IS_GODADMIN')) {
         }
         $xtpl->parse('main.system.lang_multi');
     }
-
+    $xtpl->assign('CURRENT_TIME', sprintf($lang_module['current_time'], nv_date('H:i T l, d/m/Y', NV_CURRENTTIME)));
     $xtpl->assign('TIMEZONEOP', 'byCountry');
     $xtpl->assign('TIMEZONESELECTED', ($array_config_global['site_timezone'] == 'byCountry') ? "selected='selected'" : "");
     $xtpl->assign('TIMEZONELANGVALUE', $lang_module['timezoneByCountry']);

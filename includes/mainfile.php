@@ -67,14 +67,14 @@ if (defined('NV_CONFIG_DIR')) {
     define('NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir']);
     define('NV_FILES_DIR', NV_ASSETS_DIR . '/' . $global_config['site_dir']);
     define('NV_CACHEDIR', SYSTEM_CACHEDIR . '/' . $global_config['site_dir']);
-    define('NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_groups');
     define('NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users');
+    define('NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users_groups');
 } else {
     define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
     define('NV_FILES_DIR', NV_ASSETS_DIR);
     define('SYSTEM_CACHEDIR', NV_CACHEDIR);
-    define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_groups');
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
+    define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
 }
 
 // Vendor autoload
@@ -120,6 +120,11 @@ require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
+
+if ($global_config['cached'] == 'memcached') {
+    ini_set('session.save_handler', 'memcached');
+    ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
+}
 
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
@@ -168,6 +173,9 @@ define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
 // Hau to cua file cache
 
+define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
+// Kiem tra session cua nguoi dung
+
 define('NV_USER_AGENT', $nv_Request->user_agent);
 
 // Ngon ngu
@@ -178,7 +186,7 @@ $domains = explode(',', $global_config['my_domains']);
 if (!in_array(NV_SERVER_NAME, $domains)) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
     $global_config['site_url'] = NV_SERVER_PROTOCOL . '://' . $domains[0] . NV_SERVER_PORT;
-    nv_info_die($global_config['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], '', '', '', '');
+    nv_info_die($global_config['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 400, '', '', '', '');
 }
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {
@@ -320,7 +328,8 @@ if (empty($global_config['site_logo'])) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
 }
 
-$global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_map("trim", explode(',', $global_config['ssl_https_modules']));
+$global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_map('trim', explode(',', $global_config['ssl_https_modules']));
+$global_config['array_theme_type'] = explode(',', $global_config['theme_type']);
 
 define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
@@ -374,32 +383,23 @@ if (!empty($admin_cookie)) {
     require NV_ROOTDIR . '/includes/core/is_admin.php';
 }
 
-if (defined('NV_IS_ADMIN')) {
-    // Buoc admin khai bao lai pass neu khong online trong khoang thoi gian nhat dinh
-    if (empty($admin_info['checkpass'])) {
-        if ($nv_Request->isset_request(NV_ADMINRELOGIN_VARIABLE, 'get') and $nv_Request->get_int(NV_ADMINRELOGIN_VARIABLE, 'get') == 1) {
-            require NV_ROOTDIR . '/includes/core/admin_relogin.php';
-            exit();
-        }
-    }
-} else {
+// Dinh chi hoat dong cua site
+if (!defined('NV_IS_ADMIN')) {
     $site_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post', NV_LANG_DATA);
     if (!in_array($site_lang, $global_config['allow_sitelangs'])) {
         $global_config['closed_site'] = 1;
     }
 }
-
-// Dinh chi hoat dong cua site
 if ($nv_check_update and !defined('NV_IS_UPDATE')) {
     // Dinh chi neu khong la admin toi cao
     if (!defined('NV_ADMIN') and !defined('NV_IS_GODADMIN')) {
         $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, '', '', '', '');
+        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 200, '', '', '', '');
     }
 } elseif (!defined('NV_ADMIN') and !defined('NV_IS_ADMIN')) {
     if (!empty($global_config['closed_site'])) {
         $disable_site_content = (isset($global_config['disable_site_content']) and !empty($global_config['disable_site_content'])) ? $global_config['disable_site_content'] : $lang_global['disable_site_content'];
-        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, '', '', '', '');
+        nv_info_die($global_config['site_description'], $lang_global['disable_site_title'], $disable_site_content, 200, '', '', '', '');
     } elseif (!in_array(NV_LANG_DATA, $global_config['allow_sitelangs'])) {
         Header('Location: ' . NV_BASE_SITEURL);
         exit();

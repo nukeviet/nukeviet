@@ -1,53 +1,5 @@
 [
     {
-        "name": "true/punycode",
-        "version": "v2.0.1",
-        "version_normalized": "2.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/true/php-punycode.git",
-            "reference": "b672918d992b84f8016bbe353a42516928393c63"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/true/php-punycode/zipball/b672918d992b84f8016bbe353a42516928393c63",
-            "reference": "b672918d992b84f8016bbe353a42516928393c63",
-            "shasum": ""
-        },
-        "require": {
-            "ext-mbstring": "*",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.7",
-            "squizlabs/php_codesniffer": "~2.0"
-        },
-        "time": "2015-09-01 14:53:31",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "TrueBV\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Renan Gonçalves",
-                "email": "renan.saddam@gmail.com"
-            }
-        ],
-        "description": "A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA)",
-        "homepage": "https://github.com/true/php-punycode",
-        "keywords": [
-            "idna",
-            "punycode"
-        ]
-    },
-    {
         "name": "league/url",
         "version": "3.3.5",
         "version_normalized": "3.3.5.0",
@@ -101,7 +53,8 @@
             "parse_url",
             "php",
             "url"
-        ]
+        ],
+        "abandoned": "league/uri"
     },
     {
         "name": "gregwar/cache",
@@ -367,62 +320,6 @@
         ]
     },
     {
-        "name": "phpmailer/phpmailer",
-        "version": "5.4.x-dev",
-        "version_normalized": "5.4.9999999.9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "32a99356ef0ebf27aeaf46e9b10d378de7cc9e1c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/32a99356ef0ebf27aeaf46e9b10d378de7cc9e1c",
-            "reference": "32a99356ef0ebf27aeaf46e9b10d378de7cc9e1c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.4.0"
-        },
-        "require-dev": {
-            "phpdocumentor/phpdocumentor": "2.*",
-            "phpunit/phpunit": "4.*"
-        },
-        "suggest": {
-            "league/oauth2-client": "Needed for XOAUTH2 authentication"
-        },
-        "time": "2015-12-22 08:35:50",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "PHPMailer\\PHPMailer\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-2.1"
-        ],
-        "authors": [
-            {
-                "name": "Jim Jagielski",
-                "email": "jimjag@gmail.com"
-            },
-            {
-                "name": "Marcus Bointon",
-                "email": "phpmailer@synchromedia.co.uk"
-            },
-            {
-                "name": "Andy Prevost",
-                "email": "codeworxtech@users.sourceforge.net"
-            },
-            {
-                "name": "Brent R. Matzelle"
-            }
-        ],
-        "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
-    },
-    {
         "name": "pclzip/pclzip",
         "version": "2.8.2",
         "version_normalized": "2.8.2.0",
@@ -559,24 +456,24 @@
     },
     {
         "name": "endroid/qrcode",
-        "version": "1.5.7",
-        "version_normalized": "1.5.7.0",
+        "version": "1.6.5",
+        "version_normalized": "1.6.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/endroid/QrCode.git",
-            "reference": "7b32cc5e4bd2f5e5191382926b18001b7cd78695"
+            "reference": "d1561118846d92f1c8e107a52c09512d764cbeaf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/endroid/QrCode/zipball/7b32cc5e4bd2f5e5191382926b18001b7cd78695",
-            "reference": "7b32cc5e4bd2f5e5191382926b18001b7cd78695",
+            "url": "https://api.github.com/repos/endroid/QrCode/zipball/d1561118846d92f1c8e107a52c09512d764cbeaf",
+            "reference": "d1561118846d92f1c8e107a52c09512d764cbeaf",
             "shasum": ""
         },
         "require": {
             "ext-gd": "*",
             "php": ">=5.3.0"
         },
-        "time": "2016-01-01 19:08:49",
+        "time": "2016-04-16 22:09:48",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -608,5 +505,111 @@
             "qr",
             "qrcode"
         ]
+    },
+    {
+        "name": "true/punycode",
+        "version": "v2.0.2",
+        "version_normalized": "2.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/true/php-punycode.git",
+            "reference": "74fa01d4de396c40e239794123b3874cb594a30c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/true/php-punycode/zipball/74fa01d4de396c40e239794123b3874cb594a30c",
+            "reference": "74fa01d4de396c40e239794123b3874cb594a30c",
+            "shasum": ""
+        },
+        "require": {
+            "ext-mbstring": "*",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.7",
+            "squizlabs/php_codesniffer": "~2.0"
+        },
+        "time": "2016-01-07 17:12:58",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "TrueBV\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Renan Gonçalves",
+                "email": "renan.saddam@gmail.com"
+            }
+        ],
+        "description": "A Bootstring encoding of Unicode for Internationalized Domain Names in Applications (IDNA)",
+        "homepage": "https://github.com/true/php-punycode",
+        "keywords": [
+            "idna",
+            "punycode"
+        ]
+    },
+    {
+        "name": "phpmailer/phpmailer",
+        "version": "v6.0.0rc2",
+        "version_normalized": "6.0.0.0-RC2",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/PHPMailer/PHPMailer.git",
+            "reference": "5b34f25e314558a8f7bc94f0f2ee0a09969f0640"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/5b34f25e314558a8f7bc94f0f2ee0a09969f0640",
+            "reference": "5b34f25e314558a8f7bc94f0f2ee0a09969f0640",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.5.0"
+        },
+        "require-dev": {
+            "phpdocumentor/phpdocumentor": "2.*",
+            "phpunit/phpunit": "4.*"
+        },
+        "suggest": {
+            "hayageek/oauth2-yahoo": "Needed for Yahoo XOAUTH2 authentication",
+            "league/oauth2-google": "Needed for Google XOAUTH2 authentication",
+            "stevenmaguire/oauth2-microsoft": "Needed for Microsoft XOAUTH2 authentication"
+        },
+        "time": "2016-05-10 22:00:21",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "PHPMailer\\PHPMailer\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-2.1"
+        ],
+        "authors": [
+            {
+                "name": "Jim Jagielski",
+                "email": "jimjag@gmail.com"
+            },
+            {
+                "name": "Marcus Bointon",
+                "email": "phpmailer@synchromedia.co.uk"
+            },
+            {
+                "name": "Andy Prevost",
+                "email": "codeworxtech@users.sourceforge.net"
+            },
+            {
+                "name": "Brent R. Matzelle"
+            }
+        ],
+        "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
     }
 ]

@@ -587,13 +587,16 @@ function nv_show_block_list($bid)
 
     $global_array_cat[0] = array( 'alias' => 'Other' );
 
-    $sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
+    $sql = 'SELECT t1.id, t1.catid, t1.title, t1.alias, t1.publtime, t1.status, t1.hitstotal, t1.hitscm, t2.weight FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows t1 INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id WHERE t2.bid= ' . $bid . ' AND t1.status=1 ORDER BY t2.weight ASC';
     $array_block = $db_slave->query($sql)->fetchAll();
-
     $num = sizeof($array_block);
     if ($num > 0) {
         foreach ($array_block as $row) {
             $xtpl->assign('ROW', array(
+                'publtime' => nv_date('H:i d/m/y', $row['publtime']),
+                'status' => $lang_module['status_' . $row['status']],
+                'hitstotal' => number_format($row['hitstotal'], 0, ',', '.'),
+                'hitscm' => number_format($row['hitscm'], 0, ',', '.'),
                 'id' => $row['id'],
                 'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'],
                 'title' => $row['title']

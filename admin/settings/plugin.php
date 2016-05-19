@@ -18,7 +18,7 @@ $pattern_plugin = '/^([a-zA-Z0-9\_]+)\.php$/';
 if ($nv_Request->isset_request('plugin_file', 'post')) {
     $config_plugin = array();
     $plugin_file = $nv_Request->get_title('plugin_file', 'post');
-    
+
     if (preg_match($pattern_plugin, $plugin_file) and nv_is_file(NV_BASE_SITEURL . 'includes/plugin/' . $plugin_file, 'includes/plugin')) {
         $plugin_area = $nv_Request->get_int('plugin_area', 'post');
         if ($nv_Request->isset_request('delete', 'post')) {
@@ -53,7 +53,7 @@ if ($nv_Request->isset_request('plugin_file', 'post')) {
 if ($nv_Request->isset_request('dpid', 'get')) {
     $dpid = $nv_Request->get_int('dpid', 'get');
     $checkss = $nv_Request->get_title('checkss', 'get');
-    if ($dpid > 0 and $checkss == md5($dpid . '-' . session_id() . '-' . $global_config['sitekey'])) {
+    if ($dpid > 0 and $checkss == md5($dpid . '-' . NV_CHECK_SESSION)) {
         $row = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_plugin WHERE pid=' . $dpid)->fetch();
         if (! empty($row) and $db->exec('DELETE FROM ' . $db_config['prefix'] . '_plugin WHERE pid = ' . $dpid)) {
             $weight = intval($row['weight']);
@@ -112,7 +112,7 @@ foreach ($nv_plugin_area as $area => $nv_plugin_area_i) {
     $_sizeof = sizeof($nv_plugin_area_i);
     foreach ($nv_plugin_area_i as $row) {
         $row['plugin_area'] = ($row['weight'] == 1) ? $lang_module['plugin_area_' . $row['plugin_area']] : '';
-        $row['plugin_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dpid=' . $row['pid'] . '&amp;checkss=' . md5($row['pid'] . '-' . session_id() . '-' . $global_config['sitekey']);
+        $row['plugin_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;dpid=' . $row['pid'] . '&amp;checkss=' . md5($row['pid'] . '-' . NV_CHECK_SESSION);
         $xtpl->assign('DATA', $row);
         for ($i = 1; $i <= $_sizeof; $i++) {
             $xtpl->assign('WEIGHT_SELECTED', ($i == $row['weight']) ? ' selected="selected"' : '');

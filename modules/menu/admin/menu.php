@@ -128,7 +128,7 @@ if ($nv_Request->get_int('save', 'post')) {
     $result = $db->query($sql);
     $arr = $result->fetch();
     if (empty($arr)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     }
 }
 

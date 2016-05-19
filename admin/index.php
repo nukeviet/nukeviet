@@ -180,7 +180,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             require $include_file;
             exit();
         } else {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['admin_no_allow_func']);
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['admin_no_allow_func'], 404);
         }
     } elseif (isset($site_mods[$module_name]) and $op == 'main') {
         $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admin_file=0 WHERE title= :module_name');
@@ -191,4 +191,4 @@ if (preg_match($global_config['check_module'], $module_name)) {
     }
 }
 
-nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);

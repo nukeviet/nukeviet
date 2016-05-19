@@ -1,6 +1,7 @@
 <!-- BEGIN: main -->
 <div class="row m-bottom">
 	<div class="col-xs-24">
+        <!-- BEGIN: upload_allowed -->
 		<div class="pull-left">
 			<div class="dropdown">
 				<button type="button" class="btn btn-info btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{LANG.install_package}</button>
@@ -24,6 +25,7 @@
 				</div>
 			</div>
 		</div>
+        <!-- END: upload_allowed -->
 		<div class="pull-right">
 			<em class="fa {THEME_CONFIG.sys_icon}">&nbsp;</em> {LANG.extType_sys}&nbsp; - &nbsp;
 			<em class="fa {THEME_CONFIG.admin_icon}">&nbsp;</em> {LANG.extType_admin}

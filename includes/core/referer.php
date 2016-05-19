@@ -22,7 +22,7 @@ function nv_referer_update()
         $host = explode('/', $host);
         $host = reset($host);
         $host = strtolower($host);
-        
+
         $log_path = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ref_logs';
         if (! is_dir($log_path)) {
             @nv_mkdir(NV_ROOTDIR . '/' . NV_LOGS_DIR, 'ref_logs', true);
@@ -35,7 +35,6 @@ function nv_referer_update()
         $content .= ' [' . $client_info['referer'] . ']';
         $content .= ' [' . $client_info['selfurl'] . ']';
         $content .= "\r\n";
-        $md5 = md5($client_info['referer'] . $client_info['selfurl']);
 
         $is_save = true;
 
@@ -53,6 +52,7 @@ function nv_referer_update()
             }
         }
 
+        $md5 = md5($client_info['referer'] . $client_info['selfurl']);
         if ($is_save) {
             $tmp = $log_path . '/tmp.' . NV_LOGS_EXT;
             if (file_exists($tmp)) {

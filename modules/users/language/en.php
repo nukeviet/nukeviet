@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -165,6 +165,7 @@ $lang_module['yahoo_openid_login'] = 'Yahoo\'s account';
 $lang_module['canceled_authentication'] = 'You cancelled access by OpenID';
 $lang_module['not_logged_in'] = 'You still not login by OpenID';
 $lang_module['logged_in_failed'] = 'OpenID server doesn\'t provide some required information to login to our website';
+$lang_module['logged_no_email'] = 'Unfortunately, this app does not offer e-mail, please check that you have declared for the application email then try again';
 $lang_module['openid_confirm_failed'] = 'You provided wrong infomation';
 $lang_module['openid_confirm_info'] = 'Your OpenID can be use on this site,<br />but email $s exists.<br />If you are owner of account using this email,<br />please provide password.<br />';
 $lang_module['openid_active_info'] = 'Welcom %1$s,<br /><br />Your account at website %2$s wait to activate. To activate it, click link below:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Information:<br /><br />Account:%4$s<br />Email: %5$s<br />OpenID: %6$s<br /><br />Activate link will be expired at %8$s<br /><br />This is automatic sent email from website %2$s. If you doesn\'t know about it\'s content, please delete it.<br /><br /><br /><br />Site admin';
@@ -178,7 +179,6 @@ $lang_module['lostpass_no_info4'] = 'Password does not match';
 $lang_module['lostpass_page_title'] = 'Get password';
 $lang_module['lostpass_question_empty'] = 'You doesn\'t specify secret question or answer. We can\'t provide new password for you. Please contact site admin for more information';
 $lang_module['answer_failed'] = 'Your answer is not correct';
-$lang_module['field'] = 'User name or email';
 $lang_module['lostpass_question'] = 'Question';
 $lang_module['step1'] = 'Step 1';
 $lang_module['step2'] = 'Step 2';
@@ -212,8 +212,6 @@ $lang_module['openid_add'] = 'Add a new OpenID';
 $lang_module['no_act'] = 'This function is currently not active';
 $lang_module['account_change_mail_ok'] = 'Email adress has been confirmed sucessfully';
 $lang_module['account_change_mail_error'] = 'There\'s an error in process of confirming email adress, please contact website administrator for more instruction.';
-$lang_module['allow_admin'] = 'This feature allows administrators to limit unauthorized access.';
-$lang_module['allow_user'] = 'This feature is limited to members are allowed to access.';
 $lang_module['listusers'] = 'Members List';
 $lang_module['listusers_sort_by'] = 'sort by %s, %s';
 $lang_module['listusers_sort_by_username'] = 'Username';
@@ -284,5 +282,64 @@ $lang_module['group_name'] = 'Name of group';
 $lang_module['group_description'] = 'To introduce';
 $lang_module['group_userr'] = 'Member';
 $lang_module['group_reg'] = 'Join';
+$lang_module['group_manage'] = 'Group manage';
 $lang_module['in_group_ok'] = 'Setting';
 $lang_module['lostpass_key'] = 'The Verification code';
+$lang_module['group_join_queue'] = 'Request to join group';
+$lang_module['group_join_queue_message'] = 'Hello leader  <strong>%1$s</strong>,<br /><br /><strong>%2$s</strong> has sent the request to join the group <strong>%3$s</strong> because you are managing. You need to approve this request! <br /> <br /> Please <a href="%4$s" title=""> visit this link </a> to approve membership.';
+$lang_module['group_status'] = 'Status';
+$lang_module['group_status_0'] = 'Not joined';
+$lang_module['group_status_1'] = 'Joined';
+$lang_module['group_status_2'] = 'Pending';
+$lang_module['group_type'] = 'Group type';
+$lang_module['group_type_0'] = 'Group fixed';
+$lang_module['group_type_1'] = 'Group must submit a request';
+$lang_module['group_type_2'] = 'Free group';
+$lang_module['group_manage_count'] = 'Group manage number';
+$lang_module['group_manage_list'] = 'List groups manage';
+$lang_module['lastname_firstname'] = 'Fullname';
+$lang_module['members_in_group_caption'] = 'List member group "%s" (%d account)';
+$lang_module['leaders_in_group_caption'] = 'List leader group "%s" (%d account)';
+$lang_module['pending_in_group_caption'] = 'List waiting approve group "%s" (%d account)';
+$lang_module['error_group_not_found'] = 'Error: Group not found';
+$lang_module['error_users_not_found'] = 'This group empty account';
+$lang_module['error_group_in_site'] = 'Error: You can add and delete account, is account your site manage';
+$lang_module['error_not_groups'] = 'Empty account. Click <a href="%s">here</a> to create group';
+$lang_module['add_users'] = 'Add account';
+$lang_module['exclude_user2'] = 'Remove';
+$lang_module['promote'] = 'Promote';
+$lang_module['demote'] = 'Demote';
+$lang_module['approved'] = 'Approved';
+$lang_module['denied'] = 'Denied';
+$lang_module['search_id'] = 'Account';
+$lang_module['addMemberToGroup'] = 'Add to group';
+$lang_module['delConfirm'] = 'You sure to delete?';
+$lang_module['choiceUserID'] = 'Please fill account';
+$lang_module['no_premission'] = 'No premission';
+$lang_module['no_premission_leader'] = 'Only leader have premission this area. Please back!';
+$lang_module['title'] = 'Group name';
+$lang_module['add_time'] = 'Start time';
+$lang_module['exp_time'] = 'End time';
+$lang_module['users'] = 'User';
+$lang_module['addusers'] = 'Add new user';
+$lang_module['del_user_err'] = 'Delete user failed';
+$lang_module['user_waiting'] = 'User waiting';
+$lang_module['firstname_lastname'] = 'Full name';
+$lang_module['search'] = 'Search users';
+$lang_module['reset'] = 'Reset';
+$lang_module['username'] = 'Username';
+$lang_module['user_id'] = 'ID';
+$lang_module['active'] = 'Active';
+$lang_module['active_users'] = 'Active users';
+$lang_module['actived_users'] = 'The user has been successfully activated!';
+$lang_module['not_active'] = 'Can\'t active user, please check again!';
+$lang_module['adduser_register'] = 'User has been created';
+$lang_module['adduser_register_info'] = 'Hi %1$s,<br  /><br  />Your account at website %2$s activated. Your login information:<br  /><br  />URL: <a href="%3$s">%3$s</a><br  />Account: %4$s<br  />This is email automatic sending from website %2$s.<br  />Site administrator';
+$lang_module['noresult'] = 'No results matching your request';
+$lang_module['STT'] = 'Order';
+$lang_module['min_search'] = 'Please enter more than %s characters';
+$lang_module['no_premission_pass'] = 'You are not allowed to change the member password!';
+$lang_module['info_user'] = 'Complete the form below to add new user';
+$lang_module['note_remove_leader'] = 'You can not remove yourself from the group!';
+$lang_module['not_del_user'] = 'You can\'t delete this user because user is member of other group. You can only remove this user from your group';
+$lang_module['UserNotInGroup'] = 'This user not in your group';
