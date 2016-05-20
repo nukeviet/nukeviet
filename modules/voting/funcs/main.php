@@ -48,7 +48,7 @@ if (empty($vid)) {
         $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
         foreach ($allowed as $current_voting) {
             $voting_array = array(
-                'checkss' => md5($current_voting['vid'] . $client_info['session_id'] . $global_config['sitekey']),
+                'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                 'accept' => (int) $current_voting['acceptcm'],
                 'errsm' => (int) $current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], (int) $current_voting['acceptcm']) : $lang_module['voting_warning_accept1'],
                 'vid' => $current_voting['vid'],
@@ -87,7 +87,7 @@ if (empty($vid)) {
     $checkss = $nv_Request->get_string('checkss', 'get', '');
     $lid = $nv_Request->get_string('lid', 'get', '');
 
-    if ($checkss != md5($vid . $client_info['session_id'] . $global_config['sitekey']) or $vid <= 0 or $lid == '') {
+    if ($checkss != md5($vid . NV_CHECK_SESSION) or $vid <= 0 or $lid == '') {
         header('location:' . $global_config['site_url']);
         exit();
     }

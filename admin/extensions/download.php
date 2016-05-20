@@ -34,7 +34,7 @@ $request['mode'] = 'download';
 if (empty($request['id']) or empty($request['fid']) or ! isset($array['tid'])) {
     $contents = "ERR|" . $lang_module['download_error_preparam'];
 } else {
-    $filename = NV_TEMPNAM_PREFIX . 'auto_' . md5($global_config['sitekey'] . session_id()) . '.zip';
+    $filename = NV_TEMPNAM_PREFIX . 'auto_' . NV_CHECK_SESSION . '.zip';
 
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 

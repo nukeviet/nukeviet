@@ -1,11 +1,12 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.0.29
+NUKEVIET 4.0.29 Final
 - Requires PHP 5.5 or later
 - PHPMailer v6.0
 - Endroid/qrcode v1.6.5
 - CKEditor v4.5.9
+- Config allow theme type 
 - Update theme default
 - Update theme admin default
 - Update Memcache class
@@ -14,7 +15,12 @@ NUKEVIET 4.0.29
 - Module upload: fix download image
 - Fix update, upgrade system and extentions
 - Fix check update, auto update
-- Module users: Add feature for group's leader (creat user, delete user, accept user, delete user, change password), update theme redirect login, update facebook login, change rule for view list users
+- Module users: 
+	Add feature for group's leader (creat user, delete user, accept user, delete user, change password), 
+	Update theme redirect login, 
+	Update facebook login
+	Change rule for view list users
+	Remove Admin Relogin
 - Module extensions: Fix download file
 - Add more options for module's theme mobile
 - Support statisics for CocCoc browser

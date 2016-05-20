@@ -28,14 +28,14 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
         $query = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $id);
         $news_contents = $query->fetch();
         $nv_redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-        $nv_redirect2 = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . $global_config['sitekey'] . session_id()) . '&rand=' . nv_genpass();
+        $nv_redirect2 = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . NV_CHECK_SESSION) . '&rand=' . nv_genpass();
 
         $prcservice = (isset($module_config['seotools']['prcservice'])) ? $module_config['seotools']['prcservice'] : '';
         $prcservice = (! empty($prcservice)) ? explode(',', $prcservice) : array();
 
         if ($news_contents['id'] > 0 and ! empty($prcservice)) {
             if ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME + 1 and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME + 1)) {
-                if ($nv_Request->get_string('checkss', 'post,get', '') == md5($id . $global_config['sitekey'] . session_id())) {
+                if ($nv_Request->get_string('checkss', 'post,get', '') == md5($id . NV_CHECK_SESSION)) {
                     $services_active = array();
                     require NV_ROOTDIR . '/' . NV_DATADIR . '/rpc_services.php';
                     foreach ($services as $key => $service) {
@@ -54,7 +54,7 @@ if (nv_function_exists('curl_init') and nv_function_exists('curl_exec')) {
                         $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
                         $xtpl->assign('MODULE_NAME', $module_name);
                         $xtpl->assign('OP', $op);
-                        $xtpl->assign('LOAD_DATA', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . $global_config['sitekey'] . session_id()) . '&getdata=1');
+                        $xtpl->assign('LOAD_DATA', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $id . '&checkss=' . md5($id . NV_CHECK_SESSION) . '&getdata=1');
 
                         $xtpl->assign('HOME', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
                         foreach ($services_active as $key => $service) {

@@ -174,7 +174,7 @@ while ($row = $result->fetch()) {
 $gfx_chk = (in_array($global_config['gfx_chk'], array( 3, 4, 6, 7 ))) ? 1 : 0;
 
 $array_register = array();
-$array_register['checkss'] = md5($client_info['session_id'] . $global_config['sitekey']);
+$array_register['checkss'] = NV_CHECK_SESSION;
 $array_register['nv_redirect'] = $nv_redirect;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 

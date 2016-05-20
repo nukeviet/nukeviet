@@ -202,6 +202,7 @@ $lang_module['note_ssl_modules'] = 'Chaque langue aura des différents module, c
 $lang_module['timezoneAuto'] = 'Selon l\'ordinateur du visiteur';
 $lang_module['timezoneByCountry'] = 'Selon le pays du visiteur';
 $lang_module['allow_switch_mobi_des'] = 'Échange possible de thème de mobile et de bureau';
+$lang_module['allow_theme_type'] = 'Échange le type de thème';
 $lang_module['ftp_auto_detect_root'] = 'Détection automatique';
 $lang_module['ftp_error_full'] = 'Rentrer complètement les infos pour détecter automatiquement Remote path';
 $lang_module['ftp_error_detect_root'] = 'Il est impossible de déterminer, merci de vérifier l\'identifiant et le mot de passe';

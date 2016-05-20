@@ -172,7 +172,7 @@ $(document).ready(function() {
 var LANG = [];
 LANG.note_ssl = "{LANG.note_ssl}";
 var CFG = [];
-CFG.cdndl = "{CDNDL}";
+CFG.cdndl = "{NV_CHECK_SESSION}";
 
 show_rewrite_op();
 </script>
