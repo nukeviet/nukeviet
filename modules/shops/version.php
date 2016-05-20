@@ -17,8 +17,8 @@ $module_version = array(
     'modfuncs' => 'main,viewcat,detail,search,cart,order,payment,complete,history,group,search_result,compare,wishlist,tag,point,shippingajax,download, blockcat', // Cac function co block
     'is_sysmod' => 0, // 1:0 => Co phai la module he thong hay khong
     'virtual' => 1, // 1:0 => Co cho phep ao hao module hay khong
-    'version' => '4.0.25', // Module Shops 4 Release Candidate 1
-    'date' => 'Sun, 21 Jun 2013 00:50:00 GMT', // Ngay phat hanh phien ban
+    'version' => '4.0.29', // Module Shops 4
+    'date' => 'Fri, 20 May 2016 17:00:00 GMT', // Ngay phat hanh phien ban
     'author' => 'VINADES (contact@vinades.vn)', // Tac gia
     'note' => '', // Ghi chu
     'uploads_dir' => array( $module_upload, $module_upload . '/temp_pic', $module_upload . '/' . date('Y_m'), $module_upload . '/files' )
