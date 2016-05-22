@@ -35,14 +35,14 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CHECKSS', $checkss);
-    
+
 	if ($group_id != 0) {
 		$xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register/' . $group_id);
 	}
-	
+
     $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);
     $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], NV_UPASSMIN, NV_UPASSMAX) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], NV_UPASSMIN, NV_UPASSMAX);
-    
+
     $xtpl->assign('USERNAME_RULE', $username_rule);
     $xtpl->assign('PASSWORD_RULE', $password_rule);
 
@@ -180,7 +180,7 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
         $xtpl->assign('LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostactivelink');
         $xtpl->parse('main.lostactivelink');
     }
-	
+
 	if (defined('NV_IS_USER') and !defined('ACCESS_ADDUS')) {
 	    $xtpl->parse('main.agreecheck');
 	}
@@ -494,14 +494,14 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op;
 
     $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
-    
+
     if (defined('ACCESS_EDITUS')) {//trường hợp trưởng nhóm truy cập sửa thông tin member
     	$xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $data['group_id'] . '/' . $data['userid']);
     }
 	else {
 		$xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
 	}
-	
+
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('AVATAR_DEFAULT', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png');
@@ -558,7 +558,7 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.edit_email');
         $xtpl->parse('main.tab_edit_email');
     }
- 
+
     if (in_array('openid', $types)) {
         if (! empty($data_openid)) {
             $openid_del_al = 0;
@@ -746,16 +746,11 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 		if ($pass_empty) {
 	        $xtpl->parse('main.question_empty_pass');
         }
-		
+
 		$xtpl->parse('main.edit_question');
         $xtpl->parse('main.tab_edit_question');
 	}
-	
-	if (in_array('avatar', $types)) {
-		$xtpl->parse('main.edit_avatar');
-        $xtpl->parse('main.tab_edit_avatar');
-	}
-	
+
 	if (in_array('safemode', $types)) {
 		if ($pass_empty) {
 			$xtpl->parse('main.safemode_empty_pass');
