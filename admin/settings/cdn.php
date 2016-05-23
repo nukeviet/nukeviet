@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_SETTINGS')) {
     die('Stop!!!');
 }
 
-if (md5($global_config['sitekey'] . $admin_info['admin_id'] . session_id()) == $nv_Request->get_string('cdndl', 'get')) {
+if (NV_CHECK_SESSION == $nv_Request->get_string('cdndl', 'get')) {
     $dir = NV_ROOTDIR;
     $allowzip = array();
     $allowzip[] = $dir . '/.htaccess';
@@ -83,7 +83,7 @@ if (md5($global_config['sitekey'] . $admin_info['admin_id'] . session_id()) == $
     }
     if (empty($error)) {
         $allowzip = array_unique($allowzip);
-        $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'cdn_' . md5(nv_genpass(10) . session_id()) . '.zip';
+        $file_src = NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . NV_TEMPNAM_PREFIX . 'cdn_' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '.zip';
         $zip = new PclZip($file_src);
         $zip->add($allowzip, PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR);
         $zip->add(NV_ROOTDIR . '/themes/index.html', PCLZIP_OPT_REMOVE_PATH, NV_ROOTDIR . '/themes');

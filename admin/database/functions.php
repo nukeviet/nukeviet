@@ -41,7 +41,7 @@ function nv_show_tables()
     $result = $db->query("SHOW TABLE STATUS LIKE '" . $db_config['prefix'] . "\_%'");
     while ($item = $result->fetch()) {
         $tables_size = floatval($item['data_length']) + floatval($item['index_length']);
-        
+
         if ($item['engine'] != 'MyISAM') {
             $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
         }
@@ -139,7 +139,7 @@ function nv_show_tab()
     if ($item['engine'] != 'MyISAM') {
         $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
     }
-    
+
     $tablename = substr($item['name'], strlen($db_config['prefix']) + 1);
     $contents = array();
     $contents['table']['caption'] = sprintf($lang_module['table_caption'], $tablename);
@@ -203,13 +203,12 @@ function main_theme($contents)
 
 function nv_show_tables_theme($contents)
 {
-    global $global_config, $client_info, $module_file;
+    global $global_config, $module_file;
 
     $xtpl = new XTemplate('tables.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
     $xtpl->assign('ACTION', $contents['action']);
     $xtpl->assign('CAPTIONS', $contents['captions']['tables_info']);
-    $xtpl->assign('CHECKSS', md5($client_info['session_id'] . $global_config['sitekey']));
 
     foreach ($contents['columns'] as $value) {
         $xtpl->assign('COLNAME', $value);

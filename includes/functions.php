@@ -582,7 +582,7 @@ function nv_user_in_groups($groups_view)
         return true;
     } elseif (defined('NV_IS_USER')) {
         global $user_info;
-        
+
         if (in_array(4, $groups_view) and (empty($user_info['in_groups']) or !in_array(7, $user_info['in_groups']))) {
             // User with no group or not in new users groups
             return true;
@@ -1095,7 +1095,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail->Body = $message;
         $mail->AltBody = strip_tags($message);
         $mail->IsHTML(true);
-        
+
         if($AddEmbeddedImage) {
             $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
         }
@@ -1282,7 +1282,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
         } else {
             $page_string .= '<li class="disabled"><span>...</span></li>';
         }
-        
+
         $init_page_min = ($total_pages - $on_page > 3) ? $total_pages : $total_pages - 1;
         for ($i = $init_page_min; $i <= $total_pages; ++$i) {
             if ($i == $on_page) {
@@ -1770,9 +1770,8 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
  */
 function nv_redirect_encrypt($url)
 {
-    global $global_config, $crypt, $client_info;
-    $key = md5($global_config['sitekey'] . $client_info['session_id']);
-    return nv_base64_encode($crypt->aes_encrypt($url, $key));
+    global $crypt;
+    return nv_base64_encode($crypt->aes_encrypt($url, NV_CHECK_SESSION));
 }
 
 /**
@@ -1785,8 +1784,6 @@ function nv_redirect_encrypt($url)
  */
 function nv_redirect_decrypt($string, $insite = true)
 {
-    global $global_config, $crypt, $client_info;
-
     if (empty($string)) {
         return '';
     }
@@ -1800,7 +1797,8 @@ function nv_redirect_decrypt($string, $insite = true)
         return '';
     }
 
-    $url = $crypt->aes_decrypt($string, md5($global_config['sitekey'] . $client_info['session_id']));
+    global $crypt;
+    $url = $crypt->aes_decrypt($string, NV_CHECK_SESSION);
     if (empty($url)) {
         return '';
     }

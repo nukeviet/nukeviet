@@ -165,7 +165,7 @@ if ($catid == 0) {
 $where = '';
 $page = $nv_Request->get_int('page', 'get', 1);
 $checkss = $nv_Request->get_string('checkss', 'get', '');
-if ($checkss == md5(session_id())) {
+if ($checkss == NV_CHECK_SESSION) {
     if ($stype == 'bodytext') {
         $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
         $where = " c.bodyhtml LIKE '%" . $db_slave->dblikeescape($q) . "%'";
@@ -262,10 +262,10 @@ $db_slave->sqlreset()
     ->where($where);
 
 $_sql = $db_slave->sql();
-$num_checkss = md5($num_items . $client_info['session_id'] . $_sql);
+$num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
 if ($num_checkss != $nv_Request->get_string('num_checkss', 'get', '')) {
     $num_items = $db_slave->query($_sql)->fetchColumn();
-    $num_checkss = md5($num_items . $client_info['session_id'] . $_sql);
+    $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
 }
 $base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
 if ($catid) {
@@ -414,8 +414,6 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('Q', $qhtml);
-$xtpl->assign('CHECKSS', md5(session_id()));
-$xtpl->assign('SITEKEY', md5($global_config['sitekey'] . session_id()));
 $xtpl->assign('base_url_id', $base_url_id);
 $xtpl->assign('base_url_name', $base_url_name);
 $xtpl->assign('base_url_publtime', $base_url_publtime);

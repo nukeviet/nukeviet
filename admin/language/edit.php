@@ -21,7 +21,7 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 
 $dirlang = $nv_Request->get_title('dirlang', 'post, get', '');
-if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $nv_Request->isset_request('idfile,savedata', 'post') and $nv_Request->get_string('savedata', 'post') == md5(session_id())) {
+if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $nv_Request->isset_request('idfile,savedata', 'post') and $nv_Request->get_string('savedata', 'post') == NV_CHECK_SESSION) {
     $numberfile = 0;
 
     $idfile = $nv_Request->get_int('idfile', 'post', 0);
@@ -85,7 +85,7 @@ if (isset($language_array[$dirlang]) and isset($language_array[$dirlang]) and $n
 
 $page_title = $lang_module['nv_admin_edit'] . ': ' . $language_array[$dirlang]['name'];
 
-if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_string('checksess', 'get') == md5($nv_Request->get_int('idfile', 'get') . session_id())) {
+if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_string('checksess', 'get') == md5($nv_Request->get_int('idfile', 'get') . NV_CHECK_SESSION)) {
     $idfile = $nv_Request->get_int('idfile', 'get');
 
     list($idfile, $module, $admin_file, $langtype, $author_lang) = $db->query('SELECT idfile, module, admin_file, langtype, author_' . $dirlang . ' FROM ' . NV_LANGUAGE_GLOBALTABLE . '_file WHERE idfile =' . $idfile)->fetch(3);
@@ -144,8 +144,6 @@ if ($nv_Request->isset_request('idfile,checksess', 'get') and $nv_Request->get_s
 
         $xtpl->assign('IDFILE', $idfile);
         $xtpl->assign('DIRLANG', $dirlang);
-        $xtpl->assign('SAVEDATA', md5(session_id()));
-
         $xtpl->parse('main');
         $contents .= $xtpl->text('main');
     }

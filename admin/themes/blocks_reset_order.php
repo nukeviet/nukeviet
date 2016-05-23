@@ -15,7 +15,7 @@ if (! defined('NV_IS_FILE_THEMES')) {
 $checkss = $nv_Request->get_string('checkss', 'post');
 $theme = $nv_Request->get_string('selectthemes', 'cookie', $global_config['site_theme']);
 
-if (! empty($theme) and $checkss == md5($theme . $global_config['sitekey'] . session_id())) {
+if (! empty($theme) and $checkss == md5($theme . NV_CHECK_SESSION)) {
 
     // load position file
     $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $theme . '/config.ini');

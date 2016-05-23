@@ -49,9 +49,9 @@ if ($nv_Request->isset_request('i', 'get')) {
 
                 // Allow auto update to newest version
                 if ((string)$new_version->version == (string)$new_version->updateable) {
-                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ((string)$new_version->updateable) . '&amp;package=' . ((string)$new_version->updatepackage) . '&amp;checksess=' . md5(((string)$new_version->updateable) . ((string)$new_version->updatepackage) . $global_config['sitekey'] . session_id())));
+                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info1'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ((string)$new_version->updateable) . '&amp;package=' . ((string)$new_version->updatepackage) . '&amp;checksess=' . md5(((string)$new_version->updateable) . ((string)$new_version->updatepackage) . NV_CHECK_SESSION)));
                 } elseif (((string)$new_version->updateable) != '') {
-                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info2'], ((string)$new_version->updateable), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ((string)$new_version->updateable) . '&amp;package=' . ((string)$new_version->updatepackage) . '&amp;checksess=' . md5(((string)$new_version->updateable) . ((string)$new_version->updatepackage) . $global_config['sitekey'] . session_id())));
+                    $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info2'], ((string)$new_version->updateable), NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getupdate&amp;version=' . ((string)$new_version->updateable) . '&amp;package=' . ((string)$new_version->updatepackage) . '&amp;checksess=' . md5(((string)$new_version->updateable) . ((string)$new_version->updatepackage) . NV_CHECK_SESSION)));
                 } else {
                     $xtpl->assign('VERSION_LINK', sprintf($lang_module['newVersion_info3'], (string)$new_version->link));
                 }
@@ -183,10 +183,10 @@ if ($nv_Request->isset_request('i', 'get')) {
                         $xtpl->assign('UPDNOTE', sprintf($lang_module['extUpdNote1'], $value['link']));
                         $xtpl->parse('extUpd.loop.updateNotSuport');
                     } elseif ($updateVersion['new'] != $value['new_version']) {
-                        $xtpl->assign('UPDNOTE', sprintf($lang_module['extUpdNote2'], $updateVersion['new'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=update&amp;eid=' . $value['id'] . '&amp;fid=' . $updateVersion['fid'] . '&amp;checksess=' . md5($value['id'] . $updateVersion['fid'] . $global_config['sitekey'] . session_id())));
+                        $xtpl->assign('UPDNOTE', sprintf($lang_module['extUpdNote2'], $updateVersion['new'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=update&amp;eid=' . $value['id'] . '&amp;fid=' . $updateVersion['fid'] . '&amp;checksess=' . md5($value['id'] . $updateVersion['fid'] . NV_CHECK_SESSION)));
                         $xtpl->parse('extUpd.loop.updateNotLastest');
                     } else {
-                        $xtpl->assign('UPDNOTE', sprintf($lang_module['extUpdNote3'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=update&amp;eid=' . $value['id'] . '&amp;fid=' . $updateVersion['fid'] . '&amp;checksess=' . md5($value['id'] . $updateVersion['fid'] . $global_config['sitekey'] . session_id())));
+                        $xtpl->assign('UPDNOTE', sprintf($lang_module['extUpdNote3'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=extensions&amp;' . NV_OP_VARIABLE . '=update&amp;eid=' . $value['id'] . '&amp;fid=' . $updateVersion['fid'] . '&amp;checksess=' . md5($value['id'] . $updateVersion['fid'] . NV_CHECK_SESSION)));
                         $xtpl->parse('extUpd.loop.updateLastest');
                     }
                 } elseif (!$value['origin']) {

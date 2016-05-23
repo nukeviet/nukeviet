@@ -135,7 +135,7 @@ if ($nv_Request->isset_request('get_alias', 'post')) {
 
 $contentid = $nv_Request->get_int('contentid', 'get,post', 0);
 $fcheckss = $nv_Request->get_title('checkss', 'get,post', '');
-$checkss = md5($contentid . $client_info['session_id'] . $global_config['sitekey']);
+$checkss = md5($contentid . NV_CHECK_SESSION);
 
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
     if ($contentid > 0) {
@@ -595,7 +595,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $page = intval(substr($array_op[1], 5));
     }
 
-    $contents = "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5("0" . $client_info['session_id'] . $global_config['sitekey']) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
+    $contents = "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5("0" . NV_CHECK_SESSION) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
 
     $array_catpage = array();
 
@@ -649,11 +649,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $array_link_content = array();
 
             if ($array_row_i['is_edit_content']) {
-                $array_link_content[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5($id . $client_info['session_id'] . $global_config['sitekey']) . "\">" . $lang_global['edit'] . "</a>";
+                $array_link_content[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5($id . NV_CHECK_SESSION) . "\">" . $lang_global['edit'] . "</a>";
             }
 
             if ($array_row_i['is_del_content']) {
-                $array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5($id . $client_info['session_id'] . $global_config['sitekey']) . "\">" . $lang_global['delete'] . "</a>";
+                $array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5($id . NV_CHECK_SESSION) . "\">" . $lang_global['delete'] . "</a>";
             }
 
             if (! empty($array_link_content)) {
@@ -688,7 +688,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         }
     }
 } elseif ($array_post_user['addcontent']) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&contentid=0&checkss=' . md5('0' . $client_info['session_id'] . $global_config['sitekey']), true));
+    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&contentid=0&checkss=' . md5('0' . NV_CHECK_SESSION), true));
     die();
 }
 

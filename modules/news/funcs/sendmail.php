@@ -44,7 +44,7 @@ if ($id > 0 and $catid > 0) {
                 $youremail = $nv_Request->get_title('youremail', 'post', '');
             }
             $to_mail = $content = '';
-            if ($checkss == md5($id . session_id() . $global_config['sitekey']) and $allowed_send == 1) {
+            if ($checkss == md5($id . NV_CHECK_SESSION) and $allowed_send == 1) {
                 $link = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], true);
                 if (strpos($link, NV_MY_DOMAIN) !== 0) {
                     $link = NV_MY_DOMAIN . $link;
@@ -85,7 +85,7 @@ if ($id > 0 and $catid > 0) {
             $sendmail = array(
                 'id' => $id,
                 'catid' => $catid,
-                'checkss' => md5($id . session_id() . $global_config['sitekey']),
+                'checkss' => md5($id . NV_CHECK_SESSION),
                 'v_name' => $name,
                 'v_mail' => $youremail,
                 'to_mail' => $to_mail,
