@@ -1133,9 +1133,10 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
  * @param bool $onclick
  * @param string $js_func_name
  * @param string $containerid
+ * @param bool $full_theme
  * @return
  */
-function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page')
+function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page', $full_theme = true)
 {
     global $lang_global;
 
@@ -1217,6 +1218,10 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         } else {
             $page_string .= '<li class="disabled"><a href="#">&raquo;</a></li>';
         }
+    }
+
+    if ($full_theme !== true) {
+        return $page_string;
     }
 
     return '<ul class="pagination">' . $page_string . '</ul>';
