@@ -27,7 +27,6 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $nv_Request, $op, $nv_redirect;
 
     $xtpl = new XTemplate('register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
-    $xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register');
     $xtpl->assign('NICK_MAXLENGTH', NV_UNICKMAX);
     $xtpl->assign('NICK_MINLENGTH', NV_UNICKMIN);
     $xtpl->assign('PASS_MAXLENGTH', NV_UPASSMAX);
@@ -38,6 +37,9 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
 
 	if ($group_id != 0) {
 		$xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register/' . $group_id);
+	} else {
+        $xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register');
+	   $xtpl->parse('main.agreecheck');
 	}
 
     $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);

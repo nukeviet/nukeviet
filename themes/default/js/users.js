@@ -256,7 +256,14 @@ function reg_validForm(a) {
 					window.location.href = "" != b.input ? b.input : window.location.href
 				}, 6E3)
 			})))
-		}
+		},
+        error: function (xhr, opt, err) {
+            if (window.console.log) {
+                console.log(xhr.status + ': ' + err);
+            } else {
+                alert(xhr.status + ': ' + err);
+            }
+        }
 	}));
 	return !1
 }
