@@ -234,7 +234,7 @@ CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (1850 commits: from commi
 	+ Support Vietnamese domain name.
 	+ Hosting CDN for javascript, css
 	+ Configue Vietnamese Keyboard (If site installed Vietnamese language.
-	+ Encrypt passwords of FPT account, Account mail SMTP.
+	+ Encrypt passwords of FTP account, Account mail SMTP.
 	+ Many values at file /includes/constants.php will be configue in admin control panel.
 
 	+ Add IPV6 library to detected coutry by IPV6.

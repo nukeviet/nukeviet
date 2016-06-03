@@ -18,7 +18,7 @@ $flb = new NukeViet\Core\FloodBlocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs
 
 if ($flb->is_blocker) {
     if (!defined('NV_IS_AJAX') and file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/flood_blocker.tpl')) {
-        $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/flood_blocker.tpl');
+        $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
         $xtpl->assign('PAGE_TITLE', $lang_global['flood_page_title']);
         $xtpl->assign('IMG_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif');
         $xtpl->assign('IMG_WIDTH', 33);
