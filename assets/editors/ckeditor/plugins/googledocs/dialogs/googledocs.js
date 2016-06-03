@@ -114,13 +114,15 @@ CKEDITOR.dialog.add('googledocs', function (editor) {
 		var dialog = this;
 		var iframe = editor.document.createElement( 'iframe' );
 		var txtUrl = dialog.getValueOf( 'settingsTab', 'txtUrl' );
-		var regexp = /(ftp|http|https):\/\//;
+		var regexp = /(ftp|http|https):\/\/docs\.google\.com\/viewer/;
 		if( ! regexp.test( txtUrl ) ) {
 			txtUrl = window.location.protocol + '//' + window.location.host + txtUrl;
+			var srcEncoded = encodeURIComponent( txtUrl );
+			iframe.setAttribute( 'src',     'https://docs.google.com/viewer?url=' + srcEncoded + '&embedded=true' );
+		} else {
+			iframe.setAttribute( 'src', txtUrl );
 		}
-		var srcEncoded = encodeURIComponent( txtUrl );
-
-		iframe.setAttribute( 'src',     'http://docs.google.com/viewer?url=' + srcEncoded + '&embedded=true' );
+		
 		iframe.setAttribute( 'width',   dialog.getValueOf( 'settingsTab', 'txtWidth' ) );
 		iframe.setAttribute( 'height',  dialog.getValueOf( 'settingsTab', 'txtHeight' ) );
 		iframe.setAttribute( 'style',   'border: none;' );
