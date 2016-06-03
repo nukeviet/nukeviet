@@ -120,7 +120,14 @@ CKEDITOR.dialog.add('googledocs', function (editor) {
 			var srcEncoded = encodeURIComponent( txtUrl );
 			iframe.setAttribute( 'src',     'https://docs.google.com/viewer?url=' + srcEncoded + '&embedded=true' );
 		} else {
-			iframe.setAttribute( 'src', txtUrl );
+			var regexp = /(http):\/\/docs\.google\.com\/viewer/;
+			if( regexp.test( txtUrl ) ) {
+				txtUrl = txtUrl.replace("http://docs.google.com/viewer", "https://docs.google.com/viewer");
+				iframe.setAttribute( 'src', txtUrl );
+			} 
+			else {
+				iframe.setAttribute( 'src', txtUrl );
+			}
 		}
 		
 		iframe.setAttribute( 'width',   dialog.getValueOf( 'settingsTab', 'txtWidth' ) );
