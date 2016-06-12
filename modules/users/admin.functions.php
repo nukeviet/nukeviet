@@ -13,3 +13,4 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADM
 }
 
 define('NV_IS_FILE_ADMIN', true);
+define('NV_MOD_TABLE', ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data);

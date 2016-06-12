@@ -29,7 +29,7 @@ while (list($catid_i, $alias_i) = $result->fetch(3)) {
     $global_array_cat[$catid_i] = array( 'alias' => $alias_i );
 }
 
-$sql = 'SELECT id, catid, alias, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE topicid=' . $topicid . ' ORDER BY id ASC';
+$sql = 'SELECT id, catid, alias, title, publtime, status, hitstotal, hitscm FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE topicid=' . $topicid . ' ORDER BY publtime DESC';
 $result = $db_slave->query($sql);
 
 $xtpl = new XTemplate('topicsnews.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -40,9 +40,12 @@ $xtpl->assign('TOPICID', $topicid);
 $i = 0;
 while ($row = $result->fetch()) {
     ++$i;
+    $row['publtime'] = nv_date('H:i d/m/y', $row['publtime']);
+    $row['status'] = $lang_module['status_' . $row['status']];
+    $row['hitstotal'] = number_format($row['hitstotal'], 0, ',', '.');
+    $row['hitscm'] = number_format($row['hitscm'], 0, ',', '.');
     $row['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$row['catid']]['alias'] . '/' . $row['alias'] . '-' . $row['id'] . $global_config['rewrite_exturl'];
     $row['delete'] = nv_link_edit_page($row['id']);
-
     $xtpl->assign('ROW', $row);
     $xtpl->parse('main.data.loop');
 }

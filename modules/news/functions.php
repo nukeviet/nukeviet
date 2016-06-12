@@ -17,22 +17,6 @@ require_once NV_ROOTDIR . '/modules/' . $module_file . '/global.functions.php';
 
 global $global_array_cat;
 $global_array_cat = array();
-$link_i = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=Other';
-$global_array_cat[0] = array(
-    'catid' => 0,
-    'parentid' => 0,
-    'title' => 'Other',
-    'titlesite' => '',
-    'alias' => 'Other',
-    'link' => $link_i,
-    'viewcat' => 'viewcat_page_new',
-    'viewdescription' => '',
-    'subcatid' => 0,
-    'numlinks' => 3,
-    'description' => '',
-    'inhome' => 0,
-    'keywords' => ''
-);
 $catid = 0;
 $parentid = 0;
 $alias_cat_url = isset($array_op[0]) ? $array_op[0] : '';
@@ -40,12 +24,15 @@ $array_mod_title = array();
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat ORDER BY sort ASC';
 $list = $nv_Cache->db($sql, 'catid', $module_name);
-foreach ($list as $l) {
-    $global_array_cat[$l['catid']] = $l;
-    $global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
-    if ($alias_cat_url == $l['alias']) {
-        $catid = $l['catid'];
-        $parentid = $l['parentid'];
+if(!empty($list))
+{
+    foreach ($list as $l) {
+        $global_array_cat[$l['catid']] = $l;
+        $global_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
+        if ($alias_cat_url == $l['alias']) {
+            $catid = $l['catid'];
+            $parentid = $l['parentid'];
+        }
     }
 }
 
@@ -99,7 +86,7 @@ if (! empty($array_op) and $op == 'main') {
     if ($count_op == 1 or substr($array_op[1], 0, 5) == 'page-') {
         if ($count_op > 1 or $catid > 0) {
             $op = 'viewcat';
-            if( substr($array_op[1], 0, 5) == 'page-' ){
+            if( isset($array_op[1]) and substr($array_op[1], 0, 5) == 'page-' ){
                 $page = intval(substr($array_op[1], 5));   
             }
         }
@@ -115,16 +102,17 @@ if (! empty($array_op) and $op == 'main') {
         $number = strlen($id) + 1;
         $alias_url = substr($array_op[1], 0, -$number);
         if ($id > 0 and $alias_url != '') {
-            if( $catid > 0 ){
+            if ($catid > 0) {
 				$op = 'detail';
-			}else{
+			} else {
 				//muc tieu neu xoa chuyen muc cu hoac doi ten alias chuyen muc thi van rewrite duoc bai viet
-				$query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $id );
-				$news_contents = $query->fetch();
-				$url_Permanently = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true );
-				header( "HTTP/1.1 301 Moved Permanently" );
-				header( 'Location:' . $url_Permanently );
-				exit();
+				$_row = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id = ' . $id )->fetch();
+				if (!empty($_row) and isset($global_array_cat[$_row['catid']])) {
+    				$url_Permanently = nv_url_rewrite( NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$_row['catid']]['alias'] . '/' . $_row['alias'] . '-' . $_row['id'] . $global_config['rewrite_exturl'], true );
+    				header( "HTTP/1.1 301 Moved Permanently" );
+    				header( 'Location:' . $url_Permanently );
+    				exit();
+				}
 			}
         }
     }

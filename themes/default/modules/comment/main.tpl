@@ -1,11 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: header -->
-<!-- BEGIN: jsfile -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/comment.js"></script>
-<!-- END: jsfile -->
-<!-- BEGIN: cssfile -->
-<link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/comment.css" type="text/css" />
-<!-- END: cssfile -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE_JS}/js/comment.js"></script>
+<link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE_CSS}/css/comment.css" type="text/css" />
 <!-- END: header -->
 
 <div id="idcomment" class="nv-fullbg">

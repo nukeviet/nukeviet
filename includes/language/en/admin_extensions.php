@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -152,6 +152,8 @@ $lang_module['autoinstall_error_cfg_content'] = 'Application package is incomple
 $lang_module['autoinstall_error_cfg_type'] = 'Application Type Unknown';
 $lang_module['autoinstall_error_cfg_version'] = 'Application version is invalid';
 $lang_module['autoinstall_error_cfg_name'] = 'The application name by incorrect application of the regulation';
+$lang_module['autoinstall_error_mimetype'] = 'Warning: The system does not check the file type of the file follows. If the file to make sure it does not contain malicious code, click the button "Ignore warnings"';
+$lang_module['autoinstall_error_mimetype_pass'] = 'Ignore warnings';
 $lang_module['autoinstall_note_invaild'] = 'Location not allowed';
 $lang_module['autoinstall_note_exists'] = 'The file already exists';
 $lang_module['package'] = 'Packaged Applications';

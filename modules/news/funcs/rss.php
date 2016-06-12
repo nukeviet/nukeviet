@@ -16,7 +16,7 @@ $channel = array();
 $items = array();
 
 $channel['title'] = $module_info['custom_title'];
-$channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+$channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 $channel['description'] = ! empty($module_info['description']) ? $module_info['description'] : $global_config['site_description'];
 
 $catid = 0;
@@ -38,7 +38,7 @@ $db_slave->sqlreset()
 
 if (! empty($catid)) {
     $channel['title'] = $module_info['custom_title'] . ' - ' . $global_array_cat[$catid]['title'];
-    $channel['link'] = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias_cat_url;
+    $channel['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $alias_cat_url;
     $channel['description'] = $global_array_cat[$catid]['description'];
 
     $db_slave->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
@@ -54,26 +54,22 @@ if ($module_info['rss']) {
 
         if ($homeimgthumb == 1) {
             // image thumb
-
-            $rimages = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
+            $rimages = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
         } elseif ($homeimgthumb == 2) {
             // image file
-
-            $rimages = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
+            $rimages = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
         } elseif ($homeimgthumb == 3) {
             // image url
-
             $rimages = $homeimgfile;
         } else {
             // no image
-
             $rimages = '';
         }
         $rimages = (! empty($rimages)) ? '<img src="' . $rimages . '" width="100" align="left" border="0">' : '';
 
         $items[] = array(
             'title' => $title,
-            'link' => NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], //
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $catalias . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'], //
             'guid' => $module_name . '_' . $id,
             'description' => $rimages . $hometext,
             'pubdate' => $publtime

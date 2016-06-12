@@ -23,7 +23,7 @@ CKEDITOR.dialog.add( 'tbvdownloadDialog', function( editor ) {
             icurrentpath = sParameterName[1];
         }
     }
-    path_image = (icurrentpath.indexOf(ipath) != -1 ) ? icurrentpath.replace(ipath+'/', '') : '';
+    path_image = (icurrentpath.indexOf(ipath) != -1 ) ? icurrentpath : '';
 
 	function onPasteFrameLoad( win ) {
 		var doc = new CKEDITOR.dom.document( win.document ),

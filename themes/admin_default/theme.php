@@ -37,7 +37,7 @@ function nv_get_submenu($mod)
 
 function nv_get_submenu_mod($module_name)
 {
-    global $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
+    global $nv_Cache, $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
 
     $submenu = array();
     if (isset($site_mods[$module_name])) {
@@ -187,7 +187,6 @@ function nv_admin_theme($contents, $head_site = 1)
         }
 
         $xtpl->parse('main.top_menu');
-        $xtpl->assign('NV_DIGCLOCK', nv_date('H:i T l, d/m/Y', NV_CURRENTTIME));
 
         if ($admin_info['current_login'] >= NV_CURRENTTIME - 60) {
             if (! empty($admin_info['last_login'])) {

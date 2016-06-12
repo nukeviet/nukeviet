@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate May 30, 2010, 05:07:00 PM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -66,6 +66,10 @@ $lang_module['year'] = 'Year';
 $lang_module['show_email'] = 'Display email';
 $lang_module['sig'] = 'Signature';
 $lang_module['in_group'] = 'Member of group';
+$lang_module['in_group_default'] = 'Group default';
+$lang_module['is_official'] = 'Is an official member';
+$lang_module['is_official_note'] = 'If not selected, this account will be included in the group of new member registration';
+$lang_module['set_official_note'] = 'To make an official member';
 $lang_module['question'] = 'Secret question';
 $lang_module['addquestion'] = 'Add secret question';
 $lang_module['savequestion'] = 'Save secret question';
@@ -120,6 +124,7 @@ $lang_module['edit_add_error'] = 'Can\'t update member information!';
 $lang_module['edit_error_question'] = 'Empty secret question';
 $lang_module['edit_error_answer'] = 'Empty answer';
 $lang_module['edit_error_group'] = 'Please select group for member';
+$lang_module['edit_error_group_default'] = 'Choose default account groups';
 $lang_module['account_deny_name'] = 'Sorry, Account %s banned.';
 $lang_module['awaiting_active'] = 'Activate';
 $lang_module['delconfirm_message'] = 'Do you realy want to delete selected member?';
@@ -152,11 +157,23 @@ $lang_module['title'] = 'Group name';
 $lang_module['content'] = 'Content';
 $lang_module['add_time'] = 'Start date';
 $lang_module['exp_time'] = 'Expire date';
-$lang_module['public'] = 'Public';
+$lang_module['group_type'] = 'Loại nhóm';
+$lang_module['group_type_0'] = 'Nhóm cố định';
+$lang_module['group_type_1'] = 'Nhóm tham gia phải gửi yêu cầu';
+$lang_module['group_type_2'] = 'Nhóm tham gia tự do';
+$lang_module['group_color'] = 'Colour group';
+$lang_module['group_avatar'] = 'Avatar group';
+$lang_module['group_is_default'] = 'Default groups when members register';
 $lang_module['siteus'] = 'Allow subsite add members to the group';
 $lang_module['users'] = 'User';
+$lang_module['promote'] = 'Promote';
+$lang_module['demote'] = 'Demote';
+$lang_module['approved'] = 'Approved';
+$lang_module['denied'] = 'Denied';
 $lang_module['error_title_exists'] = 'Group name "%s" already exist';
-$lang_module['users_in_group_caption'] = 'Member list in group "%s" (%d group)';
+$lang_module['members_in_group_caption'] = 'Member list in group "%s" (%d group)';
+$lang_module['leaders_in_group_caption'] = 'Managing the list of group "%s" (%d accounts)';
+$lang_module['pending_in_group_caption'] = 'Acceding list of group "%s" (%d accounts)';
 $lang_module['error_group_not_found'] = 'Error: Can\'t find group';
 $lang_module['error_users_not_found'] = 'Group has not member';
 $lang_module['error_group_in_site'] = 'Error: You just added and deleted from the group account, the account management of your site.';
@@ -171,6 +188,7 @@ $lang_module['search_not_result'] = 'Not found any results';
 $lang_module['search_result_caption'] = 'Result';
 $lang_module['group_pgtitle'] = 'Detail';
 $lang_module['group_info'] = 'Group information &ldquo;%s&rdquo;';
+$lang_module['group_user_peding'] = 'Some members would like to join the group "%s"';
 $lang_module['add_user'] = 'Member %1$s group %2$s';
 $lang_module['exclude_user'] = 'Delete member %1$s in group %2$s';
 $lang_module['siteinfo_user'] = 'Members';
@@ -211,9 +229,6 @@ $lang_module['ChangeConfigModule'] = 'Change module configuration';
 $lang_module['active_users'] = 'Activate members';
 $lang_module['unactive_users'] = 'Inactivates members';
 $lang_module['whoviewlistuser'] = 'Who can view a list of members';
-$lang_module['whoview_all'] = 'All';
-$lang_module['whoview_user'] = 'User';
-$lang_module['whoview_admin'] = 'Administrator';
 $lang_module['random_password'] = 'Random Password';
 $lang_module['show_password'] = 'Show password';
 $lang_module['usactive'] = 'Account status';
@@ -237,6 +252,9 @@ $lang_module['access_editus'] = 'Edit member';
 $lang_module['access_delus'] = 'Delete member';
 $lang_module['access_passus'] = 'Change password';
 $lang_module['access_groups'] = 'Group manage';
+$lang_module['access_caption_leader'] = 'User configuration module powers of the leader';
+$lang_module['access_groups_add'] = 'Add members to the group';
+$lang_module['access_groups_del'] = 'Remove member from group';
 $lang_module['fields'] = 'Custom User Fields';
 $lang_module['captionform_add'] = 'Add User Fields';
 $lang_module['captionform_edit'] = 'Edit User Fields';
@@ -268,6 +286,7 @@ $lang_module['field_options_text'] = 'Options for Text Fields';
 $lang_module['field_match_type'] = 'Value Match Requirements:<br>Empty values are always allowed.';
 $lang_module['field_match_type_none'] = 'none';
 $lang_module['field_match_type_alphanumeric'] = 'A-Z, 0-9, and _ only';
+$lang_module['field_match_type_date'] = 'Enter the date in the format dd/mm/yyyy';
 $lang_module['field_match_type_url'] = 'Url';
 $lang_module['field_match_type_regex'] = 'Regular expression';
 $lang_module['field_match_type_callback'] = 'Func callback';
@@ -334,7 +353,7 @@ $lang_module['read_error_memory_limit'] = 'Error: The system can not read the da
 $lang_module['read_ignore'] = 'Read the incorrect data standards';
 $lang_module['update_field'] = 'Upgrade site';
 $lang_module['update_field_oncreate'] = 'Once created';
-$lang_module['update_field_onlogin'] = 'Site Update Newsletter';
+$lang_module['update_field_onlogin'] = 'On login';
 $lang_module['cas_config'] = 'Set the CAS server';
 $lang_module['cas_config_hostname'] = 'Hostname';
 $lang_module['cas_config_hostname_info'] = 'Hostname of the CAS server	<br />eg: cas.nukeviet.vn';
@@ -399,3 +418,6 @@ $lang_module['safe_active_info'] = 'Your account is in safe mode,  all the featu
 $lang_module['safe_deactivate'] = 'Safe mode turn off';
 $lang_module['group_description'] = 'Description';
 $lang_module['group_description_empty'] = 'Take a brief description of the group.';
+$lang_module['auto_login_after_reg'] = 'Automatically login after successful registration';
+$lang_module['active_group_newusers'] = 'Enable new member';
+$lang_module['active_group_newusers_note'] = 'If this function is activated, the new member registration will be automatically classified as "activated" until it has been removed from the team manager, at which new members are considered "Official members"';

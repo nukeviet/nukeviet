@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -21,6 +21,7 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['list'] = 'List of articles';
 $lang_module['add'] = 'Add a new article';
+$lang_module['send'] = 'Send';
 $lang_module['title'] = 'Title';
 $lang_module['order'] = 'Order';
 $lang_module['status'] = 'Status';
@@ -44,12 +45,15 @@ $lang_module['imagealt'] = 'Image note';
 $lang_module['socialbutton'] = 'Social button';
 $lang_module['socialbuttonnote'] = 'Display Like facebook, G+, Twitter';
 $lang_module['activecomm'] = 'Allow comment';
+$lang_module['imgposition'] = 'Imag position';
+$lang_module['imgposition_0'] = 'Hidden';
+$lang_module['imgposition_1'] = 'Left description';
+$lang_module['imgposition_2'] = 'Bellow description';
 $lang_module['layout_func'] = 'Layout';
 $lang_module['layout_default'] = 'Default';
 $lang_module['googleplus'] = 'authentication Google+ (copyright)';
 $lang_module['googleplus_1'] = 'Not use';
 $lang_module['googleplus_0'] = 'Follow configure of module';
-
 $lang_module['config'] = 'Config';
 $lang_module['config_view_type'] = 'Display articles type';
 $lang_module['config_view_type_0'] = 'Main article';

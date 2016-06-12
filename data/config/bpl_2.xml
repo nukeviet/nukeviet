@@ -4,25 +4,9 @@
   <lang></lang>
   <title>Quang cao trai</title>
   <form>sequential</form>
-  <width>190</width>
-  <height>500</height>
+  <width>212</width>
+  <height>800</height>
   <banners>
-    <banners_item>
-      <id>1</id>
-      <title>Bo ngoai giao</title>
-      <clid>0</clid>
-      <file_name>bongoaigiao.jpg</file_name>
-      <imageforswf></imageforswf>
-      <file_ext>jpg</file_ext>
-      <file_mime>image/jpeg</file_mime>
-      <file_width>160</file_width>
-      <file_height>54</file_height>
-      <file_alt></file_alt>
-      <file_click>http://www.mofa.gov.vn</file_click>
-      <target>_blank</target>
-      <publ_time>1451871523</publ_time>
-      <exp_time>0</exp_time>
-    </banners_item>
     <banners_item>
       <id>2</id>
       <title>vinades</title>
@@ -31,12 +15,12 @@
       <imageforswf></imageforswf>
       <file_ext>jpg</file_ext>
       <file_mime>image/jpeg</file_mime>
-      <file_width>190</file_width>
-      <file_height>454</file_height>
+      <file_width>212</file_width>
+      <file_height>400</file_height>
       <file_alt></file_alt>
       <file_click>http://vinades.vn</file_click>
       <target>_blank</target>
-      <publ_time>1451871523</publ_time>
+      <publ_time>1453191549</publ_time>
       <exp_time>0</exp_time>
     </banners_item>
   </banners>

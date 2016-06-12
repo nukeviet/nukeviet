@@ -50,6 +50,8 @@ $lang_global['unick_type_1'] = 'Tên đăng nhập chỉ được sử dụng ch
 $lang_global['unick_type_2'] = 'Tên đăng nhập chỉ được sử dụng chữ số và chữ cái';
 $lang_global['unick_type_3'] = 'Tên đăng nhập chỉ được sử dụng chữ số, chữ cái, và các ký tự sau nằm giữa: gạch ngang, gạch dưới, cách trống';
 $lang_global['unick_type_4'] = 'Tên đăng nhập chỉ được sử dụng Unicode, không có các ký tự đặc biệt';
+$lang_global['username_rule_limit'] = 'Tên đăng nhập không hợp lệ: %1$s và có từ %2$d đến %3$d ký tự';
+$lang_global['username_rule_nolimit'] = 'Tên đăng nhập phải từ %1$d đến %2$d ký tự';
 
 $lang_global['password_empty'] = 'Mật khẩu đăng nhập chưa được khai báo';
 $lang_global['passwordlong'] = 'Mật khẩu quá dài. Chỉ chấp nhận mật khẩu có số ký tự tối đa là %1$d';
@@ -61,13 +63,13 @@ $lang_global['upass_type_2'] = 'Mật khẩu cần kết hợp số và chữ, y
 $lang_global['upass_type_3'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA';
 $lang_global['upass_type_4'] = 'Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA, có ký tự đặc biệt';
 $lang_global['upass_type_simple'] = 'Mật khẩu bạn đã sử dụng là mật khẩu dễ đoán, cần nhập mật khẩu phức tạp hơn';
+$lang_global['password_rule_limit'] = 'Mật khẩu không hợp lệ: %1$s và có từ %2$d đến %3$d ký tự';
+$lang_global['password_rule_nolimit'] = 'Mật khẩu phải từ %1$d đến %2$d ký tự';
 
 $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
 $lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai Tên đăng nhập hoặc Mật khẩu truy cập';
 $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công. Bây giờ hệ thống sẽ chuyển bạn đến khu vực Quản trị của site';
 $lang_global['incorrect_password'] = 'Mật khẩu sai';
-$lang_global['relogin_info'] = 'Bạn đã không online một thời gian dài. Hệ thống đòi hỏi bạn phải khai báo lại mật khẩu đăng nhập. Hãy điền mật khẩu vào ô trống dưới đây. Thao tác này chỉ được làm nhiều nhất %1$d lần.';
-$lang_global['relogin_error_info'] = '%1$s. Hãy điền lại mật khẩu vào ô trống dưới đây. Thao tác này chỉ được làm nhiều nhất %2$d lần nữa.';
 
 $lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$s giây';
 $lang_global['for_admin'] = 'Dành cho admin';
@@ -79,6 +81,7 @@ $lang_global['adminlogin'] = 'Đăng nhập quản trị hệ thống';
 $lang_global['module_for_admin'] = 'Khu vực chỉ dành cho <em>Người quản trị</em>';
 $lang_global['in_groups'] = 'Nhóm thành viên';
 $lang_global['username'] = 'Tên đăng nhập';
+$lang_global['username_email'] = 'Tên đăng nhập hoặc email';
 $lang_global['password'] = 'Mật khẩu';
 $lang_global['password2'] = 'Lặp lại mật khẩu';
 $lang_global['captcharefresh'] = 'Thay mới';
@@ -282,9 +285,10 @@ $lang_global['groups_view'] = 'Các nhóm được xem';
 $lang_global['level1'] = 'Quản trị tối cao';
 $lang_global['level2'] = 'Điều hành chung';
 $lang_global['level3'] = 'Quản lý module';
-$lang_global['level4'] = 'Thành viên';
+$lang_global['level4'] = 'Thành viên chính thức';
 $lang_global['level5'] = 'Khách';
 $lang_global['level6'] = 'Tất cả';
+$lang_global['level7'] = 'Thành viên mới';
 
 $lang_global['msgbeforeunload'] = 'Bạn có chắc chắn chuyển sang trang khác, Nếu thực hiện dữ liệu sẽ không được lưu';
 $lang_global['timeoutsess_nouser'] = 'Bạn đã không sử dụng Site';

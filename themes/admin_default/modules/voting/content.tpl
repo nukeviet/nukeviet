@@ -1,9 +1,6 @@
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript">
 	var items = '{NEW_ITEM_NUM}';
@@ -91,7 +88,7 @@
 							<tr>
 								<td class="text-right">{LANG.voting_question_num} {ITEM.stt}</td>
 								<td><input class="form-control" type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" maxlength="245"/></td>
-								<td><input  class="form-control"type="text" value="{ITEM.link}" name="urlvote[{ITEM.id}]"/></td>
+								<td><input class="form-control" type="url" value="{ITEM.link}" name="urlvote[{ITEM.id}]"/></td>
 							</tr>
 							<!-- END: item -->
 							<tr>

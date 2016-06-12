@@ -25,7 +25,7 @@
     		<em class="fa fa-quote-right">&nbsp;</em>
     	</div>
     	<div class="form-group">
-    		<label for="userField_iavim" class="col-sm-8 control-label">{LANG.field}<span class="text-danger"> (*)</span>:</label>
+    		<label for="userField_iavim" class="col-sm-8 control-label">{GLANG.username_email}<span class="text-danger"> (*)</span>:</label>
     		<div class="col-sm-16">
     			<input type="text" class="required form-control" name="userField" id="userField_iavim" value="{DATA.userField}" maxlength="100"/>
     		</div>

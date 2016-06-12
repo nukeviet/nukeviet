@@ -19,9 +19,7 @@ $contents = 'ERR_' . $lang_module['comment_unsuccess'];
 $cid = $nv_Request->get_int('cid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
 
-$session_id = session_id() . '_' . $global_config['sitekey'];
-
-if ($cid > 0 and $checkss == md5($cid . '_' . $session_id)) {
+if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
     if ($nv_Request->isset_request($module_name . '_like_' . $cid, 'cookie')) {
         $contents = 'ERR_' . $lang_module['like_unsuccess'];
     } else {
