@@ -12,6 +12,36 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
+if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
+    $q = $nv_Request->get_title('q', 'post, get', '');
+    
+    $db->sqlreset()
+        ->select('topicid, title')
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics')
+        ->where('title LIKE :q_title')
+        ->order('weight ASC')
+        ->limit(20);
+    
+    $sth = $db->prepare($db->sql());
+    $sth->bindValue(':q_title', '%' . $q . '%', PDO::PARAM_STR);
+    $sth->execute();
+    
+    $array_data = array();
+    while (list ($topicid, $title) = $sth->fetch(3)) {
+        $array_data[] = array(
+            'id' => $topicid,
+            'title' => $title
+        );
+    }
+    
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Content-type: application/json');
+    
+    ob_start('ob_gzhandler');
+    echo json_encode($array_data);
+    exit();
+}
+
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
@@ -770,18 +800,18 @@ if (! empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/
 
 $array_catid_in_row = explode(',', $rowcontent['listcatid']);
 
-$db->sqlreset()
-  ->select('topicid, title')
-  ->from(NV_PREFIXLANG . '_' . $module_data . '_topics')
-  ->order('weight ASC')
-  ->limit(100);
-$result = $db->query($db->sql());
-
 $array_topic_module = array();
 $array_topic_module[0] = $lang_module['topic_sl'];
-
-while (list($topicid_i, $title_i) = $result->fetch(3)) {
-    $array_topic_module[$topicid_i] = $title_i;
+if(!empty($rowcontent['topicid'])){
+    $db->sqlreset()
+    ->select('topicid, title')
+    ->from(NV_PREFIXLANG . '_' . $module_data . '_topics')
+    ->where('topicid=' . $rowcontent['topicid']);
+    $result = $db->query($db->sql());
+    
+    while (list($topicid_i, $title_i) = $result->fetch(3)) {
+        $array_topic_module[$topicid_i] = $title_i;
+    }   
 }
 
 $sql = 'SELECT sourceid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC';
