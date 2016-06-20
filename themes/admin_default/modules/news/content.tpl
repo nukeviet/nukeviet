@@ -2,7 +2,9 @@
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{error}</div>
 <!-- END: error -->
+
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 
 <form class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post">
 	<div class="row">
@@ -28,7 +30,7 @@
 					</tr>
 					<tr>
 						<td>
-						<select class="form-control w300" name="topicid">
+						<select class="form-control w300" name="topicid" id="topicid">
 							<!-- BEGIN: rowstopic -->
 							<option value="{topicid}" {sl}>{topic_title}</option>
 							<!-- END: rowstopic -->
@@ -298,6 +300,8 @@ $("#idtitle").change(function() {
 <!-- END: getalias -->
 //]]>
 </script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/news_content.js"></script>
