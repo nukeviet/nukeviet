@@ -80,7 +80,7 @@ if ($global_config['rewrite_endurl'] != $global_config['rewrite_exturl'] and pre
         define('NV_REWRITE_EXTURL', true);
     }
 } else {
-    if (preg_match('/^(' . $base_siteurl_quote . '([a-z0-9\-\_\.\/]+)(' . nv_preg_quote($global_config['rewrite_endurl']) . '|' . nv_preg_quote($global_config['rewrite_exturl']) . '))\?(.*)$/i', $request_uri, $matches)) {
+    if (preg_match('/^(' . $base_siteurl_quote . '([a-z0-9\-\_\.\/]+)(' . nv_preg_quote($global_config['rewrite_endurl']) . '|' . nv_preg_quote($global_config['rewrite_exturl']) . '))\?(.*)$/i', $request_uri, $matches) and (!isset($_GET[NV_NAME_VARIABLE]) or $_GET[NV_NAME_VARIABLE] !== 'seek') and (!isset($_GET[NV_OP_VARIABLE]) or $_GET[NV_OP_VARIABLE] !== 'search')) {
         header('HTTP/1.1 301 Moved Permanently');
         Header('Location: ' . $matches[1]);
         die();
