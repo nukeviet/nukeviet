@@ -1,6 +1,16 @@
 CHANGE LOG: MODULE SHOPS
 
-Module Shops 4.0.16 (Release Candidate 1)
+Module Shops 4.0.19
+	+ Upadte for NukeViet 4.0.24
+	+ Gallery in detaild product,  Fix modal-body thank anhyeuviolet
+	+ Fix cart error quantity empty 
+	+ Fix add title block for block shops 
+	+ Update custom title for seo
+	+ Fix use coupons code 
+	+ Support utf8mb4
+	+ Add More https://github.com/nukeviet/module-shops/compare/4.0.18...4.0.19 
+
+Module Shops 4.0.16
 	+ Sửa một số lỗi Module Shops 4.0.15
 	+ Cho phép xuống dòng trong nội dung quà tặng
 	+ Thêm đường dẫn đến bài viết giới thiệu từng chức trên wiki

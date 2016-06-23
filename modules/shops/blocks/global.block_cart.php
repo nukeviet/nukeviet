@@ -8,30 +8,30 @@
  * @Createdate 3/25/2010 18:6
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
-if ( ! function_exists( 'nv_cart_info' ) )
-{
-	/**
-	 * nv_cart_info()
-	 *
-	 * @param mixed $block_config
-	 * @return
-	 */
-	function nv_cart_info ( $block_config )
-	{
-		global $module_data;
+if (! function_exists('nv_cart_info')) {
+    /**
+     * nv_cart_info()
+     *
+     * @param mixed $block_config
+     * @return
+     */
+    function nv_cart_info($block_config)
+    {
+        global $module_data;
 
-		$module = $block_config['module'];
+        $module = $block_config['module'];
 
-		$coupons_code = '';
+        $coupons_code = '';
 
-		if( isset( $_SESSION[$module_data . '_coupons'] ) and !empty( $_SESSION[$module_data . '_coupons']['code'] ) and $_SESSION[$module_data . '_coupons']['check'] )
-		{
-			$coupons_code = $_SESSION[$module_data . '_coupons']['code'];
-		}
+        if (isset($_SESSION[$module_data . '_coupons']) and !empty($_SESSION[$module_data . '_coupons']['code']) and $_SESSION[$module_data . '_coupons']['check']) {
+            $coupons_code = $_SESSION[$module_data . '_coupons']['code'];
+        }
 
-		$content = '
+        $content = '
 		<div class="block clearfix">
 			<div class="block_cart clearfix" id="cart_' . $module . '"></div>
 			<script type="text/javascript">
@@ -39,11 +39,10 @@ if ( ! function_exists( 'nv_cart_info' ) )
 			</script>
 		</div>
 		';
-		return $content;
-	}
+        return $content;
+    }
 }
 
-if ( defined( 'NV_SYSTEM' ) )
-{
-	$content = nv_cart_info( $block_config );
+if (defined('NV_SYSTEM')) {
+    $content = nv_cart_info($block_config);
 }

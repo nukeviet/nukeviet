@@ -8,9 +8,11 @@
  * @Createdate Tue, 21 Jan 2014 01:32:02 GMT
  */
 
-if( ! defined( 'NV_MAINFILE' ) )	die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
-$numf = $db->query( 'SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment where module= ' . $db->quote( $row['module'] ) . ' AND id= ' . $row['id'] . ' AND status=1' )->fetchColumn();
+$numf = $db->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_comment where module= ' . $db->quote($row['module']) . ' AND id= ' . $row['id'] . ' AND status=1')->fetchColumn();
 
 $query = 'UPDATE ' . $db_config['prefix'] . '_' . $mod_info['module_data'] . '_rows SET hitscm=' . $numf . ' WHERE id=' . $row['id'];
-$db->query( $query );
+$db->query($query);

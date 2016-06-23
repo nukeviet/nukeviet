@@ -8,23 +8,21 @@
  * @Createdate Dec 29, 2010 10:42:00 PM
  */
 
-if ( ! defined( 'NV_IS_MOD_SHOPS' ) ) die( 'Stop!!!' );
-
-// Gọi thư viện PayPal SDK
-require_once( NV_ROOTDIR . '/includes/class/PayPal/PPBootStrap.php');
+if (! defined('NV_IS_MOD_SHOPS')) {
+    die('Stop!!!');
+}
 
 // Thông tin cấu hình gian hàng
-foreach( $payment_config as $ckey => $cval )
-{
-	$payment_config[$ckey] = nv_unhtmlspecialchars( $cval );
+foreach ($payment_config as $ckey => $cval) {
+    $payment_config[$ckey] = nv_unhtmlspecialchars($cval);
 }
-unset( $ckey, $cval );
+unset($ckey, $cval);
 
 $config = array(
-	"mode" => $payment_config['environment'],
-	"acct1.UserName" => $payment_config['apiusername'],
-	"acct1.Password" => $payment_config['apipassword'],
-	"acct1.Signature" => $payment_config['signature'],
+    "mode" => $payment_config['environment'],
+    "acct1.UserName" => $payment_config['apiusername'],
+    "acct1.Password" => $payment_config['apipassword'],
+    "acct1.Signature" => $payment_config['signature'],
 );
 
 // Đường dẫn trả về nếu có lỗi
@@ -35,36 +33,31 @@ $BackUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=
  */
 
 // Lấy thông tin
-$payerID = $nv_Request->get_string( "payerid", "get", "" );
-$token = $nv_Request->get_string( "token", "get", "" );
+$payerID = $nv_Request->get_string("payerid", "get", "");
+$token = $nv_Request->get_string("token", "get", "");
 $paymentAction = $payment_config['paymentaction'];
 
-if( empty( $payerID ) or empty( $token ) )
-{
-	redict_link( "Error Access!!!", $lang_module['cart_back'], $BackUrl );
+if (empty($payerID) or empty($token)) {
+    redict_link("Error Access!!!", $lang_module['cart_back'], $BackUrl);
 }
 
-$getExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType( $token );
+$getExpressCheckoutDetailsRequest = new GetExpressCheckoutDetailsRequestType($token);
 $getExpressCheckoutReq = new GetExpressCheckoutDetailsReq();
 $getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
 
-$paypalService = new PayPalAPIInterfaceServiceService( $config );
-try
-{
-	$getECResponse = $paypalService->GetExpressCheckoutDetails( $getExpressCheckoutReq );
-}
-catch( Exception $ex )
-{
-	redict_link( $ex->getMessage(), $lang_module['cart_back'], $BackUrl );
+$paypalService = new PayPalAPIInterfaceServiceService($config);
+try {
+    $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
+} catch (Exception $ex) {
+    redict_link($ex->getMessage(), $lang_module['cart_back'], $BackUrl);
 }
 
 // Lấy thông tin session
-$PaymentDetail = $nv_Request->get_string( $module_data . "_payerdata_paypal", 'session', '' );
-$PaymentDetail = $PaymentDetail ? unserialize( $PaymentDetail ) : array();
+$PaymentDetail = $nv_Request->get_string($module_data . "_payerdata_paypal", 'session', '');
+$PaymentDetail = $PaymentDetail ? unserialize($PaymentDetail) : array();
 
-if( empty( $PaymentDetail ) or $PaymentDetail['token'] !== $token or $PaymentDetail['id'] !== $payerID )
-{
-	redict_link( "Data Error!!!", $lang_module['cart_back'], $BackUrl );
+if (empty($PaymentDetail) or $PaymentDetail['token'] !== $token or $PaymentDetail['id'] !== $payerID) {
+    redict_link("Data Error!!!", $lang_module['cart_back'], $BackUrl);
 }
 
 $orderTotal = new BasicAmountType();
@@ -87,119 +80,108 @@ $DoECRequest->DoExpressCheckoutPaymentRequestDetails = $DoECRequestDetails;
 $DoECReq = new DoExpressCheckoutPaymentReq();
 $DoECReq->DoExpressCheckoutPaymentRequest = $DoECRequest;
 
-try
-{
-	$DoECResponse = $paypalService->DoExpressCheckoutPayment($DoECReq);
-}
-catch( Exception $ex )
-{
-	redict_link( $ex->getMessage(), $lang_module['cart_back'], $BackUrl );
+try {
+    $DoECResponse = $paypalService->DoExpressCheckoutPayment($DoECReq);
+} catch (Exception $ex) {
+    redict_link($ex->getMessage(), $lang_module['cart_back'], $BackUrl);
 }
 
-if( isset( $DoECResponse ) )
-{
-	if( $DoECResponse->Ack == 'Success' or $DoECResponse->Ack == 'SuccessWithWarning' )
-	{
-		// Lấy thông tin chi tiết
-		$details = $DoECResponse->DoExpressCheckoutPaymentResponseDetails;
+if (isset($DoECResponse)) {
+    if ($DoECResponse->Ack == 'Success' or $DoECResponse->Ack == 'SuccessWithWarning') {
+        // Lấy thông tin chi tiết
+        $details = $DoECResponse->DoExpressCheckoutPaymentResponseDetails;
 
-		$payment_info = $details->PaymentInfo[0];
-		$tran_ID = $payment_info->TransactionID;
+        $payment_info = $details->PaymentInfo[0];
+        $tran_ID = $payment_info->TransactionID;
 
-		$amt_obj = $payment_info->GrossAmount;
-		$amt = $amt_obj->value;
-		$currency_cd = $amt_obj->currencyID;
+        $amt_obj = $payment_info->GrossAmount;
+        $amt = $amt_obj->value;
+        $currency_cd = $amt_obj->currencyID;
 
-		$PaymentStatus = $payment_info->PaymentStatus;
-		$PaymentDate = $payment_info->PaymentDate;
-		$PaymentDate = strtotime( $PaymentDate );
-		if( $PaymentDate < 0 ) $PaymentDate = 0;
+        $PaymentStatus = $payment_info->PaymentStatus;
+        $PaymentDate = $payment_info->PaymentDate;
+        $PaymentDate = strtotime($PaymentDate);
+        if ($PaymentDate < 0) {
+            $PaymentDate = 0;
+        }
 
-		/*
-			Thông số mặc định của PayPal
-			Completed - Thanh toán hoàn thành
-			Pending - Thanh toán đang chờ
-			Failed - Thanh toán không thành công
-			Denied - Bị từ chối thanh toán
-			Refunded - Được hoàn tiền thanh toán
-			Canceled_Reversal - Thanh toán ngược bị hủy
-			Reversed - Thanh toán ngược lại (hoàn trả)
-			Expired - Thanh toán bị hết hạn
-			Processed - Đang thực hiện thanh toán
-			Voided - Bị hủy bỏ vì không được xác thực
-			Created - Đang khởi tạo
-		 */
+        /*
+            Thông số mặc định của PayPal
+            Completed - Thanh toán hoàn thành
+            Pending - Thanh toán đang chờ
+            Failed - Thanh toán không thành công
+            Denied - Bị từ chối thanh toán
+            Refunded - Được hoàn tiền thanh toán
+            Canceled_Reversal - Thanh toán ngược bị hủy
+            Reversed - Thanh toán ngược lại (hoàn trả)
+            Expired - Thanh toán bị hết hạn
+            Processed - Đang thực hiện thanh toán
+            Voided - Bị hủy bỏ vì không được xác thực
+            Created - Đang khởi tạo
+         */
 
-		$Status = 0;
-		switch( $PaymentStatus )
-		{
-			case 'Canceled_Reversal': $Status = 5; break;
-			case 'Completed': $Status = 4; break;
-			case 'Denied': $Status = 6; break;
-			case 'Expired': $Status = 7; break;
-			case 'Failed': $Status = 8; break;
-			case 'Pending': $Status = 2; break;
-			case 'Processed': $Status = 9; break;
-			case 'Refunded': $Status = 10; break;
-			case 'Reversed': $Status = 11; break;
-			case 'Voided': $Status = 3; break;
-			case 'Created': $Status = 0; break;
-			default: $Status = -1;
-		}
+        $Status = 0;
+        switch ($PaymentStatus) {
+            case 'Canceled_Reversal': $Status = 5; break;
+            case 'Completed': $Status = 4; break;
+            case 'Denied': $Status = 6; break;
+            case 'Expired': $Status = 7; break;
+            case 'Failed': $Status = 8; break;
+            case 'Pending': $Status = 2; break;
+            case 'Processed': $Status = 9; break;
+            case 'Refunded': $Status = 10; break;
+            case 'Reversed': $Status = 11; break;
+            case 'Voided': $Status = 3; break;
+            case 'Created': $Status = 0; break;
+            default: $Status = -1;
+        }
 
-		$nv_Request->unset_request( $module_data . "_payerdata_paypal", "session" );
+        $nv_Request->unset_request($module_data . "_payerdata_paypal", "session");
 
-		if( $PaymentDetail['order_id'] > 0 )
-		{
-			$error_update = false;
+        if ($PaymentDetail['order_id'] > 0) {
+            $error_update = false;
 
-			$PaymentDetail['transaction_status'] = $Status;
-			$PaymentDetail['transaction_time'] = $PaymentDate;
-			$PaymentDetail['transaction_id'] = $tran_ID;
-			$payment_data = nv_base64_encode( serialize( $PaymentDetail ) );
+            $PaymentDetail['transaction_status'] = $Status;
+            $PaymentDetail['transaction_time'] = $PaymentDate;
+            $PaymentDetail['transaction_id'] = $tran_ID;
+            $payment_data = nv_base64_encode(serialize($PaymentDetail));
 
-			$db->sqlreset()->select( 'payment_data' )->from( $db_config['prefix'] . "_" . $module_data . "_transaction" )->where( "payment='" . $payment . "' AND payment_id= :payment_id" )->order( 'transaction_id DESC' )->limit( 1 );
+            $db->sqlreset()->select('payment_data')->from($db_config['prefix'] . "_" . $module_data . "_transaction")->where("payment='" . $payment . "' AND payment_id= :payment_id")->order('transaction_id DESC')->limit(1);
 
-			$stmt = $db->prepare( $db->sql() );
-			$stmt->bindParam( ':payment_id', $tran_ID, PDO::PARAM_STR );
-			$stmt->execute();
+            $stmt = $db->prepare($db->sql());
+            $stmt->bindParam(':payment_id', $tran_ID, PDO::PARAM_STR);
+            $stmt->execute();
 
-			$payment_data_old = $stmt->fetchColumn();
+            $payment_data_old = $stmt->fetchColumn();
 
-			if( $payment_data != $payment_data_old )
-			{
-				$nv_transaction_status = intval( $Status );
-				$payment_amount = intval( $amt );
-				$payment_time = $PaymentDate;
+            if ($payment_data != $payment_data_old) {
+                $nv_transaction_status = intval($Status);
+                $payment_amount = intval($amt);
+                $payment_time = $PaymentDate;
 
-				$transaction_id = $db->insert_id( "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, " . NV_CURRENTTIME . ", '" . $nv_transaction_status . "', '" . $PaymentDetail['order_id'] . "', '0', '" . $payment . "', '" . $tran_ID . "', '" . $payment_time . "', '" . $payment_amount . "', '" . $payment_data . "')" );
+                $transaction_id = $db->insert_id("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_transaction (transaction_id, transaction_time, transaction_status, order_id, userid, payment, payment_id, payment_time, payment_amount, payment_data) VALUES (NULL, " . NV_CURRENTTIME . ", '" . $nv_transaction_status . "', '" . $PaymentDetail['order_id'] . "', '0', '" . $payment . "', '" . $tran_ID . "', '" . $payment_time . "', '" . $payment_amount . "', '" . $payment_data . "')");
 
-				if( $transaction_id > 0 )
-				{
-					$db->query( "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE order_id=" . $PaymentDetail['order_id'] );
-				}
-				else
-				{
-					$error_update = true;
-				}
-			}
+                if ($transaction_id > 0) {
+                    $db->query("UPDATE " . $db_config['prefix'] . "_" . $module_data . "_orders SET transaction_status=" . $nv_transaction_status . " , transaction_id = " . $transaction_id . " , transaction_count = transaction_count+1 WHERE order_id=" . $PaymentDetail['order_id']);
+                } else {
+                    $error_update = true;
+                }
+            }
 
-			if( ! $error_update )
-			{
-				// Cap nhat diem tich luy
-				$data_content = array();
-				$result = $db->query( 'SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id );
-				$data_content = $result->fetch( );
-				if( ! empty( $data_content ) )
-				{
-					UpdatePoint( $data_content );
-				}
+            if (! $error_update) {
+                // Cap nhat diem tich luy
+                $data_content = array();
+                $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders WHERE order_id=' . $order_id);
+                $data_content = $result->fetch();
+                if (! empty($data_content)) {
+                    UpdatePoint($data_content);
+                }
 
-				$nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=history";
-				$contents = redict_link( $lang_module['payment_complete'], $lang_module['back_history'], $nv_redirect );
-			}
-		}
-	}
+                $nv_redirect = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=history";
+                $contents = redict_link($lang_module['payment_complete'], $lang_module['back_history'], $nv_redirect);
+            }
+        }
+    }
 }
 
-redict_link( "Unknow Error!!!", $lang_module['cart_back'], $BackUrl );
+redict_link("Unknow Error!!!", $lang_module['cart_back'], $BackUrl);
