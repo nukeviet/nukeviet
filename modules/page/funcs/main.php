@@ -14,7 +14,7 @@ if (! defined('NV_IS_MOD_PAGE')) {
 
 $contents = '';
 if ($id) {
-    // xem theo bài viết
+    // Xem theo bài viết
     $base_url_rewrite = nv_url_rewrite($base_url . '&' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'], true);
     if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
         $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
