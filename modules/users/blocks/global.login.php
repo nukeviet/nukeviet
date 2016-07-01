@@ -199,8 +199,10 @@ if (!nv_function_exists('nv_block_login')) {
                     if (empty($block_config['popup_register'])) {
                         !empty($block_config['display_mode']) ? $xtpl->parse('main.' . $display_layout . '.allowuserreg_link') : $xtpl->parse('main.' . $display_layout . '.allowuserreg_linkform');
                     } else {
+                    	$_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
+                    	 
                         $data_questions = array();
-                        $sql = "SELECT qid, title FROM " . $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'] . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+                        $sql = "SELECT qid, title FROM " . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
                         $result = $db->query($sql);
                         while ($row = $result->fetch()) {
                             $data_questions[$row['qid']] = array('qid' => $row['qid'], 'title' => $row['title']);
@@ -214,7 +216,7 @@ if (!nv_function_exists('nv_block_login')) {
                         $datepicker = false;
 
                         $array_field_config = array();
-                        $result_field = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $site_mods[$block_config['module']]['module_data'] . '_field ORDER BY weight ASC');
+                        $result_field = $db->query('SELECT * FROM ' . $_mod_data . '_field ORDER BY weight ASC');
                         while ($row_field = $result_field->fetch()) {
                             $language = unserialize($row_field['language']);
                             $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];

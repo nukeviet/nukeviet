@@ -229,7 +229,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 }
 
-$xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $selectthemes . '/system/');
+$xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $selectthemes . '/system');
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
 $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);

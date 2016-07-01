@@ -65,7 +65,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
 
         $userid = 0;
         if (nv_check_valid_email($nv_username) == '') {
-            $sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE email =" . $db->quote($nv_username);
+            $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email =' . $db->quote($nv_username);
             $login_email = true;
         } else {
             $sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe($nv_username) . "'";
@@ -159,13 +159,13 @@ $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);
 
 $dir_template = '';
 if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/login.tpl')) {
-    $dir_template = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
+    $dir_template = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
 } else {
-    $dir_template = NV_ROOTDIR . "/themes/admin_default/system";
-    $global_config['admin_theme'] = "admin_default";
+    $dir_template = NV_ROOTDIR . '/themes/admin_default/system';
+    $global_config['admin_theme'] = 'admin_default';
 }
 
-$xtpl = new XTemplate("login.tpl", $dir_template);
+$xtpl = new XTemplate('login.tpl', $dir_template);
 $xtpl->assign('CHARSET', $global_config['site_charset']);
 $xtpl->assign('SITE_NAME', $global_config['site_name']);
 $xtpl->assign('PAGE_TITLE', $lang_global['admin_page']);
