@@ -12,8 +12,6 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$per_page_comment = (defined('NV_PER_PAGE_COMMENT')) ? NV_PER_PAGE_COMMENT : 5;
-
 /**
  * nv_comment_module()
  *
@@ -25,9 +23,11 @@ $per_page_comment = (defined('NV_PER_PAGE_COMMENT')) ? NV_PER_PAGE_COMMENT : 5;
  */
 function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_url)
 {
-    global $db_slave, $global_config, $module_config, $db_config, $per_page_comment;
+    global $db_slave, $global_config, $module_config, $db_config;
 
     $comment_array = array();
+    $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
+    
     $_where = 'a.module=' .$db_slave->quote($module);
     if ($area) {
         $_where .= ' AND a.area= ' . $area;
@@ -111,11 +111,12 @@ function nv_comment_get_reply($cid, $module, $session_id, $sortcomm)
 
 function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $status_comment = '')
 {
-    global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info, $per_page_comment;
+    global $module_config, $nv_Request, $lang_module_comment, $module_info, $client_info;
 
     // Kiểm tra module có được Sử dụng chức năng bình luận
     if (! empty($module) and isset($module_config[$module]['activecomm'])) {
         if ($id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed . '-' . NV_CACHE_PREFIX)) {
+            $per_page_comment = empty($module_config[$module]['perpagecomm']) ? 5 : $module_config[$module]['perpagecomm'];
             $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=comment&module=' . $module . '&area=' . $area . '&id=' . $id . '&allowed=' . $allowed . '&checkss=' . $checkss . '&perpage=' . $per_page_comment;
 
             // Kiểm tra quyền xem bình luận

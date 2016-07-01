@@ -99,6 +99,10 @@ a.link:hover {
 	margin-bottom: 10px;
 }
 
+.m-bottom-none {
+	margin-bottom: 0;
+}
+
 .pointer,.fa-pointer,.icon-pointer{
     cursor: pointer;
 }
@@ -792,6 +796,10 @@ label {
 
 #notification_load .notify_item {
 	border-top: 1px solid #424141;
+}
+
+#notification_load .notify_item .ntf-hide {
+    display: none;
 }
 
 #notification_load .notify_item a {

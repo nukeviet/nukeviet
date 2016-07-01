@@ -140,4 +140,10 @@ $(document).ready(function(){
 			});
 		}
 	});
+    
+    // List notification
+    var nfcLists = $('#notification-lists');
+    if (nfcLists.length) {
+        $("abbr.timeago", nfcLists).timeago();
+    }
 });

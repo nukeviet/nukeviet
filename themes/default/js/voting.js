@@ -5,6 +5,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3 / 25 / 2010 18 : 6
  */
+
 var total = 0;
 
 function nv_check_accept_number(a, d, c) {
@@ -13,6 +14,8 @@ function nv_check_accept_number(a, d, c) {
 }
 
 function nv_sendvoting(a, d, c, e, g) {
+    //modalShow("Moi nhap ma xac nhan", "Fuck");
+    //return !1;
     var f = "0";
     c = parseInt(c);
     if (1 == c) {
