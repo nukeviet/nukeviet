@@ -12,11 +12,13 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+$allowed_mods = array_unique(array_merge_recursive(array_keys($admin_mods), array_keys($site_mods)));
+
 $page_title = $lang_module['notification'];
 
 // Reset notification
 if ($nv_Request->isset_request('notification_reset', 'post')) {
-    $db->query('UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=1 WHERE view=0');
+    $db->query('UPDATE ' . NV_NOTIFICATION_GLOBALTABLE . ' SET view=1 WHERE view=0 AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
     die();
 }
 
@@ -31,7 +33,7 @@ if ($nv_Request->isset_request('notification_get', 'get')) {
     $count = 0;
     $return = array();
 
-    $result = $db->query('SELECT add_time FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '" AND area=1 AND view=0 ORDER BY id DESC');
+    $result = $db->query('SELECT add_time FROM ' . NV_NOTIFICATION_GLOBALTABLE . ' WHERE language="' . NV_LANG_DATA . '" AND area=1 AND view=0 AND module IN(\'' . implode("', '", $allowed_mods) . '\') ORDER BY id DESC');
     $count = $result->rowCount();
     if ($result) {
         $last_time = $result->fetchColumn();
@@ -48,17 +50,29 @@ if ($nv_Request->isset_request('notification_get', 'get')) {
     die();
 }
 
+// Hide (delete)
+if ($nv_Request->isset_request('delete', 'post')) {
+    $id = $nv_Request->get_int('id', 'post', 0);
+    
+    if ($id) {
+        $db->query("DELETE FROM " . NV_NOTIFICATION_GLOBALTABLE . " WHERE id=" . $id . ' AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
+        die('OK');
+    }
+    
+    die('ERROR');
+}
+
 $page = $nv_Request->get_int('page', 'get', 1);
 $is_ajax = $nv_Request->isset_request('ajax', 'post,get');
-
-$per_page = 10;
+$base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
+$per_page = $is_ajax ? 10 : 20;
 $array_data = array();
 
 $db->sqlreset()
   ->select('COUNT(*)')
   ->from(NV_NOTIFICATION_GLOBALTABLE)
-  ->where('language = "' . NV_LANG_DATA . '" AND area = 1 OR area = 2');
-  
+  ->where('language = "' . NV_LANG_DATA . '" AND (area = 1 OR area = 2) AND module IN(\'' . implode("', '", $allowed_mods) . '\')');
+
 $all_pages = $db->query($db->sql())->fetchColumn();
 
 $db->select('*')
@@ -135,6 +149,12 @@ if (!empty($array_data)) {
     if ($is_ajax) {
         $contents = $xtpl->text('main.loop');
     } else {
+        $generate_page = nv_generate_page($base_url, $all_pages, $per_page, $page);
+        if (!empty($generate_page)) {
+            $xtpl->assign('GENERATE_PAGE', $generate_page);
+            $xtpl->parse('main.generate_page');
+        }
+        
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
     }

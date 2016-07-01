@@ -82,4 +82,22 @@ $(function() {
         $('#notification_load').html('');
         $('#notification_waiting').show();
     });
+    
+    // Hide notification
+    $('.notify_item .ntf-hide').click(function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        $.ajax({
+            type: 'POST',
+            url: script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification&nocache=' + new Date().getTime(),
+            data: 'delete=1&id=' + $this.data('id'),
+            success: function(data) {
+                if (data == 'OK') {
+                    window.location.href = window.location.href;
+                } else {
+                    alert(nv_is_change_act_confirm[2]);
+                }
+            }
+        });
+    });
 });

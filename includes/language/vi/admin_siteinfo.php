@@ -162,3 +162,4 @@ $lang_module['notification'] = 'Thông báo';
 $lang_module['notification_empty'] = '<p align="center">Chưa có thông báo!</p>';
 $lang_module['notification_module_auto_deactive'] = 'Module <strong>%s</strong> đã ngưng hoạt động do lỗi';
 $lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong>%s</strong> đã ngưng hoạt động do lỗi';
+$lang_module['notification_hide'] = 'Ẩn thông báo này';

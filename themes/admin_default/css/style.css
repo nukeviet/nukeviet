@@ -794,6 +794,10 @@ label {
 	border-top: 1px solid #424141;
 }
 
+#notification_load .notify_item .ntf-hide {
+    display: none;
+}
+
 #notification_load .notify_item a {
 	display: block;
 	width: 100%;
