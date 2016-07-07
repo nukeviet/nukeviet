@@ -57,7 +57,7 @@ class FloodBlocker
             }
             $ip2long = base_convert($r_ip, 2, 10);
         }
-        if ($ip2long == - 1 || $ip2long === false) {
+        if ($ip2long == - 1 or $ip2long === false) {
             trigger_error(FloodBlocker::INCORRECT_IP_ADDRESS, E_USER_ERROR);
         }
 

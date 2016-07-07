@@ -118,7 +118,7 @@ function unicode_to_utf8($str)
  */
 function nv_str_split($str, $split_len = 1)
 {
-    if (! is_int($split_len) || $split_len < 1) {
+    if (! is_int($split_len) or $split_len < 1) {
         return false;
     }
 
@@ -142,7 +142,7 @@ function nv_str_split($str, $split_len = 1)
  */
 function nv_strspn($str, $mask, $start = null, $length = null)
 {
-    if ($start !== null || $length !== null) {
+    if ($start !== null or $length !== null) {
         $str = nv_substr($str, $start, $length);
     }
 

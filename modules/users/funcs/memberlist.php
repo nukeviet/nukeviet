@@ -29,7 +29,7 @@ $array_mod_title[] = array(
 );
 
 // Xem chi tiet thanh vien
-if (isset($array_op[1]) && ! empty($array_op[1])) {
+if (isset($array_op[1]) and ! empty($array_op[1])) {
     $md5 = '';
     unset($matches);
     if (preg_match('/^(.*)\-([a-z0-9]{32})$/', $array_op[1], $matches)) {

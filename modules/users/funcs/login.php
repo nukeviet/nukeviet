@@ -636,7 +636,7 @@ $mod_title = $lang_module['login'];
 
 $contents = user_login();
 
-$full = empty($nv_header);// && empty($nv_redirect);
+$full = empty($nv_header);// and empty($nv_redirect);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents, $full);

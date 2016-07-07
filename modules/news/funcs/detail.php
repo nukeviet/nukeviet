@@ -134,7 +134,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $news_contents['source'] = '<a title="' . $sourcetext . '" rel="nofollow" href="' . $news_contents['sourcetext'] . '">' . $source_link . '</a>'; // Hiển thị link của nguồn tin
         } elseif ($module_config[$module_name]['config_source'] == 3) {
             $news_contents['source'] = '<a title="' . $sourcetext . '" href="' . $news_contents['sourcetext'] . '">' . $source_link . '</a>'; // Hiển thị link của nguồn tin
-        } elseif ($module_config[$module_name]['config_source'] == 2 && ! empty($source_logo)) {
+        } elseif ($module_config[$module_name]['config_source'] == 2 and ! empty($source_logo)) {
             $news_contents['source'] = '<img width="100px" src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $source_logo . '">';
         }
     }

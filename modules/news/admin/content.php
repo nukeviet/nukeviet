@@ -1002,7 +1002,7 @@ if (! empty($error)) {
     $xtpl->parse('main.error');
 }
 
-if (defined('NV_IS_ADMIN_MODULE') || ! empty($array_pub_content)) {//toan quyen module
+if (defined('NV_IS_ADMIN_MODULE') or ! empty($array_pub_content)) {//toan quyen module
     if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
         $xtpl->parse('main.status');
     } else {

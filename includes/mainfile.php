@@ -369,7 +369,7 @@ if ($nv_Request->get_string('second', 'get') == 'cronjobs') {
 }
 
 // Kiem tra tu cach admin
-if (defined('NV_IS_ADMIN') || defined('NV_IS_SPADMIN')) {
+if (defined('NV_IS_ADMIN') or defined('NV_IS_SPADMIN')) {
     trigger_error('Hacking attempt', 256);
 }
 

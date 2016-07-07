@@ -35,7 +35,7 @@ if (! empty($submit)) {
 
     $answervotenews = $nv_Request->get_array('answervotenews', 'post');
     $urlvotenews = $nv_Request->get_array('urlvotenews', 'post');
-    if ($maxoption > ($sizeof = sizeof($answervotenews) + sizeof($array_answervote)) || $maxoption <= 0) {
+    if ($maxoption > ($sizeof = sizeof($answervotenews) + sizeof($array_answervote)) or $maxoption <= 0) {
         $maxoption = $sizeof;
     }
 

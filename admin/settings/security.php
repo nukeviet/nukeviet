@@ -185,7 +185,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $area = $nv_Request->get_int('area', 'post', 0);
     $mask = $nv_Request->get_int('mask', 'post', 0);
 
-    if (empty($ip) || ! $ips->nv_validip($ip)) {
+    if (empty($ip) or ! $ips->nv_validip($ip)) {
         $error[] = $lang_module['banip_error_validip'];
     }
 

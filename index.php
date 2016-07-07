@@ -47,7 +47,7 @@ if ($client_info['is_myreferer'] === 0 and !defined('NV_IS_MY_USER_AGENT')) {
     require NV_ROOTDIR . '/includes/core/referer.php';
 }
 
-if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') || $nv_Request->isset_request(NV_NAME_VARIABLE, 'post')) {
+if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') or $nv_Request->isset_request(NV_NAME_VARIABLE, 'post')) {
     $home = 0;
     $module_name = $nv_Request->get_string(NV_NAME_VARIABLE, 'post,get');
 
