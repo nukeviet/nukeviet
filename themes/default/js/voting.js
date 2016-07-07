@@ -27,38 +27,38 @@ function nv_sendvoting(form, id, num, checkss, errmsg, captcha) {
     if ("0" == vals && 0 < num) {
         alert(errmsg);
     } else if (captcha == 0 || "0" == vals) {
-		nv_sendvoting_submit(id, checkss, vals);
+        nv_sendvoting_submit(id, checkss, vals);
     } else {
-		$('#voting-modal-' + id).data('id', id).data('checkss', checkss).data('vals', vals);
-		modalShowByObj('#voting-modal-' + id);
-	}
+        $('#voting-modal-' + id).data('id', id).data('checkss', checkss).data('vals', vals);
+        modalShowByObj('#voting-modal-' + id);
+    }
     return !1
 }
 
 function nv_sendvoting_submit(id, checkss, vals, capt) {
-	$.ajax({
-		type: "POST",
-		cache: !1,
-		url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + id + "&checkss=" + checkss + "&lid=" + vals + (typeof capt != 'undefined' ? '&captcha=' + capt : ''),
-		data: "nv_ajax_voting=1",
-		dataType: "html",
-		success: function(res) {
-			if (res.match(/^ERROR\|/g)) {
-				change_captcha('.rsec');
-				alert(res.substring(6));
-			} else {
-				modalShow("", res);
-			}
-		}
-	});
+    $.ajax({
+        type: "POST",
+        cache: !1,
+        url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + id + "&checkss=" + checkss + "&lid=" + vals + (typeof capt != 'undefined' ? '&captcha=' + capt : ''),
+        data: "nv_ajax_voting=1",
+        dataType: "html",
+        success: function(res) {
+            if (res.match(/^ERROR\|/g)) {
+                change_captcha('.rsec');
+                alert(res.substring(6));
+            } else {
+                modalShow("", res);
+            }
+        }
+    });
 }
 
 function nv_sendvoting_captcha(btn, id, msg) {
-	var ctn = $('#voting-modal-' + id);
-	var capt = $('[name="captcha"]', $(btn).parent()).val();
-	if (!capt) {
-		alert(msg);
-	} else {
-		nv_sendvoting_submit(ctn.data('id'), ctn.data('checkss'), ctn.data('vals'), capt);
-	}
+    var ctn = $('#voting-modal-' + id);
+    var capt = $('[name="captcha"]', $(btn).parent()).val();
+    if (!capt) {
+        alert(msg);
+    } else {
+        nv_sendvoting_submit(ctn.data('id'), ctn.data('checkss'), ctn.data('vals'), capt);
+    }
 }
