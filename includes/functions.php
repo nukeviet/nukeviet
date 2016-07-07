@@ -580,18 +580,20 @@ function nv_user_in_groups($groups_view)
     if (in_array(6, $groups_view)) {
         // All
         return true;
-    } elseif (defined('NV_IS_USER')) {
-        global $user_info;
-
-        if (in_array(4, $groups_view) and (empty($user_info['in_groups']) or !in_array(7, $user_info['in_groups']))) {
+    } elseif (defined('NV_IS_USER') or defined('NV_IS_ADMIN')) {
+        global $user_info, $admin_info;
+        
+        $in_groups = defined('NV_IS_ADMIN') ? $admin_info['in_groups'] : $user_info['in_groups'];
+        
+        if (in_array(4, $groups_view) and (empty($in_groups) or !in_array(7, $in_groups))) {
             // User with no group or not in new users groups
             return true;
         } else {
             // Check group
-            if (empty($user_info['in_groups'])) {
+            if (empty($in_groups)) {
                 return false;
             }
-            return (array_intersect($user_info['in_groups'], $groups_view) != array());
+            return (array_intersect($in_groups, $groups_view) != array());
         }
     } elseif (in_array(5, $groups_view)) {
         // Guest
