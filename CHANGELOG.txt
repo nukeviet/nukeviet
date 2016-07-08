@@ -1,6 +1,74 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.29 Final
+- Requires PHP 5.5 or later
+- PHPMailer v6.0
+- Endroid/qrcode v1.6.5
+- CKEditor v4.5.9
+- Config allow theme type 
+- Update theme default
+- Update theme admin default
+- Update Memcache class
+- Update Request class
+- Update DB class
+- Module upload: fix download image
+- Fix update, upgrade system and extentions
+- Fix check update, auto update
+- Module users: 
+	Add feature for group's leader (creat user, delete user, accept user, delete user, change password), 
+	Update theme redirect login, 
+	Update facebook login
+	Change rule for view list users
+	Remove Admin Relogin
+- Module extensions: Fix download file
+- Add more options for module's theme mobile
+- Support statisics for CocCoc browser
+- Module news: Optimize database, fix sample data
+
+NUKEVIET 4.0.28
+- Fix set tollower meta-tag name
+- Update javascript to lastest version: lazyload 1.9.7, Jcop 2.0.4, Select2 4.0.2, jquery-treeview v1.4.2, jquery.imgpreload 1.6.2, jquery.flash v1.3.3, jquery.flash v1.3.3, jquery-ui v1.12.0, jQuery v2.2.3
+- update CKEditor 4.5.8
+- Module Seotools: Remove site Diagnostic
+- Module Users: Allow virtual, fix user custom fields, fix block login, fix users login, fix search user waiting
+- Module Upload: Fix error on quickly refresh dir, fix error on refresh large dir
+- Module News: Fix check image exists, fix change alias op content, fix function and cat, add block by category 
+- Module Contact: Delete link in contact mail containing admin path
+- Update theme mobile_nukeviet
+- Fix comment on mobile theme
+- Fix function nv_xmlOutput
+- Fix class Memcacheds
+- Fix dump database
+- Fix plugin rewrite_obsolute
+- Fix backup MySQL Engine InnoDB
+- Update Font Awesome Version 4.6.1
+- Fix function nv_clean60
+- Theme default: fix block company_info
+
+NUKEVIET 4.0.27
+- update class Punycode
+- update class phpmailer 
+- Module Users: add Group new users
+- Module users: add function groups manage for leader 
+- Theme mobile: file layout not exit
+- nv_info_die function: send http status code
+- Module authors: remove module siteinfo in grant system 
+- Module news: update block newscenter, fix edit content
+- update sample data
+- Fix module Extensions
+- Module page: add image position config, add og:image
+- Update ckeditor 4.5.7, fix when editor maximize
+- Blocks: fix variables $blockID 
+- Database: fix setting backup database
+
+NUKEVIET 4.0.26
+- Add management: leaders, avatar, color, default for groups
+- Contact: update show department
+- Add simple mode for generate pages
+- Fix check extension version
+- Fix and update something...
+
 NUKEVIET 4.0.25
 - Update Data demo
 - Update jQuery v2.2.0 

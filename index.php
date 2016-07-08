@@ -171,7 +171,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
             // Xac dinh giao dien chung
             $is_mobile = false;
             $theme_type = '';
-            $_theme_mobile = (!empty($module_info['mobile'])) ? $module_info['mobile'] : $global_config['mobile_theme'];
+            $_theme_mobile = empty($module_info['mobile']) ? $global_config['mobile_theme'] : (($module_info['mobile'] == ':pcsite') ? $global_config['site_theme'] : (($module_info['mobile'] == ':pcmod') ? $module_info['theme'] : $module_info['mobile']));
             if ((($client_info['is_mobile'] and (empty($global_config['current_theme_type']) or empty($global_config['switch_mobi_des']))) or ($global_config['current_theme_type'] == 'm' and !empty($global_config['switch_mobi_des']))) and !empty($_theme_mobile) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_mobile . '/theme.php')) {
                 $global_config['module_theme'] = $_theme_mobile;
                 $is_mobile = true;
@@ -283,11 +283,11 @@ if (preg_match($global_config['check_module'], $module_name)) {
             die();
         } elseif (!defined('NV_IS_ADMIN') and ($groups_view == '2' or $groups_view == '1')) {
             // Exit
-            nv_info_die($lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin']);
+            nv_info_die($lang_global['error_404_title'], $lang_global['site_info'], $lang_global['module_for_admin'], 404);
         } elseif (defined('NV_IS_USER') and !nv_user_in_groups($groups_view)) {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
         }
     }
 }
 
-nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);

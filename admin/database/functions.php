@@ -42,10 +42,24 @@ function nv_show_tables()
     while ($item = $result->fetch()) {
         $tables_size = floatval($item['data_length']) + floatval($item['index_length']);
 
+        if ($item['engine'] != 'MyISAM') {
+            if($item['rows'] < 100000)
+            {
+                $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+                $item['rows'] = number_format($item['rows']);
+            }
+            else {
+                $item['rows'] = '~' . number_format($item['rows']);
+            }
+        }
+        else
+        {
+            $item['rows'] = number_format($item['rows']);
+        }
         $tables[$item['name']]['table_size'] = nv_convertfromBytes($tables_size);
         $tables[$item['name']]['table_max_size'] = ! empty($item['max_data_length']) ? nv_convertfromBytes(floatval($item['max_data_length'])) : 0;
         $tables[$item['name']]['table_datafree'] = ! empty($item['data_free']) ? nv_convertfromBytes(floatval($item['data_free'])) : 0;
-        $tables[$item['name']]['table_numrow'] = intval($item['rows']);
+        $tables[$item['name']]['table_numrow'] = $item['rows'];
         $tables[$item['name']]['table_charset'] = (! empty($item['collation']) && preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '';
         $tables[$item['name']]['table_type'] = (isset($item['engine'])) ? $item['engine'] : $item['type'];
         $tables[$item['name']]['table_auto_increment'] = (isset($item['auto_increment'])) ? intval($item['auto_increment']) : 'n/a';
@@ -133,6 +147,10 @@ function nv_show_tab()
         include NV_ROOTDIR . '/includes/footer.php';
     }
 
+    if ($item['engine'] != 'MyISAM') {
+        $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+    }
+
     $tablename = substr($item['name'], strlen($db_config['prefix']) + 1);
     $contents = array();
     $contents['table']['caption'] = sprintf($lang_module['table_caption'], $tablename);
@@ -196,13 +214,12 @@ function main_theme($contents)
 
 function nv_show_tables_theme($contents)
 {
-    global $global_config, $client_info, $module_file;
+    global $global_config, $module_file;
 
     $xtpl = new XTemplate('tables.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 
     $xtpl->assign('ACTION', $contents['action']);
     $xtpl->assign('CAPTIONS', $contents['captions']['tables_info']);
-    $xtpl->assign('CHECKSS', md5($client_info['session_id'] . $global_config['sitekey']));
 
     foreach ($contents['columns'] as $value) {
         $xtpl->assign('COLNAME', $value);

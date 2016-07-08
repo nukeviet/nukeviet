@@ -3,11 +3,8 @@
 <div class="alert alert-warning">{LANG.modforum}</div>
 <!-- END: is_forum -->
 <!-- BEGIN: edit_user -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <form  class="form-inline" role="form" action="{FORM_ACTION}" method="post" onsubmit="return user_validForm(this);">
@@ -73,7 +70,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td colspan="2"> {LANG.avata} </td>
+					<td colspan="2"> {LANG.avatar} </td>
 					<td>
 						<!-- BEGIN: photo -->
 						<p id="current-photo" class="pull-left text-center">
@@ -111,16 +108,26 @@
 				<tr>
 					<td style="vertical-align:top" colspan="2"> {LANG.in_group} </td>
 					<td>
-						<div class="row checkbox">
-							<!-- BEGIN: list -->
-							<label class="col-sm-20">
-								<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
-							</label>
-							<!-- END: list -->
-						</div>
+						<!-- BEGIN: list -->
+                        <div class="clearfix">
+    						<label class="pull-left w200">
+    							<input type="checkbox" value="{GROUP.id}" name="group[]" {GROUP.checked} {GROUP.disabled}/>
+    							{GROUP.title}
+    						</label>
+                            <label class="pull-left group_default"{GROUP_DEFAULT_STYLE}>
+                                <input type="radio" value="{GROUP.id}" name="group_default"{GROUP.default}/> {LANG.in_group_default}
+                            </label>
+                        </div>
+						<!-- END: list -->
 					</td>
 				</tr>
 				<!-- END: group -->
+                <!-- BEGIN: is_official -->
+                <tr>
+					<td colspan="2"> {LANG.set_official_note} </td>
+					<td><input type="checkbox" name="is_official" value="1" /></td>
+                </tr>
+                <!-- END: is_official -->
 			</tbody>
 		</table>
 		<!-- BEGIN: field -->

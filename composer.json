@@ -22,18 +22,15 @@
         "source": "https://github.com/nukeviet/nukeviet/releases"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "ext-mbstring": "*",
         "ext-gd": "*",
         "vinades/nukeviet": "dev-master",
         "gregwar/captcha": "1.*",
         "and/oauth": "^0.7-dev",
-        "phpmailer/phpmailer": "5.4.x-dev",
+        "phpmailer/phpmailer": "v6.0.0rc2",
         "pclzip/pclzip": "^2.8",
         "endroid/qrcode": "^1.5",
         "true/punycode": "^2.0"
-    },
-    "require-dev": {
-        "jasig/phpcas": "*"
     } 
 }

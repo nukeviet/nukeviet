@@ -110,7 +110,9 @@
 						<!-- BEGIN: opsite_timezone -->
 						<option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE} </option>
 						<!-- END: opsite_timezone -->
-					</select></td>
+					</select>
+					{CURRENT_TIME}
+					</td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.gzip_method}</strong></td>
@@ -170,7 +172,7 @@ $(document).ready(function() {
 var LANG = [];
 LANG.note_ssl = "{LANG.note_ssl}";
 var CFG = [];
-CFG.cdndl = "{CDNDL}";
+CFG.cdndl = "{NV_CHECK_SESSION}";
 
 show_rewrite_op();
 </script>

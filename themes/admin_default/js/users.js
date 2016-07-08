@@ -134,6 +134,18 @@ function nv_row_del(vid) {
 	return false;
 }
 
+function nv_set_official(vid) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=setofficial&nocache=' + new Date().getTime(), 'userid=' + vid, function(res) {
+		if (res == 'OK') {
+			window.location.href = window.location.href;
+		} else {
+			alert(res);
+		}
+
+	});
+	return false;
+}
+
 function nv_waiting_row_del(uid) {
 	if (confirm(nv_is_del_confirm[0])) {
 		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=user_waiting&nocache=' + new Date().getTime(), 'del=1&userid=' + uid, function(res) {
@@ -409,6 +421,34 @@ function nv_users_check_choicetypes(elemnet) {
 	}
 }
 
+function control_theme_groups() {
+    var ingroup = $('[name="group[]"]:checked').length,
+        gdefault = $('[name="group_default"]:checked').val(),
+        groups = [],
+        ioff = $('[name="is_official"]').is(':checked')
+    
+    $('[name="group[]"]').each(function(){
+        if ($(this).is(':checked') && ingroup > 1 && ioff) {
+            $('.group_default', $(this).parent().parent()).show()
+            
+            if (typeof gdefault == 'undefined') {
+                gdefault = $(this).val()
+                $('[name="group_default"]', $(this).parent().parent()).prop('checked', true)
+            }
+        } else {
+            $('.group_default', $(this).parent().parent()).hide()
+        }
+        if ($(this).is(':checked')) {
+            groups.push($(this).val())
+        }
+    })
+    
+    if (typeof gdefault != 'undefined' && $.inArray(gdefault, groups) == -1 && ingroup > 1) {
+        $('[name="group_default"]').prop('checked', false)
+        $('[name="group_default"]', $('[name="group[]"]:checked:first').parent().parent()).prop('checked', true)
+    }
+}
+
 $(document).ready(function(){
 	// Edit user
 	$("#pop").on("click", function() {
@@ -463,6 +503,13 @@ $(document).ready(function(){
 	    	}
 		});
 	}
+    
+    $('[name="group[]"]').change(function(){
+        control_theme_groups()
+    })
+    $('[name="is_official"]').change(function(){
+        control_theme_groups()
+    })
 
 	// Export user
 	$("input[name=data_export]").click(function() {
@@ -472,11 +519,10 @@ $(document).ready(function(){
 	});
 
 	// Get userid
-	$("thead a,.generatePage a").click(function() {
-		var a = $(this).attr("href");
-		$("#resultdata").load(a);
-		return !1
-	});
+    $("#resultdata").delegate("thead a,.generatePage a", "click", function(e) {
+		e.preventDefault()
+		$("#resultdata").load($(this).attr("href"))
+    });
 	if ($.fn.datepicker){
 		$("#last_loginfrom,#last_loginto,#regdatefrom,#regdateto").datepicker({
 			showOn : "both",
@@ -571,5 +617,15 @@ $(document).ready(function(){
 	$("select[name=choicetypes]").change(function() {
 		nv_users_check_choicetypes(this);
 	});
+    
+    // Group
+ 	$("[name='browse-image']").click(function(e) {
+        e.preventDefault()
+		var area = $(this).data('area'),
+            path = $(this).data('path'),
+            currentpath = $(this).data('currentpath'),
+            type = "image"
 
+		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+	});
 });

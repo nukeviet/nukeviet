@@ -17,9 +17,7 @@ $contents = 'ERR_' . $lang_module['comment_unsuccess'];
 $cid = $nv_Request->get_int('cid', 'post');
 $checkss = $nv_Request->get_string('checkss', 'post');
 
-$session_id = session_id() . '_' . $global_config['sitekey'];
-
-if ($cid > 0 and $checkss == md5($cid . '_' . $session_id)) {
+if ($cid > 0 and $checkss == md5($cid . '_' . NV_CHECK_SESSION)) {
     $_sql = 'SELECT cid, module, id FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE cid=' . $cid;
     $row = $db->query($_sql)->fetch();
     if (isset($row['cid'])) {

@@ -26,7 +26,7 @@ function safekeySend(a) {
 		data: $(a).serialize() + '&resend=1',
 		dataType: "json",
 		success: function(e) {
-			"error" == e.status ? ($(".safekeySend", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $("[name=" + e.input + "]", a).addClass("tooltip-current").attr("data-current-mess", $("[name=" + e.input + "]", a).attr("data-mess")), validErrorShow($("[name=" + e.input + "]", a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(), setTimeout(function() {
+			"error" == e.status ? ($(".safekeySend", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $("[name=\"" + e.input + "\"]", a).addClass("tooltip-current").attr("data-current-mess", $("[name=\"" + e.input + "\"]", a).attr("data-mess")), validErrorShow($("[name=\"" + e.input + "\"]", a))) : ($(".nv-info", a).html(e.mess).removeClass("error").addClass("success").show(), setTimeout(function() {
 				var d = $(".nv-info", a).attr("data-default");
 				if (!d) d = $(".nv-info-default", a).html();
 				$(".nv-info", a).removeClass("error success").html(d);
@@ -112,7 +112,20 @@ function usageTermsShow(t) {
 		data: 'get_usage_terms=1',
 		dataType: 'html',
 		success: function(e) {
-			modalShow(t, e)
+            if ($('#sitemodal').length) {
+                if (!$('#sitemodalTerm').length) {
+                    $('body').append('<div id="sitemodalTerm" class="modal fade" role="dialog">' + $('#sitemodal').html() + '</div>')
+                }
+                "" != t && 'undefined' != typeof t && $("#sitemodalTerm .modal-content").prepend('<div class="modal-header"><h2 class="modal-title">' + t + '</h2></div>');
+                $("#sitemodalTerm").find(".modal-title").html(t);
+                $("#sitemodalTerm").find(".modal-body").html(e);
+                $('#sitemodalTerm').on('hidden.bs.modal', function () {
+                    $("#sitemodalTerm .modal-content").find(".modal-header").remove()
+            	});
+                $("#sitemodalTerm").modal({backdrop: "static"})
+            } else {
+                alert(strip_tags(e))
+            }
 		}
 	});
 	return !1
@@ -195,7 +208,7 @@ function login_validForm(a) {
 		success: function(d) {
 			var b = $("[onclick*='change_captcha']", a);
 			b && b.click();
-			"error" == d.status ? ($("input,button", a).not("[type=submit]").prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != d.input ? $(a).find("[name=" + d.input + "]").each(function() {
+			"error" == d.status ? ($("input,button", a).not("[type=submit]").prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
 				$(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
 				validErrorShow(this)
 			}) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
@@ -226,7 +239,7 @@ function reg_validForm(a) {
 		success: function(b) {
 			var c = $("[onclick*='change_captcha']", a);
 			c && c.click();
-			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find("[name=" + b.input + "]").each(function() {
+			"error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != b.input ? $(a).find("[name=\"" + b.input + "\"]").each(function() {
 				$(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
 				validErrorShow(this)
 			}) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
@@ -343,6 +356,7 @@ function bt_logout(a) {
 	});
 	return !1
 }
+
 var UAV = {};
 // Default config, replace it with your own
 UAV.config = {
@@ -414,6 +428,8 @@ UAV.common = {
 			$('#' + UAV.config.target).attr('src', e.target.result);
 			$('#' + UAV.config.target).load(function() {
 				var img = document.getElementById(UAV.config.target);
+                var boxWidth = $('#' + UAV.config.target).innerWidth();
+                var boxHeight = Math.round(boxWidth * img.naturalHeight / img.naturalWidth);
 				if (img.naturalWidth > UAV.config.max_width || img.naturalHeight > UAV.config.max_height) {
 					UAV.common.error(UAV.lang.bigsize);
 					UAV.data.error = true;
@@ -431,12 +447,15 @@ UAV.common = {
 					$('#' + UAV.config.imageType).html(file.type);
 					$('#' + UAV.config.imageSize).html(UAV.tool.bytes2Size(file.size));
 					$('#' + UAV.config.originalDimension).html(img.naturalWidth + ' x ' + img.naturalHeight);
+                    console.log()
 					$('#' + UAV.config.target).Jcrop({
 						minSize: [UAV.config.avatar_width, UAV.config.avatar_height],
 						setSelect: [300, 300, 55, 55],
 						aspectRatio: 1,
 						bgFade: true,
 						bgOpacity: .3,
+                        boxWidth: boxWidth,
+                        boxHeight: boxHeight,
 						onChange: function(e) {
 							UAV.tool.update(e);
 						},
@@ -447,10 +466,9 @@ UAV.common = {
 							UAV.tool.clear(e);
 						}
 					}, function() {
-						var bounds = this.getBounds();
-						$('#' + UAV.config.w).val(bounds[0]);
-						$('#' + UAV.config.h).val(bounds[1]);
-						$('#' + UAV.config.displayDimension).html(bounds[0] + ' x ' + bounds[1]);
+						$('#' + UAV.config.w).val(boxWidth);
+						$('#' + UAV.config.h).val(boxHeight);
+						$('#' + UAV.config.displayDimension).html(boxWidth + ' x ' + boxHeight);
 						UAV.data.jcropApi = this;
 					});
 				} else {

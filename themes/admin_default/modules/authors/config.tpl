@@ -5,12 +5,8 @@
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
 
-<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css">
-<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css">
-<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css">
-
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <form action="{NV_BASE_ADMINURL}index.php" method="post" id="frm">
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
@@ -44,15 +40,6 @@
 				<tr>
 					<td>{LANG.spadmin_add_admin}</td>
 					<td><input type="checkbox" value="1" name="spadmin_add_admin"{DATA.spadmin_add_admin} /></td>
-				</tr>
-				<tr>
-					<td>{LANG.adminrelogin_max}</td>
-					<td>
-					<select name="adminrelogin_max" class="form-control">
-						<!-- BEGIN: adminrelogin_max -->
-						<option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
-						<!-- END: adminrelogin_max -->
-					</select></td>
 				</tr>
 				<tr>
 					<td>{LANG.admin_check_pass_time}</td>

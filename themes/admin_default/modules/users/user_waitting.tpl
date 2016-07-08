@@ -42,8 +42,7 @@
 				<tr>
 					<td> {CONTENT_TD.userid} </td>
 					<td> {CONTENT_TD.username} </td>
-					<td> {CONTENT_TD.first_name} </td>
-					<td> {CONTENT_TD.last_name} </td>
+					<td> {CONTENT_TD.full_name} </td>
 					<td><a href="mailto:{CONTENT_TD.email}">{CONTENT_TD.email}</a></td>
 					<td> {CONTENT_TD.regdate} </td>
 					<td>

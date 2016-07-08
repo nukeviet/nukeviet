@@ -19,7 +19,7 @@ if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
  */
 function cron_dump_autobackup()
 {
-    global $db, $db_config, $global_config, $client_info;
+    global $db, $db_config, $global_config;
 
     $result = true;
 
@@ -31,7 +31,7 @@ function cron_dump_autobackup()
     $file_ext = ($contents['savetype'] == 'sql') ? 'sql' : 'sql.gz';
     $log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 
-    $contents['filename'] = $log_dir . '/' . md5(nv_genpass(10) . $client_info['session_id']) . '_' . $current_day . '.' . $file_ext;
+    $contents['filename'] = $log_dir . '/' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '_' . $current_day . '.' . $file_ext;
 
     if (! file_exists($contents['filename'])) {
         if ($dh = opendir($log_dir)) {

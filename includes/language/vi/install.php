@@ -19,7 +19,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'Cài đặt Nukeviet 4.0 RC1';
+$lang_module['titlesetup'] = 'Cài đặt Nukeviet 4';
 $lang_module['select_language'] = 'Lựa chọn ngôn ngữ';
 $lang_module['license'] = 'Bản quyền';
 $lang_module['check_server'] = 'Kiểm tra máy chủ';
@@ -189,8 +189,8 @@ $lang_module['update_mod_list'] = 'Các module hiện đang sử dụng';
 $lang_module['update_mod_version'] = 'Phiên bản';
 $lang_module['update_mod_note'] = 'Ghi chú';
 $lang_module['update_mod_author'] = 'Tác giả';
-$lang_module['update_mod_uptodate'] = 'Là module hệ thống, phiên bản mới nhất';
-$lang_module['update_mod_othermod'] = 'Không là module hệ thống, hãy kiểm tra lại khả năng tương thích với phiên bản mới nâng cấp này';
+$lang_module['update_mod_uptodate'] = 'Là ứng dụng hệ thống, phiên bản mới nhất';
+$lang_module['update_mod_othermod'] = 'Không là ứng dụng hệ thống, hãy kiểm tra lại khả năng tương thích với phiên bản mới nâng cấp này';
 $lang_module['update_info_end'] = 'Để website có thể hoạt động trở lại bạn cần xóa gói cập nhật này khỏi hệ thống.';
 $lang_module['update_package_deleted'] = 'Gói cập nhật đã được xóa khỏi hệ thống thành công.';
 $lang_module['update_package_not_deleted'] = 'Không thể xóa gói cập nhật đi được, bạn hãy xóa thủ công các tệp và thư mục trong cảnh báo vừa xuất hiện sau đó website mới có thể hoạt động trở lại';
@@ -209,7 +209,7 @@ $lang_module['update_taskierror'] = 'Thất bại';
 $lang_module['update_taskiok'] = 'Thành công';
 $lang_module['update_taskiwarn'] = 'Cảnh báo không thành công';
 $lang_module['update_taskiload'] = 'Đang thực hiện';
-$lang_module['update_task_error_message'] = 'Tiến trình không thể tiếp tục được do thất bại trong việc <strong>"%s"</strong>. Hãy thử đóng trình duyệt lại sau đó thực hiện lại toàn bộ công việc. Truy cập <a href="http://nukeviet.vn/phpbb/" title="Diễn đàn hỗ trợ mã nguồn mở NukeViet">diễn đàn</a> và thông báo về lỗi này để được hỗ trợ.';
+$lang_module['update_task_error_message'] = 'Tiến trình không thể tiếp tục được do thất bại trong việc <strong>"%s"</strong>. Hãy thử đóng trình duyệt lại sau đó thực hiện lại toàn bộ công việc. Truy cập <a href="%s">vào đây</a> và thông báo về lỗi này để được hỗ trợ.';
 $lang_module['update_task_all_complete'] = 'Các công việc đã hoàn tất, bạn có thể chuyển sang bước tiếp theo';
 $lang_module['update_task_all_complete_alert'] = 'Các công việc đã thực hiện hết, có một số công việc bị lỗi tuy nhiên có thể bỏ qua. Danh sách công việc lỗi được đanh dấu bên cạnh, bạn có thể kiểm tra lại sau.';
 $lang_module['update_task_load'] = 'Đang thực hiện';
@@ -217,7 +217,7 @@ $lang_module['update_task_load_message'] = 'Chúng tôi khuyến cáo bạn khô
 $lang_module['update_task_next'] = 'Công việc sắp thực hiện';
 $lang_module['update_task_start'] = 'Bắt đầu';
 $lang_module['update_task_do1_error'] = 'Công việc';
-$lang_module['update_task_do2_error'] = 'Bị lỗi do đó việc nâng cấp không thể tiếp tục được. Truy cập <a href="http://nukeviet.vn/phpbb/" title="Diễn đàn hỗ trợ mã nguồn mở NukeViet">diễn đàn</a> và thông báo về lỗi này để được hỗ trợ.';
+$lang_module['update_task_do2_error'] = 'Bị lỗi do đó việc nâng cấp không thể tiếp tục được. Truy cập <a href="%s">vào đây</a> và thông báo về lỗi này để được hỗ trợ.';
 $lang_module['update_nav_confirm'] = 'Các công việc đang thực hiện, chuyển trang hoặc tắt trình duyệt có thể dẫn tới lỗi.';
 $lang_module['update_file_info_win'] = 'Cảnh báo: Trên nền window việc di chuyển các file có thể sẽ không thực hiện được, chúng tôi khuyến khích bạn thực hiện di chuyển thủ công các files và folders trong <strong>install/update/</strong> ra ngoài thư mục gốc của website (thư mục chứa index.php, robots.php...).';
 $lang_module['update_file_info_win_manual'] = 'Sau khi di chuyển có thể nhấp vào đây để tiếp tục.';
@@ -256,3 +256,5 @@ $lang_module['updatemod_notexist'] = 'Bạn chưa cài đặt module này lên h
 $lang_module['updatemod_notcertified'] = 'Module này chưa được chứng nhận do đó hệ thống có thể sẽ không kiểm soát được những rủi ro có thể gặp phải.';
 $lang_module['dbcheck_error_files'] = 'Để cài đặt NukeViet với loại CSDL này, bạn cần tải thêm trình hỗ trợ. Nhấp vào đây để tìm hiểu về trình hỗ trợ và tải về bản phù hợp. Sau khi tải về, giải nén và upload các tệp và thư mục lên website của bạn, tải lại trang này và chọn loại CSDL để kiểm tra. Nếu không có thông báo này hiện lên nữa, điều đó có nghĩa là bạn đã sẵn sàng để tiến hành bước tiếp theo. Bên dưới liệt kê danh sách các file cần có để tiến hành cài đặt với loại CSDL này.';
 $lang_module['dbcheck_error_driver'] = 'Lỗi: Hệ thống không hỗ trợ loại CSDL này, vui lòng chọn loại khác';
+$lang_module['update_error_check_version_sys'] = 'Lỗi: Không thể kiểm tra phiên bản hệ thống';
+$lang_module['update_error_check_version_ext'] = 'Lỗi: Không thể kiểm tra phiên bản các ứng dụng';

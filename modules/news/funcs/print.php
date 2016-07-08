@@ -27,12 +27,12 @@ if ($id > 0 and $catid > 0) {
     $result = $db_slave->query($sql);
 
     if ($result->rowCount() !== 1) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     }
 
     $content = $result->fetch();
 
-    $body_contents = $db_slave->query('SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_print FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($content['id'] / 2000) . ' where id=' . $content['id'])->fetch();
+    $body_contents = $db_slave->query('SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_print FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $content['id'])->fetch();
     $content = array_merge($content, $body_contents);
     unset($sql, $result, $body_contents);
 

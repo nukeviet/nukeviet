@@ -274,7 +274,7 @@ class Request
         $this->base_adminurl = $base_siteurl . (NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '');
         $this->doc_root = $doc_root;
         $this->server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'])) . (($this->get_Env('HTTPS') == 'on') ? 's' : '');
-        $this->server_port = ($_SERVER['SERVER_PORT'] == '80') ? '' : (':' . $_SERVER['SERVER_PORT']);
+        $this->server_port = ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') ? '' : (':' . $_SERVER['SERVER_PORT']);
 
         if (filter_var($this->server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
             $this->my_current_domain = $this->server_protocol . '://' . $this->server_name . $this->server_port;
@@ -348,6 +348,7 @@ class Request
 
         $user_agent = ( string )$this->get_Env('HTTP_USER_AGENT');
         $user_agent = substr(htmlspecialchars($user_agent), 0, 255);
+        if(!empty($user_agent)) $user_agent = trim($user_agent);
         if (empty($user_agent) or $user_agent == '-') {
             $user_agent = 'none';
         }

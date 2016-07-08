@@ -22,7 +22,7 @@ if (! defined('NV_IS_MOD_USER')) {
  * @param mixed $custom_fields
  * @return
  */
-function user_register($gfx_chk, $checkss, $data_questions, $array_field_config, $custom_fields)
+function user_register($gfx_chk, $checkss, $data_questions, $array_field_config, $custom_fields, $group_id)
 {
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $nv_Request, $op, $nv_redirect;
 
@@ -35,6 +35,16 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CHECKSS', $checkss);
+
+	if ($group_id != 0) {
+		$xtpl->assign('USER_REGISTER', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=register/' . $group_id);
+	}
+
+    $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);
+    $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], NV_UPASSMIN, NV_UPASSMAX) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], NV_UPASSMIN, NV_UPASSMAX);
+
+    $xtpl->assign('USERNAME_RULE', $username_rule);
+    $xtpl->assign('PASSWORD_RULE', $password_rule);
 
     foreach ($data_questions as $array_question_i) {
         $xtpl->assign('QUESTION', $array_question_i['title']);
@@ -171,11 +181,15 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
         $xtpl->parse('main.lostactivelink');
     }
 
+	if (defined('NV_IS_USER') and !defined('ACCESS_ADDUS')) {
+	    $xtpl->parse('main.agreecheck');
+	}
+
     $_lis = $module_info['funcs'];
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -283,7 +297,7 @@ function user_login($is_ajax = false)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -388,7 +402,7 @@ function user_lostpass($data)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -444,7 +458,7 @@ function user_lostactivelink($data, $question)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -480,7 +494,14 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op;
 
     $xtpl = new XTemplate('info.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
-    $xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
+
+    if (defined('ACCESS_EDITUS')) {//trường hợp trưởng nhóm truy cập sửa thông tin member
+    	$xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo/' . $data['group_id'] . '/' . $data['userid']);
+    }
+	else {
+		$xtpl->assign('EDITINFO_FORM', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=editinfo');
+	}
+
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
     $xtpl->assign('AVATAR_DEFAULT', NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no_avatar.png');
@@ -497,12 +518,8 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
 
     $xtpl->assign('DATA', $data);
-    if ($pass_empty) {
+	if ($pass_empty) {
         $xtpl->assign('FORM_HIDDEN', ' hidden');
-        $xtpl->parse('main.question_empty_pass');
-        $xtpl->parse('main.safemode_empty_pass');
-    } else {
-        $xtpl->parse('main.is_old_pass');
     }
 
     $xtpl->assign(strtoupper($data['type']) . '_ACTIVE', 'active');
@@ -524,6 +541,14 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         }
         $xtpl->parse('main.edit_username');
         $xtpl->parse('main.tab_edit_username');
+    }
+
+	if (in_array('password', $types)) {
+        if (! $pass_empty and ! defined('ACCESS_PASSUS')) {
+           $xtpl->parse('main.tab_edit_password.is_old_pass');
+        }
+        $xtpl->parse('main.edit_password');
+        $xtpl->parse('main.tab_edit_password');
     }
 
     if (in_array('email', $types)) {
@@ -577,7 +602,14 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $group_check_all_checked = 1;
         $count = 0;
         foreach ($groups as $group) {
+        	$group['status'] = $lang_module['group_status_' . $group['status']];
+        	$group['group_type'] = $lang_module['group_type_' . $group['group_type']];
             $xtpl->assign('GROUP_LIST', $group);
+            if ($group['is_leader']) {
+            	$xtpl->assign('URL_IS_LEADER', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups/' . $group['group_id'], true));
+                $xtpl->parse('main.tab_edit_group.group_list.is_leader');
+				$xtpl->parse('main.tab_edit_group.group_list.is_disable_checkbox');
+            }
             $xtpl->parse('main.tab_edit_group.group_list');
             if (empty($group['checked'])) {
                 $group_check_all_checked = 0;
@@ -705,11 +737,33 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.tab_edit_others');
     }
 
+	if (in_array('avatar', $types)) {
+		$xtpl->parse('main.edit_avatar');
+        $xtpl->parse('main.tab_edit_avatar');
+	}
+
+	if (in_array('question', $types)) {
+		if ($pass_empty) {
+	        $xtpl->parse('main.question_empty_pass');
+        }
+
+		$xtpl->parse('main.edit_question');
+        $xtpl->parse('main.tab_edit_question');
+	}
+
+	if (in_array('safemode', $types)) {
+		if ($pass_empty) {
+			$xtpl->parse('main.safemode_empty_pass');
+        }
+		$xtpl->parse('main.edit_safemode');
+        $xtpl->parse('main.tab_edit_safemode');
+	}
+
     $_lis = $module_info['funcs'];
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -760,6 +814,7 @@ function user_welcome()
     $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/upd', true));
+    $xtpl->assign('URL_GROUPS', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups', true));
 
     if (! empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
         $xtpl->assign('IMG', array( 'src' => NV_BASE_SITEURL . $user_info['photo'], 'title' => $lang_module['img_size_title'] ));
@@ -803,11 +858,15 @@ function user_welcome()
         $xtpl->parse('main.question_empty_note');
     }
 
+    if ($user_info['group_manage'] > 0) {
+        $xtpl->parse('main.group_manage');
+    }
+
     $_lis = $module_info['funcs'];
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -887,7 +946,7 @@ function user_openid_administrator($data)
 {
     global $lang_global, $lang_module, $module_info, $module_file, $module_name, $global_config;
 
-    $groups_list = nv_groups_list_pub();
+    $groups_list = nv_groups_list_pub($module_info['module_data']);
 
     $xtpl = new XTemplate('openid_administrator.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -975,7 +1034,7 @@ function nv_memberslist_theme($users_array, $array_order_new, $generate_page)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -1056,7 +1115,7 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
@@ -1183,7 +1242,7 @@ function safe_deactivate($data)
     $_alias = $module_info['alias'];
     foreach ($_lis as $_li) {
         if ($_li['show_func']) {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar') {
+            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
                 continue;
             }
             if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
