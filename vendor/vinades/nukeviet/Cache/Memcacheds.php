@@ -72,7 +72,7 @@ class Memcacheds
     {
         $AllKeys = $this->_Cache->getAllKeys();
         foreach ($AllKeys as $_key) {
-            if (preg_match('/^' . $module_name . '\_/', $_key)) {
+            if (preg_match('/^' . preg_quote($module_name) . '\_/', $_key)) {
                 $this->_Cache->delete($_key);
             }
         }
