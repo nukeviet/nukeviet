@@ -82,11 +82,13 @@ class Memcacheds
      *
      * @param mixed $module_name
      * @param mixed $filename
+     * @param integer $ttl
      * @return
      *
      */
-    public function getItem($module_name, $filename)
+    public function getItem($module_name, $filename, $ttl = 0)
     {
+        // Note: $ttl not check in Memcached cache
         return $this->_Cache->get($module_name . '_' . md5($filename));
     }
 
@@ -95,12 +97,13 @@ class Memcacheds
      * @param mixed $module_name
      * @param mixed $filename
      * @param mixed $content
+     * @param integer $ttl
      * @return
      *
      */
-    public function setItem($module_name, $filename, $content)
+    public function setItem($module_name, $filename, $content, $ttl = 0)
     {
-        return $this->_Cache->set($module_name . '_' . md5($filename), $content);
+        return $this->_Cache->set($module_name . '_' . md5($filename), $content, $ttl);
     }
 
     /**
@@ -118,10 +121,11 @@ class Memcacheds
      * @param mixed $key
      * @param mixed $modname
      * @param mixed $lang
+     * @param integer $ttl
      * @return
      *
      */
-    public function db($sql, $key, $modname, $lang = '')
+    public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
         $_rows = array();
 
@@ -144,7 +148,7 @@ class Memcacheds
                     ++$a;
                 }
                 $result->closeCursor();
-                $this->_Cache->set($cache_key, $_rows);
+                $this->_Cache->set($cache_key, $_rows, $ttl);
             }
         }
 

@@ -3,8 +3,7 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC.
- * All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
@@ -104,10 +103,6 @@ define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIM
 
 // Ket noi voi class Error_handler
 $ErrorHandler = new NukeViet\Core\Error($global_config);
-set_error_handler(array(
-    &$ErrorHandler,
-    'error_handler'
-));
 
 if (empty($global_config['allow_sitelangs'])) {
     trigger_error('Error! Language variables is empty!', 256);
@@ -120,14 +115,6 @@ require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
-
-if ($global_config['cached'] == 'memcached') {
-    ini_set('session.save_handler', 'memcached');
-    ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
-} elseif ($global_config['cached'] == 'redis') {
-    ini_set('session.save_handler', 'redis');
-    ini_set('session.save_path', NV_REDIS_HOST . ':' . NV_REDIS_PORT);
-}
 
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {

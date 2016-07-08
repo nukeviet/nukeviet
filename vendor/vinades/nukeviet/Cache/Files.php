@@ -33,6 +33,8 @@ class Files
     private $_FunCompress = '';
 
     private $_FunUnCompress = '';
+    
+    private $_Current_Time = 0;
 
     /**
      * Files::__construct()
@@ -55,6 +57,12 @@ class Files
         } elseif (function_exists('gzdeflate') and function_exists('gzinflate')) {
             $this->_FunCompress = 'gzdeflate';
             $this->_FunUnCompress = 'gzinflate';
+        }
+        
+        if (defined('NV_CURRENTTIME')) {
+            $this->_Current_Time = NV_CURRENTTIME;
+        } else {
+            $this->_Current_Time = time();
         }
     }
 
@@ -125,20 +133,27 @@ class Files
      *
      * @param mixed $module_name
      * @param mixed $filename
+     * @param integer $ttl
      * @return
      *
      */
-    public function getItem($module_name, $filename)
+    public function getItem($module_name, $filename, $ttl = 0)
     {
         if (!preg_match('/([a-z0-9\_]+)\.cache/', $filename)) {
             return false;
         }
+        
+        $fullname = $this->_CacheDir . '/' . $module_name . '/' . $filename;
 
-        if (!is_file($this->_CacheDir . '/' . $module_name . '/' . $filename)) {
+        if (!is_file($fullname)) {
+            return false;
+        }
+        
+        if ($ttl > 0 and ($this->_Current_Time - filemtime($fullname)) > $ttl) {
             return false;
         }
 
-        $content = file_get_contents($this->_CacheDir . '/' . $module_name . '/' . $filename);
+        $content = file_get_contents($fullname);
         if (!empty($this->_FunUnCompress)) {
             $content = call_user_func($this->_FunUnCompress, $content);
         }
@@ -151,11 +166,13 @@ class Files
      * @param mixed $module_name
      * @param mixed $filename
      * @param mixed $content
+     * @param integer $ttl
      * @return
      *
      */
-    public function setItem($module_name, $filename, $content)
+    public function setItem($module_name, $filename, $content, $ttl = 0)
     {
+        // Note: $ttl not use in Files cache
         if (!preg_match('/([a-z0-9\_]+)\.cache/', $filename)) {
             return false;
         }
@@ -186,11 +203,13 @@ class Files
      * @param mixed $key
      * @param mixed $modname
      * @param mixed $lang
+     * @param integer $ttl
      * @return
      *
      */
-    public function db($sql, $key, $modname, $lang = '')
+    public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
+        // Note: $ttl not use in Files cache
         $list = array();
 
         if (empty($sql)) {

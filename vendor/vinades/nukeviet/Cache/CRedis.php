@@ -11,7 +11,6 @@
 namespace NukeViet\Cache;
 
 use Redis;
-use RedisException;
 
 /**
  * CRedis
@@ -49,23 +48,25 @@ class CRedis
     {
         $this->_Lang = $Lang;
         $this->_Cache_Prefix = $Cache_Prefix;
+
+        $redis = new Redis();
         
-        try {
-            $redis = new Redis();
-        } catch (RedisException $e) {
-            trigger_error("Can not find Redis server!", 256);
+        $connected = false;
+        if ($redis->pconnect($Host, $Port, $Timeout) === true) {
+            $connected = true;
+        } elseif ($redis->connect($Host, $Port, $Timeout) === true) {
+            $connected = true;
         }
-        
-        if ($redis->connect($Host, $Port, $Timeout) !== true) {
-            trigger_error("Can not connect to Redis server!", 256);
+        if ($connected !== true) {
+            trigger_error('Can not connect to Redis server!', 256);
         }
         
         if (!empty($Password) and $redis->auth($Password) !== true) {
-            trigger_error("Can not Authenticate Redis server!", 256);
+            trigger_error('Can not Authenticate Redis server!', 256);
         }
         
         if ($redis->select($DBnumber) !== true) {
-            trigger_error("Can not connect to Redis DB!", 256);
+            trigger_error('Can not connect to Redis DB!', 256);
         }
         
         $checkOptions = array();
@@ -74,10 +75,10 @@ class CRedis
         
         foreach ($checkOptions as $opt) {
             if ($opt !== true) {
-                trigger_error("Can not set Redis option!", 256);
+                trigger_error('Can not set Redis option!', 256);
             }
         }
-        
+                
         $this->_Cache = $redis;
     }
 
@@ -110,28 +111,31 @@ class CRedis
     }
 
     /**
-     *
+     * CRedis::getItem()
+     * 
      * @param mixed $module_name
      * @param mixed $filename
+     * @param integer $ttl
      * @return
-     *
      */
-    public function getItem($module_name, $filename)
+    public function getItem($module_name, $filename, $ttl = 0)
     {
+        // Note: $ttl not check in Redis cache
         return $this->_Cache->get($module_name . '_' . md5($filename));
     }
 
     /**
-     *
+     * CRedis::setItem()
+     * 
      * @param mixed $module_name
      * @param mixed $filename
      * @param mixed $content
+     * @param integer $ttl
      * @return
-     *
      */
-    public function setItem($module_name, $filename, $content)
+    public function setItem($module_name, $filename, $content, $ttl = 0)
     {
-        return $this->_Cache->set($module_name . '_' . md5($filename), $content);
+        return $this->set($module_name . '_' . md5($filename), $content, $ttl);
     }
 
     /**
@@ -144,15 +148,16 @@ class CRedis
     }
 
     /**
-     *
+     * CRedis::db()
+     * 
      * @param mixed $sql
      * @param mixed $key
      * @param mixed $modname
-     * @param mixed $lang
+     * @param string $lang
+     * @param integer $ttl
      * @return
-     *
      */
-    public function db($sql, $key, $modname, $lang = '')
+    public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
         $_rows = array();
 
@@ -175,10 +180,27 @@ class CRedis
                     ++$a;
                 }
                 $result->closeCursor();
-                $this->_Cache->set($cache_key, $_rows);
+                $this->set($cache_key, $_rows, $ttl);
             }
         }
 
         return $_rows;
+    }
+    
+    /**
+     * CRedis::set()
+     * 
+     * @param mixed $key
+     * @param mixed $value
+     * @param integer $ttl
+     * @return void
+     */
+    private function set($key, $value, $ttl = 0)
+    {
+        $this->_Cache->set($key, $value);
+        
+        if ($ttl > 0) {
+            $this->_Cache->setTimeout($key, $ttl);
+        }
     }
 }

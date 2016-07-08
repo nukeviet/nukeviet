@@ -1020,6 +1020,7 @@ function nv_save_file_config()
         $content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
         $content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";
         $content .= "\$global_config['cached'] = 'files';\n";
+        $content .= "\$global_config['session_handler'] = 'files';\n";
         $content .= "\$global_config['extension_setup'] = 3; // 0: No, 1: Upload, 2: NukeViet Store, 3: Upload + NukeViet Store\n";
 
         if ($step < 7) {
