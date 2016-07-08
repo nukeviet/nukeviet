@@ -81,7 +81,7 @@ class Error
             )
         )
     );
-    private $error_excluded = array("/^ftp\_login\(\)/i");
+    private $error_excluded = array("/^ftp\_login\(\)/i", "/^gzinflate\(\)\: data error/i");
 
     /**
      * Error::__construct()
