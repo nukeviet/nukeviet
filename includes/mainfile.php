@@ -124,6 +124,9 @@ require NV_ROOTDIR . '/includes/core/theme_functions.php';
 if ($global_config['cached'] == 'memcached') {
     ini_set('session.save_handler', 'memcached');
     ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
+} elseif ($global_config['cached'] == 'redis') {
+    ini_set('session.save_handler', 'redis');
+    ini_set('session.save_path', NV_REDIS_HOST . ':' . NV_REDIS_PORT);
 }
 
 // IP Ban
@@ -191,6 +194,8 @@ if (!in_array(NV_SERVER_NAME, $domains)) {
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {
     $nv_Cache = new NukeViet\Cache\Memcacheds(NV_MEMCACHED_HOST, NV_MEMCACHED_PORT, NV_LANG_DATA, NV_CACHE_PREFIX);
+} elseif ($global_config['cached'] == 'redis') {
+    $nv_Cache = new NukeViet\Cache\CRedis(NV_REDIS_HOST, NV_REDIS_PORT, NV_REDIS_TIMEOUT, NV_REDIS_PASSWORD, NV_REDIS_DBINDEX, NV_LANG_DATA, NV_CACHE_PREFIX);
 } else {
     $nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);
 }
@@ -337,11 +342,7 @@ $global_config['smtp_password'] = $crypt->aes_decrypt(nv_base64_decode($global_c
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
-if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array(
-    'mild',
-    'lite',
-    'none'
-))) {
+if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array('mild', 'lite', 'none'))) {
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);

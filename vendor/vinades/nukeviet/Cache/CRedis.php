@@ -10,10 +10,11 @@
 
 namespace NukeViet\Cache;
 
-use Memcached;
+use Redis;
+use RedisException;
 
 /**
- * Memcacheds
+ * CRedis
  * 
  * @package NukeViet Cache
  * @author VINADES.,JSC (contact@vinades.vn)
@@ -21,7 +22,7 @@ use Memcached;
  * @version 4.0
  * @access public
  */
-class Memcacheds
+class CRedis
 {
 
     private $_Lang = 'vi';
@@ -33,20 +34,51 @@ class Memcacheds
     private $_Cache;
 
     /**
-     * Memcacheds::__construct()
+     * CRedis::__construct()
      * 
      * @param mixed $Host
      * @param mixed $Port
+     * @param mixed $Timeout
+     * @param mixed $Password
+     * @param mixed $DBnumber
      * @param mixed $Lang
      * @param mixed $Cache_Prefix
      * @return void
      */
-    public function __construct($Host, $Port, $Lang, $Cache_Prefix)
+    public function __construct($Host, $Port, $Timeout, $Password, $DBnumber, $Lang, $Cache_Prefix)
     {
         $this->_Lang = $Lang;
         $this->_Cache_Prefix = $Cache_Prefix;
-        $this->_Cache = new Memcached();
-        $this->_Cache->addServer($Host, $Port);
+        
+        try {
+            $redis = new Redis();
+        } catch (RedisException $e) {
+            trigger_error("Can not find Redis server!", 256);
+        }
+        
+        if ($redis->connect($Host, $Port, $Timeout) !== true) {
+            trigger_error("Can not connect to Redis server!", 256);
+        }
+        
+        if (!empty($Password) and $redis->auth($Password) !== true) {
+            trigger_error("Can not Authenticate Redis server!", 256);
+        }
+        
+        if ($redis->select($DBnumber) !== true) {
+            trigger_error("Can not connect to Redis DB!", 256);
+        }
+        
+        $checkOptions = array();
+        $checkOptions[] = $redis->setOption(Redis::OPT_PREFIX, $Cache_Prefix);
+        $checkOptions[] = $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+        
+        foreach ($checkOptions as $opt) {
+            if ($opt !== true) {
+                trigger_error("Can not set Redis option!", 256);
+            }
+        }
+        
+        $this->_Cache = $redis;
     }
 
     /**
@@ -58,7 +90,7 @@ class Memcacheds
      */
     public function delAll($sys = true)
     {
-        $this->_Cache->flush();
+        $this->_Cache->flushDb();
     }
 
     /**
@@ -70,11 +102,10 @@ class Memcacheds
      */
     public function delMod($module_name, $lang = '')
     {
-        $AllKeys = $this->_Cache->getAllKeys();
-        foreach ($AllKeys as $_key) {
-            if (preg_match('/^' . $module_name . '\_/', $_key)) {
-                $this->_Cache->delete($_key);
-            }
+        $AllKeys = $this->_Cache->keys(str_replace('-', '\-', $module_name) . '*');
+        
+        foreach ($AllKeys as $key) {
+            $this->_Cache->delete(substr($key, strlen($this->_Cache_Prefix)));
         }
     }
 

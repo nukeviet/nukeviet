@@ -183,6 +183,13 @@ define('PLATFORM_PALM', 'Palm');
 define('NV_MEMCACHED_HOST', '127.0.0.1');
 define('NV_MEMCACHED_PORT', '11211');
 
+// Redis
+define('NV_REDIS_HOST', '127.0.0.1');
+define('NV_REDIS_PORT', 6379);
+define('NV_REDIS_PASSWORD', ''); // Warning: password default is empty, but if using the password is sent in plain-text over the network
+define('NV_REDIS_DBINDEX', 0);
+define('NV_REDIS_TIMEOUT', 2.5);
+
 $global_config['site_charset'] = 'utf-8';
 $global_config['check_module'] = '/^[a-zA-Z0-9\-]+$/';
 $global_config['check_op'] = '/^[a-zA-Z0-9\-]+$/';

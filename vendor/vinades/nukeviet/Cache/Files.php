@@ -3,14 +3,22 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC.
- * All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010, 3:21
  */
 
 namespace NukeViet\Cache;
 
+/**
+ * Files
+ * 
+ * @package NukeViet Cache
+ * @author VINADES.,JSC (contact@vinades.vn)
+ * @copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @version 4.0
+ * @access public
+ */
 class Files
 {
 
@@ -26,6 +34,14 @@ class Files
 
     private $_FunUnCompress = '';
 
+    /**
+     * Files::__construct()
+     * 
+     * @param mixed $CacheDir
+     * @param mixed $Lang
+     * @param mixed $Cache_Prefix
+     * @return void
+     */
     public function __construct($CacheDir, $Lang, $Cache_Prefix)
     {
         $this->_CacheDir = $CacheDir;
