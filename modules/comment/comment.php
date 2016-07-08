@@ -48,7 +48,6 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
         } else {
             $db_slave->order('a.cid DESC');
         }
-        $session_id = session_id() . '_' . $global_config['sitekey'];
 
         $result = $db_slave->query($db_slave->sql());
         $comment_list_id = array();
@@ -58,13 +57,13 @@ function nv_comment_data($module, $area, $id, $allowed, $page, $sortcomm, $base_
                 $row['post_email'] = $row['email'];
                 $row['post_name'] = $row['first_name'];
             }
-            $row['check_like'] = md5($row['cid'] . '_' . $session_id);
+            $row['check_like'] = md5($row['cid'] . '_' . NV_CHECK_SESSION);
             $row['post_email'] = ($emailcomm) ? $row['post_email'] : '';
             $comment_array[$row['cid']] = $row;
         }
         if (! empty($comment_list_id)) {
             foreach ($comment_list_id as $cid) {
-                $comment_array[$cid]['subcomment'] = nv_comment_get_reply($cid, $module, $session_id, $sortcomm);
+                $comment_array[$cid]['subcomment'] = nv_comment_get_reply($cid, $module, NV_CHECK_SESSION, $sortcomm);
             }
             $result->closeCursor();
             unset($row, $result);

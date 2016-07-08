@@ -70,8 +70,6 @@ $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
 $lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai Tên đăng nhập hoặc Mật khẩu truy cập';
 $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công. Bây giờ hệ thống sẽ chuyển bạn đến khu vực Quản trị của site';
 $lang_global['incorrect_password'] = 'Mật khẩu sai';
-$lang_global['relogin_info'] = 'Bạn đã không online một thời gian dài. Hệ thống đòi hỏi bạn phải khai báo lại mật khẩu đăng nhập. Hãy điền mật khẩu vào ô trống dưới đây. Thao tác này chỉ được làm nhiều nhất %1$d lần.';
-$lang_global['relogin_error_info'] = '%1$s. Hãy điền lại mật khẩu vào ô trống dưới đây. Thao tác này chỉ được làm nhiều nhất %2$d lần nữa.';
 
 $lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$s giây';
 $lang_global['for_admin'] = 'Dành cho admin';

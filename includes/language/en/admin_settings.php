@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -202,6 +202,7 @@ $lang_module['note_ssl_modules'] = 'Each language will have different modules, c
 $lang_module['timezoneAuto'] = 'By computer of visitor';
 $lang_module['timezoneByCountry'] = 'By country of visitor';
 $lang_module['allow_switch_mobi_des'] = 'Allow to switch mobile, desktop theme';
+$lang_module['allow_theme_type'] = 'Allow theme type';
 $lang_module['ftp_auto_detect_root'] = 'Auto detection';
 $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detection the Remote path';
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';

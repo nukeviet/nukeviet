@@ -19,7 +19,7 @@ if (! (defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and $global_config
 
 if ($nv_Request->get_int('result', 'get', 0)) {
     $checksess = $nv_Request->get_title('checksess', 'get', '');
-    if ($checksess != md5($global_config['sitekey'] . session_id())) {
+    if ($checksess != NV_CHECK_SESSION) {
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         die();
     }
@@ -194,8 +194,8 @@ $xtpl = new XTemplate('add.tpl', NV_ROOTDIR . '/themes/' . $global_config['modul
 $xtpl->assign('INFO', $contents['info']);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
-$xtpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . md5($global_config['sitekey'] . session_id()));
-$xtpl->assign('FILTERSQL', nv_base64_encode($crypt->aes_encrypt($filtersql, md5($global_config['sitekey'] . $client_info['session_id']))));
+$xtpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . NV_CHECK_SESSION);
+$xtpl->assign('FILTERSQL', nv_base64_encode($crypt->aes_encrypt($filtersql, NV_CHECK_SESSION)));
 $xtpl->assign('ACTION', $contents['action']);
 
 if (isset($contents['editor'])) {

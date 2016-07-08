@@ -186,7 +186,45 @@ $(document).ready(function() {
 		$(".message_body").slideDown(1000);
 		return false;
 	});
+	
+	$("#topicid").select2({
+		language: "vi",
+		ajax: {
+	    url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&get_topic_json=1',
+	    	dataType: 'json',
+	    	delay: 250,
+	    	data: function (params) {
+	      		return {
+	      			q: params.term, // search term
+	      			page: params.page
+	      		};
+	      	},
+	    	processResults: function (data, params) {
+	    		params.page = params.page || 1;
+	    		return {
+	    			results: data,
+	    			pagination: {
+	    				more: (params.page * 30) < data.total_count
+	    			}
+	    		};
+	    	},
+		cache: true
+		},
+		escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+		minimumInputLength: 3,
+		templateResult: formatRepo, // omitted for brevity, see the source of this page
+		templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+	});
 });
+
+function formatRepo (repo) {
+	if (repo.loading) return repo.text;
+	return repo.title;
+}
+
+function formatRepoSelection (repo) {
+	return repo.title || repo.text;
+}
 
 function nv_add_element( idElment, key, value ){
    var html = "<span title=\"" + value + "\" class=\"uiToken removable\" ondblclick=\"$(this).remove();\">" + value + "<input type=\"hidden\" value=\"" + key + "\" name=\"" + idElment + "[]\" autocomplete=\"off\"><a onclick=\"$(this).parent().remove();\" href=\"javascript:void(0);\" class=\"remove uiCloseButton uiCloseButtonSmall\"></a></span>";

@@ -215,7 +215,7 @@ function nv_save_file_config_global()
             $content_config .= "\$global_config['" . $c_config_name . "']=" . $config_sso . ";\n";
         } elseif (in_array($c_config_name, $config_name_array)) {
             if (! empty($c_config_value)) {
-                $c_config_value = "'" . implode("','", array_map("trim", explode(',', $c_config_value))) . "'";
+                $c_config_value = "'" . implode("','", array_map('trim', explode(',', $c_config_value))) . "'";
             } else {
                 $c_config_value = '';
             }
@@ -232,7 +232,6 @@ function nv_save_file_config_global()
             }
         }
     }
-    $content_config .= "\$global_config['array_theme_type']=" . nv_var_export(array_filter(array_map('trim', explode(',', NV_THEME_TYPE)))) . ";\n";
 
     //allowed_html_tags
     if (! empty($allowed_html_tags)) {

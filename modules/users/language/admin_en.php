@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -229,9 +229,6 @@ $lang_module['ChangeConfigModule'] = 'Change module configuration';
 $lang_module['active_users'] = 'Activate members';
 $lang_module['unactive_users'] = 'Inactivates members';
 $lang_module['whoviewlistuser'] = 'Who can view a list of members';
-$lang_module['whoview_all'] = 'All';
-$lang_module['whoview_user'] = 'User';
-$lang_module['whoview_admin'] = 'Administrator';
 $lang_module['random_password'] = 'Random Password';
 $lang_module['show_password'] = 'Show password';
 $lang_module['usactive'] = 'Account status';
@@ -258,7 +255,6 @@ $lang_module['access_groups'] = 'Group manage';
 $lang_module['access_caption_leader'] = 'User configuration module powers of the leader';
 $lang_module['access_groups_add'] = 'Add members to the group';
 $lang_module['access_groups_del'] = 'Remove member from group';
-
 $lang_module['fields'] = 'Custom User Fields';
 $lang_module['captionform_add'] = 'Add User Fields';
 $lang_module['captionform_edit'] = 'Edit User Fields';
@@ -357,7 +353,7 @@ $lang_module['read_error_memory_limit'] = 'Error: The system can not read the da
 $lang_module['read_ignore'] = 'Read the incorrect data standards';
 $lang_module['update_field'] = 'Upgrade site';
 $lang_module['update_field_oncreate'] = 'Once created';
-$lang_module['update_field_onlogin'] = 'Site Update Newsletter';
+$lang_module['update_field_onlogin'] = 'On login';
 $lang_module['cas_config'] = 'Set the CAS server';
 $lang_module['cas_config_hostname'] = 'Hostname';
 $lang_module['cas_config_hostname_info'] = 'Hostname of the CAS server	<br />eg: cas.nukeviet.vn';
