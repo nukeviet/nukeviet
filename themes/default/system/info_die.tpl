@@ -10,7 +10,7 @@
 		<link rel="shortcut icon" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/favicon.ico" />
 		<link rel="apple-touch-icon" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/apple-touch-icon.png" />
 		<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/bootstrap.min.css" rel="stylesheet" />
-		<link href="{NV_BASE_SITEURL}themes/default/css/font-awesome.min.css" rel="stylesheet" />
+		<link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/css/font-awesome.min.css" rel="stylesheet" />
 		<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.css" rel="stylesheet" />
 		<link href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/style.responsive.css" rel="stylesheet" />
         <script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/{LANG.Content_Language}.js"></script>
