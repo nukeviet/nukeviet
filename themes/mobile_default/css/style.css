@@ -1152,7 +1152,7 @@ header.header-up {
 /* WinHelp */
 
 #winHelp {
-    position:fixed;
+    position:absolute;
     top:0;
     left:0;
     bottom:0;
@@ -1164,7 +1164,7 @@ header.header-up {
 }
 
 #winHelp .winHelp {
-    position:fixed;
+    position:absolute;
     top:0;
     left:0;
     bottom:0;
@@ -1175,7 +1175,7 @@ header.header-up {
     z-index:12;
     color:#333;
     box-shadow:0 2px 10px rgba(0,0,0,0.5);
-    overflow-y: auto;
+    overflow: scroll;
 }
 
 #winHelp .winHelp a {

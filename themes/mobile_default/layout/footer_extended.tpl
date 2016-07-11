@@ -28,21 +28,23 @@
 <!-- Help window -->
 <div id="winHelp">
     <div class="winHelp">
-        <div class="logo-small padding"></div>
-        [MENU_FOOTER]
-        [COMPANY_INFO]
-        <div class="padding margin-bottom-lg">
-            <!-- BEGIN: theme_type -->
-            <div class="theme-change margin-bottom-lg">
-                {LANG.theme_type_chose2}:
-                <!-- BEGIN: loop -->
-                    <!-- BEGIN: other -->
-                    <span><a href="{STHEME_TYPE}" rel="nofollow" title="{STHEME_INFO}">{STHEME_TITLE}</a></span>
-                    <!-- END: other -->
-                <!-- END: loop -->
+        <div class="clearfix">
+            <div class="logo-small padding"></div>
+            [MENU_FOOTER]
+            [COMPANY_INFO]
+            <div class="padding margin-bottom-lg">
+                <!-- BEGIN: theme_type -->
+                <div class="theme-change margin-bottom-lg">
+                    {LANG.theme_type_chose2}:
+                    <!-- BEGIN: loop -->
+                        <!-- BEGIN: other -->
+                        <span><a href="{STHEME_TYPE}" rel="nofollow" title="{STHEME_INFO}">{STHEME_TITLE}</a></span>
+                        <!-- END: other -->
+                    <!-- END: loop -->
+                </div>
+                <!-- END: theme_type -->
+                [FOOTER_SITE]
             </div>
-            <!-- END: theme_type -->
-            [FOOTER_SITE]
         </div>
     </div>
 </div>
