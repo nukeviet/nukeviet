@@ -1175,7 +1175,7 @@ header.header-up {
     z-index:12;
     color:#333;
     box-shadow:0 2px 10px rgba(0,0,0,0.5);
-    overflow: scroll;
+    overflow-y: auto;
 }
 
 #winHelp .winHelp a {
