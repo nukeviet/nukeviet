@@ -12,8 +12,12 @@
                     </div>
                     <div class="text-right">
                         <div class="fr">
-                        [SOCIAL_ICONS]
-                        <a class="bttop pointer"><em class="fa fa-refresh fa-lg mbt"></em></a>
+                            <div class="fl">
+                                [SOCIAL_ICONS]
+                            </div>
+                            <div class="fr">
+                                <a class="bttop pointer"><em class="fa fa-refresh fa-lg mbt"></em></a>
+                            </div>
                         </div>
                     </div>
                 </div>

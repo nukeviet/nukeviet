@@ -743,7 +743,7 @@ a.btn {
 /* Header */
 
 header.first-child {
-    position:fixed !important;
+    position:fixed;
     top:0;
     left:0;
     width:100%;
