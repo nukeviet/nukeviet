@@ -23,9 +23,14 @@ class Blocker
 {
     const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
     const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
+    
+    const LOGIN_RULE_NUMBER = 0;
+    const LOGIN_RULE_TIMERANGE = 1;
+    const LOGIN_RULE_END = 2;
 
     public $is_flooded;
     public $flood_block_time;
+    public $login_block_end;
 
     private $logs_path;
     private $ip_addr;
@@ -35,6 +40,7 @@ class Blocker
         300 => 50, // rule 3 - maximum 50 requests in 300 secs
         3600 => 200 // rule 4 - maximum 200 requests in 3600 secs
     );
+    private $login_rules = array(5, 5, 1440);
 
     /**
      * Blocker::__construct()
@@ -88,13 +94,8 @@ class Blocker
         if (!empty($rules)) {
             $this->flood_rules = $rules;
         }
-
-        $info = array();
-        $logfile = $this->logs_path . $this->ip_addr . '.' . NV_LOGS_EXT;
-        if (file_exists($logfile)) {
-            $info = unserialize(file_get_contents($logfile));
-        }
-
+        
+        $info = $this->_get_info();
         foreach ($this->flood_rules as $interval => $limit) {
             if (!isset($info['access'][$interval])) {
                 $info['access'][$interval]['time'] = NV_CURRENTTIME;
@@ -115,7 +116,130 @@ class Blocker
         }
 
         if (empty($this->is_flooded)) {
-            file_put_contents($logfile, serialize($info));
+            $this->_save_info($info);
         }
+    }
+    
+    /**
+     * Blocker::trackLogin()
+     * 
+     * @param mixed $rules
+     * @return void
+     */
+    public function trackLogin($rules = array())
+    {
+        if (!empty($rules)) {
+            $this->login_rules = $rules;
+        }
+    }
+    
+    /**
+     * Blocker::is_blocklogin()
+     * 
+     * @param mixed $loginname
+     * @return
+     */
+    public function is_blocklogin($loginname)
+    {
+        $blocked = false;
+        
+        if (!empty($loginname)) {
+            $_loginname = md5($loginname);
+            $info = $this->_get_info();
+            
+            if (isset($info['login'][$_loginname]) and $info['login'][$_loginname]['count'] >= $this->login_rules[Blocker::LOGIN_RULE_NUMBER]) {
+                $this->login_block_end = $info['login'][$_loginname]['lasttime'] + ($this->login_rules[Blocker::LOGIN_RULE_END] * 60);
+                if ($this->login_block_end > NV_CURRENTTIME) {
+                    $blocked = true;
+                }
+            }
+        }
+        
+        return $blocked;
+    }
+    
+    /**
+     * Blocker::set_loginFailed()
+     * 
+     * @param mixed $loginname
+     * @param integer $time
+     * @return void
+     */
+    public function set_loginFailed($loginname, $time = 0)
+    {
+        if (empty($time)) {
+            $time = time();
+        }
+        
+        if (!empty($loginname)) {
+            $loginname = md5($loginname);
+            $info = $this->_get_info();
+            
+            if (!isset($info['login'][$loginname]) or ($time - $info['login'][$loginname]['starttime']) > ($this->login_rules[Blocker::LOGIN_RULE_TIMERANGE] * 60)) {
+                $info['login'][$loginname] = array();
+                $info['login'][$loginname]['count'] = 0;
+                $info['login'][$loginname]['starttime'] = $time;
+                $info['login'][$loginname]['lasttime'] = 0;
+            }
+            
+            $info['login'][$loginname]['count'] ++;
+            $info['login'][$loginname]['lasttime'] = $time;
+            
+            $this->_save_info($info);
+        }
+    }
+    
+    /**
+     * Blocker::reset_trackLogin()
+     * 
+     * @param mixed $loginname
+     * @return void
+     */
+    public function reset_trackLogin($loginname)
+    {
+        if (!empty($loginname)) {
+            $loginname = md5($loginname);
+            $info = $this->_get_info();
+            unset($info['login'][$loginname]);
+            $this->_save_info($info);
+        }
+    }
+    
+    /**
+     * Blocker::_get_info()
+     * 
+     * @return
+     */
+    private function _get_info()
+    {
+        $info = array();
+        $logfile = $this->_get_logfile();
+        if (file_exists($logfile)) {
+            $info = unserialize(file_get_contents($logfile));
+        }
+        
+        return $info;
+    }
+    
+    /**
+     * Blocker::_save_info()
+     * 
+     * @param mixed $info
+     * @return
+     */
+    private function _save_info($info)
+    {
+        $logfile = $this->_get_logfile();
+        return file_put_contents($logfile, serialize($info));
+    }
+    
+    /**
+     * Blocker::_get_logfile()
+     * 
+     * @return
+     */
+    private function _get_logfile()
+    {
+        return $this->logs_path . $this->ip_addr . '.' . NV_LOGS_EXT;
     }
 }

@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE') or ! defined('NV_IS_MODADMIN')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE') or !defined('NV_IS_MODADMIN')) {
     die('Stop!!!');
 }
 
@@ -54,7 +54,7 @@ function nv_save_file_banip()
         }
     }
 
-    if (! $content_config_site and ! $content_config_admin) {
+    if (!$content_config_site and !$content_config_admin) {
         nv_deletefile(NV_ROOTDIR . '/' . NV_DATADIR . '/banip.php');
         return true;
     }
@@ -95,7 +95,7 @@ $captcha_array = array(
     7 => $lang_module['captcha_7']
 );
 
-$captcha_type_array = array( 0 => $lang_module['captcha_type_0'], 1 => $lang_module['captcha_type_1'] );
+$captcha_type_array = array(0 => $lang_module['captcha_type_0'], 1 => $lang_module['captcha_type_1']);
 
 $errormess = '';
 if ($nv_Request->isset_request('submitcaptcha', 'post')) {
@@ -114,11 +114,22 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     if (isset($captcha_type_array[$captcha_type])) {
         $array_config_global['captcha_type'] = $captcha_type;
     }
-    $array_config_global['str_referer_blocker'] = ( int )$nv_Request->get_bool('str_referer_blocker', 'post');
-    $array_config_global['is_flood_blocker'] = ( int )$nv_Request->get_bool('is_flood_blocker', 'post');
+    $array_config_global['str_referer_blocker'] = (int)$nv_Request->get_bool('str_referer_blocker', 'post');
+    $array_config_global['is_flood_blocker'] = (int)$nv_Request->get_bool('is_flood_blocker', 'post');
     $array_config_global['max_requests_60'] = $nv_Request->get_int('max_requests_60', 'post');
     $array_config_global['max_requests_300'] = $nv_Request->get_int('max_requests_300', 'post');
-
+    $array_config_global['is_login_blocker'] = (int)$nv_Request->get_bool('is_login_blocker', 'post', false);
+    $array_config_global['login_number_tracking'] = $nv_Request->get_int('login_number_tracking', 'post', 0);
+    $array_config_global['login_time_tracking'] = $nv_Request->get_int('login_time_tracking', 'post', 0);
+    $array_config_global['login_time_ban'] = $nv_Request->get_int('login_time_ban', 'post', 0);
+    
+    if ($array_config_global['login_number_tracking'] < 1) {
+        $array_config_global['login_number_tracking'] = 5;
+    }
+    if ($array_config_global['login_time_tracking'] <= 0) {
+        $array_config_global['login_time_tracking'] = 5;
+    }
+    
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
     foreach ($array_config_global as $config_name => $config_value) {
         $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR, 30);
@@ -127,18 +138,18 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     }
 
     $array_config_define = array();
-    $array_config_define['nv_anti_agent'] = ( int )$nv_Request->get_bool('nv_anti_agent', 'post');
+    $array_config_define['nv_anti_agent'] = (int)$nv_Request->get_bool('nv_anti_agent', 'post');
     $array_config_define['nv_gfx_num'] = $nv_Request->get_int('nv_gfx_num', 'post');
     $array_config_define['nv_gfx_width'] = $nv_Request->get_int('nv_gfx_width', 'post');
     $array_config_define['nv_gfx_height'] = $nv_Request->get_int('nv_gfx_height', 'post');
-    $array_config_define['nv_anti_iframe'] = ( int )$nv_Request->get_bool('nv_anti_iframe', 'post');
+    $array_config_define['nv_anti_iframe'] = (int)$nv_Request->get_bool('nv_anti_iframe', 'post');
     $variable = $nv_Request->get_string('nv_allowed_html_tags', 'post');
     $variable = str_replace(';', ',', strtolower($variable));
     $variable = explode(',', $variable);
     $nv_allowed_html_tags = array();
     foreach ($variable as $value) {
         $value = trim($value);
-        if (preg_match('/^[a-z0-9]+$/', $value) and ! in_array($value, $nv_allowed_html_tags)) {
+        if (preg_match('/^[a-z0-9]+$/', $value) and !in_array($value, $nv_allowed_html_tags)) {
             $nv_allowed_html_tags[] = $value;
         }
     }
@@ -160,6 +171,7 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
 
 $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
+$xtpl->assign('GLANG', $lang_global);
 
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
@@ -174,7 +186,7 @@ $contents = '';
 $cid = $nv_Request->get_int('id', 'get');
 $del = $nv_Request->get_int('del', 'get');
 
-if (! empty($del) and ! empty($cid)) {
+if (!empty($del) and !empty($cid)) {
     $db->query('DELETE FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid);
     nv_save_file_banip();
 }
@@ -185,7 +197,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $area = $nv_Request->get_int('area', 'post', 0);
     $mask = $nv_Request->get_int('mask', 'post', 0);
 
-    if (empty($ip) or ! $ips->nv_validip($ip)) {
+    if (empty($ip) or !$ips->nv_validip($ip)) {
         $error[] = $lang_module['banip_error_validip'];
     }
 
@@ -217,21 +229,21 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
             $sth->execute();
         } else {
-        	$result = $db->query('DELETE FROM ' . $db_config['prefix'] . '_banip WHERE ip=' . $db->quote($ip));
-			if ($result) {
-	            $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_banip ( ip, mask, area, begintime, endtime, notice) VALUES ( :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )');
-	            $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
-	            $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
-	            $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
-	            $sth->execute();
-			}
+            $result = $db->query('DELETE FROM ' . $db_config['prefix'] . '_banip WHERE ip=' . $db->quote($ip));
+            if ($result) {
+                $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_banip ( ip, mask, area, begintime, endtime, notice) VALUES ( :ip, :mask, ' . $area . ', ' . $begintime . ', ' . $endtime . ', :notice )');
+                $sth->bindParam(':ip', $ip, PDO::PARAM_STR);
+                $sth->bindParam(':mask', $mask, PDO::PARAM_STR);
+                $sth->bindParam(':notice', $notice, PDO::PARAM_STR);
+                $sth->execute();
+            }
         }
 
         $save = nv_save_file_banip();
 
         if ($save !== true) {
             $xtpl->assign('MESSAGE', sprintf($lang_module['banip_error_write'], NV_DATADIR, NV_DATADIR));
-            $xtpl->assign('CODE', str_replace(array( '\n', '\t' ), array( "<br />", "&nbsp;&nbsp;&nbsp;&nbsp;" ), nv_htmlspecialchars($save)));
+            $xtpl->assign('CODE', str_replace(array('\n', '\t'), array("<br />", "&nbsp;&nbsp;&nbsp;&nbsp;"), nv_htmlspecialchars($save)));
             $xtpl->parse('main.manual_save');
         } else {
             Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
@@ -257,6 +269,11 @@ $xtpl->assign('IS_FLOOD_BLOCKER', ($global_config['is_flood_blocker']) ? ' check
 $xtpl->assign('MAX_REQUESTS_60', $global_config['max_requests_60']);
 $xtpl->assign('MAX_REQUESTS_300', $global_config['max_requests_300']);
 $xtpl->assign('ANTI_IFRAME', (NV_ANTI_IFRAME) ? ' checked="checked"' : '');
+
+$xtpl->assign('IS_LOGIN_BLOCKER', ($global_config['is_login_blocker']) ? ' checked="checked"' : '');
+$xtpl->assign('LOGIN_NUMBER_TRACKING', $global_config['login_number_tracking']);
+$xtpl->assign('LOGIN_TIME_TRACKING', $global_config['login_time_tracking']);
+$xtpl->assign('LOGIN_TIME_BAN', $global_config['login_time_ban']);
 
 foreach ($captcha_array as $gfx_chk_i => $gfx_chk_lang) {
     $array = array(
@@ -311,8 +328,8 @@ while (list($dbid, $dbip, $dbmask, $dbarea, $dbbegintime, $dbendtime) = $result-
         'dbip' => $dbip,
         'dbmask' => $mask_text_array[$dbmask],
         'dbarea' => $banip_area_array[$dbarea],
-        'dbbegintime' => ! empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
-        'dbendtime' => ! empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
+        'dbbegintime' => !empty($dbbegintime) ? date('d/m/Y', $dbbegintime) : '',
+        'dbendtime' => !empty($dbendtime) ? date('d/m/Y', $dbendtime) : $lang_module['banip_nolimit'],
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;id=' . $dbid,
         'url_delete' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;del=1&amp;id=' . $dbid
     ));
@@ -323,7 +340,7 @@ if ($i) {
     $xtpl->parse('main.listip');
 }
 
-if (! empty($cid)) {
+if (!empty($cid)) {
     list($id, $ip, $mask, $area, $begintime, $endtime, $notice) = $db->query('SELECT id, ip, mask, area, begintime, endtime, notice FROM ' . $db_config['prefix'] . '_banip WHERE id=' . $cid)->fetch(3);
     $lang_module['banip_add'] = $lang_module['banip_edit'];
 }
@@ -341,8 +358,8 @@ $xtpl->assign('DATA', array(
     'selected_area_1' => ($area == 1) ? ' selected="selected"' : '',
     'selected_area_2' => ($area == 2) ? ' selected="selected"' : '',
     'selected_area_3' => ($area == 3) ? ' selected="selected"' : '',
-    'begintime' => ! empty($begintime) ? date('d/m/Y', $begintime) : '',
-    'endtime' => ! empty($endtime) ? date('d/m/Y', $endtime) : '',
+    'begintime' => !empty($begintime) ? date('d/m/Y', $begintime) : '',
+    'endtime' => !empty($endtime) ? date('d/m/Y', $endtime) : '',
     'endtime' => $notice
 ));
 
