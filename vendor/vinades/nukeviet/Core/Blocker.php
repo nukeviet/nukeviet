@@ -7,17 +7,29 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3/27/2010 0:30
  */
+
 namespace NukeViet\Core;
 
-class FloodBlocker
+/**
+ * Blocker
+ * 
+ * @package NUKEVIET 4 CORE
+ * @author VINADES.,JSC (contact@vinades.vn)
+ * @copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @version 4.0
+ * @access public
+ */
+class Blocker
 {
     const INCORRECT_TEMPRORARY_DIRECTORY = 'Incorrect temprorary directory specified';
     const INCORRECT_IP_ADDRESS = 'Incorrect IP address specified';
-    public $is_blocker;
-    public $time_blocker;
+
+    public $is_flooded;
+    public $flood_block_time;
+
     private $logs_path;
     private $ip_addr;
-    private $rules = array(
+    private $flood_rules = array(
         10 => 10, // rule 1 - maximum 10 requests in 10 secs
         60 => 30, // rule 2 - maximum 30 requests in 60 secs
         300 => 50, // rule 3 - maximum 50 requests in 300 secs
@@ -25,7 +37,7 @@ class FloodBlocker
     );
 
     /**
-     * FloodBlocker::__construct()
+     * Blocker::__construct()
      *
      * @param mixed $logs_path
      * @param mixed $rules
@@ -34,8 +46,8 @@ class FloodBlocker
      */
     public function __construct($logs_path, $rules = array(), $ip = '')
     {
-        if (! is_dir($logs_path)) {
-            trigger_error(FloodBlocker::INCORRECT_TEMPRORARY_DIRECTORY, E_USER_ERROR);
+        if (!is_dir($logs_path)) {
+            trigger_error(Blocker::INCORRECT_TEMPRORARY_DIRECTORY, E_USER_ERROR);
         }
         if (substr($logs_path, -1) != '/') {
             $logs_path .= '/';
@@ -57,54 +69,52 @@ class FloodBlocker
             }
             $ip2long = base_convert($r_ip, 2, 10);
         }
-        if ($ip2long == - 1 or $ip2long === false) {
-            trigger_error(FloodBlocker::INCORRECT_IP_ADDRESS, E_USER_ERROR);
+        if ($ip2long == -1 or $ip2long === false) {
+            trigger_error(Blocker::INCORRECT_IP_ADDRESS, E_USER_ERROR);
         }
 
         $this->logs_path = $logs_path;
         $this->ip_addr = $ip2long;
-        if (! empty($rules)) {
-            $this->rules = $rules;
-        }
-        $this->is_blocker = false;
-        $this->time_blocker = 0;
-
-        $this->CheckFlood();
     }
 
     /**
-     * FloodBlocker::CheckFlood()
-     *
-     * @return
+     * Blocker::trackFlood()
+     * 
+     * @param mixed $rules
+     * @return void
      */
-    private function CheckFlood()
+    public function trackFlood($rules = array())
     {
+        if (!empty($rules)) {
+            $this->flood_rules = $rules;
+        }
+
         $info = array();
         $logfile = $this->logs_path . $this->ip_addr . '.' . NV_LOGS_EXT;
         if (file_exists($logfile)) {
             $info = unserialize(file_get_contents($logfile));
         }
 
-        foreach ($this->rules as $interval => $limit) {
-            if (! isset($info[$interval])) {
-                $info[$interval]['time'] = NV_CURRENTTIME;
-                $info[$interval]['count'] = 0;
+        foreach ($this->flood_rules as $interval => $limit) {
+            if (!isset($info['access'][$interval])) {
+                $info['access'][$interval]['time'] = NV_CURRENTTIME;
+                $info['access'][$interval]['count'] = 0;
             }
 
-            ++$info[$interval]['count'];
+            ++$info['access'][$interval]['count'];
 
-            if (NV_CURRENTTIME - $info[$interval]['time'] > $interval) {
-                $info[$interval]['count'] = 1;
-                $info[$interval]['time'] = NV_CURRENTTIME;
+            if (NV_CURRENTTIME - $info['access'][$interval]['time'] > $interval) {
+                $info['access'][$interval]['count'] = 1;
+                $info['access'][$interval]['time'] = NV_CURRENTTIME;
             }
 
-            if ($info[$interval]['count'] > $limit) {
-                $this->time_blocker = 1 + (NV_CURRENTTIME - $info[$interval]['time'] - $interval) * - 1;
-                $this->is_blocker = true;
+            if ($info['access'][$interval]['count'] > $limit) {
+                $this->flood_block_time = 1 + (NV_CURRENTTIME - $info['access'][$interval]['time'] - $interval) * -1;
+                $this->is_flooded = true;
             }
         }
 
-        if (empty($this->is_blocker)) {
+        if (empty($this->is_flooded)) {
             file_put_contents($logfile, serialize($info));
         }
     }
