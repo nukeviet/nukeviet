@@ -67,6 +67,10 @@
 					<td><input type="checkbox" value="1" name="showhometext"{SHOWHOMETEXT}/></td>
 				</tr>
 				<tr>
+					<th>{LANG.htmlhometext}</th>
+					<td><input type="checkbox" value="1" name="htmlhometext"{HTMLHOMETEXT}/></td>
+				</tr>
+				<tr>
 					<th>{LANG.socialbutton}</th>
 					<td><input type="checkbox" value="1" name="socialbutton"{SOCIALBUTTON}/></td>
 				</tr>

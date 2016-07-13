@@ -39,7 +39,7 @@
 							<!-- END: comment -->
 						</ul>
 					</div>
-					<p>{CONTENT.hometext}</p>
+					{CONTENT.hometext}
 				</div>
 
 				<!-- BEGIN: related -->
@@ -47,7 +47,7 @@
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">
-							<a class="show h4" href="{OTHER.link}" title="{OTHER.title}" <!-- BEGIN: tooltip -->data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip -->>{OTHER.title}</a>
+							<a class="show h4" href="{OTHER.link}" title="{OTHER.title}" <!-- BEGIN: tooltip -->data-content="{OTHER.hometext_clean}" data-img="{OTHER.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip -->>{OTHER.title}</a>
 						</li>
 						<!-- END: loop -->
 					</ul>

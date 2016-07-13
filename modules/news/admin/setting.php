@@ -36,6 +36,7 @@ if (!empty($savesetting)) {
     $array_config['tooltip_position'] = $nv_Request->get_string('tooltip_position', 'post', '');
     $array_config['tooltip_length'] = $nv_Request->get_int('tooltip_length', 'post', 0);
     $array_config['showhometext'] = $nv_Request->get_int('showhometext', 'post', 0);
+    $array_config['htmlhometext'] = $nv_Request->get_int('htmlhometext', 'post', 0);
     
     $array_config['facebookappid'] = $nv_Request->get_title('facebookappid', 'post', '');
     $array_config['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
@@ -138,6 +139,7 @@ for ($i = 0; $i <= 6; ++$i) {
 
 $xtpl->assign('SHOWTOOLTIP', $module_config[$module_name]['showtooltip'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '');
+$xtpl->assign('HTMLHOMETEXT', $module_config[$module_name]['htmlhometext'] ? ' checked="checked"' : '');
 $xtpl->assign('SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '');
 $xtpl->assign('TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '');
 $xtpl->assign('ALIAS_LOWER', $module_config[$module_name]['alias_lower'] ? ' checked="checked"' : '');

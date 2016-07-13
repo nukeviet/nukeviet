@@ -31,9 +31,9 @@
 					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {NEWSTOP.hitscm}</li>
 				</ul>
 			</div>
-			<p class="text-justify">
+			<div class="text-justify">
 				{NEWSTOP.hometext}
-			</p>
+			</div>
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
 				{ADMINLINK}
@@ -76,9 +76,9 @@
 			<!-- BEGIN: image -->
 			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
-			<p class="text-justify">
+			<div class="text-justify">
 				{CONTENT.hometext}
-			</p>
+			</div>
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
 				{ADMINLINK}
