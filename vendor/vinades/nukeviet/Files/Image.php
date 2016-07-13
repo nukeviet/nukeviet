@@ -186,7 +186,7 @@ class Image
         if (! is_readable($this->filename)) {
             return self::ERROR_IMAGE2;
         }
-        if ($this->fileinfo['src'] == '' || $this->fileinfo['width'] == 0 || $this->fileinfo['height'] == 0 || $this->fileinfo['mime'] == '') {
+        if ($this->fileinfo['src'] == '' or $this->fileinfo['width'] == 0 or $this->fileinfo['height'] == 0 or $this->fileinfo['mime'] == '') {
             return self::ERROR_IMAGE3;
         }
         if (! in_array($this->fileinfo['type'], array( IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP ))) {
@@ -411,7 +411,7 @@ class Image
             if ($maxY < 0) {
                 $maxY = 0;
             }
-            if (($maxX != 0 || $maxY != 0) and ($maxX != $this->create_Image_info['width'] || $maxY != $this->create_Image_info['height'])) {
+            if (($maxX != 0 or $maxY != 0) and ($maxX != $this->create_Image_info['width'] or $maxY != $this->create_Image_info['height'])) {
                 if ($maxX >= $maxY) {
                     $newwidth = $maxX;
                     $newheight = ceil($maxX * $this->create_Image_info['height'] / $this->create_Image_info['width']);
@@ -485,7 +485,7 @@ class Image
             if ($Y > $this->gmaxY and $this->gmaxY != 0) {
                 $Y = $this->gmaxY;
             }
-            if ($X != $this->create_Image_info['width'] || $Y != $this->create_Image_info['height']) {
+            if ($X != $this->create_Image_info['width'] or $Y != $this->create_Image_info['height']) {
                 if ($X >= $Y) {
                     $newwidth = $X;
                     $newheight = ceil($X * $this->create_Image_info['height'] / $this->create_Image_info['width']);
@@ -555,19 +555,19 @@ class Image
             $leftY = intval($leftY);
             $newwidth = intval($newwidth);
             $newheight = intval($newheight);
-            if ($leftX < 0 || $leftX >= $this->create_Image_info['width']) {
+            if ($leftX < 0 or $leftX >= $this->create_Image_info['width']) {
                 $leftX = 0;
             }
-            if ($leftY < 0 || $leftY >= $this->create_Image_info['height']) {
+            if ($leftY < 0 or $leftY >= $this->create_Image_info['height']) {
                 $leftY = 0;
             }
-            if ($newwidth <= 0 || ($newwidth + $leftX > $this->create_Image_info['width'])) {
+            if ($newwidth <= 0 or ($newwidth + $leftX > $this->create_Image_info['width'])) {
                 $newwidth = $this->create_Image_info['width'] - $leftX;
             }
-            if ($newheight <= 0 || ($newheight + $leftY > $this->create_Image_info['height'])) {
+            if ($newheight <= 0 or ($newheight + $leftY > $this->create_Image_info['height'])) {
                 $newheight = $this->create_Image_info['height'] - $leftY;
             }
-            if ($newwidth != $this->create_Image_info['width'] || $newheight != $this->create_Image_info['height']) {
+            if ($newwidth != $this->create_Image_info['width'] or $newheight != $this->create_Image_info['height']) {
                 $workingImage = function_exists('ImageCreateTrueColor') ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);
                 if ($workingImage != false) {
                     $this->is_createWorkingImage = true;
@@ -616,13 +616,13 @@ class Image
 
             $newwidth = intval($newwidth);
             $newheight = intval($newheight);
-            if ($newwidth <= 0 || $newwidth > $this->create_Image_info['width']) {
+            if ($newwidth <= 0 or $newwidth > $this->create_Image_info['width']) {
                 $newwidth = $this->create_Image_info['width'];
             }
-            if ($newheight <= 0 || $newheight > $this->create_Image_info['height']) {
+            if ($newheight <= 0 or $newheight > $this->create_Image_info['height']) {
                 $newheight = $this->create_Image_info['height'];
             }
-            if ($newwidth < $this->create_Image_info['width'] || $newheight < $this->create_Image_info['height']) {
+            if ($newwidth < $this->create_Image_info['width'] or $newheight < $this->create_Image_info['height']) {
                 $leftX = ($this->create_Image_info['width'] - $newwidth) / 2;
                 $leftY = ($this->create_Image_info['height'] - $newheight) / 2;
                 $workingImage = function_exists('ImageCreateTrueColor') ? ImageCreateTrueColor($newwidth, $newheight) : ImageCreate($newwidth, $newheight);

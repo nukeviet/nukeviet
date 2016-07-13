@@ -337,7 +337,7 @@ function nv_comment_module_data($module, $comment_array, $is_delete)
             }
             $comment_array_i['post_time'] = nv_date('d/m/Y H:i', $comment_array_i['post_time']);
 
-            if (! empty($comment_array_i['photo']) && file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
+            if (! empty($comment_array_i['photo']) and file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
                 $comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
             } elseif (is_file(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png')) {
                 $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';
@@ -389,7 +389,7 @@ function nv_comment_module_data_reply($module, $comment_array, $is_delete)
         }
         $comment_array_i['post_time'] = nv_date('d/m/Y H:i', $comment_array_i['post_time']);
 
-        if (! empty($comment_array_i['photo']) && file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
+        if (! empty($comment_array_i['photo']) and file_exists(NV_ROOTDIR . '/' . $comment_array_i['photo'])) {
             $comment_array_i['photo'] = NV_BASE_SITEURL . $comment_array_i['photo'];
         } else {
             $comment_array_i['photo'] = NV_BASE_SITEURL . 'themes/' . $global_config['module_theme'] . '/images/users/no_avatar.png';

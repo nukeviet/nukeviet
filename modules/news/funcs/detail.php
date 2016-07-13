@@ -18,6 +18,7 @@ $publtime = 0;
 if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $query = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id);
     $news_contents = $query->fetch();
+
     if ($news_contents['id'] > 0) {
         $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
         if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
@@ -31,7 +32,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $canonicalUrl = $base_url_rewrite;
         }
 
-        $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
+        $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
         $news_contents = array_merge($news_contents, $body_contents);
         unset($body_contents);
 
@@ -134,7 +135,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             $news_contents['source'] = '<a title="' . $sourcetext . '" rel="nofollow" href="' . $news_contents['sourcetext'] . '">' . $source_link . '</a>'; // Hiển thị link của nguồn tin
         } elseif ($module_config[$module_name]['config_source'] == 3) {
             $news_contents['source'] = '<a title="' . $sourcetext . '" href="' . $news_contents['sourcetext'] . '">' . $source_link . '</a>'; // Hiển thị link của nguồn tin
-        } elseif ($module_config[$module_name]['config_source'] == 2 && ! empty($source_logo)) {
+        } elseif ($module_config[$module_name]['config_source'] == 2 and ! empty($source_logo)) {
             $news_contents['source'] = '<img width="100px" src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $source_logo . '">';
         }
     }
@@ -322,9 +323,9 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
     $id_profile_googleplus = $news_contents['gid'];
 
-    $page_title = $news_contents['title'];
-    $key_words = implode(', ', $key_words);
-    $description = $news_contents['hometext'];
+    $page_title = empty($news_contents['titlesite']) ? $news_contents['title'] : $news_contents['titlesite'];
+    $key_words = implode(',', $key_words);
+    $description = empty($news_contents['description']) ? nv_clean60(strip_tags($news_contents['hometext']), 160) : $news_contents['description'];
 } else {
     $contents = no_permission($global_array_cat[$catid]['groups_view']);
 }

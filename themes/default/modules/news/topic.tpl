@@ -21,9 +21,9 @@
 		<p>
 			<em class="fa fa-clock-o">&nbsp;</em><em>{TIME} {DATE}</em>
 		</p>
-		<p class="text-justify">
+		<div class="text-justify">
 			{TOPIC.hometext}
-		</p>
+		</div>
 		<!-- BEGIN: adminlink -->
 		<p class="text-right">
 			{ADMINLINK}

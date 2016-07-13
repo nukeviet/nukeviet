@@ -37,9 +37,7 @@
 					<!-- END: comment -->
 				</ul>
 			</div>
-			<p>
-				{CONTENT.hometext}
-			</p>
+			{CONTENT.hometext}
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
 				{ADMINLINK}
@@ -69,9 +67,7 @@
 					<!-- END: comment -->
 				</ul>
 			</div>
-			<p>
-				{CONTENT.hometext}
-			</p>
+			{CONTENT.hometext}
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
 				{ADMINLINK}

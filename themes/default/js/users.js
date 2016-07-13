@@ -215,10 +215,10 @@ function login_validForm(a) {
                 $("[type=submit]", a).prop("disabled", !1)
             }, 1E3)) : ($(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function() {
                 if( "undefined" != typeof d.redirect && "" != d.redirect){
-			         window.location.href = d.redirect;
-			    }else{
-			         $('#sitemodal').modal('hide');
-			    }
+                     window.location.href = d.redirect;
+                }else{
+                     $('#sitemodal').modal('hide');
+                }
             }, 3E3))
         }
     }));
@@ -561,3 +561,25 @@ UAV.init = function() {
         return UAV.common.submit();
     });
 };
+
+$(document).ready(function() {
+    // Delete user handler
+    $('[data-toggle="admindeluser"]').click(function(e) {
+        e.preventDefault();
+        var data = $(this).data();
+        if (confirm(nv_is_del_confirm[0])) {
+            $.post(data.link, 'userid=' + data.userid, function(res) {
+                if (res == 'OK') {
+                    window.location.href = data.back;
+                } else {
+                    var r_split = res.split("_");
+                    if (r_split[0] == 'ERROR') {
+                        alert(r_split[1]);
+                    } else {
+                        alert(nv_is_del_confirm[2]);
+                    }
+                }
+            });
+        }
+    });
+});

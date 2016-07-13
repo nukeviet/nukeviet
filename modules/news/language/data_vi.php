@@ -60,7 +60,7 @@ $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_d
 $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_cat (catid, parentid, title, titlesite, alias, description, descriptionhtml, image, viewdescription, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, keywords, admins, add_time, edit_time, groups_view) VALUES (12, 1, 'Bản tin nội bộ', '', 'Ban-tin-noi-bo', '', '', '', 0, 2, 3, 1, 'viewcat_page_new', 0, '', 1, 4, '2', '', '', 1274987902, 1274987902, '6')");
 
 // News: bodyhtml, bodytext
-$sth_detail = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail VALUES (:id, :bodyhtml, :sourcetext, 2, 0, 1, 1, 1, 0)");
+$sth_detail = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (:id, :bodyhtml, :sourcetext, 2, 0, 1, 1, 1, 0)");
 
 $id = 1;
 list ($homeimgfile, $homeimgthumb) = nv_news_check_image_exit('nangly.jpg', $module_upload);

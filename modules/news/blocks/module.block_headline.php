@@ -148,7 +148,8 @@ if (! nv_function_exists('nv_block_headline')) {
                         $xtpl->assign('TITLE', 'title="' . $lastest['title'] . '"');
                     }
 
-                    $lastest['hometext'] = nv_clean60($lastest['hometext'], $block_config['tooltip_length'], true);
+                    $lastest['hometext_clean'] = strip_tags($lastest['hometext']);
+                    $lastest['hometext_clean'] = nv_clean60($lastest['hometext_clean'], $block_config['tooltip_length'], true);
                     $xtpl->assign('LASTEST', $lastest);
                     $xtpl->parse('main.loop_tabs_content.content.loop');
                 }

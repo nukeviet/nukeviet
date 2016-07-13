@@ -234,3 +234,8 @@ $lang_module['notification_active'] = 'Hiển thị thông báo khi có hoạt �
 $lang_module['notification_autodel'] = 'Tự động xóa thông báo sau thời gian';
 $lang_module['notification_autodel_note'] = 'Điền <strong>0</strong> nếu không muốn tự động xóa';
 $lang_module['notification_day'] = 'ngày';
+
+$lang_module['is_login_blocker'] = 'Kích hoạt chức năng chặn đăng nhập sai nhiều lần';
+$lang_module['login_number_tracking'] = 'Số lần đăng nhập sai tối đa trong khoản thời gian theo dõi';
+$lang_module['login_time_tracking'] = 'Thời gian theo dõi';
+$lang_module['login_time_ban'] = 'Thời gian bị cấm đăng nhập';

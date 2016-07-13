@@ -26,7 +26,7 @@ if ($id) {
         $canonicalUrl = $base_url_rewrite;
     }
 
-    if (! empty($rowdetail['image']) && ! nv_is_url($rowdetail['image'])) {
+    if (! empty($rowdetail['image']) and ! nv_is_url($rowdetail['image'])) {
         $imagesize = @getimagesize(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowdetail['image']);
         $rowdetail['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowdetail['image'];
         $rowdetail['imageWidth'] = $imagesize[0] > 500 ? 500 : $imagesize[0];

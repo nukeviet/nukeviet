@@ -111,7 +111,8 @@ if (! nv_function_exists('nv_news_block_news')) {
         $xtpl->assign('TEMPLATE', $block_theme);
 
         foreach ($array_block_news as $array_news) {
-            $array_news['hometext'] = nv_clean60($array_news['hometext'], $block_config['tooltip_length'], true);
+            $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
+            $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
             $xtpl->assign('blocknews', $array_news);
             if (! empty($array_news['imgurl'])) {
                 $xtpl->parse('main.newloop.imgblock');

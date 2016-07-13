@@ -35,21 +35,21 @@ if ($nv_Request->isset_request('act', 'get')) {
     }
 
     $sql = "INSERT INTO " . NV_MOD_TABLE . " (
-		username, md5username, password, email, first_name, last_name, gender, photo, birthday,
-		regdate, question,
-		answer, passlostkey, view_mail, remember, in_groups, active, checknum,
-		last_login, last_ip, last_agent, last_openid, idsite
-		) VALUES (
-		:username,
-		:md5_username,
-		:password,
-		:email,
-		:first_name,
-		:last_name,
-		'', '', 0, " . $row['regdate'] . ",
-		:question,
-		:answer,
-		'', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
+        username, md5username, password, email, first_name, last_name, gender, photo, birthday,
+        regdate, question,
+        answer, passlostkey, view_mail, remember, in_groups, active, checknum,
+        last_login, last_ip, last_agent, last_openid, idsite
+        ) VALUES (
+        :username,
+        :md5_username,
+        :password,
+        :email,
+        :first_name,
+        :last_name,
+        '', '', 0, " . $row['regdate'] . ",
+        :question,
+        :answer,
+        '', 0, 0, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
     $data_insert = array();
     $data_insert['username'] = $row['username'];
@@ -72,7 +72,6 @@ if ($nv_Request->isset_request('act', 'get')) {
             $stmt->execute();
         }
 
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
         $users_info = unserialize(nv_base64_decode($row['users_info']));
         $query_field = array();
         $query_field['userid'] = $userid;
@@ -80,7 +79,9 @@ if ($nv_Request->isset_request('act', 'get')) {
         while ($row_f = $result_field->fetch()) {
             $query_field[$row_f['field']] = (isset($users_info[$row_f['field']])) ? $users_info[$row_f['field']] : $db->quote($row_f['default_value']);
         }
+        
         if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
+            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
             $db->query('DELETE FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $row['userid']);
 
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['active_users'], 'userid: ' . $userid . ' - username: ' . $row['username'], $admin_info['userid']);
@@ -94,7 +95,7 @@ if ($nv_Request->isset_request('act', 'get')) {
             $message = sprintf($lang_module['adduser_register_info'], $full_name, $global_config['site_name'], $_url, $row['username']);
             @nv_sendmail($global_config['site_email'], $row['email'], $subject, $message);
         } else {
-            $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $row['userid']);
+            $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
         }
     }
     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=user_waiting');
@@ -173,7 +174,8 @@ while ($row = $result->fetch()) {
         'username' => $row['username'],
         'full_name' => nv_show_name_user($row['first_name'], $row['last_name'], $row['username']),
         'email' => $row['email'],
-        'regdate' => date('d/m/Y H:i', $row['regdate']) );
+        'regdate' => date('d/m/Y H:i', $row['regdate'])
+    );
 }
 
 $generate_page = nv_generate_page($base_url, $num_items, $per_page, $page);

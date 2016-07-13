@@ -46,7 +46,7 @@ function nv_getenv($a)
             return $_ENV[$b];
         } elseif (@getenv($b)) {
             return @getenv($b);
-        } elseif (function_exists('apache_getenv') && apache_getenv($b, true)) {
+        } elseif (function_exists('apache_getenv') and apache_getenv($b, true)) {
             return apache_getenv($b, true);
         }
     }
@@ -102,7 +102,7 @@ function nv_is_blocker_proxy($is_proxy, $proxy_blocker)
     if ($proxy_blocker == 1 and $is_proxy == 'Strong') {
         return true;
     }
-    if ($proxy_blocker == 2 and ($is_proxy == 'Strong' || $is_proxy == 'Mild')) {
+    if ($proxy_blocker == 2 and ($is_proxy == 'Strong' or $is_proxy == 'Mild')) {
         return true;
     }
     if ($proxy_blocker == 3 and $is_proxy != 'No') {
@@ -580,18 +580,20 @@ function nv_user_in_groups($groups_view)
     if (in_array(6, $groups_view)) {
         // All
         return true;
-    } elseif (defined('NV_IS_USER')) {
-        global $user_info;
-
-        if (in_array(4, $groups_view) and (empty($user_info['in_groups']) or !in_array(7, $user_info['in_groups']))) {
+    } elseif (defined('NV_IS_USER') or defined('NV_IS_ADMIN')) {
+        global $user_info, $admin_info;
+        
+        $in_groups = defined('NV_IS_ADMIN') ? $admin_info['in_groups'] : $user_info['in_groups'];
+        
+        if (in_array(4, $groups_view) and (empty($in_groups) or !in_array(7, $in_groups))) {
             // User with no group or not in new users groups
             return true;
         } else {
             // Check group
-            if (empty($user_info['in_groups'])) {
+            if (empty($in_groups)) {
                 return false;
             }
-            return (array_intersect($user_info['in_groups'], $groups_view) != array());
+            return (array_intersect($in_groups, $groups_view) != array());
         }
     } elseif (in_array(5, $groups_view)) {
         // Guest
@@ -1264,7 +1266,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
             }
         }
 
-        if ($on_page > 1 && $on_page < $total_pages) {
+        if ($on_page > 1 and $on_page < $total_pages) {
             if ($on_page > 3) {
                 $page_string .= '<li class="disabled"><span>...</span></li>';
             }
@@ -1387,7 +1389,7 @@ function nv_is_url($url)
         return false;
     }
 
-    if (isset($parts['path']) and ! preg_match('/^[0-9A-Za-z\/\_\.\@\~\-\%\\s]*$/', $parts['path'])) {
+    if (isset($parts['path']) and ! preg_match('/^[0-9A-Za-z\/\_\.\@\~\:\-\%\\s]*$/', $parts['path'])) {
         return false;
     }
 
@@ -1412,7 +1414,7 @@ function nv_check_url($url, $is_200 = 0)
     }
 
     $url = str_replace(' ', '%20', $url);
-    $allow_url_fopen = (ini_get('allow_url_fopen') == '1' || strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
+    $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
 
     if (nv_function_exists('get_headers') and $allow_url_fopen == 1) {
         $res = get_headers($url);
@@ -1428,7 +1430,7 @@ function nv_check_url($url, $is_200 = 0)
             'Opera/9.25 (Windows NT 6.0; U; en)'
         );
 
-        $open_basedir = (ini_get('open_basedir') == '1' || strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
+        $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
         srand(( float )microtime() * 10000000);
         $rand = array_rand($userAgents);

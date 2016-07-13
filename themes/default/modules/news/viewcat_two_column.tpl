@@ -33,9 +33,9 @@
                     <!-- END: comment -->
                 </ul>
             </div>
-            <p class="text-justify">
+            <div class="text-justify">
                 {NEWSTOP.hometext}
-            </p>
+            </div>
             <!-- BEGIN: adminlink -->
             <p class="text-right">
                 {ADMINLINK}
@@ -46,7 +46,7 @@
         <ul class="related">
             <!-- BEGIN: other -->
             <li>
-                <a class="show h4" href="{NEWSTOP.link}" <!-- BEGIN: tooltip -->data-content="{NEWSTOP.hometext}" data-img="{NEWSTOP.imghome}" data-placement="{TOOLTIP_POSITION}" data-rel="tooltip"<!-- END: tooltip --> title="{NEWSTOP.title}">{NEWSTOP.title}</a>
+                <a class="show h4" href="{NEWSTOP.link}" <!-- BEGIN: tooltip -->data-content="{NEWSTOP.hometext_clean}" data-img="{NEWSTOP.imghome}" data-placement="{TOOLTIP_POSITION}" data-rel="tooltip"<!-- END: tooltip --> title="{NEWSTOP.title}">{NEWSTOP.title}</a>
             </li>
             <!-- END: other -->
         </ul>
@@ -91,7 +91,7 @@
                 <ul class="related">
                     <!-- BEGIN: other -->
                     <li class="{CLASS}">
-                        <a class="show h4" href="{CONTENT.link}" <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">{CONTENT.title}</a>
+                        <a class="show h4" href="{CONTENT.link}" <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext_clean}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">{CONTENT.title}</a>
                     </li>
                     <!-- END: other -->
                 </ul>
