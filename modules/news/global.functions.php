@@ -112,12 +112,7 @@ function nv_del_content_module($id)
             ++$number_no_del;
         }
 
-        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($id / 2000) . ' WHERE id = ' . $id;
-        if (! $db->exec($_sql)) {
-            ++$number_no_del;
-        }
-
-        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext WHERE id = ' . $id;
+        $_sql = 'DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail WHERE id = ' . $id;
         if (! $db->exec($_sql)) {
             ++$number_no_del;
         }
@@ -181,42 +176,9 @@ function nv_link_edit_page($id)
 function nv_link_delete_page($id, $detail = 0)
 {
     global $lang_global, $module_name;
-    $link = "<a class=\"btn btn-danger btn-xs\" href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5($id . session_id()) . "','" . NV_BASE_ADMINURL . "', " . $detail . ")\"><em class=\"fa fa-trash-o margin-right\"></em> " . $lang_global['delete'] . "</a>";
+    $link = "<a class=\"btn btn-danger btn-xs\" href=\"javascript:void(0);\" onclick=\"nv_del_content(" . $id . ", '" . md5($id . NV_CHECK_SESSION) . "','" . NV_BASE_ADMINURL . "', " . $detail . ")\"><em class=\"fa fa-trash-o margin-right\"></em> " . $lang_global['delete'] . "</a>";
     return $link;
 }
-
-/**
- * nv_news_get_bodytext()
- *
- * @param mixed $bodytext
- * @return
- */
-function nv_news_get_bodytext($bodytext)
-{
-    // Get image tags
-    if (preg_match_all("/\<img[^\>]*src=\"([^\"]*)\"[^\>]*\>/is", $bodytext, $match)) {
-        foreach ($match[0] as $key => $_m) {
-            $textimg = '';
-            if (strpos($match[1][$key], 'data:image/png;base64') === false) {
-                $textimg = " " . $match[1][$key];
-            }
-            if (preg_match_all("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $_m, $m_alt)) {
-                $textimg .= " " . $m_alt[1][0];
-            }
-            $bodytext = str_replace($_m, $textimg, $bodytext);
-        }
-    }
-    // Get link tags
-    if (preg_match_all("/\<a[^\>]*href=\"([^\"]+)\"[^\>]*\>(.*)\<\/a\>/isU", $bodytext, $match)) {
-        foreach ($match[0] as $key => $_m) {
-            $bodytext = str_replace($_m, $match[1][$key] . " " . $match[2][$key], $bodytext);
-        }
-    }
-
-    $bodytext = str_replace('&nbsp;', ' ', strip_tags($bodytext));
-    return preg_replace('/[ ]+/', ' ', $bodytext);
-}
-
 
 /**
  * nv_get_firstimage()
@@ -226,9 +188,9 @@ function nv_news_get_bodytext($bodytext)
  */
 function nv_get_firstimage( $contents ){
 	if( preg_match('/< *img[^>]*src *= *["\']?([^"\']*)/i', $contents, $img) ){
-		return $img[1]; 
+		return $img[1];
 	}else{
-		return ''; 
+		return '';
 	}
 }
 
@@ -239,8 +201,14 @@ function nv_get_firstimage( $contents ){
  * @return boolean
  */
 function nv_check_block_topcat_news( $catid ){
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+
+	global $global_config, $module_info, $module_name;
+
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	$find1 = "/<name>" . strtoupper($module_name) . "_TOPCAT_" . $catid . "<\/name>/";
@@ -259,8 +227,14 @@ function nv_check_block_topcat_news( $catid ){
  * @return boolean
  */
 function nv_check_block_block_botcat_news( $catid ){
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+
+	global $global_config, $module_info, $module_name;
+
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	$find1 = "/<name>" . strtoupper($module_name) . "_BOTTOMCAT_" . $catid . "<\/name>/";
@@ -279,9 +253,14 @@ function nv_check_block_block_botcat_news( $catid ){
  * @return boolean
  */
 function nv_add_block_topcat_news( $catid ){
-	global $global_config, $module_name;
 
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+	global $global_config, $module_info, $module_name;
+
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	if( !nv_check_block_topcat_news( $catid ) AND !empty($contents) ){
@@ -298,10 +277,10 @@ function nv_add_block_topcat_news( $catid ){
 		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
 
 		$doc = new DOMDocument('1.0', 'utf-8');
-		$doc->formatOutput = true; 
+		$doc->formatOutput = true;
 		$doc->loadXML($contents);
 		$contents = $doc->saveXML();
-		
+
 		$fname = $ini_file;
 		$fhandle = fopen( $fname,"w" );
 		$fwrite = fwrite( $fhandle, $contents );
@@ -324,9 +303,14 @@ function nv_add_block_topcat_news( $catid ){
  * @return boolean
  */
 function nv_add_block_botcat_news( $catid ){
-	
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+
+	global $global_config, $module_info, $module_name;
+
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	if( !nv_check_block_block_botcat_news( $catid ) AND !empty($contents) ){
@@ -338,12 +322,12 @@ function nv_add_block_botcat_news( $catid ){
 		</position>
 			";
 		$_replace = "<positions>".$pos;
-		$contents = preg_replace($find, $_replace, $contents);		
+		$contents = preg_replace($find, $_replace, $contents);
 		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
 		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
 
 		$doc = new DOMDocument('1.0', 'utf-8');
-		$doc->formatOutput = true; 
+		$doc->formatOutput = true;
 		$doc->loadXML($contents);
 		$contents = $doc->saveXML();
 
@@ -369,17 +353,23 @@ function nv_add_block_botcat_news( $catid ){
  * @return boolean
  */
 function nv_remove_block_topcat_news( $catid ){
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+
+	global $global_config, $module_info, $module_name;
+
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	if( nv_check_block_topcat_news( $catid ) ){
-		
+
 		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
 		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
 
 		$doc = new DOMDocument('1.0');
-		$doc->formatOutput = true; 
+		$doc->formatOutput = true;
 		$doc->loadXML($contents);
 		$xpath = new DOMXpath($doc);
 		$positions = $xpath->query('//name[text()="' . strtoupper($module_name) . '_TOPCAT_' . $catid . '"]/parent::position');
@@ -409,17 +399,23 @@ function nv_remove_block_topcat_news( $catid ){
  * @return boolean
  */
 function nv_remove_block_botcat_news( $catid ){
-	global $global_config, $module_name;
-	$ini_file = NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/config.ini';
+
+	global $global_config, $module_info, $module_name;
+
+	if ( !empty($module_info['theme']) ){
+		$ini_file = NV_ROOTDIR . '/themes/' . $module_info['theme'] . '/config.ini';
+	}else{
+		$ini_file = NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini';
+	}
 	$contents = file_get_contents($ini_file);
 
 	if( nv_check_block_block_botcat_news( $catid ) ){
-		
+
 		$contents = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $contents);
 		$contents = preg_replace("/\\t\\t\\n/", "", $contents);
 
 		$doc = new DOMDocument('1.0');
-		$doc->formatOutput = true; 
+		$doc->formatOutput = true;
 		$doc->loadXML($contents);
 		$xpath = new DOMXpath($doc);
 		$positions = $xpath->query('//name[text()="' . strtoupper($module_name) . '_BOTTOMCAT_' . $catid . '"]/parent::position');

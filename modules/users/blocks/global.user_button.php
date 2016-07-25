@@ -95,16 +95,16 @@ if ($global_config['allowuserlogin']) {
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-        $xtpl->assign('CHECKSS', md5($client_info['session_id'] . $global_config['sitekey']));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
         $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
         $xtpl->assign('NV_HEADER', '');
         $xtpl->assign('NV_REDIRECT', '');
-        
+        $xtpl->assign('CHECKSS', NV_CHECK_SESSION);
+
         $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);
         $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], NV_UPASSMIN, NV_UPASSMAX) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], NV_UPASSMIN, NV_UPASSMAX);
-        
+
         $xtpl->assign('USERNAME_RULE', $username_rule);
         $xtpl->assign('PASSWORD_RULE', $password_rule);
 
@@ -266,6 +266,7 @@ if ($global_config['allowuserlogin']) {
                 $xtpl->parse('main.allowuserreg.field');
             }
 
+            $xtpl->parse('main.allowuserreg.agreecheck');
             $xtpl->parse('main.allowuserreg');
             $xtpl->parse('main.allowuserreg2');
             $xtpl->parse('main.allowuserreg3');

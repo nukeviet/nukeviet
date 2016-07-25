@@ -54,7 +54,7 @@ $sourcelang = $nv_Request->get_title('sourcelang', 'post,get', '');
 $idfile = $nv_Request->get_int('idfile', 'post,get', 0);
 $check_type = $nv_Request->get_int('check_type', 'post,get', 0);
 
-if ($nv_Request->isset_request('idfile,savedata', 'post') and $nv_Request->get_string('savedata', 'post') == md5($global_config['sitekey'] . session_id())) {
+if ($nv_Request->isset_request('idfile,savedata', 'post') and $nv_Request->get_string('savedata', 'post') == NV_CHECK_SESSION) {
     $pozlang = $nv_Request->get_array('pozlang', 'post', array());
 
     if (! empty($pozlang) and isset($language_array[$typelang])) {
@@ -174,7 +174,7 @@ if ($submit > 0 and in_array($sourcelang, $array_lang_exit) and in_array($typela
             'sourcelang' => $sourcelang,
             'check_type' => $check_type,
             'idfile' => $idfile,
-            'savedata' => md5($global_config['sitekey'] . session_id())
+            'savedata' => NV_CHECK_SESSION
         ));
 
         $i = 0;

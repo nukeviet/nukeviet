@@ -11,6 +11,7 @@
 
 var timer = 0;
 var timer_is_on = 0;
+var load_notification = 1;
 
 function notification_reset() {
 	$.post(script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification_load&nocache=' + new Date().getTime(), 'notification_reset=1', function(res) {
@@ -39,22 +40,23 @@ function nv_get_notification(timestamp) {
 			'notification_get' : 1,
 			'timestamp' : timestamp
 		};
-
-		$.ajax({
-			type : 'GET',
-			url : script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification_load&nocache=' + new Date().getTime(),
-			data : queryString,
-			success : function(data) {
-				var obj = jQuery.parseJSON(data);
-				if (obj.data_from_file > 0) {
-					$('#notification').show().html(obj.data_from_file);
-				} else {
-					$('#notification').hide();
+		if(load_notification) {
+			$.ajax({
+				type : 'GET',
+				url : script_name + '?' + nv_name_variable + '=siteinfo&' + nv_fc_variable + '=notification_load&nocache=' + new Date().getTime(),
+				data : queryString,
+				success : function(data) {
+					var obj = jQuery.parseJSON(data);
+					if (obj.data_from_file > 0) {
+						$('#notification').show().html(obj.data_from_file);
+					} else {
+						$('#notification').hide();
+					}
+					// call the function again
+					timer = setTimeout("nv_get_notification()", 30000);// load step 30 sec
 				}
-				// call the function again
-				timer = setTimeout("nv_get_notification()", 30000);// load step 30 sec
-			}
-		});
+			});
+		}
 	}
 }
 

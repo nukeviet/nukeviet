@@ -1600,7 +1600,7 @@ class PclZip
                         $p_options_list[$i + 1] = strtr($p_options_list[$i + 1], ' ', '');
 
                         // ----- Parse items
-                        $v_work_list = explode(",", $p_options_list[$i + 1]);
+                        $v_work_list = explode(',', $p_options_list[$i + 1]);
                     } elseif (is_integer($p_options_list[$i + 1])) {
                         $v_work_list[0] = $p_options_list[$i + 1] . '-' . $p_options_list[$i + 1];
                     } elseif (is_array($p_options_list[$i + 1])) {

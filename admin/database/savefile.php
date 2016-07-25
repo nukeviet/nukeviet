@@ -36,7 +36,7 @@ $contents['type'] = ($type != 'str') ? 'all' : 'str';
 $contents['savetype'] = ($ext != 'sql') ? 'gz' : 'sql';
 
 $file_ext = ($contents['savetype'] == 'sql') ? 'sql' : 'sql.gz';
-$file_name = md5($client_info['session_id']) . '_backupdata_' . date('Y-m-d-H-i', time()) . '.' . $file_ext;
+$file_name = NV_CHECK_SESSION . '_backupdata_' . date('Y-m-d-H-i', time()) . '.' . $file_ext;
 
 $log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 if ($global_config['idsite']) {
@@ -57,7 +57,7 @@ if (empty($result)) {
     $file = explode('_', $file_name);
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['savefile'], 'File name: ' . end($file), $admin_info['userid']);
 
-    $xtpl->assign('LINK_DOWN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file_name . '&amp;checkss=' . md5($file_name . $client_info['session_id'] . $global_config['sitekey']));
+    $xtpl->assign('LINK_DOWN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=getfile&amp;filename=' . $file_name . '&amp;checkss=' . md5($file_name . NV_CHECK_SESSION));
 
     $xtpl->parse('main.result');
 }

@@ -449,3 +449,7 @@ img.previewimg {
 	color: #666;
 	width: 25px;
 }
+
+#imglist .imgcontent:nth-child(2n) {
+    background: #fbfbfb;
+}

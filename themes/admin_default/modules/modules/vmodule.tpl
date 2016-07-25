@@ -7,7 +7,7 @@
 <form id="vform" action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
-	<input name="checkss" type="hidden" value="{CHECKSS}" />
+	<input name="checkss" type="hidden" value="{NV_CHECK_SESSION}" />
 	<div class="table-responsive">
 		<table class="table table-striped table-bordered table-hover">
 			<tfoot>

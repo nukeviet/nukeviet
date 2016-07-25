@@ -70,7 +70,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td colspan="2"> {LANG.avata} </td>
+					<td colspan="2"> {LANG.avatar} </td>
 					<td>
 						<!-- BEGIN: photo -->
 						<p id="current-photo" class="pull-left text-center">

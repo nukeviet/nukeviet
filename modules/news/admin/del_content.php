@@ -17,9 +17,9 @@ $checkss = $nv_Request->get_string('checkss', 'post', '');
 $listid = $nv_Request->get_string('listid', 'post', '');
 $contents = 'NO_' . $id;
 
-if ($listid != '' and md5($global_config['sitekey'] . session_id()) == $checkss) {
+if ($listid != '' and NV_CHECK_SESSION == $checkss) {
     $del_array = array_map('intval', explode(',', $listid));
-} elseif (md5($id . session_id()) == $checkss) {
+} elseif (md5($id . NV_CHECK_SESSION) == $checkss) {
     $del_array = array( $id );
 }
 if (! empty($del_array)) {

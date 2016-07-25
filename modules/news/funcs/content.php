@@ -135,7 +135,7 @@ if ($nv_Request->isset_request('get_alias', 'post')) {
 
 $contentid = $nv_Request->get_int('contentid', 'get,post', 0);
 $fcheckss = $nv_Request->get_title('checkss', 'get,post', '');
-$checkss = md5($contentid . $client_info['session_id'] . $global_config['sitekey']);
+$checkss = md5($contentid . NV_CHECK_SESSION);
 
 if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checkss) {
     if ($contentid > 0) {
@@ -305,8 +305,6 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                 $rowcontent['status'] = 4;
             }
             $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
-            $rowcontent['bodytext'] = nv_news_get_bodytext($rowcontent['bodyhtml']);
-
             $rowcontent['sourceid'] = 0;
             if (! empty($rowcontent['sourcetext'])) {
                 $url_info = @parse_url($rowcontent['sourcetext']);
@@ -358,9 +356,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                         $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_" . $catid . " SELECT * FROM " . NV_PREFIXLANG . "_" . $module_data . "_rows WHERE id=" . $rowcontent['id']);
                     }
 
-                    $tbhtml = NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil($rowcontent['id'] / 2000);
-                    $db->query("CREATE TABLE IF NOT EXISTS " . $tbhtml . " (id int(11) unsigned NOT NULL, bodyhtml longtext NOT NULL, sourcetext varchar(255) NOT NULL default '', imgposition tinyint(1) NOT NULL default '1', copyright tinyint(1) NOT NULL default '0', allowed_send tinyint(1) NOT NULL default '0', allowed_print tinyint(1) NOT NULL default '0', allowed_save tinyint(1) NOT NULL default '0', PRIMARY KEY (id)) ENGINE=MyISAM");
-                    $db->query("INSERT INTO " . $tbhtml . " (id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
+                    $db->query("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_detail (id, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid) VALUES (
 							" . $rowcontent['id'] . ",
 							" . $db->quote($rowcontent['bodyhtml']) . ",
 							" . $db->quote($rowcontent['sourcetext']) . ",
@@ -371,7 +367,6 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 			 				" . intval($rowcontent['allowed_save']) . ", 0
 						)");
 
-                    $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext VALUES (' . $rowcontent['id'] . ', ' . $db->quote($rowcontent['bodytext']) . ')');
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
 
                     // Them vao thong bao
@@ -427,7 +422,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
                         $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
                     }
 
-                    $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_bodyhtml_" . ceil($rowcontent['id'] / 2000) . " SET
+                    $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_detail SET
 							bodyhtml=" . $db->quote($rowcontent['bodyhtml']) . ",
 							imgposition=" . intval($rowcontent['imgposition']) . ",
 							 sourcetext=" . $db->quote($rowcontent['sourcetext']) . ",
@@ -436,8 +431,6 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 							 allowed_print=" . intval($rowcontent['allowed_print']) . ",
 							 allowed_save=" . intval($rowcontent['allowed_save']) . "
 							WHERE id =" . $rowcontent['id']);
-
-                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_bodytext SET bodytext=' . $db->quote($rowcontent['bodytext']) . ' WHERE id =' . $rowcontent['id']);
 
                     $user_content = defined('NV_IS_USER') ? ' | ' . $user_info['username'] : '';
 
@@ -495,7 +488,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             die();
         }
 
-        $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($rowcontent['id'] / 2000) . ' where id=' . $rowcontent['id'])->fetch();
+        $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
         $rowcontent = array_merge($rowcontent, $body_contents);
         unset($body_contents);
     }
@@ -602,7 +595,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         $page = intval(substr($array_op[1], 5));
     }
 
-    $contents = "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5("0" . $client_info['session_id'] . $global_config['sitekey']) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
+    $contents = "<div style=\"border: 1px solid #ccc;margin: 10px; font-size: 15px; font-weight: bold; text-align: center;\"><a href=\"" . $base_url . "&amp;contentid=0&checkss=" . md5("0" . NV_CHECK_SESSION) . "\">" . $lang_module['add_content'] . "</a></h1></div>";
 
     $array_catpage = array();
 
@@ -656,11 +649,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $array_link_content = array();
 
             if ($array_row_i['is_edit_content']) {
-                $array_link_content[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5($id . $client_info['session_id'] . $global_config['sitekey']) . "\">" . $lang_global['edit'] . "</a>";
+                $array_link_content[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;checkss=" . md5($id . NV_CHECK_SESSION) . "\">" . $lang_global['edit'] . "</a>";
             }
 
             if ($array_row_i['is_del_content']) {
-                $array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5($id . $client_info['session_id'] . $global_config['sitekey']) . "\">" . $lang_global['delete'] . "</a>";
+                $array_link_content[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a onclick=\"return confirm(nv_is_del_confirm[0]);\" href=\"" . $base_url . "&amp;contentid=" . $id . "&amp;delcontent=1&amp;checkss=" . md5($id . NV_CHECK_SESSION) . "\">" . $lang_global['delete'] . "</a>";
             }
 
             if (! empty($array_link_content)) {
@@ -695,7 +688,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         }
     }
 } elseif ($array_post_user['addcontent']) {
-    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&contentid=0&checkss=' . md5('0' . $client_info['session_id'] . $global_config['sitekey']), true));
+    Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&contentid=0&checkss=' . md5('0' . NV_CHECK_SESSION), true));
     die();
 }
 

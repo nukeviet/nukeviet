@@ -88,7 +88,7 @@
 							<tr>
 								<td class="text-right">{LANG.voting_question_num} {ITEM.stt}</td>
 								<td><input class="form-control" type="text" value="{ITEM.title}" name="answervote[{ITEM.id}]" maxlength="245"/></td>
-								<td><input  class="form-control"type="text" value="{ITEM.link}" name="urlvote[{ITEM.id}]"/></td>
+								<td><input class="form-control" type="url" value="{ITEM.link}" name="urlvote[{ITEM.id}]"/></td>
 							</tr>
 							<!-- END: item -->
 							<tr>

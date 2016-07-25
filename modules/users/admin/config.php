@@ -31,6 +31,7 @@ function valid_name_config($array_name)
     return $array_retutn;
 }
 
+$groups_list = nv_groups_list();
 $array_config = array();
 $array_config_define = array();
 
@@ -70,9 +71,11 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['openid_servers'] = $nv_Request->get_typed_array('openid_servers', 'post', 'string');
         $array_config['openid_servers'] = ! empty($array_config['openid_servers']) ? implode(',', $array_config['openid_servers']) : '';
         $array_config['openid_processing'] = $nv_Request->get_int('openid_processing', 'post', 0);
-        $array_config['whoviewuser'] = $nv_Request->get_int('whoviewuser', 'post', 0);
         $array_config['user_check_pass_time'] = 60 * $nv_Request->get_int('user_check_pass_time', 'post');
         $array_config['auto_login_after_reg'] = $nv_Request->get_int('auto_login_after_reg', 'post', 0);
+        
+        $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', array());
+        $array_config['whoviewuser'] = !empty($array_config['whoviewuser']) ? implode(',', nv_groups_post(array_intersect($array_config['whoviewuser'], array_keys($groups_list)))) : '';
 
         if ($array_config['user_check_pass_time'] < 120) {
             $array_config['user_check_pass_time'] = 120;
@@ -185,11 +188,6 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         1 => $lang_module['active_all'],
         2 => $lang_module['active_email'],
         3 => $lang_module['active_admin_check']
-    );
-    $array_whoview = array(
-        0 => $lang_module['whoview_all'],
-        1 => $lang_module['whoview_user'],
-        2 => $lang_module['whoview_admin']
     );
     $array_openid_processing = array(
         0 => $lang_module['openid_processing_0'],
@@ -314,14 +312,14 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.name_show');
     }
 
-    foreach ($array_whoview as $id => $titleregister) {
-        $select = ($array_config['whoviewuser'] == $id) ? ' selected="selected"' : '';
-        $array = array(
-            'id' => $id,
-            'select' => $select,
-            'value' => $titleregister
+    $array_config['whoviewuser'] = explode(',', $array_config['whoviewuser']);
+    foreach ($groups_list as $group_id => $group_name) {
+        $whoview = array(
+            'key' => $group_id,
+            'checked' => in_array($group_id, $array_config['whoviewuser']) ? ' checked="checked"' : '',
+            'title' => $group_name
         );
-        $xtpl->assign('WHOVIEW', $array);
+        $xtpl->assign('WHOVIEW', $whoview);
         $xtpl->parse('main.whoviewlistuser');
     }
 

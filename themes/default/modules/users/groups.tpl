@@ -50,7 +50,7 @@
 			<col width="250" />
 			<thead>
 				<tr>
-					<th class="text-center"> {LANG.userid} </th>
+					<th class="text-center"> {LANG.STT} </th>
 					<th> {LANG.account} </th>
 					<th> {LANG.nametitle} </th>
 					<th class="text-center"> {GLANG.actions} </th>
@@ -59,7 +59,7 @@
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
-					<td class="text-center"> {LOOP.userid} </td>
+					<td class="text-center"> {LOOP.stt} </td>
 					<td>{LOOP.username}</td>
 					<td>{LOOP.full_name}</td>
 					<td class="text-center">
@@ -115,7 +115,7 @@ $("a.denied").click(function() {
 			<col width="250" />
 			<thead>
 				<tr>
-					<th class="text-center"> {LANG.userid} </th>
+					<th class="text-center"> {LANG.STT} </th>
 					<th> {LANG.account} </th>
 					<th> {LANG.nametitle} </th>
 					<th class="text-center"> {GLANG.actions} </th>
@@ -124,7 +124,7 @@ $("a.denied").click(function() {
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
-					<td class="text-center"> {LOOP.userid} </td>
+					<td class="text-center"> {LOOP.stt} </td>
 					<td>{LOOP.username}</td>
 					<td>{LOOP.full_name}</td>
 					<td class="text-center">
@@ -177,10 +177,10 @@ $("a.demote").click(function() {
 		<table class="table table-striped table-bordered table-hover">
 			<col width="50"/>
 			<col span="2" />
-			<col width="250"/>
+			<col width="300"/>
 			<thead>
 				<tr>
-					<th class="text-center"> {LANG.userid} </th>
+					<th class="text-center"> {LANG.STT} </th>
 					<th> {LANG.account} </th>
 					<th> {LANG.nametitle} </th>
 					<th class="text-center"> {GLANG.actions} </th>
@@ -189,13 +189,22 @@ $("a.demote").click(function() {
 			<tbody>
 				<!-- BEGIN: loop -->
 				<tr>
-					<td class="text-center"> {LOOP.userid} </td>
+					<td class="text-center"> {LOOP.stt} </td>
 					<td>{LOOP.username}</td>
 					<td>{LOOP.full_name}</td>
 					<td class="text-center">
 					<!-- BEGIN: tools -->
-	                <i class="fa fa-star">&nbsp;</i> <a class="promote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.promote}</a> -
-					<i class="fa fa-trash-o">&nbsp;</i> <a class="deletemember" href="javascript:void(0);" title="{LOOP.userid}">{LANG.exclude_user2}</a>
+	                <!--<i class="fa fa-star">&nbsp;</i> <a class="promote" href="javascript:void(0);" data-id="{LOOP.userid}">{LANG.promote}</a> - -->
+	                
+		                <!-- BEGIN: deletemember -->
+							<i class="fa fa-ban">&nbsp;</i><a class="deletemember" href="javascript:void(0);" data-userid="{LOOP.userid}">{LANG.exclude_user2}</a>&nbsp; 
+						<!-- END: deletemember -->
+						<!-- BEGIN: edituser -->
+							<i class="fa fa-pencil-square-o">&nbsp;</i><a href="{LINK_EDIT}" class="edituser">{GLANG.edit}</a>&nbsp; 
+						<!-- END: edituser -->
+						<!-- BEGIN: deluser -->
+							<i class="fa fa-trash-o">&nbsp;</i><a class="deluser" href="javascript:void(0);" data-userid="{LOOP.userid}">{GLANG.delete}</a>
+						<!-- END: deluser -->
 					<!-- END: tools -->
 					</td>
 				</tr>
@@ -209,11 +218,22 @@ $("a.demote").click(function() {
 </div>
 <script type="text/javascript">
 //<![CDATA[
+$("a.deluser").click(function() {
+	confirm("{LANG.delConfirm} ?") && $.ajax({
+		type : "POST",
+		url : "{MODULE_URL}={OP}",
+		data : "gid={GID}&del=" + $(this).attr("data-userid"),
+		success : function(a) {
+			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
+		}
+	});
+	return !1;
+});
 $("a.deletemember").click(function() {
 	confirm("{LANG.delConfirm} ?") && $.ajax({
 		type : "POST",
 		url : "{MODULE_URL}={OP}",
-		data : "gid={GID}&exclude=" + $(this).attr("title"),
+		data : "gid={GID}&exclude=" + $(this).attr("data-userid"),
 		success : function(a) {
 			a == "OK" ? $("div#pageContent").load("{MODULE_URL}={OP}&listUsers={GID}&random=" + nv_randomPassword(10)) : alert(a);
 		}
@@ -237,13 +257,23 @@ $("a.promote").click(function() {
 <!-- END: listUsers -->
 
 <!-- BEGIN: userlist -->
-<!-- BEGIN: adduser -->
+<!-- BEGIN: tools -->
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <div id="ablist" class="m-bottom well">
+	<!-- BEGIN: addUserGroup -->
 	<select name="uid" id="uid" class="form-control" style="width: 250px">
 
 	</select>
 	<input class="btn btn-primary" name="addUser" type="button" value="{LANG.addMemberToGroup}" />
+	<!-- END: addUserGroup -->
+	<!-- BEGIN: add_user -->
+	<a href="{MODULE_URL}=register/{GID}">
+		<button class="btn btn-primary" name="add_user" type="button"> <i class="fa fa-user-plus"></i>{LANG.addusers}</button>
+	</a>
+	<!-- END: add_user -->
+	<!-- BEGIN: user_waiting -->
+		<button class="btn btn-primary" name="user_waiting" type="button">{LANG.user_waiting}</button>
+	<!-- END: user_waiting -->
 </div>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
@@ -252,7 +282,7 @@ $("a.promote").click(function() {
         $("#uid").select2({
             placeholder: "{LANG.search_id}",
             ajax: {
-            url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&get_user_json=1',
+            url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=groups&get_user_json=1&gid={GID}',
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -275,7 +305,14 @@ $("a.promote").click(function() {
             escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
             minimumInputLength: 3,
             templateResult: formatRepo, // omitted for brevity, see the source of this page
-            templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+            templateSelection: formatRepoSelection, // omitted for brevity, see the source of this page
+           	language: {
+		    inputTooShort: function(args) {
+		      // args.minimum is the minimum required length
+		      // args.input is the user-typed text
+		      return "{MIN_SEARCH}";
+		    }
+		   }
         });
     });
 
@@ -294,7 +331,7 @@ $("a.promote").click(function() {
         return repo.username || repo.text;
     }
 </script>
-<!-- END: adduser -->
+<!-- END: tools -->
 <div id="pageContent">&nbsp;</div>
 <script type="text/javascript">
 	//<![CDATA[
@@ -318,6 +355,16 @@ $("a.promote").click(function() {
 			}
 		});
 		return !1;
+	});
+	$("button[name=user_waiting]").click(function() {
+		$.ajax({
+			type : "POST",
+			url : "{MODULE_URL}={OP}",
+			data : "gid={GID}&getuserid=1&rand=" + nv_randomPassword(10),
+			success : function(a) {
+				modalShow('{LANG.user_waiting}', a);
+			}
+		});
 	});
 	//]]>
 </script>

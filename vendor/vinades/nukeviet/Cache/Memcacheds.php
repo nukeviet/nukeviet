@@ -29,7 +29,7 @@ class Memcacheds
         $this->_Lang = $Lang;
         $this->_Cache_Prefix = $Cache_Prefix;
         $this->_Cache = new Memcached();
-        $this->_Cache->addServer($Host, $Post);
+        $this->_Cache->addServer($Host, $Port);
     }
 
     /**

@@ -45,6 +45,6 @@
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="{OP}" />
 	<input type="hidden" name="idfile" value="{IDFILE}" />
 	<input type="hidden" name="dirlang" value="{DIRLANG}" />
-	<input type="hidden" name="savedata" value="{SAVEDATA}" />
+	<input type="hidden" name="savedata" value="{NV_CHECK_SESSION}" />
 </form>
 <!-- END: main -->
