@@ -30,7 +30,7 @@
 				<ul class="lastest-news">
 					<!-- BEGIN: loop -->
 					<li>
-						<a {TITLE} class="show" href="{LASTEST.link}" data-content="{LASTEST.hometext}" data-img="{LASTEST.homeimgfile}" data-rel="block_headline_tooltip">{LASTEST.title}</a>
+						<a {TITLE} class="show" href="{LASTEST.link}" data-content="{LASTEST.hometext_clean}" data-img="{LASTEST.homeimgfile}" data-rel="block_headline_tooltip">{LASTEST.title}</a>
 					</li>
 					<!-- END: loop -->
 				</ul>

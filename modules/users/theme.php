@@ -1064,10 +1064,11 @@ function nv_memberslist_theme($users_array, $array_order_new, $generate_page)
  */
 function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
 {
-    global $module_info, $module_file, $lang_module, $module_name, $global_config, $op;
+    global $module_info, $module_file, $lang_module, $lang_global, $module_name, $global_config, $op;
 
     $xtpl = new XTemplate('viewdetailusers.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
 
@@ -1084,6 +1085,17 @@ function nv_memberslist_detail_theme($item, $array_field_config, $custom_fields)
     $item['last_login'] = empty($item['last_login']) ? '' : nv_date('l, d/m/Y H:i', $item['last_login']);
 
     $xtpl->assign('USER', $item);
+    
+    if ($item['is_admin']) {
+        if ($item['allow_edit']) {
+            $xtpl->assign('LINK_EDIT', $item['link_edit']);
+            $xtpl->parse('main.for_admin.edit');
+        }
+        if ($item['allow_delete']) {
+            $xtpl->parse('main.for_admin.delete');
+        }
+        $xtpl->parse('main.for_admin');
+    }
 
     if (! empty($item['view_mail'])) {
         $xtpl->parse('main.viewemail');

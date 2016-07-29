@@ -159,8 +159,11 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
                         $row['imgsource'] = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/no_image.gif';
                         $row['width'] = $width;
                     }
-
-                    $row['hometext'] = nv_clean60(strip_tags($row['hometext']), $block_config['length_hometext']);
+                    
+                    if (!empty($block_config['length_hometext'])) {
+                        $row['hometext'] = nv_clean60(strip_tags($row['hometext']), $block_config['length_hometext']);
+                    }
+                    
                     $xtpl->assign('main', $row);
                 } else {
                     if ($row['homeimgthumb'] == 1) {
@@ -176,7 +179,8 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
                     }
 
                     if ($block_config['showtooltip']) {
-                        $row['hometext'] = nv_clean60(strip_tags($row['hometext']), $block_config['tooltip_length']);
+                        $row['hometext_clean'] = strip_tags($row['hometext']);
+                        $row['hometext_clean'] = nv_clean60($row['hometext_clean'], $block_config['tooltip_length'], true);
                     }
 					$row['titleclean60'] = nv_clean60($row['title'], $block_config['length_othertitle']);
                     $xtpl->assign('othernews', $row);

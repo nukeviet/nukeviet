@@ -3,8 +3,7 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC.
- * All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
@@ -104,10 +103,6 @@ define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIM
 
 // Ket noi voi class Error_handler
 $ErrorHandler = new NukeViet\Core\Error($global_config);
-set_error_handler(array(
-    &$ErrorHandler,
-    'error_handler'
-));
 
 if (empty($global_config['allow_sitelangs'])) {
     trigger_error('Error! Language variables is empty!', 256);
@@ -120,11 +115,6 @@ require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
-
-if ($global_config['cached'] == 'memcached') {
-    ini_set('session.save_handler', 'memcached');
-    ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
-}
 
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
@@ -191,6 +181,8 @@ if (!in_array(NV_SERVER_NAME, $domains)) {
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {
     $nv_Cache = new NukeViet\Cache\Memcacheds(NV_MEMCACHED_HOST, NV_MEMCACHED_PORT, NV_LANG_DATA, NV_CACHE_PREFIX);
+} elseif ($global_config['cached'] == 'redis') {
+    $nv_Cache = new NukeViet\Cache\CRedis(NV_REDIS_HOST, NV_REDIS_PORT, NV_REDIS_TIMEOUT, NV_REDIS_PASSWORD, NV_REDIS_DBINDEX, NV_LANG_DATA, NV_CACHE_PREFIX);
 } else {
     $nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);
 }
@@ -337,11 +329,7 @@ $global_config['smtp_password'] = $crypt->aes_decrypt(nv_base64_decode($global_c
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
-if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array(
-    'mild',
-    'lite',
-    'none'
-))) {
+if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array('mild', 'lite', 'none'))) {
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
@@ -369,7 +357,7 @@ if ($nv_Request->get_string('second', 'get') == 'cronjobs') {
 }
 
 // Kiem tra tu cach admin
-if (defined('NV_IS_ADMIN') || defined('NV_IS_SPADMIN')) {
+if (defined('NV_IS_ADMIN') or defined('NV_IS_SPADMIN')) {
     trigger_error('Hacking attempt', 256);
 }
 

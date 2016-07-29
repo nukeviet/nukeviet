@@ -75,7 +75,7 @@ function nv_set_authorization()
 
     if (strcmp(substr($auth_user, 0, 6), 'Basic ') == 0) {
         $usr_pass = base64_decode(substr($auth_user, 6));
-        if (! empty($usr_pass) && strpos($usr_pass, ':') !== false) {
+        if (! empty($usr_pass) and strpos($usr_pass, ':') !== false) {
             list($auth_user, $auth_pw) = explode(':', $usr_pass);
         }
         unset($usr_pass);
@@ -103,7 +103,7 @@ function nv_admin_checkfirewall()
 
             $auth = nv_set_authorization();
 
-            if (empty($auth['auth_user']) || empty($auth['auth_pw'])) {
+            if (empty($auth['auth_user']) or empty($auth['auth_pw'])) {
                 return false;
             }
 

@@ -23,6 +23,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  question varchar(250) NOT NULL,
  link varchar(255) default '',
  acceptcm int(2) NOT NULL DEFAULT '1',
+ active_captcha tinyint(1) unsigned NOT NULL DEFAULT '0',
  admin_id mediumint(8) unsigned NOT NULL DEFAULT '0',
  groups_view varchar(255) default '',
  publ_time int(11) unsigned NOT NULL DEFAULT '0',

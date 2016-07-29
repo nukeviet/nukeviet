@@ -186,6 +186,8 @@ $lang_module['content_checkcatmsg'] = 'Bạn cần chọn chủ đề chính cho
 $lang_module['content_archive'] = 'Lưu trữ sau thời gian hết hạn';
 $lang_module['content_tags_empty'] = 'Chú ý: Bài viết chưa có từ khóa nào';
 $lang_module['content_tags_empty_auto'] = 'Hệ thống sẽ tạo tự động từ khóa lúc lưu bài viết này, có thể tắt tính năng tự động tạo từ khóa ở phần quản lý module';
+$lang_module['content_advfeature'] = 'Tùy chọn nâng cao';
+$lang_module['content_description'] = 'Mô tả của site';
 
 $lang_module['showtooltip'] = 'Hiển thị tooltips';
 $lang_module['showtooltip_position'] = 'Vị trí hiển thị';
@@ -195,6 +197,7 @@ $lang_module['showtooltip_position_left'] = 'Trái';
 $lang_module['showtooltip_position_right'] = 'Phải';
 $lang_module['showtooltip_length'] = 'Số ký tự';
 $lang_module['showhometext'] = 'Hiển thị phần Giới thiệu ngắn gọn khi xem bài viết';
+$lang_module['htmlhometext'] = 'Sử dụng trình soạn thảo cho phần Giới thiệu ngắn gọn';
 $lang_module['show_no_image'] = 'Hiển thị ảnh No-Image nếu không bài viết không có hình minh họa';
 $lang_module['imgposition'] = 'Trình bày hình trong bài viết';
 $lang_module['imgpositiondefault'] = 'Cấu hình mặc định, Trình bày hình trong bài viết khi đăng bài';

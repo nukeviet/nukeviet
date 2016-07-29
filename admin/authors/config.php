@@ -124,12 +124,12 @@ if ($nv_Request->isset_request('submituser', 'post')) {
         }
     }
 
-    if (! empty($begintime1) && preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\.([0-9]{4})$/', $begintime1, $m)) {
+    if (! empty($begintime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\.([0-9]{4})$/', $begintime1, $m)) {
         $begintime1 = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     } else {
         $begintime1 = NV_CURRENTTIME;
     }
-    if (! empty($endtime1) && preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime1, $m)) {
+    if (! empty($endtime1) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime1, $m)) {
         $endtime1 = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     } else {
         $endtime1 = 0;
@@ -168,15 +168,15 @@ if ($nv_Request->isset_request('submitip', 'post')) {
     $begintime = $nv_Request->get_title('begintime', 'post', 0, 1);
     $endtime = $nv_Request->get_title('endtime', 'post', 0, 1);
 
-    if (empty($keyname) || ! $ips->nv_validip($keyname)) {
+    if (empty($keyname) or ! $ips->nv_validip($keyname)) {
         $error[] = $lang_module['adminip_error_validip'];
     }
-    if (! empty($begintime) && preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $begintime, $m)) {
+    if (! empty($begintime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $begintime, $m)) {
         $begintime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     } else {
         $begintime = NV_CURRENTTIME;
     }
-    if (! empty($endtime) && preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime, $m)) {
+    if (! empty($endtime) and preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $endtime, $m)) {
         $endtime = mktime(0, 0, 0, $m[2], $m[1], $m[3]);
     } else {
         $endtime = 0;

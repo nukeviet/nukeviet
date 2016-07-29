@@ -165,7 +165,7 @@ function getLeapMonthOffset($a11, $timeZone)
         $last = $arc;
         $i = $i + 1;
         $arc = getSunLongitude(getNewMoonDay($k + $i, $timeZone), $timeZone);
-    } while ($arc != $last && $i < 14);
+    } while ($arc != $last and $i < 14);
     return $i - 1;
 }
 
@@ -211,7 +211,7 @@ function convertSolar2Lunar($dd, $mm, $yy, $timeZone)
     if ($lunarMonth > 12) {
         $lunarMonth = $lunarMonth - 12;
     }
-    if ($lunarMonth >= 11 && $diff < 4) {
+    if ($lunarMonth >= 11 and $diff < 4) {
         $lunarYear -= 1;
     }
     return array( $lunarDay, $lunarMonth, $lunarYear, $lunarLeap );
@@ -247,9 +247,9 @@ function convertLunar2Solar($lunarDay, $lunarMonth, $lunarYear, $lunarLeap, $tim
         if ($leapMonth < 0) {
             $leapMonth += 12;
         }
-        if ($lunarLeap != 0 && $lunarMonth != $leapMonth) {
+        if ($lunarLeap != 0 and $lunarMonth != $leapMonth) {
             return array( 0, 0, 0 );
-        } elseif ($lunarLeap != 0 || $off >= $leapOff) {
+        } elseif ($lunarLeap != 0 or $off >= $leapOff) {
             $off += 1;
         }
     }
