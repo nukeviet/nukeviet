@@ -304,6 +304,12 @@
     border-color:#82b2dc !important;
 }
 
+.nv-info.info{
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    color: #31708f;
+}
+
 .nv-info:before {
     display:inline-block;
     font-family:FontAwesome;
@@ -321,6 +327,11 @@
 .nv-info.success:before {
     content:" \f13a ";
     color:#68D044;
+}
+
+.nv-info.info:before {
+    content: "\f05a";
+    color:#31708f;
 }
 
 .clear {

@@ -1,17 +1,39 @@
 <form action="{USER_LOGIN}" method="post" onsubmit="return login_validForm(this);" autocomplete="off" novalidate>
     <div class="nv-info margin-bottom" data-default="{GLANG.logininfo}">{GLANG.logininfo}</div>
     <div class="form-detail">
-        <div class="form-group">
+        <div class="form-group loginstep1">
             <div class="input-group">
                 <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
                 <input type="text" class="required form-control" placeholder="{GLANG.username_email}" value="" name="nv_login" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
             </div>
         </div>
         
-        <div class="form-group">
+        <div class="form-group loginstep1">
             <div class="input-group">
                 <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
                 <input type="password" class="required form-control" placeholder="{GLANG.password}" value="" name="nv_password" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+            </div>
+        </div>
+        
+        <div class="form-group loginstep2 hidden">
+            <label class="margin-bottom">{GLANG.2teplogin_totppin_label}</label>
+            <div class="input-group margin-bottom">
+                <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
+                <input type="text" class="required form-control" placeholder="{GLANG.2teplogin_totppin_placeholder}" value="" name="nv_totppin" maxlength="6" data-pattern="/^(.){6,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.2teplogin_totppin_placeholder}">
+            </div>
+            <div class="text-center">
+                <a href="#" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
+            </div>
+        </div>
+        
+        <div class="form-group loginstep3 hidden">
+            <label class="margin-bottom">{GLANG.2teplogin_code_label}</label>
+            <div class="input-group margin-bottom">
+                <span class="input-group-addon"><em class="fa fa-key fa-lg fa-fix"></em></span>
+                <input type="text" class="required form-control" placeholder="{GLANG.2teplogin_code_placeholder}" value="" name="nv_backupcodepin" maxlength="8" data-pattern="/^(.){8,}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.2teplogin_code_placeholder}">
+            </div>
+            <div class="text-center">
+                <a href="#" onclick="login2step_change(this);">{GLANG.2teplogin_other_menthod}</a>
             </div>
         </div>
         

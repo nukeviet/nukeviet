@@ -11,7 +11,7 @@
 if (! defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
-
+//$global_config['two_step_verification']
 if (defined('NV_IS_USER') or ! $global_config['allowuserlogin']) {
     Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
     die();
@@ -617,9 +617,16 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
                 if (! $row['active']) {
                     $error1 = $lang_module['login_no_active'];
                 } else {
-                    $error1 = '';
-                    validUserLog($row, 1, '');
-                    $blocker->reset_trackLogin($nv_username);
+                    if (!empty($row['active2step'])) {
+                        die(signin_result(array(
+                            'status' => '2step',
+                            'input' => '',
+                            'mess' => '' )));
+                    } else {
+                        $error1 = '';
+                        validUserLog($row, 1, '');
+                        $blocker->reset_trackLogin($nv_username);
+                    }
                 }
             }
         }
