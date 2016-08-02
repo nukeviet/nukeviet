@@ -472,7 +472,7 @@ foreach ($data as $row) {
 }
 
 while (list ($action_i, $title_i) = each($array_list_action)) {
-    if (defined('NV_IS_ADMIN_MODULE') || isset($_permission_action[$action_i])) {
+    if (defined('NV_IS_ADMIN_MODULE') or isset($_permission_action[$action_i])) {
         $action_assign = array(
             'value' => $action_i,
             'title' => $title_i

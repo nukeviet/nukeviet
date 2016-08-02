@@ -5,7 +5,7 @@
 		<!-- BEGIN: imgblock -->
 		<a title="{blocknews.title}" href="{blocknews.link}"><img src="{blocknews.imgurl}" alt="{blocknews.title}" width="{blocknews.width}" class="img-thumbnail pull-left"/></a>
 		<!-- END: imgblock -->
-		<a {TITLE} class="show" href="{blocknews.link}" data-content="{blocknews.hometext}" data-img="{blocknews.imgurl}" data-rel="block_news_tooltip">{blocknews.title}</a>
+		<a {TITLE} class="show" href="{blocknews.link}" data-content="{blocknews.hometext_clean}" data-img="{blocknews.imgurl}" data-rel="block_news_tooltip">{blocknews.title}</a>
 	</li>
 	<!-- END: newloop -->
 </ul>

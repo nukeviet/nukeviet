@@ -316,7 +316,7 @@ class Download
             return $_ENV[$key];
         } elseif (@getenv($key)) {
             return @getenv($key);
-        } elseif (function_exists('apache_getenv') && apache_getenv($key, true)) {
+        } elseif (function_exists('apache_getenv') and apache_getenv($key, true)) {
             return apache_getenv($key, true);
         }
         return '';

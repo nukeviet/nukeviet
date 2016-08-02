@@ -158,6 +158,8 @@ $lang_module['update_package_detected'] = 'Phát hiện có gói cập nhật, w
 $lang_module['update_package_delete'] = 'Xóa gói cập nhật';
 $lang_module['update_package_do'] = 'Thực hiện cập nhật';
 
+$lang_module['notification'] = 'Thông báo';
 $lang_module['notification_empty'] = '<p align="center">Chưa có thông báo!</p>';
 $lang_module['notification_module_auto_deactive'] = 'Module <strong>%s</strong> đã ngưng hoạt động do lỗi';
 $lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong>%s</strong> đã ngưng hoạt động do lỗi';
+$lang_module['notification_hide'] = 'Ẩn thông báo này';

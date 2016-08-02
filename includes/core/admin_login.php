@@ -30,6 +30,10 @@ if (! nv_admin_checkfirewall()) {
     nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />');
 }
 
+$blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
+$rules = array($global_config['login_number_tracking'], $global_config['login_time_tracking'], $global_config['login_time_ban']);
+$blocker->trackLogin($rules);
+
 $error = '';
 $login = '';
 $array_gfx_chk = array( 1, 5, 6, 7 );
@@ -38,15 +42,21 @@ if (in_array($global_config['gfx_chk'], $array_gfx_chk)) {
 } else {
     $global_config['gfx_chk'] = 0;
 }
+
 $admin_login_redirect = $nv_Request->get_string('admin_login_redirect', 'session', '');
+
 if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
     $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
+    
     if ($global_config['gfx_chk'] == 1) {
         $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     }
+    
     if (empty($nv_username)) {
         $error = $lang_global['username_empty'];
+    } elseif ($global_config['login_number_tracking'] and $blocker->is_blocklogin($nv_username)) {
+        $error = sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end));
     } elseif (empty($nv_password)) {
         $error = $lang_global['password_empty'];
     } elseif ($global_config['gfx_chk'] == 1 and ! nv_capcha_txt($nv_seccode)) {
@@ -65,13 +75,15 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
 
         $userid = 0;
         if (nv_check_valid_email($nv_username) == '') {
-            $sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE email =" . $db->quote($nv_username);
+            $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email =' . $db->quote($nv_username);
             $login_email = true;
         } else {
             $sql = "SELECT * FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username ='" . nv_md5safe($nv_username) . "'";
             $login_email = false;
         }
+        
         $row = $db->query($sql)->fetch();
+        
         if (empty($row)) {
             nv_insert_logs(NV_LANG_DATA, 'login', '[' . $nv_username . '] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0);
         } else {
@@ -79,7 +91,9 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                 $userid = $row['userid'];
             }
         }
+        
         $error = $lang_global['loginincorrect'];
+        
         if ($userid > 0) {
             $row = $db->query('SELECT t1.admin_id as admin_id, t1.lev as admin_lev, t1.last_agent as admin_last_agent, t1.last_ip as admin_last_ip, t1.last_login as admin_last_login, t2.password as admin_pass FROM ' . NV_AUTHORS_GLOBALTABLE . ' t1 INNER JOIN ' . NV_USERS_GLOBALTABLE . ' t2 ON t1.admin_id = t2.userid WHERE t1.admin_id = ' . $userid . ' AND t1.lev!=0 AND t1.is_suspend=0 AND t2.active=1')->fetch();
             if (! empty($row)) {
@@ -126,9 +140,10 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                     }
 
                     define('NV_IS_ADMIN', true);
+                    $blocker->reset_trackLogin($nv_username);
 
                     $redirect = NV_BASE_SITEURL . NV_ADMINDIR;
-                    if (! empty($admin_login_redirect) and strpos($admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification_load') == 0) {
+                    if (! empty($admin_login_redirect) and strpos($admin_login_redirect, NV_NAME_VARIABLE . '=siteinfo&' . NV_OP_VARIABLE . '=notification') == 0) {
                         $redirect = $admin_login_redirect;
                         $nv_Request->unset_request('admin_login_redirect', 'session');
                     }
@@ -140,6 +155,8 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                 nv_insert_logs(NV_LANG_DATA, 'login', '[ ' . $nv_username . ' ] ' . $lang_global['loginsubmit'] . ' ' . $lang_global['fail'], ' Client IP:' . NV_CLIENT_IP, 0);
             }
         }
+        
+        $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
     }
 } else {
     if (empty($admin_login_redirect)) {
@@ -159,13 +176,13 @@ $size = @getimagesize(NV_ROOTDIR . '/' . $global_config['site_logo']);
 
 $dir_template = '';
 if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system/login.tpl')) {
-    $dir_template = NV_ROOTDIR . "/themes/" . $global_config['admin_theme'] . "/system";
+    $dir_template = NV_ROOTDIR . '/themes/' . $global_config['admin_theme'] . '/system';
 } else {
-    $dir_template = NV_ROOTDIR . "/themes/admin_default/system";
-    $global_config['admin_theme'] = "admin_default";
+    $dir_template = NV_ROOTDIR . '/themes/admin_default/system';
+    $global_config['admin_theme'] = 'admin_default';
 }
 
-$xtpl = new XTemplate("login.tpl", $dir_template);
+$xtpl = new XTemplate('login.tpl', $dir_template);
 $xtpl->assign('CHARSET', $global_config['site_charset']);
 $xtpl->assign('SITE_NAME', $global_config['site_name']);
 $xtpl->assign('PAGE_TITLE', $lang_global['admin_page']);
@@ -204,6 +221,7 @@ if (isset($size[1])) {
         $xtpl->parse('main.image');
     }
 }
+
 $xtpl->assign('LANGLOSTPASS', $lang_global['lostpass']);
 $xtpl->assign('LINKLOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostpass');
 

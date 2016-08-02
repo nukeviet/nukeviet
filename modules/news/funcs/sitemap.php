@@ -14,9 +14,9 @@ if (! defined('NV_IS_MOD_NEWS')) {
 
 $url = array();
 $cacheFile = NV_LANG_DATA . '_sitemap_' . NV_CACHE_PREFIX . '.cache';
-$pa = NV_CURRENTTIME - 7200;
+$cacheTTL = 7200;
 
-if (($cache = $nv_Cache->getItem($module_name, $cacheFile)) != false and filemtime(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $module_name . '/' . $cacheFile) >= $pa) {
+if (($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
     $url = unserialize($cache);
 } else {
     $db_slave->sqlreset()
@@ -38,7 +38,7 @@ if (($cache = $nv_Cache->getItem($module_name, $cacheFile)) != false and filemti
     }
 
     $cache = serialize($url);
-    $nv_Cache->setItem($module_name, $cacheFile, $cache);
+    $nv_Cache->setItem($module_name, $cacheFile, $cache, $cacheTTL);
 }
 
 nv_xmlSitemap_generate($url);

@@ -32,9 +32,9 @@
 						<!-- END: comment -->
 					</ul>
 				</div>
-				<p class="text-justify">
+				<div class="text-justify">
 					{CONTENT.hometext}
-				</p>
+				</div>
 				<!-- BEGIN: adminlink -->
 				<p class="text-right">
 					{ADMINLINK}
