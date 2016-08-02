@@ -11,7 +11,7 @@
 if (! defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
-//$global_config['two_step_verification']
+
 if (defined('NV_IS_USER') or ! $global_config['allowuserlogin']) {
     Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
     die();
@@ -612,16 +612,35 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
 
         $row = $db->query($sql)->fetch();
 
-        if (! empty($row)) {
+        if (!empty($row)) {
             if ((($row['md5username'] == nv_md5safe($nv_username) and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password'])) {
-                if (! $row['active']) {
+                if (!$row['active']) {
                     $error1 = $lang_module['login_no_active'];
                 } else {
                     if (!empty($row['active2step'])) {
-                        die(signin_result(array(
-                            'status' => '2step',
-                            'input' => '',
-                            'mess' => '' )));
+                        $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
+                        $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
+                        
+                        if (empty($nv_totppin) and empty($nv_backupcodepin)) {
+                            die(signin_result(array(
+                                'status' => '2step',
+                                'input' => '',
+                                'mess' => '' )));
+                        }
+                        
+                        if (!empty($nv_totppin)) {
+                            die(signin_result(array(
+                                'status' => 'error',
+                                'input' => 'nv_totppin',
+                                'mess' => $nv_totppin )));
+                        }
+                        
+                        if (!empty($nv_backupcodepin)) {
+                            die(signin_result(array(
+                                'status' => 'error',
+                                'input' => 'nv_backupcodepin',
+                                'mess' => $nv_backupcodepin )));
+                        }
                     } else {
                         $error1 = '';
                         validUserLog($row, 1, '');
@@ -635,14 +654,19 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
             $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
         }
 
-        if (! empty($error1)) {
+        if (!empty($error1)) {
             die(signin_result(array(
                 'status' => 'error',
                 'input' => '',
                 'mess' => $error1 )));
+        } elseif (in_array($global_config['two_step_verification'], array(2, 3)) and empty($row['active2step'])) {
+            die(signin_result(array(
+                'status' => '2steprequire',
+                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE, true),
+                'mess' => $lang_module['2step_require'] )));
         }
     }
-
+    
     die(signin_result(array(
         'status' => 'ok',
         'input' => '',

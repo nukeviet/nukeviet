@@ -229,6 +229,9 @@ function login_validForm(a) {
                          window.location.href = window.location.href;
                     }
                 }, 3E3)
+            } else if (d.status == "2steprequire") {
+                $(".form-detail", a).hide(), $("#other_form").hide();
+                $(".nv-info", a).html("<a href=\"" + d.input + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
             } else {
                 $("input,button", a).prop("disabled", !1);
                 $('.loginstep1, .loginstep2', a).toggleClass('hidden');
