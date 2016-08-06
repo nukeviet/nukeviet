@@ -64,10 +64,11 @@ function cartorder(a_ob, popup, url) {
 	}
 	else
 	{
-        $('#idmodals').removeData('bs.modal');
-     	$('#idmodals').on('show.bs.modal', function () {
-             $('#idmodals .modal-body').load( url + '&popup=1' );
-        }).modal();
+	        $('#idmodals').removeData('bs.modal');
+	     	$.post(url + '&popup=1', function(res) {
+			$('#idmodals .modal-body').html( res ); 
+			$('#idmodals').modal('show');
+		});
 	}
 }
 
@@ -369,3 +370,34 @@ function check_price( id_pro, pro_unit )
 		});
 	}
 }
+
+function fix_image_content(){
+	var news = $('.tab-content'), newsW, w, h;
+	if( news.length ){
+		var newsW = news.innerWidth();
+		$.each($('img', news), function(){
+			if( typeof $(this).data('width') == "undefined" ){
+				w = $(this).innerWidth();
+				h = $(this).innerHeight();
+				$(this).data('width', w);
+				$(this).data('height', h);
+			}else{
+				w = $(this).data('width');
+				h = $(this).data('height');
+			}
+
+			if( w > newsW ){
+				$(this).prop('width', newsW);
+				$(this).prop('height', h * newsW / w);
+			}
+		});
+	}
+}
+
+$(window).load(function(){
+	fix_image_content();
+});
+
+$(window).on("resize", function() {
+	fix_image_content();
+});
