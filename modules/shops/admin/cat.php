@@ -7,7 +7,6 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
-
 if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
@@ -25,17 +24,36 @@ if (defined('NV_EDITOR')) {
 }
 
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y_m');
-if (!file_exists($currentpath)) {
+if (! file_exists($currentpath)) {
     nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, date('Y_m'), true);
 }
 
-list($data['catid'], $data['parentid'], $data['title'], $data['title_custom'], $data['alias'], $data['description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice']) = array( 0, 0, '', '', '', '', '', '', '6', 0, 0, 0, '', '', $pro_config['group_price'], 0, 7, 1);
+list ($data['catid'], $data['parentid'], $data['title'], $data['title_custom'], $data['alias'], $data['description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice']) = array(
+    0,
+    0,
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '6',
+    0,
+    0,
+    0,
+    '',
+    '',
+    $pro_config['group_price'],
+    0,
+    7,
+    1
+);
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
 $cat_form_exit = array();
-if(is_dir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/files_tpl')) {
-    $_form_exit = scandir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/files_tpl');
+if (is_dir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl')) {
+    $_form_exit = scandir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl');
     foreach ($_form_exit as $_form) {
         if (preg_match('/^cat\_form\_([a-zA-Z0-9\-\_]+)\.tpl$/', $_form, $m)) {
             $cat_form_exit[] = $m[1];
@@ -45,7 +63,7 @@ if(is_dir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/files_tpl'))
 
 if (! empty($savecat)) {
     $field_lang = nv_file_table($table_name);
-
+    
     $data['catid'] = $nv_Request->get_int('catid', 'post', 0);
     $data['typeprice'] = $nv_Request->get_int('typeprice', 'post', 2);
     $data['parentid_old'] = $nv_Request->get_int('parentid_old', 'post', 0);
@@ -61,21 +79,21 @@ if (! empty($savecat)) {
     $data['cat_allow_point'] = $nv_Request->get_int('cat_allow_point', 'post', 0);
     $data['cat_number_point'] = $nv_Request->get_int('cat_number_point', 'post', 0);
     $data['cat_number_product'] = $nv_Request->get_int('cat_number_product', 'post', 0);
-
+    
     $data['alias'] = ($data['alias'] == '') ? change_alias($data['title']) : change_alias($data['alias']);
-
+    
     // Cat mo ta cho chinh xac
     if (strlen($data['description']) > 255) {
         $data['description'] = nv_clean60($data['description'], 250);
     }
-
+    
     $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
     $data['groups_view'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
-
+    
     if ($data['title'] == '') {
         $error = $lang_module['error_cat_name'];
     }
-
+    
     $image = $nv_Request->get_string('image', 'post', '');
     if (is_file(NV_DOCUMENT_ROOT . $image)) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
@@ -83,37 +101,37 @@ if (! empty($savecat)) {
     } else {
         $data['image'] = '';
     }
-
+    
     $data['form'] = $nv_Request->get_title('cat_form', 'post', '');
     if (! in_array($data['form'], $cat_form_exit)) {
         $data['form'] = '';
     }
-
+    
     $data['group_price'] = $nv_Request->get_textarea('group_price', '', 'br');
-
+    
     $stmt = $db->prepare('SELECT count(*) FROM ' . $table_name . ' WHERE catid!=' . $data['catid'] . ' AND ' . NV_LANG_DATA . '_alias= :alias');
     $stmt->bindParam(':alias', $data['alias'], PDO::PARAM_STR);
     $stmt->execute();
     $check_alias = $stmt->fetchColumn();
-
+    
     if ($check_alias and $data['parentid'] > 0) {
         $parentid_alias = $db->query('SELECT ' . NV_LANG_DATA . '_alias FROM ' . $table_name . ' WHERE catid=' . $data['parentid'])->fetchColumn();
         $data['alias'] = $parentid_alias . '-' . $data['alias'];
     }
-
+    
     if ($data['catid'] == 0 and $data['title'] != '' and $error == '') {
         $listfield = '';
         $listvalue = '';
         foreach ($field_lang as $field_lang_i) {
-            list($flang, $fname) = $field_lang_i;
+            list ($flang, $fname) = $field_lang_i;
             $listfield .= ', ' . $flang . '_' . $fname;
             $listvalue .= ', :' . $flang . '_' . $fname;
         }
-        $w='SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid'];
+        $w = 'SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid'];
         $rw = $db->query($w);
         $weight = $rw->fetchColumn();
         $weight = intval($weight) + 1;
-
+        
         $sql = "INSERT INTO " . $table_name . " (catid, parentid, image, weight, sort, lev, viewcat, numsubcat, subcatid, inhome, numlinks, newday, typeprice, form, group_price, viewdescriptionhtml, admins, add_time, edit_time, groups_view, cat_allow_point, cat_number_point, cat_number_product " . $listfield . " )
  			VALUES (NULL, :parentid, :image," . $weight . ", '0', '0', :viewcat, '0', :subcatid, '1', '4', :newday, :typeprice, :form, :group_price, :viewdescriptionhtml, :admins, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", :groups_view, :cat_allow_point, :cat_number_point, :cat_number_product" . $listvalue . ")";
         $data_insert = array();
@@ -132,10 +150,10 @@ if (! empty($savecat)) {
         $data_insert['cat_number_point'] = $data['cat_number_point'];
         $data_insert['cat_number_product'] = $data['cat_number_product'];
         foreach ($field_lang as $field_lang_i) {
-            list($flang, $fname) = $field_lang_i;
+            list ($flang, $fname) = $field_lang_i;
             $data_insert[$flang . '_' . $fname] = $data[$fname];
         }
-
+        
         $newcatid = intval($db->insert_id($sql, 'catid', $data_insert));
         if ($newcatid > 0) {
             nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_catalog', 'id ' . $newcatid, $admin_info['userid']);
@@ -165,12 +183,12 @@ if (! empty($savecat)) {
             $stmt->bindParam(':cat_allow_point', $data['cat_allow_point'], PDO::PARAM_INT);
             $stmt->bindParam(':cat_number_point', $data['cat_number_point'], PDO::PARAM_INT);
             $stmt->bindParam(':cat_number_product', $data['cat_number_product'], PDO::PARAM_INT);
-
+            
             if ($stmt->execute()) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_catalog', 'id ' . $data['catid'], $admin_info['userid']);
-
+                
                 if ($data['parentid'] != $data['parentid_old']) {
-                    $w='SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid'];
+                    $w = 'SELECT max(weight) FROM ' . $table_name . ' WHERE parentid=' . $data['parentid'];
                     $rw = $db->query($w);
                     $weight = $rw->fetchColumn();
                     $weight = intval($weight) + 1;
@@ -178,14 +196,14 @@ if (! empty($savecat)) {
                     $db->query($sql);
                     nv_fix_cat_order();
                 }
-
-                //cập nhật các form dữ liệu tùy biến cho các subcat
+                
+                // cập nhật các form dữ liệu tùy biến cho các subcat
                 $_sql = 'SELECT catid FROM ' . $table_name . ' WHERE parentid=' . intval($data['catid']);
                 $_query = $db->query($_sql);
                 while ($row_catid = $_query->fetch()) {
-                    $db->query('UPDATE ' . $table_name . ' SET form=' .$db->quote($data['form']). ' WHERE catid=' . intval($row_catid['catid']));
+                    $db->query('UPDATE ' . $table_name . ' SET form=' . $db->quote($data['form']) . ' WHERE catid=' . intval($row_catid['catid']));
                 }
-
+                
                 $nv_Cache->delMod($module_name);
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&parentid=' . $data['parentid']);
                 die();
@@ -196,7 +214,7 @@ if (! empty($savecat)) {
     }
 } else {
     $data['parentid'] = $nv_Request->get_int('parentid', 'get,post', 0);
-
+    
     $data['catid'] = $nv_Request->get_int('catid', 'get', 0);
     if ($data['catid'] > 0) {
         $data = $db->query('SELECT * FROM ' . $table_name . ' where catid=' . $data['catid'])->fetch();
@@ -212,7 +230,7 @@ if (! empty($savecat)) {
     }
     if ($data['parentid']) {
         $data['form'] = $db->query('SELECT form FROM ' . $table_name . ' where catid=' . $data['parentid'])->fetchColumn();
-        list($parent_title, $group_price) = $db->query('SELECT ' . NV_LANG_DATA . '_title, group_price FROM ' . $table_name . ' where catid=' . $data['parentid'])->fetch(3);
+        list ($parent_title, $group_price) = $db->query('SELECT ' . NV_LANG_DATA . '_title, group_price FROM ' . $table_name . ' where catid=' . $data['parentid'])->fetch(3);
         $data['group_price'] = $group_price;
         $data['parent_title'] = $parent_title;
     }
@@ -221,18 +239,24 @@ if (! empty($savecat)) {
 $sql = 'SELECT catid, ' . NV_LANG_DATA . '_title, lev FROM ' . $table_name . ' WHERE catid !=' . $data['catid'] . ' ORDER BY sort ASC';
 $result = $db->query($sql);
 $array_cat_list = array();
-$array_cat_list[0] = array( '0', $lang_module['cat_sub_sl'] );
+$array_cat_list[0] = array(
+    '0',
+    $lang_module['cat_sub_sl']
+);
 
-while (list($catid_i, $title_i, $lev_i) = $result->fetch(3)) {
+while (list ($catid_i, $title_i, $lev_i) = $result->fetch(3)) {
     $xtitle_i = '';
     if ($lev_i > 0) {
         $xtitle_i .= '&nbsp;';
-        for ($i = 1; $i <= $lev_i; $i++) {
+        for ($i = 1; $i <= $lev_i; $i ++) {
             $xtitle_i .= '---';
         }
     }
     $xtitle_i .= $title_i;
-    $array_cat_list[] = array( $catid_i, $xtitle_i );
+    $array_cat_list[] = array(
+        $catid_i,
+        $xtitle_i
+    );
 }
 
 $lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
@@ -301,10 +325,18 @@ foreach ($groups_list as $_group_id => $_title) {
 }
 
 // Cach tinh gia san pham
-$array_typeprice = array( $lang_module['typeprice_none'], $lang_module['config_discounts'], $lang_module['typeprice_per_product'] );
+$array_typeprice = array(
+    $lang_module['typeprice_none'],
+    $lang_module['config_discounts'],
+    $lang_module['typeprice_per_product']
+);
 foreach ($array_typeprice as $key => $value) {
     $ck = $data['typeprice'] == $key ? 'checked="checked"' : '';
-    $xtpl->assign('TYPEPRICE', array( 'key' => $key, 'value' => $value, 'checked' => $ck ));
+    $xtpl->assign('TYPEPRICE', array(
+        'key' => $key,
+        'value' => $value,
+        'checked' => $ck
+    ));
     $xtpl->parse('main.typeprice_loop');
 }
 
@@ -332,8 +364,12 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 }
 $xtpl->assign('DESCRIPTIONHTML', $descriptionhtml);
 
-for ($i = 0; $i <= 2; $i++) {
-    $xtpl->assign('VIEWDESCRIPTION', array( 'value' => $i, 'checked' => $data['viewdescriptionhtml'] == $i ? ' checked="checked"' : '', 'title' => $lang_module['content_bodytext_display_' . $i] ));
+for ($i = 0; $i <= 2; $i ++) {
+    $xtpl->assign('VIEWDESCRIPTION', array(
+        'value' => $i,
+        'checked' => $data['viewdescriptionhtml'] == $i ? ' checked="checked"' : '',
+        'title' => $lang_module['content_bodytext_display_' . $i]
+    ));
     $xtpl->parse('main.viewdescriptionhtml');
 }
 
