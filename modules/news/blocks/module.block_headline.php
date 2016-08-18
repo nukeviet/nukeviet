@@ -148,7 +148,8 @@ if (! nv_function_exists('nv_block_headline')) {
                         $xtpl->assign('TITLE', 'title="' . $lastest['title'] . '"');
                     }
 
-                    $lastest['hometext'] = nv_clean60($lastest['hometext'], $block_config['tooltip_length'], true);
+                    $lastest['hometext_clean'] = strip_tags($lastest['hometext']);
+                    $lastest['hometext_clean'] = nv_clean60($lastest['hometext_clean'], $block_config['tooltip_length'], true);
                     $xtpl->assign('LASTEST', $lastest);
                     $xtpl->parse('main.loop_tabs_content.content.loop');
                 }
@@ -167,11 +168,11 @@ if (! nv_function_exists('nv_block_headline')) {
             $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery/jquery.imgpreload.min.js\"></script>\n";
         }
 
-        $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/contentslider.js\"></script>\n";
-        $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
-        $my_footer .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
-        $my_footer .= '$(document).ready(function(){var b=["' . implode('","', $images) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
-        $my_footer .= "\n//]]>\n</script>\n";
+        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/contentslider.js\"></script>\n";
+        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
+        $my_head .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
+        $my_head .= '$(document).ready(function(){var b=["' . implode('","', $images) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
+        $my_head .= "\n//]]>\n</script>\n";
         $xtpl->parse('main');
         return $xtpl->text('main');
     }

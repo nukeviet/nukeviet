@@ -12,11 +12,21 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (headers_sent() || connection_status() != 0 || connection_aborted()) {
+if (headers_sent() or connection_status() != 0 or connection_aborted()) {
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
 
 if ($sys_info['ini_set_support']) {
+    if ($global_config['session_handler'] == 'memcached') {
+        if (ini_set('session.save_handler', 'memcached') === false or ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT) === false) {
+            trigger_error('Server does not support Memcached Session handler!', 256);
+        }
+    } elseif ($global_config['session_handler'] == 'redis') {
+        if (ini_set('session.save_handler', 'redis') === false or ini_set('session.save_path', NV_REDIS_HOST . ':' . NV_REDIS_PORT) === false) {
+            trigger_error('Server does not support Redis Session handler!', 256);
+        }
+    }
+    
     if (! isset($_SESSION)) {
         //ini_set( 'session.save_handler', 'files' );
         ini_set('session.use_trans_sid', 0);

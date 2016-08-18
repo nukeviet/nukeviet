@@ -14,18 +14,22 @@ function extractLast(term) {
 	return split(term).pop();
 }
 
-
-$("#titlelength").html($("#idtitle").val().length);
-$("#idtitle").bind("keyup paste", function() {
-	$("#titlelength").html($(this).val().length);
-});
-
-$("#descriptionlength").html($("#description").val().length);
-$("#description").bind("keyup paste", function() {
-	$("#descriptionlength").html($(this).val().length);
-});
-
 $(document).ready(function() {
+    $("#titlelength").html($("#idtitle").val().length);
+    $("#idtitle").bind("keyup paste", function() {
+    	$("#titlelength").html($(this).val().length);
+    });
+    
+    $("#titlesitelength").html($("#idtitlesite").val().length);
+    $("#idtitlesite").bind("keyup paste", function() {
+    	$("#titlesitelength").html($(this).val().length);
+    });
+    
+    $("#descriptionlength").html($("#description").val().length);
+    $("#description").bind("keyup paste", function() {
+    	$("#descriptionlength").html($(this).val().length);
+    });
+
 	$("input[name='catids[]']").click(function() {
 		var catid = $("input:radio[name=catid]:checked").val();
 		var radios_catid = $("input:radio[name=catid]");
@@ -215,6 +219,21 @@ $(document).ready(function() {
 		templateResult: formatRepo, // omitted for brevity, see the source of this page
 		templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
 	});
+    
+    // Control content adv tab
+    $('#adv-form').on('hidden.bs.collapse', function() {
+        $('#adv-form-arrow').removeClass('fa-angle-double-up').addClass('fa-angle-double-down');
+        $.cookie(nv_module_name + '_advtabcontent', 'HIDE', {expires: 7});
+    });
+    $('#adv-form').on('shown.bs.collapse', function() {
+        $('#adv-form-arrow').removeClass('fa-angle-double-down').addClass('fa-angle-double-up');
+        $.cookie(nv_module_name + '_advtabcontent', 'SHOW', {expires: 7});
+    });
+    if ($.cookie(nv_module_name + '_advtabcontent') == 'SHOW') {
+        $('#adv-form').collapse('show');
+    } else {
+        $('#adv-form').collapse('hide');
+    }
 });
 
 function formatRepo (repo) {

@@ -87,7 +87,7 @@ class UrlGetContents
      */
     private function check_url($is_200 = 0)
     {
-        $allow_url_fopen = (ini_get('allow_url_fopen') == '1' || strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
+        $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
 
         if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions) and $allow_url_fopen == 1) {
             $res = get_headers($this->url_info['uri']);
@@ -239,7 +239,7 @@ class UrlGetContents
 
         $result = curl_exec($curlHandle);
 
-        if (curl_errno($curlHandle) == 23 || curl_errno($curlHandle) == 61) {
+        if (curl_errno($curlHandle) == 23 or curl_errno($curlHandle) == 61) {
             curl_setopt($curlHandle, CURLOPT_ENCODING, 'none');
             $result = curl_exec($curlHandle);
         }
@@ -254,7 +254,7 @@ class UrlGetContents
         $response = curl_getinfo($curlHandle);
 
         if ($this->open_basedir) {
-            if ($response['http_code'] == 301 || $response['http_code'] == 302 || $response['http_code'] == 303) {
+            if ($response['http_code'] == 301 or $response['http_code'] == 302 or $response['http_code'] == 303) {
                 if (preg_match('/^(Location:|URI:)[\s]*(.*?)$/m', $header, $matches) and $this->redirectCount <= 5) {
                     ++$this->redirectCount;
 
@@ -273,7 +273,7 @@ class UrlGetContents
             }
         }
 
-        if (($response['http_code'] < 200) || (300 <= $response['http_code'])) {
+        if (($response['http_code'] < 200) or (300 <= $response['http_code'])) {
             curl_close($curlHandle);
             return false;
         }
@@ -363,7 +363,7 @@ class UrlGetContents
 
         $response = '';
 
-        while ((!@feof($fp)) && (!$in_f['timed_out'])) {
+        while ((!@feof($fp)) and (!$in_f['timed_out'])) {
             $response .= @fgets($fp, 4096);
             $inf = @stream_get_meta_data($fp);
             if ($inf['timed_out']) {

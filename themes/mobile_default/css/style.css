@@ -743,7 +743,7 @@ a.btn {
 /* Header */
 
 header.first-child {
-    position:fixed !important;
+    position:fixed;
     top:0;
     left:0;
     width:100%;
@@ -1152,7 +1152,7 @@ header.header-up {
 /* WinHelp */
 
 #winHelp {
-    position:fixed;
+    position:absolute;
     top:0;
     left:0;
     bottom:0;
@@ -1164,7 +1164,7 @@ header.header-up {
 }
 
 #winHelp .winHelp {
-    position:fixed;
+    position:absolute;
     top:0;
     left:0;
     bottom:0;

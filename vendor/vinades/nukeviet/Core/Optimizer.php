@@ -14,8 +14,6 @@ class Optimizer
 {
     private $_content;
     private $_conditon = array();
-    private $_conditonCss = array();
-    private $_conditonJs = array();
     private $_condCount = 0;
     private $_meta = array();
     private $_title = '<title></title>';
@@ -49,23 +47,18 @@ class Optimizer
     public function process()
     {
         $conditionRegex = "/<\!--\[if([^\]]+)\].*?\[endif\]-->/is";
-        if (preg_match_all($conditionRegex, $this->_content, $conditonMatches)) {
-            $this->_conditon = $conditonMatches[0];
-            $this->_content = preg_replace_callback($conditionRegex, array(
-                $this,
-                'conditionCallback'
-            ), $this->_content);
-        }
+        $this->_content = preg_replace_callback($conditionRegex, array(
+            $this,
+            'conditionCallback'
+        ), $this->_content);
 
         $this->_content = preg_replace("/<script[^>]+src\s*=\s*[\"|']([^\"']+jquery.min.js)[\"|'][^>]*>[\s\r\n\t]*<\/script>/is", "", $this->_content);
+        
         $jsRegex = "/<\s*\bscript\b[^>]*>(.*?)<\s*\/\s*script\s*>/is";
-        if (preg_match_all($jsRegex, $this->_content, $jsMatches)) {
-            $this->_jsMatches = $jsMatches[0];
-            $this->_content = preg_replace_callback($jsRegex, array(
-                $this,
-                'jsCallback'
-            ), $this->_content);
-        }
+        $this->_content = preg_replace_callback($jsRegex, array(
+            $this,
+            'jsCallback'
+        ), $this->_content);
 
         $htmlRegex = "/<\!--\s*START\s+FORFOOTER\s*-->(.*?)<\!--\s*END\s+FORFOOTER\s*-->/is";
         if (preg_match_all($htmlRegex, $this->_content, $htmlMatches)) {
@@ -224,6 +217,7 @@ class Optimizer
      */
     private function conditionCallback($matches)
     {
+        $this->_conditon[] = $matches[0];
         $num = $this->_condCount;
         ++$this->_condCount;
         return '{|condition_' . $num . '|}';
@@ -238,8 +232,13 @@ class Optimizer
      */
     private function jsCallback($matches)
     {
-        $num = $this->_jsCount;
-        ++$this->_jsCount;
-        return '{|js_' . $num . '|}';
+        if (preg_match('/<\s*\bscript\b[^>]*data\-show\=["|\']inline["|\'][^>]*>/is', $matches[0])) {
+            return $matches[0];
+        } else {
+            $this->_jsMatches[] = $matches[0];
+            $num = $this->_jsCount;
+            ++$this->_jsCount;
+            return '{|js_' . $num . '|}';
+        }
     }
 }

@@ -23,7 +23,7 @@ function nv_parse_ini_file($filename, $process_sections = false)
 {
     $process_sections = ( bool )$process_sections;
 
-    if (! file_exists($filename) || ! is_readable($filename)) {
+    if (! file_exists($filename) or ! is_readable($filename)) {
         return false;
     }
 
@@ -32,7 +32,7 @@ function nv_parse_ini_file($filename, $process_sections = false)
     $section = '';
     foreach ($data as $line) {
         $line = trim($line);
-        if (empty($line) || preg_match('/^;/', $line)) {
+        if (empty($line) or preg_match('/^;/', $line)) {
             continue;
         }
         if (preg_match('/^\[(.*?)\]$/', $line, $match)) {
@@ -47,7 +47,7 @@ function nv_parse_ini_file($filename, $process_sections = false)
         $value = trim($value);
         $value = str_replace(array( '"', "'" ), array( '', '' ), $value);
 
-        if ($process_sections && ! empty($section)) {
+        if ($process_sections and ! empty($section)) {
             if (preg_match('/^(.*?)\[\]$/', $key, $match)) {
                 $ini[$section][$match[1]][] = $value;
             } else {
@@ -397,7 +397,7 @@ function nv_mkdir($path, $dir_name)
         $conn_id = ftp_connect($ftp_server, $ftp_port, 10);
         // login with username and password
         $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
-        if ((! $conn_id) || (! $login_result)) {
+        if ((! $conn_id) or (! $login_result)) {
             $ftp_check_login = 3;
         } elseif (ftp_chdir($conn_id, $ftp_path)) {
             $ftp_check_login = 1;
@@ -559,7 +559,7 @@ function nv_ftp_del_dir($ftp, $dst_dir, $delsub)
             $st_type = $ar_files[$i]['type'];
             // 1: folder | 0: file
 
-            if ($st_file == '.' || $st_file == '..') {
+            if ($st_file == '.' or $st_file == '..') {
                 continue;
             }
             // Kiem tra neu co cac file ngoai le

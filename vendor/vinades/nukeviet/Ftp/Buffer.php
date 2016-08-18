@@ -90,7 +90,7 @@ class Buffer
     {
         switch ($whence) {
             case SEEK_SET:
-                if ($offset < strlen($GLOBALS[$this->varname]) && $offset >= 0) {
+                if ($offset < strlen($GLOBALS[$this->varname]) and $offset >= 0) {
                     $this->position = $offset;
                     return true;
                 } else {

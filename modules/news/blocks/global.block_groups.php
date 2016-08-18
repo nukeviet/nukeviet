@@ -113,8 +113,9 @@ if (! nv_function_exists('nv_block_news_groups')) {
                 }
 
                 $l['blockwidth'] = $blockwidth;
-
-                $l['hometext'] = nv_clean60($l['hometext'], $block_config['tooltip_length'], true);
+                
+                $l['hometext_clean'] = strip_tags($l['hometext']);
+                $l['hometext_clean'] = nv_clean60($l['hometext_clean'], $block_config['tooltip_length'], true);
 
                 if (! $block_config['showtooltip']) {
                     $xtpl->assign('TITLE', 'title="' . $l['title'] . '"');

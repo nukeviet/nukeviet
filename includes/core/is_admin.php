@@ -140,7 +140,7 @@ if (! empty($admin_cookie)) {
             exit();
         }
     }
-    if ($nv_Request->get_title(NV_OP_VARIABLE, 'get') != 'notification_load') {
+    if ($nv_Request->get_title(NV_OP_VARIABLE, 'get') != 'notification') {
         $nv_Request->set_Session('online', $admin_info['checkpass'] . '|' . $admin_info['last_online'] . '|' . NV_CURRENTTIME . '|' . $admin_info['checkhits']);
     }
     $admin_info['full_name'] = nv_show_name_user($admin_info['first_name'], $admin_info['last_name']);

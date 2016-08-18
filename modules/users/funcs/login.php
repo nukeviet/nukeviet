@@ -547,6 +547,10 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     exit();
 }
 
+$blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
+$rules = array($global_config['login_number_tracking'], $global_config['login_time_tracking'], $global_config['login_time_ban']);
+$blocker->trackLogin($rules);
+
 //Dang nhap kieu thong thuong
 if ($nv_Request->isset_request('nv_login', 'post')) {
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
@@ -568,7 +572,14 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
             'input' => 'nv_login',
             'mess' => $lang_global['username_empty'] )));
     }
-
+    
+    if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($nv_username)) {
+        die(signin_result(array(
+            'status' => 'error',
+            'input' => '',
+            'mess' => sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end)) )));
+    }    
+    
     if (empty($nv_password)) {
         die(signin_result(array(
             'status' => 'error',
@@ -608,8 +619,13 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
                 } else {
                     $error1 = '';
                     validUserLog($row, 1, '');
+                    $blocker->reset_trackLogin($nv_username);
                 }
             }
+        }
+        
+        if ($global_config['login_number_tracking'] and (empty($row) or ($row['active'] and !empty($error1)))) {
+            $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
         }
 
         if (! empty($error1)) {
@@ -636,7 +652,7 @@ $mod_title = $lang_module['login'];
 
 $contents = user_login();
 
-$full = empty($nv_header);// && empty($nv_redirect);
+$full = empty($nv_header);// and empty($nv_redirect);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents, $full);

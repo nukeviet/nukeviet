@@ -290,7 +290,7 @@ function preview(){
 		autoOpen : false,
 		width : 388,
 		modal : true,
-		position : "center"
+		position : {my: "center", at: "center", of: window}
 	}).dialog("open").dblclick(function(){
 		$("div#imgpreview").dialog("close");
 	});
@@ -326,7 +326,7 @@ function create(){
 			autoOpen : false,
 			width : 650,
 			modal : true,
-			position : "center"
+			position : {my: "center", at: "center", of: window}
 		}).dialog("open");
 	}
 }
@@ -366,7 +366,7 @@ function move(){
 		autoOpen : false,
 		width : 300,
 		modal : true,
-		position : "center"
+		position : {my: "center", at: "center", of: window}
 	}).dialog("open");
 }
 
@@ -386,7 +386,7 @@ function filerename(){
 		autoOpen : false,
 		width : 400,
 		modal : true,
-		position : "center"
+		position : {my: "center", at: "center", of: window}
 	}).dialog("open");
 }
 
@@ -737,7 +737,7 @@ function cropfile(){
 		autoOpen : false,
 		width : 400,
 		modal : true,
-		position : "center"
+		position : {my: "center", at: "center", of: window}
 	}).dialog("open");
 }
 
@@ -864,7 +864,7 @@ function addlogo(){
 		autoOpen : false,
 		width : 400,
 		modal : true,
-		position : "center"
+		position : {my: "center", at: "center", of: window}
 	}).dialog("open");
 }
 
@@ -896,7 +896,7 @@ function rotatefile(){
 		autoOpen : false,
 		width : 400,
 		modal : true,
-		position : "center"
+		position : {my: "center", at: "center", of: window}
 	}).dialog("open");
 
 	// Dat lai gia tri xoay
@@ -1005,7 +1005,7 @@ $(".search em").click(function (){
 		autoOpen: false,
 		width: 300,
 		modal: true,
-		position: "center"
+		position: {my: "center", at: "center", of: window}
 	}).dialog("open");
 	$("input[name=q]").val("").focus();
 	return false
@@ -1016,7 +1016,7 @@ $("div#errorInfo").dialog({
 	width : 300,
 	height : 180,
 	modal : true,
-	position : "center",
+	position : {my: "center", at: "center", of: window},
 	show : "slide"
 });
 
@@ -1025,7 +1025,7 @@ $("div#renamefolder").dialog({
 	width : 250,
 	height : 160,
 	modal : true,
-	position : "center",
+	position : {my: "center", at: "center", of: window},
 	buttons : {
 		Ok : function(){
 			var a = $("span[name=current]").attr("title"), b = $("input[name=foldername]").val(), d = $("span#foldervalue").attr("title"), e = a.split("/");
@@ -1079,10 +1079,10 @@ $("div#renamefolder").dialog({
 
 $("div#createfolder").dialog({
 	autoOpen : false,
-	width : 250,
-	height : 160,
+	width : 260,
+	height : 170,
 	modal : true,
-	position : "center",
+	position : {my: "center", at: "center", of: window},
 	buttons : {
 		Ok : function(){
 			var a = $("input[name=createfoldername]").val(), b = $("span[name=current]").attr("title");
@@ -1264,7 +1264,7 @@ function remoteUpload(){
 		width : 400,
 		height : nv_alt_require ? 200 : 120,
 		modal : true,
-		position : "center"
+		position : {my: "center", at: "center", of: window}
 	}).dialog("open");
 
 	if( nv_auto_alt ){
