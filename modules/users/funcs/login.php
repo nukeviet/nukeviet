@@ -628,21 +628,38 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
                                 'mess' => '' )));
                         }
                         
-                        if (!empty($nv_totppin)) {
+                        $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
+                        
+                        if (!empty($nv_totppin) and !$GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
                             die(signin_result(array(
                                 'status' => 'error',
                                 'input' => 'nv_totppin',
-                                'mess' => $nv_totppin )));
+                                'mess' => $lang_module['2step_error_opt'] )));
                         }
                         
                         if (!empty($nv_backupcodepin)) {
-                            die(signin_result(array(
-                                'status' => 'error',
-                                'input' => 'nv_backupcodepin',
-                                'mess' => $nv_backupcodepin )));
+                            $nv_backupcodepin = nv_strtolower($nv_backupcodepin);
+                            $sth = $db->prepare('SELECT code FROM ' . NV_MOD_TABLE . '_backupcodes WHERE is_used=0 AND code=:code AND userid=' . $row['userid']);
+                            $sth->bindParam(':code', $nv_backupcodepin, PDO::PARAM_STR);
+                            $sth->execute();
+                            
+                            if ($sth->rowCount() != 1) {
+                                die(signin_result(array(
+                                    'status' => 'error',
+                                    'input' => 'nv_backupcodepin',
+                                    'mess' => $lang_module['2step_error_backup'] )));
+                            }
+                            
+                            $code = $sth->fetchColumn();
+                            $db->query('UPDATE ' . NV_MOD_TABLE . "_backupcodes SET is_used=1, time_used=" . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $row['userid']);
                         }
+                        
+                        $error1 = '';
                     } else {
                         $error1 = '';
+                    }
+                    
+                    if (empty($error1)) {
                         validUserLog($row, 1, '');
                         $blocker->reset_trackLogin($nv_username);
                     }

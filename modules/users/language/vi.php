@@ -354,3 +354,6 @@ $lang_module['2step_require'] = 'Hệ thống bắt buộc bạn phải kích ho
 $lang_module['2step_require_title'] = 'Yêu cầu kích hoạt chức năng xác thực hai bước';
 $lang_module['2step_require_content'] = 'Hệ thống bắt buộc bạn phải kích hoạt chức năng xác thực hai bước mới có thể đăng nhập được. Hệ thống sẽ tự chuyển đến trang kích hoạt chức năng này trong giây lát';
 $lang_module['2step_require_directgo'] = 'Nhấp vào đây nếu hệ thống không tự chuyển';
+$lang_module['2step_error_opt_backup'] = 'Vui lòng nhập mã xác nhận từ ứng dụng Google Authenticator hoặc Mã dự phòng đã lưu';
+$lang_module['2step_error_opt'] = 'Mã xác nhận không chính xác, vui lòng nhập lại';
+$lang_module['2step_error_backup'] = 'Mã dự phòng không chính xác, vui lòng nhập lại';

@@ -22,6 +22,8 @@ if (!isset($site_mods[NV_BRIDGE_USER_MODULE]) or (!defined('NV_IS_USER') and !de
     die();
 }
 
+$GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
+
 /**
  * nv_get_user_secretkey()
  * 
@@ -35,8 +37,9 @@ function nv_get_user_secretkey()
     $secretkey = $db->query('SELECT secretkey FROM ' . $module_data . ' WHERE userid=' . $user_info['userid'])->fetchColumn();
     
     if (empty($secretkey)) {
+        global $GoogleAuthenticator;
         while (1) {
-            $_secretkey = strtolower(nv_genpass(16));
+            $_secretkey = $GoogleAuthenticator->creatSecretkey();
             if ($db->query('SELECT COUNT(*) FROM ' . $module_data . ' WHERE secretkey=' . $db->quote($_secretkey))->fetchColumn() == 0) {
                 if ($db->exec('UPDATE ' . $module_data . ' SET secretkey=' . $db->quote($_secretkey) . ' WHERE userid=' . $user_info['userid'])) {
                     $secretkey = $_secretkey;
@@ -51,7 +54,31 @@ function nv_get_user_secretkey()
     return $secretkey;
 }
 
+/**
+ * nv_creat_backupcodes()
+ * 
+ * @return void
+ */
+function nv_creat_backupcodes()
+{
+    global $user_info, $db, $db_config, $site_mods;
+    
+    $module_data = $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'];
+    $db->query('DELETE FROM ' . $module_data . '_backupcodes WHERE userid=' . $user_info['userid']);
+    
+    $new_code = array();
+    while (sizeof($new_code) < 10) {
+        $code = nv_strtolower(nv_genpass(8, 0));
+        if (!in_array($code, $new_code)) {
+            $new_code[] = $code;
+        }
+    }
+    
+    foreach ($new_code as $code) {
+        $db->query('INSERT INTO ' . $module_data . '_backupcodes (userid, code, is_used, time_used, time_creat) VALUES (
+        ' . $user_info['userid'] . ', ' . $db->quote($code) . ', 0, 0, ' . NV_CURRENTTIME . ')');
+    }
+}
+
 // Lấy mã bí mật
 $secretkey = nv_get_user_secretkey();
-
-//otpauth://totp/Example99:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example99

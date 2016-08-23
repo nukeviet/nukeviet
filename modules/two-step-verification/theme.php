@@ -12,59 +12,96 @@ if (! defined('NV_MOD_2STEP_VERIFICATION')) {
     die('Stop!!!');
 }
 
-function nv_theme_info_2step($data)
+/**
+ * nv_theme_info_2step()
+ * 
+ * @param mixed $backupcodes
+ * @return
+ */
+function nv_theme_info_2step($backupcodes, $allow_disable_2step)
 {
-    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name, $op, $nv_redirect;
+    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $user_info, $module_name;
 
     $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
-
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('DATA', $data);
-    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=lostpass');
-    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-    $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-    $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-    $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-    $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-
-    if (! empty($nv_redirect)) {
-        $xtpl->assign('REDIRECT', $nv_redirect);
-        $xtpl->parse('main.redirect');
+    
+    if ($allow_disable_2step and !empty($user_info['active2step'])) {
+        $xtpl->assign('LINK_TURNOFF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=turnoff');
+        $xtpl->parse('main.turnoff');
+    } elseif (empty($user_info['active2step'])) {
+        $xtpl->assign('LINK_TURNON', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=setup');
+        $xtpl->parse('main.turnon');
     }
-
-    $_lis = $module_info['funcs'];
-    $_alias = $module_info['alias'];
-    foreach ($_lis as $_li) {
-        if ($_li['show_func'] and $_li['in_submenu'] and $_li['func_name'] != 'main') {
-            if ($_li['func_name'] == $op or $_li['func_name'] == 'avatar' or $_li['func_name'] == 'groups') {
-                continue;
+    
+    if (empty($user_info['active2step'])) {
+        $xtpl->parse('main.off');
+    } else {
+        $code_unused = 0;
+        foreach ($backupcodes as $code) {
+            $code_unused += (!$code['is_used']);
+            $xtpl->assign('CODE', $code);
+            
+            if ($code['is_used']) {
+                $xtpl->parse('main.backupcodeModal.code.used');
+            } else {
+                $xtpl->parse('main.backupcodeModal.code.unuse');
             }
-            if ($_li['func_name'] == 'register' and ! $global_config['allowuserreg']) {
-                continue;
-            }
-
-            $href = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $_alias[$_li['func_name']];
-            if (! empty($nv_redirect)) {
-                $href .= '&nv_redirect=' . $nv_redirect;
-            }
-            $li = array( 'href' => $href, 'title' => $_li['func_name'] == 'main' ? $module_info['custom_title'] : $_li['func_custom_name'] );
-            $xtpl->assign('NAVBAR', $li);
-            $xtpl->parse('main.navbar');
+            
+            $xtpl->parse('main.backupcodeModal.code');
         }
+        $xtpl->parse('main.backupcodeModal');
+        
+        $xtpl->assign('NUM_CODE', sprintf($lang_module['backupcode_2step'], $code_unused));
+        $xtpl->assign('LINK_CREATCODE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=changecode');
+        
+        $xtpl->parse('main.backupcode');
+        $xtpl->parse('main.on');
     }
+    
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+/**
+ * nv_theme_config_2step()
+ * 
+ * @param mixed $secretkey
+ * @return
+ */
+function nv_theme_config_2step($secretkey)
+{
+    global $module_info, $module_file, $lang_global, $lang_module, $module_name, $op;
+
+    $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+    
+    $xtpl->assign('SECRETKEY', strtolower($secretkey));
+    $xtpl->assign('QR_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/qr-image/' . nv_genpass());
+    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 
     $xtpl->parse('main');
     return $xtpl->text('main');
 }
 
-function nv_theme_creat_2step()
-{
-    
-}
-
+/**
+ * nv_theme_confirm_password()
+ * 
+ * @return
+ */
 function nv_theme_confirm_password()
 {
+    global $module_info, $module_file, $lang_global, $lang_module, $op, $module_name;
+
+    $xtpl = new XTemplate('confirm_password.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
     
+    $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
+
+    $xtpl->parse('main');
+    return $xtpl->text('main');
 }
