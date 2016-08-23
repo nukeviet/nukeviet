@@ -40,6 +40,8 @@ $install_lang['modules']['Page'] = 'Page';
 $install_lang['modules']['Page_for_acp'] = '';
 $install_lang['modules']['freecontent'] = 'Introduction';
 $install_lang['modules']['freecontent_for_acp'] = '';
+$install_lang['modules']['two_step_verification'] = '2-Step Verification';
+$install_lang['modules']['two_step_verification_for_acp'] = '';
 
 $install_lang['modfuncs'] = array();
 $install_lang['modfuncs']['users'] = array();

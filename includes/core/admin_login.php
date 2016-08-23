@@ -183,6 +183,8 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                 
                 $captcha_require = 0;
                 $nv_Request->set_Session('admin_dismiss_captcha', 1);
+            } else {
+                $valid_user = true;
             }
             
             if ($valid_user === true) {

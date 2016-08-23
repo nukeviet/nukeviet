@@ -634,7 +634,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
                             die(signin_result(array(
                                 'status' => 'error',
                                 'input' => 'nv_totppin',
-                                'mess' => $lang_module['2step_error_opt'] )));
+                                'mess' => $lang_global['2teplogin_error_opt'] )));
                         }
                         
                         if (!empty($nv_backupcodepin)) {
@@ -647,7 +647,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
                                 die(signin_result(array(
                                     'status' => 'error',
                                     'input' => 'nv_backupcodepin',
-                                    'mess' => $lang_module['2step_error_backup'] )));
+                                    'mess' => $lang_global['2teplogin_error_backup'] )));
                             }
                             
                             $code = $sth->fetchColumn();
@@ -680,7 +680,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
             die(signin_result(array(
                 'status' => '2steprequire',
                 'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE, true),
-                'mess' => $lang_module['2step_require'] )));
+                'mess' => $lang_global['2teplogin_require'] )));
         }
     }
     
