@@ -72,6 +72,7 @@ class GoogleAuthenticator
     {
         $secret = '';
         $validChars = $this->getTable();
+        unset($validChars[33]);
         
         for ($i = 0; $i < $this->secretLength; $i++) {
             $secret .= $validChars[array_rand($validChars)];
@@ -200,10 +201,10 @@ class GoogleAuthenticator
     private function getTable()
     {
         $table = array(
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-            'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-            'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-            'Y', 'Z', '2', '3', '4', '5', '6', '7',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', // 7
+            'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', // 15
+            'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', // 24
+            'Y', 'Z', '2', '3', '4', '5', '6', '7', // 32
             '='
         );
         

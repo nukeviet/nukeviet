@@ -551,12 +551,13 @@ $blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs'
 $rules = array($global_config['login_number_tracking'], $global_config['login_time_tracking'], $global_config['login_time_ban']);
 $blocker->trackLogin($rules);
 
-//Dang nhap kieu thong thuong
+// Dang nhap kieu thong thuong
 if ($nv_Request->isset_request('nv_login', 'post')) {
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
-
+    
+    $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
     $check_seccode = ! $gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
 
     if (! $check_seccode) {
@@ -622,6 +623,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
                         $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
                         
                         if (empty($nv_totppin) and empty($nv_backupcodepin)) {
+                            $nv_Request->set_Session('users_dismiss_captcha', md5($nv_username));
                             die(signin_result(array(
                                 'status' => '2step',
                                 'input' => '',
@@ -661,6 +663,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
                     
                     if (empty($error1)) {
                         validUserLog($row, 1, '');
+                        $nv_Request->unset_request('users_dismiss_captcha', 'session');
                         $blocker->reset_trackLogin($nv_username);
                     }
                 }
@@ -689,6 +692,8 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
         'input' => '',
         'mess' => $lang_module['login_ok'] )));
 }
+
+$nv_Request->unset_request('users_dismiss_captcha', 'session');
 
 if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
     die(user_login(true));

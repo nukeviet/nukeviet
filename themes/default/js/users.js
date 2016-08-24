@@ -234,7 +234,7 @@ function login_validForm(a) {
                 $(".nv-info", a).html("<a href=\"" + d.input + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
             } else {
                 $("input,button", a).prop("disabled", !1);
-                $('.loginstep1, .loginstep2', a).toggleClass('hidden');
+                $('.loginstep1, .loginstep2, .loginCaptcha', a).toggleClass('hidden');
             }
         }
     }));

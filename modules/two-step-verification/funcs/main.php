@@ -28,7 +28,7 @@ if (in_array($global_config['two_step_verification'], array(1, 3))) {
 }
 
 if (isset($array_op[0]) and $array_op[0] == 'turnoff' and $allow_disable_2step) {
-    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET active2step=0 WHERE userid=' . $user_info['userid']);
+    $db->query('UPDATE ' . $db_config['prefix'] . '_' . $site_mods[NV_BRIDGE_USER_MODULE]['module_data'] . ' SET active2step=0, secretkey=\'\' WHERE userid=' . $user_info['userid']);
     header('Location:' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
     die();
 }
