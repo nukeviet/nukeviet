@@ -92,12 +92,13 @@ if (in_array($global_config['gfx_chk'], $array_gfx_chk)) {
 $admin_login_redirect = $nv_Request->get_string('admin_login_redirect', 'session', '');
 
 if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
-    $captcha_require = ($global_config['gfx_chk'] == 1 and $nv_Request->get_int('admin_dismiss_captcha', 'session', 0) == 0);
-    
     $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
+    
     $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
+    
+    $captcha_require = ($global_config['gfx_chk'] == 1 and $nv_Request->get_title('admin_dismiss_captcha', 'session', '') != md5($nv_username));
     $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
     
     if (empty($nv_username)) {
@@ -182,7 +183,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
                 }
                 
                 $captcha_require = 0;
-                $nv_Request->set_Session('admin_dismiss_captcha', 1);
+                $nv_Request->set_Session('admin_dismiss_captcha', md5($nv_username));
             } else {
                 $valid_user = true;
             }
