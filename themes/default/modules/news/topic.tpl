@@ -2,7 +2,7 @@
 <!-- BEGIN: topicdescription -->
 <div class="news_column">
 	<div class="alert alert-info clearfix">
-		<h3>{TOPPIC_TITLE}</h3>
+		<h1>{TOPPIC_TITLE}</h1>
 		<!-- BEGIN: image -->
 		<img alt="{TOPPIC_TITLE}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" />
 		<!-- END: image -->
