@@ -1641,8 +1641,6 @@ function nv_site_mods()
         if (isset($site_mods['users'])) {
             if (defined('NV_IS_USER')) {
                 $user_ops = array( 'main', 'logout', 'editinfo', 'avatar', 'groups' );
-            } elseif (defined('NV_IS_1STEP_USER')) {
-                $user_ops = array( 'main', 'login', 'logout', 'lostpass' );
             } else {
                 $user_ops = array( 'main', 'login', 'register', 'lostpass' );
                 if ($global_config['allowuserreg'] == 2 or $global_config['allowuserreg'] == 1) {
