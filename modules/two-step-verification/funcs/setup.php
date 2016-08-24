@@ -24,6 +24,11 @@ $tokend_key = md5($user_info['username'] . '_' . $user_info['current_login'] . '
 $tokend_confirm_password = $nv_Request->get_title($tokend_key, 'session', '');
 $tokend = md5(NV_BRIDGE_USER_MODULE . '_confirm_pass_' . NV_CHECK_SESSION);
 
+$nv_redirect = '';
+if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
+    $nv_redirect = nv_get_redirect();
+}
+
 /**
  * nv_json_result()
  * 
@@ -32,6 +37,9 @@ $tokend = md5(NV_BRIDGE_USER_MODULE . '_confirm_pass_' . NV_CHECK_SESSION);
  */
 function nv_json_result($array)
 {
+    global $nv_redirect;
+    
+    $array['redirect'] = $nv_redirect ? nv_redirect_decrypt($nv_redirect) : '';
     $string = json_encode($array);
     return $string;
 }
@@ -116,7 +124,7 @@ if ($tokend_confirm_password != $tokend) {
             'mess' => '' )));
     }
     
-    $contents = nv_theme_config_2step($secretkey);
+    $contents = nv_theme_config_2step($secretkey, $nv_redirect);
 }
 
 include NV_ROOTDIR . '/includes/header.php';

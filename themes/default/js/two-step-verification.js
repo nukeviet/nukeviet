@@ -129,7 +129,7 @@ function opt_validForm(a) {
                     $("[type=submit]", a).prop("disabled", !1)
                 }, 1E3)
             } else {
-                window.location.href = window.location.href;
+                window.location.href = (typeof d.redirect != 'undefined' && d.redirect != '') ? d.redirect : window.location.href;
             }
         }
     }));

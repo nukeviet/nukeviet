@@ -146,7 +146,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
             $valid_user = false;
             // Check 2-step login
             if (in_array($global_config['two_step_verification'], array(1, 3)) and empty($row['active2step'])) {
-                $url_setup2step = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification&amp;' . NV_OP_VARIABLE . '=setup', true);
+                $url_setup2step = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification&amp;' . NV_OP_VARIABLE . '=setup&amp;nv_redirect=' . nv_redirect_encrypt(NV_BASE_ADMINURL);
                 $error = '<a href="' . $url_setup2step . '">' . $lang_global['2teplogin_require'] . '</a>';
                 validUserLog($row);
                 $tokend_key = md5($row['username'] . '_' . NV_CURRENTTIME . '_users_confirm_pass_' . NV_CHECK_SESSION);

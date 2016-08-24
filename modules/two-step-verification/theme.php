@@ -67,9 +67,10 @@ function nv_theme_info_2step($backupcodes, $allow_disable_2step)
  * nv_theme_config_2step()
  * 
  * @param mixed $secretkey
+ * @param mixed $nv_redirect
  * @return
  */
-function nv_theme_config_2step($secretkey)
+function nv_theme_config_2step($secretkey, $nv_redirect)
 {
     global $module_info, $module_file, $lang_global, $lang_module, $module_name, $op;
 
@@ -77,6 +78,7 @@ function nv_theme_config_2step($secretkey)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
+    $xtpl->assign('NV_REDIRECT', $nv_redirect);
     
     $xtpl->assign('SECRETKEY', strtolower($secretkey));
     $xtpl->assign('QR_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '/qr-image/' . nv_genpass());

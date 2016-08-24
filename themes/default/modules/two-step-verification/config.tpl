@@ -43,6 +43,7 @@
                 
                 <div class="text-center margin-bottom-lg">
                      <input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
+                     <input type="hidden" name="nv_redirect" value="{NV_REDIRECT}" />
                     <button class="bsubmit btn btn-primary" type="submit">{LANG.confirm}</button>
                	</div>
             </div>
