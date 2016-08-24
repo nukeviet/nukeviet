@@ -23,10 +23,7 @@ $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $m
 if (!defined('NV_IS_ADMIN') and !$global_config['allowuserlogin']) {
     $contents = user_info_exit($lang_module['notallowuserlogin']);
 } else {
-    if (defined('NV_IS_1STEP_USER')) {
-        $url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE, true);
-        $contents = nv_theme_alert($lang_module['2step_require_title'], $lang_module['2step_require_content'], 'info', $url, $lang_module['2step_require_directgo'], 5);
-    } elseif (!defined('NV_IS_USER')) {
+    if (!defined('NV_IS_USER')) {
         $url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=login';
         $nv_redirect = nv_get_redirect();
         if (!empty($nv_redirect)) {
