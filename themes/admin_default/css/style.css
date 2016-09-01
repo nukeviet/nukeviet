@@ -930,7 +930,9 @@ button.close {
     }
 }
 
-.select2-container--default .select2-selection--single{
+.select2-container--default .select2-selection--single,
+.select2-container--bootstrap .select2-selection--single
+{
 	height: 32px !important;
     padding-top: 2px;
 }
