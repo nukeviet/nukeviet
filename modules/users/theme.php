@@ -233,11 +233,7 @@ function user_login($is_ajax = false)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
-    if (in_array($global_config['gfx_chk'], array(
-        2,
-        4,
-        5,
-        7 ))) {
+    if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
