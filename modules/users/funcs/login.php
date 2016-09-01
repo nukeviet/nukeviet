@@ -281,13 +281,14 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 $page_title = $lang_module['openid_login'];
                 $key_words = $module_info['keywords'];
                 $mod_title = $lang_module['openid_login'];
+                
+                unset($nv_row['password']);
 
-                $contents = openid_account_confirm($gfx_chk, $attribs);
+                $contents = openid_account_confirm($gfx_chk, $attribs, $nv_row);
 
                 include NV_ROOTDIR . '/includes/header.php';
                 echo nv_site_theme($contents, false);
                 include NV_ROOTDIR . '/includes/footer.php';
-                exit;
             }
         }
 

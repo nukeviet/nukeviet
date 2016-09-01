@@ -32,7 +32,7 @@ if (!empty($_GET['code'])) {
     $token = $facebookService->requestAccessToken($_GET['code']);
 
     // Send a request with it: /me?fields=id,name,email
-    $result = json_decode($facebookService->request('/me'), true); 
+    $result = json_decode($facebookService->request('/me?fields=id,name,email,link,first_name,last_name,gender'), true); 
     if (isset($result['id'])) {
         $attribs = array(
             'identity' => $result['link'],
