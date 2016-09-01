@@ -543,8 +543,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents, false);
     include NV_ROOTDIR . '/includes/footer.php';
-
-    exit();
 }
 
 $blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
