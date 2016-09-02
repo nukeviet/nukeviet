@@ -8,11 +8,11 @@
  * @Createdate 07/30/2013 10:27
  */
 
-if (! defined('NV_ADMIN')) {
+if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$allow_func = array( 'main', 'notification_load' );
+$allow_func = array('main', 'notification');
 if (defined('NV_IS_GODADMIN')) {
     $submenu['system_info'] = $lang_module['site_configs_info'];
 

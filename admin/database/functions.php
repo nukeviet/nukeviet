@@ -43,13 +43,24 @@ function nv_show_tables()
         $tables_size = floatval($item['data_length']) + floatval($item['index_length']);
 
         if ($item['engine'] != 'MyISAM') {
-            $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+            if($item['rows'] < 100000)
+            {
+                $item['rows'] = $db->query("SELECT COUNT(*) FROM " . $item['name'])->fetchColumn();
+                $item['rows'] = number_format($item['rows']);
+            }
+            else {
+                $item['rows'] = '~' . number_format($item['rows']);
+            }
+        }
+        else
+        {
+            $item['rows'] = number_format($item['rows']);
         }
         $tables[$item['name']]['table_size'] = nv_convertfromBytes($tables_size);
         $tables[$item['name']]['table_max_size'] = ! empty($item['max_data_length']) ? nv_convertfromBytes(floatval($item['max_data_length'])) : 0;
         $tables[$item['name']]['table_datafree'] = ! empty($item['data_free']) ? nv_convertfromBytes(floatval($item['data_free'])) : 0;
-        $tables[$item['name']]['table_numrow'] = intval($item['rows']);
-        $tables[$item['name']]['table_charset'] = (! empty($item['collation']) && preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '';
+        $tables[$item['name']]['table_numrow'] = $item['rows'];
+        $tables[$item['name']]['table_charset'] = (! empty($item['collation']) and preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '';
         $tables[$item['name']]['table_type'] = (isset($item['engine'])) ? $item['engine'] : $item['type'];
         $tables[$item['name']]['table_auto_increment'] = (isset($item['auto_increment'])) ? intval($item['auto_increment']) : 'n/a';
         $tables[$item['name']]['table_create_time'] = ! empty($item['create_time']) ? strftime('%H:%M %d/%m/%Y', strtotime($item['create_time'])) : 'n/a';
@@ -154,7 +165,7 @@ function nv_show_tab()
     $contents['table']['info']['create_time'] = array( $lang_module['table_create_time'], (! empty($item['create_time']) ? strftime('%H:%M:%S %d/%m/%Y', strtotime($item['create_time'])) : 'n/a') );
     $contents['table']['info']['update_time'] = array( $lang_module['table_update_time'], (! empty($item['update_time']) ? strftime('%H:%M:%S %d/%m/%Y', strtotime($item['update_time'])) : 'n/a') );
     $contents['table']['info']['check_time'] = array( $lang_module['table_check_time'], (! empty($item['check_time']) ? strftime('%H:%M:%S %d/%m/%Y', strtotime($item['check_time'])) : 'n/a') );
-    $contents['table']['info']['collation'] = array( $lang_module['table_charset'], ((! empty($item['collation']) && preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '') );
+    $contents['table']['info']['collation'] = array( $lang_module['table_charset'], ((! empty($item['collation']) and preg_match('/^([a-z0-9]+)_/i', $item['collation'], $m)) ? $m[1] : '') );
 
     $contents['table']['show'] = nv_highlight_string($tab, 'php');
     $contents['table']['show_lang'] = array( $lang_module['php_code'], $lang_module['sql_code'] );

@@ -357,14 +357,18 @@ if (md5('delete_' . $request['type'] . '_' . $request['title'] . '_' . NV_CHECK_
                 // Kiem tra cac site con
                 $result = $db->query('SELECT * FROM ' . $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_site ORDER BY domain ASC');
                 while ($row = $result->fetch()) {
-                    $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1');
-                    while (list($lang_i) = $result2->fetch(3)) {
-                        $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
-                        $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
-                        $sth->execute();
-                        if ($sth->fetchColumn()) {
-                            $module_exit[] = $row['title'] . ' :' . $lang_i;
+                    try {
+                        $result2 = $db->query('SELECT lang FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_setup_language WHERE setup=1');
+                        while (list($lang_i) = $result2->fetch(3)) {
+                            $sth = $db->prepare('SELECT COUNT(*) FROM ' . $row['dbsite'] . '.' . $db_config['prefix'] . '_' . $lang_i . '_modules WHERE module_file= :module_file');
+                            $sth->bindParam(':module_file', $request['title'], PDO::PARAM_STR);
+                            $sth->execute();
+                            if ($sth->fetchColumn()) {
+                                $module_exit[] = $row['title'] . ' :' . $lang_i;
+                            }
                         }
+                    } catch (PDOException $e) {
+                        // Nothinh
                     }
                 }
             }

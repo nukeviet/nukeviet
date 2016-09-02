@@ -17,7 +17,9 @@ $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix
 
 $_arr_siteinfo = array();
 $cacheFile = 'siteinfo_' . NV_CACHE_PREFIX . '.cache';
-if (($cache = $nv_Cache->getItem($mod, $cacheFile)) != false and filemtime(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $mod . '/' . $cacheFile) >= NV_CURRENTTIME - 3600) {
+$cacheTTL = 7200;
+
+if (($cache = $nv_Cache->getItem($mod, $cacheFile, $cacheTTL)) != false) {
     $_arr_siteinfo = unserialize($cache);
     $access_admin = $_arr_siteinfo['access_admin'];
 } else {
@@ -26,7 +28,7 @@ if (($cache = $nv_Cache->getItem($mod, $cacheFile)) != false and filemtime(NV_RO
     $access_admin = $db->query("SELECT content FROM " . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
     $access_admin = unserialize($access_admin);
     $_arr_siteinfo['access_admin'] = $access_admin;
-    $nv_Cache->setItem($mod, $cacheFile, serialize($_arr_siteinfo));
+    $nv_Cache->setItem($mod, $cacheFile, serialize($_arr_siteinfo), $cacheTTL);
 }
 // So thanh vien
 if ($_arr_siteinfo['number_user'] > 0) {

@@ -42,7 +42,7 @@ $hash = $createTime . '-' . md5($host);
 
 header('Etag: "' . $hash . '"');
 
-if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) == '"' . $hash . '"') {
+if (isset($_SERVER['HTTP_IF_NONE_MATCH']) and stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) == '"' . $hash . '"') {
     header('HTTP/1.1 304 Not Modified');
     header('Content-Length: 0');
     exit();

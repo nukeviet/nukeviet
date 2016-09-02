@@ -40,8 +40,9 @@ if ($nv_Request->isset_request('q', 'get')) {
     if (! isset($array_mod[$search['mod']])) {
         $search['mod'] = 'all';
     }
-
-    $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . htmlspecialchars(nv_unhtmlspecialchars($search['key']));
+    
+    $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+    $base_url_rewrite .= (empty($rewrite_keys) ? '&' : '?') . 'q=' . htmlspecialchars(nv_unhtmlspecialchars($search['key']));
     if ($search['mod'] != 'all') {
         $base_url_rewrite .= '&m=' . htmlspecialchars(nv_unhtmlspecialchars($search['mod']));
     }
@@ -51,7 +52,6 @@ if ($nv_Request->isset_request('q', 'get')) {
     if ($search['page'] > 1) {
         $base_url_rewrite .= '&page=' . $search['page'];
     }
-    $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
 
     $request_uri = urldecode($_SERVER['REQUEST_URI']);
     if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {

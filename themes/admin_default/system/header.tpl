@@ -42,7 +42,6 @@
 
 		<!--[if IE]>
 		<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=EmulateIE8; IE=EDGE" />
-		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/default/css/font-awesome-ie7.css" />
 		<![endif]-->
 	</head>
 	<body>

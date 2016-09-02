@@ -32,13 +32,23 @@
 				</a>
 			</li>
 			<!-- BEGIN: notification -->
-			<li class="dropdown">
+			<li class="dropdown" id="notification-area">
 				<span id="notification" style="display: none"></span>
-				<a href="javascript:void(0)"  class="dropdown-toggle" data-toggle="dropdown"> <em class="fa fa-bell-o fa-2x fix">&nbsp;</em></a>
-				<div class="dropdown-menu" style="width: 430px">
-					<div id="notification_load">
-
-					</div>
+				<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"> <em class="fa fa-bell-o fa-2x fix">&nbsp;</em></a>
+				<div class="dropdown-menu">
+                    <div>
+    					<div id="notification_load"></div>
+                        <div id="notification_waiting">
+                            <div class="text-center">
+                                <i class="fa fa-spin fa-spinner"></i>
+                            </div>
+                        </div>
+                        <div id="notification_more">
+                            <div class="text-center">
+                                <a href="{NV_GO_ALL_NOTIFICATION}">{LANG.view_all}</a>
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</li>
 			<!-- END: notification -->

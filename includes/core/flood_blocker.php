@@ -8,17 +8,18 @@
  * @Createdate 3/27/2010 4:6
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-$rules = array( '60' => $global_config['max_requests_60'], '300' => $global_config['max_requests_300'] );
+$rules = array('60' => $global_config['max_requests_60'], '300' => $global_config['max_requests_300']);
 
-$flb = new NukeViet\Core\FloodBlocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', $rules, NV_CLIENT_IP);
+$flb = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
+$flb->trackFlood($rules);
 
-if ($flb->is_blocker) {
+if ($flb->is_flooded) {
     if (!defined('NV_IS_AJAX') and file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/flood_blocker.tpl')) {
-        $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/flood_blocker.tpl');
+        $xtpl = new XTemplate('flood_blocker.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
         $xtpl->assign('PAGE_TITLE', $lang_global['flood_page_title']);
         $xtpl->assign('IMG_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/load_bar.gif');
         $xtpl->assign('IMG_WIDTH', 33);
@@ -26,7 +27,7 @@ if ($flb->is_blocker) {
         $xtpl->assign('FLOOD_BLOCKER_INFO1', $lang_global['flood_info1']);
         $xtpl->assign('FLOOD_BLOCKER_INFO2', $lang_global['flood_info2']);
         $xtpl->assign('FLOOD_BLOCKER_INFO3', $lang_global['sec']);
-        $xtpl->assign('FLOOD_BLOCKER_TIME', $flb->time_blocker);
+        $xtpl->assign('FLOOD_BLOCKER_TIME', $flb->flood_block_time);
         $xtpl->parse('main');
         echo $xtpl->text('main');
         exit();
