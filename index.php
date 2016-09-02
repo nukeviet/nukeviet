@@ -159,7 +159,10 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
             // Xac dinh kieu giao dien mac dinh
             $global_config['current_theme_type'] = $nv_Request->get_string('nv' . NV_LANG_DATA . 'themever', 'cookie', '');
-            if(!in_array($global_config['current_theme_type'],$global_config['array_theme_type'])) $global_config['current_theme_type'] = '';
+            if(!in_array($global_config['current_theme_type'],$global_config['array_theme_type'])) {
+            	$global_config['current_theme_type'] = '';
+            	$nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', '', NV_LIVE_COOKIE_TIME);
+            }
 
             // Xac dinh giao dien chung
             $is_mobile = false;
