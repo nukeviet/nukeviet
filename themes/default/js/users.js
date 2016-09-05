@@ -146,21 +146,23 @@ function validErrorShow(a) {
 }
 
 function validCheck(a) {
-    var c = $(a).attr("data-pattern"),
-        d = $(a).val(),
-        b = $(a).prop("tagName"),
-        e = $(a).prop("type");
-    if ("INPUT" == b && "email" == e) {
-        if (!nv_mailfilter.test(d)) return !1
-    } else if ("SELECT" == b) {
-        if (!$("option:selected", a).length) return !1
-    } else if ("DIV" == b && $(a).is(".radio-box")) {
-        if (!$("[type=radio]:checked", a).length) return !1
-    } else if ("DIV" == b && $(a).is(".check-box")) {
-        if (!$("[type=checkbox]:checked", a).length) return !1
-    } else if ("INPUT" == b || "TEXTAREA" == b) if ("undefined" == typeof c || "" == c) {
-        if ("" == d) return !1
-    } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
+    if ($(a).is(':visible')) {
+        var c = $(a).attr("data-pattern"),
+            d = $(a).val(),
+            b = $(a).prop("tagName"),
+            e = $(a).prop("type");
+        if ("INPUT" == b && "email" == e) {
+            if (!nv_mailfilter.test(d)) return !1
+        } else if ("SELECT" == b) {
+            if (!$("option:selected", a).length) return !1
+        } else if ("DIV" == b && $(a).is(".radio-box")) {
+            if (!$("[type=radio]:checked", a).length) return !1
+        } else if ("DIV" == b && $(a).is(".check-box")) {
+            if (!$("[type=checkbox]:checked", a).length) return !1
+        } else if ("INPUT" == b || "TEXTAREA" == b) if ("undefined" == typeof c || "" == c) {
+            if ("" == d) return !1
+        } else if (a = c.match(/^\/(.*?)\/([gim]*)$/), !(a ? new RegExp(a[1], a[2]) : new RegExp(c)).test(d)) return !1;
+    }
     return !0
 }
 
@@ -208,18 +210,32 @@ function login_validForm(a) {
         success: function(d) {
             var b = $("[onclick*='change_captcha']", a);
             b && b.click();
-            "error" == d.status ? ($("input,button", a).not("[type=submit]").prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
-                $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
-                validErrorShow(this)
-            }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
-                $("[type=submit]", a).prop("disabled", !1)
-            }, 1E3)) : ($(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function() {
-                if( "undefined" != typeof d.redirect && "" != d.redirect){
-                     window.location.href = d.redirect;
-                }else{
-                     $('#sitemodal').modal('hide');
-                }
-            }, 3E3))
+            if (d.status == "error") {
+                $("input,button", a).not("[type=submit]").prop("disabled", !1), 
+                $(".tooltip-current", a).removeClass("tooltip-current"), 
+                "" != d.input ? $(a).find("[name=\"" + d.input + "\"]").each(function() {
+                    $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
+                    validErrorShow(this)
+                }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
+                    $("[type=submit]", a).prop("disabled", !1)
+                }, 1E3)
+            } else if (d.status == "ok") {
+                $(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), 
+                $(".form-detail", a).hide(), $("#other_form").hide(), setTimeout(function() {
+                    if( "undefined" != typeof d.redirect && "" != d.redirect){
+                         window.location.href = d.redirect;
+                    }else{
+                         $('#sitemodal').modal('hide');
+                         window.location.href = window.location.href;
+                    }
+                }, 3E3)
+            } else if (d.status == "2steprequire") {
+                $(".form-detail", a).hide(), $("#other_form").hide();
+                $(".nv-info", a).html("<a href=\"" + d.input + "\">" + d.mess + "</a>").removeClass("error").removeClass("success").addClass("info").show();
+            } else {
+                $("input,button", a).prop("disabled", !1);
+                $('.loginstep1, .loginstep2, .loginCaptcha', a).toggleClass('hidden');
+            }
         }
     }));
     return !1
@@ -366,6 +382,21 @@ function bt_logout(a) {
         }
     });
     return !1
+}
+
+function login2step_change(ele) {
+    var ele = $(ele), form = ele, i = 0;
+    while (!form.is('form')) {
+        if (i++ > 10) {
+            break;
+        }
+        form = form.parent();
+    }
+    if (form.is('form')) {
+        $('.loginstep2 input,.loginstep3 input', form).val('');
+        $('.loginstep2,.loginstep3', form).toggleClass('hidden');
+    }
+    return false;
 }
 
 var UAV = {};

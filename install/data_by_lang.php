@@ -28,6 +28,7 @@ $sth->execute(array( 'page', 'page', 'page', 'page', $install_lang['modules']['P
 $sth->execute(array( 'comment', 'comment', 'comment', 'comment', $install_lang['modules']['comment'], $install_lang['modules']['comment_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 12, 1, '', 0, 0));
 $sth->execute(array( 'siteterms', 'page', 'siteterms', 'siteterms', $install_lang['modules']['siteterms'], $install_lang['modules']['siteterms_for_acp'], NV_CURRENTTIME, 1, 1, '', '', '', '', '6', 13, 1, '', 1, 0));
 $sth->execute(array( 'freecontent', 'freecontent', 'freecontent', 'freecontent', $install_lang['modules']['freecontent'], $install_lang['modules']['freecontent_for_acp'], NV_CURRENTTIME, 0, 1, '', '', '', '', '6', 14, 1, '', 0, 0));
+$sth->execute(array( 'two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', $install_lang['modules']['two_step_verification'], $install_lang['modules']['two_step_verification_for_acp'], NV_CURRENTTIME, 1, 0, '', '', '', '', '6', 15, 1, '', 0, 0));
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modfuncs (func_name, alias, func_custom_name, in_module, show_func, in_submenu, subweight, setting) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
@@ -94,6 +95,9 @@ $sth->execute(array( 'rss', 'rss', 'Rss', 'page', 0, 0, 0, ''));
 $sth->execute(array( 'main', 'main', 'Main', 'siteterms', 1, 0, 1, ''));
 $sth->execute(array( 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, ''));
 $sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
+//Two-Step Verification
+$sth->execute(array( 'main', 'main', 'Main', 'two-step-verification', 1, 0, 1, ''));
+$sth->execute(array( 'setup', 'setup', 'Setup', 'two-step-verification', 1, 0, 2, ''));
 //Others
 $sth->execute(array( 'main', 'main', 'Main', 'contact', 1, 0, 1, ''));
 $sth->execute(array( 'main', 'main', 'Main', 'voting', 1, 0, 1, ''));
@@ -144,7 +148,9 @@ $themes_default['left-main-right'] = array(
     $array_funcid_mod['comment']['like'],
     $array_funcid_mod['comment']['delete'],
     $array_funcid_mod['siteterms']['main'],
-    $array_funcid_mod['siteterms']['rss']
+    $array_funcid_mod['siteterms']['rss'],
+    $array_funcid_mod['two-step-verification']['main'],
+    $array_funcid_mod['two-step-verification']['setup']
     );
 
 $themes_default['left-main'] = array(
@@ -203,7 +209,10 @@ $themes_mobile['main'] = array(
     $array_funcid_mod['comment']['like'],
     $array_funcid_mod['comment']['delete'],
     $array_funcid_mod['siteterms']['main'],
-    $array_funcid_mod['siteterms']['rss'] );
+    $array_funcid_mod['siteterms']['rss'],
+    $array_funcid_mod['two-step-verification']['main'],
+    $array_funcid_mod['two-step-verification']['setup']
+);
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes (func_id, layout, theme) VALUES (?, ?, ?)');
