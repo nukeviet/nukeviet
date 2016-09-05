@@ -167,7 +167,7 @@ $lang_module['not_logged_in'] = 'You still not login by OpenID';
 $lang_module['logged_in_failed'] = 'OpenID server doesn\'t provide some required information to login to our website';
 $lang_module['logged_no_email'] = 'Unfortunately, this app does not offer e-mail, please check that you have declared for the application email then try again';
 $lang_module['openid_confirm_failed'] = 'You provided wrong infomation';
-$lang_module['openid_confirm_info'] = 'Your OpenID can be use on this site,<br />but email $s exists.<br />If you are owner of account using this email,<br />please provide password.<br />';
+$lang_module['openid_confirm_info'] = 'Email %s of OpenID that you just declare were attached earlier to the account %s. If this is your account, please confirm by declaring login password.';
 $lang_module['openid_active_info'] = 'Welcom %1$s,<br /><br />Your account at website %2$s wait to activate. To activate it, click link below:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Information:<br /><br />Account:%4$s<br />Email: %5$s<br />OpenID: %6$s<br /><br />Activate link will be expired at %8$s<br /><br />This is automatic sent email from website %2$s. If you doesn\'t know about it\'s content, please delete it.<br /><br /><br /><br />Site admin';
 $lang_module['openid_register_info'] = 'Welcome %1$s,<br /><br />Your account at website %2$s activated. You can log in by OpenID or your account. Your account information:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Account: %4$s<br /><br /> <br />OpenID: %5$s<br /><br />This is an email automatic sent from website %2$s. If you doesn\'t know about it\'s content, please delete it. <br /><br />Site admin';
 $lang_module['openid_register'] = 'Register through OpenID';

@@ -12,7 +12,7 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-define('NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,freecontent');
+define('NV_MODULE_SETUP_DEFAULT', 'users,statistics,banners,seek,news,contact,about,siteterms,voting,feeds,menu,page,comment,freecontent,two-step-verification');
 
 function nv_copy_structure_table($table_des, $table_src)
 {
@@ -164,7 +164,8 @@ function nv_create_table_sys($lang)
 		('page', 'page', 'page', 'page', 'Page', '', 1463652000, 1, 1, '', '', '', '', '0', 11, 1, '', 1, 0),
 		('comment', 'comment', 'comment', 'comment', 'Comment', '', 1463652000, 1, 1, '', '', '', '', '0', 12, 1, '', 0, 0),
  		('siteterms', 'page', 'siteterms', 'siteterms', 'Siteterms', '', 1463652000, 1, 1, '', '', '', '', '0', 13, 1, '', 1, 0),
- 		('freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1463652000, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 0)";
+ 		('freecontent', 'freecontent', 'freecontent', 'freecontent', 'Free Content', '', 1463652000, 0, 1, '', '', '', '', '0', 14, 1, '', 0, 0),
+ 		('two-step-verification', 'two-step-verification', 'two_step_verification', 'two-step-verification', 'Two-Step Verification', '', 1463652000, 1, 0, '', '', '', '', '0', 15, 1, '', 0, 0)";
 
     $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES
 	 	('" . $lang . "', 'global', 'site_domain', ''),

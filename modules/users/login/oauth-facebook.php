@@ -22,7 +22,7 @@ $storage = new Session();
 $serviceFactory = new \OAuth\ServiceFactory();
 
 // Setup the credentials for the requests
-$credentials = new Credentials($global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=facebook');
+$credentials = new Credentials($global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=facebook' . (!empty($nv_redirect) ? '&nv_redirect=' . $nv_redirect : ''));
 
 // Instantiate the Facebook service using the credentials, http client and storage mechanism for the token
 $facebookService = $serviceFactory->createService('facebook', $credentials, $storage, array( 'email', 'user_photos' ));
@@ -32,7 +32,7 @@ if (!empty($_GET['code'])) {
     $token = $facebookService->requestAccessToken($_GET['code']);
 
     // Send a request with it: /me?fields=id,name,email
-    $result = json_decode($facebookService->request('/me'), true); 
+    $result = json_decode($facebookService->request('/me?fields=id,name,email,link,first_name,last_name,gender'), true); 
     if (isset($result['id'])) {
         $attribs = array(
             'identity' => $result['link'],
