@@ -233,11 +233,7 @@ function user_login($is_ajax = false)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
-    if (in_array($global_config['gfx_chk'], array(
-        2,
-        4,
-        5,
-        7 ))) {
+    if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
@@ -914,13 +910,17 @@ function user_info_exit($info, $error = false)
  *
  * @param mixed $gfx_chk
  * @param mixed $attribs
+ * @param mixed $user
  * @return
  */
-function openid_account_confirm($gfx_chk, $attribs)
+function openid_account_confirm($gfx_chk, $attribs, $user)
 {
     global $lang_global, $lang_module, $module_info, $module_file, $module_name, $nv_redirect;
 
     $xtpl = new XTemplate('confirm.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    
+    $lang_module['openid_confirm_info'] = sprintf($lang_module['openid_confirm_info'], $attribs['contact/email'], $user['username']);
+    
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
@@ -932,6 +932,11 @@ function openid_account_confirm($gfx_chk, $attribs)
         $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
         $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
         $xtpl->parse('main.captcha');
+    }
+
+    if (!empty($nv_redirect)) {
+        $xtpl->assign('REDIRECT', $nv_redirect);
+        $xtpl->parse('main.redirect');
     }
 
     $xtpl->parse('main');

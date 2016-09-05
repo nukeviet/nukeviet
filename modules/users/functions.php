@@ -14,6 +14,7 @@ if (! defined('NV_SYSTEM')) {
 
 define('NV_IS_MOD_USER', true);
 define('NV_MOD_TABLE', ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data);
+define('NV_2STEP_VERIFICATION_MODULE', 'two-step-verification');
 
 $lang_module['in_groups'] = $lang_global['in_groups'];
 
