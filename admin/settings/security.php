@@ -122,12 +122,16 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     $array_config_global['login_number_tracking'] = $nv_Request->get_int('login_number_tracking', 'post', 0);
     $array_config_global['login_time_tracking'] = $nv_Request->get_int('login_time_tracking', 'post', 0);
     $array_config_global['login_time_ban'] = $nv_Request->get_int('login_time_ban', 'post', 0);
+    $array_config_global['two_step_verification'] = $nv_Request->get_int('two_step_verification', 'post', 0);
     
     if ($array_config_global['login_number_tracking'] < 1) {
         $array_config_global['login_number_tracking'] = 5;
     }
     if ($array_config_global['login_time_tracking'] <= 0) {
         $array_config_global['login_time_tracking'] = 5;
+    }
+    if ($array_config_global['two_step_verification'] < 0 or $array_config_global['two_step_verification'] > 3) {
+        $array_config_global['two_step_verification'] = 0;
     }
     
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
@@ -362,6 +366,16 @@ $xtpl->assign('DATA', array(
     'endtime' => !empty($endtime) ? date('d/m/Y', $endtime) : '',
     'endtime' => $notice
 ));
+
+for ($i = 0; $i <= 3; $i++) {
+    $two_step_verification = array(
+        'key' => $i,
+        'title' => $lang_module['two_step_verification' . $i],
+        'selected' => $i == $global_config['two_step_verification'] ? ' selected="selected"' : ''
+    );
+    $xtpl->assign('TWO_STEP_VERIFICATION', $two_step_verification);
+    $xtpl->parse('main.two_step_verification');
+}
 
 $xtpl->parse('main');
 $contents = $xtpl->text('main');

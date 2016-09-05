@@ -1698,23 +1698,25 @@ function nv_insert_notification($module, $type, $content = array(), $obid = 0, $
      * 1: Khu vuc quan tri
      * 2: Ca 2 khu vuc tren
      */
-
+    
+    $new_id = 0;
     if ($global_config['notification_active']) {
         !empty($content) and $content = serialize($content);
 
-        $sth = $db->prepare('INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
+        $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
 		(send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
-		(:send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)');
-        $sth->bindParam(':send_to', $send_to, PDO::PARAM_STR);
-        $sth->bindParam(':send_from', $send_from, PDO::PARAM_INT);
-        $sth->bindParam(':area', $area, PDO::PARAM_INT);
-        $sth->bindParam(':module', $module, PDO::PARAM_STR);
-        $sth->bindParam(':obid', $obid, PDO::PARAM_INT);
-        $sth->bindParam(':type', $type, PDO::PARAM_STR);
-        $sth->bindParam(':content', $content, PDO::PARAM_STR);
-        $sth->execute();
+		(:send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)';
+        $data_insert = array();
+        $data_insert['send_to'] = $send_to;
+        $data_insert['send_from'] = $send_from;
+        $data_insert['area'] = $area;
+        $data_insert['module'] = $module;
+        $data_insert['obid'] = $obid;
+        $data_insert['type'] = $type;
+        $data_insert['content'] = $content;
+        $new_id = $db->insert_id($_sql, 'id', $data_insert);
     }
-    return true;
+    return $new_id;
 }
 
 /**

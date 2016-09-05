@@ -236,6 +236,12 @@ $lang_module['notification_autodel_note'] = 'Điền <strong>0</strong> nếu kh
 $lang_module['notification_day'] = 'ngày';
 
 $lang_module['is_login_blocker'] = 'Kích hoạt chức năng chặn đăng nhập sai nhiều lần';
-$lang_module['login_number_tracking'] = 'Số lần đăng nhập sai tối đa trong khoản thời gian theo dõi';
+$lang_module['login_number_tracking'] = 'Số lần đăng nhập sai tối đa trong khoảng thời gian theo dõi';
 $lang_module['login_time_tracking'] = 'Thời gian theo dõi';
 $lang_module['login_time_ban'] = 'Thời gian bị cấm đăng nhập';
+
+$lang_module['two_step_verification'] = 'Yêu cầu xác thực đăng nhập hai bước tại';
+$lang_module['two_step_verification0'] = 'Không yêu cầu';
+$lang_module['two_step_verification1'] = 'Khu vực quản trị';
+$lang_module['two_step_verification2'] = 'Khu vực ngoài site';
+$lang_module['two_step_verification3'] = 'Tất cả các khu vực';

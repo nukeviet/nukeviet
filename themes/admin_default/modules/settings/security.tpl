@@ -42,6 +42,14 @@
 					<td><strong>{LANG.login_time_ban}</strong> ({GLANG.min})</td>
 					<td><input type="text" value="{LOGIN_TIME_BAN}" name="login_time_ban" style="width: 80px; text-align: right" class="required form-control pull-left"/></td>
 				</tr>
+                <tr>
+                    <td><strong>{LANG.two_step_verification}</strong></td>
+                    <td>
+                        <select name="two_step_verification" class="form-control w200">
+                            <!-- BEGIN: two_step_verification --><option value="{TWO_STEP_VERIFICATION.key}"{TWO_STEP_VERIFICATION.selected}>{TWO_STEP_VERIFICATION.title}</option><!-- END: two_step_verification -->
+                        </select>
+                    </td>
+                </tr>
 				<tr>
 					<td><strong>{LANG.nv_anti_agent}</strong></td>
 					<td><input type="checkbox" value="1" name="nv_anti_agent" {ANTI_AGENT} /></td>
