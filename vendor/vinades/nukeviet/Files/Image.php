@@ -435,7 +435,7 @@ class Image
                     $this->set_memory_limit();
 
                     $transparent_index = imagecolortransparent($this->createImage);
-                    if ($transparent_index >= 0) {
+                    if ($transparent_index >= 0 && $transparent_index < imagecolorstotal($this->createImage) ) {
                         $t_c = imagecolorsforindex($this->createImage, $transparent_index);
                         $transparent_index = imagecolorallocate($workingImage, $t_c['red'], $t_c['green'], $t_c['blue']);
                         if (false !== $transparent_index and imagefill($workingImage, 0, 0, $transparent_index)) {
