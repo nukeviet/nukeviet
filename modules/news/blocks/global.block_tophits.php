@@ -153,7 +153,8 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         $xtpl->assign('TEMPLATE', $block_theme);
         
         foreach ($array_block_news as $array_news) {
-            $array_news['hometext'] = nv_clean60($array_news['hometext'], $block_config['tooltip_length'], true);
+            $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
+            $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
             $xtpl->assign('blocknews', $array_news);
             if (!empty($array_news['imgurl'])) {
                 $xtpl->parse('main.newloop.imgblock');
@@ -188,9 +189,12 @@ if (defined('NV_SYSTEM')) {
             $module_array_cat = array();
             $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM ' . NV_PREFIXLANG . '_' . $mod_data . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
-            foreach ($list as $l) {
-                $module_array_cat[$l['catid']] = $l;
-                $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
+            if(!empty($list))
+            {
+                foreach ($list as $l) {
+                    $module_array_cat[$l['catid']] = $l;
+                    $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
+                }
             }
         }
         $content = nv_news_block_tophits($block_config, $mod_data);

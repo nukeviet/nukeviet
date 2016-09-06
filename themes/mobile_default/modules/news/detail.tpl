@@ -37,7 +37,7 @@
 				<hr />
 			</div>
 			<!-- END: imgthumb -->
-			<h2>{DETAIL.hometext}</h2>
+			<div class="h2">{DETAIL.hometext}</div>
 		</div>
 		<!-- BEGIN: imgfull -->
 		<div style="max-width:{DETAIL.image.width}px;margin: 10px auto 10px auto">
@@ -49,7 +49,7 @@
 		<!-- END: imgfull -->
 		<!-- END: showhometext -->
 		<div class="bodytext">
-			{DETAIL.bodytext}
+			{DETAIL.bodyhtml}
 		</div>
 		<!-- BEGIN: author -->
 		<!-- BEGIN: name -->

@@ -2,11 +2,9 @@
 <!-- BEGIN: error -->
 <div class="alert alert-danger">{error}</div>
 <!-- END: error -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.menu.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 
 <form class="form-inline m-bottom confirm-reload" action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" enctype="multipart/form-data" method="post">
 	<div class="row">
@@ -32,7 +30,7 @@
 					</tr>
 					<tr>
 						<td>
-						<select class="form-control w300" name="topicid">
+						<select class="form-control w300" name="topicid" id="topicid">
 							<!-- BEGIN: rowstopic -->
 							<option value="{topicid}" {sl}>{topic_title}</option>
 							<!-- END: rowstopic -->
@@ -67,10 +65,12 @@
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
 					<tr>
-						<td><strong>{LANG.content_hometext}</strong> <i>{LANG.content_notehome}.</i> {GLANG.length_characters}: <span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max} </td>
+						<td><strong>{LANG.content_hometext}</strong> <i>{LANG.content_notehome}.</i></td>
 					</tr>
 					<tr>
-						<td><textarea id="description" name="hometext" rows="5" cols="75" style="font-size:14px; width: 100%; height:100px;" class="form-control">{rowcontent.hometext}</textarea></td>
+						<td>
+                            {edit_hometext}
+                        </td>
 					</tr>
 					<tr>
 						<td><strong>{LANG.content_bodytext}</strong> <sup class="required">(∗)</sup> <i>{LANG.content_bodytext_note}</i></td>
@@ -153,40 +153,6 @@
 		                        </div>
 		                	</div>
 						</li>
-						<li>
-							<p class="message_head">
-								<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
-							</p>
-							<div class="message_body">
-								<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" type="text"/>
-								<select class="form-control" name="phour">
-									{phour}
-								</select>
-								:
-								<select class="form-control" name="pmin">
-									{pmin}
-								</select>
-							</div>
-						</li>
-						<li>
-							<p class="message_head">
-								<cite>{LANG.content_exp_date}:</cite><span class="timestamp">{LANG.content_notetime}</span>
-							</p>
-							<div class="message_body">
-								<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" type="text"/>
-								<select class="form-control" name="ehour">
-									{ehour}
-								</select>
-								:
-								<select class="form-control" name="emin">
-									{emin}
-								</select>
-								<div style="margin-top: 5px;">
-									<input type="checkbox" value="1" name="archive" {archive_checked} />
-									<label> {LANG.content_archive} </label>
-								</div>
-							</div>
-						</li>
 					</ul>
 				</div>
 				<div class="col-sm-12 col-md-24">
@@ -264,6 +230,70 @@
 			</div>
 		</div>
 	</div>
+    <div class="clearfix">
+        <h2><i class="fa fa-angle-double-down" id="adv-form-arrow"></i> <a data-toggle="collapse" href="#adv-form" aria-expanded="false">{LANG.content_advfeature}</a></h2>
+        <hr class="inline"/>
+        <div class="collapse" id="adv-form">
+            <div class="row">
+                <div class="col-sm-24 col-md-18">
+        			<table class="table table-striped table-bordered">
+        				<col class="w200" /><col />
+        				<tbody>
+        					<tr>
+        						<td><strong>{LANG.titlesite}</strong>:</td>
+        						<td><input type="text" maxlength="250" value="{rowcontent.titlesite}" id="idtitlesite" name="titlesite" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+        					</tr>
+        					<tr>
+        						<td><strong>{LANG.content_description}: </strong></td>
+        						<td>
+                                    <div class="help-block">{GLANG.length_characters}:<span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max}</div>
+                                    <textarea id="description" name="description" class="form-control w500" rows="5">{rowcontent.description}</textarea>
+                                </td>
+        					</tr>
+        				</tbody>
+        			</table>
+                </div>
+                <div class="col-sm-24 col-md-6">
+                    <ul style="padding-left:4px; margin:0">
+						<li>
+							<p class="message_head">
+								<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
+							</p>
+							<div class="message_body">
+								<input class="form-control" name="publ_date" id="publ_date" value="{publ_date}" style="width: 90px;" maxlength="10" type="text"/>
+								<select class="form-control" name="phour">
+									{phour}
+								</select>
+								:
+								<select class="form-control" name="pmin">
+									{pmin}
+								</select>
+							</div>
+						</li>
+						<li>
+							<p class="message_head">
+								<cite>{LANG.content_exp_date}:</cite><span class="timestamp">{LANG.content_notetime}</span>
+							</p>
+							<div class="message_body">
+								<input class="form-control" name="exp_date" id="exp_date" value="{exp_date}" style="width: 90px;" maxlength="10" type="text"/>
+								<select class="form-control" name="ehour">
+									{ehour}
+								</select>
+								:
+								<select class="form-control" name="emin">
+									{emin}
+								</select>
+								<div style="margin-top: 5px;">
+									<input type="checkbox" value="1" name="archive" {archive_checked} />
+									<label> {LANG.content_archive} </label>
+								</div>
+							</div>
+						</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 	<div class="text-center">
 		<br/>
 		<input type="hidden" value="1" name="save" />
@@ -278,9 +308,9 @@
         <!-- BEGIN:status1 -->
 		<input class="btn btn-primary submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
 		<input class="btn btn-primary submit-post" name="status6" type="submit" value="{LANG.save_send_admin}" />
-            <!-- BEGIN:status0 -->
-            <input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
-            <!-- END:status0 -->
+        <!-- BEGIN:status0 -->
+        <input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
+        <!-- END:status0 -->
 		<!-- END:status1 -->
 		<br />
 	</div>
@@ -302,10 +332,10 @@ $("#idtitle").change(function() {
 <!-- END: getalias -->
 //]]>
 </script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.menu.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.autocomplete.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/news_content.js"></script>
 <!-- END:main -->

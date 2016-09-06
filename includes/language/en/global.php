@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -49,6 +49,8 @@ $lang_global['unick_type_1'] = 'Account used only numbers';
 $lang_global['unick_type_2'] = 'Account used only numbers and letters';
 $lang_global['unick_type_3'] = 'Account used only numbers, letters and following characters between: dash, underline, space';
 $lang_global['unick_type_4'] = 'Account used only Unicode, no special characters';
+$lang_global['username_rule_limit'] = 'Invalid Username: %1$s and %2$d from to %3$d characters';
+$lang_global['username_rule_nolimit'] = 'Username must be between %1$d to %2$d characters';
 $lang_global['password_empty'] = 'Password has not been declared';
 $lang_global['passwordlong'] = 'Password too length. limit %1$d characters';
 $lang_global['passwordadjective'] = 'Password too short. Minimum %1$d characters';
@@ -59,12 +61,12 @@ $lang_global['upass_type_2'] = 'Password should combin number and letter, have s
 $lang_global['upass_type_3'] = 'Password should combin number and letter, have uppercase letter';
 $lang_global['upass_type_4'] = 'Password should combin number and letter, have uppercase letter and special characters';
 $lang_global['upass_type_simple'] = 'Password is using easily guessed password, enter the password more complex';
+$lang_global['password_rule_limit'] = 'Invalid Password: %1$s and %2$d from to %3$d characters';
+$lang_global['password_rule_nolimit'] = 'Password must be between %1$d to %2$d characters';
 $lang_global['securitycodeincorrect'] = 'Security Code is invalid';
 $lang_global['loginincorrect'] = 'The system can not find information correctly with your declaration. Username or password do not match';
 $lang_global['admin_loginsuccessfully'] = 'You have successfully logged. The system will transfer you to the site administration area';
 $lang_global['incorrect_password'] = 'Password is incorrect';
-$lang_global['relogin_info'] = 'You were not online for a long time. Please declare your password again. Please enter your password in the box below. You only enter password maximum %1$d times. If the %1$d times that you did not verify the password, the system will forfeit the right to access your Administration';
-$lang_global['relogin_error_info'] = '%1$s. Please enter your password in the box below. You only enter password maximum %2$d times. You only enter password maximum %2$d times. If the %1$d times that you did not verify the password, the system will forfeit the right to access your Administration';
 $lang_global['memory_time_usage'] = 'Memory: %1$s. Processing time: %2$s seconds';
 $lang_global['for_admin'] = 'For Admin';
 $lang_global['admin_account'] = 'Admin Account';
@@ -75,6 +77,7 @@ $lang_global['adminlogin'] = 'Login to Administration';
 $lang_global['module_for_admin'] = 'We are Sorry but this section of our site is for <em>Administrators Only.</em>';
 $lang_global['in_groups'] = 'Members Groups';
 $lang_global['username'] = 'Username';
+$lang_global['username_email'] = 'Username or Email';
 $lang_global['password'] = 'Password';
 $lang_global['password2'] = 'Repeat password';
 $lang_global['captcharefresh'] = 'Refresh';

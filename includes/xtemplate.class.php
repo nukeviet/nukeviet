@@ -460,11 +460,11 @@ class XTemplate {
 		if (isset($tpldir)) {
 			$this->tpldir = $tpldir;
 		}
-		if (defined('XTPL_DIR') && empty($this->tpldir)) {
+		if (defined('XTPL_DIR') and empty($this->tpldir)) {
 			$this->tpldir = XTPL_DIR;
 		}
 
-		if (isset($files) && is_array($files)) {
+		if (isset($files) and is_array($files)) {
 			$this->files = $files;
 		}
 
@@ -504,7 +504,7 @@ class XTemplate {
 			$this->callback_preg = preg_replace($this->preg_delimiter . '^\(' . $delim . '(.*)\)\*$' . $this->preg_delimiter, '\\1', $this->callback_preg);
 		}
 
-		if (!isset($autosetup) || $autosetup) {
+		if (!isset($autosetup) or $autosetup) {
 			$this->setup();
 		}
 	}
@@ -725,7 +725,7 @@ class XTemplate {
 
 					//$var = trim($var);
 					switch (true) {
-						case preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $var) && preg_match($this->preg_delimiter . "\n$" .$this->preg_delimiter, $var):
+						case preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $var) and preg_match($this->preg_delimiter . "\n$" .$this->preg_delimiter, $var):
 							$var = substr($var, 1, -1);
 							break;
 
@@ -747,7 +747,7 @@ class XTemplate {
 					$var = str_replace('\\|', '|', $var);
 					$copy = preg_replace($this->preg_delimiter . $this->tag_start_delim . $v . $this->tag_end_delim . $this->preg_delimiter . 'm', "$var", $copy);
 
-					if (preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $copy) && preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $copy)) {
+					if (preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $copy) and preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $copy)) {
 						$copy = substr($copy, 1, -1);
 					}
 				}
@@ -769,7 +769,7 @@ class XTemplate {
 					 */
 					switch (true) {
 						case is_array($var):
-							if (!isset($var[$v1]) || (is_string($var[$v1]) && strlen($var[$v1]) == 0)) {
+							if (!isset($var[$v1]) or (is_string($var[$v1]) and strlen($var[$v1]) == 0)) {
 
 								// Check for constant, when variable not assigned
 								if (defined($v1)) {
@@ -785,7 +785,7 @@ class XTemplate {
 							break;
 
 						case is_object($var):
-							 if (!isset($var->$v1) || (is_string($var->$v1) && strlen($var->$v1) == 0)) {
+							 if (!isset($var->$v1) or (is_string($var->$v1) and strlen($var->$v1) == 0)) {
 								// Check for constant, when variable not assigned
 								if (defined($v1)) {
 
@@ -809,7 +809,7 @@ class XTemplate {
 				 * @since 03/08/2007
 				 */
 				if ($this->allow_callbacks) {
-					if (is_array($callback_funcs) && !empty($callback_funcs)) {
+					if (is_array($callback_funcs) and !empty($callback_funcs)) {
 						foreach ($callback_funcs as $callback) {
 							// See if we've got parameters being used e.g. |str_replace('A', 'B', %s)
 							if (preg_match($this->preg_delimiter . '\((.*?)\)' . $this->preg_delimiter, $callback, $matches)) {
@@ -850,7 +850,7 @@ class XTemplate {
 
 							// Allow callback of methods in a sub-class of XTemplate
 							// e.g. you must my_class extends XTemplate {} if you want to use this feature
-							if (is_subclass_of($this, 'XTemplate') && method_exists($this, $callback) && is_callable(array($this, $callback))) {
+							if (is_subclass_of($this, 'XTemplate') and method_exists($this, $callback) and is_callable(array($this, $callback))) {
 								if (isset($parameters)) {
 									$var = call_user_func_array(array($this, $callback), $parameters);
 									unset($parameters);
@@ -858,7 +858,7 @@ class XTemplate {
 									// Standard form e.g. {tag|callback}
 									$var = call_user_func(array($this, $callback), $var);
 								}
-							} elseif (in_array($callback, $this->allowed_callbacks) && function_exists($callback) && is_callable($callback)) {
+							} elseif (in_array($callback, $this->allowed_callbacks) and function_exists($callback) and is_callable($callback)) {
 								if (isset($parameters)) {
 									$var = call_user_func_array($callback, $parameters);
 									unset($parameters);
@@ -892,7 +892,7 @@ class XTemplate {
 
 				$copy = preg_replace($this->preg_delimiter . $this->tag_start_delim . preg_quote($orig_v) . $this->tag_end_delim . $this->preg_delimiter . 'm', "$var", $copy);
 
-				if (preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $copy) && preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $copy)) {
+				if (preg_match($this->preg_delimiter . "^\n" . $this->preg_delimiter, $copy) and preg_match($this->preg_delimiter . "\n$" . $this->preg_delimiter, $copy)) {
 					$copy = substr($copy, 1);
 				}
 			}
@@ -905,7 +905,7 @@ class XTemplate {
 		}
 
 		/* reset sub-blocks */
-		if ($this->_autoreset && (!empty($this->sub_blocks[$bname]))) {
+		if ($this->_autoreset and (!empty($this->sub_blocks[$bname]))) {
 
 			reset($this->sub_blocks[$bname]);
 
@@ -1013,7 +1013,7 @@ class XTemplate {
      */
 	public function out_file ($bname, $fname) {
 
-		if (!empty($bname) && !empty($fname) && is_writeable($fname)) {
+		if (!empty($bname) and !empty($fname) and is_writeable($fname)) {
 
 			$fp = fopen($fname, 'w');
 			fwrite($fp, $this->text($bname));
@@ -1259,7 +1259,7 @@ class XTemplate {
 
 				foreach($this->filevar_parent[$name] as $parent) {
 
-					if (isset($this->preparsed_blocks[$parent]) && !isset($this->filevars[$name])) {
+					if (isset($this->preparsed_blocks[$parent]) and !isset($this->filevars[$name])) {
 
 						$copy = $this->preparsed_blocks[$parent];
 
@@ -1272,7 +1272,7 @@ class XTemplate {
 
 					preg_match_all($this->filevar_delim, $copy, $res, PREG_SET_ORDER);
 
-					if (is_array($res) && isset($res[0])) {
+					if (is_array($res) and isset($res[0])) {
 
 						// Changed as per solution in SF bug ID #1261828
 						foreach ($res as $v) {

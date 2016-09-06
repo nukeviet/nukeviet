@@ -17,7 +17,11 @@ $user_info = array();
 if (defined('NV_IS_ADMIN')) {
     $user_info = $admin_info;
 
-    define('NV_IS_USER', true);
+    if (empty($user_info['active2step']) and in_array($global_config['two_step_verification'], array(1, 3))) {
+        define('NV_IS_1STEP_USER', true);
+    } else {
+        define('NV_IS_USER', true);
+    }
 } elseif (defined('NV_IS_USER_FORUM')) {
     require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/is_user.php';
 
@@ -52,7 +56,7 @@ if (defined('NV_IS_ADMIN')) {
                 $user['userid'] = intval($user['userid']);
                 if ($user['checkhash'] == md5($user['userid'] . $user['checknum'] . $global_config['sitekey'] . NV_USER_AGENT)) {
                     $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,
-						view_mail, remember, in_groups, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
+						view_mail, remember, in_groups, active2step, checknum, last_agent AS current_agent, last_ip AS current_ip, last_login AS current_login,
 						last_openid AS current_openid, password, question, answer, safemode 
 						FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid = ' . $user['userid'] . ' AND active=1';
 
@@ -108,7 +112,11 @@ if (defined('NV_IS_ADMIN')) {
         }
 
         if (! empty($user_info) and isset($user_info['userid']) and $user_info['userid'] > 0) {
-            define('NV_IS_USER', true);
+            if (empty($user_info['active2step']) and in_array($global_config['two_step_verification'], array(2, 3))) {
+                define('NV_IS_1STEP_USER', true);
+            } else {
+                define('NV_IS_USER', true);
+            }
         } else {
             $nv_Request->unset_request('nvloginhash', 'cookie');
             $user_info = array();

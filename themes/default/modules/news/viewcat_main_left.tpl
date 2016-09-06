@@ -13,7 +13,11 @@
 				<!-- END: subcatmore -->
 			</ul>
 		</div>
-
+		<!-- BEGIN: block_topcat -->
+		<div class="block-top clear">
+			{BLOCK_TOPCAT}
+		</div>
+		<!-- END: block_topcat -->
 		<div class="panel-body">
 			<div class="row">
 				<!-- BEGIN: related -->
@@ -21,7 +25,7 @@
 					<ul class="related">
 						<!-- BEGIN: loop -->
 						<li class="{CLASS}">
-							<a class="show h4" href="{OTHER.link}" <!-- BEGIN: tooltip -->data-content="{OTHER.hometext}" data-img="{OTHER.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{OTHER.title}">{OTHER.title}</a>
+							<a class="show h4" href="{OTHER.link}" <!-- BEGIN: tooltip -->data-content="{OTHER.hometext_clean}" data-img="{OTHER.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{OTHER.title}">{OTHER.title}</a>
 						</li>
 						<!-- END: loop -->
 					</ul>
@@ -47,11 +51,16 @@
 							<!-- END: comment -->
 						</ul>
 					</div>
-					<p>{CONTENT.hometext}</p>
+					{CONTENT.hometext}
 				</div>
 			</div>
 		</div>
 	</div>
+	<!-- BEGIN: block_bottomcat -->
+	<div class="bottom-cat clear">
+		{BLOCK_BOTTOMCAT}
+	</div>
+	<!-- END: block_bottomcat -->
 </div>
 <!-- END: listcat -->
 <!-- END: main -->

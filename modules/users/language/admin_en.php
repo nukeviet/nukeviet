@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -229,9 +229,6 @@ $lang_module['ChangeConfigModule'] = 'Change module configuration';
 $lang_module['active_users'] = 'Activate members';
 $lang_module['unactive_users'] = 'Inactivates members';
 $lang_module['whoviewlistuser'] = 'Who can view a list of members';
-$lang_module['whoview_all'] = 'All';
-$lang_module['whoview_user'] = 'User';
-$lang_module['whoview_admin'] = 'Administrator';
 $lang_module['random_password'] = 'Random Password';
 $lang_module['show_password'] = 'Show password';
 $lang_module['usactive'] = 'Account status';
@@ -255,6 +252,9 @@ $lang_module['access_editus'] = 'Edit member';
 $lang_module['access_delus'] = 'Delete member';
 $lang_module['access_passus'] = 'Change password';
 $lang_module['access_groups'] = 'Group manage';
+$lang_module['access_caption_leader'] = 'User configuration module powers of the leader';
+$lang_module['access_groups_add'] = 'Add members to the group';
+$lang_module['access_groups_del'] = 'Remove member from group';
 $lang_module['fields'] = 'Custom User Fields';
 $lang_module['captionform_add'] = 'Add User Fields';
 $lang_module['captionform_edit'] = 'Edit User Fields';
@@ -286,6 +286,7 @@ $lang_module['field_options_text'] = 'Options for Text Fields';
 $lang_module['field_match_type'] = 'Value Match Requirements:<br>Empty values are always allowed.';
 $lang_module['field_match_type_none'] = 'none';
 $lang_module['field_match_type_alphanumeric'] = 'A-Z, 0-9, and _ only';
+$lang_module['field_match_type_date'] = 'Enter the date in the format dd/mm/yyyy';
 $lang_module['field_match_type_url'] = 'Url';
 $lang_module['field_match_type_regex'] = 'Regular expression';
 $lang_module['field_match_type_callback'] = 'Func callback';
@@ -352,7 +353,7 @@ $lang_module['read_error_memory_limit'] = 'Error: The system can not read the da
 $lang_module['read_ignore'] = 'Read the incorrect data standards';
 $lang_module['update_field'] = 'Upgrade site';
 $lang_module['update_field_oncreate'] = 'Once created';
-$lang_module['update_field_onlogin'] = 'Site Update Newsletter';
+$lang_module['update_field_onlogin'] = 'On login';
 $lang_module['cas_config'] = 'Set the CAS server';
 $lang_module['cas_config_hostname'] = 'Hostname';
 $lang_module['cas_config_hostname_info'] = 'Hostname of the CAS server	<br />eg: cas.nukeviet.vn';

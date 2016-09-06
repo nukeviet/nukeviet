@@ -190,7 +190,6 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('OP', $op);
-$xtpl->assign('CDNDL', md5($global_config['sitekey'] . $admin_info['admin_id'] . session_id()));
 
 if (defined('NV_IS_GODADMIN')) {
     $result = $db->query("SELECT config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='sys' AND module='global'");

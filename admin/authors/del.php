@@ -65,7 +65,7 @@ $row_user = $db->query($sql)->fetch();
 $action_account = $nv_Request->get_int('action_account', 'post', 0);
 $action_account = (isset($array_action_account[$action_account])) ? $action_account : 0;
 $error = '';
-$checkss = md5($admin_id . session_id() . $global_config['sitekey']);
+$checkss = md5($admin_id . NV_CHECK_SESSION);
 if ($nv_Request->get_title('ok', 'post', 0) == $checkss) {
     $sendmail = $nv_Request->get_int('sendmail', 'post', 0);
     $reason = $nv_Request->get_title('reason', 'post', '', 1);

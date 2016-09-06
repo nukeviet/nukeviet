@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -35,16 +35,6 @@ $lang_module['pleasePingAgain'] = 'You have just sent it. Wait a while';
 $lang_module['searchEngineValue'] = 'Ping Service Links';
 $lang_module['searchEngineFailed'] = 'Error Ping Service Links';
 $lang_module['pingOK'] = 'Sitemap file has been sent successfully';
-$lang_module['siteDiagnostic'] = 'Diagnostic';
-$lang_module['EngineInfo'] = 'Informations from Search engines';
-$lang_module['diagnosticDate'] = 'Update';
-$lang_module['diagnosticGPR'] = 'Google<br />PageRank';
-$lang_module['diagnosticATR'] = 'Alexa<br />Rank';
-$lang_module['diagnosticGBL'] = 'Google<br />BackLink';
-$lang_module['diagnosticBBL'] = 'Bing<br />BackLink';
-$lang_module['diagnosticABL'] = 'Alexa<br />BackLink';
-$lang_module['diagnosticGID'] = 'Google<br />Indexed';
-$lang_module['diagnosticBID'] = 'Bing<br />Indexed';
 $lang_module['submit'] = 'Submit';
 $lang_module['weight'] = 'No.';
 $lang_module['robots'] = 'Config. robots.txt';

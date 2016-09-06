@@ -11,12 +11,20 @@
 					<th class="text-center"><input name="check_all[]" type="checkbox" value="yes" onclick="nv_checkAll(this.form, 'idcheck[]', 'check_all[]',this.checked);" /></th>
 					<th class="w100">{LANG.weight}</th>
 					<th>{LANG.name}</th>
+                    <th class="text-center">{LANG.content_publ_date}</th>
+                    <th>{LANG.status}</th>
+                    <th class="text-center">
+                       <em title="{LANG.hitstotal}" class="fa fa-eye">&nbsp;</em>
+                    </th>
+                    <th class="text-center">
+                       <em title="{LANG.numcomments}" class="fa fa-comment-o">&nbsp;</em>
+                    </th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="5"><input class="btn btn-primary" type="button" onclick="nv_del_block_list(this.form, {BID})" value="{LANG.delete_from_block}"></td>
+					<td colspan="8"><input class="btn btn-primary" type="button" onclick="nv_del_block_list(this.form, {BID})" value="{LANG.delete_from_block}"></td>
 				</tr>
 			</tfoot>
 			<tbody>
@@ -30,6 +38,10 @@
 						<!-- END: weight -->
 					</select></td>
 					<td class="text-left"><a target="_blank" href="{ROW.link}">{ROW.title}</a></td>
+                    <td>{ROW.publtime}</td>
+                    <td title="{ROW.status}">{ROW.status}</td>
+                    <td class="text-center">{ROW.hitstotal}</td>
+                    <td class="text-center">{ROW.hitscm}</td>
 					<td class="text-center">
 						<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}=content&amp;id={ROW.id}">{GLANG.edit}</a> 
 					</td>

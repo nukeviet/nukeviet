@@ -12,7 +12,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('checkss', 'get') == md5($global_config['sitekey'] . session_id())) {
+if ($nv_Request->isset_request('checkss', 'get') and $nv_Request->get_string('checkss', 'get') == NV_CHECK_SESSION) {
     $listid = $nv_Request->get_string('listid', 'get');
     $id_array = array_map('intval', explode(',', $listid));
 

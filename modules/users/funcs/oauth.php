@@ -12,17 +12,22 @@ if (! defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
+$nv_redirect = '';
+if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
+    $nv_redirect = nv_get_redirect();
+}
+
 if ($global_config['allowuserlogin'] and defined('NV_OPENID_ALLOWED')) {
     $server = $nv_Request->get_string('server', 'get', '');
 
     if (! empty($server) and in_array($server, $global_config['openid_servers'])) {
         // Add to Global config
-        $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_width'";
+        $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='avatar_width'";
         $result = $db->query($sql);
         $global_config['avatar_width'] = $result->fetchColumn();
         $result->closeCursor();
 
-        $sql = "SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='avatar_height'";
+        $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='avatar_height'";
         $result = $db->query($sql);
         $global_config['avatar_height'] = $result->fetchColumn();
         $result->closeCursor();

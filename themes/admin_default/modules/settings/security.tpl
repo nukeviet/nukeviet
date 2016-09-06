@@ -1,11 +1,8 @@
 <!-- BEGIN: main -->
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.validator-{NV_LANG_INTERFACE}.js"></script>
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <form action="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}" method="post" id="frm">
@@ -29,6 +26,30 @@
 					<td><strong>{LANG.max_requests_300}</strong></td>
 					<td><input type="text" value="{MAX_REQUESTS_300}" name="max_requests_300" style="width: 50px; text-align: right" class="required form-control pull-left"/></td>
 				</tr>
+				<tr>
+					<td><strong>{LANG.is_login_blocker}</strong></td>
+					<td><input type="checkbox" value="1" name="is_login_blocker" {IS_LOGIN_BLOCKER} /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.login_number_tracking}</strong></td>
+					<td><input type="text" value="{LOGIN_NUMBER_TRACKING}" name="login_number_tracking" style="width: 80px; text-align: right" class="required form-control pull-left"/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.login_time_tracking}</strong> ({GLANG.min})</td>
+					<td><input type="text" value="{LOGIN_TIME_TRACKING}" name="login_time_tracking" style="width: 80px; text-align: right" class="required form-control pull-left"/></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.login_time_ban}</strong> ({GLANG.min})</td>
+					<td><input type="text" value="{LOGIN_TIME_BAN}" name="login_time_ban" style="width: 80px; text-align: right" class="required form-control pull-left"/></td>
+				</tr>
+                <tr>
+                    <td><strong>{LANG.two_step_verification}</strong></td>
+                    <td>
+                        <select name="two_step_verification" class="form-control w200">
+                            <!-- BEGIN: two_step_verification --><option value="{TWO_STEP_VERIFICATION.key}"{TWO_STEP_VERIFICATION.selected}>{TWO_STEP_VERIFICATION.title}</option><!-- END: two_step_verification -->
+                        </select>
+                    </td>
+                </tr>
 				<tr>
 					<td><strong>{LANG.nv_anti_agent}</strong></td>
 					<td><input type="checkbox" value="1" name="nv_anti_agent" {ANTI_AGENT} /></td>

@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Trương Đắc Ngọc (truongdacngoc1993@gmail.com)';

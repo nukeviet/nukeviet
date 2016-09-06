@@ -8,14 +8,15 @@
  * @Createdate 07/30/2013 10:27
  */
 
-if (! defined('NV_ADMIN')) {
+if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$access_admin = $db->query("SELECT content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='access_admin'")->fetchColumn();
+$_mod_table = ($module_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $module_data;
+$access_admin = $db->query("SELECT content FROM " . $_mod_table . "_config WHERE config='access_admin'")->fetchColumn();
 $access_admin = unserialize($access_admin);
 
-$allow_func = array( 'main', 'getuserid' );
+$allow_func = array('main', 'getuserid');
 $level = $admin_info['level'];
 if (isset($access_admin['access_addus'][$level]) and $access_admin['access_addus'][$level] == 1) {
     $submenu['user_add'] = $lang_module['user_add'];
@@ -39,7 +40,7 @@ if (isset($access_admin['access_groups'][$level]) and $access_admin['access_grou
     $allow_func[] = 'groups';
 }
 
-if (isset($admin_mods['authors'])) {
+if ($module_data == 'users' and isset($admin_mods['authors'])) {
     $submenu['authors'] = $lang_global['mod_authors'];
     $allow_func[] = 'authors';
 }

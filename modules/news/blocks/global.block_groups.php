@@ -39,6 +39,10 @@ if (! nv_function_exists('nv_block_news_groups')) {
         $html .= '</script>';
         $html .= '</tr>';
         $html .= '<tr>';
+        $html .= '<td>' . $lang_block['title_length'] . '</td>';
+        $html .= '<td><input type="text" class="form-control w200" name="config_title_length" size="5" value="' . $data_block['title_length'] . '"/></td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
         $html .= '<td>' . $lang_block['numrow'] . '</td>';
         $html .= '<td><input type="text" class="form-control w200" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
         $html .= '</tr>';
@@ -66,6 +70,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
         $return['config'] = array();
         $return['config']['blockid'] = $nv_Request->get_int('config_blockid', 'post', 0);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
+        $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 20);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
         $return['config']['tooltip_position'] = $nv_Request->get_string('config_tooltip_position', 'post', 0);
         $return['config']['tooltip_length'] = $nv_Request->get_string('config_tooltip_length', 'post', 0);
@@ -113,13 +118,16 @@ if (! nv_function_exists('nv_block_news_groups')) {
                 }
 
                 $l['blockwidth'] = $blockwidth;
-
-                $l['hometext'] = nv_clean60($l['hometext'], $block_config['tooltip_length'], true);
+                
+                $l['hometext_clean'] = strip_tags($l['hometext']);
+                $l['hometext_clean'] = nv_clean60($l['hometext_clean'], $block_config['tooltip_length'], true);
 
                 if (! $block_config['showtooltip']) {
                     $xtpl->assign('TITLE', 'title="' . $l['title'] . '"');
                 }
-
+                
+                $l['title_clean'] = nv_clean60($l['title'], $block_config['title_length']);
+                
                 $xtpl->assign('ROW', $l);
                 if (! empty($l['thumb'])) {
                     $xtpl->parse('main.loop.img');
@@ -148,9 +156,12 @@ if (defined('NV_SYSTEM')) {
             $module_array_cat = array();
             $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
             $list = $nv_Cache->db($sql, 'catid', $module);
-            foreach ($list as $l) {
-                $module_array_cat[$l['catid']] = $l;
-                $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
+            if(!empty($list))
+            {
+                foreach ($list as $l) {
+                    $module_array_cat[$l['catid']] = $l;
+                    $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
+                }
             }
         }
         $content = nv_block_news_groups($block_config);

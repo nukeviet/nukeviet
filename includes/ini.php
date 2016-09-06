@@ -12,11 +12,21 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (headers_sent() || connection_status() != 0 || connection_aborted()) {
+if (headers_sent() or connection_status() != 0 or connection_aborted()) {
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
 
 if ($sys_info['ini_set_support']) {
+    if ($global_config['session_handler'] == 'memcached') {
+        if (ini_set('session.save_handler', 'memcached') === false or ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT) === false) {
+            trigger_error('Server does not support Memcached Session handler!', 256);
+        }
+    } elseif ($global_config['session_handler'] == 'redis') {
+        if (ini_set('session.save_handler', 'redis') === false or ini_set('session.save_path', NV_REDIS_HOST . ':' . NV_REDIS_PORT) === false) {
+            trigger_error('Server does not support Redis Session handler!', 256);
+        }
+    }
+    
     if (! isset($_SESSION)) {
         //ini_set( 'session.save_handler', 'files' );
         ini_set('session.use_trans_sid', 0);
@@ -57,8 +67,8 @@ $sys_info['curl_support'] = (extension_loaded('curl') and (empty($sys_info['disa
 $sys_info['ftp_support'] = (function_exists('ftp_connect') and ! in_array('ftp_connect', $sys_info['disable_functions']) and function_exists('ftp_chmod') and ! in_array('ftp_chmod', $sys_info['disable_functions']) and function_exists('ftp_mkdir') and ! in_array('ftp_mkdir', $sys_info['disable_functions']) and function_exists('ftp_chdir') and ! in_array('ftp_chdir', $sys_info['disable_functions']) and function_exists('ftp_nlist') and ! in_array('ftp_nlist', $sys_info['disable_functions'])) ? 1 : 0;
 
 //Neu he thong khong ho tro php se bao loi
-if (version_compare(PHP_VERSION, '5.4.0') < 0) {
-    trigger_error('You are running an unsupported PHP version. Please upgrade to PHP 5.4 or higher before trying to install Nukeviet Portal', 256);
+if (version_compare(PHP_VERSION, '5.5.0') < 0) {
+    trigger_error('You are running an unsupported PHP version. Please upgrade to PHP 5.5 or higher before trying to install Nukeviet Portal', 256);
 }
 
 //Neu he thong khong ho tro opendir se bao loi

@@ -18,7 +18,7 @@ function nv_getTimezoneName_from_cookie($cookie)
     global $nv_parse_ini_timezone;
     if (preg_match('/^([\-]*\d+)\.([\-]*\d+)\.([\-]*\d+)\|(.*)$/', rawurldecode($cookie), $matches)) {
         foreach ($nv_parse_ini_timezone as $name => $offset) {
-            if ($offset['winter_offset'] == intval($matches[2]) * 60 && $offset['summer_offset'] == intval($matches[1]) * 60) {
+            if ($offset['winter_offset'] == intval($matches[2]) * 60 and $offset['summer_offset'] == intval($matches[1]) * 60) {
                 return $name;
             }
         }

@@ -1,24 +1,21 @@
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="page">
     <h2 class="margin-bottom-lg margin-top-lg">{LANG.editinfo_pagetitle}</h2>
     <ul class="users-menu nav nav-pills margin-bottom">
         <li class="{BASIC_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/basic" href="#edit_basic">{LANG.edit_basic}</a></li>
-        <li class="{AVATAR_ACTIVE}"><a data-toggle="tab" href="#edit_avatar" data-location="{EDITINFO_FORM}/avatar">{LANG.edit_avatar}</a></li>
+        <!-- BEGIN: edit_avatar --><li class="{AVATAR_ACTIVE}"><a data-toggle="tab" href="#edit_avatar" data-location="{EDITINFO_FORM}/avatar">{LANG.edit_avatar}</a></li><!-- END: edit_avatar -->
         <!-- BEGIN: edit_username --><li class="{USERNAME_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/username" href="#edit_username">{LANG.edit_login}</a></li><!-- END: edit_username -->
         <!-- BEGIN: edit_email --><li class="{EMAIL_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/email" href="#edit_email">{LANG.edit_email}</a></li><!-- END: edit_email -->
-        <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/password" href="#edit_password">{LANG.edit_password}</a></li>
-        <li class="{QUESTION_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/question" href="#edit_question">{LANG.edit_question}</a></li>
+        <!-- BEGIN: edit_password --><li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/password" href="#edit_password">{LANG.edit_password}</a></li><!-- END: edit_password -->
+        <!-- BEGIN: edit_question --><li class="{QUESTION_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/question" href="#edit_question">{LANG.edit_question}</a></li><!-- END: edit_question -->
         <!-- BEGIN: edit_openid --><li class="{OPENID_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/openid" href="#edit_openid">{LANG.openid_administrator}</a></li><!-- END: edit_openid -->
         <!-- BEGIN: edit_group --><li class="{GROUP_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/group" href="#edit_group">{LANG.group}</a></li><!-- END: edit_group -->
         <!-- BEGIN: edit_others --><li class="{OTHERS_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/others" href="#edit_others">{LANG.edit_others}</a></li><!-- END: edit_others -->
-        <li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/safemode" href="#edit_safemode">{LANG.safe_mode}</a></li>
+        <!-- BEGIN: edit_safemode --><li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/safemode" href="#edit_safemode">{LANG.safe_mode}</a></li><!-- END: edit_safemode -->
     </ul>
 
     <div class="tab-content margin-bottom-lg">
@@ -102,7 +99,7 @@
                 </div>
             </div>
         </div>
-
+		 <!-- BEGIN: tab_edit_avatar -->
         <div id="edit_avatar" class="tab-pane fade {TAB_AVATAR_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -116,7 +113,7 @@
                 </div>
             </div>
         </div>
-
+		<!-- END: tab_edit_avatar -->
         <!-- BEGIN: tab_edit_username -->
         <div id="edit_username" class="tab-pane fade {TAB_USERNAME_ACTIVE}">
             <div class="page panel panel-default">
@@ -232,6 +229,7 @@
             </div>
         </div>
         <!-- END: tab_edit_email -->
+        <!-- BEGIN: tab_edit_password -->
         <div id="edit_password" class="tab-pane fade {TAB_PASSWORD_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -276,7 +274,8 @@
                 </div>
             </div>
         </div>
-
+        <!-- END: tab_edit_password -->
+		<!-- BEGIN: tab_edit_question -->
         <div id="edit_question" class="tab-pane fade {TAB_QUESTION_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -334,7 +333,7 @@
                 </div>
             </div>
         </div>
-
+		<!-- END: tab_edit_question -->
         <!-- BEGIN: tab_edit_openid -->
         <div id="edit_openid" class="tab-pane fade {TAB_OPENID_ACTIVE}">
             <!-- BEGIN: openid_not_empty -->
@@ -592,7 +591,7 @@
             </div>
         </div>
         <!-- END: tab_edit_others -->
-
+		<!-- BEGIN: tab_edit_safemode -->
         <div id="edit_safemode" class="tab-pane fade {TAB_SAFEMODE_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -642,6 +641,7 @@
                 </div>
             </div>
         </div>
+        <!-- END: tab_edit_safemode -->
     </div>
 
     <ul class="nav navbar-nav">

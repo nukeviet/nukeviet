@@ -158,7 +158,7 @@ if ($nv_Request->isset_request('submit', 'get')) {
         $array_where[] = '( last_login <= ' . $array['last_loginto1'] . ' )';
     }
     if (! empty($filtersql)) {
-        $data_str = $crypt->aes_decrypt(nv_base64_decode($filtersql), md5($global_config['sitekey'] . $client_info['session_id']));
+        $data_str = $crypt->aes_decrypt(nv_base64_decode($filtersql), NV_CHECK_SESSION);
         if (! empty($data_str)) {
             $array_where[] = $data_str;
         }
@@ -194,7 +194,7 @@ if ($nv_Request->isset_request('submit', 'get')) {
 
     $db->sqlreset()
         ->select('COUNT(*)')
-        ->from(NV_USERS_GLOBALTABLE);
+        ->from(NV_MOD_TABLE);
     if (! empty($array_where)) {
         $db->where(implode(' AND ', $array_where));
     }

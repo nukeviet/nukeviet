@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -66,6 +66,10 @@ $lang_module['year'] = 'Année';
 $lang_module['show_email'] = 'Afficher l\'e-mail';
 $lang_module['sig'] = 'Signature';
 $lang_module['in_group'] = 'est membre du groupe';
+$lang_module['in_group_default'] = 'Le groupe est par défaut';
+$lang_module['is_official'] = 'En tant que membre officiel';
+$lang_module['is_official_note'] = 'Si non sélectionné, ce compte sera inclus dans le groupe de la nouvelle immatriculation de membre';
+$lang_module['set_official_note'] = 'Pour un membre officiel';
 $lang_module['question'] = 'Question secrète';
 $lang_module['addquestion'] = 'Ajouter une question secrète';
 $lang_module['savequestion'] = 'Modifier la question de sécurité';
@@ -120,6 +124,7 @@ $lang_module['edit_add_error'] = 'Erreur: impossible de mettre à jour les coord
 $lang_module['edit_error_question'] = 'Il faut choisir une question secrète';
 $lang_module['edit_error_answer'] = 'Merci de donner une réponse à la question secrète';
 $lang_module['edit_error_group'] = 'Sélectionnez un groupe';
+$lang_module['edit_error_group_default'] = 'Choisissez les groupes de comptes par défaut';
 $lang_module['account_deny_name'] = 'Désolé, le compte %s est interdit';
 $lang_module['awaiting_active'] = 'Activer';
 $lang_module['delconfirm_message'] = 'Êtes-vous sûr de vouloir supprimer?';
@@ -156,10 +161,19 @@ $lang_module['group_type'] = 'Loại nhóm';
 $lang_module['group_type_0'] = 'Nhóm cố định';
 $lang_module['group_type_1'] = 'Nhóm tham gia phải gửi yêu cầu';
 $lang_module['group_type_2'] = 'Nhóm tham gia tự do';
+$lang_module['group_color'] = 'Groupe de couleur';
+$lang_module['group_avatar'] = 'Groupe Hailie';
+$lang_module['group_is_default'] = 'Groupes par défaut lorsque les membres inscrivent au';
 $lang_module['siteus'] = 'Permettre au sous-site d\'ajouter les membres dans le groupe';
 $lang_module['users'] = 'Utilisateurs';
+$lang_module['promote'] = 'Promouvoir';
+$lang_module['demote'] = 'Rétrograder';
+$lang_module['approved'] = 'Feuilleter';
+$lang_module['denied'] = 'Refuser';
 $lang_module['error_title_exists'] = 'Ce nom du groupe "%s" a été utilisé';
 $lang_module['members_in_group_caption'] = 'Liste des utilisateurs du groupe "%s" (%d utilisateurs)';
+$lang_module['leaders_in_group_caption'] = 'Gestion de la liste des groupes "%s" (comptes %d)';
+$lang_module['pending_in_group_caption'] = 'Liste des groupes "%s" adhérents (comptes %d)';
 $lang_module['error_group_not_found'] = 'Erreur: Groupe introuvable';
 $lang_module['error_users_not_found'] = 'Ce groupe n\'a pas encore d\'utilisateur';
 $lang_module['error_group_in_site'] = 'Erreur: Vous ne pouvez qu\'ajouter et effacer les comptes du groupe qui sont les comptes que votre site gère';
@@ -174,6 +188,7 @@ $lang_module['search_not_result'] = 'Aucun résultat';
 $lang_module['search_result_caption'] = 'Résultats de la recherche';
 $lang_module['group_pgtitle'] = 'Infos détailées';
 $lang_module['group_info'] = 'Infos du groupe &ldquo;%s&rdquo;';
+$lang_module['group_user_peding'] = 'Certains membres aimeraient se joindre au groupe "%s"';
 $lang_module['add_user'] = 'Ajouter l\'utilisateur %1$s au groupe %2$s';
 $lang_module['exclude_user'] = 'Retirer l\'utilisateur %1$s du groupe %2$s';
 $lang_module['siteinfo_user'] = 'Utilisateurs';
@@ -214,9 +229,6 @@ $lang_module['ChangeConfigModule'] = 'Changer la configuration du module';
 $lang_module['active_users'] = 'Activer les utilisateurs';
 $lang_module['unactive_users'] = 'Désactiver les utilisateurs';
 $lang_module['whoviewlistuser'] = 'Qui est autorisé de voir la liste d\'utilisateurs';
-$lang_module['whoview_all'] = 'Tout';
-$lang_module['whoview_user'] = 'Utilisateur';
-$lang_module['whoview_admin'] = 'Administrateur';
 $lang_module['random_password'] = 'Créer le mot de passe aléatoirement';
 $lang_module['show_password'] = 'Afficher le mot de passe';
 $lang_module['usactive'] = 'Etat du compte';
@@ -240,6 +252,9 @@ $lang_module['access_editus'] = 'Modifier l\'utilisateur';
 $lang_module['access_delus'] = 'Supprimer l\'utilisateur';
 $lang_module['access_passus'] = 'Changer le mot de passe';
 $lang_module['access_groups'] = 'Gérer le groupe';
+$lang_module['access_caption_leader'] = 'Puissances du module de configuration de l\'utilisateur du leader';
+$lang_module['access_groups_add'] = 'Ajouter des membres au groupe';
+$lang_module['access_groups_del'] = 'Retirer membre du groupe';
 $lang_module['fields'] = 'Modification des données';
 $lang_module['captionform_add'] = 'Ajouter les lexiques de données';
 $lang_module['captionform_edit'] = 'Modifier la lexique de données';
@@ -271,6 +286,7 @@ $lang_module['field_options_text'] = 'Les autres options';
 $lang_module['field_match_type'] = 'Demande de vérifier avec valeur:';
 $lang_module['field_match_type_none'] = 'Ne vérifie pas';
 $lang_module['field_match_type_alphanumeric'] = 'N\'utilise que les caractère A-Z, 0-9 et underscore';
+$lang_module['field_match_type_date'] = 'Entrez la date dans le format dd/mm/yyyy';
 $lang_module['field_match_type_url'] = 'URL';
 $lang_module['field_match_type_regex'] = 'Formulaire';
 $lang_module['field_match_type_callback'] = 'Utiliser la fonction';
@@ -337,7 +353,7 @@ $lang_module['read_error_memory_limit'] = 'Erreur: Systeme ne peut pas lire les 
 $lang_module['read_ignore'] = 'Lire les données qui ne respectent pas les règles';
 $lang_module['update_field'] = 'Mise a jour le site';
 $lang_module['update_field_oncreate'] = 'au moment de création';
-$lang_module['update_field_onlogin'] = 'Mise à jour le site';
+$lang_module['update_field_onlogin'] = 'Lors de la connexion';
 $lang_module['cas_config'] = 'Configurer la machine centrale CAS';
 $lang_module['cas_config_hostname'] = 'Hostname';
 $lang_module['cas_config_hostname_info'] = 'Hostname du serveur CAS	<br />eg: cas.nukeviet.vn';
@@ -402,3 +418,6 @@ $lang_module['safe_active_info'] = 'Votre compte est en mode sans échec donc to
 $lang_module['safe_deactivate'] = 'Désactiver le mode sans échec';
 $lang_module['group_description'] = 'Description';
 $lang_module['group_description_empty'] = 'Prenez une brève description du groupe';
+$lang_module['auto_login_after_reg'] = 'Se connecter automatiquement après une inscription réussie';
+$lang_module['active_group_newusers'] = 'Activer membre d\'authentification';
+$lang_module['active_group_newusers_note'] = 'Si cette fonction est activée, le nouvel enregistrement de membre sera automatiquement classé comme "activé" jusqu\'à ce qu\'il ait été retiré du chef d\'équipe, au cours de laquelle les nouveaux membres sont considérés comme des «membres officiels "';

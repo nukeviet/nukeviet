@@ -12,15 +12,6 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-/**
- * dumpsave
- *
- * @package
- * @author NUKEVIET commercial version 1.0
- * @copyright Anh Tu Nguyen
- * @version 2010
- * @access public
- */
 class dumpsave
 {
     public $savetype;
@@ -30,13 +21,12 @@ class dumpsave
     public $fp = false;
 
     /**
-     * dumpsave::dumpsave()
      *
      * @param mixed $save_type
      * @param mixed $filesave_name
      * @return
      */
-    public function dumpsave($save_type, $filesave_name)
+    public function __construct($save_type, $filesave_name)
     {
         $this->filesavename = $filesave_name;
         if ($save_type == 'gz' and extension_loaded('zlib')) {
@@ -108,7 +98,7 @@ function nv_dump_save($params)
     if (! isset($params['tables']) or ! is_array($params['tables']) or $params['tables'] == array()) {
         return false;
     }
-    
+
     $params['tables'] = array_map('trim', $params['tables']);
     $tables = array();
     $dbsize = 0;
@@ -141,7 +131,7 @@ function nv_dump_save($params)
         return false;
     }
 
-    $template = explode('@@@', file_get_contents(NV_ROOTDIR . '/themes/admin_default/system/dump.tpl'));
+    $template = explode('@@@', file_get_contents(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl/dump.tpl'));
 
     $patterns = array( "/\{\|SERVER_NAME\|\}/", "/\{\|GENERATION_TIME\|\}/", "/\{\|SQL_VERSION\|\}/", "/\{\|PHP_VERSION\|\}/", "/\{\|DB_NAME\|\}/", "/\{\|DB_CHARACTER\|\}/", "/\{\|DB_COLLATION\|\}/" );
     $replacements = array( $db->server, gmdate("F j, Y, h:i A", NV_CURRENTTIME) . " GMT", $db->getAttribute(PDO::ATTR_SERVER_VERSION), PHP_VERSION, $db->dbname, $db_config['charset'], $db_config['collation'] );
@@ -265,7 +255,7 @@ function nv_dump_restore($file)
             $st = preg_replace("/^\xEF\xBB\xBF/", "", $st);
         }
 
-        if (empty($st) || preg_match('/^(#|--)/', $st)) {
+        if (empty($st) or preg_match('/^(#|--)/', $st)) {
             continue;
         } else {
             $query_len += strlen($st);

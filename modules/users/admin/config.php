@@ -31,6 +31,7 @@ function valid_name_config($array_name)
     return $array_retutn;
 }
 
+$groups_list = nv_groups_list();
 $array_config = array();
 $array_config_define = array();
 
@@ -70,9 +71,11 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['openid_servers'] = $nv_Request->get_typed_array('openid_servers', 'post', 'string');
         $array_config['openid_servers'] = ! empty($array_config['openid_servers']) ? implode(',', $array_config['openid_servers']) : '';
         $array_config['openid_processing'] = $nv_Request->get_int('openid_processing', 'post', 0);
-        $array_config['whoviewuser'] = $nv_Request->get_int('whoviewuser', 'post', 0);
         $array_config['user_check_pass_time'] = 60 * $nv_Request->get_int('user_check_pass_time', 'post');
         $array_config['auto_login_after_reg'] = $nv_Request->get_int('auto_login_after_reg', 'post', 0);
+        
+        $array_config['whoviewuser'] = $nv_Request->get_typed_array('whoviewuser', 'post', 'int', array());
+        $array_config['whoviewuser'] = !empty($array_config['whoviewuser']) ? implode(',', nv_groups_post(array_intersect($array_config['whoviewuser'], array_keys($groups_list)))) : '';
 
         if ($array_config['user_check_pass_time'] < 120) {
             $array_config['user_check_pass_time'] = 120;
@@ -92,18 +95,18 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
 
         // Cau hinh kich thuoc avatar
         $array_config['avatar_width'] = $nv_Request->get_int('avatar_width', 'post', 120);
-        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_width'");
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_width'");
         $stmt->bindParam(':content', $array_config['avatar_width'], PDO::PARAM_STR);
         $stmt->execute();
 
         $array_config['avatar_height'] = $nv_Request->get_int('avatar_height', 'post', 120);
-        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'");
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='avatar_height'");
         $stmt->bindParam(':content', $array_config['avatar_height'], PDO::PARAM_STR);
         $stmt->execute();
         
         // Kich hoat chuc nang xet duyet thanh vien moi dang ky
         $array_config['active_group_newusers'] = ($nv_Request->get_int('active_group_newusers', 'post', 0) ? 1 : 0);
-        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_group_newusers'");
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='active_group_newusers'");
         $stmt->bindParam(':content', $array_config['active_group_newusers'], PDO::PARAM_STR);
         $stmt->execute();
         
@@ -114,7 +117,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $array_config['deny_email'] = implode('|', $array_config['deny_email']);
         }
 
-        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'");
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_email'");
         $stmt->bindParam(':content', $array_config['deny_email'], PDO::PARAM_STR, strlen($array_config['deny_email']));
         $stmt->execute();
 
@@ -123,7 +126,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             $array_config['deny_name'] = valid_name_config(explode(',', $array_config['deny_name']));
             $array_config['deny_name'] = implode('|', $array_config['deny_name']);
         }
-        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'");
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='deny_name'");
         $stmt->bindParam(':content', $array_config['deny_name'], PDO::PARAM_STR, strlen($array_config['deny_name']));
         $stmt->execute();
 
@@ -134,7 +137,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
             asort($array_config['password_simple']);
             $array_config['password_simple'] = implode('|', $array_config['password_simple']);
         }
-        $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'");
+        $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . "_config SET content= :content, edit_time=" . NV_CURRENTTIME . " WHERE config='password_simple'");
         $stmt->bindParam(':content', $array_config['password_simple'], PDO::PARAM_STR, strlen($array_config['password_simple']));
         $stmt->execute();
 
@@ -145,7 +148,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $access_admin['access_delus'] = $nv_Request->get_typed_array('access_delus', 'post', 'bool');
         $access_admin['access_passus'] = $nv_Request->get_typed_array('access_passus', 'post', 'bool');
         $access_admin['access_groups'] = $nv_Request->get_typed_array('access_groups', 'post', 'bool');
-        $sql = "UPDATE " . NV_USERS_GLOBALTABLE . "_config SET content='" . serialize($access_admin) . "', edit_time=" . NV_CURRENTTIME . " WHERE config='access_admin'";
+        $sql = "UPDATE " . NV_MOD_TABLE . "_config SET content='" . serialize($access_admin) . "', edit_time=" . NV_CURRENTTIME . " WHERE config='access_admin'";
         $db->query($sql);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['ChangeConfigModule'], '', $admin_info['userid']);
@@ -165,7 +168,7 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     $array_config['is_user_forum'] = ! empty($array_config['is_user_forum']) ? ' checked="checked"' : '';
     $array_config['auto_login_after_reg'] = ! empty($array_config['auto_login_after_reg']) ? ' checked="checked"' : '';
 
-    $sql = "SELECT config, content FROM " . NV_USERS_GLOBALTABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height' OR config='active_group_newusers'";
+    $sql = "SELECT config, content FROM " . NV_MOD_TABLE . "_config WHERE config='deny_email' OR config='deny_name' OR config='password_simple' OR config='avatar_width' OR config='avatar_height' OR config='active_group_newusers'";
     $result = $db->query($sql);
     while (list($config, $content) = $result->fetch(3)) {
         $content = array_map('trim', explode('|', $content));
@@ -185,11 +188,6 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         1 => $lang_module['active_all'],
         2 => $lang_module['active_email'],
         3 => $lang_module['active_admin_check']
-    );
-    $array_whoview = array(
-        0 => $lang_module['whoview_all'],
-        1 => $lang_module['whoview_user'],
-        2 => $lang_module['whoview_admin']
     );
     $array_openid_processing = array(
         0 => $lang_module['openid_processing_0'],
@@ -314,14 +312,14 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $xtpl->parse('main.name_show');
     }
 
-    foreach ($array_whoview as $id => $titleregister) {
-        $select = ($array_config['whoviewuser'] == $id) ? ' selected="selected"' : '';
-        $array = array(
-            'id' => $id,
-            'select' => $select,
-            'value' => $titleregister
+    $array_config['whoviewuser'] = explode(',', $array_config['whoviewuser']);
+    foreach ($groups_list as $group_id => $group_name) {
+        $whoview = array(
+            'key' => $group_id,
+            'checked' => in_array($group_id, $array_config['whoviewuser']) ? ' checked="checked"' : '',
+            'title' => $group_name
         );
-        $xtpl->assign('WHOVIEW', $array);
+        $xtpl->assign('WHOVIEW', $whoview);
         $xtpl->parse('main.whoviewlistuser');
     }
 

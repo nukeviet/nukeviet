@@ -12,7 +12,7 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (headers_sent() || connection_status() != 0 || connection_aborted()) {
+if (headers_sent() or connection_status() != 0 or connection_aborted()) {
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
 
@@ -42,7 +42,7 @@ if ($sys_info['ini_set_support']) {
     ini_set('auto_detect_line_endings', 0);
 }
 
-$sys_info['php_required'] = '5.4.0';
+$sys_info['php_required'] = '5.5.0';
 $sys_info['opendir_support'] = (function_exists('opendir') and ! in_array('opendir', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['gd_support'] = (extension_loaded('gd')) ? 1 : 0;
 $sys_info['fileuploads_support'] = (ini_get('file_uploads')) ? 1 : 0;
@@ -69,7 +69,7 @@ if (function_exists('apache_get_modules')) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
 } elseif (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
-    if (isset($_SERVER['IIS_UrlRewriteModule']) && (php_sapi_name() == 'cgi-fcgi') && class_exists('DOMDocument')) {
+    if (isset($_SERVER['IIS_UrlRewriteModule']) and (php_sapi_name() == 'cgi-fcgi') and class_exists('DOMDocument')) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
     } elseif (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';

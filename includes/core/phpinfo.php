@@ -45,7 +45,7 @@ function phpinfo_array($option = 1, $return = false)
             $n = substr($section, 0, strpos($section, '</h2>'));
             preg_match_all('#%S%(?:<td>(.*?)</td>)?(?:<td>(.*?)</td>)?(?:<td>(.*?)</td>)?%E%#', $section, $askapache, PREG_SET_ORDER);
             foreach ($askapache as $m) {
-                $pi[$n][$m[1]] = (isset($m[2]) and (! isset($m[3]) || $m[2] == $m[3])) ? $m[2] : array_slice($m, 2);
+                $pi[$n][$m[1]] = (isset($m[2]) and (! isset($m[3]) or $m[2] == $m[3])) ? $m[2] : array_slice($m, 2);
             }
         }
     }

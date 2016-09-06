@@ -186,6 +186,8 @@ $lang_module['content_checkcatmsg'] = 'Bạn cần chọn chủ đề chính cho
 $lang_module['content_archive'] = 'Lưu trữ sau thời gian hết hạn';
 $lang_module['content_tags_empty'] = 'Chú ý: Bài viết chưa có từ khóa nào';
 $lang_module['content_tags_empty_auto'] = 'Hệ thống sẽ tạo tự động từ khóa lúc lưu bài viết này, có thể tắt tính năng tự động tạo từ khóa ở phần quản lý module';
+$lang_module['content_advfeature'] = 'Tùy chọn nâng cao';
+$lang_module['content_description'] = 'Mô tả của site';
 
 $lang_module['showtooltip'] = 'Hiển thị tooltips';
 $lang_module['showtooltip_position'] = 'Vị trí hiển thị';
@@ -195,6 +197,7 @@ $lang_module['showtooltip_position_left'] = 'Trái';
 $lang_module['showtooltip_position_right'] = 'Phải';
 $lang_module['showtooltip_length'] = 'Số ký tự';
 $lang_module['showhometext'] = 'Hiển thị phần Giới thiệu ngắn gọn khi xem bài viết';
+$lang_module['htmlhometext'] = 'Sử dụng trình soạn thảo cho phần Giới thiệu ngắn gọn';
 $lang_module['show_no_image'] = 'Hiển thị ảnh No-Image nếu không bài viết không có hình minh họa';
 $lang_module['imgposition'] = 'Trình bày hình trong bài viết';
 $lang_module['imgpositiondefault'] = 'Cấu hình mặc định, Trình bày hình trong bài viết khi đăng bài';
@@ -272,6 +275,7 @@ $lang_module['structure_image_upload'] = 'Ảnh upload của module được lư
 $lang_module['config_source'] = 'Cấu hình hiển thị nguồn bài viết tại chi tiết tin';
 $lang_module['config_source_title'] = 'Hiển thị tiêu đề nguồn tin';
 $lang_module['config_source_link'] = 'Hiển thị link của nguồn tin';
+$lang_module['config_source_link_nofollow'] = 'Hiển thị link của nguồn tin (rel= "nofollow")';
 $lang_module['config_source_logo'] = 'Hiển thị logo của nguồn tin';
 
 $lang_module['tags'] = 'Quản lý Tags';
@@ -296,3 +300,7 @@ $lang_module['delete_from_cat'] = 'Xóa bài viết khỏi chuyên mục';
 $lang_module['not_featured'] = 'Không có bài viết nào';
 
 $lang_module['notification_post_queue'] = 'Kiểm duyệt bài viết <strong>%s</strong> gửi bởi <strong>%s</strong><br /><em>%s</em>';
+
+$lang_module['ad_block_show'] = 'Hiển thị các block phụ';
+$lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
+$lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';

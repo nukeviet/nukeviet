@@ -20,10 +20,10 @@ if ($nv_Request->isset_request('nv_genpass', 'post')) {
 
 $page_title = $lang_module['user_add'];
 
-$groups_list = nv_groups_list();
+$groups_list = nv_groups_list($module_data);
 
 $array_field_config = array();
-$result_field = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC');
+$result_field = $db->query('SELECT * FROM ' . NV_MOD_TABLE . '_field ORDER BY weight ASC');
 while ($row_field = $result_field->fetch()) {
     $language = unserialize($row_field['language']);
     $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -83,7 +83,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     // Thực hiện câu truy vấn để kiểm tra username đã tồn tại chưa.
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username= :md5username');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE md5username= :md5username');
     $stmt->bindParam(':md5username', $md5username, PDO::PARAM_STR);
     $stmt->execute();
     $query_error_username = $stmt->fetchColumn();
@@ -102,7 +102,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     // Thực hiện câu truy vấn để kiểm tra email đã tồn tại chưa.
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email= :email');
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . ' WHERE email= :email');
     $stmt->bindParam(':email', $_user['email'], PDO::PARAM_STR);
     $stmt->execute();
     $query_error_email = $stmt->fetchColumn();
@@ -113,8 +113,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             'mess' => $lang_module['edit_error_email_exist'] )));
     }
 
-    // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong NV_USERS_GLOBALTABLE_reg  chưa.
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_reg WHERE email= :email');
+    // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong nv4_users_reg  chưa.
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_reg WHERE email= :email');
     $stmt->bindParam(':email', $_user['email'], PDO::PARAM_STR);
     $stmt->execute();
     $query_error_email_reg = $stmt->fetchColumn();
@@ -125,8 +125,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             'mess' => $lang_module['edit_error_email_exist'] )));
     }
 
-    // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong NV_USERS_GLOBALTABLE_openid chưa.
-    $stmt = $db->prepare('SELECT userid FROM ' . NV_USERS_GLOBALTABLE . '_openid WHERE email= :email');
+    // Thực hiện câu truy vấn để kiểm tra email đã tồn tại trong nv3_users_openid chưa.
+    $stmt = $db->prepare('SELECT userid FROM ' . NV_MOD_TABLE . '_openid WHERE email= :email');
     $stmt->bindParam(':email', $_user['email'], PDO::PARAM_STR);
     $stmt->execute();
     $query_error_email_openid = $stmt->fetchColumn();
@@ -213,7 +213,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         $_user['in_groups'][] = 7;
     }
     
-    $sql = "INSERT INTO " . NV_USERS_GLOBALTABLE . " (
+    $sql = "INSERT INTO " . NV_MOD_TABLE . " (
         group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
         question, answer, passlostkey, view_mail,
         remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
@@ -259,7 +259,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
 
     $query_field['userid'] = $userid;
-    $db->query('INSERT INTO ' . NV_USERS_GLOBALTABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
+    $db->query('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')');
 
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_user', 'userid ' . $userid, $admin_info['userid']);
 
@@ -291,7 +291,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
 
         if (! empty($_user['photo'])) {
-            $stmt = $db->prepare('UPDATE ' . NV_USERS_GLOBALTABLE . ' SET photo= :file_name WHERE userid=' . $userid);
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET photo= :file_name WHERE userid=' . $userid);
             $stmt->bindParam(':file_name', $_user['photo'], PDO::PARAM_STR, strlen($file_name));
             $stmt->execute();
         }
@@ -300,12 +300,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     if (! empty($_user['in_groups'])) {
         foreach ($_user['in_groups'] as $group_id) {
             if ($group_id != 7) {
-                nv_groups_add_user($group_id, $userid);
+                nv_groups_add_user($group_id, $userid, 1, $module_data);
             }
         }
     }
     
-    $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET numbers = numbers+1 WHERE group_id=' . ($_user['is_official'] ? 4 : 7));
+    $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($_user['is_official'] ? 4 : 7));
 
     die(json_encode(array(
         'status' => 'ok',

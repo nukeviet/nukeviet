@@ -3,8 +3,7 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC.
- * All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 1/9/2010, 3:21
  */
@@ -13,6 +12,15 @@ namespace NukeViet\Cache;
 
 use Memcached;
 
+/**
+ * Memcacheds
+ * 
+ * @package NukeViet Cache
+ * @author VINADES.,JSC (contact@vinades.vn)
+ * @copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @version 4.0
+ * @access public
+ */
 class Memcacheds
 {
 
@@ -24,12 +32,21 @@ class Memcacheds
 
     private $_Cache;
 
+    /**
+     * Memcacheds::__construct()
+     * 
+     * @param mixed $Host
+     * @param mixed $Port
+     * @param mixed $Lang
+     * @param mixed $Cache_Prefix
+     * @return void
+     */
     public function __construct($Host, $Port, $Lang, $Cache_Prefix)
     {
         $this->_Lang = $Lang;
         $this->_Cache_Prefix = $Cache_Prefix;
         $this->_Cache = new Memcached();
-        $this->_Cache->addServer($Host, $Post);
+        $this->_Cache->addServer($Host, $Port);
     }
 
     /**
@@ -53,10 +70,10 @@ class Memcacheds
      */
     public function delMod($module_name, $lang = '')
     {
-        $AllKeys = $this->getAllKeys();
+        $AllKeys = $this->_Cache->getAllKeys();
         foreach ($AllKeys as $_key) {
-            if (preg_match('/^' . $module_name . '\_/', $_key)) {
-                $this->delete($_key);
+            if (preg_match('/^' . preg_quote($module_name) . '\_/', $_key)) {
+                $this->_Cache->delete($_key);
             }
         }
     }
@@ -65,11 +82,13 @@ class Memcacheds
      *
      * @param mixed $module_name
      * @param mixed $filename
+     * @param integer $ttl
      * @return
      *
      */
-    public function getItem($module_name, $filename)
+    public function getItem($module_name, $filename, $ttl = 0)
     {
+        // Note: $ttl not check in Memcached cache
         return $this->_Cache->get($module_name . '_' . md5($filename));
     }
 
@@ -78,12 +97,13 @@ class Memcacheds
      * @param mixed $module_name
      * @param mixed $filename
      * @param mixed $content
+     * @param integer $ttl
      * @return
      *
      */
-    public function setItem($module_name, $filename, $content)
+    public function setItem($module_name, $filename, $content, $ttl = 0)
     {
-        return $this->_Cache->set($module_name . '_' . md5($filename), $content);
+        return $this->_Cache->set($module_name . '_' . md5($filename), $content, $ttl);
     }
 
     /**
@@ -101,10 +121,11 @@ class Memcacheds
      * @param mixed $key
      * @param mixed $modname
      * @param mixed $lang
+     * @param integer $ttl
      * @return
      *
      */
-    public function db($sql, $key, $modname, $lang = '')
+    public function db($sql, $key, $modname, $lang = '', $ttl = 0)
     {
         $_rows = array();
 
@@ -127,7 +148,7 @@ class Memcacheds
                     ++$a;
                 }
                 $result->closeCursor();
-                $this->_Cache->set($cache_key, $_rows);
+                $this->_Cache->set($cache_key, $_rows, $ttl);
             }
         }
 
