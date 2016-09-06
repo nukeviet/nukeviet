@@ -72,6 +72,15 @@ $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công
 $lang_global['incorrect_password'] = 'Mật khẩu sai';
 $lang_global['userlogin_blocked'] = 'Bạn đã đăng nhập thất bại %s lần, hệ thống tạm khóa đăng nhập cho đến %s';
 
+$lang_global['2teplogin_totppin_label'] = 'Nhập mã xác minh từ ứng dụng Google Authenticator';
+$lang_global['2teplogin_totppin_placeholder'] = 'Nhập mã 6 chữ số';
+$lang_global['2teplogin_code_label'] = 'Nhập một trong các mã dự phòng bạn đã nhận được.';
+$lang_global['2teplogin_code_placeholder'] = 'Nhập mã 8 chữ số';
+$lang_global['2teplogin_other_menthod'] = 'Thử cách khác';
+$lang_global['2teplogin_error_opt'] = 'Mã xác nhận không chính xác, vui lòng nhập lại';
+$lang_global['2teplogin_error_backup'] = 'Mã dự phòng không chính xác, vui lòng nhập lại';
+$lang_global['2teplogin_require'] = 'Hệ thống bắt buộc bạn phải kích hoạt chức năng xác thực hai bước mới có thể đăng nhập được. Nhấp vào đây để kích hoạt chức năng này';
+
 $lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$s giây';
 $lang_global['for_admin'] = 'Dành cho admin';
 $lang_global['admin_account'] = 'Tài khoản quản trị';
