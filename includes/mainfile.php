@@ -77,7 +77,7 @@ if (defined('NV_CONFIG_DIR')) {
 }
 
 // Vendor autoload
-require NV_ROOTDIR . '/vendor/autoload.php';
+$loader = require NV_ROOTDIR . '/vendor/autoload.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 // Xac dinh IP cua client
