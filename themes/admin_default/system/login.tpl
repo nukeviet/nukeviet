@@ -8,15 +8,16 @@
 		<meta name="distribution" content="global" />
 		<meta name="copyright" content="Copyright (c) {SITE_NAME}" />
 		<meta name="robots" content="noindex, nofollow" />
+        <meta name="viewport" content="width=device-width">
 		<title>{SITE_NAME} {NV_TITLEBAR_DEFIS} {GLANG.admin_page}</title>
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/default/css/bootstrap.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/style.css">
 		<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/css/login.css" />
 		<script type="text/javascript">
-		var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{GFX_NUM}');
-		var login_error_security = '{LOGIN_ERROR_SECURITY}';
-		var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
+    		var jsi = new Array('{SITELANG}', '{NV_BASE_SITEURL}', '{CHECK_SC}', '{GFX_NUM}');
+    		var login_error_security = '{LOGIN_ERROR_SECURITY}';
+    		var nv_cookie_prefix = '{NV_COOKIE_PREFIX}';
 		</script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/global.js"></script>
 		<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{ADMIN_THEME}/js/login.js"></script>
