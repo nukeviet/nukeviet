@@ -247,6 +247,7 @@ $company['company_mapcenterlng'] = (float)105.7954749999999961573848850093781948
 $company['company_maplat'] = (float)20.9845159999999992805896908976137638092041015625;
 $company['company_maplng'] = (float)105.7954750000000103682396002113819122314453125;
 $company['company_mapzoom'] = 17;
+$company['company_mapapikey'] = 'AIzaSyC8ODAzZ75hsAufVBSffnwvKfTOT6TnnNQ';
 $company['company_phone'] = "+84-4-85872007[+84485872007]|+84-904762534[+84904762534]";
 $company['company_fax'] = "+84-4-35500914";
 $company['company_email'] = "contact@vinades.vn";
