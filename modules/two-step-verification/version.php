@@ -14,8 +14,8 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
 
 $module_version = array(
     'name' => 'Two-Step Verification',
-    'modfuncs' => 'main,setup',
-    'submenu' => 'main,setup',
+    'modfuncs' => 'main,setup,confirm',
+    'submenu' => 'main,setup,confirm',
     'is_sysmod' => 1,
     'virtual' => 0,
     'version' => '4.0.30',

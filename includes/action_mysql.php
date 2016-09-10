@@ -39,7 +39,7 @@ function nv_delete_table_sys($lang)
 
 function nv_create_table_sys($lang)
 {
-    global $db_config, $global_config;
+    global $db_config, $global_config, $db;
 
     $xml = simplexml_load_file(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/config.ini');
     $layoutdefault = ( string )$xml->layoutdefault;
@@ -191,8 +191,10 @@ function nv_create_table_sys($lang)
 		('" . $lang . "', 'global', 'disable_site_content', 'For technical reasons Web site temporary not available. we are very sorry for any inconvenience!'),
 		('" . $lang . "', 'global', 'ssl_https_modules', ''),
 		('" . $lang . "', 'seotools', 'prcservice', '')";
-
-    $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup) VALUES('" . $lang . "', 1)";
+    
+    $lang_weight = $db->query('SELECT MAX(weight) FROM ' . $db_config['prefix'] . '_setup_language')->fetchColumn() + 1;
+    
+    $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_language (lang, setup, weight) VALUES('" . $lang . "', 1, " . $lang_weight . ")";
 
     $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_modthemes (func_id, layout, theme) VALUES ('0', '" . $layoutdefault . "', '" . $global_config['site_theme'] . "')";
     $sql_create_table[] = "ALTER TABLE " . $db_config['prefix'] . "_cronjobs ADD " . $lang . "_cron_name VARCHAR( 255 ) NOT NULL DEFAULT ''";
