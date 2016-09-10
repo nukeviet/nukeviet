@@ -23,7 +23,7 @@ if( ! document.getElementById('googleMapAPI') ){
     var s = document.createElement('script');
     s.type = 'text/javascript';
     s.id = 'googleMapAPI';
-    s.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places&callback=controlMap';
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC8ODAzZ75hsAufVBSffnwvKfTOT6TnnNQ&libraries=places&callback=controlMap';
     document.body.appendChild(s);
 }else{
     controlMap();
@@ -91,7 +91,6 @@ function initializeMap(){
         
         markerdragEvent(markers);
         map.fitBounds(bounds);
-        console.log( places );
     });
     
     // Add marker when click on map
@@ -120,7 +119,6 @@ function initializeMap(){
     google.maps.event.addListener(map, 'center_changed', function() {
         $("#" + mapCenLat).val(map.getCenter().lat());
         $("#" + mapCenLng).val(map.getCenter().lng());
-        console.log( map.getCenter() );
     });    
 }
 

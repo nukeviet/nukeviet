@@ -10,7 +10,7 @@
 <!-- BEGIN: company_website --><li><em class="fa fa-globe"></em><span>{LANG.company_website}: <!-- BEGIN: item --><!-- BEGIN: comma -->&nbsp; <!-- END: comma --><a href="{WEBSITE}" target="_blank"><span itemprop="url">{WEBSITE}</span></a><!-- END: item --></span></li><!-- END: company_website -->
 </ul>
 <!-- BEGIN: company_map_modal -->
-<div class="modal fade company-map-modal" id="company-map-modal-{DATA.bid}" data-trigger="false">
+<div class="modal fade company-map-modal" id="company-map-modal-{DATA.bid}" data-trigger="false" data-apikey="{DATA.company_mapapikey}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">

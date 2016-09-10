@@ -385,7 +385,7 @@ $(function() {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.id = 'googleMapAPI';
-                script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initializeMap';
+                script.src = 'https://maps.googleapis.com/maps/api/js?' + ($(this).data('apikey') != '' ? 'key=' + $(this).data('apikey') + '&' : '') + 'callback=initializeMap';
                 document.body.appendChild(script);
             } else {
                 initializeMap();
