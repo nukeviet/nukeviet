@@ -438,7 +438,7 @@ $(window).load(function() {
         var a = document.createElement("script");
         a.type = "text/javascript";
         a.async = !0;
-        a.src = "https://apis.google.com/js/plusone.js";
+        a.src = "//apis.google.com/js/plusone.js";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }());
@@ -446,7 +446,7 @@ $(window).load(function() {
     0 < $(".twitter-share-button").length && function() {
         var a = document.createElement("script");
         a.type = "text/javascript";
-        a.src = "http://platform.twitter.com/widgets.js";
+        a.src = "//platform.twitter.com/widgets.js";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }();
