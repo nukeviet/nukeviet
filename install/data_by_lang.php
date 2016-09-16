@@ -151,7 +151,8 @@ $themes_default['left-main-right'] = array(
     $array_funcid_mod['siteterms']['main'],
     $array_funcid_mod['siteterms']['rss'],
     $array_funcid_mod['two-step-verification']['main'],
-    $array_funcid_mod['two-step-verification']['setup']
+    $array_funcid_mod['two-step-verification']['setup'],
+    $array_funcid_mod['two-step-verification']['confirm']
     );
 
 $themes_default['left-main'] = array(
@@ -212,7 +213,8 @@ $themes_mobile['main'] = array(
     $array_funcid_mod['siteterms']['main'],
     $array_funcid_mod['siteterms']['rss'],
     $array_funcid_mod['two-step-verification']['main'],
-    $array_funcid_mod['two-step-verification']['setup']
+    $array_funcid_mod['two-step-verification']['setup'],
+    $array_funcid_mod['two-step-verification']['confirm']
 );
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
