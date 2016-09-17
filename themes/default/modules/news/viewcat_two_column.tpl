@@ -125,7 +125,7 @@ function fixColumnHeight(){
         });
     }
 }
-$(window).load(function(){
+$(window).on('load', function() {
     cat2ColTimer = setTimeout(function(){
        fixColumnHeight();
     }, 100)

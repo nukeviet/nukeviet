@@ -69,7 +69,7 @@
 </div>
 <!-- BEGIN: typemodule -->
 <script type="text/javascript">
-$(window).load(function(){
+$(window).on('load', function() {
 	$('#versioninfo').load('{NV_BASE_SITEURL}install/update.php?step=3&load=module');
 });
 </script>
@@ -85,7 +85,7 @@ $(window).load(function(){
 function LoadModInfo(){
 	$('#modinfo').load('{NV_BASE_SITEURL}install/update.php?step=3&load=mod');
 }
-$(window).load(function(){
+$(window).on('load', function() {
 	$('#versioninfo').load('{NV_BASE_SITEURL}install/update.php?step=3&load=ver', function(){
 		$('#versioninfo').append(
 			'<div id="modinfo">' +
