@@ -331,3 +331,6 @@ $lang_global['design_url'] = 'URL của trang giữ bản quyền thiết kế';
 $lang_global['signin'] = 'Đăng nhập';
 $lang_global['feedback'] = 'Gửi phản hồi';
 $lang_global['required'] = 'Chú ý: Bạn cần khai báo tất cả các ô có đánh dấu hoa thị (*).';
+
+$lang_global['on'] = 'Bật';
+$lang_global['off'] = 'Tắt';

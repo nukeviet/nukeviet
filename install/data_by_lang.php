@@ -97,7 +97,8 @@ $sth->execute(array( 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, ''));
 $sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
 //Two-Step Verification
 $sth->execute(array( 'main', 'main', 'Main', 'two-step-verification', 1, 0, 1, ''));
-$sth->execute(array( 'setup', 'setup', 'Setup', 'two-step-verification', 1, 0, 2, ''));
+$sth->execute(array( 'confirm', 'confirm', 'Confirm', 'two-step-verification', 1, 0, 2, ''));
+$sth->execute(array( 'setup', 'setup', 'Setup', 'two-step-verification', 1, 0, 3, ''));
 //Others
 $sth->execute(array( 'main', 'main', 'Main', 'contact', 1, 0, 1, ''));
 $sth->execute(array( 'main', 'main', 'Main', 'voting', 1, 0, 1, ''));
@@ -150,7 +151,8 @@ $themes_default['left-main-right'] = array(
     $array_funcid_mod['siteterms']['main'],
     $array_funcid_mod['siteterms']['rss'],
     $array_funcid_mod['two-step-verification']['main'],
-    $array_funcid_mod['two-step-verification']['setup']
+    $array_funcid_mod['two-step-verification']['setup'],
+    $array_funcid_mod['two-step-verification']['confirm']
     );
 
 $themes_default['left-main'] = array(
@@ -211,7 +213,8 @@ $themes_mobile['main'] = array(
     $array_funcid_mod['siteterms']['main'],
     $array_funcid_mod['siteterms']['rss'],
     $array_funcid_mod['two-step-verification']['main'],
-    $array_funcid_mod['two-step-verification']['setup']
+    $array_funcid_mod['two-step-verification']['setup'],
+    $array_funcid_mod['two-step-verification']['confirm']
 );
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
