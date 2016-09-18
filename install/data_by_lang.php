@@ -97,7 +97,8 @@ $sth->execute(array( 'rss', 'rss', 'Rss', 'siteterms', 1, 0, 2, ''));
 $sth->execute(array( 'sitemap', 'sitemap', 'Sitemap', 'siteterms', 0, 0, 0, ''));
 //Two-Step Verification
 $sth->execute(array( 'main', 'main', 'Main', 'two-step-verification', 1, 0, 1, ''));
-$sth->execute(array( 'setup', 'setup', 'Setup', 'two-step-verification', 1, 0, 2, ''));
+$sth->execute(array( 'confirm', 'confirm', 'Confirm', 'two-step-verification', 1, 0, 2, ''));
+$sth->execute(array( 'setup', 'setup', 'Setup', 'two-step-verification', 1, 0, 3, ''));
 //Others
 $sth->execute(array( 'main', 'main', 'Main', 'contact', 1, 0, 1, ''));
 $sth->execute(array( 'main', 'main', 'Main', 'voting', 1, 0, 1, ''));
@@ -150,7 +151,8 @@ $themes_default['left-main-right'] = array(
     $array_funcid_mod['siteterms']['main'],
     $array_funcid_mod['siteterms']['rss'],
     $array_funcid_mod['two-step-verification']['main'],
-    $array_funcid_mod['two-step-verification']['setup']
+    $array_funcid_mod['two-step-verification']['setup'],
+    $array_funcid_mod['two-step-verification']['confirm']
     );
 
 $themes_default['left-main'] = array(
@@ -211,7 +213,8 @@ $themes_mobile['main'] = array(
     $array_funcid_mod['siteterms']['main'],
     $array_funcid_mod['siteterms']['rss'],
     $array_funcid_mod['two-step-verification']['main'],
-    $array_funcid_mod['two-step-verification']['setup']
+    $array_funcid_mod['two-step-verification']['setup'],
+    $array_funcid_mod['two-step-verification']['confirm']
 );
 
 $db->query('TRUNCATE TABLE ' . $db_config['prefix'] . '_' . $lang_data . '_modthemes');
@@ -247,6 +250,7 @@ $company['company_mapcenterlng'] = (float)105.7954749999999961573848850093781948
 $company['company_maplat'] = (float)20.9845159999999992805896908976137638092041015625;
 $company['company_maplng'] = (float)105.7954750000000103682396002113819122314453125;
 $company['company_mapzoom'] = 17;
+$company['company_mapapikey'] = 'AIzaSyC8ODAzZ75hsAufVBSffnwvKfTOT6TnnNQ';
 $company['company_phone'] = "+84-4-85872007[+84485872007]|+84-904762534[+84904762534]";
 $company['company_fax'] = "+84-4-35500914";
 $company['company_email'] = "contact@vinades.vn";

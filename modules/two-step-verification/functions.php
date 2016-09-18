@@ -82,3 +82,12 @@ function nv_creat_backupcodes()
 
 // Lấy mã bí mật
 $secretkey = nv_get_user_secretkey();
+
+$tokend_key = md5($user_info['username'] . '_' . $user_info['current_login'] . '_' . NV_BRIDGE_USER_MODULE . '_confirm_pass_' . NV_CHECK_SESSION);
+$tokend_confirm_password = $nv_Request->get_title($tokend_key, 'session', '');
+$tokend = md5(NV_BRIDGE_USER_MODULE . '_confirm_pass_' . NV_CHECK_SESSION);
+
+if ($tokend_confirm_password != $tokend and $op != 'confirm') {
+    header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $module_info['alias']['confirm'] . '&nv_redirect=' . nv_redirect_encrypt($client_info['selfurl']), true));
+    die();
+}

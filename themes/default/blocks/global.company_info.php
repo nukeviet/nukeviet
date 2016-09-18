@@ -89,7 +89,7 @@ if (! nv_function_exists('nv_company_info')) {
 				  </div>';
         $html .= '</div>';
         $html .= '</div>';
-        $html .= '<div class="row">';
+        $html .= '<div class="row m-bottom">';
         $html .= '<div class="col-xs-12">';
         $html .= '<div class="input-group">
 				  	<span class="input-group-addon">Z</span>
@@ -99,6 +99,17 @@ if (! nv_function_exists('nv_company_info')) {
         $html .= '<div class="col-xs-12">';
         $html .= '<button class="btn btn-default" onclick="modalShow(\'' . $lang_block['cominfo_map_guide_title'] . '\',\'' . $lang_block['cominfo_map_guide_content'] . '\');return!1;">' . $lang_block['cominfo_map_guide_title'] . '</button>';
         $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-xs-12">';
+        $html .= '<div class="input-group">
+				  	<span class="input-group-addon">' . $lang_block['cominfo_map_key'] . '</span>
+				  	<input type="text" class="form-control" name="config_company_mapapikey" id="config_company_mapapikey" value="' . $data_block['company_mapapikey'] . '">
+				  </div>';
+        $html .= '</div>';
+        $html .= '<div class="col-xs-12">';
+        $html .= '<a class="btn btn-default" href="http://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">' . $lang_block['cominfo_map_key_guide'] . '</a>';
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</td>';
@@ -148,6 +159,7 @@ if (! nv_function_exists('nv_company_info')) {
         $return['config']['company_maplat'] = $nv_Request->get_float('config_company_maplat', 'post', 20.984516000000013);
         $return['config']['company_maplng'] = $nv_Request->get_float('config_company_maplng', 'post', 105.79547500000001);
         $return['config']['company_mapzoom'] = $nv_Request->get_int('config_company_mapzoom', 'post', 17);
+        $return['config']['company_mapapikey'] = $nv_Request->get_title('config_company_mapapikey', 'post', '', true);
         $return['config']['company_phone'] = $nv_Request->get_title('config_company_phone', 'post');
         $return['config']['company_fax'] = $nv_Request->get_title('config_company_fax', 'post');
         $return['config']['company_email'] = $nv_Request->get_title('config_company_email', 'post');

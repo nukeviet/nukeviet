@@ -20,7 +20,7 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['confirm_password'] = 'Nhập mật khẩu xác nhận để tiếp tục';
-$lang_module['confirm_password_info'] = 'Để thay đổi tính năng này, bạn cần xác nhận lại mật khẩu, điền mật khẩu của bạn vào ô bên dưới và nhấp Xác nhận';
+$lang_module['confirm_password_info'] = 'Để thực hiện tính năng này, bạn cần xác nhận lại mật khẩu, điền mật khẩu của bạn vào ô bên dưới và nhấp Xác nhận';
 $lang_module['confirm'] = 'Xác nhận';
 $lang_module['secretkey'] = 'Mã bí mật';
 $lang_module['wrong_confirm'] = 'Mã xác nhận không chính xác, vui lòng nhập lại';

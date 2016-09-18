@@ -133,6 +133,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language (
 	lang char(2) NOT NULL,
 	setup tinyint(1) NOT NULL DEFAULT '0',
+    weight smallint(4) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (lang)
 ) ENGINE=MyISAM";
 

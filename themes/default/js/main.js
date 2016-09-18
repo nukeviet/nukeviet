@@ -385,7 +385,7 @@ $(function() {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.id = 'googleMapAPI';
-                script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initializeMap';
+                script.src = 'https://maps.googleapis.com/maps/api/js?' + ($(this).data('apikey') != '' ? 'key=' + $(this).data('apikey') + '&' : '') + 'callback=initializeMap';
                 document.body.appendChild(script);
             } else {
                 initializeMap();
@@ -453,7 +453,7 @@ $(window).load(function() {
         var a = document.createElement("script");
         a.type = "text/javascript";
         a.async = !0;
-        a.src = "https://apis.google.com/js/plusone.js";
+        a.src = "//apis.google.com/js/plusone.js";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }());
@@ -461,7 +461,7 @@ $(window).load(function() {
     function() {
         var a = document.createElement("script");
         a.type = "text/javascript";
-        a.src = "http://platform.twitter.com/widgets.js";
+        a.src = "//platform.twitter.com/widgets.js";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }();
