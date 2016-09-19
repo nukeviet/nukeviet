@@ -468,7 +468,7 @@ UAV.common = {
         fRead.onload = function(e) {
             $('#' + UAV.config.target).show();
             $('#' + UAV.config.target).attr('src', e.target.result);
-            $('#' + UAV.config.target).load(function() {
+            $('#' + UAV.config.target).on('load', function() {
                 var img = document.getElementById(UAV.config.target);
                 var boxWidth = $('#' + UAV.config.target).innerWidth();
                 var boxHeight = Math.round(boxWidth * img.naturalHeight / img.naturalWidth);

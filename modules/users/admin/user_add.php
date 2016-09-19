@@ -291,8 +291,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         }
 
         if (! empty($_user['photo'])) {
-            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET photo= :file_name WHERE userid=' . $userid);
-            $stmt->bindParam(':file_name', $_user['photo'], PDO::PARAM_STR, strlen($file_name));
+            $stmt = $db->prepare('UPDATE ' . NV_MOD_TABLE . ' SET photo= :photo WHERE userid=' . $userid);
+            $stmt->bindParam(':photo', $_user['photo'], PDO::PARAM_STR, strlen($_user['photo']));
             $stmt->execute();
         }
     }

@@ -177,7 +177,7 @@ function openID_result() {
 function qrcodeLoad(a) {
     var b = new Image,
         c = $(a).data("img");
-    $(b).load(function() {
+    $(q).on('load', function() {
         $(c).attr("src", b.src);
         $(a).attr("data-load", "yes").click()
     });
@@ -423,7 +423,7 @@ $(window).on("resize", function() {
 });
 
 // Load Social script - lasest
-$(window).load(function() {
+$(window).on('load', function() {
     nvbreadcrumbs();
     (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
@@ -438,7 +438,7 @@ $(window).load(function() {
         var a = document.createElement("script");
         a.type = "text/javascript";
         a.async = !0;
-        a.src = "https://apis.google.com/js/plusone.js";
+        a.src = "//apis.google.com/js/plusone.js";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }());
@@ -446,7 +446,7 @@ $(window).load(function() {
     0 < $(".twitter-share-button").length && function() {
         var a = document.createElement("script");
         a.type = "text/javascript";
-        a.src = "http://platform.twitter.com/widgets.js";
+        a.src = "//platform.twitter.com/widgets.js";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }();
