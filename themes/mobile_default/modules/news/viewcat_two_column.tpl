@@ -102,7 +102,7 @@
 <div class="clear">&nbsp;</div>
 
 <script type="text/javascript">
-$(window).load(function(){
+$(window).on('load', function() {
     $.each( $('.two_column .panel-body'), function(k,v){
         if( k % 2 == 0 ){
             var height1 = $($('.two_column .panel-body')[k]).height();

@@ -80,7 +80,7 @@ function fix_news_image(){
     }
 }
 
-$(window).load(function(){
+$(window).on('load', function() {
     fix_news_image();
 });
 
