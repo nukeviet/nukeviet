@@ -15,10 +15,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             'Symfony\\Component\\OptionsResolver\\' => 34,
         ),
-        'P' => 
-        array (
-            'PHPMailer\\PHPMailer\\' => 20,
-        ),
         'O' => 
         array (
             'OAuth\\' => 6,
@@ -49,10 +45,6 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'Symfony\\Component\\OptionsResolver\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/options-resolver',
-        ),
-        'PHPMailer\\PHPMailer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'OAuth\\' => 
         array (
