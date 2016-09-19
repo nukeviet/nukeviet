@@ -177,7 +177,7 @@ function openID_result() {
 function qrcodeLoad(a) {
     var b = new Image,
         c = $(a).data("img");
-    $(b).load(function() {
+    $(q).on('load', function() {
         $(c).attr("src", b.src);
         $(a).attr("data-load", "yes").click()
     });
@@ -423,7 +423,7 @@ $(window).on("resize", function() {
 });
 
 // Load Social script - lasest
-$(window).load(function() {
+$(window).on('load', function() {
     nvbreadcrumbs();
     (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
