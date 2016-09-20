@@ -56,3 +56,4 @@ $lang_module['voting_delete_success'] = 'Delete successfully !';
 $lang_module['voting_delete_unsuccess'] = 'Error:Delete fail !';
 $lang_module['warning'] = 'Note: selectable must smaller than available';
 $lang_module['voting_error_content'] = 'Notice: you should input Vote content and all answer question';
+$lang_module['voting_active_captcha'] = 'Activation confirmation code';
