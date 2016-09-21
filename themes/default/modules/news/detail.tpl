@@ -103,11 +103,11 @@
 	<div class="panel-body">
         <form id="form3B" action="">
             <div class="h5 clearfix">
-                <p>{STRINGRATING}</p>
+                <p id="stringrating">{STRINGRATING}</p>
                 <!-- BEGIN: data_rating -->
                 <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate">{LANG.rating_average}:
-                    <span itemprop="rating">{DETAIL.numberrating}</span> -
-                    <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count}
+                    <span itemprop="rating" id="numberrating">{DETAIL.numberrating}</span> -
+                    <span itemprop="votes" id="click_rating">{DETAIL.click_rating}</span> {LANG.rating_count}
                 </span>
                 <!-- END: data_rating -->
                 <div style="padding: 5px;">

@@ -43,7 +43,7 @@ function fix_page_image(){
     }
 }
 
-$(window).load(function(){
+$(window).on('load', function() {
     fix_page_image();
 });
 

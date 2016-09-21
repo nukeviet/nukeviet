@@ -233,11 +233,7 @@ function user_login($is_ajax = false)
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
-    if (in_array($global_config['gfx_chk'], array(
-        2,
-        4,
-        5,
-        7 ))) {
+    if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
@@ -552,6 +548,11 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
         $xtpl->parse('main.edit_password');
         $xtpl->parse('main.tab_edit_password');
     }
+    
+    if (in_array('2step', $types)) {
+        $xtpl->assign('URL_2STEP', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification', true));
+        $xtpl->parse('main.2step');
+    }
 
     if (in_array('email', $types)) {
         if ($pass_empty) {
@@ -817,6 +818,7 @@ function user_welcome()
     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
     $xtpl->assign('URL_AVATAR', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=avatar/upd', true));
     $xtpl->assign('URL_GROUPS', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=groups', true));
+    $xtpl->assign('URL_2STEP', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=two-step-verification', true));
 
     if (! empty($user_info['photo']) and file_exists(NV_ROOTDIR . '/' . $user_info['photo'])) {
         $xtpl->assign('IMG', array( 'src' => NV_BASE_SITEURL . $user_info['photo'], 'title' => $lang_module['img_size_title'] ));
@@ -833,6 +835,7 @@ function user_welcome()
     $_user_info['last_login'] = empty($user_info['last_login']) ? '' : nv_date('l, d/m/Y H:i', $user_info['last_login']);
     $_user_info['current_login'] = nv_date('l, d/m/Y H:i', $user_info['current_login']);
     $_user_info['st_login'] = ! empty($user_info['st_login']) ? $lang_module['yes'] : $lang_module['no'];
+    $_user_info['active2step'] = ! empty($user_info['active2step']) ? $lang_global['on'] : $lang_global['off'];
 
     if (isset($user_info['current_mode']) and $user_info['current_mode'] == 5) {
         $_user_info['current_mode'] = $lang_module['admin_login'];
@@ -914,13 +917,17 @@ function user_info_exit($info, $error = false)
  *
  * @param mixed $gfx_chk
  * @param mixed $attribs
+ * @param mixed $user
  * @return
  */
-function openid_account_confirm($gfx_chk, $attribs)
+function openid_account_confirm($gfx_chk, $attribs, $user)
 {
     global $lang_global, $lang_module, $module_info, $module_file, $module_name, $nv_redirect;
 
     $xtpl = new XTemplate('confirm.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    
+    $lang_module['openid_confirm_info'] = sprintf($lang_module['openid_confirm_info'], $attribs['contact/email'], $user['username']);
+    
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('OPENID_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
@@ -932,6 +939,11 @@ function openid_account_confirm($gfx_chk, $attribs)
         $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
         $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
         $xtpl->parse('main.captcha');
+    }
+
+    if (!empty($nv_redirect)) {
+        $xtpl->assign('REDIRECT', $nv_redirect);
+        $xtpl->parse('main.redirect');
     }
 
     $xtpl->parse('main');

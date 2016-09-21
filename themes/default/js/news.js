@@ -9,7 +9,14 @@
 function sendrating(id, point, newscheckss) {
     if (point == 1 || point == 2 || point == 3 || point == 4 || point == 5) {
         $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=rating&nocache=' + new Date().getTime(), 'id=' + id + '&checkss=' + newscheckss + '&point=' + point, function(res) {
-            $('#stringrating').html(res);
+            res = res.split('|');
+            $('#stringrating').html(res[0]);
+            if (typeof res[1] != 'undefined' && res[1] != '0') {
+                $('#numberrating').html(res[1]);
+            }
+            if (typeof res[2] != 'undefined' && res[2] != '0') {
+                $('#click_rating').html(res[2]);
+            }
         });
     }
 }
@@ -73,7 +80,7 @@ function fix_news_image(){
     }
 }
 
-$(window).load(function(){
+$(window).on('load', function() {
     fix_news_image();
 });
 

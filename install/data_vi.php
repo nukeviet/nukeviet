@@ -40,6 +40,8 @@ $install_lang['modules']['Page'] = 'Page';
 $install_lang['modules']['Page_for_acp'] = '';
 $install_lang['modules']['freecontent'] = 'Giới thiệu sản phẩm';
 $install_lang['modules']['freecontent_for_acp'] = '';
+$install_lang['modules']['two_step_verification'] = 'Xác thực hai bước';
+$install_lang['modules']['two_step_verification_for_acp'] = '';
 
 $install_lang['modfuncs'] = array();
 $install_lang['modfuncs']['users'] = array();

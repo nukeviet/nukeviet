@@ -12,6 +12,11 @@ if (! defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
+$nv_redirect = '';
+if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
+    $nv_redirect = nv_get_redirect();
+}
+
 if ($global_config['allowuserlogin'] and defined('NV_OPENID_ALLOWED')) {
     $server = $nv_Request->get_string('server', 'get', '');
 
