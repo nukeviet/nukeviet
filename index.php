@@ -93,6 +93,9 @@ if (preg_match($global_config['check_module'], $module_name)) {
         $include_file = NV_ROOTDIR . '/modules/' . $module_file . '/funcs/main.php';
 
         if (file_exists($include_file)) {
+          if(empty($global_config['switch_mobi_des'])) {
+          	$global_config['array_theme_type'] = array_diff($global_config['array_theme_type'], array('m'));
+          }
             // Tuy chon kieu giao dien
             if ($nv_Request->isset_request('nv' . NV_LANG_DATA . 'themever', 'get')) {
                 $theme_type = $nv_Request->get_title('nv' . NV_LANG_DATA . 'themever', 'get', '', 1);
