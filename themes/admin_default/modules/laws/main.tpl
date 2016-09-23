@@ -132,7 +132,7 @@
         }
     }
 
-    $(window).load(function() {
+    $(window).on('load', function() {
         $('#lawlist').load('{BASE_LOAD}');
     });
 </script>
