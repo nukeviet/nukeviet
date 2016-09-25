@@ -322,9 +322,6 @@ if (empty($global_config['site_logo'])) {
 
 $global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_map('trim', explode(',', $global_config['ssl_https_modules']));
 $global_config['array_theme_type'] = explode(',', $global_config['theme_type']);
-if(empty($global_config['switch_mobi_des'])) {
-    $global_config['array_theme_type'] = array_diff($global_config['array_theme_type'], array('m'));
-}
 
 define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 

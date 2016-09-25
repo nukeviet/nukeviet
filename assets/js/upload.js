@@ -956,7 +956,7 @@ ICON.addlogo = 'fa-file-image-o';
 ICON.spin = 'fa-spin';
 
 $(".vchange").change(function(){
-    var a = $("span#foldervalue").attr("title"), b = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $(this).val() == 1 ? "&author" : "";
+    var a = $("span#foldervalue").attr("title"), b = $("input[name=selFile]").val(), d = $("select[name=imgtype]").val(), e = $("select[name=author]").val() == 1 ? "&author" : "";
     $("#imglist").html(nv_loading_data).load(nv_module_url + "imglist&path=" + a + "&type=" + d + "&imgfile=" + b + e + "&order=" + $("select[name=order]").val() + "&random=" + nv_randomNum(10), function(){ LFILE.setViewMode(); })
 });
 
