@@ -28,6 +28,7 @@ function nv_aleditor( $textareaname, $width = '100%', $height = '450px', $val = 
 	{
 		define( 'CKEDITOR', true );
 		$return .= '<script type="text/javascript" src="' . NV_BASE_SITEURL . NV_EDITORSDIR . '/ckeditor/ckeditor.js?t=' . $global_config['timestamp'] . '"></script>';
+		$return .= '<script type="text/javascript">CKEDITOR.timestamp=CKEDITOR.timestamp+' . $global_config['timestamp'] . ';</script>';
 	}
 	$return .= "<script type=\"text/javascript\">
 			CKEDITOR.replace( '" . $module_data . "_" . $textareaname . "', {" . ( ! empty( $customtoolbar ) ? 'toolbar : "' . $customtoolbar . '",' : '' ) . " width: '" . $width . "',height: '" . $height . "',";
