@@ -1,6 +1,26 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.1.00 Beta
+- Change system rewrite rule (Optimize for NginX)
+- Update system notification
+- Support redis cache and session_handler
+- Update error_handler class: Log fatal error for development
+- Fix mobile theme on iOS
+- Fix Omtimize Class for ADS
+- Add block login feature
+- Add two-step-verification feature for Admin area and site area
+- Add sorting language feature
+- Module Database: Optimize for Large database
+- Module News: Update topic content, Fix edit groups
+- Module Users: Update block login, add link view userdetail, link edit user, link delete user for admin, fix user_waiting, support Oauth login redirect
+- Module Comment: Add config timeout and comment perpage
+- Module Upload: Fix UI dialog position
+- Module Voting: Add config for active captcha
+- Module Upload: Fix for Microsoft Edge
+- Module Freecontent: Suport virtual module
+- Theme default: Fix google map on block company_info
+
 NUKEVIET 4.0.29 Final
 - Requires PHP 5.5 or later
 - PHPMailer v6.0
@@ -234,7 +254,7 @@ CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (1850 commits: from commi
 	+ Support Vietnamese domain name.
 	+ Hosting CDN for javascript, css
 	+ Configue Vietnamese Keyboard (If site installed Vietnamese language.
-	+ Encrypt passwords of FPT account, Account mail SMTP.
+	+ Encrypt passwords of FTP account, Account mail SMTP.
 	+ Many values at file /includes/constants.php will be configue in admin control panel.
 
 	+ Add IPV6 library to detected coutry by IPV6.

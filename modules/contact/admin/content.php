@@ -19,7 +19,7 @@ if (defined('NV_EDITOR')) {
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
-    $bodytext = $nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS);
+    $bodytext = nv_editor_nl2br($nv_Request->get_editor('bodytext', '', NV_ALLOWED_HTML_TAGS));
 
     if (isset($module_config[$module_name]['bodytext'])) {
         $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = 'bodytext' AND lang = '" . NV_LANG_DATA . "' AND module=:module");
@@ -37,19 +37,15 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     die();
 }
 
-$bodytext = (isset($module_config[$module_name]['bodytext'])) ? nv_editor_br2nl($module_config[$module_name]['bodytext']) : '';
-
-$is_edit = $nv_Request->get_int('is_edit', 'get', 0);
-if (empty($bodytext)) {
-    $is_edit = 1;
-}
+$bodytext = (isset($module_config[$module_name]['bodytext'])) ? $module_config[$module_name]['bodytext'] : '';
+$is_edit = (empty($bodytext) or $nv_Request->get_int('is_edit', 'get', 0));
 
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 
 if ($is_edit) {
-    $bodytext = htmlspecialchars(nv_editor_br2nl($bodytext));
+    $bodytext = nv_htmlspecialchars(nv_editor_br2nl($bodytext));
 
     $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op);
 

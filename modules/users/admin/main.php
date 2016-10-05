@@ -136,7 +136,8 @@ while ($row = $result2->fetch()) {
         'is_delete' => $is_delete,
         'level' => $lang_module['level0'],
         'is_admin' => false,
-        'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups']))
+        'is_newuser' => ($row['group_id'] == 7 or in_array(7, $row['in_groups'])),
+        'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=memberlist/' . change_alias($row['username']) . '-' . $row['md5username']
     );
     if ($global_config['idsite'] > 0 and $row['idsite'] != $global_config['idsite']) {
         $users_list[$row['userid']]['is_edit'] = false;
@@ -241,15 +242,25 @@ foreach ($head_tds as $head_td) {
     $xtpl->parse('main.head_td');
 }
 
+$view_user_allowed = nv_user_in_groups($global_config['whoviewuser']);
+if (defined('NV_IS_USER')) {
+    die("DM");
+}
 foreach ($users_list as $u) {
     $xtpl->assign('CONTENT_TD', $u);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ADMIN_THEME', $global_config['admin_theme']);
+    
     if ($u['is_admin']) {
         $xtpl->parse('main.xusers.is_admin');
     }
 
     if (! defined('NV_IS_USER_FORUM')) {
+        if ($view_user_allowed) {
+            $xtpl->parse('main.xusers.view');
+        } else {
+            $xtpl->parse('main.xusers.show');
+        }
         if ($u['is_edit']) {
             $xtpl->assign('EDIT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $u['userid']);
             $xtpl->parse('main.xusers.edit');

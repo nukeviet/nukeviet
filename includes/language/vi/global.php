@@ -70,6 +70,16 @@ $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
 $lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai Tên đăng nhập hoặc Mật khẩu truy cập';
 $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công. Bây giờ hệ thống sẽ chuyển bạn đến khu vực Quản trị của site';
 $lang_global['incorrect_password'] = 'Mật khẩu sai';
+$lang_global['userlogin_blocked'] = 'Bạn đã đăng nhập thất bại %s lần, hệ thống tạm khóa đăng nhập cho đến %s';
+
+$lang_global['2teplogin_totppin_label'] = 'Nhập mã xác minh từ ứng dụng Google Authenticator';
+$lang_global['2teplogin_totppin_placeholder'] = 'Nhập mã 6 chữ số';
+$lang_global['2teplogin_code_label'] = 'Nhập một trong các mã dự phòng bạn đã nhận được.';
+$lang_global['2teplogin_code_placeholder'] = 'Nhập mã 8 chữ số';
+$lang_global['2teplogin_other_menthod'] = 'Thử cách khác';
+$lang_global['2teplogin_error_opt'] = 'Mã xác nhận không chính xác, vui lòng nhập lại';
+$lang_global['2teplogin_error_backup'] = 'Mã dự phòng không chính xác, vui lòng nhập lại';
+$lang_global['2teplogin_require'] = 'Hệ thống bắt buộc bạn phải kích hoạt chức năng xác thực hai bước mới có thể đăng nhập được. Nhấp vào đây để kích hoạt chức năng này';
 
 $lang_global['memory_time_usage'] = 'Bộ nhớ: %1$s, Thời gian xử lý: %2$s giây';
 $lang_global['for_admin'] = 'Dành cho admin';
@@ -321,3 +331,6 @@ $lang_global['design_url'] = 'URL của trang giữ bản quyền thiết kế';
 $lang_global['signin'] = 'Đăng nhập';
 $lang_global['feedback'] = 'Gửi phản hồi';
 $lang_global['required'] = 'Chú ý: Bạn cần khai báo tất cả các ô có đánh dấu hoa thị (*).';
+
+$lang_global['on'] = 'Bật';
+$lang_global['off'] = 'Tắt';

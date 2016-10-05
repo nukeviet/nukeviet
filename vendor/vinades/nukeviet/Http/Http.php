@@ -138,7 +138,7 @@ class Http
 
         // Determine if this request is to OUR install of NukeViet
         $homeURL = parse_url($this->site_config['my_domain']);
-        $args['local'] = $homeURL['host'] == $infoURL['host'] || 'localhost' == $infoURL['host'];
+        $args['local'] = $homeURL['host'] == $infoURL['host'] or 'localhost' == $infoURL['host'];
         unset($homeURL);
 
         // If Stream but no file, default is a file in temp dir with base $url name

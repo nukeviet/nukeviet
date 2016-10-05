@@ -16,7 +16,7 @@ $page_title = $lang_module['smtp_config'];
 $smtp_encrypted_array = array();
 $smtp_encrypted_array[0] = 'None';
 $smtp_encrypted_array[1] = 'SSL';
-$smtp_encrypted_array[2] = 'TSL';
+$smtp_encrypted_array[2] = 'TLS';
 
 $array_config = array();
 $errormess = '';

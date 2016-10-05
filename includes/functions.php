@@ -46,7 +46,7 @@ function nv_getenv($a)
             return $_ENV[$b];
         } elseif (@getenv($b)) {
             return @getenv($b);
-        } elseif (function_exists('apache_getenv') && apache_getenv($b, true)) {
+        } elseif (function_exists('apache_getenv') and apache_getenv($b, true)) {
             return apache_getenv($b, true);
         }
     }
@@ -102,7 +102,7 @@ function nv_is_blocker_proxy($is_proxy, $proxy_blocker)
     if ($proxy_blocker == 1 and $is_proxy == 'Strong') {
         return true;
     }
-    if ($proxy_blocker == 2 and ($is_proxy == 'Strong' || $is_proxy == 'Mild')) {
+    if ($proxy_blocker == 2 and ($is_proxy == 'Strong' or $is_proxy == 'Mild')) {
         return true;
     }
     if ($proxy_blocker == 3 and $is_proxy != 'No') {
@@ -580,18 +580,20 @@ function nv_user_in_groups($groups_view)
     if (in_array(6, $groups_view)) {
         // All
         return true;
-    } elseif (defined('NV_IS_USER')) {
-        global $user_info;
-
-        if (in_array(4, $groups_view) and (empty($user_info['in_groups']) or !in_array(7, $user_info['in_groups']))) {
+    } elseif (defined('NV_IS_USER') or defined('NV_IS_ADMIN')) {
+        global $user_info, $admin_info;
+        
+        $in_groups = defined('NV_IS_ADMIN') ? $admin_info['in_groups'] : $user_info['in_groups'];
+        
+        if (in_array(4, $groups_view) and (empty($in_groups) or !in_array(7, $in_groups))) {
             // User with no group or not in new users groups
             return true;
         } else {
             // Check group
-            if (empty($user_info['in_groups'])) {
+            if (empty($in_groups)) {
                 return false;
             }
-            return (array_intersect($user_info['in_groups'], $groups_view) != array());
+            return (array_intersect($in_groups, $groups_view) != array());
         }
     } elseif (in_array(5, $groups_view)) {
         // Guest
@@ -1133,9 +1135,10 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
  * @param bool $onclick
  * @param string $js_func_name
  * @param string $containerid
+ * @param bool $full_theme
  * @return
  */
-function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page')
+function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page', $full_theme = true)
 {
     global $lang_global;
 
@@ -1219,6 +1222,10 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         }
     }
 
+    if ($full_theme !== true) {
+        return $page_string;
+    }
+
     return '<ul class="pagination">' . $page_string . '</ul>';
 }
 
@@ -1259,7 +1266,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
             }
         }
 
-        if ($on_page > 1 && $on_page < $total_pages) {
+        if ($on_page > 1 and $on_page < $total_pages) {
             if ($on_page > 3) {
                 $page_string .= '<li class="disabled"><span>...</span></li>';
             }
@@ -1333,7 +1340,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
  */
 function nv_check_domain($domain)
 {
-    if (preg_match('/^([a-z0-9]+)([a-z0-9\-\.]+)\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mf|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|post|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|xxx|ye|yt|za|zm|zw)$/', $domain) or $domain == 'localhost' or filter_var($domain, FILTER_VALIDATE_IP)) {
+    if (preg_match('/^([a-z0-9]+)([a-z0-9\-\.]+)\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mf|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|post|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|xxx|ye|yt|za|zm|zw|xyz)$/', $domain) or $domain == 'localhost' or filter_var($domain, FILTER_VALIDATE_IP)) {
         return $domain;
     } else {
         if (function_exists('idn_to_ascii')) {
@@ -1342,7 +1349,7 @@ function nv_check_domain($domain)
             $Punycode = new TrueBV\Punycode();
             $domain_ascii = $Punycode->encode($domain);
         }
-        if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mf|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|post|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|xxx|ye|yt|za|zm|zw|xn--0zwm56d|xn--11b5bs3a9aj6g|xn--3e0b707e|xn--45brj9c|xn--54b7fta0cc|xn--80akhbyknj4f|xn--80ao21a|xn--90a3ac|xn--9t4b11yi5a|xn--clchc0ea0b2g2a9gcd|xn--deba0ad|xn--fiqs8s|xn--fiqz9s|xn--fpcrj9c3d|xn--fzc2c9e2c|xn--g6w251d|xn--gecrj9c|xn--h2brj9c|xn--hgbk6aj7f53bba|xn--hlcj6aya9esc7a|xn--j1amh|xn--j6w193g|xn--jxalpdlp|xn--kgbechtv|xn--kprw13d|xn--kpry57d|xn--l1acc|xn--lgbbat1ad8j|xn--mgb9awbf|xn--mgba3a4f16a|xn--mgbaam7a8h|xn--mgbai9azgqp6j|xn--mgbayh7gpa|xn--mgbbh1a71e|xn--mgbc0a9azcg|xn--mgberp4a5d4ar|xn--mgbx4cd0ab|xn--node|xn--o3cw4h|xn--ogbpf8fl|xn--p1ai|xn--pgbs0dh|xn--s9brj9c|xn--wgbh1c|xn--wgbl6a|xn--xkc2al3hye2a|xn--xkc2dl3a5ee0h|xn--yfro4i67o|xn--ygbi2ammx|xn--zckzah)$/', $domain_ascii)) {
+        if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mf|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|post|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|xxx|ye|yt|za|zm|zw|xyz|xn--0zwm56d|xn--11b5bs3a9aj6g|xn--3e0b707e|xn--45brj9c|xn--54b7fta0cc|xn--80akhbyknj4f|xn--80ao21a|xn--90a3ac|xn--9t4b11yi5a|xn--clchc0ea0b2g2a9gcd|xn--deba0ad|xn--fiqs8s|xn--fiqz9s|xn--fpcrj9c3d|xn--fzc2c9e2c|xn--g6w251d|xn--gecrj9c|xn--h2brj9c|xn--hgbk6aj7f53bba|xn--hlcj6aya9esc7a|xn--j1amh|xn--j6w193g|xn--jxalpdlp|xn--kgbechtv|xn--kprw13d|xn--kpry57d|xn--l1acc|xn--lgbbat1ad8j|xn--mgb9awbf|xn--mgba3a4f16a|xn--mgbaam7a8h|xn--mgbai9azgqp6j|xn--mgbayh7gpa|xn--mgbbh1a71e|xn--mgbc0a9azcg|xn--mgberp4a5d4ar|xn--mgbx4cd0ab|xn--node|xn--o3cw4h|xn--ogbpf8fl|xn--p1ai|xn--pgbs0dh|xn--s9brj9c|xn--wgbh1c|xn--wgbl6a|xn--xkc2al3hye2a|xn--xkc2dl3a5ee0h|xn--yfro4i67o|xn--ygbi2ammx|xn--zckzah)$/', $domain_ascii)) {
             return $domain_ascii;
         } elseif ($domain == NV_SERVER_NAME) {
             return $domain;
@@ -1382,7 +1389,7 @@ function nv_is_url($url)
         return false;
     }
 
-    if (isset($parts['path']) and ! preg_match('/^[0-9A-Za-z\/\_\.\@\~\-\%\\s]*$/', $parts['path'])) {
+    if (isset($parts['path']) and ! preg_match('/^[0-9A-Za-z\/\_\.\@\~\:\-\%\\s]*$/', $parts['path'])) {
         return false;
     }
 
@@ -1407,7 +1414,7 @@ function nv_check_url($url, $is_200 = 0)
     }
 
     $url = str_replace(' ', '%20', $url);
-    $allow_url_fopen = (ini_get('allow_url_fopen') == '1' || strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
+    $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
 
     if (nv_function_exists('get_headers') and $allow_url_fopen == 1) {
         $res = get_headers($url);
@@ -1423,7 +1430,7 @@ function nv_check_url($url, $is_200 = 0)
             'Opera/9.25 (Windows NT 6.0; U; en)'
         );
 
-        $open_basedir = (ini_get('open_basedir') == '1' || strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
+        $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
         srand(( float )microtime() * 10000000);
         $rand = array_rand($userAgents);
@@ -1691,23 +1698,25 @@ function nv_insert_notification($module, $type, $content = array(), $obid = 0, $
      * 1: Khu vuc quan tri
      * 2: Ca 2 khu vuc tren
      */
-
+    
+    $new_id = 0;
     if ($global_config['notification_active']) {
         !empty($content) and $content = serialize($content);
 
-        $sth = $db->prepare('INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
+        $_sql = 'INSERT INTO ' . NV_NOTIFICATION_GLOBALTABLE . '
 		(send_to, send_from, area, language, module, obid, type, content, add_time, view)	VALUES
-		(:send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)');
-        $sth->bindParam(':send_to', $send_to, PDO::PARAM_STR);
-        $sth->bindParam(':send_from', $send_from, PDO::PARAM_INT);
-        $sth->bindParam(':area', $area, PDO::PARAM_INT);
-        $sth->bindParam(':module', $module, PDO::PARAM_STR);
-        $sth->bindParam(':obid', $obid, PDO::PARAM_INT);
-        $sth->bindParam(':type', $type, PDO::PARAM_STR);
-        $sth->bindParam(':content', $content, PDO::PARAM_STR);
-        $sth->execute();
+		(:send_to, :send_from, :area, ' . $db->quote(NV_LANG_DATA) . ', :module, :obid, :type, :content, ' . NV_CURRENTTIME . ', 0)';
+        $data_insert = array();
+        $data_insert['send_to'] = $send_to;
+        $data_insert['send_from'] = $send_from;
+        $data_insert['area'] = $area;
+        $data_insert['module'] = $module;
+        $data_insert['obid'] = $obid;
+        $data_insert['type'] = $type;
+        $data_insert['content'] = $content;
+        $new_id = $db->insert_id($_sql, 'id', $data_insert);
     }
-    return true;
+    return $new_id;
 }
 
 /**

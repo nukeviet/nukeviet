@@ -54,7 +54,7 @@
 	UAV.lang.filetype = '{LANG.avatar_filetype}';
 	UAV.lang.bigfile = '{LANG.avatar_bigfile}';
 	UAV.lang.upload = '{LANG.avatar_upload}';
-	$(window).load(function() {
+	$(window).on('load', function() {
 		<!-- BEGIN: complete -->
 		$("#avatar", opener.document).val('{FILENAME}');
 		window.close();

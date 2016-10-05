@@ -29,22 +29,25 @@ $array_mod_title[] = array(
 );
 
 // Xem chi tiet thanh vien
-if (isset($array_op[1]) && ! empty($array_op[1])) {
+if (isset($array_op[1]) and ! empty($array_op[1])) {
     $md5 = '';
     unset($matches);
     if (preg_match('/^(.*)\-([a-z0-9]{32})$/', $array_op[1], $matches)) {
         $md5 = $matches[2];
     }
+    
     if (! empty($md5)) {
-        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE md5username = :md5');
+        $stmt = $db->prepare('SELECT * FROM ' . NV_MOD_TABLE . ' WHERE md5username = :md5' . (defined('NV_IS_ADMIN') ? '' : ' AND active=1'));
         $stmt->bindParam(':md5', $md5, PDO::PARAM_STR);
         $stmt->execute();
         $item = $stmt->fetch();
+        
         if (! empty($item)) {
             if (change_alias($item['username']) != $matches[1]) {
                 Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
                 exit();
             }
+            
             // Them vao tieu de
             $array_mod_title[] = array(
                 'catid' => 0,
@@ -58,12 +61,14 @@ if (isset($array_op[1]) && ! empty($array_op[1])) {
                 $language = unserialize($row_field['language']);
                 $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
                 $row_field['description'] = (isset($language[NV_LANG_DATA])) ? nv_htmlspecialchars($language[NV_LANG_DATA][1]) : '';
+                
                 if (! empty($row_field['field_choices'])) {
                     $row_field['field_choices'] = unserialize($row_field['field_choices']);
                 } elseif (! empty($row_field['sql_choices'])) {
                     $row_field['sql_choices'] = explode('|', $row_field['sql_choices']);
-                    $query = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
-                    $result = $db->query($query);
+                    $sql = 'SELECT ' . $row_field['sql_choices'][2] . ', ' . $row_field['sql_choices'][3] . ' FROM ' . $row_field['sql_choices'][1];
+                    $result = $db->query($sql);
+                    
                     $weight = 0;
                     while (list($key, $val) = $result->fetch(3)) {
                         $row_field['field_choices'][$key] = $val;
@@ -75,6 +80,32 @@ if (isset($array_op[1]) && ! empty($array_op[1])) {
             $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_info WHERE userid=' . $item['userid'];
             $result = $db->query($sql);
             $custom_fields = $result->fetch();
+            
+            // Kiểm tra quyền sửa, xóa user của admin
+            $item['is_admin'] = false;
+            $item['allow_edit'] = false;
+            $item['allow_delete'] = false;
+            
+            if (defined('NV_IS_ADMIN') and ($global_config['idsite'] == 0 or $item['idsite'] == $global_config['idsite'])) {
+                $access_admin = $db->query("SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='access_admin'")->fetchColumn();
+                $access_admin = unserialize($access_admin);
+                
+                $check_admin = $db->query('SELECT admin_id, lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $item['userid'])->fetch();
+
+                if (isset($access_admin['access_editus'][$admin_info['level']]) and $access_admin['access_editus'][$admin_info['level']] == 1 and (empty($check_admin) or $admin_info['userid'] == $item['userid'] or defined('NV_IS_GODADMIN') or (defined('NV_IS_SPADMIN') and !($check_admin['lev'] == 1 or $check_admin['lev'] == 2)))) {
+                    $item['is_admin'] = true;
+                    $item['allow_edit'] = true;
+                    $item['link_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;userid=' . $item['userid'];
+                }
+                if (isset($access_admin['access_delus'][$admin_info['level']]) and $access_admin['access_delus'][$admin_info['level']] == 1 and empty($check_admin)) {
+                    $item['is_admin'] = true;
+                    $item['allow_delete'] = true;
+                    $item['link_delete'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=del&amp;nocache=' . NV_CURRENTTIME;
+                    $item['link_delete_callback'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
+                }
+                
+                unset($access_admin, $check_admin);
+            }
 
             $contents = nv_memberslist_detail_theme($item, $array_field_config, $custom_fields);
         } else {
@@ -119,7 +150,7 @@ if (isset($array_op[1]) && ! empty($array_op[1])) {
     $db->sqlreset()
         ->select('COUNT(*)')
         ->from(NV_MOD_TABLE)
-        ->where('active=1');
+        ->where((defined('NV_IS_ADMIN') ? '' : 'active=1'));
 
     $num_items = $db->query($db->sql())->fetchColumn();
 

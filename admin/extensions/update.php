@@ -50,7 +50,7 @@ if ($nv_Request->get_title('checksess', 'get', '') == md5('unzip' . $eid . $fid 
             // login with username and password
             $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
 
-            if ((! $conn_id) || (! $login_result)) {
+            if ((! $conn_id) or (! $login_result)) {
                 $ftp_check_login = 3;
             } elseif (ftp_chdir($conn_id, $ftp_path)) {
                 $ftp_check_login = 1;

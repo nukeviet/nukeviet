@@ -38,7 +38,7 @@ if ($num_items) {
         ->offset(($page - 1) * $limit);
     $result = $db_slave->query($db_slave->sql());
     while (list($id, $tilterow, $alias, $catid, $hometext, $bodytext) = $result->fetch(3)) {
-        $content = $hometext . strip_tags($bodytext);
+        $content = strip_tags($hometext, 'br') . strip_tags($bodytext);
         $url = $link . $array_cat_alias[$catid] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
         $result_array[] = array(
             'link' => $url,

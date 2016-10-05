@@ -72,6 +72,10 @@ $lang_module['auto_postcomm'] = 'Kiểm duyệt bình luận';
 $lang_module['auto_postcomm_0'] = 'Kiểm duyệt tất cả';
 $lang_module['auto_postcomm_1'] = 'Không kiểm duyệt';
 $lang_module['auto_postcomm_2'] = 'Kiểm duyệt nếu không là thành viên';
+$lang_module['perpagecomm'] = 'Số bình luận hiển thị trên một trang';
+$lang_module['perpagecomm_note'] = 'Nhập tối thiểu 1 và không nên quá 100';
+$lang_module['timeoutcomm'] = 'Thời gian (giây) tối thiểu giữa hai lần gửi bình luận';
+$lang_module['timeoutcomm_note'] = 'Nhập 0 nếu không giới hạn. Lưu ý nên bật captcha nếu chọn giá trị này là 0, giá trị này không tính cho Admin';
 
 $lang_module['adminscomm'] = 'Admin quản lý bình luận';
 $lang_module['view_comm'] = 'Ai được phép xem bình luận';

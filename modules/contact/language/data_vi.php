@@ -65,6 +65,6 @@ $sth->bindValue(':is_default', $is_default, PDO::PARAM_INT);
 $sth->execute();
 
 $bodytext = 'Để không ngừng nâng cao chất lượng dịch vụ và đáp ứng tốt hơn nữa các yêu cầu của Quý khách, chúng tôi mong muốn nhận được các thông tin phản hồi. Nếu Quý khách có bất kỳ thắc mắc hoặc đóng góp nào, xin vui lòng liên hệ với chúng tôi theo thông tin dưới đây. Chúng tôi sẽ phản hồi lại Quý khách trong thời gian sớm nhất.';
-$sth = $db->prepare("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('vi', '" . $module_name . "', 'bodytext', :bodytext)");
+$sth = $db->prepare("INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'bodytext', :bodytext)");
 $sth->bindParam(':bodytext', $bodytext, PDO::PARAM_STR, strlen($bodytext));
 $sth->execute();

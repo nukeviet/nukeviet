@@ -88,7 +88,7 @@ if (!nv_function_exists('nv_news_category')) {
             $xtpl->assign('TEMPLATE', $block_theme);
             $html = '';
             foreach ($module_array_cat as $cat) {
-                if ($block_config['catid'] == 0 && $cat['parentid'] == 0 || ($block_config['catid'] > 0 && $cat['parentid'] == $block_config['catid'])) {
+                if ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid'])) {
                     $cat['title0'] = nv_clean60($cat['title'], $title_length);
 
                     $xtpl->assign('CAT', $cat);
