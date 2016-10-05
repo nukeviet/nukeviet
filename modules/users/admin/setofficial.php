@@ -41,6 +41,7 @@ if (!empty($row)) {
     $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers-1 WHERE group_id=7');
     $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
     
+    $nv_Cache->delMod($module_name);
     die('OK');
 }
 

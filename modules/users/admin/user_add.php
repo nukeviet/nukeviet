@@ -214,28 +214,28 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
     
     $sql = "INSERT INTO " . NV_MOD_TABLE . " (
-        group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
-        question, answer, passlostkey, view_mail,
-        remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
-    VALUES (
-        " . ($_user['is_official'] ? $_user['in_groups_default'] : 7) . ",
-        :username,
-        :md5_username,
-        :password,
-        :email,
-        :first_name,
-        :last_name,
-        :gender,
-        " . $_user['birthday'] . ",
-        :sig,
-        " . NV_CURRENTTIME . ",
-        :question,
-        :answer,
-        '',
-         " . $_user['view_mail'] . ",
-         1,
-         '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . "
-    )";
+            group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
+            question, answer, passlostkey, view_mail,
+            remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
+        VALUES (
+            " . ($_user['is_official'] ? $_user['in_groups_default'] : 7) . ",
+            :username,
+            :md5_username,
+            :password,
+            :email,
+            :first_name,
+            :last_name,
+            :gender,
+            " . $_user['birthday'] . ",
+            :sig,
+            " . NV_CURRENTTIME . ",
+            :question,
+            :answer,
+            '',
+             " . $_user['view_mail'] . ",
+             1,
+             '" . implode(',', $_user['in_groups']) . "', 1, '', 0, '', '', '', " . $global_config['idsite'] . "
+        )";
 
     $data_insert = array();
     $data_insert['username'] = $_user['username'];
@@ -306,7 +306,8 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
     
     $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($_user['is_official'] ? 4 : 7));
-
+    $nv_Cache->delMod($module_name);
+    
     die(json_encode(array(
         'status' => 'ok',
         'input' => '',

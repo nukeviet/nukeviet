@@ -43,5 +43,7 @@ if (empty($level) or $admin_info['level'] < $level) {
 
     $note = ($active) ? $lang_module['active_users'] : $lang_module['unactive_users'];
     nv_insert_logs(NV_LANG_DATA, $module_name, $note, 'userid: ' . $userid . ' - username: ' . $username, $admin_info['userid']);
+    $nv_Cache->delMod($module_name);
+    
     echo 'OK';
 }
