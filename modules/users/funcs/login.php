@@ -479,7 +479,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $stmt->execute();
 
         validUserLog($row, 1, $reg_attribs['opid'], $current_mode);
-
+        $nv_Cache->delMod($module_name);
+        
         opidr(array( 'status' => 'success', 'mess' => $lang_module['login_ok'] ));
         die();
     }
@@ -530,7 +531,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             opidr(array( 'status' => 'error', 'mess' => $lang_module['err_no_save_account'] ));
             die();
         }
-
+        $nv_Cache->delMod($module_name);
+        
         opidr(array( 'status' => 'success', 'mess' => $lang_module['account_register_to_admin'] ));
         die();
     }
