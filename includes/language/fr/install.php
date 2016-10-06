@@ -56,6 +56,7 @@ $lang_module['is_support'] = 'Support recommandé';
 $lang_module['supports_rewrite'] = 'Support de rewrite';
 $lang_module['opendir_support'] = 'PHP supporte opendir';
 $lang_module['gd_support'] = 'PHP supporte GD';
+$lang_module['xml_support'] = 'PHP supporte XML';
 $lang_module['mcrypt_support'] = 'PHP entraide le bibliothèque chiffé mycrypt';
 $lang_module['session_support'] = 'PHP supporte session';
 $lang_module['fileuploads_support'] = 'PHP supporte le transfert des fichiers';

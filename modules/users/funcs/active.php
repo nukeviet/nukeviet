@@ -105,6 +105,8 @@ if ($checknum == $row['checknum']) {
             } else {
                 $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
             }
+            
+            $nv_Cache->delMod($module_name);
         }
     }
 }

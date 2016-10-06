@@ -438,7 +438,8 @@ if ($checkss == $array_register['checkss']) {
                     $url .= '&nv_redirect=' . $nv_redirect;
                 }
             }
-
+            $nv_Cache->delMod($module_name);
+            
             $nv_redirect = '';
             die(reg_result(array(
                 'status' => 'ok',
