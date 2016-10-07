@@ -12,15 +12,14 @@ CKEDITOR.dialog.add('tbvdownloadDialog', function(editor) {
 		// console.log(msg);
 	}
     var path_image= (editor.config.filebrowserImageBrowseUrl)? editor.config.filebrowserImageBrowseUrl : '';
-    var sURLVariables = path_image.split('&');
-	var dirpath_view = editor.config.toolbar;
-	var icurrentpath, ipath = '';
+	var sURLVariables = path_image.split('&');
+	var ipath = icurrentpath = dirpath_view = '';
     for (var i = 0; i < sURLVariables.length; i++)
     {
         var sParameterName = sURLVariables[i].split('=');
         if (sParameterName[0] == 'path')
         {
-            ipath = sParameterName[1];
+            dirpath_view = ipath = sParameterName[1];
         }
         else if (sParameterName[0] == 'currentpath')
         {
@@ -148,7 +147,7 @@ CKEDITOR.dialog.add('tbvdownloadDialog', function(editor) {
 				type : 'text',
 				label : lang.url_path_save,
 				required : true,
-				'default' : nv_siteroot + ipath
+				'default' : icurrentpath
 			}, {
 				type : 'button',
 				id : 'rhi_browse',
@@ -158,11 +157,7 @@ CKEDITOR.dialog.add('tbvdownloadDialog', function(editor) {
 				label : editor.lang.common.browseServer,
 				filebrowser : {
 					action : 'Browse',
-					params : {
-						type : 'image',
-                        'currentpath' : icurrentpath,
-                        'path' : dirpath_view
-					},
+					params : {},
 					onSelect : function(fileUrl) {
 						var dialog = this.getDialog();
 						var p = fileUrl.substring(0, fileUrl.lastIndexOf("/"));
@@ -277,7 +272,7 @@ CKEDITOR.dialog.add('tbvdownloadDialog', function(editor) {
 								if (r.substring(0, 6) == 'ERROR_') {
 									$('#rhie_' + i).html(r);
 								} else {
-				                    var new_src = pathsave + '/' + r;
+				                    var new_src = nv_base_siteurl + pathsave + '/' + r;
 									rhi.objs.every(function(rgi_e, j) {
 										var obj = rgi_e.obj;
 										obj.attr('src', new_src).attr('data-cke-saved-src', new_src);
