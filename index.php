@@ -47,7 +47,7 @@ if ($client_info['is_myreferer'] === 0 and !defined('NV_IS_MY_USER_AGENT')) {
     require NV_ROOTDIR . '/includes/core/referer.php';
 }
 
-if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') || $nv_Request->isset_request(NV_NAME_VARIABLE, 'post')) {
+if ($nv_Request->isset_request(NV_NAME_VARIABLE, 'get') or $nv_Request->isset_request(NV_NAME_VARIABLE, 'post')) {
     $home = 0;
     $module_name = $nv_Request->get_string(NV_NAME_VARIABLE, 'post,get');
 
@@ -93,18 +93,13 @@ if (preg_match($global_config['check_module'], $module_name)) {
         $include_file = NV_ROOTDIR . '/modules/' . $module_file . '/funcs/main.php';
 
         if (file_exists($include_file)) {
+          if(empty($global_config['switch_mobi_des'])) {
+          	$global_config['array_theme_type'] = array_diff($global_config['array_theme_type'], array('m'));
+          }
             // Tuy chon kieu giao dien
             if ($nv_Request->isset_request('nv' . NV_LANG_DATA . 'themever', 'get')) {
-                if (empty($global_config['switch_mobi_des'])) {
-                    $array_theme_type = array_diff($global_config['array_theme_type'], array(
-                        'm'
-                    ));
-                } else {
-                    $array_theme_type = $global_config['array_theme_type'];
-                }
-
                 $theme_type = $nv_Request->get_title('nv' . NV_LANG_DATA . 'themever', 'get', '', 1);
-                if (in_array($theme_type, $array_theme_type)) {
+                if (in_array($theme_type, $global_config['array_theme_type'])) {
                     $nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', $theme_type, NV_LIVE_COOKIE_TIME);
                 }
 
@@ -167,6 +162,10 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
             // Xac dinh kieu giao dien mac dinh
             $global_config['current_theme_type'] = $nv_Request->get_string('nv' . NV_LANG_DATA . 'themever', 'cookie', '');
+            if(!in_array($global_config['current_theme_type'],$global_config['array_theme_type'])) {
+            	$global_config['current_theme_type'] = '';
+            	$nv_Request->set_Cookie('nv' . NV_LANG_DATA . 'themever', '', NV_LIVE_COOKIE_TIME);
+            }
 
             // Xac dinh giao dien chung
             $is_mobile = false;

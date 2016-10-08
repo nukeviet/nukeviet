@@ -161,7 +161,7 @@ function openID_result() {
 function qrcodeLoad(a) {
     var b = new Image,
         c = $(a).data("img");
-    $(b).load(function() {
+    $(b).on('load', function() {
         $(c).attr("src", b.src);
         $(a).attr("data-load", "yes").click()
     });
@@ -385,7 +385,7 @@ $(function() {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.id = 'googleMapAPI';
-                script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initializeMap';
+                script.src = 'https://maps.googleapis.com/maps/api/js?' + ($(this).data('apikey') != '' ? 'key=' + $(this).data('apikey') + '&' : '') + 'callback=initializeMap';
                 document.body.appendChild(script);
             } else {
                 initializeMap();
@@ -439,7 +439,7 @@ $(window).on("resize", function() {
     //if (150 < cRangeX || 150 < cRangeY) tipHide(), ftipHide()
 });
 // Load Social script - lasest
-$(window).load(function() {
+$(window).on('load', function() {
     nvbreadcrumbs();
     (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
@@ -453,7 +453,7 @@ $(window).load(function() {
         var a = document.createElement("script");
         a.type = "text/javascript";
         a.async = !0;
-        a.src = "https://apis.google.com/js/plusone.js";
+        a.src = "//apis.google.com/js/plusone.js";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }());
@@ -461,7 +461,7 @@ $(window).load(function() {
     function() {
         var a = document.createElement("script");
         a.type = "text/javascript";
-        a.src = "http://platform.twitter.com/widgets.js";
+        a.src = "//platform.twitter.com/widgets.js";
         var b = document.getElementsByTagName("script")[0];
         b.parentNode.insertBefore(a, b);
     }();

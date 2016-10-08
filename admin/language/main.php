@@ -57,12 +57,54 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
 
 $array_lang_setup = array();
-$result = $db->query('SELECT lang, setup FROM ' . $db_config['prefix'] . '_setup_language');
+$db->sqlreset()->select('*')->from($db_config['prefix'] . '_setup_language')->order('weight ASC');
+$result = $db->query($db->sql());
 while ($row = $result->fetch()) {
     $array_lang_setup[$row['lang']] = intval($row['setup']);
 }
 
 if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN'))) {
+    // Change weight
+    if ($nv_Request->isset_request('changeweight', 'post')) {
+        if (!defined('NV_IS_AJAX')) {
+            die('NO_Access denied!!!');
+        }
+        
+        $keylang = $nv_Request->get_title('keylang', 'post', '');
+    
+        if (!isset($array_lang_setup[$keylang])) {
+            die('NO_Access denied!!!');
+        }
+    
+        $new_weight = $nv_Request->get_int('new_weight', 'post', 0);
+        if (empty($new_weight)) {
+            die('NO_Access denied!!!');
+        }
+    
+        $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language WHERE lang!=' . $db->quote($keylang) . ' ORDER BY weight ASC';
+        $result = $db->query($sql);
+    
+        $weight = 0;
+        while ($row = $result->fetch()) {
+            ++$weight;
+            if ($weight == $new_weight)
+                ++$weight;
+    
+            $sql = 'UPDATE ' . $db_config['prefix'] . '_setup_language SET weight=' . $weight . ' WHERE lang=' . $db->quote($row['lang']);
+            $db->query($sql);
+        }
+    
+        $sql = 'UPDATE ' . $db_config['prefix'] . '_setup_language SET weight=' . $new_weight . ' WHERE lang=' . $db->quote($keylang);
+        $db->query($sql);
+        
+        nv_update_config_allow_sitelangs();
+        nv_save_file_config_global();
+        
+        include NV_ROOTDIR . '/includes/header.php';
+        echo 'OK_' . $keylang;
+        include NV_ROOTDIR . '/includes/footer.php';
+    }
+
     $checksess = $nv_Request->get_title('checksess', 'get', '');
     $keylang = $nv_Request->get_title('keylang', 'get', '', 1);
     $deletekeylang = $nv_Request->get_title('deletekeylang', 'get', '', 1);
@@ -82,13 +124,8 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
                     $keylang
                 ));
             }
-
-            $allow_sitelangs = array_unique($allow_sitelangs);
-
-            $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang='sys' AND module = 'global' AND config_name = 'allow_sitelangs'");
-            $sth->bindValue(':config_value', implode(',', $allow_sitelangs), PDO::PARAM_STR);
-            $sth->execute();
-
+            
+            nv_update_config_allow_sitelangs(array_unique($allow_sitelangs));
             nv_save_file_config_global();
 
             $xtpl->assign('URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
@@ -312,6 +349,19 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
 
         $db->query("DELETE FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang = '" . $deletekeylang . "'");
         $db->query("DELETE FROM " . $db_config['prefix'] . "_setup_language WHERE lang = '" . $deletekeylang . "'");
+        
+        $sql = 'SELECT lang FROM ' . $db_config['prefix'] . '_setup_language ORDER BY weight ASC';
+        $result = $db->query($sql);
+    
+        $weight = 0;
+        while ($row = $result->fetch()) {
+            ++$weight;
+            if ($weight == $new_weight)
+                ++$weight;
+    
+            $sql = 'UPDATE ' . $db_config['prefix'] . '_setup_language SET weight=' . $weight . ' WHERE lang=' . $db->quote($row['lang']);
+            $db->query($sql);
+        }
 
         $nv_Cache->delAll();
 
@@ -320,24 +370,37 @@ if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_I
     }
 }
 
-$a = 0;
-foreach ($lang_array_exit as $keylang) {
-    $delete = '';
-    $allow_sitelangs = '';
-
-    $xtpl->assign('ROW', array(
-        'keylang' => $keylang,
-        'name' => $language_array[$keylang]['name']
-    ));
-
-    if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN'))) {
-        if (isset($array_lang_setup[$keylang]) and $array_lang_setup[$keylang] == 1) {
+$array_lang_installed = array();
+$num = sizeof($array_lang_setup);
+$weight = 0;
+foreach ($array_lang_setup as $keylang => $setup) {
+    if (in_array($keylang, $lang_array_exit)) {
+        $weight ++;
+        $xtpl->assign('ROW', array(
+            'keylang' => $keylang,
+            'name' => $language_array[$keylang]['name']
+        ));
+        
+        if ($setup == 1) {
+            $array_lang_installed[$keylang] = $keylang;
+        }
+        
+        for ($i = 1; $i <= $num; ++$i) {
+            $xtpl->assign('WEIGHT', array(
+                'w' => $i,
+                'selected' => ($i == $weight) ? ' selected="selected"' : ''
+            ));
+    
+            $xtpl->parse('main.installed_loop.weight');
+        }
+        
+        if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN')) and $setup == 1) {
             if (!in_array($keylang, $global_config['allow_sitelangs'])) {
                 $xtpl->assign('DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;deletekeylang=' . $keylang . '&amp;checksess=' . md5($keylang . NV_CHECK_SESSION . 'deletekeylang'));
 
-                $xtpl->parse('main.loop.setup_delete');
+                $xtpl->parse('main.installed_loop.setup_delete');
             } else {
-                $xtpl->parse('main.loop.setup_note');
+                $xtpl->parse('main.installed_loop.setup_note');
             }
 
             if ($keylang != $global_config['site_lang']) {
@@ -356,16 +419,36 @@ foreach ($lang_array_exit as $keylang) {
                     'url_no' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;keylang=' . $keylang . '&amp;activelang=0&amp;checksess=' . md5('activelang_' . $keylang . NV_CHECK_SESSION)
                 ));
 
-                $xtpl->parse('main.loop.allow_sitelangs');
+                $xtpl->parse('main.installed_loop.allow_sitelangs');
             } else {
-                $xtpl->parse('main.loop.allow_sitelangs_note');
+                $xtpl->parse('main.installed_loop.allow_sitelangs_note');
             }
-        } else {
-            $xtpl->assign('INSTALL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;keylang=' . $keylang . '&amp;checksess=' . md5($keylang . NV_CHECK_SESSION));
-            $xtpl->parse('main.loop.setup_new');
         }
+        
+        $xtpl->parse('main.installed_loop');
     }
-    $xtpl->parse('main.loop');
+}
+
+$lang_can_install = false;
+foreach ($lang_array_exit as $keylang) {
+    if (!isset($array_lang_installed[$keylang])) {
+        $lang_can_install = true;
+        
+        $xtpl->assign('ROW', array(
+            'keylang' => $keylang,
+            'name' => $language_array[$keylang]['name']
+        ));
+    
+        if (defined('NV_IS_GODADMIN') or ($global_config['idsite'] > 0 and defined('NV_IS_SPADMIN'))) {
+            $xtpl->assign('INSTALL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;keylang=' . $keylang . '&amp;checksess=' . md5($keylang . NV_CHECK_SESSION));
+            $xtpl->parse('main.can_install.loop.setup_new');
+        }
+        $xtpl->parse('main.can_install.loop');
+    }
+}
+
+if ($lang_can_install) {
+    $xtpl->parse('main.can_install');
 }
 
 $xtpl->parse('main');

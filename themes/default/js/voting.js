@@ -5,29 +5,60 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3 / 25 / 2010 18 : 6
  */
+
 var total = 0;
 
-function nv_check_accept_number(a, d, c) {
-    a = a["option[]"];
-    for (var e = total = 0; e < a.length; e++) if (a[e].checked && (total += 1), total > d) return alert(c), !1
+function nv_check_accept_number(form, num, errmsg) {
+    opts = form["option[]"];
+    for (var e = total = 0; e < opts.length; e++)
+        if (opts[e].checked && (total += 1), total > num) return alert(errmsg), !1
 }
 
-function nv_sendvoting(a, d, c, e, g) {
-    var f = "0";
-    c = parseInt(c);
-    if (1 == c) {
-        a = a.option;
-        for (var b = 0; b < a.length; b++) a[b].checked && (f = a[b].value)
-    } else if (1 < c) for (a = a["option[]"], b = 0; b < a.length; b++) a[b].checked && (f = f + "," + a[b].value);
-    "0" == f && 0 < c ? alert(g) : $.ajax({
+function nv_sendvoting(form, id, num, checkss, errmsg, captcha) {
+    var vals = "0";
+    num = parseInt(num);
+    captcha = parseInt(captcha);
+    if (1 == num) {
+        opts = form.option;
+        for (var b = 0; b < opts.length; b++) opts[b].checked && (vals = opts[b].value)
+    } else if (1 < num)
+        for (opts = form["option[]"], b = 0; b < opts.length; b++) opts[b].checked && (vals = vals + "," + opts[b].value);
+    
+    if ("0" == vals && 0 < num) {
+        alert(errmsg);
+    } else if (captcha == 0 || "0" == vals) {
+        nv_sendvoting_submit(id, checkss, vals);
+    } else {
+        $('#voting-modal-' + id).data('id', id).data('checkss', checkss).data('vals', vals);
+        modalShowByObj('#voting-modal-' + id);
+    }
+    return !1
+}
+
+function nv_sendvoting_submit(id, checkss, vals, capt) {
+    $.ajax({
         type: "POST",
         cache: !1,
-        url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + d + "&checkss=" + e + "&lid=" + f,
+        url: nv_base_siteurl + "index.php?" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_name_variable + "=voting&" + nv_fc_variable + "=main&vid=" + id + "&checkss=" + checkss + "&lid=" + vals + (typeof capt != 'undefined' ? '&captcha=' + capt : ''),
         data: "nv_ajax_voting=1",
         dataType: "html",
-        success: function(a) {
-            modalShow("", a)
+        success: function(res) {
+            if (res.match(/^ERROR\|/g)) {
+                change_captcha('.rsec');
+                alert(res.substring(6));
+            } else {
+                modalShow("", res);
+            }
         }
     });
-    return !1
-};
+}
+
+function nv_sendvoting_captcha(btn, id, msg) {
+    var ctn = $('#voting-modal-' + id);
+    var capt = $('[name="captcha"]', $(btn).parent()).val();
+    if (!capt) {
+        alert(msg);
+    } else {
+        nv_sendvoting_submit(ctn.data('id'), ctn.data('checkss'), ctn.data('vals'), capt);
+    }
+}

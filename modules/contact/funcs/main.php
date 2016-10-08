@@ -252,7 +252,7 @@ $array_content = array(
     'fname' => $fname,
     'femail' => $femail,
     'fphone' => $fphone );
-$array_content['bodytext'] = (isset($module_config[$module_name]['bodytext'])) ? nv_editor_br2nl($module_config[$module_name]['bodytext']) : '';
+$array_content['bodytext'] = (isset($module_config[$module_name]['bodytext'])) ? $module_config[$module_name]['bodytext'] : '';
 
 $contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, NV_CHECK_SESSION);
 

@@ -32,7 +32,7 @@ if (substr($alias, 0, 5) == 'page-') {
     $id = 0;
     $alias = '';
 } elseif (empty($alias) and empty($page_config['viewtype'])) {
-    $db_slave->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $module_data)->order('weight ASC')->limit(1);
+    $db_slave->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $module_data)->where('status=1')->order('weight ASC')->limit(1);
     $rowdetail = $db_slave->query($db_slave->sql())->fetch();
     if (! empty($rowdetail)) {
         $id = $rowdetail['id'];

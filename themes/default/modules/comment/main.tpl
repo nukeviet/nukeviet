@@ -52,8 +52,8 @@
 			</div>
 			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
-				<label class="col-xs-6">{LANG.comment_seccode}</label>
-				<div class="col-xs-8">
+				<label class="col-xs-6 hidden-xs">{LANG.comment_seccode}</label>
+				<div class="col-xs-14 col-sm-8">
 					<img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
 					&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode_iavim');">&nbsp;</em>
 				</div>

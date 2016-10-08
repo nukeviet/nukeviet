@@ -11,6 +11,7 @@
         <!-- BEGIN: edit_username --><li class="{USERNAME_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/username" href="#edit_username">{LANG.edit_login}</a></li><!-- END: edit_username -->
         <!-- BEGIN: edit_email --><li class="{EMAIL_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/email" href="#edit_email">{LANG.edit_email}</a></li><!-- END: edit_email -->
         <!-- BEGIN: edit_password --><li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/password" href="#edit_password">{LANG.edit_password}</a></li><!-- END: edit_password -->
+        <!-- BEGIN: 2step --><li><a href="{URL_2STEP}">{LANG.2step_status}</a></li><!-- END: 2step -->
         <!-- BEGIN: edit_question --><li class="{QUESTION_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/question" href="#edit_question">{LANG.edit_question}</a></li><!-- END: edit_question -->
         <!-- BEGIN: edit_openid --><li class="{OPENID_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/openid" href="#edit_openid">{LANG.openid_administrator}</a></li><!-- END: edit_openid -->
         <!-- BEGIN: edit_group --><li class="{GROUP_ACTIVE}"><a data-toggle="tab" data-location="{EDITINFO_FORM}/group" href="#edit_group">{LANG.group}</a></li><!-- END: edit_group -->

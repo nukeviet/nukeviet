@@ -297,7 +297,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         } elseif (! nv_capcha_txt($fcode)) {
             $error = $lang_module['error_captcha'];
         } else {
-            if (($array_post_user['postcontent']) && $nv_Request->isset_request('status1', 'post')) {
+            if (($array_post_user['postcontent']) and $nv_Request->isset_request('status1', 'post')) {
                 $rowcontent['status'] = 1;
             } elseif ($nv_Request->isset_request('status0', 'post')) {
                 $rowcontent['status'] = 5;

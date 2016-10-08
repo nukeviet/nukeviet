@@ -157,7 +157,7 @@ if ($step == 1) {
 
             // Login with username and password
             $login_result = ftp_login($conn_id, $global_config['ftp_user_name'], $global_config['ftp_user_pass']);
-            if ((! $conn_id) || (! $login_result)) {
+            if ((! $conn_id) or (! $login_result)) {
                 $ftp_check_login = 3;
                 $array_ftp_data['error'] = $lang_module['ftp_error_account'];
             } elseif (ftp_chdir($conn_id, $global_config['ftp_path'])) {
@@ -280,7 +280,7 @@ if ($step == 1) {
     $array_resquest['php_required'] = $sys_info['php_required'];
     $array_resquest['php_version'] = PHP_VERSION;
     $sys_info['php_support'] = (version_compare(PHP_VERSION, $sys_info['php_required']) < 0) ? 0 : 1;
-    $array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
+    $array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'xml_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
     foreach ($array_resquest_key as $key) {
         $array_resquest['class_' . $key] = ($sys_info[$key]) ? 'highlight_green' : 'highlight_red';
         $array_resquest[$key] = ($sys_info[$key]) ? $lang_module['compatible'] : $lang_module['not_compatible'];
@@ -296,9 +296,9 @@ if ($step == 1) {
 
     $array_suport = array();
     $array_support['supports_rewrite'] = (empty($sys_info['supports_rewrite'])) ? 0 : 1;
-    $array_support['output_buffering'] = (ini_get('output_buffering') == '1' || strtolower(ini_get('output_buffering')) == 'on') ? 0 : 1;
-    $array_support['session_auto_start'] = (ini_get('session.auto_start') == '1' || strtolower(ini_get('session.auto_start')) == 'on') ? 0 : 1;
-    $array_support['display_errors'] = (ini_get('display_errors') == '1' || strtolower(ini_get('display_errors')) == 'on') ? 0 : 1;
+    $array_support['output_buffering'] = (ini_get('output_buffering') == '1' or strtolower(ini_get('output_buffering')) == 'on') ? 0 : 1;
+    $array_support['session_auto_start'] = (ini_get('session.auto_start') == '1' or strtolower(ini_get('session.auto_start')) == 'on') ? 0 : 1;
+    $array_support['display_errors'] = (ini_get('display_errors') == '1' or strtolower(ini_get('display_errors')) == 'on') ? 0 : 1;
     $array_support['allowed_set_time_limit'] = ($sys_info['allowed_set_time_limit']) ? 1 : 0;
     $array_support['zlib_support'] = ($sys_info['zlib_support']) ? 1 : 0;
     $array_support['zip_support'] = (extension_loaded('zip')) ? 1 : 0;
@@ -941,7 +941,7 @@ if ($step == 1) {
             // Login with username and password
             $login_result = ftp_login($conn_id, $ftp_server_array['ftp_user_name'], $ftp_server_array['ftp_user_pass']);
 
-            if ((! $conn_id) || (! $login_result)) {
+            if ((! $conn_id) or (! $login_result)) {
                 $ftp_check_login = 3;
             } elseif (ftp_chdir($conn_id, $ftp_server_array['ftp_path'])) {
                 $ftp_check_login = 1;
@@ -1020,6 +1020,7 @@ function nv_save_file_config()
         $content .= "\$global_config['sitekey'] = '" . $global_config['sitekey'] . "';// Do not change sitekey!\n";
         $content .= "\$global_config['hashprefix'] = '" . $global_config['hashprefix'] . "';\n";
         $content .= "\$global_config['cached'] = 'files';\n";
+        $content .= "\$global_config['session_handler'] = 'files';\n";
         $content .= "\$global_config['extension_setup'] = 3; // 0: No, 1: Upload, 2: NukeViet Store, 3: Upload + NukeViet Store\n";
 
         if ($step < 7) {

@@ -132,6 +132,12 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
+    
+    $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
+    if (! empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
+        $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
+    }
+    $xtpl->assign('SITE_FAVICON', $site_favicon);
 
     if (isset($size[1])) {
         if ($size[0] > 490) {
@@ -212,10 +218,10 @@ function nv_xmlOutput($content, $lastModified)
         $encoding = strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') ? 'gzip' : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate') ? 'deflate' : 'none');
 
         if ($encoding != 'none') {
-            if (! strstr($_SERVER['HTTP_USER_AGENT'], 'Opera') && preg_match('/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+            if (! strstr($_SERVER['HTTP_USER_AGENT'], 'Opera') and preg_match('/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
                 $version = floatval($matches[1]);
 
-                if ($version < 6 || ($version == 6 && ! strstr($_SERVER['HTTP_USER_AGENT'], 'EV1'))) {
+                if ($version < 6 or ($version == 6 and ! strstr($_SERVER['HTTP_USER_AGENT'], 'EV1'))) {
                     $encoding = 'none';
                 }
             }
@@ -469,7 +475,7 @@ function nv_css_setproperties($tag, $property_array)
             $css .= $value;
         }
     }
-    ! empty($css) && $css = $tag . '{' . $css . '}';
+    ! empty($css) and $css = $tag . '{' . $css . '}';
     return $css;
 }
 

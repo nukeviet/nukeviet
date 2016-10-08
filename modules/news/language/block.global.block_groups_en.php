@@ -23,6 +23,7 @@ $lang_block['blockid'] = 'Group related news';
 $lang_block['numrow'] = 'Number aricle';
 $lang_block['type'] = 'Dipslay type';
 $lang_block['showtooltip'] = 'Dipslay tooltip';
+$lang_block['title_length'] = 'Title length';
 $lang_block['tooltip_position'] = 'Position';
 $lang_block['tooltip_position_top'] = 'Top';
 $lang_block['tooltip_position_bottom'] = 'Bottom';

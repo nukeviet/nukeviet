@@ -70,7 +70,7 @@ function nv_site_theme($contents, $full = true)
     if (isset($module_config['themes'][$global_config['module_theme']]) and ! empty($module_config['themes'][$global_config['module_theme']])) {
         $config_theme = unserialize($module_config['themes'][$global_config['module_theme']]);
 
-        if (isset($config_theme['css_content']) && ! empty($config_theme['css_content'])) {
+        if (isset($config_theme['css_content']) and ! empty($config_theme['css_content'])) {
             $customFileName = $global_config['module_theme'] . '.' . NV_LANG_DATA . '.' . $global_config['idsite'];
 
             if (! file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/css/' . $customFileName . '.css')) {
@@ -93,7 +93,7 @@ function nv_site_theme($contents, $full = true)
             $html_links[] = array( 'rel' => 'StyleSheet', 'href' => NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/' . $customFileName . '.css?t=' . $global_config['timestamp'] );
         }
 
-        if (isset($config_theme['gfont']) && ! empty($config_theme['gfont']) && isset($config_theme['gfont']['family']) && !empty($config_theme['gfont']['family'])) {
+        if (isset($config_theme['gfont']) and ! empty($config_theme['gfont']) and isset($config_theme['gfont']['family']) and !empty($config_theme['gfont']['family'])) {
             $subset = isset($config_theme['gfont']['subset']) ? $config_theme['gfont']['subset'] : '';
             $gf = new NukeViet\Client\Gfonts(array('fonts' => array($config_theme['gfont']), 'subset' => $subset), $client_info);
             $webFontFile = $gf->getUrlCss();
@@ -140,7 +140,7 @@ function nv_site_theme($contents, $full = true)
     $logo = file_exists(NV_ROOTDIR . '/' . $logo_small) ? $logo_small : $global_config['site_logo'];
     $size = @getimagesize(NV_ROOTDIR . '/' . $logo);
     $logo_svg = preg_replace('/\.[a-z]+$/i', '.svg', $logo);
-    file_exists(NV_ROOTDIR . '/' . $logo_svg) && $logo = $logo_svg;
+    file_exists(NV_ROOTDIR . '/' . $logo_svg) and $logo = $logo_svg;
 
     $xtpl->assign('LOGO_SRC', NV_BASE_SITEURL . $logo);
     $xtpl->assign('LOGO_WIDTH', $size[0]);
@@ -227,7 +227,7 @@ function nv_site_theme($contents, $full = true)
         $sitecontent = preg_replace('/(<\/body>)/i', $my_footer . '\\1', $sitecontent, 1);
     }
 
-    if (defined('NV_IS_ADMIN') && $full) {
+    if (defined('NV_IS_ADMIN') and $full) {
         $sitecontent = preg_replace('/(<\/body>)/i', PHP_EOL . nv_admin_menu() . PHP_EOL . '\\1', $sitecontent, 1);
     }
 

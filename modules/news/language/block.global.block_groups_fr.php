@@ -23,6 +23,7 @@ $lang_block['blockid'] = 'Les nouvelles concernées';
 $lang_block['numrow'] = 'Nombre d\'articles affichés';
 $lang_block['type'] = 'La méthode d\'affichage';
 $lang_block['showtooltip'] = 'Afficher tooltip';
+$lang_block['title_length'] = 'Numero';
 $lang_block['tooltip_position'] = 'Positiom';
 $lang_block['tooltip_position_top'] = 'Au dessus';
 $lang_block['tooltip_position_bottom'] = 'Au dessous';
