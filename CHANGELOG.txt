@@ -18,6 +18,7 @@ NUKEVIET 4.1.00 Beta
 - Module Upload: Fix UI dialog position
 - Module Voting: Add config for active captcha
 - Module Upload: Fix for Microsoft Edge
+- Module Freecontent: Suport virtual module
 - Theme default: Fix google map on block company_info
 
 NUKEVIET 4.0.29 Final
