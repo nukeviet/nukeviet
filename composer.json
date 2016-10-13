@@ -31,6 +31,7 @@
         "phpmailer/phpmailer": "v6.0.0rc2",
         "pclzip/pclzip": "^2.8",
         "endroid/qrcode": "^1.7",
-        "true/punycode": "^2.1"
+        "true/punycode": "^2.1",
+		"elasticsearch/elasticsearch": "~2.0"
     } 
 }

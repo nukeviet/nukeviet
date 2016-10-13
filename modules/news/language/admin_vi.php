@@ -111,6 +111,14 @@ $lang_module['setting_post'] = 'Cấu hình đăng bài';
 $lang_module['setting_auto_tags'] = 'Tự động tạo từ khóa cho bài viết nếu không nhập từ khóa lúc đăng bài';
 $lang_module['setting_tags_remind'] = 'Nhắc nhở các từ khóa không có mô tả';
 $lang_module['setting_alias_lower'] = 'Chuyển Liên kết tĩnh về chữ thường khi tạo mới';
+$lang_module['setting_elasticseach'] = 'Cấu hình sử dụng máy chủ tìm kiếm Elasticseach';
+$lang_module['setting_use_elas'] = 'Sử dụng Elasticsearch';
+$lang_module['setting_elas_host'] = 'Địa chỉ máy chủ cài đặt Elasticsearch';
+$lang_module['setting_elas_port'] = 'Cổng kết nối với máy chủ Elasticseach';
+$lang_module['setting_elas_index'] = 'CSDL lưu trữ tại máy chủ Elasticsearch';
+$lang_module['error_elas_host_connect'] = 'Không thể kết nối đến máy chủ Elasticsearch!';
+$lang_module['use_setup_elasticseach'] = 'Hướng dẫn cài đặt Elasticsearch';
+$lang_module['use_dev_elasticseach'] = 'Hướng dẫn tích hợp Elasticsearch vào NukeViet';
 
 $lang_module['viewcat_page'] = 'Cách thể hiện Chuyên mục';
 $lang_module['viewcat_page_new'] = 'danh sách, mới lên trên';

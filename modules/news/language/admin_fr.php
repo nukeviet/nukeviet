@@ -108,6 +108,15 @@ $lang_module['setting_post'] = 'Configuration de la mise en ligne des articles';
 $lang_module['setting_auto_tags'] = 'Créer les mots clés automatiquement pour un article si vous ne donnez pas les mots clés au moment de mettre en ligne les articles';
 $lang_module['setting_tags_remind'] = 'Rappeler les mots clés qui n\'ont pas de description';
 $lang_module['setting_alias_lower'] = 'Mettre les alias en minuscule quand on les crée à nouveau';
+$lang_module['setting_elasticseach'] = 'Configurer le serveur de recherche en utilisant ElasticSearch';
+$lang_module['setting_use_elas'] = 'Utilisez ElasticSearch';
+$lang_module['setting_elas_host'] = 'Serveur d\'adresses installé ElasticSearch';
+$lang_module['setting_elas_port'] = 'Connectez-vous à des ports de serveur ElasticSearch';
+$lang_module['setting_elas_index'] = 'Base de données stockées dans le serveur ElasticSearch';
+$lang_module['error_elas_host_connect'] = 'Impossible de se connecter au serveur ElasticSearch!';
+$lang_module['use_setup_elasticseach'] = 'Les instructions d\'installation ElasticSearch';
+$lang_module['use_dev_elasticseach'] = 'Guide ElasticSearch intégré dans NukeViet';
+
 $lang_module['viewcat_page'] = 'Méthode d\'affichage';
 $lang_module['viewcat_page_new'] = 'liste, nouveau en haut';
 $lang_module['viewcat_page_old'] = 'liste, ancien en haut';
