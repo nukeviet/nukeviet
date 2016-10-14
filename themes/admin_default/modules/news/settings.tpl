@@ -1,7 +1,9 @@
 <!-- BEGIN: main -->
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
-
+<!-- BEGIN: error -->
+<div class="alert alert-danger">{error}</div>
+<!-- END: error -->
 <form class="form-inline" role="form" action="{NV_BASE_ADMINURL}index.php" method="post">
 	<input type="hidden" name ="{NV_NAME_VARIABLE}" value="{MODULE_NAME}" />
 	<input type="hidden" name ="{NV_OP_VARIABLE}" value="{OP}" />
@@ -146,6 +148,35 @@
 				<tr>
 					<th>{LANG.setting_tags_remind}</th>
 					<td><input type="checkbox" value="1" name="tags_remind"{TAGS_REMIND}/></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+    <div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_elasticseach}</caption>
+			<tbody>
+                <tr>
+                    <td colspan="2">
+                        {LANG.use_setup_elasticseach}: <a href="http://wiki.nukeviet.vn/web_server:install-and-configure-elasticsearch-on-centos-7" target="_blank">http://wiki.nukeviet.vn/web_server:install-and-configure-elasticsearch-on-centos-7</a><br />
+                        {LANG.use_dev_elasticseach}: <a href="http://wiki.nukeviet.vn/web_server:use-elasticsearch-in-nukeviet" target="_blank">http://wiki.nukeviet.vn/web_server:use-elasticsearch-in-nukeviet</a><br />
+                    </td>
+                </tr>
+				<tr>
+					<th>{LANG.setting_use_elas}</th>
+					<td><input type="checkbox" value="1" name="use_elas"{USE_ELAS}/></td>
+				</tr>
+				<tr>
+					<th>{LANG.setting_elas_host}</th>
+					<td><input class="form-control" type="text" value="{DATA.elas_host}" name="elas_host"/></td>
+				</tr>
+				<tr>
+					<th>{LANG.setting_elas_port}</th>
+					<td><input class="form-control" type="text" value="{DATA.elas_port}" name="elas_port"/></td>
+				</tr>
+                <tr>
+					<th>{LANG.setting_elas_index}</th>
+					<td><input class="form-control" type="text" value="{DATA.elas_index}" name="elas_index"/></td>
 				</tr>
 			</tbody>
 			<tfoot>

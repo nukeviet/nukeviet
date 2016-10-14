@@ -108,6 +108,15 @@ $lang_module['setting_post'] = 'Setting post';
 $lang_module['setting_auto_tags'] = 'Automatically generate keywords for article keyword is entered at the post';
 $lang_module['setting_tags_remind'] = 'Remind the keywords no description';
 $lang_module['setting_alias_lower'] = 'Alias to lowercase when creating a new';
+$lang_module['setting_elasticseach'] = 'Configure search server using Elasticsearch';
+$lang_module['setting_use_elas'] = 'Use Elasticsearch';
+$lang_module['setting_elas_host'] = 'Server address installed Elasticsearch';
+$lang_module['setting_elas_port'] = 'Server ports Elasticsearch';
+$lang_module['setting_elas_index'] = 'Database name Elasticsearch';
+$lang_module['error_elas_host_connect'] = 'Unable to connect to the server Elasticsearch!';
+$lang_module['use_setup_elasticseach'] = 'Installation instructions Elasticsearch';
+$lang_module['use_dev_elasticseach'] = 'Programming Guide Elasticsearch on NukeViet';
+
 $lang_module['viewcat_page'] = 'Display method';
 $lang_module['viewcat_page_new'] = 'New categories, Up';
 $lang_module['viewcat_page_old'] = 'Old categories, Up';

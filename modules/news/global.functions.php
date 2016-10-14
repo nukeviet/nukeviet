@@ -90,7 +90,7 @@ function nv_set_status_module()
  */
 function nv_del_content_module($id)
 {
-    global $db, $module_name, $module_data, $title, $lang_module;
+    global $db, $module_name, $module_data, $title, $lang_module, $module_config;
     $content_del = 'NO_' . $id;
     $title = '';
     list($id, $listcatid, $title, $homeimgfile) = $db->query('SELECT id, listcatid, title, homeimgfile FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . intval($id))->fetch(3);
@@ -124,7 +124,14 @@ function nv_del_content_module($id)
         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $id);
 
         nv_delete_notification(NV_LANG_DATA, $module_name, 'post_queue', $id);
-
+        
+        /*conenct to elasticsearch*/
+		if(isset($module_config[$module_name]['use_elas']))  {
+		  
+            $nukeVietElasticSearh = new NukeViet\NukeVietElasticSearch\Functions( $module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index'] );
+            $response = $nukeVietElasticSearh->delete_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $id);
+		}
+        
         if ($number_no_del == 0) {
             $content_del = 'OK_' . $id .'_' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true);
         } else {
