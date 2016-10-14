@@ -163,8 +163,8 @@
                     </td>
                 </tr>
 				<tr>
-					<th>{LANG.setting_use_elas}</th>
-					<td><input type="checkbox" value="1" name="use_elas"{USE_ELAS}/></td>
+					<th>{LANG.setting_elas_use}</th>
+					<td><input type="checkbox" value="1" name="elas_use" {ELAS_USE}/></td>
 				</tr>
 				<tr>
 					<th>{LANG.setting_elas_host}</th>
