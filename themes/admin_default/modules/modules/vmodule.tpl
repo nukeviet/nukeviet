@@ -18,7 +18,7 @@
 			<tbody>
 				<tr>
 					<td class="w250 text-right"><strong>{LANG.vmodule_name}: </strong><sup class="required">(*)</sup></td>
-					<td><input class="w250 required form-control" style="margin-right: 10px;" name="title" type="text" value="{TITLE}" maxlength="255" /></td>
+					<td><input class="w400 required form-control" style="margin-right: 10px;" name="title" type="text" value="{TITLE}" maxlength="50" /> (Max: 50 characters)</td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.vmodule_file}: </strong><sup class="required">(*)</sup></td>
