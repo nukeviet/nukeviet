@@ -8,7 +8,7 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -70,21 +70,20 @@ if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
 } else {
     $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $module_upload;
     $e = explode('/', $currentpath);
-    if (! empty($e)) {
+    if (!empty($e)) {
         $cp = '';
         foreach ($e as $p) {
-            if (! empty($p) and ! is_dir(NV_UPLOADS_REAL_DIR . '/' . $cp . $p)) {
+            if (!empty($p) and !is_dir(NV_UPLOADS_REAL_DIR . '/' . $cp . $p)) {
                 $mk = nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $cp, $p);
                 if ($mk[0] > 0) {
                     $upload_real_dir_page = $mk[2];
                     try {
                         $db->query("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_dir (dirname, time) VALUES ('" . NV_UPLOADS_DIR . "/" . $cp . $p . "', 0)");
-                    }
-                    catch (PDOException $e) {
+                    } catch (PDOException $e) {
                         trigger_error($e->getMessage());
                     }
                 }
-            } elseif (! empty($p)) {
+            } elseif (!empty($p)) {
                 $upload_real_dir_page = NV_UPLOADS_REAL_DIR . '/' . $cp . $p;
             }
             $cp .= $p . '/';
@@ -95,7 +94,7 @@ if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $currentpath)) {
 
 $currentpath = str_replace(NV_ROOTDIR . '/', '', $upload_real_dir_page);
 $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload;
-if (! defined('NV_IS_SPADMIN') and strpos($structure_upload, 'username') !== false) {
+if (!defined('NV_IS_SPADMIN') and strpos($structure_upload, 'username') !== false) {
     $array_currentpath = explode('/', $currentpath);
     if ($array_currentpath[2] == $username_alias) {
         $uploads_dir_user = NV_UPLOADS_DIR . '/' . $module_upload . '/' . $username_alias;
@@ -106,7 +105,7 @@ $array_block_cat_module = array();
 $id_block_content = array();
 $sql = 'SELECT bid, adddefault, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block_cat ORDER BY weight ASC';
 $result = $db->query($sql);
-while (list($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
+while (list ($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
     $array_block_cat_module[$bid_i] = $title_i;
     if ($adddefault_i) {
         $id_block_content[] = $bid_i;
@@ -173,7 +172,7 @@ $rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
 if ($rowcontent['id'] > 0) {
     $check_permission = false;
     $rowcontent = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows where id=' . $rowcontent['id'])->fetch();
-    if (! empty($rowcontent['id'])) {
+    if (!empty($rowcontent['id'])) {
         $rowcontent['mode'] = 'edit';
         $arr_catid = explode(',', $rowcontent['listcatid']);
         if (defined('NV_IS_ADMIN_MODULE')) {
@@ -201,39 +200,39 @@ if ($rowcontent['id'] > 0) {
             }
         }
     }
-
-    if (! $check_permission) {
+    
+    if (!$check_permission) {
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         die();
     }
-
+    
     $page_title = $lang_module['content_edit'];
     $rowcontent['topictext'] = '';
-
+    
     $body_contents = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
     $rowcontent = array_merge($rowcontent, $body_contents);
     unset($body_contents);
-
+    
     $_query = $db->query('SELECT tid, keyword FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id=' . $rowcontent['id'] . ' ORDER BY keyword ASC');
     while ($row = $_query->fetch()) {
         $array_keywords_old[$row['tid']] = $row['keyword'];
     }
     $rowcontent['keywords'] = implode(', ', $array_keywords_old);
     $rowcontent['keywords_old'] = $rowcontent['keywords'];
-
+    
     $id_block_content = array();
     $sql = 'SELECT bid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block where id=' . $rowcontent['id'];
     $result = $db->query($sql);
-    while (list($bid_i) = $result->fetch(3)) {
+    while (list ($bid_i) = $result->fetch(3)) {
         $id_block_content[] = $bid_i;
     }
-
+    
     if (empty($rowcontent['status'])) {
         nv_status_notification(NV_LANG_DATA, $module_name, 'post_queue', $rowcontent['id']);
     }
-
+    
     if (!empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR)) {
-        $currentpath = NV_UPLOADS_DIR . '/'. $module_upload . '/' . dirname($rowcontent['homeimgfile']);
+        $currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . dirname($rowcontent['homeimgfile']);
     }
     
     if (empty($module_config[$module_name]['htmlhometext'])) {
@@ -253,15 +252,15 @@ foreach ($global_array_cat as $catid_i => $array_value) {
             if ($array_cat_admin[$admin_id][$catid_i]['add_content'] == 1) {
                 $check_add_content = true;
             }
-
+            
             if ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1) {
                 $check_pub_content = true;
             }
-
+            
             if ($array_cat_admin[$admin_id][$catid_i]['app_content'] == 1) {
                 $check_censor_content = true;
             }
-
+            
             if ($array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1) {
                 $check_edit_content = true;
             }
@@ -270,16 +269,17 @@ foreach ($global_array_cat as $catid_i => $array_value) {
     if ($check_add_content) {
         $array_cat_add_content[] = $catid_i;
     }
-
+    
     if ($check_pub_content) {
         $array_cat_pub_content[] = $catid_i;
     }
     if ($check_censor_content) {
         //Nguoi kiem duyet
+        
 
         $array_censor_content[] = $catid_i;
     }
-
+    
     if ($check_edit_content) {
         $array_cat_edit_content[] = $catid_i;
     }
@@ -289,24 +289,21 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', array()));
     $rowcontent['listcatid'] = implode(',', $catids);
     $rowcontent['catid'] = $nv_Request->get_int('catid', 'post', 0);
-
+    
     $id_block_content_post = array_unique($nv_Request->get_typed_array('bids', 'post', 'int', array()));
     if ($nv_Request->isset_request('status1', 'post')) {
         $rowcontent['status'] = 1;
         //Dang tin
-    }
-    elseif ($nv_Request->isset_request('status0', 'post')) {
+    } elseif ($nv_Request->isset_request('status0', 'post')) {
         $rowcontent['status'] = 0;
-    }
-    elseif ($nv_Request->isset_request('status4', 'post')) {
+    } elseif ($nv_Request->isset_request('status4', 'post')) {
         $rowcontent['status'] = 4;
         //Luu tam
-    }
-    else {
+    } else {
         $rowcontent['status'] = 6;
         //Gui, cho bien tap
     }
-
+    
     $message_error_show = $lang_module['permissions_pub_error'];
     if ($rowcontent['status'] == 1) {
         $array_cat_check_content = $array_cat_pub_content;
@@ -318,17 +315,17 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     } else {
         $array_cat_check_content = $array_cat_add_content;
     }
-
+    
     foreach ($catids as $catid_i) {
-        if (! in_array($catid_i, $array_cat_check_content)) {
+        if (!in_array($catid_i, $array_cat_check_content)) {
             $error[] = sprintf($message_error_show, $global_array_cat[$catid_i]['title']);
         }
     }
-
+    
     $rowcontent['topicid'] = $nv_Request->get_int('topicid', 'post', 0);
     if ($rowcontent['topicid'] == 0) {
         $rowcontent['topictext'] = $nv_Request->get_title('topictext', 'post', '');
-        if (! empty($rowcontent['topictext'])) {
+        if (!empty($rowcontent['topictext'])) {
             $stmt = $db->prepare('SELECT topicid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics WHERE title= :title');
             $stmt->bindParam(':title', $rowcontent['topictext'], PDO::PARAM_STR);
             $stmt->execute();
@@ -337,9 +334,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     }
     $rowcontent['author'] = $nv_Request->get_title('author', 'post', '', 1);
     $rowcontent['sourcetext'] = $nv_Request->get_title('sourcetext', 'post', '');
-
+    
     $publ_date = $nv_Request->get_title('publ_date', 'post', '');
-
+    
     if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date, $m)) {
         $phour = $nv_Request->get_int('phour', 'post', 0);
         $pmin = $nv_Request->get_int('pmin', 'post', 0);
@@ -347,7 +344,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     } else {
         $rowcontent['publtime'] = NV_CURRENTTIME;
     }
-
+    
     $exp_date = $nv_Request->get_title('exp_date', 'post', '');
     if (preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $exp_date, $m)) {
         $ehour = $nv_Request->get_int('ehour', 'post', 0);
@@ -356,13 +353,13 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     } else {
         $rowcontent['exptime'] = 0;
     }
-
+    
     $rowcontent['archive'] = $nv_Request->get_int('archive', 'post', 0);
     if ($rowcontent['archive'] > 0) {
         $rowcontent['archive'] = ($rowcontent['exptime'] > NV_CURRENTTIME) ? 1 : 2;
     }
     $rowcontent['title'] = $nv_Request->get_title('title', 'post', '', 1);
-
+    
     // Xử lý liên kết tĩnh
     $alias = $nv_Request->get_title('alias', 'post', '');
     if (empty($alias)) {
@@ -373,52 +370,52 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     } else {
         $alias = change_alias($alias);
     }
-
-    if (empty($alias) or ! preg_match("/^([a-zA-Z0-9\_\-]+)$/", $alias)) {
+    
+    if (empty($alias) or !preg_match("/^([a-zA-Z0-9\_\-]+)$/", $alias)) {
         if (empty($rowcontent['alias'])) {
             $rowcontent['alias'] = 'post';
         }
     } else {
         $rowcontent['alias'] = $alias;
     }
-
+    
     if (!empty($module_config[$module_name]['htmlhometext'])) {
         $rowcontent['hometext'] = $nv_Request->get_editor('hometext', '', NV_ALLOWED_HTML_TAGS);
     } else {
         $rowcontent['hometext'] = $nv_Request->get_textarea('hometext', '', 'br', 1);
     }
-
+    
     $rowcontent['homeimgfile'] = $nv_Request->get_title('homeimg', 'post', '');
     $rowcontent['homeimgalt'] = $nv_Request->get_title('homeimgalt', 'post', '', 1);
     $rowcontent['imgposition'] = $nv_Request->get_int('imgposition', 'post', 0);
-    if (! array_key_exists($rowcontent['imgposition'], $array_imgposition)) {
+    if (!array_key_exists($rowcontent['imgposition'], $array_imgposition)) {
         $rowcontent['imgposition'] = 1;
     }
     $rowcontent['titlesite'] = $nv_Request->get_title('titlesite', 'post', '');
     $rowcontent['description'] = $nv_Request->get_title('description', 'post', '');
     $rowcontent['bodyhtml'] = $nv_Request->get_editor('bodyhtml', '', NV_ALLOWED_HTML_TAGS);
-
-    $rowcontent['copyright'] = (int)$nv_Request->get_bool('copyright', 'post');
-    $rowcontent['inhome'] = (int)$nv_Request->get_bool('inhome', 'post');
-
+    
+    $rowcontent['copyright'] = (int) $nv_Request->get_bool('copyright', 'post');
+    $rowcontent['inhome'] = (int) $nv_Request->get_bool('inhome', 'post');
+    
     $_groups_post = $nv_Request->get_array('allowed_comm', 'post', array());
-    $rowcontent['allowed_comm'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
-
-    $rowcontent['allowed_rating'] = (int)$nv_Request->get_bool('allowed_rating', 'post');
-    $rowcontent['allowed_send'] = (int)$nv_Request->get_bool('allowed_send', 'post');
-    $rowcontent['allowed_print'] = (int)$nv_Request->get_bool('allowed_print', 'post');
-    $rowcontent['allowed_save'] = (int)$nv_Request->get_bool('allowed_save', 'post');
+    $rowcontent['allowed_comm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+    
+    $rowcontent['allowed_rating'] = (int) $nv_Request->get_bool('allowed_rating', 'post');
+    $rowcontent['allowed_send'] = (int) $nv_Request->get_bool('allowed_send', 'post');
+    $rowcontent['allowed_print'] = (int) $nv_Request->get_bool('allowed_print', 'post');
+    $rowcontent['allowed_save'] = (int) $nv_Request->get_bool('allowed_save', 'post');
     $rowcontent['gid'] = $nv_Request->get_int('gid', 'post', 0);
-
+    
     $rowcontent['keywords'] = $nv_Request->get_array('keywords', 'post', '');
     $rowcontent['keywords'] = implode(', ', $rowcontent['keywords']);
-
+    
     // Tu dong xac dinh keywords
-    if ($rowcontent['keywords'] == '' and ! empty($module_config[$module_name]['auto_tags'])) {
+    if ($rowcontent['keywords'] == '' and !empty($module_config[$module_name]['auto_tags'])) {
         $keywords = ($rowcontent['hometext'] != '') ? $rowcontent['hometext'] : $rowcontent['bodyhtml'];
         $keywords = nv_get_keywords($keywords, 100);
         $keywords = explode(',', $keywords);
-
+        
         // Ưu tiên lọc từ khóa theo các từ khóa đã có trong tags thay vì đọc từ từ điển
         $keywords_return = array();
         foreach ($keywords as $keyword_i) {
@@ -432,10 +429,10 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 }
             }
         }
-
+        
         if (sizeof($keywords_return) < 20) {
             foreach ($keywords as $keyword_i) {
-                if (! in_array($keyword_i, $keywords_return)) {
+                if (!in_array($keyword_i, $keywords_return)) {
                     $keywords_return[] = $keyword_i;
                     if (sizeof($keywords_return) > 20) {
                         break;
@@ -445,22 +442,22 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         }
         $rowcontent['keywords'] = implode(',', $keywords_return);
     }
-
+    
     if ($rowcontent['status'] != 4) {
         if (empty($rowcontent['title'])) {
             $error[] = $lang_module['error_title'];
         } elseif (empty($rowcontent['listcatid'])) {
             $error[] = $lang_module['error_cat'];
-        } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '' and ! preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'])) {
+        } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '' and !preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'])) {
             $error[] = $lang_module['error_bodytext'];
         }
     }
-
+    
     if (empty($error)) {
-        if(!empty($catids)) {
+        if (!empty($catids)) {
             $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
         }
-        if (! empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
+        if (!empty($rowcontent['topictext']) and empty($rowcontent['topicid'])) {
             $weightopic = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics')->fetchColumn();
             $weightopic = intval($weightopic) + 1;
             $aliastopic = change_alias($rowcontent['topictext']);
@@ -473,9 +470,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $data_insert['keywords'] = $rowcontent['topictext'];
             $rowcontent['topicid'] = $db->insert_id($_sql, 'topicid', $data_insert);
         }
-
+        
         $rowcontent['sourceid'] = 0;
-        if (! empty($rowcontent['sourcetext'])) {
+        if (!empty($rowcontent['sourcetext'])) {
             $url_info = @parse_url($rowcontent['sourcetext']);
             if (isset($url_info['scheme']) and isset($url_info['host'])) {
                 $sourceid_link = $url_info['scheme'] . '://' . $url_info['host'];
@@ -483,17 +480,17 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $stmt->bindParam(':link', $sourceid_link, PDO::PARAM_STR);
                 $stmt->execute();
                 $rowcontent['sourceid'] = $stmt->fetchColumn();
-
+                
                 if (empty($rowcontent['sourceid'])) {
                     $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
                     $weight = intval($weight) + 1;
                     $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title ,:sourceid_link, '', :weight, " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
-
+                    
                     $data_insert = array();
                     $data_insert['title'] = $url_info['host'];
                     $data_insert['sourceid_link'] = $sourceid_link;
                     $data_insert['weight'] = $weight;
-
+                    
                     $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid', $data_insert);
                 }
             } else {
@@ -501,25 +498,25 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $stmt->bindParam(':title', $rowcontent['sourcetext'], PDO::PARAM_STR);
                 $stmt->execute();
                 $rowcontent['sourceid'] = $stmt->fetchColumn();
-
+                
                 if (empty($rowcontent['sourceid'])) {
                     $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
                     $weight = intval($weight) + 1;
                     $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_sources (title, link, logo, weight, add_time, edit_time) VALUES ( :title, '', '', " . $weight . " , " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ")";
                     $data_insert = array();
                     $data_insert['title'] = $rowcontent['sourcetext'];
-
+                    
                     $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid', $data_insert);
                 }
             }
         }
-
+        
         // Xu ly anh minh hoa
         $rowcontent['homeimgthumb'] = 0;
-        if(empty($rowcontent['homeimgfile']) AND ( $rowcontent['imgposition'] == 1 OR $rowcontent['imgposition'] == 2 ) ){
+        if (empty($rowcontent['homeimgfile']) and ($rowcontent['imgposition'] == 1 or $rowcontent['imgposition'] == 2)) {
             $rowcontent['homeimgfile'] = nv_get_firstimage($rowcontent['bodyhtml']);
         }
-        if (! nv_is_url($rowcontent['homeimgfile']) and nv_is_file($rowcontent['homeimgfile'], NV_UPLOADS_DIR . '/' . $module_upload) === true) {
+        if (!nv_is_url($rowcontent['homeimgfile']) and nv_is_file($rowcontent['homeimgfile'], NV_UPLOADS_DIR . '/' . $module_upload) === true) {
             $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
             $rowcontent['homeimgfile'] = substr($rowcontent['homeimgfile'], $lu);
             if (file_exists(NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'])) {
@@ -532,9 +529,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         } else {
             $rowcontent['homeimgfile'] = '';
         }
-
+        
         if ($rowcontent['id'] == 0) {
-            if (! defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < NV_CURRENTTIME) {
+            if (!defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < NV_CURRENTTIME) {
                 $rowcontent['publtime'] = NV_CURRENTTIME;
             }
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
@@ -567,7 +564,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                  ' . intval($rowcontent['hitscm']) . ',
                  ' . intval($rowcontent['total_rating']) . ',
                  ' . intval($rowcontent['click_rating']) . ')';
-
+            
             $data_insert = array();
             $data_insert['listcatid'] = $rowcontent['listcatid'];
             $data_insert['author'] = $rowcontent['author'];
@@ -578,12 +575,12 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $data_insert['homeimgalt'] = $rowcontent['homeimgalt'];
             $data_insert['homeimgthumb'] = $rowcontent['homeimgthumb'];
             $data_insert['allowed_comm'] = $rowcontent['allowed_comm'];
-
+            
             $rowcontent['id'] = $db->insert_id($sql, 'id', $data_insert);
             if ($rowcontent['id'] > 0) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_add'], $rowcontent['title'], $admin_info['userid']);
                 $ct_query = array();
-
+                
                 $stmt = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_detail VALUES (
                     ' . $rowcontent['id'] . ',
                     :titlesite,
@@ -601,16 +598,29 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $stmt->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
                 $stmt->bindParam(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen($rowcontent['bodyhtml']));
                 $stmt->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
-                $ct_query[] = (int)$stmt->execute();
-
+                $ct_query[] = (int) $stmt->execute();
+                
                 foreach ($catids as $catid) {
-                    $ct_query[] = (int)$db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
+                    $ct_query[] = (int) $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
                 }
-
+                
                 if (array_sum($ct_query) != sizeof($ct_query)) {
                     $error[] = $lang_module['errorsave'];
                 }
                 unset($ct_query);
+                if ($module_config[$module_name]['elas_use'] == 1) {
+                    /*connect to elasticsearch */
+                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
+                    $rowcontent = array_merge($rowcontent, $body_contents);
+                    
+                    $rowcontent['unsigned_title'] = nv_EncString($rowcontent['title']);
+                    $rowcontent['unsigned_bodyhtml'] = nv_EncString($rowcontent['bodyhtml']);
+                    $rowcontent['unsigned_author'] = nv_EncString($rowcontent['author']);
+                    $rowcontent['unsigned_hometext'] = nv_EncString($rowcontent['hometext']);
+                    
+                    $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
+                    $response = $nukeVietElasticSearh->insert_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $rowcontent['id'], $rowcontent);
+                }
             } else {
                 $error[] = $lang_module['errorsave'];
             }
@@ -619,10 +629,10 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             if ($rowcontent_old['status'] == 1) {
                 $rowcontent['status'] = 1;
             }
-            if (! defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < intval($rowcontent_old['addtime'])) {
+            if (!defined('NV_IS_SPADMIN') and intval($rowcontent['publtime']) < intval($rowcontent_old['addtime'])) {
                 $rowcontent['publtime'] = $rowcontent_old['addtime'];
             }
-
+            
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
                 $rowcontent['status'] = 2;
             }
@@ -647,7 +657,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 allowed_rating=' . intval($rowcontent['allowed_rating']) . ',
                 edittime=' . NV_CURRENTTIME . '
             WHERE id =' . $rowcontent['id']);
-
+            
             $sth->bindParam(':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR);
             $sth->bindParam(':author', $rowcontent['author'], PDO::PARAM_STR);
             $sth->bindParam(':title', $rowcontent['title'], PDO::PARAM_STR);
@@ -657,10 +667,10 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $sth->bindParam(':homeimgalt', $rowcontent['homeimgalt'], PDO::PARAM_STR);
             $sth->bindParam(':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_STR);
             $sth->bindParam(':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR);
-
+            
             if ($sth->execute()) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid']);
-
+                
                 $ct_query = array();
                 $sth = $db->prepare('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_detail SET
                     titlesite=:titlesite,
@@ -674,14 +684,14 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     allowed_save=' . intval($rowcontent['allowed_save']) . ',
                     gid=' . intval($rowcontent['gid']) . '
                 WHERE id =' . $rowcontent['id']);
-
+                
                 $sth->bindParam(':titlesite', $rowcontent['titlesite'], PDO::PARAM_STR);
                 $sth->bindParam(':description', $rowcontent['description'], PDO::PARAM_STR, strlen($rowcontent['description']));
                 $sth->bindParam(':bodyhtml', $rowcontent['bodyhtml'], PDO::PARAM_STR, strlen($rowcontent['bodyhtml']));
                 $sth->bindParam(':sourcetext', $rowcontent['sourcetext'], PDO::PARAM_STR, strlen($rowcontent['sourcetext']));
-
-                $ct_query[] = (int)$sth->execute();
-
+                
+                $ct_query[] = (int) $sth->execute();
+                
                 if ($rowcontent_old['listcatid'] != $rowcontent['listcatid']) {
                     $array_cat_old = explode(',', $rowcontent_old['listcatid']);
                     $array_cat_new = explode(',', $rowcontent['listcatid']);
@@ -692,27 +702,39 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                         }
                     }
                 }
-
+                
                 foreach ($catids as $catid) {
                     if (!empty($catid)) {
                         $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $rowcontent['id']);
                         $ct_query[] = $db->exec('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE id=' . $rowcontent['id']);
                     }
                 }
-
+                
                 if (array_sum($ct_query) != sizeof($ct_query)) {
                     $error[] = $lang_module['errorsave'];
+                }
+                if ($module_config[$module_name]['elas_use'] == 1) {
+                    $body_contents = $db_slave->query('SELECT bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $rowcontent['id'])->fetch();
+                    $rowcontent = array_merge($rowcontent, $body_contents);
+                    
+                    $rowcontent['unsigned_title'] = nv_EncString($rowcontent['title']);
+                    $rowcontent['unsigned_bodyhtml'] = nv_EncString($rowcontent['bodyhtml']);
+                    $rowcontent['unsigned_author'] = nv_EncString($rowcontent['author']);
+                    $rowcontent['unsigned_hometext'] = nv_EncString($rowcontent['hometext']);
+                    
+                    $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
+                    $result_search = $nukeVietElasticSearh->update_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $rowcontent['id'], $rowcontent);
                 }
             } else {
                 $error[] = $lang_module['errorsave'];
             }
         }
-
+        
         nv_set_status_module();
         if (empty($error)) {
             $id_block_content_new = $rowcontent['mode'] == 'edit' ? array_diff($id_block_content_post, $id_block_content) : $id_block_content_post;
             $id_block_content_del = $rowcontent['mode'] == 'edit' ? array_diff($id_block_content, $id_block_content_post) : array();
-
+            
             $array_block_fix = array();
             foreach ($id_block_content_new as $bid_i) {
                 $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_block (bid, id, weight) VALUES (' . $bid_i . ', ' . $rowcontent['id'] . ', 0)');
@@ -722,39 +744,41 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_block WHERE id = ' . $rowcontent['id'] . ' AND bid = ' . $bid_i);
                 $array_block_fix[] = $bid_i;
             }
-
+            
             $array_block_fix = array_unique($array_block_fix);
             foreach ($array_block_fix as $bid_i) {
                 nv_news_fix_block($bid_i, false);
             }
-
+            
             if ($rowcontent['keywords'] != $rowcontent['keywords_old']) {
                 $keywords = explode(',', $rowcontent['keywords']);
                 $keywords = array_map('strip_punctuation', $keywords);
                 $keywords = array_map('trim', $keywords);
-                $keywords = array_diff($keywords, array( '' ));
+                $keywords = array_diff($keywords, array(
+                    ''
+                ));
                 $keywords = array_unique($keywords);
-
+                
                 foreach ($keywords as $keyword) {
                     $keyword = str_replace('&', ' ', $keyword);
-                    if (! in_array($keyword, $array_keywords_old)) {
+                    if (!in_array($keyword, $array_keywords_old)) {
                         $alias_i = ($module_config[$module_name]['tags_alias']) ? change_alias($keyword) : str_replace(' ', '-', $keyword);
                         $alias_i = nv_strtolower($alias_i);
                         $sth = $db->prepare('SELECT tid, alias, description, keywords FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags where alias= :alias OR FIND_IN_SET(:keyword, keywords)>0');
                         $sth->bindParam(':alias', $alias_i, PDO::PARAM_STR);
                         $sth->bindParam(':keyword', $keyword, PDO::PARAM_STR);
                         $sth->execute();
-
-                        list($tid, $alias, $keywords_i) = $sth->fetch(3);
+                        
+                        list ($tid, $alias, $keywords_i) = $sth->fetch(3);
                         if (empty($tid)) {
                             $array_insert = array();
                             $array_insert['alias'] = $alias_i;
                             $array_insert['keyword'] = $keyword;
-
+                            
                             $tid = $db->insert_id("INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_tags (numnews, alias, description, image, keywords) VALUES (1, :alias, '', '', :keyword)", "tid", $array_insert);
                         } else {
                             if ($alias != $alias_i) {
-                                if (! empty($keywords_i)) {
+                                if (!empty($keywords_i)) {
                                     $keyword_arr = explode(',', $keywords_i);
                                     $keyword_arr[] = $keyword;
                                     $keywords_i2 = implode(',', array_unique($keyword_arr));
@@ -769,7 +793,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                             }
                             $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews+1 WHERE tid = ' . $tid);
                         }
-
+                        
                         // insert keyword for table _tags_id
                         try {
                             $sth = $db->prepare('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id (id, tid, keyword) VALUES (' . $rowcontent['id'] . ', ' . intval($tid) . ', :keyword)');
@@ -783,16 +807,16 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                         unset($array_keywords_old[$tid]);
                     }
                 }
-
+                
                 foreach ($array_keywords_old as $tid => $keyword) {
-                    if (! in_array($keyword, $keywords)) {
+                    if (!in_array($keyword, $keywords)) {
                         $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tags SET numnews = numnews-1 WHERE tid = ' . $tid);
                         $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE id = ' . $rowcontent['id'] . ' AND tid=' . $tid);
                     }
                 }
             }
-
-            if (isset($module_config['seotools']['prcservice']) and ! empty($module_config['seotools']['prcservice']) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ($rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1)) {
+            
+            if (isset($module_config['seotools']['prcservice']) and !empty($module_config['seotools']['prcservice']) and $rowcontent['status'] == 1 and $rowcontent['publtime'] < NV_CURRENTTIME + 1 and ($rowcontent['exptime'] == 0 or $rowcontent['exptime'] > NV_CURRENTTIME + 1)) {
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 die();
             } else {
@@ -819,7 +843,7 @@ if (!empty($module_config[$module_name]['htmlhometext'])) {
 $rowcontent['bodyhtml'] = htmlspecialchars(nv_editor_br2nl($rowcontent['bodyhtml']));
 $rowcontent['alias'] = ($rowcontent['status'] == 4 and empty($rowcontent['title'])) ? '' : $rowcontent['alias'];
 
-if (! empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'])) {
+if (!empty($rowcontent['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'])) {
     $rowcontent['homeimgfile'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $rowcontent['homeimgfile'];
 }
 
@@ -827,36 +851,36 @@ $array_catid_in_row = explode(',', $rowcontent['listcatid']);
 
 $array_topic_module = array();
 $array_topic_module[0] = $lang_module['topic_sl'];
-if(!empty($rowcontent['topicid'])){
+if (!empty($rowcontent['topicid'])) {
     $db->sqlreset()
-    ->select('topicid, title')
-    ->from(NV_PREFIXLANG . '_' . $module_data . '_topics')
-    ->where('topicid=' . $rowcontent['topicid']);
+        ->select('topicid, title')
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics')
+        ->where('topicid=' . $rowcontent['topicid']);
     $result = $db->query($db->sql());
     
-    while (list($topicid_i, $title_i) = $result->fetch(3)) {
+    while (list ($topicid_i, $title_i) = $result->fetch(3)) {
         $array_topic_module[$topicid_i] = $title_i;
-    }   
+    }
 }
 
 $sql = 'SELECT sourceid, title FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources ORDER BY weight ASC';
 $result = $db->query($sql);
 $array_source_module = array();
 $array_source_module[0] = $lang_module['sources_sl'];
-while (list($sourceid_i, $title_i) = $result->fetch(3)) {
+while (list ($sourceid_i, $title_i) = $result->fetch(3)) {
     $array_source_module[$sourceid_i] = $title_i;
 }
 
 $tdate = date('H|i', $rowcontent['publtime']);
 $publ_date = date('d/m/Y', $rowcontent['publtime']);
-list($phour, $pmin) = explode('|', $tdate);
+list ($phour, $pmin) = explode('|', $tdate);
 if ($rowcontent['exptime'] == 0) {
     $emin = $ehour = 0;
     $exp_date = '';
 } else {
     $exp_date = date('d/m/Y', $rowcontent['exptime']);
     $tdate = date('H|i', $rowcontent['exptime']);
-    list($ehour, $emin) = explode('|', $tdate);
+    list ($ehour, $emin) = explode('|', $tdate);
 }
 
 if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
@@ -870,7 +894,7 @@ if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
 if (empty($array_cat_check_content)) {
     $redirect = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cat';
     $contents = nv_theme_alert($lang_module['note_cat_title'], $lang_module['note_cat_content'], 'warning', $redirect, $lang_module['categories']);
-
+    
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
@@ -900,17 +924,18 @@ foreach ($global_array_cat as $catid_i => $array_value) {
         $array_cat = GetCatidInParent($catid_i);
         $check_show = array_intersect($array_cat, $array_cat_check_content);
     }
-    if (! empty($check_show)) {
+    if (!empty($check_show)) {
         $space = intval($array_value['lev']) * 30;
         $catiddisplay = (sizeof($array_catid_in_row) > 1 and (in_array($catid_i, $array_catid_in_row))) ? '' : ' display: none;';
         $temp = array(
             'catid' => $catid_i,
             'space' => $space,
             'title' => $array_value['title'],
-            'disabled' => (! in_array($catid_i, $array_cat_check_content)) ? ' disabled="disabled"' : '',
+            'disabled' => (!in_array($catid_i, $array_cat_check_content)) ? ' disabled="disabled"' : '',
             'checked' => (in_array($catid_i, $array_catid_in_row)) ? ' checked="checked"' : '',
             'catidchecked' => ($catid_i == $rowcontent['catid']) ? ' checked="checked"' : '',
-            'catiddisplay' => $catiddisplay );
+            'catiddisplay' => $catiddisplay
+        );
         $xtpl->assign('CATS', $temp);
         $xtpl->parse('main.catid');
     }
@@ -921,7 +946,7 @@ $checkcop = ($rowcontent['copyright']) ? ' checked="checked"' : '';
 $xtpl->assign('checkcop', $checkcop);
 
 // topic
-while (list($topicid_i, $title_i) = each($array_topic_module)) {
+while (list ($topicid_i, $title_i) = each($array_topic_module)) {
     $sl = ($topicid_i == $rowcontent['topicid']) ? ' selected="selected"' : '';
     $xtpl->assign('topicid', $topicid_i);
     $xtpl->assign('topic_title', $title_i);
@@ -930,7 +955,7 @@ while (list($topicid_i, $title_i) = each($array_topic_module)) {
 }
 
 // position images
-while (list($id_imgposition, $title_imgposition) = each($array_imgposition)) {
+while (list ($id_imgposition, $title_imgposition) = each($array_imgposition)) {
     $sl = ($id_imgposition == $rowcontent['imgposition']) ? ' selected="selected"' : '';
     $xtpl->assign('id_imgposition', $id_imgposition);
     $xtpl->assign('title_imgposition', $title_imgposition);
@@ -980,7 +1005,7 @@ if ($module_config[$module_name]['allowed_comm'] != '-1') {
 
 // source
 $select = '';
-while (list($sourceid_i, $source_title_i) = each($array_source_module)) {
+while (list ($sourceid_i, $source_title_i) = each($array_source_module)) {
     $source_sl = ($sourceid_i == $rowcontent['sourceid']) ? ' selected="selected"' : '';
     $select .= "<option value=\"" . $sourceid_i . "\" " . $source_sl . ">" . $source_title_i . "</option>\n";
 }
@@ -1005,12 +1030,16 @@ if ($has_editor) {
 $shtm = '';
 if (sizeof($array_block_cat_module)) {
     foreach ($array_block_cat_module as $bid_i => $bid_title) {
-        $xtpl->assign('BLOCKS', array( 'title' => $bid_title, 'bid' => $bid_i, 'checked' =>  in_array($bid_i, $id_block_content) ? 'checked="checked"' : '' ));
+        $xtpl->assign('BLOCKS', array(
+            'title' => $bid_title,
+            'bid' => $bid_i,
+            'checked' => in_array($bid_i, $id_block_content) ? 'checked="checked"' : ''
+        ));
         $xtpl->parse('main.block_cat.loop');
     }
     $xtpl->parse('main.block_cat');
 }
-if (! empty($rowcontent['keywords'])) {
+if (!empty($rowcontent['keywords'])) {
     $keywords_array = explode(',', $rowcontent['keywords']);
     foreach ($keywords_array as $keywords) {
         $xtpl->assign('KEYWORDS', $keywords);
@@ -1033,12 +1062,12 @@ $xtpl->assign('allowed_save_checked', $allowed_save_checked);
 $xtpl->assign('edit_bodytext', $edits);
 $xtpl->assign('edit_hometext', $editshometext);
 
-if (! empty($error)) {
+if (!empty($error)) {
     $xtpl->assign('error', implode('<br />', $error));
     $xtpl->parse('main.error');
 }
 
-if (defined('NV_IS_ADMIN_MODULE') or ! empty($array_pub_content)) {//toan quyen module
+if (defined('NV_IS_ADMIN_MODULE') or !empty($array_pub_content)) { //toan quyen module
     if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
         $xtpl->parse('main.status');
     } else {
@@ -1048,13 +1077,15 @@ if (defined('NV_IS_ADMIN_MODULE') or ! empty($array_pub_content)) {//toan quyen 
     //gioi hoan quyen
     if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
         $xtpl->parse('main.status');
-    } elseif (! empty($array_cat_pub_content)) {
+    } elseif (!empty($array_cat_pub_content)) {
         // neu co quyen dang bai
+        
 
         $xtpl->parse('main.status0');
     } else {
-        if (! empty($array_censor_content)) {
+        if (!empty($array_censor_content)) {
             // neu co quyen duyet bai thi
+            
 
             $xtpl->parse('main.status1.status0');
         }
@@ -1071,8 +1102,14 @@ $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_googleplus ORDER BY weight AS
 $_array = $db->query($sql)->fetchAll();
 if (sizeof($_array)) {
     $array_googleplus = array();
-    $array_googleplus[] = array( 'gid' => -1, 'title' => $lang_module['googleplus_1'] );
-    $array_googleplus[] = array( 'gid' => 0, 'title' => $lang_module['googleplus_0'] );
+    $array_googleplus[] = array(
+        'gid' => -1,
+        'title' => $lang_module['googleplus_1']
+    );
+    $array_googleplus[] = array(
+        'gid' => 0,
+        'title' => $lang_module['googleplus_0']
+    );
     foreach ($_array as $row) {
         $array_googleplus[] = $row;
     }
