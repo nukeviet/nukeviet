@@ -33,6 +33,20 @@ if (empty($row)) {
 $theme_site_array = $theme_mobile_array = array();
 $theme_array = scandir(NV_ROOTDIR . '/themes');
 
+$theme_mobile_default = array();
+$theme_mobile_default[''] = array(
+    'key' => '',
+    'title' => $lang_module['theme_mobiledefault']
+);
+$theme_mobile_default[':pcsite'] = array(
+    'key' => ':pcsite',
+    'title' => $lang_module['theme_mobile_bysite']
+);
+$theme_mobile_default[':pcmod'] = array(
+    'key' => ':pcmod',
+    'title' => $lang_module['theme_mobile_bymod']
+);
+
 foreach ($theme_array as $dir) {
     if (preg_match($global_config['check_theme'], $dir)) {
         if (file_exists(NV_ROOTDIR . '/themes/' . $dir . '/config.ini')) {
@@ -65,7 +79,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $custom_title = $nv_Request->get_title('custom_title', 'post', 1);
     $admin_title = $nv_Request->get_title('admin_title', 'post', 1);
     $theme = $nv_Request->get_title('theme', 'post', '', 1);
-    $mobile = $nv_Request->get_title('mobile', 'post', '', 1);
+    $mobile = $nv_Request->get_title('mobile', 'post', '', 0);
     $description = $nv_Request->get_title('description', 'post', '', 1);
     $description = nv_substr($description, 0, 255);
     $keywords = $nv_Request->get_title('keywords', 'post', '', 1);
@@ -76,7 +90,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $theme = '';
     }
 
-    if (! empty($mobile) and ! in_array($mobile, $theme_mobile_list)) {
+    if (! empty($mobile) and ! in_array($mobile, $theme_mobile_list) and !isset($theme_mobile_default[$mobile])) {
         $mobile = '';
     }
 
@@ -231,7 +245,7 @@ $data['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_
 $data['custom_title'] = $custom_title;
 $data['admin_title'] = $admin_title;
 $data['theme'] = array( $lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme );
-$data['mobile'] = array( $lang_module['mobile'], $lang_module['theme_default'], $theme_mobile_list, $mobile );
+$data['mobile'] = array( $lang_module['mobile'], $theme_mobile_default, $theme_mobile_list, $mobile );
 $data['description'] = $description;
 $data['keywords'] = $keywords;
 $data['mod_name'] = $mod;
@@ -257,9 +271,13 @@ foreach ($data['theme'][2] as $tm) {
     $xtpl->parse('main.theme');
 }
 
-if (! empty($data['mobile'][2])) {
+if (! empty($data['mobile'][2]) or ! empty($data['mobile'][1])) {
+    foreach ($data['mobile'][1] as $tm) {
+        $xtpl->assign('MOBILE', array( 'key' => $tm['key'], 'selected' => $tm['key'] == $data['mobile'][3] ? ' selected="selected"' : '', 'title' => $tm['title'] ));
+        $xtpl->parse('main.mobile.loop');
+    }
     foreach ($data['mobile'][2] as $tm) {
-        $xtpl->assign('MOBILE', array( 'key' => $tm, 'selected' => $tm == $data['mobile'][3] ? ' selected="selected"' : '' ));
+        $xtpl->assign('MOBILE', array( 'key' => $tm, 'selected' => $tm == $data['mobile'][3] ? ' selected="selected"' : '', 'title' => $tm ));
         $xtpl->parse('main.mobile.loop');
     }
 

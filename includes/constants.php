@@ -66,9 +66,6 @@ define('NV_OP_VARIABLE', 'op');
 //Ten thay the cho bien ngon ngu
 define('NV_LANG_VARIABLE', 'language');
 
-//Ten bien kiem tra lai mat khau admin
-define('NV_ADMINRELOGIN_VARIABLE', 'adminrelogin');
-
 //Do nen trang khi bat che do nen
 define('ZLIB_OUTPUT_COMPRESSION_LEVEL', 6);
 
@@ -116,9 +113,6 @@ define('NV_SEND_ERRORS_LIST', E_USER_ERROR);
 //Phan dau cua trang
 define('NV_FILEHEAD', "/**\n * @Project NUKEVIET 4.x\n * @Author VINADES.,JSC (contact@vinades.vn)\n * @Copyright (C) " . gmdate("Y") . " VINADES.,JSC. All rights reserved\n * @License GNU/GPL version 2 or any later version\n * @Createdate " . gmdate("D, d M Y H:i:s") . " GMT\n */");
 
-// Phien ban giao dien tu cao den thap - it nhat phai co hai kieu mac dinh khong duoc it hon
-define('NV_THEME_TYPE', 'r,d,m');
-
 // Vui long khong thay doi gia tri nay
 define('NUKEVIET_STORE_APIURL', 'https://api.nukeviet.vn/store/');
 
@@ -144,6 +138,7 @@ define('BROWSER_IPHONE', 'iPhone');
 define('BROWSER_IPOD', 'iPod');
 define('BROWSER_IPAD', 'iPad');
 define('BROWSER_CHROME', 'Chrome');
+define('BROWSER_COCCOC', 'Coc Coc');
 define('BROWSER_ANDROID', 'Android');
 define('BROWSER_GOOGLEBOT', 'GoogleBot');
 define('BROWSER_YAHOOSLURP', 'Yahoo! Slurp');

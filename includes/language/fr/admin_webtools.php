@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
@@ -72,6 +72,7 @@ $lang_module['update_manual_delete'] = 'Merci de supprimer manuellement';
 $lang_module['error_unknow'] = 'Erreur non-déterminé';
 $lang_module['get_update'] = 'Mettre à jour le système';
 $lang_module['get_update_error_file_download'] = 'Téléchargement du paquage de mise a jour échoué';
+$lang_module['get_update_error_file_download1'] = 'Vous pouvez essayer l\'autre sous la mise à jour d\'orientation ici: <a href="%1$s" target="_blank">%1$s</a>';
 $lang_module['get_update_ok'] = 'Le paquage assuré, cliquez <a href="%s">Ici</a> pour déballer le paquage';
 $lang_module['get_update_warning'] = 'Ce plaquage peut menacer votre site Web en cas d\'erreur. Sauvegardez votre site avant de l\'utiliser, cliquez <a href="%s">Ici</a> pour déballer le paquage';
 $lang_module['get_update_warning_permission_folder'] = 'Erreur de ne pas pourvoir créer le dossier, désactivez le mode sans échec';

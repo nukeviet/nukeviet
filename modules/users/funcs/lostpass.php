@@ -57,7 +57,7 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 }
 
 $data = array();
-$data['checkss'] = md5($client_info['session_id'] . $global_config['sitekey']);
+$data['checkss'] = NV_CHECK_SESSION;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 if ($checkss == $data['checkss']) {

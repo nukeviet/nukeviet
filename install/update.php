@@ -226,11 +226,11 @@ class NvUpdate
             echo $this->template($contents);
             include NV_ROOTDIR . '/includes/footer.php';
         }
-        
+
         //Resets the contents of the opcode cache
         if (function_exists('opcache_reset')) {
             opcache_reset();
-        }        
+        }
     }
 
     /**
@@ -337,12 +337,12 @@ class NvUpdate
                 $logs_status[] = true;
             }
         }
-        
+
         //Resets the contents of the opcode cache
         if (function_exists('opcache_reset')) {
             opcache_reset();
         }
-        
+
         // Luu nhat ki
         $this->log($nv_update_config, $logs_message, $logs_status);
 
@@ -431,7 +431,7 @@ class NvUpdate
         $xtpl->assign('DATA', $array);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
-        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5($global_config['sitekey'] . session_id()));
+        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . NV_CHECK_SESSION);
         $xtpl->assign('URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo');
 
         $xtpl->assign('RELEASE_DATE', ! empty($this->config['release_date']) ? nv_date('d/m/Y H:i:s', $this->config['release_date']) : 'N/A');
@@ -474,8 +474,6 @@ class NvUpdate
         if ($substep == 1) {
             // Back up cac file de phong bat trac
 
-            $checksess = md5($global_config['sitekey'] . session_id());
-
             if ($array['data_backuped']) {
                 // Thong bao da backup CSDL vao luc
 
@@ -486,7 +484,7 @@ class NvUpdate
             if ($array['is_data_backup']) {
                 // Cho phep backup CSDL
 
-                $xtpl->assign('URL_DUMP_DB_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&amp;substep=' . $substep . '&amp;dump&amp;checksess=' . $checksess);
+                $xtpl->assign('URL_DUMP_DB_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&amp;substep=' . $substep . '&amp;dump&amp;checksess=' . NV_CHECK_SESSION);
                 $xtpl->parse('main.step1.is_data_backup');
             } else {
                 // Thong bao khong cho backup CSDL nua
@@ -504,7 +502,7 @@ class NvUpdate
             if ($array['is_file_backup']) {
                 // Cho phep backup CODE
 
-                $xtpl->assign('URL_DUMP_FILE_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&substep=' . $substep . '&amp;dumpfile&amp;checksess=' . $checksess);
+                $xtpl->assign('URL_DUMP_FILE_BACKUP', NV_BASE_SITEURL . 'install/update.php?step=' . $this->config['step'] . '&substep=' . $substep . '&amp;dumpfile&amp;checksess=' . NV_CHECK_SESSION);
                 $xtpl->parse('main.step1.is_file_backup');
             }
 
@@ -563,8 +561,8 @@ class NvUpdate
 
                 if (! empty($array['stopprocess'])) {
                     // Dung cong viec do loi
-
-                    $xtpl->assign('ERROR_MESSAGE', sprintf($this->lang['update_task_error_message'], $array['stopprocess']['title']));
+                    global $nv_update_config;
+                    $xtpl->assign('ERROR_MESSAGE', sprintf($this->lang['update_task_error_message'], $array['stopprocess']['title'], $nv_update_config['support_website']));
                     $xtpl->parse('main.step3.data.errorProcess');
                 } elseif ($array['AllPassed'] == true) {
                     // Hoan tat cong viec va chuyen sang buoc tiep theo
@@ -656,7 +654,7 @@ class NvUpdate
         $xtpl->assign('DATA', $array);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
-        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5($global_config['sitekey'] . session_id()));
+        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . NV_CHECK_SESSION);
         $xtpl->assign('URL_GOHOME', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA, true));
         $xtpl->assign('URL_GOADMIN', NV_BASE_ADMINURL);
 
@@ -684,7 +682,7 @@ class NvUpdate
         $xtpl->assign('CONFIG', $this->config);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 
-        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . md5($global_config['sitekey'] . session_id()));
+        $xtpl->assign('URL_DELETE', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=webtools&amp;' . NV_OP_VARIABLE . '=deleteupdate&amp;checksess=' . NV_CHECK_SESSION);
         $xtpl->assign('URL_RETURN', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo');
 
         $xtpl->parse('main');
@@ -738,7 +736,7 @@ class NvUpdate
             }
 
             $mod['class'] = $i++ % 2 ? 'specalt' : 'spec';
-            $mod['time'] = nv_date('d/m/y H:i', $mod['time']);
+            $mod['time'] = $mod['date'] ? nv_date('d/m/y H:i', strtotime($mod['date'])) : 'N/A';
 
             $xtpl->assign('ROW', $mod);
             $xtpl->parse('module_info.loop');
@@ -800,7 +798,7 @@ class NvUpdate
             $this->set_data_log($nv_update_config['updatelog']);
         }
 
-        $file_log = 'log-update-' . nv_date('H-i-s-d-m-Y', $nv_update_config['updatelog']['starttime']) . '-' . $client_info['session_id'] . '.log';
+        $file_log = 'log-update-' . nv_date('H-i-s-d-m-Y', $nv_update_config['updatelog']['starttime']) . '-' . NV_CHECK_SESSION . '.log';
 
         $time = nv_date('H:i:s_d-m-Y');
 
@@ -838,10 +836,10 @@ class NvUpdate
         $xtpl->parse('main');
         return $xtpl->text('main');
     }
-    
+
     /**
      * NvUpdate::trigger_error()
-     * 
+     *
      * @param mixed $message
      * @return void
      */
@@ -951,7 +949,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
         // Backup CSDL
         if ($nv_Request->isset_request('dump', 'get')) {
             $checksess = $nv_Request->get_title('checksess', 'get', '');
-            if ($checksess != md5($global_config['sitekey'] . session_id())) {
+            if ($checksess != NV_CHECK_SESSION) {
                 die('Error!!!');
             }
 
@@ -964,7 +962,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
             $file_ext = ($contents['savetype'] == 'sql') ? 'sql' : 'sql.gz';
             $log_dir = NV_ROOTDIR . '/' . NV_LOGS_DIR . '/dump_backup';
 
-            $contents['filename'] = $log_dir . '/' . md5(nv_genpass(10) . $client_info['session_id']) . '_' . $current_day . '.' . $file_ext;
+            $contents['filename'] = $log_dir . '/' . md5(nv_genpass(10) . NV_CHECK_SESSION) . '_' . $current_day . '.' . $file_ext;
 
             if (! file_exists($contents['filename'])) {
                 $contents['tables'] = array();
@@ -992,7 +990,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                     $nv_update_config['updatelog']['data_backuped'] = NV_CURRENTTIME;
                     $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                    die($lang_module['update_dump_ok'] . ' ' . nv_convertfromBytes($dump[1]) . '<br /><a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . "=database&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file . "&amp;checkss=" . md5($file . $client_info['session_id'] . $global_config['sitekey']) . '" title="' . $lang_module['update_dump_download'] . '">' . $lang_module['update_dump_download'] . '</a>');
+                    die($lang_module['update_dump_ok'] . ' ' . nv_convertfromBytes($dump[1]) . '<br /><a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . "=database&amp;" . NV_OP_VARIABLE . "=getfile&amp;filename=" . $file . "&amp;checkss=" . md5($file . NV_CHECK_SESSION) . '" title="' . $lang_module['update_dump_download'] . '">' . $lang_module['update_dump_download'] . '</a>');
                 }
             } else {
                 die($lang_module['update_dump_exist']);
@@ -1002,7 +1000,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
         // Download CODE thay doi
         if ($nv_Request->isset_request('downfile', 'get')) {
             $checksess = $nv_Request->get_title('checksess', 'get', '');
-            if ($checksess != md5($global_config['sitekey'] . session_id())) {
+            if ($checksess != NV_CHECK_SESSION) {
                 die('Error!!!');
             }
 
@@ -1046,7 +1044,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
             }
 
             if (! empty($zip_file_backup)) {
-                $file_src = 'backup_update_' . date('Y_m_d') . '_' . md5($global_config['sitekey'] . session_id()) . '.zip';
+                $file_src = 'backup_update_' . date('Y_m_d') . '_' . NV_CHECK_SESSION . '.zip';
 
                 // Kiem tra file ton tai
                 $filename2 = $file_src;
@@ -1072,7 +1070,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                     $nv_update_config['updatelog']['file_backuped'] = NV_CURRENTTIME;
                     $NvUpdate->set_data_log($nv_update_config['updatelog']);
 
-                    die('<a href="' . NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=4&downfile=' . $filename2 . '&checksess=' . md5($global_config['sitekey'] . session_id()) . '" title="' . $lang_module['update_log_dump_file_down'] . '">' . $lang_module['update_file_backup_ok'] . '</a>');
+                    die('<a href="' . NV_BASE_SITEURL . 'install/update.php?step=2&amp;substep=4&downfile=' . $filename2 . '&checksess=' . NV_CHECK_SESSION . '" title="' . $lang_module['update_log_dump_file_down'] . '">' . $lang_module['update_file_backup_ok'] . '</a>');
                 }
             }
         }
@@ -1712,7 +1710,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
 
         if ($type == 'ver') {
             $version = nv_geVersion(0);
-            
+
             if ($version === false or is_string($version)) {
                 $NvUpdate->trigger_error($lang_module['update_error_check_version_sys']);
             }
@@ -1733,9 +1731,9 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
             if ($XML_exts === false or is_string($XML_exts)) {
                 $NvUpdate->trigger_error($lang_module['update_error_check_version_sys']);
             }
-            
+
             $XML_exts = $XML_exts->xpath('extension');
-            
+
             $exts = array();
             $i = 0;
             foreach ($XML_exts as $extname => $values) {
@@ -1756,10 +1754,10 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                     'updateable' => array(),
                     'origin' => (( string ) $values->origin) == 'true' ? true : false,
                 );
-                
+
                 // Xu ly update
                 $updateables = $values->xpath('updateable/upds/upd');
-                
+
                 if (! empty($updateables)) {
                     foreach ($updateables as $updateable) {
                         $exts[$i]['updateable'][] = array(
@@ -1769,22 +1767,61 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
                         );
                     }
                 }
-                
+
                 $i ++;
                 unset($updateables, $updateable);
             }
 
             $NvUpdate->module_info($exts);
         } elseif ($type == 'module') {
-            $exts = nv_getExtVersion(0);
-            $exts = nv_object2array($exts);
-            $exts = $exts['module'];
+            $XML_exts = nv_getExtVersion(0);
+
+            if ($XML_exts === false or is_string($XML_exts)) {
+                $NvUpdate->trigger_error($lang_module['update_error_check_version_ext']);
+            }
+
+            $XML_exts = $XML_exts->xpath('extension');
+
             $onlineModules = array();
-            foreach ($exts as $m) {
-                $name = array_shift($m);
-                $onlineModules[$name] = $m;
-                unset($onlineModules[$name]['date']);
-                $onlineModules[$name]['pubtime'] = strtotime($m['date']);
+            foreach ($XML_exts as $extname => $values) {
+                $exts_type = trim((string)$values->type);
+                $exts_name = trim((string)$values->name);
+                if ($exts_type == 'module') {
+                    $onlineModules[$exts_name] = array(
+                        'id' => (int)$values->id,
+                        'type' => (string)$values->type,
+                        'name' => (string)$values->name,
+                        'version' => (string)$values->version,
+                        'date' => (string)$values->date,
+                        'new_version' => (string)$values->new_version,
+                        'new_date' => (string)$values->new_date,
+                        'author' => (string)$values->author,
+                        'license' => (string)$values->license,
+                        'mode' => (string)$values->mode,
+                        'message' => (string)$values->message,
+                        'link' => (string)$values->link,
+                        'support' => (string)$values->support,
+                        'updateable' => array(),
+                        'origin' => ((string)$values->origin) == 'true' ? true : false,
+                    );
+
+                    $onlineModules[$exts_name]['pubtime'] = strtotime($onlineModules[$exts_name]['date']);
+
+                    // Xu ly update
+                    $updateables = $values->xpath('updateable/upds/upd');
+
+                    if (!empty($updateables)) {
+                        foreach ($updateables as $updateable) {
+                            $onlineModules[$exts_name]['updateable'][] = array(
+                                'fid' => (string)$updateable->upd_fid,
+                                'old' => explode(',', (string)$updateable->upd_old),
+                                'new' => (string)$updateable->upd_new,
+                            );
+                        }
+                    }
+
+                    unset($updateables, $updateable);
+                }
             }
 
             $NvUpdate->module_com_info($onlineModules);
@@ -1794,7 +1831,7 @@ if ($nv_update_config['step'] == 1) {// Kiem tra phien ban va tuong thich du lie
     } else {
         // Xoa toan bo cache
         $nv_Cache->delAll();
-        
+
         // Tao lai file cau hinh
         nv_save_file_config_global();
     }

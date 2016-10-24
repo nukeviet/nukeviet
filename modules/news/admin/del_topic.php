@@ -26,7 +26,7 @@ if ($topicid > 0) {
     $_rows = $query->fetchAll();
     $check_rows = sizeof($_rows);
 
-    if ($check_rows > 0 and $checkss == md5($topicid . session_id() . $global_config['sitekey'])) {
+    if ($check_rows > 0 and $checkss == md5($topicid . NV_CHECK_SESSION)) {
         foreach ($_rows as $row) {
             $arr_catid = explode(',', $row['listcatid']);
             foreach ($arr_catid as $catid_i) {
@@ -36,7 +36,7 @@ if ($topicid > 0) {
         }
         $check_del_topicid = true;
     } elseif ($check_rows > 0) {
-        $contents = 'ERR_ROWS_' . $topicid . '_' . md5($topicid . session_id() . $global_config['sitekey']) . '_' . sprintf($lang_module['deltopic_msg_rows'], $check_rows);
+        $contents = 'ERR_ROWS_' . $topicid . '_' . md5($topicid . NV_CHECK_SESSION) . '_' . sprintf($lang_module['deltopic_msg_rows'], $check_rows);
     } else {
         $check_del_topicid = true;
     }

@@ -29,7 +29,7 @@ while ($row = $result->fetch()) {
         'question' => $row['question'],
         'totalvote' => $totalvote,
         'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;vid=' . $row['vid'],
-        'checksess' => md5($row['vid'] . session_id())
+        'checksess' => md5($row['vid'] . NV_CHECK_SESSION)
     ));
 
     $xtpl->parse('main.loop');

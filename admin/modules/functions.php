@@ -140,7 +140,7 @@ function nv_setup_block_module($mod, $func_id = 0)
  */
 function nv_setup_data_module($lang, $module_name, $sample = 0)
 {
-    global $nv_Cache, $db, $db_config, $global_config;
+    global $nv_Cache, $db, $db_config, $global_config, $install_lang;
 
     $return = 'NO_' . $module_name;
 

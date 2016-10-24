@@ -76,6 +76,7 @@ class Browser
     const BROWSER_IPOD = 'ipod'; // http://apple.com
     const BROWSER_IPAD = 'ipad'; // http://apple.com
     const BROWSER_CHROME = 'chrome'; // http://www.google.com/chrome
+    const BROWSER_COCCOC = 'coccoc'; // https://coccoc.com
     const BROWSER_ANDROID = 'android'; // http://www.android.com/
     const BROWSER_GOOGLEBOT = 'googlebot'; // http://en.wikipedia.org/wiki/Googlebot
     const BROWSER_SLURP = 'yahooslurp'; // http://en.wikipedia.org/wiki/Yahoo!_Slurp
@@ -114,6 +115,7 @@ class Browser
     const BROWSER_IPOD_NAME = 'iPod'; // http://apple.com
     const BROWSER_IPAD_NAME = 'iPad'; // http://apple.com
     const BROWSER_CHROME_NAME = 'Chrome'; // http://www.google.com/chrome
+    const BROWSER_COCCOC_NAME = 'Coc Coc'; // https://coccoc.com
     const BROWSER_ANDROID_NAME = 'Android'; // http://www.android.com/
     const BROWSER_GOOGLEBOT_NAME = 'GoogleBot'; // http://en.wikipedia.org/wiki/Googlebot
     const BROWSER_SLURP_NAME = 'Yahoo! Slurp'; // http://en.wikipedia.org/wiki/Yahoo!_Slurp
@@ -792,7 +794,13 @@ class Browser
             if (isset($aresult[1])) {
                 $aversion = explode(' ', $aresult[1]);
                 $this->setVersion($aversion[0]);
-                $this->setBrowser(self::BROWSER_CHROME, self::BROWSER_CHROME_NAME);
+                if (stripos($this->_agent, 'coc_coc') !== false) {
+                    $this->setBrowser(self::BROWSER_COCCOC, self::BROWSER_COCCOC_NAME);
+                }
+                else
+                {
+                    $this->setBrowser(self::BROWSER_CHROME, self::BROWSER_CHROME_NAME);
+                }
                 //Chrome on Android
                 if (stripos($this->_agent, 'Android') !== false) {
                     if (stripos($this->_agent, 'Mobile') !== false) {

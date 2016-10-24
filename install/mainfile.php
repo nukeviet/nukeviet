@@ -47,7 +47,7 @@ require_once realpath(NV_ROOTDIR . '/install/config.php');
 $global_config['my_domains'] = $_SERVER['SERVER_NAME'];
 
 // Xac dinh cac tags cho phep
-$global_config['allowed_html_tags'] = array_map("trim", explode(',', NV_ALLOWED_HTML_TAGS));
+$global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
 
 //Xac dinh IP cua client
 $ips = new NukeViet\Core\Ips();
@@ -89,7 +89,7 @@ require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
-$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map("trim", explode(',', NV_ALLOW_REQUEST_MODS)) : "request";
+$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map('trim', explode(',', NV_ALLOW_REQUEST_MODS)) : "request";
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim(NV_REQUEST_DEFAULT_MODE) : 'request';
 
 $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
@@ -119,8 +119,12 @@ define('NV_EOL', (strtoupper(substr(PHP_OS, 0, 3) == 'WIN') ? "\r\n" : (strtoupp
 //Ngat dong
 define('NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR);
 //Xac dinh duong dan thuc den thu muc upload
+
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_BASE_SITEURL));
 //Hau to cua file cache
+
+define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
+// Kiem tra session cua nguoi dung
 
 //Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
@@ -148,8 +152,7 @@ $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_
 //trang dang xem
 $client_info['agent'] = $nv_Request->user_agent;
 //HTTP_USER_AGENT
-$client_info['session_id'] = $nv_Request->session_id;
-//ten cua session
+
 $global_config['sitekey'] = md5($_SERVER['SERVER_NAME'] . NV_ROOTDIR . $client_info['session_id']);
 
 //Chan truy cap neu HTTP_USER_AGENT == 'none'

@@ -10,7 +10,7 @@
 */
 
 if (! defined('NV_MAINFILE')) {
-	die( 'Stop!!!' );
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -165,6 +165,7 @@ $lang_module['yahoo_openid_login'] = 'Yahoo\'s account';
 $lang_module['canceled_authentication'] = 'You cancelled access by OpenID';
 $lang_module['not_logged_in'] = 'You still not login by OpenID';
 $lang_module['logged_in_failed'] = 'OpenID server doesn\'t provide some required information to login to our website';
+$lang_module['logged_no_email'] = 'Unfortunately, this app does not offer e-mail, please check that you have declared for the application email then try again';
 $lang_module['openid_confirm_failed'] = 'You provided wrong infomation';
 $lang_module['openid_confirm_info'] = 'Your OpenID can be use on this site,<br />but email $s exists.<br />If you are owner of account using this email,<br />please provide password.<br />';
 $lang_module['openid_active_info'] = 'Welcom %1$s,<br /><br />Your account at website %2$s wait to activate. To activate it, click link below:<br /><br />URL: <a href="%3$s">%3$s</a><br /><br />Information:<br /><br />Account:%4$s<br />Email: %5$s<br />OpenID: %6$s<br /><br />Activate link will be expired at %8$s<br /><br />This is automatic sent email from website %2$s. If you doesn\'t know about it\'s content, please delete it.<br /><br /><br /><br />Site admin';
@@ -211,8 +212,6 @@ $lang_module['openid_add'] = 'Add a new OpenID';
 $lang_module['no_act'] = 'This function is currently not active';
 $lang_module['account_change_mail_ok'] = 'Email adress has been confirmed sucessfully';
 $lang_module['account_change_mail_error'] = 'There\'s an error in process of confirming email adress, please contact website administrator for more instruction.';
-$lang_module['allow_admin'] = 'This feature allows administrators to limit unauthorized access.';
-$lang_module['allow_user'] = 'This feature is limited to members are allowed to access.';
 $lang_module['listusers'] = 'Members List';
 $lang_module['listusers_sort_by'] = 'sort by %s, %s';
 $lang_module['listusers_sort_by_username'] = 'Username';
@@ -322,3 +321,25 @@ $lang_module['title'] = 'Group name';
 $lang_module['add_time'] = 'Start time';
 $lang_module['exp_time'] = 'End time';
 $lang_module['users'] = 'User';
+$lang_module['addusers'] = 'Add new user';
+$lang_module['del_user_err'] = 'Delete user failed';
+$lang_module['user_waiting'] = 'User waiting';
+$lang_module['firstname_lastname'] = 'Full name';
+$lang_module['search'] = 'Search users';
+$lang_module['reset'] = 'Reset';
+$lang_module['username'] = 'Username';
+$lang_module['user_id'] = 'ID';
+$lang_module['active'] = 'Active';
+$lang_module['active_users'] = 'Active users';
+$lang_module['actived_users'] = 'The user has been successfully activated!';
+$lang_module['not_active'] = 'Can\'t active user, please check again!';
+$lang_module['adduser_register'] = 'User has been created';
+$lang_module['adduser_register_info'] = 'Hi %1$s,<br  /><br  />Your account at website %2$s activated. Your login information:<br  /><br  />URL: <a href="%3$s">%3$s</a><br  />Account: %4$s<br  />This is email automatic sending from website %2$s.<br  />Site administrator';
+$lang_module['noresult'] = 'No results matching your request';
+$lang_module['STT'] = 'Order';
+$lang_module['min_search'] = 'Please enter more than %s characters';
+$lang_module['no_premission_pass'] = 'You are not allowed to change the member password!';
+$lang_module['info_user'] = 'Complete the form below to add new user';
+$lang_module['note_remove_leader'] = 'You can not remove yourself from the group!';
+$lang_module['not_del_user'] = 'You can\'t delete this user because user is member of other group. You can only remove this user from your group';
+$lang_module['UserNotInGroup'] = 'This user not in your group';

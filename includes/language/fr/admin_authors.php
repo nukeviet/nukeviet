@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -135,7 +135,6 @@ $lang_module['rule_user'] = 'Utiliser uniquement les caractères a-zA-Z0-9_- pou
 $lang_module['rule_pass'] = 'Utiliser uniquement les caractères a-zA-Z0-9_- pour le mot de passe';
 $lang_module['spadmin_add_admin'] = 'Autoriser l\'administrateur général de changer les droits des administrateurs de module';
 $lang_module['authors_detail_main'] = 'Afficher les détails du compte de l\'administrateur';
-$lang_module['adminrelogin_max'] = 'Nombre de fois de re-saisir si vous avez mal tapé après système va licencier votre droit d\'admin et vous retourne à la page principale';
 $lang_module['admin_check_pass_time'] = 'Le temps pour vérifier le mot de passe si l\'admin n\'utilise pas navigateur';
 $lang_module['add_user'] = 'Désigner un utilisateur';
 $lang_module['add_select'] = 'Sélectionner';

@@ -1,6 +1,31 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
+NUKEVIET 4.0.29 Final
+- Requires PHP 5.5 or later
+- PHPMailer v6.0
+- Endroid/qrcode v1.6.5
+- CKEditor v4.5.9
+- Config allow theme type 
+- Update theme default
+- Update theme admin default
+- Update Memcache class
+- Update Request class
+- Update DB class
+- Module upload: fix download image
+- Fix update, upgrade system and extentions
+- Fix check update, auto update
+- Module users: 
+	Add feature for group's leader (creat user, delete user, accept user, delete user, change password), 
+	Update theme redirect login, 
+	Update facebook login
+	Change rule for view list users
+	Remove Admin Relogin
+- Module extensions: Fix download file
+- Add more options for module's theme mobile
+- Support statisics for CocCoc browser
+- Module news: Optimize database, fix sample data
+
 NUKEVIET 4.0.28
 - Fix set tollower meta-tag name
 - Update javascript to lastest version: lazyload 1.9.7, Jcop 2.0.4, Select2 4.0.2, jquery-treeview v1.4.2, jquery.imgpreload 1.6.2, jquery.flash v1.3.3, jquery.flash v1.3.3, jquery-ui v1.12.0, jQuery v2.2.3
@@ -209,7 +234,7 @@ CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (1850 commits: from commi
 	+ Support Vietnamese domain name.
 	+ Hosting CDN for javascript, css
 	+ Configue Vietnamese Keyboard (If site installed Vietnamese language.
-	+ Encrypt passwords of FPT account, Account mail SMTP.
+	+ Encrypt passwords of FTP account, Account mail SMTP.
 	+ Many values at file /includes/constants.php will be configue in admin control panel.
 
 	+ Add IPV6 library to detected coutry by IPV6.

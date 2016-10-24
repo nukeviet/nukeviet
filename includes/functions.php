@@ -582,7 +582,7 @@ function nv_user_in_groups($groups_view)
         return true;
     } elseif (defined('NV_IS_USER')) {
         global $user_info;
-        
+
         if (in_array(4, $groups_view) and (empty($user_info['in_groups']) or !in_array(7, $user_info['in_groups']))) {
             // User with no group or not in new users groups
             return true;
@@ -1095,7 +1095,7 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
         $mail->Body = $message;
         $mail->AltBody = strip_tags($message);
         $mail->IsHTML(true);
-        
+
         if($AddEmbeddedImage) {
             $mail->AddEmbeddedImage(NV_ROOTDIR . '/' . $global_config['site_logo'], 'sitelogo', basename(NV_ROOTDIR . '/' . $global_config['site_logo']));
         }
@@ -1133,9 +1133,10 @@ function nv_sendmail($from, $to, $subject, $message, $files = '', $AddEmbeddedIm
  * @param bool $onclick
  * @param string $js_func_name
  * @param string $containerid
+ * @param bool $full_theme
  * @return
  */
-function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page')
+function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevnext_text = true, $onclick = false, $js_func_name = 'nv_urldecode_ajax', $containerid = 'generate_page', $full_theme = true)
 {
     global $lang_global;
 
@@ -1219,6 +1220,10 @@ function nv_generate_page($base_url, $num_items, $per_page, $on_page, $add_prevn
         }
     }
 
+    if ($full_theme !== true) {
+        return $page_string;
+    }
+
     return '<ul class="pagination">' . $page_string . '</ul>';
 }
 
@@ -1282,7 +1287,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
         } else {
             $page_string .= '<li class="disabled"><span>...</span></li>';
         }
-        
+
         $init_page_min = ($total_pages - $on_page > 3) ? $total_pages : $total_pages - 1;
         for ($i = $init_page_min; $i <= $total_pages; ++$i) {
             if ($i == $on_page) {
@@ -1382,7 +1387,7 @@ function nv_is_url($url)
         return false;
     }
 
-    if (isset($parts['path']) and ! preg_match('/^[0-9A-Za-z\/\_\.\@\~\-\%\\s]*$/', $parts['path'])) {
+    if (isset($parts['path']) and ! preg_match('/^[0-9A-Za-z\/\_\.\@\~\:\-\%\\s]*$/', $parts['path'])) {
         return false;
     }
 
@@ -1641,7 +1646,7 @@ function nv_site_mods()
                     $user_ops[] = 'active';
                 }
             }
-            if (($global_config['whoviewuser'] == 2 and defined('NV_IS_ADMIN')) or ($global_config['whoviewuser'] == 1 and defined('NV_IS_USER')) or $global_config['whoviewuser'] == 0) {
+            if (nv_user_in_groups($global_config['whoviewuser'])) {
                 $user_ops[] = 'memberlist';
             }
             if (defined('NV_OPENID_ALLOWED')) {
@@ -1770,9 +1775,8 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
  */
 function nv_redirect_encrypt($url)
 {
-    global $global_config, $crypt, $client_info;
-    $key = md5($global_config['sitekey'] . $client_info['session_id']);
-    return nv_base64_encode($crypt->aes_encrypt($url, $key));
+    global $crypt;
+    return nv_base64_encode($crypt->aes_encrypt($url, NV_CHECK_SESSION));
 }
 
 /**
@@ -1785,8 +1789,6 @@ function nv_redirect_encrypt($url)
  */
 function nv_redirect_decrypt($string, $insite = true)
 {
-    global $global_config, $crypt, $client_info;
-
     if (empty($string)) {
         return '';
     }
@@ -1800,7 +1802,8 @@ function nv_redirect_decrypt($string, $insite = true)
         return '';
     }
 
-    $url = $crypt->aes_decrypt($string, md5($global_config['sitekey'] . $client_info['session_id']));
+    global $crypt;
+    $url = $crypt->aes_decrypt($string, NV_CHECK_SESSION);
     if (empty($url)) {
         return '';
     }

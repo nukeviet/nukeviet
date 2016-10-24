@@ -511,7 +511,7 @@ function nv_show_sources_list()
     global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $nv_Request, $module_file, $global_config;
 
     $num = $db_slave->query('SELECT COUNT(*) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources')->fetchColumn();
-    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_data . '&amp;' . NV_OP_VARIABLE . '=sources';
+    $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sources';
     $num_items = ($num > 1) ? $num : 1;
     $per_page = 20;
     $page = $nv_Request->get_int('page', 'get', 1);
@@ -534,7 +534,7 @@ function nv_show_sources_list()
                 'sourceid' => $row['sourceid'],
                 'title' => $row['title'],
                 'link' => $row['link'],
-                'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sources&amp;sourceid=' . $row['sourceid'] . '#edit'
+                'url_edit' => $base_url . '&amp;sourceid=' . $row['sourceid'] . '#edit'
             ));
 
             for ($i = 1; $i <= $num; ++$i) {

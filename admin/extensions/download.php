@@ -34,7 +34,7 @@ $request['mode'] = 'download';
 if (empty($request['id']) or empty($request['fid']) or ! isset($array['tid'])) {
     $contents = "ERR|" . $lang_module['download_error_preparam'];
 } else {
-    $filename = NV_TEMPNAM_PREFIX . 'auto_' . md5($global_config['sitekey'] . session_id()) . '.zip';
+    $filename = NV_TEMPNAM_PREFIX . 'auto_' . NV_CHECK_SESSION . '.zip';
 
     $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
 
@@ -45,6 +45,7 @@ if (empty($request['id']) or empty($request['fid']) or ! isset($array['tid'])) {
         'stream' => true,
         'filename' => NV_ROOTDIR . '/' . NV_TEMP_DIR . '/' . $filename,
         'body' => $request,
+        'timeout' => 0
     );
 
     // Delete temp file if exists
@@ -56,7 +57,7 @@ if (empty($request['id']) or empty($request['fid']) or ! isset($array['tid'])) {
 
     if (! empty(NukeViet\Http\Http::$error)) {
         $contents = "ERR|" . nv_http_get_lang(NukeViet\Http\Http::$error);
-    } elseif (empty($array['filename']) or ! file_exists($array['filename'])) {
+    } elseif (empty($array['filename']) or ! file_exists($array['filename']) or filesize($array['filename']) <= 0) {
         $contents = "ERR|" . $lang_module['download_error_save'];
     } else {
         $contents = 'OK|' . $filename;
