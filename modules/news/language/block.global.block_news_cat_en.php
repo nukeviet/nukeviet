@@ -21,6 +21,7 @@ $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['catid'] = 'Category';
 $lang_block['numrow'] = 'Number aricle';
+$lang_block['title_length'] = 'Title length';
 $lang_block['type'] = 'Dipslay type';
 $lang_block['showtooltip'] = 'Dipslay tooltip';
 $lang_block['tooltip_position'] = 'Position';
