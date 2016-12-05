@@ -220,6 +220,7 @@ $(function() {
 	    field: '#password2',
 	    control: '#methods'
 	});
+	control_theme_groups();
 });
 //]]>
 </script>
