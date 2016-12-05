@@ -160,7 +160,7 @@ if (isset($array_op[1])) {
     $viewcat = $module_config[$module_name]['indexfile'];
 
     if ($viewcat != 'viewcat_main_left' and $viewcat != 'viewcat_main_bottom') {
-        $viewcat == 'viewcat_main_right';
+        $viewcat = 'viewcat_main_right';
     }
 
     $contents = viewsubcat_main($viewcat, $array_cat);
