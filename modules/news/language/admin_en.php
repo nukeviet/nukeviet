@@ -167,6 +167,7 @@ $lang_module['content_inhome'] = 'Show on homepage';
 $lang_module['content_allowed_comm'] = 'Allow comment';
 $lang_module['content_note_comm'] = 'Function currently config in Management module comment';
 $lang_module['content_allowed_rating'] = 'Allow ratings';
+$lang_module['content_external_link'] = 'Use external link';
 $lang_module['allowed_rating_point'] = 'Showing reviews on google if article have points';
 $lang_module['no_allowed_rating'] = 'No display';
 $lang_module['content_allowed_send'] = 'Allow sending';

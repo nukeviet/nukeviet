@@ -20,10 +20,10 @@
 		<!-- END: block_topcat -->
 		<div class="panel-body">
 			<!-- BEGIN: image -->
-			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT}" src="{HOMEIMG}" width="{IMGWIDTH}" class="img-thumbnail pull-left imghome" /></a>
+			<a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}><img alt="{HOMEIMGALT}" src="{HOMEIMG}" width="{IMGWIDTH}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
 			<h3>
-				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+				<a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}>{CONTENT.title}</a>
 				<!-- BEGIN: newday -->
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
@@ -48,7 +48,7 @@
 			<ul class="related">
 				<!-- BEGIN: loop -->
 				<li class="{CLASS}">
-					<a class="show h4" href="{OTHER.link}" <!-- BEGIN: tooltip -->data-content="{OTHER.hometext_clean}" data-img="{OTHER.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{OTHER.title}">{OTHER.title}</a>
+					<a class="show h4" href="{OTHER.link}" {OTHER.target_blank} <!-- BEGIN: tooltip -->data-content="{OTHER.hometext_clean}" data-img="{OTHER.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{OTHER.title}">{OTHER.title}</a>
 				</li>
 				<!-- END: loop -->
 			</ul>

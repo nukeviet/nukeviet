@@ -185,6 +185,7 @@ $lang_module['content_admin'] = 'Người tạo';
 $lang_module['content_author'] = 'Tác giả bài viết';
 $lang_module['content_sourceid'] = 'Nguồn tin';
 $lang_module['content_copyright'] = 'Giữ bản quyền bài viết';
+$lang_module['content_external_link'] = 'Mở liên kết nguồn tin (nếu có)';
 $lang_module['content_saveok'] = 'Đã ghi dữ liệu thành công';
 $lang_module['content_main'] = 'Quay lại trang quản lý';
 $lang_module['content_back'] = 'Quay lại trang sửa bài viết';

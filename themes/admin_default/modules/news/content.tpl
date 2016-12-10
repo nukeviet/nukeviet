@@ -73,7 +73,7 @@
                         </td>
 					</tr>
 					<tr>
-						<td><strong>{LANG.content_bodytext}</strong> <sup class="required">(∗)</sup> <i>{LANG.content_bodytext_note}</i></td>
+						<td><strong>{LANG.content_bodytext}</strong> <sup class="required {rowcontent.style_content_bodytext_required}" id="content_bodytext_required">(∗)</sup> <i>{LANG.content_bodytext_note}</i></td>
 					</tr>
 					<tr>
 						<td>
@@ -198,8 +198,11 @@
 									<label> {LANG.content_allowed_save} </label>
 								</div>
 								<div style="margin-bottom: 2px;">
-								<input type="checkbox" value="1" name="copyright"{checkcop}/>
+								<input type="checkbox" value="1" name="copyright" {checkcop}/>
 									<label> {LANG.content_copyright} </label>
+								</div>
+								<div style="margin-bottom: 2px;">
+									<label><input type="checkbox" value="1" name="external_link" {external_link_checked}/>{LANG.content_external_link} </label>
 								</div>
 							</div>
 						</li>
