@@ -15,10 +15,10 @@
 		<div class="panel-body featured">
 			<!-- BEGIN: catcontent -->
 				<!-- BEGIN: image -->
-				<a href="{CONTENT.link}" title="{CONTENT.title}"><img id="imghome" alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
+				<a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}><img id="imghome" alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
 				<!-- END: image -->
 				<h2>
-					<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+					<a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}>{CONTENT.title}</a>
 					<!-- BEGIN: newday -->
 					<span class="icon_new"></span>
 					<!-- END: newday -->
@@ -45,7 +45,7 @@
 			<ul class="related">
 				<!-- BEGIN: catcontentloop -->
 				<li>
-					<em class="fa fa-angle-right">&nbsp;</em><a title="{CONTENT.title}" href="{CONTENT.link}">{CONTENT.title}</a>
+					<em class="fa fa-angle-right">&nbsp;</em><a title="{CONTENT.title}" href="{CONTENT.link}" {CONTENT.target_blank}>{CONTENT.title}</a>
 					<!-- BEGIN: newday -->
 					<span class="icon_new"></span>
 					<!-- END: newday -->

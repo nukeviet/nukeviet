@@ -50,7 +50,7 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -109,7 +109,7 @@ if (empty($contents)) {
 
         $key = 0;
         $db_slave->sqlreset()
-        ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order('publtime DESC');
 
         foreach ($global_array_cat as $_catid => $array_cat_i) {
@@ -176,7 +176,7 @@ if (empty($contents)) {
         $key = 0;
 
         $db_slave->sqlreset()
-            ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+            ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->where('status= 1 AND inhome=1')
             ->order('publtime DESC');
         foreach ($global_array_cat as $_catid => $array_cat_i) {
@@ -244,7 +244,7 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -283,7 +283,7 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);

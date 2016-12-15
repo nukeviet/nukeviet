@@ -149,6 +149,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 inhome tinyint(1) unsigned NOT NULL default '0',
 	 allowed_comm varchar(255) default '',
 	 allowed_rating tinyint(1) unsigned NOT NULL default '0',
+     external_link tinyint(1) unsigned NOT NULL default '0', 
 	 hitstotal mediumint(8) unsigned NOT NULL default '0',
 	 hitscm mediumint(8) unsigned NOT NULL default '0',
 	 total_rating int(11) NOT NULL default '0',

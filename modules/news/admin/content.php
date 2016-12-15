@@ -150,6 +150,7 @@ $rowcontent = array(
     'inhome' => 1,
     'allowed_comm' => $module_config[$module_name]['setcomm'],
     'allowed_rating' => 1,
+    'external_link' => 0,
     'allowed_send' => 1,
     'allowed_print' => 1,
     'allowed_save' => 1,
@@ -402,6 +403,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     $rowcontent['allowed_comm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
     
     $rowcontent['allowed_rating'] = (int) $nv_Request->get_bool('allowed_rating', 'post');
+    $rowcontent['external_link'] = (int) $nv_Request->get_bool('external_link', 'post');
     $rowcontent['allowed_send'] = (int) $nv_Request->get_bool('allowed_send', 'post');
     $rowcontent['allowed_print'] = (int) $nv_Request->get_bool('allowed_print', 'post');
     $rowcontent['allowed_save'] = (int) $nv_Request->get_bool('allowed_save', 'post');
@@ -448,7 +450,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $error[] = $lang_module['error_title'];
         } elseif (empty($rowcontent['listcatid'])) {
             $error[] = $lang_module['error_cat'];
-        } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '' and !preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'])) {
+        } elseif (empty($rowcontent['external_link']) and trim(strip_tags($rowcontent['bodyhtml'])) == '' and ! preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'])) {
             $error[] = $lang_module['error_bodytext'];
         }
     }
@@ -493,6 +495,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     
                     $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid', $data_insert);
                 }
+                
+                $rowcontent['external_link'] = $rowcontent['external_link'] ? 1 : 0;
             } else {
                 $stmt = $db->prepare('SELECT sourceid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE title= :title');
                 $stmt->bindParam(':title', $rowcontent['sourcetext'], PDO::PARAM_STR);
@@ -508,6 +512,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     
                     $rowcontent['sourceid'] = $db->insert_id($_sql, 'sourceid', $data_insert);
                 }
+                
+                $rowcontent['external_link'] = 0;
             }
         }
         
@@ -538,7 +544,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $rowcontent['status'] = 2;
             }
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows
-                (catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
+                (catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, external_link, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
                  (' . intval($rowcontent['catid']) . ',
                  :listcatid,
                  ' . $rowcontent['topicid'] . ',
@@ -560,6 +566,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                  ' . intval($rowcontent['inhome']) . ',
                  :allowed_comm,
                  ' . intval($rowcontent['allowed_rating']) . ',
+                 ' . intval($rowcontent['external_link']) . ',
                  ' . intval($rowcontent['hitstotal']) . ',
                  ' . intval($rowcontent['hitscm']) . ',
                  ' . intval($rowcontent['total_rating']) . ',
@@ -655,6 +662,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 inhome=' . intval($rowcontent['inhome']) . ',
                 allowed_comm=:allowed_comm,
                 allowed_rating=' . intval($rowcontent['allowed_rating']) . ',
+                external_link=' . intval($rowcontent['external_link']) . ',
                 edittime=' . NV_CURRENTTIME . '
             WHERE id =' . $rowcontent['id']);
             
@@ -905,6 +913,8 @@ $contents = '';
 $lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
 $lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_max'], 160);
 
+$rowcontent['style_content_bodytext_required'] = $rowcontent['external_link'] ? 'hidden' : '';
+
 $xtpl = new XTemplate('content.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -1052,6 +1062,8 @@ $inhome_checked = ($rowcontent['inhome']) ? ' checked="checked"' : '';
 $xtpl->assign('inhome_checked', $inhome_checked);
 $allowed_rating_checked = ($rowcontent['allowed_rating']) ? ' checked="checked"' : '';
 $xtpl->assign('allowed_rating_checked', $allowed_rating_checked);
+$external_link_checked = ($rowcontent['external_link']) ? ' checked="checked"' : '';
+$xtpl->assign('external_link_checked', $external_link_checked);
 $allowed_send_checked = ($rowcontent['allowed_send']) ? ' checked="checked"' : '';
 $xtpl->assign('allowed_send_checked', $allowed_send_checked);
 $allowed_print_checked = ($rowcontent['allowed_print']) ? ' checked="checked"' : '';

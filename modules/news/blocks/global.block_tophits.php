@@ -99,7 +99,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         
         $array_block_news = array();
         $db_slave->sqlreset()
-            ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext')
+            ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
             ->order('hitstotal DESC')
             ->limit($block_config['numrow']);
@@ -110,7 +110,7 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         }
         
         $result = $db_slave->query($db_slave->sql());
-        while (list ($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext) = $result->fetch(3)) {
+        while (list ($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
                 
@@ -138,7 +138,8 @@ if (!nv_function_exists('nv_news_block_tophits')) {
                 'link' => $link,
                 'imgurl' => $imgurl,
                 'width' => $blockwidth,
-                'hometext' => $hometext
+                'hometext' => $hometext,
+                'external_link' => $external_link
             );
         }
         
@@ -155,7 +156,13 @@ if (!nv_function_exists('nv_news_block_tophits')) {
         foreach ($array_block_news as $array_news) {
             $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
             $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
+            
+            if ($array_news['external_link']) {
+                $array_news['target_blank'] = 'target="_blank"';
+            }
+            
             $xtpl->assign('blocknews', $array_news);
+            
             if (!empty($array_news['imgurl'])) {
                 $xtpl->parse('main.newloop.imgblock');
             }

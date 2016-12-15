@@ -87,7 +87,7 @@ if (! nv_function_exists('nv_block_news_cat')) {
         $catid = implode(',', $block_config['catid']);
 
         $db->sqlreset()
-            ->select('id, catid, title, alias, homeimgfile, homeimgthumb, hometext, publtime')
+            ->select('id, catid, title, alias, homeimgfile, homeimgthumb, hometext, publtime, external_link')
             ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows')
             ->where('status= 1 AND catid IN(' . $catid . ')')
             ->order('publtime DESC')
@@ -130,6 +130,10 @@ if (! nv_function_exists('nv_block_news_cat')) {
                 
                 $l['title_clean'] = nv_clean60($l['title'], $block_config['title_length']);
 
+                if ($l['external_link']) {
+                    $l['target_blank'] = 'target="_blank"';
+                }
+                
                 $xtpl->assign('ROW', $l);
                 if (! empty($l['thumb'])) {
                     $xtpl->parse('main.loop.img');
