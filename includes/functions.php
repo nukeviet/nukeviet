@@ -1389,11 +1389,11 @@ function nv_is_url($url)
         return false;
     }
 
-    if (isset($parts['path']) and ! preg_match('/^[0-9A-Za-z\/\_\.\@\~\:\-\%\\s]*$/', $parts['path'])) {
+    if (isset($parts['path']) and ! preg_match('/^[0-9a-z\-\_\/\&\=\#\.\,\;\%\\s\!]*$/', $parts['path'])) {
         return false;
     }
 
-    if (isset($parts['query']) and ! preg_match('/^[0-9a-z\-\_\/\?\&\=\#\.\,\;\%\\s]*$/', $parts['query'])) {
+    if (isset($parts['query']) and ! preg_match('/^[0-9a-z\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $parts['query'])) {
         return false;
     }
 
@@ -1549,38 +1549,30 @@ function nv_url_rewrite($buffer, $is_url = false)
 function nv_change_buffer($buffer)
 {
     global $global_config, $client_info;
-
+    
+    if (defined('NV_SYSTEM') and (defined('GOOGLE_ANALYTICS_SYSTEM') or preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID']))) {
+        $_google_analytics = "<script data-show=\"inline\">function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
+        $_google_analytics .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," . PHP_EOL;
+        $_google_analytics .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" . PHP_EOL;
+        $_google_analytics .= "})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');" . PHP_EOL;
+        if (preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'])) {
+            $_google_analytics .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');" . PHP_EOL;
+        }
+        if (defined('GOOGLE_ANALYTICS_SYSTEM')) {
+            $_google_analytics .= "ga('create', '" . GOOGLE_ANALYTICS_SYSTEM . "', 'auto');" . PHP_EOL;
+        }
+        $_google_analytics .= "ga('send', 'pageview');" . PHP_EOL;
+        $_google_analytics .= "</script>" . PHP_EOL;
+        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics . "$1", $buffer, 1);
+    }    
+    
     if (NV_ANTI_IFRAME and ! $client_info['is_myreferer']) {
         $buffer = preg_replace('/(<body[^>]*>)/', "$1" . PHP_EOL . "<script>if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1);
     }
 
-    $body_replace = $internal = $external = '';
-
     if (NV_CURRENTTIME > $global_config['cronjobs_next_time']) {
-        $body_replace .= "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>" . PHP_EOL;
-    }
-
-    if (defined('NV_SYSTEM') and (defined('GOOGLE_ANALYTICS_SYSTEM') or preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID']))) {
-        $internal .= "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
-        $internal .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," . PHP_EOL;
-        $internal .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" . PHP_EOL;
-        $internal .= "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');" . PHP_EOL;
-        if (preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'])) {
-            $internal .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');" . PHP_EOL;
-        }
-        if (defined('GOOGLE_ANALYTICS_SYSTEM')) {
-            $internal .= "ga('create', '" . GOOGLE_ANALYTICS_SYSTEM . "', 'auto');" . PHP_EOL;
-        }
-        $internal .= "ga('send', 'pageview');" . PHP_EOL;
-    }
-
-    if (! empty($internal)) {
-        $internal = "<script>" . PHP_EOL . $internal . "</script>" . PHP_EOL;
-    }
-    $body_replace .= $internal . $external;
-
-    if (! empty($body_replace)) {
-        $buffer = preg_replace('/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1);
+        $_body_cronjobs = "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>" . PHP_EOL;
+        $buffer = preg_replace('/\s*<\/body>/i', PHP_EOL . $_body_cronjobs . '</body>', $buffer, 1);
     }
 
     $optimizer = new NukeViet\Core\Optimizer($buffer,  NV_BASE_SITEURL);
