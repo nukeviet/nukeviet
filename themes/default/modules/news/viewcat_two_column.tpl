@@ -16,10 +16,10 @@
     <div class="panel panel-default clearfix">
         <div class="panel-body">
             <!-- BEGIN: image -->
-            <a href="{NEWSTOP.link}" title="{NEWSTOP.title}"><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
+            <a href="{NEWSTOP.link}" title="{NEWSTOP.title}" {NEWSTOP.target_blank}><img alt="{HOMEIMGALT0}" src="{HOMEIMG0}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
             <!-- END: image -->
             <h3>
-                <a href="{NEWSTOP.link}" title="{NEWSTOP.title}">{NEWSTOP.title}</a>
+                <a href="{NEWSTOP.link}" title="{NEWSTOP.title}" {NEWSTOP.target_blank}>{NEWSTOP.title}</a>
                 <!-- BEGIN: newday -->
                 <span class="icon_new">&nbsp;</span>
                 <!-- END: newday -->
@@ -46,7 +46,7 @@
         <ul class="related">
             <!-- BEGIN: other -->
             <li>
-                <a class="show h4" href="{NEWSTOP.link}" <!-- BEGIN: tooltip -->data-content="{NEWSTOP.hometext_clean}" data-img="{NEWSTOP.imghome}" data-placement="{TOOLTIP_POSITION}" data-rel="tooltip"<!-- END: tooltip --> title="{NEWSTOP.title}">{NEWSTOP.title}</a>
+                <a class="show h4" href="{NEWSTOP.link}" {NEWSTOP.target_blank} <!-- BEGIN: tooltip -->data-content="{NEWSTOP.hometext_clean}" data-img="{NEWSTOP.imghome}" data-placement="{TOOLTIP_POSITION}" data-rel="tooltip"<!-- END: tooltip --> title="{NEWSTOP.title}">{NEWSTOP.title}</a>
             </li>
             <!-- END: other -->
         </ul>
@@ -64,7 +64,7 @@
             <div class="panel-body">
                 <!-- BEGIN: content -->
                 <h3>
-                    <a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+                    <a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}>{CONTENT.title}</a>
                     <!-- BEGIN: newday -->
                     <span class="icon_new">&nbsp;</span>
                     <!-- END: newday -->
@@ -79,7 +79,7 @@
                     </ul>
                 </div>
                 <!-- BEGIN: image -->
-                <a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
+                <a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
                 <!-- END: image -->
                 <p>{CONTENT.hometext}</p>
                 <!-- BEGIN: adminlink -->
@@ -91,7 +91,7 @@
                 <ul class="related">
                     <!-- BEGIN: other -->
                     <li class="{CLASS}">
-                        <a class="show h4" href="{CONTENT.link}" <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext_clean}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">{CONTENT.title}</a>
+                        <a class="show h4" href="{CONTENT.link}" {CONTENT.target_blank} <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext_clean}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">{CONTENT.title}</a>
                     </li>
                     <!-- END: other -->
                 </ul>

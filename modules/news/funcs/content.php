@@ -207,6 +207,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         'inhome' => 1,
         'allowed_comm' => 4,
         'allowed_rating' => 1,
+        'external_link' => 0,
         'allowed_send' => 1,
         'allowed_print' => 1,
         'allowed_save' => 1,
@@ -323,7 +324,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             }
             if ($rowcontent['id'] == 0) {
                 $_sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows
-						(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
+						(catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating) VALUES
 						 (" . intval($rowcontent['catid']) . ",
 						 " . $db->quote($rowcontent['listcatid']) . ",
 						 " . intval($rowcontent['topicid']) . ",
@@ -345,6 +346,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 						 " . intval($rowcontent['inhome']) . ",
 						 " . intval($rowcontent['allowed_comm']) . ",
 						 " . intval($rowcontent['allowed_rating']) . ",
+						 " . intval($rowcontent['external_link']) . ",
 						 " . intval($rowcontent['hitstotal']) . ",
 						 " . intval($rowcontent['hitscm']) . ",
 						 " . intval($rowcontent['total_rating']) . ",
@@ -406,6 +408,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 						 inhome=" . intval($rowcontent['inhome']) . ",
 						 allowed_comm=" . intval($rowcontent['allowed_comm']) . ",
 						 allowed_rating=" . intval($rowcontent['allowed_rating']) . ",
+						 external_link=" . intval($rowcontent['external_link']) . ",
 						 edittime=" . NV_CURRENTTIME . "
 						WHERE id =" . $rowcontent['id'];
 

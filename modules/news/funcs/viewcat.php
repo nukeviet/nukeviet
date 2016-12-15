@@ -63,7 +63,7 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating');
+        $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating');
 
         $featured = 0;
         if ($global_array_cat[$catid]['featured'] != 0) {
@@ -158,7 +158,7 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating');
+        $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating');
 
         $featured = 0;
         if ($global_array_cat[$catid]['featured'] != 0) {
@@ -226,7 +226,7 @@ if (empty($contents)) {
             foreach ($array_catid as $catid_i) {
                 $array_cat_other[$key] = $global_array_cat[$catid_i];
                 $db_slave->sqlreset()
-                    ->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+                    ->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
                     ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i);
 
                 $featured = 0;
@@ -300,7 +300,7 @@ if (empty($contents)) {
         $array_catcontent = array();
 
         $db_slave->sqlreset()
-            ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+            ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
             ->where('status=1');
         $featured = 0;
@@ -370,7 +370,7 @@ if (empty($contents)) {
         foreach ($array_catid as $catid_i) {
             $array_cat_other[$key] = $global_array_cat[$catid_i];
             $db_slave->sqlreset()
-                ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+                ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid_i)
                 ->where('status=1');
 
@@ -449,7 +449,7 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -494,7 +494,7 @@ if (empty($contents)) {
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
         $featured = 0;
         if ($global_array_cat[$catid]['featured'] != 0) {
-            $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+            $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
                 ->where('id=' . $global_array_cat[$catid]['featured']);
             $result = $db_slave->query($db_slave->sql());
             while ($item = $result->fetch()) {
@@ -524,7 +524,7 @@ if (empty($contents)) {
         } else {
             $db_slave->where('status= 1 AND inhome=1');
         }
-        $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
