@@ -424,11 +424,10 @@ function nv_users_check_choicetypes(elemnet) {
 function control_theme_groups() {
     var ingroup = $('[name="group[]"]:checked').length,
         gdefault = $('[name="group_default"]:checked').val(),
-        groups = [],
-        ioff = $('[name="is_official"]').is(':checked')
+        groups = []
     
     $('[name="group[]"]').each(function(){
-        if ($(this).is(':checked') && ingroup > 1 && ioff) {
+        if ($(this).is(':checked') && ingroup > 1) {
             $('.group_default', $(this).parent().parent()).show()
             
             if (typeof gdefault == 'undefined') {

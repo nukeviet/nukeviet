@@ -404,6 +404,10 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     
     $rowcontent['allowed_rating'] = (int) $nv_Request->get_bool('allowed_rating', 'post');
     $rowcontent['external_link'] = (int) $nv_Request->get_bool('external_link', 'post');
+    if ($rowcontent['external_link'] and empty($rowcontent['sourcetext'])) {
+        $rowcontent['external_link'] = 0;
+    }
+    
     $rowcontent['allowed_send'] = (int) $nv_Request->get_bool('allowed_send', 'post');
     $rowcontent['allowed_print'] = (int) $nv_Request->get_bool('allowed_print', 'post');
     $rowcontent['allowed_save'] = (int) $nv_Request->get_bool('allowed_save', 'post');
@@ -450,7 +454,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $error[] = $lang_module['error_title'];
         } elseif (empty($rowcontent['listcatid'])) {
             $error[] = $lang_module['error_cat'];
-        } elseif (empty($rowcontent['external_link']) and trim(strip_tags($rowcontent['bodyhtml'])) == '' and ! preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'])) {
+        } elseif (empty($rowcontent['external_link']) and trim(strip_tags($rowcontent['bodyhtml'])) == '' and !preg_match("/\<img[^\>]*alt=\"([^\"]+)\"[^\>]*\>/is", $rowcontent['bodyhtml'])) {
             $error[] = $lang_module['error_bodytext'];
         }
     }
@@ -544,7 +548,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 $rowcontent['status'] = 2;
             }
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows
-                (catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, external_link, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, hitstotal, hitscm, total_rating, click_rating) VALUES
+                (catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating) VALUES
                  (' . intval($rowcontent['catid']) . ',
                  :listcatid,
                  ' . $rowcontent['topicid'] . ',
