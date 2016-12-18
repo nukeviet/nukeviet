@@ -186,7 +186,7 @@ if (! nv_function_exists('nv_relates_product')) {
         $xtpl->assign('WIDTH', $pro_config['homewidth']);
 
         $db->sqlreset()
-        ->select('t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice')
+        ->select('t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.product_number')
         ->from($db_config['prefix'] . '_' . $mod_data . '_rows t1')
         ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $mod_data . '_block t2 ON t1.id = t2.id')
         ->where('t2.bid= ' . $block_config['blockid'] . ' AND t1.status =1')
