@@ -37,6 +37,13 @@
 					{LANG.description}</th>
 					<td><textarea class="form-control" style="width: 650px" name="description" cols="100" rows="5">{DATA.description}</textarea></td>
 				</tr>
+				<tr>
+					<th class="text-right">{LANG.content_homeimg}</th>
+					<td>
+						<input class="form-control" style="width: 500px" type="text" name="image" id="image" value="{DATA.image}"/>
+						<a class="btn btn-info" name="selectimg"><em class="fa fa-folder-open-o">&nbsp;</em>{LANG.file_selectfile}</a>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -45,4 +52,14 @@
 		<input class="btn btn-primary" name="submit1" type="submit" value="{LANG.save}" />
 	</div>
 </form>
+<script>
+$("a[name=selectimg]").click(function() {
+	var area = "image";
+	var path = "{UPLOAD_CURRENT}";
+	var currentpath = "{UPLOAD_CURRENT}";
+	var type = "image";
+	nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+	return false;
+});
+</script>
 <!-- END: main -->
