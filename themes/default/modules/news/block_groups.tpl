@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
-<ul>
+<ul class="block_groups">
 	<!-- BEGIN: loop -->
 	<li class="clearfix">
 		<!-- BEGIN: img -->
