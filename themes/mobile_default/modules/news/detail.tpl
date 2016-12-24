@@ -37,7 +37,7 @@
 				<hr />
 			</div>
 			<!-- END: imgthumb -->
-			<h2>{DETAIL.hometext}</h2>
+			<div class="h2">{DETAIL.hometext}</div>
 		</div>
 		<!-- BEGIN: imgfull -->
 		<div style="max-width:{DETAIL.image.width}px;margin: 10px auto 10px auto">
@@ -99,11 +99,12 @@
 			<br />
 				<form id="form3B" action="">
 					<div class="clearfix">
+                        <p id="stringrating">{STRINGRATING}</p>
 			            <!-- BEGIN: data_rating -->
 			            <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate">
 			               {LANG.rating_average}:
-			               <span itemprop="rating">{DETAIL.numberrating}</span> -
-			               <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count}
+			               <span itemprop="rating" id="numberrating">{DETAIL.numberrating}</span> -
+			               <span itemprop="votes" id="click_rating">{DETAIL.click_rating}</span> {LANG.rating_count}
 			            </span>
 			            <!-- END: data_rating -->
 						<div style="padding: 5px;">

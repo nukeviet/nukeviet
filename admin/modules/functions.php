@@ -284,7 +284,7 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                                 $layout = $array_layout_func_default[$module_name][$func];
                             }
                         }
-                        $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_modthemes (`func_id`, `layout`, `theme`) VALUES (' . $arr_func_id[$func] . ', ' . $db->quote($layout) . ', ' . $db->quote($selectthemes) . ')');
+                        $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_modthemes (func_id, layout, theme) VALUES (' . $arr_func_id[$func] . ', ' . $db->quote($layout) . ', ' . $db->quote($selectthemes) . ')');
                     }
                 }
             }

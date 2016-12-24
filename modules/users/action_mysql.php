@@ -66,6 +66,8 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	remember tinyint(1) unsigned NOT NULL DEFAULT '0',
     	in_groups varchar(255) DEFAULT '',
     	active tinyint(1) unsigned NOT NULL DEFAULT '0',
+    	active2step tinyint(1) unsigned NOT NULL DEFAULT '0',
+    	secretkey varchar(20) DEFAULT '',
     	checknum varchar(40) DEFAULT '',
     	last_login int(11) unsigned NOT NULL DEFAULT '0',
     	last_ip varchar(45) DEFAULT '',
@@ -79,6 +81,15 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	UNIQUE KEY md5username (md5username),
     	UNIQUE KEY email (email),
     	KEY idsite (idsite)
+    ) ENGINE=MyISAM";
+    
+    $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_backupcodes (
+        userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+        code varchar(20) NOT NULL,
+        is_used tinyint(1) unsigned NOT NULL DEFAULT '0',
+        time_used int(11) unsigned NOT NULL DEFAULT '0',
+        time_creat int(11) unsigned NOT NULL DEFAULT '0',
+        UNIQUE KEY userid (userid, code)
     ) ENGINE=MyISAM";
     
     $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_groups (

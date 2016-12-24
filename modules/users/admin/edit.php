@@ -349,6 +349,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
     
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid']);
+    $nv_Cache->delMod($module_name);
     
     die(json_encode(array(
         'status' => 'ok',

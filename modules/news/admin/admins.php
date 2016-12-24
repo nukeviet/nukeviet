@@ -47,7 +47,7 @@ if (empty($module_info['admins'])) {
 
 foreach ($module_admin as $userid_i) {
     $userid_i = intval($userid_i);
-    if ($userid_i > 0 && ! isset($array_cat_admin[$userid_i])) {
+    if ($userid_i > 0 and ! isset($array_cat_admin[$userid_i])) {
         // Them nguoi dieu hanh chung, voi quyen han Quan ly module
         $sql = 'SELECT userid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_admins WHERE userid=' . $userid_i . ' AND catid=0';
         $numrows = $db->query($sql)->fetchColumn();

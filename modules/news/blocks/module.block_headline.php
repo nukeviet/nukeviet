@@ -75,7 +75,7 @@ if (! nv_function_exists('nv_block_headline')) {
 
             foreach ($array_bid_content as $i => $array_bid) {
                 $db_slave->sqlreset()
-                    ->select('t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt, t1.hometext')
+                    ->select('t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgalt, t1.hometext, t1.external_link')
                     ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
                     ->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_block t2 ON t1.id = t2.id')
                     ->where('t1.status= 1 AND t2.bid=' . $array_bid['bid'])
@@ -84,14 +84,15 @@ if (! nv_function_exists('nv_block_headline')) {
 
                 $result = $db_slave->query($db_slave->sql());
                 $array_content = array();
-                while (list($id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt, $hometext) = $result->fetch(3)) {
+                while (list($id, $catid_i, $title, $alias, $homeimgfile, $homeimgalt, $hometext, $external_link) = $result->fetch(3)) {
                     $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
                     $array_content[] = array(
                         'title' => $title,
                         'link' => $link,
                         'homeimgfile' => $homeimgfile,
                         'homeimgalt' => $homeimgalt,
-                        'hometext' => $hometext
+                        'hometext' => $hometext,
+                        'external_link' => $external_link
                     );
                 }
                 $array_bid_content[$i]['content'] = $array_content;
@@ -111,6 +112,11 @@ if (! nv_function_exists('nv_block_headline')) {
             $hot_news = $array_bid_content[1]['content'];
             $a = 0;
             foreach ($hot_news as $hot_news_i) {
+                
+                if ($hot_news_i['external_link']) {
+                    $hot_news_i['target_blank'] = 'target="_blank"';
+                }
+                
                 if (! empty($hot_news_i['homeimgfile']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'])) {
                     $images_url = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $hot_news_i['homeimgfile'];
                 } elseif (nv_is_url($hot_news_i['homeimgfile'])) {
@@ -148,7 +154,13 @@ if (! nv_function_exists('nv_block_headline')) {
                         $xtpl->assign('TITLE', 'title="' . $lastest['title'] . '"');
                     }
 
-                    $lastest['hometext'] = nv_clean60($lastest['hometext'], $block_config['tooltip_length'], true);
+                    $lastest['hometext_clean'] = strip_tags($lastest['hometext']);
+                    $lastest['hometext_clean'] = nv_clean60($lastest['hometext_clean'], $block_config['tooltip_length'], true);
+                    
+                    if ($lastest['external_link']) {
+                        $lastest['target_blank'] = 'target="_blank"';
+                    }
+                    
                     $xtpl->assign('LASTEST', $lastest);
                     $xtpl->parse('main.loop_tabs_content.content.loop');
                 }
@@ -167,11 +179,11 @@ if (! nv_function_exists('nv_block_headline')) {
             $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery/jquery.imgpreload.min.js\"></script>\n";
         }
 
-        $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/contentslider.js\"></script>\n";
-        $my_footer .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
-        $my_footer .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
-        $my_footer .= '$(document).ready(function(){var b=["' . implode('","', $images) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
-        $my_footer .= "\n//]]>\n</script>\n";
+        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/js/contentslider.js\"></script>\n";
+        $my_head .= "<script type=\"text/javascript\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/js/jquery-ui/jquery-ui.min.js\"></script>\n";
+        $my_head .= "<script type=\"text/javascript\">\n//<![CDATA[\n";
+        $my_head .= '$(document).ready(function(){var b=["' . implode('","', $images) . '"];$.imgpreload(b,function(){for(var c=b.length,a=0;a<c;a++)$("#slImg"+a).attr("src",b[a]);featuredcontentslider.init({id:"slider1",contentsource:["inline",""],toc:"#increment",nextprev:["&nbsp;","&nbsp;"],revealtype:"click",enablefade:[true,0.2],autorotate:[true,3E3],onChange:function(){}});$("#tabs").tabs({ajaxOptions:{error:function(e,f,g,d){$(d.hash).html("Couldnt load this tab.")}}});$("#topnews").show()})});';
+        $my_head .= "\n//]]>\n</script>\n";
         $xtpl->parse('main');
         return $xtpl->text('main');
     }

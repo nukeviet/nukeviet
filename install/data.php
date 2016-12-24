@@ -105,11 +105,16 @@ $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, 
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'is_flood_blocker', '1')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'max_requests_60', '40')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'max_requests_300', '150')";
+$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'is_login_blocker', '1')";
+$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'login_number_tracking', '5')";
+$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'login_time_tracking', '5')";
+$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'login_time_ban', '1440')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'nv_display_errors_list', '1')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'display_errors_list', '1')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'nv_auto_resize', '1')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'dump_interval', '1')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'cdn_url', '')";
+$sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'global', 'two_step_verification', '0')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_unickmin', '" . NV_UNICKMIN . "')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_unickmax', '" . NV_UNICKMAX . "')";
 $sql_create_table[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('sys', 'define', 'nv_upassmin', '" . NV_UPASSMIN . "')";
@@ -150,7 +155,8 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (283, 'module', 'feeds', 1, 0, 'feeds', 'feeds', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (282, 'module', 'page', 1, 1, 'page', 'page', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (281, 'module', 'comment', 1, 0, 'comment', 'comment', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (312, 'module', 'freecontent', 0, 0, 'freecontent', 'freecontent', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (312, 'module', 'freecontent', 0, 1, 'freecontent', 'freecontent', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (327, 'module', 'two-step-verification', 1, 0, 'two-step-verification', 'two_step_verification', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (307, 'theme', 'default', 0, 0, 'default', 'default', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (311, 'theme', 'mobile_default', 0, 0, 'mobile_default', 'mobile_default', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 
@@ -160,6 +166,5 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VA
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 212, 400, '', '', 'http://vinades.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 2)";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (3, 'Quang cao giua trang', 1, 0, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 1)";
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (4, '123host_Nukeviet', 3, 0, '123host_nukeviet.jpg', 'jpg', 'image/jpeg', 250, 250, '', '', 'http://event.123host.vn/link/out/338', '_blank', 1453194858, 1453194858, 0, 0, 1, 0)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_plugin (`pid`, `plugin_file`, `plugin_area`, `weight`) VALUES (1, 'qrcode.php', 1, 1)";

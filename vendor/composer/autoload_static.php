@@ -11,6 +11,10 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         array (
             'TrueBV\\' => 7,
         ),
+        'S' => 
+        array (
+            'Symfony\\Component\\OptionsResolver\\' => 34,
+        ),
         'P' => 
         array (
             'PHPMailer\\PHPMailer\\' => 20,
@@ -41,6 +45,10 @@ class ComposerStaticInit8c9f50366561a5497ebe188ba93ba4da
         'TrueBV\\' => 
         array (
             0 => __DIR__ . '/..' . '/true/punycode/src',
+        ),
+        'Symfony\\Component\\OptionsResolver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/options-resolver',
         ),
         'PHPMailer\\PHPMailer\\' => 
         array (

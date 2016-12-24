@@ -36,6 +36,7 @@ if (!empty($savesetting)) {
     $array_config['tooltip_position'] = $nv_Request->get_string('tooltip_position', 'post', '');
     $array_config['tooltip_length'] = $nv_Request->get_int('tooltip_length', 'post', 0);
     $array_config['showhometext'] = $nv_Request->get_int('showhometext', 'post', 0);
+    $array_config['htmlhometext'] = $nv_Request->get_int('htmlhometext', 'post', 0);
     
     $array_config['facebookappid'] = $nv_Request->get_title('facebookappid', 'post', '');
     $array_config['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
@@ -48,25 +49,39 @@ if (!empty($savesetting)) {
     $array_config['auto_tags'] = $nv_Request->get_int('auto_tags', 'post', 0);
     $array_config['tags_remind'] = $nv_Request->get_int('tags_remind', 'post', 0);
     
+    $array_config['elas_use'] = $nv_Request->get_int('elas_use', 'post', 0);
+    $array_config['elas_host'] = $nv_Request->get_title('elas_host', 'post', '');
+    $array_config['elas_port'] = $nv_Request->get_int('elas_port', 'post', 0);
+    $array_config['elas_index'] = $nv_Request->get_title('elas_index', 'post', '');
+    
+    if ($array_config['elas_use']) {
+        $fp = fsockopen($array_config['elas_host'], $array_config['elas_port'], $errno, $errstr, 30);
+        if (!$fp) {
+            $error = $lang_module['error_elas_host_connect'];
+        }
+    }
+    
     if (!nv_is_url($array_config['show_no_image']) and nv_is_file($array_config['show_no_image'])) {
         $lu = strlen(NV_BASE_SITEURL);
         $array_config['show_no_image'] = substr($array_config['show_no_image'], $lu);
     } else {
         $array_config['show_no_image'] = '';
     }
-    
-    $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
-    $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
-    foreach ($array_config as $config_name => $config_value) {
-        $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
-        $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
-        $sth->execute();
+    if (empty($error)) {
+        $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = '" . NV_LANG_DATA . "' AND module = :module_name AND config_name = :config_name");
+        $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
+        foreach ($array_config as $config_name => $config_value) {
+            $sth->bindParam(':config_name', $config_name, PDO::PARAM_STR);
+            $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
+            $sth->execute();
+        }
+        
+        $nv_Cache->delMod('settings');
+        $nv_Cache->delMod($module_name);
+        Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
+        die();
     }
-    
-    $nv_Cache->delMod('settings');
-    $nv_Cache->delMod($module_name);
-    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
-    die();
+
 }
 
 $xtpl = new XTemplate('settings.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
@@ -78,6 +93,10 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('DATA', $module_config[$module_name]);
+if (!empty($error)) {
+    $xtpl->assign('error', $error);
+    $xtpl->parse('main.error');
+}
 
 $array_tooltip_position = array(
     'top' => $lang_module['showtooltip_position_top'],
@@ -138,11 +157,13 @@ for ($i = 0; $i <= 6; ++$i) {
 
 $xtpl->assign('SHOWTOOLTIP', $module_config[$module_name]['showtooltip'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOWHOMETEXT', $module_config[$module_name]['showhometext'] ? ' checked="checked"' : '');
+$xtpl->assign('HTMLHOMETEXT', $module_config[$module_name]['htmlhometext'] ? ' checked="checked"' : '');
 $xtpl->assign('SOCIALBUTTON', $module_config[$module_name]['socialbutton'] ? ' checked="checked"' : '');
 $xtpl->assign('TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' checked="checked"' : '');
 $xtpl->assign('ALIAS_LOWER', $module_config[$module_name]['alias_lower'] ? ' checked="checked"' : '');
 $xtpl->assign('AUTO_TAGS', $module_config[$module_name]['auto_tags'] ? ' checked="checked"' : '');
 $xtpl->assign('TAGS_REMIND', $module_config[$module_name]['tags_remind'] ? ' checked="checked"' : '');
+$xtpl->assign('ELAS_USE', $module_config[$module_name]['elas_use'] ? ' checked="checked"' : '');
 $xtpl->assign('SHOW_NO_IMAGE', (!empty($module_config[$module_name]['show_no_image'])) ? NV_BASE_SITEURL . $module_config[$module_name]['show_no_image'] : '');
 
 $array_structure_image = array();

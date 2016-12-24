@@ -184,7 +184,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $language[NV_LANG_DATA] = array( $dataform['title'], $dataform['description'] );
-    if ($dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea' || $dataform['field_type'] == 'editor') {
+    if ($dataform['field_type'] == 'textbox' or $dataform['field_type'] == 'textarea' or $dataform['field_type'] == 'editor') {
         $text_fields = 1;
         $dataform['match_type'] = nv_substr($nv_Request->get_title('match_type', 'post', '', 0, $preg_replace), 0, 50);
         $dataform['match_regex'] = ($dataform['match_type'] == 'regex') ? $nv_Request->get_string('match_regex', 'post', '', false) : '';
@@ -285,7 +285,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             $choicesql_column_key = $nv_Request->get_string('choicesql_column_key', 'post', ''); //cot value cho fields
             $choicesql_column_val = $nv_Request->get_string('choicesql_column_val', 'post', ''); //cot key cho fields
             
-            if ($choicesql_module != '' && $choicesql_table != '' && $choicesql_column_key != '' && $choicesql_column_val != '') {
+            if ($choicesql_module != '' and $choicesql_table != '' and $choicesql_column_key != '' and $choicesql_column_val != '') {
                 $dataform['sql_choices'] = $choicesql_module . '|' . $choicesql_table . '|' . $choicesql_column_key . '|' . $choicesql_column_val;
             } else {
                 $error = $lang_module['field_sql_choices_empty'];
@@ -457,9 +457,9 @@ if ($nv_Request->isset_request('qlist', 'get')) {
                 'field' => $row['field'],
                 'field_lang' => (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : '',
                 'field_type' => $array_field_type[$row['field_type']],
-                'required' => ($row['required']) ? ' checked="checked"' : '',
-                'show_register' => ($row['show_register']) ? ' checked="checked"' : '',
-                'show_profile' => ($row['show_profile']) ? ' checked="checked"' : ''
+                'required' => ($row['required']) ? 'fa-check-square-o' : 'fa fa-square-o',
+                'show_register' => ($row['show_register']) ? 'fa-check-square-o' : 'fa fa-square-o',
+                'show_profile' => ($row['show_profile']) ? 'fa-check-square-o' : 'fa fa-square-o'
             ));
 
             for ($i = 1; $i <= $num; ++$i) {
@@ -526,7 +526,7 @@ if ($nv_Request->isset_request('qlist', 'get')) {
         }
     }
 
-    if ($dataform['field_type'] == 'textbox' || $dataform['field_type'] == 'textarea' || $dataform['field_type'] == 'editor') {
+    if ($dataform['field_type'] == 'textbox' or $dataform['field_type'] == 'textarea' or $dataform['field_type'] == 'editor') {
         $text_fields = 1;
     } elseif ($dataform['field_type'] == 'number') {
         $number_fields = 1;

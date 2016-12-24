@@ -508,7 +508,7 @@ while (list($m_title, $m_custom_title) = $result->fetch(3)) {
         foreach ($aray_mod_func[$m_title] as $aray_mod_func_i) {
             $sel = '';
 
-            if (in_array($aray_mod_func_i['id'], $func_list) || $functionid == $aray_mod_func_i['id']) {
+            if (in_array($aray_mod_func_i['id'], $func_list) or $functionid == $aray_mod_func_i['id']) {
                 ++$i;
                 $sel = ' checked="checked"';
             }

@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 
 $site_lang = $nv_Request->get_string(NV_LANG_VARIABLE, 'get,post');
 if (empty($global_config['lang_multi'])) {
-    if ($site_lang == $global_config['site_lang'] || empty($site_lang)) {
+    if ($site_lang == $global_config['site_lang'] or empty($site_lang)) {
         define('NV_LANG_INTERFACE', $global_config['site_lang']);
         define('NV_LANG_DATA', $global_config['site_lang']);
     } else {

@@ -3,8 +3,7 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC.
- * All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 31/05/2010, 00:36
  */
@@ -22,7 +21,7 @@ define('NV_MAINFILE', true);
 define('NV_START_TIME', microtime(true));
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu =  $error_info = $countries = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -57,26 +56,6 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
 }
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 
-if (defined('NV_CONFIG_DIR')) {
-    $server_name = preg_replace('/^[a-z]+\:\/\//i', '', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : ''));
-    if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php')) {
-        require NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php';
-        $db_config['dbname'] = $db_config['dbsite'];
-        $global_config['my_domains'] = $server_name;
-    }
-    define('NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir']);
-    define('NV_FILES_DIR', NV_ASSETS_DIR . '/' . $global_config['site_dir']);
-    define('NV_CACHEDIR', SYSTEM_CACHEDIR . '/' . $global_config['site_dir']);
-    define('NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users');
-    define('NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users_groups');
-} else {
-    define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
-    define('NV_FILES_DIR', NV_ASSETS_DIR);
-    define('SYSTEM_CACHEDIR', NV_CACHEDIR);
-    define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
-    define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
-}
-
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
@@ -87,6 +66,12 @@ $ips = new NukeViet\Core\Ips();
 define('NV_FORWARD_IP', $ips->forward_ip);
 define('NV_REMOTE_ADDR', $ips->remote_addr);
 define('NV_CLIENT_IP', $ips->remote_ip);
+
+define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
+define('NV_FILES_DIR', NV_ASSETS_DIR);
+define('SYSTEM_CACHEDIR', NV_CACHEDIR);
+define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
+define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
 
 // Neu khong co IP
 if (NV_CLIENT_IP == 'none') {
@@ -104,10 +89,6 @@ define('NV_CURRENTTIME', isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIM
 
 // Ket noi voi class Error_handler
 $ErrorHandler = new NukeViet\Core\Error($global_config);
-set_error_handler(array(
-    &$ErrorHandler,
-    'error_handler'
-));
 
 if (empty($global_config['allow_sitelangs'])) {
     trigger_error('Error! Language variables is empty!', 256);
@@ -120,11 +101,6 @@ require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
-
-if ($global_config['cached'] == 'memcached') {
-    ini_set('session.save_handler', 'memcached');
-    ini_set('session.save_path', NV_MEMCACHED_HOST . ':' . NV_MEMCACHED_PORT);
-}
 
 // IP Ban
 if (nv_is_banIp(NV_CLIENT_IP)) {
@@ -149,32 +125,42 @@ $nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
 define('NV_SERVER_NAME', $nv_Request->server_name);
 // vd: mydomain1.com
 
+
 define('NV_SERVER_PROTOCOL', $nv_Request->server_protocol);
 // vd: http
+
 
 define('NV_SERVER_PORT', $nv_Request->server_port);
 // vd: 80
 
+
 define('NV_MY_DOMAIN', $nv_Request->my_current_domain);
 // vd: http://mydomain1.com:80
+
 
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
 
+
 define('NV_BASE_SITEURL', $nv_Request->base_siteurl . '/');
 // vd: /ten_thu_muc_chua_site/
+
 
 define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
 // vd: /ten_thu_muc_chua_site/admin/
 
+
 define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
 // D:/AppServ/www
+
 
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
 // Hau to cua file cache
 
+
 define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 // Kiem tra session cua nguoi dung
+
 
 define('NV_USER_AGENT', $nv_Request->user_agent);
 
@@ -191,6 +177,8 @@ if (!in_array(NV_SERVER_NAME, $domains)) {
 // Ket noi Cache
 if ($global_config['cached'] == 'memcached') {
     $nv_Cache = new NukeViet\Cache\Memcacheds(NV_MEMCACHED_HOST, NV_MEMCACHED_PORT, NV_LANG_DATA, NV_CACHE_PREFIX);
+} elseif ($global_config['cached'] == 'redis') {
+    $nv_Cache = new NukeViet\Cache\CRedis(NV_REDIS_HOST, NV_REDIS_PORT, NV_REDIS_TIMEOUT, NV_REDIS_PASSWORD, NV_REDIS_DBINDEX, NV_LANG_DATA, NV_CACHE_PREFIX);
 } else {
     $nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);
 }
@@ -369,7 +357,7 @@ if ($nv_Request->get_string('second', 'get') == 'cronjobs') {
 }
 
 // Kiem tra tu cach admin
-if (defined('NV_IS_ADMIN') || defined('NV_IS_SPADMIN')) {
+if (defined('NV_IS_ADMIN') or defined('NV_IS_SPADMIN')) {
     trigger_error('Hacking attempt', 256);
 }
 

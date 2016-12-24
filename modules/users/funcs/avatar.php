@@ -96,7 +96,7 @@ $array['checkss'] = NV_CHECK_SESSION;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 //Xoa avatar
-if ($checkss == $array['checkss'] && $nv_Request->isset_request('del', 'post')) {
+if ($checkss == $array['checkss'] and $nv_Request->isset_request('del', 'post')) {
     deleteAvatar();
     die(json_encode(array(
         'status' => 'ok',

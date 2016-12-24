@@ -281,13 +281,14 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 $page_title = $lang_module['openid_login'];
                 $key_words = $module_info['keywords'];
                 $mod_title = $lang_module['openid_login'];
+                
+                unset($nv_row['password']);
 
-                $contents = openid_account_confirm($gfx_chk, $attribs);
+                $contents = openid_account_confirm($gfx_chk, $attribs, $nv_row);
 
                 include NV_ROOTDIR . '/includes/header.php';
                 echo nv_site_theme($contents, false);
                 include NV_ROOTDIR . '/includes/footer.php';
-                exit;
             }
         }
 
@@ -478,7 +479,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         $stmt->execute();
 
         validUserLog($row, 1, $reg_attribs['opid'], $current_mode);
-
+        $nv_Cache->delMod($module_name);
+        
         opidr(array( 'status' => 'success', 'mess' => $lang_module['login_ok'] ));
         die();
     }
@@ -529,7 +531,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             opidr(array( 'status' => 'error', 'mess' => $lang_module['err_no_save_account'] ));
             die();
         }
-
+        $nv_Cache->delMod($module_name);
+        
         opidr(array( 'status' => 'success', 'mess' => $lang_module['account_register_to_admin'] ));
         die();
     }
@@ -543,16 +546,19 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     include NV_ROOTDIR . '/includes/header.php';
     echo nv_site_theme($contents, false);
     include NV_ROOTDIR . '/includes/footer.php';
-
-    exit();
 }
 
-//Dang nhap kieu thong thuong
+$blocker = new NukeViet\Core\Blocker(NV_ROOTDIR . '/' . NV_LOGS_DIR . '/ip_logs', NV_CLIENT_IP);
+$rules = array($global_config['login_number_tracking'], $global_config['login_time_tracking'], $global_config['login_time_ban']);
+$blocker->trackLogin($rules);
+
+// Dang nhap kieu thong thuong
 if ($nv_Request->isset_request('nv_login', 'post')) {
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
     $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
-
+    
+    $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
     $check_seccode = ! $gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
 
     if (! $check_seccode) {
@@ -568,7 +574,14 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
             'input' => 'nv_login',
             'mess' => $lang_global['username_empty'] )));
     }
-
+    
+    if ($global_config['login_number_tracking'] and $blocker->is_blocklogin($nv_username)) {
+        die(signin_result(array(
+            'status' => 'error',
+            'input' => '',
+            'mess' => sprintf($lang_global['userlogin_blocked'], $global_config['login_number_tracking'], nv_date('H:i d/m/Y', $blocker->login_block_end)) )));
+    }    
+    
     if (empty($nv_password)) {
         die(signin_result(array(
             'status' => 'error',
@@ -601,30 +614,87 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
 
         $row = $db->query($sql)->fetch();
 
-        if (! empty($row)) {
+        if (!empty($row)) {
             if ((($row['md5username'] == nv_md5safe($nv_username) and $login_email == false) or ($row['email'] == $nv_username and $login_email == true)) and $crypt->validate_password($nv_password, $row['password'])) {
-                if (! $row['active']) {
+                if (!$row['active']) {
                     $error1 = $lang_module['login_no_active'];
                 } else {
-                    $error1 = '';
-                    validUserLog($row, 1, '');
+                    if (!empty($row['active2step'])) {
+                        $nv_totppin = $nv_Request->get_title('nv_totppin', 'post', '');
+                        $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
+                        
+                        if (empty($nv_totppin) and empty($nv_backupcodepin)) {
+                            $nv_Request->set_Session('users_dismiss_captcha', md5($nv_username));
+                            die(signin_result(array(
+                                'status' => '2step',
+                                'input' => '',
+                                'mess' => '' )));
+                        }
+                        
+                        $GoogleAuthenticator = new \NukeViet\Core\GoogleAuthenticator();
+                        
+                        if (!empty($nv_totppin) and !$GoogleAuthenticator->verifyOpt($row['secretkey'], $nv_totppin)) {
+                            die(signin_result(array(
+                                'status' => 'error',
+                                'input' => 'nv_totppin',
+                                'mess' => $lang_global['2teplogin_error_opt'] )));
+                        }
+                        
+                        if (!empty($nv_backupcodepin)) {
+                            $nv_backupcodepin = nv_strtolower($nv_backupcodepin);
+                            $sth = $db->prepare('SELECT code FROM ' . NV_MOD_TABLE . '_backupcodes WHERE is_used=0 AND code=:code AND userid=' . $row['userid']);
+                            $sth->bindParam(':code', $nv_backupcodepin, PDO::PARAM_STR);
+                            $sth->execute();
+                            
+                            if ($sth->rowCount() != 1) {
+                                die(signin_result(array(
+                                    'status' => 'error',
+                                    'input' => 'nv_backupcodepin',
+                                    'mess' => $lang_global['2teplogin_error_backup'] )));
+                            }
+                            
+                            $code = $sth->fetchColumn();
+                            $db->query('UPDATE ' . NV_MOD_TABLE . "_backupcodes SET is_used=1, time_used=" . NV_CURRENTTIME . " WHERE code='" . $code . "' AND userid=" . $row['userid']);
+                        }
+                        
+                        $error1 = '';
+                    } else {
+                        $error1 = '';
+                    }
+                    
+                    if (empty($error1)) {
+                        validUserLog($row, 1, '');
+                        $nv_Request->unset_request('users_dismiss_captcha', 'session');
+                        $blocker->reset_trackLogin($nv_username);
+                    }
                 }
             }
         }
+        
+        if ($global_config['login_number_tracking'] and (empty($row) or ($row['active'] and !empty($error1)))) {
+            $blocker->set_loginFailed($nv_username, NV_CURRENTTIME);
+        }
 
-        if (! empty($error1)) {
+        if (!empty($error1)) {
             die(signin_result(array(
                 'status' => 'error',
                 'input' => '',
                 'mess' => $error1 )));
+        } elseif (in_array($global_config['two_step_verification'], array(2, 3)) and empty($row['active2step'])) {
+            die(signin_result(array(
+                'status' => '2steprequire',
+                'input' => nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . NV_2STEP_VERIFICATION_MODULE . '&' . NV_OP_VARIABLE . '=setup' . ($nv_redirect ? '&nv_redirect=' . $nv_redirect : ''), true),
+                'mess' => $lang_global['2teplogin_require'] )));
         }
     }
-
+    
     die(signin_result(array(
         'status' => 'ok',
         'input' => '',
         'mess' => $lang_module['login_ok'] )));
 }
+
+$nv_Request->unset_request('users_dismiss_captcha', 'session');
 
 if ($nv_Request->get_int('nv_ajax', 'post', 0) == 1) {
     die(user_login(true));
@@ -636,7 +706,7 @@ $mod_title = $lang_module['login'];
 
 $contents = user_login();
 
-$full = empty($nv_header);// && empty($nv_redirect);
+$full = empty($nv_header);// and empty($nv_redirect);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_site_theme($contents, $full);

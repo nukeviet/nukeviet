@@ -8,7 +8,7 @@
  * @Createdate 10/03/2010 10:51
  */
 
-if (! defined('NV_IS_MOD_USER')) {
+if (!defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
@@ -31,10 +31,12 @@ $db->query($sql);
 
 $sql = 'SELECT * FROM ' . NV_MOD_TABLE . '_reg WHERE userid=' . $userid;
 $row = $db->query($sql)->fetch();
+
 if (empty($row)) {
     Header('Location: ' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true));
     die();
 }
+
 $page_title = $mod_title = $lang_module['register'];
 $key_words = $module_info['keywords'];
 
@@ -54,22 +56,23 @@ if ($checknum == $row['checknum']) {
             $stmt->execute();
             $check_update_user = true;
         }
-    } elseif (! defined('NV_IS_USER') and $global_config['allowuserreg'] == 2) {
+    } elseif (!defined('NV_IS_USER') and $global_config['allowuserreg'] == 2) {
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (
-					username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
-					question, answer, passlostkey, view_mail, remember, in_groups,
-					active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-					:username,
-					:md5_username,
-					:password,
-					:email,
-					:first_name,
-					:last_name,
-					'', '', 0,
-					:regdate,
-					:question,
-					:answer,
-					'', 1, 1, '', 1, '', 0, '', '', '', ".$global_config['idsite'].")";
+            username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
+            question, answer, passlostkey, view_mail, remember, in_groups,
+            active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
+            :username,
+            :md5_username,
+            :password,
+            :email,
+            :first_name,
+            :last_name,
+            '', '', 0,
+            :regdate,
+            :question,
+            :answer,
+            '', 1, 1, '', 1, '', 0, '', '', '', " . $global_config['idsite'] . "
+            )";
 
         $data_insert = array();
         $data_insert['username'] = $row['username'];
@@ -81,10 +84,10 @@ if ($checknum == $row['checknum']) {
         $data_insert['regdate'] = $row['regdate'];
         $data_insert['question'] = $row['question'];
         $data_insert['answer'] = $row['answer'];
+        
         $userid = $db->insert_id($sql, 'userid', $data_insert);
+        
         if ($userid) {
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
-
             $users_info = unserialize(nv_base64_decode($row['users_info']));
             $query_field = array();
             $query_field['userid'] = $userid;
@@ -100,8 +103,10 @@ if ($checknum == $row['checknum']) {
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['account_active_log'], $row['username'] . ' | ' . $client_info['ip'], 0);
             } else {
-                $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $row['userid']);
+                $db->query('DELETE FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid);
             }
+            
+            $nv_Cache->delMod($module_name);
         }
     }
 }
@@ -119,6 +124,7 @@ if ($check_update_user) {
         $info = $lang_module['account_change_mail_error'] . "<br /><br />\n";
     }
 }
+
 $info .= "<img border=\"0\" src=\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/load_bar.gif\"><br /><br />\n";
 $info .= "[<a href=\"" . NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "\">" . $lang_module['redirect_to_login'] . "</a>]";
 

@@ -49,7 +49,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_config (
 
 $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
 	mid mediumint(8) NOT NULL AUTO_INCREMENT,
-	module varchar(55) NOT NULL,
+	module varchar(50) NOT NULL,
 	lang_key varchar(50) NOT NULL DEFAULT '',
 	weight mediumint(8) NOT NULL DEFAULT '0',
 	act_1 tinyint(4) NOT NULL DEFAULT '0',
@@ -62,7 +62,7 @@ $sql_create_table[] = "CREATE TABLE " . NV_AUTHORS_GLOBALTABLE . "_module (
 
 $sql_create_table[] = "CREATE TABLE " . NV_CONFIG_GLOBALTABLE . " (
 	lang varchar(3) NOT NULL DEFAULT 'sys',
-	module varchar(25) NOT NULL DEFAULT 'global',
+	module varchar(50) NOT NULL DEFAULT 'global',
 	config_name varchar(30) NOT NULL DEFAULT '',
 	config_value text,
 	UNIQUE KEY lang (lang,module,config_name)
@@ -133,6 +133,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_setup_language (
 	lang char(2) NOT NULL,
 	setup tinyint(1) NOT NULL DEFAULT '0',
+    weight smallint(4) unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (lang)
 ) ENGINE=MyISAM";
 
@@ -261,7 +262,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banip (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_logs (
 	id int(11) NOT NULL AUTO_INCREMENT,
 	lang varchar(10) NOT NULL,
-	module_name varchar(150) NOT NULL,
+	module_name varchar(50) NOT NULL,
 	name_key varchar(255) NOT NULL,
 	note_action text NOT NULL,
 	link_acess varchar(255) DEFAULT '',

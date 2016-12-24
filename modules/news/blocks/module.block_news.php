@@ -64,14 +64,14 @@ if (! nv_function_exists('nv_news_block_news')) {
             $array_block_news = array();
 
             $db_slave->sqlreset()
-                ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext')
+                ->select('id, catid, publtime, exptime, title, alias, homeimgthumb, homeimgfile, hometext, external_link')
                 ->from(NV_PREFIXLANG . '_' . $mod_data . '_rows')
                 ->where('status= 1')
                 ->order('publtime DESC')
                 ->limit($numrow);
             $result = $db_slave->query($db_slave->sql());
 
-            while (list($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext) = $result->fetch(3)) {
+            while (list($id, $catid, $publtime, $exptime, $title, $alias, $homeimgthumb, $homeimgfile, $hometext, $external_link) = $result->fetch(3)) {
                 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $module_array_cat[$catid]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'];
                 if ($homeimgthumb == 1) {
                     //image thumb
@@ -94,7 +94,8 @@ if (! nv_function_exists('nv_news_block_news')) {
                     'link' => $link,
                     'imgurl' => $imgurl,
                     'width' => $blockwidth,
-                    'hometext' => $hometext
+                    'hometext' => $hometext,
+                    'external_link' => $external_link
                 );
             }
             $cache = serialize($array_block_news);
@@ -106,13 +107,20 @@ if (! nv_function_exists('nv_news_block_news')) {
         } else {
             $block_theme = 'default';
         }
-        $xtpl = new XTemplate('block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news/');
+        $xtpl = new XTemplate('block_news.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/news');
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('TEMPLATE', $block_theme);
 
         foreach ($array_block_news as $array_news) {
-            $array_news['hometext'] = nv_clean60($array_news['hometext'], $block_config['tooltip_length'], true);
+            $array_news['hometext_clean'] = strip_tags($array_news['hometext']);
+            $array_news['hometext_clean'] = nv_clean60($array_news['hometext_clean'], $block_config['tooltip_length'], true);
+            
+            if ($array_news['external_link']) {
+                $array_news['target_blank'] = 'target="_blank"';
+            }
+            
             $xtpl->assign('blocknews', $array_news);
+            
             if (! empty($array_news['imgurl'])) {
                 $xtpl->parse('main.newloop.imgblock');
             }

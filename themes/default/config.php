@@ -178,7 +178,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     $property['family'] = $nv_Request->get_title('gfont_family', 'post', '');
     $property['styles'] = $nv_Request->get_title('gfont_styles', 'post', '');
     $property['subset'] = $nv_Request->get_title('gfont_subset', 'post', '');
-    empty($property['family']) && ($property['styles'] = $property['subset'] = "");
+    empty($property['family']) and ($property['styles'] = $property['subset'] = "");
     $config_theme['gfont'] = array_filter($property);
 
     // General css
@@ -188,7 +188,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 
     $config_value = array_filter($config_theme);
-    !empty($css) && $config_value['css_content'] = $css;
+    !empty($css) and $config_value['css_content'] = $css;
     $config_value = serialize($config_value);
 
     if (isset($module_config['themes'][$selectthemes])) {
@@ -229,7 +229,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
     }
 }
 
-$xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $selectthemes . '/system/');
+$xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $selectthemes . '/system');
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
 $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
@@ -260,7 +260,7 @@ if (isset($module_config['themes'][$selectthemes])) {
         $xtpl->assign('BLOCK_BORDER_STYLE', array(
             'key' => $key,
             'value' => $value,
-            'selected' => (isset($config_theme['block']['border_style']) && $config_theme['block']['border_style'] == $key) ? ' selected="selected"' : '' ));
+            'selected' => (isset($config_theme['block']['border_style']) and $config_theme['block']['border_style'] == $key) ? ' selected="selected"' : '' ));
         $xtpl->parse('main.block_border_style');
     }
 
