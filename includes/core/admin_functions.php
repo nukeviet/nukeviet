@@ -515,7 +515,12 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " 	</conditions>\n";
         $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
         $rewrite_rule .= " </rule>\n";
-        
+		
+        $rewrite_rule .= " <rule name=\"nv_rule_rewrite_tag\">\n";
+        $rewrite_rule .= " 	<match url=\"([^?]+)\/([^?]+)\/tag\/([^?]+)$\" ignoreCase=\"false\" />\n";
+        $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
+        $rewrite_rule .= " </rule>\n";
+		
         $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
         $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/{R:2}/\" />\n";
