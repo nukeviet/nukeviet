@@ -317,7 +317,7 @@ function nv_geVersion($updatetime = 3600)
 
         $args = array(
             'headers' => array(
-                'Referer' => NV_SERVER_NAME,
+                'Referer' => NV_MY_DOMAIN,
             ),
             'body' => array(
                 'lang' > NV_LANG_INTERFACE,
@@ -740,7 +740,7 @@ function nv_getExtVersion($updatetime = 3600)
 
             $args = array(
                 'headers' => array(
-                    'Referer' => NUKEVIET_STORE_APIURL,
+                    'Referer' => NV_MY_DOMAIN,
                 ),
                 'body' => array(
                     'lang' > NV_LANG_INTERFACE,
