@@ -234,6 +234,14 @@ $(document).ready(function() {
     } else {
         $('#adv-form').collapse('hide');
     }
+    
+    $('input[name="open_source"]').change(function() {
+    	if ($(this).is(':checked')) {
+    		$('#content_bodytext_required').addClass('hidden');
+    	} else {
+    		$('#content_bodytext_required').removeClass('hidden');
+    	}
+	});
 });
 
 function formatRepo (repo) {

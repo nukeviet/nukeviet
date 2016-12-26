@@ -21,6 +21,7 @@ $lang_translator['langtype'] = 'lang_block';
 
 $lang_block['catid'] = 'Sujet';
 $lang_block['numrow'] = 'Nombre d\'articles affichés';
+$lang_block['title_length'] = 'Numero';
 $lang_block['type'] = 'Méthode d\'affichage';
 $lang_block['showtooltip'] = 'Affichage de tooltip';
 $lang_block['tooltip_position'] = 'Position';

@@ -26,9 +26,9 @@
 				<td>{ROW.field}</td>
 				<td>{ROW.field_lang}</td>
 				<td>{ROW.field_type} </td>
-				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_register}/></td>
-				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.required}/></td>
-				<td class="text-center"><input type="checkbox" onclick="nv_edit_field({ROW.fid});" {ROW.show_profile}/></td>
+				<td class="text-center"><i class="fa fa-lg {ROW.show_register}" aria-hidden="true"></i></td>
+				<td class="text-center"><i class="fa fa-lg {ROW.required}" aria-hidden="true"></i></td>
+				<td class="text-center"><i class="fa fa-lg {ROW.show_profile}" aria-hidden="true"></i></td>
 				<td>
 					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_edit_field({ROW.fid});">{LANG.field_edit}</a> -
 					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_del_field({ROW.fid})">{LANG.delete}</a>

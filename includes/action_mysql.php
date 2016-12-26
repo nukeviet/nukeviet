@@ -46,10 +46,10 @@ function nv_create_table_sys($lang)
 
     $sql_create_table = array();
     $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_modules (
-		 title varchar(55) NOT NULL,
-		 module_file varchar(55) NOT NULL DEFAULT '',
-		 module_data varchar(55) NOT NULL DEFAULT '',
-		 module_upload varchar(55) NOT NULL DEFAULT '',
+		 title varchar(50) NOT NULL,
+		 module_file varchar(50) NOT NULL DEFAULT '',
+		 module_data varchar(50) NOT NULL DEFAULT '',
+		 module_upload varchar(50) NOT NULL DEFAULT '',
 		 custom_title varchar(255) NOT NULL,
 		 admin_title varchar(255) DEFAULT '',
 		 set_time int(11) unsigned NOT NULL DEFAULT '0',
@@ -103,7 +103,7 @@ function nv_create_table_sys($lang)
 		 func_name varchar(55) NOT NULL,
 		 alias varchar(55) NOT NULL DEFAULT '',
 		 func_custom_name varchar(255) NOT NULL,
-		 in_module varchar(55) NOT NULL,
+		 in_module varchar(50) NOT NULL,
 		 show_func tinyint(4) NOT NULL DEFAULT '0',
 		 in_submenu tinyint(1) unsigned NOT NULL DEFAULT '0',
 		 subweight smallint(2) unsigned NOT NULL DEFAULT '1',
