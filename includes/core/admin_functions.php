@@ -136,7 +136,7 @@ function nv_save_file_config_global()
         } else {
             $sys_info['supports_rewrite'] = false;
         }
-    } elseif (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.') !== false) {
+    } elseif (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
         if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument')) {
             $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
         } else {
