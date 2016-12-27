@@ -129,6 +129,7 @@ function nv_save_file_config_global()
     $ini_set_support = ($sys_info['ini_set_support']) ? 'true' : 'false';
     $content_config .= "\$sys_info['ini_set_support']= " . $ini_set_support . ";\n";
     //Kiem tra ho tro rewrite
+	$iis_info = explode( '/', $_SERVER['SERVER_SOFTWARE']);
     if (function_exists('apache_get_modules')) {
         $apache_modules = apache_get_modules();
         if (in_array('mod_rewrite', $apache_modules)) {
@@ -136,7 +137,7 @@ function nv_save_file_config_global()
         } else {
             $sys_info['supports_rewrite'] = false;
         }
-    } elseif (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.') !== false) {
+    } elseif (strpos($iis_info[0], 'Microsoft-IIS') !== false AND $iis_info[0] >= 7) {
         if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument')) {
             $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
         } else {
