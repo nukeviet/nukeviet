@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -101,6 +103,7 @@ $lang_module['addlogo'] = 'Thêm Logo';
 $lang_module['addlogosave'] = 'Lưu thay đổi';
 $lang_module['notlogo'] = 'Lỗi: Hệ thống không tìm thấy file Logo, có thể bạn chưa cấu hình chèn ảnh logo hoặc file ảnh bị xóa, vui lòng cấu hình lại';
 $lang_module['upload_logo'] = 'Logo khi thêm vào hình ảnh ';
+$lang_module['upload_logo_pos'] = 'Vị trí của logo';
 $lang_module['selectimg'] = 'Chọn hình ảnh';
 $lang_module['autologo'] = 'Tự động chèn Logo vào ảnh của các module';
 $lang_module['autologomodall'] = 'Tất cả các module';
@@ -108,6 +111,15 @@ $lang_module['logosizecaption'] = 'Kích thước của logo';
 $lang_module['imagewith'] = 'Nếu chiều rộng ảnh';
 $lang_module['logowith'] = 'Chiều rộng của logo bằng';
 $lang_module['logosize3'] = 'Sử dụng nguyên kích thước logo, Kích thước tối đa của logo bằng';
+$lang_module['logoposbottomright'] = 'Phía dưới, bên phải';
+$lang_module['logoposbottomleft'] = 'Phía dưới, bên trái';
+$lang_module['logoposbottomcenter'] = 'Phía dưới, ở giữa';
+$lang_module['logoposcenterright'] = 'Ở giữa, bên phải';
+$lang_module['logoposcenterleft'] = 'Ở giữa, bên trái';
+$lang_module['logoposcentercenter'] = 'Chính giữa ảnh';
+$lang_module['logopostopright'] = 'Phía trên, bên phải';
+$lang_module['logopostopleft'] = 'Phía trên, bên trái';
+$lang_module['logopostopcenter'] = 'Phía trên, ở giữa';
 $lang_module['fileimage'] = 'ảnh';
 $lang_module['altimage'] = 'Chú thích cho hình';
 
@@ -161,3 +173,5 @@ $lang_module['addlogo_error_small'] = 'Ảnh này kích thước quá nhỏ, kh�
 $lang_module['upload_alt_require'] = 'Bắt buộc nhập chú thích cho file khi upload';
 $lang_module['upload_auto_alt'] = 'Tự xác định mô tả từ tên ảnh';
 $lang_module['upload_alt_note'] = 'Hãy nhập chú thích cho file trước';
+$lang_module['upload_view_thumbnail'] = 'Chuyển sang xem theo dạng lưới';
+$lang_module['upload_view_detail'] = 'Chuyển sang xem theo dạng danh sách';

@@ -8,9 +8,9 @@
  * @Createdate 11-7-2011 9:25
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
-
-if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
+if (!defined('NV_MAINFILE') or !defined('NV_IS_CRON')) {
+    die('Stop!!!');
+}
 
 /**
  * cron_auto_check_version()
@@ -19,22 +19,20 @@ if( ! defined( 'NV_IS_CRON' ) ) die( 'Stop!!!' );
  */
 function cron_auto_check_version()
 {
-	global $nv_Request, $global_config, $client_info;
+    global $nv_Request, $global_config, $client_info;
 
-	$admin_cookie = $nv_Request->get_bool( 'admin', 'session', false );
+    $admin_cookie = $nv_Request->get_bool('admin', 'session', false);
 
-	if( ! empty( $admin_cookie ) and $global_config['autocheckupdate'] )
-	{
-		require NV_ROOTDIR . '/includes/core/admin_access.php';
-		require NV_ROOTDIR . '/includes/core/is_admin.php';
+    if (! empty($admin_cookie) and $global_config['autocheckupdate']) {
+        require NV_ROOTDIR . '/includes/core/admin_access.php';
+        require NV_ROOTDIR . '/includes/core/is_admin.php';
 
-		if( defined( 'NV_IS_GODADMIN' ) )
-		{
-			define( 'NV_ADMIN', true );
-			include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
-			nv_geVersion( $global_config['autoupdatetime'] * 3600 );
-		}
-	}
+        if (defined('NV_IS_GODADMIN')) {
+            define('NV_ADMIN', true);
+            include_once NV_ROOTDIR . '/includes/core/admin_functions.php';
+            nv_geVersion($global_config['autoupdatetime'] * 3600);
+        }
+    }
 
-	return true;
+    return true;
 }

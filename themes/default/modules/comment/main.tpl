@@ -1,11 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: header -->
-<!-- BEGIN: jsfile -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/comment.js"></script>
-<!-- END: jsfile -->
-<!-- BEGIN: cssfile -->
-<link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/comment.css" type="text/css" />
-<!-- END: cssfile -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE_JS}/js/comment.js"></script>
+<link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE_CSS}/css/comment.css" type="text/css" />
 <!-- END: header -->
 
 <div id="idcomment" class="nv-fullbg">
@@ -56,8 +52,8 @@
 			</div>
 			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
-				<label class="col-xs-6">{LANG.comment_seccode}</label>
-				<div class="col-xs-8">
+				<label class="col-xs-6 hidden-xs">{LANG.comment_seccode}</label>
+				<div class="col-xs-14 col-sm-8">
 					<img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
 					&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode_iavim');">&nbsp;</em>
 				</div>
@@ -81,7 +77,7 @@
 		<!-- BEGIN: form_login-->
 		<div class="alert alert-danger fade in">
 			<!-- BEGIN: message_login -->
-			<a title="{GLANG.loginsubmit}" href="#" onclick="return loginForm();">{LANG.comment_login}</a>
+			<a title="{GLANG.loginsubmit}" href="#" onclick="return loginForm('');">{LANG.comment_login}</a>
 			<!-- END: message_login -->
 
 			<!-- BEGIN: message_register_group -->

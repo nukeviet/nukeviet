@@ -1,7 +1,7 @@
 <noscript>
     <div class="alert alert-danger">{LANG.nojs}</div>
 </noscript>
-<div id="mobilePage" class="fixed">
+<div id="mobilePage">
     <header class="first-child">
         <div id="header" class="clearfix">
             <div class="logo">
@@ -47,11 +47,15 @@
     	<section>
     		<div id="body">
                 <!-- BEGIN: breadcrumbs -->
-     		   <div class="row">
-    	    		<ol class="breadcrumb">
-    	    			<li class="home" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><em class="fa fa-lg fa-home">&nbsp;</em><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title">{LANG.Home}</span></a></li>
-    	    			<!-- BEGIN: loop --><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
-    	    		</ol>
+     		   <div class="breadcrumbs clearfix">
+     		   		<span class="home-icon" itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{THEME_SITE_HREF}" itemprop="url" title="{LANG.Home}"><span itemprop="title"><em class="fa fa-home fa-lg"></em></span></a></span>
+    	    		<!--span class="load-bar"></span-->
+    	    		<a class="toggle" onclick="showSubBreadcrumbs(this,event);"><em class="fa fa-angle-right"></em></a>
+					<ol class="breadcrumb"></ol>
     			</div>
+	    		<ol class="sub-breadcrumbs"></ol>
+	    		<ol class="temp-breadcrumbs hidden">
+    	    		<!-- BEGIN: loop --><li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{BREADCRUMBS.link}" itemprop="url" title="{BREADCRUMBS.title}"><span itemprop="title">{BREADCRUMBS.title}</span></a></li><!-- END: loop -->
+				</ol>
     			<!-- END: breadcrumbs -->
     			[THEME_ERROR_INFO]

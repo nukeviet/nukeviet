@@ -16,10 +16,10 @@
 	<div class="panel panel-default">
 		<div class="panel-body featured">
 			<!-- BEGIN: image -->
-			<a href="{CONTENT.link}" title="{CONTENT.title}"><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" /></a>
+			<a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
 			<h2>
-				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+				<a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}>{CONTENT.title}</a>
 				<!-- BEGIN: newday --><span class="icon_new">&nbsp;</span><!-- END: newday -->
 			</h2>
 			<div class="text-muted">
@@ -30,14 +30,14 @@
 					<li>
 						<em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}
 					</li>
+					<!-- BEGIN: comment -->
 					<li>
 						<em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}
 					</li>
+					<!-- END: comment -->
 				</ul>
 			</div>
-			<p>
-				{CONTENT.hometext}
-			</p>
+			{CONTENT.hometext}
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
 				{ADMINLINK}
@@ -50,10 +50,10 @@
 	<div class="panel panel-default">
 		<div class="panel-body">
 			<!-- BEGIN: image -->
-			<a href="{CONTENT.link}" title="{CONTENT.title}"><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" /></a>
+			<a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}><img  alt="{HOMEIMGALT1}" src="{HOMEIMG1}" width="{IMGWIDTH1}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
 			<h3>
-				<a href="{CONTENT.link}" title="{CONTENT.title}">{CONTENT.title}</a>
+				<a href="{CONTENT.link}" title="{CONTENT.title}" {CONTENT.target_blank}>{CONTENT.title}</a>
 				<!-- BEGIN: newday -->
 				<span class="icon_new">&nbsp;</span>
 				<!-- END: newday -->
@@ -62,12 +62,12 @@
 				<ul class="list-unstyled list-inline">
 					<li><em class="fa fa-clock-o">&nbsp;</em> {CONTENT.publtime}</li>
 					<li><em class="fa fa-eye">&nbsp;</em> {LANG.view}: {CONTENT.hitstotal}</li>
+					<!-- BEGIN: comment -->
 					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {CONTENT.hitscm}</li>
+					<!-- END: comment -->
 				</ul>
 			</div>
-			<p>
-				{CONTENT.hometext}
-			</p>
+			{CONTENT.hometext}
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
 				{ADMINLINK}
@@ -84,7 +84,7 @@
 <ul class="related">
 	<!-- BEGIN: loop -->
 	<li>
-		<em class="fa fa-angle-right">&nbsp;</em><a href="{RELATED.link}" title="{RELATED.title}">{RELATED.title} <em>({RELATED.publtime}) </em></a>
+		<em class="fa fa-angle-right">&nbsp;</em><a href="{RELATED.link}" title="{RELATED.title}" {EXTLINK}>{RELATED.title} <em>({RELATED.publtime}) </em></a>
 		<!-- BEGIN: newday -->
 		<span class="icon_new">&nbsp;</span>
 		<!-- END: newday -->

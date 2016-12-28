@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
 $lang_translator['createdate'] = '31/07/2015, 16:30';
@@ -31,7 +33,7 @@ $lang_module['comment_email'] = 'E-mail';
 $lang_module['comment_content'] = 'Contenu';
 $lang_module['comment_seccode'] = 'Code de sécurité';
 $lang_module['comment_submit'] = 'Envoyer';
-$lang_module['comment_timeout'] = 'Vous avez voter, veuillez attendre %s minutes pour envoyer les commentaires';
+$lang_module['comment_timeout'] = 'Vous avez voter, veuillez attendre %s pour envoyer les commentaires';
 $lang_module['sortcomm'] = 'Mettre en ordre des commentaire';
 $lang_module['sortcomm_0'] = 'Mettre en ordre des commentaires plus récents';
 $lang_module['sortcomm_1'] = 'Mettre en ordre des commentaires plus vieux';

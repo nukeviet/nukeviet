@@ -6,11 +6,8 @@
 <div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
 <!-- BEGIN: edit_user -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <form action="{FORM_ACTION}" method="post" class="form-inline" onsubmit="return user_validForm(this);">
 	<div class="table-responsive">
@@ -80,7 +77,7 @@
 					</select></td>
 				</tr>
 				<tr>
-					<td colspan="2"> {LANG.avata} </td>
+					<td colspan="2"> {LANG.avatar} </td>
 					<td>
                         <div class="input-group">
 					       <input type="text" class="form-control" id="avatar" name="photo" value="" readonly="readonly"/>
@@ -106,16 +103,23 @@
 				<tr>
 					<td style="vertical-align:top" colspan="2"> {LANG.in_group} </td>
 					<td>
-						<div class="row checkbox">
-							<!-- BEGIN: list -->
-							<label class="col-sm-20">
-								<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
-							</label>
-							<!-- END: list -->
-						</div>
+						<!-- BEGIN: list -->
+                        <div class="clearfix">
+    						<label class="pull-left w200">
+    							<input type="checkbox" value="{GROUP.id}" name="group[]"{GROUP.checked} /> {GROUP.title}
+    						</label>
+                            <label class="pull-left group_default" style="display:none">
+                                <input type="radio" value="{GROUP.id}" name="group_default" /> {LANG.in_group_default}
+                            </label>
+                        </div>
+						<!-- END: list -->
 					</td>
 				</tr>
 				<!-- END: group -->
+				<tr>
+					<td style="vertical-align:top" colspan="2"> {LANG.is_official} </td>
+					<td><input type="checkbox" name="is_official" value="1"{DATA.is_official}/> <small>{LANG.is_official_note}</small></td>
+				</tr>
 			</tbody>
 		</table>
 		<!-- BEGIN: field -->

@@ -1,6 +1,5 @@
 <!-- BEGIN: step -->
-<table id="checkserver" cellspacing="0"
-	summary="{LANG.checkserver_detail}">
+<table id="checkserver" cellspacing="0" summary="{LANG.checkserver_detail}">
 	<caption>{LANG.if_server} <span class="highlight_red">{LANG.not_compatible}</span>.
 	{LANG.please_checkserver}.</caption>
 	<tr>
@@ -9,12 +8,12 @@
 		<th scope="col">{LANG.result}</th>
 	</tr>
 	<tr>
-		<th scope="row" class="spec">{LANG.php_version}</th>
+		<th scope="row" class="spec">{LANG.php_version}: {DATA_REQUEST.php_version}</th>
 		<td>{LANG.required_on} >= {DATA_REQUEST.php_required}</td>
 		<td><span class="{DATA_REQUEST.class_php_support}">{DATA_REQUEST.php_support}</span></td>
 	</tr>
 	<tr>
-		<th scope="row" class="specalt">{LANG.pdo_support}</th>
+		<th scope="row" class="specalt">{LANG.pdo_support} (PDO)</th>
 		<td class="alt">{LANG.required_on}</td>
 		<td class="alt"><span class="{DATA_REQUEST.class_pdo_support}">{DATA_REQUEST.pdo_support}</span></td>
 	</tr>
@@ -27,6 +26,11 @@
 		<th scope="row" class="specalt">{LANG.gd_support}</th>
 		<td class="alt">{LANG.request}</td>
 		<td class="alt"><span class="{DATA_REQUEST.class_gd_support}">{DATA_REQUEST.gd_support}</span></td>
+	</tr>
+	<tr>
+		<th scope="row" class="spec">{LANG.xml_support}</th>
+		<td>{LANG.request}</td>
+		<td><span class="{DATA_REQUEST.class_xml_support}">{DATA_REQUEST.xml_support}</span></td>
 	</tr>
 	<tr>
 		<th scope="row" class="specalt">{LANG.mcrypt_support}</th>
@@ -56,30 +60,10 @@
 		<td><span class="{DATA_SUPPORT.class_supports_rewrite}">{DATA_SUPPORT.supports_rewrite}</span></td>
 	</tr>
 	<tr>
-		<th scope="row" class="specalt">{LANG.safe_mode}</th>
-		<td class="alt">{LANG.turnoff}</td>
-		<td class="alt"><span class="{DATA_SUPPORT.class_safe_mode}">{DATA_SUPPORT.safe_mode}</span></td>
-	</tr>
-	<tr>
-		<th scope="row" class="spec">Register Global</th>
-		<td>{LANG.turnoff}</td>
-		<td><span class="{DATA_SUPPORT.class_register_globals}">{DATA_SUPPORT.register_globals}</span></td>
-	</tr>
-	<tr>
-		<th scope="row" class="specalt">Magic Quotes Runtime</th>
-		<td class="alt">{LANG.turnoff}</td>
-		<td class="alt"><span class="{DATA_SUPPORT.class_magic_quotes_runtime}">{DATA_SUPPORT.magic_quotes_runtime}</span></td>
-	</tr>
-	<tr>
-		<th scope="row" class="spec">Magic Quotes GPC</th>
-		<td>{LANG.turnoff}</td>
-		<td><span class="{DATA_SUPPORT.class_magic_quotes_gpc}">{DATA_SUPPORT.magic_quotes_gpc}</span></td>
-	</tr>
-	<tr>
-		<th scope="row" class="specalt">Magic Quotes Sybase</th>
-		<td class="alt">{LANG.turnoff}</td>
-		<td class="alt"><span class="{DATA_SUPPORT.class_magic_quotes_sybase}">{DATA_SUPPORT.magic_quotes_sybase}</span></td>
-	</tr>
+		<th scope="row" class="specalt">Extension Mbstring Support</th>
+		<td class="alt">{LANG.is_support}</td>
+		<td class="alt"><span class="{DATA_SUPPORT.class_mbstring_support}">{DATA_SUPPORT.mbstring_support}</span></td>
+	</tr>	
 	<tr>
 		<th scope="row" class="spec">Output Buffering</th>
 		<td>{LANG.turnoff}</td>
@@ -110,6 +94,11 @@
 		<td class="alt">{LANG.is_support}</td>
 		<td class="alt"><span class="{DATA_SUPPORT.class_zip_support}">{DATA_SUPPORT.zip_support}</span></td>
 	</tr>
+	<tr>
+		<th scope="row" class="spec">Client URL Library (curl)</th>
+		<td>{LANG.is_support}</td>
+		<td><span class="{DATA_SUPPORT.class_curl_support}">{DATA_SUPPORT.curl_support}</span></td>
+	</tr>	
 </table>
 <ul class="control_t fr">
 	<li><span class="back_step"><a

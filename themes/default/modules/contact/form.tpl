@@ -32,7 +32,7 @@
 			<div class="input-group">
 				<span class="input-group-addon"><em class="fa fa-user fa-lg fa-horizon"></em></span>
 				<input type="text" maxlength="100" value="" name="fname" class="form-control required" placeholder="{LANG.fullname}" data-pattern="/^(.){3,}$/" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_fullname}" />
-                <span class="input-group-addon pointer" title="{GLANG.loginsubmit}" onclick="return loginForm();"><em class="fa fa-sign-in fa-lg"></em></span>
+                <span class="input-group-addon pointer" title="{GLANG.loginsubmit}" onclick="return loginForm('');"><em class="fa fa-sign-in fa-lg"></em></span>
             </div>
 		</div>
 		<div class="form-group">
@@ -76,6 +76,9 @@
     			<textarea cols="8" name="fcon" class="form-control required" maxlength="1000" placeholder="{LANG.content}" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_content}"></textarea>
             </div>
 		</div>
+        <div class="form-group">
+            <label><input type="checkbox" name="sendcopy" value="1" checked="checked" /><span>{LANG.sendcopy}</span></label>
+        </div>
 		<div class="form-group">
             <div class="middle text-right clearfix">
                 <img width="{GFX_WIDTH}" height="{GFX_HEIGHT}" title="{LANG.captcha}" alt="{LANG.captcha}" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" class="captchaImg display-inline-block">

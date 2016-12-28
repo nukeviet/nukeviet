@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -98,13 +100,14 @@ $lang_module['allow_create_subdirectories'] = 'Được phép tạo thư mục';
 $lang_module['allow_modify_subdirectories'] = 'Được phép đổi tên, xóa thư mục';
 $lang_module['admin_login_incorrect'] = 'Tài khoản &ldquo;<strong>%s</strong>&rdquo; đã có trong danh sách quản trị. Hãy sử dụng một tài khoản khác';
 $lang_module['config'] = 'Cấu hình';
+$lang_module['funcs'] = 'Chức năng';
+$lang_module['checkall'] = 'Chọn tất cả';
+$lang_module['uncheckall'] = 'Bỏ chọn tất cả';
+
 $lang_module['adminip'] = 'Quản lý IP truy cập khu vực quản trị';
 $lang_module['adminip_ip'] = 'Ip';
 $lang_module['adminip_timeban'] = 'Thời gian bắt đầu';
 $lang_module['adminip_timeendban'] = 'Thời gian kết thúc';
-$lang_module['adminip_funcs'] = 'Chức năng';
-$lang_module['adminip_checkall'] = 'Chọn tất cả';
-$lang_module['adminip_uncheckall'] = 'Bỏ chọn tất cả';
 $lang_module['adminip_add'] = 'Thêm địa chỉ IP';
 $lang_module['adminip_address'] = 'Địa chỉ';
 $lang_module['adminip_begintime'] = 'Thời gian bắt đầu';
@@ -134,7 +137,6 @@ $lang_module['rule_pass'] = 'Mật khẩu chỉ dùng các ký tự a-zA-Z0-9_-'
 $lang_module['spadmin_add_admin'] = 'Cho phép người điều hành chung tạo và thay đổi quyền hạn người điều hành modules';
 $lang_module['authors_detail_main'] = 'Hiển thị chi tiết các thông tin tài khoản của người quản trị';
 
-$lang_module['adminrelogin_max'] = 'Số lần admin được nhập lại nếu gõ sai, sau đó hệ thống sẽ tước quyền truy cập admin và đẩy ra trang chủ';
 $lang_module['admin_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu admin không sử dụng trình duyệt';
 $lang_module['add_user'] = 'Chỉ định thành viên';
 $lang_module['add_select'] = 'Chọn';
@@ -147,7 +149,7 @@ $lang_module['action_account'] = 'Tài khoản thành viên';
 $lang_module['action_account_nochange'] = 'Giữ nguyên tài khoản thành viên';
 $lang_module['action_account_suspend'] = 'Khóa tài khoản thành viên';
 $lang_module['action_account_del'] = 'Xóa tài khoản thành viên';
-$lang_module['module_admin'] = 'Quyền hạn module hệ thống';
+$lang_module['module_admin'] = 'Phân quyền hệ thống';
 $lang_module['users'] = 'Tài khoản';
 $lang_module['number'] = 'STT';
 $lang_module['module'] = 'Tên module';

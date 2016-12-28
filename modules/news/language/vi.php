@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -73,7 +75,7 @@ $lang_module['search_on_internet'] = 'Tìm trên toàn mạng Internet';
 $lang_module['search_adv_internet'] = 'Mở rộng trên Internet';
 $lang_module['search_on_nuke'] = 'Tìm trong site';
 $lang_module['search_none'] = 'Không tìm thấy dữ liệu nào có liên quan đến';
-$lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 truờng tìm kiếm';
+$lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 trường tìm kiếm';
 $lang_module['search_in_module'] = 'trong mục';
 $lang_module['view_all_title'] = 'Xem tất cả các kết quả tìm kiếm';
 $lang_module['pages_title'] = 'Trang';
@@ -104,7 +106,7 @@ $lang_module['search_all'] = ' Tất cả các chủ đề';
 $lang_module['search_date_rule'] = 'dd.mm.yyyy';
 $lang_module['content'] = 'Quản lý bài viết';
 $lang_module['add_content'] = 'Đăng bài viết';
-$lang_module['topic_sl'] = 'Chọn nhóm tin liên quan';
+$lang_module['topic_sl'] = 'Chọn dòng sự kiện';
 $lang_module['imgposition'] = 'Hình ảnh tại bài viết';
 $lang_module['imgposition_0'] = 'Không hiển thị';
 $lang_module['imgposition_1'] = 'Hiển thị theo cấu hình module';
@@ -112,7 +114,7 @@ $lang_module['imgposition_2'] = 'Hiển thị dưới phần mở đầu';
 $lang_module['name'] = 'Tiêu đề';
 $lang_module['alias'] = 'Liên kết tĩnh';
 $lang_module['content_cat'] = 'Chủ đề của bài viết';
-$lang_module['content_topic'] = 'Nhóm tin liên quan';
+$lang_module['content_topic'] = 'Thuộc dòng sự kiện';
 $lang_module['content_homeimg'] = 'Hình Minh họa';
 $lang_module['content_homeimgalt'] = 'Chú thích cho hình minh họa';
 $lang_module['content_hometext'] = 'Giới thiệu ngắn gọn';

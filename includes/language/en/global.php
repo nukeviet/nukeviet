@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -47,6 +49,8 @@ $lang_global['unick_type_1'] = 'Account used only numbers';
 $lang_global['unick_type_2'] = 'Account used only numbers and letters';
 $lang_global['unick_type_3'] = 'Account used only numbers, letters and following characters between: dash, underline, space';
 $lang_global['unick_type_4'] = 'Account used only Unicode, no special characters';
+$lang_global['username_rule_limit'] = 'Invalid Username: %1$s and %2$d from to %3$d characters';
+$lang_global['username_rule_nolimit'] = 'Username must be between %1$d to %2$d characters';
 $lang_global['password_empty'] = 'Password has not been declared';
 $lang_global['passwordlong'] = 'Password too length. limit %1$d characters';
 $lang_global['passwordadjective'] = 'Password too short. Minimum %1$d characters';
@@ -57,12 +61,21 @@ $lang_global['upass_type_2'] = 'Password should combin number and letter, have s
 $lang_global['upass_type_3'] = 'Password should combin number and letter, have uppercase letter';
 $lang_global['upass_type_4'] = 'Password should combin number and letter, have uppercase letter and special characters';
 $lang_global['upass_type_simple'] = 'Password is using easily guessed password, enter the password more complex';
+$lang_global['password_rule_limit'] = 'Invalid Password: %1$s and %2$d from to %3$d characters';
+$lang_global['password_rule_nolimit'] = 'Password must be between %1$d to %2$d characters';
 $lang_global['securitycodeincorrect'] = 'Security Code is invalid';
 $lang_global['loginincorrect'] = 'The system can not find information correctly with your declaration. Username or password do not match';
 $lang_global['admin_loginsuccessfully'] = 'You have successfully logged. The system will transfer you to the site administration area';
 $lang_global['incorrect_password'] = 'Password is incorrect';
-$lang_global['relogin_info'] = 'You were not online for a long time. Please declare your password again. Please enter your password in the box below. You only enter password maximum %1$d times. If the %1$d times that you did not verify the password, the system will forfeit the right to access your Administration';
-$lang_global['relogin_error_info'] = '%1$s. Please enter your password in the box below. You only enter password maximum %2$d times. You only enter password maximum %2$d times. If the %1$d times that you did not verify the password, the system will forfeit the right to access your Administration';
+$lang_global['userlogin_blocked'] = 'You are logged after failure%, temporarily locking system login to% s';
+$lang_global['2teplogin_totppin_label'] = 'Enter the verification code from the Google Authenticator app';
+$lang_global['2teplogin_totppin_placeholder'] = 'Enter the 6-digit code';
+$lang_global['2teplogin_code_label'] = 'Enter one of the backup codes you received.';
+$lang_global['2teplogin_code_placeholder'] = 'Enter the 8-digit code';
+$lang_global['2teplogin_other_menthod'] = 'Try other ways';
+$lang_global['2teplogin_error_opt'] = 'Confirmation code is incorrect, please re-enter';
+$lang_global['2teplogin_error_backup'] = 'Backup codes are incorrect, please re-enter';
+$lang_global['2teplogin_require'] = 'You must enable two-factor authentication can login. Click here to activate this function';
 $lang_global['memory_time_usage'] = 'Memory: %1$s. Processing time: %2$s seconds';
 $lang_global['for_admin'] = 'For Admin';
 $lang_global['admin_account'] = 'Admin Account';
@@ -73,6 +86,7 @@ $lang_global['adminlogin'] = 'Login to Administration';
 $lang_global['module_for_admin'] = 'We are Sorry but this section of our site is for <em>Administrators Only.</em>';
 $lang_global['in_groups'] = 'Members Groups';
 $lang_global['username'] = 'Username';
+$lang_global['username_email'] = 'Username or Email';
 $lang_global['password'] = 'Password';
 $lang_global['password2'] = 'Repeat password';
 $lang_global['captcharefresh'] = 'Refresh';
@@ -220,6 +234,8 @@ $lang_global['type_email'] = 'Enter your email address...';
 $lang_global['add_block'] = 'Add blocks in this area';
 $lang_global['edit_block'] = 'Edit';
 $lang_global['delete_block'] = 'Delete';
+$lang_global['act_block'] = 'Activate. Click to deactivate';
+$lang_global['deact_block'] = 'Deactivate. Click to activate';
 $lang_global['outgroup_block'] = 'Remove from group';
 $lang_global['block_delete_confirm'] = 'Note: When you remove this block in the system will delete all, you are definitely doing?';
 $lang_global['block_outgroup_confirm'] = 'This will remove this block from a group and create a new group that contains this block if this block is located in a block group having 2 or more. Are you sure you want to remove this block from the group?';
@@ -246,7 +262,7 @@ $lang_global['error_upload_extension'] = 'Error: The uploaded file is blocked be
 $lang_global['error_upload_unknown'] = 'Unknown upload error';
 $lang_global['error_upload_type_not_allowed'] = 'Files of this type are not allowed';
 $lang_global['error_upload_mime_not_recognize'] = 'System does not recognize the mime type of uploaded file';
-$lang_global['error_upload_max_user_size'] = 'The file exceeds the maximum size allowed. Maximum size is %d bytes';
+$lang_global['error_upload_max_user_size'] = 'The file exceeds the maximum size allowed. Maximum size is %s';
 $lang_global['error_upload_not_image'] = 'The file is not a known image format';
 $lang_global['error_upload_image_failed'] = 'Error: The uploaded image is not valid';
 $lang_global['error_upload_image_width'] = 'The image is not allowed because the width is greater than the maximum of %d pixels';
@@ -276,6 +292,7 @@ $lang_global['level3'] = 'Module administrator';
 $lang_global['level4'] = 'Member';
 $lang_global['level5'] = 'Guest';
 $lang_global['level6'] = 'All';
+$lang_global['level7'] = 'New member';
 $lang_global['msgbeforeunload'] = 'Are you sure you go to other sites, if done the data will not be stored';
 $lang_global['timeoutsess_nouser'] = 'You did not use the site';
 $lang_global['timeoutsess_click'] = 'Click here to remain logged';
@@ -305,3 +322,5 @@ $lang_global['design_url'] = 'Design by URL';
 $lang_global['signin'] = 'Sign In';
 $lang_global['feedback'] = 'Feedback';
 $lang_global['required'] = 'Note: You need to declare all the boxes marked with an asterisk (*).';
+$lang_global['on'] = 'On';
+$lang_global['off'] = 'Off';

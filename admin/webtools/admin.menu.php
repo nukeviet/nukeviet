@@ -8,12 +8,13 @@
  * @Createdate 07/30/2013 10:27
  */
 
-if( ! defined( 'NV_ADMIN' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN')) {
+    die('Stop!!!');
+}
 
 $submenu['statistics'] = $lang_module['global_statistics'];
 $submenu['clearsystem'] = $lang_module['clearsystem'];
-if( empty( $global_config['idsite'] ) )
-{
-	$submenu['checkupdate'] = $lang_module['checkupdate'];
-	$submenu['config'] = $lang_module['config'];
+if (empty($global_config['idsite'])) {
+    $submenu['checkupdate'] = $lang_module['checkupdate'];
+    $submenu['config'] = $lang_module['config'];
 }

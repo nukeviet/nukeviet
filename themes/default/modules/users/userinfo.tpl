@@ -39,7 +39,7 @@
 <div class="table-responsive margin-bottom-lg">
     <table class="table table-bordered table-striped">
         <colgroup>
- 			<col style="width:30%"/>
+ 			<col style="width:45%"/>
   		</colgroup>
         <tbody>
             <tr>
@@ -62,9 +62,19 @@
                 <td>{LANG.regdate}</td>
                 <td>{USER.regdate}</td>
             </tr>
+            <!-- BEGIN: group_manage -->
+            <tr>
+                <td>{LANG.group_manage_count}</td>
+                <td>{USER.group_manage} <a href="{URL_GROUPS}" title="{LANG.group_manage_list}">({LANG.group_manage_list})</a></td>
+            </tr>
+            <!-- END: group_manage -->
             <tr>
                 <td>{LANG.st_login2}</td>
                 <td>{USER.st_login}</td>
+            </tr>
+            <tr>
+                <td>{LANG.2step_status}</td>
+                <td>{USER.active2step} (<a href="{URL_2STEP}">{LANG.2step_link}</a>)</td>
             </tr>
             <tr>
                 <td>{LANG.last_login}</td>

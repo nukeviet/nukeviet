@@ -8,29 +8,29 @@
  * @Createdate 17/6/2010, 11:25
  */
 
-if( ! defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
-
-$host = $nv_Request->get_string( 'host', 'get', '' );
-
-if( ! isset( $host ) or ! preg_match( '/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/', $host ) )
-{
-	Header( 'Location: ' . nv_url_rewrite( NV_BASE_MOD_URL, true ) );
-	die();
+if (! defined('NV_IS_MOD_STATISTICS')) {
+    die('Stop!!!');
 }
 
-$sth = $db->prepare( 'SELECT * FROM ' . NV_REFSTAT_TABLE . ' WHERE host= :host' );
-$sth->bindParam( ':host', $host, PDO::PARAM_STR );
+$host = $nv_Request->get_string('host', 'get', '');
+
+if (! isset($host) or ! preg_match('/^[0-9a-z]([-.]?[0-9a-z])*.[a-z]{2,4}$/', $host)) {
+    Header('Location: ' . nv_url_rewrite(NV_BASE_MOD_URL, true));
+    die();
+}
+
+$sth = $db->prepare('SELECT * FROM ' . NV_REFSTAT_TABLE . ' WHERE host= :host');
+$sth->bindParam(':host', $host, PDO::PARAM_STR);
 $sth->execute();
 
 $row = $sth->fetch();
-if( empty( $row ) )
-{
-	Header( 'Location: ' . nv_url_rewrite( NV_BASE_MOD_URL, true ) );
-	die();
+if (empty($row)) {
+    Header('Location: ' . nv_url_rewrite(NV_BASE_MOD_URL, true));
+    die();
 }
 
 $contents = '';
-$mod_title = $page_title = sprintf( $lang_module['refererbysite'], $host );
+$mod_title = $page_title = sprintf($lang_module['refererbysite'], $host);
 $key_words = $module_info['keywords'];
 
 $cts = array();
@@ -51,24 +51,21 @@ $cts['rows']['Dec'] = array( 'fullname' => $lang_global['december'], 'count' => 
 
 $total = 0;
 $max = 0;
-foreach( $cts['rows'] as $key => $month )
-{
-	$total = $total + $month['count'];
-	if( $month['count'] > $max )
-	{
-		$max = $month['count'];
-	}
+foreach ($cts['rows'] as $key => $month) {
+    $total = $total + $month['count'];
+    if ($month['count'] > $max) {
+        $max = $month['count'];
+    }
 }
 
-if( $total )
-{
-	$cts['current_month'] = date( 'M', NV_CURRENTTIME );
-	$cts['max'] = $max;
-	$cts['total'] = array( $lang_global['total'], number_format( $total ) );
+if ($total) {
+    $cts['current_month'] = date('M', NV_CURRENTTIME);
+    $cts['max'] = $max;
+    $cts['total'] = array( $lang_global['total'], number_format($total) );
 }
 
-$contents = nv_theme_statistics_referer( $cts, $total );
+$contents = nv_theme_statistics_referer($cts, $total);
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme( $contents );
+echo nv_site_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

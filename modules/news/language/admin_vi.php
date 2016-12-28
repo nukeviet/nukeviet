@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -22,9 +24,10 @@ $lang_module['topics'] = 'Theo dòng sự kiện';
 $lang_module['topics_error_title'] = 'Lỗi: Bạn không nhập vào tiêu đề sự kiện';
 $lang_module['sources'] = 'Nguồn tin';
 $lang_module['save'] = 'Lưu thay đổi';
+$lang_module['send'] = 'Gửi';
 $lang_module['action'] = 'Thực hiện';
 $lang_module['move'] = 'Di chuyển bài viết';
-$lang_module['save_temp'] = 'Lưu tạm';
+$lang_module['save_temp'] = 'Lưu bản nháp';
 $lang_module['save_send_admin'] = 'Lưu bài, chuyển biên tập';
 $lang_module['save_send_spadmin'] = 'Lưu bài, chuyển tổng biên tập';
 $lang_module['publtime'] = 'Đăng bài viết';
@@ -37,7 +40,7 @@ $lang_module['status_0'] = 'Ngưng hiệu lực';
 $lang_module['status_1'] = 'Xuất bản';
 $lang_module['status_2'] = 'Hẹn giờ đăng';
 $lang_module['status_3'] = 'Hết hạn';
-$lang_module['status_4'] = 'Lưu tạm';
+$lang_module['status_4'] = 'Lưu nháp';
 $lang_module['status_5'] = 'Chuyển duyệt bài';
 $lang_module['status_6'] = 'Từ chối duyệt bài';
 $lang_module['status_7'] = 'Đang duyệt bài';
@@ -49,6 +52,7 @@ $lang_module['saveok'] = 'Cập nhật bài viết thành công';
 $lang_module['clickgotomodule'] = 'Click vào đây để chuyển vào trang quản lý bài viết.';
 $lang_module['alias'] = 'Liên kết tĩnh';
 $lang_module['name'] = 'Tiêu đề';
+$lang_module['no_name'] = 'Không có tiêu đề';
 $lang_module['titlesite'] = 'Tùy chỉnh Tiêu đề site';
 $lang_module['error_name'] = 'Lỗi:Bạn cần nhập Tiêu đề';
 $lang_module['weight'] = 'Vị trí';
@@ -81,7 +85,8 @@ $lang_module['edit_block_cat'] = 'Sửa nhóm tin';
 $lang_module['link'] = 'Website nguồn tin';
 $lang_module['cat_sub'] = 'Thuộc chuyên mục';
 $lang_module['cat_sub_sl'] = 'Là chuyên mục chính';
-$lang_module['note_cat'] = 'Bạn cần tạo chuyên mục trước';
+$lang_module['note_cat_title'] = 'Chưa có chuyên mục';
+$lang_module['note_cat_content'] = 'Bạn cần chuyên mục trước khi thêm bài viết mới. Hệ thống sẽ chuyển bạn đến trang <strong>Quản lý chuyên mục</strong> trong giây lát!';
 $lang_module['topic_sl'] = 'Chọn nhóm tin liên quan hoặc tự điền';
 $lang_module['delcat_msg_cat'] = 'Chuyên mục này có %s Chuyên mục thành phần, bạn cần xóa hoặc di chuyển các Chuyên mục thành phần trước';
 $lang_module['delcat_msg_rows'] = 'Chuyên mục có %s bài viết, bạn có chắc chắn xóa hoặc di chuyển sang Chuyên mục khác';
@@ -106,6 +111,14 @@ $lang_module['setting_post'] = 'Cấu hình đăng bài';
 $lang_module['setting_auto_tags'] = 'Tự động tạo từ khóa cho bài viết nếu không nhập từ khóa lúc đăng bài';
 $lang_module['setting_tags_remind'] = 'Nhắc nhở các từ khóa không có mô tả';
 $lang_module['setting_alias_lower'] = 'Chuyển Liên kết tĩnh về chữ thường khi tạo mới';
+$lang_module['setting_elasticseach'] = 'Cấu hình sử dụng máy chủ tìm kiếm Elasticseach';
+$lang_module['setting_elas_use'] = 'Sử dụng Elasticsearch';
+$lang_module['setting_elas_host'] = 'Địa chỉ máy chủ cài đặt Elasticsearch';
+$lang_module['setting_elas_port'] = 'Cổng kết nối với máy chủ Elasticseach';
+$lang_module['setting_elas_index'] = 'CSDL lưu trữ tại máy chủ Elasticsearch';
+$lang_module['error_elas_host_connect'] = 'Không thể kết nối đến máy chủ Elasticsearch!';
+$lang_module['use_setup_elasticseach'] = 'Hướng dẫn cài đặt Elasticsearch';
+$lang_module['use_dev_elasticseach'] = 'Hướng dẫn tích hợp Elasticsearch vào NukeViet';
 
 $lang_module['viewcat_page'] = 'Cách thể hiện Chuyên mục';
 $lang_module['viewcat_page_new'] = 'danh sách, mới lên trên';
@@ -172,6 +185,7 @@ $lang_module['content_admin'] = 'Người tạo';
 $lang_module['content_author'] = 'Tác giả bài viết';
 $lang_module['content_sourceid'] = 'Nguồn tin';
 $lang_module['content_copyright'] = 'Giữ bản quyền bài viết';
+$lang_module['content_external_link'] = 'Mở liên kết nguồn tin (nếu có)';
 $lang_module['content_saveok'] = 'Đã ghi dữ liệu thành công';
 $lang_module['content_main'] = 'Quay lại trang quản lý';
 $lang_module['content_back'] = 'Quay lại trang sửa bài viết';
@@ -181,6 +195,8 @@ $lang_module['content_checkcatmsg'] = 'Bạn cần chọn chủ đề chính cho
 $lang_module['content_archive'] = 'Lưu trữ sau thời gian hết hạn';
 $lang_module['content_tags_empty'] = 'Chú ý: Bài viết chưa có từ khóa nào';
 $lang_module['content_tags_empty_auto'] = 'Hệ thống sẽ tạo tự động từ khóa lúc lưu bài viết này, có thể tắt tính năng tự động tạo từ khóa ở phần quản lý module';
+$lang_module['content_advfeature'] = 'Tùy chọn nâng cao';
+$lang_module['content_description'] = 'Mô tả của site';
 
 $lang_module['showtooltip'] = 'Hiển thị tooltips';
 $lang_module['showtooltip_position'] = 'Vị trí hiển thị';
@@ -190,11 +206,12 @@ $lang_module['showtooltip_position_left'] = 'Trái';
 $lang_module['showtooltip_position_right'] = 'Phải';
 $lang_module['showtooltip_length'] = 'Số ký tự';
 $lang_module['showhometext'] = 'Hiển thị phần Giới thiệu ngắn gọn khi xem bài viết';
+$lang_module['htmlhometext'] = 'Sử dụng trình soạn thảo cho phần Giới thiệu ngắn gọn';
 $lang_module['show_no_image'] = 'Hiển thị ảnh No-Image nếu không bài viết không có hình minh họa';
 $lang_module['imgposition'] = 'Trình bày hình trong bài viết';
 $lang_module['imgpositiondefault'] = 'Cấu hình mặc định, Trình bày hình trong bài viết khi đăng bài';
 $lang_module['imgposition_0'] = 'Không hiển thị';
-$lang_module['imgposition_1'] = 'Hiển thị theo cấu hình module';
+$lang_module['imgposition_1'] = 'Hiển thị bên trái phần mở đầu';
 $lang_module['imgposition_2'] = 'Hiển thị dưới phần mở đầu';
 $lang_module['addtoblock'] = 'Thêm bài viết vào nhóm tin';
 $lang_module['delete_from_block'] = 'Xóa bài viết khỏi nhóm tin';
@@ -240,7 +257,8 @@ $lang_module['admin_module'] = 'Quản lý module';
 $lang_module['admin_module_for_user'] = 'Bạn có tất cả các quyền hạn của module, trừ chức năng phân quyền quản lý';
 $lang_module['admin_cat'] = 'Quản lý Chuyên mục';
 $lang_module['admin_cat_for_user'] = 'Quyền hạn của bạn tại các chuyên mục';
-$lang_module['admin_no_user'] = 'Chức năng phân quyền cho module này chỉ áp dụng cho người điều hành module, bạn cần thêm người điều hành module trước khi tiến hành phân quyền.';
+$lang_module['admin_no_user_title'] = 'Chưa có người quản lý module';
+$lang_module['admin_no_user_content'] = 'Chức năng phân quyền cho module này chỉ áp dụng cho người điều hành module, bạn cần thêm người điều hành module trước khi tiến hành phân quyền.';
 $lang_module['admin_userid'] = 'userid';
 $lang_module['admin_username'] = 'Tài khoản';
 $lang_module['admin_full_name'] = 'Họ tên';
@@ -266,6 +284,7 @@ $lang_module['structure_image_upload'] = 'Ảnh upload của module được lư
 $lang_module['config_source'] = 'Cấu hình hiển thị nguồn bài viết tại chi tiết tin';
 $lang_module['config_source_title'] = 'Hiển thị tiêu đề nguồn tin';
 $lang_module['config_source_link'] = 'Hiển thị link của nguồn tin';
+$lang_module['config_source_link_nofollow'] = 'Hiển thị link của nguồn tin (rel= "nofollow")';
 $lang_module['config_source_logo'] = 'Hiển thị logo của nguồn tin';
 
 $lang_module['tags'] = 'Quản lý Tags';
@@ -288,3 +307,9 @@ $lang_module['featured'] = 'Tin nổi bật';
 $lang_module['addtocat'] = 'Thêm bài viết nổi bật vào chuyên mục';
 $lang_module['delete_from_cat'] = 'Xóa bài viết khỏi chuyên mục';
 $lang_module['not_featured'] = 'Không có bài viết nào';
+
+$lang_module['notification_post_queue'] = 'Kiểm duyệt bài viết <strong>%s</strong> gửi bởi <strong>%s</strong><br /><em>%s</em>';
+
+$lang_module['ad_block_show'] = 'Hiển thị các block phụ';
+$lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
+$lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';

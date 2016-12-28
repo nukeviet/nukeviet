@@ -9,7 +9,9 @@
  * @Createdate Jun 06, 2011, 12:55:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '06/06/2011, 13:55';
@@ -17,7 +19,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. All rights res
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'Cài đặt Nukeviet 4.0 Beta';
+$lang_module['titlesetup'] = 'Cài đặt Nukeviet 4';
 $lang_module['select_language'] = 'Lựa chọn ngôn ngữ';
 $lang_module['license'] = 'Bản quyền';
 $lang_module['check_server'] = 'Kiểm tra máy chủ';
@@ -44,7 +46,6 @@ $lang_module['php_support'] = 'Hỗ trợ PHP';
 $lang_module['php_version'] = 'Phiên bản PHP';
 $lang_module['pdo_support'] = 'Hỗ trợ PHP Data Objects';
 $lang_module['request'] = 'Yêu cầu';
-$lang_module['safe_mode'] = 'Safe mode';
 $lang_module['required_off'] = 'Bắt buộc tắt';
 $lang_module['required_on'] = 'Bắt buộc hỗ trợ';
 $lang_module['recommnet'] = 'Khuyến cáo';
@@ -55,6 +56,7 @@ $lang_module['is_support'] = 'Nên hỗ trợ';
 $lang_module['supports_rewrite'] = 'Hỗ trợ rewrite';
 $lang_module['opendir_support'] = 'PHP hỗ trợ opendir';
 $lang_module['gd_support'] = 'PHP hỗ trợ thư viện xử lý ảnh GD';
+$lang_module['xml_support'] = 'PHP hỗ trợ thư viện xử lý XML';
 $lang_module['mcrypt_support'] = 'PHP hỗ trợ thư viện mã hóa mcrypt';
 $lang_module['session_support'] = 'PHP hỗ trợ session';
 $lang_module['fileuploads_support'] = 'PHP hỗ trợ uploads file';
@@ -117,13 +119,13 @@ $lang_module['admin_repass_note'] = 'Nhập lại mật khẩu.';
 $lang_module['success'] = 'Bạn đã cài đặt thành công!';
 $lang_module['congratulations'] = 'Xin chúc mừng!!! Bạn đã cài đặt thành công hệ thống Nukeviet. Bạn cần đăng nhập vào khu vực quản trị để tiến hành các bước cấu hình site.';
 $lang_module['notesupport'] = 'Mọi nhu cầu về hỗ trợ kỹ thuật xin liên hệ tại <a href="http://nukeviet.vn" target="_blank"><strong>diễn đàn Nukeviet.VN</strong></a>.';
-$lang_module['noteuploads'] = '<strong>Chú ý:</strong> Hãy <strong>CHMOD thư mục uploads</strong> trên webroot và các thư mục con nằm trong nó ở chế độ 777. Nếu không làm việc này ngay, hệ thống sẽ không cho phép bạn upload các tập tin lên host.';
+$lang_module['noteuploads'] = '<strong>Chú ý:</strong> Hãy <strong>CHMOD thư mục uploads</strong> trên webroot và các thư mục con nằm trong nó ở chế độ php có thể ghi file. Nếu không làm việc này ngay, hệ thống sẽ không cho phép bạn upload các tập tin lên host.';
 $lang_module['thanks'] = 'Xin cảm ơn và chúc thành công!';
 $lang_module['gohome'] = 'Xem trang chủ';
 $lang_module['goadmin'] = 'Đăng nhập trang quản trị';
 $lang_module['finish'] = 'Kết thúc';
 $lang_module['checkfileconfig'] = 'Kiểm tra lại';
-$lang_module['movefileconfig'] = 'Bạn cần chuyển file config.php trong thư mục tmp ra thư mục gốc của site, sau đó click vào nút kiểm tra để hệ thống kiểm tra lại';
+$lang_module['movefileconfig'] = 'Bạn cần chuyển file <b>config.php</b> trong thư mục <b>data/tmp</b> ra thư mục gốc của site, sau đó click vào nút kiểm tra để hệ thống kiểm tra lại';
 $lang_module['copyright'] = 'Chú ý: Việc đăng lại bài viết trên ở website hoặc các phương tiện truyền thông khác mà không ghi rõ nguồn http://nukeviet.vn là vi phạm bản quyền';
 $lang_module['question'] = 'Điền câu hỏi bảo mật';
 $lang_module['answer_question'] = 'Câu trả lời của bạn';
@@ -188,8 +190,8 @@ $lang_module['update_mod_list'] = 'Các module hiện đang sử dụng';
 $lang_module['update_mod_version'] = 'Phiên bản';
 $lang_module['update_mod_note'] = 'Ghi chú';
 $lang_module['update_mod_author'] = 'Tác giả';
-$lang_module['update_mod_uptodate'] = 'Là module hệ thống, phiên bản mới nhất';
-$lang_module['update_mod_othermod'] = 'Không là module hệ thống, hãy kiểm tra lại khả năng tương thích với phiên bản mới nâng cấp này';
+$lang_module['update_mod_uptodate'] = 'Là ứng dụng hệ thống, phiên bản mới nhất';
+$lang_module['update_mod_othermod'] = 'Không là ứng dụng hệ thống, hãy kiểm tra lại khả năng tương thích với phiên bản mới nâng cấp này';
 $lang_module['update_info_end'] = 'Để website có thể hoạt động trở lại bạn cần xóa gói cập nhật này khỏi hệ thống.';
 $lang_module['update_package_deleted'] = 'Gói cập nhật đã được xóa khỏi hệ thống thành công.';
 $lang_module['update_package_not_deleted'] = 'Không thể xóa gói cập nhật đi được, bạn hãy xóa thủ công các tệp và thư mục trong cảnh báo vừa xuất hiện sau đó website mới có thể hoạt động trở lại';
@@ -208,7 +210,7 @@ $lang_module['update_taskierror'] = 'Thất bại';
 $lang_module['update_taskiok'] = 'Thành công';
 $lang_module['update_taskiwarn'] = 'Cảnh báo không thành công';
 $lang_module['update_taskiload'] = 'Đang thực hiện';
-$lang_module['update_task_error_message'] = 'Tiến trình không thể tiếp tục được do thất bại trong việc <strong>"%s"</strong>. Hãy thử đóng trình duyệt lại sau đó thực hiện lại toàn bộ công việc. Truy cập <a href="http://nukeviet.vn/phpbb/" title="Diễn đàn hỗ trợ mã nguồn mở NukeViet">diễn đàn</a> và thông báo về lỗi này để được hỗ trợ.';
+$lang_module['update_task_error_message'] = 'Tiến trình không thể tiếp tục được do thất bại trong việc <strong>"%s"</strong>. Hãy thử đóng trình duyệt lại sau đó thực hiện lại toàn bộ công việc. Truy cập <a href="%s">vào đây</a> và thông báo về lỗi này để được hỗ trợ.';
 $lang_module['update_task_all_complete'] = 'Các công việc đã hoàn tất, bạn có thể chuyển sang bước tiếp theo';
 $lang_module['update_task_all_complete_alert'] = 'Các công việc đã thực hiện hết, có một số công việc bị lỗi tuy nhiên có thể bỏ qua. Danh sách công việc lỗi được đanh dấu bên cạnh, bạn có thể kiểm tra lại sau.';
 $lang_module['update_task_load'] = 'Đang thực hiện';
@@ -216,7 +218,7 @@ $lang_module['update_task_load_message'] = 'Chúng tôi khuyến cáo bạn khô
 $lang_module['update_task_next'] = 'Công việc sắp thực hiện';
 $lang_module['update_task_start'] = 'Bắt đầu';
 $lang_module['update_task_do1_error'] = 'Công việc';
-$lang_module['update_task_do2_error'] = 'Bị lỗi do đó việc nâng cấp không thể tiếp tục được. Truy cập <a href="http://nukeviet.vn/phpbb/" title="Diễn đàn hỗ trợ mã nguồn mở NukeViet">diễn đàn</a> và thông báo về lỗi này để được hỗ trợ.';
+$lang_module['update_task_do2_error'] = 'Bị lỗi do đó việc nâng cấp không thể tiếp tục được. Truy cập <a href="%s">vào đây</a> và thông báo về lỗi này để được hỗ trợ.';
 $lang_module['update_nav_confirm'] = 'Các công việc đang thực hiện, chuyển trang hoặc tắt trình duyệt có thể dẫn tới lỗi.';
 $lang_module['update_file_info_win'] = 'Cảnh báo: Trên nền window việc di chuyển các file có thể sẽ không thực hiện được, chúng tôi khuyến khích bạn thực hiện di chuyển thủ công các files và folders trong <strong>install/update/</strong> ra ngoài thư mục gốc của website (thư mục chứa index.php, robots.php...).';
 $lang_module['update_file_info_win_manual'] = 'Sau khi di chuyển có thể nhấp vào đây để tiếp tục.';
@@ -230,7 +232,7 @@ $lang_module['update_file_backup_ok'] = 'Sao lưu thành công, nhấp vào đâ
 $lang_module['update_file_backup_error'] = 'Hệ thống không tự sao lưu được bạn hãy tự sao lưu';
 $lang_module['update_step5_info'] = 'Các bước thực hiện đã hoàn tất, bây giờ bạn hãy đọc và làm theo một số lưu ý sau trước khi chọn "<strong>Bước kế tiếp</strong>".';
 $lang_module['update_step5_info_error'] = 'Hệ thống không tìm thấy hướng dẫn nào, nhấp "<strong>Bước kế tiếp</strong>" để tiếp tục.';
-$lang_module['update_error_log_data'] = 'Lỗi: Hệ thống không ghi nhật kí được, hãy CHMOD 0777 thư mục "<strong>%s</strong>" sau đó nhấn F5 (tải lại trang) để tiếp tục.';
+$lang_module['update_error_log_data'] = 'Lỗi: Hệ thống không ghi nhật kí được, hãy CHMOD thư mục "<strong>%s</strong>" để php có thể ghi file, sau đó nhấn F5 (tải lại trang) để tiếp tục.';
 $lang_module['update_data_backuped'] = 'Bạn đã sao lưu CSDL vào lúc %s';
 $lang_module['update_file_backuped'] = 'Bạn đã sao lưu các file thay đổi vào lúc %s';
 $lang_module['update_data_not_allow'] = 'Việc sửa đổi CSDL đã diễn ra do đó bạn không được sao lưu CSDL nữa mà hãy tiếp tục thực hiện các công việc còn lại';
@@ -255,3 +257,5 @@ $lang_module['updatemod_notexist'] = 'Bạn chưa cài đặt module này lên h
 $lang_module['updatemod_notcertified'] = 'Module này chưa được chứng nhận do đó hệ thống có thể sẽ không kiểm soát được những rủi ro có thể gặp phải.';
 $lang_module['dbcheck_error_files'] = 'Để cài đặt NukeViet với loại CSDL này, bạn cần tải thêm trình hỗ trợ. Nhấp vào đây để tìm hiểu về trình hỗ trợ và tải về bản phù hợp. Sau khi tải về, giải nén và upload các tệp và thư mục lên website của bạn, tải lại trang này và chọn loại CSDL để kiểm tra. Nếu không có thông báo này hiện lên nữa, điều đó có nghĩa là bạn đã sẵn sàng để tiến hành bước tiếp theo. Bên dưới liệt kê danh sách các file cần có để tiến hành cài đặt với loại CSDL này.';
 $lang_module['dbcheck_error_driver'] = 'Lỗi: Hệ thống không hỗ trợ loại CSDL này, vui lòng chọn loại khác';
+$lang_module['update_error_check_version_sys'] = 'Lỗi: Không thể kiểm tra phiên bản hệ thống';
+$lang_module['update_error_check_version_ext'] = 'Lỗi: Không thể kiểm tra phiên bản các ứng dụng';

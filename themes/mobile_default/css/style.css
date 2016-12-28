@@ -601,16 +601,14 @@ figure figcaption {
 }
 
 /* Global */
-
-html,
-body {
-    width:100%;
-    height:100%;
+html {
     margin:0;
-    padding:0
+    padding:0;
 }
 
 body {
+    margin:0;
+    padding:48px 0 40px 0;
     color: #333;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
@@ -737,39 +735,34 @@ a.btn {
     color:#fff;
 }
 
-.fixed {
-    width:100%;
-    height:100%;
+.container-simple{
+    margin-top: -48px;
+    margin-bottom: -40px;
 }
 
 /* Header */
 
 header.first-child {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:10;
     min-height:48px;
-    opacity:0;
-    display:none;
     background:#137CBE;
     background-image:linear-gradient(60deg,#D8EAF8 0,#D8EAF8 133px,rgba(0,0,0,0) 134px,rgba(0,0,0,0) 100%);
+    -webkit-transition: top 0.08s ease-in-out;
+    transition: top 0.08s ease-in-out;
 }
 
-.fixed header {
-    opacity:1;
-    display:block;
+header.header-up {
+    top: -50px;
 }
 
 #header {
-    position:relative;
-    width:100%;
     min-height:47px;
-    z-index:10;
     background-image:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0.2) 100%);
     border-bottom:1px solid #205FA0;
-}
-
-.fixed #header {
-    position:fixed !important;
-    top:0;
-    left:0;
 }
 
 #header .logo {
@@ -1004,48 +997,126 @@ header.first-child {
 }
 
 /* Body */
-
-.wrap {
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    overflow-x:hidden;
-    overflow-y:auto;
-}
-
-.fixed .wrap {
-    top:48px !important;
-    height:calc(100% - 48px) !important;
-}
-
-.breadcrumb {
-    margin-top:0;
-    margin-bottom:0;
-    border-radius:0;
-}
-
 #body {
     background:#fff;
     border-color:#dadada;
     border-style:solid;
     border-width:0;
+    position: relative;
+}
+
+.breadcrumbs {
+	position: relative;
+    height: 35px;
+    line-height: 1;
+    padding: 0 10px 0 50px;
+    margin: 0;
+    background: transparent;
+    overflow: hidden;
+	background: rgba(0,0,0,0.05);
+}
+
+.breadcrumbs .home-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+
+.breadcrumbs .home-icon a{
+	width: 40px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    display: block;
+    border-right: 1px solid rgba(0,0,0,0.1);
+    color: #666;
+}
+
+.breadcrumbs .toggle{
+	width: 15px;
+	display: inline-block;
+	text-align: center;
+	cursor: pointer;
+	display: none;
+}
+
+.breadcrumb{
+	padding: 0;
+	margin: 0;
+	line-height: 35px;
+	display: inline-block;
+}
+
+.sub-breadcrumbs {
+    margin: 0;
+    padding: 0;
+    background: #fff linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0.1) 100%) repeat scroll 0 0;
+    position: absolute;
+    left: 39px;
+    top: 36px;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-top: none;
+    box-shadow: 0 0.063em 0.25em rgba(7, 20, 34, 0.25);
+    display: none;
+}
+
+.sub-breadcrumbs.open{
+	display: block;
+}
+
+.sub-breadcrumbs li:last-child,
+.sub-breadcrumbs li:last-child a,
+.sub-breadcrumbs{
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.sub-breadcrumbs li, .sub-breadcrumbs a {
+    display:block;
+    float:none;
+}
+
+.sub-breadcrumbs a{
+    line-height:40px;
+    height:40px;
+    overflow: hidden;
+    padding:0 10px;
+}
+
+.sub-breadcrumbs li:not(:last-child) a{
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.sub-breadcrumbs a:hover{
+    background: rgba(0,0,0,0.1)
+}
+
+.sub-breadcrumbs a em{
+	display: inline-block;
+	margin-right: 5px;
+	color: #666;
 }
 
 /* Footer */
 
 #footer {
-    width:100%;
-    min-height:40px;
-}
-
-.footer {
     position:fixed;
     bottom:0;
     left:0;
     right:0;
     z-index:10;
+    width:100%;
+    min-height:40px;
+    -webkit-transition: top 0.08s ease-in-out;
+    transition: top 0.08s ease-in-out;
+}
+
+#footer.footer-down {
+    bottom: -42px;
+}
+
+.footer {
     height:39px;
     width:100%;
     background:#205FA0;
@@ -1053,10 +1124,6 @@ header.first-child {
     border-top:1px solid #205FA0;
     font-size:0.9em;
     color:#333;
-}
-
-.footer.pos-rel {
-    position:relative !important;
 }
 
 .footer a {
@@ -1085,7 +1152,7 @@ header.first-child {
 /* WinHelp */
 
 #winHelp {
-    position:fixed;
+    position:absolute;
     top:0;
     left:0;
     bottom:0;
@@ -1097,7 +1164,7 @@ header.first-child {
 }
 
 #winHelp .winHelp {
-    position:fixed;
+    position:absolute;
     top:0;
     left:0;
     bottom:0;

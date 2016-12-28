@@ -8,7 +8,9 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_MODULES')) {
+    die('Stop!!!');
+}
 
 $sql_drop_module = array();
 
@@ -20,11 +22,13 @@ $sql_create_module = $sql_drop_module;
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department (
  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
- full_name varchar(255) NOT NULL,
- alias varchar(255) NOT NULL,
+ full_name varchar(250) NOT NULL,
+ alias varchar(250) NOT NULL,
+ image varchar(255) NOT NULL  DEFAULT '',
  phone varchar(255) NOT NULL,
  fax varchar(255) NOT NULL,
  email varchar(100) NOT NULL,
+ address varchar(255) NOT NULL,
  note text NOT NULL,
  others text NOT NULL,
  cats text NOT NULL,
@@ -33,7 +37,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  weight smallint(5) NOT NULl,
  is_default tinyint(1) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
- UNIQUE KEY full_name (full_name)
+ UNIQUE KEY full_name (full_name),
+ UNIQUE KEY alias (alias)
 ) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send (

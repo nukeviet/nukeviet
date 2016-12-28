@@ -8,6 +8,8 @@
  * @Createdate Sun, 19 Apr 2015 11:35:18 GMT
  */
 
-if( !defined( 'NV_IS_MOD_STATISTICS' ) ) die( 'Stop!!!' );
+if (!defined('NV_IS_MOD_STATISTICS')) {
+    die('Stop!!!');
+}
 
 require NV_ROOTDIR . '/modules/' . $module_file . '/funcs/' . $op . '.php';

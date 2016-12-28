@@ -11,11 +11,24 @@
 			<tbody>
 				<tr>
 					<td><strong>{LANG.part_row_title}</strong><sup class="required">(*)</sup></td>
-					<td><input class="w300 form-control pull-left" type="text" value="{DATA.full_name}" name="full_name" id="idfull_name" maxlength="255" /></td>
+					<td><input class="w300 form-control pull-left" type="text" value="{DATA.full_name}" name="full_name" id="idfull_name" maxlength="250" /></td>
 				</tr>
 				<tr>
                     <td><strong>{LANG.alias}</strong></td>
-                    <td><input class="w300 form-control pull-left" type="text" name="alias" value="{DATA.alias}" id="idalias" maxlength="255" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('{ID}');">&nbsp;</em></td>
+                    <td><input class="w300 form-control pull-left" type="text" name="alias" value="{DATA.alias}" id="idalias" maxlength="250" />&nbsp;<em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('{ID}');">&nbsp;</em></td>
+                </tr>
+				<tr>
+                    <td><strong>{LANG.image}</strong></td>
+                    <td>
+						<div class="input-group w300">
+							<input class="form-control" type="text" name="image" id="image" value="{DATA.image}"/>
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" data-path="{PATH}" data-currentpath="{PATH}" data-type="image" data-area="image" onclick="nv_open_file( $(this) )">
+									<em class="fa fa-folder-open-o fa-fix">&nbsp;</em>
+								</button>
+							</span>
+						</div>
+                    </td>
                 </tr>
 				<tr>
 					<td><strong>{GLANG.phonenumber}</strong></td>
@@ -28,6 +41,10 @@
 				<tr>
 					<td><strong>{GLANG.email}</strong></td>
 					<td><input class="w300 form-control" type="text" name="email" value="{DATA.email}"/><span>{GLANG.multi_email_note}</span></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.address}</strong></td>
+					<td><input class="w300 form-control" type="text" name="address" value="{DATA.address}"/></td>
 				</tr>
                 <tr>
 					<td><strong>{LANG.otherContacts}</strong></td>

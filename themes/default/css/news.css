@@ -241,6 +241,8 @@ p {
 #print #footer {
     margin-top:10px;
     border-top:2px solid #DC0312;
+    min-height: 30px!important;
+    padding: 10px;
 }
 
 #print #footer #url {
@@ -267,9 +269,12 @@ p {
     cursor:pointer;
 }
 
-#news-bodyhtml{
-	overflow-x: hidden;
-	overflow-y: visible
+#print #footer a{
+	color: #fff;
+}
+
+.bodytext figure.image {
+	width: 100%
 }
 
 .bodytext figure.image figcaption {

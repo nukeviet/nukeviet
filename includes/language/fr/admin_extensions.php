@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
 $lang_translator['createdate'] = '31/07/2015, 16:30';
@@ -150,6 +152,8 @@ $lang_module['autoinstall_error_cfg_content'] = 'Le paquage n\'est pas assez d\'
 $lang_module['autoinstall_error_cfg_type'] = 'Type d\'application non-déterminé';
 $lang_module['autoinstall_error_cfg_version'] = 'Version d\'application incompatible';
 $lang_module['autoinstall_error_cfg_name'] = 'Nom d\'application selon type d\'application ne respecte pas la règle';
+$lang_module['autoinstall_error_mimetype'] = 'Attention: Le système ne vérifie pas le type du fichier de fichier suit. Si le fichier pour vous assurer qu\'il ne contient pas de code malveillant, cliquez sur le bouton "Ignorer les avertissements"';
+$lang_module['autoinstall_error_mimetype_pass'] = 'Ignorer l\'avertissement';
 $lang_module['autoinstall_note_invaild'] = 'La location interdite';
 $lang_module['autoinstall_note_exists'] = 'Fichier existe déjà';
 $lang_module['package'] = 'Emballer application';

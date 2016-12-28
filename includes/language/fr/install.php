@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 30, 2010, 03:30:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '30/06/2010, 10:30';
@@ -17,7 +19,7 @@ $lang_translator['copyright'] = 'Copyright (C) 2010 VINADES.,JSC. Tous droits r�
 $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
-$lang_module['titlesetup'] = 'Installation de Nukeviet';
+$lang_module['titlesetup'] = 'Installation de Nukeviet 4';
 $lang_module['select_language'] = 'Sélectionner la langue';
 $lang_module['license'] = 'Licence';
 $lang_module['check_server'] = 'Vérification du système';
@@ -44,7 +46,6 @@ $lang_module['php_support'] = 'Suppor de PHP';
 $lang_module['php_version'] = 'Version de PHP';
 $lang_module['pdo_support'] = 'Compatible avec PHP Data Objects';
 $lang_module['request'] = 'Obligatoire';
-$lang_module['safe_mode'] = 'Mode sans échec';
 $lang_module['required_off'] = 'Inactif obligatoire';
 $lang_module['required_on'] = 'Support obligatoire';
 $lang_module['recommnet'] = 'Recommandé';
@@ -55,6 +56,7 @@ $lang_module['is_support'] = 'Support recommandé';
 $lang_module['supports_rewrite'] = 'Support de rewrite';
 $lang_module['opendir_support'] = 'PHP supporte opendir';
 $lang_module['gd_support'] = 'PHP supporte GD';
+$lang_module['xml_support'] = 'PHP supporte XML';
 $lang_module['mcrypt_support'] = 'PHP entraide le bibliothèque chiffé mycrypt';
 $lang_module['session_support'] = 'PHP supporte session';
 $lang_module['fileuploads_support'] = 'PHP supporte le transfert des fichiers';
@@ -123,7 +125,7 @@ $lang_module['gohome'] = 'Accueil';
 $lang_module['goadmin'] = 'Administration';
 $lang_module['finish'] = 'Terminer';
 $lang_module['checkfileconfig'] = 'Vérifier';
-$lang_module['movefileconfig'] = 'Veuillez déplacer le fichier config.php dans le répertoire tmp vers le répertoire de racine du site, puis cliquez sur Vérifier';
+$lang_module['movefileconfig'] = 'Veuillez déplacer le fichier <b>config.php</b> dans le répertoire <b>data/tmp</b> vers le répertoire de racine du site, puis cliquez sur Vérifier';
 $lang_module['copyright'] = 'Merci de citer le lien vers l\'article original si vous le reproduisez sur les autres sites';
 $lang_module['question'] = 'Question secrète';
 $lang_module['answer_question'] = 'Votre réponse';
@@ -208,7 +210,7 @@ $lang_module['update_taskierror'] = 'Échoué';
 $lang_module['update_taskiok'] = 'Réussi';
 $lang_module['update_taskiwarn'] = 'Notification de l’échec';
 $lang_module['update_taskiload'] = 'En cours';
-$lang_module['update_task_error_message'] = 'Le processus ne peut pas continuer en raison d\'échec dans l\'étape  <strong>"%s"</strong>. Essayez à fermer votre navigateur et refaites à nouveau le travail.  Entrez dans <a href="http://nukeviet.vn/phpbb/" title="Diễn đàn hỗ trợ mã nguồn mở NukeViet"> ce forum</a> et annoncez cette erreur pour avoir des aides.';
+$lang_module['update_task_error_message'] = 'Le processus ne peut pas continuer en raison d\'échec dans l\'étape  <strong>"%s"</strong>. Essayez à fermer votre navigateur et refaites à nouveau le travail.  Entrez dans <a href="%s">lien de cette</a> et annoncez cette erreur pour avoir des aides.';
 $lang_module['update_task_all_complete'] = 'Tous les procès sont finis, vous pouvez continuer';
 $lang_module['update_task_all_complete_alert'] = 'Les procès sont termines, Il ys a des tâches erronées que vous trouvez dans la liste, veuillez les vérifiez après.';
 $lang_module['update_task_load'] = 'En cours';
@@ -216,7 +218,7 @@ $lang_module['update_task_load_message'] = 'Ne fermez pas la page et le navigate
 $lang_module['update_task_next'] = 'Prochains procès';
 $lang_module['update_task_start'] = 'Commencer';
 $lang_module['update_task_do1_error'] = 'Tâche';
-$lang_module['update_task_do2_error'] = 'Il est impossible de continuer. Rapporter cette erreur <a href="http://nukeviet.vn/phpbb/" title="Forum de NukeViet">au forum</a> pour avoir de l\'aide';
+$lang_module['update_task_do2_error'] = 'Il est impossible de continuer. Rapporter cette erreur <a href="%s">lien de cette</a> pour avoir de l\'aide';
 $lang_module['update_nav_confirm'] = 'Les procès sont en cours, ne pas fermer la page';
 $lang_module['update_file_info_win'] = 'Attention: Le déplacement automatique est impossible dans Windows, veuillez déplacer manuellement les fichiers et répertoires dans <strong>install/update/</strong> à la répertoire racine du site (même niveau que index.php, CJzip.php, robots.php...).';
 $lang_module['update_file_info_win_manual'] = 'Cliquez ici pour continuer après le déplacement';
@@ -255,3 +257,5 @@ $lang_module['updatemod_notexist'] = 'Ce module n\'est pas installé sur votre s
 $lang_module['updatemod_notcertified'] = 'Ce module n\'est pas certifié et le système ne peut pas contrôler les risques';
 $lang_module['dbcheck_error_files'] = 'Pour installer Nukeviet avec ce type de CSDL, vous devez télécharger en plus un programme';
 $lang_module['dbcheck_error_driver'] = 'Erreur: Systeme n\'est pas compatible a ce type de CSDL, veuillez utiliser un autre type';
+$lang_module['update_error_check_version_sys'] = 'Erreur: Impossible de vérifier la version du système';
+$lang_module['update_error_check_version_ext'] = 'Erreur: Impossible de vérifier la version de l\'application';

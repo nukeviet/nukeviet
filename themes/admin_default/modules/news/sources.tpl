@@ -23,19 +23,21 @@
 			<tbody>
 				<tr>
 					<td class="text-right"><strong>{LANG.name}: </strong><sup class="required">(∗)</sup></td>
-					<td><input class="form-control w500" name="title" type="text" value="{title}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="title" type="text" value="{title}" maxlength="250" /></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.link}: </strong></td>
-					<td><input class="form-control w500" name="link" type="text" value="{link}" maxlength="255" /></td>
+					<td><input class="form-control w500" name="link" type="url" value="{link}" maxlength="255" /></td>
 				</tr>
 				<tr>
 					<td class="text-right"><strong>{LANG.source_logo}: </strong></td>
-					<td><input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="logo" id="logo" value="{logo}"/> <input id="select-img-source" type="button" value="{GLANG.browse_image}" name="selectimg" class="btn btn-info" />
-					<!-- BEGIN: logo -->
-					<br />
-					<img src="{logo}"/></td>
-					<!-- END: logo -->
+					<td>
+                        <input class="form-control w500 pull-left" style="margin-right: 5px" type="text" name="logo" id="logo" value="{logo}"/>
+                        <input id="select-img-source" type="button" value="{GLANG.browse_image}" name="selectimg" class="btn btn-info" />
+    					<!-- BEGIN: logo -->
+    					<br />
+    					<img src="{logo}"/>
+    					<!-- END: logo -->
 					</td>
 				</tr>
 			</tbody>

@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -155,6 +157,8 @@ $lang_module['log_empty_log'] = 'Supprimer tous les historiques du système';
 $lang_module['update_package_detected'] = 'Mise à jours disponibles, le site sera en suspens. Merci de faire 1 de 2 procès suivants avant que le site puisse remet en marche';
 $lang_module['update_package_delete'] = 'Supprimer la mise à jour';
 $lang_module['update_package_do'] = 'Mettre à jour';
+$lang_module['notification'] = 'Notifier';
 $lang_module['notification_empty'] = '<p align="center">Aucune annonce!</p>';
 $lang_module['notification_module_auto_deactive'] = 'Module <strong>%s</strong> s\'arrête d\'exécuter à cause d\'erreur';
 $lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong>%s</strong> s\'arrête d\'exécuter à cause d\'erreur';
+$lang_module['notification_hide'] = 'Masquer cette notification';

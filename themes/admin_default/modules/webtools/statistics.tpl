@@ -32,24 +32,6 @@
 					<td><strong>{LANG.googleAnalyticsID}</strong></td>
 					<td><input type="text" class="form-control w400" name="googleAnalyticsID" value="{DATA.googleAnalyticsID}" maxlength="20" /></td>
 				</tr>
-				<tr>
-					<td><strong>{LANG.googleAnalyticsSetDomainName_title}</strong></td>
-					<td>
-					<select name="googleAnalyticsSetDomainName" class="form-control w200">
-						<!-- BEGIN: googleAnalyticsSetDomainName -->
-						<option value="{GOOGLEANALYTICSSETDOMAINNAME_VALUE}" {GOOGLEANALYTICSSETDOMAINNAME_SELECTED}>{GOOGLEANALYTICSSETDOMAINNAME_TITLE}</option>
-						<!-- END: googleAnalyticsSetDomainName -->
-					</select></td>
-				</tr>
-				<tr>
-					<td><strong>{LANG.googleAnalyticsMethod}</strong></td>
-					<td>
-					<select name="googleAnalyticsMethod" class="form-control w200">
-						<!-- BEGIN: googleAnalyticsMethod -->
-						<option value="{GOOGLEANALYTICSMETHOD_VALUE}" {GOOGLEANALYTICSMETHOD_SELECTED}>{GOOGLEANALYTICSMETHOD_TITLE}</option>
-						<!-- END: googleAnalyticsMethod -->
-					</select></td>
-				</tr>
 			</tbody>
 		</table>
 	</div>

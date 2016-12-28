@@ -1,5 +1,7 @@
 <!-- BEGIN: main -->
 {FILE "header_only.tpl"}
-	{MODULE_CONTENT}
+<div class="container-simple">
+    {MODULE_CONTENT}
+</div>
 {FILE "footer_only.tpl"}
 <!-- END: main -->

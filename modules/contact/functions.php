@@ -8,6 +8,8 @@
  * @Createdate Apr 20, 2010 10:47:41 AM
  */
 
-if( ! defined( 'NV_SYSTEM' ) ) die( 'Stop!!!' );
+if (! defined('NV_SYSTEM')) {
+    die('Stop!!!');
+}
 
-define( 'NV_IS_MOD_CONTACT', true );
+define('NV_IS_MOD_CONTACT', true);

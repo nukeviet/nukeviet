@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -98,13 +100,13 @@ $lang_module['allow_create_subdirectories'] = 'Authoriser la création des fichi
 $lang_module['allow_modify_subdirectories'] = 'Authoriser la modification, la suppression des répertoires';
 $lang_module['admin_login_incorrect'] = 'Le compte &ldquo;<strong>%s</strong>&rdquo; a été utilisé. Veuillez utiliser un autre nom';
 $lang_module['config'] = 'Configuration';
+$lang_module['funcs'] = 'Fonctionalités';
+$lang_module['checkall'] = 'Sélectionner tout';
+$lang_module['uncheckall'] = 'Désélectionner tout';
 $lang_module['adminip'] = 'Gestion de IP connecté à l\'administration';
 $lang_module['adminip_ip'] = 'IP';
 $lang_module['adminip_timeban'] = 'Commencer';
 $lang_module['adminip_timeendban'] = 'Terminer';
-$lang_module['adminip_funcs'] = 'Fonctionalités';
-$lang_module['adminip_checkall'] = 'Sélectionner tout';
-$lang_module['adminip_uncheckall'] = 'Désélectionner tout';
 $lang_module['adminip_add'] = 'Ajouter IP';
 $lang_module['adminip_address'] = 'Adresse';
 $lang_module['adminip_begintime'] = 'Commencer';
@@ -133,7 +135,6 @@ $lang_module['rule_user'] = 'Utiliser uniquement les caractères a-zA-Z0-9_- pou
 $lang_module['rule_pass'] = 'Utiliser uniquement les caractères a-zA-Z0-9_- pour le mot de passe';
 $lang_module['spadmin_add_admin'] = 'Autoriser l\'administrateur général de changer les droits des administrateurs de module';
 $lang_module['authors_detail_main'] = 'Afficher les détails du compte de l\'administrateur';
-$lang_module['adminrelogin_max'] = 'Nombre de fois de re-saisir si vous avez mal tapé après système va licencier votre droit d\'admin et vous retourne à la page principale';
 $lang_module['admin_check_pass_time'] = 'Le temps pour vérifier le mot de passe si l\'admin n\'utilise pas navigateur';
 $lang_module['add_user'] = 'Désigner un utilisateur';
 $lang_module['add_select'] = 'Sélectionner';

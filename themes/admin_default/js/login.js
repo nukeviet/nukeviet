@@ -43,3 +43,54 @@ function nv_change_captcha() {
 	document.getElementById("seccode").value = "";
 	return !1
 };
+
+function login2step_change(ele) {
+    var ele = $(ele), form = ele, i = 0;
+    while (!form.is('form')) {
+        if (i++ > 100) {
+            break;
+        }
+        form = form.parent();
+    }
+    if (form.is('form')) {
+        $('.loginStep2 input', form).val('');
+        $('.loginStep2 > div', form).toggleClass('hidden');
+    }
+    return false;
+}
+
+$(document).ready(function() {
+    // Submit form
+    $('#admin-login-form').submit(function(e) {
+        var uname = $('#nv_login'),
+            upass = $('#nv_password'),
+            otp = $('#nv_totppin'),
+            backupcode = $('#nv_backupcodepin'),
+            seccode = $('#seccode'),
+            validForm = true;
+        
+        if (uname.val() == '') {
+            uname.focus();
+            validForm = false;
+        } else if (upass.val() == '') {
+            upass.focus();
+            validForm = false;
+        } else if (otp.is(':visible') && otp.val() == '') {
+            otp.focus();
+            validForm = false;
+        } else if (backupcode.is(':visible') && backupcode.val() == '') {
+            backupcode.focus();
+            validForm = false;
+        } else if (seccode.length && seccode.val() == '') {
+            seccode.focus();
+            validForm = false;
+        }
+        if (!validForm) {
+            e.preventDefault();
+        }
+    });
+    // Loaded
+    if ($('#nv_login').length) {
+        $('#nv_login').focus();
+    }
+});

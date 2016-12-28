@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -72,22 +74,22 @@ $lang_module['chg_is_suspend1'] = 'Status: active. To suspend this administrator
 $lang_module['chg_is_suspend2'] = 'Activate/ Suspend';
 $lang_module['nv_admin_chg_suspend'] = 'Change status administrator account &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['position_info'] = 'Position is used for external activities such as mail exchange , written comments...';
-$lang_module['susp_reason_empty'] = 'You do not declare the reason for suspending Administrator account&ldquo;<strong>%s</strong>&rdquo;';
+$lang_module['susp_reason_empty'] = 'You do not declare the reason for suspending Administrator account &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['suspend_info_empty'] = 'Administrator account &ldquo;<strong>%s</strong>&rdquo; not be suspended any time';
 $lang_module['suspend_info_yes'] = 'List of times to suspend the operation of the Administrator Account &ldquo;<strong>%s</strong>&rdquo;';
 $lang_module['suspend_start'] = 'Start';
 $lang_module['suspend_end'] = 'Finish';
 $lang_module['suspend_reason'] = 'Suspending reason';
-$lang_module['suspend_info'] = 'At: %1$s<br  />By: %2$s';
+$lang_module['suspend_info'] = 'At: %1$s<br />By: %2$s';
 $lang_module['suspend0'] = 'Reactive';
 $lang_module['suspend1'] = 'Suspend';
 $lang_module['clean_history'] = 'Clear History';
 $lang_module['suspend_sendmail'] = 'Send notification';
-$lang_module['suspend_sendmail_mess1'] = 'Information from %1$s Aministrators:<br  />Your administrator account %1$s is suspended %2$s reason: %3$s.<br  />If you have any questions... Email: %4$s';
-$lang_module['suspend_sendmail_mess0'] = 'Information from %1$s Aministrators:<br  />Your administrator account %1$s is active at%2$s.<br  />Your account has been suspended because:: %3$s';
+$lang_module['suspend_sendmail_mess1'] = 'Information from %1$s Aministrators:<br />Your administrator account %1$s is suspended %2$s reason: %3$s.<br />If you have any questions... Email: %4$s';
+$lang_module['suspend_sendmail_mess0'] = 'Information from %1$s Aministrators:<br />Your administrator account %1$s is active at %2$s.<br />Your account has been suspended because: %3$s';
 $lang_module['suspend_sendmail_title'] = 'Notification from website %s';
-$lang_module['delete_sendmail_mess0'] = 'Administrator %1$s notify:<br  />Your administrator account in %1$s website deleted %2$s.<br  />If you have any questions... Email %3$s';
-$lang_module['delete_sendmail_mess1'] = 'Administrator %1$s website notify:<br  />Your administrator account in %1$s website deleted %2$s Reason: %3$s.<br  />If you have any questions... Email %4$s';
+$lang_module['delete_sendmail_mess0'] = 'Administrator %1$s notify:<br />Your administrator account in %1$s website deleted %2$s.<br />If you have any questions... Email %3$s';
+$lang_module['delete_sendmail_mess1'] = 'Administrator %1$s website notify:<br />Your administrator account in %1$s website deleted %2$s Reason: %3$s.<br />If you have any questions... Email %4$s';
 $lang_module['delete_sendmail_title'] = 'Information from %s website';
 $lang_module['delete_sendmail_info'] = 'Do you really want to delete the administrator account &ldquo;<strong>%s</strong>&rdquo;? Please fill in box below to confirm';
 $lang_module['admin_del_sendmail'] = 'Send notification';
@@ -98,13 +100,13 @@ $lang_module['allow_create_subdirectories'] = 'Allowed to create folders';
 $lang_module['allow_modify_subdirectories'] = 'Allowed to rename, delete folders';
 $lang_module['admin_login_incorrect'] = 'Account &ldquo;<strong>%s</strong>&rdquo; already exist. Please use other account';
 $lang_module['config'] = 'Configuration';
+$lang_module['funcs'] = 'Functions';
+$lang_module['checkall'] = 'Check all';
+$lang_module['uncheckall'] = 'Uncheck all';
 $lang_module['adminip'] = 'Admin IP';
 $lang_module['adminip_ip'] = 'IP';
 $lang_module['adminip_timeban'] = 'Start';
 $lang_module['adminip_timeendban'] = 'Finish';
-$lang_module['adminip_funcs'] = 'Functions';
-$lang_module['adminip_checkall'] = 'Check all';
-$lang_module['adminip_uncheckall'] = 'Uncheck all';
 $lang_module['adminip_add'] = 'Add IP';
 $lang_module['adminip_address'] = 'Address';
 $lang_module['adminip_begintime'] = 'Start';
@@ -133,7 +135,6 @@ $lang_module['rule_user'] = 'Use only characters a-zA-Z0-9_- for account';
 $lang_module['rule_pass'] = 'Use only characters a-zA-Z0-9_- for password';
 $lang_module['spadmin_add_admin'] = 'Allows General Administrator to create and modify the rights of modules administrator';
 $lang_module['authors_detail_main'] = 'Show detailed information of the administrator account';
-$lang_module['adminrelogin_max'] = 'Filed admin if the wrong type is entered, then the system will deprive admin access and ejected homepage';
 $lang_module['admin_check_pass_time'] = 'Time to check your password, if admin not using the browser';
 $lang_module['add_user'] = 'Appoint a member';
 $lang_module['add_select'] = 'Select';

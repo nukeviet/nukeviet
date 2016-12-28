@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -85,6 +87,8 @@ $lang_module['bot_ips'] = 'IP của máy chủ';
 $lang_module['bot_allowed'] = 'Quyền xem';
 $lang_module['site_keywords'] = 'Từ khóa cho máy chủ tìm kiếm';
 $lang_module['site_logo'] = 'Tên file logo của site';
+$lang_module['site_banner'] = 'Tên file banner của site';
+$lang_module['site_favicon'] = 'Tên file favicon của site';
 $lang_module['site_email'] = 'Email của site';
 $lang_module['error_set_logs'] = 'Ghi lại lỗi của hệ thống';
 $lang_module['error_send_email'] = 'Email nhận thông báo lỗi';
@@ -93,6 +97,7 @@ $lang_module['lang_geo'] = 'Kích hoạt chức năng xác định ngôn ngữ t
 $lang_module['lang_geo_config'] = 'Cấu hình chức năng xác định ngôn ngữ theo quốc gia';
 $lang_module['site_lang'] = 'Ngôn ngữ mặc định';
 $lang_module['site_timezone'] = 'Múi giờ của site';
+$lang_module['current_time'] = 'Giờ hiện tại: %s';
 $lang_module['date_pattern'] = 'Kiểu hiển thị ngày tháng năm';
 $lang_module['time_pattern'] = 'Kiểu hiển thị giờ phút';
 $lang_module['gzip_method'] = 'Bật chế độ gzip';
@@ -204,6 +209,7 @@ $lang_module['note_ssl_modules'] = 'Mỗi ngôn ngữ sẽ có các module khác
 $lang_module['timezoneAuto'] = 'Theo máy tính của khách truy cập';
 $lang_module['timezoneByCountry'] = 'Theo quốc gia của khách truy cập';
 $lang_module['allow_switch_mobi_des'] = 'Cho phép chuyển đổi giao diện mobile, desktop';
+$lang_module['allow_theme_type'] = 'Các loại giao diện được sử dụng';
 $lang_module['ftp_auto_detect_root'] = 'Xác định tự động';
 $lang_module['ftp_error_full'] = 'Hãy nhập đủ các thông số để tự động nhận diện Remote path';
 $lang_module['ftp_error_detect_root'] = 'Không thể tìm thấy thông số nào phù hợp, hãy kiểm tra lại tên đăng nhập và mật khẩu';
@@ -228,3 +234,14 @@ $lang_module['notification_active'] = 'Hiển thị thông báo khi có hoạt �
 $lang_module['notification_autodel'] = 'Tự động xóa thông báo sau thời gian';
 $lang_module['notification_autodel_note'] = 'Điền <strong>0</strong> nếu không muốn tự động xóa';
 $lang_module['notification_day'] = 'ngày';
+
+$lang_module['is_login_blocker'] = 'Kích hoạt chức năng chặn đăng nhập sai nhiều lần';
+$lang_module['login_number_tracking'] = 'Số lần đăng nhập sai tối đa trong khoảng thời gian theo dõi';
+$lang_module['login_time_tracking'] = 'Thời gian theo dõi';
+$lang_module['login_time_ban'] = 'Thời gian bị cấm đăng nhập';
+
+$lang_module['two_step_verification'] = 'Yêu cầu xác thực đăng nhập hai bước tại';
+$lang_module['two_step_verification0'] = 'Không yêu cầu';
+$lang_module['two_step_verification1'] = 'Khu vực quản trị';
+$lang_module['two_step_verification2'] = 'Khu vực ngoài site';
+$lang_module['two_step_verification3'] = 'Tất cả các khu vực';

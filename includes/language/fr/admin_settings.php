@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -81,6 +83,8 @@ $lang_module['bot_ips'] = 'IP du serveur';
 $lang_module['bot_allowed'] = 'Autoriser';
 $lang_module['site_keywords'] = 'Mots clés pour les moteurs de recherche';
 $lang_module['site_logo'] = 'Nom du fichier logo';
+$lang_module['site_banner'] = 'Nom du fichier bannière';
+$lang_module['site_favicon'] = 'Nom du fichier favicon';
 $lang_module['site_email'] = 'E-mail du site';
 $lang_module['error_set_logs'] = 'Sauvegarder l\'erreur du système';
 $lang_module['error_send_email'] = 'E-mail recevant les notifications d\'erreurs';
@@ -89,6 +93,7 @@ $lang_module['lang_geo'] = 'Activer la définition de langue selon pays';
 $lang_module['lang_geo_config'] = 'Configuration de la fonctionnalité de définir la langue selon pays';
 $lang_module['site_lang'] = 'Langue par défaut';
 $lang_module['site_timezone'] = 'Fuseau horaire';
+$lang_module['current_time'] = 'Heure: %s';
 $lang_module['date_pattern'] = 'Format de la date';
 $lang_module['time_pattern'] = 'Type d\'affichage: Heure Minute';
 $lang_module['gzip_method'] = 'Activer gzip';
@@ -197,6 +202,7 @@ $lang_module['note_ssl_modules'] = 'Chaque langue aura des différents module, c
 $lang_module['timezoneAuto'] = 'Selon l\'ordinateur du visiteur';
 $lang_module['timezoneByCountry'] = 'Selon le pays du visiteur';
 $lang_module['allow_switch_mobi_des'] = 'Échange possible de thème de mobile et de bureau';
+$lang_module['allow_theme_type'] = 'Échange le type de thème';
 $lang_module['ftp_auto_detect_root'] = 'Détection automatique';
 $lang_module['ftp_error_full'] = 'Rentrer complètement les infos pour détecter automatiquement Remote path';
 $lang_module['ftp_error_detect_root'] = 'Il est impossible de déterminer, merci de vérifier l\'identifiant et le mot de passe';
@@ -219,3 +225,12 @@ $lang_module['notification_active'] = 'Lever les annonces en cas de nouvelles ac
 $lang_module['notification_autodel'] = 'Supprimer automatiquement après un temps';
 $lang_module['notification_autodel_note'] = 'Remplir <strong>0</strong> si vous ne voulez pas supprimer automatiquement';
 $lang_module['notification_day'] = 'jour';
+$lang_module['is_login_blocker'] = 'Activer journal bloc fonction incorrectement plusieurs fois';
+$lang_module['login_number_tracking'] = 'Mauvaises connexions piste maximale période';
+$lang_module['login_time_tracking'] = 'Time Tracking';
+$lang_module['login_time_ban'] = 'Forclose Connexion';
+$lang_module['two_step_verification'] = 'Nécessite deux étapes journal d\'authentification';
+$lang_module['two_step_verification0'] = 'Ne demandez pas';
+$lang_module['two_step_verification1'] = 'Admin Area';
+$lang_module['two_step_verification2'] = 'Espace extérieur du site';
+$lang_module['two_step_verification3'] = 'Toutes les zones';
