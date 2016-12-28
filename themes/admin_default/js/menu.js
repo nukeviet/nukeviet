@@ -156,8 +156,8 @@ function nv_menu_reload( mid, id, parentid, lang_confirm ){
 }
 
 $(document).ready(function(){
-	$("#select-img-menurow").click(function(){
-		var area = "icon";
+	$(".selectimg").click(function(){
+		var area = $(this).data('area');
 		var path = CFG.upload_current;
 		var currentpath = CFG.upload_current;
 		var type = "image";
