@@ -17,7 +17,7 @@ $key_words = $module_info['keywords'];
 
 $nv_Request->get_int('sorts', 'session', 0);
 $sorts = $nv_Request->get_int('sort', 'post', 0);
-$sorts_old = $nv_Request->get_int('sorts', 'session', 0);
+$sorts_old = $nv_Request->get_int('sorts', 'session', $pro_config['sortdefault']);
 $sorts = $nv_Request->get_int('sorts', 'post', $sorts_old);
 
 $compare_id = $nv_Request->get_string($module_data . '_compare_id', 'session', '');

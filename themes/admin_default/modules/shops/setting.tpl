@@ -171,6 +171,16 @@
 					<td><strong>{LANG.setting_show_product_code}</strong></td>
 					<td><input type="checkbox" value="1" name="show_product_code" {ck_show_product_code} id="show_product_code" /></td>
 				</tr>
+				<tr>
+					<td><strong>{LANG.setting_sortdefault}</strong></td>
+					<td>
+						<select name="sortdefault" class="form-control w200">
+							<!-- BEGIN: sortdefault -->
+							<option value="{SORTDEFAULT.index}" {SORTDEFAULT.selected}>{SORTDEFAULT.value}</option>
+							<!-- END: sortdefault -->
+						</select>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
