@@ -714,3 +714,7 @@ $lang_module['error_required_content'] = 'Lỗi: bạn cần nhập dữ liệu 
 $lang_module['updateprice'] = 'Cập nhật giá theo loại';
 $lang_module['cateid'] = 'Loại sản phẩm';
 $lang_module['newprice'] = 'Giá mới';
+
+$lang_module['ad_block_show'] = 'Hiển thị các block phụ';
+$lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
+$lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';
