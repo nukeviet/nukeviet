@@ -110,7 +110,7 @@
 					<td>
 					<div class="message_body" style="max-height:150px; overflow: auto">
 						<!-- BEGIN: catid -->
-						<label> <input type="checkbox" value="{CATS.id}" name="templateid[]" class="news_checkbox" {CATS.checked} {CATS.disabled}> {CATS.title} </label>
+						<label> <input type="checkbox" value="{CATS.id}" name="templateid[]" class="news_checkbox" {CATS.checked} {CATS.disabled} required> {CATS.title} </label>
 						<!-- END: catid -->
 					</div></td>
 				</tr>
