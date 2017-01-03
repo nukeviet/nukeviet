@@ -115,6 +115,8 @@ $lang_tmp['history_title'] = $lang_module['history_title'];
 $lang_tmp['active_order_dis'] = $lang_module['active_order_dis'];
 $lang_tmp['wishlist_product'] = $lang_module['wishlist_product'];
 $lang_tmp['point_cart_text'] = $lang_module['point_cart_text'];
+$lang_tmp['title_products'] = $lang_module['title_products'];
+$lang_tmp['cart_check_cart'] = $lang_module['cart_check_cart'];
 
 $xtpl = new XTemplate("block.cart.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file);
 $xtpl->assign('LANG', $lang_tmp);

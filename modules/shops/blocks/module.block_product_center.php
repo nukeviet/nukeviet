@@ -47,12 +47,20 @@ if (! function_exists('nv_product_center')) {
             $result = $db->query($db->sql());
             $bid = $result->fetchColumn();
 
+            if ($pro_config['sortdefault'] == 0) {
+                $orderby = 't1.id DESC';
+            } elseif ($pro_config['sortdefault'] == 1) {
+                $orderby = 't1.product_price ASC, t1.id DESC';
+            } else {
+                $orderby = 't1.product_price DESC, t1.id DESC';
+            }
+            
             $db->sqlreset()
                 ->select('t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.homeimgfile, t1.homeimgthumb , t1.homeimgalt, t1.showprice, t1.discount_id')
                 ->from($db_config['prefix'] . '_' . $module_data . '_rows t1')
                 ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_block t2 ON t1.id = t2.id')
                 ->where('t2.bid= ' . $bid . ' AND t1.status =1')
-                ->order('t1.id DESC')
+                ->order($orderby)
                 ->limit($num);
 
             $array = $nv_Cache->db($db->sql(), 'id', $module_name);

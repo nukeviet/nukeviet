@@ -2,17 +2,17 @@
 
 /**
  * @Project NUKEVIET 4.x
- * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES., JSC. All rights reserved
- * @License GNU/GPL version 2 or any later version
- * @Createdate 3/9/2010 23:25
- */
-
+* @Author VINADES.,JSC (contact@vinades.vn)
+* @Copyright (C) 2014 VINADES., JSC. All rights reserved
+* @License GNU/GPL version 2 or any later version
+* @Createdate 3/9/2010 23:25
+*/
 if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
 if (! nv_function_exists('nv_relates_product')) {
+
     /**
      * nv_block_config_relates_blocks()
      *
@@ -20,6 +20,7 @@ if (! nv_function_exists('nv_relates_product')) {
      * @param mixed $data_block
      * @param mixed $lang_block
      * @return
+     *
      */
     function nv_block_config_relates_blocks($module, $data_block, $lang_block)
     {
@@ -61,6 +62,7 @@ if (! nv_function_exists('nv_relates_product')) {
      * @param mixed $module
      * @param mixed $lang_block
      * @return
+     *
      */
     function nv_block_config_relates_blocks_submit($module, $lang_block)
     {
@@ -74,7 +76,8 @@ if (! nv_function_exists('nv_relates_product')) {
         return $return;
     }
 
-    if (!nv_function_exists('nv_get_price_tmp')) {
+    if (! nv_function_exists('nv_get_price_tmp')) {
+
         function nv_get_price_tmp($module_name, $module_data, $module_file, $pro_id)
         {
             global $nv_Cache, $db, $db_config, $module_config, $discounts_config;
@@ -94,10 +97,11 @@ if (! nv_function_exists('nv_relates_product')) {
      *
      * @param mixed $block_config
      * @return
+     *
      */
     function nv_relates_product($block_config)
     {
-        global $nv_Cache, $nv_Cache, $site_mods, $global_config, $lang_module, $module_config, $module_config, $module_name, $module_info, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config;
+        global $nv_Cache, $nv_Cache, $site_mods, $global_config, $lang_module, $module_config, $module_config, $module_name, $module_info, $global_array_shops_cat, $db_config, $my_head, $db, $pro_config, $money_config, $array_wishlist_id;
 
         $module = $block_config['module'];
         $mod_data = $site_mods[$module]['module_data'];
@@ -136,6 +140,11 @@ if (! nv_function_exists('nv_relates_product')) {
             // Css
             if (file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/css/' . $mod_file . '.css')) {
                 $my_head .= '<link rel="StyleSheet" href="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/css/' . $mod_file . '.css" type="text/css" />';
+            }
+
+            // js
+            if (file_exists(NV_ROOTDIR . '/themes/' . $block_theme . '/js/' . $mod_file . '.js')) {
+                $my_head .= '<script src="' . NV_BASE_SITEURL . 'themes/' . $block_theme . '/js/' . $mod_file . '.js"></script>';
             }
 
             // Language
@@ -177,12 +186,12 @@ if (! nv_function_exists('nv_relates_product')) {
         $xtpl->assign('WIDTH', $pro_config['homewidth']);
 
         $db->sqlreset()
-            ->select('t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice')
-            ->from($db_config['prefix'] . '_' . $mod_data . '_rows t1')
-            ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $mod_data . '_block t2 ON t1.id = t2.id')
-            ->where('t2.bid= ' . $block_config['blockid'] . ' AND t1.status =1')
-            ->order('t1.addtime DESC, t2.weight ASC')
-            ->limit($block_config['numrow']);
+        ->select('t1.id, t1.listcatid, t1.' . NV_LANG_DATA . '_title AS title, t1.' . NV_LANG_DATA . '_alias AS alias, t1.addtime, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t1.money_unit, t1.discount_id, t1.showprice, t1.product_number')
+        ->from($db_config['prefix'] . '_' . $mod_data . '_rows t1')
+        ->join('INNER JOIN ' . $db_config['prefix'] . '_' . $mod_data . '_block t2 ON t1.id = t2.id')
+        ->where('t2.bid= ' . $block_config['blockid'] . ' AND t1.status =1')
+        ->order('t1.addtime DESC, t2.weight ASC')
+        ->limit($block_config['numrow']);
 
         $list = $nv_Cache->db($db->sql(), 'id', $module);
 
@@ -191,32 +200,43 @@ if (! nv_function_exists('nv_relates_product')) {
 
         foreach ($list as $row) {
             if ($row['homeimgthumb'] == 1) {
-                //image thumb
+                // image thumb
 
                 $src_img = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 2) {
-                //image file
+                // image file
 
                 $src_img = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $site_mods[$module]['module_upload'] . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 3) {
-                //image url
+                // image url
 
                 $src_img = $row['homeimgfile'];
             } else {
-                //no image
+                // no image
 
                 $src_img = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/images/shops/no-image.jpg';
             }
 
+            $xtpl->assign('id', $row['id']);
             $xtpl->assign('link', $link . $global_array_shops_cat[$row['listcatid']]['alias'] . '/' . $row['alias'] . $global_config['rewrite_exturl']);
             $xtpl->assign('title', nv_clean60($row['title'], $cut_num));
             $xtpl->assign('src_img', $src_img);
             $xtpl->assign('time', nv_date('d-m-Y h:i:s A', $row['addtime']));
 
+            if ($pro_config['active_order'] == '1' and $pro_config['active_order_non_detail'] == '1') {
+                if ($row['showprice'] == '1') {
+                    if ($row['product_number'] > 0) {
+                        $xtpl->parse('main.loop.order');
+                    } else {
+                        $xtpl->parse('main.loop.product_empty');
+                    }
+                }
+            }
+
             if ($pro_config['active_price'] == '1') {
                 if ($row['showprice'] == '1') {
                     $price = nv_get_price_tmp($module, $mod_data, $mod_file, $row['id']);
-                    //var_dump($price); die;
+                    // var_dump($price); die;
                     $xtpl->assign('PRICE', $price);
                     if ($row['discount_id'] and $price['discount_percent'] > 0) {
                         $xtpl->parse('main.loop.price.discounts');
@@ -229,8 +249,18 @@ if (! nv_function_exists('nv_relates_product')) {
                 }
             }
 
+            // San pham yeu thich
+            if ($pro_config['active_wishlist']) {
+                if (! empty($array_wishlist_id)) {
+                    if (in_array($row['id'], $array_wishlist_id)) {
+                        $xtpl->parse('main.loop.wishlist.disabled');
+                    }
+                }
+                $xtpl->parse('main.loop.wishlist');
+            }
+
             $xtpl->parse('main.loop');
-            ++$i;
+            ++ $i;
         }
 
         $xtpl->parse('main');

@@ -69,6 +69,14 @@ if (strlen($key) >= NV_MIN_SEARCH_LENGTH) {
     $dbkey = $db->dblikeescape($key);
     $where = "AND ( product_code LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_title LIKE '%" . $dbkey . "%' OR " . NV_LANG_DATA . "_bodytext LIKE '%" . $dbkey . "%' ) ";
 
+    if ($pro_config['sortdefault'] == 0) {
+        $orderby = 'id DESC';
+    } elseif ($pro_config['sortdefault'] == 1) {
+        $orderby = 'product_price ASC, t1.id DESC';
+    } else {
+        $orderby = 'product_price DESC, t1.id DESC';
+    }
+    
     if ($catid != 0) {
         if ($global_array_shops_cat[$catid]['numsubcat'] == 0) {
             $where .= 'AND listcatid=' . $catid;
@@ -94,7 +102,7 @@ if (strlen($key) >= NV_MIN_SEARCH_LENGTH) {
 
     $numRecord = $db->query($db->sql())->fetchColumn();
 
-    $db->select('id, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, listcatid, ' . NV_LANG_DATA . '_hometext, publtime, homeimgfile, homeimgthumb')->order('id DESC')->limit($per_pages)->offset(($page - 1) * $per_page);
+    $db->select('id, ' . NV_LANG_DATA . '_title, ' . NV_LANG_DATA . '_alias, listcatid, ' . NV_LANG_DATA . '_hometext, publtime, homeimgfile, homeimgthumb')->order($orderby)->limit($per_pages)->offset(($page - 1) * $per_page);
 
     $result = $db->query($db->sql());
 

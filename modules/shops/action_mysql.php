@@ -757,6 +757,7 @@ $data['groups_notify'] = '3';
 $data['template_active'] = '0';
 $data['download_active'] = '0';
 $data['download_groups'] = '6';
+$data['sortdefault'] = 0;
 
 foreach ($data as $config_name => $config_value) {
     $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', " . $db->quote($module_name) . ", " . $db->quote($config_name) . ", " . $db->quote($config_value) . ")";

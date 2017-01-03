@@ -46,12 +46,11 @@ foreach ($array_op as $_inurl) {
         $array_url_group[$m[1]][] = $m[2];
     }
 }
-if (empty($global_array_shops_cat[$catid]['title_custom'])) {
+if (!empty($global_array_shops_cat[$catid]['title_custom'])) {
     $page_title = $global_array_shops_cat[$catid]['title_custom'];
 } else {
     $page_title = $global_array_shops_cat[$catid]['title'];
 }
-$page_title = $global_array_shops_cat[$catid]['title_custom'];
 $key_words = $global_array_shops_cat[$catid]['keywords'];
 $description = $global_array_shops_cat[$catid]['description'];
 
@@ -59,7 +58,7 @@ $contents = '';
 $cache_file = '';
 $nv_Request->get_int('sorts', 'session', 0);
 $sorts = $nv_Request->get_int('sort', 'post', 0);
-$sorts_old = $nv_Request->get_int('sorts', 'session', 0);
+$sorts_old = $nv_Request->get_int('sorts', 'session', $pro_config['sortdefault']);
 $sorts = $nv_Request->get_int('sorts', 'post', $sorts_old);
 
 $nv_Request->get_string('viewtype', 'session', '');
