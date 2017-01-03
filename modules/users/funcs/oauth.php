@@ -17,6 +17,10 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
 }
 
+if (!empty($nv_redirect) and nv_redirect_decrypt($nv_redirect) != '') {
+    $nv_Request->set_Session('nv_redirect_' . $module_data, $nv_redirect);
+}
+
 if ($global_config['allowuserlogin'] and defined('NV_OPENID_ALLOWED')) {
     $server = $nv_Request->get_string('server', 'get', '');
 
