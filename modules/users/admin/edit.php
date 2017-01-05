@@ -256,7 +256,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
     
     if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $in_groups)) {
-        $_user['in_groups_default'] = $row['group_id'];
+        $_user['in_groups_default'] = 0;
     }
     
     if (!$_user['in_groups_default'] and sizeof($in_groups) == 1) {
