@@ -127,7 +127,7 @@ function nv_del_content_module($id)
         nv_delete_notification(NV_LANG_DATA, $module_name, 'post_queue', $id);
         
         /*conenct to elasticsearch*/
-        if (isset($module_config[$module_name]['elas_use'])) {
+        if ($module_config[$module_name]['elas_use'] == 1) {
             $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
             $response = $nukeVietElasticSearh->delete_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $id);
         }

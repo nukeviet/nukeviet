@@ -1,7 +1,22 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.1.00 Beta
+NUKEVIET 4.1.01 Beta 2
+- Add Elasticseach for module News
+- Theme mobile: Fix send contact
+- Fix create virtual module
+- Fix function nv_is_url, check_domain
+- Fix Assign variable syntax error	Thank hiidemo
+- Module news: Update block news cat Thank Hồ Ngọc Triển
+- Module news: config external link Thank Hồ Ngọc Triển
+- Module menu: add image field Thank mynukeviet
+- Fix googleAnalytics Thank phongaz
+- Fix IIS rewrite Thank  anhyeuviolet
+- Module news: Fix setup step 5, Field 'description' doesn't have a default value
+- theme: fixes interface Set default configuration
+- Module users: fix list customization data, active users
+
+NUKEVIET 4.1.00 Beta 1
 - Change system rewrite rule (Optimize for NginX)
 - Update system notification
 - Support redis cache and session_handler
