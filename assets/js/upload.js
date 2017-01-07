@@ -704,46 +704,32 @@ function cropfile() {
             '<input type="button" id="crop-save" value="' + LANG.save + '" class="btn btn-primary"/>'
         );
 
-        var markW = parseInt(Math.round(size[0] * 0.7));
-        var markH = parseInt(Math.round(size[1] * 0.7));
-
-        if (markW < 10) {
-            markW = 10;
-        }
-
-        if (markH < 10) {
-            markH = 10;
-        }
-
-        var markX = size[0] - markW - 5;
-        var markY = size[1] - markH - 5;
-
-        if (markX < 0) {
-            markX = 0;
-        }
-
-        if (markY < 0) {
-            markY = 0;
-        }
-
-        // Init watermark
-        $('#cropContent img.crop-image').Jcrop({
-            minSize: [10, 10],
-            setSelect: [markX, markY, markW, markH],
-            aspectRatio: 0,
-            bgFade: true,
-            bgOpacity: .3,
-            boxWidth: size[0],
-            boxHeight: size[1],
-            onChange: function(e) {},
-            onSelect: function(e) {
+        // Init cropper
+        $('#cropContent img.crop-image').cropper({
+            viewMode: 3,
+            dragMode: 'crop',
+            aspectRatio: NaN,
+            responsive: true,
+            modal: true,
+            guides: false,
+            highlight: true,
+            autoCrop: true,
+            autoCropArea: 0.5,
+            movable: false,
+            rotatable: false,
+            scalable: false,
+            zoomable: false,
+            zoomOnTouch: false,
+            zoomOnWheel: false,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            crop: function(e) {
                 $('#crop-x').val(parseInt(Math.floor(e.x)));
                 $('#crop-y').val(parseInt(Math.floor(e.y)));
-                $('#crop-w').val(parseInt(Math.floor(e.w)));
-                $('#crop-h').val(parseInt(Math.floor(e.h)));
-            },
-            onRelease: function(e) {}
-        }, function() {});
+                $('#crop-w').val(parseInt(Math.floor(e.width)));
+                $('#crop-h').val(parseInt(Math.floor(e.height)));
+            }
+        });
 
         $('#crop-save').click(function() {
             $(this).attr('disabled', 'disabled');
@@ -835,62 +821,56 @@ function addlogo() {
             markW = Math.ceil(markH * logoConfig[0] / logoConfig[1]);
         }
 
-        var markX = size[0] - markW - 5;
-        var markY = size[1] - markH - 5;
-
-        if (markX < 0) {
-            markX = 0;
-        }
-
-        if (markY < 0) {
-            markY = 0;
-        }
-
-        // Init watermark
-        /*
-        $('#addlogoContent img.addlogo-image').Watermarker({
-            watermark_img : logo,
-            x : markX,
-            y : markY,
-            w : markW,
-            h : markH,
-            opacity : 1,
-            position : 'centercenter',
-            onChange : function(e){
-                $('#addlogo-x').val( parseInt( Math.floor( markScale * e.x ) ) );
-                $('#addlogo-y').val( parseInt( Math.floor( markScale * e.y ) ) );
-                $('#addlogo-w').val( parseInt( Math.floor( markScale * e.w ) ) );
-                $('#addlogo-h').val( parseInt( Math.floor( markScale * e.h ) ) );
-            }
-        });
-        */
-        
-console.log(markX);        
-console.log(markY);        
-console.log(markW);        
-console.log(markH);        
-        
-        $('#addlogoContent img.addlogo-image').Jcrop({
-            minSize: [10, 10],
-            setSelect: [0, 0, 100, 100],
-            aspectRatio: 0,
-            bgFade: true,
-            bgOpacity: .3,
-            canDelete: false,
-            canSelect: false,
-            canResize: false,
-            canDrag: true,
-            boxWidth: size[0],
-            boxHeight: size[1],
-            onChange: function(e) {},
-            onSelect: function(e) {
+        // Init cropper
+        $('#addlogoContent img.addlogo-image').cropper({
+            viewMode: 3,
+            dragMode: 'none',
+            aspectRatio: NaN,
+            responsive: true,
+            modal: true,
+            guides: false,
+            highlight: true,
+            autoCrop: false,
+            autoCropArea: .01,
+            movable: false,
+            rotatable: false,
+            scalable: false,
+            zoomable: false,
+            zoomOnTouch: false,
+            zoomOnWheel: false,
+            cropBoxMovable: true,
+            cropBoxResizable: false,
+            crop: function(e) {
                 $('#addlogo-x').val(parseInt(Math.floor(e.x)));
                 $('#addlogo-y').val(parseInt(Math.floor(e.y)));
-                $('#addlogo-w').val(parseInt(Math.floor(e.w)));
-                $('#addlogo-h').val(parseInt(Math.floor(e.h)));
+                $('#addlogo-w').val(parseInt(Math.floor(e.width)));
+                $('#addlogo-h').val(parseInt(Math.floor(e.height)));
             },
-            onRelease: function(e) {}
-        }, function() {});
+            built: function(e) {
+                var imageData = $(this).cropper('getImageData');
+                var cropBoxScale = imageData.naturalWidth / imageData.width;
+                var cropBoxSize = {
+                    width: markW / cropBoxScale,
+                    height: markH / cropBoxScale
+                };
+                cropBoxSize.left = imageData.width - cropBoxSize.width - 10;
+                cropBoxSize.top = imageData.height - cropBoxSize.height - 10;
+                $(this).cropper('crop');
+                $(this).cropper('setCropBoxData', {
+                    left: cropBoxSize.left,
+                    top: cropBoxSize.top,
+                    width: cropBoxSize.width,
+                    height: cropBoxSize.height
+                });
+                var wrapCropper = $(this).parent();
+                $('.cropper-face', wrapCropper).css({
+                    'opacity' : 1,
+                    'background-image' : 'url(' + logo + ')',
+                    'background-size' : '100%',
+                    'background-color' : 'transparent'
+                });
+            }
+        });
 
         $('#addlogo-save').click(function() {
             $(this).attr('disabled', 'disabled');
