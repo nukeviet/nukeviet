@@ -489,7 +489,6 @@ UAV.common = {
                     $('#' + UAV.config.imageType).html(file.type);
                     $('#' + UAV.config.imageSize).html(UAV.tool.bytes2Size(file.size));
                     $('#' + UAV.config.originalDimension).html(img.naturalWidth + ' x ' + img.naturalHeight);
-                    console.log()
                     $('#' + UAV.config.target).Jcrop({
                         minSize: [UAV.config.avatar_width, UAV.config.avatar_height],
                         setSelect: [300, 300, 55, 55],
