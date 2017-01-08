@@ -19,7 +19,37 @@ if (! nv_function_exists('nv_contact_supporter')) {
         
         if (isset($site_mods[$module])) {
             
+            $cache_file = NV_LANG_DATA . '_block_contact_supporter' . NV_CACHE_PREFIX . '.cache';
             $array_data = array();
+            
+            $sql = 'SELECT id, full_name, alias, phone, email, others, image FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 ORDER BY weight';
+            $_array_department = $nv_Cache->db($sql, 'id', $module);
+            
+            if (($cache = $nv_Cache->getItem($module, $cache_file)) != false) {
+                $array_data = unserialize($cache);
+            }else{                
+                foreach ($_array_department as $array_department) {
+                
+                    $db->sqlreset()
+                    ->select('*')
+                    ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_supporter')
+                    ->where('act=1 AND departmentid=' . $array_department['id'])
+                    ->order('weight ASC');
+                
+                    $sth = $db->prepare($db->sql());
+                    $sth->execute();
+                
+                    while ($_row = $sth->fetch()) {
+                        $array_data[$array_department['id']][] = $_row;
+                    }
+                }
+                $cache = serialize($array_data);
+                $nv_Cache->setItem($module, $cache_file, $cache);
+            }
+
+            if (empty($array_data)) {
+                return '';
+            }
             
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $site_mods[$module]['module_file'] . '/block.supporter.tpl')) {
                 $block_theme = $global_config['module_theme'];
@@ -27,29 +57,6 @@ if (! nv_function_exists('nv_contact_supporter')) {
                 $block_theme = $global_config['site_theme'];
             } else {
                 $block_theme = 'default';
-            }
-            
-            $sql = 'SELECT id, full_name, alias, phone, email, others, image FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_department WHERE act=1 ORDER BY weight';
-            $_array_department = $nv_Cache->db($sql, 'id', $module);
-            
-            if (empty($_array_department)) {
-                return '';
-            }
-            
-            foreach ($_array_department as $array_department) {
-                
-                $db->sqlreset()
-                    ->select('*')
-                    ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_supporter')
-                    ->where('act=1 AND departmentid=' . $array_department['id'])
-                    ->order('weight ASC');
-                
-                $sth = $db->prepare($db->sql());
-                $sth->execute();
-                
-                while ($_row = $sth->fetch()) {
-                    $array_data[$array_department['id']][] = $_row;
-                }
             }
             
             $xtpl = new XTemplate('block.supporter.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/modules/' . $site_mods[$module]['module_file']);
