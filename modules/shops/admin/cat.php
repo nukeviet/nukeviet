@@ -28,7 +28,7 @@ if (! file_exists($currentpath)) {
     nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, date('Y_m'), true);
 }
 
-list ($data['catid'], $data['parentid'], $data['title'], $data['title_custom'], $data['alias'], $data[NV_LANG_DATA . '_description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['tag_description'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice']) = array(
+list ($data['catid'], $data['parentid'], $data['title'], $data['title_custom'], $data['alias'], $data['description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice']) = array(
     0,
     0,
     '',
@@ -54,8 +54,8 @@ list ($data['catid'], $data['parentid'], $data['title'], $data['title_custom'], 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
 $cat_form_exit = array();
-if (is_dir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/files_tpl')) {
-    $_form_exit = scandir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_file . '/files_tpl');
+if (is_dir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl')) {
+    $_form_exit = scandir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl');
     foreach ($_form_exit as $_form) {
         if (preg_match('/^cat\_form\_([a-zA-Z0-9\-\_]+)\.tpl$/', $_form, $m)) {
             $cat_form_exit[] = $m[1];
@@ -271,7 +271,7 @@ if (! empty($data['image']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_
     $data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data['image'];
     $currentpath = dirname($data['image']);
 }
-$data['description'] = nv_br2nl($data[NV_LANG_DATA . '_description']);
+$data['description'] = nv_br2nl($data['description']);
 if ($pro_config['point_active']) {
     if ($data['cat_allow_point']) {
         $data['cat_number_point_dis'] = '';

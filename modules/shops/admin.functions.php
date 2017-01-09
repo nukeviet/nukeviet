@@ -1153,7 +1153,7 @@ function Insertabl_catfields($table, $array, $idshop)
 
 function nv_create_form_file($array_template_id)
 {
-    global $db, $db_config, $module_name, $module_data, $module_file, $array_template, $lang_module;
+    global $db, $db_config, $module_upload, $module_data, $module_file, $array_template, $lang_module;
 
     foreach ($array_template_id as $templateids_i) {
         $array_views = array();
@@ -1294,11 +1294,11 @@ function nv_create_form_file($array_template_id)
 
         $content_2 .= "<!-- END: main -->";
 
-        if (!file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl')) {
-            nv_mkdir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name, 'files_tpl');
+        if (!file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl')) {
+            nv_mkdir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload, 'files_tpl');
         }
 
-        $file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_name . '/files_tpl/cat_form_' . preg_replace('/[\-]/', '_', $array_template[$templateids_i]['alias']) . '.tpl';
+        $file = NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl/cat_form_' . preg_replace('/[\-]/', '_', $array_template[$templateids_i]['alias']) . '.tpl';
         file_put_contents($file, $content_2, LOCK_EX);
     }
 }
