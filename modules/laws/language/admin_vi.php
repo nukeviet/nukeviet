@@ -148,6 +148,13 @@ $lang_module['config_detail_other_area'] = "Cùng lĩnh vực";
 $lang_module['config_detail_other_signer'] = "Cùng người ký";
 $lang_module['config_detail_other_subject'] = "Cùng cơ quan ban hành";
 $lang_module['config_detail_other_numlinks'] = "Số liên kết cùng loại";
+$lang_module['config_show_link_detailpage'] = "Hiển thị liên kết khi xem chi tiết văn bản tại các mục";
+$lang_module['config_show_link_detailpage1'] = "Loại văn bản";
+$lang_module['config_show_link_detailpage2'] = "Lĩnh vực";
+$lang_module['config_show_link_detailpage3'] = "Cơ quan ban hành";
+$lang_module['config_show_link_detailpage4'] = "Người ký";
+$lang_module['config_detail_hide_empty_field'] = "Ẩn các mục không có thông tin khi xem chi tiết văn bản";
+$lang_module['config_detail_pdf_quick_view'] = "Hiển thị nút xem nhanh các file PDF tại trang chi tiết văn bản";
 
 $lang_module['type_view_0'] = "Ngày ban hành, mới lên trên";
 $lang_module['type_view_1'] = "Ngày ban hành, cũ lên trên";

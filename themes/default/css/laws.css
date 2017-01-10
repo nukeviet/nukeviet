@@ -312,3 +312,32 @@ a#btn-search{
 	font-size: 12px;
 	margin-top: 7px;
 }
+
+.laws-download-file {
+    margin-top: -6px;
+}
+
+.laws-download-file .list-group-item:first-child{
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.laws-download-file .list-group-item .badge {
+    float: right;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 22px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #5cb85c;
+    border-radius: 15px;
+}
+
+.laws-download-file .list-group-item .badge a {
+    color: #fff;
+}

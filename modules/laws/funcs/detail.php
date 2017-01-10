@@ -71,6 +71,24 @@ if ($nv_Request->isset_request('download', 'get')) {
     exit();
 }
 
+if ($nv_Request->isset_request('pdf', 'get')) {
+    $fileid = $nv_Request->get_int('id', 'get', 0);
+
+    $row['files'] = explode(',', $row['files']);
+
+    if (!isset($row['files'][$fileid])) {
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    }
+
+    if (!file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['files'][$fileid])) {
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
+    }
+    
+    $file_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&download=1&id=' . $fileid;
+    $contents = nv_theme_viewpdf($file_url);
+    die($contents);
+}
+
 $page_title = $row['title'];
 $key_words = $row['keywords'];
 $description = $row['introtext'];
@@ -133,8 +151,11 @@ if (!empty($row['files'])) {
         $file_title = basename($file);
         $row['files'][] = array(
             'title' => $file_title,
+            'key' => md5($id . $file_title),
+            'ext' => nv_getextension($file_title),
             'titledown' => $lang_module['download'] . ' ' . (count($files) > 1 ? $id + 1 : ''),
-            'url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;download=1&amp;id=' . $id
+            'url' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;download=1&amp;id=' . $id,
+            'urlpdf' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['detail'] . '/' . $lawalias . '&amp;pdf=1&amp;id=' . $id
         );
     }
 }

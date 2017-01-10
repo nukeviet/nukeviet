@@ -20,7 +20,7 @@ if (!defined('NV_IS_MOD_LAWS'))
  */
 function nv_theme_laws_main($array_data, $generate_page)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -65,7 +65,7 @@ function nv_theme_laws_main($array_data, $generate_page)
  */
 function nv_theme_laws_maincat($mod, $array_data)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate('main_' . $mod . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -122,7 +122,7 @@ function nv_theme_laws_maincat($mod, $array_data)
  */
 function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = array(), $other_subject = array(), $other_signer = array())
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $client_info;
+    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $client_info, $nv_laws_setting;
 
     $xtpl = new XTemplate($module_info['funcs'][$op]['func_name'] . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -131,55 +131,126 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
     $array_data['startvalid'] = $array_data['startvalid'] ? nv_date('d/m/Y', $array_data['startvalid']) : '';
     $array_data['exptime'] = $array_data['exptime'] ? nv_date('d/m/Y', $array_data['exptime']) : '';
 
-    $array_data['cat'] = $nv_laws_listcat[$array_data['cid']]['title'];
-    $array_data['cat_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $nv_laws_listcat[$array_data['cid']]['alias'];
+    if (isset($nv_laws_listcat[$array_data['cid']])) {
+        $array_data['cat'] = $nv_laws_listcat[$array_data['cid']]['title'];
+        $array_data['cat_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $nv_laws_listcat[$array_data['cid']]['alias'];
+    } else {
+        $array_data['cat'] = '';
+        $array_data['cat_url'] = '#';
+    }
 
-    $array_data['subject'] = $nv_laws_listsubject[$array_data['sid']]['title'];
-    $array_data['subject_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=subject/' . $nv_laws_listsubject[$array_data['sid']]['alias'];
+    if (isset($nv_laws_listsubject[$array_data['sid']])) {
+        $array_data['subject'] = $nv_laws_listsubject[$array_data['sid']]['title'];
+        $array_data['subject_url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=subject/' . $nv_laws_listsubject[$array_data['sid']]['alias'];
+    } else {
+        $array_data['subject'] = '';
+        $array_data['subject_url'] = '';
+    }
 
     $xtpl->assign('DATA', $array_data);
+
+    // Ẩn giá trị trống
+    $filled_field = 0;
+    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['cat'])) {
+        $filled_field++;
+        if (!empty($nv_laws_setting['detail_show_link_cat'])) {
+            $xtpl->parse('main.field.cat.link');
+        } else {
+            $xtpl->parse('main.field.cat.text');
+        }
+        $xtpl->parse('main.field.cat');
+    }
+    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['subject'])) {
+        $filled_field++;
+        if (!empty($nv_laws_setting['detail_show_link_subject'])) {
+            $xtpl->parse('main.field.subject.link');
+        } else {
+            $xtpl->parse('main.field.subject.text');
+        }
+        $xtpl->parse('main.field.subject');
+    }
+    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['publtime'])) {
+        $filled_field++;
+        $xtpl->parse('main.field.publtime');
+    }
+    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['startvalid'])) {
+        $filled_field++;
+        $xtpl->parse('main.field.startvalid');
+    }
+    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['exptime'])) {
+        $filled_field++;
+        $xtpl->parse('main.field.exptime');
+    }
+    if (empty($nv_laws_setting['detail_hide_empty_field'])or !empty($array_data['signer'])) {
+        $filled_field++;
+        if (!empty($nv_laws_setting['detail_show_link_signer'])) {
+            $xtpl->parse('main.field.signer.link');
+        } else {
+            $xtpl->parse('main.field.signer.text');
+        }
+        $xtpl->parse('main.field.signer');
+    }
 
     if (!empty($array_data['aid'])) {
         foreach ($array_data['aid'] as $aid) {
             $area['title'] = $nv_laws_listarea[$aid]['title'];
             $area['url'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=area/' . $nv_laws_listarea[$aid]['alias'];
             $xtpl->assign('AREA', $area);
-            $xtpl->parse('main.area');
+            
+            if (!empty($nv_laws_setting['detail_show_link_area'])) {
+                $xtpl->parse('main.field.area_link');
+            } else {
+                $xtpl->parse('main.field.area_text');
+            }
         }
+        $filled_field++;
+    }
+
+    if (!empty($array_data['relatement'])) {
+        foreach ($array_data['relatement'] as $relatement) {
+            $xtpl->assign('relatement', $relatement);
+            $xtpl->parse('main.field.relatement.loop');
+        }
+        $xtpl->parse('main.field.relatement');
+        $filled_field++;
+    }
+
+    if (!empty($array_data['replacement'])) {
+        foreach ($array_data['replacement'] as $replacement) {
+            $xtpl->assign('replacement', $replacement);
+            $xtpl->parse('main.field.replacement.loop');
+        }
+        $xtpl->parse('main.field.replacement');
+        $filled_field++;
+    }
+
+    if (!empty($array_data['unreplacement'])) {
+        foreach ($array_data['unreplacement'] as $unreplacement) {
+            $xtpl->assign('unreplacement', $unreplacement);
+            $xtpl->parse('main.field.unreplacement.loop');
+        }
+        $xtpl->parse('main.field.unreplacement');
+        $filled_field++;
+    }
+
+    if ($filled_field > 0) {
+        $xtpl->parse('main.field');
     }
 
     if (!empty($array_data['bodytext'])) {
         $xtpl->parse('main.bodytext');
     }
 
-    if (!empty($array_data['relatement'])) {
-        foreach ($array_data['relatement'] as $relatement) {
-            $xtpl->assign('relatement', $relatement);
-            $xtpl->parse('main.relatement.loop');
-        }
-        $xtpl->parse('main.relatement');
-    }
-
-    if (!empty($array_data['replacement'])) {
-        foreach ($array_data['replacement'] as $replacement) {
-            $xtpl->assign('replacement', $replacement);
-            $xtpl->parse('main.replacement.loop');
-        }
-        $xtpl->parse('main.replacement');
-    }
-
-    if (!empty($array_data['unreplacement'])) {
-        foreach ($array_data['unreplacement'] as $unreplacement) {
-            $xtpl->assign('unreplacement', $unreplacement);
-            $xtpl->parse('main.unreplacement.loop');
-        }
-        $xtpl->parse('main.unreplacement');
-    }
-
     if (nv_user_in_groups($array_data['groups_download'])) {
         if (!empty($array_data['files'])) {
             foreach ($array_data['files'] as $file) {
                 $xtpl->assign('FILE', $file);
+                
+                if ($file['ext'] == 'pdf' and !empty($nv_laws_setting['detail_pdf_quick_view'])) {
+                    $xtpl->parse('main.files.loop.show_quick_view');
+                    $xtpl->parse('main.files.loop.content_quick_view');
+                }
+                
                 $xtpl->parse('main.files.loop');
             }
             $xtpl->parse('main.files');
@@ -222,7 +293,7 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
  */
 function nv_theme_laws_search($array_data, $generate_page, $all_page)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op;
+    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op;
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -258,7 +329,7 @@ function nv_theme_laws_search($array_data, $generate_page, $all_page)
  */
 function nv_theme_laws_area($array_data, $generate_page, $cat)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -306,7 +377,7 @@ function nv_theme_laws_area($array_data, $generate_page, $cat)
  */
 function nv_theme_laws_cat($array_data, $generate_page, $cat)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op;
+    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op;
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -337,7 +408,7 @@ function nv_theme_laws_cat($array_data, $generate_page, $cat)
  */
 function nv_theme_laws_subject($array_data, $generate_page, $cat)
 {
-    global $global_config, $module_name, $nv_laws_setting, $module_file, $lang_module, $module_config, $module_info, $op;
+    global $global_config, $module_name, $nv_laws_setting, $module_file, $lang_module, $module_info, $op;
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -386,7 +457,7 @@ function nv_theme_laws_subject($array_data, $generate_page, $cat)
  */
 function nv_theme_laws_signer($array_data, $generate_page, $cat)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -433,7 +504,7 @@ function nv_theme_laws_signer($array_data, $generate_page, $cat)
  */
 function nv_theme_laws_list_other($array_data)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_config, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
 
     $xtpl = new XTemplate('list_other.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -447,6 +518,25 @@ function nv_theme_laws_list_other($array_data)
         $i++;
     }
 
+    $xtpl->parse('main');
+    return $xtpl->text('main');
+}
+
+
+/**
+ * nv_theme_viewpdf()
+ * 
+ * @param mixed $file_url
+ * @return
+ */
+function nv_theme_viewpdf($file_url)
+{
+    global $lang_module, $lang_global;
+    $xtpl = new XTemplate('viewer.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/js/pdf.js');
+    $xtpl->assign('LANG', $lang_module);
+    $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('PDF_JS_DIR', NV_BASE_SITEURL . NV_ASSETS_DIR . '/js/pdf.js/');
+    $xtpl->assign('PDF_URL', $file_url);
     $xtpl->parse('main');
     return $xtpl->text('main');
 }

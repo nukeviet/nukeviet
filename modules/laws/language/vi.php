@@ -72,6 +72,7 @@ $lang_module['s_noresult'] = "Không có kết quả nào phù hợp với yêu 
 $lang_module['s_result_num'] = "%d văn bản";
 
 $lang_module['download'] = "Tải tập tin";
+$lang_module['quick_view_pdf'] = "Xem trước tập tin PDF";
 $lang_module['other_cat'] = "Các văn bản cùng thể loại";
 $lang_module['other_area'] = "Các văn bản cùng lĩnh vực";
 $lang_module['other_subject'] = "Các văn bản cùng cơ quan ban hành";
