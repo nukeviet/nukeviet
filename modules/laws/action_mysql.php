@@ -134,6 +134,6 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('detail_show_link_area', '1'),
 ('detail_show_link_subject', '1'),
 ('detail_show_link_signer', '1'),
-('detail_pdf_quick_view', '0'),
+('detail_pdf_quick_view', '1'),
 ('other_numlinks', '5')
 ";
