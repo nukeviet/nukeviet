@@ -160,6 +160,8 @@ $rowcontent = array(
     'click_rating' => 0,
     'keywords' => '',
     'keywords_old' => '',
+    'instant_active' => isset($module_config[$module_name]['instant_articles_auto']) ? $module_config[$module_name]['instant_articles_auto'] : 0,
+    'instant_template' => '',
     'mode' => 'add'
 );
 
@@ -459,6 +461,17 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         }
     }
     
+    if (!empty($module_config[$module_name]['instant_articles_active'])) {
+        $rowcontent['instant_active'] = (int) $nv_Request->get_bool('instant_active', 'post');
+        $rowcontent['instant_template'] = $nv_Request->get_title('instant_template', 'post', '');
+    } else {
+        $rowcontent['instant_active'] = 0;
+        $rowcontent['instant_template'] = '';
+    }
+    if (empty($rowcontent['instant_active'])) {
+        $rowcontent['instant_template'] = '';
+    }
+    
     if (empty($error)) {
         if (!empty($catids)) {
             $rowcontent['catid'] = in_array($rowcontent['catid'], $catids) ? $rowcontent['catid'] : $catids[0];
@@ -547,9 +560,11 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             if ($rowcontent['status'] == 1 and $rowcontent['publtime'] > NV_CURRENTTIME) {
                 $rowcontent['status'] = 2;
             }
-            $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows
-                (catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating) VALUES
-                 (' . intval($rowcontent['catid']) . ',
+            $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (
+                catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, 
+                homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating, instant_active, instant_template 
+            ) VALUES (
+                 ' . intval($rowcontent['catid']) . ',
                  :listcatid,
                  ' . $rowcontent['topicid'] . ',
                  ' . intval($rowcontent['admin_id']) . ',
@@ -574,7 +589,10 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                  ' . intval($rowcontent['hitstotal']) . ',
                  ' . intval($rowcontent['hitscm']) . ',
                  ' . intval($rowcontent['total_rating']) . ',
-                 ' . intval($rowcontent['click_rating']) . ')';
+                 ' . intval($rowcontent['click_rating']) . '
+                 ' . intval($rowcontent['instant_active']) . ', 
+                 :instant_template
+            )';
             
             $data_insert = array();
             $data_insert['listcatid'] = $rowcontent['listcatid'];
@@ -586,6 +604,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $data_insert['homeimgalt'] = $rowcontent['homeimgalt'];
             $data_insert['homeimgthumb'] = $rowcontent['homeimgthumb'];
             $data_insert['allowed_comm'] = $rowcontent['allowed_comm'];
+            $data_insert['instant_template'] = $rowcontent['instant_template'];
             
             $rowcontent['id'] = $db->insert_id($sql, 'id', $data_insert);
             if ($rowcontent['id'] > 0) {
@@ -667,6 +686,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 allowed_comm=:allowed_comm,
                 allowed_rating=' . intval($rowcontent['allowed_rating']) . ',
                 external_link=' . intval($rowcontent['external_link']) . ',
+                instant_active=' . intval($rowcontent['instant_active']) . ',
+                instant_template=:instant_template,
                 edittime=' . NV_CURRENTTIME . '
             WHERE id =' . $rowcontent['id']);
             
@@ -679,6 +700,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $sth->bindParam(':homeimgalt', $rowcontent['homeimgalt'], PDO::PARAM_STR);
             $sth->bindParam(':homeimgthumb', $rowcontent['homeimgthumb'], PDO::PARAM_STR);
             $sth->bindParam(':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR);
+            $sth->bindParam(':instant_template', $rowcontent['instant_template'], PDO::PARAM_STR);
             
             if ($sth->execute()) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['content_edit'], $rowcontent['title'], $admin_info['userid']);
@@ -1074,6 +1096,8 @@ $allowed_print_checked = ($rowcontent['allowed_print']) ? ' checked="checked"' :
 $xtpl->assign('allowed_print_checked', $allowed_print_checked);
 $allowed_save_checked = ($rowcontent['allowed_save']) ? ' checked="checked"' : '';
 $xtpl->assign('allowed_save_checked', $allowed_save_checked);
+$instant_active_checked = ($rowcontent['instant_active']) ? ' checked="checked"' : '';
+$xtpl->assign('instant_active_checked', $instant_active_checked);
 
 $xtpl->assign('edit_bodytext', $edits);
 $xtpl->assign('edit_hometext', $editshometext);
@@ -1139,6 +1163,9 @@ if (sizeof($_array)) {
 
 if ($module_config[$module_name]['auto_tags']) {
     $xtpl->parse('main.auto_tags');
+}
+if (!empty($module_config[$module_name]['instant_articles_active'])) {
+    $xtpl->parse('main.instant_articles_active');
 }
 
 $xtpl->parse('main');

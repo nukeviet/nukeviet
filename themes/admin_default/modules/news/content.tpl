@@ -292,6 +292,20 @@
 								</div>
 							</div>
 						</li>
+                        <!-- BEGIN: instant_articles_active -->
+                        <li>
+							<p class="message_head">
+								<cite>{LANG.content_insart}:</cite>
+							</p>
+							<div class="message_body">
+								<p><label><input type="checkbox" name="instant_active" value="1" {instant_active_checked}/>&nbsp;{LANG.content_instant_active}</label></p>
+                                <div>
+                                    {LANG.content_instant_template}: 
+                                    <input type="text" placeholder="{LANG.content_instant_templatenote}" name="instant_template" value="{rowcontent.instant_template}" class="form-control" style="width:100%"/>
+                                </div>
+							</div>
+                        </li>
+                        <!-- END: instant_articles_active -->
                     </ul>
                 </div>
             </div>

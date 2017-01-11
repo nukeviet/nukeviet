@@ -569,4 +569,13 @@ $(document).ready(function(){
 		nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
 		return false;
 	});
+    $('a.viewinstantrss').click(function(e) {
+        e.preventDefault();
+        modalShow($(this).data('modaltitle'), '<div><input type="text" class="form-control w500" value="' + $(this).attr('href') + '" data-toggle="selectall"/></div>');
+    });
+    
+    // Setting Instant Articles
+    $(document).delegate('[data-toggle="selectall"]', 'focus', function() {
+        $(this).select();
+    })
 });
