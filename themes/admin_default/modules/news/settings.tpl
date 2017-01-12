@@ -207,7 +207,17 @@
 				</tr>
                 <tr>
 					<th class="w400">{LANG.setting_instant_articles_password}</th>
-					<td><input type="text" value="{DATA.instant_articles_password}" name="instant_articles_password" class="form-control"/></td>
+					<td>
+                        <div class="input-group">
+                            <input type="password" value="{INSTANT_ARTICLES_PASSWORD}" name="instant_articles_password" class="form-control"/> 
+                            <span class="input-group-addon">
+                                <a href="#" class="showhidepass" data-target="[name='instant_articles_password']" data-toggle="tooltip" title="{LANG.show_hide_pass}"><i class="fa fa-key"></i></a>
+                            </span>
+                            <span class="input-group-addon">
+                                <a href="#" class="genrandpass" data-target="[name='instant_articles_password']" data-toggle="tooltip" title="{LANG.gen_rand_pass}"><i class="fa fa-refresh"></i></a>
+                            </span>
+                        </div>
+                    </td>
 				</tr>
                 <tr>
 					<th class="w400">{LANG.setting_instant_articles_livetime}&nbsp;(<a href="javascript:void(0);" data-toggle="tooltip" title="{LANG.setting_instant_articles_livetime1}"><i class="fa fa-info-circle"></i></a>)</th>

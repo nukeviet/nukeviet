@@ -577,5 +577,19 @@ $(document).ready(function(){
     // Setting Instant Articles
     $(document).delegate('[data-toggle="selectall"]', 'focus', function() {
         $(this).select();
-    })
+    });
+    $('.showhidepass').click(function(e) {
+        e.preventDefault();
+        var tg = $($(this).data('target'));
+        if (tg.prop('type') == 'text') {
+            tg.prop('type', 'password');
+        } else {
+            tg.prop('type', 'text');
+        }
+    });
+    $('.genrandpass').click(function(e) {
+        e.preventDefault();
+        $($(this).data('target')).prop('type', 'text');
+        $($(this).data('target')).val(nv_randomPassword(10));
+    });
 });

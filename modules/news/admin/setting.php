@@ -66,6 +66,9 @@ if (!empty($savesetting)) {
     if (!empty($array_config['instant_articles_httpauth']) and (empty($array_config['instant_articles_username']) or empty($array_config['instant_articles_password']))) {
         $array_config['instant_articles_httpauth'] = 0;
     }
+    if (!empty($array_config['instant_articles_password'])) {
+        $array_config['instant_articles_password'] = nv_base64_encode($crypt->aes_encrypt($array_config['instant_articles_password']));
+    }
     
     if ($array_config['elas_use']) {
         $fp = fsockopen($array_config['elas_host'], $array_config['elas_port'], $errno, $errstr, 30);
@@ -182,6 +185,12 @@ $xtpl->assign('INSTANT_ARTICLES_URL_DEFAULT', NV_MY_DOMAIN . nv_url_rewrite(NV_B
 $xtpl->assign('INSTANT_ARTICLES_ACTIVE', $module_config[$module_name]['instant_articles_active'] ? ' checked="checked"' : '');
 $xtpl->assign('INSTANT_ARTICLES_HTTPAUTH', $module_config[$module_name]['instant_articles_httpauth'] ? ' checked="checked"' : '');
 $xtpl->assign('INSTANT_ARTICLES_AUTO', $module_config[$module_name]['instant_articles_auto'] ? ' checked="checked"' : '');
+
+if (!empty($module_config[$module_name]['instant_articles_password'])) {
+    $xtpl->assign('INSTANT_ARTICLES_PASSWORD', $crypt->aes_decrypt(nv_base64_decode($module_config[$module_name]['instant_articles_password'])));
+} else {
+    $xtpl->assign('INSTANT_ARTICLES_PASSWORD', '');
+}
 
 $array_structure_image = array();
 $array_structure_image[''] = NV_UPLOADS_DIR . '/' . $module_upload;

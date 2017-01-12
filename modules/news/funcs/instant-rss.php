@@ -16,6 +16,19 @@ if (empty($module_config[$module_name]['instant_articles_active'])) {
     nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
 }
 
+if (!empty($module_config[$module_name]['instant_articles_httpauth'])) {
+    $auth = nv_set_authorization();
+    
+    if (empty($auth['auth_user']) or empty($auth['auth_pw']) or $auth['auth_user'] !== $module_config[$module_name]['instant_articles_username'] or $auth['auth_pw'] !== $crypt->aes_decrypt(nv_base64_decode($module_config[$module_name]['instant_articles_password']))) {
+        header('WWW-Authenticate: Basic realm="Private Area"');
+        header(NV_HEADERSTATUS . ' 401 Unauthorized');
+        if (php_sapi_name() !== 'cgi-fcgi') {
+            header('status: 401 Unauthorized');
+        }
+        nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_module['insrss_not_auth'], 401);
+    }
+}
+
 $channel = array();
 $items = array();
 $gettime = empty($module_config[$module_name]['instant_articles_gettime']) ? 0 : (NV_CURRENTTIME - ($module_config[$module_name]['instant_articles_gettime'] * 60));

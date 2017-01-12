@@ -67,6 +67,8 @@ $lang_module['uncheckall'] = 'Bỏ chọn tất cả';
 $lang_module['cat_instant_view'] = 'Xem URL nguồn cấp RSS bài viết tức thời';
 $lang_module['cat_instant_viewsimple'] = 'Xem URL RSS';
 $lang_module['cat_instant_title'] = 'URL nguồn cấp RSS tức thời';
+$lang_module['show_hide_pass'] = 'Hiển thị/Ẩn mật khẩu';
+$lang_module['gen_rand_pass'] = 'Tạo ngẫu nhiên';
 
 $lang_module['description'] = 'Miêu tả';
 $lang_module['viewdescription'] = 'Hiển thị nội dung chi tiết khi xem chủ đề';
