@@ -49,7 +49,8 @@ if (! empty($admin_cookie)) {
     }
 
     //Admin thoat
-    if ($nv_Request->isset_request('second', 'get') and $nv_Request->get_string('second', 'get') == 'admin_logout') {
+    $_second = $nv_Request->get_string('second', 'get');
+    if ($_second == 'admin_logout') {
         if (defined('NV_IS_USER_FORUM')) {
             define('NV_IS_MOD_USER', true);
             require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/logout.php';
@@ -131,6 +132,16 @@ if (! empty($admin_cookie)) {
     $admin_info['checkpass'] = intval($admin_online[0]);
     $admin_info['last_online'] = intval($admin_online[2]);
     $admin_info['checkhits'] = intval($admin_online[3]);
+    if ($_second == 'time_login') {
+        $time_login = array();
+        $time_login['showtimeoutsess'] = (NV_CURRENTTIME + 63 - $admin_info['last_online'] > $global_config['admin_check_pass_time']) ? 1 : 0;
+        $time_login['check_pass_time'] = ($global_config['admin_check_pass_time'] - (NV_CURRENTTIME - $admin_info['last_online']) - 63)*1000;
+        
+        header('Content-Type: application/json');        
+        echo json_encode($time_login);
+        exit;
+    }
+    
     if ($admin_info['checkpass']) {
         if ((NV_CURRENTTIME - $admin_info['last_online']) > $global_config['admin_check_pass_time']) {
             $nv_Request->unset_request('admin,online', 'session');
