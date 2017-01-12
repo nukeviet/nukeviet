@@ -297,6 +297,10 @@ p {
     padding-left:5px !important;
 }
 
+ul.related h4{
+     display: inline-block;
+}
+
 /* Responsive news */
 @media (max-width:499px) {
     div.news_column ul.related {

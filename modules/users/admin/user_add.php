@@ -193,15 +193,13 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     }
     $_user['in_groups'] = array_intersect($in_groups, array_keys($groups_list));
     
-    if (!empty($_user['in_groups_default']) and !in_array($_user['in_groups_default'], $_user['in_groups'])) {
+    if (empty($_user['is_official'])) {
+        $_user['in_groups'][] = 7;
+        $_user['in_groups_default'] = 7;
+    } elseif (empty($_user['in_groups_default']) or !in_array($_user['in_groups_default'], $_user['in_groups'])) {
         $_user['in_groups_default'] = 4;
     }
-    
-    if (!$_user['in_groups_default'] and sizeof($_user['in_groups']) == 1) {
-        $_user['in_groups_default'] = array_values($_user['in_groups']);
-        $_user['in_groups_default'] = $_user['in_groups_default'][0];
-    }
-    
+        
     if (empty($_user['in_groups_default']) and sizeof($_user['in_groups'])) {
         die(json_encode(array(
             'status' => 'error',
@@ -209,16 +207,12 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             'mess' => $lang_module['edit_error_group_default'] )));
     }
     
-    if (!$_user['is_official']) {
-        $_user['in_groups'][] = 7;
-    }
-    
     $sql = "INSERT INTO " . NV_MOD_TABLE . " (
             group_id, username, md5username, password, email, first_name, last_name, gender, birthday, sig, regdate,
             question, answer, passlostkey, view_mail,
             remember, in_groups, active, checknum, last_login, last_ip, last_agent, last_openid, idsite)
         VALUES (
-            " . ($_user['is_official'] ? $_user['in_groups_default'] : 7) . ",
+            " . $_user['in_groups_default'] . ",
             :username,
             :md5_username,
             :password,

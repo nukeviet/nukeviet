@@ -413,12 +413,10 @@ UAV.config = {
     target: 'preview',
     uploadInfo: 'uploadInfo',
     uploadGuide: 'guide',
-    x1: 'x1',
-    y1: 'y1',
-    x2: 'x2',
-    y2: 'y2',
-    w: 'w',
-    h: 'h',
+    x: 'crop_x',
+    y: 'crop_y',
+    w: 'crop_width',
+    h: 'crop_height',
     originalDimension: 'original-dimension',
     displayDimension: 'display-dimension',
     imageType: 'image-type',
@@ -438,7 +436,7 @@ UAV.lang = {
 UAV.data = {
     error: false,
     busy: false,
-    jcropApi: null
+    cropperApi: null
 };
 UAV.tool = {
     bytes2Size: function(bytes) {
@@ -448,19 +446,19 @@ UAV.tool = {
         return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
     },
     update: function(e) {
-        $('#' + UAV.config.x1).val(e.x);
-        $('#' + UAV.config.y1).val(e.y);
-        $('#' + UAV.config.x2).val(e.x2);
-        $('#' + UAV.config.y2).val(e.y2);
+        $('#' + UAV.config.x).val(e.x);
+        $('#' + UAV.config.y).val(e.y);
+        $('#' + UAV.config.w).val(e.width);
+        $('#' + UAV.config.h).val(e.height);
     },
     clear: function(e) {
-        $('#' + UAV.config.x1).val(0);
-        $('#' + UAV.config.y1).val(0);
-        $('#' + UAV.config.x2).val(0);
-        $('#' + UAV.config.y2).val(0);
+        $('#' + UAV.config.x).val(0);
+        $('#' + UAV.config.y).val(0);
+        $('#' + UAV.config.w).val(0);
+        $('#' + UAV.config.h).val(0);
     }
 };
-// Please use this package with Jcrop http://deepliquid.com/content/Jcrop.html
+// Please use this package with fengyuanchen/cropper https://fengyuanchen.github.io/cropper
 UAV.common = {
     read: function(file) {
         $('#' + UAV.config.uploadIcon).hide();
@@ -472,6 +470,8 @@ UAV.common = {
                 var img = document.getElementById(UAV.config.target);
                 var boxWidth = $('#' + UAV.config.target).innerWidth();
                 var boxHeight = Math.round(boxWidth * img.naturalHeight / img.naturalWidth);
+                var minCropBoxWidth = UAV.config.avatar_width / (img.naturalWidth / boxWidth);
+                var minCropBoxHeight = UAV.config.avatar_height / (img.naturalHeight / boxHeight);
                 if (img.naturalWidth > UAV.config.max_width || img.naturalHeight > UAV.config.max_height) {
                     UAV.common.error(UAV.lang.bigsize);
                     UAV.data.error = true;
@@ -489,29 +489,52 @@ UAV.common = {
                     $('#' + UAV.config.imageType).html(file.type);
                     $('#' + UAV.config.imageSize).html(UAV.tool.bytes2Size(file.size));
                     $('#' + UAV.config.originalDimension).html(img.naturalWidth + ' x ' + img.naturalHeight);
-                    console.log()
-                    $('#' + UAV.config.target).Jcrop({
-                        minSize: [UAV.config.avatar_width, UAV.config.avatar_height],
-                        setSelect: [300, 300, 55, 55],
+                    
+                    UAV.data.cropperApi = $('#' + UAV.config.target).cropper({
+                        viewMode: 3,
+                        dragMode: 'crop',
                         aspectRatio: 1,
-                        bgFade: true,
-                        bgOpacity: .3,
-                        boxWidth: boxWidth,
-                        boxHeight: boxHeight,
-                        onChange: function(e) {
+                        responsive: true,
+                        modal: true,
+                        guides: false,
+                        highlight: true,
+                        autoCrop: false,
+                        autoCropArea: 0.1,
+                        movable: false,
+                        rotatable: false,
+                        scalable: false,
+                        zoomable: false,
+                        zoomOnTouch: false,
+                        zoomOnWheel: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
+                        minCropBoxWidth: minCropBoxWidth,
+                        minCropBoxHeight: minCropBoxHeight,
+                        crop: function(e) {
                             UAV.tool.update(e);
                         },
-                        onSelect: function(e) {
-                            UAV.tool.update(e);
-                        },
-                        onRelease: function(e) {
-                            UAV.tool.clear(e);
+                        built: function(e) {
+                            var imageData = $(this).cropper('getImageData');
+                            var cropBoxScale = imageData.naturalWidth / imageData.width;
+                            imageData.width = parseInt(Math.floor(imageData.width));
+                            imageData.height = parseInt(Math.floor(imageData.height));
+                            var cropBoxSize = {
+                                width: 80 / cropBoxScale,
+                                height: 80 / cropBoxScale
+                            };
+                            cropBoxSize.left = (imageData.width - cropBoxSize.width) / 2;
+                            cropBoxSize.top = (imageData.height - cropBoxSize.height) / 2;
+                            $(this).cropper('crop');
+                            $(this).cropper('setCropBoxData', {
+                                left: cropBoxSize.left,
+                                top: cropBoxSize.top,
+                                width: cropBoxSize.width,
+                                height: cropBoxSize.height
+                            });
+                            $('#' + UAV.config.w).val(imageData.width);
+                            $('#' + UAV.config.h).val(imageData.height);
+                            $('#' + UAV.config.displayDimension).html(imageData.width + ' x ' + imageData.height);
                         }
-                    }, function() {
-                        $('#' + UAV.config.w).val(boxWidth);
-                        $('#' + UAV.config.h).val(boxHeight);
-                        $('#' + UAV.config.displayDimension).html(boxWidth + ' x ' + boxHeight);
-                        UAV.data.jcropApi = this;
                     });
                 } else {
                     $('#' + UAV.config.uploadIcon).show();
@@ -546,8 +569,9 @@ UAV.common = {
         alert(e);
     },
     reset: function() {
-        if (UAV.data.jcropApi != null) {
-            UAV.data.jcropApi.destroy();
+        if (UAV.data.cropperApi != null) {
+            UAV.data.cropperApi.cropper('destroy');
+            UAV.data.cropperApi = null;
         }
         UAV.data.error = false;
         UAV.data.busy = false;
@@ -565,7 +589,7 @@ UAV.common = {
     },
     submit: function() {
         if (!UAV.data.busy) {
-            if ($('#' + UAV.config.x2).val() == '' || $('#' + UAV.config.x2).val() == '0') {
+            if ($('#' + UAV.config.w).val() == '' || $('#' + UAV.config.w).val() == '0') {
                 alert(UAV.lang.upload);
                 return false;
             }

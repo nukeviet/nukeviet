@@ -1,6 +1,6 @@
 <!-- BEGIN: main -->
-<script src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.Jcrop.min.js" type="text/javascript"></script>
-<link href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.Jcrop.min.css" rel="stylesheet" type="text/css" />
+<link  type="text/css"href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js"></script>
 <div class="users-av-wraper">
     <form id="upload-form" method="post" enctype="multipart/form-data" action="{NV_AVATAR_UPLOAD}">
         <div class="form-group">
@@ -34,12 +34,10 @@
                 <button class="btn btn-danger btn-sm" onclick=" window.close();return!1">{GLANG.cancel}</button>
             </div>
         </div>
-        <input type="hidden" id="x1" name="x1"/>
-        <input type="hidden" id="y1" name="y1"/>
-        <input type="hidden" id="x2" name="x2"/>
-        <input type="hidden" id="y2" name="y2"/>
-        <input type="hidden" id="w" name="w"/>
-        <input type="hidden" id="h" name="h"/>
+        <input type="hidden" id="crop_x" name="crop_x"/>
+        <input type="hidden" id="crop_y" name="crop_y"/>
+        <input type="hidden" id="crop_width" name="crop_width"/>
+        <input type="hidden" id="crop_height" name="crop_height"/>
         <input type="file" name="image_file" id="image_file" class="hide"/>
     </form>
 </div>
