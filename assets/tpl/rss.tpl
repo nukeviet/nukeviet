@@ -79,6 +79,12 @@
                                     {ITEM.content.opkicker}
                                 </h3>
                                 <!-- END: opkicker -->
+                                <!-- BEGIN: pubdate -->
+                                <time class="op-published" datetime="{PUBLISHED}">{PUBLISHED_DISPLAY}</time>
+                                <!-- END: pubdate -->
+                                <!-- BEGIN: modifydate -->
+                                <time class="op-modified" dateTime="{MODIFIED}">{MODIFIED_DISPLAY}</time>
+                                <!-- END: modifydate -->
                             </header>
                             {ITEM.content.html}
                         </article>

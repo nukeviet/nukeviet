@@ -285,6 +285,8 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
     }
 
     $channel['pubDate'] = 0;
+    $channel['modified'] = 0;
+    
     if (! empty($items)) {
         foreach ($items as $item) {
             if (! empty($item['title']) and ! empty($item['link'])) {
@@ -298,6 +300,9 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
                     } else {
                         $item['pubdate'] = gmdate('D, j M Y H:m:s', $item['pubdate']) . ' GMT';
                     }
+                }
+                if (!empty($item['modifydate'])) {
+                    $channel['modified'] = max($channel['modified'], $item['modifydate']);
                 }
 
                 if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $item['link'], $matches)) {
@@ -326,6 +331,26 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
                     if (!empty($item['content']['opkicker'])) {
                         $xtpl->parse('main.item.content.opkicker');
                     }
+                    if (!empty($item['content']['pubdate'])) {
+                        if ($timemode == 'ISO8601') {
+                            $published = date('c', $item['content']['pubdate']);
+                        } else {
+                            $published = gmdate('D, j M Y H:m:s', $item['content']['pubdate']) . ' GMT';
+                        }
+                        $xtpl->assign('PUBLISHED', $published);
+                        $xtpl->assign('PUBLISHED_DISPLAY', nv_date('H:i: d/m/Y', $item['content']['pubdate']));
+                        $xtpl->parse('main.item.content.pubdate');
+                    }
+                    if (!empty($item['content']['modifydate'])) {
+                        if ($timemode == 'ISO8601') {
+                            $modified = date('c', $item['content']['modifydate']);
+                        } else {
+                            $modified = gmdate('D, j M Y H:m:s', $item['content']['modifydate']) . ' GMT';
+                        }
+                        $xtpl->assign('MODIFIED', $modified);
+                        $xtpl->assign('MODIFIED_DISPLAY', nv_date('H:i: d/m/Y', $item['content']['modifydate']));
+                        $xtpl->parse('main.item.content.modifydate');
+                    }
                     
                     $xtpl->parse('main.item.content');
                 }
@@ -345,7 +370,11 @@ function nv_rss_generate($channel, $items, $timemode = 'GMT')
             $channel['pubDate'] = gmdate('D, j M Y H:m:s', $channel['pubDate']) . ' GMT';
         }
     }
-
+    
+    if ($channel['modified'] > $lastModified) {
+        $lastModified = $channel['modified'];
+    }
+    
     $xtpl->assign('CHANNEL', $channel);
 
     if (! empty($channel['description'])) {

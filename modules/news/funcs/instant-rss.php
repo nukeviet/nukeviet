@@ -50,7 +50,7 @@ if (isset($array_op[1])) {
 }
 
 $db_slave->sqlreset()
-    ->select('id, catid, author, publtime, title, alias, hometext, homeimgfile, homeimgalt, instant_template')
+    ->select('id, catid, author, publtime, edittime, title, alias, hometext, homeimgfile, homeimgalt, instant_template')
     ->order('publtime DESC')
     ->limit(1000);
 
@@ -83,6 +83,7 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
             'guid' => md5($module_name . '_' . $row['id']),
             'description' => $row['hometext'],
             'pubdate' => $row['publtime'],
+            'modifydate' => $row['edittime'],
             'author' => $row['author'],
             'homeimgfile' => $row['homeimgfile'],
             'homeimgalt' => $row['homeimgalt'],
@@ -104,6 +105,8 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
             }
             $content['opkicker'] = $items[$row['id']]['cattitle'];
             $content['template'] = $items[$row['id']]['instant_template'];
+            $content['pubdate'] = $items[$row['id']]['pubdate'];
+            $content['modifydate'] = $items[$row['id']]['modifydate'];
             if (empty($content['template'])) {
                 $content['template'] = $module_config[$module_name]['instant_articles_template'];
             }
