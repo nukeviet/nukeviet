@@ -156,6 +156,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 click_rating int(11) NOT NULL default '0',
 	 instant_active tinyint(1) NOT NULL default '0',
      instant_template varchar(100) NOT NULL default '',
+	 instant_creatauto tinyint(1) NOT NULL default '1',
 	 PRIMARY KEY (id),
 	 KEY catid (catid),
 	 KEY topicid (topicid),
@@ -167,7 +168,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 KEY publtime (publtime),
 	 KEY exptime (exptime),
 	 KEY status (status),
-	 KEY instant_active (instant_active)
+	 KEY instant_active (instant_active),
+	 KEY instant_creatauto (instant_creatauto)
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_detail (

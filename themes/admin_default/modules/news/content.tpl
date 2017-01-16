@@ -299,10 +299,11 @@
 							</p>
 							<div class="message_body">
 								<p><label><input type="checkbox" name="instant_active" value="1" {instant_active_checked}/>&nbsp;{LANG.content_instant_active}</label></p>
-                                <div>
+                                <div class="m-bottom">
                                     {LANG.content_instant_template}: 
                                     <input type="text" placeholder="{LANG.content_instant_templatenote}" name="instant_template" value="{rowcontent.instant_template}" class="form-control" style="width:100%"/>
                                 </div>
+                                <p><label><input type="checkbox" name="instant_creatauto" value="1" {instant_creatauto_checked}/>&nbsp;{LANG.content_instant_creatauto}</label></p>
 							</div>
                         </li>
                         <!-- END: instant_articles_active -->

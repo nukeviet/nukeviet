@@ -219,6 +219,7 @@ $lang_module['content_insart'] = 'Bài viết tức thời';
 $lang_module['content_instant_active'] = 'Đây là bài viết tức thời';
 $lang_module['content_instant_template'] = 'Mẫu';
 $lang_module['content_instant_templatenote'] = 'Để trống tức là sử dụng mẫu mặc định';
+$lang_module['content_instant_creatauto'] = 'Tự động tạo bài viết tức thời từ bài viết thường';
 
 $lang_module['showtooltip'] = 'Hiển thị tooltips';
 $lang_module['showtooltip_position'] = 'Vị trí hiển thị';
@@ -335,3 +336,7 @@ $lang_module['notification_post_queue'] = 'Kiểm duyệt bài viết <strong>%s
 $lang_module['ad_block_show'] = 'Hiển thị các block phụ';
 $lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
 $lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';
+
+$lang_module['fbinsartmgs_100'] = 'Lỗi: Bài viết có các thẻ HTML: <strong>%s</strong> không được hỗ trở bởi bài viết tức thời. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng, thay thế bằng các thẻ được hỗ trợ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
+$lang_module['fbinsartmgs_101'] = 'Lỗi: Bài viết không có nội dung';
+$lang_module['fbinsartmgs_102'] = 'Lỗi: Bài viết của bạn có các thuộc tính cho các thẻ. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng khỏi thẻ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';

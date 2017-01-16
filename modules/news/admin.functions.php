@@ -679,7 +679,15 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
         $xtpl->assign('AUTOSAVEKEY', $autoSaveKey);
         $xtpl->parse('main.removelocalstorage');
     }
-
+    
+    if (nv_strlen($msg1) > 255) {
+        $xtpl->assign('REDRIECT_T1', 20);
+        $xtpl->assign('REDRIECT_T2', 20000);
+    } else {
+        $xtpl->assign('REDRIECT_T1', 5);
+        $xtpl->assign('REDRIECT_T2', 5000);
+    }
+    
     if ($go_back) {
         $xtpl->parse('main.go_back');
     } else {

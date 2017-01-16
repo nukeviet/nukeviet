@@ -162,6 +162,7 @@ $rowcontent = array(
     'keywords_old' => '',
     'instant_active' => isset($module_config[$module_name]['instant_articles_auto']) ? $module_config[$module_name]['instant_articles_auto'] : 0,
     'instant_template' => '',
+    'instant_creatauto' => 0,
     'mode' => 'add'
 );
 
@@ -170,6 +171,7 @@ $page_title = $lang_module['content_add'];
 $error = array();
 $groups_list = nv_groups_list();
 $array_keywords_old = array();
+$FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
 
 $rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
 if ($rowcontent['id'] > 0) {
@@ -461,15 +463,25 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         }
     }
     
+    // Thao tác xử lý bài viết tức thời
     if (!empty($module_config[$module_name]['instant_articles_active'])) {
         $rowcontent['instant_active'] = (int) $nv_Request->get_bool('instant_active', 'post');
         $rowcontent['instant_template'] = $nv_Request->get_title('instant_template', 'post', '');
+        $rowcontent['instant_creatauto'] = (int) $nv_Request->get_bool('instant_creatauto', 'post');
     } else {
         $rowcontent['instant_active'] = 0;
         $rowcontent['instant_template'] = '';
+        $rowcontent['instant_creatauto'] = 0;
     }
     if (empty($rowcontent['instant_active'])) {
         $rowcontent['instant_template'] = '';
+    }
+    if ($rowcontent['instant_active'] and !$rowcontent['instant_creatauto']) {
+        $FBIA->setArticle($rowcontent['bodyhtml']);
+        $checkArt = $FBIA->checkArticle();
+        if ($checkArt !== true) {
+            $error[] = $checkArt;
+        }
     }
     
     if (empty($error)) {
@@ -562,7 +574,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             }
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_rows (
                 catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, status, publtime, exptime, archive, title, alias, hometext, 
-                homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating, instant_active, instant_template 
+                homeimgfile, homeimgalt, homeimgthumb, inhome, allowed_comm, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating, instant_active, instant_template, 
+                instant_creatauto
             ) VALUES (
                  ' . intval($rowcontent['catid']) . ',
                  :listcatid,
@@ -589,9 +602,10 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                  ' . intval($rowcontent['hitstotal']) . ',
                  ' . intval($rowcontent['hitscm']) . ',
                  ' . intval($rowcontent['total_rating']) . ',
-                 ' . intval($rowcontent['click_rating']) . '
+                 ' . intval($rowcontent['click_rating']) . ',
                  ' . intval($rowcontent['instant_active']) . ', 
-                 :instant_template
+                 :instant_template, 
+                 ' . intval($rowcontent['instant_creatauto']) . ' 
             )';
             
             $data_insert = array();
@@ -688,6 +702,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 external_link=' . intval($rowcontent['external_link']) . ',
                 instant_active=' . intval($rowcontent['instant_active']) . ',
                 instant_template=:instant_template,
+                instant_creatauto=' . intval($rowcontent['instant_creatauto']) . ',
                 edittime=' . NV_CURRENTTIME . '
             WHERE id =' . $rowcontent['id']);
             
@@ -1098,6 +1113,7 @@ $allowed_save_checked = ($rowcontent['allowed_save']) ? ' checked="checked"' : '
 $xtpl->assign('allowed_save_checked', $allowed_save_checked);
 $instant_active_checked = ($rowcontent['instant_active']) ? ' checked="checked"' : '';
 $xtpl->assign('instant_active_checked', $instant_active_checked);
+$xtpl->assign('instant_creatauto_checked', empty($rowcontent['instant_creatauto']) ? '' : ' checked="checked"');
 
 $xtpl->assign('edit_bodytext', $edits);
 $xtpl->assign('edit_hometext', $editshometext);
