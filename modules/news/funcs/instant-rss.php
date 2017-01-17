@@ -50,7 +50,7 @@ if (isset($array_op[1])) {
 }
 
 $db_slave->sqlreset()
-    ->select('id, catid, author, publtime, edittime, title, alias, hometext, homeimgfile, homeimgalt, instant_template')
+    ->select('id, catid, author, publtime, edittime, title, alias, hometext, homeimgfile, homeimgalt, instant_template, instant_creatauto')
     ->order('publtime DESC')
     ->limit(1000);
 
@@ -70,6 +70,8 @@ if (! empty($catid)) {
 $cacheFile = NV_LANG_DATA . '_instantrss' . $catid . '_' . NV_CACHE_PREFIX . '.cache';
 $cacheTTL = 60 * intval($module_config[$module_file]['instant_articles_livetime']);
 
+$FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
+
 if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $cacheFile, $cacheTTL)) != false) {
     $items = unserialize($cache);
 } else {
@@ -88,7 +90,8 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
             'homeimgfile' => $row['homeimgfile'],
             'homeimgalt' => $row['homeimgalt'],
             'cattitle' => $global_array_cat[$row['catid']]['title'],
-            'instant_template' => $row['instant_template']
+            'instant_template' => $row['instant_template'],
+            'instant_creatauto' => $row['instant_creatauto']
         );
     }
     
@@ -98,7 +101,13 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
         
         while ($row = $result->fetch()) {
             $content = array();
-            $content['html'] = $row['bodyhtml'];
+            $FBIA->setArticle($row['bodyhtml']);
+            if ($items[$row['id']]['instant_creatauto']) {
+                $content['html'] = $FBIA->hardProcces();
+            } else {
+                $content['html'] = $FBIA->preProcces();
+            }
+            
             if (!empty($items[$row['id']]['homeimgfile'])) {
                 $content['image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $items[$row['id']]['homeimgfile'];
                 $content['image_caption'] = empty($items[$row['id']]['homeimgalt']) ? $items[$row['id']]['title'] : $items[$row['id']]['homeimgalt'];

@@ -169,6 +169,11 @@ class InstantArticles
         $this->article = $html;
     }
     
+    public function clearArticle()
+    {
+        $this->article = '';
+    }    
+    
     public function checkArticle($html = '')
     {
         if (!empty($html)) {
@@ -300,8 +305,18 @@ class InstantArticles
         return true;
     }
     
+    private function procces($hard = false)
+    {
+        return $this->article;
+    }
+    
     public function preProcces()
     {
-        
+        return $this->procces(false);
+    }
+    
+    public function hardProcces()
+    {
+        return $this->procces(true);
     }
 }
