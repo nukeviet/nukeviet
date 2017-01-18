@@ -156,7 +156,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 click_rating int(11) NOT NULL default '0',
 	 instant_active tinyint(1) NOT NULL default '0',
      instant_template varchar(100) NOT NULL default '',
-	 instant_creatauto tinyint(1) NOT NULL default '1',
+	 instant_creatauto tinyint(1) NOT NULL default '0',
 	 PRIMARY KEY (id),
 	 KEY catid (catid),
 	 KEY topicid (topicid),
