@@ -385,12 +385,22 @@ function nv_show_cat_list($parentid = 0)
  *
  * @return
  */
-function nv_show_topics_list()
+function nv_show_topics_list( $page = 1)
 {
-    global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $global_config, $module_file, $module_info;
-
-    $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC';
-    $_array_topic = $db_slave->query($sql)->fetchAll();
+    global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $module_config, $global_config, $module_file, $module_info;
+    
+    $per_page = $module_config[$module_name]['per_page'];
+    $db_slave->sqlreset()
+        ->select('COUNT(*)')
+        ->from(NV_PREFIXLANG . '_' . $module_data . '_topics' );
+    
+    $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
+    
+    $db_slave->select('*')    
+        ->order('weight ASC')
+        ->limit($per_page)
+        ->offset(($page - 1) * $per_page);
+    $_array_topic = $db_slave->query($db_slave->sql())->fetchAll();
     $num = sizeof($_array_topic);
 
     if ($num > 0) {
@@ -410,7 +420,7 @@ function nv_show_topics_list()
                 'url_edit' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topics&amp;topicid=' . $row['topicid'] . '#edit'
             ));
 
-            for ($i = 1; $i <= $num; ++$i) {
+            for ($i = ($page-1)* $per_page; $i <= $page * $per_page; ++$i) {
                 $xtpl->assign('WEIGHT', array(
                     'key' => $i,
                     'title' => $i,
@@ -424,6 +434,7 @@ function nv_show_topics_list()
 
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
+        $contents .= nv_generate_page(NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=topics', $num_items, $per_page, $page);
     } else {
         $contents = '&nbsp;';
     }
