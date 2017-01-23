@@ -17,6 +17,7 @@ $sql_drop_module = array();
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_department";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_send";
 $sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_reply";
+$sql_drop_module[] = "DROP TABLE IF EXISTS " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_supporter";
 
 $sql_create_module = $sql_drop_module;
 
@@ -67,4 +68,17 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  reply_aid mediumint(8) unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (rid),
  KEY id (id)
+) ENGINE=MyISAM";
+
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_supporter (
+ id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+ departmentid smallint(5) unsigned NOT NULL,
+ full_name varchar(255) NOT NULL,
+ image varchar(255) NOT NULL  DEFAULT '',
+ phone varchar(255) NOT NULL,
+ email varchar(100) NOT NULL,
+ others text NOT NULL,
+ act tinyint(1) unsigned NOT NULL DEFAULT '1',
+ weight smallint(5) NOT NULl,
+ PRIMARY KEY (id)
 ) ENGINE=MyISAM";

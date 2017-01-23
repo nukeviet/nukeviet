@@ -201,7 +201,7 @@ function nv_news_fix_block($bid, $repairtable = true)
  */
 function nv_show_cat_list($parentid = 0)
 {
-    global $db, $lang_module, $lang_global, $module_name, $module_data, $array_viewcat_full, $array_viewcat_nosub, $array_cat_admin, $global_array_cat, $admin_id, $global_config, $module_file;
+    global $db, $lang_module, $lang_global, $module_name, $module_data, $array_viewcat_full, $array_viewcat_nosub, $array_cat_admin, $global_array_cat, $admin_id, $global_config, $module_file, $module_config;
 
     $xtpl = new XTemplate('cat_list.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
@@ -239,7 +239,7 @@ function nv_show_cat_list($parentid = 0)
         $xtpl->parse('main.cat_title');
     }
 
-    $sql = 'SELECT catid, parentid, title, weight, viewcat, numsubcat, inhome, numlinks, newday FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
+    $sql = 'SELECT catid, parentid, title, alias, weight, viewcat, numsubcat, inhome, numlinks, newday FROM ' . NV_PREFIXLANG . '_' . $module_data . '_cat WHERE parentid = ' . $parentid . ' ORDER BY weight ASC';
     $rowall = $db->query($sql)->fetchAll(3);
     $num = sizeof($rowall);
     $a = 1;
@@ -249,7 +249,7 @@ function nv_show_cat_list($parentid = 0)
     );
 
     foreach ($rowall as $row) {
-        list($catid, $parentid, $title, $weight, $viewcat, $numsubcat, $inhome, $numlinks, $newday) = $row;
+        list($catid, $parentid, $title, $alias, $weight, $viewcat, $numsubcat, $inhome, $numlinks, $newday) = $row;
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_show = 1;
         } else {
@@ -268,24 +268,27 @@ function nv_show_cat_list($parentid = 0)
 
             $admin_funcs = array();
             $weight_disabled = $func_cat_disabled = true;
+            if (!empty($module_config[$module_name]['instant_articles_active'])) {
+                $admin_funcs[] = "<a title=\"" . $lang_module['cat_instant_view'] . "\" href=\"" . NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=instant-rss/" . $alias, true) . "\" class=\"btn btn-default btn-xs viewinstantrss\" data-toggle=\"tooltip\" data-modaltitle=\"" . $lang_module['cat_instant_title'] . "\"><em class=\"fa fa-rss\"></em><span class=\"visible-xs-inline-block\">&nbsp;" . $lang_module['cat_instant_viewsimple'] . "</span></a>\n";
+            }
             if (defined('NV_IS_ADMIN_MODULE') or (isset($array_cat_admin[$admin_id][$catid]) and $array_cat_admin[$admin_id][$catid]['add_content'] == 1)) {
                 $func_cat_disabled = false;
-                $admin_funcs[] = "<em class=\"fa fa-plus fa-lg\">&nbsp;</em> <a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "\">" . $lang_module['content_add'] . "</a>\n";
+                $admin_funcs[] = "<a title=\"" . $lang_module['content_add'] . "\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "\" class=\"btn btn-success btn-xs\" data-toggle=\"tooltip\"><em class=\"fa fa-plus\"></em><span class=\"visible-xs-inline-block\">&nbsp;" . $lang_module['content_add'] . "</span></a>\n";
             }
             if (defined('NV_IS_ADMIN_MODULE') or ($parentid > 0 and isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) {
                 $func_cat_disabled = false;
-                $admin_funcs[] = "<em class=\"fa fa-edit fa-lg\">&nbsp;</em> <a class=\"\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "#edit\">" . $lang_global['edit'] . "</a>\n";
+                $admin_funcs[] = "<a title=\"" . $lang_global['edit'] . "\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=cat&amp;catid=" . $catid . "&amp;parentid=" . $parentid . "#edit\" class=\"btn btn-info btn-xs\" data-toggle=\"tooltip\"><em class=\"fa fa-edit\"></em><span class=\"visible-xs-inline-block\">&nbsp;" . $lang_global['edit'] . "</span></a>\n";
             }
             if (defined('NV_IS_ADMIN_MODULE') or ($parentid > 0 and isset($array_cat_admin[$admin_id][$parentid]) and $array_cat_admin[$admin_id][$parentid]['admin'] == 1)) {
                 $weight_disabled = false;
-                $admin_funcs[] = "<em class=\"fa fa-trash-o fa-lg\">&nbsp;</em> <a href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\">" . $lang_global['delete'] . "</a>";
+                $admin_funcs[] = "<a title=\"" . $lang_global['delete'] . "\" href=\"javascript:void(0);\" onclick=\"nv_del_cat(" . $catid . ")\" class=\"btn btn-danger btn-xs\" data-toggle=\"tooltip\"><em class=\"fa fa-trash-o\"></em><span class=\"visible-xs-inline-block\">&nbsp;" . $lang_global['delete'] . "</span></a>";
             }
 
             $xtpl->assign('ROW', array(
                 'catid' => $catid,
                 'link' => NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=cat&amp;parentid=' . $catid,
                 'title' => $title,
-                'adminfuncs' => implode('&nbsp;-&nbsp;', $admin_funcs)
+                'adminfuncs' => implode(' ', $admin_funcs)
             ));
 
             if ($weight_disabled) {
@@ -676,7 +679,15 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
         $xtpl->assign('AUTOSAVEKEY', $autoSaveKey);
         $xtpl->parse('main.removelocalstorage');
     }
-
+    
+    if (nv_strlen($msg1) > 255) {
+        $xtpl->assign('REDRIECT_T1', 20);
+        $xtpl->assign('REDRIECT_T2', 20000);
+    } else {
+        $xtpl->assign('REDRIECT_T1', 5);
+        $xtpl->assign('REDRIECT_T2', 5000);
+    }
+    
     if ($go_back) {
         $xtpl->parse('main.go_back');
     } else {

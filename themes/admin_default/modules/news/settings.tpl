@@ -179,7 +179,63 @@
 					<td><input class="form-control" type="text" value="{DATA.elas_index}" name="elas_index"/></td>
 				</tr>
 			</tbody>
-			<tfoot>
+		</table>
+	</div>
+    <div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<caption><em class="fa fa-file-text-o">&nbsp;</em>{LANG.setting_insart_caption}</caption>
+			<tbody>
+                <tr>
+					<th class="w400">{LANG.setting_active_instant_articles}</th>
+					<td><input type="checkbox" name="instant_articles_active" value="1"{INSTANT_ARTICLES_ACTIVE}/></td>
+				</tr>
+                <tr>
+					<th class="w400">{LANG.setting_instant_articles_auto}</th>
+					<td><input type="checkbox" name="instant_articles_auto" value="1"{INSTANT_ARTICLES_AUTO}/></td>
+				</tr>
+                <tr>
+					<th class="w400">{LANG.setting_instant_articles_template}</th>
+					<td><input type="text" value="{DATA.instant_articles_template}" name="instant_articles_template" class="form-control"/></td>
+				</tr>
+                <tr>
+					<th class="w400">{LANG.setting_instant_articles_httpauth}</th>
+					<td><input type="checkbox" name="instant_articles_httpauth" value="1"{INSTANT_ARTICLES_HTTPAUTH}/></td>
+				</tr>
+                <tr>
+					<th class="w400">{LANG.setting_instant_articles_username}</th>
+					<td><input type="text" value="{DATA.instant_articles_username}" name="instant_articles_username" class="form-control"/></td>
+				</tr>
+                <tr>
+					<th class="w400">{LANG.setting_instant_articles_password}</th>
+					<td>
+                        <div class="input-group">
+                            <input type="password" value="{INSTANT_ARTICLES_PASSWORD}" name="instant_articles_password" class="form-control"/> 
+                            <span class="input-group-addon">
+                                <a href="#" class="showhidepass" data-target="[name='instant_articles_password']" data-toggle="tooltip" title="{LANG.show_hide_pass}"><i class="fa fa-key"></i></a>
+                            </span>
+                            <span class="input-group-addon">
+                                <a href="#" class="genrandpass" data-target="[name='instant_articles_password']" data-toggle="tooltip" title="{LANG.gen_rand_pass}"><i class="fa fa-refresh"></i></a>
+                            </span>
+                        </div>
+                    </td>
+				</tr>
+                <tr>
+					<th class="w400">{LANG.setting_instant_articles_livetime}&nbsp;(<a href="javascript:void(0);" data-toggle="tooltip" title="{LANG.setting_instant_articles_livetime1}"><i class="fa fa-info-circle"></i></a>)</th>
+					<td><input type="text" value="{DATA.instant_articles_livetime}" name="instant_articles_livetime" class="form-control"/></td>
+				</tr>
+                <tr>
+					<th class="w400">{LANG.setting_instant_articles_gettime}&nbsp;(<a href="javascript:void(0);" data-toggle="tooltip" title="{LANG.setting_instant_articles_gettime1}"><i class="fa fa-info-circle"></i></a>)</th>
+					<td><input type="text" value="{DATA.instant_articles_gettime}" name="instant_articles_gettime" class="form-control"/></td>
+				</tr>
+                <tr>
+					<th class="w400">{LANG.setting_instant_articles_defaulturl}</th>
+					<td>
+                        <input type="text" class="form-control display-inline-block w500 m-bottom" value="{INSTANT_ARTICLES_URL_DEFAULT}" data-toggle="selectall"/>
+                        <p><em class="text-info">{LANG.setting_instant_articles_defaulturl1}</em></p>
+                    </td>
+				</tr>
+            </tbody>
+            <tfoot>
 				<tr>
 					<td class="text-center" colspan="2">
 						<input class="btn btn-primary" type="submit" value="{LANG.save}" name="Submit1" />
@@ -187,8 +243,8 @@
 					</td>
 				</tr>
 			</tfoot>
-		</table>
-	</div>
+        </table>
+   </div>
 </form>
 <script type="text/javascript">
 //<![CDATA[
