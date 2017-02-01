@@ -1123,31 +1123,22 @@ if (!empty($error)) {
     $xtpl->parse('main.error');
 }
 
-if (defined('NV_IS_ADMIN_MODULE') or !empty($array_pub_content)) { //toan quyen module
-    if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
-        $xtpl->parse('main.status');
-    } else {
-        $xtpl->parse('main.status0');
-    }
+//Gioi hoan quyen
+if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
+    $xtpl->parse('main.status_save');
 } else {
-    //gioi hoan quyen
-    if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
-        $xtpl->parse('main.status');
-    } elseif (!empty($array_cat_pub_content)) {
+    $xtpl->parse('main.status_4');
+    if (!empty($array_cat_pub_content)) {
         // neu co quyen dang bai
-        
-
-        $xtpl->parse('main.status0');
-    } else {
-        if (!empty($array_censor_content)) {
-            // neu co quyen duyet bai thi
-            
-
-            $xtpl->parse('main.status1.status0');
-        }
-        $xtpl->parse('main.status1');
+        $xtpl->parse('main.status_1');
     }
+    if (!empty($array_censor_content)) {
+        // neu co quyen duyet bai thi
+        $xtpl->parse('main.status_0');
+    }
+    $xtpl->parse('main.status_6');
 }
+
 if (empty($rowcontent['alias'])) {
     $xtpl->parse('main.getalias');
 }

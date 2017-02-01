@@ -142,7 +142,7 @@ foreach ($array_viewcat_full as $key => $val) {
 }
 
 // So bai viet tren mot trang
-for ($i = 5; $i <= 30; ++$i) {
+for ($i = 5; $i <= 100; ++$i) {
     $xtpl->assign('PER_PAGE', array(
         'key' => $i,
         'title' => $i,
@@ -152,7 +152,7 @@ for ($i = 5; $i <= 30; ++$i) {
 }
 
 // Bai viet chi hien thi link
-for ($i = 0; $i <= 20; ++$i) {
+for ($i = 0; $i <= 50; ++$i) {
     $xtpl->assign('ST_LINKS', array(
         'key' => $i,
         'title' => $i,

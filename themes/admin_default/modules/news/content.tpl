@@ -316,20 +316,24 @@
 		<br/>
 		<input type="hidden" value="1" name="save" />
 		<input type="hidden" value="{rowcontent.id}" name="id" />
-		<!-- BEGIN:status -->
+		<!-- BEGIN:status_save -->
 		<input class="btn btn-primary submit-post" name="statussave" type="submit" value="{LANG.save}" />
-		<!-- END:status -->
-		<!-- BEGIN:status0 -->
+		<!-- END:status_save -->
+		
+		<!-- BEGIN:status_4 -->
 		<input class="btn btn-warning submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
+		<!-- END:status_4 -->
+		<!-- BEGIN:status_1 -->
 		<input class="btn btn-primary submit-post" name="status1" type="submit" value="{LANG.publtime}" />
-		<!-- END:status0 -->
-        <!-- BEGIN:status1 -->
-		<input class="btn btn-primary submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
+		<!-- END:status_1 -->
+        		
+        <!-- BEGIN:status_6 -->
 		<input class="btn btn-primary submit-post" name="status6" type="submit" value="{LANG.save_send_admin}" />
-        <!-- BEGIN:status0 -->
+		<!-- END:status_6 -->
+		
+        <!-- BEGIN:status_0 -->
         <input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
-        <!-- END:status0 -->
-		<!-- END:status1 -->
+        <!-- END:status_0 -->
 		<br />
 	</div>
 </form>
