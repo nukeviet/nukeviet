@@ -58,7 +58,7 @@ if (!empty($alias)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order('publtime DESC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -114,6 +114,7 @@ if (!empty($alias)) {
 
         if (! empty($topic_image)) {
             $topic_image = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $topic_image;
+            $meta_property['og:image'] = NV_MY_DOMAIN . $topic_image;
         }
 
         $contents = topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image);

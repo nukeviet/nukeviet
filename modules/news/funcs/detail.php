@@ -31,11 +31,16 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         } else {
             $canonicalUrl = $base_url_rewrite;
         }
-
+        
         $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
         $news_contents = array_merge($news_contents, $body_contents);
         unset($body_contents);
 
+        if ($news_contents['external_link']) {
+            Header('Location: ' . $news_contents['sourcetext']);
+            die();
+        }
+        
         $show_no_image = $module_config[$module_name]['show_no_image'];
 
         if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME))) {
@@ -147,7 +152,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $related_array = array();
     if ($st_links > 0) {
         $db_slave->sqlreset()
-            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext')
+            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
             ->where('status=1 AND publtime > ' . $publtime)
             ->order('id ASC')
@@ -178,7 +183,8 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'link' => $link,
                 'newday' => $global_array_cat[$catid]['newday'],
                 'hometext' => $row['hometext'],
-                'imghome' => $row['imghome']
+                'imghome' => $row['imghome'],
+                'external_link' => $row['external_link']
             );
         }
         $related->closeCursor();
@@ -186,7 +192,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         sort($related_new_array, SORT_NUMERIC);
 
         $db_slave->sqlreset()
-            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext')
+            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
             ->where('status=1 AND publtime < ' . $publtime)
             ->order('id DESC')
@@ -217,7 +223,8 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'link' => $link,
                 'newday' => $global_array_cat[$catid]['newday'],
                 'hometext' => $row['hometext'],
-                'imghome' => $row['imghome']
+                'imghome' => $row['imghome'],
+                'external_link' => $row['external_link']
             );
         }
 
@@ -232,7 +239,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         $topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 
         $db_slave->sqlreset()
-            ->select('id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext')
+            ->select('id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
             ->where('status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id)
             ->order('id DESC')
@@ -264,7 +271,8 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'topiclink' => $topiclink,
                 'topictitle' => $topic_title,
                 'hometext' => $row['hometext'],
-                'imghome' => $row['imghome']
+                'imghome' => $row['imghome'],
+                'external_link' => $row['external_link']
             );
         }
         $topic->closeCursor();

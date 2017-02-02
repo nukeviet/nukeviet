@@ -129,6 +129,7 @@ function nv_save_file_config_global()
     $ini_set_support = ($sys_info['ini_set_support']) ? 'true' : 'false';
     $content_config .= "\$sys_info['ini_set_support']= " . $ini_set_support . ";\n";
     //Kiem tra ho tro rewrite
+	$iis_info = explode( '/', $_SERVER['SERVER_SOFTWARE']);
     if (function_exists('apache_get_modules')) {
         $apache_modules = apache_get_modules();
         if (in_array('mod_rewrite', $apache_modules)) {
@@ -136,7 +137,7 @@ function nv_save_file_config_global()
         } else {
             $sys_info['supports_rewrite'] = false;
         }
-    } elseif (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.') !== false) {
+    } elseif (strpos($iis_info[0], 'Microsoft-IIS') !== false AND $iis_info[0] >= 7) {
         if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument')) {
             $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
         } else {
@@ -317,7 +318,7 @@ function nv_geVersion($updatetime = 3600)
 
         $args = array(
             'headers' => array(
-                'Referer' => NV_SERVER_NAME,
+                'Referer' => NV_MY_DOMAIN,
             ),
             'body' => array(
                 'lang' > NV_LANG_INTERFACE,
@@ -515,7 +516,12 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " 	</conditions>\n";
         $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
         $rewrite_rule .= " </rule>\n";
-        
+		
+        $rewrite_rule .= " <rule name=\"nv_rule_rewrite_tag\">\n";
+        $rewrite_rule .= " 	<match url=\"([^?]+)\/([^?]+)\/tag\/([^?]+)$\" ignoreCase=\"false\" />\n";
+        $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
+        $rewrite_rule .= " </rule>\n";
+		
         $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
         $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/{R:2}/\" />\n";
@@ -735,7 +741,7 @@ function nv_getExtVersion($updatetime = 3600)
 
             $args = array(
                 'headers' => array(
-                    'Referer' => NUKEVIET_STORE_APIURL,
+                    'Referer' => NV_MY_DOMAIN,
                 ),
                 'body' => array(
                     'lang' > NV_LANG_INTERFACE,

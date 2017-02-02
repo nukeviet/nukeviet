@@ -434,7 +434,7 @@ function nv_check_valid_email($mail)
         return $lang_global['email_incorrect'];
     }
 
-    if (! preg_match('/\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw|xxx)$/', $mail)) {
+    if (! preg_match('/\.([a-z0-9\-]+)$/', $mail)) {
         return $lang_global['email_incorrect'];
     }
 
@@ -1340,7 +1340,7 @@ function nv_alias_page($title, $base_url, $num_items, $per_page, $on_page, $add_
  */
 function nv_check_domain($domain)
 {
-    if (preg_match('/^([a-z0-9]+)([a-z0-9\-\.]+)\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mf|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|post|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|xxx|ye|yt|za|zm|zw|xyz)$/', $domain) or $domain == 'localhost' or filter_var($domain, FILTER_VALIDATE_IP)) {
+    if (preg_match('/^([a-z0-9]+)([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain) or $domain == 'localhost' or filter_var($domain, FILTER_VALIDATE_IP)) {
         return $domain;
     } else {
         if (function_exists('idn_to_ascii')) {
@@ -1349,7 +1349,7 @@ function nv_check_domain($domain)
             $Punycode = new TrueBV\Punycode();
             $domain_ascii = $Punycode->encode($domain);
         }
-        if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mf|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|post|pr|pro|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|xxx|ye|yt|za|zm|zw|xyz|xn--0zwm56d|xn--11b5bs3a9aj6g|xn--3e0b707e|xn--45brj9c|xn--54b7fta0cc|xn--80akhbyknj4f|xn--80ao21a|xn--90a3ac|xn--9t4b11yi5a|xn--clchc0ea0b2g2a9gcd|xn--deba0ad|xn--fiqs8s|xn--fiqz9s|xn--fpcrj9c3d|xn--fzc2c9e2c|xn--g6w251d|xn--gecrj9c|xn--h2brj9c|xn--hgbk6aj7f53bba|xn--hlcj6aya9esc7a|xn--j1amh|xn--j6w193g|xn--jxalpdlp|xn--kgbechtv|xn--kprw13d|xn--kpry57d|xn--l1acc|xn--lgbbat1ad8j|xn--mgb9awbf|xn--mgba3a4f16a|xn--mgbaam7a8h|xn--mgbai9azgqp6j|xn--mgbayh7gpa|xn--mgbbh1a71e|xn--mgbc0a9azcg|xn--mgberp4a5d4ar|xn--mgbx4cd0ab|xn--node|xn--o3cw4h|xn--ogbpf8fl|xn--p1ai|xn--pgbs0dh|xn--s9brj9c|xn--wgbh1c|xn--wgbl6a|xn--xkc2al3hye2a|xn--xkc2dl3a5ee0h|xn--yfro4i67o|xn--ygbi2ammx|xn--zckzah)$/', $domain_ascii)) {
+        if (preg_match('/^xn\-\-([a-z0-9\-\.]+)\.([a-z0-9\-]+)$/', $domain_ascii)) {
             return $domain_ascii;
         } elseif ($domain == NV_SERVER_NAME) {
             return $domain;
@@ -1389,11 +1389,11 @@ function nv_is_url($url)
         return false;
     }
 
-    if (isset($parts['path']) and ! preg_match('/^[0-9A-Za-z\/\_\.\@\~\:\-\%\\s]*$/', $parts['path'])) {
+    if (isset($parts['path']) and ! preg_match('/^[0-9a-z\-\_\/\&\=\#\.\,\;\%\\s\!]*$/', $parts['path'])) {
         return false;
     }
 
-    if (isset($parts['query']) and ! preg_match('/^[0-9a-z\-\_\/\?\&\=\#\.\,\;\%\\s]*$/', $parts['query'])) {
+    if (isset($parts['query']) and ! preg_match('/^[0-9a-z\-\_\/\?\&\=\#\.\,\;\%\\s\!]*$/', $parts['query'])) {
         return false;
     }
 
@@ -1549,38 +1549,30 @@ function nv_url_rewrite($buffer, $is_url = false)
 function nv_change_buffer($buffer)
 {
     global $global_config, $client_info;
-
+    
+    if (defined('NV_SYSTEM') and (defined('GOOGLE_ANALYTICS_SYSTEM') or preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID']))) {
+        $_google_analytics = "<script data-show=\"inline\">(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
+        $_google_analytics .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," . PHP_EOL;
+        $_google_analytics .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" . PHP_EOL;
+        $_google_analytics .= "})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');" . PHP_EOL;
+        if (preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'])) {
+            $_google_analytics .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');" . PHP_EOL;
+        }
+        if (defined('GOOGLE_ANALYTICS_SYSTEM')) {
+            $_google_analytics .= "ga('create', '" . GOOGLE_ANALYTICS_SYSTEM . "', 'auto');" . PHP_EOL;
+        }
+        $_google_analytics .= "ga('send', 'pageview');" . PHP_EOL;
+        $_google_analytics .= "</script>" . PHP_EOL;
+        $buffer = preg_replace('/(<\/head[^>]*>)/', PHP_EOL . $_google_analytics . "$1", $buffer, 1);
+    }    
+    
     if (NV_ANTI_IFRAME and ! $client_info['is_myreferer']) {
         $buffer = preg_replace('/(<body[^>]*>)/', "$1" . PHP_EOL . "<script>if(window.top!==window.self){document.write=\"\";window.top.location=window.self.location;setTimeout(function(){document.body.innerHTML=\"\"},1);window.self.onload=function(){document.body.innerHTML=\"\"}};</script>", $buffer, 1);
     }
 
-    $body_replace = $internal = $external = '';
-
     if (NV_CURRENTTIME > $global_config['cronjobs_next_time']) {
-        $body_replace .= "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>" . PHP_EOL;
-    }
-
-    if (defined('NV_SYSTEM') and (defined('GOOGLE_ANALYTICS_SYSTEM') or preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID']))) {
-        $internal .= "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" . PHP_EOL;
-        $internal .= "(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)," . PHP_EOL;
-        $internal .= "m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)" . PHP_EOL;
-        $internal .= "})(window,document,'script','//www.google-analytics.com/analytics.js','ga');" . PHP_EOL;
-        if (preg_match('/^UA-\d{4,}-\d+$/', $global_config['googleAnalyticsID'])) {
-            $internal .= "ga('create', '" . $global_config['googleAnalyticsID'] . "', '" . $global_config['cookie_domain'] . "');" . PHP_EOL;
-        }
-        if (defined('GOOGLE_ANALYTICS_SYSTEM')) {
-            $internal .= "ga('create', '" . GOOGLE_ANALYTICS_SYSTEM . "', 'auto');" . PHP_EOL;
-        }
-        $internal .= "ga('send', 'pageview');" . PHP_EOL;
-    }
-
-    if (! empty($internal)) {
-        $internal = "<script>" . PHP_EOL . $internal . "</script>" . PHP_EOL;
-    }
-    $body_replace .= $internal . $external;
-
-    if (! empty($body_replace)) {
-        $buffer = preg_replace('/\s*<\/body>/i', PHP_EOL . $body_replace . '</body>', $buffer, 1);
+        $_body_cronjobs = "<div id=\"run_cronjobs\" style=\"visibility:hidden;display:none;\"><img alt=\"\" src=\"" . NV_BASE_SITEURL . "index.php?second=cronjobs&amp;p=" . nv_genpass() . "\" width=\"1\" height=\"1\" /></div>" . PHP_EOL;
+        $buffer = preg_replace('/\s*<\/body>/i', PHP_EOL . $_body_cronjobs . '</body>', $buffer, 1);
     }
 
     $optimizer = new NukeViet\Core\Optimizer($buffer,  NV_BASE_SITEURL);
@@ -1858,4 +1850,42 @@ function nv_get_redirect($mode = 'post,get', $decode = false)
     }
 
     return $nv_redirect;
+}
+
+/**
+ * nv_set_authorization()
+ *
+ * @return
+ */
+function nv_set_authorization()
+{
+    $auth_user = $auth_pw = '';
+    if (nv_getenv('PHP_AUTH_USER')) {
+        $auth_user = nv_getenv('PHP_AUTH_USER');
+    } elseif (nv_getenv('REMOTE_USER')) {
+        $auth_user = nv_getenv('REMOTE_USER');
+    } elseif (nv_getenv('AUTH_USER')) {
+        $auth_user = nv_getenv('AUTH_USER');
+    } elseif (nv_getenv('HTTP_AUTHORIZATION')) {
+        $auth_user = nv_getenv('HTTP_AUTHORIZATION');
+    } elseif (nv_getenv('Authorization')) {
+        $auth_user = nv_getenv('Authorization');
+    }
+
+    if (nv_getenv('PHP_AUTH_PW')) {
+        $auth_pw = nv_getenv('PHP_AUTH_PW');
+    } elseif (nv_getenv('REMOTE_PASSWORD')) {
+        $auth_pw = nv_getenv('REMOTE_PASSWORD');
+    } elseif (nv_getenv('AUTH_PASSWORD')) {
+        $auth_pw = nv_getenv('AUTH_PASSWORD');
+    }
+
+    if (strcmp(substr($auth_user, 0, 6), 'Basic ') == 0) {
+        $usr_pass = base64_decode(substr($auth_user, 6));
+        if (! empty($usr_pass) and strpos($usr_pass, ':') !== false) {
+            list($auth_user, $auth_pw) = explode(':', $usr_pass);
+        }
+        unset($usr_pass);
+    }
+    return array( 'auth_user' => $auth_user, 'auth_pw' => $auth_pw );
 }

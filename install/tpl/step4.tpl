@@ -28,6 +28,11 @@
 		<td class="alt"><span class="{DATA_REQUEST.class_gd_support}">{DATA_REQUEST.gd_support}</span></td>
 	</tr>
 	<tr>
+		<th scope="row" class="spec">{LANG.xml_support}</th>
+		<td>{LANG.request}</td>
+		<td><span class="{DATA_REQUEST.class_xml_support}">{DATA_REQUEST.xml_support}</span></td>
+	</tr>
+	<tr>
 		<th scope="row" class="specalt">{LANG.mcrypt_support}</th>
 		<td class="alt">{LANG.request}</td>
 		<td class="alt"><span class="{DATA_REQUEST.class_mcrypt_support}">{DATA_REQUEST.mcrypt_support}</span></td>

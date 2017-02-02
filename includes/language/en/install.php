@@ -56,6 +56,7 @@ $lang_module['is_support'] = 'Should be support';
 $lang_module['supports_rewrite'] = 'Supports rewrite';
 $lang_module['opendir_support'] = 'PHP support opendir';
 $lang_module['gd_support'] = 'PHP support GD library';
+$lang_module['xml_support'] = 'PHP support XML library';
 $lang_module['mcrypt_support'] = 'PHP supported encryption mcrypt library';
 $lang_module['session_support'] = 'PHP support session';
 $lang_module['fileuploads_support'] = 'PHP support file upload';

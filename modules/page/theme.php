@@ -100,7 +100,13 @@ function nv_page_main_list($array_data, $generate_page)
     if (! empty($array_data)) {
         foreach ($array_data as $row) {
             if (! empty($row['image'])) {
-                $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
+                if(file_exists(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'])){
+                    $row['image'] = NV_BASE_SITEURL . NV_ASSETS_DIR . '/' . $module_upload . '/' . $row['image'];
+                }elseif(file_exists(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'])){
+                    $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
+                }else{
+                    $row['image'] = '';
+                }
                 $row['imagealt'] = ! empty($row['imagealt']) ? $row['imagealt'] : $row['title'];
             }
 

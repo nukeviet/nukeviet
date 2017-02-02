@@ -96,6 +96,8 @@ if (is_file(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/
     $array['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $array['image'];
 }
 
+$page = $nv_Request->get_int('page', 'get', 1);
+
 $xtpl = new XTemplate('topics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -105,7 +107,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/topics');
 $xtpl->assign('DATA', $array);
-$xtpl->assign('TOPIC_LIST', nv_show_topics_list());
+$xtpl->assign('TOPIC_LIST', nv_show_topics_list($page));
 
 if (! empty($error)) {
     $xtpl->assign('ERROR', $error);

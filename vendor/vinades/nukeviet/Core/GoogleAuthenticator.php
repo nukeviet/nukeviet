@@ -72,7 +72,7 @@ class GoogleAuthenticator
     {
         $secret = '';
         $validChars = $this->getTable();
-        unset($validChars[33]);
+        unset($validChars[32]);
         
         for ($i = 0; $i < $this->secretLength; $i++) {
             $secret .= $validChars[array_rand($validChars)];
