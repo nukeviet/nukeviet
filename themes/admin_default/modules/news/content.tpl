@@ -352,6 +352,25 @@ $("#idtitle").change(function() {
 	get_alias();
 });
 <!-- END: getalias -->
+
+$(document).ready(function() {
+	var id='{rowcontent.id}';
+	if (id != 0) {
+   		check_edit();
+  	}
+});
+var check_edit = function() {
+   $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'id={rowcontent.id}&check_edit=1', function(res) {
+		res = res.split("_");
+		if (res[0] != 'OK') {// thông báo bị chiếm quyền sửa
+			alert(res[1]);
+			$('.submit-post').remove();
+		} else {
+			setTimeout(check_edit, 60000);//1 phút cập nhật đang sửa
+		}
+	});
+	return false;
+};
 //]]>
 </script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
