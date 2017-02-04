@@ -37,6 +37,8 @@ list ($data['catid'], $data['parentid'], $data['title'], $data['title_custom'], 
     '',
     '',
     '',
+    '',
+    '',
     '6',
     0,
     0,
@@ -76,6 +78,7 @@ if (! empty($savecat)) {
     $data['description'] = nv_nl2br(nv_htmlspecialchars(strip_tags($data['description'])), '<br />');
     $data['descriptionhtml'] = $nv_Request->get_editor('descriptionhtml', '', NV_ALLOWED_HTML_TAGS);
     $data['viewdescriptionhtml'] = $nv_Request->get_int('viewdescriptionhtml', 'post', 0);
+    $data['tag_description'] = $nv_Request->get_textarea('tag_description', 'post', NV_ALLOWED_HTML_TAGS);
     $data['cat_allow_point'] = $nv_Request->get_int('cat_allow_point', 'post', 0);
     $data['cat_number_point'] = $nv_Request->get_int('cat_number_point', 'post', 0);
     $data['cat_number_product'] = $nv_Request->get_int('cat_number_product', 'post', 0);
@@ -166,7 +169,7 @@ if (! empty($savecat)) {
         }
     } elseif ($data['catid'] > 0 and $data['title'] != '' and $error == '') {
         try {
-            $stmt = $db->prepare("UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, viewdescriptionhtml = :viewdescriptionhtml, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_title_custom= :title_custom, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_descriptionhtml = :descriptionhtml, " . NV_LANG_DATA . "_keywords= :keywords, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid']);
+            $stmt = $db->prepare("UPDATE " . $table_name . " SET parentid = :parentid, image = :image, typeprice = :typeprice, form = :form, group_price = :group_price, viewdescriptionhtml = :viewdescriptionhtml, " . NV_LANG_DATA . "_title= :title, " . NV_LANG_DATA . "_title_custom= :title_custom, " . NV_LANG_DATA . "_alias = :alias, " . NV_LANG_DATA . "_description= :description, " . NV_LANG_DATA . "_descriptionhtml = :descriptionhtml, " . NV_LANG_DATA . "_keywords= :keywords, " . NV_LANG_DATA . "_tag_description = :tag_description, groups_view= :groups_view, cat_allow_point = :cat_allow_point, cat_number_point = :cat_number_point, cat_number_product = :cat_number_product, edit_time=" . NV_CURRENTTIME . " WHERE catid =" . $data['catid']);
             $stmt->bindParam(':parentid', $data['parentid'], PDO::PARAM_INT);
             $stmt->bindParam(':title', $data['title'], PDO::PARAM_STR);
             $stmt->bindParam(':title_custom', $data['title_custom'], PDO::PARAM_STR);
@@ -175,6 +178,7 @@ if (! empty($savecat)) {
             $stmt->bindParam(':description', $data['description'], PDO::PARAM_STR);
             $stmt->bindParam(':descriptionhtml', $data['descriptionhtml'], PDO::PARAM_STR);
             $stmt->bindParam(':keywords', $data['keywords'], PDO::PARAM_STR);
+            $stmt->bindParam(':tag_description', $data['tag_description'], PDO::PARAM_STR);
             $stmt->bindParam(':typeprice', $data['typeprice'], PDO::PARAM_INT);
             $stmt->bindParam(':form', $data['form'], PDO::PARAM_STR);
             $stmt->bindParam(':group_price', $data['group_price'], PDO::PARAM_STR);
@@ -227,6 +231,7 @@ if (! empty($savecat)) {
         $data['alias'] = $data[NV_LANG_DATA . '_alias'];
         $data['description'] = $data[NV_LANG_DATA . '_description'];
         $data['keywords'] = $data[NV_LANG_DATA . '_keywords'];
+        $data['tag_description'] = $data[NV_LANG_DATA . '_tag_description'];
     }
     if ($data['parentid']) {
         $data['form'] = $db->query('SELECT form FROM ' . $table_name . ' where catid=' . $data['parentid'])->fetchColumn();

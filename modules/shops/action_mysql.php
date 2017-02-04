@@ -51,7 +51,9 @@ if (in_array($lang, $array_lang_module_setup) and $num_table > 1) {
 	 DROP ' . $lang . '_hometext,
 	 DROP ' . $lang . '_bodytext,
 	 DROP ' . $lang . '_gift_content,
-	 DROP ' . $lang . '_address';
+	 DROP ' . $lang . '_address,
+	 DROP ' . $lang . '_tag_title,
+	 DROP ' . $lang . '_tag_description';
 
     $sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_catalogs
 	 DROP ' . $lang . '_title,
@@ -59,7 +61,8 @@ if (in_array($lang, $array_lang_module_setup) and $num_table > 1) {
 	 DROP ' . $lang . '_alias,
 	 DROP ' . $lang . '_description,
 	 DROP ' . $lang . '_descriptionhtml,
-	 DROP ' . $lang . '_keywords';
+	 DROP ' . $lang . '_keywords,
+	 DROP ' . $lang . '_tag_description';
 
     $sql_drop_module[] = 'ALTER TABLE ' . $db_config['prefix'] . '_' . $module_data . '_group
 	 DROP ' . $lang . '_title,
@@ -176,6 +179,7 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD " . $lang . "_description VARCHAR( 250 ) NOT NULL DEFAULT ''";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD " . $lang . "_descriptionhtml TEXT NOT NULL";
 $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD " . $lang . "_keywords text NOT NULL";
+$sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_data . "_catalogs ADD " . $lang . "_tag_description mediumtext";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_template (
   id mediumint(8) NOT NULL AUTO_INCREMENT,
@@ -346,7 +350,9 @@ $sql_create_module[] = "ALTER TABLE " . $db_config['prefix'] . "_" . $module_dat
  ADD " . $lang . "_hometext text NOT NULL,
  ADD " . $lang . "_bodytext mediumtext NOT NULL,
  ADD " . $lang . "_gift_content text NOT NULL,
- ADD " . $lang . "_address text NOT NULL";
+ ADD " . $lang . "_address text NOT NULL,
+ ADD " . $lang . "_tag_title VARCHAR(255) NOT NULL DEFAULT '',
+ ADD " . $lang . "_tag_description mediumtext NOT NULL";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_review (
   review_id int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -770,8 +776,9 @@ if (! empty($set_lang_data)) {
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET " . $lang . "_title_custom = " . $global_config['site_lang'] . "_title_custom";
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET " . $lang . "_alias = " . $set_lang_data . "_alias";
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET " . $lang . "_description = " . $set_lang_data . "_description";
-        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET " . $lang . "_description = " . $set_lang_data . "_descriptionhtml";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET " . $lang . "_descriptionhtml = " . $set_lang_data . "_descriptionhtml";
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET " . $lang . "_keywords = " . $set_lang_data . "_keywords";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_catalogs SET " . $lang . "_tag_description = " . $set_lang_data . "_tag_description";
     }
 
     $numrow = $db->query("SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_rows")->fetchColumn();
@@ -781,6 +788,8 @@ if (! empty($set_lang_data)) {
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_hometext = " . $set_lang_data . "_hometext";
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_bodytext = " . $set_lang_data . "_bodytext";
         $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_gift_content = " . $set_lang_data . "_gift_content";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_tag_title = " . $set_lang_data . "_tag_title";
+        $sql_create_module[] = "UPDATE " . $db_config['prefix'] . "_" . $module_data . "_rows SET " . $lang . "_tag_description = " . $set_lang_data . "_tag_description";
     }
 
     $numrow = $db->query("SELECT count(*) FROM " . $db_config['prefix'] . "_" . $module_data . "_units")->fetchColumn();

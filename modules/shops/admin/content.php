@@ -100,7 +100,9 @@ $rowcontent = array(
     'files_old' => array(),
     'gift_content' => '',
     'gift_from' => NV_CURRENTTIME,
-    'gift_to' => 0
+    'gift_to' => 0,
+    'tag_title' => '',
+    'tag_description' => ''
 );
 
 $page_title = $lang_module['content_add'];
@@ -283,6 +285,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
     $rowcontent['copyright'] = ( int )$nv_Request->get_bool('copyright', 'post');
     $rowcontent['inhome'] = ( int )$nv_Request->get_bool('inhome', 'post');
+    
+    $rowcontent['tag_title'] = $nv_Request->get_title('tag_title', 'post', '');
+    $rowcontent['tag_description'] = $nv_Request->get_textarea('tag_description', '', NV_ALLOWED_HTML_TAGS);
 
     $_groups_post = $nv_Request->get_array('allowed_comm', 'post', array( ));
     $rowcontent['allowed_comm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
@@ -620,7 +625,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 			 " . NV_LANG_DATA . "_alias= :alias,
 			 " . NV_LANG_DATA . "_hometext= :hometext,
 			 " . NV_LANG_DATA . "_bodytext= :bodytext,
-			 " . NV_LANG_DATA . "_gift_content= :gift_content
+			 " . NV_LANG_DATA . "_gift_content= :gift_content,
+			 " . NV_LANG_DATA . "_tag_title= :tag_title,
+			 " . NV_LANG_DATA . "_tag_description= :tag_description
 			 WHERE id =" . $rowcontent['id']);
 
             $stmt->bindParam(':listcatid', $rowcontent['listcatid'], PDO::PARAM_STR);
@@ -641,6 +648,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
             $stmt->bindParam(':bodytext', $rowcontent['bodytext'], PDO::PARAM_STR, strlen($rowcontent['bodytext']));
             $stmt->bindParam(':gift_content', $rowcontent['gift_content'], PDO::PARAM_STR);
             $stmt->bindParam(':allowed_comm', $rowcontent['allowed_comm'], PDO::PARAM_STR);
+            $stmt->bindParam(':tag_title', $rowcontent['tag_title'], PDO::PARAM_STR);
+            $stmt->bindParam(':tag_description', $rowcontent['tag_description'], PDO::PARAM_STR, strlen($rowcontent['tag_description']));
 
             if ($stmt->execute()) {
                 // Cap nhat lai group neu co thay doi
@@ -793,6 +802,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     $rowcontent['bodytext'] = $rowcontent[NV_LANG_DATA . '_bodytext'];
     $rowcontent['gift_content'] = $rowcontent[NV_LANG_DATA . '_gift_content'];
     $rowcontent['address'] = $rowcontent[NV_LANG_DATA . '_address'];
+    $rowcontent['tag_title'] = $rowcontent[NV_LANG_DATA . '_tag_title'];
+    $rowcontent['tag_description'] = $rowcontent[NV_LANG_DATA . '_tag_description'];
     $rowcontent['group_id'] = $group_id_old;
     $rowcontent['keywords'] = $keyword;
     $rowcontent['files'] = $files;
