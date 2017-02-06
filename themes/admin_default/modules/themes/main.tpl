@@ -17,7 +17,8 @@
 			<p>
 				<strong>{ROW.name}</strong> {LANG.theme_created_by} <a href="{ROW.website}" title="{LANG.theme_created_website}" style="color:#3B5998" onclick="this.target='_blank'"><strong>{ROW.author}</strong></a>
 			</p>
-			<p><img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" style="max-width:300px;max-height:200px"/>
+			<p>
+				<a href="#" title="{ROW.name}"><img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" style="max-width:300px;max-height:200px" onclick="modalShow(modal_title_{ROW.value}, modal_body_{ROW.value});"/></a>
 			</p>
 			<p style="font-size:13px;margin-top:10px;font-weight:bold">
 				<!-- BEGIN: link_setting -->
@@ -46,11 +47,16 @@
 			<!-- BEGIN: endtd -->
 			</td>
 			<!-- END: endtd -->
+			<script>
+				var modal_title_{ROW.value} = '<strong>{ROW.title}</strong><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+				var modal_body_{ROW.value} = '<img src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" alt="" class="center-block img-responsive" />';
+			</script>
 			<!-- END: loop -->
 		</tr>
 	</tbody>
 	</table>
 </div>
+
 <script type="text/javascript">
 //<![CDATA[
 LANG.theme_delete_confirm = '{LANG.theme_delete_confirm}';
