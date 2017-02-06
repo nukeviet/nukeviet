@@ -75,8 +75,8 @@ $global_config['nv_upass_type'] = 2;
 // Thời gian lặp lại việc sao lưu CSDL tính bằng ngày
 $global_config['dump_interval'] = 1;
 
-//hashprefix: support LDAP({SSHA}, {SHA}, {MD5}); {NV3}
-$global_config['hashprefix'] = '{SSHA}';
+//hashprefix: support LDAP({SSHA512}, {SSHA256}, {SSHA}, {SHA}, {MD5}); {NV3}
+$global_config['hashprefix'] = '{SSHA512}';
 
 //so ky tu toi da cua password doi voi user
 define('NV_UPASSMAX', 20);

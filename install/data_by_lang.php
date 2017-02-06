@@ -51,6 +51,7 @@ $sth->execute(array( 'print', 'print', 'Print', 'news', 0, 0, 0, ''));
 $sth->execute(array( 'rating', 'rating', 'Rating', 'news', 0, 0, 0, ''));
 $sth->execute(array( 'savefile', 'savefile', 'Savefile', 'news', 0, 0, 0, ''));
 $sth->execute(array( 'sendmail', 'sendmail', 'Sendmail', 'news', 0, 0, 0, ''));
+$sth->execute(array( 'instant-rss', 'instant-rss', 'Instant Articles RSS', 'news', 0, 0, 0, ''));
 //Users
 $sth->execute(array( 'main', 'main', 'Main', 'users', 1, 0, 1, ''));
 $sth->execute(array( 'login', 'login', $install_lang['modfuncs']['users']['login'], 'users', 1, 1, 2, ''));
