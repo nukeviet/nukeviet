@@ -17,7 +17,8 @@
 			<p>
 				<strong>{ROW.name}</strong> {LANG.theme_created_by} <a href="{ROW.website}" title="{LANG.theme_created_website}" style="color:#3B5998" onclick="this.target='_blank'"><strong>{ROW.author}</strong></a>
 			</p>
-			<p><a href="" data-src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" data-title="{ROW.name}" title="{ROW.name}" class="open_modal"><img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" style="max-width:300px;max-height:200px"/></a>
+			<p>
+				<a href="#" title="{ROW.name}"><img alt="{ROW.name}" src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" style="max-width:300px;max-height:200px" onclick="modalShow(modal_title_{ROW.value}, modal_body_{ROW.value});"/></a>
 			</p>
 			<p style="font-size:13px;margin-top:10px;font-weight:bold">
 				<!-- BEGIN: link_setting -->
@@ -46,33 +47,19 @@
 			<!-- BEGIN: endtd -->
 			</td>
 			<!-- END: endtd -->
+			<script>
+				var modal_title_{ROW.value} = '<strong>{ROW.title}</strong><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+				var modal_body_{ROW.value} = '<img src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" alt="" class="center-block img-responsive" />';
+			</script>
 			<!-- END: loop -->
 		</tr>
 	</tbody>
 	</table>
 </div>
-<div class="modal fade" id="idmodals" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				&nbsp;
-			</div>
-			<div class="modal-body">
-				<p class="text-center"><em class="fa fa-spinner fa-spin fa-3x">&nbsp;</em></p>
-			</div>
-		</div>
-	</div>
-</div>
+
 <script type="text/javascript">
 //<![CDATA[
 LANG.theme_delete_confirm = '{LANG.theme_delete_confirm}';
 //]]>
-$('.open_modal').click(function(e){
-	e.preventDefault();
-	$('#idmodals .modal-header').html( '<strong>' + $(this).data('title') + '</strong><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>');
-	$('#idmodals .modal-body').html( '<img src="' + $(this).data('src') + '" alt="" class="center-block img-responsive" />' );
-	$('#idmodals').modal('show');
-});
 </script>
 <!-- END: main -->
