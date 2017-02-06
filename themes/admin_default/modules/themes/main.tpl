@@ -48,7 +48,7 @@
 			</td>
 			<!-- END: endtd -->
 			<script>
-				var modal_title_{ROW.value} = '<strong>{ROW.title}</strong><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+				var modal_title_{ROW.value} = '<strong>{ROW.name}</strong><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
 				var modal_body_{ROW.value} = '<img src="{NV_BASE_SITEURL}themes/{ROW.value}/{ROW.thumbnail}" alt="" class="center-block img-responsive" />';
 			</script>
 			<!-- END: loop -->
