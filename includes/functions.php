@@ -1851,3 +1851,41 @@ function nv_get_redirect($mode = 'post,get', $decode = false)
 
     return $nv_redirect;
 }
+
+/**
+ * nv_set_authorization()
+ *
+ * @return
+ */
+function nv_set_authorization()
+{
+    $auth_user = $auth_pw = '';
+    if (nv_getenv('PHP_AUTH_USER')) {
+        $auth_user = nv_getenv('PHP_AUTH_USER');
+    } elseif (nv_getenv('REMOTE_USER')) {
+        $auth_user = nv_getenv('REMOTE_USER');
+    } elseif (nv_getenv('AUTH_USER')) {
+        $auth_user = nv_getenv('AUTH_USER');
+    } elseif (nv_getenv('HTTP_AUTHORIZATION')) {
+        $auth_user = nv_getenv('HTTP_AUTHORIZATION');
+    } elseif (nv_getenv('Authorization')) {
+        $auth_user = nv_getenv('Authorization');
+    }
+
+    if (nv_getenv('PHP_AUTH_PW')) {
+        $auth_pw = nv_getenv('PHP_AUTH_PW');
+    } elseif (nv_getenv('REMOTE_PASSWORD')) {
+        $auth_pw = nv_getenv('REMOTE_PASSWORD');
+    } elseif (nv_getenv('AUTH_PASSWORD')) {
+        $auth_pw = nv_getenv('AUTH_PASSWORD');
+    }
+
+    if (strcmp(substr($auth_user, 0, 6), 'Basic ') == 0) {
+        $usr_pass = base64_decode(substr($auth_user, 6));
+        if (! empty($usr_pass) and strpos($usr_pass, ':') !== false) {
+            list($auth_user, $auth_pw) = explode(':', $usr_pass);
+        }
+        unset($usr_pass);
+    }
+    return array( 'auth_user' => $auth_user, 'auth_pw' => $auth_pw );
+}

@@ -27,7 +27,7 @@ if (! nv_admin_checkfirewall()) {
     if (php_sapi_name() !== 'cgi-fcgi') {
         header('status: 401 Unauthorized');
     }
-    nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />');
+    nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />', 401);
 }
 
 /**
