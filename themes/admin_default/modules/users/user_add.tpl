@@ -117,8 +117,12 @@
 				</tr>
 				<!-- END: group -->
 				<tr>
-					<td style="vertical-align:top" colspan="2"> {LANG.is_official} </td>
-					<td><input type="checkbox" name="is_official" value="1"{DATA.is_official}/> <small>{LANG.is_official_note}</small></td>
+					<td colspan="2"> {LANG.is_official} </td>
+					<td><label><input type="checkbox" name="is_official" value="1"{DATA.is_official}/> <small>{LANG.is_official_note}</small></label></td>
+				</tr>
+				<tr>
+					<td colspan="2"> {LANG.adduser_email1} </td>
+					<td><label><input type="checkbox" name="adduser_email" value="1"{DATA.adduser_email}/> <small>{LANG.adduser_email1_note}</small></label></td>
 				</tr>
 			</tbody>
 		</table>
@@ -181,7 +185,10 @@
 	</div>
 	<div class="text-center">
         <input type="hidden" name="confirm" value="1" />
-		<input class="btn btn-primary" type="submit" value="{LANG.member_add}" />
+        <button class="btn btn-primary" type="submit">
+            <i class="fa fa-spin fa-spinner hidden"></i>
+            <span>{LANG.member_add}</span>
+        </button>
 	</div>
 </form>
 <script type="text/javascript">

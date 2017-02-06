@@ -65,6 +65,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['in_groups_default'] = $nv_Request->get_int('group_default', 'post', 0);
     $_user['photo'] = nv_substr($nv_Request->get_title('photo', 'post', '', 1), 0, 255);
     $_user['is_official'] = $nv_Request->get_int('is_official', 'post', 0);
+    $_user['adduser_email'] = $nv_Request->get_int('adduser_email', 'post', 0);
 
     $md5username = nv_md5safe($_user['username']);
 
@@ -302,6 +303,15 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($_user['is_official'] ? 4 : 7));
     $nv_Cache->delMod($module_name);
     
+    // Gửi mail thông báo
+    if (!empty($_user['adduser_email'])) {
+        $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
+        $subject = $lang_module['adduser_register'];
+        $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+        $message = sprintf($lang_module['adduser_register_info1'], $full_name, $global_config['site_name'], $_url, $_user['username'], $_user['password1']);
+        @nv_sendmail($global_config['site_email'], $_user['email'], $subject, $message);
+    }
+    
     die(json_encode(array(
         'status' => 'ok',
         'input' => '',
@@ -315,6 +325,7 @@ $_user['first_name'] = $_user['last_name'] = $_user['gender'] = $_user['sig'] = 
 $_user['view_mail'] = 0;
 $_user['in_groups'] = array();
 $_user['is_official'] = ' checked="checked"';
+$_user['adduser_email'] = '';
 
 $genders = array(
     'N' => array(

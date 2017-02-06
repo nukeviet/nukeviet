@@ -7,6 +7,8 @@
  */
 
 function user_validForm(a) {
+    $('[type="submit"] .fa', $(a)).toggleClass('hidden');
+    $('[type="submit"]', $(a)).prop('disabled', true);
     $.ajax({
         type: $(a).prop("method"),
         cache: !1,
@@ -14,13 +16,12 @@ function user_validForm(a) {
         data: $(a).serialize(),
         dataType: "json",
         success: function(b) {
-            if( b.status == "error" )
-            {
+            $('[type="submit"] .fa', $(a)).toggleClass('hidden');
+            $('[type="submit"]', $(a)).prop('disabled', false);
+            if( b.status == "error" ) {
                 alert(b.mess);
                 $("[name=" + b.input + "]", a).focus();
-            }
-            else
-            {
+            } else {
                 location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
                 if( b.admin_add == "yes" ) {
                     if (confirm( b.mess )) {
