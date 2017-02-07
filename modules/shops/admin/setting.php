@@ -82,10 +82,14 @@ if ($savesetting == 1) {
     $data['tags_alias'] = $nv_Request->get_int('tags_alias', 'post', 0);
     $data['auto_tags'] = $nv_Request->get_int('auto_tags', 'post', 0);
     $data['tags_remind'] = $nv_Request->get_int('tags_remind', 'post', 0);
+    
     $data['point_active'] = $nv_Request->get_int('point_active', 'post', 0);
     $data['point_conversion'] = $nv_Request->get_string('point_conversion', 'post', 0);
     $data['point_conversion'] = floatval(preg_replace('/[^0-9\.]/', '', $data['point_conversion']));
+    $data['money_to_point'] = $nv_Request->get_string('money_to_point', 'post', 0);
+    $data['money_to_point'] = floatval(preg_replace('/[^0-9\.]/', '', $data['money_to_point']));
     $data['point_new_order'] = $nv_Request->get_string('point_new_order', 'post', 0);
+    
     $data['review_active'] = $nv_Request->get_int('review_active', 'post', 0);
     $data['review_check'] = $nv_Request->get_int('review_check', 'post', 0);
     $data['review_captcha'] = $nv_Request->get_int('review_captcha', 'post', 0);
@@ -131,6 +135,7 @@ if ($data['active_payment'] == '1') {
 }
 
 $data['point_conversion'] = number_format($data['point_conversion']);
+$data['money_to_point'] = number_format($data['money_to_point']);
 
 $xtpl = new XTemplate("setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign('LANG', $lang_module);
@@ -172,82 +177,82 @@ $xtpl->assign('TAGS_ALIAS', $module_config[$module_name]['tags_alias'] ? ' check
 $xtpl->assign('AUTO_TAGS', $module_config[$module_name]['auto_tags'] ? ' checked="checked"' : '');
 $xtpl->assign('TAGS_REMIND', $module_config[$module_name]['tags_remind'] ? ' checked="checked"' : '');
 
-$check = ($data['auto_check_order'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['auto_check_order'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_auto_check_order', $check);
 
-$check = ($data['post_auto_member'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['post_auto_member'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_post_auto_member', $check);
 
-$check = ($data['active_order'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_order'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_order', $check);
 
-$check = ($data['active_order_popup'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_order_popup'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_order_popup', $check);
 
-$check = ($data['active_order_non_detail'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_order_non_detail'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_order_non_detail', $check);
 
-$check = ($data['active_price'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_price'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_price', $check);
 
-$check = ($data['active_order_number'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_order_number'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_order_number', $check);
 
-$check = ($data['active_payment'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_payment'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_payment', $check);
 
-$check = ($data['active_guest_order'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_guest_order'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_guest_order', $check);
 
-$check = ($data['active_showhomtext'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_showhomtext'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_showhomtext', $check);
 
-$check = ($data['active_tooltip'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_tooltip'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_tooltip', $check);
 
-$check = ($data['alias_lower'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['alias_lower'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_alias_lower', $check);
 
-$check = ! empty($data['show_product_code']) ? "checked=\"checked\"" : "";
+$check = ! empty($data['show_product_code']) ? 'checked="checked"' : '';
 $xtpl->assign('ck_show_product_code', $check);
 
-$check = ($data['show_compare'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['show_compare'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_compare', $check);
 
-$check = ($data['show_displays'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['show_displays'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_displays', $check);
 
-$check = ($data['use_shipping'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['use_shipping'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_shipping', $check);
 
-$check = ($data['use_coupons'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['use_coupons'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_coupons', $check);
 
-$check = ($data['active_wishlist'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_wishlist'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_wishlist', $check);
 
-$check = ($data['active_gift'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_gift'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_gift', $check);
 
-$check = ($data['active_warehouse'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['active_warehouse'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_warehouse', $check);
 
-$check = ($data['point_active'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['point_active'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_active_point', $check);
 
-$check = ($data['review_active'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['review_active'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_review_active', $check);
 
-$check = ($data['review_check'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['review_check'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_review_check', $check);
 
-$check = ($data['review_captcha'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['review_captcha'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_review_captcha', $check);
 
-$check = ($data['template_active'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['template_active'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_template_active', $check);
 
-$check = ($data['download_active'] == '1') ? "checked=\"checked\"" : "";
+$check = ($data['download_active'] == '1') ? 'checked="checked"' : '';
 $xtpl->assign('ck_download_active', $check);
 
 $groups_notify = explode(',', $data['groups_notify']);
@@ -310,7 +315,7 @@ if (! empty($array_setting_payment)) {
     foreach ($array_setting_payment as $value) {
         $value['titleactive'] = (! empty($value['active'])) ? $lang_global['yes'] : $lang_global['no'];
         $value['link_edit'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=payport&amp;payment=" . $value['payment'];
-        $value['active'] = ($value['active'] == '1') ? "checked=\"checked\"" : "";
+        $value['active'] = ($value['active'] == '1') ? 'checked="checked"' : '';
         if (! empty($value['images_button']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $value['images_button'])) {
             $value['images_button'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $value['images_button'];
         }

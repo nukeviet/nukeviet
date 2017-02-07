@@ -755,6 +755,7 @@ $data['tags_remind'] = 0;
 $data['point_active'] = 0;
 $data['point_conversion'] = 0;
 $data['point_new_order'] = 0;
+$data['money_to_point'] = 0;
 $data['review_active'] = 1;
 $data['review_check'] = 1;
 $data['review_captcha'] = 1;
