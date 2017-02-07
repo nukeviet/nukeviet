@@ -84,6 +84,7 @@ if ($savesetting == 1) {
     $data['tags_remind'] = $nv_Request->get_int('tags_remind', 'post', 0);
     $data['point_active'] = $nv_Request->get_int('point_active', 'post', 0);
     $data['point_conversion'] = $nv_Request->get_string('point_conversion', 'post', 0);
+    $data['point_conversion'] = floatval(preg_replace('/[^0-9\.]/', '', $data['point_conversion']));
     $data['point_new_order'] = $nv_Request->get_string('point_new_order', 'post', 0);
     $data['review_active'] = $nv_Request->get_int('review_active', 'post', 0);
     $data['review_check'] = $nv_Request->get_int('review_check', 'post', 0);
@@ -129,6 +130,8 @@ if ($data['active_payment'] == '1') {
     }
 }
 
+$data['point_conversion'] = number_format($data['point_conversion']);
+
 $xtpl = new XTemplate("setting.tpl", NV_ROOTDIR . "/themes/" . $global_config['module_theme'] . "/modules/" . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('DATA', $data);
@@ -146,12 +149,12 @@ for ($i = 1; $i <= 10; $i ++) {
 }
 
 $check_view = array(
-    "view_home_all" => "",
-    "view_home_cat" => "",
-    "view_home_group" => "",
-    "view_home_none" => ""
+    'view_home_all' => '',
+    'view_home_cat' => '',
+    'view_home_group' => '',
+    'view_home_none' => ''
 );
-$check_view[$data['home_view']] = "selected=\"selected\"";
+$check_view[$data['home_view']] = 'selected="selected"';
 
 foreach ($check_view as $type_view => $select) {
     $xtpl->assign('type_view', $type_view);
@@ -160,7 +163,7 @@ foreach ($check_view as $type_view => $select) {
     $xtpl->parse('main.home_view_loop');
 }
 
-$select = "";
+$select = '';
 for ($i = 5; $i <= 50; $i = $i + 5) {
     $select .= "<option value=\"" . $i . "\"" . (($i == $data['per_page']) ? " selected=\"selected\"" : "") . ">" . $i . "</option>\n";
 }

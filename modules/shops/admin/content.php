@@ -857,7 +857,7 @@ if (!empty($rowcontent['otherimage'])) {
 }
 
 $rowcontent['product_weight'] = empty($rowcontent['product_weight']) ? '' : $rowcontent['product_weight'];
-
+$rowcontent['product_price'] = number_format($rowcontent['product_price']);
 $array_files = array();
 if ($pro_config['download_active']) {
     $sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';

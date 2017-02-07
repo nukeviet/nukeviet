@@ -289,7 +289,7 @@
 			<tbody>
 				<tr>
 					<td><strong>{LANG.setting_point_conversion}</strong></td>
-					<td><input type="text" name="point_conversion" class="form-control" value="{DATA.point_conversion}" /><span class="text-middle">{DATA.money_unit} / {LANG.setting_point_1}</span></td>
+					<td><input type="text" name="point_conversion" class="form-control" value="{DATA.point_conversion}" onkeyup="this.value=FormatNumber(this.value);"/> <span class="text-middle">{DATA.money_unit} / {LANG.setting_point_1}</span></td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.setting_point_new_order}</strong></td>
