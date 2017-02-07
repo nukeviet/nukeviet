@@ -115,6 +115,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     $_user['in_groups_default'] = $nv_Request->get_int('group_default', 'post', 0);
     $_user['delpic'] = $nv_Request->get_int('delpic', 'post', 0);
     $_user['is_official'] = $nv_Request->get_int('is_official', 'post', 0);
+    $_user['adduser_email'] = $nv_Request->get_int('adduser_email', 'post', 0);
     
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
     
@@ -346,6 +347,19 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     
     if (!empty($array_field_config)) {
         $db->query('UPDATE ' . NV_MOD_TABLE . '_info SET ' . implode(', ', $query_field) . ' WHERE userid=' . $userid);
+    }
+    
+    // Gửi mail thông báo
+    if (!empty($_user['adduser_email'])) {
+        $full_name = nv_show_name_user($_user['first_name'], $_user['last_name'], $_user['username']);
+        $subject = $lang_module['adduser_register1'];
+        $_url = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
+        $message = sprintf($lang_module['adduser_register_info2'], $full_name, $global_config['site_name'], $_url, $_user['username']);
+        if (!empty($_user['password1'])) {
+            $message .= sprintf($lang_module['adduser_register_info3'], $_user['password1']);
+        }
+        $message .= sprintf($lang_module['adduser_register_info4'], $global_config['site_name']);
+        @nv_sendmail($global_config['site_email'], $_user['email'], $subject, $message);
     }
     
     nv_insert_logs(NV_LANG_DATA, $module_name, 'log_edit_user', 'userid ' . $userid, $admin_info['userid']);
