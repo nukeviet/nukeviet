@@ -340,3 +340,8 @@ $lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';
 $lang_module['fbinsartmgs_100'] = 'Lỗi: Bài viết có các thẻ HTML: <strong>%s</strong> không được hỗ trở bởi bài viết tức thời. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng, thay thế bằng các thẻ được hỗ trợ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
 $lang_module['fbinsartmgs_101'] = 'Lỗi: Bài viết không có nội dung';
 $lang_module['fbinsartmgs_102'] = 'Lỗi: Bài viết của bạn có các thuộc tính cho các thẻ. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng khỏi thẻ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
+
+
+$lang_module['error_edit'] = 'Bài viết đang có quản trị chỉnh sửa. Bạn không thể chỉnh sửa tiếp.';
+$lang_module['dulicate_edit'] = 'Bài viết đang có quản trị chỉnh sửa. Bạn có muốn chiếm quyền của quản trị này không.';
+$lang_module['not_edit_by_admin'] = 'Bạn đã bị chiếm quyền chỉnh sửa bài viết này. Những thay đổi của bạn không thể lưu vào hệ thống, hãy sao chép lại để tránh mất nội dung đã thay đổi.';
