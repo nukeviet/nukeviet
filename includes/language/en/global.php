@@ -307,3 +307,4 @@ $lang_global['design_url'] = 'Design by URL';
 $lang_global['signin'] = 'Sign In';
 $lang_global['feedback'] = 'Feedback';
 $lang_global['required'] = 'Note: You need to declare all the boxes marked with an asterisk (*).';
+$lang_global['address'] = 'Address';

@@ -47,6 +47,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  send_time int(11) unsigned NOT NULL DEFAULT '0',
  sender_id mediumint(8) unsigned NOT NULL DEFAULT '0',
  sender_name varchar(100) NOT NULL,
+ sender_address varchar(250) NOT NULL,
  sender_email varchar(100) NOT NULL,
  sender_phone varchar(20) DEFAULT '',
  sender_ip varchar(15) NOT NULL,

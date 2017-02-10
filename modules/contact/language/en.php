@@ -37,6 +37,7 @@ $lang_module['sendcontactok'] = 'Thank you! We will reply as soon as possible.';
 $lang_module['sendinfo'] = 'This email sent by contact function at website';
 $lang_module['sendinfo2'] = 'Sender information';
 $lang_module['phone'] = 'Phone number';
+$lang_module['address'] = 'Address';
 $lang_module['fax'] = 'Fax';
 $lang_module['note_s'] = 'Note';
 $lang_module['department'] = 'Department';

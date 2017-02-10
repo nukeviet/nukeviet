@@ -71,6 +71,14 @@
                 <input type="text" maxlength="60" value="{CONTENT.fphone}" name="fphone" class="form-control" placeholder="{LANG.phone}" />
             </div>
         </div>
+        <div class="form-group">
+			<div class="input-group">
+				<span class="input-group-addon">
+					<em class="fa fa-home fa-lg fa-horizon"></em>
+				</span>
+                <input type="text" maxlength="60" value="{CONTENT.faddress}" name="faddress" class="form-control" placeholder="{LANG.address}" />
+            </div>
+        </div>
 		<div class="form-group">
             <div>
     			<textarea cols="8" name="fcon" class="form-control required" maxlength="1000" placeholder="{LANG.content}" onkeypress="nv_validErrorHidden(this);" data-mess="{LANG.error_content}"></textarea>

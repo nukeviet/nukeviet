@@ -89,6 +89,7 @@ $lang_global['adminlogininfo']  = 'Để đăng nhập quản trị, vui lòng k
 $lang_global['site_rss'] = 'RSS - Tin mới';
 $lang_global['copyright'] = '&copy; Copyright %s. All right reserved';
 $lang_global['phonenumber'] = 'Điện thoại';
+$lang_global['address'] = 'Điạ chỉ';
 $lang_global['full_name'] = 'Họ và tên';
 $lang_global['first_name'] = 'Tên';
 $lang_global['last_name'] = 'Họ';

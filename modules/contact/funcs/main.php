@@ -39,7 +39,7 @@ if ( ! empty( $array_department ) )
     		}
     		break;
     	}
-    	
+
         if ( ! empty( $department['cats'] ) )
         {
             $_cats = array_map( 'trim', explode( '|', $department['cats'] ) );
@@ -101,6 +101,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
     if ( ! defined( 'NV_IS_USER' ) )
     {
         $fname = nv_substr( $nv_Request->get_title( 'fname', 'post', '', 1 ), 0, 100 );
+		$faddress = nv_substr( $nv_Request->get_title( 'faddress', 'post', '', 1 ), 0, 100 );
         $femail = nv_substr( $nv_Request->get_title( 'femail', 'post', '', 1 ), 0, 100 );
     }
 
@@ -150,8 +151,8 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
     $sender_id = intval( defined( 'NV_IS_USER' ) ? $user_info['userid'] : 0 );
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
-    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES
-    (' . $fpart . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $sender_id . ', :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)';
+    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_address, sender_ip, is_read, is_reply) VALUES
+    (' . $fpart . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $sender_id . ', :sender_name, :sender_email, :sender_phone, :sender_address, :sender_ip, 0, 0)';
 	$data_insert = array();
     $data_insert['cat'] = $fcat;
     $data_insert['title'] = $ftitle;
@@ -159,6 +160,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
     $data_insert['sender_name'] = $fname;
     $data_insert['sender_email'] = $femail;
     $data_insert['sender_phone'] = $fphone;
+	$data_insert['sender_address'] = $faddress;
     $data_insert['sender_ip'] = $client_info['ip'];
 	$row_id = $db->insert_id( $sql, 'id', $data_insert );
     if ( $row_id > 0 )
