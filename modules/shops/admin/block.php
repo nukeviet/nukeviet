@@ -45,7 +45,7 @@ $page_title = $array_block[$bid];
 if ($nv_Request->isset_request('checkss,idcheck', 'post') and $nv_Request->get_string('checkss', 'post') == md5(session_id())) {
     $id_array = array_map('intval', $nv_Request->get_array('idcheck', 'post'));
     foreach ($id_array as $id) {
-        $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_block (bid, id, weight) VALUES ('" . $bid . "', '" . $id . "', '0')");
+        $db->query("INSERT IGNORE INTO " . $db_config['prefix'] . "_" . $module_data . "_block (bid, id, weight) VALUES ('" . $bid . "', '" . $id . "', '0')");
     }
     nv_news_fix_block($bid);
     $nv_Cache->delMod($module_name);
