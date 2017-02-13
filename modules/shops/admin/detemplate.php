@@ -16,8 +16,8 @@ $id = $nv_Request->get_int('id', 'get', 0);
 $contents = "NO_" . $id;
 
 if ($id > 0) {
-    $template = $db->query('SELECT title, alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE id = ' . $id)->fetch();
-
+    $template = $db->query('SELECT '. NV_LANG_DATA .'_title, alias FROM ' . $db_config['prefix'] . '_' . $module_data . '_template WHERE id = ' . $id)->fetch();
+    
     $result = $db->query('SELECT fid, listtemplate, field FROM ' . $db_config['prefix'] . '_' . $module_data . '_field');
     if ($result->rowCount()) {
         while (list($fid, $listtemplate, $field) = $result->fetch(3)) {
