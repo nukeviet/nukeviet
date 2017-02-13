@@ -6,6 +6,12 @@
  * @Createdate 1 - 31 - 2010 5 : 12
  */
 
+$(document).ready(function(){
+	$('#departmentid').change(function(){
+		window.location.href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=supporter&departmentid=" + $(this).val();
+	});
+});
+
 function mark_as_unread() {
 	$.ajax({
 		type: "POST",
@@ -92,3 +98,13 @@ function get_alias(a) {
 	});
 	return !1
 };
+
+function nv_open_file( $_this )
+{
+	var area = $_this.data('area');
+	var path = $_this.data('path');
+	var currentpath = $_this.data('currentpath');
+	var type = $_this.data('type');
+	nv_open_browse( script_name + '?' + nv_name_variable + "=upload&popup=1&area=" + area + "&path=" + path + "&currentpath="+currentpath+"&type=" + type, "NVImg", 850, 500, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+	return false;
+}

@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -72,9 +74,10 @@ $lang_module['error_unknow'] = 'Lỗi chưa xác định';
 
 $lang_module['get_update'] = 'Cập nhật hệ thống';
 $lang_module['get_update_error_file_download'] = 'Tải gói cập nhật thất bại';
+$lang_module['get_update_error_file_download1'] = 'Bạn có thể thử cách cập nhật khác theo hướng dẫn tại đây: <a href="%1$s" target="_blank">%1$s</a>';
 $lang_module['get_update_ok'] = 'Gói nâng cấp an toàn, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
 $lang_module['get_update_warning'] = 'Gói nâng cấp này có thể gây nguy hại đến website của bạn nếu có bất kỳ lỗi nào xảy ra, do đó bạn nên sao lưu toàn bộ website trước khi thực hiện, nhấp <a href="%s">Vào đây</a> để tiến hành giải nén gói nâng cấp';
-$lang_module['get_update_warning_permission_folder'] = 'Lỗi không thể tạo thư mục, hãy kiểm tra và tắt chế độ safe_mode';
+$lang_module['get_update_warning_permission_folder'] = 'Lỗi không thể tạo thư mục.';
 $lang_module['get_update_error_movefile'] = 'Lỗi không thể di chuyển file';
 $lang_module['get_update_cantunzip'] = 'Lỗi không thể giải nén. Hãy kiểm tra lại chmod các thư mục.';
 $lang_module['get_update_okunzip'] = 'Giải nén thành công, hệ thống sẽ chuyển trang trong giây lát';
@@ -84,9 +87,4 @@ $lang_module['global_statistics'] = 'Cấu hình thống kê';
 $lang_module['statistic'] = 'Kích hoạt tiện ích thống kê';
 $lang_module['statistics_timezone'] = 'Múi giờ dùng khi thống kê truy cập';
 $lang_module['online_upd'] = 'Kích hoạt tiện ích đếm số người online';
-$lang_module['googleAnalyticsSetDomainName_title'] = 'Đặc tính Domain khi khai báo với Google Analytics';
-$lang_module['googleAnalyticsSetDomainName_0'] = 'Domain duy nhất';
-$lang_module['googleAnalyticsSetDomainName_1'] = 'Domain cấp cao + subdomains chạy song song';
-$lang_module['googleAnalyticsSetDomainName_2'] = 'Nhiều Domain cấp cao chạy song song';
 $lang_module['googleAnalyticsID'] = 'ID tài khoản Google Analytics<br />(Có dạng UA-XXXXX-X, <a href="http://www.google.com/analytics/" target="_blank">xem chi tiết</a>)';
-$lang_module['googleAnalyticsMethod'] = 'Chọn phương pháp theo dõi site của Google Analytics';

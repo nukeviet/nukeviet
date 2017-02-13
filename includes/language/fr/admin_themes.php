@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 10:30:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 17:30';
@@ -133,7 +135,6 @@ $lang_module['autoinstall_theme_error_warning_overwrite'] = 'Notification: Fichi
 $lang_module['autoinstall_theme_overwrite'] = 'Remplacer';
 $lang_module['config'] = 'Configuration d\'interface';
 $lang_module['config_not_exit'] = 'L\'interface %s ne peut pas être configurée';
-
 $lang_module['show_device'] = 'Affiche le nom de l\'appareil';
 $lang_module['show_device_1'] = 'Tous';
 $lang_module['show_device_2'] = 'Afficher mobiles';

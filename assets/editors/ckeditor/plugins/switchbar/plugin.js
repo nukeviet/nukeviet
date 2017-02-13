@@ -11,6 +11,11 @@
 	{
 		exec: function( editor )
 		{
+			// fix when editor maximize
+			if(editor.commands.maximize.state == 1 ){
+				editor.execCommand('maximize');
+			}
+			
 			if ( editor.config.toolbar == editor.config.switchBarSimple ) {
 				editor.config.toolbar = editor.config.switchBarReach;
 			} else {
@@ -22,7 +27,6 @@
 			editor.destroy();
 			CKEDITOR.replace( areaID, config );
 		},
-
 		editorFocus : false,
 		canUndo     : false
 	};

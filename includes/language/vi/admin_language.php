@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -17,6 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights re
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['order'] = 'Thứ tự';
 $lang_module['nv_lang_data'] = 'Ngôn ngữ data';
 $lang_module['site_lang'] = 'Ngôn ngữ mặc định';
 $lang_module['nv_lang_interface'] = 'Ngôn ngữ giao diện';
@@ -78,3 +81,5 @@ $lang_module['nv_check_type_2'] = 'Kiểm tra tất cả';
 $lang_module['nv_lang_check_title'] = 'Kiểm tra các ngôn ngữ chưa được dịch';
 $lang_module['countries'] = 'Ngôn ngữ theo quốc gia';
 $lang_module['countries_name'] = 'Tên quốc gia';
+$lang_module['lang_installed'] = 'Ngôn ngữ đã cài đặt';
+$lang_module['lang_can_install'] = 'Ngôn ngữ chưa cài đặt';

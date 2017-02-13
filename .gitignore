@@ -12,13 +12,40 @@
 /data/logs/ip_logs/
 /data/logs/ref_logs/
 /data/logs/voting_logs/
-/data/tmp/
+/data/tmp/*
 /uploads/logo_*
 /install/default.php
 
-# Ignore some class
-/includes/class/PHPExcel/
-/includes/class/PHPExcel.php
+composer.lock
+#vendor test ignore 
+/vendor/**/demo/
+/vendor/**/example/
+/vendor/**/examples/
+/vendor/**/test/
+/vendor/**/tests/
+/vendor/**/Tests/
+/vendor/**/travis*
+/vendor/**/.travis.yml
+/vendor/**/.scrutinizer.yml
+/vendor/**/phpunit.xml*
+/vendor/**/phpunit.php
+
+#vendor docs ignore
+/vendor/**/doc/
+/vendor/**/docs/
+/vendor/**/readme*
+/vendor/**/README*
+/vendor/**/changelog*
+/vendor/**/CHANGELOG*
+/vendor/**/FAQ*
+/vendor/**/CONTRIBUTING*
+/vendor/**/HISTORY*
+/vendor/**/UPGRADING*
+/vendor/**/UPGRADE*
+/vendor/**/package*
+/vendor/**/phpunit.php
+/vendor/**/.gitignore
+/vendor/**/composer.*
 
 # Ignore some uploads, assets dir
 /assets/download
@@ -39,3 +66,4 @@
 !/uploads/banners/webnhanh_vn.png
 !/data/cache/.htaccess
 !/data/cache/index.html
+!/data/tmp/index.html

@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -42,3 +44,4 @@ $lang_module['note_s'] = 'Note';
 $lang_module['department'] = 'Département';
 $lang_module['sendcontactfailed'] = 'Votre message n\'a pas été envoyé pour des raisons techniques. Désolé pour le désagrément.';
 $lang_module['note'] = 'Complétez le formulaire ci-dessous et nous vous contacterons rapidement.';
+$lang_module['sendcopy'] = 'Envoyer une copie de cette lettre pour moi';

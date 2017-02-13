@@ -5,246 +5,339 @@
  * @Createdate 16-03-2015 12:55
  */
 
-CKEDITOR.dialog.add( 'tbvdownloadDialog', function( editor ) {
-	var lang = editor.lang.tbvdownload;
-	var path_image= (editor.config.filebrowserImageBrowseUrl)? editor.config.filebrowserImageBrowseUrl : '';
+
+CKEDITOR.dialog.add('tbvdownloadDialog', function(editor) {
+	function rhi_log(msg) {
+		//hàm log, bật lên để bug
+		// console.log(msg);
+	}
+    var path_image= (editor.config.filebrowserImageBrowseUrl)? editor.config.filebrowserImageBrowseUrl : '';
 	var sURLVariables = path_image.split('&');
-	var ipath = '';
-	var icurrentpath = '';
+	var ipath = icurrentpath = dirpath_view = '';
     for (var i = 0; i < sURLVariables.length; i++)
     {
         var sParameterName = sURLVariables[i].split('=');
         if (sParameterName[0] == 'path')
         {
-            ipath = sParameterName[1];
+            dirpath_view = ipath = sParameterName[1];
         }
         else if (sParameterName[0] == 'currentpath')
         {
             icurrentpath = sParameterName[1];
         }
     }
-    path_image = (icurrentpath.indexOf(ipath) != -1 ) ? icurrentpath.replace(ipath+'/', '') : '';
+    icurrentpath = (icurrentpath.indexOf(ipath) != -1 ) ? icurrentpath : ipath;
+    
+	var lang = editor.lang.tbvdownload;
+	var domainName = window.location.hostname;
+	rhi_log('domainname: ' + domainName);
+	var editor_id = editor.id;
+	rhi_log('editor_id: ' + editor_id);
+	var DOM_doc;
+	var editor_body;
+	var rhi_list = [];
+	var need_alt = 0;
+	var UploaderUrl = script_name + '?' + nv_name_variable + '=upload&' + nv_fc_variable + '=upload';
+    var RenameUrl = script_name + '?' + nv_name_variable + '=upload&' + nv_fc_variable + '=renameimg';
 
-	function onPasteFrameLoad( win ) {
-		var doc = new CKEDITOR.dom.document( win.document ),
-			body = doc.getBody(),
-			script = doc.getById( 'cke_actscrpt' );
-
-		script && script.remove();
-
-		body.setAttribute( 'contenteditable', true );
-
-		// IE before version 8 will leave cursor blinking inside the document after
-		// editor blurred unless we clean up the selection. (#4716)
-		if ( CKEDITOR.env.ie && CKEDITOR.env.version < 8 ) {
-			doc.getWindow().on( 'blur', function() {
-				doc.$.selection.empty();
-			} );
-		}
-
-		doc.on( 'keydown', function( e ) {
-			var domEvent = e.data,
-				key = domEvent.getKeystroke(),
-				processed;
-
-			switch ( key ) {
-				case 27:
-					this.hide();
-					processed = 1;
-					break;
-
-				case 9:
-				case CKEDITOR.SHIFT + 9:
-					this.changeFocus( 1 );
-					processed = 1;
-			}
-
-			processed && domEvent.preventDefault();
-		}, this );
-
-		editor.fire( 'ariaWidget', new CKEDITOR.dom.element( win.frameElement ) );
-
-		// Handle pending focus.
-		if ( doc.getWindow().getFrame().removeCustomData( 'pendingFocus' ) )
-			body.focus();
+	rhi_log('Uploader : ' + UploaderUrl);
+	var rhi_progress = 0;
+	//--------------------- Hàm xác định body
+	function rhi_determine_body(){
+		//khi người dùng nhấn nút HTML thì thẻ frame bị hủy và cần xác định lại
+		// lay phan tu DOM cua tai lieu
+		DOM_doc = editor.document.getBody();
+		// lấy phần tử jquery thao tác cho nhanh
+		editor_body = $(DOM_doc.$);	
 	}
-
-	// If pasteDialogCommit wasn't canceled by e.g. editor.getClipboardData
-	// then fire paste event.
-	// Do not use editor#paste, because it would start from beforePaste event.
-	editor.on( 'pasteDialogCommit', function( evt ) {
-		if ( evt.data )
-			editor.fire( 'paste', { type: 'auto', dataValue: evt.data } );
-	}, null, null, 1000 );
-
-	return {
-		title: lang.toolbar,
-
-		minWidth: CKEDITOR.env.ie && CKEDITOR.env.quirks ? 370 : 350,
-		minHeight: CKEDITOR.env.quirks ? 250 : 245,
-		onShow: function() {
-			// FIREFOX BUG: Force the browser to render the dialog to make the to-be-
-			// inserted iframe editable. (#3366)
-			this.parts.dialog.$.offsetHeight;
-
-			this.setupContent();
-
-			// Set dialog title to the custom value (set e.g. in editor.openDialog callback) and reset this value.
-			// If custom title not set, use default one.
-			this.parts.title.setHtml( this.customTitle || lang.toolbar );
-			this.customTitle = null;
-		},
-
-		onLoad: function() {
-			if ( ( CKEDITOR.env.ie7Compat || CKEDITOR.env.ie6Compat ) && editor.lang.dir == 'rtl' )
-				this.parts.contents.setStyle( 'overflow', 'hidden' );
-		},
-
-		onOk: function() {
-		  this.commitContent();
-		},
-
-		contents: [ {
-			id: 'general',
-			label: editor.lang.common.generalTab,
-			elements: [
-				{
-					type: 'html',
-					id: 'pasteMsg',
-					html: '<div style="white-space:normal;width:340px">' + lang.pasteMsg + '</div>'
-				},
-				{
-					type: 'html',
-					id: 'editing_area',
-					style: 'width:100%;height:100%',
-					html: '',
-					focus: function() {
-						var iframe = this.getInputElement(),
-							doc = iframe.getFrameDocument(),
-							body = doc.getBody();
-
-						// Frame content may not loaded at the moment.
-						if ( !body || body.isReadOnly() )
-							iframe.setCustomData( 'pendingFocus', 1 );
-						else
-							body.focus();
-					},
-					setup: function() {
-						var dialog = this.getDialog();
-						var htmlToLoad = '<html dir="' + editor.config.contentsLangDirection + '"' +
-							' lang="' + ( editor.config.contentsLanguage || editor.langCode ) + '">' +
-							'<head><style>body{margin:3px;height:95%}</style></head><body>' +
-							'<script id="cke_actscrpt" type="text/javascript">' +
-							'window.parent.CKEDITOR.tools.callFunction(' + CKEDITOR.tools.addFunction( onPasteFrameLoad, dialog ) + ',this);' +
-							'</script></body>' +
-							'</html>';
-
-						var src =
-							CKEDITOR.env.air ?
-								'javascript:void(0)' : // jshint ignore:line
-							CKEDITOR.env.ie ?
-								'javascript:void((function(){' + encodeURIComponent( // jshint ignore:line
-									'document.open();' +
-									'(' + CKEDITOR.tools.fixDomain + ')();' +
-									'document.close();'
-								) + '})())"'
-							: '';
-
-						var iframe = CKEDITOR.dom.element.createFromHtml( '<iframe' +
-							' class="cke_pasteframe"' +
-							' frameborder="0" ' +
-							' allowTransparency="true"' +
-							' src="' + src + '"' +
-							' role="region"' +
-							' aria-label="' + lang.pasteArea + '"' +
-							' aria-describedby="' + dialog.getContentElement( 'general', 'pasteMsg' ).domId + '"' +
-							' aria-multiple="true"' +
-							'></iframe>' );
-
-						iframe.on( 'load', function( e ) {
-							e.removeListener();
-
-							var doc = iframe.getFrameDocument();
-							doc.write( htmlToLoad );
-
-							editor.focusManager.add( doc.getBody() );
-
-							if ( CKEDITOR.env.air )
-								onPasteFrameLoad.call( this, doc.getWindow().$ );
-						}, dialog );
-
-						iframe.setCustomData( 'dialog', dialog );
-
-						var container = this.getElement();
-						container.setHtml( '' );
-						container.append( iframe );
-
-						// IE need a redirect on focus to make
-						// the cursor blinking inside iframe. (#5461)
-						if ( CKEDITOR.env.ie ) {
-							var focusGrabber = CKEDITOR.dom.element.createFromHtml( '<span tabindex="-1" style="position:absolute" role="presentation"></span>' );
-							focusGrabber.on( 'focus', function() {
-								// Since fixDomain is called in src attribute,
-								// IE needs some slight delay to correctly move focus.
-								setTimeout( function() {
-									iframe.$.contentWindow.focus();
-								} );
-							} );
-							container.append( focusGrabber );
-
-							// Override focus handler on field.
-							this.focus = function() {
-								focusGrabber.focus();
-								this.fire( 'focus' );
-							};
-						}
-
-						this.getInputElement = function() {
-							return iframe;
-						};
-
-						// Force container to scale in IE.
-						if ( CKEDITOR.env.ie ) {
-							container.setStyle( 'display', 'block' );
-							container.setStyle( 'height', ( iframe.$.offsetHeight + 2 ) + 'px' );
-						}
-					},
-					commit: function() {
-						var editor = this.getDialog().getParentEditor(),
-							body = this.getInputElement().getFrameDocument().getBody(),
-							bogus = body.getBogus(),
-							html;
-						bogus && bogus.remove();
-
-						// Saving the contents so changes until paste is complete will not take place (#7500)
-						html = body.getHtml();
-						// Opera needs some time to think about what has happened and what it should do now.
-                        html = $.ajax({
-                            method: "POST",
-                            url: script_name + '?' + nv_name_variable + '=upload&' + nv_fc_variable + '=download',
-                            data: { data: html, module_name : nv_module_name, pathsave : $('#pathsave').val() },
-                            async: false
-                        }).responseText
-
-						setTimeout( function() {
-							editor.fire( 'pasteDialogCommit', html );
-						}, 0 );
+	rhi_determine_body();
+    //---------------ham doi ten file
+    function rhi_renameimage( pathsave, new_filename, filename ){
+        var result = false;
+        $.ajax({
+			type : 'POST',
+			url : RenameUrl,
+            dataType: "html",
+            async: false,
+			data : {
+				path : pathsave,
+				newname : new_filename,
+				file : filename
+			},
+            success : function(rn) {
+                if (rn.substring(0, 6) == 'ERROR_') {
+					result = filename; //ten file cu
+				} else {
+			        result = rn;//ten file moi
+                }
+            } 
+        });
+        return result;
+    }
+	//--------------------- Hàm lấy tất cả các phần tử img
+	function rhi_extract_image() {
+		var l = [];
+		var img_src = '';
+		var img_alt = '';
+		var matches = '';
+		var img_domain = '';
+		var isnew = false;
+		//tìm tất cả ảnh trong nội dung
+		editor_body.find('img').each(function(index) {
+			var thisimg = $(this);
+			img_src = thisimg.attr('src');
+			if ( typeof (img_src) == 'undefined')
+				img_src = '';
+			matches = img_src.match(/^https?\:\/\/([^\/?#]+)([\/?#])?.*/i);
+			img_domain = matches && matches[1];
+			if (img_domain && (img_domain.toLowerCase() != domainName.toLowerCase())) {
+				//tìm thấy ảnh đúng là ở ngoài domain hiện tại
+				img_alt = thisimg.attr('alt');
+				if ( typeof (img_alt) == 'undefined')
+					img_alt = '';
+				if (!img_alt)
+					need_alt = 1;
+				var imgobj = {
+					obj : thisimg,
+					alt : img_alt
+				};
+				isnew = l.every(function(rhi) {
+					if (rhi.src != img_src)
+						return true;
+					else {
+						rhi.objs.push(imgobj);
+						rhi_log('image repeat: ' + img_src);
+						return false;
 					}
-				},
-                {
-					type: 'html',
-					id: 'url_path_saveMsg',
-					html: '<div style="white-space:normal;width:340px">' + lang.url_path_save + '</div>'
-				},
-				{
-					// Text input field for the abbreviation title (explanation).
-                    //id cai toi ko lay dc gio la minh dang dung trong 1 thang khac de goi quay ra
-					type: 'html',
-					id: 'pathsave',
-                    style: 'width:100%;height:100%',
-                    html : '<div><input class="cke_dialog_ui_input_text" type="text" name="pathsave" id="pathsave" value="' + path_image + '"></div>'
+				});
+				if (isnew) {
+					l.push({
+						src : img_src,
+						objs : [imgobj]
+					});
+					rhi_log('image found: ' + img_src);
 				}
-			]
-		} ]
+			}
+		});
+		return l;
 	};
-} );
+	//---------------- hàm hiển thị thanh tiến trình
+	function rhi_set_progress(p) {
+		rhi_progress += p;
+		var l = (rhi_list.length == 0) ? 1 : rhi_list.length;
+		var w = Math.round(rhi_progress * 100 / l);
+		if (w < 1)
+			w = 1;
+		$('#rhi_pv').css('width', '' + w + '%');
+		rhi_log('progress: ' + rhi_progress + '/' + l);
+	}
+	//rhi_list = rhi_extract_image();
+	//biến nội của cửa sổ dialogs contents
+	var dc = [];
+	//nạp tab thứ nhất
+	dc.push({
+		id : 'rhi_main',
+		label : lang.title,
+		elements : [{
+			type : 'hbox',
+			widths : ['100%', '120px'],
+			align : 'right',
+			children : [{
+				id : 'rhi_pathsave',
+				type : 'text',
+				label : lang.url_path_save,
+				required : true,
+				'default' : icurrentpath
+			}, {
+				type : 'button',
+				id : 'rhi_browse',
+				hidden : true,
+				style : 'display:inline-block;margin-top:12px;',
+				align : 'center',
+				label : editor.lang.common.browseServer,
+				filebrowser : {
+					action : 'Browse',
+					params : {},
+					onSelect : function(fileUrl) {
+						var dialog = this.getDialog();
+						var p = fileUrl.substring(0, fileUrl.lastIndexOf("/"));
+						dialog.getContentElement('rhi_main', 'rhi_pathsave').setValue(p);
+					}
+				}
+			}]
+		}, {
+			id : 'rhi_Alt',
+			type : 'text',
+			label : lang.altimage,
+			'default' : '',
+		}, {
+			id : 'rhi_noaltonly',
+			type : 'checkbox',
+			label : lang.noaltonly,
+			'default' : 'checked',
+		}, {
+			id : 'rhi_FileName',
+			type : 'text',
+			label : lang.filename,
+			'default' : '',
+		}, {
+			type : 'html',
+			id : 'rhi_table',
+			html : '',
+			setup : function() {
+				var htmlToLoad = '';
+				var container = this.getElement();
+				if (rhi_list.length == 0) {
+					htmlToLoad += lang.noimgae;
+				} else {
+					//có ảnh ngoài, xử lý hiện danh sách
+					htmlToLoad += '<div style="width:100%;height: 200px; overflow-y: auto; display: inline-block;">';
+					htmlToLoad += '<table style="width:100%; background-color:white;">';
+					htmlToLoad += '<thead><tr><th colspan="2">' + lang.imageurl + '</th><th>' + lang.imagestatus + '</th></tr></thead>';
+					htmlToLoad += '<tbody id="eximgs">';
+					rhi_list.every(function(rhi, i) {
+						htmlToLoad += '<tr style="border-top: 1px solid #ccc;">';
+						htmlToLoad += '<td style="vertical-align: middle;"><img src="' + rhi.src + '" style="width:64px;height:64px;padding:2px"></td>';
+						htmlToLoad += '<td><a href="' + rhi.src + '" target="_blank" >' + rhi.src + '</a>';
+						htmlToLoad += '<ol style="padding:3px 0 3px 30px" colspan="2">';
+						rhi.objs.every(function(rgi_e) {
+							var alt = rgi_e.alt;
+							if (!alt)
+								alt = '<span style="color:red">' + lang.noalt + '</span>';
+							htmlToLoad += '<li>' + alt + '</li>';
+							return true;
+						});
+						htmlToLoad += '</ol>';
+						htmlToLoad += '<span style="color:red" id="rhie_' + i + '"></span>';
+						htmlToLoad += '</td><td id="rhis_' + i + '" style="color:red">✘</td></tr>';
+						return true;
+					});
+					htmlToLoad += '</tbody>';
+					htmlToLoad += '</table>';
+					htmlToLoad += '</div>';
+				}
+				container.setHtml(htmlToLoad);
+			},
+		}, {
+			type : 'hbox',
+			widths : ['120px', '100%'],
+			children : [{
+				type : 'button',
+				id : 'rhi_cmd_upload',
+				label : editor.lang.common.uploadSubmit,
+				onClick : function() {
+					if (rhi_list.length == 0) {
+						alert(lang.noimgae2);
+						return false;
+					}
+					var dialog = this.getDialog();
+					var new_alt = dialog.getValueOf('rhi_main', 'rhi_Alt');
+					// kiểm tra xem có cần thông tin về alt không để tiếp tục
+					if (!new_alt)
+						new_alt = '';
+					rhi_log('new_alt: ' + new_alt);
+					var noaltonly = dialog.getValueOf('rhi_main', 'rhi_noaltonly') ? 1 : 0;
+					rhi_log('noaltonly: ' + noaltonly);
+					if (((!noaltonly) || need_alt) && (new_alt == '' )) {
+						alert(lang.require_alt);
+						return false;
+					}
+					// kiểm tra xem có thư mục chưa để tiếp tục
+					var pathsave = dialog.getValueOf('rhi_main', 'rhi_pathsave');
+					if (!pathsave) {
+						alert(lang.require_path_save);
+						return false;
+					}
+					var new_filename = dialog.getValueOf('rhi_main', 'rhi_FileName');
+					if (!new_filename)
+						new_filename = '';
+					else
+						rhi_log('New Filename: ' + new_filename);
+					//thực hiện upload
+					editor.fire('saveSnapshot');
+					k = 0;
+					rhi_list.every(function(rhi, i) {
+						rhi_log('Upload file: ' + rhi.src);
+						$.ajax({
+							type : 'POST',
+							url : UploaderUrl,
+							data : {
+								path : pathsave,
+								fileurl : rhi.src,
+								newfilename : new_filename
+							},
+							success : function(r) {
+								//upload thành công
+								rhi_log('Upload result: ' + r);
+								if (r.substring(0, 6) == 'ERROR_') {
+									$('#rhie_' + i).html(r);
+								} else {
+				                    var new_src = nv_base_siteurl + pathsave + '/' + r;
+									rhi.objs.every(function(rgi_e, j) {
+										var obj = rgi_e.obj;
+										obj.attr('src', new_src).attr('data-cke-saved-src', new_src);
+										if ((!noaltonly) || (rgi_e.alt == ''))
+											obj.attr('alt', new_alt);
+										rhi_log(j + '. ' + rgi_e.alt);
+										return true;
+									});
+									$('#rhis_' + i).html('✔').css('color', 'green');
+								}
+								rhi_set_progress(1);
+							}
+						}).fail(function() {
+							$('#rhie_' + i).html(lang.server_error);
+							rhi_log(lang.server_error);
+							rhi_set_progress(1);
+						});
+						return true;
+					});
+				}
+			}, {
+				type : 'html',
+				id : 'rhi_progress',
+				html : '<div style="width:100%; height:17px; border: 1px solid #ccc;"><div id="rhi_pv" style="height:100%;width:1px; background-color:green;" ><div><div>',
+				setup : function() {
+					rhi_progress = 0;
+					rhi_set_progress(0);
+				}
+			}]
+		}]
+	});
+    //thêm tag huong dan su dung
+	dc.push({
+		id : 'rhi_guide',
+		label : lang.guide,
+		elements : [{
+			type : 'html',
+			id : 'rhi_guide_box',
+			html : '<p>' + lang.guidecontent + '<p>'
+		}]
+	});
+	//thêm tag bản quyền
+	dc.push({
+		id : 'rhi_about',
+		label : lang.about,
+		elements : [{
+			type : 'html',
+			id : 'rhi_about_box',
+			html : '<p>' + lang.copyright + '<p>'
+		}]
+	});
+	//---------------- tra ve dialogs --------------------------------------
+	return {
+		title : lang.title,
+		minWidth : CKEDITOR.env.ie && CKEDITOR.env.quirks ? 670 : 650,
+		minHeight : CKEDITOR.env.quirks ? 390 : 385,
+		onShow : function() {
+			//kích thoạt hàm setup
+			rhi_determine_body();
+			rhi_list = rhi_extract_image();
+			this.setupContent();
+		},
+		onOk : function() {
+			this.commitContent();
+		},
+		contents : dc
+	};
+});

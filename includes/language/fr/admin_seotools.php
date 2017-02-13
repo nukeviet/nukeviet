@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
 $lang_translator['createdate'] = '31/07/2015, 16:30';
@@ -33,16 +35,6 @@ $lang_module['pleasePingAgain'] = 'Vous venez d\'envoyer. Attendez un moment';
 $lang_module['searchEngineValue'] = 'lien';
 $lang_module['searchEngineFailed'] = 'Erreur de lien';
 $lang_module['pingOK'] = 'Sitemap est envoyé avec succès. Cette opération peut être refait dans 60 minutes';
-$lang_module['siteDiagnostic'] = 'Diagnostique du site';
-$lang_module['EngineInfo'] = 'Infos des moteurs de recherches';
-$lang_module['diagnosticDate'] = 'Mettre à jour';
-$lang_module['diagnosticGPR'] = 'Google<br />PageRank';
-$lang_module['diagnosticATR'] = 'Alexa<br />Rank';
-$lang_module['diagnosticGBL'] = 'Google<br />BackLink';
-$lang_module['diagnosticBBL'] = 'Bing<br />BackLink';
-$lang_module['diagnosticABL'] = 'Alexa<br />BackLink';
-$lang_module['diagnosticGID'] = 'Google<br />Indexed';
-$lang_module['diagnosticBID'] = 'Bing<br />Indexed';
 $lang_module['submit'] = 'Soumettre';
 $lang_module['weight'] = 'Numéro';
 $lang_module['robots'] = 'Config. de robots.txt';

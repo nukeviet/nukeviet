@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -49,6 +51,8 @@ $lang_module['related_new'] = 'Newer articles';
 $lang_module['related'] = 'Older articles';
 $lang_module['savefile'] = 'Save';
 $lang_module['rating'] = 'Article reviews';
+$lang_module['rating_average'] = 'Ranking';
+$lang_module['rating_count'] = 'vote';
 $lang_module['stringrating'] = 'Total notes of this article: %1$s in %2$s rating';
 $lang_module['star_note'] = 'Click on stars to rate this article';
 $lang_module['star_verypoor'] = 'Very poor article';
@@ -99,6 +103,7 @@ $lang_module['counter'] = 'counter';
 $lang_module['total_comment'] = 'Feedback';
 $lang_module['search_cat'] = 'Search in topics';
 $lang_module['search_all'] = 'Search all topics';
+$lang_module['search_date_rule'] = 'dd.mm.yyyy';
 $lang_module['content'] = 'Management Articles';
 $lang_module['add_content'] = 'Add Articles';
 $lang_module['topic_sl'] = 'Select the relevant group';
@@ -132,10 +137,6 @@ $lang_module['error_addcontent'] = 'Error: You have not been granted permission 
 $lang_module['errorsave'] = 'System errors do not update the content, you check the article title may be identical. Change it and try again.';
 $lang_module['update_content'] = 'Edit Post';
 $lang_module['del_content'] = 'Delete Post';
-$lang_module['search_date_rule'] = 'dd.mm.yyyy';
-$lang_module['rating_average'] = 'Ranking';
-$lang_module['rating_count'] = 'vote';
-
 $lang_module['no_public'] = 'Note: This article has not yet been published, only those with the right manipulation can view the content.';
 $lang_module['status_alert'] = 'Article are in state: % 1$s';
 $lang_module['status_0'] = 'Stop effect';

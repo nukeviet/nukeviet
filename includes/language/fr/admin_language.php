@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -17,6 +19,7 @@ $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits r
 $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
 
+$lang_module['order'] = 'Ordre';
 $lang_module['nv_lang_data'] = 'Langue de données';
 $lang_module['site_lang'] = 'Langue par défaut';
 $lang_module['nv_lang_interface'] = 'Langue d\'interface';
@@ -78,3 +81,5 @@ $lang_module['nv_check_type_2'] = 'Vérifier tout';
 $lang_module['nv_lang_check_title'] = 'Vérifier les lignes pas encore traduites';
 $lang_module['countries'] = 'Langue selon pays';
 $lang_module['countries_name'] = 'Pays';
+$lang_module['lang_installed'] = 'Langue a installé';
+$lang_module['lang_can_install'] = 'Langue est pas installé';

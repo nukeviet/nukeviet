@@ -57,7 +57,7 @@
 				</div>
 			</div>
 		</div>
-		<input type="hidden" name="checkss" value="{CHECKSS}" />
+		<input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
 		<label><em>{LANG.search_note}</em></label>
 	</form>
 </div>
@@ -89,7 +89,14 @@
 				<tr class="{ROW.class}">
 					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
 					<td class="text-left">
-						<p><a target="_blank" href="{ROW.link}">{ROW.title}</a></p>
+						<p>
+						    <!-- BEGIN: url -->
+						    <a target="_blank" href="{ROW.link}">{ROW.title}</a>
+						    <!-- END: url -->
+						    <!-- BEGIN: text -->
+						    <strong><em>{LANG.status_4}</em></strong>: {ROW.title}
+						    <!-- END: text -->
+						</p>
 					</td>
 					<td>{ROW.publtime}</td>
 					<td>{ROW.username}</td>
@@ -114,7 +121,7 @@
 							<option value="{ACTION.value}">{ACTION.title}</option>
 							<!-- END: action -->
 						</select>
-						<input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{SITEKEY}', '{LANG.msgnocheck}')" value="{LANG.action}" />
+						<input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{NV_CHECK_SESSION}', '{LANG.msgnocheck}')" value="{LANG.action}" />
 					</td>
 				</tr>
 			</tfoot>
@@ -130,6 +137,32 @@
 	$(document).ready(function() {
 		$("#catid").select2({
 			language: '{NV_LANG_DATA}'
+		});
+		
+		$(".btn_edit").click(function() {
+			var id = $(this).attr('data-id');
+			var link = $(this).attr('href');
+			
+			$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'id=' + id + '&check_edit=1', function(res) {
+				var r_split = res.split('_');
+				if (r_split[0] == 'NO') { // nếu có, xác nhận có chiếm quyền hay không
+					if (confirm(r_split[1])) {
+						$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'id=' + id + '&get_edit=1', function(res) {
+							window.location.href = link;
+						});
+					}
+				} else if (r_split[0] == 'ERR') { // quyền hạn thấp hơn hoặc bằng nhau, k cho phép sửa, chiếm quyền
+					alert(r_split[1]);
+				} else if (r_split[0] == 'EDIT') { // quá thời gian cho phép, thì vào sửa luôn
+					$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'id=' + id + '&get_edit=1', function(res) {
+						window.location.href = link;
+					});
+				} else { // nếu chưa có người sửa, vào sửa luôn
+					window.location.href = link; 
+				}
+				return false;
+			});
+			return false;
 		});
 	});
 </script>

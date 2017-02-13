@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -34,16 +36,6 @@ $lang_module['pleasePingAgain'] = 'Bạn vừa mới gửi đi rồi. Hãy đợ
 $lang_module['searchEngineValue'] = 'Đường dẫn để PING';
 $lang_module['searchEngineFailed'] = 'Lỗi link để ping';
 $lang_module['pingOK'] = 'Hệ thống đã gửi file Sitemap thành công. Việc này có thể được thực hiện lại sau 60 phút';
-$lang_module['siteDiagnostic'] = 'Chẩn đoán site';
-$lang_module['EngineInfo'] = 'Thông tin từ các máy chủ tìm kiếm';
-$lang_module['diagnosticDate'] = 'Cập nhật';
-$lang_module['diagnosticGPR'] = 'Google<br />PageRank';
-$lang_module['diagnosticATR'] = 'Alexa<br />Rank';
-$lang_module['diagnosticGBL'] = 'Google<br />BackLink';
-$lang_module['diagnosticBBL'] = 'Bing<br />BackLink';
-$lang_module['diagnosticABL'] = 'Alexa<br />BackLink';
-$lang_module['diagnosticGID'] = 'Google<br />Indexed';
-$lang_module['diagnosticBID'] = 'Bing<br />Indexed';
 $lang_module['submit'] = 'Thực hiện';
 $lang_module['weight'] = 'Stt';
 

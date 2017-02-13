@@ -8,17 +8,19 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-if ( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $module_version = array(
-	'name' => 'Comment',
-	'modfuncs' => '',
-	'submenu' => '',
-	'is_sysmod' => 0,
-	'virtual' => 0,
-	'version' => '4.0.21',
-	'date' => 'Mon, 27 Jan 2014 00:08:04 GMT',
-	'author' => 'VINADES (contact@vinades.vn)',
-	'uploads_dir' => array(),
-	'note' => ''
+    'name' => 'Comment',
+    'modfuncs' => '',
+    'submenu' => '',
+    'is_sysmod' => 0,
+    'virtual' => 0,
+    'version' => '4.0.29',
+    'date' => 'Mon, 27 Jan 2014 00:08:04 GMT',
+    'author' => 'VINADES (contact@vinades.vn)',
+    'uploads_dir' => array(),
+    'note' => ''
 );

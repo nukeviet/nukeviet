@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 29, 2010, 05:00:00 PM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '30/06/2010';
@@ -100,6 +102,7 @@ $lang_module['addlogo'] = 'Ajouter le logo';
 $lang_module['addlogosave'] = 'Sauver';
 $lang_module['notlogo'] = 'Erreur: Le système ne trouve pas le fichier de logo, peut-être vous n\'avez pas encore configurer l\'image de logo ou le fichier d\'image a été supprimé, veuillez vous re-configurer';
 $lang_module['upload_logo'] = 'Logo à ajouter aux images';
+$lang_module['upload_logo_pos'] = 'La position du logo';
 $lang_module['selectimg'] = 'Sélectionner l\'image';
 $lang_module['autologo'] = 'Ajouter automatiquement le logo aux images';
 $lang_module['autologomodall'] = 'Tous les modules';
@@ -107,6 +110,15 @@ $lang_module['logosizecaption'] = 'Taille de logo';
 $lang_module['imagewith'] = 'Si la largeur de l\'image';
 $lang_module['logowith'] = 'Largeur de logo est égale';
 $lang_module['logosize3'] = 'Utiliser la taille originale du logo, taille maximum du logo';
+$lang_module['logoposbottomright'] = 'Bas, à droite';
+$lang_module['logoposbottomleft'] = 'Bottom, gauche';
+$lang_module['logoposbottomcenter'] = 'Ci-dessous, au milieu';
+$lang_module['logoposcenterright'] = 'Au milieu, à droite';
+$lang_module['logoposcenterleft'] = 'Au milieu, à gauche';
+$lang_module['logoposcentercenter'] = 'Dans la photo du milieu';
+$lang_module['logopostopright'] = 'Ci-dessus, à droite';
+$lang_module['logopostopleft'] = 'Au-dessus, à gauche';
+$lang_module['logopostopcenter'] = 'Ci-dessus, au milieu';
 $lang_module['fileimage'] = 'Image';
 $lang_module['altimage'] = 'Note de l\'image';
 $lang_module['uploadconfig'] = 'Configuration du Transfert';
@@ -155,3 +167,5 @@ $lang_module['addlogo_error_small'] = 'Cette image a des mesures insuffisants, n
 $lang_module['upload_alt_require'] = 'Obligé de saisir une commentaire pour le fichier en cas de mettre en ligne';
 $lang_module['upload_auto_alt'] = 'Déterminer la description de l\'image automatiquement';
 $lang_module['upload_alt_note'] = 'Veuillez saisir des commentaires pour le fichier avant';
+$lang_module['upload_view_thumbnail'] = 'Passer à l\'affichage de la grille';
+$lang_module['upload_view_detail'] = 'Passer à un affichage de la liste';

@@ -8,7 +8,7 @@
             <button type="button" class="close">&times;</button>
             {GLANG.feedback}
         </div>
-        <div class="panel-body" data-cs="{CHECKSS}"></div>
+        <div class="panel-body" data-cs="{NV_CHECK_SESSION}"></div>
     </div>
 </div>
 <!-- END: main -->

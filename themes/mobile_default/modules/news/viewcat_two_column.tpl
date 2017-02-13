@@ -31,9 +31,9 @@
 					<li><em class="fa fa-comment-o">&nbsp;</em> {LANG.total_comment}: {NEWSTOP.hitscm}</li>
 				</ul>
 			</div>
-			<p class="text-justify">
+			<div class="text-justify">
 				{NEWSTOP.hometext}
-			</p>
+			</div>
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
 				{ADMINLINK}
@@ -74,11 +74,11 @@
 				</ul>
 			</div>
 			<!-- BEGIN: image -->
-			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH01}" class="img-thumbnail pull-left imghome" /></a>
+			<a href="{CONTENT.link}" title="{CONTENT.title}"><img alt="{HOMEIMGALT01}" src="{HOMEIMG01}" width="{IMGWIDTH0}" class="img-thumbnail pull-left imghome" /></a>
 			<!-- END: image -->
-			<p class="text-justify">
+			<div class="text-justify">
 				{CONTENT.hometext}
-			</p>
+			</div>
 			<!-- BEGIN: adminlink -->
 			<p class="text-right">
 				{ADMINLINK}
@@ -102,7 +102,7 @@
 <div class="clear">&nbsp;</div>
 
 <script type="text/javascript">
-$(window).load(function(){
+$(window).on('load', function() {
     $.each( $('.two_column .panel-body'), function(k,v){
         if( k % 2 == 0 ){
             var height1 = $($('.two_column .panel-body')[k]).height();

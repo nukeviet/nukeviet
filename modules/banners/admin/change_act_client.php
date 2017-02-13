@@ -8,22 +8,30 @@
  * @Createdate 3/11/2010 22:27
  */
 
-if( ! defined( 'NV_IS_FILE_ADMIN' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_ADMIN')) {
+    die('Stop!!!');
+}
 
-if( ! defined( 'NV_IS_AJAX' ) ) die( 'Wrong URL' );
+if (! defined('NV_IS_AJAX')) {
+    die('Wrong URL');
+}
 
-$id = $nv_Request->get_int( 'id', 'post', 0 );
+$id = $nv_Request->get_int('id', 'post', 0);
 
-if( empty( $id ) ) die( 'Stop!!!' );
+if (empty($id)) {
+    die('Stop!!!');
+}
 
 $query = 'SELECT act FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE id=' . $id;
-$row = $db->query( $query )->fetch();
-if( empty( $row ) ) die( 'Stop!!!' );
+$row = $db->query($query)->fetch();
+if (empty($row)) {
+    die('Stop!!!');
+}
 
 $act = $row['act'] ? 0 : 1;
 
 $sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_clients SET act=' . $act . ' WHERE id=' . $id;
-$return = $db->exec( $sql ) ? 'OK' : 'NO';
+$return = $db->exec($sql) ? 'OK' : 'NO';
 
 include NV_ROOTDIR . '/includes/header.php';
 echo $return . '|act_' . $id . '|' . $id . '|client_info';

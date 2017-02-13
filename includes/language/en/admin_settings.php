@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -91,6 +93,7 @@ $lang_module['lang_geo'] = 'Enable the definition of language according to count
 $lang_module['lang_geo_config'] = 'Configure the function to define language by country';
 $lang_module['site_lang'] = 'Default language';
 $lang_module['site_timezone'] = 'Site\'s timezone';
+$lang_module['current_time'] = 'Current time: %s';
 $lang_module['date_pattern'] = 'Date format';
 $lang_module['time_pattern'] = 'Time display format';
 $lang_module['gzip_method'] = 'Activate gzip';
@@ -199,6 +202,7 @@ $lang_module['note_ssl_modules'] = 'Each language will have different modules, c
 $lang_module['timezoneAuto'] = 'By computer of visitor';
 $lang_module['timezoneByCountry'] = 'By country of visitor';
 $lang_module['allow_switch_mobi_des'] = 'Allow to switch mobile, desktop theme';
+$lang_module['allow_theme_type'] = 'Allow theme type';
 $lang_module['ftp_auto_detect_root'] = 'Auto detection';
 $lang_module['ftp_error_full'] = 'Please enter all the parameters to auto detection the Remote path';
 $lang_module['ftp_error_detect_root'] = 'Can not find any suitable parameters, check your username and password';
@@ -221,3 +225,12 @@ $lang_module['notification_active'] = 'Show notification when a new activity';
 $lang_module['notification_autodel'] = 'Automatically deleted after a period of notice';
 $lang_module['notification_autodel_note'] = 'Fill <strong>0</strong> if you do not want to automatically delete';
 $lang_module['notification_day'] = 'Day';
+$lang_module['is_login_blocker'] = 'Activate login blocker';
+$lang_module['login_number_tracking'] = 'Wrong logins maximum track time period';
+$lang_module['login_time_tracking'] = 'Time Tracking';
+$lang_module['login_time_ban'] = 'Ban time';
+$lang_module['two_step_verification'] = 'Requires two-step authentication log in';
+$lang_module['two_step_verification0'] = 'Not required';
+$lang_module['two_step_verification1'] = 'Admin Area';
+$lang_module['two_step_verification2'] = 'Site area';
+$lang_module['two_step_verification3'] = 'All areas';

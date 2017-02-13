@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -20,7 +22,10 @@ $lang_translator['langtype'] = 'lang_module';
 $lang_module['edit_title'] = 'Xem nội dung gửi';
 $lang_module['add_row_title'] = 'Thêm bộ phận';
 $lang_module['department_title'] = 'Các bộ phận';
+$lang_module['department_no_home'] = 'Không hiển thị tại trang chính module';
+$lang_module['department_parent'] = 'Thuộc bộ phận';
 $lang_module['alias'] = 'Liên kết tĩnh';
+$lang_module['image'] = 'Hình ảnh';
 $lang_module['error_alias'] = 'Lỗi: chưa có liên kết tĩnh';
 $lang_module['duplicate_alias'] = 'Lỗi: Tiêu đề hoặc liên kết tính đã tồn tại';
 $lang_module['number'] = 'Thứ tự';
@@ -70,6 +75,13 @@ $lang_module['delall'] = 'Xóa tất cả';
 $lang_module['siteinfo_new'] = 'Liên hệ chưa đọc';
 $lang_module['no_row_contact'] = 'Không có liên hệ nào gửi đến bạn';
 $lang_module['url_for_iframe'] = 'Liên kết dùng chèn cho iframe';
+$lang_module['supporter'] = 'Nhân viên hỗ trợ';
+$lang_module['supporter_add'] = 'Thêm nhân viên hỗ trợ';
+$lang_module['supporter_edit'] = 'Sửa thông tin nhân viên hỗ trợ';
+$lang_module['supporter_contact_add'] = 'Thêm thông tin';
+$lang_module['add'] = 'Thêm mới';
+$lang_module['active'] = 'Hoạt động';
+$lang_module['full_name'] = 'Họ tên';
 
 $lang_module['notification_contact_new'] = '<strong>%s</strong> gửi thư liên hệ với tiêu đề <strong>%s</strong>';
 $lang_module['is_default'] = 'Mặc định';
@@ -82,3 +94,7 @@ $lang_module['cat'] = 'Chủ đề';
 $lang_module['mark_as_unread'] = 'Đánh dấu là chưa đọc';
 $lang_module['mark_as_read'] = 'Đánh dấu là đã đọc';
 $lang_module['please_choose'] = 'Hãy chọn ít nhất một thư trong danh sách trên.';
+
+$lang_module['error_required_departmentid'] = 'Lỗi: bạn cần nhập dữ liệu cho Departmentid';
+$lang_module['error_required_full_name'] = 'Lỗi: bạn cần nhập dữ liệu cho Full name';
+$lang_module['error_required_phone'] = 'Lỗi: bạn cần nhập dữ liệu cho Phone';

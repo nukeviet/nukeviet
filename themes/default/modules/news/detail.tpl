@@ -45,10 +45,11 @@
                     <p class="text-center"><img alt="{DETAIL.image.alt}" src="{DETAIL.homeimgfile}" alt="{DETAIL.image.note}" class="img-thumbnail"/></p>
             </figure>
             <!-- END: empty -->
-            <div class="hometext">{DETAIL.hometext}</div>
 			<!-- END: imgthumb -->
+			 
+			 <div class="hometext m-bottom">{DETAIL.hometext}</div>
+			
     		<!-- BEGIN: imgfull -->
-    		<div class="hometext m-bottom">{DETAIL.hometext}</div>
     		<figure class="article center">
     			<img alt="{DETAIL.image.alt}" src="{DETAIL.image.src}" width="{DETAIL.image.width}" class="img-thumbnail" />
     			<!-- BEGIN: note --><figcaption>{DETAIL.image.note}</figcaption><!-- END: note -->
@@ -57,7 +58,7 @@
 		</div>
 		<!-- END: showhometext -->
 		<div id="news-bodyhtml" class="bodytext margin-bottom-lg">
-			{DETAIL.bodytext}
+			{DETAIL.bodyhtml}
 		</div>
 		<!-- BEGIN: author -->
         <div class="margin-bottom-lg">
@@ -102,11 +103,11 @@
 	<div class="panel-body">
         <form id="form3B" action="">
             <div class="h5 clearfix">
-                <p>{STRINGRATING}</p>
+                <p id="stringrating">{STRINGRATING}</p>
                 <!-- BEGIN: data_rating -->
                 <span itemscope itemtype="http://data-vocabulary.org/Review-aggregate">{LANG.rating_average}:
-                    <span itemprop="rating">{DETAIL.numberrating}</span> -
-                    <span itemprop="votes">{DETAIL.click_rating}</span> {LANG.rating_count}
+                    <span itemprop="rating" id="numberrating">{DETAIL.numberrating}</span> -
+                    <span itemprop="votes" id="click_rating">{DETAIL.click_rating}</span> {LANG.rating_count}
                 </span>
                 <!-- END: data_rating -->
                 <div style="padding: 5px;">
@@ -172,7 +173,7 @@ $(function() {
             		<!-- BEGIN: loop -->
             		<li>
             			<em class="fa fa-angle-right">&nbsp;</em>
-            			<a href="{TOPIC.link}" <!-- BEGIN: tooltip -->data-placement="{TOOLTIP_POSITION}" data-content="{TOPIC.hometext}" data-img="{TOPIC.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{TOPIC.title}">{TOPIC.title}</a>
+            			<a href="{TOPIC.link}" {TOPIC.target_blank} <!-- BEGIN: tooltip -->data-placement="{TOOLTIP_POSITION}" data-content="{TOPIC.hometext_clean}" data-img="{TOPIC.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{TOPIC.title}"><h4>{TOPIC.title}</h4></a>
             			<em>({TOPIC.time})</em>
             			<!-- BEGIN: newday -->
             			<span class="icon_new">&nbsp;</span>
@@ -190,11 +191,11 @@ $(function() {
     	<!-- BEGIN: related_new -->
     	<p class="h3"><strong>{LANG.related_new}</strong></p>
     	<div class="clearfix">
-            <ul class="related">
+            <ul class="related list-inline">
         		<!-- BEGIN: loop -->
         		<li>
         			<em class="fa fa-angle-right">&nbsp;</em>
-        			<a href="{RELATED_NEW.link}" <!-- BEGIN: tooltip -->data-placement="{TOOLTIP_POSITION}" data-content="{RELATED_NEW.hometext}" data-img="{RELATED_NEW.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{RELATED_NEW.title}">{RELATED_NEW.title}</a>
+        			<a href="{RELATED_NEW.link}" {RELATED_NEW.target_blank} <!-- BEGIN: tooltip -->data-placement="{TOOLTIP_POSITION}" data-content="{RELATED_NEW.hometext_clean}" data-img="{RELATED_NEW.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{RELATED_NEW.title}"><h4>{RELATED_NEW.title}</h4></a>
         			<em>({RELATED_NEW.time})</em>
         			<!-- BEGIN: newday -->
         			<span class="icon_new">&nbsp;</span>
@@ -208,11 +209,11 @@ $(function() {
     	<!-- BEGIN: related -->
     	<p class="h3"><strong>{LANG.related}</strong></p>
     	<div class="clearfix">
-            <ul class="related">
+            <ul class="related list-inline">
         		<!-- BEGIN: loop -->
         		<li>
         			<em class="fa fa-angle-right">&nbsp;</em>
-        			<a class="list-inline" href="{RELATED.link}"<!-- BEGIN: tooltip --> data-placement="{TOOLTIP_POSITION}" data-content="{RELATED.hometext}" data-img="{RELATED.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{RELATED.title}">{RELATED.title}</a>
+        			<a href="{RELATED.link}" {RELATED.target_blank} <!-- BEGIN: tooltip --> data-placement="{TOOLTIP_POSITION}" data-content="{RELATED.hometext_clean}" data-img="{RELATED.imghome}" data-rel="tooltip"<!-- END: tooltip --> title="{RELATED.title}"><h4>{RELATED.title}</h4></a>
         			<em>({RELATED.time})</em>
         			<!-- BEGIN: newday -->
         			<span class="icon_new">&nbsp;</span>

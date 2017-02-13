@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -34,3 +36,5 @@ $lang_module['goback'] = 'Quay lại';
 $lang_module['voting_total'] = 'Tổng số';
 $lang_module['voting_counter'] = 'lượt';
 $lang_module['voting_pubtime'] = 'Tính từ';
+$lang_module['enter_captcha'] = 'Mời nhập mã xác nhận';
+$lang_module['enter_captcha_error'] = 'Vui lòng nhập mã xác nhận';

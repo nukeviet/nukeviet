@@ -9,7 +9,9 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
@@ -73,7 +75,7 @@ $lang_module['search_on_internet'] = 'Tìm trên toàn mạng Internet';
 $lang_module['search_adv_internet'] = 'Mở rộng trên Internet';
 $lang_module['search_on_nuke'] = 'Tìm trong site';
 $lang_module['search_none'] = 'Không tìm thấy dữ liệu nào có liên quan đến';
-$lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 truờng tìm kiếm';
+$lang_module['empty_data_search'] = 'Bạn cần chọn ít nhất 1 trường tìm kiếm';
 $lang_module['search_in_module'] = 'trong mục';
 $lang_module['view_all_title'] = 'Xem tất cả các kết quả tìm kiếm';
 $lang_module['pages_title'] = 'Trang';
@@ -136,6 +138,7 @@ $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được n�
 $lang_module['update_content'] = 'Sửa bài viết';
 $lang_module['del_content'] = 'Xóa bài viết';
 $lang_module['no_public'] = 'Chú ý: Bài viết này chưa được xuất bản, chỉ có những người có quyền thao tác mới có thể xem được nội dung.';
+$lang_module['insrss_not_auth'] = 'Tường lửa đã chặn truy cập khu vực này';
 
 $lang_module['status_alert'] = 'Bài viết đang ở trạng thái: %1$s';
 $lang_module['status_0'] = 'Ngưng hiệu lực';

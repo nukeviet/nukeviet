@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Apr 15, 2011, 08:22:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '15/04/2011, 15:22';
@@ -39,6 +41,7 @@ $lang_module['m_list'] = 'Menu list';
 $lang_module['add_type_menu'] = 'Select menu type';
 $lang_module['module_name'] = 'Select module';
 $lang_module['cho_module'] = 'Select module';
+$lang_module['error_menu_block'] = 'Error: Enter name of menu block';
 $lang_module['action'] = 'Activities';
 $lang_module['display'] = 'Display';
 $lang_module['data_no'] = 'There is no data in the system';
@@ -78,8 +81,6 @@ $lang_module['add_type_css'] = 'CSS class name.';
 $lang_module['add_type_css_info'] = 'Class name (CSS) to define the menu interface.';
 $lang_module['add_error_module'] = 'Error: No any module selected';
 $lang_module['add_error_module_exist'] = 'Error: Module not exist';
-$lang_module['error_menu_block'] = 'Error: Enter name of menu block';
-
 $lang_module['action_menu_reload'] = 'Menu reload';
 $lang_module['action_menu_reload_confirm'] = 'This action will reload the ingredients is the subject of the current module. Do you want to continue?';
 $lang_module['action_menu_reload_success'] = 'Already successfully reloaded menu!';
@@ -90,5 +91,6 @@ $lang_module['action_menu_sys_1'] = 'Module name';
 $lang_module['action_menu_sys_2'] = 'Module name, submenu is catalogs or functions';
 $lang_module['action_menu_sys_3'] = 'Catalogs or functions in module';
 $lang_module['icon'] = 'Icon';
+$lang_module['image'] = 'Image';
 $lang_module['action_form'] = 'Submit';
 $lang_module['msgnocheck'] = 'No menu selected';

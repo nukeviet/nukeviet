@@ -8,7 +8,9 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if( ! defined( 'NV_IS_FILE_MODULES' ) ) die( 'Stop!!!' );
+if (! defined('NV_IS_FILE_MODULES')) {
+    die('Stop!!!');
+}
 
 $sql_drop_module = array();
 
@@ -23,6 +25,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  alias varchar(250) NOT NULL,
  image varchar(255) DEFAULT '',
  imagealt varchar(255) DEFAULT '',
+ imageposition tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
  description text,
  bodytext mediumtext NOT NULL,
  keywords text,
@@ -48,7 +51,7 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_config VALUES
 ('viewtype', '0'),
 ('facebookapi', ''),
-('per_page', '5'),
+('per_page', '20'),
 ('news_first', '0'),
 ('related_articles', '5')";
 
@@ -62,3 +65,5 @@ $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module,
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'adminscomm', '')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'sortcomm', '0')";
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'captcha', '1')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'perpagecomm', '5')";
+$sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'timeoutcomm', '360')";

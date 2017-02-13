@@ -1,23 +1,23 @@
 <!-- BEGIN: tree -->
 <li class="{DIRTREE.class1}">
-	<span {DIRTREE.style} class="{DIRTREE.class2}" title="{DIRTREE.title}"> &nbsp;{DIRTREE.titlepath}</span>
-	<ul>
-		<!-- BEGIN: tree_content -->
-		{TREE_CONTENT}
-		<!-- END: tree_content -->
-	</ul>
+    <span {DIRTREE.style} class="{DIRTREE.class2}" title="{DIRTREE.title}"> &nbsp;{DIRTREE.titlepath}</span>
+    <ul>
+        <!-- BEGIN: tree_content -->
+        {TREE_CONTENT}
+        <!-- END: tree_content -->
+    </ul>
 </li>
 <!-- END: tree -->
 <!-- BEGIN: main -->
 <ul id="foldertree" class="filetree">
-	<li class="open collapsable">
-		<span {DATA.style} class="{DATA.class}" title="{DATA.title}"> &nbsp; {DATA.titlepath}</span>
-		<ul>
-			<!-- BEGIN: main_content -->
-			{CONTENT}
-			<!-- END: main_content -->
-		</ul>
-	</li>
+    <li class="open collapsable">
+        <span {DATA.style} class="{DATA.class}" title="{DATA.title}"> &nbsp; {DATA.titlepath}</span>
+        <ul>
+            <!-- BEGIN: main_content -->
+            {CONTENT}
+            <!-- END: main_content -->
+        </ul>
+    </li>
 </ul>
 
 <span class="upload-hide" id="path" title="{PATH}"></span>
@@ -40,14 +40,14 @@
 NVUPLOAD.init();
 
 $("#foldertree").treeview({
-	collapsed : true,
-	unique : true,
-	persist : "location"
+    collapsed : true,
+    unique : true,
+    persist : "location"
 });
 
 $('span.folder').bind('mouseup contextmenu', function(e){
-	e.preventDefault();
-	folderMouseup(this, e);
+    e.preventDefault();
+    folderMouseup(this, e);
 });
 //]]>
 </script>

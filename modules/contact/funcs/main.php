@@ -101,7 +101,7 @@ if ( $nv_Request->isset_request( 'checkss', 'post' ) )
     if ( ! defined( 'NV_IS_USER' ) )
     {
         $fname = nv_substr( $nv_Request->get_title( 'fname', 'post', '', 1 ), 0, 100 );
-		$faddress = nv_substr( $nv_Request->get_title( 'faddress', 'post', '', 1 ), 0, 100 );
+		$faddress = nv_substr( $nv_Request->get_title( 'faddress', 'post', '', 1 ), 0, 255 );
         $femail = nv_substr( $nv_Request->get_title( 'femail', 'post', '', 1 ), 0, 100 );
     }
 

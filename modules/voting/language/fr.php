@@ -3,13 +3,15 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
-if( ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_MAINFILE')) {
+    die( 'Stop!!!' );
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
@@ -34,3 +36,5 @@ $lang_module['goback'] = 'Retourner';
 $lang_module['voting_total'] = 'Totale';
 $lang_module['voting_counter'] = 'votes';
 $lang_module['voting_pubtime'] = 'depuis';
+$lang_module['enter_captcha'] = 'Entrez le code de vérification';
+$lang_module['enter_captcha_error'] = 'S\'il vous plaît entrez le code de confirmation';
