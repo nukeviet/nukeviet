@@ -185,7 +185,7 @@ if (! empty($data_content['order_note'])) {
     $xtpl->parse('main.order_note');
 }
 $xtpl->assign('order_total', nv_number_format($data_content['order_total'], nv_get_decimals($pro_config['money_unit'])));
-$xtpl->assign('unit', $data_content['unit_total']);
+$xtpl->assign('unit', $money_config[$data_content['unit_total']]['symbol']);
 
 // transaction_status: Trang thai giao dich:
 // -1 - Giao dich cho duyet

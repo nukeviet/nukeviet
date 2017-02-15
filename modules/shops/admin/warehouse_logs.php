@@ -113,7 +113,7 @@ $xtpl->assign('NV_UPLOADS_DIR', NV_UPLOADS_DIR);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('SEARCH', $array_search);
-$xtpl->assign('MONEY_UNIT', $pro_config['money_unit']);
+$xtpl->assign('MONEY_UNIT', $money_config[$pro_config['money_unit']]['symbol']);
 
 if ($wid > 0) {
     $array_warehouse['addtime'] = nv_date('H:i d/m/Y', $array_warehouse['addtime']);
