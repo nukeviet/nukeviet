@@ -44,6 +44,7 @@ $lang_module['client_list'] = 'Khách hàng';
 $lang_module['client_list2'] = 'Danh sách Khách hàng';
 $lang_module['reg_time'] = 'Ngày đăng ký';
 $lang_module['is_act'] = 'Hiệu lực';
+$lang_module['require_image'] = 'Yêu cầu hình ảnh';
 $lang_module['act0'] = 'Đang đợi chấp nhận';
 $lang_module['act1'] = 'Đang hoạt động';
 $lang_module['act2'] = 'Đã hết hạn';
