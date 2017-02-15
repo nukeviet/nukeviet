@@ -481,6 +481,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  id mediumint(11) NOT NULL,
  code char(3) NOT NULL,
  currency varchar(250) NOT NULL,
+ symbol varchar(3) NOT NULL,
  exchange float NOT NULL default '0',
  round varchar(10) NOT NULL,
  number_format varchar(5) NOT NULL DEFAULT ',||.',

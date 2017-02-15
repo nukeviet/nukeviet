@@ -1737,7 +1737,7 @@ function cart_product($data_content, $coupons_code, $order_info, $array_error_nu
     }
 
     $xtpl->assign('price_total', nv_number_format($price_total, nv_get_decimals($pro_config['money_unit'])));
-    $xtpl->assign('unit_config', $pro_config['money_unit']);
+    $xtpl->assign('unit_config',$money_config[$pro_config['money_unit']]['symbol'] );
     $xtpl->assign('LINK_DEL_ALL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=remove');
     $xtpl->assign('LINK_CART', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=cart');
     $xtpl->assign('LINK_PRODUCTS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '');
@@ -1851,7 +1851,7 @@ function uers_order($data_content, $data_order, $total_coupons, $order_info, $er
 
     $xtpl->assign('price_coupons', nv_number_format($total_coupons, nv_get_decimals($pro_config['money_unit'])));
     $xtpl->assign('price_total', nv_number_format($price_total - $total_coupons, nv_get_decimals($pro_config['money_unit'])));
-    $xtpl->assign('unit_config', $pro_config['money_unit']);
+    $xtpl->assign('unit_config', $money_config[$pro_config['money_unit']]['symbol']);
     $xtpl->assign('weight_unit', $pro_config['weight_unit']);
     $xtpl->assign('DATA', $data_order);
     $xtpl->assign('ERROR', $error);
@@ -1977,7 +1977,7 @@ function payment($data_content, $data_pro, $data_shipping, $url_checkout, $intro
         $xtpl->assign('product_number', $pdata['product_number']);
         $xtpl->assign('product_price', nv_number_format($pdata['product_price'], nv_get_decimals($pro_config['money_unit'])));
         $xtpl->assign('product_price_total', nv_number_format($pdata['product_price'] * $pdata['product_number'], nv_get_decimals($pro_config['money_unit'])));
-        $xtpl->assign('money_unit', $pdata['money_unit']);
+        $xtpl->assign('money_unit', $money_config[$pdata['money_unit']]['symbol']);
         $xtpl->assign('product_unit', $pdata['product_unit']);
         $xtpl->assign('link_pro', $pdata['link_pro']);
         $xtpl->assign('pro_no', $j + 1);
@@ -2044,7 +2044,7 @@ function payment($data_content, $data_pro, $data_shipping, $url_checkout, $intro
     }
     $xtpl->assign('order_coupons', nv_number_format($data_content['coupons']['amount'], nv_get_decimals($pro_config['money_unit'])));
     $xtpl->assign('order_total', nv_number_format($data_content['order_total'], nv_get_decimals($pro_config['money_unit'])));
-    $xtpl->assign('unit', $data_content['unit_total']);
+    $xtpl->assign('unit',$money_config[$data_content['unit_total']]['symbol'] );
     if (!empty($url_checkout)) {
         $xtpl->assign('note_pay', '');
         foreach ($url_checkout as $value) {
