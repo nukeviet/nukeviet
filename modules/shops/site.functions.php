@@ -21,7 +21,7 @@ $sql = 'SELECT groupid, parentid, lev, ' . NV_LANG_DATA . '_title AS title, ' . 
 $global_array_group = $nv_Cache->db($sql, 'groupid', $module_name);
 
 // Lay ty gia ngoai te
-$sql = 'SELECT code, currency, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
+$sql = 'SELECT code, currency,symbol, exchange, round, number_format FROM ' . $db_config['prefix'] . '_' . $module_data . '_money_' . NV_LANG_DATA;
 $cache_file = NV_LANG_DATA . '_' . md5($sql) . '_' . NV_CACHE_PREFIX . '.cache';
 if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
     $money_config = unserialize($cache);
@@ -32,6 +32,7 @@ if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
         $money_config[$row['code']] = array(
             'code' => $row['code'],
             'currency' => $row['currency'],
+            'symbol' => $row['symbol'],
             'exchange' => $row['exchange'],
             'round' => $row['round'],
             'number_format' => $row['number_format'],
@@ -182,7 +183,7 @@ function nv_get_price($pro_id, $currency_convert, $number = 1, $per_pro = false,
 
     $return['sale'] = $price - $discount;// Giá bán thực tế của sản phẩm
     $return['sale_format'] = nv_number_format($return['sale'], $decimals);// Giá bán thực tế của sản phẩm đã format
-    $return['unit'] = $currency_convert;
+    $return['unit'] = $money_config[$currency_convert]['symbol'];
 
     return $return;
 }
