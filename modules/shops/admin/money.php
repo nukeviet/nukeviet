@@ -29,42 +29,42 @@ $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
 $id = $nv_Request->get_int('id', 'get', 0);
 if (!empty($savecat)) {
-    $data['id'] = $nv_Request->get_int('id', 'post');
-    $data['code'] = $nv_Request->get_title('code', 'post');
-    $data['currency'] = $nv_Request->get_title('currency', 'post', '', 1);
-	$data['symbol'] = $nv_Request->get_title('symbol', 'post', '');
-    $data['exchange'] = $nv_Request->get_title('exchange', 'post,get', 0);
-    $data['exchange'] = floatval(preg_replace('/[^0-9\.]/', '', $data['exchange']));
-    $data['round'] = $nv_Request->get_title('round', 'post,get', 0);
-    $data['round'] = floatval(preg_replace('/[^0-9\.]/', '', $data['round']));
-    $data['dec_point'] = $nv_Request->get_title('dec_point', 'post,get', ',');
-    $data['dec_point'] = preg_replace('/[^\,\.]/', ',', $data['dec_point']);
-    $data['thousands_sep'] = $nv_Request->get_title('thousands_sep', 'post,get', ',');
-    $data['thousands_sep'] = preg_replace('/[^\,\.]/', '.', $data['thousands_sep']);
-    $data['number_format'] = $data['dec_point'] . '||' . $data['thousands_sep'];
+	    $data['id'] = $nv_Request->get_int('id', 'post');
+	    $data['code'] = $nv_Request->get_title('code', 'post');
+	    $data['currency'] = $nv_Request->get_title('currency', 'post', '', 1);
+		$data['symbol'] = $nv_Request->get_title( 'symbol', 'post', '' );
+	    $data['exchange'] = $nv_Request->get_title('exchange', 'post,get', 0);
+	    $data['exchange'] = floatval(preg_replace('/[^0-9\.]/', '', $data['exchange']));
+	    $data['round'] = $nv_Request->get_title('round', 'post,get', 0);
+	    $data['round'] = floatval(preg_replace('/[^0-9\.]/', '', $data['round']));
+	    $data['dec_point'] = $nv_Request->get_title('dec_point', 'post,get', ',');
+	    $data['dec_point'] = preg_replace('/[^\,\.]/', ',', $data['dec_point']);
+	    $data['thousands_sep'] = $nv_Request->get_title('thousands_sep', 'post,get', ',');
+	    $data['thousands_sep'] = preg_replace('/[^\,\.]/', '.', $data['thousands_sep']);
+	    $data['number_format'] = $data['dec_point'] . '||' . $data['thousands_sep'];
+		    if (isset($currencies_array[$data['code']])) {
+		        $numeric = intval($currencies_array[$data['code']]['numeric']);
+		        if (!empty($pro_config['money_unit']) and $pro_config['money_unit'] == $data['code']) {
+		            $data['exchange'] = 1;
+		        }
 
-    if (isset($currencies_array[$data['code']])) {
-        $numeric = intval($currencies_array[$data['code']]['numeric']);
-        if (!empty($pro_config['money_unit']) and $pro_config['money_unit'] == $data['code']) {
-            $data['exchange'] = 1;
-        }
+		        $data['currency'] = (empty($data['currency'])) ? $currencies_array[$data['code']]['currency'] : $data['currency'];
+				$data['symbol'] = (empty($data['symbol'])) ? $currencies_array[$data['code']]['symbol'] : $data['symbol'];
+		        if (empty($data['id'])) {
+		            $sql = 'INSERT INTO ' . $table_name . ' (id, code, currency,symbol, exchange, round, number_format) VALUES (' . $numeric . ', ' . $db->quote($data['code']) . ', ' . $db->quote($data['currency']) . ', '. $db->quote($data['symbol']) . ', ' . $db->quote($data['exchange']) . ', ' . $db->quote($data['round']) . ', ' . $db->quote($data['number_format']) . ')';
+		        } else {
+		            $sql = 'UPDATE ' . $table_name . ' SET code = ' . $db->quote($data['code']) . ', currency = ' . $db->quote($data['currency']) .', symbol = ' . $db->quote($data['symbol']) . ', exchange = ' . $db->quote($data['exchange']) . ', round = ' . $db->quote($data['round']) . ', number_format = ' . $db->quote($data['number_format']) . ' WHERE id = ' . $data['id'];
+		        }
 
-        $data['currency'] = (empty($data['currency'])) ? $currencies_array[$data['code']]['currency'] : $data['currency'];
-        if (empty($data['id'])) {
-            $sql = 'INSERT INTO ' . $table_name . ' (id, code, currency,symbol, exchange, round, number_format) VALUES (' . $numeric . ', ' . $db->quote($data['code']) . ', ' . $db->quote($data['currency']) . ', '. $db->quote($data['symbol']) . ', ' . $db->quote($data['exchange']) . ', ' . $db->quote($data['round']) . ', ' . $db->quote($data['number_format']) . ')';
-        } else {
-            $sql = 'UPDATE ' . $table_name . ' SET code = ' . $db->quote($data['code']) . ', currency = ' . $db->quote($data['currency']) .', symbol = ' . $db->quote($data['symbol']) . ', exchange = ' . $db->quote($data['exchange']) . ', round = ' . $db->quote($data['round']) . ', number_format = ' . $db->quote($data['number_format']) . ' WHERE id = ' . $data['id'];
-        }
-
-        if ($db->exec($sql)) {
-            $error = $lang_module['saveok'];
-            $nv_Cache->delMod($module_name);
-            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
-            die();
-        } else {
-            $error = $lang_module['errorsave'];
-        }
-    }
+		        if ($db->exec($sql)) {
+		            $error = $lang_module['saveok'];
+		            $nv_Cache->delMod($module_name);
+		            Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op);
+		            die();
+		        } else {
+		            $error = $lang_module['errorsave'];
+		        }
+	    }
 } elseif (!empty($id)) {
     $data = $db->query('SELECT * FROM ' . $table_name . ' WHERE id=' . $id)->fetch();
     $data['caption'] = $lang_module['money_edit'];
@@ -86,7 +86,7 @@ $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('MONEY_UNIT', $pro_config['money_unit']);
 
 $count = 0;
-$array_code_exit = array( ); //print_r($table_name);die();
+$array_code_exit = array( );
 $result = $db->query('SELECT id, code,symbol, currency, exchange, round FROM ' . $table_name . ' ORDER BY code DESC');
 while ($row = $result->fetch()) {
     $array_code_exit[] = $row['code'];
@@ -122,34 +122,11 @@ if ($count > 0) {
 
 $numeric = 0;
 ksort($currencies_array);
-
 foreach ($currencies_array as $code => $value) {
     if (!in_array($code, $array_code_exit) or $code == $data['code']) {
         $array_temp = array( );
         $array_temp['value'] = $code;
-		if($code=='USD'||$code=='AUD'||$code=='CAD'||$code=='HKD'||$code=='SGD')$array_temp['symbol'] ='$';
-		else if($code=='VND')$array_temp['symbol'] ='Đ';
-		else if($code=='CHF')$array_temp['symbol'] ='Fr';
-		else if($code=='DKK'||$code=='NOK'||$code=='SEK'||$code=='ISK')$array_temp['symbol'] ='kr';
-		else if($code=='EUR')$array_temp['symbol'] ='€';
-		else if($code=='GBP')$array_temp['symbol'] ='£';
-		else if($code=='JPY'||$code=='CNY')$array_temp['symbol'] ='¥';
-		else if($code=='KWD')$array_temp['symbol'] ='د.ك';
-		else if($code=='BYR')$array_temp['symbol'] ='Br';
-		else if($code=='KZT')$array_temp['symbol'] ='₸';
-		else if($code=='UAH')$array_temp['symbol'] ='₴';
-		else if($code=='RUB')$array_temp['symbol'] ='р.';
-		else if($code=='BGN'||$code=='KGS'||$code=='UZS')$array_temp['symbol'] ='лв';
-		else if($code=='MDL')$array_temp['symbol'] ='L';
-		else if($code=='PLN')$array_temp['symbol'] ='zł';
-		else if($code=='CZK')$array_temp['symbol'] ='Kč';
-		else if($code=='HUF')$array_temp['symbol'] ='Ft';
-		else if($code=='KRW')$array_temp['symbol'] ='₩t';
-		else if($code=='MYR')$array_temp['symbol'] ='RM';
-		else {
-			$array_temp['symbol'] =$code;
-		}
-        $array_temp['title'] = $code . ' - ' . $value['currency']. ' - ' .$array_temp['symbol'];
+        $array_temp['title'] = $code . ' - ' . $value['currency']. ' - ' .$value['symbol'];
         $array_temp['selected'] = ($value['numeric'] == $data['id']) ? ' selected="selected"' : '';
 
         $xtpl->assign('DATAMONEY', $array_temp);
@@ -192,7 +169,6 @@ for ($i = -5; $i < 5; $i++) {
     ));
     $xtpl->parse('main.round');
 }
-
 $xtpl->parse('main');
 $contents = $xtpl->text('main');
 
