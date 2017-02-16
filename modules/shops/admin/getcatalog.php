@@ -14,7 +14,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 
 $pid = $nv_Request->get_int('pid', 'get', 0);
 
-if ($pid == 0) {
+if ($pid >= 0) {
     $cateid = $nv_Request->get_string('cid', 'get', '');
     $cateid = nv_base64_decode($cateid);
     $cateid = unserialize($cateid);
@@ -42,7 +42,6 @@ if ($pid == 0) {
 } else {
     $contents = '';
 }
-
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents;
 include NV_ROOTDIR . '/includes/footer.php';

@@ -61,7 +61,6 @@ if (! empty($savegroup)) {
     $data['description'] = $nv_Request->get_string('description', 'post', '');
     $data['description'] = nv_nl2br(nv_htmlspecialchars(strip_tags($data['description'])), '<br />');
     $data['alias'] = ($data['alias'] == '') ? change_alias($data['title']) : change_alias($data['alias']);
-
     $image = $nv_Request->get_string('image', 'post', '');
     if (is_file(NV_DOCUMENT_ROOT . $image)) {
         $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
@@ -140,7 +139,7 @@ if (! empty($savegroup)) {
             if ($stmt->execute()) {
                 // Cap nhat cateid
                 $data['cateid'] = array_map('intval', $data['cateid']);
-                if ($data['cateid'] != $data['cateid_old']) {
+                if ($data['cateid'] != $data['cateid_old']||$data['cateid_old']=='') {
                     foreach ($data['cateid'] as $cateid) {
                         if (!in_array($cateid, $data['cateid_old'])) {
                             $db->query('INSERT INTO ' . $table_name . '_cateid (groupid, cateid) VALUES (' . $data['groupid'] .', ' . $cateid . ')');

@@ -452,7 +452,6 @@ function shops_show_group_list($parentid = 0)
             $array_group_title[] = "<a href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=group&amp;parentid=" . $groupid_i . "\"><strong>" . $title_i . "</strong></a>";
             ++$a;
         }
-
         for ($i = $a - 1; $i >= 0; $i--) {
             $xtpl->assign('GROUP_NAV', $array_group_title[$i] . ($i > 0 ? " &raquo; " : ""));
             $xtpl->parse('main.groupnav.loop');
@@ -460,6 +459,7 @@ function shops_show_group_list($parentid = 0)
 
         $xtpl->parse('main.catnav');
     }
+
 
     $sql = "SELECT groupid, parentid, " . NV_LANG_DATA . "_title, " . NV_LANG_DATA . "_description, weight, viewgroup, numsubgroup, inhome, indetail, in_order FROM " . $db_config['prefix'] . "_" . $module_data . "_group WHERE parentid = '" . $parentid . "' ORDER BY weight ASC";
     $result = $db->query($sql);
