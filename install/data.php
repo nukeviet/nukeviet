@@ -160,9 +160,9 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (307, 'theme', 'default', 0, 0, 'default', 'default', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_setup_extensions (id, type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES (311, 'theme', 'mobile_default', 0, 0, 'mobile_default', 'mobile_default', '4.0.29 1463652000', " . NV_CURRENTTIME . ", 'VINADES (contact@vinades.vn)', '')";
 
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (1, '', 'Quang cao giua trang', '', 'sequential', 575, 72, 1)";
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (2, '', 'Quang cao trai', '', 'sequential', 212, 800, 1)";
-$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (3, '', 'Quang cao Phai', '', 'random', 250, 500, 1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (1, '', 'Quang cao giua trang', '', 'sequential', 575, 72, 1, 1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (2, '', 'Quang cao trai', '', 'sequential', 212, 800, 1, 1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_plans VALUES (3, '', 'Quang cao Phai', '', 'random', 250, 500, 1, 1)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (2, 'vinades', 2, 0, 'vinades.jpg', 'jpg', 'image/jpeg', 212, 400, '', '', 'http://vinades.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 2)";
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (3, 'Quang cao giua trang', 1, 0, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 1)";

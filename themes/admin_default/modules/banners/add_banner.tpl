@@ -27,9 +27,9 @@
 					<td>{CONTENTS.plan.0}:</td>
 					<td><sup class="required">&lowast;</sup></td>
 					<td>
-					<select name="{CONTENTS.plan.1}" id="{CONTENTS.plan.1}" class="form-control w300">
+					<select name="{CONTENTS.plan.1}" id="{CONTENTS.plan.1}" class="form-control w300" onchange="chancePlan()" onload="chancePlan()" >
 						<!-- BEGIN: plan -->
-						<option value="{PLAN.key}"{PLAN.selected}>{PLAN.title}</option>
+						<option value="{PLAN.key}" class="{PLAN.require_image}" {PLAN.selected}>{PLAN.title}</option>
 						<!-- END: plan -->
 					</select></td>
 				</tr>
@@ -46,7 +46,7 @@
 				</tr>
 				<tr>
 					<td>{CONTENTS.upload.0}:</td>
-					<td><sup class="required">&lowast;</sup></td>
+					<td><sup class="required" id="require_image" ></sup></td>
 					<td><input name="{CONTENTS.upload.1}" type="file" /></td>
 				</tr>
 				<tr>
@@ -99,9 +99,11 @@
 	<div class="text-center">
 		<input type="submit" value="{CONTENTS.submit}" class="btn btn-primary" />
 	</div>
+	<div id="demo"></div>
 </form>
 <script type="text/javascript">
 	$(document).ready(function() {
+		chancePlan();
 		$('#frm').validate();
 		$("#publ_time,#exp_date").datepicker({
 			dateFormat : "dd/mm/yy",
@@ -110,14 +112,22 @@
 			showOtherMonths : true,
 			showOn: 'focus'
 		});
-		
+
 		$('#publ_time-btn').click(function(){
 			$("#publ_time").datepicker('show');
 		});
-		
+
 		$('#exp_date-btn').click(function(){
 			$("#exp_date").datepicker('show');
 		});
 	});
+	function chancePlan() {
+		var x =	$('select option:selected').attr('class');
+	   	if (x == 'require_image') {
+	   	document.getElementById("require_image").innerHTML = "&lowast;";
+	    }else{
+	   		document.getElementById("require_image").innerHTML = "&nbsp;";
+	    };
+}
 </script>
 <!-- END: main -->

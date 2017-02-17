@@ -31,7 +31,7 @@ $contents['rows']['blang'] = array( $lang_module['blang'], (! empty($row['blang'
 $contents['rows']['form'] = array( $lang_module['form'], $row['form'] );
 $contents['rows']['size'] = array( $lang_module['size'], $row['width'] . ' x ' . $row['height'] . 'px' );
 $contents['rows']['is_act'] = array( $lang_module['is_act'], $row['act'] ? $lang_global['yes'] : $lang_global['no'] );
-
+$contents['rows']['require_image'] = array( $lang_module['require_image'], $row['require_image'] ? $lang_global['yes'] : $lang_global['no'] );
 if (! empty($row['description'])) {
     $contents['rows']['description'] = array( $lang_module['description'], $row['description'] );
 }
