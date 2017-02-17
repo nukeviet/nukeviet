@@ -335,6 +335,11 @@ if (!nv_function_exists('nv_block_login')) {
                             }
                             $xtpl->parse('main.allowuserreg.field');
                         }
+                    
+                        if ($global_config['allowuserreg'] == 2) {
+                            $xtpl->assign('LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostactivelink');
+                            $xtpl->parse('main.allowuserreg.lostactivelink');
+                        }
 
                         $xtpl->parse('main.allowuserreg.agreecheck');
                         $xtpl->parse('main.allowuserreg');
