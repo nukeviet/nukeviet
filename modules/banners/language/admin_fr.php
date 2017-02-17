@@ -88,6 +88,7 @@ $lang_module['exp_date'] = 'Terminer';
 $lang_module['edit_banner'] = 'Modifier';
 $lang_module['edit_banner_info'] = 'Les champs avec * sont obligatoirement déclarés';
 $lang_module['file_name'] = 'Image';
+$lang_module['banners_list0'] = 'Liste des publicités';
 $lang_module['banners_list1'] = 'Liste des publicités actives';
 $lang_module['banners_list2'] = 'Liste des publicités expirées';
 $lang_module['banners_list3'] = 'Liste des publicités suspens';
