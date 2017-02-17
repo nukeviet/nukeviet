@@ -99,12 +99,16 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $click_url = '';
     }
 
+	$sql = 'SELECT require_image FROM ' . NV_BANNERS_GLOBALTABLE. '_plans where id = ' . $pid;
+	$array_require_image = $nv_Cache->db($sql, '', $module_name);
     if (empty($title)) {
         $error = $lang_module['title_empty'];
     } elseif (empty($pid) or ! isset($plans[$pid])) {
         $error = $lang_module['plan_not_selected'];
     } elseif (! empty($click_url) and ! nv_is_url($click_url)) {
         $error = $lang_module['click_url_invalid'];
+    } elseif (! is_uploaded_file($_FILES['banner']['tmp_name']) && $array_require_image[0]['require_image'] == 1 && empty($file_name) ) {
+    	$error = $lang_module['file_upload_empty'];
     } else {
         if (isset($_FILES['banner']) and is_uploaded_file($_FILES['banner']['tmp_name'])) {
             $upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
@@ -219,7 +223,11 @@ $contents['client'] = array( $lang_module['of_client'], 'clid', $clients, $clid 
 
 $imageforswf = (! empty($imageforswf)) ? NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $imageforswf : '';
 
-$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "data-width=" . $width . " id=" . ($file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image') . "", NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif" );
+if($file_ext != 'no_image'){
+	$contents['file_name'] = array( $lang_module['file_name'], NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $file_name, "data-width=" . $width . " id=" . ($file_ext == 'swf' ? 'open_modal_flash' : 'open_modal_image') . "", NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . $file_ext . ".gif", $lang_global['show_picture'], $imageforswf, NV_BASE_SITEURL . NV_ASSETS_DIR . "/images/ico_" . substr($imageforswf, -3) . ".gif" );
+}else{
+	$contents['file_name'] = array( $lang_module['file_name'],'');
+}
 
 $contents['upload'] = array( sprintf($lang_module['re_upload'], $contents['file_allowed_ext']), 'banner', $lang_module['imageforswf'], 'imageforswf' );
 $contents['file_alt'] = array( $lang_module['file_alt'], 'file_alt', $file_alt, 255 );

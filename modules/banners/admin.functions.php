@@ -329,7 +329,7 @@ function nv_add_plan_theme($contents)
 function nv_edit_plan_theme($contents)
 {
     global $global_config, $module_file;
-
+//print_r($contents);die();
     $xtpl = new XTemplate('edit_plan.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
@@ -342,6 +342,12 @@ function nv_edit_plan_theme($contents)
         ));
         $xtpl->parse('main.blang');
     }
+
+	if($contents['form'][4]){
+		 $xtpl->assign('CHECKED', 'checked' );
+	}else{
+		$xtpl->assign('CHECKED', '' );
+	}
 
     foreach ($contents['form'][2] as $form) {
         $xtpl->assign('FORM', array(
@@ -487,11 +493,12 @@ function nv_add_banner_theme($contents)
     }
 
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
-
+//print_r($contents['plan']);die();
     foreach ($contents['plan'][2] as $pid => $ptitle) {
         $xtpl->assign('PLAN', array(
             'key' => $pid,
             'title' => $ptitle,
+            'require_image' => $contents['plan'][5][$pid] == 1 ? 'require_image' : '',
             'selected' => $pid == $contents['plan'][3] ? ' selected="selected"' : ''
         ));
         $xtpl->parse('main.plan');
@@ -566,7 +573,9 @@ function nv_edit_banner_theme($contents)
         ));
         $xtpl->parse('main.target');
     }
-
+	if (! empty($contents['file_name'][1])) {
+        $xtpl->parse('main.img_info');
+    }
     if (! empty($contents['file_name'][5])) {
         $xtpl->parse('main.imageforswf1');
     }
@@ -665,6 +674,9 @@ function nv_info_b_theme($contents)
     }
 
     $a = 0;
+	if($contents['rows'][5][1] == ''){
+			$contents['rows'][4][1] = '';
+	}
     foreach ($contents['rows'] as $row) {
         $xtpl->assign('ROW1', $row);
         $xtpl->parse('main.loop1');
@@ -681,7 +693,6 @@ function nv_info_b_theme($contents)
         $xtpl->assign('V', $v);
         $xtpl->parse('main.stat2');
     }
-
     $xtpl->parse('main');
     return $xtpl->text('main');
 }

@@ -44,6 +44,7 @@ $lang_module['client_list'] = 'Clients';
 $lang_module['client_list2'] = 'Liste des clients';
 $lang_module['reg_time'] = 'Date d\'inscription';
 $lang_module['is_act'] = 'Activer';
+$lang_module['require_image'] = 'Besoin d\'image';
 $lang_module['act0'] = 'En suspens';
 $lang_module['act1'] = 'Actif';
 $lang_module['act2'] = 'Expiré';
