@@ -26,7 +26,8 @@ $array_table = array(
     'tags_id',
     'topics',
     'detail',
-    'logs'
+    'logs',
+    'tmp'
 );
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($table . '_%'));
@@ -237,6 +238,15 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
 	 keyword varchar(65) NOT NULL,
 	 UNIQUE KEY id_tid (id,tid),
 	 KEY tid (tid)
+	) ENGINE=MyISAM";
+	
+$sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tmp (
+	  id mediumint(8) unsigned NOT NULL,
+	  admin_id int(11) NOT NULL DEFAULT '0',
+	  time_edit int(11) NOT NULL,
+	  time_late int(11) NOT NULL,
+	  ip varchar(50) NOT NULL,
+	  PRIMARY KEY (id)
 	) ENGINE=MyISAM";
 
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'indexfile', 'viewcat_main_right')";

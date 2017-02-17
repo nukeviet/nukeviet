@@ -42,6 +42,22 @@ if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
     exit();
 }
 
+//kiểm tra xem đang sửa có bị cướp quyền hay không, cập nhật thêm thời gian chỉnh sửa
+if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('check_edit', 'post')) {
+	$id = $nv_Request->get_int('id', 'post', 0);
+	
+	$return = 'NO_'. $lang_module['not_edit_by_admin'];
+	$_query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp 
+		WHERE id =' . $id .' AND admin_id=' . $admin_info['admin_id'] );
+	if ($row_tmp = $_query->fetch()) {
+		$db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET 
+	 		time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . ' 
+	 		WHERE id=' . $id);
+	 	$return = 'OK_';
+	}
+	die($return);
+}
+
 if (defined('NV_EDITOR')) {
     require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
 }
@@ -243,6 +259,19 @@ if ($rowcontent['id'] > 0) {
     if (empty($module_config[$module_name]['htmlhometext'])) {
         $rowcontent['hometext'] = strip_tags($rowcontent['hometext'], 'br');
     }
+
+	//lưu thông tin người đang sửa
+	$_query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp 
+		WHERE id =' . $rowcontent['id'] );
+	if ($row_tmp = $_query->fetch()) {
+	 	$db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET 
+	 		time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . ' 
+	 		WHERE id=' . $rowcontent['id']);
+			
+	} else {
+		$db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (id, admin_id, time_edit, time_late, ip) 
+			VALUES (' . $rowcontent['id'] . ',' . $admin_info['admin_id'] . ',' . NV_CURRENTTIME . ',' . NV_CURRENTTIME . ',' . $db->quote($admin_info['last_ip']) . ')');
+	}
 }
 
 $array_cat_add_content = $array_cat_pub_content = $array_cat_edit_content = $array_censor_content = array();
@@ -774,6 +803,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
                     $result_search = $nukeVietElasticSearh->update_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $rowcontent['id'], $rowcontent);
                 }
+				
+				// sau khi sửa, tiến hành xóa bản ghi lưu trạng thái sửa trong csdl
+				$db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id = ' . $rowcontent['id']);
             } else {
                 $error[] = $lang_module['errorsave'];
             }

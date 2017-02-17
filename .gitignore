@@ -12,7 +12,7 @@
 /data/logs/ip_logs/
 /data/logs/ref_logs/
 /data/logs/voting_logs/
-/data/tmp/
+/data/tmp/*
 /uploads/logo_*
 /install/default.php
 
@@ -66,3 +66,4 @@ composer.lock
 !/uploads/banners/webnhanh_vn.png
 !/data/cache/.htaccess
 !/data/cache/index.html
+!/data/tmp/index.html

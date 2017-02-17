@@ -138,6 +138,32 @@
 		$("#catid").select2({
 			language: '{NV_LANG_DATA}'
 		});
+		
+		$(".btn_edit").click(function() {
+			var id = $(this).attr('data-id');
+			var link = $(this).attr('href');
+			
+			$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'id=' + id + '&check_edit=1', function(res) {
+				var r_split = res.split('_');
+				if (r_split[0] == 'NO') { // nếu có, xác nhận có chiếm quyền hay không
+					if (confirm(r_split[1])) {
+						$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'id=' + id + '&get_edit=1', function(res) {
+							window.location.href = link;
+						});
+					}
+				} else if (r_split[0] == 'ERR') { // quyền hạn thấp hơn hoặc bằng nhau, k cho phép sửa, chiếm quyền
+					alert(r_split[1]);
+				} else if (r_split[0] == 'EDIT') { // quá thời gian cho phép, thì vào sửa luôn
+					$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=main&nocache=' + new Date().getTime(), 'id=' + id + '&get_edit=1', function(res) {
+						window.location.href = link;
+					});
+				} else { // nếu chưa có người sửa, vào sửa luôn
+					window.location.href = link; 
+				}
+				return false;
+			});
+			return false;
+		});
 	});
 </script>
 <!-- END: main -->
