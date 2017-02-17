@@ -107,7 +107,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $error = $lang_module['plan_not_selected'];
     } elseif (! empty($click_url) and ! nv_is_url($click_url)) {
         $error = $lang_module['click_url_invalid'];
-    } elseif (! is_uploaded_file($_FILES['banner']['tmp_name']) && $array_require_image[0]['require_image'] == 1 ) {
+    } elseif (! is_uploaded_file($_FILES['banner']['tmp_name']) && $array_require_image[0]['require_image'] == 1 && empty($file_name) ) {
     	$error = $lang_module['file_upload_empty'];
     } else {
         if (isset($_FILES['banner']) and is_uploaded_file($_FILES['banner']['tmp_name'])) {
