@@ -57,8 +57,6 @@ if ($checknum == $row['checknum']) {
             $check_update_user = true;
         }
     } elseif (!defined('NV_IS_USER') and $global_config['allowuserreg'] == 2) {
-        $_active_group_newusers = $db->query("SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='active_group_newusers'")->fetchColumn();
-        
         $sql = "INSERT INTO " . NV_MOD_TABLE . " (
                 group_id, username, md5username, password, email, first_name, last_name, 
                 gender, photo, birthday, regdate, question, answer, 
@@ -72,7 +70,7 @@ if ($checknum == $row['checknum']) {
             )";
         
         $data_insert = array();
-        $data_insert['group_id'] = ($_active_group_newusers) ? 7 : 4;
+        $data_insert['group_id'] = (!empty($global_users_config['active_group_newusers']) ? 7 : 4);
         $data_insert['username'] = $row['username'];
         $data_insert['md5_username'] = nv_md5safe($row['username']);
         $data_insert['password'] = $row['password'];
@@ -95,7 +93,7 @@ if ($checknum == $row['checknum']) {
             }
             
             if ($db->exec('INSERT INTO ' . NV_MOD_TABLE . '_info (' . implode(', ', array_keys($query_field)) . ') VALUES (' . implode(', ', array_values($query_field)) . ')')) {
-                if ($_active_group_newusers) {
+                if (!empty($global_users_config['active_group_newusers'])) {
                     nv_groups_add_user(7, $row['userid'], 1, $module_data);
                 } else {
                     $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=4');
