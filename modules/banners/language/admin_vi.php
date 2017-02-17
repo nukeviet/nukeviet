@@ -88,6 +88,7 @@ $lang_module['exp_date'] = 'Kết thúc';
 $lang_module['edit_banner'] = 'Sửa quảng cáo';
 $lang_module['edit_banner_info'] = 'Những ô có đánh dấu hoa thị bắt buộc phải khai báo';
 $lang_module['file_name'] = 'Hình quảng cáo';
+$lang_module['banners_list0'] = 'Danh sách các quảng cáo';
 $lang_module['banners_list1'] = 'Danh sách các quảng cáo đang hoạt động';
 $lang_module['banners_list2'] = 'Danh sách các quảng cáo đã hết hạn';
 $lang_module['banners_list3'] = 'Danh sách các quảng cáo đang bị đình chỉ hoạt động';

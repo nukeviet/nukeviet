@@ -88,6 +88,7 @@ $lang_module['exp_date'] = 'Finish';
 $lang_module['edit_banner'] = 'Edit advertising';
 $lang_module['edit_banner_info'] = 'Box marked with an asterisk to be required to declare';
 $lang_module['file_name'] = 'Advertising image';
+$lang_module['banners_list0'] = 'List advertising';
 $lang_module['banners_list1'] = 'List active advertising';
 $lang_module['banners_list2'] = 'List expire advertising';
 $lang_module['banners_list3'] = 'List suspend advertising';
