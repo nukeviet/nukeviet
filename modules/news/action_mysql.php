@@ -26,7 +26,8 @@ $array_table = array(
     'tags_id',
     'topics',
     'detail',
-    'logs'
+    'logs',
+    'tmp'
 );
 $table = $db_config['prefix'] . '_' . $lang . '_' . $module_data;
 $result = $db->query('SHOW TABLE STATUS LIKE ' . $db->quote($table . '_%'));

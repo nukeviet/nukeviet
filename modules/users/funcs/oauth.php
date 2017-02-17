@@ -25,16 +25,8 @@ if ($global_config['allowuserlogin'] and defined('NV_OPENID_ALLOWED')) {
     $server = $nv_Request->get_string('server', 'get', '');
 
     if (! empty($server) and in_array($server, $global_config['openid_servers'])) {
-        // Add to Global config
-        $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='avatar_width'";
-        $result = $db->query($sql);
-        $global_config['avatar_width'] = $result->fetchColumn();
-        $result->closeCursor();
-
-        $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='avatar_height'";
-        $result = $db->query($sql);
-        $global_config['avatar_height'] = $result->fetchColumn();
-        $result->closeCursor();
+        $global_config['avatar_width'] = $global_users_config['avatar_width'];
+        $global_config['avatar_height'] = $global_users_config['avatar_height'];
 
         if (file_exists(NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php')) {
             include NV_ROOTDIR . '/modules/users/login/oauth-' . $server . '.php';

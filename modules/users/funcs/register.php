@@ -43,10 +43,6 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
     $nv_redirect = nv_get_redirect();
 }
 
-// Cau hinh xac thuc thanh vien moi
-$sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='active_group_newusers'";
-$active_group_newusers = intval($db->query($sql)->fetchColumn());
-
 /**
  * nv_check_username_reg()
  * Ham kiem tra ten dang nhap kha dung
@@ -56,7 +52,7 @@ $active_group_newusers = intval($db->query($sql)->fetchColumn());
  */
 function nv_check_username_reg($login)
 {
-    global $db, $lang_module;
+    global $db, $lang_module, $global_users_config;
 
     $error = nv_check_valid_login($login, NV_UNICKMAX, NV_UNICKMIN);
     if ($error != '') {
@@ -66,12 +62,7 @@ function nv_check_username_reg($login)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='deny_name'";
-    $result = $db->query($sql);
-    $deny_name = $result->fetchColumn();
-    $result->closeCursor();
-
-    if (! empty($deny_name) and preg_match('/' . $deny_name . '/i', $login)) {
+    if (! empty($global_users_config['deny_name']) and preg_match('/' . $global_users_config['deny_name'] . '/i', $login)) {
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
@@ -101,19 +92,14 @@ function nv_check_username_reg($login)
  */
 function nv_check_email_reg($email)
 {
-    global $db, $lang_module;
+    global $db, $lang_module, $global_users_config;
 
     $error = nv_check_valid_email($email);
     if ($error != '') {
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
     }
 
-    $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='deny_email'";
-    $result = $db->query($sql);
-    $deny_email = $result->fetchColumn();
-    $result->closeCursor();
-
-    if (! empty($deny_email) and preg_match('/' . $deny_email . '/i', $email)) {
+    if (! empty($global_users_config['deny_email']) and preg_match('/' . $global_users_config['deny_email'] . '/i', $email)) {
         return sprintf($lang_module['email_deny_name'], $email);
     }
 
@@ -368,7 +354,7 @@ if ($checkss == $array_register['checkss']) {
 		(group_id, username, md5username, password, email, first_name, last_name, gender, photo, birthday, regdate,
 		question, answer, passlostkey, view_mail, remember, in_groups,
 		active, checknum, last_login, last_ip, last_agent, last_openid, idsite) VALUES (
-        " . (defined('ACCESS_ADDUS') ? $group_id : ($active_group_newusers ? 7 : 4)) . ",
+        " . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . ",
 		:username,
 		:md5username,
 		:password,
@@ -379,7 +365,7 @@ if ($checkss == $array_register['checkss']) {
 		:your_question,
 		:answer,
 		'', 0, 1,
-		'" . (defined('ACCESS_ADDUS') ? $group_id : ($active_group_newusers ? 7 : 4)) . "',
+		'" . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)) . "',
 		1, '', 0, '', '', '', " . $global_config['idsite'] . ")";
 
         $data_insert = array();
@@ -407,7 +393,7 @@ if ($checkss == $array_register['checkss']) {
 				$db->query('INSERT INTO ' . NV_MOD_TABLE . '_groups_users (group_id, userid, is_leader, approved, data) VALUES (' . $group_id . ',' . $userid . ', 0, 1, \'0\')');
 			}
 
-            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($active_group_newusers ? 7 : 4)));
+            $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . (defined('ACCESS_ADDUS') ? $group_id : ($global_users_config['active_group_newusers'] ? 7 : 4)));
 
             $subject = $lang_module['account_register'];
             $_url = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name, true);
@@ -450,11 +436,8 @@ if ($checkss == $array_register['checkss']) {
 }
 
 if ($nv_Request->isset_request('get_usage_terms', 'post')) {
-    $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='siteterms_" . NV_LANG_DATA . "'";
-    $siteterms = $db->query($sql)->fetchColumn();
-
     include NV_ROOTDIR . '/includes/header.php';
-    echo $siteterms;
+    echo $global_users_config['siteterms_' . NV_LANG_DATA];
     include NV_ROOTDIR . '/includes/footer.php';
 }
 
