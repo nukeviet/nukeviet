@@ -24,7 +24,12 @@
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="8"><input class="btn btn-primary" type="button" onclick="nv_del_block_list(this.form, {BID})" value="{LANG.delete_from_block}"></td>
+					<td colspan="8">
+						<input class="btn btn-primary" type="button" onclick="nv_del_block_list(this.form, {BID})" value="{LANG.delete_from_block}">
+						<!-- BEGIN: order_publtime -->
+						<a onclick="return confirm(nv_is_change_act_confirm[0])" class="btn btn-info" href="{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&{NV_NAME_VARIABLE}={MODULE_NAME}&amp;{NV_OP_VARIABLE}={OP}&amp;bid={BID}&order_publtime={ORDER_PUBLTIME}">{LANG.order_publtime}</a>
+						<!-- END: order_publtime -->						
+					</td>
 				</tr>
 			</tfoot>
 			<tbody>

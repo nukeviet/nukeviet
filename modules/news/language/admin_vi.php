@@ -184,6 +184,7 @@ $lang_module['content_clickhere'] = 'vào đây';
 $lang_module['content_showmore'] = '(Mở rộng để xem chi tiết)';
 $lang_module['content_notetime'] = '(Ngày/tháng/năm giờ:phút)';
 $lang_module['content_publ_date'] = 'Thời gian đăng';
+$lang_module['order_publtime'] = 'Sắp xếp lại theo Thời gian đăng';
 $lang_module['content_exp_date'] = 'Thời gian hết hạn';
 $lang_module['content_extra'] = 'Tính năng mở rộng';
 $lang_module['content_inhome'] = 'Hiển thị trên trang chủ';
@@ -340,7 +341,6 @@ $lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';
 $lang_module['fbinsartmgs_100'] = 'Lỗi: Bài viết có các thẻ HTML: <strong>%s</strong> không được hỗ trở bởi bài viết tức thời. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng, thay thế bằng các thẻ được hỗ trợ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
 $lang_module['fbinsartmgs_101'] = 'Lỗi: Bài viết không có nội dung';
 $lang_module['fbinsartmgs_102'] = 'Lỗi: Bài viết của bạn có các thuộc tính cho các thẻ. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng khỏi thẻ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
-
 
 $lang_module['error_edit'] = 'Bài viết đang có quản trị chỉnh sửa. Bạn không thể chỉnh sửa tiếp.';
 $lang_module['dulicate_edit'] = 'Bài viết đang có quản trị chỉnh sửa. Bạn có muốn chiếm quyền của quản trị này không.';

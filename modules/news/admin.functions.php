@@ -607,7 +607,7 @@ function nv_show_block_list($bid)
     if ($num > 0) {
         foreach ($array_block as $row) {
             $xtpl->assign('ROW', array(
-                'publtime' => nv_date('H:i d/m/y', $row['publtime']),
+                'publtime' => nv_date('H:i d/m/Y', $row['publtime']),
                 'status' => $lang_module['status_' . $row['status']],
                 'hitstotal' => number_format($row['hitstotal'], 0, ',', '.'),
                 'hitscm' => number_format($row['hitscm'], 0, ',', '.'),
@@ -627,6 +627,12 @@ function nv_show_block_list($bid)
 
             $xtpl->parse('main.loop');
         }
+        
+        if(defined('NV_IS_SPADMIN'))
+        {
+            $xtpl->assign('ORDER_PUBLTIME', md5($bid . NV_CHECK_SESSION));
+            $xtpl->parse('main.order_publtime');
+        }        
 
         $xtpl->parse('main');
         $contents = $xtpl->text('main');
