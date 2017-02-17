@@ -1,5 +1,4 @@
 <?php
-
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
@@ -8,17 +7,14 @@
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
-
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
     die( 'Stop!!!' );
 }
-
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
-
 $lang_module['add_client'] = 'Add client';
 $lang_module['edit_client'] = 'Edit client';
 $lang_module['full_name_empty'] = 'Client name has not been declared';
@@ -44,6 +40,7 @@ $lang_module['client_list'] = 'Client';
 $lang_module['client_list2'] = 'List client';
 $lang_module['reg_time'] = 'Registration date';
 $lang_module['is_act'] = 'Active';
+$lang_module['require_image'] = 'Require image';
 $lang_module['act0'] = 'Wait for active';
 $lang_module['act1'] = 'Active';
 $lang_module['act2'] = 'Expire';

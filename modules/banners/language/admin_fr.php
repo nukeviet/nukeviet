@@ -1,5 +1,4 @@
 <?php
-
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
@@ -8,17 +7,14 @@
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
-
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
     die( 'Stop!!!' );
 }
-
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
-
 $lang_module['add_client'] = 'Ajouter un client';
 $lang_module['edit_client'] = 'Modifier les coordonnées du client';
 $lang_module['full_name_empty'] = 'Le nom du client n\'a pas été déclaré';
@@ -44,6 +40,7 @@ $lang_module['client_list'] = 'Clients';
 $lang_module['client_list2'] = 'Liste des clients';
 $lang_module['reg_time'] = 'Date d\'inscription';
 $lang_module['is_act'] = 'Activer';
+$lang_module['require_image'] = 'Besoin d\'image';
 $lang_module['act0'] = 'En suspens';
 $lang_module['act1'] = 'Actif';
 $lang_module['act2'] = 'Expiré';
