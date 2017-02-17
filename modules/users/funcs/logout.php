@@ -20,6 +20,8 @@ if (!defined('NV_IS_USER') and !defined('NV_IS_1STEP_USER')) {
 if (defined('NV_IS_ADMIN')) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $user_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, 0);
     $nv_Request->unset_request('admin,online', 'session');
+} elseif (!empty($global_users_config['active_user_logs'])) {
+    nv_insert_logs(NV_LANG_DATA, $module_name, '[' . $user_info['username'] . '] ' . $lang_module['userlogout'], ' Client IP:' . NV_CLIENT_IP, 0);
 }
 
 $url_redirect = !empty($client_info['referer']) ? $client_info['referer'] : (isset($_SERVER['SCRIPT_URI']) ? $_SERVER['SCRIPT_URI'] : NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA);
