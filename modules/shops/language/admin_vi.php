@@ -426,6 +426,7 @@ $lang_module['error_required_title'] = 'Lỗi: bạn cần nhập dữ liệu ch
 $lang_module['error_required_begin_time'] = 'Lỗi: bạn cần nhập dữ liệu cho Ngày bắt đầu';
 $lang_module['error_required_end_time'] = 'Lỗi: bạn cần nhập dữ liệu cho Ngày kết thúc';
 $lang_module['error_required_config'] = 'Lỗi: bạn cần nhập dữ liệu cho Cấu hình';
+$lang_module['error_symbol'] = 'Lỗi: bạn cần nhập dữ liệu cho Ký hiệu';
 
 $lang_module['discount_add'] = 'Thêm mới giảm giá';
 $lang_module['discount_edit'] = 'Sửa giảm giá';
@@ -722,3 +723,5 @@ $lang_module['newprice'] = 'Giá mới';
 $lang_module['ad_block_show'] = 'Hiển thị các block phụ';
 $lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
 $lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';
+
+

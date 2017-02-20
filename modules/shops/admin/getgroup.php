@@ -48,10 +48,29 @@ $contents_temp_cate = '';
 if ($cid > 0) {
     $cid = GetParentCatFilter($cid);
 
+	$arr=array();
     $arr_groupid = array();
     $result = $db->query('SELECT t1.groupid FROM ' . $db_config['prefix'] . '_' . $module_data . '_group t1 INNER JOIN ' . $db_config['prefix'] . '_' . $module_data . '_group_cateid t2 ON t1.groupid = t2.groupid WHERE t2.cateid = ' . $cid);
-    while (list($groupid) = $result->fetch(3)) {
-        $arr_groupid[$groupid] = GetGroupidInParent($groupid, 0, 1);
+   while (list($groupid) = $result->fetch(3)) {
+   		if($global_array_group[$groupid]['parentid']==0)
+   		{
+   			$arr_groupid[$groupid] = GetGroupidInParent($groupid, 0, 1,$cid);
+   		}
+		else {
+			$arr[$groupid]=$groupid;
+		}
+    }
+    foreach ($arr_groupid as $key => $value) {
+    	$dataarr=array();
+        foreach ($arr as $keyar => $valuearr) {
+        	if($value[$valuearr]==$valuearr) $dataarr[$valuearr]=$valuearr;
+   		 }
+		if(!empty($dataarr))
+		{
+			$arr_groupid[$key]=$dataarr;continue;
+
+		}
+
     }
 
     foreach ($arr_groupid as $groupid_i => $subgroupid_i) {
@@ -70,8 +89,9 @@ if ($cid > 0) {
         $contents_temp_cate .= '</div>';
         $contents_temp_cate .= '</div>';
     }
-}
 
+}
+//print_r($contents_temp_cate);die();
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents_temp_cate;
 include NV_ROOTDIR . '/includes/footer.php';

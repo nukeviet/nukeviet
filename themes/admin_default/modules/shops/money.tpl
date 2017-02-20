@@ -1,4 +1,9 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: error -->
+<div class="alert alert-danger">
+	{error}
+</div>
+<!-- END: error -->
 <!-- BEGIN: data -->
 <table class="table table-striped table-bordered table-hover">
 	<thead>
