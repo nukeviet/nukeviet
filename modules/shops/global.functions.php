@@ -435,35 +435,38 @@ function GetParentCatFilter($cateid)
  * @param integer $check_inhome
  * @return
  */
-function GetGroupidInParent($groupid, $check_inhome = 0, $only_children = 0)
+function GetGroupidInParent($groupid, $check_inhome = 0, $only_children = 0,$cid = 0)
 {
-    global $global_array_group, $array_group;
+    global $global_array_group, $array_group,$db,$global_array_shops_cat;
 
     if ($only_children) {
         $array_group = array();
     } else {
-        $array_group[] = $groupid;
+        $array_group[$groupid] = $groupid;
     }
 
     $subgroupid = explode(',', $global_array_group[$groupid]['subgroupid']);
     if (! empty($subgroupid)) {
         foreach ($subgroupid as $id) {
-            if ($id > 0) {
+        	$result=$db->query('SELECT COUNT(*) FROM `nv4_shops_group_cateid` WHERE `groupid`='.$id.' AND cateid ='.$cid)->fetch();
+            if ($id > 0 and $result['count(*)'] <=1) {
                 if ($global_array_group[$id]['numsubgroup'] == 0) {
                     if (! $check_inhome or ($check_inhome and $global_array_group[$id]['inhome'] == 1)) {
-                        $array_group[] = $id;
+                        $array_group[$id] = $id;
                     }
                 } else {
+
                     $array_group_temp = GetGroupidInParent($id, $check_inhome);
                     foreach ($array_group_temp as $groupid_i) {
                         if (! $check_inhome or ($check_inhome and $global_array_group[$groupid_i]['inhome'] == 1)) {
-                            $array_group[] = $groupid_i;
+                            $array_group[$groupid_i] = $groupid_i;
                         }
                     }
                 }
             }
         }
     }
+
     return array_unique($array_group);
 }
 

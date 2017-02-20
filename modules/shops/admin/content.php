@@ -285,7 +285,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
     $rowcontent['copyright'] = ( int )$nv_Request->get_bool('copyright', 'post');
     $rowcontent['inhome'] = ( int )$nv_Request->get_bool('inhome', 'post');
-    
+
     $rowcontent['tag_title'] = $nv_Request->get_title('tag_title', 'post', '');
     $rowcontent['tag_description'] = $nv_Request->get_textarea('tag_description', '', NV_ALLOWED_HTML_TAGS);
 
