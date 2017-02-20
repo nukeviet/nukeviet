@@ -429,13 +429,13 @@ function GetParentCatFilter($cateid)
 }
 
 /**
- * GetGroupidInParent()
+ * GetGroupidInParentGroup()
  *
  * @param mixed $groupid
  * @param integer $check_inhome
  * @return
  */
-function GetGroupidInParent($groupid, $check_inhome = 0, $only_children = 0,$cid = 0)
+function GetGroupidInParentGroup($groupid, $check_inhome = 0, $only_children = 0,$cid = 0)
 {
     global $global_array_group, $array_group,$db,$global_array_shops_cat;
 
@@ -456,7 +456,7 @@ function GetGroupidInParent($groupid, $check_inhome = 0, $only_children = 0,$cid
                     }
                 } else {
 
-                    $array_group_temp = GetGroupidInParent($id, $check_inhome);
+                    $array_group_temp = GetGroupidInParentGroup($id, $check_inhome);
                     foreach ($array_group_temp as $groupid_i) {
                         if (! $check_inhome or ($check_inhome and $global_array_group[$groupid_i]['inhome'] == 1)) {
                             $array_group[$groupid_i] = $groupid_i;
@@ -468,6 +468,49 @@ function GetGroupidInParent($groupid, $check_inhome = 0, $only_children = 0,$cid
     }
 
     return array_unique($array_group);
+}
+function GetGroupidInParent( $groupid, $check_inhome = 0, $only_children = 0 )
+{
+	global $global_array_group, $array_group;
+
+	if( $only_children )
+	{
+		$array_group = array( );
+	}
+	else
+	{
+		$array_group[] = $groupid;
+	}
+
+	$subgroupid = explode( ',', $global_array_group[$groupid]['subgroupid'] );
+	if( !empty( $subgroupid ) )
+	{
+		foreach( $subgroupid as $id )
+		{
+			if( $id > 0 )
+			{
+				if( $global_array_group[$id]['numsubgroup'] == 0 )
+				{
+					if( !$check_inhome or ($check_inhome and $global_array_group[$id]['inhome'] == 1) )
+					{
+						$array_group[] = $id;
+					}
+				}
+				else
+				{
+					$array_group_temp = GetGroupidInParent( $id, $check_inhome );
+					foreach( $array_group_temp as $groupid_i )
+					{
+						if( !$check_inhome or ($check_inhome and $global_array_group[$groupid_i]['inhome'] == 1) )
+						{
+							$array_group[] = $groupid_i;
+						}
+					}
+				}
+			}
+		}
+	}
+	return array_unique( $array_group );
 }
 
 /**
