@@ -13,6 +13,36 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 }
 
 $error = '';
+if ($nv_Request->isset_request('nv_genpass', 'post')) {
+    $_len = round((NV_UPASSMIN + NV_UPASSMAX) / 2);
+    echo nv_genpass($_len, $global_config['nv_upass_type']);
+    exit();
+}
+
+if ($nv_Request->isset_request('name', 'post')) {
+    $name = $nv_Request->get_string('name', 'post', '');
+	$sql = 'SELECT userid, email, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE username="' . $name . '"';
+    $result = $db->query($sql);
+	$info = $result->fetch();
+	if(!empty($info)){
+		$sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_info WHERE userid=' . $info['userid'];
+		$result = $db->query($sql);
+		$more_info = $result->fetch();
+		$return = array(
+            'email' => $info['email'],
+            'full_name' => $info['last_name'] . ' ' . $info['first_name'],
+			'phone' => !empty($more_info['phone']) ? $more_info['phone'] : '',
+			'mobile' => !empty($more_info['mobile']) ? $more_info['mobile'] : '',
+			'website' => !empty($more_info['website']) ? $more_info['website'] : '',
+			'location' => !empty($more_info['location']) ? $more_info['location'] : '',
+			'yim' => !empty($more_info['yim']) ? $more_info['yim'] : '',
+			'fax' => !empty($more_info['fax']) ? $more_info['fax'] : ''
+        );
+    $json = json_encode($return);
+    echo $json;
+    die();
+	}
+}
 
 if ($nv_Request->get_int('save', 'post') == '1') {
     $login = strip_tags($nv_Request->get_string('login_iavim', 'post', ''));
