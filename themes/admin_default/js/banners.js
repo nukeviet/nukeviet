@@ -327,14 +327,30 @@ function find_User() {
         data: 'name=' + name,
         success: function(data) {
         	var obj = jQuery.parseJSON(data);
-            $('#email_iavim').val(obj.email);
-			$('#full_name').val(obj.full_name);
-			$('#phone').val(obj.phone);
-			$('#website_iavim').val(obj.website);
-			$('#location').val(obj.location);
-			$('#yim_iavim').val(obj.yim);
-			$('#fax').val(obj.fax);
-			$('#mobile').val(obj.mobile);
+        	if ($('#email_iavim').val()=='') {
+        		$('#email_iavim').val(obj.email);
+        	};
+        	if ($('#full_name').val()=='') {
+        		$('#full_name').val(obj.full_name);
+        	};
+        	if ($('#phone').val()=='') {
+        		$('#phone').val(obj.phone);
+        	};
+        	if ($('#website_iavim').val()=='') {
+        		$('#website_iavim').val(obj.website);
+        	};
+        	if ($('#location').val()=='') {
+        		$('#location').val(obj.location);
+        	};
+        	if ($('#yim_iavim').val()=='') {
+        		$('#yim_iavim').val(obj.yim);
+        	};
+			if ($('#fax').val()=='') {
+        		$('#fax').val(obj.fax);
+        	};
+        	if ($('#mobile').val()=='') {
+        		$('#mobile').val(obj.mobile);
+        	};
         },
     });
 }

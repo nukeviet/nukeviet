@@ -21,7 +21,7 @@ if ($nv_Request->isset_request('nv_genpass', 'post')) {
 
 if ($nv_Request->isset_request('name', 'post')) {
     $name = $nv_Request->get_string('name', 'post', '');
-	$sql = 'SELECT userid, email, first_name, last_name FROM ' . NV_USERS_GLOBALTABLE . ' WHERE username="' . $name . '"';
+	 $sql = "SELECT userid, email, first_name, last_name FROM " . NV_USERS_GLOBALTABLE . " WHERE md5username='". nv_md5safe($name) . "'";
     $result = $db->query($sql);
 	$info = $result->fetch();
 	if(!empty($info)){
