@@ -1730,6 +1730,18 @@ a.btn {
     vertical-align:middle;
 }
 
+.nv-recaptcha-default {
+    margin: 0 auto;
+    width: 304px;
+    height: 78px;
+}
+
+.nv-recaptcha-compact {
+    margin: 0 auto;
+    width: 164px;
+    height: 144px;
+}
+
 /* List item */
 
 .nv-list-item {

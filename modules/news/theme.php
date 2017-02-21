@@ -1019,15 +1019,21 @@ function sendmail_themme($sendmail)
     $xtpl->assign('SENDMAIL', $sendmail);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('GFX_NUM', NV_GFX_NUM);
 
     if ($global_config['gfx_chk'] > 0) {
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-        $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-        $xtpl->parse('main.content.captcha');
+        if ($global_config['captcha_type'] == 2) {
+            $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+            $xtpl->parse('main.content.recaptcha');
+        } else {
+            $xtpl->assign('GFX_NUM', NV_GFX_NUM);
+            $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+            $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+            $xtpl->parse('main.content.captcha');
+        }
     }
 
     $xtpl->parse('main.content');
