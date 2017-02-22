@@ -148,7 +148,7 @@ if (! empty($savegroup)) {
 
                     foreach ($data['cateid_old'] as $cateid_old) {
                         if (!in_array($cateid_old, $data['cateid'])) {
-                            $db->query('DELETE FROM ' . $table_name . '_cateid WHERE cateid = ' . $cateid_old);
+                            $db->query('DELETE FROM ' . $table_name . '_cateid WHERE cateid = ' . $cateid_old.' AND groupid='.$data['groupid']);
                         }
                     }
                 }

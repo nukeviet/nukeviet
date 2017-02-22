@@ -54,7 +54,7 @@ if ($cid > 0) {
    while (list($groupid) = $result->fetch(3)) {
    		if($global_array_group[$groupid]['parentid']==0)
    		{
-   			$arr_groupid[$groupid] = GetGroupidInParent($groupid, 0, 1,$cid);
+   			$arr_groupid[$groupid] = GetGroupidInParentGroup($groupid, 0, 1,$cid);
    		}
 		else {
 			$arr[$groupid]=$groupid;
@@ -91,7 +91,7 @@ if ($cid > 0) {
     }
 
 }
-//print_r($contents_temp_cate);die();
+
 include NV_ROOTDIR . '/includes/header.php';
 echo $contents_temp_cate;
 include NV_ROOTDIR . '/includes/footer.php';
