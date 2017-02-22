@@ -259,7 +259,12 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         if (! empty($nv_row['password'])) {
             if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
                 $password = $nv_Request->get_string('password', 'post', '');
-                $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+
+                if ($global_config['captcha_type'] == 2) {
+                    $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+                } else {
+                    $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+                }
 
                 $check_seccode = ! $gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
 
@@ -313,7 +318,11 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     if ($nv_Request->isset_request('nv_login', 'post')) {
         $nv_username = $nv_Request->get_title('login', 'post', '', 1);
         $nv_password = $nv_Request->get_title('password', 'post', '');
-        $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+        if ($global_config['captcha_type'] == 2) {
+            $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+        } else {
+            $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+        }
 
         $check_seccode = ! $gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
 
@@ -552,7 +561,11 @@ $blocker->trackLogin($rules);
 if ($nv_Request->isset_request('nv_login', 'post')) {
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
-    $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+    if ($global_config['captcha_type'] == 2) {
+        $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    } else {
+        $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+    }
     
     $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
     $check_seccode = ! $gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
@@ -560,8 +573,8 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
     if (! $check_seccode) {
         die(signin_result(array(
             'status' => 'error',
-            'input' => 'nv_seccode',
-            'mess' => $lang_global['securitycodeincorrect'] )));
+            'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) )));
     }
 
     if (empty($nv_username)) {

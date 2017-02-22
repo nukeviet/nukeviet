@@ -28,9 +28,7 @@ function nv_del_content(id, checkss, base_adminurl, detail) {
             if (r_split[0] == 'OK') {
                 if( detail ){
                     window.location.href = r_split[2];
-                }
-                else
-                {
+                } else {
                     window.location.href = strHref;
                 }
             } else if (r_split[0] == 'ERR') {

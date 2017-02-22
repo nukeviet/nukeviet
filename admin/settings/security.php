@@ -95,7 +95,8 @@ $captcha_array = array(
     7 => $lang_module['captcha_7']
 );
 
-$captcha_type_array = array(0 => $lang_module['captcha_type_0'], 1 => $lang_module['captcha_type_1']);
+$captcha_type_array = array(0 => $lang_module['captcha_type_0'], 1 => $lang_module['captcha_type_1'], 2 => $lang_module['captcha_type_2']);
+$recaptcha_type_array = array('image' => $lang_module['recaptcha_type_image'], 'audio' => $lang_module['recaptcha_type_audio']);
 
 $errormess = '';
 if ($nv_Request->isset_request('submitcaptcha', 'post')) {
@@ -123,6 +124,9 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     $array_config_global['login_time_tracking'] = $nv_Request->get_int('login_time_tracking', 'post', 0);
     $array_config_global['login_time_ban'] = $nv_Request->get_int('login_time_ban', 'post', 0);
     $array_config_global['two_step_verification'] = $nv_Request->get_int('two_step_verification', 'post', 0);
+    $array_config_global['recaptcha_sitekey'] = $nv_Request->get_title('recaptcha_sitekey', 'post', '');
+    $array_config_global['recaptcha_secretkey'] = $nv_Request->get_title('recaptcha_secretkey', 'post', '');
+    $array_config_global['recaptcha_type'] = $nv_Request->get_title('recaptcha_type', 'post', '');
     
     if ($array_config_global['login_number_tracking'] < 1) {
         $array_config_global['login_number_tracking'] = 5;
@@ -132,6 +136,17 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
     }
     if ($array_config_global['two_step_verification'] < 0 or $array_config_global['two_step_verification'] > 3) {
         $array_config_global['two_step_verification'] = 0;
+    }
+    
+    if ($array_config_global['captcha_type'] == 2 and (empty($array_config_global['recaptcha_sitekey']) or empty($array_config_global['recaptcha_secretkey']))) {
+        $array_config_global['captcha_type'] = 0;
+    }
+    if (!isset($recaptcha_type_array[$array_config_global['recaptcha_type']])) {
+        $array_config_global['recaptcha_type'] = array_keys($array_config_global['recaptcha_type']);
+        $array_config_global['recaptcha_type'] = $array_config_global['recaptcha_type'][0];
+    }
+    if (!empty($array_config_global['recaptcha_secretkey'])) {
+        $array_config_global['recaptcha_secretkey'] = nv_base64_encode($crypt->aes_encrypt($array_config_global['recaptcha_secretkey']));
     }
     
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
@@ -298,6 +313,23 @@ foreach ($captcha_type_array as $captcha_type_i => $captcha_type_lang) {
     $xtpl->assign('OPTION', $array);
     $xtpl->parse('main.captcha_type');
 }
+
+$xtpl->assign('RECAPTCHA_SITEKEY', $global_config['recaptcha_sitekey']);
+$xtpl->assign('RECAPTCHA_SECRETKEY', $global_config['recaptcha_secretkey'] ? $crypt->aes_decrypt(nv_base64_decode($global_config['recaptcha_secretkey'])) : '');
+
+$xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($global_config['captcha_type'] == 2) ? ' style="display:none;"' : '');
+$xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($global_config['captcha_type'] == 2) ? '' : ' style="display:none;"');
+
+foreach ($recaptcha_type_array as $recaptcha_type_key => $recaptcha_type_title) {
+    $array = array(
+        'value' => $recaptcha_type_key,
+        'select' => ($global_config['recaptcha_type'] == $recaptcha_type_key) ? ' selected="selected"' : '',
+        'text' => $recaptcha_type_title
+    );
+    $xtpl->assign('RECAPTCHA_TYPE', $array);
+    $xtpl->parse('main.recaptcha_type');
+}
+
 for ($i = 2; $i < 10; $i++) {
     $array = array(
         'value' => $i,

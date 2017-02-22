@@ -486,8 +486,34 @@ class Browser
      */
     protected function checkBrowserBlackBerry()
     {
-        if (stripos($this->_agent, 'blackberry') !== false) {
+        // User Agent in BlackBerry 6 and BlackBerry 7: Mozilla/5.0 (BlackBerry; U; BlackBerry AAAA; en-US) AppleWebKit/534.11+ (KHTML, like Gecko) Version/X.X.X.X Mobile Safari/534.11+
+        // User Agent in BlackBerry Device Software 4.2 to 5.0: BlackBerry9000/5.0.0.93 Profile/MIDP-2.0 Configuration/CLDC-1.1 VendorID/179
+        if (stripos($this->_agent, 'BlackBerry') !== false) {
             $aresult = explode("/", stristr($this->_agent, "BlackBerry"));
+            if (isset($aresult[1])) {
+                $aversion = explode(' ', $aresult[1]);
+                $this->setVersion($aversion[0]);
+                $this->_browser_name = self::BROWSER_BLACKBERRY_NAME;
+                $this->_browser_key = self::BROWSER_BLACKBERRY;
+                $this->setMobile(true);
+                return true;
+            }
+        }
+        // User Agent in BlackBerry Tablet OS: Mozilla/5.0 (PlayBook; U; RIM Tablet OS 2.0.0; en-US) AppleWebKit/535.8+ (KHTML, like Gecko) Version/7.2.0.0 Safari/535.8+
+        if (stripos($this->_agent, 'PlayBook') !== false) {
+            $aresult = explode("/", stristr($this->_agent, "PlayBook"));
+            if (isset($aresult[1])) {
+                $aversion = explode(' ', $aresult[1]);
+                $this->setVersion($aversion[0]);
+                $this->_browser_name = self::BROWSER_BLACKBERRY_NAME;
+                $this->_browser_key = self::BROWSER_BLACKBERRY;
+                $this->setTablet(true);
+                return true;
+            }
+        }
+        // User Agent in BlackBerry 10: Mozilla/5.0 (BB10; <Device Type>) AppleWebKit/537.10+ (KHTML, like Gecko) Version/<BB Version #> Mobile Safari/537.10+
+        if (stripos($this->_agent, '(BB10;') !== false) {
+            $aresult = explode("/", stristr($this->_agent, "(BB10;"));
             if (isset($aresult[1])) {
                 $aversion = explode(' ', $aresult[1]);
                 $this->setVersion($aversion[0]);
@@ -796,9 +822,7 @@ class Browser
                 $this->setVersion($aversion[0]);
                 if (stripos($this->_agent, 'coc_coc') !== false) {
                     $this->setBrowser(self::BROWSER_COCCOC, self::BROWSER_COCCOC_NAME);
-                }
-                else
-                {
+                } else {
                     $this->setBrowser(self::BROWSER_CHROME, self::BROWSER_CHROME_NAME);
                 }
                 //Chrome on Android
@@ -1323,6 +1347,10 @@ class Browser
         } elseif (stripos($this->_agent, 'Nokia') !== false) {
             $this->_platform = self::PLATFORM_NOKIA;
         } elseif (stripos($this->_agent, 'BlackBerry') !== false) {
+            $this->_platform = self::PLATFORM_BLACKBERRY;
+        } elseif (stripos($this->_agent, 'PlayBook') !== false) {
+            $this->_platform = self::PLATFORM_BLACKBERRY;
+        } elseif (stripos($this->_agent, 'BB10') !== false) {
             $this->_platform = self::PLATFORM_BLACKBERRY;
         } elseif (stripos($this->_agent, 'FreeBSD') !== false) {
             $this->_platform = self::PLATFORM_FREEBSD;

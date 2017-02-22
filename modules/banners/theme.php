@@ -69,7 +69,7 @@ function nv_banner_theme_main($contents, $manament)
  */
 function logininfo_theme($contents)
 {
-    global $global_config, $module_name, $module_file, $module_info;
+    global $global_config, $module_name, $module_file, $module_info, $lang_global;
 
     $xtpl = new XTemplate('logininfo.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('CLIENT_LOGIN_INFO', $contents['client_info']);
@@ -81,13 +81,19 @@ function logininfo_theme($contents)
     $xtpl->assign('PASS_INPUT_MAXLENGTH', $contents['pass_input_maxlength']);
 
     if ($contents['gfx_chk']) {
-        $xtpl->assign('CAPTCHA_LANG', $contents['captcha']);
-        $xtpl->assign('CAPTCHA_NAME', $contents['captcha_name']);
-        $xtpl->assign('CAPTCHA_IMG', $contents['captcha_img']);
-        $xtpl->assign('CAPTCHA_MAXLENGTH', $contents['captcha_maxlength']);
-        $xtpl->assign('CAPTCHA_REFRESH', $contents['captcha_refresh']);
-        $xtpl->assign('CAPTCHA_REFR_SRC', $contents['captcha_refr_src']);
-        $xtpl->parse('logininfo.captcha');
+        if ($global_config['captcha_type'] == 2) {
+            $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+            $xtpl->parse('logininfo.recaptcha');
+        } else {
+            $xtpl->assign('CAPTCHA_LANG', $contents['captcha']);
+            $xtpl->assign('CAPTCHA_NAME', $contents['captcha_name']);
+            $xtpl->assign('CAPTCHA_IMG', $contents['captcha_img']);
+            $xtpl->assign('CAPTCHA_MAXLENGTH', $contents['captcha_maxlength']);
+            $xtpl->assign('CAPTCHA_REFRESH', $contents['captcha_refresh']);
+            $xtpl->assign('CAPTCHA_REFR_SRC', $contents['captcha_refr_src']);
+            $xtpl->parse('logininfo.captcha');
+        }
     }
 
     $xtpl->assign('SUBMIT_LANG', $contents['submit']);

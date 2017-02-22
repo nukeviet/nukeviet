@@ -174,11 +174,24 @@ if (!nv_function_exists('nv_block_login')) {
                 $xtpl->assign('PASSWORD_RULE', $password_rule);
 
                 if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
-                    $xtpl->parse('main.' . $display_layout . '.captcha');
+                    if ($global_config['captcha_type'] == 2) {
+                        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                        $xtpl->parse('main.' . $display_layout . '.recaptcha.compact');
+                        $xtpl->parse('main.' . $display_layout . '.recaptcha.smallbtn');
+                        $xtpl->parse('main.' . $display_layout . '.recaptcha');
+                    } else {
+                        $xtpl->parse('main.' . $display_layout . '.captcha');
+                    }
                 }
 
                 if (in_array($global_config['gfx_chk'], array(3, 4, 6, 7))) {
-                    $xtpl->parse('main.allowuserreg.reg_captcha');
+                    if ($global_config['captcha_type'] == 2) {
+                        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                        $xtpl->parse('main.allowuserreg.reg_recaptcha');
+                    } else {
+                        $xtpl->parse('main.allowuserreg.reg_captcha');
+                    }
                 }
 
                 if (defined('NV_OPENID_ALLOWED')) {
@@ -334,6 +347,11 @@ if (!nv_function_exists('nv_block_login')) {
                                 }
                             }
                             $xtpl->parse('main.allowuserreg.field');
+                        }
+                    
+                        if ($global_config['allowuserreg'] == 2) {
+                            $xtpl->assign('LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostactivelink');
+                            $xtpl->parse('main.allowuserreg.lostactivelink');
                         }
 
                         $xtpl->parse('main.allowuserreg.agreecheck');

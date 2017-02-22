@@ -443,26 +443,50 @@ function nv_check_valid_email($mail)
 
 /**
  * nv_capcha_txt()
- *
- * @param string $seccode
- * @param string $scaptcha
+ * 
+ * @param mixed $seccode
  * @return
  */
 function nv_capcha_txt($seccode)
 {
-    global $sys_info, $global_config, $nv_Request;
+    global $sys_info, $global_config, $nv_Request, $client_info, $crypt;
 
-    mt_srand(( double )microtime() * 1000000);
-    $maxran = 1000000;
-    $random = mt_rand(0, $maxran);
-
-    $seccode = strtoupper($seccode);
-    $random_num = $nv_Request->get_string('random_num', 'session', 0);
-    $datekey = date('F j');
-    $rcode = strtoupper(md5(NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey));
-
-    $nv_Request->set_Session('random_num', $random);
-    return (preg_match('/^[a-zA-Z0-9]{' . NV_GFX_NUM . '}$/', $seccode) and $seccode == substr($rcode, 2, NV_GFX_NUM));
+    if ($global_config['captcha_type'] == 2) {
+        if (!empty($global_config['recaptcha_secretkey'])) {
+            $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
+            $request = array(
+                'secret' => $crypt->aes_decrypt(nv_base64_decode($global_config['recaptcha_secretkey'])),
+                'response' => $seccode,
+                'remoteip' => $client_info['ip']
+            );
+            $args = array(
+                'headers' => array(
+                    'Referer' => NV_MY_DOMAIN,
+                ),
+                'body' => $request
+            );
+            $array = $NV_Http->post('https://www.google.com/recaptcha/api/siteverify', $args);
+            if (is_array($array) and isset($array['body'])) {
+                $jsonRes = nv_object2array(@json_decode($array['body']));
+                if (is_array($jsonRes) and isset($jsonRes['success']) and ((bool)$jsonRes['success']) === true) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    } else {
+        mt_srand(( double )microtime() * 1000000);
+        $maxran = 1000000;
+        $random = mt_rand(0, $maxran);
+    
+        $seccode = strtoupper($seccode);
+        $random_num = $nv_Request->get_string('random_num', 'session', 0);
+        $datekey = date('F j');
+        $rcode = strtoupper(md5(NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey));
+    
+        $nv_Request->set_Session('random_num', $random);
+        return (preg_match('/^[a-zA-Z0-9]{' . NV_GFX_NUM . '}$/', $seccode) and $seccode == substr($rcode, 2, NV_GFX_NUM));
+    }
 }
 
 /**
