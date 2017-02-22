@@ -113,9 +113,10 @@ function nv_fix_banner_weight($pid)
  */
 function nv_add_client_theme($contents)
 {
-    global $global_config, $module_file;
+    global $global_config, $module_file, $lang_module;
     $xtpl = new XTemplate('add_client.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENTS', $contents);
+	$xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
     $xtpl->parse('main');
     return $xtpl->text('main');
@@ -410,7 +411,7 @@ function nv_add_banner_theme($contents)
         return $xtpl->text('upload_blocked');
     }
     $xtpl->assign('CLASS', $contents['is_error'] ? ' class="error"' : '');
-//print_r($contents['plan']);die();
+
     foreach ($contents['plan'][2] as $pid => $ptitle) {
         $xtpl->assign('PLAN', array(
             'key' => $pid,
