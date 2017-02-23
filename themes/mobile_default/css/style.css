@@ -795,7 +795,7 @@ header.header-up {
     padding-left:3px !important;
 }
 
-#header .site-buttons strong {
+#header .site-buttons a.user {
     display:inline-block;
     vertical-align:middle;
     width:26px;

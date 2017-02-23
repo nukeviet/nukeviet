@@ -110,6 +110,25 @@ function change_captcha(a) {
     return !1
 }
 
+function checkAll(a) {
+    $(".checkAll", a).is(":checked") ? $(".checkSingle", a).each(function() {
+        $(this).prop("checked", !0)
+    }) : $(".checkSingle", a).each(function() {
+        $(this).prop("checked", !1)
+    });
+    return !1
+}
+
+function checkSingle(a) {
+    var b = 0,
+        c = 0;
+    $(".checkSingle", a).each(function() {
+        $(this).is(":checked") ? b++ : c++
+    });
+    0 != b && 0 == c ? $(".checkAll", a).prop("checked", !0) : $(".checkAll", a).prop("checked", !1);
+    return !1
+}
+
 function tipHide() {
     $("[data-toggle=tip]").attr("data-click", "y").removeClass("active");
     $("#tip").hide();
