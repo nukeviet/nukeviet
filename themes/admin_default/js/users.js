@@ -449,6 +449,32 @@ function control_theme_groups() {
     }
 }
 
+function nv_del_oauthall(userid) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'delall=1&userid=' + userid, function(res) {
+            if (res == 'OK') {
+                window.location.href = window.location.href;
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+    return false;
+}
+
+function nv_del_oauthone(opid, userid) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'del=1&userid=' + userid + '&opid=' + opid, function(res) {
+            if (res == 'OK') {
+                window.location.href = window.location.href;
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+    return false;
+}
+
 $(document).ready(function(){
     // Edit user
     $("#pop").on("click", function() {

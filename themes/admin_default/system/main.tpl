@@ -140,7 +140,18 @@
 					<!-- END: loop -->
 				</ol>
 				<!-- END: breadcrumbs -->
-				<!-- BEGIN: select_option -->
+
+				<ul class="pull-right list-inline btncontrol">
+					<!-- BEGIN: url_instruction -->
+					<li><a target="_blank" href="{NV_URL_INSTRUCTION}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_INSTRUCTION}"><em class="fa fa-book fa-lg">&nbsp;</em></a></li>
+					<!-- END: url_instruction -->
+
+					<!-- BEGIN: site_mods -->
+					<li><a target="_blank" href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_GO_CLIENTMOD}"><em class="fa fa-globe fa-lg">&nbsp;</em></a></li>
+					<!-- END: site_mods -->
+				</ul>
+				
+                <!-- BEGIN: select_option -->
 				<div class="pull-right btn-group">
 					<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
 						{PLEASE_SELECT} <span class="caret">&nbsp;</span>
@@ -152,16 +163,6 @@
 					</ul>
 				</div>
 				<!-- END: select_option -->
-
-				<ul class="pull-right list-inline" style="margin: 0">
-					<!-- BEGIN: url_instruction -->
-					<li><a target="_blank" href="{NV_URL_INSTRUCTION}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_INSTRUCTION}"><em class="fa fa-book fa-lg">&nbsp;</em></a></li>
-					<!-- END: url_instruction -->
-
-					<!-- BEGIN: site_mods -->
-					<li><a target="_blank" href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_GO_CLIENTMOD}"><em class="fa fa-globe fa-lg">&nbsp;</em></a></li>
-					<!-- END: site_mods -->
-				</ul>
 			</div>
 			<div id="contentmod">
 				{THEME_ERROR_INFO}
