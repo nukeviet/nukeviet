@@ -45,6 +45,24 @@
         </div>
         <!-- END: captcha -->
         
+        <!-- BEGIN: recaptcha -->
+        <div class="form-group loginCaptcha">
+            <div class="middle text-center clearfix">
+                <!-- BEGIN: default --><div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div><!-- END: default -->
+                <!-- BEGIN: compact --><div class="nv-recaptcha-compact"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div><!-- END: compact -->
+                <script type="text/javascript">
+                nv_recaptcha_elements.push({
+                    id: "{RECAPTCHA_ELEMENT}",
+                    <!-- BEGIN: smallbtn -->size: "compact",<!-- END: smallbtn -->
+                    btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent()),
+                    pnum: 4,
+                    btnselector: '[type="submit"]'
+                });
+                </script>
+            </div>
+        </div>
+        <!-- END: recaptcha -->
+        
         <div class="text-center margin-bottom-lg">
             <!-- BEGIN: header --><input name="nv_header" value="{NV_HEADER}" type="hidden" /><!-- END: header -->
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{NV_REDIRECT}" type="hidden" /><!-- END: redirect -->

@@ -30,6 +30,8 @@ if (isset($access_admin['access_waiting'][$level]) and $access_admin['access_wai
 }
 if (isset($access_admin['access_editus'][$level]) and $access_admin['access_editus'][$level] == 1) {
     $allow_func[] = 'edit';
+    $allow_func[] = 'edit_2step';
+    $allow_func[] = 'edit_oauth';
 }
 if (isset($access_admin['access_delus'][$level]) and $access_admin['access_delus'][$level] == 1) {
     $allow_func[] = 'del';

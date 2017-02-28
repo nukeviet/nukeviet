@@ -30,7 +30,7 @@ function nv_sendvoting(form, id, num, checkss, errmsg, captcha) {
         nv_sendvoting_submit(id, checkss, vals);
     } else {
         $('#voting-modal-' + id).data('id', id).data('checkss', checkss).data('vals', vals);
-        modalShowByObj('#voting-modal-' + id);
+        modalShowByObj('#voting-modal-' + id, "recaptchareset");
     }
     return !1
 }
@@ -55,8 +55,13 @@ function nv_sendvoting_submit(id, checkss, vals, capt) {
 
 function nv_sendvoting_captcha(btn, id, msg) {
     var ctn = $('#voting-modal-' + id);
-    var capt = $('[name="captcha"]', $(btn).parent()).val();
-    if (!capt) {
+    var capt = "";
+    if (nv_is_recaptcha) {
+        capt = $('[name="g-recaptcha-response"]', $(btn).parent()).val();
+    } else {
+        capt = $('[name="captcha"]', $(btn).parent()).val();
+    }
+    if (capt == "") {
         alert(msg);
     } else {
         nv_sendvoting_submit(ctn.data('id'), ctn.data('checkss'), ctn.data('vals'), capt);

@@ -38,7 +38,7 @@ if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($
 
             $timeout = $nv_Request->get_int($site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, 'cookie', 0);
             $difftimeout = isset($module_config[$module]['timeoutcomm']) ? intval($module_config[$module]['timeoutcomm']) : 360;
-            
+
             if (($status == 2 and !defined('NV_IS_USER')) or $status == 0) {
                 $status = 0;
             } else {
