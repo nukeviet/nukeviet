@@ -7,6 +7,8 @@
  */
 
 function user_validForm(a) {
+    $('[type="submit"] .fa', $(a)).toggleClass('hidden');
+    $('[type="submit"]', $(a)).prop('disabled', true);
     $.ajax({
         type: $(a).prop("method"),
         cache: !1,
@@ -14,13 +16,12 @@ function user_validForm(a) {
         data: $(a).serialize(),
         dataType: "json",
         success: function(b) {
-            if( b.status == "error" )
-            {
+            $('[type="submit"] .fa', $(a)).toggleClass('hidden');
+            $('[type="submit"]', $(a)).prop('disabled', false);
+            if( b.status == "error" ) {
                 alert(b.mess);
                 $("[name=" + b.input + "]", a).focus();
-            }
-            else
-            {
+            } else {
                 location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
                 if( b.admin_add == "yes" ) {
                     if (confirm( b.mess )) {
@@ -446,6 +447,32 @@ function control_theme_groups() {
         $('[name="group_default"]').prop('checked', false)
         $('[name="group_default"]', $('[name="group[]"]:checked:first').parent().parent()).prop('checked', true)
     }
+}
+
+function nv_del_oauthall(userid) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'delall=1&userid=' + userid, function(res) {
+            if (res == 'OK') {
+                window.location.href = window.location.href;
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+    return false;
+}
+
+function nv_del_oauthone(opid, userid) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'del=1&userid=' + userid + '&opid=' + opid, function(res) {
+            if (res == 'OK') {
+                window.location.href = window.location.href;
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+    return false;
 }
 
 $(document).ready(function(){

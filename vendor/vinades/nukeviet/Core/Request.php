@@ -194,7 +194,7 @@ class Request
         if (sizeof($_POST)) {
             $array_keys = array_keys($_POST);
             foreach ($array_keys as $k) {
-                if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
+                if ((!preg_match('/^[a-zA-Z0-9\_]+$/', $k) and $k != 'g-recaptcha-response') or is_numeric($k)) {
                     unset($_POST[$k]);
                 }
             }

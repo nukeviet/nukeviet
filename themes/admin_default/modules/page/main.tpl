@@ -10,6 +10,8 @@
 			<tr class="text-center">
 				<th>{LANG.order}</th>
 				<th>{LANG.title}</th>
+				<th>{LANG.add_time}</th>
+				<th>{LANG.edit_time}</th>
 				<th>{LANG.status}</th>
 				<th>{LANG.feature}</th>
 			</tr>
@@ -24,6 +26,8 @@
 					<!-- END: weight -->
 				</select></td>
 				<td><a href="{ROW.url_view}" title="{ROW.title}" target="_blank">{ROW.title}</a></td>
+				<td>{ROW.add_time}</td>
+				<td>{ROW.edit_time}</td>
 				<td class="text-center">
 				<select id="change_status_{ROW.id}" onchange="nv_chang_status('{ROW.id}');" class="form-control">
 					<!-- BEGIN: status -->

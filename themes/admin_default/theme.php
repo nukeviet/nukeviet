@@ -298,7 +298,8 @@ function nv_admin_theme($contents, $head_site = 1)
         }
 
         $xtpl->parse('main.select_option');
-    } elseif (isset($site_mods[$module_name]['main_file']) and $site_mods[$module_name]['main_file']) {
+    }
+    if (isset($site_mods[$module_name]['main_file']) and $site_mods[$module_name]['main_file']) {
         $xtpl->assign('NV_GO_CLIENTMOD', $lang_global['go_clientmod']);
         $xtpl->parse('main.site_mods');
     }

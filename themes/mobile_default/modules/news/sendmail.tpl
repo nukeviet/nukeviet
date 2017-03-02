@@ -72,8 +72,26 @@
 						</div>
 					</div>
 					<!-- END: captcha -->
+                    
+                    <!-- BEGIN: recaptcha -->
+                    <div class="form-group">
+                        <label for="semail" class="col-sm-4 control-label">{N_CAPTCHA}<em>*</em></label>
+                        <div class="col-sm-20">
+                            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                            <script type="text/javascript">
+                            nv_recaptcha_elements.push({
+                                id: "{RECAPTCHA_ELEMENT}",
+                                btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+                            })
+                            </script>
+                        </div>
+                    </div>
+                    <!-- END: recaptcha -->
 
-					<input type="hidden" name="checkss" value="{SENDMAIL.checkss}" /><input type="hidden" name="catid" value="{SENDMAIL.catid}" /><input type="hidden" name="id" value="{SENDMAIL.id}" /><input type="submit" value="{LANG.sendmail_submit}" class="btn btn-default" />
+					<input type="hidden" name="checkss" value="{SENDMAIL.checkss}" />
+                    <input type="hidden" name="catid" value="{SENDMAIL.catid}" />
+                    <input type="hidden" name="id" value="{SENDMAIL.id}" />
+                    <input type="submit" value="{LANG.sendmail_submit}" class="btn btn-default" />
 				</form>
 			<!-- END: content -->
 		</div>

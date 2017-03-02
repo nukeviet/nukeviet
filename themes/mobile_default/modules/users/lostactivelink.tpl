@@ -30,6 +30,7 @@
     			<input type="text" class="required form-control" name="userField" id="userField_iavim" value="{DATA.userField}" maxlength="100"/>
     		</div>
     	</div>
+        <!-- BEGIN: captcha -->
     	<div class="form-group">
     		<label for="seccode_iavim" class="col-sm-8 control-label">{LANG.captcha}<span class="text-danger"> (*)</span>:</label>
     		<div class="col-sm-8">
@@ -42,6 +43,23 @@
     			</label>
     		</div>
     	</div>
+        <!-- END: captcha -->
+        <!-- BEGIN: recaptcha -->
+        <div class="form-group">
+            <div class="col-sm-8"></div>
+            <div class="col-sm-8">
+                <div class="middle text-center clearfix">
+                    <div id="{RECAPTCHA_ELEMENT}"></div>
+                    <script type="text/javascript">
+                    nv_recaptcha_elements.push({
+                        id: "{RECAPTCHA_ELEMENT}",
+                        btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+                    })
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!-- END: recaptcha -->        
     	<div class="form-group">
     		<div class="col-sm-offset-8 col-sm-16">
     			<input type="hidden" name="checkss" value="{DATA.checkss}" />
