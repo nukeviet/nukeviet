@@ -72,7 +72,7 @@ function file_name_change() {
 	if (blok_file_name != "") {
 		$("#block_config").show();
 		$("#block_config").html(htmlload);
-		$.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=block_config&bid=" + bid + "&module=" + module_type + "&selectthemes=" + selectthemes + "&file_name=" + blok_file_name + "&nocache=" + new Date().getTime(), function(theResponse) {
+		$.get(script_name + "?" + nv_name_variable + "=" + nv_module_name + '&' + nv_lang_variable + "=" + nv_lang_data + "&" + nv_fc_variable + "=block_config&bid=" + bid + "&module=" + module_type + "&selectthemes=" + selectthemes + "&file_name=" + blok_file_name + "&nocache=" + new Date().getTime(), function(theResponse) {
 			if (theResponse.length > 10) {
 				theResponse = theResponse.replace("<head/><tr><td", "<tr><td");//fix for Centmin Mod 1.2.3-eva2000.07
 				$("#block_config").html(theResponse);
@@ -87,7 +87,7 @@ function file_name_change() {
 
 $(function() {
 
-	$("select[name=file_name]").load(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=loadblocks&selectthemes=" + selectthemes + "&module=" + bid_module + "&bid=" + bid + "&nocache=" + new Date().getTime(), function() {
+	$("select[name=file_name]").load(script_name + "?" + nv_name_variable + "=" + nv_module_name + '&' + nv_lang_variable + "=" + nv_lang_data + "&" + nv_fc_variable + "=loadblocks&selectthemes=" + selectthemes + "&module=" + bid_module + "&bid=" + bid + "&nocache=" + new Date().getTime(), function() {
 		file_name_change();
 	});
 
@@ -107,7 +107,7 @@ $(function() {
 		if (module_type != "") {
 			$("#block_config").html("");
 			$("#block_config").hide();
-			$("select[name=file_name]").load(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable + "=loadblocks&bid=" + bid + "&module=" + module_type + "&nocache=" + new Date().getTime());
+			$("select[name=file_name]").load(script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_lang_variable + "=" + nv_lang_data + "&" + nv_fc_variable + "=loadblocks&bid=" + bid + "&module=" + module_type + "&nocache=" + new Date().getTime());
 		}
 	});
 
