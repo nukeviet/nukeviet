@@ -213,7 +213,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_plans (
 	id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
 	blang char(2) DEFAULT '',
 	title varchar(250) NOT NULL,
-	description varchar(255) DEFAULT '',
+	description text,    
 	form varchar(100) NOT NULL,
 	width smallint(4) unsigned NOT NULL DEFAULT '0',
 	height smallint(4) unsigned NOT NULL DEFAULT '0',
