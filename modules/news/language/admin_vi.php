@@ -135,7 +135,7 @@ $lang_module['setting_instant_articles_livetime1'] = 'Nhập 0 để tạo ngay 
 $lang_module['setting_instant_articles_gettime'] = 'Giới hạn thời gian (phút) lấy bài viết mới đăng và bài viết mới cập nhật tính từ thời điểm tạo RSS về trước';
 $lang_module['setting_instant_articles_gettime1'] = 'Chú ý: Facebook truy vấn vào nguồn cấp nhiều giờ một lần tuy nhiên để chắc chắn là bài viết mới cập nhật hoặc tạo mới có thể hiển thị giữa các khoảng thời gian chờ truy vấn từ facebook nên chọn giá trị này từ 60 phút trở lên. Cũng cần chú ý, nếu chọn giá trị này nhỏ hơn thời gian tạo lại RSS một số bài viết có thể sẽ không được hiển thị';
 $lang_module['setting_instant_articles_defaulturl'] = 'URL nguồn cấp RSS để khai báo nếu sử dụng tính năng bài viết tức thời';
-$lang_module['setting_instant_articles_defaulturl1'] = 'Chú ý: URL này là URL chứa toàn bộ bài viết của module, để lấy URL của nguồn cấp cho từng chuyên mục. Sau khi kích hoạt sử dụng tính năng bài viết tức thời xong, di chuyển vào phần quản lý chuyên mục, nhấp chọn nút hiển thị URL của nguồn cấp RSS bài viết tức thời tại mỗi chuyên mục tương ứng.';
+$lang_module['setting_instant_articles_defaulturl1'] = 'Chú ý: URL này là URL chứa toàn bộ bài viết của module. Để lấy URL của nguồn cấp cho từng chuyên mục, sau khi kích hoạt sử dụng tính năng bài viết tức thời xong, bạn cần di chuyển vào phần quản lý chuyên mục, nhấp chọn nút hiển thị URL của nguồn cấp RSS bài viết tức thời tại mỗi chuyên mục tương ứng.';
 $lang_module['setting_instant_articles_auto'] = 'Mặc định bài viết được đăng là bài viết tức thời nếu chức năng này kích hoạt';
 
 $lang_module['viewcat_page'] = 'Cách thể hiện Chuyên mục';
