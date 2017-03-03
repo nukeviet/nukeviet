@@ -1,75 +1,67 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div style="width: 780px;" class="quote">
-    <blockquote class="error">
-        <p>
-            <span>{ERROR}</span>
-        </p>
-    </blockquote>
-</div>
-<div class="clear"></div>
+<div class="alert alert-danger">{ERROR}</div>
 <!-- END: error -->
-<form action="{FORM_ACTION}" method="post">
-    <table class="tab1">
+
+<form class="form-inline" action="{FORM_ACTION}" method="post">
+    <table class="table table-striped table-bordered table-hover">
         <tbody>
             <tr>
                 <td>
                     {LANG.topic_name}
                 </td>
                 <td>
-                    <input class="txt" value="{DATA.title}" name="title" id="title" style="width:300px" maxlength="100" />
+                    <input class="form-control" value="{DATA.title}" name="title" id="title" style="width:300px" maxlength="100" />
                 </td>
             </tr>
-        </tbody>
-        <tbody class="second">
+            <tr>
+				<td> {LANG.alias}</td>
+				<td>
+				<input class="form-control" title="{LANG.alias}" type="text" name="alias" value="{DATA.alias}" style="width:300px" maxlength="255" id="id_alias" disabled="disabled"/>
+				&nbsp;<i class="fa fa-refresh fa-lg icon-pointer" onclick="nv_get_alias('id_alias');">&nbsp;</i>
+				</td>
+			</tr>
             <tr>
                 <td>
                     {LANG.description}
                 </td>
                 <td>
-                    <input class="txt" type="text" value="{DATA.description}" name="description" style="width:300px" maxlength="255" />
+                    <input class="form-control" type="text" value="{DATA.description}" name="description" style="width:300px" maxlength="255" />
                 </td>
             </tr>
-        </tbody>
-        <tbody>
             <tr>
                 <td>
                     {LANG.keywords}
                 </td>
                 <td>
-                    <input class="txt" type="text" value="{DATA.keywords}" name="keywords" style="width:300px" maxlength="255" />
+                    <input class="form-control" type="text" value="{DATA.keywords}" name="keywords" style="width:300px" maxlength="255" />
                 </td>
             </tr>
-        </tbody>
-        <tbody class="second">
             <tr>
                 <td>
                     {LANG.topic_parent}
                 </td>
                 <td>
-                    <select name="parentid">
+                    <select class="form-control" name="parentid">
                         <!-- BEGIN: parentid -->
                         <option value="{LISTCATS.id}"{LISTCATS.selected}>{LISTCATS.name}</option>
                         <!-- END: parentid -->
                     </select>
                 </td>
             </tr>
-        </tbody>
-        <tbody class="second">
 			<tr>
 				<td>
 					{LANG.homeImg} (24 x 24px)
 				</td>
 				<td>
-					<input title="{LANG.homeImg}" type="text" name="img" id="img" value="{DATA.img}" style="width:280px" maxlength="255" />
-					<input type="button" value="Browse server" class="selectimg" />
+										
+					<input class="form-control" style="width:300px" type="text" name="img" id="img" value="{DATA.img}" title="{LANG.homeImg}"/> 
+					<input type="button" value="Browse server" name="selectimg" class="btn btn-info" /> 
 				</td>
 			</tr>
-		</tbody>
-        <tbody>
             <tr>
-                <td colspan="2">
-                    <input type="submit" name="submit" value="{LANG.save}" />
+                <td colspan="2" class="text-center">
+                    <input class="btn btn-primary" type="submit" name="submit" value="{LANG.save}" />
                 </td>
             </tr>
         </tbody>
@@ -77,7 +69,34 @@
 </form>
 <script type="text/javascript">
 //<![CDATA[
-$("input.selectimg").click(function(){var a=$(this).prev().attr("id");nv_open_browse_file(script_name+"?"+nv_name_variable+"=upload&popup=1&area="+a+"&path={UPLOAD_CURRENT}/icons&type=image&currentpath={UPLOAD_CURRENT}/icons","NVImg","850","420","resizable=no,scrollbars=no,toolbar=no,location=no,status=no");return!1});
+var content_checkcatmsg = "{LANG.content_checkcatmsg}";
+$("input[name=selectimg]").click(function() {
+	var area = "img";
+	var alt = "homeimgalt";
+	var path = "{UPLOAD_CURRENT}/icons";
+	var currentpath = "{UPLOAD_CURRENT}/icons";
+	var type = "image";
+	nv_open_browse(script_name + "?" + nv_name_variable + "=upload&popup=1&area=" + area + "&alt=" + alt + "&path=" + path + "&type=" + type + "&currentpath=" + currentpath, "NVImg", 850, 420, "resizable=no,scrollbars=no,toolbar=no,location=no,status=no");
+	return false;
+});
+
+function nv_get_alias(id) {
+	var title = strip_tags($("[name='title']").val());
+	if (title != '') {
+		$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=topic&nocache=' + new Date().getTime(), 'get_alias_title=' + encodeURIComponent(title), function(res) {
+			$("#" + id).val(strip_tags(res));
+		});
+	}
+	return false;
+}
 //]]>
 </script>
+
+<!-- BEGIN: auto_get_alias -->
+<script type="text/javascript">
+	$("[name='title']").change(function() {
+		nv_get_alias('id_alias');
+	}); 
+</script>
+<!-- END: auto_get_alias -->
 <!-- END: main -->

@@ -1,37 +1,38 @@
 <!-- BEGIN: main -->
 <div id="pageContent">
     <!-- BEGIN: loop -->
-	<table class="tab1">
-        <tbody class="second">
-            <thead>
-				<td>
-					<a href="{DATA.userUrl}">{DATA.full_name}</a> (IP: {DATA.ip}). {LANG.cpubDate}: {DATA.pubDate}
-                </td>
-            </thead>
-            <tr>
-                <td> 
-                    {LANG.cnumbroken}: {DATA.broken}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {LANG.videoClip}: <a href="{DATA.clipUrl}">{DATA.title}</a>
-				</td>
-            </tr>
-            <tr>
-				<td>
-					<textarea style="width:98%" rows="4" name="content{DATA.id}">{DATA.content}</textarea>
-				</td>
-            </tr>
-            <tr>
-				<td>
-					<a class="save_{DATA.id}" href="{MODURL}">{LANG.saveAndChecked}</a>
-					|
-					<a class="del_{DATA.id}" href="{MODURL}">{GLANG.delete}</a>
-				</td>
-			</tr>
-			</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover">
+			<tbody>
+	            <thead>
+					<th>
+						<a href="{DATA.userUrl}">{DATA.full_name}</a> (IP: {DATA.ip}). {LANG.cpubDate}: {DATA.pubDate}
+	                </th>
+	            </thead>
+	            <tr>
+	                <td>
+	                    {LANG.cnumbroken}: {DATA.broken}
+	                </td>
+	            </tr>
+	            <tr>
+	                <td>
+	                    {LANG.videoClip}: <a href="{DATA.clipUrl}">{DATA.title}</a>
+					</td>
+	            </tr>
+	            <tr>
+					<td><textarea style="width:98%" rows="4" name="content{DATA.id}">{DATA.content}</textarea>
+					</td>
+	            </tr>
+	            <tr>
+					<td>
+						<a class="save_{DATA.id}" href="{MODURL}">{LANG.saveAndChecked}</a>
+						|
+						<a class="del_{DATA.id}" href="{MODURL}">{GLANG.delete}</a>
+					</td>
+				</tr>
+				</tbody>
+		</table>
+	</div>
     <!-- END: loop -->
 	<div id="nv_generate_page">
 		{NV_GENERATE_PAGE}
