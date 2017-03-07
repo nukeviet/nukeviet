@@ -32,6 +32,11 @@
 	<!-- BEGIN: type_image -->
 	<img alt="{DATA.file_alt}" src="{DATA.file_image}" width="{DATA.file_width}" height="{DATA.file_height}" />
 	<!-- END: type_image -->
+    <!-- BEGIN: bannerhtml -->
+    <div class="clearfix text-left">
+        {DATA.bannerhtml}
+    </div>
+    <!-- END: bannerhtml -->
 </div>
 <!-- END: loop -->
 <!-- END: main -->

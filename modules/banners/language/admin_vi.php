@@ -139,3 +139,4 @@ $lang_module['target_blank'] = 'Cửa sổ mới (_blank)';
 $lang_module['target_top'] = 'Cửa sổ trên cùng (_top)';
 $lang_module['target_self'] = 'Tại trang (_self)';
 $lang_module['target_parent'] = 'Cửa sổ cha (_parent)';
+$lang_module['bannerhtml'] = 'Nội dung quảng cáo';

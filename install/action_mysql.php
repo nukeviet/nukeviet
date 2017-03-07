@@ -237,6 +237,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_rows (
 	imageforswf varchar(255) DEFAULT '',
 	click_url varchar(255) DEFAULT '',
 	target varchar(10) NOT NULL DEFAULT '_blank',
+    bannerhtml mediumtext NOT NULL,
 	add_time int(11) unsigned NOT NULL DEFAULT '0',
 	publ_time int(11) unsigned NOT NULL DEFAULT '0',
 	exp_time int(11) unsigned NOT NULL DEFAULT '0',
