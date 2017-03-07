@@ -67,7 +67,7 @@ $lang_module['recaptcha_secretkey'] = 'Secret key';
 $lang_module['recaptcha_type'] = 'Kiểu xác nhận';
 $lang_module['recaptcha_type_image'] = 'Hình ảnh (nên chọn)';
 $lang_module['recaptcha_type_audio'] = 'Âm thanh';
-$lang_module['recaptcha_guide'] = 'Nhấp vào đây để lấy thông số Site key và Secret key. Chú ý: reCAPTCHA không hoạt động trên môi trường thử nghiệm localhost';
+$lang_module['recaptcha_guide'] = 'Nhấp vào đây để lấy thông số Site key và Secret key.';
 
 $lang_module['ftp_config'] = 'Cấu hình FTP';
 $lang_module['smtp_config'] = 'Cấu hình SMTP';

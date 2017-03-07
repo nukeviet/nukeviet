@@ -90,6 +90,9 @@ if (! nv_function_exists('nv_block_data_config_banners')) {
                 $banners['file_alt'] = (! empty($banners['file_alt'])) ? $banners['file_alt'] : $banners['title'];
                 $banners['file_image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . NV_BANNER_DIR . '/' . $banners['file_name'];
                 $banners['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=banners&amp;' . NV_OP_VARIABLE . '=click&amp;id=' . $banners['id'];
+                if (!empty($banners['bannerhtml'])) {
+                    $banners['bannerhtml'] = html_entity_decode($banners['bannerhtml'], ENT_COMPAT | ENT_HTML401, strtoupper($global_config['site_charset']));
+                }
                 $array_banners_content[] = $banners;
             }
         }
@@ -123,6 +126,10 @@ if (! nv_function_exists('nv_block_data_config_banners')) {
                     $xtpl->parse('main.loop.type_image_link');
                 } else {
                     $xtpl->parse('main.loop.type_image');
+                }
+                
+                if (!empty($banners['bannerhtml'])) {
+                    $xtpl->parse('main.loop.bannerhtml');
                 }
 
                 $xtpl->parse('main.loop');

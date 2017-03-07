@@ -71,6 +71,7 @@ function nv_CreateXML_bannerPlan()
                 'file_alt' => $row2['file_alt'],
                 'file_click' => $row2['click_url'],
                 'target' => $row2['target'],
+                'bannerhtml' => $row2['bannerhtml'],
                 'publ_time' => $row2['publ_time'],
                 'exp_time' => $row2['exp_time']
             );

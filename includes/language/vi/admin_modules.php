@@ -64,6 +64,7 @@ $lang_module['vmodule_note'] = 'Ghi chú';
 $lang_module['vmodule_select'] = 'Chọn module';
 $lang_module['vmodule_blockquote'] = 'Ghi chú: Tên module mới chỉ gồm các chữ cái, số và dấu gạch ngang.';
 $lang_module['vmodule_exit'] = 'Lỗi: Module bạn đặt đã có trong hệ thống.';
+$lang_module['vmodule_maxlength'] = 'Tối đa 50 ký tự';
 $lang_module['back'] = 'Quay lại';
 $lang_module['change_func_name'] = 'Đổi tên function "%s" của module "%s"';
 $lang_module['change_fun_alias'] = 'Đổi tên alias "%s" của module "%s"';
