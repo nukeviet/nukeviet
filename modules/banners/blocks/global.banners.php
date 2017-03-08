@@ -81,7 +81,7 @@ if (! nv_function_exists('nv_block_data_config_banners')) {
         foreach ($array_banners as $banners) {
             $banners = ( array )$banners;
             if ($banners['publ_time'] < NV_CURRENTTIME and ($banners['exp_time'] == 0 or $banners['exp_time'] > NV_CURRENTTIME)) {
-                $banners['file_height'] = round($banners['file_height'] * $width_banners / $banners['file_width']);
+                $banners['file_height'] = empty($banners['file_height']) ? 0 : round($banners['file_height'] * $width_banners / $banners['file_width']);
                 $banners['file_width'] = $width_banners;
                 if (! empty($banners['imageforswf']) and ! empty($client_info['is_mobile'])) {
                     $banners['file_name'] = $banners['imageforswf'];
@@ -116,16 +116,18 @@ if (! nv_function_exists('nv_block_data_config_banners')) {
             foreach ($array_banners_content as $banners) {
                 $xtpl->assign('DATA', $banners);
 
-                if ($banners['file_ext'] == 'swf') {
-                    if (! empty($banners['file_click'])) {
-                        $xtpl->parse('main.loop.type_swf.fix_link');
+                if ($banners['file_name'] != 'no_image') {
+                    if ($banners['file_ext'] == 'swf') {
+                        if (! empty($banners['file_click'])) {
+                            $xtpl->parse('main.loop.type_swf.fix_link');
+                        }
+    
+                        $xtpl->parse('main.loop.type_swf');
+                    } elseif (! empty($banners['file_click'])) {
+                        $xtpl->parse('main.loop.type_image_link');
+                    } else {
+                        $xtpl->parse('main.loop.type_image');
                     }
-
-                    $xtpl->parse('main.loop.type_swf');
-                } elseif (! empty($banners['file_click'])) {
-                    $xtpl->parse('main.loop.type_image_link');
-                } else {
-                    $xtpl->parse('main.loop.type_image');
                 }
                 
                 if (!empty($banners['bannerhtml'])) {
