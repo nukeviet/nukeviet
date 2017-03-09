@@ -134,9 +134,9 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $file_mime = 'no_image';
             $width = 0;
             $height = 0;
-			$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_rows ( title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
+			$_sql = "INSERT INTO " . NV_BANNERS_GLOBALTABLE. "_rows ( title, pid, clid, file_name, file_ext, file_mime, width, height, file_alt, imageforswf, click_url, target, bannerhtml, add_time, publ_time, exp_time, hits_total, act, weight) VALUES
 					( :title, " . $pid . ", " . $clid . ", :file_name, :file_ext, :file_mime,
-					" . $width . ", " . $height . ", :file_alt, '', :click_url, :target, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
+					" . $width . ", " . $height . ", :file_alt, '', :click_url, :target, :bannerhtml, " . NV_CURRENTTIME . ", " . $publtime . ", " . $exptime . ",
 					0, 1, " . $_weight . ")";
 
 	            $data_insert = array();
@@ -147,6 +147,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 	            $data_insert['file_alt'] = $file_alt;
 	            $data_insert['click_url'] = $click_url;
 	            $data_insert['target'] = $target;
+	            $data_insert['bannerhtml'] = $bannerhtml;
 	            $id = $db->insert_id($_sql, 'id', $data_insert);
     	}else{
     		$upload = new NukeViet\Files\Upload($contents['file_allowed_ext'], $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
