@@ -723,6 +723,8 @@ function cropfile() {
             zoomOnWheel: false,
             cropBoxMovable: true,
             cropBoxResizable: true,
+            minContainerWidth: 10,
+            minContainerHeight: 10,
             crop: function(e) {
                 $('#crop-x').val(parseInt(Math.floor(e.x)));
                 $('#crop-y').val(parseInt(Math.floor(e.y)));
@@ -840,6 +842,8 @@ function addlogo() {
             zoomOnWheel: false,
             cropBoxMovable: true,
             cropBoxResizable: false,
+            minContainerWidth: 10,
+            minContainerHeight: 10,
             crop: function(e) {
                 $('#addlogo-x').val(parseInt(Math.floor(e.x)));
                 $('#addlogo-y').val(parseInt(Math.floor(e.y)));
