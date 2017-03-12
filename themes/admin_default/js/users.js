@@ -477,19 +477,18 @@ function nv_del_oauthone(opid, userid) {
 
 $(document).ready(function(){
     // Edit user
-    $("#pop").on("click", function() {
-       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
-       $('#imagemodal').modal('show');
-    });
-
     $("#btn_upload").click(function() {
         nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
         return false;
     });
-    $('#current-photo-btn').click(function(){
+    $('#current-photo-btn').click(function() {
         $('#current-photo').hide();
         $('#photo_delete').val('1');
         $('#change-photo').show();
+    });
+    $('#imageresource').click(function() {
+        $('#current-photo-btn').click();
+        $("#btn_upload").click();
     });
 
     if ($.fn.validate){

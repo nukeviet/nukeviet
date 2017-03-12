@@ -517,6 +517,8 @@ UAV.common = {
                         cropBoxResizable: true,
                         minCropBoxWidth: minCropBoxWidth,
                         minCropBoxHeight: minCropBoxHeight,
+                        minContainerWidth: 10,
+                        minContainerHeight: 10,
                         crop: function(e) {
                             UAV.tool.update(e);
                         },
