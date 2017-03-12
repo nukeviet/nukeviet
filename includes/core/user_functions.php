@@ -608,6 +608,10 @@ function nv_html_site_js($html = true)
     if (defined('NV_IS_DRAG_BLOCK')) {
         $jsDef .= ',drag_block=1,blockredirect="' . nv_redirect_encrypt($client_info['selfurl']) . '",selfurl="' . $client_info['selfurl'] . '",block_delete_confirm="' . $lang_global['block_delete_confirm'] . '",block_outgroup_confirm="' . $lang_global['block_outgroup_confirm'] . '",blocks_saved="' . $lang_global['blocks_saved'] . '",blocks_saved_error="' . $lang_global['blocks_saved_error'] . '",post_url="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=themes&' . NV_OP_VARIABLE . '=",func_id=' . $module_info['funcs'][$op]['func_id'] . ',module_theme="' . $global_config['module_theme'] . '"';
     }
+    $jsDef .= ',nv_is_recaptcha=' . ($global_config['captcha_type'] == 2 ? '1' : '0');
+    if ($global_config['captcha_type'] == 2) {
+        $jsDef .= ',nv_recaptcha_sitekey="' . $global_config['recaptcha_sitekey'] . '",nv_recaptcha_type="' . $global_config['recaptcha_type'] . '",nv_recaptcha_elements=[]';
+    }
     $jsDef .= ';';
 
     $return = array();
@@ -699,7 +703,9 @@ function nv_groups_list_pub($mod_data = 'users')
 {
     global $nv_Cache, $db, $db_config, $global_config;
 
-    $query = 'SELECT group_id, title, group_type, exp_time FROM ' . $db_config['prefix'] . '_' . $mod_data . '_groups WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+    $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
+    
+    $query = 'SELECT group_id, title, group_type, exp_time FROM ' . $_mod_table . '_groups WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
     $list = $nv_Cache->db($query, '', $mod_data);
 
     if (empty($list)) {
@@ -717,7 +723,7 @@ function nv_groups_list_pub($mod_data = 'users')
     }
 
     if ($reload) {
-        $db->query('UPDATE ' . $db_config['prefix'] . '_' . $mod_data . '_groups SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
+        $db->query('UPDATE ' . $_mod_table . '_groups SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
         $nv_Cache->delMod($mod_data);
     }
 

@@ -35,6 +35,10 @@ if (! nv_function_exists('nv_block_news_cat')) {
         $html .= '</td>';
         $html .= '</tr>';
         $html .= '<tr>';
+        $html .= '<td>' . $lang_block['title_length'] . '</td>';
+        $html .= '<td><input type="text" class="form-control w200" name="config_title_length" size="5" value="' . $data_block['title_length'] . '"/></td>';
+        $html .= '</tr>';
+        $html .= '<tr>';
         $html .= '<td>' . $lang_block['numrow'] . '</td>';
         $html .= '<td><input type="text" class="form-control w200" name="config_numrow" size="5" value="' . $data_block['numrow'] . '"/></td>';
         $html .= '</tr>';
@@ -62,6 +66,7 @@ if (! nv_function_exists('nv_block_news_cat')) {
         $return['config'] = array();
         $return['config']['catid'] = $nv_Request->get_array('config_catid', 'post', array());
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
+        $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 20);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
         $return['config']['tooltip_position'] = $nv_Request->get_string('config_tooltip_position', 'post', 0);
         $return['config']['tooltip_length'] = $nv_Request->get_string('config_tooltip_length', 'post', 0);
@@ -82,7 +87,7 @@ if (! nv_function_exists('nv_block_news_cat')) {
         $catid = implode(',', $block_config['catid']);
 
         $db->sqlreset()
-            ->select('id, catid, title, alias, homeimgfile, homeimgthumb, hometext, publtime')
+            ->select('id, catid, title, alias, homeimgfile, homeimgthumb, hometext, publtime, external_link')
             ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows')
             ->where('status= 1 AND catid IN(' . $catid . ')')
             ->order('publtime DESC')
@@ -122,7 +127,13 @@ if (! nv_function_exists('nv_block_news_cat')) {
                 if (! $block_config['showtooltip']) {
                     $xtpl->assign('TITLE', 'title="' . $l['title'] . '"');
                 }
+                
+                $l['title_clean'] = nv_clean60($l['title'], $block_config['title_length']);
 
+                if ($l['external_link']) {
+                    $l['target_blank'] = 'target="_blank"';
+                }
+                
                 $xtpl->assign('ROW', $l);
                 if (! empty($l['thumb'])) {
                     $xtpl->parse('main.loop.img');

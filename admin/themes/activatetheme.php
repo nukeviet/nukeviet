@@ -102,7 +102,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
                 }
             } elseif (isset($site_mods[$row['module']]) and preg_match($global_config['check_block_module'], $file_name, $matches)) {
                 $mod_file = $site_mods[$row['module']]['module_file'];
-                if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name)) {
+                if (! file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name)) {
                     continue;
                 }
             } else {

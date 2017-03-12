@@ -7,6 +7,8 @@
  */
 
 function user_validForm(a) {
+    $('[type="submit"] .fa', $(a)).toggleClass('hidden');
+    $('[type="submit"]', $(a)).prop('disabled', true);
     $.ajax({
         type: $(a).prop("method"),
         cache: !1,
@@ -14,13 +16,12 @@ function user_validForm(a) {
         data: $(a).serialize(),
         dataType: "json",
         success: function(b) {
-            if( b.status == "error" )
-            {
+            $('[type="submit"] .fa', $(a)).toggleClass('hidden');
+            $('[type="submit"]', $(a)).prop('disabled', false);
+            if( b.status == "error" ) {
                 alert(b.mess);
                 $("[name=" + b.input + "]", a).focus();
-            }
-            else
-            {
+            } else {
                 location_href = script_name + "?" + nv_name_variable + "=" + nv_module_name + "&" + nv_fc_variable;
                 if( b.admin_add == "yes" ) {
                     if (confirm( b.mess )) {
@@ -424,11 +425,10 @@ function nv_users_check_choicetypes(elemnet) {
 function control_theme_groups() {
     var ingroup = $('[name="group[]"]:checked').length,
         gdefault = $('[name="group_default"]:checked').val(),
-        groups = [],
-        ioff = $('[name="is_official"]').is(':checked')
+        groups = []
     
     $('[name="group[]"]').each(function(){
-        if ($(this).is(':checked') && ingroup > 1 && ioff) {
+        if ($(this).is(':checked') && ingroup > 1) {
             $('.group_default', $(this).parent().parent()).show()
             
             if (typeof gdefault == 'undefined') {
@@ -449,21 +449,46 @@ function control_theme_groups() {
     }
 }
 
+function nv_del_oauthall(userid) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'delall=1&userid=' + userid, function(res) {
+            if (res == 'OK') {
+                window.location.href = window.location.href;
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+    return false;
+}
+
+function nv_del_oauthone(opid, userid) {
+    if (confirm(nv_is_del_confirm[0])) {
+        $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=edit_oauth&nocache=' + new Date().getTime(), 'del=1&userid=' + userid + '&opid=' + opid, function(res) {
+            if (res == 'OK') {
+                window.location.href = window.location.href;
+            } else {
+                alert(nv_is_del_confirm[2]);
+            }
+        });
+    }
+    return false;
+}
+
 $(document).ready(function(){
     // Edit user
-    $("#pop").on("click", function() {
-       $('#imagepreview').attr('src', $('#imageresource').attr('src'));
-       $('#imagemodal').modal('show');
-    });
-
     $("#btn_upload").click(function() {
         nv_open_browse( nv_base_siteurl  + "index.php?" + nv_name_variable  + "=" + nv_module_name + "&" + nv_fc_variable  + "=avatar/opener", "NVImg", 650, 430, "resizable=no,scrollbars=1,toolbar=no,location=no,status=no");
         return false;
     });
-    $('#current-photo-btn').click(function(){
+    $('#current-photo-btn').click(function() {
         $('#current-photo').hide();
         $('#photo_delete').val('1');
         $('#change-photo').show();
+    });
+    $('#imageresource').click(function() {
+        $('#current-photo-btn').click();
+        $("#btn_upload").click();
     });
 
     if ($.fn.validate){

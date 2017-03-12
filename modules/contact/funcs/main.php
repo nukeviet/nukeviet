@@ -60,6 +60,7 @@ if (empty($dpDefault) and ! empty($array_department)) {
 $fname = '';
 $femail = '';
 $fphone = '';
+$faddress = '';
 
 if (defined('NV_IS_USER')) {
     $fname = ! empty($user_info['full_name']) ? $user_info['full_name'] : $user_info['username'];
@@ -123,11 +124,11 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'input' => 'fcon',
             'mess' => $lang_module['error_content'] )));
     }
-    if (! nv_capcha_txt($nv_Request->get_title('fcode', 'post', ''))) {
+    if (! nv_capcha_txt(($global_config['captcha_type'] == 2 ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('fcode', 'post', '')))) {
         die(json_encode(array(
             'status' => 'error',
-            'input' => 'fcode',
-            'mess' => $lang_module['error_captcha'] )));
+            'input' => ($global_config['captcha_type'] == 2 ? '' : 'fcode'),
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) )));
     }
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);
@@ -146,12 +147,13 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $fcon = nv_nl2br($fcon);
     $fphone = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
+	$faddress = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 100);
 	$fsendcopy = (int)$nv_Request->get_bool('sendcopy', 'post');
     $sender_id = intval(defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
-    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES
-    (' . $fpart . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $sender_id . ', :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)';
+    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_address, sender_ip, is_read, is_reply) VALUES
+    (' . $fpart . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $sender_id . ', :sender_name, :sender_email, :sender_phone, :sender_address, :sender_ip, 0, 0)';
     $data_insert = array();
     $data_insert['cat'] = $fcat;
     $data_insert['title'] = $ftitle;
@@ -159,6 +161,7 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $data_insert['sender_name'] = $fname;
     $data_insert['sender_email'] = $femail;
     $data_insert['sender_phone'] = $fphone;
+	$data_insert['sender_address'] = $faddress;
     $data_insert['sender_ip'] = $client_info['ip'];
     $row_id = $db->insert_id($sql, 'id', $data_insert);
     if ($row_id > 0) {

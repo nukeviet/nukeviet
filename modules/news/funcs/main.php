@@ -28,7 +28,7 @@ if (! ($home or $request_uri == $base_url_rewrite or $request_uri == $page_url_r
 }
 if (! defined('NV_IS_MODADMIN') and $page < 5) {
     $cache_file = NV_LANG_DATA . '_' . $module_info['template'] . '-' . $op . '-' . $page . '-' . NV_CACHE_PREFIX . '.cache';
-    if (($cache = $nv_Cache->getItem($module_name, $cache_file)) != false) {
+    if (($cache = $nv_Cache->getItem($module_name, $cache_file, 3600)) != false) {
         $contents = $cache;
     }
 }
@@ -42,7 +42,7 @@ if (empty($contents)) {
     if ($viewcat == 'viewcat_none') {
         $contents = '';
     } elseif ($viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old') {
-        $order_by = ($viewcat == 'viewcat_page_new') ? 'publtime DESC' : 'publtime ASC';
+        $order_by = ($viewcat == 'viewcat_page_new') ? 'publtime DESC, addtime DESC' : 'publtime ASC, addtime ASC';
         $db_slave->sqlreset()
             ->select('COUNT(*)')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
@@ -50,7 +50,7 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, catid, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -109,7 +109,7 @@ if (empty($contents)) {
 
         $key = 0;
         $db_slave->sqlreset()
-        ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
         ->order('publtime DESC');
 
         foreach ($global_array_cat as $_catid => $array_cat_i) {
@@ -176,7 +176,7 @@ if (empty($contents)) {
         $key = 0;
 
         $db_slave->sqlreset()
-            ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+            ->select('id, listcatid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->where('status= 1 AND inhome=1')
             ->order('publtime DESC');
         foreach ($global_array_cat as $_catid => $array_cat_i) {
@@ -244,7 +244,7 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -274,7 +274,7 @@ if (empty($contents)) {
     } elseif ($viewcat == 'viewcat_list_new' or $viewcat == 'viewcat_list_old') {
         // Xem theo tieu de
 
-        $order_by = ($viewcat == 'viewcat_list_new') ? 'publtime DESC' : 'publtime ASC';
+        $order_by = ($viewcat == 'viewcat_list_new') ? 'publtime DESC, addtime DESC' : 'publtime ASC, addtime ASC';
 
         $db_slave->sqlreset()
             ->select('COUNT(*) ')
@@ -283,7 +283,7 @@ if (empty($contents)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order($order_by)
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);

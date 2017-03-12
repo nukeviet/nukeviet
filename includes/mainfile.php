@@ -21,7 +21,7 @@ define('NV_MAINFILE', true);
 define('NV_START_TIME', microtime(true));
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu =  $error_info = $countries = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -56,26 +56,6 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
 }
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 
-if (defined('NV_CONFIG_DIR')) {
-    $server_name = preg_replace('/^[a-z]+\:\/\//i', '', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : ''));
-    if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php')) {
-        require NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php';
-        $db_config['dbname'] = $db_config['dbsite'];
-        $global_config['my_domains'] = $server_name;
-    }
-    define('NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir']);
-    define('NV_FILES_DIR', NV_ASSETS_DIR . '/' . $global_config['site_dir']);
-    define('NV_CACHEDIR', SYSTEM_CACHEDIR . '/' . $global_config['site_dir']);
-    define('NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users');
-    define('NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users_groups');
-} else {
-    define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
-    define('NV_FILES_DIR', NV_ASSETS_DIR);
-    define('SYSTEM_CACHEDIR', NV_CACHEDIR);
-    define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
-    define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
-}
-
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
@@ -86,6 +66,12 @@ $ips = new NukeViet\Core\Ips();
 define('NV_FORWARD_IP', $ips->forward_ip);
 define('NV_REMOTE_ADDR', $ips->remote_addr);
 define('NV_CLIENT_IP', $ips->remote_ip);
+
+define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
+define('NV_FILES_DIR', NV_ASSETS_DIR);
+define('SYSTEM_CACHEDIR', NV_CACHEDIR);
+define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
+define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
 
 // Neu khong co IP
 if (NV_CLIENT_IP == 'none') {
@@ -139,32 +125,42 @@ $nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
 define('NV_SERVER_NAME', $nv_Request->server_name);
 // vd: mydomain1.com
 
+
 define('NV_SERVER_PROTOCOL', $nv_Request->server_protocol);
 // vd: http
+
 
 define('NV_SERVER_PORT', $nv_Request->server_port);
 // vd: 80
 
+
 define('NV_MY_DOMAIN', $nv_Request->my_current_domain);
 // vd: http://mydomain1.com:80
+
 
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
 
+
 define('NV_BASE_SITEURL', $nv_Request->base_siteurl . '/');
 // vd: /ten_thu_muc_chua_site/
+
 
 define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
 // vd: /ten_thu_muc_chua_site/admin/
 
+
 define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
 // D:/AppServ/www
+
 
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
 // Hau to cua file cache
 
+
 define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 // Kiem tra session cua nguoi dung
+
 
 define('NV_USER_AGENT', $nv_Request->user_agent);
 
@@ -329,7 +325,11 @@ $global_config['smtp_password'] = $crypt->aes_decrypt(nv_base64_decode($global_c
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
-if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array('mild', 'lite', 'none'))) {
+if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array(
+    'mild',
+    'lite',
+    'none'
+))) {
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);

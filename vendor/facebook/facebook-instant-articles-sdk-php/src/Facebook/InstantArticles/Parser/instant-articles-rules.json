@@ -1,0 +1,670 @@
+{
+    "rules" :
+        [
+            {
+                "class": "TextNodeRule"
+            },
+            {
+                "class": "PassThroughRule",
+                "selector" : "html"
+            },
+            {
+                "class": "PassThroughRule",
+                "selector" : "head"
+            },
+            {
+                "class": "PassThroughRule",
+                "selector" : "body"
+            },
+            {
+                "class": "PassThroughRule",
+                "selector" : "article"
+            },
+            {
+                "class": "PassThroughRule",
+                "selector" : "div"
+            },
+            {
+                "class": "PassThroughRule",
+                "selector" : "span"
+            },
+            {
+                "class": "PassThroughRule",
+                "selector" : "p"
+            },
+            {
+                "class": "PassThroughRule",
+                "selector" : "aside"
+            },
+            {
+                "class": "AnchorRule",
+                "selector" : "a",
+                "properties" : {
+                    "anchor.href" : {
+                        "type" : "string",
+                        "selector" : "a",
+                        "attribute": "href"
+                    },
+                    "anchor.rel" : {
+                        "type" : "string",
+                        "selector" : "a",
+                        "attribute": "rel"
+                    }
+                }
+            },
+            {
+                "class": "ItalicRule",
+                "selector" : "i"
+            },
+            {
+                "class": "BoldRule",
+                "selector" : "b"
+            },
+            {
+                "class": "BoldRule",
+                "selector" : "strong"
+            },
+            {
+                "class": "ParagraphRule",
+                "selector" : "p"
+            },
+            {
+                "class": "ParagraphFooterRule",
+                "selector" : "p"
+            },
+            {
+                "class": "ListItemRule",
+                "selector" : "li"
+            },
+            {
+                "class": "SponsorRule",
+                "selector" : "ul.op-sponsors",
+                "properties" : {
+                    "sponsor.page_url" : {
+                        "type" : "string",
+                        "selector" : "a",
+                        "attribute": "href"
+                    }
+                }
+            },
+            {
+                "class": "ListElementRule",
+                "selector" : "ul"
+            },
+            {
+                "class": "ListElementRule",
+                "selector" : "ol"
+            },
+            {
+                "class": "BlockquoteRule",
+                "selector" : "blockquote"
+            },
+            {
+                "class": "H1Rule",
+                "selector" : "h1",
+                "properties" : {
+                    "h1.class" : {
+                        "type" : "string",
+                        "selector" : "link",
+                        "attribute": "class"
+                    }
+                }
+            },
+            {
+                "class": "H1Rule",
+                "selector" : "title"
+            },
+            {
+                "class": "H2Rule",
+                "selector" : "h2",
+                "properties" : {
+                    "h2.class" : {
+                        "type" : "string",
+                        "selector" : "link",
+                        "attribute": "class"
+                    }
+                }
+            },
+            {
+                "class": "HeaderRule",
+                "selector" : "header"
+            },
+            {
+                "class": "FooterRule",
+                "selector" : "footer"
+            },
+            {
+                "class": "RelatedArticlesRule",
+                "selector" : "ul.op-related-articles",
+                "properties" : {
+                    "related.title" : {
+                        "type" : "string",
+                        "selector" : "ul.op-related-articles",
+                        "attribute": "title"
+                    }
+                }
+            },
+            {
+                "class": "FooterRelatedArticlesRule",
+                "selector" : "ul.op-related-articles"
+            },
+            {
+                "class": "RelatedItemRule",
+                "selector" : "li",
+                "properties" : {
+                    "related.sponsored" : {
+                        "type" : "exists",
+                        "selector" : "li",
+                        "attribute": "data-sponsored"
+                    },
+                    "related.url" : {
+                        "type" : "string",
+                        "selector" : "a",
+                        "attribute": "href"
+                    }
+                }
+            },
+            {
+                "class": "InstantArticleRule",
+                "selector" : "head",
+                "properties" : {
+                    "article.canonical" : {
+                        "type" : "string",
+                        "selector" : "link",
+                        "attribute": "href"
+                    },
+                    "article.charset" : {
+                        "type" : "xpath",
+                        "selector" : "//meta[@charset]",
+                        "attribute": "charset"
+                    },
+                    "article.markup.version" : {
+                        "type" : "xpath",
+                        "selector" : "//meta[@property='op:markup_version']",
+                        "attribute": "content"
+                    },
+                    "article.auto.ad" : {
+                        "type" : "xpath",
+                        "selector" : "//meta[@property='fb:use_automatic_ad_placement']",
+                        "attribute": "content"
+                    }
+
+                }
+            },
+            {
+                "class": "HeaderTitleRule",
+                "selector" : "h1"
+            },
+            {
+                "class": "HeaderSubTitleRule",
+                "selector" : "h2"
+            },
+            {
+                "class": "HeaderKickerRule",
+                "selector" : "h3.op-kicker"
+            },
+            {
+                "class": "TimeRule",
+                "selector" : "time.op-modified",
+                "properties" : {
+                    "article.time" : {
+                        "type" : "string",
+                        "selector" : "time",
+                        "attribute": "datetime"
+                    },
+                    "article.datetype": {
+                        "type": "constant",
+                        "value": "op-modified"
+                    }
+                }
+            },
+            {
+                "class": "TimeRule",
+                "selector" : "time.op-published",
+                "properties" : {
+                    "article.time" : {
+                        "type" : "string",
+                        "selector" : "time",
+                        "attribute": "datetime"
+                    },
+                    "article.datetype": {
+                        "type": "constant",
+                        "value": "op-published"
+                    }
+                }
+            },
+            {
+                "class": "AuthorRule",
+                "selector" : "address",
+                "properties" : {
+                    "author.url" : {
+                        "type" : "string",
+                        "selector" : "a",
+                        "attribute": "href"
+                    },
+                    "author.name" : {
+                        "type" : "string",
+                        "selector" : "a"
+                    },
+                    "author.role_contribution" : {
+                        "type" : "string",
+                        "selector" : "a",
+                        "attribute": "title"
+                    },
+                    "author.description" : {
+                        "type" : "sibling",
+                        "selector" : "a"
+                    }
+                }
+            },
+            {
+                "class": "H1Rule",
+                "selector" : "h1",
+                "properties" : {
+                    "op-left": {
+                        "type": "exists",
+                        "selector" : "h1.op-left"
+                    },
+                    "op-center": {
+                        "type": "exists",
+                        "selector" : "h1.op-center"
+                    },
+                    "op-right": {
+                        "type": "exists",
+                        "selector" : "h1.op-right"
+                    },
+
+                    "op-vertical-below": {
+                        "type": "exists",
+                        "selector" : "h1.op-vertical-below"
+                    },
+                    "op-vertical-center": {
+                        "type": "exists",
+                        "selector" : "h1.op-vertical-center"
+                    },
+                    "op-vertical-above": {
+                        "type": "exists",
+                        "selector" : "h1.op-vertical-above"
+                    }
+                }
+            },
+            {
+                "class": "H2Rule",
+                "selector" : "h2",
+                "properties" : {
+                    "op-left": {
+                        "type": "exists",
+                        "selector" : "h2.op-left"
+                    },
+                    "op-center": {
+                        "type": "exists",
+                        "selector" : "h2.op-center"
+                    },
+                    "op-right": {
+                        "type": "exists",
+                        "selector" : "h2.op-right"
+                    },
+
+                    "op-vertical-below": {
+                        "type": "exists",
+                        "selector" : "h2.op-vertical-below"
+                    },
+                    "op-vertical-center": {
+                        "type": "exists",
+                        "selector" : "h2.op-vertical-center"
+                    },
+                    "op-vertical-above": {
+                        "type": "exists",
+                        "selector" : "h2.op-vertical-above"
+                    }
+                }
+            },
+            {
+                "class": "CaptionCreditRule",
+                "selector" : "cite",
+                "properties" : {
+                    "op-left": {
+                        "type": "exists",
+                        "selector" : "cite.op-left"
+                    },
+                    "op-center": {
+                        "type": "exists",
+                        "selector" : "cite.op-center"
+                    },
+                    "op-right": {
+                        "type": "exists",
+                        "selector" : "cite.op-right"
+                    },
+
+                    "op-vertical-below": {
+                        "type": "exists",
+                        "selector" : "cite.op-vertical-below"
+                    },
+                    "op-vertical-center": {
+                        "type": "exists",
+                        "selector" : "cite.op-vertical-center"
+                    },
+                    "op-vertical-above": {
+                        "type": "exists",
+                        "selector" : "cite.op-vertical-above"
+                    }
+                }
+            },
+            {
+                "class": "PullquoteCiteRule",
+                "selector" : "cite"
+            },
+            {
+                "class": "CaptionRule",
+                "selector" : "figcaption",
+                "properties" : {
+                    "op-medium": {
+                        "type": "exists",
+                        "selector" : "figcaption.op-medium"
+                    },
+                    "op-large": {
+                        "type": "exists",
+                        "selector" : "figcaption.op-large"
+                    },
+                    "op-extra-large": {
+                        "type": "exists",
+                        "selector" : "figcaption.op-extra-large"
+                    },
+
+                    "op-left": {
+                        "type": "exists",
+                        "selector" : "figcaption.op-left"
+                    },
+                    "op-center": {
+                        "type": "exists",
+                        "selector" : "figcaption.op-center"
+                    },
+                    "op-right": {
+                        "type": "exists",
+                        "selector" : "figcaption.op-right"
+                    },
+
+                    "op-vertical-below": {
+                        "type": "exists",
+                        "selector" : "figcaption.op-vertical-below"
+                    },
+                    "op-vertical-center": {
+                        "type": "exists",
+                        "selector" : "figcaption.op-vertical-center"
+                    },
+                    "op-vertical-above": {
+                        "type": "exists",
+                        "selector" : "figcaption.op-vertical-above"
+                    },
+                    "caption.default": {
+                        "type": "string",
+                        "selector": "img",
+                        "attribute": "alt"
+                    }
+                }
+            },
+            {
+                "class": "AudioRule",
+                "selector" : "audio",
+                "properties" : {
+                    "audio.url" : {
+                        "type" : "string",
+                        "selector" : "source",
+                        "attribute": "src"
+                    },
+                    "audio.title" : {
+                        "type" : "string",
+                        "selector" : "audio",
+                        "attribute": "title"
+                    },
+                    "audio.autoplay" : {
+                        "type" : "string",
+                        "selector" : "audio",
+                        "attribute": "autoplay"
+                    },
+                    "audio.muted" : {
+                        "type" : "string",
+                        "selector" : "audio",
+                        "attribute": "muted"
+                    }
+                }
+            },
+            {
+                "class": "ImageRule",
+                "selector" : "figure",
+                "properties" : {
+                    "image.url" : {
+                        "type" : "string",
+                        "selector" : "img",
+                        "attribute": "src"
+                    },
+                    "image.like" : {
+                        "type" : "exists",
+                        "selector" : "figure[data-feedback*='fb:likes']",
+                        "attribute": "data-feedback"
+                    },
+                    "aspect-fit": {
+                        "type": "exists",
+                        "selector" : "figure[data-mode=aspect-fit]"
+                    },
+                    "aspect-fit-only": {
+                        "type": "exists",
+                        "selector" : "figure[data-mode=aspect-fit-only]"
+                    },
+                    "fullscreen": {
+                        "type": "exists",
+                        "selector" : "figure[data-mode=fullscreen]"
+                    },
+                    "non-interactive": {
+                        "type": "exists",
+                        "selector" : "figure[data-mode=non-interactive]"
+                    },
+                    "image.comments" : {
+                        "type" : "exists",
+                        "selector" : "figure[data-feedback*='fb:comments']",
+                        "attribute": "data-feedback"
+                    }
+                }
+            },
+            {
+                "class": "VideoRule",
+                "selector" : "figure",
+                "containsChild": "video",
+                "properties" : {
+                    "video.url" : {
+                        "type" : "string",
+                        "selector" : "source",
+                        "attribute": "src"
+                    },
+                    "video.type" : {
+                        "type" : "string",
+                        "selector" : "source",
+                        "attribute": "type"
+                    },
+                    "aspect-fit": {
+                        "type": "exists",
+                        "selector" : "figure[data-mode=aspect-fit]"
+                    },
+                    "aspect-fit-only": {
+                        "type": "exists",
+                        "selector" : "figure[data-mode=aspect-fit-only]"
+                    },
+                    "fullscreen": {
+                        "type": "exists",
+                        "selector" : "figure[data-mode=fullscreen]"
+                    },
+                    "non-interactive": {
+                        "type": "exists",
+                        "selector" : "figure[data-mode=non-interactive]"
+                    },
+                    "video.controls": {
+                        "type": "exists",
+                        "selector" : "video",
+                        "attribute": "controls"
+                    },
+                    "video.playback": {
+                        "type": "exists",
+                        "selector" : "video",
+                        "attribute": "data-fb-disable-autoplay"
+                    },
+                    "video.like" : {
+                        "type" : "exists",
+                        "selector" : "figure[data-feedback*='fb:likes']",
+                        "attribute": "data-feedback"
+                    },
+                    "video.comments" : {
+                        "type" : "exists",
+                        "selector" : "figure[data-feedback*='fb:comments']",
+                        "attribute": "data-feedback"
+                    }
+                }
+            },
+            {
+                "class": "MapRule",
+                "selector" : "figure.op-map"
+            },
+            {
+                "class": "GeoTagRule",
+                "selector" : "script.op-geotag",
+                "properties" : {
+                    "map.geotag" : {
+                        "type" : "string",
+                        "selector" : "script"
+                    }
+                }
+            },
+            {
+                "class": "InteractiveRule",
+                "selector" : "figure.op-interactive",
+                "properties" : {
+                    "no-margin" : {
+                        "type" : "exists",
+                        "selector" : "iframe.no-margin"
+                    },
+                    "column-width" : {
+                        "type" : "exists",
+                        "selector" : "iframe.column-width"
+                    },
+                    "interactive.url" : {
+                        "type" : "string",
+                        "selector" : "iframe",
+                        "attribute": "src"
+                    },
+                    "interactive.height" : {
+                        "type" : "int",
+                        "selector" : "iframe",
+                        "attribute": "height"
+                    },
+                    "interactive.width": {
+                        "type": "int",
+                        "selector": "iframe",
+                        "attribute": "width"
+                    },
+                    "interactive.iframe" : {
+                        "type" : "children",
+                        "selector" : "iframe"
+                    }
+                }
+            },
+            {
+                "class": "HeaderImageRule",
+                "selector" : "figure",
+                "containsChild" : "img",
+                "properties" : {
+                    "image.url" : {
+                        "type" : "string",
+                        "selector" : "img",
+                        "attribute": "src"
+                    }
+                }
+            },
+            {
+                "class": "SlideshowImageRule",
+                "selector" : "figure",
+                "properties" : {
+                    "image.url" : {
+                        "type" : "string",
+                        "selector" : "img",
+                        "attribute": "src"
+                    },
+                    "caption.title" : {
+                        "type" : "string",
+                        "selector" : "figcaption"
+                    }
+                }
+            },
+            {
+                "class": "SlideshowRule",
+                "selector" : "figure.op-slideshow"
+            },
+            {
+                "class": "AdRule",
+                "selector" : "figure.op-ad",
+                "properties" : {
+                    "ad.url" : {
+                        "type" : "string",
+                        "selector" : "iframe",
+                        "attribute": "src"
+                    },
+                    "ad.height" : {
+                        "type" : "int",
+                        "selector" : "iframe",
+                        "attribute": "height"
+                    },
+                    "ad.width" : {
+                        "type" : "int",
+                        "selector" : "iframe",
+                        "attribute": "width"
+                    },
+                    "ad.embed" : {
+                        "type" : "children",
+                        "selector" : "iframe"
+                    }
+                }
+            },
+            {
+                "class": "HeaderAdRule",
+                "selector" : "figure.op-ad",
+                "properties" : {
+                    "ad.url" : {
+                        "type" : "string",
+                        "selector" : "iframe",
+                        "attribute": "src"
+                    },
+                    "ad.height" : {
+                        "type" : "int",
+                        "selector" : "iframe",
+                        "attribute": "height"
+                    },
+                    "ad.width" : {
+                        "type" : "int",
+                        "selector" : "iframe",
+                        "attribute": "width"
+                    },
+                    "ad.embed" : {
+                        "type" : "children",
+                        "selector" : "iframe"
+                    }
+                }
+            },
+            {
+                "class": "AnalyticsRule",
+                "selector" : "figure.op-tracker",
+                "properties" : {
+                    "analytics.url" : {
+                        "type" : "string",
+                        "selector" : "iframe",
+                        "attribute": "src"
+                    },
+                    "analytics.embed" : {
+                        "type" : "children",
+                        "selector" : "iframe"
+                    }
+                }
+            },
+            {
+                "class": "PullquoteRule",
+                "selector" : "aside"
+            }
+        ]
+}

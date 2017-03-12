@@ -13,6 +13,8 @@
 				{GLANG.phonenumber}: {DATA.sender_phone}
 				<br />
 				<!-- END: sender_phone -->
+				{GLANG.address}: {DATA.sender_address}
+				<br />
 				IP: {DATA.sender_ip}
 				<br />
 				{DATA.time} </td>

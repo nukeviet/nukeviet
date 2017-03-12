@@ -197,6 +197,7 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 
 $rowvote['link'] = nv_htmlspecialchars($rowvote['link']);
 $rowvote['active_captcha'] = $active_captcha ? ' checked="checked"' : '';
+$rowvote['question_maxlength'] = ($db_config['charset'] == 'utf8') ? 333 : 250;
 
 $xtpl->assign('DATA', $rowvote);
 

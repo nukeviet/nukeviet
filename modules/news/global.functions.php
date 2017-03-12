@@ -127,7 +127,7 @@ function nv_del_content_module($id)
         nv_delete_notification(NV_LANG_DATA, $module_name, 'post_queue', $id);
         
         /*conenct to elasticsearch*/
-        if (isset($module_config[$module_name]['elas_use'])) {
+        if ($module_config[$module_name]['elas_use'] == 1) {
             $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
             $response = $nukeVietElasticSearh->delete_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $id);
         }
@@ -170,7 +170,7 @@ function nv_archive_content_module($id, $listcatid)
 function nv_link_edit_page($id)
 {
     global $lang_global, $module_name;
-    $link = "<a class=\"btn btn-primary btn-xs\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\"><em class=\"fa fa-edit margin-right\"></em> " . $lang_global['edit'] . "</a>";
+    $link = "<a class=\"btn btn-primary btn-xs btn_edit\" href=\"" . NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=content&amp;id=" . $id . "\"><em class=\"fa fa-edit margin-right\"></em> " . $lang_global['edit'] . "</a>";
     return $link;
 }
 

@@ -169,6 +169,9 @@ class Optimizer
                 }
 
                 $this->_content = preg_replace("/\{\|js\_" . $key . "\|\}/", $this->eol . $value, $this->_content);
+                if (!empty($this->_htmlforFooter)) {
+                    $this->_htmlforFooter = preg_replace("/\{\|js\_" . $key . "\|\}/", $this->eol . $value, $this->_htmlforFooter);
+                }
             }
         }
 

@@ -33,8 +33,11 @@ if (! empty($cl_full_name)) {
     $cl_full_name = $cl_full_name . ' (' . $cl_login . ')';
     $cl_full_name = '<a href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=info_client&amp;id=' . $row['clid'] . '">' . $cl_full_name . '</a>';
 }
-
-$img_info = sprintf($lang_module['img_info2'], $row['file_ext'], $row['file_mime'], $row['width'], $row['height']);
+if($row['file_ext'] != 'no_image'){
+	$img_info = sprintf($lang_module['img_info2'], $row['file_ext'], $row['file_mime'], $row['width'], $row['height']);
+}else{
+	$img_info = '';
+}
 $click_url = $row['click_url'];
 
 if (! empty($click_url)) {

@@ -1,4 +1,4 @@
-CKEDITOR.plugins.setLang('cleanlink', 'vi', {
+CKEDITOR.plugins.setLang('cleanlink', 'en', {
 	title : 'Clean linkout',
 	about : 'About',
     guide : 'Guide',

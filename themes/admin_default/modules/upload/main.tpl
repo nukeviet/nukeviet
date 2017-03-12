@@ -4,9 +4,10 @@
 <!-- BEGIN: main -->
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.css" rel="stylesheet" />
+<link  type="text/css"href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css" rel="stylesheet" />
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.watermarker.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.flash.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.lazyload.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.min.js"></script>
@@ -324,6 +325,7 @@ LANG.upload_stop = "{LANG.upload_stop}";
 LANG.upload_continue = "{LANG.upload_continue}";
 LANG.upload_finish = "{LANG.upload_finish}";
 LANG.crop_error_small = "{LANG.crop_error_small}";
+LANG.crop_keep_original = "{LANG.crop_keep_original}";
 LANG.save = "{LANG.addlogosave}";
 LANG.notlogo = "{LANG.notlogo}";
 LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
