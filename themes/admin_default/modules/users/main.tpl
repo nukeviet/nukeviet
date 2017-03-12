@@ -86,9 +86,7 @@
                     <!-- END: set_official -->
                     <!-- BEGIN: edit -->
                     <div class="btn-group">
-                        <button type="button" class="btn btn-xs btn-warning">
-                            <a data-toggle="tooltip" title="{LANG.memberlist_edit}" href="{EDIT_URL}" class="text-white"><em class="fa fa-edit"></em></a>
-                        </button>
+                        <a class="btn btn-xs btn-warning text-white" href="{EDIT_URL}" data-toggle="tooltip" title="{LANG.memberlist_edit}"><em class="fa fa-edit"></em></a>
                         <button type="button" class="btn btn-warning btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only">{LANG.memberlist_edit}</span>

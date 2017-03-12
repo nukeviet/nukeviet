@@ -84,6 +84,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     if (! isset($targets[$target])) {
         $target = '_blank';
     }
+    $bannerhtml = $nv_Request->get_editor('bannerhtml', '', NV_ALLOWED_HTML_TAGS);
 
     if (! empty($publ_date) and ! preg_match('/^([0-9]{1,2})\/([0-9]{1,2})\/([0-9]{4})$/', $publ_date)) {
         $publ_date = '';
@@ -178,7 +179,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET title= :title, pid=' . $pid . ', clid=' . $clid . ',
 				 file_name= :file_name, file_ext= :file_ext, file_mime= :file_mime,
 				 width=' . $width . ', height=' . $height . ', file_alt= :file_alt, imageforswf= :imageforswf,
-				 click_url= :click_url, target= :target,
+				 click_url= :click_url, target= :target, bannerhtml=:bannerhtml, 
 				 publ_time=' . $publtime . ', exp_time=' . $exptime . ' WHERE id=' . $id);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':file_name', $file_name, PDO::PARAM_STR);
@@ -188,6 +189,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $stmt->bindParam(':imageforswf', $imageforswf, PDO::PARAM_STR);
             $stmt->bindParam(':click_url', $click_url, PDO::PARAM_STR);
             $stmt->bindParam(':target', $target, PDO::PARAM_STR);
+            $stmt->bindParam(':bannerhtml', $bannerhtml, PDO::PARAM_STR, strlen($bannerhtml));
             $stmt->execute();
 
             if ($pid_old != $pid) {
@@ -209,6 +211,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $file_alt = $row['file_alt'];
     $click_url = $row['click_url'];
     $target = $row['target'];
+    $bannerhtml = $row['bannerhtml'];
     $publ_date = ! empty($row['publ_time']) ? date('d/m/Y', $row['publ_time']) : '';
     $exp_date = ! empty($row['exp_time']) ? date('d/m/Y', $row['exp_time']) : '';
 }
@@ -238,6 +241,18 @@ $contents['target'] = array( $lang_module['target'], 'target', $targets, $target
 
 $contents['publ_date'] = array( $lang_module['publ_date'], 'publ_date', $publ_date, 10 );
 $contents['exp_date'] = array( $lang_module['exp_date'], 'exp_date', $exp_date, 10 );
+
+$contents['bannerhtml'] = htmlspecialchars(nv_editor_br2nl($bannerhtml));
+
+if (defined('NV_EDITOR')) {
+    require_once NV_ROOTDIR . '/' . NV_EDITORSDIR . '/' . NV_EDITOR . '/nv.php';
+}
+
+if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
+    $contents['bannerhtml'] = nv_aleditor('bannerhtml', '100%', '300px', $contents['bannerhtml']);
+} else {
+    $contents['bannerhtml'] = '<textarea style="width:100%;height:300px" name="bannerhtml">' . $contents['bannerhtml'] . '</textarea>';
+}
 
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme(nv_edit_banner_theme($contents));
