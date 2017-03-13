@@ -161,6 +161,7 @@ $lang_module['content_clickhere'] = 'ici';
 $lang_module['content_showmore'] = '(extendre)';
 $lang_module['content_notetime'] = '(Date/mois/année heure:minute)';
 $lang_module['content_publ_date'] = 'Horaire de publication';
+$lang_module['order_publtime'] = 'Réorganiser par publication';
 $lang_module['content_exp_date'] = 'Date d\'expiration';
 $lang_module['content_extra'] = 'Fonction d\'extension';
 $lang_module['content_inhome'] = 'Afficher à l\'Accueil';

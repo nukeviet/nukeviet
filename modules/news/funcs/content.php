@@ -243,7 +243,11 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     if ($nv_Request->isset_request('contentid', 'post')) {
         $rowcontent['id'] = $contentid;
-        $fcode = $nv_Request->get_title('fcode', 'post', '');
+        if ($global_config['captcha_type'] == 2) {
+            $fcode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+        } else {
+            $fcode = $nv_Request->get_title('fcode', 'post', '');
+        }
         $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', array()));
 
         $rowcontent['listcatid'] = implode(',', $catids);
@@ -296,7 +300,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         } elseif (trim(strip_tags($rowcontent['bodyhtml'])) == '') {
             $error = $lang_module['error_bodytext'];
         } elseif (! nv_capcha_txt($fcode)) {
-            $error = $lang_module['error_captcha'];
+            $error = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
         } else {
             if (($array_post_user['postcontent']) and $nv_Request->isset_request('status1', 'post')) {
                 $rowcontent['status'] = 1;
@@ -525,13 +529,20 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
     $xtpl->assign('DATA', $rowcontent);
     $xtpl->assign('HTMLBODYTEXT', $htmlbodyhtml);
 
-    $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-    $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-    $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
-    $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
-    $xtpl->assign('CHECKSS', $checkss);
+    if ($global_config['captcha_type'] == 2) {
+        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+        $xtpl->parse('main.recaptcha');
+    } else {
+        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+        $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
+        $xtpl->assign('CHECKSS', $checkss);
+        $xtpl->parse('main.captcha');
+    }
 
     $xtpl->assign('CONTENT_URL', $base_url . '&contentid=' . $rowcontent['id'] . '&checkss=' . $checkss);
     $array_catid_in_row = explode(',', $rowcontent['listcatid']);
@@ -637,7 +648,6 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
             $item['link'] = $global_array_cat[$catid]['link'] . '/' . $item['alias'] . '-' . $item['id'] . $global_config['rewrite_exturl'];
             $array_catpage[] = $item;
         }
-
 
         // parse content
         $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);

@@ -27,7 +27,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $title = nv_htmlspecialchars(strip_tags($nv_Request->get_string('title', 'post', '')));
     $description = defined('NV_EDITOR') ? $nv_Request->get_string('description', 'post', '') : strip_tags($nv_Request->get_string('description', 'post', ''));
     $form = $nv_Request->get_string('form', 'post', 'sequential');
-
+	$require_image = $nv_Request->get_int('require_image', 'post', 0);
     if (! in_array($form, $forms)) {
         $form = 'sequential';
     }
@@ -44,12 +44,13 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $description = defined('NV_EDITOR') ? nv_nl2br($description, '') : nv_nl2br(nv_htmlspecialchars($description), '<br />');
         }
 
-        $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE. '_plans (blang, title, description, form, width, height, act) VALUES ( :blang, :title, :description, :form, ' . $width . ', ' . $height . ', 1)';
+        $_sql = 'INSERT INTO ' . NV_BANNERS_GLOBALTABLE. '_plans (blang, title, description, form, width, height, act, require_image) VALUES ( :blang, :title, :description, :form, ' . $width . ', ' . $height . ', 1, :require_image)';
         $data_insert = array();
         $data_insert['blang'] = $blang;
         $data_insert['title'] = $title;
         $data_insert['description'] = $description;
         $data_insert['form'] = $form;
+		$data_insert['require_image'] = $require_image;
         $id = $db->insert_id($_sql, 'id', $data_insert);
 
         nv_insert_logs(NV_LANG_DATA, $module_name, 'log_add_plan', 'planid ' . $id, $admin_info['userid']);
@@ -87,6 +88,7 @@ $contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
 $contents['blang'] = array( $lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang );
 $contents['form'] = array( $lang_module['form'], 'form', $forms, $form );
 $contents['size'] = $lang_module['size'];
+$contents['require_image'] = $lang_module['require_image'];
 $contents['width'] = array( $lang_module['width'], 'width', $width, 4 );
 $contents['height'] = array( $lang_module['height'], 'height', $height, 4 );
 $contents['description'] = array( $lang_module['description'], 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false );

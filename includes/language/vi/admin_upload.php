@@ -160,6 +160,7 @@ $lang_module['searchkey'] = 'Từ khóa tìm kiếm';
 
 $lang_module['crop'] = 'Cắt ảnh';
 $lang_module['crop_error_small'] = 'Ảnh này kích thước quá nhỏ, không nên cắt';
+$lang_module['crop_keep_original'] = 'Giữ lại ảnh gốc';
 $lang_module['rotate'] = 'Xoay ảnh';
 $lang_module['waiting'] = 'Đang tải dữ liệu, vui lòng đợi';
 $lang_module['file_no_exists'] = 'File không tồn tại';

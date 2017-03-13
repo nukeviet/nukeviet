@@ -67,6 +67,7 @@ $lang_global['password_rule_limit'] = 'Mật khẩu không hợp lệ: %1$s và 
 $lang_global['password_rule_nolimit'] = 'Mật khẩu phải từ %1$d đến %2$d ký tự';
 
 $lang_global['securitycodeincorrect'] = 'Mã bảo mật không chính xác';
+$lang_global['securitycodeincorrect1'] = 'Chưa xác thực không phải là Robot, vui lòng xác thực lại';
 $lang_global['loginincorrect'] = 'Hệ thống không tìm thấy tài khoản nào phù hợp với thông tin khai báo của bạn. Có thể bạn đã khai báo sai Tên đăng nhập hoặc Mật khẩu truy cập';
 $lang_global['admin_loginsuccessfully'] = 'Bạn đã đăng nhập thành công. Bây giờ hệ thống sẽ chuyển bạn đến khu vực Quản trị của site';
 $lang_global['incorrect_password'] = 'Mật khẩu sai';
@@ -96,6 +97,7 @@ $lang_global['password'] = 'Mật khẩu';
 $lang_global['password2'] = 'Lặp lại mật khẩu';
 $lang_global['captcharefresh'] = 'Thay mới';
 $lang_global['securitycode'] = 'Mã bảo mật';
+$lang_global['securitycode1'] = 'Xác minh bạn không phải là Robot';
 $lang_global['loginsubmit'] = 'Đăng nhập';
 $lang_global['register'] = 'Đăng ký';
 $lang_global['lostpass'] = 'Quên mật khẩu';

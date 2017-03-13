@@ -697,6 +697,7 @@ function cropfile() {
         $('#cropButtons').html('<span class="text-danger">' + LANG.crop_error_small + '</span>');
     } else {
         $('#cropButtons').html(
+            '<div class="margin-left text-left"><label><input type="checkbox" id="crop-keeporg" value="1"/>' + LANG.crop_keep_original + '</label></div>' +
             'X:<input type="text" id="crop-x" value="" class="w50 form-control" readonly="readonly"/> ' +
             'Y:<input type="text" id="crop-y" value="" class="w50 form-control" readonly="readonly"/> ' +
             'W:<input type="text" id="crop-w" value="" class="w50 form-control" readonly="readonly"/> ' +
@@ -723,6 +724,8 @@ function cropfile() {
             zoomOnWheel: false,
             cropBoxMovable: true,
             cropBoxResizable: true,
+            minContainerWidth: 10,
+            minContainerHeight: 10,
             crop: function(e) {
                 $('#crop-x').val(parseInt(Math.floor(e.x)));
                 $('#crop-y').val(parseInt(Math.floor(e.y)));
@@ -737,7 +740,7 @@ function cropfile() {
             $.ajax({
                 type: "POST",
                 url: nv_module_url + "cropimg&random=" + nv_randomNum(10),
-                data: "path=" + path + "&file=" + selFile + "&x=" + $('#crop-x').val() + "&y=" + $('#crop-y').val() + "&w=" + $('#crop-w').val() + "&h=" + $('#crop-h').val(),
+                data: "path=" + path + "&file=" + selFile + "&x=" + $('#crop-x').val() + "&y=" + $('#crop-y').val() + "&w=" + $('#crop-w').val() + "&h=" + $('#crop-h').val() + "&k=" + ($("#crop-keeporg").is(":checked") ? 1 : 0),
                 success: function(e) {
                     $('#crop-save').removeAttr('disabled');
                     e = e.split('#');
@@ -745,7 +748,7 @@ function cropfile() {
                     if (e[0] == 'ERROR') {
                         $("div#errorInfo").html(e[1]).dialog("open");
                     } else {
-                        LFILE.reload(path, selFile);
+                        LFILE.reload(path, e[1]);
                         $("div#cropimage").dialog('close');
                     }
                 }
@@ -840,6 +843,8 @@ function addlogo() {
             zoomOnWheel: false,
             cropBoxMovable: true,
             cropBoxResizable: false,
+            minContainerWidth: 10,
+            minContainerHeight: 10,
             crop: function(e) {
                 $('#addlogo-x').val(parseInt(Math.floor(e.x)));
                 $('#addlogo-y').val(parseInt(Math.floor(e.y)));

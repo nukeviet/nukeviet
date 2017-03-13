@@ -161,6 +161,7 @@ $lang_module['content_clickhere'] = 'Click here';
 $lang_module['content_showmore'] = '(Show more)';
 $lang_module['content_notetime'] = '(date/month/year hour:minute)';
 $lang_module['content_publ_date'] = 'Publish Time';
+$lang_module['order_publtime'] = 'Reorder by Publish Time';
 $lang_module['content_exp_date'] = 'Expire:';
 $lang_module['content_extra'] = 'Extra features';
 $lang_module['content_inhome'] = 'Show on homepage';

@@ -21,12 +21,12 @@ $datekey = date('F j');
 $rcode = strtoupper(md5(NV_USER_AGENT . $global_config['sitekey'] . $random_num . $datekey));
 $code = substr($rcode, 2, NV_GFX_NUM);
 
-if ($global_config['captcha_type'] == 1) {
+if ($global_config['captcha_type'] === 1) {
     $builder = new Gregwar\Captcha\CaptchaBuilder($code);
     $builder->build(NV_GFX_WIDTH, NV_GFX_HEIGHT);
     header('Content-type: image/jpeg');
     $builder->output();
-} else {
+} elseif ($global_config['captcha_type'] === 0) {
     $image = imagecreate(NV_GFX_WIDTH, NV_GFX_HEIGHT);
     $bgc = imagecolorallocate($image, 240, 240, 240);
     imagefilledrectangle($image, 0, 0, NV_GFX_WIDTH, NV_GFX_HEIGHT, $bgc);
@@ -59,6 +59,16 @@ if ($global_config['captcha_type'] == 1) {
         ImageString($image, 5, 20, 6, $code, $text_color);
     }
 
+    Header('Content-type: image/jpeg');
+    header('Cache-Control:');
+    header('Pragma:');
+    header('Set-Cookie:');
+    imagejpeg($image, null, 80);
+    imagedestroy($image);
+} else {
+    $image = imagecreate(NV_GFX_WIDTH, NV_GFX_HEIGHT);
+    $bgc = imagecolorallocate($image, 0, 0, 0);
+    imagefilledrectangle($image, 0, 0, NV_GFX_WIDTH, NV_GFX_HEIGHT, $bgc);
     Header('Content-type: image/jpeg');
     header('Cache-Control:');
     header('Pragma:');

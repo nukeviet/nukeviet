@@ -129,5 +129,5 @@ $(document).ready(function() {
     });
 
     // Bootstrap tooltip
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 });

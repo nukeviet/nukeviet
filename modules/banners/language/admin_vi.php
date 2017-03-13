@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
@@ -8,17 +7,14 @@
  * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
-
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
-
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2012 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
-
 $lang_module['add_client'] = 'Thêm khách hàng';
 $lang_module['edit_client'] = 'Sửa thông tin khách hàng';
 $lang_module['full_name_empty'] = 'Tên khách hàng chưa được khai báo';
@@ -26,6 +22,8 @@ $lang_module['website_incorrect'] = 'Website không đúng';
 $lang_module['yim_incorrect'] = 'YIM không đúng';
 $lang_module['add_client_info'] = 'Để thêm khách hàng mới, bạn cần điền đầy đủ vào các ô trống dưới đây';
 $lang_module['edit_client_info'] = 'Những ô có đánh dấu hoa thị bắt buộc phải khai báo';
+$lang_module['random_password'] = 'Tạo mật khẩu ngẫu nhiên';
+$lang_module['show_password'] = 'Hiển thị mật khẩu';
 $lang_module['login'] = 'Tài khoản';
 $lang_module['full_name'] = 'Họ và Tên';
 $lang_module['email'] = 'Email';
@@ -44,6 +42,7 @@ $lang_module['client_list'] = 'Khách hàng';
 $lang_module['client_list2'] = 'Danh sách Khách hàng';
 $lang_module['reg_time'] = 'Ngày đăng ký';
 $lang_module['is_act'] = 'Hiệu lực';
+$lang_module['require_image'] = 'Yêu cầu hình ảnh';
 $lang_module['act0'] = 'Đang đợi chấp nhận';
 $lang_module['act1'] = 'Đang hoạt động';
 $lang_module['act2'] = 'Đã hết hạn';
@@ -91,6 +90,7 @@ $lang_module['exp_date'] = 'Kết thúc';
 $lang_module['edit_banner'] = 'Sửa quảng cáo';
 $lang_module['edit_banner_info'] = 'Những ô có đánh dấu hoa thị bắt buộc phải khai báo';
 $lang_module['file_name'] = 'Hình quảng cáo';
+$lang_module['banners_list0'] = 'Danh sách các quảng cáo';
 $lang_module['banners_list1'] = 'Danh sách các quảng cáo đang hoạt động';
 $lang_module['banners_list2'] = 'Danh sách các quảng cáo đã hết hạn';
 $lang_module['banners_list3'] = 'Danh sách các quảng cáo đang bị đình chỉ hoạt động';
@@ -134,9 +134,9 @@ $lang_module['file_del_confirm'] = 'Bạn có muốn xóa?';
 $lang_module['delfile_success'] = 'Đã xóa xong';
 $lang_module['delfile_error'] = 'Xóa lỗi';
 $lang_module['weight'] = 'vị trí';
-
 $lang_module['target'] = 'Đích đếm';
 $lang_module['target_blank'] = 'Cửa sổ mới (_blank)';
 $lang_module['target_top'] = 'Cửa sổ trên cùng (_top)';
 $lang_module['target_self'] = 'Tại trang (_self)';
 $lang_module['target_parent'] = 'Cửa sổ cha (_parent)';
+$lang_module['bannerhtml'] = 'Nội dung quảng cáo';

@@ -107,6 +107,25 @@
 						</div>
 					</p>
 					<!-- END: captcha -->
+                    <!-- BEGIN: recaptcha -->
+                    <div class="m-bottom">
+                        <label>{N_CAPTCHA}:</label>
+                        <div id="reCaptcha"></div>
+                        <script src="https://www.google.com/recaptcha/api.js?hl={SITELANG}&onload=onloadCallback&render=explicit"></script>
+                        <script type="text/javascript">
+                        var onloadCallback = function() {
+                            $('[type="submit"]').prop('disabled', true);
+                            grecaptcha.render('reCaptcha', {
+                                'sitekey': '{RECAPTCHA_SITEKEY}',
+                                'type': '{RECAPTCHA_TYPE}',
+                                'callback': function(res) {
+                                    $('[type="submit"]').prop('disabled', false);
+                                }
+                            });
+                        };
+                        </script>
+                    </div>
+                    <!-- END: recaptcha -->
 					<div id="smb">
 						<input type="hidden" name="checkss" value="{NV_CHECK_SESSION}" />
 						<input class="btn btn-primary" type="submit" value="{GLANG.loginsubmit}" />

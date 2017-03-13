@@ -91,15 +91,13 @@ if ($numrows) {
                 $thead['chg_is_suspend'] = 0;
                 $thead['del'] = 0;
             } elseif ($row['lev'] == 2) {
-                if ($row['admin_id'] == $admin_info['admin_id']) {
+                if ($row['admin_id'] == $admin_info['admin_id'] or $admin_info['level'] == 1) {
                     $thead['edit'] = 1;
-                    $thead['chg_is_suspend'] = 0;
-                    $thead['del'] = 0;
                 } else {
                     $thead['edit'] = 0;
-                    $thead['chg_is_suspend'] = 0;
-                    $thead['del'] = 0;
                 }
+                $thead['chg_is_suspend'] = 0;
+                $thead['del'] = 0;
             } elseif ($global_config['spadmin_add_admin'] == 1) {
                 $thead['edit'] = 1;
                 $thead['chg_is_suspend'] = 1;
