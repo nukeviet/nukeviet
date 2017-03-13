@@ -58,6 +58,14 @@
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
 					<tr>
+						<td>{LANG.group_post}</td>
+					</tr>
+					<tr>
+						<td>
+							<label><input type="checkbox" value="1" name="hot_post"/> {LANG.hot_post}</label>
+						</td>
+					</tr>
+					<tr>
 						<td>{LANG.keywords}</td>
 					</tr>
 					<tr>
