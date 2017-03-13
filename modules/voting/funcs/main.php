@@ -3,8 +3,7 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES.,JSC.
- * All rights reserved
+ * @Copyright (C) 2014 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate 3-6-2010 0:33
  */
@@ -52,7 +51,7 @@ if (empty($vid)) {
             $voting_array = array(
                 'checkss' => md5($current_voting['vid'] . NV_CHECK_SESSION),
                 'accept' => (int) $current_voting['acceptcm'],
-                'active_captcha' => (int) $current_voting['active_captcha'],
+                'active_captcha' => ((int)$current_voting['active_captcha'] ? ($global_config['captcha_type'] == 2 ? 2 : 1) : 0),
                 'errsm' => (int) $current_voting['acceptcm'] > 1 ? sprintf($lang_module['voting_warning_all'], (int) $current_voting['acceptcm']) : $lang_module['voting_warning_accept1'],
                 'vid' => $current_voting['vid'],
                 'question' => (empty($current_voting['link'])) ? $current_voting['question'] : '<a target="_blank" href="' . $current_voting['link'] . '">' . $current_voting['question'] . '</a>',
@@ -79,13 +78,20 @@ if (empty($vid)) {
             }
 
             if ($voting_array['active_captcha']) {
-                $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-                $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-                $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-                $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-                $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-                $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-                $xtpl->parse('main.loop.captcha');
+                if ($global_config['captcha_type'] == 2) {
+                    $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                    $xtpl->parse('main.loop.has_captcha.recaptcha');
+                } else {
+                    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+                    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+                    $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+                    $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+                    $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
+                    $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
+                    $xtpl->parse('main.loop.has_captcha.basic');
+                }
+                $xtpl->parse('main.loop.has_captcha');
             }
             
             $xtpl->parse('main.loop');

@@ -18,25 +18,45 @@
 		</div>
 	</fieldset>
 </form>
-<!-- BEGIN: captcha -->
+<!-- BEGIN: has_captcha -->
 <div id="voting-modal-{VOTING.vid}" class="hidden">
-    <div class="m-bottom">
-        <strong>{LANG.enter_captcha}</strong>
-    </div>
     <div class="clearfix">
-        <div class="margin-bottom">
-            <div class="row">
-                <div class="col-xs-12">
-                    <input type="text" class="form-control rsec" value="" name="captcha" maxlength="{GFX_MAXLENGTH}"/>
-                </div>
-                <div class="col-xs-12">
-                    <img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" height="32" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" />
-    				<em class="fa fa-pointer fa-refresh margin-left margin-right" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.rsec');"></em>
+        <!-- BEGIN: basic -->
+        <div class="m-bottom">
+            <strong>{LANG.enter_captcha}</strong>
+        </div>
+        <div class="clearfix">
+            <div class="margin-bottom">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <input type="text" class="form-control rsec" value="" name="captcha" maxlength="{GFX_MAXLENGTH}"/>
+                    </div>
+                    <div class="col-xs-12">
+                        <img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" height="32" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" />
+        				<em class="fa fa-pointer fa-refresh margin-left margin-right" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.rsec');"></em>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- END: basic -->
+        <!-- BEGIN: recaptcha -->
+        <div class="m-bottom text-center">
+            <strong>{N_CAPTCHA}</strong>
+        </div>
+        <div class="margin-bottom clearfix">
+            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div>
+            <script type="text/javascript">
+            nv_recaptcha_elements.push({
+                id: "{RECAPTCHA_ELEMENT}",
+                btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent()),
+                pnum: 3,
+                btnselector: '[name="submit"]'
+            })
+            </script>
+        </div>
+        <!-- END: recaptcha -->
         <input type="button" name="submit" class="btn btn-primary btn-block" value="{VOTING.langsubmit}" onclick="nv_sendvoting_captcha(this, {VOTING.vid}, '{LANG.enter_captcha_error}');"/>
     </div>
 </div>
-<!-- END: captcha -->
+<!-- END: has_captcha -->
 <!-- END: main -->

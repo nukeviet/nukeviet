@@ -67,15 +67,19 @@ if ($checkss == $data['checkss']) {
     }
     $seccode = $nv_Request->get_string('lostpass_seccode', 'session', '');
 
-    $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
+    if ($global_config['captcha_type'] == 2) {
+        $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    } else {
+        $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
+    }
 
     if (empty($data['nv_seccode']) or (! empty($data['nv_seccode']) and md5($data['nv_seccode']) != $seccode and ! nv_capcha_txt($data['nv_seccode']))) {
         $nv_Request->set_Session('lostpass_seccode', '');
         die(json_encode(array(
             'status' => 'error',
-            'input' => 'nv_seccode',
+            'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
             'step' => 'step1',
-            'mess' => $lang_global['securitycodeincorrect'] )));
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) )));
     }
 
     $data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);

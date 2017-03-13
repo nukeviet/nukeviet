@@ -89,6 +89,15 @@ $(document).ready(function(){
 		}
 		return false;
 	});
+    $('[data-toggle="ctcaptcha"]').change(function() {
+        if ($(this).val() == '2') {
+            $('[data-captcha="typebasic"]').hide();
+            $('[data-captcha="typerecaptcha"]').show();
+        } else {
+            $('[data-captcha="typebasic"]').show();
+            $('[data-captcha="typerecaptcha"]').hide();
+        }
+    });
 	
 	// Site setting
 	$(".selectimg").click(function() {

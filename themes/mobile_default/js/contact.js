@@ -55,9 +55,10 @@ function nv_validForm(a) {
 				nv_validErrorShow(this)
 			}), setTimeout(function() {
 				$(a).find("[type='submit']").prop("disabled", !1)
-			}, 1E3)) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".nv-info",a).html(b.mess).removeClass("success").addClass("error") : $(".nv-info",a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function() {
+			}, 1E3), (nv_is_recaptcha && change_captcha())) : ($("input,select,button,textarea", a).prop("disabled", !0), "error" == b.status ? $(".nv-info",a).html(b.mess).removeClass("success").addClass("error") : $(".nv-info",a).html(b.mess).removeClass("error").addClass("success"), setTimeout(function() {
 				$("input,select,button,textarea", a).not(".disabled").prop("disabled", !1);
-                nv_validReset(a)
+                nv_validReset(a);
+                (nv_is_recaptcha && change_captcha());
 			}, 5E3))
 		}
 	}));

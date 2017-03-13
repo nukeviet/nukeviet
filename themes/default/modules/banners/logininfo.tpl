@@ -25,6 +25,20 @@
 			</div>
 		</div>
 		<!-- END: captcha -->
+        <!-- BEGIN: recaptcha -->
+        <div class="form-group">
+            <label class="col-sm-6 control-label">{N_CAPTCHA}:</label>
+            <div class="col-xs-24">
+                <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                <script type="text/javascript">
+                nv_recaptcha_elements.push({
+                    id: "{RECAPTCHA_ELEMENT}",
+                    btn: $('[type="button"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent().parent())
+                })
+                </script>
+            </div>
+        </div>
+        <!-- END: recaptcha -->
 	</form>
 	<div class="text-center">
 		<input type="button" value="{SUBMIT_LANG}" name="{SM_BUTTON_NAME}" id="{SM_BUTTON_NAME}" onclick="{SM_BUTTON_ONCLICK}" class="btn btn-primary"/>

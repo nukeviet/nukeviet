@@ -42,7 +42,7 @@ if (empty($contents)) {
     if ($viewcat == 'viewcat_none') {
         $contents = '';
     } elseif ($viewcat == 'viewcat_page_new' or $viewcat == 'viewcat_page_old') {
-        $order_by = ($viewcat == 'viewcat_page_new') ? 'publtime DESC' : 'publtime ASC';
+        $order_by = ($viewcat == 'viewcat_page_new') ? 'publtime DESC, addtime DESC' : 'publtime ASC, addtime ASC';
         $db_slave->sqlreset()
             ->select('COUNT(*)')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows')
@@ -274,7 +274,7 @@ if (empty($contents)) {
     } elseif ($viewcat == 'viewcat_list_new' or $viewcat == 'viewcat_list_old') {
         // Xem theo tieu de
 
-        $order_by = ($viewcat == 'viewcat_list_new') ? 'publtime DESC' : 'publtime ASC';
+        $order_by = ($viewcat == 'viewcat_list_new') ? 'publtime DESC, addtime DESC' : 'publtime ASC, addtime ASC';
 
         $db_slave->sqlreset()
             ->select('COUNT(*) ')

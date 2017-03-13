@@ -50,7 +50,12 @@ if ($id > 0 and $catid > 0) {
                     $link = NV_MY_DOMAIN . $link;
                 }
                 $link = "<a href=\"$link\" title=\"$title\">$link</a>\n";
-                $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+                
+                if ($global_config['captcha_type'] == 2) {
+                    $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+                } else {
+                    $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+                }
 
                 $to_mail = $nv_Request->get_title('email', 'post', '');
                 $content = $nv_Request->get_title('content', 'post', '', 1);

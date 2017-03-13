@@ -104,16 +104,8 @@ if ($checkss == $array['checkss'] and $nv_Request->isset_request('del', 'post'))
         'mess' => $lang_module['editinfo_ok'])));
 }
 
-//global config
-$sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='avatar_width'";
-$result = $db->query($sql);
-$global_config['avatar_width'] = $result->fetchColumn();
-$result->closeCursor();
-
-$sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='avatar_height'";
-$result = $db->query($sql);
-$global_config['avatar_height'] = $result->fetchColumn();
-$result->closeCursor();
+$global_config['avatar_width'] = $global_users_config['avatar_width'];
+$global_config['avatar_height'] = $global_users_config['avatar_height'];
 
 if (isset($_FILES['image_file']) and is_uploaded_file($_FILES['image_file']['tmp_name']) and !empty($array['u'])) {
     // Get post data

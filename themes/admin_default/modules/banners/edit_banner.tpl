@@ -47,7 +47,10 @@
 				<tr>
 					<td>{CONTENTS.file_name.0}:</td>
 					<td>&nbsp;</td>
-					<td><a href="javascript:void(0)" data-src="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a>
+					<td>
+					<!-- BEGIN: img_info -->
+					<a href="javascript:void(0)" data-src="{CONTENTS.file_name.1}" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.3}" width="16" height="16" style="cursor: pointer" /></a>
+					<!-- END: img_info -->
 					<!-- BEGIN: imageforswf1 -->
 					<a href="javascript:void(0)" data-src="{CONTENTS.file_name.5}" class="open_modal_image" {CONTENTS.file_name.2}><img alt="{CONTENTS.file_name.4}" src="{CONTENTS.file_name.6}" width="16" height="16" style="cursor: pointer; margin-left: 20px;" /></a>
 					<!-- END: imageforswf1 -->
@@ -95,6 +98,12 @@
 					<td>&nbsp;</td>
 					<td><input name="{CONTENTS.exp_date.1}" class="w100 datepicker form-control pull-left" type="text" value="{CONTENTS.exp_date.2}" maxlength="{CONTENTS.exp_date.3}" readonly="readonly" /></td>
 				</tr>
+                <tr>
+                    <td colspan="3">
+                        <p class="m-bottom">{LANG.bannerhtml}:</p>
+                        {CONTENTS.bannerhtml}
+                    </td>
+                </tr>
 			</tbody>
 		</table>
 	</div>
