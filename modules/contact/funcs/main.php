@@ -124,11 +124,11 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'input' => 'fcon',
             'mess' => $lang_module['error_content'] )));
     }
-    if (! nv_capcha_txt($nv_Request->get_title('fcode', 'post', ''))) {
+    if (! nv_capcha_txt(($global_config['captcha_type'] == 2 ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('fcode', 'post', '')))) {
         die(json_encode(array(
             'status' => 'error',
-            'input' => 'fcode',
-            'mess' => $lang_module['error_captcha'] )));
+            'input' => ($global_config['captcha_type'] == 2 ? '' : 'fcode'),
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) )));
     }
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);

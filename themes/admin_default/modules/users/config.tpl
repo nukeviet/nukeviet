@@ -177,6 +177,10 @@
                     <td><input name="allowuserlogin" value="1" type="checkbox"{DATA.allowuserlogin} /></td>
                 </tr>
                 <tr>
+                    <td>{LANG.active_user_logs}</td>
+                    <td><input name="active_user_logs" value="1" type="checkbox"{DATA.active_user_logs} /></td>
+                </tr>
+                <tr>
                     <td>{LANG.allow_public}</td>
                     <td><input name="allowuserpublic" value="1" type="checkbox"{DATA.allowuserpublic} /></td>
                 </tr>

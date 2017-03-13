@@ -99,25 +99,50 @@
 				<tr>
 					<td><strong>{LANG.captcha_type}</strong></td>
 					<td>
-					<select name="captcha_type" class="form-control w200">
+					<select name="captcha_type" class="form-control w200" data-toggle="ctcaptcha">
 						<!-- BEGIN: captcha_type -->
 						<option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
 						<!-- END: captcha_type -->
 					</select></td>
 				</tr>
-				<tr>
+				<tr data-captcha="typebasic"{DISPLAY_CAPTCHA_BASIC}>
 					<td><strong>{LANG.captcha_num}</strong></td>
 					<td>
-					<select name="nv_gfx_num" class="form-control w200">
-						<!-- BEGIN: nv_gfx_num -->
-						<option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
-						<!-- END: nv_gfx_num -->
-					</select></td>
+    					<select name="nv_gfx_num" class="form-control w200">
+    						<!-- BEGIN: nv_gfx_num -->
+    						<option value="{OPTION.value}"{OPTION.select}>{OPTION.text}</option>
+    						<!-- END: nv_gfx_num -->
+    					</select>
+                    </td>
 				</tr>
-				<tr>
+				<tr data-captcha="typebasic"{DISPLAY_CAPTCHA_BASIC}>
 					<td><strong>{LANG.captcha_size}</strong></td>
 					<td><input class="form-control pull-left" style="width:50px;" type="text" value="{NV_GFX_WIDTH}" name="nv_gfx_width" maxlength="3"/> <span class="text-middle pull-left">&nbsp;x&nbsp;</span> <input class="form-control pull-left" style="width:50px;" type="text" value="{NV_GFX_HEIGHT}" name="nv_gfx_height" maxlength="3"/></td>
 				</tr>
+                <tr data-captcha="typerecaptcha"{DISPLAY_CAPTCHA_RECAPTCHA}>
+					<td><strong>{LANG.recaptcha_sitekey} (<span style="color:red">*</span>)</strong></td>
+					<td>
+                        <input class="form-control pull-left w300" type="text" value="{RECAPTCHA_SITEKEY}" name="recaptcha_sitekey" maxlength="200"/>
+                        &nbsp; <a href="https://www.google.com/recaptcha/admin" target="_blank" data-toggle="tooltip" title="{LANG.recaptcha_guide}" class="text-middle"><i class="fa fa-info-circle"></i></a>
+                    </td>
+                </tr>
+                <tr data-captcha="typerecaptcha"{DISPLAY_CAPTCHA_RECAPTCHA}>
+					<td><strong>{LANG.recaptcha_secretkey} (<span style="color:red">*</span>)</strong></td>
+					<td>
+                        <input class="form-control pull-left w300" type="text" value="{RECAPTCHA_SECRETKEY}" name="recaptcha_secretkey" maxlength="200"/>
+                        &nbsp; <a href="https://www.google.com/recaptcha/admin" target="_blank" data-toggle="tooltip" title="{LANG.recaptcha_guide}" class="text-middle"><i class="fa fa-info-circle"></i></a>
+                    </td>
+                </tr>
+                <tr data-captcha="typerecaptcha"{DISPLAY_CAPTCHA_RECAPTCHA}>
+					<td><strong>{LANG.recaptcha_type}</strong></td>
+					<td>
+    					<select name="recaptcha_type" class="form-control w300">
+    						<!-- BEGIN: recaptcha_type -->
+    						<option value="{RECAPTCHA_TYPE.value}"{RECAPTCHA_TYPE.select}>{RECAPTCHA_TYPE.text}</option>
+    						<!-- END: recaptcha_type -->
+    					</select>
+                    </td>
+                </tr>
 			</tbody>
 			<tfoot>
 				<tr>

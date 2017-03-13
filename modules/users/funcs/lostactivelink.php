@@ -35,7 +35,11 @@ $data['checkss'] = NV_CHECK_SESSION;
 $data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);
 $data['answer'] = nv_substr($nv_Request->get_title('answer', 'post', '', 1), 0, 255);
 $data['send'] = $nv_Request->get_bool('send', 'post', false);
-$data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
+if ($global_config['captcha_type'] == 2) {
+    $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+} else {
+    $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
+}
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 $seccode = $nv_Request->get_string('lostactivelink_seccode', 'session', '');

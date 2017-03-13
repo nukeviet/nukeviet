@@ -98,6 +98,12 @@
 					<td>&nbsp;</td>
 					<td><input name="{CONTENTS.exp_date.1}" class="w100 datepicker form-control pull-left" type="text" value="{CONTENTS.exp_date.2}" maxlength="{CONTENTS.exp_date.3}" readonly="readonly" /></td>
 				</tr>
+                <tr>
+                    <td colspan="3">
+                        <p class="m-bottom">{LANG.bannerhtml}:</p>
+                        {CONTENTS.bannerhtml}
+                    </td>
+                </tr>
 			</tbody>
 		</table>
 	</div>

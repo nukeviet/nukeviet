@@ -79,6 +79,10 @@ a.link:hover {
     background-color:#C0C0C0
 }
 
+.text-white, a.text-white {
+    color: #fff;
+}
+
 #timeoutsess {
 	display: none;
 }
@@ -340,6 +344,12 @@ h1, h2, h3, h4, h5, h6 {
 	float: right;
 	display: inline-block;
 	margin-right: 10px;
+}
+
+#info_tab ul.btncontrol {
+    margin: 0;
+    padding: 0;
+    line-height: 22px;
 }
 
 .nv-panel-body {

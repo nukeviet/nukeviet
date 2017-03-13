@@ -217,7 +217,11 @@ function login_validForm(a) {
                     $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
                     validErrorShow(this)
                 }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
-                    $("[type=submit]", a).prop("disabled", !1)
+                    if (nv_is_recaptcha) {
+                        change_captcha();
+                    } else {
+                        $("[type=submit]", a).prop("disabled", !1);
+                    }
                 }, 1E3)
             } else if (d.status == "ok") {
                 $(".nv-info", a).html(d.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), 
@@ -264,7 +268,7 @@ function reg_validForm(a) {
                 validErrorShow(this)
             }) : ($(".nv-info", a).html(b.mess).addClass("error").show(), $("html, body").animate({
                 scrollTop: $(".nv-info", a).offset().top
-            }, 800))) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
+            }, 800)), (nv_is_recaptcha && change_captcha())) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.input ? setTimeout(function() {
                 $(".nv-info", a).fadeOut();
                 $("input,button,select,textarea", a).prop("disabled", !1);
                 $("[onclick*=validReset]", a).click()
@@ -306,7 +310,10 @@ function lostpass_validForm(a) {
         success: function(b) {
             if (b.status == "error") {
                 $("[name=step]",a).val(b.step);
-                 if(b.step == 'step1') $("[onclick*='change_captcha']", a).click();
+                 if(b.step == 'step1') {
+                    $("[onclick*='change_captcha']", a).click();
+                    (nv_is_recaptcha && change_captcha());
+                 }
                  if("undefined" != typeof b.info && "" != b.info) $(".nv-info",a).removeClass('error success').text(b.info);
                 $("input,button", a).prop("disabled", !1);
                 $(".required",a).removeClass("required");
@@ -317,7 +324,7 @@ function lostpass_validForm(a) {
                 $(a).find("[name=" + b.input + "]").each(function() {
                     $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
                     validErrorShow(this)
-                })
+                });
             } else {
                  $(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show();
                  setTimeout(function() {
@@ -349,7 +356,7 @@ function changemail_validForm(a) {
             "error" == b.status ? ($("input,button,select,textarea", a).prop("disabled", !1), $(".tooltip-current", a).removeClass("tooltip-current"), $(a).find("[name=" + b.input + "]").each(function() {
                 $(this).addClass("tooltip-current").attr("data-current-mess", b.mess);
                 validErrorShow(this)
-            })) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.status ? setTimeout(function() {
+            }), (nv_is_recaptcha && change_captcha())) : ($(".nv-info", a).html(b.mess + '<span class="load-bar"></span>').removeClass("error").addClass("success").show(), ("ok" == b.status ? setTimeout(function() {
                 $(".nv-info", a).fadeOut();
                 $("input,button,select,textarea", a).prop("disabled", !1)
             }, 6E3) : $("html, body").animate({
@@ -510,6 +517,8 @@ UAV.common = {
                         cropBoxResizable: true,
                         minCropBoxWidth: minCropBoxWidth,
                         minCropBoxHeight: minCropBoxHeight,
+                        minContainerWidth: 10,
+                        minContainerHeight: 10,
                         crop: function(e) {
                             UAV.tool.update(e);
                         },

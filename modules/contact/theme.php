@@ -174,7 +174,7 @@ function contact_main_theme($array_content, $array_department, $catsName, $base_
  */
 function contact_form_theme($array_content, $catsName, $base_url, $checkss)
 {
-    global $module_file, $lang_global, $lang_module, $module_info;
+    global $module_file, $lang_global, $lang_module, $module_info, $global_config;
 
     $xtpl = new XTemplate('form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
     $xtpl->assign('CONTENT', $array_content);
@@ -182,11 +182,19 @@ function contact_form_theme($array_content, $catsName, $base_url, $checkss)
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('ACTION_FILE', $base_url);
     $xtpl->assign('CHECKSS', $checkss);
-    $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-    $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-    $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-    $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
+    
+    if ($global_config['captcha_type'] == 2) {
+        $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->parse('main.recaptcha');
+    } else {
+        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+        $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
+        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('NV_GFX_NUM', NV_GFX_NUM);
+        $xtpl->parse('main.captcha');
+    }
 
     if (defined('NV_IS_USER')) {
         $xtpl->parse('main.iuser');

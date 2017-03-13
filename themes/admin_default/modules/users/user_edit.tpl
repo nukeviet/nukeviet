@@ -74,7 +74,7 @@
                     <td>
                         <!-- BEGIN: photo -->
                         <p id="current-photo" class="pull-left text-center">
-                            <img id="imageresource" alt="{DATA.username}" src="{IMG.src}" width="{IMG.width}" height="{IMG.height}" class="img-thumbnail"/>
+                            <img id="imageresource" alt="{DATA.username}" src="{IMG.src}" width="{IMG.width}" height="{IMG.height}" class="img-thumbnail fa-pointer"/>
                             <span class="fa-pointer" id="current-photo-btn"><em class="fa fa-trash-o fa-lg">&nbsp;</em> {LANG.delete}</span>
                             <input type="hidden" name="delpic" id="photo_delete" value="{DATA.delpic}"/>
                         </p>

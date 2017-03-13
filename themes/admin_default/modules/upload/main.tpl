@@ -325,6 +325,7 @@ LANG.upload_stop = "{LANG.upload_stop}";
 LANG.upload_continue = "{LANG.upload_continue}";
 LANG.upload_finish = "{LANG.upload_finish}";
 LANG.crop_error_small = "{LANG.crop_error_small}";
+LANG.crop_keep_original = "{LANG.crop_keep_original}";
 LANG.save = "{LANG.addlogosave}";
 LANG.notlogo = "{LANG.notlogo}";
 LANG.addlogo_error_small = "{LANG.addlogo_error_small}";

@@ -6,10 +6,15 @@
  * @Createdate Mon, 27 Jan 2014 00:08:04 GMT
  */
 
-function sendcommment(module, id_content, area, id, allowed, newscheckss, gfx_count) {
+function sendcommment(btn, module, id_content, area, id, allowed, newscheckss, gfx_count) {
     var commentname = document.getElementById('commentname');
     var commentemail = document.getElementById('commentemail_iavim');
-    var code = $("#commentseccode_iavim").val();
+    var code = "";
+    if (gfx_count > 0) {
+        code = $("#commentseccode_iavim").val();
+    } else if (gfx_count == -1) {
+        code = $('[name="g-recaptcha-response"]', $(btn.form)).val();
+    }
     var commentcontent = strip_tags($('textarea[name=commentcontent]').val());
     if (commentname.value == "") {
         alert(nv_fullname);
@@ -29,7 +34,11 @@ function sendcommment(module, id_content, area, id, allowed, newscheckss, gfx_co
         $.post(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&' + nv_fc_variable + '=post&nocache=' + new Date().getTime(), 'module=' + module + '&area=' + area + '&id=' + id + '&pid=' + $('#commentpid').val() + '&allowed=' + allowed + '&checkss=' + newscheckss + '&name=' + commentname.value + '&email=' + commentemail.value + '&code=' + code + '&content=' + encodeURIComponent(commentcontent), function(res) {
             var rs = res.split('_');
             if (rs[0] == 'OK') {
-                $("#idcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + module + '&area=' + area + '&id=' + id + '&allowed=' + allowed + '&status_comment=' + rs[1] + '&checkss=' + newscheckss + '&nocache=' + new Date().getTime());
+                $("#idcomment").load(nv_base_siteurl + 'index.php?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=comment&module=' + module + '&area=' + area + '&id=' + id + '&allowed=' + allowed + '&status_comment=' + rs[1] + '&checkss=' + newscheckss + '&nocache=' + new Date().getTime(), function() {
+                    if (gfx_count == -1) {
+                        change_captcha();
+                    }
+                });
                 $('html, body').animate({
                     scrollTop: $("#idcomment").offset().top
                 }, 800);
