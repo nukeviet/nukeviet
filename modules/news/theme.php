@@ -423,7 +423,7 @@ function viewsubcat_main($viewcat, $array_cat)
             $array_row_i['rss'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=" . $module_info['alias']['rss'] . "/" . $array_row_i['alias'];
             $xtpl->assign('CAT', $array_row_i);
             $catid = intval($array_row_i['catid']);
-			$array_row_i['ad_block_cat'] = explode(',', $array_row_i['ad_block_cat']);
+			$array_row_i['ad_block_cat'] = isset($array_row_i['ad_block_cat']) ? explode(',', $array_row_i['ad_block_cat']) : array();
 
 			$_block_topcat_by_id = '[' . strtoupper($module_name) . '_TOPCAT_' . $array_row_i['catid'] . ']';
 			if( in_array( '1', $array_row_i['ad_block_cat']) ){
@@ -474,7 +474,7 @@ function viewsubcat_main($viewcat, $array_cat)
 
             $a = 0;
             foreach ($array_cat[$key]['content'] as $array_row_i) {
-                $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
+                $newday = isset($array_row_i['newday']) ? $array_row_i['publtime'] + (86400 * $array_row_i['newday']) : 0;
                 $array_row_i['publtime'] = nv_date('d/m/Y H:i', $array_row_i['publtime']);
                 ++$a;
                 
