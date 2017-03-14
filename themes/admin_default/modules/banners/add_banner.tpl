@@ -93,6 +93,12 @@
 						</div>
 					</td>
 				</tr>
+                <tr>
+                    <td colspan="3">
+                        <p class="m-bottom">{CONTENTS.bannerhtml.0}:</p>
+                        {CONTENTS.bannerhtml.1}
+                    </td>
+                </tr>
 			</tbody>
 		</table>
 	</div>
