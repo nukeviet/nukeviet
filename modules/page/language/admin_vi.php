@@ -51,6 +51,8 @@ $lang_module['imgposition'] = 'Vị trí ảnh minh họa';
 $lang_module['imgposition_0'] = 'Không hiển thị';
 $lang_module['imgposition_1'] = 'Hiển thị bên trái mô tả';
 $lang_module['imgposition_2'] = 'Hiển thị dưới mô tả';
+$lang_module['group_post'] = 'Bài viết thuộc nhóm';
+$lang_module['hot_post'] = 'Nổi bật';
 
 $lang_module['layout_func'] = 'Sử dụng layout';
 $lang_module['layout_default'] = 'Mặc định';
