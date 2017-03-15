@@ -56,6 +56,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $row['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
     $row['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
     $row['gid'] = $nv_Request->get_int('gid', 'post', 0);
+	$row['hot_post'] = $nv_Request->get_int('hot_post', 'post', 0);
 
     $_groups_post = $nv_Request->get_array('activecomm', 'post', array());
     $row['activecomm'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
@@ -79,7 +80,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
 
         if ($id) {
-            $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, imageposition = :imageposition, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, gid = :gid, admin_id = :admin_id, edit_time = ' . NV_CURRENTTIME . ' WHERE id =' . $id;
+            $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, imageposition = :imageposition, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, gid = :gid, admin_id = :admin_id, edit_time = ' . NV_CURRENTTIME . ', hot_post = :hot_post WHERE id =' . $id;
             $publtime = $row['add_time'];
         } else {
             if ($page_config['news_first']) {
@@ -90,8 +91,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
 
             $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '
-				(title, alias, image, imagealt, imageposition, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status) VALUES
-				(:title, :alias, :image, :imagealt, :imageposition, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1)';
+				(title, alias, image, imagealt, imageposition, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status,hot_post) VALUES
+				(:title, :alias, :image, :imagealt, :imageposition, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1,:hot_post)';
 
             $publtime = NV_CURRENTTIME;
         }
@@ -111,6 +112,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $sth->bindParam(':layout_func', $row['layout_func'], PDO::PARAM_STR);
             $sth->bindParam(':gid', $row['gid'], PDO::PARAM_INT);
             $sth->bindParam(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
+			$sth->bindParam(':hot_post', $row['hot_post'], PDO::PARAM_INT);
             $sth->execute();
 
             if ($sth->rowCount()) {
@@ -173,6 +175,7 @@ $xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('DATA', $row);
 $xtpl->assign('BODYTEXT', $row['bodytext']);
 $xtpl->assign('SOCIALBUTTON', ($row['socialbutton']) ? ' checked="checked"' : '');
+$xtpl->assign('HOST_POST', ($row['hot_post']) ? ' checked="checked"' : '');
 
 foreach ($layout_array as $value) {
     $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
