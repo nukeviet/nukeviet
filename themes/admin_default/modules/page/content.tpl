@@ -62,7 +62,7 @@
 					</tr>
 					<tr>
 						<td>
-							<label><input type="checkbox" value="1" name="hot_post"/> {LANG.hot_post}</label>
+							<label><input type="checkbox" value="1" name="hot_post"{HOST_POST}/> {LANG.hot_post}</label>
 						</td>
 					</tr>
 					<tr>
