@@ -76,6 +76,7 @@ $lang_module['avatar_news_copy_error'] = 'Unable to save avatar';
 $lang_module['birthday'] = 'Birthday';
 $lang_module['showmail'] = 'Display email';
 $lang_module['login'] = 'Member login';
+$lang_module['login_with'] = 'Sign in with';
 $lang_module['login_submit'] = 'Login';
 $lang_module['user_info'] = 'Member information';
 $lang_module['regdate'] = 'Date';
