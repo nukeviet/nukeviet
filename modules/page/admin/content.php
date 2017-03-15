@@ -175,6 +175,7 @@ $xtpl->assign('UPLOADS_DIR_USER', NV_UPLOADS_DIR . '/' . $module_upload);
 $xtpl->assign('DATA', $row);
 $xtpl->assign('BODYTEXT', $row['bodytext']);
 $xtpl->assign('SOCIALBUTTON', ($row['socialbutton']) ? ' checked="checked"' : '');
+$xtpl->assign('HOST_POST', ($row['hot_post']) ? ' checked="checked"' : '');
 
 foreach ($layout_array as $value) {
     $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
