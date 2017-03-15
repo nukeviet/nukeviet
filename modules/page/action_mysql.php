@@ -38,6 +38,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  add_time int(11) NOT NULL DEFAULT '0',
  edit_time int(11) NOT NULL DEFAULT '0',
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
+ hitstotal MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+ hot_post TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  UNIQUE KEY alias (alias)
 ) ENGINE=MyISAM";
