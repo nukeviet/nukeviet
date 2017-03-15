@@ -44,7 +44,7 @@ if (empty($vid)) {
     }
 
     if (!empty($allowed)) {
-        $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+        $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
         $xtpl->assign('LANG', $lang_module);
         
         foreach ($allowed as $current_voting) {
