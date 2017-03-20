@@ -252,3 +252,7 @@ $lang_module['two_step_verification0'] = 'Không yêu cầu';
 $lang_module['two_step_verification1'] = 'Khu vực quản trị';
 $lang_module['two_step_verification2'] = 'Khu vực ngoài site';
 $lang_module['two_step_verification3'] = 'Tất cả các khu vực';
+
+$lang_module['site_phone'] = 'Số điện thoại của site';
+$lang_module['googleMapsAPI'] = 'Google Maps API';
+
