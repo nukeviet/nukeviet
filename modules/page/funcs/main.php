@@ -85,7 +85,12 @@ if ($id) {
     } else {
         $content_comment = '';
     }
-
+	$time_set = $nv_Request->get_int($module_data . '_' . $op . '_' . $id, 'session');
+     if (empty($time_set)) {
+                $nv_Request->set_Session($module_data . '_' . $op . '_' . $id, NV_CURRENTTIME);
+                $query = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET hitstotal=hitstotal+1 WHERE id=' . $id;
+                $db->query($query);
+	 }
     $contents = nv_page_main($rowdetail, $other_links, $content_comment);
 } else {
     // Xem theo danh sách
