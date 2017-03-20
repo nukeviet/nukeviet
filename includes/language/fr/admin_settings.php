@@ -234,3 +234,6 @@ $lang_module['two_step_verification0'] = 'Ne demandez pas';
 $lang_module['two_step_verification1'] = 'Admin Area';
 $lang_module['two_step_verification2'] = 'Espace extérieur du site';
 $lang_module['two_step_verification3'] = 'Toutes les zones';
+
+$lang_module['site_phone'] = 'Nom du fichier Téléphone';
+$lang_module['googleMapsAPI'] = 'Google Maps API';
