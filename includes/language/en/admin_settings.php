@@ -235,4 +235,6 @@ $lang_module['two_step_verification1'] = 'Admin Area';
 $lang_module['two_step_verification2'] = 'Site area';
 $lang_module['two_step_verification3'] = 'All areas';
 $lang_module['site_phone'] = 'Site\'s phone';
-$lang_module['googleMapsAPI'] = 'Google Maps API';
+$lang_module['googleMapsAPI'] = 'Google Maps API key';
+$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Guide to get Google Maps API key</a>';
+
