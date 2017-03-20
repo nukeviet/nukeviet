@@ -52,7 +52,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
         $array_config_site['site_email'] = $site_email;
     }
     
-    $global_config['site_phone'] = nv_substr($nv_Request->get_title('site_phone', 'post', ''), 0, 20);
+    $array_config_site['site_phone'] = nv_substr($nv_Request->get_title('site_phone', 'post', ''), 0, 20);
 
     $preg_replace = array( 'pattern' => "/[^a-z\-\_\.\,\;\:\@\/\\s]/i", 'replacement' => '' );
     $array_config_site['date_pattern'] = nv_substr($nv_Request->get_title('date_pattern', 'post', '', 0, $preg_replace), 0, 255);
