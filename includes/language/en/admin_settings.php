@@ -234,3 +234,5 @@ $lang_module['two_step_verification0'] = 'Not required';
 $lang_module['two_step_verification1'] = 'Admin Area';
 $lang_module['two_step_verification2'] = 'Site area';
 $lang_module['two_step_verification3'] = 'All areas';
+$lang_module['site_phone'] = 'Site\'s phone';
+$lang_module['googleMapsAPI'] = 'Google Maps API';
