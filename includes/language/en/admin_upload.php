@@ -154,6 +154,7 @@ $lang_module['searchdir'] = 'Search in folder';
 $lang_module['searchkey'] = 'Search key';
 $lang_module['crop'] = 'Crop image';
 $lang_module['crop_error_small'] = 'This image size is too small, do not cut';
+$lang_module['crop_keep_original'] = 'Crop as a new image and keep original image';
 $lang_module['rotate'] = 'rotate image';
 $lang_module['waiting'] = 'Loading, please wait ...';
 $lang_module['file_no_exists'] = 'file no exists';
