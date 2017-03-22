@@ -139,3 +139,4 @@ $lang_module['target_blank'] = 'New Window (_blank)';
 $lang_module['target_top'] = 'Topmost Window (_top)';
 $lang_module['target_self'] = 'Same Window (_self)';
 $lang_module['target_parent'] = 'Parent Window (_parent)';
+$lang_module['bannerhtml'] = 'Advertising content';

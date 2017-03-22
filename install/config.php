@@ -36,6 +36,7 @@ $array_data['socialbutton'] = 1;
 
 $global_config['version'] = '4.1.01';// NukeViet 4.1 Beta 2
 $global_config['site_email'] = '';
+$global_config['site_phone'] = '';
 $global_config['error_set_logs'] = 1;
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';
