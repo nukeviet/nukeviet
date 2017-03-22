@@ -21,6 +21,8 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['notallowuserlogin'] = 'Sorry, login temporary not available';
 $lang_module['register'] = 'Register';
+$lang_module['userlogout'] = 'Log out of a user\'s account';
+$lang_module['userloginviaopt'] = 'Login by port';
 $lang_module['login_title'] = 'If you had an account';
 $lang_module['lostpass_title'] = 'Are you forgot your password';
 $lang_module['memberlist'] = 'Member list';
