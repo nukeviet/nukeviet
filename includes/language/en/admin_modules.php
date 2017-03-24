@@ -64,6 +64,7 @@ $lang_module['vmodule_note'] = 'Note';
 $lang_module['vmodule_select'] = 'Select module';
 $lang_module['vmodule_blockquote'] = 'Note: Module name only accept regular characters, numerals and underscore';
 $lang_module['vmodule_exit'] = 'Error: Module you have put in the system.';
+$lang_module['vmodule_maxlength'] = 'Maximum 50 characters';
 $lang_module['back'] = 'Back';
 $lang_module['change_func_name'] = 'Rename function "%s" of module "%s"';
 $lang_module['change_fun_alias'] = 'Rename alias "%s" of module "%s"';
