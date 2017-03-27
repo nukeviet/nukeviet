@@ -12,13 +12,13 @@ if (! defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
-$submenu['sitemapPing'] = $lang_module['sitemapPing'];
 $submenu['googleplus'] = $lang_module['googleplus'];
-$submenu['pagetitle'] = $lang_module['pagetitle'];
-$submenu['metatags'] = $lang_module['metaTagsConfig'];
-if (empty($global_config['idsite'])) {
-    $submenu['rpc'] = $lang_module['rpc_setting'];
-}
 if (defined('NV_IS_GODADMIN')) {
+    $submenu['sitemapPing'] = $lang_module['sitemapPing'];
+    $submenu['pagetitle'] = $lang_module['pagetitle'];
+    $submenu['metatags'] = $lang_module['metaTagsConfig'];
     $submenu['robots'] = $lang_module['robots'];
+    if (empty($global_config['idsite'])) {
+        $submenu['rpc'] = $lang_module['rpc_setting'];
+    }
 }
