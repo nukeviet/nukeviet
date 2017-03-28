@@ -57,13 +57,14 @@ if (! empty($setmodule) and preg_match($global_config['check_module'], $setmodul
 
             try {
                 $sth = $db->prepare("INSERT INTO " . NV_MODULES_TABLE . "
-					(title, module_file, module_data, module_upload, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss) VALUES
-					(:title, :module_file, :module_data, :module_upload, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '',1)
+					(title, module_file, module_data, module_upload, module_theme, custom_title, admin_title, set_time, main_file, admin_file, theme, mobile, description, keywords, groups_view, weight, act, admins, rss) VALUES
+					(:title, :module_file, :module_data, :module_upload, :module_theme, :custom_title, '', " . NV_CURRENTTIME . ", " . $main_file . ", " . $admin_file . ", '', '', '', '', '6', " . $weight . ", 0, '',1)
 				");
                 $sth->bindParam(':title', $setmodule, PDO::PARAM_STR);
                 $sth->bindParam(':module_file', $modrow['basename'], PDO::PARAM_STR);
                 $sth->bindParam(':module_data', $modrow['table_prefix'], PDO::PARAM_STR);
                 $sth->bindParam(':module_upload', $setmodule, PDO::PARAM_STR);
+                $sth->bindParam(':module_theme', $modrow['basename'], PDO::PARAM_STR);
                 $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
                 $sth->execute();
             } catch (PDOException $e) {

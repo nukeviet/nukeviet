@@ -411,6 +411,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'module_file' => $row['module_file'],
                     'module_data' => $row['module_data'],
                     'module_upload' => $row['module_upload'],
+                    'module_theme' => $row['module_theme'],
                     'custom_title' => $row['custom_title'],
                     'admin_title' => (empty($row['admin_title'])) ? $row['custom_title'] : $row['admin_title'],
                     'admin_file' => $row['admin_file'],
