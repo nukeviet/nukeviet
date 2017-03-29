@@ -20,6 +20,7 @@ $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['voting_alias'] = 'Liên kết tĩnh';
+$lang_module['voting_order'] = 'Thứ tự';
 $lang_module['voting'] = 'Bầu chọn trên site';
 $lang_module['voting_list'] = 'Quản lý thăm dò';
 $lang_module['voting_id'] = 'Mã ID';
@@ -57,3 +58,5 @@ $lang_module['voting_delete_unsuccess'] = 'Có lỗi trong quá trình xóa dữ
 $lang_module['warning'] = 'Lưu ý: số cho phép chọn phải nhỏ hơn hoặc bằng số lựa chọn';
 $lang_module['voting_error_content'] = 'Lưu ý: bạn cần nhập Nội dung thăm dò và các câu trả lời';
 $lang_module['voting_active_captcha'] = 'Kích hoạt mã xác nhận';
+$lang_module['group_post'] = 'Bài viết thuộc nhóm';
+$lang_module['hot_post'] = 'Nổi bật';
