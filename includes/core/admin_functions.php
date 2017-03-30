@@ -467,47 +467,6 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=sitemap\" appendQueryString=\"false\" />\n";
         $rewrite_rule .= " </rule>\n";
 
-        if ($array_config_global['rewrite_optional']) {
-            if (! empty($array_config_global['rewrite_op_mod'])) {
-                if ($array_config_global['rewrite_op_mod'] == 'seek') {
-                    $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-                    $rewrite_rule .= " \t<match url=\"^\/$\" ignoreCase=\"false\" />\n";
-                    $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek\" appendQueryString=\"true\" />\n";
-                    $rewrite_rule .= " </rule>\n";
-                } else {
-                    $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-                    $rewrite_rule .= " \t<match url=\"^seek\/$\" ignoreCase=\"false\" />\n";
-                    $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek\" appendQueryString=\"true\" />\n";
-                    $rewrite_rule .= " </rule>\n";
-                }
-
-                $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-                $rewrite_rule .= " \t<match url=\"^search\/$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&amp;" . NV_OP_VARIABLE . "=search\" appendQueryString=\"true\" />\n";
-                $rewrite_rule .= " </rule>\n";
-            } else {
-                $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-                $rewrite_rule .= " \t<match url=\"^seek\/$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek\" appendQueryString=\"true\" />\n";
-                $rewrite_rule .= " </rule>\n";
-            }
-
-            $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-            $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9\-]+)\/search\/$\" ignoreCase=\"false\" />\n";
-            $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "=search\" appendQueryString=\"true\" />\n";
-            $rewrite_rule .= " </rule>\n";
-        } else {
-            $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-            $rewrite_rule .= " \t<match url=\"^([a-z]{2})\/seek\/$\" ignoreCase=\"false\" />\n";
-            $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "=seek\" appendQueryString=\"true\" />\n";
-            $rewrite_rule .= " </rule>\n";
-
-            $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-            $rewrite_rule .= " \t<match url=\"^([a-z]{2})\/([a-zA-Z0-9\-]+)\/search\/$\" ignoreCase=\"false\" />\n";
-            $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "=search\" appendQueryString=\"true\" />\n";
-            $rewrite_rule .= " </rule>\n";
-        }
-
         $rewrite_rule .= " <rule name=\"nv_rule_rewrite\">\n";
         $rewrite_rule .= " 	<match url=\"(.*)(" . $endurl . ")$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " 	<conditions logicalGrouping=\"MatchAll\">\n";
@@ -555,27 +514,6 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\.xml$ index.php?" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=$3&" . NV_OP_VARIABLE . "=sitemap [L]\n";
-
-        // Search: rewrite no lang variable
-        if ($array_config_global['rewrite_optional']) {
-            if (! empty($array_config_global['rewrite_op_mod'])) {
-                if ($array_config_global['rewrite_op_mod'] == 'seek') {
-                    $rewrite_rule .= "RewriteRule ^\/$ index.php?" . NV_NAME_VARIABLE . "=seek&%{QUERY_STRING} [L]\n";
-                } else {
-                    $rewrite_rule .= "RewriteRule ^seek\/$ index.php?" . NV_NAME_VARIABLE . "=seek&%{QUERY_STRING} [L]\n";
-                }
-
-                $rewrite_rule .= "RewriteRule ^search\/$ index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&" . NV_OP_VARIABLE . "=search&%{QUERY_STRING} [L]\n";
-            } else {
-                $rewrite_rule .= "RewriteRule ^seek\/$ index.php?" . NV_NAME_VARIABLE . "=seek&%{QUERY_STRING} [L]\n";
-            }
-
-            $rewrite_rule .= "RewriteRule ^([a-zA-Z0-9\-]+)\/search\/$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=search&%{QUERY_STRING} [L]\n";
-        } else {
-            // Rewrite with lang variable
-            $rewrite_rule .= "RewriteRule ^([a-z]{2})\/seek\/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=seek&%{QUERY_STRING} [L]\n";
-            $rewrite_rule .= "RewriteRule ^([a-z]{2})\/([a-zA-Z0-9\-]+)\/search\/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=search&%{QUERY_STRING} [L]\n";
-        }
         
         // Rewrite for other module's rule
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
