@@ -18,11 +18,29 @@ $publtime = 0;
 if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $query = $db_slave->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_' . $catid . ' WHERE id = ' . $id);
     $news_contents = $query->fetch();
+
     if ($news_contents['id'] > 0) {
-        $body_contents = $db_slave->query('SELECT bodyhtml as bodytext, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_bodyhtml_' . ceil($news_contents['id'] / 2000) . ' where id=' . $news_contents['id'])->fetch();
+        $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
+        if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
+            $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
+        } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
+            //chuyen huong neu doi alias
+            header('HTTP/1.1 301 Moved Permanently');
+            Header('Location: ' . $base_url_rewrite);
+            die();
+        } else {
+            $canonicalUrl = $base_url_rewrite;
+        }
+        
+        $body_contents = $db_slave->query('SELECT titlesite, description, bodyhtml, sourcetext, imgposition, copyright, allowed_send, allowed_print, allowed_save, gid FROM ' . NV_PREFIXLANG . '_' . $module_data . '_detail where id=' . $news_contents['id'])->fetch();
         $news_contents = array_merge($news_contents, $body_contents);
         unset($body_contents);
 
+        if ($news_contents['external_link']) {
+            Header('Location: ' . $news_contents['sourcetext']);
+            die();
+        }
+        
         $show_no_image = $module_config[$module_name]['show_no_image'];
 
         if (defined('NV_IS_MODADMIN') or ($news_contents['status'] == 1 and $news_contents['publtime'] < NV_CURRENTTIME and ($news_contents['exptime'] == 0 or $news_contents['exptime'] > NV_CURRENTTIME))) {
@@ -82,12 +100,10 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
             } elseif (! empty($show_no_image)) {
                 $meta_property['og:image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . $show_no_image;
             }
-            if ($alias_url == $news_contents['alias']) {
-                $publtime = intval($news_contents['publtime']);
-            }
 
+            $publtime = intval($news_contents['publtime']);
             $meta_property['og:type'] = 'article';
-            $meta_property['article:published_time'] = date('Y-m-dTH:i:s', $news_contents['publtime']);
+            $meta_property['article:published_time'] = date('Y-m-dTH:i:s', $publtime);
             $meta_property['article:modified_time'] = date('Y-m-dTH:i:s', $news_contents['edittime']);
             if ($news_contents['exptime']) {
                 $meta_property['article:expiration_time'] = date('Y-m-dTH:i:s', $news_contents['exptime']);
@@ -104,45 +120,39 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
 
     if ($publtime == 0) {
         $redirect = '<meta http-equiv="Refresh" content="3;URL=' . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name, true) . '" />';
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect);
-    }
-
-
-    $base_url_rewrite = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$news_contents['catid']]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
-    if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
-        $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
-    } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
-        Header('Location: ' . $base_url_rewrite);
-        die();
-    } else {
-        $canonicalUrl = $base_url_rewrite;
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'] . $redirect, 404);
     }
 
     $news_contents['url_sendmail'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=sendmail/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
     $news_contents['url_print'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=print/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
     $news_contents['url_savefile'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=savefile/' . $global_array_cat[$catid]['alias'] . '/' . $news_contents['alias'] . '-' . $news_contents['id'] . $global_config['rewrite_exturl'], true);
 
-    $sql = 'SELECT title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $news_contents['sourceid'];
-    $result = $db_slave->query($sql);
-
-    list($sourcetext, $source_link, $source_logo) = $result->fetch(3);
-    unset($sql, $result);
-
-    $news_contents['newscheckss'] = md5($news_contents['id'] . session_id() . $global_config['sitekey']);
-    if ($module_config[$module_name]['config_source'] == 0) {
-        $news_contents['source'] = $sourcetext;
-    } elseif ($module_config[$module_name]['config_source'] == 1) {
-        $news_contents['source'] = $source_link;
-    } elseif ($module_config[$module_name]['config_source'] == 2 && ! empty($source_logo)) {
-        $news_contents['source'] = '<img width="100px" src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $source_logo . '">';
+    $news_contents['source'] = '';
+    if( $news_contents['sourceid'] )
+    {
+        $sql = 'SELECT title, link, logo FROM ' . NV_PREFIXLANG . '_' . $module_data . '_sources WHERE sourceid = ' . $news_contents['sourceid'];
+        $result = $db_slave->query($sql);
+        list($sourcetext, $source_link, $source_logo) = $result->fetch(3);
+        unset($sql, $result);
+        if ($module_config[$module_name]['config_source'] == 0) {
+            $news_contents['source'] = $sourcetext; // Hiển thị tiêu đề nguồn tin
+        } elseif ($module_config[$module_name]['config_source'] == 1) {
+            $news_contents['source'] = '<a title="' . $sourcetext . '" rel="nofollow" href="' . $news_contents['sourcetext'] . '">' . $source_link . '</a>'; // Hiển thị link của nguồn tin
+        } elseif ($module_config[$module_name]['config_source'] == 3) {
+            $news_contents['source'] = '<a title="' . $sourcetext . '" href="' . $news_contents['sourcetext'] . '">' . $source_link . '</a>'; // Hiển thị link của nguồn tin
+        } elseif ($module_config[$module_name]['config_source'] == 2 and ! empty($source_logo)) {
+            $news_contents['source'] = '<img width="100px" src="' . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/source/' . $source_logo . '">';
+        }
     }
+
     $news_contents['publtime'] = nv_date('l - d/m/Y H:i', $news_contents['publtime']);
+    $news_contents['newscheckss'] = md5($news_contents['id'] . NV_CHECK_SESSION);
 
     $related_new_array = array();
     $related_array = array();
     if ($st_links > 0) {
         $db_slave->sqlreset()
-            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext')
+            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
             ->where('status=1 AND publtime > ' . $publtime)
             ->order('id ASC')
@@ -152,19 +162,15 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         while ($row = $related->fetch()) {
             if ($row['homeimgthumb'] == 1) {
                 //image thumb
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 2) {
                 //image file
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 3) {
                 //image url
-
                 $row['imghome'] = $row['homeimgfile'];
             } elseif (! empty($show_no_image)) {
                 //no image
-
                 $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $row['imghome'] = '';
@@ -177,7 +183,8 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'link' => $link,
                 'newday' => $global_array_cat[$catid]['newday'],
                 'hometext' => $row['hometext'],
-                'imghome' => $row['imghome']
+                'imghome' => $row['imghome'],
+                'external_link' => $row['external_link']
             );
         }
         $related->closeCursor();
@@ -185,7 +192,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         sort($related_new_array, SORT_NUMERIC);
 
         $db_slave->sqlreset()
-            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext')
+            ->select('id, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
             ->where('status=1 AND publtime < ' . $publtime)
             ->order('id DESC')
@@ -195,19 +202,15 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         while ($row = $related->fetch()) {
             if ($row['homeimgthumb'] == 1) {
                 //image thumb
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 2) {
                 //image file
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 3) {
                 //image url
-
                 $row['imghome'] = $row['homeimgfile'];
             } elseif (! empty($show_no_image)) {
                 //no image
-
                 $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $row['imghome'] = '';
@@ -220,7 +223,8 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'link' => $link,
                 'newday' => $global_array_cat[$catid]['newday'],
                 'hometext' => $row['hometext'],
-                'imghome' => $row['imghome']
+                'imghome' => $row['imghome'],
+                'external_link' => $row['external_link']
             );
         }
 
@@ -235,7 +239,7 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         $topiclink = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $module_info['alias']['topic'] . '/' . $topic_alias;
 
         $db_slave->sqlreset()
-            ->select('id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext')
+            ->select('id, catid, title, alias, publtime, homeimgfile, homeimgthumb, hometext, external_link')
             ->from(NV_PREFIXLANG . '_' . $module_data . '_rows t1')
             ->where('status=1 AND topicid = ' . $news_contents['topicid'] . ' AND id != ' . $id)
             ->order('id DESC')
@@ -244,19 +248,15 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         while ($row = $topic->fetch()) {
             if ($row['homeimgthumb'] == 1) {
                 //image thumb
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 2) {
                 //image file
-
                 $row['imghome'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['homeimgfile'];
             } elseif ($row['homeimgthumb'] == 3) {
                 //image url
-
                 $row['imghome'] = $row['homeimgfile'];
             } elseif (! empty($show_no_image)) {
                 //no image
-
                 $row['imghome'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $row['imghome'] = '';
@@ -271,7 +271,8 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
                 'topiclink' => $topiclink,
                 'topictitle' => $topic_title,
                 'hometext' => $row['hometext'],
-                'imghome' => $row['imghome']
+                'imghome' => $row['imghome'],
+                'external_link' => $row['external_link']
             );
         }
         $topic->closeCursor();
@@ -318,7 +319,6 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
         if ($allowed == '-1') {
             $allowed = $news_contents['allowed_comm'];
         }
-        define('NV_PER_PAGE_COMMENT', 5); //Số bản ghi hiển thị bình luận
         require_once NV_ROOTDIR . '/modules/comment/comment.php';
         $area = (defined('NV_COMM_AREA')) ? NV_COMM_AREA : 0;
         $checkss = md5($module_name . '-' . $area . '-' . NV_COMM_ID . '-' . $allowed . '-' . NV_CACHE_PREFIX);
@@ -331,9 +331,9 @@ if (nv_user_in_groups($global_array_cat[$catid]['groups_view'])) {
     $contents = detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment);
     $id_profile_googleplus = $news_contents['gid'];
 
-    $page_title = $news_contents['title'];
-    $key_words = implode(', ', $key_words);
-    $description = $news_contents['hometext'];
+    $page_title = empty($news_contents['titlesite']) ? $news_contents['title'] : $news_contents['titlesite'];
+    $key_words = implode(',', $key_words);
+    $description = empty($news_contents['description']) ? nv_clean60(strip_tags($news_contents['hometext']), 160) : $news_contents['description'];
 } else {
     $contents = no_permission($global_array_cat[$catid]['groups_view']);
 }

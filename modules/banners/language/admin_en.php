@@ -1,24 +1,20 @@
 <?php
-
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
-
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
-
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
 $lang_translator['createdate'] = '04/03/2010, 15:22';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_module';
-
 $lang_module['add_client'] = 'Add client';
 $lang_module['edit_client'] = 'Edit client';
 $lang_module['full_name_empty'] = 'Client name has not been declared';
@@ -26,6 +22,8 @@ $lang_module['website_incorrect'] = 'Website incorrect';
 $lang_module['yim_incorrect'] = 'YIM incorrect';
 $lang_module['add_client_info'] = 'Complete all fields below to create a new customer account';
 $lang_module['edit_client_info'] = 'Box marked with an asterisk to be required to declare';
+$lang_module['random_password'] = 'Random password';
+$lang_module['show_password'] = 'Show password';
 $lang_module['login'] = 'Login';
 $lang_module['full_name'] = 'Full name';
 $lang_module['email'] = 'Email';
@@ -44,6 +42,7 @@ $lang_module['client_list'] = 'Client';
 $lang_module['client_list2'] = 'List client';
 $lang_module['reg_time'] = 'Registration date';
 $lang_module['is_act'] = 'Active';
+$lang_module['require_image'] = 'Require image';
 $lang_module['act0'] = 'Wait for active';
 $lang_module['act1'] = 'Active';
 $lang_module['act2'] = 'Expire';
@@ -82,6 +81,7 @@ $lang_module['add_banner_info'] = 'T add advertising, Please declare fully the b
 $lang_module['of_client'] = 'Client';
 $lang_module['upload'] = 'Image file for advertising (%s)';
 $lang_module['re_upload'] = 'Replace advertising image(%s)';
+$lang_module['imageforswf'] = 'Images for mobile browser';
 $lang_module['file_alt'] = 'Advertising note';
 $lang_module['click_url'] = 'Image\'s URL';
 $lang_module['add_date'] = 'Initial';
@@ -90,6 +90,7 @@ $lang_module['exp_date'] = 'Finish';
 $lang_module['edit_banner'] = 'Edit advertising';
 $lang_module['edit_banner_info'] = 'Box marked with an asterisk to be required to declare';
 $lang_module['file_name'] = 'Advertising image';
+$lang_module['banners_list0'] = 'List advertising';
 $lang_module['banners_list1'] = 'List active advertising';
 $lang_module['banners_list2'] = 'List expire advertising';
 $lang_module['banners_list3'] = 'List suspend advertising';
@@ -138,4 +139,4 @@ $lang_module['target_blank'] = 'New Window (_blank)';
 $lang_module['target_top'] = 'Topmost Window (_top)';
 $lang_module['target_self'] = 'Same Window (_self)';
 $lang_module['target_parent'] = 'Parent Window (_parent)';
-$lang_module['imageforswf'] = 'Images for mobile browser';
+$lang_module['bannerhtml'] = 'Advertising content';

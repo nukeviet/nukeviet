@@ -71,7 +71,7 @@ if ($nv_Request->isset_request('reload', 'post,get')) {
     if (! empty($array_sub_id)) {
         $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem='" . implode(',', $array_sub_id) . "' WHERE id=" . $id);
         menu_fix_order($mid, $id);
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
     }
     die('OK_' . $lang_module['action_menu_reload_success']);
 }
@@ -190,6 +190,14 @@ if ($nv_Request->isset_request('submit1', 'post')) {
     } else {
         $post['icon'] = '';
     }
+    
+    $post['image'] = $nv_Request->get_string('image', 'post', '');
+    if (nv_is_file($post['image'], NV_UPLOADS_DIR . '/' . $module_upload)) {
+        $lu = strlen(NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/');
+        $post['image'] = substr($post['image'], $lu);
+    } else {
+        $post['image'] = '';
+    }
 
     if (empty($post['module_name']) and ! empty($post['link'])) {
         // Kiểm tra để tách link module nếu nhập trực tiếp link đúng cấu trúc của module
@@ -222,12 +230,13 @@ if ($nv_Request->isset_request('submit1', 'post')) {
         } else {
             $weight = $db->query('SELECT max(weight) FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid=' . intval($post['mid']) . ' AND parentid=' . intval($post['parentid'] . ' AND mid=' . $post['mid']))->fetchColumn();
             $weight = intval($weight) + 1;
-            $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (parentid, mid, title, link, icon, note, weight, sort, lev, subitem, groups_view, module_name, op, target, css, active_type, status) VALUES (
+            $sql = "INSERT INTO " . NV_PREFIXLANG . "_" . $module_data . "_rows (parentid, mid, title, link, icon, image, note, weight, sort, lev, subitem, groups_view, module_name, op, target, css, active_type, status) VALUES (
 				" . intval($post['parentid']) . ",
 				" . intval($post['mid']) . ",
 				:title,
 				:link,
                 :icon,
+			    :image,
 				:note,
 				" . intval($weight) . ",
 				0, 0, '',
@@ -244,6 +253,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             $data_insert['title'] = $post['title'];
             $data_insert['link'] = $post['link'];
             $data_insert['icon'] = $post['icon'];
+            $data_insert['image'] = $post['image'];
             $data_insert['note'] = $post['note'];
             $data_insert['groups_view'] = $post['groups_view'];
             $data_insert['module_name'] = $post['module_name'];
@@ -266,7 +276,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                     $db->query($sql);
                 }
 
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
                 exit();
             } else {
@@ -286,6 +296,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
 				title= :title,
 				link= :link,
                 icon= :icon,
+                image= :image,
 				note= :note,
 				groups_view= :groups_view,
 				module_name= :module_name,
@@ -298,6 +309,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
             $stmt->bindParam(':title', $post['title'], PDO::PARAM_STR);
             $stmt->bindParam(':link', $post['link'], PDO::PARAM_STR);
             $stmt->bindParam(':icon', $post['icon'], PDO::PARAM_STR);
+            $stmt->bindParam(':image', $post['image'], PDO::PARAM_STR);
             $stmt->bindParam(':note', $post['note'], PDO::PARAM_STR);
             $stmt->bindParam(':groups_view', $post['groups_view'], PDO::PARAM_STR);
             $stmt->bindParam(':module_name', $post['module_name'], PDO::PARAM_STR);
@@ -341,7 +353,7 @@ if ($nv_Request->isset_request('submit1', 'post')) {
                     $db->query("UPDATE " . NV_PREFIXLANG . "_" . $module_data . "_rows SET subitem= '" . implode(',', $arr_item_menu) . "' WHERE mid=" . $mid_old . " AND id=" . $pa_old);
                 }
 
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&mid=' . $post['mid'] . '&parentid=' . $post['parentid']);
                 exit();
             } else {
@@ -357,7 +369,7 @@ if ($nv_Request->get_title('action', 'post') =='delete' and $nv_Request->isset_r
         nv_menu_del_sub($id, $post['parentid']);
     }
     menu_fix_order($post['mid']);
-    nv_del_moduleCache($module_name);
+    $nv_Cache->delMod($module_name);
 }
 
 $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_rows WHERE mid = ' . $post['mid'] . ' AND parentid=' . $post['parentid'] . ' ORDER BY weight';
@@ -385,6 +397,11 @@ while ($row = $result->fetch()) {
     } else {
         $row['icon'] = '';
     }
+    if (! empty($row['image']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'])) {
+        $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
+    } else {
+        $row['image'] = '';
+    }
     $arr_table[$row['id']] = array(
         'id' => $row['id'],
         'mid' => $row['mid'],
@@ -393,6 +410,7 @@ while ($row = $result->fetch()) {
         'parentid' => $row['parentid'],
         'link' => nv_htmlspecialchars($row['link']),
         'icon' => $row['icon'],
+        'image' => $row['image'],
         'weight' => $row['weight'],
         'title' => $row['title'],
         'groups_view' => implode('<br>', $groups_view),
@@ -433,6 +451,10 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 
 if (! empty($post['icon']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['icon'])) {
     $post['icon'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['icon'];
+}
+
+if (! empty($post['image']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $post['image'])) {
+    $post['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $post['image'];
 }
 
 $xtpl->assign('DATA', $post);

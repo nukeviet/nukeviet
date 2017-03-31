@@ -15,7 +15,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 $area = $nv_Request->get_title('area', 'get', '');
 $return = $nv_Request->get_title('return', 'get,post', '');
 if (empty($area)) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
 }
 
 $page_title = $lang_module['pagetitle'];
@@ -158,7 +158,7 @@ if ($nv_Request->isset_request('submit', 'get')) {
         $array_where[] = '( last_login <= ' . $array['last_loginto1'] . ' )';
     }
     if (! empty($filtersql)) {
-        $data_str = $crypt->aes_decrypt(nv_base64_decode($filtersql), md5($global_config['sitekey'] . $client_info['session_id']));
+        $data_str = $crypt->aes_decrypt(nv_base64_decode($filtersql), NV_CHECK_SESSION);
         if (! empty($data_str)) {
             $array_where[] = $data_str;
         }
@@ -194,7 +194,7 @@ if ($nv_Request->isset_request('submit', 'get')) {
 
     $db->sqlreset()
         ->select('COUNT(*)')
-        ->from(NV_USERS_GLOBALTABLE);
+        ->from(NV_MOD_TABLE);
     if (! empty($array_where)) {
         $db->where(implode(' AND ', $array_where));
     }

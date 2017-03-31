@@ -9,7 +9,9 @@
  */
 
 namespace NukeViet\Core;
+
 use PDO;
+use PDOException;
 
 /**
  * extends for PDO
@@ -37,9 +39,7 @@ class Database extends pdo
      */
     public function __construct($config)
     {
-        $aray_type = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
-
-        $AvailableDrivers = PDO::getAvailableDrivers();
+        $_alldbtype = array( 'mysql', 'pgsql', 'mssql', 'sybase', 'dblib' );
 
         $driver_options = array(
             PDO::ATTR_EMULATE_PREPARES => false,
@@ -48,7 +48,7 @@ class Database extends pdo
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         );
 
-        if (in_array($config['dbtype'], $AvailableDrivers) and in_array($config['dbtype'], $aray_type)) {
+        if (in_array($config['dbtype'], $_alldbtype)) {
             $dsn = $config['dbtype'] . ':dbname=' . $config['dbname'] . ';host=' . $config['dbhost'] . ';charset=' . $config['charset'];
             if (!empty($config['dbport'])) {
                 $dsn .= ';port=' . $config['dbport'];
@@ -90,10 +90,11 @@ class Database extends pdo
             if ($this->dbtype == 'oci') {
                 $_sql .= ' RETURNING ' . $column . ' INTO :primary_key';
             }
-            $i =0;
             $stmt = $this->prepare($_sql);
-            foreach ($data as $key => $value) {
-                $stmt->bindParam(':' . $key, $data[$key], PDO::PARAM_STR, strlen($value));
+            if(!empty($data)) {
+                foreach (array_keys($data) as $key) {
+                    $stmt->bindParam(':' . $key, $data[$key], PDO::PARAM_STR, strlen($data[$key]));
+                }
             }
             if ($this->dbtype == 'oci') {
                 $stmt->bindParam(':primary_key', $primary_key, PDO::PARAM_INT, 11);
@@ -106,6 +107,32 @@ class Database extends pdo
                 return $this->lastInsertId();
             }
         } catch (PDOException $e) {
+            trigger_error($e->getMessage());
+        }
+        return false;
+    }
+    
+    /**
+     * Database::affected_rows_count()
+     * Get the number of affected rows by the last INSERT, UPDATE, REPLACE or DELETE query
+     *
+     * @param mixed $_sql
+     * @param mixed $data
+     * @return
+     */
+    public function affected_rows_count($_sql, $data = array())
+    {
+        try {
+            $stmt = $this->prepare($_sql);
+            if (!empty($data)) {
+                foreach (array_keys($data) as $key) {
+                    $stmt->bindParam(':' . $key, $data[$key], PDO::PARAM_STR, strlen($data[$key]));
+                }
+            }
+            $stmt->execute();
+            return $stmt->rowCount();
+        }
+        catch (PDOException $e) {
             trigger_error($e->getMessage());
         }
         return false;

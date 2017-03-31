@@ -12,6 +12,12 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
+/**
+ * nv_get_submenu()
+ * 
+ * @param mixed $mod
+ * @return
+ */
 function nv_get_submenu($mod)
 {
     global $lang_global, $module_name, $global_config, $admin_mods;
@@ -35,9 +41,15 @@ function nv_get_submenu($mod)
     return $submenu;
 }
 
+/**
+ * nv_get_submenu_mod()
+ * 
+ * @param mixed $module_name
+ * @return
+ */
 function nv_get_submenu_mod($module_name)
 {
-    global $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
+    global $nv_Cache, $lang_global, $global_config, $db, $site_mods, $admin_info, $db_config, $admin_mods;
 
     $submenu = array();
     if (isset($site_mods[$module_name])) {
@@ -61,6 +73,13 @@ function nv_get_submenu_mod($module_name)
     return $submenu;
 }
 
+/**
+ * nv_admin_theme()
+ * 
+ * @param mixed $contents
+ * @param integer $head_site
+ * @return
+ */
 function nv_admin_theme($contents, $head_site = 1)
 {
     global $global_config, $lang_global, $admin_mods, $site_mods, $admin_menu_mods, $module_name, $module_file, $module_info, $admin_info, $db, $page_title, $submenu, $select_options, $op, $set_active_op, $array_lang_admin, $my_head, $my_footer, $array_mod_title, $array_url_instruction, $op, $client_info;
@@ -137,6 +156,7 @@ function nv_admin_theme($contents, $head_site = 1)
         $lang_site = (! empty($site_mods)) ? NV_LANG_DATA : $global_config['site_lang'];
         $xtpl->assign('NV_GO_CLIENTSECTOR_URL', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $lang_site);
         $xtpl->assign('NV_LOGOUT', $lang_global['admin_logout_title']);
+        $xtpl->assign('NV_GO_ALL_NOTIFICATION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=siteinfo&amp;' . NV_OP_VARIABLE . '=notification');
 
         if (! empty($array_lang_admin)) {
             $xtpl->assign('NV_LANGDATA', $lang_global['langdata']);
@@ -187,7 +207,6 @@ function nv_admin_theme($contents, $head_site = 1)
         }
 
         $xtpl->parse('main.top_menu');
-        $xtpl->assign('NV_DIGCLOCK', nv_date('H:i T l, d/m/Y', NV_CURRENTTIME));
 
         if ($admin_info['current_login'] >= NV_CURRENTTIME - 60) {
             if (! empty($admin_info['last_login'])) {
@@ -279,7 +298,8 @@ function nv_admin_theme($contents, $head_site = 1)
         }
 
         $xtpl->parse('main.select_option');
-    } elseif (isset($site_mods[$module_name]['main_file']) and $site_mods[$module_name]['main_file']) {
+    }
+    if (isset($site_mods[$module_name]['main_file']) and $site_mods[$module_name]['main_file']) {
         $xtpl->assign('NV_GO_CLIENTMOD', $lang_global['go_clientmod']);
         $xtpl->parse('main.site_mods');
     }

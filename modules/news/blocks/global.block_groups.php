@@ -15,7 +15,7 @@ if (! defined('NV_MAINFILE')) {
 if (! nv_function_exists('nv_block_news_groups')) {
     function nv_block_config_news_groups($module, $data_block, $lang_block)
     {
-        global $site_mods;
+        global $nv_Cache, $site_mods;
 
         $html_input = '';
         $html = '';
@@ -24,7 +24,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
         $html .= '<td><select name="config_blockid" class="form-control w200">';
         $html .= '<option value="0"> -- </option>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_block_cat ORDER BY weight ASC';
-        $list = nv_db_cache($sql, '', $module);
+        $list = $nv_Cache->db($sql, '', $module);
         foreach ($list as $l) {
             $html_input .= '<input type="hidden" id="config_blockid_' . $l['bid'] . '" value="' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $site_mods[$module]['alias']['groups'] . '/' . $l['alias'] . '" />';
             $html .= '<option value="' . $l['bid'] . '" ' . (($data_block['blockid'] == $l['bid']) ? ' selected="selected"' : '') . '>' . $l['title'] . '</option>';
@@ -37,6 +37,10 @@ if (! nv_function_exists('nv_block_news_groups')) {
         $html .= '		$("input[name=link]").val($("#config_blockid_" + $("select[name=config_blockid]").val()).val());';
         $html .= '	});';
         $html .= '</script>';
+        $html .= '</tr>';
+        $html .= '<tr>';
+        $html .= '<td>' . $lang_block['title_length'] . '</td>';
+        $html .= '<td><input type="text" class="form-control w200" name="config_title_length" size="5" value="' . $data_block['title_length'] . '"/></td>';
         $html .= '</tr>';
         $html .= '<tr>';
         $html .= '<td>' . $lang_block['numrow'] . '</td>';
@@ -66,6 +70,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
         $return['config'] = array();
         $return['config']['blockid'] = $nv_Request->get_int('config_blockid', 'post', 0);
         $return['config']['numrow'] = $nv_Request->get_int('config_numrow', 'post', 0);
+        $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 20);
         $return['config']['showtooltip'] = $nv_Request->get_int('config_showtooltip', 'post', 0);
         $return['config']['tooltip_position'] = $nv_Request->get_string('config_tooltip_position', 'post', 0);
         $return['config']['tooltip_length'] = $nv_Request->get_string('config_tooltip_length', 'post', 0);
@@ -74,19 +79,19 @@ if (! nv_function_exists('nv_block_news_groups')) {
 
     function nv_block_news_groups($block_config)
     {
-        global $module_array_cat, $module_info, $site_mods, $module_config, $global_config, $db;
+        global $module_array_cat, $module_info, $site_mods, $module_config, $global_config, $nv_Cache, $db;
         $module = $block_config['module'];
         $show_no_image = $module_config[$module]['show_no_image'];
         $blockwidth = $module_config[$module]['blockwidth'];
 
         $db->sqlreset()
-            ->select('t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime')
+            ->select('t1.id, t1.catid, t1.title, t1.alias, t1.homeimgfile, t1.homeimgthumb,t1.hometext,t1.publtime,t1.external_link')
             ->from(NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_rows t1')
             ->join('INNER JOIN ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_block t2 ON t1.id = t2.id')
             ->where('t2.bid= ' . $block_config['blockid'] . ' AND t1.status= 1')
             ->order('t2.weight ASC')
             ->limit($block_config['numrow']);
-        $list = nv_db_cache($db->sql(), '', $module);
+        $list = $nv_Cache->db($db->sql(), '', $module);
 
         if (! empty($list)) {
             if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/news/block_groups.tpl')) {
@@ -113,13 +118,20 @@ if (! nv_function_exists('nv_block_news_groups')) {
                 }
 
                 $l['blockwidth'] = $blockwidth;
-
-                $l['hometext'] = nv_clean60($l['hometext'], $block_config['tooltip_length'], true);
+                
+                $l['hometext_clean'] = strip_tags($l['hometext']);
+                $l['hometext_clean'] = nv_clean60($l['hometext_clean'], $block_config['tooltip_length'], true);
 
                 if (! $block_config['showtooltip']) {
                     $xtpl->assign('TITLE', 'title="' . $l['title'] . '"');
                 }
-
+                
+                $l['title_clean'] = nv_clean60($l['title'], $block_config['title_length']);
+                
+                if ($l['external_link']) {
+                    $l['target_blank'] = 'target="_blank"';
+                }
+                
                 $xtpl->assign('ROW', $l);
                 if (! empty($l['thumb'])) {
                     $xtpl->parse('main.loop.img');
@@ -138,7 +150,7 @@ if (! nv_function_exists('nv_block_news_groups')) {
     }
 }
 if (defined('NV_SYSTEM')) {
-    global $site_mods, $module_name, $global_array_cat, $module_array_cat;
+    global $site_mods, $module_name, $global_array_cat, $module_array_cat, $nv_Cache, $db;
     $module = $block_config['module'];
     if (isset($site_mods[$module])) {
         if ($module == $module_name) {
@@ -147,10 +159,13 @@ if (defined('NV_SYSTEM')) {
         } else {
             $module_array_cat = array();
             $sql = 'SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
-            $list = nv_db_cache($sql, 'catid', $module);
-            foreach ($list as $l) {
-                $module_array_cat[$l['catid']] = $l;
-                $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
+            $list = $nv_Cache->db($sql, 'catid', $module);
+            if(!empty($list))
+            {
+                foreach ($list as $l) {
+                    $module_array_cat[$l['catid']] = $l;
+                    $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=' . $l['alias'];
+                }
             }
         }
         $content = nv_block_news_groups($block_config);

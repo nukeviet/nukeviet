@@ -66,8 +66,8 @@ if (empty($error) and empty($message)) {
         die();
     }
 
-    if (! empty(NV_Http::$error)) {
-        $error = nv_http_get_lang(NV_Http::$error);
+    if (! empty(NukeViet\Http\Http::$error)) {
+        $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
         $error = $lang_global['error_valid_response'];
     } elseif (! empty($array['error']['message'])) {
@@ -138,6 +138,7 @@ if (! empty($error)) {
                     $installed = nv_extensions_is_installed($array['tid'], $array['name'], $array['compatible']['ver']);
 
                     if ($installed == 1) {
+                        $xtpl->assign('INSTALLED_MESSAGE', sprintf($lang_module['install_check_installed_error'], NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name));
                         $xtpl->parse('main.install.installed');
                     } else {
                         // Da thanh toan

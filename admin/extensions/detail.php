@@ -40,8 +40,8 @@ $array = $NV_Http->post(NUKEVIET_STORE_APIURL, $args);
 $array = ! empty($array['body']) ? @unserialize($array['body']) : array();
 
 $error = '';
-if (! empty(NV_Http::$error)) {
-    $error = nv_http_get_lang(NV_Http::$error);
+if (! empty(NukeViet\Http\Http::$error)) {
+    $error = nv_http_get_lang(NukeViet\Http\Http::$error);
 } elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
     $error = $lang_global['error_valid_response'];
 } elseif (! empty($array['error']['message'])) {
@@ -85,7 +85,7 @@ if (! empty($error)) {
         $xtpl->parse('main.data.empty_images');
     }
 
-    if (! empty($array['compatible'])) {
+    if (! empty($array['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
         $xtpl->parse('main.data.install');
     }
 
@@ -97,7 +97,7 @@ if (! empty($error)) {
 
         $xtpl->assign('FILE', $file);
 
-        if ($file['type'] == 1 and ! empty($file['compatible'])) {
+        if ($file['type'] == 1 and ! empty($file['compatible']) and ($global_config['extension_setup'] == 2 or $global_config['extension_setup'] == 3)) {
             $xtpl->parse('main.data.file.install');
         } else {
             $xtpl->parse('main.data.file.download');

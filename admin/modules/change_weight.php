@@ -47,7 +47,7 @@ $sth2 = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET weight=' . $new_weight
 $sth2->bindParam(':title', $mod, PDO::PARAM_STR);
 $sth2->execute();
 
-nv_del_moduleCache('modules');
+$nv_Cache->delMod('modules');
 
 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['weight'] . ' module: ' . $mod, $weight . ' -> ' . $new_weight, $admin_info['userid']);
 

@@ -14,7 +14,7 @@
 
 <div class="list-group">
 	<!-- BEGIN: viewcatloop -->
-	<a class="show h4" href="{CONTENT.link}" <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">
+	<a class="show h4" href="{CONTENT.link}" {CONTENT.target_blank} <!-- BEGIN: tooltip -->data-content="{CONTENT.hometext_clean}" data-img="{CONTENT.imghome}" data-rel="tooltip" data-placement="{TOOLTIP_POSITION}"<!-- END: tooltip --> title="{CONTENT.title}">
 		<h4 class="list-group-item-heading">
 			<span class="label label-default">{NUMBER}</span>&nbsp;&nbsp;{CONTENT.title}
 			<!-- BEGIN: newday -->

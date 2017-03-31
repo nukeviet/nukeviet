@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jul 31, 2015, 09:30:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
@@ -70,10 +70,15 @@ $lang_module['auto_postcomm'] = 'Contrôler les commentaires';
 $lang_module['auto_postcomm_0'] = 'Contrôler tous';
 $lang_module['auto_postcomm_1'] = 'Ne peut pas controller';
 $lang_module['auto_postcomm_2'] = 'Contrôler si vous n\'êtes pas membres';
+$lang_module['perpagecomm'] = 'Nombre de commentaires affichés sur une page';
+$lang_module['perpagecomm_note'] = 'Entrez au moins 1 et pas plus de 100';
+$lang_module['timeoutcomm'] = 'Temps (s) minimum entre chaque poste commentaire';
+$lang_module['timeoutcomm_note'] = 'Entrez 0 pour un nombre illimité. Remarque devrait permettre captcha si choisir cette valeur est 0, la valeur est pas applicable pour l\'administrateur';
 $lang_module['adminscomm'] = 'Admin gère les commentaires';
 $lang_module['view_comm'] = 'Ceux qui ont le droit de regarder les commentaires';
 $lang_module['allowed_comm'] = 'Ceux qui ont le droit d\'écrire les commentaires';
 $lang_module['allowed_comm_item'] = 'Selon la configuration des commentaires';
+$lang_module['adminscomm_note'] = 'Le "Admin peut gérer les commentaires" applique uniquement au module de gestion admin, vous devez ajouter un module de gestion avant la décentralisation';
 $lang_module['sortcomm'] = 'Mettre en ordre des commentaires';
 $lang_module['sortcomm_0'] = 'Les nouveaux avant';
 $lang_module['sortcomm_1'] = 'Les anciens avant';
@@ -84,3 +89,4 @@ $lang_module['captcha_1'] = 'Si vous n\'êtes pas membres';
 $lang_module['captcha_2'] = 'On n\'est pas le responsable des commentaires';
 $lang_module['captcha_3'] = 'Présente dans tous les cas';
 $lang_module['siteinfo_queue_comments'] = 'Le nombre de commentaire en liste d\'attente d\'être vérifié';
+$lang_module['notification_comment_queue'] = 'Commentaire messages de modération par %s<br /><em>%s</em>';

@@ -13,6 +13,7 @@ if (! defined('NV_IS_FILE_SETTINGS')) {
 }
 
 $show_ssl_modules = $nv_Request->get_int('show_ssl_modules', 'post,get', $global_config['ssl_https'] == 3);
+$array_theme_type = array('r', 'd', 'm');
 $submit = $nv_Request->get_string('submit', 'post');
 $errormess = '';
 
@@ -21,14 +22,25 @@ if ($submit) {
 
     $site_domain = $nv_Request->get_title('site_domain', 'post', '');
     $array_config['site_domain'] = (sizeof($global_config['my_domains']) > 1 and in_array($site_domain, $global_config['my_domains'])) ? $site_domain : '';
-
     $array_config['site_theme'] = nv_substr($nv_Request->get_title('site_theme', 'post', '', 1), 0, 255);
     $array_config['mobile_theme'] = nv_substr($nv_Request->get_title('mobile_theme', 'post', '', 1), 0, 255);
     $array_config['site_name'] = nv_substr($nv_Request->get_title('site_name', 'post', '', 1), 0, 255);
     $array_config['switch_mobi_des'] = $nv_Request->get_int('switch_mobi_des', 'post', 0);
+    $_array_theme_type = $nv_Request->get_typed_array('theme_type', 'post', 'title');
+    $_array_theme_type = array_intersect($_array_theme_type,$array_theme_type);
+    if (!in_array('m', $_array_theme_type)) {
+        $array_config['mobile_theme'] = '';
+    }
+    if(empty($array_config['mobile_theme']))
+    {
+        $array_config['switch_mobi_des'] = 0;
+    }
+    if (!in_array('r', $_array_theme_type) and !in_array('d', $_array_theme_type)) {
+        $_array_theme_type[] = 'r';
+    }
+    $array_config['theme_type'] = implode(',', $_array_theme_type);
 
     $array_config['site_keywords'] = nv_substr($nv_Request->get_title('site_keywords', 'post', '', 1), 0, 255);
-
     if (! empty($array_config['site_keywords'])) {
         $site_keywords = array_map('trim', explode(',', $array_config['site_keywords']));
         $array_config['site_keywords'] = array();
@@ -40,7 +52,6 @@ if ($submit) {
                 }
             }
         }
-
         $array_config['site_keywords'] = (! empty($array_config['site_keywords'])) ? implode(', ', $array_config['site_keywords']) : '';
     }
 
@@ -103,7 +114,7 @@ if ($submit) {
         $sth->execute();
     }
 
-    nv_delete_all_cache();
+    $nv_Cache->delAll();
 
     if (empty($errormess)) {
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . ($show_ssl_modules ? '&show_ssl_modules=1' : '') . '&rand=' . nv_genpass());
@@ -120,7 +131,7 @@ if ($submit) {
             }
         }
 
-        $global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_intersect(array_map("trim", explode(',', $global_config['ssl_https_modules'])), array_keys($site_mods));
+        $global_config['ssl_https_modules'] = empty($global_config['ssl_https_modules']) ? array() : array_intersect(array_map('trim', explode(',', $global_config['ssl_https_modules'])), array_keys($site_mods));
     }
 }
 
@@ -181,10 +192,17 @@ $xtpl->assign('OP', $op);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('VALUE', $value_setting);
 
+foreach ($array_theme_type as $theme_type) {
+    $xtpl->assign('THEME_TYPE', $theme_type);
+    $xtpl->assign('THEME_TYPE_TXT', $lang_global['theme_type_' . $theme_type]);
+    $xtpl->assign('THEME_TYPE_CHECKED', in_array($theme_type, $global_config['array_theme_type']) ? ' checked="checked"' : '');
+    $xtpl->parse('main.theme_type');
+}
+
 if (sizeof($global_config['my_domains']) > 1) {
     foreach ($global_config['my_domains'] as $_domain) {
         $xtpl->assign('SELECTED', ($global_config['site_domain'] == $_domain) ? ' selected="selected"' : '');
-        $xtpl->assign('site_domain', $_domain);
+        $xtpl->assign('SITE_DOMAIN', $_domain);
         $xtpl->parse('main.site_domain.loop');
     }
     $xtpl->parse('main.site_domain');
@@ -195,8 +213,7 @@ foreach ($theme_array as $folder) {
     $xtpl->assign('SITE_THEME', $folder);
     $xtpl->parse('main.site_theme');
 }
-
-if (! empty($mobile_theme_array)) {
+if (! empty($mobile_theme_array) and in_array('m', $global_config['array_theme_type'])) {
     foreach ($mobile_theme_array as $folder) {
         $xtpl->assign('SELECTED', ($global_config['mobile_theme'] == $folder) ? ' selected="selected"' : '');
         $xtpl->assign('SITE_THEME', $folder);

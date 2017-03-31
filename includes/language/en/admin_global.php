@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -30,6 +30,8 @@ $lang_global['mod_siteinfo'] = 'Informations';
 $lang_global['mod_language'] = 'Language';
 $lang_global['mod_upload'] = 'Upload';
 $lang_global['mod_webtools'] = 'Webtools';
+$lang_global['mod_seotools'] = 'SEO tool';
+$lang_global['mod_subsite'] = 'Subsite manage';
 $lang_global['mod_extensions'] = 'Extensions';
 $lang_global['go_clientsector'] = 'Home page';
 $lang_global['go_clientmod'] = 'Preview';
@@ -40,7 +42,6 @@ $lang_global['adminpassincorrect'] = 'Administrator password &ldquo;<strong>%s</
 $lang_global['admin_password'] = 'Password';
 $lang_global['admin_no_allow_func'] = 'You can\'t access this function';
 $lang_global['admin_suspend'] = 'Account Suspended';
-
 $lang_global['block_modules'] = 'Block in modules';
 $lang_global['hello_admin1'] = 'Wellcome %1$s ! Last login to administration at: %2$s';
 $lang_global['hello_admin2'] = 'Account: %1$s ! Your session was opened %2$s ago';
@@ -52,8 +53,6 @@ $lang_global['login_error_password'] = 'Error: Password has not announced or dec
 $lang_global['login_error_security'] = 'Error: Security Code not valid ! (Only Latin alphabet. Must have %1$s characters)';
 $lang_global['error_zlib_support'] = 'Error: Your server does not support zlib extension, You need contact your hosting provider to enable the zlib extension.';
 $lang_global['error_zip_extension'] = 'Error: Your server does not support ZIP extension, You need contact your hosting provider to enable the ZIP extension.';
-$lang_global['mod_seotools'] = 'SEO tool';
-$lang_global['mod_subsite'] = 'Subsite manage';
 $lang_global['length_characters'] = 'Length characters';
 $lang_global['length_suggest_max'] = 'Should enter maximum %s characters';
 $lang_global['error_code_1'] = 'Address is invalid';
@@ -72,3 +71,4 @@ $lang_global['phone_note_title'] = 'Rules of entering phone numbers';
 $lang_global['phone_note_content'] = '<ul><li>Phone number is divided into two parts. The first part is mandatory and for display on the site, the second part is not mandatory, and to make a call when you click on it.</li><li>The first part is expressed freely, but without the square brackets. The second part is in square brackets and contains only the following characters: digits, asterisk, pound sign, commas, periods, semicolons, and the plus sign ([0-9\*\#\.\,\;\+]).</li><li>For example, if you declare <strong>0438211725 (ext 601)</strong>, the number <strong>0438211725 (ext 601)</strong> will simply be displayed on the site. If you declare <strong>0438211725 (ext 601)[+84438211725,601]</strong>, the system will display the number <strong>0438211725 (ext 601)</strong> on the site. When clicked on this number will automatically call the following number <strong>tel:+84438211725,601</strong></li><li>You can declare more phone numbers in accordance with the above regulations. They are separated by |</li></ul>';
 $lang_global['multi_note'] = 'You can enter more than one value, separated by comma';
 $lang_global['multi_email_note'] = 'You can enter more than one value, separated by comma. The first e-mail is considered to be the main email and is used to send and receive mail.';
+$lang_global['view_all'] = 'View all';

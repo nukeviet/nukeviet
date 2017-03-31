@@ -22,7 +22,7 @@ if ($global_config['idsite']) {
 
 $path_filename = NV_BASE_SITEURL . $log_dir . '/' . $filename;
 
-if (nv_is_file($path_filename, $log_dir) === true and $checkss == md5($filename . $client_info['session_id'] . $global_config['sitekey'])) {
+if (nv_is_file($path_filename, $log_dir) === true and $checkss == md5($filename . NV_CHECK_SESSION)) {
     $temp = explode('_', $filename);
 
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_global['delete'] . ' ' . $lang_module['file_backup'], 'File name: ' . end($temp), $admin_info['userid']);

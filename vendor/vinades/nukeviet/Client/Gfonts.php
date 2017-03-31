@@ -8,7 +8,7 @@
  * @Createdate 30/07/2015 10:00
  */
 
-namespace NukeViet\Http;
+namespace NukeViet\Client;
 
 class Gfonts
 {
@@ -114,7 +114,7 @@ class Gfonts
         curl_setopt($curlHandle, CURLOPT_MAXREDIRS, 10);
         curl_setopt($curlHandle, CURLOPT_TIMEOUT, 30);
         $result = curl_exec($curlHandle);
-        if (curl_errno($curlHandle) == 23 || curl_errno($curlHandle) == 61) {
+        if (curl_errno($curlHandle) == 23 or curl_errno($curlHandle) == 61) {
             curl_setopt($curlHandle, CURLOPT_ENCODING, 'none');
             $result = curl_exec($curlHandle);
         }
@@ -143,7 +143,7 @@ class Gfonts
         $_fonts = array();
         foreach ($fonts as $k => $font) {
             $_fonts[$k] = urlencode($font['family']);
-            if (isset($font['styles']) && ! empty($font['styles'])) {
+            if (isset($font['styles']) and ! empty($font['styles'])) {
                 $_fonts[$k] .= ':' . $font['styles'];
             }
         }

@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2014 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -53,6 +53,7 @@ $lang_module['deletefolder'] = 'Delete';
 $lang_module['createfolder'] = 'Create';
 $lang_module['rename_newname'] = 'New name:';
 $lang_module['rename_noname'] = 'You not enter a new file name';
+$lang_module['rename_error_folder'] = 'Error: System can not rename folder';
 $lang_module['rename_nonamefolder'] = 'You not enter new name for the folder or directory names incorrect standard';
 $lang_module['preview'] = 'Preview';
 $lang_module['movefolder'] = 'Move to';
@@ -96,10 +97,12 @@ $lang_module['nopreview'] = 'File doesn\'t support preview.';
 $lang_module['errorNewSize'] = 'You only create new image width: 10 to %d px, height: 10 to %d px';
 $lang_module['maxSizeSize'] = 'Maximum size: %dx%dpx';
 $lang_module['enter_url'] = 'Enter url';
+$lang_module['configlogo'] = 'Configuringf insert logo';
 $lang_module['addlogo'] = 'Add logo';
 $lang_module['addlogosave'] = 'Save';
 $lang_module['notlogo'] = 'Error: the system do not find any logo';
 $lang_module['upload_logo'] = 'Logo to be inserted into the picture';
+$lang_module['upload_logo_pos'] = 'The position of the logo';
 $lang_module['selectimg'] = 'Select image';
 $lang_module['autologo'] = 'Automatically insert the logo on the picture of the module';
 $lang_module['autologomodall'] = 'All module';
@@ -107,24 +110,31 @@ $lang_module['logosizecaption'] = 'Logo size';
 $lang_module['imagewith'] = 'If the image width';
 $lang_module['logowith'] = 'The width of the logo';
 $lang_module['logosize3'] = 'Using the original logo size, maximum size of the logo';
+$lang_module['logoposbottomright'] = 'Bottom, right';
+$lang_module['logoposbottomleft'] = 'Bottom, left';
+$lang_module['logoposbottomcenter'] = 'Bottom, middle';
+$lang_module['logoposcenterright'] = 'Center, right';
+$lang_module['logoposcenterleft'] = 'Center, left';
+$lang_module['logoposcentercenter'] = 'Center';
+$lang_module['logopostopright'] = 'Top, right';
+$lang_module['logopostopleft'] = 'Top, left';
+$lang_module['logopostopcenter'] = 'Top, Center';
 $lang_module['fileimage'] = 'image';
+$lang_module['altimage'] = 'Note for image';
 $lang_module['uploadconfig'] = 'Upload Configuration';
 $lang_module['uploadconfig_ban_ext'] = 'Forbidden Extensions';
 $lang_module['uploadconfig_ban_mime'] = 'Forbidden Mimes';
 $lang_module['uploadconfig_types'] = 'Allowed file types';
 $lang_module['sys_max_size'] = 'Your server only allows upload maximum';
 $lang_module['nv_max_size'] = 'Maximum size of uploaded file';
+$lang_module['nv_max_width_height'] = 'Maximum size file upload';
+$lang_module['nv_auto_resize'] = 'Automatically resize larger image';
 $lang_module['upload_checking_mode'] = 'Upload Checking Mode';
 $lang_module['strong_mode'] = 'Hight';
 $lang_module['mild_mode'] = 'Medium';
 $lang_module['lite_mode'] = 'Low';
 $lang_module['none_mode'] = 'None';
 $lang_module['upload_checking_note'] = 'Your server does not support some functions defined file types. If you chose "Strong", you will not be able to upload files to your host';
-$lang_module['rename_error_folder'] = 'Error: System can not rename folder';
-$lang_module['configlogo'] = 'Configuringf insert logo';
-$lang_module['altimage'] = 'Note for image';
-$lang_module['nv_max_width_height'] = 'Maximum size file upload';
-$lang_module['nv_auto_resize'] = 'Automatically resize larger image';
 $lang_module['thumbconfig'] = 'Configuring thumbnail';
 $lang_module['thumb_width_height'] = 'Thumbnail size';
 $lang_module['thumb_note'] = 'Thumbnail image will be used in place using small image size will not change the existing file';
@@ -142,9 +152,9 @@ $lang_module['order1'] = 'Sort by date old';
 $lang_module['order2'] = 'Sort by file name';
 $lang_module['searchdir'] = 'Search in folder';
 $lang_module['searchkey'] = 'Search key';
-
 $lang_module['crop'] = 'Crop image';
 $lang_module['crop_error_small'] = 'This image size is too small, do not cut';
+$lang_module['crop_keep_original'] = 'Crop as a new image and keep original image';
 $lang_module['rotate'] = 'rotate image';
 $lang_module['waiting'] = 'Loading, please wait ...';
 $lang_module['file_no_exists'] = 'file no exists';
@@ -158,3 +168,5 @@ $lang_module['addlogo_error_small'] = 'This image size is too small to insert th
 $lang_module['upload_alt_require'] = 'Required to enter description when uploading';
 $lang_module['upload_auto_alt'] = 'Self-defined description of the image name';
 $lang_module['upload_alt_note'] = 'Please enter a description for the file first';
+$lang_module['upload_view_thumbnail'] = 'Switch to grid view';
+$lang_module['upload_view_detail'] = 'Switch to a list view';

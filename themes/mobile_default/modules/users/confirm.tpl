@@ -30,8 +30,22 @@
 					</div>
 				</div>
 				<!-- END: captcha -->
+                <!-- BEGIN: recaptcha -->
+                <div class="form-group">
+                    <div class="middle text-center clearfix">
+                        <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                        <script type="text/javascript">
+                        nv_recaptcha_elements.push({
+                            id: "{RECAPTCHA_ELEMENT}",
+                            btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+                        })
+                        </script>
+                    </div>
+                </div>
+                <!-- END: recaptcha -->
 				<div class="text-center margin-bottom-lg">
 					<input name="openid_account_confirm" value="1" type="hidden" />
+                    <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->
 					<input type="reset" value="{GLANG.reset}" class="btn btn-default"/>
 					<button class="bsubmit btn btn-primary" type="submit">
 						{GLANG.loginsubmit}

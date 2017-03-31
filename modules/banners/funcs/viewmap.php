@@ -32,7 +32,7 @@ if (defined('NV_IS_BANNER_CLIENT')) {
         '11' => 30,
         '12' => 31
     );
-    $month_array['2'] = (($year % 100 == 0) && ($year % 400 == 0)) ? 29 : 28;
+    $month_array['2'] = (($year % 100 == 0) and ($year % 400 == 0)) ? 29 : 28;
     $firstdate = mktime(0, 0, 0, $month, 1, $year);
     $enddate = mktime(24, 60, 60, $month, $month_array[$month], $year);
     $onetype = '';

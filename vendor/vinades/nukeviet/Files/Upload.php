@@ -10,7 +10,11 @@
 
 namespace NukeViet\Files;
 
-define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
+use finfo;
+
+if (! defined('NV_MIME_INI_FILE')) {
+    define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
+}
 define('NV_TEMP_REAL_DIR', NV_ROOTDIR . '/' . NV_TEMP_DIR);
 define('_ERROR_UPLOAD_NAMEEMPTY', isset($lang_global['error_uploadNameEmpty']) ? $lang_global['error_uploadNameEmpty'] : 'Upload failed: UserFile Name is empty');
 define('_ERROR_UPLOAD_SIZEEMPTY', isset($lang_global['error_uploadSizeEmpty']) ? $lang_global['error_uploadSizeEmpty'] : 'Upload failed: UserFile Size is empty');
@@ -54,7 +58,6 @@ class Upload
     private $img_info = array();
     private $disable_functions = array();
     private $disable_classes = array();
-    private $safe_mode;
     private $user_agent;
 
     /**
@@ -98,7 +101,6 @@ class Upload
         $this->disable_functions = $disable_functions;
 
         $this->disable_classes = (ini_get('disable_classes') != '' and ini_get('disable_classes') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_classes'))) : array();
-        $this->safe_mode = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
 
         $userAgents = array(
             'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
@@ -111,7 +113,7 @@ class Upload
         $rand = array_rand($userAgents);
         $this->user_agent = $userAgents[$rand];
 
-        if (! $this->safe_mode and function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
             set_time_limit(120);
         }
 
@@ -180,7 +182,7 @@ class Upload
         $section = '';
         foreach ($data as $line) {
             $line = trim($line);
-            if (empty($line) || preg_match('/^;/', $line)) {
+            if (empty($line) or preg_match('/^;/', $line)) {
                 continue;
             }
 
@@ -878,7 +880,7 @@ class Upload
      */
     private function check_url($is_200 = 0)
     {
-        $allow_url_fopen = (ini_get('allow_url_fopen') == '1' || strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
+        $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
         if (function_exists('get_headers') and ! in_array('get_headers', $this->disable_functions) and $allow_url_fopen == 1) {
             $res = get_headers($this->url_info['uri']);
         } elseif (function_exists('curl_init') and ! in_array('curl_init', $this->disable_functions) and function_exists('curl_exec') and ! in_array('curl_exec', $this->disable_functions)) {
@@ -892,8 +894,7 @@ class Upload
                 'Mozilla/4.8 [en] (Windows NT 6.0; U)',
                 'Opera/9.25 (Windows NT 6.0; U; en)'
             );
-            $safe_mode = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
-            $open_basedir = (ini_get('open_basedir') == '1' || strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
+            $open_basedir = (ini_get('open_basedir') == '1' or strtolower(ini_get('open_basedir')) == 'on') ? 1 : 0;
 
             srand(( float )microtime() * 10000000);
             $rand = array_rand($userAgents);
@@ -905,7 +906,7 @@ class Upload
 
             curl_setopt($curl, CURLOPT_PORT, $port);
 
-            if (! $safe_mode and $open_basedir) {
+            if ($open_basedir) {
                 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
             }
 

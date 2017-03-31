@@ -12,13 +12,21 @@ if (! defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
+/**
+ * viewcat_grid_new()
+ * 
+ * @param mixed $array_catpage
+ * @param mixed $catid
+ * @param mixed $generate_page
+ * @return
+ */
 function viewcat_grid_new($array_catpage, $catid, $generate_page)
 {
-    global $module_name, $module_file, $lang_module, $module_upload, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page;
-    $xtpl = new XTemplate('viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    global $module_name, $lang_module, $module_upload, $module_config, $module_info, $global_array_cat, $global_array_cat, $catid, $page;
+    $xtpl = new XTemplate('viewcat_grid.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -87,15 +95,24 @@ function viewcat_grid_new($array_catpage, $catid, $generate_page)
     return $xtpl->text('main');
 }
 
+/**
+ * viewcat_list_new()
+ * 
+ * @param mixed $array_catpage
+ * @param mixed $catid
+ * @param mixed $page
+ * @param mixed $generate_page
+ * @return
+ */
 function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
 {
-    global $module_name, $module_file, $lang_module, $module_upload, $module_config, $module_info, $global_array_cat;
+    global $module_name, $lang_module, $module_upload, $module_config, $module_info, $global_array_cat;
 
-    $xtpl = new XTemplate('viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('viewcat_list.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 0) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 0) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -139,13 +156,21 @@ function viewcat_list_new($array_catpage, $catid, $page, $generate_page)
     return $xtpl->text('main');
 }
 
+/**
+ * viewcat_page_new()
+ * 
+ * @param mixed $array_catpage
+ * @param mixed $array_cat_other
+ * @param mixed $generate_page
+ * @return
+ */
 function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
 {
-    global $global_array_cat, $module_name, $module_file, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
+    global $global_array_cat, $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
-    $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -158,7 +183,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
         $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
         $array_row_i['publtime'] = nv_date('d/m/Y', $array_row_i['publtime']);
         $array_row_i['listcatid'] = explode(',', $array_row_i['listcatid']);
-        $array_row_i['hometext'] = nv_clean60($array_row_i['hometext'], 120);
+        $array_row_i['hometext'] = nv_clean60(strip_tags($array_row_i['hometext']), 120);
         $num_cat = sizeof($array_row_i['listcatid']);
 
         $n = 1;
@@ -242,14 +267,21 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
     return $xtpl->text('main');
 }
 
+/**
+ * viewcat_top()
+ * 
+ * @param mixed $array_catcontent
+ * @param mixed $generate_page
+ * @return
+ */
 function viewcat_top($array_catcontent, $generate_page)
 {
-    global $module_name, $module_file, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
+    global $module_name, $module_upload, $lang_module, $module_config, $module_info, $global_array_cat, $catid, $page;
 
-    $xtpl = new XTemplate('viewcat_top.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('viewcat_top.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid > 0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -300,11 +332,18 @@ function viewcat_top($array_catcontent, $generate_page)
     return $xtpl->text('main');
 }
 
+/**
+ * viewsubcat_main()
+ * 
+ * @param mixed $viewcat
+ * @param mixed $array_cat
+ * @return
+ */
 function viewsubcat_main($viewcat, $array_cat)
 {
-    global $module_name, $module_file, $global_array_cat, $lang_module, $module_config, $module_info;
+    global $module_name, $global_array_cat, $lang_module, $module_config, $module_info;
 
-    $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate($viewcat . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
     // Hien thi cac chu de con
@@ -329,7 +368,7 @@ function viewsubcat_main($viewcat, $array_cat)
             foreach ($array_cat[$key]['content'] as $array_row_i) {
                 $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
                 $array_row_i['publtime'] = nv_date('d/m/Y H:i', $array_row_i['publtime']);
-                $array_row_i['hometext'] = nv_clean60($array_row_i['hometext'], 120);
+                $array_row_i['hometext'] = nv_clean60(strip_tags($array_row_i['hometext']), 120);
                 ++$a;
 
                 if ($a == 1) {
@@ -379,14 +418,21 @@ function viewsubcat_main($viewcat, $array_cat)
     return $xtpl->text('main');
 }
 
+/**
+ * viewcat_two_column()
+ * 
+ * @param mixed $array_content
+ * @param mixed $array_catpage
+ * @return
+ */
 function viewcat_two_column($array_content, $array_catpage)
 {
-    global $module_name, $module_file, $module_upload, $module_upload, $module_config, $module_info, $lang_module, $global_array_cat, $catid, $page;
+    global $module_name, $module_upload, $module_upload, $module_config, $module_info, $lang_module, $global_array_cat, $catid, $page;
 
-    $xtpl = new XTemplate('viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('viewcat_two_column.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('IMGWIDTH0', $module_config[$module_name]['homewidth']);
-    if (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2) {
+    if ($catid >0 and (($global_array_cat[$catid]['viewdescription'] and $page == 1) or $global_array_cat[$catid]['viewdescription'] == 2)) {
         $xtpl->assign('CONTENT', $global_array_cat[$catid]);
         if ($global_array_cat[$catid]['image']) {
             $xtpl->assign('HOMEIMG1', NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $global_array_cat[$catid]['image']);
@@ -430,7 +476,6 @@ function viewcat_two_column($array_content, $array_catpage)
 
     //Theo chu de
     $a = 0;
-    $xtpl->assign('IMGWIDTH01', $module_config[$module_name]['homewidth']);
 
     foreach ($array_catpage as $key => $array_catpage_i) {
         $number_content = isset($array_catpage[$key]['content']) ? sizeof($array_catpage[$key]['content']) : 0;
@@ -445,7 +490,7 @@ function viewcat_two_column($array_content, $array_catpage)
 
             $array_content_i = $array_catpage_i['content'][0];
             $newday = $array_content_i['publtime'] + (86400 * $array_content_i['newday']);
-            $array_content_i['hometext'] = nv_clean60($array_content_i['hometext'], 200);
+            $array_content_i['hometext'] = nv_clean60(strip_tags($array_content_i['hometext']), 200);
             $array_content_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_content_i['publtime']);
 
             $xtpl->assign('CONTENT', $array_content_i);
@@ -495,11 +540,22 @@ function viewcat_two_column($array_content, $array_catpage)
     return $xtpl->text('main');
 }
 
+/**
+ * detail_theme()
+ * 
+ * @param mixed $news_contents
+ * @param mixed $array_keyword
+ * @param mixed $related_new_array
+ * @param mixed $related_array
+ * @param mixed $topic_array
+ * @param mixed $content_comment
+ * @return
+ */
 function detail_theme($news_contents, $array_keyword, $related_new_array, $related_array, $topic_array, $content_comment)
 {
-    global $global_config, $module_info, $lang_module, $module_name, $module_file, $module_config, $lang_global, $user_info, $admin_info, $client_info;
+    global $global_config, $module_info, $lang_module, $module_name, $module_config, $lang_global, $user_info, $admin_info, $client_info;
 
-    $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG_GLOBAL', $lang_global);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('TEMPLATE', $global_config['module_theme']);
@@ -656,22 +712,38 @@ function detail_theme($news_contents, $array_keyword, $related_new_array, $relat
     return $xtpl->text('main');
 }
 
+/**
+ * no_permission()
+ * 
+ * @return
+ */
 function no_permission()
 {
-    global $module_info, $module_file, $lang_module;
+    global $module_info, $lang_module;
 
-    $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('detail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
 
     $xtpl->assign('NO_PERMISSION', $lang_module['no_permission']);
     $xtpl->parse('no_permission');
     return $xtpl->text('no_permission');
 }
 
+/**
+ * topic_theme()
+ * 
+ * @param mixed $topic_array
+ * @param mixed $topic_other_array
+ * @param mixed $generate_page
+ * @param mixed $page_title
+ * @param mixed $description
+ * @param mixed $topic_image
+ * @return
+ */
 function topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image)
 {
-    global $lang_module, $module_info, $module_name, $module_file, $topicalias, $module_config, $topicid;
+    global $lang_module, $module_info, $module_name, $topicalias, $module_config, $topicid;
 
-    $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('topic.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('TOPPIC_TITLE', $page_title);
     $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
@@ -722,23 +794,35 @@ function topic_theme($topic_array, $topic_other_array, $generate_page, $page_tit
     return $xtpl->text('main');
 }
 
+/**
+ * sendmail_themme()
+ * 
+ * @param mixed $sendmail
+ * @return
+ */
 function sendmail_themme($sendmail)
 {
-    global $module_info, $module_file, $global_config, $lang_module, $lang_global;
+    global $module_info, $global_config, $lang_module, $lang_global;
 
-    $xtpl = new XTemplate('sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('sendmail.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('SENDMAIL', $sendmail);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-    $xtpl->assign('GFX_NUM', NV_GFX_NUM);
 
     if ($global_config['gfx_chk'] > 0) {
-        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-        $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
-        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-        $xtpl->parse('main.content.captcha');
+        if ($global_config['captcha_type'] == 2) {
+            $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+            $xtpl->parse('main.content.recaptcha');
+        } else {
+            $xtpl->assign('GFX_NUM', NV_GFX_NUM);
+            $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+            $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+            $xtpl->parse('main.content.captcha');
+        }
     }
 
     $xtpl->parse('main.content');
@@ -756,11 +840,17 @@ function sendmail_themme($sendmail)
     return $xtpl->text('main');
 }
 
+/**
+ * news_print()
+ * 
+ * @param mixed $result
+ * @return
+ */
 function news_print($result)
 {
-    global $module_info, $module_file, $lang_module;
+    global $module_info, $lang_module;
 
-    $xtpl = new XTemplate('print.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('print.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('CONTENT', $result);
     $xtpl->assign('LANG', $lang_module);
 
@@ -804,11 +894,20 @@ function news_print($result)
 }
 
 // Search
+/**
+ * search_theme()
+ * 
+ * @param mixed $key
+ * @param mixed $check_num
+ * @param mixed $date_array
+ * @param mixed $array_cat_search
+ * @return
+ */
 function search_theme($key, $check_num, $date_array, $array_cat_search)
 {
-    global $module_name, $module_info, $module_file, $lang_module, $module_name, $my_head;
+    global $module_name, $module_info, $lang_module, $module_name, $my_head;
 
-    $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
@@ -838,11 +937,22 @@ function search_theme($key, $check_num, $date_array, $array_cat_search)
     return $xtpl->text('main');
 }
 
+/**
+ * search_result_theme()
+ * 
+ * @param mixed $key
+ * @param mixed $numRecord
+ * @param mixed $per_pages
+ * @param mixed $page
+ * @param mixed $array_content
+ * @param mixed $catid
+ * @return
+ */
 function search_result_theme($key, $numRecord, $per_pages, $page, $array_content, $catid)
 {
-    global $module_file, $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
+    global $module_info, $lang_module, $module_name, $global_array_cat, $module_config, $global_config;
 
-    $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('search.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('KEY', $key);
     $xtpl->assign('IMG_WIDTH', $module_config[$module_name]['homewidth']);
@@ -854,7 +964,7 @@ function search_result_theme($key, $numRecord, $per_pages, $page, $array_content
 
             $xtpl->assign('LINK', $global_array_cat[$catid_i]['link'] . '/' . $value['alias'] . "-" . $value['id'] . $global_config['rewrite_exturl']);
             $xtpl->assign('TITLEROW', strip_tags(BoldKeywordInStr($value['title'], $key)));
-            $xtpl->assign('CONTENT', BoldKeywordInStr($value['hometext'], $key) . "...");
+            $xtpl->assign('CONTENT', BoldKeywordInStr(strip_tags($value['hometext']), $key) . "...");
             $xtpl->assign('TIME', date('d/m/Y h:i:s A', $value['publtime']));
             $xtpl->assign('AUTHOR', BoldKeywordInStr($value['author'], $key));
             $xtpl->assign('SOURCE', BoldKeywordInStr(GetSourceNews($value['sourceid']), $key));

@@ -34,8 +34,9 @@ $array_data['question'] = '';
 $array_data['answer_question'] = '';
 $array_data['socialbutton'] = 1;
 
-$global_config['version'] = '4.0.24 Not release';// NukeViet 4.0 (Not release)
+$global_config['version'] = '4.1.01';// NukeViet 4.1 Beta 2
 $global_config['site_email'] = '';
+$global_config['site_phone'] = '';
 $global_config['error_set_logs'] = 1;
 $global_config['error_send_email'] = 'support@nukeviet.vn';
 $global_config['my_domains'] = '';
@@ -75,8 +76,8 @@ $global_config['nv_upass_type'] = 2;
 // Thời gian lặp lại việc sao lưu CSDL tính bằng ngày
 $global_config['dump_interval'] = 1;
 
-//hashprefix: support LDAP({SSHA}, {SHA}, {MD5}); {NV3}
-$global_config['hashprefix'] = '{SSHA}';
+//hashprefix: support LDAP({SSHA512}, {SSHA256}, {SSHA}, {SHA}, {MD5}); {NV3}
+$global_config['hashprefix'] = '{SSHA512}';
 
 //so ky tu toi da cua password doi voi user
 define('NV_UPASSMAX', 20);
@@ -95,7 +96,7 @@ define('NV_LIVE_COOKIE_TIME', 31104000);
 define('NV_LIVE_SESSION_TIME', 0);
 
 // Ma HTML duoc chap nhan
-define('NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, audio, source, track, code, pre');
+define('NV_ALLOWED_HTML_TAGS', 'embed, object, param, a, b, blockquote, br, caption, col, colgroup, div, em, h1, h2, h3, h4, h5, h6, hr, i, img, li, p, span, strong, s, sub, sup, table, tbody, td, th, tr, u, ul, ol, iframe, figure, figcaption, video, audio, source, track, code, pre');
 
 //Chống IFRAME
 define('NV_ANTI_IFRAME', 0);

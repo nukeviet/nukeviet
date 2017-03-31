@@ -1,13 +1,17 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: display_button -->
 <div id="nv-block-login" class="text-center">
-	<button type="button" class="login btn btn-success btn-sm" onclick="modalShowByObj('#guestLogin_{BLOCKID}')">
+	<button type="button" class="login btn btn-success btn-sm" onclick="modalShowByObj('#guestLogin_{BLOCKID}', 'recaptchareset')">
 		{GLANG.signin}
 	</button>
 	<!-- BEGIN: allowuserreg2 -->
-	<button type="button" class="register btn btn-primary btn-sm" onclick="modalShowByObj('#guestReg_{BLOCKID}')">
+	<button type="button" class="register btn btn-primary btn-sm" onclick="modalShowByObj('#guestReg_{BLOCKID}', 'recaptchareset')">
 		{GLANG.register}
 	</button>
 	<!-- END: allowuserreg2 -->
+    <!-- BEGIN: allowuserreg_link -->
+    <a href="{USER_REGISTER}" class="register btn btn-primary btn-sm">{GLANG.register}</a>
+    <!-- END: allowuserreg_link -->
 </div>
 <!-- START FORFOOTER -->
 <div id="guestLogin_{BLOCKID}" class="hidden">
@@ -20,6 +24,13 @@
 		</div>
 	</div>
 </div>
+<!-- END FORFOOTER -->
+<!-- END: display_button -->
+
+<!-- BEGIN: display_form -->
+{FILE "login_form.tpl"}
+<!-- END: display_form -->
+
 <!-- BEGIN: allowuserreg -->
 <div id="guestReg_{BLOCKID}" class="hidden">
 	<div class="page panel panel-default bg-lavender box-shadow">
@@ -32,15 +43,13 @@
 	</div>
 </div>
 <!-- END: allowuserreg -->
-<!-- END FORFOOTER -->
+
 <!-- BEGIN: datepicker -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <!-- END: datepicker -->
+
 <script src="{NV_BASE_SITEURL}themes/default/js/users.js"></script>
 <!-- END: main -->
 

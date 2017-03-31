@@ -19,7 +19,7 @@
 		<label class="col-sm-4 control-label">{LANG.alias}</label>
 		<div class="col-sm-20">
 			<input type="text" class="form-control pull-left" name="alias" id="idalias" value="{DATA.alias}" maxlength="255" style="width: 94%;" />
-			<em class="fa fa-refresh pull-right" style="cursor: pointer; vertical-align: middle; margin: 9px 0 0 4px" onclick="get_alias();" alt="Click">&nbsp;</em>
+			<em class="fa fa-refresh pull-right" style="cursor: pointer; vertical-align: middle; margin: 9px 0 0 4px" onclick="get_alias('{OP}');" alt="Click">&nbsp;</em>
 		</div>
 	</div>
 
@@ -107,14 +107,32 @@
 		</div>
 	</div>
 
+    <!-- BEGIN: captcha -->
 	<div class="form-group">
 		<label class="col-sm-4 control-label">{LANG.captcha} <span class="txtrequired">(*)</span></label>
 		<div class="col-sm-20">
-			<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control pull-left" style="width: 150px;" /><img height="22" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{LANG.captcha}" class="captchaImg" /><img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="change_captcha('#fcode_iavim');" />
+			<input type="text" maxlength="6" value="" id="fcode_iavim" name="fcode" class="form-control pull-left" style="width: 150px;" />
+            <img height="32" src="{NV_BASE_SITEURL}index.php?scaptcha=captcha&t={NV_CURRENTTIME}" alt="{LANG.captcha}" class="captchaImg" />
+            <img alt="{CAPTCHA_REFRESH}" src="{CAPTCHA_REFR_SRC}" width="16" height="16" class="refresh" onclick="change_captcha('#fcode_iavim');" />
 		</div>
 	</div>
-
-	<br />
+    <!-- END: captcha -->
+    
+    <!-- BEGIN: recaptcha -->
+    <div class="form-group">
+        <label class="col-sm-4 control-label">{N_CAPTCHA} <span class="txtrequired">(*)</span></label>
+        <div class="col-sm-20">
+            <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+            <script type="text/javascript">
+            nv_recaptcha_elements.push({
+                id: "{RECAPTCHA_ELEMENT}",
+                btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent())
+            })
+            </script>
+        </div>
+    </div>
+    <!-- END: recaptcha -->
+    
 	<ul class="list-inline text-center">
 		<input type="hidden" name="contentid" value="{DATA.id}" />
 		<input type="hidden" name="checkss" value="{CHECKSS}" />

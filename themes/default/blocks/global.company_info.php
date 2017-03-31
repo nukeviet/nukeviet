@@ -89,7 +89,7 @@ if (! nv_function_exists('nv_company_info')) {
 				  </div>';
         $html .= '</div>';
         $html .= '</div>';
-        $html .= '<div class="row">';
+        $html .= '<div class="row m-bottom">';
         $html .= '<div class="col-xs-12">';
         $html .= '<div class="input-group">
 				  	<span class="input-group-addon">Z</span>
@@ -174,6 +174,8 @@ if (! nv_function_exists('nv_company_info')) {
             $block_theme = 'default';
         }
 
+        $block_config['company_mapapikey'] = $global_config['googleMapsAPI'];
+        
         $xtpl = new XTemplate('global.company_info.tpl', NV_ROOTDIR . '/themes/' . $block_theme . '/blocks');
         $xtpl->assign('LANG', $lang_global);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
@@ -189,19 +191,19 @@ if (! nv_function_exists('nv_company_info')) {
         $key = array();
         $i = 0;
         if (! empty($block_config['company_regcode'])) {
-            $key[$i] = $lang_global['company_regcode2'] . ": " . $block_config['company_regcode'];
+            $key[$i] = $lang_global['company_regcode2'] . ': ' . $block_config['company_regcode'];
             if (! empty($block_config['company_regplace'])) {
-                $key[$i] .= ", " . $lang_global['company_regplace'] . " " . $block_config['company_regplace'];
+                $key[$i] .= ', ' . $lang_global['company_regplace'] . ' ' . $block_config['company_regplace'];
             }
             ++$i;
         }
         if (! empty($block_config['company_licensenumber'])) {
-            $key[$i] = $lang_global['company_licensenumber'] . ": " . $block_config['company_licensenumber'];
+            $key[$i] = $lang_global['company_licensenumber'] . ': ' . $block_config['company_licensenumber'];
             ++$i;
         }
 
         if ($i) {
-            $key = implode(".<br>", $key);
+            $key = implode('.<br>', $key);
             $xtpl->assign('LICENSE', $key);
             $xtpl->parse('main.company_regcode');
         }
@@ -220,7 +222,7 @@ if (! nv_function_exists('nv_company_info')) {
         }
 
         if (! empty($block_config['company_phone'])) {
-            $nums = array_map("trim", explode("|", nv_unhtmlspecialchars($block_config['company_phone'])));
+            $nums = array_map('trim', explode('|', nv_unhtmlspecialchars($block_config['company_phone'])));
             foreach ($nums as $k => $num) {
                 unset($m);
                 if (preg_match("/^(.*)\s*\[([0-9\+\.\,\;\*\#]+)\]$/", $num, $m)) {
@@ -243,7 +245,7 @@ if (! nv_function_exists('nv_company_info')) {
             $xtpl->parse('main.company_fax');
         }
         if (! empty($block_config['company_email'])) {
-            $emails = array_map("trim", explode(",", $block_config['company_email']));
+            $emails = array_map('trim', explode(',', $block_config['company_email']));
             foreach ($emails as $k => $email) {
                 $xtpl->assign('EMAIL', $email);
                 if ($k) {
@@ -254,10 +256,10 @@ if (! nv_function_exists('nv_company_info')) {
             $xtpl->parse('main.company_email');
         }
         if (! empty($block_config['company_website'])) {
-            $webs = array_map("trim", explode(",", $block_config['company_website']));
+            $webs = array_map('trim', explode(',', $block_config['company_website']));
             foreach ($webs as $k => $web) {
                 if (! preg_match("/^http\:\/\//", $web)) {
-                    $web = "http://" . $web;
+                    $web = 'http://' . $web;
                 }
                 $xtpl->assign('WEBSITE', $web);
                 if ($k) {

@@ -21,7 +21,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
  */
 function nv_show_tags_list($q = '', $incomplete = false)
 {
-    global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $module_config;
+    global $db_slave, $lang_module, $lang_global, $module_name, $module_data, $op, $module_file, $global_config, $module_info, $module_config, $nv_Request;
 
     $db_slave->sqlreset()->select('*')->from(NV_PREFIXLANG . '_' . $module_data . '_tags')->order('alias ASC');
 
@@ -33,7 +33,8 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $q = strip_punctuation($q);
         $db_slave->where('keywords LIKE :keywords');
     } else {
-        $db_slave->order('alias ASC')->limit($module_config[$module_name]['per_page']);
+        $per_page = $nv_Request->get_int('per_page', 'cookie', $module_config[$module_name]['per_page']);
+        $db_slave->order('alias ASC')->limit($per_page);
     }
 
     $sth = $db_slave->prepare($db_slave->sql());
@@ -45,6 +46,8 @@ function nv_show_tags_list($q = '', $incomplete = false)
     $xtpl = new XTemplate('tags_lists.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
+    $xtpl->assign('MODULE_NAME', $module_name);
+    $xtpl->assign('OP', $op);
 
     $number = 0;
     while ($row = $sth->fetch()) {
@@ -72,6 +75,14 @@ function nv_show_tags_list($q = '', $incomplete = false)
         $contents = '&nbsp;';
     }
     return $contents;
+}
+
+$checkss = $nv_Request->get_string('checkss', 'get', '');
+$del_listid = $nv_Request->get_string('del_listid', 'get', '');
+if (!empty($del_listid) and NV_CHECK_SESSION == $checkss) {
+    $del_listid = array_map('intval', explode(',', $del_listid));
+    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags WHERE tid IN (' . implode(',', $del_listid) . ')');
+    $db->query('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tags_id WHERE tid IN (' . implode(',', $del_listid) . ')');
 }
 
 if ($nv_Request->isset_request('del_tid', 'get')) {
@@ -105,6 +116,7 @@ if (! empty($savecat)) {
     $description = $nv_Request->get_string('description', 'post', '');
     $description = nv_nl2br(nv_htmlspecialchars(strip_tags($description)), '<br />');
 
+    $alias = str_replace('&', ' ', $alias);
     $alias = str_replace('-', ' ', nv_unhtmlspecialchars($alias));
     $keywords = explode(',', $keywords);
     $keywords[] = $alias;

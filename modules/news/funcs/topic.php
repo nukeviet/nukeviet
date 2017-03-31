@@ -58,7 +58,7 @@ if (!empty($alias)) {
 
         $num_items = $db_slave->query($db_slave->sql())->fetchColumn();
 
-        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, hitstotal, hitscm, total_rating, click_rating')
+        $db_slave->select('id, catid, topicid, admin_id, author, sourceid, addtime, edittime, publtime, title, alias, hometext, homeimgfile, homeimgalt, homeimgthumb, allowed_rating, external_link, hitstotal, hitscm, total_rating, click_rating')
             ->order('publtime DESC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -69,19 +69,15 @@ if (!empty($alias)) {
         while ($item = $result->fetch()) {
             if ($item['homeimgthumb'] == 1) {
                 //image thumb
-
                 $item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 2) {
                 //image file
-
                 $item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $item['homeimgfile'];
             } elseif ($item['homeimgthumb'] == 3) {
                 //image url
-
                 $item['src'] = $item['homeimgfile'];
             } elseif (! empty($show_no_image)) {
                 //no image
-
                 $item['src'] = NV_BASE_SITEURL . $show_no_image;
             } else {
                 $item['imghome'] = '';
@@ -118,6 +114,7 @@ if (!empty($alias)) {
 
         if (! empty($topic_image)) {
             $topic_image = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $topic_image;
+            $meta_property['og:image'] = NV_MY_DOMAIN . $topic_image;
         }
 
         $contents = topic_theme($topic_array, $topic_other_array, $generate_page, $page_title, $description, $topic_image);
@@ -133,15 +130,12 @@ if (!empty($alias)) {
     while ($item = $result->fetch()) {
         if (! empty($item['image']) and file_exists(NV_ROOTDIR. '/' . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'])) {
             //image thumb
-
             $item['src'] = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/topics/' . $item['image'];
         } elseif (! empty($item['image'])) {
             //image file
-
             $item['src'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $item['image'];
         } elseif (! empty($show_no_image)) {
             //no image
-
             $item['src'] = NV_BASE_SITEURL . $show_no_image;
         } else {
             $item['src'] = '';

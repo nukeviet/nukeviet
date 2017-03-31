@@ -13,7 +13,6 @@ namespace NukeViet\Client;
 class UrlGetContents
 {
     private $allow_methods = array();
-    private $safe_mode;
     private $open_basedir;
     private $url_info = false;
     private $login = '';
@@ -39,11 +38,9 @@ class UrlGetContents
         }
         $this->disable_functions = $disable_functions;
 
-        $safe_mode = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
-
         $this->time_limit = ( int )$time_limit;
 
-        if (!$safe_mode and function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and !in_array('set_time_limit', $this->disable_functions)) {
             set_time_limit($this->time_limit);
         }
 
@@ -79,12 +76,6 @@ class UrlGetContents
             $this->allow_methods[] = 'file';
         }
 
-        if (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') {
-            $this->safe_mode = true;
-        } else {
-            $this->safe_mode = false;
-        }
-
         $this->open_basedir = @ini_get('open_basedir') ? true : false;
     }
 
@@ -96,7 +87,7 @@ class UrlGetContents
      */
     private function check_url($is_200 = 0)
     {
-        $allow_url_fopen = (ini_get('allow_url_fopen') == '1' || strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
+        $allow_url_fopen = (ini_get('allow_url_fopen') == '1' or strtolower(ini_get('allow_url_fopen')) == 'on') ? 1 : 0;
 
         if (function_exists('get_headers') and !in_array('get_headers', $this->disable_functions) and $allow_url_fopen == 1) {
             $res = get_headers($this->url_info['uri']);
@@ -120,7 +111,7 @@ class UrlGetContents
             curl_setopt($curl, CURLOPT_NOBODY, true);
 
             curl_setopt($curl, CURLOPT_PORT, $port);
-            if (!$this->safe_mode and !$this->open_basedir) {
+            if (!$this->open_basedir) {
                 curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
             }
 
@@ -239,7 +230,7 @@ class UrlGetContents
             curl_setopt($curlHandle, CURLOPT_REFERER, $this->url_info['uri']);
         }
 
-        if (!$this->safe_mode and !$this->open_basedir) {
+        if (!$this->open_basedir) {
             curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($curlHandle, CURLOPT_MAXREDIRS, 10);
         }
@@ -248,7 +239,7 @@ class UrlGetContents
 
         $result = curl_exec($curlHandle);
 
-        if (curl_errno($curlHandle) == 23 || curl_errno($curlHandle) == 61) {
+        if (curl_errno($curlHandle) == 23 or curl_errno($curlHandle) == 61) {
             curl_setopt($curlHandle, CURLOPT_ENCODING, 'none');
             $result = curl_exec($curlHandle);
         }
@@ -262,8 +253,8 @@ class UrlGetContents
 
         $response = curl_getinfo($curlHandle);
 
-        if ($this->safe_mode or $this->open_basedir) {
-            if ($response['http_code'] == 301 || $response['http_code'] == 302 || $response['http_code'] == 303) {
+        if ($this->open_basedir) {
+            if ($response['http_code'] == 301 or $response['http_code'] == 302 or $response['http_code'] == 303) {
                 if (preg_match('/^(Location:|URI:)[\s]*(.*?)$/m', $header, $matches) and $this->redirectCount <= 5) {
                     ++$this->redirectCount;
 
@@ -282,7 +273,7 @@ class UrlGetContents
             }
         }
 
-        if (($response['http_code'] < 200) || (300 <= $response['http_code'])) {
+        if (($response['http_code'] < 200) or (300 <= $response['http_code'])) {
             curl_close($curlHandle);
             return false;
         }
@@ -372,7 +363,7 @@ class UrlGetContents
 
         $response = '';
 
-        while ((!@feof($fp)) && (!$in_f['timed_out'])) {
+        while ((!@feof($fp)) and (!$in_f['timed_out'])) {
             $response .= @fgets($fp, 4096);
             $inf = @stream_get_meta_data($fp);
             if ($inf['timed_out']) {

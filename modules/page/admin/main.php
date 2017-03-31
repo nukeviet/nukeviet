@@ -34,7 +34,7 @@ $i = 0;
 foreach ($_rows as $row) {
     $row['url_view'] = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $row['alias'] . $global_config['rewrite_exturl'];
     $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'];
-    $row['checkss'] = md5($row['id'] . $global_config['sitekey'] . session_id());
+    $row['checkss'] = md5($row['id'] . NV_CHECK_SESSION);
     for ($i = 1; $i <= $num; ++$i) {
         $xtpl->assign('WEIGHT', array(
             'w' => $i,
@@ -62,7 +62,10 @@ foreach ($_rows as $row) {
             $row['url_send'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=excdata&amp;' . NV_OP_VARIABLE . '=send&amp;module=' . $module_name . '&amp;id=' . $row['id'];
         }
     }
-
+                
+	$row['edit_time'] = nv_date( 'H:i d/m/y', $row['edit_time'] );
+	$row['add_time'] = nv_date( 'H:i d/m/y', $row['add_time'] );
+                
     $xtpl->assign('ROW', $row);
 
     if ($is_excdata) {

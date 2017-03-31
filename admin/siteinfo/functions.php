@@ -31,9 +31,9 @@ define('NV_IS_FILE_SITEINFO', true);
  */
 function nv_siteinfo_getlang()
 {
-    global $db_config;
+    global $db_config, $nv_Cache;
     $sql = 'SELECT DISTINCT lang FROM ' . $db_config['prefix'] . '_logs';
-    $result = nv_db_cache($sql, 'lang');
+    $result = $nv_Cache->db($sql, 'lang', 'siteinfo');
     $array_lang = array();
 
     if (! empty($result)) {
@@ -52,14 +52,14 @@ function nv_siteinfo_getlang()
  */
 function nv_siteinfo_getuser()
 {
-    global $db_config;
+    global $db_config, $nv_Cache;
     $sql = 'SELECT userid, username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid IN ( SELECT DISTINCT userid FROM ' . $db_config['prefix'] . '_logs WHERE userid!=0 ) ORDER BY username ASC';
-    $result = nv_db_cache($sql, 'userid');
+    $result = $nv_Cache->db($sql, 'userid', 'siteinfo');
     $array_user = array();
 
     if (! empty($result)) {
         foreach ($result as $row) {
-            $array_user[] = array( 'userid' => ( int )$row['userid'], 'username' => $row['username'] );
+            $array_user[] = array( 'userid' => $row['userid'], 'username' => $row['username'] );
         }
     }
 
@@ -73,9 +73,9 @@ function nv_siteinfo_getuser()
  */
 function nv_siteinfo_getmodules()
 {
-    global $db_config;
+    global $db_config, $nv_Cache;
     $sql = 'SELECT DISTINCT module_name FROM ' . $db_config['prefix'] . '_logs';
-    $result = nv_db_cache($sql, 'module_name');
+    $result = $nv_Cache->db($sql, 'module_name', 'siteinfo');
     $array_modules = array();
 
     if (! empty($result)) {

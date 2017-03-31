@@ -16,7 +16,7 @@ $js = $nv_Request->get_int('js', 'get', 0);
 if ($js) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $admin_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, 0);
     $nv_Request->unset_request('admin,online', 'session');
-    include NV_ROOTDIR . '/includes/header.php';
+    session_destroy();
     die('1');
 }
 
@@ -24,6 +24,7 @@ $ok = $nv_Request->get_int('ok', 'get', 0);
 if ($ok) {
     nv_insert_logs(NV_LANG_DATA, 'login', '[' . $admin_info['username'] . '] ' . $lang_global['admin_logout_title'], ' Client IP:' . NV_CLIENT_IP, 0);
     $nv_Request->unset_request('admin,online', 'session');
+    session_destroy();
     $info = $lang_global['admin_logout_ok'];
     $info .= '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />';
 } else {

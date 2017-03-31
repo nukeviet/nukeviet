@@ -183,7 +183,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $sth->execute();
             if ($sth->rowCount()) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $name_key, $note_action, $admin_info['userid']);
-                nv_del_moduleCache($module_name);
+                $nv_Cache->delMod($module_name);
             }
             Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=department');
             die();
@@ -243,7 +243,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             }
         }
     } else {
-        $full_name = $alias = $phone = $fax = $email = $note = $address = '';
+        $full_name = $alias = $image = $phone = $fax = $email = $note = $address = '';
         $others = $cats = $view_level = $reply_level = $obt_level = array();
 
         foreach ($adms as $admid => $values) {

@@ -29,6 +29,9 @@ if (! defined('NV_IS_ADMIN') or ! isset($admin_info) or empty($admin_info)) {
     exit();
 }
 
+// Khong cho xac dinh tu do cac variables
+$array_url_instruction = $select_options = array();
+
 if (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php')) {
     require NV_ROOTDIR . '/includes/language/' . NV_LANG_INTERFACE . '/admin_global.php';
 } elseif (file_exists(NV_ROOTDIR . '/includes/language/' . NV_LANG_DATA . '/admin_global.php')) {
@@ -52,7 +55,7 @@ if (preg_match($global_config['check_module'], $module_name)) {
     $module_data = $module_file = $module_name;
 
     $op = $nv_Request->get_title(NV_OP_VARIABLE, 'post,get', 'main');
-    
+
     if (empty($op) or $op == 'functions') {
         $op = 'main';
     } elseif (! preg_match('/^[a-z0-9\-\_\/\+]+$/i', $op)) {
@@ -177,15 +180,15 @@ if (preg_match($global_config['check_module'], $module_name)) {
             require $include_file;
             exit();
         } else {
-            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['admin_no_allow_func']);
+            nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['admin_no_allow_func'], 404);
         }
     } elseif (isset($site_mods[$module_name]) and $op == 'main') {
         $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET admin_file=0 WHERE title= :module_name');
         $sth->bindParam(':module_name', $module_name, PDO::PARAM_STR);
         $sth->execute();
 
-        nv_del_moduleCache('modules');
+        $nv_Cache->delMod('modules');
     }
 }
 
-nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);

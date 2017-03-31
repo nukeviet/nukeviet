@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -56,3 +56,4 @@ $lang_module['voting_delete_success'] = 'Le sondage a été supprimé !';
 $lang_module['voting_delete_unsuccess'] = 'Erreur dans le processus de supprimer des données';
 $lang_module['warning'] = 'Remarque: Nombre d\'options doivent être moins ou égale au nombre de réponses données';
 $lang_module['voting_error_content'] = 'Remarques: vous devez saisir le contenu de sondage et les réponses';
+$lang_module['voting_active_captcha'] = 'Activation code de confirmation';

@@ -23,7 +23,7 @@ function nv_parse_ini_file($filename, $process_sections = false)
 {
     $process_sections = ( bool )$process_sections;
 
-    if (! file_exists($filename) || ! is_readable($filename)) {
+    if (! file_exists($filename) or ! is_readable($filename)) {
         return false;
     }
 
@@ -32,7 +32,7 @@ function nv_parse_ini_file($filename, $process_sections = false)
     $section = '';
     foreach ($data as $line) {
         $line = trim($line);
-        if (empty($line) || preg_match('/^;/', $line)) {
+        if (empty($line) or preg_match('/^;/', $line)) {
             continue;
         }
         if (preg_match('/^\[(.*?)\]$/', $line, $match)) {
@@ -47,7 +47,7 @@ function nv_parse_ini_file($filename, $process_sections = false)
         $value = trim($value);
         $value = str_replace(array( '"', "'" ), array( '', '' ), $value);
 
-        if ($process_sections && ! empty($section)) {
+        if ($process_sections and ! empty($section)) {
             if (preg_match('/^(.*?)\[\]$/', $key, $match)) {
                 $ini[$section][$match[1]][] = $value;
             } else {
@@ -224,39 +224,39 @@ function nv_get_mime_type($filename, $magic_path = '', $default_mime = 'applicat
     }
 
     if (preg_match('/^application\/(?:x-)?zip(?:-compressed)?$/is', $mime)) {
-        if ($this->file_extension == 'docx') {
+        if ($ext == 'docx') {
             $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-        } elseif ($this->file_extension == 'dotx') {
+        } elseif ($ext == 'dotx') {
             $mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template';
-        } elseif ($this->file_extension == 'potx') {
+        } elseif ($ext == 'potx') {
             $mime = 'application/vnd.openxmlformats-officedocument.presentationml.template';
-        } elseif ($this->file_extension == 'ppsx') {
+        } elseif ($ext == 'ppsx') {
             $mime = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';
-        } elseif ($this->file_extension == 'pptx') {
+        } elseif ($ext == 'pptx') {
             $mime = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-        } elseif ($this->file_extension == 'xlsx') {
+        } elseif ($ext == 'xlsx') {
             $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-        } elseif ($this->file_extension == 'xltx') {
+        } elseif ($ext == 'xltx') {
             $mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template';
-        } elseif ($this->file_extension == 'docm') {
+        } elseif ($ext == 'docm') {
             $mime = 'application/vnd.ms-word.document.macroEnabled.12';
-        } elseif ($this->file_extension == 'dotm') {
+        } elseif ($ext == 'dotm') {
             $mime = 'application/vnd.ms-word.template.macroEnabled.12';
-        } elseif ($this->file_extension == 'potm') {
+        } elseif ($ext == 'potm') {
             $mime = 'application/vnd.ms-powerpoint.template.macroEnabled.12';
-        } elseif ($this->file_extension == 'ppam') {
+        } elseif ($ext == 'ppam') {
             $mime = 'application/vnd.ms-powerpoint.addin.macroEnabled.12';
-        } elseif ($this->file_extension == 'ppsm') {
+        } elseif ($ext == 'ppsm') {
             $mime = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12';
-        } elseif ($this->file_extension == 'pptm') {
+        } elseif ($ext == 'pptm') {
             $mime = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12';
-        } elseif ($this->file_extension == 'xlam') {
+        } elseif ($ext == 'xlam') {
             $mime = 'application/vnd.ms-excel.addin.macroEnabled.12';
-        } elseif ($this->file_extension == 'xlsb') {
+        } elseif ($ext == 'xlsb') {
             $mime = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12';
-        } elseif ($this->file_extension == 'xlsm') {
+        } elseif ($ext == 'xlsm') {
             $mime = 'application/vnd.ms-excel.sheet.macroEnabled.12';
-        } elseif ($this->file_extension == 'xltm') {
+        } elseif ($ext == 'xltm') {
             $mime = 'application/vnd.ms-excel.template.macroEnabled.12';
         }
     }
@@ -397,7 +397,7 @@ function nv_mkdir($path, $dir_name)
         $conn_id = ftp_connect($ftp_server, $ftp_port, 10);
         // login with username and password
         $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
-        if ((! $conn_id) || (! $login_result)) {
+        if ((! $conn_id) or (! $login_result)) {
             $ftp_check_login = 3;
         } elseif (ftp_chdir($conn_id, $ftp_path)) {
             $ftp_check_login = 1;
@@ -482,14 +482,12 @@ function nv_deletefile($file, $delsub = false)
     if ($ftp_check_login == 1) {
         if (is_dir($realpath)) {
             // Xoa thu muc
-
             $check = nv_ftp_del_dir($ftp, $filename, $delsub);
             if ($check !== true) {
                 return array( 0, $check );
             }
-        } elseif ($ftp->unlink($realpath) === false) {
+        } elseif ($ftp->unlink($filename) === false) {
             // Xoa file bang FTP khong duoc thi xoa theo cach thong thuong
-
             @unlink($realpath);
         }
 
@@ -561,7 +559,7 @@ function nv_ftp_del_dir($ftp, $dst_dir, $delsub)
             $st_type = $ar_files[$i]['type'];
             // 1: folder | 0: file
 
-            if ($st_file == '.' || $st_file == '..') {
+            if ($st_file == '.' or $st_file == '..') {
                 continue;
             }
             // Kiem tra neu co cac file ngoai le
@@ -691,43 +689,6 @@ function nv_chmod_dir($conn_id, $dir, $subdir = false)
     } else {
         $array_cmd_dir[] = '<strong>' . $dir . ' --> no chmod 777 </strong>';
     }
-}
-
-/**
- * nv_gz_get_contents()
- *
- * @param mixed $filename
- * @return
- */
-function nv_gz_get_contents($filename)
-{
-    global $sys_info;
-
-    $content = file_get_contents($filename);
-
-    if (isset($sys_info['str_compress']) and ! empty($sys_info['str_compress'])) {
-        $content = call_user_func($sys_info['str_compress'][1], $content);
-    }
-
-    return $content;
-}
-
-/**
- * nv_gz_put_contents()
- *
- * @param mixed $filename
- * @param mixed $content
- * @return
- */
-function nv_gz_put_contents($filename, $content)
-{
-    global $sys_info;
-
-    if (isset($sys_info['str_compress']) and ! empty($sys_info['str_compress'])) {
-        $content = call_user_func($sys_info['str_compress'][0], $content, 9);
-    }
-
-    return file_put_contents($filename, $content, LOCK_EX);
 }
 
 /**

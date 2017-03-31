@@ -47,7 +47,7 @@ class Http
          * This class must be put in a file which be stored in 2 subdir with root dir
          * If you store this file on other folder, you must change $store_dir below
          */
-        $store_dir = '/../../';
+        $store_dir = '/../../../../';
         $this->root_dir = preg_replace('/[\/]+$/', '', str_replace(DIRECTORY_SEPARATOR, '/', realpath(dirname(__file__) . $store_dir)));
 
         // Custom some config
@@ -138,7 +138,7 @@ class Http
 
         // Determine if this request is to OUR install of NukeViet
         $homeURL = parse_url($this->site_config['my_domain']);
-        $args['local'] = $homeURL['host'] == $infoURL['host'] || 'localhost' == $infoURL['host'];
+        $args['local'] = $homeURL['host'] == $infoURL['host'] or 'localhost' == $infoURL['host'];
         unset($homeURL);
 
         // If Stream but no file, default is a file in temp dir with base $url name
@@ -194,7 +194,7 @@ class Http
         Http::mbstring_binary_safe_encoding();
 
         if (! isset($args['headers']['Accept-Encoding'])) {
-            if ($encoding = NukeViet\Http\Encoding::accept_encoding($url, $args)) {
+            if ($encoding = Encoding::accept_encoding($url, $args)) {
                 $args['headers']['Accept-Encoding'] = $encoding;
             }
         }
@@ -281,10 +281,6 @@ class Http
     {
         $r = array();
         parse_str($str, $r);
-
-        if (get_magic_quotes_gpc()) {
-            $r = array_map('stripslashes', $r);
-        }
 
         return $r;
     }
@@ -393,10 +389,8 @@ class Http
      */
     public static function handle_redirects($url, $args, $response)
     {
-        static $nv_http;
-
         // If no redirects are present, or, redirects were not requested, perform no action.
-        if (! isset($response['headers']['location']) or $args['_redirection'] === 0) {
+        if (! isset($response['headers']['location']) or $args['redirection'] === 0) {
             return false;
         }
 
@@ -436,12 +430,7 @@ class Http
             }
         }
 
-        // Create object if null
-        if (is_null($nv_http)) {
-            $nv_http = new Http();
-        }
-
-        return $nv_http->request($redirect_location, $args);
+        return Http::request($redirect_location, $args);
     }
 
     /**
@@ -643,7 +632,7 @@ class Http
             }
 
             if ('set-cookie' == $key) {
-                $cookies[] = new NukeViet\Http\Cookie($value, $url);
+                $cookies[] = new Cookie($value, $url);
             }
         }
 
@@ -662,10 +651,10 @@ class Http
     public static function buildCookieHeader(&$args)
     {
         if (! empty($args['cookies'])) {
-            // Upgrade any name => value cookie pairs to NV_http_cookie instances
+            // Upgrade any name => value cookie pairs to NukeViet\Http\Cookie instances
             foreach ($args['cookies'] as $name => $value) {
                 if (! is_object($value)) {
-                    $args['cookies'][$name] = new NukeViet\Http\Cookie(array( 'name' => $name, 'value' => $value ));
+                    $args['cookies'][$name] = new Cookie(array( 'name' => $name, 'value' => $value ));
                 }
             }
 

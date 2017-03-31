@@ -18,8 +18,25 @@
 
 /* ==========================================================================
  NukeViet's custom styles
+ - Global
+ - Heading
+ - Header
+ - Menu Horizontal
+ - Middle
+ - Left Menu
+ - Footer
+ - Content Size
+ - Responsive theme
+ - Form Element
+ - Breadcrumb
+ - Fixed Jquery UI Style
+ - DIV Listing
+ - Add more style left menu admin css
+ - Notification
+ - Site Modal
  ========================================================================== */
 
+/* Global */
 html, body {
 	height: 100%;
 	background: #f1f1f1;
@@ -62,6 +79,10 @@ a.link:hover {
     background-color:#C0C0C0
 }
 
+.text-white, a.text-white {
+    color: #fff;
+}
+
 #timeoutsess {
 	display: none;
 }
@@ -82,12 +103,21 @@ a.link:hover {
 	margin-bottom: 10px;
 }
 
+.m-bottom-none {
+	margin-bottom: 0;
+}
+
 .pointer,.fa-pointer,.icon-pointer{
     cursor: pointer;
 }
 
 .icon-pointer {
 	margin-top: 10px;
+}
+
+.text-middle {
+	height: 32px;
+	line-height: 32px;
 }
 
 .nvwrap {
@@ -99,16 +129,6 @@ a.link:hover {
 	overflow-y: hidden;
 }
 
-#left-menu-bg {
-	background: url("../images/bg_left.png") repeat-y scroll right center rgba(0, 0, 0, 0);
-	bottom: 0;
-	left: 0;
-	position: absolute;
-	top: 52px;
-	width: 200px;
-	z-index: 0;
-}
-}
 /* Heading
  -----------------------------------------------------------------------------*/
 h1, h2, h3, h4, h5, h6 {
@@ -254,11 +274,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Menu Horizontal
  -----------------------------------------------------------------------------*/
-@media (max-width: 1300px) and (min-width: 768px) {
-	#digclock {
-		display: none;
-	}
-}
 @media (max-width: 1070px) and (min-width: 768px) {
 	#menu-horizontal > ul > li > a {
 		padding-left: 10px;
@@ -331,12 +346,28 @@ h1, h2, h3, h4, h5, h6 {
 	margin-right: 10px;
 }
 
+#info_tab ul.btncontrol {
+    margin: 0;
+    padding: 0;
+    line-height: 22px;
+}
+
 .nv-panel-body {
 	padding: 10px;
 }
 
 /* Left Menu
  -----------------------------------------------------------------------------*/
+#left-menu-bg {
+	background: url("../images/bg_left.png") repeat-y scroll right center rgba(0, 0, 0, 0);
+	bottom: 0;
+	left: 0;
+	position: absolute;
+	top: 52px;
+	width: 200px;
+	z-index: 0;
+}
+
 #left-menu {
 	top: 4px;
 	left: 0;
@@ -483,48 +514,43 @@ sup.required {
 /* Content Size
  -----------------------------------------------------------------------------*/
 .w20 {
-	width: 20px
+	width: 20px!important
 }
 
 .w50 {
-	width: 50px
+	width: 50px!important
 }
 
 .w100 {
-	width: 100px
+	width: 100px!important
 }
 
 .w150 {
-	width: 150px
+	width: 150px!important
 }
 
 .w200 {
-	width: 200px
+	width: 200px!important
 }
 
 .w250 {
-	width: 250px
+	width: 250px!important
 }
 
 .w300 {
-	width: 300px
+	width: 300px!important
 }
 
 .w350 {
-	width: 350px
+	width: 350px!important
 }
 
 .w400 {
-	width: 400px
+	width: 400px!important
 }
 
 .w500 {
-	width: 500px
-}
-
-.text-middle {
-	height: 32px;
-	line-height: 32px;
+	width: 500px!important
 }
 
 /* Responsive theme
@@ -754,6 +780,7 @@ label {
 	content: "\f05a";
 }
 
+/* Notification */
 #notification {
 	position: absolute;
 	top: 4px;
@@ -773,8 +800,16 @@ label {
 	z-index: 1
 }
 
+#notification_load {
+    min-height: 30px;
+}
+
 #notification_load .notify_item {
 	border-top: 1px solid #424141;
+}
+
+#notification_load .notify_item .ntf-hide {
+    display: none;
 }
 
 #notification_load .notify_item a {
@@ -792,6 +827,7 @@ label {
 	max-width: 40px;
 	margin: 0 5px 5px 0
 }
+
 @media (min-width: 360px) {
 	#header .menu > li {
 		float: left;
@@ -801,6 +837,44 @@ label {
 	}
 }
 
+#notification-area .dropdown-menu {
+    width: 430px;
+}
+
+#notification-area .dropdown-menu > div {
+    position: relative;
+    margin: -5px 0;
+}
+
+@media (max-width: 430px) {
+#notification-area .dropdown-menu {
+    _width: 100%;
+}
+}
+
+#notification_waiting, 
+#notification_more {
+    position: absolute;
+    left: 0;
+    width: 100%;
+}
+
+#notification_more {
+    background-color: #666;
+    line-height: 30px;
+    height: 30px;
+}
+
+#notification_more a:hover {
+    background: transparent!important;
+}
+
+#notification_waiting {
+    bottom: 0;
+    line-height: 30px;
+}
+
+/* Site Modal */
 .modal-header .close {
     margin-top:-2px;
 }
@@ -866,11 +940,15 @@ button.close {
     }
 }
 
-#digclock {
-	margin-right: 10px;
-}
-
-.select2-container--default .select2-selection--single{
+.select2-container--default .select2-selection--single,
+.select2-container--bootstrap .select2-selection--single
+{
 	height: 32px !important;
     padding-top: 2px;
+}
+
+input[type=text].required, input[type=password].required, input[type=email].required, input[type=number].required, input[type=search].required, input[type=tel].required, input[type=time].required, input[type=url].required, input[type=url].required, textarea.required, select.required, label.required {
+    background-image: url(../images/icons/required.png);
+    background-position: right center;
+    background-repeat: no-repeat;
 }

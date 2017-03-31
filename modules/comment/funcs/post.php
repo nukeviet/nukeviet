@@ -12,16 +12,16 @@ if (! defined('NV_IS_MOD_COMMENT')) {
     die('Stop!!!');
 }
 
-$difftimeout = 360;
-
 $contents = 'ERR_' . $lang_module['comment_unsuccess'];
 $module = $nv_Request->get_string('module', 'post');
-if (! empty($module) and isset($module_config[$module]['activecomm']) and isset($site_mods[$module])) {
+
+if (!empty($module) and isset($module_config[$module]['activecomm']) and isset($site_mods[$module])) {
     // Kiểm tra module có được Sử dụng chức năng bình luận
     $area = $nv_Request->get_int('area', 'post', 0);
     $id = $nv_Request->get_int('id', 'post');
     $allowed_comm = $nv_Request->get_title('allowed', 'post');
     $checkss = $nv_Request->get_title('checkss', 'post');
+    
     if ($id > 0 and $module_config[$module]['activecomm'] == 1 and $checkss == md5($module . '-' . $area . '-' . $id . '-' . $allowed_comm . '-' . NV_CACHE_PREFIX)) {
         // Kiểm tra quyền đăng bình luận
         $allowed = $module_config[$module]['allowed_comm'];
@@ -32,11 +32,12 @@ if (! empty($module) and isset($module_config[$module]['activecomm']) and isset(
 
         if (nv_user_in_groups($allowed)) {
             $content = $nv_Request->get_title('content', 'post', '', 1);
-            $content = nv_nl2br($content, '<br />');
+            $content = nv_nl2br($content);
             $code = $nv_Request->get_title('code', 'post', '');
             $status = $module_config[$module]['auto_postcomm'];
 
             $timeout = $nv_Request->get_int($site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, 'cookie', 0);
+            $difftimeout = isset($module_config[$module]['timeoutcomm']) ? intval($module_config[$module]['timeoutcomm']) : 360;
 
             if (($status == 2 and !defined('NV_IS_USER')) or $status == 0) {
                 $status = 0;
@@ -48,6 +49,7 @@ if (! empty($module) and isset($module_config[$module]['activecomm']) and isset(
                 $userid = $user_info['userid'];
                 $name = $user_info['username'];
                 $email = $user_info['email'];
+                
                 if (defined('NV_IS_ADMIN')) {
                     $status = 1;
                     $timeout = 0;
@@ -90,7 +92,10 @@ if (! empty($module) and isset($module_config[$module]['activecomm']) and isset(
                     $new_id = $db->insert_id($_sql, 'cid', $data_insert);
 
                     if ($new_id > 0) {
-                        $nv_Request->set_Cookie($site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, NV_CURRENTTIME, $difftimeout);
+                        if ($difftimeout) {
+                            $nv_Request->set_Cookie($site_mods[$module]['module_data'] . '_timeout_' . $area . '_' . $id, NV_CURRENTTIME, $difftimeout);
+                        }
+                        
                         if ($status) {
                             $mod_info = $site_mods[$module];
                             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
@@ -115,7 +120,7 @@ if (! empty($module) and isset($module_config[$module]['activecomm']) and isset(
                     $contents = 'ERR_' . $e->getMessage();
                 }
             } else {
-                $timeout = ceil(($difftimeout - NV_CURRENTTIME + $timeout) / 60);
+                $timeout = nv_convertfromSec($difftimeout - NV_CURRENTTIME + $timeout);
                 $timeoutmsg = sprintf($lang_module['comment_timeout'], $timeout);
                 $contents = 'ERR_' . $timeoutmsg;
             }

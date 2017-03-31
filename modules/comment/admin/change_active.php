@@ -31,7 +31,7 @@ if (isset($site_mod_comm[$row['module']])) {
     $mod_info = $site_mod_comm[$row['module']];
     if (file_exists(NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php')) {
         include NV_ROOTDIR . '/modules/' . $mod_info['module_file'] . '/comment.php';
-        nv_del_moduleCache($row['module']);
+        $nv_Cache->delMod($row['module']);
     }
 }
 
@@ -39,7 +39,7 @@ if ($new_status) {
     nv_status_notification(NV_LANG_DATA, $module_name, 'comment_queue', $cid);
 }
 
-nv_del_moduleCache($module_name);
+$nv_Cache->delMod($module_name);
 
 include NV_ROOTDIR . '/includes/header.php';
 echo 'OK_' . $cid;

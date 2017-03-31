@@ -12,9 +12,9 @@ if (! defined('NV_SYSTEM')) {
     die('Stop!!!');
 }
 
-global $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
+global $site_mods, $db_config, $client_info, $global_config, $module_name, $user_info, $lang_global, $my_head, $admin_info, $blockID;
 
-$content = "";
+$content = '';
 
 if ($global_config['allowuserlogin']) {
     if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/users/block.user_button.tpl')) {
@@ -95,27 +95,37 @@ if ($global_config['allowuserlogin']) {
         $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
         $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
         $xtpl->assign('GFX_MAXLENGTH', NV_GFX_NUM);
-        $xtpl->assign('CHECKSS', md5($client_info['session_id'] . $global_config['sitekey']));
         $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
         $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
         $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
         $xtpl->assign('NV_HEADER', '');
         $xtpl->assign('NV_REDIRECT', '');
+        $xtpl->assign('CHECKSS', NV_CHECK_SESSION);
 
-        if (in_array($global_config['gfx_chk'], array(
-            2,
-            4,
-            5,
-            7 ))) {
-            $xtpl->parse('main.captcha');
+        $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);
+        $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], NV_UPASSMIN, NV_UPASSMAX) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], NV_UPASSMIN, NV_UPASSMAX);
+
+        $xtpl->assign('USERNAME_RULE', $username_rule);
+        $xtpl->assign('PASSWORD_RULE', $password_rule);
+
+        if (in_array($global_config['gfx_chk'], array(2, 4, 5, 7))) {
+            if ($global_config['captcha_type'] == 2) {
+                $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                $xtpl->parse('main.recaptcha.default');
+                $xtpl->parse('main.recaptcha');
+            } else {
+                $xtpl->parse('main.captcha');
+            }
         }
 
-        if (in_array($global_config['gfx_chk'], array(
-            3,
-            4,
-            6,
-            7 ))) {
-            $xtpl->parse('main.allowuserreg.reg_captcha');
+        if (in_array($global_config['gfx_chk'], array(3, 4, 6, 7 ))) {
+            if ($global_config['captcha_type'] == 2) {
+                $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+                $xtpl->parse('main.allowuserreg.reg_recaptcha');
+            } else {
+                $xtpl->parse('main.allowuserreg.reg_captcha');
+            }
         }
 
         if (defined('NV_OPENID_ALLOWED')) {
@@ -133,8 +143,10 @@ if ($global_config['allowuserlogin']) {
         }
 
         if ($global_config['allowuserreg']) {
+        	$_mod_data = defined('NV_CONFIG_DIR') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . "_" . $site_mods[$block_config['module']]['module_data'];
+        	 
             $data_questions = array();
-            $sql = "SELECT qid, title FROM " . NV_USERS_GLOBALTABLE . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
+            $sql = "SELECT qid, title FROM " . $_mod_data . "_question WHERE lang='" . NV_LANG_DATA . "' ORDER BY weight ASC";
             $result = $db->query($sql);
             while ($row = $result->fetch()) {
                 $data_questions[$row['qid']] = array( 'qid' => $row['qid'], 'title' => $row['title'] );
@@ -148,7 +160,7 @@ if ($global_config['allowuserlogin']) {
             $datepicker = false;
 
             $array_field_config = array();
-            $result_field = $db->query('SELECT * FROM ' . NV_USERS_GLOBALTABLE . '_field ORDER BY weight ASC');
+            $result_field = $db->query('SELECT * FROM ' . $_mod_data . '_field ORDER BY weight ASC');
             while ($row_field = $result_field->fetch()) {
                 $language = unserialize($row_field['language']);
                 $row_field['title'] = (isset($language[NV_LANG_DATA])) ? $language[NV_LANG_DATA][0] : $row['field'];
@@ -267,7 +279,13 @@ if ($global_config['allowuserlogin']) {
                 }
                 $xtpl->parse('main.allowuserreg.field');
             }
+        
+            if ($global_config['allowuserreg'] == 2) {
+                $xtpl->assign('LOSTACTIVELINK_SRC', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostactivelink');
+                $xtpl->parse('main.allowuserreg.lostactivelink');
+            }
 
+            $xtpl->parse('main.allowuserreg.agreecheck');
             $xtpl->parse('main.allowuserreg');
             $xtpl->parse('main.allowuserreg2');
             $xtpl->parse('main.allowuserreg3');

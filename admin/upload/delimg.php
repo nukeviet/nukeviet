@@ -18,7 +18,7 @@ if (! isset($check_allow_upload_dir['delete_file'])) {
     die('ERROR#' . $lang_module['notlevel']);
 }
 
-$files = array_map("basename", explode("|", htmlspecialchars(trim($nv_Request->get_string('file', 'post')), ENT_QUOTES)));
+$files = array_map('basename', explode('|', htmlspecialchars(trim($nv_Request->get_string('file', 'post')), ENT_QUOTES)));
 
 // Check choose file
 if (empty($files)) {

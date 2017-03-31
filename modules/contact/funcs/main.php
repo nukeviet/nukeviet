@@ -13,8 +13,8 @@ if (! defined('NV_IS_MOD_CONTACT')) {
 }
 
 //Danh sach cac bo phan
-$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act=1 ORDER BY weight';
-$array_department = nv_db_cache($sql, 'id');
+$sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_department WHERE act>0 ORDER BY weight';
+$array_department = $nv_Cache->db($sql, 'id', $module_name);
 
 $alias_url = isset($array_op[0]) ? $array_op[0] : '';
 $alias_department = '';
@@ -60,6 +60,7 @@ if (empty($dpDefault) and ! empty($array_department)) {
 $fname = '';
 $femail = '';
 $fphone = '';
+$faddress = '';
 
 if (defined('NV_IS_USER')) {
     $fname = ! empty($user_info['full_name']) ? $user_info['full_name'] : $user_info['username'];
@@ -72,7 +73,7 @@ if (defined('NV_IS_USER')) {
  */
 if ($nv_Request->isset_request('checkss', 'post')) {
     $checkss = $nv_Request->get_title('checkss', 'post', '');
-    if ($checkss != md5($client_info['session_id'] . $global_config['sitekey'])) {
+    if ($checkss != NV_CHECK_SESSION) {
         die();
     }
 
@@ -85,11 +86,9 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'femail' => $femail,
             'fphone' => $fphone );
 
-        $checkss = md5($client_info['session_id'] . $global_config['sitekey']);
-
         $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 
-        $form = contact_form_theme($array_content, $catsName, $base_url, $checkss);
+        $form = contact_form_theme($array_content, $catsName, $base_url, NV_CHECK_SESSION);
 
         exit($form);
     }
@@ -125,11 +124,11 @@ if ($nv_Request->isset_request('checkss', 'post')) {
             'input' => 'fcon',
             'mess' => $lang_module['error_content'] )));
     }
-    if (! nv_capcha_txt($nv_Request->get_title('fcode', 'post', ''))) {
+    if (! nv_capcha_txt(($global_config['captcha_type'] == 2 ? $nv_Request->get_title('g-recaptcha-response', 'post', '') : $nv_Request->get_title('fcode', 'post', '')))) {
         die(json_encode(array(
             'status' => 'error',
-            'input' => 'fcode',
-            'mess' => $lang_module['error_captcha'] )));
+            'input' => ($global_config['captcha_type'] == 2 ? '' : 'fcode'),
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) )));
     }
 
     $fcat = $nv_Request->get_int('fcat', 'post', 0);
@@ -148,11 +147,13 @@ if ($nv_Request->isset_request('checkss', 'post')) {
 
     $fcon = nv_nl2br($fcon);
     $fphone = nv_substr($nv_Request->get_title('fphone', 'post', '', 1), 0, 100);
+	$faddress = nv_substr($nv_Request->get_title('faddress', 'post', '', 1), 0, 100);
+	$fsendcopy = (int)$nv_Request->get_bool('sendcopy', 'post');
     $sender_id = intval(defined('NV_IS_USER') ? $user_info['userid'] : 0);
 
     $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_send
-    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_ip, is_read, is_reply) VALUES
-    (' . $fpart . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $sender_id . ', :sender_name, :sender_email, :sender_phone, :sender_ip, 0, 0)';
+    (cid, cat, title, content, send_time, sender_id, sender_name, sender_email, sender_phone, sender_address, sender_ip, is_read, is_reply) VALUES
+    (' . $fpart . ', :cat, :title, :content, ' . NV_CURRENTTIME . ', ' . $sender_id . ', :sender_name, :sender_email, :sender_phone, :sender_address, :sender_ip, 0, 0)';
     $data_insert = array();
     $data_insert['cat'] = $fcat;
     $data_insert['title'] = $ftitle;
@@ -160,24 +161,11 @@ if ($nv_Request->isset_request('checkss', 'post')) {
     $data_insert['sender_name'] = $fname;
     $data_insert['sender_email'] = $femail;
     $data_insert['sender_phone'] = $fphone;
+	$data_insert['sender_address'] = $faddress;
     $data_insert['sender_ip'] = $client_info['ip'];
     $row_id = $db->insert_id($sql, 'id', $data_insert);
     if ($row_id > 0) {
-        $xtpl = new XTemplate('sendcontact.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
-        $xtpl->assign('LANG', $lang_module);
-        $xtpl->assign('SITE_NAME', $global_config['site_name']);
-        $xtpl->assign('SITE_URL', $global_config['site_url']);
-        $xtpl->assign('FULLNAME', $fname);
-        $xtpl->assign('EMAIL', $femail);
-        $xtpl->assign('PHONE', $fphone);
-        $xtpl->assign('IP', $client_info['ip']);
-        $xtpl->assign('CAT', $fcat);
-        $xtpl->assign('PART', $array_department[$fpart]['full_name']);
-        $xtpl->assign('TITLE', $ftitle);
-        $xtpl->assign('CONTENT', nv_htmlspecialchars($fcon));
-
-        $xtpl->parse('main');
-        $fcon = $xtpl->text('main');
+    	$fcon_mail = contact_sendcontact( $row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart );
 
         $email_list = array();
         if (! empty($array_department[$fpart]['email'])) {
@@ -213,8 +201,15 @@ if ($nv_Request->isset_request('checkss', 'post')) {
         if (! empty($email_list)) {
             $from = array( $fname, $femail );
             $email_list = array_unique($email_list);
-            @nv_sendmail($from, $email_list, $ftitle, $fcon);
+            @nv_sendmail($from, $email_list, $ftitle, $fcon_mail);
         }
+
+		// Gửi bản sao đến hộp thư người gửi
+		if ($fsendcopy) {
+			$from = array( $global_config['site_name'], $global_config['site_email'] );
+			$fcon_mail = contact_sendcontact( $row_id, $fcat, $ftitle, $fname, $femail, $fphone, $fcon, $fpart, false );
+			@nv_sendmail($from, $femail, $ftitle, $fcon_mail);
+		}
 
         nv_insert_notification($module_name, 'contact_new', array( 'title' => $ftitle ), $row_id, 0, $sender_id, 1);
 
@@ -235,10 +230,17 @@ $page_title = $module_info['custom_title'];
 $key_words = $module_info['keywords'];
 $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
 
+$full_theme = true;
 $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name;
 if (! empty($alias_department)) {
     $base_url .= '&amp;' . NV_OP_VARIABLE . '=' . $alias_department;
+    if(isset($array_op[1]) and $array_op[1] == 0)
+    {
+        $base_url .= '/0';
+        $full_theme = false;
+    }
 }
+
 $base_url_rewrite = nv_url_rewrite($base_url, true);
 if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
     $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
@@ -253,11 +255,10 @@ $array_content = array(
     'fname' => $fname,
     'femail' => $femail,
     'fphone' => $fphone );
-$array_content['bodytext'] = (isset($module_config[$module_name]['bodytext'])) ? nv_editor_br2nl($module_config[$module_name]['bodytext']) : '';
+$array_content['bodytext'] = (isset($module_config[$module_name]['bodytext'])) ? $module_config[$module_name]['bodytext'] : '';
 
-$checkss = md5($client_info['session_id'] . $global_config['sitekey']);
-$contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, $checkss);
+$contents = contact_main_theme($array_content, $array_department, $catsName, $base_url, NV_CHECK_SESSION);
 
 include NV_ROOTDIR . '/includes/header.php';
-echo nv_site_theme($contents, 1);
+echo nv_site_theme($contents, $full_theme);
 include NV_ROOTDIR . '/includes/footer.php';

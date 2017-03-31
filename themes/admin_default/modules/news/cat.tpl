@@ -49,12 +49,12 @@
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.keywords}: </th>
-						<td><input class="form-control w500" name="keywords" type="text" value="{keywords}" maxlength="255" /></td>
+						<td><input class="form-control w500" name="keywords" type="text" value="{keywords}" maxlength="250" /></td>
 					</tr>
 					<tr>
-						<td class="text-right">
+						<th class="text-right">
 						<br />
-						<strong>{LANG.description} </th>
+						{LANG.description} </th>
 						<td >
 							<textarea class="form-control" id="description" name="description" cols="100" rows="5">{description}</textarea>
 							<br />
@@ -65,12 +65,16 @@
 						<td><input class="form-control w500 pull-left" type="text" name="image" id="image" value="{image}"/> &nbsp;<input id="select-img-cat" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 					</tr>
 					<tr>
-						<td class="text-right">
+						<th class="text-right">
 						<br />
-						<strong>{LANG.viewcat_detail} </th> <td><!-- BEGIN: groups_views -->
+						{LANG.viewcat_detail} </th> 
+						<td>
+						<!-- BEGIN: groups_views -->
 						<div class="row">
 							<label><input name="groups_view[]" type="checkbox" value="{groups_views.value}" {groups_views.checked} />{groups_views.title}</label>
-						</div><!-- END: groups_views --></td>
+						</div>
+						<!-- END: groups_views -->
+						</td>
 					</tr>
 					<tr>
 						<th class="text-right">{LANG.content_bodytext}: </th>
@@ -96,6 +100,16 @@
 						</select></td>
 					</tr>
 					<!-- END: featured -->
+					<tr>
+						<th class="text-right">{LANG.ad_block_show}: </th> 
+						<td>
+						<!-- BEGIN: ad_block_cats -->
+						<div class="row">
+							<label><input name="ad_block_cat[]" type="checkbox" value="{ad_block_cats.value}" {ad_block_cats.checked} />{ad_block_cats.title}</label>
+						</div>
+						<!-- END: ad_block_cats -->
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>

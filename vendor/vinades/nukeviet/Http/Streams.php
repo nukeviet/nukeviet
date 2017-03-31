@@ -31,7 +31,7 @@ class Streams
             'cookies' => array()
         );
 
-        $args = NV_Http::build_args($args, $defaults);
+        $args = Http::build_args($args, $defaults);
 
         // Get user agent
         if (isset($args['headers']['User-Agent'])) {
@@ -52,7 +52,7 @@ class Streams
         }
 
         // Construct Cookie: header if any cookies are set
-        NV_Http::buildCookieHeader($args);
+        Http::buildCookieHeader($args);
 
         $arrURL = parse_url($url);
 
@@ -90,8 +90,6 @@ class Streams
         $ssl_verify = isset($args['sslverify']) and $args['sslverify'];
 
         // NukeViet has no proxy setup
-        //$proxy = new WP_http_proxy();
-
         $context = stream_context_create(array(
             'ssl' => array(
                 'verify_peer' => $ssl_verify,
@@ -132,18 +130,18 @@ class Streams
         if ($handle === false) {
             // SSL connection failed due to expired/invalid cert, or, OpenSSL configuration is broken
             if ($secure_transport and $connection_error === 0 and $connection_error_str === '') {
-                NV_Http::set_error(6);
+                Http::set_error(6);
                 return false;
             }
 
-            NV_Http::set_error(7);
+            Http::set_error(7);
             return false;
         }
 
         // Verify that the SSL certificate is valid for this request
         if ($secure_transport and $ssl_verify /* and ! $proxy->is_enabled() */) {
             if (! self::verify_ssl_certificate($handle, $arrURL['host'])) {
-                NV_Http::set_error(6);
+                Http::set_error(6);
                 return false;
             }
         }
@@ -224,7 +222,7 @@ class Streams
             $stream_handle = @fopen($args['filename'], 'w+');
 
             if (! $stream_handle) {
-                NV_Http::set_error(8);
+                Http::set_error(8);
                 return false;
             }
 
@@ -236,7 +234,7 @@ class Streams
                     $strResponse .= $block;
 
                     if (strpos($strResponse, "\r\n\r\n")) {
-                        $process = NV_Http::processResponse($strResponse);
+                        $process = Http::processResponse($strResponse);
                         $bodyStarted = true;
                         $block = $process['body'];
                         unset($strResponse);
@@ -255,7 +253,7 @@ class Streams
                 if ($bytes_written_to_file != $this_block_size) {
                     fclose($handle);
                     fclose($stream_handle);
-                    NV_Http::set_error(9);
+                    Http::set_error(9);
                     return false;
                 }
 
@@ -281,13 +279,13 @@ class Streams
                 $keep_reading = (! $bodyStarted or ! isset($args['limit_response_size']) or strlen($strResponse) < ($header_length + $args['limit_response_size']));
             }
 
-            $process = NV_Http::processResponse($strResponse);
+            $process = Http::processResponse($strResponse);
             unset($strResponse);
         }
 
         fclose($handle);
 
-        $arrHeaders = NV_Http::processHeaders($process['headers'], $url);
+        $arrHeaders = Http::processHeaders($process['headers'], $url);
 
         $response = array(
             'headers' => $arrHeaders['headers'],
@@ -298,17 +296,17 @@ class Streams
         );
 
         // Handle redirects
-        if (false !== ($redirect_response = NV_Http::handle_redirects($url, $args, $response))) {
+        if (false !== ($redirect_response = Http::handle_redirects($url, $args, $response))) {
             return $redirect_response;
         }
 
         // If the body was chunk encoded, then decode it.
         if (! empty($process['body']) and isset($arrHeaders['headers']['transfer-encoding']) and 'chunked' == $arrHeaders['headers']['transfer-encoding']) {
-            $process['body'] = NV_Http::chunkTransferDecode($process['body']);
+            $process['body'] = Http::chunkTransferDecode($process['body']);
         }
 
-        if ($args['decompress'] === true and NukeViet\Http\Encoding::should_decode($arrHeaders['headers']) === true) {
-            $process['body'] = NukeViet\Http\Encoding::decompress($process['body']);
+        if ($args['decompress'] === true and Encoding::should_decode($arrHeaders['headers']) === true) {
+            $process['body'] = Encoding::decompress($process['body']);
         }
 
         if (isset($args['limit_response_size']) and strlen($process['body']) > $args['limit_response_size']) {
@@ -340,7 +338,7 @@ class Streams
         }
 
         // If the request is being made to an IP address, we'll validate against IP fields in the cert (if they exist)
-        $host_type = (NV_Http::is_ip_address($host) ? 'ip' : 'dns');
+        $host_type = (Http::is_ip_address($host) ? 'ip' : 'dns');
 
         $certificate_hostnames = array();
 

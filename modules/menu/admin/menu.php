@@ -119,7 +119,7 @@ if ($nv_Request->get_int('save', 'post')) {
                 }
             }
         }
-        nv_del_moduleCache($module_name);
+        $nv_Cache->delMod($module_name);
         Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
         exit();
     }
@@ -128,7 +128,7 @@ if ($nv_Request->get_int('save', 'post')) {
     $result = $db->query($sql);
     $arr = $result->fetch();
     if (empty($arr)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     }
 }
 

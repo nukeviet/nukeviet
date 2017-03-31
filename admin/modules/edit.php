@@ -33,6 +33,20 @@ if (empty($row)) {
 $theme_site_array = $theme_mobile_array = array();
 $theme_array = scandir(NV_ROOTDIR . '/themes');
 
+$theme_mobile_default = array();
+$theme_mobile_default[''] = array(
+    'key' => '',
+    'title' => $lang_module['theme_mobiledefault']
+);
+$theme_mobile_default[':pcsite'] = array(
+    'key' => ':pcsite',
+    'title' => $lang_module['theme_mobile_bysite']
+);
+$theme_mobile_default[':pcmod'] = array(
+    'key' => ':pcmod',
+    'title' => $lang_module['theme_mobile_bymod']
+);
+
 foreach ($theme_array as $dir) {
     if (preg_match($global_config['check_theme'], $dir)) {
         if (file_exists(NV_ROOTDIR . '/themes/' . $dir . '/config.ini')) {
@@ -65,7 +79,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $custom_title = $nv_Request->get_title('custom_title', 'post', 1);
     $admin_title = $nv_Request->get_title('admin_title', 'post', 1);
     $theme = $nv_Request->get_title('theme', 'post', '', 1);
-    $mobile = $nv_Request->get_title('mobile', 'post', '', 1);
+    $module_theme = $nv_Request->get_title('module_theme', 'post', '', 1);
+    $mobile = $nv_Request->get_title('mobile', 'post', '', 0);
     $description = $nv_Request->get_title('description', 'post', '', 1);
     $description = nv_substr($description, 0, 255);
     $keywords = $nv_Request->get_title('keywords', 'post', '', 1);
@@ -76,7 +91,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         $theme = '';
     }
 
-    if (! empty($mobile) and ! in_array($mobile, $theme_mobile_list)) {
+    if (! empty($mobile) and ! in_array($mobile, $theme_mobile_list) and !isset($theme_mobile_default[$mobile])) {
         $mobile = '';
     }
 
@@ -130,8 +145,23 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     }
                 }
             }
+            
+            // Check module_theme
+            $_theme_check = (!empty($theme)) ? $theme : $global_config['site_theme'];
+            if (!empty($_theme_check) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_check . '/theme.php')) {
+                if (!file_exists(NV_ROOTDIR . '/themes/' . $_theme_check . '/modules/' . $module_theme)) {
+                    $module_theme = $row['module_file'];
+                }
+            } else {
+                $module_theme = $row['module_file'];
+            }
+            
 
-            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET custom_title=:custom_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description, keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ' WHERE title= :title');
+            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET 
+                    module_theme=:module_theme, custom_title=:custom_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description, 
+                    keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ' 
+                    WHERE title= :title');
+            $sth->bindParam(':module_theme', $module_theme, PDO::PARAM_STR);
             $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
             $sth->bindParam(':admin_title', $admin_title, PDO::PARAM_STR);
             $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
@@ -193,7 +223,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     }
                 }
             }
-            nv_delete_all_cache();
+            $nv_Cache->delAll();
             nv_insert_logs(NV_LANG_DATA, $module_name, sprintf($lang_module['edit'], $mod), '', $admin_info['userid']);
 
             Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -208,6 +238,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $custom_title = $row['custom_title'];
     $admin_title = $row['admin_title'];
     $theme = $row['theme'];
+    $module_theme = $row['module_theme'];
     $mobile = $row['mobile'];
     $act = $row['act'];
     $description = $row['description'];
@@ -231,10 +262,11 @@ $data['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_
 $data['custom_title'] = $custom_title;
 $data['admin_title'] = $admin_title;
 $data['theme'] = array( $lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme );
-$data['mobile'] = array( $lang_module['mobile'], $lang_module['theme_default'], $theme_mobile_list, $mobile );
+$data['mobile'] = array( $lang_module['mobile'], $theme_mobile_default, $theme_mobile_list, $mobile );
 $data['description'] = $description;
 $data['keywords'] = $keywords;
 $data['mod_name'] = $mod;
+$data['module_theme'] = $module_theme;
 
 if ($mod != $global_config['site_home_module']) {
     $data['groups_view'] = array( $lang_global['groups_view'], $groups_list, $groups_view );
@@ -257,9 +289,13 @@ foreach ($data['theme'][2] as $tm) {
     $xtpl->parse('main.theme');
 }
 
-if (! empty($data['mobile'][2])) {
+if (! empty($data['mobile'][2]) or ! empty($data['mobile'][1])) {
+    foreach ($data['mobile'][1] as $tm) {
+        $xtpl->assign('MOBILE', array( 'key' => $tm['key'], 'selected' => $tm['key'] == $data['mobile'][3] ? ' selected="selected"' : '', 'title' => $tm['title'] ));
+        $xtpl->parse('main.mobile.loop');
+    }
     foreach ($data['mobile'][2] as $tm) {
-        $xtpl->assign('MOBILE', array( 'key' => $tm, 'selected' => $tm == $data['mobile'][3] ? ' selected="selected"' : '' ));
+        $xtpl->assign('MOBILE', array( 'key' => $tm, 'selected' => $tm == $data['mobile'][3] ? ' selected="selected"' : '', 'title' => $tm ));
         $xtpl->parse('main.mobile.loop');
     }
 

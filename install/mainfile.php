@@ -40,13 +40,14 @@ define('NV_FILES_DIR', NV_ASSETS_DIR);
 
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
+require NV_ROOTDIR . '/includes/xtemplate.class.php';
 
 require_once realpath(NV_ROOTDIR . '/install/config.php');
 
 $global_config['my_domains'] = $_SERVER['SERVER_NAME'];
 
 // Xac dinh cac tags cho phep
-$global_config['allowed_html_tags'] = array_map("trim", explode(',', NV_ALLOWED_HTML_TAGS));
+$global_config['allowed_html_tags'] = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
 
 //Xac dinh IP cua client
 $ips = new NukeViet\Core\Ips();
@@ -78,18 +79,16 @@ $global_config['error_log_fileext'] = NV_LOGS_EXT;
 
 //Ket noi voi class Error_handler
 $ErrorHandler = new NukeViet\Core\Error($global_config);
-set_error_handler(array( &$ErrorHandler, 'error_handler' ));
 
 //Ket noi voi cac file cau hinh, function va template
 require NV_ROOTDIR . '/install/ini.php';
 require NV_ROOTDIR . '/includes/utf8/' . $sys_info['string_handler'] . '_string_handler.php';
 require NV_ROOTDIR . '/includes/utf8/utf8_functions.php';
 require NV_ROOTDIR . '/includes/core/filesystem_functions.php';
-require NV_ROOTDIR . '/includes/core/cache_files.php';
 require NV_ROOTDIR . '/includes/functions.php';
 require NV_ROOTDIR . '/includes/core/theme_functions.php';
 
-$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map("trim", explode(',', NV_ALLOW_REQUEST_MODS)) : "request";
+$global_config['allow_request_mods'] = NV_ALLOW_REQUEST_MODS != '' ? array_map('trim', explode(',', NV_ALLOW_REQUEST_MODS)) : "request";
 $global_config['request_default_mode'] = NV_REQUEST_DEFAULT_MODE != '' ? trim(NV_REQUEST_DEFAULT_MODE) : 'request';
 
 $language_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/langs.ini', true);
@@ -119,8 +118,12 @@ define('NV_EOL', (strtoupper(substr(PHP_OS, 0, 3) == 'WIN') ? "\r\n" : (strtoupp
 //Ngat dong
 define('NV_UPLOADS_REAL_DIR', NV_ROOTDIR . '/' . NV_UPLOADS_DIR);
 //Xac dinh duong dan thuc den thu muc upload
+
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_BASE_SITEURL));
 //Hau to cua file cache
+
+define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
+// Kiem tra session cua nguoi dung
 
 //Ngon ngu
 require NV_ROOTDIR . '/includes/language.php';
@@ -135,10 +138,6 @@ $global_config['site_url'] = $nv_Request->site_url;
 $global_config['my_domains'] = $nv_Request->my_domains;
 //vd: "mydomain1.com,mydomain2.com"
 
-$sys_info['register_globals'] = $nv_Request->is_register_globals;
-//0 = khong, 1 = bat
-$sys_info['magic_quotes_gpc'] = $nv_Request->is_magic_quotes_gpc;
-// 0 = khong, 1 = co
 $sys_info['sessionpath'] = $nv_Request->session_save_path;
 //vd: D:/AppServ/www/ten_thu_muc_chua_site/sess/
 
@@ -152,8 +151,7 @@ $client_info['selfurl'] = $nv_Request->my_current_domain . $nv_Request->request_
 //trang dang xem
 $client_info['agent'] = $nv_Request->user_agent;
 //HTTP_USER_AGENT
-$client_info['session_id'] = $nv_Request->session_id;
-//ten cua session
+
 $global_config['sitekey'] = md5($_SERVER['SERVER_NAME'] . NV_ROOTDIR . $client_info['session_id']);
 
 //Chan truy cap neu HTTP_USER_AGENT == 'none'
@@ -168,3 +166,5 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 
 //Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
+
+$nv_Cache = new NukeViet\Cache\Files(NV_ROOTDIR . '/' . NV_CACHEDIR, NV_LANG_DATA, NV_CACHE_PREFIX);

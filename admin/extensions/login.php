@@ -54,8 +54,8 @@ if (! empty($request['username']) and ! empty($request['password'])) {
     $array = ! empty($array['body']) ? (is_serialized_string($array['body']) ? unserialize($array['body']) : array()) : array();
 
     $error = '';
-    if (! empty(NV_Http::$error)) {
-        $error = nv_http_get_lang(NV_Http::$error);
+    if (! empty(NukeViet\Http\Http::$error)) {
+        $error = nv_http_get_lang(NukeViet\Http\Http::$error);
     } elseif (empty($array['status']) or ! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
         $error = $lang_global['error_valid_response'];
     } elseif (! empty($array['error']['message'])) {

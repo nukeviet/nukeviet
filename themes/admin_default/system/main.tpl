@@ -32,13 +32,23 @@
 				</a>
 			</li>
 			<!-- BEGIN: notification -->
-			<li class="dropdown">
+			<li class="dropdown" id="notification-area">
 				<span id="notification" style="display: none"></span>
-				<a href="javascript:void(0)"  class="dropdown-toggle" data-toggle="dropdown"> <em class="fa fa-bell-o fa-2x fix">&nbsp;</em></a>
-				<div class="dropdown-menu" style="width: 430px">
-					<div id="notification_load">
-
-					</div>
+				<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"> <em class="fa fa-bell-o fa-2x fix">&nbsp;</em></a>
+				<div class="dropdown-menu">
+                    <div>
+    					<div id="notification_load"></div>
+                        <div id="notification_waiting">
+                            <div class="text-center">
+                                <i class="fa fa-spin fa-spinner"></i>
+                            </div>
+                        </div>
+                        <div id="notification_more">
+                            <div class="text-center">
+                                <a href="{NV_GO_ALL_NOTIFICATION}">{LANG.view_all}</a>
+                            </div>
+                        </div>
+                    </div>
 				</div>
 			</li>
 			<!-- END: notification -->
@@ -80,7 +90,6 @@
 						</li>
 						<!-- END: top_menu_loop -->
 					</ul>
-					<p class="navbar-text navbar-right" id="digclock">{NV_DIGCLOCK}</p>
 				</div>
 			</div>
 		</div>
@@ -131,7 +140,18 @@
 					<!-- END: loop -->
 				</ol>
 				<!-- END: breadcrumbs -->
-				<!-- BEGIN: select_option -->
+
+				<ul class="pull-right list-inline btncontrol">
+					<!-- BEGIN: url_instruction -->
+					<li><a target="_blank" href="{NV_URL_INSTRUCTION}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_INSTRUCTION}"><em class="fa fa-book fa-lg">&nbsp;</em></a></li>
+					<!-- END: url_instruction -->
+
+					<!-- BEGIN: site_mods -->
+					<li><a target="_blank" href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_GO_CLIENTMOD}"><em class="fa fa-globe fa-lg">&nbsp;</em></a></li>
+					<!-- END: site_mods -->
+				</ul>
+				
+                <!-- BEGIN: select_option -->
 				<div class="pull-right btn-group">
 					<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown">
 						{PLEASE_SELECT} <span class="caret">&nbsp;</span>
@@ -143,16 +163,6 @@
 					</ul>
 				</div>
 				<!-- END: select_option -->
-
-				<ul class="pull-right list-inline" style="margin: 0">
-					<!-- BEGIN: url_instruction -->
-					<li><a target="_blank" href="{NV_URL_INSTRUCTION}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_INSTRUCTION}"><em class="fa fa-book fa-lg">&nbsp;</em></a></li>
-					<!-- END: url_instruction -->
-
-					<!-- BEGIN: site_mods -->
-					<li><a target="_blank" href="{NV_BASE_SITEURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DATA}&amp;{NV_NAME_VARIABLE}={MODULE_NAME}" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{NV_GO_CLIENTMOD}"><em class="fa fa-globe fa-lg">&nbsp;</em></a></li>
-					<!-- END: site_mods -->
-				</ul>
 			</div>
 			<div id="contentmod">
 				{THEME_ERROR_INFO}

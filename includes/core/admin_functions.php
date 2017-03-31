@@ -17,23 +17,25 @@ if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
  *
  * @return
  */
-function nv_groups_list()
+function nv_groups_list($mod_data = 'users')
 {
+    global $nv_Cache;
     $cache_file = NV_LANG_DATA . '_groups_list_' . NV_CACHE_PREFIX . '.cache';
-    if (($cache = nv_get_cache('users', $cache_file)) != false) {
+    if (($cache = $nv_Cache->getItem($mod_data, $cache_file)) != false) {
         return unserialize($cache);
     } else {
         global $db, $db_config, $global_config, $lang_global;
 
         $groups = array();
-        $result = $db->query('SELECT group_id, title, idsite FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
+        $_mod_table = ($mod_data == 'users') ? NV_USERS_GLOBALTABLE : $db_config['prefix'] . '_' . $mod_data;
+        $result = $db->query('SELECT group_id, title, idsite FROM ' . $_mod_table . '_groups WHERE (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight');
         while ($row = $result->fetch()) {
             if ($row['group_id'] < 9) {
                 $row['title'] = $lang_global['level' . $row['group_id']];
             }
             $groups[$row['group_id']] = ($global_config['idsite'] > 0 and empty($row['idsite'])) ? '<strong>' . $row['title'] . '</strong>' : $row['title'];
         }
-        nv_set_cache('users', $cache_file, serialize($groups));
+        $nv_Cache->setItem($mod_data, $cache_file, serialize($groups));
 
         return $groups;
     }
@@ -51,7 +53,7 @@ function nv_groups_post($groups_view)
         return array( 6 );
     }
     if (in_array(4, $groups_view)) {
-        return array_intersect($groups_view, array( 4, 5 ));
+        return array_intersect($groups_view, array( 4, 5, 7 ));
     }
     if (in_array(3, $groups_view)) {
         return array_diff($groups_view, array( 1, 2 ));
@@ -90,7 +92,7 @@ function nv_var_export($var_array)
  */
 function nv_save_file_config_global()
 {
-    global $db, $sys_info, $global_config, $db_config;
+    global $nv_Cache, $db, $sys_info, $global_config, $db_config;
 
     if ($global_config['idsite']) {
         return false;
@@ -127,6 +129,7 @@ function nv_save_file_config_global()
     $ini_set_support = ($sys_info['ini_set_support']) ? 'true' : 'false';
     $content_config .= "\$sys_info['ini_set_support']= " . $ini_set_support . ";\n";
     //Kiem tra ho tro rewrite
+	$iis_info = explode( '/', $_SERVER['SERVER_SOFTWARE']);
     if (function_exists('apache_get_modules')) {
         $apache_modules = apache_get_modules();
         if (in_array('mod_rewrite', $apache_modules)) {
@@ -134,7 +137,7 @@ function nv_save_file_config_global()
         } else {
             $sys_info['supports_rewrite'] = false;
         }
-    } elseif (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS/7.') !== false) {
+    } elseif (strpos($iis_info[0], 'Microsoft-IIS') !== false AND $iis_info[1] >= 7) {
         if (isset($_SERVER['IIS_UrlRewriteModule']) and class_exists('DOMDocument')) {
             $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
         } else {
@@ -213,7 +216,7 @@ function nv_save_file_config_global()
             $content_config .= "\$global_config['" . $c_config_name . "']=" . $config_sso . ";\n";
         } elseif (in_array($c_config_name, $config_name_array)) {
             if (! empty($c_config_value)) {
-                $c_config_value = "'" . implode("','", array_map("trim", explode(',', $c_config_value))) . "'";
+                $c_config_value = "'" . implode("','", array_map('trim', explode(',', $c_config_value))) . "'";
             } else {
                 $c_config_value = '';
             }
@@ -230,7 +233,6 @@ function nv_save_file_config_global()
             }
         }
     }
-    $content_config .= "\$global_config['array_theme_type']=" . nv_var_export(array_filter(array_map('trim', explode(',', NV_THEME_TYPE)))) . ";\n";
 
     //allowed_html_tags
     if (! empty($allowed_html_tags)) {
@@ -284,7 +286,7 @@ function nv_save_file_config_global()
     $content_config .= "\$rewrite_values=" . nv_var_export(array_values($rewrite)) . ";\n";
 
     $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config), LOCK_EX);
-    nv_delete_all_cache();
+    $nv_Cache->delAll();
 
     //Resets the contents of the opcode cache
     if (function_exists('opcache_reset')) {
@@ -316,7 +318,7 @@ function nv_geVersion($updatetime = 3600)
 
         $args = array(
             'headers' => array(
-                'Referer' => NV_SERVER_NAME,
+                'Referer' => NV_MY_DOMAIN,
             ),
             'body' => array(
                 'lang' > NV_LANG_INTERFACE,
@@ -329,8 +331,8 @@ function nv_geVersion($updatetime = 3600)
         $array = ! empty($array['body']) ? @unserialize($array['body']) : array();
 
         $error = '';
-        if (! empty(NV_Http::$error)) {
-            $error = nv_http_get_lang(NV_Http::$error);
+        if (! empty(NukeViet\Http\Http::$error)) {
+            $error = nv_http_get_lang(NukeViet\Http\Http::$error);
         } elseif (! isset($array['error']) or ! isset($array['data']) or ! isset($array['pagination']) or ! is_array($array['error']) or ! is_array($array['data']) or ! is_array($array['pagination']) or (! empty($array['error']) and (! isset($array['error']['level']) or empty($array['error']['message'])))) {
             $error = $lang_global['error_valid_response'];
         } elseif (! empty($array['error']['message'])) {
@@ -343,7 +345,7 @@ function nv_geVersion($updatetime = 3600)
 
         $array = $array['data'];
 
-        $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<cms>\n\t<name><![CDATA[" . $array['name'] . "]]></name>\n\t<version><![CDATA[" . $array['version'] . "]]></version>\n\t<date><![CDATA[" . $array['date'] . "]]></date>\n\t<message><![CDATA[" . $array['message'] . "]]></message>\n\t<link><![CDATA[" . $array['link'] . "]]></link>\n\t<updateable><![CDATA[" . $array['updateable'] . "]]></updateable>\n</cms>";
+        $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<cms>\n\t<name><![CDATA[" . $array['name'] . "]]></name>\n\t<version><![CDATA[" . $array['version'] . "]]></version>\n\t<date><![CDATA[" . $array['date'] . "]]></date>\n\t<message><![CDATA[" . $array['message'] . "]]></message>\n\t<link><![CDATA[" . $array['link'] . "]]></link>\n\t<updateable><![CDATA[" . $array['updateable'] . "]]></updateable>\n\t<updatepackage><![CDATA[" . $array['updatepackage'] . "]]></updatepackage>\n</cms>";
 
         $xmlcontent = simplexml_load_string($content);
 
@@ -465,6 +467,47 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:2}&amp;" . NV_NAME_VARIABLE . "={R:3}&amp;" . NV_OP_VARIABLE . "=sitemap\" appendQueryString=\"false\" />\n";
         $rewrite_rule .= " </rule>\n";
 
+        if ($array_config_global['rewrite_optional']) {
+            if (! empty($array_config_global['rewrite_op_mod'])) {
+                if ($array_config_global['rewrite_op_mod'] == 'seek') {
+                    $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+                    $rewrite_rule .= " \t<match url=\"^\/$\" ignoreCase=\"false\" />\n";
+                    $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek\" appendQueryString=\"true\" />\n";
+                    $rewrite_rule .= " </rule>\n";
+                } else {
+                    $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+                    $rewrite_rule .= " \t<match url=\"^seek\/$\" ignoreCase=\"false\" />\n";
+                    $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek\" appendQueryString=\"true\" />\n";
+                    $rewrite_rule .= " </rule>\n";
+                }
+
+                $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+                $rewrite_rule .= " \t<match url=\"^search\/$\" ignoreCase=\"false\" />\n";
+                $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&amp;" . NV_OP_VARIABLE . "=search\" appendQueryString=\"true\" />\n";
+                $rewrite_rule .= " </rule>\n";
+            } else {
+                $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+                $rewrite_rule .= " \t<match url=\"^seek\/$\" ignoreCase=\"false\" />\n";
+                $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek\" appendQueryString=\"true\" />\n";
+                $rewrite_rule .= " </rule>\n";
+            }
+
+            $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+            $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9\-]+)\/search\/$\" ignoreCase=\"false\" />\n";
+            $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "=search\" appendQueryString=\"true\" />\n";
+            $rewrite_rule .= " </rule>\n";
+        } else {
+            $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+            $rewrite_rule .= " \t<match url=\"^([a-z]{2})\/seek\/$\" ignoreCase=\"false\" />\n";
+            $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "=seek\" appendQueryString=\"true\" />\n";
+            $rewrite_rule .= " </rule>\n";
+
+            $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
+            $rewrite_rule .= " \t<match url=\"^([a-z]{2})\/([a-zA-Z0-9\-]+)\/search\/$\" ignoreCase=\"false\" />\n";
+            $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "=search\" appendQueryString=\"true\" />\n";
+            $rewrite_rule .= " </rule>\n";
+        }
+
         $rewrite_rule .= " <rule name=\"nv_rule_rewrite\">\n";
         $rewrite_rule .= " 	<match url=\"(.*)(" . $endurl . ")$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " 	<conditions logicalGrouping=\"MatchAll\">\n";
@@ -473,47 +516,12 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " 	</conditions>\n";
         $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
         $rewrite_rule .= " </rule>\n";
-
-        if ($array_config_global['rewrite_optional']) {
-            if (! empty($array_config_global['rewrite_op_mod'])) {
-                if ($array_config_global['rewrite_op_mod'] == 'seek') {
-                    $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-                    $rewrite_rule .= " \t<match url=\"^q\=(.*)$\" ignoreCase=\"false\" />\n";
-                    $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek&amp;q={R:1}\" appendQueryString=\"false\" />\n";
-                    $rewrite_rule .= " </rule>\n";
-                } else {
-                    $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-                    $rewrite_rule .= " \t<match url=\"^seek\/q\=(.*)$\" ignoreCase=\"false\" />\n";
-                    $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek&amp;q={R:1}\" appendQueryString=\"false\" />\n";
-                    $rewrite_rule .= " </rule>\n";
-                }
-
-                $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-                $rewrite_rule .= " \t<match url=\"^search\/q\=(.*)$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&amp;" . NV_OP_VARIABLE . "=search&amp;q={R:1}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= " </rule>\n";
-            } else {
-                $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-                $rewrite_rule .= " \t<match url=\"^seek\/q\=(.*)$\" ignoreCase=\"false\" />\n";
-                $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "=seek&amp;q={R:1}\" appendQueryString=\"false\" />\n";
-                $rewrite_rule .= " </rule>\n";
-            }
-
-            $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-            $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9\-]+)\/search\/q\=(.*)$\" ignoreCase=\"false\" />\n";
-            $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_NAME_VARIABLE . "={R:1}&amp;" . NV_OP_VARIABLE . "=search&amp;q={R:2}\" appendQueryString=\"false\" />\n";
-            $rewrite_rule .= " </rule>\n";
-        } else {
-            $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-            $rewrite_rule .= " \t<match url=\"^([a-z]{2})\/seek\/q\=(.*)$\" ignoreCase=\"false\" />\n";
-            $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "=seek&amp;q={R:2}\" appendQueryString=\"false\" />\n";
-            $rewrite_rule .= " </rule>\n";
-
-            $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\">\n";
-            $rewrite_rule .= " \t<match url=\"^([a-z]{2})\/([a-zA-Z0-9\-]+)\/search\/q\=(.*)$\" ignoreCase=\"false\" />\n";
-            $rewrite_rule .= " \t<action type=\"Rewrite\" url=\"index.php?" . NV_LANG_VARIABLE . "={R:1}&amp;" . NV_NAME_VARIABLE . "={R:2}&amp;" . NV_OP_VARIABLE . "=search&amp;q={R:3}\" appendQueryString=\"false\" />\n";
-            $rewrite_rule .= " </rule>\n";
-        }
+		
+        $rewrite_rule .= " <rule name=\"nv_rule_rewrite_tag\">\n";
+        $rewrite_rule .= " 	<match url=\"([^?]+)\/([^?]+)\/tag\/([^?]+)$\" ignoreCase=\"false\" />\n";
+        $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
+        $rewrite_rule .= " </rule>\n";
+		
         $rewrite_rule .= " <rule name=\"nv_rule_" . ++ $rulename . "\" stopProcessing=\"true\">\n";
         $rewrite_rule .= " \t<match url=\"^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " \t<action type=\"Redirect\" redirectType=\"Permanent\" url=\"" . NV_BASE_SITEURL . "{R:1}/{R:2}/\" />\n";
@@ -548,33 +556,32 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=SitemapIndex [L]\n";
         $rewrite_rule .= "RewriteRule ^(.*?)sitemap\-([a-z]{2})\.([a-zA-Z0-9-]+)\.xml$ index.php?" . NV_LANG_VARIABLE . "=$2&" . NV_NAME_VARIABLE . "=$3&" . NV_OP_VARIABLE . "=sitemap [L]\n";
 
+        // Search: rewrite no lang variable
+        if ($array_config_global['rewrite_optional']) {
+            if (! empty($array_config_global['rewrite_op_mod'])) {
+                if ($array_config_global['rewrite_op_mod'] == 'seek') {
+                    $rewrite_rule .= "RewriteRule ^\/$ index.php?" . NV_NAME_VARIABLE . "=seek&%{QUERY_STRING} [L]\n";
+                } else {
+                    $rewrite_rule .= "RewriteRule ^seek\/$ index.php?" . NV_NAME_VARIABLE . "=seek&%{QUERY_STRING} [L]\n";
+                }
+
+                $rewrite_rule .= "RewriteRule ^search\/$ index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&" . NV_OP_VARIABLE . "=search&%{QUERY_STRING} [L]\n";
+            } else {
+                $rewrite_rule .= "RewriteRule ^seek\/$ index.php?" . NV_NAME_VARIABLE . "=seek&%{QUERY_STRING} [L]\n";
+            }
+
+            $rewrite_rule .= "RewriteRule ^([a-zA-Z0-9\-]+)\/search\/$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=search&%{QUERY_STRING} [L]\n";
+        } else {
+            // Rewrite with lang variable
+            $rewrite_rule .= "RewriteRule ^([a-z]{2})\/seek\/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=seek&%{QUERY_STRING} [L]\n";
+            $rewrite_rule .= "RewriteRule ^([a-z]{2})\/([a-zA-Z0-9\-]+)\/search\/$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=search&%{QUERY_STRING} [L]\n";
+        }
+        
+        // Rewrite for other module's rule
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-f\n";
         $rewrite_rule .= "RewriteCond %{REQUEST_FILENAME} !-d\n";
         $rewrite_rule .= "RewriteRule (.*)(" . $endurl . ")\$ index.php\n";
         $rewrite_rule .= "RewriteRule (.*)tag\/([^?]+)$ index.php\n";
-
-        if ($array_config_global['rewrite_optional']) {
-            if (! empty($array_config_global['rewrite_op_mod'])) {
-                if ($array_config_global['rewrite_op_mod'] == 'seek') {
-                    $rewrite_rule .= "RewriteRule ^q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";
-                } else {
-                    $rewrite_rule .= "RewriteRule ^seek\/q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";
-                }
-
-                $rewrite_rule .= "RewriteRule ^search\/q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=" . $array_config_global['rewrite_op_mod'] . "&" . NV_OP_VARIABLE . "=search&q=$1 [L]\n";
-            } else {
-                $rewrite_rule .= "RewriteRule ^seek\/q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=seek&q=$1 [L]\n";
-                ;
-            }
-
-            $rewrite_rule .= "RewriteRule ^([a-zA-Z0-9\-]+)\/search\/q\=([^?]+)$ index.php?" . NV_NAME_VARIABLE . "=$1&" . NV_OP_VARIABLE . "=search&q=$2 [L]\n";
-            ;
-        } else {
-            $rewrite_rule .= "RewriteRule ^([a-z]{2})\/seek\/q\=([^?]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=seek&q=$2 [L]\n";
-            ;
-            $rewrite_rule .= "RewriteRule ^([a-z]{2})\/([a-zA-Z0-9\-]+)\/search\/q\=([^?]+)$ index.php?" . NV_LANG_VARIABLE . "=$1&" . NV_NAME_VARIABLE . "=$2&" . NV_OP_VARIABLE . "=search&q=$3 [L]\n";
-            ;
-        }
 
         $rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-\/]+)\/([a-zA-Z0-9-]+)$ " . NV_BASE_SITEURL . "$1/$2/ [L,R=301]\n";
         $rewrite_rule .= "RewriteRule ^([a-zA-Z0-9-]+)$ " . NV_BASE_SITEURL . "$1/ [L,R=301]\n";
@@ -699,7 +706,6 @@ function nv_getExtVersion($updatetime = 3600)
     if (file_exists($my_file) and @filemtime($my_file) > $p) {
         $xmlcontent = simplexml_load_file($my_file);
     } else {
-        // Lấy các ứng dụng của hệ thống
         $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_setup_extensions WHERE title=basename ORDER BY title ASC';
         $result = $db->query($sql);
 
@@ -735,7 +741,7 @@ function nv_getExtVersion($updatetime = 3600)
 
             $args = array(
                 'headers' => array(
-                    'Referer' => NUKEVIET_STORE_APIURL,
+                    'Referer' => NV_MY_DOMAIN,
                 ),
                 'body' => array(
                     'lang' > NV_LANG_INTERFACE,
@@ -749,8 +755,8 @@ function nv_getExtVersion($updatetime = 3600)
             $apidata = ! empty($apidata['body']) ? @unserialize($apidata['body']) : array();
 
             $error = '';
-            if (! empty(NV_Http::$error)) {
-                $error = nv_http_get_lang(NV_Http::$error);
+            if (! empty(NukeViet\Http\Http::$error)) {
+                $error = nv_http_get_lang(NukeViet\Http\Http::$error);
             } elseif (! isset($apidata['error']) or ! isset($apidata['data']) or ! isset($apidata['pagination']) or ! is_array($apidata['error']) or ! is_array($apidata['data']) or ! is_array($apidata['pagination']) or (! empty($apidata['error']) and (! isset($apidata['error']['level']) or empty($apidata['error']['message'])))) {
                 $error = $lang_global['error_valid_response'];
             } elseif (! empty($apidata['error']['message'])) {
@@ -762,68 +768,69 @@ function nv_getExtVersion($updatetime = 3600)
             }
 
             $apidata = $apidata['data'];
-            $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<cms>\n";
+        }
 
-            // Xử lý dữ liệu
-            foreach ($array as $row) {
-                if (isset($apidata[$row['id']])) {
-                    $row['remote_version'] = $apidata[$row['id']]['lastest_version'];
-                    $row['remote_release'] = $apidata[$row['id']]['lastest_release'];
-                    $row['updateable'] = $apidata[$row['id']]['updateable'];
+        $content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<cms>\n";
 
-                    if (empty($row['author'])) {
-                        $row['author'] = $apidata[$row['id']]['author'];
-                    }
-                    $row['license'] = $apidata[$row['id']]['license'];
-                    $row['message'] = $apidata[$row['id']]['note'];
-                    $row['link'] = $apidata[$row['id']]['link'];
-                    $row['support'] = $apidata[$row['id']]['support'];
-                    $row['origin'] = true;
+        foreach ($array as $row) {
+            if (isset($apidata[$row['id']])) {
+                $row['remote_version'] = $apidata[$row['id']]['lastest_version'];
+                $row['remote_release'] = $apidata[$row['id']]['lastest_release'];
+                $row['updateable'] = $apidata[$row['id']]['updateable'];
+
+                if (empty($row['author'])) {
+                    $row['author'] = $apidata[$row['id']]['author'];
                 }
 
-                $content .= "\t<extension>\n";
-                $content .= "\t\t<id><![CDATA[" . $row['id'] . "]]></id>\n";
-                $content .= "\t\t<type><![CDATA[" . $row['type'] . "]]></type>\n";
-                $content .= "\t\t<name><![CDATA[" . $row['name'] . "]]></name>\n";
-                $content .= "\t\t<version><![CDATA[" . $row['current_version'] . "]]></version>\n";
-                $content .= "\t\t<date><![CDATA[" . gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT]]></date>\n";
-                $content .= "\t\t<new_version><![CDATA[" . $row['remote_version'] . "]]></new_version>\n";
-                $content .= "\t\t<new_date><![CDATA[" . ($row['remote_release'] ? gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT" : "") . "]]></new_date>\n";
-                $content .= "\t\t<author><![CDATA[" . $row['author'] . "]]></author>\n";
-                $content .= "\t\t<license><![CDATA[" . $row['license'] . "]]></license>\n";
-                $content .= "\t\t<mode><![CDATA[" . $row['mode'] . "]]></mode>\n";
-                $content .= "\t\t<message><![CDATA[" . $row['message'] . "]]></message>\n";
-                $content .= "\t\t<link><![CDATA[" . $row['link'] . "]]></link>\n";
-                $content .= "\t\t<support><![CDATA[" . $row['support'] . "]]></support>\n";
-                $content .= "\t\t<updateable>\n";
+                $row['license'] = $apidata[$row['id']]['license'];
+                $row['message'] = $apidata[$row['id']]['note'];
+                $row['link'] = $apidata[$row['id']]['link'];
+                $row['support'] = $apidata[$row['id']]['support'];
+                $row['origin'] = true;
+            }
 
-                if (! empty($row['updateable'])) {
-                    $content .= "\t\t\t<upds>\n";
+            $content .= "\t<extension>\n";
+            $content .= "\t\t<id><![CDATA[" . $row['id'] . "]]></id>\n";
+            $content .= "\t\t<type><![CDATA[" . $row['type'] . "]]></type>\n";
+            $content .= "\t\t<name><![CDATA[" . $row['name'] . "]]></name>\n";
+            $content .= "\t\t<version><![CDATA[" . $row['current_version'] . "]]></version>\n";
+            $content .= "\t\t<date><![CDATA[" . gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT]]></date>\n";
+            $content .= "\t\t<new_version><![CDATA[" . $row['remote_version'] . "]]></new_version>\n";
+            $content .= "\t\t<new_date><![CDATA[" . ($row['remote_release'] ? gmdate("D, d M Y H:i:s", $row['current_release']) . " GMT" : "") . "]]></new_date>\n";
+            $content .= "\t\t<author><![CDATA[" . $row['author'] . "]]></author>\n";
+            $content .= "\t\t<license><![CDATA[" . $row['license'] . "]]></license>\n";
+            $content .= "\t\t<mode><![CDATA[" . $row['mode'] . "]]></mode>\n";
+            $content .= "\t\t<message><![CDATA[" . $row['message'] . "]]></message>\n";
+            $content .= "\t\t<link><![CDATA[" . $row['link'] . "]]></link>\n";
+            $content .= "\t\t<support><![CDATA[" . $row['support'] . "]]></support>\n";
+            $content .= "\t\t<updateable>\n";
 
-                    foreach ($row['updateable'] as $updateable) {
-                        $content .= "\t\t\t\t<upd>\n";
-                        $content .= "\t\t\t\t\t<upd_fid><![CDATA[" . $updateable['fid'] . "]]></upd_fid>\n";
-                        $content .= "\t\t\t\t\t<upd_old><![CDATA[" . $updateable['old_ver'] . "]]></upd_old>\n";
-                        $content .= "\t\t\t\t\t<upd_new><![CDATA[" . $updateable['new_ver'] . "]]></upd_new>\n";
-                        $content .= "\t\t\t\t</upd>\n";
-                    }
-                    $content .= "\t\t\t</upds>\n";
+            if (! empty($row['updateable'])) {
+                $content .= "\t\t\t<upds>\n";
 
-                    unset($updateable);
+                foreach ($row['updateable'] as $updateable) {
+                    $content .= "\t\t\t\t<upd>\n";
+                    $content .= "\t\t\t\t\t<upd_fid><![CDATA[" . $updateable['fid'] . "]]></upd_fid>\n";
+                    $content .= "\t\t\t\t\t<upd_old><![CDATA[" . $updateable['old_ver'] . "]]></upd_old>\n";
+                    $content .= "\t\t\t\t\t<upd_new><![CDATA[" . $updateable['new_ver'] . "]]></upd_new>\n";
+                    $content .= "\t\t\t\t</upd>\n";
                 }
+                $content .= "\t\t\t</upds>\n";
 
-                $content .= "\t\t</updateable>\n";
-                $content .= "\t\t<origin><![CDATA[" . ($row['origin'] === true ? 'true' : 'false') . "]]></origin>\n";
-                $content .= "\t</extension>\n";
+                unset($updateable);
             }
 
-            $content .= "</cms>";
+            $content .= "\t\t</updateable>\n";
+            $content .= "\t\t<origin><![CDATA[" . ($row['origin'] === true ? 'true' : 'false') . "]]></origin>\n";
+            $content .= "\t</extension>\n";
+        }
 
-            $xmlcontent = simplexml_load_string($content);
+        $content .= "</cms>";
 
-            if ($xmlcontent !== false) {
-                file_put_contents($my_file, $content);
-            }
+        $xmlcontent = simplexml_load_string($content);
+
+        if ($xmlcontent !== false) {
+            file_put_contents($my_file, $content);
         }
     }
 

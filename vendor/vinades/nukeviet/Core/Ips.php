@@ -31,10 +31,10 @@ class Ips
      */
     public function __construct()
     {
-        $this->client_ip = $this->nv_get_clientip();
-        $this->forward_ip = $this->nv_get_forwardip();
-        $this->remote_addr = $this->nv_get_remote_addr();
-        $this->remote_ip = $this->nv_getip();
+        $this->client_ip = trim($this->nv_get_clientip());
+        $this->forward_ip = trim($this->nv_get_forwardip());
+        $this->remote_addr = trim($this->nv_get_remote_addr());
+        $this->remote_ip = trim($this->nv_getip());
     }
 
     /**
@@ -52,7 +52,7 @@ class Ips
             return $_ENV[$key];
         } elseif (@getenv($key)) {
             return @getenv($key);
-        } elseif (function_exists('apache_getenv') && apache_getenv($key, true)) {
+        } elseif (function_exists('apache_getenv') and apache_getenv($key, true)) {
             return apache_getenv($key, true);
         }
         return '';
@@ -183,7 +183,7 @@ class Ips
     public function nv_check_proxy()
     {
         $proxy = 'No';
-        if ($this->client_ip != 'none' || $this->forward_ip != 'none') {
+        if ($this->client_ip != 'none' or $this->forward_ip != 'none') {
             $proxy = 'Lite';
         }
         $host = @getHostByAddr($this->remote_ip);

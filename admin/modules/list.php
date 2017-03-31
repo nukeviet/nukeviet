@@ -22,7 +22,7 @@ $sql = 'SELECT title, basename, is_sys, version FROM ' . $db_config['prefix'] . 
 $result = $db->query($sql);
 
 $is_delCache = false;
-
+$act2 = array();
 while (list($m, $mod_file, $is_sys, $version) = $result->fetch(3)) {
     $new_modules[$m] = array(
         'module_file' => $mod_file,
@@ -30,17 +30,15 @@ while (list($m, $mod_file, $is_sys, $version) = $result->fetch(3)) {
         'version' => $version
     );
 
-    if (! isset($modules_exit[$m])) {
-        $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET act=2 WHERE module_file= :module_file');
-        $sth->bindParam(':module_file', $m, PDO::PARAM_STR);
-        $sth->execute();
-
-        $is_delCache = true;
+    if (! isset($modules_exit[$mod_file])) {
+        $act2[] = $m;
     }
 }
 
-if ($is_delCache) {
-    nv_del_moduleCache('modules');
+if (!empty($act2)) {
+    $act2 = "'" . implode("','",$act2) . "'";
+    $db->query("UPDATE " . NV_MODULES_TABLE . " SET act=2 WHERE title IN (".$act2.")");
+    $is_delCache = true;
 }
 
 // Lay danh sach cac module co trong ngon ngu
@@ -49,8 +47,6 @@ $modules_data = array();
 $iw = 0;
 $sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
 $result = $db->query($sql);
-
-$is_delCache = false;
 
 while ($row = $result->fetch()) {
     ++$iw;
@@ -108,7 +104,7 @@ while ($row = $result->fetch()) {
 $result->closeCursor();
 
 if ($is_delCache) {
-    nv_del_moduleCache('modules');
+    $nv_Cache->delMod('modules');
 }
 
 $contents['caption'] = array( $lang_module['caption_actmod'], $lang_module['caption_deactmod'], $lang_module['caption_badmod'], $lang_module['caption_newmod'] );

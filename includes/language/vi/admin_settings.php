@@ -50,6 +50,7 @@ $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử d�
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
+$lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Cấu hình hiển thị captcha';
 $lang_module['captcha_0'] = 'Không hiển thị';
 $lang_module['captcha_1'] = 'Khi admin đăng nhập';
@@ -61,6 +62,12 @@ $lang_module['captcha_6'] = 'Khi admin đăng nhập hoặc khách đăng ký';
 $lang_module['captcha_7'] = 'Hiển thị trong mọi trường hợp';
 $lang_module['captcha_num'] = 'Số ký tự của captcha';
 $lang_module['captcha_size'] = 'Kích thước của captcha';
+$lang_module['recaptcha_sitekey'] = 'Site key';
+$lang_module['recaptcha_secretkey'] = 'Secret key';
+$lang_module['recaptcha_type'] = 'Kiểu xác nhận';
+$lang_module['recaptcha_type_image'] = 'Hình ảnh (nên chọn)';
+$lang_module['recaptcha_type_audio'] = 'Âm thanh';
+$lang_module['recaptcha_guide'] = 'Nhấp vào đây để lấy thông số Site key và Secret key.';
 
 $lang_module['ftp_config'] = 'Cấu hình FTP';
 $lang_module['smtp_config'] = 'Cấu hình SMTP';
@@ -97,6 +104,7 @@ $lang_module['lang_geo'] = 'Kích hoạt chức năng xác định ngôn ngữ t
 $lang_module['lang_geo_config'] = 'Cấu hình chức năng xác định ngôn ngữ theo quốc gia';
 $lang_module['site_lang'] = 'Ngôn ngữ mặc định';
 $lang_module['site_timezone'] = 'Múi giờ của site';
+$lang_module['current_time'] = 'Giờ hiện tại: %s';
 $lang_module['date_pattern'] = 'Kiểu hiển thị ngày tháng năm';
 $lang_module['time_pattern'] = 'Kiểu hiển thị giờ phút';
 $lang_module['gzip_method'] = 'Bật chế độ gzip';
@@ -208,6 +216,7 @@ $lang_module['note_ssl_modules'] = 'Mỗi ngôn ngữ sẽ có các module khác
 $lang_module['timezoneAuto'] = 'Theo máy tính của khách truy cập';
 $lang_module['timezoneByCountry'] = 'Theo quốc gia của khách truy cập';
 $lang_module['allow_switch_mobi_des'] = 'Cho phép chuyển đổi giao diện mobile, desktop';
+$lang_module['allow_theme_type'] = 'Các loại giao diện được sử dụng';
 $lang_module['ftp_auto_detect_root'] = 'Xác định tự động';
 $lang_module['ftp_error_full'] = 'Hãy nhập đủ các thông số để tự động nhận diện Remote path';
 $lang_module['ftp_error_detect_root'] = 'Không thể tìm thấy thông số nào phù hợp, hãy kiểm tra lại tên đăng nhập và mật khẩu';
@@ -232,3 +241,20 @@ $lang_module['notification_active'] = 'Hiển thị thông báo khi có hoạt �
 $lang_module['notification_autodel'] = 'Tự động xóa thông báo sau thời gian';
 $lang_module['notification_autodel_note'] = 'Điền <strong>0</strong> nếu không muốn tự động xóa';
 $lang_module['notification_day'] = 'ngày';
+
+$lang_module['is_login_blocker'] = 'Kích hoạt chức năng chặn đăng nhập sai nhiều lần';
+$lang_module['login_number_tracking'] = 'Số lần đăng nhập sai tối đa trong khoảng thời gian theo dõi';
+$lang_module['login_time_tracking'] = 'Thời gian theo dõi';
+$lang_module['login_time_ban'] = 'Thời gian bị cấm đăng nhập';
+
+$lang_module['two_step_verification'] = 'Yêu cầu xác thực đăng nhập hai bước tại';
+$lang_module['two_step_verification0'] = 'Không yêu cầu';
+$lang_module['two_step_verification1'] = 'Khu vực quản trị';
+$lang_module['two_step_verification2'] = 'Khu vực ngoài site';
+$lang_module['two_step_verification3'] = 'Tất cả các khu vực';
+
+$lang_module['site_phone'] = 'Số điện thoại của site';
+$lang_module['googleMapsAPI'] = 'Google Maps API key';
+$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Hướng dẫn lấy Google Maps API key</a>';
+
+

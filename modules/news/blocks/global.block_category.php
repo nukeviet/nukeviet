@@ -15,7 +15,7 @@ if (!defined('NV_MAINFILE')) {
 if (!nv_function_exists('nv_news_category')) {
     function nv_block_config_news_category($module, $data_block, $lang_block)
     {
-        global $site_mods;
+        global $nv_Cache, $site_mods;
 
         $html_input = '';
         $html = '<tr>';
@@ -23,7 +23,7 @@ if (!nv_function_exists('nv_news_category')) {
         $html .= '<td><select name="config_catid" class="form-control w200">';
         $html .= '<option value="0"> -- </option>';
         $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $site_mods[$module]['module_data'] . '_cat ORDER BY sort ASC';
-        $list = nv_db_cache($sql, '', $module);
+        $list = $nv_Cache->db($sql, '', $module);
         foreach ($list as $l) {
             $xtitle_i = '';
 
@@ -88,7 +88,7 @@ if (!nv_function_exists('nv_news_category')) {
             $xtpl->assign('TEMPLATE', $block_theme);
             $html = '';
             foreach ($module_array_cat as $cat) {
-                if ($block_config['catid'] == 0 && $cat['parentid'] == 0 || ($block_config['catid'] > 0 && $cat['parentid'] == $block_config['catid'])) {
+                if ($block_config['catid'] == 0 and $cat['parentid'] == 0 or ($block_config['catid'] > 0 and $cat['parentid'] == $block_config['catid'])) {
                     $cat['title0'] = nv_clean60($cat['title'], $title_length);
 
                     $xtpl->assign('CAT', $cat);
@@ -136,7 +136,7 @@ if (!nv_function_exists('nv_news_category')) {
 }
 
 if (defined('NV_SYSTEM')) {
-    global $site_mods, $module_name, $global_array_cat, $module_array_cat;
+    global $site_mods, $module_name, $global_array_cat, $module_array_cat, $nv_Cache;
     $module = $block_config['module'];
     if (isset($site_mods[$module])) {
         if ($module == $module_name) {
@@ -145,10 +145,13 @@ if (defined('NV_SYSTEM')) {
         } else {
             $module_array_cat = array( );
             $sql = "SELECT catid, parentid, title, alias, viewcat, subcatid, numlinks, description, inhome, keywords, groups_view FROM " . NV_PREFIXLANG . "_" . $site_mods[$module]['module_data'] . "_cat ORDER BY sort ASC";
-            $list = nv_db_cache($sql, 'catid', $module);
-            foreach ($list as $l) {
-                $module_array_cat[$l['catid']] = $l;
-                $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+            $list = $nv_Cache->db($sql, 'catid', $module);
+            if(!empty($list))
+            {
+                foreach ($list as $l) {
+                    $module_array_cat[$l['catid']] = $l;
+                    $module_array_cat[$l['catid']]['link'] = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module . "&amp;" . NV_OP_VARIABLE . "=" . $l['alias'];
+                }
             }
         }
         $content = nv_news_category($block_config);

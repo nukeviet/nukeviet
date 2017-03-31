@@ -1,7 +1,7 @@
 <noscript>
     <div class="alert alert-danger">{LANG.nojs}</div>
 </noscript>
-<div id="mobilePage" class="fixed">
+<div id="mobilePage">
     <header class="first-child">
         <div id="header" class="clearfix">
             <div class="logo">

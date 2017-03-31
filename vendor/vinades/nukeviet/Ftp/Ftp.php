@@ -472,13 +472,13 @@ class Ftp
      *
      * @return
      */
-    public function unlink($dir)
+    public function unlink($file)
     {
         if (! $this->check_login()) {
             return false;
         }
 
-        return ftp_delete($this->conn_id, $dir);
+        return ftp_delete($this->conn_id, $file);
     }
 
     /**

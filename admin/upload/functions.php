@@ -84,9 +84,9 @@ function nv_check_allow_upload_dir($dir)
         if ($admin_info['allow_modify_subdirectories'] and ! in_array($dir, $allow_upload_dir)) {
             $level['rename_dir'] = true;
             $level['delete_dir'] = true;
-
-            // Khong doi ten, xoa thu muc upload cua module hoac thu muc co chua thu muc con
-            if (isset($site_mods[$mod_name]) and ! empty($_dir_mod_sub)) {
+            
+            // Khong doi ten, xoa thu muc upload cua module
+            if (isset($site_mods[$mod_name]) and $dir == NV_UPLOADS_DIR.'/'.$mod_name) {
                 unset($level['rename_dir'], $level['delete_dir']);
             }
         }
@@ -115,6 +115,10 @@ function nv_check_allow_upload_dir($dir)
         if (! empty($_dir_mod_sub) and $admin_info['allow_modify_subdirectories']) {
             $level['rename_dir'] = true;
             $level['delete_dir'] = true;
+            // Khong doi ten, xoa thu muc upload cua module hoac thu muc co chua thu muc con
+            if (isset($site_mods[$mod_name]) and ! empty($_dir_mod_sub)) {
+                unset($level['rename_dir'], $level['delete_dir']);
+            }
         }
 
         if (! empty($admin_info['allow_files_type'])) {
@@ -129,10 +133,6 @@ function nv_check_allow_upload_dir($dir)
             $level['crop_file'] = true;
             $level['rotate_file'] = true;
         }
-    }
-
-    if (preg_match('/^([\d]{4})\_([\d]{1,2})$/', $arr_dir[sizeof($arr_dir) - 1])) {
-        unset($level['rename_dir'], $level['delete_dir']);
     }
 
     return $level;
@@ -375,26 +375,28 @@ function nv_filesListRefresh($pathimg)
                     $info = nv_getFileInfo($pathimg, $title);
                     $info['did'] = $did;
                     $info['title'] = $title;
-                    $newalt = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1', $title);
-                    $newalt = str_replace('-', ' ', change_alias($newalt));
+                    $info['sizes'] = $info['size'];
+                    unset($info['size']);
+
                     if (isset($results[$title])) {
                         $info['userid'] = $results[$title]['userid'];
                         $dif = array_diff_assoc($info, $results[$title]);
                         if (! empty($dif)) {
-                            //Cập nhật CSDL file thay đổi
-                            $sth = $db->prepare("REPLACE INTO " . NV_UPLOAD_GLOBALTABLE . "_file
-								(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
-								VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "', :newalt)");
-                            $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
-                            $sth->execute();
+                            // Cập nhật CSDL file thay đổi
+                            $db->query("UPDATE " . NV_UPLOAD_GLOBALTABLE . "_file SET filesize=" . intval($info['filesize']) . ", src='" . $info['src'] . "', srcwidth=" . intval($info['srcwidth']) . ", srcheight=" . intval($info['srcheight']) . ", sizes='" . $info['sizes'] . "', userid=" . $admin_info['userid'] . ", mtime=" . $info['mtime'] . " WHERE did = " . $did . " AND title = " . $db->quote($title));
                         }
                         unset($results[$title]);
                     } else {
                         $info['userid'] = $admin_info['userid'];
+                        $newalt = preg_replace('/(.*)(\.[a-zA-Z0-9]+)$/', '\1', $title);
+                        $newalt = str_replace('-', ' ', change_alias($newalt));
+
                         // Thêm file mới
                         $sth = $db->prepare("INSERT INTO " . NV_UPLOAD_GLOBALTABLE . "_file
 							(name, ext, type, filesize, src, srcwidth, srcheight, sizes, userid, mtime, did, title, alt)
-							VALUES ('" . $info['name'] . "', '" . $info['ext'] . "', '" . $info['type'] . "', " . $info['filesize'] . ", '" . $info['src'] . "', " . $info['srcwidth'] . ", " . $info['srcheight'] . ", '" . $info['size'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", '" . $title . "', :newalt)");
+							VALUES (:name, '" . $info['ext'] . "', '" . $info['type'] . "', " . intval($info['filesize']) . ", '" . $info['src'] . "', " . intval($info['srcwidth']) . ", " . intval($info['srcheight']) . ", '" . $info['sizes'] . "', " . $info['userid'] . ", " . $info['mtime'] . ", " . $did . ", :title, :newalt)");
+                        $sth->bindParam(':name', $info['name'], PDO::PARAM_STR);
+                        $sth->bindParam(':title', $title, PDO::PARAM_STR);
                         $sth->bindParam(':newalt', $newalt, PDO::PARAM_STR);
                         $sth->execute();
                     }
@@ -405,7 +407,7 @@ function nv_filesListRefresh($pathimg)
             if (! empty($results)) {
                 // Xóa CSDL file không còn tồn tại
                 foreach ($results as $title => $value) {
-                    $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title='" . $title . "'");
+                    $db->query("DELETE FROM " . NV_UPLOAD_GLOBALTABLE . "_file WHERE did = " . $did . " AND title=" . $db->quote($title));
                 }
             }
             $db->query('UPDATE ' . NV_UPLOAD_GLOBALTABLE . '_dir SET time = ' . NV_CURRENTTIME . ' WHERE did = ' . $did);

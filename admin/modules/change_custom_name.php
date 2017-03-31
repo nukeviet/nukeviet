@@ -36,7 +36,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $sth->bindParam(':func_custom_name', $func_custom_name, PDO::PARAM_STR);
     $sth->execute();
 
-    nv_del_moduleCache('modules');
+    $nv_Cache->delMod('modules');
 
     die('OK|show_funcs|action');
 } else {

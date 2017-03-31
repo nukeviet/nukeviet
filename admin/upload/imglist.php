@@ -18,6 +18,9 @@ $check_allow_upload_dir = nv_check_allow_upload_dir($path);
 
 if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path])) {
     if ($refresh) {
+        if ($sys_info['allowed_set_time_limit']) {
+            set_time_limit(0);
+        }        
         nv_filesListRefresh($path);
     }
 
@@ -27,7 +30,7 @@ if (isset($check_allow_upload_dir['view_dir']) and isset($array_dirname[$path]))
 
     $q = nv_string_to_filename(htmlspecialchars(trim($nv_Request->get_string('q', 'get')), ENT_QUOTES));
 
-    $selectfile = array_filter(array_unique(array_map("basename", explode("|", htmlspecialchars(trim($nv_Request->get_string('imgfile', 'get', '')), ENT_QUOTES)))));
+    $selectfile = array_filter(array_unique(array_map('basename', explode('|', htmlspecialchars(trim($nv_Request->get_string('imgfile', 'get', '')), ENT_QUOTES)))));
 
     $base_url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;path=' . $path . '&amp;type=' . $type . '&amp;order=' . $order;
 

@@ -118,7 +118,7 @@ function unicode_to_utf8($str)
  */
 function nv_str_split($str, $split_len = 1)
 {
-    if (! is_int($split_len) || $split_len < 1) {
+    if (! is_int($split_len) or $split_len < 1) {
         return false;
     }
 
@@ -142,7 +142,7 @@ function nv_str_split($str, $split_len = 1)
  */
 function nv_strspn($str, $mask, $start = null, $length = null)
 {
-    if ($start !== null || $length !== null) {
+    if ($start !== null or $length !== null) {
         $str = nv_substr($str, $start, $length);
     }
 
@@ -276,12 +276,13 @@ function nv_clean60($string, $num = 60, $specialchars = false)
 
     $len = nv_strlen($string);
     if ($num and $num < $len) {
-        if (ord(nv_substr($string, $num, 1)) == 32) {
-            $string = nv_substr($string, 0, $num) . '...';
-        } elseif (strpos($string, ' ') === false) {
+        if (strpos($string, ' ') === false) {
             $string = nv_substr($string, 0, $num);
         } else {
-            $string = nv_clean60($string, $num - 1);
+            while (ord(nv_substr($string, $num, 1)) != 32) {
+                --$num;
+            }
+            $string = nv_substr($string, 0, $num) . '...';
         }
     }
     

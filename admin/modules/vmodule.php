@@ -23,7 +23,7 @@ if ($global_config['idsite']) {
 
 $title = $note = $modfile = $error = '';
 $modules_site = nv_scandir(NV_ROOTDIR . '/modules', $global_config['check_module']);
-if ($nv_Request->get_title('checkss', 'post') == md5(session_id() . 'addmodule')) {
+if ($nv_Request->get_title('checkss', 'post') == NV_CHECK_SESSION) {
     $title = $nv_Request->get_title('title', 'post', '', 1);
     $modfile = $nv_Request->get_title('module_file', 'post', '', 1);
     $note = $nv_Request->get_title('note', 'post', '', 1);
@@ -39,7 +39,7 @@ if ($nv_Request->get_title('checkss', 'post') == md5(session_id() . 'addmodule')
         $module_data = preg_replace('/(\W+)/i', '_', $title);
         if (empty($array_site_cat_module) or in_array($modfile, $array_site_cat_module)) {
             try {
-                $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, virtual, basename, table_prefix, version, addtime, author, note) VALUES ( \'module\', :title, 0, 0, :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)');
+                $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_setup_extensions (type, title, is_sys, is_virtual, basename, table_prefix, version, addtime, author, note) VALUES ( \'module\', :title, 0, 0, :basename, :table_prefix, :version, ' . NV_CURRENTTIME . ', :author, :note)');
                 $sth->bindParam(':title', $title, PDO::PARAM_STR);
                 $sth->bindParam(':basename', $modfile, PDO::PARAM_STR);
                 $sth->bindParam(':table_prefix', $module_data, PDO::PARAM_STR);
@@ -48,7 +48,7 @@ if ($nv_Request->get_title('checkss', 'post') == md5(session_id() . 'addmodule')
                 $sth->bindParam(':note', $note, PDO::PARAM_STR);
                 if ($sth->execute()) {
                     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['vmodule_add'] . ' ' . $module_data, '', $admin_info['userid']);
-                    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup&setmodule=' . $title . '&checkss=' . md5($title . session_id() . $global_config['sitekey']));
+                    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=setup&setmodule=' . $title . '&checkss=' . md5($title . NV_CHECK_SESSION));
                     die();
                 }
             } catch (PDOException $e) {
@@ -57,7 +57,6 @@ if ($nv_Request->get_title('checkss', 'post') == md5(session_id() . 'addmodule')
         }
     }
 }
-
 
 $page_title = $lang_module['vmodule_add'];
 
@@ -73,12 +72,11 @@ $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
 $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
-$xtpl->assign('CHECKSS', md5(session_id() . 'addmodule'));
 
 $xtpl->assign('TITLE', $title);
 $xtpl->assign('NOTE', $note);
 
-$sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_extensions WHERE virtual=1 AND type=\'module\' ORDER BY addtime ASC';
+$sql = 'SELECT title FROM ' . $db_config['prefix'] . '_setup_extensions WHERE is_virtual=1 AND type=\'module\' ORDER BY addtime ASC';
 $result = $db->query($sql);
 
 while (list($modfile_i) = $result->fetch(3)) {

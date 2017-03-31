@@ -1,25 +1,29 @@
 <!-- BEGIN: main -->
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 
 <div class="page">
-    <h2 class="margin-bottom-lg margin-top-lg">{LANG.editinfo_pagetitle}</h2>
-    <ul class="nav nav-pills margin-bottom">
-        <li class="{BASIC_ACTIVE}"><a data-toggle="tab" href="#edit_basic">{LANG.edit_basic}</a></li>
-        <li class="{AVATAR_ACTIVE}"><a data-toggle="tab" href="#edit_avatar">{LANG.edit_avatar}</a></li>
-        <!-- BEGIN: edit_username --><li class="{USERNAME_ACTIVE}"><a data-toggle="tab" href="#edit_username">{LANG.edit_login}</a></li><!-- END: edit_username -->
-        <!-- BEGIN: edit_email --><li class="{EMAIL_ACTIVE}"><a data-toggle="tab" href="#edit_email">{LANG.edit_email}</a></li><!-- END: edit_email -->
-        <li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" href="#edit_password">{LANG.edit_password}</a></li>
-        <li class="{QUESTION_ACTIVE}"><a data-toggle="tab" href="#edit_question">{LANG.edit_question}</a></li>
-        <!-- BEGIN: edit_openid --><li class="{OPENID_ACTIVE}"><a data-toggle="tab" href="#edit_openid">{LANG.openid_administrator}</a></li><!-- END: edit_openid -->
-        <!-- BEGIN: edit_others --><li class="{OTHERS_ACTIVE}"><a data-toggle="tab" href="#edit_others">{LANG.edit_others}</a></li><!-- END: edit_others -->
-        <li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" href="#edit_safemode">{LANG.safe_mode}</a></li>
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="dropdown active">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <span class="text">{LANG.editinfo_pagetitle}</span> <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="{BASIC_ACTIVE}"><a data-toggle="tab" href="#edit_basic">{LANG.edit_basic}</a></li>
+                <!-- BEGIN: edit_avatar --><li class="{AVATAR_ACTIVE}"><a data-toggle="tab" href="#edit_avatar">{LANG.edit_avatar}</a></li><!-- END: edit_avatar -->
+                <!-- BEGIN: edit_username --><li class="{USERNAME_ACTIVE}"><a data-toggle="tab" href="#edit_username">{LANG.edit_login}</a></li><!-- END: edit_username -->
+                <!-- BEGIN: edit_email --><li class="{EMAIL_ACTIVE}"><a data-toggle="tab" href="#edit_email">{LANG.edit_email}</a></li><!-- END: edit_email -->
+                <!-- BEGIN: edit_password --><li class="{PASSWORD_ACTIVE}"><a data-toggle="tab" href="#edit_password">{LANG.edit_password}</a></li><!-- END: edit_password -->
+                <!-- BEGIN: edit_question --><li class="{QUESTION_ACTIVE}"><a data-toggle="tab" href="#edit_question">{LANG.edit_question}</a></li><!-- END: edit_question -->
+                <!-- BEGIN: edit_openid --><li class="{OPENID_ACTIVE}"><a data-toggle="tab" href="#edit_openid">{LANG.openid_administrator}</a></li><!-- END: edit_openid -->
+                <!-- BEGIN: edit_group --><li class="{GROUP_ACTIVE}"><a data-toggle="tab" href="#edit_group">{LANG.group}</a></li><!-- END: edit_group -->
+                <!-- BEGIN: edit_others --><li class="{OTHERS_ACTIVE}"><a data-toggle="tab" href="#edit_others">{LANG.edit_others}</a></li><!-- END: edit_others -->
+                <!-- BEGIN: edit_safemode --><li class="{SAFEMODE_ACTIVE}"><a data-toggle="tab" href="#edit_safemode">{LANG.safe_mode}</a></li><!-- END: edit_safemode -->
+            </ul>
+        </li>
     </ul>
-
+    
     <div class="tab-content margin-bottom-lg">
 
         <div id="edit_basic" class="tab-pane fade {TAB_BASIC_ACTIVE}">
@@ -102,6 +106,7 @@
             </div>
         </div>
         
+        <!-- BEGIN: tab_edit_avatar -->
         <div id="edit_avatar" class="tab-pane fade {TAB_AVATAR_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -115,6 +120,7 @@
                 </div>
             </div>
         </div>
+        <!-- END: tab_edit_avatar -->
         
         <!-- BEGIN: tab_edit_username -->
         <div id="edit_username" class="tab-pane fade {TAB_USERNAME_ACTIVE}">
@@ -231,6 +237,8 @@
             </div>
         </div>
         <!-- END: tab_edit_email -->
+        
+        <!-- BEGIN: tab_edit_password -->
         <div id="edit_password" class="tab-pane fade {TAB_PASSWORD_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -275,7 +283,9 @@
                 </div>
             </div>
         </div>
+        <!-- END: tab_edit_password -->
         
+        <!-- BEGIN: tab_edit_question -->
         <div id="edit_question" class="tab-pane fade {TAB_QUESTION_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -333,6 +343,7 @@
                 </div>
             </div>
         </div>
+        <!-- END: tab_edit_question -->
         
         <!-- BEGIN: tab_edit_openid -->
         <div id="edit_openid" class="tab-pane fade {TAB_OPENID_ACTIVE}">
@@ -394,7 +405,67 @@
             </div>
         </div>
         <!-- END: tab_edit_openid -->
-        
+
+        <!-- BEGIN: tab_edit_group -->
+        <div id="edit_group" class="tab-pane fade {TAB_GROUP_ACTIVE}">
+            <form action="{EDITINFO_FORM}/group" method="post" role="form" class="form-horizontal" onsubmit="return reg_validForm(this);" autocomplete="off" novalidate>
+                <div class="nv-info margin-bottom" data-default="" style="display:none"></div>
+
+                <div class="form-detail">
+                    <table class="table table-bordered table-striped table-hover">
+                        <colgroup>
+                            <col width="20"/>
+                            <col width="240" />
+                            <col />
+                            <col width="100"/>
+                            <col width="120"/>
+                        </colgroup>
+                        <thead>
+                            <tr class="bg-lavender">
+                                <td>
+                                    <!-- BEGIN: checkAll -->
+                                    <input type="checkbox" class="checkAll" onclick="checkAll(this.form);"{CHECK_ALL_CHECKED} />
+                                    <!-- END: checkAll -->
+                                </td>
+                                <td class="text-uppercase">{LANG.group_name}</td>
+                                <td class="text-uppercase">{LANG.group_description}</td>
+                                <td class="text-uppercase text-center">{LANG.group_userr}</td>
+                                <td class="text-uppercase"></td>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <input type="hidden" name="checkss" value="{DATA.checkss}" />
+                                    <input id="submit" type="submit" class="btn btn-primary" value="{LANG.group_reg}" />
+                                </td>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <!-- BEGIN: group_list -->
+                            <tr>
+                                <th class="text-center">
+                                    <input name="in_groups[]" type="checkbox" value="{GROUP_LIST.group_id}" class="checkSingle" onclick="checkSingle(this.form);"{GROUP_LIST.checked} <!-- BEGIN: is_disable_checkbox -->disabled="disabled"<!-- END: is_disable_checkbox --> />
+                                </th>
+                                <td>
+                                    <strong>{GROUP_LIST.title}</strong>
+                                    <em class="show text-success">{GROUP_LIST.group_type}</em>
+                                    <!-- BEGIN: is_leader -->
+                                    <span class="text-danger"><em class="fa fa-users">&nbsp;</em><a href="{URL_IS_LEADER}" title="">{LANG.group_manage}</a></span>
+                                    <!-- END: is_leader -->
+                                </td>
+                                <td>{GROUP_LIST.description}</td>
+                                <td class="text-center">{GROUP_LIST.numbers}</td>
+                                <td class="text-center">{GROUP_LIST.status}</td>
+                            </tr>
+                            <!-- END: group_list -->
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <!-- END: tab_edit_group -->
+
         <!-- BEGIN: tab_edit_others -->
         <div id="edit_others" class="tab-pane fade {TAB_OTHERS_ACTIVE}">
             <div class="page panel panel-default">
@@ -532,6 +603,7 @@
         </div>
         <!-- END: tab_edit_others -->
         
+        <!-- BEGIN: tab_edit_safemode -->
         <div id="edit_safemode" class="tab-pane fade {TAB_SAFEMODE_ACTIVE}">
             <div class="page panel panel-default">
                 <div class="panel-body bg-lavender">
@@ -581,6 +653,7 @@
                 </div>
             </div>
         </div>
+        <!-- END: tab_edit_safemode -->
     </div>
     
     <ul class="nav navbar-nav">

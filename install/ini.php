@@ -12,14 +12,11 @@ if (! defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (headers_sent() || connection_status() != 0 || connection_aborted()) {
+if (headers_sent() or connection_status() != 0 or connection_aborted()) {
     trigger_error('Warning: Headers already sent', E_USER_WARNING);
 }
 
 if ($sys_info['ini_set_support']) {
-    ini_set('magic_quotes_runtime', 'Off');
-    ini_set('magic_quotes_sybase', 'Off');
-    //ini_set( 'session.save_handler', 'files' );
     ini_set('session.use_trans_sid', 0);
     ini_set('session.auto_start', 0);
     ini_set('session.use_cookies', 1);
@@ -45,17 +42,17 @@ if ($sys_info['ini_set_support']) {
     ini_set('auto_detect_line_endings', 0);
 }
 
-$sys_info['safe_mode'] = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
-$sys_info['php_required'] = '5.4.0';
+$sys_info['php_required'] = '5.5.0';
 $sys_info['opendir_support'] = (function_exists('opendir') and ! in_array('opendir', $sys_info['disable_functions'])) ? 1 : 0;
 $sys_info['gd_support'] = (extension_loaded('gd')) ? 1 : 0;
+$sys_info['xml_support'] = (extension_loaded('xml')) ? 1 : 0;
 $sys_info['fileuploads_support'] = (ini_get('file_uploads')) ? 1 : 0;
 $sys_info['zlib_support'] = (extension_loaded('zlib')) ? 1 : 0;
 $sys_info['session_support'] = (extension_loaded('session')) ? 1 : 0;
 $sys_info['mb_support'] = (extension_loaded('mbstring')) ? 1 : 0;
 $sys_info['iconv_support'] = (extension_loaded('iconv')) ? 1 : 0;
 $sys_info['curl_support'] = (extension_loaded('curl') and function_exists('curl_init') and ! in_array('curl_init', $sys_info['disable_functions'])) ? 1 : 0;
-$sys_info['allowed_set_time_limit'] = (! $sys_info['safe_mode'] and function_exists('set_time_limit') and ! in_array('set_time_limit', $sys_info['disable_functions'])) ? 1 : 0;
+$sys_info['allowed_set_time_limit'] = (function_exists('set_time_limit') and ! in_array('set_time_limit', $sys_info['disable_functions'])) ? 1 : 0;
 
 $sys_info['os'] = strtoupper((function_exists('php_uname') and ! in_array('php_uname', $sys_info['disable_functions']) and php_uname('s') != '') ? php_uname('s') : PHP_OS);
 $sys_info['ftp_support'] = (function_exists('ftp_connect') and ! in_array('ftp_connect', $sys_info['disable_functions']) and function_exists('ftp_chmod') and ! in_array('ftp_chmod', $sys_info['disable_functions']) and function_exists('ftp_mkdir') and ! in_array('ftp_mkdir', $sys_info['disable_functions']) and function_exists('ftp_chdir') and ! in_array('ftp_chdir', $sys_info['disable_functions']) and function_exists('ftp_nlist') and ! in_array('ftp_nlist', $sys_info['disable_functions'])) ? 1 : 0;
@@ -73,7 +70,7 @@ if (function_exists('apache_get_modules')) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';
     }
 } elseif (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') !== false) {
-    if (isset($_SERVER['IIS_UrlRewriteModule']) && (php_sapi_name() == 'cgi-fcgi') && class_exists('DOMDocument')) {
+    if (isset($_SERVER['IIS_UrlRewriteModule']) and (php_sapi_name() == 'cgi-fcgi') and class_exists('DOMDocument')) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_iis';
     } elseif (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
         $sys_info['supports_rewrite'] = 'rewrite_mode_apache';

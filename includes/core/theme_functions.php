@@ -91,9 +91,11 @@ function nv_error_info()
  * @param string $site_title
  * @return
  */
-function nv_info_die($page_title = '', $info_title, $info_content, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
+function nv_info_die($page_title = '', $info_title, $info_content, $error_code = 200, $admin_link = NV_BASE_ADMINURL, $admin_title = '', $site_link = NV_BASE_SITEURL, $site_title = '')
 {
     global $lang_global, $global_config;
+
+	http_response_code($error_code); // only (PHP 5 >= 5.4.0, PHP 7)
 
     if (empty($page_title)) {
         $page_title = $global_config['site_description'];
@@ -130,6 +132,12 @@ function nv_info_die($page_title = '', $info_title, $info_content, $admin_link =
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_ASSETS_DIR', NV_ASSETS_DIR);
     $xtpl->assign('SITE_NAME', $global_config['site_name']);
+    
+    $site_favicon = NV_BASE_SITEURL . 'favicon.ico';
+    if (! empty($global_config['site_favicon']) and file_exists(NV_ROOTDIR . '/' . $global_config['site_favicon'])) {
+        $site_favicon = NV_BASE_SITEURL . $global_config['site_favicon'];
+    }
+    $xtpl->assign('SITE_FAVICON', $site_favicon);
 
     if (isset($size[1])) {
         if ($size[0] > 490) {
@@ -210,10 +218,10 @@ function nv_xmlOutput($content, $lastModified)
         $encoding = strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') ? 'gzip' : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate') ? 'deflate' : 'none');
 
         if ($encoding != 'none') {
-            if (! strstr($_SERVER['HTTP_USER_AGENT'], 'Opera') && preg_match('/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
+            if (! strstr($_SERVER['HTTP_USER_AGENT'], 'Opera') and preg_match('/^Mozilla\/4\.0 \(compatible; MSIE ([0-9]\.[0-9])/i', $_SERVER['HTTP_USER_AGENT'], $matches)) {
                 $version = floatval($matches[1]);
 
-                if ($version < 6 || ($version == 6 && ! strstr($_SERVER['HTTP_USER_AGENT'], 'EV1'))) {
+                if ($version < 6 or ($version == 6 and ! strstr($_SERVER['HTTP_USER_AGENT'], 'EV1'))) {
                     $encoding = 'none';
                 }
             }
@@ -223,6 +231,7 @@ function nv_xmlOutput($content, $lastModified)
     if ($encoding != 'none') {
         $content = gzencode($content, 6, $encoding == 'gzip' ? FORCE_GZIP : FORCE_DEFLATE);
         header('Content-Encoding: ' . $encoding);
+        header('Content-Length: ' . strlen($content));
         header('Vary: Accept-Encoding');
     }
 
@@ -232,42 +241,52 @@ function nv_xmlOutput($content, $lastModified)
 
 /**
  * nv_rss_generate()
- *
+ * 
  * @param mixed $channel
  * @param mixed $items
+ * @param string $timemode
  * @return void
  */
-function nv_rss_generate($channel, $items)
+function nv_rss_generate($channel, $items, $timemode = 'GMT')
 {
     global $db, $global_config, $client_info;
 
-    $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/themes/default/layout/');
-    $xtpl->assign('CSSPATH', NV_BASE_SITEURL . 'themes/default/css/rss.xsl');
+    $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
     //Chi co tac dung voi IE6 va Chrome
+    $xtpl->assign('CSSPATH', NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/rss.xsl');
+    $xtpl->assign('CHARSET', $global_config['site_charset']);
+    $xtpl->assign('SITELANG', $global_config['site_lang']);
 
+    $channel['generator'] = 'NukeViet v4.0';
     $channel['title'] = nv_htmlspecialchars($channel['title']);
     $channel['atomlink'] = str_replace('&', '&amp;', $client_info['selfurl']);
     $channel['lang'] = $global_config['site_lang'];
     $channel['copyright'] = $global_config['site_name'];
-    $channel['docs'] = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss', true);
-    $channel['generator'] = 'Nukeviet Version 4';
+
+    $channel['docs'] = nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=rss', true);
+    if (strpos($channel['docs'], NV_MY_DOMAIN) !== 0) {
+        $channel['docs'] = NV_MY_DOMAIN . $channel['docs'];
+    }
 
     if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['link'], $matches)) {
-        $channel['link'] = $matches[1];
-    } elseif (preg_match('/^' . nv_preg_quote(NV_BASE_SITEURL) . '(.+)$/', $channel['link'], $matches)) {
-        $channel['link'] = $matches[1];
+        $channel['link'] = NV_BASE_SITEURL . $matches[1];
     }
-    $channel['link'] = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . $channel['link'], true);
+    $channel['link'] = nv_url_rewrite($channel['link'], true);
+    if (strpos($channel['link'], NV_MY_DOMAIN) !== 0) {
+        $channel['link'] = NV_MY_DOMAIN . $channel['link'];
+    }
 
     if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $channel['atomlink'], $matches)) {
-        $channel['atomlink'] = $matches[1];
-    } elseif (preg_match('/^' . nv_preg_quote(NV_BASE_SITEURL) . '(.+)$/', $channel['atomlink'], $matches)) {
-        $channel['atomlink'] = $matches[1];
+        $channel['atomlink'] = NV_BASE_SITEURL . $matches[1];
+    }
+    $channel['atomlink'] = nv_url_rewrite($channel['atomlink'], true);
+    if (strpos($channel['atomlink'], NV_MY_DOMAIN) !== 0) {
+        $channel['atomlink'] = NV_MY_DOMAIN . $channel['atomlink'];
     }
 
-    $channel['atomlink'] = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . $channel['atomlink'], true);
     $channel['pubDate'] = 0;
-
+    $channel['modified'] = 0;
+    
     if (! empty($items)) {
         foreach ($items as $item) {
             if (! empty($item['title']) and ! empty($item['link'])) {
@@ -276,24 +295,64 @@ function nv_rss_generate($channel, $items)
                 if (isset($item['pubdate']) and ! empty($item['pubdate'])) {
                     $item['pubdate'] = intval($item['pubdate']);
                     $channel['pubDate'] = max($channel['pubDate'], $item['pubdate']);
-                    $item['pubdate'] = gmdate('D, j M Y H:m:s', $item['pubdate']) . ' GMT';
+                    if ($timemode == 'ISO8601') {
+                        $item['pubdate'] = date('c', $item['pubdate']);
+                    } else {
+                        $item['pubdate'] = gmdate('D, j M Y H:m:s', $item['pubdate']) . ' GMT';
+                    }
+                }
+                if (!empty($item['modifydate'])) {
+                    $channel['modified'] = max($channel['modified'], $item['modifydate']);
                 }
 
                 if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $item['link'], $matches)) {
-                    $item['link'] = $matches[1];
-                } elseif (preg_match('/^' . nv_preg_quote(NV_BASE_SITEURL) . '(.+)$/', $item['link'], $matches)) {
-                    $item['link'] = $matches[1];
+                    $item['link'] = NV_BASE_SITEURL . $matches[1];
                 }
-                $item['link'] = NV_MY_DOMAIN . nv_url_rewrite(NV_BASE_SITEURL . $item['link'], true);
+                $item['link'] = nv_url_rewrite($item['link'], true);
+                if (strpos($item['link'], NV_MY_DOMAIN) !== 0) {
+                    $item['link'] = NV_MY_DOMAIN . $item['link'];
+                }
 
                 $xtpl->assign('ITEM', $item);
 
                 if (isset($item['guid']) and ! empty($item['guid'])) {
                     $xtpl->parse('main.item.guid');
                 }
-
                 if (isset($item['pubdate']) and ! empty($item['pubdate'])) {
                     $xtpl->parse('main.item.pubdate');
+                }
+                if (isset($item['author']) and ! empty($item['author'])) {
+                    $xtpl->parse('main.item.author');
+                }
+                if (isset($item['content']) and ! empty($item['content'])) {
+                    if (!empty($item['content']['image'])) {
+                        $xtpl->parse('main.item.content.image');
+                    }
+                    if (!empty($item['content']['opkicker'])) {
+                        $xtpl->parse('main.item.content.opkicker');
+                    }
+                    if (!empty($item['content']['pubdate'])) {
+                        if ($timemode == 'ISO8601') {
+                            $published = date('c', $item['content']['pubdate']);
+                        } else {
+                            $published = gmdate('D, j M Y H:m:s', $item['content']['pubdate']) . ' GMT';
+                        }
+                        $xtpl->assign('PUBLISHED', $published);
+                        $xtpl->assign('PUBLISHED_DISPLAY', nv_date('H:i: d/m/Y', $item['content']['pubdate']));
+                        $xtpl->parse('main.item.content.pubdate');
+                    }
+                    if (!empty($item['content']['modifydate'])) {
+                        if ($timemode == 'ISO8601') {
+                            $modified = date('c', $item['content']['modifydate']);
+                        } else {
+                            $modified = gmdate('D, j M Y H:m:s', $item['content']['modifydate']) . ' GMT';
+                        }
+                        $xtpl->assign('MODIFIED', $modified);
+                        $xtpl->assign('MODIFIED_DISPLAY', nv_date('H:i: d/m/Y', $item['content']['modifydate']));
+                        $xtpl->parse('main.item.content.modifydate');
+                    }
+                    
+                    $xtpl->parse('main.item.content');
                 }
 
                 $xtpl->parse('main.item');
@@ -305,9 +364,17 @@ function nv_rss_generate($channel, $items)
 
     if (! empty($channel['pubDate'])) {
         $lastModified = $channel['pubDate'];
-        $channel['pubDate'] = gmdate('D, j M Y H:m:s', $channel['pubDate']) . ' GMT';
+        if ($timemode == 'ISO8601') {
+            $channel['pubDate'] = date('c', $channel['pubDate']);
+        } else {
+            $channel['pubDate'] = gmdate('D, j M Y H:m:s', $channel['pubDate']) . ' GMT';
+        }
     }
-
+    
+    if ($channel['modified'] > $lastModified) {
+        $lastModified = $channel['modified'];
+    }
+    
     $xtpl->assign('CHANNEL', $channel);
 
     if (! empty($channel['description'])) {
@@ -327,7 +394,11 @@ function nv_rss_generate($channel, $items)
         $image['height'] = $resSize['height'];
         $image['title'] = $channel['title'];
         $image['link'] = $channel['link'];
-        $image['src'] = NV_MY_DOMAIN . nv_url_rewrite($image['src'], true);
+
+        $image['src'] = nv_url_rewrite($image['src'], true);
+        if (strpos($image['src'], NV_MY_DOMAIN) !== 0) {
+            $image['src'] = NV_MY_DOMAIN . $image['src'];
+        }
 
         $xtpl->assign('IMAGE', $image);
         $xtpl->parse('main.image');
@@ -347,26 +418,18 @@ function nv_rss_generate($channel, $items)
  */
 function nv_xmlSitemap_generate($url)
 {
-    global $global_config;
-
-    if (file_exists(NV_ROOTDIR . 'themes/' . $global_config['site_theme'] . '/css/sitemap.xsl')) {
-        $path_css_sitemap = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/css/sitemap.xsl';
-    } else {
-        $path_css_sitemap = NV_BASE_SITEURL . 'themes/default/css/sitemap.xsl';
-    }
-
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $path_css_sitemap . '"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
-    $xml = new SimpleXMLElement($sitemapHeader);
-
     $lastModified = time() - 86400;
-
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemap.xsl"?><urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>';
+    $xml = new SimpleXMLElement($sitemapHeader);
     if (! empty($url)) {
         foreach ($url as $key => $values) {
-            $publdate = date('c', $values['publtime']);
-
+            $values['link'] = nv_url_rewrite($values['link'], true);
+            if (strpos($values['link'], NV_MY_DOMAIN) !== 0) {
+                $values['link'] = NV_MY_DOMAIN . $values['link'];
+            }
             $row = $xml->addChild('url');
-            $row->addChild('loc', "'" . nv_url_rewrite($values['link'], true) . "'");
-            $row->addChild('lastmod', $publdate);
+            $row->addChild('loc', $values['link']);
+            $row->addChild('lastmod', date('c', $values['publtime']));
             $row->addChild('changefreq', 'daily');
             $row->addChild('priority', '0.8');
 
@@ -378,7 +441,6 @@ function nv_xmlSitemap_generate($url)
 
     $contents = $xml->asXML();
     $contents = nv_url_rewrite($contents);
-    $contents = preg_replace("/(<loc>)\'(.*?)\'(<\/loc>)/", "\\1" . NV_MY_DOMAIN . "\\2\\3", $contents);
 
     nv_xmlOutput($contents, $lastModified);
 }
@@ -392,13 +454,7 @@ function nv_xmlSitemapIndex_generate()
 {
     global $db_config, $db, $global_config, $nv_Request, $sys_info;
 
-    if (file_exists(NV_ROOTDIR . 'themes/' . $global_config['site_theme'] . '/css/sitemapindex.xsl')) {
-        $path_css_sitemap = NV_BASE_SITEURL . 'themes/' . $global_config['site_theme'] . '/css/sitemapindex.xsl';
-    } else {
-        $path_css_sitemap = NV_BASE_SITEURL . 'themes/default/css/sitemapindex.xsl';
-    }
-
-    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . $path_css_sitemap . '"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
+    $sitemapHeader = '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="' . NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/sitemapindex.xsl"?><sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>';
     $xml = new SimpleXMLElement($sitemapHeader);
 
     $lastModified = NV_CURRENTTIME - 86400;
@@ -471,7 +527,7 @@ function nv_css_setproperties($tag, $property_array)
             $css .= $value;
         }
     }
-    ! empty($css) && $css = $tag . '{' . $css . '}';
+    ! empty($css) and $css = $tag . '{' . $css . '}';
     return $css;
 }
 

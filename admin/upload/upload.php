@@ -14,6 +14,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 
 $path = nv_check_path_upload($nv_Request->get_string('path', 'post,get', NV_UPLOADS_DIR));
 $check_allow_upload_dir = nv_check_allow_upload_dir($path);
+$newfilename = change_alias( $nv_Request->get_title( 'newfilename', 'post', '' ) );
 
 $error = '';
 if (! isset($check_allow_upload_dir['upload_file'])) {
@@ -35,7 +36,6 @@ if (! isset($check_allow_upload_dir['upload_file'])) {
         $allow_files_type = array();
     }
 
-    include_once NV_ROOTDIR . '/includes/class/upload.class.php';
     $upload = new NukeViet\Files\Upload($allow_files_type, $global_config['forbid_extensions'], $global_config['forbid_mimes'], NV_UPLOAD_MAX_FILESIZE, NV_MAX_WIDTH, NV_MAX_HEIGHT);
 
     if (isset($_FILES['upload']['tmp_name']) and is_uploaded_file($_FILES['upload']['tmp_name'])) {
@@ -138,6 +138,20 @@ if (! isset($check_allow_upload_dir['upload_file'])) {
                         $createImage->save(NV_ROOTDIR . '/' . $path, $upload_info['basename'], $thumb_config['thumb_quality']);
                     }
                 }
+				//remame with option new filename
+        		if( ! empty( $newfilename ) ){
+        			$i = 1;
+        			$newfilename = $newfilename . '.' . $upload_info['ext'];
+        			$newname2 = $newfilename;
+        			while( file_exists( NV_ROOTDIR . '/' . $path . '/' . $newname2 ) ){
+        				$newname2 = preg_replace( '/(.*)(\.[a-zA-Z0-9]+)$/', '\1_' . $i . '\2', $newfilename );
+        				++$i;
+        			}
+        			$newfilename = $newname2;
+        			if( @rename( NV_ROOTDIR . '/' . $path . '/' . $upload_info['basename'], NV_ROOTDIR . '/' . $path . '/' . $newfilename ) ){
+                        $upload_info['basename'] = $newfilename;
+        			}
+        		}
             }
         }
     }

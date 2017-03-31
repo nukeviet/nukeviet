@@ -27,7 +27,7 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
     $sth->execute();
 
     $global_config['site_theme'] = $selectthemes;
-    nv_delete_all_cache();
+    $nv_Cache->delAll();
     nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_active'] . ' theme: "' . $selectthemes . '"', '', $admin_info['userid']);
 
     echo 'OK_' . $selectthemes;
@@ -47,18 +47,16 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
         for ($i = 0, $count = sizeof($layout); $i < $count; ++$i) {
             $layout_name = ( string )$layout[$i]->name;
 
-            if (in_array($layout_name, $layout_array)) {
-                $layout_funcs = $layout[$i]->xpath('funcs');
+            $layout_funcs = $layout[$i]->xpath('funcs');
 
-                for ($j = 0, $sizeof = sizeof($layout_funcs); $j < $sizeof; ++$j) {
-                    $mo_funcs = ( string )$layout_funcs[$j];
-                    $mo_funcs = explode(':', $mo_funcs);
-                    $m = $mo_funcs[0];
-                    $arr_f = explode(',', $mo_funcs[1]);
+            for ($j = 0, $sizeof = sizeof($layout_funcs); $j < $sizeof; ++$j) {
+                $mo_funcs = ( string )$layout_funcs[$j];
+                $mo_funcs = explode(':', $mo_funcs);
+                $m = $mo_funcs[0];
+                $arr_f = explode(',', $mo_funcs[1]);
 
-                    foreach ($arr_f as $f) {
-                        $array_layout_func_default[$m][$f] = $layout_name;
-                    }
+                foreach ($arr_f as $f) {
+                    $array_layout_func_default[$m][$f] = $layout_name;
                 }
             }
         }
@@ -88,6 +86,14 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
         $blocks = $xml->xpath('setblocks/block');
         for ($i = 0, $count = sizeof($blocks); $i < $count; ++$i) {
             $row = (array)$blocks[$i];
+            
+            if (!isset($row['link'])) {
+                $row['link'] = '';
+            }
+            if (!isset($row['module'])) {
+                $row['module'] = 'theme';
+            }
+            
             $file_name = $row['file_name'];
 
             if ($row['module'] == 'theme' and preg_match($global_config['check_block_theme'], $file_name, $matches)) {
@@ -95,8 +101,8 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
                     continue;
                 }
             } elseif (isset($site_mods[$row['module']]) and preg_match($global_config['check_block_module'], $file_name, $matches)) {
-                $mod_file = $site_mods[$module]['module_file'];
-                if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name)) {
+                $mod_file = $site_mods[$row['module']]['module_file'];
+                if (! file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/blocks/' . $file_name)) {
                     continue;
                 }
             } else {
@@ -107,8 +113,9 @@ if (preg_match($global_config['check_theme'], $selectthemes) and $sth->fetchColu
             $sth->bindParam(':theme', $selectthemes, PDO::PARAM_STR);
             $sth->bindParam(':position', $row['position'], PDO::PARAM_STR);
             $sth->execute();
+            
             $row['weight'] = intval($sth->fetchColumn()) + 1;
-
+            
             $row['exp_time'] = 0;
             $row['active'] = 1;
             $row['groups_view'] = '6';

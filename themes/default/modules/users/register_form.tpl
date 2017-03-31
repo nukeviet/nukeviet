@@ -15,7 +15,7 @@
         
         <div class="form-group">
             <div>
-                <input type="text" class="required form-control" placeholder="{LANG.account}" value="" name="username" maxlength="{NICK_MAXLENGTH}" data-pattern="/^(.){{NICK_MINLENGTH},{NICK_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.username_empty}">
+                <input type="text" class="required form-control" placeholder="{LANG.account}" value="" name="username" maxlength="{NICK_MAXLENGTH}" data-pattern="/^(.){{NICK_MINLENGTH},{NICK_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{USERNAME_RULE}">
             </div>
         </div>
        
@@ -27,7 +27,7 @@
     
         <div class="form-group">
             <div>
-                <input type="password" class="password required form-control" placeholder="{LANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.password_empty}">
+                <input type="password" class="password required form-control" placeholder="{LANG.password}" value="" name="password" maxlength="{PASS_MAXLENGTH}" data-pattern="/^(.){{PASS_MINLENGTH},{PASS_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{PASSWORD_RULE}">
             </div>
         </div>
     
@@ -158,7 +158,17 @@
     	<!-- END: loop -->
     	<!-- END: field -->
      
-    	<!-- BEGIN:reg_captcha -->
+    	<!-- BEGIN: agreecheck -->
+        <div>
+            <div>
+                <div class="form-group text-center check-box required" data-mess="">
+                    <input type="checkbox" name="agreecheck" value="1" class="fix-box" onclick="validErrorHidden(this,3);"/>{LANG.accept2} <a onclick="usageTermsShow('{LANG.usage_terms}');" href="javascript:void(0);"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
+                </div>
+            </div>
+        </div>
+        <!-- END: agreecheck -->
+    	
+        <!-- BEGIN: reg_captcha -->
         <div class="form-group">
             <div class="middle text-center clearfix">
                 <img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" />
@@ -167,13 +177,21 @@
             </div>
         </div>
     	<!-- END: reg_captcha -->
-        <div>
-            <div>
-                <div class="form-group text-center check-box required" data-mess="">
-                    <input type="checkbox" name="agreecheck" value="1" class="fix-box" onclick="validErrorHidden(this,3);"/>{LANG.accept2} <a onclick="usageTermsShow('{LANG.usage_terms}');" href="javascript:void(0);"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
-                </div>
+        <!-- BEGIN: reg_recaptcha -->
+        <div class="form-group">
+            <div class="middle text-center clearfix">
+                <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div>
+                <script type="text/javascript">
+                nv_recaptcha_elements.push({
+                    id: "{RECAPTCHA_ELEMENT}",
+                    btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent()),
+                    pnum: 4,
+                    btnselector: '[type="submit"]'
+                })
+                </script>
             </div>
         </div>
+        <!-- END: reg_recaptcha -->
     	<div class="text-center margin-bottom-lg">
             <input type="hidden" name="checkss" value="{CHECKSS}" />
             <!-- BEGIN: redirect --><input name="nv_redirect" value="{REDIRECT}" type="hidden" /><!-- END: redirect -->

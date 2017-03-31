@@ -1,24 +1,20 @@
 <?php
-
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
-
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
-
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
-
 $lang_module['add_client'] = 'Ajouter un client';
 $lang_module['edit_client'] = 'Modifier les coordonnées du client';
 $lang_module['full_name_empty'] = 'Le nom du client n\'a pas été déclaré';
@@ -26,6 +22,8 @@ $lang_module['website_incorrect'] = 'Site web incorrect';
 $lang_module['yim_incorrect'] = 'Mauvais YIM';
 $lang_module['add_client_info'] = 'Remplissez tous les champs ci-dessous pour créer un nouveau compte de client';
 $lang_module['edit_client_info'] = 'Les champs avec * sont obligatoirement déclarés';
+$lang_module['random_password'] = 'Créer le mot de passe aléatoirement';
+$lang_module['show_password'] = 'Afficher le mot de passe';
 $lang_module['login'] = 'Identifiant';
 $lang_module['full_name'] = 'Nom complet';
 $lang_module['email'] = 'E-mail';
@@ -44,6 +42,7 @@ $lang_module['client_list'] = 'Clients';
 $lang_module['client_list2'] = 'Liste des clients';
 $lang_module['reg_time'] = 'Date d\'inscription';
 $lang_module['is_act'] = 'Activer';
+$lang_module['require_image'] = 'Besoin d\'image';
 $lang_module['act0'] = 'En suspens';
 $lang_module['act1'] = 'Actif';
 $lang_module['act2'] = 'Expiré';
@@ -91,6 +90,7 @@ $lang_module['exp_date'] = 'Terminer';
 $lang_module['edit_banner'] = 'Modifier';
 $lang_module['edit_banner_info'] = 'Les champs avec * sont obligatoirement déclarés';
 $lang_module['file_name'] = 'Image';
+$lang_module['banners_list0'] = 'Liste des publicités';
 $lang_module['banners_list1'] = 'Liste des publicités actives';
 $lang_module['banners_list2'] = 'Liste des publicités expirées';
 $lang_module['banners_list3'] = 'Liste des publicités suspens';

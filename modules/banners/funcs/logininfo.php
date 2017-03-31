@@ -17,11 +17,11 @@ if (defined('NV_IS_BANNER_CLIENT')) {
 }
 
 if ($nv_Request->get_int('save', 'post') == '1') {
-    $login = strip_tags($nv_Request->get_string('login', 'post', ''));
-    $password = strip_tags($nv_Request->get_string('password', 'post', ''));
+    $login = $nv_Request->get_title('login', 'post', '');
+    $password = $nv_Request->get_title('password', 'post', '');
 
     if ($global_config['gfx_chk']) {
-        $seccode = strip_tags($nv_Request->get_string('seccode', 'post', ''));
+        $seccode = $nv_Request->get_title('seccode', 'post', '');
     }
 
     $check_login = nv_check_valid_login($login, NV_UNICKMAX, NV_UNICKMIN);
@@ -41,7 +41,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         if (empty($row)) {
             die('action');
         } else {
-            if (! $crypt->validate_password($password, $row['pass'])) {
+            if (!$crypt->validate_password($password, $row['pass'])) {
                 die('action');
             } else {
                 $checknum = md5(nv_genpass(10));
@@ -93,7 +93,8 @@ $contents['captcha_refresh'] = $lang_global['captcharefresh'];
 $contents['captcha_refr_src'] = NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png';
 $contents['submit'] = $lang_global['loginsubmit'];
 $contents['sm_button_name'] = 'sm_button';
-$contents['sm_button_onclick'] = "nv_cl_login_submit(" . NV_UNICKMAX . ", " . NV_UNICKMIN . ", " . NV_UPASSMAX . ", " . NV_UPASSMIN . ", " . NV_GFX_NUM . ", " . $global_config['gfx_chk'] . ",'lg_iavim','pw_iavim','seccode_iavim','sm_button');";
+$captcha_num = ($global_config['captcha_type'] == 2 ? -1 : NV_GFX_NUM);
+$contents['sm_button_onclick'] = "nv_cl_login_submit(" . NV_UNICKMAX . ", " . NV_UNICKMIN . ", " . NV_UPASSMAX . ", " . NV_UPASSMIN . ", " . $captcha_num . ", " . $global_config['gfx_chk'] . ",'lg_iavim','pw_iavim','seccode_iavim','sm_button');";
 
 $contents = logininfo_theme($contents);
 

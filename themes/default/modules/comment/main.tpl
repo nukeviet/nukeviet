@@ -1,11 +1,7 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: header -->
-<!-- BEGIN: jsfile -->
-<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE}/js/comment.js"></script>
-<!-- END: jsfile -->
-<!-- BEGIN: cssfile -->
-<link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE}/css/comment.css" type="text/css" />
-<!-- END: cssfile -->
+<script type="text/javascript" src="{NV_BASE_SITEURL}themes/{TEMPLATE_JS}/js/comment.js"></script>
+<link rel="StyleSheet" href="{NV_BASE_SITEURL}themes/{TEMPLATE_CSS}/css/comment.css" type="text/css" />
 <!-- END: header -->
 
 <div id="idcomment" class="nv-fullbg">
@@ -56,8 +52,8 @@
 			</div>
 			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
-				<label class="col-xs-6">{LANG.comment_seccode}</label>
-				<div class="col-xs-8">
+				<label class="col-xs-6 hidden-xs">{LANG.comment_seccode}</label>
+				<div class="col-xs-14 col-sm-8">
 					<img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
 					&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode_iavim');">&nbsp;</em>
 				</div>
@@ -66,9 +62,20 @@
 				</div>
 			</div>
 			<!-- END: captcha -->
+            <!-- BEGIN: recaptcha -->
+            <div class="form-group clearfix">
+                <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                <script type="text/javascript">
+                nv_recaptcha_elements.push({
+                    id: "{RECAPTCHA_ELEMENT}",
+                    btn: $("#buttoncontent", $('#{RECAPTCHA_ELEMENT}').parent().parent().parent())
+                })
+                </script>
+            </div>
+            <!-- END: recaptcha -->
 			<div class="form-group text-center">
 				<input id="reset-cm" type="button" value="{GLANG.reset}" class="btn btn-default" />
-				<input id="buttoncontent" type="button" value="{LANG.comment_submit}" onclick="sendcommment('{MODULE_COMM}', '{MODULE_DATA}_commentcontent', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
+				<input id="buttoncontent" type="button" value="{LANG.comment_submit}" onclick="sendcommment(this, '{MODULE_COMM}', '{MODULE_DATA}_commentcontent', '{AREA_COMM}', '{ID_COMM}', '{ALLOWED_COMM}', '{CHECKSS_COMM}', {GFX_NUM});" class="btn btn-primary" />
 			</div>
 		</form>
 		<script type="text/javascript">

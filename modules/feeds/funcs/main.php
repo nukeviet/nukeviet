@@ -19,7 +19,7 @@ if (! defined('NV_IS_MOD_RSS')) {
  */
 function nv_get_rss_link()
 {
-    global $db, $module_data, $global_config, $site_mods;
+    global $nv_Cache, $db, $module_data, $global_config, $site_mods;
     $contentrss = '';
 
     foreach ($site_mods as $mod_name => $mod_info) {
@@ -31,7 +31,7 @@ function nv_get_rss_link()
             if (file_exists(NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php')) {
                 $rssarray = array();
                 include NV_ROOTDIR . '/modules/' . $mod_file . '/rssdata.php' ;
-                
+
                 $contentrss .= "<ul>";
                 foreach ($rssarray as $key => $value) {
                     $parentid = (isset($value['parentid'])) ? $value['parentid'] : 0;
@@ -81,7 +81,7 @@ function nv_get_sub_rss_link($rssarray, $id)
 $page_title = $module_info['custom_title'];
 
 $array = '';
-$content_file = NV_ROOTDIR . "/" . NV_DATADIR . "/" . NV_LANG_DATA . "_" . $module_data . "Content.txt";
+$content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . 'Content.txt';
 if (file_exists($content_file)) {
     $array = file_get_contents($content_file);
 }

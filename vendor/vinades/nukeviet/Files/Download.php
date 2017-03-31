@@ -10,8 +10,10 @@
 
 namespace NukeViet\Files;
 
+use finfo;
+
 if (! defined('NV_MIME_INI_FILE')) {
-    define("NV_MIME_INI_FILE", str_replace("\\", "/", realpath(dirname(__file__) . "/..") . '/ini/mime.ini'));
+    define('NV_MIME_INI_FILE', NV_ROOTDIR . '/includes/ini/mime.ini');
 }
 
 class Download
@@ -30,7 +32,6 @@ class Download
     private $disable_functions = array();
     private $disable_classes = array();
     private $magic_path;
-    private $safe_mode;
 
     /**
      * download::__construct()
@@ -54,8 +55,6 @@ class Download
         $this->disable_functions = $disable_functions;
 
         $this->disable_classes = (ini_get('disable_classes') != '' and ini_get('disable_classes') != false) ? array_map('trim', preg_split("/[\s,]+/", ini_get('disable_classes'))) : array();
-
-        $this->safe_mode = (ini_get('safe_mode') == '1' || strtolower(ini_get('safe_mode')) == 'on') ? 1 : 0;
 
         $path = $this->real_path($path, $directory);
         $extension = $this->getextension($path);
@@ -317,7 +316,7 @@ class Download
             return $_ENV[$key];
         } elseif (@getenv($key)) {
             return @getenv($key);
-        } elseif (function_exists('apache_getenv') && apache_getenv($key, true)) {
+        } elseif (function_exists('apache_getenv') and apache_getenv($key, true)) {
             return apache_getenv($key, true);
         }
         return '';
@@ -396,7 +395,7 @@ class Download
         }
         $old_status = ignore_user_abort(true);
 
-        if (! $this->safe_mode and function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
             set_time_limit(0);
         }
 
@@ -456,7 +455,7 @@ class Download
         fclose($res);
 
         ignore_user_abort($old_status);
-        if (! $this->safe_mode and function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
+        if (function_exists('set_time_limit') and ! in_array('set_time_limit', $this->disable_functions)) {
             set_time_limit(ini_get('max_execution_time'));
         }
         exit();

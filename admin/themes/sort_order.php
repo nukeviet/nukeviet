@@ -18,7 +18,7 @@ $func_id = $nv_Request->get_int('func_id', 'post');
 
 $position = $nv_Request->get_string('position', 'post');
 
-if (! empty($array_bid) && ! empty($position)) {
+if (! empty($array_bid) and ! empty($position)) {
     $pos_new = '[' . $position . ']';
 
     $sth = $db->prepare('SELECT bid, theme, position FROM ' . NV_BLOCKS_TABLE . '_groups WHERE position != :position AND bid IN (' . implode(',', $array_bid) . ')');
@@ -28,11 +28,11 @@ if (! empty($array_bid) && ! empty($position)) {
     if (!empty($row)) {
         list($bid, $theme, $pos_old) = $row;
 
-        $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET position= :position, weight=2147483647 WHERE bid=' . $bid);
+        $sth = $db->prepare('UPDATE ' . NV_BLOCKS_TABLE . '_groups SET position= :position, weight=8388607 WHERE bid=' . $bid);
         $sth->bindParam(':position', $pos_new, PDO::PARAM_STR);
         $sth->execute();
 
-        $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=2147483647 WHERE bid=' . $bid);
+        $db->query('UPDATE ' . NV_BLOCKS_TABLE . '_weight SET weight=8388607 WHERE bid=' . $bid);
 
         //Update weight for old position
         $sth = $db->prepare('SELECT bid FROM ' . NV_BLOCKS_TABLE . '_groups WHERE theme= :theme AND position=:position ORDER BY weight ASC');
@@ -109,7 +109,7 @@ if (! empty($array_bid) and $func_id > 0) {
     }
 }
 
-nv_del_moduleCache('themes');
+$nv_Cache->delMod('themes');
 
 $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_groups');
 $db->query('OPTIMIZE TABLE ' . NV_BLOCKS_TABLE . '_weight');

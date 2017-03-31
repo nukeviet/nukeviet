@@ -57,7 +57,7 @@ if ($nv_Request->isset_request('add', 'post')) {
         die('NO');
     }
 
-    nv_del_moduleCache('seotools');
+    $nv_Cache->delMod('seotools');
     die('OK');
 }
 
@@ -101,7 +101,7 @@ if ($nv_Request->isset_request('del', 'post')) {
 
     if ($gid) {
         $db->query('UPDATE ' . NV_MODULES_TABLE . ' SET gid=0 WHERE gid=' . $gid);
-        nv_del_moduleCache('modules');
+        $nv_Cache->delMod('modules');
 
         $query = 'DELETE FROM ' . $db_config['prefix'] . '_googleplus WHERE gid=' . $gid;
         if ($db->exec($query)) {
@@ -113,7 +113,7 @@ if ($nv_Request->isset_request('del', 'post')) {
                 $db->query('UPDATE ' . $db_config['prefix'] . '_googleplus SET weight=' . $weight . ' WHERE gid=' . $row['gid']);
             }
             $result->closeCursor();
-            nv_del_moduleCache('seotools');
+            $nv_Cache->delMod('seotools');
             die('OK');
         }
     }
@@ -138,7 +138,7 @@ if ($nv_Request->isset_request('changemod', 'post')) {
     $sth->bindParam(':title', $title, PDO::PARAM_STR);
     $sth->execute();
 
-    nv_del_moduleCache('modules');
+    $nv_Cache->delMod('modules');
     die('OK');
 }
 $xtpl = new XTemplate('googleplus.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

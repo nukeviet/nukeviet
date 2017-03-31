@@ -29,8 +29,6 @@ class Request
     public $session_save_path;
     public $cookie_path;
     public $cookie_domain;
-    public $is_register_globals = false;
-    public $is_magic_quotes_gpc = false;
     public $referer;
     public $referer_key;
     public $referer_host = '';
@@ -114,21 +112,14 @@ class Request
             $ip2long = base_convert($r_ip, 2, 10);
         }
 
-        if ($ip2long == - 1 || $ip2long === false) {
+        if ($ip2long == - 1 or $ip2long === false) {
             trigger_error(Request::INCORRECT_IP, 256);
         }
         $this->ip_addr = $ip2long;
 
         $this->cookie_key = md5($this->cookie_key);
-        if (ini_get('register_globals') == '1' || strtolower(ini_get('register_globals')) == 'on') {
-            $this->is_register_globals = true;
-        }
-        if (function_exists('get_magic_quotes_gpc')) {
-            if (get_magic_quotes_gpc()) {
-                $this->is_magic_quotes_gpc = true;
-            }
-        }
-        if (extension_loaded('filter') && filter_id(ini_get('filter.default')) !== FILTER_UNSAFE_RAW) {
+
+        if (extension_loaded('filter') and filter_id(ini_get('filter.default')) !== FILTER_UNSAFE_RAW) {
             $this->is_filter = true;
         }
         $this->Initialize($config['my_domains']);
@@ -155,7 +146,7 @@ class Request
                 return $_ENV[$k];
             } elseif (@getenv($k)) {
                 return @getenv($k);
-            } elseif (function_exists('apache_getenv') && apache_getenv($k, true)) {
+            } elseif (function_exists('apache_getenv') and apache_getenv($k, true)) {
                 return apache_getenv($k, true);
             }
         }
@@ -176,9 +167,6 @@ class Request
             if (is_array($var[$k])) {
                 $this->fixQuery($var[$k], $mode);
             } elseif (is_string($var[$k])) {
-                if ($this->is_magic_quotes_gpc) {
-                    $var[$k] = stripslashes($var[$k]);
-                }
                 if ($mode == 'get') {
                     $var[$k] = $this->security_get($var[$k]);
                 }
@@ -197,13 +185,6 @@ class Request
         if (sizeof($_GET)) {
             $array_keys = array_keys($_GET);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
                 if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
                     unset($_GET[$k]);
                 }
@@ -213,14 +194,7 @@ class Request
         if (sizeof($_POST)) {
             $array_keys = array_keys($_POST);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
-                if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
+                if ((!preg_match('/^[a-zA-Z0-9\_]+$/', $k) and $k != 'g-recaptcha-response') or is_numeric($k)) {
                     unset($_POST[$k]);
                 }
             }
@@ -229,13 +203,6 @@ class Request
         if (sizeof($_COOKIE)) {
             $array_keys = array_keys($_COOKIE);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
                 if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
                     @setcookie($k, '', NV_CURRENTTIME - 3600);
                     unset($_COOKIE[$k]);
@@ -243,16 +210,9 @@ class Request
             }
             $this->fixQuery($_COOKIE, 'cookie');
         }
-        if (sizeof($_FILES) && strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+        if (sizeof($_FILES) and strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
             $array_keys = array_keys($_FILES);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
                 if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
                     unset($_FILES[$k]);
                 }
@@ -314,7 +274,7 @@ class Request
         $this->base_adminurl = $base_siteurl . (NV_ADMINDIR != '' ? '/' . NV_ADMINDIR : '');
         $this->doc_root = $doc_root;
         $this->server_protocol = strtolower(preg_replace('/^([^\/]+)\/*(.*)$/', '\\1', $_SERVER['SERVER_PROTOCOL'])) . (($this->get_Env('HTTPS') == 'on') ? 's' : '');
-        $this->server_port = ($_SERVER['SERVER_PORT'] == '80') ? '' : (':' . $_SERVER['SERVER_PORT']);
+        $this->server_port = ($_SERVER['SERVER_PORT'] == '80' or $_SERVER['SERVER_PORT'] == '443') ? '' : (':' . $_SERVER['SERVER_PORT']);
 
         if (filter_var($this->server_name, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
             $this->my_current_domain = $this->server_protocol . '://' . $this->server_name . $this->server_port;
@@ -388,6 +348,7 @@ class Request
 
         $user_agent = ( string )$this->get_Env('HTTP_USER_AGENT');
         $user_agent = substr(htmlspecialchars($user_agent), 0, 255);
+        if(!empty($user_agent)) $user_agent = trim($user_agent);
         if (empty($user_agent) or $user_agent == '-') {
             $user_agent = 'none';
         }
@@ -414,7 +375,7 @@ class Request
      */
     private function sessionStart()
     {
-        if (headers_sent() || connection_status() != 0 || connection_aborted()) {
+        if (headers_sent() or connection_status() != 0 or connection_aborted()) {
             trigger_error(Request::IS_HEADERS_SENT, 256);
         }
 
@@ -428,13 +389,6 @@ class Request
         if (sizeof($_SESSION)) {
             $array_keys = array_keys($_SESSION);
             foreach ($array_keys as $k) {
-                if ($this->is_register_globals) {
-                    if (in_array($k, array( 'GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_SESSION', '_ENV', '_FILES' ))) {
-                        die();
-                    }
-                    unset($GLOBALS[$k]);
-                    unset($GLOBALS[$k]);
-                }
                 if (! preg_match('/^[a-zA-Z0-9\_]+$/', $k) or is_numeric($k)) {
                     unset($_SESSION[$k]);
                 }
@@ -526,7 +480,7 @@ class Request
             $attrSubSet = array_map('trim', explode('=', trim($attrSet[$i]), 2));
             $attrSubSet[0] = strtolower($attrSubSet[0]);
 
-            if (! preg_match('/[a-z]+/i', $attrSubSet[0]) || in_array($attrSubSet[0], $this->disabledattributes) || preg_match('/^on/i', $attrSubSet[0])) {
+            if (! preg_match('/[a-z]+/i', $attrSubSet[0]) or in_array($attrSubSet[0], $this->disabledattributes) or preg_match('/^on/i', $attrSubSet[0])) {
                 continue;
             }
 
@@ -616,7 +570,7 @@ class Request
 
             $tagOpen_nested = strpos($fromTagOpen, '<');
 
-            if (($tagOpen_nested !== false) && ($tagOpen_nested < $tagOpen_end)) {
+            if (($tagOpen_nested !== false) and ($tagOpen_nested < $tagOpen_end)) {
                 $preTag .= substr($postTag, 0, ($tagOpen_nested + 1));
                 $postTag = substr($postTag, ($tagOpen_nested + 1));
                 $tagOpen_start = strpos($postTag, '<');
@@ -646,7 +600,7 @@ class Request
                 $tagName = strtolower($tagName);
             }
 
-            if ((! preg_match('/^[a-z][a-z0-9]*$/i', $tagName)) || in_array($tagName, $this->disabletags)) {
+            if ((! preg_match('/^[a-z][a-z0-9]*$/i', $tagName)) or in_array($tagName, $this->disabletags)) {
                 $postTag = substr($postTag, ($tagLength + 2));
                 $tagOpen_start = strpos($postTag, '<');
                 continue;
@@ -659,7 +613,7 @@ class Request
                 $closeQuotes = strpos(substr($fromSpace, ($openQuotes + 1)), '"') + $openQuotes + 1;
 
                 if (strpos($fromSpace, '=') !== false) {
-                    if (($openQuotes !== false) && (strpos(substr($fromSpace, ($openQuotes + 1)), '"') !== false)) {
+                    if (($openQuotes !== false) and (strpos(substr($fromSpace, ($openQuotes + 1)), '"') !== false)) {
                         $attr = substr($fromSpace, 0, ($closeQuotes + 1));
                     } else {
                         $attr = substr($fromSpace, 0, $nextSpace);

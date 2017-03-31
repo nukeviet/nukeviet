@@ -30,7 +30,17 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
     $array_config['activecomm'] = $nv_Request->get_int('activecomm', 'post', 0);
     $array_config['sortcomm'] = $nv_Request->get_int('sortcomm', 'post', 0);
     $array_config['captcha'] = $nv_Request->get_int('captcha', 'post', 0);
-
+    $array_config['perpagecomm'] = $nv_Request->get_int('perpagecomm', 'post', 0);
+    $array_config['timeoutcomm'] = $nv_Request->get_int('timeoutcomm', 'post', 0);
+    
+    if ($array_config['perpagecomm'] < 1 or $array_config['perpagecomm'] > 1000) {
+        $array_config['perpagecomm'] = 5;
+    }
+    
+    if ($array_config['timeoutcomm'] < 0) {
+        $array_config['timeoutcomm'] = 360;
+    }
+    
     $_groups_com = $nv_Request->get_array('allowed_comm', 'post', array());
     if (in_array(-1, $_groups_com)) {
         $array_config['allowed_comm'] = '-1';
@@ -59,7 +69,7 @@ if ($nv_Request->isset_request('submit', 'post') and isset($site_mod_comm[$mod_n
         $sth->bindParam(':config_value', $config_value, PDO::PARAM_STR);
         $sth->execute();
     }
-    nv_del_moduleCache('settings');
+    $nv_Cache->delMod('settings');
     Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&rand=' . nv_genpass());
     die();
 }
@@ -74,7 +84,7 @@ $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
 $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 
-if (! empty($mod_name)) {
+if (!empty($mod_name)) {
     $xtpl->assign('MOD_NAME', $mod_name);
     $xtpl->assign('DATA', $module_config[$mod_name]);
     $xtpl->assign('ACTIVECOMM', $module_config[$mod_name]['activecomm'] ? ' checked="checked"' : '');
@@ -206,7 +216,7 @@ if (! empty($mod_name)) {
         $xtpl->assign('ROW', $row);
         $xtpl->parse('main.list.loop');
     }
-    
+
     $xtpl->parse('main.list');
 }
 

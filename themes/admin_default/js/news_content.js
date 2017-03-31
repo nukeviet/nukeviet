@@ -14,18 +14,22 @@ function extractLast(term) {
 	return split(term).pop();
 }
 
-
-$("#titlelength").html($("#idtitle").val().length);
-$("#idtitle").bind("keyup paste", function() {
-	$("#titlelength").html($(this).val().length);
-});
-
-$("#descriptionlength").html($("#description").val().length);
-$("#description").bind("keyup paste", function() {
-	$("#descriptionlength").html($(this).val().length);
-});
-
 $(document).ready(function() {
+    $("#titlelength").html($("#idtitle").val().length);
+    $("#idtitle").bind("keyup paste", function() {
+    	$("#titlelength").html($(this).val().length);
+    });
+    
+    $("#titlesitelength").html($("#idtitlesite").val().length);
+    $("#idtitlesite").bind("keyup paste", function() {
+    	$("#titlesitelength").html($(this).val().length);
+    });
+    
+    $("#descriptionlength").html($("#description").val().length);
+    $("#description").bind("keyup paste", function() {
+    	$("#descriptionlength").html($(this).val().length);
+    });
+
 	$("input[name='catids[]']").click(function() {
 		var catid = $("input:radio[name=catid]:checked").val();
 		var radios_catid = $("input:radio[name=catid]");
@@ -186,7 +190,68 @@ $(document).ready(function() {
 		$(".message_body").slideDown(1000);
 		return false;
 	});
+	
+	$("#topicid").select2({
+		language: "vi",
+		ajax: {
+	    url: script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&get_topic_json=1',
+	    	dataType: 'json',
+	    	delay: 250,
+	    	data: function (params) {
+	      		return {
+	      			q: params.term, // search term
+	      			page: params.page
+	      		};
+	      	},
+	    	processResults: function (data, params) {
+	    		params.page = params.page || 1;
+	    		return {
+	    			results: data,
+	    			pagination: {
+	    				more: (params.page * 30) < data.total_count
+	    			}
+	    		};
+	    	},
+		cache: true
+		},
+		escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+		minimumInputLength: 3,
+		templateResult: formatRepo, // omitted for brevity, see the source of this page
+		templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+	});
+    
+    // Control content adv tab
+    $('#adv-form').on('hidden.bs.collapse', function() {
+        $('#adv-form-arrow').removeClass('fa-angle-double-up').addClass('fa-angle-double-down');
+        $.cookie(nv_module_name + '_advtabcontent', 'HIDE', {expires: 7});
+    });
+    $('#adv-form').on('shown.bs.collapse', function() {
+        $('#adv-form-arrow').removeClass('fa-angle-double-down').addClass('fa-angle-double-up');
+        $.cookie(nv_module_name + '_advtabcontent', 'SHOW', {expires: 7});
+    });
+    if ($.cookie(nv_module_name + '_advtabcontent') == 'SHOW') {
+        $('#adv-form').collapse('show');
+    } else {
+        $('#adv-form').collapse('hide');
+    }
+    
+    $('input[name="open_source"]').change(function() {
+    	if ($(this).is(':checked')) {
+    		$('#content_bodytext_required').addClass('hidden');
+    	} else {
+    		$('#content_bodytext_required').removeClass('hidden');
+    	}
+	});
 });
+
+function formatRepo (repo) {
+	if (repo.loading) return repo.text;
+	return repo.title;
+}
+
+function formatRepoSelection (repo) {
+	return repo.title || repo.text;
+}
 
 function nv_add_element( idElment, key, value ){
    var html = "<span title=\"" + value + "\" class=\"uiToken removable\" ondblclick=\"$(this).remove();\">" + value + "<input type=\"hidden\" value=\"" + key + "\" name=\"" + idElment + "[]\" autocomplete=\"off\"><a onclick=\"$(this).parent().remove();\" href=\"javascript:void(0);\" class=\"remove uiCloseButton uiCloseButtonSmall\"></a></span>";

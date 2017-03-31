@@ -24,7 +24,7 @@ function nv_site_theme($step, $titletheme, $contenttheme)
 {
     global $lang_module, $languageslist, $language_array, $global_config;
 
-    $xtpl = new XTemplate('theme.tpl', NV_ROOTDIR . '/install/tpl/');
+    $xtpl = new XTemplate('theme.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('NV_FILES_DIR', NV_FILES_DIR);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
@@ -81,7 +81,7 @@ function nv_step_1()
 {
     global $lang_module, $languageslist, $language_array, $sys_info, $global_config;
 
-    $xtpl = new XTemplate('step1.tpl', NV_ROOTDIR . '/install/tpl/');
+    $xtpl = new XTemplate('step1.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
 
@@ -99,7 +99,7 @@ function nv_step_1()
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
     $xtpl->assign('LANG', $lang_module);
     if (empty($sys_info['supports_rewrite'])) {
-        $xtpl->assign('SUPPORTS_REWRITE', md5($global_config['sitekey']));
+        $xtpl->assign('SUPPORTS_REWRITE', NV_CHECK_SESSION);
         $xtpl->parse('step.check_supports_rewrite');
     }
     $xtpl->parse('step');
@@ -118,7 +118,7 @@ function nv_step_2($array_dir_check, $array_ftp_data, $nextstep)
 {
     global $lang_module, $sys_info, $step;
 
-    $xtpl = new XTemplate('step2.tpl', NV_ROOTDIR . '/install/tpl/');
+    $xtpl = new XTemplate('step2.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
@@ -172,7 +172,7 @@ function nv_step_3($license)
 {
     global $lang_module;
 
-    $xtpl = new XTemplate('step3.tpl', NV_ROOTDIR . '/install/tpl/');
+    $xtpl = new XTemplate('step3.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CONTENT_LICENSE', $license);
@@ -195,7 +195,7 @@ function nv_step_4($array_resquest, $array_support, $nextstep)
 {
     global $lang_module;
 
-    $xtpl = new XTemplate('step4.tpl', NV_ROOTDIR . '/install/tpl/');
+    $xtpl = new XTemplate('step4.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
@@ -222,7 +222,7 @@ function nv_step_5($db_config, $nextstep)
 {
     global $lang_module, $step, $PDODrivers;
 
-    $xtpl = new XTemplate('step5.tpl', NV_ROOTDIR . '/install/tpl/');
+    $xtpl = new XTemplate('step5.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
@@ -281,7 +281,7 @@ function nv_step_6($array_data, $nextstep)
 {
     global $lang_module, $step;
 
-    $xtpl = new XTemplate('step6.tpl', NV_ROOTDIR . '/install/tpl/');
+    $xtpl = new XTemplate('step6.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);
     $xtpl->assign('CURRENTLANG', NV_LANG_DATA);
@@ -312,7 +312,7 @@ function nv_step_7($finish)
 {
     global $lang_module;
 
-    $xtpl = new XTemplate('step7.tpl', NV_ROOTDIR . '/install/tpl/');
+    $xtpl = new XTemplate('step7.tpl', NV_ROOTDIR . '/install/tpl');
     $xtpl->assign('BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('ADMINDIR', NV_ADMINDIR);
     $xtpl->assign('LANG_VARIABLE', NV_LANG_VARIABLE);

@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
 */
 
 if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -157,6 +157,8 @@ $lang_module['log_empty_log'] = 'Delete all system logs';
 $lang_module['update_package_detected'] = 'Detects updated package, the website will temporarily stop working. Please perform the following tasks either before the website will be active again.';
 $lang_module['update_package_delete'] = 'Delete the update package';
 $lang_module['update_package_do'] = 'Update';
+$lang_module['notification'] = 'Notification';
 $lang_module['notification_empty'] = '<p align="center">No Notification!</p>';
 $lang_module['notification_module_auto_deactive'] = 'Module <strong />%s  has stopped operation due to error';
 $lang_module['notification_cronjobs_auto_deactive'] = 'Cronjobs <strong />%s  has stopped operation due to error';
+$lang_module['notification_hide'] = 'Hide this notification';

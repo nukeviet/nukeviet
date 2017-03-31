@@ -29,6 +29,10 @@
 					<td><input type="text" name="site_email" value="{DATA.site_email}" class="form-control" style="width: 450px"/></td>
 				</tr>
 				<tr>
+					<td><strong>{LANG.site_phone}</strong></td>
+					<td><input type="text" name="site_phone" value="{DATA.site_phone}" class="form-control" style="width: 450px"/></td>
+				</tr>
+				<tr>
 					<td><strong>{LANG.themeadmin}</strong></td>
 					<td>
 					<select name="admin_theme" class="form-control w200" >
@@ -110,7 +114,9 @@
 						<!-- BEGIN: opsite_timezone -->
 						<option value="{TIMEZONEOP}" {TIMEZONESELECTED}>{TIMEZONELANGVALUE} </option>
 						<!-- END: opsite_timezone -->
-					</select></td>
+					</select>
+					{CURRENT_TIME}
+					</td>
 				</tr>
 				<tr>
 					<td><strong>{LANG.gzip_method}</strong></td>
@@ -136,6 +142,10 @@
 				<tr>
 					<td><strong>{LANG.searchEngineUniqueID}</strong></td>
 					<td><input type="text" name="searchEngineUniqueID" value="{DATA.searchEngineUniqueID}" class="form-control" style="width: 450px" maxlength="50" /></td>
+				</tr>
+				<tr>
+					<td><strong>{LANG.googleMapsAPI}</strong><br />({LANG.googleMapsAPI_guide})</td>
+					<td><input type="text" name="googleMapsAPI" value="{DATA.googleMapsAPI}" class="form-control" style="width: 450px" maxlength="50" /></td>
 				</tr>
 			</tbody>
 		</table>
@@ -170,7 +180,7 @@ $(document).ready(function() {
 var LANG = [];
 LANG.note_ssl = "{LANG.note_ssl}";
 var CFG = [];
-CFG.cdndl = "{CDNDL}";
+CFG.cdndl = "{NV_CHECK_SESSION}";
 
 show_rewrite_op();
 </script>

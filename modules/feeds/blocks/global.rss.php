@@ -3,16 +3,17 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2014 VINADES ., JSC. All rights reserved
+ * @Copyright (C) 2014 VINADES .
+ * , JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
  * @Createdate Jan 10, 2011 6:04:54 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
-if (! nv_function_exists('nv_block_data_config_rss')) {
+if (!nv_function_exists('nv_block_data_config_rss')) {
 
     /**
      * nv_block_data_config_rss()
@@ -21,6 +22,7 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
      * @param mixed $data_block
      * @param mixed $lang_block
      * @return
+     *
      */
     function nv_block_data_config_rss($module, $data_block, $lang_block)
     {
@@ -74,6 +76,7 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
      * @param mixed $module
      * @param mixed $lang_block
      * @return
+     *
      */
     function nv_block_data_config_rss_submit($module, $lang_block)
     {
@@ -88,7 +91,7 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
         $return['config']['ispubdate'] = $nv_Request->get_int('config_ispubdate', 'post', 0);
         $return['config']['istarget'] = $nv_Request->get_int('config_istarget', 'post', 0);
         $return['config']['title_length'] = $nv_Request->get_int('config_title_length', 'post', 0);
-        if (! nv_is_url($return['config']['url'])) {
+        if (!nv_is_url($return['config']['url'])) {
             $return['error'][] = $lang_block['error_url'];
         }
         return $return;
@@ -99,22 +102,21 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
      *
      * @param mixed $url
      * @return
+     *
      */
     function nv_get_rss($url)
     {
-        global $global_config;
+        global $global_config, $nv_Cache;
         $array_data = array();
-        $cache_file = NV_LANG_DATA . "_" . md5($url) . "_" . NV_CACHE_PREFIX . ".cache";
-        if (file_exists(NV_ROOTDIR . '/' . NV_CACHEDIR . '/' . $cache_file) and filemtime(NV_ROOTDIR . "/" . NV_CACHEDIR . "/" . $cache_file) > NV_CURRENTTIME - 1200) {
-            if (($cache = nv_get_cache('rss', $cache_file)) != false) {
-                $array_data = unserialize($cache);
-            }
+        $cache_file = NV_LANG_DATA . '_' . md5($url) . '_' . NV_CACHE_PREFIX . '.cache';
+        if (($cache = $nv_Cache->getItem('rss', $cache_file, 3600)) != false) {
+            $array_data = unserialize($cache);
         }
-        if (empty($array_data)) {
+        else {
             $getContent = new NukeViet\Client\UrlGetContents($global_config);
             $xml_source = $getContent->get($url);
-            $allowed_html_tags = array_map("trim", explode(',', NV_ALLOWED_HTML_TAGS));
-            $allowed_html_tags = "<" . implode("><", $allowed_html_tags) . ">";
+            $allowed_html_tags = array_map('trim', explode(',', NV_ALLOWED_HTML_TAGS));
+            $allowed_html_tags = '<' . implode('><', $allowed_html_tags) . '>';
             if ($xml = simplexml_load_string($xml_source)) {
                 $a = 0;
                 if (isset($xml->channel)) {
@@ -122,7 +124,7 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
                         $array_data[$a]['title'] = strip_tags($item->title);
                         $array_data[$a]['description'] = strip_tags($item->description, $allowed_html_tags);
                         $array_data[$a]['link'] = strip_tags($item->link);
-                        $array_data[$a]['pubDate'] = nv_date("l - d/m/Y H:i", strtotime($item->pubDate));
+                        $array_data[$a]['pubDate'] = nv_date('l - d/m/Y H:i', strtotime($item->pubDate));
                         ++$a;
                     }
                 } elseif (isset($xml->entry)) {
@@ -132,13 +134,13 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
                         $array_data[$a]['title'] = strip_tags($item->title);
                         $array_data[$a]['description'] = strip_tags($item->content, $allowed_html_tags);
                         $array_data[$a]['link'] = strip_tags($urlAtt['href']);
-                        $array_data[$a]['pubDate'] = nv_date("l - d/m/Y H:i", strtotime($item->updated));
+                        $array_data[$a]['pubDate'] = nv_date('l - d/m/Y H:i', strtotime($item->updated));
                         ++$a;
                     }
                 }
             }
             $cache = serialize($array_data);
-            nv_set_cache('rss', $cache_file, $cache);
+            $nv_Cache->setItem('rss', $cache_file, $cache);
         }
         return $array_data;
     }
@@ -148,6 +150,7 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
      *
      * @param mixed $block_config
      * @return
+     *
      */
     function nv_block_global_rss($block_config)
     {
@@ -158,7 +161,7 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
         } elseif (file_exists(NV_ROOTDIR . '/themes/' . $global_config['site_theme'] . '/modules/feeds/global.rss.tpl')) {
             $block_theme = $global_config['site_theme'];
         } else {
-            $block_theme = "default";
+            $block_theme = 'default';
         }
 
         $a = 1;
@@ -169,7 +172,7 @@ if (! nv_function_exists('nv_block_data_config_rss')) {
             if ($a <= $block_config['number']) {
                 $item['description'] = ($block_config['ishtml']) ? $item['description'] : strip_tags($item['description']);
                 $item['target'] = ($block_config['istarget']) ? " onclick=\"this.target='_blank'\" " : "";
-                $item['class'] = ($a % 2 == 0) ? "second" : "";
+                $item['class'] = ($a % 2 == 0) ? 'second' : '';
                 if ($title_length > 0) {
                     $item['text'] = nv_clean60($item['title'], $title_length);
                 } else {

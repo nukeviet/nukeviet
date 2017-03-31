@@ -5,15 +5,31 @@
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><em class="fa fa-user fa-lg"></em></span>
-                    <input type="text" class="required form-control" placeholder="{LANG.field}" value="" name="userField" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.lostpass_no_info1}">
+                    <input type="text" class="required form-control" placeholder="{GLANG.username_email}" value="" name="userField" maxlength="100" data-pattern="/^(.){3,}$/" onkeypress="validErrorHidden(this);" data-mess="{LANG.lostpass_no_info1}">
                 </div>
             </div>
             
+            <!-- BEGIN: captcha -->
             <div class="form-group">
                 <div class="middle text-right clearfix">
                     <img class="captchaImg display-inline-block" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" alt="{N_CAPTCHA}" title="{N_CAPTCHA}" /><em class="fa fa-pointer fa-refresh margin-left margin-right" title="{CAPTCHA_REFRESH}" onclick="change_captcha('.bsec');"></em><input type="text" style="width:100px;" class="bsec required form-control display-inline-block" name="nv_seccode" value="" maxlength="{GFX_MAXLENGTH}" placeholder="{GLANG.securitycode}" data-pattern="/^(.){{GFX_MAXLENGTH},{GFX_MAXLENGTH}}$/" onkeypress="validErrorHidden(this);" data-mess="{GLANG.securitycodeincorrect}" />
                 </div>
             </div>
+            <!-- END: captcha -->
+            
+            <!-- BEGIN: recaptcha -->
+            <div class="form-group">
+                <div class="middle text-right clearfix">
+                    <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}"></div></div>
+                    <script type="text/javascript">
+                    nv_recaptcha_elements.push({
+                        id: "{RECAPTCHA_ELEMENT}",
+                        btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent().parent())
+                    })
+                    </script>
+                </div>
+            </div>
+            <!-- END: recaptcha -->
         </div>
         
         <div class="step2" style="display:none">

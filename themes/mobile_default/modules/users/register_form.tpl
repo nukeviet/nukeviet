@@ -157,6 +157,16 @@
         <!-- END: multiselect -->
     	<!-- END: loop -->
     	<!-- END: field -->
+
+        <!-- BEGIN: agreecheck -->
+        <div>
+            <div>
+                <div class="form-group text-center check-box required" data-mess="">
+                    <input type="checkbox" name="agreecheck" value="1" class="fix-box" onclick="validErrorHidden(this,3);"/>{LANG.accept2} <a onclick="usageTermsShow('{LANG.usage_terms}');" href="javascript:void(0);"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
+                </div>
+            </div>
+        </div>
+        <!-- END: agreecheck -->
      
     	<!-- BEGIN:reg_captcha -->
         <div class="form-group">
@@ -165,14 +175,24 @@
             </div>
         </div>
     	<!-- END: reg_captcha -->
-        <div>
-            <div>
-                <div class="form-group text-center check-box required" data-mess="">
-                    <input type="checkbox" name="agreecheck" value="1" class="fix-box" onclick="validErrorHidden(this,3);"/>{LANG.accept2} <a onclick="usageTermsShow('{LANG.usage_terms}');" href="javascript:void(0);"><span class="btn btn-default btn-xs">{LANG.usage_terms}</span></a>
-                </div>
+
+        <!-- BEGIN: reg_recaptcha -->
+        <div class="form-group">
+            <div class="middle text-center clearfix">
+                <div class="nv-recaptcha-default"><div id="{RECAPTCHA_ELEMENT}" data-toggle="recaptcha"></div></div>
+                <script type="text/javascript">
+                nv_recaptcha_elements.push({
+                    id: "{RECAPTCHA_ELEMENT}",
+                    btn: $('[type="submit"]', $('#{RECAPTCHA_ELEMENT}').parent().parent().parent().parent()),
+                    pnum: 4,
+                    btnselector: '[type="submit"]'
+                })
+                </script>
             </div>
         </div>
-    	<div class="text-center margin-bottom-lg">
+        <!-- END: reg_recaptcha -->
+    	
+        <div class="text-center margin-bottom-lg">
             <input type="hidden" name="checkss" value="{CHECKSS}" />
             <input type="button" value="{GLANG.reset}" class="btn btn-default" onclick="validReset(this.form);return!1;" />
             <input type="submit" class="btn btn-primary" value="{LANG.register}" />

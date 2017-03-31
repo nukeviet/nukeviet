@@ -39,7 +39,7 @@ function lost_pass_sendMail($row)
         $pa = NV_CURRENTTIME + 3600;
         $passlostkey = $pa . '|' . $passlostkey;
 
-        $sql = "UPDATE " . NV_USERS_GLOBALTABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
+        $sql = "UPDATE " . NV_MOD_TABLE . " SET passlostkey='" . $passlostkey . "' WHERE userid=" . $row['userid'];
         $db->query($sql);
 
         $name = $global_config['name_show'] ? array( $row['first_name'], $row['last_name'] ) : array( $row['last_name'], $row['first_name'] );
@@ -57,7 +57,7 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
 }
 
 $data = array();
-$data['checkss'] = md5($client_info['session_id'] . $global_config['sitekey']);
+$data['checkss'] = NV_CHECK_SESSION;
 $checkss = $nv_Request->get_title('checkss', 'post', '');
 
 if ($checkss == $data['checkss']) {
@@ -67,15 +67,19 @@ if ($checkss == $data['checkss']) {
     }
     $seccode = $nv_Request->get_string('lostpass_seccode', 'session', '');
 
-    $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
+    if ($global_config['captcha_type'] == 2) {
+        $data['nv_seccode'] = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    } else {
+        $data['nv_seccode'] = $nv_Request->get_title('nv_seccode', 'post', '');
+    }
 
     if (empty($data['nv_seccode']) or (! empty($data['nv_seccode']) and md5($data['nv_seccode']) != $seccode and ! nv_capcha_txt($data['nv_seccode']))) {
         $nv_Request->set_Session('lostpass_seccode', '');
         die(json_encode(array(
             'status' => 'error',
-            'input' => 'nv_seccode',
+            'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
             'step' => 'step1',
-            'mess' => $lang_global['securitycodeincorrect'] )));
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) )));
     }
 
     $data['userField'] = nv_substr($nv_Request->get_title('userField', 'post', '', 1), 0, 100);
@@ -90,10 +94,10 @@ if ($checkss == $data['checkss']) {
 
     $check_email = nv_check_valid_email($data['userField']);
     if (empty($check_email)) {
-        $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE email= :userField AND active=1';
+        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE email= :userField AND active=1';
         $userField = nv_strtolower($data['userField']);
     } else {
-        $sql = 'SELECT * FROM ' . NV_USERS_GLOBALTABLE . ' WHERE md5username=:userField AND active=1';
+        $sql = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE md5username=:userField AND active=1';
         $userField = nv_md5safe($data['userField']);
     }
     $stmt = $db->prepare($sql);
@@ -238,7 +242,7 @@ if ($checkss == $data['checkss']) {
 
     $re_password = $crypt->hash_password($new_password, $global_config['hashprefix']);
 
-    $stmt = $db->prepare("UPDATE " . NV_USERS_GLOBALTABLE . " SET password= :password, passlostkey='' WHERE userid=" . $row['userid']);
+    $stmt = $db->prepare("UPDATE " . NV_MOD_TABLE . " SET password= :password, passlostkey='' WHERE userid=" . $row['userid']);
     $stmt->bindParam(':password', $re_password, PDO::PARAM_STR);
     $stmt->execute();
 

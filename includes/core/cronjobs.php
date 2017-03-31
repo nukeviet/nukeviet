@@ -46,7 +46,7 @@ while ($cron_row = $cron_result->fetch()) {
         if (file_exists($check_run_cronjobs) and @filemtime($check_run_cronjobs) > $p) {
             continue;
         }
-        file_put_contents($check_run_cronjobs, '');
+        file_put_contents($check_run_cronjobs, var_export($cron_row, true));
 
         $params = (! empty($cron_row['params'])) ? array_map('trim', explode(',', $cron_row['params'])) : array();
         $result2 = call_user_func_array($cron_row['run_func'], $params);
@@ -64,7 +64,7 @@ while ($cron_row = $cron_result->fetch()) {
 
                 $cronjobs_next_time = NV_CURRENTTIME + $interval;
                 if ($db->exec("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = '" . $cronjobs_next_time . "' WHERE lang = '" . NV_LANG_DATA . "' AND module = 'global' AND config_name = 'cronjobs_next_time' AND (config_value < '" . NV_CURRENTTIME . "' OR config_value > '" . $cronjobs_next_time . "')")) {
-                    nv_del_moduleCache('settings');
+                    $nv_Cache->delMod('settings');
                 }
             }
         }
@@ -72,7 +72,6 @@ while ($cron_row = $cron_result->fetch()) {
         clearstatcache();
     }
 }
-
 
 $image = imagecreate(1, 1);
 Header('Content-type: image/jpg');

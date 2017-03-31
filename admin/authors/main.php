@@ -38,7 +38,7 @@ if ($nv_Request->isset_request('id', 'get')) {
 
 if ($numrows) {
     $sql = 'SELECT * FROM ' . NV_MODULES_TABLE . ' ORDER BY weight ASC';
-    $list_modules = nv_db_cache($sql, '', 'modules');
+    $list_modules = $nv_Cache->db($sql, '', 'modules');
     foreach ($adminrows as $row) {
         $login = $row['username'];
         $email = (defined('NV_IS_SPADMIN')) ? $row['email'] : (($row['admin_id'] == $admin_info['admin_id']) ? $row['email'] : (intval($row['view_mail']) ? $row['email'] : ''));
@@ -61,7 +61,7 @@ if ($numrows) {
         $last_login = $last_login ? nv_date('l, d/m/Y H:i', $last_login) : $lang_module['last_login0'];
         $last_agent = $row['last_agent'];
 
-        $_browser = new Browser($last_agent);
+        $_browser = new NukeViet\Client\Browser($last_agent);
         $browser = array( 'key' => $_browser->getBrowserKey(), 'name' => $_browser->getBrowser() );
         $os = array( 'key' => $_browser->getPlatformKey(), 'name' => $_browser->getPlatform() );
 
@@ -91,15 +91,13 @@ if ($numrows) {
                 $thead['chg_is_suspend'] = 0;
                 $thead['del'] = 0;
             } elseif ($row['lev'] == 2) {
-                if ($row['admin_id'] == $admin_info['admin_id']) {
+                if ($row['admin_id'] == $admin_info['admin_id'] or $admin_info['level'] == 1) {
                     $thead['edit'] = 1;
-                    $thead['chg_is_suspend'] = 0;
-                    $thead['del'] = 0;
                 } else {
                     $thead['edit'] = 0;
-                    $thead['chg_is_suspend'] = 0;
-                    $thead['del'] = 0;
                 }
+                $thead['chg_is_suspend'] = 0;
+                $thead['del'] = 0;
             } elseif ($global_config['spadmin_add_admin'] == 1) {
                 $thead['edit'] = 1;
                 $thead['chg_is_suspend'] = 1;

@@ -80,7 +80,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
             $data['author'] = $author;
             $idfile = $db->insert_id('INSERT INTO ' . NV_LANGUAGE_GLOBALTABLE . '_file (module, admin_file, langtype, author_' . $dirlang . ') VALUES (:module, :admin_file, :langtype, :author)', 'idfile', $data);
             if (empty($idfile)) {
-                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], 'error read file: ' . str_replace(NV_ROOTDIR . '/', '', $include_lang));
+                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], 'error read file: ' . str_replace(NV_ROOTDIR . '/', '', $include_lang), 404);
             }
         } else {
             $lang_translator_save = array();
@@ -99,7 +99,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
                 $sth->bindParam(':author', $author, PDO::PARAM_STR, strlen($author));
                 $sth->execute();
             } catch (PDOException $e) {
-                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $e->getMessage());
+                nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $e->getMessage(), 404);
             }
         }
 
@@ -184,7 +184,7 @@ function nv_admin_read_lang($dirlang, $module, $admin_file = 1)
 $dirlang = $nv_Request->get_title('dirlang', 'get', '');
 $page_title = $language_array[$dirlang]['name'] . ': ' . $lang_module['nv_admin_read'];
 
-if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . session_id()) and preg_match("/^([a-z]{2})$/", $dirlang) and is_dir(NV_ROOTDIR . '/includes/language/' . $dirlang)) {
+if ($nv_Request->get_string('checksess', 'get') == md5('readallfile' . NV_CHECK_SESSION) and preg_match("/^([a-z]{2})$/", $dirlang) and is_dir(NV_ROOTDIR . '/includes/language/' . $dirlang)) {
     $array_filename = array();
 
     nv_admin_add_field_lang($dirlang);

@@ -17,7 +17,7 @@ $blockredirect = $nv_Request->get_string('blockredirect', 'get');
 
 $selectthemes = $nv_Request->get_string('selectthemes', 'post,get', $global_config['site_theme']);
 if (! (preg_match($global_config['check_theme'], $selectthemes) or preg_match($global_config['check_theme_mobile'], $selectthemes))) {
-    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+    nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
 }
 
 $row = array(
@@ -42,7 +42,7 @@ if ($row['bid'] > 0) {
     $row = $db->query('SELECT * FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid'])->fetch();
 
     if (empty($row)) {
-        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content']);
+        nv_info_die($lang_global['error_404_title'], $lang_global['error_404_title'], $lang_global['error_404_content'], 404);
     } else {
         $row_old = $row;
     }
@@ -329,7 +329,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                 $sth->execute();
 
                 if (isset($site_mods[$module])) {
-                    nv_del_moduleCache($module);
+                    $nv_Cache->delMod($module);
                 }
 
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['block_edit'], 'Name : ' . $row['title'], $admin_info['userid']);
@@ -361,7 +361,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
                     }
                 }
 
-                nv_del_moduleCache('themes');
+                $nv_Cache->delMod('themes');
 
                 // Chuyen huong
                 $xtpl->assign('BLOCKMESS', $is_add ? $lang_module['block_add_success'] : $lang_module['block_update_success']);
@@ -383,7 +383,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_groups WHERE bid=' . $row['bid']);
             $db->query('DELETE FROM ' . NV_BLOCKS_TABLE . '_weight WHERE bid=' . $row['bid']);
 
-            nv_del_moduleCache('themes');
+            $nv_Cache->delMod('themes');
         }
     }
 }
@@ -398,7 +398,7 @@ while (list($id_i, $func_custom_name_i, $in_module_i) = $func_result->fetch(3)) 
 }
 
 // Load position file
-$xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini') or nv_info_die($lang_global['error_404_title'], $lang_module['block_error_fileconfig_title'], $lang_module['block_error_fileconfig_content']);
+$xml = @simplexml_load_file(NV_ROOTDIR . '/themes/' . $selectthemes . '/config.ini') or nv_info_die($lang_global['error_404_title'], $lang_module['block_error_fileconfig_title'], $lang_module['block_error_fileconfig_content'], 404);
 $xmlpositions = $xml->xpath('positions');
 $positions = $xmlpositions[0]->position;
 
@@ -508,7 +508,7 @@ while (list($m_title, $m_custom_title) = $result->fetch(3)) {
         foreach ($aray_mod_func[$m_title] as $aray_mod_func_i) {
             $sel = '';
 
-            if (in_array($aray_mod_func_i['id'], $func_list) || $functionid == $aray_mod_func_i['id']) {
+            if (in_array($aray_mod_func_i['id'], $func_list) or $functionid == $aray_mod_func_i['id']) {
                 ++$i;
                 $sel = ' checked="checked"';
             }

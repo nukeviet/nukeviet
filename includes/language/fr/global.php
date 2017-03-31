@@ -3,14 +3,14 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
 */
 
 if (! defined('NV_MAINFILE')) {
-    die('Stop!!!');
+    die( 'Stop!!!' );
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -49,6 +49,8 @@ $lang_global['unick_type_1'] = 'Votre compte ne peut être construit que par les
 $lang_global['unick_type_2'] = 'Votre compte ne peut être construit que par les chiffres et les lettres';
 $lang_global['unick_type_3'] = 'Votre compte ne peut être construit que par des chiffres, des lettres et des caractères suivant: tiret, underscore et/ou les espaces';
 $lang_global['unick_type_4'] = 'Votre compte doit être effectué sous Unicode et sans avoir les caractères spécifiques';
+$lang_global['username_rule_limit'] = 'Invalid Username: %1$s et %2$d à partir de %3$d caractères';
+$lang_global['username_rule_nolimit'] = 'Nom d\'utilisateur doit être comprise entre %1$d et %2$d caractères';
 $lang_global['password_empty'] = 'Vous n\'avez pas entré le mot de passe';
 $lang_global['passwordlong'] = 'Mot de passe trop long. Maximum à %1$d caractères';
 $lang_global['passwordadjective'] = 'Mot de passe trop court. Minimum à %1$d caractères';
@@ -59,12 +61,21 @@ $lang_global['upass_type_2'] = 'Votre mot de passe doit être construit par des 
 $lang_global['upass_type_3'] = 'Votre mot de passe doit être construit par des chiffres, des lettres minuscules ET celles majuscules';
 $lang_global['upass_type_4'] = 'Votre mot de passe doit être construit par des chiffres, des lettres (minuscules ET majuscules) et des caractères spécifiques';
 $lang_global['upass_type_simple'] = 'Mot de passe utilisé est trop facile à deviner, il faut que vous saisissiez un nouveau mot de passe plus compliqué';
+$lang_global['password_rule_limit'] = 'Mot de passe invalide: %1$s et %2$d à %3$d caractère';
+$lang_global['password_rule_nolimit'] = 'Les mots de passe doivent être compris entre %1$d et %2$d caractères';
 $lang_global['securitycodeincorrect'] = 'Code de sécurité incorrect';
 $lang_global['loginincorrect'] = 'L\'identifiant et le mot de passe ne correspondent pas';
 $lang_global['admin_loginsuccessfully'] = 'Vous avez réussi à vous identifier. Le système vous transférera à l\'Administration du site';
 $lang_global['incorrect_password'] = 'Mot de passe incorrect';
-$lang_global['relogin_info'] = 'Vous n\'êtes pas actif pour une longue durée. Le système vous demande de confirmer le mot de passe. Entrez le mot de passe dans le champs ci-dessous. Cette opération n\'est faite que %1$d fois. Après %1$d fois, si vous ne pouvez pas donner un bon mot de passe, le système bloquera votre compte d\'administration';
-$lang_global['relogin_error_info'] = '%1$s. Ré-entrez le mot de passe dans la champs ci-dessous. Cette opération ne peut être faite encore %2$d fois. Après %2$d fois, si vous ne pouvez pas donner un bon mot de passe, le système bloquera votre compte d\'administration';
+$lang_global['userlogin_blocked'] = 'Vous devez être connecté %s fois échoué, verrouiller temporairement journal système jusqu\'à %s';
+$lang_global['2teplogin_totppin_label'] = 'Entrez le code de vérification de l\'application Google Authenticator';
+$lang_global['2teplogin_totppin_placeholder'] = 'Entrez le code à 6 chiffres';
+$lang_global['2teplogin_code_label'] = 'Entrez l\'un des codes de sauvegarde que vous avez reçus.';
+$lang_global['2teplogin_code_placeholder'] = 'Entrez le code à 8 chiffres';
+$lang_global['2teplogin_other_menthod'] = 'Essayez d\'autres façons';
+$lang_global['2teplogin_error_opt'] = 'Code de confirmation est incorrecte, s\'il vous plaît ré-entrer';
+$lang_global['2teplogin_error_backup'] = 'Codes de sauvegarde sont incorrects, s\'il vous plaît ré-entrer';
+$lang_global['2teplogin_require'] = 'Vous devez activer l\'authentification à deux facteurs peut se connecter. Cliquez ici pour activer cette fonction';
 $lang_global['memory_time_usage'] = 'Storage: %1$s, Temps d\'exécution:  %2$s secondes';
 $lang_global['for_admin'] = 'Pour l\'administrateur';
 $lang_global['admin_account'] = 'Compte Admin';
@@ -75,6 +86,7 @@ $lang_global['adminlogin'] = 'Connexion à l\'Administration';
 $lang_global['module_for_admin'] = 'Cette section est reservée à l\'<em>Administrateur</em>';
 $lang_global['in_groups'] = 'Groupes  d\'utilisateurs';
 $lang_global['username'] = 'Identifiant';
+$lang_global['username_email'] = 'Identifiant ou E-mail';
 $lang_global['password'] = 'Mot de passe';
 $lang_global['password2'] = 'Confirmer le mot de passe';
 $lang_global['captcharefresh'] = 'Rafraîchir';
@@ -280,6 +292,7 @@ $lang_global['level3'] = 'Administrateur de module';
 $lang_global['level4'] = 'Membre';
 $lang_global['level5'] = 'Visiteur';
 $lang_global['level6'] = 'Tous';
+$lang_global['level7'] = 'Nouveau membre';
 $lang_global['msgbeforeunload'] = 'Vous pouvez passer dans une autre page mais les données ne sont pas sauvegardées';
 $lang_global['timeoutsess_nouser'] = 'Vous n\'avez pas utilisé le site Web';
 $lang_global['timeoutsess_click'] = 'Cliquer ici pour maintenir votre état de connexion';
@@ -309,3 +322,5 @@ $lang_global['design_url'] = 'URL de la page qui a le droit de conception';
 $lang_global['signin'] = 'Connexion';
 $lang_global['feedback'] = 'Réaction';
 $lang_global['required'] = 'Note: Vous devez declarer toute les zones cochés avec l\'étoile (*)';
+$lang_global['on'] = 'On';
+$lang_global['off'] = 'De';
