@@ -2064,7 +2064,7 @@ function payment($data_content, $data_pro, $data_shipping, $url_checkout, $intro
         $xtpl->parse('main.actpay');
     }
 
-    if ($data_content['transaction_status'] != 4) {
+    if ($data_content['transaction_status'] == -1 or $data_content['transaction_status'] == 0) {
         $action = empty($_SESSION[$module_data . '_order_info']) ? 'edit' : 'unedit';
         $xtpl->assign('url_action', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=payment&' . $action . '&order_id=' . $data_content['order_id'] . '&checkss=' . md5($data_content['order_id'] . $global_config['sitekey'] . session_id()));
         $xtpl->parse('main.order_action');
