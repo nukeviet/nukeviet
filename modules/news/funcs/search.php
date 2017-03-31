@@ -12,6 +12,12 @@ if (!defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
+/**
+ * GetSourceNews()
+ * 
+ * @param mixed $sourceid
+ * @return
+ */
 function GetSourceNews($sourceid)
 {
     global $db_slave, $module_data;
@@ -27,6 +33,13 @@ function GetSourceNews($sourceid)
     return '-/-';
 }
 
+/**
+ * BoldKeywordInStr()
+ * 
+ * @param mixed $str
+ * @param mixed $keyword
+ * @return
+ */
 function BoldKeywordInStr($str, $keyword)
 {
     $str = nv_clean60($str, 300);
