@@ -23,6 +23,8 @@ function nv_view_voting_main( $allowed, $id, $listhithot, $listhot )
 	global $lang_module, $module_info, $module_name, $module_data, $db;
 	$xtpl = new XTemplate( 'main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] );
 	$xtpl->assign( 'LANG', $lang_module );
+	$link_url=nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name , true);
+	$xtpl->assign( 'LINKURL', $link_url );
 	$i = 0;
 	foreach( $allowed as $current_voting )
 	{
@@ -52,7 +54,7 @@ function nv_view_voting_main( $allowed, $id, $listhithot, $listhot )
 				$vrow[] = $row2;
 			}
 
-			$pubtime = nv_date( 'l - d/m/Y H:i', $row['publ_time'] );
+			$pubtime = nv_date( 'l - d/m/Y H:i', $row2['publ_time'] );
 			$lang = array(
 				'total' => $lang_module['voting_total'],
 				'counter' => $lang_module['voting_counter'],
@@ -162,7 +164,7 @@ function voting_result_main( $current_voting )
 		$vrow[] = $row2;
 	}
 
-	$pubtime = nv_date( 'l - d/m/Y H:i', $current_voting['publ_time'] );
+	$pubtime = nv_date( 'l - d/m/Y H:i',$row2['publ_time'] );
 	$lang = array(
 		'total' => $lang_module['voting_total'],
 		'counter' => $lang_module['voting_counter'],

@@ -116,7 +116,7 @@ if( !empty( $vid ) )
 		$vrow[] = $row2;
 	}
 
-	$pubtime = nv_date( 'l - d/m/Y H:i', $row['publ_time'] );
+	$pubtime = nv_date( 'l - d/m/Y H:i', $row2['publ_time'] );
 	$lang = array(
 		'total' => $lang_module['voting_total'],
 		'counter' => $lang_module['voting_counter'],

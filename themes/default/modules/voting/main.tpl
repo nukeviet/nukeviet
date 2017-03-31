@@ -23,8 +23,7 @@
         		</div>
         		<!-- END: result1 -->
         		<div class="clearfix">
-        			<input class="btn btn-success btn-sm" type="button" value="{VOTING.langsubmit}" onclick="nv_sendvoting(this.form, '{VOTING.vid}', '{VOTING.accept}', '{VOTING.checkss}', '{VOTING.errsm}');" />
-                    <input class="btn btn-primary btn-sm" type="button" value="{VOTING.langresult}" onclick="nv_sendvoting(this.form, '{VOTING.vid}', 0, '{VOTING.checkss}', '');"/>
+        			<input class="btn btn-success btn-sm" type="button" value="{VOTING.langsubmit}" onclick="nv_sendvoting(this.form, '{VOTING.vid}', '{VOTING.accept}', '{VOTING.checkss}', '{VOTING.errsm}','{LINKURL}');" />
         		</div>
         	</fieldset>
         </form>
@@ -67,7 +66,7 @@
             </script>
         </div>
         <!-- END: recaptcha -->
-        <input type="button" name="submit" class="btn btn-primary btn-block" value="{VOTING.langsubmit}" onclick="nv_sendvoting_captcha(this, {VOTING.vid}, '{LANG.enter_captcha_error}');"/>
+        <input type="button" name="submit" class="btn btn-primary btn-block" value="{VOTING.langsubmit}" onclick="nv_sendvoting_captcha(this, {VOTING.vid}, '{LANG.enter_captcha_error}','{LINKURL}');"/>
     </div>
 </div>
 <!-- END: has_captcha -->
@@ -87,7 +86,7 @@
 	        </div>
 	    </div>
 		<!-- END: result -->
-	    <p class="text-center">
+	    <p class="text-center sum-voting">
 	        <strong>{LANG.voting_total}</strong>: {TOTAL} {LANG.voting_counter} - <strong>{LANG.voting_pubtime}: </strong>{VOTINGTIME}
 	    </p>
 	</div>
