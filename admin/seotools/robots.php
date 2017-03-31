@@ -55,7 +55,7 @@ if ($nv_Request->isset_request('submit', 'post')) {
             }
         }
 
-        $rbcontents[] = 'Sitemap: ' . $global_config['site_url'] . '/index.php?SitemapIndex' . $global_config['rewrite_endurl'];
+        $rbcontents[] = 'Sitemap: ' . $global_config['site_url'] . '/index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
 
         $rbcontents = implode("\n", $rbcontents);
 
