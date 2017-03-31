@@ -216,12 +216,10 @@ if (defined('NV_IS_GODADMIN')) {
         $xtpl->assign('CHECKED2', ($array_config_global['rewrite_optional'] == 1) ? ' checked ' : '');
 
         foreach ($site_mods as $mod => $row) {
-            if ($row['module_file'] != 'page') {
-                $xtpl->assign('MODE_VALUE', $mod);
-                $xtpl->assign('MODE_SELECTED', ($mod == $array_config_global['rewrite_op_mod']) ? "selected='selected'" : "");
-                $xtpl->assign('MODE_NAME', $row['custom_title']);
-                $xtpl->parse('main.system.rewrite_optional.rewrite_op_mod');
-            }
+            $xtpl->assign('MODE_VALUE', $mod);
+            $xtpl->assign('MODE_SELECTED', ($mod == $array_config_global['rewrite_op_mod']) ? "selected='selected'" : "");
+            $xtpl->assign('MODE_NAME', $row['custom_title']);
+            $xtpl->parse('main.system.rewrite_optional.rewrite_op_mod');
         }
 
         $xtpl->parse('main.system.rewrite_optional');

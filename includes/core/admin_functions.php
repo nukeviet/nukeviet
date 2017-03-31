@@ -259,18 +259,11 @@ function nv_save_file_config_global()
     $tmp_array = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/timezone.ini', true);
     $content_config .= "\$nv_parse_ini_timezone=" . nv_var_export($tmp_array) . ";\n";
 
-    $rewrite = array();
     $global_config['rewrite_optional'] = $config_variable['rewrite_optional'];
     $global_config['rewrite_op_mod'] = $config_variable['rewrite_op_mod'];
 
     $global_config['rewrite_endurl'] = $config_variable['rewrite_endurl'];
     $global_config['rewrite_exturl'] = $config_variable['rewrite_exturl'];
-
-    if ($config_variable['check_rewrite_file']) {
-        require NV_ROOTDIR . '/includes/rewrite.php';
-    } else {
-        require NV_ROOTDIR . '/includes/rewrite_index.php';
-    }
 
     $content_config .= "\n";
 
@@ -281,9 +274,6 @@ function nv_save_file_config_global()
         $nv_plugin_area[$row['plugin_area']][] = $row['plugin_file'];
     }
     $content_config .= "\$nv_plugin_area=" . nv_var_export($nv_plugin_area) . ";\n\n";
-
-    $content_config .= "\$rewrite_keys=" . nv_var_export(array_keys($rewrite)) . ";\n";
-    $content_config .= "\$rewrite_values=" . nv_var_export(array_values($rewrite)) . ";\n";
 
     $return = file_put_contents(NV_ROOTDIR . "/" . NV_DATADIR . "/config_global.php", trim($content_config), LOCK_EX);
     $nv_Cache->delAll();

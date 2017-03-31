@@ -1547,14 +1547,14 @@ function nv_check_url($url, $is_200 = 0)
  */
 function nv_url_rewrite($buffer, $is_url = false)
 {
-    global $rewrite_keys, $rewrite_values;
-
-    if (! empty($rewrite_keys)) {
+    global $global_config;
+    
+    if ($global_config['check_rewrite_file']) {
         if ($is_url) {
             $buffer = "\"" . $buffer . "\"";
         }
 
-        $buffer = preg_replace($rewrite_keys, $rewrite_values, $buffer);
+        $buffer = preg_replace_callback('#"(' . preg_quote(NV_BASE_SITEURL, '#') . ')index.php\\?' . preg_quote(NV_LANG_VARIABLE, '#') . '=([^"]+)"#', 'nv_url_rewrite_callback', $buffer);
 
         if ($is_url) {
             $buffer = substr($buffer, 1, -1);
@@ -1562,6 +1562,71 @@ function nv_url_rewrite($buffer, $is_url = false)
     }
 
     return $buffer;
+}
+
+/**
+ * nv_url_rewrite_callback()
+ * 
+ * @param mixed $matches
+ * @return
+ */
+function nv_url_rewrite_callback($matches)
+{
+    global $global_config, $language_array;
+    
+    $query_string = NV_LANG_VARIABLE . '=' . $matches[2];
+    $query_array = array();
+    $is_amp = (strpos($query_string, '&amp;') !== false);
+    parse_str(str_replace('&amp;', '&', $query_string), $query_array);
+    
+    if (!empty($query_array)) {
+        $op_rewrite = array();
+        $op_rewrite_count = 0;
+        $query_array_keys = array_keys($query_array);
+        if (!in_array($query_array[NV_LANG_VARIABLE], $global_config['allow_sitelangs']) or (isset($query_array[NV_NAME_VARIABLE]) and (!isset($query_array_keys[1]) or $query_array_keys[1] != NV_NAME_VARIABLE or !preg_match($global_config['check_module'], $query_array[NV_NAME_VARIABLE]))) or (isset($query_array[NV_OP_VARIABLE]) and (!isset($query_array_keys[2]) or $query_array_keys[2] != NV_OP_VARIABLE))) {
+            return $matches[0];
+        }
+        if (!$global_config['rewrite_optional']) {
+            $op_rewrite[] = $query_array[NV_LANG_VARIABLE];
+            $op_rewrite_count++;
+        }
+        unset($query_array[NV_LANG_VARIABLE]);
+        if (isset($query_array[NV_NAME_VARIABLE])) {
+            if ($global_config['rewrite_op_mod'] != $query_array[NV_NAME_VARIABLE]) {
+                $op_rewrite[] = $query_array[NV_NAME_VARIABLE];
+                $op_rewrite_count++;
+            }
+            unset($query_array[NV_NAME_VARIABLE]);
+        }
+        $rewrite_end = $global_config['rewrite_endurl'];
+        if (isset($query_array[NV_OP_VARIABLE])) {
+            if (preg_match('/^tag\/(.*)$/', $query_array[NV_OP_VARIABLE], $m)) {
+                if (strpos($m[1], '/') !== false) {
+                    return $matches[0];
+                }
+                $rewrite_end = '';
+            } elseif (preg_match('/^[a-zA-Z0-9\-\/]+(' . nv_preg_quote($global_config['rewrite_exturl']) . ')*$/', $query_array[NV_OP_VARIABLE], $m)) {
+                if (!empty($m[1])) {
+                    $rewrite_end = '';
+                }
+            } else {
+                return $matches[0];
+            }
+            $op_rewrite[] = $query_array[NV_OP_VARIABLE];
+            $op_rewrite_count++;
+            unset($query_array[NV_OP_VARIABLE]);
+        }
+        
+        $rewrite_string = (defined('NV_IS_REWRITE_OBSOLUTE') ? NV_MY_DOMAIN : '') . NV_BASE_SITEURL . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
+        
+        if (!empty($query_array)) {
+            $rewrite_string .= '?' . http_build_query($query_array, '', $is_amp ? '&amp;' : '&');
+        }
+        
+        return '"' . $rewrite_string . '"';
+    }
+
+    return $matches[0];
 }
 
 /**
