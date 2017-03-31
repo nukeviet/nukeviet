@@ -1549,7 +1549,7 @@ function nv_url_rewrite($buffer, $is_url = false)
 {
     global $global_config;
     
-    if ($global_config['check_rewrite_file']) {
+    if ($global_config['rewrite_enable']) {
         if ($is_url) {
             $buffer = "\"" . $buffer . "\"";
         }
@@ -1572,7 +1572,7 @@ function nv_url_rewrite($buffer, $is_url = false)
  */
 function nv_url_rewrite_callback($matches)
 {
-    global $global_config, $language_array;
+    global $global_config, $language_array, $sys_info;
     
     $query_string = NV_LANG_VARIABLE . '=' . $matches[2];
     $query_array = array();
@@ -1617,7 +1617,7 @@ function nv_url_rewrite_callback($matches)
             unset($query_array[NV_OP_VARIABLE]);
         }
         
-        $rewrite_string = (defined('NV_IS_REWRITE_OBSOLUTE') ? NV_MY_DOMAIN : '') . NV_BASE_SITEURL . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
+        $rewrite_string = (defined('NV_IS_REWRITE_OBSOLUTE') ? NV_MY_DOMAIN : '') . NV_BASE_SITEURL . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
         
         if (!empty($query_array)) {
             $rewrite_string .= '?' . http_build_query($query_array, '', $is_amp ? '&amp;' : '&');
