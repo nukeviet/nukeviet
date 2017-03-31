@@ -51,7 +51,7 @@ $keyhtml = nv_htmlspecialchars($key);
 
 $base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op;
 if (!empty($key)) {
-    $base_url_rewrite .= '&q=' . $key;
+    $base_url_rewrite .= '&q=' . urlencode($key);
 }
 
 $choose = $nv_Request->get_int('choose', 'get', 0);
@@ -76,12 +76,12 @@ if (preg_match('/^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{4})$/', $date_array['to_dat
 }
 
 $page = $nv_Request->get_int('page', 'get', 1);
-if (!empty($page)) {
+if ($page > 1) {
     $base_url_rewrite .= '&page=' . $page;
 }
 $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
 
-$request_uri = urldecode($_SERVER['REQUEST_URI']);
+$request_uri = $_SERVER['REQUEST_URI'];
 if ($request_uri != $base_url_rewrite and NV_MAIN_DOMAIN . $request_uri != $base_url_rewrite) {
     header('Location: ' . $base_url_rewrite);
     die();
@@ -249,7 +249,8 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 'author' => $value['_source']['author'],
                 'publtime' => $value['_source']['publtime'],
                 'homeimgfile' => $img_src,
-                'sourceid' => $value['_source']['sourceid']
+                'sourceid' => $value['_source']['sourceid'],
+                'external_link' => $value['_source']['external_link']
             );
         
         }
@@ -299,7 +300,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $numRecord = $db_slave->query($db_slave->sql())
             ->fetchColumn();
         
-        $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid')
+        $db_slave->select('tb1.id,tb1.title,tb1.alias,tb1.catid,tb1.hometext,tb1.author,tb1.publtime,tb1.homeimgfile, tb1.homeimgthumb,tb1.sourceid,tb1.external_link')
             ->order('tb1.publtime DESC')
             ->limit($per_page)
             ->offset(($page - 1) * $per_page);
@@ -309,7 +310,7 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
         $array_content = array();
         $show_no_image = $module_config[$module_name]['show_no_image'];
         
-        while (list ($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid) = $result->fetch(3)) {
+        while (list ($id, $title, $alias, $catid, $hometext, $author, $publtime, $homeimgfile, $homeimgthumb, $sourceid, $external_link) = $result->fetch(3)) {
             if ($homeimgthumb == 1) {
                 // image thumb
                 $img_src = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
@@ -334,7 +335,8 @@ if (empty($key) and ($catid == 0) and empty($from_date) and empty($to_date)) {
                 'author' => $author,
                 'publtime' => $publtime,
                 'homeimgfile' => $img_src,
-                'sourceid' => $sourceid
+                'sourceid' => $sourceid,
+                'external_link' => $external_link
             );
         }
     }
