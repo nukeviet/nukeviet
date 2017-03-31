@@ -1572,7 +1572,7 @@ function nv_url_rewrite($buffer, $is_url = false)
  */
 function nv_url_rewrite_callback($matches)
 {
-    global $global_config, $language_array, $sys_info;
+    global $global_config;
     
     $query_string = NV_LANG_VARIABLE . '=' . $matches[2];
     $query_array = array();
