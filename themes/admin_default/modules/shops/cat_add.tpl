@@ -23,10 +23,6 @@
 					<td><input class="form-control" style="width: 500px" name="alias" type="text" value="{DATA.alias}" maxlength="255" id="idalias"/>&nbsp; <em class="fa fa-refresh fa-lg fa-pointer" onclick="get_alias('cat', {DATA.catid});">&nbsp;</em>
 				</tr>
 				<tr>
-					<th class="text-right">{LANG.catalog_name_seo}</th>
-					<td><input class="form-control" style="width: 500px" name="title_custom" type="text" value="{DATA.title_custom}" maxlength="255" id="titlesite"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
-				</tr>
-				<tr>
 					<th class="text-right">{LANG.cat_sub}</th>
 					<td>
 					<select class="form-control" name="parentid">
@@ -122,6 +118,27 @@
 			</tbody>
 		</table>
 		<!-- END: point -->
+		
+		<table class="table table-striped table-bordered table-hover">
+			<caption>{LANG.tag}</caption>
+			<colgroup>
+				<col class="w300" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td class="text-right"><strong>{LANG.tag_title}</strong></td>
+					<td>
+						<input class="form-control" style="width: 500px" name="title_custom" type="text" value="{DATA.title_custom}" maxlength="255" id="titlesite"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span>
+					</td>
+				</tr>
+				<tr>
+					<td class="text-right"><strong>{LANG.tag_description}</strong></td>
+					<td>
+						<textarea class="form-control" style="width: 500px" name="tag_description">{DATA.tag_description}</textarea>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
 		<table class="table table-striped table-bordered table-hover">
 			<caption>{LANG.setting_group_price}</caption>

@@ -9,7 +9,9 @@
 * @Createdate Jul 04, 2011, 03:18:00 AM
 */
 
-if( ! defined( 'NV_ADMIN' ) or ! defined( 'NV_MAINFILE' ) ) die( 'Stop!!!' );
+if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+    die('Stop!!!');
+}
 
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '04/07/2011, 10:18';
@@ -402,6 +404,7 @@ $lang_module['error_required_title'] = 'Error: Required fields enter the Title';
 $lang_module['error_required_begin_time'] = 'Error: Required fields enter the Begin time';
 $lang_module['error_required_end_time'] = 'Error: Required fields enter the End time';
 $lang_module['error_required_config'] = 'Error: Required fields enter the Config';
+$lang_module['error_symbol'] = 'Error: Required fields enter the symbol';
 $lang_module['discount_add'] = 'Add new discount';
 $lang_module['discount_edit'] = 'Edit discount';
 $lang_module['discount_from'] = 'From production';

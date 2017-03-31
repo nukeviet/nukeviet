@@ -6,11 +6,7 @@
 <!-- END: error -->
 
 <link rel="stylesheet" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.css">
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.theme.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.menu.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.autocomplete.css" rel="stylesheet" />
-<link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
 
 <script type="text/javascript">var inrow = '{inrow}';</script>
 <form class="form-horizontal" action="" enctype="multipart/form-data" method="post">
@@ -316,6 +312,25 @@
 			<!-- END: gift -->
 
 			<div id="custom_form">{DATACUSTOM_FORM}</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">{LANG.tag}</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-md-4 control-label">{LANG.tag_title}</label>
+						<div class="col-md-20">
+							<input type="text" maxlength="255" value="{rowcontent.tag_title}" name="tag_title" class="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-4 control-label">{LANG.tag_description}</label>
+						<div class="col-md-20">
+							<textarea class="form-control" name="tag_description">{rowcontent.tag_description}</textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<div class="col-sm-24 col-md-6">
@@ -478,10 +493,7 @@
 <div id="message"></div>
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.menu.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.autocomplete.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/ui/jquery.ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/language/jquery.ui.datepicker-{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}themes/admin_default/js/content.js"></script>
 
