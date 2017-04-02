@@ -104,7 +104,7 @@ class Footer extends Element implements Container
      */
     public function withCopyright($copyright)
     {
-        Type::enforce($copyright, Type::STRING);
+        Type::enforce($copyright, [Type::STRING, Small::getClassName()]);
         $this->copyright = $copyright;
 
         return $this;
@@ -188,9 +188,13 @@ class Footer extends Element implements Container
         }
 
         if ($this->copyright) {
-            $small = $document->createElement('small');
-            $small->appendChild($document->createTextNode($this->copyright));
-            $footer->appendChild($small);
+            if (Type::is($this->copyright, Type::STRING)) {
+                $small = $document->createElement('small');
+                $small->appendChild($document->createTextNode($this->copyright));
+                $footer->appendChild($small);
+            } else {
+                $footer->appendChild($this->copyright->toDOMElement($document));
+            }
         }
 
         if ($this->relatedArticles) {

@@ -184,6 +184,9 @@ function nv_setup_data_module($lang, $module_name, $sample = 0)
                     try {
                         $db->query($sql);
                     } catch (PDOException $e) {
+                        echo '<pre>';
+                        print_r($e);
+                        echo '</pre>';
                         trigger_error($e->getMessage());
                         return $return;
                     }

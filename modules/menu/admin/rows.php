@@ -201,15 +201,15 @@ if ($nv_Request->isset_request('submit1', 'post')) {
 
     if (empty($post['module_name']) and ! empty($post['link'])) {
         // Kiểm tra để tách link module nếu nhập trực tiếp link đúng cấu trúc của module
-        foreach ($rewrite_keys as $pattern_i) {
-            if (preg_match($pattern_i, '"' . $post['link'] . '"', $m)) {
-                if (isset($site_mods[$m[3]])) {
-                    $post['module_name'] = $m[3];
-                    if (empty($post['op']) and isset($m[4]) and isset($site_mods[$m[3]]['funcs'][$m[4]])) {
-                        $post['op'] = $m[4];
-                    }
-                    break;
+        $checklink = explode('/', $post['link']);
+        foreach ($checklink as $k => $v) {
+            if (isset($site_mods[$v])) {
+                $k1 = $k + 1;
+                $post['module_name'] = $v;
+                if (isset($checklink[$k1]) and isset($site_mods[$v]['funcs'][$checklink[$k1]])) {
+                    $post['op'] = $checklink[$k1];
                 }
+                break;
             }
         }
     }

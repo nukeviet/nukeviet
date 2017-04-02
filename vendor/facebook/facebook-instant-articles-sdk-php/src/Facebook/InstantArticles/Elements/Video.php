@@ -45,6 +45,16 @@ class Video extends Element implements Container
     const DATA_FADE = 'data-fade';
 
     /**
+     * @var boolean marks if any created image will have likes enabled by default
+     */
+    private static $defaultLikeEnabled = false;
+
+    /**
+     * @var boolean marks if any created image will have comments enabled by default
+     */
+    private static $defaultCommentEnabled = false;
+
+    /**
      * @var Caption The caption for Video
      */
     private $caption;
@@ -114,6 +124,8 @@ class Video extends Element implements Container
 
     private function __construct()
     {
+        $this->isLikeEnabled = self::$defaultLikeEnabled;
+        $this->isCommentsEnabled = self::$defaultCommentEnabled;
     }
 
     /**
@@ -432,6 +444,31 @@ class Video extends Element implements Container
     {
         return $this->geoTag;
     }
+
+    /**
+     * Modify the default setup to enable/disable likes in videos
+     *
+     * WARNING this is not Thread-safe, so if you are using pthreads or any other multithreaded engine,
+     * this might not work as expected. (you will need to set this in all working threads manually)
+     * @param boolean $enabled inform true to enable likes on videos per default or false to disable like on videos.
+     */
+    public static function setDefaultLikeEnabled($enabled)
+    {
+        self::$defaultLikeEnabled = $enabled;
+    }
+
+    /**
+     * Modify the default setup to enable/disable comments in videos
+     *
+     * WARNING this is not Thread-safe, so if you are using pthreads or any other multithreaded engine,
+     * this might not work as expected. (you will need to set this in all working threads manually)
+     * @param boolean $enabled inform true to enable comments on videos per default or false to disable commenting on videos.
+     */
+    public static function setDefaultCommentEnabled($enabled)
+    {
+        self::$defaultCommentEnabled = $enabled;
+    }
+
 
     /**
      * Structure and create the full Video in a XML format DOMElement.

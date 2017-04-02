@@ -55,12 +55,7 @@ if ($nv_Request->isset_request('gid, get_user_json ', 'post, get')) {
         $array_data[] = array('id' => $userid, 'username' => $username, 'fullname' => nv_show_name_user($first_name, $last_name));
     }
 
-    header('Cache-Control: no-cache, must-revalidate');
-    header('Content-type: application/json');
-
-    ob_start('ob_gzhandler');
-    echo json_encode($array_data);
-    exit();
+    nv_jsonOutput($array_data);
 }
 
 //lấy danh sách user chưa kích hoạt
@@ -510,7 +505,7 @@ if (sizeof($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
 	    if ($groupsList[$group_id]['idsite'] != $global_config['idsite'] and $groupsList[$group_id]['idsite'] == 0) {
 	        $filtersql .= ' AND idsite=' . $global_config['idsite'];
 	    }
-	    $xtpl->assign('FILTERSQL', nv_base64_encode($crypt->aes_encrypt($filtersql, NV_CHECK_SESSION)));
+	    $xtpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
 	    $xtpl->assign('GID', $group_id);
 		$xtpl->assign('MIN_SEARCH', sprintf($lang_module['min_search'], NV_MIN_SEARCH_LENGTH));
 

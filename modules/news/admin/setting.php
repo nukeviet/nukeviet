@@ -67,7 +67,7 @@ if (!empty($savesetting)) {
         $array_config['instant_articles_httpauth'] = 0;
     }
     if (!empty($array_config['instant_articles_password'])) {
-        $array_config['instant_articles_password'] = nv_base64_encode($crypt->aes_encrypt($array_config['instant_articles_password']));
+        $array_config['instant_articles_password'] = $crypt->encrypt($array_config['instant_articles_password']);
     }
     
     if ($array_config['elas_use']) {
@@ -187,7 +187,7 @@ $xtpl->assign('INSTANT_ARTICLES_HTTPAUTH', $module_config[$module_name]['instant
 $xtpl->assign('INSTANT_ARTICLES_AUTO', $module_config[$module_name]['instant_articles_auto'] ? ' checked="checked"' : '');
 
 if (!empty($module_config[$module_name]['instant_articles_password'])) {
-    $xtpl->assign('INSTANT_ARTICLES_PASSWORD', $crypt->aes_decrypt(nv_base64_decode($module_config[$module_name]['instant_articles_password'])));
+    $xtpl->assign('INSTANT_ARTICLES_PASSWORD', $crypt->decrypt($module_config[$module_name]['instant_articles_password']));
 } else {
     $xtpl->assign('INSTANT_ARTICLES_PASSWORD', '');
 }

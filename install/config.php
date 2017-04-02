@@ -52,6 +52,7 @@ $global_config['idsite'] = 0;
 $global_config['site_timezone'] = 'byCountry';
 $global_config['statistics_timezone'] = '';
 $global_config['gzip_method'] = 1;
+$global_config['rewrite_enable'] = 1;
 $global_config['rewrite_endurl'] = '/';
 $global_config['rewrite_exturl'] = '.html';
 $global_config['rewrite_optional'] = 0;
@@ -70,8 +71,8 @@ $global_config['gfx_chk'] = 3;
 // Tài khoản chỉ được sử dụng Unicode, không có các ký tự đặc biệt
 $global_config['nv_unick_type'] = 4;
 
-// Mật khẩu cần kết hợp số và chữ
-$global_config['nv_upass_type'] = 2;
+// Mật khẩu cần kết hợp số và chữ, yêu cầu có chữ in HOA
+$global_config['nv_upass_type'] = 3;
 
 // Thời gian lặp lại việc sao lưu CSDL tính bằng ngày
 $global_config['dump_interval'] = 1;

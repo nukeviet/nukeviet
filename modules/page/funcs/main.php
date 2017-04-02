@@ -15,7 +15,7 @@ if (! defined('NV_IS_MOD_PAGE')) {
 $contents = '';
 if ($id) {
     // Xem theo bài viết
-    $base_url_rewrite = nv_url_rewrite($base_url . '&' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'], true);
+    $base_url_rewrite = nv_url_rewrite(str_replace('&amp;', '&', $base_url) . '&' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'], true);
     if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
         $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
     } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {

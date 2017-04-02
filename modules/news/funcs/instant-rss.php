@@ -19,7 +19,7 @@ if (empty($module_config[$module_name]['instant_articles_active'])) {
 if (!empty($module_config[$module_name]['instant_articles_httpauth'])) {
     $auth = nv_set_authorization();
     
-    if (empty($auth['auth_user']) or empty($auth['auth_pw']) or $auth['auth_user'] !== $module_config[$module_name]['instant_articles_username'] or $auth['auth_pw'] !== $crypt->aes_decrypt(nv_base64_decode($module_config[$module_name]['instant_articles_password']))) {
+    if (empty($auth['auth_user']) or empty($auth['auth_pw']) or $auth['auth_user'] !== $module_config[$module_name]['instant_articles_username'] or $auth['auth_pw'] !== $crypt->decrypt($module_config[$module_name]['instant_articles_password'])) {
         header('WWW-Authenticate: Basic realm="Private Area"');
         header(NV_HEADERSTATUS . ' 401 Unauthorized');
         if (php_sapi_name() !== 'cgi-fcgi') {
