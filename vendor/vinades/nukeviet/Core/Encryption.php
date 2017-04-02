@@ -177,15 +177,14 @@ class Encryption
      * Encryption::encrypt()
      *
      * @param mixed $val
-     * @param mixed $key
+     * @param mixed $iv
      * @return
      */
-    public function encrypt($data, $key = '')
+    public function encrypt($data, $iv = '')
     {
-        if (empty($key)) {
-            $key = $this->_key;
-        }
-        $data = openssl_encrypt($data, 'aes-256-cbc', $key, 0);
+        $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
+        
+        $data = openssl_encrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
         return strtr($data, '+/=', '-_,');
     }
 
@@ -193,15 +192,14 @@ class Encryption
      * Encryption::decrypt()
      *
      * @param mixed $val
-     * @param mixed $key
+     * @param mixed $iv
      * @return
      */
-    public function decrypt($data, $key = '')
+    public function decrypt($data, $iv = '')
     {
-        if (empty($key)) {
-            $key = $this->_key;
-        }
+        $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
+        
         $data = strtr($data, '-_,', '+/=');
-        return openssl_decrypt($data, 'aes-256-cbc', $key, 0);
+        return openssl_decrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
     }    
 }
