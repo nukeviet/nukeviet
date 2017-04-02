@@ -55,12 +55,7 @@ if ($nv_Request->isset_request('gid, get_user_json ', 'post, get')) {
         $array_data[] = array('id' => $userid, 'username' => $username, 'fullname' => nv_show_name_user($first_name, $last_name));
     }
 
-    header('Cache-Control: no-cache, must-revalidate');
-    header('Content-type: application/json');
-
-    ob_start('ob_gzhandler');
-    echo json_encode($array_data);
-    exit();
+    nv_jsonOutput($array_data);
 }
 
 //lấy danh sách user chưa kích hoạt
