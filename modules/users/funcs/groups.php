@@ -510,7 +510,7 @@ if (sizeof($array_op) == 2 and $array_op[0] == 'groups' and $array_op[1]) {
 	    if ($groupsList[$group_id]['idsite'] != $global_config['idsite'] and $groupsList[$group_id]['idsite'] == 0) {
 	        $filtersql .= ' AND idsite=' . $global_config['idsite'];
 	    }
-	    $xtpl->assign('FILTERSQL', nv_base64_encode($crypt->aes_encrypt($filtersql, NV_CHECK_SESSION)));
+	    $xtpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
 	    $xtpl->assign('GID', $group_id);
 		$xtpl->assign('MIN_SEARCH', sprintf($lang_module['min_search'], NV_MIN_SEARCH_LENGTH));
 
