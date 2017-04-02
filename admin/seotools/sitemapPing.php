@@ -30,7 +30,7 @@ function nv_sitemapPing($module, $link)
         return $lang_module['pleasePingAgain'];
     }
 
-    if ($sys_info['supports_rewrite']) {
+    if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
         $myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap-' . NV_LANG_DATA . '.' . $module . '.xml';
     } else {
         $myUrl = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module . '&amp;' . NV_OP_VARIABLE . '=sitemap';
@@ -118,10 +118,10 @@ while ($row = $result->fetch()) {
     $sitemapFiles[$row['name']] = $row['title'];
 }
 
-if ($global_config['check_rewrite_file']) {
+if ($global_config['rewrite_enable'] and $global_config['check_rewrite_file']) {
     $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap.xml';
 } else {
-    $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php/SitemapIndex' . $global_config['rewrite_endurl'];
+    $url_sitemap = NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
 }
 
 $xtpl = new XTemplate('sitemap.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);

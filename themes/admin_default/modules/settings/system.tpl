@@ -71,7 +71,7 @@
 				</tr>
 				<tr>
 					<td><strong>{LANG.lang_multi}</strong></td>
-					<td><input type="checkbox" value="1" name="lang_multi" {CHECKED_LANG_MULTI} /></td>
+					<td><input type="checkbox" value="1" name="lang_multi" {CHECKED_LANG_MULTI} data-toggle="controlrw"/></td>
 				</tr>
 				<!-- BEGIN: lang_multi -->
 				<tr>
@@ -90,12 +90,15 @@
 				</tr>
 				<!-- END: lang_geo -->
 				<!-- END: lang_multi -->
-				<!-- BEGIN: rewrite_optional -->
 				<tr>
-					<td><strong>{LANG.rewrite_optional}</strong></td>
-					<td><input type="checkbox" value="1" name="rewrite_optional" {CHECKED2} onchange="show_rewrite_op();"/></td>
+					<td><strong>{LANG.rewrite}</strong></td>
+					<td><input type="checkbox" value="1" name="rewrite_enable" {CHECKED_REWRITE_ENABLE} data-toggle="controlrw"/></td>
 				</tr>
-				<tr id="tr_rewrite_op_mod">
+				<tr id="tr_rewrite_optional"{SHOW_REWRITE_OPTIONAL}>
+					<td><strong>{LANG.rewrite_optional}</strong></td>
+					<td><input type="checkbox" value="1" name="rewrite_optional" {CHECKED_REWRITE_OPTIONAL} data-toggle="controlrw1"/></td>
+				</tr>
+				<tr id="tr_rewrite_op_mod"{SHOW_REWRITE_OP_MOD}>
 					<td><strong>{LANG.rewrite_op_mod}</strong></td>
 					<td>
 					<select name="rewrite_op_mod" class="form-control w200">
@@ -105,7 +108,6 @@
 						<!-- END: rewrite_op_mod -->
 					</select></td>
 				</tr>
-				<!-- END: rewrite_optional -->
 				<tr>
 					<td><strong>{LANG.site_timezone}</strong></td>
 					<td>
@@ -181,7 +183,5 @@ var LANG = [];
 LANG.note_ssl = "{LANG.note_ssl}";
 var CFG = [];
 CFG.cdndl = "{NV_CHECK_SESSION}";
-
-show_rewrite_op();
 </script>
 <!-- END: main -->
