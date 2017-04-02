@@ -2,6 +2,9 @@ CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
 NUKEVIET 4.1.01 Beta 2
+- Update CKEditor 4.6: Add feature: Copy Formatting, Drag&drop Image, Drag&drop File1
+- Change encrypt data use Openssl
+- Change rewrite Thank Hoaquynhtim99
 - Add Elasticseach for module News
 - Theme mobile: Fix send contact
 - Fix create virtual module
