@@ -41,11 +41,24 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
     require NV_ROOTDIR . '/modules/users/admin/config_' . $oauth_config . '.php';
 } else {
     if ($nv_Request->isset_request('submit', 'post')) {
+        $array_config['is_user_forum'] = $nv_Request->get_int('is_user_forum', 'post', 0);
         
         $array_config['dir_forum'] = $nv_Request->get_string('dir_forum', 'post', 0);
-        if (!is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet')) {
+        if (!$array_config['is_user_forum'] or !is_dir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet')) {
             $array_config['dir_forum'] = '';
         }
+        
+        // Kiểm tra cấu trúc thư mục diễn đàn mới cho lưu
+        if ($array_config['dir_forum']) {
+            $forum_files = @scandir(NV_ROOTDIR . '/' . $array_config['dir_forum'] . '/nukeviet');
+            if (empty($forum_files) or !in_array('is_user.php', $forum_files) or !in_array('changepass.php', $forum_files) or !in_array('editinfo.php', $forum_files) or !in_array('login.php', $forum_files) or !in_array('logout.php', $forum_files) or !in_array('lostpass.php', $forum_files) or !in_array('register.php', $forum_files)) {
+                $array_config['is_user_forum'] = 0;
+                $array_config['dir_forum'] = '';
+            }
+        } else {
+            $array_config['is_user_forum'] = 0;
+        }
+        
         $array_config['nv_unickmin'] = $nv_Request->get_int('nv_unickmin', 'post', 3);
         $array_config['nv_unickmax'] = $nv_Request->get_int('nv_unickmax', 'post', 100);
         $array_config['nv_upassmin'] = $nv_Request->get_int('nv_upassmin', 'post', 5);
@@ -60,7 +73,6 @@ if (preg_match('/^([a-z0-9\-\_]+)$/', $oauth_config, $m) and file_exists(NV_ROOT
         $array_config['allowuserlogin'] = $nv_Request->get_int('allowuserlogin', 'post', 0);
         $array_config['allowuserloginmulti'] = $nv_Request->get_int('allowuserloginmulti', 'post', 0);
         $array_config['allowuserreg'] = $nv_Request->get_int('allowuserreg', 'post', 0);
-        $array_config['is_user_forum'] = $nv_Request->get_int('is_user_forum', 'post', 0);
         $array_config['openid_servers'] = $nv_Request->get_typed_array('openid_servers', 'post', 'string');
         $array_config['openid_servers'] = !empty($array_config['openid_servers']) ? implode(',', $array_config['openid_servers']) : '';
         $array_config['openid_processing'] = $nv_Request->get_int('openid_processing', 'post', 0);
