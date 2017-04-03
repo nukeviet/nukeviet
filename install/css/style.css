@@ -469,3 +469,21 @@ div.infoerror a {
 	list-style: circle!important;
 	padding: 5px 0 5px 30px;
 }
+#thanks {
+	margin-top: 20px;
+	border-top: 1px solid #e6e6e6;
+	height: 320px;
+}
+#thanks .administrator h1 {
+	z-index: 3;
+    font-size: 16px;
+    line-height: 2.4;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #3a9705;
+    font-family: Segoe UI, Tahoma, sans-serif;
+}
+#thanks .list-member {
+	height: 250px;
+	overflow: scroll;
+}

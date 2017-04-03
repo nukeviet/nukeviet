@@ -47,4 +47,16 @@
 	});
 </script>
 <!-- END: check_supports_rewrite -->
+<div class="clearfix"></div>
+<div id="thanks">
+	<div class="administrator">
+		<h1>Lời cảm ơn</h1>
+		<p>
+			Ban quản trị NuKeViet xin được gửi lời cảm ơn chân thành đến các thành viên đã đóng góp công sức của mình cho công cuộc phát triển NuKeViet
+		</p>
+	</div>
+	<div class="list-member">
+		<h5>Danh sách thành viên:</h5><a href="#">Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet</a>
+	</div>
+</div>
 <!-- END: step -->
