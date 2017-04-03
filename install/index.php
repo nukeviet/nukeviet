@@ -377,8 +377,7 @@ if ($step == 1) {
             }
         }
 
-        echo json_encode($respon);
-        die();
+        nv_jsonOutput($respon);
     }
 
     if (in_array($db_config['dbtype'], $PDODrivers) and ! empty($db_config['dbhost']) and preg_match('#[a-z]#ui', $db_config['dbname']) and ! empty($db_config['dbuname']) and ! empty($db_config['prefix'])) {

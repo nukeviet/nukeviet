@@ -176,6 +176,22 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 }
 
 /**
+ * nv_jsonOutput()
+ *
+ * @param array $array_data
+ * @return void
+ */
+function nv_jsonOutput($array_data)
+{
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Content-type: application/json');
+    
+    ob_start('ob_gzhandler');
+    echo json_encode($array_data);
+    exit();
+}
+
+/**
  * nv_xmlOutput()
  *
  * @param string $content

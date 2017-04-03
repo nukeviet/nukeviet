@@ -38,27 +38,29 @@
 		<form method="post" role="form" onsubmit="return false;">
 			<input type="hidden" id="commentpid" value="0"/>
 			<div class="form-group clearfix">
-				<div class="col-xs-12">
-					<input id="commentname" type="text" value="{NAME}" {DISABLED} class="form-control" placeholder="{LANG.comment_name}"/>
-				</div>
-				<div class="col-xs-12">
-					<input id="commentemail_iavim" type="text" value="{EMAIL}" {DISABLED} class="form-control" placeholder="{LANG.comment_email}"/>
+				<div class="row">
+					<div class="col-xs-12">
+						<input id="commentname" type="text" value="{NAME}" {DISABLED} class="form-control" placeholder="{LANG.comment_name}"/>
+					</div>
+					<div class="col-xs-12">
+						<input id="commentemail_iavim" type="text" value="{EMAIL}" {DISABLED} class="form-control" placeholder="{LANG.comment_email}"/>
+					</div>
 				</div>
 			</div>
-			<div class="form-group clearfix">
-				<div class="col-xs-24">
-					<textarea class="form-control" style="width: 100%" name="commentcontent" id="commentcontent" cols="20" rows="5"></textarea>
-				</div>
+			<div class="form-group clearfix">				
+				<textarea class="form-control" style="width: 100%" name="commentcontent" id="commentcontent" cols="20" rows="5"></textarea>			
 			</div>
 			<!-- BEGIN: captcha -->
 			<div class="form-group clearfix">
-				<label class="col-xs-6 hidden-xs">{LANG.comment_seccode}</label>
-				<div class="col-xs-14 col-sm-8">
-					<img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
-					&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode_iavim');">&nbsp;</em>
-				</div>
-				<div class="col-xs-10">
-					<input id="commentseccode_iavim" type="text" class="form-control" maxlength="{GFX_NUM}"/>
+				<div class="row">
+					<label class="col-xs-24 hidden-xs">{LANG.comment_seccode}</label>
+					<div class="col-xs-12 col-sm-8">
+						<img class="captchaImg" alt="{N_CAPTCHA}" src="{SRC_CAPTCHA}" width="{GFX_WIDTH}" height="{GFX_HEIGHT}" />
+						&nbsp;<em class="fa fa-pointer fa-refresh fa-lg" onclick="change_captcha('#commentseccode_iavim');">&nbsp;</em>
+					</div>
+					<div class="col-xs-12">
+						<input id="commentseccode_iavim" type="text" class="form-control" maxlength="{GFX_NUM}"/>
+					</div>
 				</div>
 			</div>
 			<!-- END: captcha -->

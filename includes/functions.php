@@ -455,7 +455,7 @@ function nv_capcha_txt($seccode)
         if (!empty($global_config['recaptcha_secretkey'])) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
             $request = array(
-                'secret' => $crypt->aes_decrypt(nv_base64_decode($global_config['recaptcha_secretkey'])),
+                'secret' => $crypt->decrypt($global_config['recaptcha_secretkey']),
                 'response' => $seccode,
                 'remoteip' => $client_info['ip']
             );
@@ -1861,7 +1861,7 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
 function nv_redirect_encrypt($url)
 {
     global $crypt;
-    return nv_base64_encode($crypt->aes_encrypt($url, NV_CHECK_SESSION));
+    return $crypt->encrypt($url, NV_CHECK_SESSION);
 }
 
 /**
@@ -1888,7 +1888,7 @@ function nv_redirect_decrypt($string, $insite = true)
     }
 
     global $crypt;
-    $url = $crypt->aes_decrypt($string, NV_CHECK_SESSION);
+    $url = $crypt->decrypt($string, NV_CHECK_SESSION);
     if (empty($url)) {
         return '';
     }
