@@ -32,6 +32,7 @@ $lang_module['caption_badmod'] = 'Danh sách các module ngưng hoạt động v
 $lang_module['caption_newmod'] = 'Danh sách các module chưa cài đặt';
 $lang_module['module_name'] = 'Module';
 $lang_module['custom_title'] = 'Tên gọi ngoài site';
+$lang_module['site_title'] = 'Giá trị cho tiêu đề site';
 $lang_module['admin_title'] = 'Tên gọi khu vực quản trị';
 $lang_module['weight'] = 'Thứ tự';
 $lang_module['in_menu'] = 'Top Menu';

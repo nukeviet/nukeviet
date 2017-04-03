@@ -191,6 +191,7 @@ function nv_show_funcs()
             $act_funcs[$func]['show_func'] = $row['show_func'];
             $act_funcs[$func]['alias'] = $row['alias'];
             $act_funcs[$func]['func_custom_name'] = $row['func_custom_name'];
+            $act_funcs[$func]['func_site_title'] = $row['func_site_title'];
             $act_funcs[$func]['in_submenu'] = $row['in_submenu'];
             $act_funcs[$func]['subweight'] = $row['subweight'];
 

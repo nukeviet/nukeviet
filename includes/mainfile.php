@@ -413,6 +413,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'module_upload' => $row['module_upload'],
                     'module_theme' => $row['module_theme'],
                     'custom_title' => $row['custom_title'],
+                    'site_title' => (empty($row['site_title'])) ? $row['custom_title'] : $row['site_title'],
                     'admin_title' => (empty($row['admin_title'])) ? $row['custom_title'] : $row['admin_title'],
                     'admin_file' => $row['admin_file'],
                     'main_file' => $row['main_file'],
@@ -433,6 +434,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                 'func_name' => $f_name,
                 'show_func' => $row['show_func'],
                 'func_custom_name' => $row['func_custom_name'],
+                'func_site_title' => empty($row['func_site_title']) ? $row['func_custom_name'] : $row['func_site_title'],
                 'in_submenu' => $row['in_submenu']
             );
             $sys_mods[$m_title]['alias'][$f_name] = $f_alias;
