@@ -474,16 +474,33 @@ div.infoerror a {
 	border-top: 1px solid #e6e6e6;
 	height: 310px;
 }
+#thanks a {
+	color: #1b7fa9;
+}
 #thanks .administrator h1 {
 	z-index: 3;
     font-size: 16px;
     line-height: 2.4;
     font-weight: 700;
     text-transform: uppercase;
-    color: #f58e32;
+    color: #3a9705;
     font-family: Segoe UI, Tahoma, sans-serif;
 }
 #thanks .list-member {
 	height: 220px;
-	overflow: scroll;
+	overflow-y: scroll;
+}
+#thanks .list-member h4 {
+	font-family: Segoe UI, Tahoma, sans-serif;
+	font-size: 14px;
+	color: #ef8609;
+}
+#thanks .list-member h5 {
+	color: #333;
+}
+#thanks .list-member .list-member-all {
+	padding-bottom: 20px
+}
+#thanks .list-member .list-member-other-version {
+	padding-bottom: 20px
 }
