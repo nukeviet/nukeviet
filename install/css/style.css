@@ -472,7 +472,7 @@ div.infoerror a {
 #thanks {
 	margin-top: 20px;
 	border-top: 1px solid #e6e6e6;
-	height: 320px;
+	height: 310px;
 }
 #thanks .administrator h1 {
 	z-index: 3;
@@ -484,6 +484,6 @@ div.infoerror a {
     font-family: Segoe UI, Tahoma, sans-serif;
 }
 #thanks .list-member {
-	height: 230px;
+	height: 220px;
 	overflow: scroll;
 }
