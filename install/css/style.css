@@ -501,6 +501,7 @@ div.infoerror a {
 #thanks .list-member .list-member-all {
 	padding-bottom: 20px
 }
-#thanks .list-member .list-member-other-version {
-	padding-bottom: 20px
+#thanks .list-member .list-member-other-version .version {
+	padding: 10px 0px;
+	text-transform: inherit;
 }

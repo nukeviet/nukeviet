@@ -259,3 +259,9 @@ $lang_module['dbcheck_error_files'] = 'To install NukeViet for this kind databas
 $lang_module['dbcheck_error_driver'] = 'Error: System does not support this kind of database, please select the kind other.';
 $lang_module['update_error_check_version_sys'] = 'Error: Unable to check the version of the system';
 $lang_module['update_error_check_version_ext'] = 'Error: Unable to check the version of the extension';
+
+$lang_module['thanks'] = 'Thanks';
+$lang_module['thanks_text'] = 'NuKeViets management would like to send our sincere thanks to our fellow members as well as for their contribution to the development of NuKeViet so far, hope you continue to promote and always support As well as continue building hands NuKeViets growing.';
+$lang_module['thanks_list_member_all'] = 'Members list:';
+$lang_module['thanks_list_member_other_version'] = 'The list of members contributed by each version';
+$lang_module['thanks_other_version'] = 'Version';
