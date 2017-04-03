@@ -53,7 +53,7 @@ if (! empty($admin_cookie)) {
     if ($_second == 'admin_logout') {
         if (defined('NV_IS_USER_FORUM')) {
             define('NV_IS_MOD_USER', true);
-            require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/logout.php';
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/logout.php';
         } else {
             $nv_Request->unset_request('nvloginhash', 'cookie');
         }

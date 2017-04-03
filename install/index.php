@@ -673,7 +673,7 @@ if ($step == 1) {
 
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
     $array_data['site_name'] = $nv_Request->get_title('site_name', 'post', $array_data['site_name'], 1);
-    $array_data['nv_login'] = nv_substr($nv_Request->get_title('nv_login', 'post', $array_data['nv_login'], 1), 0, NV_UNICKMAX);
+    $array_data['nv_login'] = nv_substr($nv_Request->get_title('nv_login', 'post', $array_data['nv_login'], 1), 0, $global_config['nv_unickmax']);
     $array_data['nv_email'] = $nv_Request->get_title('nv_email', 'post', $array_data['nv_email']);
     $array_data['nv_password'] = $nv_Request->get_title('nv_password', 'post', $array_data['nv_password']);
     $array_data['re_password'] = $nv_Request->get_title('re_password', 'post', $array_data['re_password']);
@@ -692,8 +692,8 @@ if ($step == 1) {
                 $error = 'Sorry! Could not connect to data server';
             }
             else {
-                $check_login = nv_check_valid_login($array_data['nv_login'], NV_UNICKMAX, NV_UNICKMIN);
-                $check_pass = nv_check_valid_pass($array_data['nv_password'], NV_UPASSMAX, NV_UPASSMIN);
+                $check_login = nv_check_valid_login($array_data['nv_login'], $global_config['nv_unickmax'], $global_config['nv_unickmin']);
+                $check_pass = nv_check_valid_pass($array_data['nv_password'], $global_config['nv_upassmax'], $global_config['nv_upassmin']);
                 $check_email = nv_check_valid_email($array_data['nv_email']);
 
                 if (empty($array_data['site_name'])) {
