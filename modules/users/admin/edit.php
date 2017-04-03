@@ -123,7 +123,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
     
     $custom_fields = $nv_Request->get_array('custom_fields', 'post');
     
-    if ($_user['username'] != $row['username'] and ($error_username = nv_check_valid_login($_user['username'], NV_UNICKMAX, NV_UNICKMIN)) != '') {
+    if ($_user['username'] != $row['username'] and ($error_username = nv_check_valid_login($_user['username'], $global_config['nv_unickmax'], $global_config['nv_unickmin'])) != '') {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'username',
@@ -183,7 +183,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
         )));
     }
     
-    if (!empty($_user['password1']) and ($check_pass = nv_check_valid_pass($_user['password1'], NV_UPASSMAX, NV_UPASSMIN)) != '') {
+    if (!empty($_user['password1']) and ($check_pass = nv_check_valid_pass($_user['password1'], $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'password1',

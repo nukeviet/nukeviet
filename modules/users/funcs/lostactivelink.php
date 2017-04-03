@@ -18,7 +18,7 @@ if (defined('NV_IS_USER')) {
 }
 
 if (defined('NV_IS_USER_FORUM')) {
-    require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/lostpass.php' ;
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/lostpass.php' ;
     exit();
 }
 
@@ -51,7 +51,7 @@ if ($checkss == $data['checkss']) {
     if ((! empty($seccode) and md5($data['nv_seccode']) == $seccode) or nv_capcha_txt($data['nv_seccode'])) {
         if (! empty($data['userField'])) {
             $check_email = nv_check_valid_email($data['userField']);
-            $check_login = nv_check_valid_login($data['userField'], NV_UNICKMAX, NV_UNICKMIN);
+            $check_login = nv_check_valid_login($data['userField'], $global_config['nv_unickmax'], $global_config['nv_unickmin']);
 
             if (! empty($check_email) and ! empty($check_login)) {
                 $step = 1;
@@ -97,7 +97,7 @@ if ($checkss == $data['checkss']) {
                         if ($data['answer'] == $row['answer']) {
                             $nv_Request->unset_request('lostactivelink_seccode', 'session');
 
-                            $rand = rand(NV_UPASSMIN, NV_UPASSMAX);
+                            $rand = rand($global_config['nv_upassmin'], $global_config['nv_upassmax']);
                             $password_new = nv_genpass($rand);
                             $checknum = nv_genpass(10);
                             $checknum = md5($checknum);
