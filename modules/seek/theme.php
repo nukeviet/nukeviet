@@ -22,9 +22,9 @@ if (! defined('NV_IS_MOD_SEARCH')) {
  */
 function search_main_theme($is_search, $search, $array_modul)
 {
-    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $module_name;
+    global $module_info, $global_config, $lang_global, $lang_module, $module_name;
 
-    $xtpl = new XTemplate('form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('form.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('NV_MIN_SEARCH_LENGTH', NV_MIN_SEARCH_LENGTH);
     $xtpl->assign('NV_MAX_SEARCH_LENGTH', NV_MAX_SEARCH_LENGTH);
@@ -34,16 +34,16 @@ function search_main_theme($is_search, $search, $array_modul)
     $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
     $xtpl->assign('MODULE_NAME', $module_name);
 
-    $search['action'] = NV_BASE_SITEURL . "index.php";
-    $search['andChecked'] = $search['logic'] == 1 ? " checked=\"checked\"" : "";
-    $search['orChecked'] = $search['logic'] == 1 ? "" : " checked=\"checked\"";
+    $search['action'] = NV_BASE_SITEURL . 'index.php';
+    $search['andChecked'] = $search['logic'] == 1 ? ' checked="checked"' : '';
+    $search['orChecked'] = $search['logic'] == 1 ? '' : ' checked="checked"';
 
     $xtpl->assign('DATA', $search);
 
     if (! empty($array_modul)) {
         foreach ($array_modul as $m_name => $m_info) {
             $m_info['value'] = $m_name;
-            $m_info['selected'] = ($m_name == $search['mod']) ? " selected=\"selected\"" : "";
+            $m_info['selected'] = ($m_name == $search['mod']) ? ' selected="selected"' : '';
             $m_info['adv_search'] = $m_info['adv_search'] ? 'true' : 'false';
 
             $xtpl->assign('MOD', $m_info);
@@ -58,7 +58,7 @@ function search_main_theme($is_search, $search, $array_modul)
 
     if ($is_search) {
         if ($search['is_error']) {
-            $xtpl->assign('SEARCH_RESULT', '<span class=\'red\'>' . $search['errorInfo'] . '</span>');
+            $xtpl->assign('SEARCH_RESULT', '<span class="red">' . $search['errorInfo'] . '</span>');
         } else {
             $xtpl->assign('SEARCH_RESULT', $search['content']);
         }
@@ -95,8 +95,8 @@ function urlencode_rfc_3986($string)
  */
 function search_result_theme($result_array, $mod, $mod_custom_title, $search, $is_generate_page, $limit, $num_items)
 {
-    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $db, $module_name;
-    $xtpl = new XTemplate('result.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    global $module_info, $global_config, $lang_global, $lang_module, $db, $module_name;
+    $xtpl = new XTemplate('result.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('SEARCH_RESULT_NUM', $num_items);
     $xtpl->assign('MODULE_CUSTOM_TITLE', $mod_custom_title);
@@ -107,12 +107,12 @@ function search_result_theme($result_array, $mod, $mod_custom_title, $search, $i
         $xtpl->parse('main.result');
     }
 
-    $base_url = NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&q=" . urlencode_rfc_3986($search['key']);
-    if ($mod != "all") {
-        $base_url .= "&m=" . $mod;
+    $base_url = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&q=' . urlencode_rfc_3986($search['key']);
+    if ($mod != 'all') {
+        $base_url .= '&m=' . $mod;
     }
     if (empty($search['logic'])) {
-        $base_url .= "&l=" . $search['logic'];
+        $base_url .= '&l=' . $search['logic'];
     }
 
     if ($is_generate_page) {

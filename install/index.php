@@ -377,8 +377,7 @@ if ($step == 1) {
             }
         }
 
-        echo json_encode($respon);
-        die();
+        nv_jsonOutput($respon);
     }
 
     if (in_array($db_config['dbtype'], $PDODrivers) and ! empty($db_config['dbhost']) and preg_match('#[a-z]#ui', $db_config['dbname']) and ! empty($db_config['dbuname']) and ! empty($db_config['prefix'])) {
@@ -793,6 +792,7 @@ if ($step == 1) {
                         nv_save_file_config();
 
                         $array_config_rewrite = array(
+                            'rewrite_enable' => $global_config['rewrite_enable'],
                             'rewrite_optional' => $global_config['rewrite_optional'],
                             'rewrite_endurl' => $global_config['rewrite_endurl'],
                             'rewrite_exturl' => $global_config['rewrite_exturl'],
@@ -815,10 +815,10 @@ if ($step == 1) {
 
                                 $check_rewrite_file = nv_check_rewrite_file();
 
-                                if ($check_rewrite_file) {
+                                if ($global_config['rewrite_enable'] and $check_rewrite_file) {
                                     $content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap.xml';
                                 } else {
-                                    $content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php/SitemapIndex' . $global_config['rewrite_endurl'];
+                                    $content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
                                 }
 
                                 $contents = str_replace('Sitemap: http://yousite.com/?nv=SitemapIndex', $content_sitemap, $contents);

@@ -49,7 +49,7 @@ class SMTP
      *
      * @var integer
      */
-    const DEFAULT_SMTP_PORT = 25;
+    const DEFAULT_PORT = 25;
 
     /**
      * The maximum line length allowed by RFC 2822 section 2.1.1
@@ -102,13 +102,17 @@ class SMTP
      * * `echo` Output plain-text as-is, appropriate for CLI
      * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
      * * `error_log` Output to error log as configured in php.ini
-     *
      * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
      * <code>
      * $smtp->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
      * </code>
+     * Alternatively, you can pass in an instance of a PSR-3 compatible logger, though only `debug`
+     * level output is used:
+     * <code>
+     * $mail->Debugoutput = new myPsr3Logger;
+     * </code>
      *
-     * @var string|callable
+     * @var string|callable|Psr\Log\LoggerInterface
      */
     public $Debugoutput = 'echo';
 
@@ -138,6 +142,17 @@ class SMTP
      * @var integer
      */
     public $Timelimit = 300;
+
+    /**
+     * @var array patterns to extract smtp transaction id from smtp reply
+     * Only first capture group will be use, use non-capturing group to deal with it
+     * Extend this class to override this property to fulfil your needs.
+     */
+    protected $smtp_transaction_id_patterns = [
+        'exim' => '/[0-9]{3} OK id=(.*)/',
+        'sendmail' => '/[0-9]{3} 2.0.0 (.*) Message/',
+        'postfix' => '/[0-9]{3} 2.0.0 Ok: queued as (.*)/'
+    ];
 
     /**
      * The socket for the server connection.
@@ -199,9 +214,14 @@ class SMTP
         if ($level > $this->do_debug) {
             return;
         }
+        //Is this a PSR-3 logger?
+        if (is_a($this->Debugoutput, 'Psr\Log\LoggerInterface')) {
+            $this->Debugoutput->debug($str);
+            return;
+        }
         //Avoid clash with built-in function names
         if (!in_array($this->Debugoutput, ['error_log', 'html', 'echo']) and is_callable($this->Debugoutput)) {
-            call_user_func($this->Debugoutput, $str, $this->do_debug);
+            call_user_func($this->Debugoutput, $str, $level);
             return;
         }
         switch ($this->Debugoutput) {
@@ -257,7 +277,7 @@ class SMTP
             return false;
         }
         if (empty($port)) {
-            $port = self::DEFAULT_SMTP_PORT;
+            $port = self::DEFAULT_PORT;
         }
         // Connect to the SMTP server
         $this->edebug(
@@ -1178,5 +1198,29 @@ class SMTP
             $notice . ' Error number ' . $errno . '. "Error notice: ' . $errmsg,
             self::DEBUG_CONNECTION
         );
+    }
+
+    /**
+     * Will return the ID of the last smtp transaction based on a list of patterns provided
+     * in SMTP::$smtp_transaction_id_patterns.
+     * If no reply has been received yet, it will return null.
+     * If no pattern has been matched, it will return false.
+     * @return bool|null|string
+     */
+    public function getLastTransactionID()
+    {
+        $reply = $this->getLastReply();
+
+        if (empty($reply)) {
+            return null;
+        }
+
+        foreach ($this->smtp_transaction_id_patterns as $smtp_transaction_id_pattern) {
+            if (preg_match($smtp_transaction_id_pattern, $reply, $matches)) {
+                return $matches[1];
+            }
+        }
+
+        return false;
     }
 }

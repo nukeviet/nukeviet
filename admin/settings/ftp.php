@@ -110,7 +110,7 @@ if ($sys_info['ftp_support']) {
 
 
         if (empty($error)) {
-            $array_config['ftp_user_pass'] = nv_base64_encode($crypt->aes_encrypt($ftp_user_pass));
+            $array_config['ftp_user_pass'] = $crypt->encrypt($ftp_user_pass);
 
             $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value= :config_value WHERE config_name = :config_name AND lang = 'sys' AND module='global'");
             foreach ($array_config as $config_name => $config_value) {

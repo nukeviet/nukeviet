@@ -147,6 +147,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $row['activecomm'] = $module_config[$module_name]['setcomm'];
     $row['socialbutton'] = 1;
     $row['gid'] = 0;
+    $row['hot_post'] = 0;
 }
 
 if (defined('NV_EDITOR')) {

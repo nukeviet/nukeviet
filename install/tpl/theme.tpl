@@ -49,7 +49,7 @@
         </div>
         <div id="footer">
             <p>
-                &copy; 2010 - 2015 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
+                &copy; 2010 - 2017 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
             </p>
             <p>
                 {LANG.publish} <strong><a title="GNU General Public License, version 2" href="https://www.gnu.org/licenses/gpl-2.0.html">GNU/GPL v2.0</a></strong>

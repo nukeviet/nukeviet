@@ -263,7 +263,7 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 }
 // Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
-$global_config['ftp_user_pass'] = $crypt->aes_decrypt(nv_base64_decode($global_config['ftp_user_pass']));
+$global_config['ftp_user_pass'] = $crypt->decrypt($global_config['ftp_user_pass']);
 
 if (isset($nv_plugin_area[1])) {
     // Kết nối với các plugin Trước khi kết nối CSDL
@@ -321,7 +321,7 @@ $global_config['array_theme_type'] = explode(',', $global_config['theme_type']);
 
 define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
-$global_config['smtp_password'] = $crypt->aes_decrypt(nv_base64_decode($global_config['smtp_password']));
+$global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password']);
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
@@ -411,6 +411,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'module_file' => $row['module_file'],
                     'module_data' => $row['module_data'],
                     'module_upload' => $row['module_upload'],
+                    'module_theme' => $row['module_theme'],
                     'custom_title' => $row['custom_title'],
                     'admin_title' => (empty($row['admin_title'])) ? $row['custom_title'] : $row['admin_title'],
                     'admin_file' => $row['admin_file'],
