@@ -59,22 +59,27 @@
 	<div class="list-member">
 		<div class="list-member-all">
 			<h4>Danh sách thành viên:</h4>
-			<a href="#">Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet</a>
+			<a href="#">Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet
+			Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,
+			Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,
+			Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,
+			Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,	
+			</a>
 		</div>
 		<div class="list-member-other-version">
-			<h5>Cảm ơn các thành viên đã đóng góp (phiên bản 3.0):</h5>
+			<h5>Các thành viên đã đóng góp (phiên bản 3.0):</h5>
 			<a href="#">The Hung, Vu Thao</a>
 		</div>
 		<div class="list-member-other-version">
-			<h5>Cảm ơn các thành viên đã đóng góp (phiên bản 3.4):</h5>
+			<h5>Các thành viên đã đóng góp (phiên bản 3.4):</h5>
 			<a href="#">The Hung, Vu Thao, Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet</a>
 		</div>
 		<div class="list-member-other-version">
-			<h5>Cảm ơn các thành viên đã đóng góp (phiên bản 3.4.2):</h5>
+			<h5>Các thành viên đã đóng góp (phiên bản 3.4.2):</h5>
 			<a href="#">The Hung, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet</a>
 		</div>
 		<div class="list-member-other-version">
-			<h5>Cảm ơn các thành viên đã đóng góp (phiên bản 4.0):</h5>
+			<h5>Các thành viên đã đóng góp (phiên bản 4.0):</h5>
 			<a href="#">The Hung, Vu Thao, Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet</a>
 		</div>
 	</div>
