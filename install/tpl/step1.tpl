@@ -52,7 +52,8 @@
 	<div class="administrator">
 		<h1>Lời cảm ơn</h1>
 		<p>
-			Ban quản trị NuKeViet xin được gửi lời cảm ơn chân thành đến các thành viên đã đóng góp công sức của mình cho công cuộc phát triển NuKeViet
+			Ban quản trị NuKeViet xin được gửi lời cảm ơn chân thành đến các thành viên đã đồng hành cũng như đóng góp công sức của mình cho công cuộc phát triển NuKeViet từ trước cho đến nay, 
+			mong các bạn tiếp tục phát huy và luôn luôn ủng hộ cũng như tiếp tục chung tay xây dựng NuKeViet ngày càng lớn mạnh.
 		</p>
 	</div>
 	<div class="list-member">

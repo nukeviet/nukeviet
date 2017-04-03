@@ -480,10 +480,10 @@ div.infoerror a {
     line-height: 2.4;
     font-weight: 700;
     text-transform: uppercase;
-    color: #3a9705;
+    color: #f58e32;
     font-family: Segoe UI, Tahoma, sans-serif;
 }
 #thanks .list-member {
-	height: 250px;
+	height: 230px;
 	overflow: scroll;
 }
