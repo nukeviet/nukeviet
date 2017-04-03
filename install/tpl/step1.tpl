@@ -47,4 +47,40 @@
 	});
 </script>
 <!-- END: check_supports_rewrite -->
+<div class="clearfix"></div>
+<div id="thanks">
+	<div class="administrator">
+		<h1>{LANG.thanks}</h1>
+		<p>
+			{LANG.thanks_text}
+		</p>
+	</div>
+	<div class="list-member">
+		<div class="list-member-all">
+			<h4>{LANG.thanks_list_member_all}</h4>
+			<a href="https://github.com/thehung">The Hung,</a>
+			<a href="https://github.com/vuthao">Vu Thao,</a>
+			<a href="https://github.com/hoaquynhtim99">Hoaquynhtim99,</a>
+			<a href="https://github.com/hiidemo">hiidemo,</a>
+			<a href="https://github.com/#">Hồ Ngọc Triển,</a>
+			<a href="https://github.com/mynukeviet">mynukeviet,</a>
+			<a href="https://github.com/phongaz">phongaz,</a>
+			<a href="https://github.com/anhyeuviolet">anhyeuviolet,</a>
+		</div>
+		<div class="list-member-other-version">
+			<h4>{LANG.thanks_list_member_other_version}</h4>
+			<div class="version">
+				<h5>{LANG.thanks_other_version} 4.1</h5>
+				<a href="https://github.com/thehung">The Hung,</a>
+				<a href="https://github.com/vuthao">Vu Thao,</a>
+				<a href="https://github.com/hoaquynhtim99">Hoaquynhtim99,</a>
+				<a href="https://github.com/hiidemo">hiidemo,</a>
+				<a href="https://github.com/#">Hồ Ngọc Triển,</a>
+				<a href="https://github.com/mynukeviet">mynukeviet,</a>
+				<a href="https://github.com/phongaz">phongaz,</a>
+				<a href="https://github.com/anhyeuviolet">anhyeuviolet,</a>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- END: step -->

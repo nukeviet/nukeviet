@@ -259,3 +259,9 @@ $lang_module['dbcheck_error_files'] = 'Để cài đặt NukeViet với loại C
 $lang_module['dbcheck_error_driver'] = 'Lỗi: Hệ thống không hỗ trợ loại CSDL này, vui lòng chọn loại khác';
 $lang_module['update_error_check_version_sys'] = 'Lỗi: Không thể kiểm tra phiên bản hệ thống';
 $lang_module['update_error_check_version_ext'] = 'Lỗi: Không thể kiểm tra phiên bản các ứng dụng';
+
+$lang_module['thanks'] = 'Lời cảm ơn';
+$lang_module['thanks_text'] = 'Ban quản trị NuKeViet xin được gửi lời cảm ơn chân thành đến các thành viên đã đồng hành cũng như đóng góp công sức của mình cho công cuộc phát triển NuKeViet từ trước cho đến nay, mong các bạn tiếp tục phát huy và luôn luôn ủng hộ cũng như tiếp tục chung tay xây dựng NuKeViet ngày càng lớn mạnh.';
+$lang_module['thanks_list_member_all'] = 'Danh sách thành viên:';
+$lang_module['thanks_list_member_other_version'] = 'Danh sách các thành viên đã đóng góp theo từng phiên bản';
+$lang_module['thanks_other_version'] = 'Phiên bản';

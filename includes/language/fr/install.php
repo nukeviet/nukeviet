@@ -259,3 +259,9 @@ $lang_module['dbcheck_error_files'] = 'Pour installer Nukeviet avec ce type de C
 $lang_module['dbcheck_error_driver'] = 'Erreur: Systeme n\'est pas compatible a ce type de CSDL, veuillez utiliser un autre type';
 $lang_module['update_error_check_version_sys'] = 'Erreur: Impossible de vérifier la version du système';
 $lang_module['update_error_check_version_ext'] = 'Erreur: Impossible de vérifier la version de l\'application';
+
+$lang_module['thanks'] = 'Remerciements';
+$lang_module['thanks_text'] = 'gestion NuKeViets denvoyer nos sincères Muon grâce à nos collègues ainsi que la contribution au développement pour chung de NukeViet jusqu à présent, espérons que vous continuerez à promouvoir et soutenir toujours aussi bien que continuer à bâtir NuKeViets croissance mains.';
+$lang_module['thanks_list_member_all'] = 'Liste des membres:';
+$lang_module['thanks_list_member_other_version'] = 'La liste des membres Contribution de chaque version';
+$lang_module['thanks_other_version'] = 'Version';
