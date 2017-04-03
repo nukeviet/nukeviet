@@ -47,6 +47,18 @@ foreach ($array_op as $_inurl) {
     }
 }
 
+$base_url_rewrite = $global_array_shops_cat[$catid]['link'];
+if ($page > 1) {
+    $base_url_rewrite .= '/page-' . $page;
+}
+$base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
+
+if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
+    header('HTTP/1.1 301 Moved Permanently');
+    Header('Location: ' . $base_url_rewrite);
+    die();
+}
+
 if (!empty($global_array_shops_cat[$catid]['title_custom'])) {
     $page_title = $global_array_shops_cat[$catid]['title_custom'];
 } else {
