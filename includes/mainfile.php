@@ -304,12 +304,17 @@ define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
 $sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND module='site') ORDER BY module ASC";
 $list = $nv_Cache->db($sql, '', 'settings');
+
 foreach ($list as $row) {
     if (($row['lang'] == NV_LANG_DATA and $row['module'] == 'global') or ($row['lang'] == 'sys' and $row['module'] == 'site')) {
         $global_config[$row['config_name']] = $row['config_value'];
     } else {
         $module_config[$row['module']][$row['config_name']] = $row['config_value'];
     }
+}
+
+if ($global_config['is_user_forum']) {
+    define('NV_IS_USER_FORUM', true);
 }
 
 if (empty($global_config['site_logo'])) {
