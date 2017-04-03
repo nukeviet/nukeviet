@@ -795,10 +795,7 @@ foreach ($data as $row) {
     
     if ($row['status_id'] == 4) {
         $xtpl->parse('main.loop.text');
-    } else {
-        $xtpl->parse('main.loop.url');
     }
-    
     $xtpl->parse('main.loop');
 }
 

@@ -90,12 +90,10 @@
 					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
 					<td class="text-left">
 						<p>
-						    <!-- BEGIN: url -->
-						    <a target="_blank" href="{ROW.link}">{ROW.title}</a>
-						    <!-- END: url -->
 						    <!-- BEGIN: text -->
-						    <strong><em>{LANG.status_4}</em></strong>: {ROW.title}
+						    <strong><em>{LANG.status_4}</em></strong>:
 						    <!-- END: text -->
+						    <a target="_blank" href="{ROW.link}">{ROW.title}</a>
 						</p>
 					</td>
 					<td>{ROW.publtime}</td>
