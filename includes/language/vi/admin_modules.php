@@ -68,6 +68,7 @@ $lang_module['vmodule_exit'] = 'Lỗi: Module bạn đặt đã có trong hệ t
 $lang_module['vmodule_maxlength'] = 'Tối đa 50 ký tự';
 $lang_module['back'] = 'Quay lại';
 $lang_module['change_func_name'] = 'Đổi tên function "%s" của module "%s"';
+$lang_module['change_func_sitetitle'] = 'Đổi tiêu đề site funtion "%s" của module "%s"';
 $lang_module['change_fun_alias'] = 'Đổi tên alias "%s" của module "%s"';
 $lang_module['description'] = 'Mô tả';
 $lang_module['reinstall_module'] = 'Cài lại module';
