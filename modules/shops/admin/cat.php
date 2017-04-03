@@ -7,7 +7,7 @@
  * @License GNU/GPL version 2 or any later version
  * @Createdate 2-9-2010 14:43
  */
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -16,7 +16,6 @@ $page_title = $lang_module['cat_title'];
 $table_name = $db_config['prefix'] . '_' . $module_data . '_catalogs';
 $error = $admins = '';
 $savecat = 0;
-$data = array();
 $groups_list = nv_groups_list();
 
 if (defined('NV_EDITOR')) {
@@ -24,32 +23,28 @@ if (defined('NV_EDITOR')) {
 }
 
 $currentpath = NV_UPLOADS_DIR . '/' . $module_upload . '/' . date('Y_m');
-if (! file_exists($currentpath)) {
+if (!file_exists($currentpath)) {
     nv_mkdir(NV_UPLOADS_REAL_DIR . '/' . $module_upload, date('Y_m'), true);
 }
-
-list ($data['catid'], $data['parentid'], $data['title'], $data['title_custom'], $data['alias'], $data['description'], $data[NV_LANG_DATA . '_descriptionhtml'], $data['keywords'], $data['groups_view'], $data['cat_allow_point'], $data['cat_number_point'], $data['cat_number_product'], $data['image'], $data['form'], $data['group_price'], $data['viewdescriptionhtml'], $data['newday'], $data['typeprice']) = array(
-    0,
-    0,
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '6',
-    0,
-    0,
-    0,
-    '',
-    '',
-    $pro_config['group_price'],
-    0,
-    7,
-    1
-);
+$data = array();
+$data['catid'] = 0;
+$data['parentid'] = 0;
+$data['title'] = '';
+$data['title_custom'] = '';
+$data['alias'] = '';
+$data['description'] = '';
+$data[NV_LANG_DATA . '_descriptionhtml'] = '';
+$data['keywords'] = '';
+$data['groups_view'] = '6';
+$data['cat_allow_point'] = 0;
+$data['cat_number_point'] = 0;
+$data['cat_number_product'] = '';
+$data['image'] = '';
+$data['form'] = '';
+$data['group_price'] = $pro_config['group_price'];
+$data['viewdescriptionhtml'] = 0;
+$data['newday'] = 7;
+$data['typeprice'] = 1;
 
 $savecat = $nv_Request->get_int('savecat', 'post', 0);
 
@@ -63,7 +58,7 @@ if (is_dir(NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/' . $module_upload . '/files_tpl
     }
 }
 
-if (! empty($savecat)) {
+if (!empty($savecat)) {
     $field_lang = nv_file_table($table_name);
     
     $data['catid'] = $nv_Request->get_int('catid', 'post', 0);
@@ -91,7 +86,7 @@ if (! empty($savecat)) {
     }
     
     $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
-    $data['groups_view'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+    $data['groups_view'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
     
     if ($data['title'] == '') {
         $error = $lang_module['error_cat_name'];
@@ -106,7 +101,7 @@ if (! empty($savecat)) {
     }
     
     $data['form'] = $nv_Request->get_title('cat_form', 'post', '');
-    if (! in_array($data['form'], $cat_form_exit)) {
+    if (!in_array($data['form'], $cat_form_exit)) {
         $data['form'] = '';
     }
     
@@ -253,7 +248,7 @@ while (list ($catid_i, $title_i, $lev_i) = $result->fetch(3)) {
     $xtitle_i = '';
     if ($lev_i > 0) {
         $xtitle_i .= '&nbsp;';
-        for ($i = 1; $i <= $lev_i; $i ++) {
+        for ($i = 1; $i <= $lev_i; $i++) {
             $xtitle_i .= '---';
         }
     }
@@ -267,7 +262,7 @@ while (list ($catid_i, $title_i, $lev_i) = $result->fetch(3)) {
 $lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
 $lang_global['description_suggest_max'] = sprintf($lang_global['length_suggest_max'], 160);
 
-if (! empty($data['image']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $data['image'])) {
+if (!empty($data['image']) and file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $data['image'])) {
     $data['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $data['image'];
     $currentpath = dirname($data['image']);
 }
@@ -282,8 +277,8 @@ if ($pro_config['point_active']) {
         $data['cat_number_product_dis'] = 'readonly="readonly"';
         $data['cat_allow_point'] = '';
     }
-    $data['cat_number_point'] = ! empty($data['cat_number_point']) ? $data['cat_number_point'] : '';
-    $data['cat_number_product'] = ! empty($data['cat_number_product']) ? $data['cat_number_product'] : '';
+    $data['cat_number_point'] = !empty($data['cat_number_point']) ? $data['cat_number_point'] : '';
+    $data['cat_number_product'] = !empty($data['cat_number_product']) ? $data['cat_number_product'] : '';
 }
 
 if ($data['parentid']) {
@@ -349,7 +344,7 @@ if ($pro_config['point_active']) {
     $xtpl->parse('main.point');
 }
 
-if (! empty($cat_form_exit)) {
+if (!empty($cat_form_exit)) {
     foreach ($cat_form_exit as $_form) {
         $xtpl->assign('CAT_FORM', array(
             'value' => $_form,
@@ -369,7 +364,7 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
 }
 $xtpl->assign('DESCRIPTIONHTML', $descriptionhtml);
 
-for ($i = 0; $i <= 2; $i ++) {
+for ($i = 0; $i <= 2; $i++) {
     $xtpl->assign('VIEWDESCRIPTION', array(
         'value' => $i,
         'checked' => $data['viewdescriptionhtml'] == $i ? ' checked="checked"' : '',

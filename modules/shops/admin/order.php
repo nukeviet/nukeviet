@@ -113,6 +113,7 @@ while ($row = $query->fetch()) {
     $row['link_user'] = NV_BASE_ADMINURL . "index.php?" . NV_NAME_VARIABLE . "=users&" . NV_OP_VARIABLE . "=edit&userid=" . $row['user_id'];
     $row['order_time'] = nv_date("H:i d/m/y", $row['order_time']);
     $row['order_total'] = nv_number_format($price);
+	$row['unit_total']=$money_config[$pro_config['money_unit']]['symbol'];
 
     $xtpl->assign('DATA', $row);
 
@@ -154,7 +155,7 @@ if (! empty($search['date_to'])) {
     $search['date_to'] = nv_date('d/m/Y', $search['date_to']);
 }
 
-$order_info['sum_unit'] = $pro_config['money_unit'];
+$order_info['sum_unit'] = $money_config[$pro_config['money_unit']]['symbol'];
 $order_info['sum_price'] = nv_number_format($order_info['sum_price'], nv_get_decimals($pro_config['money_unit']));
 $xtpl->assign('ORDER_INFO', $order_info);
 $xtpl->assign('CHECKSESS', md5(session_id()));

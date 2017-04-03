@@ -404,6 +404,7 @@ $lang_module['error_required_title'] = 'Error: Required fields enter the Title';
 $lang_module['error_required_begin_time'] = 'Error: Required fields enter the Begin time';
 $lang_module['error_required_end_time'] = 'Error: Required fields enter the End time';
 $lang_module['error_required_config'] = 'Error: Required fields enter the Config';
+$lang_module['error_symbol'] = 'Error: Required fields enter the symbol';
 $lang_module['discount_add'] = 'Add new discount';
 $lang_module['discount_edit'] = 'Edit discount';
 $lang_module['discount_from'] = 'From production';

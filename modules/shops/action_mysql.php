@@ -481,14 +481,16 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  id mediumint(11) NOT NULL,
  code char(3) NOT NULL,
  currency varchar(250) NOT NULL,
+ symbol varchar(3) NOT NULL default '',
  exchange float NOT NULL default '0',
  round varchar(10) NOT NULL,
  number_format varchar(5) NOT NULL DEFAULT ',||.',
  PRIMARY KEY (id),
  UNIQUE KEY code (code)
 ) ENGINE=MyISAM";
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round, number_format) VALUES (840, 'USD', 'US Dollar', 21000, '0.01', ',||.')";
-$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, exchange, round, number_format) VALUES (704, 'VND', 'Vietnam Dong', 1, '100', ',||.')";
+
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, symbol, exchange, round, number_format) VALUES (840, 'USD', 'US Dollar', '$', 21000, '0.01', ',||.')";
+$sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_money_" . $lang . " (id, code, currency, symbol, exchange, round, number_format) VALUES (704, 'VND', 'Vietnam Dong', 'đ', 1, '100', ',||.')";
 
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_weight_" . $lang . " (
  id tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
@@ -755,6 +757,7 @@ $data['tags_remind'] = 0;
 $data['point_active'] = 0;
 $data['point_conversion'] = 0;
 $data['point_new_order'] = 0;
+$data['money_to_point'] = 0;
 $data['review_active'] = 1;
 $data['review_check'] = 1;
 $data['review_captcha'] = 1;

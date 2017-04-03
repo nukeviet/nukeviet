@@ -1,4 +1,9 @@
 <!-- BEGIN: main -->
+<!-- BEGIN: error -->
+<div class="alert alert-danger">
+	{error}
+</div>
+<!-- END: error -->
 <!-- BEGIN: data -->
 <table class="table table-striped table-bordered table-hover">
 	<thead>
@@ -6,6 +11,7 @@
 			<th width="10px" class="text-center">&nbsp;</th>
 			<th>{LANG.money_name}</th>
 			<th>{LANG.currency}</th>
+			<th>{LANG.weight_sign}</th>
 			<th>{LANG.exchange}</th>
 			<th>{LANG.round}</th>
 			<th width="120px" class="text-center">{LANG.function}</th>
@@ -22,6 +28,7 @@
 			<td><input type="checkbox" class="ck" value="{ROW.id}" /></td>
 			<td>{ROW.code}</td>
 			<td>{ROW.currency}</td>
+			<td>{ROW.symbol}</td>
 			<td>1 {ROW.code} = {ROW.exchange} {MONEY_UNIT}</td>
 			<td>{ROW.round}</td>
 			<td class="text-center"><i class="fa fa-edit">&nbsp;</i><a href="{ROW.link_edit}" title="">{LANG.edit}</a>&nbsp; <i class="fa fa-trash-o">&nbsp;</i><a href="{ROW.link_del}" class="delete" title="">{LANG.del}</a></td>
@@ -96,6 +103,10 @@
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.currency}: </strong></td>
 				<td><input class="form-control w400" name="currency" type="text" value="{DATA.currency}" maxlength="255" /></td>
+			</tr>
+			<tr>
+				<td valign="top" align="right"><strong>{LANG.weight_sign}: </strong></td>
+				<td><input class="form-control w400" name="symbol" type="text" value="{DATA.symbol}" maxlength="255" /></td>
 			</tr>
 			<tr>
 				<td valign="top" align="right"><strong>{LANG.exchange}: </strong></td>

@@ -285,7 +285,7 @@ if ($nv_Request->get_int('save', 'post') == 1) {
 
     $rowcontent['copyright'] = ( int )$nv_Request->get_bool('copyright', 'post');
     $rowcontent['inhome'] = ( int )$nv_Request->get_bool('inhome', 'post');
-    
+
     $rowcontent['tag_title'] = $nv_Request->get_title('tag_title', 'post', '');
     $rowcontent['tag_description'] = $nv_Request->get_textarea('tag_description', '', NV_ALLOWED_HTML_TAGS);
 
@@ -857,7 +857,7 @@ if (!empty($rowcontent['otherimage'])) {
 }
 
 $rowcontent['product_weight'] = empty($rowcontent['product_weight']) ? '' : $rowcontent['product_weight'];
-
+$rowcontent['product_price'] = number_format($rowcontent['product_price']);
 $array_files = array();
 if ($pro_config['download_active']) {
     $sql = 'SELECT id, ' . NV_LANG_DATA . '_title title FROM ' . $db_config['prefix'] . '_' . $module_data . '_files WHERE status=1';

@@ -195,7 +195,6 @@ if ($post_order == 1) {
     if (empty($error) and $i > 0) {
         if (!empty($order_info)) {
             // Sua don hang
-
             $sth = $db->prepare('UPDATE ' . $db_config['prefix'] . '_' . $module_data . '_orders SET
 			order_name = :order_name, order_email = :order_email,
 			order_phone = :order_phone, order_address = :order_address, order_note = :order_note, order_total = ' . doubleval($data_order['order_total']) . ',
@@ -338,6 +337,10 @@ if ($post_order == 1) {
                 }
 
                 // Ghi nhan diem tich luy khach hang
+                if($pro_config['money_to_point'] > 0){
+                    $total_point += floor($total / $pro_config['money_to_point']);
+                }
+
                 if ($total_point > 0 and $pro_config['point_active']) {
                     $stmt = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_point_queue( order_id, point, status ) VALUES ( :order_id, :point, 1 )');
                     $stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
@@ -500,6 +503,8 @@ if ($post_order == 1) {
             unset($_SESSION[$module_data . '_cart']);
             unset($_SESSION[$module_data . '_order_info']);
             unset($_SESSION[$module_data . '_coupons']);
+			unset( $_SESSION[$module_data . '_point_payment_discount'] );
+			unset( $_SESSION[$module_data . '_point_payment_uses'] );
             Header('Location: ' . $review_url);
             $action = 1;
         }

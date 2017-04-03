@@ -104,7 +104,6 @@ if ($idtemplate) {
                 $allowed_html_tags = array_map("trim", explode(',', NV_ALLOWED_HTML_TAGS));
                 $allowed_html_tags = "<" . implode("><", $allowed_html_tags) . ">";
                 $value = strip_tags($value, $allowed_html_tags);
-                $value = nv_nl2br($value, '<br />');
 
                 if ($row['match_type'] == 'regex') {
                     if (!preg_match("/" . $row['match_regex'] . "/", $value)) {

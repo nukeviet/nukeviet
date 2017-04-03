@@ -14,7 +14,7 @@
 			<colgroup>
 				<col span="2" />
 				<col class="w200" />
-				<col span="4" class="w150" />
+				<col span="2" class="w150" />
 			</colgroup>
 			<thead>
 				<tr>

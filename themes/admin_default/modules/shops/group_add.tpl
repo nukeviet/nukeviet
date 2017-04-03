@@ -75,6 +75,7 @@
 	$.get('{URL}', function(data) {
 		if( data == '' )
 		{
+
 			$('#cat, #require').hide();
 		}
 		else

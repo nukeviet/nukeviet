@@ -426,6 +426,7 @@ $lang_module['error_required_title'] = 'Lỗi: bạn cần nhập dữ liệu ch
 $lang_module['error_required_begin_time'] = 'Lỗi: bạn cần nhập dữ liệu cho Ngày bắt đầu';
 $lang_module['error_required_end_time'] = 'Lỗi: bạn cần nhập dữ liệu cho Ngày kết thúc';
 $lang_module['error_required_config'] = 'Lỗi: bạn cần nhập dữ liệu cho Cấu hình';
+$lang_module['error_symbol'] = 'Lỗi: bạn cần nhập dữ liệu cho Ký hiệu';
 
 $lang_module['discount_add'] = 'Thêm mới giảm giá';
 $lang_module['discount_edit'] = 'Sửa giảm giá';
@@ -508,9 +509,10 @@ $lang_module['point_fullname'] = 'Họ tên khách hàng';
 $lang_module['point_email'] = 'Email khách hàng';
 $lang_module['setting_point'] = 'Cấu hình điểm tích lũy';
 $lang_module['setting_point_active'] = 'Kích hoạt tính năng điểm tích lũy';
-$lang_module['setting_point_conversion'] = 'Tỉ lệ quy đổi';
+$lang_module['setting_point_conversion'] = 'Tỉ lệ quy đổi khi lấy điểm thanh toán';
 $lang_module['setting_point_value_conversion'] = 'Giá trị quy đổi';
 $lang_module['setting_point_new_order'] = 'Số điểm thưởng khi tạo đơn hàng mới';
+$lang_module['setting_money_to_point'] = 'Số tiền để được 1 điểm thưởng khi tạo đơn hàng mới';
 $lang_module['setting_point_1'] = '1 điểm';
 $lang_module['cat_allow_point'] = 'Cho phép tích lũy điểm với các sản phẩm loại này';
 $lang_module['cat_number_point'] = 'Số điểm thưởng khi mua các sản phẩm loại này';
@@ -721,3 +723,5 @@ $lang_module['newprice'] = 'Giá mới';
 $lang_module['ad_block_show'] = 'Hiển thị các block phụ';
 $lang_module['ad_block_top'] = 'Block bên trên chuyên mục';
 $lang_module['ad_block_bot'] = 'Block bên dưới chuyên mục';
+
+
