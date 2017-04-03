@@ -58,30 +58,27 @@
 	<div class="list-member">
 		<div class="list-member-all">
 			<h4>{LANG.thanks_list_member_all}</h4>
-			<a href="#">Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet
-			Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,
-			Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,
-			Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,
-			Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet,	
-			</a>
+			<a href="https://github.com/thehung">The Hung,</a>
+			<a href="https://github.com/vuthao">Vu Thao,</a>
+			<a href="https://github.com/hoaquynhtim99">Hoaquynhtim99,</a>
+			<a href="https://github.com/hiidemo">hiidemo,</a>
+			<a href="https://github.com/#">Hồ Ngọc Triển,</a>
+			<a href="https://github.com/mynukeviet">mynukeviet,</a>
+			<a href="https://github.com/phongaz">phongaz,</a>
+			<a href="https://github.com/anhyeuviolet">anhyeuviolet,</a>
 		</div>
 		<div class="list-member-other-version">
 			<h4>{LANG.thanks_list_member_other_version}</h4>
 			<div class="version">
-				<h5>{LANG.thanks_other_version}</h5>
-				<a href="#">The Hung, Vu Thao, Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet</a>
-			</div>
-			<div class="version">
-				<h5>{LANG.thanks_other_version}</h5>
-				<a href="#">The Hung, Vu Thao, Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet</a>
-			</div>
-			<div class="version">
-				<h5>Phiên bản 3.4.2:</h5>
-				<a href="#">The Hung, Vu Thao, Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet</a>
-			</div>
-			<div class="version">
-				<h5>Phiên bản 4.0.2:</h5>
-				<a href="#">The Hung, Vu Thao, Hoaquynhtim99, hiidemo, Hồ Ngọc Triển, mynukeviet, phongaz, anhyeuviolet</a>
+				<h5>{LANG.thanks_other_version} 4.1</h5>
+				<a href="https://github.com/thehung">The Hung,</a>
+				<a href="https://github.com/vuthao">Vu Thao,</a>
+				<a href="https://github.com/hoaquynhtim99">Hoaquynhtim99,</a>
+				<a href="https://github.com/hiidemo">hiidemo,</a>
+				<a href="https://github.com/#">Hồ Ngọc Triển,</a>
+				<a href="https://github.com/mynukeviet">mynukeviet,</a>
+				<a href="https://github.com/phongaz">phongaz,</a>
+				<a href="https://github.com/anhyeuviolet">anhyeuviolet,</a>
 			</div>
 		</div>
 	</div>
