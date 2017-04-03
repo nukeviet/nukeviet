@@ -335,7 +335,7 @@ if ($post_order == 1) {
                     $stmt->bindParam(':amount', $amount, PDO::PARAM_INT);
                     $stmt->execute();
                 }
-                
+
                 // Ghi nhan diem tich luy khach hang
                 if($pro_config['money_to_point'] > 0){
                     $total_point += floor($total / $pro_config['money_to_point']);
@@ -503,6 +503,8 @@ if ($post_order == 1) {
             unset($_SESSION[$module_data . '_cart']);
             unset($_SESSION[$module_data . '_order_info']);
             unset($_SESSION[$module_data . '_coupons']);
+			unset( $_SESSION[$module_data . '_point_payment_discount'] );
+			unset( $_SESSION[$module_data . '_point_payment_uses'] );
             Header('Location: ' . $review_url);
             $action = 1;
         }
