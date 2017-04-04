@@ -458,7 +458,7 @@ function nv_rewrite_change($array_config_global)
         $rewrite_rule .= " </rule>\n";
 		
         $rewrite_rule .= " <rule name=\"nv_rule_rewrite_tag\">\n";
-        $rewrite_rule .= " 	<match url=\"([^?]+)\/([^?]+)\/tag\/([^?]+)$\" ignoreCase=\"false\" />\n";
+        $rewrite_rule .= " 	<match url=\"(.*)tag\/([^?]+)$\" ignoreCase=\"false\" />\n";
         $rewrite_rule .= " 	<action type=\"Rewrite\" url=\"index.php\" />\n";
         $rewrite_rule .= " </rule>\n";
 		
@@ -511,7 +511,7 @@ function nv_rewrite_change($array_config_global)
         if (file_exists($filename)) {
             $htaccess = @file_get_contents($filename);
             if (! empty($htaccess)) {
-                $htaccess = preg_replace("/[\n]*[\#]+[\n]+\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end[\n]+[\#]+[\n]*/s", "\n", $htaccess);
+                $htaccess = preg_replace("/[\n\s]*[\#]+[\n\s]+\#nukeviet\_rewrite\_start(.*)\#nukeviet\_rewrite\_end[\n\s]+[\#]+[\n\s]*/s", "\n", $htaccess);
                 $htaccess = trim($htaccess);
             }
         }
