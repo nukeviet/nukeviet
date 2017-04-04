@@ -472,7 +472,6 @@ div.infoerror a {
 #thanks {
 	margin-top: 20px;
 	border-top: 1px solid #e6e6e6;
-	height: 310px;
 }
 #thanks a {
 	color: #1b7fa9;
@@ -487,8 +486,8 @@ div.infoerror a {
     font-family: Segoe UI, Tahoma, sans-serif;
 }
 #thanks .list-member {
-	height: 220px;
-	overflow-y: scroll;
+	max-height: 220px;
+	overflow-y: auto;
 }
 #thanks .list-member h4 {
 	font-family: Segoe UI, Tahoma, sans-serif;
