@@ -98,8 +98,8 @@ function set_reg_attribs($attribs)
         $reg_attribs['yim'] = $username;
     }
 
-    $username = str_pad($username, NV_UNICKMIN, '0', STR_PAD_RIGHT);
-    $username = substr($username, 0, (NV_UNICKMAX - 2));
+    $username = str_pad($username, $global_config['nv_unickmin'], '0', STR_PAD_RIGHT);
+    $username = substr($username, 0, ($global_config['nv_unickmax'] - 2));
     $username2 = $username;
     for ($i = 0; $i < 100; ++$i) {
         if ($i > 0) {
@@ -225,8 +225,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             die();
         }
 
-        if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php')) {
-            require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php';
+        if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php')) {
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
         } else {
             $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_id;
             $row = $db->query($query)->fetch();
@@ -269,11 +269,11 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                 $check_seccode = ! $gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
 
                 $nv_Request->unset_request('openid_attribs', 'session');
-                if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php')) {
+                if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php')) {
                     $nv_username = $nv_row['username'];
                     $nv_password = $password;
                     $error = "";
-                    require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
+                    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
                     if (! empty($error)) {
                         opidr(array( 'status' => 'error', 'mess' => $lang_module['openid_confirm_failed'] ));
                         die();
@@ -343,7 +343,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         if (defined('NV_IS_USER_FORUM')) {
             $error = '';
-            require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
             if (! empty($error)) {
                 opidr(array( 'status' => 'error', 'mess' => $error ));
                 die();
@@ -600,7 +600,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
 
     if (defined('NV_IS_USER_FORUM')) {
         $error = '';
-        require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
+        require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
         if (! empty($error)) {
             die(signin_result(array(
                 'status' => 'error',

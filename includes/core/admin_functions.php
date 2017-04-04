@@ -201,15 +201,6 @@ function nv_save_file_config_global()
 
     $config_name_array = array( 'file_allowed_ext', 'forbid_extensions', 'forbid_mimes', 'allow_sitelangs', 'openid_servers', 'allow_request_mods', 'config_sso' );
 
-    if ($config_variable['is_user_forum']) {
-        $forum_files = @scandir(NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet');
-        if (! empty($forum_files) and in_array('is_user.php', $forum_files) and in_array('changepass.php', $forum_files) and in_array('editinfo.php', $forum_files) and in_array('login.php', $forum_files) and in_array('logout.php', $forum_files) and in_array('lostpass.php', $forum_files) and in_array('register.php', $forum_files)) {
-            $content_config .= "define( 'NV_IS_USER_FORUM', true );\n\n";
-        } else {
-            $config_variable['is_user_forum'] = 0;
-        }
-    }
-
     foreach ($config_variable as $c_config_name => $c_config_value) {
         if ($c_config_name == 'config_sso') {
             $config_sso = empty($c_config_value) ? '' : nv_var_export(unserialize($c_config_value));

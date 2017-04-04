@@ -12,7 +12,7 @@ if (! defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
 $contents = '';

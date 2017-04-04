@@ -152,7 +152,7 @@ if( isset( $array_op[0] ) and preg_match( '/^([a-zA-Z0-9\-\_]+)\-([\d]+)$/', $ar
 	$alias = $matches[0];
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
 $sql = 'SELECT vid, question, link, acceptcm, active_captcha, groups_view, publ_time, exp_time,alias FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE act=1 ORDER BY publ_time DESC';

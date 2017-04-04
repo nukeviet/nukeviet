@@ -341,13 +341,7 @@ var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DAT
 var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
 var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
 var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom"></em><br />{LANG.waiting}...</p>';
-var nv_filters = {
-    mime_types : [
-        <!-- BEGIN: mime -->
-        { title : "{MIMI_TYPE} files", extensions : "{MIME_EXTS}" },
-        <!-- END: mime -->
-    ]
-};
+
 //Resize images on clientside if we can
 var nv_resize = {
     width : {NV_MAX_WIDTH},

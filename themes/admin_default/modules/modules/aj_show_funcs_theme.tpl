@@ -11,6 +11,7 @@
 				<th>{LANG.funcs_alias}</th>
 				<!-- END: change_alias_head -->
 				<th>{LANG.custom_title}</th>
+				<th>{LANG.site_title}</th>
 				<th>{LANG.funcs_layout}</th>
 			</tr>
 		</thead>
@@ -31,7 +32,8 @@
 				<!-- BEGIN: show_alias -->
 				<td>{ROW.alias}</td>
 				<!-- END: show_alias -->
-				<td><a href="#action" onclick="nv_change_custom_name({ROW.func_id},'action');">{ROW.func_custom_name}</a></td>
+				<td><a href="#action" onclick="nv_change_custom_name({ROW.func_id}, 'action');">{ROW.func_custom_name}</a></td>
+				<td><a href="#action" onclick="nv_change_site_title({ROW.func_id}, 'action');">{ROW.func_site_title}</a></td>
 				<td>{ROW.layout}</td>
 			</tr>
 			<!-- END: loop -->
