@@ -87,8 +87,8 @@ if (! extension_loaded('session')) {
 }
 
 //Neu he thong khong ho tro mcrypt library se bao loi
-if (! function_exists('mcrypt_encrypt')) {
-    trigger_error('Mcrypt library not available', 256);
+if (! function_exists('openssl_encrypt')) {
+    trigger_error('Openssl library not available', 256);
 }
 
 //Xac dinh tien ich mo rong lam viec voi string

@@ -33,9 +33,9 @@
         <td><span class="{DATA_REQUEST.class_xml_support}">{DATA_REQUEST.xml_support}</span></td>
     </tr>
     <tr>
-        <th scope="row" class="specalt">{LANG.mcrypt_support}</th>
+        <th scope="row" class="specalt">{LANG.openssl_support}</th>
         <td class="alt">{LANG.request}</td>
-        <td class="alt"><span class="{DATA_REQUEST.class_mcrypt_support}">{DATA_REQUEST.mcrypt_support}</span></td>
+        <td class="alt"><span class="{DATA_REQUEST.class_openssl_support}">{DATA_REQUEST.openssl_support}</span></td>
     </tr>
     <tr>
         <th scope="row" class="spec">{LANG.session_support}</th>
