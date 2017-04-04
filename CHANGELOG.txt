@@ -2,6 +2,7 @@ CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
 NUKEVIET 4.1.01 Beta 2
+- Jquery 3.2.0, Plupload 2.3.1
 - Update CKEditor 4.6: Add feature: Copy Formatting, Drag&drop Image, Drag&drop File1
 - Add function nv_jsonOutput
 - Change encrypt data use Openssl
