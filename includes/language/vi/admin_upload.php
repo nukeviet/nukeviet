@@ -81,6 +81,10 @@ $lang_module['uploadError2'] = 'Lỗi: URL không đúng quy chuẩn';
 $lang_module['pubdate'] = 'Cập nhật';
 $lang_module['newSize'] = 'Tạo ảnh mới';
 $lang_module['prView'] = 'Xem';
+$lang_module['prViewExample'] = 'Xem ví dụ';
+$lang_module['prViewExampleError'] = 'Hãy chọn thư mục, phương án và nhập đầy đủ kích thước, chất lượng ảnh thumb trước';
+$lang_module['prViewExampleError1'] = 'Lỗi dữ liệu';
+$lang_module['prViewExampleError2'] = 'Hệ thống không tìm thấy bất kỳ ảnh nào để đưa ra ví dụ. Bạn cần upload lên ít nhất một ảnh ở thư mục upload';
 $lang_module['errorMinX'] = 'Lỗi: Chiều rộng nhỏ hơn mức cho phép';
 $lang_module['errorMaxX'] = 'Lỗi: Chiều rộng lớn hơn mức cho phép';
 $lang_module['errorMinY'] = 'Lỗi: Chiều cao nhỏ hơn mức cho phép';
@@ -157,6 +161,8 @@ $lang_module['order2'] = 'Sắp xếp theo tên file';
 
 $lang_module['searchdir'] = 'Tìm kiếm trong thư mục';
 $lang_module['searchkey'] = 'Từ khóa tìm kiếm';
+$lang_module['original_image'] = 'Ảnh gốc';
+$lang_module['thumb_image'] = 'Ảnh thumb';
 
 $lang_module['crop'] = 'Cắt ảnh';
 $lang_module['crop_error_small'] = 'Ảnh này kích thước quá nhỏ, không nên cắt';
