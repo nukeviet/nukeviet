@@ -1728,7 +1728,6 @@ var NVUPLOAD = {
                 silverlight_xap_url: nv_base_siteurl + 'assets/js/plupload/Moxie.xap',
                 drop_element: 'upload-content',
                 file_data_name: 'upload',
-                filters: nv_filters,
                 resize: nv_resize,
                 multipart: true,
                 init: {
@@ -1803,7 +1802,7 @@ var NVUPLOAD = {
                                 );
 
                                 $('#upload-button-area .total-info').html(
-                                    mOxie.sprintf(LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize(NVUPLOAD.uploader.total.bytesPerSec))
+                                    plupload.sprintf(LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize(NVUPLOAD.uploader.total.bytesPerSec))
                                 );
 
                                 // Init upload progress bar
@@ -2084,7 +2083,7 @@ var NVUPLOAD = {
         );
 
         $('#upload-button-area .total-info').html(
-            mOxie.sprintf(LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize(NVUPLOAD.uploader.total.bytesPerSec))
+            plupload.sprintf(LANG.upload_info, NVUPLOAD.uploader.total.uploaded, NVUPLOAD.uploader.files.length, plupload.formatSize(NVUPLOAD.uploader.total.bytesPerSec))
         );
     },
     finish: function() {
