@@ -27,13 +27,13 @@ $lang_array = array(
  */
 function nv_banner_client_checkdata($cookie)
 {
-    global $db;
+    global $db, $global_config;
 
     $client = unserialize($cookie);
 
     $banner_client_info = array();
 
-    if (isset($client['login']) and preg_match('/^[a-zA-Z0-9_]{' . NV_UNICKMIN . ',' . NV_UNICKMAX . '}$/', $client['login'])) {
+    if (isset($client['login']) and preg_match('/^[a-zA-Z0-9_]{' . $global_config['nv_unickmax'] . ',' . $global_config['nv_unickmin'] . '}$/', $client['login'])) {
         if (isset($client['checknum']) and preg_match('/^[a-z0-9]{32}$/', $client['checknum'])) {
             $login = $client['login'];
             $stmt = $db->prepare('SELECT * FROM ' . NV_BANNERS_GLOBALTABLE. '_clients WHERE login = :login AND act=1');

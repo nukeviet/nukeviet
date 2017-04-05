@@ -23,7 +23,7 @@ if (defined('NV_IS_ADMIN')) {
         define('NV_IS_USER', true);
     }
 } elseif (defined('NV_IS_USER_FORUM')) {
-    require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/is_user.php';
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/is_user.php';
 
     if (isset($user_info['userid']) and $user_info['userid'] > 0) {
         $_sql = 'SELECT userid, group_id, username, email, first_name, last_name, gender, photo, birthday, regdate,

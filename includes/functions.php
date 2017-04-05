@@ -1874,19 +1874,6 @@ function nv_redirect_encrypt($url)
  */
 function nv_redirect_decrypt($string, $insite = true)
 {
-    if (empty($string)) {
-        return '';
-    }
-
-    if (preg_match('/[^a-z0-9\-\_\,]/i', $string)) {
-        return '';
-    }
-
-    $string = nv_base64_decode($string);
-    if (! $string) {
-        return '';
-    }
-
     global $crypt;
     $url = $crypt->decrypt($string, NV_CHECK_SESSION);
     if (empty($url)) {

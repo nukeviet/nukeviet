@@ -9,7 +9,7 @@
  * @Createdate Jun 22, 2010, 08:22:00 AM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 

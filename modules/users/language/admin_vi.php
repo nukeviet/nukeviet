@@ -9,7 +9,7 @@
  * @Createdate May 30, 2010, 10:57:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -439,7 +439,7 @@ $lang_module['info'] = "Cập nhật dữ liệu từ LDAP xuống website là t
 		Trong trường hợp khác, người dùng sẽ có khả năng soạn thảo tất cả các trường này sau khi chúng bắt dầu.	</p>	<p>		<b>Cập nhật site:</b> Nếu được kích hoạt, mục sẽ được cập nhật (từ xác thực ngoài) mỗi khi người dùng đăng nhập hoặc có đồng bộ hóa người dùng.	</p>	<hr>	<p>
 		<b>Chú ý:</b> Cập nhật dư liệu LDAP bên ngoại yêu cầu bạn thiết đặt binddn và bindpw cho một người dùng bind có quyền chỉnh sửa tất cả bản ghi người dùng. Hiện tại nó không lưu giữ các thuộc tính đa trị, và sẽ xóa các giá trị gia tăng khi cập nhật.	</p>";
 
-$lang_module['allowuserloginmulti']='Cho phép đăng nhập cùng lúc từ nhiều trình duyệt';
+$lang_module['allowuserloginmulti'] = 'Cho phép đăng nhập cùng lúc từ nhiều trình duyệt';
 $lang_module['user_check_pass_time'] = 'Thời gian kiểm tra lại mật khẩu, nếu người dùng không sử dụng trình duyệt';
 $lang_module['safe_mode'] = 'Chế độ an toàn';
 $lang_module['safe_active_info'] = 'Tài khoản của bạn đang ở chế độ an toàn nên tất cả các tính năng chỉnh sửa thông tin tài khoản đã bị khóa.';

@@ -62,8 +62,8 @@ $contents['rows'] = array();
 while ($row = $result->fetch()) {
     $client = ! empty($row['clid']) ? $clients[$row['clid']] : "";
 	if($row['exp_time'] != 0 && $row['exp_time'] <= NV_CURRENTTIME){
-		$sql = 'UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET act=0 WHERE id=' . $row['id'];
-		$db->exec($sql);
+		$db->exec('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET act=0 WHERE id=' . $row['id']);
+		$row['act'] = 0;
 	}
     $contents['rows'][$row['id']]['title'] = $row['title'];
     $contents['rows'][$row['id']]['pid'] = array( NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'], $plans[$row['pid']] );
