@@ -173,3 +173,4 @@ $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VAL
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_banners_rows VALUES (3, 'Quang cao giua trang', 1, 0, 'webnhanh.jpg', 'png', 'image/jpeg', 575, 72, '', '', 'http://webnhanh.vn', '_blank', '', " . NV_CURRENTTIME . ", " . NV_CURRENTTIME . ", 0, 0, 1, 1)";
 
 $sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_plugin (`pid`, `plugin_file`, `plugin_area`, `weight`) VALUES (1, 'qrcode.php', 1, 1)";
+$sql_create_table[] = "INSERT INTO " . $db_config['prefix'] . "_plugin (`pid`, `plugin_file`, `plugin_area`, `weight`) VALUES (2, 'cdn_js_css_image.php', 3, 1)";

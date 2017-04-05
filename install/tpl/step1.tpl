@@ -59,7 +59,7 @@
         <div class="list-member-all">
             <h4>{LANG.thanks_list_member_all}</h4>
             <a target="_blank" href="https://github.com/vuthao">vuthao</a>,
-            <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99</a>),
+            <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99</a>,
             <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen</a>,
             <a target="_blank" href="https://github.com/mynukeviet">mynukeviet</a>,
             <a target="_blank" href="https://github.com/thehung">thehung</a>,
@@ -69,16 +69,16 @@
             <a target="_blank" href="https://github.com/PhamQuocTien132">PhamQuocTien132</a>,
             <a target="_blank" href="https://github.com/htuyen9x">htuyen9x</a>,
             <a target="_blank" href="https://github.com/thangbv">thangbv</a>,
-            <a target="_blank" href="https://github.com/dangdinhtu2014">dangdinhtu2014</a>),
+            <a target="_blank" href="https://github.com/dangdinhtu2014">dangdinhtu2014</a>,
             <a target="_blank" href="https://github.com/thuvp1995">thuvp1995</a>,
             <a target="_blank" href="https://github.com/phongaz">phongaz</a>,
             <a target="_blank" href="https://github.com/volong1012">volong1012</a>,
-            <a target="_blank" href="https://github.com/dangdlinhtu">dangdlinhtu</a>),
+            <a target="_blank" href="https://github.com/dangdlinhtu">dangdlinhtu</a>,
             <a target="_blank" href="https://github.com/htuyen1994">htuyen1994</a>,
-            <a target="_blank" href="https://github.com/ThinhNguyenVB">ThinhNguyenVB</a>),
+            <a target="_blank" href="https://github.com/ThinhNguyenVB">ThinhNguyenVB</a>,
             <a target="_blank" href="https://github.com/tkhuyenbk">tkhuyenbk</a>,
             <a target="_blank" href="https://github.com/hiidemo">hiidemo</a>,
-            <a target="_blank" href="https://github.com/webvangvn">webvangvn</a>),
+            <a target="_blank" href="https://github.com/webvangvn">webvangvn</a>,
             <a target="_blank" href="https://github.com/thethao">thethao</a>,
             <a target="_blank" href="https://github.com/tuanta">tuanta</a>,
             <a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993</a>,
@@ -126,6 +126,9 @@
 	            <a target="_blank" href="https://github.com/tuanta">tuanta</a> (1 commit),
 	            <a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993</a> (1 commit),
 	            <a target="_blank" href="https://github.com/webvang">webvang</a> (1 commit),
+                <br><br>
+                <h5>{LANG.thanks_other_version} <=3.4</h5>
+                (Not counts, do not use github)
             </div>
         </div>
     </div>
