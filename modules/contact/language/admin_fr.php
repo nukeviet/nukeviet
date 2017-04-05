@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
@@ -85,3 +85,14 @@ $lang_module['cat'] = 'Catégorie';
 $lang_module['mark_as_unread'] = 'Cocher comme ne pas encore être lu';
 $lang_module['mark_as_read'] = 'Cocher comme déjà lu';
 $lang_module['please_choose'] = 'Choisissez au moins un mail dans la liste au dessus';
+$lang_module['department_parent'] = 'Sous pièces';
+$lang_module['supporter'] = 'Le personnel de soutien';
+$lang_module['supporter_add'] = 'Le personnel de soutien supplémentaire';
+$lang_module['supporter_edit'] = 'Modifier le personnel de soutien de l\'information';
+$lang_module['supporter_contact_add'] = 'plus d\'informations';
+$lang_module['add'] = 'plus d\'informations';
+$lang_module['active'] = 'travail';
+$lang_module['full_name'] = 'nom et prénom';
+$lang_module['error_required_departmentid'] = 'Erreur: vous devez saisir des données pour departmentId';
+$lang_module['error_required_full_name'] = 'Erreur: vous devez saisir des données pour Nom complet';
+$lang_module['error_required_phone'] = 'Erreur: vous devez saisir les données pour téléphone';

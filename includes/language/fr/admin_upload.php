@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 29, 2010, 05:00:00 PM
@@ -169,3 +169,4 @@ $lang_module['upload_auto_alt'] = 'Déterminer la description de l\'image automa
 $lang_module['upload_alt_note'] = 'Veuillez saisir des commentaires pour le fichier avant';
 $lang_module['upload_view_thumbnail'] = 'Passer à l\'affichage de la grille';
 $lang_module['upload_view_detail'] = 'Passer à un affichage de la liste';
+$lang_module['crop_keep_original'] = 'Gardez l\'image originale';
