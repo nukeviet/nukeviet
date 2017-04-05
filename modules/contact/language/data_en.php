@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if (! defined('NV_ADMIN')) {
+if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -26,7 +26,11 @@ $phone = '(08) 38.000.000[+84838000000]';
 $fax = '08 38.000.001';
 $email = 'customer@mysite.com';
 $note = 'Receive requests, suggestions, comments relating to the operations of company';
-$others = json_encode(array( 'viber' => 'myViber', 'skype' => 'mySkype', 'yahoo' => 'myYahoo'));
+$others = json_encode(array(
+    'viber' => 'myViber',
+    'skype' => 'mySkype',
+    'yahoo' => 'myYahoo'
+));
 $cats = 'Consulting|Complaints|Cooperation';
 $weight = 1;
 $is_default = 1;
@@ -48,7 +52,11 @@ $phone = '(08) 38.000.002[+84838000002]';
 $fax = '08 38.000.003';
 $email = 'technical@mysite.com';
 $note = 'Resolve technical issues';
-$others = json_encode(array( 'viber' => 'myViber2', 'skype' => 'mySkype2', 'yahoo' => 'myYahoo2'));
+$others = json_encode(array(
+    'viber' => 'myViber2',
+    'skype' => 'mySkype2',
+    'yahoo' => 'myYahoo2'
+));
 $cats = 'Bug Reports|Recommendations to improve';
 $weight = 2;
 $is_default = 0;
