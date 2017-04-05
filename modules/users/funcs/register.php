@@ -20,7 +20,7 @@ if (defined('NV_IS_USER') and ! defined('ACCESS_ADDUS')) {
 
 // Chuyen trang dang ki neu tich hop dien dan
 if (defined('NV_IS_USER_FORUM')) {
-    require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/register.php';
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/register.php';
     exit();
 }
 
@@ -54,7 +54,7 @@ function nv_check_username_reg($login)
 {
     global $db, $lang_module, $global_users_config;
 
-    $error = nv_check_valid_login($login, NV_UNICKMAX, NV_UNICKMIN);
+    $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if ($error != '') {
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
     }
@@ -249,7 +249,7 @@ if ($checkss == $array_register['checkss']) {
             'mess' => $check_email )));
     }
 
-    if (($check_pass = nv_check_valid_pass($array_register['password'], NV_UPASSMAX, NV_UPASSMIN)) != '') {
+    if (($check_pass = nv_check_valid_pass($array_register['password'], $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
         die(reg_result(array(
             'status' => 'error',
             'input' => 'password',

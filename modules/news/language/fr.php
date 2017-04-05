@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
 * @Language Français
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Jun 21, 2010, 12:30:00 PM
@@ -150,3 +150,4 @@ $lang_module['status_7'] = 'En cours d\'examiner';
 $lang_module['status_8'] = 'Passer à la mise en ligne de l\'article';
 $lang_module['status_9'] = 'Refuse de mettre en ligne de l\'article';
 $lang_module['status_10'] = 'En cours d\'examiner avant de mettre en ligne';
+$lang_module['insrss_not_auth'] = 'Pare-feu a bloqué l\'accès à cette zone';

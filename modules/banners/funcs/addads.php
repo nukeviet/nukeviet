@@ -12,7 +12,7 @@ if (! defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 
 global $global_config, $module_name, $module_info, $lang_module, $lang_global, $manament;
 

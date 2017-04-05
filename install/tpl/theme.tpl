@@ -26,7 +26,7 @@
                     <li>
                         <a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={LANGTYPE}&amp;step={MAIN_STEP}">{LANGNAME} </a>
                     </li>
-					<!-- END: looplang -->
+                    <!-- END: looplang -->
                 </ul>
             </div>
         </div>
@@ -56,10 +56,10 @@
             </p>
         </div>
         <div class="nv-modal">
-			<div class="nv-modal-wrap">
-				<div class="nv-modal-content"></div>
-			</div>
-		</div>
+            <div class="nv-modal-wrap">
+                <div class="nv-modal-content"></div>
+            </div>
+        </div>
     </body>
 </html>
 <!-- END: main -->

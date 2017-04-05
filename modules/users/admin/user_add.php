@@ -13,7 +13,7 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 }
 
 if ($nv_Request->isset_request('nv_genpass', 'post')) {
-    $_len = round((NV_UPASSMIN + NV_UPASSMAX) / 2);
+    $_len = round(($global_config['nv_upassmin'] + $global_config['nv_upassmax']) / 2);
     echo nv_genpass($_len, $global_config['nv_upass_type']);
     exit();
 }
@@ -69,7 +69,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
 
     $md5username = nv_md5safe($_user['username']);
 
-    if (($error_username = nv_check_valid_login($_user['username'], NV_UNICKMAX, NV_UNICKMIN)) != '') {
+    if (($error_username = nv_check_valid_login($_user['username'], $global_config['nv_unickmax'], $global_config['nv_unickmin'])) != '') {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'username',
@@ -138,7 +138,7 @@ if ($nv_Request->isset_request('confirm', 'post')) {
             'mess' => $lang_module['edit_error_email_exist'] )));
     }
 
-    if (($check_pass = nv_check_valid_pass($_user['password1'], NV_UPASSMAX, NV_UPASSMIN)) != '') {
+    if (($check_pass = nv_check_valid_pass($_user['password1'], $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'password1',
@@ -360,10 +360,10 @@ $xtpl->assign('FORM_ACTION', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE 
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('NV_LANG_INTERFACE', NV_LANG_INTERFACE);
 
-$xtpl->assign('NV_UNICKMIN', NV_UNICKMIN);
-$xtpl->assign('NV_UNICKMAX', NV_UNICKMAX);
-$xtpl->assign('NV_UPASSMAX', NV_UPASSMAX);
-$xtpl->assign('NV_UPASSMAX', NV_UPASSMAX);
+$xtpl->assign('NV_UNICKMIN', $global_config['nv_unickmin']);
+$xtpl->assign('NV_UNICKMAX', $global_config['nv_unickmax']);
+$xtpl->assign('NV_UPASSMAX', $global_config['nv_upassmax']);
+$xtpl->assign('NV_UPASSMIN', $global_config['nv_upassmin']);
 
 if (defined('NV_IS_USER_FORUM')) {
     $xtpl->parse('main.is_forum');
