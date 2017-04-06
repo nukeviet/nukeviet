@@ -34,7 +34,7 @@ if ($nv_Request->isset_request('mailer_mode', 'post')) {
 
 if ($nv_Request->isset_request('mailer_mode', 'post')) {
     $smtp_password = $array_config['smtp_password'];
-    $array_config['smtp_password'] = nv_base64_encode($crypt->aes_encrypt($smtp_password));
+    $array_config['smtp_password'] = $crypt->encrypt($smtp_password);
 
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'site' AND config_name = :config_name");
     foreach ($array_config as $config_name => $config_value) {

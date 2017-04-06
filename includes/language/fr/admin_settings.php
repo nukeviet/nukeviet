@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -234,3 +234,13 @@ $lang_module['two_step_verification0'] = 'Ne demandez pas';
 $lang_module['two_step_verification1'] = 'Admin Area';
 $lang_module['two_step_verification2'] = 'Espace extérieur du site';
 $lang_module['two_step_verification3'] = 'Toutes les zones';
+$lang_module['site_phone'] = 'Nom du fichier Téléphone';
+$lang_module['googleMapsAPI'] = 'Google Maps API key';
+$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Guides obtiennent clé API</a>';
+$lang_module['captcha_type_2'] = 'reCAPTCHA';
+$lang_module['recaptcha_sitekey'] = 'Clé du site';
+$lang_module['recaptcha_secretkey'] = 'Clef secrète';
+$lang_module['recaptcha_type'] = 'Exemple confirmé';
+$lang_module['recaptcha_type_image'] = 'Images (recommandé)';
+$lang_module['recaptcha_type_audio'] = 'son';
+$lang_module['recaptcha_guide'] = 'Cliquez ici pour obtenir la clé des paramètres du site clé et secret.';

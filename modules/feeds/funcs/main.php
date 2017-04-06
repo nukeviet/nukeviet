@@ -78,7 +78,7 @@ function nv_get_sub_rss_link($rssarray, $id)
     return $content;
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 
 $array = '';
 $content_file = NV_ROOTDIR . '/' . NV_DATADIR . '/' . NV_LANG_DATA . '_' . $module_data . 'Content.txt';

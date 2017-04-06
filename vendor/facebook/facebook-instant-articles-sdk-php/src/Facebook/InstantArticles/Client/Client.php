@@ -85,10 +85,11 @@ class Client
      *
      * @param InstantArticle $article The article to import
      * @param bool|false $published Specifies if this article should be taken live or not. Optional. Default: false.
+     * @param bool|false $formatOutput Specifies if this article should be formatted after transformation. Optional. Default: false.
      *
      * @return int The submission status ID. It is not the article ID. (Since 1.3.0)
      */
-    public function importArticle($article, $published = false)
+    public function importArticle($article, $published = false, $forceRescrape = false, $formatOutput = false)
     {
         Type::enforce($article, 'Facebook\InstantArticles\Elements\InstantArticleInterface');
         Type::enforce($published, Type::BOOLEAN);
@@ -98,12 +99,30 @@ class Client
 
         // Assume default access token is set on $this->facebook
         $response = $this->facebook->post($this->pageID . Client::EDGE_NAME, [
-          'html_source' => $article->render(),
+          'html_source' => $article->render(null, $formatOutput),
           'published' => $published,
           'development_mode' => $this->developmentMode,
         ]);
 
+        if ($forceRescrape) {
+            // Re-scrape Graph object for article URL
+            $this->scrapeArticleURL($article->getCanonicalURL());
+        }
+
         return $response->getGraphNode()->getField('id');
+    }
+
+    /**
+     * Scrape Graph object for given URL
+     *
+     * @param string $canonicalURL The URL that will be scraped.
+     */
+    private function scrapeArticleURL($canonicalURL)
+    {
+        $this->facebook->post('/', [
+            'id' => $canonicalURL,
+            'scrape' => 'true',
+        ]);
     }
 
     /**

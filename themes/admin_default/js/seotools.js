@@ -83,7 +83,7 @@ function nv_add_googleplus() {
 	}
 
 	var nv_timer = nv_settimeout_disable('new_title', 5000);
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=googleplus&nocache=' + new Date().getTime(), 'add=1&idprofile=' + new_profile.value + '&title=' + new_title.value, function(res) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=googleplus&nocache=' + new Date().getTime(), 'add=1&idprofile=' + new_profile.value + '&title=' + encodeURIComponent(new_title.value), function(res) {
 		if (res == 'OK') {
 			nv_show_list_googleplus();
 		} else {
@@ -96,7 +96,7 @@ function nv_add_googleplus() {
 function nv_mod_googleplus(title) {
 	var nv_timer = nv_settimeout_disable('id_mod_' + title, 5000);
 	var gid = $("#id_mod_" + title).val();
-	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=googleplus&nocache=' + new Date().getTime(), 'changemod=' + title + '&gid=' + gid, function(res) {
+	$.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=googleplus&nocache=' + new Date().getTime(), 'changemod=' + encodeURIComponent(title) + '&gid=' + gid, function(res) {
 		if (res != 'OK') {
 			alert(nv_is_change_act_confirm[2]);
 		}

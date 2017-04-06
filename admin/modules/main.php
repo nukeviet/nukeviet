@@ -19,6 +19,7 @@ if (sizeof($site_mods) < 1) {
 
 $page_title = $lang_module['main'];
 
+$contents = array();
 $contents['div_id'] = 'list_mods';
 $contents['ajax'] = 'nv_show_list_mods();';
 

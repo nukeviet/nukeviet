@@ -12,7 +12,7 @@ if (! defined('NV_IS_MOD_BANNERS')) {
     die('Stop!!!');
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 
 global $global_config, $module_name, $module_info, $lang_module, $lang_global, $manament;
 
@@ -36,7 +36,7 @@ if (defined('NV_IS_BANNER_CLIENT')) {
         include NV_ROOTDIR . '/includes/footer.php';
     }
 
-    $xtpl = new XTemplate('addads.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('addads.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
