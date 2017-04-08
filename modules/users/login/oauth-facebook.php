@@ -29,10 +29,10 @@ $facebookService = $serviceFactory->createService('facebook', $credentials, $sto
 
 if (!empty($_GET['code'])) {
     // This was a callback request from facebook, get the token
-    $token = $facebookService->requestAccessToken($_GET['code']);
+    $token = $facebookService->requestAccessToken($_GET['code'])->getAccessToken();
 
     // Send a request with it: /me?fields=id,name,email
-    $result = json_decode($facebookService->request('/me?fields=id,name,email,link,first_name,last_name,gender'), true); 
+    $result = json_decode($facebookService->request('/me?fields=id,name,email,link,first_name,last_name,gender'), true);
     if (isset($result['id'])) {
         $attribs = array(
             'identity' => $result['link'],
