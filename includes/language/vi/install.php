@@ -9,7 +9,7 @@
  * @Createdate Jun 06, 2011, 12:55:00 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 

@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -81,6 +81,10 @@ $lang_module['uploadError2'] = 'Error: URL not in accordance with standard';
 $lang_module['pubdate'] = 'Updated';
 $lang_module['newSize'] = 'Create a new image';
 $lang_module['prView'] = 'View';
+$lang_module['prViewExample'] = 'View Example';
+$lang_module['prViewExampleError'] = 'Please select the directory, a medias and input full size, thumb thumb thumb quality';
+$lang_module['prViewExampleError1'] = 'Example Error';
+$lang_module['prViewExampleError2'] = 'The system did not find any photos to give an example. You need to upload at least one image in the upload directory';
 $lang_module['errorMinX'] = 'Error: The width is less than the permitted level';
 $lang_module['errorMaxX'] = 'Error: The width is greater than the permitted level';
 $lang_module['errorMinY'] = 'Error: height less than the permitted level';
@@ -152,6 +156,8 @@ $lang_module['order1'] = 'Sort by date old';
 $lang_module['order2'] = 'Sort by file name';
 $lang_module['searchdir'] = 'Search in folder';
 $lang_module['searchkey'] = 'Search key';
+$lang_module['original_image'] = 'Original image';
+$lang_module['thumb_image'] = 'thumb mage';
 $lang_module['crop'] = 'Crop image';
 $lang_module['crop_error_small'] = 'This image size is too small, do not cut';
 $lang_module['crop_keep_original'] = 'Crop as a new image and keep original image';

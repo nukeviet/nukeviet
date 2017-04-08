@@ -560,36 +560,30 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
 function nv_user_groups($in_groups)
 {
     global $nv_Cache, $db, $db_config, $global_config;
-
-    if (empty($in_groups)) {
-        return '';
-    }
-
-    $query = 'SELECT group_id, title, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
-    $list = $nv_Cache->db($query, '', 'users');
-
-    if (empty($list)) {
-        return '';
-    }
-
-    $in_groups = explode(',', $in_groups);
-    $groups = array();
-    $reload = array();
-
-    for ($i = 0, $count = sizeof($list); $i < $count; ++$i) {
-        if ($list[$i]['exp_time'] != 0 and $list[$i]['exp_time'] <= NV_CURRENTTIME) {
-            $reload[] = $list[$i]['group_id'];
-        } elseif (in_array($list[$i]['group_id'], $in_groups)) {
-            $groups[] = $list[$i]['group_id'];
+    
+    $_groups = array();
+    if (!empty($in_groups)) {
+        $query = 'SELECT group_id, title, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+        $list = $nv_Cache->db($query, '', 'users');
+        if (!empty($list)) {
+            $reload = array();
+            $in_groups = explode(',', $in_groups);
+            for ($i = 0, $count = sizeof($list); $i < $count; ++$i) {
+                if ($list[$i]['exp_time'] != 0 and $list[$i]['exp_time'] <= NV_CURRENTTIME) {
+                    $reload[] = $list[$i]['group_id'];
+                } elseif (in_array($list[$i]['group_id'], $in_groups)) {
+                    $_groups[] = $list[$i]['group_id'];
+                }
+            }
+            
+            if ($reload) {
+                $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
+                $nv_Cache->delMod('users');
+            }
         }
     }
-
-    if ($reload) {
-        $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
-        $nv_Cache->delMod('users');
-    }
-
-    return $groups;
+    
+    return $_groups;
 }
 
 /**
@@ -1874,19 +1868,6 @@ function nv_redirect_encrypt($url)
  */
 function nv_redirect_decrypt($string, $insite = true)
 {
-    if (empty($string)) {
-        return '';
-    }
-
-    if (preg_match('/[^a-z0-9\-\_\,]/i', $string)) {
-        return '';
-    }
-
-    $string = nv_base64_decode($string);
-    if (! $string) {
-        return '';
-    }
-
     global $crypt;
     $url = $crypt->decrypt($string, NV_CHECK_SESSION);
     if (empty($url)) {

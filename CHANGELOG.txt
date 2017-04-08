@@ -1,7 +1,7 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.1.01 Beta 2
+NUKEVIET 4.1.01 Beta 2 Releases Apr 9, 2017
 - Jquery 3.2.0, Plupload 2.3.1
 - Update CKEditor 4.6: Add feature: Copy Formatting, Drag&drop Image, Drag&drop File1
 - Add function nv_jsonOutput
@@ -56,7 +56,7 @@ NUKEVIET 4.1.00 Beta 1
 - Module Freecontent: Suport virtual module
 - Theme default: Fix google map on block company_info
 
-NUKEVIET 4.0.29 Final
+NUKEVIET 4.0.29 Final Releases May 19, 2016
 - Requires PHP 5.5 or later
 - PHPMailer v6.0
 - Endroid/qrcode v1.6.5
@@ -406,7 +406,7 @@ CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (1850 commits: from commi
 	+ Change menu management more visually.
 	+ Split menu types  into block menu distinct.
 
-NUKEVIET 3.4.02 (3.4.02.r1929)
+NUKEVIET 3.4.02 (3.4.02.r1929) Releases Jan 9, 2014
 CODE: http://code.google.com/p/nuke-viet/source/list (r1759 to r1929)
 - Fix for system core, captcha, function delete theme, install, module news, download, weblinks
 - Delete block_blocknews (exit with block_groups) in module news.
