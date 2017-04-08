@@ -271,9 +271,9 @@ if ($post_order == 1) {
                 }
                 product_number_sell($listid_old, $listnum_old, '-');
             }
-
+			$j=0;
             //Them chi tiet don hang
-            foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {
+            foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {$j++;
             	$proid=$pro_id;
 				$array=explode('_', $pro_id);
 				$pro_id=$array[0];
@@ -284,22 +284,24 @@ if ($post_order == 1) {
                     $price = nv_get_price($pro_id, $pro_config['money_unit'], $info['num'], true);
                     $info['price'] = $price['sale'];
 
-                    $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id, proid, num, price, discount_id ) VALUES ( :order_id, :proid, :num, :price, :discount_id )';
+                    $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id,listgroupid, proid, num, price, discount_id ) VALUES ( :order_id,:listgroupid, :proid, :num, :price, :discount_id )';
                     $data_insert = array();
                     $data_insert['order_id'] = $order_id;
                     $data_insert['proid'] = $pro_id;
                     $data_insert['num'] = $info['num'];
                     $data_insert['price'] = $info['price'];
                     $data_insert['discount_id'] = $info['discount_id'];
+					$data_insert['listgroupid'] = $info['group'];
                     $order_i = $db->insert_id($sql, 'id', $data_insert);
 
                     if ($order_i > 0 and !empty($info['group'])) {
                         $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group(order_i, group_id) VALUES( :order_i, :group_id )');
-                        $info['group'] = explode(',', $info['group']);
+					    $info['group'] = explode(',', $info['group']);
                         foreach ($info['group'] as $group_i) {
                             $sth->bindParam(':order_i', $order_i, PDO::PARAM_INT);
                             $sth->bindParam(':group_id', $group_i, PDO::PARAM_INT);
                             $sth->execute();
+
                         }
                     }
 
