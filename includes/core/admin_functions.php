@@ -178,11 +178,6 @@ function nv_save_file_config_global()
     $content_config .= "define('NV_EOL', " . $nv_eol . ");\n";
     $content_config .= "define('NV_UPLOAD_MAX_FILESIZE', " . floatval($upload_max_filesize) . ");\n";
 
-
-    if (! empty($config_variable['openid_servers'])) {
-        $content_config .= "define('NV_OPENID_ALLOWED', true);\n\n";
-    }
-
     $my_domains = array_map('trim', explode(',', $config_variable['my_domains']));
     $my_domains[] = NV_SERVER_NAME;
     $config_variable['my_domains'] = implode(',', array_unique($my_domains));
