@@ -317,6 +317,11 @@ if ($global_config['is_user_forum']) {
     define('NV_IS_USER_FORUM', true);
 }
 
+if (!empty($global_config['openid_servers'])) {
+    $global_config['openid_servers'] = explode(',', $global_config['openid_servers']);
+    define('NV_OPENID_ALLOWED', true);
+}
+
 if (empty($global_config['site_logo'])) {
     $global_config['site_logo'] = NV_ASSETS_DIR . '/images/logo.png';
 }
@@ -330,11 +335,7 @@ $global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password'
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
-if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array(
-    'mild',
-    'lite',
-    'none'
-))) {
+if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array('mild','lite','none'))) {
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
