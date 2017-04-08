@@ -47,7 +47,7 @@ if (isset($array_op[1]) and $array_op[1] == 'qr-image') {
     
     header('Content-type: image/png');
     $qrCode->setText($url)
-        ->setErrorCorrection('high')
+        ->setErrorCorrection('medium')
         ->setModuleSize(4)
         ->setImageType('png')
         ->render();
