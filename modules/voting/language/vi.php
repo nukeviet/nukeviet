@@ -38,6 +38,3 @@ $lang_module['voting_counter'] = 'lượt';
 $lang_module['voting_pubtime'] = 'Tính từ';
 $lang_module['enter_captcha'] = 'Mời nhập mã xác nhận';
 $lang_module['enter_captcha_error'] = 'Vui lòng nhập mã xác nhận';
-$lang_module['voting_pro'] = 'Mới nhất';
-$lang_module['voting_hits_hot']='Bình chọn nhiều nhất';
-$lang_module['voting_hot']='Nổi bật';
