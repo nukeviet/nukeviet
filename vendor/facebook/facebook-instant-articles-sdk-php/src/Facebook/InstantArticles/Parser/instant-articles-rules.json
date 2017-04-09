@@ -130,6 +130,10 @@
                 "selector" : "header"
             },
             {
+                "class": "FooterSmallRule",
+                "selector": "small"
+            },
+            {
                 "class": "FooterRule",
                 "selector" : "footer"
             },

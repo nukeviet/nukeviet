@@ -263,7 +263,7 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 }
 // Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
-$global_config['ftp_user_pass'] = $crypt->aes_decrypt(nv_base64_decode($global_config['ftp_user_pass']));
+$global_config['ftp_user_pass'] = $crypt->decrypt($global_config['ftp_user_pass']);
 
 if (isset($nv_plugin_area[1])) {
     // Kết nối với các plugin Trước khi kết nối CSDL
@@ -304,12 +304,17 @@ define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
 $sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND module='site') ORDER BY module ASC";
 $list = $nv_Cache->db($sql, '', 'settings');
+
 foreach ($list as $row) {
     if (($row['lang'] == NV_LANG_DATA and $row['module'] == 'global') or ($row['lang'] == 'sys' and $row['module'] == 'site')) {
         $global_config[$row['config_name']] = $row['config_value'];
     } else {
         $module_config[$row['module']][$row['config_name']] = $row['config_value'];
     }
+}
+
+if ($global_config['is_user_forum']) {
+    define('NV_IS_USER_FORUM', true);
 }
 
 if (empty($global_config['site_logo'])) {
@@ -321,7 +326,7 @@ $global_config['array_theme_type'] = explode(',', $global_config['theme_type']);
 
 define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
-$global_config['smtp_password'] = $crypt->aes_decrypt(nv_base64_decode($global_config['smtp_password']));
+$global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password']);
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
@@ -413,6 +418,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'module_upload' => $row['module_upload'],
                     'module_theme' => $row['module_theme'],
                     'custom_title' => $row['custom_title'],
+                    'site_title' => (empty($row['site_title'])) ? $row['custom_title'] : $row['site_title'],
                     'admin_title' => (empty($row['admin_title'])) ? $row['custom_title'] : $row['admin_title'],
                     'admin_file' => $row['admin_file'],
                     'main_file' => $row['main_file'],
@@ -433,6 +439,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                 'func_name' => $f_name,
                 'show_func' => $row['show_func'],
                 'func_custom_name' => $row['func_custom_name'],
+                'func_site_title' => empty($row['func_site_title']) ? $row['func_custom_name'] : $row['func_site_title'],
                 'in_submenu' => $row['in_submenu']
             );
             $sys_mods[$m_title]['alias'][$f_name] = $f_alias;

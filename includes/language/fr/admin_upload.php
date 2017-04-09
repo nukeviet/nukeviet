@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 29, 2010, 05:00:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 29, 2010, 05:00:00 PM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -81,6 +81,10 @@ $lang_module['uploadError2'] = 'Erreur: lien invalide';
 $lang_module['pubdate'] = 'Mis à jour';
 $lang_module['newSize'] = 'Créer une image';
 $lang_module['prView'] = 'Voir';
+$lang_module['prViewExample'] = 'Voir un exemple';
+$lang_module['prViewExampleError'] = 'Sélectionnez le dossier, et entrez la taille complète du plan, le pouce avant la qualité d\'image';
+$lang_module['prViewExampleError1'] = 'Erreur de données';
+$lang_module['prViewExampleError2'] = 'Le système n\'a pas pu trouver des photos pour donner des exemples. Vous devez télécharger au moins une image dans le répertoire de téléchargement';
 $lang_module['errorMinX'] = 'Erreur: largeur inférieur au niveau autorisé';
 $lang_module['errorMaxX'] = 'Erreur: largeur supérieur au niveau autorisé';
 $lang_module['errorMinY'] = 'Erreur: hauteur inférieur le minimum';
@@ -152,8 +156,11 @@ $lang_module['order1'] = 'Mettre en ordre de date la plus loin';
 $lang_module['order2'] = 'Mettre en ordre de nom de fichier';
 $lang_module['searchdir'] = 'Recherche dans le dossier';
 $lang_module['searchkey'] = 'Le mot clé de recherche';
+$lang_module['original_image'] = 'l\'image originale';
+$lang_module['thumb_image'] = 'photo pouce';
 $lang_module['crop'] = 'Couper image';
 $lang_module['crop_error_small'] = 'Cette image a des mesures trop petites, ne recommande pas de couper';
+$lang_module['crop_keep_original'] = 'Gardez l\'image originale';
 $lang_module['rotate'] = 'Tourner image';
 $lang_module['waiting'] = 'En cours de télécharger les données, veuillez-vous attendre';
 $lang_module['file_no_exists'] = 'Fichier n\'existe pas';

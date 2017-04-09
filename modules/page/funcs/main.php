@@ -15,7 +15,7 @@ if (! defined('NV_IS_MOD_PAGE')) {
 $contents = '';
 if ($id) {
     // Xem theo bài viết
-    $base_url_rewrite = nv_url_rewrite($base_url . '&' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'], true);
+    $base_url_rewrite = nv_url_rewrite(str_replace('&amp;', '&', $base_url) . '&' . NV_OP_VARIABLE . '=' . $rowdetail['alias'] . $global_config['rewrite_exturl'], true);
     if ($_SERVER['REQUEST_URI'] == $base_url_rewrite) {
         $canonicalUrl = NV_MAIN_DOMAIN . $base_url_rewrite;
     } elseif (NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
@@ -94,7 +94,7 @@ if ($id) {
     $contents = nv_page_main($rowdetail, $other_links, $content_comment);
 } else {
     // Xem theo danh sách
-    $page_title = $module_info['custom_title'];
+    $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
     $mod_title = isset($lang_module['main_title']) ? $lang_module['main_title'] : $module_info['custom_title'];
     $per_page = $page_config['per_page'];

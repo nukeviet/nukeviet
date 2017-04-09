@@ -17,7 +17,7 @@ if (!empty($user_info['active2step'])) {
     die();
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
 $nv_redirect = '';

@@ -34,12 +34,7 @@ if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
         );
     }
     
-    header('Cache-Control: no-cache, must-revalidate');
-    header('Content-type: application/json');
-    
-    ob_start('ob_gzhandler');
-    echo json_encode($array_data);
-    exit();
+    nv_jsonOutput($array_data);
 }
 
 //kiểm tra xem đang sửa có bị cướp quyền hay không, cập nhật thêm thời gian chỉnh sửa

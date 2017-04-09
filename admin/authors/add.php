@@ -195,7 +195,7 @@ $xtpl->assign('INFO', $contents['info']);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_BASE_ADMINURL', NV_BASE_ADMINURL);
 $xtpl->assign('RESULT_URL', NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=add&result=1&checksess=' . NV_CHECK_SESSION);
-$xtpl->assign('FILTERSQL', nv_base64_encode($crypt->aes_encrypt($filtersql, NV_CHECK_SESSION)));
+$xtpl->assign('FILTERSQL', $crypt->encrypt($filtersql, NV_CHECK_SESSION));
 $xtpl->assign('ACTION', $contents['action']);
 
 if (isset($contents['editor'])) {
