@@ -51,6 +51,7 @@ $lang_module['rename'] = 'Renommer le fichier';
 $lang_module['renamefolder'] = 'Renommer le répertoire';
 $lang_module['deletefolder'] = 'Supprimer le répertoire';
 $lang_module['createfolder'] = 'Créer  un répertoire';
+$lang_module['recreatethumb'] = 'Régénérer pouce image';
 $lang_module['rename_newname'] = 'Nouveau nom';
 $lang_module['rename_noname'] = 'Vous n\'avez pas encore nommé le fichier';
 $lang_module['rename_error_folder'] = 'Erreur: Le système ne peut pas changer le nom du dossier';

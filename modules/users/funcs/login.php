@@ -283,9 +283,9 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                     die();
                 }
             } else {
-                $page_title = $lang_module['openid_login'];
+                $page_title = $lang_global['openid_login'];
                 $key_words = $module_info['keywords'];
-                $mod_title = $lang_module['openid_login'];
+                $mod_title = $lang_global['openid_login'];
                 
                 unset($nv_row['password']);
 
