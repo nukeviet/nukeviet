@@ -325,3 +325,8 @@ $lang_module['fbinsartmgs_102'] = 'Error: Your article has attributes for tags. 
 $lang_module['error_edit'] = 'Posts are moderated moderators. You can not edit next.';
 $lang_module['dulicate_edit'] = 'Posts are moderated moderators. Do you want to take over this administration?';
 $lang_module['not_edit_by_admin'] = 'You have been hijacked to edit this post. Your changes can not be saved to the system, please copy again to avoid losing your changes.';
+
+$lang_module['dulicate_edit'] = 'The article <b>%s </b> is being edited by the account <b>%s</b> at %s. You may not edit this post until it is complete.';
+$lang_module['dulicate_edit_admin'] = 'The article <b>%s </b> is being edited by the account <b>%s</b> at %s. Do you want to <b>Take over the editor of the post</b>?';
+$lang_module['dulicate_takeover'] = 'Take over the editor of the post';
+$lang_module['dulicate_edit_takeover'] = 'You have been take over by this account %s at %s. Your changes can not be saved to the system, please copy again to avoid losing your changes.';
