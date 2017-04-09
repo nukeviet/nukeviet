@@ -13,4 +13,7 @@ Bằng việc tham gia kho code này ( [coder](#coder) hoặc [tester](#tester))
 - Các coder tham gia đóng góp code đồng ý rằng sẽ trao quyền cho VINADES.,JSC hoặc một tổ chức hợp pháp đại diện cho cộng đồng NukeViet thay mặt coder giải quyết các vấn đề tranh chấp về bản quyền phần mềm NukeViet (nếu có).
 
 ## Tester
+### Quy định đóng góp
+Tương tự việc đóng góp code, đóng góp của các tester cũng được tuân thủ theo quy định như đối với coder
+### Hướng dẫn gửi báo lỗi
 Xem [Quy định thông báo lỗi](./ISSUE_TEMPLATE.md)
