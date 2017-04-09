@@ -22,7 +22,6 @@ $sql_create_module = $sql_drop_module;
 $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
  vid smallint(5) unsigned NOT NULL AUTO_INCREMENT,
  question varchar(". $_maxlength . ") NOT NULL,
- alias VARCHAR(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
  link varchar(255) default '',
  acceptcm int(2) NOT NULL DEFAULT '1',
  active_captcha tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -31,8 +30,6 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  publ_time int(11) unsigned NOT NULL DEFAULT '0',
  exp_time int(11) unsigned NOT NULL DEFAULT '0',
  act tinyint(1) unsigned NOT NULL DEFAULT '0',
- weight smallint(4) NOT NULL DEFAULT '0',
- hot_post tinyint(1) NOT NULL DEFAULT '0',
  PRIMARY KEY (vid),
  UNIQUE KEY question (question)
 ) ENGINE=MyISAM";

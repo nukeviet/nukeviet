@@ -18,21 +18,13 @@ if (! defined('NV_ADMIN')) {
  * 	- Accept global var: $db, $db_config, $global_config
  */
 
-$sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " (
-    vid, question, alias, link, acceptcm, active_captcha, admin_id, groups_view, publ_time, exp_time, act, weight, hot_post
-) VALUES (
-    :vid, :question, :alias, '', 1, 0, 1, '6', 1275318563, 0, 1, :weight, 0)
-");
+$sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . " VALUES (:vid, :question, '', 1, 0, 1, '6', 1275318563, 0, 1)");
 $sth->bindValue(':vid', 2, PDO::PARAM_INT);
 $sth->bindValue(':question', 'Bạn biết gì về NukeViet 4?', PDO::PARAM_STR);
-$sth->bindValue(':alias', change_alias('Bạn biết gì về NukeViet 4?'), PDO::PARAM_STR);
-$sth->bindValue(':weight', 1, PDO::PARAM_INT);
 $sth->execute();
 
 $sth->bindValue(':vid', 3, PDO::PARAM_INT);
 $sth->bindValue(':question', 'Lợi ích của phần mềm nguồn mở là gì?', PDO::PARAM_STR);
-$sth->bindValue(':alias',change_alias('Lợi ích của phần mềm nguồn mở là gì?'), PDO::PARAM_STR);
-$sth->bindValue(':weight', 2, PDO::PARAM_INT);
 $sth->execute();
 
 $sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_rows VALUES (?, ?, ?, ?, ?)");
