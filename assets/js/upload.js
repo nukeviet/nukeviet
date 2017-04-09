@@ -634,6 +634,8 @@ function createfolder() {
 //Tạo lại ảnh thumb
 function recreatethumb() {
     $("div#recreatethumb").dialog("open")
+	$("#recreatethumb_ok").show();
+	$("#recreatethumb_loading").html(LANG.recreatethumb_note);
 }
 
 // Xoa thu muc

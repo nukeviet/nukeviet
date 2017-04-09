@@ -12,46 +12,6 @@ if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
-//kiểm tra xem có người sửa hay chưa, và quyền sửa có dc cướp quyền hay không
-if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('check_edit', 'post')) {
-	$id = $nv_Request->get_int('id', 'post', 0);
-	$time = NV_CURRENTTIME -  300;// thời gian sửa:5p
-	
-	$_query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp 
-		WHERE id =' . $id );
-	if ($row_tmp = $_query->fetch()) {
-		if ($row_tmp['time_late'] > $time) { // đang trong thời gian sửa
-			$array_admin = array();
-			$query_admin = $db->query( 'SELECT admin_id, lev FROM ' . NV_AUTHORS_GLOBALTABLE );
-			while ($_tmp = $query_admin->fetch()) {
-				$array_admin[$_tmp['admin_id']] = $_tmp; 
-			}
-			
-			if ($array_admin[$admin_info['admin_id']]['lev'] == 1 or $array_admin[$admin_info['admin_id']]['lev'] < $array_admin[$row_tmp['admin_id']]['lev']) {
-				$return = 'NO_' . $lang_module['dulicate_edit'];
-			} else {
-				$return = 'ERR_' . $lang_module['error_edit'];
-			}
-		} else {// không trong khoảng thời gian sửa
-			$return = 'EDIT_';
-		}
-	} else {
-		$return = 'OK_';
-	}
-	
-	die($return);
-}
-
-//chiếm quyền sửa bài viết
-if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('get_edit', 'post')) {
-	$id = $nv_Request->get_int('id', 'post', 0);
-	
-	$db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET 
-	 		admin_id=' . $admin_info['admin_id'] .',time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . ' 
-	 		WHERE id=' . $id);
-	die('OK');
-}
-
 $page_title = $lang_module['content_list'];
 $stype = $nv_Request->get_string('stype', 'get', '-');
 $sstatus = $nv_Request->get_int('sstatus', 'get', -1);

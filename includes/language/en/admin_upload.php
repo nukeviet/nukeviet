@@ -52,6 +52,7 @@ $lang_module['renamefolder'] = 'Rename Folder';
 $lang_module['deletefolder'] = 'Delete Folder';
 $lang_module['createfolder'] = 'Create Folder';
 $lang_module['recreatethumb'] = 'Recreate thumb images';
+$lang_module['recreatethumb_note'] = 'Note: This function will erase all the thumbs under the folder, both sub-folders and recreate the thumb image according to the new configuration. This process can take a long time, you can not close the browser';
 $lang_module['rename_newname'] = 'New name:';
 $lang_module['rename_noname'] = 'You not enter a new file name';
 $lang_module['rename_error_folder'] = 'Error: System can not rename folder';
