@@ -120,6 +120,15 @@
     </div>
 </div>
 
+
+<div id="recreatethumb" class="upload-hide" title="{LANG.recreatethumb}">
+    <div class="form-horizontal" role="form">
+        <div class="form-group" id="recreatethumb_loading">
+        	{LANG.recreatethumb_note}
+        </div>
+    </div>
+</div>
+
 <div id="errorInfo" class="upload-hide" title="{LANG.errorInfo}"></div>
 
 <div id="imgpreview" title="{LANG.preview}">
@@ -293,6 +302,7 @@ LANG.move_multiple = "{LANG.move_multiple}";
 LANG.rename = "{LANG.rename}";
 LANG.upload_delfile = "{LANG.upload_delfile}";
 LANG.createfolder = "{LANG.createfolder}";
+LANG.recreatethumb = "{LANG.recreatethumb}";
 LANG.renamefolder = "{LANG.renamefolder}";
 LANG.deletefolder = "{LANG.deletefolder}";
 LANG.delete_folder = "{LANG.delete_folder}";
