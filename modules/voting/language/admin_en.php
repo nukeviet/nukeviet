@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -57,6 +57,3 @@ $lang_module['voting_delete_unsuccess'] = 'Error:Delete fail !';
 $lang_module['warning'] = 'Note: selectable must smaller than available';
 $lang_module['voting_error_content'] = 'Notice: you should input Vote content and all answer question';
 $lang_module['voting_active_captcha'] = 'Activation confirmation code';
-$lang_module['voting_order'] = 'Ordinal';
-$lang_module['group_post'] = 'Group article';
-$lang_module['hot_post'] = 'Highlights';

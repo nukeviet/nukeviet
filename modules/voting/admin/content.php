@@ -25,7 +25,7 @@ if (! empty($submit)) {
 
     $_groups_post = $nv_Request->get_array('groups_view', 'post', array());
     $groups_view = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
-	$hot_post = $nv_Request->get_int('hot_post', 'post', 0);
+
     $publ_date = $nv_Request->get_title('publ_date', 'post', '');
     $exp_date = $nv_Request->get_title('exp_date', 'post', '');
     $maxoption = $nv_Request->get_int('maxoption', 'post', 1);
@@ -73,8 +73,7 @@ if (! empty($submit)) {
         'exp_time' => $enddate,
         'acceptcm' => $maxoption,
         'question' => $question,
-        'link' => $link,
-        'hot_post'=>$hot_post
+        'link' => $link
     );
 
     $active_captcha = $nv_Request->get_int('active_captcha', 'post', 0) ? 1 : 0;
@@ -83,18 +82,15 @@ if (! empty($submit)) {
         $error = $lang_module['voting_error'];
 
         if (empty($vid)) {
-        	$weight = 0;
-        	$weight = $db->query("SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data)->fetchColumn();
-            $weight = intval($weight) + 1;
             $sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . ' (
-                question, link, acceptcm, active_captcha, admin_id, groups_view, publ_time, exp_time, act,weight,hot_post,alias
+                question, link, acceptcm, active_captcha, admin_id, groups_view, publ_time, exp_time, act
             ) VALUES (
-                ' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ', ' . $active_captcha . ',' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0, 0, 1,'.$weight.','.$hot_post.','.$db->quote(change_alias($question)).'
+                ' . $db->quote($question) . ', ' . $db->quote($link) . ', ' . $maxoption . ', ' . $active_captcha . ',' . $admin_info['admin_id'] . ', ' . $db->quote($groups_view) . ', 0, 0, 1
             )';
             $vid = $db->insert_id($sql, 'vid');
             nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_add'], $question, $admin_info['userid']);
         }
-
+        
         if ($vid > 0) {
             $maxoption_data = 0;
             foreach ($array_answervote as $id => $title) {
@@ -103,7 +99,7 @@ if (! empty($submit)) {
                     $url = nv_unhtmlspecialchars(strip_tags($array_urlvote[$id]));
                     if (!nv_is_url($url)) {
                         $url = '';
-                    }
+                    }                    
                     $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_rows SET title = ' . $db->quote($title) . ', url = ' . $db->quote($url) . ' WHERE id =' . intval($id) . ' AND vid =' . $vid);
                     ++$maxoption_data;
                 } else {
@@ -132,13 +128,13 @@ if (! empty($submit)) {
             } else {
                 $act = 1;
             }
-
-            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET
-                question=' . $db->quote($question) . ', link=' . $db->quote($link) . ', acceptcm = ' . $maxoption . ', active_captcha=' . $active_captcha . ',
-                admin_id = ' . $admin_info['admin_id'] . ', groups_view = ' . $db->quote($groups_view) . ',
-                publ_time=' . $begindate . ', exp_time=' . $enddate . ', act=' . $act . ', hot_post=' . $hot_post . ', alias='.$db->quote(change_alias($question)).'
+            
+            $sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET 
+                question=' . $db->quote($question) . ', link=' . $db->quote($link) . ', acceptcm = ' . $maxoption . ', active_captcha=' . $active_captcha . ', 
+                admin_id = ' . $admin_info['admin_id'] . ', groups_view = ' . $db->quote($groups_view) . ', 
+                publ_time=' . $begindate . ', exp_time=' . $enddate . ', act=' . $act . ' 
             WHERE vid =' . $vid;
-
+            
             if ($db->query($sql)) {
                 nv_insert_logs(NV_LANG_DATA, $module_name, $lang_module['voting_edit'], $question, $admin_info['userid']);
                 $nv_Cache->delMod($module_name);
@@ -162,7 +158,7 @@ if (! empty($submit)) {
     $maxoption = 1;
     $array_answervote = array();
     $array_urlvote = array();
-
+    
     if ($vid > 0) {
         $queryvote = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE vid=' . $vid;
         $rowvote = $db->query($queryvote)->fetch();
@@ -178,7 +174,7 @@ if (! empty($submit)) {
         if ($maxoption > 1) {
             $maxoption = $maxoption - 1;
         }
-
+        
         $active_captcha = $rowvote['active_captcha'];
     } else {
         $rowvote = array(

@@ -3,7 +3,7 @@
 /**
 * @Project NUKEVIET 4.x
 * @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
 * @Language English
 * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
 * @Createdate Mar 04, 2010, 08:22:00 AM
@@ -38,6 +38,3 @@ $lang_module['voting_counter'] = 'Voting count';
 $lang_module['voting_pubtime'] = 'From';
 $lang_module['enter_captcha'] = 'Enter the confirmation code';
 $lang_module['enter_captcha_error'] = 'Please enter confirmation code';
-$lang_module['voting_pro'] = 'Latest';
-$lang_module['voting_hits_hot'] = 'Most voted';
-$lang_module['voting_hot'] = 'Highlights';
