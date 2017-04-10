@@ -593,6 +593,9 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
         $page_title = $message_title;
         $xtpl->assign('TITLE', $message_title);
         $xtpl->parse('main.title');
+    } elseif (!empty($module_info['site_title'])) {
+        // For admin if use in admin area
+        $page_title = $module_info['site_title'];
     } else {
         $page_title = $module_info['custom_title'];
     }

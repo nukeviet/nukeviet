@@ -55,12 +55,7 @@ if (defined('NV_IS_SPADMIN') and empty($global_config['idsite'])) {
     if (defined('NV_IS_GODADMIN')) {
         $submenu['fields'] = $lang_module['fields'];
         $allow_func[] = 'fields';
-        $submenu['config'] = $lang_module['config'];
-        $allow_func[] = 'config';
-        if (file_exists(NV_ROOTDIR . '/modules/users/admin/import.php')) {
-            $submenu['import'] = $lang_module['import'];
-            $allow_func[] = 'import';
-            $allow_func[] = 'export';
-        }
     }
+    $submenu['config'] = $lang_module['config'];
+    $allow_func[] = 'config';
 }

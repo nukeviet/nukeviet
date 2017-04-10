@@ -31,7 +31,7 @@ while ($row = $result->fetch()) {
 $contents['containerid'] = 'action';
 $contents['aj'] = "nv_login_info('action');";
 
-$page_title = $module_info['custom_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['funcs'][$op]['func_custom_name'];
+$page_title = $module_info['custom_title'] . ' ' . NV_TITLEBAR_DEFIS . ' ' . $module_info['funcs'][$op]['func_site_title'];
 $contents = nv_banner_theme_main($contents, $manament);
 
 include NV_ROOTDIR . '/includes/header.php';

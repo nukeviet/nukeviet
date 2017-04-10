@@ -81,16 +81,16 @@ $global_config['dump_interval'] = 1;
 $global_config['hashprefix'] = '{SSHA512}';
 
 //so ky tu toi da cua password doi voi user
-define('NV_UPASSMAX', 20);
+$global_config['nv_upassmax'] = 32;
 
 //so ky tu toi thieu cua password doi voi user
-define('NV_UPASSMIN', 8);
+$global_config['nv_upassmin'] = 8;
 
 //so ky tu toi da cua ten tai khoan doi voi user
-define('NV_UNICKMAX', 20);
+$global_config['nv_unickmax'] = 20;
 
 //so ky tu toi thieu cua ten tai khoan doi voi user
-define('NV_UNICKMIN', 4);
+$global_config['nv_unickmin'] = 4;
 
 define('NV_LIVE_COOKIE_TIME', 31104000);
 

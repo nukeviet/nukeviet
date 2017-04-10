@@ -80,7 +80,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
         }
 
         if ($id) {
-            $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, imageposition = :imageposition, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, gid = :gid, admin_id = :admin_id, edit_time = ' . NV_CURRENTTIME . ', hot_post = :hot_post WHERE id =' . $id;
+            $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, imageposition = :imageposition, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, gid = :gid, edit_time = ' . NV_CURRENTTIME . ', hot_post = :hot_post WHERE id =' . $id;
             $publtime = $row['add_time'];
         } else {
             if ($page_config['news_first']) {
@@ -89,11 +89,11 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                 $weight = $db->query("SELECT MAX(weight) FROM " . NV_PREFIXLANG . "_" . $module_data)->fetchColumn();
                 $weight = intval($weight) + 1;
             }
-
+            
             $_sql = 'INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '
 				(title, alias, image, imagealt, imageposition, description, bodytext, keywords, socialbutton, activecomm, layout_func, gid, weight,admin_id, add_time, edit_time, status,hot_post) VALUES
-				(:title, :alias, :image, :imagealt, :imageposition, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', :admin_id, ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1,:hot_post)';
-
+				(:title, :alias, :image, :imagealt, :imageposition, :description, :bodytext, :keywords, :socialbutton, :activecomm, :layout_func, :gid, ' . $weight . ', ' . $admin_info['admin_id'] . ', ' . NV_CURRENTTIME . ', ' . NV_CURRENTTIME . ', 1,:hot_post)';
+            
             $publtime = NV_CURRENTTIME;
         }
 
@@ -111,7 +111,6 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $sth->bindParam(':activecomm', $row['activecomm'], PDO::PARAM_INT);
             $sth->bindParam(':layout_func', $row['layout_func'], PDO::PARAM_STR);
             $sth->bindParam(':gid', $row['gid'], PDO::PARAM_INT);
-            $sth->bindParam(':admin_id', $admin_info['admin_id'], PDO::PARAM_INT);
 			$sth->bindParam(':hot_post', $row['hot_post'], PDO::PARAM_INT);
             $sth->execute();
 

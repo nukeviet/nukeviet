@@ -104,7 +104,7 @@ if ($nv_Request->isset_request('q', 'get')) {
 
 $contents = search_main_theme($is_search, $search, $array_mod);
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 
 if (! empty($search['key'])) {
     $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $search['key'];

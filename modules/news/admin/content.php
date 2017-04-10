@@ -39,18 +39,20 @@ if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
 
 //kiểm tra xem đang sửa có bị cướp quyền hay không, cập nhật thêm thời gian chỉnh sửa
 if ($nv_Request->isset_request('id', 'post') and $nv_Request->isset_request('check_edit', 'post')) {
-	$id = $nv_Request->get_int('id', 'post', 0);
-	
-	$return = 'NO_'. $lang_module['not_edit_by_admin'];
-	$_query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp 
-		WHERE id =' . $id .' AND admin_id=' . $admin_info['admin_id'] );
-	if ($row_tmp = $_query->fetch()) {
-		$db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET 
-	 		time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . ' 
-	 		WHERE id=' . $id);
-	 	$return = 'OK_';
-	}
-	die($return);
+    $id = $nv_Request->get_int('id', 'post', 0);
+    $return = 'OK_';
+    
+    $_query = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id =' . $id);
+    if ($row_tmp = $_query->fetch()) {
+        if ($row_tmp['admin_id'] == $admin_info['admin_id']) {
+            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET  time_late=' . NV_CURRENTTIME . ', ip=' . $db->quote($admin_info['last_ip']) . ' WHERE id=' . $id);
+            $return = 'OK_' . $id;
+        } else {
+            $_username = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $row_tmp['admin_id'])->fetchColumn();
+            $return = 'ERROR_' . sprintf($lang_module['dulicate_edit_takeover'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
+        }
+    }
+    die($return);
 }
 
 if (defined('NV_EDITOR')) {
@@ -254,19 +256,6 @@ if ($rowcontent['id'] > 0) {
     if (empty($module_config[$module_name]['htmlhometext'])) {
         $rowcontent['hometext'] = strip_tags($rowcontent['hometext'], 'br');
     }
-
-	//lưu thông tin người đang sửa
-	$_query = $db->query( 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp 
-		WHERE id =' . $rowcontent['id'] );
-	if ($row_tmp = $_query->fetch()) {
-	 	$db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET 
-	 		time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . ' 
-	 		WHERE id=' . $rowcontent['id']);
-			
-	} else {
-		$db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (id, admin_id, time_edit, time_late, ip) 
-			VALUES (' . $rowcontent['id'] . ',' . $admin_info['admin_id'] . ',' . NV_CURRENTTIME . ',' . NV_CURRENTTIME . ',' . $db->quote($admin_info['last_ip']) . ')');
-	}
 }
 
 $array_cat_add_content = $array_cat_pub_content = $array_cat_edit_content = $array_censor_content = array();
@@ -305,7 +294,6 @@ foreach ($global_array_cat as $catid_i => $array_value) {
     if ($check_censor_content) {
         //Nguoi kiem duyet
         
-
         $array_censor_content[] = $catid_i;
     }
     
@@ -798,9 +786,9 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                     $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
                     $result_search = $nukeVietElasticSearh->update_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $rowcontent['id'], $rowcontent);
                 }
-				
-				// sau khi sửa, tiến hành xóa bản ghi lưu trạng thái sửa trong csdl
-				$db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id = ' . $rowcontent['id']);
+                
+                // sau khi sửa, tiến hành xóa bản ghi lưu trạng thái sửa trong csdl
+                $db->exec('DELETE FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp WHERE id = ' . $rowcontent['id']);
             } else {
                 $error[] = $lang_module['errorsave'];
             }
@@ -909,6 +897,42 @@ if ($nv_Request->get_int('save', 'post') == 1) {
         redriect($msg1, $msg2, $url, $module_data . '_detail', 'back');
     }
     $id_block_content = $id_block_content_post;
+} elseif ($rowcontent['id'] > 0) {
+    // Lưu thông tin người đang sửa
+    $_query = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp
+		WHERE id =' . $rowcontent['id']);
+    if ($row_tmp = $_query->fetch()) {
+        if ($row_tmp['admin_id'] == $admin_info['admin_id']) {
+            // Cập nhật thời gian sửa cuối
+            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . ' WHERE id=' . $rowcontent['id']);
+        } elseif ($row_tmp['time_late'] < NV_CURRENTTIME - 300) {
+            //Cho phép sửa nếu người đang sửa 5 phút không thao tác đến
+            $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET admin_id=' . $admin_info['admin_id'] . ', time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . '	WHERE id=' . $rowcontent['id']);
+        } else {
+            // Thông báo không có quyền sửa.
+            $_username = $db->query('SELECT username FROM ' . NV_USERS_GLOBALTABLE . ' WHERE userid =' . $row_tmp['admin_id'])->fetchColumn();
+            $_authors_lev = $db->query('SELECT lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id =' . $row_tmp['admin_id'])->fetchColumn();
+            if ($admin_info['level'] < $_authors_lev) {
+                $takeover = md5($rowcontent['id'] . '_takeover_' . NV_CHECK_SESSION);
+                if ($takeover == $nv_Request->get_title('takeover', 'get', '')) {
+                    $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . '_tmp SET admin_id=' . $admin_info['admin_id'] . ', time_late=' . NV_CURRENTTIME . ',ip=' . $db->quote($admin_info['last_ip']) . '	WHERE id=' . $rowcontent['id']);
+                    Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
+                    die();
+                }
+                $contents = sprintf($lang_module['dulicate_edit_admin'], $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
+                $contents .= '<br><a type="button" class="btn btn-danger" href="' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op . '&id=' . $rowcontent['id'] . '&takeover=' . $takeover . '">' . $lang_module['dulicate_takeover'] . '</a>';
+            } else {
+                $contents = sprintf($lang_module['dulicate_edit'], $rowcontent['title'], $_username, date('H:i d/m/Y', $row_tmp['time_edit']));
+            }
+            
+            include NV_ROOTDIR . '/includes/header.php';
+            echo nv_admin_theme('<br><br><br><h2 class="text-center">' . $contents . '</h2>');
+            include NV_ROOTDIR . '/includes/footer.php';
+        }
+    } else {
+        $db->query('INSERT INTO ' . NV_PREFIXLANG . '_' . $module_data . '_tmp (id, admin_id, time_edit, time_late, ip)
+			VALUES (' . $rowcontent['id'] . ',' . $admin_info['admin_id'] . ',' . NV_CURRENTTIME . ',' . NV_CURRENTTIME . ',' . $db->quote($admin_info['last_ip']) . ')');
+    }
 }
 
 if (!empty($module_config[$module_name]['htmlhometext'])) {
@@ -1150,6 +1174,11 @@ if (!empty($error)) {
     $xtpl->parse('main.error');
 }
 
+$status_save = true;
+if ($rowcontent['id'] > 0) {
+    $op = '';
+}
+
 //Gioi hoan quyen
 if ($rowcontent['status'] == 1 and $rowcontent['id'] > 0) {
     $xtpl->parse('main.status_save');
@@ -1205,9 +1234,8 @@ if (!empty($module_config[$module_name]['instant_articles_active'])) {
 $xtpl->parse('main');
 $contents .= $xtpl->text('main');
 
-if ($rowcontent['id'] > 0) {
-    $op = '';
-}
+$my_footer .= '<script type="text/javascript">timer_check_takeover = setTimeout(function() {nv_timer_check_takeover(' . $rowcontent['id'] . ');}, 30000);</script>';
+
 include NV_ROOTDIR . '/includes/header.php';
 echo nv_admin_theme($contents);
 include NV_ROOTDIR . '/includes/footer.php';

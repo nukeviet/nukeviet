@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -342,6 +342,7 @@ $lang_module['fbinsartmgs_100'] = 'Lỗi: Bài viết có các thẻ HTML: <stro
 $lang_module['fbinsartmgs_101'] = 'Lỗi: Bài viết không có nội dung';
 $lang_module['fbinsartmgs_102'] = 'Lỗi: Bài viết của bạn có các thuộc tính cho các thẻ. Để chọn bài viết này làm bài viết tức thời hãy loại bỏ chúng khỏi thẻ hoặc tích chọn vào ô tự động chuyển đổi bài viết thường thành bài viết tức thời. Lưu ý: lúc chuyển đổi hệ thống sẽ tự động bỏ đi các thành phần không hỗ trợ hoặc thay thế chúng bằng các thành phần khác thích hợp';
 
-$lang_module['error_edit'] = 'Bài viết đang có quản trị chỉnh sửa. Bạn không thể chỉnh sửa tiếp.';
-$lang_module['dulicate_edit'] = 'Bài viết đang có quản trị chỉnh sửa. Bạn có muốn chiếm quyền của quản trị này không.';
-$lang_module['not_edit_by_admin'] = 'Bạn đã bị chiếm quyền chỉnh sửa bài viết này. Những thay đổi của bạn không thể lưu vào hệ thống, hãy sao chép lại để tránh mất nội dung đã thay đổi.';
+$lang_module['dulicate_edit'] = 'Bài viết <b>%s</b> đang được sửa bởi tài khoản <b>%s</b> lúc %s. Bạn không được sửa bài viết này đến khi người đó sửa xong.';
+$lang_module['dulicate_edit_admin'] = 'Bài viết <b>%s</b> đang được sửa bởi tài khoản <b>%s</b> lúc %s. Bạn có muốn <b>chiếm quyền sửa bài viết</b> này không ?';
+$lang_module['dulicate_takeover'] = 'Chiếm quyền sửa bài viết';
+$lang_module['dulicate_edit_takeover'] = 'Bạn đã bị chiếm quyền chỉnh sửa bài viết này bởi  tài khoản %s lúc %s. Những thay đổi của bạn không thể lưu vào hệ thống, hãy sao chép lại để tránh mất nội dung đã thay đổi.';

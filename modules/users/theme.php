@@ -27,10 +27,10 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
     global $module_info, $global_config, $lang_global, $lang_module, $module_name, $nv_Request, $op, $nv_redirect;
 
     $xtpl = new XTemplate('register.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
-    $xtpl->assign('NICK_MAXLENGTH', NV_UNICKMAX);
-    $xtpl->assign('NICK_MINLENGTH', NV_UNICKMIN);
-    $xtpl->assign('PASS_MAXLENGTH', NV_UPASSMAX);
-    $xtpl->assign('PASS_MINLENGTH', NV_UPASSMIN);
+    $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
+    $xtpl->assign('NICK_MINLENGTH', $global_config['nv_unickmin']);
+    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
+    $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CHECKSS', $checkss);
@@ -42,8 +42,8 @@ function user_register($gfx_chk, $checkss, $data_questions, $array_field_config,
 	   $xtpl->parse('main.agreecheck');
 	}
 
-    $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], NV_UNICKMIN, NV_UNICKMAX) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], NV_UNICKMIN, NV_UNICKMAX);
-    $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], NV_UPASSMIN, NV_UPASSMAX) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], NV_UPASSMIN, NV_UPASSMAX);
+    $username_rule = empty($global_config['nv_unick_type']) ? sprintf($lang_global['username_rule_nolimit'], $global_config['nv_unickmin'], $global_config['nv_unickmax']) : sprintf($lang_global['username_rule_limit'], $lang_global['unick_type_' . $global_config['nv_unick_type']], $global_config['nv_unickmin'], $global_config['nv_unickmax']);
+    $password_rule = empty($global_config['nv_upass_type']) ? sprintf($lang_global['password_rule_nolimit'], $global_config['nv_upassmin'], $global_config['nv_upassmax']) : sprintf($lang_global['password_rule_limit'], $lang_global['upass_type_' . $global_config['nv_upass_type']], $global_config['nv_upassmin'], $global_config['nv_upassmax']);
 
     $xtpl->assign('USERNAME_RULE', $username_rule);
     $xtpl->assign('PASSWORD_RULE', $password_rule);
@@ -344,8 +344,8 @@ function user_openid_login($gfx_chk, $attribs)
     $xtpl = new XTemplate('openid_login.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/users');
 
     $xtpl->assign('USER_LOGIN', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=login&amp;server=' . $attribs['server'] . '&amp;result=1');
-    $xtpl->assign('NICK_MAXLENGTH', NV_UNICKMAX);
-    $xtpl->assign('PASS_MAXLENGTH', NV_UPASSMAX);
+    $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
+    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
 
@@ -543,10 +543,10 @@ function user_info($data, $array_field_config, $custom_fields, $types, $data_que
 
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('NICK_MAXLENGTH', NV_UNICKMAX);
-    $xtpl->assign('NICK_MINLENGTH', NV_UNICKMIN);
-    $xtpl->assign('PASS_MAXLENGTH', NV_UPASSMAX);
-    $xtpl->assign('PASS_MINLENGTH', NV_UPASSMIN);
+    $xtpl->assign('NICK_MAXLENGTH', $global_config['nv_unickmax']);
+    $xtpl->assign('NICK_MINLENGTH', $global_config['nv_unickmin']);
+    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
+    $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
 
     $xtpl->assign('URL_HREF', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=');
     $xtpl->assign('URL_MODULE', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name);
@@ -1296,8 +1296,8 @@ function safe_deactivate($data)
     $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
-    $xtpl->assign('PASS_MAXLENGTH', NV_UPASSMAX);
-    $xtpl->assign('PASS_MINLENGTH', NV_UPASSMIN);
+    $xtpl->assign('PASS_MAXLENGTH', $global_config['nv_upassmax']);
+    $xtpl->assign('PASS_MINLENGTH', $global_config['nv_upassmin']);
     $xtpl->assign('DATA', $data);
 
     if ($data['safeshow']) {
