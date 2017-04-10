@@ -12,6 +12,14 @@ if (!defined('NV_MAINFILE'))
     die('Stop!!!');
 
 if (!function_exists('nv_law_block_search')) {
+    /**
+     * nv_block_config_laws_search()
+     * 
+     * @param mixed $module
+     * @param mixed $data_block
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_laws_search($module, $data_block, $lang_block)
     {
         $html = '';
@@ -37,6 +45,13 @@ if (!function_exists('nv_law_block_search')) {
         return $html;
     }
 
+    /**
+     * nv_block_config_laws_search_submit()
+     * 
+     * @param mixed $module
+     * @param mixed $lang_block
+     * @return
+     */
     function nv_block_config_laws_search_submit($module, $lang_block)
     {
         global $nv_Request;
@@ -48,6 +63,12 @@ if (!function_exists('nv_law_block_search')) {
         return $return;
     }
 
+    /**
+     * nv_law_block_search()
+     * 
+     * @param mixed $block_config
+     * @return
+     */
     function nv_law_block_search($block_config)
     {
         global $my_head, $lang_module, $site_mods, $global_config, $module_info, $module_file, $nv_laws_listsubject, $nv_laws_listarea, $nv_laws_listcat, $module_name, $nv_Request, $module_data, $nv_Cache;
@@ -67,15 +88,21 @@ if (!function_exists('nv_law_block_search')) {
         $xtpl = new XTemplate($block_file_name, NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_info['module_theme']);
         $xtpl->assign('LANG', $lang_module);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
-        $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
-        $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
         $xtpl->assign('TEMPLATE', $module_info['template']);
         $xtpl->assign('MODULE_FILE', $module_file);
-        $xtpl->assign('MODULE_NAME', $module_name);
-        $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
-        $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
-        $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . "index.php?");
         $xtpl->assign('BLOCKID', $block_config['bid']);
+        
+        if (!$global_config['rewrite_enable']) {
+            $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);
+            $xtpl->assign('NV_OP_VARIABLE', NV_OP_VARIABLE);
+            $xtpl->assign('MODULE_NAME', $module_name);
+            $xtpl->assign('NV_LANG_DATA', NV_LANG_DATA);
+            $xtpl->assign('NV_LANG_VARIABLE', NV_LANG_VARIABLE);
+            $xtpl->assign('FORM_ACTION', NV_BASE_SITEURL . "index.php");
+            $xtpl->parse('main.no_rewrite');
+        } else {
+            $xtpl->assign('FORM_ACTION', nv_url_rewrite(NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=search', true));
+        }
 
         $skey = nv_substr($nv_Request->get_title('q', 'get', '', 1), 0, NV_MAX_SEARCH_LENGTH);
 

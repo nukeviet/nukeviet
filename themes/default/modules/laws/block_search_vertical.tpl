@@ -2,9 +2,11 @@
 <link rel="stylesheet" type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css">
 
 <form id="ltablesearch{BLOCKID}" action="{FORM_ACTION}" method="get" onsubmit="return nv_check_search_laws(this);">
+    <!-- BEGIN: no_rewrite -->
 	<input type="hidden" name="{NV_LANG_VARIABLE}" value="{NV_LANG_DATA}"/>
 	<input type="hidden" name="{NV_NAME_VARIABLE}" value="{MODULE_NAME}"/>
 	<input type="hidden" name="{NV_OP_VARIABLE}" value="search"/>
+    <!-- END: no_rewrite -->
 	<input type="hidden" name="is_advance" value="{IS_ADVANCE}"/>
 
 	<div class="form-group">
