@@ -428,6 +428,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
 $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_" . $module_data . "_orders_id (
  id int(11) unsigned NOT NULL AUTO_INCREMENT,
  order_id int(11) NOT NULL,
+ listgroupid VARCHAR(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
  proid mediumint(9) NOT NULL,
  num mediumint(9) NOT NULL,
  price int(11) NOT NULL,

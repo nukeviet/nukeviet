@@ -58,7 +58,7 @@
 			</thead>
 			<tbody>
 				<!-- BEGIN: rows -->
-				<tr id="{id}">
+				<tr id="{id}_{list_group_id}">
 					<td align="center">{stt}</td>
 					<td>
 						<a title="{title_pro}" href="{link_pro}">{title_pro}</a>
@@ -82,7 +82,7 @@
 					<!-- BEGIN: price2 -->
 					<td class="money text-right"><strong>{PRICE.sale_format}</strong></td>
 					<!-- END: price2 -->
-					<td align="center"><input type="number" size="1" value="{pro_num}" name="listproid[{id}]" id="{id}" class="form-control"/></td>
+					<td align="center"><input type="number" size="1" value="{pro_num}" name="listproid[{id}_{list_group}]" id="{id}" class="form-control"/></td>
 					<td>{product_unit}</td>
 					<!-- BEGIN: price5 -->
 					<td class="money text-right">{PRICE_TOTAL.sale_format}</td>
