@@ -20,9 +20,9 @@ if (!defined('NV_IS_MOD_LAWS'))
  */
 function nv_theme_laws_main($array_data, $generate_page)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting;
 
-    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('generate_page', $generate_page);
 
@@ -65,9 +65,9 @@ function nv_theme_laws_main($array_data, $generate_page)
  */
 function nv_theme_laws_maincat($mod, $array_data)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting;
 
-    $xtpl = new XTemplate('main_' . $mod . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('main_' . $mod . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
     foreach ($array_data as $data) {
@@ -122,9 +122,9 @@ function nv_theme_laws_maincat($mod, $array_data)
  */
 function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = array(), $other_subject = array(), $other_signer = array())
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $client_info, $nv_laws_setting;
+    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_listcat, $nv_laws_listarea, $nv_laws_listsubject, $client_info, $nv_laws_setting;
 
-    $xtpl = new XTemplate($module_info['funcs'][$op]['func_name'] . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate($module_info['funcs'][$op]['func_name'] . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
     $array_data['publtime'] = $array_data['publtime'] ? nv_date('d/m/Y', $array_data['publtime']) : '';
@@ -293,9 +293,9 @@ function nv_theme_laws_detail($array_data, $other_cat = array(), $other_area = a
  */
 function nv_theme_laws_search($array_data, $generate_page, $all_page)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op;
+    global $global_config, $module_name, $lang_module, $module_info, $op;
 
-    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
     $xtpl->assign('generate_page', $generate_page);
@@ -329,9 +329,9 @@ function nv_theme_laws_search($array_data, $generate_page, $all_page)
  */
 function nv_theme_laws_area($array_data, $generate_page, $cat)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting;
 
-    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CAT', $cat);
 
@@ -377,9 +377,9 @@ function nv_theme_laws_area($array_data, $generate_page, $cat)
  */
 function nv_theme_laws_cat($array_data, $generate_page, $cat)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op;
+    global $global_config, $module_name, $lang_module, $module_info, $op;
 
-    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CAT', $cat);
 
@@ -408,9 +408,9 @@ function nv_theme_laws_cat($array_data, $generate_page, $cat)
  */
 function nv_theme_laws_subject($array_data, $generate_page, $cat)
 {
-    global $global_config, $module_name, $nv_laws_setting, $module_file, $lang_module, $module_info, $op;
+    global $global_config, $module_name, $nv_laws_setting, $lang_module, $module_info, $op;
 
-    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CAT', $cat);
 
@@ -457,9 +457,9 @@ function nv_theme_laws_subject($array_data, $generate_page, $cat)
  */
 function nv_theme_laws_signer($array_data, $generate_page, $cat)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting;
 
-    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate($op . '.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('CAT', $cat);
 
@@ -504,9 +504,9 @@ function nv_theme_laws_signer($array_data, $generate_page, $cat)
  */
 function nv_theme_laws_list_other($array_data)
 {
-    global $global_config, $module_name, $module_file, $lang_module, $module_info, $op, $nv_laws_setting;
+    global $global_config, $module_name, $lang_module, $module_info, $op, $nv_laws_setting;
 
-    $xtpl = new XTemplate('list_other.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('list_other.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
 
     $i = 1;

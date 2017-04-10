@@ -64,7 +64,7 @@ if (!function_exists('nv_law_block_search')) {
             $block_theme = 'default';
         }
 
-        $xtpl = new XTemplate($block_file_name, NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_file);
+        $xtpl = new XTemplate($block_file_name, NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_info['module_theme']);
         $xtpl->assign('LANG', $lang_module);
         $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
         $xtpl->assign('NV_NAME_VARIABLE', NV_NAME_VARIABLE);

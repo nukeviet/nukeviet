@@ -25,7 +25,7 @@ if ( ! function_exists( 'nv_law_block_area' ) )
 			$block_theme = 'default';
 		}
 
-        $xtpl = new XTemplate( "block_area.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_file );
+        $xtpl = new XTemplate( "block_area.tpl", NV_ROOTDIR . "/themes/" . $block_theme . "/modules/" . $module_info['module_theme'] );
         $xtpl->assign( 'LANG', $lang_module );
         $xtpl->assign( 'NV_BASE_SITEURL', NV_BASE_SITEURL );
         $xtpl->assign( 'TEMPLATE', $module_info['template'] );
