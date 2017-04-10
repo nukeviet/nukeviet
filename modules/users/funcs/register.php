@@ -52,7 +52,7 @@ if ($nv_Request->isset_request('nv_redirect', 'post,get')) {
  */
 function nv_check_username_reg($login)
 {
-    global $db, $lang_module, $global_users_config;
+    global $db, $lang_module, $global_users_config, $global_config;
 
     $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if ($error != '') {
