@@ -2182,7 +2182,7 @@ var NVCMENU = {
         margin: '0px',
         backgroundColor: '#fff',
         border: '1px solid #999',
-        width: '120px'
+        width: '150px'
     },
     itemStyle: {
         margin: '0px',
