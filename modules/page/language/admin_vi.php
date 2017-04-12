@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -51,6 +51,8 @@ $lang_module['imgposition'] = 'Vị trí ảnh minh họa';
 $lang_module['imgposition_0'] = 'Không hiển thị';
 $lang_module['imgposition_1'] = 'Hiển thị bên trái mô tả';
 $lang_module['imgposition_2'] = 'Hiển thị dưới mô tả';
+$lang_module['group_post'] = 'Bài viết thuộc nhóm';
+$lang_module['hot_post'] = 'Nổi bật';
 
 $lang_module['layout_func'] = 'Sử dụng layout';
 $lang_module['layout_default'] = 'Mặc định';

@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -421,3 +421,33 @@ $lang_module['group_description_empty'] = 'Prenez une brève description du grou
 $lang_module['auto_login_after_reg'] = 'Se connecter automatiquement après une inscription réussie';
 $lang_module['active_group_newusers'] = 'Activer membre d\'authentification';
 $lang_module['active_group_newusers_note'] = 'Si cette fonction est activée, le nouvel enregistrement de membre sera automatiquement classé comme "activé" jusqu\'à ce qu\'il ait été retiré du chef d\'équipe, au cours de laquelle les nouveaux membres sont considérés comme des «membres officiels "';
+$lang_module['adduser_email1'] = 'Les notifications par courriel';
+$lang_module['adduser_email1_note'] = 'Si elle est sélectionnée, après avoir créé le compte créé avec succès un compte de membres recevront un compte de messagerie de notification a été créée, les informations, y compris connexion et mot de passe';
+$lang_module['adduser_email1_note1'] = 'Si elle est sélectionnée, après les membres de compte mise à jour réussie recevront notification par courrier électronique au sujet du changement d\'informations de compte, y compris le nom d\'utilisateur et mot de passe (si les mots de passe sont modifiés)';
+$lang_module['adduser_register1'] = 'Votre compte a été mis à jour';
+$lang_module['adduser_register_info1'] = 'Bonjour %1$s,<br  /><br  /> Votre compte sur le site %2$s a été créé. Voici vos informations de connexion: <br  /><br  />URL: <a href="%3$s">%3$s</a><br  /> Nom: %4$s<br  /> mot de passe: %5$s<br  /><br  /> Nous de vous recommandons de changer votre mot de passe avant d\'utiliser le compte <br  /><br  /> Ceci est un message automatique envoyé. votre boîte de réception e-mail à partir du site web %2$s. Si vous ne comprenez rien au sujet du contenu de cette lettre, supprimer tout simplement. <br  /><br  /> site d\'administration';
+$lang_module['adduser_register_info2'] = 'Bonjour %1$s,<br  /><br  /> Votre compte sur le site %2$s a été mis à jour. Voici les nouvelles informations de connexion: <br  /><br  />URL: <a href="%3$s">%3$s</a><br  /> Nom: %4$s';
+$lang_module['adduser_register_info3'] = '<br  /> Mot de passe: %1$s';
+$lang_module['adduser_register_info4'] = '<br  /> <br  /> Ceci est un message automatique envoyé à votre boîte de réception e-mail à partir du site %1$s. Si vous ne comprenez rien au sujet du contenu de cette lettre, supprimer tout simplement. <br  /> <br  /> site d\'administration';
+$lang_module['active_user_logs'] = 'Connexion Enregistrement, déconnexion des membres';
+$lang_module['user_openid_mamager'] = 'Gérer et OAuth OpenID';
+$lang_module['user_2step_mamager'] = 'Gérer l\'authentification en deux étapes';
+$lang_module['user_2step_of'] = 'Les membres de la gestion de l\'authentification en deux étapes:';
+$lang_module['user_2step_off'] = 'L\'authentification à deux étapes est désactivée';
+$lang_module['user_2step_turnoff'] = 'Désactivez l\'authentification en deux étapes';
+$lang_module['user_2step_turnoff_info'] = 'L\'authentification est requise en deux étapes pour certaines régions. Si vous désactivez, le membre sera obligé de faire demi-tour';
+$lang_module['user_2step_codes'] = 'Codes de sauvegarde';
+$lang_module['user_2step_newcodes'] = 'Codes de sauvegarde';
+$lang_module['user_2step_codes_timecreat'] = 'Heure de création';
+$lang_module['user_2step_codes_timeuse'] = 'L\'emploi du temps';
+$lang_module['user_2step_codes_s0'] = 'Inutilisé';
+$lang_module['user_2step_codes_s1'] = 'ont utilisé';
+$lang_module['user_2step_reset'] = 'Recréer codes de sauvegarde';
+$lang_module['user_2step_sendmail'] = 'Codes de sauvegarde Email pour les membres';
+$lang_module['user_2step_bodymail'] = 'Bonjour %1$s,<br  /><br  /> code de sauvegarde sur votre compte sur le site %2$s a été changé. Voici le nouveau code de sauvegarde: <br  /><br  />%3$s<br  /><br  /> Vous gardez les codes de sauvegarde sécurisés. Si vous perdez votre téléphone et prenez les deux codes de sauvegarde que vous ne serez pas en mesure d\'accéder à votre compte. <br  /> <br  /> C\'est un message automatique envoyé à votre boîte de réception e-mail à partir du site %2$s. Si vous ne comprenez rien au sujet du contenu de cette lettre, supprimer tout simplement. <br  /> <br  /> site d\'administration';
+$lang_module['user_oauthmanager'] = 'Gérer OAuth, les membres OpenID';
+$lang_module['user_oauthmanager_list'] = 'Liste OAuth, OpenID est utilisé par les membres';
+$lang_module['user_oauthmanager_empty'] = 'Ce membre n\'a pas ou OAuth OpenID';
+$lang_module['user_oauthmanager_gate'] = 'nom du port';
+$lang_module['user_oauthmanager_email'] = 'Utiliser la messagerie électronique';
+$lang_module['user_oauthmanager_deleteall'] = 'supprimer tout';

@@ -18,7 +18,7 @@ if (defined('NV_IS_USER')) {
 }
 
 if (defined('NV_IS_USER_FORUM')) {
-    require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/lostpass.php';
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/lostpass.php';
     exit();
 }
 
@@ -222,7 +222,7 @@ if ($checkss == $data['checkss']) {
     $new_password = $nv_Request->get_title('new_password', 'post', '');
     $re_password = $nv_Request->get_title('re_password', 'post', '');
 
-    if (($check_new_password = nv_check_valid_pass($new_password, NV_UPASSMAX, NV_UPASSMIN)) != '') {
+    if (($check_new_password = nv_check_valid_pass($new_password, $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'new_password',

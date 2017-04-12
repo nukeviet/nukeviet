@@ -1,5 +1,5 @@
 <!-- BEGIN: main -->
 <div class="infoerror">
-	{MESSAGE}
+    {MESSAGE}
 </div>
 <!-- END: main -->

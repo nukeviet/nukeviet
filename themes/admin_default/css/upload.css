@@ -453,7 +453,7 @@ img.previewimg {
     border: 2px solid #F0F0F0;
 }
 
-#addlogo .addlogo-content img{
+#addlogo .addlogo-content img {
     vertical-align: top;
 }
 
@@ -465,4 +465,13 @@ img.previewimg {
 
 #imglist .imgcontent:nth-child(2n) {
     background: #fbfbfb;
+}
+
+/* Thumb Config */
+#thumbprewiew .col-imgorg h2 {
+    padding-right: 11px;
+}
+#thumbprewiew .imgorg {
+    border-right: 1px solid #dadada;
+    padding-right: 10px;
 }

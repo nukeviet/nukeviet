@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jul 31, 2015, 09:30:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jul 31, 2015, 09:30:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Nguyễn Phú Thành';
@@ -63,3 +63,7 @@ $lang_module['config_view_related_articles'] = 'Nombre d\'articles concernés';
 $lang_module['config_facebookapi'] = 'Facebook App ID';
 $lang_module['config_facebookapi_note'] = '(Sous formet 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">xRegarder en détail</a>)';
 $lang_module['config_save'] = 'Sauvegarder la configuration';
+$lang_module['add_time'] = 'Date affichée';
+$lang_module['edit_time'] = 'dernière mise à jour';
+$lang_module['group_post'] = 'Articles de rubrique';
+$lang_module['hot_post'] = 'Sélection';

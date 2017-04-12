@@ -21,9 +21,9 @@ if (! defined('NV_IS_MOD_PAGE')) {
  */
 function nv_page_main($row, $ab_links, $content_comment)
 {
-    global $module_name, $module_file, $lang_global, $module_info, $meta_property, $client_info, $page_config, $global_config;
+    global $module_name, $lang_global, $module_info, $meta_property, $client_info, $page_config, $global_config;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('CONTENT', $row);
 
@@ -90,11 +90,11 @@ function nv_page_main($row, $ab_links, $content_comment)
  */
 function nv_page_main_list($array_data, $generate_page)
 {
-    global $global_config, $module_file, $lang_global, $module_upload, $module_info, $module_name;
+    global $global_config, $lang_global, $module_upload, $module_info, $module_name;
 
-    $template = (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file .'/main_list.tpl')) ? $module_info['template'] : 'default';
+    $template = (file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] .'/main_list.tpl')) ? $module_info['template'] : 'default';
 
-    $xtpl = new XTemplate('main_list.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_file);
+    $xtpl = new XTemplate('main_list.tpl', NV_ROOTDIR . '/themes/' . $template . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('GLANG', $lang_global);
 
     if (! empty($array_data)) {
