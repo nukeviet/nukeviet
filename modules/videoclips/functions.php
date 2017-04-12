@@ -105,7 +105,7 @@ if (!empty($configMods['playerSkin'])) {
     $configMods['playerSkin'] = ",skin:\"" . NV_BASE_SITEURL . NV_ASSETS_DIR . "images/jwplayer/skin/" . $configMods['playerSkin'] . ".zip\"";
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 if (isset($module_info['description'])) $description = $module_info['description'];
 $array_mod_title = array();

@@ -93,7 +93,7 @@ $clip['editUrl'] = nv_url_rewrite(NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARI
 
 $page_title = $clip['title'] . " - " . $page_title;
 if (!empty($clip['keywords'])) $key_words = nv_extKeywords($clip['keywords'] . (!empty($key_words) ? "," . $key_words : ""));
-$description = !empty($clip['hometext']) ? $clip['hometext'] : $clip['title'] . " - " . $module_info['custom_title'];
+$description = !empty($clip['hometext']) ? $clip['hometext'] : $clip['title'] . " - " . $module_info['site_title'];
 
 if ($topic['parentid']) {
     $array_mod_title[] = array( //
@@ -111,7 +111,7 @@ $array_mod_title[] = array( //
 
 $cpgnum = 0;
 
-$xtpl = new XTemplate("detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_file);
+$xtpl = new XTemplate("detail.tpl", NV_ROOTDIR . "/themes/" . $module_info['template'] . "/modules/" . $module_info['module_theme']);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('NV_BASE_SITEURL', NV_BASE_SITEURL);
 $xtpl->assign('MODULECONFIG', $configMods);
@@ -121,7 +121,7 @@ $lang = (NV_LANG_DATA == 'vi') ? 'vi_VN' : 'en_US';
 $xtpl->assign('FACEBOOK_LANG', $lang);
 $meta_property['og:type'] = "website";
 $meta_property['og:url'] = $client_info['selfurl'];
-$meta_property['og:image'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/video.png";
+$meta_property['og:image'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_info['module_theme'] . "/video.png";
 
 // kiểm tra có phải youtube
 if (preg_match("/^(http(s)?\:)?\/\/([w]{3})?\.youtube[^\/]+\/watch\?v\=([^\&]+)\&?(.*?)$/is", $clip['externalpath'], $m)) {
@@ -161,7 +161,7 @@ if ($all_page) {
             $imageinfo = nv_ImageInfo(NV_ROOTDIR . '/' . $row['img'], 120, true, NV_ROOTDIR . '/' . NV_FILES_DIR . '/' . $module_name);
             $row['img'] = $imageinfo['src'];
         } else {
-            $row['img'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_file . "/video.png";
+            $row['img'] = NV_BASE_SITEURL . "themes/" . $module_info['template'] . "/images/" . $module_info['module_theme'] . "/video.png";
         }
         $row['href'] = nv_url_rewrite(NV_BASE_SITEURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&" . NV_NAME_VARIABLE . "=" . $module_name . "&" . NV_OP_VARIABLE . "=video-" . $row['alias'], 1);
         $row['sortTitle'] = nv_clean60($row['title'], 20);
@@ -192,7 +192,7 @@ $my_head .= "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/a
 $my_head .= '<script type="text/javascript">
 function explode(a,d,b){if(2>arguments.length||"undefined"==typeof a||"undefined"==typeof d)return null;if(""===a||!1===a||null===a)return!1;if("function"==typeof a||"object"==typeof a||"function"==typeof d||"object"==typeof d)return{"0":""};!0===a&&(a="1");var a=a+"",c=(d+"").split(a);if("undefined"===typeof b)return c;0===b&&(b=1);if(0<b)return b>=c.length?c:c.slice(0,b-1).concat([c.slice(b-1).join(a)]);if(-b>=c.length)return[];c.splice(c.length+b);return c};
 function videoPlay(d,c){var a=$("#"+c).outerWidth(),b;' . $configMods['playerMaxWidth'] . '<a&&(a=' . $configMods['playerMaxWidth'] . ');b=a;a=Math.ceil(45*a/80)+4;$("#"+c).parent().css({width:b,height:a,margin:"0 auto"});swfobject.embedSWF("' . NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/player.swf",c,b,a,"10.0.0.0",!1,{file:d,backcolor:"0x000000",frontcolor:"0x666666",lightcolor:"0xFF6600",width:b,height:a,controlbar:"over",autostart:' . $configMods['playerAutostart'] . ',smoothing:1,autoscroll:1,stretching:"fill",volume:100,largecontrols:1' . $configMods['playerSkin'] . '},{bgcolor:"#000000",wmode:"window",allowFullScreen:"true",allowScriptAccess:"always"});return!1};
-function videoPlayList(a,b){swfobject.embedSWF("' . NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/player.swf",b,"640","393","10.0.0.0",!1,{playlistfile:a,backcolor:"0x000000",frontcolor:"0x666666",lightcolor:"0xFF6600",width:"640",height:"392",controlbar:"over",autostart:' . $configMods['playerAutostart'] . ',smoothing:1,autoscroll:1,stretching:"fill",volume:100,largecontrols:1' . $configMods['playerSkin'] . '},{bgcolor:"#000000",wmode:"window",allowFullScreen:"true",allowScriptAccess:"always"});return!1};
+function videoPlayList(a,b){swfobject.embedSWF("' . NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_info['module_theme'] . '/player.swf",b,"640","393","10.0.0.0",!1,{playlistfile:a,backcolor:"0x000000",frontcolor:"0x666666",lightcolor:"0xFF6600",width:"640",height:"392",controlbar:"over",autostart:' . $configMods['playerAutostart'] . ',smoothing:1,autoscroll:1,stretching:"fill",volume:100,largecontrols:1' . $configMods['playerSkin'] . '},{bgcolor:"#000000",wmode:"window",allowFullScreen:"true",allowScriptAccess:"always"});return!1};
 function elementSupportsAttribute(a,b){var c=document.createElement(a);return b in c};
 </script>' . "\n";
 
