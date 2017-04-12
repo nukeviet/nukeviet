@@ -129,7 +129,7 @@ if (empty($contents)) {
         }
         if ($st_links > 0) {
             $db_slave->sqlreset()
-                ->select('id, listcatid, addtime, edittime, publtime, title, alias, hitstotal')
+                ->select('id, listcatid, addtime, edittime, publtime, title, alias, external_link, hitstotal')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
                 ->order($order_by)
                 ->limit($st_links);
