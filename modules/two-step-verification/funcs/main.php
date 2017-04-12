@@ -12,7 +12,7 @@ if (! defined('NV_MOD_2STEP_VERIFICATION')) {
     die('Stop!!!');
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
 if (empty($user_info['active2step']) and in_array($global_config['two_step_verification'], array(1, 3))) {

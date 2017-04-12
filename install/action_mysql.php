@@ -187,7 +187,7 @@ $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_click (
 $sql_create_table[] = "CREATE TABLE " . $db_config['prefix'] . "_banners_clients (
 	id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
 	login varchar(60) NOT NULL,
-	pass varchar(80) NOT NULL,
+	pass varchar(200) NOT NULL,
 	reg_time int(11) unsigned NOT NULL DEFAULT '0',
 	full_name varchar(250) NOT NULL,
 	email varchar(100) NOT NULL,

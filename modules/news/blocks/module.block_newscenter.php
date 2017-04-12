@@ -114,7 +114,7 @@ if (! nv_function_exists('nv_news_block_newscenter')) {
 
         $list = $nv_Cache->db($db->sql(), 'id', $module_name);
         if (! empty($list)) {
-            $xtpl = new XTemplate('block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+            $xtpl = new XTemplate('block_newscenter.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
             $xtpl->assign('lang', $lang_module);
             $xtpl->assign('TEMPLATE', $module_info['template']);
 

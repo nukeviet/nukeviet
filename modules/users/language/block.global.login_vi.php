@@ -9,12 +9,12 @@
  * @Createdate Apr 25, 2016, 05:03:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
-$lang_translator['createdate'] = '25/04/2016, 17:03'; 
+$lang_translator['createdate'] = '25/04/2016, 17:03';
 $lang_translator['copyright'] = '@Copyright (C) 2016 VINADES.,JSC. All rights reserved';
 $lang_translator['info'] = '';
 $lang_translator['langtype'] = 'lang_block';

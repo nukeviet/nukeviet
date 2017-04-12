@@ -233,8 +233,8 @@ if (preg_match($global_config['check_module'], $module_name)) {
 
             // Xac dinh template module
             $module_info['template'] = $global_config['module_theme'];
-            if (!file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file)) {
-                if (file_exists(NV_ROOTDIR . '/themes/default/modules/' . $module_file)) {
+            if (!file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_info['module_theme'])) {
+                if (file_exists(NV_ROOTDIR . '/themes/default/modules/' . $module_info['module_theme'])) {
                     $module_info['template'] = 'default';
                 }
             }
@@ -248,8 +248,8 @@ if (preg_match($global_config['check_module'], $module_name)) {
             // Xac dinh op file
             $op_file = $module_info['funcs'][$op]['func_name'];
 
-            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '/theme.php')) {
-                require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file . '/theme.php';
+            if (file_exists(NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_info['module_theme'] . '/theme.php')) {
+                require NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_info['module_theme'] . '/theme.php';
             } elseif (file_exists(NV_ROOTDIR . '/modules/' . $module_file . '/theme.php')) {
                 require NV_ROOTDIR . '/modules/' . $module_file . '/theme.php';
             }

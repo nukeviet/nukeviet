@@ -1,20 +1,24 @@
 <?php
+
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
+
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
+
 $lang_translator['author'] = 'Phạm Chí Quang';
 $lang_translator['createdate'] = '21/6/2010, 19:30';
 $lang_translator['copyright'] = '@Copyright (C) 2010 VINADES.,JSC. Tous droits réservés.';
 $lang_translator['info'] = 'Langue française pour NukeViet 4';
 $lang_translator['langtype'] = 'lang_module';
+
 $lang_module['add_client'] = 'Ajouter un client';
 $lang_module['edit_client'] = 'Modifier les coordonnées du client';
 $lang_module['full_name_empty'] = 'Le nom du client n\'a pas été déclaré';
@@ -139,3 +143,4 @@ $lang_module['target_blank'] = 'Nouvelle fenêtre';
 $lang_module['target_top'] = 'Fenêtre le plus haut';
 $lang_module['target_self'] = 'A la page';
 $lang_module['target_parent'] = 'Fenêtre père';
+$lang_module['bannerhtml'] = 'Contenu de l\'annonce';

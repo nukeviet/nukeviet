@@ -398,25 +398,34 @@ function modalShowByObj(a, callback) {
 
 // Build google map for block Company Info
 function initializeMap() {
-    var a, b, c, d, e;
-    a = parseFloat($("#company-map").data("clat"));
-    b = parseFloat($("#company-map").data("clng"));
-    c = parseFloat($("#company-map").data("lat"));
-    d = parseFloat($("#company-map").data("lng"));
-    e = parseInt($("#company-map").data("zoom"));
-    a = new google.maps.Map(document.getElementById("company-map"), {
-        zoom: e,
-        center: {
-            lat: a,
-            lng: b
+    var ele = false
+    $('.company-map-modal').each(function() {
+        if ($(this).data('trigger')) {
+            ele = $('.company-map', $(this)).attr('id')
+            return
         }
-    });
-    new google.maps.Marker({
-        map: a,
-        position: new google.maps.LatLng(c, d),
-        draggable: !1,
-        animation: google.maps.Animation.DROP
     })
+    if (ele) {
+        var map, marker, ca, cf, a, f, z;
+        ca = parseFloat($('#' + ele).data('clat'));
+        cf = parseFloat($('#' + ele).data('clng'));
+        a = parseFloat($('#' + ele).data('lat'));
+        f = parseFloat($('#' + ele).data('lng'));
+        z = parseInt($('#' + ele).data('zoom'));
+        map = new google.maps.Map(document.getElementById(ele), {
+            zoom: z,
+            center: {
+                lat: ca,
+                lng: cf
+            }
+        });
+        marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(a, f),
+            draggable: false,
+            animation: google.maps.Animation.DROP
+        });
+    }
 }
 
 function headerSearchSubmit(a) {
@@ -568,19 +577,17 @@ $(function() {
         $("body").append(script);
     }
     // Google map
-    if( $('#company-address').length ){
-        $('#company-address').click(function(e){
-            e.preventDefault();
-            $('#company-map-modal').modal('show');
-        });
-        $('#company-map-modal').on('shown.bs.modal', function(){
-            if( ! $('#googleMapAPI').length ){
+    if ($('.company-address').length) {
+        $('.company-map-modal').on('shown.bs.modal', function() {
+            $('.company-map-modal').data('trigger', false)
+            $(this).data('trigger', true)
+            if (!$('#googleMapAPI').length) {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.id = 'googleMapAPI';
-                script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=initializeMap';
+                script.src = 'https://maps.googleapis.com/maps/api/js?' + ($(this).data('apikey') != '' ? 'key=' + $(this).data('apikey') + '&' : '') + 'callback=initializeMap';
                 document.body.appendChild(script);
-            }else{
+            } else {
                 initializeMap();
             }
         })
@@ -632,7 +639,7 @@ $(window).on("resize", function() {
 // Load Social script - lasest
 $(window).on('load', function() {
     nvbreadcrumbs();
-    (0 < $(".fb-share-button").length || 0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
+    (0 < $(".fb-like").length) && (1 > $("#fb-root").length && $("body").append('<div id="fb-root"></div>'), function(a, b, c) {
         var d = a.getElementsByTagName(b)[0];
         var fb_app_id = ( $('[property="fb:app_id"]').length > 0 ) ? '&appId=' + $('[property="fb:app_id"]').attr("content") : '';
         var fb_locale = ( $('[property="og:locale"]').length > 0 ) ? $('[property="og:locale"]').attr("content") : ((nv_lang_data=="vi") ? 'vi_VN' : 'en_US');

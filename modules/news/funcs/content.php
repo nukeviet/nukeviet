@@ -108,7 +108,7 @@ if (! $array_post_user['addcontent']) {
     $array_temp['content'] = $lang_module['error_addcontent'];
     $template = $module_info['template'];
 
-    if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/content.tpl')) {
+    if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
         $template = 'default';
     }
 
@@ -471,7 +471,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
                 $template = $module_info['template'];
 
-                if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/content.tpl')) {
+                if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
                     $template = 'default';
                 }
 
@@ -519,7 +519,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
 
     $template = $module_info['template'];
 
-    if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file . '/content.tpl')) {
+    if (! file_exists(NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme'] . '/content.tpl')) {
         $template = 'default';
     }
 
@@ -650,7 +650,7 @@ if ($nv_Request->isset_request('contentid', 'get,post') and $fcheckss == $checks
         }
 
         // parse content
-        $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+        $xtpl = new XTemplate('viewcat_page.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
         $xtpl->assign('LANG', $lang_module);
         $xtpl->assign('IMGWIDTH1', $module_config[$module_name]['homewidth']);
 

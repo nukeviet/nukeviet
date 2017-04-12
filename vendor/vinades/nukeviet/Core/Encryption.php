@@ -172,4 +172,34 @@ class Encryption
             return null;
         }
     }
+
+    /**
+     * Encryption::encrypt()
+     *
+     * @param mixed $val
+     * @param mixed $iv
+     * @return
+     */
+    public function encrypt($data, $iv = '')
+    {
+        $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
+        
+        $data = openssl_encrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
+        return strtr($data, '+/=', '-_,');
+    }
+
+    /**
+     * Encryption::decrypt()
+     *
+     * @param mixed $val
+     * @param mixed $iv
+     * @return
+     */
+    public function decrypt($data, $iv = '')
+    {
+        $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
+        
+        $data = strtr($data, '-_,', '+/=');
+        return openssl_decrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
+    }    
 }

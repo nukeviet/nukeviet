@@ -117,7 +117,7 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
     } else {
         if (defined('NV_IS_USER_FORUM')) {
             define('NV_IS_MOD_USER', true);
-            require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
             if (empty($nv_username)) {
                 $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
             }

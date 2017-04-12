@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -252,3 +252,9 @@ $lang_module['two_step_verification0'] = 'Không yêu cầu';
 $lang_module['two_step_verification1'] = 'Khu vực quản trị';
 $lang_module['two_step_verification2'] = 'Khu vực ngoài site';
 $lang_module['two_step_verification3'] = 'Tất cả các khu vực';
+
+$lang_module['site_phone'] = 'Số điện thoại của site';
+$lang_module['googleMapsAPI'] = 'Google Maps API key';
+$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Hướng dẫn lấy Google Maps API key</a>';
+
+
