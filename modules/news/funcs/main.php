@@ -83,7 +83,7 @@ if (empty($contents)) {
 
         if ($st_links > 0) {
             $db_slave->sqlreset()
-                ->select('id, catid, addtime, edittime, publtime, title, alias, hitstotal')
+                ->select('id, catid, addtime, edittime, publtime, title, alias, external_link, hitstotal')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_rows');
 
             if ($viewcat == 'viewcat_page_new') {
