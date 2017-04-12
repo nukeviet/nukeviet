@@ -326,7 +326,7 @@ function nv_shipping_price($weight, $weight_unit, $location_id, $shops_id, $carr
         foreach ($array_weight_config as $weight_config) {
             foreach ($weight_config as $config) {
                 $config['weight'] = nv_weight_conversion($config['weight'], $config['weight_unit'], $weight_unit);
-                if ($weight < $config['weight']) {
+                if ($weight <= $config['weight']) {
                     $price = nv_currency_conversion($config['carrier_price'], $config['carrier_price_unit'], $pro_config['money_unit']);
                     break;
                 } else {
