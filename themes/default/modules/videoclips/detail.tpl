@@ -77,13 +77,13 @@
 	          window.___gcfg = {lang: nv_lang_data};
 	          (function() {
 	            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-	            po.src = 'https://apis.google.com/js/plusone.js';
+	            po.src = '//apis.google.com/js/plusone.js';
 	            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
 	          })();
 	        </script>
 	        
-	        <a href="http://twitter.com/share" class="twitter-share-button">Tweet</a>
-	        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+	        <a href="//twitter.com/share" class="twitter-share-button">Tweet</a>
+	        <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 	    </div>
 			<div class="clearfix"></div>
 			<div class="hometext">
