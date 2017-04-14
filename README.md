@@ -1,46 +1,20 @@
-#Introduction about NukeViet
-NukeViet is the first opensource CMS in Vietnam. The lastest version - NukeViet 4 coding ground up support lastest web technologies, include reponsive web design (use HTML 5, CSS 3, Composer, XTemplate), jQuery, Ajax...) enables you to build websites and online applications rapidly.
+# Module shops
 
-With it own core libraries built in, NukeViet 4 is cross platforms and frameworks independent. By basic knowledge of PHP and MySQL, you can easily extend NukeViet for your purposes.
+Trước sự phát triển như vũ bảo của Internet, bùng nổ thông tin toàn cầu, thương mại điện tử (TMĐT) đang phát triển hết sức rầm rộ về cả số lượng và chất lượng. Việt Nam đã và đang được đánh giá là một quốc gia châu Á có tiềm năng lớn trong lĩnh vực kinh doanh trực tuyến, sẽ phát triển mạnh mẽ trong thời gian tới.
 
-NukeViet core is simply but powerful. It supports abstract modules which can be duplicate. So, it helps you create automatically many modules without any line of code from existing abstract modules.
+Nắm bắt cơ hội đó, Công ty cổ phẩn phát triển nguồn mở Việt Nam (VINADES.,JSC) cùng với cộng đồng mã nguồn mở NukeViet đã xây dựng hệ thống bán hàng trực tuyến, hoạt động trên nên tảng mã nguồn mở NukeViet - Module Shops 4.x.
 
-NukeViet supports installing automatically modules, blocks, themes at Admin Control Panel and supports packing features which allow you to share your modules to web- community.
+Trên kinh nghiệm thực tế phát triển các hệ thống bán hàng lớn cho các đơn vị đối tác, cùng với sự đóng góp chức năng, ý tưởng từ cộng đồng người sử dụng, VINADES đã xây dựng Module Shops 4.x hướng tới người dùng, đặc biệt là người dùng Việt Nam, đáp ứng đầy đủ các yêu cầu cần có của một hệ thống bán hàng trực tuyến. Cùng với đó, hệ thống cũng được nâng cấp, phát triển từng ngày, từng giờ bởi các lập trình viên toàn thế giới nói chung, và Việt Nam nói riêng, cho ra mắt các bản nâng cấp định kỳ, bắt nhịp theo bước tiến công nghệ và nhu cầu thực tế của lĩnh vực bán hàng trực tuyến.
 
-NukeViet fully supports multi-languages for internationalization and localization. Not only multi-interface languages but also multi-database languages are supported. NukeViet supports you to build new languages which are not distributed by NukeViet.
+## Cài đặt 
+1. Cài đặt từ store http://nukeviet.vn/vi/store/modules/shops/
+2. Cài đặt từ github https://github.com/nukeviet/module-shops/releases
+3. Nếu sử dụng thanh toán online cần dùng Composer cài thêm các thư viện sau:
 
-Detailed information about Nukeviet at Wikipedia Encyclopedia: http://vi.wikipedia.org/wiki/NukeViet
+```
+paypal/sdk-core-php
+paypal/permissions-sdk-php
+paypal/merchant-sdk-php
+nusphere/nusoap
+```
 
-##Licensing
-NukeViet is released under GNU/GPL version 2 or any later version.
-
-See [LICENSE.txt](LICENSE.txt) for the full license.
-
-##NukeViet official website
-  - Home page - link to all resources NukeViet: http://nukeviet.vn (select Vietnamese to have the latest information).
-  - NukeViet official Coding: http://code.nukeviet.vn
-  - Theme, Module and more add-ons for NukeViet: http://nukeviet.vn/vi/store/
-  - NukeViet official Forum http://forum.nukeviet.vn/
-  - Open Document Library for NukeViet: http://wiki.nukeviet.vn/
-  - NukeViet Translate Center: http://translate.nukeviet.vn/
-  - NukeViet partner: http://nukeviet.vn/vi/partner/
-  - NukeViet Education Center: http://nukeviet.edu.vn
-  - NukeViet SaaS: http://nukeviet.com (testing)
-
-##Community
-  - NukeViet Fanpage: http://facebook.com/nukeviet
-  - NukeViet group on FB: https://www.facebook.com/groups/nukeviet/
-  - http://twitter.com/nukeviet
-  - https://groups.google.com/forum/?fromgroups#!forum/nukeviet
-  - http://google.com/+nukeviet
-
-
-
-##Nukeviet Centre for Research and Development
-VIETNAM OPEN SOURCE DEVELOPMENT JOINT STOCK COMPANY (VINADES.,JSC)
-
-Website: http://vinades.vn | http://nukeviet.vn | http://nukeviet.com
-
-Head Office:
-  - Room 2004 - CT2 Nang Huong Building, 583 Nguyen Trai st, Ha Dong dist, Hanoi, Vietnam.
-  - Phone: +84-4-85872007, Fax: +84-4-35500914, Email: contact (at) vinades.vn
