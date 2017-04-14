@@ -141,7 +141,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                 }
             }
 
-            $page_title = $module_info['custom_title'];
+            $page_title = $module_info['site_title'];
             $key_words = $module_info['keywords'];
             $array_data = array();
 

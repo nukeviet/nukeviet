@@ -1,20 +1,40 @@
 CHANGE LOG: NUKEVIET CMS
 http://nukeviet.vn
 
-NUKEVIET 4.1.01 Beta 2
+NUKEVIET 4.1.01 Beta 2 Releases Apr 9, 2017
+- Jquery 3.2.0, Plupload 2.3.1
+- Update CKEditor 4.6: Add feature: Copy Formatting, Drag&drop Image, Drag&drop File
+- Add function nv_jsonOutput
+- Change encrypt data use Openssl
+- Change rewrite rule
+- SPADMIN can access module seotools
+- Module Upload: Crop image and save original image
+- Mail filter: Allow uppercase
+- Module users: Admin can manage OpenID, Oauth, 2-Step of user.
+- Add ReCAPTCHA
+- Update Browser class: Support all Blackberry devices
+- Module voting: Add fields address, bannerhtml, require_image
+- Module users: Add option to send user's info to mail when admin add user
+- Module News: Controlling multiple people edit post
 - Add Elasticseach for module News
 - Theme mobile: Fix send contact
+- Module news: Support Facebook Instant Articles
+- Update theme copy blocks
+- Replace watermarker and Jcrop with cropper
+- Module users: Fix Oauth with redirect
+- Fix checkupdate for system and extensions
 - Fix create virtual module
 - Fix function nv_is_url, check_domain
-- Fix Assign variable syntax error	Thank hiidemo
-- Module news: Update block news cat Thank Hồ Ngọc Triển
-- Module news: config external link Thank Hồ Ngọc Triển
-- Module menu: add image field Thank mynukeviet
-- Fix googleAnalytics Thank phongaz
-- Fix IIS rewrite Thank  anhyeuviolet
+- Fix Assign variable syntax error
+- Module news: Update block news cat
+- Module news: config external link
+- Module menu: add image field
+- Fix googleAnalytics
+- Fix IIS rewrite
 - Module news: Fix setup step 5, Field 'description' doesn't have a default value
 - theme: fixes interface Set default configuration
 - Module users: fix list customization data, active users
+- Fix class GoogleAuthenticator
 
 NUKEVIET 4.1.00 Beta 1
 - Change system rewrite rule (Optimize for NginX)
@@ -36,7 +56,7 @@ NUKEVIET 4.1.00 Beta 1
 - Module Freecontent: Suport virtual module
 - Theme default: Fix google map on block company_info
 
-NUKEVIET 4.0.29 Final
+NUKEVIET 4.0.29 Final Releases May 19, 2016
 - Requires PHP 5.5 or later
 - PHPMailer v6.0
 - Endroid/qrcode v1.6.5
@@ -386,7 +406,7 @@ CODE: https://github.com/nukeviet/nukeviet/tree/4.0.11 (1850 commits: from commi
 	+ Change menu management more visually.
 	+ Split menu types  into block menu distinct.
 
-NUKEVIET 3.4.02 (3.4.02.r1929)
+NUKEVIET 3.4.02 (3.4.02.r1929) Releases Jan 9, 2014
 CODE: http://code.google.com/p/nuke-viet/source/list (r1759 to r1929)
 - Fix for system core, captcha, function delete theme, install, module news, download, weblinks
 - Delete block_blocknews (exit with block_groups) in module news.

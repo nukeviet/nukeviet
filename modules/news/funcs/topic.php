@@ -39,7 +39,7 @@ if (!empty($alias)) {
             $page_title .= ' ' . NV_TITLEBAR_DEFIS . ' ' . $lang_global['page'] . ' ' . $page;
             $base_url_rewrite .= '/page-' . $page;
         }
-        $base_url_rewrite = nv_url_rewrite($base_url_rewrite, true);
+        $base_url_rewrite = nv_url_rewrite(str_replace('&amp;', '&', $base_url_rewrite), true);
         if ($_SERVER['REQUEST_URI'] != $base_url_rewrite and NV_MAIN_DOMAIN . $_SERVER['REQUEST_URI'] != $base_url_rewrite) {
             Header('Location: ' . $base_url_rewrite);
             die();
@@ -123,7 +123,7 @@ if (!empty($alias)) {
         exit();
     }
 } else {
-    $page_title = $module_info['custom_title'];
+    $page_title = $module_info['site_title'];
     $key_words = $module_info['keywords'];
 
     $result = $db_slave->query('SELECT topicid as id, title, alias, image, description as hometext, keywords, add_time as publtime FROM ' . NV_PREFIXLANG . '_' . $module_data . '_topics ORDER BY weight ASC');

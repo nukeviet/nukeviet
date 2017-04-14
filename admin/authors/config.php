@@ -106,14 +106,14 @@ if ($nv_Request->isset_request('submituser', 'post')) {
     $begintime1 = $nv_Request->get_title('begintime1', 'post', 0, 1);
     $endtime1 = $nv_Request->get_title('endtime1', 'post', 0, 1);
 
-    $errorlogin = nv_check_valid_login($username, NV_UNICKMAX, NV_UNICKMIN);
+    $errorlogin = nv_check_valid_login($username, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if (! empty($errorlogin)) {
         $error[] = $errorlogin;
     } elseif (preg_match('/[^a-zA-Z0-9_-]/', $username)) {
         $error[] = $lang_module['rule_user'];
     }
     if (! empty($password) or empty($uid)) {
-        $errorpassword = nv_check_valid_pass($password, NV_UPASSMAX, NV_UPASSMIN);
+        $errorpassword = nv_check_valid_pass($password, $global_config['nv_upassmax'], $global_config['nv_upassmin']);
         if (! empty($errorpassword)) {
             $error[] = $errorpassword;
         }

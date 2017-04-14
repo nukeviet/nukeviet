@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if (! defined('NV_ADMIN')) {
+if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 

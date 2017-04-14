@@ -41,6 +41,16 @@ class Image extends Audible implements Container
     const NON_INTERACTIVE = 'non-interactive';
 
     /**
+     * @var boolean marks if any created image will have likes enabled by default
+     */
+    public static $defaultLikeEnabled = false;
+
+    /**
+     * @var boolean marks if any created image will have comments enabled by default
+     */
+    public static $defaultCommentEnabled = false;
+
+    /**
      * @var Caption The caption for Image
      */
     private $caption;
@@ -86,6 +96,8 @@ class Image extends Audible implements Container
      */
     private function __construct()
     {
+        $this->isLikeEnabled = self::$defaultLikeEnabled;
+        $this->isCommentsEnabled = self::$defaultCommentEnabled;
     }
 
     /**
@@ -383,5 +395,29 @@ class Image extends Audible implements Container
         }
 
         return $children;
+    }
+
+    /**
+     * Modify the default setup to enable/disable likes in images
+     *
+     * WARNING this is not Thread-safe, so if you are using pthreads or any other multithreaded engine,
+     * this might not work as expected. (you will need to set this in all working threads manually)
+     * @param boolean $enabled inform true to enable likes on images per default or false to disable like on images.
+     */
+    public static function setDefaultLikeEnabled($enabled)
+    {
+        self::$defaultLikeEnabled = $enabled;
+    }
+
+    /**
+     * Modify the default setup to enable/disable comments in images
+     *
+     * WARNING this is not Thread-safe, so if you are using pthreads or any other multithreaded engine,
+     * this might not work as expected. (you will need to set this in all working threads manually)
+     * @param boolean $enabled inform true to enable comments on images per default or false to disable commenting on images.
+     */
+    public static function setDefaultCommentEnabled($enabled)
+    {
+        self::$defaultCommentEnabled = $enabled;
     }
 }
