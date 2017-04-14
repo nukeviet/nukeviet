@@ -3,9 +3,9 @@
 /**
  * @Project NUKEVIET 4.x
  * @Author VINADES.,JSC (contact@vinades.vn)
- * @Copyright (C) 2015 VINADES.,JSC. All rights reserved
+ * @Copyright (C) 2017 VINADES.,JSC. All rights reserved
  * @License GNU/GPL version 2 or any later version
- * @Createdate Wed, 01 Apr 2015 18:51:25 GMT
+ * @Createdate 04/14/2017 09:47
  */
 
 if (!defined('NV_ADMIN')) die('Stop!!!');
