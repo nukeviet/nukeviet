@@ -1787,7 +1787,6 @@ var NVUPLOAD = {
                 silverlight_xap_url: nv_base_siteurl + 'assets/js/plupload/Moxie.xap',
                 drop_element: 'upload-content',
                 file_data_name: 'upload',
-                resize: nv_resize,
                 multipart: true,
                 init: {
                     // Event on init uploader
