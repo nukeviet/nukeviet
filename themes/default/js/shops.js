@@ -394,7 +394,7 @@ function fix_image_content(){
 	}
 }
 
-$(window).load(function(){
+$(window).on('load', function(){
 	fix_image_content();
 });
 
