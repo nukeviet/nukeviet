@@ -51,30 +51,32 @@ if ($save == 1 and intval($data_content['transaction_status']) == - 1) {
 $link = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=';
 
 // Thong tin chi tiet mat hang trong don hang
-$listid = $listnum = $listprice = $listgroup = array();
+$listid = $listnum = $listprice = $listgroup = $slistgroup = array();
 $result = $db->query('SELECT * FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id WHERE order_id=' . $order_id);
 while ($row = $result->fetch()) {
     $listid[] = $row['proid'];
     $listnum[] = $row['num'];
     $listprice[] = $row['price'];
 
-    $result_group = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['order_id']);
+    $result_group = $db->query('SELECT group_id FROM ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group WHERE order_i=' . $row['id']);
     $group = array();
     while (list($group_id) = $result_group->fetch(3)) {
         $group[] = $group_id;
     }
     $listgroup[] = $group;
+	$slistgroup[] = implode( ",", $group );
 }
 
 $data_pro = array();
 $i = 0;
+$slistid= implode( ',', $listid );
 
-foreach ($listid as $id) {
-    $sql = 'SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.product_price,t2.' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 WHERE t1.product_unit = t2.id AND t1.id =' . $id . ' AND t1.status =1 AND t1.publtime < ' . NV_CURRENTTIME . ' AND (t1.exptime=0 OR t1.exptime>' . NV_CURRENTTIME . ')';
+foreach ($slistgroup as $list) {
+    $sql = 'SELECT t1.id, t1.listcatid, t1.product_code, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.product_price,t2.' . NV_LANG_DATA . '_title FROM ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2, ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1, ' . $db_config['prefix'] . '_' . $module_data . '_orders_id AS t3  WHERE t1.product_unit = t2.id AND t1.id = t3.proid AND t1.id IN (' . $slistid . ') AND listgroupid=' . $db->quote( $list ) . ' AND t3.order_id=' . $order_id.' AND t1.status =1 AND t1.publtime < ' . NV_CURRENTTIME . ' AND (t1.exptime=0 OR t1.exptime>' . NV_CURRENTTIME . ')';
     $result = $db->query($sql);
     if ($result->rowCount()) {
         list($id, $_catid, $product_code, $publtime, $title, $alias, $product_price, $unit) = $result->fetch(3);
-        $data_pro[] = array(
+     	 $data_pro[] = array(
             'id' => $id,
             'publtime' => $publtime,
             'title' => $title,

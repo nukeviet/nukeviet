@@ -45,6 +45,8 @@ if ($coupons_load) {
 
 if (! empty($_SESSION[$module_data . '_cart'])) {
     foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {
+    	$array=explode('_', $pro_id);
+		$pro_id	=$array[0];
         $price = nv_get_price($pro_id, $pro_config['money_unit'], $info['num']);
         // Ap dung giam gia cho tung san pham dac biet
         if (!empty($counpons['product'])) {

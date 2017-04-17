@@ -91,10 +91,13 @@ if ($post_order == 1) {
     $listid = $listnum = $listprice = $listgroup = $listid_old = $listnum_old = array();
 
     foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {
+    	$proid=$pro_id;
+		$array=explode('_', $pro_id);
+		$pro_id=$array[0];
         if ($pro_config['active_price'] == '0') {
             $info['price'] = 0;
         }
-        if ($_SESSION[$module_data . '_cart'][$pro_id]['order'] == 1) {
+        if ($_SESSION[$module_data . '_cart'][$proid]['order'] == 1) {
             $price = nv_get_price($pro_id, $pro_config['money_unit'], ( int )$info['num']);
 
             // Ap dung giam gia cho tung san pham dac biet
@@ -268,32 +271,37 @@ if ($post_order == 1) {
                 }
                 product_number_sell($listid_old, $listnum_old, '-');
             }
-
+			$j=0;
             //Them chi tiet don hang
-            foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {
+            foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $info) {$j++;
+            	$proid=$pro_id;
+				$array=explode('_', $pro_id);
+				$pro_id=$array[0];
                 if ($pro_config['active_price'] == '0') {
                     $info['price'] = 0;
                 }
-                if ($_SESSION[$module_data . '_cart'][$pro_id]['order'] == 1 and $i > 0) {
+                if ($_SESSION[$module_data . '_cart'][$proid]['order'] == 1 and $i > 0) {
                     $price = nv_get_price($pro_id, $pro_config['money_unit'], $info['num'], true);
                     $info['price'] = $price['sale'];
 
-                    $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id, proid, num, price, discount_id ) VALUES ( :order_id, :proid, :num, :price, :discount_id )';
+                    $sql = 'INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id( order_id,listgroupid, proid, num, price, discount_id ) VALUES ( :order_id,:listgroupid, :proid, :num, :price, :discount_id )';
                     $data_insert = array();
                     $data_insert['order_id'] = $order_id;
                     $data_insert['proid'] = $pro_id;
                     $data_insert['num'] = $info['num'];
                     $data_insert['price'] = $info['price'];
                     $data_insert['discount_id'] = $info['discount_id'];
+					$data_insert['listgroupid'] = $info['group'];
                     $order_i = $db->insert_id($sql, 'id', $data_insert);
 
                     if ($order_i > 0 and !empty($info['group'])) {
                         $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $module_data . '_orders_id_group(order_i, group_id) VALUES( :order_i, :group_id )');
-                        $info['group'] = explode(',', $info['group']);
+					    $info['group'] = explode(',', $info['group']);
                         foreach ($info['group'] as $group_i) {
                             $sth->bindParam(':order_i', $order_i, PDO::PARAM_INT);
                             $sth->bindParam(':group_id', $group_i, PDO::PARAM_INT);
                             $sth->execute();
+
                         }
                     }
 
@@ -335,7 +343,7 @@ if ($post_order == 1) {
                     $stmt->bindParam(':amount', $amount, PDO::PARAM_INT);
                     $stmt->execute();
                 }
-                
+
                 // Ghi nhan diem tich luy khach hang
                 if($pro_config['money_to_point'] > 0){
                     $total_point += floor($total / $pro_config['money_to_point']);
@@ -503,6 +511,8 @@ if ($post_order == 1) {
             unset($_SESSION[$module_data . '_cart']);
             unset($_SESSION[$module_data . '_order_info']);
             unset($_SESSION[$module_data . '_coupons']);
+			unset( $_SESSION[$module_data . '_point_payment_discount'] );
+			unset( $_SESSION[$module_data . '_point_payment_uses'] );
             Header('Location: ' . $review_url);
             $action = 1;
         }
@@ -531,45 +541,60 @@ if ($action == 0) {
 
     $i = 0;
     $arrayid = array( );
-    foreach ($_SESSION[$module_data . '_cart'] as $pro_id => $pro_info) {
-        $arrayid[] = $pro_id;
-    }
 
-    if (!empty($arrayid)) {
-        $listid = implode(',', $arrayid);
+	foreach( $_SESSION[$module_data . '_cart'] as $pro_id => $pro_info )
+	{
+		$arrayid[] = $pro_id;
+		$array=explode('_', $pro_id);
+		if($array[1]=='')
+		{
+			$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.discount_id, t2." . NV_LANG_DATA . "_title, t1.money_unit, t1.discount_id, t1.product_weight, t1.weight_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1, " . $db_config['prefix'] . "_" . $module_data . "_units AS t2 WHERE t1.product_unit = t2.id AND t1.id IN ('" . $array[0] . "') AND t1.status =1";
 
-        $sql = 'SELECT t1.id, t1.listcatid, t1.publtime, t1.' . NV_LANG_DATA . '_title, t1.' . NV_LANG_DATA . '_alias, t1.' . NV_LANG_DATA . '_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_price, t2.' . NV_LANG_DATA . '_title, t1.money_unit, t1.discount_id, t1.product_weight, t1.weight_unit FROM ' . $db_config['prefix'] . '_' . $module_data . '_rows AS t1 LEFT JOIN ' . $db_config['prefix'] . '_' . $module_data . '_units AS t2 ON t1.product_unit = t2.id WHERE t1.id IN (' . $listid . ') AND t1.status =1';
-        $result = $db->query($sql);
-        $weight_total = 0;
-        while (list($id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $unit, $money_unit, $discount_id, $product_weight, $weight_unit) = $result->fetch(3)) {
-            if ($homeimgthumb == 1) {
-                //image thumb
+		}
+		else {
+			$sql = "SELECT t1.id, t1.listcatid, t1.publtime, t1." . NV_LANG_DATA . "_title, t1." . NV_LANG_DATA . "_alias, t1." . NV_LANG_DATA . "_hometext, t1.homeimgalt, t1.homeimgfile, t1.homeimgthumb, t1.product_number, t1.product_price, t1.discount_id, t2." . NV_LANG_DATA . "_title, t1.money_unit, t1.discount_id, t1.product_weight, t1.weight_unit FROM " . $db_config['prefix'] . "_" . $module_data . "_rows AS t1, " . $db_config['prefix'] . "_" . $module_data . "_units AS t2, " . $db_config['prefix'] . "_" . $module_data . "_group_quantity t3 WHERE t1.product_unit = t2.id AND t1.id = t3.pro_id AND  t3.listgroup ='".$array[1]."' AND t1.id IN ('" . $array[0] . "') AND t1.status =1";
 
-                $thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
-            } elseif ($homeimgthumb == 2) {
-                //image file
+		}
+		$result = $db->query( $sql );
+		$weight_total = 0;
+		while( list( $id, $listcatid, $publtime, $title, $alias, $hometext, $homeimgalt, $homeimgfile, $homeimgthumb, $product_price, $unit, $money_unit, $discount_id, $product_weight, $weight_unit ) = $result->fetch( 3 ) )
+		{
+			if( $homeimgthumb == 1 )
+			{
+				//image thumb
 
-                $thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
-            } elseif ($homeimgthumb == 3) {
-                //image url
+				$thumb = NV_BASE_SITEURL . NV_FILES_DIR . '/' . $module_upload . '/' . $homeimgfile;
+			}
+			elseif( $homeimgthumb == 2 )
+			{
+				//image file
 
-                $thumb = $homeimgfile;
-            } else {
-                //no image
+				$thumb = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $homeimgfile;
+			}
+			elseif( $homeimgthumb == 3 )
+			{
+				//image url
 
-                $thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
-            }
+				$thumb = $homeimgfile;
+			}
+			else
+			{
+				//no image
 
-            if ($pro_config['active_price'] == '0') {
-                $discount_id = $product_price = 0;
-            }
+				$thumb = NV_BASE_SITEURL . 'themes/' . $module_info['template'] . '/images/' . $module_file . '/no-image.jpg';
+			}
 
-            $num = $_SESSION[$module_data . '_cart'][$id]['num'];
-            $weight_total += nv_weight_conversion($product_weight, $weight_unit, $pro_config['weight_unit'], $num);
+			if( $pro_config['active_price'] == '0' )
+			{
+				$discount_id = $product_price = 0;
+			}
 
-            $group = $_SESSION[$module_data . '_cart'][$id]['group'];
+			$num = $_SESSION[$module_data . '_cart'][$id.'_'.$array[1]]['num'];
+			$weight_total += nv_weight_conversion( $product_weight, $weight_unit, $pro_config['weight_unit'], $num );
 
-            $data_content[] = array(
+			$group = $_SESSION[$module_data . '_cart'][$id.'_'.$array[1]]['group'];
+
+			$data_content[] = array(
                 'id' => $id,
                 'publtime' => $publtime,
                 'title' => $title,
@@ -585,9 +610,10 @@ if ($action == 0) {
                 'link_pro' => $link . $global_array_shops_cat[$listcatid]['alias'] . '/' . $alias . $global_config['rewrite_exturl'],
                 'num' => $num
             );
-            ++$i;
-        }
-    }
+			++$i;
+
+		}
+	}
 
     $data_order['weight_total'] = $weight_total;
 

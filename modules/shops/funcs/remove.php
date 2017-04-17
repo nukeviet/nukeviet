@@ -17,12 +17,12 @@ if (! isset($_SESSION[$module_data . '_cart'])) {
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
-
+$group = $nv_Request->get_string('group', 'post,get', '');
 if ($id > 0) {
-    if (isset($_SESSION[$module_data . '_cart'][$id])) {
-        unset($_SESSION[$module_data . '_cart'][$id]);
-        echo $id;
-    } else {
+    if (isset($_SESSION[$module_data . '_cart'][$id.'_'.$group])) {
+        unset($_SESSION[$module_data . '_cart'][$id.'_'.$group]);
+        echo $id.'_'.str_replace(',', '_', $group);
+    }  else {
         echo "";
     }
 } else {
@@ -31,8 +31,8 @@ if ($id > 0) {
     $array_id = array_map("intval", $array_id);
     foreach ($array_id as $id) {
         if ($id > 0) {
-            if (isset($_SESSION[$module_data . '_cart'][$id])) {
-                unset($_SESSION[$module_data . '_cart'][$id]);
+            if (isset($_SESSION[$module_data . '_cart'][$id.'_'.$group])) {
+                unset($_SESSION[$module_data . '_cart'][$id.'_'.$group]);
             }
         }
     }
