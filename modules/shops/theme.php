@@ -1203,14 +1203,13 @@ function viewcat_page_list($data_content, $compare_id, $pages, $sort = 0, $viewt
             if (defined('NV_IS_MODADMIN')) {
                 $xtpl->assign('ADMINLINK', nv_link_edit_page($data_row['id']) . '&nbsp;-&nbsp;' . nv_link_delete_page($data_row['id']));
                 $xtpl->parse('main.row.adminlink');
-            } else {
-                if ($pro_config['show_compare'] == 1) {
-                    if (!empty($compare_id)) {
-                        $ch = (in_array($data_row['id'], $compare_id)) ? ' checked="checked"' : '';
-                        $xtpl->assign('ch', $ch);
-                    }
-                    $xtpl->parse('main.row.compare');
+            }
+            if ($pro_config['show_compare'] == 1) {
+                if (!empty($compare_id)) {
+                    $ch = (in_array($data_row['id'], $compare_id)) ? ' checked="checked"' : '';
+                    $xtpl->assign('ch', $ch);
                 }
+                $xtpl->parse('main.row.compare');
             }
 
             if ($data_row['discount_id'] and $price['discount_percent'] > 0 and $data_row['showprice']) {
