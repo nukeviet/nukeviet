@@ -631,7 +631,7 @@ function createfolder() {
     $("div#createfolder").dialog("open")
 }
 
-//Tạo lại ảnh thumb
+//Táº¡o láº¡i áº£nh thumb
 function recreatethumb() {
     $("div#recreatethumb").dialog("open")
 	$("#recreatethumb_ok").show();
@@ -1803,6 +1803,39 @@ var NVUPLOAD = {
                         }
 
                         NVUPLOAD.updateList();
+                        
+                        // Kiểm tra kích thước file (Fix plupload 2.3.1)
+                        if (nv_resize != false) {
+                            var lastKey = NVUPLOAD.uploader.files.length - 1;
+                            $.each(NVUPLOAD.uploader.files, function(k, file) {
+                                $('#upload-start').prop('disabled', true).html('<i class="fa fa-circle-o-notch fa-spin"></i> ' + LANG.upload_file);
+                                file.clientResize = false;
+                                var img = new moxie.image.Image();
+                                try {
+                                	img.onload = function() {
+                                		if (this.width > nv_resize.width || this.height > nv_resize.height) {
+                                            file.clientResize = true;
+                                		}
+                                        if (k == lastKey) {
+                                            setTimeout(function() {
+                                                $('#upload-start').prop('disabled', false).html(LANG.upload_file);
+                                            }, 1500);
+                                        }
+                                	};
+                                    img.onerror = function() {
+                                        if (k == lastKey) {
+                                            setTimeout(function() {
+                                                $('#upload-start').prop('disabled', false).html(LANG.upload_file);
+                                            }, 1500);
+                                        }
+                                    }
+                                	img.load(file.getSource());
+                                } catch(ex) {
+                                    // Nothing
+                                }
+                                NVUPLOAD.uploader.files[k] = file;
+                            });
+                        }
 
                         $('#upload-start').click(function() {
                             // Check file before start upload
@@ -1938,6 +1971,14 @@ var NVUPLOAD = {
                         NVUPLOAD.uploader.settings.multipart_params = {
                             "filealt": filealt
                         };
+                        // Xác định xem có resize ảnh không (fix lỗi plupload 2.3.1)
+                        if (nv_resize != false) {
+                            if (typeof file.clientResize != "undefined" && file.clientResize) {
+                                NVUPLOAD.uploader.settings.resize = nv_resize;
+                            } else {
+                                NVUPLOAD.uploader.settings.resize = {};
+                            }
+                        }
                     }
                 }
             });
@@ -1956,7 +1997,7 @@ var NVUPLOAD = {
 
         // Add some button
         $('#upload-button-area .buttons').append(
-            '<input id="upload-start" type="button" class="btn btn-primary" value="' + LANG.upload_file + '"/> ' +
+            '<button id="upload-start" type="button" class="btn btn-primary">' + LANG.upload_file + '</button> ' +
             '<input id="upload-cancel" type="button" class="btn btn-default" value="' + LANG.upload_cancel + '"/> '
         );
 
@@ -2126,8 +2167,11 @@ var NVUPLOAD = {
         } else {
             // Nothing to do
         }
-
-        $('#' + file.id + ' .file-action').html('<i class="' + actionClass + '"></i>');
+        
+        var actionHTML = '<i class="' + actionClass + '"></i>';
+        if ($('#' + file.id + ' .file-action').html() != actionHTML) {
+            $('#' + file.id + ' .file-action').html(actionHTML);
+        }
 
         if (file.hint) {
             $('#' + file.id).attr('title', file.hint);
