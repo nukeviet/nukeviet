@@ -443,7 +443,7 @@ function GetParentCatFilter($cateid)
  */
 function GetGroupidInParentGroup($groupid, $check_inhome = 0, $only_children = 0, $cid = 0)
 {
-    global $global_array_group, $array_group, $db, $global_array_shops_cat;
+    global $global_array_group, $array_group, $db, $global_array_shops_cat, $db_config, $module_data;
     
     if ($only_children) {
         $array_group = array();
