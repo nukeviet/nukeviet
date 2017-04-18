@@ -258,3 +258,20 @@ function nv_add_element( idElment, key, value ){
     $("#" + idElment).append( html );
 	return false;
 }
+
+var timer_check_takeover = '';
+function nv_timer_check_takeover(id) {
+	clearTimeout(timer_check_takeover);
+    $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=content&nocache=' + new Date().getTime(), 'id='+id+'&check_edit=1', function(res) {
+		res = res.split("_");
+		if (res[0] != 'OK') {// thông báo bị chiếm quyền sửa
+			alert(res[1]);
+			$('.submit-post').remove();
+		} else {
+			timer_check_takeover = setTimeout(function() {
+				nv_timer_check_takeover(id);
+			}, 30000);
+		}
+	});
+	return false;
+}

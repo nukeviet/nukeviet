@@ -84,21 +84,6 @@ if ($popup) {
         $allow_files_type = $admin_info['allow_files_type'];
     }
 
-    $mimes = nv_parse_ini_file(NV_ROOTDIR . '/includes/ini/mime.ini', true);
-
-    foreach ($mimes as $mime_type => $file_ext) {
-        if (! in_array($mime_type, $global_config['forbid_mimes']) and in_array($mime_type, $allow_files_type)) {
-            $file_ext = array_diff(array_keys($file_ext), $global_config['forbid_extensions']);
-
-            if (! empty($file_ext)) {
-                $xtpl->assign('MIMI_TYPE', ucfirst($mime_type));
-                $xtpl->assign('MIME_EXTS', implode(',', $file_ext));
-
-                $xtpl->parse('main.mime');
-            }
-        }
-    }
-
     $xtpl->assign('UPLOAD_ALT_REQUIRE', ! empty($global_config['upload_alt_require']) ? 'true' : 'false');
     $xtpl->assign('UPLOAD_AUTO_ALT', ! empty($global_config['upload_auto_alt']) ? 'true' : 'false');
 
@@ -108,10 +93,6 @@ if ($popup) {
 
     if (! empty($global_config['upload_auto_alt'])) {
         $xtpl->parse('main.auto_alt');
-    }
-
-    if (! $global_config['nv_auto_resize']) {
-        $xtpl->parse('main.no_auto_resize');
     }
 
     $xtpl->parse('main');

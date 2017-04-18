@@ -16,7 +16,7 @@ $cache_file = '';
 $contents = '';
 $viewcat = $global_array_cat[$catid]['viewcat'];
 
-$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'];
+$base_url_rewrite = NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid]['alias'];
 if ($page > 1) {
     $base_url_rewrite .= '/page-' . $page;
 }
@@ -129,7 +129,7 @@ if (empty($contents)) {
         }
         if ($st_links > 0) {
             $db_slave->sqlreset()
-                ->select('id, listcatid, addtime, edittime, publtime, title, alias, hitstotal')
+                ->select('id, listcatid, addtime, edittime, publtime, title, alias, external_link, hitstotal')
                 ->from(NV_PREFIXLANG . '_' . $module_data . '_' . $catid)
                 ->order($order_by)
                 ->limit($st_links);

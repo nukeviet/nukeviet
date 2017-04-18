@@ -19,7 +19,7 @@ if (empty($module_config[$module_name]['instant_articles_active'])) {
 if (!empty($module_config[$module_name]['instant_articles_httpauth'])) {
     $auth = nv_set_authorization();
     
-    if (empty($auth['auth_user']) or empty($auth['auth_pw']) or $auth['auth_user'] !== $module_config[$module_name]['instant_articles_username'] or $auth['auth_pw'] !== $crypt->aes_decrypt(nv_base64_decode($module_config[$module_name]['instant_articles_password']))) {
+    if (empty($auth['auth_user']) or empty($auth['auth_pw']) or $auth['auth_user'] !== $module_config[$module_name]['instant_articles_username'] or $auth['auth_pw'] !== $crypt->decrypt($module_config[$module_name]['instant_articles_password'])) {
         header('WWW-Authenticate: Basic realm="Private Area"');
         header(NV_HEADERSTATUS . ' 401 Unauthorized');
         if (php_sapi_name() !== 'cgi-fcgi') {
@@ -109,7 +109,11 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
             }
             
             if (!empty($items[$row['id']]['homeimgfile'])) {
-                $content['image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $items[$row['id']]['homeimgfile'];
+                if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $items[$row['id']]['homeimgfile'])) {
+                    $content['image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $items[$row['id']]['homeimgfile'];
+                } else {
+                    $content['image'] = $items[$row['id']]['homeimgfile'];
+                }
                 $content['image_caption'] = empty($items[$row['id']]['homeimgalt']) ? $items[$row['id']]['title'] : $items[$row['id']]['homeimgalt'];
             }
             $content['opkicker'] = $items[$row['id']]['cattitle'];

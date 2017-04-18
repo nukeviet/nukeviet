@@ -165,7 +165,7 @@ if (isset($array_op[1])) {
 
     $contents = viewsubcat_main($viewcat, $array_cat);
 
-    $page_title = $module_info['funcs']['groups']['func_custom_name'];
+    $page_title = $module_info['funcs']['groups']['func_site_title'];
     $key_words = $module_info['keywords'];
 }
 

@@ -455,7 +455,7 @@ function nv_capcha_txt($seccode)
         if (!empty($global_config['recaptcha_secretkey'])) {
             $NV_Http = new NukeViet\Http\Http($global_config, NV_TEMP_DIR);
             $request = array(
-                'secret' => $crypt->aes_decrypt(nv_base64_decode($global_config['recaptcha_secretkey'])),
+                'secret' => $crypt->decrypt($global_config['recaptcha_secretkey']),
                 'response' => $seccode,
                 'remoteip' => $client_info['ip']
             );
@@ -560,36 +560,30 @@ function nv_EncodeEmail($strEmail, $strDisplay = '', $blnCreateLink = true)
 function nv_user_groups($in_groups)
 {
     global $nv_Cache, $db, $db_config, $global_config;
-
-    if (empty($in_groups)) {
-        return '';
-    }
-
-    $query = 'SELECT group_id, title, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
-    $list = $nv_Cache->db($query, '', 'users');
-
-    if (empty($list)) {
-        return '';
-    }
-
-    $in_groups = explode(',', $in_groups);
-    $groups = array();
-    $reload = array();
-
-    for ($i = 0, $count = sizeof($list); $i < $count; ++$i) {
-        if ($list[$i]['exp_time'] != 0 and $list[$i]['exp_time'] <= NV_CURRENTTIME) {
-            $reload[] = $list[$i]['group_id'];
-        } elseif (in_array($list[$i]['group_id'], $in_groups)) {
-            $groups[] = $list[$i]['group_id'];
+    
+    $_groups = array();
+    if (!empty($in_groups)) {
+        $query = 'SELECT group_id, title, exp_time FROM ' . NV_GROUPS_GLOBALTABLE . ' WHERE act=1 AND (idsite = ' . $global_config['idsite'] . ' OR (idsite =0 AND siteus = 1)) ORDER BY idsite, weight';
+        $list = $nv_Cache->db($query, '', 'users');
+        if (!empty($list)) {
+            $reload = array();
+            $in_groups = explode(',', $in_groups);
+            for ($i = 0, $count = sizeof($list); $i < $count; ++$i) {
+                if ($list[$i]['exp_time'] != 0 and $list[$i]['exp_time'] <= NV_CURRENTTIME) {
+                    $reload[] = $list[$i]['group_id'];
+                } elseif (in_array($list[$i]['group_id'], $in_groups)) {
+                    $_groups[] = $list[$i]['group_id'];
+                }
+            }
+            
+            if ($reload) {
+                $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
+                $nv_Cache->delMod('users');
+            }
         }
     }
-
-    if ($reload) {
-        $db->query('UPDATE ' . NV_GROUPS_GLOBALTABLE . ' SET act=0 WHERE group_id IN (' . implode(',', $reload) . ')');
-        $nv_Cache->delMod('users');
-    }
-
-    return $groups;
+    
+    return $_groups;
 }
 
 /**
@@ -1547,14 +1541,14 @@ function nv_check_url($url, $is_200 = 0)
  */
 function nv_url_rewrite($buffer, $is_url = false)
 {
-    global $rewrite_keys, $rewrite_values;
-
-    if (! empty($rewrite_keys)) {
+    global $global_config;
+    
+    if ($global_config['rewrite_enable']) {
         if ($is_url) {
             $buffer = "\"" . $buffer . "\"";
         }
 
-        $buffer = preg_replace($rewrite_keys, $rewrite_values, $buffer);
+        $buffer = preg_replace_callback('#"(' . preg_quote(NV_BASE_SITEURL, '#') . ')index.php\\?' . preg_quote(NV_LANG_VARIABLE, '#') . '=([^"]+)"#', 'nv_url_rewrite_callback', $buffer);
 
         if ($is_url) {
             $buffer = substr($buffer, 1, -1);
@@ -1562,6 +1556,71 @@ function nv_url_rewrite($buffer, $is_url = false)
     }
 
     return $buffer;
+}
+
+/**
+ * nv_url_rewrite_callback()
+ * 
+ * @param mixed $matches
+ * @return
+ */
+function nv_url_rewrite_callback($matches)
+{
+    global $global_config;
+    
+    $query_string = NV_LANG_VARIABLE . '=' . $matches[2];
+    $query_array = array();
+    $is_amp = (strpos($query_string, '&amp;') !== false);
+    parse_str(str_replace('&amp;', '&', $query_string), $query_array);
+    
+    if (!empty($query_array)) {
+        $op_rewrite = array();
+        $op_rewrite_count = 0;
+        $query_array_keys = array_keys($query_array);
+        if (!in_array($query_array[NV_LANG_VARIABLE], $global_config['allow_sitelangs']) or (isset($query_array[NV_NAME_VARIABLE]) and (!isset($query_array_keys[1]) or $query_array_keys[1] != NV_NAME_VARIABLE)) or (isset($query_array[NV_OP_VARIABLE]) and (!isset($query_array_keys[2]) or $query_array_keys[2] != NV_OP_VARIABLE))) {
+            return $matches[0];
+        }
+        if (!$global_config['rewrite_optional']) {
+            $op_rewrite[] = $query_array[NV_LANG_VARIABLE];
+            $op_rewrite_count++;
+        }
+        unset($query_array[NV_LANG_VARIABLE]);
+        if (isset($query_array[NV_NAME_VARIABLE])) {
+            if ($global_config['rewrite_op_mod'] != $query_array[NV_NAME_VARIABLE]) {
+                $op_rewrite[] = $query_array[NV_NAME_VARIABLE];
+                $op_rewrite_count++;
+            }
+            unset($query_array[NV_NAME_VARIABLE]);
+        }
+        $rewrite_end = $global_config['rewrite_endurl'];
+        if (isset($query_array[NV_OP_VARIABLE])) {
+            if (preg_match('/^tag\/(.*)$/', $query_array[NV_OP_VARIABLE], $m)) {
+                if (strpos($m[1], '/') !== false) {
+                    return $matches[0];
+                }
+                $rewrite_end = '';
+            } elseif (preg_match('/^[a-zA-Z0-9\-\/]+(' . nv_preg_quote($global_config['rewrite_exturl']) . ')*$/', $query_array[NV_OP_VARIABLE], $m)) {
+                if (!empty($m[1])) {
+                    $rewrite_end = '';
+                }
+            } else {
+                return $matches[0];
+            }
+            $op_rewrite[] = $query_array[NV_OP_VARIABLE];
+            $op_rewrite_count++;
+            unset($query_array[NV_OP_VARIABLE]);
+        }
+        
+        $rewrite_string = (defined('NV_IS_REWRITE_OBSOLUTE') ? NV_MY_DOMAIN : '') . NV_BASE_SITEURL . ($global_config['check_rewrite_file'] ? '' : 'index.php/') . implode('/', $op_rewrite) . ($op_rewrite_count ? $rewrite_end : '');
+        
+        if (!empty($query_array)) {
+            $rewrite_string .= '?' . http_build_query($query_array, '', $is_amp ? '&amp;' : '&');
+        }
+        
+        return '"' . $rewrite_string . '"';
+    }
+
+    return $matches[0];
 }
 
 /**
@@ -1796,7 +1855,7 @@ function nv_status_notification($language, $module, $type, $obid, $status = 1, $
 function nv_redirect_encrypt($url)
 {
     global $crypt;
-    return nv_base64_encode($crypt->aes_encrypt($url, NV_CHECK_SESSION));
+    return $crypt->encrypt($url, NV_CHECK_SESSION);
 }
 
 /**
@@ -1809,21 +1868,8 @@ function nv_redirect_encrypt($url)
  */
 function nv_redirect_decrypt($string, $insite = true)
 {
-    if (empty($string)) {
-        return '';
-    }
-
-    if (preg_match('/[^a-z0-9\-\_\,]/i', $string)) {
-        return '';
-    }
-
-    $string = nv_base64_decode($string);
-    if (! $string) {
-        return '';
-    }
-
     global $crypt;
-    $url = $crypt->aes_decrypt($string, NV_CHECK_SESSION);
+    $url = $crypt->decrypt($string, NV_CHECK_SESSION);
     if (empty($url)) {
         return '';
     }

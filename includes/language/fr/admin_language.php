@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language Français
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Jun 21, 2010, 12:30:00 PM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language Français
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Jun 21, 2010, 12:30:00 PM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'Phạm Chí Quang';
@@ -61,10 +61,9 @@ $lang_module['nv_setup_new'] = 'Installer';
 $lang_module['nv_setup_delete'] = 'Supprimer les données';
 $lang_module['nv_data_setup'] = 'Données de cette langue a été installées';
 $lang_module['nv_data_setup_ok'] = 'Installation réussie, le système vous transfèrera vers l\'installation de modules, <br /><br />Vous devez installer les modules nécessaires et activer ces modules';
-$lang_module['nv_lang_readok'] = 'Lecture réussie de langue d\'interface, aller à la liste des fichiers.';
-$lang_module['nv_lang_copyok'] = 'Création de langue d\'interface réussie, aller à la liste des fichiers.';
+$lang_module['nv_lang_readok'] = 'Lecture réussie de langue d\'interface, aller à la liste des fichiers. Cliquez ici si vous attendez trop longtemps';
 $lang_module['nv_lang_deleteok'] = 'Suppression réussie de la langue d\'interface.';
-$lang_module['nv_lang_wite_ok'] = 'Création réussie des fichiers de langue d\'interface.';
+$lang_module['nv_lang_wite_ok'] = 'Création réussie des fichiers de langue d\'interface';
 $lang_module['nv_lang_delete'] = 'supprimer langue du site';
 $lang_module['nv_lang_delete_error'] = 'Erreur de la suppression des fichiers de langue d\'interface, vérifiez les permissions des fichiers.';
 $lang_module['nv_error_write_file'] = 'Erreur de création du fichier';

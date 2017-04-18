@@ -146,7 +146,7 @@ if ($nv_Request->isset_request('submitcaptcha', 'post')) {
         $array_config_global['recaptcha_type'] = $array_config_global['recaptcha_type'][0];
     }
     if (!empty($array_config_global['recaptcha_secretkey'])) {
-        $array_config_global['recaptcha_secretkey'] = nv_base64_encode($crypt->aes_encrypt($array_config_global['recaptcha_secretkey']));
+        $array_config_global['recaptcha_secretkey'] = $crypt->encrypt($array_config_global['recaptcha_secretkey']);
     }
     
     $sth = $db->prepare("UPDATE " . NV_CONFIG_GLOBALTABLE . " SET config_value = :config_value WHERE lang = 'sys' AND module = 'global' AND config_name = :config_name");
@@ -315,7 +315,7 @@ foreach ($captcha_type_array as $captcha_type_i => $captcha_type_lang) {
 }
 
 $xtpl->assign('RECAPTCHA_SITEKEY', $global_config['recaptcha_sitekey']);
-$xtpl->assign('RECAPTCHA_SECRETKEY', $global_config['recaptcha_secretkey'] ? $crypt->aes_decrypt(nv_base64_decode($global_config['recaptcha_secretkey'])) : '');
+$xtpl->assign('RECAPTCHA_SECRETKEY', $global_config['recaptcha_secretkey'] ? $crypt->decrypt($global_config['recaptcha_secretkey']) : '');
 
 $xtpl->assign('DISPLAY_CAPTCHA_BASIC', ($global_config['captcha_type'] == 2) ? ' style="display:none;"' : '');
 $xtpl->assign('DISPLAY_CAPTCHA_RECAPTCHA', ($global_config['captcha_type'] == 2) ? '' : ' style="display:none;"');
