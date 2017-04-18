@@ -103,6 +103,9 @@
                     <td class="text-center">{ROW.hitscm}</td>
                     <td class="text-center">{ROW.numtags}</td>
 					<td class="text-center">
+						<!-- BEGIN: copy_news -->
+						<a href="{URL_COPY}" class="btn btn-success btn-xs"><em class="fa fa-copy fa-lg">&nbsp;</em></a> &nbsp;
+						<!-- END: copy_news -->
 						<!-- BEGIN: excdata -->
 						<a href="{ROW.url_send}" class="btn btn-success btn-xs"><em class="fa fa-paper-plane-o fa-lg">&nbsp;</em>{LANG.send}</a> &nbsp;
 						<!-- END: excdata -->

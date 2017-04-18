@@ -346,3 +346,5 @@ $lang_module['dulicate_edit'] = 'Bài viết <b>%s</b> đang được sửa b�
 $lang_module['dulicate_edit_admin'] = 'Bài viết <b>%s</b> đang được sửa bởi tài khoản <b>%s</b> lúc %s. Bạn có muốn <b>chiếm quyền sửa bài viết</b> này không ?';
 $lang_module['dulicate_takeover'] = 'Chiếm quyền sửa bài viết';
 $lang_module['dulicate_edit_takeover'] = 'Bạn đã bị chiếm quyền chỉnh sửa bài viết này bởi  tài khoản %s lúc %s. Những thay đổi của bạn không thể lưu vào hệ thống, hãy sao chép lại để tránh mất nội dung đã thay đổi.';
+
+$lang_module['setting_copy_news'] = 'Cho phép copy bài viết';

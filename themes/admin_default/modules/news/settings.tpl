@@ -149,6 +149,10 @@
 					<th>{LANG.setting_tags_remind}</th>
 					<td><input type="checkbox" value="1" name="tags_remind"{TAGS_REMIND}/></td>
 				</tr>
+				<tr>
+					<th>{LANG.setting_copy_news}</th>
+					<td><input type="checkbox" value="1" name="copy_news"{COPY_NEWS}/></td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -209,7 +213,7 @@
 					<th class="w400">{LANG.setting_instant_articles_password}</th>
 					<td>
                         <div class="input-group">
-                            <input type="password" value="{INSTANT_ARTICLES_PASSWORD}" name="instant_articles_password" class="form-control"/> 
+                            <input type="password" value="{INSTANT_ARTICLES_PASSWORD}" name="instant_articles_password" class="form-control"/>
                             <span class="input-group-addon">
                                 <a href="#" class="showhidepass" data-target="[name='instant_articles_password']" data-toggle="tooltip" title="{LANG.show_hide_pass}"><i class="fa fa-key"></i></a>
                             </span>

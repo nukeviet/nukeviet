@@ -300,7 +300,7 @@
 							<div class="message_body">
 								<p><label><input type="checkbox" name="instant_active" value="1" {instant_active_checked}/>&nbsp;{LANG.content_instant_active}</label></p>
                                 <div class="m-bottom">
-                                    {LANG.content_instant_template}: 
+                                    {LANG.content_instant_template}:
                                     <input type="text" placeholder="{LANG.content_instant_templatenote}" name="instant_template" value="{rowcontent.instant_template}" class="form-control" style="width:100%"/>
                                 </div>
                                 <p><label><input type="checkbox" name="instant_creatauto" value="1" {instant_creatauto_checked}/>&nbsp;{LANG.content_instant_creatauto}</label></p>
@@ -315,22 +315,23 @@
 	<div class="text-center">
 		<br/>
 		<input type="hidden" value="1" name="save" />
+		<input type="hidden" value="1" name="{ISCOPY}" />
 		<input type="hidden" value="{rowcontent.id}" name="id" />
 		<!-- BEGIN:status_save -->
 		<input class="btn btn-primary submit-post" name="statussave" type="submit" value="{LANG.save}" />
 		<!-- END:status_save -->
-		
+
 		<!-- BEGIN:status_4 -->
 		<input class="btn btn-warning submit-post" name="status4" type="submit" value="{LANG.save_temp}" />
 		<!-- END:status_4 -->
 		<!-- BEGIN:status_1 -->
 		<input class="btn btn-primary submit-post" name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status_1 -->
-        		
+
         <!-- BEGIN:status_6 -->
 		<input class="btn btn-primary submit-post" name="status6" type="submit" value="{LANG.save_send_admin}" />
 		<!-- END:status_6 -->
-		
+
         <!-- BEGIN:status_0 -->
         <input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
         <!-- END:status_0 -->
