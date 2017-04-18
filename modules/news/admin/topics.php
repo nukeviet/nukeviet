@@ -45,7 +45,7 @@ if (! empty($savecat)) {
         $array['image'] = '';
     }
 
-    $array['alias'] = ($array['alias'] == '') ? change_alias($array['title']) : change_alias($array['alias']);
+    $array['alias'] = ($array['alias'] == '') ? get_mod_alias($array['title'], 'topics', $array['topicid']) : get_mod_alias($array['alias'], 'topics', $array['topicid']);
 
     if (empty($array['title'])) {
         $error = $lang_module['topics_error_title'];

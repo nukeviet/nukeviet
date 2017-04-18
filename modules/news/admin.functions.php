@@ -718,3 +718,63 @@ function redriect($msg1 = '', $msg2 = '', $nv_redirect, $autoSaveKey = '', $go_b
     echo nv_admin_theme($contents);
     include NV_ROOTDIR . '/includes/footer.php';
 }
+
+/**
+ * get_mod_alias()
+ * 
+ * @param mixed $title
+ * @param string $mod
+ * @param integer $id
+ * @return
+ */
+function get_mod_alias($title, $mod = '', $id = 0)
+{
+    global $module_data, $module_config, $module_name, $db_slave, $db; 
+    
+    if (empty($title)) {
+        return '';
+    }
+    
+    $alias = change_alias($title);
+    if ($module_config[$module_name]['alias_lower']) {
+        $alias = strtolower($alias);
+    }
+    $id = intval($id);
+    
+    if ($mod == 'cat') {
+        $tab = NV_PREFIXLANG . '_' . $module_data . '_cat';
+        $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE catid!=' . $id . ' AND alias= :alias');
+        $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
+        $stmt->execute();
+        $nb = $stmt->fetchColumn();
+        if (! empty($nb)) {
+            $nb = $db_slave->query('SELECT MAX(catid) FROM ' . $tab)->fetchColumn();
+    
+            $alias .= '-' . (intval($nb) + 1);
+        }
+    } elseif ($mod == 'topics') {
+        $tab = NV_PREFIXLANG . '_' . $module_data . '_topics';
+        $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE topicid!=' . $id . ' AND alias= :alias');
+        $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
+        $stmt->execute();
+        $nb = $stmt->fetchColumn();
+        if (! empty($nb)) {
+            $nb = $db_slave->query('SELECT MAX(topicid) FROM ' . $tab)->fetchColumn();
+    
+            $alias .= '-' . (intval($nb) + 1);
+        }
+    } elseif ($mod == 'blockcat') {
+        $tab = NV_PREFIXLANG . '_' . $module_data . '_block_cat';
+        $stmt = $db_slave->prepare('SELECT COUNT(*) FROM ' . $tab . ' WHERE bid!=' . $id . ' AND alias= :alias');
+        $stmt->bindParam(':alias', $alias, PDO::PARAM_STR);
+        $stmt->execute();
+        $nb = $stmt->fetchColumn();
+        if (! empty($nb)) {
+            $nb = $db_slave->query('SELECT MAX(bid) FROM ' . $tab)->fetchColumn();
+    
+            $alias .= '-' . (intval($nb) + 1);
+        }
+    }
+    
+    return $alias;
+}
