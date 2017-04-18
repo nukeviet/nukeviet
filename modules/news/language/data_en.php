@@ -8,7 +8,7 @@
  * @Createdate 2-10-2010 20:59
  */
 
-if (! defined('NV_ADMIN')) {
+if (!defined('NV_ADMIN')) {
     die('Stop!!!');
 }
 
@@ -71,32 +71,95 @@ $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_d
 $db->query("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_sources VALUES (2, 'Enlightened Website Development', 'http://www.etianen.com', '', 2, 1277691851, 1277691851)");
 
 $sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags (tid, numnews, alias, image, description, keywords) VALUES (?, ?, ?, ?, ?, ?)");
-$sth->execute(array(1, 0, 'vinades', '', '', 'VINADES'));
-$sth->execute(array(2, 0, 'web', '', '', 'Web'));
-$sth->execute(array(3, 0, 'html5', '', '', 'HTML5'));
-$sth->execute(array(4, 0, 'nguyen-anh-tu', '', '', 'Nguyen Anh Tu'));
-$sth->execute(array(5, 0, 'nukeviet', '', '', 'NukeViet'));
+$sth->execute(array(
+    1,
+    0,
+    'vinades',
+    '',
+    '',
+    'VINADES'
+));
+$sth->execute(array(
+    2,
+    0,
+    'web',
+    '',
+    '',
+    'Web'
+));
+$sth->execute(array(
+    3,
+    0,
+    'html5',
+    '',
+    '',
+    'HTML5'
+));
+$sth->execute(array(
+    4,
+    0,
+    'nguyen-anh-tu',
+    '',
+    '',
+    'Nguyen Anh Tu'
+));
+$sth->execute(array(
+    5,
+    0,
+    'nukeviet',
+    '',
+    '',
+    'NukeViet'
+));
 
 $sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags_id (id, tid, keyword) VALUES (?, ?, ?)");
-$sth->execute(array(1, 1, 'VINADES'));
-$sth->execute(array(2, 2, 'Web'));
-$sth->execute(array(3, 3, 'HTML5'));
-$sth->execute(array(4, 1, 'VINADES'));
-$sth->execute(array(4, 4, 'Nguyen Anh Tu'));
-$sth->execute(array(5, 5, 'NukeViet'));
-$sth->execute(array(5, 1, 'VINADES'));
+$sth->execute(array(
+    1,
+    1,
+    'VINADES'
+));
+$sth->execute(array(
+    2,
+    2,
+    'Web'
+));
+$sth->execute(array(
+    3,
+    3,
+    'HTML5'
+));
+$sth->execute(array(
+    4,
+    1,
+    'VINADES'
+));
+$sth->execute(array(
+    4,
+    4,
+    'Nguyen Anh Tu'
+));
+$sth->execute(array(
+    5,
+    5,
+    'NukeViet'
+));
+$sth->execute(array(
+    5,
+    1,
+    'VINADES'
+));
 
 $copyright = 'Note: The above article reprinted at the website or other media sources not specify the source http://nukeviet.vn is copyright infringement';
 $db->query("UPDATE " . $db_config['prefix'] . "_config SET config_value = " . $db->quote($copyright) . " WHERE module = " . $db->quote($module_name) . " AND config_name = 'copyright' AND lang=" . $db->quote($lang));
 
 $result = $db->query('SELECT catid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_cat ORDER BY sort ASC');
-while (list($catid_i) = $result->fetch(3)) {
+while (list ($catid_i) = $result->fetch(3)) {
     $db->exec('CREATE TABLE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid_i . ' LIKE ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows');
 }
 
 $result = $db->query('SELECT id, listcatid FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows ORDER BY id ASC');
 
-while (list($id, $listcatid) = $result->fetch(3)) {
+while (list ($id, $listcatid) = $result->fetch(3)) {
     $arr_catid = explode(',', $listcatid);
     foreach ($arr_catid as $catid) {
         $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_' . $catid . ' SELECT * FROM ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_rows WHERE id=' . $id);

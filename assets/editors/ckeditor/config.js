@@ -9,6 +9,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.allowedContent = true;
 	config.extraPlugins = 'video,eqneditor,switchbar,tbvdownload,cleanlink,googledocs';
 	config.entities = false;
+	config.image2_altRequired = true;
 	config.youtube_width = '640';
 	config.youtube_height = '480';
 	config.youtube_related = false;
@@ -17,20 +18,21 @@ CKEDITOR.editorConfig = function( config ) {
 	config.youtube_autoplay = true;
 	config.codeSnippet_theme = 'github';
 	// Default setting.
+
 	config.toolbarGroups = [
-		{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
-		{ name: 'insert' },
-		{ name: 'others' },
+	    { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+		{ name: 'insert', groups: [ 'insert' ] },
+		{ name: 'others', groups: [ 'others' ] },
 		'/',
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-		{ name: 'links' },
+		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+		{ name: 'links', groups: [ 'links' ] },
 		'/',
-		{ name: 'styles' },
-		{ name: 'colors' },
-		{ name: 'editing', groups: [ 'find', 'selection'] },
+		{ name: 'styles', groups: [ 'styles' ] },
+		{ name: 'colors', groups: [ 'colors' ] },
+		{ name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
 		{ name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-		{ name: 'tools' }
+		{ name: 'tools', groups: [ 'tools' ] }
 	];
 
 	config.toolbar_Basic =

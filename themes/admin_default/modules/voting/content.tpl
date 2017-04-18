@@ -108,12 +108,6 @@
                     <input class="form-control w100" type="text" name="maxoption" size="5" value="{DATA.acceptcm}" class="txt" required pattern="^([0-9])+$" oninvalid="this.setCustomValidity(nv_digits)" oninput="this.setCustomValidity('')"/>
                 </div>
                 <div class="col-sm-12 col-md-24 m-bottom">
-                    <label><strong>{LANG.group_post}:</strong></label>
-                    <div class="clearfix">
-                    	<label><input type="checkbox" value="1" name="hot_post"{HOST_POST}/> {LANG.hot_post}</label>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-24 m-bottom">
                     <label><strong>{GLANG.groups_view}:</strong></label>
                     <!-- BEGIN: groups_view -->
                     <div class="clearfix">

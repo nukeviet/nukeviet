@@ -26,7 +26,7 @@
                     <li>
                         <a href="{BASE_SITEURL}install/index.php?{LANG_VARIABLE}={LANGTYPE}&amp;step={MAIN_STEP}">{LANGNAME} </a>
                     </li>
-					<!-- END: looplang -->
+                    <!-- END: looplang -->
                 </ul>
             </div>
         </div>
@@ -49,17 +49,17 @@
         </div>
         <div id="footer">
             <p>
-                &copy; 2010 - 2015 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
+                &copy; 2010 - 2017 {LANG.developed} <strong><a title="VINADES.,JSC" href="http://vinades.vn">VINADES.,JSC</a></strong>
             </p>
             <p>
                 {LANG.publish} <strong><a title="GNU General Public License, version 2" href="https://www.gnu.org/licenses/gpl-2.0.html">GNU/GPL v2.0</a></strong>
             </p>
         </div>
         <div class="nv-modal">
-			<div class="nv-modal-wrap">
-				<div class="nv-modal-content"></div>
-			</div>
-		</div>
+            <div class="nv-modal-wrap">
+                <div class="nv-modal-content"></div>
+            </div>
+        </div>
     </body>
 </html>
 <!-- END: main -->

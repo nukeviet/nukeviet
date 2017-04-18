@@ -17,7 +17,7 @@ if (!empty($user_info['active2step'])) {
     die();
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 $key_words = $module_info['keywords'];
 
 $nv_redirect = '';
@@ -47,7 +47,7 @@ if (isset($array_op[1]) and $array_op[1] == 'qr-image') {
     
     header('Content-type: image/png');
     $qrCode->setText($url)
-        ->setErrorCorrection('high')
+        ->setErrorCorrection('medium')
         ->setModuleSize(4)
         ->setImageType('png')
         ->render();

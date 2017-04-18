@@ -12,7 +12,7 @@ if (! defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
-$page_title = $module_info['funcs'][$op]['func_custom_name'];
+$page_title = $module_info['funcs'][$op]['func_site_title'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['listusers'];
 

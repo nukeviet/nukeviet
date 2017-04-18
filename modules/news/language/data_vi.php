@@ -42,7 +42,7 @@ if (!function_exists('nv_news_check_image_exit')) {
             $homeimgfile = '';
             $homeimgthumb = 0;
         }
-
+        
         return array(
             $homeimgfile,
             $homeimgthumb
@@ -236,121 +236,699 @@ $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_d
 $db->query('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_block VALUES (2, 6, 8)');
 
 $sth = $db->prepare('INSERT INTO ' . $db_config['prefix'] . '_' . $lang . '_' . $module_data . '_tags (tid, numnews, alias, image, description, keywords) VALUES (?, ?, ?, ?, ?, ?)');
-$sth->execute(array(1, 0, 'nguồn-mở', '', '', 'nguồn mở'));
-$sth->execute(array(2, 0, 'quen-thuộc', '', '', 'quen thuộc'));
-$sth->execute(array(3, 0, 'cộng-đồng', '', '', 'cộng đồng'));
-$sth->execute(array(4, 0, 'việt-nam', '', '', 'việt nam'));
-$sth->execute(array(5, 0, 'hoạt-động', '', '', 'hoạt động'));
-$sth->execute(array(6, 0, 'tin-tức', '', '', 'tin tức'));
-$sth->execute(array(7, 1, 'thương-mại-điện', '', '', 'thương mại điện'));
-$sth->execute(array(8, 0, 'điện-tử', '', '', 'điện tử'));
-$sth->execute(array(9, 13, 'nukeviet', '', '', 'nukeviet'));
-$sth->execute(array(10, 8, 'vinades', '', '', 'vinades'));
-$sth->execute(array(11, 3, 'lập-trình-viên', '', '', 'lập trình viên'));
-$sth->execute(array(12, 3, 'chuyên-viên-đồ-họa', '', '', 'chuyên viên đồ họa'));
-$sth->execute(array(13, 3, 'php', '', '', 'php'));
-$sth->execute(array(14, 2, 'mysql', '', '', 'mysql'));
-$sth->execute(array(15, 1, 'nhân-tài-đất-việt-2011', '', '', 'nhân tài đất việt 2011'));
-$sth->execute(array(16, 9, 'mã-nguồn-mở', '', '', 'mã nguồn mở'));
-$sth->execute(array(17, 2, 'nukeviet4', '', '', 'nukeviet4'));
-$sth->execute(array(18, 1, 'mail', '', '', 'mail'));
-$sth->execute(array(19, 1, 'fpt', '', '', 'fpt'));
-$sth->execute(array(20, 1, 'smtp', '', '', 'smtp'));
-$sth->execute(array(21, 1, 'bootstrap', '', '', 'bootstrap'));
-$sth->execute(array(22, 1, 'block', '', '', 'block'));
-$sth->execute(array(23, 1, 'modules', '', '', 'modules'));
-$sth->execute(array(24, 2, 'banner', '', '', 'banner'));
-$sth->execute(array(25, 1, 'liên-kết', '', '', 'liên kết'));
-$sth->execute(array(26, 2, 'hosting', '', '', 'hosting'));
-$sth->execute(array(27, 1, 'hỗ-trợ', '', '', 'hỗ trợ'));
-$sth->execute(array(28, 1, 'hợp-tác', '', '', 'hợp tác'));
-$sth->execute(array(29, 1, 'tốc-độ', '', '', 'tốc độ'));
-$sth->execute(array(30, 2, 'website', '', '', 'website'));
-$sth->execute(array(31, 1, 'bảo-mật', '', '', 'bảo mật'));
-$sth->execute(array(32, 4, 'giáo-dục', '', '', 'giáo dục'));
-$sth->execute(array(33, 1, 'edu-gate', '', '', 'edu gate'));
-$sth->execute(array(34, 2, 'lập-trình', '', '', 'lập trình'));
-$sth->execute(array(35, 1, 'logo', '', '', 'logo'));
-$sth->execute(array(36, 1, 'code', '', '', 'code'));
-$sth->execute(array(37, 1, 'thực-tập', '', '', 'thực tập'));
-$sth->execute(array(38, 1, 'kinh-doanh', '', '', 'kinh doanh'));
-$sth->execute(array(39, 1, 'nhân-viên', '', '', 'nhân viên'));
-$sth->execute(array(40, 1, 'bộ-gd&đt', '', '', 'Bộ GD&ĐT'));
-$sth->execute(array(41, 1, 'module', '', '', 'module'));
-$sth->execute(array(42, 1, 'php-nuke', '', '', 'php-nuke'));
+$sth->execute(array(
+    1,
+    0,
+    'nguồn-mở',
+    '',
+    '',
+    'nguồn mở'
+));
+$sth->execute(array(
+    2,
+    0,
+    'quen-thuộc',
+    '',
+    '',
+    'quen thuộc'
+));
+$sth->execute(array(
+    3,
+    0,
+    'cộng-đồng',
+    '',
+    '',
+    'cộng đồng'
+));
+$sth->execute(array(
+    4,
+    0,
+    'việt-nam',
+    '',
+    '',
+    'việt nam'
+));
+$sth->execute(array(
+    5,
+    0,
+    'hoạt-động',
+    '',
+    '',
+    'hoạt động'
+));
+$sth->execute(array(
+    6,
+    0,
+    'tin-tức',
+    '',
+    '',
+    'tin tức'
+));
+$sth->execute(array(
+    7,
+    1,
+    'thương-mại-điện',
+    '',
+    '',
+    'thương mại điện'
+));
+$sth->execute(array(
+    8,
+    0,
+    'điện-tử',
+    '',
+    '',
+    'điện tử'
+));
+$sth->execute(array(
+    9,
+    13,
+    'nukeviet',
+    '',
+    '',
+    'nukeviet'
+));
+$sth->execute(array(
+    10,
+    8,
+    'vinades',
+    '',
+    '',
+    'vinades'
+));
+$sth->execute(array(
+    11,
+    3,
+    'lập-trình-viên',
+    '',
+    '',
+    'lập trình viên'
+));
+$sth->execute(array(
+    12,
+    3,
+    'chuyên-viên-đồ-họa',
+    '',
+    '',
+    'chuyên viên đồ họa'
+));
+$sth->execute(array(
+    13,
+    3,
+    'php',
+    '',
+    '',
+    'php'
+));
+$sth->execute(array(
+    14,
+    2,
+    'mysql',
+    '',
+    '',
+    'mysql'
+));
+$sth->execute(array(
+    15,
+    1,
+    'nhân-tài-đất-việt-2011',
+    '',
+    '',
+    'nhân tài đất việt 2011'
+));
+$sth->execute(array(
+    16,
+    9,
+    'mã-nguồn-mở',
+    '',
+    '',
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    17,
+    2,
+    'nukeviet4',
+    '',
+    '',
+    'nukeviet4'
+));
+$sth->execute(array(
+    18,
+    1,
+    'mail',
+    '',
+    '',
+    'mail'
+));
+$sth->execute(array(
+    19,
+    1,
+    'fpt',
+    '',
+    '',
+    'fpt'
+));
+$sth->execute(array(
+    20,
+    1,
+    'smtp',
+    '',
+    '',
+    'smtp'
+));
+$sth->execute(array(
+    21,
+    1,
+    'bootstrap',
+    '',
+    '',
+    'bootstrap'
+));
+$sth->execute(array(
+    22,
+    1,
+    'block',
+    '',
+    '',
+    'block'
+));
+$sth->execute(array(
+    23,
+    1,
+    'modules',
+    '',
+    '',
+    'modules'
+));
+$sth->execute(array(
+    24,
+    2,
+    'banner',
+    '',
+    '',
+    'banner'
+));
+$sth->execute(array(
+    25,
+    1,
+    'liên-kết',
+    '',
+    '',
+    'liên kết'
+));
+$sth->execute(array(
+    26,
+    2,
+    'hosting',
+    '',
+    '',
+    'hosting'
+));
+$sth->execute(array(
+    27,
+    1,
+    'hỗ-trợ',
+    '',
+    '',
+    'hỗ trợ'
+));
+$sth->execute(array(
+    28,
+    1,
+    'hợp-tác',
+    '',
+    '',
+    'hợp tác'
+));
+$sth->execute(array(
+    29,
+    1,
+    'tốc-độ',
+    '',
+    '',
+    'tốc độ'
+));
+$sth->execute(array(
+    30,
+    2,
+    'website',
+    '',
+    '',
+    'website'
+));
+$sth->execute(array(
+    31,
+    1,
+    'bảo-mật',
+    '',
+    '',
+    'bảo mật'
+));
+$sth->execute(array(
+    32,
+    4,
+    'giáo-dục',
+    '',
+    '',
+    'giáo dục'
+));
+$sth->execute(array(
+    33,
+    1,
+    'edu-gate',
+    '',
+    '',
+    'edu gate'
+));
+$sth->execute(array(
+    34,
+    2,
+    'lập-trình',
+    '',
+    '',
+    'lập trình'
+));
+$sth->execute(array(
+    35,
+    1,
+    'logo',
+    '',
+    '',
+    'logo'
+));
+$sth->execute(array(
+    36,
+    1,
+    'code',
+    '',
+    '',
+    'code'
+));
+$sth->execute(array(
+    37,
+    1,
+    'thực-tập',
+    '',
+    '',
+    'thực tập'
+));
+$sth->execute(array(
+    38,
+    1,
+    'kinh-doanh',
+    '',
+    '',
+    'kinh doanh'
+));
+$sth->execute(array(
+    39,
+    1,
+    'nhân-viên',
+    '',
+    '',
+    'nhân viên'
+));
+$sth->execute(array(
+    40,
+    1,
+    'bộ-gd&đt',
+    '',
+    '',
+    'Bộ GD&ĐT'
+));
+$sth->execute(array(
+    41,
+    1,
+    'module',
+    '',
+    '',
+    'module'
+));
+$sth->execute(array(
+    42,
+    1,
+    'php-nuke',
+    '',
+    '',
+    'php-nuke'
+));
 
 $sth = $db->prepare("INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_" . $module_data . "_tags_id (id, tid, keyword) VALUES (?, ?, ?)");
-$sth->execute(array(1, 7, 'thương mại điện'));
-$sth->execute(array(1, 9, 'nukeviet'));
-$sth->execute(array(7, 10, 'vinades'));
-$sth->execute(array(7, 9, 'nukeviet'));
-$sth->execute(array(7, 11, 'lập trình viên'));
-$sth->execute(array(7, 12, 'chuyên viên đồ họa'));
-$sth->execute(array(7, 13, 'php'));
-$sth->execute(array(7, 14, 'mysql'));
-$sth->execute(array(10, 15, 'Nhân tài đất Việt 2011'));
-$sth->execute(array(10, 16, 'mã nguồn mở'));
-$sth->execute(array(10, 9, 'nukeviet'));
-$sth->execute(array(18, 17, 'nukeviet4'));
-$sth->execute(array(18, 9, 'nukeviet'));
-$sth->execute(array(18, 10, 'vinades'));
-$sth->execute(array(18, 13, 'php'));
-$sth->execute(array(18, 14, 'mysql'));
-$sth->execute(array(18, 18, 'mail'));
-$sth->execute(array(18, 19, 'fpt'));
-$sth->execute(array(18, 20, 'smtp'));
-$sth->execute(array(18, 21, 'bootstrap'));
-$sth->execute(array(18, 22, 'block'));
-$sth->execute(array(18, 23, 'modules'));
-$sth->execute(array(18, 16, 'mã nguồn mở'));
-$sth->execute(array(6, 16, 'mã nguồn mở'));
-$sth->execute(array(6, 9, 'nukeviet'));
-$sth->execute(array(6, 17, 'nukeviet4'));
-$sth->execute(array(6, 10, 'vinades'));
-$sth->execute(array(6, 24, 'banner'));
-$sth->execute(array(6, 25, 'liên kết'));
-$sth->execute(array(6, 26, 'hosting'));
-$sth->execute(array(6, 27, 'hỗ trợ'));
-$sth->execute(array(6, 28, 'hợp tác'));
-$sth->execute(array(17, 9, 'nukeviet'));
-$sth->execute(array(17, 32, 'giáo dục'));
-$sth->execute(array(17, 33, 'edu gate'));
-$sth->execute(array(15, 16, 'mã nguồn mở'));
-$sth->execute(array(15, 10, 'vinades'));
-$sth->execute(array(15, 9, 'nukeviet'));
-$sth->execute(array(15, 11, 'lập trình viên'));
-$sth->execute(array(15, 12, 'chuyên viên đồ họa'));
-$sth->execute(array(16, 9, 'nukeviet'));
-$sth->execute(array(16, 16, 'mã nguồn mở'));
-$sth->execute(array(16, 32, 'giáo dục'));
-$sth->execute(array(8, 10, 'vinades'));
-$sth->execute(array(8, 34, 'lập trình'));
-$sth->execute(array(8, 35, 'logo'));
-$sth->execute(array(8, 24, 'banner'));
-$sth->execute(array(8, 30, 'website'));
-$sth->execute(array(8, 36, 'code'));
-$sth->execute(array(8, 13, 'php'));
-$sth->execute(array(9, 16, 'mã nguồn mở'));
-$sth->execute(array(9, 10, 'vinades'));
-$sth->execute(array(9, 34, 'lập trình'));
-$sth->execute(array(9, 9, 'nukeviet'));
-$sth->execute(array(14, 37, 'thực tập'));
-$sth->execute(array(14, 10, 'vinades'));
-$sth->execute(array(14, 12, 'chuyên viên đồ họa'));
-$sth->execute(array(14, 11, 'lập trình viên'));
-$sth->execute(array(14, 9, 'nukeviet'));
-$sth->execute(array(14, 16, 'mã nguồn mở'));
-$sth->execute(array(12, 38, 'kinh doanh'));
-$sth->execute(array(12, 9, 'nukeviet'));
-$sth->execute(array(12, 32, 'giáo dục'));
-$sth->execute(array(12, 39, 'nhân viên'));
-$sth->execute(array(11, 16, 'mã nguồn mở'));
-$sth->execute(array(11, 9, 'nukeviet'));
-$sth->execute(array(11, 40, 'Bộ GD&ĐT'));
-$sth->execute(array(11, 32, 'giáo dục'));
-$sth->execute(array(1, 41, 'module'));
-$sth->execute(array(1, 16, 'mã nguồn mở'));
-$sth->execute(array(1, 42, 'php-nuke'));
+$sth->execute(array(
+    1,
+    7,
+    'thương mại điện'
+));
+$sth->execute(array(
+    1,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    7,
+    10,
+    'vinades'
+));
+$sth->execute(array(
+    7,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    7,
+    11,
+    'lập trình viên'
+));
+$sth->execute(array(
+    7,
+    12,
+    'chuyên viên đồ họa'
+));
+$sth->execute(array(
+    7,
+    13,
+    'php'
+));
+$sth->execute(array(
+    7,
+    14,
+    'mysql'
+));
+$sth->execute(array(
+    10,
+    15,
+    'Nhân tài đất Việt 2011'
+));
+$sth->execute(array(
+    10,
+    16,
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    10,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    18,
+    17,
+    'nukeviet4'
+));
+$sth->execute(array(
+    18,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    18,
+    10,
+    'vinades'
+));
+$sth->execute(array(
+    18,
+    13,
+    'php'
+));
+$sth->execute(array(
+    18,
+    14,
+    'mysql'
+));
+$sth->execute(array(
+    18,
+    18,
+    'mail'
+));
+$sth->execute(array(
+    18,
+    19,
+    'fpt'
+));
+$sth->execute(array(
+    18,
+    20,
+    'smtp'
+));
+$sth->execute(array(
+    18,
+    21,
+    'bootstrap'
+));
+$sth->execute(array(
+    18,
+    22,
+    'block'
+));
+$sth->execute(array(
+    18,
+    23,
+    'modules'
+));
+$sth->execute(array(
+    18,
+    16,
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    6,
+    16,
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    6,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    6,
+    17,
+    'nukeviet4'
+));
+$sth->execute(array(
+    6,
+    10,
+    'vinades'
+));
+$sth->execute(array(
+    6,
+    24,
+    'banner'
+));
+$sth->execute(array(
+    6,
+    25,
+    'liên kết'
+));
+$sth->execute(array(
+    6,
+    26,
+    'hosting'
+));
+$sth->execute(array(
+    6,
+    27,
+    'hỗ trợ'
+));
+$sth->execute(array(
+    6,
+    28,
+    'hợp tác'
+));
+$sth->execute(array(
+    17,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    17,
+    32,
+    'giáo dục'
+));
+$sth->execute(array(
+    17,
+    33,
+    'edu gate'
+));
+$sth->execute(array(
+    15,
+    16,
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    15,
+    10,
+    'vinades'
+));
+$sth->execute(array(
+    15,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    15,
+    11,
+    'lập trình viên'
+));
+$sth->execute(array(
+    15,
+    12,
+    'chuyên viên đồ họa'
+));
+$sth->execute(array(
+    16,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    16,
+    16,
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    16,
+    32,
+    'giáo dục'
+));
+$sth->execute(array(
+    8,
+    10,
+    'vinades'
+));
+$sth->execute(array(
+    8,
+    34,
+    'lập trình'
+));
+$sth->execute(array(
+    8,
+    35,
+    'logo'
+));
+$sth->execute(array(
+    8,
+    24,
+    'banner'
+));
+$sth->execute(array(
+    8,
+    30,
+    'website'
+));
+$sth->execute(array(
+    8,
+    36,
+    'code'
+));
+$sth->execute(array(
+    8,
+    13,
+    'php'
+));
+$sth->execute(array(
+    9,
+    16,
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    9,
+    10,
+    'vinades'
+));
+$sth->execute(array(
+    9,
+    34,
+    'lập trình'
+));
+$sth->execute(array(
+    9,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    14,
+    37,
+    'thực tập'
+));
+$sth->execute(array(
+    14,
+    10,
+    'vinades'
+));
+$sth->execute(array(
+    14,
+    12,
+    'chuyên viên đồ họa'
+));
+$sth->execute(array(
+    14,
+    11,
+    'lập trình viên'
+));
+$sth->execute(array(
+    14,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    14,
+    16,
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    12,
+    38,
+    'kinh doanh'
+));
+$sth->execute(array(
+    12,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    12,
+    32,
+    'giáo dục'
+));
+$sth->execute(array(
+    12,
+    39,
+    'nhân viên'
+));
+$sth->execute(array(
+    11,
+    16,
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    11,
+    9,
+    'nukeviet'
+));
+$sth->execute(array(
+    11,
+    40,
+    'Bộ GD&ĐT'
+));
+$sth->execute(array(
+    11,
+    32,
+    'giáo dục'
+));
+$sth->execute(array(
+    1,
+    41,
+    'module'
+));
+$sth->execute(array(
+    1,
+    16,
+    'mã nguồn mở'
+));
+$sth->execute(array(
+    1,
+    42,
+    'php-nuke'
+));
 
 $copyright = 'Chú ý: Việc đăng lại bài viết trên ở website hoặc các phương tiện truyền thông khác mà không ghi rõ nguồn http://nukeviet.vn là vi phạm bản quyền';
 

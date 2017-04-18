@@ -280,7 +280,7 @@ if ($step == 1) {
     $array_resquest['php_required'] = $sys_info['php_required'];
     $array_resquest['php_version'] = PHP_VERSION;
     $sys_info['php_support'] = (version_compare(PHP_VERSION, $sys_info['php_required']) < 0) ? 0 : 1;
-    $array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'xml_support', 'mcrypt_support', 'session_support', 'fileuploads_support' );
+    $array_resquest_key = array( 'php_support', 'opendir_support', 'gd_support', 'xml_support', 'openssl_support', 'session_support', 'fileuploads_support' );
     foreach ($array_resquest_key as $key) {
         $array_resquest['class_' . $key] = ($sys_info[$key]) ? 'highlight_green' : 'highlight_red';
         $array_resquest[$key] = ($sys_info[$key]) ? $lang_module['compatible'] : $lang_module['not_compatible'];
@@ -377,8 +377,7 @@ if ($step == 1) {
             }
         }
 
-        echo json_encode($respon);
-        die();
+        nv_jsonOutput($respon);
     }
 
     if (in_array($db_config['dbtype'], $PDODrivers) and ! empty($db_config['dbhost']) and preg_match('#[a-z]#ui', $db_config['dbname']) and ! empty($db_config['dbuname']) and ! empty($db_config['prefix'])) {
@@ -674,7 +673,7 @@ if ($step == 1) {
 
     define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
     $array_data['site_name'] = $nv_Request->get_title('site_name', 'post', $array_data['site_name'], 1);
-    $array_data['nv_login'] = nv_substr($nv_Request->get_title('nv_login', 'post', $array_data['nv_login'], 1), 0, NV_UNICKMAX);
+    $array_data['nv_login'] = nv_substr($nv_Request->get_title('nv_login', 'post', $array_data['nv_login'], 1), 0, $global_config['nv_unickmax']);
     $array_data['nv_email'] = $nv_Request->get_title('nv_email', 'post', $array_data['nv_email']);
     $array_data['nv_password'] = $nv_Request->get_title('nv_password', 'post', $array_data['nv_password']);
     $array_data['re_password'] = $nv_Request->get_title('re_password', 'post', $array_data['re_password']);
@@ -693,8 +692,8 @@ if ($step == 1) {
                 $error = 'Sorry! Could not connect to data server';
             }
             else {
-                $check_login = nv_check_valid_login($array_data['nv_login'], NV_UNICKMAX, NV_UNICKMIN);
-                $check_pass = nv_check_valid_pass($array_data['nv_password'], NV_UPASSMAX, NV_UPASSMIN);
+                $check_login = nv_check_valid_login($array_data['nv_login'], $global_config['nv_unickmax'], $global_config['nv_unickmin']);
+                $check_pass = nv_check_valid_pass($array_data['nv_password'], $global_config['nv_upassmax'], $global_config['nv_upassmin']);
                 $check_email = nv_check_valid_email($array_data['nv_email']);
 
                 if (empty($array_data['site_name'])) {
@@ -793,6 +792,7 @@ if ($step == 1) {
                         nv_save_file_config();
 
                         $array_config_rewrite = array(
+                            'rewrite_enable' => $global_config['rewrite_enable'],
                             'rewrite_optional' => $global_config['rewrite_optional'],
                             'rewrite_endurl' => $global_config['rewrite_endurl'],
                             'rewrite_exturl' => $global_config['rewrite_exturl'],
@@ -815,10 +815,10 @@ if ($step == 1) {
 
                                 $check_rewrite_file = nv_check_rewrite_file();
 
-                                if ($check_rewrite_file) {
+                                if ($global_config['rewrite_enable'] and $check_rewrite_file) {
                                     $content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'sitemap.xml';
                                 } else {
-                                    $content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php/SitemapIndex' . $global_config['rewrite_endurl'];
+                                    $content_sitemap = 'Sitemap: ' . NV_MY_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_NAME_VARIABLE . '=SitemapIndex' . $global_config['rewrite_endurl'];
                                 }
 
                                 $contents = str_replace('Sitemap: http://yousite.com/?nv=SitemapIndex', $content_sitemap, $contents);

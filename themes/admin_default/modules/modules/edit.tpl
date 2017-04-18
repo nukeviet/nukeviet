@@ -16,11 +16,11 @@
 			</tfoot>
 			<tbody>
 				<tr>
-					<td>{LANG.module_name}:</td>
+					<td>{LANG.module_name} <span class="text-danger">(*)</span>:</td>
 					<td><input class="w300 form-control" name="mod_name" id="mod_name" type="text" value="{DATA.mod_name}" maxlength="55" readonly="readonly"/></td>
 				</tr>
 				<tr>
-					<td>{LANG.custom_title}:</td>
+					<td>{LANG.custom_title} <span class="text-danger">(*)</span>:</td>
 					<td><input class="w300 form-control" name="custom_title" id="custom_title" type="text" value="{DATA.custom_title}" maxlength="100" /></td>
 				</tr>
 				<tr>
@@ -48,6 +48,10 @@
 					</select></td>
 				</tr>
 				<!-- END: mobile -->
+				<tr>
+					<td>{LANG.site_title}:</td>
+					<td><input class="w300 form-control" name="site_title" id="site_title" type="text" value="{DATA.site_title}" maxlength="255" /></td>
+				</tr>
 				<tr>
 					<td>{LANG.description}:</td>
 					<td><input class="w300 form-control" name="description" id="description" type="text" value="{DATA.description}" maxlength="255" /></td>
