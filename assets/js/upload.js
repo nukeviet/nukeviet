@@ -631,7 +631,7 @@ function createfolder() {
     $("div#createfolder").dialog("open")
 }
 
-//Táº¡o láº¡i áº£nh thumb
+// Tạo lại ảnh Thumb
 function recreatethumb() {
     $("div#recreatethumb").dialog("open")
 	$("#recreatethumb_ok").show();
@@ -1804,7 +1804,7 @@ var NVUPLOAD = {
 
                         NVUPLOAD.updateList();
                         
-                        // Kiểm tra kích thước file (Fix plupload 2.3.1)
+                        // Xác định resize ảnh (bug plupload 2.3.1)
                         if (nv_resize != false) {
                             var lastKey = NVUPLOAD.uploader.files.length - 1;
                             $.each(NVUPLOAD.uploader.files, function(k, file) {
@@ -1971,7 +1971,7 @@ var NVUPLOAD = {
                         NVUPLOAD.uploader.settings.multipart_params = {
                             "filealt": filealt
                         };
-                        // Xác định xem có resize ảnh không (fix lỗi plupload 2.3.1)
+                        // Xác định resize ảnh (bug plupload 2.3.1)
                         if (nv_resize != false) {
                             if (typeof file.clientResize != "undefined" && file.clientResize) {
                                 NVUPLOAD.uploader.settings.resize = nv_resize;
