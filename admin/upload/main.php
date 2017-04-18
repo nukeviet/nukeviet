@@ -95,10 +95,6 @@ if ($popup) {
         $xtpl->parse('main.auto_alt');
     }
 
-    if (! $global_config['nv_auto_resize']) {
-        $xtpl->parse('main.no_auto_resize');
-    }
-
     $xtpl->parse('main');
     $contents = $xtpl->text('main');
 
