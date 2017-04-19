@@ -192,15 +192,24 @@ $xtpl->assign('ISCOPY', $copy);
 
 foreach ($layout_array as $value) {
     $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-    $xtpl->assign('LAYOUT_FUNC', array('key' => $value, 'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : ''));
+    $xtpl->assign('LAYOUT_FUNC', array(
+        'key' => $value,
+        'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : ''
+    ));
     $xtpl->parse('main.layout_func');
 }
 $sql = "SELECT * FROM " . $db_config['prefix'] . "_googleplus ORDER BY weight ASC";
 $_grows = $db->query($sql)->fetchAll();
 if (sizeof($_grows)) {
     $array_googleplus = array();
-    $array_googleplus[] = array('gid' => -1, 'title' => $lang_module['googleplus_1']);
-    $array_googleplus[] = array('gid' => 0, 'title' => $lang_module['googleplus_0']);
+    $array_googleplus[] = array(
+        'gid' => -1,
+        'title' => $lang_module['googleplus_1']
+    );
+    $array_googleplus[] = array(
+        'gid' => 0,
+        'title' => $lang_module['googleplus_0']
+    );
     foreach ($_grows as $grow) {
         $array_googleplus[] = $grow;
     }
@@ -214,7 +223,11 @@ if (sizeof($_grows)) {
 
 $activecomm = explode(',', $row['activecomm']);
 foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('ACTIVECOMM', array('value' => $_group_id, 'checked' => in_array($_group_id, $activecomm) ? ' checked="checked"' : '', 'title' => $_title));
+    $xtpl->assign('ACTIVECOMM', array(
+        'value' => $_group_id,
+        'checked' => in_array($_group_id, $activecomm) ? ' checked="checked"' : '',
+        'title' => $_title
+    ));
     $xtpl->parse('main.activecomm');
 }
 
@@ -223,7 +236,11 @@ if (empty($row['alias'])) {
 }
 
 // position images
-$array_imgposition = array(0 => $lang_module['imgposition_0'], 1 => $lang_module['imgposition_1'], 2 => $lang_module['imgposition_2']);
+$array_imgposition = array(
+    0 => $lang_module['imgposition_0'],
+    1 => $lang_module['imgposition_1'],
+    2 => $lang_module['imgposition_2']
+);
 foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
     $sl = ($id_imgposition == $row['imageposition']) ? ' selected="selected"' : '';
     $xtpl->assign('id_imgposition', $id_imgposition);

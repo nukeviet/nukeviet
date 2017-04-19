@@ -24,7 +24,10 @@ if ($num < 1) {
     die();
 }
 
-$array_status = array($lang_module['inactive'], $lang_module['active']);
+$array_status = array(
+    $lang_module['inactive'],
+    $lang_module['active']
+);
 
 $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
@@ -36,13 +39,20 @@ foreach ($_rows as $row) {
     $row['url_edit'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;id=' . $row['id'];
     $row['checkss'] = md5($row['id'] . NV_CHECK_SESSION);
     for ($i = 1; $i <= $num; ++$i) {
-        $xtpl->assign('WEIGHT', array('w' => $i, 'selected' => ($i == $row['weight']) ? ' selected="selected"' : ''));
+        $xtpl->assign('WEIGHT', array(
+            'w' => $i,
+            'selected' => ($i == $row['weight']) ? ' selected="selected"' : ''
+        ));
 
         $xtpl->parse('main.row.weight');
     }
 
     foreach ($array_status as $key => $val) {
-        $xtpl->assign('STATUS', array('key' => $key, 'val' => $val, 'selected' => ($key == $row['status']) ? ' selected="selected"' : ''));
+        $xtpl->assign('STATUS', array(
+            'key' => $key,
+            'val' => $val,
+            'selected' => ($key == $row['status']) ? ' selected="selected"' : ''
+        ));
 
         $xtpl->parse('main.row.status');
     }

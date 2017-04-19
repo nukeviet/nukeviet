@@ -23,7 +23,10 @@ if ($nv_Request->isset_request('get_topic_json', 'post, get')) {
 
     $array_data = array();
     while (list($topicid, $title) = $sth->fetch(3)) {
-        $array_data[] = array('id' => $topicid, 'title' => $title);
+        $array_data[] = array(
+            'id' => $topicid,
+            'title' => $title
+        );
     }
 
     nv_jsonOutput($array_data);
@@ -119,9 +122,57 @@ while (list($bid_i, $adddefault_i, $title_i) = $result->fetch(3)) {
 
 $catid = $nv_Request->get_int('catid', 'get', 0);
 $parentid = $nv_Request->get_int('parentid', 'get', 0);
-$array_imgposition = array(0 => $lang_module['imgposition_0'], 1 => $lang_module['imgposition_1'], 2 => $lang_module['imgposition_2']);
+$array_imgposition = array(
+    0 => $lang_module['imgposition_0'],
+    1 => $lang_module['imgposition_1'],
+    2 => $lang_module['imgposition_2']
+);
 
-$rowcontent = array('id' => '', 'catid' => $catid, 'listcatid' => $catid . ',' . $parentid, 'topicid' => '', 'admin_id' => $admin_id, 'author' => '', 'sourceid' => 0, 'addtime' => NV_CURRENTTIME, 'edittime' => NV_CURRENTTIME, 'status' => 0, 'publtime' => NV_CURRENTTIME, 'exptime' => 0, 'archive' => 1, 'title' => '', 'alias' => '', 'hometext' => '', 'sourcetext' => '', 'homeimgfile' => '', 'homeimgalt' => '', 'homeimgthumb' => '', 'imgposition' => isset($module_config[$module_name]['imgposition']) ? $module_config[$module_name]['imgposition'] : 1, 'titlesite' => '', 'description' => '', 'bodyhtml' => '', 'copyright' => 0, 'gid' => 0, 'inhome' => 1, 'allowed_comm' => $module_config[$module_name]['setcomm'], 'allowed_rating' => 1, 'external_link' => 0, 'allowed_send' => 1, 'allowed_print' => 1, 'allowed_save' => 1, 'hitstotal' => 0, 'hitscm' => 0, 'total_rating' => 0, 'click_rating' => 0, 'keywords' => '', 'keywords_old' => '', 'instant_active' => isset($module_config[$module_name]['instant_articles_auto']) ? $module_config[$module_name]['instant_articles_auto'] : 0, 'instant_template' => '', 'instant_creatauto' => 0, 'mode' => 'add');
+$rowcontent = array(
+    'id' => '',
+    'catid' => $catid,
+    'listcatid' => $catid . ',' . $parentid,
+    'topicid' => '',
+    'admin_id' => $admin_id,
+    'author' => '',
+    'sourceid' => 0,
+    'addtime' => NV_CURRENTTIME,
+    'edittime' => NV_CURRENTTIME,
+    'status' => 0,
+    'publtime' => NV_CURRENTTIME,
+    'exptime' => 0,
+    'archive' => 1,
+    'title' => '',
+    'alias' => '',
+    'hometext' => '',
+    'sourcetext' => '',
+    'homeimgfile' => '',
+    'homeimgalt' => '',
+    'homeimgthumb' => '',
+    'imgposition' => isset($module_config[$module_name]['imgposition']) ? $module_config[$module_name]['imgposition'] : 1,
+    'titlesite' => '',
+    'description' => '',
+    'bodyhtml' => '',
+    'copyright' => 0,
+    'gid' => 0,
+    'inhome' => 1,
+    'allowed_comm' => $module_config[$module_name]['setcomm'],
+    'allowed_rating' => 1,
+    'external_link' => 0,
+    'allowed_send' => 1,
+    'allowed_print' => 1,
+    'allowed_save' => 1,
+    'hitstotal' => 0,
+    'hitscm' => 0,
+    'total_rating' => 0,
+    'click_rating' => 0,
+    'keywords' => '',
+    'keywords_old' => '',
+    'instant_active' => isset($module_config[$module_name]['instant_articles_auto']) ? $module_config[$module_name]['instant_articles_auto'] : 0,
+    'instant_template' => '',
+    'instant_creatauto' => 0,
+    'mode' => 'add'
+);
 
 $rowcontent['topictext'] = '';
 $page_title = $lang_module['content_add'];
@@ -974,7 +1025,15 @@ foreach ($global_array_cat as $catid_i => $array_value) {
     if (!empty($check_show)) {
         $space = intval($array_value['lev']) * 30;
         $catiddisplay = (sizeof($array_catid_in_row) > 1 and (in_array($catid_i, $array_catid_in_row))) ? '' : ' display: none;';
-        $temp = array('catid' => $catid_i, 'space' => $space, 'title' => $array_value['title'], 'disabled' => (!in_array($catid_i, $array_cat_check_content)) ? ' disabled="disabled"' : '', 'checked' => (in_array($catid_i, $array_catid_in_row)) ? ' checked="checked"' : '', 'catidchecked' => ($catid_i == $rowcontent['catid']) ? ' checked="checked"' : '', 'catiddisplay' => $catiddisplay);
+        $temp = array(
+            'catid' => $catid_i,
+            'space' => $space,
+            'title' => $array_value['title'],
+            'disabled' => (!in_array($catid_i, $array_cat_check_content)) ? ' disabled="disabled"' : '',
+            'checked' => (in_array($catid_i, $array_catid_in_row)) ? ' checked="checked"' : '',
+            'catidchecked' => ($catid_i == $rowcontent['catid']) ? ' checked="checked"' : '',
+            'catiddisplay' => $catiddisplay
+        );
         $xtpl->assign('CATS', $temp);
         $xtpl->parse('main.catid');
     }
@@ -1031,7 +1090,11 @@ $xtpl->assign('emin', $select);
 // allowed comm
 $allowed_comm = explode(',', $rowcontent['allowed_comm']);
 foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('ALLOWED_COMM', array('value' => $_group_id, 'checked' => in_array($_group_id, $allowed_comm) ? ' checked="checked"' : '', 'title' => $_title));
+    $xtpl->assign('ALLOWED_COMM', array(
+        'value' => $_group_id,
+        'checked' => in_array($_group_id, $allowed_comm) ? ' checked="checked"' : '',
+        'title' => $_title
+    ));
     $xtpl->parse('main.allowed_comm');
 }
 if ($module_config[$module_name]['allowed_comm'] != '-1') {
@@ -1065,7 +1128,11 @@ if ($has_editor) {
 $shtm = '';
 if (sizeof($array_block_cat_module)) {
     foreach ($array_block_cat_module as $bid_i => $bid_title) {
-        $xtpl->assign('BLOCKS', array('title' => $bid_title, 'bid' => $bid_i, 'checked' => in_array($bid_i, $id_block_content) ? 'checked="checked"' : ''));
+        $xtpl->assign('BLOCKS', array(
+            'title' => $bid_title,
+            'bid' => $bid_i,
+            'checked' => in_array($bid_i, $id_block_content) ? 'checked="checked"' : ''
+        ));
         $xtpl->parse('main.block_cat.loop');
     }
     $xtpl->parse('main.block_cat');
@@ -1134,8 +1201,14 @@ $sql = 'SELECT * FROM ' . $db_config['prefix'] . '_googleplus ORDER BY weight AS
 $_array = $db->query($sql)->fetchAll();
 if (sizeof($_array)) {
     $array_googleplus = array();
-    $array_googleplus[] = array('gid' => -1, 'title' => $lang_module['googleplus_1']);
-    $array_googleplus[] = array('gid' => 0, 'title' => $lang_module['googleplus_0']);
+    $array_googleplus[] = array(
+        'gid' => -1,
+        'title' => $lang_module['googleplus_1']
+    );
+    $array_googleplus[] = array(
+        'gid' => 0,
+        'title' => $lang_module['googleplus_0']
+    );
     foreach ($_array as $row) {
         $array_googleplus[] = $row;
     }
