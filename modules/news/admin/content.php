@@ -207,12 +207,9 @@ $array_keywords_old = array( );
 $FBIA = new \NukeViet\Facebook\InstantArticles( $lang_module );
 
 $rowcontent['id'] = $nv_Request->get_int( 'id', 'get,post', 0 );
-$copy = $nv_Request->isset_request('copy', 'get');
 if($nv_Request->isset_request('copy', 'get,post')){
-	$is_copy = 'copy';
 	$copy = 1;
 } else {
-	$is_copy = '';
 	$copy = 0;
 }
 
@@ -1227,7 +1224,7 @@ $xtpl = new XTemplate( 'content.tpl', NV_ROOTDIR . '/themes/' . $global_config['
 $xtpl->assign( 'LANG', $lang_module );
 $xtpl->assign( 'GLANG', $lang_global );
 $xtpl->assign( 'rowcontent', $rowcontent );
-$xtpl->assign( 'ISCOPY', $is_copy );
+$xtpl->assign( 'ISCOPY', $copy );
 $xtpl->assign( 'NV_BASE_ADMINURL', NV_BASE_ADMINURL );
 $xtpl->assign( 'NV_NAME_VARIABLE', NV_NAME_VARIABLE );
 $xtpl->assign( 'NV_OP_VARIABLE', NV_OP_VARIABLE );

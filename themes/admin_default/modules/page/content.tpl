@@ -4,7 +4,7 @@
 <!-- END: error -->
 <form action="{FORM_ACTION}" method="post" class="confirm-reload">
 	<input name="save" type="hidden" value="1" />
-	<input type="hidden" value="1" name="{ISCOPY}" />
+	<input type="hidden" value="{ISCOPY}" name="copy" />
 	<div class="row">
 		<div class="col-sm-24 col-md-18">
 			<div class="table-responsive">

@@ -315,7 +315,7 @@
 	<div class="text-center">
 		<br/>
 		<input type="hidden" value="1" name="save" />
-		<input type="hidden" value="1" name="{ISCOPY}" />
+		<input type="hidden" value="{ISCOPY}" name="copy" />
 		<input type="hidden" value="{rowcontent.id}" name="id" />
 		<!-- BEGIN:status_save -->
 		<input class="btn btn-primary submit-post" name="statussave" type="submit" value="{LANG.save}" />

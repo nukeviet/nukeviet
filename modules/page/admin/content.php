@@ -13,12 +13,9 @@ if (! defined('NV_IS_FILE_ADMIN')) {
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
-$copy = $nv_Request->isset_request('copy', 'get');
 if($nv_Request->isset_request('copy', 'get,post')){
-	$is_copy = 'copy';
 	$copy = 1;
 } else {
-	$is_copy = '';
 	$copy = 0;
 }
 
@@ -191,7 +188,7 @@ $xtpl->assign('DATA', $row);
 $xtpl->assign('BODYTEXT', $row['bodytext']);
 $xtpl->assign('SOCIALBUTTON', ($row['socialbutton']) ? ' checked="checked"' : '');
 $xtpl->assign('HOST_POST', ($row['hot_post']) ? ' checked="checked"' : '');
-$xtpl->assign( 'ISCOPY', $is_copy );
+$xtpl->assign( 'ISCOPY', $copy );
 
 foreach ($layout_array as $value) {
     $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
