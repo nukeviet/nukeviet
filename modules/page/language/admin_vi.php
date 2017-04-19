@@ -71,3 +71,4 @@ $lang_module['config_facebookapi_note'] = ' (Có dạng 1419186468293063, <a hre
 $lang_module['config_save'] = 'Lưu cấu hình';
 
 $lang_module['setting_copy_page'] = 'Cho phép copy bài viết';
+$lang_module['title_copy_page'] = 'Sao chép bài viết';

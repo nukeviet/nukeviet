@@ -348,3 +348,4 @@ $lang_module['dulicate_takeover'] = 'Chiếm quyền sửa bài viết';
 $lang_module['dulicate_edit_takeover'] = 'Bạn đã bị chiếm quyền chỉnh sửa bài viết này bởi  tài khoản %s lúc %s. Những thay đổi của bạn không thể lưu vào hệ thống, hãy sao chép lại để tránh mất nội dung đã thay đổi.';
 
 $lang_module['setting_copy_news'] = 'Cho phép copy bài viết';
+$lang_module['title_copy_news'] = 'Sao chép bài viết';
