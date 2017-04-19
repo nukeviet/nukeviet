@@ -72,15 +72,9 @@
 					<th class="text-center"><a href="{base_url_publtime}">{LANG.content_publ_date}</a></th>
 					<th>{LANG.content_admin}</th>
 					<th>{LANG.status}</th>
-                    <th class="text-center">
-					   <a href="{base_url_hitstotal}"><em title="{LANG.hitstotal}" class="fa fa-eye">&nbsp;</em></a>
-                    </th>
-                    <th class="text-center">
-					   <a href="{base_url_hitscm}"><em title="{LANG.numcomments}" class="fa fa-comment-o">&nbsp;</em></a>
-                    </th>
-                    <th class="text-center">
-					   <em title="{LANG.keywords}" class="fa fa-tags">&nbsp;</em>
-                    </th>
+					<th class="text-center"><a href="{base_url_hitstotal}"><em title="{LANG.hitstotal}" class="fa fa-eye">&nbsp;</em></a></th>
+					<th class="text-center"><a href="{base_url_hitscm}"><em title="{LANG.numcomments}" class="fa fa-comment-o">&nbsp;</em></a></th>
+					<th class="text-center"><em title="{LANG.keywords}" class="fa fa-tags">&nbsp;</em></th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -89,38 +83,29 @@
 				<tr class="{ROW.class}">
 					<td class="text-center"><input type="checkbox" onclick="nv_UncheckAll(this.form, 'idcheck[]', 'check_all[]', this.checked);" value="{ROW.id}" name="idcheck[]" /></td>
 					<td class="text-left">
-						<p>
-						    <!-- BEGIN: text -->
-						    <strong><em>{LANG.status_4}</em></strong>:
-						    <!-- END: text -->
-						    <a target="_blank" href="{ROW.link}">{ROW.title}</a>
-						</p>
-					</td>
+					<p>
+						<!-- BEGIN: text -->
+						<strong><em>{LANG.status_4}</em></strong>: <!-- END: text -->
+						<a target="_blank" href="{ROW.link}">{ROW.title}</a>
+					</p></td>
 					<td>{ROW.publtime}</td>
 					<td>{ROW.username}</td>
 					<td title="{ROW.status}">{ROW.status}</td>
-                    <td class="text-center">{ROW.hitstotal}</td>
-                    <td class="text-center">{ROW.hitscm}</td>
-                    <td class="text-center">{ROW.numtags}</td>
-					<td class="text-center">
-						<!-- BEGIN: excdata -->
-						<a href="{ROW.url_send}" class="btn btn-success btn-xs"><em class="fa fa-paper-plane-o fa-lg">&nbsp;</em>{LANG.send}</a> &nbsp;
-						<!-- END: excdata -->
-						{ROW.feature}
-					</td>
+					<td class="text-center">{ROW.hitstotal}</td>
+					<td class="text-center">{ROW.hitscm}</td>
+					<td class="text-center">{ROW.numtags}</td>
+					<td class="text-center"><!-- BEGIN: copy_news --><a href="{URL_COPY}" class="btn btn-success btn-xs" title="{LANG.title_copy_news}" ><em class="fa fa-copy fa-lg">&nbsp;</em></a> &nbsp; <!-- END: copy_news --><!-- BEGIN: excdata --><a href="{ROW.url_send}" class="btn btn-success btn-xs"><em class="fa fa-paper-plane-o fa-lg">&nbsp;</em>{LANG.send}</a> &nbsp; <!-- END: excdata --> {ROW.feature} </td>
 				</tr>
 				<!-- END: loop -->
 			</tbody>
 			<tfoot>
 				<tr class="text-left">
 					<td colspan="12">
-						<select class="form-control" name="action" id="action">
-							<!-- BEGIN: action -->
-							<option value="{ACTION.value}">{ACTION.title}</option>
-							<!-- END: action -->
-						</select>
-						<input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{NV_CHECK_SESSION}', '{LANG.msgnocheck}')" value="{LANG.action}" />
-					</td>
+					<select class="form-control" name="action" id="action">
+						<!-- BEGIN: action -->
+						<option value="{ACTION.value}">{ACTION.title}</option>
+						<!-- END: action -->
+					</select><input type="button" class="btn btn-primary" onclick="nv_main_action(this.form, '{NV_CHECK_SESSION}', '{LANG.msgnocheck}')" value="{LANG.action}" /></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -134,7 +119,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$("#catid").select2({
-			language: '{NV_LANG_DATA}'
+			language : '{NV_LANG_DATA}'
 		});
 	});
 </script>

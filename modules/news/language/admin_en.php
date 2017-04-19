@@ -330,3 +330,5 @@ $lang_module['dulicate_edit'] = 'The article <b>%s </b> is being edited by the a
 $lang_module['dulicate_edit_admin'] = 'The article <b>%s </b> is being edited by the account <b>%s</b> at %s. Do you want to <b>Take over the editor of the post</b>?';
 $lang_module['dulicate_takeover'] = 'Take over the editor of the post';
 $lang_module['dulicate_edit_takeover'] = 'You have been take over by this account %s at %s. Your changes can not be saved to the system, please copy again to avoid losing your changes.';
+
+$lang_module['setting_copy_news'] = 'Copy the article';
