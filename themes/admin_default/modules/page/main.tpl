@@ -34,13 +34,7 @@
 					<option value="{STATUS.key}"{STATUS.selected}>{STATUS.val}</option>
 					<!-- END: status -->
 				</select></td>
-				<td class="text-center">
-					<!-- BEGIN: copy_page -->
-					<a href={URL_COPY} title="{LANG.title_copy_page}"><em class="fa fa-copy fa-lg">&nbsp;</em></a>
-					<!-- END: copy_page -->
-					<em class="fa fa-edit fa-lg">&nbsp;</em> <a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp;
-					<em class="fa fa-trash-o fa-lg">&nbsp;</em> <a href="javascript:void(0);" onclick="nv_module_del({ROW.id}, '{ROW.checkss}');">{GLANG.delete}</a>
-				</td>
+				<td class="text-center"><!-- BEGIN: copy_page --><a href={URL_COPY} title="{LANG.title_copy_page}"><em class="fa fa-copy fa-lg">&nbsp;</em></a><!-- END: copy_page --><em class="fa fa-edit fa-lg">&nbsp;</em><a href="{ROW.url_edit}">{GLANG.edit}</a> &nbsp; <em class="fa fa-trash-o fa-lg">&nbsp;</em><a href="javascript:void(0);" onclick="nv_module_del({ROW.id}, '{ROW.checkss}');">{GLANG.delete}</a></td>
 			</tr>
 			<!-- END: row -->
 		</tbody>

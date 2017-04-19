@@ -1,6 +1,8 @@
 <!-- BEGIN: main -->
 <!-- BEGIN: error -->
-<div class="alert alert-danger">{error}</div>
+<div class="alert alert-danger">
+	{error}
+</div>
 <!-- END: error -->
 
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
@@ -34,8 +36,7 @@
 							<!-- BEGIN: rowstopic -->
 							<option value="{topicid}" {sl}>{topic_title}</option>
 							<!-- END: rowstopic -->
-						</select>
-						<input class="form-control w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
+						</select><input class="form-control w200" type="text" maxlength="255" id="AjaxTopicText" value="{rowcontent.topictext}" name="topictext"/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -45,7 +46,7 @@
 				<tbody>
 					<tr>
 						<td><strong>{LANG.content_homeimg}</strong></td>
-						<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/> <input id="select-img-post" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
+						<td><input class="form-control" style="width:380px" type="text" name="homeimg" id="homeimg" value="{rowcontent.homeimgfile}"/><input id="select-img-post" type="button" value="Browse server" name="selectimg" class="btn btn-info" /></td>
 					</tr>
 					<tr>
 						<td>{LANG.content_homeimgalt}</td>
@@ -65,15 +66,13 @@
 			<table class="table table-striped table-bordered table-hover">
 				<tbody>
 					<tr>
-						<td><strong>{LANG.content_hometext}</strong> <i>{LANG.content_notehome}.</i></td>
+						<td><strong>{LANG.content_hometext}</strong><i>{LANG.content_notehome}.</i></td>
 					</tr>
 					<tr>
-						<td>
-                            {edit_hometext}
-                        </td>
+						<td> {edit_hometext} </td>
 					</tr>
 					<tr>
-						<td><strong>{LANG.content_bodytext}</strong> <sup class="required {rowcontent.style_content_bodytext_required}" id="content_bodytext_required">(∗)</sup> <i>{LANG.content_bodytext_note}</i></td>
+						<td><strong>{LANG.content_bodytext}</strong><sup class="required {rowcontent.style_content_bodytext_required}" id="content_bodytext_required">(∗)</sup><i>{LANG.content_bodytext_note}</i></td>
 					</tr>
 					<tr>
 						<td>
@@ -85,9 +84,7 @@
 						<td><strong>{LANG.content_sourceid}</strong></td>
 					</tr>
 					<tr>
-						<td>
-							<input class="form-control" type="text" maxlength="255" value="{rowcontent.sourcetext}" name="sourcetext" id="AjaxSourceText" style="width:100%"/>
-						</td>
+						<td><input class="form-control" type="text" maxlength="255" value="{rowcontent.sourcetext}" name="sourcetext" id="AjaxSourceText" style="width:100%"/></td>
 					</tr>
 				</tbody>
 			</table>
@@ -98,7 +95,7 @@
 					<ul style="padding-left:4px; margin:0">
 						<li>
 							<p class="message_head">
-								<cite>{LANG.content_cat}:</cite> <sup class="required">(∗)</sup>
+								<cite>{LANG.content_cat}:</cite><sup class="required">(∗)</sup>
 							</p>
 							<div class="message_body" style="height:260px; overflow: auto">
 								<table class="table table-striped table-bordered table-hover">
@@ -119,11 +116,11 @@
 								<cite>{LANG.content_block}:</cite>
 							</p>
 							<div class="message_body" style="overflow: auto">
-                                <!-- BEGIN: loop -->
-									<div class="row">
-										<label><input type="checkbox" value="{BLOCKS.bid}" name="bids[]" {BLOCKS.checked}>{BLOCKS.title}</label>
-									</div>
-                                <!-- END: loop -->
+								<!-- BEGIN: loop -->
+								<div class="row">
+									<label><input type="checkbox" value="{BLOCKS.bid}" name="bids[]" {BLOCKS.checked}>{BLOCKS.title}</label>
+								</div>
+								<!-- END: loop -->
 							</div>
 						</li>
 						<!-- END:block_cat -->
@@ -133,25 +130,21 @@
 							</p>
 							<div class="message_body" style="overflow: auto">
 								<div class="clearfix uiTokenizer uiInlineTokenizer">
-		                            <div id="keywords" class="tokenarea">
-		                                <!-- BEGIN: keywords -->
-		                                <span class="uiToken removable" title="{KEYWORDS}" ondblclick="$(this).remove();">
-		                                    {KEYWORDS}
-		                                    <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" />
-		                                    <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a>
-		                                </span>
-		                                <!-- END: keywords -->
-		                            </div>
-		                            <div class="uiTypeahead">
-		                                <div class="wrap">
-		                                    <input type="hidden" class="hiddenInput" autocomplete="off" value="" />
-		                                    <div class="innerWrap">
-		                                        <input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control textInput" style="width: 100%;" />
-		                                    </div>
-		                                </div>
-		                            </div>
-		                        </div>
-		                	</div>
+									<div id="keywords" class="tokenarea">
+										<!-- BEGIN: keywords -->
+										<span class="uiToken removable" title="{KEYWORDS}" ondblclick="$(this).remove();"> {KEYWORDS} <input type="hidden" autocomplete="off" name="keywords[]" value="{KEYWORDS}" /> <a onclick="$(this).parent().remove();" class="remove uiCloseButton uiCloseButtonSmall" href="javascript:void(0);"></a> </span>
+										<!-- END: keywords -->
+									</div>
+									<div class="uiTypeahead">
+										<div class="wrap">
+											<input type="hidden" class="hiddenInput" autocomplete="off" value="" />
+											<div class="innerWrap">
+												<input id="keywords-search" type="text" placeholder="{LANG.input_keyword_tags}" class="form-control textInput" style="width: 100%;" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</div>
@@ -168,7 +161,9 @@
 								</div>
 								<!-- END: allowed_comm -->
 								<!-- BEGIN: content_note_comm -->
-								<div class="alert alert-info">{LANG.content_note_comm}</div>
+								<div class="alert alert-info">
+									{LANG.content_note_comm}
+								</div>
 								<!-- END: content_note_comm -->
 							</div>
 						</li>
@@ -198,7 +193,7 @@
 									<label> {LANG.content_allowed_save} </label>
 								</div>
 								<div style="margin-bottom: 2px;">
-								<input type="checkbox" value="1" name="copyright" {checkcop}/>
+									<input type="checkbox" value="1" name="copyright" {checkcop}/>
 									<label> {LANG.content_copyright} </label>
 								</div>
 								<div style="margin-bottom: 2px;">
@@ -233,31 +228,32 @@
 			</div>
 		</div>
 	</div>
-    <div class="clearfix">
-        <h2><i class="fa fa-angle-double-down" id="adv-form-arrow"></i> <a data-toggle="collapse" href="#adv-form" aria-expanded="false">{LANG.content_advfeature}</a></h2>
-        <hr class="inline"/>
-        <div class="collapse" id="adv-form">
-            <div class="row">
-                <div class="col-sm-24 col-md-18">
-        			<table class="table table-striped table-bordered">
-        				<col class="w200" /><col />
-        				<tbody>
-        					<tr>
-        						<td><strong>{LANG.titlesite}</strong>:</td>
-        						<td><input type="text" maxlength="250" value="{rowcontent.titlesite}" id="idtitlesite" name="titlesite" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
-        					</tr>
-        					<tr>
-        						<td><strong>{LANG.content_description}: </strong></td>
-        						<td>
-                                    <div class="help-block">{GLANG.length_characters}:<span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max}</div>
-                                    <textarea id="description" name="description" class="form-control w500" rows="5">{rowcontent.description}</textarea>
-                                </td>
-        					</tr>
-        				</tbody>
-        			</table>
-                </div>
-                <div class="col-sm-24 col-md-6">
-                    <ul style="padding-left:4px; margin:0">
+	<div class="clearfix">
+		<h2><i class="fa fa-angle-double-down" id="adv-form-arrow"></i><a data-toggle="collapse" href="#adv-form" aria-expanded="false">{LANG.content_advfeature}</a></h2>
+		<hr class="inline"/>
+		<div class="collapse" id="adv-form">
+			<div class="row">
+				<div class="col-sm-24 col-md-18">
+					<table class="table table-striped table-bordered">
+						<col class="w200" />
+						<col />
+						<tbody>
+							<tr>
+								<td><strong>{LANG.titlesite}</strong>:</td>
+								<td><input type="text" maxlength="250" value="{rowcontent.titlesite}" id="idtitlesite" name="titlesite" class="form-control"  style="width:350px"/><span class="text-middle"> {GLANG.length_characters}: <span id="titlesitelength" class="red">0</span>. {GLANG.title_suggest_max} </span></td>
+							</tr>
+							<tr>
+								<td><strong>{LANG.content_description}: </strong></td>
+								<td>
+								<div class="help-block">
+									{GLANG.length_characters}:<span id="descriptionlength" class="red">0</span>. {GLANG.description_suggest_max}
+								</div>								<textarea id="description" name="description" class="form-control w500" rows="5">{rowcontent.description}</textarea></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-sm-24 col-md-6">
+					<ul style="padding-left:4px; margin:0">
 						<li>
 							<p class="message_head">
 								<cite>{LANG.content_publ_date}</cite><span class="timestamp">{LANG.content_notetime}</span>
@@ -292,26 +288,30 @@
 								</div>
 							</div>
 						</li>
-                        <!-- BEGIN: instant_articles_active -->
-                        <li>
+						<!-- BEGIN: instant_articles_active -->
+						<li>
 							<p class="message_head">
 								<cite>{LANG.content_insart}:</cite>
 							</p>
 							<div class="message_body">
-								<p><label><input type="checkbox" name="instant_active" value="1" {instant_active_checked}/>&nbsp;{LANG.content_instant_active}</label></p>
-                                <div class="m-bottom">
-                                    {LANG.content_instant_template}:
-                                    <input type="text" placeholder="{LANG.content_instant_templatenote}" name="instant_template" value="{rowcontent.instant_template}" class="form-control" style="width:100%"/>
-                                </div>
-                                <p><label><input type="checkbox" name="instant_creatauto" value="1" {instant_creatauto_checked}/>&nbsp;{LANG.content_instant_creatauto}</label></p>
+								<p>
+									<label><input type="checkbox" name="instant_active" value="1" {instant_active_checked}/>&nbsp;{LANG.content_instant_active}</label>
+								</p>
+								<div class="m-bottom">
+									{LANG.content_instant_template}:
+									<input type="text" placeholder="{LANG.content_instant_templatenote}" name="instant_template" value="{rowcontent.instant_template}" class="form-control" style="width:100%"/>
+								</div>
+								<p>
+									<label><input type="checkbox" name="instant_creatauto" value="1" {instant_creatauto_checked}/>&nbsp;{LANG.content_instant_creatauto}</label>
+								</p>
 							</div>
-                        </li>
-                        <!-- END: instant_articles_active -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+						</li>
+						<!-- END: instant_articles_active -->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="text-center">
 		<br/>
 		<input type="hidden" value="1" name="save" />
@@ -328,33 +328,32 @@
 		<input class="btn btn-primary submit-post" name="status1" type="submit" value="{LANG.publtime}" />
 		<!-- END:status_1 -->
 
-        <!-- BEGIN:status_6 -->
+		<!-- BEGIN:status_6 -->
 		<input class="btn btn-primary submit-post" name="status6" type="submit" value="{LANG.save_send_admin}" />
 		<!-- END:status_6 -->
 
-        <!-- BEGIN:status_0 -->
-        <input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
-        <!-- END:status_0 -->
+		<!-- BEGIN:status_0 -->
+		<input class="btn btn-primary submit-post" name="status0" type="submit" value="{LANG.save_send_spadmin}" />
+		<!-- END:status_0 -->
 		<br />
 	</div>
 </form>
 <div id="message"></div>
 <script type="text/javascript">
-//<![CDATA[
-var LANG = [];
-var CFG = [];
-CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
-CFG.upload_current = "{UPLOAD_CURRENT}";
-LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
-LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
-var content_checkcatmsg = "{LANG.content_checkcatmsg}";
-<!-- BEGIN: getalias -->
-$("#idtitle").change(function() {
+		//<![CDATA[
+	var LANG = [];
+	var CFG = [];
+	CFG.uploads_dir_user = "{UPLOADS_DIR_USER}";
+	CFG.upload_current = "{UPLOAD_CURRENT}";
+	LANG.content_tags_empty = "{LANG.content_tags_empty}.<!-- BEGIN: auto_tags --> {LANG.content_tags_empty_auto}.<!-- END: auto_tags -->";
+	LANG.alias_empty_notice = "{LANG.alias_empty_notice}";
+	var content_checkcatmsg = "{LANG.content_checkcatmsg}";
+	<!-- BEGIN: getalias -->
+	$("#idtitle").change(function() {
 	get_alias();
-});
-<!-- END: getalias -->
-//]]>
-</script>
+	});
+	<!-- END: getalias -->
+	//]]></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/select2.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/select2/i18n/{NV_LANG_INTERFACE}.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>

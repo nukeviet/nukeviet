@@ -8,15 +8,15 @@
  * @Createdate 2-9-2010 14:43
  */
 
-if (! defined('NV_IS_FILE_ADMIN')) {
+if (!defined('NV_IS_FILE_ADMIN')) {
     die('Stop!!!');
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
-if($nv_Request->isset_request('copy', 'get,post')){
-	$copy = 1;
+if ($nv_Request->isset_request('copy', 'get,post')) {
+    $copy = 1;
 } else {
-	$copy = 0;
+    $copy = 0;
 }
 
 if ($id) {
@@ -35,7 +35,7 @@ if ($id) {
     $action = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op;
 }
 
-$selectthemes = (! empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
+$selectthemes = (!empty($site_mods[$module_name]['theme'])) ? $site_mods[$module_name]['theme'] : $global_config['site_theme'];
 $layout_array = nv_scandir(NV_ROOTDIR . '/themes/' . $selectthemes . '/layout', $global_config['check_op_layout']);
 $error = '';
 $groups_list = nv_groups_list();
@@ -61,10 +61,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $row['socialbutton'] = $nv_Request->get_int('socialbutton', 'post', 0);
     $row['layout_func'] = $nv_Request->get_title('layout_func', 'post', '');
     $row['gid'] = $nv_Request->get_int('gid', 'post', 0);
-	$row['hot_post'] = $nv_Request->get_int('hot_post', 'post', 0);
+    $row['hot_post'] = $nv_Request->get_int('hot_post', 'post', 0);
 
     $_groups_post = $nv_Request->get_array('activecomm', 'post', array());
-    $row['activecomm'] = ! empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
+    $row['activecomm'] = !empty($_groups_post) ? implode(',', nv_groups_post(array_intersect($_groups_post, array_keys($groups_list)))) : '';
 
     if (empty($row['title'])) {
         $error = $lang_module['empty_title'];
@@ -88,7 +88,8 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $_sql = 'UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET title = :title, alias = :alias, image = :image, imagealt = :imagealt, imageposition = :imageposition, description = :description, bodytext = :bodytext, keywords = :keywords, socialbutton = :socialbutton, activecomm = :activecomm, layout_func = :layout_func, gid = :gid, edit_time = ' . NV_CURRENTTIME . ', hot_post = :hot_post WHERE id =' . $id;
             $publtime = $row['add_time'];
         } else {
-        	if($copy) $row['alias'] = 'copy-'.$id;
+            if ($copy)
+                $row['alias'] = 'copy-' . $id;
             if ($page_config['news_first']) {
                 $weight = 1;
             } else {
@@ -105,8 +106,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
         try {
 
-
-		 	$sth = $db->prepare($_sql);
+            $sth = $db->prepare($_sql);
             $sth->bindParam(':title', $row['title'], PDO::PARAM_STR);
             $sth->bindParam(':alias', $row['alias'], PDO::PARAM_STR);
             $sth->bindParam(':image', $row['image'], PDO::PARAM_STR);
@@ -119,15 +119,15 @@ if ($nv_Request->get_int('save', 'post') == '1') {
             $sth->bindParam(':activecomm', $row['activecomm'], PDO::PARAM_INT);
             $sth->bindParam(':layout_func', $row['layout_func'], PDO::PARAM_STR);
             $sth->bindParam(':gid', $row['gid'], PDO::PARAM_INT);
-			$sth->bindParam(':hot_post', $row['hot_post'], PDO::PARAM_INT);
-        	$sth->execute();
+            $sth->bindParam(':hot_post', $row['hot_post'], PDO::PARAM_INT);
+            $sth->execute();
 
             if ($sth->rowCount()) {
                 if ($id) {
-                	if($copy) {
-                		$id_copy =$db->lastInsertId();
-                		$db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET alias = ' . $db->quote(change_alias($row['title']). '-' . $id_copy ) . ' WHERE id=' . $id_copy);
-					}
+                    if ($copy) {
+                        $id_copy = $db->lastInsertId();
+                        $db->query('UPDATE ' . NV_PREFIXLANG . '_' . $module_data . ' SET alias = ' . $db->quote(change_alias($row['title']) . '-' . $id_copy) . ' WHERE id=' . $id_copy);
+                    }
                     nv_insert_logs(NV_LANG_DATA, $module_name, 'Edit', 'ID: ' . $id, $admin_info['userid']);
                 } else {
                     if ($page_config['news_first']) {
@@ -151,7 +151,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 } elseif (empty($id)) {
     $row['image'] = '';
     $row['imagealt'] = '';
-	$row['imageposition'] = 0;
+    $row['imageposition'] = 0;
     $row['layout_func'] = '';
     $row['description'] = '';
     $row['bodytext'] = '';
@@ -173,7 +173,7 @@ if (defined('NV_EDITOR') and nv_function_exists('nv_aleditor')) {
     $row['bodytext'] = '<textarea style="width:100%;height:300px" name="bodytext">' . $row['bodytext'] . '</textarea>';
 }
 
-if (! empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'])) {
+if (!empty($row['image']) and is_file(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $row['image'])) {
     $row['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $row['image'];
 }
 $lang_global['title_suggest_max'] = sprintf($lang_global['length_suggest_max'], 65);
@@ -188,19 +188,19 @@ $xtpl->assign('DATA', $row);
 $xtpl->assign('BODYTEXT', $row['bodytext']);
 $xtpl->assign('SOCIALBUTTON', ($row['socialbutton']) ? ' checked="checked"' : '');
 $xtpl->assign('HOST_POST', ($row['hot_post']) ? ' checked="checked"' : '');
-$xtpl->assign( 'ISCOPY', $copy );
+$xtpl->assign('ISCOPY', $copy);
 
 foreach ($layout_array as $value) {
     $value = preg_replace($global_config['check_op_layout'], '\\1', $value);
-    $xtpl->assign('LAYOUT_FUNC', array( 'key' => $value, 'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : '' ));
+    $xtpl->assign('LAYOUT_FUNC', array('key' => $value, 'selected' => ($row['layout_func'] == $value) ? ' selected="selected"' : ''));
     $xtpl->parse('main.layout_func');
 }
 $sql = "SELECT * FROM " . $db_config['prefix'] . "_googleplus ORDER BY weight ASC";
 $_grows = $db->query($sql)->fetchAll();
 if (sizeof($_grows)) {
     $array_googleplus = array();
-    $array_googleplus[] = array( 'gid' => - 1, 'title' => $lang_module['googleplus_1'] );
-    $array_googleplus[] = array( 'gid' => 0, 'title' => $lang_module['googleplus_0'] );
+    $array_googleplus[] = array('gid' => -1, 'title' => $lang_module['googleplus_1']);
+    $array_googleplus[] = array('gid' => 0, 'title' => $lang_module['googleplus_0']);
     foreach ($_grows as $grow) {
         $array_googleplus[] = $grow;
     }
@@ -214,11 +214,7 @@ if (sizeof($_grows)) {
 
 $activecomm = explode(',', $row['activecomm']);
 foreach ($groups_list as $_group_id => $_title) {
-    $xtpl->assign('ACTIVECOMM', array(
-        'value' => $_group_id,
-        'checked' => in_array($_group_id, $activecomm) ? ' checked="checked"' : '',
-        'title' => $_title
-    ));
+    $xtpl->assign('ACTIVECOMM', array('value' => $_group_id, 'checked' => in_array($_group_id, $activecomm) ? ' checked="checked"' : '', 'title' => $_title));
     $xtpl->parse('main.activecomm');
 }
 
@@ -227,12 +223,8 @@ if (empty($row['alias'])) {
 }
 
 // position images
-$array_imgposition = array(
-    0 => $lang_module['imgposition_0'],
-    1 => $lang_module['imgposition_1'],
-    2 => $lang_module['imgposition_2']
-);
-foreach($array_imgposition as $id_imgposition => $title_imgposition) {
+$array_imgposition = array(0 => $lang_module['imgposition_0'], 1 => $lang_module['imgposition_1'], 2 => $lang_module['imgposition_2']);
+foreach ($array_imgposition as $id_imgposition => $title_imgposition) {
     $sl = ($id_imgposition == $row['imageposition']) ? ' selected="selected"' : '';
     $xtpl->assign('id_imgposition', $id_imgposition);
     $xtpl->assign('title_imgposition', $title_imgposition);
