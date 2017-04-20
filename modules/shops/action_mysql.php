@@ -431,7 +431,7 @@ $sql_create_module[] = "CREATE TABLE IF NOT EXISTS " . $db_config['prefix'] . "_
  listgroupid VARCHAR(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
  proid mediumint(9) NOT NULL,
  num mediumint(9) NOT NULL,
- price int(11) NOT NULL,
+ price float NOT NULL DEFAULT '0',
  discount_id smallint(6) NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  UNIQUE KEY orderid (order_id, id)
