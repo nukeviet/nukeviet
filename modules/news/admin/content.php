@@ -182,11 +182,7 @@ $array_keywords_old = array();
 $FBIA = new \NukeViet\Facebook\InstantArticles($lang_module);
 
 $rowcontent['id'] = $nv_Request->get_int('id', 'get,post', 0);
-if ($nv_Request->isset_request('copy', 'get,post')) {
-    $copy = 1;
-} else {
-    $copy = 0;
-}
+$copy = $nv_Request->get_int('copy', 'get,post',0);
 
 if ($rowcontent['id'] > 0) {
     $check_permission = false;
@@ -304,6 +300,7 @@ foreach ($global_array_cat as $catid_i => $array_value) {
 }
 
 if ($nv_Request->get_int('save', 'post') == 1) {
+    $rowcontent['referer'] = $nv_Request->get_string('referer', 'get,post');
     $catids = array_unique($nv_Request->get_typed_array('catids', 'post', 'int', array()));
     $rowcontent['listcatid'] = implode(',', $catids);
     $rowcontent['catid'] = $nv_Request->get_int('catid', 'post', 0);
@@ -882,10 +879,18 @@ if ($nv_Request->get_int('save', 'post') == 1) {
                 Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=rpc&id=' . $rowcontent['id'] . '&rand=' . nv_genpass());
                 die();
             } else {
-                $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
-                $msg1 = $lang_module['content_saveok'];
-                $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
-                redriect($msg1, $msg2, $url, $module_data . '_detail');
+
+                $referer = $crypt->decrypt($rowcontent['referer']);
+                if (!empty($referer)) {
+                    Header('Location: ' . $referer);
+                    //$url = referer;
+                } else {
+                    $url = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name;
+                    $msg1 = $lang_module['content_saveok'];
+                    $msg2 = $lang_module['content_main'] . ' ' . $module_info['custom_title'];
+                    redriect($msg1, $msg2, $url, $module_data . '_detail');
+                }
+
             }
         }
     } else {
@@ -896,6 +901,8 @@ if ($nv_Request->get_int('save', 'post') == 1) {
     }
     $id_block_content = $id_block_content_post;
 } elseif ($rowcontent['id'] > 0) {
+    $rowcontent['referer'] = $crypt->encrypt($client_info['referer']);
+
     // Lưu thông tin người đang sửa
     $_query = $db->query('SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . '_tmp
 		WHERE id =' . $rowcontent['id']);

@@ -13,11 +13,7 @@ if (!defined('NV_IS_FILE_ADMIN')) {
 }
 
 $id = $nv_Request->get_int('id', 'post,get', 0);
-if ($nv_Request->isset_request('copy', 'get,post')) {
-    $copy = 1;
-} else {
-    $copy = 0;
-}
+$copy = $nv_Request->get_int('copy', 'get,post',0);
 
 if ($id) {
     $sql = 'SELECT * FROM ' . NV_PREFIXLANG . '_' . $module_data . ' WHERE id=' . $id;
