@@ -328,3 +328,4 @@ $lang_module['dulicate_edit_admin'] = 'L\'article <b>%s</b> est édité par le c
 $lang_module['dulicate_takeover'] = 'Prendre en charge l\'éditeur de la publication';
 $lang_module['setting_copy_news'] = 'Nouvelles de copie';
 $lang_module['dulicate_edit_takeover'] = 'Vous avez été pris en charge par ce compte %s à %s. Vos modifications ne peuvent pas être sauvegardées dans le système, copiez-les à nouveau pour éviter de perdre vos modifications.';
+$lang_module['title_copy_news'] = 'Copier l\'article';
