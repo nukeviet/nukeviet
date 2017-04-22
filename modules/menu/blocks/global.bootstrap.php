@@ -125,8 +125,8 @@ if (! nv_function_exists('nv_menu_bootstrap')) {
                 } elseif (! empty($submenu_active)) {
                     $classcurrent[] = 'active';
                 }
-                if (! empty($item['class'])) {
-                    $classcurrent[] = $item['class'];
+                if (! empty($item['css'])) {
+                    $classcurrent[] = $item['css'];
                 }
                 $item['current'] = empty($classcurrent) ? '' : ' class="' . (implode(' ', $classcurrent)) . '"';
 
