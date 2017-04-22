@@ -48,6 +48,10 @@
 						<td>{LANG.config_facebookapi}</td>
 						<td><input class="form-control w200" name="facebookapi" value="{DATA.facebookapi}" /><span class="help-block">{LANG.config_facebookapi_note}</span></td>
 					</tr>
+					<tr>
+						<td>{LANG.setting_copy_page}</td>
+						<td><input type="checkbox" value="1" name="copy_page"{COPY_PAGE}/></td>
+					</tr>
 
 				</tbody>
 			</table>
