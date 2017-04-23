@@ -68,4 +68,5 @@ $lang_module['config_facebookapi'] = 'Facebook App ID';
 $lang_module['config_facebookapi_note'] = '(Form: 1419186468293063, <a href="http://wiki.nukeviet.vn/nukeviet:admin:news:facebookapi" target="_blank">view detail</a>)';
 $lang_module['config_save'] = 'Save config';
 
-$lang_module['setting_copy_page'] = 'Copy the article';
+$lang_module['setting_copy_page'] = 'Allowed to copy the article';
+$lang_module['title_copy_page'] = 'Copy the article';
