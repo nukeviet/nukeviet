@@ -109,7 +109,11 @@ if (!defined('NV_IS_MODADMIN') and ($cache = $nv_Cache->getItem($module_name, $c
             }
             
             if (!empty($items[$row['id']]['homeimgfile'])) {
-                $content['image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $items[$row['id']]['homeimgfile'];
+                if (file_exists(NV_UPLOADS_REAL_DIR . '/' . $module_upload . '/' . $items[$row['id']]['homeimgfile'])) {
+                    $content['image'] = NV_MY_DOMAIN . NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/' . $items[$row['id']]['homeimgfile'];
+                } else {
+                    $content['image'] = $items[$row['id']]['homeimgfile'];
+                }
                 $content['image_caption'] = empty($items[$row['id']]['homeimgalt']) ? $items[$row['id']]['title'] : $items[$row['id']]['homeimgalt'];
             }
             $content['opkicker'] = $items[$row['id']]['cattitle'];

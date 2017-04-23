@@ -234,7 +234,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
         if ($a == 0) {
             $xtpl->clear_autoreset();
             
-            if($array_row_i['external_link']){
+            if ($array_row_i['external_link']) {
                 $array_row_i['target_blank'] = 'target="_blank"';
             }
             
@@ -263,7 +263,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
         } else {
             $xtpl->clear_autoreset();
             
-            if($array_row_i['external_link']){
+            if ($array_row_i['external_link']) {
                 $array_row_i['target_blank'] = 'target="_blank"';
             }
             
@@ -302,7 +302,7 @@ function viewcat_page_new($array_catpage, $array_cat_other, $generate_page)
             $newday = $array_row_i['publtime'] + (86400 * $array_row_i['newday']);
             $array_row_i['publtime'] = nv_date("d/m/Y", $array_row_i['publtime']);
             
-            if($array_row_i['external_link']){
+            if ($array_row_i['external_link']) {
                 $array_row_i['target_blank'] = 'target="_blank"';
             }
             
@@ -357,7 +357,7 @@ function viewcat_top($array_catcontent, $generate_page)
             $newday = $array_catcontent_i['publtime'] + (86400 * $array_catcontent_i['newday']);
             $array_catcontent_i['publtime'] = nv_date('d/m/Y h:i:s A', $array_catcontent_i['publtime']);
             
-            if($array_catcontent_i['external_link']){
+            if ($array_catcontent_i['external_link']) {
                 $array_catcontent_i['target_blank'] = 'target="_blank"';
             }
             

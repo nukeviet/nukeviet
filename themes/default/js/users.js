@@ -217,10 +217,9 @@ function login_validForm(a) {
                     $(this).addClass("tooltip-current").attr("data-current-mess", d.mess);
                     validErrorShow(this)
                 }) : $(".nv-info", a).html(d.mess).addClass("error").show(), setTimeout(function() {
+                    $("[type=submit]", a).prop("disabled", !1);
                     if (nv_is_recaptcha) {
                         change_captcha();
-                    } else {
-                        $("[type=submit]", a).prop("disabled", !1);
                     }
                 }, 1E3)
             } else if (d.status == "ok") {

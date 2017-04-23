@@ -1,26 +1,19 @@
-# Quy định thông báo lỗi
+# Những quy định liên quan đến đóng góp dành cho kho code của NukeViet
+Bằng việc tham gia kho code này ( [coder](#coder) hoặc [tester](#tester)), bạn đồng ý với các quy định dưới đây:
 
-Khi báo lỗi bạn vui lòng cung cấp các thông tin sau để chúng tôi có thể xây dựng môi trường thử nghiệm giống của bạn để kiểm tra. Các thông tin này rất cần thiết trong quá trình đội code kiểm tra và sửa lỗi, đề nghị thành viên cung cấp đầy đủ thông tin để việc sửa lỗi được nhanh chóng.
+## Coder
+### Bản quyền mã nguồn đóng góp
+- Các coder cam kết mình là tác giả mã nguồn hoặc có đủ quyền đối với mã nguồn mà mình đóng góp. Điều này có nghĩa là nếu bạn là coder, bạn phải cam kết mình là tác giả của code hoặc code được cung cấp theo một giấy phép tương thích với [giấy phép mà NukeViet đang sử dụng](../LICENSE.txt).
+- Ngoại trừ các thành phần code được xây dựng độc lập, có thể tách rời khỏi NukeViet thì có thể được cấp phép theo giấy phép riêng tương thích với [giấy phép mà NukeViet đang sử dụng](../LICENSE.txt) và phải được liệt kê ở [file thông tin bản quyền](../COPYRIGHT.txt).
+- Tất cả các chỉnh sửa vào mã nguồn ban đầu hoặc trực tiếp đóng góp cho code NukeViet không phải dưới dạng thành phần có thể tách ra khỏi NukeViet một cách độc lập (theo dạng addons hay plugins) đều được coder cam kết tuân theo [giấy phép mà NukeViet đang sử dụng](../LICENSE.txt). 
+- Các coder tham gia đóng góp code cho NukeViet đồng ý rằng VINADES.,JSC hoặc một tổ chức hợp pháp sở hữu thương hiệu NukeViet có quyền thay đổi [giấy phép NukeViet đang sử dụng](../LICENSE.txt) mà không cần xin phép lại các coder về bản quyền các mã nguồn đã đóng góp cho NukeViet.
+### Trách nhiệm về bản quyền
+- Hệ thống ghi nhận toàn bộ quá trình đóng góp code. Các coder phải hoàn toàn chịu trách nhiệm cá nhân nếu đưa các đoạn mã vi phạm bản quyền vào kho code của NukeViet.
+### Ủy quyền quản lý giấy phép
+- Các coder tham gia đóng góp code đồng ý rằng sẽ trao quyền cho VINADES.,JSC hoặc một tổ chức hợp pháp đại diện cho cộng đồng NukeViet thay mặt coder giải quyết các vấn đề tranh chấp về bản quyền phần mềm NukeViet (nếu có).
 
-1. Tiêu đề thông báo lỗi ngắn gọn, xúc tích, đảm bảo tóm tắt được nội dung.
-
-2. Mô tả chi tiết lỗi gặp phải, quá trình hoặc thao tác dẫn đến lỗi.Việc mô tả quá trình dẫn đến lỗi đặc biệt quan trọng vì nhiều khi lỗi chỉ xảy ra đúng với một số thao tác nhất định màvới các thao tác khác thì hệ thống không bị lỗi. Ví dụ trường hợp này: https://github.com/nukeviet/nukeviet/issues/1178
-
-3. Cung cấp thông tin máy chủ
-
-* Nếu xác định lỗi từ code, vui lòng cung cấp thêm các thông tin về WebServer và trình duyệt
-
-> - Phiên bản NukeViet: (Ví dụ NukeViet 4.0.21 hoặc NukeViet 2574f2bc8b6f23f9fcfefc021554034e33fbc695 - là chuỗi xác định commit trên kho code)
-> - Môi trường thử Nghiệm: Localhost/ hosting
-> - Hệ điều hành: (Ví dụ: Ubuntu 13.10 32-bit)
-> - Trình duyệt web: (Ví dụ: Mozilla Firefox 27.0)
-> - Máy chủ web: (Ví dụ: XAMPP for Linux 1.8.1 )
-
-Nếu NukeViet cài trên hosting (website đang chạy thực tế) cần có thêm thông tin
-> + Công cụ quản lý hosting: (Ví dụ: Cpanel/ Vista Panel/ Parallels Plesk/ DirectAdmin/ Kloxo...)
-> + Các thông tin khác về phần mềm webserver, PHP và cơ sở dữ liệu: (Ví dụ: Apache 2.4.7, MySQL 5.5.36, PHP 5.4.25)
-
- 
-* Nếu xác định lỗi từ giao diện, vui lòng cung cấp thêm thông tin về  Tên gói giao diện (Chỉ kiểm tra đối với giao diện tích hợp sẵn trong source NukeViet)
- 
-* Nếu là các lỗi nhỏ, cơ bản, dễ xác định lỗi... hay các câu hỏi, đề xuất, góp ý... thì không cần cung cấp thông tin về máy chủ, giao diện tại phần 2, 3.
+## Tester
+### Quy định đóng góp
+Tương tự việc đóng góp code, đóng góp của các tester cũng được tuân thủ theo quy định như đối với coder
+### Hướng dẫn gửi báo lỗi
+Xem [Quy định thông báo lỗi](./ISSUE_TEMPLATE.md)

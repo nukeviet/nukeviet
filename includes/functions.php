@@ -1577,7 +1577,7 @@ function nv_url_rewrite_callback($matches)
         $op_rewrite = array();
         $op_rewrite_count = 0;
         $query_array_keys = array_keys($query_array);
-        if (!in_array($query_array[NV_LANG_VARIABLE], $global_config['allow_sitelangs']) or (isset($query_array[NV_NAME_VARIABLE]) and (!isset($query_array_keys[1]) or $query_array_keys[1] != NV_NAME_VARIABLE or !preg_match($global_config['check_module'], $query_array[NV_NAME_VARIABLE]))) or (isset($query_array[NV_OP_VARIABLE]) and (!isset($query_array_keys[2]) or $query_array_keys[2] != NV_OP_VARIABLE))) {
+        if (!in_array($query_array[NV_LANG_VARIABLE], $global_config['allow_sitelangs']) or (isset($query_array[NV_NAME_VARIABLE]) and (!isset($query_array_keys[1]) or $query_array_keys[1] != NV_NAME_VARIABLE)) or (isset($query_array[NV_OP_VARIABLE]) and (!isset($query_array_keys[2]) or $query_array_keys[2] != NV_OP_VARIABLE))) {
             return $matches[0];
         }
         if (!$global_config['rewrite_optional']) {
