@@ -57,78 +57,116 @@
     </div>
     <div class="list-member">
         <div class="list-member-all">
-            <h4>{LANG.thanks_list_member_all}</h4>
-            <a target="_blank" href="https://github.com/vuthao">vuthao</a>,
-            <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99</a>,
-            <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen</a>,
-            <a target="_blank" href="https://github.com/mynukeviet">mynukeviet</a>,
-            <a target="_blank" href="https://github.com/thehung">thehung</a>,
-            <a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet</a>,
-            <a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp</a>,
-            <a target="_blank" href="https://github.com/thinhhpvn">thinhhpvn</a>,
-            <a target="_blank" href="https://github.com/PhamQuocTien132">PhamQuocTien132</a>,
-            <a target="_blank" href="https://github.com/htuyen9x">htuyen9x</a>,
-            <a target="_blank" href="https://github.com/thangbv">thangbv</a>,
-            <a target="_blank" href="https://github.com/dangdinhtu2014">dangdinhtu2014</a>,
-            <a target="_blank" href="https://github.com/thuvp1995">thuvp1995</a>,
-            <a target="_blank" href="https://github.com/phongaz">phongaz</a>,
-            <a target="_blank" href="https://github.com/volong1012">volong1012</a>,
-            <a target="_blank" href="https://github.com/dangdlinhtu">dangdlinhtu</a>,
-            <a target="_blank" href="https://github.com/htuyen1994">htuyen1994</a>,
-            <a target="_blank" href="https://github.com/ThinhNguyenVB">ThinhNguyenVB</a>,
-            <a target="_blank" href="https://github.com/tkhuyenbk">tkhuyenbk</a>,
-            <a target="_blank" href="https://github.com/hiidemo">hiidemo</a>,
-            <a target="_blank" href="https://github.com/webvangvn">webvangvn</a>,
-            <a target="_blank" href="https://github.com/thethao">thethao</a>,
-            <a target="_blank" href="https://github.com/tuanta">tuanta</a>,
-            <a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993</a>,
-            <a target="_blank" href="https://github.com/webvang">webvang</a>,
-            <a target="_blank" href="https://github.com/duyetdev">duyetdev</a>
+		    <h4>{LANG.thanks_list_member_all}</h4>
+			VINADES.,JSC, 
+			<a target="_blank" href="https://github.com/vuthao">vuthao</a>, 
+			<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99</a>, 
+			<a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen</a>, 
+			<a target="_blank" href="https://github.com/mynukeviet">mynukeviet</a>, 
+			<a target="_blank" href="https://github.com/thehung">thehung</a>, 
+			dinhpc86 at gmail.com, 
+			<a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet</a>, 
+			<a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp</a>, 
+			nguyenhung2904 at gmail.com, 
+			<a target="_blank" href="https://github.com/htuyen9x">htuyen9x</a>, 
+			<a target="_blank" href="https://github.com/dangdlinhtu">dangdlinhtu</a>, 
+			<a target="_blank" href="https://github.com/thangbv">thangbv</a>, 
+			trankhuyen81 at gmail.com, 
+			<a target="_blank" href="https://github.com/thuvp1995">thuvp1995</a>, 
+			<a target="_blank" href="https://github.com/PhamQuocTien132">PhamQuocTien132</a>, 
+			mabubeo1990 at gmail.com, 
+			<a target="_blank" href="https://github.com/phongaz">phongaz</a>, 
+			tamahari at gmail.com, 
+			<a target="_blank" href="https://github.com/ngocphan12031995">ngocphan12031995</a>, 
+			hungtmit at gmail.com, 
+			<a target="_blank" href="https://github.com/tkhuyenbk">tkhuyenbk</a>, 
+			<a target="_blank" href="https://github.com/webvang">webvang</a>, 
+			<a target="_blank" href="https://github.com/hiidemo">hiidemo</a>, 
+			<a target="_blank" href="https://github.com/thethao">thethao</a>, 
+			<a target="_blank" href="https://github.com/tuanta">tuanta</a>, 
+			<a target="_blank" href="https://github.com/duyetdev">duyetdev</a>, 
+			ledinhhung87 at gmail.com, 
+			mtmost.com at gmail.com, 
+			<a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993</a>
         </div>
         <div class="list-member-other-version">
             <h4>{LANG.thanks_list_member_other_version}:</h4>
             <div class="version">
-                <h5>{LANG.thanks_other_version} 4.1</h5>
-                <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99</a> (120 commits),
-                <a target="_blank" href="https://github.com/vuthao">vuthao</a> (60 commits),
-                <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen</a> (42 commits),
-                <a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet</a> (14 commits),
-                <a target="_blank" href="https://github.com/mynukeviet">mynukeviet</a> (10 commits),
-                <a target="_blank" href="https://github.com/thuvp1995">thuvp1995</a> (9 commits),
-                <a target="_blank" href="https://github.com/thangbv">thangbv</a> (6 commits),
-                <a target="_blank" href="https://github.com/thehung">thehung</a> (3 commits),
-                <a target="_blank" href="https://github.com/htuyen1994">htuyen1994</a> (3 commits),
-                <a target="_blank" href="https://github.com/hiidemo">hiidemo</a> (2 commits),
-                <a target="_blank" href="https://github.com/duyetdev">duyetdev</a> (1 commit),
-                <a target="_blank" href="https://github.com/webvangvn">webvangvn</a> (1 commit),
-                <a target="_blank" href="https://github.com/phongaz">phongaz</a> (1 commit),
-                <a target="_blank" href="https://github.com/htuyen9x">htuyen9x</a> (1 commit)
-                <br><br>
-                <h5>{LANG.thanks_other_version} 4.0</h5>
-	           	<a target="_blank" href="https://github.com/vuthao">vuthao</a> (1,085 commits),
-	            <a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99</a> (447 commits),
-	            <a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen</a> (266 commits),
-	            <a target="_blank" href="https://github.com/mynukeviet">mynukeviet</a> (221 commits),
-	            <a target="_blank" href="https://github.com/thehung">thehung</a> (40 commits),
-	            <a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp</a> (35 commits),
-	            <a target="_blank" href="https://github.com/thinhhpvn">thinhhpvn</a> (33 commits),
-	            <a target="_blank" href="https://github.com/PhamQuocTien132">PhamQuocTien132</a> (30 commits),
-	            <a target="_blank" href="https://github.com/htuyen9x">htuyen9x</a> (21 commits),
-	            <a target="_blank" href="https://github.com/thangbv">thangbv</a> (14 commits),
-	            <a target="_blank" href="https://github.com/dangdinhtu2014">dangdinhtu2014</a> (18 commits),
-	            <a target="_blank" href="https://github.com/phongaz">phongaz</a> (6 commits),
-	            <a target="_blank" href="https://github.com/volong1012">volong1012</a> (6 commits),
-	            <a target="_blank" href="https://github.com/dangdlinhtu">dangdlinhtu</a> (5 commits),
-	            <a target="_blank" href="https://github.com/htuyen1994">htuyen1994</a> (3 commits),
-	            <a target="_blank" href="https://github.com/ThinhNguyenVB">ThinhNguyenVB</a> (2 commits),
-	            <a target="_blank" href="https://github.com/webvangvn">webvangvn</a> (1 commit),
-	            <a target="_blank" href="https://github.com/thethao">thethao</a> (1 commit),
-	            <a target="_blank" href="https://github.com/tuanta">tuanta</a> (1 commit),
-	            <a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993</a> (1 commit),
-	            <a target="_blank" href="https://github.com/webvang">webvang</a> (1 commit),
-                <br><br>
-                <h5>{LANG.thanks_other_version} <=3.4</h5>
-                (Not counts, do not use github)
+				<h5>{LANG.thanks_other_version} 4.1</h5>
+					VINADES.,JSC (197 commits)</a>, 
+					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (131 commits)</a>, 
+					<a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet (19 commits)</a>, 
+					<a target="_blank" href="https://github.com/vuthao">vuthao (17 commits)</a>, 
+					<a target="_blank" href="https://github.com/mynukeviet">mynukeviet (10 commits)</a>, 
+					<a target="_blank" href="https://github.com/thuvp1995">thuvp1995 (9 commits)</a>, 
+					<a target="_blank" href="https://github.com/thangbv">thangbv (6 commits)</a>, 
+					<a target="_blank" href="https://github.com/ngocphan12031995">ngocphan12031995 (5 commits)</a>, 
+					<a target="_blank" href="https://github.com/htuyen9x">htuyen9x (4 commits)</a>, 
+					<a target="_blank" href="https://github.com/hiidemo">hiidemo (2 commits)</a>, 
+					<a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp (1 commits)</a>, 
+					<a target="_blank" href="https://github.com/duyetdev">duyetdev (1 commits)</a>, 
+					<a target="_blank" href="https://github.com/phongaz">phongaz (1 commits)</a>, 
+					<a target="_blank" href="https://github.com/webvang">webvang (1 commits)</a>, 
+				 <br><br>
+
+				<h5>{LANG.thanks_other_version} 4.0</h5>
+					VINADES.,JSC (713 commits)</a>, 
+					<a target="_blank" href="https://github.com/vuthao">vuthao (1360 commits)</a>, 
+					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (547 commits)</a>, 
+					<a target="_blank" href="https://github.com/mynukeviet">mynukeviet (219 commits)</a>, 
+					<a target="_blank" href="https://github.com/trinhthinhhp">trinhthinhhp (37 commits)</a>, 
+					<a target="_blank" href="https://github.com/anhyeuviolet">anhyeuviolet (25 commits)</a>, 
+					<a target="_blank" href="https://github.com/dangdlinhtu">dangdlinhtu (23 commits)</a>, 
+					<a target="_blank" href="https://github.com/htuyen9x">htuyen9x (21 commits)</a>, 
+					<a target="_blank" href="https://github.com/thangbv">thangbv (15 commits)</a>, 
+					<a target="_blank" href="https://github.com/PhamQuocTien132">PhamQuocTien132 (9 commits)</a>, 
+					mabubeo1990 at gmail.com (8 commits)</a>, 
+					<a target="_blank" href="https://github.com/phongaz">phongaz (6 commits)</a>, 
+					<a target="_blank" href="https://github.com/tkhuyenbk">tkhuyenbk (2 commits)</a>, 
+					<a target="_blank" href="https://github.com/tuanta">tuanta (1 commits)</a>, 
+					<a target="_blank" href="https://github.com/thethao">thethao (1 commits)</a>, 
+					<a target="_blank" href="https://github.com/truongdacngoc1993">truongdacngoc1993 (1 commits)</a>, 
+					<a target="_blank" href="https://github.com/webvang">webvang (1 commits)</a>, 
+				 <br><br>
+				<h5>{LANG.thanks_other_version} 3.4</h5>
+					VINADES.,JSC (74 commits)</a>, 
+					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (245 commits)</a>, 
+					<a target="_blank" href="https://github.com/vuthao">vuthao (60 commits)</a>, 
+					<a target="_blank" href="https://github.com/thehung">thehung (23 commits)</a>, 
+					<a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (5 commits)</a>, 
+				 <br><br>
+				<h5>{LANG.thanks_other_version} 3.3</h5>
+					VINADES.,JSC (29 commits)</a>, 
+					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (24 commits)</a>, 
+					<a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (20 commits)</a>, 
+					<a target="_blank" href="https://github.com/thehung">thehung (5 commits)</a>, 
+				 <br><br>
+				<h5>{LANG.thanks_other_version} 3.2</h5>
+					VINADES.,JSC (56 commits)</a>, 
+					<a target="_blank" href="https://github.com/vuthao">vuthao (98 commits)</a>, 
+					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (49 commits)</a>, 
+					<a target="_blank" href="https://github.com/thehung">thehung (17 commits)</a>, 
+					<a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (13 commits)</a>, 
+					trankhuyen81 at gmail.com (10 commits)</a>, 
+				 <br><br>
+				<h5>{LANG.thanks_other_version} 3.1</h5>
+					<a target="_blank" href="https://github.com/vuthao">vuthao (316 commits)</a>, 
+					<a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (134 commits)</a>, 
+					dinhpc86 at gmail.com (45 commits)</a>, 
+					<a target="_blank" href="https://github.com/thehung">thehung (27 commits)</a>, 
+					nguyenhung2904 at gmail.com (23 commits)</a>, 
+					<a target="_blank" href="https://github.com/hoaquynhtim99">hoaquynhtim99 (9 commits)</a>, 
+					tamahari at gmail.com (5 commits)</a>, 
+					ledinhhung87 at gmail.com (1 commits)</a>, 
+					mtmost.com at gmail.com (1 commits)</a>, 
+				 <br><br>
+				<h5>{LANG.thanks_other_version} 3.0</h5>
+					<a target="_blank" href="https://github.com/vuthao">vuthao (283 commits)</a>, 
+					<a target="_blank" href="https://github.com/anhtunguyen">anhtunguyen (115 commits)</a>, 
+					<a target="_blank" href="https://github.com/thehung">thehung (12 commits)</a>, 
+					nguyenhung2904 at gmail.com (3 commits)</a>, 
+					hungtmit at gmail.com (2 commits)</a>, 
+				 <br><br>
             </div>
         </div>
     </div>

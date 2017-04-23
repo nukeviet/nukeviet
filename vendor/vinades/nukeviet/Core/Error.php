@@ -571,7 +571,7 @@ class Error
         $track_errors = $this->error_log_tmp . '/' . $track_errors . '.' . $this->error_log_fileext;
 
         if ($this->error_set_logs and !file_exists($track_errors)) {
-            file_put_contents($track_errors, '', FILE_APPEND);
+            //file_put_contents($track_errors, '', FILE_APPEND);
 
             if (!empty($this->log_errors_list) and isset($this->log_errors_list[$this->errno])) {
                 $this->_log();
