@@ -18,7 +18,7 @@ if (!defined('NV_IS_USER') or !$global_config['allowuserlogin']) {
 }
 
 if (defined('NV_IS_USER_FORUM')) {
-    require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/editinfo.php';
+    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/editinfo.php';
     exit();
 }
 
@@ -30,9 +30,9 @@ if (defined('NV_IS_USER_FORUM')) {
  */
 function nv_check_username_change($login, $edit_userid)
 {
-    global $db, $lang_module, $user_info;
+    global $db, $lang_module, $user_info, $global_users_config;
 
-    $error = nv_check_valid_login($login, NV_UNICKMAX, NV_UNICKMIN);
+    $error = nv_check_valid_login($login, $global_config['nv_unickmax'], $global_config['nv_unickmin']);
     if ($error != '') {
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
     }
@@ -40,12 +40,7 @@ function nv_check_username_change($login, $edit_userid)
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
-    $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='deny_name'";
-    $result = $db->query($sql);
-    $deny_name = $result->fetchColumn();
-    $result->closeCursor();
-
-    if (!empty($deny_name) and preg_match('/' . $deny_name . '/i', $login)) {
+    if (!empty($global_users_config['deny_name']) and preg_match('/' . $global_users_config['deny_name'] . '/i', $login)) {
         return sprintf($lang_module['account_deny_name'], $login);
     }
 
@@ -70,19 +65,14 @@ function nv_check_username_change($login, $edit_userid)
  */
 function nv_check_email_change($email, $edit_userid)
 {
-    global $db, $lang_module, $user_info;
+    global $db, $lang_module, $user_info, $global_users_config;
 
     $error = nv_check_valid_email($email);
     if ($error != '') {
         return preg_replace('/\&(l|r)dquo\;/', '', strip_tags($error));
     }
 
-    $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='deny_email'";
-    $result = $db->query($sql);
-    $deny_email = $result->fetchColumn();
-    $result->closeCursor();
-
-    if (!empty($deny_email) and preg_match("/" . $deny_email . "/i", $email)) {
+    if (!empty($global_users_config['deny_email']) and preg_match("/" . $global_users_config['deny_email'] . "/i", $email)) {
         return sprintf($lang_module['email_deny_name'], $email);
     }
 
@@ -443,7 +433,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'avatar') 
 }
 //Username
 elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'username') {
-    $nv_username = nv_substr($nv_Request->get_title('username', 'post', '', 1), 0, NV_UNICKMAX);
+    $nv_username = nv_substr($nv_Request->get_title('username', 'post', '', 1), 0, $global_config['nv_unickmax']);
     $nv_password = $nv_Request->get_title('password', 'post', '');
 
     if (empty($nv_password) or !$crypt->validate_password($nv_password, $row['password'])) {
@@ -540,7 +530,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'email') {
         }
 
         if (empty($p) or empty($verikey)) {
-            $rand = rand(NV_UPASSMIN, NV_UPASSMAX);
+            $rand = rand($global_config['nv_upassmin'], $global_config['nv_upassmax']);
             if ($rand < 6) {
                 $rand = 6;
             }
@@ -636,7 +626,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'password'
         )));
     }
 
-    if (($check_new_password = nv_check_valid_pass($new_password, NV_UPASSMAX, NV_UPASSMIN)) != '') {
+    if (($check_new_password = nv_check_valid_pass($new_password, $global_config['nv_upassmax'], $global_config['nv_upassmin'])) != '') {
         die(json_encode(array(
             'status' => 'error',
             'input' => 'new_password',
@@ -823,7 +813,7 @@ elseif ($checkss == $array_data['checkss'] and $array_data['type'] == 'safemode'
 
     if ($nv_Request->isset_request('resend', 'post')) {
         if (empty($row['safekey'])) {
-            $rand = rand(NV_UPASSMIN, NV_UPASSMAX);
+            $rand = rand($global_config['nv_upassmin'], $global_config['nv_upassmax']);
             if ($rand < 6) {
                 $rand = 6;
             }

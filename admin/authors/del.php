@@ -183,7 +183,7 @@ $contents['sendmail'] = $sendmail;
 
 $contents['reason'] = array( $reason, 255 );
 
-$contents['admin_password'] = array( $lang_global['admin_password'], $adminpass, NV_UPASSMAX );
+$contents['admin_password'] = array( $lang_global['admin_password'], $adminpass, $global_config['nv_upassmax'] );
 
 $page_title = $lang_module['nv_admin_del'];
 

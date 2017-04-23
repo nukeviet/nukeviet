@@ -38,6 +38,8 @@ $sql_create_module[] = "CREATE TABLE " . $db_config['prefix'] . "_" . $lang . "_
  add_time int(11) NOT NULL DEFAULT '0',
  edit_time int(11) NOT NULL DEFAULT '0',
  status tinyint(1) unsigned NOT NULL DEFAULT '0',
+ hitstotal MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+ hot_post TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
  PRIMARY KEY (id),
  UNIQUE KEY alias (alias)
 ) ENGINE=MyISAM";
@@ -53,7 +55,8 @@ $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $lang . "_"
 ('facebookapi', ''),
 ('per_page', '20'),
 ('news_first', '0'),
-('related_articles', '5')";
+('related_articles', '5'),
+('copy_page', '0')";
 
 // Comments
 $sql_create_module[] = "INSERT INTO " . NV_CONFIG_GLOBALTABLE . " (lang, module, config_name, config_value) VALUES ('" . $lang . "', '" . $module_name . "', 'auto_postcomm', '1')";

@@ -46,7 +46,7 @@ if (! $is_read) {
     $is_read = 1;
 }
 
-$page_title = $module_info['custom_title'];
+$page_title = $module_info['site_title'];
 
 $xtpl = new XTemplate('view.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);

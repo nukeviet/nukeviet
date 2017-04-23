@@ -158,7 +158,7 @@ if ($nv_Request->isset_request('submit', 'get')) {
         $array_where[] = '( last_login <= ' . $array['last_loginto1'] . ' )';
     }
     if (! empty($filtersql)) {
-        $data_str = $crypt->aes_decrypt(nv_base64_decode($filtersql), NV_CHECK_SESSION);
+        $data_str = $crypt->decrypt($filtersql, NV_CHECK_SESSION);
         if (! empty($data_str)) {
             $array_where[] = $data_str;
         }

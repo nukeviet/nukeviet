@@ -150,6 +150,10 @@ function nv_admin_theme($contents, $head_site = 1)
         $xtpl->assign('NV_JS_MODULE', NV_BASE_SITEURL . 'themes/' . $global_config['admin_theme'] . '/js/' . $module_file . '.js');
         $xtpl->parse('main.module_js');
     }
+    elseif (file_exists(NV_ROOTDIR . '/themes/admin_default/js/' . $module_file . '.js')) {
+        $xtpl->assign('NV_JS_MODULE', NV_BASE_SITEURL . 'themes/admin_default/js/' . $module_file . '.js');
+        $xtpl->parse('main.module_js');
+    }
 
     if ($head_site == 1) {
         $xtpl->assign('NV_GO_CLIENTSECTOR', $lang_global['go_clientsector']);
@@ -298,7 +302,8 @@ function nv_admin_theme($contents, $head_site = 1)
         }
 
         $xtpl->parse('main.select_option');
-    } elseif (isset($site_mods[$module_name]['main_file']) and $site_mods[$module_name]['main_file']) {
+    }
+    if (isset($site_mods[$module_name]['main_file']) and $site_mods[$module_name]['main_file']) {
         $xtpl->assign('NV_GO_CLIENTMOD', $lang_global['go_clientmod']);
         $xtpl->parse('main.site_mods');
     }

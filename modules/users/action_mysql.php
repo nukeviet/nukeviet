@@ -50,7 +50,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
         group_id smallint(5) unsigned NOT NULL DEFAULT '0',
     	username varchar(100) NOT NULL DEFAULT '',
     	md5username char(32) NOT NULL DEFAULT '',
-    	password varchar(80) NOT NULL DEFAULT '',
+    	password varchar(150) NOT NULL DEFAULT '',
     	email varchar(100) NOT NULL DEFAULT '',
     	first_name varchar(100) NOT NULL DEFAULT '',
     	last_name varchar(100) NOT NULL DEFAULT '',
@@ -128,7 +128,7 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     	userid mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
     	username varchar(100) NOT NULL DEFAULT '',
     	md5username char(32) NOT NULL DEFAULT '',
-    	password varchar(80) NOT NULL DEFAULT '',
+    	password varchar(150) NOT NULL DEFAULT '',
     	email varchar(100) NOT NULL DEFAULT '',
     	first_name varchar(255) NOT NULL DEFAULT '',
     	last_name varchar(255) NOT NULL DEFAULT '',
@@ -189,8 +189,9 @@ if ($module_data != 'users' or empty($_arr_table_module)) {
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_width', 80, " . NV_CURRENTTIME . ")";
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('avatar_height', 80, " . NV_CURRENTTIME . ")";
     $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_group_newusers', '0', " . NV_CURRENTTIME . ")";
+    $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_config (config, content, edit_time) VALUES ('active_user_logs', '1', " . NV_CURRENTTIME . ")";
     
-    $a=0;
+    $a = 0;
     if ($module_data == 'users') {
         $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (1, 'Super admin', '', 'Super Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 1, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";
         $sql_create_module[] = "INSERT INTO " . $db_config['prefix'] . "_" . $module_data . "_groups (group_id, title, email, description, content, group_type, group_color, group_avatar, is_default, add_time, exp_time, weight, act, idsite, numbers, siteus, config) VALUES (2, 'General admin', '', 'General Admin', '', 0, '', '', 0, " . NV_CURRENTTIME . ", 0, " . ++$a . ", 1, 0, 0, 0, 'a:7:{s:17:\"access_groups_add\";i:1;s:17:\"access_groups_del\";i:1;s:12:\"access_addus\";i:0;s:14:\"access_waiting\";i:0;s:13:\"access_editus\";i:0;s:12:\"access_delus\";i:0;s:13:\"access_passus\";i:0;}')";

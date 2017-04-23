@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -21,6 +21,8 @@ $lang_translator['langtype'] = 'lang_module';
 
 $lang_module['notallowuserlogin'] = 'Xin lỗi, hiện tại chức năng đăng nhập thành viên đang dừng hoạt động';
 $lang_module['register'] = 'Đăng ký thành viên';
+$lang_module['userlogout'] = 'Thoát khỏi tài khoản thành viên';
+$lang_module['userloginviaopt'] = 'Đăng nhập bằng cổng';
 $lang_module['login_title'] = 'Nếu bạn đã có tài khoản';
 $lang_module['lostpass_title'] = 'Nếu bạn quên Mật khẩu đăng nhập';
 $lang_module['memberlist'] = 'Danh sách thành viên';

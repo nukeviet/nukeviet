@@ -795,7 +795,7 @@ header.header-up {
     padding-left:3px !important;
 }
 
-#header .site-buttons strong {
+#header .site-buttons a.user {
     display:inline-block;
     vertical-align:middle;
     width:26px;
@@ -1316,6 +1316,18 @@ header.header-up {
 
 .nv-captcha {
     vertical-align:middle;
+}
+
+.nv-recaptcha-default {
+    margin: 0 auto;
+    width: 304px;
+    height: 78px;
+}
+
+.nv-recaptcha-compact {
+    margin: 0 auto;
+    width: 164px;
+    height: 144px;
 }
 
 /* List item */

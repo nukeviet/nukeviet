@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -50,6 +50,7 @@ $lang_module['nv_allowed_html_tags'] = 'Mã HTML được chấp nhận sử d�
 $lang_module['captcha_type'] = 'Loại captcha';
 $lang_module['captcha_type_0'] = 'Captcha mặc định';
 $lang_module['captcha_type_1'] = 'Cool php captcha';
+$lang_module['captcha_type_2'] = 'reCAPTCHA';
 $lang_module['captcha'] = 'Cấu hình hiển thị captcha';
 $lang_module['captcha_0'] = 'Không hiển thị';
 $lang_module['captcha_1'] = 'Khi admin đăng nhập';
@@ -61,6 +62,12 @@ $lang_module['captcha_6'] = 'Khi admin đăng nhập hoặc khách đăng ký';
 $lang_module['captcha_7'] = 'Hiển thị trong mọi trường hợp';
 $lang_module['captcha_num'] = 'Số ký tự của captcha';
 $lang_module['captcha_size'] = 'Kích thước của captcha';
+$lang_module['recaptcha_sitekey'] = 'Site key';
+$lang_module['recaptcha_secretkey'] = 'Secret key';
+$lang_module['recaptcha_type'] = 'Kiểu xác nhận';
+$lang_module['recaptcha_type_image'] = 'Hình ảnh (nên chọn)';
+$lang_module['recaptcha_type_audio'] = 'Âm thanh';
+$lang_module['recaptcha_guide'] = 'Nhấp vào đây để lấy thông số Site key và Secret key.';
 
 $lang_module['ftp_config'] = 'Cấu hình FTP';
 $lang_module['smtp_config'] = 'Cấu hình SMTP';
@@ -245,3 +252,9 @@ $lang_module['two_step_verification0'] = 'Không yêu cầu';
 $lang_module['two_step_verification1'] = 'Khu vực quản trị';
 $lang_module['two_step_verification2'] = 'Khu vực ngoài site';
 $lang_module['two_step_verification3'] = 'Tất cả các khu vực';
+
+$lang_module['site_phone'] = 'Số điện thoại của site';
+$lang_module['googleMapsAPI'] = 'Google Maps API key';
+$lang_module['googleMapsAPI_guide'] = '<a href="https://wiki.nukeviet.vn/google:api:creat-google-map-apikey" target="_blank">Hướng dẫn lấy Google Maps API key</a>';
+
+

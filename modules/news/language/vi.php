@@ -9,7 +9,7 @@
  * @Createdate Mar 04, 2010, 03:22:00 PM
  */
 
-if (! defined('NV_MAINFILE')) {
+if (!defined('NV_MAINFILE')) {
     die('Stop!!!');
 }
 
@@ -138,6 +138,7 @@ $lang_module['errorsave'] = 'Lỗi hệ thống không cập nhật được n�
 $lang_module['update_content'] = 'Sửa bài viết';
 $lang_module['del_content'] = 'Xóa bài viết';
 $lang_module['no_public'] = 'Chú ý: Bài viết này chưa được xuất bản, chỉ có những người có quyền thao tác mới có thể xem được nội dung.';
+$lang_module['insrss_not_auth'] = 'Tường lửa đã chặn truy cập khu vực này';
 
 $lang_module['status_alert'] = 'Bài viết đang ở trạng thái: %1$s';
 $lang_module['status_0'] = 'Ngưng hiệu lực';

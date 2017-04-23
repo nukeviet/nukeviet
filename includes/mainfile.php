@@ -21,7 +21,7 @@ define('NV_MAINFILE', true);
 define('NV_START_TIME', microtime(true));
 
 // Khong cho xac dinh tu do cac variables
-$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu =  $error_info = $countries = array();
+$db_config = $global_config = $module_config = $client_info = $user_info = $admin_info = $sys_info = $lang_global = $lang_module = $rss = $nv_vertical_menu = $array_mod_title = $content_type = $submenu = $error_info = $countries = array();
 $page_title = $key_words = $canonicalUrl = $mod_title = $editor_password = $my_head = $my_footer = $description = $contents = '';
 $editor = false;
 
@@ -56,26 +56,6 @@ if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_FILENAME)) {
 }
 require NV_ROOTDIR . '/' . NV_DATADIR . '/config_global.php';
 
-if (defined('NV_CONFIG_DIR')) {
-    $server_name = preg_replace('/^[a-z]+\:\/\//i', '', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : ''));
-    if (file_exists(NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php')) {
-        require NV_ROOTDIR . '/' . NV_CONFIG_DIR . '/' . $server_name . '.php';
-        $db_config['dbname'] = $db_config['dbsite'];
-        $global_config['my_domains'] = $server_name;
-    }
-    define('NV_UPLOADS_DIR', SYSTEM_UPLOADS_DIR . '/' . $global_config['site_dir']);
-    define('NV_FILES_DIR', NV_ASSETS_DIR . '/' . $global_config['site_dir']);
-    define('NV_CACHEDIR', SYSTEM_CACHEDIR . '/' . $global_config['site_dir']);
-    define('NV_USERS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users');
-    define('NV_GROUPS_GLOBALTABLE', $db_config['dbsystem'] . '.' . $db_config['prefix'] . '_users_groups');
-} else {
-    define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
-    define('NV_FILES_DIR', NV_ASSETS_DIR);
-    define('SYSTEM_CACHEDIR', NV_CACHEDIR);
-    define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
-    define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
-}
-
 // Vendor autoload
 require NV_ROOTDIR . '/vendor/autoload.php';
 require NV_ROOTDIR . '/includes/xtemplate.class.php';
@@ -86,6 +66,12 @@ $ips = new NukeViet\Core\Ips();
 define('NV_FORWARD_IP', $ips->forward_ip);
 define('NV_REMOTE_ADDR', $ips->remote_addr);
 define('NV_CLIENT_IP', $ips->remote_ip);
+
+define('SYSTEM_UPLOADS_DIR', NV_UPLOADS_DIR);
+define('NV_FILES_DIR', NV_ASSETS_DIR);
+define('SYSTEM_CACHEDIR', NV_CACHEDIR);
+define('NV_USERS_GLOBALTABLE', $db_config['prefix'] . '_users');
+define('NV_GROUPS_GLOBALTABLE', $db_config['prefix'] . '_users_groups');
 
 // Neu khong co IP
 if (NV_CLIENT_IP == 'none') {
@@ -139,32 +125,42 @@ $nv_Request = new NukeViet\Core\Request($global_config, NV_CLIENT_IP);
 define('NV_SERVER_NAME', $nv_Request->server_name);
 // vd: mydomain1.com
 
+
 define('NV_SERVER_PROTOCOL', $nv_Request->server_protocol);
 // vd: http
+
 
 define('NV_SERVER_PORT', $nv_Request->server_port);
 // vd: 80
 
+
 define('NV_MY_DOMAIN', $nv_Request->my_current_domain);
 // vd: http://mydomain1.com:80
+
 
 define('NV_HEADERSTATUS', $nv_Request->headerstatus);
 // vd: HTTP/1.0
 
+
 define('NV_BASE_SITEURL', $nv_Request->base_siteurl . '/');
 // vd: /ten_thu_muc_chua_site/
+
 
 define('NV_BASE_ADMINURL', $nv_Request->base_adminurl . '/');
 // vd: /ten_thu_muc_chua_site/admin/
 
+
 define('NV_DOCUMENT_ROOT', $nv_Request->doc_root);
 // D:/AppServ/www
+
 
 define('NV_CACHE_PREFIX', md5($global_config['sitekey'] . NV_SERVER_NAME));
 // Hau to cua file cache
 
+
 define('NV_CHECK_SESSION', md5(NV_CACHE_PREFIX . $nv_Request->session_id));
 // Kiem tra session cua nguoi dung
+
 
 define('NV_USER_AGENT', $nv_Request->user_agent);
 
@@ -267,7 +263,7 @@ if ($nv_Request->isset_request('scaptcha', 'get')) {
 }
 // Class ma hoa du lieu
 $crypt = new NukeViet\Core\Encryption($global_config['sitekey']);
-$global_config['ftp_user_pass'] = $crypt->aes_decrypt(nv_base64_decode($global_config['ftp_user_pass']));
+$global_config['ftp_user_pass'] = $crypt->decrypt($global_config['ftp_user_pass']);
 
 if (isset($nv_plugin_area[1])) {
     // Kết nối với các plugin Trước khi kết nối CSDL
@@ -308,12 +304,22 @@ define('NV_REFSTAT_TABLE', NV_PREFIXLANG . '_referer_stats');
 
 $sql = "SELECT lang, module, config_name, config_value FROM " . NV_CONFIG_GLOBALTABLE . " WHERE lang='" . NV_LANG_DATA . "' or (lang='sys' AND module='site') ORDER BY module ASC";
 $list = $nv_Cache->db($sql, '', 'settings');
+
 foreach ($list as $row) {
     if (($row['lang'] == NV_LANG_DATA and $row['module'] == 'global') or ($row['lang'] == 'sys' and $row['module'] == 'site')) {
         $global_config[$row['config_name']] = $row['config_value'];
     } else {
         $module_config[$row['module']][$row['config_name']] = $row['config_value'];
     }
+}
+
+if ($global_config['is_user_forum']) {
+    define('NV_IS_USER_FORUM', true);
+}
+
+if (!empty($global_config['openid_servers'])) {
+    $global_config['openid_servers'] = explode(',', $global_config['openid_servers']);
+    define('NV_OPENID_ALLOWED', true);
 }
 
 if (empty($global_config['site_logo'])) {
@@ -325,11 +331,11 @@ $global_config['array_theme_type'] = explode(',', $global_config['theme_type']);
 
 define('NV_MAIN_DOMAIN', in_array($global_config['site_domain'], $global_config['my_domains']) ? str_replace(NV_SERVER_NAME, $global_config['site_domain'], NV_MY_DOMAIN) : NV_MY_DOMAIN);
 
-$global_config['smtp_password'] = $crypt->aes_decrypt(nv_base64_decode($global_config['smtp_password']));
+$global_config['smtp_password'] = $crypt->decrypt($global_config['smtp_password']);
 if ($sys_info['ini_set_support']) {
     ini_set('sendmail_from', $global_config['site_email']);
 }
-if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array('mild', 'lite', 'none'))) {
+if (!isset($global_config['upload_checking_mode']) or !in_array($global_config['upload_checking_mode'], array('mild','lite','none'))) {
     $global_config['upload_checking_mode'] = 'strong';
 }
 define('UPLOAD_CHECKING_MODE', $global_config['upload_checking_mode']);
@@ -411,7 +417,9 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                     'module_file' => $row['module_file'],
                     'module_data' => $row['module_data'],
                     'module_upload' => $row['module_upload'],
+                    'module_theme' => $row['module_theme'],
                     'custom_title' => $row['custom_title'],
+                    'site_title' => (empty($row['site_title'])) ? $row['custom_title'] : $row['site_title'],
                     'admin_title' => (empty($row['admin_title'])) ? $row['custom_title'] : $row['admin_title'],
                     'admin_file' => $row['admin_file'],
                     'main_file' => $row['main_file'],
@@ -432,6 +440,7 @@ if (($cache = $nv_Cache->getItem('modules', $cache_file)) != false) {
                 'func_name' => $f_name,
                 'show_func' => $row['show_func'],
                 'func_custom_name' => $row['func_custom_name'],
+                'func_site_title' => empty($row['func_site_title']) ? $row['func_custom_name'] : $row['func_site_title'],
                 'in_submenu' => $row['in_submenu']
             );
             $sys_mods[$m_title]['alias'][$f_name] = $f_alias;

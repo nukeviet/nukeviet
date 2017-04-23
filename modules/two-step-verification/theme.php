@@ -20,9 +20,9 @@ if (! defined('NV_MOD_2STEP_VERIFICATION')) {
  */
 function nv_theme_info_2step($backupcodes, $allow_disable_2step)
 {
-    global $module_info, $module_file, $global_config, $lang_global, $lang_module, $user_info, $module_name;
+    global $module_info, $global_config, $lang_global, $lang_module, $user_info, $module_name;
 
-    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('main.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     
@@ -72,9 +72,9 @@ function nv_theme_info_2step($backupcodes, $allow_disable_2step)
  */
 function nv_theme_config_2step($secretkey, $nv_redirect)
 {
-    global $module_info, $module_file, $lang_global, $lang_module, $module_name, $op;
+    global $module_info, $lang_global, $lang_module, $module_name, $op;
 
-    $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('config.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);
@@ -95,9 +95,9 @@ function nv_theme_config_2step($secretkey, $nv_redirect)
  */
 function nv_theme_confirm_password()
 {
-    global $module_info, $module_file, $lang_global, $lang_module, $op, $module_name;
+    global $module_info, $lang_global, $lang_module, $op, $module_name;
 
-    $xtpl = new XTemplate('confirm_password.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_file);
+    $xtpl = new XTemplate('confirm_password.tpl', NV_ROOTDIR . '/themes/' . $module_info['template'] . '/modules/' . $module_info['module_theme']);
     $xtpl->assign('LANG', $lang_module);
     $xtpl->assign('GLANG', $lang_global);
     $xtpl->assign('NV_CHECK_SESSION', NV_CHECK_SESSION);

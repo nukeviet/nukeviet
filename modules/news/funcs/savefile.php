@@ -12,6 +12,12 @@ if (! defined('NV_IS_MOD_NEWS')) {
     die('Stop!!!');
 }
 
+/**
+ * nv_src_href_callback()
+ * 
+ * @param mixed $matches
+ * @return
+ */
 function nv_src_href_callback($matches)
 {
     if (! empty($matches[2]) and ! preg_match("/^http\:\/\//", $matches[2]) and ! preg_match("/^https\:\/\//", $matches[2]) and ! preg_match("/^mailto\:/", $matches[2]) and ! preg_match("/^tel\:/", $matches[2]) and ! preg_match("/^javascript/", $matches[2])) {

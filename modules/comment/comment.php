@@ -141,7 +141,7 @@ function nv_comment_module($module, $checkss, $area, $id, $allowed, $page, $stat
                 }
             }
 
-            $page_title = $module_info['custom_title'];
+            $page_title = $module_info['site_title'];
             $key_words = $module_info['keywords'];
             $array_data = array();
 
@@ -268,15 +268,21 @@ function nv_theme_comment_module($module, $area, $id, $allowed_comm, $checkss, $
         }
 
         if ($show_captcha) {
-            $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-            $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-            $xtpl->assign('GFX_NUM', NV_GFX_NUM);
-            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-            $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-            $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-            $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
-            $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
-            $xtpl->parse('main.allowed_comm.captcha');
+            if ($global_config['captcha_type'] == 2) {
+                $xtpl->assign('RECAPTCHA_ELEMENT', 'recaptcha' . nv_genpass(8));
+                $xtpl->assign('GFX_NUM', -1);
+                $xtpl->parse('main.allowed_comm.recaptcha');
+            } else {
+                $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+                $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+                $xtpl->assign('GFX_NUM', NV_GFX_NUM);
+                $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+                $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+                $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+                $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+                $xtpl->assign('SRC_CAPTCHA', NV_BASE_SITEURL . 'index.php?scaptcha=captcha&t=' . NV_CURRENTTIME);
+                $xtpl->parse('main.allowed_comm.captcha');
+            }
         } else {
             $xtpl->assign('GFX_NUM', 0);
         }

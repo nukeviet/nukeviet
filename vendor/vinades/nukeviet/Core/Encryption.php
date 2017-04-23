@@ -53,7 +53,7 @@ class Encryption
         }
 
         $mhast = constant('MHASH_SHA1');
-        $salt = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz0123456789'), 0, 8);
+        $salt = substr(sha1(microtime() . $this->_key), 0, 8);
         $salt = mhash_keygen_s2k($mhast, $digest, substr(pack('h*', md5($salt)), 0, 8), 4);
         $hash = strtr(base64_encode(mhash($mhast, $digest . $salt) . $salt), '+/=', '-_,');
         return $hash;
@@ -68,8 +68,14 @@ class Encryption
      */
     public function hash_password($password, $hashprefix = '{SSHA}')
     {
-        if ($hashprefix == '{SSHA}') {
-            $salt = substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 4)), 0, 4);
+        if ($hashprefix == '{SSHA512}') {
+            $salt = substr(sha1(microtime() . $this->_key), 0, 4);
+            return '{SSHA512}' . base64_encode(hash('sha512', $password . $salt, true) . $salt);
+        } elseif ($hashprefix == '{SSHA256}') {
+            $salt = substr(sha1(microtime() . $this->_key), 0, 4);
+            return '{SSHA256}' . base64_encode(hash('sha256', $password . $salt, true) . $salt);
+        } elseif ($hashprefix == '{SSHA}') {
+            $salt = substr(sha1(microtime() . $this->_key), 0, 4);
             return '{SSHA}' . base64_encode(sha1($password . $salt, true) . $salt);
         } elseif ($hashprefix == '{SHA}') {
             return '{SHA}' . base64_encode(sha1($password, true));
@@ -88,7 +94,13 @@ class Encryption
      */
     public function validate_password($password, $hash)
     {
-        if (substr($hash, 0, 6) == '{SSHA}') {
+        if (substr($hash, 0, 9) == '{SSHA512}') {
+            $salt = substr(base64_decode(substr($hash, 9)), 64);
+            $validate_hash = '{SSHA512}' . base64_encode(hash('sha512', $password . $salt, true) . $salt);
+        } elseif (substr($hash, 0, 9) == '{SSHA256}') {
+            $salt = substr(base64_decode(substr($hash, 9)), 32);
+            $validate_hash = '{SSHA256}' . base64_encode(hash('sha256', $password . $salt, true) . $salt);
+        } elseif (substr($hash, 0, 6) == '{SSHA}') {
             $salt = substr(base64_decode(substr($hash, 6)), 20);
             $validate_hash = '{SSHA}' . base64_encode(sha1($password . $salt, true) . $salt);
         } elseif (substr($hash, 0, 5) == '{SHA}') {
@@ -160,4 +172,34 @@ class Encryption
             return null;
         }
     }
+
+    /**
+     * Encryption::encrypt()
+     *
+     * @param mixed $val
+     * @param mixed $iv
+     * @return
+     */
+    public function encrypt($data, $iv = '')
+    {
+        $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
+        
+        $data = openssl_encrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
+        return strtr($data, '+/=', '-_,');
+    }
+
+    /**
+     * Encryption::decrypt()
+     *
+     * @param mixed $val
+     * @param mixed $iv
+     * @return
+     */
+    public function decrypt($data, $iv = '')
+    {
+        $iv = empty($iv) ? substr($this->_key, 0, 16) : substr($iv, 0, 16);
+        
+        $data = strtr($data, '-_,', '+/=');
+        return openssl_decrypt($data, 'aes-256-cbc', $this->_key, 0, $iv);
+    }    
 }

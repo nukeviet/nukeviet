@@ -30,6 +30,8 @@ if (isset($access_admin['access_waiting'][$level]) and $access_admin['access_wai
 }
 if (isset($access_admin['access_editus'][$level]) and $access_admin['access_editus'][$level] == 1) {
     $allow_func[] = 'edit';
+    $allow_func[] = 'edit_2step';
+    $allow_func[] = 'edit_oauth';
 }
 if (isset($access_admin['access_delus'][$level]) and $access_admin['access_delus'][$level] == 1) {
     $allow_func[] = 'del';
@@ -53,12 +55,7 @@ if (defined('NV_IS_SPADMIN') and empty($global_config['idsite'])) {
     if (defined('NV_IS_GODADMIN')) {
         $submenu['fields'] = $lang_module['fields'];
         $allow_func[] = 'fields';
-        $submenu['config'] = $lang_module['config'];
-        $allow_func[] = 'config';
-        if (file_exists(NV_ROOTDIR . '/modules/users/admin/import.php')) {
-            $submenu['import'] = $lang_module['import'];
-            $allow_func[] = 'import';
-            $allow_func[] = 'export';
-        }
     }
+    $submenu['config'] = $lang_module['config'];
+    $allow_func[] = 'config';
 }

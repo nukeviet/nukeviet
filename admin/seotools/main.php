@@ -12,5 +12,11 @@ if (! defined('NV_IS_FILE_SEOTOOLS')) {
     die('Stop!!!');
 }
 
-Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=pagetitle');
+if (defined('NV_IS_GODADMIN')) {
+    $redirect_op = 'pagetitle';
+} else {
+    $redirect_op = 'googleplus';
+}
+
+Header('Location: ' . NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $redirect_op);
 exit();

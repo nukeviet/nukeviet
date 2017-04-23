@@ -166,274 +166,292 @@ $where = '';
 $page = $nv_Request->get_int('page', 'get', 1);
 $checkss = $nv_Request->get_string('checkss', 'get', '');
 
-if ( ( $module_config[$module_name]['use_elas'] == 1 )   && $checkss == NV_CHECK_SESSION)
-{
-    //ket noi den csdl elastic 
-    $nukeVietElasticSearh = new NukeViet\NukeVietElasticSearch\Functions( $module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index'] );
-    
-	$search_elastic=array();
-	//t�m ki?m theo bodytext,author,title
-	$key_elastic_search=nv_EncString($db_slave->dblikeescape($q));
-	if($stype == 'bodytext' or $stype == 'author' or $stype == 'title')
-		{
-		    if ($stype == 'bodytext') {
-				//match:tim kiem theo 1 truong
-				$search_elastic=[
-				'should'=> [
-		        'match'=>['unsigned_bodyhtml'=>$key_elastic_search ]
-		            ],
-		          ];
+if (($module_config[$module_name]['elas_use'] == 1) && $checkss == NV_CHECK_SESSION) {
+    // Ket noi den csdl elastic
+    $nukeVietElasticSearh = new NukeViet\ElasticSearch\Functions($module_config[$module_name]['elas_host'], $module_config[$module_name]['elas_port'], $module_config[$module_name]['elas_index']);
 
-				}
-			elseif ($stype == 'author') {
-				$search_elastic=[
-				'should'=> [
-		        'match'=>['unsigned_author'=>$key_elastic_search ]
-		            ],
-		          ];
-
-			}
-			elseif ($stype == 'title') {
-				$search_elastic=[
-				'should'=> [
-		              'match'=>['unsigned_title'=>$key_elastic_search ]
-		            ],
-		          ];
-			}
- 		}
-	 elseif($stype == 'sourcetext'){
-		        $qurl = $q;
-		        $url_info = @parse_url($qurl);
-				//print_r($url_info);die('pass');
-		        if (isset($url_info['scheme']) and isset($url_info['host'])) {
-		            $qurl = $url_info['scheme'] . '://' . $url_info['host'];
-		        }
-				// T�m ki?m c� 1 trong c�c t?.
-				$search_elastic=[
-				'should'=> [
-		        'match'=>['sourcetext'=>$db_slave->dblikeescape($qurl) ]
-		            	],
-		         ];
-		   	 }
-		//t�m ki?m theo admin_id
-		elseif ($stype == 'admin_id') {
-
-			//tim tat ca cac admin_id c� username=$db_slave->dblikeescape($qhtml) ho?c first_name=$db_slave->dblikeescape($qhtml)
-	    	$db->sqlreset()
-	        ->select('userid')
-	        ->from (NV_USERS_GLOBALTABLE)
-	        ->where ('username LIKE :q_username OR first_name LIKE :q_first_name');
-
-		    $sth = $db->prepare($db->sql());
-		    $sth->bindValue(':q_username', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
-			$sth->bindValue(':q_first_name', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
-		    $sth->execute();
-		    $admin_id_search=array();
-			//search elastic theo admin_id v?a t�m dc
-			$match = array();
-			while($admin_id_search=$sth->fetch(3))
-				{
-					$match[] = ['match'=>['admin_id'=>$admin_id_search[0]]];
-				}
-			$result = count($match);
-			if($result==0)
-			{
-					$match[] = ['match'=>['admin_id'=>-1]];
-			}
-			//print_r($result);die('pass');
-			//gop mang
-			$search_elastic_user['filter']['or']=$match;
-			$search_elastic=array_merge($search_elastic,$search_elastic_user);
-
-		}
-
-	 	else{
-			$key_search=nv_EncString($db_slave->dblikeescape($q));
-			$search_elastic=[
-					'should'=> [
-	              	'multi_match' => [
-	                'query'=> $key_search,
-	                'type'=> ['cross_fields'],
-	                'fields'=> [ 'unsigned_title',
-	    						'unsigned_bodyhtml','unsigned_author'],
-	                'minimum_should_match'=> ['50%']
-	              ]
-	            ]
+    $search_elastic = array();
+    // Tim kiem theo bodytext,author,title
+    $key_elastic_search = nv_EncString($db_slave->dblikeescape($q));
+    if ($stype == 'bodytext' or $stype == 'author' or $stype == 'title') {
+        if ($stype == 'bodytext') {
+            //match:tim kiem theo 1 truong
+            $search_elastic = [
+                'should' => [
+                    'match' => [
+                        'unsigned_bodyhtml' => $key_elastic_search
+                    ]
+                ]
             ];
-			//tim tat ca cac admin_id c� username=$db_slave->dblikeescape($qhtml) ho?c first_name=$db_slave->dblikeescape($qhtml)
-	    	$db->sqlreset()
-	        ->select('userid')
-	        ->from (NV_USERS_GLOBALTABLE)
-	        ->where ('username LIKE :q_username OR first_name LIKE :q_first_name');
 
-		    $sth = $db->prepare($db->sql());
-		    $sth->bindValue(':q_username', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
-			$sth->bindValue(':q_first_name', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
-		    $sth->execute();
-		    $admin_id_search=array();
-			//search elastic theo admin_id v?a t�m dc
-			$match = array();
-			while($admin_id_search=$sth->fetch(3))
-				{
-					$match[] = ['match'=>['admin_id'=>$admin_id_search[0]]];
-				}
-			$result = count($match);
+        } elseif ($stype == 'author') {
+            $search_elastic = [
+                'should' => [
+                    'match' => [
+                        'unsigned_author' => $key_elastic_search
+                    ]
+                ]
+            ];
 
-			if($result>0)
-			{
-					$search_elastic_user['filter']['or']=$match;
-					$search_elastic=array_merge($search_elastic,$search_elastic_user);
-			}
+        } elseif ($stype == 'title') {
+            $search_elastic = [
+                'should' => [
+                    'match' => [
+                        'unsigned_title' => $key_elastic_search
+                    ]
+                ]
+            ];
+        }
+    } elseif ($stype == 'sourcetext') {
+        $qurl = $q;
+        $url_info = @parse_url($qurl);
+        //print_r($url_info);die('pass');
+        if (isset($url_info['scheme']) and isset($url_info['host'])) {
+            $qurl = $url_info['scheme'] . '://' . $url_info['host'];
+        }
+        // T�m ki?m c� 1 trong c�c t?.
+        $search_elastic = [
+            'should' => [
+                'match' => [
+                    'sourcetext' => $db_slave->dblikeescape($qurl)
+                ]
+            ]
+        ];
+    } elseif ($stype == 'admin_id') {
+        //tim tat ca cac admin_id c� username=$db_slave->dblikeescape($qhtml) ho?c first_name=$db_slave->dblikeescape($qhtml)
+        $db->sqlreset()
+            ->select('userid')
+            ->from(NV_USERS_GLOBALTABLE)
+            ->where('username LIKE :q_username OR first_name LIKE :q_first_name');
 
-		}
-		if($catid!=0)
-			{
-				$search_elastic_catid=[
-						'must'=> [
-		              	'match'=>['catid'=>$catid ]
-		            			],
-		          			];
-				if(!empty($q))
-				{
-					$search_elastic=array_merge($search_elastic,$search_elastic_catid);
-				}
-				else {
-					$search_elastic=$search_elastic_catid;
-				}
+        $sth = $db->prepare($db->sql());
+        $sth->bindValue(':q_username', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_first_name', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
+        $sth->execute();
+        $admin_id_search = array();
+        //search elastic theo admin_id v?a t�m dc
+        $match = array();
+        while ($admin_id_search = $sth->fetch(3)) {
+            $match[] = [
+                'match' => [
+                    'admin_id' => $admin_id_search[0]
+                ]
+            ];
+        }
+        $result = count($match);
+        if ($result == 0) {
+            $match[] = [
+                'match' => [
+                    'admin_id' => -1
+                ]
+            ];
+        }
+        $search_elastic_user['filter']['or'] = $match;
+        $search_elastic = array_merge($search_elastic, $search_elastic_user);
+    } else {
+        $key_search = nv_EncString($db_slave->dblikeescape($q));
+        $search_elastic = [
+            'should' => [
+                'multi_match' => [
+                    'query' => $key_search,
+                    'type' => [
+                        'cross_fields'
+                    ],
+                    'fields' => [
+                        'unsigned_title',
+                        'unsigned_bodyhtml',
+                        'unsigned_author'
+                    ],
+                    'minimum_should_match' => [
+                        '50%'
+                    ]
+                ]
+            ]
+        ];
+        //tim tat ca cac admin_id c� username=$db_slave->dblikeescape($qhtml) ho?c first_name=$db_slave->dblikeescape($qhtml)
+        $db->sqlreset()
+            ->select('userid')
+            ->from(NV_USERS_GLOBALTABLE)
+            ->where('username LIKE :q_username OR first_name LIKE :q_first_name');
 
-			}
+        $sth = $db->prepare($db->sql());
+        $sth->bindValue(':q_username', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
+        $sth->bindValue(':q_first_name', '%' . $db_slave->dblikeescape($qhtml) . '%', PDO::PARAM_STR);
+        $sth->execute();
+        $admin_id_search = array();
+        //search elastic theo admin_id v?a t�m dc
+        $match = array();
+        while ($admin_id_search = $sth->fetch(3)) {
+            $match[] = [
+                'match' => [
+                    'admin_id' => $admin_id_search[0]
+                ]
+            ];
+        }
+        $result = count($match);
 
-		if ($sstatus != -1)
-			{
-				$search_elastic_status=[
-				'filter'=> [
-		        'match'=>['status'=>$sstatus ]
-		            		],
-		          ];
-				if(!empty($q))
-				{
-				 	$search_elastic=array_merge($search_elastic,$search_elastic_status);
-				}
-				else {
-					$search_elastic=$search_elastic_status;
-				}
-			}
-            
-            $array_query_elastic = array();
-			$array_query_elastic['query']['bool']=$search_elastic;
-			$array_query_elastic['size']=$per_page;
-			$array_query_elastic['from']=($page - 1) * $per_page;
-            
-			$response = $nukeVietElasticSearh->search_data( NV_PREFIXLANG . '_' . $module_data . '_rows', $array_query_elastic);
-            
+        if ($result > 0) {
+            $search_elastic_user['filter']['or'] = $match;
+            $search_elastic = array_merge($search_elastic, $search_elastic_user);
+        }
 
-		//so dong du lieu lay dc,c?n s?a $num_items=s? dong d? li?u
-		$num_checkss = md5($num_items . NV_CHECK_SESSION);
-		if ($num_checkss != $nv_Request->get_string('num_checkss', 'get', '')) {
-			//print_r($expression)
-		    $num_items = $response['hits']['total'];
-		    $num_checkss = md5($num_items . NV_CHECK_SESSION);//?c?n s?a
-		}
-		$base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
-		if ($catid) {
-		    $base_url_mod .= '&amp;catid=' . $catid;
-		}
-		if (!empty($q)) {
-		    $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
-		}
-		$base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
+    }
+    if ($catid != 0) {
+        $search_elastic_catid = [
+            'must' => [
+                'match' => [
+                    'catid' => $catid
+                ]
+            ]
+        ];
+        if (!empty($q)) {
+            $search_elastic = array_merge($search_elastic, $search_elastic_catid);
+        } else {
+            $search_elastic = $search_elastic_catid;
+        }
 
-		//hien thi du lieu
-		$data = $array_ids = $array_userid = array();
-		foreach ($response ['hits'] ['hits'] as $key => $value) {
-		$array_list_elastic_search=array($value['_source']['id'],$value['_source']['catid'],$value['_source']['listcatid'],$value['_source']['admin_id'],$value['_source']['title'],$value['_source']['alias'],$value['_source']['status'],$value['_source']['publtime'],$value['_source']['exptime'],$value['_source']['hitstotal'],$value['_source']['hitscm'],$value['_source']['admin_id']);
-		list ($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $_userid)=$array_list_elastic_search;
-	    $publtime = nv_date('H:i d/m/y', $publtime);
-	    $title = nv_clean60($title);
-	    if ($catid > 0) {
-	        $catid_i = $catid;
-	    }
+    }
 
-	    $check_permission_edit = $check_permission_delete = false;
+    if ($sstatus != -1) {
+        $search_elastic_status = [
+            'filter' => [
+                'match' => [
+                    'status' => $sstatus
+                ]
+            ]
+        ];
+        if (!empty($q)) {
+            $search_elastic = array_merge($search_elastic, $search_elastic_status);
+        } else {
+            $search_elastic = $search_elastic_status;
+        }
+    }
 
-	    if (defined('NV_IS_ADMIN_MODULE')) {
-	        $check_permission_edit = $check_permission_delete = true;
-	    } else {
-	        $array_temp = explode(',', $listcatid);
-	        $check_edit = $check_del = 0;
+    $array_query_elastic = array();
+    $array_query_elastic['query']['bool'] = $search_elastic;
+    $array_query_elastic['size'] = $per_page;
+    $array_query_elastic['from'] = ($page - 1) * $per_page;
 
-	        foreach ($array_temp as $catid_i) {
-	            if (isset($array_cat_admin[$admin_id][$catid_i])) {
-	                if ($array_cat_admin[$admin_id][$catid_i]['admin'] == 1) {
-	                    ++$check_edit;
-	                    ++$check_del;
-	                    $_permission_action['publtime'] = true;
-	                    $_permission_action['re-published'] = true;
-	                    $_permission_action['exptime'] = true;
-	                    $_permission_action['declined'] = true;
-	                } else {
-	                    if ($array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1) {
-	                        ++$check_edit;
-	                        if ($status) {
-	                            $_permission_action['exptime'] = true;
-	                        }
-	                    } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and $status == 0) {
-	                        ++$check_edit;
-	                        $_permission_action['publtime'] = true;
-	                        $_permission_action['re-published'] = true;
-	                    } elseif (($status == 0 or $status == 4 or $status == 5) and $post_id == $admin_id) {
-	                        ++$check_edit;
-	                        $_permission_action['waiting'] = true;
-	                    }
+    $response = $nukeVietElasticSearh->search_data(NV_PREFIXLANG . '_' . $module_data . '_rows', $array_query_elastic);
 
-	                    if ($array_cat_admin[$admin_id][$catid_i]['del_content'] == 1) {
-	                        ++$check_del;
-	                    } elseif (($status == 0 or $status == 4 or $status == 5) and $post_id == $admin_id) {
-	                        ++$check_del;
-	                        $_permission_action['waiting'] = true;
-	                    }
-	                }
-	            }
-	        }
+    //so dong du lieu lay dc,c?n s?a $num_items=s? dong d? li?u
+    $num_checkss = md5($num_items . NV_CHECK_SESSION);
+    if ($num_checkss != $nv_Request->get_string('num_checkss', 'get', '')) {
+        //print_r($expression)
+        $num_items = $response['hits']['total'];
+        $num_checkss = md5($num_items . NV_CHECK_SESSION); //?c?n s?a
+    }
+    $base_url_mod = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $op . '&amp;per_page=' . $per_page;
+    if ($catid) {
+        $base_url_mod .= '&amp;catid=' . $catid;
+    }
+    if (!empty($q)) {
+        $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
+    }
+    $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
 
-	        if ($check_edit == sizeof($array_temp)) {
-	            $check_permission_edit = true;
-	        }
+    //hien thi du lieu
+    $data = $array_ids = $array_userid = array();
+    foreach ($response['hits']['hits'] as $key => $value) {
+        $array_list_elastic_search = array(
+            $value['_source']['id'],
+            $value['_source']['catid'],
+            $value['_source']['listcatid'],
+            $value['_source']['admin_id'],
+            $value['_source']['title'],
+            $value['_source']['alias'],
+            $value['_source']['status'],
+            $value['_source']['publtime'],
+            $value['_source']['exptime'],
+            $value['_source']['hitstotal'],
+            $value['_source']['hitscm'],
+            $value['_source']['admin_id']
+        );
+        list ($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $_userid) = $array_list_elastic_search;
+        $publtime = nv_date('H:i d/m/y', $publtime);
+        $title = nv_clean60($title);
+        if ($catid > 0) {
+            $catid_i = $catid;
+        }
 
-	        if ($check_del == sizeof($array_temp)) {
-	            $check_permission_delete = true;
-	        }
-	    }
+        $check_permission_edit = $check_permission_delete = false;
 
-	    $admin_funcs = array();
-	    if ($check_permission_edit) {
-	        $admin_funcs[] = nv_link_edit_page($id);
-	    }
-	    if ($check_permission_delete) {
-	        $admin_funcs[] = nv_link_delete_page($id);
-	        $_permission_action['delete'] = true;
-	    }
-	    $data[$id] = array(
-	        'id' => $id,
-	        'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
-	        'title' => $title,
-	        'publtime' => $publtime,
-	        'status_id' => $status,
-	        'status' => $lang_module['status_' . $status],
-	        'class' => $array_status_class[$status],
-	        'userid' => $_userid,
-	        'hitstotal' => number_format($hitstotal, 0, ',', '.'),
-	        'hitscm' => number_format($hitscm, 0, ',', '.'),
-	        'numtags' => 0,
-	        'feature' => implode(' ', $admin_funcs)
-	    );
+        if (defined('NV_IS_ADMIN_MODULE')) {
+            $check_permission_edit = $check_permission_delete = true;
+        } else {
+            $array_temp = explode(',', $listcatid);
+            $check_edit = $check_del = 0;
 
-	    $array_ids[] = $id;
-	    $array_userid[] = $_userid;
-	}
-}
-else
-{
+            foreach ($array_temp as $catid_i) {
+                if (isset($array_cat_admin[$admin_id][$catid_i])) {
+                    if ($array_cat_admin[$admin_id][$catid_i]['admin'] == 1) {
+                        ++$check_edit;
+                        ++$check_del;
+                        $_permission_action['publtime'] = true;
+                        $_permission_action['re-published'] = true;
+                        $_permission_action['exptime'] = true;
+                        $_permission_action['declined'] = true;
+                    } else {
+                        if ($array_cat_admin[$admin_id][$catid_i]['edit_content'] == 1) {
+                            ++$check_edit;
+                            if ($status) {
+                                $_permission_action['exptime'] = true;
+                            }
+                        } elseif ($array_cat_admin[$admin_id][$catid_i]['pub_content'] == 1 and $status == 0) {
+                            ++$check_edit;
+                            $_permission_action['publtime'] = true;
+                            $_permission_action['re-published'] = true;
+                        } elseif (($status == 0 or $status == 4 or $status == 5) and $post_id == $admin_id) {
+                            ++$check_edit;
+                            $_permission_action['waiting'] = true;
+                        }
+
+                        if ($array_cat_admin[$admin_id][$catid_i]['del_content'] == 1) {
+                            ++$check_del;
+                        } elseif (($status == 0 or $status == 4 or $status == 5) and $post_id == $admin_id) {
+                            ++$check_del;
+                            $_permission_action['waiting'] = true;
+                        }
+                    }
+                }
+            }
+
+            if ($check_edit == sizeof($array_temp)) {
+                $check_permission_edit = true;
+            }
+
+            if ($check_del == sizeof($array_temp)) {
+                $check_permission_delete = true;
+            }
+        }
+
+        $admin_funcs = array();
+        if ($check_permission_edit) {
+            $admin_funcs[] = nv_link_edit_page($id);
+        }
+        if ($check_permission_delete) {
+            $admin_funcs[] = nv_link_delete_page($id);
+            $_permission_action['delete'] = true;
+        }
+        $data[$id] = array(
+            'id' => $id,
+            'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
+            'title' => $title,
+            'publtime' => $publtime,
+            'status_id' => $status,
+            'status' => $lang_module['status_' . $status],
+            'class' => $array_status_class[$status],
+            'userid' => $_userid,
+            'hitstotal' => number_format($hitstotal, 0, ',', '.'),
+            'hitscm' => number_format($hitscm, 0, ',', '.'),
+            'numtags' => 0,
+            'feature' => implode(' ', $admin_funcs)
+        );
+
+        $array_ids[] = $id;
+        $array_userid[] = $_userid;
+    }
+} else {
     if ($checkss == NV_CHECK_SESSION) {
         if ($stype == 'bodytext') {
             $from .= ' INNER JOIN ' . NV_PREFIXLANG . '_' . $module_data . '_detail c ON (r.id=c.id)';
@@ -472,7 +490,7 @@ else
             $from .= ' LEFT JOIN ' . NV_USERS_GLOBALTABLE . ' u ON r.admin_id=u.userid';
         }
     }
-    
+
     if (!defined('NV_IS_ADMIN_MODULE')) {
         $from_catid = array();
         foreach ($array_cat_view as $catid_i) {
@@ -496,13 +514,12 @@ else
         'description' => '',
         'keywords' => ''
     );
-    
-    
+
     $db_slave->sqlreset()
         ->select('COUNT(*)')
         ->from($from)
         ->where($where);
-    
+
     $_sql = $db_slave->sql();
     $num_checkss = md5($num_items . NV_CHECK_SESSION . $_sql);
     if ($num_checkss != $nv_Request->get_string('num_checkss', 'get', '')) {
@@ -517,30 +534,30 @@ else
         $base_url_mod .= '&amp;q=' . $q . '&amp;checkss=' . $checkss;
     }
     $base_url_mod .= '&amp;stype=' . $stype . '&amp;num_items=' . $num_items . '&amp;num_checkss=' . $num_checkss;
-    
+
     $db_slave->select('r.id, r.catid, r.listcatid, r.admin_id, r.title, r.alias, r.status , r.publtime, r.exptime, r.hitstotal, r.hitscm, r.admin_id')
         ->order('r.' . $ordername . ' ' . $order)
         ->limit($per_page)
         ->offset(($page - 1) * $per_page);
     $result = $db_slave->query($db_slave->sql());
-    
+
     $data = $array_ids = $array_userid = array();
     while (list ($id, $catid_i, $listcatid, $post_id, $title, $alias, $status, $publtime, $exptime, $hitstotal, $hitscm, $_userid) = $result->fetch(3)) {
         $publtime = nv_date('H:i d/m/y', $publtime);
         $title = nv_clean60($title);
-    
+
         if ($catid > 0) {
             $catid_i = $catid;
         }
-    
+
         $check_permission_edit = $check_permission_delete = false;
-    
+
         if (defined('NV_IS_ADMIN_MODULE')) {
             $check_permission_edit = $check_permission_delete = true;
         } else {
             $array_temp = explode(',', $listcatid);
             $check_edit = $check_del = 0;
-    
+
             foreach ($array_temp as $catid_i) {
                 if (isset($array_cat_admin[$admin_id][$catid_i])) {
                     if ($array_cat_admin[$admin_id][$catid_i]['admin'] == 1) {
@@ -564,7 +581,7 @@ else
                             ++$check_edit;
                             $_permission_action['waiting'] = true;
                         }
-    
+
                         if ($array_cat_admin[$admin_id][$catid_i]['del_content'] == 1) {
                             ++$check_del;
                         } elseif (($status == 0 or $status == 4 or $status == 5) and $post_id == $admin_id) {
@@ -574,16 +591,16 @@ else
                     }
                 }
             }
-    
+
             if ($check_edit == sizeof($array_temp)) {
                 $check_permission_edit = true;
             }
-    
+
             if ($check_del == sizeof($array_temp)) {
                 $check_permission_delete = true;
             }
         }
-    
+
         $admin_funcs = array();
         if ($check_permission_edit) {
             $admin_funcs[] = nv_link_edit_page($id);
@@ -592,7 +609,7 @@ else
             $admin_funcs[] = nv_link_delete_page($id);
             $_permission_action['delete'] = true;
         }
-    
+
         $data[$id] = array(
             'id' => $id,
             'link' => NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=' . $global_array_cat[$catid_i]['alias'] . '/' . $alias . '-' . $id . $global_config['rewrite_exturl'],
@@ -607,7 +624,7 @@ else
             'numtags' => 0,
             'feature' => implode(' ', $admin_funcs)
         );
-    
+
         $array_ids[] = $id;
         $array_userid[] = $_userid;
     }
@@ -631,19 +648,19 @@ while ($i <= 500) {
     );
     $i = $i + 5;
 }
-    
+
 $search_type = array();
-    foreach ($array_search as $key => $val) {
-        $search_type[] = array(
-            'key' => $key,
-            'value' => $val,
-            'selected' => ($key == $stype) ? ' selected="selected"' : ''
-        );
-    }
-    
+foreach ($array_search as $key => $val) {
+    $search_type[] = array(
+        'key' => $key,
+        'value' => $val,
+        'selected' => ($key == $stype) ? ' selected="selected"' : ''
+    );
+}
+
 $order2 = ($order == 'asc') ? 'desc' : 'asc';
 $ord_sql = ' r.' . $ordername . ' ' . $order;
-    
+
 // Lay so tags
 if (!empty($array_ids)) {
     $db_slave->sqlreset()
@@ -715,6 +732,7 @@ foreach ($search_status as $status_view) {
     $xtpl->parse('main.search_status');
 }
 
+$url_copy = '';
 foreach ($data as $row) {
     $is_excdata = 0;
     if ($global_config['idsite'] > 0 and isset($site_mods['excdata']) and isset($push_content['module'][$module_name]) and $row['status_id'] == 1) {
@@ -730,18 +748,20 @@ foreach ($data as $row) {
         $row['title'] = $lang_module['no_name'];
     }
     $row['username'] = isset($array_userid[$row['userid']]) ? $array_userid[$row['userid']] : '';
-    $xtpl->assign('ROW', $row);
+	$xtpl->assign('ROW', $row);
 
     if ($is_excdata) {
         $xtpl->parse('main.loop.excdata');
     }
+	if($module_config[$module_name]['copy_news'] == 1) {
+		$url_copy = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=content&amp;copy=1&amp;id=' . $row['id'];
+		$xtpl->assign('URL_COPY', $url_copy);
+		$xtpl->parse('main.loop.copy_news');
+	}
 
     if ($row['status_id'] == 4) {
         $xtpl->parse('main.loop.text');
-    } else {
-        $xtpl->parse('main.loop.url');
     }
-
     $xtpl->parse('main.loop');
 }
 

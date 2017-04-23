@@ -1,16 +1,16 @@
 <?php
 
 /**
-* @Project NUKEVIET 4.x
-* @Author VINADES.,JSC (contact@vinades.vn)
-* @Copyright (C) 2016 VINADES.,JSC. All rights reserved
-* @Language English
-* @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
-* @Createdate Mar 04, 2010, 08:22:00 AM
-*/
+ * @Project NUKEVIET 4.x
+ * @Author VINADES.,JSC (contact@vinades.vn)
+ * @Copyright (C) 2016 VINADES.,JSC. All rights reserved
+ * @Language English
+ * @License CC BY-SA (http://creativecommons.org/licenses/by-sa/4.0/)
+ * @Createdate Mar 04, 2010, 08:22:00 AM
+ */
 
-if (! defined('NV_ADMIN') or ! defined('NV_MAINFILE')) {
-    die( 'Stop!!!' );
+if (!defined('NV_ADMIN') or !defined('NV_MAINFILE')) {
+    die('Stop!!!');
 }
 
 $lang_translator['author'] = 'VINADES.,JSC (contact@vinades.vn)';
@@ -61,8 +61,7 @@ $lang_module['nv_setup_new'] = 'Setup';
 $lang_module['nv_setup_delete'] = 'Delete data language';
 $lang_module['nv_data_setup'] = 'Data of this language has been installed';
 $lang_module['nv_data_setup_ok'] = 'Successful installation, the system will move to site configuration';
-$lang_module['nv_lang_readok'] = 'Done reading the language interface, the system will automatically switch to the file list';
-$lang_module['nv_lang_copyok'] = 'Done creating the language interface, the system will automatically switch to the file list.';
+$lang_module['nv_lang_readok'] = 'Done reading the language interface, the system will automatically switch to the file list. Click here if you wait too long';
 $lang_module['nv_lang_deleteok'] = 'Delete interface language successful';
 $lang_module['nv_lang_wite_ok'] = 'Create interface language successful';
 $lang_module['nv_lang_delete'] = 'Delete interface language';

@@ -76,9 +76,11 @@ while (list($theme) = $result->fetch(3)) {
 $groups_list = nv_groups_list();
 
 if ($nv_Request->get_int('save', 'post') == '1') {
-    $custom_title = $nv_Request->get_title('custom_title', 'post', 1);
-    $admin_title = $nv_Request->get_title('admin_title', 'post', 1);
+    $custom_title = $nv_Request->get_title('custom_title', 'post', '', 1);
+    $site_title = $nv_Request->get_title('site_title', 'post', '');
+    $admin_title = $nv_Request->get_title('admin_title', 'post', '', 1);
     $theme = $nv_Request->get_title('theme', 'post', '', 1);
+    $module_theme = $nv_Request->get_title('module_theme', 'post', '', 1);
     $mobile = $nv_Request->get_title('mobile', 'post', '', 0);
     $description = $nv_Request->get_title('description', 'post', '', 1);
     $description = nv_substr($description, 0, 255);
@@ -144,9 +146,25 @@ if ($nv_Request->get_int('save', 'post') == '1') {
                     }
                 }
             }
+            
+            // Check module_theme
+            $_theme_check = (!empty($theme)) ? $theme : $global_config['site_theme'];
+            if (!empty($_theme_check) and file_exists(NV_ROOTDIR . '/themes/' . $_theme_check . '/theme.php')) {
+                if (!file_exists(NV_ROOTDIR . '/themes/' . $_theme_check . '/modules/' . $module_theme)) {
+                    $module_theme = $row['module_file'];
+                }
+            } else {
+                $module_theme = $row['module_file'];
+            }
+            
 
-            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET custom_title=:custom_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description, keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ' WHERE title= :title');
+            $sth = $db->prepare('UPDATE ' . NV_MODULES_TABLE . ' SET 
+                    module_theme=:module_theme, custom_title=:custom_title, site_title=:site_title, admin_title=:admin_title, theme= :theme, mobile= :mobile, description= :description, 
+                    keywords= :keywords, groups_view= :groups_view, act=' . $act . ', rss=' . $rss . ' 
+                    WHERE title= :title');
+            $sth->bindParam(':module_theme', $module_theme, PDO::PARAM_STR);
             $sth->bindParam(':custom_title', $custom_title, PDO::PARAM_STR);
+            $sth->bindParam(':site_title', $site_title, PDO::PARAM_STR);
             $sth->bindParam(':admin_title', $admin_title, PDO::PARAM_STR);
             $sth->bindParam(':theme', $theme, PDO::PARAM_STR);
             $sth->bindParam(':mobile', $mobile, PDO::PARAM_STR);
@@ -220,8 +238,10 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     }
 } else {
     $custom_title = $row['custom_title'];
+    $site_title = $row['site_title'];
     $admin_title = $row['admin_title'];
     $theme = $row['theme'];
+    $module_theme = $row['module_theme'];
     $mobile = $row['mobile'];
     $act = $row['act'];
     $description = $row['description'];
@@ -243,12 +263,14 @@ if (file_exists(NV_ROOTDIR . '/modules/' . $row['module_file'] . '/funcs/rss.php
 
 $data['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit&amp;mod=' . $mod;
 $data['custom_title'] = $custom_title;
+$data['site_title'] = $site_title;
 $data['admin_title'] = $admin_title;
 $data['theme'] = array( $lang_module['theme'], $lang_module['theme_default'], $theme_list, $theme );
 $data['mobile'] = array( $lang_module['mobile'], $theme_mobile_default, $theme_mobile_list, $mobile );
 $data['description'] = $description;
 $data['keywords'] = $keywords;
 $data['mod_name'] = $mod;
+$data['module_theme'] = $module_theme;
 
 if ($mod != $global_config['site_home_module']) {
     $data['groups_view'] = array( $lang_global['groups_view'], $groups_list, $groups_view );

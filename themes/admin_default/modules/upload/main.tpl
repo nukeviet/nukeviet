@@ -4,9 +4,10 @@
 <!-- BEGIN: main -->
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
 <link type="text/css" href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.css" rel="stylesheet" />
+<link  type="text/css"href="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.css" rel="stylesheet" />
 
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.watermarker.js"></script>
+<script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/cropper/cropper.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.flash.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.lazyload.min.js"></script>
 <script type="text/javascript" src="{NV_BASE_SITEURL}{NV_ASSETS_DIR}/js/jquery/jquery.treeview.min.js"></script>
@@ -115,6 +116,15 @@
             <div class="col-xs-14">
                 <input type="text" name="createfoldername" class="form-control dynamic"/>
             </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="recreatethumb" class="upload-hide" title="{LANG.recreatethumb}">
+    <div class="form-horizontal" role="form">
+        <div class="form-group" id="recreatethumb_loading">
+        	{LANG.recreatethumb_note}
         </div>
     </div>
 </div>
@@ -292,6 +302,8 @@ LANG.move_multiple = "{LANG.move_multiple}";
 LANG.rename = "{LANG.rename}";
 LANG.upload_delfile = "{LANG.upload_delfile}";
 LANG.createfolder = "{LANG.createfolder}";
+LANG.recreatethumb = "{LANG.recreatethumb}";
+LANG.recreatethumb_note = "{LANG.recreatethumb_note}";
 LANG.renamefolder = "{LANG.renamefolder}";
 LANG.deletefolder = "{LANG.deletefolder}";
 LANG.delete_folder = "{LANG.delete_folder}";
@@ -324,6 +336,7 @@ LANG.upload_stop = "{LANG.upload_stop}";
 LANG.upload_continue = "{LANG.upload_continue}";
 LANG.upload_finish = "{LANG.upload_finish}";
 LANG.crop_error_small = "{LANG.crop_error_small}";
+LANG.crop_keep_original = "{LANG.crop_keep_original}";
 LANG.save = "{LANG.addlogosave}";
 LANG.notlogo = "{LANG.notlogo}";
 LANG.addlogo_error_small = "{LANG.addlogo_error_small}";
@@ -339,14 +352,8 @@ var nv_module_url = "{NV_BASE_ADMINURL}index.php?{NV_LANG_VARIABLE}={NV_LANG_DAT
 var nv_namecheck = /^([a-zA-Z0-9_-])+$/;
 var array_images = ["gif", "jpg", "jpeg", "pjpeg", "png"];
 var nv_loading_data = '<p class="upload-loading"><em class="fa fa-spin fa-spinner fa-2x m-bottom"></em><br />{LANG.waiting}...</p>';
-var nv_filters = {
-    mime_types : [
-        <!-- BEGIN: mime -->
-        { title : "{MIMI_TYPE} files", extensions : "{MIME_EXTS}" },
-        <!-- END: mime -->
-    ]
-};
-//Resize images on clientside if we can
+
+// Resize images on clientside if we can
 var nv_resize = {
     width : {NV_MAX_WIDTH},
     height : {NV_MAX_HEIGHT},

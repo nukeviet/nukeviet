@@ -176,6 +176,22 @@ function nv_info_die($page_title = '', $info_title, $info_content, $error_code =
 }
 
 /**
+ * nv_jsonOutput()
+ *
+ * @param array $array_data
+ * @return void
+ */
+function nv_jsonOutput($array_data)
+{
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Content-type: application/json');
+    
+    ob_start('ob_gzhandler');
+    echo json_encode($array_data);
+    exit();
+}
+
+/**
  * nv_xmlOutput()
  *
  * @param string $content
@@ -241,18 +257,21 @@ function nv_xmlOutput($content, $lastModified)
 
 /**
  * nv_rss_generate()
- *
+ * 
  * @param mixed $channel
  * @param mixed $items
+ * @param string $timemode
  * @return void
  */
-function nv_rss_generate($channel, $items)
+function nv_rss_generate($channel, $items, $timemode = 'GMT')
 {
     global $db, $global_config, $client_info;
 
     $xtpl = new XTemplate('rss.tpl', NV_ROOTDIR . '/' . NV_ASSETS_DIR . '/tpl');
-    $xtpl->assign('CSSPATH', NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/rss.xsl');
     //Chi co tac dung voi IE6 va Chrome
+    $xtpl->assign('CSSPATH', NV_BASE_SITEURL . NV_ASSETS_DIR . '/css/rss.xsl');
+    $xtpl->assign('CHARSET', $global_config['site_charset']);
+    $xtpl->assign('SITELANG', $global_config['site_lang']);
 
     $channel['generator'] = 'NukeViet v4.0';
     $channel['title'] = nv_htmlspecialchars($channel['title']);
@@ -282,6 +301,8 @@ function nv_rss_generate($channel, $items)
     }
 
     $channel['pubDate'] = 0;
+    $channel['modified'] = 0;
+    
     if (! empty($items)) {
         foreach ($items as $item) {
             if (! empty($item['title']) and ! empty($item['link'])) {
@@ -290,7 +311,14 @@ function nv_rss_generate($channel, $items)
                 if (isset($item['pubdate']) and ! empty($item['pubdate'])) {
                     $item['pubdate'] = intval($item['pubdate']);
                     $channel['pubDate'] = max($channel['pubDate'], $item['pubdate']);
-                    $item['pubdate'] = gmdate('D, j M Y H:m:s', $item['pubdate']) . ' GMT';
+                    if ($timemode == 'ISO8601') {
+                        $item['pubdate'] = date('c', $item['pubdate']);
+                    } else {
+                        $item['pubdate'] = gmdate('D, j M Y H:m:s', $item['pubdate']) . ' GMT';
+                    }
+                }
+                if (!empty($item['modifydate'])) {
+                    $channel['modified'] = max($channel['modified'], $item['modifydate']);
                 }
 
                 if (preg_match('/^' . nv_preg_quote(NV_MY_DOMAIN . NV_BASE_SITEURL) . '(.+)$/', $item['link'], $matches)) {
@@ -306,9 +334,41 @@ function nv_rss_generate($channel, $items)
                 if (isset($item['guid']) and ! empty($item['guid'])) {
                     $xtpl->parse('main.item.guid');
                 }
-
                 if (isset($item['pubdate']) and ! empty($item['pubdate'])) {
                     $xtpl->parse('main.item.pubdate');
+                }
+                if (isset($item['author']) and ! empty($item['author'])) {
+                    $xtpl->parse('main.item.author');
+                }
+                if (isset($item['content']) and ! empty($item['content'])) {
+                    if (!empty($item['content']['image'])) {
+                        $xtpl->parse('main.item.content.image');
+                    }
+                    if (!empty($item['content']['opkicker'])) {
+                        $xtpl->parse('main.item.content.opkicker');
+                    }
+                    if (!empty($item['content']['pubdate'])) {
+                        if ($timemode == 'ISO8601') {
+                            $published = date('c', $item['content']['pubdate']);
+                        } else {
+                            $published = gmdate('D, j M Y H:m:s', $item['content']['pubdate']) . ' GMT';
+                        }
+                        $xtpl->assign('PUBLISHED', $published);
+                        $xtpl->assign('PUBLISHED_DISPLAY', nv_date('H:i: d/m/Y', $item['content']['pubdate']));
+                        $xtpl->parse('main.item.content.pubdate');
+                    }
+                    if (!empty($item['content']['modifydate'])) {
+                        if ($timemode == 'ISO8601') {
+                            $modified = date('c', $item['content']['modifydate']);
+                        } else {
+                            $modified = gmdate('D, j M Y H:m:s', $item['content']['modifydate']) . ' GMT';
+                        }
+                        $xtpl->assign('MODIFIED', $modified);
+                        $xtpl->assign('MODIFIED_DISPLAY', nv_date('H:i: d/m/Y', $item['content']['modifydate']));
+                        $xtpl->parse('main.item.content.modifydate');
+                    }
+                    
+                    $xtpl->parse('main.item.content');
                 }
 
                 $xtpl->parse('main.item');
@@ -320,9 +380,17 @@ function nv_rss_generate($channel, $items)
 
     if (! empty($channel['pubDate'])) {
         $lastModified = $channel['pubDate'];
-        $channel['pubDate'] = gmdate('D, j M Y H:m:s', $channel['pubDate']) . ' GMT';
+        if ($timemode == 'ISO8601') {
+            $channel['pubDate'] = date('c', $channel['pubDate']);
+        } else {
+            $channel['pubDate'] = gmdate('D, j M Y H:m:s', $channel['pubDate']) . ' GMT';
+        }
     }
-
+    
+    if ($channel['modified'] > $lastModified) {
+        $lastModified = $channel['modified'];
+    }
+    
     $xtpl->assign('CHANNEL', $channel);
 
     if (! empty($channel['description'])) {
@@ -432,13 +500,15 @@ function nv_xmlSitemapIndex_generate()
 
     $contents = $xml->asXML();
 
-    if ($global_config['check_rewrite_file']) {
-        $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "sitemap-\\1.xml", $contents);
-        $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "sitemap-\\1.\\2.xml", $contents);
-    } elseif ($global_config['rewrite_optional']) {
-        $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
-    } else {
-        $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\1/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
+    if ($global_config['rewrite_enable']) {
+        if ($global_config['check_rewrite_file']) {
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=SitemapIndex/", "sitemap-\\1.xml", $contents);
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "sitemap-\\1.\\2.xml", $contents);
+        } elseif ($global_config['rewrite_optional']) {
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
+        } else {
+            $contents = preg_replace("/index\.php\?" . NV_LANG_VARIABLE . "\=([a-z]{2})\&[amp\;]*" . NV_NAME_VARIABLE . "\=([a-zA-Z0-9\-]+)\&[amp\;]*" . NV_OP_VARIABLE . "\=sitemap/", "index.php/\\1/\\2/sitemap" . $global_config['rewrite_endurl'], $contents);
+        }
     }
 
     nv_xmlOutput($contents, $lastModified);
@@ -523,6 +593,9 @@ function nv_theme_alert($message_title, $message_content, $type = 'info', $url_b
         $page_title = $message_title;
         $xtpl->assign('TITLE', $message_title);
         $xtpl->parse('main.title');
+    } elseif (!empty($module_info['site_title'])) {
+        // For admin if use in admin area
+        $page_title = $module_info['site_title'];
     } else {
         $page_title = $module_info['custom_title'];
     }

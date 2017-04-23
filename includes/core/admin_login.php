@@ -27,7 +27,7 @@ if (! nv_admin_checkfirewall()) {
     if (php_sapi_name() !== 'cgi-fcgi') {
         header('status: 401 Unauthorized');
     }
-    nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />');
+    nv_info_die($global_config['site_description'], $lang_global['site_info'], $lang_global['firewallincorrect'] . '<meta http-equiv="Refresh" content="5;URL=' . $global_config['site_url'] . '" />', 401);
 }
 
 /**
@@ -99,7 +99,12 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
     $nv_backupcodepin = $nv_Request->get_title('nv_backupcodepin', 'post', '');
     
     $captcha_require = ($global_config['gfx_chk'] == 1 and $nv_Request->get_title('admin_dismiss_captcha', 'session', '') != md5($nv_username));
-    $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+    
+    if ($global_config['captcha_type'] == 2) {
+        $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    } else {
+        $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+    }
     
     if (empty($nv_username)) {
         $error = $lang_global['username_empty'];
@@ -108,11 +113,11 @@ if ($nv_Request->isset_request('nv_login,nv_password', 'post') and $nv_Request->
     } elseif (empty($nv_password)) {
         $error = $lang_global['password_empty'];
     } elseif ($captcha_require and ! nv_capcha_txt($nv_seccode)) {
-        $error = $lang_global['securitycodeincorrect'];
+        $error = ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']);
     } else {
         if (defined('NV_IS_USER_FORUM')) {
             define('NV_IS_MOD_USER', true);
-            require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
             if (empty($nv_username)) {
                 $nv_username = $nv_Request->get_title('nv_login', 'post', '', 1);
             }
@@ -344,13 +349,20 @@ $xtpl->assign('LANGLOSTPASS', $lang_global['lostpass']);
 $xtpl->assign('LINKLOSTPASS', NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . $global_config['site_lang'] . '&amp;' . NV_NAME_VARIABLE . '=users&amp;' . NV_OP_VARIABLE . '=lostpass');
 
 if ($captcha_require) {
-    $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
-    $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
-    $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
-    $xtpl->assign('GFX_NUM', NV_GFX_NUM);
-    $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
-    $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
-    $xtpl->parse('main.captcha');
+    if ($global_config['captcha_type'] == 2) {
+        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode1']);
+        $xtpl->assign('RECAPTCHA_SITEKEY', $global_config['recaptcha_sitekey']);
+        $xtpl->assign('RECAPTCHA_TYPE', $global_config['recaptcha_type']);
+        $xtpl->parse('main.recaptcha');
+    } else {
+        $xtpl->assign('CAPTCHA_REFRESH', $lang_global['captcharefresh']);
+        $xtpl->assign('CAPTCHA_REFR_SRC', NV_BASE_SITEURL . NV_ASSETS_DIR . '/images/refresh.png');
+        $xtpl->assign('N_CAPTCHA', $lang_global['securitycode']);
+        $xtpl->assign('GFX_NUM', NV_GFX_NUM);
+        $xtpl->assign('GFX_WIDTH', NV_GFX_WIDTH);
+        $xtpl->assign('GFX_HEIGHT', NV_GFX_HEIGHT);
+        $xtpl->parse('main.captcha');
+    }
 }
 
 if ($global_config['lang_multi'] == 1) {

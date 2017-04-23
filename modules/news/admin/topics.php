@@ -45,10 +45,20 @@ if (! empty($savecat)) {
         $array['image'] = '';
     }
 
-    $array['alias'] = ($array['alias'] == '') ? change_alias($array['title']) : change_alias($array['alias']);
+    $array['alias'] = ($array['alias'] == '') ? get_mod_alias($array['title'], 'topics', $array['topicid']) : get_mod_alias($array['alias'], 'topics', $array['topicid']);
+
+    // Kiểm tra trùng
+    $sql = "SELECT COUNT(*) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics WHERE (title=:title OR alias=:alias)" . ($array['topicid'] ? ' AND topicid!=' . $array['topicid'] : '');
+    $sth = $db->prepare($sql);
+    $sth->bindParam(':title', $array['title'], PDO::PARAM_STR);
+    $sth->bindParam(':alias', $array['alias'], PDO::PARAM_STR);
+    $sth->execute();
+    $is_exists = $sth->fetchColumn();
 
     if (empty($array['title'])) {
         $error = $lang_module['topics_error_title'];
+    } elseif ($is_exists) {
+        $error = $lang_module['errorexists'];
     } elseif ($array['topicid'] == 0) {
         $weight = $db->query("SELECT max(weight) FROM " . NV_PREFIXLANG . "_" . $module_data . "_topics")->fetchColumn();
         $weight = intval($weight) + 1;
@@ -96,6 +106,8 @@ if (is_file(NV_ROOTDIR . '/' . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/
     $array['image'] = NV_BASE_SITEURL . NV_UPLOADS_DIR . '/' . $module_upload . '/topics/' . $array['image'];
 }
 
+$page = $nv_Request->get_int('page', 'get', 1);
+
 $xtpl = new XTemplate('topics.tpl', NV_ROOTDIR . '/themes/' . $global_config['module_theme'] . '/modules/' . $module_file);
 $xtpl->assign('LANG', $lang_module);
 $xtpl->assign('GLANG', $lang_global);
@@ -105,7 +117,7 @@ $xtpl->assign('MODULE_NAME', $module_name);
 $xtpl->assign('OP', $op);
 $xtpl->assign('UPLOADS_DIR', NV_UPLOADS_DIR . '/' . $module_upload . '/topics');
 $xtpl->assign('DATA', $array);
-$xtpl->assign('TOPIC_LIST', nv_show_topics_list());
+$xtpl->assign('TOPIC_LIST', nv_show_topics_list($page));
 
 if (! empty($error)) {
     $xtpl->assign('ERROR', $error);

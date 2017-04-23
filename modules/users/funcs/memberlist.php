@@ -12,7 +12,7 @@ if (! defined('NV_IS_MOD_USER')) {
     die('Stop!!!');
 }
 
-$page_title = $module_info['funcs'][$op]['func_custom_name'];
+$page_title = $module_info['funcs'][$op]['func_site_title'];
 $key_words = $module_info['keywords'];
 $mod_title = $lang_module['listusers'];
 
@@ -87,8 +87,7 @@ if (isset($array_op[1]) and ! empty($array_op[1])) {
             $item['allow_delete'] = false;
             
             if (defined('NV_IS_ADMIN') and ($global_config['idsite'] == 0 or $item['idsite'] == $global_config['idsite'])) {
-                $access_admin = $db->query("SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='access_admin'")->fetchColumn();
-                $access_admin = unserialize($access_admin);
+                $access_admin = unserialize($global_users_config['access_admin']);
                 
                 $check_admin = $db->query('SELECT admin_id, lev FROM ' . NV_AUTHORS_GLOBALTABLE . ' WHERE admin_id=' . $item['userid'])->fetch();
 

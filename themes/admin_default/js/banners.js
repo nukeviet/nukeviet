@@ -291,3 +291,66 @@ function nv_show_list_stat(bid, month, ext, val, containerid, page) {
 		request_query += '&page=' + page;
 	$('#' + containerid).load(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + request_query + '&nocache=' + new Date().getTime());
 }
+
+// ---------------------------------------
+
+function nv_genpass() {
+    $.post(script_name + '?' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=add_client&nocache=' + new Date().getTime(), 'nv_genpass=1', function(res) {
+        $("input[name='pass_iavim']").val(res);
+        $("input[name='re_pass_iavim']").val(res);
+    });
+    return;
+}
+
+$.toggleShowPassword = function (options) {
+    var settings = $.extend({
+        field: "#password",
+        control: "#toggle_show_password"
+    }, options);
+
+    var control = $(settings.control);
+    var field = $(settings.field);
+
+    control.bind('click', function () {
+        if (control.is(':checked')) {
+            field.attr('type', 'text');
+        } else {
+            field.attr('type', 'password');
+        }
+    });
+};
+function find_User() {
+    var name = $("#login_iavim").val();
+    $.ajax({
+        type: 'POST',
+        url: script_name + '?' + nv_lang_variable + '=' + nv_lang_data + '&' + nv_name_variable + '=' + nv_module_name + '&' + nv_fc_variable + '=add_client&nocache=' + new Date().getTime(),
+        data: 'name=' + name,
+        success: function(data) {
+        	var obj = jQuery.parseJSON(data);
+        	if ($('#email_iavim').val()=='') {
+        		$('#email_iavim').val(obj.email);
+        	};
+        	if ($('#full_name').val()=='') {
+        		$('#full_name').val(obj.full_name);
+        	};
+        	if ($('#phone').val()=='') {
+        		$('#phone').val(obj.phone);
+        	};
+        	if ($('#website_iavim').val()=='') {
+        		$('#website_iavim').val(obj.website);
+        	};
+        	if ($('#location').val()=='') {
+        		$('#location').val(obj.location);
+        	};
+        	if ($('#yim_iavim').val()=='') {
+        		$('#yim_iavim').val(obj.yim);
+        	};
+			if ($('#fax').val()=='') {
+        		$('#fax').val(obj.fax);
+        	};
+        	if ($('#mobile').val()=='') {
+        		$('#mobile').val(obj.mobile);
+        	};
+        },
+    });
+}

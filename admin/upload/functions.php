@@ -24,6 +24,7 @@ $allow_func = array( 'main', 'imglist', 'delimg', 'createimg', 'dlimg', 'renamei
 
 if (defined('NV_IS_SPADMIN')) {
     $allow_func[] = 'thumbconfig';
+    $allow_func[] = 'recreatethumb';
     $allow_func[] = 'config';
     if (defined('NV_IS_GODADMIN')) {
         $allow_func[] = 'uploadconfig';
@@ -99,6 +100,7 @@ function nv_check_allow_upload_dir($dir)
         // Cho phep sua, xoa file
         if ($admin_info['allow_modify_files']) {
             $level['create_file'] = true;
+            $level['recreatethumb'] = !empty($_dir_mod) ? true : false;
             $level['rename_file'] = true;
             $level['delete_file'] = true;
             $level['move_file'] = true;
@@ -127,6 +129,7 @@ function nv_check_allow_upload_dir($dir)
 
         if ($admin_info['allow_modify_files']) {
             $level['create_file'] = true;
+            $level['recreatethumb'] = false;
             $level['rename_file'] = true;
             $level['delete_file'] = true;
             $level['move_file'] = true;
@@ -173,88 +176,108 @@ function nv_check_path_upload($path)
  * @param mixed $fileName
  * @return
  */
-function nv_get_viewImage($fileName)
+function nv_get_viewImage($fileName, $refresh = 0)
 {
     global $array_thumb_config;
-
+    
     if (preg_match('/^' . nv_preg_quote(NV_UPLOADS_DIR) . '\/(([a-z0-9\-\_\/]+\/)*([a-z0-9\-\_\.]+)(\.(gif|jpg|jpeg|png|bmp|ico)))$/i', $fileName, $m)) {
         $viewFile = NV_FILES_DIR . '/' . $m[1];
-
+        
         if (file_exists(NV_ROOTDIR . '/' . $viewFile)) {
-            $size = @getimagesize(NV_ROOTDIR . '/' . $viewFile);
-            return array( $viewFile, $size[0], $size[1] );
-        } else {
-            $m[2] = rtrim($m[2], '/');
-
-            if (isset($array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]])) {
-                $thumb_config = $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]];
+            if ($refresh) {
+                @nv_deletefile(NV_ROOTDIR . '/' . $viewFile);
             } else {
-                $thumb_config = $array_thumb_config[''];
-                $_arr_path = explode('/', NV_UPLOADS_DIR . '/' . $m[2]);
-                while (sizeof($_arr_path) > 1) {
-                    array_pop($_arr_path);
-                    $_path = implode('/', $_arr_path);
-                    if (isset($array_thumb_config[$_path])) {
-                        $thumb_config = $array_thumb_config[$_path];
-                        break;
-                    }
-                }
-            }
-
-            $viewDir = NV_FILES_DIR;
-            if (! empty($m[2])) {
-                if (! is_dir(NV_ROOTDIR . '/' . $m[2])) {
-                    $e = explode('/', $m[2]);
-                    $cp = NV_FILES_DIR;
-                    foreach ($e as $p) {
-                        if (is_dir(NV_ROOTDIR . '/' . $cp . '/' . $p)) {
-                            $viewDir .= '/' . $p;
-                        } else {
-                            $mk = nv_mkdir(NV_ROOTDIR . '/' . $cp, $p);
-                            if ($mk[0] > 0) {
-                                $viewDir .= '/' . $p;
-                            }
-                        }
-                        $cp .= '/' . $p;
-                    }
-                }
-            }
-            $image = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT);
-            if ($thumb_config['thumb_type'] == 4) {
-                $thumb_width = $thumb_config['thumb_width'];
-                $thumb_height = $thumb_config['thumb_height'];
-                $maxwh = max($thumb_width, $thumb_height);
-                if ($image->fileinfo['width'] > $image->fileinfo['height']) {
-                    $thumb_config['thumb_width'] = 0;
-                    $thumb_config['thumb_height'] = $maxwh;
-                } else {
-                    $thumb_config['thumb_width'] = $maxwh;
-                    $thumb_config['thumb_height'] = 0;
-                }
-            }
-            if ($image->fileinfo['width'] > $thumb_config['thumb_width'] or $image->fileinfo['height'] > $thumb_config['thumb_height']) {
-                $image->resizeXY($thumb_config['thumb_width'], $thumb_config['thumb_height']);
-                if ($thumb_config['thumb_type'] == 4) {
-                    $image->cropFromCenter($thumb_width, $thumb_height);
-                }
-                $image->save(NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality']);
-                $create_Image_info = $image->create_Image_info;
-                $error = $image->error;
-                $image->close();
-                if (empty($error)) {
-                    return array( $viewDir . '/' . basename($create_Image_info['src']), $create_Image_info['width'], $create_Image_info['height'] );
-                }
-            } elseif (copy(NV_ROOTDIR . '/' . $fileName, NV_ROOTDIR . '/' . $viewDir . '/' . $m[3] . $m[4])) {
-                $return = array( $viewDir . '/' . $m[3] . $m[4], $image->fileinfo['width'], $image->fileinfo['height'] );
-                $image->close();
-                return $return;
-            } else {
-                return false;
+                $size = @getimagesize(NV_ROOTDIR . '/' . $viewFile);
+                return array(
+                    $viewFile,
+                    $size[0],
+                    $size[1]
+                );
             }
         }
+        
+        $m[2] = rtrim($m[2], '/');
+        if (isset($array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]])) {
+            $thumb_config = $array_thumb_config[NV_UPLOADS_DIR . '/' . $m[2]];
+        } else {
+            $thumb_config = $array_thumb_config[''];
+            $_arr_path = explode('/', NV_UPLOADS_DIR . '/' . $m[2]);
+            while (sizeof($_arr_path) > 1) {
+                array_pop($_arr_path);
+                $_path = implode('/', $_arr_path);
+                if (isset($array_thumb_config[$_path])) {
+                    $thumb_config = $array_thumb_config[$_path];
+                    break;
+                }
+            }
+        }
+        
+        $viewDir = NV_FILES_DIR;
+        if (!empty($m[2])) {
+            if (!is_dir(NV_ROOTDIR . '/' . $m[2])) {
+                $e = explode('/', $m[2]);
+                $cp = NV_FILES_DIR;
+                foreach ($e as $p) {
+                    if (is_dir(NV_ROOTDIR . '/' . $cp . '/' . $p)) {
+                        $viewDir .= '/' . $p;
+                    } else {
+                        $mk = nv_mkdir(NV_ROOTDIR . '/' . $cp, $p);
+                        if ($mk[0] > 0) {
+                            $viewDir .= '/' . $p;
+                        }
+                    }
+                    $cp .= '/' . $p;
+                }
+            }
+        }
+        $image = new NukeViet\Files\Image(NV_ROOTDIR . '/' . $fileName, NV_MAX_WIDTH, NV_MAX_HEIGHT);
+        if ($thumb_config['thumb_type'] == 4) {
+            $thumb_width = $thumb_config['thumb_width'];
+            $thumb_height = $thumb_config['thumb_height'];
+            $maxwh = max($thumb_width, $thumb_height);
+            if ($image->fileinfo['width'] > $image->fileinfo['height']) {
+                $thumb_config['thumb_width'] = 0;
+                $thumb_config['thumb_height'] = $maxwh;
+            } else {
+                $thumb_config['thumb_width'] = $maxwh;
+                $thumb_config['thumb_height'] = 0;
+            }
+        }
+        if ($image->fileinfo['width'] > $thumb_config['thumb_width'] or $image->fileinfo['height'] > $thumb_config['thumb_height']) {
+            $image->resizeXY($thumb_config['thumb_width'], $thumb_config['thumb_height']);
+            if ($thumb_config['thumb_type'] == 4) {
+                $image->cropFromCenter($thumb_width, $thumb_height);
+            }
+            $image->save(NV_ROOTDIR . '/' . $viewDir, $m[3] . $m[4], $thumb_config['thumb_quality']);
+            $create_Image_info = $image->create_Image_info;
+            $error = $image->error;
+            $image->close();
+            if (empty($error)) {
+                return array(
+                    $viewDir . '/' . basename($create_Image_info['src']),
+                    $create_Image_info['width'],
+                    $create_Image_info['height']
+                );
+            }
+        } elseif (copy(NV_ROOTDIR . '/' . $fileName, NV_ROOTDIR . '/' . $viewDir . '/' . $m[3] . $m[4])) {
+            $return = array(
+                $viewDir . '/' . $m[3] . $m[4],
+                $image->fileinfo['width'],
+                $image->fileinfo['height']
+            );
+            $image->close();
+            return $return;
+        } else {
+            return false;
+        }
+    
     } else {
         $size = @getimagesize(NV_ROOTDIR . '/' . $fileName);
-        return array( $fileName, $size[0], $size[1] );
+        return array(
+            $fileName,
+            $size[0],
+            $size[1]
+        );
     }
     return false;
 }

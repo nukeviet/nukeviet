@@ -37,8 +37,8 @@ if (in_array($nv_Request->get_int('act', 'get'), array( 2, 3, 4 ))) {
     $sql .= "act=" . $nv_Request->get_int('act', 'get');
     $contents['caption'] = $lang_module['banners_list' . $nv_Request->get_int('act', 'get')];
 } else {
-    $sql .= "act=1";
-    $contents['caption'] = $lang_module['banners_list1'];
+    $sql .= "act=0 or act=1";
+    $contents['caption'] = $lang_module['banners_list0'];
 }
 
 if ($nv_Request->get_bool('clid', 'get') and isset($clients[$nv_Request->get_int('clid', 'get')])) {
@@ -61,7 +61,10 @@ $contents['rows'] = array();
 
 while ($row = $result->fetch()) {
     $client = ! empty($row['clid']) ? $clients[$row['clid']] : "";
-
+	if($row['exp_time'] != 0 && $row['exp_time'] <= NV_CURRENTTIME){
+		$db->exec('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_rows SET act=0 WHERE id=' . $row['id']);
+		$row['act'] = 0;
+	}
     $contents['rows'][$row['id']]['title'] = $row['title'];
     $contents['rows'][$row['id']]['pid'] = array( NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_plan&amp;id=" . $row['pid'], $plans[$row['pid']] );
     $contents['rows'][$row['id']]['clid'] = ! empty($client) ? array( NV_BASE_ADMINURL . "index.php?" . NV_LANG_VARIABLE . "=" . NV_LANG_DATA . "&amp;" . NV_NAME_VARIABLE . "=" . $module_name . "&amp;" . NV_OP_VARIABLE . "=info_client&amp;id=" . $row['clid'], $client ) : array();

@@ -22,17 +22,17 @@ $storage = new Session();
 $serviceFactory = new \OAuth\ServiceFactory();
 
 // Setup the credentials for the requests
-$credentials = new Credentials($global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=facebook' . (!empty($nv_redirect) ? '&nv_redirect=' . $nv_redirect : ''));
+$credentials = new Credentials($global_config['facebook_client_id'], $global_config['facebook_client_secret'], NV_MAIN_DOMAIN . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=oauth&server=facebook');
 
 // Instantiate the Facebook service using the credentials, http client and storage mechanism for the token
 $facebookService = $serviceFactory->createService('facebook', $credentials, $storage, array( 'email', 'user_photos' ));
 
 if (!empty($_GET['code'])) {
     // This was a callback request from facebook, get the token
-    $token = $facebookService->requestAccessToken($_GET['code']);
+    $token = $facebookService->requestAccessToken($_GET['code'])->getAccessToken();
 
     // Send a request with it: /me?fields=id,name,email
-    $result = json_decode($facebookService->request('/me?fields=id,name,email,link,first_name,last_name,gender'), true); 
+    $result = json_decode($facebookService->request('/me?fields=id,name,email,link,first_name,last_name,gender'), true);
     if (isset($result['id'])) {
         $attribs = array(
             'identity' => $result['link'],
@@ -54,10 +54,15 @@ if (!empty($_GET['code'])) {
     $nv_Request->set_Session('openid_attribs', serialize($attribs));
 
     $op_redirect = (defined('NV_IS_USER')) ? 'editinfo/openid' : 'login';
-    $nv_redirect = nv_get_redirect();
+    $nv_redirect_session = $nv_Request->get_title('nv_redirect_' . $module_data, 'session', '');
+    $nv_redirect = '';
+    if (!empty($nv_redirect_session) and nv_redirect_decrypt($nv_redirect_session) != '') {
+        $nv_redirect = $nv_redirect_session;
+    }
     if (!empty($nv_redirect)) {
         $nv_redirect = '&nv_redirect=' . $nv_redirect;
     }
+    $nv_Request->unset_request('nv_redirect_' . $module_data, 'session');
     Header('Location: ' . NV_BASE_SITEURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&' . NV_NAME_VARIABLE . '=' . $module_name . '&' . NV_OP_VARIABLE . '=' . $op_redirect . '&server=' . $server . '&result=1' . $nv_redirect);
     exit();
 } else {

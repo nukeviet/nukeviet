@@ -36,7 +36,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $title = nv_htmlspecialchars(strip_tags($nv_Request->get_string('title', 'post', '')));
     $description = defined('NV_EDITOR') ? $nv_Request->get_string('description', 'post', '') : strip_tags($nv_Request->get_string('description', 'post', ''));
     $form = $nv_Request->get_string('form', 'post', 'sequential');
-
+	$require_image = $nv_Request->get_int('require_image', 'post', '0');
     if (! in_array($form, $forms)) {
         $form = 'sequential';
     }
@@ -55,11 +55,12 @@ if ($nv_Request->get_int('save', 'post') == '1') {
 
         list($blang_old, $form_old) = $db->query('SELECT blang, form FROM ' . NV_BANNERS_GLOBALTABLE. '_plans WHERE id=' . intval($id))->fetch(3);
 
-        $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET blang= :blang, title= :title, description= :description, form= :form, width=' . $width . ', height=' . $height . ' WHERE id=' . $id);
+        $stmt = $db->prepare('UPDATE ' . NV_BANNERS_GLOBALTABLE. '_plans SET blang= :blang, title= :title, description= :description, form= :form, require_image= :require_image, width=' . $width . ', height=' . $height . ' WHERE id=' . $id);
         $stmt->bindParam(':blang', $blang, PDO::PARAM_STR);
         $stmt->bindParam(':title', $title, PDO::PARAM_STR);
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
         $stmt->bindParam(':form', $form, PDO::PARAM_STR);
+		$stmt->bindParam(':require_image', $require_image, PDO::PARAM_STR);
         $stmt->execute();
 
         if ($form_old != $form or $blang_old != $blang) {
@@ -76,6 +77,7 @@ if ($nv_Request->get_int('save', 'post') == '1') {
     $title = $row['title'];
     $description = nv_br2nl($row['description']);
     $form = $row['form'];
+	$require_image = $row['require_image'];
     $width = $row['width'];
     $height = $row['height'];
 }
@@ -106,8 +108,9 @@ $contents['submit'] = $lang_module['edit_plan'];
 $contents['action'] = NV_BASE_ADMINURL . 'index.php?' . NV_LANG_VARIABLE . '=' . NV_LANG_DATA . '&amp;' . NV_NAME_VARIABLE . '=' . $module_name . '&amp;' . NV_OP_VARIABLE . '=edit_plan&amp;id=' . $id;
 $contents['title'] = array( $lang_module['title'], 'title', $title, 255 );
 $contents['blang'] = array( $lang_module['blang'], 'blang', $lang_module['blang_all'], $allow_langs, $blang );
-$contents['form'] = array( $lang_module['form'], 'form', $forms, $form );
+$contents['form'] = array( $lang_module['form'], 'form', $forms, $form, $require_image );
 $contents['size'] = $lang_module['size'];
+$contents['require_image'] = $lang_module['require_image'];
 $contents['width'] = array( $lang_module['width'], 'width', $width, 4 );
 $contents['height'] = array( $lang_module['height'], 'height', $height, 4 );
 $contents['description'] = array( $lang_module['description'], 'description', $description, '99%', '300px', defined('NV_EDITOR') ? true : false );

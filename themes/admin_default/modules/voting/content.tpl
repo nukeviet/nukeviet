@@ -66,7 +66,7 @@
                         </tr>
                         <tr>
                             <td>{LANG.voting_question}<sup class="required">(*)</sup></td>
-                            <td><input class="form-control" type="text" name="question" size="60" maxlength="250" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}"  oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')"/></td>
+                            <td><input class="form-control" type="text" name="question" size="60" maxlength="{DATA.question_maxlength}" value="{DATA.question}" class="txt" required placeholder="{LANG.voting_question}"  oninvalid="this.setCustomValidity(nv_required)" oninput="this.setCustomValidity('')"/></td>
                         </tr>
                         <tr>
                             <td>{LANG.voting_link}</td>

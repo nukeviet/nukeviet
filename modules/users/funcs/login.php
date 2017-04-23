@@ -98,8 +98,8 @@ function set_reg_attribs($attribs)
         $reg_attribs['yim'] = $username;
     }
 
-    $username = str_pad($username, NV_UNICKMIN, '0', STR_PAD_RIGHT);
-    $username = substr($username, 0, (NV_UNICKMAX - 2));
+    $username = str_pad($username, $global_config['nv_unickmin'], '0', STR_PAD_RIGHT);
+    $username = substr($username, 0, ($global_config['nv_unickmax'] - 2));
     $username2 = $username;
     for ($i = 0; $i < 100; ++$i) {
         if ($i > 0) {
@@ -225,8 +225,8 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
             die();
         }
 
-        if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php')) {
-            require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/set_user_login.php';
+        if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php')) {
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/set_user_login.php';
         } else {
             $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $user_id;
             $row = $db->query($query)->fetch();
@@ -259,16 +259,21 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         if (! empty($nv_row['password'])) {
             if ($nv_Request->isset_request('openid_account_confirm', 'post')) {
                 $password = $nv_Request->get_string('password', 'post', '');
-                $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+
+                if ($global_config['captcha_type'] == 2) {
+                    $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+                } else {
+                    $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+                }
 
                 $check_seccode = ! $gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
 
                 $nv_Request->unset_request('openid_attribs', 'session');
-                if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php')) {
+                if (defined('NV_IS_USER_FORUM') and file_exists(NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php')) {
                     $nv_username = $nv_row['username'];
                     $nv_password = $password;
                     $error = "";
-                    require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
+                    require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
                     if (! empty($error)) {
                         opidr(array( 'status' => 'error', 'mess' => $lang_module['openid_confirm_failed'] ));
                         die();
@@ -278,9 +283,9 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
                     die();
                 }
             } else {
-                $page_title = $lang_module['openid_login'];
+                $page_title = $lang_global['openid_login'];
                 $key_words = $module_info['keywords'];
-                $mod_title = $lang_module['openid_login'];
+                $mod_title = $lang_global['openid_login'];
                 
                 unset($nv_row['password']);
 
@@ -313,7 +318,11 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     if ($nv_Request->isset_request('nv_login', 'post')) {
         $nv_username = $nv_Request->get_title('login', 'post', '', 1);
         $nv_password = $nv_Request->get_title('password', 'post', '');
-        $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+        if ($global_config['captcha_type'] == 2) {
+            $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+        } else {
+            $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+        }
 
         $check_seccode = ! $gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
 
@@ -334,7 +343,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
 
         if (defined('NV_IS_USER_FORUM')) {
             $error = '';
-            require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
+            require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
             if (! empty($error)) {
                 opidr(array( 'status' => 'error', 'mess' => $error ));
                 die();
@@ -404,10 +413,6 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
      * Vi ban than xac thuc cua OpenID da du dieu kien
      */
     if ($nv_Request->isset_request('nv_reg', 'post') and ($global_config['allowuserreg'] == 1 or $global_config['allowuserreg'] == 2)) {
-        // Cau hinh xac thuc thanh vien moi
-        $sql = "SELECT content FROM " . NV_MOD_TABLE . "_config WHERE config='active_group_newusers'";
-        $active_group_newusers = intval($db->query($sql)->fetchColumn());
-
         $reg_attribs = set_reg_attribs($attribs);
         if (empty($reg_attribs['username'])) {
             opidr(array( 'status' => 'error', 'mess' => $lang_module['logged_in_failed'] ));
@@ -419,7 +424,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     		question, answer, passlostkey, view_mail, remember, in_groups,
     		active, checknum, last_login, last_ip, last_agent, last_openid, idsite
         ) VALUES (
-    		" . ($active_group_newusers ? 7 : 4) . ",
+    		" . ($global_users_config['active_group_newusers'] ? 7 : 4) . ",
             :username,
     		:md5username,
     		'',
@@ -429,7 +434,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
     		:gender,
     		'', 0,
     		" . NV_CURRENTTIME . ",
-    		'', '', '', 0, 0, '" . ($active_group_newusers ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . "
+    		'', '', '', 0, 0, '" . ($global_users_config['active_group_newusers'] ? '7' : '') . "', 1, '', 0, '', '', '', " . intval($global_config['idsite']) . "
 		)";
 
         $data_insert = array();
@@ -455,7 +460,7 @@ if (defined('NV_OPENID_ALLOWED') and $nv_Request->isset_request('server', 'get')
         }
 
         // Cap nhat so thanh vien
-        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($active_group_newusers ? 7 : 4));
+        $db->query('UPDATE ' . NV_MOD_TABLE . '_groups SET numbers = numbers+1 WHERE group_id=' . ($global_users_config['active_group_newusers'] ? 7 : 4));
 
         $query = 'SELECT * FROM ' . NV_MOD_TABLE . ' WHERE userid=' . $userid . ' AND active=1';
         $result = $db->query($query);
@@ -556,7 +561,11 @@ $blocker->trackLogin($rules);
 if ($nv_Request->isset_request('nv_login', 'post')) {
     $nv_username = nv_substr($nv_Request->get_title('nv_login', 'post', '', 1), 0, 100);
     $nv_password = $nv_Request->get_title('nv_password', 'post', '');
-    $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+    if ($global_config['captcha_type'] == 2) {
+        $nv_seccode = $nv_Request->get_title('g-recaptcha-response', 'post', '');
+    } else {
+        $nv_seccode = $nv_Request->get_title('nv_seccode', 'post', '');
+    }
     
     $gfx_chk = ($gfx_chk and $nv_Request->get_title('users_dismiss_captcha', 'session', '') != md5($nv_username));
     $check_seccode = ! $gfx_chk ? true : (nv_capcha_txt($nv_seccode) ? true : false);
@@ -564,8 +573,8 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
     if (! $check_seccode) {
         die(signin_result(array(
             'status' => 'error',
-            'input' => 'nv_seccode',
-            'mess' => $lang_global['securitycodeincorrect'] )));
+            'input' => ($global_config['captcha_type'] == 2 ? '' : 'nv_seccode'),
+            'mess' => ($global_config['captcha_type'] == 2 ? $lang_global['securitycodeincorrect1'] : $lang_global['securitycodeincorrect']) )));
     }
 
     if (empty($nv_username)) {
@@ -591,7 +600,7 @@ if ($nv_Request->isset_request('nv_login', 'post')) {
 
     if (defined('NV_IS_USER_FORUM')) {
         $error = '';
-        require_once NV_ROOTDIR . '/' . DIR_FORUM . '/nukeviet/login.php';
+        require_once NV_ROOTDIR . '/' . $global_config['dir_forum'] . '/nukeviet/login.php';
         if (! empty($error)) {
             die(signin_result(array(
                 'status' => 'error',
