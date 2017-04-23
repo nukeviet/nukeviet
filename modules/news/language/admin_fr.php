@@ -48,6 +48,7 @@ $lang_module['status_8'] = 'Passer à la mise en ligne de l\'article';
 $lang_module['status_9'] = 'Refuse de mettre en ligne de l\'article';
 $lang_module['status_10'] = 'En cours d\'examiner avant de mettre en ligne';
 $lang_module['errorsave'] = 'Erreur: il est impossible de mettre à jour, vérifiez si le titre ou l\'alias a été utilisé';
+$lang_module['errorexists'] = 'Erreur: le titre ou le lien statique est dupliqué, entrez une valeur différente';
 $lang_module['saveok'] = 'Mise à jour réussie';
 $lang_module['clickgotomodule'] = 'Cliquez ici pour aller à la gestion des articles';
 $lang_module['alias'] = 'Alias';
