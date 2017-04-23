@@ -7,7 +7,7 @@
 
 CKEDITOR.plugins.setLang('tbvdownload','vi', {
 	title : 'Lấy ảnh về máy chủ',
-    copyright : 'Bản quyền &copy; <a target="_blank" href="mailto:kid.apt@gmail.com">Mr.Thang - kid.apt@gmail.com</a>. Giữ toàn quyền.',
+    copyright : ' Giấy phép GNU/GPL. Phát triển bởi <a target="_blank" href="mailto:kid.apt@gmail.com">Mr.Thang - kid.apt@gmail.com.</a>',
 	url_path_save : 'Thư mục sẽ lưu trữ hình ảnh (Chọn 1 file bất kỳ trong thư mục)',
 	filename : 'Đổi tên tệp ảnh (để trống sẽ lấy nguyên gốc)',
 	imageurl : 'Tệp ảnh bên ngoài và thẻ alt',
