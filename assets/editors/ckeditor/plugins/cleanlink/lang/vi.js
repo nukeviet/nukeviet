@@ -6,7 +6,7 @@ CKEDITOR.plugins.setLang('cleanlink', 'vi', {
 	about : 'Giới thiệu',
     guide : 'Hướng dẫn sử dụng',
     guide_info : '<strong>Gỡ link</strong> - Là chức năng chỉ loại bỏ link trong đoạn văn chứa nó mà không loại bỏ chữ<br /><strong>Xóa link</strong> - Là chức năng loại bỏ cả link và chữ trong đoạn chứa link<br />',
-    copyright : 'Phát triển bởi &copy; <a target="_blank" href="http://volvox.vn">Công ty Volvox</a>.',
+    copyright : 'Giấy phép GNU/GPL. Phát triển bởi &copy; <a target="_blank" href="http://volvox.vn">Công ty Volvox</a>.',
 	nolink : 'Bài viết <b style="color:green">không có link ngoài</b>, rất tốt !',
 	info : 'Danh sách các link ngoài domain hiện tại',
 	type_normal : 'Link thường',
